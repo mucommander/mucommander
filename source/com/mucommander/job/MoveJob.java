@@ -374,7 +374,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
         }
     
         stop();
-
+/*
 		try {
 		    activeTable.refresh();
 		}
@@ -393,7 +393,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 				// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
 				// like switching to a root folder        
 			}
-
+*/
 		activeTable.requestFocus();
 	}
 }	

@@ -59,6 +59,7 @@ public class SinEffectPanel extends JPanel implements Runnable, ComponentListene
 		Graphics g = bi.getGraphics();
 		g.setColor(new Color(BG_COLOR));
 		g.fillRect(0, 0, width, height);
+		repaint();
 	
 		int temp[] = new int[3];
 		int xOffset;
@@ -73,6 +74,12 @@ public class SinEffectPanel extends JPanel implements Runnable, ComponentListene
 		for(int i=0; i<sinValues.length; i++)
 			sinValues[i] = (float)Math.sin(twoPi * i/height);
 
+		// Gives some time to 'cool down', otherwise hick ups for a few seconds
+		try {
+			computeThread.sleep(1000);
+		}
+		catch(InterruptedException e) {};
+		
 		while (computeThread!=null) {
 			if(!isVisible())
 				continue;

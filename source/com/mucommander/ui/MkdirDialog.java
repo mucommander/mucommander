@@ -110,6 +110,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 	        showErrorDialog("Unable to create directory "+dirPath, "mkdir error");
 	    }    
 
+/*		
 		FileTable table1 = mainFrame.getBrowser1().getFileTable();
 		FileTable table2 = mainFrame.getBrowser2().getFileTable();
 	    FileTable unactiveTable = activeTable==table1?table2:table1;
@@ -121,7 +122,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 		    	// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
 		    	// like switching to a root folder        
 		    }
-	
+*/	
 		activeTable.requestFocus();
 	}
 

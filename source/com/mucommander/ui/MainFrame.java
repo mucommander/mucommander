@@ -530,5 +530,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     }
 
     public void windowClosed(WindowEvent e) {
-    }
+		// Properly disposes folder panels and releases
+		// associated resources
+		this.folderPanel1.dispose();
+		this.folderPanel2.dispose();
+	}
 }

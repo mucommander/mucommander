@@ -391,13 +391,21 @@ public class ConfigurationManager {
      * Adds the specified configuration listener to the list of registered listeners.
      * @param listener listener to insert in the list.
      */
-    public static synchronized void addConfigurationListener(ConfigurationListener listener) {listeners.add(listener);}
+    public static synchronized void addConfigurationListener(ConfigurationListener listener) {
+		listeners.add(listener);
+		if(com.mucommander.Debug.TRACE)
+			System.out.println("ConfigurationManager.addConfigurationListener: "+listeners.size()+" listeners");
+	}
 
     /**
      * Removes the specified configuration listener from the list of registered listeners.
      * @param listener listener to remove from the list.
      */
-    public static synchronized void removeConfigurationListener(ConfigurationListener listener) {listeners.remove(listener);}
+    public static synchronized void removeConfigurationListener(ConfigurationListener listener) {
+		listeners.remove(listener);
+		if(com.mucommander.Debug.TRACE)
+			System.out.println("ConfigurationManager.removeConfigurationListener: "+listeners.size()+" listeners");
+	}
 
     /**
      * Notifies all the registered configuration listeners of a configuration change event.

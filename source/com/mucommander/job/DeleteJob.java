@@ -159,9 +159,9 @@ public class DeleteJob extends FileJob implements Runnable {
     
         stop();
 
+/*
 		// Refreshes FileTables if necessary
-
-        try {
+		try {
         	activeTable.refresh();
         }
         catch(IOException e) {
@@ -182,7 +182,7 @@ public class DeleteJob extends FileJob implements Runnable {
         		folderPanel.setCurrentFolder(activeTable.getCurrentFolder(), true);
         	}
         }
-    
+*/    
         activeTable.requestFocus();
 	}
 }	

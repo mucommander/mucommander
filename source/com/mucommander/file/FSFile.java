@@ -109,6 +109,8 @@ public class FSFile extends AbstractFile {
 	}
 	
 	public boolean isSymlink() {
+//		AbstractFile parent = getParent();
+//		return this.isSymlink && (parent==null || !parent.isSymlink());
 		return this.isSymlink;
 	}
 

@@ -341,6 +341,17 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		}
 	}
 
+
+	/**
+	 * This method must be called when this FolderPanel isn't used anymore, otherwise
+	 * resources associated to this FolderPanel won't be released.
+	 */
+	public void dispose() {
+		ConfigurationManager.removeConfigurationListener(this);
+		fileTable.dispose();
+	}
+	
+	
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 

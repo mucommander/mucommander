@@ -21,7 +21,7 @@ import com.mucommander.Debug;
 
 public class Launcher implements ActionListener, WindowListener, LocationListener, ConfigurationListener {
 	/** Version string */
-	public final static String MUCOMMANDER_VERSION = "0.5";
+	public final static String MUCOMMANDER_VERSION = "0.6";
 		
 	private static Vector mainFrames;
     	
