@@ -66,8 +66,8 @@ public abstract class AbstractFile {
 
 //		// Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
 //		// (Reminder: C: is C's current folder, while C:\ is C's root)
-//		if((absPath.endsWith("/") && absPath.length()>1) || (absPath.endsWith("\\") && absPath.charAt(absPath.length()-2)!=':'))
-//			absPath = absPath.substring(0, absPath.length()-1);
+//		if((path.endsWith("/") && path.length()>1) || (path.endsWith("\\") && path.charAt(path.length()-2)!=':'))
+//			path = path.substring(0, path.length()-1);
 
 		// Lower case absolute path
 		String absPathLC = absPath.toLowerCase();
@@ -162,21 +162,24 @@ public abstract class AbstractFile {
 
 	
 	/**
-	 * Returns the absolute path of this AbstractFile, without a trailing separator, except for root folders ('/', 'c:\' ...).
+	 * Returns the absolute path of this AbstractFile, usually with a trailing separator for directories and root folders ('/', 'c:\' ...) and
+	 * no trailing separator for 'regular' files.
 	 */
 	public abstract String getAbsolutePath();
 	
+	
 	/**
-	 * Returns the absolute path of this AbstractFile, appending a separator character if <code>true</code> is passed. 
+	 * Returns the absolute path of this AbstractFile with a trailing separator character if <code>true</code> is passed,
+	 * or without one if <code>false</code> is passed.
 	 */
 	public String getAbsolutePath(boolean appendSeparator) {
 		String path = getAbsolutePath();
-		return appendSeparator?addTrailingSeparator(path):path;
+		return appendSeparator?addTrailingSeparator(path):removeTrailingSlash(path);
 	}
 
 	
 	/**
-	 * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences, without a trailing separator.
+	 * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences.
 	 * AbstractFile's implementation simply returns the absolute path, this method should be overridden if canonical path resolution is available.
 	 */
 	public String getCanonicalPath() {
@@ -185,21 +188,38 @@ public abstract class AbstractFile {
 
 	/**
 	 * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences,
-	 * appending a separator character if <code>true</code> is passed.
-	 * AbstractFile's implementation simply returns the absolute path, this method should be overridden if canonical path resolution is available.
+	 * and with a separator character if <code>true</code> is passed or without one if <code>false</code> is passed.
+	 * <p>AbstractFile's implementation simply returns the absolute path, this method should be overridden if canonical path resolution is available.</p>
 	 */
 	public String getCanonicalPath(boolean appendSeparator) {
 		String path = getCanonicalPath();
-		return appendSeparator?addTrailingSeparator(path):path;
+		return appendSeparator?addTrailingSeparator(path):removeTrailingSlash(path);
 	}
 
 	
+	/**
+	 * Tests if the given path contains a trailing separator character, and if not, adds one and returns the path.
+	 */
 	protected String addTrailingSeparator(String path) {
 		// Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
 		// are exceptions that's why we still have to test if path ends with a separator
 		String separator = getSeparator();
 		if(!path.endsWith(separator))
 			return path+separator;
+		return path;
+	}
+	
+	
+	/**
+	 * Tests if the given path contains a trailing separator character, and if it does, removes it and returns the path.
+	 */
+	private String removeTrailingSlash(String path) {
+		// Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
+		// (Reminder: C: is C's current folder, while C:\ is C's root)
+		String separator = getSeparator();
+		if(path.endsWith(separator)
+			 && !((separator.equals("/") && path.length()==1) || (separator.equals("\\") && path.charAt(path.length()-2)==':')))
+			path = path.substring(0, path.length()-1);
 		return path;
 	}
 	

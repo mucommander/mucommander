@@ -379,7 +379,8 @@ if(com.mucommander.Debug.ON)
 	public void locationChanged(FolderPanel folderPanel) {
 		AbstractFile currentFolder = folderPanel.getCurrentFolder();
 		MainFrame mainFrame = folderPanel.getMainFrame();
-		String currentPath = currentFolder.getAbsolutePath(true);
+//		String currentPath = currentFolder.getAbsolutePath(true);
+		String currentPath = currentFolder.getAbsolutePath();
 		mainFrame.setTitle(currentPath+" - muCommander");
 
 		JMenu windowMenu;

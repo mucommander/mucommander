@@ -23,7 +23,14 @@ public abstract class AbstractEntryFile extends AbstractFile {
 	}
 	
 	public String getAbsolutePath() {
-		return getParent().getAbsolutePath(false)+getSeparator()+getName();
+		String path = getParent().getAbsolutePath(true)+getName();
+		String separator = getSeparator();
+
+		// Append a trailing separator character for directories
+		if(isDirectory() && !path.endsWith(getSeparator()))
+			return path+separator;
+	
+		return path;
 	}
 
 	public String getSeparator() {

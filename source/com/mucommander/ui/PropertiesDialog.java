@@ -66,7 +66,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		mainPanel.addTextFieldRow(Translator.get("properties_dialog.contents")+":", counterLabel, 10);
 
 		// Location (set here)
-		String location = files.getBaseFolder().getAbsolutePath(true);
+		String location = files.getBaseFolder().getAbsolutePath();
 		JLabel locationLabel = new JLabel(location);
 		locationLabel.setToolTipText(location);
 		mainPanel.addTextFieldRow(Translator.get("properties_dialog.location")+":", locationLabel, 10);

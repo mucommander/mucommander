@@ -117,16 +117,23 @@ public class FSFile extends AbstractFile {
 		return file.getParent()==null?absPath+separator:file.getName();
 	}
 
+
 	public String getAbsolutePath() {
-		return file.getParent()==null?absPath+separator:absPath;
+		// Append separator for root folders (C:\ , /) and for directories
+		if(file.getParent()==null || (isDirectory() && !absPath.endsWith(separator)))
+			return absPath+separator;
+	
+		return absPath;
 	}
+
 
 	public String getCanonicalPath() {
 		// To avoid drive seek and potential 'floppy drive not available' dialog under Win32
 		// triggered by java.io.File.getCanonicalPath() 
 		int osFamily = PlatformManager.getOSFamily();
 		if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
-			String absPath = getAbsolutePath(true);
+//			String absPath = getAbsolutePath(true);
+			String absPath = getAbsolutePath();
 			if(absPath.equals("A:\\") || absPath.equals("B:\\"))
 				return absPath;
 		}
@@ -134,9 +141,11 @@ public class FSFile extends AbstractFile {
 		if(this.canonicalPath==null) {
 			try {
 				this.canonicalPath = file.getCanonicalPath();
+				// Append separator for directories
+				if(isDirectory() && !this.canonicalPath.endsWith(separator))
+					this.canonicalPath = this.canonicalPath + separator;
 			}
 			catch(IOException e) {
-//				if(com.mucommander.Debug.ON) e.printStackTrace();
 				this.canonicalPath = this.absPath;
 			}
 		}
