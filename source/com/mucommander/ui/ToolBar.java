@@ -15,7 +15,7 @@ import java.awt.event.*;
  *
  * @author Maxence Bernard
  */
-public class ToolBar extends JToolBar implements ActionListener, LocationListener {
+public class ToolBar extends JToolBar implements ActionListener, LocationListener, MouseListener {
 	private MainFrame mainFrame;
 
 	/** Buttons icons, loaded only once */
@@ -90,14 +90,17 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		// Create buttons
 		int nbButtons = BUTTONS_DESC.length;
 		buttons = new JButton[nbButtons];
-Dimension separatorDimension = new Dimension(10, 16);
+		Dimension separatorDimension = new Dimension(10, 16);
 		for(int i=0; i<nbButtons; i++) {
 			buttons[i] = addButton(icons[i][0], icons[i][1], BUTTONS_DESC[i][0]);
 			if(BUTTONS_DESC[i][3]!=null &&!BUTTONS_DESC[i][3].equals("false"))
 				addSeparator(separatorDimension);
 //				addSeparator();
 		}
-		
+
+		// In order to catch Shift+clicks
+		buttons[ZIP_INDEX].addMouseListener(this);
+		buttons[UNZIP_INDEX].addMouseListener(this);
 	}
 
 	
@@ -130,6 +133,25 @@ Dimension separatorDimension = new Dimension(10, 16);
 	}
 
 	
+	
+	public void locationChanged(FolderPanel folderPanel) {
+		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
+		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
+	}
+
+	
+	// For JDK 1.3 (deprecated in 1.4)
+	public boolean isFocusTraversable() {
+		return false;
+	}
+
+	// For JDK 1.4 and up
+	public boolean isFocusable() {
+		return false;
+	}
+
+
+
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 	
@@ -172,12 +194,6 @@ Dimension separatorDimension = new Dimension(10, 16);
 		else if (buttonIndex==RUNCMD_INDEX) {
 			;
 		}
-		else if (buttonIndex= ZIP_INDEX) {
-			new ZipDialog(mainFrame, e.isShiftDown()).show();
-		}
-		else if (buttonIndex==UNZIP_INDEX) {
-			;
-		}
 		else if (buttonIndex==EMAIL_INDEX) {
 			;
 		}
@@ -188,20 +204,33 @@ Dimension separatorDimension = new Dimension(10, 16);
 		mainFrame.getLastActiveTable().requestFocus();
 	}
 	
-	
-	public void locationChanged(FolderPanel folderPanel) {
-		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
-		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
+	///////////////////////////////////////////////////////
+	// MouseListener methods to catch shift-clicked buttons
+	///////////////////////////////////////////////////////
+	public void mouseClicked(MouseEvent e) {
+		Object source = e.getSource();
+		
+		JButton button = (JButton)source;
+		int buttonIndex=getButtonIndex(button);
+
+		if (buttonIndex==ZIP_INDEX) {
+			new ZipDialog(mainFrame, e.isShiftDown()).show();
+		}
+		else if (buttonIndex==UNZIP_INDEX) {
+			new CopyDialog(mainFrame, true, false);
+		}
 	}
 
-	
-	// For JDK 1.3 (deprecated in 1.4)
-	public boolean isFocusTraversable() {
-		return false;
+	public void mouseReleased(MouseEvent e) {
 	}
 
-	// For JDK 1.4 and up
-	public boolean isFocusable() {
-		return false;
+	public void mousePressed(MouseEvent e) {
 	}
+	
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}	
+
 }

@@ -14,6 +14,7 @@ import java.awt.event.*;
 
 import java.io.*;
 import java.util.Vector;
+import java.util.StringTokenizer;
 import java.net.Socket;
 
 public class SendMailJob extends ExtendedFileJob {
@@ -202,21 +203,53 @@ public class SendMailJob extends ExtendedFileJob {
         // warning : some mail server validate the sender address
         //           in the MAIL FROM command, put your real address here
         sendln(in, out, "MAIL FROM: "+fromAddress);
-        sendln(in, out, "RCPT TO: <"+recipientString+">" );
+		
+		Vector recipients = new Vector();
+		recipientString = splitRecipientString(recipientString, recipients);
+		int nbRecipients = recipients.size();
+		for(int i=0; i<nbRecipients; i++)
+			sendln(in, out, "RCPT TO: <"+recipients.elementAt(i)+">" );
         sendln(in, out, "DATA");
         sendln(out, "MIME-Version: 1.0");
         sendln(out, "Subject: "+this.mailSubject);
-        sendln(out, "From: "+this.fromName+"<"+this.fromAddress+">");
-        sendln(out, "To: <"+recipientString+">");
+        sendln(out, "From: "+this.fromName+" <"+this.fromAddress+">");
+        sendln(out, "To: "+recipientString);
         sendln(out, "Content-Type: multipart/mixed; boundary=\"" + boundary +"\"");
         sendln(out, "\r\n--" + boundary);
 
         // Send the body
-        sendln(out, "Content-Type: text/plain; charset=\"us-ascii\"\r\n");
+//        sendln(out, "Content-Type: text/plain; charset=\"us-ascii\"\r\n");
+        sendln(out, "Content-Type: text/plain; charset=\"utf-8\"\r\n");
         sendln(out, this.mailBody+"\r\n\r\n");
         sendln(out, "\r\n--" +  boundary );        
     }
     
+
+	/**
+	 * Parses the specified string, replaces delimiter characters if needed and adds recipients  (String instances) to the given Vector.
+	 *
+	 * @param recipientsStr String containing one or several recipients that need to be separated by ',' and/or ';' characters.
+	 */
+	private String splitRecipientString(String recipientsStr, Vector recipients) {
+		recipientsStr.replace(';', ',');
+
+		StringBuffer newRecipientsSb = new StringBuffer();
+		StringTokenizer st = new StringTokenizer(recipientsStr, ",");
+		String rec;
+		int pos1, pos2;
+		while(st.hasMoreTokens()) {
+			rec = st.nextToken().trim();
+			if((pos1=rec.indexOf('<'))!=-1 && (pos2=rec.indexOf('>', pos1+1))!=-1)
+				recipients.add(rec.substring(pos1+1, pos2));
+			else
+				recipients.add(rec);
+			newRecipientsSb.append(rec+(st.hasMoreTokens()?", ":""));
+		}
+		
+		return newRecipientsSb.toString();
+	}
+	
+	
     private void sendAttachment(AbstractFile file) throws IOException {
         // sends MIME type of attachment file
         sendln(out, "Content-Type:"+MimeTypes.getMimeType(file)+"; name="+file.getName());
@@ -243,13 +276,18 @@ public class SendMailJob extends ExtendedFileJob {
     }
     
     private void sendln(BufferedReader in, OutputStream out, String s) throws IOException {
-        out.write((s + "\r\n").getBytes("8859_1"));
+		if(com.mucommander.Debug.TRACE)
+			System.out.println("SendMailJob.sendln: "+s);
+		//        out.write((s + "\r\n").getBytes("8859_1"));
+        out.write((s + "\r\n").getBytes("UTF-8"));
         out.flush();
         s = in.readLine();
     }
 
     private void sendln(OutputStream out, String s) throws IOException {
-        out.write((s + "\r\n").getBytes("8859_1"));
+		System.out.println("SendMailJob.sendln: "+s);
+//        out.write((s + "\r\n").getBytes("8859_1"));
+        out.write((s + "\r\n").getBytes("UTF-8"));
         out.flush();
     }
     
