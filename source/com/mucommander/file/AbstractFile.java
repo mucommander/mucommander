@@ -64,10 +64,10 @@ public abstract class AbstractFile {
 	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) throws AuthException, IOException {
 		AbstractFile file;
 
-		// Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
-		// (Reminder: C: is C's current folder, while C:\ is C's root)
-		if((absPath.endsWith("/") && absPath.length()>1) || (absPath.endsWith("\\") && absPath.charAt(absPath.length()-2)!=':'))
-			absPath = absPath.substring(0, absPath.length()-1);
+//		// Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
+//		// (Reminder: C: is C's current folder, while C:\ is C's root)
+//		if((absPath.endsWith("/") && absPath.length()>1) || (absPath.endsWith("\\") && absPath.charAt(absPath.length()-2)!=':'))
+//			absPath = absPath.substring(0, absPath.length()-1);
 
 		// Lower case absolute path
 		String absPathLC = absPath.toLowerCase();

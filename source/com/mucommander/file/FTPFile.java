@@ -11,9 +11,12 @@ import java.io.*;
 //public class FTPFile extends AbstractFile implements RemoteFile {
 public class FTPFile extends AbstractFile {
 
-	protected org.apache.commons.net.ftp.FTPFile file;
-	protected FTPClient ftpClient;
-	protected FileURL fileURL;
+	private org.apache.commons.net.ftp.FTPFile file;
+	private FTPClient ftpClient;
+	/** Sets whether passive mode should be used for data transfers (default is true) */ 
+	private boolean passiveMode = true;
+
+	private FileURL fileURL;
 
     protected String absPath;
 
@@ -158,6 +161,7 @@ if(com.mucommander.Debug.ON) System.out.print("initConnection: connecting to "+f
 		this.ftpClient = new FTPClient();
 		
 		try {
+			// Override default port (21) if a custom port was specified in the URL
 			int port = fileURL.getPort();
 if(com.mucommander.Debug.ON) System.out.println("initConnection: custom port="+port);
 			if(port!=-1)
@@ -187,20 +191,15 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileU
 				checkServerReply(ftpClient, fileURL);
 			}
 			
+			// Enables/disables passive mode
+if(com.mucommander.Debug.ON) System.out.println("initConnection: passive mode ="+passiveMode);
+			if(passiveMode)
+				this.ftpClient.enterLocalPassiveMode();
+			else
+				this.ftpClient.enterLocalActiveMode();
+
 			// Set file type to 'binary'
 			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-
-/*
-			this.file = getFTPFile(ftpClient, this.fileURL);
-			// If file doesn't exist (could not be resolved), create it
-			if(this.file==null) {
-				this.file = createFTPFile(this.fileURL.getFilename(), false);
-				this.fileExists = false;
-			}
-			else {
-				this.fileExists = true;
-			}
-*/
 		}
 		catch(IOException e) {
 			// Disconnect if something went wrong
@@ -273,12 +272,21 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 		}
 	}
 
-
+	
+	/**
+	 * Enables / disables passive mode mode.
+	 * <p>Default is enabled, so no need to call this method to enable passive mode, this would result in 
+	 * issuing an unecessary command.</p>
+	 */
 	public void setPassiveMode(boolean enabled) throws IOException {
-		if(enabled)
-			this.ftpClient.enterLocalPassiveMode();
-		else
-			this.ftpClient.enterLocalActiveMode();
+		this.passiveMode = enabled;
+		
+		if(ftpClient!=null) {
+			if(enabled)
+				this.ftpClient.enterLocalPassiveMode();
+			else
+				this.ftpClient.enterLocalActiveMode();
+		}
 	}
 
 	

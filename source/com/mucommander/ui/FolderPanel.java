@@ -117,7 +117,8 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 			}
 		}
 
-		locationField.setText(currentFolder.getAbsolutePath(true));
+//		locationField.setText(currentFolder.getAbsolutePath(true));
+		locationField.setText(currentFolder.getAbsolutePath());
 		driveButton.updateText(currentFolder);
 				
 		scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER) {
@@ -191,8 +192,9 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 			this.currentFolder = folder;
 
 			// Update location field with new current folder's path
-			locationField.setText(currentFolder.getAbsolutePath(true));
-			locationField.repaint();
+//			locationField.setText(currentFolder.getAbsolutePath(true));
+//			locationField.repaint();
+			locationField.setText(currentFolder.getAbsolutePath());
 
 			// Update drive button to reflect new current folder
 			driveButton.updateText(currentFolder);
@@ -286,7 +288,6 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 				// Retry (loop) if user authentified
 				if(showFolderAccessError(e)) {
 					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
-//					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
 					continue;
 				}
 			}
@@ -487,7 +488,8 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 			if(browse) {
 				// If folder could not be set, restore current folder's path
 				if(!setCurrentFolder(file, true))
-					locationField.setText(currentFolder.getAbsolutePath(true));
+//					locationField.setText(currentFolder.getAbsolutePath(true));
+					locationField.setText(currentFolder.getAbsolutePath());
 			}
 			else {
 				FileSet fileSet = new FileSet(currentFolder);
@@ -500,7 +502,8 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 //					new CopyDialog(mainFrame, fileSet, false);
 					
 				// Restore current folder's path
-				locationField.setText(currentFolder.getAbsolutePath(true));
+//				locationField.setText(currentFolder.getAbsolutePath(true));
+				locationField.setText(currentFolder.getAbsolutePath());
 			}
 		}
 	}
@@ -513,7 +516,8 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		if (e.getSource()==locationField) {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				// Restore current location string
-				locationField.setText(currentFolder.getAbsolutePath(true));
+//				locationField.setText(currentFolder.getAbsolutePath(true));
+				locationField.setText(currentFolder.getAbsolutePath());
 				fileTable.requestFocus();
 			}
 		}
@@ -547,7 +551,8 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		// If location field's text was not already set between focus gained and lost 
 		if(source==locationField && !locationFieldTextSet) {
 			// Restore current folder's path
-			locationField.setText(currentFolder.getAbsolutePath(true));
+//			locationField.setText(currentFolder.getAbsolutePath(true));
+			locationField.setText(currentFolder.getAbsolutePath());
 		}
 	}
 	
