@@ -30,6 +30,17 @@ cancel:FR:Annuler
 #cancel:JP:ｷｬﾝｾﾙ
 
 
+##########
+# Language #
+##########
+
+language.en:EN:English
+language.en:FR:Anglais
+
+language.fr:EN:French
+language.fr:FR:Français
+
+
 ###############
 # Command bar #
 ###############
@@ -61,4 +72,136 @@ command_bar.refresh:FR:Raffraîchir [F9]
 command_bar.close:EN:Close [F10]
 command_bar.close:FR:Fermer [F10]
 
+
+#############
+# File menu #
+#############
+
+file_menu:EN:File
+file_menu:FR:Fichier
+
+file_menu.server_connect:EN:Connect to server...
+file_menu.server_connect:FR:Connexion à un serveur...
+
+file_menu.new_window:EN:New window
+file_menu.new_window:FR:Nouvelle fenêtre
+
+file_menu.run_command:EN:Run command
+file_menu.run_command:FR:Lancer une commande
+
+file_menu.zip:EN:Zip files...
+file_menu.zip:FR:Zipper fichiers...
+
+file_menu.unzip:EN:Unzip file...
+file_menu.unzip:FR:Dézipper fichier...
+
+file_menu.email:EN:Email files...
+file_menu.email:FR:Envoyer par email...
+
+file_menu.properties:EN:Properties
+file_menu.properties:FR:Propriétés
+
+file_menu.preferences:EN:Preferences...
+file_menu.preferences:FR:Préférences...
+
+file_menu.check_for_updates:EN:Check for updates
+file_menu.check_for_updates:FR:Mises à jour...
+
+file_menu.close_window:EN:Close window
+file_menu.close_window:FR:Fermer fenêtre
+
+
+#############
+# Mark menu #
+#############
+
+mark_menu:EN:Mark
+mark_menu:FR:Marquer
+
+mark_menu.mark:EN:Mark files...
+mark_menu.mark:FR:Marquer fichiers...
+
+mark_menu.unmark:EN:Unmark files...
+mark_menu.unmark:FR:Démarquer fichiers...
+
+mark_menu.mark_all:EN:Mark all
+mark_menu.mark_all:FR:Marquer tous
+
+mark_menu.unmark_all:EN:Unmark all
+mark_menu.unmark_all:FR:Démarquer tous
+
+mark_menu.invert_selection:EN:Invert selection
+mark_menu.invert_selection:FR:Inverser sélection
+
+mark_menu.compare_folders:EN:Compare folders
+mark_menu.compare_folders:FR:Comparer dossiers
+
+
+#############
+# View menu #
+#############
+
+view_menu:EN:View
+view_menu:FR:Vue
+
+view_menu.go_back:EN:Go back
+view_menu.go_back:FR:Dossier précédent
+
+view_menu.go_forward:EN:Go forward
+view_menu.go_forward:FR:Dossier suivant
+
+view_menu.sort_by_name:EN:Sort by Name
+view_menu.sort_by_name:FR:Classer par nom
+
+view_menu.sort_by_date:EN:Sort by Date
+view_menu.sort_by_date:FR:Classer par date
+
+view_menu.sort_by_size:EN:Sort by Size
+view_menu.sort_by_size:FR:Classer par taille
+
+view_menu.sort_by_extension:EN:Sort by Extension
+view_menu.sort_by_extension:FR:Classer par extension
+
+view_menu.reverse_order:EN:Reverse order
+view_menu.reverse_order:FR:Inverser l'ordre
+
+view_menu.swap_folders:EN:Swap folders
+view_menu.swap_folders:FR:Echanger les dossiers
+
+view_menu.set_same_folder:EN:Set same folder
+view_menu.set_same_folder:FR:Affecter le même dossier
+
+view_menu.show_toolbar:EN:Show toolbar
+view_menu.show_toolbar:FR:Afficher la barre d'outils
+
+view_menu.hide_toolbar:EN:Hide toolbar
+view_menu.hide_toolbar:FR:Cacher la barre d'outils
+
+
+###############
+# Window menu #
+###############
+
+window_menu:EN:Window
+window_menu:FR:Fenêtre
+
+
+#############
+# Help menu #
+#############
+
+help_menu:EN:Help
+help_menu:FR:Aide
+
+help_menu.shortcuts:EN:Keyboard shortcuts
+help_menu.shortcuts:FR:Raccourcis clavier
+
+help_menu.homepage:EN:muCommander homepage
+help_menu.homepage:FR:Site muCommander
+
+help_menu.forums:EN:muCommander forums
+help_menu.forums:FR:Forums muCommander
+
+help_menu.about:EN:About muCommander...
+help_menu.about:FR:A propos de muCommander...
 

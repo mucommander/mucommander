@@ -10,6 +10,7 @@ import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.ui.help.ShortcutsDialog;
 import com.mucommander.ui.about.AboutDialog;
 import com.mucommander.job.SendMailJob;
+import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -75,46 +76,46 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		this.mainFrame = mainFrame;
 		
 		// File menu
-		fileMenu = addMenu("File", KeyEvent.VK_F, true);
-		newWindowItem = addMenuItem(fileMenu, "New window", KeyEvent.VK_N, KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+		fileMenu = addMenu(Translator.get("file_menu"), KeyEvent.VK_F, true);
+		newWindowItem = addMenuItem(fileMenu, Translator.get("file_menu.new_window"), KeyEvent.VK_N, KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 
 		fileMenu.add(new JSeparator());
-		serverConnectItem = addMenuItem(fileMenu, "Connect to Server...", KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.CTRL_MASK));
-		runItem = addMenuItem(fileMenu, "Run command...", KeyEvent.VK_R, KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
-		zipItem = addMenuItem(fileMenu, "Zip files...", KeyEvent.VK_Z, KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
-		unzipItem = addMenuItem(fileMenu, "Unzip file...", KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
-        emailFilesItem = addMenuItem(fileMenu, "Email files...", KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		serverConnectItem = addMenuItem(fileMenu, Translator.get("file_menu.server_connect"), KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.CTRL_MASK));
+		runItem = addMenuItem(fileMenu, Translator.get("file_menu.run_command"), KeyEvent.VK_R, KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		zipItem = addMenuItem(fileMenu, Translator.get("file_menu.zip"), KeyEvent.VK_Z, KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
+		unzipItem = addMenuItem(fileMenu, Translator.get("file_menu.unzip"), KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
+        emailFilesItem = addMenuItem(fileMenu, Translator.get("file_menu.email"), KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 
 		fileMenu.add(new JSeparator());
-        propertiesItem = addMenuItem(fileMenu, "Properties", KeyEvent.VK_P, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.ALT_MASK));
+        propertiesItem = addMenuItem(fileMenu, Translator.get("file_menu.properties"), KeyEvent.VK_P, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.ALT_MASK));
 
 		fileMenu.add(new JSeparator());
-		preferencesItem = addMenuItem(fileMenu, "Preferences...", KeyEvent.VK_F, null);
-		checkForUpdatesItem = addMenuItem(fileMenu, "Check for updates", KeyEvent.VK_K, null);
+		preferencesItem = addMenuItem(fileMenu, Translator.get("file_menu.preferences"), KeyEvent.VK_F, null);
+		checkForUpdatesItem = addMenuItem(fileMenu, Translator.get("file_menu.check_for_updates"), KeyEvent.VK_K, null);
 		
 		fileMenu.add(new JSeparator());
-		quitItem = addMenuItem(fileMenu, "Close window", KeyEvent.VK_Q, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
+		quitItem = addMenuItem(fileMenu, Translator.get("file_menu.close_window"), KeyEvent.VK_Q, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
 	
 		// Mark menu
-		markMenu = addMenu("Mark", KeyEvent.VK_M, false);
-		markGroupItem = addMenuItem(markMenu, "Mark...", KeyEvent.VK_A, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0));
-		unmarkGroupItem = addMenuItem(markMenu, "Unmark...", KeyEvent.VK_N, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0));
-		markAllItem = addMenuItem(markMenu, "Mark all", KeyEvent.VK_M, KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
-		unmarkAllItem = addMenuItem(markMenu, "Unmark all", KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
-		invertSelectionItem = addMenuItem(markMenu, "Invert selection", KeyEvent.VK_I, KeyStroke.getKeyStroke(KeyEvent.VK_MULTIPLY, 0));
+		markMenu = addMenu(Translator.get("mark_menu"), KeyEvent.VK_M, false);
+		markGroupItem = addMenuItem(markMenu, Translator.get("mark_menu.mark"), KeyEvent.VK_A, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0));
+		unmarkGroupItem = addMenuItem(markMenu, Translator.get("mark_menu.unmark"), KeyEvent.VK_N, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0));
+		markAllItem = addMenuItem(markMenu, Translator.get("mark_menu.mark_all"), KeyEvent.VK_M, KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+		unmarkAllItem = addMenuItem(markMenu, Translator.get("mark_menu.unmark_all"), KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
+		invertSelectionItem = addMenuItem(markMenu, Translator.get("mark_menu.invert_selection"), KeyEvent.VK_I, KeyStroke.getKeyStroke(KeyEvent.VK_MULTIPLY, 0));
 
 		markMenu.add(new JSeparator());
-		compareFoldersItem = addMenuItem(markMenu, "Compare folders", KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
+		compareFoldersItem = addMenuItem(markMenu, Translator.get("mark_menu.compare_folders"), KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
 
 		// View menu
-		viewMenu = addMenu("View", KeyEvent.VK_V, true);
-		goBackItem = addMenuItem(viewMenu, "Go back", KeyEvent.VK_B, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
-		goForwardItem = addMenuItem(viewMenu, "Go forward", KeyEvent.VK_F, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK));
+		viewMenu = addMenu(Translator.get("view_menu"), KeyEvent.VK_V, true);
+		goBackItem = addMenuItem(viewMenu, Translator.get("view_menu.go_back"), KeyEvent.VK_B, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
+		goForwardItem = addMenuItem(viewMenu, Translator.get("view_menu.go_forward"), KeyEvent.VK_F, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK));
 		viewMenu.add(new JSeparator());
-		sortByNameItem = addCheckBoxMenuItem(viewMenu, "Sort by Name", KeyEvent.VK_N, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK));
-		sortByDateItem = addCheckBoxMenuItem(viewMenu, "Sort by Date", KeyEvent.VK_D, KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.CTRL_MASK));
-		sortBySizeItem = addCheckBoxMenuItem(viewMenu, "Sort by Size", KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.CTRL_MASK));
-		sortByExtensionItem = addCheckBoxMenuItem(viewMenu, "Sort by Extension", KeyEvent.VK_X, KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.CTRL_MASK));
+		sortByNameItem = addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_name"), KeyEvent.VK_N, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK));
+		sortByDateItem = addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_date"), KeyEvent.VK_D, KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.CTRL_MASK));
+		sortBySizeItem = addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_size"), KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.CTRL_MASK));
+		sortByExtensionItem = addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_extension"), KeyEvent.VK_X, KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.CTRL_MASK));
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(sortByNameItem);
 		buttonGroup.add(sortByDateItem);
@@ -122,10 +123,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		buttonGroup.add(sortByExtensionItem);
 		sortByNameItem.setState(true);
 
-		reverseOrderItem = addMenuItem(viewMenu, "Reverse order", KeyEvent.VK_R, null);
+		reverseOrderItem = addMenuItem(viewMenu, Translator.get("view_menu.reverse_order"), KeyEvent.VK_R, null);
 		viewMenu.add(new JSeparator());
-		swapFoldersItem = addMenuItem(viewMenu, "Swap folders", KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_MASK));
-		setSameFolderItem = addMenuItem(viewMenu, "Set same folder", KeyEvent.VK_T, KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK));
+		swapFoldersItem = addMenuItem(viewMenu, Translator.get("view_menu.swap_folders"), KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_MASK));
+		setSameFolderItem = addMenuItem(viewMenu, Translator.get("view_menu.set_same_folder"), KeyEvent.VK_T, KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK));
 //		refreshItem = addMenuItem(viewMenu, "Refresh", KeyEvent.VK_R, null);
 
 		viewMenu.add(new JSeparator());
@@ -133,18 +134,18 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		showToolbarItem = addMenuItem(viewMenu, "", KeyEvent.VK_O, null);
 		
 		// Window menu
-		windowMenu = addMenu("Window", KeyEvent.VK_W, false);
+		windowMenu = addMenu(Translator.get("window_menu"), KeyEvent.VK_W, false);
 		
 		// Help menu
-		helpMenu = addMenu("Help", KeyEvent.VK_H, false);
-		keysItem = addMenuItem(helpMenu, "Keyboard shortcuts", KeyEvent.VK_K, null);
+		helpMenu = addMenu(Translator.get("help_menu"), KeyEvent.VK_H, false);
+		keysItem = addMenuItem(helpMenu, Translator.get("help_menu.shortcuts"), KeyEvent.VK_K, null);
 		helpMenu.add(new JSeparator());
 		if (PlatformManager.canOpenURL()) {
-			homepageItem = addMenuItem(helpMenu, "muCommander homepage", KeyEvent.VK_H, null);
-			forumsItem = addMenuItem(helpMenu, "muCommander forums", KeyEvent.VK_F, null);
+			homepageItem = addMenuItem(helpMenu, Translator.get("help_menu.homepage"), KeyEvent.VK_H, null);
+			forumsItem = addMenuItem(helpMenu, Translator.get("help_menu.forums"), KeyEvent.VK_F, null);
 		}
 		helpMenu.add(new JSeparator());
-		aboutItem = addMenuItem(helpMenu, "About muCommander...", KeyEvent.VK_A, null);		
+		aboutItem = addMenuItem(helpMenu, Translator.get("help_menu.about"), KeyEvent.VK_A, null);		
 	}
 	
 	/**
@@ -356,7 +357,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			emailFilesItem.setEnabled(filesSelected);
 		}
 		else if(source==viewMenu) {
-			showToolbarItem.setText(mainFrame.isToolbarVisible()?"Hide toolbar":"Show Toolbar");
+			showToolbarItem.setText(mainFrame.isToolbarVisible()?Translator.get("view_menu.hide_toolbar"):Translator.get("view_menu.show_toolbar"));
 		}
 	}
 	

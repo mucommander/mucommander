@@ -1,6 +1,8 @@
 
 package com.mucommander.text;
 
+import com.mucommander.conf.ConfigurationManager;
+
 import java.io.*;
 
 import java.util.Enumeration;
@@ -25,7 +27,8 @@ public class Translator {
 //	private static Vector orderedEntries;
 //	private static boolean needsToBeSaved;
 
-	private static String language = Locale.getDefault().getLanguage();
+	/** Current language (2-letter language code). Uses default locale's language if language hasn't been set yet */
+	private static String language;
 
 
 	/**
@@ -35,21 +38,84 @@ public class Translator {
 	 */
 	private Translator(String filePath) {
 		dictionaryFilePath = filePath;
-//		Locale locale = getDefault();
-//		System.out.println(locale.getLanguage()+" ("+locale.getDisplayLanguage()+")"+" / "+locale.getCountry()+" ("+locale.getDisplayCountry()+")"+" / "+locale.getVariant()+"("+locale.getDisplayVariant());
+//Locale locale = Locale.getDefault();
+//System.out.println(locale.getLanguage()+" ("+locale.getDisplayLanguage()+")"+" / "+locale.getCountry()+" ("+locale.getDisplayCountry()+")"+" / "+locale.getVariant()+"("+locale.getDisplayVariant());
 
 		try {
 			loadDictionnaryFile();
 		} catch (IOException e) {
 			new RuntimeException("Translator.init: unable to load dictionary file "+e);
 		}
+		
+		String langVal = ConfigurationManager.getVariable("prefs.language");
+		if(com.mucommander.Debug.ON)
+			System.out.println("Language in prefs: "+langVal);
+
+		// If language is not set in preferences 
+		if(langVal==null) {
+			// Try to set language to the system's language, if system's language
+			// has a dictionary, otherwise English is used by default.
+			String languages[] = getAvailableLanguages();
+			String localeLang = Locale.getDefault().getLanguage();
+
+			if(com.mucommander.Debug.ON)
+				System.out.println("Language not set, trying to match system's language ("+localeLang+")");
+			
+			for(int i=0; i<languages.length; i++) {
+				if(languages[i].equalsIgnoreCase(localeLang)) {
+					Translator.language = localeLang;
+					break;
+				}
+			}
+
+			// Fall back to English (system's language doesn't have a dictionary)
+			if(Translator.language==null) {
+				Translator.language = "en";
+
+				if(com.mucommander.Debug.ON)
+					System.out.println("No dictionary matching "+localeLang+", falling back to English");
+			}
+			
+			if(com.mucommander.Debug.ON)
+				System.out.println("Language has been set to "+Translator.language);
+
+				// Set language to configuration file
+			ConfigurationManager.setVariable("prefs.language", Translator.language);
+		}
+		else {
+			Translator.language = langVal;
+		}
+
+		if(com.mucommander.Debug.ON)
+			System.out.println("Translator language: "+Translator.language);
 	}
 
+	
+	/**
+	 * Sets language used by <code>get()</code> methods when language parameter isn't specified.
+	 *
+	 * @param lang 2-letter language code
+	 */
+	public static void setLanguage(String lang) {
+		Translator.language = lang;
+	}
+	
+	
+	/**
+	 * Returns language used by <code>get()</code> methods when language parameter isn't specified.
+	 *
+	 * @return lang 2-letter language code
+	 */
+	public static String getLanguage() {
+		return language;
+	}
+	
+	
 	/**
 	 * Returns an array of available languages, each described by a 2-letter
 	 * String ("fr", "en", "jp"...).
 	 *
-	 * @return DOCUMENT ME!
+	 * @return a String array of 2-letter language codes.
 	 */
 	public static String[] getAvailableLanguages() {
 		String[] languages = new String[dictionaries.size()];
