@@ -52,9 +52,8 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 		// Add menu to frame
 		setJMenuBar(menuBar);
 		
-		// Catches window close event
-//		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-//		addWindowListener(this);
+		// Important: dispose window on close (default is hide)
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		setResizable(true);
 	}
@@ -100,11 +99,6 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	}
 
 
-//	public MainFrame getMainFrame() {
-//		return mainFrame;
-//	}
-	
-	
 	private void setViewer(FileViewer viewer) {
 		this.viewer = viewer;
 	

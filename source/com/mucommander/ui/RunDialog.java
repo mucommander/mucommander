@@ -84,13 +84,6 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(runStopButton, cancelButton, this), BorderLayout.SOUTH);
 
-//        // Escape key disposes dialog
-//		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
-//		commandField.addKeyListener(escapeKeyAdapter);
-//		outputTextArea.addKeyListener(escapeKeyAdapter);
-//		runStopButton.addKeyListener(escapeKeyAdapter);
-//		cancelButton.addKeyListener(escapeKeyAdapter);
-
         // Selects OK when enter is pressed
         getRootPane().setDefaultButton(runStopButton);
         
@@ -99,9 +92,6 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 			
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 //		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-
-		// Closing this dialog will invoke WindowListener's windowClosed() method
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		// Closing this dialog kills the process
 		addWindowListener(new WindowAdapter() {
@@ -166,6 +156,7 @@ if(com.mucommander.Debug.ON) System.out.println("processOutput "+process+" outpu
 if(com.mucommander.Debug.ON) System.out.println("processError "+process+" output= "+new String(buffer, 0, length));
 		addToTextArea(buffer, offset, length);
 	}
+
 
 	private void addToTextArea(byte buffer[], int offset, int length) {
 		outputTextArea.append(new String(buffer, 0, length));

@@ -156,7 +156,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
         table1.addKeyListener(this);
         table2.addKeyListener(this);
     
-		// Catches window close event
+		// Do nothing on close (default is to hide window),
+		// WindowManager takes of catching close events and do the rest
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 // For testing purposes, full screen option could be nice to add someday

@@ -470,6 +470,7 @@ if(com.mucommander.Debug.ON)
 	}
 
 	public void windowClosing(WindowEvent e) {
+		// Dispose MainFrame instance
 		disposeMainFrame((MainFrame)e.getSource());
 	}
 
