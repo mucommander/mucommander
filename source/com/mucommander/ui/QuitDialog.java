@@ -61,7 +61,7 @@ public class QuitDialog extends FocusDialog implements ActionListener {
 			ConfigurationManager.setVariable("prefs.quit_confirmation", ""+showNextTimeCheckBox.isSelected());
 
 			// Quit
-			System.exit(0);
+			WindowManager.getInstance().quit();
 		}
 	}
 	

@@ -27,6 +27,8 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	
 	private JPopupMenu popupMenu;
 	private Vector menuItems;
+
+	/* Time when popup menu was last hidden */
 	private long lastPopupTime;
 	
 	private int rootsOffset;
@@ -159,7 +161,9 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		
 		// The button was clicked
 		if (source == this)	 {
-			// Return (do not popup menu) if popup menu was last showing less than POPUP_DELAY ms ago
+			// Return (do not popup menu) if popup menu was last showing less than POPUP_DELAY ms ago.
+			// We need this test because popupMenuWillBecomeInvisible() is called before actionPerformed(),
+			// so we interpret the button click as a way to close the popup menu
 			if((System.currentTimeMillis()-this.lastPopupTime)<POPUP_DELAY) {
 				// Reset time stamp
 				this.lastPopupTime = 0;

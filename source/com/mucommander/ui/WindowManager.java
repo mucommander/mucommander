@@ -32,19 +32,19 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	 * or last frame to have been used if muCommander doesn't have focus */	
 	private static MainFrame currentMainFrame;
 
-	private final static int MENU_ITEM_VK_TABLE[] = {
-		KeyEvent.VK_1,KeyEvent.VK_2,KeyEvent.VK_3,KeyEvent.VK_4,
-		KeyEvent.VK_5,KeyEvent.VK_6,KeyEvent.VK_7,KeyEvent.VK_8,
-		KeyEvent.VK_9, KeyEvent.VK_0};
-	
-	private static WindowManager instance;
-
 	/** Time at which the last focus request was made */	
 	private long lastFocusRequest;
 
 	/** Last main frame on which focus has been explicitely requested */
 	private MainFrame lastFocusedMainFrame;
 	
+	private static WindowManager instance;
+
+	private final static int MENU_ITEM_VK_TABLE[] = {
+		KeyEvent.VK_1,KeyEvent.VK_2,KeyEvent.VK_3,KeyEvent.VK_4,
+		KeyEvent.VK_5,KeyEvent.VK_6,KeyEvent.VK_7,KeyEvent.VK_8,
+		KeyEvent.VK_9, KeyEvent.VK_0};
+
 	/** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
 	private final static int FOCUS_REQUEST_DELAY = 1000;
 
@@ -313,6 +313,33 @@ if(com.mucommander.Debug.ON)
 			System.exit(0);		
 	}
 
+	
+	/**
+	 * Disposes all opened windows, ending with the one that is currently active if there is one, 
+	 * or the last one which was activated.
+	 */
+	public void quit() {
+		int nbFrames = mainFrames.size();
+		// Retrieve current MainFrame's index
+		int currentMainFrameIndex = mainFrames.indexOf(this.currentMainFrame);
+		MainFrame mainFrame;
+		int index = 0;
+		
+		// Dispose all MainFrame but the current one
+		for(int i=0; i<nbFrames; i++) {
+			if(i==currentMainFrameIndex) {
+				index++;
+				continue;
+			}
+			disposeMainFrame((MainFrame)mainFrames.elementAt(index));
+		}
+
+		// There should normally be one and only one MainFrame remaining
+		nbFrames = mainFrames.size();
+		for(int i=0; i<nbFrames; i++)
+			disposeMainFrame((MainFrame)mainFrames.elementAt(i));
+	}
+	
 	
 	/**
 	 * Switches to the next MainFrame, in the order of which they were created.

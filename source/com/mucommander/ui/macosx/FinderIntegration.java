@@ -75,10 +75,12 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 				mainFrame.showPreferencesDialog();
 				break;
 			case QUIT_ACTION:
+				// Show confirmation dialog if it hasn't been disabled
 				if(ConfigurationManager.getVariable("prefs.quit_confirmation", "true").equals("true"))
 					new QuitDialog(mainFrame).showDialog();
+				// Quit directly otherwisee
 				else
-					System.exit(0);
+					WindowManager.getInstance().quit();
 				break;
 		}
 	}
