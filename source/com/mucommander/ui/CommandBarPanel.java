@@ -20,7 +20,8 @@ import java.util.Vector;
 /**
  * Command bar panel 
  */
-public class CommandBarPanel extends JPanel implements ActionListener, MouseListener {
+//public class CommandBarPanel extends JPanel implements ActionListener, MouseListener {
+public class CommandBarPanel extends JPanel implements ActionListener {
 
     private MainFrame mainFrame;
     
@@ -34,6 +35,9 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	public final static int CLOSE_INDEX = 7;
 	
 	private final static int NB_BUTTONS = 8;
+
+	private boolean shiftDown;
+
 	
 /*
 	private JButton viewButton;
@@ -108,11 +112,11 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 		closeButton = addButton(CLOSE_TEXT);
 */
 
-		// Shift+F6 renames a file but since shift-clicks cannot be caught using
-		// an ActionListener (because of a known bug), we use a MouseListener
-		buttons[MOVE_INDEX].addMouseListener(this);
-		// Same for copy button
-		buttons[COPY_INDEX].addMouseListener(this);
+//		// Shift+F6 renames a file but since shift-clicks cannot be caught using
+//		// an ActionListener (because of a known bug), we use a MouseListener
+//		buttons[MOVE_INDEX].addMouseListener(this);
+//		// Same for copy button
+//		buttons[COPY_INDEX].addMouseListener(this);
 	}
 
 	
@@ -138,8 +142,11 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	 * the action is different when shift is pressed.
 	 */
 	public void setShiftMode(boolean on) {
-		buttons[MOVE_INDEX].setText(on&(mainFrame.getLastActiveTable().getSelectedFiles().size()<=1)?RENAME_TEXT:MOVE_TEXT);
-		buttons[MOVE_INDEX].repaint();
+		if(shiftDown!=on) {
+			this.shiftDown = on;
+			buttons[MOVE_INDEX].setText(on&(mainFrame.getLastActiveTable().getSelectedFiles().size()<=1)?RENAME_TEXT:MOVE_TEXT);
+			buttons[MOVE_INDEX].repaint();
+		}
 	}
 
 	
@@ -282,7 +289,8 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 		Launcher.getLauncher().disposeMainFrame(mainFrame);
 	}
 	
-	
+
+/*	
 	///////////////////////////////////////////////////////
 	// MouseListener methods to catch shift-clicked buttons
 	///////////////////////////////////////////////////////
@@ -308,17 +316,23 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 
 	public void mouseExited(MouseEvent e) {
 	}
-	
+*/	
 
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        
+//System.out.println("actionPerformed  "+source);        
         if(source == buttons[VIEW_INDEX]) {
         	doView();
 		}
         else if(source == buttons[EDIT_INDEX]) {
         	doEdit();
+		}
+		else if(source == buttons[MOVE_INDEX]) {
+			new MoveDialog(mainFrame, shiftDown);
+		}
+		else if(source == buttons[COPY_INDEX]) {
+			new CopyDialog(mainFrame, false, shiftDown);
 		}
         else if(source == buttons[MKDIR_INDEX]) {
             new MkdirDialog(mainFrame);

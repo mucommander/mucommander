@@ -6,7 +6,6 @@ import com.mucommander.file.AbstractFile;
 import java.io.IOException;
 import java.util.Vector;
 
-// public class PlatformManager implements Runnable {
 
 public class PlatformManager {
 
@@ -25,9 +24,6 @@ public class PlatformManager {
 	private static String osName;
 	private static String osVersion;
 	private static int osType;
-
-    private static Process currentProcess;
-//    private Process process;
 
     
 	/**
@@ -63,11 +59,6 @@ public class PlatformManager {
 		}
 	}
 
-/*
-    private PlatformManager(Process p) {
-        this.process = p;
-    }
- */  
 	
 	/**
 	 * Returns OS type (OS family if you wish).
@@ -154,10 +145,6 @@ public class PlatformManager {
             
             Runtime.getRuntime().exec(getOpenTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
             
-/*            if(com.mucommander.Debug.ON) {
-                new Thread(new PlatformManager(currentProcess)).start();
-            }
-*/                
             return true;
 		}
 		catch(IOException e) {

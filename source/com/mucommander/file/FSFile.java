@@ -10,8 +10,6 @@ public class FSFile extends AbstractFile {
 	/** "/" for UNIX systems, "\" for Win32 */
 	protected final static String separator = File.separator;
 
-	private static FSFile roots[];
-	
 	private File file;
     private String absPath;
 	private String canonicalPath;
@@ -29,19 +27,6 @@ public class FSFile extends AbstractFile {
 	// Indicates whether or not the value has already been retrieved
 	private boolean parentValCached = false;
 		
-	// Retreives fs roots once for all because File.listRoots() sometimes triggers a weird dialog
-	// about A:\, we only want this to happen once...
-	static {
-        File fileRoots[] = File.listRoots();	
-        roots = new FSFile[fileRoots.length];
-        for(int i=0; i<fileRoots.length; i++)
-            roots[i] = new FSFile(fileRoots[i]);
-	}
-
-	public static FSFile[] listRoots() {
-		return roots;
-	}
-
 	
 	/**
 	 * Creates a new instance of FSFile. Although the existence

@@ -62,7 +62,11 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	
 		// Sets frame to a decent size without exceeding screen size
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, Math.min(d.width-44,800-44), Math.min(d.height-33, 600-33));		
+//		setBounds(0, 0, Math.min(d.width-44,800-44), Math.min(d.height-33, 600-33));		
+		Insets insets = getInsets();
+System.out.println("w "+d.width+" "+insets.left+" "+insets.right);
+System.out.println("h "+d.height+" "+insets.top+" "+insets.bottom);
+		setBounds(0, 0, d.width - insets.left - insets.right, d.height - insets.top - insets.bottom);		
 		setResizable(true);
 
 		Container contentPane = getContentPane();
@@ -531,6 +535,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
      * Listens to focus events coming from FileTable instances to keep track of the last active table
      */
     public void focusGained(FocusEvent e) {
+		// Resets shift mode to false, since keyReleased events may have been lost
+		commandBar.setShiftMode(false);
         this.lastActiveTable = e.getSource()==table1?table1:table2;
     }
     

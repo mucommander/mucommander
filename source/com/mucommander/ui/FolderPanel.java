@@ -41,7 +41,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	private FileTable fileTable;
 	private JScrollPane scrollPane;
 	
-	private static FSFile roots[];
+	private static AbstractFile rootFolders[];
 	
     private static Color backgroundColor;
 
@@ -54,7 +54,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 
 	
 	static {
-		roots = FSFile.listRoots();
+		rootFolders = RootFolders.getRootFolders();
 
 		// Set background color
 		backgroundColor = FileTableCellRenderer.getColor("prefs.colors.background", "000084");
@@ -75,7 +75,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			}
 		};
 		
-		rootButton = new JButton(roots[0].toString());
+		rootButton = new JButton(rootFolders[0].toString());
 		// For Mac OS X whose minimum width for buttons is enormous
 		rootButton.setMinimumSize(new Dimension(40, (int)rootButton.getPreferredSize().getWidth()));
 		rootButton.setMargin(new Insets(0,5,0,5));
@@ -85,8 +85,8 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		rootPopup.addPopupMenuListener(this);
 		rootMenuItems = new Vector();
 		JMenuItem menuItem;
-		for(int i=0; i<roots.length; i++) {
-			menuItem = new JMenuItem(roots[i].toString());
+		for(int i=0; i<rootFolders.length; i++) {
+			menuItem = new JMenuItem(rootFolders[i].toString());
 			menuItem.addActionListener(this);
 			rootMenuItems.add(menuItem);
 			rootPopup.add(menuItem);
@@ -112,13 +112,13 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		}
 		catch(Exception e) {
 			// If that failed, tries to read any other drive
-				for(int i=0; i<roots.length; i++) {
+				for(int i=0; i<rootFolders.length; i++) {
 					try  {
-						_setCurrentFolder(roots[i], true);
+						_setCurrentFolder(rootFolders[i], true);
 						break;
 					}
 					catch(IOException e2) {
-						if (i==roots.length-1) {
+						if (i==rootFolders.length-1) {
 							// Now we're screwed
 							throw new RuntimeException("Unable to read any drive");
 						}
@@ -191,9 +191,9 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 
 			// Updates root button label if necessary
 			String currentPath = currentFolder.getAbsolutePath();
-			for(int i=0; i<roots.length; i++) {
-				if (currentPath.toLowerCase().startsWith(roots[i].getAbsolutePath().toLowerCase())) {
-					rootButton.setText(roots[i].toString());
+			for(int i=0; i<rootFolders.length; i++) {
+				if (currentPath.toLowerCase().startsWith(rootFolders[i].getAbsolutePath().toLowerCase())) {
+					rootButton.setText(rootFolders[i].toString());
 					lastPopupIndex = i;
 					break;
 				}
@@ -400,7 +400,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 				int index = rootMenuItems.indexOf(source);
 
 				// Tries to change current folder
-				if (setCurrentFolder(roots[index], true)) {
+				if (setCurrentFolder(rootFolders[index], true)) {
 					// if success, hide popup
 					rootPopup.setVisible(false);
 					

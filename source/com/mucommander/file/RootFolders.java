@@ -1,0 +1,143 @@
+
+package com.mucommander.file;
+
+import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
+
+import java.io.*;
+
+import java.util.Vector;
+import java.util.StringTokenizer;
+
+
+/**
+ * This class' sole purpose is to resolve root folders, those returned by
+ * java.io.File, and platform-specific ones.
+ *
+ * @author Maxence Bernard
+ */
+public class RootFolders {
+
+	// First time init
+	static {
+		updateRootFolders();
+	}
+
+	/** Resolved root folders */
+	private static AbstractFile rootFolders[];
+	
+	
+	/**
+	 * Returns resolved root folders.
+	 */
+	public static AbstractFile[] getRootFolders() {
+		return rootFolders;
+	}
+	
+	
+	/**
+	 * Updates root folders info.
+	 */
+	public static void updateRootFolders() {
+		Vector rootFoldersV = new Vector();
+
+		// Add java.io.File's root folders
+		addFileRoots(rootFoldersV);
+		if(Debug.ON)
+			System.out.println("java.io.File's root folders: "+rootFoldersV);
+		
+		// Add /etc/fstab folders
+		int osType = PlatformManager.getOsType();
+		// If we're running windows, we can just skip that
+		if(!(osType==PlatformManager.WINDOWS_9X || osType==PlatformManager.WINDOWS_NT)) {
+			addFstabEntries(rootFoldersV);
+			if(Debug.ON)
+				System.out.println("/etc/fstab mount points added: "+rootFoldersV);
+		}
+		
+		// Add Mac OS X's /Volumes subfolders
+		if(osType==PlatformManager.MAC_OS_X) {
+			addMacOSXVolumes(rootFoldersV);
+			if(Debug.ON)
+				System.out.println("/Volumes's subfolders added: "+rootFoldersV);
+		}
+		
+		// Folders are cached for subsequent calls to getRootFolders()
+		rootFolders = new AbstractFile[rootFoldersV.size()];
+		rootFoldersV.toArray(rootFolders);
+	}
+
+	
+	/**
+	 * Retrieves java.io.File's reported root folders and adds them to 
+	 * the given Vector.
+	 */
+	private static void addFileRoots(Vector v) {
+		// Warning : No file operation should be performed on the resolved folders,
+		// otherwise this will cause under Win32 a dialog to appear for removable drives such as A:\
+		// if no disk is present.
+		File fileRoots[] = File.listRoots();	
+
+		int nbFolders = fileRoots.length;
+		for(int i=0; i<nbFolders; i++)
+			v.add(new FSFile(fileRoots[i]));		
+	}
+	
+
+	/**
+	 * Parses /etc/fstab file and adds resolved folders to the given vector.
+	 */
+	private static void addFstabEntries(Vector v) {
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("/etc/fstab")));
+			StringTokenizer st;
+			String line;
+			AbstractFile file;
+			String folderPath;
+			while((line=br.readLine())!=null) {
+				// Skip comments
+				if(!line.startsWith("#")) {
+					st = new StringTokenizer(line);
+					// path is second token
+					st.nextToken();
+					folderPath = st.nextToken();
+					if(!folderPath.equals("/proc")) {
+						file = AbstractFile.getAbstractFile(folderPath);
+						if(file!=null)
+							v.add(file);
+					}
+				}
+			}
+		}
+		catch(Exception e) {
+			if(Debug.ON)
+				System.out.println("Error reading /etc/fstab entries: "+ e);
+		}
+		
+	}
+	
+	
+	/**
+	 * Adds /Volumes subfolders to the given Vector.
+	 */
+	private static void addMacOSXVolumes(Vector v) {
+		// /Volumes not resolved for some reason, giving up
+		AbstractFile volumesFolder = AbstractFile.getAbstractFile("/Volumes");
+		if(volumesFolder==null)
+			return;
+		
+		// Adds subfolders
+		try {
+			AbstractFile volumesFiles[] = volumesFolder.ls();
+			int nbFiles = volumesFiles.length;
+			AbstractFile folder;
+			for(int i=0; i<nbFiles; i++)
+				if((folder=volumesFiles[i]).isDirectory())
+					v.add(folder);
+		}
+		catch(IOException e) {
+			if(Debug.ON)
+				System.out.println("Can't get /Volumes subfolders: "+ e);
+		}
+	}
+}

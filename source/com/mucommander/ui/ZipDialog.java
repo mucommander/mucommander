@@ -4,6 +4,7 @@ import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.job.ZipJob;
+import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -27,11 +28,6 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 
 	private final static int CANCEL_ACTION = 0;
 	private final static int OVERWRITE_ACTION = 1;
-	private final static int APPEND_ACTION = 2;
-
-	private final static String CANCEL_TEXT = "Cancel";
-	private final static String OVERWRITE_TEXT = "Overwrite";
-	private final static String APPEND_TEXT = "Add to zip file";
 
 
 	public ZipDialog(MainFrame mainFrame, boolean isShiftDown) {
@@ -65,8 +61,8 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 
 		contentPane.add(mainPanel, BorderLayout.NORTH);
 				
-		okButton = new JButton("OK");
-		cancelButton = new JButton("Cancel");
+		okButton = new JButton(Translator.get("ok"));
+		cancelButton = new JButton(Translator.get("cancel"));
 		// Escape key disposes dialog
 		okButton.addKeyListener(escapeKeyAdapter);
 		cancelButton.addKeyListener(escapeKeyAdapter);
@@ -103,7 +99,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			if (dest==null || dest[1]==null) {
 				// Incorrect destination
 				QuestionDialog dialog = new QuestionDialog(mainFrame, "Incorrect destination", filePath+" is not a valid file path.", mainFrame,
-					new String[] {"OK"},
+					new String[] {Translator.get("ok")},
 					new int[]  {0},
 					0);
 				dialog.getActionValue();
@@ -113,8 +109,8 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
 			if (destFile.exists()) {
 				// File already exists: cancel, append or overwrite?
-				QuestionDialog dialog = new QuestionDialog(mainFrame, "Zip warning", "A file with the same name already exists.", mainFrame,
-					new String[] {CANCEL_TEXT, OVERWRITE_TEXT},
+				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), "A file with the same name already exists.", mainFrame,
+					new String[] {Translator.get("cancel"), Translator.get("overwrite")},
 					new int[]  {CANCEL_ACTION, OVERWRITE_ACTION},
 					0);
 				int ret = dialog.getActionValue();
@@ -131,8 +127,8 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 				destOut = destFile.getOutputStream(false);
 			}
 			catch(Exception ex) {
-				QuestionDialog dialog = new QuestionDialog(mainFrame, "Zip error", "Cannot write to destination file.", mainFrame,
-					new String[] {"OK"},
+				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("zip_dialog.error_title"), Translator.get("zip_dialog.cannot_write"), mainFrame,
+					new String[] {Translator.get("ok")},
 					new int[]  {0},
 					0);
 				dialog.getActionValue();
@@ -140,7 +136,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			}
 			
 			// Starts zipping
-			ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Zipping files");
+			ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
 			ZipJob zipJob = new ZipJob(mainFrame, progressDialog, filesToZip, commentArea.getText(), destOut, destFile.getParent());
 			zipJob.start();
 			progressDialog.start(zipJob);

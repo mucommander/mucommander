@@ -145,8 +145,8 @@ file_menu.run_command:FR:Exécuter une commande
 file_menu.zip:EN:Zip files...
 file_menu.zip:FR:Zipper fichiers...
 
-file_menu.unzip:EN:Unzip file...
-file_menu.unzip:FR:Dézipper fichier...
+file_menu.unzip:EN:Unzip files...
+file_menu.unzip:FR:Dézipper fichiers...
 
 file_menu.email:EN:Email files...
 file_menu.email:FR:Envoyer par email...
@@ -613,6 +613,38 @@ server_connect_dialog.connect:FR:Se connecter
 # Zip dialog #
 ##############
 
+zip_dialog.title:EN:Zip files
+zip_dialog.title:FR:Zipper fichiers
+
+zip_dialog.zipping:EN:Zipping files
+zip_dialog.zipping:FR:Compression en cours
+
+zip_dialog.error_title:EN:Zip error
+zip_dialog.error_title:FR:Erreur de compression
+
+zip_dialog.cannot_write:EN:Cannot create zip file in destination folder.
+zip_dialog.cannot_write:FR:Impossible de créer le fichier zip dans le dossier de destination.
+
+zip_dialog.:EN:
+zip_dialog.:FR:
+
+zip_dialog.:EN:
+zip_dialog.:FR:
+
+zip_dialog.:EN:
+zip_dialog.:FR:
+
+zip_dialog.:EN:
+zip_dialog.:FR:
+
+zip_dialog.:EN:
+zip_dialog.:FR:
+
+zip_dialog.:EN:
+zip_dialog.:FR:
+
+zip_dialog.:EN:
+zip_dialog.:FR:
 
 ###############
 # Text viewer #
@@ -649,12 +681,6 @@ text_editor.file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
 
 text_editor.save_warning:EN:Save changes made to this file before closing ?
 text_editor.save_warning:FR:Enregistrer les modifications avant de fermer ce fichier ?
-
-text_editor.:EN:
-text_editor.:FR:
-
-text_editor.:EN:
-text_editor.:FR:
 
 
 ################
