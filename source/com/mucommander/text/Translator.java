@@ -38,8 +38,6 @@ public class Translator {
 	 */
 	private Translator(String filePath) {
 		dictionaryFilePath = filePath;
-//Locale locale = Locale.getDefault();
-//System.out.println(locale.getLanguage()+" ("+locale.getDisplayLanguage()+")"+" / "+locale.getCountry()+" ("+locale.getDisplayCountry()+")"+" / "+locale.getVariant()+"("+locale.getDisplayVariant());
 
 		try {
 			loadDictionnaryFile();
@@ -48,8 +46,7 @@ public class Translator {
 		}
 		
 		String langVal = ConfigurationManager.getVariable("prefs.language");
-		if(com.mucommander.Debug.ON)
-			System.out.println("Language in prefs: "+langVal);
+		if(com.mucommander.Debug.ON) System.out.println("Language in prefs: "+langVal);
 
 		// If language is not set in preferences 
 		if(langVal==null) {
@@ -58,8 +55,7 @@ public class Translator {
 			String languages[] = getAvailableLanguages();
 			String localeLang = Locale.getDefault().getLanguage();
 
-			if(com.mucommander.Debug.ON)
-				System.out.println("Language not set, trying to match system's language ("+localeLang+")");
+			if(com.mucommander.Debug.ON) System.out.println("Language not set, trying to match system's language ("+localeLang+")");
 			
 			for(int i=0; i<languages.length; i++) {
 				if(languages[i].equalsIgnoreCase(localeLang)) {
@@ -72,12 +68,10 @@ public class Translator {
 			if(Translator.language==null) {
 				Translator.language = "en";
 
-				if(com.mucommander.Debug.ON)
-					System.out.println("No dictionary matching "+localeLang+", falling back to English");
+				if(com.mucommander.Debug.ON) System.out.println("No dictionary matching "+localeLang+", falling back to English");
 			}
 			
-			if(com.mucommander.Debug.ON)
-				System.out.println("Language has been set to "+Translator.language);
+			if(com.mucommander.Debug.ON) System.out.println("Language has been set to "+Translator.language);
 
 				// Set language to configuration file
 			ConfigurationManager.setVariable("prefs.language", Translator.language);
@@ -86,8 +80,7 @@ public class Translator {
 			Translator.language = langVal;
 		}
 
-		if(com.mucommander.Debug.ON)
-			System.out.println("Translator language: "+Translator.language);
+		if(com.mucommander.Debug.ON) System.out.println("Translator language: "+Translator.language);
 	}
 
 	
@@ -204,7 +197,6 @@ public class Translator {
 //					orderedEntries.add(key+":"+lang);
 					nbEntries++;
 				} catch (Exception e) {
-//					LogManager.log("Translator init: Error in line "+line+" ("+e+")");
 					System.out.println("Translator init: error in line "+line+" ("+e+")");
 				}
 			} else {
@@ -214,8 +206,6 @@ public class Translator {
 
 		br.close();
 //		needsToBeSaved = false;
-
-//		LogManager.log("Translator init: "+nbEntries+" entries loaded");
 	}
 
 
@@ -305,8 +295,7 @@ public class Translator {
 		// Dictionary for this language doesn't exist 
 		if (dictionary==null) {
 			if (language.equals("en")) {
-//				LogManager.logError("Translator.get: Unknown key "+key, true);
-				System.out.println("Translator.get: Unknown key "+key);
+				if(com.mucommander.Debug.ON) System.out.println("Translator.get: Unknown key "+key);
 
 				return key;
 			} else
@@ -319,8 +308,7 @@ public class Translator {
 
 		if (text==null) {
 			if (language.equals("en")) {
-//				LogManager.logError("Translator.get: Unknown key "+key, true);
-				System.out.println("Translator.get: Unknown key "+key);
+				if(com.mucommander.Debug.ON) System.out.println("Translator.get: Unknown key "+key);
 
 				return key;
 			} else
@@ -328,18 +316,13 @@ public class Translator {
 				return get(key, "en", originalLanguage, paramValues);
 		}
 
+
 		// Replace %1, %2 ... parameters by their value
 		if (paramValues!=null) {
-			int i;
-			int pos = 0;
-
-			while ((pos = text.indexOf('%', pos))!=-1) {
-				i = Integer.parseInt(""+text.charAt(pos+1))-1;
-
-				if (i<paramValues.length)
+			int pos = -1;
+			for(int i=0; i<paramValues.length; i++) {
+				while(++pos<text.length()-1 && (pos = text.indexOf("%"+(i+1), pos))!=-1)
 					text = text.substring(0, pos)+paramValues[i]+text.substring(pos+2, text.length());
-
-				i++;
 			}
 		}
 
@@ -442,6 +425,99 @@ public class Translator {
 		} else
 
 			return null;
+	}
+
+
+	public static void main(String args[]) throws IOException {
+		Enumeration languages = dictionaries.keys();
+		Vector langsV = new Vector();
+		while(languages.hasMoreElements())
+			langsV.add(languages.nextElement());
+			
+		String langs[] = new String[langsV.size()];
+		langsV.toArray(langs);
+		
+		com.mucommander.file.AbstractFile sourceFolder = com.mucommander.file.AbstractFile.getAbstractFile(args[0]);
+	
+		System.out.println("\n##### Checking missing entries #####");
+		checkMissingEntries(sourceFolder, langs);
+
+		System.out.println("\n##### Checking unused entries #####");
+		checkUnusedEntries(sourceFolder, langs);
+	}
+
+
+	private static void checkMissingEntries(com.mucommander.file.AbstractFile file, String languages[]) throws IOException {
+		if(file.isDirectory()) {
+//			System.out.println("Checking missing entries in "+file.getAbsolutePath());
+			com.mucommander.file.AbstractFile children[] = file.ls();
+			for(int i=0; i<children.length; i++)
+				checkMissingEntries(children[i], languages);
+		}
+		else if(file.getName().endsWith(".java")) {
+//			System.out.println("Checking missing entries in "+file.getAbsolutePath());
+			BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
+			String line;
+			int pos;
+			String entry;
+			String language;
+			while((line=br.readLine())!=null) {
+				if(!line.trim().startsWith("//") && (pos=line.indexOf("Translator.get(\""))!=-1) {
+					try {
+						entry = line.substring(pos+16, line.indexOf("\"", pos+16));
+//						System.out.println("Checking entry "+entry);
+						for(int i=0; i<languages.length; i++) {
+							language = languages[i];
+							if(((Hashtable)dictionaries.get(language)).get(entry)==null)
+								System.out.println("Missing "+language.toUpperCase()+" entry '"+entry+"' in "+file.getAbsolutePath());
+						}
+					}
+					catch(Exception e) {
+					}
+				}
+			}
+			br.close();
+		} 
+	}
+
+
+	private static void checkUnusedEntries(com.mucommander.file.AbstractFile sourceFolder, String languages[]) throws IOException {
+		Hashtable dictionary;
+		Enumeration entries;
+		String entry;
+		for(int i=0; i<languages.length; i++) {
+			entries = ((Hashtable)dictionaries.get(languages[i])).keys();
+			while(entries.hasMoreElements()) {
+				entry = (String)entries.nextElement();
+				if(!isEntryUsed(entry, sourceFolder))
+					System.out.println("Unused "+languages[i].toUpperCase()+" entry "+entry);
+			}
+		}
+	}
+
+	private static boolean isEntryUsed(String entry, com.mucommander.file.AbstractFile file) throws IOException {
+		if(file.isDirectory()) {
+			com.mucommander.file.AbstractFile children[] = file.ls();
+			for(int i=0; i<children.length; i++)
+				if(isEntryUsed(entry, children[i]))
+					return true;
+			return false;
+		}
+		else if(file.getName().endsWith(".java")) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
+			String line;
+			int pos;
+			while((line=br.readLine())!=null) {
+				if(!line.trim().startsWith("//") && (pos=line.indexOf("\""+entry+"\""))!=-1) {
+					br.close();
+					return true;
+				}
+			}
+			br.close();
+			return false;
+		}
+		
+		return false;
 	}
 
 
