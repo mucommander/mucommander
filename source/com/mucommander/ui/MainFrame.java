@@ -49,6 +49,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	private boolean isActive; 
 	
 	
+	/**
+	 * Creates a new main frame, set to the given initial folders.
+	 */
 	public MainFrame(AbstractFile initialFolder1, AbstractFile initialFolder2) {
 		super(FRAME_TITLE);
 	
@@ -142,6 +145,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	}
 	
 	
+	/**
+	 * Returns true if there is an icon toolbar visible on this frame.
+	 */
 	public boolean isToolbarVisible() {
 		return this.toolbar!=null;
 	}
@@ -231,43 +237,51 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 */
 	public void compareDirectories() {
 		AbstractFile tempFile;
-		AbstractFile files1[] = ((FileTableModel)table1.getModel()).getFileArray();
-		AbstractFile files2[] = ((FileTableModel)table2.getModel()).getFileArray();
-        int fileIndex;
+//		AbstractFile files1[] = ((FileTableModel)table1.getModel()).getFileArray();
+//		AbstractFile files2[] = ((FileTableModel)table2.getModel()).getFileArray();
+		FileTableModel tableModel1 = (FileTableModel)table1.getModel();
+		FileTableModel tableModel2 = (FileTableModel)table2.getModel();
+        int nbFiles1 = tableModel1.getRowCount();
+        int nbFiles2 = tableModel2.getRowCount();
+		int fileIndex;
 		String tempFileName;
-		for(int i=table1.getCurrentFolder().getParent()==null?0:1; i<files1.length; i++) {
-			tempFile = files1[i];
-//			if(tempFile.isFolder() && !(tempFile instanceof ArchiveFile))
+		for(int i=table1.getCurrentFolder().getParent()==null?0:1; i<nbFiles1; i++) {
+//			tempFile = files1[i];
+			tempFile = tableModel1.getFileAtRow(i);
 			if(tempFile.isDirectory())
 				continue;
 			
 			tempFileName = tempFile.getName();
             fileIndex = -1;
-			for(int j=table2.getCurrentFolder().getParent()==null?0:1; j<files2.length; j++)
-				if (files2[j].getName().equals(tempFileName)) {
+			for(int j=table2.getCurrentFolder().getParent()==null?0:1; j<nbFiles2; j++)
+//				if (files2[j].getName().equals(tempFileName)) {
+				if (tableModel2.getFileAtRow(j).getName().equals(tempFileName)) {
                     fileIndex = j;
 					break;
 				}
-			if (fileIndex==-1 || files2[fileIndex].getDate()<tempFile.getDate()) {
+//			if (fileIndex==-1 || files2[fileIndex].getDate()<tempFile.getDate()) {
+			if (fileIndex==-1 || tableModel2.getFileAtRow(fileIndex).getDate()<tempFile.getDate()) {
 				table1.setFileMarked(tempFile, true);
 				table1.repaint();
 			}
 		}
 
-		for(int i=table2.getCurrentFolder().getParent()==null?0:1; i<files2.length; i++) {
-			tempFile = files2[i];
-//			if(tempFile.isFolder() && !(tempFile instanceof ArchiveFile))
+		for(int i=table2.getCurrentFolder().getParent()==null?0:1; i<nbFiles2; i++) {
+//			tempFile = files2[i];
+			tempFile = tableModel2.getFileAtRow(i);
 			if(tempFile.isDirectory())
 				continue;
 
 			tempFileName = tempFile.getName();
             fileIndex = -1;
-			for(int j=table1.getCurrentFolder().getParent()==null?0:1; j<files1.length; j++)
-				if (files1[j].getName().equals(tempFileName)) {
+			for(int j=table1.getCurrentFolder().getParent()==null?0:1; j<nbFiles1; j++)
+//				if (files1[j].getName().equals(tempFileName)) {
+				if (tableModel1.getFileAtRow(j).getName().equals(tempFileName)) {
                     fileIndex = j;
 					break;
 				}
-			if (fileIndex==-1 || files1[fileIndex].getDate()<tempFile.getDate()) {
+//			if (fileIndex==-1 || files1[fileIndex].getDate()<tempFile.getDate()) {
+			if (fileIndex==-1 || tableModel1.getFileAtRow(fileIndex).getDate()<tempFile.getDate()) {
 				table2.setFileMarked(tempFile, true);
 				table2.repaint();
 			}
