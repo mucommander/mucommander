@@ -3,7 +3,7 @@ package com.mucommander.ui.macosx;
 
 import com.mucommander.Launcher;
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.AboutDialog;
+import com.mucommander.ui.about.AboutDialog;
 
 import com.apple.mrj.MRJAboutHandler;
 import com.apple.mrj.MRJPrefsHandler;

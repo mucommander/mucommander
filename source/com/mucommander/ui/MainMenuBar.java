@@ -7,7 +7,10 @@ import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.EmailFilesDialog;
 import com.mucommander.ui.pref.PreferencesDialog;
+import com.mucommander.ui.help.ShortcutsDialog;
+import com.mucommander.ui.about.AboutDialog;
 import com.mucommander.job.SendMailJob;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
