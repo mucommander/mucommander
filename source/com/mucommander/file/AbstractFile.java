@@ -81,6 +81,9 @@ public abstract class AbstractFile {
 		// FTP file
 		else if (absPathLC.startsWith("ftp://"))
 			file = new FTPFile(absPath);
+		// SFTP file
+		else if (absPathLC.startsWith("sftp://"))
+			file = new SFTPFile(absPath);
 		// FS file, test if the given path is indeed absolute
 		else if (new File(absPath).isAbsolute())
 			file = new FSFile(absPath);

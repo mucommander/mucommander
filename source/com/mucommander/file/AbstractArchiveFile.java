@@ -87,6 +87,10 @@ public abstract class AbstractArchiveFile extends AbstractFile implements Archiv
 		return file.getInputStream();
 	}
 	
+	public InputStream getInputStream(long skipBytes) throws IOException {
+		return file.getInputStream(skipBytes);
+	}
+	
 	public OutputStream getOutputStream(boolean append) throws IOException {
 		return file.getOutputStream(append);
 	}

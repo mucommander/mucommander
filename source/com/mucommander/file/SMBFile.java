@@ -203,13 +203,10 @@ public class SMBFile extends AbstractFile {
 			SMBFile destSMBFile = (SMBFile)dest;
 			if(destSMBFile.fileURL.getHost().equals(this.fileURL.getHost())) 
 				try{
-//if(com.mucommander.Debug.ON) System.out.print("SMBFile.moveTo "+getAbsolutePath()+" to "+destSMBFile.getAbsolutePath());
 					file.renameTo(destSMBFile.file);
-//if(com.mucommander.Debug.ON) System.out.print("SMBFile.moveTo TRUE");
 					return true;
 				}
 				catch(SmbException e) {
-//if(com.mucommander.Debug.ON) System.out.print("SMBFile.moveTo FALSE");
 					return false;
 				}
 		}

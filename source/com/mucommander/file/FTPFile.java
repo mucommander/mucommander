@@ -180,16 +180,12 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: "+ftpClient.get
 			AuthInfo authInfo = AuthInfo.getAuthInfo(fileURL);
 
 if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileURL.getURL(true)+" authInfo="+authInfo);
-			if(authInfo!=null) {
-//				try { ftpClient.login(authInfo.getLogin(), authInfo.getPassword()); }
-//				catch(IOException e) {
-//					// Throw an AuthException so that we can ask the user to authentify
-//					throw new AuthException(fileURL, ftpClient.getReplyString());
-//				}
-				ftpClient.login(authInfo.getLogin(), authInfo.getPassword());
-//				// Throw an IOException (possibly AuthException) if server replied with an error
-				checkServerReply(ftpClient, fileURL);
-			}
+			if(authInfo==null)
+				throw new AuthException(fileURL);
+			
+			ftpClient.login(authInfo.getLogin(), authInfo.getPassword());
+			// Throw an IOException (possibly AuthException) if server replied with an error
+			checkServerReply(ftpClient, fileURL);
 			
 			// Enables/disables passive mode
 if(com.mucommander.Debug.ON) System.out.println("initConnection: passive mode ="+passiveMode);
@@ -428,13 +424,17 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
 		if(destFile instanceof FTPFile) {
 			FTPFile destFTPFile = (FTPFile)destFile;
 			
-			if(destFTPFile.fileURL.getHost().equals(this.fileURL.getHost()))
+			if(destFTPFile.fileURL.getHost().equals(this.fileURL.getHost())) {
+				// Check connection and reconnect if connection timed out
+				checkConnection(ftpClient);
+				
 				try {
 					return ftpClient.rename(absPath, destFTPFile.absPath);
 				}
 				catch(IOException e) {
 					return false;
 				}
+			}
 		}
 		
 		return false;
@@ -472,19 +472,36 @@ if(com.mucommander.Debug.ON) System.out.println("FTPFile.ls(): ParserInitializat
         AbstractFile children[] = new AbstractFile[files.length];
         AbstractFile child;
 		FileURL childURL;
+		String childName;
 		int nbFiles = files.length;
+		int fileCount = 0;
 		String parentURL = fileURL.getURL(false);
 		if(!parentURL.endsWith(SEPARATOR))
 			parentURL += SEPARATOR;
-		
+
 		for(int i=0; i<nbFiles; i++) {
-			childURL = new FileURL(parentURL+files[i].getName());
+			childName = files[i].getName();
+			if(childName.equals(".") || childName.equals(".."))
+				continue;
+				
+			childURL = new FileURL(parentURL+childName);
+			
+			// Discard '.' and '..' files
+			if(childName.equals(".") || childName.equals(".."))
+				continue;
 
 //			children[nbFiles] = AbstractFile.getAbstractFile(absPath+SEPARATOR+names[i], this);
 			child = AbstractFile.wrapArchive(new FTPFile(childURL, files[i], ftpClient));
 			child.setParent(this);
-			children[i] = child;
+			children[fileCount++] = child;
         }
+		
+		// Create new array of the exact file count
+		if(fileCount<nbFiles) {
+			AbstractFile newChildren[] = new AbstractFile[fileCount];
+			System.arraycopy(children, 0, newChildren, 0, fileCount);
+			return newChildren;
+		}
 		
         return children;
 	}

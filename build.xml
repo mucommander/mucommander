@@ -46,6 +46,7 @@
     <unjar src="${lib}/commons-net.jar" dest="${classes}"/>
     <unjar src="${lib}/jakarta-oro.jar" dest="${classes}"/> 
     <unjar src="${lib}/javatar.jar" dest="${classes}"/>
+    <unjar src="${lib}/j2ssh-core.jar" dest="${classes}"/>
     <!-- Not supported by unjar, too bad
         <fileset dir="${lib}">
         <include name="**/*.jar"/>

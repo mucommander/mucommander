@@ -243,11 +243,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 
 	
 	/**
-	 * Displays a popup message notifying the user that the request folder couldn't be opened.
+	 * Depending on the given IOException kind :
+	 * - if AuthException : pops up an authentication window where the user can enter a new login and password
+	 * - if any other IOException : displays a popup message notifying the user that the request folder couldn't be opened.
 	 *
 	 * @return <code>true</code> if the exception was due to authentication and the user was asked to authentify, in that case, caller may want to try and read the folder again.
 	 */
-	private boolean showFolderAccessError(IOException e) {
+	private boolean showAccessErrorDialog(IOException e) {
 		if(e instanceof AuthException) {
 			AuthDialog authDialog = new AuthDialog(mainFrame, (AuthException)e);
 			authDialog.showDialog();
@@ -289,7 +291,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			}
 			catch(IOException e) {
 				// Retry (loop) if user authentified
-				if(showFolderAccessError(e)) {
+				if(showAccessErrorDialog(e)) {
 					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
 					continue;
 				}
@@ -318,7 +320,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			}
 			catch(IOException e) {
 				// Retry (loop) if user authentified
-				if(showFolderAccessError(e)) {
+				if(showAccessErrorDialog(e)) {
 					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
 					continue;
 				}
@@ -348,7 +350,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			}
 			catch(IOException e) {
 				// Retry (loop) if user authentified
-				if(showFolderAccessError(e)) {
+				if(showAccessErrorDialog(e)) {
 					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
 					continue;
 				}
@@ -402,7 +404,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			return;
 		}
 		catch(IOException e) {
-			if(!showFolderAccessError(e))
+			if(!showAccessErrorDialog(e))
 				return;
 
 			// Retry if user authentified, using setCurrentFolder which will lose selection
@@ -414,7 +416,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 				}
 				catch(IOException e2) {
 					// Retry (loop) if user authentified
-					if(showFolderAccessError(e))
+					if(showAccessErrorDialog(e))
 						continue;
 				}
 				break;
@@ -461,7 +463,24 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 		if (source == locationField) {
 			String location = locationField.getText();
 
-			AbstractFile file = AbstractFile.getAbstractFile(location);
+			AbstractFile file = null;
+			do {
+				try {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFile");
+					file = AbstractFile.getAbstractFile(location, true);
+ 				}
+				catch(IOException ex) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception thrown");
+					// Retry (loop) if user authentified
+					if(showAccessErrorDialog(ex))
+						continue;
+					else return;
+				}
+				break;
+			}
+			while(true);
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file = "+file);
 
 			boolean browse = false;
 			if(file==null || !file.exists()) {
