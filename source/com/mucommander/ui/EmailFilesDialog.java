@@ -102,8 +102,11 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
 			int nbFiles = files.size();
 			fileCheckboxes = new JCheckBox[nbFiles];
+			AbstractFile file;
 			for(int i=0; i<nbFiles; i++) {
-				fileCheckboxes[i] = new JCheckBox(((AbstractFile)files.elementAt(i)).getName(), true);
+				file = (AbstractFile)files.elementAt(i);
+				fileCheckboxes[i] = new JCheckBox(file.getName()
+					+" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB)+")", true);
 				fileCheckboxes[i].addItemListener(this);
 				fileCheckboxes[i].addKeyListener(escapeKeyAdapter);
 				tempPanel.add(fileCheckboxes[i]);

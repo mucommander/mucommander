@@ -149,7 +149,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 				nbBytesTotal = job.getTotalBytesProcessed();
 				if(lastBytesTotal!=nbBytesTotal) {
 					now = System.currentTimeMillis();
-					speed = (long)(nbBytesTotal/(double)((now-startTime)/1000));
+					speed = (long)(nbBytesTotal/((now-startTime)/(double)1000));
+//System.out.println(nbBytesTotal+" "+((now-startTime)/1000));
 					statsLabel.setText("Transferred "+SizeFormatter.format(nbBytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB)+" at "+SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+"/s");
 					statsLabel.repaint(REFRESH_RATE);
 	
