@@ -5,6 +5,7 @@ import com.mucommander.file.*;
 import com.mucommander.ui.table.*;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.*;
+import com.mucommander.ui.comp.ProgressTextField;
 
 import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
@@ -36,7 +37,8 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		so there is no way to tell if it's the final selection (ENTER) or not.
 	*/
 	private DriveButton driveButton;
-	private JTextField locationField;
+//	private JTextField locationField;
+	private ProgressTextField locationField;
 	private boolean locationFieldTextSet;
 	
 	private FileTable fileTable;
@@ -167,6 +169,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
 		public void run() {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
 
+locationField.setProgressValue(10);
+
 			mainFrame.setStatusBarText(Translator.get("status_bar.connecting_to_folder"));
 
 			// Start a new thread which will popup a dialog after a number of seconds
@@ -232,6 +236,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 							file = AbstractFile.getAbstractFile(folderURL, true);
 						else
 							file = AbstractFile.getAbstractFile(folderPath, true);
+
+locationField.setProgressValue(30);
 
 						synchronized(lock) {
 							if(isKilled) {
@@ -299,6 +305,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 						this.folder = file;
 					}
 
+locationField.setProgressValue(50);
+
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
 					AbstractFile children[] = folder.ls();
 
@@ -309,9 +317,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
 						}
 						doNotKill = true;
 					}
+
+locationField.setProgressValue(70);
 					
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFolder");
 					setCurrentFolder(folder, children, addToHistory);
+
+locationField.setProgressValue(90);
 					
 					// Select specified file if there is one
 					if(fileToSelect!=null)
@@ -353,6 +365,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on w
 
 				// Clean things up
 				finish();
+
+locationField.setProgressValue(0);
 			}
 		}
 	
@@ -399,7 +413,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		locationPanel.add(driveButton);
 		locationPanel.addSpace(6);
 
-		locationField = new JTextField();
+//		locationField = new JTextField();
+		locationField = new ProgressTextField(0, new Color(0, 255, 255, 64));
 		locationField.addActionListener(this);
 		locationField.addKeyListener(this);
 		locationField.addFocusListener(this);
