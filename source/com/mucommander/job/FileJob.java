@@ -304,7 +304,7 @@ public abstract class FileJob implements Runnable {
 	 */
 	protected void nextFile(AbstractFile file) {
 		this.currentFile = file;
-		if(file.getFolder().equals(baseSourceFolder)
+		if(file.getParent().equals(baseSourceFolder))
 			currentFileIndex++;
 	}
 	

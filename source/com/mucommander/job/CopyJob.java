@@ -47,8 +47,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
     /**
 	 * @param indicates if this CopyJob corresponds to an 'unzip' operation.
 	 */
-	public CopyJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToCopy, String newName, AbstractFile destFolder, boolean unzip) {
-		super(progressDialog, mainFrame);
+	public CopyJob(MainFrame mainFrame, ProgressDialog progressDialog, AbstractFile baseSourceFolder, Vector filesToCopy, String newName, AbstractFile destFolder, boolean unzip) {
+		super(progressDialog, mainFrame, baseSourceFolder);
 
 	    this.filesToCopy = filesToCopy;
         this.nbFiles = filesToCopy.size();
