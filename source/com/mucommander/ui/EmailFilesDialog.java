@@ -107,9 +107,9 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 					tempPanel2.add(fileCheckboxes[i]);
 				}
 				scrollPane = new JScrollPane(tempPanel2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-				updateInfoLabel();
 				contentPane.add(scrollPane, BorderLayout.CENTER);
 			}
+			updateInfoLabel();
 				
 			// OK / Cancel buttons panel
 			okButton = new JButton("OK");

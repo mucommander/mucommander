@@ -5,24 +5,36 @@ import java.util.Vector;
 
 public abstract class AbstractFile {
 
-	/**
-	 * Creates a new instance of AbstractFile.
-	 */
-	public AbstractFile() {
-	}
+
+	
+	protected abstract void setParent(AbstractFile parent);
+	
 	
 	/**
-	 * Returns an instance of an AbstractFile for the given absolute path.
-	 * This method will return an instance of the correct AbstractFile class.
-	 * It will return <code>null</code> if the given path is not absolute or incorrect.
+	 * Returns an instance of AbstractFile for the given absolute path.
+	 *
+	 * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file).
 	 */
 	public static AbstractFile getAbstractFile(String absPath) {
+		return getAbstractFile(absPath, null);
+	}
+
+
+
+	/**
+	 * Returns an instance of AbstractFile for the given absolute path and sets the giving parent. AbstractFile subclasses should
+	 * call this method rather than getAbstractFile(String) because it is more efficient.
+	 *
+	 * @param parent the returned file's parent
+	 * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file).
+	 */
+	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) {
 		AbstractFile file;
 
 		// SMB file
 		if (absPath.toLowerCase().startsWith("smb://")) {
 			try {
-			file = new SMBFile(absPath);
+				file = new SMBFile(absPath);
 			}
 			catch(IOException e) {
 				return null;
@@ -65,8 +77,12 @@ public abstract class AbstractFile {
 		if(name!=null && !file.isDirectory() && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")))
 			return new ZipArchiveFile(file);
 		
+		if(parent!=null)
+			file.setParent(parent);
+		
 		return file;		
 	}
+
 
     
 	/**

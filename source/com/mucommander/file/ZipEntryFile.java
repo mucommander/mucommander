@@ -17,6 +17,12 @@ public class ZipEntryFile extends AbstractFile {
 		this.parent = parent;
 		this.zipEntry = zipEntry;
 	}
+
+
+	protected void setParent(AbstractFile parent) {
+		this.parent = parent;	
+	}
+
 	
 	/**
 	 * Returns the ZipEntry associated with this ZipEntryFile

@@ -11,17 +11,18 @@ import com.apple.mrj.MRJQuitHandler;
 import com.apple.mrj.MRJApplicationUtils;
 
 
-public class FinderIntegration implements MRJAboutHandler, MRJPrefsHandler, Runnable {
+public class FinderIntegration implements MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Runnable {
 
 	private final static int ABOUT_ACTION = 0;
 	private final static int PREFS_ACTION = 1;
-//	private final static int QUIT_ACTION = 2;
+	private final static int QUIT_ACTION = 2;
 	
 	private int action;
 	
 	public FinderIntegration() {
 		MRJApplicationUtils.registerAboutHandler(this);
 		MRJApplicationUtils.registerPrefsHandler(this);
+		MRJApplicationUtils.registerQuitHandler(this);
 	}
 
 	public void handleAbout() {
@@ -33,13 +34,12 @@ public class FinderIntegration implements MRJAboutHandler, MRJPrefsHandler, Runn
 		this.action = PREFS_ACTION;
 		new Thread(this).start();
 	}
-
-/*	
+	
 	public void handleQuit() {
 		this.action = QUIT_ACTION;
 		new Thread(this).start();
 	}
-*/
+
 	
 	public void run() {
 		MainFrame mainFrame = Launcher.getLauncher().getCurrentMainFrame();
@@ -52,9 +52,9 @@ public class FinderIntegration implements MRJAboutHandler, MRJPrefsHandler, Runn
 			case PREFS_ACTION:
 				mainFrame.showPreferencesDialog();
 				break;
-				
-//			case QUIT_ACTION:
-//				break;
+			case QUIT_ACTION:
+				System.exit(0);
+				break;
 		}
 	}
 }

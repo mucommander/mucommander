@@ -21,12 +21,9 @@ public class HTMLFile extends AbstractFile {
 //	private long date = -1;
 //	private long size = -1;
 
-//	// Indicates whether or not the value has already been retrieved
-//	private boolean parentValCached = false;
-		
 	private boolean isFolder;
-//	// Indicates whether or not the value has already been retrieved
-//	private boolean isFolderValCached = false;
+	
+	private AbstractFile parent;	
 	
 	
 	/**
@@ -40,7 +37,12 @@ public class HTMLFile extends AbstractFile {
 		this(new URL(context, fileURL));
 	}
 		 
-	
+
+	protected void setParent(AbstractFile parent) {
+		this.parent = parent;
+	}
+
+		 
 	protected HTMLFile(URL url) {
 		this.url = url;
 		
@@ -195,6 +197,7 @@ public class HTMLFile extends AbstractFile {
 					href = ""+s.getAttribute(HTML.Attribute.HREF);
 					if (href.startsWith("http://")) {
 						child = new HTMLFile(href, url);
+						child.parent = this;
 						if(children.indexOf(child)==-1)
 							children.add(child);
 					}

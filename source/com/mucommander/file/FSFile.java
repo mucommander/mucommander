@@ -69,7 +69,7 @@ public class FSFile extends AbstractFile {
 		this.absPath = _file.getAbsolutePath();
 		// Tries to find out if the file may be a symbolic link
 		try {
-		this.isSymlink = !_file.getCanonicalPath().equals(this.absPath);
+			this.isSymlink = !_file.getCanonicalPath().equals(this.absPath);
 		}
 		catch(IOException e){}
 
@@ -83,6 +83,13 @@ public class FSFile extends AbstractFile {
 			this.file = _file;
 	}
 
+	
+	protected void setParent(AbstractFile parent) {
+		this.parent = (FSFile)parent;	
+		this.parentValCached = true;
+	}
+	
+	
 	public String getName() {
     	// Retrieves name and caches it
 //    	if (name==null) {
@@ -223,7 +230,7 @@ public class FSFile extends AbstractFile {
         
         AbstractFile children[] = new AbstractFile[names.length];
 		for(int i=0; i<names.length; i++) {
-			children[i] = AbstractFile.getAbstractFile(absPath+separator+names[i]);
+			children[i] = AbstractFile.getAbstractFile(absPath+separator+names[i], this);
 		}
 		return children;
 	}

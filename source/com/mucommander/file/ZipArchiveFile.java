@@ -15,6 +15,10 @@ public class ZipArchiveFile extends ArchiveFile {
 		this.file = file;
 	}
 
+	protected void setParent(AbstractFile parent) {
+		this.file.setParent(parent);	
+	}	
+
 	public String getName() {
 		return file.getName();
 	}

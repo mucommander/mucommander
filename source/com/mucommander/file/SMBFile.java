@@ -15,6 +15,8 @@ public class SMBFile extends AbstractFile {
 	/** File separator is '/' for urls */
 	private String separator = "/";
 
+	private AbstractFile parent;
+	private boolean parentValCached;
 	
 	/**
 	 * Creates a new instance of SMBFile.
@@ -70,8 +72,13 @@ public class SMBFile extends AbstractFile {
 		}
 	 }
 
-	
-	/**
+
+	protected void setParent(AbstractFile parent) {
+		this.parent = parent;	
+	}
+	 
+	 
+	 /**
 	 * Removes login and password information (if any) from the URL.
 	 */
 	private static String getPrivateURL(String url) {
@@ -132,7 +139,6 @@ public class SMBFile extends AbstractFile {
 
 		return new AuthInfo(login, password);
 	} 
-
 
 
 	public String getName() {
@@ -209,23 +215,26 @@ public class SMBFile extends AbstractFile {
         }
 	}
 	
+	
 	public AbstractFile getParent() {
-/*
-		if(file==null)
-			return null;
-
-*/		
-		String parent = file.getParent();
-        // SmbFile.getParent() never returns null
-		if(parent.equals("smb://"))
-            return null;
-        
-		try {
-            return new SMBFile(parent);
-        }
-        catch(IOException e) {
-            return null;
-        }
+		if(!parentValCached) {
+			String parentS = file.getParent();
+			// SmbFile.getParent() never returns null
+			if(parentS.equals("smb://"))
+				this.parent = null;
+			
+			try {
+				this.parent = new SMBFile(parentS);
+			}
+			catch(IOException e) {
+				this.parent = null;
+			}
+			
+			this.parentValCached = true;
+			return this.parent;
+		}
+		
+		return this.parent;
     }
 	
 	public boolean exists() {
@@ -368,7 +377,7 @@ public class SMBFile extends AbstractFile {
         AbstractFile children[] = new AbstractFile[names.length];
         int nbFiles = 0;
 		for(int i=0; i<names.length; i++) {
-			children[nbFiles] = AbstractFile.getAbstractFile(absPath+separator+names[i]);
+			children[nbFiles] = AbstractFile.getAbstractFile(absPath+separator+names[i], this);
         
             // It can happen that the SmbFile constructor throws an SmbException (for example
             // when a filename contains an '@' symbol in jCIFS v0.6.7), in which
