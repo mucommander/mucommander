@@ -34,8 +34,8 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 	private JButton cancelButton;
 
 	// Dialog size constrains
-	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
-	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(480,400);	
+	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(400,0);	
+	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(550,400);	
 	
 	
 	public EmailFilesDialog(MainFrame mainFrame) {
@@ -68,7 +68,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			tempPanel = new JPanel();
 			tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.X_AXIS));
 			tempPanel.add(new JLabel("Subject"));
-			tempPanel.add(Box.createRigidArea(new Dimension(5, 0)));		
+			tempPanel.add(Box.createRigidArea(new Dimension(6, 0)));		
 			subjectField = new JTextField(lastSubject);
 			subjectField.addKeyListener(escapeKeyAdapter);
 			tempPanel.add(subjectField);
@@ -79,8 +79,9 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			// Body area
 			bodyArea = new JTextArea(lastBody);
 			bodyArea.addKeyListener(escapeKeyAdapter);
-			bodyArea.setRows(6); 
-			JScrollPane scrollPane = new JScrollPane(bodyArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			bodyArea.setRows(6);
+			bodyArea.setLineWrap(true);
+			JScrollPane scrollPane = new JScrollPane(bodyArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			mainPanel.add(scrollPane);
 			
 			mainPanel.addSpace(15);
