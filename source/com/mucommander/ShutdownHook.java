@@ -20,11 +20,7 @@ public class ShutdownHook extends Thread {
 	 */
 	public void run() {
 		// Saves preferences
-		try {
-			ConfigurationManager.writeConfiguration();
-		}
-		catch(java.io.IOException e) {
-		}
+		ConfigurationManager.writeConfiguration();
 	}
 
 }
