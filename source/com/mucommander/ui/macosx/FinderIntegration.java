@@ -1,7 +1,7 @@
 
 package com.mucommander.ui.macosx;
 
-import com.mucommander.ui.WindowManager;
+import com.mucommander.Launcher;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.about.AboutDialog;
 
@@ -20,9 +20,17 @@ public class FinderIntegration implements MRJAboutHandler, MRJPrefsHandler, MRJQ
 	private int action;
 	
 	public FinderIntegration() {
-		MRJApplicationUtils.registerAboutHandler(this);
-		MRJApplicationUtils.registerPrefsHandler(this);
-		MRJApplicationUtils.registerQuitHandler(this);
+		// Have to catch exceptions (NoClassDefFoundError and NoSuchMethodException)
+		// because they seem not to be available under Mac OS X 10.1 (reported by Lanch)
+		try {MRJApplicationUtils.registerAboutHandler(this);}
+		catch(NoClassDefFoundError e){}
+		catch(Exception e2){}
+		try {MRJApplicationUtils.registerPrefsHandler(this);}
+		catch(NoClassDefFoundError e){}
+		catch(Exception e2){}
+		try {MRJApplicationUtils.registerQuitHandler(this);}
+		catch(NoClassDefFoundError e){}
+		catch(Exception e2){}
 	}
 
 	public void handleAbout() {
@@ -42,7 +50,7 @@ public class FinderIntegration implements MRJAboutHandler, MRJPrefsHandler, MRJQ
 
 	
 	public void run() {
-		MainFrame mainFrame = WindowManager.getInstance().getCurrentMainFrame();
+		MainFrame mainFrame = Launcher.getLauncher().getCurrentMainFrame();
 		
 		switch(action) {
 			case ABOUT_ACTION:
