@@ -3,13 +3,11 @@ package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.pref.PreferencesDialog;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFile;
-
 import com.mucommander.job.SendMailJob;
-
 import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -54,12 +52,12 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 	
 	
 	public EmailFilesDialog(MainFrame mainFrame) {
-		super(mainFrame, "Email files", mainFrame);
+		super(mainFrame, Translator.get("email_dialog.title"), mainFrame);
 		this.mainFrame = mainFrame;
 
 		// Notifies the user that mail preferences are not set and brings the preferences dialog 
 		if(!SendMailJob.mailPreferencesSet()) {
-			JOptionPane.showMessageDialog(mainFrame, "You need to set your mail preferences first.", "Mail preferences not set", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(mainFrame, Translator.get("email_dialog.prefs_not_set"), Translator.get("email_dialog.prefs_not_set_title"), JOptionPane.INFORMATION_MESSAGE);
 	
 			PreferencesDialog preferencesDialog = new PreferencesDialog(mainFrame);
 			preferencesDialog.setActiveTab(PreferencesDialog.MAIL_TAB);
@@ -86,12 +84,12 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			// To (recipients) field
 			toField = new JTextField(lastTo);
 			toField.addKeyListener(escapeKeyAdapter);
-			textFieldsPanel.addTextFieldRow("To", toField, 10);
+			textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.to"), toField, 10);
 			
 			// Subject field
 			subjectField = new JTextField(lastSubject);
 			subjectField.addKeyListener(escapeKeyAdapter);
-			textFieldsPanel.addTextFieldRow("Subject", subjectField, 15);
+			textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.subject"), subjectField, 15);
 
 			mainPanel.add(textFieldsPanel);		
 	
@@ -131,8 +129,8 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			updateInfoLabel();
 				
 			// OK / Cancel buttons panel
-			okButton = new JButton("OK");
-			cancelButton = new JButton("Cancel");
+			okButton = new JButton(Translator.get("email_dialog.send"));
+			cancelButton = new JButton(Translator.get("cancel"));
 			// Escape key disposes dialog
 			okButton.addKeyListener(escapeKeyAdapter);
 			cancelButton.addKeyListener(escapeKeyAdapter);
@@ -151,7 +149,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			showDialog();
 		}
 		catch(IOException e) {
-			JOptionPane.showMessageDialog(this, "Unable to read files in subfolders.", "Email files error", JOptionPane.ERROR_MESSAGE);	
+			JOptionPane.showMessageDialog(this, Translator.get("email_dialog.read_error"), Translator.get("email_dialog.error_title"), JOptionPane.ERROR_MESSAGE);	
 		}
 	}
 
@@ -169,8 +167,9 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 				nbSelected++;
 			}
 		}
-		String text = nbSelected
-			+(nbSelected>1?" files":" file")
+		String text = 
+//			nbSelected + (nbSelected>1?" files":" file")
+			Translator.get("email_dialog.nb_files", ""+nbSelected)
 			+(nbSelected==0?"":" ("+SizeFormatter.format(bytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB)+")");
 		infoLabel.setText(text);
 		infoLabel.repaint(100);
@@ -233,7 +232,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 						filesToSend.add(files.elementAt(i));
 
 				// Starts sending files
-				ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Sending files");
+				ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("email_dialog.sending"));
 				SendMailJob mailJob = new SendMailJob(mainFrame, progressDialog, filesToSend, to, subject, body);
 				mailJob.start();
 				progressDialog.start(mailJob);

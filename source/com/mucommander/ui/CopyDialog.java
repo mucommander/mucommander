@@ -5,6 +5,7 @@ import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.job.CopyJob;
+import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -42,7 +43,7 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 	 * @param isShiftDown true if shift key was pressed when invoking this dialog.
 	 */
 	public CopyDialog(MainFrame mainFrame, boolean unzipDialog, boolean isShiftDown) {
-		super(mainFrame, (unzipDialog?"Unzip":"Copy"), mainFrame);
+		super(mainFrame, Translator.get(unzipDialog?"unzip_dialog.unzip":"copy_dialog.copy"), mainFrame);
 		this.mainFrame = mainFrame;
 	    this.unzipDialog = unzipDialog;
 		
@@ -57,7 +58,7 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 		Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel();
 		
-		JLabel label = new JLabel((unzipDialog?"Unzip":"Copy")+" selected file(s) to");
+		JLabel label = new JLabel(Translator.get(unzipDialog?"unzip_dialog.destination":"copy_dialog.destination"));
         mainPanel.add(label);
 
 		AbstractFile destFolder = (activeTable==table1?table2:table1).getCurrentFolder();
@@ -102,8 +103,8 @@ public class CopyDialog extends FocusDialog implements ActionListener {
         contentPane.add(mainPanel, BorderLayout.NORTH);
 		
 			// OK / Cancel buttons panel
-        okButton = new JButton(unzipDialog?"Unzip":"Copy");
-        cancelButton = new JButton("Cancel");
+        okButton = new JButton(Translator.get(unzipDialog?"unzip_dialog.unzip":"copy_dialog.copy"));
+        cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
         // Escape key disposes dialog
@@ -136,7 +137,10 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 		Object ret[] = mainFrame.resolvePath(destPath);
 		// The path entered doesn't correspond to any existing folder
 		if (ret==null || ((filesToCopy.size()>1 || unzipDialog) && ret[1]!=null)) {
-			showErrorDialog("Folder "+destPath+" doesn't exist.", (unzipDialog?"Unzip":"Copy")+" error");
+			if(unzipDialog)				
+				showErrorDialog(Translator.get("unzip_dialog.unknown_folder", destPath), Translator.get("unzip_dialog.error_title"));
+			else
+				showErrorDialog(Translator.get("copy_dialog.unknown_folder", destPath), Translator.get("copy_dialog.error_title"));
 			return;
 		}
 
@@ -144,12 +148,12 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 		String newName = (String)ret[1];
 
 		if (!unzipDialog && newName==null && activeTable.getCurrentFolder().equals(destFolder)) {
-			showErrorDialog("Source and destination are the same.", (unzipDialog?"Unzip":"Copy")+" error");
+			showErrorDialog(Translator.get("copy_dialog.same_source_destination"), Translator.get("copy_dialog.error_title"));
 			return;
 		}
 
 		// Starts moving files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, (unzipDialog?"Unzipping":"Copying")+" files");
+		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get(unzipDialog?"unzip_dialog.unzipping":"copy_dialog.copying"));
 		CopyJob copyJob = new CopyJob(mainFrame, progressDialog, filesToCopy, newName, destFolder, unzipDialog);
 		copyJob.start();
 		progressDialog.start(copyJob);

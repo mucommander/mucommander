@@ -6,6 +6,7 @@ import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.job.DeleteJob;
+import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -35,7 +36,7 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
 
 	
 	public DeleteDialog(MainFrame mainFrame) {
-	    super(mainFrame, "Delete", mainFrame);
+	    super(mainFrame, Translator.get("delete_dialog.delete"), mainFrame);
 		this.mainFrame = mainFrame;
 		
 		activeTable = mainFrame.getLastActiveTable();
@@ -45,13 +46,13 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
         Container contentPane = getContentPane();
         
         YBoxPanel mainPanel = new YBoxPanel();
-        mainPanel.add(new JLabel("Permanently delete selected file(s) ?"));
+        mainPanel.add(new JLabel(Translator.get("delete_dialog.confirmation")));
 
 		mainPanel.addSpace(10);
 		contentPane.add(mainPanel, BorderLayout.NORTH);
         
-        okButton = new JButton("Delete");
-		cancelButton = new JButton("Cancel");
+        okButton = new JButton(Translator.get("delete_dialog.delete"));
+		cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
         		
 		// Escape key disposes dialog
@@ -82,20 +83,21 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
         	return;
                     
         // Starts deleting files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Deleting files");
+		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("delete_dialog.deleting"));
 		DeleteJob deleteJob = new DeleteJob(mainFrame, progressDialog, filesToDelete);
         deleteJob.start();
     	progressDialog.start(deleteJob);
 	}
 	
-	
+
+/*	
 	private void showErrorDialog(String msg, String title) {
 		JOptionPane.showMessageDialog(mainFrame, msg, title, JOptionPane.ERROR_MESSAGE);
 
 		// FileTable lost focus
 		activeTable.requestFocus();
 	}
-
+*/
 
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();

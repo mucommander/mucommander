@@ -4,6 +4,8 @@ package com.mucommander.ui;
 import com.mucommander.Launcher;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.button.RolloverButton;
+import com.mucommander.text.Translator;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
@@ -29,20 +31,20 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	
 	/** Buttons descriptions */
 	private String BUTTONS_DESC[][] = {
-		{"New window (Ctrl+N)", "/newwindow.gif", null, "true"},
-		{"Go back (Alt+Left)", "/back.gif", "/backg.gif", null},
-		{"Go forward (Alt+Right)", "/forward.gif", "/forwardg.gif", "true"},
-		{"Mark (NumPad +)", "/mark.gif", null, null},
-		{"Unmark (NumPad -)", "/unmark.gif", null, "true"},
-		{"Swap folders (Ctrl+U)", "/switch.gif", null, null},
-		{"Set same folder (Ctrl+E)", "/same.gif", null, "true"},
-		{"Connect to Server (Ctrl+K)", "/sconnect.gif", null, null},
-		{"Run command (Ctrl+R)", "/runcmd.gif", null, null},
-		{"Zip (Ctrl+I)", "/zip.gif", null, null},
-		{"Unzip (Ctrl+P)", "/unzip.gif", null, null},
-		{"Email files (Ctrl+S)", "/mail.gif", null, null},
-		{"Properties (Alt+Enter)", "/properties.gif", null, "true"},
-		{"Preferences", "/configure.gif", null, null}
+		{Translator.get("toolbar.new_window"), "/newwindow.gif", null, "true"},
+		{Translator.get("toolbar.go_back"), "/back.gif", "/backg.gif", null},
+		{Translator.get("toolbar.go_forward"), "/forward.gif", "/forwardg.gif", "true"},
+		{Translator.get("toolbar.mark"), "/mark.gif", null, null},
+		{Translator.get("toolbar.unmark"), "/unmark.gif", null, "true"},
+		{Translator.get("toolbar.swap_folders"), "/switch.gif", null, null},
+		{Translator.get("toolbar.set_same_folder"), "/same.gif", null, "true"},
+		{Translator.get("toolbar.server_connect"), "/sconnect.gif", null, null},
+		{Translator.get("toolbar.run_command"), "/runcmd.gif", null, null},
+		{Translator.get("toolbar.zip"), "/zip.gif", null, null},
+		{Translator.get("toolbar.unzip"), "/unzip.gif", null, null},
+		{Translator.get("toolbar.email"), "/mail.gif", null, null},
+		{Translator.get("toolbar.properties"), "/properties.gif", null, "true"},
+		{Translator.get("toolbar.preferences"), "/configure.gif", null, null}
 	};
 
 	
@@ -230,7 +232,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {		
 				if(this.popupMenu==null) {
 					popupMenu = new JPopupMenu();
-					this.hideToolbarMenuItem = new JMenuItem("Hide Toolbar");
+					this.hideToolbarMenuItem = new JMenuItem(Translator.get("toolbar.hide_toolbar"));
 					hideToolbarMenuItem.addActionListener(this);
 					popupMenu.add(hideToolbarMenuItem);
 				}

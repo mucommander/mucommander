@@ -30,9 +30,9 @@ cancel:FR:Annuler
 #cancel:JP:ｷｬﾝｾﾙ
 
 
-##########
+############
 # Language #
-##########
+############
 
 language.en:EN:English
 language.en:FR:Anglais
@@ -64,7 +64,7 @@ command_bar.mkdir:EN:Make dir [F7]
 command_bar.mkdir:FR:Créer rep [F7]
 
 command_bar.delete:EN:Delete [F8]
-command_bar.delete:FR:Effacer [F8]
+command_bar.delete:FR:Supprimer [F8]
 
 command_bar.refresh:EN:Refresh [F9]
 command_bar.refresh:FR:Raffraîchir [F9]
@@ -204,4 +204,218 @@ help_menu.forums:FR:Forums muCommander
 
 help_menu.about:EN:About muCommander...
 help_menu.about:FR:A propos de muCommander...
+
+
+###########
+# Toolbar #
+###########
+
+# Keyboard shortcuts will soon be removed from here
+# and be inserted dynamically
+
+toolbar.new_window:EN:$[file_menu.new_window] (Ctrl+N)
+
+toolbar.go_back:EN:$[view_menu.go_back] (Alt+Left)
+
+toolbar.go_forward:EN:$[view_menu.go_forward] (Alt+Right)
+
+toolbar.mark:EN:$[mark_menu.mark] (NumPad +)
+
+toolbar.unmark:EN:$[mark_menu.unmark] (NumPad -)
+
+toolbar.swap_folders:EN:$[view_menu.swap_folders] (Ctrl+U)
+
+toolbar.set_same_folder:EN:$[view_menu.set_same_folder] (Ctrl+E)
+
+toolbar.server_connect:EN:$[file_menu.server_connect] (Ctrl+K)
+
+toolbar.run_command:EN:$[file_menu.run_command] (Ctrl+R)
+
+toolbar.zip:EN:$[file_menu.zip] (Ctrl+I)
+
+toolbar.unzip:EN:$[file_menu.unzip] (Ctrl+P)
+
+toolbar.email:EN:$[file_menu.email] (Ctrl+S)
+
+toolbar.properties:EN:$[file_menu.properties] (Alt+Enter)
+
+toolbar.preferences:EN:$[file_menu.preferences]
+
+toolbar.hide_toolbar:EN:$[view_menu.hide_toolbar]
+
+
+#########
+# Table #
+#########
+
+table.name:EN:Name
+table.name:FR:Nom
+
+table.size:EN:Size
+table.size:FR:Taille
+
+table.date:EN:Date
+table.date:FR:Date
+
+
+##################
+# Version dialog #
+##################
+
+version_dialog.no_new_version_title:EN:No new version
+version_dialog.no_new_version_title:FR:Pas de nouvelle version
+
+version_dialog.no_new_version:EN:Congratulations, you already have the latest version.
+version_dialog.no_new_version:EN:Félicitations, vous avez déjà la dernière version.
+
+version_dialog.new_version_title:EN:New version available
+version_dialog.new_version_title:FR:Nouvelle version disponible
+
+version_dialog.new_version:EN:There is a new version of muCommander available.
+version_dialog.new_version:EN:Il y a une nouvelle version de muCommander disponible.
+
+version_dialog.new_version_url:EN:There is a new version of muCommander available at %1
+version_dialog.new_version_url:EN:Il y a une nouvelle version de muCommander disponible à %1
+
+version_dialog.not_available_title:EN:Server not reachable
+version_dialog.not_available_title:EN:Serveur indisponible
+
+version_dialog.not_available:EN:Unable to get version information from server.
+version_dialog.not_available:EN:L'information de version n'a pas pu être récupérée.
+
+version_dialog.download:EN:Download
+version_dialog.download:FR:Téléchargement
+
+
+###############
+# Copy dialog #
+###############
+
+copy_dialog.copy:EN:Copy
+copy_dialog.copy:FR:Copier
+
+copy_dialog.destination:EN:Copy selected file(s) to
+copy_dialog.destination:FR:Copier les fichiers sélectionnés dans
+
+copy_dialog.error_title:EN:Copy error
+copy_dialog.error_title:FR:Erreur de copie
+
+copy_dialog.unknown_folder:EN:Folder %1 doesn't exist.
+copy_dialog.unknown_folder:FR:Le dossier %1 n'existe pas.
+
+copy_dialog.same_source_destination:EN:Source and destination are the same.
+copy_dialog.same_source_destination:FR:La source et la destination sont les mêmes.
+
+copy_dialog.copying:EN:Copying files
+copy_dialog.copying:FR:Copie en cours
+
+
+################
+# Unzip dialog #
+################
+
+unzip_dialog.unzip:EN:Unzip
+unzip_dialog.unzip:FR:Dézipper
+
+unzip_dialog.destination:EN:Unzip selected file(s) to
+unzip_dialog.destination:FR:Décompresser les fichiers selectionnés dans
+
+unzip_dialog.error_title:EN:Unzip error
+unzip_dialog.error_title:FR:Erreur de décompression
+
+unzip_dialog.unknown_folder:EN:$[copy_dialog.unknown_folder]
+
+unzip_dialog.unzipping:EN:Unzipping files
+unzip_dialog.unzipping:FR:Décompression en cours
+
+
+#################
+# Delete dialog #
+#################
+
+delete_dialog.delete:EN:Delete
+delete_dialog.delete:FR:Supprimer
+
+delete_dialog.confirmation:EN:Permanently delete selected file(s) ?
+delete_dialog.confirmation:FR:Définitivement supprimer les fichiers sélectionnés ?
+
+delete_dialog.deleting:EN:Deleting
+delete_dialog.deleting:FR:Suppression en cours
+
+
+################
+# Email dialog #
+################
+
+email_dialog.title:EN:Email files
+email_dialog.title:FR:Envoyer par email
+
+email_dialog.prefs_not_set_title:EN:Mail not configured
+email_dialog.prefs_not_set_title:FR:Paramètres absents
+
+email_dialog.prefs_not_set:EN:You need to set your mail parameters first.
+email_dialog.prefs_not_set:FR:Vous devez d'abord configurer vos paramètres email.
+
+email_dialog.to:EN:To
+email_dialog.to:FR:A
+
+email_dialog.subject:EN:Subject
+email_dialog.subject:FR:Sujet
+
+email_dialog.send:EN:Send
+email_dialog.send:FR:Envoyer
+
+email_dialog.error_title:EN:Email files error
+email_dialog.error_title:FR:Erreur d'envoi
+
+email_dialog.read_error:EN:Unable to read files in subfolders.
+email_dialog.read_error:FR:Les fichiers ne peuvent être lus.
+
+email_dialog.sending:EN:Sending files
+email_dialog.sending:FR:Envoi en cours
+
+email_dialog.nb_files:EN:%1 file(s)
+email_dialog.nb_files:FR:%1 fichier(s)
+
+
+#########################
+# File selection dialog #
+#########################
+
+file_selection_dialog.mark:EN:Mark
+file_selection_dialog.mark:FR:Marquer
+
+file_selection_dialog.unmark:EN:Unmark
+file_selection_dialog.unmark:FR:Démarquer
+
+file_selection_dialog.mark_description:EN:Mark files whose filename:
+file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom:
+
+file_selection_dialog.unmark_description:EN:Unmark files whose filename:
+file_selection_dialog.unmark_description:FR:Démarquer les fichiers dont le nom:
+
+file_selection_dialog.contains:EN:Contains
+file_selection_dialog.contains:FR:Contient
+
+file_selection_dialog.starts_with:EN:Starts with
+file_selection_dialog.starts_with:FR:Commence par
+
+file_selection_dialog.ends_with:EN:Ends with
+file_selection_dialog.ends_with:FR:Termine par
+
+file_selection_dialog.is:EN:Is
+file_selection_dialog.is:FR:Est
+
+file_selection_dialog.case_sensitive:EN:Case sensitive
+file_selection_dialog.case_sensitive:FR:Respecter la casse
+
+file_selection_dialog.include_folders:EN:Include folders
+file_selection_dialog.include_folders:FR:Inclure les dossiers
+
+file_selection_dialog.:EN:
+file_selection_dialog.:FR:
+
+file_selection_dialog.:EN:
+file_selection_dialog.:FR:
+
 

@@ -4,6 +4,8 @@ import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.*;
 import com.mucommander.file.*;
+import com.mucommander.text.Translator;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -70,7 +72,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 	 */
 	public FileSelectionDialog(MainFrame mainFrame, boolean addToSelection) {
 
-		super(mainFrame, addToSelection?"Mark":"Unmark", mainFrame);
+		super(mainFrame, Translator.get(addToSelection?"file_selection_dialog.mark":"file_selection_dialog.unmark"), mainFrame);
 	
 		this.mainFrame = mainFrame;
 		this.addToSelection = addToSelection;
@@ -81,16 +83,16 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
 		
 		YBoxPanel northPanel = new YBoxPanel(5);
-		JLabel label = new JLabel((addToSelection?"Mark":"Unmark")+" files whose filename:");
+		JLabel label = new JLabel(Translator.get(addToSelection?"file_selection_dialog.mark_description":"file_selection_dialog.unmark_description"));
 		northPanel.add(label);
 
 		JPanel tempPanel = new JPanel();
 		tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.X_AXIS));
 		comparisonComboBox = new JComboBox();
-		comparisonComboBox.addItem("Contains");
-		comparisonComboBox.addItem("Starts with");
-		comparisonComboBox.addItem("Ends with");
-		comparisonComboBox.addItem("Is");
+		comparisonComboBox.addItem(Translator.get("file_selection_dialog.contains"));
+		comparisonComboBox.addItem(Translator.get("file_selection_dialog.starts_with"));
+		comparisonComboBox.addItem(Translator.get("file_selection_dialog.ends_with"));
+		comparisonComboBox.addItem(Translator.get("file_selection_dialog.is"));
 		comparisonComboBox.setSelectedIndex(comparison);
 		comparisonComboBox.addKeyListener(escapeKeyAdapter);
 		tempPanel.add(comparisonComboBox);
@@ -107,11 +109,11 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 		// Add some vertical space
 		northPanel.addSpace(10);
 		
-		caseSensitiveCheckBox = new JCheckBox("Case sensitive", caseSensitive);
+		caseSensitiveCheckBox = new JCheckBox(Translator.get("file_selection_dialog.case_sensitive"), caseSensitive);
 		caseSensitiveCheckBox.addKeyListener(escapeKeyAdapter);
 		northPanel.add(caseSensitiveCheckBox);
 
-		includeFoldersCheckBox = new JCheckBox("Include folders", includeFolders);
+		includeFoldersCheckBox = new JCheckBox(Translator.get("file_selection_dialog.include_folders"), includeFolders);
 		includeFoldersCheckBox.addKeyListener(escapeKeyAdapter);
 		northPanel.add(includeFoldersCheckBox);
 		
@@ -120,12 +122,12 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 
 		contentPane.add(northPanel, BorderLayout.NORTH);
 
+		okButton = new JButton(Translator.get(addToSelection?"file_selection_dialog.mark":"file_selection_dialog.unmark"));
 		// Sets default 'enter' button
-		okButton = new JButton("OK");
 		okButton.setDefaultCapable(true);
 		getRootPane().setDefaultButton(okButton);
 		okButton.addKeyListener(escapeKeyAdapter);
-		cancelButton = new JButton("Cancel");
+		cancelButton = new JButton(Translator.get("cancel"));
 		cancelButton.addKeyListener(escapeKeyAdapter);
 		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 

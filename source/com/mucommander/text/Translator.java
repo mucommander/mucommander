@@ -350,7 +350,7 @@ public class Translator {
 		while ((pos = text.indexOf("$[", pos))!=-1) {
 			pos2 = text.indexOf("]", pos+1);
 			var = text.substring(pos+2, pos2);
-			text = text.substring(0, pos)+get(var, language)+text.substring(pos2+1, text.length());
+			text = text.substring(0, pos)+get(var, language, paramValues)+text.substring(pos2+1, text.length());
 		}
 
 		return text;
