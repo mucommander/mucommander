@@ -15,26 +15,31 @@ import com.mucommander.text.Translator;
 import java.io.*;
 
 import java.net.URL;
-import java.net.URLDecoder;
-
+import java.net.URLConnection;
 
 /**
  * This job downloads a file over HTTP.
  */
-public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
+public class HttpDownloadJob extends ExtendedFileJob implements Runnable, FileModifier {
 
 	/** URL of the file to download */
 	private String fileURL;
 	
-	/** Destination folder where the file will be downloaded */
+	/** Local file where the file will be downloaded */
+	private AbstractFile destFile;
+
+	/** Local folder where the file will be downloaded */
 	private AbstractFile destFolder;
 
-	/** Index of file currently being processed */
-	private int currentFileIndex;
+	/** Length of remote file, -1 if information is not available */
+	private long fileLength;
 
     /** Number of bytes processed so far */
     private long nbBytesProcessed;
 
+	/** Value set to true once the connection to the server has been made */
+	private boolean connected;
+	
 	private final static int CANCEL_ACTION = 0;
 	private final static int SKIP_ACTION = 1;
 
@@ -43,30 +48,19 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
 
 	
     /**
-	 *
+	 * Creates a new HttpDownloadJob.
 	 */
-	public HttpDownloadJob(MainFrame mainFrame, ProgressDialog progressDialog, String fileURL, AbstractFile destFolder) {
+	public HttpDownloadJob(MainFrame mainFrame, ProgressDialog progressDialog, String fileURL, AbstractFile destFile) {
 		super(progressDialog, mainFrame);
 
 		this.fileURL = fileURL;
-		this.destFolder = destFolder;
-
+		this.destFile = destFile;
+		this.destFolder = destFile.getParent();
 	}
 
 	
 	private void downloadFile() {
 
-		// Determines local file name
-		int urlLen = fileURL.length();
-		while(fileURL.charAt(urlLen-1)=='/')
-			fileURL = fileURL.substring(0, --urlLen);
-
-		int lastSlashPos = fileURL.lastIndexOf('/');
-		String fileName = URLDecoder.decode(fileURL.substring(lastSlashPos==-1||lastSlashPos<7?7:lastSlashPos, urlLen));
-		
-		// Create destination file
-		AbstractFile destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath()+destFolder.getSeparator()+fileName);
-		
 		// Tests if file exists in destination folder
 		boolean append = false;
 		if (destFile.exists())  {
@@ -84,16 +78,23 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
 			// Simply continue for overwrite
 		}
 
-		// Open inputstream
+		// Open connection
 		InputStream in = null;
 		try {
-			in = new URL(fileURL).openStream();
+			URLConnection conn = new URL(fileURL).openConnection();
+			conn.connect();
+			fileLength = conn.getContentLength();
+			in = conn.getInputStream();
+			connected = true;
 		}
 		catch(IOException e) {
 			showErrorDialog(Translator.get("http_download.cannot_open_url"));
 			return;
 		}
 
+		// Check if operation has not been cancelled by the user
+		if(isInterrupted())
+			return;
 		
 		OutputStream out = null;
 		try  {
@@ -110,7 +111,7 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
 			catch(IOException e) {
 				if(com.mucommander.Debug.ON)
 					System.out.println(""+e);
-				int ret = showErrorDialog(Translator.get("http_download.cannot_copy_file", fileName));
+				int ret = showErrorDialog(Translator.get("http_download.cannot_download_file", destFile.getName()));
 				if(ret!=SKIP_ACTION)		// CANCEL_ACTION or close dialog
 					stop();                
 			}
@@ -118,7 +119,7 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
 		catch(IOException e) {
 			if(com.mucommander.Debug.ON)
 				System.out.println(""+e);
-			int ret = showErrorDialog(Translator.get("http_download.cannot_create_destination", fileName));
+			int ret = showErrorDialog(Translator.get("http_download.cannot_create_destination", destFile.getName()));
 			if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
 				stop();
 		}
@@ -206,9 +207,24 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
     public int getNbFiles() {
         return 1;
     }
-    
+
     public String getStatusString() {
-        return Translator.get("http_download.downloading", fileURL);
-    }
- 
+		if(connected)
+			return Translator.get("http_download.downloading_file", fileURL);
+		else
+			return Translator.get("http_download.connecting");
+	}
+
+	
+	/*******************************************
+	 *** ExtendedFileJob implemented methods ***
+	 *******************************************/
+
+    public long getCurrentFileBytesProcessed() {
+        return nbBytesProcessed;
+	}
+
+    public long getCurrentFileSize() {
+		return fileLength;
+	}
 }	

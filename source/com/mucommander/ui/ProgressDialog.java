@@ -123,6 +123,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         String lastInfo;
 
 		long nbBytesTotal;
+		long nbBytesSkipped;
 		long lastBytesTotal = 0;
         
         totalPercent = lastTotalPercent = -1;
@@ -134,7 +135,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             extendedJob = (ExtendedFileJob)job;
 
 		long speed;
-		long startTime = job.getStartTime();
+//		long startTime = job.getStartTime();
+		// Start time will only be available after this dialog has been activated
+		long startTime;
 		long now;
 		long pausedTime;
 		while(repaintThread!=null && !job.hasFinished()) {
@@ -152,11 +155,14 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
 				// Update stats if necessary
 				nbBytesTotal = job.getTotalBytesProcessed();
+				nbBytesSkipped = job.getTotalBytesSkipped();
 				pausedTime = job.getPausedTime();
+				startTime = job.getStartTime();
 				if(lastBytesTotal!=nbBytesTotal) {
 					now = System.currentTimeMillis();
-					speed = (long)(nbBytesTotal/((now-startTime-pausedTime)/(double)1000));
-//					statsLabel.setText("Transferred "+SizeFormatter.format(nbBytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB)+" at "+SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+"/s");
+					speed = (long)((nbBytesTotal-nbBytesSkipped)/((now-startTime-pausedTime)/1000d));
+if(com.mucommander.Debug.ON)
+System.out.println("nbBytesTotal="+nbBytesTotal+"nbBytesSkipped="+nbBytesSkipped+" startTime="+startTime+" pausedTime="+pausedTime+" now="+now+" speed="+speed+" speedStr="+SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB));
 					statsLabel.setText(
 						Translator.get("progress_bar.transferred",
 						SizeFormatter.format(nbBytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB),

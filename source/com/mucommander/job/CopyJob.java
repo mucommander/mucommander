@@ -42,6 +42,9 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
     /** Number of bytes processed so far */
     private long nbBytesProcessed;
 
+    /** Number of bytes skipped so far */
+    private long nbBytesSkipped;
+	
     /** Number of files that this job contains */
     private int nbFiles;
     
@@ -180,10 +183,18 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 			
 			OutputStream out = null;
 			InputStream in = null;
+			long bytesSkipped;
 			try  {
 				in = file.getInputStream();
 				out = destFile.getOutputStream(append);
-
+				if(append) {
+					bytesSkipped = destFile.getSize();
+					in.skip(bytesSkipped);
+					nbBytesProcessed += bytesSkipped;
+					currentFileProcessed += bytesSkipped;
+					nbBytesSkipped += bytesSkipped;
+				}
+				
 				try  {
 					int read;
                     while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
@@ -319,6 +330,10 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
         return nbBytesProcessed;
     }
 
+    public long getTotalBytesSkipped() {
+		return nbBytesSkipped;
+	}
+
     public int getCurrentFileIndex() {
         return currentFileIndex;
     }
@@ -330,7 +345,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
     public long getCurrentFileBytesProcessed() {
         return currentFileProcessed;
     }
-
+	
     public long getCurrentFileSize() {
         return currentFileSize;
     }

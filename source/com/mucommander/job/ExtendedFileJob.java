@@ -36,6 +36,7 @@ public abstract class ExtendedFileJob extends FileJob {
      */
     public abstract long getCurrentFileBytesProcessed();
 
+
     /**
      * Returns current file's size, -1 if is not available.
      */

@@ -70,7 +70,7 @@ skip_all:FR:Ignorer (tous)
 append:EN:Append
 append:FR:Ajouter a la fin
 
-append_all:EN:Append
+append_all:EN:Append all
 append_all:FR:Ajouter a la fin (tous)
 
 overwrite:EN:Overwrite
@@ -366,9 +366,9 @@ version_dialog.download:EN:Download
 version_dialog.download:FR:Télécharger
 
 
-###############
-# Copy dialog #
-###############
+########
+# Copy #
+########
 
 copy_dialog.copy:EN:Copy
 copy_dialog.copy:FR:Copier
@@ -378,8 +378,6 @@ copy_dialog.destination:FR:Copier les fichiers sélectionnés dans
 
 copy_dialog.error_title:EN:Copy error
 copy_dialog.error_title:FR:Erreur de copie
-
-copy_dialog.folder_does_not_exist:EN:$[this_folder_does_not_exist]
 
 copy_dialog.same_source_destination:EN:Source and destination folders are the same.
 copy_dialog.same_source_destination:FR:Les répertoires source et destination sont les mêmes.
@@ -402,9 +400,9 @@ copy.copying_file:EN:Copying %1
 copy.copying_file:FR:Copie de %1 en cours
 
 
-################
-# Unzip dialog #
-################
+#########
+# Unzip #
+#########
 
 unzip_dialog.unzip:EN:Unzip
 unzip_dialog.unzip:FR:Dézipper
@@ -414,8 +412,6 @@ unzip_dialog.destination:FR:Décompresser les fichiers selectionnés dans
 
 unzip_dialog.error_title:EN:Unzip error
 unzip_dialog.error_title:FR:Erreur de décompression
-
-unzip_dialog.folder_does_not_exist:EN:$[folder_does_not_exist]
 
 unzip_dialog.unzipping:EN:Unzipping files
 unzip_dialog.unzipping:FR:Décompression en cours
@@ -433,9 +429,9 @@ unzip.unable_to_open_zip:EN:Unable to open zip file %1.
 unzip.unable_to_open_zip:FR:Impossible d'ouvrir l'archive %1.
 
 
-###############
-# Move dialog #
-###############
+########
+# Move #
+########
 
 move_dialog.rename:EN:Rename
 move_dialog.rename:FR:Renommer
@@ -443,7 +439,7 @@ move_dialog.rename:FR:Renommer
 move_dialog.move:EN:Move
 move_dialog.move:FR:Déplacer
 
-move_dialog.rename_description:EN:Rename to
+move_dialog.rename_description:EN:Rename file to
 move_dialog.rename_description:FR:Renommer en
 
 move_dialog.move_description:EN:Move to
@@ -451,8 +447,6 @@ move_dialog.move_description:FR:Déplacer vers
 
 move_dialog.error_title:EN:Move error
 move_dialog.error_title:FR:Erreur de déplacement
-
-move_dialog.folder_does_not_exist:EN:$[this_folder_does_not_exist]
 
 move_dialog.same_source_destination:EN:$[copy_dialog.same_source_destination]
 
@@ -467,6 +461,9 @@ move_dialog.moving:FR:Déplacement en cours
 # HTTP download #
 #################
 
+http_download.connecting:EN:Connecting to server...
+http_download.connecting:FR:Connection en cours...
+
 http_download.downloading:EN:Downloading
 http_download.downloading:FR:Téléchargement en cours
 
@@ -476,16 +473,28 @@ http_download.downloading_file:FR:Téléchargement de %1 en cours
 http_download.error_title:EN:Download error
 http_download.error_title:FR:Erreur lors du téléchargement
 
-http_download.cannot_copy_file:EN:Unable to download %1
-http_download.cannot_copy_file:FR:Impossible de télécharger %1
+http_download.cannot_download_file:EN:Unable to download %1
+http_download.cannot_download_file:FR:Impossible de télécharger %1
 
 http_download.cannot_create_destination:EN:Unable to create file %1 in destination.
 http_download.cannot_create_destination:FR:Impossible de créer le fichier %1 dans le dossier de destination.
 
+download_dialog.download:EN:Download
+download_dialog.download:FR:Télécharger
 
-#################
-# Delete dialog #
-#################
+download_dialog.description:EN:Download file to
+download_dialog.description:FR:Télécharger le fichier dans
+
+download_dialog.error_title:EN:Download error
+download_dialog.error_title:FR:Erreur de téléchargement
+
+download_dialog.downloading:EN:Downloading file
+download_dialog.downloading:FR:Téléchargement en cours
+
+
+##########
+# Delete #
+##########
 
 delete_dialog.delete:EN:Delete
 delete_dialog.delete:FR:Supprimer
@@ -497,9 +506,9 @@ delete_dialog.deleting:EN:Deleting
 delete_dialog.deleting:FR:Suppression en cours
 
 
-################
-# Email dialog #
-################
+#########
+# Email #
+#########
 
 email_dialog.title:EN:Email files
 email_dialog.title:FR:Envoyer par email
@@ -567,9 +576,9 @@ file_selection_dialog.include_folders:EN:Include folders
 file_selection_dialog.include_folders:FR:Inclure les dossiers
 
 
-################
-# Mkdir dialog #
-################
+#########
+# Mkdir #
+#########
 
 mkdir_dialog.title:EN:Make directory
 mkdir_dialog.title:FR:Créer repertoire
@@ -680,9 +689,9 @@ server_connect_dialog.connect:EN:Connect
 server_connect_dialog.connect:FR:Se connecter
 
 
-##############
-# Zip dialog #
-##############
+#######
+# Zip #
+#######
 
 zip_dialog.title:EN:Zip files
 zip_dialog.title:FR:Zipper fichiers

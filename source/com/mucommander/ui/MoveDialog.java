@@ -50,7 +50,7 @@ public class MoveDialog extends DestinationDialog {
 				fieldText += ((AbstractFile)filesToMove.elementAt(0)).getName();
 		}
 
-		setFieldText(fieldText);
+		setTextField(fieldText);
  
 		showDialog();
 	}
@@ -68,7 +68,7 @@ public class MoveDialog extends DestinationDialog {
 		Object ret[] = mainFrame.resolvePath(destPath);
 		// The path entered doesn't correspond to any existing folder
 		if (ret==null || (filesToMove.size()>1 && ret[1]!=null)) {
-			showErrorDialog(Translator.get("move_dialog.folder_does_not_exist", destPath), Translator.get("move_dialog.error_title"));
+			showErrorDialog(Translator.get("this_folder_does_not_exist", destPath), Translator.get("move_dialog.error_title"));
 			return;
 		}
 

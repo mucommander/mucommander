@@ -72,7 +72,7 @@ public class CopyDialog extends DestinationDialog {
 			}
 		}
 		
-		setFieldText(fieldText);
+		setTextField(fieldText);
 		
 		showDialog();
 	}
@@ -89,10 +89,7 @@ public class CopyDialog extends DestinationDialog {
 		Object ret[] = mainFrame.resolvePath(destPath);
 		// The path entered doesn't correspond to any existing folder
 		if (ret==null || ((filesToCopy.size()>1 || unzipDialog) && ret[1]!=null)) {
-			if(unzipDialog)				
-				showErrorDialog(Translator.get("unzip_dialog.folder_does_not_exist", destPath), Translator.get("unzip_dialog.error_title"));
-			else
-				showErrorDialog(Translator.get("copy_dialog.folder_does_not_exist", destPath), Translator.get("copy_dialog.error_title"));
+			showErrorDialog(Translator.get("this_folder_does_not_exist", destPath), Translator.get(unzipDialog?"unzip_dialog.error_title":"copy_dialog.error_title"));
 			return;
 		}
 

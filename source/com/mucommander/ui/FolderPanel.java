@@ -393,16 +393,14 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 
 		if (source == locationField) {
 			String location = locationField.getText();
-			
+
 			// HTTP URL: Copy file to current folder
 			if(location.startsWith("http://") || location.startsWith("HTTP://")) {
-				AbstractFile destFolder = fileTable.getCurrentFolder();
-				ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("http_download.downloading"));
-				com.mucommander.job.HttpDownloadJob downloadJob = new com.mucommander.job.HttpDownloadJob(mainFrame, progressDialog, location, destFolder);
-				progressDialog.start(downloadJob);
-				
 				// Restore current folder's path
 				locationField.setText(currentFolder.getAbsolutePath(true));
+
+				// Show confirmation/path modification dialog
+				new DownloadDialog(mainFrame, location);
 			}
 			// If folder could not be set, restore current folder's path
 			else if(!setCurrentFolder(AbstractFile.getAbstractFile(location), true))

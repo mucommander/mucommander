@@ -93,7 +93,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 	}
 
 
-	protected void setFieldText(String text) {
+	protected void setTextField(String text) {
 		pathField.setText(text);
         // Text is selected so that user can directly type and replace path
         pathField.setSelectionStart(0);

@@ -12,7 +12,7 @@ import com.mucommander.file.AbstractFile;
 
 /**
  * FileJob is a container for a 'file task' : basically an operation that involves files and bytes.
- * The class implementing FileJob is required to give some information about the status of the job that
+ * The class extending FileJob is required to give some information about the status of the job that
  * will be used to display visual indications of the job's progress.
  *
  * <p>The actual file operations are performed in a separate thread.</p>
@@ -206,6 +206,11 @@ public abstract class FileJob implements Runnable {
 	}
 	
 
+	/**
+	 * Returns a String describing what's currently being done (e.g. "Deleting file test.zip")
+	 */
+	public abstract String getStatusString();
+
     /**
      * Returns the number of file that this job contains.
      */
@@ -217,14 +222,15 @@ public abstract class FileJob implements Runnable {
     public abstract int getCurrentFileIndex();
 
     /**
-     * Returns the number of bytes that have by been processed by this job so far.
+     * Returns the number of bytes that have been processed by this job so far.
      */
     public abstract long getTotalBytesProcessed();
 
-	/**
-	 * Returns a String describing what's currently being done (e.g. "Deleting file test.zip")
-	 */
-	public abstract String getStatusString();
+    /**
+	 * Returns the number of bytes reported by {@link #getTotalBytesProcessed() getTotalBytesProcessed}
+	 * which have been skipped, for example when resuming a file transfer. This information must be
+	 * taken into account when calculating transfer speed.
+     */
+    public abstract long getTotalBytesSkipped();
 
-    
 }
