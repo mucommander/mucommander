@@ -159,9 +159,6 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
         currentFileIndex = 0;
         int numFiles = filesToZip.size();
 
-        // Important!
-        waitForDialog();
-
 		AbstractFile currentFile;
         FileTable activeTable = mainFrame.getLastActiveTable();
 		int rowCount = activeTable.getRowCount();

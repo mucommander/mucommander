@@ -186,18 +186,14 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
         currentFileIndex = 0;
         int numFiles = filesToDelete.size();
 
-if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #1");
-        // Important!
-        waitForDialog();
-
-if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #1");
+//if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #1");
 		
         FileTable activeTable = mainFrame.getLastActiveTable();
         AbstractFile currentFile;
         while(!isInterrupted()) {
             currentFile = (AbstractFile)filesToDelete.elementAt(currentFileIndex);
 
-if(com.mucommander.Debug.ON) System.out.println("DeleteJob: file "+currentFile.getName());
+//if(com.mucommander.Debug.ON) System.out.println("DeleteJob: file "+currentFile.getName());
 			
 			// if current file or folder was successfully deleted, remove it from file table
 			if (deleteRecurse(currentFile))
@@ -213,11 +209,11 @@ if(com.mucommander.Debug.ON) System.out.println("DeleteJob: file "+currentFile.g
             else break;
         }
 
-if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #2");
+//if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #2");
 		
         stop();
 
-if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #3");
+//if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #3");
 
 		// Refreshes FileTables if necessary
 		try {
@@ -228,7 +224,7 @@ if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #3");
         	// like switching to a root folder        
         }
         
-if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #4");
+//if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #4");
 
         // Refreshes the other file table if needed, that is if is 'below' the active table
         FileTable unactiveTable = mainFrame.getUnactiveTable();
@@ -247,11 +243,11 @@ if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #4");
 //        activeTable.requestFocus();
 //		new FocusRequester(activeTable.requestFocus();
 
-if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #5");
+//if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #5");
 
 		cleanUp();
 		
-if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #6");
+//if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #6");
 		
 	}
 }	

@@ -17,7 +17,7 @@ import java.awt.event.*;
 /**
  * This dialog informs the user of the progress made by a Job.
  */
-public class ProgressDialog extends FocusDialog implements Runnable, ActionListener, KeyListener {
+public class ProgressDialog extends FocusDialog implements Runnable, ActionListener, KeyListener, WindowListener {
     private JLabel infoLabel;
     private JLabel statsLabel;
     private OverlayProgressBar totalProgressBar;
@@ -39,6 +39,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     private MainFrame mainFrame;
 
+	private boolean firstTimeActivated = true;
+	
 	
     public ProgressDialog(MainFrame mainFrame, String title) {
         super(mainFrame, title, mainFrame);
@@ -48,7 +50,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 		// Sets maximum and minimum dimensions for this dialog
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-    }
+    
+//addWindowListener(this);
+	}
     
     
     public void start(FileJob job) {
@@ -225,4 +229,43 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     public void keyTyped(KeyEvent e) {
     }
+
+
+	/**************************
+	 * WindowListener methods *
+	 **************************/	
+
+	public void windowOpened(WindowEvent e) {
+		// (this method is called first time the dialog is made visible)
+		if(com.mucommander.Debug.ON)
+			System.out.println("ProgressDialog.windowOpened");
+		super.windowOpened(e);
+	}
+
+	public void windowActivated(WindowEvent e) {
+		// (this method is called each time the dialog is activated)
+		super.windowActivated(e);
+		if(firstTimeActivated) {
+			if(com.mucommander.Debug.ON)
+				System.out.println("ProgressDialog.windowActivated: first time activated, starting job!");
+			firstTimeActivated = false;
+			this.job.start();
+		}
+	}
+
+	public void windowClosing(WindowEvent e) {
+	}
+
+	public void windowClosed(WindowEvent e) {
+	}
+
+	public void windowDeactivated(WindowEvent e) {
+	}
+
+	public void windowIconified(WindowEvent e) {
+	}
+
+	public void windowDeiconified(WindowEvent e) {
+	}
+
 }

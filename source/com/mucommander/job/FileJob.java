@@ -89,31 +89,33 @@ public abstract class FileJob implements Runnable {
 	}
 
 
+// No needed anymore, now ProgressDialog starts the job once it has been activated
     /**
 	 * Waits for ProgressDialog to be activated (visible with keyboard focus)
      * This is very important because we want ProgressDialog to be activated BEFORE 
      * any other dialog, otherwise ProgressDialog could request focus after another FocusDialog
      * but would be nested 'under' (weird).
 	 */
-	protected void waitForDialog() {
+/*
+	 protected void waitForDialog() {
 		if (progressDialog!=null) {
 //		    while (!progressDialog.isActivated() || !progressDialog.hasFocus()) {
 		    while (!progressDialog.isActivated()) {
-if(com.mucommander.Debug.ON)
-System.out.println("FileJob.waitForDialog "+progressDialog.isActivated()+" "+progressDialog.isShowing()+" "+progressDialog.hasFocus());
+//if(com.mucommander.Debug.ON)
+//System.out.println("FileJob.waitForDialog "+progressDialog.isActivated()+" "+progressDialog.isShowing()+" "+progressDialog.hasFocus());
 		    	try { Thread.sleep(10);
 		    	} catch(InterruptedException e) {}
 			}
 		}
 	}
-
+*/
 
     /**
 	 * Asks to stop file job's thread.
 	 */	
 	public void stop() {
-		if(com.mucommander.Debug.ON)
-			System.out.println("FileJob.stop(): modifier="+(this instanceof FileModifier));
+//		if(com.mucommander.Debug.ON)
+//			System.out.println("FileJob.stop(): modifier="+(this instanceof FileModifier));
 
 		jobThread = null;
 		// Resume auto-refresh if auto-refresh has been paused
@@ -167,8 +169,8 @@ System.out.println("FileJob.waitForDialog "+progressDialog.isActivated()+" "+pro
 		setPaused(true);
 		int retValue = dialog.getActionValue();
 		// Back to work
-		setPaused(false);    
-		return retValue;		
+		setPaused(false);
+		return retValue;
 	}
 	
 	

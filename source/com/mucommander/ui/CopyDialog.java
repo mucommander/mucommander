@@ -155,7 +155,6 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 		// Starts moving files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get(unzipDialog?"unzip_dialog.unzipping":"copy_dialog.copying"));
 		CopyJob copyJob = new CopyJob(mainFrame, progressDialog, filesToCopy, newName, destFolder, unzipDialog);
-		copyJob.start();
 		progressDialog.start(copyJob);
 	}
 

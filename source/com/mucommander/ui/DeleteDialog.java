@@ -85,7 +85,6 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
         // Starts deleting files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("delete_dialog.deleting"));
 		DeleteJob deleteJob = new DeleteJob(mainFrame, progressDialog, filesToDelete);
-        deleteJob.start();
     	progressDialog.start(deleteJob);
 	}
 	

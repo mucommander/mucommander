@@ -282,9 +282,6 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
     public void run() {
 		currentFileIndex = 0;
 
-		// Important!
-		waitForDialog();
-
 		FileTable activeTable = mainFrame.getLastActiveTable();
 		AbstractFile currentFile;
         AbstractFile zipSubFiles[];

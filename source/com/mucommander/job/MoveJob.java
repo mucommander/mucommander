@@ -363,9 +363,6 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
     }
 
     public void run() {
-        // Important!
-        waitForDialog();
-
 		FileTable activeTable = mainFrame.getLastActiveTable();
         AbstractFile currentFile;
 		while (!isInterrupted()) {

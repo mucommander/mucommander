@@ -123,9 +123,6 @@ public class SendMailJob extends ExtendedFileJob {
     }
 
     public void run() {
-        // Important!
-        waitForDialog();
-
         // Open socket connection to the mail server, and say hello
         try {
             openConnection();

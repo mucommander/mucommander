@@ -134,7 +134,6 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 		// Starts moving files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
 		MoveJob moveJob = new MoveJob(mainFrame, progressDialog, filesToMove, newName, destFolder);
-	    moveJob.start();
 	    progressDialog.start(moveJob);
 	}
 
