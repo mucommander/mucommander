@@ -74,7 +74,12 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		}
 	
 		public void run() {
-			try { AbstractFile children[] = folder.ls(); }
+			try {
+				AbstractFile children[] = folder.ls();
+				if(stopped)
+					return;
+				setCurrentFolder(folder, children, true);
+			}
 			catch(IOException e) {}
 		}
 	}
