@@ -151,14 +151,12 @@ public class FSFile extends AbstractFile {
 	public boolean isSymlink() {
 		if(!symlinkValueSet) {
 			FSFile parent = (FSFile)getParent();
-			String canonPath = getCanonicalPath();
-			if(parent==null || canonPath==null)			
-//			if(parent==null || this.canonicalPath==null)
+			String canonPath = getCanonicalPath(false);
+			if(parent==null || canonPath==null)
 				this.isSymlink = false;
 			else {
-				String parentCanonPath = parent.getCanonicalPath();
-				this.isSymlink = !canonPath.equals(parentCanonPath+(parentCanonPath.endsWith(separator)?"":separator)+getName());
-//				this.isSymlink = !this.canonicalPath.equals(parent.canonicalPath+(parent.canonicalPath.endsWith(separator)?"":separator)+getName());
+				String parentCanonPath = parent.getCanonicalPath(true);
+				this.isSymlink = !canonPath.equals(parentCanonPath+getName());
 			}
 			
 			this.symlinkValueSet = true;

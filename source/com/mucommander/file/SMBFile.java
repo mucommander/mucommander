@@ -19,7 +19,6 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	private FileURL fileURL;
 	private String publicURL;
 	private String privateURL;
-//	private boolean isSymlink;
 
 	private AbstractFile parent;
 	private boolean parentValSet;
@@ -228,7 +227,11 @@ public class SMBFile extends AbstractFile implements RemoteFile {
         }
 	}
 	
-	
+	public boolean isSymlink() {
+		// Symlinks are not supported under jCIFS (or in CIFS/SMB?)
+		return false;
+	}
+
 	public boolean equals(Object f) {
 		if(!(f instanceof SMBFile))
 			return super.equals(f);		// could be equal to a ZipArchiveFile

@@ -194,6 +194,10 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 		return false;
 	}
 	
+	public boolean isSymlink() {
+		return false;
+	}
+
 	public boolean isBrowsable() {
 		return isHTML;
 	}

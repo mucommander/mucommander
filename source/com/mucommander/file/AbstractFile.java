@@ -243,9 +243,7 @@ public abstract class AbstractFile {
 	/**
 	 * Returns true if this file *may* be a symbolic link and thus handled with care.
 	 */
-	public boolean isSymlink() {
-		return false;
-	}
+	public abstract boolean isSymlink();
 	
 	/**
 	 * Returns the contents of this AbstractFile is a folder.

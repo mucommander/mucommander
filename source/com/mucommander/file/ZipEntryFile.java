@@ -83,6 +83,10 @@ public class ZipEntryFile extends AbstractFile {
 		return zipEntry.isDirectory();
 	}
 
+	public boolean isSymlink() {
+		return false;
+	}
+
 	public InputStream getInputStream() throws IOException {
 		return zipArchive.getEntryInputStream(zipEntry);
 	}

@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.zip.*;
 
 public class ZipArchiveFile extends AbstractFile implements ArchiveFile {
+
 	private AbstractFile file;
 
 	private ZipEntry entries[];
@@ -65,6 +66,10 @@ public class ZipArchiveFile extends AbstractFile implements ArchiveFile {
 
 	public boolean isHidden() {
 		return file.isHidden();
+	}
+
+	public boolean isSymlink() {
+		return file.isSymlink();
 	}
 
 	public InputStream getInputStream() throws IOException {

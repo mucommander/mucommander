@@ -15,7 +15,6 @@ public class FTPFile extends AbstractFile implements RemoteFile {
 	protected FileURL fileURL;
 
     protected String absPath;
-	protected boolean isSymlink;
 
 	/** File separator is '/' for urls */
 	private final static String SEPARATOR = "/";
