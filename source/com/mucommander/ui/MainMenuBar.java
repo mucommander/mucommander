@@ -120,8 +120,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		helpMenu = addMenu("Help", KeyEvent.VK_H, false);
 		keysItem = addMenuItem(helpMenu, "Keyboard shortcuts", KeyEvent.VK_K, null);
 		helpMenu.add(new JSeparator());
-		homepageItem = addMenuItem(helpMenu, "muCommander homepage", KeyEvent.VK_H, null);
-		forumsItem = addMenuItem(helpMenu, "muCommander forums", KeyEvent.VK_F, null);
+		if (PlatformManager.canOpenURL()) {
+			homepageItem = addMenuItem(helpMenu, "muCommander homepage", KeyEvent.VK_H, null);
+			forumsItem = addMenuItem(helpMenu, "muCommander forums", KeyEvent.VK_F, null);
+		}
 		helpMenu.add(new JSeparator());
 		aboutItem = addMenuItem(helpMenu, "About muCommander...", KeyEvent.VK_A, null);		
 	}
