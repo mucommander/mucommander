@@ -655,20 +655,27 @@ text_viewer.file:EN:$[file_menu]
 text_viewer.close:EN:Close
 text_viewer.close:FR:Fermer
 
+text_viewer.edit:EN:Edit
+text_viewer.edit:FR:Edition
+
+text_viewer.copy:EN:Copy
+text_viewer.copy:FR:Copier
+
+text_viewer.select_all:EN:Select All
+text_viewer.select_all:FR:Tout sélectionner
+
 
 ###############
 # Text editor #
 ###############
 
-text_editor.file:EN:$[file_menu]
+# Text editor uses text viewer's entries
 
 text_editor.save:EN:Save
 text_editor.save:FR:Enregister
 
 text_editor.save_as:EN:Save As...
 text_editor.save_as:FR:Enregistrer sous...
-
-text_editor.close:EN:$[command_bar.close]
 
 text_editor.cannot_write:EN:Unable to write file.
 text_editor.cannot_write:FR:Impossible d'écrire le fichier. 
@@ -681,6 +688,12 @@ text_editor.file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
 
 text_editor.save_warning:EN:Save changes made to this file before closing ?
 text_editor.save_warning:FR:Enregistrer les modifications avant de fermer ce fichier ?
+
+text_editor.cut:EN:Cut
+text_editor.cut:FR:Couper
+
+text_editor.paste:EN:Paste
+text_editor.paste:FR:Coller
 
 
 ################

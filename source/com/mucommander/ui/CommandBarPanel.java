@@ -117,11 +117,6 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		
 		try {
 			FileViewer viewer = ViewerRegistrar.getViewer(file);
-			// Default file viewer
-			if (viewer==null) {
-				// we should ask the user if he wants to try the default viewer
-				viewer = new TextViewer();
-			}
 
 			// Test if file is too large to be viewed and warns user
 			long max = viewer.getMaxRecommendedSize();
@@ -139,28 +134,8 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			
 			// All OK, start viewing
 			viewer.startViewing(file, true);
-			
-			JFrame frame = new ViewerFrame(file.getAbsolutePath());
-			
-			frame.getContentPane().setLayout(new BorderLayout());
-			frame.getContentPane().add(viewer, BorderLayout.CENTER);
-			
-			// Sets panel to preferred size, without exceeding a maximum size and with a minumum size
-			frame.pack();
-			Dimension d = frame.getSize();
-			Dimension screend = Toolkit.getDefaultToolkit().getScreenSize();
-			
-			// width is 800 max and 480 min
-			int width = Math.max(480, Math.min(d.width, Math.min(screend.width-44, 800-44)));
-			
-			// height is 3/4 of width
-			frame.setSize(
-				width, 
-				(int)(width*3/((float)4))
-			);
-
-			frame.setResizable(true);
-			frame.setVisible(true);
+		
+			viewer.getFrame().show();
 		}
 		catch(IOException e) {
 			showErrorDialog(Translator.get("view_error"), Translator.get("view_error_title"));

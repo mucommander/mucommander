@@ -6,20 +6,31 @@ import java.io.IOException;
 
 public abstract class FileViewer extends JPanel {
 	
+	protected ViewerFrame frame;
+
+	
 	/**
 	 * Creates a new instance of a FileViewer.
 	 */
-	public FileViewer() {
+	public FileViewer(ViewerFrame frame) {
+		this.frame = frame;
 	}
 
+	/**
+	 * Returns the frame which contains this viewer.
+	 */
+	public ViewerFrame getFrame() {
+		return frame;
+	}
+	
 	/**
 	 * Starts viewing the given file.
 	 *
 	 * @param fileToView the file that needs to be displayed.
 	 * @param isSeparateWindow <code>true</code> if the panel is put in a separate window
 	 */
-	public void startViewing(AbstractFile fileToView, boolean isSeparateWindow) throws IOException {
-	}
+	public abstract void startViewing(AbstractFile fileToView, boolean isSeparateWindow) throws IOException;
+	
 	
 	/**
 	 * Returns <code>true</code> if the given file can be handled by this FileViewer.<br>
@@ -29,6 +40,7 @@ public abstract class FileViewer extends JPanel {
 	public static boolean canViewFile(AbstractFile file) {
 		return false;
 	}
+	
 	
 	/**
 	 * Returns maximum file size this FileViewer can handle for sure, -1 if there is no such limit.

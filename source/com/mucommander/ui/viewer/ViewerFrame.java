@@ -6,6 +6,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 
+import com.mucommander.file.AbstractFile;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -14,9 +16,11 @@ import javax.swing.*;
 public class ViewerFrame extends JFrame implements ActionListener, WindowListener {
 	private JMenuItem closeItem;
 	
-	public ViewerFrame(String title) {
-		super(title);
-
+	public ViewerFrame(AbstractFile file) {
+		super(file.getAbsolutePath());
+		
+		getContentPane().setLayout(new BorderLayout());
+		
 		// Create default menu
 		MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
 		MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
@@ -36,7 +40,32 @@ public class ViewerFrame extends JFrame implements ActionListener, WindowListene
 		addWindowListener(this);
 	}
 
+	
+	void setViewer(FileViewer viewer) {
+		getContentPane().add(viewer, BorderLayout.CENTER);
+	}
+	
+	
+	public void show() {
+		// Sets panel to preferred size, without exceeding a maximum size and with a minumum size
+		super.pack();
+		Dimension d = getSize();
+		Dimension screend = Toolkit.getDefaultToolkit().getScreenSize();
+			
+		// width is 800 max and 480 min
+		int width = Math.max(480, Math.min(d.width, Math.min(screend.width-44, 800-44)));
+			
+		// height is 3/4 of width
+		setSize(
+			width, 
+			(int)(width*3/((float)4))
+		);
 
+		super.setResizable(true);
+		super.show();
+	}
+
+	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==closeItem)
 			close();
