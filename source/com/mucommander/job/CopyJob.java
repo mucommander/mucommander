@@ -125,7 +125,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 		if(file.isSymlink())
 			;
 		// Copy directory recursively
-        else if(file.isDirectory() || unzip) {
+//        else if(file.isDirectory() || unzip) {
+        else if(file.isDirectory()) {
             // creates the folder in the destination folder if it doesn't exist
 			
 			if(!(destFile.exists() && destFile.isDirectory())) {

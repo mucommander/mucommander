@@ -102,7 +102,7 @@ public class CopyDialog extends FocusDialog implements ActionListener {
         contentPane.add(mainPanel, BorderLayout.NORTH);
 		
 			// OK / Cancel buttons panel
-        okButton = new JButton("Copy");
+        okButton = new JButton(unzipDialog?"Unzip":"Copy");
         cancelButton = new JButton("Cancel");
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 

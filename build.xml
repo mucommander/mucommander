@@ -68,9 +68,13 @@
         classname="com.yworks.yguard.ObfuscatorTask" 
         classpath="yguard.jar"/>
     <obfuscate mainclass="com.mucommander.Launcher" logfile="dist/yguard_log.xml" conservemanifest="true">
-    <property name="naming-scheme" value="small"/>
-        <inoutpair in="dist/mucommander.jar" out="dist/mucommander_obf.jar"/>
-    </obfuscate>
+	    <property name="naming-scheme" value="small"/>
+		<inoutpair in="dist/mucommander.jar" out="dist/mucommander_obf.jar"/>
+		<!-- Needed for jCIFS -->
+		<expose>
+			<class name="jcifs.Config"/>
+		</expose>
+	</obfuscate>
   </target>
 
   <!-- Launches mucommander from the classes directory -->
