@@ -186,13 +186,18 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
         currentFileIndex = 0;
         int numFiles = filesToDelete.size();
 
+if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #1");
         // Important!
         waitForDialog();
 
+if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #1");
+		
         FileTable activeTable = mainFrame.getLastActiveTable();
         AbstractFile currentFile;
         while(!isInterrupted()) {
             currentFile = (AbstractFile)filesToDelete.elementAt(currentFileIndex);
+
+if(com.mucommander.Debug.ON) System.out.println("DeleteJob: file "+currentFile.getName());
 			
 			// if current file or folder was successfully deleted, remove it from file table
 			if (deleteRecurse(currentFile))
@@ -207,9 +212,12 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
                 currentFileIndex++;
             else break;
         }
-    
+
+if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #2");
+		
         stop();
 
+if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #3");
 
 		// Refreshes FileTables if necessary
 		try {
@@ -220,6 +228,8 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
         	// like switching to a root folder        
         }
         
+if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #4");
+
         // Refreshes the other file table if needed, that is if is 'below' the active table
         FileTable unactiveTable = mainFrame.getUnactiveTable();
         if (unactiveTable.getCurrentFolder().getAbsolutePath().startsWith(activeTable.getCurrentFolder().getAbsolutePath()))  {
@@ -234,6 +244,14 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
         	}
         }
     
-        activeTable.requestFocus();
+//        activeTable.requestFocus();
+//		new FocusRequester(activeTable.requestFocus();
+
+if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #5");
+
+		cleanUp();
+		
+if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #6");
+		
 	}
 }	

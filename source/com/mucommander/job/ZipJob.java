@@ -179,12 +179,12 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
         }
     
 		stop();
+		
 		try {
 			zipOut.close();
 		}
 		catch(IOException e) {
 		}
-
 
 		FileTable table1 = mainFrame.getBrowser1().getFileTable();
 		// Refreshes table1 only if folder is destFolder
@@ -203,6 +203,7 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 			}
 
 				
-		mainFrame.getLastActiveTable().requestFocus();
+//		mainFrame.getLastActiveTable().requestFocus();
+		cleanUp();
 	}
 }	

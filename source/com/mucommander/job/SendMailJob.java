@@ -132,18 +132,26 @@ public class SendMailJob extends ExtendedFileJob {
         }
         catch(IOException e) {
             showErrorDialog("Unable to contact server, check mail server preferences.");
-            return;
         }
 
+		if(isInterrupted()) {
+			cleanUp();
+			return;
+		}
+		
         // Send mail body
-        try {
+		try {
             sendBody();
         }
         catch(IOException e) {
             showErrorDialog("Connection terminated by server, mail not sent.");
-			return;
 		}
 
+		if(isInterrupted()) {
+			cleanUp();
+			return;
+		}
+		
         // Send attachments
         AbstractFile file;
         for(int i=0; i<nbFiles && !isInterrupted(); i++) {
@@ -158,25 +166,28 @@ public class SendMailJob extends ExtendedFileJob {
             }
             catch(IOException e) {
                 showErrorDialog("Unable to send "+file.getName()+", mail not sent.");
-                return;
+			}
+
+			if(isInterrupted()) {
+				cleanUp();
+				return;
 			}
         }
 
-		if(!isInterrupted()) {
-			// Notifies the mail server that the mail is over
-			try {
-				sayGoodBye();
-			}
-			catch(IOException e) {
-				showErrorDialog("Unable to terminate connection, mail may have been sent.");
-				return;
-			}
+		// Notifies the mail server that the mail is over
+		try {
+			sayGoodBye();
+		}
+		catch(IOException e) {
+			showErrorDialog("Unable to close connection, mail may have been sent.");
 		}
 
         // Close the connection
         closeConnection();
 
         stop();
+
+		cleanUp();
     }    
 
     private void showErrorDialog(String message) {

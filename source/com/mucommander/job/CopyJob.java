@@ -325,9 +325,9 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
                 currentFileIndex++;
             else break;
         }
-   
-        stop();
 
+        stop();
+		
         // Refreshes only if table's folder is destFolder
         FileTable table1 = mainFrame.getBrowser1().getFileTable();
 		if (table1.getCurrentFolder().equals(baseDestFolder))
@@ -350,6 +350,6 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
         		// like switching to a root folder        
         	}
 
-        mainFrame.getLastActiveTable().requestFocus();
+		cleanUp();
 	}
 }	

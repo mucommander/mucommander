@@ -384,9 +384,9 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
                 currentFileIndex++;
             else break;
         }
-    
-        stop();
 
+        stop();
+		
 		try {
 		    activeTable.refresh();
 		}
@@ -406,6 +406,9 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 				// like switching to a root folder        
 			}
 
-		activeTable.requestFocus();
+//		activeTable.requestFocus();
+//        new FocusRequester(activeTable).requestFocus();
+
+		cleanUp();
 	}
 }	

@@ -4,6 +4,7 @@ package com.mucommander.job;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
+import com.mucommander.ui.comp.FocusRequester;
 
 
 /**
@@ -23,8 +24,8 @@ public abstract class FileJob implements Runnable {
 	/** Associated dialog showing job progression */
 	protected ProgressDialog progressDialog;
 
-/** Main frame on which the job is to be performed */ 
-protected MainFrame mainFrame;
+	/** Main frame on which the job is to be performed */ 
+	protected MainFrame mainFrame;
 	
 	/** Thread in which the file job is performed */
 	private Thread jobThread;
@@ -46,7 +47,7 @@ protected MainFrame mainFrame;
 	
 	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame) {
 		this.progressDialog = progressDialog;
-this.mainFrame = mainFrame;
+		this.mainFrame = mainFrame;
 	}
 
 	
@@ -60,8 +61,8 @@ this.mainFrame = mainFrame;
 		// Pause auto-refresh during file job if this job potentially modifies folders contents
 		// and would potentially cause table to auto-refresh
 		if(this instanceof FileModifier) {
-		mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(false);
-		mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(false);
+			mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(false);
+			mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(false);
 		}		
 		
         // Serves to differenciate between the 'stopped' and 'not started yet' states
@@ -96,10 +97,11 @@ this.mainFrame = mainFrame;
 	 */
 	protected void waitForDialog() {
 		if (progressDialog!=null) {
-		    while (!progressDialog.isActivated() || !progressDialog.hasFocus()) {
+//		    while (!progressDialog.isActivated() || !progressDialog.hasFocus()) {
+		    while (!progressDialog.isActivated()) {
 if(com.mucommander.Debug.ON)
 System.out.println("FileJob.waitForDialog "+progressDialog.isActivated()+" "+progressDialog.isShowing()+" "+progressDialog.hasFocus());
-		    	try { Thread.sleep(1);
+		    	try { Thread.sleep(10);
 		    	} catch(InterruptedException e) {}
 			}
 		}
@@ -118,9 +120,22 @@ System.out.println("FileJob.waitForDialog "+progressDialog.isActivated()+" "+pro
 		if(this instanceof FileModifier) {
 			mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(true);
 			mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(true);
-		}		
+		}
 	}
 
+	
+	/**
+	 * This method should be called once after the job has been stopped
+	 */
+	public void cleanUp() {
+		// Dispose associated progress dialog
+		progressDialog.dispose();
+	
+		// Request focus on last active table
+        FocusRequester.requestFocus(mainFrame.getLastActiveTable());
+	}
+
+	
 	/**
 	 * Returns <code>true</code> if file job has been interrupted.
 	 */
