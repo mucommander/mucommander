@@ -6,13 +6,13 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.about.AboutDialog;
 
-import com.apple.mrj.MRJAboutHandler;
-import com.apple.mrj.MRJPrefsHandler;
-import com.apple.mrj.MRJQuitHandler;
-import com.apple.mrj.MRJApplicationUtils;
+//import com.apple.mrj.MRJAboutHandler;
+//import com.apple.mrj.MRJPrefsHandler;
+//import com.apple.mrj.MRJQuitHandler;
+//import com.apple.mrj.MRJApplicationUtils;
 
 
-public class FinderIntegration implements MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Runnable {
+public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandler, com.apple.mrj.MRJPrefsHandler, com.apple.mrj.MRJQuitHandler {
 
 	private final static int ABOUT_ACTION = 0;
 	private final static int PREFS_ACTION = 1;
@@ -23,13 +23,13 @@ public class FinderIntegration implements MRJAboutHandler, MRJPrefsHandler, MRJQ
 	public FinderIntegration() {
 		// Have to catch exceptions (NoClassDefFoundError and NoSuchMethodException)
 		// because they seem not to be available under Mac OS X 10.1 (reported by Lanch)
-		try {MRJApplicationUtils.registerAboutHandler(this);}
+		try {com.apple.mrj.MRJApplicationUtils.registerAboutHandler(this);}
 		catch(NoClassDefFoundError e){}
 		catch(Exception e2){}
-		try {MRJApplicationUtils.registerPrefsHandler(this);}
+		try {com.apple.mrj.MRJApplicationUtils.registerPrefsHandler(this);}
 		catch(NoClassDefFoundError e){}
 		catch(Exception e2){}
-		try {MRJApplicationUtils.registerQuitHandler(this);}
+		try {com.apple.mrj.MRJApplicationUtils.registerQuitHandler(this);}
 		catch(NoClassDefFoundError e){}
 		catch(Exception e2){}
 	}

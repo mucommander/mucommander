@@ -2,7 +2,9 @@ package com.mucommander;
 
 import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.CheckVersionDialog;
-import com.mucommander.ui.macosx.FinderIntegration;
+
+//import com.mucommander.ui.macosx.FinderIntegration;
+import java.lang.reflect.*;
 
 import com.mucommander.conf.ConfigurationManager;
 
@@ -30,6 +32,7 @@ public class Launcher {
 	/** muCommander app string */
 	public final static String MUCOMMANDER_APP_STRING = "muCommander v"+MUCOMMANDER_VERSION;
 
+	/** Custom user agent for HTTP requests */
 	public final static String USER_AGENT = MUCOMMANDER_APP_STRING
 		+" (Java "+System.getProperty("java.vm.version")
 		+"; "+System.getProperty("os.name")+" "+System.getProperty("os.version")+" "+System.getProperty("os.arch")+")";
@@ -53,21 +56,26 @@ public class Launcher {
 		// If muCommander is running under Mac OS X (how lucky!), add some
 		// glue for the main menu bar.
 		if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X) {
+			// Use reflection to create a FinderIntegration class so that ClassLoader
+			// doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
 			try {
-				FinderIntegration finderIntegration = new FinderIntegration();
+//				FinderIntegration finderIntegration = new FinderIntegration();
+				Class finderIntegrationClass = Class.forName("com.mucommander.ui.macosx.FinderIntegration");
+				Constructor constructor = finderIntegrationClass.getConstructor(new Class[]{});
+				constructor.newInstance(new Object[]{});
 			}
 			catch(Exception e) {
 				if(Debug.ON)
 					System.out.println("Launcher.init: exception thrown while initializing Mac Finder integration");
 			}
 
-			// Turn on/off brush metal look (default is on) :
+			// Turn on/off brush metal look (default is off because still buggy when scrolling and panning dialog windows) :
 			//  "Allows you to display your main windows with the “textured” Aqua window appearance.
 			//   This property should be applied only to the primary application window,
 			//   and should not affect supporting windows like dialogs or preference windows."
 			System.setProperty("apple.awt.brushMetalLook", ConfigurationManager.getVariable("prefs.macosx.brushed_metal_look", "true"));
 
-			// Enables/Disables screen menu bar (default is enable) :
+			// Enables/Disables screen menu bar (default is on) :
 			//  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."
 			System.setProperty("apple.laf.useScreenMenuBar", ConfigurationManager.getVariable("prefs.macosx.screen_menu_bar", "true"));
 		}
