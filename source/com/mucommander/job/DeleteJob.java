@@ -217,7 +217,7 @@ public class DeleteJob extends FileJob implements Runnable {
     
         stop();
 
-/*
+
 		// Refreshes FileTables if necessary
 		try {
         	activeTable.refresh();
@@ -240,7 +240,7 @@ public class DeleteJob extends FileJob implements Runnable {
         		folderPanel.setCurrentFolder(activeTable.getCurrentFolder(), true);
         	}
         }
-*/    
+    
         activeTable.requestFocus();
 	}
 }	

@@ -189,7 +189,7 @@ public class ZipJob extends ExtendedFileJob implements Runnable {
 		catch(IOException e) {
 		}
 
-/*
+
 		FileTable table1 = mainFrame.getBrowser1().getFileTable();
 		// Refreshes table1 only if folder is destFolder
 		if (table1.getCurrentFolder().equals(destFolder))
@@ -205,8 +205,8 @@ public class ZipJob extends ExtendedFileJob implements Runnable {
 			catch(IOException e) {
 				// Probably should do something when a folder becomes unreadable
 			}
-*/
 
+				
 		mainFrame.getLastActiveTable().requestFocus();
 	}
 }	
