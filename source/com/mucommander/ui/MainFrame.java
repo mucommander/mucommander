@@ -52,6 +52,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	
 	private CommandBarPanel commandBar;
 	
+	/** Is no events mode enabled ? */
+	private boolean noEventsMode;
 
 	/**
 	 * Creates a new main frame, set to the given initial folders.
@@ -159,13 +161,34 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	
 	
 	/**
+	 * Enables/disables 'no events mode' which prevents mouse and keyboard events from being caught
+	 * by the application (main frame and its subcomponents and menus).
+	 */
+	public void setNoEventsMode(boolean enabled) {
+		// Set cursor to hourglass/wait if enabled, to default cursor otherwise
+		setCursor(enabled?new Cursor(Cursor.WAIT_CURSOR):Cursor.getDefaultCursor());
+		
+		getGlassPane().setVisible(enabled);
+		getJMenuBar().setEnabled(!enabled);
+
+		this.noEventsMode = enabled;
+	}
+
+	/**
+	 * Returns true if 'no events mode' is enabled.
+	 */
+	public boolean getNoEventsMode() {
+		return this.noEventsMode;
+	}
+	
+	
+	/**
 	 * Shows/hide the toolbar.
 	 */
 	public void setToolbarVisible(boolean visible) {
 		toolbar.setVisible(visible);
 		validate();
 	}
-	
 	
 	/**
 	 * Returns true if the icon toolbar is visible on this frame.
@@ -261,6 +284,15 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	public CommandBarPanel getCommandBar() {
 		return commandBar;
 	}
+
+
+	/**
+	 * Returns the toolbar where all buttons like go back, go forward, ... are 
+	 */
+	public ToolBar getToolBar() {
+		return toolbar;
+	}
+
 
 	/**
 	 * After a call to this method, folder1 will be folder2 and vice-versa.
@@ -542,6 +574,10 @@ if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): destFo
      ***********************/
     
     public void keyPressed(KeyEvent e) {
+		// Disable key presses if 'noEventsMode' enabled 
+		if(noEventsMode)
+			return;
+
         Object source = e.getSource();
         int keyCode = e.getKeyCode();
         if(keyCode == KeyEvent.VK_F3 && !e.isControlDown()) {

@@ -26,6 +26,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	private MainFrame mainFrame;
     
     private AbstractFile currentFolder;
+	private ChangeFolderThread changeFolderThread;
 
     // Registered LocationListeners
     private Vector locationListeners = new Vector();
@@ -59,67 +60,187 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	private final static String DOWNLOAD_TEXT = Translator.get("download");
 
 
+
 	private class ChangeFolderThread extends Thread {
 	
 		private AbstractFile folder;
+		private String folderPath;
 		private boolean addToHistory;
 		
-		private boolean interrupted;
-		private AbstractFile children[];
-		private IOException ioException;
-		
+		private boolean isKilled;
+		private boolean doNotKill;
 	
 		public ChangeFolderThread(AbstractFile folder, boolean addToHistory) {
 			this.folder = folder;
 			this.addToHistory = addToHistory;
 		}
-	
-		public synchronized void startAndWait() {
-			super.start();
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("wait starts");
-			try {
-				wait();
-			}
-			catch(InterruptedException e) {
-			}
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("wait returns");
-		}
-	
-//		public void stop() {
-//			this.stopped = true;
-//			super.stop();
-//			notifyAll();
-//		}
 
-		public void kill() {
-//			this.interrupted = true;
-			synchronized(this) { notifyAll(); }
-			super.stop();
+		public ChangeFolderThread(String folderPath, boolean addToHistory) {
+			this.folderPath = folderPath;
+			this.addToHistory = addToHistory;
 		}
 	
-		public void run() {
-			try {
-				this.children = folder.ls();
+		public void tryKill() {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+			if(isKilled)
+				return;
+			
+			synchronized(this) {
+				isKilled = true;
+				if(!doNotKill) {
+					super.stop();
+					// Resume mouse/keybaord events and restore cursor
+					disableNoEventsMode();
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
+				}
+				changeFolderThread = null;
 			}
-			catch(IOException e) {
-				this.ioException = e;
-			}
+		}
+	
+	
+		private void enableNoEventsMode() {
+			// Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
+			mainFrame.setNoEventsMode(true);
 
-			synchronized(this) { notifyAll(); }
-		}
-	
-//		public boolean interrupted() {
-//			return interrupted;
-//		}
-	
-		public IOException getIOException() {
-			return ioException;
+			// Catch escape key clicks and have them close the dialog
+			// by mapping the escape keystroke to a custom Action
+			JPanel contentPane = (JPanel)mainFrame.getContentPane();
+			InputMap inputMap = contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+			ActionMap actionMap = contentPane.getActionMap();
+			AbstractAction killAction = new AbstractAction() {
+				public void actionPerformed(ActionEvent e){
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("escape pressed");
+					tryKill();
+				}
+			};
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "customEscapeAction");
+			actionMap.put("customEscapeAction", killAction);
 		}
 		
-		public AbstractFile[] getChildren() {
-			return children;
+
+		private void disableNoEventsMode() {
+			// Restore mouse/keybaord events and default cursor
+			mainFrame.setNoEventsMode(false);
+			// Remove 'escape' action
+			JPanel contentPane = (JPanel)mainFrame.getContentPane();
+			contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
+			contentPane.getActionMap().remove("customEscapeAction");
 		}
+		
+		
+		public void run() {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
+
+			boolean hadFocus = fileTable.hasFocus();
+			do {
+				// Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
+				enableNoEventsMode();
+
+				try {
+					if(folder==null) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFile()");
+						AbstractFile file = AbstractFile.getAbstractFile(folderPath, true);
+
+						synchronized(this) {
+							if(isKilled) {
+	if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
+								// Restore mouse/keybaord events and default cursor
+								disableNoEventsMode();
+								break;
+							}
+						}
+
+						if(file==null || !file.exists()) {
+							// Restore mouse/keybaord events and default cursor
+							disableNoEventsMode();
+							// Keep the text input by the user (do not restore current path) to give him a change to correct it
+							locationFieldTextSet = true;
+							JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+							break;
+						}
+
+						boolean browse = false;
+						if(file.isDirectory()) {
+							// Just continue
+						}
+						else if(file.isBrowsable()) {
+							// Restore mouse/keybaord events and default cursor
+							disableNoEventsMode();
+
+							// Download or browse file ?
+							QuestionDialog dialog = new QuestionDialog(mainFrame, 
+							null,
+							Translator.get("table.download_or_browse"),
+							mainFrame,
+							new String[] {BROWSE_TEXT, DOWNLOAD_TEXT, CANCEL_TEXT},
+							new int[] {BROWSE_ACTION, DOWNLOAD_ACTION, CANCEL_ACTION},
+							0);
+
+							int ret = dialog.getActionValue();
+							if(ret==-1 || ret==CANCEL_ACTION)
+								break;
+							// Download file
+							if(ret==DOWNLOAD_ACTION) {
+								FileSet fileSet = new FileSet(currentFolder);
+								fileSet.add(file);
+								
+								// Show confirmation/path modification dialog
+								new DownloadDialog(mainFrame, fileSet);
+									
+								// Restore current folder's path
+								locationField.setText(currentFolder.getAbsolutePath());
+							
+								break;
+							}
+							// Continue if BROWSE_ACTION
+							// Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
+							enableNoEventsMode();
+						}
+					
+						this.folder = file;
+					}
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
+					AbstractFile children[] = folder.ls();
+
+					synchronized(this) {
+						if(isKilled) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
+							break;
+						}
+						doNotKill = true;
+					}
+					
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling _setCurrentFolder");
+					_setCurrentFolder(folder, children, addToHistory);
+					
+					break;
+				}
+				catch(IOException e) {
+					// Restore mouse/keybaord events and default cursor
+					disableNoEventsMode();
+					
+					// Retry (loop) if user authentified
+					if(showAccessErrorDialog(e)) {
+						folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
+						continue;
+					}
+					break;
+				}
+			}
+			while(true);
+
+			// Restore mouse/keybaord events and default cursor
+			disableNoEventsMode();
+
+			if(hadFocus || mainFrame.getLastActiveTable()==fileTable)
+				fileTable.requestFocus();
+
+			changeFolderThread = null;
+		}
+	
 	}
+
 
 	
 	static {
@@ -243,11 +364,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 	}
 
 	
-//	public boolean hasFocus() {
-//		return super.hasFocus() || locationField.hasFocus() || fileTable.hasFocus() || rootPopup.hasFocus() || rootButton.hasFocus();
-//	}
-	
-
 	/**
 	 * Notifies all listeners that have registered interest for notification on this event type.
 	 */
@@ -293,7 +409,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		
+
+/*		
 		boolean hadFocus = fileTable.hasFocus();
 
 		boolean success = false;
@@ -302,6 +419,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 			ChangeFolderThread thread = new ChangeFolderThread(folder, addToHistory);
+
 			thread.startAndWait();
 			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("wakes up");
 			if(thread.isInterrupted()) {
@@ -335,8 +453,20 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			fileTable.requestFocus();
 
 		return success;
+*/
+		this.changeFolderThread = new ChangeFolderThread(folder, addToHistory);
+		changeFolderThread.start();
+
+		return true;
 	}
 		
+
+	public void stopChangeFolder() {
+		if(changeFolderThread!=null) {
+			changeFolderThread.tryKill();
+		}
+	}
+
 
 	private void _setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory) {
 		// Set 'wait' cursor
@@ -549,7 +679,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 
 		if (source == locationField) {
 			String location = locationField.getText();
-
+			
+			new ChangeFolderThread(location, true).start();
+/*
 			AbstractFile file = null;
 			do {
 				try {
@@ -603,8 +735,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file = "+file);
 				// If folder could not be set, restore current folder's path
 				if(!setCurrentFolder(file, true))
 					locationField.setText(currentFolder.getAbsolutePath());
-//				else
-//					locationField.setText(currentFolder.getAbsolutePath());
 			}
 			else {
 				FileSet fileSet = new FileSet(currentFolder);
@@ -616,6 +746,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file = "+file);
 				// Restore current folder's path
 				locationField.setText(currentFolder.getAbsolutePath());
 			}
+*/
 		}
 	}
 
