@@ -1,7 +1,6 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.Launcher;
 import com.mucommander.PlatformManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
@@ -235,7 +234,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 
 		// File menu
 		if (source == newWindowItem) {
-			Launcher.getLauncher().createNewMainFrame();
+			WindowManager.getInstance().createNewMainFrame();
 		}
 		else if (source == propertiesItem) {
 			mainFrame.showPropertiesDialog();
@@ -262,7 +261,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			new CheckVersionDialog(mainFrame, true);
 		}
 		else if (source == quitItem) {
-			Launcher.getLauncher().disposeMainFrame(mainFrame);
+			WindowManager.getInstance().disposeMainFrame(mainFrame);
 		}
 		// Mark menu
 		else if (source == markGroupItem) {

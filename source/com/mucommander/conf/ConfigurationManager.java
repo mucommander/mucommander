@@ -107,9 +107,11 @@ public class ConfigurationManager {
         return new File(getConfigurationFolder(), CONFIGURATION_FILE).getAbsolutePath();
     }
 
+	
     private static String getGenericConfigurationFilePath() {
         return new File(getGenericConfigurationFolder(), CONFIGURATION_FILE).getAbsolutePath();
     }	
+
 	
     private static File getConfigurationFolder() {
 		// Mac OS X specific folder (~/Library/Preferences/)
@@ -120,9 +122,11 @@ public class ConfigurationManager {
 			return getGenericConfigurationFolder();
     }
 
+	
 	private static File getGenericConfigurationFolder() {
 		return new File(System.getProperty("user.home")+"/.mucommander");		
 	}
+
 	
     /**
      * Loads the specified configuration file in memory.
@@ -135,7 +139,6 @@ public class ConfigurationManager {
         parser = new ConfigurationParser(loader = new ConfigurationLoader());
         parser.parse(path);
     }
-    /* End of method loadConfiguration(String) */
 
 	
     /**
@@ -175,8 +178,8 @@ public class ConfigurationManager {
 		
 		return false;
 	}
-    /* End of method loadConfiguration() */
 
+	
     /**
      * Writes the configuration to the specified file.
      * <p>
@@ -206,6 +209,7 @@ public class ConfigurationManager {
 		writeConfiguration(getConfigurationFilePath());
 	}
 
+	
     /* ------------------------ */
     /*      Variable access     */
     /* ------------------------ */
@@ -229,7 +233,6 @@ public class ConfigurationManager {
             buildConfigurationTree(builder, (ConfigurationTree)iterator.next());
         builder.closeNode(node.getName());
     }
-    /* End of method buildConfigurationTree(ConfigurationTreeBuilder, ConfigurationTree) */
 
     /**
      * Builds a configuration tree.
@@ -271,9 +274,8 @@ public class ConfigurationManager {
         }
         return null;
     }
-    /* End of method getVariable(String) */
 
-
+	
     /**
      * Retrieves the value of the specified configuration variable and assigns it
 	 * a given default value if the the value returned by {@link #getVariable(String)} is
@@ -293,8 +295,49 @@ public class ConfigurationManager {
 		}
 		return value;
 	}
-    /* End of method getVariable(String, String) */
 
+	
+	/**
+	 * Returns the value of the given configuration variable, <code>-1</code>
+	 * if the variable has no value OR if the variable cannot be parsed as an integer.
+	 *
+	 * @param  var name of the variable to retrieve.
+     * @return the value of the specified configuration variable.
+	 */
+	public static synchronized int getVariableInt(String var) {
+		String val = getVariable(var);
+		if(val==null)
+			return -1;
+		
+		try {
+			return Integer.parseInt(val);
+		}
+		catch(NumberFormatException e) {
+			return -1;
+		}
+	}
+
+
+	/**
+	 * Retrieves the value of the given configuration variable and assigns it
+	 * a given default value if the the value returned by {@link #getVariable(String)} is
+	 * <code>null</code>. 
+	 *
+	 * <p>Returns <code>-1</code> if the variable cannot be parsed as an integer.</p>
+	 *
+	 * @param  var name of the variable to retrieve.
+     * @param defaultValue defaultValue assigned if the variable's value is <code>null</code>.
+     * @return the value of the specified configuration variable.
+	 */
+	public static synchronized int getVariableInt(String var, int defaultValue) {
+		try {
+			return Integer.parseInt(getVariable(var, ""+defaultValue));
+		}
+		catch(NumberFormatException e) {
+			return -1;
+		}
+	}
+	
 
     /**
      * Sets the value of the specified configuration variable.
@@ -332,7 +375,6 @@ public class ConfigurationManager {
             }
         }
     }
-    /* End of method setVariable(String, String) */
 
 //    /* ------------------------ */
 //    /*      File monitoring     */
@@ -421,6 +463,5 @@ public class ConfigurationManager {
                 return false;
         return true;
     }
-    /* End of method fireConfigurationEvent(ConfigurationEvent) */
 }
-/* End of class ConfigurationManager */
+

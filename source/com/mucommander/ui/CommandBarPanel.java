@@ -2,7 +2,6 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.Launcher;
 import com.mucommander.ui.table.*;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.viewer.*;
@@ -37,18 +36,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	private final static int NB_BUTTONS = 8;
 
 	private boolean shiftDown;
-
 	
-/*
-	private JButton viewButton;
-	private JButton editButton;
-	private JButton copyButton;
-	private JButton buttons[MOVE_INDEX];
-	private JButton mkdirButton;
-	private JButton deleteButton;
-	private JButton refreshButton;
-	private JButton closeButton;
-*/
 	private JButton buttons[];
 
 	private final static String MOVE_TEXT = Translator.get("command_bar.move");
@@ -66,29 +54,6 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	};
 
 	
-	
-/*
-	private final static String VIEW_TEXT = Translator.get("command_bar.view");
-	private final static String EDIT_TEXT = Translator.get("command_bar.edit");
-	private final static String COPY_TEXT = Translator.get("command_bar.copy");
-	private final static String MOVE_TEXT = Translator.get("command_bar.move");
-	private final static String RENAME_TEXT = Translator.get("command_bar.rename");
-	private final static String MKDIR_TEXT = Translator.get("command_bar.mkdir");
-	private final static String DELETE_TEXT = Translator.get("command_bar.delete");
-	private final static String REFRESH_TEXT = Translator.get("command_bar.refresh");
-	private final static String CLOSE_TEXT = Translator.get("command_bar.close");
-	
-	private final static String VIEW_TEXT = Translator.get("command_bar.view");
-	private final static String EDIT_TEXT = Translator.get("command_bar.edit");
-	private final static String COPY_TEXT = Translator.get("command_bar.copy");
-	private final static String MOVE_TEXT = Translator.get("command_bar.move");
-	private final static String RENAME_TEXT = Translator.get("command_bar.rename");
-	private final static String MKDIR_TEXT = Translator.get("command_bar.mkdir");
-	private final static String DELETE_TEXT = Translator.get("command_bar.delete");
-	private final static String REFRESH_TEXT = Translator.get("command_bar.refresh");
-	private final static String CLOSE_TEXT = Translator.get("command_bar.close");
-*/	
-
     // Dialog width should not exceed 360, height is not an issue (always the same)
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
 
@@ -100,23 +65,6 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		this.buttons = new JButton[NB_BUTTONS];
 		for(int i=0; i<NB_BUTTONS; i++)
 			buttons[i] = addButton(BUTTONS_TEXT[i]);	
-
-/*		
-		viewButton = addButton(VIEW_TEXT);
-		editButton = addButton(EDIT_TEXT);
-		copyButton = addButton(COPY_TEXT);
-		moveButton = addButton(MOVE_TEXT);
-		mkdirButton = addButton(MKDIR_TEXT);
-		deleteButton = addButton(DELETE_TEXT);
-		refreshButton = addButton(REFRESH_TEXT);
-		closeButton = addButton(CLOSE_TEXT);
-*/
-
-//		// Shift+F6 renames a file but since shift-clicks cannot be caught using
-//		// an ActionListener (because of a known bug), we use a MouseListener
-//		buttons[MOVE_INDEX].addMouseListener(this);
-//		// Same for copy button
-//		buttons[COPY_INDEX].addMouseListener(this);
 	}
 
 	
@@ -131,7 +79,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		// For Mac OS X whose minimum width for buttons is enormous
 		button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getWidth()));
 		button.addActionListener(this);
-//        button.setToolTipText(text);
+        button.setToolTipText(text);
 		add(button);
 		return button;
 	}
@@ -286,7 +234,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	
 
 	public void doExit()  {
-		Launcher.getLauncher().disposeMainFrame(mainFrame);
+		WindowManager.getInstance().disposeMainFrame(mainFrame);
 	}
 	
 

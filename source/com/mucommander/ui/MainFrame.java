@@ -1,6 +1,5 @@
 package com.mucommander.ui;
 
-import com.mucommander.Launcher;
 import com.mucommander.PlatformManager;
 
 import com.mucommander.ui.table.FileTable;
@@ -81,8 +80,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		MainMenuBar menuBar = new MainMenuBar(this);
 		setJMenuBar(menuBar);
 		
-        folderPanel1.addLocationListener(Launcher.getLauncher());
-        folderPanel2.addLocationListener(Launcher.getLauncher());
+        folderPanel1.addLocationListener(WindowManager.getInstance());
+        folderPanel2.addLocationListener(WindowManager.getInstance());
 
         folderPanel1.addLocationListener(menuBar);
         folderPanel2.addLocationListener(menuBar);
@@ -492,10 +491,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
         	folderPanel2.showRootBox();
 		}
         else if(e.isControlDown() && keyCode==KeyEvent.VK_LEFT) {
-			Launcher.getLauncher().switchToPreviousWindow();
+			WindowManager.getInstance().switchToPreviousWindow();
 		}
 		else if(e.isControlDown() && keyCode==KeyEvent.VK_RIGHT) {
-			Launcher.getLauncher().switchToNextWindow();	
+			WindowManager.getInstance().switchToNextWindow();	
 		}
         else if(keyCode == KeyEvent.VK_TAB) {
             if(source == table1)

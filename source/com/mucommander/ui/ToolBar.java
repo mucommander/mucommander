@@ -1,7 +1,6 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.Launcher;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.text.Translator;
@@ -181,7 +180,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			return;
 		
 		if (buttonIndex==NEW_WINDOW_INDEX) {
-			Launcher.getLauncher().createNewMainFrame();
+			WindowManager.getInstance().createNewMainFrame();
 		}
 		else if (buttonIndex==BACK_INDEX) {
 			mainFrame.getLastActiveTable().getBrowser().goBack();
