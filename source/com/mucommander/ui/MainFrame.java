@@ -170,14 +170,14 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	/**
 	 * Returns left FolderPanel.
 	 */
-	public FolderPanel getBrowser1() {
+	public FolderPanel getFolderPanel1() {
 		return folderPanel1;
 	}
 
 	/**
 	 * Returns right FolderPanel.
 	 */
-	public FolderPanel getBrowser2() {
+	public FolderPanel getFolderPanel2() {
 		return folderPanel2;
 	}
 
@@ -293,7 +293,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 * Makes both folders the same, choosing the one which is currently active. 
 	 */
 	public void setSameFolder() {
-		(lastActiveTable==table1?table2:table1).getBrowser().setCurrentFolder(lastActiveTable.getCurrentFolder(), false);
+		(lastActiveTable==table1?table2:table1).getFolderPanel().setCurrentFolder(lastActiveTable.getCurrentFolder(), false);
 	}
 
 	/**

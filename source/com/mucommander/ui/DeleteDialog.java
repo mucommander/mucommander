@@ -84,19 +84,10 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
                     
         // Starts deleting files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("delete_dialog.deleting"));
-		DeleteJob deleteJob = new DeleteJob(mainFrame, progressDialog, filesToDelete);
+		DeleteJob deleteJob = new DeleteJob(progressDialog, mainFrame, filesToDelete);
     	progressDialog.start(deleteJob);
 	}
 	
-
-/*	
-	private void showErrorDialog(String msg, String title) {
-		JOptionPane.showMessageDialog(mainFrame, msg, title, JOptionPane.ERROR_MESSAGE);
-
-		// FileTable lost focus
-		activeTable.requestFocus();
-	}
-*/
 
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
@@ -107,6 +98,4 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
 			doDelete();
 		}
 	}
-	
-	
 }

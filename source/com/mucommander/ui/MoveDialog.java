@@ -26,8 +26,8 @@ public class MoveDialog extends DestinationDialog {
 		super(mainFrame);
 		
 		FileTable activeTable = mainFrame.getLastActiveTable();
-		FileTable table1 = mainFrame.getBrowser1().getFileTable();
-		FileTable table2 = mainFrame.getBrowser2().getFileTable();
+		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
+		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
     	this.filesToMove = activeTable.getSelectedFiles();
 		int nbFiles = filesToMove.size();
 		if(nbFiles==0)

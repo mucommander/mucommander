@@ -44,7 +44,16 @@ public class FileExistsDialog extends QuestionDialog {
 	
 	public FileExistsDialog(Dialog parent, Component locationRelative, AbstractFile sourceFile, AbstractFile destFile) {
 	    super(parent, Translator.get("file_exists_dialog.title"), locationRelative);
- 
+		init(sourceFile, destFile);
+	}
+
+	public FileExistsDialog(Frame parent, Component locationRelative, AbstractFile sourceFile, AbstractFile destFile) {
+	    super(parent, Translator.get("file_exists_dialog.title"), locationRelative);
+		init(sourceFile, destFile);
+	}
+
+	
+	private void init(AbstractFile sourceFile, AbstractFile destFile) {
 		YBoxPanel panel = new YBoxPanel();
     	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm a");
     	panel.add(new JLabel("Source: "+sourceFile.getAbsolutePath()));

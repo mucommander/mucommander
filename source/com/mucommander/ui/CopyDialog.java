@@ -40,8 +40,8 @@ public class CopyDialog extends DestinationDialog {
 		this.unzipDialog = unzipDialog;
 		
 		FileTable activeTable = mainFrame.getLastActiveTable();
-		FileTable table1 = mainFrame.getBrowser1().getFileTable();
-		FileTable table2 = mainFrame.getBrowser2().getFileTable();
+		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
+		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
     	this.filesToCopy = activeTable.getSelectedFiles();
 		int nbFiles = filesToCopy.size();
 		if(nbFiles==0)

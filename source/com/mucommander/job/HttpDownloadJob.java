@@ -167,7 +167,7 @@ public class HttpDownloadJob extends ExtendedFileJob implements Runnable, FileMo
         stop();
 		
         // Refresh only if table's folder is destFolder
-        FileTable table1 = mainFrame.getBrowser1().getFileTable();
+        FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
 		if (table1.getCurrentFolder().equals(destFolder))
         	try {
         		table1.refresh();
@@ -178,7 +178,7 @@ public class HttpDownloadJob extends ExtendedFileJob implements Runnable, FileMo
         	}
 
         // Refresh only if table's folder is destFolder
-        FileTable table2 = mainFrame.getBrowser2().getFileTable();
+        FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
         if (table2.getCurrentFolder().equals(destFolder))
         	try {
         		table2.refresh();

@@ -131,7 +131,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
 			dispose();
 		
-			mainFrame.getLastActiveTable().getBrowser().setCurrentFolder(AbstractFile.getAbstractFile(SMBFile.getPrivateURL(getSmbURL(), lastSmbUsername, lastSmbPassword)), true);
+			mainFrame.getLastActiveTable().getFolderPanel().setCurrentFolder(AbstractFile.getAbstractFile(SMBFile.getPrivateURL(getSmbURL(), lastSmbUsername, lastSmbPassword)), true);
 		}
 		else if (source==cancelButton)  {
 			dispose();			

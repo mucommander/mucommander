@@ -247,7 +247,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	 * Displays a popup message notifying the user that the request folder couldn't be opened.
 	 */
 	private void showFolderAccessError(IOException e) {
-		String exceptionMsg = e.getMessage();
+		String exceptionMsg = e==null?null:e.getMessage();
 		String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?".":": "+exceptionMsg);
 		if(!errorMsg.endsWith("."))
 			errorMsg += ".";
@@ -362,19 +362,15 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	
 	
 	/**
-	 * Refreshes this panel's components, file table, root button and location field.
+	 * Refreshes this panel's components: file table, root button and location field
+	 * and notifies the user if current folder could not be refreshed.
 	 */
 	public void refresh() {
 		rootButton.repaint();
 		locationField.repaint();
 	
-		try {
-			fileTable.refresh();
-		}
-		catch(IOException e) {
-//			JOptionPane.showMessageDialog(mainFrame, "Unable to access folder contents.", "Access error", JOptionPane.ERROR_MESSAGE);
-			showFolderAccessError(e);
-		}
+		if(!fileTable.refresh())
+			showFolderAccessError(null);
 	}
 
 

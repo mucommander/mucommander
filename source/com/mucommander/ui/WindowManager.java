@@ -106,8 +106,8 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		}
 		// If not, use previous window's folders 
 		else {
-			folder1 = currentMainFrame.getBrowser1().getFileTable().getCurrentFolder();
-			folder2 = currentMainFrame.getBrowser2().getFileTable().getCurrentFolder();
+			folder1 = currentMainFrame.getFolderPanel1().getFileTable().getCurrentFolder();
+			folder2 = currentMainFrame.getFolderPanel2().getFileTable().getCurrentFolder();
 		}
 		
 		// Create frame
@@ -253,9 +253,9 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	public void disposeMainFrame(MainFrame mainFrameToDispose) {
 		// Saves last folders
 		ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
-			mainFrameToDispose.getBrowser1().getLastSavableFolder());
+			mainFrameToDispose.getFolderPanel1().getLastSavableFolder());
 		ConfigurationManager.setVariable("prefs.startup_folder.right.last_folder", 
-			mainFrameToDispose.getBrowser2().getLastSavableFolder());
+			mainFrameToDispose.getFolderPanel2().getLastSavableFolder());
 
 		// Saves window position, size and screen resolution
 		Rectangle bounds = mainFrameToDispose.getBounds();

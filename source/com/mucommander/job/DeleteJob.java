@@ -2,19 +2,18 @@
 package com.mucommander.job;
 
 import com.mucommander.file.*;
+
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
-import com.mucommander.text.SizeFormatter;
+
+import com.mucommander.text.Translator;
 
 import java.io.IOException;
 import java.util.Vector;
 
-import javax.swing.*;
-
+import javax.swing.JLabel;
 
 /**
  * This class is responsible for deleting recursively a group of files.
@@ -29,7 +28,8 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 	/** Title used for error dialogs */
 	private String errorDialogTitle;
 
-
+	private String baseFolderPath;	
+	
 	private final static int DELETE_LINK_ACTION = 0;
 	private final static int DELETE_FOLDER_ACTION = 1;
 	private final static int CANCEL_ACTION = 2;
@@ -47,11 +47,11 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 	 * @param progressDialog dialog which shows this job's progress
 	 * @param mainFrame mainFrame this job has been triggered by
 	 * @param files files which are going to be deleted
-	 * @param destFolder destination folder where the files will be moved
 	 */
-    public DeleteJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder) {
-		super(progressDialog, mainFrame, files, destFolder);
+    public DeleteJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files) {
+		super(progressDialog, mainFrame, files);
 
+		this.baseFolderPath = ((AbstractFile)files.elementAt(0)).getAbsolutePath();
 		this.errorDialogTitle = Translator.get("delete_dialog.error_title");
 	}
 
@@ -64,7 +64,7 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 	 * 
 	 * @return <code>true</code> if the file has been completely deleted.
 	 */
-    private boolean processFile(AbstractFile file, Object recurseParams[]) {
+    protected boolean processFile(AbstractFile file, Object recurseParams) {
 		String filePath = file.getAbsolutePath();
 		filePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
 
@@ -97,7 +97,7 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 					try {
 						AbstractFile subFiles[] = file.ls();
 						for(int i=0; i<subFiles.length && !isInterrupted(); i++)
-							deleteRecurse(subFiles[i]);
+							processFile(subFiles[i], null);
 					}
 					catch(IOException e) {
 						if(com.mucommander.Debug.ON) e.printStackTrace();
@@ -163,59 +163,6 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 	    return waitForUserResponse(dialog);
 	}
 	
-
-	
-    public void run() {
-        currentFileIndex = 0;
-        int numFiles = filesToDelete.size();
-
-        FileTable activeTable = mainFrame.getLastActiveTable();
-        AbstractFile currentFile;
-        while(!isInterrupted()) {
-            currentFile = (AbstractFile)filesToDelete.elementAt(currentFileIndex);
-
-			// if current file or folder was successfully deleted, remove it from file table
-			if (deleteRecurse(currentFile))
-            	activeTable.excludeFile(currentFile);
-			// else unmark it
-			else
-				activeTable.setFileMarked(currentFile, false);
-
-			activeTable.repaint();
-			
-			if(currentFileIndex<numFiles-1)	// This ensures that currentFileIndex is never out of bounds (cf getCurrentFile)
-                currentFileIndex++;
-            else break;
-        }
-
-        stop();
-
-		// Refreshes FileTables if necessary
-		try {
-        	activeTable.refresh();
-        }
-        catch(IOException e) {
-        	// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
-        	// like switching to a root folder        
-        }
-        
-        // Refreshes the other file table if needed, that is if is 'below' the active table
-        FileTable unactiveTable = mainFrame.getUnactiveTable();
-        if (unactiveTable.getCurrentFolder().getAbsolutePath().startsWith(activeTable.getCurrentFolder().getAbsolutePath()))  {
-        	try {			
-        		unactiveTable.refresh();
-        	}
-        	catch(IOException e) {
-        		// If folder cannot be read, changes the folder to the one of active table
-        		// since the unactive one is 'below' the active one.
-        		FolderPanel folderPanel = unactiveTable.getBrowser();
-        		folderPanel.setCurrentFolder(activeTable.getCurrentFolder(), true);
-        	}
-        }
-    
-		cleanUp();
-	}
-
 
     public String getStatusString() {
         return Translator.get("delete.deleting_file", getCurrentFileInfo());

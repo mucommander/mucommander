@@ -22,6 +22,9 @@ import java.io.IOException;
  */
 public class CopyJob extends ExtendedFileJob implements Runnable {
 
+	/** Base destination folder */
+	protected AbstractFile baseDestFolder;
+
 	/** New filename in destination */
 	private String newName;
 
@@ -46,8 +49,10 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	 * @param unzipMode if true, files will be unzipped in the destination folder instead of being copied.
 	 */
 	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, boolean unzipMode) {
-		super(progressDialog, mainFrame, files, destFolder);
-
+//		super(progressDialog, mainFrame, files, destFolder);
+		super(progressDialog, mainFrame, files);
+		
+		this.baseDestFolder = destFolder;
 		this.newName = newName;
 		this.unzipMode = unzipMode;
 		this.errorDialogTitle = Translator.get(unzipMode?"unzip_dialog.error_title":"copy_dialog.error_title");
@@ -59,16 +64,21 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	/////////////////////////////////////
 
 	/**
-	 * Moves recursively the given file or folder. 
+	 * Copies recursively the given file or folder. 
 	 *
 	 * @param file the file or folder to move
-	 * @param recurseParams not used
+	 * @param recurseParams destination folder where the given file will be copied (null for top level files)
 	 * 
 	 * @return <code>true</code> if the file has been copied.
 	 */
-    protected boolean processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
+//    protected boolean processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
+    protected boolean processFile(AbstractFile file, Object recurseParams) {
+		// Stop if interrupted
 		if(isInterrupted())
             return false;
+
+		// Destination folder
+		AbstractFile destFolder = recurseParams==null?baseDestFolder:(AbstractFile)recurseParams;
 		
 		// Notify job that we're starting to process this file
 		nextFile(file);
@@ -87,7 +97,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 					// Recurse on zip's contents
 					AbstractFile zipSubFiles[] = currentFile.ls();
 					for(int j=0; j<zipSubFiles.length && !isInterrupted(); j++)
-						processFile(zipSubFiles[j], destFolder, null);
+					processFile(zipSubFiles[j], destFolder);
 					return true;
 				}
 				catch(IOException e) {
@@ -145,7 +155,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 					// for each file in folder...
 					AbstractFile subFiles[] = file.ls();
 					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
-						processFile(subFiles[i], destFile, null);
+//						processFile(subFiles[i], destFile, null);
+						processFile(subFiles[i], destFile);
 					return true;
 				}
 				catch(IOException e) {

@@ -183,10 +183,10 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			WindowManager.getInstance().createNewMainFrame();
 		}
 		else if (buttonIndex==BACK_INDEX) {
-			mainFrame.getLastActiveTable().getBrowser().goBack();
+			mainFrame.getLastActiveTable().getFolderPanel().goBack();
 		}
 		else if(buttonIndex==FORWARD_INDEX) {
-			mainFrame.getLastActiveTable().getBrowser().goForward();
+			mainFrame.getLastActiveTable().getFolderPanel().goForward();
 		}
 		else if(buttonIndex==MARK_INDEX) {
 			mainFrame.showSelectionDialog(true);

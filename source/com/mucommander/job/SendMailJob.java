@@ -161,9 +161,9 @@ public class SendMailJob extends ExtendedFileJob {
     }
 
 	
-    /**************************************************
-	 *** Methods taking care of actual mail sending ***
-	 **************************************************/
+    /***********************************************
+	 *** Methods taking care of sending the mail ***
+	 ***********************************************/
     
     private void openConnection() throws IOException {
         this.socket = new Socket(mailServer, 25);

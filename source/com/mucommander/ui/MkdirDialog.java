@@ -112,8 +112,8 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 	    }    
 
 /*		
-		FileTable table1 = mainFrame.getBrowser1().getFileTable();
-		FileTable table2 = mainFrame.getBrowser2().getFileTable();
+		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
+		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
 	    FileTable unactiveTable = activeTable==table1?table2:table1;
 	    if (unactiveTable.getCurrentFolder().equals(activeTable.getCurrentFolder()))
 	    	try {

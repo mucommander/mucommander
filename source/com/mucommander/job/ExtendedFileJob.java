@@ -36,8 +36,8 @@ public abstract class ExtendedFileJob extends FileJob {
 	/**
 	 * Creates a new ExtendedFileJob.
 	 */
-    public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame, java.util.Vector files, AbstractFile destFolder) {
-        super(progressDialog, mainFrame, files, destFolder);
+    public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame, java.util.Vector files) {
+        super(progressDialog, mainFrame, files);
     }
 
 

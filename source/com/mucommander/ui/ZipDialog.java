@@ -98,9 +98,8 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 
 			// Figures out which files to zip
 			Vector filesToZip = mainFrame.getLastActiveTable().getSelectedFiles();
-			
-			boolean append = false;
-			
+
+			// Checks that destination file can be resolved 
 			String filePath = filePathField.getText();
 			Object dest[] = mainFrame.resolvePath(filePath);
 			if (dest==null || dest[1]==null) {
@@ -112,8 +111,10 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 				dialog.getActionValue();
 				return;
 			}
-			
+
 			AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
+/*			
+			boolean append = false;
 			if (destFile.exists()) {
 				// File already exists: cancel, append or overwrite?
 				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("zip_dialog.file_already_exists", destFile.getName()), mainFrame,
@@ -144,6 +145,12 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			// Starts zipping
 			ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
 			ZipJob zipJob = new ZipJob(mainFrame, progressDialog, filesToZip, commentArea.getText(), destOut, destFile.getParent());
+			progressDialog.start(zipJob);
+*/
+
+			// Starts zipping
+			ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
+			ZipJob zipJob = new ZipJob(progressDialog, mainFrame, filesToZip, commentArea.getText(), destFile);
 			progressDialog.start(zipJob);
 		}
 		else if (source==cancelButton)  {

@@ -22,6 +22,9 @@ import java.io.IOException;
  */
 public class MoveJob extends ExtendedFileJob implements Runnable {
 
+	/** Base destination folder */
+	protected AbstractFile baseDestFolder;
+
 	/** New filename in destination */
 	private String newName;
 
@@ -42,8 +45,9 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 	 * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
 	 */
 	public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName) {
-		super(progressDialog, mainFrame, files, destFolder);
+		super(progressDialog, mainFrame, files);
 
+		this.baseDestFolder = destFolder;
 		this.newName = newName;
 		this.errorDialogTitle = Translator.get("move_dialog.error_title");
 	}
@@ -57,13 +61,18 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 	 * Moves recursively the given file or folder. 
 	 *
 	 * @param file the file or folder to move
-	 * @param recurseParams not used
+	 * @param recurseParams destination folder where the given file will be moved (null for top level files)
 	 * 
-	 * @return <code>true</code> if the file has been completely moved (copied + deleted).
+	 * @return <code>true</code> if the file has been moved completly (copied + deleted).
 	 */
-    protected boolean processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
+//    protected boolean processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
+    protected boolean processFile(AbstractFile file, Object recurseParams) {
+		// Stop if interrupted
 		if(isInterrupted())
             return false;
+		
+		// Destination folder
+		AbstractFile destFolder = recurseParams==null?baseDestFolder:(AbstractFile)recurseParams;
 		
 		// Notify job that we're starting to process this file
 		nextFile(file);
@@ -134,7 +143,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 					AbstractFile subFiles[] = file.ls();
 					boolean isFolderEmpty = true;
 					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
-						if(!processFile(subFiles[i], destFile, null))
+						if(!processFile(subFiles[i], destFile))
 							isFolderEmpty = false;
 					// If one file could returned failure, return failure as well since this
 					// folder could not be moved totally
@@ -254,7 +263,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 	 * Tries to move the file with AbstractFile.moveTo() 
 	 * skipping the whole manual recursive process
 	 */
-	priate boolean fileMove(AbstractFile file, AbstractFile destFile) {
+	private boolean fileMove(AbstractFile file, AbstractFile destFile) {
 		try {
 			if(file.moveTo(destFile))
 				return true;		// return true in case of success

@@ -59,8 +59,8 @@ public abstract class FileJob implements Runnable {
 	/** Base source folder */
 	protected AbstractFile baseSourceFolder;
 	
-	/** Base destination folder */
-	protected AbstractFile baseDestFolder;
+//	/** Base destination folder */
+//	protected AbstractFile baseDestFolder;
 
 	/** Files which are going to be processed */
 	protected Vector files;
@@ -97,18 +97,30 @@ public abstract class FileJob implements Runnable {
 	 * @param progressDialog dialog which shows this job's progress
 	 * @param mainFrame mainFrame this job has been triggered by
 	 * @param files files which are going to be processed
-	 * @param destFolder destination folder where the files will be transferred, can be <code>null</code> if there is no destination.
+//	 * @param destFolder destination folder where the files will be transferred, can be <code>null</code> if there is no destination.
 	 */
-	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder) {
+//	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder) {
+	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files) {
+		this(mainFrame, files);
 		this.progressDialog = progressDialog;
+	}
+
+	
+    /**
+	 * Creates a new FileJob without starting it, and with no associated ProgressDialog.
+	 *
+	 * @param mainFrame mainFrame this job has been triggered by
+	 * @param files files which are going to be processed
+	 */
+	public FileJob(MainFrame mainFrame, Vector files) {
 		this.mainFrame = mainFrame;
 	    this.files = files;
 		
         this.nbFiles = files.size();
 		this.baseSourceFolder = ((AbstractFile)files.elementAt(0)).getParent();
-		this.baseDestFolder = destFolder;
+//		this.baseDestFolder = destFolder;
 	}
-
+	
 	
     /**
      * Starts file job in a separate thread.
@@ -120,8 +132,8 @@ public abstract class FileJob implements Runnable {
 		// Pause auto-refresh during file job if this job potentially modifies folders contents
 		// and would potentially cause table to auto-refresh
 //		if(this instanceof FileModifier) {
-		mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(false);
-		mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(false);
+		mainFrame.getFolderPanel1().getFileTable().setAutoRefreshActive(false);
+		mainFrame.getFolderPanel2().getFileTable().setAutoRefreshActive(false);
 //		}		
 		
         // Serves to differenciate between the 'stopped' and 'not started yet' states
@@ -152,15 +164,10 @@ public abstract class FileJob implements Runnable {
 	 * Asks to stop file job's thread.
 	 */	
 	public void stop() {
-//		if(com.mucommander.Debug.ON)
-//			System.out.println("FileJob.stop(): modifier="+(this instanceof FileModifier));
-
 		jobThread = null;
 		// Resume auto-refresh if auto-refresh has been paused
-//		if(this instanceof FileModifier) {
-		mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(true);
-		mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(true);
-//		}
+		mainFrame.getFolderPanel1().getFileTable().setAutoRefreshActive(true);
+		mainFrame.getFolderPanel2().getFileTable().setAutoRefreshActive(true);
 	}
 	
 	
@@ -169,7 +176,8 @@ public abstract class FileJob implements Runnable {
 	 */
 	public void cleanUp() {
 		// Dispose associated progress dialog
-		progressDialog.dispose();
+		if(progressDialog!=null)
+			progressDialog.dispose();
 	
 		// Request focus on last active table
         FocusRequester.requestFocus(mainFrame.getLastActiveTable());
@@ -235,7 +243,8 @@ public abstract class FileJob implements Runnable {
 				break;
 			
 			// Process current file
-			processFile(currentFile, baseDestFolder, null);
+//			processFile(currentFile, baseDestFolder, null);
+			processFile(currentFile, null);
 			
 			// Unmark file in active table
 			activeTable.setFileMarked(currentFile, false);
@@ -245,9 +254,9 @@ public abstract class FileJob implements Runnable {
 		// Stop job
         stop();
 		
-        // Refresh tables only if folder is destFolder
-		refreshTableIfFolderEquals(mainFrame.getBrowser1().getFileTable(), baseDestFolder);
-        refreshTableIfFolderEquals(mainFrame.getBrowser2().getFileTable(), baseDestFolder);
+//        // Refresh tables only if folder is destFolder
+//		refreshTableIfFolderEquals(mainFrame.getFolderPanel1().getFileTable(), baseDestFolder);
+//        refreshTableIfFolderEquals(mainFrame.getFolderPanel2().getFileTable(), baseDestFolder);
 
 		// Clean 
 		cleanUp();
@@ -261,13 +270,24 @@ public abstract class FileJob implements Runnable {
 	 * is returned.
 	 */
     protected int showErrorDialog(String title, String message) {
-		QuestionDialog dialog = new QuestionDialog(progressDialog, 
-			title,
-			message,
-			mainFrame,
-			new String[] {SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT},
-			new int[]  {SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION},
-			0);
+		QuestionDialog dialog;
+		
+		if(progressDialog==null)
+			dialog = new QuestionDialog(mainFrame, 
+				title,
+				message,
+				mainFrame,
+				new String[] {SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT},
+				new int[]  {SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION},
+				0);
+		else
+			dialog = new QuestionDialog(progressDialog, 
+				title,
+				message,
+				mainFrame,
+				new String[] {SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT},
+				new int[]  {SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION},
+				0);
 
 		int userChoice = waitForUserResponse(dialog);
 		if(userChoice==-1 || userChoice==CANCEL_ACTION)
@@ -305,26 +325,29 @@ public abstract class FileJob implements Runnable {
 	 * under the same name and asks for what to do.
 	 */
     protected FileExistsDialog getFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
-		return new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
+		if(progressDialog==null)
+			return new FileExistsDialog(mainFrame, mainFrame, sourceFile, destFile);
+		else
+			return new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
 	}
 
 
 	/**
 	 * Refreshes the folder's content of the given file table.
 	 */
-	protected void refreshTable(FileTable table) {
-		table.refresh();
-	}
+//	protected void refreshTable(FileTable table) {
+//		table.refresh();
+//	}
 	
 
 	/**
 	 * Refreshes the folder's content of the given file table only
 	 * if the table's current folder equals the specified folder.
 	 */
-	protected void refreshTableIfFolderEquals(FileTable table, AbstractFile folder) {
-		if (table.getCurrentFolder().equals(folder))
-			refreshTable(table);
-	}
+//	protected void refreshTableIfFolderEquals(FileTable table, AbstractFile folder) {
+//		if (table.getCurrentFolder().equals(folder))
+//			refreshTable(table);
+//	}
 	
 
 	////////////////////////////////////////////
@@ -391,7 +414,8 @@ public abstract class FileJob implements Runnable {
 	 *
 	 * @return <code>true</code> if the operation was sucessful
 	 */
-    protected abstract boolean processFile(AbstractFile file, AbstractFile destFolder, Object[] recurseParams);
+//    protected abstract boolean processFile(AbstractFile file, AbstractFile destFolder, Object[] recurseParams);
+    protected abstract boolean processFile(AbstractFile file, Object recurseParams);
 
 	
 	/**

@@ -1,12 +1,11 @@
 
 package com.mucommander.job;
 
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
-import com.mucommander.text.SizeFormatter;
 
 import java.io.*;
 import java.util.zip.*;
@@ -17,86 +16,90 @@ import java.util.Vector;
  */
 public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 
+	/** Files which are going to be zipped */
     private Vector filesToZip;
-	private ZipOutputStream zipOut;
-	private AbstractFile destFolder;
-	private String currentFileInfo = "";
+	
+	/** Destination (zip) file */
+	private AbstractFile destFile;
+
+	/** Base destination folder */
 	private String baseFolderPath;
 
-    /** Size of current file */
-    private long currentFileSize;
-
-    /** Number of bytes of current file that have been processed */
-    private long currentFileProcessed;
-    
-	/** Index of file currently being processed */
-	private int currentFileIndex;
-
-    /** Number of bytes processed so far */
-    private long nbBytesProcessed;
-
-    /** Number of files that this job contains */
-    private int nbFiles;
-
-	private final static int CANCEL_ACTION = 0;
-	private final static int SKIP_ACTION = 1;
-
-	private final static String CANCEL_TEXT = "Cancel";
-	private final static String SKIP_TEXT = "Skip";
-
-	private byte buffer[] = new byte[READ_BLOCK_SIZE];
-
+	/** Zip output stream */
+	private ZipOutputStream zipOut;
 	
-    public ZipJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToZip, String zipComment, OutputStream zipOut, AbstractFile destFolder) {
+	/** Title used for error dialogs */
+	private String errorDialogTitle;
+	
+	
+    public ZipJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector filesToZip, String zipComment, AbstractFile destFile) {
         super(progressDialog, mainFrame);
 		
 		this.filesToZip = filesToZip;
-        this.nbFiles = filesToZip.size();
-		this.zipOut = new ZipOutputStream(zipOut);
-		this.destFolder = destFolder;
+		this.destFile = destFile;
+		this.zipComment = zipComment;
 
-		if(zipComment!=null && !zipComment.equals(""))
-			this.zipOut.setComment(zipComment);
-	
-		this.baseFolderPath = ((AbstractFile)filesToZip.elementAt(0)).getParent().getAbsolutePath();
+//		this.baseFolderPath = ((AbstractFile)filesToZip.elementAt(0)).getParent().getAbsolutePath();
+		this.baseFolderPath = baseSourceFolder.getAbsolutePath();
+		this.errorDialogTitle = Translator.get("zip_dialog.error_title");
 	}
-
-
-    private int showErrorDialog(String message) {
-		QuestionDialog dialog = new QuestionDialog(progressDialog, "Zip error", message, mainFrame,
-			new String[] {SKIP_TEXT, CANCEL_TEXT},
-			new int[]  {SKIP_ACTION, CANCEL_ACTION},
-			0);
-	
-	    return waitForUserResponse(dialog);
-    }
 
 
 	private boolean zipRecurse(AbstractFile file) {
 		if(isInterrupted())
 			return false;
 
-//        if(level==0) {
-            currentFileProcessed = 0;
-            currentFileSize = file.getSize();
-//        }
+		if(zipOut==null) {
+			boolean append = false;
+			if (destFile.exists()) {
+				// File already exists: cancel, append or overwrite?
+				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("zip_dialog.file_already_exists", destFile.getName()), mainFrame,
+					new String[] {Translator.get("cancel"), Translator.get("replace")},
+					new int[]  {CANCEL_ACTION, REPLACE_ACTION},
+					0);
+				int ret = dialog.getActionValue();
+				
+				// User cancelled
+				if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
+					return;
+			}
+
+			java.io.OutputStream destOut = null;
+			// Tries to open zip/destination file
+			try {
+				destOut = destFile.getOutputStream(false);
+			}
+			catch(Exception ex) {
+				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("zip_dialog.error_title"), Translator.get("zip_dialog.cannot_write"), mainFrame,
+					new String[] {Translator.get("ok")},
+					new int[]  {0},
+					0);
+				dialog.getActionValue();
+				return;
+			}
+
+			zipOut = new ZipOutputStream(destFile.getOutputStream());
+			if(zipComment!=null && !zipComment.equals(""))
+				zipOut.setComment(zipComment);
+		}
+		
+		currentFileProcessed = 0;
+		currentFileSize = file.getSize();
         
 		String filePath = file.getAbsolutePath();
 		String zipEntryRelativePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
-		currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
+//		currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
 		
 		try {
-//			if (file.isFolder() && !(file instanceof ArchiveFile)) {
 			if (file.isDirectory() && !file.isSymlink()) {
 				// Create directory entry
 				zipOut.putNextEntry(new ZipEntry(zipEntryRelativePath.replace('\\', '/')+"/"));
 				
 				AbstractFile subFiles[] = file.ls();
 				boolean folderComplete = true;
-				for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
+				for(int i=0; i<subFiles.length && !isInterrupted(); i++)
 					if(!zipRecurse(subFiles[i]))
 						folderComplete = false;
-				}
 				
 				return folderComplete;
 			}
@@ -111,14 +114,13 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 					zipOut.write(buffer, 0, nbRead);
                     nbBytesProcessed += nbRead;
 					currentFileProcessed += nbRead;
-//					fileSize = Math.max(bytesTotal, fileSize);
 				}
                 			
 				return true;
 			}
 		}
 		catch(IOException e) {
-			int ret = showErrorDialog("Error while adding "+file.getAbsolutePath());
+			int ret = showErrorDialog(errorDialogTitle, "Error while adding "+file.getAbsolutePath());
 			if(ret==-1 || ret==CANCEL_ACTION) {		// CANCEL_ACTION or close dialog
 			    stop();
 			}              
@@ -126,7 +128,23 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 		}
 	}
 
-
+	/**
+	 * Override stop method to catch zip output stream.
+	 */
+	public void stop() {
+		
+		// Try to close ZipOutputStream
+		if(zipOut!=null) {
+			try { zipOut.close(); }
+			catch(IOException e) {}
+		}
+		
+		// and call parent method
+		super.stop();
+	}
+	
+	
+/*
     public void run() {
         currentFileIndex = 0;
         int numFiles = filesToZip.size();
@@ -155,7 +173,7 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 		catch(IOException e) {
 		}
 
-		FileTable table1 = mainFrame.getBrowser1().getFileTable();
+		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
 		// Refreshes table1 only if folder is destFolder
 		if (table1.getCurrentFolder().equals(destFolder))
 			try { table1.refresh();	}
@@ -163,7 +181,7 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 				// Probably should do something when a folder becomes unreadable
 			}
 
-		FileTable table2 = mainFrame.getBrowser2().getFileTable();
+		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
 		// Refreshes table2 only if folder is destFolder
 		if (table2.getCurrentFolder().equals(destFolder))
 			try { table2.refresh();	}
@@ -175,32 +193,8 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 //		mainFrame.getLastActiveTable().requestFocus();
 		cleanUp();
 	}
+*/
 
-
-
-	/*******************************************
-	 *** ExtendedFileJob implemented methods ***
-	 *******************************************/
-
-	 public long getTotalBytesProcessed() {
-		return nbBytesProcessed;
-    }
-
-    public int getCurrentFileIndex() {
-        return currentFileIndex;
-    }
-
-    public int getNbFiles() {
-        return nbFiles;
-    }
-    
-    public long getCurrentFileBytesProcessed() {
-        return currentFileProcessed;
-    }
-
-    public long getCurrentFileSize() {
-        return currentFileSize;
-    }
 
     public String getStatusString() {
 		return "Adding "+currentFileInfo;

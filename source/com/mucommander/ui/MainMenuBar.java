@@ -268,10 +268,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 //		}
 		// View menu
 		else if (source == goBackItem) {
-			mainFrame.getLastActiveTable().getBrowser().goBack();	
+			mainFrame.getLastActiveTable().getFolderPanel().goBack();	
 		}
 		else if (source == goForwardItem) {
-			mainFrame.getLastActiveTable().getBrowser().goForward();	
+			mainFrame.getLastActiveTable().getFolderPanel().goForward();	
 		}
 		else if (source == sortByNameItem) {
 			mainFrame.getLastActiveTable().sortBy(FileTable.NAME);	
