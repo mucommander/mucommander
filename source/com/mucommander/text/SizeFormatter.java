@@ -30,6 +30,14 @@ public class SizeFormatter {
 	public final static int ROUND_TO_KB = 32;
 
 
+	private final static String BYTE = Translator.get("unit.byte");
+	private final static String BYTES = Translator.get("unit.bytes");
+	private final static String B = Translator.get("unit.bytes_short");
+	private final static String KB = Translator.get("unit.kb");
+	private final static String MB = Translator.get("unit.mb");
+	private final static String GB = Translator.get("unit.gb");
+	
+	
     public static String format(long size, int format) {
         String digitsString;
 		String unitString;
@@ -50,7 +58,7 @@ public class SizeFormatter {
 			for(int i=len; i>0; i-=3)
 				digitsString = s.substring(Math.max(i-3, 0), i)+(i==len?"":","+digitsString);
 
-			unitString = unitLong?"bytes":unitShort?"b":"";
+			unitString = unitLong?BYTES:unitShort?B:"";
 		}
 		else {
 			// size < 1KB
@@ -61,46 +69,42 @@ public class SizeFormatter {
 				}
 				else {
 					digitsString = ""+size;
-					unitString = unitLong?(size<=1?"byte":"bytes"):unitShort?"b":"";
+					unitString = unitLong?(size<=1?BYTE:BYTES):unitShort?B:"";
 				}
 			}
 			// size < 10KB	-> "9,6 KB"
 			else if(size<10000 && !digitsShort) {
 				int nKB = (int)size/1000;
-//				digitsString = nKB+","+((""+(size-nKB*1000)).charAt(0));
 				digitsString = nKB+","+((""+(size-nKB*1000)/(double)1000).charAt(2));
-				unitString = unitLong?"KB":unitShort?"KB":"";;
+				unitString = unitLong?KB:unitShort?KB:"";;
 			}
 			// size < 1MB -> "436 KB"
 			else if(size<1000000) {
 				digitsString = ""+size/1000;
-				unitString = unitLong?"KB":unitShort?"KB":"";
+				unitString = unitLong?KB:unitShort?KB:"";
 			}
-// Bug 4086784 -> 4,8MB !
 			// size < 10MB -> "4,3 MB"
 			else if(size<10000000 && !digitsShort) {
 				int nMB = (int)size/1000000;
-//				digitsString = nMB+","+((""+(size-nMB*1000000)).charAt(0));
 				digitsString = nMB+","+((""+(size-nMB*1000000)/(double)1000000).charAt(2));
-				unitString = unitLong?"MB":unitShort?"MB":"";
+				unitString = unitLong?MB:unitShort?MB:"";
 			}
 			// size < 1GB -> "548 MB"
 			else if(size<1000000000) {
 				digitsString = ""+size/1000000;
-				unitString = unitLong?"MB":unitShort?"MB":"";
+				unitString = unitLong?MB:unitShort?MB:"";
 			}
 	
 			// size < 10GB -> "4,8 GB"
 			else if(size<10000000000l && !digitsShort) {
 				long nGB = size/1000000000;
-//				digitsString = nGB+","+((""+(size-nGB*1000000000)).charAt(0));
 				digitsString = nGB+","+((""+(size-nGB*1000000000)/(double)1000000000).charAt(2));
-				unitString = unitLong?"GB":unitShort?"GB":"";
+				unitString = unitLong?GB:unitShort?GB:"";
 			}
 			// size > 1TB -> "216 GB"
 			else {
 				digitsString = ""+size/1000000000;
-				unitString = unitLong?"GB":unitShort?"GB":"";
+				unitString = unitLong?GB:unitShort?GB:"";
 			}
 		}
 

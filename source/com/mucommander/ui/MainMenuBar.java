@@ -46,7 +46,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenuItem unmarkAllItem;
 	private JMenuItem invertSelectionItem;
 	private JMenuItem compareFoldersItem;
-
+private JMenuItem renamerItem;
+	
 	// View menu
 	private JMenu viewMenu;
 	private JCheckBoxMenuItem sortByNameItem;
@@ -117,6 +118,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 
 		markMenu.add(new JSeparator());
 		compareFoldersItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.compare_folders"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), this);
+if(com.mucommander.Debug.ON)
+	renamerItem = MenuToolkit.addMenuItem(markMenu, "[[[RENAMER]]]", menuItemMnemonicHelper, null, this);
 
 		add(markMenu);
 		
@@ -260,6 +263,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == compareFoldersItem) {
 			mainFrame.compareDirectories();	
 		}
+else if (source == renamerItem) {
+	(new RenamerDialog(mainFrame)).showDialog();	
+}
 		// View menu
 		else if (source == goBackItem) {
 			mainFrame.getLastActiveTable().getBrowser().goBack();	

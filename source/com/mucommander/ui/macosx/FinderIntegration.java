@@ -3,6 +3,7 @@ package com.mucommander.ui.macosx;
 
 import com.mucommander.Launcher;
 import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.about.AboutDialog;
 
 import com.apple.mrj.MRJAboutHandler;
@@ -50,7 +51,7 @@ public class FinderIntegration implements MRJAboutHandler, MRJPrefsHandler, MRJQ
 
 	
 	public void run() {
-		MainFrame mainFrame = Launcher.getLauncher().getCurrentMainFrame();
+		MainFrame mainFrame = WindowManager.getInstance().getCurrentMainFrame();
 		
 		switch(action) {
 			case ABOUT_ACTION:

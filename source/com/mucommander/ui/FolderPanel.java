@@ -243,10 +243,10 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	 */
 	private void showFolderAccessError(IOException e) {
 		String exceptionMsg = e.getMessage();
-		String errorMsg = "Unable to access folder contents"+(exceptionMsg==null?".":": "+exceptionMsg);
+		String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?".":": "+exceptionMsg);
 		if(!errorMsg.endsWith("."))
 			errorMsg += ".";
-		JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error"), JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
 	}
 
 	
@@ -261,7 +261,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
             System.out.println("FolderPanel.setCurrentFolder: "+folder+" ");
         
 		if (folder==null || !folder.exists()) {
-			JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		

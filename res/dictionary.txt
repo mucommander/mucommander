@@ -40,6 +40,9 @@ cancel:EN:Cancel
 cancel:FR:Annuler
 #cancel:JP:ｷｬﾝｾﾙ
 
+apply:EN:Apply
+apply:FR:Appliquer
+
 folder_does_not_exist:EN:Folder doesn't exist.
 folder_does_not_exist:FR:Le dossier n'existe pas.
 
@@ -83,9 +86,9 @@ overwrite_all_older:EN:Overwrite all older
 overwrite_all_older:FR:Remplacer si plus ancien (tous)
 
 
-############
-# Language #
-############
+#############
+# Languages #
+#############
 
 language.en:EN:English
 language.en:FR:Anglais
@@ -98,35 +101,32 @@ language.fr:FR:Français
 # Command bar #
 ###############
 
-# Keyboard shortcuts will soon be removed from here
-# and be inserted dynamically
+command_bar.view:EN:View
+command_bar.view:FR:Voir
 
-command_bar.view:EN:View [F3]
-command_bar.view:FR:Voir [F3]
+command_bar.edit:EN:Edit
+command_bar.edit:FR:Editer
 
-command_bar.edit:EN:Edit [F4]
-command_bar.edit:FR:Editer [F4]
+command_bar.copy:EN:Copy
+command_bar.copy:FR:Copier
 
-command_bar.copy:EN:Copy [F5]
-command_bar.copy:FR:Copier [F5]
+command_bar.move:EN:Move
+command_bar.move:FR:Déplacer
 
-command_bar.move:EN:Move [F6]
-command_bar.move:FR:Déplacer [F6]
+command_bar.rename:EN:Rename
+command_bar.rename:FR:Renommer
 
-command_bar.rename:EN:Rename [F6]
-command_bar.rename:FR:Renommer [F6]
+command_bar.mkdir:EN:Make dir
+command_bar.mkdir:FR:Créer rep
 
-command_bar.mkdir:EN:Make dir [F7]
-command_bar.mkdir:FR:Créer rep [F7]
+command_bar.delete:EN:Delete
+command_bar.delete:FR:Supprimer
 
-command_bar.delete:EN:Delete [F8]
-command_bar.delete:FR:Supprimer [F8]
+command_bar.refresh:EN:Refresh
+command_bar.refresh:FR:Raffraîchir
 
-command_bar.refresh:EN:Refresh [F9]
-command_bar.refresh:FR:Raffraîchir [F9]
-
-command_bar.close:EN:Close [F10]
-command_bar.close:FR:Fermer [F10]
+command_bar.close:EN:Close
+command_bar.close:FR:Fermer
 
 command_bar.large_file_warning:EN:This file may be too large for this operation.
 command_bar.large_file_warning:FR:Ce fichier est peut-être trop large pour cette operation.
@@ -196,13 +196,13 @@ mark_menu.mark:EN:Mark files...
 mark_menu.mark:FR:Marquer fichiers...
 
 mark_menu.unmark:EN:Unmark files...
-mark_menu.unmark:FR:Démarquer fichiers...
+mark_menu.unmark:FR:Dé-marquer fichiers...
 
 mark_menu.mark_all:EN:Mark all
 mark_menu.mark_all:FR:Marquer tous
 
 mark_menu.unmark_all:EN:Unmark all
-mark_menu.unmark_all:FR:Démarquer tous
+mark_menu.unmark_all:FR:Dé-marquer tous
 
 mark_menu.invert_selection:EN:Invert selection
 mark_menu.invert_selection:FR:Inverser sélection
@@ -276,15 +276,15 @@ help_menu.homepage:FR:Site muCommander
 help_menu.forums:EN:muCommander forums
 help_menu.forums:FR:Forums muCommander
 
-help_menu.about:EN:About muCommander...
-help_menu.about:FR:A propos de muCommander...
+help_menu.about:EN:About muCommander
+help_menu.about:FR:A propos de muCommander
 
 
 ###########
 # Toolbar #
 ###########
 
-# Keyboard shortcuts will soon be removed from here
+# Keyboard shortcuts should soon be removed from here
 # and be inserted dynamically
 
 toolbar.new_window:EN:$[file_menu.new_window] (Ctrl+N)
@@ -331,8 +331,11 @@ table.size:FR:Taille
 table.date:EN:Date
 table.date:FR:Date
 
-table.folder_access_error:EN:Folder access error
-table.folder_access_error:FR:Folder access error
+table.folder_access_error_title:EN:Folder access error
+table.folder_access_error_title:FR:Folder access error
+
+table.folder_access_error:EN:Unable to access folder contents
+table.folder_access_error:FR:Unable to access folder contents
 
 table.folder_does_not_exist:EN:$[folder_does_not_exist]
 
@@ -363,7 +366,7 @@ version_dialog.not_available:EN:Unable to get version information from server.
 version_dialog.not_available:EN:L'information de version n'a pas pu être récupérée.
 
 version_dialog.download:EN:Download
-version_dialog.download:FR:Téléchargement
+version_dialog.download:FR:Télécharger
 
 
 ###############
@@ -494,13 +497,13 @@ file_selection_dialog.mark:EN:Mark
 file_selection_dialog.mark:FR:Marquer
 
 file_selection_dialog.unmark:EN:Unmark
-file_selection_dialog.unmark:FR:Démarquer
+file_selection_dialog.unmark:FR:Dé-marquer
 
 file_selection_dialog.mark_description:EN:Mark files whose filename:
 file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom:
 
 file_selection_dialog.unmark_description:EN:Unmark files whose filename:
-file_selection_dialog.unmark_description:FR:Démarquer les fichiers dont le nom:
+file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom:
 
 file_selection_dialog.contains:EN:Contains
 file_selection_dialog.contains:FR:Contient
@@ -556,6 +559,10 @@ progress_bar.starting:FR:Démarrage du transfert...
 
 progress_bar.hide:EN:Hide
 progress_bar.hide:FR:Cacher
+
+# %1 is the amount of data transferred (already formatted+localized) and %2 the transfer speed.
+progress_bar.transferred:EN:Transferred %1 at %2/s.
+progress_bar.transferred:FR:%1 transférés à %2/s.
 
 
 #####################
@@ -706,6 +713,248 @@ text_editor.paste:EN:Paste
 text_editor.paste:FR:Coller
 
 
+####################
+# Shortcuts dialog #
+####################
+
+shortcuts_dialog.navigation:EN:Navigation
+shortcuts_dialog.navigation:FR:Navigation
+
+shortcuts_dialog.navigation.change_left:EN:Change left folder
+shortcuts_dialog.navigation.change_left:FR:Changer le dossier de gauche
+
+shortcuts_dialog.navigation.change_right:EN:Change right folder
+shortcuts_dialog.navigation.change_right:FR:Changer le dossier de droite
+
+shortcuts_dialog.navigation.switch:EN:Switch between left and right panels
+shortcuts_dialog.navigation.switch:FR:Basculer entre les dossiers de droite et de gauche
+
+shortcuts_dialog.navigation.enter:EN:Enter folder / Enter archive / Execute
+shortcuts_dialog.navigation.enter:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
+
+shortcuts_dialog.navigation.execute:EN:Execute with system's file associations
+shortcuts_dialog.navigation.execute:FR:Exécuter avec les associations de fichiers du système  
+
+shortcuts_dialog.navigation.go_to_parent:EN:Go to parent folder
+shortcuts_dialog.navigation.go_to_parent:FR:Remonter au dossier parent
+
+shortcuts_dialog.navigation.go_to_first:EN:Go to first file in current folder
+shortcuts_dialog.navigation.go_to_first:FR:Aller au premier fichier du dossier
+
+shortcuts_dialog.navigation.go_to_last:EN:Go to last file in current folder
+shortcuts_dialog.navigation.go_to_last:FR:Aller au dernier fichier du dossier
+
+shortcuts_dialog.view:EN:View
+shortcuts_dialog.view:FR:Vue
+
+shortcuts_dialog.selection:EN:Selection
+shortcuts_dialog.selection:FR:Selection
+
+shortcuts_dialog.selection.mark_unmark:EN:Mark/Unmark a file
+shortcuts_dialog.selection.mark_unmark:FR:Marquer/Dé-marquer un fichier
+
+shortcuts_dialog.file_operations:EN:File operations
+shortcuts_dialog.file_operations:FR:Opérations sur fichiers
+
+shortcuts_dialog.file_operations.local_copy:EN:Copy to current folder
+shortcuts_dialog.file_operations.local_copy:FR:Copier vers le dossier courant
+
+shortcuts_dialog.file_operations.server_connect:EN:Connect to a remote server
+shortcuts_dialog.file_operations.server_connect:FR:Se connecter à un serveur distant
+
+shortcuts_dialog.windows:EN:Windows
+shortcuts_dialog.windows:FR:Fenêtres
+
+shortcuts_dialog.windows.create:EN:Create a new window
+shortcuts_dialog.windows.create:FR:Créer une nouvelle fenêtre
+
+shortcuts_dialog.windows.recall:EN:Recall a window
+shortcuts_dialog.windows.recall:FR:Rappeler une fenêtre
+
+shortcuts_dialog.windows.switch_previous:EN:Switch to previous window
+shortcuts_dialog.windows.switch_previous:FR:Aller à la fenêtre précédente
+
+shortcuts_dialog.windows.switch_next:EN:Switch to next window
+shortcuts_dialog.windows.switch_next:FR:Aller à la fenêtre suivante
+
+
+######################
+# Preferences dialog #
+######################
+
+prefs_dialog.title:EN:Preferences
+prefs_dialog.title:FR:Préférences
+
+# General tab
+
+prefs_dialog.general_tab:EN:General
+prefs_dialog.general_tab:FR:Général
+
+prefs_dialog.day:EN:Day
+prefs_dialog.day:FR:Jour
+
+prefs_dialog.month:EN:Month
+prefs_dialog.month:FR:Mois
+
+prefs_dialog.year:EN:Year
+prefs_dialog.year:FR:Année
+
+prefs_dialog.language:EN:Language (requires restart)
+prefs_dialog.language:FR:Langage (après redémarrage)
+
+prefs_dialog.date_time:EN:Date & time format
+prefs_dialog.date_time:FR:Format de date et d'heure
+
+prefs_dialog.time:EN:Time
+prefs_dialog.time:FR:Heure
+
+prefs_dialog.time_12_hour:EN:12-hour format
+prefs_dialog.time_12_hour:FR:Format 12 heures
+
+prefs_dialog.time_24_hour:EN:24-hour format
+prefs_dialog.time_24_hour:FR:Format 24 heures
+
+prefs_dialog.check_for_updates_on_startup:EN:Check for updates on startup
+prefs_dialog.check_for_updates_on_startup:FR:Chercher les mises à jour au démarrage
+
+prefs_dialog.show_toolbar_on_startup:EN:Show toolbar on startup
+prefs_dialog.show_toolbar_on_startup:FR:Afficher la barre d'outils au démarrage
+
+prefs_dialog.example:EN:Example
+prefs_dialog.example:FR:Exemple
+
+# Folders tab
+
+prefs_dialog.folders_tab:EN:Folders
+prefs_dialog.folders_tab:FR:Dossiers
+
+prefs_dialog.startup_folders:EN:Startup folders
+prefs_dialog.startup_folders:FR:Dossiers de démarrage
+
+prefs_dialog.left_folder:EN:Left folder
+prefs_dialog.left_folder:FR:Dossier de gauche
+
+prefs_dialog.right_folder:EN:Right folder
+prefs_dialog.right_folder:FR:Dossier de droite
+
+prefs_dialog.last_folder:EN:Last visited folder
+prefs_dialog.last_folder:FR:Dernier dossier visité
+
+prefs_dialog.custom_folder:EN:Custom folder
+prefs_dialog.custom_folder:FR:Dossier spécifique
+
+prefs_dialog.show_hidden_files:EN:Show Hidden files
+prefs_dialog.show_hidden_files:FR:Afficher les fichiers cachés
+
+prefs_dialog.compact_file_size:EN:Display compact file sizes
+prefs_dialog.compact_file_size:FR:Afficher les tailles de fichiers de façon compacte
+
+# Appearance tab
+
+prefs_dialog.appearance_tab:EN:Appearance
+prefs_dialog.appearance_tab:FR:Apparence
+
+prefs_dialog.look_and_feel:EN:Look and Feel
+prefs_dialog.look_and_feel:FR:Look and Feel
+
+prefs_dialog.font:EN:Font
+prefs_dialog.font:FR:Fonte
+
+prefs_dialog.font_size:EN:Size
+prefs_dialog.font_size:FR:Taille
+
+prefs_dialog.font_style:EN:Style
+prefs_dialog.font_style:FR:Style
+
+prefs_dialog.font_plain:EN:Plain
+prefs_dialog.font_plain:FR:Normal
+
+prefs_dialog.font_bold:EN:Bold
+prefs_dialog.font_bold:FR:Gras
+
+prefs_dialog.font_italic:EN:Italic
+prefs_dialog.font_italic:FR:Italique
+
+prefs_dialog.font_bold_italic:EN:Bold & italic
+prefs_dialog.font_bold_italic:FR:Gras et italique
+
+prefs_dialog.background_colors:EN:Background colors
+prefs_dialog.background_colors:FR:Couleurs de fond
+
+prefs_dialog.background_color:EN:Background
+prefs_dialog.background_color:FR:Fond
+
+prefs_dialog.selection_color:EN:Selection background
+prefs_dialog.selection_color:FR:Fond de la sélection
+
+prefs_dialog.font_colors:EN:Font colors
+prefs_dialog.font_colors:FR:Couleurs de la fonte
+
+prefs_dialog.plain_file_color:EN:Plain file
+prefs_dialog.plain_file_color:FR:Fichier normal
+
+prefs_dialog.marked_file_color:EN:Marked file
+prefs_dialog.marked_file_color:FR:Fichier marqué
+
+prefs_dialog.selected_file_color:EN:Selected file
+prefs_dialog.selected_file_color:FR:Fichier sélectionné
+
+prefs_dialog.hidden_file_color:EN:Hidden file
+prefs_dialog.hidden_file_color:FR:Fichier caché
+
+prefs_dialog.folder_color:EN:Folder
+prefs_dialog.folder_color:FR:Dossier
+
+prefs_dialog.archive_file_color:EN:Archive file
+prefs_dialog.archive_file_color:FR:Archive
+
+prefs_dialog.symbolic_link_color:EN:Symbolic link
+prefs_dialog.symbolic_link_color:FR:Lien symbolique
+
+prefs_dialog.pick_a_color:EN:Pick a color
+prefs_dialog.pick_a_color:FR:Choisir une couleur
+
+# Mail tab
+
+prefs_dialog.mail_tab:EN:Mail
+prefs_dialog.mail_tab:FR:Email
+
+prefs_dialog.mail_settings:EN:Outgoing mail settings
+prefs_dialog.mail_settings:FR:Paramètres d'email sortant
+
+prefs_dialog.mail_name:EN:Your name
+prefs_dialog.mail_name:FR:Votre nom
+
+prefs_dialog.mail_address:EN:Your email address
+prefs_dialog.mail_address:FR:Votre adresse email
+
+prefs_dialog.mail_server:EN:SMTP server
+prefs_dialog.mail_server:FR:Serveur SMTP
+
+
+#########
+# Units #
+#########
+
+unit.byte:EN:byte
+unit.byte:FR:octet
+
+unit.bytes:EN:bytes
+unit.bytes:EN:octets
+
+unit.bytes_short:EN:b
+unit.bytes_short:EN:o
+
+unit.kb:EN:KB
+unit.kb:FR:Ko
+
+unit.mb:EN:MB
+unit.mb:FR:Mo
+
+unit.gb:EN:GB
+unit.gb:FR:Go
+
+
 ################
 #
 ################
@@ -713,4 +962,5 @@ text_editor.paste:FR:Coller
 ################
 #
 ################
+
 

@@ -39,18 +39,18 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	
 	private JButton buttons[];
 
-	private final static String MOVE_TEXT = Translator.get("command_bar.move");
-	private final static String RENAME_TEXT = Translator.get("command_bar.rename");
+	private final static String MOVE_TEXT = Translator.get("command_bar.move")+" [F6]";
+	private final static String RENAME_TEXT = Translator.get("command_bar.rename")+" [F6]";
 	
 	private final static String BUTTONS_TEXT[] = new String[] {
-		Translator.get("command_bar.view"),
-		Translator.get("command_bar.edit"),
-		Translator.get("command_bar.copy"),
+		Translator.get("command_bar.view")+" [F3]",
+		Translator.get("command_bar.edit")+" [F4]",
+		Translator.get("command_bar.copy")+" [F5]",
 		MOVE_TEXT,
-		Translator.get("command_bar.mkdir"),
-		Translator.get("command_bar.delete"),
-		Translator.get("command_bar.refresh"),
-		Translator.get("command_bar.close")
+		Translator.get("command_bar.mkdir")+" [F7]",
+		Translator.get("command_bar.delete")+" [F8]",
+		Translator.get("command_bar.refresh")+" [F9]",
+		Translator.get("command_bar.close")+" [F10]"
 	};
 
 	
