@@ -20,7 +20,7 @@ public class FSFile extends AbstractFile {
 //	private long date = -1;
 //	private long size = -1;
 
-	private String name;
+//	private String name;
 
 	private FSFile parent;
 	// Indicates whether or not the value has already been retrieved
@@ -74,37 +74,6 @@ public class FSFile extends AbstractFile {
 			this.file = new File(absPath);
 		else
 			this.file = _file;
-
-        this.name = file.getName();
-
-//System.out.println("F2");		
-//		// Most frequently requested values are cached to avoid I/O accesses.
-
-//		// Determines if this file is a folder (directory)
-//		this.isFolder = file.isDirectory();
-
-// Can't do this since a File does not necessarely exist at this time so there is way
-// to know if it is a folder or not.
-//		// Folder paths always end with a separator
-//		if (isFolder && !absPath.endsWith(separator))
-//			absPath += separator;
-
-//System.out.println("F3");
-	
-//		// Resolves name
-//		this.name = file.getParent()==null?absPath+separator:file.getName();
-
-//System.out.println("F4");	
-//		// Resolves date
-//		this.date = file.lastModified();
-		
-//System.out.println("F5");
-//		// Resolves size
-//		this.size = file.length();
-	
-//System.out.println("F6");
-//		// Determines if this file is hidden
-//		this.isHidden = file.isHidden();
 	}
 
 	public String getName() {
@@ -114,7 +83,7 @@ public class FSFile extends AbstractFile {
 //	   	}    
 //		return name;
 
-        return name;
+		return file.getParent()==null?absPath+separator:file.getName();
 	}
 
 	/**
@@ -195,13 +164,13 @@ public class FSFile extends AbstractFile {
         return file.isDirectory();
 	}
 
-	public boolean equals(AbstractFile f) {
+	public boolean equals(Object f) {
 		if(!(f instanceof FSFile))
 			return super.equals(f);		// could be equal to a ZipArchiveFile
 
 		// Compares canonical path (which File does not do by default in its equals() method)
 		try {
-			return this.file.getCanonicalPath().equals(((FSFile)f).file.getCanonicalPath());
+            return this.file.getCanonicalPath().equals(((FSFile)f).file.getCanonicalPath());
 		}
 		catch(IOException e) {
 			return this.file.equals(((FSFile)f).file);

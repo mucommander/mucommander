@@ -64,11 +64,6 @@ System.out.println(absPath);
 
 
 	public String getName() {
-//		// Retrieves name and caches it
-//		if (name==null && file!=null) {
-//			this.name = file.getParent()==null?absPath+separator:file.getName();
-//		}
-//
 		return name;
 	}
 
@@ -175,11 +170,11 @@ System.out.println(absPath);
 		URLConnection conn;
 		Reader r = null;
 		try {
-			// Open connection
-			conn = url.openConnection();
+        // Open connection
+        conn = url.openConnection();
 			
-			// Set custom user-agent
-			conn.setRequestProperty("user-agent", "mucommander"+com.mucommander.Launcher.VERSION);
+        // Set custom user-agent
+        conn.setRequestProperty("user-agent", "mucommander_"+com.mucommander.Launcher.MUCOMMANDER_VERSION);
 			
 		  // Create a reader on the HTML content.
 	      r = new InputStreamReader(conn.getInputStream());

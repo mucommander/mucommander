@@ -13,7 +13,8 @@ public class SMBFile extends AbstractFile {
 
 	/** File separator is '/' for urls */
 	private String separator = "/";
-	
+
+/*	
 	private String name = null;
 	private long date = -1;
 	private long size = -1;
@@ -28,12 +29,12 @@ public class SMBFile extends AbstractFile {
 	private boolean isHidden;
 	// Indicates whether or not the value has already been retrieved
 	private boolean isHiddenValCached = false;
-
+*/
 	
 	/**
 	 * Creates a new instance of SMBFile.
 	 */
-	 public SMBFile(String fileURL) {
+	 public SMBFile(String fileURL) throws IOException {
 	 	AuthInfo urlAuthInfo = SMBFile.getAuthInfo(fileURL);
 	 	// if the URL specifies a login and password (typed in by the user)
 	 	// add it to AuthManager and use it
@@ -50,7 +51,6 @@ public class SMBFile extends AbstractFile {
 	 		}
 	 	}
 	 	
-// System.out.println("fileURL " + fileURL);
 	 	// Unlike java.io.File, SmbFile throws an SmbException
 	 	// when file doesn't exist
 	 	try {
@@ -66,7 +66,9 @@ public class SMBFile extends AbstractFile {
 	 		// Remove newly created AuthInfo entry from AuthManager
 	 		if(urlAuthInfo!=null)
 	 			AuthManager.remove(getPrivateURL(fileURL));
-			
+
+            throw e;
+/*			
 			// File doesn't exist, sets default values
 			this.absPath = getPrivateURL(fileURL);			
 			this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
@@ -76,6 +78,8 @@ public class SMBFile extends AbstractFile {
 			this.date = 0;
 			this.size = 0;
 			this.isHidden = false;
+*/
+
 		}
 	 }
 
@@ -145,12 +149,15 @@ public class SMBFile extends AbstractFile {
 
 
 	public String getName() {
+/*
 		// Retrieves name and caches it
 		if (name==null && file!=null) {
 			this.name = file.getParent()==null?absPath+separator:file.getName();
 		}
 
 		return name;
+*/
+        return file.getParent()==null?absPath+separator:file.getName();
 	}
 
 	/**
@@ -169,6 +176,7 @@ public class SMBFile extends AbstractFile {
 	}
 
 	public long getDate() {
+/*
 		// Retrieves date and caches it
 		if (date==-1 && file!=null)
 			try {
@@ -179,9 +187,17 @@ public class SMBFile extends AbstractFile {
 			}
 		
 		return date;
-	}
+*/
+        try {
+            return file.lastModified();
+        }
+        catch(SmbException e) {
+            return 0;
+        }
+    }
 	
 	public long getSize() {
+/*
 		// Retrieves size and caches it
 		if(size==-1 && file!=null)
 			try {
@@ -192,24 +208,39 @@ public class SMBFile extends AbstractFile {
 			}
 
 		return size;
+*/
+        try {
+            return file.length();
+        }
+        catch(SmbException e) {
+            return 0;
+        }
 	}
 	
 	public AbstractFile getParent() {
+/*
 		if(file==null)
 			return null;
-		
+
+*/		
 		String parent = file.getParent();
         // SmbFile.getParent() never returns null
 		if(parent.equals("smb://"))
             return null;
         
-		return new SMBFile(parent);
-	}
+		try {
+            return new SMBFile(parent);
+        }
+        catch(IOException e) {
+            return null;
+        }
+    }
 	
 	public boolean exists() {
 		// Unlike java.io.File, SmbFile.exists() can throw an SmbException
 		try {
-			return file==null?false:file.exists();
+//			return file==null?false:file.exists();
+            return file.exists();
 		}
 		catch(SmbException e) {
 			return false;
@@ -219,7 +250,8 @@ public class SMBFile extends AbstractFile {
 	public boolean canRead() {
 		// Unlike java.io.File, SmbFile.canRead() can throw an SmbException
 		try {
-			return file==null?false:file.canRead();
+//			return file==null?false:file.canRead();
+            return file.canRead();
 		}
 		catch(SmbException e) {
 			return false;
@@ -229,7 +261,8 @@ public class SMBFile extends AbstractFile {
 	public boolean canWrite() {
 		// Unlike java.io.File, SmbFile.canWrite() can throw an SmbException
 		try {
-			return file==null?false:file.canWrite();
+//			return file==null?false:file.canWrite();
+            return file.canWrite();
 		}
 		catch(SmbException e) {
 			return false;
@@ -237,8 +270,9 @@ public class SMBFile extends AbstractFile {
 	}
 	
 	public boolean isHidden() {
+/*
 		// Retrieves isHidden info and caches it
-		if (!isHiddenValCached && file!=null) {
+        if (!isHiddenValCached && file!=null) {
 			try {
 				isHidden = file.isHidden();
 				isHiddenValCached = true;
@@ -249,9 +283,17 @@ public class SMBFile extends AbstractFile {
 			}			
 		}
 		return isHidden;
+*/
+        try {
+            return file.isHidden();
+        }
+        catch(SmbException e) {
+            return false;
+        }			
 	}
 
 	public boolean isFolder() {
+/*
 		// Retrieves isFolder info and caches it
 		if (!isFolderValCached && file!=null) {
 			try {
@@ -264,10 +306,17 @@ public class SMBFile extends AbstractFile {
 			}
 		}
 		return isFolder;
+*/
+        try {
+            return file.isDirectory();
+        }
+        catch(SmbException e) {
+            return false;
+        }
 	}
 	
 	
-	public boolean equals(AbstractFile f) {
+	public boolean equals(Object f) {
 		if(!(f instanceof SMBFile))
 			return super.equals(f);		// could be equal to a ZipArchiveFile
 		
@@ -275,7 +324,6 @@ public class SMBFile extends AbstractFile {
 		// and IP addresses
 		return file.equals(((SMBFile)f).file);
 	}
-	
 	
 	
 	private String getPrivateURL() {
@@ -326,10 +374,25 @@ public class SMBFile extends AbstractFile {
             throw new IOException();
         
         AbstractFile children[] = new AbstractFile[names.length];
-		for(int i=0; i<names.length; i++)
-			children[i] = AbstractFile.getAbstractFile(absPath+separator+names[i]);
+        int nbFiles = 0;
+		for(int i=0; i<names.length; i++) {
+			children[nbFiles] = AbstractFile.getAbstractFile(absPath+separator+names[i]);
+        
+            // It can happen that the SmbFile constructor throws an SmbException (for example
+            // when a filename contains an '@' symbol in jCIFS v0.6.7), in which
+            // case getAbstractFile() will return null, so we have to handle this case; 
+            if(children[nbFiles]!=null)
+                nbFiles++;
+        }
 
-		return children;
+        // Rebuild array if one or more files are null
+        if(nbFiles!=names.length) {
+            AbstractFile newChildren[] = new AbstractFile[nbFiles];
+            System.arraycopy(children, 0, newChildren, 0, nbFiles);
+            return newChildren;
+        }
+		
+        return children;
 	}
 
 	public void mkdir(String name) throws IOException {

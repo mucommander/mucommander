@@ -21,12 +21,12 @@ public abstract class AbstractFile {
 
 		// SMB file
 		if (absPath.toLowerCase().startsWith("smb://")) {
-//			try {
+			try {
 			file = new SMBFile(absPath);
-//			}
-//			catch(IOException e) {
-//				return null;
-//			}
+			}
+			catch(IOException e) {
+				return null;
+			}
 		}
 		// HTML file
 		else if (absPath.toLowerCase().startsWith("http://")) {
@@ -68,8 +68,8 @@ public abstract class AbstractFile {
 	 *
 	 * <p>This method should be overriden as it only compares the absolute path.</p>
 	 */
-	public boolean equals(AbstractFile f) {
-		if(f==null)
+	public boolean equals(Object f) {
+		if(f==null || !(f instanceof AbstractFile))
 			return false;
 		
 		return getAbsolutePath().equals(((AbstractFile)f).getAbsolutePath());

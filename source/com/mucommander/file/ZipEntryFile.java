@@ -85,14 +85,6 @@ public class ZipEntryFile extends AbstractFile {
 		throw new IOException();
 	}
 	
-//	public void close() throws IOException {
-//		// do nothing, no resource needs to be disposed
-//	}
-
-//	public void rename(String absPath) throws IOException {
-//		throw new IOException();
-//	}
-
 	public boolean moveTo(AbstractFile dest) throws IOException {
 		return false;
 	}
