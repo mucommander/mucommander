@@ -23,6 +23,9 @@ public abstract class FileJob implements Runnable {
 	/** Thread in which the file job is performed */
 	private Thread jobThread;
 
+	/** Timestamp in milliseconds when job started */
+	private long startTime;
+
 
 	public FileJob(ProgressDialog progressDialog) {
 		this.progressDialog = progressDialog;
@@ -34,9 +37,18 @@ public abstract class FileJob implements Runnable {
     public void start() {
         // Serves to differenciate between the 'stopped' and 'not started yet' states
         hasStarted = true;
+		startTime = System.currentTimeMillis();
         jobThread = new Thread(this);
         jobThread.start();
     }
+
+
+	/**
+	 * Returns the timestamp in milliseconds when the job started.
+	 */
+	public long getStartTime() {
+		return startTime;
+	}
 
 
     /**
@@ -81,7 +93,6 @@ public abstract class FileJob implements Runnable {
     public int getTotalPercentDone() {
         return (int)(100*(getCurrentFileIndex()/(float)getNbFiles()));
     }
-
 
 
     /**

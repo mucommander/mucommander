@@ -7,6 +7,7 @@ import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.FolderPanel;
+import com.mucommander.text.SizeFormatter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,6 +47,7 @@ public class DeleteJob extends FileJob implements Runnable {
 		super(progressDialog);
 
 		this.filesToDelete = filesToDelete;
+		this.nbFiles = filesToDelete.size();
         this.mainFrame = mainFrame;
 	
 		this.baseFolderPath = ((AbstractFile)filesToDelete.elementAt(0)).getParent().getAbsolutePath();
@@ -59,8 +61,10 @@ public class DeleteJob extends FileJob implements Runnable {
     private boolean deleteRecurse(AbstractFile file) {
 		String filePath = file.getAbsolutePath();
 		filePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
-        currentFileInfo = filePath;
-		
+
+//        currentFileInfo = "\""+filePath+"\" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
+        currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
+				
 		if(isInterrupted())
             return false;
 

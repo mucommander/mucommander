@@ -6,6 +6,7 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.table.FileTable;
+import com.mucommander.text.SizeFormatter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,25 +99,26 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	/**
 	 * Recursively copies a file or folder.
 	 */
-    private void copyRecurse(AbstractFile file, AbstractFile destFolder, String newName, int level) {
+    private void copyRecurse(AbstractFile file, AbstractFile destFolder, String newName) {
 		if(isInterrupted())
             return;
 
-        if(level==0) {
+//        if(level==0) {
             currentFileProcessed = 0;
             currentFileSize = file.getSize();        
-        }
+//        }
 
 //System.out.println("DEST FOLDER "+destFolder.getAbsolutePath());
-		
-		String destFileName = (newName==null?file.getName():newName);
+		String originalName = file.getName();
+		String destFileName = (newName==null?originalName:newName);
        	String destFilePath = destFolder.getAbsolutePath()
        		+destFolder.getSeparator()
        		+destFileName;
 
 //System.out.println("SOURCE "+file.getAbsolutePath()+" DEST "+destFilePath);
 
-		currentFileInfo = destFilePath.substring(baseDestFolder.getAbsolutePath().length()+1, destFilePath.length());
+//		currentFileInfo = "\""+destFilePath.substring(baseDestFolder.getAbsolutePath().length()+1, destFilePath.length())+ "\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
+		currentFileInfo = "\""+originalName+ "\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
 
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
 
@@ -140,7 +142,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
                 AbstractFile subFiles[] = file.ls();
 				for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
 //                    System.out.println("Copy recurse "+subFiles[i].getAbsolutePath()+" to "+destFile.getAbsolutePath());
-					copyRecurse(subFiles[i], destFile, null, level+1);
+//					copyRecurse(subFiles[i], destFile, null, level+1);
+					copyRecurse(subFiles[i], destFile, null);
                 }
 			}
             catch(IOException e) {
@@ -209,8 +212,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
                     while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
 						out.write(buf, 0, read);
                         nbBytesProcessed += read;
-                        if(level==0)
-                            currentFileProcessed += read;
+//                        if(level==0)
+						currentFileProcessed += read;
 
 						// currentFileSize can be wrong (for example with HTMLFiles)
 						// currentFileSize = Math.max(currentFileProcessed, currentFileSize);
@@ -318,7 +321,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 					try {
 						zipSubFiles = currentFile.ls();
 						for(int i=0; i<zipSubFiles.length; i++) {
-                            copyRecurse(zipSubFiles[i], baseDestFolder, null, 0);
+//                            copyRecurse(zipSubFiles[i], baseDestFolder, null, 0);
+                            copyRecurse(zipSubFiles[i], baseDestFolder, null);
 						}
 					}
 					catch(IOException e) {
@@ -331,7 +335,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 				}
 			}
 			else {
-				copyRecurse(currentFile, baseDestFolder, newName, 0);
+//				copyRecurse(currentFile, baseDestFolder, newName, 0);
+				copyRecurse(currentFile, baseDestFolder, newName);
 			}
 			
 			activeTable.setFileMarked(currentFile, false);

@@ -5,6 +5,9 @@ import com.mucommander.Launcher;
 import com.mucommander.PlatformManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.ui.EmailFilesDialog;
+import com.mucommander.ui.pref.PreferencesDialog;
+import com.mucommander.job.SendMailJob;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -17,9 +20,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenu fileMenu;
 	private JMenuItem newWindowItem;
 	private JMenuItem serverConnectItem;
+	private JMenuItem runItem;
 	private JMenuItem zipItem;
 	private JMenuItem unzipItem;
-    private JMenuItem sendMailItem;
+    private JMenuItem emailFilesItem;
     private JMenuItem propertiesItem;
 	private JMenuItem preferencesItem;
 	private JMenuItem checkForUpdatesItem;
@@ -72,13 +76,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 
 		fileMenu.add(new JSeparator());
 		serverConnectItem = addMenuItem(fileMenu, "Connect to Server...", KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.CTRL_MASK));
+		runItem = addMenuItem(fileMenu, "Run...", KeyEvent.VK_R, KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		zipItem = addMenuItem(fileMenu, "Zip...", KeyEvent.VK_Z, KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
 		unzipItem = addMenuItem(fileMenu, "Unzip...", KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
-        sendMailItem = addMenuItem(fileMenu, "Send mail...", KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+        emailFilesItem = addMenuItem(fileMenu, "Email files...", KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
         propertiesItem = addMenuItem(fileMenu, "Properties", KeyEvent.VK_P, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.ALT_MASK));
 
 		fileMenu.add(new JSeparator());
-		preferencesItem = addMenuItem(fileMenu, "Preferences...", KeyEvent.VK_R, null);
+		preferencesItem = addMenuItem(fileMenu, "Preferences...", KeyEvent.VK_F, null);
 		checkForUpdatesItem = addMenuItem(fileMenu, "Check for updates", KeyEvent.VK_K, null);
 		
 		fileMenu.add(new JSeparator());
@@ -227,15 +232,28 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == serverConnectItem) {
 			mainFrame.showServerConnectDialog();
 		}
+		else if (source == runItem) {
+			new RunDialog(mainFrame);
+		}
 		else if (source == zipItem) {
 			new ZipDialog(mainFrame).show();
 		}
 		else if (source == unzipItem) {
-			mainFrame.getCommandBar().showCopyDialog(true);
+//			mainFrame.getCommandBar().showCopyDialog(true);
+			new CopyDialog(mainFrame, true);
 		}
-        else if  (source == sendMailItem) {
-            mainFrame.sendMail();
-        }
+        else if  (source == emailFilesItem) {
+			if(!SendMailJob.mailPreferencesSet()) {
+				JOptionPane.showMessageDialog(mainFrame, "You need to set your mail preferences first.", "Mail preferences not set", JOptionPane.INFORMATION_MESSAGE);
+
+				PreferencesDialog preferencesDialog = new PreferencesDialog(mainFrame);
+				preferencesDialog.setActiveTab(PreferencesDialog.MAIL_TAB);
+				preferencesDialog.showDialog();
+			}
+			else {
+				new EmailFilesDialog(mainFrame).showDialog();
+			}
+		}
 		else if (source == preferencesItem) {
 			mainFrame.showPreferencesDialog();
 		}
@@ -322,6 +340,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			propertiesItem.setEnabled(filesSelected);
 			zipItem.setEnabled(filesSelected);
 			unzipItem.setEnabled(filesSelected);
+			emailFilesItem.setEnabled(filesSelected);
 		}
 	}
 	

@@ -274,16 +274,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	}
 
 
-    public void sendMail() {
-        // Figures out which files to send
-        Vector filesToSend = lastActiveTable.getSelectedFiles();
-
-        // Starts moving files
-        ProgressDialog progressDialog = new ProgressDialog(this, "Send mail");
-        SendMailJob sendJob = new SendMailJob(this, progressDialog, filesToSend, "maxence@maxence.info", "test subject", "test body");
-        sendJob.start();
-        progressDialog.start(sendJob);
-    }        
             
 	/**
 	 * Matches a path typed by the user (which can be relative to the current folder or absolute)
@@ -405,10 +395,11 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
             commandBar.doEdit();
         }
         else if(keyCode == KeyEvent.VK_F5 && !e.isControlDown()) {
-            commandBar.showCopyDialog(false);
+//            commandBar.showCopyDialog(false);
+			new CopyDialog(this, false);
         }
         else if(keyCode == KeyEvent.VK_F6 && !e.isControlDown()) {
-            commandBar.showMoveDialog();
+			new MoveDialog(this, e.isShiftDown());
         }
         else if(keyCode == KeyEvent.VK_F7 && !e.isControlDown()) {
             commandBar.showMkdirDialog();

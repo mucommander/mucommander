@@ -6,6 +6,7 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.text.SizeFormatter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,22 +99,24 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 	 * Moves recursively a file to a destination folder.
 	 * @return <code>true</code> if the file was completely moved.
 	 */
-    private boolean moveRecurse(AbstractFile file, AbstractFile destFolder, String newName, int level) {
+    private boolean moveRecurse(AbstractFile file, AbstractFile destFolder, String newName) {
 
 		if(isInterrupted())
             return false;
 
-        if(level==0) {
+//        if(level==0) {
             currentFileProcessed = 0;
             currentFileSize = file.getSize();
-        }
+//        }
 
-		String destFileName = (newName==null?file.getName():newName);
+		String originalName = file.getName();
+		String destFileName = (newName==null?originalName:newName);
 		String destFilePath = destFolder.getAbsolutePath()
         	+destFolder.getSeparator()
         	+destFileName;
 
-		currentFileInfo = destFilePath.substring(baseDestFolder.getAbsolutePath().length()+1, destFilePath.length());
+//		currentFileInfo = "\""+destFilePath.substring(baseDestFolder.getAbsolutePath().length()+1, destFilePath.length())+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
+		currentFileInfo = "\""+originalName+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
 
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
 
@@ -147,7 +150,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
                 AbstractFile subFiles[] = file.ls();
                 boolean isFolderEmpty = true;
 				for(int i=0; i<subFiles.length && !isInterrupted(); i++)
-                    if(!moveRecurse(subFiles[i], destFile, null, level+1))
+                    if(!moveRecurse(subFiles[i], destFile, null))
 						isFolderEmpty = false;
             	// If one file could returned failure, return failure as well since this
 				// folder could not be moved totally
@@ -241,9 +244,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 					while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
 						out.write(buf, 0, read);
                         nbBytesProcessed += read;
-						if(level==0) {
-                            currentFileProcessed += read;
-                        }
+						currentFileProcessed += read;
                     }
 
 					moved = !isInterrupted();
@@ -359,7 +360,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
             currentFile = (AbstractFile)filesToMove.elementAt(currentFileIndex);
 			
 			// if current file or folder was successfully moved, exclude it from the file table
-			if (moveRecurse(currentFile, baseDestFolder, newName, 0))
+			if (moveRecurse(currentFile, baseDestFolder, newName))
 				activeTable.excludeFile(currentFile);
 			// else unmark it
 			else

@@ -18,7 +18,7 @@ import java.util.Vector;
 /**
  * Probably the dirtiest class of all...
  */
-public class CommandBarPanel extends JPanel implements ActionListener {
+public class CommandBarPanel extends JPanel implements ActionListener, MouseListener {
     private MainFrame mainFrame;
     
 	private FileTable table1;
@@ -39,22 +39,22 @@ public class CommandBarPanel extends JPanel implements ActionListener {
     private FocusDialog dialog;
 	private JTextField mkdirPathField;
     private JTextField movePathField;
-    private JTextField copyPathField;
+//    private JTextField copyPathField;
 	
 	private final static String VIEW_CAPTION = "[F3] View";
 	private final static String EDIT_CAPTION = "[F4] Edit";
 	private final static String COPY_CAPTION = "[F5] Copy";
-	private final static String MOVE_CAPTION = "[F6] Move";
+	private final static String MOVE_CAPTION = "[F6] Move/Rename";
 	private final static String MKDIR_CAPTION = "[F7] Make dir";
 	private final static String DELETE_CAPTION = "[F8] Delete";
 	private final static String REFRESH_CAPTION = "[F9] Refresh";
 	private final static String EXIT_CAPTION = "[F10] Exit";
 	
     private int dialogType;
-	private boolean unzipDialog;
+//	private boolean unzipDialog;
     private final static int NO_DIALOG = 0;
-	private final static int COPY_DIALOG = 1;
-    private final static int MOVE_DIALOG = 2;
+//	private final static int COPY_DIALOG = 1;
+//    private final static int MOVE_DIALOG = 2;
     private final static int MKDIR_DIALOG = 3;
     private final static int DELETE_DIALOG = 4;
 
@@ -72,6 +72,9 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		editButton = addButton(EDIT_CAPTION);
 		copyButton = addButton(COPY_CAPTION);
 		moveButton = addButton(MOVE_CAPTION);
+		// Shift+F6 renames a file but since shift-clicks cannot be caught using
+		// an ActionListener (because of a known bug), we use a MouseListener
+		moveButton.addMouseListener(this);
 		mkdirButton = addButton(MKDIR_CAPTION);
 		deleteButton = addButton(DELETE_CAPTION);
 		refreshButton = addButton(REFRESH_CAPTION);
@@ -96,6 +99,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		mainFrame.getLastActiveTable().requestFocus();
 	}
 
+/*
     public void showCopyDialog(boolean unzipDialog) {
 	    this.unzipDialog = unzipDialog;
 		
@@ -142,7 +146,10 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		dialog.setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		dialog.showDialog();
 	}
-    
+  
+*/	
+	    
+/*
     public void showMoveDialog() {
         FileTable activeTable = mainFrame.getLastActiveTable();
        	Vector selectedFiles = activeTable.getSelectedFiles();
@@ -187,6 +194,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
         dialog.setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		dialog.showDialog();
 	}
+*/
 
     public void showMkdirDialog() {
 	    FileTable activeTable = mainFrame.getLastActiveTable();
@@ -368,36 +376,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	}
 	
 	
-	public void doCopy(String destPath, boolean unzip) {
-		FileTable activeTable = mainFrame.getLastActiveTable();
-
-		// Figures out which files to copy
-		Vector filesToCopy = activeTable.getSelectedFiles();
-
-		// Resolves destination folder
-		Object ret[] = mainFrame.resolvePath(destPath);
-		// The path entered doesn't correspond to any existing folder
-		if (ret==null || ((filesToCopy.size()>1 || unzip) && ret[1]!=null)) {
-			showErrorDialog("Folder "+destPath+" doesn't exist.", (unzip?"Unzip":"Copy")+" error");
-			return;
-		}
-
-		AbstractFile destFolder = (AbstractFile)ret[0];
-		String newName = (String)ret[1];
-
-		if (!unzip && newName==null && activeTable.getCurrentFolder().equals(destFolder)) {
-			showErrorDialog("Source and destination are the same.", (unzip?"Unzip":"Copy")+" error");
-			return;
-		}
-
-		// Starts moving files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, (unzip?"Unzipping":"Copying")+" files");
-		CopyJob copyJob = new CopyJob(mainFrame, progressDialog, filesToCopy, newName, destFolder, unzip);
-		copyJob.start();
-		progressDialog.start(copyJob);
-	}
-
-
+/*
 	private void doMove(String destPath) {
 	    FileTable activeTable = mainFrame.getLastActiveTable();
 
@@ -431,7 +410,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	    moveJob.start();
 	    progressDialog.start(moveJob);
 	}
-
+*/
 
 	private void doMkdir(String dirPath) {
 		FileTable activeTable = mainFrame.getLastActiveTable();
@@ -512,9 +491,29 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 
 	public void doExit()  {
 		Launcher.getLauncher().disposeMainFrame(mainFrame);
-//		System.exit(0);
 	}
 	
+	
+	///////////////////////////////////////////////////////
+	// MouseListener methods to catch shift-clicked buttons
+	///////////////////////////////////////////////////////
+	public void mouseClicked(MouseEvent e) {
+		new MoveDialog(mainFrame, e.isShiftDown());
+	}
+
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+	}
+	
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+	
+
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -526,10 +525,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
         	doEdit();
 		}
         if(source == copyButton) {
-            showCopyDialog(false);
-        }
-        else if(source == moveButton) {
-            showMoveDialog();
+			new CopyDialog(mainFrame, false);
         }
         else if(source == mkdirButton) {
             showMkdirDialog();
@@ -543,7 +539,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
         else if(source == exitButton) {
         	doExit();
 		}
-
+/*
         // Dialog
 		else if(dialogType == COPY_DIALOG) {
 			dialog.dispose();
@@ -555,6 +551,8 @@ public class CommandBarPanel extends JPanel implements ActionListener {
             }
             copyPathField = null;
 		}
+*/
+/*
         else if(dialogType == MOVE_DIALOG) {
             dialog.dispose();
             dialog = null;
@@ -565,6 +563,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
             }
             movePathField = null;
         }
+*/		
         else if(dialogType == MKDIR_DIALOG) {
 	        dialog.dispose();
 	        dialog = null;

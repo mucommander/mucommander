@@ -25,9 +25,13 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	// Dialog width is constrained to 320, height is not an issue (always the same)
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
 	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);	
+
+	/** How often should progress information be refreshed (in ms) */
+	private final static int REFRESH_RATE = 500;
 	
-	// Window title without status
+	/* Window title without status */
 	private String title;
+
 	
 	public PropertiesDialog(MainFrame mainFrame, Vector files) {
 		super(mainFrame, "", mainFrame);
@@ -96,8 +100,9 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 			+(nbFolders>0?nbFolders+ " folder"+(nbFolders>1?"s":""):"")+"</html>");
 
 		sizeLabel.setText("<html>"+NumberFormat.getInstance().format(job.getTotalBytes())+" bytes</html>");
-
-		repaint();
+		
+		counterLabel.repaint(REFRESH_RATE);
+		sizeLabel.repaint(REFRESH_RATE);
 	}
 
 
@@ -119,7 +124,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		while(repaintThread!=null && !job.hasFinished()) {
 			updateLabels();
 			
-			try { Thread.sleep(100); }
+			try { Thread.sleep(REFRESH_RATE); }
 			catch(InterruptedException e) {}
 		}
 

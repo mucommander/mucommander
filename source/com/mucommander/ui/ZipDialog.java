@@ -44,9 +44,11 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		
 		Container contentPane = getContentPane();
 		
-		JPanel tempPanel = new JPanel(new BorderLayout());
-		JPanel tempPanel2 = new JPanel(new GridLayout(0,1));
-		tempPanel2.add(new JLabel("Add selected files to:"));
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		JLabel label = new JLabel("Add selected files to:");
+		label.setAlignmentX(LEFT_ALIGNMENT);
+		mainPanel.add(label);
 
 		FileTable activeTable = mainFrame.getUnactiveTable();
 		String initialPath = activeTable.getCurrentFolder().getAbsolutePath(true)+".zip";
@@ -54,17 +56,22 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		filePathField.setCaretPosition(initialPath.length()-4);
 		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
 		filePathField.addKeyListener(escapeKeyAdapter);
-		tempPanel2.add(filePathField);
-		tempPanel.add(tempPanel2, BorderLayout.NORTH);
+		filePathField.setAlignmentX(LEFT_ALIGNMENT);
+		mainPanel.add(filePathField);
 		
-		tempPanel2 = new JPanel(new BorderLayout());
-		tempPanel2.add(new JLabel("Comment (optional)"), BorderLayout.NORTH);
+		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+		
+		label = new JLabel("Comment (optional)");
+		label.setAlignmentX(LEFT_ALIGNMENT);
+		mainPanel.add(label);
 		commentArea = new JTextArea();
 		commentArea.setRows(4);
 		commentArea.addKeyListener(escapeKeyAdapter);
-		tempPanel2.add(commentArea, BorderLayout.SOUTH);
-		tempPanel.add(tempPanel2, BorderLayout.SOUTH);
-		contentPane.add(tempPanel, BorderLayout.NORTH);
+		mainPanel.add(commentArea);
+
+		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+		contentPane.add(mainPanel, BorderLayout.NORTH);
 				
 		okButton = new JButton("OK");
 		cancelButton = new JButton("Cancel");

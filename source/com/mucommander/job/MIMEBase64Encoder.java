@@ -83,12 +83,15 @@ public class MIMEBase64Encoder {
 
     private final static int BLOCK_SIZE = 1024;
 
+	private FileJob job;
     private static long totalRead;
+
     
-    public MIMEBase64Encoder() {
-    }
+    public MIMEBase64Encoder(FileJob job) {
+		this.job = job;
+	}
     
-    static void encode(AbstractFile file, OutputStream out) throws IOException {
+    public void encode(AbstractFile file, OutputStream out) throws IOException {
         InputStream in = file.getInputStream();
         byte bytes[] = new byte[BLOCK_SIZE];
 
@@ -97,8 +100,8 @@ public class MIMEBase64Encoder {
         int n3byt, nrest=0, k=0, linelength=0, i;
         byte buf[] = new byte[4];   // array of base64 characters
         
-        while ((n=in.read(bytes, nrest, BLOCK_SIZE-nrest))!=-1) {
-            System.out.println("nbread ="+n+" nrest="+nrest);
+        while ((n=in.read(bytes, nrest, BLOCK_SIZE-nrest))!=-1 && !job.isInterrupted()) {
+System.out.println("nbread ="+n+" nrest="+nrest);
 
             totalRead += n;
             n += nrest;

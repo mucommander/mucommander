@@ -2,7 +2,9 @@
 package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
+
 import java.io.IOException;
+import java.util.Vector;
 
 // public class PlatformManager implements Runnable {
 
@@ -77,7 +79,67 @@ public class PlatformManager {
 
 
 	/**
-	 * Opens/executes the given file, from the given folder.
+	 * Executes an arbitrary command in the given folder and returns <code>true</code>
+	 * if the operation succeeded.
+	 */
+	public static boolean execute(String command, AbstractFile currentFolder) {
+		try {
+            if(com.mucommander.Debug.TRACE)
+                System.out.println("Executing "+command);
+
+/*
+            String tokens[];
+			if (osType == WINDOWS_NT) {
+				tokens = new String[] {"cmd", "/c", command};
+			}
+			else {
+				tokens = new String[] {command};
+			}
+*/
+
+            Vector tokensV = new Vector();
+			if (osType == WINDOWS_NT) {
+				tokensV.add("cmd");
+				tokensV.add("/c");
+			}
+			// Splits the command into tokens
+			command.trim();
+			char c;
+			int pos = 0;
+			int len = command.length();
+			StringBuffer token = new StringBuffer();
+			while(pos<len) {
+				c = command.charAt(pos);
+				if((c==' ' && command.charAt(pos-1)!='\\') || c=='\t' || c=='\n' || c=='\r' || c=='\f') {
+System.out.println("token= "+token.toString());
+					tokensV.add(token.toString());
+					token = new StringBuffer();
+				}
+				else if(!(c=='\\' && pos!=len-1 && command.charAt(pos+1)==' ')) {
+					token.append(c);
+				}
+				pos ++;
+			}
+System.out.println("token= "+token.toString());
+			tokensV.add(token.toString());
+			
+			String tokens[] = new String[tokensV.size()];
+			tokensV.toArray(tokens);
+
+			Runtime.getRuntime().exec(tokens, null, new java.io.File(currentFolder.getAbsolutePath()));
+			return true;
+		}
+		catch(IOException e) {
+            if(com.mucommander.Debug.TRACE)
+                System.out.println("Error while executing "+command+": "+e);
+            return false;
+		}
+	}
+
+
+	/**
+	 * Opens/executes the given file, from the given folder and returns <code>true</code>
+	 * if the operation succeeded.
 	 */
 	public static boolean open(String filePath, AbstractFile currentFolder) {
 		try {
@@ -87,7 +149,7 @@ public class PlatformManager {
             if(com.mucommander.Debug.TRACE)
                 System.out.println("Opening "+filePath);
             
-            Runtime.getRuntime().exec(getCommandTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
+            Runtime.getRuntime().exec(getOpenTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
             
 /*            if(com.mucommander.Debug.TRACE) {
                 new Thread(new PlatformManager(currentProcess)).start();
@@ -103,7 +165,7 @@ public class PlatformManager {
 	}
 
 
-	private static String[] getCommandTokens(String filePath) {
+	private static String[] getOpenTokens(String filePath) {
 		// Under Win32, the 'start' command opens a file with the program
 		// registered with this file's extension (great!)
 		// Windows 95, 98, Me : syntax is start "myfile"

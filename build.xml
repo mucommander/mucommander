@@ -1,4 +1,4 @@
-<project name="muCommander" default="dist" basedir=".">
+<project name="mucommander" default="compile" basedir=".">
 
   <!-- set global properties for this build -->
   <property name="source" value="source"/>
@@ -14,29 +14,24 @@
     <mkdir dir="${classes}"/>
   </target>
 
+
+  <!-- Compiles .java files, adding libraries to classpath -->
   <target name="compile" depends="init">
     <!-- Compile the java code from ${source} into ${classes} -->
     <javac srcdir="${source}" destdir="${classes}" debug="on">
       <classpath>
         <pathelement location="classes"/>
-        <fileset dir="lib">
+         <fileset dir="lib">
           <include name="**/*.jar"/>
-        </fileset>
+         </fileset>
         <pathelement path="${classpath}"/>
       </classpath>
     </javac>
   </target>
 
-  <target name="dist" depends="compile">
-    <mkdir dir="${dist}"/>
 
-    <!-- Copy images files to {$classes} -->
-    <copy todir="${classes}">
-      <fileset dir="res">
-        <include name="**/*"/>
-      </fileset>
-    </copy>
-
+  <!-- Extracts lib JAR files and copies resource files to the classes folder -->
+  <target name="prepare">
     <!-- Unjar libraries to include them in the JAR file -->
     <unjar src="${lib}/muxml.jar" dest="${classes}"/>
 <!-- Not supported by unjar, too bad
@@ -45,17 +40,47 @@
     </fileset>                      -->
 
     <unjar src="${lib}/jcifs.jar" dest="${classes}"/>
+ 
+    <!-- Copy images files to {$classes} -->
+    <copy todir="${classes}">
+      <fileset dir="res">
+        <include name="**/*"/>
+      </fileset>
+    </copy>
 
-    <unjar src="${lib}/jftp.jar" dest="${classes}"/>
+ </target> 
 
+
+  <!-- Creates a distribution JAR file, including all resources and needed libraries -->
+  <target name="jar" depends="compile,prepare">
+  
+    <!-- Create dist subfolder where the JAR file will be put -->
+    <mkdir dir="${dist}"/>
+    
     <!-- Put everything in ${classes} into the ${dist}/mucommander.jar file -->
     <jar jarfile="${dist}/mucommander.jar" basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
   </target>
 
+
+  <!-- launches mucommander from the classes directory -->
   <target name="run">
-    <!-- Launches mucommander from the jar file -->
+    <java classname="com.mucommander.Launcher" fork="true">
+      <classpath>
+        <pathelement location="classes"/>
+         <fileset dir="lib">
+          <include name="**/*.jar"/>
+         </fileset>
+        <pathelement path="${classpath}"/>
+      </classpath>
+    </java>
+  </target>
+
+
+   <!-- launches mucommander from the distribution JAR file -->
+  <target name="runjar">
     <java jar="${dist}/mucommander.jar" fork="true"/>
   </target>
+
 
   <target name="clean">
     <!-- Delete the ${classes} and ${dist} directory trees -->

@@ -4,10 +4,11 @@ package com.mucommander.ui;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.ExtendedFileJob;
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.progress.ValueProgressBar;
+import com.mucommander.ui.comp.progress.OverlayProgressBar;
 import com.mucommander.ui.comp.button.ButtonChoicePanel;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.EscapeKeyAdapter;
+import com.mucommander.text.SizeFormatter;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -16,9 +17,10 @@ import java.awt.event.*;
  * This dialog informs the user of the progress made by a Job.
  */
 public class ProgressDialog extends FocusDialog implements Runnable, ActionListener, KeyListener {
-    private JLabel progressLabel;
-    private JProgressBar totalProgressBar;
-    private JProgressBar fileProgressBar;
+    private JLabel infoLabel;
+    private JLabel statsLabel;
+    private OverlayProgressBar totalProgressBar;
+    private OverlayProgressBar fileProgressBar;
     private JButton cancelButton;
     private JButton hideButton;
 
@@ -31,6 +33,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);	
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
 
+	/** How often should progress information be refreshed (in ms) */
+	private final static int REFRESH_RATE = 500;
+
     private MainFrame mainFrame;
 
     public ProgressDialog(MainFrame mainFrame, String title) {
@@ -41,53 +46,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 		// Sets maximum and minimum dimensions for this dialog
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-
-//        setVisible(false);
     }
     
-
-    public void initUI() {
-        Container contentPane = getContentPane();
-        progressLabel = new JLabel(job.getStatusString());
-        totalProgressBar = new ValueProgressBar();
-        
-		Panel tempPanel;
-		if (dualBar) {
-			tempPanel = new Panel(new GridLayout(2,1));
-        	
-			Panel tempPanel2 = new Panel(new BorderLayout());
-        	tempPanel2.add(progressLabel, BorderLayout.NORTH);
-        	fileProgressBar = new ValueProgressBar();
-			tempPanel2.add(fileProgressBar, BorderLayout.CENTER);
-			tempPanel.add(tempPanel2);
-			
-			tempPanel2 = new Panel(new BorderLayout());
-			tempPanel2.add(new JLabel("Total:"), BorderLayout.NORTH);
-			tempPanel2.add(totalProgressBar, BorderLayout.CENTER);
-			tempPanel.add(tempPanel2);
-		}	
-		else {
-			tempPanel = new Panel(new BorderLayout());
-			tempPanel.add(progressLabel, BorderLayout.NORTH);
-			tempPanel.add(totalProgressBar, BorderLayout.CENTER);
-		}
-		contentPane.add(tempPanel, BorderLayout.NORTH);
-        
-		cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(this);
-        cancelButton.addKeyListener(this);
-		hideButton = new JButton("Hide");
-		hideButton.addActionListener(this);
-		hideButton.addKeyListener(this);
-		// Cancel button receives initial focus
-		setInitialFocusComponent(cancelButton);
-		// Enter triggers cancel button
-		getRootPane().setDefaultButton(cancelButton);
-		contentPane.add(new ButtonChoicePanel(new JButton[] {cancelButton, hideButton}, 0, getRootPane()), BorderLayout.SOUTH);
-
-//        setVisible(true);
-    }
-
     
     public void start(FileJob job) {
         this.job = job;
@@ -100,6 +60,52 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     	showDialog();
 	}
 
+
+    private void initUI() {
+        Container contentPane = getContentPane();
+
+        totalProgressBar = new OverlayProgressBar();
+		totalProgressBar.setAlignmentX(LEFT_ALIGNMENT);
+        infoLabel = new JLabel(job.getStatusString());
+		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
+		
+		JPanel tempPanel = new JPanel();
+		tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
+		// 2 progress bars
+		if (dualBar) {
+        	tempPanel.add(infoLabel);
+        	fileProgressBar = new OverlayProgressBar();
+			fileProgressBar.setAlignmentX(LEFT_ALIGNMENT);
+			tempPanel.add(fileProgressBar);
+			tempPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+		
+			statsLabel = new JLabel("Transfer starting...");
+			tempPanel.add(statsLabel);
+			tempPanel.add(totalProgressBar);
+		}	
+		// Single progress bar
+		else {
+			tempPanel.add(infoLabel);
+			tempPanel.add(totalProgressBar);
+		}
+
+		tempPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+		tempPanel.add(Box.createVerticalGlue());
+		contentPane.add(tempPanel, BorderLayout.CENTER);
+        
+		cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(this);
+        cancelButton.addKeyListener(this);
+		hideButton = new JButton("Hide");
+		hideButton.addActionListener(this);
+		hideButton.addKeyListener(this);
+		// Cancel button receives initial focus
+		setInitialFocusComponent(cancelButton);
+		// Enter triggers cancel button
+		getRootPane().setDefaultButton(cancelButton);
+		contentPane.add(new ButtonChoicePanel(new JButton[] {cancelButton, hideButton}, 0, getRootPane()), BorderLayout.SOUTH);
+    }
+
     
     public void run() {
 	    // Used for dual bars
@@ -108,44 +114,71 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
         int totalPercent;
         int lastTotalPercent;
+
         String currentInfo;
         String lastInfo;
+
+		long nbBytesTotal;
+		long lastBytesTotal = 0;
         
         totalPercent = lastTotalPercent = -1;
         filePercent = lastFilePercent = -1;
         currentInfo = lastInfo = "";
 
-        while(repaintThread!=null && !job.hasFinished()) {
-	        // Updates totalProgressBar if necessary
+        ExtendedFileJob extendedJob = null;
+        if(dualBar)
+            extendedJob = (ExtendedFileJob)job;
+
+		long speed;
+		long startTime = job.getStartTime();
+		long now;
+		while(repaintThread!=null && !job.hasFinished()) {
 	        if (dualBar) {
-				filePercent = ((ExtendedFileJob)job).getFilePercentDone(); 
+				// Updates fileProgressBar if necessary
+				filePercent = extendedJob.getFilePercentDone(); 
 		        if(lastFilePercent!=filePercent) {
-		            fileProgressBar.setValue(filePercent);
-		            fileProgressBar.repaint();
+		            // Updates file progress bar
+                    fileProgressBar.setValue(filePercent);
+                    fileProgressBar.setTextOverlay(filePercent+"%");
+		            fileProgressBar.repaint(REFRESH_RATE);
+
 		            lastFilePercent = filePercent;
-		        }
+                }
+
+				// Update stats if necessary
+				nbBytesTotal = job.getTotalBytesProcessed();
+				if(lastBytesTotal!=nbBytesTotal) {
+					now = System.currentTimeMillis();
+					speed = (long)(nbBytesTotal/(double)((now-startTime)/1000));
+					statsLabel.setText("Transferred "+SizeFormatter.format(nbBytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG)+" at "+SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+"/s");
+					statsLabel.repaint(REFRESH_RATE);
+	
+					lastBytesTotal = nbBytesTotal;
+				}
 			}
         	
 		
             // Updates totalProgressBar if necessary
-            totalPercent = job.getTotalPercentDone(); 
+            totalPercent = job.getTotalPercentDone();
 			if(lastTotalPercent!=totalPercent) {
+				// Updates total progress bar 
                 totalProgressBar.setValue(totalPercent);
-                totalProgressBar.repaint();
+				totalProgressBar.setTextOverlay(totalPercent+"% ");
+                totalProgressBar.repaint(REFRESH_RATE);
+					            
                 lastTotalPercent = totalPercent;
             }
+
             
-            // Updates progressLabel if necessary 
+            // Updates infoLabel if necessary 
             currentInfo = job.getStatusString();
-// System.out.println("currentInfo "+currentInfo);
             if(!lastInfo.equals(currentInfo)) {
-// System.out.println("currentInfo changed");
-                progressLabel.setText(currentInfo);
-                progressLabel.repaint();
+                infoLabel.setText(currentInfo);
+                infoLabel.repaint(REFRESH_RATE);
                 lastInfo = currentInfo;
             }
 
-            try { Thread.sleep(200); }
+            try { Thread.sleep(REFRESH_RATE); }
             catch(InterruptedException e) {}
         }
 	

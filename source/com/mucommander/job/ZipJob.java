@@ -6,6 +6,7 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.text.SizeFormatter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,18 +104,19 @@ public class ZipJob extends ExtendedFileJob implements Runnable {
     }
 
 
-	private boolean zipRecurse(AbstractFile file, int level) {
+	private boolean zipRecurse(AbstractFile file) {
 		if(isInterrupted())
 			return false;
 
-        if(level==0) {
+//        if(level==0) {
             currentFileProcessed = 0;
             currentFileSize = file.getSize();
-        }
+//        }
         
 		String filePath = file.getAbsolutePath();
 		String zipEntryRelativePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
-		currentFileInfo = zipEntryRelativePath;
+//		currentFileInfo = "\""+zipEntryRelativePath+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
+		currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
 		
 		try {
 			if (file.isFolder() && !(file instanceof ArchiveFile)) {
@@ -124,7 +126,7 @@ public class ZipJob extends ExtendedFileJob implements Runnable {
 				AbstractFile subFiles[] = file.ls();
 				boolean folderComplete = true;
 				for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
-					if(!zipRecurse(subFiles[i], level+1))
+					if(!zipRecurse(subFiles[i]))
 						folderComplete = false;
 				}
 				
@@ -140,10 +142,8 @@ public class ZipJob extends ExtendedFileJob implements Runnable {
 				while ((nbRead=in.read(buffer, 0, buffer.length))!=-1) {
 					zipOut.write(buffer, 0, nbRead);
                     nbBytesProcessed += nbRead;
-					if(level==0)
-                        currentFileProcessed += nbRead;
+					currentFileProcessed += nbRead;
 //					fileSize = Math.max(bytesTotal, fileSize);
-//					currentFileProgress = (int) (100 * (bytesTotal/(float)fileSize));
 				}
                 			
 				return true;
@@ -172,7 +172,7 @@ public class ZipJob extends ExtendedFileJob implements Runnable {
 		
 		while(!isInterrupted()) {
             currentFile = (AbstractFile)filesToZip.elementAt(currentFileIndex);
-			zipRecurse(currentFile, 0);
+			zipRecurse(currentFile);
 			
 			activeTable.setFileMarked(currentFile, false);
 			activeTable.repaint();

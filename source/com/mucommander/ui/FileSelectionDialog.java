@@ -88,7 +88,6 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener, 
 
 		JPanel tempPanel = new JPanel();
 		tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.X_AXIS));
-//		tempPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		comparisonComboBox = new JComboBox();
 		comparisonComboBox.addItem("Contains");
 		comparisonComboBox.addItem("Starts with");
@@ -121,7 +120,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener, 
 		includeFoldersCheckBox.setAlignmentX(LEFT_ALIGNMENT);
 		northPanel.add(includeFoldersCheckBox);
 		
-		northPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+		northPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 		northPanel.add(Box.createVerticalGlue());
 
 		contentPane.add(northPanel, BorderLayout.NORTH);

@@ -191,6 +191,17 @@ public class ConfigurationManager {
      */
     public static synchronized void buildConfigurationTree(ConfigurationTreeBuilder builder) {buildConfigurationTree(builder, tree);}
 
+
+	/**
+	 * Returns true if the given variable has a value (not null and not equals to "" after being trimmed).
+	 * @param var the name of the variable to test.
+	 */
+	public static boolean isVariableSet(String var) {
+		String value = getVariable(var);
+		return value!=null && !value.trim().equals("");
+	}
+
+
     /**
      * Retrieves the value of the specified configuration variable.
      * @param  var name of the variable to retrieve.
@@ -245,10 +256,10 @@ public class ConfigurationManager {
      * @param value value for the specified variable.
      */
     public static synchronized void setVariable(String var, String value) {
-        // Maxence patch: ConfigurationParser does not handle empty elements
-		// (containing whitespace characters) properly
-		if(value.trim().equals(""))
-			return;
+//        // Maxence patch: ConfigurationParser does not handle empty elements
+//		// (containing whitespace characters) properly
+//		if(value.trim().equals(""))
+//			return;
 		
 		StringTokenizer   parser;
         String            buffer;

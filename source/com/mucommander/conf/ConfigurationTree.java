@@ -23,7 +23,7 @@ import java.util.*;
  * there is no <i>createLeaf</i> method(it was not deemed usefull, but may be added
  * in later releases).
  * </p>
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 class ConfigurationTree {
     /** Name of the root node. */
@@ -106,17 +106,20 @@ class ConfigurationTree {
      */
     public boolean setLeaf(String name, String value) {
         ConfigurationLeaf leaf;
+		// Maxence's patch: empty strings "" or all whitespace strings should also 
+		// be considered as null values 
+		boolean nullValue = value == null || value.trim().equals("");
 
         leaf = getLeafInstance(name);
         if(leaf == null) {
-            if(value != null) {
+            if(!nullValue) {
                 leafs.add(new ConfigurationLeaf(name, value));
                 return true;
             }
             return false;
         }
         else {
-            if(value == null) {
+            if(nullValue) {
                 leafs.remove(leaf);
                 return true;
             }

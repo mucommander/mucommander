@@ -6,6 +6,7 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.text.SizeFormatter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,8 +31,10 @@ public class SendMailJob extends ExtendedFileJob {
     private String mailServer;
     private String fromName;
     private String fromAddress;
+	
+	private String boundary;
 
-    private final static String BOUNDARY = "mucommander";
+//    private final static String BOUNDARY = "mucommander";
 
     /* Connection variable */
 //    private BufferedWriter out;
@@ -44,6 +47,9 @@ public class SendMailJob extends ExtendedFileJob {
 
 	/** Index of file currently being processed */
 	private int currentFileIndex;
+
+	/** Info string about the file currently being processed */
+	private String currentFileInfo = "";
 
     /** Number of bytes processed so far */
     private long nbBytesProcessed;
@@ -61,20 +67,30 @@ public class SendMailJob extends ExtendedFileJob {
         this.mainFrame = mainFrame;
         this.filesToSend = filesToSend;
         this.nbFiles = filesToSend.size();
-        this.base64Encoder = new MIMEBase64Encoder();
-        
+        this.base64Encoder = new MIMEBase64Encoder(this);
+        this.boundary = "muco"+System.currentTimeMillis();
+		
         this.recipientString = recipientString;
         this.mailSubject = mailSubject;
-        this.mailBody = mailBody;
+        this.mailBody = mailBody+"\n\n"+"Sent by muCommander - http://www.mucommander.com\n";
 
         this.mailServer = ConfigurationManager.getVariable("prefs.mail.smtp_server");
-        this.fromName = ConfigurationManager.getVariable("prefs.mail.name");
-        this.fromAddress = ConfigurationManager.getVariable("prefs.mail.from");
+        this.fromName = ConfigurationManager.getVariable("prefs.mail.sender_name");
+        this.fromAddress = ConfigurationManager.getVariable("prefs.mail.sender_address");
     }
+
+	/**
+	 * Returns true if mail preferences have been set.
+	 */
+	public static boolean mailPreferencesSet() {
+        return ConfigurationManager.isVariableSet("prefs.mail.smtp_server")
+			&& ConfigurationManager.isVariableSet("prefs.mail.sender_name")
+			&& ConfigurationManager.isVariableSet("prefs.mail.sender_address");
+	}
 
 
     public long getTotalBytesProcessed() {
-        return nbBytesProcessed;
+        return nbBytesProcessed + base64Encoder.getTotalRead();
     }
 
     public int getCurrentFileIndex() {
@@ -98,19 +114,23 @@ public class SendMailJob extends ExtendedFileJob {
      * Returns a String describing what's currently being done.
      */
     public String getStatusString() {
-        if(connectedToMailServer)
-            return "Sending "+((AbstractFile)filesToSend.elementAt(currentFileIndex)).getName();
+        AbstractFile currentFile;
+		if(connectedToMailServer)
+            return "Sending "+currentFileInfo;
         else
             return "Connecting to "+mailServer;
     }
 
     public void run() {
+        // Important!
+        waitForDialog();
+
         // Open socket connection to the mail server, and say hello
         try {
             openConnection();
         }
         catch(IOException e) {
-            showErrorDialog("Unable to contact server, check mail server settings.");
+            showErrorDialog("Unable to contact server, check mail server preferences.");
             return;
         }
 
@@ -119,31 +139,38 @@ public class SendMailJob extends ExtendedFileJob {
             sendBody();
         }
         catch(IOException e) {
-            showErrorDialog("Mail refused by server.");
-        }
+            showErrorDialog("Connection terminated by server, mail not sent.");
+			return;
+		}
 
         // Send attachments
         AbstractFile file;
-        for(int i=0; i<nbFiles; i++) {
+        for(int i=0; i<nbFiles && !isInterrupted(); i++) {
             this.currentFileIndex = i;
             file = (AbstractFile)filesToSend.elementAt(i);
             this.currentFileSize = file.getSize();
+			this.currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
             try {
                 sendAttachment(file);
-                nbBytesProcessed += base64Encoder.getTotalRead();
+                if(i!=nbFiles-1)
+					nbBytesProcessed += currentFileSize;
             }
             catch(IOException e) {
-                showErrorDialog("Unable to send "+((AbstractFile)filesToSend.elementAt(i)).getName()+".");
-                return; }
+                showErrorDialog("Unable to send "+file.getName()+", mail not sent.");
+                return;
+			}
         }
 
-        // Notifies the mail server that the mail is over
-        try {
-            sayGoodBye();
-        }
-        catch(IOException e) {
-            showErrorDialog("Unable to terminate connection."); return;
-        }
+		if(!isInterrupted()) {
+			// Notifies the mail server that the mail is over
+			try {
+				sayGoodBye();
+			}
+			catch(IOException e) {
+				showErrorDialog("Unable to terminate connection, mail may have been sent.");
+				return;
+			}
+		}
 
         // Close the connection
         closeConnection();
@@ -152,14 +179,11 @@ public class SendMailJob extends ExtendedFileJob {
     }    
 
     private void showErrorDialog(String message) {
-        QuestionDialog dialog = new QuestionDialog(progressDialog, "Send mail error", message, mainFrame,
-                                                   new String[] {OK_CAPTION},
-                                                   new int[]  {OK_ACTION},
-                                                   new int[]  {OK_MNEMONIC},
-                                                   0);
-
-        stop();
         closeConnection();
+
+		JOptionPane.showMessageDialog(progressDialog, message, "Email files error", JOptionPane.ERROR_MESSAGE);	
+
+		stop();
     }
 
     /********* Methods taking care of mail sending *********/
@@ -168,11 +192,13 @@ public class SendMailJob extends ExtendedFileJob {
         this.socket = new Socket(mailServer, 25);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "8859_1"));
         this.out = socket.getOutputStream();
-    }
+
+		this.connectedToMailServer = true;
+	}
 
     private void sendBody() throws IOException {
         // here you are supposed to send your username
-        sendln(in, out, "HELO thisIsMuCommander");
+        sendln(in, out, "HELO muCommander");
         // warning : some mail server validate the sender address
         //           in the MAIL FROM command, put your real address here
         sendln(in, out, "MAIL FROM: "+fromAddress);
@@ -181,13 +207,14 @@ public class SendMailJob extends ExtendedFileJob {
         sendln(out, "MIME-Version: 1.0");
         sendln(out, "Subject: "+this.mailSubject);
         sendln(out, "From: "+this.fromName+"<"+this.fromAddress+">");
-        sendln(out, "Content-Type: multipart/mixed; boundary=\"" + BOUNDARY +"\"");
-        sendln(out, "\r\n--" + BOUNDARY);
+        sendln(out, "To: <"+recipientString+">");
+        sendln(out, "Content-Type: multipart/mixed; boundary=\"" + boundary +"\"");
+        sendln(out, "\r\n--" + boundary);
 
         // Send the body
         sendln(out, "Content-Type: text/plain; charset=\"us-ascii\"\r\n");
         sendln(out, this.mailBody+"\r\n\r\n");
-        sendln(out, "\r\n--" +  BOUNDARY );        
+        sendln(out, "\r\n--" +  boundary );        
     }
     
     private void sendAttachment(AbstractFile file) throws IOException {
@@ -196,11 +223,11 @@ public class SendMailJob extends ExtendedFileJob {
         sendln(out, "Content-Disposition: attachment;filename=\""+file.getName()+"\"");
         sendln(out, "Content-transfer-encoding: base64\r\n");
         base64Encoder.encode(file, out);
-        sendln(out, "\r\n--" + BOUNDARY);
+        sendln(out, "\r\n--" + boundary);
     }
 
     private void sayGoodBye() throws IOException {
-        sendln(out, "\r\n\r\n--" + BOUNDARY + "--\r\n");
+        sendln(out, "\r\n\r\n--" + boundary + "--\r\n");
         sendln(in, out,".");
         sendln(in, out, "QUIT");        
     }
