@@ -37,6 +37,9 @@ cancel:EN:Cancel
 cancel:FR:Annuler
 #cancel:JP:ｷｬﾝｾﾙ
 
+close:EN:Close
+close:FR:Fermer
+
 apply:EN:Apply
 apply:FR:Appliquer
 

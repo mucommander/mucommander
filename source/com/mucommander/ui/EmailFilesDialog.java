@@ -233,7 +233,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 
 				// Starts sending files
 				ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("email_dialog.sending"));
-				SendMailJob mailJob = new SendMailJob(mainFrame, progressDialog, filesToSend, to, subject, body);
+				SendMailJob mailJob = new SendMailJob(progressDialog, mainFrame, filesToSend, to, subject, body);
 				progressDialog.start(mailJob);
 			}
 		}

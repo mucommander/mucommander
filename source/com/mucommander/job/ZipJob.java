@@ -151,19 +151,16 @@ public class ZipJob extends ExtendedFileJob {
 		} while(true);
 	}
 
+
 	/**
-	 * Override stop method to catch zip output stream.
+	 * Overriden method to properly close zip output stream.
 	 */
-	public void stop() {
-		
+	protected void jobStopped() {
 		// Try to close ZipOutputStream
 		if(zipOut!=null) {
 			try { zipOut.close(); }
 			catch(IOException e) {}
 		}
-		
-		// and call parent method
-		super.stop();
 	}
 
 

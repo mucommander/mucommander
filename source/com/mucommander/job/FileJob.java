@@ -168,13 +168,16 @@ public abstract class FileJob implements Runnable {
 		// Resume auto-refresh if auto-refresh has been paused
 		mainFrame.getFolderPanel1().getFileTable().setAutoRefreshActive(true);
 		mainFrame.getFolderPanel2().getFileTable().setAutoRefreshActive(true);
+	
+		// Notify that the job has been stopped
+		jobStopped();
 	}
 	
 	
 	/**
-	 * This method should be called once, after the job has been stopped
+	 * This method is called once, after the job has been stopped.
 	 */
-	public void cleanUp() {
+	private void cleanUp() {
 		// Dispose associated progress dialog
 		if(progressDialog!=null)
 			progressDialog.dispose();
@@ -229,21 +232,54 @@ public abstract class FileJob implements Runnable {
 	
 	
 	/**
+	 * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object) processFile()} is made.
+	 * The method implementation here does nothing but it can be overriden by subclasses to perform some first-time initializations.
+	 */
+	protected void jobStarted() {
+	}
+	
+
+	/**
+	 * This method is called when this job has completed normal execution : all files have been processed without any interuption
+	 * (without any call to {@link #stop() stop()}).
+	 *
+	 * <p>The call happens after the last call to {@link #processFile(AbstractFile,Object) processFile()} is made.
+	 * The method implementation here does nothing but it can be overriden by subclasses to properly complete the job.</p>
+	 
+	 * <p>Note that this method will NOT be called if a call to {@link #stop() stop()} was made before all files were processed.</p>
+	 */
+	protected void jobCompleted() {
+	}
+	
+	
+	/**
+	 * This method is called when this job has been stopped. The call after any call to {@link #processFile(AbstractFile,Object) processFile()} and
+	 * {@link jobComplete() jobComplete()} is made.
+	 * The method implementation here does nothing but it can be overriden by subclasses to properly terminate the job. This is where you want to close
+	 * any opened connections.
+	 *
+	 * <p>Note that unlike {@link jobComplete() jobComplete()} this method is always called, whether the job has been completed (all
+	 * files were processed) or has been interrupted in the middle.</p>
+	 */
+	protected void jobStopped() {
+	}
+	
+	
+	/**
 	 * Actual job is performed in a separate thread.
 	 */
     public void run() {
 		FileTable activeTable = mainFrame.getLastActiveTable();
 		AbstractFile currentFile;
-		// Loop on all source files
-		for(int i=0; i<nbFiles; i++) {
+
+		// Notifies that this job starts
+		jobStarted();
+
+		// Loop on all source files, checking that job has not been interrupted
+		for(int i=0; i<nbFiles && !isInterrupted(); i++) {
 			currentFile = (AbstractFile)files.elementAt(i);
 	
-			// Check if the job has been interrupted (stop copying in that case)
-			if(isInterrupted())
-				break;
-			
 			// Process current file
-//			processFile(currentFile, baseDestFolder, null);
 			processFile(currentFile, null);
 			
 			// Unmark file in active table
@@ -251,8 +287,14 @@ public abstract class FileJob implements Runnable {
 			activeTable.repaint();
         }
 
-		// Stop job
-        stop();
+		// Notifies that job has been completed (all files have been processed).
+		jobCompleted();
+		
+		// If this job hasn't already been stopped, call stop()
+		if(!isInterrupted()) {
+			// Stop job
+			stop();
+		}
 		
 //        // Refresh tables only if folder is destFolder
 //		refreshTableIfFolderEquals(mainFrame.getFolderPanel1().getFileTable(), baseDestFolder);
@@ -271,31 +313,45 @@ public abstract class FileJob implements Runnable {
 	 */
     protected int showErrorDialog(String title, String message) {
 		QuestionDialog dialog;
-		
-		if(progressDialog==null)
-			dialog = new QuestionDialog(mainFrame, 
-				title,
-				message,
-				mainFrame,
-				new String[] {SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT},
-				new int[]  {SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION},
-				0);
-		else
-			dialog = new QuestionDialog(progressDialog, 
-				title,
-				message,
-				mainFrame,
-				new String[] {SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT},
-				new int[]  {SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION},
-				0);
 
-		int userChoice = waitForUserResponse(dialog);
+		String actionTexts[] = new String[]{SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT};
+		int actionValues[] = new int[]{SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION};
+		
+		int userChoice = showErrorDialog(title, message, actionTexts, actionValues);
 		if(userChoice==-1 || userChoice==CANCEL_ACTION)
 			stop();
 		
 		return userChoice;
 	}
 
+
+	
+	/**
+	 * Displays an error dialog with the specified title and message and returns the selection action's value.
+	 */
+    protected int showErrorDialog(String title, String message, String actionTexts[], int actionValues[]) {
+		QuestionDialog dialog;
+		
+		if(progressDialog==null)
+			dialog = new QuestionDialog(mainFrame, 
+				title,
+				message,
+				mainFrame,
+				actionTexts,
+				actionValues,
+				0);
+		else
+			dialog = new QuestionDialog(progressDialog, 
+				title,
+				message,
+				mainFrame,
+				actionTexts,
+				actionValues,
+				0);
+
+		return waitForUserResponse(dialog);
+	}
+	
 	
 	/**
 	 * Waits for the user's answer to the given question dialog, putting this

@@ -6,7 +6,7 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.Translator;
 
 import java.io.*;
 import java.util.Vector;
@@ -21,53 +21,57 @@ import javax.swing.*;
  */
 public class SendMailJob extends ExtendedFileJob {
 
-    private Vector filesToSend;
-    private MIMEBase64Encoder base64Encoder;
+    /** Files that are going to be sent */
+	private Vector filesToSend;
+    
+	/** True after connection to mail server has been established */
+	private boolean connectedToMailServer;
 
-    private boolean connectedToMailServer = false;
-
-    /* Mail parameters */
+	/** Error dialog title */
+	private String errorDialogTitle;
+	
+	
+	/////////////////////
+    // Mail parameters //
+	/////////////////////
+	/** Email recipient(s) */
     private String recipientString;
+	/** Email subject */
     private String mailSubject;
+	/** Email body */
     private String mailBody;
+
+	/** SMTP server */
     private String mailServer;
+	/** From name */
     private String fromName;
+	/** From address */
     private String fromAddress;
 	
+	/** Email boundary string, delimits the end of the body and attachments */
 	private String boundary;
 
-//    private final static String BOUNDARY = "mucommander";
-
-    /* Connection variable */
-//    private BufferedWriter out;
-    private BufferedReader in;
+    /** Connection variable */
+//    private BufferedReader in;
+    private DataInputStream in;
+	/** OuputStream to the SMTP server */
     private OutputStream out;
+	/** Base64OuputStream to the SMTP server */
+    private Base64OutputStream out64;
+	/** Socket connection to the SMTP server */
     private Socket socket;
 
-    /** Size of current file */
-    private long currentFileSize;
-
-	/** Index of file currently being processed */
-	private int currentFileIndex;
-
-	/** Info string about the file currently being processed */
-	private String currentFileInfo = "";
-
-    /** Number of bytes processed so far */
-    private long nbBytesProcessed;
-
-    /** Number of files that this job contains */
-    private int nbFiles;
-    
 	
-    public SendMailJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToSend, String recipientString, String mailSubject, String mailBody) {
-        super(progressDialog, mainFrame);
+	private final static String CLOSE_TEXT = Translator.get("close");
+	private final static int CLOSE_ACTION = 11;
+	
+	
+    public SendMailJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector filesToSend, String recipientString, String mailSubject, String mailBody) {
+        super(progressDialog, mainFrame, filesToSend);
 
         this.filesToSend = filesToSend;
-        this.nbFiles = filesToSend.size();
-        this.base64Encoder = new MIMEBase64Encoder(this);
-        this.boundary = "muco"+System.currentTimeMillis();
-		
+
+		this.boundary = "mucommander"+System.currentTimeMillis();
         this.recipientString = recipientString;
         this.mailSubject = mailSubject;
         this.mailBody = mailBody+"\n\n"+"Sent by muCommander - http://www.mucommander.com\n";
@@ -75,7 +79,9 @@ public class SendMailJob extends ExtendedFileJob {
         this.mailServer = ConfigurationManager.getVariable("prefs.mail.smtp_server");
         this.fromName = ConfigurationManager.getVariable("prefs.mail.sender_name");
         this.fromAddress = ConfigurationManager.getVariable("prefs.mail.sender_address");
-    }
+    
+		this.errorDialogTitle = Translator.get("email_dialog.error_title");
+	}
 
 	/**
 	 * Returns true if mail preferences have been set.
@@ -86,20 +92,31 @@ public class SendMailJob extends ExtendedFileJob {
 			&& ConfigurationManager.isVariableSet("prefs.mail.sender_address");
 	}
 
+
+	/**
+	 * Shows an error dialog with a single action : close, and stops the job.
+	 */
+    private void showErrorDialog(String message) {
+		showErrorDialog(errorDialogTitle, message, new String[]{CLOSE_TEXT}, new int[]{CLOSE_ACTION});
+		stop();
+	}
 	
-    public void run() {
+	
+	/**
+	 * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object) processFile()} is made.
+	 * This method here does nothing but it can be overriden by subclasses to perform some first-time initializations.
+	 */
+	protected void jobStarted() {
         // Open socket connection to the mail server, and say hello
         try {
             openConnection();
         }
         catch(IOException e) {
-            showErrorDialog("Unable to contact server, check mail server preferences.");
+            showErrorDialog("Unable to contact mail server "+mailServer+", check mail server preferences.");
         }
 
-		if(isInterrupted()) {
-			cleanUp();
+		if(isInterrupted())
 			return;
-		}
 		
         // Send mail body
 		try {
@@ -108,57 +125,50 @@ public class SendMailJob extends ExtendedFileJob {
         catch(IOException e) {
             showErrorDialog("Connection terminated by server, mail not sent.");
 		}
+	}
+	
 
-		if(isInterrupted()) {
-			cleanUp();
-			return;
-		}
-		
-        // Send attachments
-        AbstractFile file;
-        for(int i=0; i<nbFiles && !isInterrupted(); i++) {
-            this.currentFileIndex = i;
-            file = (AbstractFile)filesToSend.elementAt(i);
-            this.currentFileSize = file.getSize();
-			this.currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
-            try {
-                sendAttachment(file);
-                if(i!=nbFiles-1)
-					nbBytesProcessed += currentFileSize;
-            }
-            catch(IOException e) {
-                showErrorDialog("Unable to send "+file.getName()+", mail not sent.");
-			}
-
-			if(isInterrupted()) {
-				cleanUp();
-				return;
-			}
-        }
-
+	/**
+	 * Overriden method to say 'goodbye' to the mail server.
+	 */
+	protected void jobCompleted() {
 		// Notifies the mail server that the mail is over
 		try {
+			// Writes padding bytes without closing the underlying stream.
+			out64.writePadding();
+
+			// Say goodbye to the server
 			sayGoodBye();
 		}
 		catch(IOException e) {
-			showErrorDialog("Unable to close connection, mail may have been sent.");
+			showErrorDialog("Unable to close connection, mail may not have been sent.");
 		}
-
+	}
+	
+	
+	/**
+     * Overrident method to close connection to the mail server.
+	 */
+	protected void jobStopped() {
         // Close the connection
         closeConnection();
+	}
+	
+	
+    protected boolean processFile(AbstractFile file, Object recurseParams) {
+		if(isInterrupted())
+			return false;
 
-        stop();
-
-		cleanUp();
+        // Send file attachment
+		try {
+			sendAttachment(file);
+			return true;
+		}
+		catch(IOException e) {
+			showErrorDialog("Unable to send "+file.getName()+", mail not sent.");
+			return false;
+		}
     }    
-
-    private void showErrorDialog(String message) {
-        closeConnection();
-
-		JOptionPane.showMessageDialog(progressDialog, message, "Email files error", JOptionPane.ERROR_MESSAGE);	
-
-		stop();
-    }
 
 	
     /***********************************************
@@ -167,37 +177,39 @@ public class SendMailJob extends ExtendedFileJob {
     
     private void openConnection() throws IOException {
         this.socket = new Socket(mailServer, 25);
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+//        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+        this.in = new DataInputStream(socket.getInputStream());
         this.out = socket.getOutputStream();
-
+		this.out64 = new Base64OutputStream(out);
+		
 		this.connectedToMailServer = true;
 	}
 
     private void sendBody() throws IOException {
         // here you are supposed to send your username
-        sendln(in, out, "HELO muCommander");
-        // warning : some mail server validate the sender address
-        //           in the MAIL FROM command, put your real address here
-        sendln(in, out, "MAIL FROM: "+fromAddress);
+        readWriteLine("HELO muCommander");
+        // warning : some mail server validate the sender address and will fail is an invalid
+		// address is provided
+        readWriteLine("MAIL FROM: "+fromAddress);
 		
 		Vector recipients = new Vector();
 		recipientString = splitRecipientString(recipientString, recipients);
 		int nbRecipients = recipients.size();
 		for(int i=0; i<nbRecipients; i++)
-			sendln(in, out, "RCPT TO: <"+recipients.elementAt(i)+">" );
-        sendln(in, out, "DATA");
-        sendln(out, "MIME-Version: 1.0");
-        sendln(out, "Subject: "+this.mailSubject);
-        sendln(out, "From: "+this.fromName+" <"+this.fromAddress+">");
-        sendln(out, "To: "+recipientString);
-        sendln(out, "Content-Type: multipart/mixed; boundary=\"" + boundary +"\"");
-        sendln(out, "\r\n--" + boundary);
+			readWriteLine("RCPT TO: <"+recipients.elementAt(i)+">" );
+        readWriteLine("DATA");
+        writeLine("MIME-Version: 1.0");
+        writeLine("Subject: "+this.mailSubject);
+        writeLine("From: "+this.fromName+" <"+this.fromAddress+">");
+        writeLine("To: "+recipientString);
+        writeLine("Content-Type: multipart/mixed; boundary=\"" + boundary +"\"");
+        writeLine("\r\n--" + boundary);
 
         // Send the body
-//        sendln(out, "Content-Type: text/plain; charset=\"us-ascii\"\r\n");
-        sendln(out, "Content-Type: text/plain; charset=\"utf-8\"\r\n");
-        sendln(out, this.mailBody+"\r\n\r\n");
-        sendln(out, "\r\n--" +  boundary );        
+//        writeLine( "Content-Type: text/plain; charset=\"us-ascii\"\r\n");
+        writeLine("Content-Type: text/plain; charset=\"utf-8\"\r\n");
+        writeLine(this.mailBody+"\r\n\r\n");
+        writeLine("\r\n--" +  boundary );        
     }
     
 
@@ -207,10 +219,10 @@ public class SendMailJob extends ExtendedFileJob {
 	 * @param recipientsStr String containing one or several recipients that need to be separated by ',' and/or ';' characters.
 	 */
 	private String splitRecipientString(String recipientsStr, Vector recipients) {
-		recipientsStr.replace(';', ',');
 
+		// /!\ this piece of code is far from being bullet proof but I'm too lazy now to rewrite it
 		StringBuffer newRecipientsSb = new StringBuffer();
-		StringTokenizer st = new StringTokenizer(recipientsStr, ",");
+		StringTokenizer st = new StringTokenizer(recipientsStr, ",;");
 		String rec;
 		int pos1, pos2;
 		while(st.hasMoreTokens()) {
@@ -228,40 +240,44 @@ public class SendMailJob extends ExtendedFileJob {
 	
     private void sendAttachment(AbstractFile file) throws IOException {
         // sends MIME type of attachment file
-        sendln(out, "Content-Type:"+MimeTypes.getMimeType(file)+"; name="+file.getName());
-        sendln(out, "Content-Disposition: attachment;filename=\""+file.getName()+"\"");
-        sendln(out, "Content-transfer-encoding: base64\r\n");
-        base64Encoder.encode(file, out);
-        sendln(out, "\r\n--" + boundary);
+        writeLine("Content-Type:"+MimeTypes.getMimeType(file)+"; name="+file.getName());
+        writeLine("Content-Disposition: attachment;filename=\""+file.getName()+"\"");
+        writeLine("Content-transfer-encoding: base64\r\n");
+        copyStream(in, out, 0);
+        writeLine("\r\n--" + boundary);
     }
-
+	
     private void sayGoodBye() throws IOException {
-        sendln(out, "\r\n\r\n--" + boundary + "--\r\n");
-        sendln(in, out,".");
-        sendln(in, out, "QUIT");        
+        writeLine("\r\n\r\n--" + boundary + "--\r\n");
+        readWriteLine(".");
+        readWriteLine("QUIT");
     }
 
     private void closeConnection() {
         try {
             socket.close();
             in.close();
-            out.close();
+            out64.close();
         }
         catch(Exception e){
         }
     }
     
-    private void sendln(BufferedReader in, OutputStream out, String s) throws IOException {
+    private void readWriteLine(String s) throws IOException {
 		//        out.write((s + "\r\n").getBytes("8859_1"));
         out.write((s + "\r\n").getBytes("UTF-8"));
-        out.flush();
+//        out.flush();
+		// We use DataInputStream's readLine method even though it's deprecated
+		// because we need the input stream to be an InputStream and not a Reader,
+		// and we cannot both a InputStream and a BufferedReader above since BufferedReader
+		// is, well, buffered.
         s = in.readLine();
     }
 
-    private void sendln(OutputStream out, String s) throws IOException {
+    private void writeLine(String s) throws IOException {
 //        out.write((s + "\r\n").getBytes("8859_1"));
         out.write((s + "\r\n").getBytes("UTF-8"));
-        out.flush();
+//        out.flush();
     }
 
 
@@ -269,30 +285,9 @@ public class SendMailJob extends ExtendedFileJob {
 	 *** ExtendedFileJob implemented methods ***
 	 *******************************************/
 
-    public long getTotalBytesProcessed() {
-        return nbBytesProcessed + base64Encoder.getTotalRead();
-    }
-
-    public int getCurrentFileIndex() {
-        return currentFileIndex;
-    }
-
-    public int getNbFiles() {
-        return nbFiles;
-    }
-    
-    public long getCurrentFileBytesProcessed() {
-        return connectedToMailServer?base64Encoder.getTotalRead():0;
-    }
-
-    public long getCurrentFileSize() {
-        return currentFileSize;
-    }
-
     public String getStatusString() {
-        AbstractFile currentFile;
 		if(connectedToMailServer)
-            return "Sending "+currentFileInfo;
+            return "Sending "+getCurrentFileInfo();
         else
             return "Connecting to "+mailServer;
     }
