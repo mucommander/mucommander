@@ -1,16 +1,17 @@
 ----------------
-muCommander v0.4
+muCommander v0.5
 ----------------
 
-muCommander is a cross-platform file manager.
-It features a Norton Commander style interface and runs on any OS supporting 
-the Java 2 Platform, Standard Edition.
+muCommander is a cross-platform file manager.  It features a Norton
+Commander style interface and runs on any OS supporting the Java 2
+Platform, Standard Edition.
 
-Please send any question, suggestion or bug report to feedback@mucommander.com
-Your feeback is important and always welcome! 
+Please use the muCommander forums (http://www.mucommander.com/forums)
+to post your questions, suggestions or bug reports. Your feedback is
+important and always welcome!
 
-muCommander uses the jCIFS library released under the LGPL to provide SMB support. jCIFS can
-be found at http://jcifs.samba.org.
+muCommander uses the jCIFS library released under the LGPL to provide
+SMB support. jCIFS can be found at http://jcifs.samba.org.
 
 Official website: http://www.mucommander.com
 (c) 2002 Maxence Bernard. All rights reserved.
@@ -19,21 +20,52 @@ Official website: http://www.mucommander.com
 Requirements
 ------------
 
-You must read and accept the license contained in this package prior to using muCommander.
+You must read and accept the license contained in this package prior
+to using muCommander.
 
-- Java Runtime Environment 1.3.0 (JRE) or later is required to run muCommander. JRE 1.4 is recommended, 
-  you can download it at http://java.sun.com/j2se/1.4/.
-  Mac OS X users: JRE 1.3.1 already comes preinstalled on Mac OS X.
-- If you're having problems launching muCommander, make sure the $JAVA_HOME environment variable
-  points to the directory where your JRE or JDK is installed.
+- Java Runtime Environment 1.3.0 (JRE) or later is required to run
+  muCommander. JRE 1.4 is recommended, you can download it at
+  http://java.sun.com/j2se/1.4/.  Mac OS X users: JRE 1.3.1 already
+  comes preinstalled on Mac OS X.
+
+- If you're having problems launching muCommander, make sure the
+  $JAVA_HOME environment variable points to the directory where your
+  JRE or JDK is installed.
 
 
-What's new in v0.4?
+What's new in v0.5?
 -------------------
 
 New features:
+- Look-and-Feel, font, colors, time/date format and startup folders can now be configured
+- Option to show/hide hidden files
+- Sort files by extension
+- Compare directories: marks files that are missing from a directory or that are newer
+- Links to the muCommander homepage & forums (Windows & Mac OS X only)
+
+Improvements:
+- Current sort criteria is now indicated in view menu
+- Shift+enter forces native association even for folders
+- jCIFS library (for SMB support) updated to v0.6.7
+- File selection dialog can now select files whose filename either contains, starts with or ends with a given keyword
+- Buttons in dialogs are now all of the same size
+
+Bug fixes:
+- Fixed a bug when manipulating files that have been changed since they were last refreshed 
+- Fixed several bugs in the file selection dialog
+- Fixed a bug which caused files to no longer be marked after F9/Refresh
+- Fixed a bug in copy/move operation: 'cancel' did not stop current file to be copied/moved
+- Fixed a bug which crashed the app when accessing a remote SMB file whose filename contains a '@' symbol
+- Fixed a rare bug which occurred when trying to access an unreachable SMB folder and resulted in the app to display the full parent folder's path (including login and password) instead of '..'
+
+
+History
+-------
+
+v0.4 [8/22/02]
+New features: 
 - SMB support: 'File->Connect to Server' to browse a remote SMB server
-- Add to zip: mark files and select 'File->Zip'
+- Add to zip: mark files and select 'File->Zip' 
 - Batch-unzip: mark .zip files and select 'File->Unzip'
 
 Improvements:
@@ -66,9 +98,6 @@ Bug fixes:
 - Fixed initial size problem under OS X on 800x600 or smaller displays
 - Fixed minimum size problem under OS X
 
-
-History
--------
 
 v0.3 [5/8/02]
 New features:
@@ -123,9 +152,24 @@ Bug fixes:
 - Fixed move bug that happened when cancelling a move operation after a 'file already exists' dialog, it would still try to move parent folders.
 - Fixed repaint bug that sometimes happened when a folder contents was updated or changed and contained less files than before.
 - Prevents user from moving files to a folder which is itself marked (inconsistent operation).
-- Dialogs size now constrained to more rationnal values.
+- Dialogs size now constrained to more rational values.
 
 
 v0.1 [2/17/02]
 - Initial release. Fully functional version with basic commander features.
   ZIP and JAR file support (read-only).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
