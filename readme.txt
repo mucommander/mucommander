@@ -38,48 +38,48 @@ What's new in v0.6?
 
 New features:
 - Send files as email attachments [ctrl+S]
-- Automatic refresh when folder content has changed
+- 'File -> Run command' to run a command in local directory [ctrl+R]
+- Symbolic links support: special color and specific handling during file operations
+- Automatic refresh when folder's content has changed
 - New progress bar with more information and improved refresh rate
 - Option to hide toolbar
-- Option to display file size in a compact manner
+- Option to display file size in a compact way
 - [shift+F6] renames selected file
 - [shift+F5] copies selected file to local directory
-- 'File -> Run command' to run a command in local directory [ctrl+R]
 - Mac OS X : 'About', 'Preferences' and 'Quit' menu items, dirty window indication in text editor
-- Symbolic link support: special color and specific handling during file operations
 - 'Apply' button in preferences dialog
 - New logo :)
 
 Improvements:
-- Reworked all windows and dialogs for cleaner and roomier layout
+- Reworked all windows and dialogs for a cleaner and roomier layout
 - Increased file access performance
 - jCIFS library (for SMB support) updated to 0.7.15
 - Improved Properties dialog refresh rate
-- Mac OS X : preferences file moved to ~/Library/Preferences/mucommander instead of ~/.mucommander/ (backward-compatible)
 - Keyboard shortcuts added to toolbar tooltips
 - Sound beep on question dialogs
 - Improved toolbar icons management
+- Mac OS X : preferences file moved to ~/Library/Preferences/mucommander instead of ~/.mucommander/ (backwards compatible)
 - Redesigned sort headers
 - Optimized 'About' dialog
 - 'Quit' button and menu item renamed to 'Close' and 'Close window' [F10]
 
-Bug fixes
-- Fixed bug when moving a file and cancelling, original of the file currently being moved would be deleted
-- Fixed a memory leak when closing main window
+Bug fixes :
+- Fixed bug when moving files and canceling, file currently being moved would be deleted
+- Fixed a memory leak caused by mucommander windows not releasing all resources when closed
 - Fixed bug which occurred when 'show hidden files' option was disabled and caused the application to fail on certain folders
-- Fixed minor bug in question dialogs which sometimes led to an extra row of buttons
-- Fixed bug when copying files and canceling, current file unselected even though file/folder not completely copied
-- Fixed annoying delay on startup when last folder was an SMB share
 - Fixed bug when copying a folder to a folder containing a folder with the same, copied folder would get nested (reported by Pixel)
+- Fixed annoying delay on startup when last folder was an SMB share
+- Fixed minor bug in question dialogs which sometimes led to an extra row of buttons
+- Fixed bug when copying files and canceling, current file was unselected even though file/folder was not completely copied
 - '..' date used to be that current folder's parent instead of being current folder's
-- Fixed cryptic error message when a folder cannot be created during a Copy/Move file operation
-- Fixed no title in Zip file overwrite dialog
+- Fixed cryptic error message when a folder could not be created during a Copy/Move file operation
 
 Known issues:
 - Symbolic links are not detected in SMB folders
 - Folder cannot be renamed to upper/lower case variations of the same name
 - Pipe '|' and other shell operators cannot be used in 'Run Command'
-- 'Sound beep on question dialog' doesn't work under Mac OS X + Java 1.3.1
+- Mac OS X: muCommander is slow with Java 1.4.1 under Panther and buggy under Jaguar so Java 1.3.1 is used by default
+- Mac OS X: 'Sound beep on question dialog' doesn't work with Java 1.3.1
 
 
 History
@@ -205,3 +205,4 @@ Bug fixes:
 v0.1 [2/17/02]
 - Initial release. Fully functional version with basic commander features.
   ZIP and JAR file support (read-only).
+
