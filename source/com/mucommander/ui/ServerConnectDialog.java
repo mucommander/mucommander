@@ -2,9 +2,9 @@
 package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.SMBFile;
+import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -35,7 +35,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 	private static String lastSmbPassword = "";
 	
 	public ServerConnectDialog(MainFrame mainFrame) {
-		super(mainFrame, "Connect to Server", mainFrame);
+		super(mainFrame, Translator.get("server_connect_dialog.server_connect"), mainFrame);
 		this.mainFrame = mainFrame;
 		
 		Container contentPane = getContentPane();
@@ -43,7 +43,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		
 		YBoxPanel mainPanel = new YBoxPanel();
 		JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		tempPanel.add(new JLabel("Server type  "));
+		tempPanel.add(new JLabel(Translator.get("server_connect_dialog.server_type")+":  "));
 		serverTypeCombo = new JComboBox();
 		serverTypeCombo.addItem("SMB");
 		serverTypeCombo.addKeyListener(escapeKeyAdapter);
@@ -54,8 +54,8 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		mainPanel.add(serverDetailsPanel);
 		contentPane.add(mainPanel, BorderLayout.NORTH);
 		
-		okButton = new JButton("OK");
-		cancelButton = new JButton("Cancel");
+		okButton = new JButton(Translator.get("server_connect_dialog.connect"));
+		cancelButton = new JButton(Translator.get("cancel"));
 		// Escape key disposes dialog
 		okButton.addKeyListener(escapeKeyAdapter);
 		cancelButton.addKeyListener(escapeKeyAdapter);
@@ -81,22 +81,22 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		// Server field
 		smbServerField = new JTextField(lastSmbServer);
 		addTextFieldListeners(smbServerField);
-		textFieldsPanel.addTextFieldRow("Server", smbServerField, 15);
+		textFieldsPanel.addTextFieldRow(Translator.get("server_connect_dialog.server"), smbServerField, 15);
 
 		// Username field
 		smbUsernameField = new JTextField(lastSmbUsername);
 		addTextFieldListeners(smbUsernameField);
-		textFieldsPanel.addTextFieldRow("Username", smbUsernameField, 5);
+		textFieldsPanel.addTextFieldRow(Translator.get("server_connect_dialog.username"), smbUsernameField, 5);
 
 		// Password field
 		smbPasswordField = new JPasswordField(lastSmbPassword);
 		addTextFieldListeners(smbPasswordField);
-		textFieldsPanel.addTextFieldRow("Password", smbPasswordField, 15);
+		textFieldsPanel.addTextFieldRow(Translator.get("server_connect_dialog.password"), smbPasswordField, 15);
 
 		smbPanel.add(textFieldsPanel);
 		
 		XBoxPanel tempPanel = new XBoxPanel();
-		tempPanel.add(new JLabel("Server URL:"));
+		tempPanel.add(new JLabel(Translator.get("server_connect_dialog.server_url")+":"));
 		tempPanel.addSpace(10);
 		smbURLLabel = new JLabel(getSmbURL());
 		tempPanel.add(smbURLLabel, BorderLayout.CENTER);

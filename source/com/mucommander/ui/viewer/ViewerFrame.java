@@ -1,9 +1,12 @@
 
 package com.mucommander.ui.viewer;
 
+import com.mucommander.text.Translator;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
 
 public class ViewerFrame extends JFrame implements ActionListener, WindowListener {
 	private JMenuItem closeItem;
@@ -11,10 +14,10 @@ public class ViewerFrame extends JFrame implements ActionListener, WindowListene
 	public ViewerFrame(String title) {
 		super(title);
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu("File");
+		JMenu menu = new JMenu(Translator.get("text_viewer.file"));
 		menu.setMnemonic(KeyEvent.VK_F);
 		
-		closeItem = new JMenuItem("Close");
+		closeItem = new JMenuItem(Translator.get("text_viewer.close"));
 		closeItem.setMnemonic(KeyEvent.VK_C);
 		closeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
 		closeItem.addActionListener(this);

@@ -61,23 +61,14 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 	private final static int APPEND_ALL_ACTION = 6;
 	private final static int OVERWRITE_ALL_OLDER_ACTION = 7;
 
-	private final static int CANCEL_MNEMONIC = KeyEvent.VK_C;
-	private final static int SKIP_MNEMONIC = KeyEvent.VK_S;
-	private final static int OVERWRITE_MNEMONIC = KeyEvent.VK_O;
-	private final static int APPEND_MNEMONIC = KeyEvent.VK_A;
-	private final static int SKIP_ALL_MNEMONIC = KeyEvent.VK_K;
-	private final static int OVERWRITE_ALL_MNEMONIC = KeyEvent.VK_V;
-	private final static int APPEND_ALL_MNEMONIC = KeyEvent.VK_P;
-	private final static int OVERWRITE_ALL_OLDER_MNEMONIC = KeyEvent.VK_E;
-
-	private final static String CANCEL_CAPTION = "Cancel";
-	private final static String SKIP_CAPTION = "Skip";
-	private final static String OVERWRITE_CAPTION = "Overwrite";
-	private final static String APPEND_CAPTION = "Append";
-	private final static String SKIP_ALL_CAPTION = "Skip all";
-	private final static String OVERWRITE_ALL_CAPTION = "Overwrite all";
-	private final static String APPEND_ALL_CAPTION = "Append all";
-	private final static String OVERWRITE_ALL_OLDER_CAPTION = "Overwrite all older";
+	private final static String CANCEL_TEXT = "Cancel";
+	private final static String SKIP_TEXT = "Skip";
+	private final static String OVERWRITE_TEXT = "Overwrite";
+	private final static String APPEND_TEXT = "Append";
+	private final static String SKIP_ALL_TEXT = "Skip all";
+	private final static String OVERWRITE_ALL_TEXT = "Overwrite all";
+	private final static String APPEND_ALL_TEXT = "Append all";
+	private final static String OVERWRITE_ALL_OLDER_TEXT = "Overwrite all older";
 
 	private final static int BLOCK_SIZE = 1024;
 
@@ -291,9 +282,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
     	
     	QuestionDialog dialog = new QuestionDialog(progressDialog, "File already exists in destination", 
     		panel, mainFrame,
-    		new String[] {SKIP_CAPTION, OVERWRITE_CAPTION, APPEND_CAPTION, SKIP_ALL_CAPTION, OVERWRITE_ALL_CAPTION, APPEND_ALL_CAPTION, CANCEL_CAPTION, OVERWRITE_ALL_OLDER_CAPTION},
+    		new String[] {SKIP_TEXT, OVERWRITE_TEXT, APPEND_TEXT, SKIP_ALL_TEXT, OVERWRITE_ALL_TEXT, APPEND_ALL_TEXT, CANCEL_TEXT, OVERWRITE_ALL_OLDER_TEXT},
     		new int[]  {SKIP_ACTION, OVERWRITE_ACTION, APPEND_ACTION, SKIP_ALL_ACTION, OVERWRITE_ALL_ACTION, APPEND_ALL_ACTION, CANCEL_ACTION, OVERWRITE_ALL_OLDER_ACTION},
-    		new int[]  {SKIP_MNEMONIC, OVERWRITE_MNEMONIC, APPEND_MNEMONIC, SKIP_ALL_MNEMONIC, OVERWRITE_ALL_MNEMONIC, APPEND_ALL_MNEMONIC, CANCEL_MNEMONIC, OVERWRITE_ALL_OLDER_MNEMONIC},
     		3);
 
 		return waitForUserResponse(dialog);
@@ -302,9 +292,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 	
     private int showErrorDialog(String message) {
 		QuestionDialog dialog = new QuestionDialog(progressDialog, (unzip?"Unzip":"Copy")+" error", message, mainFrame,
-			new String[] {SKIP_CAPTION, CANCEL_CAPTION},
+			new String[] {SKIP_TEXT, CANCEL_TEXT},
 			new int[]  {SKIP_ACTION, CANCEL_ACTION},
-			new int[]  {SKIP_MNEMONIC, CANCEL_MNEMONIC},
 			0);
 
 		return waitForUserResponse(dialog);

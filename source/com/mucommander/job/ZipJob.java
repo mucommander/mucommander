@@ -45,11 +45,8 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 	private final static int CANCEL_ACTION = 0;
 	private final static int SKIP_ACTION = 1;
 
-	private final static int CANCEL_MNEMONIC = KeyEvent.VK_C;
-	private final static int SKIP_MNEMONIC = KeyEvent.VK_S;
-
-	private final static String CANCEL_CAPTION = "Cancel";
-	private final static String SKIP_CAPTION = "Skip";
+	private final static String CANCEL_TEXT = "Cancel";
+	private final static String SKIP_TEXT = "Skip";
 
 	private byte buffer[] = new byte[1024];
 
@@ -95,9 +92,8 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 
     private int showErrorDialog(String message) {
 		QuestionDialog dialog = new QuestionDialog(progressDialog, "Zip error", message, mainFrame,
-			new String[] {SKIP_CAPTION, CANCEL_CAPTION},
+			new String[] {SKIP_TEXT, CANCEL_TEXT},
 			new int[]  {SKIP_ACTION, CANCEL_ACTION},
-			new int[]  {SKIP_MNEMONIC, CANCEL_MNEMONIC},
 			0);
 	
 	    return waitForUserResponse(dialog);

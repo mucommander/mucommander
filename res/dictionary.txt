@@ -33,7 +33,7 @@ yes:FR:Oui
 #yes:JP:はい
 
 no:EN:No
-no:FR:No
+no:FR:Non
 #no:JP:いいえ
 
 cancel:EN:Cancel
@@ -45,6 +45,21 @@ folder_does_not_exist:FR:Le dossier n'existe pas.
 
 this_folder_does_not_exist:EN:This folder doesn't exist : %1
 this_folder_does_not_exist:FR:Ce dossier n'existe pas : %1
+
+save:EN:Save
+save:FR:Enregistrer
+
+dont_save:EN:Don't save
+dont_save:FR:Ne pas enregistrer
+
+replace:EN:Replace
+replace:FR:Remplacer
+
+dont_replace:EN:Don't replace
+dont_replace:FR:Ne pas remplacer
+
+warning:EN:Warning
+warning:FR:Avertissement
 
 
 ############
@@ -61,6 +76,9 @@ language.fr:FR:Français
 ###############
 # Command bar #
 ###############
+
+# Keyboard shortcuts will soon be removed from here
+# and be inserted dynamically
 
 command_bar.view:EN:View [F3]
 command_bar.view:FR:Voir [F3]
@@ -89,6 +107,24 @@ command_bar.refresh:FR:Raffraîchir [F9]
 command_bar.close:EN:Close [F10]
 command_bar.close:FR:Fermer [F10]
 
+command_bar.large_file_warning:EN:This file may be too large for this operation.
+command_bar.large_file_warning:FR:Ce fichier est peut-être trop large pour cette operation.
+
+command_bar.open_anyway:EN:Open anyway
+command_bar.open_anyway:FR:Ouvrir
+
+command_bar.view_error_title:EN:View error
+command_bar.view_error_title:FR:Erreur 'vue'
+
+command_bar.view_error:EN:Unable to view file.
+command_bar.view_error:FR:Impossible de voir le fichier.
+
+command_bar.edit_error_title:EN:Edit error
+command_bar.edit_error_title:FR:Erreur d'édition
+
+command_bar.edit_error:EN:Unable to edit file.
+command_bar.edit_error:FR:Impossible d'éditer le fichier.
+
 
 #############
 # File menu #
@@ -104,7 +140,7 @@ file_menu.new_window:EN:New window
 file_menu.new_window:FR:Nouvelle fenêtre
 
 file_menu.run_command:EN:Run command
-file_menu.run_command:FR:Lancer une commande
+file_menu.run_command:FR:Exécuter une commande
 
 file_menu.zip:EN:Zip files...
 file_menu.zip:FR:Zipper fichiers...
@@ -354,8 +390,11 @@ unzip_dialog.unzipping:FR:Décompression en cours
 # Move dialog #
 ###############
 
-move_dialog.title:EN:Move/Rename
-move_dialog.title:FR:Déplacer/Renommer
+move_dialog.rename:EN:Rename
+move_dialog.rename:FR:Renommer
+
+move_dialog.move:EN:Move
+move_dialog.move:FR:Déplacer
 
 move_dialog.rename_description:EN:Rename to
 move_dialog.rename_description:FR:Renommer en
@@ -363,27 +402,18 @@ move_dialog.rename_description:FR:Renommer en
 move_dialog.move_description:EN:Move to
 move_dialog.move_description:FR:Déplacer vers
 
-move_dialog.rename:EN:Rename
-move_dialog.rename:FR:Renommer
-
-move_dialog.move:EN:Move
-move_dialog.move:FR:Déplacer
-
 move_dialog.error_title:EN:Move error
 move_dialog.error_title:FR:Erreur de déplacement
 
-move_dialog.folder_does_not_exist:EN:$[this_folder_does_exist]
+move_dialog.folder_does_not_exist:EN:$[this_folder_does_not_exist]
 
 move_dialog.same_source_destination:EN:$[copy_dialog.same_source_destination]
 
+move_dialog.cannot_move_to_itself:EN:Cannot move destination folder to itself.
+move_dialog.cannot_move_to_itself:FR:Impossible de déplacer le dossier de destination vers lui-même.
+
 move_dialog.moving:EN:Moving files
 move_dialog.moving:FR:Déplacement en cours
-
-move_dialog.:EN:
-move_dialog.:FR:
-
-move_dialog.:EN:
-move_dialog.:FR:
 
 
 #################
@@ -495,4 +525,143 @@ mkdir_dialog.dir_already_exists:FR:Le répertoire %1 existe déjà.
 mkdir_dialog.cannot_create_dir:EN:Unable to create directory %1.
 mkdir_dialog.cannot_create_dir:FR:Impossible de créer le répertoire %1.
 
+
+################
+# Progress bar #
+################
+
+progress_bar.starting:EN:Transfer starting...
+progress_bar.starting:FR:Démarrage du transfert...
+
+progress_bar.hide:EN:Hide
+progress_bar.hide:FR:Cacher
+
+
+#####################
+# Properties dialog #
+#####################
+
+properties_dialog.properties:EN:$[file_menu.properties]
+
+properties_dialog.file_properties:EN:%1 Properties
+properties_dialog.file_properties:FR:Propriétés de %1
+
+properties_dialog.contents:EN:Contents
+properties_dialog.contents:FR:Contenu
+
+properties_dialog.location:EN:Location
+properties_dialog.location:FR:Emplacement
+
+properties_dialog.size:EN:Size
+properties_dialog.size:FR:Taille
+
+properties_dialog.nb_files:EN:%1 file(s)
+properties_dialog.nb_files:FR:%1 fichier(s)
+
+properties_dialog.nb_folders:EN:%1 folder(s)
+properties_dialog.nb_folders:FR:%1 dossier(s)
+
+properties_dialog.nb_bytes:EN:%1 bytes
+properties_dialog.nb_bytes:FR:%1 octets
+
+
+##############
+# Run dialog #
+##############
+
+run_dialog.run_command:EN:$[file_menu.run_command]
+
+run_dialog.run_command_description:EN:Run in current folder
+run_dialog.run_command_description:FR:Exécuter dans le répertoire courant
+
+run_dialog.command_output:EN:Command output
+run_dialog.command_output:FR:Sortie de la commande
+
+run_dialog.run:EN:Run
+run_dialog.run:FR:Exécuter
+
+run_dialog.stop:EN:Stop
+run_dialog.stop:FR:Arrêter
+
+
+#########################
+# Server connect dialog #
+#########################
+
+server_connect_dialog.server_connect:EN:$[file_menu.server_connect]
+
+server_connect_dialog.server_type:EN:Connection type
+server_connect_dialog.server_type:FR:Type de connexion
+
+server_connect_dialog.server:EN:Server
+server_connect_dialog.server:FR:Serveur
+
+server_connect_dialog.username:EN:Username
+server_connect_dialog.username:FR:Nom d'utilisateur
+
+server_connect_dialog.password:EN:Password
+server_connect_dialog.password:FR:Mot de passe
+
+server_connect_dialog.server_url:EN:Server URL
+server_connect_dialog.server_url:FR:URL serveur
+
+server_connect_dialog.connect:EN:Connect
+server_connect_dialog.connect:FR:Se connecter
+
+
+##############
+# Zip dialog #
+##############
+
+
+###############
+# Text viewer #
+###############
+
+text_viewer.file:EN:$[file_menu]
+
+text_viewer.close:EN:Close
+text_viewer.close:FR:Fermer
+
+
+###############
+# Text editor #
+###############
+
+text_editor.file:EN:$[file_menu]
+
+text_editor.save:EN:Save
+text_editor.save:FR:Enregister
+
+text_editor.save_as:EN:Save As...
+text_editor.save_as:FR:Enregistrer sous...
+
+text_editor.close:EN:$[command_bar.close]
+
+text_editor.cannot_write:EN:Unable to write file.
+text_editor.cannot_write:FR:Impossible d'écrire le fichier. 
+
+text_editor.write_error:EN:Write error
+text_editor.write_error:FR:Erreur d'écriture
+
+text_editor.file_already_exists:EN:%1 already exists, do you want to replace it ?
+text_editor.file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
+
+text_editor.save_warning:EN:Save changes made to this file before closing ?
+text_editor.save_warning:FR:Enregistrer les modifications avant de fermer ce fichier ?
+
+text_editor.:EN:
+text_editor.:FR:
+
+text_editor.:EN:
+text_editor.:FR:
+
+
+################
+#
+################
+
+################
+#
+################
 

@@ -40,15 +40,10 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 	private final static int CANCEL_ACTION = 2;
 	private final static int SKIP_ACTION = 3;
 
-	private final static int DELETE_LINK_MNEMONIC = KeyEvent.VK_L;
-	private final static int DELETE_FOLDER_MNEMONIC = KeyEvent.VK_F;
-	private final static int CANCEL_MNEMONIC = KeyEvent.VK_C;
-	private final static int SKIP_MNEMONIC = KeyEvent.VK_S;
-
-	private final static String DELETE_LINK_CAPTION = "Delete Link only";
-	private final static String DELETE_FOLDER_CAPTION = "Delete Folder";
-	private final static String CANCEL_CAPTION = "Cancel";
-	private final static String SKIP_CAPTION = "Skip";
+	private final static String DELETE_LINK_TEXT = "Delete Link only";
+	private final static String DELETE_FOLDER_TEXT = "Delete Folder";
+	private final static String CANCEL_TEXT = "Cancel";
+	private final static String SKIP_TEXT = "Skip";
 
 	
     public DeleteJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToDelete) {
@@ -159,9 +154,8 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 	
     private int showErrorDialog(String message) {
 		QuestionDialog dialog = new QuestionDialog(progressDialog, "Delete error", message, mainFrame,
-			new String[] {SKIP_CAPTION, CANCEL_CAPTION},
+			new String[] {SKIP_TEXT, CANCEL_TEXT},
 			new int[]  {SKIP_ACTION, CANCEL_ACTION},
-			new int[]  {SKIP_MNEMONIC, CANCEL_MNEMONIC},
 			0);
 	
 	    return waitForUserResponse(dialog);
@@ -179,9 +173,8 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 		panel.add(new JLabel("  Links to: "+canonicalPath));
 		
 		QuestionDialog dialog = new QuestionDialog(progressDialog, "Symlink found", panel, mainFrame,
-			new String[] {DELETE_LINK_CAPTION, DELETE_FOLDER_CAPTION, SKIP_CAPTION, CANCEL_CAPTION},
+			new String[] {DELETE_LINK_TEXT, DELETE_FOLDER_TEXT, SKIP_TEXT, CANCEL_TEXT},
 			new int[]  {DELETE_LINK_ACTION, DELETE_FOLDER_ACTION, SKIP_ACTION, CANCEL_ACTION},
-			new int[]  {DELETE_LINK_MNEMONIC, DELETE_FOLDER_MNEMONIC, SKIP_MNEMONIC, CANCEL_MNEMONIC},
 			2);
 	
 	    return waitForUserResponse(dialog);

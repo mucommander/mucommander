@@ -7,6 +7,7 @@ import com.mucommander.ProcessListener;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -50,13 +51,13 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 	 * @param mainFrame the main frame this dialog is attached to.
 	 */
 	public RunDialog(MainFrame mainFrame) {
-		super(mainFrame, "Run command", mainFrame);
+		super(mainFrame, Translator.get("run_dialog.run_command"), mainFrame);
 		this.mainFrame = mainFrame;
 		
 		Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel();
 		
-		JLabel label = new JLabel("Run in current folder:");
+		JLabel label = new JLabel(Translator.get("run_dialog.run_command_description")+":");
         mainPanel.add(label);
 
 		commandField = new JTextField(lastCommand);
@@ -70,7 +71,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
         contentPane.add(mainPanel, BorderLayout.NORTH);
 
-		mainPanel.add(new JLabel("Command output:"));
+		mainPanel.add(new JLabel(Translator.get("run_dialog.command_output")+":"));
 		outputTextArea = new JTextArea();
 		outputTextArea.setRows(10);
 		outputTextArea.setEditable(false);
@@ -79,8 +80,8 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
 		// Run / Cancel buttons panel
-        runStopButton = new JButton("Run");
-        cancelButton = new JButton("Cancel");
+        runStopButton = new JButton(Translator.get("run_dialog.run"));
+        cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(runStopButton, cancelButton, this), BorderLayout.SOUTH);
 
         // Escape key disposes dialog
@@ -176,7 +177,7 @@ if(com.mucommander.Debug.ON) System.out.println("processError "+process+" output
 	
 	private void switchToStopState() {
 		// Change 'Run' button to 'Stop'
-		this.runStopButton.setText("Stop");
+		this.runStopButton.setText(Translator.get("run_dialog.stop"));
 		// Clear text area
 		this.outputTextArea.setText("");
 //				// Make text area active
@@ -189,7 +190,7 @@ if(com.mucommander.Debug.ON) System.out.println("processError "+process+" output
 	
 	private void switchToRunState() {
 		// Change 'Stop' button to 'Run'
-		this.runStopButton.setText("Run");
+		this.runStopButton.setText(Translator.get("run_dialog.run"));
 //		// Make text area not active anymore
 //		this.outputTextArea.setEnabled(false);
 		// Make command field active again

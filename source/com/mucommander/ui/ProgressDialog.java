@@ -8,6 +8,7 @@ import com.mucommander.ui.comp.progress.OverlayProgressBar;
 import com.mucommander.ui.comp.button.ButtonChoicePanel;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.Translator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,7 +79,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 			tempPanel.add(fileProgressBar);
 			tempPanel.addSpace(15);
 		
-			statsLabel = new JLabel("Transfer starting...");
+			statsLabel = new JLabel(Translator.get("progress_bar.starting"));
 			tempPanel.add(statsLabel);
 			tempPanel.add(totalProgressBar);
 		}	
@@ -92,10 +93,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 		tempPanel.add(Box.createVerticalGlue());
 		contentPane.add(tempPanel, BorderLayout.CENTER);
         
-		cancelButton = new JButton("Cancel");
+		cancelButton = new JButton(Translator.get("cancel"));
         cancelButton.addActionListener(this);
         cancelButton.addKeyListener(this);
-		hideButton = new JButton("Hide");
+		hideButton = new JButton(Translator.get("progress_bar.hide"));
 		hideButton.addActionListener(this);
 		hideButton.addKeyListener(this);
 		// Cancel button receives initial focus

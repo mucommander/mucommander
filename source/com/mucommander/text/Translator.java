@@ -291,11 +291,12 @@ public class Translator {
 	 *
 	 * @param key a case-insensitive key.
 	 * @param language a 2-letter language case-insensitive string.
+	 * @param originalLanguage used for recursive calls to this method, to keep track of language originally requested.
 	 * @param paramValues an array containing the parameters' value.
 	 *
 	 * @return DOCUMENT ME!
 	 */
-	public static String get(String key, String language, String[] paramValues) {
+	private static String get(String key, String language, String originalLanguage, String[] paramValues) {
 		// Gets the dictionary for this language
 		language = language.toLowerCase();
 
@@ -310,7 +311,7 @@ public class Translator {
 				return key;
 			} else
 
-				return get(key, "en", paramValues);
+				return get(key, "en", originalLanguage, paramValues);
 		}
 
 		// Returns the localized text
@@ -324,7 +325,7 @@ public class Translator {
 				return key;
 			} else
 
-				return get(key, "en", paramValues);
+				return get(key, "en", originalLanguage, paramValues);
 		}
 
 		// Replace %1, %2 ... parameters by their value
@@ -350,7 +351,7 @@ public class Translator {
 		while ((pos = text.indexOf("$[", pos))!=-1) {
 			pos2 = text.indexOf("]", pos+1);
 			var = text.substring(pos+2, pos2);
-			text = text.substring(0, pos)+get(var, language, paramValues)+text.substring(pos2+1, text.length());
+			text = text.substring(0, pos)+get(var, originalLanguage, originalLanguage, paramValues)+text.substring(pos2+1, text.length());
 		}
 
 		return text;
@@ -370,7 +371,7 @@ public class Translator {
 	 * @return DOCUMENT ME!
 	 */
 	public static String get(String key) {
-		return get(key, language, (String[])null);
+		return get(key, language, language, (String[])null);
 	}
 
 
@@ -386,7 +387,7 @@ public class Translator {
 	 * @return DOCUMENT ME!
 	 */
 	public static String get(String key, String paramValue1) {
-		return get(key, language, new String[] {paramValue1});
+		return get(key, language, language, new String[] {paramValue1});
 	}
 
 
@@ -403,7 +404,7 @@ public class Translator {
 	 * @return DOCUMENT ME!
 	 */
 	public static String get(String key, String paramValue1, String paramValue2) {
-		return get(key, language, new String[] {paramValue1, paramValue2});
+		return get(key, language, language, new String[] {paramValue1, paramValue2});
 	}
 
 
@@ -421,7 +422,7 @@ public class Translator {
 	 * @return DOCUMENT ME!
 	 */
 	public static String get(String key, String paramValue1, String paramValue2, String paramValue3) {
-		return get(key, language, new String[] {
+		return get(key, language, language, new String[] {
 			    paramValue1, paramValue2, paramValue3
 		    });
 	}

@@ -24,15 +24,46 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 
     private MainFrame mainFrame;
     
+	public final static int VIEW_INDEX = 0;
+	public final static int EDIT_INDEX = 1;
+	public final static int COPY_INDEX = 2;
+	public final static int MOVE_INDEX = 3;
+	public final static int MKDIR_INDEX = 4;
+	public final static int DELETE_INDEX = 5;
+	public final static int REFRESH_INDEX = 6;
+	public final static int CLOSE_INDEX = 7;
+	
+	private final static int NB_BUTTONS = 8;
+	
+/*
 	private JButton viewButton;
 	private JButton editButton;
 	private JButton copyButton;
-	private JButton moveButton;
+	private JButton buttons[MOVE_INDEX];
 	private JButton mkdirButton;
 	private JButton deleteButton;
 	private JButton refreshButton;
 	private JButton closeButton;
+*/
+	private JButton buttons[];
+
+	private final static String MOVE_TEXT = Translator.get("command_bar.move");
+	private final static String RENAME_TEXT = Translator.get("command_bar.rename");
 	
+	private final static String BUTTONS_TEXT[] = new String[] {
+		Translator.get("command_bar.view"),
+		Translator.get("command_bar.edit"),
+		Translator.get("command_bar.copy"),
+		MOVE_TEXT,
+		Translator.get("command_bar.mkdir"),
+		Translator.get("command_bar.delete"),
+		Translator.get("command_bar.refresh"),
+		Translator.get("command_bar.close")
+	};
+
+	
+	
+/*
 	private final static String VIEW_TEXT = Translator.get("command_bar.view");
 	private final static String EDIT_TEXT = Translator.get("command_bar.edit");
 	private final static String COPY_TEXT = Translator.get("command_bar.copy");
@@ -43,6 +74,16 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	private final static String REFRESH_TEXT = Translator.get("command_bar.refresh");
 	private final static String CLOSE_TEXT = Translator.get("command_bar.close");
 	
+	private final static String VIEW_TEXT = Translator.get("command_bar.view");
+	private final static String EDIT_TEXT = Translator.get("command_bar.edit");
+	private final static String COPY_TEXT = Translator.get("command_bar.copy");
+	private final static String MOVE_TEXT = Translator.get("command_bar.move");
+	private final static String RENAME_TEXT = Translator.get("command_bar.rename");
+	private final static String MKDIR_TEXT = Translator.get("command_bar.mkdir");
+	private final static String DELETE_TEXT = Translator.get("command_bar.delete");
+	private final static String REFRESH_TEXT = Translator.get("command_bar.refresh");
+	private final static String CLOSE_TEXT = Translator.get("command_bar.close");
+*/	
 
     // Dialog width should not exceed 360, height is not an issue (always the same)
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
@@ -50,9 +91,13 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
     
 	public CommandBarPanel(MainFrame mainFrame) {
 		super(new GridLayout(0,8));
-
         this.mainFrame = mainFrame;
 
+		this.buttons = new JButton[NB_BUTTONS];
+		for(int i=0; i<NB_BUTTONS; i++)
+			buttons[i] = addButton(BUTTONS_TEXT[i]);	
+
+/*		
 		viewButton = addButton(VIEW_TEXT);
 		editButton = addButton(EDIT_TEXT);
 		copyButton = addButton(COPY_TEXT);
@@ -61,22 +106,28 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 		deleteButton = addButton(DELETE_TEXT);
 		refreshButton = addButton(REFRESH_TEXT);
 		closeButton = addButton(CLOSE_TEXT);
+*/
 
 		// Shift+F6 renames a file but since shift-clicks cannot be caught using
 		// an ActionListener (because of a known bug), we use a MouseListener
-		moveButton.addMouseListener(this);
+		buttons[MOVE_INDEX].addMouseListener(this);
 		// Same for copy button
-		copyButton.addMouseListener(this);
+		buttons[COPY_INDEX].addMouseListener(this);
 	}
 
 	
-	private JButton addButton(String caption) {
-		JButton button = new JButton(caption);
+	public JButton getButton(int buttonIndex) {
+		return buttons[buttonIndex];
+	}
+	
+	
+	private JButton addButton(String text) {
+		JButton button = new JButton(text);
 		button.setMargin(new Insets(1,1,1,1));
 		// For Mac OS X whose minimum width for buttons is enormous
 		button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getWidth()));
 		button.addActionListener(this);
-//        button.setToolTipText(caption);
+//        button.setToolTipText(text);
 		add(button);
 		return button;
 	}
@@ -87,8 +138,8 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	 * the action is different when shift is pressed.
 	 */
 	public void setShiftMode(boolean on) {
-		moveButton.setText(on?RENAME_TEXT:MOVE_TEXT);
-		moveButton.repaint();
+		buttons[MOVE_INDEX].setText(on&(mainFrame.getLastActiveTable().getSelectedFiles().size()<=1)?RENAME_TEXT:MOVE_TEXT);
+		buttons[MOVE_INDEX].repaint();
 	}
 
 	
@@ -117,13 +168,12 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 				viewer = new TextViewer();
 			}
 
-			// Tests if file is too large to be viewed and warns user
+			// Test if file is too large to be viewed and warns user
 			long max = viewer.getMaxRecommendedSize();
 			if (max!=-1 && file.getSize()>max) {
-				QuestionDialog dialog = new QuestionDialog(mainFrame, "Warning", "This file may be too large to be viewed", mainFrame, 
-					new String[] {"Open anyway", "Cancel"},
+				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("command_bar.large_file_warning"), mainFrame, 
+					new String[] {Translator.get("command_bar.open_anyway"), Translator.get("cancel")},
 					new int[]  {0, 1},
-					new int[]  {KeyEvent.VK_O, KeyEvent.VK_C},
 					0);
 
                 int ret = dialog.getActionValue();
@@ -158,7 +208,7 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 			frame.setVisible(true);
 		}
 		catch(IOException e) {
-			showErrorDialog("Unable to view file.", "View error");
+			showErrorDialog(Translator.get("view_error"), Translator.get("view_error_title"));
 		}
 	}
 	
@@ -183,11 +233,10 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 			// Tests if file is too large to be edited and warns user
 			long max = editor.getMaxRecommendedSize();
 			if (max!=-1 && file.getSize()>max) {
-				QuestionDialog dialog = new QuestionDialog(mainFrame, "Warning", "This file may be too large to be edited", mainFrame,
-                        new String[] {"Open anyway", "Cancel"},
-                        new int[]  {0, 1},
-                        new int[]  {KeyEvent.VK_O, KeyEvent.VK_C},
-                        0);
+				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("command_bar.large_file_warning"), mainFrame, 
+					new String[] {Translator.get("command_bar.open_anyway"), Translator.get("cancel")},
+					new int[]  {0, 1},
+					0);
 				int ret = dialog.getActionValue();
 				
 				if (ret==1 || ret==-1)
@@ -215,7 +264,7 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 			editor.setVisible(true);
 		}
 		catch(IOException e) {
-			showErrorDialog("Unable to edit file.", "Edit error");
+			showErrorDialog(Translator.get("edit_error"), Translator.get("edit_error_title"));
 		}
 	}
 	
@@ -240,10 +289,10 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	public void mouseClicked(MouseEvent e) {
 		Object source = e.getSource();
 		
-		if(source == moveButton) {
+		if(source == buttons[MOVE_INDEX]) {
 			new MoveDialog(mainFrame, e.isShiftDown());
 		}
-		else if(source == copyButton) {
+		else if(source == buttons[COPY_INDEX]) {
 			new CopyDialog(mainFrame, false, e.isShiftDown());	
 		}
 	}
@@ -265,22 +314,22 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         
-        if(source == viewButton) {
+        if(source == buttons[VIEW_INDEX]) {
         	doView();
 		}
-        else if(source == editButton) {
+        else if(source == buttons[EDIT_INDEX]) {
         	doEdit();
 		}
-        else if(source == mkdirButton) {
+        else if(source == buttons[MKDIR_INDEX]) {
             new MkdirDialog(mainFrame);
         }
-        else if(source == deleteButton) {
+        else if(source == buttons[DELETE_INDEX]) {
             new DeleteDialog(mainFrame);
         }
-        else if(source == refreshButton) {
+        else if(source == buttons[REFRESH_INDEX]) {
 			doRefresh();
 		}
-        else if(source == closeButton) {
+        else if(source == buttons[CLOSE_INDEX]) {
         	doExit();
 		}
 

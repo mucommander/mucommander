@@ -448,32 +448,41 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
         Object source = e.getSource();
         int keyCode = e.getKeyCode();
         if(keyCode == KeyEvent.VK_F3 && !e.isControlDown()) {
-            commandBar.doView();
+			commandBar.getButton(CommandBarPanel.VIEW_INDEX).doClick();
+//            commandBar.doView();
         }
         else if(keyCode == KeyEvent.VK_F4 && e.isAltDown()) {
-            commandBar.doExit();
+			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
+//            commandBar.doExit();
         }
         else if(keyCode == KeyEvent.VK_F4 && !e.isControlDown()) {
-            commandBar.doEdit();
+			commandBar.getButton(CommandBarPanel.EDIT_INDEX).doClick();
+//            commandBar.doEdit();
         }
         else if(keyCode == KeyEvent.VK_F5 && !e.isControlDown()) {
-			new CopyDialog(this, false, e.isShiftDown());
+			commandBar.getButton(CommandBarPanel.COPY_INDEX).doClick();
+//			new CopyDialog(this, false, e.isShiftDown());
         }
         else if(keyCode == KeyEvent.VK_F6 && !e.isControlDown()) {
-			new MoveDialog(this, e.isShiftDown());
+			commandBar.getButton(CommandBarPanel.MOVE_INDEX).doClick();
+//			new MoveDialog(this, e.isShiftDown());
         }
         else if(keyCode == KeyEvent.VK_F7 && !e.isControlDown()) {
-			new MkdirDialog(this);
+//			new MkdirDialog(this);
+			commandBar.getButton(CommandBarPanel.MKDIR_INDEX).doClick();
         }
         else if((keyCode == KeyEvent.VK_F8 || keyCode == KeyEvent.VK_DELETE)
 		 && !e.isControlDown()) {
-			new DeleteDialog(this);
+			commandBar.getButton(CommandBarPanel.DELETE_INDEX).doClick();
+//			new DeleteDialog(this);
         }
         else if(keyCode == KeyEvent.VK_F9 && !e.isControlDown()) {
-        	commandBar.doRefresh();
+			commandBar.getButton(CommandBarPanel.REFRESH_INDEX).doClick();
+//        	commandBar.doRefresh();
         }
         else if(keyCode == KeyEvent.VK_F10 && !e.isControlDown()) {
-            commandBar.doExit();
+			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
+//            commandBar.doExit();
         }
 		else if(keyCode == KeyEvent.VK_F1 && e.isAltDown()) {
 			folderPanel1.showRootBox();

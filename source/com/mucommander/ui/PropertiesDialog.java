@@ -2,10 +2,9 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
-
 import com.mucommander.ui.comp.dialog.*;
-
 import com.mucommander.job.PropertiesJob;
+import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -40,7 +39,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		this.mainFrame = mainFrame;
 
 		AbstractFile firstFile = (AbstractFile)files.elementAt(0);
-		setTitle((title=files.size()==1?firstFile.getName()+" Properties":"Properties"));
+		setTitle((title=files.size()==1?Translator.get("properties_dialog.file_properties", firstFile.getName()):Translator.get("properties_dialog.properties")));
 		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
 		this.job = new PropertiesJob(files, mainFrame);
@@ -51,7 +50,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		
 		// Contents (set later)
 		JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		tempPanel.add(new JLabel("<html><b>Contents: </b></html>"));
+		tempPanel.add(new JLabel("<html><b>"+Translator.get("properties_dialog.contents")+": </b></html>"));
 		counterLabel = new JLabel("");
 		tempPanel.add(counterLabel);
 		gridPanel.add(tempPanel);
@@ -59,14 +58,14 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		// Location (set here)
 		tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		String folderString = firstFile.getParent().getAbsolutePath(true);
-		JLabel locationLabel = new JLabel("<html><b>Location:</b> "+folderString+"</html>");
+		JLabel locationLabel = new JLabel("<html><b>"+Translator.get("properties_dialog.location")+": </b>"+folderString+"</html>");
 		locationLabel.setToolTipText(folderString);
 		tempPanel.add(locationLabel);
 		gridPanel.add(tempPanel);
 
 		// Size (set later)
 		tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		tempPanel.add(new JLabel("<html><b>Size: </b></html>"));
+		tempPanel.add(new JLabel("<html><b>"+Translator.get("properties_dialog.size")+": </b></html>"));
 		sizeLabel = new JLabel("");
 		tempPanel.add(sizeLabel);
 		gridPanel.add(tempPanel);
@@ -74,7 +73,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		updateLabels();
 		contentPane.add(gridPanel, BorderLayout.NORTH);
 		
-		okButton = new JButton("OK");
+		okButton = new JButton(Translator.get("ok"));
 		// Escape key disposes dialog
 		okButton.addKeyListener(new EscapeKeyAdapter(this));
 		contentPane.add(DialogToolkit.createOKPanel(okButton, this), BorderLayout.SOUTH);
@@ -96,11 +95,13 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		int nbFiles = job.getNbFilesRecurse();
 		int nbFolders = job.getNbFolders();
 		counterLabel.setText("<html>"
-			+(nbFiles>0?nbFiles+" file"+(nbFiles>1?"s":""):"")
+//			+(nbFiles>0?nbFiles+" file"+(nbFiles>1?"s":""):"")
+			+(nbFiles>0?Translator.get("properties_dialog.nb_files", ""+nbFiles):"")
 			+(nbFiles>0&&nbFolders>0?", ":"")
-			+(nbFolders>0?nbFolders+ " folder"+(nbFolders>1?"s":""):"")+"</html>");
+//			+(nbFolders>0?nbFolders+ " folder"+(nbFolders>1?"s":""):"")+"</html>");
+			+(nbFolders>0?Translator.get("properties_dialog.nb_folders", ""+nbFolders):"")+"</html>");
 
-		sizeLabel.setText("<html>"+NumberFormat.getInstance().format(job.getTotalBytes())+" bytes</html>");
+		sizeLabel.setText("<html>"+Translator.get("properties_dialog.nb_bytes", NumberFormat.getInstance().format(job.getTotalBytes()))+"</html>");
 		
 		counterLabel.repaint(REFRESH_RATE);
 		sizeLabel.repaint(REFRESH_RATE);

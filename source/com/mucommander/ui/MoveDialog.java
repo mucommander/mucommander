@@ -36,7 +36,7 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 	
 	
 	public MoveDialog(MainFrame mainFrame, boolean isShiftDown) {
-		super(mainFrame, "Move/Rename", mainFrame);
+		super(mainFrame, null, mainFrame);
 		this.mainFrame = mainFrame;
 		
 		FileTable activeTable = mainFrame.getLastActiveTable();
@@ -46,12 +46,14 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 		int nbFiles = filesToMove.size();
 		if(nbFiles==0)
     		return;
+
+		boolean rename = isShiftDown && nbFiles==1;
+		setTitle(Translator.get(rename?"move_dialog.rename":"move_dialog.move"));
         
 		Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel();
 		
-		boolean rename = isShiftDown && nbFiles==1;
-		JLabel label = new JLabel(rename?"Rename to":"Move to");
+		JLabel label = new JLabel(Translator.get(rename?"move_dialog.rename_description":"move_dialog.move_description"));
         mainPanel.add(label);
 
 		String fieldText;
@@ -77,8 +79,8 @@ public class MoveDialog extends FocusDialog implements ActionListener {
         contentPane.add(mainPanel, BorderLayout.NORTH);
 		
 		// OK / Cancel buttons panel
-        okButton = new JButton(rename?"Rename":"Move");
-        cancelButton = new JButton("Cancel");
+        okButton = new JButton(Translator.get(rename?"move_dialog.rename":"move_dialog.move"));
+        cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
         // Escape key disposes dialog
@@ -112,7 +114,7 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 		Object ret[] = mainFrame.resolvePath(destPath);
 		// The path entered doesn't correspond to any existing folder
 		if (ret==null || (filesToMove.size()>1 && ret[1]!=null)) {
-			showErrorDialog("Folder "+destPath+" doesn't exist.", "Move error");
+			showErrorDialog(Translator.get("move_dialog.folder_does_not_exist", destPath), Translator.get("move_dialog.error_title"));
 			return;
 		}
 
@@ -120,17 +122,17 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 		String newName = (String)ret[1];
 
 		if (newName==null && activeTable.getCurrentFolder().equals(destFolder)) {
-			showErrorDialog("Source and destination are the same.", "Move error");
+			showErrorDialog(Translator.get("move_dialog.same_source_destination"), Translator.get("move_dialog.error_title"));
 			return;
 		}
 
 		if (filesToMove.contains(destFolder)) {
-			showErrorDialog("Cannot move destination folder to itself.", "Move error");
+			showErrorDialog(Translator.get("move_dialog.cannot_move_to_itself"), Translator.get("move_dialog.error_title"));
 			return;
 		}
 		
 		// Starts moving files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Moving files");
+		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
 		MoveJob moveJob = new MoveJob(mainFrame, progressDialog, filesToMove, newName, destFolder);
 	    moveJob.start();
 	    progressDialog.start(moveJob);

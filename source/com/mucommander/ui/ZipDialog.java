@@ -26,16 +26,12 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 	private JButton cancelButton;
 
 	private final static int CANCEL_ACTION = 0;
-	private final static int OVERWRITE_ACTION = 2;
-	private final static int APPEND_ACTION = 3;
+	private final static int OVERWRITE_ACTION = 1;
+	private final static int APPEND_ACTION = 2;
 
-	private final static int CANCEL_MNEMONIC = KeyEvent.VK_C;
-	private final static int OVERWRITE_MNEMONIC = KeyEvent.VK_O;
-	private final static int APPEND_MNEMONIC = KeyEvent.VK_A;
-
-	private final static String CANCEL_CAPTION = "Cancel";
-	private final static String OVERWRITE_CAPTION = "Overwrite";
-	private final static String APPEND_CAPTION = "Add to zip file";
+	private final static String CANCEL_TEXT = "Cancel";
+	private final static String OVERWRITE_TEXT = "Overwrite";
+	private final static String APPEND_TEXT = "Add to zip file";
 
 
 	public ZipDialog(MainFrame mainFrame, boolean isShiftDown) {
@@ -109,7 +105,6 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 				QuestionDialog dialog = new QuestionDialog(mainFrame, "Incorrect destination", filePath+" is not a valid file path.", mainFrame,
 					new String[] {"OK"},
 					new int[]  {0},
-					new int[]  {KeyEvent.VK_O},
 					0);
 				dialog.getActionValue();
 				return;
@@ -119,9 +114,8 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			if (destFile.exists()) {
 				// File already exists: cancel, append or overwrite?
 				QuestionDialog dialog = new QuestionDialog(mainFrame, "Zip warning", "A file with the same name already exists.", mainFrame,
-					new String[] {CANCEL_CAPTION, OVERWRITE_CAPTION},
+					new String[] {CANCEL_TEXT, OVERWRITE_TEXT},
 					new int[]  {CANCEL_ACTION, OVERWRITE_ACTION},
-					new int[]  {CANCEL_MNEMONIC, OVERWRITE_MNEMONIC},
 					0);
 				int ret = dialog.getActionValue();
 				
@@ -140,7 +134,6 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 				QuestionDialog dialog = new QuestionDialog(mainFrame, "Zip error", "Cannot write to destination file.", mainFrame,
 					new String[] {"OK"},
 					new int[]  {0},
-					new int[]  {KeyEvent.VK_O},
 					0);
 				dialog.getActionValue();
 				return;
