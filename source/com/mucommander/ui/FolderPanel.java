@@ -130,7 +130,8 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 				return null;
 			}
 		};
-		scrollPane.getViewport().setBackground(backgroundColor);
+		scrollPane.getViewport().setBackground(backgroundColor);		
+//		scrollPane.addComponentListener(fileTable);
 		add(scrollPane, BorderLayout.CENTER);
 
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scrollPane.getSize());
@@ -403,26 +404,30 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 		catch(IOException e) {
 			if(!showFolderAccessError(e))
 				return;
-		}
 
-		// Retry if user authentified, using setCurrentFolder which will lose selection
-		AbstractFile folder = currentFolder;
-		do {
-			try {
-				folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
-				_setCurrentFolder(folder, false);
+			// Retry if user authentified, using setCurrentFolder which will lose selection
+			AbstractFile folder = currentFolder;
+			do {
+				try {
+					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
+					_setCurrentFolder(folder, false);
+				}
+				catch(IOException e2) {
+					// Retry (loop) if user authentified
+					if(showFolderAccessError(e))
+						continue;
+				}
+				break;
 			}
-			catch(IOException e) {
-				// Retry (loop) if user authentified
-				if(showFolderAccessError(e))
-					continue;
-			}
-			break;
+			while(true);
 		}
-		while(true);
+		finally {
+			driveButton.repaint();
+			locationField.repaint();
 
-		driveButton.repaint();
-		locationField.repaint();
+			// Request focus back from refresh button
+			fileTable.requestFocus();
+		}
 	 }
 
 
