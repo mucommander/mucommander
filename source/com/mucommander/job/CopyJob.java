@@ -2,23 +2,25 @@
 package com.mucommander.job;
 
 import com.mucommander.file.*;
+
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
+import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.table.FileTable;
+
 import com.mucommander.text.SizeFormatter;
 import com.mucommander.text.Translator;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import java.io.*;
-import java.util.Vector;
-import java.util.Date;
+import javax.swing.*;
 
-import java.text.SimpleDateFormat;
-import java.text.NumberFormat;
+import java.io.*;
+
+import java.util.Vector;
+
 
 /**
  * This job copies recursively a group of files.
@@ -56,21 +58,9 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 
 	private final static int CANCEL_ACTION = 0;
 	private final static int SKIP_ACTION = 1;
-	private final static int OVERWRITE_ACTION = 2;
-	private final static int APPEND_ACTION = 3;
-	private final static int SKIP_ALL_ACTION = 4;
-	private final static int OVERWRITE_ALL_ACTION = 5;
-	private final static int APPEND_ALL_ACTION = 6;
-	private final static int OVERWRITE_ALL_OLDER_ACTION = 7;
 
 	private final static String CANCEL_TEXT = Translator.get("cancel");
 	private final static String SKIP_TEXT = Translator.get("skip");
-	private final static String OVERWRITE_TEXT = Translator.get("overwrite");
-	private final static String APPEND_TEXT = Translator.get("append");
-	private final static String SKIP_ALL_TEXT = Translator.get("skip_all");
-	private final static String OVERWRITE_ALL_TEXT = Translator.get("overwrite_all");
-	private final static String APPEND_ALL_TEXT = Translator.get("append_all");
-	private final static String OVERWRITE_ALL_OLDER_TEXT = Translator.get("overwrite_all_older");
 
 	private final static int BLOCK_SIZE = 1024;
 
@@ -168,28 +158,28 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 				else {	
 					int ret = showFileExistsDialog(file, destFile);
 				
-			    	if (ret==-1 || ret==CANCEL_ACTION) {
+			    	if (ret==-1 || ret==FileExistsDialog.CANCEL_ACTION) {
 			    		stop();                
 			    		return;
 			    	}
-			    	else if (ret==SKIP_ACTION) {
+			    	else if (ret==FileExistsDialog.SKIP_ACTION) {
 			    		return;
 			    	}
-					else if (ret==APPEND_ACTION) {
+					else if (ret==FileExistsDialog.APPEND_ACTION) {
 			    		append = true;
 					}
-					else if (ret==SKIP_ALL_ACTION) {
+					else if (ret==FileExistsDialog.SKIP_ALL_ACTION) {
 						skipAll = true;
 						return;
 					}
-					else if (ret==OVERWRITE_ALL_ACTION) {
+					else if (ret==FileExistsDialog.OVERWRITE_ALL_ACTION) {
 						overwriteAll = true;
 					}
-					else if (ret==APPEND_ALL_ACTION) {
+					else if (ret==FileExistsDialog.APPEND_ALL_ACTION) {
 						appendAll = true;
 						append = true;
 					}	
-					else if (ret==OVERWRITE_ALL_OLDER_ACTION) {
+					else if (ret==FileExistsDialog.OVERWRITE_ALL_OLDER_ACTION) {
 						overwriteAllOlder = true;
 						if(file.getDate()<destFile.getDate())
 							return;
@@ -271,31 +261,19 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
  
 
     private int showFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
-    	JPanel panel = new JPanel(new GridLayout(0,1));
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm a");
-    	NumberFormat numberFormat = NumberFormat.getInstance();
-    	panel.add(new JLabel("Source: "+sourceFile.getAbsolutePath()));
-    	panel.add(new JLabel("  "+numberFormat.format(sourceFile.getSize())
-    			+" bytes, "+dateFormat.format(new Date(sourceFile.getDate()))));
-    	panel.add(new JLabel(""));
-    	panel.add(new JLabel("Destination: "+destFile.getAbsolutePath()));
-    	panel.add(new JLabel("  "+numberFormat.format(destFile.getSize())
-    			+" bytes, "+dateFormat.format(new Date(destFile.getDate()))));
-    	
-    	QuestionDialog dialog = new QuestionDialog(progressDialog, "File already exists in destination", 
-    		panel, mainFrame,
-    		new String[] {SKIP_TEXT, OVERWRITE_TEXT, APPEND_TEXT, SKIP_ALL_TEXT, OVERWRITE_ALL_TEXT, APPEND_ALL_TEXT, CANCEL_TEXT, OVERWRITE_ALL_OLDER_TEXT},
-    		new int[]  {SKIP_ACTION, OVERWRITE_ACTION, APPEND_ACTION, SKIP_ALL_ACTION, OVERWRITE_ALL_ACTION, APPEND_ALL_ACTION, CANCEL_ACTION, OVERWRITE_ALL_OLDER_ACTION},
-    		3);
-
+		QuestionDialog dialog = new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
+		
 		return waitForUserResponse(dialog);
 	}
 
 	
     private int showErrorDialog(String message) {
-		QuestionDialog dialog = new QuestionDialog(progressDialog, Translator.get(unzip?"unzip_dialog.error_title":"copy_dialog.error_title", message, mainFrame,
+		QuestionDialog dialog = new QuestionDialog(progressDialog, 
+			Translator.get(unzip?"unzip_dialog.error_title":"copy_dialog.error_title"),
+			message,
+			mainFrame,
 			new String[] {SKIP_TEXT, CANCEL_TEXT},
-			new int[]  {SKIP_ACTION, CANCEL_ACTION}
+			new int[]  {SKIP_ACTION, CANCEL_ACTION},
 			0);
 
 		return waitForUserResponse(dialog);

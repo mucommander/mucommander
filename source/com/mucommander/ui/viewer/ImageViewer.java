@@ -22,8 +22,10 @@ public class ImageViewer extends FileViewer implements ComponentListener {
 	
 	private boolean isSeparateWindow;
 	
-	public ImageViewer() {
+	public ImageViewer(ViewerFrame frame) {
+		super(frame);
 	}	
+	
 	
 	public void startViewing(AbstractFile fileToView, boolean isSeparateWindow) throws IOException {
 		this.isSeparateWindow = isSeparateWindow;
