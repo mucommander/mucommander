@@ -49,7 +49,7 @@ public class UnzipDialog extends DestinationDialog {
 
 		// Starts copying files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("unzip_dialog.unzipping"));
-		CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.DOWNLOAD_MODE);
+		CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.UNZIP_MODE);
 		progressDialog.start(job);
 	}
 

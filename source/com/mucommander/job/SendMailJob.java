@@ -134,9 +134,6 @@ public class SendMailJob extends ExtendedFileJob {
 	protected void jobCompleted() {
 		// Notifies the mail server that the mail is over
 		try {
-			// Writes padding bytes without closing the underlying stream.
-			out64.writePadding();
-
 			// Say goodbye to the server
 			sayGoodBye();
 		}
@@ -239,17 +236,32 @@ public class SendMailJob extends ExtendedFileJob {
 	
 	
     private void sendAttachment(AbstractFile file) throws IOException {
-        // Send MIME type of attachment file
-		String mimeType = MimeTypes.getMimeType(file);
-		// Default mime type
-		if(mimeType==null)
-			mimeType = "application/octet-stream";
-        writeLine("Content-Type:"+mimeType+"; name="+file.getName());
-        writeLine("Content-Disposition: attachment;filename=\""+file.getName()+"\"");
-        writeLine("Content-transfer-encoding: base64\r\n");
-        copyStream(in, out, 0);
-        writeLine("\r\n--" + boundary);
-    }
+		InputStream fileIn = null;
+		try {
+			// Send MIME type of attachment file
+			String mimeType = MimeTypes.getMimeType(file);
+			// Default mime type
+			if(mimeType==null)
+				mimeType = "application/octet-stream";
+			writeLine("Content-Type:"+mimeType+"; name="+file.getName());
+			writeLine("Content-Disposition: attachment;filename=\""+file.getName()+"\"");
+			writeLine("Content-transfer-encoding: base64\r\n");
+			fileIn = file.getInputStream();
+			copyStream(fileIn, out64, 0);
+	
+			// Writes padding bytes without closing the stream.
+			out64.writePadding();
+	
+			writeLine("\r\n--" + boundary);
+		}
+		catch(IOException e) {
+			throw e;
+		}
+		finally {
+			if(fileIn!=null)
+				fileIn.close();
+		}
+	}
 	
     private void sayGoodBye() throws IOException {
         writeLine("\r\n\r\n--" + boundary + "--\r\n");

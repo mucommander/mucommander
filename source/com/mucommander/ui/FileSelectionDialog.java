@@ -206,7 +206,6 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 		}
 		
 		dispose();
-		activeTable.requestFocus();
 	}
 
 }

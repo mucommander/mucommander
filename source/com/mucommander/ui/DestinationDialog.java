@@ -113,9 +113,6 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 	 */
 	protected void showErrorDialog(String msg) {
 		JOptionPane.showMessageDialog(mainFrame, msg, errorDialogTitle, JOptionPane.ERROR_MESSAGE);
-
-		// FileTable lost focus
-		mainFrame.getLastActiveTable().requestFocus();
 	}
 
 

@@ -88,9 +88,6 @@ public class CopyJob extends ExtendedFileJob {
 		// Destination folder
 		AbstractFile destFolder = recurseParams==null?baseDestFolder:(AbstractFile)recurseParams;
 		
-		// Notify job that we're starting to process this file
-		nextFile(file);
-
 		// Is current file at the base folder level ?
 		boolean isFileInBaseFolder = file.getParent().equals(baseSourceFolder);
 
@@ -104,8 +101,11 @@ public class CopyJob extends ExtendedFileJob {
 				try {
 					// Recurse on zip's contents
 					AbstractFile zipSubFiles[] = currentFile.ls();
-					for(int j=0; j<zipSubFiles.length && !isInterrupted(); j++)
-					processFile(zipSubFiles[j], destFolder);
+					for(int j=0; j<zipSubFiles.length && !isInterrupted(); j++) {
+						// Notify job that we're starting to process this file (needed for recursive calls to processFile)
+						nextFile(zipSubFiles[j]);
+						processFile(zipSubFiles[j], destFolder);
+					}
 					return true;
 				}
 				catch(IOException e) {
@@ -162,9 +162,11 @@ public class CopyJob extends ExtendedFileJob {
 				try {
 					// for each file in folder...
 					AbstractFile subFiles[] = file.ls();
-					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
-//						processFile(subFiles[i], destFile, null);
+					for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
+						// Notify job that we're starting to process this file (needed for recursive calls to processFile)
+						nextFile(subFiles[i]);
 						processFile(subFiles[i], destFile);
+					}
 					return true;
 				}
 				catch(IOException e) {

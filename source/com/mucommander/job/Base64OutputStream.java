@@ -104,13 +104,14 @@ public class Base64OutputStream extends OutputStream {
     
 	
 	public void write(int i) throws IOException {
+//System.out.println("write "+i);
 		// We have a 3-byte group
 		if(nbBytesWaiting==2) {
 			// Write 3 bytes as 4 base64 characters
 			out.write(BASE_TABLE[(byte)((byteAcc[0] & 0xFC) >> 2)]);
 			out.write(BASE_TABLE[(byte)(((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
-			out.write(BASE_TABLE[(byte)(((byteAcc[1] & 0x0F) << 2) | ((byteAcc[2] & 0xC0) >> 6))]);
-			out.write(BASE_TABLE[(byte)(byteAcc[2] & 0x3F)]);
+			out.write(BASE_TABLE[(byte)(((byteAcc[1] & 0x0F) << 2) | ((i & 0xC0) >> 6))]);
+			out.write(BASE_TABLE[(byte)(i & 0x3F)]);
 
 			if ((lineLength += 4) >= 76) {
 				out.write('\r');
@@ -148,6 +149,8 @@ public class Base64OutputStream extends OutputStream {
 			out.write('=');
             out.write('=');
         }
+		
+		nbBytesWaiting = 0;
 	}	
 	
 	

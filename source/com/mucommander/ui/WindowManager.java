@@ -259,6 +259,9 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	 * Properly disposes the given MainFrame.
 	 */
 	public void disposeMainFrame(MainFrame mainFrameToDispose) {
+if(com.mucommander.Debug.ON)
+	System.out.println("WindowManager.disposeMainFrame");
+
 		// Saves last folders
 		ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
 			mainFrameToDispose.getFolderPanel1().getLastSavableFolder());
@@ -276,10 +279,10 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		ConfigurationManager.setVariableInt("prefs.last_window.screen_height", screenSize.height);
 
 		// Disposes the MainFrame
+		int frameIndex = mainFrames.indexOf(mainFrameToDispose);
 		mainFrameToDispose.dispose();
 		mainFrames.remove(mainFrameToDispose);
 		
-		int frameIndex = mainFrames.indexOf(mainFrameToDispose);
 		int nbFrames = mainFrames.size();
 		MainFrame mainFrame;
 		JMenuItem item;
@@ -311,7 +314,6 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		int frameIndex = mainFrames.indexOf(currentMainFrame);
 		MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==mainFrames.size()-1?0:frameIndex+1);
 		mainFrame.toFront();
-		mainFrame.getLastActiveTable().requestFocus();
 	}
 
 	/**
@@ -321,7 +323,6 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		int frameIndex = mainFrames.indexOf(currentMainFrame);
 		MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==0?mainFrames.size()-1:frameIndex-1);
 		mainFrame.toFront();
-		mainFrame.getLastActiveTable().requestFocus();
 	}
 
 	
@@ -387,7 +388,6 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 			MainFrame mainFrameToFront = (MainFrame)mainFrames.elementAt(itemIndex);
 			if (mainFrameToFront != currentMainFrame) {
 				mainFrameToFront.toFront();
-				mainFrameToFront.getLastActiveTable().requestFocus();
 			}
 		}
 	}

@@ -96,8 +96,12 @@ public class DeleteJob extends FileJob {
 					// Delete each file in this folder
 					try {
 						AbstractFile subFiles[] = file.ls();
-						for(int i=0; i<subFiles.length && !isInterrupted(); i++)
+						for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
+							// Notify job that we're starting to process this file (needed for recursive calls to processFile)
+							nextFile(subFiles[i]);
 							processFile(subFiles[i], null);
+						}
+						break;
 					}
 					catch(IOException e) {
 						if(com.mucommander.Debug.ON) e.printStackTrace();

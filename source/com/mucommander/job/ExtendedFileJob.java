@@ -61,10 +61,13 @@ public abstract class ExtendedFileJob extends FileJob {
 		// Copies the InputStream's content to the OutputStream
 		int read;
 		while ((read=in.read(buffer, 0, buffer.length))!=-1 && !isInterrupted()) {
+//System.out.println("copyStream1: read="+read);
 			out.write(buffer, 0, read);
+//System.out.println("copyStream2: read="+read);
 			nbBytesProcessed += read;
 			currentFileProcessed += read;
 		}
+//System.out.println("copyStream: OVER");
 	}
 	
 	

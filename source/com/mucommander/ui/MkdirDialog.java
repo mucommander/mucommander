@@ -124,15 +124,11 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 		    	// like switching to a root folder        
 		    }
 */	
-		activeTable.requestFocus();
 	}
 
 	
 	private void showErrorDialog(String msg, String title) {
 		JOptionPane.showMessageDialog(mainFrame, msg, title, JOptionPane.ERROR_MESSAGE);
-
-		// FileTable lost focus
-		activeTable.requestFocus();
 	}
 
 

@@ -74,9 +74,6 @@ public class MoveJob extends ExtendedFileJob {
 		// Destination folder
 		AbstractFile destFolder = recurseParams==null?baseDestFolder:(AbstractFile)recurseParams;
 		
-		// Notify job that we're starting to process this file
-		nextFile(file);
-
 		// Is current file at the base folder level ?
 		boolean isFileInBaseFolder = file.getParent().equals(baseSourceFolder);
 
@@ -142,9 +139,12 @@ public class MoveJob extends ExtendedFileJob {
 				try {
 					AbstractFile subFiles[] = file.ls();
 					boolean isFolderEmpty = true;
-					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
+					for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
+						// Notify job that we're starting to process this file (needed for recursive calls to processFile)
+						nextFile(subFiles[i]);
 						if(!processFile(subFiles[i], destFile))
 							isFolderEmpty = false;
+					}
 					// If one file could returned failure, return failure as well since this
 					// folder could not be moved totally
 					if(!isFolderEmpty)

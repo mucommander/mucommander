@@ -101,8 +101,8 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	private void showErrorDialog(String msg, String title) {
 		JOptionPane.showMessageDialog(mainFrame, msg, title, JOptionPane.ERROR_MESSAGE);
 
-		// FileTable lost focus
-		mainFrame.getLastActiveTable().requestFocus();
+//		// FileTable lost focus
+//		mainFrame.getLastActiveTable().requestFocus();
 	}
 
 
@@ -219,8 +219,12 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			// The following actions need to work on files, so return
 			// if no files are selected
 			Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
-			if(files.size()==0)
+			if(files.size()==0) {
+				// Request focus since focus currently belongs to a command bar button
+				// and no dialog will request focus
+				mainFrame.requestFocus();
 				return;
+			}
 			
 			if(source == buttons[COPY_INDEX]) {
 				new CopyDialog(mainFrame, files, shiftDown);
@@ -232,8 +236,5 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 				new DeleteDialog(mainFrame, files);
 			}
 		}
-		
-        // FileTable lost focus since a button was clicked
-        mainFrame.getLastActiveTable().requestFocus();
     }
 }

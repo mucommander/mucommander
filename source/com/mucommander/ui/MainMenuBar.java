@@ -240,7 +240,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		}
 		else if (source == unzipItem) {
 			if(nbSelectedFiles>0)
-				new CopyDialog(mainFrame, files, false);
+				new UnzipDialog(mainFrame, files, false);
 		}
         else if  (source == emailFilesItem) {
 			if(nbSelectedFiles>0)

@@ -29,7 +29,8 @@ import java.util.Vector;
 public class MainFrame extends JFrame implements ComponentListener, KeyListener, FocusListener, WindowListener {
 	
 	private final static String FRAME_TITLE = "muCommander";
-	
+
+	// Variables related to split pane	
 	private JSplitPane splitPane;
 	private int splitPaneWidth = -1;
 	private int dividerLocation;
@@ -46,11 +47,12 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     
 	private CommandBarPanel commandBar;
 	
-    /** False until this window has been activated */
-	private boolean firstTimeActivated;
-
 	/** Used to determine whether or not this MainFrame is active, i.e. muCommander window is in the foreground */
 	private boolean isActive; 
+	
+	private long lastFocusRequest;
+
+	private final static int FOCUS_REQUEST_DELAY = 3000;
 	
 	
 	/**
@@ -100,11 +102,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		lastActiveTable = table1;
 
 		// Enables folderPanel window resizing
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
-			public javax.swing.border.Border getBorder() {
-				return null;
-			}
-		};
+		splitPane = createSplitPane();
 			
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(((double)0.5));
@@ -133,6 +131,14 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		addWindowListener(this);
 	}
 	
+	
+	public JSplitPane createSplitPane() {
+		return new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
+					public javax.swing.border.Border getBorder() {
+						return null;
+					}
+				};
+	}
 	
 	/**
 	 * Shows/hide the toolbar.
@@ -167,16 +173,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 * Shows/hide the command bar.
 	 */
 	public void setCommandBarVisible(boolean visible) {
-/*
-		if(!visible && this.commandBar.isVisible()) {
-			this.commandBar.setVisible(false);
-			validate();
-		}
-		else if(visible && !this.commandBar.isVisible()) {
-			this.commandBar.setVisible(true);
-			validate();
-		}
-*/
 		this.commandBar.setVisible(visible);
 		validate();
 	}
@@ -242,7 +238,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		splitPane.removeAll();
 		contentPane.remove(splitPane);
 
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2);
+		splitPane = createSplitPane();
 		splitPane.setOneTouchExpandable(true);
 
 		contentPane.add(splitPane, BorderLayout.CENTER);
@@ -250,8 +246,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		contentPane.doLayout();
 		splitPane.setDividerLocation(dividerLocation);
 
-		(lastActiveTable==table1?table2:table1).requestFocus();
-
+		requestFocus();
+		
 	// This should also work but splitPane becomes crazy (does not want to resize anymore)
 
 //		FolderPanel tempBrowser = folderPanel1;
@@ -421,13 +417,24 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 
 	
 	/**
-	 * Returns whether or not this MainFrame is active, i.e. if muCommander window is in the foreground.
+	 * Returns whether or not this MainFrame is active, i.e. if this muCommander window is in the foreground.
 	 */
 	public boolean isActive() {
 		return isActive;
 	}
 
 
+	/**
+	 * Override this method to request focus on the last active table.
+	 */
+	public void requestFocus() {
+		if(isVisible())
+			lastActiveTable.requestFocus();
+		else
+			FocusRequester.requestFocus(lastActiveTable);
+	}
+
+	
 	/*****************************
 	 * ComponentListener methods *
 	 *****************************/
@@ -579,13 +586,21 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 
     	if(com.mucommander.Debug.ON)
 			System.out.println("MainFrame.windowActivated");
-		
-		// Requests focus first time MainFrame is activated
-    	// (this method is called each time MainFrame is activated)
-    	if (!firstTimeActivated) {
-    		FocusRequester.requestFocus(table1);
-    		firstTimeActivated = true;
-    	}
+
+//		// Requests focus first time MainFrame is activated
+//    	// (this method is called each time MainFrame is activated)
+//    	if (!firstTimeActivated) {
+//    		FocusRequester.requestFocus(table1);
+//    		firstTimeActivated = true;
+//    	}
+
+		// Requests focus if last active table doesn't already have focus
+		// Delay check is to avoid that 2 main frames fight over focus.
+		long now;
+		if(!lastActiveTable.hasFocus() && (now=System.currentTimeMillis())-lastFocusRequest>FOCUS_REQUEST_DELAY) {
+			lastFocusRequest = now;
+			requestFocus();
+		}
     }
 
     public void windowDeactivated(WindowEvent e) {
@@ -623,4 +638,5 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 //	 public Insets getInsets() {
 //		 return new Insets(3, 4, 3, 4);
 //	 }
+
 }

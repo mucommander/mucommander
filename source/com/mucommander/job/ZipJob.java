@@ -118,9 +118,12 @@ public class ZipJob extends ExtendedFileJob {
 					// Recurse on files
 					AbstractFile subFiles[] = file.ls();
 					boolean folderComplete = true;
-					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
+					for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
+						// Notify job that we're starting to process this file (needed for recursive calls to processFile)
+						nextFile(subFiles[i]);
 						if(!processFile(subFiles[i], null))
 							folderComplete = false;
+					}
 					
 					return folderComplete;
 				}

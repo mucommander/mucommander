@@ -182,8 +182,8 @@ public abstract class FileJob implements Runnable {
 		if(progressDialog!=null)
 			progressDialog.dispose();
 	
-		// Request focus on last active table
-        FocusRequester.requestFocus(mainFrame.getLastActiveTable());
+//		// Request focus on last active table
+//        FocusRequester.requestFocus(mainFrame.getLastActiveTable());
 	}
 
 	
@@ -210,10 +210,15 @@ public abstract class FileJob implements Runnable {
 
 
 	/**
-	 * Advances file index. This method should be called by subclasses whenever the job
-	 * starts processing a new file.
+	 * Changes current file. This method should be called by subclasses whenever the job
+	 * starts processing a new file other than a top-level file, i.e. one that was passed
+	 * as an argument to {@link #processFile(AbstractFile, Object) processFile()}.
+	 * ({#nextFile(AbstractFile) nextFile()} is automatically called for top-level files).
 	 */
 	protected void nextFile(AbstractFile file) {
+		if(this.currentFile!=null && this.currentFile.equals(file))
+			return;
+		
 		this.currentFile = file;
 		if(file.getParent().equals(baseSourceFolder))
 			currentFileIndex++;
@@ -279,6 +284,9 @@ public abstract class FileJob implements Runnable {
 		for(int i=0; i<nbFiles && !isInterrupted(); i++) {
 			currentFile = (AbstractFile)files.elementAt(i);
 	
+			// Change current file and advance file index
+			nextFile(currentFile);
+			
 			// Process current file
 			processFile(currentFile, null);
 			

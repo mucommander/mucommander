@@ -169,21 +169,20 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			this.popupMenu.setVisible(false);
 			this.popupMenu = null;
 			this.hideToolbarMenuItem = null;
+			mainFrame.requestFocus();
+			return;
 		}
-		
-		if(!(source instanceof JButton))
-			return;
-		
+				
 		JButton button = (JButton)source;
-		int buttonIndex=getButtonIndex(button);
+		int buttonIndex = getButtonIndex(button);
 
-		if(buttonIndex==-1)
-			return;
+//		if(buttonIndex==-1)
+//			return;
+
+		// Actions that do not invoke a dialog must request focus on the main frame,
+		// since ToolBar has the focus when a button is clicked.
+		boolean requestFocus = false;
 		
-		// Some actions need to work on selected files
-		Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
-		int nbSelectedFiles = files.size();
-
 		if (buttonIndex==NEW_WINDOW_INDEX) {
 			WindowManager.getInstance().createNewMainFrame();
 		}
@@ -201,9 +200,11 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		}
 		else if(buttonIndex==SWAP_FOLDERS_INDEX) {
 			mainFrame.swapFolders();
+			requestFocus = true;
 		}
 		else if(buttonIndex==SET_SAME_FOLDER_INDEX) {
 			mainFrame.setSameFolder();
+			requestFocus = true;
 		}
 		else if(buttonIndex==SERVER_CONNECT_INDEX) {
 			mainFrame.showServerConnectDialog();
@@ -214,15 +215,26 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		else if (buttonIndex==RUNCMD_INDEX) {
 			new RunDialog(mainFrame);
 		}
-		else if (buttonIndex==EMAIL_INDEX) {
-			if(nbSelectedFiles>0)
+		else {
+			// The following actions need to operate on selected files
+			Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
+			int nbSelectedFiles = files.size();
+			
+			// Return if no file is selected
+			if(nbSelectedFiles<=0) {
+				requestFocus = true;
+			}
+			else if (buttonIndex==EMAIL_INDEX) {
 				new EmailFilesDialog(mainFrame, files);
+			}
+			else if (buttonIndex==PROPERTIES_INDEX) {
+				mainFrame.showPropertiesDialog();
+			}
 		}
-		else if (buttonIndex==PROPERTIES_INDEX) {
-			mainFrame.showPropertiesDialog();
-		}
-	
-		mainFrame.getLastActiveTable().requestFocus();
+		
+		// Request focus for actions that did not invoke a dialog
+		if(requestFocus)
+			mainFrame.requestFocus();
 	}
 	
 	///////////////////////////////////////////////////////
@@ -251,9 +263,11 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	
 			// Don't display dialog is file selection is empty
 			Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
-			if(files.size()==0)
+			if(files.size()==0) {
+				mainFrame.requestFocus();
 				return;
-
+			}
+				
 			if (buttonIndex==ZIP_INDEX) {
 				new ZipDialog(mainFrame, files, e.isShiftDown());
 			}

@@ -69,7 +69,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 		
 		try {
 			// Figures out which files to send and calculates the number of files and the number of bytes
-			files = getFlattenedFiles(files);
+			this.files = getFlattenedFiles(files);
 			
 			Container contentPane = getContentPane();
 			EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);

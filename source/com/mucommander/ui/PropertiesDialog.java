@@ -14,6 +14,13 @@ import java.text.NumberFormat;
 
 import java.util.Vector;
 
+
+/**
+ * This dialog shows properties of a file or a group of files : number of files, file kind,
+ * combined size and location.
+ *
+ * @author Maxence Bernard
+ */
 public class PropertiesDialog extends FocusDialog implements Runnable, ActionListener {
 	private MainFrame mainFrame;
 	private PropertiesJob job;
@@ -25,8 +32,8 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	private JButton okButton;
 
 	// Dialog width is constrained to 320, height is not an issue (always the same)
-	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
-	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);	
+	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 
 	/** How often should progress information be refreshed (in ms) */
 	private final static int REFRESH_RATE = 500;
