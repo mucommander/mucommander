@@ -97,7 +97,7 @@ public abstract class AbstractFile {
 
 	
 	/**
-	 * Returns the absolute path of this AbstractFile, without trailing separators, except for root folders ('/', 'c:\' ...).
+	 * Returns the absolute path of this AbstractFile, without a trailing separator, except for root folders ('/', 'c:\' ...).
 	 */
 	public abstract String getAbsolutePath();
 	
@@ -105,23 +105,37 @@ public abstract class AbstractFile {
 	 * Returns the absolute path of this AbstractFile, appending a separator character if <code>true</code> is passed. 
 	 */
 	public String getAbsolutePath(boolean appendSeparator) {
-		String absPath = getAbsolutePath();
-
-		// Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
-		// are exceptions that's why we still have to test if path ends with a separator
-		String separator = getSeparator();
-		if(appendSeparator && !absPath.endsWith(separator))
-			return absPath+getSeparator();
-
-		return absPath;
+		String path = getAbsolutePath();
+		return appendSeparator?addTrailingSeparator(path):path;
 	}
 
 	
 	/**
-	 * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences.
+	 * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences, without a trailing separator.
+	 * AbstractFile's implementation simply returns the absolute path, this method should be overridden if canonical path resolution is available.
 	 */
 	public String getCanonicalPath() {
 		return getAbsolutePath();
+	}
+
+	/**
+	 * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences,
+	 * appending a separator character if <code>true</code> is passed.
+	 * AbstractFile's implementation simply returns the absolute path, this method should be overridden if canonical path resolution is available.
+	 */
+	public String getCanonicalPath(boolean appendSeparator) {
+		String path = getCanonicalPath();
+		return appendSeparator?addTrailingSeparator(path):path;
+	}
+
+	
+	protected String addTrailingSeparator(String path) {
+		// Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
+		// are exceptions that's why we still have to test if path ends with a separator
+		String separator = getSeparator();
+		if(!path.endsWith(separator))
+			return path+separator;
+		return path;
 	}
 	
 	

@@ -91,7 +91,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		rootButton = new JButton(rootFolders[0].toString());
 		// For Mac OS X whose minimum width for buttons is enormous
 		rootButton.setMinimumSize(new Dimension(40, (int)rootButton.getPreferredSize().getHeight()));
-		rootButton.setMargin(new Insets(6,8,6,8));
+//		rootButton.setMargin(new Insets(6,8,6,8));
 		
 		rootButton.addActionListener(this);
 		rootPopup = new JPopupMenu();
@@ -213,16 +213,17 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			this.currentFolder = folder;
 
 			// Updates root button label if necessary
-			String currentPath = currentFolder.getAbsolutePath(false).toLowerCase();
-			int bestLength = rootFolders[0].getAbsolutePath(false).length();
+			String currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
+			int bestLength = -1;
 			int bestIndex = 0;
 			String temp;
 			int len;
-//System.out.println("currentPath "+currentPath+" rootFolders.length="+rootFolders.length);
+System.out.println("currentPath "+currentPath+" rootFolders.length="+rootFolders.length);
 			for(int i=0; i<rootFolders.length; i++) {
-//System.out.println("rootFolder "+rootFolders[i].getAbsolutePath(false).toLowerCase());
-				temp = rootFolders[i].getAbsolutePath(false).toLowerCase();
+				temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
 				len = temp.length();
+System.out.println("rootFolder "+temp+" "+len);
+System.out.println("test "+" "+currentPath.startsWith(temp)+" "+len+" "+bestLength);
 				if (currentPath.startsWith(temp) && len>bestLength) {
 					bestIndex = i;
 					bestLength = len;

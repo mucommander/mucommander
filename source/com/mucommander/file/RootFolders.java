@@ -41,32 +41,34 @@ public class RootFolders {
 	public static void updateRootFolders() {
 		Vector rootFoldersV = new Vector();
 
-		// Add java.io.File's root folders
-		addFileRoots(rootFoldersV);
-		if(Debug.ON)
-			System.out.println("java.io.File's root folders: "+rootFoldersV);
-
-		// Add home folder
-		AbstractFile homeFolder = AbstractFile.getAbstractFile(System.getProperty("user.home"));
-		if(homeFolder!=null)
-			rootFoldersV.add(homeFolder);
-		
-		// Add /etc/fstab folders
+		// Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link 
+		// (like 'Hard drive' or whatever silly name the user gave his primary hard disk) to /
 		int osType = PlatformManager.getOSFamily();
-		// If we're running windows, we can just skip that
-		if(!(osType==PlatformManager.WINDOWS_9X || osType==PlatformManager.WINDOWS_NT)) {
-			addFstabEntries(rootFoldersV);
-			if(Debug.ON)
-				System.out.println("/etc/fstab mount points added: "+rootFoldersV);
-		}
-		
-		// Add Mac OS X's /Volumes subfolders
 		if(osType==PlatformManager.MAC_OS_X) {
 			addMacOSXVolumes(rootFoldersV);
 			if(Debug.ON)
 				System.out.println("/Volumes's subfolders added: "+rootFoldersV);
 		}
-		
+		else {
+			// Add java.io.File's root folders
+			addFileRoots(rootFoldersV);
+			if(Debug.ON)
+				System.out.println("java.io.File's root folders: "+rootFoldersV);
+	
+			// Add /etc/fstab folders
+			// If we're running windows, we can just skip that
+			if(!(osType==PlatformManager.WINDOWS_9X || osType==PlatformManager.WINDOWS_NT)) {
+				addFstabEntries(rootFoldersV);
+				if(Debug.ON)
+					System.out.println("/etc/fstab mount points added: "+rootFoldersV);
+			}
+		}
+
+		// Add home folder
+		AbstractFile homeFolder = AbstractFile.getAbstractFile(System.getProperty("user.home"));
+		if(homeFolder!=null)
+			rootFoldersV.add(homeFolder);
+			
 		// Folders are cached for subsequent calls to getRootFolders()
 		rootFolders = new AbstractFile[rootFoldersV.size()];
 		rootFoldersV.toArray(rootFolders);
@@ -137,8 +139,13 @@ public class RootFolders {
 			int nbFiles = volumesFiles.length;
 			AbstractFile folder;
 			for(int i=0; i<nbFiles; i++)
-				if((folder=volumesFiles[i]).isDirectory())
-					v.add(folder);
+				if((folder=volumesFiles[i]).isDirectory()) {
+					// Primary hard drive (the one corresponding to '/') is listed under Volumes and should be the first root folder
+					if(folder.getCanonicalPath().equals("/"))
+						v.insertElementAt(folder, 0);
+					else
+						v.add(folder);
+				}
 		}
 		catch(IOException e) {
 			if(Debug.ON)

@@ -59,9 +59,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	public MainFrame(AbstractFile initialFolder1, AbstractFile initialFolder2) {
 		super(FRAME_TITLE);
 	
-		// Resolves the URL of the image within the JAR file
+		// Resolve the URL of the image within the JAR file
 		URL imageURL = getClass().getResource("/icon16.gif");
-		// Sets frame icon
+		// Set frame icon
 		setIconImage(new ImageIcon(imageURL).getImage());
 
 		// Enable window resize
@@ -78,33 +78,40 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		contentPane.setInsets(new Insets(3, 4, 3, 4));
 		setContentPane(contentPane);
 
-		// Folder panels
+		// Start by creating folder panels as they are used
+		// below (by Toolbar)
 		folderPanel1 = new FolderPanel(this, initialFolder1);
         folderPanel2 = new FolderPanel(this, initialFolder2);
 
-		// Create toolbar and show it only if it hasn't been disabled in the preferences
-		this.toolbar = new ToolBar(this);
-		contentPane.add(toolbar);
-		if(ConfigurationManager.getVariable("prefs.show_toolbar_on_startup", "true").equals("false"))
-			toolbar.setVisible(false);
-
-		// Create menu bar (has to be created after toolbar)
-		MainMenuBar menuBar = new MainMenuBar(this);
-		setJMenuBar(menuBar);
-		
-        folderPanel1.addLocationListener(WindowManager.getInstance());
-        folderPanel2.addLocationListener(WindowManager.getInstance());
-
-        folderPanel1.addLocationListener(menuBar);
-        folderPanel2.addLocationListener(menuBar);
-
-        table1 = folderPanel1.getFileTable();
+		table1 = folderPanel1.getFileTable();
         table2 = folderPanel2.getFileTable();
 
 		lastActiveTable = table1;
 
+		folderPanel1.addLocationListener(WindowManager.getInstance());
+        folderPanel2.addLocationListener(WindowManager.getInstance());
+
+		// Create toolbar and show it only if it hasn't been disabled in the preferences
+		this.toolbar = new ToolBar(this);
+		this.toolbar.setVisible(ConfigurationManager.getVariable("prefs.show_toolbar_on_startup", "true").equals("true"));
+		contentPane.add(toolbar);
+
+		folderPanel1.addLocationListener(toolbar);
+		folderPanel2.addLocationListener(toolbar);
+		
+		// Create menu bar (has to be created after toolbar)
+		MainMenuBar menuBar = new MainMenuBar(this);
+		setJMenuBar(menuBar);
+
+        folderPanel1.addLocationListener(menuBar);
+        folderPanel2.addLocationListener(menuBar);
+		
 		// Enables folderPanel window resizing
-		splitPane = createSplitPane();
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
+			public javax.swing.border.Border getBorder() {
+				return null;
+			}
+		};
 			
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(((double)0.5));
@@ -141,34 +148,30 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	}
 	
 	
-	public JSplitPane createSplitPane() {
-		return new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
-					public javax.swing.border.Border getBorder() {
-						return null;
-					}
-				};
-	}
-	
 	/**
 	 * Shows/hide the toolbar.
 	 */
 	public void setToolbarVisible(boolean visible) {
+/*
 		if(toolbar.isVisible() && !visible) {
 //			getContentPane().remove(toolbar);
-			folderPanel1.removeLocationListener(toolbar);
-			folderPanel2.removeLocationListener(toolbar);
+//			folderPanel1.removeLocationListener(toolbar);
+//			folderPanel2.removeLocationListener(toolbar);
 //			this.toolbar = null;
 			toolbar.setVisible(false);
 			validate();
 		}
 		else if(!toolbar.isVisible() && visible) {
 //			this.toolbar = new ToolBar(this);
-			folderPanel1.addLocationListener(toolbar);
-			folderPanel2.addLocationListener(toolbar);
+//			folderPanel1.addLocationListener(toolbar);
+//			folderPanel2.addLocationListener(toolbar);
 //			getContentPane().insert(toolbar, BorderLayout.NORTH);
 			toolbar.setVisible(true);
 			validate();
 		}
+*/
+		toolbar.setVisible(visible);
+		validate();
 	}
 	
 	
@@ -263,6 +266,9 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 	 * After a call to this method, folder1 will be folder2 and vice-versa.
 	 */
 	public void swapFolders() {
+		splitPane.remove(folderPanel1);
+		splitPane.remove(folderPanel2);
+
 		FolderPanel tempBrowser = folderPanel1;
 		folderPanel1 = folderPanel2;
 		folderPanel2 = tempBrowser;
@@ -270,36 +276,13 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 		FileTable tempTable = table1;
 		table1 = table2;
 		table2 = tempTable;
-		
-		Container contentPane = getContentPane();
-		splitPane.removeAll();
-		contentPane.remove(splitPane);
 
-		splitPane = createSplitPane();
-		splitPane.setOneTouchExpandable(true);
-
-		contentPane.add(splitPane, BorderLayout.CENTER);
-	
-		contentPane.doLayout();
+		splitPane.setLeftComponent(folderPanel1);
+		splitPane.setRightComponent(folderPanel2);
+		splitPane.doLayout();
 		splitPane.setDividerLocation(dividerLocation);
 
 		requestFocus();
-		
-	// This should also work but splitPane becomes crazy (does not want to resize anymore)
-
-//		FolderPanel tempBrowser = folderPanel1;
-//		folderPanel1 = folderPanel2;
-//		folderPanel2 = tempBrowser;
-//
-//		FileTable tempTable = table1;
-//		table1 = table2;
-//		table2 = tempTable;
-//
-//		splitPane.removeAll();
-//		splitPane.setLeftComponent(folderPanel1);
-//		splitPane.setRightComponent(folderPanel2);
-//		splitPane.doLayout();
-//		splitPane.repaint();
 	}
 
 	/**

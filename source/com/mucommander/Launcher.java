@@ -131,7 +131,9 @@ public class Launcher {
 		// Resolves the URL of the image within the JAR file
 		URL imageURL = getClass().getResource("/logo.png");
 
-		splashScreen.getContentPane().add(new JLabel(new ImageIcon(imageURL)));
+//		splashScreen.getContentPane().add(new JLabel(new ImageIcon(imageURL)));
+		splashScreen.setContentPane(new JLabel(new ImageIcon(imageURL)));
+
 		splashScreen.pack();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		splashScreen.setLocation(screenSize.width/2 - splashScreen.getSize().width/2,

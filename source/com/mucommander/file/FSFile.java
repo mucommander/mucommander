@@ -3,6 +3,8 @@
 import java.io.*;
 import java.util.Vector;
 
+import com.mucommander.PlatformManager;
+
 /**
  * FSFile represents a 'file system file', that is a regular native file.
  */
@@ -125,6 +127,15 @@ public class FSFile extends AbstractFile {
 	}
 
 	public String getCanonicalPath() {
+		// To avoid drive seek and potential 'floppy drive not available' dialog under Win32
+		// triggered by java.io.File.getCanonicalPath() 
+		int osFamily = PlatformManager.getOSFamily();
+		if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
+			String absPath = getAbsolutePath(true);
+			if(absPath.equals("A:\\") || absPath.equals("B:\\"))
+				return absPath;
+		}
+		
 		if(this.canonicalPath==null) {
 			try {
 				this.canonicalPath = file.getCanonicalPath();

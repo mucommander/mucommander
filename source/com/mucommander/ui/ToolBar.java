@@ -102,6 +102,11 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 				addSeparator(separatorDimension);
 		}
 
+		// Back (forward) is enabled only if there is a previous (next) folder
+		FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
+		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
+		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
+		
 		// In order to catch Shift+clicks
 		buttons[ZIP_INDEX].addMouseListener(this);
 		buttons[UNZIP_INDEX].addMouseListener(this);
@@ -109,6 +114,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		// Add a mouse listener to create popup menu when right-clicking
 		// on the toolbar
 		this.addMouseListener(this);
+		
 	}
 
 	
