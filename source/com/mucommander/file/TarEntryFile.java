@@ -40,6 +40,11 @@ public class TarEntryFile extends AbstractEntryFile {
 		return tarEntry.getModTime().getTime();
 	}
 	
+	public boolean changeDate(long lastModified) {
+		// Entries are read-only
+		return false;
+	}
+	
 	public long getSize() {
 		return tarEntry.getSize();
 	}

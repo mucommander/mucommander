@@ -17,7 +17,7 @@ public class SMBFile extends AbstractFile {
 	private final static String SEPARATOR = "/";
 
 	private SmbFile file;
-	private FileURL fileURL;
+//	private FileURL fileURL;
 	private String publicURL;
 	private String privateURL;
 
@@ -25,37 +25,32 @@ public class SMBFile extends AbstractFile {
 	private boolean parentValSet;
 
 
-	public SMBFile(String url) throws IOException {	
-		this(url, true);
+	public SMBFile(FileURL fileURL) throws IOException {	
+		this(fileURL, true);
 	}
 	
 	
-	private SMBFile(String url, boolean addAuthInfo) throws IOException {	
-		// all SMB URLs that represent  workgroups, servers, shares, or directories require a trailing slash '/'. 
-		if(!url.endsWith("/"))
-			url += '/';
+	private SMBFile(FileURL fileURL, boolean addAuthInfo) throws IOException {	
+		super(fileURL);
 
-		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
-		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem
-		FileURL fileURL = new FileURL(url);
-		
+//		if(!url.endsWith("/"))
+//			url += '/';
+//		url = file.getCanonicalPath();
+//		this.fileURL = new FileURL(url);
+
 		AuthManager.authenticate(fileURL, addAuthInfo);
-		
-		// Unlike java.io.File, SmbFile throws an SmbException
-		// when file doesn't exist
-		this.file = new SmbFile(fileURL.getURL(true));
-		url = file.getCanonicalPath();
-		this.fileURL = new FileURL(url);
-		
+
 		this.privateURL = fileURL.getURL(true);
 		this.publicURL = fileURL.getURL(false);
+		
+		// Unlike java.io.File, SmbFile throws an SmbException
+		// when file doesn't exist.
+		// All SMB workgroups, servers, shares, or directories URLs require a trailing slash '/'. 
+		// Regular SMB files can have a trailing slash as well, so let's add a trailing slash.
+		this.file = new SmbFile(privateURL.endsWith("/")?privateURL:privateURL+"/");
 	}
 	
 	
-	private void init(SmbFile smbFile) throws MalformedURLException {
-	}
-
-
 	/////////////////////////////////////////
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
@@ -88,6 +83,16 @@ public class SMBFile extends AbstractFile {
             return 0;
         }
     }
+
+	public boolean changeDate(long lastModified) {
+		try {
+			file.setLastModified(lastModified);
+			return true;
+		}
+		catch(SmbException e) {
+			return false;
+		}
+	}
 	
 	public long getSize() {
         try {
@@ -102,12 +107,14 @@ public class SMBFile extends AbstractFile {
 	public AbstractFile getParent() {
 		if(!parentValSet) {
 			// SmbFile.getParent() never returns null
-			if(this.publicURL.equals("smb://"))
-				this.parent = null;
-			else {
-				String parentS = file.getParent();
-//System.out.println("SMBFile.getParent, parentS= "+parentS);				
-				try { this.parent = new SMBFile(parentS, false); }
+//			if(this.publicURL.get("smb://"))
+//				this.parent = null;
+
+			FileURL parentURL = fileURL.getParent();
+			if(parentURL!=null) {
+//				String parentS = file.getParent();
+//				try { this.parent = new SMBFile(parentS, false); }
+				try { this.parent = new SMBFile(parentURL, false); }
 				catch(IOException e) { this.parent = null; }
 			}
 				
@@ -198,17 +205,27 @@ public class SMBFile extends AbstractFile {
 		return new SmbFileOutputStream(privateURL, append);
 	}
 		
-	public boolean moveTo(AbstractFile dest) throws IOException  {
-		if (dest instanceof SMBFile) {
-			SMBFile destSMBFile = (SMBFile)dest;
-			if(destSMBFile.fileURL.getHost().equals(this.fileURL.getHost())) 
-				try{
-					file.renameTo(destSMBFile.file);
-					return true;
-				}
-				catch(SmbException e) {
-					return false;
-				}
+	public boolean moveTo(AbstractFile destFile) throws IOException  {
+		// If destination file is an SMB file located on the same server,
+		// have the server rename the file.
+		if (destFile.fileURL.getProtocol().equals("smb") && destFile.fileURL.getHost().equals(this.fileURL.getHost())) {
+			SmbFile destSmbFile;
+
+			// Destination file is an instance of SMBFile
+			if(destFile instanceof SMBFile)
+				destSmbFile = ((SMBFile)destFile).file;		// Reuse SmbFile instance
+			// Destination file uses SMB protocol but is not an instance of SMBFile (an archive file wrapped over for instance)
+			else
+				try { destSmbFile = new SmbFile(destFile.fileURL.getURL(true)); }	// Create new SmbFile instance
+				catch(IOException e) { return false; }
+			
+			try{
+				file.renameTo(destSmbFile);
+				return true;
+			}
+			catch(SmbException e) {
+				return false;
+			}
 		}
 		
 		return false;
@@ -231,7 +248,7 @@ public class SMBFile extends AbstractFile {
 			AbstractFile children[] = new AbstractFile[smbFiles.length];
 			AbstractFile child;
 			for(int i=0; i<smbFiles.length; i++) {
-				child = AbstractFile.wrapArchive(new SMBFile(smbFiles[i].getCanonicalPath(), false));
+				child = AbstractFile.wrapArchive(new SMBFile(new FileURL(smbFiles[i].getCanonicalPath()), false));
 				child.setParent(this);
 				children[i] = child;
 				

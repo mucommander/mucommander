@@ -25,9 +25,9 @@ public class HTTPFile extends AbstractFile {
 	private long size;
 	
 	private URL url;
-	private String urlString;
+//	private String urlString;
+//	private FileURL fileURL;
 
-	private FileURL fileURL;
 	private boolean parentValSet;
 	protected AbstractFile parent;
 	
@@ -38,29 +38,33 @@ public class HTTPFile extends AbstractFile {
 	/**
 	 * Creates a new instance of HTTPFile.
 	 */
-	public HTTPFile(String urlString) throws IOException {
-		this(new URL(urlString));
+	public HTTPFile(FileURL fileURL) throws IOException {
+		this(fileURL, new URL(fileURL.getURL(true)));
 	}
 
 	
-	protected HTTPFile(URL url) throws IOException {
-		this.url = url;
-		this.urlString = url.toExternalForm();
+	protected HTTPFile(FileURL fileURL, URL url) throws IOException {
+		super(fileURL);
 
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+urlString+" content-type guess="+URLConnection.guessContentTypeFromName(url.getFile()));
-		
-		// urlString is url-encoded
-		this.fileURL = new FileURL(urlString);
-		int urlLen = urlString.length();
-
-		if((!fileURL.getProtocol().toLowerCase().equals("http") && !fileURL.getProtocol().toLowerCase().equals("https")) || fileURL.getHost().equals(""))
+		String protocol = fileURL.getProtocol().toLowerCase();
+		if((!protocol.equals("http") && !protocol.equals("https")) || fileURL.getHost()==null)
 			throw new IOException();
 		
+		this.url = url;
+
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+url.toExternalForm()+" content-type guess="+URLConnection.guessContentTypeFromName(url.getFile()));
+		
+//		// urlString is url-encoded
+//		this.fileURL = new FileURL(urlString);
+//		this.urlString = url.toExternalForm();
+
 		// Determine file name (URL-decoded)
 		this.name = fileURL.getFilename(true);
 		// Name may contain '/' or '\' characters once decoded, let's remove them
-		name = name.replace('/', ' ');
-		name = name.replace('\\', ' ');
+		if(name!=null) {
+			name = name.replace('/', ' ');
+			name = name.replace('\\', ' ');
+		}
 
 		String mimeType;
 		// Test if based on the URL, the file looks like an HTML file :
@@ -129,11 +133,14 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+c
 //	}
 
 	public String getName() {
+		if(name==null)
+			return fileURL.getHost();
 		return name;
 	}
 
 	public String getAbsolutePath() {
-		return urlString;
+//		return urlString;
+		return fileURL.getURL(true);
 	}
 
 	public String getSeparator() {
@@ -142,6 +149,11 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+c
 
 	public long getDate() {
 		return date;
+	}
+	
+	public boolean changeDate(long date) {
+		// File is read-only, return false
+		return false;
 	}
 	
 	public long getSize() {
@@ -154,7 +166,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+c
 			if(parentURL==null)
 				this.parent = null;
 			else {
-				try { this.parent = new HTTPFile(parentURL.getURL(false)); }
+				try { this.parent = new HTTPFile(parentURL); }
 				catch(IOException e) {} // No problem, no parent that's all
 			}
 			this.parentValSet = true;
@@ -320,6 +332,8 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): Location header 
 			String prevToken = "";
 			int tokenType;
 			HTTPFile child;
+			URL childURL;
+			FileURL childFileURL;
 			
 			while((tokenType=st.nextToken())!=StreamTokenizer.TT_EOF) {
 				token = st.sval;
@@ -333,16 +347,14 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): Location header 
 //							if(token.toLowerCase().startsWith("http://") || (!token.equals("") && token.charAt(0)=='/')) {
 						if((prevToken.equalsIgnoreCase("href") || prevToken.equalsIgnoreCase("src")) && !(token.startsWith("mailto") || token.startsWith("MAILTO") || token.startsWith("#"))) {
 							if(!childrenURL.contains(token)) {
-//if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+contextURL);
-//								child = new HTTPFile(new URL(contextURL, token));
 if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+contextURL);
-								child = new HTTPFile(new URL(contextURL, token));
+								childURL = new URL(contextURL, token);
+								childFileURL = new FileURL(childURL.toExternalForm());
+								child = new HTTPFile(childFileURL, childURL);
 								// Recycle this file for parent whenever possible
 if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): recycle_parent="+child.fileURL.equals(this.fileURL));
-								if(child.fileURL.equals(this.fileURL))
+								if(childFileURL.equals(this.fileURL))
 									child.setParent(this);
-
-//if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): parent="+child.getParent());
 
 								children.add(AbstractFile.wrapArchive(child));
 								childrenURL.add(token);

@@ -17,7 +17,7 @@ public class FTPFile extends AbstractFile {
 	/** Sets whether passive mode should be used for data transfers (default is true) */ 
 	private boolean passiveMode = true;
 
-	private FileURL fileURL;
+//	private FileURL fileURL;
 
     protected String absPath;
 
@@ -75,7 +75,7 @@ if(com.mucommander.Debug.ON) System.out.println("FTPOutputStream.close: exceptio
 	}
 
 	
-	public FTPFile(String fileURL) throws IOException {
+	public FTPFile(FileURL fileURL) throws IOException {
 		this(fileURL, true, null);
 	}
 
@@ -83,28 +83,25 @@ if(com.mucommander.Debug.ON) System.out.println("FTPOutputStream.close: exceptio
 	/**
 	 * Creates a new instance of FTPFile and initializes the FTP connection to the server.
 	 */
-	private FTPFile(String url, boolean addAuthInfo, FTPClient ftpClient) throws IOException {
-//	 	if(!fileURL.endsWith("/"))
-//			fileURL += '/';
+	private FTPFile(FileURL fileURL, boolean addAuthInfo, FTPClient ftpClient) throws IOException {
+		super(fileURL);
 		
-		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
-		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem
-		this.fileURL = new FileURL(url);
 		this.absPath = this.fileURL.getPath();
-		
+				
 		if(ftpClient==null)
 			// Initialize connection
-			initConnection(this.fileURL, addAuthInfo);
+			initConnection(fileURL, addAuthInfo);
 		else
 			this.ftpClient = ftpClient;
 	
-		initFile(this.fileURL);
+		initFile(fileURL);
 	}
 
 	
 	private FTPFile(FileURL fileURL, org.apache.commons.net.ftp.FTPFile file, FTPClient ftpClient) {
-		this.fileURL = fileURL;
-		this.absPath = this.fileURL.getPath();
+		super(fileURL);
+
+		this.absPath = fileURL.getPath();
 		this.file = file;
 		this.ftpClient = ftpClient;
 		this.fileExists = true;
@@ -321,6 +318,11 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 		return file.getTimestamp().getTime().getTime();
     }
 	
+	public boolean changeDate(long lastModified) {
+		// No way that I know of to change date in Commons-net API
+		return false;
+	}
+	
 	public long getSize() {
 		return file.getSize();
 	}
@@ -331,7 +333,7 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 			FileURL parentFileURL = this.fileURL.getParent();
 			if(parentFileURL!=null) {
 if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getURL(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
-				try { this.parent = new FTPFile(parentFileURL.getURL(true), false, this.ftpClient); }
+				try { this.parent = new FTPFile(parentFileURL, false, this.ftpClient); }
 				catch(IOException e) {}
 			}
 
@@ -422,19 +424,17 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
 
 		
 	public boolean moveTo(AbstractFile destFile) throws IOException {
-		if(destFile instanceof FTPFile) {
-			FTPFile destFTPFile = (FTPFile)destFile;
+		// If destination file is an FTP file located on the same server,
+		// have the server rename the file.
+		if(destFile.fileURL.getProtocol().equals("ftp") && destFile.fileURL.getHost().equals(this.fileURL.getHost())) {
+			// Check connection and reconnect if connection timed out
+			checkConnection();
 			
-			if(destFTPFile.fileURL.getHost().equals(this.fileURL.getHost())) {
-				// Check connection and reconnect if connection timed out
-				checkConnection();
-				
-				try {
-					return ftpClient.rename(absPath, destFTPFile.absPath);
-				}
-				catch(IOException e) {
-					return false;
-				}
+			try {
+				return ftpClient.rename(absPath, destFile.getURL().getPath());
+			}
+			catch(IOException e) {
+				return false;
 			}
 		}
 		

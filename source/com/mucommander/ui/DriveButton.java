@@ -67,12 +67,10 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	 */
 	public void updateText(AbstractFile folder) {
 		// Update button text
-//		if(folder instanceof RemoteFile) {
-//			setText(((RemoteFile)folder).getProtocol());
-//		}
-		// Non local file using some remote protocol
-		if(!folder.getProtocol().equals("FILE")) {
-			setText(folder.getProtocol());
+		String protocol = folder.getURL().getProtocol();
+		// Non local file
+		if(!protocol.equals("file")) {
+			setText(protocol.toUpperCase());
 		}
 		// Local file
 		else {
@@ -119,6 +117,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		popupMenu.add(new JSeparator());
 
 		addMenuItem("FTP...");
+		addMenuItem("SFTP...");
 		addMenuItem("SMB...");
 		addMenuItem("HTTP...");
 

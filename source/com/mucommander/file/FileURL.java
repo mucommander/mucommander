@@ -24,12 +24,6 @@ public class FileURL implements Cloneable {
 	private String query;
 	
 	
-	public FileURL(FileURL parentURL, String childPath) {
-		String parentURLString = parentURL.getURL(true);
-		this(parentURLString+(parentURLString.endsWith("/")?"":"/")+childPath);
-	}
-	
-	
 	/**
 	 * Creates a new FileURL from the given URL string.
 	 */
@@ -47,7 +41,6 @@ public class FileURL implements Cloneable {
 			pos += 3;
 			
 			// Parse login and password and they have been specified
-//			int atPos = url.indexOf('@', pos);		
 			int atPos = url.lastIndexOf('@');		// Last index because password can contain an '@' if it's an email address
 			int colonPos;
 			if(atPos!=-1) {
@@ -73,6 +66,9 @@ public class FileURL implements Cloneable {
 				hostEndPos = urlLen;
 			
 			host = url.substring(pos, colonPos==-1?hostEndPos:colonPos).trim();
+			if(host.equals(""))
+				host = null;
+				
 			if(colonPos!=-1)
 				port = Integer.parseInt(url.substring(colonPos+1, hostEndPos).trim());
 		
@@ -89,7 +85,8 @@ public class FileURL implements Cloneable {
 		
 			// Extract filename and parent from path
 			if(path.equals("") || path.equals("/")) {
-				filename = host;
+//				filename = "/";
+				filename = null;
 				// parent is null
 			}
 			else {	
@@ -97,15 +94,16 @@ public class FileURL implements Cloneable {
 				int len = path.length();
 				slashPos = (path.endsWith("/")?path.substring(0, --len):path).lastIndexOf('/');
 				filename = path.substring(slashPos+1, len).trim();
+				if(filename.equals(""))
+					filename = null;
 //				if(urlDecode)
 //					try { filename = URLDecoder.decode(filename); }
 //					catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 				
 				len = url.length();
 				slashPos = (url.endsWith("/")?url.substring(0, --len):url).lastIndexOf('/');
-				if(slashPos>7) {
+				if(slashPos>7)
 					parent = url.substring(0, slashPos);
-				}
 			}
 		}
 		catch(MalformedURLException e) {
@@ -269,10 +267,8 @@ public class FileURL implements Cloneable {
 			s += "@";
 		}
 
-		if(host.equals(""))
-			return s;
-		
-		s += host;
+		if(host!=null)
+			s += host;
 		
 		if(port!=-1)
 			s += ":"+port;
@@ -318,7 +314,10 @@ public class FileURL implements Cloneable {
 			"ftp://mucommander.com:21/pub/incoming",
 			"ftp://mucommander.com:21/pub/incoming/",
 			"ftp://mucommander.com:21/pub/incoming/0day-warez.zip",
-			"ftp://anonymous:john.doe@somewhere.net@mucommander.com:21/pub/incoming/0day-warez.zip"
+			"ftp://anonymous:john.doe@somewhere.net@mucommander.com:21/pub/incoming/0day-warez.zip",
+			"sftp://maxence:blah@192.168.1.2",
+			"file://relative_path",
+			"file:///absolute_path"
 		};
 		
 		FileURL f;
@@ -327,6 +326,8 @@ public class FileURL implements Cloneable {
 				System.out.println("Creating "+urls[i]);
 				f = new FileURL(urls[i]); 
 				System.out.println("FileURL.toString()= "+f.toString());
+				System.out.println(" - path= "+f.getPath());
+				System.out.println(" - host= "+f.getHost());
 				System.out.println(" - filename= "+f.getFilename());
 				System.out.println(" - parent= "+f.getParent()+"\n");
 			}

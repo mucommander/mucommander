@@ -24,7 +24,7 @@ public class SFTPFile extends AbstractFile {
 	private SshClient sshClient;
 	SftpSubsystemClient sftpChannel;
 
-	private FileURL fileURL;
+//	private FileURL fileURL;
 
     protected String absPath;
 
@@ -46,22 +46,18 @@ public class SFTPFile extends AbstractFile {
 	/**
 	 * Creates a new instance of SFTPFile and initializes the SSH/SFTP connection to the server.
 	 */
-	public SFTPFile(String fileURL) throws IOException {
+	public SFTPFile(FileURL fileURL) throws IOException {
 		this(fileURL, true, null, null);
 	}
 
 	
 	/**
-	 * Creates a new instance of FTPFile and reuses the given SSH/SFTP active connection.
-	 *
-	 * @param 
+	 * Creates a new instance Sof FTPFile and reuses the given SSH/SFTP active connection.
 	 */
-	private SFTPFile(String url, boolean addAuthInfo, SshClient sshClient, SftpSubsystemClient sftpChannel) throws IOException {
+	private SFTPFile(FileURL fileURL, boolean addAuthInfo, SshClient sshClient, SftpSubsystemClient sftpChannel) throws IOException {
+		super(fileURL);
 
-		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
-		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem
-		this.fileURL = new FileURL(url);
-		this.absPath = this.fileURL.getPath();
+		this.absPath = fileURL.getPath();
 		
 		if(sshClient==null)
 			// Initialize connection
@@ -85,7 +81,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Cannot retrieve file "
 
 	
 	private SFTPFile(FileURL fileURL, SftpFile file, SshClient sshClient, SftpSubsystemClient sftpChannel) throws IOException {
-		this.fileURL = fileURL;
+		super(fileURL);
 		this.absPath = this.fileURL.getPath();
 		this.file = file;
 		this.sshClient = sshClient;
@@ -188,6 +184,21 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isConnected= "+sshClie
 	public long getDate() {
 		return file==null?0:file.getAttributes().getModifiedTime().longValue()*1000;
 	}
+
+	public boolean changeDate(long lastModified) {
+		try {
+			SftpFile sftpFile = sftpChannel.openFile(absPath, SftpSubsystemClient.OPEN_WRITE);
+			FileAttributes attributes = sftpFile.getAttributes();
+			attributes.setTimes(attributes.getAccessedTime(), new UnsignedInteger32(lastModified/1000));
+			sftpChannel.setAttributes(sftpFile, attributes);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("return true");
+			return true;
+		}
+		catch(IOException e) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("return false "+e);
+			return false;
+		}
+	}
 	
 	public long getSize() {
 		return file==null?0:file.getAttributes().getSize().longValue();
@@ -199,7 +210,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isConnected= "+sshClie
 			FileURL parentFileURL = this.fileURL.getParent();
 			if(parentFileURL!=null) {
 if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getURL(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
-				try { this.parent = new SFTPFile(parentFileURL.getURL(true), false, this.sshClient, this.sftpChannel); }
+				try { this.parent = new SFTPFile(parentFileURL, false, this.sshClient, this.sftpChannel); }
 				catch(IOException e) {}
 			}
 
@@ -286,29 +297,24 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file="+getAbsolutePath
 	
 
 	public boolean moveTo(AbstractFile destFile) throws IOException {
-		if(file==null)
-			throw new IOException();
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("instanceof SFTPFile "+(destFile instanceof SFTPFile));
-
-		if(destFile instanceof SFTPFile) {
-			SFTPFile destSFTPFile = (SFTPFile)destFile;
-
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("host equality= "+(destSFTPFile.fileURL.getHost().equals(this.fileURL.getHost())));
+		// If destination file is an SFTP file located on the same server,
+		// have the server rename the file.
+		if(destFile.fileURL.getProtocol().equals("sftp") && destFile.fileURL.getHost().equals(this.fileURL.getHost())) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("host equality= "+(destFile.fileURL.getHost().equals(this.fileURL.getHost())));
 			
-			if(destSFTPFile.fileURL.getHost().equals(this.fileURL.getHost())) {
-				// Check connection and reconnect if connection timed out
-				checkConnection();
-				
-				try { 
-					sftpChannel.renameFile(absPath, destSFTPFile.absPath);
+			// Check connection and reconnect if connection timed out
+			checkConnection();
+			
+			try { 
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("renameTo "+absPath+" -> "+destFile.getURL().getPath());
+				sftpChannel.renameFile(absPath, destFile.getURL().getPath());
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returns true");
-					return true;
-				}
-				catch(IOException e) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returns false");
-					return false;
-				}
+				return true;
+			}
+			catch(IOException e) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returns false: "+e);
+				return false;
 			}
 		}
 		

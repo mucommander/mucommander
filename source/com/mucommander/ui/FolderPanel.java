@@ -216,7 +216,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 
 			// Saves last folder recallable on startup
 //			if(!(folder instanceof RemoteFile))
-			if(folder.getProtocol().equals("FILE") && folder.isDirectory())
+			if(folder.getURL().getProtocol().equals("file") && folder.isDirectory())
 				this.lastFolderOnExit = folder.getAbsolutePath();
 			
 			// Notifies listeners that location has changed

@@ -167,6 +167,10 @@ public class CopyJob extends ExtendedFileJob {
 						nextFile(subFiles[i]);
 						processFile(subFiles[i], destFile);
 					}
+
+					// Only when finished with folder, set folder's date to original folder's
+					destFile.changeDate(file.getDate());
+
 					return true;
 				}
 				catch(IOException e) {
@@ -228,7 +232,12 @@ public class CopyJob extends ExtendedFileJob {
 			}
 
 			// Copy the file
-			return tryCopyFile(file, destFile, append, errorDialogTitle);
+			boolean success = tryCopyFile(file, destFile, append, errorDialogTitle);
+			
+			// Set file date to original's
+			destFile.changeDate(file.getDate());
+			
+			return success;
 		}
 	}
 

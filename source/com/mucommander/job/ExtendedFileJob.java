@@ -97,7 +97,7 @@ if(com.mucommander.Debug.ON) e1.printStackTrace();
 if(com.mucommander.Debug.ON) e2.printStackTrace();
 				throw new FileJobException(FileJobException.CANNOT_OPEN_DESTINATION);
 			}
-	
+
 			// Try to copy InputStream to OutputStream
 			try  { return copyStream(in, out); }
 			catch(IOException e3) {

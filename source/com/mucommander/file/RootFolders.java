@@ -90,7 +90,8 @@ public class RootFolders {
 
 		int nbFolders = fileRoots.length;
 		for(int i=0; i<nbFolders; i++)
-			v.add(new FSFile(fileRoots[i]));		
+			try { v.add(new FSFile(fileRoots[i])); }
+			catch(IOException e) {}
 	}
 	
 

@@ -9,6 +9,7 @@ import com.mucommander.PlatformManager;
  * FSFile represents a 'file system file', that is a regular native file.
  */
 public class FSFile extends AbstractFile {
+
 	/** "/" for UNIX systems, "\" for Win32 */
 	protected final static String separator = File.separator;
 
@@ -29,30 +30,48 @@ public class FSFile extends AbstractFile {
 	// Indicates whether or not the value has already been retrieved
 	private boolean parentValCached = false;
 		
-		
+
 	/**
-	 * Creates a new instance of FSFile.
+	 * Convenience constructor.
 	 */
-	public FSFile(FileURL fileURL) {
-		this(fileURL, new File(absPath));
+	public FSFile(String absPath) throws IOException {
+		this(new FileURL("file://"+absPath), new File(absPath));
 	}
 
 
 	/**
+	 * Convenience constructor.
+	 */
+	public FSFile(File file) throws IOException {
+		this(new FileURL("file://"+file.getAbsolutePath()), file);
+	}
+
+		
+	/**
 	 * Creates a new instance of FSFile.
 	 */
-	public FSFile(FileURL fileURL, File _file) {
+	public FSFile(FileURL fileURL) throws IOException {
+		this(fileURL, new File(fileURL.getPath()));
+	}
+
+
+	/**
+	 * Creates a new FSFile using the given java.io.File instance.
+	 */
+	private FSFile(FileURL fileURL, File _file) throws IOException {
 		super(fileURL);
 
+		// Throw an exception is the file's path is not absolute.
+		// Host part in file URL should be null, if not it means that path is
+		// relative, since file URL have no hostname
+		if(!_file.isAbsolute() || fileURL.getHost()!=null)
+			throw new IOException();
+
+		this.file = _file;
 		this.absPath = _file.getAbsolutePath();
 
         // removes trailing separator (if any)
-        this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
-
-		if(!_file.isAbsolute())
-			this.file = new File(absPath);
-		else
-			this.file = _file;
+        this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;		
 	}
 
 	
@@ -135,6 +154,10 @@ public class FSFile extends AbstractFile {
         return file.lastModified();
 	}
 	
+	public boolean changeDate(long lastModified) {
+		return file.setLastModified(lastModified);
+	}
+		
 	public long getSize() {
         return file.length();
 	}
@@ -142,9 +165,15 @@ public class FSFile extends AbstractFile {
 	public AbstractFile getParent() {
 		// Retrieves parent and caches it
 		if (!parentValCached) {
-			String parentS = file.getParent();
-			if(parentS != null)
-				parent = new FSFile(new File(parentS));
+//			String parentS = file.getParent();
+//			if(parentS != null)
+//				try { parent = new FSFile(new FileURL("file://"+parentS), new File(parentS)); }
+//				catch(IOException e) {}
+
+			FileURL parentURL = getURL().getParent();
+			if(parentURL != null)
+				try { parent = new FSFile(parentURL, new File(parentURL.getPath())); }
+				catch(IOException e) {}
 			parentValCached = true;
 		}
         return parent;
@@ -156,6 +185,8 @@ public class FSFile extends AbstractFile {
 	}
 		
 	public boolean exists() {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exists= "+file.exists()+" path="+file.getAbsolutePath()+" absPath="+absPath, 2);
+
 		return file.exists();
 	}
 	
@@ -205,9 +236,9 @@ public class FSFile extends AbstractFile {
 		return new FileOutputStream(absPath, append);
 	}
 		
-	public boolean moveTo(AbstractFile dest) throws IOException  {
-		if (dest instanceof FSFile)
-			return file.renameTo(new File(dest.getAbsolutePath()));
+	public boolean moveTo(AbstractFile destFile) throws IOException  {
+		if(destFile.fileURL.getProtocol().equals("file"))
+			return file.renameTo(new File(destFile.getAbsolutePath()));
 		return false;
 	}
 
@@ -229,9 +260,9 @@ public class FSFile extends AbstractFile {
             throw new IOException();
         
         AbstractFile children[] = new AbstractFile[names.length];
-		for(int i=0; i<names.length; i++) {
+		for(int i=0; i<names.length; i++)
 			children[i] = AbstractFile.getAbstractFile(absPath+separator+names[i], this);
-		}
+
 		return children;
 	}
 

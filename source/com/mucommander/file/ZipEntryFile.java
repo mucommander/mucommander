@@ -42,6 +42,11 @@ public class ZipEntryFile extends AbstractEntryFile {
 		return zipEntry.getTime();
 	}
 	
+	public boolean changeDate(long lastModified) {
+		// Entries are read-only
+		return false;
+	}
+
 	public long getSize() {
 		return zipEntry.getSize();
 	}

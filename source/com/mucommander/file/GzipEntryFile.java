@@ -24,6 +24,11 @@ public class GzipEntryFile extends AbstractEntryFile {
 		return archiveFile.getDate();
 	}
 	
+	public boolean changeDate(long lastModified) {
+		// Entries are read-only
+		return false;
+	}
+
 	public long getSize() {
 		return -1;
 	}

@@ -40,7 +40,7 @@ public abstract class AbstractFile {
 			return getAbstractFile(absPath, null);
 		}
 		catch(IOException e) {
-			if(com.mucommander.Debug.ON) e.printStackTrace();
+//			if(com.mucommander.Debug.ON) e.printStackTrace();
 			return null;
 		}
 	}
@@ -88,24 +88,29 @@ public abstract class AbstractFile {
 //		if((path.endsWith("/") && path.length()>1) || (path.endsWith("\\") && path.charAt(path.length()-2)!=':'))
 //			path = path.substring(0, path.length()-1);
 
-		// Lower case absolute path
-		String absPathLC = absPath.toLowerCase();
+		// If path contains no protocol, consider the file as a local file
+		FileURL fileURL = new FileURL(absPath.indexOf("://")==-1?"file://"+absPath:absPath);
 
+		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
+		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem		
+
+		String protocol = fileURL.getProtocol().toLowerCase();
+		
+		// FS file (local filesystem)
+		if (protocol.equals("file"))
+			file = new FSFile(fileURL);
 		// SMB file
-		if (absPathLC.startsWith("smb://"))
-			file = new SMBFile(absPath);
+		else if (protocol.equals("smb"))
+			file = new SMBFile(fileURL);
 		// HTTP/HTTPS file
-		else if (absPathLC.startsWith("http://") || absPathLC.startsWith("https://"))
-			file = new HTTPFile(absPath);
+		else if (protocol.equals("http") || protocol.equals("https"))
+			file = new HTTPFile(fileURL);
 		// FTP file
-		else if (absPathLC.startsWith("ftp://"))
-			file = new FTPFile(absPath);
+		else if (protocol.equals("ftp"))
+			file = new FTPFile(fileURL);
 		// SFTP file
-		else if (absPathLC.startsWith("sftp://"))
-			file = new SFTPFile(absPath);
-		// FS file, test if the given path is indeed absolute
-		else if (new File(absPath).isAbsolute())
-			file = new FSFile(absPath);
+		else if (protocol.equals("sftp"))
+			file = new SFTPFile(fileURL);
 		else
 			return null;
 
@@ -252,9 +257,17 @@ public abstract class AbstractFile {
 	public abstract String getSeparator();
 	
 	/**
-	 * Returns a date associated with this AbstractFile.
+	 * Returns the last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
 	 */
 	public abstract long getDate();
+	
+	/**
+	 * Changes last modified date and returns <code>true</code> if date was changed successfully.
+	 *
+	 * @param lastModified last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
+	 * @return <code>true</code> if date was changed successfully.
+	 */
+	public abstract boolean changeDate(long lastModified);
 	
 	/**
 	 * Returns the size in bytes of this AbstractFile.

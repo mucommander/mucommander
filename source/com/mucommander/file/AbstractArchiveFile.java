@@ -44,6 +44,10 @@ public abstract class AbstractArchiveFile extends AbstractFile implements Archiv
 		return file.getDate();
 	}
 	
+	public boolean changeDate(long date) {
+		return file.changeDate(date);
+	}
+	
 	public long getSize() {
 		return file.getSize();
 	}

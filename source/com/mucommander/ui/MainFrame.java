@@ -385,7 +385,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		String currentPath = currentFolder.getAbsolutePath(true);
 		AbstractFile destFolder;
 
-if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): path="+destPath+" currentPath="+currentPath);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("destPath="+destPath+" currentPath="+currentPath);
 
 		String newName = null;
 
@@ -395,12 +395,14 @@ if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): path="
 		if ((destFolder=AbstractFile.getAbstractFile(destPath))!=null 
 		 && destFolder.exists()
 		 && destFolder.isDirectory()) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+destPath);
 		}
 
 		// destPath points to an existing folder relative to current folder
 		else if ((destFolder=AbstractFile.getAbstractFile(currentPath+destPath))!=null
 		 && destFolder.exists()
 		 && destFolder.isDirectory()) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+currentPath+destPath);
 		}
 
 		// Level 1, path includes a new destination filename
@@ -422,18 +424,20 @@ if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): path="
 				destPath = "";
 			}			
 
-if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): level1, destPath="+destPath+" newname="+newName);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("level1, destPath="+destPath+" newname="+newName);
 			// destPath points to an absolute and existing folder
-			if ((destFolder=AbstractFile.getAbstractFile(destPath))!=null && destFolder.exists()) {
+			if (!destPath.equals("") && (destFolder=AbstractFile.getAbstractFile(destPath))!=null && destFolder.exists()) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+destPath+" newname="+newName);
 			}
 			
 //if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): level1b, destPath="+currentPath+destPath+" exists="+AbstractFile.getAbstractFile(currentPath+destPath).exists());
 			// destPath points to an existing folder relative to current folder
 			else if ((destFolder=AbstractFile.getAbstractFile(currentPath+destPath))!=null && destFolder.exists()) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+currentPath+destPath+" newname="+newName);
 			}
 
 			else {
-if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): returning null");
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("no match, returning null");
 				return null;
 			}
 		}
