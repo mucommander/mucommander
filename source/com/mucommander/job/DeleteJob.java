@@ -58,7 +58,7 @@ public class DeleteJob extends FileJob {
 	 */
     protected boolean processFile(AbstractFile file, Object recurseParams) {
 		String filePath = file.getAbsolutePath();
-		filePath = filePath.substring(baseSourceFolder.getAbsolutePath().length()+1, filePath.length());
+		filePath = filePath.substring(baseSourceFolder.getAbsolutePath(false).length()+1, filePath.length());
 
 		if(isInterrupted())
             return false;

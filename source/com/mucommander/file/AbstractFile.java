@@ -247,7 +247,7 @@ public abstract class AbstractFile {
 	/**
 	 * Sets this file's parent or null if it doesn't have any parent.
 	 */
-	protected abstract void setParent(AbstractFile parent);
+	public abstract void setParent(AbstractFile parent);
 
 	/**
 	 * Returns <code>true</code> if this file exists.

@@ -193,7 +193,7 @@ public class FSFile extends AbstractFile {
         return parent;
 	}
 	
-	protected void setParent(AbstractFile parent) {
+	public void setParent(AbstractFile parent) {
 		this.parent = (FSFile)parent;	
 		this.parentValCached = true;
 	}

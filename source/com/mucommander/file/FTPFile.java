@@ -333,7 +333,7 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 		if(!parentValSet) {
 			FileURL parentFileURL = this.fileURL.getParent();
 			if(parentFileURL!=null) {
-if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getURL(true)+" sig="+com.mucommander.Debug.getCallerSignature());
+if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getURL(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
 				try { this.parent = new FTPFile(parentFileURL.getURL(true), false, this.ftpClient); }
 				catch(IOException e) {}
 			}
@@ -346,7 +346,7 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
     }
 	
 	
-	protected void setParent(AbstractFile parent) {
+	public void setParent(AbstractFile parent) {
 		this.parent = parent;
 		this.parentValSet = true;
 	}

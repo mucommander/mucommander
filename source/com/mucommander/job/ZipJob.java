@@ -50,7 +50,7 @@ public class ZipJob extends ExtendedFileJob {
 		this.destFile = destFile;
 		this.zipComment = zipComment;
 
-		this.baseFolderPath = baseSourceFolder.getAbsolutePath();
+		this.baseFolderPath = baseSourceFolder.getAbsolutePath(false);
 		this.errorDialogTitle = Translator.get("zip_dialog.error_title");
 	}
 
@@ -104,8 +104,8 @@ public class ZipJob extends ExtendedFileJob {
 		if(isInterrupted())
 			return false;
 
-		String filePath = file.getAbsolutePath();
-		String zipEntryRelativePath = filePath.substring(baseFolderPath.length(), filePath.length());
+		String filePath = file.getAbsolutePath(false);
+		String zipEntryRelativePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
 
 		// Process current file
 		do {		// Loop for retry

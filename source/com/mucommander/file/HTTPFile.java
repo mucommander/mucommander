@@ -47,7 +47,7 @@ public class HTTPFile extends AbstractFile {
 		this.url = url;
 		this.urlString = url.toExternalForm();
 
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+urlString);
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+urlString+" content-type guess="+URLConnection.guessContentTypeFromName(url.getFile()));
 		
 		// urlString is url-encoded
 		this.fileURL = new FileURL(urlString);
@@ -164,7 +164,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+c
 	}
 	
 
-	protected void setParent(AbstractFile parent) {
+	public void setParent(AbstractFile parent) {
 		this.parent = parent;
 		this.parentValSet = true;
 	}
@@ -413,6 +413,8 @@ System.out.println("att="+att);
 			throw new IOException();
 		}
 		finally {
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): ends");
+
 			try {
 				// Try and close URL connection
 				if(br!=null)

@@ -51,7 +51,7 @@ public abstract class AbstractArchiveFile extends AbstractFile implements Archiv
 		return file.getParent();
 	}
 	
-	protected void setParent(AbstractFile parent) {
+	public void setParent(AbstractFile parent) {
 		this.file.setParent(parent);	
 	}	
 

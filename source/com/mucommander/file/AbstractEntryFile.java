@@ -41,7 +41,7 @@ public abstract class AbstractEntryFile extends AbstractFile {
 		return parent;
 	}
 	
-	protected void setParent(AbstractFile parent) {
+	public void setParent(AbstractFile parent) {
 		this.parent = parent;	
 	}
 	

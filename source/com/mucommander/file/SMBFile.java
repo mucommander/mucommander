@@ -118,7 +118,7 @@ public class SMBFile extends AbstractFile {
 		return this.parent;
     }
 	
-	protected void setParent(AbstractFile parent) {
+	public void setParent(AbstractFile parent) {
 		this.parent = parent;	
 		this.parentValSet = true;
 	}
