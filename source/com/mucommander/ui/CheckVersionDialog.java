@@ -2,6 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
+import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.*;
 import com.mucommander.text.Translator;
 
@@ -29,6 +30,7 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 
     private String downloadURL;
 
+	
 	/**
      * Checks for updates and displays the result
      *
@@ -132,7 +134,8 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 
 		// Selects OK when enter is pressed
 		getRootPane().setDefaultButton(okButton);
-
+		FocusRequester.requestFocus(okButton);
+		
 		// Packs dialog
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         showDialog();

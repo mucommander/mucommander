@@ -22,7 +22,7 @@ import java.io.*;
 import java.util.Vector;
 
 
-public class FolderPanel extends JPanel implements ActionListener, PopupMenuListener, KeyListener, FocusListener, ConfigurationListener {
+public class FolderPanel extends JPanel implements ActionListener, KeyListener, FocusListener, ConfigurationListener {
 	private MainFrame mainFrame;
     
     private AbstractFile currentFolder;
@@ -34,16 +34,12 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		it calls actionPerformed() each time an item is highlighted with the arrow (UP/DOWN) keys,
 		so there is no way to tell if it's the final selection (ENTER) or not.
 	*/
-	private JButton rootButton;
-	private JPopupMenu rootPopup;
-	private Vector rootMenuItems;
+	private DriveButton driveButton;
 	private JTextField locationField;
 	private boolean locationFieldTextSet;
 	
 	private FileTable fileTable;
 	private JScrollPane scrollPane;
-	
-	private static AbstractFile rootFolders[];
 	
     private static Color backgroundColor;
 
@@ -62,8 +58,6 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 
 	
 	static {
-		rootFolders = RootFolders.getRootFolders();
-
 		// Set background color
 		backgroundColor = FileTableCellRenderer.getColor("prefs.colors.background", "000084");
 	}
@@ -73,74 +67,49 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		super(new BorderLayout());
 
         this.mainFrame = mainFrame;
-/*
-		JPanel locationPanel = new JPanel(new BorderLayout()) {
-			public Insets getInsets() {
-				return new Insets(6, 8, 6, 8);
-			}
-		
-//			public Border getBorder() {
-//				return null;
-//			}
-		};
-*/		
 
 		XBoxPanel locationPanel = new XBoxPanel();
 		locationPanel.setInsets(new Insets(0, 6, 6, 0));
-		
-		rootButton = new JButton(rootFolders[0].toString());
-		// For Mac OS X whose minimum width for buttons is enormous
-		rootButton.setMinimumSize(new Dimension(40, (int)rootButton.getPreferredSize().getHeight()));
-//		rootButton.setMargin(new Insets(6,8,6,8));
-		
-		rootButton.addActionListener(this);
-		rootPopup = new JPopupMenu();
-		rootPopup.addPopupMenuListener(this);
-		rootMenuItems = new Vector();
-		JMenuItem menuItem;
-		for(int i=0; i<rootFolders.length; i++) {
-			menuItem = new JMenuItem(rootFolders[i].toString());
-			menuItem.addActionListener(this);
-			rootMenuItems.add(menuItem);
-			rootPopup.add(menuItem);
-		}
 
-//		locationPanel.add(rootButton, BorderLayout.WEST);
-		locationPanel.add(rootButton);
+		this.driveButton = new DriveButton(this);
+		// Listen to location changed events to update button's text when folder changes
+		addLocationListener(driveButton);
+		
+		locationPanel.add(driveButton);
 		locationPanel.addSpace(6);
 
 		locationField = new JTextField();
 		locationField.addActionListener(this);
 		locationField.addKeyListener(this);
 		locationField.addFocusListener(this);
-//		locationPanel.add(locationField, BorderLayout.CENTER);
 		locationPanel.add(locationField);
 
 		add(locationPanel, BorderLayout.NORTH);
 		fileTable = new FileTable(mainFrame, this);
 
-		// Initializes history vector
+		// Initialize history vector
 		history = new Vector();
     	historyIndex = -1;
 		
 		try {
-			// Sets initial folder to current directory
+			// Set initial folder to current directory
 			_setCurrentFolder(initialFolder, true);
 		}
 		catch(Exception e) {
-			// If that failed, tries to read any other drive
-				for(int i=0; i<rootFolders.length; i++) {
-					try  {
-						_setCurrentFolder(rootFolders[i], true);
-						break;
-					}
-					catch(IOException e2) {
-						if (i==rootFolders.length-1) {
-							// Now we're screwed
-							throw new RuntimeException("Unable to read any drive");
-						}
-					}					
+			AbstractFile rootFolders[] = RootFolders.getRootFolders();
+			// If that failed, try to read any other drive
+			for(int i=0; i<rootFolders.length; i++) {
+				try  {
+					_setCurrentFolder(rootFolders[i], true);
+					break;
 				}
+				catch(IOException e2) {
+					if (i==rootFolders.length-1) {
+						// Now we're screwed
+						throw new RuntimeException("Unable to read any drive");
+					}
+				}					
+			}
 		}
 
 		locationField.setText(currentFolder.getAbsolutePath(true));
@@ -186,9 +155,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 
 	
 	public void showRootBox() {
-		rootPopup.show(rootButton, 0, rootButton.getHeight());		
-//		rootPopup.requestFocus();
-		FocusRequester.requestFocus(rootPopup);
+		driveButton.popup();
 	}
 	
 
@@ -197,9 +164,9 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	}
 
 	
-	public boolean hasFocus() {
-		return super.hasFocus() || locationField.hasFocus() || fileTable.hasFocus() || rootPopup.hasFocus() || rootButton.hasFocus();
-	}
+//	public boolean hasFocus() {
+//		return super.hasFocus() || locationField.hasFocus() || fileTable.hasFocus() || rootPopup.hasFocus() || rootButton.hasFocus();
+//	}
 	
 
 	private void _setCurrentFolder(AbstractFile folder, boolean addToHistory) throws IOException {
@@ -212,28 +179,6 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			fileTable.setCurrentFolder(folder);
 			this.currentFolder = folder;
 
-			// Update root button text
-			if(folder instanceof RemoteFile) {
-				rootButton.setText(((RemoteFile)folder).getProtocol());
-			}
-			// FSFile
-			else {
-				String currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
-				int bestLength = -1;
-				int bestIndex = 0;
-				String temp;
-				int len;
-				for(int i=0; i<rootFolders.length; i++) {
-					temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
-					len = temp.length();
-					if (currentPath.startsWith(temp) && len>bestLength) {
-						bestIndex = i;
-						bestLength = len;
-					}
-				}
-				rootButton.setText(rootFolders[bestIndex].getName());
-			}
-			
 			locationField.setText(currentFolder.getAbsolutePath(true));
 			locationField.repaint();
 
@@ -423,7 +368,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	
 	
 	/**
-	 * Refreshes this panel's components: file table, root button and location field
+	 * Refreshes this panel's components: file table, drive button and location field
 	 * and notifies the user if current folder could not be refreshed.
 	 */
 	 public void refresh() {
@@ -455,7 +400,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		}
 		while(true);
 
-		rootButton.repaint();
+		driveButton.repaint();
 		locationField.repaint();
 	 }
 
@@ -466,9 +411,14 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	 */
 	public void dispose() {
 		ConfigurationManager.removeConfigurationListener(this);
+		removeLocationListener(driveButton);
 		fileTable.dispose();
 	}
+
 	
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
 	
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
@@ -527,29 +477,11 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 				locationField.setText(currentFolder.getAbsolutePath(true));
 			}
 		}
-		else if (source == rootButton)	 {
-			showRootBox();
-		}
-		// root menu items
-		else {		
-			if (rootMenuItems.indexOf(source)!=-1) {
-				int index = rootMenuItems.indexOf(source);
-
-				// Tries to change current folder
-				if (setCurrentFolder(rootFolders[index], true)) {
-					// if success, hide popup
-					rootPopup.setVisible(false);
-					
-					// and request focus on this file table
-					fileTable.requestFocus();
-				}
-			}
-		}
 	}
 
-	/***********************
-	 * KeyListener methods *
-	 ***********************/
+	/////////////////////////
+	// KeyListener methods //
+	/////////////////////////
 
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource()==locationField) {
@@ -567,24 +499,10 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	public void keyReleased(KeyEvent e) {
 	}
 
-
-	/*****************************
-	 * PopupMenuListener methods *
-	 *****************************/
 	 
-	public void popupMenuCanceled(PopupMenuEvent e) {
-	}
-
-	public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-		fileTable.requestFocus();
-	}
-
-	public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-	}
-	 
-	/**************************
-	 * Focus listener methods *
-	 **************************/
+	///////////////////////////
+	// FocusListener methods //
+	///////////////////////////
 	
 	public void focusGained(FocusEvent e) {
 		locationFieldTextSet = false;
@@ -599,9 +517,9 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	}
 	
 	 
-	/*********************************
-	 * ConfigurationListener methods *
-	 *********************************/
+	///////////////////////////////////
+	// ConfigurationListener methods //
+	///////////////////////////////////
 
     /** 
 	 * Listens to certain configuration variables.
