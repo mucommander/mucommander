@@ -95,7 +95,7 @@ skip:ES:Saltar
 retry:EN:Retry
 retry:FR:Réessayer
 retry:DE:Erneut versuchen
-retry:ES:
+retry:ES: Reintentar
 
 append:EN:Resume
 append:FR:Reprendre
@@ -415,7 +415,7 @@ mark_menu.compare_folders:ES:Comparar directorios
 view_menu:EN:View
 view_menu:FR:Vue
 view_menu:DE:Ansicht
-view_menu:ES:ver
+view_menu:ES:Ver
 
 view_menu.go_back:EN:Go back
 view_menu.go_back:FR:Dossier précédent
@@ -1924,14 +1924,17 @@ prefs_dialog.mail_server:ES:Servidor SMTP
 prefs_dialog.misc_tab:EN:Misc
 prefs_dialog.misc_tab:FR:Autres
 prefs_dialog.misc_tab:DE:Verschiedenes
+prefs_dialog.misc_tab:ES:Miscelánea
 
 prefs_dialog.use_brushed_metal:EN:Use 'brushed metal' look (requires restart)
 prefs_dialog.use_brushed_metal:FR:Utiliser le look 'brushed metal' (après redémarrage)
 prefs_dialog.use_brushed_metal:DE:'Brushed Metal' Look benutzen (Neustart nötig)
+prefs_dialog.use_brushed_metal:ES:Usar la apariencia 'brocha de metal' (requiere volver a arrancar)
 
 prefs_dialog.confirm_on_quit:EN:Show confirmation dialog on quit
 prefs_dialog.confirm_on_quit:FR:Afficher un dialogue de confirmation en quittant
 prefs_dialog.confirm_on_quit:DE:Bestätigung beim Beenden
+prefs_dialog.confirm_on_quit:ES:Mostrar diálogo de confirmación al salir
 
 
 #########
@@ -1941,29 +1944,29 @@ prefs_dialog.confirm_on_quit:DE:Bestätigung beim Beenden
 unit.byte:EN:byte
 unit.byte:FR:octet
 unit.byte:DE:Byte
-unit.byte:ES:Byte
+unit.byte:ES:byte
 
 unit.bytes:EN:bytes
 unit.bytes:FR:octets
 unit.bytes:DE:Bytes
-unit.bytes:ES:Bytes
+unit.bytes:ES:bytes
 
 unit.bytes_short:EN:b
 unit.bytes_short:FR:o
 unit.bytes_short:DE:B
-unit.bytes_short:ES:B
+unit.bytes_short:ES:b
 
 unit.kb:EN:KB
 unit.kb:FR:Ko
 unit.kb:DE:KB
-unit.kb:ES:KBytes
+unit.kb:ES:KB
 
 unit.mb:EN:MB
 unit.mb:FR:Mo
 unit.mb:DE:MB
-unit.mb:ES:MBytes
+unit.mb:ES:MB
 
 unit.gb:EN:GB
 unit.gb:FR:Go
 unit.gb:DE:GB
-unit.gb:ES:GBytes
+unit.gb:ES:GB
