@@ -72,14 +72,14 @@ if(com.mucommander.Debug.ON) System.out.println("FTPOutputStream.close: exceptio
 
 	
 	public FTPFile(String fileURL) throws IOException {
-		this(fileURL, true);
+		this(fileURL, true, null);
 	}
 
 	
 	/**
 	 * Creates a new instance of FTPFile and initializes the FTP connection to the server.
 	 */
-	private FTPFile(String url, boolean addAuthInfo) throws IOException {
+	private FTPFile(String url, boolean addAuthInfo, FTPClient ftpClient) throws IOException {
 //	 	if(!fileURL.endsWith("/"))
 //			fileURL += '/';
 		
@@ -88,8 +88,13 @@ if(com.mucommander.Debug.ON) System.out.println("FTPOutputStream.close: exceptio
 		this.fileURL = new FileURL(url);
 		this.absPath = this.fileURL.getPath();
 		
-		// Initialize connection
-		initConnection(this.fileURL, addAuthInfo);
+		if(ftpClient==null)
+			// Initialize connection
+			initConnection(this.fileURL, addAuthInfo);
+		else
+			this.ftpClient = ftpClient;
+	
+		initFile(this.fileURL);
 	}
 
 	
@@ -153,6 +158,13 @@ if(com.mucommander.Debug.ON) System.out.print("initConnection: connecting to "+f
 		this.ftpClient = new FTPClient();
 		
 		try {
+			int port = fileURL.getPort();
+if(com.mucommander.Debug.ON) System.out.println("initConnection: custom port="+port);
+			if(port!=-1)
+				ftpClient.setDefaultPort(port);
+
+if(com.mucommander.Debug.ON) System.out.println("initConnection: default timeout="+ftpClient.getDefaultTimeout());
+		
 			// Connect
 			ftpClient.connect(fileURL.getHost());
 if(com.mucommander.Debug.ON) System.out.println("initConnection: "+ftpClient.getReplyString());
@@ -160,7 +172,7 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: "+ftpClient.get
 			// Throw an IOException if server replied with an error
 			checkServerReply(ftpClient, fileURL);
 
-			AuthManager.authenticate(this.fileURL, addAuthInfo);
+			AuthManager.authenticate(fileURL, addAuthInfo);
 			AuthInfo authInfo = AuthInfo.getAuthInfo(fileURL);
 
 if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileURL.getURL(true)+" authInfo="+authInfo);
@@ -178,6 +190,7 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileU
 			// Set file type to 'binary'
 			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
 
+/*
 			this.file = getFTPFile(ftpClient, this.fileURL);
 			// If file doesn't exist (could not be resolved), create it
 			if(this.file==null) {
@@ -187,6 +200,7 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileU
 			else {
 				this.fileExists = true;
 			}
+*/
 		}
 		catch(IOException e) {
 			// Disconnect if something went wrong
@@ -195,6 +209,19 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileU
 
 			// Re-throw exception
 			throw e;
+		}
+	}
+
+
+	private void initFile(FileURL fileURL) throws IOException {
+		this.file = getFTPFile(ftpClient, fileURL);
+		// If file doesn't exist (could not be resolved), create it
+		if(this.file==null) {
+			this.file = createFTPFile(fileURL.getFilename(), false);
+			this.fileExists = false;
+		}
+		else {
+			this.fileExists = true;
 		}
 	}
 
@@ -299,7 +326,7 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 			FileURL parentFileURL = this.fileURL.getParent();
 			if(parentFileURL!=null) {
 if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getURL(true));
-				try { this.parent = new FTPFile(parentFileURL.getURL(true), false); }
+				try { this.parent = new FTPFile(parentFileURL.getURL(true), false, this.ftpClient); }
 				catch(IOException e) {}
 			}
 
@@ -420,7 +447,14 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
         // Check connection and reconnect if connection timed out
 		checkConnection(ftpClient);
 		
-		org.apache.commons.net.ftp.FTPFile files[] = ftpClient.listFiles(absPath);
+		org.apache.commons.net.ftp.FTPFile files[];
+		try { files = ftpClient.listFiles(absPath); }
+		// This exception is not an IOException and needs to be caught and rethrown
+		catch(org.apache.commons.net.ftp.parser.ParserInitializationException e) {
+if(com.mucommander.Debug.ON) System.out.println("FTPFile.ls(): ParserInitializationException");
+			throw new IOException();
+		}
+	
 		// Throw an IOException if server replied with an error
 		checkServerReply(ftpClient, fileURL);
 		

@@ -822,6 +822,12 @@ server_connect_dialog.username:FR:Nom d'utilisateur
 server_connect_dialog.password:EN:Password
 server_connect_dialog.password:FR:Mot de passe
 
+server_connect_dialog.initial_dir:EN:Initial directory
+server_connect_dialog.initial_dir:FR:Répertoire initial
+
+server_connect_dialog.port:EN:Port
+server_connect_dialog.port:FR:Port
+
 server_connect_dialog.server_url:EN:Server URL
 server_connect_dialog.server_url:FR:URL serveur
 

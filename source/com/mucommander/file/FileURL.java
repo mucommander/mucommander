@@ -141,6 +141,13 @@ public class FileURL implements Cloneable {
 		return port;
 	}
 	
+	/**
+	 * Sets a custom port.
+	 */
+	public void setPort(int port) {
+		this.port = port;
+	}
+	
 	
 	/**
 	 * Returns the login specified in this URL (e.g. maxence for ftp://maxence@mucommander.com),

@@ -213,36 +213,32 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	 */ 
 	private AbstractFile getInitialFolder(boolean left) {
 		
-		// Default path (if home folder or last folder doesn't exist or fails) is current drive
-		// for left folder and user home for right folder
+//		// Default path (if home folder or last folder doesn't exist or fails) is current drive
+//		// for left folder and user home for right folder
 		String defaultPath;
-		if (left) {				
-			AbstractFile tempFolder = new FSFile(new java.io.File(""));
-			AbstractFile tempParent;
-			while((tempParent=tempFolder.getParent())!=null)
-				tempFolder = tempParent;
+//		if (left) {				
+//			AbstractFile tempFolder = new FSFile(new java.io.File(""));
+//			AbstractFile tempParent;
+//			while((tempParent=tempFolder.getParent())!=null)
+//				tempFolder = tempParent;
 
-			defaultPath = tempFolder.getAbsolutePath(true);
-		}		
-		else {
+//			defaultPath = tempFolder.getAbsolutePath(true);
+//		}		
+//		else {
 			defaultPath = System.getProperty("user.home");
-		}
+//		}
 
 		// Initial path according to user preferences: either last folder or custom folder
-		String goTo = ConfigurationManager.getVariable("prefs.startup_folder."+(left?"left":"right")+".on_startup");
+		String goTo = ConfigurationManager.getVariable("prefs.startup_folder."+(left?"left":"right")+".on_startup", "lastFolder");
 		String folderPath = null;
-		if (goTo==null) {
-			ConfigurationManager.setVariable("prefs.startup_folder."+(left?"left":"right")+".on_startup", "lastFolder");
+
+		// go to home folder
+		if (goTo.equals("customFolder")) {
+			folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(left?"left":"right")+".custom_folder", defaultPath);
 		}
+		// go to last folder
 		else {
-			// go to home folder
-			if (goTo.equals("customFolder")) {
-				folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(left?"left":"right")+".custom_folder", defaultPath);
-			}
-			// go to last folder
-			else {
-				folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(left?"left":"right")+".last_folder", defaultPath);
-			}
+			folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(left?"left":"right")+".last_folder", defaultPath);
 		}
 
 		if(Debug.ON)
@@ -255,7 +251,7 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		if(folder==null || !folder.exists())
 			folder = AbstractFile.getAbstractFile(defaultPath);
 
-		if(Debug.ON)
+		if(Debug.ON && folder!=null)
 			System.out.println("initial folder "+folder.getAbsolutePath());
 		
 		return folder;
