@@ -37,6 +37,15 @@
       </fileset>
     </copy>
 
+    <!-- Unjar libraries to include them in the JAR file -->
+    <unjar src="${lib}/muxml.jar" dest="${classes}"/>
+<!-- Not supported by unjar, too bad
+        <fileset dir="${lib}">
+        <include name="**/*.jar"/>
+    </fileset>                      -->
+
+    <unjar src="${lib}/jcifs.jar" dest="${classes}"/>
+
     <!-- Put everything in ${classes} into the ${dist}/mucommander.jar file -->
     <jar jarfile="${dist}/mucommander.jar" basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
   </target>
