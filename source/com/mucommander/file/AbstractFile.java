@@ -34,6 +34,8 @@ public abstract class AbstractFile {
 		// SMB file
 		if (absPath.toLowerCase().startsWith("smb://")) {
 			try {
+				// Patch for jcifs 0.8.0b (path has to end with /)
+//				file = new SMBFile(absPath.endsWith("/")?absPath:absPath+"/");
 				file = new SMBFile(absPath);
 			}
 			catch(IOException e) {
