@@ -40,7 +40,7 @@ public abstract class AbstractFile {
 			return getAbstractFile(absPath, null);
 		}
 		catch(IOException e) {
-//			if(com.mucommander.Debug.ON) e.printStackTrace();
+if(com.mucommander.Debug.ON) e.printStackTrace();
 			return null;
 		}
 	}
@@ -88,8 +88,21 @@ public abstract class AbstractFile {
 //		if((path.endsWith("/") && path.length()>1) || (path.endsWith("\\") && path.charAt(path.length()-2)!=':'))
 //			path = path.substring(0, path.length()-1);
 
+		// Create a FileURL instance using the given path
+		FileURL fileURL;
 		// If path contains no protocol, consider the file as a local file
-		FileURL fileURL = new FileURL(absPath.indexOf("://")==-1?"file://"+absPath:absPath);
+		if(absPath.indexOf("://")==-1) {
+			// Replace '~' by actual home directory if path contains no protocol
+			if(absPath.startsWith("~")) {
+				String home = System.getProperty("user.home");
+				if(home!=null)
+					absPath = home + absPath.substring(1, absPath.length());
+			}
+			fileURL = new FileURL("file://localhost"+(absPath.charAt(0)=='/'?absPath:'/'+absPath));
+		}
+		else {
+			fileURL = new FileURL(absPath);
+		}
 
 		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
 		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem		

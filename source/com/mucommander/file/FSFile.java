@@ -62,9 +62,10 @@ public class FSFile extends AbstractFile {
 		super(fileURL);
 
 		// Throw an exception is the file's path is not absolute.
-		// Host part in file URL should be null, if not it means that path is
-		// relative, since file URL have no hostname
-		if(!_file.isAbsolute() || fileURL.getHost()!=null)
+//		// Host part in file URL should be null, if not it means that path is
+//		// relative, since file URL have no hostname
+//		if(!_file.isAbsolute() || fileURL.getHost()!=null)
+		if(!_file.isAbsolute())
 			throw new IOException();
 
 		this.file = _file;

@@ -68,6 +68,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	public FolderPanel(MainFrame mainFrame, AbstractFile initialFolder) {
 		super(new BorderLayout());
 
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initialFolder);
         this.mainFrame = mainFrame;
 
 		XBoxPanel locationPanel = new XBoxPanel();
@@ -117,7 +118,6 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 			}
 		}
 
-//		locationField.setText(currentFolder.getAbsolutePath(true));
 		locationField.setText(currentFolder.getAbsolutePath());
 		driveButton.updateText(currentFolder);
 				
@@ -195,8 +195,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			this.currentFolder = folder;
 
 			// Update location field with new current folder's path
-//			locationField.setText(currentFolder.getAbsolutePath(true));
-//			locationField.repaint();
 			locationField.setText(currentFolder.getAbsolutePath());
 
 			// Update drive button to reflect new current folder
@@ -484,12 +482,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file = "+file);
 
 			boolean browse = false;
 			if(file==null || !file.exists()) {
-				// Keep the text input by the user (do not restore current path)
+				// Keep the text input by the user (do not restore current path) to give him a change to correct it
 				locationFieldTextSet = true;
 				JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			else if(file.isDirectory()) {
+
+			if(file.isDirectory()) {
 				// Browse directory
 				browse = true;
 			}
@@ -514,21 +513,18 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file = "+file);
 			if(browse) {
 				// If folder could not be set, restore current folder's path
 				if(!setCurrentFolder(file, true))
-//					locationField.setText(currentFolder.getAbsolutePath(true));
 					locationField.setText(currentFolder.getAbsolutePath());
+//				else
+//					locationField.setText(currentFolder.getAbsolutePath());
 			}
 			else {
 				FileSet fileSet = new FileSet(currentFolder);
 				fileSet.add(file);
 				
 				// Show confirmation/path modification dialog
-//				if(file instanceof RemoteFile)	// Does not work coz file can be wrapped inside a ZipArchiveFile -> test is false 
 				new DownloadDialog(mainFrame, fileSet);
-//				else
-//					new CopyDialog(mainFrame, fileSet, false);
 					
 				// Restore current folder's path
-//				locationField.setText(currentFolder.getAbsolutePath(true));
 				locationField.setText(currentFolder.getAbsolutePath());
 			}
 		}
@@ -542,7 +538,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file = "+file);
 		if (e.getSource()==locationField) {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				// Restore current location string
-//				locationField.setText(currentFolder.getAbsolutePath(true));
 				locationField.setText(currentFolder.getAbsolutePath());
 				fileTable.requestFocus();
 			}
@@ -577,7 +572,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file = "+file);
 		// If location field's text was not already set between focus gained and lost 
 		if(source==locationField && !locationFieldTextSet) {
 			// Restore current folder's path
-//			locationField.setText(currentFolder.getAbsolutePath(true));
 			locationField.setText(currentFolder.getAbsolutePath());
 		}
 	}

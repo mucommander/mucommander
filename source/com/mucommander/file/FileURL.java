@@ -4,6 +4,7 @@ package com.mucommander.file;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
 
+import java.util.Vector;
 
 /**
  * This class parses a file URL without any knowledge of the underlying protocol. URL are expected to respect the following format :<br>
@@ -55,29 +56,77 @@ public class FileURL implements Cloneable {
 			// Parse host and port (if specified)
 			colonPos = url.indexOf(':', pos);
 			int questionPos = url.indexOf('?', pos);
-			int slashPos = url.indexOf('/', pos);
+			int separatorPos = url.indexOf('/', pos);
 			int hostEndPos;
-			// Slash is necessarely before question mark
-			if(slashPos!=-1)
-				hostEndPos = slashPos;
+			// Separator is necessarely before question mark
+			if(separatorPos!=-1)
+				hostEndPos = separatorPos;
 			else if(questionPos!=-1)
 				hostEndPos = questionPos;
 			else
 				hostEndPos = urlLen;
+
+			if(colonPos!=-1 && colonPos<hostEndPos) {
+				host = url.substring(pos, colonPos).trim();
+				port = Integer.parseInt(url.substring(colonPos+1, hostEndPos).trim());
+			}
+			else {
+				host = url.substring(pos, hostEndPos).trim();
+			}
 			
-			host = url.substring(pos, colonPos==-1?hostEndPos:colonPos).trim();
 			if(host.equals(""))
 				host = null;
 				
-			if(colonPos!=-1)
-				port = Integer.parseInt(url.substring(colonPos+1, hostEndPos).trim());
-		
 			// Parse path part excluding query part
 			pos = hostEndPos;
 			path = url.substring(pos, questionPos==-1?urlLen:questionPos).trim();
-			// Add '/' to path is path is empty
+			// Empty path means '/'
 			if(path.equals(""))
 				path = "/";
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw path = "+path);
+			
+			// Remove '.' and '..'
+			if(!path.equals("/")) {
+				pos = 0;
+				int pos2;
+				String dir;
+				Vector pathV = new Vector();	// Contains directory hierachy
+				while(pos!=-1) {
+					// path may contain '/' or '\\' characters, find next separator character
+					pos2 = Math.min(path.indexOf('/', pos), path.indexOf('\\', pos));
+					if(pos2==-1)	// Last dir (or empty string)
+						dir = path.substring(pos, path.length());
+					else
+						dir = path.substring(pos, ++pos2);		// Dir name includes trailing slash
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw dir name = "+dir);
+					pos = pos2;
+					// Discard '.' and empty strings
+					if(dir.equals("") || dir.equals("."))
+						continue;
+					// Remove last directory
+					else if(dir.equals("..")) {
+						if(pathV.size()==0)
+							throw new MalformedURLException();
+						pathV.removeElementAt(pathV.size()-1);
+						continue;
+					}
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Processed dir name = "+dir);
+
+					// Add directory to the end of the list
+					pathV.add(dir);
+				}
+			
+				// Reconstruct path from directory list
+				path = "";
+				int nbDirs = pathV.size();
+				for(int i=0; i<nbDirs; i++)
+					path += pathV.elementAt(i);
+				// We now have a path free of '.' and '..'
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Reconstructed path = "+path+" "+pathV);
+			}
 			
 			// Parse query part (if any)
 			if(questionPos!=-1)
@@ -85,15 +134,19 @@ public class FileURL implements Cloneable {
 		
 			// Extract filename and parent from path
 			if(path.equals("") || path.equals("/")) {
-//				filename = "/";
 				filename = null;
 				// parent is null
 			}
 			else {	
 				// Extract filename from path
 				int len = path.length();
-				slashPos = (path.endsWith("/")?path.substring(0, --len):path).lastIndexOf('/');
-				filename = path.substring(slashPos+1, len).trim();
+				char c;
+				while((c=path.charAt(len-1))=='/'||c=='\\')
+					--len;
+				 
+				filename = path.substring(0, len);
+				separatorPos = Math.min(filename.lastIndexOf('/'), filename.lastIndexOf('\\'));
+				filename = path.substring(separatorPos+1, len).trim();
 				if(filename.equals(""))
 					filename = null;
 //				if(urlDecode)
@@ -101,9 +154,9 @@ public class FileURL implements Cloneable {
 //					catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 				
 				len = url.length();
-				slashPos = (url.endsWith("/")?url.substring(0, --len):url).lastIndexOf('/');
-				if(slashPos>7)
-					parent = url.substring(0, slashPos);
+				separatorPos = (url.endsWith("/")?url.substring(0, --len):url).lastIndexOf('/');
+				if(separatorPos>7)
+					parent = url.substring(0, separatorPos);
 			}
 		}
 		catch(MalformedURLException e) {
@@ -317,7 +370,11 @@ public class FileURL implements Cloneable {
 			"ftp://anonymous:john.doe@somewhere.net@mucommander.com:21/pub/incoming/0day-warez.zip",
 			"sftp://maxence:blah@192.168.1.2",
 			"file://relative_path",
-			"file:///absolute_path"
+			"file:///absolute_path",
+			"file://localhost/absolute_path",
+			"file://localhost/~/Projects/",
+			"file://localhost/C:\\Projects",
+			"file://localhost/C:\\Projects\\",
 		};
 		
 		FileURL f;

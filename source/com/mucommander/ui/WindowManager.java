@@ -243,8 +243,7 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 			folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(left?"left":"right")+".last_folder", defaultPath);
 		}
 
-		if(Debug.ON)
-			System.out.println("defaultPath "+defaultPath);
+		if(Debug.ON) Debug.trace("defaultPath "+defaultPath);
 		
 		AbstractFile folder = null;
 		if(folderPath!=null)
@@ -253,8 +252,7 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		if(folder==null || !folder.exists())
 			folder = AbstractFile.getAbstractFile(defaultPath);
 
-		if(Debug.ON && folder!=null)
-			System.out.println("initial folder "+folder.getAbsolutePath());
+		if(Debug.ON) System.out.println("initial folder= "+folder);
 		
 		return folder;
 	}
