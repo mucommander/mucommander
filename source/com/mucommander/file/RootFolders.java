@@ -57,7 +57,7 @@ public class RootFolders {
 				System.out.println("java.io.File's root folders: "+rootFoldersV);
 	
 			// Add /etc/fstab folders
-			// If we're running windows, we can just skip that
+			// If we're running Windows, we can just skip that
 			if(!(osType==PlatformManager.WINDOWS_9X || osType==PlatformManager.WINDOWS_NT)) {
 				addFstabEntries(rootFoldersV);
 				if(Debug.ON)
@@ -111,9 +111,9 @@ public class RootFolders {
 					// path is second token
 					st.nextToken();
 					folderPath = st.nextToken();
-					if(!folderPath.equals("/proc")) {
+					if(!(folderPath.equals("/proc") || folderPath.equals("none"))) {
 						file = AbstractFile.getAbstractFile(folderPath);
-						if(file!=null)
+						if(file!=null && !v.contains(file))
 							v.add(file);
 					}
 				}

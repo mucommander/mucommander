@@ -333,11 +333,14 @@ help_menu:FR:Aide
 help_menu.shortcuts:EN:Keyboard shortcuts
 help_menu.shortcuts:FR:Raccourcis clavier
 
-help_menu.homepage:EN:muCommander homepage
-help_menu.homepage:FR:Site muCommander
+help_menu.homepage:EN:Go to website
+help_menu.homepage:FR:Site web 
 
-help_menu.forums:EN:muCommander forums
-help_menu.forums:FR:Forums muCommander
+help_menu.forums:EN:Go to forums
+help_menu.forums:FR:Forums
+
+help_menu.donate:EN:Make a donation
+help_menu.donate:FR:Faire une donation
 
 help_menu.about:EN:About muCommander
 help_menu.about:FR:A propos de muCommander

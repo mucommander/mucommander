@@ -26,9 +26,9 @@ that the following conditions are met:
    THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-****************************************************************************
+*********************************************************************
 The jCIFS library is used by muCommander under the terms of the LGPL:
-****************************************************************************
+*********************************************************************
 
 		  GNU LESSER GENERAL PUBLIC LICENSE
 		       Version 2.1, February 1999
@@ -485,9 +485,9 @@ SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGES.
 
 
-****************************************************************************
+************************************************************************************
 The CommonsNet library is used by muCommander under the terms of the Apache license:
-****************************************************************************
+************************************************************************************
 
                                  Apache License
                            Version 2.0, January 2004

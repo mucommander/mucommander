@@ -75,12 +75,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	// Help menu
 	private JMenu helpMenu;
 	private JMenuItem keysItem;
-	private JMenuItem forumsItem;
 	private JMenuItem homepageItem;
+	private JMenuItem forumsItem;
+	private JMenuItem donateItem;
 	private JMenuItem aboutItem;
 	
 	private final static String MUCOMMANDER_HOMEPAGE_URL = "http://www.mucommander.com";
 	private final static String MUCOMMANDER_FORUMS_URL = "http://www.mucommander.com/forums/";
+	private final static String MUCOMMANDER_DONATE_URL = "http://www.mucommander.com/#donate";
 
 	
 	public MainMenuBar(MainFrame mainFrame) {
@@ -170,11 +172,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		// Help menu
 		menuItemMnemonicHelper.clear();
 		helpMenu = MenuToolkit.addMenu(Translator.get("help_menu"), menuMnemonicHelper, null);
+		// Keyboard shortuts
 		keysItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.shortcuts"), menuItemMnemonicHelper, null, this);
 		helpMenu.add(new JSeparator());
+		// Links to website
 		if (PlatformManager.canOpenURL()) {
 			homepageItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.homepage"), menuItemMnemonicHelper, null, this);
 			forumsItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.forums"), menuItemMnemonicHelper, null, this);
+			donateItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.donate"), menuItemMnemonicHelper, null, this);
 		}
 		
 		// About muCommander in Mac OS X already appears somewhere else (in the app menu)
@@ -338,11 +343,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == keysItem) {
 			new ShortcutsDialog(mainFrame).showDialog();
 		}
+		else if (source == homepageItem) {
+			PlatformManager.open(MUCOMMANDER_HOMEPAGE_URL, mainFrame.getLastActiveTable().getCurrentFolder());
+		}
 		else if (source == forumsItem) {
 			PlatformManager.open(MUCOMMANDER_FORUMS_URL, mainFrame.getLastActiveTable().getCurrentFolder());
 		}
-		else if (source == homepageItem) {
-			PlatformManager.open(MUCOMMANDER_HOMEPAGE_URL, mainFrame.getLastActiveTable().getCurrentFolder());
+		else if (source == donateItem) {
+			PlatformManager.open(MUCOMMANDER_DONATE_URL, mainFrame.getLastActiveTable().getCurrentFolder());
 		}
 		else if (source == aboutItem) {
 			new AboutDialog(mainFrame).showDialog();
