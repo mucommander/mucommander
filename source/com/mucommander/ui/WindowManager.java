@@ -20,7 +20,7 @@ import java.util.Vector;
 
 /**
  * Window Manager is responsible for creating, disposing, switching,
- * in other words managing muCommander windows.
+ * in other words managing :) muCommander windows.
  *
  * @author Maxence Bernard
  */
@@ -48,6 +48,9 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	}
 	
 	
+	/**
+	 * Empty no-arg constructor.
+	 */
 	private WindowManager() {
 		// do nothing here so that
 		// getInstance() returns a non-null value
@@ -55,6 +58,9 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	}
 	
 	
+	/**
+	 * Performs first-time initialization and creates a first frame.
+	 */
 	private void init() {
 		// Sets custom lookAndFeel if different from current lookAndFeel
 		String lnfName = ConfigurationManager.getVariable("prefs.lookAndFeel");
@@ -108,10 +114,30 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		MainFrame newMainFrame = new MainFrame(folder1, folder2);
 
 		// Set window size and location
+
 		// If first window
 		if(firstWindow) {
-			// Set window size and location to use as much screen space as possible
-			newMainFrame.setBounds(PlatformManager.getFullScreenBounds(newMainFrame));
+			// Retrieve last saved window bounds
+			int x = ConfigurationManager.getVariableInt("prefs.last_window.x");
+			int y = ConfigurationManager.getVariableInt("prefs.last_window.y");
+			int width = ConfigurationManager.getVariableInt("prefs.last_window.width");
+			int height = ConfigurationManager.getVariableInt("prefs.last_window.height");
+			int lastScreenWidth = ConfigurationManager.getVariableInt("prefs.last_window.screen_width");
+			int lastScreenHeight = ConfigurationManager.getVariableInt("prefs.last_window.screen_height");
+			
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			// Set same window bounds as before if resolution hasn't changed since then and if
+			// window size is not substantially larger than screen size (safety check)
+			if(x!=-1 && y!=-1 && width!=-1 && height!=-1
+				&& screenSize.width==lastScreenWidth && screenSize.height==lastScreenHeight
+				&& width<=screenSize.width+5 && height<=screenSize.height+5) {
+				
+				newMainFrame.setBounds(x, y, width, height);
+			}
+			else {
+				// Set window size and location to use as much screen space as possible
+				newMainFrame.setBounds(PlatformManager.getFullScreenBounds(newMainFrame));
+			}
 		}
 		else {
 			// Use current's main frame size and location
@@ -226,25 +252,30 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	 */
 	public void disposeMainFrame(MainFrame mainFrameToDispose) {
 		// Saves last folders
-//		ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
-//			mainFrameToDispose.getBrowser1().getCurrentFolder().getAbsolutePath(true));
-//		ConfigurationManager.setVariable("prefs.startup_folder.right.last_folder", 
-//			mainFrameToDispose.getBrowser2().getCurrentFolder().getAbsolutePath(true));
 		ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
 			mainFrameToDispose.getBrowser1().getLastSavableFolder());
 		ConfigurationManager.setVariable("prefs.startup_folder.right.last_folder", 
 			mainFrameToDispose.getBrowser2().getLastSavableFolder());
-				
-		JMenu windowMenu;
-		int frameIndex = mainFrames.indexOf(mainFrameToDispose);
+
+		// Saves window position, size and screen resolution
+		Rectangle bounds = mainFrameToDispose.getBounds();
+		ConfigurationManager.setVariableInt("prefs.last_window.x", (int)bounds.getX());
+		ConfigurationManager.setVariableInt("prefs.last_window.y", (int)bounds.getY());
+		ConfigurationManager.setVariableInt("prefs.last_window.width", (int)bounds.getWidth());
+		ConfigurationManager.setVariableInt("prefs.last_window.height", (int)bounds.getHeight());
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		ConfigurationManager.setVariableInt("prefs.last_window.screen_width", screenSize.width);
+		ConfigurationManager.setVariableInt("prefs.last_window.screen_height", screenSize.height);
 
 		// Disposes the MainFrame
 		mainFrameToDispose.dispose();
 		mainFrames.remove(mainFrameToDispose);
 		
+		int frameIndex = mainFrames.indexOf(mainFrameToDispose);
+		int nbFrames = mainFrames.size();
 		MainFrame mainFrame;
 		JMenuItem item;
-		int nbFrames = mainFrames.size();
+		JMenu windowMenu;
 		for(int i=0; i<nbFrames; i++) {
 			mainFrame = (MainFrame)mainFrames.elementAt(i);
 			windowMenu = ((MainMenuBar)mainFrame.getJMenuBar()).getWindowMenu();
@@ -262,6 +293,43 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		// If no mainFrame is currently visible, exit
 		if(mainFrames.size()==0)
 			System.exit(0);		
+	}
+
+	
+	/**
+	 * Switches to the next MainFrame, in the order of which they were created.
+	 */
+	public void switchToNextWindow() {
+		int frameIndex = mainFrames.indexOf(currentMainFrame);
+		MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==mainFrames.size()-1?0:frameIndex+1);
+		mainFrame.toFront();
+		mainFrame.getLastActiveTable().requestFocus();
+	}
+
+	/**
+	 * Switches to previous MainFrame, in the order of which they were created.
+	 */
+	public void switchToPreviousWindow() {
+		int frameIndex = mainFrames.indexOf(currentMainFrame);
+		MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==0?mainFrames.size()-1:frameIndex-1);
+		mainFrame.toFront();
+		mainFrame.getLastActiveTable().requestFocus();
+	}
+
+	
+	/**
+	 * Changes LooknFeel to the given one, updating the UI of each MainFrame.
+	 */
+	private void setLookAndFeel(String lnfName) {
+		try {
+			UIManager.setLookAndFeel(lnfName);
+
+			for(int i=0; i<mainFrames.size(); i++) {
+				SwingUtilities.updateComponentTreeUI((MainFrame)(mainFrames.elementAt(i)));
+			}
+		}
+		catch(Exception e) {
+		}
 	}
 
 
@@ -289,26 +357,6 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	}	
 
 	
-	/**
-	 * Switches to the next MainFrame, in the order of which they were created.
-	 */
-	public void switchToNextWindow() {
-		int frameIndex = mainFrames.indexOf(currentMainFrame);
-		MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==mainFrames.size()-1?0:frameIndex+1);
-		mainFrame.toFront();
-		mainFrame.getLastActiveTable().requestFocus();
-	}
-
-	/**
-	 * Switches to previous MainFrame, in the order of which they were created.
-	 */
-	public void switchToPreviousWindow() {
-		int frameIndex = mainFrames.indexOf(currentMainFrame);
-		MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==0?mainFrames.size()-1:frameIndex-1);
-		mainFrame.toFront();
-		mainFrame.getLastActiveTable().requestFocus();
-	}
-
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 				
@@ -363,20 +411,6 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	public void windowOpened(WindowEvent e) {
 	}
 
-	/**
-	 * Changes LooknFeel to the given one, updating the UI of each MainFrame.
-	 */
-	private void setLookAndFeel(String lnfName) {
-		try {
-			UIManager.setLookAndFeel(lnfName);
-
-			for(int i=0; i<mainFrames.size(); i++) {
-				SwingUtilities.updateComponentTreeUI((MainFrame)(mainFrames.elementAt(i)));
-			}
-		}
-		catch(Exception e) {
-		}
-	}
 
     /**
      * Listens to certain configuration variables.

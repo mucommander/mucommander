@@ -376,6 +376,17 @@ public class ConfigurationManager {
         }
     }
 
+	
+    /**
+     * Sets the value of the specified configuration variable.
+     * @param var   name of the variable to set.
+     * @param value value for the specified variable.
+     */
+    public static synchronized void setVariableInt(String var, int value) {
+		setVariable(var, ""+value);
+	}
+	
+		
 //    /* ------------------------ */
 //    /*      File monitoring     */
 //    /* ------------------------ */
