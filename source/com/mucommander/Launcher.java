@@ -172,17 +172,42 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 		AbstractFile folder1;
 		AbstractFile folder2;
 		
-		AbstractFile tempFile;
-		if (mainFrames.size()==0) {
+		// If first window, set initial folders
+		boolean firstWindow = mainFrames.size()==0;
+		if (firstWindow) {
 			folder1 = getInitialFolder(true);
 			folder2 = getInitialFolder(false);
 		}
+		// If not, use previous window's folders 
 		else {
 			folder1 = currentMainFrame.getBrowser1().getFileTable().getCurrentFolder();
 			folder2 = currentMainFrame.getBrowser2().getFileTable().getCurrentFolder();
 		}
 		
+		// Create frmae
 		MainFrame newMainFrame = new MainFrame(folder1, folder2);
+
+		// Set window size and location
+		// If first window
+		if(firstWindow) {
+			// Set window size and location to use as much screen space as possible
+			newMainFrame.setBounds(PlatformManager.getFullScreenBounds(newMainFrame));
+		}
+		else {
+			// Use current's main frame size and location
+			// and shift new frame a little so the we can see
+			// previous one underneath
+			Rectangle bounds = currentMainFrame.getBounds();
+			int x = bounds.x + 22;
+			int y = bounds.y + 22;
+			// If frame is outside window (on x or y), set corresponding coordinate to 0
+			if(!PlatformManager.isInsideUsableScreen(currentMainFrame, x+bounds.width, -1))
+				x = 0;
+			if(!PlatformManager.isInsideUsableScreen(currentMainFrame, -1, y+bounds.height))
+				y = 0;
+
+			newMainFrame.setBounds(new Rectangle(x, y, bounds.width, bounds.height));
+		}
 		// To catch user window closing actions
 		newMainFrame.addWindowListener(this);
 		

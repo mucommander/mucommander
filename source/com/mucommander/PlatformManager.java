@@ -10,6 +10,12 @@ import java.util.Vector;
 import java.awt.*;
 
 
+/**
+ * This class takes care of Platform-specific issues, such as getting screen dimensions
+ * and issuing commands.
+ *
+ * @author Maxence Bernard
+ */
 public class PlatformManager {
 
 	// OS types
@@ -30,7 +36,7 @@ public class PlatformManager {
 
     
 	/**
-	 * Finds out what kind of OS muCommander is running on
+	 * Finds out what kind of OS muCommander is running on.
 	 */
 	static {
 		osName = System.getProperty("os.name");
@@ -71,6 +77,49 @@ public class PlatformManager {
 	}
 	
 	
+	/**
+	 * Returns screen insets: accurate information under 1Java 1.4,
+	 * null inset values for Java 1.3 (execept under OS X)
+	 */
+	private static Insets getScreenInsets(Frame frame) {
+		// Code for Java 1.4
+		try {
+			// Java 1.4 has a method which returns real screen insets 
+			return Toolkit.getDefaultToolkit().getScreenInsets(frame.getGraphicsConfiguration());		
+		}
+		// Code for Java 1.3
+		catch(NoSuchMethodError e) {
+			// Apple menu bar
+			int top = getOsType()==MAC_OS_X?22:0;
+			int left = 0;
+			// Could add windows task bar here ?
+			int bottom = 0;
+			int right = 0;
+			return new Insets(top, left, bottom, right);		
+		}
+	}
+	
+	
+	/**
+	 * Returns <code>true</code> if given coordinates are inside 'usable' screen space,
+	 * taking into accounts screen insets. The result is very accurate under Java 1.4, not
+	 * so accurate under Java 1.3.
+	 *
+	 * @param x x-coordinate, if value is below 0, this coordinate will not be used for the test
+	 * @param y y-coordinate, if value is below 0, this coordinate will not be used for the test
+	 */
+	public static boolean isInsideUsableScreen(Frame frame, int x, int y) {
+		Insets screenInsets = getScreenInsets(frame);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		return (x<0 || (x >= screenInsets.left && x <screenSize.width-screenInsets.right))
+			&& (y<0 || (y >= screenInsets.top && y<screenSize.height-screenInsets.bottom));
+	}
+	
+	
+	/**
+	 * Returns full-screen window bounds. The result is very accurate under Java 1.4, just an
+	 * estimate under Java 1.3.
+	 */
 	public static Rectangle getFullScreenBounds(Frame frame) {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screenSize = toolkit.getScreenSize();
@@ -107,7 +156,6 @@ public class PlatformManager {
 
 		
 	}
-	
 	
 	
 	/**

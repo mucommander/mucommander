@@ -64,8 +64,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		// Sets frame icon
 		setIconImage(new ImageIcon(imageURL).getImage());
 
-		// Sets window size and location to use as much screen space as possible
-		setBounds(PlatformManager.getFullScreenBounds(this));
 		setResizable(true);
 
 		Container contentPane = getContentPane();
