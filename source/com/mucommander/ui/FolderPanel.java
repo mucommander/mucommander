@@ -253,6 +253,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		}
 		catch(IOException e) {
 			mainFrame.setCursor(Cursor.getDefaultCursor());
+			if(com.mucommander.Debug.ON) e.printStackTrace();
 			throw e;
 		}
 		mainFrame.setCursor(Cursor.getDefaultCursor());

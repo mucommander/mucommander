@@ -22,7 +22,10 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	 * Creates a new instance of SMBFile.
 	 */
 	 public SMBFile(String fileURL) throws IOException {
-	 	AuthInfo urlAuthInfo = SMBFile.getAuthInfo(fileURL);
+	 	if(!fileURL.endsWith("/"))
+			fileURL += '/';
+		
+		AuthInfo urlAuthInfo = SMBFile.getAuthInfo(fileURL);
 	 	// if the URL specifies a login and password (typed in by the user)
 	 	// add it to AuthManager and use it
 	 	if (urlAuthInfo!=null) {
@@ -142,16 +145,11 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 
 
 	public String getName() {
-/*
-		// Retrieves name and caches it
-		if (name==null && file!=null) {
-			this.name = file.getParent()==null?absPath+separator:file.getName();
-		}
+		String name = file.getName();
 
+		if(name.endsWith("/"))
+			return name.substring(0, name.length()-1);
 		return name;
-*/
-        return file.getName();
-        //return file.getParent()==null?absPath+separator:file.getName();
 	}
 
 	/**
