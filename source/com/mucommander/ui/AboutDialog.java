@@ -79,6 +79,4 @@ public class AboutDialog extends FocusDialog implements ActionListener, KeyListe
 	public void keyTyped(KeyEvent e) {
 	}
 
-
-
 }
