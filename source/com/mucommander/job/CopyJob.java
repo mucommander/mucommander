@@ -224,7 +224,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 					}
 				}
 				catch(IOException e) {
-					if(com.mucommander.Debug.TRACE)
+					if(com.mucommander.Debug.ON)
 						System.out.println(""+e);
 				    int ret = showErrorDialog("Error while "+(unzip?"unzipping":"copying")+" file "+file.getName());
 				    if(ret!=SKIP_ACTION)		// CANCEL_ACTION or close dialog
@@ -232,7 +232,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 				}
 			}
 			catch(IOException e) {
-				if(com.mucommander.Debug.TRACE)
+				if(com.mucommander.Debug.ON)
 					System.out.println(""+e);
 			    int ret = showErrorDialog("Unable to "+(unzip?"unzip":"copy")+" file "+file.getName());
 			    if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog

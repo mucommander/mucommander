@@ -181,7 +181,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	private void _setCurrentFolder(AbstractFile folder, boolean addToHistory) throws IOException {
 		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-        if(com.mucommander.Debug.TRACE)
+        if(com.mucommander.Debug.ON)
             System.out.println("FolderPanel._setCurrentFolder: "+folder+" ");
 
 		try {
@@ -256,7 +256,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	public boolean setCurrentFolder(AbstractFile folder, boolean addToHistory) {
 		boolean success = false;
 
-        if(com.mucommander.Debug.TRACE)
+        if(com.mucommander.Debug.ON)
             System.out.println("FolderPanel.setCurrentFolder: "+folder+" ");
         
 		if (folder==null || !folder.exists()) {

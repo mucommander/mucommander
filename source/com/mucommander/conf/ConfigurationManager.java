@@ -62,7 +62,7 @@ public class ConfigurationManager {
         if(!loadConfiguration()) {
             File homeFolder = getConfigurationFolder();
             if(!homeFolder.exists()) {
-                if(com.mucommander.Debug.TRACE)
+                if(com.mucommander.Debug.ON)
                     System.out.println("Creating mucommander home folder "+homeFolder.getAbsolutePath());
                 if(!getConfigurationFolder().mkdir())
                     System.out.println("Warning: unable to create folder: "+homeFolder.getAbsolutePath()+"/.mucommander");
@@ -150,12 +150,12 @@ public class ConfigurationManager {
 		try {
 			filePath = getConfigurationFilePath();
 			loadConfiguration(filePath);
-			if(com.mucommander.Debug.TRACE)
+			if(com.mucommander.Debug.ON)
 				System.out.println("Found and loaded configuration file: "+filePath);						
 			return true;
 		}
 		catch(Exception e) {
-			if(com.mucommander.Debug.TRACE)
+			if(com.mucommander.Debug.ON)
 				System.out.println("No configuration file found at "+filePath);			
 		}
 
@@ -163,12 +163,12 @@ public class ConfigurationManager {
 			try {
 				filePath = getGenericConfigurationFilePath();
 				loadConfiguration(filePath);
-				if(com.mucommander.Debug.TRACE)
+				if(com.mucommander.Debug.ON)
 					System.out.println("Found and loaded configuration file: "+filePath);						
 				return true;
 			}
 			catch(Exception e) {
-				if(com.mucommander.Debug.TRACE)
+				if(com.mucommander.Debug.ON)
 					System.out.println("No configuration file found at "+filePath);			
 			}
 		}
@@ -191,7 +191,7 @@ public class ConfigurationManager {
 
         writer = new ConfigurationWriter();
 		String filePath = getConfigurationFilePath();
-		if(com.mucommander.Debug.TRACE)
+		if(com.mucommander.Debug.ON)
 			System.out.println("Writing configuration file: "+filePath);						
 	
         writer.writeXML(out = new PrintWriter(new FileOutputStream(filePath)));
@@ -393,7 +393,7 @@ public class ConfigurationManager {
      */
     public static synchronized void addConfigurationListener(ConfigurationListener listener) {
 		listeners.add(listener);
-		if(com.mucommander.Debug.TRACE)
+		if(com.mucommander.Debug.ON)
 			System.out.println("ConfigurationManager.addConfigurationListener: "+listeners.size()+" listeners");
 	}
 
@@ -403,7 +403,7 @@ public class ConfigurationManager {
      */
     public static synchronized void removeConfigurationListener(ConfigurationListener listener) {
 		listeners.remove(listener);
-		if(com.mucommander.Debug.TRACE)
+		if(com.mucommander.Debug.ON)
 			System.out.println("ConfigurationManager.removeConfigurationListener: "+listeners.size()+" listeners");
 	}
 

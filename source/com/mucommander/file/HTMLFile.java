@@ -203,7 +203,7 @@ public class HTMLFile extends AbstractFile {
 			}
 	      }
 	    } catch (Exception e) {
-		    if (com.mucommander.Debug.TRACE) {
+		    if (com.mucommander.Debug.ON) {
 				System.out.println("Error while parsing HTML: "+e);
 		    }
 		}

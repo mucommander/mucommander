@@ -92,7 +92,7 @@ public class PlatformManager {
 	 */
 	public static Process execute(String command, AbstractFile currentFolder) {
 		try {
-            if(com.mucommander.Debug.TRACE)
+            if(com.mucommander.Debug.ON)
                 System.out.println("Executing "+command);
 
             Vector tokensV = new Vector();
@@ -109,7 +109,7 @@ public class PlatformManager {
 			while(pos<len) {
 				c = command.charAt(pos);
 				if((c==' ' && command.charAt(pos-1)!='\\') || c=='\t' || c=='\n' || c=='\r' || c=='\f') {
-// if(com.mucommander.Debug.TRACE) System.out.println("token= "+token.toString());
+// if(com.mucommander.Debug.ON) System.out.println("token= "+token.toString());
 					tokensV.add(token.toString());
 					token = new StringBuffer();
 				}
@@ -121,7 +121,7 @@ public class PlatformManager {
 			tokensV.add(token.toString());
 
 
-//if(com.mucommander.Debug.TRACE) {
+//if(com.mucommander.Debug.ON) {
 //	for(int i=0; i<tokensV.size(); i++)
 //		System.out.println("token"+i+"= ["+tokensV.elementAt(i)+"]");
 //}
@@ -133,7 +133,7 @@ public class PlatformManager {
 			return Runtime.getRuntime().exec(command, null, new java.io.File(currentFolder.getAbsolutePath()));
 		}
 		catch(IOException e) {
-            if(com.mucommander.Debug.TRACE)
+            if(com.mucommander.Debug.ON)
                 System.out.println("Error while executing "+command+": "+e);
             return null;
 		}
@@ -149,19 +149,19 @@ public class PlatformManager {
 			// Here, we use exec(String[],String[],File) instead of exec(String,String[],File)
 			// so we parse the tokens ourself (messes up the command otherwise)
 
-            if(com.mucommander.Debug.TRACE)
+            if(com.mucommander.Debug.ON)
                 System.out.println("Opening "+filePath);
             
             Runtime.getRuntime().exec(getOpenTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
             
-/*            if(com.mucommander.Debug.TRACE) {
+/*            if(com.mucommander.Debug.ON) {
                 new Thread(new PlatformManager(currentProcess)).start();
             }
 */                
             return true;
 		}
 		catch(IOException e) {
-            if(com.mucommander.Debug.TRACE)
+            if(com.mucommander.Debug.ON)
                 System.out.println("Error while opening "+filePath+": "+e);
             return false;
 		}

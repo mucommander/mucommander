@@ -106,7 +106,7 @@ public class FSFile extends AbstractFile {
 				this.canonicalPath = file.getCanonicalPath();
 			}
 			catch(IOException e) {
-				if(com.mucommander.Debug.TRACE)
+				if(com.mucommander.Debug.ON)
 					e.printStackTrace();
 					
 				this.canonicalPath = this.absPath;

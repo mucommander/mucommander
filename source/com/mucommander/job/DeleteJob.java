@@ -127,7 +127,7 @@ public class DeleteJob extends FileJob implements Runnable {
 			return true;
 		}
         catch(IOException e) {
-			if(com.mucommander.Debug.TRACE)
+			if(com.mucommander.Debug.ON)
 				e.printStackTrace();
 			
             ret = showErrorDialog("Unable to delete "

@@ -75,7 +75,7 @@ public class VersionChecker implements ContentHandler {
     }
 
     public void endDocument() {
-        if(com.mucommander.Debug.TRACE) {
+        if(com.mucommander.Debug.ON) {
             System.out.println("download URL -"+downloadURL+"-");
             System.out.println("latestVersion -"+latestVersion+"-");
         }

@@ -522,7 +522,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     public void windowActivated(WindowEvent e) {
 		this.isActive = true;
 
-    	if(com.mucommander.Debug.TRACE)
+    	if(com.mucommander.Debug.ON)
 			System.out.println("MainFrame.windowActivated");
 		
 		// Requests focus first time MainFrame is activated
@@ -536,7 +536,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     public void windowDeactivated(WindowEvent e) {
 		this.isActive = false;
 		
-    	if(com.mucommander.Debug.TRACE)
+    	if(com.mucommander.Debug.ON)
 			System.out.println("MainFrame.windowDeactivated");
     }
 

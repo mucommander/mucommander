@@ -57,7 +57,7 @@ public abstract class AbstractFile {
                 file = new FTPFile(absPath);
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.TRACE) {
+                if(com.mucommander.Debug.ON) {
                     System.out.println(e);
                     e.printStackTrace();
                 }

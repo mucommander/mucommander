@@ -79,7 +79,7 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 				FinderIntegration finderIntegration = new FinderIntegration();
 			}
 			catch(Exception e) {
-				if(com.mucommander.Debug.TRACE)
+				if(com.mucommander.Debug.ON)
 					System.out.println("Launcher.init: exception thrown while initializing Mac Finder integration");
 			}
 		}
@@ -138,7 +138,7 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 			}
 		}
 
-		if(Debug.TRACE)
+		if(Debug.ON)
 			System.out.println("defaultPath "+defaultPath);
 		
 		AbstractFile folder = null;
@@ -148,7 +148,7 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 		if(folder==null || !folder.exists())
 			folder = AbstractFile.getAbstractFile(defaultPath);
 
-		if(Debug.TRACE)
+		if(Debug.ON)
 			System.out.println("initial folder "+folder.getAbsolutePath());
 		
 		return folder;
@@ -407,7 +407,7 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
     	// /!\ font.size is set after font.family in AppearancePrefPanel
     	// that's why we only listen to this one in order not to change Font twice
     	if (var.equals("prefs.lookAndFeel")) {
-			if(Debug.TRACE)
+			if(Debug.ON)
 				System.out.println("LookAndFeel changed! "+event.getValue());
     		String lnfName = event.getValue();
 			
