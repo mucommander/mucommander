@@ -1,0 +1,64 @@
+<project name="muCommander" default="dist" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property name="source" value="source"/>
+  <property name="classes" value="classes"/>
+  <property name="dist"  value="dist"/>
+  <property name="lib"   value="lib"/>
+  <property name="res"	 value="res"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the directory structure used by compile -->
+    <mkdir dir="${classes}"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <!-- Compile the java code from ${source} into ${classes} -->
+    <javac srcdir="${source}" destdir="${classes}" debug="on">
+      <classpath>
+        <pathelement location="classes"/>
+        <fileset dir="lib">
+          <include name="**/*.jar"/>
+        </fileset>
+        <pathelement path="${classpath}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile">
+    <mkdir dir="${dist}"/>
+
+    <!-- Copy images files to {$classes} -->
+    <copy todir="${classes}">
+      <fileset dir="res">
+        <include name="**/*"/>
+      </fileset>
+    </copy>
+
+    <!-- Put everything in ${classes} into the ${dist}/mucommander.jar file -->
+    <jar jarfile="${dist}/mucommander.jar" basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
+  </target>
+
+  <target name="run">
+    <!-- Launches mucommander from the jar file -->
+    <java jar="${dist}/mucommander.jar" fork="true"/>
+  </target>
+
+  <target name="clean">
+    <!-- Delete the ${classes} and ${dist} directory trees -->
+    <delete dir="${classes}"/>
+    <delete dir="${dist}"/>
+  </target>
+</project>
+
+
+
+
+
+
+
+
+
+
