@@ -190,14 +190,15 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 
 
     public void run() {
-		currentFileIndex = 0;
+//		currentFileIndex = 0;
 
 		FileTable activeTable = mainFrame.getLastActiveTable();
 		AbstractFile currentFile;
         AbstractFile zipSubFiles[];
-		while(true) {
-			currentFile = (AbstractFile)filesToCopy.elementAt(currentFileIndex);
-
+		for(int i=0; i<nbFiles; i++) {
+//		while(true) {
+//			currentFile = (AbstractFile)filesToCopy.elementAt(currentFileIndex);
+			currentFile = (AbstractFile)filesToCopy.elementAt(i);
 			nextFile(currentFile);
 			
 			// Unzip files		
@@ -205,8 +206,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 				if (currentFile instanceof ZipArchiveFile) {
 					try {
 						zipSubFiles = currentFile.ls();
-						for(int i=0; i<zipSubFiles.length; i++) {
-                            copyRecurse(zipSubFiles[i], baseDestFolder, null);
+						for(int j=0; j<zipSubFiles.length; j++) {
+                            copyRecurse(zipSubFiles[j], baseDestFolder, null);
 						}
 					}
 					catch(IOException e) {
@@ -228,9 +229,9 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 			activeTable.setFileMarked(currentFile, false);
 			activeTable.repaint();
 
-            if(currentFileIndex<nbFiles-1)	// This ensures that currentFileIndex is never out of bounds (cf getCurrentFile)
-                currentFileIndex++;
-            else break;
+//            if(currentFileIndex<nbFiles-1)	// This ensures that currentFileIndex is never out of bounds (cf getCurrentFile)
+//                currentFileIndex++;
+//            else break;
         }
 
         stop();

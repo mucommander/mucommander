@@ -23,7 +23,7 @@ public abstract class ExtendedFileJob extends FileJob {
 
 	/** Read buffer */
 	protected byte buffer[];
-
+	
 	/** Size that should be allocated to read buffer */
 	protected final static int READ_BLOCK_SIZE = 8192;
 
@@ -131,15 +131,17 @@ public abstract class ExtendedFileJob extends FileJob {
     /**
      * Returns current file's size, -1 if is not available.
      */
-    public abstract long getCurrentFileSize();
+    public long getCurrentFileSize() {
+		return currentFile==null?-1:currentFile.getSize();
+	}
 
 	
 	/**
 	 * Advances file index and resets file bytes counter. This method should be called by subclasses whenever the job
 	 * starts processing a new file.
 	 */
-	protected void nextFile() {
-		super.nextFile();
+	protected void nextFile(AbstractFile file) {
+		super.nextFile(file);
 		currentFileProcessed = 0;
 	}
 
@@ -148,18 +150,13 @@ public abstract class ExtendedFileJob extends FileJob {
      * Overrides this method to returns a more accurate percent value of the job processed so far, taking
      * into account current file's percent.
      */
-
-/*
     public int getTotalPercentDone() {
         float nbFilesProcessed = getCurrentFileIndex();
         long currentFileSize = getCurrentFileSize();
-        if(currentFileSize>0)
+        if(currentFileSize>0 && (currentFile!=null && !currentFile.isDirectory()))
             nbFilesProcessed += getCurrentFileBytesProcessed()/(float)currentFileSize;
-
-//System.out.println(nbFilesProcessed+" "+currentFileSize+" "+((int)(100*(nbFilesProcessed/(float)getNbFiles()))));
 
         return (int)(100*(nbFilesProcessed/(float)getNbFiles()));
     }
-*/
     
 }

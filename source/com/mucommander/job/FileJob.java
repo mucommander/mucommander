@@ -61,9 +61,12 @@ public abstract class FileJob implements Runnable {
     protected long nbBytesSkipped;
 
 	/** Index of file currently being processed, see {@link #getCurrentFileIndex() getCurrentFileIndex} */
-	protected int currentFileIndex;
+	protected int currentFileIndex = -1;
 
+	/** File currently being processed */
+	protected AbstractFile currentFile;
 
+	
 	protected final static int CANCEL_ACTION = 0;
 	protected final static int SKIP_ACTION = 1;
 
@@ -288,14 +291,15 @@ public abstract class FileJob implements Runnable {
 	* Returns the index of the file currently being processed (has to be < {@link #getNbFiles() getNbFiles}).
      */
     public int getCurrentFileIndex() {
-        return currentFileIndex;
+        return currentFileIndex==-1?0:currentFileIndex;
     }
 
 	/**
 	 * Advances file index. This method should be called by subclasses whenever the job
 	 * starts processing a new file.
 	 */
-	protected void nextFile() {
+	protected void nextFile(AbstractFile file) {
+		this.currentFile = file;
 		currentFileIndex++;
 	}
 	
