@@ -1,4 +1,4 @@
-package com.mucommander.file;
+	package com.mucommander.file;
 
 import java.io.*;
 import java.util.Vector;
@@ -29,14 +29,6 @@ public class FSFile extends AbstractFile {
 	// Indicates whether or not the value has already been retrieved
 	private boolean parentValCached = false;
 		
-//	private boolean isFolder;
-//	// Indicates whether or not the value has already been retrieved
-//	private boolean isFolderValCached = false;
-	
-//	private boolean isHidden;
-//	// Indicates whether or not the value has already been retrieved
-//	private boolean isHiddenValCached = false;
-	
 	// Retreives fs roots once for all because File.listRoots() sometimes triggers a weird dialog
 	// about A:\, we only want this to happen once...
 	static {
@@ -141,20 +133,10 @@ public class FSFile extends AbstractFile {
 	}
 
 	public long getDate() {
-//		// Retrieves date and caches it
-//		if(date==-1)
-//			date = file.lastModified();		
-//		return date;
-
         return file.lastModified();
 	}
 	
 	public long getSize() {
-//		// Retrieves size and caches it
-//		if(size==-1)
-//			size = file.length();		
-//		return size;
-
         return file.length();
 	}
 	
@@ -182,23 +164,10 @@ public class FSFile extends AbstractFile {
 	}
 	
 	public boolean isHidden() {
-//		// Retrieves isHidden info and caches it
-//		if (!isHiddenValCached) {
-//			isHidden = file.isHidden();
-//			isHiddenValCached = true;
-//		}
-//		return isHidden;
-
         return file.isHidden();
 	}
 
 	public boolean isDirectory() {
-//		// Retrieves isFolder info and caches it
-//		if (!isFolderValCached) {
-//			isFolder = file.isDirectory();
-//			isFolderValCached = true;
-//		}
-//		return isFolder;        
         return file.isDirectory();
 	}
 
