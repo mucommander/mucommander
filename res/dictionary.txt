@@ -1897,7 +1897,8 @@ prefs_dialog.pick_a_color:ES:Seleccionar un color
 prefs_dialog.mail_tab:EN:Mail
 prefs_dialog.mail_tab:FR:Email
 prefs_dialog.mail_tab:DE:eMail
-prefs_dialog.mail_tab:ES:Correo electrónico
+#prefs_dialog.mail_tab:ES:Correo electrónico
+prefs_dialog.mail_tab:ES:Correo
 
 prefs_dialog.mail_settings:EN:Outgoing mail settings
 prefs_dialog.mail_settings:FR:Paramètres d'email sortant

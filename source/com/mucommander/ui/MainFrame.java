@@ -52,7 +52,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	
 	private CommandBarPanel commandBar;
 	
-	
+
 	/**
 	 * Creates a new main frame, set to the given initial folders.
 	 */
@@ -452,10 +452,17 @@ if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): destFo
 
 	
 	/**
-	 * Returns whether or not this MainFrame is active, i.e. if this window is in the foreground.
+	 * Returns whether or not this MainFrame is active, i.e. if this window is in the foreground and has focus
+	 * (one of its components has focus). There may only be one active MainFrame at any given time, and none
+	 * if the muCommander application is not in the foreground.
+	 *
+	 * Note: Window.isActive() and Window.isFocused() are highly inaccurate (at least under Java 1.4.2 and OS X):
+	 * if the app is started (or a new window is created) and the app is not in the foreground, isActive() and isFocused()
+	 * will return true, until the app is moved to the foreground and back to the background.
 	 */
 	public boolean isActive() {
-		return isVisible() && hasFocus();
+//if(com.mucommander.Debug.ON) System.out.println("MainFrame.isActive(): isActive="+super.isActive()+" isFocused="+isFocused());
+		return super.isActive() && isFocused();
 	}
 
 	

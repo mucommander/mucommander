@@ -61,7 +61,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 	private static String keywordString = "*";
 	
 
-	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
+	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
 	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 
 

@@ -59,10 +59,6 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		{"command_bar.close", "[F10]"}
 	};
 
-	
-    // Dialog width should not exceed 360, height is not an issue (always the same)
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
-
     
 	public CommandBarPanel(MainFrame mainFrame) {
 		super(new GridLayout(0,8));

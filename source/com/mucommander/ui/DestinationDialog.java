@@ -33,7 +33,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 	// Dialog size constraints
 	protected final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
     // Dialog width should not exceed 360, height is not an issue (always the same)
-    protected final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
+    protected final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 	
 
 	/**

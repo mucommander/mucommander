@@ -30,7 +30,7 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
 	// Dialog size constraints
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
     // Dialog width should not exceed 360, height is not an issue (always the same)
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 
 	
 	public DeleteDialog(MainFrame mainFrame, FileSet files) {

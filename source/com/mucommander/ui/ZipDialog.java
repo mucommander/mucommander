@@ -37,7 +37,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
 
 	// Dialog's width has to be at most 320
-	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);	
+	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 
 
 	public ZipDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {

@@ -104,11 +104,11 @@ public abstract class AbstractFile {
 			String nameLC = name.toLowerCase();
 			if(nameLC.endsWith(".zip") || nameLC.endsWith(".jar"))
 				return new ZipArchiveFile(file);
-//			else if(nameLC.endsWith(".tar") || nameLC.endsWith(".tgz") || nameLC.endsWith(".tar.gz"))
-			else if(nameLC.endsWith(".tar"))
+			else if(nameLC.endsWith(".tar") || nameLC.endsWith(".tgz") || nameLC.endsWith(".tar.gz"))
+//			else if(nameLC.endsWith(".tar"))
 				return new TarArchiveFile(file);
-//			else if(nameLC.endsWith(".gz"))
-			else if(nameLC.endsWith(".gz") || nameLC.endsWith(".tgz") || nameLC.endsWith(".tar.gz"))
+			else if(nameLC.endsWith(".gz"))
+//			else if(nameLC.endsWith(".gz") || nameLC.endsWith(".tgz") || nameLC.endsWith(".tar.gz"))
 				return new GzipArchiveFile(file);
 		}
 		

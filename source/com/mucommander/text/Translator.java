@@ -198,7 +198,7 @@ public class Translator {
 						text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
 					}
 
-//					if(com.mucommander.Debug.ON && get(key, lang)!=null) System.out.println("Translator init: duplicate "+lang+" entry "+key);
+//if(com.mucommander.Debug.ON && get(key, lang)!=null) System.out.println("Translator init: duplicate "+lang+" entry "+key);
 					
 					put(key, lang, text);
 //					orderedEntries.add(key+":"+lang);

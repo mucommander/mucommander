@@ -27,7 +27,7 @@ import java.net.URL;
 public class Launcher {
 
 	/** Version string */
-	public final static String MUCOMMANDER_VERSION = "0.7_01";
+	public final static String MUCOMMANDER_VERSION = "0.7.1";
 
 	/** muCommander app string */
 	public final static String MUCOMMANDER_APP_STRING = "muCommander v"+MUCOMMANDER_VERSION;

@@ -20,7 +20,7 @@ import javax.swing.*;
 public class CheckVersionDialog extends FocusDialog implements ActionListener, Runnable {
 
 	// Dialog's width has to be at least 240
-	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
+	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
 
 	private MainFrame mainFrame;
     private boolean userInitiated;
