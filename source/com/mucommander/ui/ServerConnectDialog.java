@@ -72,56 +72,61 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
 
 	private JPanel getSMBPanel() {
-		YBoxPanel smbPanel = new YBoxPanel(10);
+		YBoxPanel smbPanel = new YBoxPanel(15);
+
+        // Init grid bag layout and panel.
+        GridBagLayout gridbag = new GridBagLayout();
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.EAST;
+
+        JPanel textFieldsPanel = new JPanel();
+        textFieldsPanel.setLayout(gridbag);
 
 		// Server field
-		JPanel tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("Server "), BorderLayout.WEST);
 		smbServerField = new JTextField(lastSmbServer);
-		smbServerField.addKeyListener(escapeKeyAdapter);
-		smbServerField.addKeyListener(this);
-		smbServerField.addActionListener(this);
-		tempPanel.add(smbServerField, BorderLayout.CENTER);
-		smbPanel.add(tempPanel);
+		addTextFieldRow(textFieldsPanel, c, "Server", smbServerField, 10, 20);
 
-		smbPanel.addSpace(15);
-		
 		// Username field
-		tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("Username  "), BorderLayout.WEST);
 		smbUsernameField = new JTextField(lastSmbUsername);
-		smbUsernameField.addKeyListener(escapeKeyAdapter);
-		smbUsernameField.addKeyListener(this);
-		smbUsernameField.addActionListener(this);
-		tempPanel.add(smbUsernameField, BorderLayout.CENTER);
-		smbPanel.add(tempPanel);
-
-		smbPanel.addSpace(5);
+		addTextFieldRow(textFieldsPanel, c, "Username", smbUsernameField, 10, 5);
 
 		// Password field
-		tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("Password "), BorderLayout.WEST);
 		smbPasswordField = new JPasswordField(lastSmbPassword);
-		smbPasswordField.addKeyListener(escapeKeyAdapter);
-		smbPasswordField.addKeyListener(this);
-		smbPasswordField.addActionListener(this);
-		tempPanel.add(smbPasswordField, BorderLayout.CENTER);
-		smbPanel.add(tempPanel);
+		addTextFieldRow(textFieldsPanel, c, "Password", smbPasswordField, 10, 20);
 
-		smbPanel.addSpace(15);
+		smbPanel.add(textFieldsPanel);
 		
-		tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("Server URL: "), BorderLayout.WEST);
+		XBoxPanel tempPanel = new XBoxPanel();
+		tempPanel.add(new JLabel("Server URL:"));
+		tempPanel.addSpace(10);
 		smbURLLabel = new JLabel(getSmbURL());
 		tempPanel.add(smbURLLabel, BorderLayout.CENTER);
 		smbPanel.add(tempPanel);
 
 		smbPanel.addSpace(10);
 
-// FontMetrics fm = smbServerField.getFontMetrics(smbServerField.getFont());
-// int pw = (int)Math.max(Math.max(fm.stringWidth("Server "), fm.stringWidth("Username ")), fm.stringWidth("Password ")); 		
-
 		return smbPanel;
+	}
+
+	
+	private void addTextFieldRow(JPanel gridBagPanel, GridBagConstraints c, String labelText, JTextField textField, int xSpaceAfter, int ySpaceAfter) {
+		c.gridwidth = GridBagConstraints.RELATIVE; //next-to-last
+		c.fill = GridBagConstraints.NONE;      //reset to default
+		c.weightx = 0.0;                       //reset to default
+		c.insets = new Insets(0, 0, ySpaceAfter, xSpaceAfter);
+		
+		gridBagPanel.add(new JLabel(labelText), c);
+
+		c.gridwidth = GridBagConstraints.REMAINDER;     //end row
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1.0;
+		c.insets = new Insets(0, 0, ySpaceAfter, 0);
+
+		textField.addKeyListener(escapeKeyAdapter);
+		textField.addKeyListener(this);
+		textField.addActionListener(this);
+
+		gridBagPanel.add(textField, c);
 	}
 
 
