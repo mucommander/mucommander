@@ -51,8 +51,12 @@ public class ZipArchiveFile extends ArchiveFile {
 		return file.canWrite();
 	}
 
-	public boolean isDirectory() {
+	public boolean isBrowsable() {
 		return true;
+	}
+	
+	public boolean isDirectory() {
+		return false;
 	}
 
 	public boolean isHidden() {

@@ -337,7 +337,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 			new int[]  {SKIP_MNEMONIC, OVERWRITE_MNEMONIC, APPEND_MNEMONIC, SKIP_ALL_MNEMONIC, OVERWRITE_ALL_MNEMONIC, APPEND_ALL_MNEMONIC, CANCEL_MNEMONIC, OVERWRITE_ALL_OLDER_MNEMONIC},
 			3);
 	
-		return dialog.getActionValue();
+	    return waitForUserResponse(dialog);
 	}
 	
     private int showErrorDialog(String message) {
@@ -347,7 +347,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 			new int[]  {SKIP_MNEMONIC, CANCEL_MNEMONIC},
 			0);
 
-		return dialog.getActionValue();
+	    return waitForUserResponse(dialog);
     }
 
     public void run() {

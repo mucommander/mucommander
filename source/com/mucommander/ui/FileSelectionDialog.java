@@ -80,12 +80,8 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 
 		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
 		
-		JPanel northPanel = new JPanel();
-		northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
-//		northPanel.addKeyListener(this);
-		northPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+		YBoxPanel northPanel = new YBoxPanel(5);
 		JLabel label = new JLabel((addToSelection?"Mark":"Unmark")+" files whose filename:");
-		label.setAlignmentX(LEFT_ALIGNMENT);
 		northPanel.add(label);
 
 		JPanel tempPanel = new JPanel();
@@ -106,23 +102,20 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 		selectionField.setSelectionStart(0);
 		selectionField.setSelectionEnd(keywordString.length());
 		tempPanel.add(selectionField);
-		tempPanel.setAlignmentX(LEFT_ALIGNMENT);
 		northPanel.add(tempPanel);
 
 		// Add some vertical space
-		northPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+		northPanel.addSpace(10);
 		
 		caseSensitiveCheckBox = new JCheckBox("Case sensitive", caseSensitive);
 		caseSensitiveCheckBox.addKeyListener(escapeKeyAdapter);
-		caseSensitiveCheckBox.setAlignmentX(LEFT_ALIGNMENT);
 		northPanel.add(caseSensitiveCheckBox);
 
 		includeFoldersCheckBox = new JCheckBox("Include folders", includeFolders);
 		includeFoldersCheckBox.addKeyListener(escapeKeyAdapter);
-		includeFoldersCheckBox.setAlignmentX(LEFT_ALIGNMENT);
 		northPanel.add(includeFoldersCheckBox);
 		
-		northPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+		northPanel.addSpace(10);
 		northPanel.add(Box.createVerticalGlue());
 
 		contentPane.add(northPanel, BorderLayout.NORTH);

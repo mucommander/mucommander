@@ -50,10 +50,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			Container contentPane = getContentPane();
 			EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
 			
-			JPanel mainPanel = new JPanel();
-			mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-	
-			mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+			YBoxPanel mainPanel = new YBoxPanel(5);
 	
 			// To (recipients) field
 			JPanel tempPanel = new JPanel();
@@ -63,10 +60,9 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			toField = new JTextField(lastTo);
 			toField.addKeyListener(escapeKeyAdapter);
 			tempPanel.add(toField);
-			tempPanel.setAlignmentX(LEFT_ALIGNMENT);
 			mainPanel.add(tempPanel);
 	
-			mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+			mainPanel.addSpace(10);
 			
 			// Subject field
 			tempPanel = new JPanel();
@@ -76,30 +72,27 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			subjectField = new JTextField(lastSubject);
 			subjectField.addKeyListener(escapeKeyAdapter);
 			tempPanel.add(subjectField);
-			tempPanel.setAlignmentX(LEFT_ALIGNMENT);
 			mainPanel.add(tempPanel);		
 	
-			mainPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+			mainPanel.addSpace(15);
 	
 			// Body area
 			bodyArea = new JTextArea(lastBody);
 			bodyArea.addKeyListener(escapeKeyAdapter);
 			bodyArea.setRows(6); 
 			JScrollPane scrollPane = new JScrollPane(bodyArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-			scrollPane.setAlignmentX(LEFT_ALIGNMENT);
 			mainPanel.add(scrollPane);
 			
-			mainPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-	
+			mainPanel.addSpace(15);
 			
 			// Label showing the number of files and total size
 			infoLabel = new JLabel();
-			infoLabel.setAlignmentX(LEFT_ALIGNMENT);
 			mainPanel.add(infoLabel);			
+
+			contentPane.add(mainPanel, BorderLayout.NORTH);
 			
 			// checkbox showing all files that are to be sent, allowing them to be unselected
-			tempPanel = new JPanel();
-			tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
+			YBoxPanel tempPanel2 = new YBoxPanel();
 			int nbFiles = files.size();
 			fileCheckboxes = new JCheckBox[nbFiles];
 			AbstractFile file;
@@ -109,17 +102,12 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 					+" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB)+")", true);
 				fileCheckboxes[i].addItemListener(this);
 				fileCheckboxes[i].addKeyListener(escapeKeyAdapter);
-				tempPanel.add(fileCheckboxes[i]);
+				tempPanel2.add(fileCheckboxes[i]);
 			}
-			scrollPane = new JScrollPane(tempPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-			scrollPane.setAlignmentX(LEFT_ALIGNMENT);
+			scrollPane = new JScrollPane(tempPanel2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			updateInfoLabel();
 			contentPane.add(scrollPane, BorderLayout.CENTER);
-	
-			mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-	
-			contentPane.add(mainPanel, BorderLayout.NORTH);
-			
+				
 			// OK / Cancel buttons panel
 			okButton = new JButton("OK");
 			cancelButton = new JButton("Cancel");

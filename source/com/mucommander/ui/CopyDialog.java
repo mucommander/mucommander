@@ -55,11 +55,9 @@ public class CopyDialog extends FocusDialog implements ActionListener {
     		return;
         
 		Container contentPane = getContentPane();
-        JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        YBoxPanel mainPanel = new YBoxPanel();
 		
 		JLabel label = new JLabel((unzipDialog?"Unzip":"Copy")+" selected file(s) to");
-		label.setAlignmentX(LEFT_ALIGNMENT);
         mainPanel.add(label);
 
 		AbstractFile destFolder = (activeTable==table1?table2:table1).getCurrentFolder();
@@ -79,9 +77,8 @@ public class CopyDialog extends FocusDialog implements ActionListener {
         copyPathField.setSelectionEnd(fieldText.length());
         copyPathField.addActionListener(this);
 		
-		copyPathField.setAlignmentX(LEFT_ALIGNMENT);
 		mainPanel.add(copyPathField);
-		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+		mainPanel.addSpace(10);
 		
         contentPane.add(mainPanel, BorderLayout.NORTH);
 		

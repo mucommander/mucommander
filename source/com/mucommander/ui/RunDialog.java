@@ -54,11 +54,9 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 		this.mainFrame = mainFrame;
 		
 		Container contentPane = getContentPane();
-        JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        YBoxPanel mainPanel = new YBoxPanel();
 		
 		JLabel label = new JLabel("Run in current folder:");
-		label.setAlignmentX(LEFT_ALIGNMENT);
         mainPanel.add(label);
 
 		commandField = new JTextField(lastCommand);
@@ -67,9 +65,8 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         commandField.setSelectionEnd(lastCommand.length());
         commandField.addActionListener(this);
 		
-		commandField.setAlignmentX(LEFT_ALIGNMENT);
 		mainPanel.add(commandField);
-		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+		mainPanel.addSpace(10);
 
         contentPane.add(mainPanel, BorderLayout.NORTH);
 
@@ -77,10 +74,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 		outputTextArea = new JTextArea();
 		outputTextArea.setRows(10);
 		outputTextArea.setEditable(false);
-//		// Text area is initially disabled
-//		outputTextArea.setEnabled(false);
 		JScrollPane scrollPane = new JScrollPane(outputTextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setAlignmentX(LEFT_ALIGNMENT);
 
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		

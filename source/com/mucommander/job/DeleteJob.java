@@ -91,6 +91,9 @@ public class DeleteJob extends FileJob implements Runnable {
 			return true;
 		}
         catch(IOException e) {
+			if(com.mucommander.Debug.TRACE)
+				System.out.println(""+e);
+			
             int ret = showErrorDialog("Unable to delete "
 //				+(file.isFolder() && !(file instanceof ArchiveFile)?"folder ":"file ")
 				+(file.isDirectory()&& !file.isSymlink()?"folder ":"file ")
@@ -126,7 +129,7 @@ public class DeleteJob extends FileJob implements Runnable {
 			new int[]  {SKIP_MNEMONIC, CANCEL_MNEMONIC},
 			0);
 	
-	    return dialog.getActionValue();
+	    return waitForUserResponse(dialog);
     }
 
     public void run() {

@@ -47,11 +47,9 @@ public class MoveDialog extends FocusDialog implements ActionListener {
     		return;
         
 		Container contentPane = getContentPane();
-        JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        YBoxPanel mainPanel = new YBoxPanel();
 		
 		JLabel label = new JLabel((isShiftDown && nbFiles==1)?"Move to":"Rename to");
-		label.setAlignmentX(LEFT_ALIGNMENT);
         mainPanel.add(label);
 
 		String fieldText;
@@ -71,9 +69,8 @@ public class MoveDialog extends FocusDialog implements ActionListener {
         movePathField.setSelectionEnd(fieldText.length());
         movePathField.addActionListener(this);
 		
-		movePathField.setAlignmentX(LEFT_ALIGNMENT);
 		mainPanel.add(movePathField);
-		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+		mainPanel.addSpace(10);
 		
         contentPane.add(mainPanel, BorderLayout.NORTH);
 		

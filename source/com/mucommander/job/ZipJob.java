@@ -100,7 +100,7 @@ public class ZipJob extends ExtendedFileJob implements Runnable {
 			new int[]  {SKIP_MNEMONIC, CANCEL_MNEMONIC},
 			0);
 	
-	    return dialog.getActionValue();
+	    return waitForUserResponse(dialog);
     }
 
 

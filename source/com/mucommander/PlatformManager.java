@@ -119,7 +119,7 @@ public class PlatformManager {
 			while(pos<len) {
 				c = command.charAt(pos);
 				if((c==' ' && command.charAt(pos-1)!='\\') || c=='\t' || c=='\n' || c=='\r' || c=='\f') {
-if(com.mucommander.Debug.TRACE) System.out.println("token= "+token.toString());
+// if(com.mucommander.Debug.TRACE) System.out.println("token= "+token.toString());
 					tokensV.add(token.toString());
 					token = new StringBuffer();
 				}
@@ -128,7 +128,7 @@ if(com.mucommander.Debug.TRACE) System.out.println("token= "+token.toString());
 				}
 				pos ++;
 			}
-if(com.mucommander.Debug.TRACE) System.out.println("token= "+token.toString());
+// if(com.mucommander.Debug.TRACE) System.out.println("token= "+token.toString());
 			tokensV.add(token.toString());
 			
 			String tokens[] = new String[tokensV.size()];

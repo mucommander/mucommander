@@ -4,6 +4,9 @@ import java.util.*;
 import java.io.*;
 //import org.xml.sax.*;
 
+import com.mucommander.PlatformManager;
+
+
 /**
  * Handles configuration.
  * <p>
@@ -56,19 +59,14 @@ public class ConfigurationManager {
      */
     private ConfigurationManager() {
         tree = new ConfigurationTree("root");
-        try {
-            loadConfiguration();
-        }
-        catch(Exception e) {
-            if(com.mucommander.Debug.TRACE)
-                System.out.println("No configuration file found.");
+        if(!loadConfiguration()) {
             File homeFolder = getConfigurationFolder();
             if(!homeFolder.exists()) {
                 if(com.mucommander.Debug.TRACE)
-                    System.out.println("Creating mucommander home folder (~/.mucommander)");
+                    System.out.println("Creating mucommander home folder "+homeFolder.getAbsolutePath());
                 if(!getConfigurationFolder().mkdir())
                     System.out.println("Warning: unable to create folder: "+homeFolder.getAbsolutePath()+"/.mucommander");
-                }
+            }
         }
 		
         // Sets muCommander version corresponding to this configuration file
@@ -98,26 +96,39 @@ public class ConfigurationManager {
 //    }
 //    /* End of method initDaemon() */
 
+
     /* ------------------------ */
     /*       File handling      */
     /* ------------------------ */
     /**
      * Returns the path to the configuration file.
-     * @return the path to the configuration file.
      */
-    public static String getConfigurationFilePath() {
+    private static String getConfigurationFilePath() {
         return new File(getConfigurationFolder(), CONFIGURATION_FILE).getAbsolutePath();
     }
 
-    public static File getConfigurationFolder() {
-        return new File(System.getProperty("user.home")+"/.mucommander");
+    private static String getGenericConfigurationFilePath() {
+        return new File(getGenericConfigurationFolder(), CONFIGURATION_FILE).getAbsolutePath();
+    }	
+	
+    private static File getConfigurationFolder() {
+		// Mac OS X specific folder (~/Library/Preferences/)
+		if(PlatformManager.getOsType()==PlatformManager.MAC_OS_X)
+			return new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");		
+		// For all other platforms, return generic folder (~/.mucommander)
+		else
+			return getGenericConfigurationFolder();
     }
 
+	private static File getGenericConfigurationFolder() {
+		return new File(System.getProperty("user.home")+"/.mucommander");		
+	}
+	
     /**
      * Loads the specified configuration file in memory.
      * @param path path to the configuration file to load in memory.
      */
-    public static synchronized void loadConfiguration(String path) throws Exception {
+    private static synchronized void loadConfiguration(String path) throws Exception {
         ConfigurationParser parser;
         ConfigurationLoader loader;
 
@@ -126,11 +137,43 @@ public class ConfigurationManager {
     }
     /* End of method loadConfiguration(String) */
 
+	
     /**
      * Loads the configuration file in memory.
      */
-    public static synchronized void loadConfiguration() throws Exception {
-		loadConfiguration(getConfigurationFilePath());
+    public static synchronized boolean loadConfiguration() {
+		String filePath = null;
+		
+		// under Mac OS X, since v0.6 : try to open preferences file from ~/Library/muCommander/
+		// and if it failed, try to open file from ~/.mucommander/
+
+		try {
+			filePath = getConfigurationFilePath();
+			loadConfiguration(filePath);
+			if(com.mucommander.Debug.TRACE)
+				System.out.println("Found and loaded configuration file: "+filePath);						
+			return true;
+		}
+		catch(Exception e) {
+			if(com.mucommander.Debug.TRACE)
+				System.out.println("No configuration file found at "+filePath);			
+		}
+
+		if(PlatformManager.getOsType()==PlatformManager.MAC_OS_X) {
+			try {
+				filePath = getGenericConfigurationFilePath();
+				loadConfiguration(filePath);
+				if(com.mucommander.Debug.TRACE)
+					System.out.println("Found and loaded configuration file: "+filePath);						
+				return true;
+			}
+			catch(Exception e) {
+				if(com.mucommander.Debug.TRACE)
+					System.out.println("No configuration file found at "+filePath);			
+			}
+		}
+		
+		return false;
 	}
     /* End of method loadConfiguration() */
 
@@ -147,18 +190,21 @@ public class ConfigurationManager {
         PrintWriter out;
 
         writer = new ConfigurationWriter();
-        writer.writeXML(out = new PrintWriter(new FileOutputStream(getConfigurationFilePath())));
+		String filePath = getConfigurationFilePath();
+		if(com.mucommander.Debug.TRACE)
+			System.out.println("Writing configuration file: "+filePath);						
+	
+        writer.writeXML(out = new PrintWriter(new FileOutputStream(filePath)));
         out.close();
     }
-    /* End of method writeConfiguration(String) */
 
+	
     /**
      * Writes the current variables to the configuration file.
      */
     public static synchronized void writeConfiguration() throws FileNotFoundException {
 		writeConfiguration(getConfigurationFilePath());
 	}
-    /* End of method writeConfiguration() */
 
     /* ------------------------ */
     /*      Variable access     */

@@ -6,9 +6,9 @@ import com.mucommander.job.ExtendedFileJob;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.progress.OverlayProgressBar;
 import com.mucommander.ui.comp.button.ButtonChoicePanel;
-import com.mucommander.ui.comp.dialog.FocusDialog;
-import com.mucommander.ui.comp.dialog.EscapeKeyAdapter;
+import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.text.SizeFormatter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -70,15 +70,13 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         infoLabel = new JLabel(job.getStatusString());
 		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
 		
-		JPanel tempPanel = new JPanel();
-		tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
+		YBoxPanel tempPanel = new YBoxPanel();
 		// 2 progress bars
 		if (dualBar) {
         	tempPanel.add(infoLabel);
         	fileProgressBar = new OverlayProgressBar();
-			fileProgressBar.setAlignmentX(LEFT_ALIGNMENT);
 			tempPanel.add(fileProgressBar);
-			tempPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+			tempPanel.addSpace(15);
 		
 			statsLabel = new JLabel("Transfer starting...");
 			tempPanel.add(statsLabel);
@@ -90,7 +88,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 			tempPanel.add(totalProgressBar);
 		}
 
-		tempPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+		tempPanel.addSpace(10);
 		tempPanel.add(Box.createVerticalGlue());
 		contentPane.add(tempPanel, BorderLayout.CENTER);
         
@@ -133,6 +131,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 		long speed;
 		long startTime = job.getStartTime();
 		long now;
+		long pausedTime;
 		while(repaintThread!=null && !job.hasFinished()) {
 	        if (dualBar) {
 				// Updates fileProgressBar if necessary
@@ -148,9 +147,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
 				// Update stats if necessary
 				nbBytesTotal = job.getTotalBytesProcessed();
+				pausedTime = job.getPausedTime();
 				if(lastBytesTotal!=nbBytesTotal) {
 					now = System.currentTimeMillis();
-					speed = (long)(nbBytesTotal/((now-startTime)/(double)1000));
+					speed = (long)(nbBytesTotal/((now-startTime-pausedTime)/(double)1000));
 //System.out.println(nbBytesTotal+" "+((now-startTime)/1000));
 					statsLabel.setText("Transferred "+SizeFormatter.format(nbBytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB)+" at "+SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+"/s");
 					statsLabel.repaint(REFRESH_RATE);

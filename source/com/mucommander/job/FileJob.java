@@ -2,6 +2,8 @@
 package com.mucommander.job;
 
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
+
 
 /**
  * FileJob is a container for a 'file task' : basically an operation that involves files and bytes.
@@ -26,11 +28,23 @@ public abstract class FileJob implements Runnable {
 	/** Timestamp in milliseconds when job started */
 	private long startTime;
 
+	/** Number of milliseconds this job has been paused (been waiting for some user response).
+	 * Used to compute stats like average speed.
+	 */
+	private long pausedTime;
 
+	/** Is this job paused ? */
+	private boolean isPaused;
+	
+	/** Contains the timestamp when this job has been put in pause (if in pause) */
+	private long pauseStartTime;
+	
+	
 	public FileJob(ProgressDialog progressDialog) {
 		this.progressDialog = progressDialog;
 	}
 
+	
     /**
      * Starts file job in a separate thread.
      */
@@ -48,6 +62,14 @@ public abstract class FileJob implements Runnable {
 	 */
 	public long getStartTime() {
 		return startTime;
+	}
+	
+	/**
+	 * Returns the number of milliseconds this job has been paused
+	 * (been waiting for user response).
+	 */
+	public long getPausedTime() {
+		return pausedTime;
 	}
 
 
@@ -80,6 +102,35 @@ public abstract class FileJob implements Runnable {
 		return jobThread == null;
 	}
 
+	
+	/**
+	 * Sets or unsets this job in pause mode (waiting for user response).
+	 */
+	private void setPaused(boolean paused) {
+		if(!paused && this.isPaused) {
+			this.pausedTime += System.currentTimeMillis() - this.pauseStartTime;
+		}
+		else if(paused) {
+			this.pauseStartTime = System.currentTimeMillis();
+		}
+		this.isPaused = paused;
+	}
+
+	
+	/**
+	 * Waits for the user's answer to the given question dialog, putting this
+	 * job in pause mode while waiting for the user.
+	 */
+	protected int waitForUserResponse(QuestionDialog dialog) {
+		// Put this job in pause mode while waiting for user response
+		setPaused(true);
+		int retValue = dialog.getActionValue();
+		// Back to work
+		setPaused(false);    
+		return retValue;		
+	}
+	
+	
 	/**
 	 * Returns <code>true</code> if the file job is finished.
 	 */
