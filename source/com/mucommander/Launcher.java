@@ -29,6 +29,10 @@ public class Launcher {
 
 	/** muCommander app string */
 	public final static String MUCOMMANDER_APP_STRING = "muCommander v"+MUCOMMANDER_VERSION;
+
+	public final static String USER_AGENT = MUCOMMANDER_APP_STRING
+		+" (Java "+System.getProperty("java.vm.version")
+		+"; "+System.getProperty("os.name")+" "+System.getProperty("os.version")+" "+System.getProperty("os.arch")+")";
 	
 	/** Launcher's sole instance */
 	private static Launcher launcher;
@@ -77,9 +81,11 @@ public class Launcher {
 		// Traps VM shutdown
 		Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
+		// Initialize WindowManager
+		WindowManager.checkInit();
+		
         // Check for newer version unless it was disabled
-        String checkForUpdates = ConfigurationManager.getVariable("prefs.check_for_updates_on_startup", "true");
-        if(!(checkForUpdates==null || checkForUpdates.equals("false")))
+        if(ConfigurationManager.getVariable("prefs.check_for_updates_on_startup", "true").equals("true"))
             new CheckVersionDialog(WindowManager.getInstance().getCurrentMainFrame(), false);
 		
 		// Dispose splash screen

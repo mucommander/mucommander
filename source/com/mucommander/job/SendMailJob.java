@@ -239,8 +239,12 @@ public class SendMailJob extends ExtendedFileJob {
 	
 	
     private void sendAttachment(AbstractFile file) throws IOException {
-        // sends MIME type of attachment file
-        writeLine("Content-Type:"+MimeTypes.getMimeType(file)+"; name="+file.getName());
+        // Send MIME type of attachment file
+		String mimeType = MimeTypes.getMimeType(file);
+		// Default mime type
+		if(mimeType==null)
+			mimeType = "application/octet-stream";
+        writeLine("Content-Type:"+mimeType+"; name="+file.getName());
         writeLine("Content-Disposition: attachment;filename=\""+file.getName()+"\"");
         writeLine("Content-transfer-encoding: base64\r\n");
         copyStream(in, out, 0);

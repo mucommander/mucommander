@@ -24,9 +24,10 @@ import java.util.Vector;
 /**
  * This is the main frame, which contains all other UI components visible on a mucommander window.
  * 
- * @@author Maxence Bernard
+ * @author Maxence Bernard
  */
 public class MainFrame extends JFrame implements ComponentListener, KeyListener, FocusListener, WindowListener {
+	
 	private final static String FRAME_TITLE = "muCommander";
 	
 	private JSplitPane splitPane;
@@ -41,9 +42,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     
     private FileTable lastActiveTable;
     
-    private CommandBarPanel commandBar;
-
 	private ToolBar toolbar;
+    
+	private CommandBarPanel commandBar;
 	
     /** False until this window has been activated */
 	private boolean firstTimeActivated;
@@ -112,14 +113,15 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 
 		contentPane.add(splitPane, BorderLayout.CENTER);
 
+		// Show command bar only if it hasn't been disabled in the preferences
+		this.commandBar = new CommandBarPanel(this);
+		contentPane.add(commandBar, BorderLayout.SOUTH);
+		setCommandBarVisible(ConfigurationManager.getVariable("prefs.show_command_bar_on_startup", "true").equals("true"));
+				
 		// To monitor resizing actions
 		folderPanel1.addComponentListener(this);
 		splitPane.addComponentListener(this);
 
-		// Create and show command bar only if it hasn't been disabled in the preferences
-		if(ConfigurationManager.getVariable("prefs.show_command_bar_on_startup", "true").equals("true"))
-			setCommandBarVisible(true);
-		
         table1.addKeyListener(this);
         table2.addKeyListener(this);
     
@@ -165,16 +167,18 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 * Shows/hide the command bar.
 	 */
 	public void setCommandBarVisible(boolean visible) {
-		if(this.commandBar!=null && !visible) {
-			getContentPane().remove(commandBar);
-			this.commandBar = null;
+/*
+		if(!visible && this.commandBar.isVisible()) {
+			this.commandBar.setVisible(false);
 			validate();
 		}
-		else if(this.toolbar==null && visible) {
-			this.toolbar = new CommandBarPanel(this);
-			getContentPane().add(toolbar, BorderLayout.SOUTH);
+		else if(visible && !this.commandBar.isVisible()) {
+			this.commandBar.setVisible(true);
 			validate();
 		}
+*/
+		this.commandBar.setVisible(visible);
+		validate();
 	}
 	
 	
@@ -182,7 +186,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 * Returns true if there is an command bar visible on this frame.
 	 */
 	public boolean isCommandBarVisible() {
-		return this.commandBar!=null;
+		return this.commandBar.isVisible();
 	}
 	
 	
@@ -557,6 +561,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
      */
     public void focusGained(FocusEvent e) {
 		// Resets shift mode to false, since keyReleased events may have been lost
+//		if(commandBar!=null)
 		commandBar.setShiftMode(false);
         this.lastActiveTable = e.getSource()==table1?table1:table2;
     }

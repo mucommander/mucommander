@@ -412,23 +412,6 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 
-/*
-		if (source == locationField) {
-			String location = locationField.getText();
-
-			// HTTP URL: Copy file to current folder
-			if(location.startsWith("http://") || location.startsWith("HTTP://")) {
-				// Restore current folder's path
-				locationField.setText(currentFolder.getAbsolutePath(true));
-
-				// Show confirmation/path modification dialog
-				new DownloadDialog(mainFrame, location);
-			}
-			// If folder could not be set, restore current folder's path
-			else if(!setCurrentFolder(AbstractFile.getAbstractFile(location), true))
-				locationField.setText(currentFolder.getAbsolutePath(true));
-		}
-*/
 		if (source == locationField) {
 			String location = locationField.getText();
 
@@ -436,7 +419,10 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		
 			boolean browse = false;
 			if(file==null) {
-
+				// Restore current folder's path
+				locationField.setText(currentFolder.getAbsolutePath(true));
+				showFolderAccessError(null);
+				return;
 			}
 			else if(file.isDirectory()) {
 				// Browse directory

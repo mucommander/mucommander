@@ -49,6 +49,14 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	
 	
 	/**
+	 * Method that does nothing but ensures that static initialization has
+	 * been done.
+	 */
+	public static void checkInit() {
+	}
+	
+	
+	/**
 	 * Empty no-arg constructor.
 	 */
 	private WindowManager() {

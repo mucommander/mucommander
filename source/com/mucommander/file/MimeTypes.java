@@ -12,6 +12,7 @@ public class MimeTypes extends Hashtable {
 
     private final static MimeTypes mimeTypes = new MimeTypes();
     
+	
     private MimeTypes() {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/mime.types")));
@@ -36,20 +37,19 @@ public class MimeTypes extends Hashtable {
         catch(IOException e) {}
     }
 
-
+	
     /**
-     * Returns the MIME type of the given file (determined by the file extension), <code>text/plain</code>
-     * if it is unknown (no or unknown extension), and <code>null</code> if it is a folder.
+     * Returns the MIME type of the given file (determined by the file extension), <code>null</code>
+     * if the type is unknown (unknown or no extension) or if the file is a folder.
      */
     public static String getMimeType(AbstractFile file) {
-//        if(file.isFolder() && !(file instanceof ArchiveFile))
         if(file.isDirectory())
             return null;
         
         String name = file.getName();
         int pos = name.lastIndexOf('.');
         if(pos==-1)
-            return "text.plain";
+            return null;
 
         return (String)mimeTypes.get(name.substring(pos+1, name.length()).toLowerCase());        
     }

@@ -263,6 +263,12 @@ view_menu.show_toolbar:FR:Afficher la barre d'outils
 view_menu.hide_toolbar:EN:Hide toolbar
 view_menu.hide_toolbar:FR:Cacher la barre d'outils
 
+view_menu.show_command_bar:EN:Show command bar
+view_menu.show_command_bar:FR:Afficher la barre de commande
+
+view_menu.hide_command_bar:EN:Hide command bar
+view_menu.hide_command_bar:FR:Cacher la barre de commande
+
 
 ###############
 # Window menu #
@@ -351,8 +357,8 @@ table.folder_access_error:FR:Unable to read folder contents
 
 table.folder_does_not_exist:EN:$[folder_does_not_exist]
 
-table.browse_or_copy:EN:What would you like to do with that file ?
-table.browse_or_copy:FR:Que voulez-vous faire de ce fichier ?
+table.copy_or_browse:EN:Would you like to browse or copy this file ?
+table.copy_or_browse:FR:Souhaitez-vous explorer ou copier ce fichier ?
 
 
 ##################
@@ -900,9 +906,6 @@ prefs_dialog.time_24_hour:FR:Format 24 heures
 
 prefs_dialog.check_for_updates_on_startup:EN:Check for updates on startup
 prefs_dialog.check_for_updates_on_startup:FR:Chercher les mises à jour au démarrage
-
-prefs_dialog.show_toolbar_on_startup:EN:Show toolbar on startup
-prefs_dialog.show_toolbar_on_startup:FR:Afficher la barre d'outils au démarrage
 
 prefs_dialog.example:EN:Example
 prefs_dialog.example:FR:Exemple

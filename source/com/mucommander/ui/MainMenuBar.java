@@ -11,6 +11,7 @@ import com.mucommander.ui.help.ShortcutsDialog;
 import com.mucommander.ui.about.AboutDialog;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
+import com.mucommander.conf.ConfigurationManager;
 
 import com.mucommander.job.SendMailJob;
 
@@ -65,6 +66,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	// Window menu
 	private JMenu windowMenu;
 	private JMenuItem showToolbarItem;
+	private JMenuItem showCommandBarItem;
 //	private JMenuItem previousWindowItem;
 //	private JMenuItem nextWindowItem;
 
@@ -150,6 +152,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		viewMenu.add(new JSeparator());
 		// Menu item's text will be set later, when menu is selected
 		showToolbarItem = MenuToolkit.addMenuItem(viewMenu, "", menuItemMnemonicHelper, null, this);
+		showCommandBarItem = MenuToolkit.addMenuItem(viewMenu, "", menuItemMnemonicHelper, null, this);
 		
 		add(viewMenu);
 		
@@ -303,7 +306,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			mainFrame.setSameFolder();	
 		}
 		else if (source == showToolbarItem) {
-			mainFrame.setToolbarVisible(!mainFrame.isToolbarVisible());
+			boolean toolbarVisible = !mainFrame.isToolbarVisible(); 
+			mainFrame.setToolbarVisible(toolbarVisible);
+			ConfigurationManager.setVariable("prefs.show_toolbar_on_startup", ""+toolbarVisible);		
+		}
+		else if (source == showCommandBarItem) {
+			boolean commandBarVisible = !mainFrame.isCommandBarVisible();
+			mainFrame.setCommandBarVisible(commandBarVisible);
+			ConfigurationManager.setVariable("prefs.show_command_bar_on_startup", ""+commandBarVisible);		
 		}
 		// Help menu
 		else if (source == keysItem) {
@@ -338,6 +348,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		}
 		else if(source==viewMenu) {
 			showToolbarItem.setText(mainFrame.isToolbarVisible()?Translator.get("view_menu.hide_toolbar"):Translator.get("view_menu.show_toolbar"));
+			showCommandBarItem.setText(mainFrame.isCommandBarVisible()?Translator.get("view_menu.hide_command_bar"):Translator.get("view_menu.show_command_bar"));
 		}
 	}
 	

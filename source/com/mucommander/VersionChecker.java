@@ -2,6 +2,7 @@
 package com.mucommander;
 
 import java.net.URL;
+import java.net.URLConnection;
 import java.io.*;
 import java.util.Hashtable;
 import com.muxml.*;
@@ -32,8 +33,16 @@ public class VersionChecker implements ContentHandler {
      */
     public static void getVersionInformation() throws Exception {
         Parser parser = new Parser();
-        InputStream in = new URL(VERSION_DOCUMENT_URL).openStream();
-        parser.parse(in, new VersionChecker());
+		URLConnection conn = new URL(VERSION_DOCUMENT_URL).openConnection();
+		
+		// Set user-agent header
+		conn.setRequestProperty("user-agent", Launcher.USER_AGENT);
+
+		// Establish connection
+		conn.connect();
+
+		InputStream in = conn.getInputStream();
+		parser.parse(in, new VersionChecker());
         in.close();
         
         if(latestVersion==null || latestVersion.equals(""))

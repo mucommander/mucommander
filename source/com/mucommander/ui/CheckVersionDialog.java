@@ -142,7 +142,7 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
         dispose();
 
 		if (source==downloadButton)  {
-                PlatformManager.open(downloadURL, mainFrame.getLastActiveTable().getCurrentFolder());
+			PlatformManager.open(downloadURL, mainFrame.getLastActiveTable().getCurrentFolder());
 		}
 	}
 }

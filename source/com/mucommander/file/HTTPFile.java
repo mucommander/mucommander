@@ -3,6 +3,8 @@ package com.mucommander.file;
 import java.io.*;
 import java.net.*;
 import java.util.Vector;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 import javax.swing.text.*;
 import javax.swing.text.html.*;
@@ -25,6 +27,7 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 	private URL url;
 	protected AbstractFile parent;
 	
+	/** True if the URL looks like */
 	private boolean isHTML;
 	
 	
@@ -38,40 +41,76 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 
 	protected HTTPFile(URL url) throws IOException {
 		this.url = url;
-		
 		this.absPath = url.toExternalForm();
-
-		// Determine file name (URL-encoded)
 		int urlLen = absPath.length();
-		int pos = absPath.lastIndexOf('/');
-		this.name = URLDecoder.decode(absPath.substring(pos<7?7:pos+1, absPath.endsWith(SEPARATOR)?urlLen-1:urlLen));
 
-		// Get URLConnection instance
-		URLConnection conn = url.openConnection();
+		if(!absPath.startsWith("http://") || urlLen<=7)
+			throw new IOException();
 		
-		// Set user-agent header
-		conn.setRequestProperty("user-agent", com.mucommander.Launcher.MUCOMMANDER_APP_STRING);
+//System.out.println("new HTTPFile1 = -"+absPath+"-");
 
-		// Open connection
-		conn.connect();
+		// Remove trailing / (if any)
+		if(absPath.endsWith(SEPARATOR))
+			absPath = absPath.substring(0, --urlLen);
+
+//System.out.println("new HTTPFile2 = "+absPath);
 		
-		// Resolve date: last-modified header, if not set date header, and if still not set System.currentTimeMillis
-		date = conn.getLastModified();
-		if(date==0) {
-			date = conn.getDate();
-			if(date==0)
-				date = System.currentTimeMillis();
+		// Determine file name (URL-encoded)
+		int lastSlashPos = absPath.lastIndexOf('/');
+		this.name = URLDecoder.decode(absPath.substring(lastSlashPos<7?7:lastSlashPos+1, urlLen));
+
+		// Determine parent URL (only if there is a slash after hostname)
+		if(lastSlashPos>7) {
+			try {
+				this.parent = new HTTPFile(absPath.substring(0, lastSlashPos));
+			}
+			catch(IOException e) {} // No problem, no parent that's all
 		}
+		// else no parent
 		
-		// Resolve size thru content-length header (-1 if not available)
-		size = conn.getContentLength();
-		
-		// Test if content is HTML
-		String contentType = conn.getContentType();
-		if(contentType!=null && contentType.equals("text/html"))
+		String mimeType;
+//System.out.println("MIME type = "+mimeType);
+		// Test if based on the URL, the file looks like an HTML :
+		//  - URL contains no slash after hostname (e.g. http://google.com)
+		//  - URL points to dynamic content (e.g. http://lulu.superblog.com?param=hola&val=...), even though dynamic scripts do not always return HTML
+		//  - No filename with a known mime type can be extracted from the last part of the URL (e.g. NOT http://mucommander.com/download/mucommander-0_7.tgz)
+		// If based on the test, the file is considered as an HTML file, use default date (now) and size (-1),
+		// and if not (URL points to file with a known mime type), connect to retrieve content-length, date headers, and verify that
+		// content-type is indeed not HTML
+		if(lastSlashPos<7 
+		|| absPath.indexOf('?')!=-1
+		|| ((mimeType=MimeTypes.getMimeType(this))==null || mimeType.equals("text/html"))) {
+			date = System.currentTimeMillis();
+			size = -1;
 			isHTML = true;
-
-System.out.println("isHTML ="+isHTML); 
+		}
+		else {
+			// Get URLConnection instance
+			URLConnection conn = url.openConnection();
+			
+			// Set user-agent header
+			conn.setRequestProperty("user-agent", com.mucommander.Launcher.USER_AGENT);
+	
+			// Open connection
+			conn.connect();
+			
+			// Resolve date: last-modified header, if not set date header, and if still not set System.currentTimeMillis
+			date = conn.getLastModified();
+			if(date==0) {
+				date = conn.getDate();
+				if(date==0)
+					date = System.currentTimeMillis();
+			}
+			
+			// Resolve size thru content-length header (-1 if not available)
+			size = conn.getContentLength();
+			
+			// Test if content is HTML
+			String contentType = conn.getContentType();
+			if(contentType!=null && contentType.trim().startsWith("text/html"))
+				isHTML = true;
+//System.out.println("contentType= "+contentType+" isHTML ="+isHTML); 
+		}
 	}
 
 	protected HTTPFile(String fileURL, URL context) throws IOException {
@@ -112,17 +151,7 @@ System.out.println("isHTML ="+isHTML);
 	}
 	
 	public AbstractFile getParent() {
-//		if(file==null)
-//			return null;
-//		
-//		String parent = file.getParent();
-//        // SmbFile.getParent() never returns null
-//		if(parent.equals("smb://"))
-//            return null;
-//        
-//		return new SMBFile(parent);
-		
-		return null;
+		return parent;
 	}
 	
 	
@@ -169,7 +198,7 @@ System.out.println("isHTML ="+isHTML);
 	}
 	
 	public OutputStream getOutputStream(boolean append) throws IOException {
-		return null;
+		throw new IOException();
 	}
 		
 	public boolean moveTo(AbstractFile dest) throws IOException  {
@@ -181,95 +210,155 @@ System.out.println("isHTML ="+isHTML);
 	}
 
 	public AbstractFile[] ls() throws IOException {
-		if(!isHTML)
-			throw new IOException();
-		else {
+//System.out.println("parsing "+getAbsolutePath()); 
+//			EditorKit kit = new HTMLEditorKit();
+//			Document doc = kit.createDefaultDocument();
 
-System.out.println("parsing + "+getAbsolutePath()); 
-			Vector children = new Vector();
-
-			EditorKit kit = new HTMLEditorKit();
-			Document doc = kit.createDefaultDocument();
-
-//			// The Document class does not yet 
-//			// handle charset's properly.
-//			doc.putProperty("IgnoreCharsetDirective", 
-//			  Boolean.TRUE);
+//			// The Document class does not yet handle charsets properly.
+//			doc.putProperty("IgnoreCharsetDirective", Boolean.TRUE);
+		
+//			Reader r = null;
+		BufferedReader br = null;
+		try {
+			// Open connection
+			URLConnection conn = url.openConnection();
 			
-			URLConnection conn = null;
-			Reader r = null;
-			try {
-				// Open connection
-				conn = url.openConnection();
+			// Set custom user-agent
+			conn.setRequestProperty("user-agent", com.mucommander.Launcher.USER_AGENT);
+			
+			// Establish connection
+			conn.connect();
+			
+			// Extract encoding information (if any)
+			String contentType = conn.getContentType();
+			if(contentType==null || !contentType.trim().startsWith("text/html"))
+				throw new IOException();
+			
+			int pos;
+			String enc = null;
+			if((pos=contentType.indexOf("charset"))!=-1 || (pos=contentType.indexOf("Charset"))!=-1) {
+				StringTokenizer st = new StringTokenizer(contentType.substring(pos, contentType.length()));
+				enc = st.nextToken();
+			}
+			
+			// Create a reader on the HTML content.
+//				r = new InputStreamReader();
+			// Create a reader on the HTML content with the proper encoding.
+			// Use default encoding
+			InputStream in = conn.getInputStream();
+			InputStreamReader ir;
+			// Use specified encoding
+			if(enc==null)
+				ir = new InputStreamReader(in);
+			else {
+				try {
+					ir = new InputStreamReader(in, enc);
+				}
+				catch(UnsupportedEncodingException e) {
+					ir = new InputStreamReader(in);
+				}
+			}
+
+			br = new BufferedReader(ir);
+
+			Vector children = new Vector();
+			// List that contains children URL, a TreeSet for fast (log(n)) search operations
+			TreeSet childrenURL = new TreeSet();
+			StreamTokenizer st = new StreamTokenizer(br);
+			String token;
+			String prevToken = "";
+			int tokenType;
+			HTTPFile child;
+			while((tokenType=st.nextToken())!=StreamTokenizer.TT_EOF) {
+				token = st.sval;
+//System.out.println("token= "+token+" "+st.ttype+" "+(st.ttype==st.TT_WORD)+" prevToken="+prevToken);
+//					if(st.ttype!=StreamTokenizer.TT_WORD)
+				if(token==null)
+					continue;
 				
-				// Set custom user-agent
-				conn.setRequestProperty("user-agent", com.mucommander.Launcher.MUCOMMANDER_APP_STRING);
-				
-				// Create a reader on the HTML content.
-				r = new InputStreamReader(conn.getInputStream());
-				
-				// Parse the HTML.
-				kit.read(r, doc, 0);
-				
-				// Iterate through the elements 
-				// of the HTML document.
-				ElementIterator it = new ElementIterator(doc);
-				javax.swing.text.Element elem;
-				HTTPFile child;
-				String att;
-				AttributeSet atts;
-				SimpleAttributeSet s;
-				while ((elem = it.next()) != null) {
+				if(tokenType=='\'' || tokenType=='"') {
+					try {
+//							if(token.toLowerCase().startsWith("http://") || (!token.equals("") && token.charAt(0)=='/')) {
+						if(prevToken.equals("href") || prevToken.equals("src")) {
+							if(!childrenURL.contains(token)) {
+								child = new HTTPFile(token, this.url);
+//									child = new HTTPFile(token);
+//								child.parent = this;
+								children.add(child);
+								childrenURL.add(token);
+							}
+						}
+					}
+					catch(IOException e) {
+						if (com.mucommander.Debug.ON) {
+							System.out.println("Cannot create child : "+token+" "+e);
+						}
+					}
+				}
+				prevToken = token==null?"":token.toLowerCase();
+			}
+/*
+			// Parse the HTML.
+			kit.read(br, doc, 0);
+			
+			// Iterate through the elements 
+			// of the HTML document.
+			ElementIterator it = new ElementIterator(doc);
+			javax.swing.text.Element elem;
+			HTTPFile child;
+			String att;
+			AttributeSet atts;
+			SimpleAttributeSet s;
+			while ((elem = it.next()) != null) {
 System.out.println("Parsing "+elem.getName());
-					att = null;
+				att = null;
 //					try {
-						atts = elem.getAttributes();
+					atts = elem.getAttributes();
 System.out.println("atts "+atts);
-						if ((s=(SimpleAttributeSet)atts.getAttribute(HTML.Tag.A)) != null)
-							att = ""+s.getAttribute(HTML.Attribute.HREF);
-						else if ((s=(SimpleAttributeSet)atts.getAttribute(HTML.Tag.IMG)) != null)
-							att = ""+s.getAttribute(HTML.Attribute.SRC);
+					if ((s=(SimpleAttributeSet)atts.getAttribute(HTML.Tag.A)) != null)
+						att = ""+s.getAttribute(HTML.Attribute.HREF);
+					else if ((s=(SimpleAttributeSet)atts.getAttribute(HTML.Tag.IMG)) != null)
+						att = ""+s.getAttribute(HTML.Attribute.SRC);
 System.out.println("att="+att);
 
 //					}
 //					catch(IOException e) {
 //						if (com.mucommander.Debug.ON) System.out.println("Error while parsing HTML element: "+e);
 //					}
-	
-					if (att!=null && att.toLowerCase().startsWith("http://")) {
-						try {
-							child = new HTTPFile(att, url);
-							child.parent = this;
-							if(children.indexOf(child)==-1)
-								children.add(child);
-						}
-						catch(IOException e) {
-							if (com.mucommander.Debug.ON) {
-								System.out.println("Unable to create child file : "+att+" "+e);
-								e.printStackTrace();
-							}
+
+				if (att!=null && att.toLowerCase().startsWith("http://")) {
+					try {
+						child = new HTTPFile(att, url);
+						child.parent = this;
+						if(children.indexOf(child)==-1)
+							children.add(child);
+					}
+					catch(IOException e) {
+						if (com.mucommander.Debug.ON) {
+							System.out.println("Unable to create child file : "+att+" "+e);
+							e.printStackTrace();
 						}
 					}
 				}
-	
-				Object childrenArray[] = new AbstractFile[children.size()];
-				return (AbstractFile[])children.toArray(childrenArray);
 			}
-			catch (Exception e) {
-				if (com.mucommander.Debug.ON) {
-					System.out.println("Error while parsing HTML: "+e);
-					e.printStackTrace();
-				}
-				throw new IOException();
+*/
+			Object childrenArray[] = new AbstractFile[children.size()];
+			return (AbstractFile[])children.toArray(childrenArray);
+		}
+		catch (Exception e) {
+			if (com.mucommander.Debug.ON) {
+				System.out.println("Error while parsing HTML: "+e);
+//					e.printStackTrace();
 			}
-			finally {
-				try {
-					// Try and close URL connection
-					if(r!=null)
-						r.close();
-				}
-				catch(IOException e) {}
+			throw new IOException();
+		}
+		finally {
+			try {
+				// Try and close URL connection
+				if(br!=null)
+					br.close();
 			}
+			catch(IOException e) {}
 		}
 	}
 
