@@ -2,6 +2,7 @@ package com.mucommander.file;
 
 import java.io.*;
 import java.util.Vector;
+import java.util.Hashtable;
 
 import com.ice.tar.*;
 import java.util.zip.GZIPInputStream;
@@ -25,9 +26,9 @@ public class TarArchiveFile extends AbstractArchiveFile {
 	 * Returns an InputStream which can be used to read TAR entries.
 	 */
 	private TarInputStream openTarStream() throws IOException {
-		// TGZ file
-		if(getName().toLowerCase().endsWith(".tgz") || getName().toLowerCase().endsWith(".gz"))
-			return new TarInputStream(new GZIPInputStream(file.getInputStream()));
+//		// TGZ file
+//		if(getName().toLowerCase().endsWith(".tgz") || getName().toLowerCase().endsWith(".gz"))
+//			return new TarInputStream(new GZIPInputStream(file.getInputStream()));
 		// TAR-only file
 		return new TarInputStream(file.getInputStream());
 	}
@@ -43,7 +44,7 @@ public class TarArchiveFile extends AbstractArchiveFile {
 		Vector entriesV = new Vector();
 		TarEntry entry;
 		while ((entry=tin.getNextEntry())!=null) {
-if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): found entry "+entry.getName());
+//if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): found entry "+entry.getName()+" streamPos="+tin.getStreamPosition());
 			entriesV.add(entry);
 		}
 		tin.close();
@@ -56,7 +57,7 @@ if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): f
 			TarEntry currentEntry = ((TarEntry)entriesV.elementAt(i));
 			String entryPath = currentEntry.getName();	// entry path will include a trailing '/' if entry is a directory
 			int entryLevel = getEntryLevel(entryPath);
-if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): checking entry #"+i+" "+entryPath+" level="+entryLevel);
+//if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): checking entry #"+i+" "+entryPath+" level="+entryLevel);
 			// Entry is not directly visible
 			if (entryLevel>0) {
 				int slashPos = 0;
@@ -65,7 +66,7 @@ if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): c
 					String dirName = entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
 					String dirNameWithoutSlash = dirName.substring(0, dirName.length()-1);
 
-if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): checking for an existing entry for directory "+dirName);
+//if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): checking for an existing entry for directory "+dirName);
 					boolean entryFound = false;
 					String path;
 					// Is there an entry for this directory ?
@@ -80,7 +81,7 @@ if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): c
 						continue;
 
 					// Directory has no entry, let's manually create and add a TarEntry for it
-if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): creating new entry for directory "+dirName);
+//if(com.mucommander.Debug.ON) System.out.println("TarArchiveFile.loadEntries(): creating new entry for directory "+dirName);
 					TarEntry newEntry = new TarEntry(dirName);
 					newEntry.setModTime(currentEntry.getModTime().getTime());	// Let's use current entry's time, better that 01/01/70
 					entriesV.add(newEntry);

@@ -49,7 +49,7 @@ close:ES:Cerrar
 
 apply:EN:Apply
 apply:FR:Appliquer
-apply:DE:Zuweisen
+apply:DE:Auf alle anwenden
 apply:ES:Aplicar
 
 folder_does_not_exist:EN:This folder doesn't exist or is not available.
@@ -244,7 +244,7 @@ command_bar.local_copy:ES:Copia local
 
 command_bar.local_copy_tooltip:EN:Copy selected file into current folder
 command_bar.local_copy_tooltip:FR:Copier le fichier selectionné dans le dossier courant
-command_bar.local_copy_tooltip:DE:Kopiert markierte Datei in den momentanen Ordner
+command_bar.local_copy_tooltip:DE:Kopiert markierte Datei in den aktuellen Ordner
 command_bar.local_copy_tooltip:ES:Copiar el fichero seleccionado en el directorio actual
 
 command_bar.move:EN:Move
@@ -264,7 +264,7 @@ command_bar.rename:ES:Renombrar
 
 command_bar.rename_tooltip:EN:Rename selected file
 command_bar.rename_tooltip:FR:Renommer le fichier selectionné
-command_bar.rename_tooltip:DE:Markierte Dateien umbenennen
+command_bar.rename_tooltip:DE:Markierte Datei umbenennen
 command_bar.rename_tooltip:ES:Renombrar el fichero seccionado
 
 command_bar.mkdir:EN:Make dir
@@ -274,7 +274,7 @@ command_bar.mkdir:ES:Crear directorio
 
 command_bar.mkdir_tooltip:EN:Create a directory in current folder
 command_bar.mkdir_tooltip:FR:Créer un répertoire dans le dossier courant
-command_bar.mkdir_tooltip:DE:Erstellt einen Ordner im momentanen Ordner
+command_bar.mkdir_tooltip:DE:Erstellt einen Ordner im aktuellen Ordner
 command_bar.mkdir_tooltip:ES:Crear subdirectorio en el directorio actual
 
 command_bar.delete:EN:Delete
@@ -294,7 +294,7 @@ command_bar.refresh:ES:Actualizar
 
 command_bar.refresh_tooltip:EN:Refresh current folder
 command_bar.refresh_tooltip:FR:Actualiser le répertoire courant
-command_bar.refresh_tooltip:DE:Aktualisiere momentanen Ordner
+command_bar.refresh_tooltip:DE:Aktualisiere aktuellen Ordner
 command_bar.refresh_tooltip:ES:Actualizar directorio actual
 
 command_bar.close:EN:Close
@@ -304,7 +304,7 @@ command_bar.close:ES:Cerrar
 
 command_bar.close_tooltip:EN:Close this window
 command_bar.close_tooltip:FR:Fermer cette fenêtre
-command_bar.close_tooltip:DE:Schließt dieses Fenster
+command_bar.close_tooltip:DE:Schließt aktuelles Fenster
 command_bar.close_tooltip:ES:Cerrar esta ventana
 
 
@@ -319,7 +319,7 @@ file_menu:ES:Archivo
 
 file_menu.server_connect:EN:Connect to server...
 file_menu.server_connect:FR:Connexion à un serveur...
-file_menu.server_connect:DE:Verbinde zu Server...
+file_menu.server_connect:DE:Verbinde mit Server...
 file_menu.server_connect:ES:Conectar a un servidor...
 
 file_menu.new_window:EN:New window
@@ -464,7 +464,7 @@ view_menu.swap_folders:ES:Intercambiar directorios
 
 view_menu.set_same_folder:EN:Set same folder
 view_menu.set_same_folder:FR:Affecter le même dossier
-view_menu.set_same_folder:DE:Selber Ordner
+view_menu.set_same_folder:DE:Auf selben Ordner setzen
 view_menu.set_same_folder:ES:Marcar el mismo directorio
 
 view_menu.show_toolbar:EN:Show toolbar
@@ -784,7 +784,7 @@ unzip_dialog.unzipping:ES:Descomprimiendo
 
 #unzip.cannot_unzip_file:EN:Unable to unzip file %1
 #unzip.cannot_unzip_file:FR:Impossible de décompresser le fichier %1
-#unzip.cannot_unzip_file:DE:Kann Dateie %1 nicht entpacken
+#unzip.cannot_unzip_file:DE:Kann Datei %1 nicht entpacken
 #unzip.cannot_unzip_file:ES:Imposible descomprimir el fichero %1
 
 unzip.unzipping_file:EN:Unzipping %1
@@ -883,7 +883,7 @@ download_dialog.error_title:ES:Error de descarga
 
 download.downloading_file:EN:Downloading %1
 download.downloading_file:FR:Téléchargement de %1 en cours
-download.downloading_file:DE:Downloade %1
+download.downloading_file:DE:Download %1
 download.downloading_file:ES:Descargando %1
 
 
@@ -923,7 +923,7 @@ delete.symlink_warning_title:ES:Enlace simbólico encontrado
 
 delete.symlink_warning:EN:This file looks like a symbolic link:\n\n  File: %1\n  Links to: %2\n\nDelete symlink only or\nFollow symlink and delete folder (CAUTION) ?
 delete.symlink_warning:FR:Ce fichier a l'air d'être un lien symbolique:\n\n  Fichier: %1\n  Pointe vers: %2\n\nSupprimer le lien seulement ou\nSuivre le lien symbolique et supprimer le répertoire (ATTENTION) ?
-delete.symlink_warning:DE:Diese Datei scheint ein Symbolic Link zu sein:\n\n  Datei: %1\n  Verlinktt nach: %2\n\nLink löschen oder dem \nLink folgen und Ordner löschen (VORSICHT) ?
+delete.symlink_warning:DE:Diese Datei scheint ein symbolischer Link zu sein:\n\n  Datei: %1\n  Verlinktt nach: %2\n\nLink löschen oder dem \nLink folgen und Ordner löschen (VORSICHT) ?
 delete.symlink_warning:ES:El fichero parece un enlace simbólico:\n\n Fichero: %1\n Enlace a: %2\n\n¿Eliminar enlace simbólico sólo o\nseguir el enlace y elimiar el directorio (PRECAUCIÓN)?
 
 delete.delete_link_only:EN:Delete link
@@ -978,7 +978,7 @@ email_dialog.send:ES:Enviar
 
 email_dialog.error_title:EN:Email files error
 email_dialog.error_title:FR:Erreur d'envoi
-email_dialog.error_title:DE:Fehler beim Mailen der Dateien
+email_dialog.error_title:DE:Fehler beim Senden der Dateien
 email_dialog.error_title:ES:Error de envío
 
 email_dialog.read_error:EN:Unable to read files in subfolders.
@@ -1003,7 +1003,7 @@ email.sending_file:ES:Enviando %1
 
 email.connecting_to_server:EN:Connecting to %1
 email.connecting_to_server:FR:Connexion à %1
-email.connecting_to_server:DE:Verbinde nach %1
+email.connecting_to_server:DE:Verbinden mit %1
 email.connecting_to_server:ES:Conectando a %1
 
 email.server_unavailable:EN:Unable to contact mail server %1, check your mail preferences or try again later.
@@ -1033,7 +1033,7 @@ email.send_file_error:ES:Imposible enviar el fichero %1, el mensaje no ha sido e
 
 file_exists_dialog.title:EN:File already exists in destination
 file_exists_dialog.title:FR:Le fichier existe dans la destination
-file_exists_dialog.title:DE:Datei existiert schon am Zielort
+file_exists_dialog.title:DE:Datei existiert schon am Ziel
 file_exists_dialog.title:ES:El fichero ya existe en el destino
 
 
@@ -1058,7 +1058,7 @@ file_selection_dialog.mark_description:ES:Marcar ficheros cuyo nombre:
 
 file_selection_dialog.unmark_description:EN:Unmark files whose filename:
 file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom:
-file_selection_dialog.unmark_description:DE:Demarkiere deren Name:
+file_selection_dialog.unmark_description:DE:Demarkiere Dateien deren Name:
 file_selection_dialog.unmark_description:ES:Desmarcar ficheros cuyo nombre:
 
 file_selection_dialog.contains:EN:Contains
@@ -1198,7 +1198,7 @@ run_dialog.run_command:EN:$[file_menu.run_command]
 
 run_dialog.run_command_description:EN:Run in current folder
 run_dialog.run_command_description:FR:Exécuter dans le répertoire courant
-run_dialog.run_command_description:DE:Ausführen im momentanen Ordner
+run_dialog.run_command_description:DE:Ausführen im aktuellen Ordner
 run_dialog.run_command_description:ES:Ejecutar en el directorio actual
 
 run_dialog.command_output:EN:Command output
@@ -1255,12 +1255,12 @@ server_connect_dialog.port:ES:Puerto
 
 server_connect_dialog.server_url:EN:Server URL
 server_connect_dialog.server_url:FR:URL serveur
-server_connect_dialog.server_url:DE:URL Server
+server_connect_dialog.server_url:DE:Server URL
 server_connect_dialog.server_url:ES:Dirección del servidor
 
 server_connect_dialog.http_url:EN:Web site URL
 server_connect_dialog.http_url:FR:URL site web
-server_connect_dialog.http_url:DE:URL Internetseite
+server_connect_dialog.http_url:DE:URL Webseite
 server_connect_dialog.http_url:ES:Dirección del sitio web
 
 server_connect_dialog.connect:EN:Connect
@@ -1280,7 +1280,7 @@ server_connect_dialog.auth_error:ES:Nombre o contraseña inválido.
 
 ftp_connect.passive_mode:EN:Enable passive mode
 ftp_connect.passive_mode:FR:Activer le mode passif
-ftp_connect.passive_mode:DE:Passive Mode aktivieren
+ftp_connect.passive_mode:DE:Passiven Modus aktivieren
 ftp_connect.passive_mode:ES:Activar modo pasivo
 
 ftp_connect.anonymous_user:EN:Anonymous user
@@ -1472,7 +1472,7 @@ file_editor.save_as:ES:Salvar como...
 
 file_editor.save_warning:EN:Save changes made to this file before closing ?
 file_editor.save_warning:FR:Enregistrer les modifications avant de fermer ce fichier ?
-file_editor.save_warning:DE:Änderungen an der Datei speichern vor dem Schließen ?
+file_editor.save_warning:DE:Änderungen an der Datei vor dem Schließen speichern ?
 file_editor.save_warning:ES:¿Desea guardar los cambios realizados a este fichero antes de salir?
 
 file_editor.cannot_write:EN:Unable to write file.
@@ -1543,7 +1543,7 @@ shortcuts_dialog.navigation.change_right:ES:Cambiar el directorio derecho
 
 shortcuts_dialog.navigation.tab:EN:Switch between left and right panels
 shortcuts_dialog.navigation.tab:FR:Basculer entre les dossiers de droite et de gauche
-shortcuts_dialog.navigation.tab:DE:Zwischen linken und rechten Fenster wechseln
+shortcuts_dialog.navigation.tab:DE:Zwischen linkem und rechtem Fenster wechseln
 shortcuts_dialog.navigation.tab:ES:Cambiar entre los paneles izquierdo y derecho
 
 shortcuts_dialog.navigation.enter:EN:Enter folder / Enter archive / Execute
@@ -1558,12 +1558,12 @@ shortcuts_dialog.navigation.execute:ES:Ejecutar el fichero seleccionado con la a
 
 shortcuts_dialog.navigation.go_to_first:EN:Select first file in current folder
 shortcuts_dialog.navigation.go_to_first:FR:Selectionner le premier fichier du dossier
-shortcuts_dialog.navigation.go_to_first:DE:Zur ersten Datei momentanen Ordner springen
+shortcuts_dialog.navigation.go_to_first:DE:Erste Datei im aktuellen Ordner markieren
 shortcuts_dialog.navigation.go_to_first:ES:Seleccionar el primer fichero en el directorio actual
 
 shortcuts_dialog.navigation.go_to_last:EN:Select last file in current folder
 shortcuts_dialog.navigation.go_to_last:FR:Selectionner le dernier fichier du dossier
-shortcuts_dialog.navigation.go_to_last:DE:Zur letzte Datei im momentanen Ordner springen
+shortcuts_dialog.navigation.go_to_last:DE:Letzte Datei im aktuellen Ordner markieren
 shortcuts_dialog.navigation.go_to_last:ES:Seleccionar el último fichero en el directorio actual
 
 shortcuts_dialog.view:EN:View
@@ -1602,12 +1602,12 @@ shortcuts_dialog.selection:DE:Auswahl
 shortcuts_dialog.selection:ES:Selección
 
 shortcuts_dialog.selection.mark_group:EN:Mark a group of files
-shortcuts_dialog.selection.mark_group:EN:Marquer un groupe de fichiers
+shortcuts_dialog.selection.mark_group:FR:Marquer un groupe de fichiers
 shortcuts_dialog.selection.mark_group:DE:Eine Gruppe von Dateien markieren
 shortcuts_dialog.selection.mark_group:ES:Marcar un grupo de ficheros
 
 shortcuts_dialog.selection.unmark_group:EN:Unmark a group of files
-shortcuts_dialog.selection.unmark_group:EN:Dé-marquer un groupe de fichiers
+shortcuts_dialog.selection.unmark_group:FR:Dé-marquer un groupe de fichiers
 shortcuts_dialog.selection.unmark_group:DE:Eine Gruppe von Dateien demarkieren
 shortcuts_dialog.selection.unmark_group:ES:Desmarcar un grupo de ficheros
 
@@ -1623,17 +1623,17 @@ shortcuts_dialog.file_operations:ES:Operaciones con ficheros
 
 shortcuts_dialog.file_operations.server_connect:EN:Connect to a remote server
 shortcuts_dialog.file_operations.server_connect:FR:Se connecter à un serveur distant
-shortcuts_dialog.file_operations.server_connect:DE:Zu einem Remote Server verbinden
+shortcuts_dialog.file_operations.server_connect:DE:Mit einem Remote Server verbinden
 shortcuts_dialog.file_operations.server_connect:ES:Conectar a un servidor remoto
 
 shortcuts_dialog.file_operations.run_command:EN:Run a command in current folder
 shortcuts_dialog.file_operations.run_command:FR:Exécuter une commande dans le dossier courant
-shortcuts_dialog.file_operations.run_command:DE:Einen Befehl im momentanen Ordner ausführen
+shortcuts_dialog.file_operations.run_command:DE:Einen Befehl im aktuellen Ordner ausführen
 shortcuts_dialog.file_operations.run_command:ES:Ejecutar un comando en el directorio actual
 
 shortcuts_dialog.file_operations.zip:EN:Compress marked files in a ZIP file
 shortcuts_dialog.file_operations.zip:FR:Compresser les fichiers marqués dans un fichier ZIP 
-shortcuts_dialog.file_operations.zip:DE:Markierte Datein in eine ZIP Datei packen
+shortcuts_dialog.file_operations.zip:DE:Markierte Dateien in eine ZIP Datei packen
 shortcuts_dialog.file_operations.zip:ES:Comprimir los ficheros marcados en un fichero ZIP 
 
 shortcuts_dialog.file_operations.unzip:EN:Uncompress marked ZIP files
@@ -1864,7 +1864,7 @@ prefs_dialog.marked_file_color:ES:Fichero marcado
 
 prefs_dialog.selected_file_color:EN:Selected file
 prefs_dialog.selected_file_color:FR:Fichier sélectionné
-prefs_dialog.selected_file_color:DE:Momentane Datei
+prefs_dialog.selected_file_color:DE:Selektierte Datei
 prefs_dialog.selected_file_color:ES:Fichero seleccionado
 
 prefs_dialog.hidden_file_color:EN:Hidden file

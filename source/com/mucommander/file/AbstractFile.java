@@ -100,15 +100,15 @@ public abstract class AbstractFile {
 	 */
 	static AbstractFile wrapArchive(AbstractFile file) {
         String name = file.getName();
-//		if(name!=null && !file.isDirectory() && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")))
-//			return new ZipArchiveFile(file);
 		if(name!=null && !file.isDirectory()) {
 			String nameLC = name.toLowerCase();
 			if(nameLC.endsWith(".zip") || nameLC.endsWith(".jar"))
 				return new ZipArchiveFile(file);
-			else if(nameLC.endsWith(".tar") || nameLC.endsWith(".tgz") || nameLC.endsWith(".tar.gz"))
+//			else if(nameLC.endsWith(".tar") || nameLC.endsWith(".tgz") || nameLC.endsWith(".tar.gz"))
+			else if(nameLC.endsWith(".tar"))
 				return new TarArchiveFile(file);
-			else if(nameLC.endsWith(".gz"))
+//			else if(nameLC.endsWith(".gz"))
+			else if(nameLC.endsWith(".gz") || nameLC.endsWith(".tgz") || nameLC.endsWith(".tar.gz"))
 				return new GzipArchiveFile(file);
 		}
 		
