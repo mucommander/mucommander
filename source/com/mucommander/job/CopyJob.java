@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 
 /**
- * This class is responsible for copying recursively a group of files.
+ * This job copies recursively a group of files.
  */
 public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 	private MainFrame mainFrame;
@@ -127,7 +127,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 					destFolder.mkdir(destFileName);
 				}
             	catch(IOException e) {
-                	int ret = showErrorDialog("Unable to create folder "+destFileName);
+                	int ret = showErrorDialog(Translator.get("copy.cannot_create_folder", destFileName));
                 	if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
 	                    stop();
             		return;		// abort in all cases
@@ -142,7 +142,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
                 }
 			}
             catch(IOException e) {
-                int ret = showErrorDialog("Unable to read contents of folder "+destFile.getAbsolutePath());
+                int ret = showErrorDialog(Translator.get("copy.cannot_read_folder", destFile.getAbsolutePath()));
                 if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
                     stop();
 			}
@@ -220,7 +220,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 				catch(IOException e) {
 					if(com.mucommander.Debug.ON)
 						System.out.println(""+e);
-				    int ret = showErrorDialog("Error while "+(unzip?"unzipping":"copying")+" file "+file.getName());
+					int ret = showErrorDialog(Translator.get(unzip?"unzip.error_on_file":"copy.error_on_file", file.getName()));
 				    if(ret!=SKIP_ACTION)		// CANCEL_ACTION or close dialog
 				        stop();                
 				}
@@ -228,7 +228,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 			catch(IOException e) {
 				if(com.mucommander.Debug.ON)
 					System.out.println(""+e);
-			    int ret = showErrorDialog("Unable to "+(unzip?"unzip":"copy")+" file "+file.getName());
+				int ret = showErrorDialog(Translator.get(unzip?"unzip.cannot_unzip_file":"copy.cannot_copy_file", file.getName()));
 			    if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
 			        stop();
 			}
@@ -266,7 +266,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
     }
 
     public String getStatusString() {
-        return (unzip?"Unzipping ":"Copying ")+currentFileInfo;
+        return Translator.get(unzip?"unzip.unzipping_file":"copy.copying_file", currentFileInfo);
     }
  
 
@@ -293,7 +293,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 
 	
     private int showErrorDialog(String message) {
-		QuestionDialog dialog = new QuestionDialog(progressDialog, (unzip?"Unzip":"Copy")+" error", message, mainFrame,
+		QuestionDialog dialog = new QuestionDialog(progressDialog, Translator.get(unzip?"unzip_dialog.error_title":"copy_dialog.error_title", message, mainFrame,
 			new String[] {SKIP_TEXT, CANCEL_TEXT},
 			new int[]  {SKIP_ACTION, CANCEL_ACTION},
 			0);

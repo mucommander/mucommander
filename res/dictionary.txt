@@ -4,20 +4,17 @@
 # where:
 # - <key> is the key used by the application to designate this entry
 # - <lang> is a 2-letter country code (EN, FR, JP...)
-# - <value> is the
+# - <value> is the localized text in the <lang> language
 #
 # IMPORTANT: This file should be saved in UTF-8 character encoding.
 #
-# Some things to keep in mind when translating:
-#
+# Some things to keep in mind when localizing texts into a new language:
+# - you should never modify keys, only their localized values
 # - when translating an entry which has a variable (%1, %2...) placed at the end,
 #  it might be because its value at runtime can be very large and thus will be
 #  truncated where it appears. In this case, please try to use a sentence that
 #  puts the variable at the end as well.
 #  
-#
-#
-
 
 ###########
 # General #
@@ -334,8 +331,8 @@ table.date:FR:Date
 table.folder_access_error_title:EN:Folder access error
 table.folder_access_error_title:FR:Folder access error
 
-table.folder_access_error:EN:Unable to access folder contents
-table.folder_access_error:FR:Unable to access folder contents
+table.folder_access_error:EN:Unable to read folder contents
+table.folder_access_error:FR:Unable to read folder contents
 
 table.folder_does_not_exist:EN:$[folder_does_not_exist]
 
@@ -390,6 +387,20 @@ copy_dialog.same_source_destination:FR:Les répertoires source et destination so
 copy_dialog.copying:EN:Copying files
 copy_dialog.copying:FR:Copie en cours
 
+copy.cannot_create_folder:EN:$[mkdir_dialog.cannot_create_dir]
+
+copy.cannot_read_folder:EN:Unable to read contents of folder %1
+copy.cannot_read_folder:FR:Impossible de lire le contenu du dossier %1
+
+copy.error_on_file:EN:An error occurred while copying %1
+copy.error_on_file:FR:Une erreur est survenue lors de la copie de %1
+
+copy.cannot_copy_file:EN:Unable to copy file %1
+copy.cannot_copy_file:FR:Impossible de copier le fichier %1
+
+copy.copying_file:EN:Copying %1
+copy.copying_file:FR:Copie de %1 en cours
+
 
 ################
 # Unzip dialog #
@@ -408,6 +419,15 @@ unzip_dialog.folder_does_not_exist:EN:$[folder_does_not_exist]
 
 unzip_dialog.unzipping:EN:Unzipping files
 unzip_dialog.unzipping:FR:Décompression en cours
+
+unzip.error_on_file:EN:An error occurred while unzipping %1
+unzip.error_on_file:FR:Une erreur est survenue lors de la décompression de %1
+
+unzip.cannot_unzip_file:EN:Unable to unzip file %1
+unzip.cannot_unzip_file:FR:Impossible de décompresser le fichier %1
+
+unzip.unzipping_file:EN:Unzipping %1
+unzip.unzipping_file:FR:Décompression de %1 en cours
 
 
 ###############
@@ -433,7 +453,7 @@ move_dialog.folder_does_not_exist:EN:$[this_folder_does_not_exist]
 
 move_dialog.same_source_destination:EN:$[copy_dialog.same_source_destination]
 
-move_dialog.cannot_move_to_itself:EN:Cannot move destination folder to itself.
+move_dialog.cannot_move_to_itself:EN:Unable to move destination folder to itself.
 move_dialog.cannot_move_to_itself:FR:Impossible de déplacer le dossier de destination vers lui-même.
 
 move_dialog.moving:EN:Moving files
@@ -650,7 +670,7 @@ zip_dialog.zipping:FR:Compression en cours
 zip_dialog.error_title:EN:Zip error
 zip_dialog.error_title:FR:Erreur de compression
 
-zip_dialog.cannot_write:EN:Cannot create zip file in destination folder.
+zip_dialog.cannot_write:EN:Unable to create zip file in destination folder.
 zip_dialog.cannot_write:FR:Impossible de créer le fichier zip dans le dossier de destination.
 
 zip_dialog_description:EN:Add selected files to

@@ -334,8 +334,6 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 
 	private int showFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
 		JPanel panel = new JPanel(new GridLayout(0,1));
-	//				panel.add(new JLabel("File already exists in destination:"));
-	//				panel.add(new JLabel(""));
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm a");
 		NumberFormat numberFormat = NumberFormat.getInstance();
 		panel.add(new JLabel("Source: "+sourceFile.getAbsolutePath()));
