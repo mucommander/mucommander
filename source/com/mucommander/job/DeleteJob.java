@@ -62,8 +62,7 @@ public class DeleteJob extends FileJob implements Runnable {
 		String filePath = file.getAbsolutePath();
 		filePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
 
-//        currentFileInfo = "\""+filePath+"\" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
-        currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
+        currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
 				
 		if(isInterrupted())
             return false;

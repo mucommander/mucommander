@@ -34,7 +34,7 @@ public class MoveDialog extends FocusDialog implements ActionListener {
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
 	
 	
-	public MoveDialog(MainFrame mainFrame, boolean renameDialog) {
+	public MoveDialog(MainFrame mainFrame, boolean isShiftDown) {
 		super(mainFrame, ("Move/Rename"), mainFrame);
 		this.mainFrame = mainFrame;
 		
@@ -50,12 +50,12 @@ public class MoveDialog extends FocusDialog implements ActionListener {
         JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		
-		JLabel label = new JLabel(renameDialog?"Move to":"Rename to");
+		JLabel label = new JLabel((isShiftDown && nbFiles==1)?"Move to":"Rename to");
 		label.setAlignmentX(LEFT_ALIGNMENT);
         mainPanel.add(label);
 
 		String fieldText;
-		if(renameDialog) {
+		if(isShiftDown && nbFiles==1) {
 			fieldText = ((AbstractFile)filesToMove.elementAt(0)).getName();
 		}
 		else {

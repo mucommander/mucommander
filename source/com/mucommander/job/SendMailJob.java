@@ -149,7 +149,7 @@ public class SendMailJob extends ExtendedFileJob {
             this.currentFileIndex = i;
             file = (AbstractFile)filesToSend.elementAt(i);
             this.currentFileSize = file.getSize();
-			this.currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
+			this.currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
             try {
                 sendAttachment(file);
                 if(i!=nbFiles-1)

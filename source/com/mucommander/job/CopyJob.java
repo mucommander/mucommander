@@ -117,8 +117,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 
 //System.out.println("SOURCE "+file.getAbsolutePath()+" DEST "+destFilePath);
 
-//		currentFileInfo = "\""+destFilePath.substring(baseDestFolder.getAbsolutePath().length()+1, destFilePath.length())+ "\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
-		currentFileInfo = "\""+originalName+ "\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
+		currentFileInfo = "\""+originalName+ "\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
 
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
 

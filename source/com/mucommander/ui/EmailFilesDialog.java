@@ -157,7 +157,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 		}
 		String text = nbSelected
 			+(nbSelected>1?" files":" file")
-			+(nbSelected==0?"":" ("+SizeFormatter.format(bytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG)+")");
+			+(nbSelected==0?"":" ("+SizeFormatter.format(bytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB)+")");
 		infoLabel.setText(text);
 		infoLabel.repaint(100);
 	}

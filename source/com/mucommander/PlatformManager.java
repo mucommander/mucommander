@@ -12,15 +12,15 @@ public class PlatformManager {
 
 	// OS types
 	// Windows 95, 98, Me
-	private final static int WINDOWS_9X = 11;
+	public final static int WINDOWS_9X = 11;
 	// Windows NT, 2000, XP and up
-	private final static int WINDOWS_NT = 12;
+	public final static int WINDOWS_NT = 12;
 	// Mac OS 7.x, 8.x or 9.x
-	private final static int MAC_OS = 21;
+	public final static int MAC_OS = 21;
 	// Mac OS X and up
-	private final static int MAC_OS_X = 22;
+	public final static int MAC_OS_X = 22;
 	// Other OS
-	private final static int OTHER = 0;
+	public final static int OTHER = 0;
 	
 	private static String osName;
 	private static String osVersion;
@@ -68,6 +68,14 @@ public class PlatformManager {
         this.process = p;
     }
  */  
+	
+	/**
+	 * Returns OS type (OS family if you wish).
+	 */
+	public static int getOsType() {
+		return osType;
+	}
+	
 	
 	/**
 	 * Returns <code>true</code> if the current platform is capable of opening the given URL

@@ -115,8 +115,7 @@ public class ZipJob extends ExtendedFileJob implements Runnable {
         
 		String filePath = file.getAbsolutePath();
 		String zipEntryRelativePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
-//		currentFileInfo = "\""+zipEntryRelativePath+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
-		currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
+		currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
 		
 		try {
 			if (file.isFolder() && !(file instanceof ArchiveFile)) {

@@ -239,8 +239,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			new ZipDialog(mainFrame).show();
 		}
 		else if (source == unzipItem) {
-//			mainFrame.getCommandBar().showCopyDialog(true);
-			new CopyDialog(mainFrame, true);
+			new CopyDialog(mainFrame, true, false);
 		}
         else if  (source == emailFilesItem) {
 			if(!SendMailJob.mailPreferencesSet()) {

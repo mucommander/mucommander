@@ -12,7 +12,7 @@ import java.awt.event.*;
  * This dialog allows the user to add (mark) or remove (unmark)
  * files from current selection, matching a specified keyword.
  */
-public class FileSelectionDialog extends FocusDialog implements ActionListener, KeyListener {
+public class FileSelectionDialog extends FocusDialog implements ActionListener {
 
 	/* Filename comparison */		
 	private final static int CONTAINS = 0;
@@ -78,9 +78,11 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener, 
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
+		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
+		
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
-		northPanel.addKeyListener(this);
+//		northPanel.addKeyListener(this);
 		northPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 		JLabel label = new JLabel((addToSelection?"Mark":"Unmark")+" files whose filename:");
 		label.setAlignmentX(LEFT_ALIGNMENT);
@@ -94,13 +96,13 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener, 
 		comparisonComboBox.addItem("Ends with");
 		comparisonComboBox.addItem("Is");
 		comparisonComboBox.setSelectedIndex(comparison);
-		comparisonComboBox.addKeyListener(this);
+		comparisonComboBox.addKeyListener(escapeKeyAdapter);
 		tempPanel.add(comparisonComboBox);
 				
 		// selectionField is initialized with last textfield's value (if any)
 		selectionField = new JTextField(keywordString);
 		selectionField.addActionListener(this);
-		selectionField.addKeyListener(this);
+		selectionField.addKeyListener(escapeKeyAdapter);
 		selectionField.setSelectionStart(0);
 		selectionField.setSelectionEnd(keywordString.length());
 		tempPanel.add(selectionField);
@@ -111,12 +113,12 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener, 
 		northPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 		
 		caseSensitiveCheckBox = new JCheckBox("Case sensitive", caseSensitive);
-		caseSensitiveCheckBox.addKeyListener(this);
+		caseSensitiveCheckBox.addKeyListener(escapeKeyAdapter);
 		caseSensitiveCheckBox.setAlignmentX(LEFT_ALIGNMENT);
 		northPanel.add(caseSensitiveCheckBox);
 
 		includeFoldersCheckBox = new JCheckBox("Include folders", includeFolders);
-		includeFoldersCheckBox.addKeyListener(this);
+		includeFoldersCheckBox.addKeyListener(escapeKeyAdapter);
 		includeFoldersCheckBox.setAlignmentX(LEFT_ALIGNMENT);
 		northPanel.add(includeFoldersCheckBox);
 		
@@ -129,9 +131,9 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener, 
 		okButton = new JButton("OK");
 		okButton.setDefaultCapable(true);
 		getRootPane().setDefaultButton(okButton);
-		okButton.addKeyListener(this);
+		okButton.addKeyListener(escapeKeyAdapter);
 		cancelButton = new JButton("Cancel");
-		cancelButton.addKeyListener(this);
+		cancelButton.addKeyListener(escapeKeyAdapter);
 		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
 		// Selection field receives initial keyboard focus
@@ -210,26 +212,5 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener, 
 		dispose();
 		activeTable.requestFocus();
 	}
-
-	
-	/***********************
-	 * KeyListener methods *
-	 ***********************/
-
-    /**
-	 * Escape disposes dialog.
-	 */
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode()==KeyEvent.VK_ESCAPE)
-			dispose();
-    }
-
-
-    public void keyTyped(KeyEvent e) {
-	}
-
-    public void keyReleased(KeyEvent e) {
-    }
-
 
 }

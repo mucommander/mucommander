@@ -17,67 +17,76 @@ public class SizeFormatter {
     public final static int UNIT_SHORT = 4;
 	/** Bit mask for short unit string, e.g. "bytes" */
     public final static int UNIT_LONG = 8;
-	
+
 	/** Bit mask to include a space character between digits and unit parts */
 	public final static int INCLUDE_SPACE = 16;
+
+	/** Bit mask to round any size < 1KB to 1KB (except 0 which will be 0 KB) */
+	public final static int ROUND_TO_KB = 32;
 
 
     public static String format(long size, int format) {
         String digitsString;
 		String unitString;
-
-		if(size==0) {
-			digitsString = "0";
-			unitString = (format&UNIT_LONG)!=0?"byte":(format&UNIT_SHORT)!=0?"b":"";
-		}
-		else if((format&DIGITS_FULL)!=0) {
+		
+		boolean unitLong = (format&UNIT_LONG)!=0;
+		boolean unitShort = (format&UNIT_SHORT)!=0;
+		boolean digitsShort = (format&DIGITS_SHORT)!=0;
+		boolean roundToKb = (format&ROUND_TO_KB)!=0;
+		
+		if((format&DIGITS_FULL)!=0) {
 			String s = ""+size;
 			int len = s.length();
 			digitsString = "";
 			for(int i=len; i>0; i-=3)
 				digitsString = s.substring(Math.max(i-3, 0), i)+(i==len?"":","+digitsString);
 
-			unitString = (format&UNIT_LONG)!=0?"bytes":(format&UNIT_SHORT)!=0?"b":"";
+			unitString = unitLong?"bytes":unitShort?"b":"";
 		}
 		else {
 			// size < 1KB
-			if(size<1000) {
+			if(size<1000 && !roundToKb) {
 				digitsString = ""+size;
-				unitString = (format&UNIT_LONG)!=0?(size==1?"byte":"bytes"):(format&UNIT_SHORT)!=0?"b":"";
+				unitString = unitLong?(size<=1?"byte":"bytes"):unitShort?"b":"";
 			}
 			// size < 10KB	-> "9,6 KB"
-			else if(size<10000 && (format&DIGITS_SHORT)==0) {
-				int nKB = (int)size/1000;
-				digitsString = nKB+","+((""+(size-nKB*1000)).charAt(0));
-				unitString = (format&UNIT_LONG)!=0?"KB":(format&UNIT_SHORT)!=0?"KB":"";;
+			else if(size<10000 && !digitsShort) {
+				if(roundToKb) {
+					digitsString = size==0?"0":"1";
+				}
+				else {
+					int nKB = (int)size/1000;
+					digitsString = nKB+","+((""+(size-nKB*1000)).charAt(0));
+				}
+				unitString = unitLong?"KB":unitShort?"KB":"";;
 			}
 			// size < 1MB -> "436 KB"
 			else if(size<1000000) {
 				digitsString = ""+size/1000;
-				unitString = (format&UNIT_LONG)!=0?"KB":(format&UNIT_SHORT)!=0?"KB":"";
+				unitString = unitLong?"KB":unitShort?"KB":"";
 			}
 			// size < 10MB -> "4,3 MB"
-			else if(size<10000000 && (format&DIGITS_SHORT)==0) {
+			else if(size<10000000 && !digitsShort) {
 				int nMB = (int)size/1000000;
 				digitsString = nMB+","+((""+(size-nMB*1000000)).charAt(0));
-				unitString = (format&UNIT_LONG)!=0?"MB":(format&UNIT_SHORT)!=0?"MB":"";
+				unitString = unitLong?"MB":unitShort?"MB":"";
 			}
 			// size < 1GB -> "548 MB"
 			else if(size<1000000000) {
 				digitsString = ""+size/1000000;
-				unitString = (format&UNIT_LONG)!=0?"MB":(format&UNIT_SHORT)!=0?"MB":"";
+				unitString = unitLong?"MB":unitShort?"MB":"";
 			}
 	
 			// size < 10GB -> "4,8 GB"
-			else if(size<10000000000l && (format&DIGITS_SHORT)==0) {
+			else if(size<10000000000l && !digitsShort) {
 				long nGB = size/1000000000;
 				digitsString = nGB+","+((""+(size-nGB*1000000000)).charAt(0));
-				unitString = (format&UNIT_LONG)!=0?"GB":(format&UNIT_SHORT)!=0?"GB":"";
+				unitString = unitLong?"GB":unitShort?"GB":"";
 			}
 			// size > 1TB -> "216 GB"
 			else {
 				digitsString = ""+size/1000000000;
-				unitString = (format&UNIT_LONG)!=0?"GB":(format&UNIT_SHORT)!=0?"GB":"";
+				unitString = unitLong?"GB":unitShort?"GB":"";
 			}
 		}
 

@@ -396,7 +396,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
         }
         else if(keyCode == KeyEvent.VK_F5 && !e.isControlDown()) {
 //            commandBar.showCopyDialog(false);
-			new CopyDialog(this, false);
+			new CopyDialog(this, false, e.isShiftDown());
         }
         else if(keyCode == KeyEvent.VK_F6 && !e.isControlDown()) {
 			new MoveDialog(this, e.isShiftDown());
@@ -435,9 +435,19 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
         else if(keyCode == KeyEvent.VK_ENTER && e.isAltDown()) {
         	showPropertiesDialog();
 		}
+		else if(keyCode == KeyEvent.VK_SHIFT) {
+			// Set shift mode on : displays Rename instead of Move
+			commandBar.setShiftMode(true);
+		}
     }
 
     public void keyReleased(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+
+		if(keyCode == KeyEvent.VK_SHIFT) {
+			// Set shift mode back to off : displays Move instead of Rename
+			commandBar.setShiftMode(false);
+		}
     }
 
     public void keyTyped(KeyEvent e) {

@@ -39,8 +39,9 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 	 *
 	 * @param mainFrame the main frame this dialog is attached to.
 	 * @param unzipDialog true if this dialog has been invoked by the 'unzip' action.
+	 * @param isShiftDown true if shift key was pressed when invoking this dialog.
 	 */
-	public CopyDialog(MainFrame mainFrame, boolean unzipDialog) {
+	public CopyDialog(MainFrame mainFrame, boolean unzipDialog, boolean isShiftDown) {
 		super(mainFrame, (unzipDialog?"Unzip":"Copy"), mainFrame);
 		this.mainFrame = mainFrame;
 	    this.unzipDialog = unzipDialog;
@@ -62,10 +63,16 @@ public class CopyDialog extends FocusDialog implements ActionListener {
         mainPanel.add(label);
 
 		AbstractFile destFolder = (activeTable==table1?table2:table1).getCurrentFolder();
-        String fieldText = destFolder.getAbsolutePath()+destFolder.getSeparator();
-        if(nbFiles==1 && !unzipDialog)
-			fieldText += ((AbstractFile)filesToCopy.elementAt(0)).getName();
-
+        String fieldText;
+		if(isShiftDown && nbFiles==1) {
+			fieldText = ((AbstractFile)filesToCopy.elementAt(0)).getName();
+		}
+		else {
+			fieldText = destFolder.getAbsolutePath()+destFolder.getSeparator();
+			if(nbFiles==1 && !unzipDialog)
+				fieldText += ((AbstractFile)filesToCopy.elementAt(0)).getName();
+		}
+			
 		copyPathField = new JTextField(fieldText);
         // Text is selected so that user can directly type and replace path
         copyPathField.setSelectionStart(0);

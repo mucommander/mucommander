@@ -44,7 +44,8 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	private final static String VIEW_CAPTION = "[F3] View";
 	private final static String EDIT_CAPTION = "[F4] Edit";
 	private final static String COPY_CAPTION = "[F5] Copy";
-	private final static String MOVE_CAPTION = "[F6] Move/Rename";
+	private final static String MOVE_CAPTION = "[F6] Move";
+	private final static String RENAME_CAPTION = "[F6] Rename";
 	private final static String MKDIR_CAPTION = "[F7] Make dir";
 	private final static String DELETE_CAPTION = "[F8] Delete";
 	private final static String REFRESH_CAPTION = "[F9] Refresh";
@@ -75,6 +76,8 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 		// Shift+F6 renames a file but since shift-clicks cannot be caught using
 		// an ActionListener (because of a known bug), we use a MouseListener
 		moveButton.addMouseListener(this);
+		// Same for copy button
+		copyButton.addMouseListener(this);
 		mkdirButton = addButton(MKDIR_CAPTION);
 		deleteButton = addButton(DELETE_CAPTION);
 		refreshButton = addButton(REFRESH_CAPTION);
@@ -92,6 +95,16 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 		return button;
 	}
 
+	/**
+	 * Sets shift mode on or off : some buttons such as 'F6 Move' may want to indicate
+	 * the action is different when shift is pressed.
+	 */
+	public void setShiftMode(boolean on) {
+		moveButton.setText(on?RENAME_CAPTION:MOVE_CAPTION);
+		moveButton.repaint();
+	}
+
+	
 	private void showErrorDialog(String msg, String title) {
 		JOptionPane.showMessageDialog(mainFrame, msg, title, JOptionPane.ERROR_MESSAGE);
 
@@ -498,7 +511,14 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	// MouseListener methods to catch shift-clicked buttons
 	///////////////////////////////////////////////////////
 	public void mouseClicked(MouseEvent e) {
-		new MoveDialog(mainFrame, e.isShiftDown());
+		Object source = e.getSource();
+		
+		if(source == moveButton) {
+			new MoveDialog(mainFrame, e.isShiftDown());
+		}
+		else if(source == copyButton) {
+			new CopyDialog(mainFrame, false, e.isShiftDown());	
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
@@ -521,12 +541,9 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
         if(source == viewButton) {
         	doView();
 		}
-        if(source == editButton) {
+        else if(source == editButton) {
         	doEdit();
 		}
-        if(source == copyButton) {
-			new CopyDialog(mainFrame, false);
-        }
         else if(source == mkdirButton) {
             showMkdirDialog();
         }

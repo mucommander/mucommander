@@ -8,6 +8,8 @@ import com.mucommander.ui.CheckVersionDialog;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 import com.mucommander.conf.*;
+import com.mucommander.ui.macosx.FinderIntegration;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -71,6 +73,17 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
         if(!(checkForUpdates==null || checkForUpdates.equals("false")))
             new CheckVersionDialog(mainFrame, false);
         
+		
+		if(PlatformManager.getOsType()==PlatformManager.MAC_OS_X) {
+			try {
+				FinderIntegration finderIntegration = new FinderIntegration();
+			}
+			catch(Exception e) {
+				if(com.mucommander.Debug.TRACE)
+					System.out.println("Launcher.init: exception thrown while initializing Mac Finder integration");
+			}
+		}
+		
 		// Dispose splash screen
 		splashScreen.dispose();
 	}
@@ -125,8 +138,8 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 			}
 		}
 
-if(Debug.TRACE)
-	System.out.println("defaultPath "+defaultPath);
+		if(Debug.TRACE)
+			System.out.println("defaultPath "+defaultPath);
 		
 		AbstractFile folder = null;
 		if(folderPath!=null)
@@ -135,13 +148,21 @@ if(Debug.TRACE)
 		if(folder==null || !folder.exists())
 			folder = AbstractFile.getAbstractFile(defaultPath);
 
-if(Debug.TRACE)
-	System.out.println("initial folder "+folder.getAbsolutePath());
+		if(Debug.TRACE)
+			System.out.println("initial folder "+folder.getAbsolutePath());
 		
 		return folder;
 	}
 
-
+	
+	/**
+	 * Returns the MainFrame instance that currently is active.
+	 */
+	public MainFrame getCurrentMainFrame() {
+		return currentMainFrame;
+	}
+	
+	
 	/**
 	 * Creates a new MainFrame
 	 */
@@ -176,7 +197,6 @@ if(Debug.TRACE)
 			if(nbFrames<10)
 				checkBox.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[nbFrames], ActionEvent.CTRL_MASK));
 			windowMenu.add(checkBox);
-//			windowMenu.insert(checkBox, nbFrames-1);
 		}
 		
 		// Adds the new MainFrame to the vector
@@ -192,7 +212,6 @@ if(Debug.TRACE)
 			if(i<10)
 				checkBox.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[i], ActionEvent.CTRL_MASK));
 			windowMenu.add(checkBox);
-//			windowMenu.insert(checkBox, nbFrames-1);
 		}
 
 		// To catch user clicks on window menu items and change current MainFrame accordingly
@@ -202,6 +221,10 @@ if(Debug.TRACE)
 		return newMainFrame;
 	}
 
+	
+	/**
+	 * Properly disposes the given MainFrame.
+	 */
 	public void disposeMainFrame(MainFrame mainFrameToDispose) {
 		// Saves last folders
 		ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
@@ -282,7 +305,9 @@ if(Debug.TRACE)
 		return splashScreen;
 	} 
 
-
+	/**
+	 * Switches to the next MainFrame, in the order of which they were created.
+	 */
 	public void switchToNextWindow() {
 		int frameIndex = mainFrames.indexOf(currentMainFrame);
 		MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==mainFrames.size()-1?0:frameIndex+1);
@@ -290,6 +315,9 @@ if(Debug.TRACE)
 		mainFrame.getLastActiveTable().requestFocus();
 	}
 
+	/**
+	 * Switches to previous MainFrame, in the order of which they were created.
+	 */
 	public void switchToPreviousWindow() {
 		int frameIndex = mainFrames.indexOf(currentMainFrame);
 		MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==0?mainFrames.size()-1:frameIndex-1);
@@ -351,7 +379,9 @@ if(Debug.TRACE)
 	public void windowOpened(WindowEvent e) {
 	}
 
-
+	/**
+	 * Changes LooknFeel to the given one, updating the UI of each MainFrame.
+	 */
 	private void setLookAndFeel(String lnfName) {
 		try {
 			UIManager.setLookAndFeel(lnfName);
@@ -373,8 +403,8 @@ if(Debug.TRACE)
     	// /!\ font.size is set after font.family in AppearancePrefPanel
     	// that's why we only listen to this one in order not to change Font twice
     	if (var.equals("prefs.lookAndFeel")) {
-if(Debug.TRACE)
-	System.out.println("LookAndFeel changed! "+event.getValue());
+			if(Debug.TRACE)
+				System.out.println("LookAndFeel changed! "+event.getValue());
     		String lnfName = event.getValue();
 			
 			setLookAndFeel(lnfName);

@@ -115,8 +115,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
         	+destFolder.getSeparator()
         	+destFileName;
 
-//		currentFileInfo = "\""+destFilePath.substring(baseDestFolder.getAbsolutePath().length()+1, destFilePath.length())+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
-		currentFileInfo = "\""+originalName+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT)+")";
+		currentFileInfo = "\""+originalName+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
 
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
 
