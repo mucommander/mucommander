@@ -187,23 +187,22 @@ public class Translator {
 					// Replace "\n" strings in the text by \n characters
 					int pos = 0;
 
-					while ((pos = text.indexOf("\\n", pos))!=-1) {
+					while ((pos = text.indexOf("\\n", pos))!=-1)
 						text = text.substring(0, pos)+"\n"+text.substring(pos+2, text.length());
-					}
 
 					// Replace "\\uxxxx" unicode charcter strings by the designated character
 					pos = 0;
 
-					while ((pos = text.indexOf("\\u", pos))!=-1) {
+					while ((pos = text.indexOf("\\u", pos))!=-1)
 						text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
-					}
 
-//if(com.mucommander.Debug.ON && get(key, lang)!=null) System.out.println("Translator init: duplicate "+lang+" entry "+key);
+if(com.mucommander.Debug.ON && entryExists(key, lang)) System.out.println("Translator init: duplicate "+lang+" entry "+key);
 					
 					put(key, lang, text);
 //					orderedEntries.add(key+":"+lang);
 					nbEntries++;
 				} catch (Exception e) {
+if(com.mucommander.Debug.ON) e.printStackTrace();
 					System.out.println("Translator init: error in line "+line+" ("+e+")");
 				}
 			} else {
@@ -213,6 +212,18 @@ public class Translator {
 
 		br.close();
 //		needsToBeSaved = false;
+	}
+
+	/**
+	 * Returns true if the given key exists (has a corresponding value) in the given language.
+	 */
+	public static boolean entryExists(String key, String lang) {
+		Hashtable dictionary = (Hashtable)dictionaries.get(lang.toLowerCase());
+		if(dictionary==null)
+			return false;
+		
+		String entry = (String)dictionary.get(key.toLowerCase());
+		return entry!=null; 
 	}
 
 
@@ -287,11 +298,9 @@ public class Translator {
 	 * language, and replaces  the %1, %2... parameters by their given value.
 	 *
 	 * @param key a case-insensitive key.
-	 * @param language a 2-letter language case-insensitive string.
+	 * @param language the language (2-letter code) in which the value will be returned.
 	 * @param originalLanguage used for recursive calls to this method, to keep track of language originally requested.
-	 * @param paramValues an array containing the parameters' value.
-	 *
-	 * @return DOCUMENT ME!
+	 * @param paramValues array of parameters which will be used to for variables in values.
 	 */
 	private static String get(String key, String language, String originalLanguage, String[] paramValues) {
 		// Gets the dictionary for this language
@@ -350,15 +359,25 @@ public class Translator {
 
 	/**
 	 * Returns the localized text String corresponding to the given key and
-	 * language.
+	 * language, with the specified parameters (can be null).
+	 * 
+	 * @param key a case-insensitive key.
+	 * @param language the language (2-letter code) in which the value will be returned.
+	 * @param params array of parameters which will be used to for variables in values.
+	 */
+	public static String get(String key, String language, String params[]) {
+		return get(key, language, language, params);
+	}
+
+
+	/**
+	 * Returns the localized text String corresponding to the given key in the current language.
 	 * 
 	 * <p>
 	 * Equivalent to <code>get(key, language, ((paramValues[])null)</code>.
 	 * </p>
 	 *
 	 * @param key a case-insensitive key.
-	 *
-	 * @return DOCUMENT ME!
 	 */
 	public static String get(String key) {
 		return get(key, language, language, (String[])null);
@@ -366,15 +385,10 @@ public class Translator {
 
 
 	/**
-	 * <p>
-	 * Equivalent to <code>get(key, language, new
-	 * String[]{paramValue1})</code>.
-	 * </p>
+	 * Convenience method, equivalent to <code>get(key, Translator.getLanguage(), new String[]{paramValue1})</code>)</code>.
 	 *
-	 * @param key DOCUMENT ME!
-	 * @param paramValue1 DOCUMENT ME!
-	 *
-	 * @return DOCUMENT ME!
+	 * @param key a case-insensitive key.
+	 * @param paramValue1 first parameter which will be used to replace %1 variables.
 	 */
 	public static String get(String key, String paramValue1) {
 		return get(key, language, language, new String[] {paramValue1});
@@ -382,16 +396,11 @@ public class Translator {
 
 
 	/**
-	 * <p>
-	 * Equivalent to <code>get(key, language, new String[]{paramValue1,
-	 * paramValue2})</code>.
-	 * </p>
+	 * Convenience method, equivalent to <code>get(key, Translator.getLanguage(), new String[]{paramValue1, paramValue2})</code>)</code>.
 	 *
-	 * @param key DOCUMENT ME!
-	 * @param paramValue1 DOCUMENT ME!
-	 * @param paramValue2 DOCUMENT ME!
-	 *
-	 * @return DOCUMENT ME!
+	 * @param key a case-insensitive key.
+	 * @param paramValue1 first parameter which will be used to replace %1 variables.
+	 * @param paramValue2 second parameter which will be used to replace %2 variables.
 	 */
 	public static String get(String key, String paramValue1, String paramValue2) {
 		return get(key, language, language, new String[] {paramValue1, paramValue2});
@@ -399,17 +408,12 @@ public class Translator {
 
 
 	/**
-	 * <p>
-	 * Equivalent to <code>get(key, language, new String[]{paramValue1,
-	 * paramValue2, paramValue3})</code>.
-	 * </p>
+	 * Convenience method, equivalent to <code>get(key, Translator.getLanguage(), new String[]{paramValue1, paramValue2, paramValue3})</code>)</code>.
 	 *
-	 * @param key DOCUMENT ME!
-	 * @param paramValue1 DOCUMENT ME!
-	 * @param paramValue2 DOCUMENT ME!
-	 * @param paramValue3 DOCUMENT ME!
-	 *
-	 * @return DOCUMENT ME!
+	 * @param key a case-insensitive key.
+	 * @param paramValue1 first parameter which will be used to replace %1 variables.
+	 * @param paramValue2 second parameter which will be used to replace %2 variables.
+	 * @param paramValue3 third parameter which will be used to replace %3 variables.
 	 */
 	public static String get(String key, String paramValue1, String paramValue2, String paramValue3) {
 		return get(key, language, language, new String[] {
@@ -418,23 +422,6 @@ public class Translator {
 	}
 
 
-	/**
-	 * Returns the String encoding String (confusing uh?) for the given
-	 * language, e.g. "SJIS" for "JP"
-	 *
-	 * @param lang DOCUMENT ME!
-	 *
-	 * @return DOCUMENT ME!
-	 */
-	public static String getEncoding(String lang) {
-		if (lang.toLowerCase().equals("jp")) {
-			return "SJIS";
-		} else
-
-			return null;
-	}
-
-	
 	/**
 	 * Looks for and reports any missing or unused dictionary entry,
 	 * using the supplied source folder path to look inside source files
@@ -460,20 +447,18 @@ public class Translator {
 
 
 	/**
-	 * Checks for any missing dictionary entry in the given file or folder and reports them on the standard output.
+	 * Checks for missing dictionary entries in the given file or folder and reports them on the standard output.
 	 * If the given file is a folder, recurse on each file that it contains, if it's a 'regular' file and the
 	 * extension is '.java', looks for any calls to {@link #Translator.get(String), Translator.get()} and checks
 	 * that the request entry has a value in each language's dictionary.
 	 */ 
 	private static void checkMissingEntries(com.mucommander.file.AbstractFile file, String languages[]) throws IOException {
 		if(file.isDirectory()) {
-//			System.out.println("Checking missing entries in "+file.getAbsolutePath());
 			com.mucommander.file.AbstractFile children[] = file.ls();
 			for(int i=0; i<children.length; i++)
 				checkMissingEntries(children[i], languages);
 		}
 		else if(file.getName().endsWith(".java")) {
-//			System.out.println("Checking missing entries in "+file.getAbsolutePath());
 			BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
 			String line;
 			int pos;
@@ -484,7 +469,6 @@ public class Translator {
 				if(!line.trim().startsWith("//") && (pos=line.indexOf("Translator.get(\""))!=-1) {
 					try {
 						entry = line.substring(pos+16, line.indexOf("\"", pos+16));
-//						System.out.println("Checking entry "+entry);
 						for(int i=0; i<languages.length; i++) {
 							language = languages[i];
 							if((String)((Hashtable)dictionaries.get(language)).get(entry)!=null || (!language.equalsIgnoreCase("en") && (value=(String)((Hashtable)dictionaries.get("en")).get(entry))!=null && value.startsWith("$")))
@@ -499,6 +483,7 @@ public class Translator {
 			br.close();
 		} 
 	}
+
 
 
 	/**

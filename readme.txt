@@ -50,8 +50,9 @@ What's new in v0.7.1 ?
 
 New features:
  - TAR, GZip, TGZ archives support (read-only for now)
- - German translation provided by Tony Klüver and Frank Berger
- - Spanish translation provided by Marcos Cobeña
+ - German translation by Tony Klüver and Frank Berger
+ - Spanish translation by Marcos Cobeña
+ - Czech translation by Peter Vasko
 
 Improvements:
  - Improved internal file attributes caching mechanism to lower CPU and memory usage
