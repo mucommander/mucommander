@@ -65,6 +65,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	
 		private AbstractFile folder;
 		private String folderPath;
+		private FileURL folderURL;
 		private boolean addToHistory;
 		private AbstractFile fileToSelect;
 		
@@ -78,15 +79,24 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	
 		private boolean hadFocus;
 	
+		
 		public ChangeFolderThread(AbstractFile folder, boolean addToHistory) {
 			this.folder = folder;
 			this.addToHistory = addToHistory;
-			
+
 			setPriority(MAX_PRIORITY);
 		}
 
 		public ChangeFolderThread(String folderPath, boolean addToHistory) {
 			this.folderPath = folderPath;
+			this.addToHistory = addToHistory;
+
+			setPriority(MAX_PRIORITY);
+		}
+
+
+		public ChangeFolderThread(FileURL folderURL, boolean addToHistory) {
+			this.folderURL = folderURL;
 			this.addToHistory = addToHistory;
 
 			setPriority(MAX_PRIORITY);
@@ -176,10 +186,17 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting and waiting")
 						if(changeFolderThread==null || changeFolderThread!=ChangeFolderThread.this || isKilled || !ChangeFolderThread.this.isAlive())
 							return;
 
+						YBoxPanel panel = new YBoxPanel();
+						panel.add(new JLabel(Translator.get("table.connecting_to_folder")));
+						panel.addSpace(5);
+						JProgressBar fullProgressBar = new JProgressBar();
+						fullProgressBar.setValue(50);
+						panel.add(fullProgressBar);
+
 						// Download or browse file ?
 						waitDialog = new QuestionDialog(mainFrame, 
 						null,
-						Translator.get("table.connecting_to_folder"),
+						panel,
 						mainFrame,
 						new String[] {CANCEL_TEXT},
 						new int[] {CANCEL_ACTION},
@@ -210,7 +227,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting and waiting")
 				try {
 					if(folder==null) {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFile()");
-						AbstractFile file = AbstractFile.getAbstractFile(folderPath, true);
+						AbstractFile file;
+						if(folderURL!=null)
+							file = AbstractFile.getAbstractFile(folderURL, true);
+						else
+							file = AbstractFile.getAbstractFile(folderPath, true);
 
 						synchronized(lock) {
 							if(isKilled) {
@@ -306,8 +327,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFold
 					
 					// Retry (loop) if user authentified
 					if(showAccessErrorDialog(e)) {
-//						if(folder!=null)
-						folder = AbstractFile.getAbstractFile(folder==null?folderPath:folder.getAbsolutePath());
+						if(folderURL!=null)
+							folder = AbstractFile.getAbstractFile(folderURL);
+						else if(folder!=null)
+							folder = AbstractFile.getAbstractFile(folder.getURL());
+						else
+							folder = AbstractFile.getAbstractFile(folderPath);
+
 						continue;
 					}
 					break;
@@ -576,7 +602,7 @@ if(changeFolderThread!=null && com.mucommander.Debug.ON) com.mucommander.Debug.t
 
 		return success;
 */
-		this.changeFolderThread = new ChangeFolderThread(folder, addToHistory);
+		this.changeFolderThread = new ChangeFolderThread(folder.getURL(), addToHistory);
 		if(fileToSelect!=null)
 			this.changeFolderThread.setFileToSelect(fileToSelect);
 		changeFolderThread.start();
@@ -585,6 +611,12 @@ if(changeFolderThread!=null && com.mucommander.Debug.ON) com.mucommander.Debug.t
 	
 	public void trySetCurrentFolder(String folderPath, boolean addToHistory) {
 		this.changeFolderThread = new ChangeFolderThread(folderPath, addToHistory);
+		changeFolderThread.start();
+	}
+
+
+	public void trySetCurrentFolder(FileURL folderURL, boolean addToHistory) {
+		this.changeFolderThread = new ChangeFolderThread(folderURL, addToHistory);
 		changeFolderThread.start();
 	}
 	

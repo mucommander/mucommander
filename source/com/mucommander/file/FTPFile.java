@@ -186,6 +186,8 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileU
 			checkServerReply();
 			
 			// Enables/disables passive mode
+			String passiveModeProperty = fileURL.getProperty("passiveMode");
+			this.passiveMode = passiveModeProperty==null||!passiveModeProperty.equals("false");
 if(com.mucommander.Debug.ON) System.out.println("initConnection: passive mode ="+passiveMode);
 			if(passiveMode)
 				this.ftpClient.enterLocalPassiveMode();
@@ -267,21 +269,21 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 	}
 
 	
-	/**
-	 * Enables / disables passive mode mode.
-	 * <p>Default is enabled, so no need to call this method to enable passive mode, this would result in 
-	 * issuing an unecessary command.</p>
-	 */
-	public void setPassiveMode(boolean enabled) throws IOException {
-		this.passiveMode = enabled;
-		
-		if(ftpClient!=null) {
-			if(enabled)
-				this.ftpClient.enterLocalPassiveMode();
-			else
-				this.ftpClient.enterLocalActiveMode();
-		}
-	}
+//	/**
+//	 * Enables / disables passive mode mode.
+//	 * <p>Default is enabled, so no need to call this method to enable passive mode, this would result in 
+//	 * issuing an unecessary command.</p>
+//	 */
+//	public void setPassiveMode(boolean enabled) throws IOException {
+//		this.passiveMode = enabled;
+//		
+//		if(ftpClient!=null) {
+//			if(enabled)
+//				this.ftpClient.enterLocalPassiveMode();
+//			else
+//				this.ftpClient.enterLocalActiveMode();
+//		}
+//	}
 
 	
 	/////////////////////////////////////////
@@ -333,6 +335,7 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 			FileURL parentFileURL = this.fileURL.getParent();
 			if(parentFileURL!=null) {
 if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getURL(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
+				parentFileURL.setProperty("passiveMode", ""+passiveMode);
 				try { this.parent = new FTPFile(parentFileURL, false, this.ftpClient); }
 				catch(IOException e) {}
 			}
@@ -486,6 +489,7 @@ if(com.mucommander.Debug.ON) System.out.println("FTPFile.ls(): ParserInitializat
 				continue;
 				
 			childURL = new FileURL(parentURL+childName);
+			childURL.setProperty("passiveMode", ""+passiveMode);
 			
 			// Discard '.' and '..' files
 			if(childName.equals(".") || childName.equals(".."))

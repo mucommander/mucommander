@@ -1,7 +1,11 @@
 package com.mucommander.file;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.IOException;
+
 import java.util.Vector;
+
 
 public abstract class AbstractFile {
 
@@ -52,18 +56,18 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 * <p>This method does not throw any IOException but returns <code>null</code> if the file could not be created.</p>
 	 *
 	 * @param absPath the absolute path to the file
-	 * @param rethrowException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
+	 * @param throwException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
 	 *
 	 * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file) 
-	 * @throws java.io.IOException  and rethrowException param was set to <code>true</code>.
+	 * @throws java.io.IOException  and throwException param was set to <code>true</code>.
 	 */
-	public static AbstractFile getAbstractFile(String absPath, boolean rethrowException) throws AuthException, IOException {
+	public static AbstractFile getAbstractFile(String absPath, boolean throwException) throws AuthException, IOException {
 		try {
 			return getAbstractFile(absPath, null);
 		}
 		catch(IOException e) {
 			if(com.mucommander.Debug.ON) e.printStackTrace();
-			if(rethrowException)
+			if(throwException)
 				throw e;
 			return null;
 		}
@@ -71,14 +75,13 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 
 	
 	/**
-	 * Returns an instance of AbstractFile for the given absolute path and sets the giving parent. AbstractFile subclasses should
+	 * Returns an instance of AbstractFile for the given absolute path and sets the giving parent if not null. AbstractFile subclasses should
 	 * call this method rather than getAbstractFile(String) because it is more efficient.
 	 *
 	 * @param absPath the absolute path to the file
 	 * @param parent the returned file's parent
 	 *
-	 * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file).
-	 * @throws java.io.IOException if something went wrong during file creation.
+	 * @throws java.io.IOException if something went wrong during file or file url creation.
 	 */
 	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) throws AuthException, IOException {
 		AbstractFile file;
@@ -96,12 +99,67 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 		else
 			fileURL = new FileURL(absPath);
 
+		return getAbstractFile(fileURL, parent);
+	}
+	
+
+	/**
+	 * Returns an instance of AbstractFile for the given FileURL instance.
+	 *
+	 * @param fileURL the file URL
+	 *
+	 * @return the created file or null if something went wrong during file creation 
+	 */
+	public static AbstractFile getAbstractFile(FileURL fileURL) {
+		try {
+			return getAbstractFile(fileURL, null);
+		}
+		catch(IOException e) {
+if(com.mucommander.Debug.ON) e.printStackTrace();
+			return null;
+		}
+	}
+
+
+	/**
+	 * Returns an instance of AbstractFile for the given FileURL instance.
+	 *
+	 * @param fileURL the file URL
+	 * @param throwException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
+	 *
+	 * @return the created file
+	 * @throws java.io.IOException if something went wrong during file creation
+	 */
+	public static AbstractFile getAbstractFile(FileURL fileURL, boolean throwException) throws IOException {
+		try {
+			return getAbstractFile(fileURL, null);
+		}
+		catch(IOException e) {
+			if(com.mucommander.Debug.ON) e.printStackTrace();
+			if(throwException)
+				throw e;
+			return null;
+		}
+	}
+
+
+	
+	/**
+	 * Returns an instance of AbstractFile for the given FileURL instance and sets the giving parent.
+	 *
+	 * @param fileURL the file URL
+	 * @param parent the returned file's parent
+	 *
+	 * @throws java.io.IOException if something went wrong during file creation.
+	 */
+	public static AbstractFile getAbstractFile(FileURL fileURL, AbstractFile parent) throws IOException {
 		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
 		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem		
 
 		String protocol = fileURL.getProtocol().toLowerCase();
 		
 		// FS file (local filesystem)
+		AbstractFile file;
 		if (protocol.equals("file"))
 			file = new FSFile(fileURL);
 		// SMB file
@@ -117,7 +175,7 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 		else if (protocol.equals("sftp"))
 			file = new SFTPFile(fileURL);
 		else
-			return null;
+			throw new IOException("Unkown protocol "+protocol);
 
 		if(parent!=null)
 			file.setParent(parent);

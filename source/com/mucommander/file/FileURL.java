@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URLDecoder;
 
 import java.util.Vector;
+import java.util.Hashtable;
 
 /**
  * This class parses a file URL without any knowledge of the underlying protocol. URL are expected to respect the following format :<br>
@@ -23,6 +24,8 @@ public class FileURL implements Cloneable {
 	private String parent;
 	private String filename;
 	private String query;
+	
+	private Hashtable properties;
 	
 	
 	/**
@@ -327,6 +330,25 @@ public class FileURL implements Cloneable {
 		return query;
 	}
 
+	
+	/**
+	 * Sets the given properties (name/value pair) to this URL.
+	 * Properties can be used as a way to pass parameters to AbstractFile constructors.
+	 */
+	public void setProperty(String name, String value) {
+		if(properties==null)
+			properties = new Hashtable();
+		
+		properties.put(name, value);
+	}
+	
+	/**
+	 * Returns the value corresponding to the given property's name, null if the property doesn't exist (has no value).
+	 */
+	public String getProperty(String name) {
+		return properties==null?null:(String)properties.get(name);
+	}
+	
 	
 	/**
 	 * Reconstructs the URL from all parsed fields and returns it.
