@@ -41,18 +41,18 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	
 	private JButton buttons[];
 
-	private final static String MOVE_TEXT = Translator.get("command_bar.move")+" [F6]";
-	private final static String RENAME_TEXT = Translator.get("command_bar.rename")+" [F6]";
+	private final static String MOVE_TEXT = "command_bar.move";
+	private final static String RENAME_TEXT = "command_bar.rename";
 	
-	private final static String BUTTONS_TEXT[] = new String[] {
-		Translator.get("command_bar.view")+" [F3]",
-		Translator.get("command_bar.edit")+" [F4]",
-		Translator.get("command_bar.copy")+" [F5]",
-		MOVE_TEXT,
-		Translator.get("command_bar.mkdir")+" [F7]",
-		Translator.get("command_bar.delete")+" [F8]",
-		Translator.get("command_bar.refresh")+" [F9]",
-		Translator.get("command_bar.close")+" [F10]"
+	private final static String BUTTONS_TEXT[][] =  {
+		{"command_bar.view", "[F3]"},
+		{"command_bar.edit", "[F4]"},
+		{"command_bar.copy", "[F5]"},
+		{MOVE_TEXT, "[F6]"},
+		{"command_bar.mkdir", "[F7]"},
+		{"command_bar.delete", "[F8]"},
+		{"command_bar.refresh", "[F9]"},
+		{"command_bar.close", "[F10]"}
 	};
 
 	
@@ -66,7 +66,9 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 
 		this.buttons = new JButton[NB_BUTTONS];
 		for(int i=0; i<NB_BUTTONS; i++)
-			buttons[i] = addButton(BUTTONS_TEXT[i]);	
+			buttons[i] = addButton(Translator.get(BUTTONS_TEXT[i][0])+" "+BUTTONS_TEXT[i][1],
+				Translator.get(BUTTONS_TEXT[i][0]+"_tooltip")
+			);	
 	}
 
 	
@@ -75,13 +77,13 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	}
 	
 	
-	private JButton addButton(String text) {
+	private JButton addButton(String text, String tooltipText) {
 		JButton button = new JButton(text);
+        button.setToolTipText(tooltipText);
 		button.setMargin(new Insets(1,1,1,1));
 		// For Mac OS X whose minimum width for buttons is enormous
 		button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getWidth()));
 		button.addActionListener(this);
-        button.setToolTipText(text);
 		add(button);
 		return button;
 	}
@@ -94,7 +96,9 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	public void setShiftMode(boolean on) {
 		if(shiftDown!=on) {
 			this.shiftDown = on;
-			buttons[MOVE_INDEX].setText(on&(mainFrame.getLastActiveTable().getSelectedFiles().size()<=1)?RENAME_TEXT:MOVE_TEXT);
+			String textKey = on&&((FileTableModel)(mainFrame.getLastActiveTable().getModel())).getNbMarkedFiles()<=1?RENAME_TEXT:MOVE_TEXT;
+			buttons[MOVE_INDEX].setText(Translator.get(textKey)+" "+BUTTONS_TEXT[MOVE_INDEX][1]);
+			buttons[MOVE_INDEX].setToolTipText(Translator.get(textKey+"_tooltip"));
 			buttons[MOVE_INDEX].repaint();
 		}
 	}

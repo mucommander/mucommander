@@ -28,7 +28,7 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 
 	private final static Dimension MIN_DIMENSION = new Dimension(200, 150);
 	
-	private final static String ESCAPE_KEY_EVENT = "ESCAPE_KEY_EVENT";
+	private final static String CUSTOM_DISPOSE_EVENT = "CUSTOM_DISPOSE_EVENT";
 
 	
 	public ViewerFrame(MainFrame mainFrame, AbstractFile file) {
@@ -126,14 +126,14 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 
 		// Catch Apple+W keystrokes under Mac OS X to close the window
 		if(com.mucommander.PlatformManager.getOSFamily()==com.mucommander.PlatformManager.MAC_OS_X) {
-			scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), ESCAPE_KEY_EVENT);
-			scrollPane.getActionMap().put(ESCAPE_KEY_EVENT, new AbstractAction() {
+			scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
+			scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
 				public void actionPerformed(ActionEvent e){
 					dispose();
 				}
 			});
 		}
-		
+
 //System.out.println("contentPane insets = "+getContentPane().getInsets());
 //System.out.println("viewer insets = "+viewer.getInsets());
 		// Request focus on text area when visible

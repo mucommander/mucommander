@@ -137,29 +137,56 @@ language.fr:FR:Français
 command_bar.view:EN:View
 command_bar.view:FR:Voir
 
+command_bar.view_tooltip:EN:View selected file
+command_bar.view_tooltip:FR:Voir le fichier sélectionné
+
 command_bar.edit:EN:Edit
 command_bar.edit:FR:Editer
+
+command_bar.edit_tooltip:EN:Edit selected file
+command_bar.edit_tooltip:FR:Editer le fichier selectionné
 
 command_bar.copy:EN:Copy
 command_bar.copy:FR:Copier
 
+command_bar.copy_tooltip:EN:Copy marked files
+command_bar.copy_tooltip:FR:Copier les fichiers marqués
+
 command_bar.move:EN:Move
 command_bar.move:FR:Déplacer
+
+command_bar.move_tooltip:EN:Move marked files
+command_bar.move_tooltip:FR:Déplacer les fichiers marqués
 
 command_bar.rename:EN:Rename
 command_bar.rename:FR:Renommer
 
+command_bar.rename_tooltip:EN:Rename selected file
+command_bar.rename_tooltip:FR:Renommer le fichier selectionné
+
 command_bar.mkdir:EN:Make dir
 command_bar.mkdir:FR:Créer rep
+
+command_bar.mkdir_tooltip:EN:Create a directory in current folder
+command_bar.mkdir_tooltip:FR:Créer un répertoire dans le dossier courant
 
 command_bar.delete:EN:Delete
 command_bar.delete:FR:Supprimer
 
+command_bar.delete_tooltip:EN:Delete marked files
+command_bar.delete_tooltip:FR:Supprimer les fichiers marqués
+
 command_bar.refresh:EN:Refresh
 command_bar.refresh:FR:Rafraîchir
 
+command_bar.refresh_tooltip:EN:Refresh current folder
+command_bar.refresh_tooltip:FR:Rafraîchir le répertoire courant
+
 command_bar.close:EN:Close
 command_bar.close:FR:Fermer
+
+command_bar.close_tooltip:EN:Close this window
+command_bar.close_tooltip:FR:Fermer cette fenêtre
 
 
 #############
@@ -1011,7 +1038,7 @@ shortcuts_dialog.file_operations:EN:File operations
 shortcuts_dialog.file_operations:FR:Opérations sur fichiers
 
 shortcuts_dialog.file_operations.local_copy:EN:Copy to current folder
-shortcuts_dialog.file_operations.local_copy:FR:Copier vers le dossier courant
+shortcuts_dialog.file_operations.local_copy:FR:Copier dans le dossier courant
 
 shortcuts_dialog.file_operations.server_connect:EN:Connect to a remote server
 shortcuts_dialog.file_operations.server_connect:FR:Se connecter à un serveur distant
