@@ -19,10 +19,11 @@ public class AboutDialog extends FocusDialog implements ActionListener, KeyListe
 		+"<br>&copy;2002 Maxence Bernard, all rights reserved."
 		+"<br><br><i>Code &amp; design:</i> Maxence Bernard."
 		+"<br><i>Contributors:</i> Ewan Harrow, Nicolas Rinaudo, Roger Sondermann."
-	//			+"<br><br><b>Free memory:</b> "+runtime.freeMemory()+" / "+runtime.totalMemory()
-		+"<br>muCommander uses the jCIFS library for SMB support."
+		+"<br><br>muCommander is powered by jEdit, Ant, yGuard and NSIS."
+		+"<br>SMB support provided by the jCIFS library under the LGPL license."
 		+"<br><br><i>Official website</i>: <b>http://www.mucommander.com</b>."
-		+"<br><br><b>VM:</b> "+System.getProperty("java.vm.vendor")+" "+System.getProperty("java.vm.name")+" "+System.getProperty("java.vm.version")
+		+"<br><br><b>Java VM:</b> "+System.getProperty("java.vm.vendor")+" "+System.getProperty("java.vm.name")+" "+System.getProperty("java.vm.version")
+//		+"<br><br><b>Memory:</b> "+runtime.freeMemory()+" / "+runtime.totalMemory()
 		+"<br><b>OS:</b> "+System.getProperty("os.name")+" "+System.getProperty("os.arch")+" "+System.getProperty("os.version")
 		+"</tr></td>"
 		+"</table>"

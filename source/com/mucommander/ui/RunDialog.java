@@ -155,8 +155,19 @@ if(com.mucommander.Debug.TRACE) System.out.println("process "+process+" exit, re
 		switchToRunState();
 	}	
 
+	
 	public void processOutput(Process process, byte buffer[], int offset, int length) {
-if(com.mucommander.Debug.TRACE) System.out.println("process "+process+" output= "+new String(buffer, 0, length));
+if(com.mucommander.Debug.TRACE) System.out.println("processOutput "+process+" output= "+new String(buffer, 0, length));
+		addToTextArea(buffer, offset, length);
+	}
+
+	
+	public void processError(Process process, byte buffer[], int offset, int length) {
+if(com.mucommander.Debug.TRACE) System.out.println("processError "+process+" output= "+new String(buffer, 0, length));
+		addToTextArea(buffer, offset, length);
+	}
+
+	private void addToTextArea(byte buffer[], int offset, int length) {
 		outputTextArea.append(new String(buffer, 0, length));
 		caretPos += length;
 		outputTextArea.setCaretPosition(caretPos);
