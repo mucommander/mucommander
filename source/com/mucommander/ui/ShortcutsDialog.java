@@ -26,7 +26,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
 			{"CTRL+F4", "Sort by extension"},
 			{"CTRL+F5", "Sort by date"},
 			{"CTRL+F6", "Sort by size"},
-			{"CTRL+U", "Swap panels"},
+			{"CTRL+U", "Swap folders"},
 			{"CTRL+E", "Set same folder"}
 		},
 		{	{"Selection"},

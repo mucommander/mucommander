@@ -42,7 +42,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	private final static String UNMARK_BUTTON_TOOLTIP_TEXT = "Unmark...";
 
 	private final static String SWAP_FOLDERS_BUTTON_ICON_PATH = "/switch.gif";
-	private final static String SWAP_FOLDERS_BUTTON_TOOLTIP_TEXT = "Swap panels";
+	private final static String SWAP_FOLDERS_BUTTON_TOOLTIP_TEXT = "Swap folders";
 
 	private final static String SET_SAME_FOLDER_BUTTON_ICON_PATH = "/same.gif";
 	private final static String SET_SAME_FOLDER_BUTTON_TOOLTIP_TEXT = "Set same folder";

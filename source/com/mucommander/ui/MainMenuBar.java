@@ -29,7 +29,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenuItem markAllItem;
 	private JMenuItem unmarkAllItem;
 	private JMenuItem invertSelectionItem;
-	private JMenuItem compareDirectoriesItem;
+	private JMenuItem compareFoldersItem;
 
 	// View menu
 	private JMenu viewMenu;
@@ -83,7 +83,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		invertSelectionItem = addMenuItem(markMenu, "Invert selection", KeyEvent.VK_I, KeyStroke.getKeyStroke(KeyEvent.VK_MULTIPLY, 0));
 
 		markMenu.add(new JSeparator());
-		compareDirectoriesItem = addMenuItem(markMenu, "Compare directories", KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
+		compareFoldersItem = addMenuItem(markMenu, "Compare folders", KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
 
 		// View menu
 		viewMenu = addMenu("View", KeyEvent.VK_V, false);
@@ -103,7 +103,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 
 		reverseOrderItem = addMenuItem(viewMenu, "Reverse order", KeyEvent.VK_R, null);
 		viewMenu.add(new JSeparator());
-		swapFoldersItem = addMenuItem(viewMenu, "Swap panels", KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_MASK));
+		swapFoldersItem = addMenuItem(viewMenu, "Swap folders", KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_MASK));
 		setSameFolderItem = addMenuItem(viewMenu, "Set same folder", KeyEvent.VK_T, KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK));
 //		refreshItem = addMenuItem(viewMenu, "Refresh", KeyEvent.VK_R, null);
 
@@ -240,7 +240,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == invertSelectionItem) {
 			mainFrame.getLastActiveTable().invertSelection();	
 		}
-		else if (source == compareDirectoriesItem) {
+		else if (source == compareFoldersItem) {
 			mainFrame.compareDirectories();	
 		}
 		// View menu
