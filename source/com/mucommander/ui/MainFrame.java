@@ -89,7 +89,16 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		lastActiveTable = table1;
 
 		// Enables folderPanel window resizing
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
+//			public Insets getInsets() {
+//				return new Insets(0, 0, 0, 0);
+//			}
+		
+			public javax.swing.border.Border getBorder() {
+				return null;
+			}
+		};
+			
 		splitPane.setOneTouchExpandable(true);
 		// Cool but way too slow
 //		splitPane.setContinuousLayout(true);

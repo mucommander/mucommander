@@ -55,7 +55,15 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		super(new BorderLayout());
 
         this.mainFrame = mainFrame;
-		JPanel locationPanel = new JPanel(new BorderLayout());
+		JPanel locationPanel = new JPanel(new BorderLayout()) {
+			public Insets getInsets() {
+				return new Insets(0, 0, 0, 0);
+			}
+		
+			public javax.swing.border.Border getBorder() {
+				return null;
+			}
+		};
 		
 		rootButton = new JButton(roots[0].toString());
 		// For Mac OS X whose minimum width for buttons is enormous
@@ -86,7 +94,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		locationField.addActionListener(this);
 		locationField.addKeyListener(this);
 		locationPanel.add(locationField, BorderLayout.CENTER);
-	
+
 		add(locationPanel, BorderLayout.NORTH);
 		fileTable = new FileTable(mainFrame, this);
 
@@ -116,7 +124,15 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 
 		locationField.setText(currentFolder.getAbsolutePath()+currentFolder.getSeparator());
 				
-		scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER) {
+			public Insets getInsets() {
+				return new Insets(0, 0, 0, 0);
+			}
+		
+			public javax.swing.border.Border getBorder() {
+				return null;
+			}
+		};
 		scrollPane.getViewport().setBackground(backgroundColor);
 		add(scrollPane, BorderLayout.CENTER);
 	
@@ -124,6 +140,11 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		ConfigurationManager.addConfigurationListener(this);
 	}
 
+	
+	public javax.swing.border.Border getBorder() {
+		return null;
+	}
+	
 
     public FileTable getFileTable() {
         return fileTable;

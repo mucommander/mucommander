@@ -87,7 +87,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		checkForUpdatesItem = addMenuItem(fileMenu, "Check for updates", KeyEvent.VK_K, null);
 		
 		fileMenu.add(new JSeparator());
-		quitItem = addMenuItem(fileMenu, "Quit", KeyEvent.VK_Q, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
+		quitItem = addMenuItem(fileMenu, "Close window", KeyEvent.VK_Q, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
 	
 		// Mark menu
 		markMenu = addMenu("Mark", KeyEvent.VK_M, false);
