@@ -1,7 +1,6 @@
 
 package com.mucommander.ui;
 
-
 import com.mucommander.conf.*;
 import com.mucommander.PlatformManager;
 
@@ -43,7 +42,8 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	/** Time at which the last focus request was made */	
 	private long lastFocusRequest;
 
-	private MainFrame lastMainFrameActivated;
+	/** Last main frame on which focus has been explicitely requested */
+	private MainFrame lastFocusedMainFrame;
 	
 	/** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
 	private final static int FOCUS_REQUEST_DELAY = 1000;
@@ -403,6 +403,11 @@ if(com.mucommander.Debug.ON)
 	 * WindowListener methods *
 	 **************************/	
 
+	/**
+	 * Requests focus on the activated MainFrame if it doesn't already have focus, and
+	 * if another child window (dialog) doesn't have focus and if focus was not recently 
+	 * requested on another MainFrame (to avoid having 2 main frames fight over focus).
+	 */
 	public void windowActivated(WindowEvent e) {
 		this.currentMainFrame = (MainFrame)e.getSource();
 
@@ -410,31 +415,30 @@ if(com.mucommander.Debug.ON)
 		// Delay check is to avoid that 2 main frames fight over focus.
 		long now = System.currentTimeMillis();
 
-if(com.mucommander.Debug.ON)
-	System.out.println("WindowManager.windowActivated");
-
+		// Do not request focus if this MainFrame already has focus
+		if(currentMainFrame.hasFocus())
+			return;
+	
+		// /!\ Some already disposed window may be returned by getOwnedWindows
+		// but that's apparently normal : some weak references to the window 
+		// remain for a while before they are garbage collected (found that out
+		// after first freaking out and then running the app through a profiler)
 		Window ownedWindows[] = currentMainFrame.getOwnedWindows();
 
-if(com.mucommander.Debug.ON) {
-	System.out.println("ownedWindows= "+ownedWindows);
-	for(int i=0; i<ownedWindows.length; i++)
-		System.out.println("ownedWindows #"+i+" ="+ownedWindows[i]);
-}
-
+		// Do not request focus if another child window has focus
 		if(ownedWindows!=null)
 			for(int i=0; i<ownedWindows.length; i++)
 				if(ownedWindows[i].isShowing())
 					return;
-
-		if(!currentMainFrame.hasFocus()
-//			&& (ownedWindows==null || ownedWindows.length==0)
-			&& (lastMainFrameActivated==currentMainFrame || (now-lastFocusRequest>FOCUS_REQUEST_DELAY))) {
+		
+		// Do not request focus if focus was requested on another MainFrame less than FOCUS_REQUEST_DELAY milliseconds ago
+		if (lastFocusedMainFrame==currentMainFrame || (now-lastFocusRequest>FOCUS_REQUEST_DELAY)) {
 if(com.mucommander.Debug.ON)
 	System.out.println("WindowManager.windowActivated: focus requested");
 			currentMainFrame.requestFocus();
 			lastFocusRequest = now;
+			lastFocusedMainFrame = currentMainFrame;
 		}
-		lastMainFrameActivated = currentMainFrame;
 	}
 
 	public void windowClosing(WindowEvent e) {

@@ -28,7 +28,6 @@ import java.util.Vector;
  * 
  * @author Maxence Bernard
  */
-//public class MainFrame extends JFrame implements ComponentListener, KeyListener, FocusListener, WindowListener {
 public class MainFrame extends JFrame implements ComponentListener, KeyListener, FocusListener {
 	
 	private final static String FRAME_TITLE = "muCommander";
@@ -51,15 +50,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	private JLabel statusBarLabel;
 	
 	private CommandBarPanel commandBar;
-	
-//	/** Used to determine whether or not this MainFrame is active, i.e. muCommander window is in the foreground */
-//	private boolean isActive; 
-
-//	/** Time at which the last focus request was made */	
-//	private long lastFocusRequest;
-
-//	/** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
-//	private final static int FOCUS_REQUEST_DELAY = 1000;
 	
 	
 	/**
@@ -566,6 +556,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
 //            commandBar.doExit();
         }
+        else if(keyCode == KeyEvent.VK_W && e.isMetaDown()) {
+			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
+//            commandBar.doExit();
+        }
 		else if(keyCode == KeyEvent.VK_F1 && e.isAltDown()) {
 			folderPanel1.showRootBox();
         }
@@ -622,49 +616,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     public void focusLost(FocusEvent e) {
     }    
 
-
-    /**************************
-     * WindowListener methods *
-     **************************/	
-
-/*
-    public void windowActivated(WindowEvent e) {
-		this.isActive = true;
-
-		// Requests focus if last active table doesn't already have focus
-		// Delay check is to avoid that 2 main frames fight over focus.
-		long now;
-if(com.mucommander.Debug.ON)
-	System.out.println("MainFrame.windowActivated "+!lastActiveTable.hasFocus()+" "+((now=System.currentTimeMillis())-lastFocusRequest>FOCUS_REQUEST_DELAY));
-
-		if(!lastActiveTable.hasFocus() && (now=System.currentTimeMillis())-lastFocusRequest>FOCUS_REQUEST_DELAY) {
-			lastFocusRequest = now;
-			requestFocus();
-		}
-    }
-
-    public void windowDeactivated(WindowEvent e) {
-		this.isActive = false;
-		
-    	if(com.mucommander.Debug.ON)
-			System.out.println("MainFrame.windowDeactivated");
-    }
-
-    public void windowIconified(WindowEvent e) {
-    }
-
-    public void windowDeiconified(WindowEvent e) {
-    }
-
-    public void windowOpened(WindowEvent e) {
-    }
-
-    public void windowClosing(WindowEvent e) {
-    }
-
-    public void windowClosed(WindowEvent e) {
-	}
-*/
 
 	/*********************
 	 * Overriden methods *
