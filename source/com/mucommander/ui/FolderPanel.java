@@ -6,6 +6,7 @@ import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableCellRenderer;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.conf.*;
+import com.mucommander.text.Translator;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -245,7 +246,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		String errorMsg = "Unable to access folder contents"+(exceptionMsg==null?".":": "+exceptionMsg);
 		if(!errorMsg.endsWith("."))
 			errorMsg += ".";
-		JOptionPane.showMessageDialog(mainFrame, errorMsg, "Access error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error"), JOptionPane.ERROR_MESSAGE);
 	}
 
 	
@@ -260,7 +261,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
             System.out.println("FolderPanel.setCurrentFolder: "+folder+" ");
         
 		if (folder==null || !folder.exists()) {
-			JOptionPane.showMessageDialog(mainFrame, "Folder doesn't exist.", "Access error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		

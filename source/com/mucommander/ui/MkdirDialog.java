@@ -4,6 +4,7 @@ package com.mucommander.ui;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -34,7 +35,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 	private FileTable activeTable;
 
 	public MkdirDialog(MainFrame mainFrame) {
-	    super(mainFrame, "Make directory", mainFrame);
+	    super(mainFrame, Translator.get("mkdir_dialog.title"), mainFrame);
 		this.mainFrame = mainFrame;
 		
 		activeTable = mainFrame.getLastActiveTable();
@@ -42,7 +43,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 		Container contentPane = getContentPane();
 
 		YBoxPanel mainPanel = new YBoxPanel();
-        mainPanel.add(new JLabel("Create directory"));
+        mainPanel.add(new JLabel(Translator.get("mkdir_dialog.description")));
         mkdirPathField = new JTextField();
         mkdirPathField.addActionListener(this);
         mainPanel.add(mkdirPathField);
@@ -50,8 +51,8 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 		mainPanel.addSpace(10);
         contentPane.add(mainPanel, BorderLayout.NORTH);
         
-        okButton = new JButton("Create");
-        cancelButton = new JButton("Cancel");
+        okButton = new JButton(Translator.get("mkdir_dialog.create"));
+        cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
         // Escape key disposes dialog
@@ -84,12 +85,12 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 		    Object ret[] = mainFrame.resolvePath(dirPath);
 		    // The path entered doesn't correspond to any existing folder
 		    if (ret==null) {
-		    	showErrorDialog("Incorrect path "+dirPath, "mkdir error");
+		    	showErrorDialog(Translator.get("mkdir_dialog.invalid_path", dirPath), Translator.get("mkdir_dialog.error_title"));
 		    	return;
 		    }
 
 			if(ret[1]==null) {
-		    	showErrorDialog("Directory "+dirPath+" already exists.", "mkdir error");
+		    	showErrorDialog(Translator.get("mkdir_dialog.dir_already_exists", dirPath), Translator.get("mkdir_dialog.error_title"));
 		    	return;
 		    }
 
@@ -107,7 +108,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 			}
 		}
 	    catch(IOException ex) {
-	        showErrorDialog("Unable to create directory "+dirPath, "mkdir error");
+	        showErrorDialog(Translator.get("mkdir_dialog.cannot_create_dir", dirPath), Translator.get("mkdir_dialog.error_title"));
 	    }    
 
 /*		

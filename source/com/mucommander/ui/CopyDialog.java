@@ -138,9 +138,9 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 		// The path entered doesn't correspond to any existing folder
 		if (ret==null || ((filesToCopy.size()>1 || unzipDialog) && ret[1]!=null)) {
 			if(unzipDialog)				
-				showErrorDialog(Translator.get("unzip_dialog.unknown_folder", destPath), Translator.get("unzip_dialog.error_title"));
+				showErrorDialog(Translator.get("unzip_dialog.folder_does_not_exist", destPath), Translator.get("unzip_dialog.error_title"));
 			else
-				showErrorDialog(Translator.get("copy_dialog.unknown_folder", destPath), Translator.get("copy_dialog.error_title"));
+				showErrorDialog(Translator.get("copy_dialog.folder_does_not_exist", destPath), Translator.get("copy_dialog.error_title"));
 			return;
 		}
 

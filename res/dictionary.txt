@@ -8,11 +8,22 @@
 #
 # IMPORTANT: This file should be saved in UTF-8 character encoding.
 #
+# Some things to keep in mind if you are kind enough to translate muCommander:
+#
+# - when translating an entry which has a variable (%1, %2...) placed at the end,
+#  it might be because its value at runtime can be very large and thus will be
+#  truncated where it appears. In this case, please try to use a sentence that
+#  puts the variable at the end as well.
+#  
+#
+#
 
 
 ###########
 # General #
 ###########
+
+# Entries that are used by several other categories. 
 
 ok:EN:OK
 ok:FR:OK
@@ -28,6 +39,12 @@ no:FR:No
 cancel:EN:Cancel
 cancel:FR:Annuler
 #cancel:JP:ｷｬﾝｾﾙ
+
+folder_does_not_exist:EN:Folder doesn't exist.
+folder_does_not_exist:FR:Le dossier n'existe pas.
+
+this_folder_does_not_exist:EN:This folder doesn't exist : %1
+this_folder_does_not_exist:FR:Ce dossier n'existe pas : %1
 
 
 ############
@@ -257,6 +274,11 @@ table.size:FR:Taille
 table.date:EN:Date
 table.date:FR:Date
 
+table.folder_access_error:EN:Folder access error
+table.folder_access_error:FR:Folder access error
+
+table.folder_does_not_exist:EN:$[folder_does_not_exist]
+
 
 ##################
 # Version dialog #
@@ -300,11 +322,10 @@ copy_dialog.destination:FR:Copier les fichiers sélectionnés dans
 copy_dialog.error_title:EN:Copy error
 copy_dialog.error_title:FR:Erreur de copie
 
-copy_dialog.unknown_folder:EN:Folder %1 doesn't exist.
-copy_dialog.unknown_folder:FR:Le dossier %1 n'existe pas.
+copy_dialog.folder_does_not_exist:EN:$[this_folder_does_not_exist]
 
-copy_dialog.same_source_destination:EN:Source and destination are the same.
-copy_dialog.same_source_destination:FR:La source et la destination sont les mêmes.
+copy_dialog.same_source_destination:EN:Source and destination folders are the same.
+copy_dialog.same_source_destination:FR:Les répertoires source et destination sont les mêmes.
 
 copy_dialog.copying:EN:Copying files
 copy_dialog.copying:FR:Copie en cours
@@ -323,10 +344,46 @@ unzip_dialog.destination:FR:Décompresser les fichiers selectionnés dans
 unzip_dialog.error_title:EN:Unzip error
 unzip_dialog.error_title:FR:Erreur de décompression
 
-unzip_dialog.unknown_folder:EN:$[copy_dialog.unknown_folder]
+unzip_dialog.folder_does_not_exist:EN:$[folder_does_not_exist]
 
 unzip_dialog.unzipping:EN:Unzipping files
 unzip_dialog.unzipping:FR:Décompression en cours
+
+
+###############
+# Move dialog #
+###############
+
+move_dialog.title:EN:Move/Rename
+move_dialog.title:FR:Déplacer/Renommer
+
+move_dialog.rename_description:EN:Rename to
+move_dialog.rename_description:FR:Renommer en
+
+move_dialog.move_description:EN:Move to
+move_dialog.move_description:FR:Déplacer vers
+
+move_dialog.rename:EN:Rename
+move_dialog.rename:FR:Renommer
+
+move_dialog.move:EN:Move
+move_dialog.move:FR:Déplacer
+
+move_dialog.error_title:EN:Move error
+move_dialog.error_title:FR:Erreur de déplacement
+
+move_dialog.folder_does_not_exist:EN:$[this_folder_does_exist]
+
+move_dialog.same_source_destination:EN:$[copy_dialog.same_source_destination]
+
+move_dialog.moving:EN:Moving files
+move_dialog.moving:FR:Déplacement en cours
+
+move_dialog.:EN:
+move_dialog.:FR:
+
+move_dialog.:EN:
+move_dialog.:FR:
 
 
 #################
@@ -412,10 +469,30 @@ file_selection_dialog.case_sensitive:FR:Respecter la casse
 file_selection_dialog.include_folders:EN:Include folders
 file_selection_dialog.include_folders:FR:Inclure les dossiers
 
-file_selection_dialog.:EN:
-file_selection_dialog.:FR:
 
-file_selection_dialog.:EN:
-file_selection_dialog.:FR:
+################
+# Mkdir dialog #
+################
+
+mkdir_dialog.title:EN:Make directory
+mkdir_dialog.title:FR:Créer repertoire
+
+mkdir_dialog.description:EN:Create directory
+mkdir_dialog.description:FR:Créer le repertoire
+
+mkdir_dialog.error_title:EN:Make dir error
+mkdir_dialog.error_title:FR:Erreur de création
+
+mkdir_dialog.create:EN:Create
+mkdir_dialog.create:FR:Créer
+
+mkdir_dialog.invalid_path:EN:Invalid path: %1
+mkdir_dialog.invalid_path:FR:Chemin invalide: %1
+
+mkdir_dialog.dir_already_exists:EN:Directory %1 already exists.
+mkdir_dialog.dir_already_exists:FR:Le répertoire %1 existe déjà.
+
+mkdir_dialog.cannot_create_dir:EN:Unable to create directory %1.
+mkdir_dialog.cannot_create_dir:FR:Impossible de créer le répertoire %1.
 
 

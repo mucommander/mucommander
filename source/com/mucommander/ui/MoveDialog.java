@@ -5,6 +5,7 @@ import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.job.MoveJob;
+import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -49,7 +50,8 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 		Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel();
 		
-		JLabel label = new JLabel((isShiftDown && nbFiles==1)?"Rename to":"Move to");
+		boolean rename = isShiftDown && nbFiles==1;
+		JLabel label = new JLabel(rename?"Rename to":"Move to");
         mainPanel.add(label);
 
 		String fieldText;
@@ -75,7 +77,7 @@ public class MoveDialog extends FocusDialog implements ActionListener {
         contentPane.add(mainPanel, BorderLayout.NORTH);
 		
 		// OK / Cancel buttons panel
-        okButton = new JButton("Move");
+        okButton = new JButton(rename?"Rename":"Move");
         cancelButton = new JButton("Cancel");
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
