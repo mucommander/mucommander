@@ -29,7 +29,7 @@ import java.util.Vector;
  * 
  * @author Maxence Bernard
  */
-public class MainFrame extends JFrame implements ComponentListener, KeyListener, FocusListener {
+public class MainFrame extends JFrame implements ComponentListener, KeyListener {
 	
 	private final static String FRAME_TITLE = "muCommander";
 
@@ -67,13 +67,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		// Enable window resize
 		setResizable(true);
 
-		// Create a new content pane to specify custom insets
-//		Container contentPane = new JPanel(new BorderLayout()) {
-//			 public Insets getInsets() {
-//				 // Gives some border space
-//				 return new Insets(3, 4, 3, 4);
-//			 }
-//		};
 		YBoxPanel contentPane = new YBoxPanel();
 		contentPane.setInsets(new Insets(3, 4, 3, 4));
 		setContentPane(contentPane);
@@ -139,9 +132,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
         table1.addKeyListener(this);
         table2.addKeyListener(this);
     
-        table1.addFocusListener(this);
-		table2.addFocusListener(this);
-
 		// Catches window close event
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 //		addWindowListener(this);
@@ -152,24 +142,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 * Shows/hide the toolbar.
 	 */
 	public void setToolbarVisible(boolean visible) {
-/*
-		if(toolbar.isVisible() && !visible) {
-//			getContentPane().remove(toolbar);
-//			folderPanel1.removeLocationListener(toolbar);
-//			folderPanel2.removeLocationListener(toolbar);
-//			this.toolbar = null;
-			toolbar.setVisible(false);
-			validate();
-		}
-		else if(!toolbar.isVisible() && visible) {
-//			this.toolbar = new ToolBar(this);
-//			folderPanel1.addLocationListener(toolbar);
-//			folderPanel2.addLocationListener(toolbar);
-//			getContentPane().insert(toolbar, BorderLayout.NORTH);
-			toolbar.setVisible(true);
-			validate();
-		}
-*/
 		toolbar.setVisible(visible);
 		validate();
 	}
@@ -221,7 +193,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 * Sets status bar text label. This method is called by FileTable.
 	 */
 	public void setStatusBarText(String text) {
-text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemory();
+if(com.mucommander.Debug.ON) text += " - freeMem="+Runtime.getRuntime().freeMemory()+" - totalMem="+Runtime.getRuntime().totalMemory();
 		statusBarLabel.setText(text);
 	}
 	
@@ -233,6 +205,14 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
         return lastActiveTable;
     }
 
+	/**
+	 * Sets currently active FileTable (called by FolderPanel).
+	 */
+	void setLastActiveTable(FileTable table) {
+        this.lastActiveTable = table;
+    }
+
+	
 	/**
 	 * Returns the complement to getLastActiveTable().
 	 */
@@ -292,13 +272,11 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 		AbstractFile tempFile;
 		FileTableModel tableModel1 = (FileTableModel)table1.getModel();
 		FileTableModel tableModel2 = (FileTableModel)table2.getModel();
-//        int nbFiles1 = tableModel1.getRowCount();
-//        int nbFiles2 = tableModel2.getRowCount();
+
         int nbFiles1 = tableModel1.getFileCount();
         int nbFiles2 = tableModel2.getFileCount();
 		int fileIndex;
 		String tempFileName;
-//		for(int i=table1.getCurrentFolder().getParent()==null?0:1; i<nbFiles1; i++) {
 		for(int i=0; i<nbFiles1; i++) {
 			tempFile = tableModel1.getFile(i);
 			if(tempFile.isDirectory())
@@ -306,7 +284,6 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 			
 			tempFileName = tempFile.getName();
             fileIndex = -1;
-//			for(int j=table2.getCurrentFolder().getParent()==null?0:1; j<nbFiles2; j++)
 			for(int j=0; j<nbFiles2; j++)
 				if (tableModel2.getFile(j).getName().equals(tempFileName)) {
                     fileIndex = j;
@@ -318,7 +295,6 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 			}
 		}
 
-//		for(int i=table2.getCurrentFolder().getParent()==null?0:1; i<nbFiles2; i++) {
 		for(int i=0; i<nbFiles2; i++) {
 			tempFile = tableModel2.getFile(i);
 			if(tempFile.isDirectory())
@@ -326,7 +302,6 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 
 			tempFileName = tempFile.getName();
             fileIndex = -1;
-//			for(int j=table1.getCurrentFolder().getParent()==null?0:1; j<nbFiles1; j++)
 			for(int j=0; j<nbFiles1; j++)
 				if (tableModel1.getFile(j).getName().equals(tempFileName)) {
                     fileIndex = j;
@@ -447,8 +422,22 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 		return isVisible() && hasFocus();
 	}
 
+	
+	/*********************
+	 * Overriden methods *
+	 *********************/
 
-	/**
+	 public void dispose() {
+		// Properly disposes folder panels and releases
+		// associated resources
+		this.folderPanel1.dispose();
+		this.folderPanel2.dispose();
+
+		super.dispose();
+	 }
+	 
+
+	 /**
 	 * Overrides JComponent's requestFocus() method to request focus on the last active FolderPanel.
 	 */
 	public void requestFocus() {
@@ -460,6 +449,14 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 			FocusRequester.requestFocus(lastActiveTable.getFolderPanel());
 	}
 
+	
+// Adding custom insets to the Frame causes some weird sizing problems,
+// so insets are added to the content pane instead
+//	 public Insets getInsets() {
+//		 return new Insets(3, 4, 3, 4);
+//	 }
+
+	
 	/*****************************
 	 * ComponentListener methods *
 	 *****************************/
@@ -510,45 +507,33 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
         int keyCode = e.getKeyCode();
         if(keyCode == KeyEvent.VK_F3 && !e.isControlDown()) {
 			commandBar.getButton(CommandBarPanel.VIEW_INDEX).doClick();
-//            commandBar.doView();
         }
         else if(keyCode == KeyEvent.VK_F4 && e.isAltDown()) {
 			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
-//            commandBar.doExit();
         }
         else if(keyCode == KeyEvent.VK_F4 && !e.isControlDown()) {
 			commandBar.getButton(CommandBarPanel.EDIT_INDEX).doClick();
-//            commandBar.doEdit();
         }
         else if(keyCode == KeyEvent.VK_F5 && !e.isControlDown()) {
 			commandBar.getButton(CommandBarPanel.COPY_INDEX).doClick();
-//			new CopyDialog(this, false, e.isShiftDown());
         }
         else if(keyCode == KeyEvent.VK_F6 && !e.isControlDown()) {
 			commandBar.getButton(CommandBarPanel.MOVE_INDEX).doClick();
-//			new MoveDialog(this, e.isShiftDown());
         }
         else if(keyCode == KeyEvent.VK_F7 && !e.isControlDown()) {
-//			new MkdirDialog(this);
 			commandBar.getButton(CommandBarPanel.MKDIR_INDEX).doClick();
         }
         else if((keyCode == KeyEvent.VK_F8 || keyCode == KeyEvent.VK_DELETE)
 		 && !e.isControlDown()) {
 			commandBar.getButton(CommandBarPanel.DELETE_INDEX).doClick();
-//			new DeleteDialog(this);
         }
         else if(keyCode == KeyEvent.VK_F9 && !e.isControlDown()) {
 			commandBar.getButton(CommandBarPanel.REFRESH_INDEX).doClick();
-//        	commandBar.doRefresh();
         }
         else if(keyCode == KeyEvent.VK_F10 && !e.isControlDown()
 		 || (PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_W && e.isMetaDown())) {
 			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
-//            commandBar.doExit();
         }
-//		else if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_Q && e.isMetaDown()) {
-//			System.exit(0);
-//		}
 		else if(keyCode == KeyEvent.VK_F1 && e.isAltDown()) {
 			folderPanel1.showRootBox();
         }
@@ -587,43 +572,5 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 
     public void keyTyped(KeyEvent e) {
     }
-
-    /*************************
-     * FocusListener methods *
-     *************************/
-    
-    /**
-     * Listens to focus events coming from FileTable instances to keep track of the last active table
-     */
-    public void focusGained(FocusEvent e) {
-		// Resets shift mode to false, since keyReleased events may have been lost
-		if(commandBar!=null)
-			commandBar.setShiftMode(false);
-        this.lastActiveTable = e.getSource()==table1?table1:table2;
-    }
-    
-    public void focusLost(FocusEvent e) {
-    }    
-
-
-	/*********************
-	 * Overriden methods *
-	 *********************/
-
-	 public void dispose() {
-		// Properly disposes folder panels and releases
-		// associated resources
-		this.folderPanel1.dispose();
-		this.folderPanel2.dispose();
-
-		super.dispose();
-	 }
-	 
-// Adding custom insets to the Frame causes some weird sizing problems,
-// so insets are added to the content pane instead
-//	 public Insets getInsets() {
-//		 return new Insets(3, 4, 3, 4);
-//	 }
-
 
 }

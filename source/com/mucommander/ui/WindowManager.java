@@ -438,6 +438,11 @@ if(com.mucommander.Debug.ON)
 	public void windowActivated(WindowEvent e) {
 		this.currentMainFrame = (MainFrame)e.getSource();
 
+		// Resets shift mode to false, since keyReleased events may have been lost during window switching
+		CommandBarPanel commandBar = currentMainFrame.getCommandBar();
+		if(commandBar!=null)
+			commandBar.setShiftMode(false);
+
 		// Requests focus if last active table doesn't already have focus
 		// Delay check is to avoid that 2 main frames fight over focus.
 		long now = System.currentTimeMillis();

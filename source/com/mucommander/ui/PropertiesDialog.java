@@ -55,7 +55,8 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		this.job = new PropertiesJob(files, mainFrame);
 		
 		Container contentPane = getContentPane();
-		
+	
+/*	
 		JPanel gridPanel = new JPanel(new GridLayout(0,1));
 		
 		// Contents (set later)
@@ -82,10 +83,30 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 
 		updateLabels();
 		contentPane.add(gridPanel, BorderLayout.NORTH);
+*/
+
+		TextFieldsPanel mainPanel = new TextFieldsPanel(10);
+		
+		// Contents (set later)
+		counterLabel = new JLabel("");
+		mainPanel.addTextFieldRow(Translator.get("properties_dialog.contents")+":", counterLabel, 10);
+
+		// Location (set here)
+		String location = firstFile.getParent().getAbsolutePath(true);
+		JLabel locationLabel = new JLabel(location);
+		locationLabel.setToolTipText(location);
+		mainPanel.addTextFieldRow(Translator.get("properties_dialog.location")+":", locationLabel, 10);
+
+		// Size (set later)
+		sizeLabel = new JLabel("");
+		mainPanel.addTextFieldRow(Translator.get("properties_dialog.size")+":", sizeLabel, 5);
+
+		updateLabels();
+		YBoxPanel yPanel = new YBoxPanel(5);
+		yPanel.add(mainPanel);
+		contentPane.add(yPanel, BorderLayout.NORTH);
 		
 		okButton = new JButton(Translator.get("ok"));
-//		// Escape key disposes dialog
-//		okButton.addKeyListener(new EscapeKeyAdapter(this));
 		contentPane.add(DialogToolkit.createOKPanel(okButton, this), BorderLayout.SOUTH);
 
 		// OK button will receive initial focus

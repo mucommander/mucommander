@@ -43,6 +43,8 @@
     <!-- Unjar libraries to include them in the JAR file -->
     <unjar src="${lib}/muxml.jar" dest="${classes}"/>
     <unjar src="${lib}/jcifs.jar" dest="${classes}"/>
+    <unjar src="${lib}/commons-net.jar" dest="${classes}"/>
+    <unjar src="${lib}/jakarta-oro.jar" dest="${classes}"/> 
     <!-- Not supported by unjar, too bad
         <fileset dir="${lib}">
         <include name="**/*.jar"/>
@@ -61,20 +63,44 @@
   </target>
 
 
-  <!-- Obfuscate code to make it leaner -->
-  <target name="obfuscate">
+  <!-- Obfuscate code using yGuard to app the app leaner -->
+  <target name="yguard">
     <taskdef name="obfuscate" 
         classname="com.yworks.yguard.ObfuscatorTask" 
         classpath="yguard.jar"/>
-    <obfuscate mainclass="com.mucommander.Launcher" logfile="dist/yguard_log.xml" conservemanifest="true">
+    <obfuscate mainclass="com.mucommander.Launcher" logfile="${dist}/yguard_log.xml" conservemanifest="true">
 	    <property name="naming-scheme" value="small"/>
-		<inoutpair in="dist/mucommander.jar" out="dist/mucommander_obf.jar"/>
+		<inoutpair in="${dist}/mucommander.jar" out="${dist}/mucommander_obf.jar"/>
 		<!-- Needed for jCIFS -->
 		<expose>
 			<class name="jcifs.Config"/>
 			<class name="com.mucommander.ui.macosx.FinderIntegration"/>
 		</expose>
 	</obfuscate>
+  </target>
+
+  <!-- Obfuscate code using ProGuard to app the app leaner -->
+  <target name="proguard">
+      <!-- Delete any existing obfuscated jar file -->
+      <delete file="${dist}/mucommander_obf.jar"/>
+      <!-- Imports ProGuard obfuscator ant task -->
+      <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="proguard.jar"/>
+      <proguard overloadaggressively="on" usemixedclassnames="off" ignorewarnings="on" printseeds="on">
+          <injar name="${dist}/mucommander.jar"/> 
+          <outjar name="${dist}/mucommander_obf.jar"/>
+	  <libraryjar name="/System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Classes/classes.jar"/>
+	  <keep name="com.mucommander.ui.macosx.FinderIntegration">
+	      <method access="public" name="handleAbout"/>
+              <method access="public" name="handlePrefs"/>
+              <method access="public" name="handleQuit"/>
+	  </keep>
+          <keep name="jcifs.Config">
+	      <method access="public" name="*"/>
+	  </keep>
+	  <keep name="com.mucommander.Launcher">
+	      <method access="public static" name="main" param="java.lang.String[]"/>
+	  </keep>
+      </proguard>
   </target>
 
   <!-- Launches mucommander from the classes directory -->

@@ -94,6 +94,9 @@ error_while_transferring:FR:Erreur lors du transfert de %1
 copy:EN:Copy
 copy:FR:Copier
 
+download:EN:Download
+download:FR:Télécharger
+
 browse:EN:Browse
 browse:FR:Explorer
 
@@ -361,8 +364,8 @@ table.folder_access_error:FR:Unable to read folder contents
 
 table.folder_does_not_exist:EN:$[folder_does_not_exist]
 
-table.copy_or_browse:EN:Would you like to browse or copy this file ?
-table.copy_or_browse:FR:Souhaitez-vous explorer ou copier ce fichier ?
+table.download_or_browse:EN:Would you like to browse or download this file ?
+table.download_or_browse:FR:Souhaitez-vous explorer ou télécharger ce fichier ?
 
 
 ##################
@@ -390,8 +393,7 @@ version_dialog.not_available_title:FR:Serveur indisponible
 version_dialog.not_available:EN:Unable to get version information from server.
 version_dialog.not_available:FR:L'information de version n'a pas pu être récupérée.
 
-version_dialog.download:EN:Download
-version_dialog.download:FR:Télécharger
+version_dialog.download:EN:$[download]
 
 
 ###############
@@ -535,8 +537,7 @@ http_download.cannot_download_file:FR:Impossible de télécharger %1
 http_download.cannot_create_destination:EN:Unable to create file %1 in destination.
 http_download.cannot_create_destination:FR:Impossible de créer le fichier %1 dans le dossier de destination.
 
-download_dialog.download:EN:Download
-download_dialog.download:FR:Télécharger
+download_dialog.download:EN:$[download]
 
 download_dialog.description:EN:Download file to
 download_dialog.description:FR:Télécharger le fichier dans

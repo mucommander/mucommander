@@ -67,6 +67,10 @@ public abstract class AbstractFile {
 	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) throws AuthException, IOException {
 		AbstractFile file;
 		String absPathLC = absPath.toLowerCase();
+
+		// Remove trailing slash or backslash
+		if(absPathLC.endsWith("/") || absPathLC.endsWith("\\"))
+			absPathLC.substring(0, absPathLC.length()-1);
 		
 		// SMB file
 		if (absPathLC.startsWith("smb://"))

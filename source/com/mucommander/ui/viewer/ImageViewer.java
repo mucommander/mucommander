@@ -190,7 +190,7 @@ System.out.println("goToImage");
 	
 
 	private void checkZoom() {
-System.out.println("checkZoom");
+//System.out.println("checkZoom");
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		zoomInItem.setEnabled(zoomFactor<1.0 || (2*zoomFactor*image.getWidth(null) < d.width

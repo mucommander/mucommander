@@ -52,11 +52,11 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	
 	private final static int CANCEL_ACTION = 0;
 	private final static int BROWSE_ACTION = 1;
-	private final static int COPY_ACTION = 2;
+	private final static int DOWNLOAD_ACTION = 2;
 	
 	private final static String CANCEL_TEXT = Translator.get("cancel");
 	private final static String BROWSE_TEXT = Translator.get("browse");
-	private final static String COPY_TEXT = Translator.get("copy");
+	private final static String DOWNLOAD_TEXT = Translator.get("download");
 
 	
 	static {
@@ -461,13 +461,13 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 				browse = true;
 			}
 			else if(file.isBrowsable()) {
-				// Copy or browse file ?
+				// Download or browse file ?
 				QuestionDialog dialog = new QuestionDialog(mainFrame, 
 				null,
-				Translator.get("table.copy_or_browse"),
+				Translator.get("table.download_or_browse"),
 				mainFrame,
-				new String[] {BROWSE_TEXT, COPY_TEXT, CANCEL_TEXT},
-				new int[] {BROWSE_ACTION, COPY_ACTION, CANCEL_ACTION},
+				new String[] {BROWSE_TEXT, DOWNLOAD_TEXT, CANCEL_TEXT},
+				new int[] {BROWSE_ACTION, DOWNLOAD_ACTION, CANCEL_ACTION},
 				0);
 
 				int ret = dialog.getActionValue();
@@ -476,7 +476,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 				if(ret==BROWSE_ACTION)
 					browse = true;
 			}
-			// else copy file
+			// else download file
 			
 			if(browse) {
 				// If folder could not be set, restore current folder's path
@@ -488,10 +488,10 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 				fileV.add(file);
 				
 				// Show confirmation/path modification dialog
-				if(file instanceof HTTPFile)
-					new DownloadDialog(mainFrame, fileV);
-				else
-					new CopyDialog(mainFrame, fileV, false);
+//				if(file instanceof RemoteFile)	// Does not work coz file can be wrapped inside a ZipArchiveFile -> test is false 
+				new DownloadDialog(mainFrame, fileV);
+//				else
+//					new CopyDialog(mainFrame, fileV, false);
 					
 				// Restore current folder's path
 				locationField.setText(currentFolder.getAbsolutePath(true));
@@ -530,6 +530,9 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		
 		if(source==locationField)
 			locationFieldTextSet = false;
+		
+		// Notify MainFrame that we are in control now! (our table/location field is active)
+		mainFrame.setLastActiveTable(fileTable);
 	}
 	
 	public void focusLost(FocusEvent e) {

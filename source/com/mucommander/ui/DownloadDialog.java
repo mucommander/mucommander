@@ -33,52 +33,16 @@ public class DownloadDialog extends DestinationDialog {
 			Translator.get("download_dialog.download"),
 			Translator.get("download_dialog.error_title"));
 
-/*
-		int urlLen = fileURL.length();
-		// Remove ending '/' character(s)
-		while(fileURL.charAt(urlLen-1)=='/')
-			fileURL = fileURL.substring(0, --urlLen);
-		int lastSlashPos = fileURL.lastIndexOf('/');
-		// Determine local file name
-		this.fileName = java.net.URLDecoder.decode(fileURL.substring(lastSlashPos==-1||lastSlashPos<7?7:lastSlashPos+1, urlLen));
-*/
 		this.fileV = fileV;
 		AbstractFile file = (AbstractFile)fileV.elementAt(0);
 		
 		AbstractFile activeFolder = mainFrame.getLastActiveTable().getCurrentFolder();
+		// Fill text field with current folder's absolute path and file name
 		setTextField(activeFolder.getAbsolutePath(true)+file.getName());
 		showDialog();
 	}
 
 	
-	/**
-	 * Starts an HttpDownloadJob. This method is trigged by the 'OK' button or return key.
-	 */
-/*
-	 protected void okPressed() {
-
-		String destPath = pathField.getText();
-
-		// Resolves destination folder
-		Object ret[] = mainFrame.resolvePath(destPath);
-		// The path entered doesn't correspond to any existing folder
-		if (ret==null) {
-			showErrorDialog(Translator.get("this_folder_does_not_exist", destPath), Translator.get("download_dialog.error_title"));
-			return;
-		}
-
-		AbstractFile destFolder = (AbstractFile)ret[0];
-		String newName = (String)ret[1];
-		
-		AbstractFile destFile;
-		if(newName!=null)
-			destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+newName);
-		else {
-			// Create destination file
-			destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+fileName);
-		}
-*/
-
 	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName, int defaultFileExistsAction) {
 		
 		// Starts moving files
