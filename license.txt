@@ -26,10 +26,9 @@ that the following conditions are met:
    THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-----------------------------------------------------------------------------
-
-The jCIFS library is used to provide SMB support for muCommander
-under the terms of the LGPL :
+****************************************************************************
+The jCIFS library is used by muCommander under the terms of the LGPL:
+****************************************************************************
 
 		  GNU LESSER GENERAL PUBLIC LICENSE
 		       Version 2.1, February 1999
@@ -39,9 +38,6 @@ under the terms of the LGPL :
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 
-[This is the first released version of the Lesser GPL.  It also counts
- as the successor of the GNU Library Public License, version 2, hence
- the version number 2.1.]
 
 			    Preamble
 
@@ -489,10 +485,9 @@ SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGES.
 
 
-----------------------------------------------------------------------------
-
-The CommonsNET library is used to provide FTP support for muCommander
-under the terms of the Apache license :
+****************************************************************************
+The CommonsNet library is used by muCommander under the terms of the Apache license:
+****************************************************************************
 
                                  Apache License
                            Version 2.0, January 2004

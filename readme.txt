@@ -10,34 +10,95 @@ Please use the muCommander forums (http://www.mucommander.com/forums)
 to post your questions, suggestions or bug reports. Your feedback is
 important and always welcome!
 
+Official website: http://www.mucommander.com
+(c) 2004 Maxence Bernard. All rights reserved.
+
+
+Legal stuff
+-----------
+
+You must read and accept the licenses contained in this package prior
+to using muCommander.
+
 muCommander uses the jCIFS library released under the LGPL license
 to provide SMB support. jCIFS can be found at http://jcifs.samba.org.
 
 muCommander uses the CommonsNet library released under the Apache license
 to provide FTP support. CommonsNet can be found at http://jakarta.apache.org.
 
-Official website: http://www.mucommander.com
-(c) 2004 Maxence Bernard. All rights reserved.
-
 
 Requirements
 ------------
 
-You must read and accept the license contained in this package prior
-to using muCommander.
+Java Runtime Environment 1.3.0 (JRE) or later is required to run
+muCommander. JRE 1.4 is recommended, you can download it at http://java.com.
 
-- Java Runtime Environment 1.3.0 (JRE) or later is required to run
-  muCommander. JRE 1.4 is recommended, you can download it at
-  http://java.sun.com/j2se/1.4/.  Mac OS X users: JRE 1.3.1 already
-  comes preinstalled on Mac OS X.
+Mac OS X users: JRE 1.3.1 already comes pre-installed on Mac OS X, you don't
+need to download anything else.
 
-- If you're having problems launching muCommander, make sure the
-  $JAVA_HOME environment variable points to the directory where your
-  JRE or JDK is installed.
+If you're having problems launching muCommander, make sure the
+$JAVA_HOME environment variable points to the directory where your
+JRE or JDK is installed.
 
 
-What's new in v0.6?
--------------------
+What's new in v0.7 ?
+--------------------
+
+New features:
+ - Interface localized, available in English and French
+ - FTP support
+ - Browse HTML files as a folder to easily locate and download linked files
+ - HTTP file download with resuming
+ - Status bar which displays number and combined size of selected files 
+ - Re-authentication mechanism when trying to access a folder without sufficient privileges
+ - GIF/JPEG/PNG image viewer
+ - Choice of a default action for copy/move/delete operations when a file exist in destination 
+
+Improvements:
+ - Overall application performance improved
+ - Improved windows focus management
+ - Improved SMB browsing performance
+ - Window location and dimension automatically saved after quit
+ - jCIFS library updated to version 1.0.1
+ - Added shortcuts to user home, network shares, /etc/fstab (unix) and /Volumes (Mac OS X) in drive button 
+ - All dialogs can now be closed with escape key
+ - Improved progress bar, includes current file in total
+ - New 'Go to parent' toolbar button and menu item
+ - Layout of main window reworked 
+ - Improved properties window (faster and now displays progress)
+ - 'Hide command bar' option
+ - Removed 'Show toolbar on startup option', toolbar status is now automatically saved (same goes for command and status bars)
+ - More accurate error messages and 'retry' option when copying or moving files fails 
+ - Real 'resume' file option
+ - Dialogs are now properly centered when they show up
+ - Tooltips for command bar buttons
+ - Main window is maximized on first launch (works betten under Java 1.4 than 1.3) 
+ - Command bar buttons now blink when triggered with F3-F10
+ - User now regains control faster after interrupting a file operation
+ - Sender information now appears in 'email files' dialog
+ - When renaming a file, filename without its extension is selected
+ - Code has undergone a major rewrite
+
+Bug fixes :
+ - Fixed a deadlock which sometimes occurred while refreshing a folder
+ - Application no longer hangs before an unavailable SMB folder times out
+ - Symbolic links to ZIP or JAR files are now handled correctly
+ - Fixed a bug when moving a folder to a folder containing a folder with the same name
+ - Fixed minor focus problem with drive button (would not release focus)
+ - Fixed minor bug in location field which would not always reflect current folder's path
+
+Mac OS X:
+ - Screen menu bar enabled
+ - Brushed metal look and feel (requires Java 1.4.2 update 1)
+ - Standard 'Preferences', 'About' and 'Quit' menu items
+ - Quit confirmation dialog
+ - Command+W closes windows
+
+
+History
+-------
+
+v0.6 [12/31/03]
 
 New features:
 - Send files as email attachments [ctrl+S]
@@ -84,9 +145,6 @@ Known issues:
 - Mac OS X: muCommander is buggy under Java 1.4 + Jaguar so Java 1.3.1 is used by default
 - Mac OS X: 'Sound beep on question dialog' doesn't work with Java 1.3.1
 
-
-History
--------
 
 v0.5 [12/31/02]
 New features:
