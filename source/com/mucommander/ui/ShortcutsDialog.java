@@ -65,7 +65,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
 
 
 	public ShortcutsDialog(MainFrame mainFrame) {
-		super(mainFrame, "Shortcuts", mainFrame);
+		super(mainFrame, "Keyboard shortcuts", mainFrame);
 		
 		JButton okButton = new JButton("OK");
 		setInitialFocusComponent(okButton);

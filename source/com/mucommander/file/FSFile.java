@@ -18,7 +18,7 @@ public class FSFile extends AbstractFile {
 	private boolean isSymlink;
 	private boolean symlinkValueSet; 
 	
-	/* These file attributes are cached first time they are accessed to avoid excessive I/O */
+	// These file attributes are cached first time they are accessed to avoid excessive I/O
     	
 //	private long date = -1;
 //	private long size = -1;
@@ -62,16 +62,6 @@ public class FSFile extends AbstractFile {
 //System.out.println("F0");
 		this.absPath = _file.getAbsolutePath();
 
-		try {
-			this.canonicalPath = _file.getCanonicalPath();
-		}
-		catch(IOException e) {
-			if(com.mucommander.Debug.TRACE)
-				e.printStackTrace();
-				
-			this.canonicalPath = this.absPath;
-		}
-			
         // removes trailing separator (if any)
         this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
 
@@ -111,7 +101,19 @@ public class FSFile extends AbstractFile {
 	}
 
 	public String getCanonicalPath() {
-		return canonicalPath;
+		if(this.canonicalPath==null) {
+			try {
+				this.canonicalPath = file.getCanonicalPath();
+			}
+			catch(IOException e) {
+				if(com.mucommander.Debug.TRACE)
+					e.printStackTrace();
+					
+				this.canonicalPath = this.absPath;
+			}
+		}
+		
+		return this.canonicalPath;
 	}
 	
 	public String getSeparator() {
@@ -121,10 +123,15 @@ public class FSFile extends AbstractFile {
 	public boolean isSymlink() {
 		if(!symlinkValueSet) {
 			FSFile parent = (FSFile)getParent();
-			if(parent==null || this.canonicalPath==null)
+			String canonPath = getCanonicalPath();
+			if(parent==null || canonPath==null)			
+//			if(parent==null || this.canonicalPath==null)
 				this.isSymlink = false;
-			else
-				this.isSymlink = !this.canonicalPath.equals(parent.canonicalPath+(parent.canonicalPath.endsWith(separator)?"":separator)+getName());
+			else {
+				String parentCanonPath = parent.getCanonicalPath();
+				this.isSymlink = !canonPath.equals(parentCanonPath+(parentCanonPath.endsWith(separator)?"":separator)+getName());
+//				this.isSymlink = !this.canonicalPath.equals(parent.canonicalPath+(parent.canonicalPath.endsWith(separator)?"":separator)+getName());
+			}
 			
 			this.symlinkValueSet = true;
 		}
@@ -176,7 +183,8 @@ public class FSFile extends AbstractFile {
 			return super.equals(f);		// could be equal to a ZipArchiveFile
 
 		// Compares canonical path (which File does not do by default in its equals() method)
-		return this.canonicalPath.equals(((FSFile)f).canonicalPath);
+//		return this.canonicalPath.equals(((FSFile)f).canonicalPath);
+		return getCanonicalPath().equals(((FSFile)f).getCanonicalPath());
 	}
 	
 

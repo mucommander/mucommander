@@ -95,16 +95,6 @@ public class PlatformManager {
             if(com.mucommander.Debug.TRACE)
                 System.out.println("Executing "+command);
 
-/*
-            String tokens[];
-			if (osType == WINDOWS_NT) {
-				tokens = new String[] {"cmd", "/c", command};
-			}
-			else {
-				tokens = new String[] {command};
-			}
-*/
-
             Vector tokensV = new Vector();
 			if (osType == WINDOWS_NT) {
 				tokensV.add("cmd");
@@ -128,9 +118,14 @@ public class PlatformManager {
 				}
 				pos ++;
 			}
-// if(com.mucommander.Debug.TRACE) System.out.println("token= "+token.toString());
 			tokensV.add(token.toString());
-			
+
+
+if(com.mucommander.Debug.TRACE) {
+	for(int i=0; i<tokensV.size(); i++)
+		System.out.println("token"+i+"= ["+tokensV.elementAt(i)+"]");
+}
+	
 			String tokens[] = new String[tokensV.size()];
 			tokensV.toArray(tokens);
 
