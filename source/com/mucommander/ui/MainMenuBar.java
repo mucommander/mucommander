@@ -59,6 +59,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenuItem reverseOrderItem;
 	private JMenuItem goBackItem;
 	private JMenuItem goForwardItem;
+	private JMenuItem goToParentItem;
 	private JMenuItem swapFoldersItem;
 	private JMenuItem setSameFolderItem;
 	private JMenuItem refreshItem;
@@ -132,6 +133,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
 		goBackItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_back"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK), this);
 		goForwardItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_forward"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK), this);
+		goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
 		viewMenu.add(new JSeparator());
 		sortByNameItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_name"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK), this);
 		sortByDateItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_date"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.CTRL_MASK), this);
@@ -218,6 +220,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	public void locationChanged(FolderPanel folderPanel) {
 		goBackItem.setEnabled(folderPanel.hasBackFolder());
 		goForwardItem.setEnabled(folderPanel.hasForwardFolder());
+		goToParentItem.setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -289,6 +292,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		}
 		else if (source == goForwardItem) {
 			mainFrame.getLastActiveTable().getFolderPanel().goForward();	
+		}
+		else if (source == goToParentItem) {
+			FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
+			folderPanel.setCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);	
 		}
 		else if (source == sortByNameItem) {
 			mainFrame.getLastActiveTable().sortBy(FileTable.NAME);	

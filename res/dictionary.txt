@@ -272,6 +272,9 @@ view_menu.go_back:FR:Dossier précédent
 view_menu.go_forward:EN:Go forward
 view_menu.go_forward:FR:Dossier suivant
 
+view_menu.go_to_parent:EN:Go to parent
+view_menu.go_to_parent:FR:Dossier parent
+
 view_menu.sort_by_name:EN:Sort by Name
 view_menu.sort_by_name:FR:Classer par nom
 
@@ -347,33 +350,36 @@ help_menu.about:FR:A propos de muCommander
 # Keyboard shortcuts should soon be removed from here
 # and be inserted dynamically
 
-toolbar.new_window:EN:$[file_menu.new_window]
+toolbar.new_window:EN:$[shortcuts_dialog.windows.new_window]
 
-toolbar.go_back:EN:$[view_menu.go_back]
+toolbar.go_back:EN:$[shortcuts_dialog.view.go_back]
 
-toolbar.go_forward:EN:$[view_menu.go_forward]
+toolbar.go_forward:EN:$[shortcuts_dialog.view.go_forward]
 
-toolbar.mark:EN:$[mark_menu.mark]
+toolbar.go_to_parent:EN:$[shortcuts_dialog.view.go_to_parent]
 
-toolbar.unmark:EN:$[mark_menu.unmark]
+toolbar.mark:EN:$[shortcuts_dialog.selection.mark_group]
 
-toolbar.swap_folders:EN:$[view_menu.swap_folders]
+toolbar.unmark:EN:$[shortcuts_dialog.selection.unmark_group]
 
-toolbar.set_same_folder:EN:$[view_menu.set_same_folder]
+toolbar.swap_folders:EN:$[shortcuts_dialog.view.swap_folders]
 
-toolbar.server_connect:EN:$[file_menu.server_connect]
+toolbar.set_same_folder:EN:$[shortcuts_dialog.view.set_same_folder]
 
-toolbar.run_command:EN:$[file_menu.run_command]
+toolbar.server_connect:EN:$[shortcuts_dialog.file_operations.server_connect]
 
-toolbar.zip:EN:$[file_menu.zip]
+toolbar.run_command:EN:$[shortcuts_dialog.file_operations.run_command]
 
-toolbar.unzip:EN:$[file_menu.unzip]
+toolbar.zip:EN:$[shortcuts_dialog.file_operations.zip]
 
-toolbar.email:EN:$[file_menu.email]
+toolbar.unzip:EN:$[shortcuts_dialog.file_operations.unzip]
 
-toolbar.properties:EN:$[file_menu.properties]
+toolbar.email:EN:$[shortcuts_dialog.file_operations.email]
 
-toolbar.preferences:EN:$[file_menu.preferences]
+toolbar.properties:EN:$[shortcuts_dialog.file_operations.properties]
+
+toolbar.preferences:EN:Configure muCommander
+toolbar.preferences:FR:Configurer muCommander
 
 toolbar.hide_toolbar:EN:$[view_menu.hide_toolbar]
 
@@ -1013,32 +1019,50 @@ shortcuts_dialog.navigation.change_left:FR:Changer le dossier de gauche
 shortcuts_dialog.navigation.change_right:EN:Change right folder
 shortcuts_dialog.navigation.change_right:FR:Changer le dossier de droite
 
-shortcuts_dialog.navigation.switch:EN:Switch between left and right panels
-shortcuts_dialog.navigation.switch:FR:Basculer entre les dossiers de droite et de gauche
+shortcuts_dialog.navigation.tab:EN:Switch between left and right panels
+shortcuts_dialog.navigation.tab:FR:Basculer entre les dossiers de droite et de gauche
 
 shortcuts_dialog.navigation.enter:EN:Enter folder / Enter archive / Execute
 shortcuts_dialog.navigation.enter:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
 
-shortcuts_dialog.navigation.execute:EN:Execute with system's file associations
-shortcuts_dialog.navigation.execute:FR:Exécuter avec les associations de fichiers du système  
+shortcuts_dialog.navigation.execute:EN:Execute selected file with system's file associations
+shortcuts_dialog.navigation.execute:FR:Exécuter le fichier sélectionné avec les associations de fichiers du système  
 
-shortcuts_dialog.navigation.go_to_parent:EN:Go to parent folder
-shortcuts_dialog.navigation.go_to_parent:FR:Remonter au dossier parent
+shortcuts_dialog.navigation.go_to_first:EN:Select first file in current folder
+shortcuts_dialog.navigation.go_to_first:FR:Selectionner le premier fichier du dossier
 
-shortcuts_dialog.navigation.go_to_first:EN:Go to first file in current folder
-shortcuts_dialog.navigation.go_to_first:FR:Aller au premier fichier du dossier
-
-shortcuts_dialog.navigation.go_to_last:EN:Go to last file in current folder
-shortcuts_dialog.navigation.go_to_last:FR:Aller au dernier fichier du dossier
+shortcuts_dialog.navigation.go_to_last:EN:Select last file in current folder
+shortcuts_dialog.navigation.go_to_last:FR:Selectionner le dernier fichier du dossier
 
 shortcuts_dialog.view:EN:View
 shortcuts_dialog.view:FR:Vue
 
+shortcuts_dialog.view.go_to_parent:EN:Go to parent folder
+shortcuts_dialog.view.go_to_parent:FR:Remonter au dossier parent
+
+shortcuts_dialog.view.go_back:EN:Go to previous folder
+shortcuts_dialog.view.go_back:FR:Aller au dossier précédent
+
+shortcuts_dialog.view.go_forward:EN:Go to next folder 
+shortcuts_dialog.view.go_forward:FR:Aller au dossier suivant
+
+shortcuts_dialog.view.swap_folders:EN:Swap left and right folders
+shortcuts_dialog.view.swap_folders:FR:Echanger les dossiers de gauche et de droite 
+
+shortcuts_dialog.view.set_same_folder:EN:Set same directory to left and right folders
+shortcuts_dialog.view.set_same_folder:FR:Affecter le même repertoire aux dossiers de gauche et de droite
+
 shortcuts_dialog.selection:EN:Selection
 shortcuts_dialog.selection:FR:Selection
 
-shortcuts_dialog.selection.mark_unmark:EN:Mark/Unmark a file
-shortcuts_dialog.selection.mark_unmark:FR:Marquer/Dé-marquer un fichier
+shortcuts_dialog.selection.mark_group:EN:Mark a group of files
+shortcuts_dialog.selection.mark_group:EN:Marquer un groupe de fichiers
+
+shortcuts_dialog.selection.unmark_group:EN:Unmark a group of files
+shortcuts_dialog.selection.unmark_group:EN:Dé-marquer un groupe de fichiers
+
+shortcuts_dialog.selection.mark_unmark:EN:Mark/Unmark selected file
+shortcuts_dialog.selection.mark_unmark:FR:Marquer/Dé-marquer le fichier sélectionné
 
 shortcuts_dialog.file_operations:EN:File operations
 shortcuts_dialog.file_operations:FR:Opérations sur fichiers
@@ -1064,8 +1088,8 @@ shortcuts_dialog.file_operations.properties:FR:Afficher les propriétés des fic
 shortcuts_dialog.windows:EN:Windows
 shortcuts_dialog.windows:FR:Fenêtres
 
-shortcuts_dialog.windows.create:EN:Create a new window
-shortcuts_dialog.windows.create:FR:Créer une nouvelle fenêtre
+shortcuts_dialog.windows.new_window:EN:Open a new window
+shortcuts_dialog.windows.new_window:FR:Ouvrir une nouvelle fenêtre
 
 shortcuts_dialog.windows.recall:EN:Recall a window
 shortcuts_dialog.windows.recall:FR:Rappeler une fenêtre

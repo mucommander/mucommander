@@ -36,6 +36,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		{Translator.get("toolbar.new_window")+" (Ctrl+N)", "/newwindow.gif", null, "true"},
 		{Translator.get("toolbar.go_back")+" (Alt+Left)", "/back.gif", "/backg.gif", null},
 		{Translator.get("toolbar.go_forward")+" (Alt+Right)", "/forward.gif", "/forwardg.gif", "true"},
+		{Translator.get("toolbar.go_to_parent")+" (Backspace)", "/up.gif", "/upd.gif", "true"},
 		{Translator.get("toolbar.mark")+" (NumPad +)", "/mark.gif", null, null},
 		{Translator.get("toolbar.unmark")+" (NumPad -)", "/unmark.gif", null, "true"},
 		{Translator.get("toolbar.swap_folders")+" (Ctrl+U)", "/switch.gif", null, null},
@@ -53,17 +54,18 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	private final static int NEW_WINDOW_INDEX = 0;
 	private final static int BACK_INDEX = 1;
 	private final static int FORWARD_INDEX = 2;
-	private final static int MARK_INDEX = 3;
-	private final static int UNMARK_INDEX = 4;
-	private final static int SWAP_FOLDERS_INDEX = 5;
-	private final static int SET_SAME_FOLDER_INDEX = 6;
-	private final static int SERVER_CONNECT_INDEX = 7;
-	private final static int RUNCMD_INDEX = 8;
-	private final static int ZIP_INDEX = 9;
-	private final static int UNZIP_INDEX = 10;
-	private final static int EMAIL_INDEX = 11;
-	private final static int PROPERTIES_INDEX = 12;
-	private final static int PREFERENCES_INDEX = 13;
+	private final static int PARENT_INDEX = 3;
+	private final static int MARK_INDEX = 4;
+	private final static int UNMARK_INDEX = 5;
+	private final static int SWAP_FOLDERS_INDEX = 6;
+	private final static int SET_SAME_FOLDER_INDEX = 7;
+	private final static int SERVER_CONNECT_INDEX = 8;
+	private final static int RUNCMD_INDEX = 9;
+	private final static int ZIP_INDEX = 10;
+	private final static int UNZIP_INDEX = 11;
+	private final static int EMAIL_INDEX = 12;
+	private final static int PROPERTIES_INDEX = 13;
+	private final static int PREFERENCES_INDEX = 14;
 		
 	
 	/**
@@ -91,6 +93,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
 		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
 		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
+		buttons[PARENT_INDEX].setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
 		
 		// In order to catch Shift+clicks
 		buttons[ZIP_INDEX].addMouseListener(this);
@@ -201,6 +204,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	public void locationChanged(FolderPanel folderPanel) {
 		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
 		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
+		buttons[PARENT_INDEX].setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
 	}
 
 
@@ -235,6 +239,10 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		}
 		else if(buttonIndex==FORWARD_INDEX) {
 			mainFrame.getLastActiveTable().getFolderPanel().goForward();
+		}
+		else if(buttonIndex==PARENT_INDEX) {
+			FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
+			folderPanel.setCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);
 		}
 		else if(buttonIndex==MARK_INDEX) {
 			mainFrame.showSelectionDialog(true);

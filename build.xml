@@ -58,8 +58,15 @@
     <!-- Create dist subfolder where the JAR file will be put -->
     <mkdir dir="${dist}"/>
     
-    <!-- Put everything in ${classes} into the ${dist}/mucommander.jar file -->
-    <jar jarfile="${dist}/mucommander.jar" basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
+    <!-- Put everything in ${classes} into the ${dist}/mucommander_unobf.jar file -->
+    <jar jarfile="${dist}/mucommander_unobf.jar" basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
+
+	<!-- Trigger proguard target -->
+	<antcall target="proguard"/>
+
+	<!-- Delete unobfuscated JAR file -->
+	<delete file="${dist}/mucommander_unobf.jar"/>
+
   </target>
 
 
@@ -70,7 +77,7 @@
         classpath="yguard.jar"/>
     <obfuscate mainclass="com.mucommander.Launcher" logfile="${dist}/yguard_log.xml" conservemanifest="true">
 	    <property name="naming-scheme" value="small"/>
-		<inoutpair in="${dist}/mucommander.jar" out="${dist}/mucommander_obf.jar"/>
+		<inoutpair in="${dist}/mucommander.jar" out="${dist}/mucommander.jar"/>
 		<!-- Needed for jCIFS -->
 		<expose>
 			<class name="jcifs.Config"/>
@@ -82,12 +89,12 @@
   <!-- Obfuscate code using ProGuard to app the app leaner -->
   <target name="proguard">
 	<!-- Delete any existing obfuscated jar file -->
-	<delete file="${dist}/mucommander_obf.jar"/>
+	<delete file="${dist}/mucommander.jar"/>
 	<!-- Imports ProGuard obfuscator ant task -->
 	<taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="proguard.jar"/>
 	<proguard overloadaggressively="on" usemixedclassnames="off" ignorewarnings="on" printseeds="on">
-		<injar name="${dist}/mucommander.jar"/> 
-		<outjar name="${dist}/mucommander_obf.jar"/>
+		<injar name="${dist}/mucommander_unobf.jar"/> 
+		<outjar name="${dist}/mucommander.jar"/>
 		<libraryjar name="/System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Classes/classes.jar"/>
 		<!-- Mac OS X specific -->
 		<keep name="com.mucommander.ui.macosx.FinderIntegration">
