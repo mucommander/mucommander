@@ -38,7 +38,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 	private final static String APPEND_CAPTION = "Add to zip file";
 
 
-	public ZipDialog(MainFrame mainFrame) {
+	public ZipDialog(MainFrame mainFrame, boolean isShiftDown) {
 		super(mainFrame, "Add to zip", mainFrame);
 		this.mainFrame = mainFrame;
 		
@@ -49,7 +49,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		mainPanel.add(label);
 
 		FileTable activeTable = mainFrame.getUnactiveTable();
-		String initialPath = activeTable.getCurrentFolder().getAbsolutePath(true)+".zip";
+		String initialPath = (isShiftDown?"":activeTable.getCurrentFolder().getAbsolutePath(true))+".zip";
 		filePathField = new JTextField(initialPath);
 		filePathField.setCaretPosition(initialPath.length()-4);
 		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);

@@ -18,7 +18,7 @@
   <!-- Compiles .java files, adding libraries to classpath -->
   <target name="compile" depends="init">
     <!-- Compile the java code from ${source} into ${classes} -->
-    <javac srcdir="${source}" destdir="${classes}" debug="on">
+    <javac srcdir="${source}" destdir="${classes}" debug="on" deprecation="on">
       <classpath>
         <pathelement location="classes"/>
          <fileset dir="lib">

@@ -169,7 +169,22 @@ Dimension separatorDimension = new Dimension(10, 16);
 		else if (buttonIndex==PREFERENCES_INDEX) {
 			mainFrame.showPreferencesDialog();
 		}
-		
+		else if (buttonIndex==RUNCMD_INDEX) {
+			;
+		}
+		else if (buttonIndex= ZIP_INDEX) {
+			new ZipDialog(mainFrame, e.isShiftDown()).show();
+		}
+		else if (buttonIndex==UNZIP_INDEX) {
+			;
+		}
+		else if (buttonIndex==EMAIL_INDEX) {
+			;
+		}
+		else if (buttonIndex==PROPERTIES_INDEX) {
+			;
+		}
+	
 		mainFrame.getLastActiveTable().requestFocus();
 	}
 	

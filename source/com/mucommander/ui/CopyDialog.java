@@ -62,15 +62,23 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 
 		AbstractFile destFolder = (activeTable==table1?table2:table1).getCurrentFolder();
         String fieldText;
-		if(isShiftDown && nbFiles==1) {
-			fieldText = ((AbstractFile)filesToCopy.elementAt(0)).getName();
+		if(unzipDialog) {
+			if(isShiftDown)
+				fieldText = ".";
+			else
+				fieldText = destFolder.getAbsolutePath()+destFolder.getSeparator();
 		}
 		else {
-			fieldText = destFolder.getAbsolutePath()+destFolder.getSeparator();
-			if(nbFiles==1 && !unzipDialog)
-				fieldText += ((AbstractFile)filesToCopy.elementAt(0)).getName();
+			if(isShiftDown && nbFiles==1) {
+				fieldText = ((AbstractFile)filesToCopy.elementAt(0)).getName();
+			}
+			else {
+				fieldText = destFolder.getAbsolutePath()+destFolder.getSeparator();
+				if(nbFiles==1)
+					fieldText += ((AbstractFile)filesToCopy.elementAt(0)).getName();
+			}
 		}
-			
+		
 		copyPathField = new JTextField(fieldText);
         // Text is selected so that user can directly type and replace path
         copyPathField.setSelectionStart(0);
