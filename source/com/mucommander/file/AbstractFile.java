@@ -53,6 +53,7 @@ public abstract class AbstractFile {
 		return file;		
 	}
 	
+	
 	/**
 	 * <p>Tests a file for equality: returns <code>true</code> if the given file denotes the same
 	 * file or directory. Note that two files can be equal and not have the exact same absolute
