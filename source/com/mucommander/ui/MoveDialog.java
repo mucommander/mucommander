@@ -91,7 +91,6 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 		// Path field will receive initial focus
 		setInitialFocusComponent(movePathField);		
 			
-		setResizable(true);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		

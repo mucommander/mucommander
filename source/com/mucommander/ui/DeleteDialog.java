@@ -42,15 +42,18 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
         if(activeTable.getSelectedFiles().size()==0)
         	return;
 
-        okButton = new JButton("Delete");
         Container contentPane = getContentPane();
         
-        JPanel tempPanel = new JPanel(new BorderLayout());
-        contentPane.add(new JLabel("Permanently delete selected file(s) ?"), BorderLayout.CENTER);
+        YBoxPanel mainPanel = new YBoxPanel();
+        mainPanel.add(new JLabel("Permanently delete selected file(s) ?"));
+
+		mainPanel.addSpace(10);
+		contentPane.add(mainPanel, BorderLayout.NORTH);
         
+        okButton = new JButton("Delete");
 		cancelButton = new JButton("Cancel");
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
-        
+        		
 		// Escape key disposes dialog
         EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
         okButton.addKeyListener(escapeKeyAdapter);

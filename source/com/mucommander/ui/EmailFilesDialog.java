@@ -123,7 +123,6 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			getRootPane().setDefaultButton(okButton);
 	
 			// Packs dialog
-			setResizable(true);
 			setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 			setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		}

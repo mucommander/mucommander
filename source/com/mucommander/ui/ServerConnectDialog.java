@@ -40,18 +40,18 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		Container contentPane = getContentPane();
 		escapeKeyAdapter = new EscapeKeyAdapter(this);
 		
-		JPanel tempPanel = new JPanel(new BorderLayout());
-		JPanel tempPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		tempPanel2.add(new JLabel("Server type:"));
+		YBoxPanel mainPanel = new YBoxPanel();
+		JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		tempPanel.add(new JLabel("Server type  "));
 		serverTypeCombo = new JComboBox();
 		serverTypeCombo.addItem("SMB");
 		serverTypeCombo.addKeyListener(escapeKeyAdapter);
-		tempPanel2.add(serverTypeCombo);
-		tempPanel.add(tempPanel2, BorderLayout.NORTH);
+		tempPanel.add(serverTypeCombo);
+		mainPanel.add(tempPanel);
 
 		serverDetailsPanel = getSMBPanel();
-		tempPanel.add(serverDetailsPanel, BorderLayout.SOUTH);
-		contentPane.add(tempPanel, BorderLayout.NORTH);
+		mainPanel.add(serverDetailsPanel);
+		contentPane.add(mainPanel, BorderLayout.NORTH);
 		
 		okButton = new JButton("OK");
 		cancelButton = new JButton("Cancel");
@@ -67,54 +67,54 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		getRootPane().setDefaultButton(okButton);
 
 		// Packs dialog
-        setResizable(true);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 	}
 
 
 	private JPanel getSMBPanel() {
-		JPanel gridPanel = new JPanel(new GridLayout(0, 1));
+		YBoxPanel smbPanel = new YBoxPanel(10);
 
 		// Server field
 		JPanel tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("Server:   "), BorderLayout.WEST);
+		tempPanel.add(new JLabel("Server  "), BorderLayout.WEST);
 		smbServerField = new JTextField(lastSmbServer);
 		smbServerField.addKeyListener(escapeKeyAdapter);
 		smbServerField.addKeyListener(this);
 		smbServerField.addActionListener(this);
 		tempPanel.add(smbServerField, BorderLayout.CENTER);
-		gridPanel.add(tempPanel);
+		smbPanel.add(tempPanel);
 
 		// Username field
 		tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("Username:  "), BorderLayout.WEST);
+		tempPanel.add(new JLabel("Username  "), BorderLayout.WEST);
 		smbUsernameField = new JTextField(lastSmbUsername);
 		smbUsernameField.addKeyListener(escapeKeyAdapter);
 		smbUsernameField.addKeyListener(this);
 		smbUsernameField.addActionListener(this);
 		tempPanel.add(smbUsernameField, BorderLayout.CENTER);
-		gridPanel.add(tempPanel);
-		
+		smbPanel.add(tempPanel);
 
 		// Password field
 		tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("Password:  "), BorderLayout.WEST);
+		tempPanel.add(new JLabel("Password  "), BorderLayout.WEST);
 		smbPasswordField = new JPasswordField(lastSmbPassword);
 		smbPasswordField.addKeyListener(escapeKeyAdapter);
 		smbPasswordField.addKeyListener(this);
 		smbPasswordField.addActionListener(this);
 		tempPanel.add(smbPasswordField, BorderLayout.CENTER);
-		gridPanel.add(tempPanel);
+		smbPanel.add(tempPanel);
 
-		gridPanel.add(new JLabel(""));
+		smbPanel.addSpace(15);
 		
 		tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("URL: "), BorderLayout.WEST);
+		tempPanel.add(new JLabel("Server URL:  "), BorderLayout.WEST);
 		smbURLLabel = new JLabel(getSmbURL());
 		tempPanel.add(smbURLLabel, BorderLayout.CENTER);
-		gridPanel.add(tempPanel);
+		smbPanel.add(tempPanel);
 
-		return gridPanel;
+		smbPanel.addSpace(10);
+		
+		return smbPanel;
 	}
 
 

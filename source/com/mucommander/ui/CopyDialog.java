@@ -99,7 +99,6 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 		// Path field will receive initial focus
 		setInitialFocusComponent(copyPathField);		
 			
-		setResizable(true);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		

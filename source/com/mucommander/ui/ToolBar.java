@@ -21,7 +21,12 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	private JButton swapFoldersButton;
 	private JButton setSameFolderButton;
 	private JButton serverConnectButton;
-
+	private JButton zipButton;
+	private JButton unzipButton;
+	private JButton emailButton;
+	private JButton runcmdButton;
+	private JButton propertiesButton;
+	
 	private final static String NEW_WINDOW_BUTTON_ICON_PATH = "/newwindow.gif";
 	private final static String NEW_WINDOW_BUTTON_TOOLTIP_TEXT = "New window";
 	private static ImageIcon newWindowIcon;
@@ -61,8 +66,28 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	private final static String SERVER_CONNECT_BUTTON_ICON_PATH = "/sconnect.gif";
 	private final static String SERVER_CONNECT_BUTTON_TOOLTIP_TEXT = "Connect to Server...";
 	private static ImageIcon serverConnectIcon;
+
+	private final static String ZIP_BUTTON_ICON_PATH = "/zip.gif";
+	private final static String ZIP_BUTTON_TOOLTIP_TEXT = "Zip...";
+	private static ImageIcon zipIcon;
 	
-	private static boolean firstTime = true;;
+	private final static String UNZIP_BUTTON_ICON_PATH = "/unzip.gif";
+	private final static String UNZIP_BUTTON_TOOLTIP_TEXT = "Unzip...";
+	private static ImageIcon unzipIcon;
+	
+	private final static String EMAIL_BUTTON_ICON_PATH = "/mail.gif";
+	private final static String EMAIL_BUTTON_TOOLTIP_TEXT = "Email files...";
+	private static ImageIcon emailIcon;
+	
+	private final static String RUNCMD_BUTTON_ICON_PATH = "/runcmd.gif";
+	private final static String RUNCMD_BUTTON_TOOLTIP_TEXT = "Run command...";
+	private static ImageIcon runcmdIcon;
+	
+	private final static String PROPERTIES_BUTTON_ICON_PATH = "/properties.gif";
+	private final static String PROPERTIES_BUTTON_TOOLTIP_TEXT = "Properties";
+	private static ImageIcon propertiesIcon;
+	
+	private static boolean firstTime = true;
 	
 	
 	/**
@@ -80,6 +105,11 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		setSameFolderIcon = new ImageIcon(getClass().getResource(SET_SAME_FOLDER_BUTTON_ICON_PATH));
 		serverConnectIcon = new ImageIcon(getClass().getResource(SERVER_CONNECT_BUTTON_ICON_PATH));
 		configureIcon = new ImageIcon(getClass().getResource(CONFIGURE_BUTTON_ICON_PATH));
+		zipIcon = new ImageIcon(getClass().getResource(ZIP_BUTTON_ICON_PATH));
+		unzipIcon = new ImageIcon(getClass().getResource(UNZIP_BUTTON_ICON_PATH));
+		emailIcon = new ImageIcon(getClass().getResource(EMAIL_BUTTON_ICON_PATH));
+		runcmdIcon = new ImageIcon(getClass().getResource(RUNCMD_BUTTON_ICON_PATH));
+		propertiesIcon = new ImageIcon(getClass().getResource(PROPERTIES_BUTTON_ICON_PATH));
 	}
 	
 	
@@ -132,6 +162,29 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 
 		configureButton = addButton(configureIcon, null, CONFIGURE_BUTTON_TOOLTIP_TEXT);
 		configureButton.setEnabled(true);
+
+		addSeparator();
+
+		zipButton = addButton(zipIcon, null, ZIP_BUTTON_TOOLTIP_TEXT);
+		zipButton.setEnabled(true);
+
+		unzipButton = addButton(unzipIcon, null, UNZIP_BUTTON_TOOLTIP_TEXT);
+		unzipButton.setEnabled(true);
+		
+		addSeparator();
+		
+		emailButton = addButton(emailIcon, null, EMAIL_BUTTON_TOOLTIP_TEXT);
+		emailButton.setEnabled(true);		
+
+		addSeparator();
+		
+		runcmdButton = addButton(runcmdIcon, null, RUNCMD_BUTTON_TOOLTIP_TEXT);
+		runcmdButton.setEnabled(true);		
+
+		addSeparator();
+		
+		propertiesButton = addButton(propertiesIcon, null, PROPERTIES_BUTTON_TOOLTIP_TEXT);
+		propertiesButton.setEnabled(true);		
 	}
 
 	private JButton addButton(ImageIcon enabledIcon, ImageIcon disabledIcon, String toolTipText) {

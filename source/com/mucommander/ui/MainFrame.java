@@ -100,6 +100,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		};
 			
 		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(((double)0.5));
 		// Cool but way too slow
 //		splitPane.setContinuousLayout(true);
 
@@ -366,7 +367,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 *****************************/
 	 
 	/**
-	 * Sets the divider when the ContentPane has been resized so that it stays at the
+	 * Sets the divider location when the ContentPane has been resized so that it stays at the
 	 * same proportional (not absolute) location.
 	 */
 	public void componentResized(ComponentEvent e) {

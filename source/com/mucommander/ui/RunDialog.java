@@ -96,7 +96,6 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 		// Path field will receive initial focus
 		setInitialFocusComponent(commandField);		
 			
-		setResizable(true);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 //		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		

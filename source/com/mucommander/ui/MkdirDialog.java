@@ -39,15 +39,16 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 		
 		activeTable = mainFrame.getLastActiveTable();
 
-		JPanel tempPanel = new JPanel(new BorderLayout());
-        tempPanel.add(new JLabel("Create directory"), BorderLayout.NORTH);
-        mkdirPathField = new JTextField();
-        mkdirPathField.addActionListener(this);
-
 		Container contentPane = getContentPane();
 
-        tempPanel.add(mkdirPathField, BorderLayout.SOUTH);
-        contentPane.add(tempPanel, BorderLayout.CENTER);
+		YBoxPanel mainPanel = new YBoxPanel();
+        mainPanel.add(new JLabel("Create directory"));
+        mkdirPathField = new JTextField();
+        mkdirPathField.addActionListener(this);
+        mainPanel.add(mkdirPathField);
+		
+		mainPanel.addSpace(10);
+        contentPane.add(mainPanel, BorderLayout.NORTH);
         
         okButton = new JButton("Create");
         cancelButton = new JButton("Cancel");
