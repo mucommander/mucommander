@@ -65,10 +65,10 @@
     <jar jarfile="${dist}/mucommander_unobf.jar" basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
 
 	<!-- Trigger proguard target -->
-<!--	<antcall target="proguard"/>   -->
+	<antcall target="proguard"/>
 
 	<!-- Delete unobfuscated JAR file -->
-<!--	<delete file="${dist}/mucommander_unobf.jar"/>    -->
+	<delete file="${dist}/mucommander_unobf.jar"/>
 
   </target>
 
