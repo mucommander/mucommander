@@ -91,6 +91,12 @@ cannot_write_destination:FR:Erreur lors de l'écriture de %1
 error_while_transferring:EN:Error while transferring file %1
 error_while_transferring:FR:Erreur lors du transfert de %1
 
+copy:EN:Copy
+copy:FR:Copier
+
+browse:EN:Browse
+browse:FR:Explorer
+
 
 #############
 # Languages #
@@ -1008,6 +1014,14 @@ prefs_dialog.mail_address:FR:Votre adresse email
 
 prefs_dialog.mail_server:EN:SMTP server
 prefs_dialog.mail_server:FR:Serveur SMTP
+
+# Misc tab
+
+prefs_dialog.misc_tab:EN:Misc
+prefs_dialog.misc_tab:FR:Autres
+
+prefs_dialog.use_brushed_metal:EN:Use 'brush metal' look (requires restart)
+prefs_dialog.use_brushed_metal:FR:Utiliser le look 'brush metal' (après redémarrage)
 
 
 #########

@@ -45,16 +45,16 @@ public abstract class AbstractFile {
 		// HTTP file
 		else if (absPathLC.startsWith("http://")) {
 			try {
-				if(absPathLC.endsWith(".html") || absPathLC.endsWith(".htm") || absPathLC.endsWith(".xhtml")
-					|| absPathLC.endsWith(".xhtml")
-					|| absPathLC.endsWith(".jsp")
-					|| absPathLC.endsWith(".php") || absPathLC.endsWith(".php3") || absPathLC.endsWith(".php4")
-					|| absPathLC.endsWith(".pl")  || absPathLC.endsWith(".cgi")
-					|| absPathLC.endsWith(".jsp")
-					|| absPathLC.endsWith(".py"))
+//				if(absPathLC.endsWith(".html") || absPathLC.endsWith(".htm") || absPathLC.endsWith(".xhtml")
+//					|| absPathLC.endsWith(".xhtml")
+//					|| absPathLC.endsWith(".jsp")
+//					|| absPathLC.endsWith(".php") || absPathLC.endsWith(".php3") || absPathLC.endsWith(".php4")
+//					|| absPathLC.endsWith(".pl")  || absPathLC.endsWith(".cgi")
+//					|| absPathLC.endsWith(".jsp")
+//					|| absPathLC.endsWith(".py"))
 					
-					file = new HTMLFile(absPath);
-				else
+//					file = new HTMLFile(absPath);
+//				else
 					file = new HTTPFile(absPath);
 			}
 			catch(IOException e) {

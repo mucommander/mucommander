@@ -5,7 +5,7 @@ import com.mucommander.file.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableCellRenderer;
 import com.mucommander.ui.comp.FocusRequester;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
+import com.mucommander.ui.comp.dialog.*;
 
 import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
@@ -47,8 +47,6 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	
     private static Color backgroundColor;
 
-	private int lastPopupIndex;
-
 	private Vector history;
 	private int historyIndex;
     
@@ -75,20 +73,25 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		super(new BorderLayout());
 
         this.mainFrame = mainFrame;
+/*
 		JPanel locationPanel = new JPanel(new BorderLayout()) {
 			public Insets getInsets() {
-				return new Insets(0, 0, 0, 0);
+				return new Insets(6, 8, 6, 8);
 			}
 		
-			public Border getBorder() {
-				return null;
-			}
+//			public Border getBorder() {
+//				return null;
+//			}
 		};
+*/		
+
+		XBoxPanel locationPanel = new XBoxPanel();
+		locationPanel.setInsets(new Insets(0, 6, 6, 0));
 		
 		rootButton = new JButton(rootFolders[0].toString());
 		// For Mac OS X whose minimum width for buttons is enormous
 		rootButton.setMinimumSize(new Dimension(40, (int)rootButton.getPreferredSize().getWidth()));
-		rootButton.setMargin(new Insets(0,5,0,5));
+		rootButton.setMargin(new Insets(6,8,6,8));
 		
 		rootButton.addActionListener(this);
 		rootPopup = new JPopupMenu();
@@ -102,12 +105,15 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			rootPopup.add(menuItem);
 		}
 
-		locationPanel.add(rootButton, BorderLayout.WEST);
+//		locationPanel.add(rootButton, BorderLayout.WEST);
+		locationPanel.add(rootButton);
+		locationPanel.addSpace(6);
 
 		locationField = new JTextField();
 		locationField.addActionListener(this);
 		locationField.addKeyListener(this);
-		locationPanel.add(locationField, BorderLayout.CENTER);
+//		locationPanel.add(locationField, BorderLayout.CENTER);
+		locationPanel.add(locationField);
 
 		add(locationPanel, BorderLayout.NORTH);
 		fileTable = new FileTable(mainFrame, this);
@@ -180,8 +186,8 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	
 	public void showRootBox() {
 		rootPopup.show(rootButton, 0, rootButton.getHeight());		
-		rootPopup.requestFocus();
-//		FocusRequester.requestFocus(rootPopup);
+//		rootPopup.requestFocus();
+		FocusRequester.requestFocus(rootPopup);
 	}
 
 	public AbstractFile getCurrentFolder() {
@@ -205,14 +211,23 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			this.currentFolder = folder;
 
 			// Updates root button label if necessary
-			String currentPath = currentFolder.getAbsolutePath();
+			String currentPath = currentFolder.getAbsolutePath(false).toLowerCase();
+			int bestLength = rootFolders[0].getAbsolutePath(false).length();
+			int bestIndex = 0;
+			String temp;
+			int len;
+//System.out.println("currentPath "+currentPath+" rootFolders.length="+rootFolders.length);
 			for(int i=0; i<rootFolders.length; i++) {
-				if (currentPath.toLowerCase().startsWith(rootFolders[i].getAbsolutePath().toLowerCase())) {
-					rootButton.setText(rootFolders[i].toString());
-					lastPopupIndex = i;
-					break;
+//System.out.println("rootFolder "+rootFolders[i].getAbsolutePath(false).toLowerCase());
+				temp = rootFolders[i].getAbsolutePath(false).toLowerCase();
+				len = temp.length();
+				if (currentPath.startsWith(temp) && len>bestLength) {
+					bestIndex = i;
+					bestLength = len;
 				}
 			}
+
+			rootButton.setText(rootFolders[bestIndex].getName());
 
 			locationField.setText(currentFolder.getAbsolutePath(true));
 			locationField.repaint();
@@ -427,7 +442,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 				// Browse directory
 				browse = true;
 			}
-			else if(file.isBrowsable() || file instanceof HTTPFile) {
+			else if(file.isBrowsable()) {
 				// Copy or browse file ?
 				QuestionDialog dialog = new QuestionDialog(mainFrame, 
 				null,
@@ -440,11 +455,8 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 				int ret = dialog.getActionValue();
 				if(ret==-1 || ret==CANCEL_ACTION)
 					return;
-				if(ret==BROWSE_ACTION) {
-					if(file instanceof HTTPFile)
-						file = new HTMLFile((HTTPFile)file);
+				if(ret==BROWSE_ACTION)
 					browse = true;
-				}
 			}
 			// else copy file
 			

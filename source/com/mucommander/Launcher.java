@@ -25,8 +25,11 @@ import java.net.URL;
 public class Launcher {
 
 	/** Version string */
-	public final static String MUCOMMANDER_VERSION = "0.6.1";
+	public final static String MUCOMMANDER_VERSION = "0.7";
 
+	/** muCommander app string */
+	public final static String MUCOMMANDER_APP_STRING = "muCommander v"+MUCOMMANDER_VERSION;
+	
 	/** Launcher's sole instance */
 	private static Launcher launcher;
 
@@ -43,6 +46,28 @@ public class Launcher {
 	 * No-arg private constructor.
 	 */
 	private Launcher() {
+		// If muCommander is running under Mac OS X (how lucky!), add some
+		// glue for the main menu bar.
+		if(PlatformManager.getOsType()==PlatformManager.MAC_OS_X) {
+			try {
+				FinderIntegration finderIntegration = new FinderIntegration();
+			}
+			catch(Exception e) {
+				if(Debug.ON)
+					System.out.println("Launcher.init: exception thrown while initializing Mac Finder integration");
+			}
+
+			// Turn on/off brush metal look (default is on) :
+			//  "Allows you to display your main windows with the “textured” Aqua window appearance.
+			//   This property should be applied only to the primary application window,
+			//   and should not affect supporting windows like dialogs or preference windows."
+			System.setProperty("apple.awt.brushMetalLook", ConfigurationManager.getVariable("prefs.macosx.brushed_metal_look", "true"));
+
+			// Enables/Disables screen menu bar (default is enable) :
+			//  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."
+			System.setProperty("apple.laf.useScreenMenuBar", ConfigurationManager.getVariable("prefs.macosx.screen_menu_bar", "true"));
+		}
+
 		// Show splash screen before anything else
 		JWindow splashScreen = showSplashScreen();
 
@@ -56,18 +81,6 @@ public class Launcher {
         String checkForUpdates = ConfigurationManager.getVariable("prefs.check_for_updates_on_startup", "true");
         if(!(checkForUpdates==null || checkForUpdates.equals("false")))
             new CheckVersionDialog(WindowManager.getInstance().getCurrentMainFrame(), false);
-
-		// If muCommander is running under Mac OS X (how lucky!), add some
-		// glue for the main menu bar.
-		if(PlatformManager.getOsType()==PlatformManager.MAC_OS_X) {
-			try {
-				FinderIntegration finderIntegration = new FinderIntegration();
-			}
-			catch(Exception e) {
-				if(Debug.ON)
-					System.out.println("Launcher.init: exception thrown while initializing Mac Finder integration");
-			}
-		}
 		
 		// Dispose splash screen
 		splashScreen.dispose();

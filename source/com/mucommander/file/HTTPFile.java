@@ -4,54 +4,81 @@ import java.io.*;
 import java.net.*;
 import java.util.Vector;
 
+import javax.swing.text.*;
+import javax.swing.text.html.*;
+
 
 /**
+ *
+ * @author Maxence Bernard
  */
 public class HTTPFile extends AbstractFile implements RemoteFile {
 
 	/** File separator is '/' for urls */
 	private final static String SEPARATOR = "/";
 	
-	protected String name;
-	protected String absPath;
-	protected URL url;
-	protected long date;
-//	private long size = -1;
-
-	protected AbstractFile parent;	
+	private String name;
+	private String absPath;
+	private long date;
+	private long size;
+	
+	private URL url;
+	protected AbstractFile parent;
+	
+	private boolean isHTML;
 	
 	
 	/**
 	 * Creates a new instance of HTTPFile.
 	 */
-	public HTTPFile(String absPath) throws MalformedURLException {
+	public HTTPFile(String absPath) throws IOException {
 		this(new URL(absPath));
 	}
 
 
-	protected HTTPFile(URL url) {
+	protected HTTPFile(URL url) throws IOException {
 		this.url = url;
 		
-//		this.absPath = url.toString();
 		this.absPath = url.toExternalForm();
+
+		// Determine file name (URL-encoded)
 		int urlLen = absPath.length();
 		int pos = absPath.lastIndexOf('/');
 		this.name = URLDecoder.decode(absPath.substring(pos<7?7:pos+1, absPath.endsWith(SEPARATOR)?urlLen-1:urlLen));
 
-/*
-		int urlLen = absPath.length();
-		// Remove ending '/' character(s)
-		while(absPath.charAt(urlLen-1)=='/')
-			absPath = absPath.substring(0, --urlLen);
-		int lastSlashPos = absPath.lastIndexOf('/');
-		// Determine local file name
-		this.fileName = java.net.URLDecoder.decode(absPath.substring(lastSlashPos==-1||lastSlashPos<7?7:lastSlashPos+1, urlLen));
-*/
+		// Get URLConnection instance
+		URLConnection conn = url.openConnection();
 		
-		this.date = System.currentTimeMillis();
-	} 
+		// Set user-agent header
+		conn.setRequestProperty("user-agent", com.mucommander.Launcher.MUCOMMANDER_APP_STRING);
 
+		// Open connection
+		conn.connect();
+		
+		// Resolve date: last-modified header, if not set date header, and if still not set System.currentTimeMillis
+		date = conn.getLastModified();
+		if(date==0) {
+			date = conn.getDate();
+			if(date==0)
+				date = System.currentTimeMillis();
+		}
+		
+		// Resolve size thru content-length header (-1 if not available)
+		size = conn.getContentLength();
+		
+		// Test if content is HTML
+		String contentType = conn.getContentType();
+		if(contentType!=null && contentType.equals("text/html"))
+			isHTML = true;
 
+System.out.println("isHTML ="+isHTML); 
+	}
+
+	protected HTTPFile(String fileURL, URL context) throws IOException {
+		this(new URL(context, fileURL));
+	}
+
+	
 	protected void setParent(AbstractFile parent) {
 		this.parent = parent;
 	}
@@ -81,7 +108,7 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 	}
 	
 	public long getSize() {
-		return 0;
+		return size;
 	}
 	
 	public AbstractFile getParent() {
@@ -125,6 +152,9 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 		return false;
 	}
 	
+	public boolean isBrowsable() {
+		return isHTML;
+	}
 	
 	public boolean equals(Object f) {
 		if(!(f instanceof HTTPFile))
@@ -132,7 +162,6 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 		
 		return ((HTTPFile)f).getAbsolutePath().equals(absPath);
 	}
-	
 	
 	
 	public InputStream getInputStream() throws IOException {
@@ -152,7 +181,96 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 	}
 
 	public AbstractFile[] ls() throws IOException {
-		throw new IOException();
+		if(!isHTML)
+			throw new IOException();
+		else {
+
+System.out.println("parsing + "+getAbsolutePath()); 
+			Vector children = new Vector();
+
+			EditorKit kit = new HTMLEditorKit();
+			Document doc = kit.createDefaultDocument();
+
+//			// The Document class does not yet 
+//			// handle charset's properly.
+//			doc.putProperty("IgnoreCharsetDirective", 
+//			  Boolean.TRUE);
+			
+			URLConnection conn = null;
+			Reader r = null;
+			try {
+				// Open connection
+				conn = url.openConnection();
+				
+				// Set custom user-agent
+				conn.setRequestProperty("user-agent", com.mucommander.Launcher.MUCOMMANDER_APP_STRING);
+				
+				// Create a reader on the HTML content.
+				r = new InputStreamReader(conn.getInputStream());
+				
+				// Parse the HTML.
+				kit.read(r, doc, 0);
+				
+				// Iterate through the elements 
+				// of the HTML document.
+				ElementIterator it = new ElementIterator(doc);
+				javax.swing.text.Element elem;
+				HTTPFile child;
+				String att;
+				AttributeSet atts;
+				SimpleAttributeSet s;
+				while ((elem = it.next()) != null) {
+System.out.println("Parsing "+elem.getName());
+					att = null;
+//					try {
+						atts = elem.getAttributes();
+System.out.println("atts "+atts);
+						if ((s=(SimpleAttributeSet)atts.getAttribute(HTML.Tag.A)) != null)
+							att = ""+s.getAttribute(HTML.Attribute.HREF);
+						else if ((s=(SimpleAttributeSet)atts.getAttribute(HTML.Tag.IMG)) != null)
+							att = ""+s.getAttribute(HTML.Attribute.SRC);
+System.out.println("att="+att);
+
+//					}
+//					catch(IOException e) {
+//						if (com.mucommander.Debug.ON) System.out.println("Error while parsing HTML element: "+e);
+//					}
+	
+					if (att!=null && att.toLowerCase().startsWith("http://")) {
+						try {
+							child = new HTTPFile(att, url);
+							child.parent = this;
+							if(children.indexOf(child)==-1)
+								children.add(child);
+						}
+						catch(IOException e) {
+							if (com.mucommander.Debug.ON) {
+								System.out.println("Unable to create child file : "+att+" "+e);
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+	
+				Object childrenArray[] = new AbstractFile[children.size()];
+				return (AbstractFile[])children.toArray(childrenArray);
+			}
+			catch (Exception e) {
+				if (com.mucommander.Debug.ON) {
+					System.out.println("Error while parsing HTML: "+e);
+					e.printStackTrace();
+				}
+				throw new IOException();
+			}
+			finally {
+				try {
+					// Try and close URL connection
+					if(r!=null)
+						r.close();
+				}
+				catch(IOException e) {}
+			}
+		}
 	}
 
 	public void mkdir(String name) throws IOException {

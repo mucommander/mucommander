@@ -63,18 +63,25 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		// Sets frame icon
 		setIconImage(new ImageIcon(imageURL).getImage());
 
+		// Enable window resize
 		setResizable(true);
 
-		Container contentPane = getContentPane();
+		// Create a new content pane to specify custom insets
+		Container contentPane = new JPanel(new BorderLayout()) {
+			 public Insets getInsets() {
+				 // Gives some border space
+				 return new Insets(3, 4, 3, 4);
+			 }
+		};
+		setContentPane(contentPane);
 
 		// Folder panels
 		folderPanel1 = new FolderPanel(this, initialFolder1);
         folderPanel2 = new FolderPanel(this, initialFolder2);
 
 		// Create and show toolbar only if it hasn't been disabled in the preferences
-		if(ConfigurationManager.getVariable("prefs.show_toolbar_on_startup", "true").equals("true")) {
+		if(ConfigurationManager.getVariable("prefs.show_toolbar_on_startup", "true").equals("true"))
 			setToolbarVisible(true);
-		}
 
 		// Create menu bar (has to be created after toolbar)
 		MainMenuBar menuBar = new MainMenuBar(this);
@@ -109,9 +116,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		folderPanel1.addComponentListener(this);
 		splitPane.addComponentListener(this);
 
-        commandBar = new CommandBarPanel(this);
-		contentPane.add(commandBar, BorderLayout.SOUTH);
-
+		// Create and show command bar only if it hasn't been disabled in the preferences
+		if(ConfigurationManager.getVariable("prefs.show_command_bar_on_startup", "true").equals("true"))
+			setCommandBarVisible(true);
+		
         table1.addKeyListener(this);
         table2.addKeyListener(this);
     
@@ -125,7 +133,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	
 	
 	/**
-	 * Sets the toolbar visible.
+	 * Shows/hide the toolbar.
 	 */
 	public void setToolbarVisible(boolean visible) {
 		if(this.toolbar!=null && !visible) {
@@ -153,6 +161,31 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	}
 	
 
+	/**
+	 * Shows/hide the command bar.
+	 */
+	public void setCommandBarVisible(boolean visible) {
+		if(this.commandBar!=null && !visible) {
+			getContentPane().remove(commandBar);
+			this.commandBar = null;
+			validate();
+		}
+		else if(this.toolbar==null && visible) {
+			this.toolbar = new CommandBarPanel(this);
+			getContentPane().add(toolbar, BorderLayout.SOUTH);
+			validate();
+		}
+	}
+	
+	
+	/**
+	 * Returns true if there is an command bar visible on this frame.
+	 */
+	public boolean isCommandBarVisible() {
+		return this.commandBar!=null;
+	}
+	
+	
 	/**
 	 * Returns last active FileTable, that is the last FileTable that received focus.
 	 */
@@ -237,8 +270,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 */
 	public void compareDirectories() {
 		AbstractFile tempFile;
-//		AbstractFile files1[] = ((FileTableModel)table1.getModel()).getFileArray();
-//		AbstractFile files2[] = ((FileTableModel)table2.getModel()).getFileArray();
 		FileTableModel tableModel1 = (FileTableModel)table1.getModel();
 		FileTableModel tableModel2 = (FileTableModel)table2.getModel();
         int nbFiles1 = tableModel1.getRowCount();
@@ -246,7 +277,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		int fileIndex;
 		String tempFileName;
 		for(int i=table1.getCurrentFolder().getParent()==null?0:1; i<nbFiles1; i++) {
-//			tempFile = files1[i];
 			tempFile = tableModel1.getFileAtRow(i);
 			if(tempFile.isDirectory())
 				continue;
@@ -254,12 +284,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 			tempFileName = tempFile.getName();
             fileIndex = -1;
 			for(int j=table2.getCurrentFolder().getParent()==null?0:1; j<nbFiles2; j++)
-//				if (files2[j].getName().equals(tempFileName)) {
 				if (tableModel2.getFileAtRow(j).getName().equals(tempFileName)) {
                     fileIndex = j;
 					break;
 				}
-//			if (fileIndex==-1 || files2[fileIndex].getDate()<tempFile.getDate()) {
 			if (fileIndex==-1 || tableModel2.getFileAtRow(fileIndex).getDate()<tempFile.getDate()) {
 				table1.setFileMarked(tempFile, true);
 				table1.repaint();
@@ -267,7 +295,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		}
 
 		for(int i=table2.getCurrentFolder().getParent()==null?0:1; i<nbFiles2; i++) {
-//			tempFile = files2[i];
 			tempFile = tableModel2.getFileAtRow(i);
 			if(tempFile.isDirectory())
 				continue;
@@ -275,12 +302,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 			tempFileName = tempFile.getName();
             fileIndex = -1;
 			for(int j=table1.getCurrentFolder().getParent()==null?0:1; j<nbFiles1; j++)
-//				if (files1[j].getName().equals(tempFileName)) {
 				if (tableModel1.getFileAtRow(j).getName().equals(tempFileName)) {
                     fileIndex = j;
 					break;
 				}
-//			if (fileIndex==-1 || files1[fileIndex].getDate()<tempFile.getDate()) {
 			if (fileIndex==-1 || tableModel1.getFileAtRow(fileIndex).getDate()<tempFile.getDate()) {
 				table2.setFileMarked(tempFile, true);
 				table2.repaint();
@@ -583,4 +608,14 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		this.folderPanel1.dispose();
 		this.folderPanel2.dispose();
 	}
+
+	/*********************
+	 * Overriden methods *
+	 *********************/
+
+// Adding custom insets to the Frame causes some weird sizing problems,
+// so insets are added to the content pane instead
+//	 public Insets getInsets() {
+//		 return new Insets(3, 4, 3, 4);
+//	 }
 }
