@@ -91,7 +91,9 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 
 			// Sets panel to preferred size, without exceeding a maximum size and with a minumum size
 			pack();
+System.out.println("ViewerFrame.run: ******* 1 ******** ");
 			super.show();
+System.out.println("ViewerFrame.run: ******* 2 ******** ");
 		}
 		catch(Exception e) {
 			JOptionPane.showMessageDialog(mainFrame, Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"), JOptionPane.ERROR_MESSAGE);

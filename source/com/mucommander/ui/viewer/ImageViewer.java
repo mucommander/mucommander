@@ -12,7 +12,6 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import java.io.DataInputStream;
 import java.io.*;
 
 
@@ -86,15 +85,19 @@ public class ImageViewer extends FileViewer implements ActionListener {
 System.out.println("loadImage "+file);
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
-		byte b[] = new byte[(int)file.getSize()];
-		InputStream fin = file.getInputStream();
-		DataInputStream din = new DataInputStream(fin);
-		din.readFully(b);
-		din.close();
-		fin.close();
+		int read;
+		byte buffer[] = new byte[1024];
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		InputStream in = file.getInputStream();
+		while ((read=in.read(buffer, 0, buffer.length))!=-1)
+			bout.write(buffer, 0, read);
+
+		byte imageBytes[] = bout.toByteArray();
+		bout.close();
+		in.close();
 
 		this.scaledImage = null;
-		this.image = getToolkit().createImage(b);
+		this.image = getToolkit().createImage(imageBytes);
 
 		waitForImage(image);
 

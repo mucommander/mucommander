@@ -257,6 +257,7 @@ public class MoveJob extends ExtendedFileJob {
 					}
 				} while(true);
 			}
+
 			return false;
 		}
 	}

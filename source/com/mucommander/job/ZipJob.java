@@ -132,9 +132,7 @@ public class ZipJob extends ExtendedFileJob {
 
 					// Create new file entry in zip file
 					zipOut.putNextEntry(new ZipEntry(zipEntryRelativePath.replace('\\', '/')));
-					copyStream(in, zipOut);
-								
-					return true;
+					return copyStream(in, zipOut);
 				}
 			}
 			catch(IOException e) {

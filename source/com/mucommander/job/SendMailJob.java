@@ -158,8 +158,7 @@ public class SendMailJob extends ExtendedFileJob {
 
         // Send file attachment
 		try {
-			sendAttachment(file);
-			return true;
+			return sendAttachment(file);
 		}
 		catch(IOException e) {
 			showErrorDialog("Unable to send "+file.getName()+", mail not sent.");
@@ -235,7 +234,11 @@ public class SendMailJob extends ExtendedFileJob {
 	}
 	
 	
-    private void sendAttachment(AbstractFile file) throws IOException {
+	/**
+	 * Send file as attachment encoded in Base64, and returns true if file was successfully
+	 * and completely transferred.
+	 */ 
+    private boolean sendAttachment(AbstractFile file) throws IOException {
 		InputStream fileIn = null;
 		try {
 			// Send MIME type of attachment file
@@ -248,12 +251,16 @@ public class SendMailJob extends ExtendedFileJob {
 			writeLine("Content-transfer-encoding: base64\r\n");
 			fileIn = file.getInputStream();
 //			copyStream(fileIn, out64, 0);
-			copyStream(fileIn, out64);
+			// Stop and return false if job was interrupted
+			if(!copyStream(fileIn, out64))
+				return false;
 	
 			// Writes padding bytes without closing the stream.
 			out64.writePadding();
 	
 			writeLine("\r\n--" + boundary);
+		
+			return true;
 		}
 		catch(IOException e) {
 			throw e;

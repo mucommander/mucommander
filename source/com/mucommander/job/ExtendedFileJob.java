@@ -43,26 +43,35 @@ public abstract class ExtendedFileJob extends FileJob {
 
 	/**
 	 * Copies the given InputStream's content to the given OutputStream.
+	 *
+	 * @return true if the stream was completely copied (i.e. job was not interrupted during the transfer)
 	 */
-	protected void copyStream(InputStream in, OutputStream out) throws IOException {
+	protected boolean copyStream(InputStream in, OutputStream out) throws IOException {
 		// Init read buffer the first time
 		if(buffer==null)
 			buffer = new byte[READ_BLOCK_SIZE];
 
 		// Copies the InputStream's content to the OutputStream
 		int read;
-		while ((read=in.read(buffer, 0, buffer.length))!=-1 && !isInterrupted()) {
+		while ((read=in.read(buffer, 0, buffer.length))!=-1) {
+			if(isInterrupted())
+				return false;
+			
 			out.write(buffer, 0, read);
 			nbBytesProcessed += read;
 			currentFileProcessed += read;
 		}
+		
+		return true;
 	}
 
 
 	/**
 	 * Copies the given source file to the specified destination file, optionally resuming the operation.
+	 *
+	 * @return true if the file was completely copied (i.e. job was not interrupted during the transfer)
 	 */
-	protected void copyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append) throws FileJobException {
+	protected boolean copyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append) throws FileJobException {
 		OutputStream out = null;
 		InputStream in = null;
 
@@ -91,7 +100,7 @@ public abstract class ExtendedFileJob extends FileJob {
 	
 			// Try to copy InputStream to OutputStream
 //			try  { copyStream(in, out, append?destFile.getSize():0); }
-			try  { copyStream(in, out); }
+			try  { return copyStream(in, out); }
 			catch(IOException e3) {
 				throw new FileJobException(FileJobException.ERROR_WHILE_TRANSFERRING);
 			}

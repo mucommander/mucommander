@@ -41,7 +41,8 @@ public class FileURL implements Cloneable {
 			pos += 3;
 			
 			// Parse login and password and they have been specified
-			int atPos = url.indexOf('@', pos);
+//			int atPos = url.indexOf('@', pos);		
+			int atPos = url.lastIndexOf('@');		// Last index because password can contain an '@' if it's an email address
 			int colonPos;
 			if(atPos!=-1) {
 				colonPos = url.indexOf(':', pos);
@@ -107,10 +108,10 @@ public class FileURL implements Cloneable {
 			throw e;
 		}
 		catch(Exception e2) {
-//			if(com.mucommander.Debug.ON) {
-//				System.out.println("Exception in FileURL() with "+url);
-//				e2.printStackTrace();
-//			}
+			if(com.mucommander.Debug.ON) {
+				System.out.println("Exception in FileURL() with "+url);
+				e2.printStackTrace();
+			}
 			throw new MalformedURLException();
 		}
 	}
@@ -204,12 +205,8 @@ public class FileURL implements Cloneable {
 		if(parent==null)
 			return null;
 		
-		try {
-			FileURL parentFileURL = (FileURL)clone();
-			parentFileURL.path = this.parent;
-			return new FileURL(parentFileURL.getURL(true));
-		}
-		catch(Exception e) {
+		try { return new FileURL(parent); }
+		catch(MalformedURLException e) {
 			return null;
 		}
 	}
@@ -294,7 +291,8 @@ public class FileURL implements Cloneable {
 			"ftp://mucommander.com:21/",
 			"ftp://mucommander.com:21/pub/incoming",
 			"ftp://mucommander.com:21/pub/incoming/",
-			"ftp://mucommander.com:21/pub/incoming/0day-warez.zip"
+			"ftp://mucommander.com:21/pub/incoming/0day-warez.zip",
+			"ftp://anonymous:john.doe@somewhere.net@mucommander.com:21/pub/incoming/0day-warez.zip"
 		};
 		
 		FileURL f;

@@ -43,7 +43,10 @@ public class TextViewer extends FileViewer implements ActionListener {
 
 	
 	public void view(AbstractFile file) throws IOException {
-		textArea.read(new InputStreamReader(file.getInputStream()), null);
+		InputStreamReader isr = new InputStreamReader(file.getInputStream());
+		textArea.read(isr, null);
+		isr.close();
+		
 		textArea.setCaretPosition(0);
 //		pack();
 

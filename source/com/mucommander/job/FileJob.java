@@ -296,10 +296,10 @@ public abstract class FileJob implements Runnable {
 			nextFile(currentFile);
 			
 			// Process current file
-			processFile(currentFile, null);
+			boolean success = processFile(currentFile, null);
 			
 			// Unmark file in active table
-			if(autoUnmark) {
+			if(autoUnmark && success && !isInterrupted()) {
 				activeTable.setFileMarked(currentFile, false);
 				activeTable.repaint();
 			}

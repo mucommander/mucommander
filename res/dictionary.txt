@@ -1107,8 +1107,8 @@ prefs_dialog.mail_server:FR:Serveur SMTP
 prefs_dialog.misc_tab:EN:Misc
 prefs_dialog.misc_tab:FR:Autres
 
-prefs_dialog.use_brushed_metal:EN:Use 'brushed metal' look (requires restart)
-prefs_dialog.use_brushed_metal:FR:Utiliser le look 'brushed metal' (après redémarrage)
+prefs_dialog.use_brushed_metal:EN:Use 'brushed metal' look (Experimental + requires restart)
+prefs_dialog.use_brushed_metal:FR:Utiliser le look 'brushed metal' (Expérimental + après redémarrage)
 
 
 #########
