@@ -211,7 +211,7 @@ public class FSFile extends AbstractFile {
         AbstractFile children[] = new AbstractFile[names.length];
 		for(int i=0; i<names.length; i++) {
 			children[i] = AbstractFile.getAbstractFile(absPath+separator+names[i]);
-		}		
+		}
 		return children;
 	}
 

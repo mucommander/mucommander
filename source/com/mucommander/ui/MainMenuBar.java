@@ -76,7 +76,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 
 		fileMenu.add(new JSeparator());
 		serverConnectItem = addMenuItem(fileMenu, "Connect to Server...", KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.CTRL_MASK));
-		runItem = addMenuItem(fileMenu, "Run...", KeyEvent.VK_R, KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		runItem = addMenuItem(fileMenu, "Run command...", KeyEvent.VK_R, KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		zipItem = addMenuItem(fileMenu, "Zip...", KeyEvent.VK_Z, KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
 		unzipItem = addMenuItem(fileMenu, "Unzip...", KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
         emailFilesItem = addMenuItem(fileMenu, "Email files...", KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));

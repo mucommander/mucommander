@@ -79,10 +79,10 @@ public class PlatformManager {
 
 
 	/**
-	 * Executes an arbitrary command in the given folder and returns <code>true</code>
-	 * if the operation succeeded.
+	 * Executes an arbitrary command in the given folder and returns the corresponding Process object,
+	 * or <code>null</code> if the command failed to execute
 	 */
-	public static boolean execute(String command, AbstractFile currentFolder) {
+	public static Process execute(String command, AbstractFile currentFolder) {
 		try {
             if(com.mucommander.Debug.TRACE)
                 System.out.println("Executing "+command);
@@ -102,7 +102,7 @@ public class PlatformManager {
 				tokensV.add("cmd");
 				tokensV.add("/c");
 			}
-			// Splits the command into tokens
+			// Splits the command into tokens ourself, as exec() does it anyway
 			command.trim();
 			char c;
 			int pos = 0;
@@ -111,7 +111,7 @@ public class PlatformManager {
 			while(pos<len) {
 				c = command.charAt(pos);
 				if((c==' ' && command.charAt(pos-1)!='\\') || c=='\t' || c=='\n' || c=='\r' || c=='\f') {
-System.out.println("token= "+token.toString());
+if(com.mucommander.Debug.TRACE) System.out.println("token= "+token.toString());
 					tokensV.add(token.toString());
 					token = new StringBuffer();
 				}
@@ -120,19 +120,18 @@ System.out.println("token= "+token.toString());
 				}
 				pos ++;
 			}
-System.out.println("token= "+token.toString());
+if(com.mucommander.Debug.TRACE) System.out.println("token= "+token.toString());
 			tokensV.add(token.toString());
 			
 			String tokens[] = new String[tokensV.size()];
 			tokensV.toArray(tokens);
 
-			Runtime.getRuntime().exec(tokens, null, new java.io.File(currentFolder.getAbsolutePath()));
-			return true;
+			return Runtime.getRuntime().exec(tokens, null, new java.io.File(currentFolder.getAbsolutePath()));
 		}
 		catch(IOException e) {
             if(com.mucommander.Debug.TRACE)
                 System.out.println("Error while executing "+command+": "+e);
-            return false;
+            return null;
 		}
 	}
 
