@@ -82,8 +82,8 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		contentPane.add(gridPanel, BorderLayout.NORTH);
 		
 		okButton = new JButton(Translator.get("ok"));
-		// Escape key disposes dialog
-		okButton.addKeyListener(new EscapeKeyAdapter(this));
+//		// Escape key disposes dialog
+//		okButton.addKeyListener(new EscapeKeyAdapter(this));
 		contentPane.add(DialogToolkit.createOKPanel(okButton, this), BorderLayout.SOUTH);
 
 		// OK button will receive initial focus

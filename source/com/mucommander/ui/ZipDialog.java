@@ -56,8 +56,8 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		String initialPath = (isShiftDown?"":activeTable.getCurrentFolder().getAbsolutePath(true))+".zip";
 		filePathField = new JTextField(initialPath);
 		filePathField.setCaretPosition(initialPath.length()-4);
-		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
-		filePathField.addKeyListener(escapeKeyAdapter);
+//		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
+//		filePathField.addKeyListener(escapeKeyAdapter);
 		mainPanel.add(filePathField);
 		
 		mainPanel.addSpace(10);
@@ -66,7 +66,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		mainPanel.add(label);
 		commentArea = new JTextArea();
 		commentArea.setRows(4);
-		commentArea.addKeyListener(escapeKeyAdapter);
+//		commentArea.addKeyListener(escapeKeyAdapter);
 		mainPanel.add(commentArea);
 
 		mainPanel.addSpace(10);
@@ -76,8 +76,8 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		okButton = new JButton(Translator.get("ok"));
 		cancelButton = new JButton(Translator.get("cancel"));
 		// Escape key disposes dialog
-		okButton.addKeyListener(escapeKeyAdapter);
-		cancelButton.addKeyListener(escapeKeyAdapter);
+//		okButton.addKeyListener(escapeKeyAdapter);
+//		cancelButton.addKeyListener(escapeKeyAdapter);
 		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
 		// text field will receive initial focus

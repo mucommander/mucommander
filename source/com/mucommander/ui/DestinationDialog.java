@@ -102,11 +102,11 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
         contentPane.add(mainPanel, BorderLayout.NORTH);
 
         // Escape key disposes dialog
-		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
-		pathField.addKeyListener(escapeKeyAdapter);
-		fileExistsActionComboBox.addKeyListener(escapeKeyAdapter);
-		okButton.addKeyListener(escapeKeyAdapter);
-		cancelButton.addKeyListener(escapeKeyAdapter);
+//		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
+//		pathField.addKeyListener(escapeKeyAdapter);
+//		fileExistsActionComboBox.addKeyListener(escapeKeyAdapter);
+//		okButton.addKeyListener(escapeKeyAdapter);
+//		cancelButton.addKeyListener(escapeKeyAdapter);
 		
 		// Set minimum/maximum dimension
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);

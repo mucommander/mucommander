@@ -80,7 +80,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
+//		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
 		
 		YBoxPanel northPanel = new YBoxPanel(5);
 		JLabel label = new JLabel(Translator.get(addToSelection?"file_selection_dialog.mark_description":"file_selection_dialog.unmark_description"));
@@ -94,13 +94,13 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 		comparisonComboBox.addItem(Translator.get("file_selection_dialog.ends_with"));
 		comparisonComboBox.addItem(Translator.get("file_selection_dialog.is"));
 		comparisonComboBox.setSelectedIndex(comparison);
-		comparisonComboBox.addKeyListener(escapeKeyAdapter);
+//		comparisonComboBox.addKeyListener(escapeKeyAdapter);
 		tempPanel.add(comparisonComboBox);
 				
 		// selectionField is initialized with last textfield's value (if any)
 		selectionField = new JTextField(keywordString);
 		selectionField.addActionListener(this);
-		selectionField.addKeyListener(escapeKeyAdapter);
+//		selectionField.addKeyListener(escapeKeyAdapter);
 		selectionField.setSelectionStart(0);
 		selectionField.setSelectionEnd(keywordString.length());
 		tempPanel.add(selectionField);
@@ -110,11 +110,11 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 		northPanel.addSpace(10);
 		
 		caseSensitiveCheckBox = new JCheckBox(Translator.get("file_selection_dialog.case_sensitive"), caseSensitive);
-		caseSensitiveCheckBox.addKeyListener(escapeKeyAdapter);
+//		caseSensitiveCheckBox.addKeyListener(escapeKeyAdapter);
 		northPanel.add(caseSensitiveCheckBox);
 
 		includeFoldersCheckBox = new JCheckBox(Translator.get("file_selection_dialog.include_folders"), includeFolders);
-		includeFoldersCheckBox.addKeyListener(escapeKeyAdapter);
+//		includeFoldersCheckBox.addKeyListener(escapeKeyAdapter);
 		northPanel.add(includeFoldersCheckBox);
 		
 		northPanel.addSpace(10);
@@ -126,9 +126,9 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 		// Sets default 'enter' button
 		okButton.setDefaultCapable(true);
 		getRootPane().setDefaultButton(okButton);
-		okButton.addKeyListener(escapeKeyAdapter);
+//		okButton.addKeyListener(escapeKeyAdapter);
 		cancelButton = new JButton(Translator.get("cancel"));
-		cancelButton.addKeyListener(escapeKeyAdapter);
+//		cancelButton.addKeyListener(escapeKeyAdapter);
 		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
 		// Selection field receives initial keyboard focus

@@ -84,12 +84,12 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(runStopButton, cancelButton, this), BorderLayout.SOUTH);
 
-        // Escape key disposes dialog
-		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
-		commandField.addKeyListener(escapeKeyAdapter);
-		outputTextArea.addKeyListener(escapeKeyAdapter);
-		runStopButton.addKeyListener(escapeKeyAdapter);
-		cancelButton.addKeyListener(escapeKeyAdapter);
+//        // Escape key disposes dialog
+//		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
+//		commandField.addKeyListener(escapeKeyAdapter);
+//		outputTextArea.addKeyListener(escapeKeyAdapter);
+//		runStopButton.addKeyListener(escapeKeyAdapter);
+//		cancelButton.addKeyListener(escapeKeyAdapter);
 
         // Selects OK when enter is pressed
         getRootPane().setDefaultButton(runStopButton);

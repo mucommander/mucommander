@@ -52,10 +52,10 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
 		cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
         		
-		// Escape key disposes dialog
-        EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
-        okButton.addKeyListener(escapeKeyAdapter);
-        cancelButton.addKeyListener(escapeKeyAdapter);
+//		// Escape key disposes dialog
+//        EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
+//        okButton.addKeyListener(escapeKeyAdapter);
+//        cancelButton.addKeyListener(escapeKeyAdapter);
 
 		// OK button will receive initial focus
 		setInitialFocusComponent(okButton);		
