@@ -358,7 +358,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
    
         stop();
 
-/*
+/*		
         // Refreshes only if table's folder is destFolder
         FileTable table1 = mainFrame.getBrowser1().getFileTable();
 		if (table1.getCurrentFolder().equals(baseDestFolder))
