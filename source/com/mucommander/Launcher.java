@@ -79,6 +79,15 @@ public class Launcher {
 		// Traps VM shutdown
 		Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
+		//////////////////////////////////////////////////////////////////////
+		// Important: all JAR resource files need to be loaded from main    //
+		//  thread (here may be a good place), because of some weirdness of //
+		//  JNLP/Webstart's ClassLoader.                                    //
+		//////////////////////////////////////////////////////////////////////
+
+		// Loads dictionary
+		com.mucommander.text.Translator.init();
+
 		// Initialize WindowManager
 		WindowManager.checkInit();
 		

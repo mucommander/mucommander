@@ -83,6 +83,13 @@ public class Translator {
 		if(com.mucommander.Debug.ON) System.out.println("Translator language: "+Translator.language);
 	}
 
+
+	/**
+	 * Empty method that does nothing but trigger the static initializer block.
+	 */
+	public static void init() {
+	}
+	
 	
 	/**
 	 * Sets language used by <code>get()</code> methods when language parameter isn't specified.
@@ -151,13 +158,11 @@ public class Translator {
 	/**
 	 * Opens, reads and closes dictionnary file which contain localized text
 	 * entries.
-	 *
-	 * @throws IOException DOCUMENT ME!
 	 */
-	public static void loadDictionnaryFile() throws IOException {
+	public void loadDictionnaryFile() throws IOException {
 		dictionaries = new Hashtable();
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(dictionaries.getClass().getResourceAsStream(dictionaryFilePath), "UTF-8"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(dictionaryFilePath), "UTF-8"));
 		String line;
 		String key;
 		String lang;
