@@ -60,7 +60,7 @@ public class ConfigurationManager {
             loadConfiguration();
         }
         catch(Exception e) {
-//			if(com.mucommander.Launcher.DEBUG)
+//			if(com.mucommander.Debug.TRACE)
             System.out.println("No configuration file found.");
             File homeFolder = getConfigurationFolder();
             if(!homeFolder.exists()) {

@@ -211,7 +211,7 @@ System.out.println(absPath);
 			}
 	      }
 	    } catch (Exception e) {
-		    if (com.mucommander.Launcher.DEBUG) {
+		    if (com.mucommander.Debug.TRACE) {
 				System.out.println("Error while parsing HTML:");
 				e.printStackTrace();
 		    }
