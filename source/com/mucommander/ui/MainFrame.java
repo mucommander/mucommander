@@ -134,7 +134,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
     
 		// Catches window close event
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-//		addWindowListener(this);
+
+// For testing purposes, full screen option could be nice to add someday
+//setUndecorated(true);
+//java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
 	}
 	
 	

@@ -62,7 +62,7 @@ public class SMBFile extends AbstractFile {
 	/////////////////////////////////////////
 	
 	public String getProtocol() {
-		return "HTTP";
+		return "SMB";
 	}
 
 	public String getName() {

@@ -34,11 +34,11 @@ public class MoveDialog extends DestinationDialog {
 		String fieldText;
 		if(isShiftDown && nbFiles==1) {
 			fieldText = ((AbstractFile)files.elementAt(0)).getName();
-			// If rename mode, select filename, not extension. Extension must be 4 characters max,
-			// and filename must not be null (e.g. '.DS_Store')
-			int extPos = fieldText.lastIndexOf('.');
+			// If rename mode, select the filename without extension, only if filename is not empty (unlike '.DS_Store' for example)
+			int extPos = fieldText.indexOf('.');
 			int len = fieldText.length();
-			setTextField(fieldText, 0, extPos<1||len-extPos>5?len:extPos);
+			
+			setTextField(fieldText, 0, extPos>0?extPos:len);
 		}
 		else {
 			AbstractFile destFolder = mainFrame.getUnactiveTable().getCurrentFolder();
