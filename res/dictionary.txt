@@ -464,6 +464,26 @@ move_dialog.moving:FR:Déplacement en cours
 
 
 #################
+# HTTP download #
+#################
+
+http_download.downloading:EN:Downloading
+http_download.downloading:FR:Téléchargement en cours
+
+http_download.downloading_file:EN:Downloading %1
+http_download.downloading_file:FR:Téléchargement de %1 en cours
+
+http_download.error_title:EN:Download error
+http_download.error_title:EN:Erreur lors du téléchargement
+
+http_download.cannot_copy_file:EN:Unable to download %1
+http_download.cannot_copy_file:FR:Impossible de télécharger %1
+
+http_download.cannot_create_destination:EN:Unable to create file %1 in destination.
+http_download.cannot_create_destination:FR:Impossible de créer le fichier %1 dans le dossier de destination.
+
+
+#################
 # Delete dialog #
 #################
 

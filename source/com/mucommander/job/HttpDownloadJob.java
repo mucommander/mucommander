@@ -14,7 +14,8 @@ import com.mucommander.text.Translator;
 
 import java.io.*;
 
-import java.util.Vector;
+import java.net.URL;
+import java.net.URLDecoder;
 
 
 /**
@@ -53,179 +54,34 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
 	}
 
 	
-	/**
-	 * Recursively copies a file or folder.
-	 */
-    private void copyRecurse(AbstractFile file, AbstractFile destFolder, String newName) {
-/*
-		if(isInterrupted())
-            return;
-
-		currentFileProcessed = 0;
-		currentFileSize = file.getSize();        
-
-		String originalName = file.getName();
-		String destFileName = (newName==null?originalName:newName);
-       	String destFilePath = destFolder.getAbsolutePath(true)
-       		+destFileName;
-
-		currentFileInfo = "\""+originalName+ "\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
-
-		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
-
-		// Do nothing when encountering symlinks (skip file)
-		if(file.isSymlink())
-			;
-		// Copy directory recursively
-        else if(file.isDirectory()) {
-            // creates the folder in the destination folder if it doesn't exist
-			
-			if(!(destFile.exists() && destFile.isDirectory())) {
-				try {
-					destFolder.mkdir(destFileName);
-				}
-            	catch(IOException e) {
-                	int ret = showErrorDialog(Translator.get("copy.cannot_create_folder", destFileName));
-                	if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-	                    stop();
-            		return;		// abort in all cases
-				}
-			}
-			
-			// and copy each file in this folder recursively
-            try {
-                AbstractFile subFiles[] = file.ls();
-				for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
-					copyRecurse(subFiles[i], destFile, null);
-                }
-			}
-            catch(IOException e) {
-                int ret = showErrorDialog(Translator.get("copy.cannot_read_folder", destFile.getAbsolutePath()));
-                if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-                    stop();
-			}
-        }
-		// Copy file
-        else  {
-        	byte buf[] = new byte[READ_BLOCK_SIZE];
-			boolean append = false;
-			
-			// Tests if the file exists
-			// and resolves a potential conflicting situation
-			if (destFile.exists())  {
-				if(skipAll)
-					return;
-				else if(overwriteAll);
-				else if(appendAll)
-					append = true;
-				else if (overwriteAllOlder) {
-					if(file.getDate()<destFile.getDate())
-						return;
-				}
-				else {	
-					int ret = showFileExistsDialog(file, destFile);
-				
-			    	if (ret==-1 || ret==FileExistsDialog.CANCEL_ACTION) {
-			    		stop();                
-			    		return;
-			    	}
-			    	else if (ret==FileExistsDialog.SKIP_ACTION) {
-			    		return;
-			    	}
-					else if (ret==FileExistsDialog.APPEND_ACTION) {
-			    		append = true;
-					}
-					else if (ret==FileExistsDialog.SKIP_ALL_ACTION) {
-						skipAll = true;
-						return;
-					}
-					else if (ret==FileExistsDialog.OVERWRITE_ALL_ACTION) {
-						overwriteAll = true;
-					}
-					else if (ret==FileExistsDialog.APPEND_ALL_ACTION) {
-						appendAll = true;
-						append = true;
-					}	
-					else if (ret==FileExistsDialog.OVERWRITE_ALL_OLDER_ACTION) {
-						overwriteAllOlder = true;
-						if(file.getDate()<destFile.getDate())
-							return;
-					}
-				}
-			}
-			
-			OutputStream out = null;
-			InputStream in = null;
-			try  {
-				in = file.getInputStream();
-				out = destFile.getOutputStream(append);
-
-				try  {
-					int read;
-                    while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
-						out.write(buf, 0, read);
-                        nbBytesProcessed += read;
-						currentFileProcessed += read;
-					}
-				}
-				catch(IOException e) {
-					if(com.mucommander.Debug.ON)
-						System.out.println(""+e);
-					int ret = showErrorDialog(Translator.get(unzip?"unzip.error_on_file":"copy.error_on_file", file.getName()));
-				    if(ret!=SKIP_ACTION)		// CANCEL_ACTION or close dialog
-				        stop();                
-				}
-			}
-			catch(IOException e) {
-				if(com.mucommander.Debug.ON)
-					System.out.println(""+e);
-				int ret = showErrorDialog(Translator.get(unzip?"unzip.cannot_unzip_file":"copy.cannot_copy_file", file.getName()));
-			    if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-			        stop();
-			}
-		
-			// Tries to close the streams no matter what happened before
-			try {
-				if(in!=null)
-					in.close();
-				if(out!=null)
-					out.close();
-			}
-        	catch(IOException e) {
-        	}
-		}
-*/
-    }
-
-	
 	private void downloadFile() {
+
 		// Determines local file name
-		int slashPos = fileURL.indexOf('/', 7);
-		String fileName = fileURL.substring(7, slashPos==-1?fileURL.length());
+		int urlLen = fileURL.length();
+		while(fileURL.charAt(urlLen-1)=='/')
+			fileURL = fileURL.substring(0, --urlLen);
+
+		int lastSlashPos = fileURL.lastIndexOf('/');
+		String fileName = URLDecoder.decode(fileURL.substring(lastSlashPos==-1||lastSlashPos<7?7:lastSlashPos, urlLen));
 		
 		// Create destination file
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath()+destFolder.getSeparator()+fileName);
 		
-		// Tests if the file exists
-		// and resolves a potential conflicting situation
+		// Tests if file exists in destination folder
 		boolean append = false;
 		if (destFile.exists())  {
-			int ret = showFileExistsDialog(file, destFile, false);
+			int ret = showFileExistsDialog(fileURL, destFile);
 		
+			// Cancel
 			if (ret==-1 || ret==FileExistsDialog.CANCEL_ACTION) {
 				stop();
 				return;
 			}
-			else if (ret==FileExistsDialog.SKIP_ACTION) {
-				return;
-			}
+			// Append to destination file
 			else if (ret==FileExistsDialog.APPEND_ACTION) {
 				append = true;
 			}
-			else if (ret==FileExistsDialog.SKIP_ALL_ACTION) {
-				skipAll = true;
-				return;
-			}
+			// Simply continue for overwrite
 		}
 
 		// Open inputstream
@@ -234,7 +90,8 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
 			in = new URL(fileURL).openStream();
 		}
 		catch(IOException e) {
-		
+			showErrorDialog(Translator.get("http_download.cannot_open_url"));
+			return;
 		}
 
 		
@@ -253,7 +110,7 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
 			catch(IOException e) {
 				if(com.mucommander.Debug.ON)
 					System.out.println(""+e);
-				int ret = showErrorDialog(Translator.get(unzip?"unzip.error_on_file":"copy.error_on_file", file.getName()));
+				int ret = showErrorDialog(Translator.get("http_download.cannot_copy_file", fileName));
 				if(ret!=SKIP_ACTION)		// CANCEL_ACTION or close dialog
 					stop();                
 			}
@@ -261,7 +118,7 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
 		catch(IOException e) {
 			if(com.mucommander.Debug.ON)
 				System.out.println(""+e);
-			int ret = showErrorDialog(Translator.get(unzip?"unzip.cannot_unzip_file":"copy.cannot_copy_file", file.getName()));
+			int ret = showErrorDialog(Translator.get("http_download.cannot_create_destination", fileName));
 			if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
 				stop();
 		}
@@ -290,56 +147,27 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
 		return waitForUserResponse(dialog);
     }
 
+	
+	/**
+	 * Shows a dialog which notifies the user that a file already exists in the destination folder
+	 * under the same name and asks for what to do.
+	 */
+    protected int showFileExistsDialog(String sourceURL, AbstractFile destFile) {
+		QuestionDialog dialog = new FileExistsDialog(progressDialog, mainFrame, sourceURL, destFile);
+		return waitForUserResponse(dialog);
+	}
+	
+	
     public void run() {
-/*
-		currentFileIndex = 0;
 
-		FileTable activeTable = mainFrame.getLastActiveTable();
-		AbstractFile currentFile;
-        AbstractFile zipSubFiles[];
-		while(true) {
-			currentFile = (AbstractFile)filesToCopy.elementAt(currentFileIndex);
-			
-			// Unzip files		
-			if (unzip) {
-				if (currentFile instanceof ZipArchiveFile) {
-					try {
-						zipSubFiles = currentFile.ls();
-						for(int i=0; i<zipSubFiles.length; i++) {
-//                            copyRecurse(zipSubFiles[i], baseDestFolder, null, 0);
-                            copyRecurse(zipSubFiles[i], baseDestFolder, null);
-						}
-					}
-					catch(IOException e) {
-						int ret = showErrorDialog(Translator.get("unzip.unable_to_open_zip", currentFile.getName()));
-						if (ret==-1 || ret==CANCEL_ACTION)	 {		// CANCEL_ACTION or close dialog
-						    stop();
-							break;
-						}
-					}
-				}
-			}
-			else {
-//				copyRecurse(currentFile, baseDestFolder, newName, 0);
-				copyRecurse(currentFile, baseDestFolder, newName);
-			}
-
-			if(isInterrupted())
-				break;
-			
-			activeTable.setFileMarked(currentFile, false);
-			activeTable.repaint();
-
-            if(currentFileIndex<nbFiles-1)	// This ensures that currentFileIndex is never out of bounds (cf getCurrentFile)
-                currentFileIndex++;
-            else break;
-        }
-
+		// Download file
+		downloadFile();
+		
         stop();
 		
-        // Refreshes only if table's folder is destFolder
+        // Refresh only if table's folder is destFolder
         FileTable table1 = mainFrame.getBrowser1().getFileTable();
-		if (table1.getCurrentFolder().equals(baseDestFolder))
+		if (table1.getCurrentFolder().equals(destFolder))
         	try {
         		table1.refresh();
         	}
@@ -348,9 +176,9 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
         		// like switching to a root folder        
         	}
 
-        // Refreshes only if table's folder is destFolder
+        // Refresh only if table's folder is destFolder
         FileTable table2 = mainFrame.getBrowser2().getFileTable();
-        if (table2.getCurrentFolder().equals(baseDestFolder))
+        if (table2.getCurrentFolder().equals(destFolder))
         	try {
         		table2.refresh();
         	}
@@ -360,7 +188,6 @@ public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
         	}
 
 		cleanUp();
-*/
 	}
 	
 	

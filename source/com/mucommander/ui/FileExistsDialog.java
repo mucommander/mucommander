@@ -57,4 +57,23 @@ public class FileExistsDialog extends QuestionDialog {
     		3);
 	}
 
+	
+	public FileExistsDialog(Dialog parent, Component locationRelative, String sourceURL, AbstractFile destFile) {
+	    super(parent, "File already exists in destination", locationRelative);
+ 
+	   	JPanel panel = new JPanel(new GridLayout(0,1));
+    	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm a");
+    	NumberFormat numberFormat = NumberFormat.getInstance();
+    	panel.add(new JLabel("Source: "+sourceURL));
+    	panel.add(new JLabel(""));
+    	panel.add(new JLabel("Destination: "+destFile.getAbsolutePath()));
+    	panel.add(new JLabel("  "+numberFormat.format(destFile.getSize())
+    			+" bytes, "+dateFormat.format(new Date(destFile.getDate()))));
+    	
+    	init(parent, panel,
+    		new String[] {OVERWRITE_TEXT, APPEND_TEXT, CANCEL_TEXT},
+    		new int[]  {OVERWRITE_ACTION, APPEND_ACTION, CANCEL_ACTION},
+    		3);
+	}
+
 }

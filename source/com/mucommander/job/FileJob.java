@@ -198,7 +198,7 @@ public abstract class FileJob implements Runnable {
 	
 	/**
 	 * Shows a dialog which notifies the user that a file already exists in the destination folder
-	 * under the same name.
+	 * under the same name and asks for what to do.
 	 */
     protected int showFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
 		QuestionDialog dialog = new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
