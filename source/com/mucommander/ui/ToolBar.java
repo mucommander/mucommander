@@ -33,19 +33,19 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	
 	/** Buttons descriptions */
 	private String BUTTONS_DESC[][] = {
-		{Translator.get("toolbar.new_window"), "/newwindow.gif", null, "true"},
-		{Translator.get("toolbar.go_back"), "/back.gif", "/backg.gif", null},
-		{Translator.get("toolbar.go_forward"), "/forward.gif", "/forwardg.gif", "true"},
-		{Translator.get("toolbar.mark"), "/mark.gif", null, null},
-		{Translator.get("toolbar.unmark"), "/unmark.gif", null, "true"},
-		{Translator.get("toolbar.swap_folders"), "/switch.gif", null, null},
-		{Translator.get("toolbar.set_same_folder"), "/same.gif", null, "true"},
-		{Translator.get("toolbar.server_connect"), "/sconnect.gif", null, null},
-		{Translator.get("toolbar.run_command"), "/runcmd.gif", null, null},
-		{Translator.get("toolbar.zip"), "/zip.gif", null, null},
-		{Translator.get("toolbar.unzip"), "/unzip.gif", null, null},
-		{Translator.get("toolbar.email"), "/mail.gif", null, null},
-		{Translator.get("toolbar.properties"), "/properties.gif", null, "true"},
+		{Translator.get("toolbar.new_window")+" (Ctrl+N)", "/newwindow.gif", null, "true"},
+		{Translator.get("toolbar.go_back")+" (Alt+Left)", "/back.gif", "/backg.gif", null},
+		{Translator.get("toolbar.go_forward")+" (Alt+Right)", "/forward.gif", "/forwardg.gif", "true"},
+		{Translator.get("toolbar.mark")+" (NumPad +)", "/mark.gif", null, null},
+		{Translator.get("toolbar.unmark")+" (NumPad -)", "/unmark.gif", null, "true"},
+		{Translator.get("toolbar.swap_folders")+" (Ctrl+U)", "/switch.gif", null, null},
+		{Translator.get("toolbar.set_same_folder")+" (Ctrl+E)", "/same.gif", null, "true"},
+		{Translator.get("toolbar.server_connect")+" (Ctrl+K)", "/sconnect.gif", null, null},
+		{Translator.get("toolbar.run_command")+" (Ctrl+R)", "/runcmd.gif", null, null},
+		{Translator.get("toolbar.zip")+" (Ctrl+I)", "/zip.gif", null, null},
+		{Translator.get("toolbar.unzip")+" (Ctrl+P)", "/unzip.gif", null, null},
+		{Translator.get("toolbar.email")+" (Ctrl+S)", "/mail.gif", null, null},
+		{Translator.get("toolbar.properties")+" (Alt+Enter)", "/properties.gif", null, "true"},
 		{Translator.get("toolbar.preferences"), "/configure.gif", null, null}
 	};
 

@@ -152,6 +152,12 @@ command_bar.copy:FR:Copier
 command_bar.copy_tooltip:EN:Copy marked files
 command_bar.copy_tooltip:FR:Copier les fichiers marqués
 
+command_bar.local_copy:EN:Local Copy
+command_bar.local_copy:FR:Copier local
+
+command_bar.local_copy_tooltip:EN:Copy selected file into current folder
+command_bar.local_copy_tooltip:FR:Copier le fichier selectionné dans le dossier courant
+
 command_bar.move:EN:Move
 command_bar.move:FR:Déplacer
 
@@ -341,31 +347,31 @@ help_menu.about:FR:A propos de muCommander
 # Keyboard shortcuts should soon be removed from here
 # and be inserted dynamically
 
-toolbar.new_window:EN:$[file_menu.new_window] (Ctrl+N)
+toolbar.new_window:EN:$[file_menu.new_window]
 
-toolbar.go_back:EN:$[view_menu.go_back] (Alt+Left)
+toolbar.go_back:EN:$[view_menu.go_back]
 
-toolbar.go_forward:EN:$[view_menu.go_forward] (Alt+Right)
+toolbar.go_forward:EN:$[view_menu.go_forward]
 
-toolbar.mark:EN:$[mark_menu.mark] (NumPad +)
+toolbar.mark:EN:$[mark_menu.mark]
 
-toolbar.unmark:EN:$[mark_menu.unmark] (NumPad -)
+toolbar.unmark:EN:$[mark_menu.unmark]
 
-toolbar.swap_folders:EN:$[view_menu.swap_folders] (Ctrl+U)
+toolbar.swap_folders:EN:$[view_menu.swap_folders]
 
-toolbar.set_same_folder:EN:$[view_menu.set_same_folder] (Ctrl+E)
+toolbar.set_same_folder:EN:$[view_menu.set_same_folder]
 
-toolbar.server_connect:EN:$[file_menu.server_connect] (Ctrl+K)
+toolbar.server_connect:EN:$[file_menu.server_connect]
 
-toolbar.run_command:EN:$[file_menu.run_command] (Ctrl+R)
+toolbar.run_command:EN:$[file_menu.run_command]
 
-toolbar.zip:EN:$[file_menu.zip] (Ctrl+I)
+toolbar.zip:EN:$[file_menu.zip]
 
-toolbar.unzip:EN:$[file_menu.unzip] (Ctrl+P)
+toolbar.unzip:EN:$[file_menu.unzip]
 
-toolbar.email:EN:$[file_menu.email] (Ctrl+S)
+toolbar.email:EN:$[file_menu.email]
 
-toolbar.properties:EN:$[file_menu.properties] (Alt+Enter)
+toolbar.properties:EN:$[file_menu.properties]
 
 toolbar.preferences:EN:$[file_menu.preferences]
 
@@ -1037,11 +1043,23 @@ shortcuts_dialog.selection.mark_unmark:FR:Marquer/Dé-marquer un fichier
 shortcuts_dialog.file_operations:EN:File operations
 shortcuts_dialog.file_operations:FR:Opérations sur fichiers
 
-shortcuts_dialog.file_operations.local_copy:EN:Copy to current folder
-shortcuts_dialog.file_operations.local_copy:FR:Copier dans le dossier courant
-
 shortcuts_dialog.file_operations.server_connect:EN:Connect to a remote server
 shortcuts_dialog.file_operations.server_connect:FR:Se connecter à un serveur distant
+
+shortcuts_dialog.file_operations.run_command:EN:Run a command in current folder
+shortcuts_dialog.file_operations.run_command:FR:Exécuter une commande dans le dossier courant
+
+shortcuts_dialog.file_operations.zip:EN:Compress marked files in a ZIP file
+shortcuts_dialog.file_operations.zip:FR:Compresser les fichiers marqués dans un fichier ZIP 
+
+shortcuts_dialog.file_operations.unzip:EN:Uncompress marked ZIP files
+shortcuts_dialog.file_operations.unzip:FR:Décompresser les fichiers ZIP marqués
+
+shortcuts_dialog.file_operations.email:EN:Send marked files as email attachments
+shortcuts_dialog.file_operations.email:FR:Envoyer les fichiers marqués en pièces jointes à un message
+
+shortcuts_dialog.file_operations.properties:EN:Show properties of marked files
+shortcuts_dialog.file_operations.properties:FR:Afficher les propriétés des fichiers marqués
 
 shortcuts_dialog.windows:EN:Windows
 shortcuts_dialog.windows:FR:Fenêtres

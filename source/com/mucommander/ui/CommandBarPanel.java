@@ -43,11 +43,15 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 
 	private final static String MOVE_TEXT = "command_bar.move";
 	private final static String RENAME_TEXT = "command_bar.rename";
+
+	private final static String COPY_TEXT = "command_bar.copy";
+	private final static String LOCAL_COPY_TEXT = "command_bar.local_copy";
+	
 	
 	private final static String BUTTONS_TEXT[][] =  {
 		{"command_bar.view", "[F3]"},
 		{"command_bar.edit", "[F4]"},
-		{"command_bar.copy", "[F5]"},
+		{COPY_TEXT, "[F5]"},
 		{MOVE_TEXT, "[F6]"},
 		{"command_bar.mkdir", "[F7]"},
 		{"command_bar.delete", "[F8]"},
@@ -96,10 +100,19 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	public void setShiftMode(boolean on) {
 		if(shiftDown!=on) {
 			this.shiftDown = on;
-			String textKey = on&&((FileTableModel)(mainFrame.getLastActiveTable().getModel())).getNbMarkedFiles()<=1?RENAME_TEXT:MOVE_TEXT;
+			boolean singleFileMode = on&&((FileTableModel)(mainFrame.getLastActiveTable().getModel())).getNbMarkedFiles()<=1;
+
+			// Change Move/Rename button's text and tooltip
+			String textKey = singleFileMode?RENAME_TEXT:MOVE_TEXT;
 			buttons[MOVE_INDEX].setText(Translator.get(textKey)+" "+BUTTONS_TEXT[MOVE_INDEX][1]);
 			buttons[MOVE_INDEX].setToolTipText(Translator.get(textKey+"_tooltip"));
 			buttons[MOVE_INDEX].repaint();
+
+			// Change Copy/Local copy button's text and tooltip
+			textKey = singleFileMode?LOCAL_COPY_TEXT:COPY_TEXT;
+			buttons[COPY_INDEX].setText(Translator.get(textKey)+" "+BUTTONS_TEXT[COPY_INDEX][1]);
+			buttons[COPY_INDEX].setToolTipText(Translator.get(textKey+"_tooltip"));
+			buttons[COPY_INDEX].repaint();
 		}
 	}
 
