@@ -198,7 +198,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 					}
 					
 					if(markFile)
-						activeTable.setFileMarked(file, addToSelection);
+						tableModel.setFileMarked(file, addToSelection);
 				}
 			}
 			activeTable.repaint();

@@ -52,6 +52,11 @@ public class PropertiesJob extends FileJob {
 		return nbFilesRecurse;
  	}
  
+
+	/////////////////////////////////////
+	// Abstract methods Implementation //
+	/////////////////////////////////////
+
 	/**
 	 * Adds the given file to the total of files or folders and the total size,
 	 * and recurses if it is a folder.
@@ -93,5 +98,14 @@ public class PropertiesJob extends FileJob {
 	public String getStatusString() {
 		return hasFinished()?"Complete":"Calculating";
 	}
+
+	// This job does not modify anything
 	
+	protected int getRefreshPolicy() {
+		return DO_NOT_REFRESH;
+	}
+		
+	protected AbstractFile getBaseDestinationFolder() {
+		return null;
+	}
 }

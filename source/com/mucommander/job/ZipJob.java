@@ -25,7 +25,7 @@ public class ZipJob extends ExtendedFileJob {
 	/** Destination (zip) file */
 	private AbstractFile destFile;
 
-	/** Base destination folder */
+	/** Base destination folder's path */
 	private String baseFolderPath;
 
 	/** Zip output stream */
@@ -163,4 +163,14 @@ public class ZipJob extends ExtendedFileJob {
 		return "Adding "+getCurrentFileInfo();
     }
 
+	// This job modifies baseFolder
+	
+	protected int getRefreshPolicy() {
+		return REFRESH_DESTINATION_FOLDER;
+	}
+		
+	protected AbstractFile getBaseDestinationFolder() {
+		return destFile.getParent();
+	}
+	
 }	

@@ -154,7 +154,7 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	
 	
 	public void show() {
-		new Thread(this).start();
+		new Thread(this, "com.mucommander.ui.viewer.ViewerFrame's Thread").start();
 	}
 
 	

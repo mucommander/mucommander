@@ -91,6 +91,15 @@ public abstract class AbstractFile {
 
 	
 	/**
+	 * Returns <code>true</code> if this file is a parent of the given file, or if the 2 files
+	 * point to the same path.
+	 */
+	public boolean isParent(AbstractFile file) {
+		return getCanonicalPath(false).startsWith(file.getCanonicalPath(false));
+	}
+	
+	
+	/**
 	 * Returns a String representation of this AbstractFile which is the name as returned by getName().
 	 */
 	public String toString() {

@@ -55,7 +55,7 @@ public class CopyJob extends ExtendedFileJob {
 	 */
 	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, int mode, int fileExistsAction) {
 		super(progressDialog, mainFrame, files);
-		
+
 		this.baseDestFolder = destFolder;
 		this.newName = newName;
 		this.mode = mode;
@@ -81,7 +81,7 @@ public class CopyJob extends ExtendedFileJob {
 		// Stop if interrupted
 		if(isInterrupted())
             return false;
-
+		
 		// Destination folder
 		AbstractFile destFolder = recurseParams==null?baseDestFolder:(AbstractFile)recurseParams;
 		
@@ -241,4 +241,14 @@ public class CopyJob extends ExtendedFileJob {
 //        return Translator.get(unzipMode?"unzip.unzipping_file":"copy.copying_file", getCurrentFileInfo());
         return Translator.get(mode==UNZIP_MODE?"unzip.unzipping_file":mode==DOWNLOAD_MODE?"http_download.downloading_file":"copy.copying_file", getCurrentFileInfo());
     }
+	
+	// This job modifies baseDestFolder and its subfolders
+	
+	protected int getRefreshPolicy() {
+		return REFRESH_DESTINATION_SUBFOLDERS;
+	}
+		
+	protected AbstractFile getBaseDestinationFolder() {
+		return baseDestFolder;
+	}
 }

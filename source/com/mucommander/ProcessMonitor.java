@@ -28,7 +28,7 @@ public class ProcessMonitor implements Runnable {
 		this.process = process;
 		this.listener = listener;
 	
-		(this.outputMonitorThread=new Thread(this)).start();
+		(this.outputMonitorThread=new Thread(this, "com.mucommander.ProcessMonitor's Thread")).start();
 	}
 	
 	/**

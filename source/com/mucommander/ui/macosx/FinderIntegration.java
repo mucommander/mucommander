@@ -48,17 +48,17 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 
 	public void handleAbout() {
 		this.action = ABOUT_ACTION;
-		new Thread(this).start();
+		new Thread(this, "com.mucommander.ui.macosx.FinderIntegration's handleAbout Tread").start();
 	}
 	
 	public void handlePrefs() {
 		this.action = PREFS_ACTION;
-		new Thread(this).start();
+		new Thread(this, "com.mucommander.ui.macosx.FinderIntegration's handlePrefs Tread").start();
 	}
 	
 	public void handleQuit() {
 		this.action = QUIT_ACTION;
-		new Thread(this).start();
+		new Thread(this, "com.mucommander.ui.macosx.FinderIntegration's handleQuit Tread").start();
 	}
 
 	

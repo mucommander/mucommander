@@ -60,7 +60,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         this.dualBar = job instanceof ExtendedFileJob;
         initUI();
         
-        repaintThread = new Thread(this);
+        repaintThread = new Thread(this, "com.mucommander.ui.ProgressDialog's Thread");
         repaintThread.start();
 
     	showDialog();

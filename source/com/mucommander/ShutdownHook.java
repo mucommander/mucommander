@@ -12,6 +12,7 @@ import com.mucommander.conf.ConfigurationManager;
 public class ShutdownHook extends Thread {
 
 	public ShutdownHook() {
+		super("com.mucommander.ShutDownHook's thread");
 	}
 
 	/**

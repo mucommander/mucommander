@@ -42,7 +42,7 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
         this.userInitiated = userInitiated;
 
         // Do all the hard work in a separate thread
-        new Thread(this).start();
+        new Thread(this, "com.mucommander.ui.CheckVersionDialog's Thread").start();
     }
 	
     

@@ -267,6 +267,7 @@ public class FSFile extends AbstractFile {
 	}
 
 	public void mkdir(String name) throws IOException {
+if(com.mucommander.Debug.ON) System.out.println("FSFile.mkdir "+absPath+separator+name);
 		if(!new File(absPath+separator+name).mkdir())
 			throw new IOException();
 	}

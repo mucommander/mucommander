@@ -26,15 +26,57 @@ public class FTPFile extends AbstractFile implements RemoteFile {
 	private boolean fileExists;
 	
 
-	private class FTPInputStream extends BufferedInputStream {
+	private class FTPInputStream extends FilterInputStream {
 		
 		private FTPInputStream(InputStream in) {
 			super(in);
 		}
 		
 		public void close() throws IOException {
+//			try { 
+//System.out.println("FTPInputStream.close: aborting");
+//				boolean ret = ftpClient.abort();
+//System.out.println("FTPInputStream.close: abort="+ret);
+//			} catch(IOException e) {
+//System.out.println(ftpClient.getReplyString());
+//.printStackTrace();
+//			}
+
+/*
+System.out.println("FTPInputStream.close: closed");
+int read = read();
+System.out.println("FTPInputStream.close: read="+read);
+super.close();
+			if(read==-1) {
+System.out.println("FTPInputStream.close: complete pending commands");
+				ftpClient.completePendingCommand();
+System.out.println("FTPInputStream.close: commands completed");
+*/
+
+System.out.println("FTPInputStream.close: closing");
 			super.close();
-			ftpClient.completePendingCommand();
+System.out.println("FTPInputStream.close: closed");
+			
+/*
+			try { 
+System.out.println("FTPInputStream.close: aborting");
+				int ret = ftpClient.abor();
+System.out.println("FTPInputStream.close: abort="+ret);
+			} catch(IOException e) {
+System.out.println(ftpClient.getReplyString());
+e.printStackTrace();
+			}
+*/
+
+			try {
+	System.out.println("FTPInputStream.close: complete pending commands");
+				ftpClient.completePendingCommand();
+	System.out.println("FTPInputStream.close: commands completed");
+			}
+			catch(IOException e) {
+	System.out.println("FTPInputStream.close: exception in complete pending commands, disconnecting");
+				ftpClient.disconnect();
+			}
 		}
 	}
 	
@@ -46,7 +88,16 @@ public class FTPFile extends AbstractFile implements RemoteFile {
 		
 		public void close() throws IOException {
 			super.close();
-			ftpClient.completePendingCommand();
+
+			try {
+	System.out.println("FTPOutputStream.close: complete pending commands");
+				ftpClient.completePendingCommand();
+	System.out.println("FTPOutputStream.close: commands completed");
+			}
+			catch(IOException e) {
+	System.out.println("FTPOutputStream.close: exception in complete pending commands, disconnecting");
+				ftpClient.disconnect();
+			}
 		}
 	}
 
@@ -54,7 +105,7 @@ public class FTPFile extends AbstractFile implements RemoteFile {
 	public FTPFile(String fileURL) throws IOException {
 		this(fileURL, true);
 	}
-	
+
 	
 	/**
 	 * Creates a new instance of FTPFile and initializes the FTP connection to the server.
@@ -68,21 +119,8 @@ public class FTPFile extends AbstractFile implements RemoteFile {
 		this.fileURL = new FileURL(url);
 		this.absPath = this.fileURL.getPath();
 		
-		if(addAuthInfo)
-			AuthManager.authenticate(this.fileURL);
-		
 		// Initialize connection
-		initConnection(this.fileURL);
-
-		this.file = getFTPFile(ftpClient, this.fileURL);
-		// If file doesn't exist (could not be resolved), create it
-		if(this.file==null) {
-			this.file = createFTPFile(this.fileURL.getFilename(), false);
-			this.fileExists = false;
-		}
-		else {
-			this.fileExists = true;
-		}
+		initConnection(this.fileURL, addAuthInfo);
 	}
 
 	
@@ -95,7 +133,7 @@ public class FTPFile extends AbstractFile implements RemoteFile {
 	}
 
 	
-	private static org.apache.commons.net.ftp.FTPFile getFTPFile(FTPClient ftpClient, FileURL fileURL) throws IOException {
+	private org.apache.commons.net.ftp.FTPFile getFTPFile(FTPClient ftpClient, FileURL fileURL) throws IOException {
 		FileURL parentURL = fileURL.getParent();
 System.out.println("getFTPFile "+fileURL+" parent="+parentURL);
 
@@ -104,7 +142,10 @@ System.out.println("getFTPFile "+fileURL+" parent="+parentURL);
 			return createFTPFile("/", true);
 		}
 		else {
-System.out.println("getFTPFile parent="+parentURL.getPath());
+//System.out.println("getFTPFile parent="+parentURL.getPath());
+	        // Check connection and reconnect if connection timed out
+			checkConnection(ftpClient);
+
 			org.apache.commons.net.ftp.FTPFile files[] = ftpClient.listFiles(parentURL.getPath());
 			// Throw an IOException if server replied with an error
 			checkServerReply(ftpClient, fileURL);
@@ -116,9 +157,9 @@ System.out.println("getFTPFile parent="+parentURL.getPath());
 			// Find file from parent folder
 			int nbFiles = files.length;
 			String wantedName = fileURL.getFilename();
-System.out.println("getFTPFile wanted="+wantedName+" nbcand="+nbFiles);
+//System.out.println("getFTPFile wanted="+wantedName+" nbcand="+nbFiles);
 			for(int i=0; i<nbFiles; i++) {
-System.out.println("getFTPFile candidate"+i+"="+files[i].getName());
+//System.out.println("getFTPFile candidate"+i+"="+files[i].getName());
 				if(files[i].getName().equalsIgnoreCase(wantedName))
 					return files[i];
 			}
@@ -128,7 +169,7 @@ System.out.println("getFTPFile candidate"+i+"="+files[i].getName());
 	}
 	
 	
-	private static org.apache.commons.net.ftp.FTPFile createFTPFile(String name, boolean isDirectory) {
+	private org.apache.commons.net.ftp.FTPFile createFTPFile(String name, boolean isDirectory) {
 		org.apache.commons.net.ftp.FTPFile file = new org.apache.commons.net.ftp.FTPFile();
 		file.setName("/");
 		file.setSize(0);
@@ -138,18 +179,23 @@ System.out.println("getFTPFile candidate"+i+"="+files[i].getName());
 	}
 	
 
-	private void initConnection(FileURL fileURL) throws IOException {
+	private void initConnection(FileURL fileURL, boolean addAuthInfo) throws IOException {
+System.out.print("initConnection: connecting to "+fileURL.getHost());
+
 		this.ftpClient = new FTPClient();
 		
 		try {
 			// Connect
 			ftpClient.connect(fileURL.getHost());
-System.out.print(ftpClient.getReplyString());
+System.out.println("initConnection: "+ftpClient.getReplyString());
 
 			// Throw an IOException if server replied with an error
 			checkServerReply(ftpClient, fileURL);
 
+			AuthManager.authenticate(this.fileURL, addAuthInfo);
 			AuthInfo authInfo = AuthInfo.getAuthInfo(fileURL);
+
+System.out.println("initConnection: fileURL="+fileURL.getURL(true)+" authInfo="+authInfo);
 			if(authInfo!=null) {
 //				try { ftpClient.login(authInfo.getLogin(), authInfo.getPassword()); }
 //				catch(IOException e) {
@@ -158,11 +204,21 @@ System.out.print(ftpClient.getReplyString());
 //				}
 				ftpClient.login(authInfo.getLogin(), authInfo.getPassword());
 //				// Throw an IOException (possibly AuthException) if server replied with an error
-//				checkServerReply(ftpClient, fileURL);
+				checkServerReply(ftpClient, fileURL);
 			}
-
+			
 			// Set file type to 'binary'
 			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+
+			this.file = getFTPFile(ftpClient, this.fileURL);
+			// If file doesn't exist (could not be resolved), create it
+			if(this.file==null) {
+				this.file = createFTPFile(this.fileURL.getFilename(), false);
+				this.fileExists = false;
+			}
+			else {
+				this.fileExists = true;
+			}
 		}
 		catch(IOException e) {
 			// Disconnect if something went wrong
@@ -175,9 +231,10 @@ System.out.print(ftpClient.getReplyString());
 	}
 
 	
-	private static void checkServerReply(FTPClient ftpClient, FileURL fileURL) throws IOException {
+	private void checkServerReply(FTPClient ftpClient, FileURL fileURL) throws IOException {
 		// Check that connection went ok
 		int replyCode = ftpClient.getReplyCode();
+if(com.mucommander.Debug.ON) System.out.println(ftpClient.getReplyString());
 		// If not, throw an exception using the reply string
 		if(!FTPReply.isPositiveCompletion(replyCode)) {
 			if(replyCode==FTPReply.CODE_503 || replyCode==FTPReply.NEED_PASSWORD || replyCode==FTPReply.NOT_LOGGED_IN)
@@ -188,15 +245,47 @@ System.out.print(ftpClient.getReplyString());
 	}
 
 	
-	private void checkConnection() throws IOException {
+	private void checkConnection(FTPClient client) throws IOException {
+System.out.println("checkConnection: isConnected= "+ftpClient.isConnected());
 		// Reconnect if disconnected
 		if(!ftpClient.isConnected()) {
-			// Let's be a good citizen and disconnect properly
-			try { ftpClient.disconnect(); } catch(IOException e) {}
 			// Connect again
-			initConnection(this.fileURL);
+			initConnection(this.fileURL, false);
+			return;
+		}
+		
+		// Send Noop to check connection
+		boolean noop = false;
+		try {
+			noop = ftpClient.sendNoOp();
+			checkServerReply(ftpClient, this.fileURL);
+		}
+		catch(IOException e) {
+			// Something went wrong
+System.out.println("checkConnection: exception in Noop "+e);
+		}
+
+System.out.println("checkConnection: noop returns "+noop);
+		
+		if(!noop) {
+System.out.println("checkConnection: isConnected(2)= "+ftpClient.isConnected());
+			if(ftpClient.isConnected()) {
+				// Let's be a good citizen and disconnect properly
+				try { ftpClient.disconnect(); } catch(IOException e) {}
+			}
+			// Connect again
+			initConnection(this.fileURL, false);
 		}
 	}
+
+
+	public void setPassiveMode(boolean enabled) throws IOException {
+		if(enabled)
+			this.ftpClient.enterLocalPassiveMode();
+		else
+			this.ftpClient.enterLocalActiveMode();
+	}
+
 	
 	////////////////////////
 	// RemoteFile methods //
@@ -212,7 +301,7 @@ System.out.print(ftpClient.getReplyString());
 
 	public String getName() {
 		String name = file.getName();
-
+		
 		if(name.endsWith(SEPARATOR))
 			return name.substring(0, name.length()-1);
 		return name;
@@ -245,9 +334,11 @@ System.out.print(ftpClient.getReplyString());
 		if(!parentValSet) {
 			FileURL parentFileURL = this.fileURL.getParent();
 			if(parentFileURL!=null) {
-//					try { this.parent = new FTPFile(parentFileURL, getFTPFile(this.ftpClient, parentFileURL), this.ftpClient); }
+System.out.println("getParent, parentURL="+parentFileURL.getURL(true));
 				try { this.parent = new FTPFile(parentFileURL.getURL(true), false); }
-				catch(IOException e) {}
+				catch(IOException e) {
+if(com.mucommander.Debug.ON) e.printStackTrace();				
+				}
 			}
 
 			this.parentValSet = true;
@@ -294,16 +385,37 @@ System.out.print(ftpClient.getReplyString());
 	
 	
 	public InputStream getInputStream() throws IOException {
-		InputStream in = ftpClient.retrieveFileStream(absPath);
-		if(in==null)
-			throw new IOException();
-		return new FTPInputStream(in);
+		return getInputStream(0);
 	}
 	
+
+	public InputStream getInputStream(long skipBytes) throws IOException {
+        // Check connection and reconnect if connection timed out
+		checkConnection(ftpClient);
+
+		if(skipBytes>0) {
+			// Resume transfer at the given offset
+			this.ftpClient.setRestartOffset(skipBytes);
+		}
+		
+		InputStream in = ftpClient.retrieveFileStream(absPath);
+		if(in==null) {
+			if(skipBytes>0) {
+				// Reset offset
+				this.ftpClient.setRestartOffset(0);
+			}
+			throw new IOException();
+		}
+		
+		return new FTPInputStream(in);
+	}
+
 	
 	public OutputStream getOutputStream(boolean append) throws IOException {
+        // Check connection and reconnect if connection timed out
+		checkConnection(ftpClient);
+
 		OutputStream out;
-		
 		if(append)
 			out = ftpClient.appendFileStream(absPath);
 		else
@@ -316,20 +428,36 @@ System.out.print(ftpClient.getReplyString());
 	}
 
 		
-	public boolean moveTo(AbstractFile dest) {
+	public boolean moveTo(AbstractFile destFile) throws IOException {
+		if(destFile instanceof FTPFile) {
+			FTPFile destFTPFile = (FTPFile)destFile;
+			
+			if(destFTPFile.fileURL.getHost().equals(this.fileURL.getHost()))
+				try {
+					return ftpClient.rename(absPath, destFTPFile.absPath);
+				}
+				catch(IOException e) {
+					return false;
+				}
+		}
+		
 		return false;
 	}
 
 	
 	public void delete() throws IOException {
+        // Check connection and reconnect if connection timed out
+		checkConnection(ftpClient);
+
 		ftpClient.deleteFile(absPath);
+
 		// Throw an IOException if server replied with an error
 		checkServerReply(ftpClient, this.fileURL);
 	}
 
 	public AbstractFile[] ls() throws IOException {
         // Check connection and reconnect if connection timed out
-		checkConnection();
+		checkConnection(ftpClient);
 		
 		org.apache.commons.net.ftp.FTPFile files[] = ftpClient.listFiles(absPath);
 		// Throw an IOException if server replied with an error
@@ -350,14 +478,19 @@ System.out.print(ftpClient.getReplyString());
 			childURL = new FileURL(parentURL+files[i].getName());
 
 //			children[nbFiles] = AbstractFile.getAbstractFile(absPath+SEPARATOR+names[i], this);
-			children[i] = new FTPFile(childURL, files[i], ftpClient);
-			children[i].setParent(this);
+			child = AbstractFile.wrapArchive(new FTPFile(childURL, files[i], ftpClient));
+			child.setParent(this);
+			children[i] = child;
         }
 		
         return children;
 	}
 
+	
 	public void mkdir(String name) throws IOException {
+        // Check connection and reconnect if connection timed out
+		checkConnection(ftpClient);
+
 		ftpClient.makeDirectory(absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name);
 		// Throw an IOException if server replied with an error
 		checkServerReply(ftpClient, fileURL);

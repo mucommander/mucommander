@@ -545,8 +545,8 @@ delete_dialog.confirmation:FR:Définitivement supprimer les fichiers sélectionn
 delete_dialog.deleting:EN:Deleting
 delete_dialog.deleting:FR:Suppression en cours
 
-move_dialog.error_title:EN:Delete error
-move_dialog.error_title:FR:Erreur de suppression
+delete_dialog.error_title:EN:Delete error
+delete_dialog.error_title:FR:Erreur de suppression
 
 delete.deleting_file:EN:Deleting %1
 delete.deleting_file:FR:Suppression %1 en cours
@@ -744,6 +744,16 @@ server_connect_dialog.http_url:FR:URL site web
 
 server_connect_dialog.connect:EN:Connect
 server_connect_dialog.connect:FR:Se connecter
+
+###############
+# FTP connect #
+###############
+
+ftp_connect.passive_mode:EN:Enable passive mode
+ftp_connect.passive_mode:FR:Activer le mode passif
+
+ftp_connect.anonymous_user:EN:Anonymous user
+ftp_connect.anonymous_user:FR:Utilisateur anonyme
 
 
 ##############

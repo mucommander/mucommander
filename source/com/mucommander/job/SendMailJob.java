@@ -102,71 +102,6 @@ public class SendMailJob extends ExtendedFileJob {
 	}
 	
 	
-	/**
-	 * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object) processFile()} is made.
-	 * This method here does nothing but it can be overriden by subclasses to perform some first-time initializations.
-	 */
-	protected void jobStarted() {
-        // Open socket connection to the mail server, and say hello
-        try {
-            openConnection();
-        }
-        catch(IOException e) {
-            showErrorDialog("Unable to contact mail server "+mailServer+", check mail server preferences.");
-        }
-
-		if(isInterrupted())
-			return;
-		
-        // Send mail body
-		try {
-            sendBody();
-        }
-        catch(IOException e) {
-            showErrorDialog("Connection terminated by server, mail not sent.");
-		}
-	}
-	
-
-	/**
-	 * Overriden method to say 'goodbye' to the mail server.
-	 */
-	protected void jobCompleted() {
-		// Notifies the mail server that the mail is over
-		try {
-			// Say goodbye to the server
-			sayGoodBye();
-		}
-		catch(IOException e) {
-			showErrorDialog("Unable to close connection, mail may not have been sent.");
-		}
-	}
-	
-	
-	/**
-     * Overrident method to close connection to the mail server.
-	 */
-	protected void jobStopped() {
-        // Close the connection
-        closeConnection();
-	}
-	
-	
-    protected boolean processFile(AbstractFile file, Object recurseParams) {
-		if(isInterrupted())
-			return false;
-
-        // Send file attachment
-		try {
-			return sendAttachment(file);
-		}
-		catch(IOException e) {
-			showErrorDialog("Unable to send "+file.getName()+", mail not sent.");
-			return false;
-		}
-    }    
-
-	
     /***********************************************
 	 *** Methods taking care of sending the mail ***
 	 ***********************************************/
@@ -305,9 +240,9 @@ public class SendMailJob extends ExtendedFileJob {
     }
 
 
-	/*******************************************
-	 *** ExtendedFileJob implemented methods ***
-	 *******************************************/
+	/**********************************************
+	 *** ExtendedFileJob methods implementation ***
+	 **********************************************/
 
     public String getStatusString() {
 		if(connectedToMailServer)
@@ -315,4 +250,78 @@ public class SendMailJob extends ExtendedFileJob {
         else
             return "Connecting to "+mailServer;
     }
+
+	/**
+	 * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object) processFile()} is made.
+	 * This method here does nothing but it can be overriden by subclasses to perform some first-time initializations.
+	 */
+	protected void jobStarted() {
+        // Open socket connection to the mail server, and say hello
+        try {
+            openConnection();
+        }
+        catch(IOException e) {
+            showErrorDialog("Unable to contact mail server "+mailServer+", check mail server preferences.");
+        }
+
+		if(isInterrupted())
+			return;
+		
+        // Send mail body
+		try {
+            sendBody();
+        }
+        catch(IOException e) {
+            showErrorDialog("Connection terminated by server, mail not sent.");
+		}
+	}
+	
+
+	/**
+	 * Overriden method to say 'goodbye' to the mail server.
+	 */
+	protected void jobCompleted() {
+		// Notifies the mail server that the mail is over
+		try {
+			// Say goodbye to the server
+			sayGoodBye();
+		}
+		catch(IOException e) {
+			showErrorDialog("Unable to close connection, mail may not have been sent.");
+		}
+	}
+	
+	
+	/**
+     * Overrident method to close connection to the mail server.
+	 */
+	protected void jobStopped() {
+        // Close the connection
+        closeConnection();
+	}
+	
+	
+    protected boolean processFile(AbstractFile file, Object recurseParams) {
+		if(isInterrupted())
+			return false;
+
+        // Send file attachment
+		try {
+			return sendAttachment(file);
+		}
+		catch(IOException e) {
+			showErrorDialog("Unable to send "+file.getName()+", mail not sent.");
+			return false;
+		}
+    }    
+
+	// This job does not modify anything
+	
+	protected int getRefreshPolicy() {
+		return DO_NOT_REFRESH;
+	}
+		
+	protected AbstractFile getBaseDestinationFolder() {
+		return null;
+	}	
 }

@@ -42,8 +42,7 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 		FileURL fileURL = new FileURL(url);
 //		AuthInfo prevAuthInfo = null;
 		
-		if(addAuthInfo)
-			AuthManager.authenticate(fileURL);
+		AuthManager.authenticate(fileURL, addAuthInfo);
 //			prevAuthInfo = AuthManager.authenticate(fileURL);
 		
 		// Unlike java.io.File, SmbFile throws an SmbException
@@ -249,24 +248,26 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	}
 		
 	public boolean moveTo(AbstractFile dest) throws IOException  {
-		if (dest instanceof SMBFile) 
-			try{
-				file.renameTo(new SmbFile(dest.getAbsolutePath()));
-				return true;
-			}
-			catch(SmbException e) {
-				return false;
-			}
+		if (dest instanceof SMBFile) {
+			SMBFile destSMBFile = (SMBFile)dest;
+			if(destSMBFile.fileURL.getHost().equals(this.fileURL.getHost())) 
+				try{
+//if(com.mucommander.Debug.ON) System.out.print("SMBFile.moveTo "+getAbsolutePath()+" to "+destSMBFile.getAbsolutePath());
+					file.renameTo(destSMBFile.file);
+//if(com.mucommander.Debug.ON) System.out.print("SMBFile.moveTo TRUE");
+					return true;
+				}
+				catch(SmbException e) {
+//if(com.mucommander.Debug.ON) System.out.print("SMBFile.moveTo FALSE");
+					return false;
+				}
+		}
+		
 		return false;
 	}
 
 	public void delete() throws IOException {
-//		try{
-			file.delete();
-//		}
-//		catch(SmbException e) {
-//			throw new IOException();
-//		}
+		file.delete();
 	}
 
 	
@@ -280,10 +281,15 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 			// Create SMBFile by recycling SmbFile instance and sharing parent instance
 			// among children
 			AbstractFile children[] = new AbstractFile[smbFiles.length];
-			for(int i=0; i<smbFiles.length; i++)
-//				children[i] = new SMBFile(smbFiles[i], this);
-				children[i] = AbstractFile.getAbstractFile(smbFiles[i].getCanonicalPath(), this);
-	
+			AbstractFile child;
+			for(int i=0; i<smbFiles.length; i++) {
+				child = AbstractFile.wrapArchive(new SMBFile(smbFiles[i].getCanonicalPath(), false));
+				child.setParent(this);
+				children[i] = child;
+				
+//				children[i] = AbstractFile.getAbstractFile(smbFiles[i].getCanonicalPath(), this);
+			}
+			
 			return children;
 		}
 		catch(SmbAuthException e) {

@@ -313,7 +313,7 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 					break;
 				}
 			if (fileIndex==-1 || tableModel2.getFile(fileIndex).getDate()<tempFile.getDate()) {
-				table1.setFileMarked(tempFile, true);
+				tableModel1.setFileMarked(tempFile, true);
 				table1.repaint();
 			}
 		}
@@ -333,7 +333,7 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 					break;
 				}
 			if (fileIndex==-1 || tableModel1.getFile(fileIndex).getDate()<tempFile.getDate()) {
-				table2.setFileMarked(tempFile, true);
+				tableModel2.setFileMarked(tempFile, true);
 				table2.repaint();
 			}
 		}
@@ -396,14 +396,12 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 		// destPath points to an absolute and existing folder
 		if ((destFolder=AbstractFile.getAbstractFile(destPath))!=null 
 		 && destFolder.exists()
-//		 && destFolder.isFolder() && !(destFolder instanceof ArchiveFile)) {
 		 && destFolder.isDirectory()) {
 		}
 
 		// destPath points to an existing folder relative to current folder
 		else if ((destFolder=AbstractFile.getAbstractFile(currentPath+destPath))!=null
 		 && destFolder.exists()
-//		 && destFolder.isFolder() && !(destFolder instanceof ArchiveFile)) {
 		 && destFolder.isDirectory()) {
 		}
 
@@ -599,8 +597,8 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
      */
     public void focusGained(FocusEvent e) {
 		// Resets shift mode to false, since keyReleased events may have been lost
-//		if(commandBar!=null)
-		commandBar.setShiftMode(false);
+		if(commandBar!=null)
+			commandBar.setShiftMode(false);
         this.lastActiveTable = e.getSource()==table1?table1:table2;
     }
     

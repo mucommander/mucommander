@@ -28,6 +28,7 @@ public class DeleteJob extends FileJob {
 	/** Title used for error dialogs */
 	private String errorDialogTitle;
 
+	private AbstractFile baseFolder;
 	private String baseFolderPath;	
 	
 	private final static int DELETE_LINK_ACTION = 0;
@@ -51,7 +52,8 @@ public class DeleteJob extends FileJob {
     public DeleteJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files) {
 		super(progressDialog, mainFrame, files);
 
-		this.baseFolderPath = ((AbstractFile)files.elementAt(0)).getParent().getAbsolutePath();
+		this.baseFolder = ((AbstractFile)files.elementAt(0)).getParent();
+		this.baseFolderPath = baseFolder.getAbsolutePath();
 		this.errorDialogTitle = Translator.get("delete_dialog.error_title");
 	}
 
@@ -171,5 +173,15 @@ public class DeleteJob extends FileJob {
     public String getStatusString() {
         return Translator.get("delete.deleting_file", getCurrentFileInfo());
     }
+
+	// This job modifies baseFolder
+	
+	protected int getRefreshPolicy() {
+		return REFRESH_DESTINATION_FOLDER;
+	}
+		
+	protected AbstractFile getBaseDestinationFolder() {
+		return baseFolder;
+	}
 
 }	

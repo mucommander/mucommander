@@ -134,8 +134,7 @@ public abstract class ExtendedFileJob extends FileJob {
 		// Copy file to destination
 		do {				// Loop for retry
 			try {
-				copyFile(sourceFile, destFile, append);
-				return true;
+				return copyFile(sourceFile, destFile, append);
 			}
 			catch(FileJobException e) {
 				// Copy failed

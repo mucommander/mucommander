@@ -27,6 +27,9 @@ public class AuthManager {
 	 * instance mapped on the same path.
 	 */
 	public static void put(String path, AuthInfo authInfo) {
+		// Remove trailing separator
+		if((path.endsWith("/") && !path.equals("/")) || (path.endsWith("\\") && !path.equals("\\")))
+			path = path.substring(0, path.length());
 		entries.put(path, authInfo);
 if(com.mucommander.Debug.ON) System.out.println("AuthManager.put "+path+" "+"authInfo="+authInfo+", entries = "+entries);
 	}
@@ -51,7 +54,7 @@ if(com.mucommander.Debug.ON) System.out.println("AuthManager.get, entries = "+en
 		int len;
 		while (keys.hasMoreElements()) {
 			key = (String)keys.nextElement();
-			if (path.startsWith(key)) {
+			if (path.toLowerCase().startsWith(key.toLowerCase())) {
 				len = key.length();
 				if (len>max) {
 					max = len;
@@ -95,18 +98,19 @@ if(com.mucommander.Debug.ON) System.out.println("AuthManager.get, entries = "+en
 	 *  - if it doesn't, looks for an existing AuthInfo mapping ({@link #get(String) get})
      * and if one was found, add the login and password info to the FileURL<br>
 	 *
-//	 * @return the previous AuthInfo instance if the supplied FileURL contains login/password info, the
-//	 * current AuthInfo for this URL otherwise. Returned instance may be <code>null</code>
+	 * @param fileURL the file URL to add or retrieve from login and password.
+	 * @param addAuthInfo if true, the auth info contained in the FileURL will be added and mapped to the URL.
+	 *
 	 */
-//	public static AuthInfo authenticate(FileURL fileURL) {
-	public static void authenticate(FileURL fileURL) {
+	public static void authenticate(FileURL fileURL, boolean addAuthInfo) {
 		// Retrieve login/password from URL (if any)
 		AuthInfo urlAuthInfo = AuthInfo.getAuthInfo(fileURL);
 		
 		// if the URL specifies a login and password (typed in by the user)
 		// add it to AuthManager and use it
 		if (urlAuthInfo!=null) {
-			put(fileURL.getURL(false), urlAuthInfo);
+			if(addAuthInfo)
+				put(fileURL.getURL(false), urlAuthInfo);
 		}
 		// if not, check if AuthManager has a login/password matching this url
 		else {
@@ -117,6 +121,5 @@ if(com.mucommander.Debug.ON) System.out.println("AuthManager.get, entries = "+en
 				fileURL.setPassword(authInfo.getPassword());
 			}
 		}
-//		return authInfo;
 	}
 }

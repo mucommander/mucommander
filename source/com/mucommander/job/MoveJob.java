@@ -55,6 +55,22 @@ public class MoveJob extends ExtendedFileJob {
 	}
 
 	
+	/**
+	 * Tries to move the file with AbstractFile.moveTo() 
+	 * skipping the whole manual recursive process
+	 */
+	private boolean fileMove(AbstractFile file, AbstractFile destFile) {
+		try {
+			if(file.moveTo(destFile))
+				return true;		// return true in case of success
+		} catch(IOException e) { 
+			if(com.mucommander.Debug.ON) e.printStackTrace();
+		}
+		
+		return false;
+	}
+
+	
 	/////////////////////////////////////
 	// Abstract methods Implementation //
 	/////////////////////////////////////
@@ -133,6 +149,7 @@ public class MoveJob extends ExtendedFileJob {
 						// Cancel, skip or close dialog returns false
 						return false;
 					}
+					break;
 				} while(true);
 			}
 			
@@ -237,7 +254,7 @@ public class MoveJob extends ExtendedFileJob {
 
 			// if moveTo() returned false it wasn't possible to this method because of 'append',
 			// try the hard way by copying the file first, and then deleting the source file
-			if(tryCopyFile(file, destFile, append, errorDialogTitle)) {
+			if(tryCopyFile(file, destFile, append, errorDialogTitle) && !isInterrupted()) {
 				// Delete the source file
 				do {		// Loop for retry
 					try  {
@@ -263,21 +280,18 @@ public class MoveJob extends ExtendedFileJob {
 	}
 
 	
-	/**
-	 * Tries to move the file with AbstractFile.moveTo() 
-	 * skipping the whole manual recursive process
-	 */
-	private boolean fileMove(AbstractFile file, AbstractFile destFile) {
-		try {
-			if(file.moveTo(destFile))
-				return true;		// return true in case of success
-		} catch(IOException e) { if(com.mucommander.Debug.ON) e.printStackTrace();}
-		
-		return false;
-	}
-
-	
     public String getStatusString() {
         return Translator.get("move.moving_file", getCurrentFileInfo());
     }
+
+
+	// This job modifies baseDestFolder and its subfolders
+	
+	protected int getRefreshPolicy() {
+		return REFRESH_DESTINATION_SUBFOLDERS;
+	}
+		
+	protected AbstractFile getBaseDestinationFolder() {
+		return baseDestFolder;
+	}
 }

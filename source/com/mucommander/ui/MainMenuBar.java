@@ -263,10 +263,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		}
 		// Mark menu
 		else if (source == markGroupItem) {
-			mainFrame.getLastActiveTable().markGroup();	
+			mainFrame.showSelectionDialog(true);	
 		}
 		else if (source == unmarkGroupItem) {
-			mainFrame.getLastActiveTable().unmarkGroup();	
+			mainFrame.showSelectionDialog(false);	
 		}
 		else if (source == markAllItem) {
 			mainFrame.getLastActiveTable().markAll();	

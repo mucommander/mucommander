@@ -7,6 +7,7 @@ import com.mucommander.ui.comp.dialog.QuestionDialog;
 // import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
 
 import com.mucommander.text.Translator;
 import com.mucommander.text.SizeFormatter;
@@ -95,7 +96,15 @@ public abstract class FileJob implements Runnable {
 	protected final static String CANCEL_TEXT = Translator.get("cancel");
 	protected final static String APPEND_TEXT = Translator.get("append");
 	
+	// getRefreshPolicy() return values
+	/** This job is 'read-only' and does not modify the folder's content */
+	protected final static int DO_NOT_REFRESH = 0;
+	/** This job only modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()} */
+	protected final static int REFRESH_DESTINATION_FOLDER = 1;
+	/** This job modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()} and its subfolders */
+	protected final static int REFRESH_DESTINATION_SUBFOLDERS = 2;
 
+	
     /**
 	 * Creates a new FileJob without starting it.
 	 *
@@ -147,7 +156,7 @@ public abstract class FileJob implements Runnable {
         // Serves to differenciate between the 'stopped' and 'not started yet' states
         hasStarted = true;
 		startTime = System.currentTimeMillis();
-        jobThread = new Thread(this);
+        jobThread = new Thread(this, "com.mucommander.job.FileJob's Thread");
         jobThread.start();
     }
 
@@ -172,10 +181,11 @@ public abstract class FileJob implements Runnable {
 	 * Asks to stop file job's thread.
 	 */	
 	public void stop() {
+		// Return if job has already been stopped
+		if(jobThread==null)
+			return;
+
 		jobThread = null;
-		// Resume auto-refresh if auto-refresh has been paused
-		mainFrame.getFolderPanel1().getFileTable().setAutoRefreshActive(true);
-		mainFrame.getFolderPanel2().getFileTable().setAutoRefreshActive(true);
 	
 		// Notify that the job has been stopped
 		jobStopped();
@@ -283,6 +293,7 @@ public abstract class FileJob implements Runnable {
 	 */
     public void run() {
 		FileTable activeTable = mainFrame.getLastActiveTable();
+		FileTableModel activeTableModel = (FileTableModel)activeTable.getModel();
 		AbstractFile currentFile;
 
 		// Notifies that this job starts
@@ -300,23 +311,24 @@ public abstract class FileJob implements Runnable {
 			
 			// Unmark file in active table
 			if(autoUnmark && success && !isInterrupted()) {
-				activeTable.setFileMarked(currentFile, false);
+				activeTableModel.setFileMarked(currentFile, false);
 				activeTable.repaint();
+			}
+
+			if(i==nbFiles-1) {
+				// Notifies that job has been completed (all files have been processed).
+				jobCompleted();
 			}
         }
 
-		// Notifies that job has been completed (all files have been processed).
-		jobCompleted();
-		
 		// If this job hasn't already been stopped, call stop()
 		if(!isInterrupted()) {
 			// Stop job
 			stop();
 		}
 		
-//        // Refresh tables only if folder is destFolder
-//		refreshTableIfFolderEquals(mainFrame.getFolderPanel1().getFileTable(), baseDestFolder);
-//        refreshTableIfFolderEquals(mainFrame.getFolderPanel2().getFileTable(), baseDestFolder);
+        // Refresh tables only if displayed folder are 'under' or equal destFolder
+		refreshTables();
 
 		// Clean 
 		cleanUp();
@@ -415,21 +427,36 @@ public abstract class FileJob implements Runnable {
 
 
 	/**
-	 * Refreshes the folder's content of the given file table.
+	 * Check and if needed, refreshes both file tables's current folders, based on the job's refresh policy.
 	 */
-//	protected void refreshTable(FileTable table) {
-//		table.refresh();
-//	}
-	
+	protected void refreshTables() {
+		int refreshPolicy = getRefreshPolicy();
 
-	/**
-	 * Refreshes the folder's content of the given file table only
-	 * if the table's current folder equals the specified folder.
-	 */
-//	protected void refreshTableIfFolderEquals(FileTable table, AbstractFile folder) {
-//		if (table.getCurrentFolder().equals(folder))
-//			refreshTable(table);
-//	}
+		if(refreshPolicy == DO_NOT_REFRESH)
+			return;
+		
+		AbstractFile baseDestFolder = getBaseDestinationFolder();
+		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
+		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
+		AbstractFile currentTableFolder;
+		for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
+			currentTableFolder = table.getCurrentFolder();
+			if((refreshPolicy==REFRESH_DESTINATION_FOLDER && baseDestFolder.equals(currentTableFolder))
+			 || (refreshPolicy==REFRESH_DESTINATION_SUBFOLDERS && baseDestFolder.isParent(currentTableFolder))) {
+			
+				try {
+					table.refresh();
+				}
+				catch(IOException e) {
+					// Refreshed failed, folder will be left as it was before
+				}
+			}
+		}
+
+		// Resume auto-refresh if auto-refresh has been paused
+		table1.setAutoRefreshActive(true);
+		table2.setAutoRefreshActive(true);
+	}
 	
 
 	////////////////////////////////////////////
@@ -487,6 +514,26 @@ public abstract class FileJob implements Runnable {
 	// Abstract methods //
 	//////////////////////
 
+	
+	/**
+	 * This method should return the job's refresh policy :
+	 * <ul>
+	 *  <li>- {@link #DO_NOT_REFRESH DO_NOT_REFRESH} : this job is 'read-only' and does not modify the folder's content</li>
+	 *  <li>- {@link #REFRESH_DESTINATION_FOLDER REFRESH_DESTINATION_FOLDER}: this job only modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()}</li>
+	 *  <li>- {@link #REFRESH_DESTINATION_SUBFOLDERS REFRESH_DESTINATION_SUBFOLDERS}: this job modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()}
+	 *  and its subfolders</li>
+	 * </ul>
+	 */
+	protected abstract int getRefreshPolicy();
+	
+	
+	/**
+	 * This method should return the base destination folder which this FileJob potentially modifies, <code>null</code> if
+	 * this FileJob is 'read-only' and does not modify any files.
+	 */
+	protected abstract AbstractFile getBaseDestinationFolder();
+	
+	
 	/**
 	 * Automatically called by {@link #run() run()} for each file that needs to be processed.
 	 *
