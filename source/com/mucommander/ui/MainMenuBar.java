@@ -133,7 +133,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
 		goBackItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_back"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK), this);
 		goForwardItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_forward"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK), this);
-		goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
+//		goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
+		goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, null, this);
 		viewMenu.add(new JSeparator());
 		sortByNameItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_name"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK), this);
 		sortByDateItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_date"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.CTRL_MASK), this);
@@ -321,17 +322,17 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == showToolbarItem) {
 			boolean toolbarVisible = !mainFrame.isToolbarVisible(); 
 			mainFrame.setToolbarVisible(toolbarVisible);
-			ConfigurationManager.setVariable("prefs.show_toolbar_on_startup", ""+toolbarVisible);		
+			ConfigurationManager.setVariable("prefs.show_toolbar", ""+toolbarVisible);		
 		}
 		else if (source == showCommandBarItem) {
 			boolean commandBarVisible = !mainFrame.isCommandBarVisible();
 			mainFrame.setCommandBarVisible(commandBarVisible);
-			ConfigurationManager.setVariable("prefs.show_command_bar_on_startup", ""+commandBarVisible);		
+			ConfigurationManager.setVariable("prefs.show_command_bar", ""+commandBarVisible);		
 		}
 		else if (source == showStatusBarItem) {
 			boolean statusBarVisible = !mainFrame.isStatusBarVisible();
 			mainFrame.setStatusBarVisible(statusBarVisible);
-			ConfigurationManager.setVariable("prefs.show_status_bar_on_startup", ""+statusBarVisible);		
+			ConfigurationManager.setVariable("prefs.show_status_bar", ""+statusBarVisible);		
 		}
 		// Help menu
 		else if (source == keysItem) {

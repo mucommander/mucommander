@@ -141,6 +141,10 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		return null;
 	}
 	
+//  Not needed, default insets seem to be null
+//	public Insets getInsets() {
+//		return new Insets(0, 0, 0, 0);
+//	}
 
     public FileTable getFileTable() {
         return fileTable;

@@ -58,6 +58,9 @@
     <!-- Create dist subfolder where the JAR file will be put -->
     <mkdir dir="${dist}"/>
     
+	<!-- Delete any existing JAR file -->
+	<delete file="${dist}/mucommander_unobf.jar"/>
+
     <!-- Put everything in ${classes} into the ${dist}/mucommander_unobf.jar file -->
     <jar jarfile="${dist}/mucommander_unobf.jar" basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
 
@@ -77,7 +80,7 @@
         classpath="yguard.jar"/>
     <obfuscate mainclass="com.mucommander.Launcher" logfile="${dist}/yguard_log.xml" conservemanifest="true">
 	    <property name="naming-scheme" value="small"/>
-		<inoutpair in="${dist}/mucommander.jar" out="${dist}/mucommander.jar"/>
+		<inoutpair in="${dist}/mucommander_unobf.jar" out="${dist}/mucommander.jar"/>
 		<!-- Needed for jCIFS -->
 		<expose>
 			<class name="jcifs.Config"/>
@@ -86,9 +89,9 @@
 	</obfuscate>
   </target>
 
-  <!-- Obfuscate code using ProGuard to app the app leaner -->
+  <!-- Obfuscate code using ProGuard to make the app smaller and faster -->
   <target name="proguard">
-	<!-- Delete any existing obfuscated jar file -->
+	<!-- Delete any existing obfuscated JAR file -->
 	<delete file="${dist}/mucommander.jar"/>
 	<!-- Imports ProGuard obfuscator ant task -->
 	<taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="proguard.jar"/>

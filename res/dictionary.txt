@@ -1166,8 +1166,8 @@ prefs_dialog.custom_folder:FR:Dossier spécifique
 prefs_dialog.show_hidden_files:EN:Show Hidden files
 prefs_dialog.show_hidden_files:FR:Afficher les fichiers cachés
 
-prefs_dialog.compact_file_size:EN:Display compact file sizes
-prefs_dialog.compact_file_size:FR:Afficher les tailles de fichiers de façon compacte
+prefs_dialog.compact_file_size:EN:Round displayed file sizes
+prefs_dialog.compact_file_size:FR:Arrondir les tailles de fichiers affichées
 
 # Appearance tab
 

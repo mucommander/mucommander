@@ -67,8 +67,14 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// Enable window resize
 		setResizable(true);
 
-		YBoxPanel contentPane = new YBoxPanel();
-		contentPane.setInsets(new Insets(3, 4, 3, 4));
+//		YBoxPanel contentPane = new YBoxPanel();
+//		contentPane.setInsets(new Insets(3, 4, 3, 4));
+		JPanel contentPane = new JPanel(new BorderLayout()) {
+			// Add a x=8,y=6 gap around content pane
+			public Insets getInsets() {
+				return new Insets(3, 4, 3, 4);
+			}
+		};
 		setContentPane(contentPane);
 
 		// Start by creating folder panels as they are used
@@ -86,8 +92,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 
 		// Create toolbar and show it only if it hasn't been disabled in the preferences
 		this.toolbar = new ToolBar(this);
-		this.toolbar.setVisible(ConfigurationManager.getVariable("prefs.show_toolbar_on_startup", "true").equals("true"));
-		contentPane.add(toolbar);
+		this.toolbar.setVisible(ConfigurationManager.getVariable("prefs.show_toolbar", "true").equals("true"));
+//		contentPane.add(toolbar);
+		contentPane.add(toolbar, BorderLayout.NORTH);
 
 		folderPanel1.addLocationListener(toolbar);
 		folderPanel2.addLocationListener(toolbar);
@@ -104,6 +111,11 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 			public javax.swing.border.Border getBorder() {
 				return null;
 			}
+
+			// We don't want any extra space around split pane
+			public Insets getInsets() {
+				return new Insets(0, 0, 0, 0);
+			}
 		};
 			
 		splitPane.setOneTouchExpandable(true);
@@ -111,20 +123,32 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// Cool but way too slow
 //		splitPane.setContinuousLayout(true);
 
-		contentPane.add(splitPane);
+//		contentPane.add(splitPane);
+		// Split pane will be given any extra space
+		contentPane.add(splitPane, BorderLayout.CENTER);
 
+		YBoxPanel southPanel = new YBoxPanel();
+		// Add a 3-pixel gap between table and status/command bar
+		southPanel.setInsets(new Insets(3, 0, 0, 0));
+	
 		// Create and add status bar
 		statusBarLabel = new JLabel("");
-		if(ConfigurationManager.getVariable("prefs.show_status_bar_on_startup", "true").equals("false"))
+		if(ConfigurationManager.getVariable("prefs.show_status_bar", "true").equals("false"))
 			statusBarLabel.setVisible(false);
-		contentPane.add(statusBarLabel);
+//		contentPane.add(statusBarLabel);
+		southPanel.add(statusBarLabel);
 
 		// Show command bar only if it hasn't been disabled in the preferences
 		this.commandBar = new CommandBarPanel(this);
-		if(ConfigurationManager.getVariable("prefs.show_command_bar_on_startup", "true").equals("false"))
+		if(ConfigurationManager.getVariable("prefs.show_command_bar", "true").equals("false"))
 			commandBar.setVisible(false);
-		contentPane.add(commandBar);
-				
+//		contentPane.add(commandBar);
+		southPanel.add(commandBar);
+		
+		contentPane.add(southPanel, BorderLayout.SOUTH);
+		
+//contentPane.addGlue();
+								
 		// To monitor resizing actions
 		folderPanel1.addComponentListener(this);
 		splitPane.addComponentListener(this);
