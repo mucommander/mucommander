@@ -7,6 +7,8 @@ import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.FileExistsDialog;
 
+import com.mucommander.text.Translator;
+
 import com.mucommander.file.AbstractFile;
 
 
@@ -21,17 +23,14 @@ import com.mucommander.file.AbstractFile;
  */
 public abstract class FileJob implements Runnable {
 
+	/** Thread in which the file job is performed */
+	private Thread jobThread;
+
 	/** Serves to differenciate between the 'stopped' and 'not started yet' states */
 	private boolean hasStarted;
 	
-	/** Associated dialog showing job progression */
-	protected ProgressDialog progressDialog;
-
-	/** Main frame on which the job is to be performed */ 
-	protected MainFrame mainFrame;
-	
-	/** Thread in which the file job is performed */
-	private Thread jobThread;
+	/** Is this job paused ? */
+	private boolean isPaused;
 
 	/** Timestamp in milliseconds when job started */
 	private long startTime;
@@ -41,15 +40,33 @@ public abstract class FileJob implements Runnable {
 	 */
 	private long pausedTime;
 
-	/** Is this job paused ? */
-	private boolean isPaused;
-	
 	/** Contains the timestamp when this job has been put in pause (if in pause) */
 	private long pauseStartTime;
-	
-	/** Size that should be allocated to read buffers */
-	public final static int READ_BLOCK_SIZE = 8192;
 
+
+	/** Associated dialog showing job progression */
+	protected ProgressDialog progressDialog;
+
+	/** Main frame on which the job is to be performed */ 
+	protected MainFrame mainFrame;
+	
+	
+    /** Number of bytes processed so far, see {@link #getTotalBytesProcessed() getTotalBytesProcessed} */
+    protected long nbBytesProcessed;
+
+    /** Number of bytes skipped so far, see {@link #getTotalBytesSkipped() getTotalBytesSkipped} */
+    protected long nbBytesSkipped;
+
+	/** Index of file currently being processed, see {@link #getCurrentFileIndex() getCurrentFileIndex} */
+	protected int currentFileIndex = -1;
+
+
+	protected final static int CANCEL_ACTION = 0;
+	protected final static int SKIP_ACTION = 1;
+
+	protected final static String CANCEL_TEXT = Translator.get("cancel");
+	protected final static String SKIP_TEXT = Translator.get("skip");
+	
 	
 	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame) {
 		this.progressDialog = progressDialog;
@@ -95,7 +112,7 @@ public abstract class FileJob implements Runnable {
 	}
 
 
-// No needed anymore, now ProgressDialog starts the job once it has been activated
+// Not needed anymore, now ProgressDialog starts the job once it has been activated
     /**
 	 * Waits for ProgressDialog to be activated (visible with keyboard focus)
      * This is very important because we want ProgressDialog to be activated BEFORE 
@@ -165,6 +182,23 @@ public abstract class FileJob implements Runnable {
 		this.isPaused = paused;
 	}
 
+
+	/**
+	 * Displays an error dialog with the specified title and message,
+	 * wait for user choice and returns the result.
+	 */
+    protected int showErrorDialog(String title, String message) {
+		QuestionDialog dialog = new QuestionDialog(progressDialog, 
+			title,
+			message,
+			mainFrame,
+			new String[] {SKIP_TEXT, CANCEL_TEXT},
+			new int[]  {SKIP_ACTION, CANCEL_ACTION},
+			0);
+
+		return waitForUserResponse(dialog);
+    }
+
 	
 	/**
 	 * Waits for the user's answer to the given question dialog, putting this
@@ -204,6 +238,39 @@ public abstract class FileJob implements Runnable {
 		QuestionDialog dialog = new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
 		return waitForUserResponse(dialog);
 	}
+
+
+    /**
+     * Returns the number of bytes that have been processed by this job so far.
+     */
+    public long getTotalBytesProcessed() {
+		return nbBytesProcessed;
+	}
+
+    /**
+	 * Returns the number of bytes reported by {@link #getTotalBytesProcessed() getTotalBytesProcessed}
+	 * which have been skipped, for example when resuming a file transfer. This information must be
+	 * taken into account when calculating transfer speed.
+     */
+    public long getTotalBytesSkipped() {
+		return nbBytesSkipped;
+	}
+	
+	
+    /**
+	* Returns the index of the file currently being processed (has to be < {@link #getNbFiles() getNbFiles}).
+     */
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
+    }
+
+	/**
+	 * Advances file index. This method should be called by subclasses whenever the job
+	 * starts processing a new file.
+	 */
+	protected void nextFile() {
+		currentFileIndex++;
+	}
 	
 
 	/**
@@ -215,22 +282,5 @@ public abstract class FileJob implements Runnable {
      * Returns the number of file that this job contains.
      */
     public abstract int getNbFiles();
-
-    /**
-     * Returns the index of the file currently being processed (has to be < getNbFile()).
-     */
-    public abstract int getCurrentFileIndex();
-
-    /**
-     * Returns the number of bytes that have been processed by this job so far.
-     */
-    public abstract long getTotalBytesProcessed();
-
-    /**
-	 * Returns the number of bytes reported by {@link #getTotalBytesProcessed() getTotalBytesProcessed}
-	 * which have been skipped, for example when resuming a file transfer. This information must be
-	 * taken into account when calculating transfer speed.
-     */
-    public abstract long getTotalBytesSkipped();
-
+	
 }
