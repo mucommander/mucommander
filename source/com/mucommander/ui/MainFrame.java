@@ -105,7 +105,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 
         folderPanel1.addLocationListener(menuBar);
         folderPanel2.addLocationListener(menuBar);
-		
+
 		// Enables folderPanel window resizing
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
 			public javax.swing.border.Border getBorder() {
@@ -444,22 +444,22 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 	 * Returns whether or not this MainFrame is active, i.e. if this window is in the foreground.
 	 */
 	public boolean isActive() {
-//		return isActive;
 		return isVisible() && hasFocus();
 	}
 
 
 	/**
-	 * Override this method to request focus on the last active table.
+	 * Overrides JComponent's requestFocus() method to request focus on the last active FolderPanel.
 	 */
 	public void requestFocus() {
+		// If visible, call requestFocus() directly on the component
 		if(isVisible())
-			lastActiveTable.requestFocus();
+			lastActiveTable.getFolderPanel().requestFocus();
+		// If not, call requestFocus() later when the component is visible
 		else
-			FocusRequester.requestFocus(lastActiveTable);
+			FocusRequester.requestFocus(lastActiveTable.getFolderPanel());
 	}
 
-	
 	/*****************************
 	 * ComponentListener methods *
 	 *****************************/

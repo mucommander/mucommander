@@ -47,7 +47,6 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		
 		// For Mac OS X whose minimum width for buttons is enormous
 		setMinimumSize(new Dimension(40, (int)getPreferredSize().getHeight()));
-//		setMargin(new Insets(6,8,6,8));
 		
 		addActionListener(this);
 		popupMenu = new JPopupMenu();

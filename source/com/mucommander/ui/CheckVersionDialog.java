@@ -113,9 +113,8 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
         setTitle(title);
         
 		// Text message
-		YBoxPanel mainPanel = new YBoxPanel();
-        JLabel label = new JLabel(text);
-        mainPanel.add(label);
+		YBoxPanel mainPanel = new YBoxPanel(5);
+        mainPanel.add(new JLabel(text));
 		mainPanel.addSpace(10);
 		contentPane.add(mainPanel, BorderLayout.CENTER);
 
@@ -133,8 +132,8 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
 		// Selects OK when enter is pressed
-		getRootPane().setDefaultButton(okButton);
-		FocusRequester.requestFocus(okButton);
+		getRootPane().setDefaultButton(downloadButton);
+//		FocusRequester.requestFocus(downloadButton);
 		
 		// Packs dialog
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);

@@ -47,7 +47,9 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		this.mainFrame = mainFrame;
 
 		AbstractFile firstFile = (AbstractFile)files.elementAt(0);
-		setTitle((title=files.size()==1?Translator.get("properties_dialog.file_properties", firstFile.getName()):Translator.get("properties_dialog.properties")));
+		this.title = files.size()==1?Translator.get("properties_dialog.file_properties", firstFile.getName()):Translator.get("properties_dialog.properties");
+		setTitle(title+" ("+Translator.get("properties_dialog.calculating")+")");
+		
 		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
 		this.job = new PropertiesJob(files, mainFrame);
@@ -130,6 +132,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	
 
 	public void run() {
+		
 		while(repaintThread!=null && !job.hasFinished()) {
 			updateLabels();
 			

@@ -20,7 +20,7 @@
 # General #
 ###########
 
-# Entries that are used by several other categories. 
+# Entries which are used by several other categories or are too generic to fit under any other categories
 
 ok:EN:OK
 ok:FR:OK
@@ -99,7 +99,6 @@ browse:FR:Explorer
 
 ask:EN:Ask
 ask:FR:Demander
-
 
 #############
 # Languages #
@@ -393,6 +392,23 @@ version_dialog.not_available:FR:L'information de version n'a pas pu être récup
 
 version_dialog.download:EN:Download
 version_dialog.download:FR:Télécharger
+
+
+###############
+# Quit dialog #
+###############
+
+quit_dialog.title:EN:Quit muCommander
+quit_dialog.title:FR:Quitter muCommander
+
+quit_dialog.desc:EN:Close all windows and quit muCommander ? 
+quit_dialog.desc:FR:Fermer toutes les fenêtres et quitter muCommander ?
+
+quit_dialog.show_next_time:EN:Show next time
+quit_dialog.show_next_time:FR:Afficher la prochaine fois
+
+quit_dialog.quit:EN:Quit
+quit_dialog.quit:FR:Quitter
 
 
 ######################
@@ -697,6 +713,9 @@ properties_dialog.nb_files:FR:%1 fichier(s)
 
 properties_dialog.nb_folders:EN:%1 folder(s)
 properties_dialog.nb_folders:FR:%1 dossier(s)
+
+properties_dialog.calculating:EN:calculating...
+properties_dialog.calculating:FR:calcul en cours...
 
 
 ##############
@@ -1116,13 +1135,16 @@ prefs_dialog.mail_address:FR:Votre adresse email
 prefs_dialog.mail_server:EN:SMTP server
 prefs_dialog.mail_server:FR:Serveur SMTP
 
-# Misc tab
+# Misc tab (Mac OS X only)
 
 prefs_dialog.misc_tab:EN:Misc
 prefs_dialog.misc_tab:FR:Autres
 
 prefs_dialog.use_brushed_metal:EN:Use 'brushed metal' look (Experimental + requires restart)
 prefs_dialog.use_brushed_metal:FR:Utiliser le look 'brushed metal' (Expérimental + après redémarrage)
+
+prefs_dialog.confirm_on_quit:EN:Show confirmation dialog on quit
+prefs_dialog.confirm_on_quit:FR:Afficher un dialogue de confirmation en quittant
 
 
 #########

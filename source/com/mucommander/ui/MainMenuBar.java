@@ -38,7 +38,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
     private JMenuItem propertiesItem;
 	private JMenuItem preferencesItem;
 	private JMenuItem checkForUpdatesItem;
-	private JMenuItem quitItem;
+	private JMenuItem closeItem;
 
 	// Mark menu
 	private JMenu markMenu;
@@ -107,7 +107,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		checkForUpdatesItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.check_for_updates"), menuItemMnemonicHelper, null, this);
 		
 		fileMenu.add(new JSeparator());
-		quitItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.close_window"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0), this);
+		closeItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.close_window"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0), this);
 		
 		add(fileMenu);
 	
@@ -258,7 +258,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == checkForUpdatesItem) {
 			new CheckVersionDialog(mainFrame, true);
 		}
-		else if (source == quitItem) {
+		else if (source == closeItem) {
 			WindowManager.getInstance().disposeMainFrame(mainFrame);
 		}
 		// Mark menu

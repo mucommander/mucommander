@@ -98,7 +98,7 @@ public class PropertiesJob extends FileJob {
 	 * Returns "Calculating" or "Complete".
 	 */
 	public String getStatusString() {
-		return hasFinished()?"Complete":"Calculating";
+		return hasFinished()?"done":"calculating";
 	}
 
 	// This job does not modify anything

@@ -4,6 +4,7 @@ package com.mucommander.ui.macosx;
 import com.mucommander.Launcher;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.QuitDialog;
 import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.about.AboutDialog;
 
@@ -74,7 +75,10 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 				mainFrame.showPreferencesDialog();
 				break;
 			case QUIT_ACTION:
-				System.exit(0);
+				if(ConfigurationManager.getVariable("prefs.quit_confirmation", "true").equals("true"))
+					new QuitDialog(mainFrame).showDialog();
+				else
+					System.exit(0);
 				break;
 		}
 	}

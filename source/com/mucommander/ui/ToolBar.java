@@ -103,21 +103,33 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 
 	
 	/**
-	 * Loads all the icons used by the toolbar buttons and add then to the buttons.
+	 * Loads all the icons used by the toolbar buttons.
 	 */
 	private void loadIcons() {
 		int nbIcons = BUTTONS_DESC.length;
 		icons = new ImageIcon[nbIcons][2];
 		
 		for(int i=0; i<nbIcons; i++) {
-			// Load and set 'enabled' icon
+			// Load 'enabled' icon
 			icons[i][0] = new ImageIcon(getClass().getResource(BUTTONS_DESC[i][1]));
-			buttons[i].setIcon(icons[i][0]);
-			// Load and set 'disabled' icon
-			if(BUTTONS_DESC[i][2]!=null) {
+			// Load 'disabled' icon if available
+			if(BUTTONS_DESC[i][2]!=null)
 				icons[i][1] = new ImageIcon(getClass().getResource(BUTTONS_DESC[i][2]));
+		}
+	}
+	
+
+	/**
+	 * Sets icons to toolbar buttons.
+	 */
+	private void setIcons() {
+		int nbIcons = BUTTONS_DESC.length;
+		for(int i=0; i<nbIcons; i++) {
+			// Set 'enabled' icon
+			buttons[i].setIcon(icons[i][0]);
+			// Set 'disabled' icon if available
+			if(icons[i][1]!=null)
 				buttons[i].setDisabledIcon(icons[i][1]);
-			}
 		}
 	}
 	
@@ -125,18 +137,6 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	/**
 	 * Creates and return a new JButton and adds it to this toolbar.
 	 */
-/*
-	 private JButton addButton(ImageIcon enabledIcon, ImageIcon disabledIcon, String toolTipText) {
-		JButton button = new RolloverButton(
-			enabledIcon,
-			disabledIcon,
-			toolTipText);
-		
-		button.addActionListener(this);
-		add(button);
-		return button;
-	}
-*/	
 	 private JButton addButton(String toolTipText) {
 		JButton button = new RolloverButton(null, null, toolTipText);
 		button.addActionListener(this);
@@ -164,14 +164,16 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	public void setVisible(boolean visible) {
 		if(visible) {
 			if(!iconsLoaded) {
-				// Load icons
+				// Load icon images
 				loadIcons();
 				iconsLoaded = true;
 			}
+			// Set icons to buttons
+			setIcons();
 		}
 		else {
 			if(iconsLoaded) {
-				// Unload icons (set values to null)
+				// Unload icon images (set values to null)
 				int nbButtons = buttons.length;
 				for(int i=0; i<nbButtons; i++) {
 					icons[i][0] = null;

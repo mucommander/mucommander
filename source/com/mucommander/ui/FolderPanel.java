@@ -48,6 +48,8 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
     
 	private String lastFolderOnExit;
 
+	private Object lastFocusedComponent;
+	
 	private final static int CANCEL_ACTION = 0;
 	private final static int BROWSE_ACTION = 1;
 	private final static int COPY_ACTION = 2;
@@ -85,8 +87,11 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		locationPanel.add(locationField);
 
 		add(locationPanel, BorderLayout.NORTH);
+		
 		fileTable = new FileTable(mainFrame, this);
-
+		this.lastFocusedComponent = fileTable;
+		fileTable.addFocusListener(this);
+		
 		// Initialize history vector
 		history = new Vector();
     	historyIndex = -1;
@@ -170,6 +175,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	
 
 	private void _setCurrentFolder(AbstractFile folder, boolean addToHistory) throws IOException {
+		// Set 'wait' cursor
 		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
         if(com.mucommander.Debug.ON)
@@ -206,6 +212,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 			throw e;
 		}
 		finally {
+			// Restore cursor to default, no matter what happened before
 			mainFrame.setCursor(Cursor.getDefaultCursor());
 		}
 	}
@@ -416,6 +423,15 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	}
 
 	
+	/**
+	 * Overrides JComponent's requestFocus() method to request focus
+	 * on the last focused component inside this FolderPanel: on the file able or on the location field
+	 */
+	public void requestFocus() {
+		((JComponent)lastFocusedComponent).requestFocus();
+	}
+	
+	
 	////////////////////////////
 	// ActionListener methods //
 	////////////////////////////
@@ -430,10 +446,9 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 
 			boolean browse = false;
 			if(file==null || !file.exists()) {
-				// Restore current folder's path
-				locationField.setText(currentFolder.getAbsolutePath(true));
+				// Keep the text input by the user (do not restore current path)
 				locationFieldTextSet = true;
-				showFolderAccessError(null);
+				JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			else if(file.isDirectory()) {
@@ -505,12 +520,18 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	///////////////////////////
 	
 	public void focusGained(FocusEvent e) {
-		locationFieldTextSet = false;
+		Object source = e.getSource();
+		this.lastFocusedComponent = source;
+		
+		if(source==locationField)
+			locationFieldTextSet = false;
 	}
 	
 	public void focusLost(FocusEvent e) {
+		Object source = e.getSource();
+
 		// If location field's text was not already set between focus gained and lost 
-		if(!locationFieldTextSet) {
+		if(source==locationField && !locationFieldTextSet) {
 			// Restore current folder's path
 			locationField.setText(currentFolder.getAbsolutePath(true));
 		}
