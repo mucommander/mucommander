@@ -28,73 +28,52 @@ public abstract class AbstractFile {
 	 * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file).
 	 */
 	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) {
-		AbstractFile file;
-		String absPathLC = absPath.toLowerCase();
-		
-		// SMB file
-		if (absPathLC.startsWith("smb://")) {
-			try {
-				// Patch for jcifs 0.8.0b (path has to end with /)
-//				file = new SMBFile(absPath.endsWith("/")?absPath:absPath+"/");
+		try {
+			AbstractFile file;
+			String absPathLC = absPath.toLowerCase();
+			
+			// SMB file
+			if (absPathLC.startsWith("smb://"))
 				file = new SMBFile(absPath);
-			}
-			catch(IOException e) {
+			// HTTP file
+			else if (absPathLC.startsWith("http://"))
+				file = new HTTPFile(absPath);
+			// FTP file
+//			else if (absPath.toLowerCase().startsWith("ftp://"))
+//				file = new FTPFile(absPath);
+			// FS file, test if the given path is indeed absolute
+			else if (new File(absPath).isAbsolute())
+				file = new FSFile(absPath);
+			else
 				return null;
-			}
-		}
-		// HTTP file
-		else if (absPathLC.startsWith("http://")) {
-			try {
-//				if(absPathLC.endsWith(".html") || absPathLC.endsWith(".htm") || absPathLC.endsWith(".xhtml")
-//					|| absPathLC.endsWith(".xhtml")
-//					|| absPathLC.endsWith(".jsp")
-//					|| absPathLC.endsWith(".php") || absPathLC.endsWith(".php3") || absPathLC.endsWith(".php4")
-//					|| absPathLC.endsWith(".pl")  || absPathLC.endsWith(".cgi")
-//					|| absPathLC.endsWith(".jsp")
-//					|| absPathLC.endsWith(".py"))
-					
-//					file = new HTMLFile(absPath);
-//				else
-					file = new HTTPFile(absPath);
-			}
-			catch(IOException e) {
-				return null;
-			}
-		}
 
-/*        else if (absPath.toLowerCase().startsWith("ftp://")) {
-            try {
-                file = new FTPFile(absPath);
-            }
-            catch(IOException e) {
-                if(com.mucommander.Debug.ON) {
-                    System.out.println(e);
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        }
-*/
-        // FS file, tests if the given path is indeed absolute
-		else if (new File(absPath).isAbsolute()) {
-			file = new FSFile(absPath);
-		}
-		else {
-			return null;
-        }
+			if(parent!=null)
+				file.setParent(parent);
 		
+			return wrapArchive(file);
+		}
+		catch(IOException e) {
+			if(com.mucommander.Debug.ON) {
+				System.out.println(e);
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
+
+	
+	/**
+	 * Tests if given file is an archive and if it is, create the appropriate archive file
+	 * on top of the base file object.
+	 */
+	static AbstractFile wrapArchive(AbstractFile file) {
         String name = file.getName();
-//		if(name!=null && !file.isFolder() && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")))
 		if(name!=null && !file.isDirectory() && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")))
 			return new ZipArchiveFile(file);
 		
-		if(parent!=null)
-			file.setParent(parent);
-		
 		return file;		
 	}
-
-
+	
     
 	/**
 	 * <p>Tests a file for equality: returns <code>true</code> if the given file denotes the same

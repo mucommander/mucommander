@@ -1,83 +1,90 @@
 package com.mucommander.file;
 
-import java.io.*;
 import jcifs.smb.*;
 
+import java.io.*;
+
 /**
- * SMBFile represents an SMB file.
+ * SMBFile represents a file shared through the SMB protocol.
+ *
+ * @author Maxence Bernard
  */
 public class SMBFile extends AbstractFile implements RemoteFile {
+
+	/** File separator is '/' for urls */
+	private final static String SEPARATOR = "/";
 
 	protected SmbFile file;
     protected String absPath;
 	protected boolean isSymlink;
 
-	/** File separator is '/' for urls */
-	private String separator = "/";
-
 	private AbstractFile parent;
-	private boolean parentValCached;
+	private boolean parentValSet;
+
 	
 	/**
 	 * Creates a new instance of SMBFile.
 	 */
-	 public SMBFile(String fileURL) throws IOException {
-	 	if(!fileURL.endsWith("/"))
+	public SMBFile(String fileURL) throws IOException {
+		if(!fileURL.endsWith("/"))
 			fileURL += '/';
 		
 		AuthInfo urlAuthInfo = SMBFile.getAuthInfo(fileURL);
-	 	// if the URL specifies a login and password (typed in by the user)
-	 	// add it to AuthManager and use it
-	 	if (urlAuthInfo!=null) {
-	 		AuthManager.put(getPrivateURL(fileURL), urlAuthInfo);
-	 	}
-	 	// if not, checks if AuthManager has a login/password matching this url
-	 	else {
-	 		AuthInfo authInfo = AuthManager.get(fileURL);
-	 		
-	 		if (authInfo!=null) {
-	 			// Adds login and password to the URL
-	 			fileURL = getPrivateURL(fileURL, authInfo);
-	 		}
-	 	}
-	 	
-	 	// Unlike java.io.File, SmbFile throws an SmbException
-	 	// when file doesn't exist
-	 	try {
-	 		file = new SmbFile(fileURL);
-
-	 		this.absPath = file.getCanonicalPath();
-			this.isSymlink = !file.getCanonicalPath().equals(this.absPath);
-			
-	 		// removes the ending separator character (if any)
-	 		this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
-	 		// removes login and password from canonical path
-	 		absPath = getPrivateURL(absPath);
-	 	}
-	 	catch(IOException e) {
-	 		// Remove newly created AuthInfo entry from AuthManager
-	 		if(urlAuthInfo!=null)
-	 			AuthManager.remove(getPrivateURL(fileURL));
-
-            throw e;
-/*			
-			// File doesn't exist, sets default values
-			this.absPath = getPrivateURL(fileURL);			
-			this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
-			this.isFolder = false;
-			int pos = absPath.lastIndexOf('/');
-			this.name = pos==-1?"":absPath.substring(pos+1, absPath.length());
-			this.date = 0;
-			this.size = 0;
-			this.isHidden = false;
-*/
-
+		// if the URL specifies a login and password (typed in by the user)
+		// add it to AuthManager and use it
+		if (urlAuthInfo!=null) {
+			AuthManager.put(getPrivateURL(fileURL), urlAuthInfo);
 		}
-	 }
+		// if not, checks if AuthManager has a login/password matching this url
+		else {
+			AuthInfo authInfo = AuthManager.get(fileURL);
+			
+			if (authInfo!=null) {
+				// Adds login and password to the URL
+				fileURL = getPrivateURL(fileURL, authInfo);
+			}
+		}
+		
+		// Unlike java.io.File, SmbFile throws an SmbException
+		// when file doesn't exist
+		try {
+			this.file = new SmbFile(fileURL);
+			init(file);
+		}
+		catch(IOException e) {
+			// Remove newly created AuthInfo entry from AuthManager
+			if(urlAuthInfo!=null)
+				AuthManager.remove(getPrivateURL(fileURL));
+		
+			throw e;
+		}
+	}
+
+
+	/**
+	 * Create a new SMBFile by using the given SmbFile instance and parent file.
+	 */
+	protected SMBFile(SmbFile file, SMBFile parent) {
+		this.file = file;
+		init(file);
+		setParent(parent);
+	}
+
+
+	private void init(SmbFile smbFile) {
+		this.absPath = file.getCanonicalPath();
+		this.isSymlink = !file.getCanonicalPath().equals(this.absPath);
+		
+		// removes the ending separator character (if any)
+		this.absPath = absPath.endsWith(SEPARATOR)?absPath.substring(0,absPath.length()-1):absPath;
+		// removes login and password from canonical path
+		absPath = getPrivateURL(absPath);
+	}
 
 
 	protected void setParent(AbstractFile parent) {
 		this.parent = parent;	
+		this.parentValSet = true;
 	}
 	 
 	 
@@ -164,7 +171,7 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	}
 
 	public String getSeparator() {
-		return separator;
+		return SEPARATOR;
 	}
 	
 	public boolean isSymlink() {
@@ -172,18 +179,6 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	}
 
 	public long getDate() {
-/*
-		// Retrieves date and caches it
-		if (date==-1 && file!=null)
-			try {
-				date = file.lastModified();
-			}
-			catch(SmbException e) {
-				date = 0;
-			}
-		
-		return date;
-*/
         try {
             return file.lastModified();
         }
@@ -193,18 +188,6 @@ public class SMBFile extends AbstractFile implements RemoteFile {
     }
 	
 	public long getSize() {
-/*
-		// Retrieves size and caches it
-		if(size==-1 && file!=null)
-			try {
-				size = file.length();
-			}
-			catch(SmbException e) {
-				size = 0;
-			}
-
-		return size;
-*/
         try {
             return file.length();
         }
@@ -215,20 +198,16 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	
 	
 	public AbstractFile getParent() {
-		if(!parentValCached) {
+		if(!parentValSet) {
 			String parentS = file.getParent();
 			// SmbFile.getParent() never returns null
 			if(parentS.equals("smb://"))
 				this.parent = null;
 			
-			try {
-				this.parent = new SMBFile(parentS);
-			}
-			catch(IOException e) {
-				this.parent = null;
-			}
+			try { this.parent = new SMBFile(parentS); }
+			catch(IOException e) { this.parent = null; }
 			
-			this.parentValCached = true;
+			this.parentValSet = true;
 			return this.parent;
 		}
 		
@@ -269,20 +248,6 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	}
 	
 	public boolean isHidden() {
-/*
-		// Retrieves isHidden info and caches it
-        if (!isHiddenValCached && file!=null) {
-			try {
-				isHidden = file.isHidden();
-				isHiddenValCached = true;
-			}
-			catch(SmbException e) {
-				isHidden = false;
-				isHiddenValCached = true;
-			}			
-		}
-		return isHidden;
-*/
         try {
             return file.isHidden();
         }
@@ -292,20 +257,6 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	}
 
 	public boolean isDirectory() {
-/*
-		// Retrieves isFolder info and caches it
-		if (!isFolderValCached && file!=null) {
-			try {
-				isFolder = file.isDirectory();
-				isFolderValCached = true;
-			}
-			catch(SmbException e) {
-				isFolder = false;
-				isFolderValCached = true;
-			}
-		}
-		return isFolder;
-*/
         try {
             return file.isDirectory();
         }
@@ -366,6 +317,7 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 		}
 	}
 
+/*
 	public AbstractFile[] ls() throws IOException {
         String names[] = file.list();
 		
@@ -373,15 +325,19 @@ public class SMBFile extends AbstractFile implements RemoteFile {
             throw new IOException();
         
         AbstractFile children[] = new AbstractFile[names.length];
+        AbstractFile child;
         int nbFiles = 0;
 		for(int i=0; i<names.length; i++) {
-			children[nbFiles] = AbstractFile.getAbstractFile(absPath+separator+names[i], this);
+			children[nbFiles] = AbstractFile.getAbstractFile(absPath+SEPARATOR+names[i], this);
+			child = children[nbFiles];
         
             // It can happen that the SmbFile constructor throws an SmbException (for example
             // when a filename contains an '@' symbol in jCIFS v0.6.7), in which
             // case getAbstractFile() will return null, so we have to handle this case; 
-            if(children[nbFiles]!=null)
+            if(child!=null) {
                 nbFiles++;
+				child.setParent(this);
+			}
         }
 
         // Rebuild array if one or more files are null
@@ -393,10 +349,27 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 		
         return children;
 	}
+*/
 
+	public AbstractFile[] ls() throws IOException {
+        SmbFile smbFiles[] = file.listFiles();
+		
+        if(smbFiles==null)
+            throw new IOException();
+        
+		// Create SMBFile by recycling SmbFile instance and sharing parent instance
+		// among children
+        AbstractFile children[] = new AbstractFile[smbFiles.length];
+		for(int i=0; i<smbFiles.length; i++)
+			children[i] = new SMBFile(smbFiles[i], this);
+
+        return children;
+	}
+
+	
 	public void mkdir(String name) throws IOException {
 		// Unlike java.io.File.mkdir(), SmbFile does not return a boolean value
 		// to indicate if the folder could be created
-		new SmbFile(getPrivateURL()+separator+name).mkdir();
+		new SmbFile(getPrivateURL()+SEPARATOR+name).mkdir();
 	}
 }
