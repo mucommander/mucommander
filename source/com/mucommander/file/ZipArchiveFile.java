@@ -51,7 +51,7 @@ public class ZipArchiveFile extends ArchiveFile {
 		return file.canWrite();
 	}
 
-	public boolean isFolder() {
+	public boolean isDirectory() {
 		return true;
 	}
 

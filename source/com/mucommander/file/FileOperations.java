@@ -17,7 +17,8 @@ public class FileOperations {
         int total = 0;
         for(int i=0; i<files.length; i++) {
             file = files[i];
-            if(file.isFolder() && !(file instanceof ArchiveFile)) {
+//            if(file.isFolder() && !(file instanceof ArchiveFile)) {
+			if(file.isDirectory() && !file.isSymlink()) {
                 try {
                     total += getFileCount(file.ls());
                 }
@@ -38,7 +39,8 @@ public class FileOperations {
         int total = 0;
         for(int i=0; i<files.length; i++) {
             file = files[i];
-            if(file.isFolder() && !(file instanceof ArchiveFile)) {
+//            if(file.isFolder() && !(file instanceof ArchiveFile)) {
+			if(file.isDirectory() && !file.isSymlink()) {
                 try {
                     total += getFileCount(file.ls());
                 }

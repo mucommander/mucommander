@@ -129,7 +129,8 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 		    // Let's try the other regular way
 		}
 		
-		if(file.isFolder() && !(file instanceof ArchiveFile)) {
+//		if(file.isFolder() && !(file instanceof ArchiveFile)) {
+		if(file.isDirectory()) {
             // creates the folder in the destination folder if it doesn't exist
 			if (!destFile.exists()) {
 				try {

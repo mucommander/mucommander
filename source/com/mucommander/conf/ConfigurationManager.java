@@ -37,7 +37,7 @@ public class ConfigurationManager {
     /** Contains all the registered configuration listeners. */
     private static LinkedList listeners = new LinkedList();
     /** Name of the configuration file to parse. */
-    public static final String CONFIGURATION_FILE = "preferences.xml";
+    private static final String CONFIGURATION_FILE = "preferences.xml";
     /** Instance of ConfigurationManager used to enfore configuration file loading. */
     private static ConfigurationManager singleton = new ConfigurationManager();
     /** Holds the content of the configuration file. */
@@ -72,7 +72,7 @@ public class ConfigurationManager {
         }
 		
         // Sets muCommander version corresponding to this configuration file
-        setVariable("prefs.conf_version", "0.5");
+        setVariable("prefs.conf_version", "0.6");
 //        initConfiguration();
 //        initDaemon();
     }

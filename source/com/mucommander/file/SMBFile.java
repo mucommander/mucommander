@@ -10,7 +10,7 @@ public class SMBFile extends AbstractFile {
 
 	protected SmbFile file;
     protected String absPath;
-	protected boolean mayBeSymlink;
+	protected boolean isSymlink;
 
 	/** File separator is '/' for urls */
 	private String separator = "/";
@@ -42,7 +42,7 @@ public class SMBFile extends AbstractFile {
 	 		file = new SmbFile(fileURL);
 
 	 		this.absPath = file.getCanonicalPath();
-this.mayBeSymlink = !file.getCanonicalPath().equals(this.absPath);
+			this.isSymlink = !file.getCanonicalPath().equals(this.absPath);
 			
 	 		// removes the ending separator character (if any)
 	 		this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
@@ -163,8 +163,8 @@ this.mayBeSymlink = !file.getCanonicalPath().equals(this.absPath);
 		return separator;
 	}
 	
-	public boolean mayBeSymlink() {
-		return this.mayBeSymlink;
+	public boolean isSymlink() {
+		return this.isSymlink;
 	}
 
 	public long getDate() {
@@ -284,7 +284,7 @@ this.mayBeSymlink = !file.getCanonicalPath().equals(this.absPath);
         }			
 	}
 
-	public boolean isFolder() {
+	public boolean isDirectory() {
 /*
 		// Retrieves isFolder info and caches it
 		if (!isFolderValCached && file!=null) {

@@ -121,7 +121,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
 
-        if(file.isFolder() && (!(file instanceof ArchiveFile) || unzip)) {
+//        if(file.isFolder() && (!(file instanceof ArchiveFile) || unzip)) {
+        if((file.isDirectory()|| unzip) {
             // creates the folder in the destination folder if it doesn't exist
 			
 			if(!destFile.exists())
@@ -221,12 +222,16 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 					}
 				}
 				catch(IOException e) {
+					if(com.mucommander.Debug.TRACE)
+						System.out.println(""+e);
 				    int ret = showErrorDialog("Error while "+(unzip?"unzipping":"copying")+" file "+file.getName());
 				    if(ret!=SKIP_ACTION)		// CANCEL_ACTION or close dialog
 				        stop();                
 				}
 			}
 			catch(IOException e) {
+				if(com.mucommander.Debug.TRACE)
+					System.out.println(""+e);
 			    int ret = showErrorDialog("Unable to "+(unzip?"unzip":"copy")+" file "+file.getName());
 			    if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
 			        stop();

@@ -67,7 +67,8 @@ public class DeleteJob extends FileJob implements Runnable {
 		if(isInterrupted())
             return false;
 
-        if(file.isFolder() && !(file instanceof ArchiveFile)) {
+//        if(file.isFolder() && !(file instanceof ArchiveFile) &&!file.mayBeSymlink()) {
+        if(file.isDirectory() && !file.isSymlink()) {
             // Delete each file in this folder
             try {
                 AbstractFile subFiles[] = file.ls();
@@ -91,7 +92,8 @@ public class DeleteJob extends FileJob implements Runnable {
 		}
         catch(IOException e) {
             int ret = showErrorDialog("Unable to delete "
-				+(file.isFolder() && !(file instanceof ArchiveFile)?"folder ":"file ")
+//				+(file.isFolder() && !(file instanceof ArchiveFile)?"folder ":"file ")
+				+(file.isDirectory()&& !file.isSymlink()?"folder ":"file ")
 				+file.getName());
             if(ret==-1 || ret==CANCEL_ACTION) // CANCEL_ACTION or close dialog
                 stop();                
@@ -115,8 +117,8 @@ public class DeleteJob extends FileJob implements Runnable {
     public String getStatusString() {
 		return "Deleting "+currentFileInfo;
     }
-
-
+	
+	
     private int showErrorDialog(String message) {
 		QuestionDialog dialog = new QuestionDialog(progressDialog, "Delete error", message, mainFrame,
 			new String[] {SKIP_CAPTION, CANCEL_CAPTION},

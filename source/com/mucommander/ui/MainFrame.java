@@ -213,7 +213,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		String tempFileName;
 		for(int i=table1.getCurrentFolder().getParent()==null?0:1; i<files1.length; i++) {
 			tempFile = files1[i];
-			if(tempFile.isFolder() && !(tempFile instanceof ArchiveFile))
+//			if(tempFile.isFolder() && !(tempFile instanceof ArchiveFile))
+			if(tempFile.isDirectory())
 				continue;
 			
 			tempFileName = tempFile.getName();
@@ -231,7 +232,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 
 		for(int i=table2.getCurrentFolder().getParent()==null?0:1; i<files2.length; i++) {
 			tempFile = files2[i];
-			if(tempFile.isFolder() && !(tempFile instanceof ArchiveFile))
+//			if(tempFile.isFolder() && !(tempFile instanceof ArchiveFile))
+			if(tempFile.isDirectory())
 				continue;
 
 			tempFileName = tempFile.getName();
@@ -305,13 +307,15 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		// destPath points to an absolute and existing folder
 		if ((destFolder=AbstractFile.getAbstractFile(destPath))!=null 
 		 && destFolder.exists()
-		 && destFolder.isFolder() && !(destFolder instanceof ArchiveFile)) {
+//		 && destFolder.isFolder() && !(destFolder instanceof ArchiveFile)) {
+		 && destFolder.isDirectory()) {
 		}
 
 		// destPath points to an existing folder relative to current folder
 		else if ((destFolder=AbstractFile.getAbstractFile(currentPath+currentSeparator+destPath))!=null
 		 && destFolder.exists()
-		 && destFolder.isFolder() && !(destFolder instanceof ArchiveFile)) {
+//		 && destFolder.isFolder() && !(destFolder instanceof ArchiveFile)) {
+		 && destFolder.isDirectory()) {
 		}
 
 		// Level 1, path includes a new destination filename

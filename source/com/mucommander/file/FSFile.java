@@ -14,7 +14,7 @@ public class FSFile extends AbstractFile {
 	
 	protected File file;
     protected String absPath;
-protected boolean mayBeSymlink;
+	protected boolean isSymlink;
 	
 	/* These file attributes are cached first time they are accessed to avoid excessive I/O */
     	
@@ -67,10 +67,11 @@ protected boolean mayBeSymlink;
 	public FSFile(File _file) {
 //System.out.println("F0");
 		this.absPath = _file.getAbsolutePath();
-try {
-this.mayBeSymlink = !_file.getCanonicalPath().equals(this.absPath);
-}
-catch(IOException e){}
+		// Tries to find out if the file may be a symbolic link
+		try {
+		this.isSymlink = !_file.getCanonicalPath().equals(this.absPath);
+		}
+		catch(IOException e){}
 
         // removes the ending separator character (if any)
         this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
@@ -107,9 +108,9 @@ catch(IOException e){}
 		return separator;
 	}
 	
-public boolean mayBeSymlink() {
-	return this.mayBeSymlink;
-}
+	public boolean isSymlink() {
+		return this.isSymlink;
+	}
 
 	public long getDate() {
 //		// Retrieves date and caches it
@@ -163,7 +164,7 @@ public boolean mayBeSymlink() {
         return file.isHidden();
 	}
 
-	public boolean isFolder() {
+	public boolean isDirectory() {
 //		// Retrieves isFolder info and caches it
 //		if (!isFolderValCached) {
 //			isFolder = file.isDirectory();

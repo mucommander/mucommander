@@ -73,7 +73,7 @@ public class ZipEntryFile extends AbstractFile {
 		return false;
 	}									
 
-	public boolean isFolder() {
+	public boolean isDirectory() {
 		return zipEntry.isDirectory();
 	}
 

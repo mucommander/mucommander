@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 import java.io.*;
 
 /**
- * This Hashtable maps file extensions to their mime type, e.g. txt -> 
+ * This Hashtable maps file extensions to their mime type.
  */
 public class MimeTypes extends Hashtable {
 
@@ -42,7 +42,8 @@ public class MimeTypes extends Hashtable {
      * if it is unknown (no or unknown extension), and <code>null</code> if it is a folder.
      */
     public static String getMimeType(AbstractFile file) {
-        if(file.isFolder() && !(file instanceof ArchiveFile))
+//        if(file.isFolder() && !(file instanceof ArchiveFile))
+        if(file.isDirectory())
             return null;
         
         String name = file.getName();

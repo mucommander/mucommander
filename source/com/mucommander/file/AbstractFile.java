@@ -61,7 +61,8 @@ public abstract class AbstractFile {
 		
         String name = file.getName();
 //System.out.println("getAbstractFile "+absPath);
-		if(name!=null && !file.isFolder() && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")))
+//		if(name!=null && !file.isFolder() && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")))
+		if(name!=null && !file.isDirectory() && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")))
 			return new ZipArchiveFile(file);
 		
 		return file;		
@@ -100,13 +101,6 @@ public abstract class AbstractFile {
 		return getAbsolutePath()+getSeparator();
 	}
 
-	/**
-	 * Returns true if this file *may* be a symbolic link and thus handled with care.
-	 */
-	public boolean mayBeSymlink() {
-		return false;
-	}
-	
 	/**
 	 * Returns the separator character for this kind of AbstractFile.
 	 */
@@ -148,10 +142,24 @@ public abstract class AbstractFile {
 	public abstract boolean isHidden();
 
 	/**
-	 * Returns true if this AbstractFile is a folder of some sort (not necessarely a directory, can be an archive file...),.
+	 * Returns true if this AbstractFile is a 'regular' directory, not only a 'browsable' file (like an archive file).
 	 */
-	public abstract boolean isFolder();
+	public abstract boolean isDirectory();
 
+	/**
+	 * Returns true if this AbstractFile can be browsed (entered): true for directories and supported archive files.
+	 */
+	public boolean isBrowsable() {
+		return isDirectory() || (this instanceof ArchiveFile);
+	}
+
+	/**
+	 * Returns true if this file *may* be a symbolic link and thus handled with care.
+	 */
+	public boolean isSymlink() {
+		return false;
+	}
+	
 	/**
 	 * Returns the contents of this AbstractFile is a folder.
 	 * @throws an IOException if this operation is not possible.

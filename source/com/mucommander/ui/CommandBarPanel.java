@@ -103,7 +103,8 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	 */
 	public void doView() {
 		AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-		if(file.isFolder() && !(file instanceof ArchiveFile))
+//		if(file.isFolder() && !(file instanceof ArchiveFile))
+		if(file.isDirectory())
 			return;
 		
 		try {
@@ -165,7 +166,8 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	 */
 	public void doEdit() {
 		AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-		if(file.isFolder() && !(file instanceof ArchiveFile))
+//		if(file.isFolder() && !(file instanceof ArchiveFile))
+		if(file.isDirectory() && !file.isSymlink())
 			return;
 
 		try {

@@ -73,7 +73,8 @@ public class PropertiesJob extends FileJob implements Runnable {
 	 * and recurses if it is a folder.
 	 */
 	private void addRecurse(AbstractFile file) {
-		if (file.isFolder() && !(file instanceof ArchiveFile)) {
+//		if (file.isFolder() && !(file instanceof ArchiveFile)) {
+		if (file.isDirectory() && !file.isSymlink()) {
 			nbFolders++;
 
 			try {

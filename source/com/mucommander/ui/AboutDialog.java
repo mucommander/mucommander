@@ -52,7 +52,10 @@ public class AboutDialog extends FocusDialog implements ActionListener, KeyListe
 		// Selects OK when enter is pressed
 		getRootPane().setDefaultButton(okButton);
 	
-		contentPane.add(DialogToolkit.createOKPanel(okButton, this), BorderLayout.SOUTH);
+		okButton.setBackground(bgColor);
+		JPanel okPanel = DialogToolkit.createOKPanel(okButton, this);
+		okPanel.setBackground(bgColor);
+		contentPane.add(okPanel, BorderLayout.SOUTH);
 	}
 
 

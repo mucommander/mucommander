@@ -38,6 +38,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     private MainFrame mainFrame;
 
+	
     public ProgressDialog(MainFrame mainFrame, String title) {
         super(mainFrame, title, mainFrame);
 

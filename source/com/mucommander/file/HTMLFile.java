@@ -125,7 +125,7 @@ public class HTMLFile extends AbstractFile {
 		return false;
 	}
 
-	public boolean isFolder() {
+	public boolean isDirectory() {
 		return isFolder;
 	}
 	

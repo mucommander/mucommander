@@ -181,7 +181,8 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 			int nbFiles = files.length;
 			for(int i=activeTable.getCurrentFolder().getParent()==null?0:1; i<nbFiles; i++) {
 			    file = files[i];
-				if (includeFolders || (!file.isFolder() || (file instanceof ArchiveFile)))  {
+//				if (includeFolders || (!file.isFolder() || (file instanceof ArchiveFile)))  {
+				if (includeFolders || !file.isDirectory())  {
 					fileName = file.getName();
 					if(!caseSensitive)
 						fileName = fileName.toLowerCase();

@@ -185,7 +185,8 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 	 * Adds the given file to the Vector if it's not a folder, recurses otherwise.
 	 */
 	private void recurseOnFolder(AbstractFile file, Vector flattenedFiles) throws IOException {
-		if(file.isFolder() && !(file instanceof ArchiveFile)) {
+//		if(file.isFolder() && !(file instanceof ArchiveFile)) {
+		if(file.isDirectory() && !file.isSymlink()) {
 			AbstractFile children[] = file.ls();
 			for(int i=0; i<children.length; i++)
 				recurseOnFolder(children[i], flattenedFiles);
