@@ -393,9 +393,12 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		String currentPath = currentFolder.getAbsolutePath(true);
 		AbstractFile destFolder;
 
+if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): path="+destPath+" currentPath="+currentPath);
+
 		String newName = null;
 
-		// Level 0, newName is null
+		// Level 0, folder exists, newName is null
+		
 		// destPath points to an absolute and existing folder
 		if ((destFolder=AbstractFile.getAbstractFile(destPath))!=null 
 		 && destFolder.exists()
@@ -427,18 +430,23 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 				destPath = "";
 			}			
 
+if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): level1, destPath="+destPath+" newname="+newName);
 			// destPath points to an absolute and existing folder
 			if ((destFolder=AbstractFile.getAbstractFile(destPath))!=null && destFolder.exists()) {
 			}
 			
+//if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): level1b, destPath="+currentPath+destPath+" exists="+AbstractFile.getAbstractFile(currentPath+destPath).exists());
 			// destPath points to an existing folder relative to current folder
 			else if ((destFolder=AbstractFile.getAbstractFile(currentPath+destPath))!=null && destFolder.exists()) {
 			}
 
-			else 
+			else {
+if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): returning null");
 				return null;
+			}
 		}
 
+if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): destFolder="+(destFolder==null?null:destFolder.getAbsolutePath())+" newName="+newName);
 		return new Object[] {destFolder, newName};
 	}
 

@@ -105,7 +105,7 @@ public class ZipJob extends ExtendedFileJob {
 			return false;
 
 		String filePath = file.getAbsolutePath();
-		String zipEntryRelativePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
+		String zipEntryRelativePath = filePath.substring(baseFolderPath.length(), filePath.length());
 
 		// Process current file
 		do {		// Loop for retry
