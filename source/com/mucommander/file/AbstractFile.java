@@ -72,7 +72,6 @@ public abstract class AbstractFile {
         }
 		
         String name = file.getName();
-//System.out.println("getAbstractFile "+absPath);
 //		if(name!=null && !file.isFolder() && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")))
 		if(name!=null && !file.isDirectory() && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")))
 			return new ZipArchiveFile(file);

@@ -69,10 +69,14 @@ public class FSFile extends AbstractFile {
 	public FSFile(File _file) {
 //System.out.println("F0");
 		this.absPath = _file.getAbsolutePath();
+
 		try {
 			this.canonicalPath = _file.getCanonicalPath();
 		}
 		catch(IOException e) {
+			if(com.mucommander.Debug.TRACE)
+				e.printStackTrace();
+				
 			this.canonicalPath = this.absPath;
 		}
 			
@@ -203,12 +207,7 @@ public class FSFile extends AbstractFile {
 			return super.equals(f);		// could be equal to a ZipArchiveFile
 
 		// Compares canonical path (which File does not do by default in its equals() method)
-		try {
-            return this.file.getCanonicalPath().equals(((FSFile)f).file.getCanonicalPath());
-		}
-		catch(IOException e) {
-			return this.file.equals(((FSFile)f).file);
-		}
+		return this.canonicalPath.equals(((FSFile)f).canonicalPath);
 	}
 	
 
