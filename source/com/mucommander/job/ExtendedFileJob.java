@@ -42,32 +42,6 @@ public abstract class ExtendedFileJob extends FileJob {
 
 
 	/**
-	 * Copies the given InputStream's content to the given OutputStream, skipping the specified number
-	 * of bytes (can be 0) from the InputStream.
-	 */
-/*
-	 protected void copyStream(InputStream in, OutputStream out, long skipBytes) throws IOException {
-		// Init read buffer the first time
-		if(buffer==null)
-			buffer = new byte[READ_BLOCK_SIZE];
-
-		// Skip/do not read a number of bytes from the input stream
-		if(skipBytes>0) {
-			in.skip(skipBytes);
-			currentFileProcessed += skipBytes;
-		}
-		
-		// Copies the InputStream's content to the OutputStream
-		int read;
-		while ((read=in.read(buffer, 0, buffer.length))!=-1 && !isInterrupted()) {
-			out.write(buffer, 0, read);
-			nbBytesProcessed += read;
-			currentFileProcessed += read;
-		}
-	}
-*/	
-	
-	/**
 	 * Copies the given InputStream's content to the given OutputStream.
 	 */
 	protected void copyStream(InputStream in, OutputStream out) throws IOException {
@@ -94,7 +68,6 @@ public abstract class ExtendedFileJob extends FileJob {
 
 		try {
 			// Try to open InputStream
-//			try  { in = sourceFile.getInputStream(); }
 			try  {
 				long destFileSize = destFile.getSize();
 		
@@ -161,38 +134,45 @@ public abstract class ExtendedFileJob extends FileJob {
 					System.out.println(""+e);
 				
 				int reason = e.getReason();
-				String errorMsg;
+				int choice;
 				switch(reason) {
 					// Could not open source file for read
 					case FileJobException.CANNOT_OPEN_SOURCE:
-						errorMsg = Translator.get("cannot_read_source", sourceFile.getName());
+						// Ask the user what to do
+						choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_source", sourceFile.getName()));
 						break;
 					// Could not open destination file for write
 					case FileJobException.CANNOT_OPEN_DESTINATION:
-						errorMsg = Translator.get("cannot_write_destination", sourceFile.getName());
+						choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_destination", sourceFile.getName()));
 						break;
 					// An error occurred during file transfer
 					case FileJobException.ERROR_WHILE_TRANSFERRING:
 					default:
-						errorMsg = Translator.get("error_while_transferring", sourceFile.getName());
+						choice = showErrorDialog(errorDialogTitle, 
+							Translator.get("error_while_transferring", sourceFile.getName()),
+							new String[]{SKIP_TEXT, APPEND_TEXT, RETRY_TEXT, CANCEL_TEXT},
+							new int[]{SKIP_ACTION, APPEND_ACTION, RETRY_ACTION, CANCEL_ACTION}
+						);
 						break;
 				}
 				
-				// Ask the user what to do
-				int ret = showErrorDialog(errorDialogTitle, errorMsg);
-				// Retry action
-				if(ret==RETRY_ACTION) {
-					// Resume transfer
-					if(reason==FileJobException.ERROR_WHILE_TRANSFERRING)
-						append = true;
+				// cancel action or close dialog
+				if(choice==-1 || choice==CANCEL_ACTION) {
+					stop();
+					return false;
+				}
+				else if(choice==SKIP_ACTION) { 	// skip
+					return false;
+				}
+				// Retry action (append or retry)
+				else {
+					if(reason==FileJobException.ERROR_WHILE_TRANSFERRING) {
+						currentFileProcessed = 0;
+						// Append resumes transfer
+						append = choice==APPEND_ACTION;
+					}
 					continue;
 				}
-				// cancel action or close dialog
-				else if(ret==-1 || ret==CANCEL_ACTION) {
-					stop();
-				}
-				// skip, cancel or close return false
-				return false;
 			}
 		} while(true);
 	}

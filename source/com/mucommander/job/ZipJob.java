@@ -4,7 +4,6 @@ package com.mucommander.job;
 import com.mucommander.file.AbstractFile;
 
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.text.Translator;
 
@@ -41,7 +40,7 @@ public class ZipJob extends ExtendedFileJob {
 	/** Replace action's text */
 	private String REPLACE_TEXT = Translator.get("replace");
 	/** Replace action's value */
-	private int REPLACE_ACTION = 10;
+	private int REPLACE_ACTION = 100;
 	
 
     public ZipJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector filesToZip, String zipComment, AbstractFile destFile) {
@@ -62,15 +61,15 @@ public class ZipJob extends ExtendedFileJob {
 	 */
 	protected void jobStarted() {
 		if (destFile.exists()) {
-			// File already exists: cancel, append or overwrite?
-			QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("zip_dialog.file_already_exists", destFile.getName()), mainFrame,
+			// File already exists: cancel, replace?
+			int choice = showErrorDialog(Translator.get("warning"),
+				Translator.get("zip_dialog.file_already_exists", destFile.getName()),
 				new String[] {CANCEL_TEXT, REPLACE_TEXT},
-				new int[]  {CANCEL_ACTION, REPLACE_ACTION},
-				0);
-			int ret = dialog.getActionValue();
+				new int[]  {CANCEL_ACTION, REPLACE_ACTION}
+			);
 			
 			// Cancel or close returns false
-			if(ret==-1 || ret==CANCEL_ACTION)
+			if(choice==-1 || choice==CANCEL_ACTION)
 				return;
 			// Replace simply continues
 		}
@@ -86,13 +85,14 @@ public class ZipJob extends ExtendedFileJob {
 				break;
 			}
 			catch(Exception ex) {
-				QuestionDialog dialog = new QuestionDialog(mainFrame, errorDialogTitle, Translator.get("zip_dialog.cannot_write"), mainFrame,
+				int choice = showErrorDialog(Translator.get("warning"),
+					Translator.get("zip_dialog.cannot_write", destFile.getName()),
 					new String[] {CANCEL_TEXT, RETRY_TEXT},
-					new int[]  {CANCEL_ACTION, RETRY_ACTION},
-					0);
-				int ret = dialog.getActionValue();
+					new int[]  {CANCEL_ACTION, RETRY_ACTION}
+				);
+			
 				// Retry loops
-				if(ret == RETRY_ACTION)
+				if(choice == RETRY_ACTION)
 					continue;
 				// Cancel or close dialog returns false
 				return;
@@ -132,7 +132,6 @@ public class ZipJob extends ExtendedFileJob {
 
 					// Create new file entry in zip file
 					zipOut.putNextEntry(new ZipEntry(zipEntryRelativePath.replace('\\', '/')));
-//					copyStream(in, zipOut, 0);
 					copyStream(in, zipOut);
 								
 					return true;

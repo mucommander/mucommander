@@ -45,7 +45,8 @@ public class AuthInfo  {
 		if(login==null)
 			return null;
 		
-		return new AuthInfo(login, fileURL.getPassword());
+		String password = fileURL.getPassword();
+		return new AuthInfo(login, password==null?"":password);
 	}
 
 	

@@ -30,6 +30,30 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	}
 	
 
+
+	private SMBFile(String url, boolean addAuthInfo) throws IOException {	
+//System.out.println("SMBFile() "+url);
+		// all SMB URLs that represent  workgroups, servers, shares, or directories require a trailing slash '/'. 
+		if(!url.endsWith("/"))
+			url += '/';
+
+		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
+		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem
+		FileURL fileURL = new FileURL(url);
+//		AuthInfo prevAuthInfo = null;
+		
+		if(addAuthInfo)
+			AuthManager.authenticate(fileURL);
+//			prevAuthInfo = AuthManager.authenticate(fileURL);
+		
+		// Unlike java.io.File, SmbFile throws an SmbException
+		// when file doesn't exist
+		this.file = new SmbFile(fileURL.getURL(true));
+		init(file);
+	}
+	
+	
+/*
 	private SMBFile(String url, boolean addAuthInfo) throws IOException {	
 //System.out.println("SMBFile() "+url);
 		// all SMB URLs that represent  workgroups, servers, shares, or directories require a trailing slash '/'. 
@@ -67,16 +91,19 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 			throw new IOException();
 		}	
 	}
+*/
+
 	
-	/**
-	 * Create a new SMBFile by using the given SmbFile instance and parent file.
-	 */
-	protected SMBFile(SmbFile file, SMBFile parent) throws MalformedURLException {
+//	/**
+//	 * Create a new SMBFile by using the given SmbFile instance and parent file.
+//	 */
+/*
+	 protected SMBFile(SmbFile file, SMBFile parent) throws MalformedURLException {
 		this.file = file;
 		init(file);
 		setParent(parent);
 	}
-
+*/
 
 	private void init(SmbFile smbFile) throws MalformedURLException {
 		String url = file.getCanonicalPath();
@@ -104,13 +131,6 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 		return name;
 	}
 
-	/**
-	 * Returns a String representation of this AbstractFile which is the name as returned by getName().
-	 */
-	public String toString() {
-		return getName();
-	}
-	
 	public String getAbsolutePath() {
 		return publicURL;
 	}
@@ -261,12 +281,13 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 			// among children
 			AbstractFile children[] = new AbstractFile[smbFiles.length];
 			for(int i=0; i<smbFiles.length; i++)
-				children[i] = new SMBFile(smbFiles[i], this);
+//				children[i] = new SMBFile(smbFiles[i], this);
+				children[i] = AbstractFile.getAbstractFile(smbFiles[i].getCanonicalPath(), this);
 	
 			return children;
 		}
 		catch(SmbAuthException e) {
-			throw new AuthException(fileURL, e);
+			throw new AuthException(fileURL, e.getMessage());
 		}
 	}
 

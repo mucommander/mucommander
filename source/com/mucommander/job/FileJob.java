@@ -88,10 +88,12 @@ public abstract class FileJob implements Runnable {
 	protected final static int SKIP_ACTION = 0;
 	protected final static int RETRY_ACTION = 1;
 	protected final static int CANCEL_ACTION = 2;
+	protected final static int APPEND_ACTION = 3;
 
-	protected final static String CANCEL_TEXT = Translator.get("cancel");
 	protected final static String SKIP_TEXT = Translator.get("skip");
 	protected final static String RETRY_TEXT = Translator.get("retry");
+	protected final static String CANCEL_TEXT = Translator.get("cancel");
+	protected final static String APPEND_TEXT = Translator.get("append");
 	
 
     /**
@@ -100,9 +102,7 @@ public abstract class FileJob implements Runnable {
 	 * @param progressDialog dialog which shows this job's progress
 	 * @param mainFrame mainFrame this job has been triggered by
 	 * @param files files which are going to be processed
-//	 * @param destFolder destination folder where the files will be transferred, can be <code>null</code> if there is no destination.
 	 */
-//	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder) {
 	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files) {
 		this(mainFrame, files);
 		this.progressDialog = progressDialog;
@@ -121,7 +121,6 @@ public abstract class FileJob implements Runnable {
 		
         this.nbFiles = files.size();
 		this.baseSourceFolder = ((AbstractFile)files.elementAt(0)).getParent();
-//		this.baseDestFolder = destFolder;
 	}
 	
 	
@@ -142,10 +141,8 @@ public abstract class FileJob implements Runnable {
 		
 		// Pause auto-refresh during file job if this job potentially modifies folders contents
 		// and would potentially cause table to auto-refresh
-//		if(this instanceof FileModifier) {
 		mainFrame.getFolderPanel1().getFileTable().setAutoRefreshActive(false);
 		mainFrame.getFolderPanel2().getFileTable().setAutoRefreshActive(false);
-//		}		
 		
         // Serves to differenciate between the 'stopped' and 'not started yet' states
         hasStarted = true;
@@ -338,11 +335,14 @@ public abstract class FileJob implements Runnable {
 		String actionTexts[] = new String[]{SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT};
 		int actionValues[] = new int[]{SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION};
 		
+/*
 		int userChoice = showErrorDialog(title, message, actionTexts, actionValues);
 		if(userChoice==-1 || userChoice==CANCEL_ACTION)
 			stop();
 		
 		return userChoice;
+*/
+		return showErrorDialog(title, message, actionTexts, actionValues);
 	}
 
 
@@ -370,7 +370,12 @@ public abstract class FileJob implements Runnable {
 				actionValues,
 				0);
 
-		return waitForUserResponse(dialog);
+		// Cancel or close dialog stops this job
+		int userChoice = waitForUserResponse(dialog);
+		if(userChoice==-1 || userChoice==CANCEL_ACTION)
+			stop();
+		
+		return userChoice;
 	}
 	
 	

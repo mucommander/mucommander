@@ -25,6 +25,8 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 	private long size;
 	
 	private URL url;
+	private FileURL fileURL;
+	private boolean parentValSet;
 	protected AbstractFile parent;
 	
 	/** True if the URL looks like */
@@ -43,7 +45,7 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 		this.url = url;
 		this.absPath = url.toExternalForm();
 		
-		FileURL fileURL = new FileURL(absPath);
+		this.fileURL = new FileURL(absPath);
 		int urlLen = absPath.length();
 
 		if(!fileURL.getProtocol().toLowerCase().equals("http") || fileURL.getHost().equals(""))
@@ -56,15 +58,6 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 		// Determine file name (URL-encoded)
 		this.name = fileURL.getFilename();
 
-		// Determine parent URL (may be null) and create parent file (if there is one)
-		String parentURL = fileURL.getParent();
-		if(parentURL!=null) {
-			try {
-				this.parent = new HTTPFile(parentURL);
-			}
-			catch(IOException e) {} // No problem, no parent that's all
-		}
-		
 		String mimeType;
 //System.out.println("MIME type = "+mimeType);
 		// Test if based on the URL, the file looks like an HTML :
@@ -159,7 +152,18 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 	}
 	
 	public AbstractFile getParent() {
-		return parent;
+		if(!parentValSet) {
+			FileURL parentURL = fileURL.getParent();
+			if(parentURL==null)
+				this.parent = null;
+			else {
+				try { this.parent = new HTTPFile(parentURL.getURL(false)); }
+				catch(IOException e) {} // No problem, no parent that's all
+			}
+			this.parentValSet = true;
+		}
+		
+		return this.parent;
 	}
 	
 	

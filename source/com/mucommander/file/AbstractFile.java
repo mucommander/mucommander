@@ -39,8 +39,8 @@ public abstract class AbstractFile {
 			else if (absPathLC.startsWith("http://"))
 				file = new HTTPFile(absPath);
 			// FTP file
-//			else if (absPath.toLowerCase().startsWith("ftp://"))
-//				file = new FTPFile(absPath);
+			else if (absPath.toLowerCase().startsWith("ftp://"))
+				file = new FTPFile(absPath);
 			// FS file, test if the given path is indeed absolute
 			else if (new File(absPath).isAbsolute())
 				file = new FSFile(absPath);
@@ -87,6 +87,14 @@ public abstract class AbstractFile {
 			return false;
 		
 		return getAbsolutePath().equals(((AbstractFile)f).getAbsolutePath());
+	}
+
+	
+	/**
+	 * Returns a String representation of this AbstractFile which is the name as returned by getName().
+	 */
+	public String toString() {
+		return getName();
 	}
 	
 	

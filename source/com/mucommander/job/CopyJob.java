@@ -34,9 +34,7 @@ public class CopyJob extends ExtendedFileJob {
 	/** Title used for error dialogs */
 	private String errorDialogTitle;
 	
-//	/** if true, files will be unzipped in the destination folder instead of being copied */
-//	private boolean unzipMode;
-	
+	/** Operating mode : COPY_MODE, UNZIP_MODE or DOWNLOAD_MODE */
 	private int mode;
 	
 	public final static int COPY_MODE = 0;
@@ -52,17 +50,14 @@ public class CopyJob extends ExtendedFileJob {
 	 * @param files files which are going to be copied
 	 * @param destFolder destination folder where the files will be copied
 	 * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
-//	 * @param unzipMode if true, files will be unzipped in the destination folder instead of being copied.
 	 * @param mode mode in which CopyJob is to operate: COPY_MODE, UNZIP_MODE or DOWNLOAD_MODE.
 	 * @param fileExistsAction default action to be triggered if a file already exists in the destination (action can be to ask the user)
 	 */
-//	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, boolean unzipMode) {
 	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, int mode, int fileExistsAction) {
 		super(progressDialog, mainFrame, files);
 		
 		this.baseDestFolder = destFolder;
 		this.newName = newName;
-//		this.unzipMode = unzipMode;
 		this.mode = mode;
 		this.defaultFileExistsAction = fileExistsAction;
 		this.errorDialogTitle = Translator.get(mode==UNZIP_MODE?"unzip_dialog.error_title":mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
@@ -98,16 +93,20 @@ public class CopyJob extends ExtendedFileJob {
 			// If unzip mode and file is not a ZipArchiveFile (happens when extension is not .zip)
 			if(!(file instanceof ZipArchiveFile))
 				file = new ZipArchiveFile(file);
-			
-			do {
+
+			// Recursively unzip files
+			do {		// Loop for retries
 				try {
-					// Recurse on zip's contents
+					// List files inside zip (can throw an IOException)
 					AbstractFile zipSubFiles[] = currentFile.ls();
+					// Recurse on zip's contents
 					for(int j=0; j<zipSubFiles.length && !isInterrupted(); j++) {
 						// Notify job that we're starting to process this file (needed for recursive calls to processFile)
 						nextFile(zipSubFiles[j]);
+						// Recurse
 						processFile(zipSubFiles[j], destFolder);
 					}
+					// Return true when complete
 					return true;
 				}
 				catch(IOException e) {
@@ -121,7 +120,8 @@ public class CopyJob extends ExtendedFileJob {
 				}
 			} while(true);
 		}
-
+		
+		
 		// Determine filename in destination
 		String originalName = file.getName();
 		String destFileName;

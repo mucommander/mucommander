@@ -68,16 +68,6 @@ public class Launcher {
 				if(Debug.ON)
 					System.out.println("Launcher.init: exception thrown while initializing Mac Finder integration");
 			}
-
-			// Turn on/off brush metal look (default is off because still buggy when scrolling and panning dialog windows) :
-			//  "Allows you to display your main windows with the “textured” Aqua window appearance.
-			//   This property should be applied only to the primary application window,
-			//   and should not affect supporting windows like dialogs or preference windows."
-			System.setProperty("apple.awt.brushMetalLook", ConfigurationManager.getVariable("prefs.macosx.brushed_metal_look", "true"));
-
-			// Enables/Disables screen menu bar (default is on) :
-			//  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."
-			System.setProperty("apple.laf.useScreenMenuBar", ConfigurationManager.getVariable("prefs.macosx.screen_menu_bar", "true"));
 		}
 
 		// Show splash screen before anything else

@@ -87,9 +87,11 @@ System.out.println("loadImage "+file);
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
 		byte b[] = new byte[(int)file.getSize()];
-		DataInputStream din = new DataInputStream(file.getInputStream());
+		InputStream fin = file.getInputStream();
+		DataInputStream din = new DataInputStream(fin);
 		din.readFully(b);
 		din.close();
+		fin.close();
 
 		this.scaledImage = null;
 		this.image = getToolkit().createImage(b);

@@ -456,8 +456,8 @@ unzip_dialog.unzipping:FR:Décompression en cours
 unzip.error_on_file:EN:An error occurred while unzipping %1
 unzip.error_on_file:FR:Une erreur est survenue lors de la décompression de %1
 
-unzip.cannot_unzip_file:EN:Unable to unzip file %1
-unzip.cannot_unzip_file:FR:Impossible de décompresser le fichier %1
+#unzip.cannot_unzip_file:EN:Unable to unzip file %1
+#unzip.cannot_unzip_file:FR:Impossible de décompresser le fichier %1
 
 unzip.unzipping_file:EN:Unzipping %1
 unzip.unzipping_file:FR:Décompression de %1 en cours

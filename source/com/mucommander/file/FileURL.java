@@ -11,7 +11,7 @@ import java.net.URLDecoder;
  *
  * @author Maxence Bernard
  */
-public class FileURL {
+public class FileURL implements Cloneable {
 
 	private String protocol;
 	private String host;
@@ -197,8 +197,21 @@ public class FileURL {
 	}
 
 	
-	public String getParent() {
-		return parent;
+	/**
+	 * Returns the parent URL of this file based on the path, null if there is no parent file (path is '/').
+	 */
+	public FileURL getParent() {
+		if(parent==null)
+			return null;
+		
+		try {
+			FileURL parentFileURL = (FileURL)clone();
+			parentFileURL.path = this.parent;
+			return new FileURL(parentFileURL.getURL(true));
+		}
+		catch(Exception e) {
+			return null;
+		}
 	}
 	
 

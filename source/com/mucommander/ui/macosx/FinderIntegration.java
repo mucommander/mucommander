@@ -2,6 +2,7 @@
 package com.mucommander.ui.macosx;
 
 import com.mucommander.Launcher;
+import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.about.AboutDialog;
@@ -21,6 +22,17 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 	private int action;
 	
 	public FinderIntegration() {
+		
+		// Turn on/off brush metal look (default is off because still buggy when scrolling and panning dialog windows) :
+		//  "Allows you to display your main windows with the “textured” Aqua window appearance.
+		//   This property should be applied only to the primary application window,
+		//   and should not affect supporting windows like dialogs or preference windows."
+		System.setProperty("apple.awt.brushMetalLook", ConfigurationManager.getVariable("prefs.macosx.brushed_metal_look", "false"));
+
+		// Enables/Disables screen menu bar (default is on) :
+		//  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."
+		System.setProperty("apple.laf.useScreenMenuBar", ConfigurationManager.getVariable("prefs.macosx.screen_menu_bar", "true"));
+
 		// Have to catch exceptions (NoClassDefFoundError and NoSuchMethodException)
 		// because they seem not to be available under Mac OS X 10.1 (reported by Lanch)
 		try {com.apple.mrj.MRJApplicationUtils.registerAboutHandler(this);}

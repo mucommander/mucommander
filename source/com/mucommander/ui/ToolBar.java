@@ -25,6 +25,8 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	
 	/** Buttons icons, loaded only once */
 	private static ImageIcon icons[][];
+
+	private static boolean iconsLoaded;
 	
 	/** JButton instances */
 	private JButton buttons[];
@@ -65,28 +67,10 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		
 	
 	/**
-	 * Loads all the icons used by the toolbar buttons
-	 */
-	private void loadIcons() {
-		int nbIcons = BUTTONS_DESC.length;
-		icons = new ImageIcon[nbIcons][2];
-		
-		for(int i=0; i<nbIcons; i++) {
-			icons[i][0] = new ImageIcon(getClass().getResource(BUTTONS_DESC[i][1]));
-			if(BUTTONS_DESC[i][2]!=null)
-				icons[i][1] = new ImageIcon(getClass().getResource(BUTTONS_DESC[i][2]));
-		}
-	}
-	
-	
-	/**
 	 * Creates a new toolbar and attaches it to the given frame.
 	 */
 	public ToolBar(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
-		
-		if(icons==null)
-			loadIcons();
 		
 		setBorderPainted(false);
 		setFloatable(false);
@@ -97,7 +81,8 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		buttons = new JButton[nbButtons];
 		Dimension separatorDimension = new Dimension(10, 16);
 		for(int i=0; i<nbButtons; i++) {
-			buttons[i] = addButton(icons[i][0], icons[i][1], BUTTONS_DESC[i][0]);
+//			buttons[i] = addButton(icons[i][0], icons[i][1], BUTTONS_DESC[i][0]);
+			buttons[i] = addButton(BUTTONS_DESC[i][0]);
 			if(BUTTONS_DESC[i][3]!=null &&!BUTTONS_DESC[i][3].equals("false"))
 				addSeparator(separatorDimension);
 		}
@@ -114,25 +99,51 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		// Add a mouse listener to create popup menu when right-clicking
 		// on the toolbar
 		this.addMouseListener(this);
-		
 	}
 
 	
 	/**
+	 * Loads all the icons used by the toolbar buttons and add then to the buttons.
+	 */
+	private void loadIcons() {
+		int nbIcons = BUTTONS_DESC.length;
+		icons = new ImageIcon[nbIcons][2];
+		
+		for(int i=0; i<nbIcons; i++) {
+			// Load and set 'enabled' icon
+			icons[i][0] = new ImageIcon(getClass().getResource(BUTTONS_DESC[i][1]));
+			buttons[i].setIcon(icons[i][0]);
+			// Load and set 'disabled' icon
+			if(BUTTONS_DESC[i][2]!=null) {
+				icons[i][1] = new ImageIcon(getClass().getResource(BUTTONS_DESC[i][2]));
+				buttons[i].setDisabledIcon(icons[i][1]);
+			}
+		}
+	}
+	
+	
+	/**
 	 * Creates and return a new JButton and adds it to this toolbar.
 	 */
-	private JButton addButton(ImageIcon enabledIcon, ImageIcon disabledIcon, String toolTipText) {
+/*
+	 private JButton addButton(ImageIcon enabledIcon, ImageIcon disabledIcon, String toolTipText) {
 		JButton button = new RolloverButton(
 			enabledIcon,
 			disabledIcon,
 			toolTipText);
 		
-//		button.setMargin(new Insets(1,1,1,1));
 		button.addActionListener(this);
 		add(button);
 		return button;
 	}
-	
+*/	
+	 private JButton addButton(String toolTipText) {
+		JButton button = new RolloverButton(null, null, toolTipText);
+		button.addActionListener(this);
+		add(button);
+		return button;
+	}
+
 	
 	/**
 	 * Returns the index of the given button, -1 if it isn't part of this toolbar.
@@ -147,10 +158,30 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	}
 
 	
-	
-	public void locationChanged(FolderPanel folderPanel) {
-		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
-		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
+	/**
+	 * Overridden method to load toolbar icons.
+	 */
+	public void setVisible(boolean visible) {
+		if(visible) {
+			if(!iconsLoaded) {
+				// Load icons
+				loadIcons();
+				iconsLoaded = true;
+			}
+		}
+		else {
+			if(iconsLoaded) {
+				// Unload icons (set values to null)
+				int nbButtons = buttons.length;
+				for(int i=0; i<nbButtons; i++) {
+					icons[i][0] = null;
+					icons[i][1] = null;
+				}
+				iconsLoaded = false;
+			}
+		}
+		
+		super.setVisible(visible);
 	}
 
 	
@@ -164,6 +195,11 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		return false;
 	}
 
+	
+	public void locationChanged(FolderPanel folderPanel) {
+		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
+		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
+	}
 
 
 	public void actionPerformed(ActionEvent e) {

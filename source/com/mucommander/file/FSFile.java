@@ -115,13 +115,6 @@ public class FSFile extends AbstractFile {
 		return file.getParent()==null?absPath+separator:file.getName();
 	}
 
-	/**
-	 * Returns a String representation of this AbstractFile which is the name as returned by getName().
-	 */
-	public String toString() {
-		return getName();
-	}
-	
 	public String getAbsolutePath() {
 		return file.getParent()==null?absPath+separator:absPath;
 	}

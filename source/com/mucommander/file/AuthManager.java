@@ -28,7 +28,7 @@ public class AuthManager {
 	 */
 	public static void put(String path, AuthInfo authInfo) {
 		entries.put(path, authInfo);
-System.out.println("AuthManager.put "+path+" "+"authInfo="+authInfo+", entries = "+entries);
+if(com.mucommander.Debug.ON) System.out.println("AuthManager.put "+path+" "+"authInfo="+authInfo+", entries = "+entries);
 	}
 
 	
@@ -39,7 +39,7 @@ System.out.println("AuthManager.put "+path+" "+"authInfo="+authInfo+", entries =
 	 * will be the one corresponding to the path that best matches the supplied path</p>
 	 */
 	public static AuthInfo get(String path) {
-System.out.println("AuthManager.get, entries = "+entries);
+if(com.mucommander.Debug.ON) System.out.println("AuthManager.get, entries = "+entries);
 		AuthInfo info = (AuthInfo)entries.get(path);
 		if(info!=null)
 			return info;
@@ -95,13 +95,13 @@ System.out.println("AuthManager.get, entries = "+entries);
 	 *  - if it doesn't, looks for an existing AuthInfo mapping ({@link #get(String) get})
      * and if one was found, add the login and password info to the FileURL<br>
 	 *
-	 * @return the previous AuthInfo instance if the supplied FileURL contains login/password info, the
-	 * current AuthInfo for this URL otherwise. Returned instance may be <code>null</code>
+//	 * @return the previous AuthInfo instance if the supplied FileURL contains login/password info, the
+//	 * current AuthInfo for this URL otherwise. Returned instance may be <code>null</code>
 	 */
-	public static AuthInfo authenticate(FileURL fileURL) {
+//	public static AuthInfo authenticate(FileURL fileURL) {
+	public static void authenticate(FileURL fileURL) {
 		// Retrieve login/password from URL (if any)
 		AuthInfo urlAuthInfo = AuthInfo.getAuthInfo(fileURL);
-		AuthInfo authInfo = get(fileURL.getURL(false));
 		
 		// if the URL specifies a login and password (typed in by the user)
 		// add it to AuthManager and use it
@@ -110,13 +110,13 @@ System.out.println("AuthManager.get, entries = "+entries);
 		}
 		// if not, check if AuthManager has a login/password matching this url
 		else {
+			AuthInfo authInfo = get(fileURL.getURL(false));
 			// Add login and password to the URL	
 			if (authInfo!=null) {
 				fileURL.setLogin(authInfo.getLogin());
 				fileURL.setPassword(authInfo.getPassword());
 			}
 		}
-
-		return authInfo;
+//		return authInfo;
 	}
 }
