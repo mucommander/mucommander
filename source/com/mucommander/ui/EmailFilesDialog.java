@@ -93,21 +93,23 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			contentPane.add(mainPanel, BorderLayout.NORTH);
 			
 			// checkbox showing all files that are to be sent, allowing them to be unselected
-			YBoxPanel tempPanel2 = new YBoxPanel();
 			int nbFiles = files.size();
 			fileCheckboxes = new JCheckBox[nbFiles];
-			AbstractFile file;
-			for(int i=0; i<nbFiles; i++) {
-				file = (AbstractFile)files.elementAt(i);
-				fileCheckboxes[i] = new JCheckBox(file.getName()
-					+" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB)+")", true);
-				fileCheckboxes[i].addItemListener(this);
-				fileCheckboxes[i].addKeyListener(escapeKeyAdapter);
-				tempPanel2.add(fileCheckboxes[i]);
+			if(nbFiles>0) {
+				YBoxPanel tempPanel2 = new YBoxPanel();
+				AbstractFile file;
+				for(int i=0; i<nbFiles; i++) {
+					file = (AbstractFile)files.elementAt(i);
+					fileCheckboxes[i] = new JCheckBox(file.getName()
+						+" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB)+")", true);
+					fileCheckboxes[i].addItemListener(this);
+					fileCheckboxes[i].addKeyListener(escapeKeyAdapter);
+					tempPanel2.add(fileCheckboxes[i]);
+				}
+				scrollPane = new JScrollPane(tempPanel2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				updateInfoLabel();
+				contentPane.add(scrollPane, BorderLayout.CENTER);
 			}
-			scrollPane = new JScrollPane(tempPanel2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-			updateInfoLabel();
-			contentPane.add(scrollPane, BorderLayout.CENTER);
 				
 			// OK / Cancel buttons panel
 			okButton = new JButton("OK");

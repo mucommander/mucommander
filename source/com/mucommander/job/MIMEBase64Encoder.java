@@ -6,7 +6,9 @@ import com.mucommander.file.AbstractFile;
 import java.io.*;
 
 /**
+ * This class encodes file in Base64. It is used to by SendMailJob to send email attachments.
  *
+ * @author found on the net and modified by Maxence Bernard
  */
 public class MIMEBase64Encoder {
     /*
@@ -84,7 +86,7 @@ public class MIMEBase64Encoder {
     private final static int BLOCK_SIZE = 1024;
 
 	private FileJob job;
-    private static long totalRead;
+    private long totalRead;
 
     
     public MIMEBase64Encoder(FileJob job) {
@@ -101,8 +103,6 @@ public class MIMEBase64Encoder {
         byte buf[] = new byte[4];   // array of base64 characters
         
         while ((n=in.read(bytes, nrest, BLOCK_SIZE-nrest))!=-1 && !job.isInterrupted()) {
-System.out.println("nbread ="+n+" nrest="+nrest);
-
             totalRead += n;
             n += nrest;
             

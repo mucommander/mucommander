@@ -191,7 +191,7 @@ public class SendMailJob extends ExtendedFileJob {
     
     private void openConnection() throws IOException {
         this.socket = new Socket(mailServer, 25);
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "8859_1"));
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         this.out = socket.getOutputStream();
 
 		this.connectedToMailServer = true;
