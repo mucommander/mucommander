@@ -218,12 +218,9 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			int bestIndex = 0;
 			String temp;
 			int len;
-System.out.println("currentPath "+currentPath+" rootFolders.length="+rootFolders.length);
 			for(int i=0; i<rootFolders.length; i++) {
 				temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
 				len = temp.length();
-System.out.println("rootFolder "+temp+" "+len);
-System.out.println("test "+" "+currentPath.startsWith(temp)+" "+len+" "+bestLength);
 				if (currentPath.startsWith(temp) && len>bestLength) {
 					bestIndex = i;
 					bestLength = len;
@@ -422,9 +419,6 @@ System.out.println("test "+" "+currentPath.startsWith(temp)+" "+len+" "+bestLeng
 
 			AbstractFile file = AbstractFile.getAbstractFile(location);
 
-if(com.mucommander.Debug.ON)
-	System.out.println("FolderPanel.actionPerformed file="+ (file==null?"null":file.getAbsolutePath()+" "+file.exists()));
-			
 			boolean browse = false;
 			if(file==null || !file.exists()) {
 				// Restore current folder's path
