@@ -21,11 +21,12 @@ public class HTTPFile extends AbstractFile {
 	private final static String SEPARATOR = "/";
 	
 	private String name;
-	private String absPath;
 	private long date;
 	private long size;
 	
 	private URL url;
+	private String urlString;
+
 	private FileURL fileURL;
 	private boolean parentValSet;
 	protected AbstractFile parent;
@@ -37,28 +38,24 @@ public class HTTPFile extends AbstractFile {
 	/**
 	 * Creates a new instance of HTTPFile.
 	 */
-	public HTTPFile(String absPath) throws IOException {
-		this(new URL(absPath));
+	public HTTPFile(String urlString) throws IOException {
+		this(new URL(urlString));
 	}
 
 	
 	protected HTTPFile(URL url) throws IOException {
 		this.url = url;
-		this.absPath = url.toExternalForm();
+		this.urlString = url.toExternalForm();
 
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+urlString);
 		
-		// absPath is url-encoded
-		this.fileURL = new FileURL(absPath);
-		int urlLen = absPath.length();
+		// urlString is url-encoded
+		this.fileURL = new FileURL(urlString);
+		int urlLen = urlString.length();
 
 		if((!fileURL.getProtocol().toLowerCase().equals("http") && !fileURL.getProtocol().toLowerCase().equals("https")) || fileURL.getHost().equals(""))
 			throw new IOException();
 		
-		// Remove trailing / (if any)
-		if(absPath.endsWith(SEPARATOR))
-			absPath = absPath.substring(0, --urlLen);
-
 		// Determine file name (URL-decoded)
 		this.name = fileURL.getFilename(true);
 		// Name may contain '/' or '\' characters once decoded, let's remove them
@@ -82,13 +79,15 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 		}
 		else {
 			// Get URLConnection instance
-			HttpURLConnection conn = getHttpURLConnection();
+			HttpURLConnection conn = getHttpURLConnection(url);
 	
 			// Use HEAD instead of GET as we don't need the body
 			conn.setRequestMethod("HEAD");
 			
 			// Open connection
 			conn.connect();
+
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+conn.getResponseCode());
 			
 			// Resolve date: last-modified header, if not set date header, and if still not set System.currentTimeMillis
 			date = conn.getLastModified();
@@ -110,7 +109,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 	}
 	
 	
-	private HttpURLConnection getHttpURLConnection() throws IOException {
+	private HttpURLConnection getHttpURLConnection(URL url) throws IOException {
 		// Get URLConnection instance
 		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 		
@@ -134,7 +133,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 	}
 
 	public String getAbsolutePath() {
-		return absPath;
+		return urlString;
 	}
 
 	public String getSeparator() {
@@ -209,12 +208,12 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 		if(!(f instanceof HTTPFile))
 			return super.equals(f);		// could be equal to a ZipArchiveFile
 		
-		return ((HTTPFile)f).getAbsolutePath().equals(absPath);
+		return ((HTTPFile)f).getAbsolutePath(false).equals(getAbsolutePath(false));
 	}
 	
 	
 	public InputStream getInputStream() throws IOException {
-		HttpURLConnection conn = getHttpURLConnection();
+		HttpURLConnection conn = getHttpURLConnection(this.url);
 		conn.connect();
 		return conn.getInputStream();
 	}
@@ -224,12 +223,13 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 	 * use the HTTP 1.1 header that resumes file transfer and skips a number of bytes.
 	 */
 	public InputStream getInputStream(long skipBytes) throws IOException {
-		HttpURLConnection conn = getHttpURLConnection();
+		HttpURLConnection conn = getHttpURLConnection(this.url);
 		// Set header that allows to resume transfer
 		conn.setRequestProperty("Range", "bytes="+skipBytes+"-");
 		conn.connect();
 		return conn.getInputStream();
 	}
+	
 	
 	public OutputStream getOutputStream(boolean append) throws IOException {
 		throw new IOException();
@@ -254,14 +254,33 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 //			Reader r = null;
 		BufferedReader br = null;
 		try {
-			// Open connection
-			URLConnection conn = url.openConnection();
-			
-			// Set custom user-agent
-			conn.setRequestProperty("user-agent", com.mucommander.Launcher.USER_AGENT);
-			
-			// Establish connection
-			conn.connect();
+			URL contextURL = this.url;
+			HttpURLConnection conn;
+			do {
+				// Open connection
+				conn = getHttpURLConnection(contextURL);
+				
+				// Disable automatic redirections to track URL change
+				conn.setInstanceFollowRedirects(false);
+
+				// Establish connection
+				conn.connect();
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): response code = "+conn.getResponseCode());
+
+				// Test if reponse code is in the 3xx range and if 'Location' field is set
+				int responseCode = conn.getResponseCode();
+				String locationField = conn.getHeaderField("Location");
+				if(responseCode>=300 && responseCode<400 && locationField!=null) {
+					// Redirect to Location field and remember context url
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): Location header = "+conn.getHeaderField("Location"));
+					contextURL = new URL(locationField);
+					// One more time
+					continue;
+				}
+
+				break;
+			} while(true);
+
 			
 			// Extract encoding information (if any)
 			String contentType = conn.getContentType();
@@ -275,8 +294,6 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 				enc = st.nextToken();
 			}
 			
-			// Create a reader on the HTML content.
-//				r = new InputStreamReader();
 			// Create a reader on the HTML content with the proper encoding.
 			// Use default encoding
 			InputStream in = conn.getInputStream();
@@ -304,10 +321,6 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 			int tokenType;
 			HTTPFile child;
 			
-			// The url needs to have a trailing slash if 'new URL(context, file)' constructor is to be used (see main() test)
-			String urlString = this.url.toExternalForm();
-			URL contextURL = urlString.endsWith("/")?this.url:new URL(urlString+SEPARATOR);
-			
 			while((tokenType=st.nextToken())!=StreamTokenizer.TT_EOF) {
 				token = st.sval;
 //System.out.println("token= "+token+" "+st.ttype+" "+(st.ttype==st.TT_WORD)+" prevToken="+prevToken);
@@ -320,6 +333,8 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 //							if(token.toLowerCase().startsWith("http://") || (!token.equals("") && token.charAt(0)=='/')) {
 						if((prevToken.equalsIgnoreCase("href") || prevToken.equalsIgnoreCase("src")) && !(token.startsWith("mailto") || token.startsWith("MAILTO") || token.startsWith("#"))) {
 							if(!childrenURL.contains(token)) {
+//if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+contextURL);
+//								child = new HTTPFile(new URL(contextURL, token));
 if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+contextURL);
 								child = new HTTPFile(new URL(contextURL, token));
 								// Recycle this file for parent whenever possible
@@ -393,7 +408,7 @@ System.out.println("att="+att);
 		catch (Exception e) {
 			if (com.mucommander.Debug.ON) {
 				System.out.println("Error while parsing HTML: "+e);
-//					e.printStackTrace();
+					e.printStackTrace();
 			}
 			throw new IOException();
 		}
