@@ -64,8 +64,8 @@ public abstract class AbstractFile {
 	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) throws AuthException, IOException {
 		AbstractFile file;
 
-		// Remove trailing slash or backslash
-		if(absPath.endsWith("/") || absPath.endsWith("\\"))
+		// Remove trailing slash or backslash if it's not the only character
+		if(absPath.length()>1 && (absPath.endsWith("/") || absPath.endsWith("\\")))
 			absPath = absPath.substring(0, absPath.length()-1);
 
 		// Lower case absolute path

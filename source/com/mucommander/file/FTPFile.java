@@ -337,7 +337,6 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
 		return file.isDirectory();
 	}
 	
-	
 	public boolean equals(Object f) {
 		if(!(f instanceof FTPFile))
 			return super.equals(f);		// could be equal to a ZipArchiveFile

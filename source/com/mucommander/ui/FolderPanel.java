@@ -207,7 +207,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 
 			// Saves last folder recallable on startup
 //			if(!(folder instanceof RemoteFile))
-			if(folder.getProtocol().equals("FILE"))
+			if(folder.getProtocol().equals("FILE") && folder.isDirectory())
 				this.lastFolderOnExit = folder.getAbsolutePath();
 			
 			// Notifies listeners that location has changed

@@ -196,14 +196,14 @@ public class HTTPFile extends AbstractFile {
 		return false;
 	}
 	
-	public boolean isSymlink() {
-		return false;
-	}
-
 	public boolean isBrowsable() {
 		return isHTML;
 	}
 	
+	public boolean isSymlink() {
+		return false;
+	}
+
 	public boolean equals(Object f) {
 		if(!(f instanceof HTTPFile))
 			return super.equals(f);		// could be equal to a ZipArchiveFile

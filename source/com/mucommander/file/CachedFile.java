@@ -7,6 +7,7 @@ public class CachedFile extends AbstractFile {
 
 	private AbstractFile file;
 	
+	private String protocol;
 	private String name;
 	private String absPath;
 	private String separator;
@@ -18,12 +19,15 @@ public class CachedFile extends AbstractFile {
 	private boolean canWrite;
 	private boolean isHidden;
 	private boolean isDirectory;
+	private boolean isBrowsable;
 	private boolean isSymlink;
 	
 	
 	public CachedFile(AbstractFile file) {
 		this.file = file;
 
+		// Cache accessor values
+		this.protocol = file.getProtocol();
 		this.name = file.getName();
 		this.absPath = file.getAbsolutePath();
 		this.separator = file.getSeparator();
@@ -35,6 +39,7 @@ public class CachedFile extends AbstractFile {
 		this.canWrite = file.canWrite();
 		this.isHidden = file.isHidden();
 		this.isDirectory = file.isDirectory();
+		this.isBrowsable = file.isBrowsable();
 		this.isSymlink = file.isSymlink();
 	}
 	
@@ -47,6 +52,10 @@ public class CachedFile extends AbstractFile {
 	/////////////////////////////////////////
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
+	
+	public String getProtocol() {
+		return this.protocol;
+	}
 	
 	public String getName() {
 		return this.name;
@@ -94,6 +103,10 @@ public class CachedFile extends AbstractFile {
 
 	public boolean isDirectory() {
 		return this.isDirectory;
+	}
+	
+	public boolean isBrowsable() {
+		return this.isBrowsable;
 	}
 	
 	public boolean isSymlink() {

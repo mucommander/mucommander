@@ -124,7 +124,7 @@ public class ZipArchiveFile extends AbstractFile implements ArchiveFile {
 		AbstractFile file;
 		for(int i=0; i<entries.length; i++) {
 			if (getEntryLevel(entries[i].getName())==0) {
-				subFiles.add(new ZipEntryFile(this, this, entries[i]));
+				subFiles.add(AbstractFile.wrapArchive(new ZipEntryFile(this, this, entries[i])));
 			}
 		}
 		
@@ -148,7 +148,7 @@ public class ZipArchiveFile extends AbstractFile implements ArchiveFile {
 			subEntry = entries[i];
 			subEntryName = subEntry.getName();
 			if (subEntryName.startsWith(entryName) && getEntryLevel(subEntryName)==level) {
-				subFiles.add(new ZipEntryFile(this, entryFile, subEntry));
+				subFiles.add(AbstractFile.wrapArchive(new ZipEntryFile(this, entryFile, subEntry)));
 			}
 		}
 

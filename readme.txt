@@ -1,5 +1,5 @@
 ----------------
-muCommander v0.6
+muCommander v0.7
 ----------------
 
 muCommander is a cross-platform file manager.  It features a Norton
@@ -10,11 +10,14 @@ Please use the muCommander forums (http://www.mucommander.com/forums)
 to post your questions, suggestions or bug reports. Your feedback is
 important and always welcome!
 
-muCommander uses the jCIFS library released under the LGPL to provide
-SMB support. jCIFS can be found at http://jcifs.samba.org.
+muCommander uses the jCIFS library released under the LGPL license
+to provide SMB support. jCIFS can be found at http://jcifs.samba.org.
+
+muCommander uses the CommonsNet library released under the Apache license
+to provide FTP support. CommonsNet can be found at http://jakarta.apache.org.
 
 Official website: http://www.mucommander.com
-(c) 2003 Maxence Bernard. All rights reserved.
+(c) 2004 Maxence Bernard. All rights reserved.
 
 
 Requirements
