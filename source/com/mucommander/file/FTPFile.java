@@ -10,6 +10,8 @@ import java.io.*;
 public class FTPFile extends AbstractFile implements RemoteFile {
 
 	protected FTPFile file;
+	protected FTPClient ftpClient;
+
     protected String absPath;
 	protected boolean isSymlink;
 
@@ -69,14 +71,6 @@ public class FTPFile extends AbstractFile implements RemoteFile {
 		this.file = file;
 		setParent(parent);
 	}
-	
-	
-	protected void setParent(AbstractFile parent) {
-		this.parent = parent;
-		this.parentValRetrieved;
-	}
-	
-	
 	
 	
 	/**
@@ -179,25 +173,28 @@ public class FTPFile extends AbstractFile implements RemoteFile {
 	
 	
 	public AbstractFile getParent() {
-		if(!parentValRetrieved) {
+		if(!parentValSet) {
 			String parentS = file.getParent();
 			// SmbFile.getParent() never returns null
 			if(parentS.equals("smb://"))
 				this.parent = null;
 			
-			try {
-				this.parent = new FTPFile(parentS);
-			}
-			catch(IOException e) {
-				this.parent = null;
-			}
+			try { this.parent = new FTPFile(parentS); }
+			catch(IOException e) { this.parent = null;	}
 			
-			this.parentValRetrieved = true;
+			this.parentValSet = true;
 			return this.parent;
 		}
 		
 		return this.parent;
     }
+	
+	
+	protected void setParent(AbstractFile parent) {
+		this.parent = parent;
+		this.parentValSet = true;
+	}
+	
 	
 	public boolean exists() {
 		return true;
