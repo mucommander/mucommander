@@ -56,11 +56,19 @@ public class ConfigurationManager {
      */
     private ConfigurationManager() {
         tree = new ConfigurationTree("root");
-        try {loadConfiguration();}
+        try {
+            loadConfiguration();
+        }
         catch(Exception e) {
-			if(com.mucommander.Launcher.DEBUG)
-				e.printStackTrace(System.out);
-		}
+//			if(com.mucommander.Launcher.DEBUG)
+            System.out.println("No configuration file found.");
+            File homeFolder = getConfigurationFolder();
+            if(!homeFolder.exists()) {
+                System.out.println("Creating mucommander home folder (~/.mucommander)");
+                if(!getConfigurationFolder().mkdir())
+                    System.out.println("Warning: unable to create folder: "+homeFolder.getAbsolutePath()+"/.mucommander");
+                }
+        }
 		
 //        initConfiguration();
 //        initDaemon();
@@ -94,7 +102,13 @@ public class ConfigurationManager {
      * Returns the path to the configuration file.
      * @return the path to the configuration file.
      */
-    public static String getConfigurationFilePath() {return new File(new File(System.getProperty("user.home")), CONFIGURATION_FILE).getPath();}
+    public static String getConfigurationFilePath() {
+        return new File(getConfigurationFolder(), CONFIGURATION_FILE).getAbsolutePath();
+    }
+
+    public static File getConfigurationFolder() {
+        return new File(System.getProperty("user.home")+"/.mucommander");
+    }
 
     /**
      * Loads the specified configuration file in memory.
