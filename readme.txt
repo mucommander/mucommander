@@ -86,7 +86,7 @@ Bug fixes :
  - Fixed a bug when moving a folder to a folder containing a folder with the same name
  - Fixed minor focus problem with drive button (focus would not be released)
  - Fixed a minor bug in location field which would not always reflect current folder's path
- - Fixed a bug in ZIP/JAR file handling which caused some archives to miss folders
+ - Fixed a bug in ZIP/JAR file handling which caused some archived folders not to be displayed properly
 
 Mac OS X:
  - Screen menu bar enabled
