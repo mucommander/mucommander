@@ -216,7 +216,6 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			// Saves last folder recallable on startup
 			if(!(folder instanceof RemoteFile))
 				this.lastFolderOnExit = folder.getAbsolutePath();
-System.out.println("+_setCurrentFolder: "+folder.getAbsolutePath()+" "+this.lastFolderOnExit);
 			
 			// Notifies listeners that location has changed
 			fireLocationChanged();
@@ -352,7 +351,6 @@ System.out.println("+_setCurrentFolder: "+folder.getAbsolutePath()+" "+this.last
 	 * should NOT be a folder on a remote filesystem (likely not to be reachable).
 	 */
 	public String getLastSavableFolder() {
-System.out.println("getLastSavableFolder: "+this.lastFolderOnExit);
 		return this.lastFolderOnExit;
 	}
 	

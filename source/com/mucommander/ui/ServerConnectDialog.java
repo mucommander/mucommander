@@ -2,6 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.SMBFile;
 
@@ -72,27 +73,25 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
 
 	private JPanel getSMBPanel() {
-		YBoxPanel smbPanel = new YBoxPanel(15);
+		YBoxPanel smbPanel = new YBoxPanel(10);
 
-        // Init grid bag layout and panel.
-        GridBagLayout gridbag = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.EAST;
-
-        JPanel textFieldsPanel = new JPanel();
-        textFieldsPanel.setLayout(gridbag);
+        // Labels / text fields panel.
+        TextFieldsPanel textFieldsPanel = new TextFieldsPanel(10);
 
 		// Server field
 		smbServerField = new JTextField(lastSmbServer);
-		addTextFieldRow(textFieldsPanel, c, "Server", smbServerField, 10, 20);
+		addTextFieldListeners(smbServerField);
+		textFieldsPanel.addTextFieldRow("Server", smbServerField, 15);
 
 		// Username field
 		smbUsernameField = new JTextField(lastSmbUsername);
-		addTextFieldRow(textFieldsPanel, c, "Username", smbUsernameField, 10, 5);
+		addTextFieldListeners(smbUsernameField);
+		textFieldsPanel.addTextFieldRow("Username", smbUsernameField, 5);
 
 		// Password field
 		smbPasswordField = new JPasswordField(lastSmbPassword);
-		addTextFieldRow(textFieldsPanel, c, "Password", smbPasswordField, 10, 20);
+		addTextFieldListeners(smbPasswordField);
+		textFieldsPanel.addTextFieldRow("Password", smbPasswordField, 15);
 
 		smbPanel.add(textFieldsPanel);
 		
@@ -108,25 +107,11 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		return smbPanel;
 	}
 
-	
-	private void addTextFieldRow(JPanel gridBagPanel, GridBagConstraints c, String labelText, JTextField textField, int xSpaceAfter, int ySpaceAfter) {
-		c.gridwidth = GridBagConstraints.RELATIVE; //next-to-last
-		c.fill = GridBagConstraints.NONE;      //reset to default
-		c.weightx = 0.0;                       //reset to default
-		c.insets = new Insets(0, 0, ySpaceAfter, xSpaceAfter);
-		
-		gridBagPanel.add(new JLabel(labelText), c);
 
-		c.gridwidth = GridBagConstraints.REMAINDER;     //end row
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1.0;
-		c.insets = new Insets(0, 0, ySpaceAfter, 0);
-
+	private void addTextFieldListeners(JTextField textField) {
 		textField.addKeyListener(escapeKeyAdapter);
 		textField.addKeyListener(this);
 		textField.addActionListener(this);
-
-		gridBagPanel.add(textField, c);
 	}
 
 

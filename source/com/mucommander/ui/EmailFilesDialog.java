@@ -3,9 +3,12 @@ package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.pref.PreferencesDialog;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFile;
+
 import com.mucommander.job.SendMailJob;
+
 import com.mucommander.text.SizeFormatter;
 
 import java.awt.*;
@@ -16,6 +19,17 @@ import java.io.IOException;
 
 import java.util.Vector;
 
+
+
+/**
+ * Dialog allowing the user to email files to someone.
+ *
+ * <p>One or several recipients, as well as a mail subject and body can be input.
+ * The dialog also allows the user to review the files that have been marked,
+ * select/unselect some, and displays the total file size.</p>
+ *
+ * @author Maxence Bernard
+ */
 public class EmailFilesDialog extends FocusDialog implements ActionListener, ItemListener {
 	private MainFrame mainFrame;
 	
@@ -34,7 +48,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 	private JButton okButton;
 	private JButton cancelButton;
 
-	// Dialog size constrains
+	// Dialog size constraints
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(400,0);	
 	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(550,400);	
 	
@@ -65,29 +79,21 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			
 			YBoxPanel mainPanel = new YBoxPanel(5);
 	
+			// Text fields panel
+			TextFieldsPanel textFieldsPanel = new TextFieldsPanel(5);
+			textFieldsPanel.setAlignmentX(LEFT_ALIGNMENT);
+
 			// To (recipients) field
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.X_AXIS));
-			tempPanel.add(new JLabel("To"));
-			tempPanel.add(Box.createRigidArea(new Dimension(5, 0)));		
 			toField = new JTextField(lastTo);
 			toField.addKeyListener(escapeKeyAdapter);
-			tempPanel.add(toField);
-			mainPanel.add(tempPanel);
-	
-			mainPanel.addSpace(10);
+			textFieldsPanel.addTextFieldRow("To", toField, 10);
 			
 			// Subject field
-			tempPanel = new JPanel();
-			tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.X_AXIS));
-			tempPanel.add(new JLabel("Subject"));
-			tempPanel.add(Box.createRigidArea(new Dimension(6, 0)));		
 			subjectField = new JTextField(lastSubject);
 			subjectField.addKeyListener(escapeKeyAdapter);
-			tempPanel.add(subjectField);
-			mainPanel.add(tempPanel);		
-	
-			mainPanel.addSpace(15);
+			textFieldsPanel.addTextFieldRow("Subject", subjectField, 15);
+
+			mainPanel.add(textFieldsPanel);		
 	
 			// Body area
 			bodyArea = new JTextArea(lastBody);
