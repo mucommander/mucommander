@@ -76,7 +76,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
 		// Server field
 		JPanel tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("Server  "), BorderLayout.WEST);
+		tempPanel.add(new JLabel("Server "), BorderLayout.WEST);
 		smbServerField = new JTextField(lastSmbServer);
 		smbServerField.addKeyListener(escapeKeyAdapter);
 		smbServerField.addKeyListener(this);
@@ -84,6 +84,8 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		tempPanel.add(smbServerField, BorderLayout.CENTER);
 		smbPanel.add(tempPanel);
 
+		smbPanel.addSpace(15);
+		
 		// Username field
 		tempPanel = new JPanel(new BorderLayout());
 		tempPanel.add(new JLabel("Username  "), BorderLayout.WEST);
@@ -94,9 +96,11 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		tempPanel.add(smbUsernameField, BorderLayout.CENTER);
 		smbPanel.add(tempPanel);
 
+		smbPanel.addSpace(5);
+
 		// Password field
 		tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("Password  "), BorderLayout.WEST);
+		tempPanel.add(new JLabel("Password "), BorderLayout.WEST);
 		smbPasswordField = new JPasswordField(lastSmbPassword);
 		smbPasswordField.addKeyListener(escapeKeyAdapter);
 		smbPasswordField.addKeyListener(this);
@@ -107,13 +111,16 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		smbPanel.addSpace(15);
 		
 		tempPanel = new JPanel(new BorderLayout());
-		tempPanel.add(new JLabel("Server URL:  "), BorderLayout.WEST);
+		tempPanel.add(new JLabel("Server URL: "), BorderLayout.WEST);
 		smbURLLabel = new JLabel(getSmbURL());
 		tempPanel.add(smbURLLabel, BorderLayout.CENTER);
 		smbPanel.add(tempPanel);
 
 		smbPanel.addSpace(10);
-		
+
+// FontMetrics fm = smbServerField.getFontMetrics(smbServerField.getFont());
+// int pw = (int)Math.max(Math.max(fm.stringWidth("Server "), fm.stringWidth("Username ")), fm.stringWidth("Password ")); 		
+
 		return smbPanel;
 	}
 
