@@ -81,6 +81,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 
 	private final static int BLOCK_SIZE = 1024;
 
+	
     /**
 	 * @param indicates if this CopyJob corresponds to an 'unzip' operation.
 	 */
@@ -96,6 +97,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 		this.unzip = unzip;
 	}
 
+	
 	/**
 	 * Recursively copies a file or folder.
 	 */
@@ -318,7 +320,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 		FileTable activeTable = mainFrame.getLastActiveTable();
 		AbstractFile currentFile;
         AbstractFile zipSubFiles[];
-		while(!isInterrupted()) {
+		while(true) {
 			currentFile = (AbstractFile)filesToCopy.elementAt(currentFileIndex);
 			
 			// Unzip files		
@@ -344,6 +346,9 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 //				copyRecurse(currentFile, baseDestFolder, newName, 0);
 				copyRecurse(currentFile, baseDestFolder, newName);
 			}
+
+			if(isInterrupted())
+				break;
 			
 			activeTable.setFileMarked(currentFile, false);
 			activeTable.repaint();

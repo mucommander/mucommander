@@ -118,7 +118,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
 			if (destFile.exists()) {
 				// File already exists: cancel, append or overwrite?
-				QuestionDialog dialog = new QuestionDialog(mainFrame, null, "Zip file already exists.", mainFrame,
+				QuestionDialog dialog = new QuestionDialog(mainFrame, "Zip warning", "A file with the same name already exists.", mainFrame,
 					new String[] {CANCEL_CAPTION, OVERWRITE_CAPTION},
 					new int[]  {CANCEL_ACTION, OVERWRITE_ACTION},
 					new int[]  {CANCEL_MNEMONIC, OVERWRITE_MNEMONIC},
