@@ -1,5 +1,5 @@
 ----------------
-muCommander v0.5
+muCommander v0.6
 ----------------
 
 muCommander is a cross-platform file manager.  It features a Norton
@@ -14,7 +14,7 @@ muCommander uses the jCIFS library released under the LGPL to provide
 SMB support. jCIFS can be found at http://jcifs.samba.org.
 
 Official website: http://www.mucommander.com
-(c) 2002 Maxence Bernard. All rights reserved.
+(c) 2003 Maxence Bernard. All rights reserved.
 
 
 Requirements
@@ -33,9 +33,72 @@ to using muCommander.
   JRE or JDK is installed.
 
 
-What's new in v0.5?
+What's new in v0.6?
 -------------------
 
+New features:
+- New file progress dialog with more information (current file size, average speed, total bytes transferred) and improved refresh rate
+- Send as email attachment
+- Option to display file size in a compact manner
+- SHIFT+F6 renames (w/ visual indication)
+- SHIFT+F5 to copy to local dir (consistent with Shift+F6)
+- File -> Run command
+- Mac OS X integration: add hooks for 'About', 'Preferences', 'Quit' Finder menu items, and dirty window indication in text editor
+- Mac OS X integration: Create preferences file in ~/Library/Preferences/mucommander instead of ~/.mucommander/
+- Folder auto-refresh
+- Symbolic link color in table
+- Add symbolic link color in preferences
+- Symbolic link warning when deleting (Folder: ask, File: delete link only)
+- Skip symbolic links when copying
+- Skip symbolic links when moving	(original symlink will be deleted)
+- Show/Hide toolbar
+- Show/Hide toolbar on startup option
+- Add shortcuts to toolbar icons' tooltip
+- Beep on question dialog									OK (not on Java 1.3 / Mac OS X)
+- Apply button in preferences dialog
+- Add a known bugs section to readme.txt
+
+Improvements:
+- jCIFS updated to 0.7.15
+- Improved Properties dialog refresh rate
+- Gave dialogs some breathing room
+- Sort by icon is now on the right of the text, increased gap between text and icon
+- Minor modifications to Appearance Preferences panel
+- Cleaner, roomier main window layout
+- Renamed 'Quit' button and menu item to 'Close' and 'Close window'
+
+
+Bug fixes
+- ..'s date used to be that of parent of current folder instead of being current folder's						FIXED
+- closing a window did not entirely release resources (-> addConfigurationListener ?)							FIXED
+- Important bug: while moving a big file, 'cancel' : original file is deleted, check if it was in 0.5  					FIXED (except that file is still unmarked)
+- Fixed bug which occurred when 'show hidden files' option was disabled and caused the application to fail on certain folders		FIXED
+- Fixed minor bug in QuestionDialog which sometimes lead to an extra row of buttons 							FIXED
+- Fixed no title on zip overwrite dialog												FIXED
+- Fixed copy -> cancel, current file unselected even though file/folder not completely copied						FIXED
+- Fixed timeout annoyance which occurred on startup when last folder was an SMB share	(-> last folder is never a remote file)		FIXED
+- Fix bug when copying a folder to a folder containing a folder with the same, the folder would get nested (reported by Pixel)		FIXED
+
+- (Internal) symbolic link handling in file API : seems OK for FS files, KO for SMB files (System.out getCanonicalPath)		OK
+- (Internal) ascending/descending and toolbar icons now loaded only once (more efficient)					OK
+- (Internal) Create separate dialogs (CopyDialog, MoveDialog, MkDirDialog, DeleteDialog) to make CommandBarPanel leaner		OK
+- (Internal) Use EscapeKeyAdapater in FileSelectionDialog									OK
+- (Internal) Filetable.refresh() and Filetable.setCurrentFolder() now synchronized						OK
+- (Internal) Rework all dialogs (with BoxLayout / YBoxPanel)									OK
+- (Internal) configuration listeners -> call getVariable STUPID!! Check all configurationChanged() methods			OK
+- (Internal) configuration listeners -> check if classes that register as listeners, unregister after, otherwise memory leaks	OK
+- (Internal) AbstractFile.getAbstractFile(absPath, parent) & AbstractFile.setParent(parent) for increased file performance	OK
+- (Internal) SMBFile parent folder value cached	for increased SMB performance							OK
+- (Internal) Fixed OverlayProgressBar text placement problem visible under OS X / 1.4						OK
+- (Internal) Fixed Copy/Move issue when a folder needed to be created in destination and a file existed with the same name, the error message was cryptic, now gives a more understandable 'cannot create folder' message						OK
+- (Internal) File info cache, should yield to better table performance								OK
+
+
+
+History
+-------
+
+v0.5 [12/31/02]
 New features:
 - Look-and-Feel, font, colors, time/date format and startup folders can now be configured
 - Option to show/hide hidden files
@@ -58,9 +121,6 @@ Bug fixes:
 - Fixed a bug which crashed the app when accessing a remote SMB file whose filename contains a '@' symbol
 - Fixed a rare bug which occurred when trying to access an unreachable SMB folder and resulted in the app to display the full parent folder's path (including login and password) instead of '..'
 
-
-History
--------
 
 v0.4 [8/22/02]
 New features:
