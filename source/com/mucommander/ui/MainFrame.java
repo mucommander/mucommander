@@ -70,9 +70,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 //		YBoxPanel contentPane = new YBoxPanel();
 //		contentPane.setInsets(new Insets(3, 4, 3, 4));
 		JPanel contentPane = new JPanel(new BorderLayout()) {
-			// Add a x=8,y=6 gap around content pane
+			// Add an x=3,y=3 gap around content pane
 			public Insets getInsets() {
-				return new Insets(3, 4, 3, 4);
+				return new Insets(3, 3, 3, 3);
 			}
 		};
 		setContentPane(contentPane);
