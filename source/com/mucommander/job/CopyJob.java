@@ -40,8 +40,8 @@ public class CopyJob extends ExtendedFileJob {
 	private int mode;
 	
 	public final static int COPY_MODE = 0;
-	public final static int UNZIP_MODE = 0;
-	public final static int DOWNLOAD_MODE = 0;
+	public final static int UNZIP_MODE = 1;
+	public final static int DOWNLOAD_MODE = 2;
 	
 	
     /**

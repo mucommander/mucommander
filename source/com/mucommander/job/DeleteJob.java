@@ -51,7 +51,7 @@ public class DeleteJob extends FileJob {
     public DeleteJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files) {
 		super(progressDialog, mainFrame, files);
 
-		this.baseFolderPath = ((AbstractFile)files.elementAt(0)).getAbsolutePath();
+		this.baseFolderPath = ((AbstractFile)files.elementAt(0)).getParent().getAbsolutePath();
 		this.errorDialogTitle = Translator.get("delete_dialog.error_title");
 	}
 

@@ -60,7 +60,8 @@ public class FileExistsDialog extends QuestionDialog {
     	panel.add(new JLabel("  "+SizeFormatter.format(sourceFile.getSize(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE)
     			+", "+dateFormat.format(new Date(sourceFile.getDate()))));
     	panel.addSpace(10);
-    	panel.add(new JLabel("Destination: "+destFile.getAbsolutePath()));
+		// Use canonical path for destination, to resolve '..', '.' and '~'
+    	panel.add(new JLabel("Destination: "+destFile.getCanonicalPath()));
     	panel.add(new JLabel("  "+SizeFormatter.format(destFile.getSize(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE)
     			+", "+dateFormat.format(new Date(destFile.getDate()))));
     	
