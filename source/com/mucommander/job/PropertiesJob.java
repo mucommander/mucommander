@@ -7,6 +7,7 @@ import com.mucommander.ui.MainFrame;
 import java.util.Vector;
 import java.io.IOException;
 
+
 /**
  * This FileJob calculates the number of files contained in a list of file and folders and
  * computes their size.

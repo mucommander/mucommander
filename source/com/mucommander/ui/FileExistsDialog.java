@@ -42,18 +42,18 @@ public class FileExistsDialog extends QuestionDialog {
 	private JCheckBox applyToAllCheckBox;
 
 	
-	public FileExistsDialog(Dialog parent, Component locationRelative, AbstractFile sourceFile, AbstractFile destFile) {
+	public FileExistsDialog(Dialog parent, Component locationRelative, AbstractFile sourceFile, AbstractFile destFile, boolean applyToAllOption) {
 	    super(parent, Translator.get("file_exists_dialog.title"), locationRelative);
-		init(sourceFile, destFile);
+		init(sourceFile, destFile, applyToAllOption);
 	}
 
-	public FileExistsDialog(Frame parent, Component locationRelative, AbstractFile sourceFile, AbstractFile destFile) {
+	public FileExistsDialog(Frame parent, Component locationRelative, AbstractFile sourceFile, AbstractFile destFile, boolean applyToAllOption) {
 	    super(parent, Translator.get("file_exists_dialog.title"), locationRelative);
-		init(sourceFile, destFile);
+		init(sourceFile, destFile, applyToAllOption);
 	}
 
 	
-	private void init(AbstractFile sourceFile, AbstractFile destFile) {
+	private void init(AbstractFile sourceFile, AbstractFile destFile, boolean applyToAllOption) {
 		YBoxPanel panel = new YBoxPanel();
     	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm a");
     	panel.add(new JLabel("Source: "+sourceFile.getAbsolutePath()));
@@ -68,9 +68,11 @@ public class FileExistsDialog extends QuestionDialog {
     		new String[] {SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, APPEND_TEXT, CANCEL_TEXT},
     		new int[]  {SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, APPEND_ACTION, CANCEL_ACTION},
     		3);
-			
-		applyToAllCheckBox = new JCheckBox(Translator.get("apply_to_all"));
-		addCheckBox(applyToAllCheckBox);
+		
+		if(applyToAllOption) {
+			applyToAllCheckBox = new JCheckBox(Translator.get("apply_to_all"));
+			addCheckBox(applyToAllCheckBox);
+		}
 	}
 
 	
@@ -97,7 +99,7 @@ public class FileExistsDialog extends QuestionDialog {
 	 * Returns <code>true</code> if the 'apply to all' checkbox has been selected.
 	 */
 	public boolean applyToAllSelected() {
-		return applyToAllCheckBox.isSelected();
+		return applyToAllCheckBox==null?false:applyToAllCheckBox.isSelected();
 	}
 	
 }

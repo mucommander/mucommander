@@ -181,7 +181,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 				int choice;
 				// No default choice
 				if(defaultFileExistsChoice==-1) {
-					FileExistsDialog dialog = getFileExistsDialog(file, destFile);
+					FileExistsDialog dialog = getFileExistsDialog(file, destFile, true);
 					choice = waitForUserResponse(dialog);
 					// If 'apply to all' was selected, this choice will be used
 					// for any files that already exist  (user will not be asked again)

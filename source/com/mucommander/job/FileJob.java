@@ -324,11 +324,11 @@ public abstract class FileJob implements Runnable {
 	 * Creates and returns a dialog which notifies the user that a file already exists in the destination folder
 	 * under the same name and asks for what to do.
 	 */
-    protected FileExistsDialog getFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
+    protected FileExistsDialog getFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile, boolean applyToAllOption) {
 		if(progressDialog==null)
-			return new FileExistsDialog(mainFrame, mainFrame, sourceFile, destFile);
+			return new FileExistsDialog(mainFrame, mainFrame, sourceFile, destFile, applyToAllOption);
 		else
-			return new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
+			return new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile, applyToAllOption);
 	}
 
 
