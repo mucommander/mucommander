@@ -3,8 +3,8 @@ muCommander v0.6
 ----------------
 
 muCommander is a cross-platform file manager.  It features a Norton
-Commander style interface and runs on any OS supporting the Java 2
-Platform, Standard Edition.
+Commander style interface and runs on any operating system that has
+support for the Java 2 Platform, Standard Edition.
 
 Please use the muCommander forums (http://www.mucommander.com/forums)
 to post your questions, suggestions or bug reports. Your feedback is
@@ -37,62 +37,49 @@ What's new in v0.6?
 -------------------
 
 New features:
-- New file progress dialog with more information (current file size, average speed, total bytes transferred) and improved refresh rate
-- Send as email attachment
+- Send files as email attachments [ctrl+S]
+- Automatic refresh when folder content has changed
+- New progress bar with more information and improved refresh rate
+- Option to hide toolbar
 - Option to display file size in a compact manner
-- SHIFT+F6 renames (w/ visual indication)
-- SHIFT+F5 to copy to local dir (consistent with Shift+F6)
-- File -> Run command
-- Mac OS X integration: add hooks for 'About', 'Preferences', 'Quit' Finder menu items, and dirty window indication in text editor
-- Mac OS X integration: Create preferences file in ~/Library/Preferences/mucommander instead of ~/.mucommander/
-- Folder auto-refresh
-- Symbolic link color in table
-- Add symbolic link color in preferences
-- Symbolic link warning when deleting (Folder: ask, File: delete link only)
-- Skip symbolic links when copying
-- Skip symbolic links when moving	(original symlink will be deleted)
-- Show/Hide toolbar
-- Show/Hide toolbar on startup option
-- Add shortcuts to toolbar icons' tooltip
-- Beep on question dialog									OK (not on Java 1.3 / Mac OS X)
-- Apply button in preferences dialog
-- Add a known bugs section to readme.txt
+- [shift+F6] renames selected file
+- [shift+F5] copies selected file to local directory
+- 'File -> Run command' to run a command in local directory [ctrl+R]
+- Mac OS X : 'About', 'Preferences' and 'Quit' menu items, dirty window indication in text editor
+- Symbolic link support: special color and specific handling during file operations
+- 'Apply' button in preferences dialog
+- New logo :)
 
 Improvements:
-- jCIFS updated to 0.7.15
+- Reworked all windows and dialogs for cleaner and roomier layout
+- Increased file access performance
+- jCIFS library (for SMB support) updated to 0.7.15
 - Improved Properties dialog refresh rate
-- Gave dialogs some breathing room
-- Sort by icon is now on the right of the text, increased gap between text and icon
-- Minor modifications to Appearance Preferences panel
-- Cleaner, roomier main window layout
-- Renamed 'Quit' button and menu item to 'Close' and 'Close window'
-
+- Mac OS X : preferences file moved to ~/Library/Preferences/mucommander instead of ~/.mucommander/ (backward-compatible)
+- Keyboard shortcuts added to toolbar tooltips
+- Sound beep on question dialogs
+- Improved toolbar icons management
+- Redesigned sort headers
+- Optimized 'About' dialog
+- 'Quit' button and menu item renamed to 'Close' and 'Close window' [F10]
 
 Bug fixes
-- ..'s date used to be that of parent of current folder instead of being current folder's						FIXED
-- closing a window did not entirely release resources (-> addConfigurationListener ?)							FIXED
-- Important bug: while moving a big file, 'cancel' : original file is deleted, check if it was in 0.5  					FIXED (except that file is still unmarked)
-- Fixed bug which occurred when 'show hidden files' option was disabled and caused the application to fail on certain folders		FIXED
-- Fixed minor bug in QuestionDialog which sometimes lead to an extra row of buttons 							FIXED
-- Fixed no title on zip overwrite dialog												FIXED
-- Fixed copy -> cancel, current file unselected even though file/folder not completely copied						FIXED
-- Fixed timeout annoyance which occurred on startup when last folder was an SMB share	(-> last folder is never a remote file)		FIXED
-- Fix bug when copying a folder to a folder containing a folder with the same, the folder would get nested (reported by Pixel)		FIXED
+- Fixed bug when moving a file and cancelling, original of the file currently being moved would be deleted
+- Fixed a memory leak when closing main window
+- Fixed bug which occurred when 'show hidden files' option was disabled and caused the application to fail on certain folders
+- Fixed minor bug in question dialogs which sometimes led to an extra row of buttons
+- Fixed bug when copying files and canceling, current file unselected even though file/folder not completely copied
+- Fixed annoying delay on startup when last folder was an SMB share
+- Fixed bug when copying a folder to a folder containing a folder with the same, copied folder would get nested (reported by Pixel)
+- '..' date used to be that current folder's parent instead of being current folder's
+- Fixed cryptic error message when a folder cannot be created during a Copy/Move file operation
+- Fixed no title in Zip file overwrite dialog
 
-- (Internal) symbolic link handling in file API : seems OK for FS files, KO for SMB files (System.out getCanonicalPath)		OK
-- (Internal) ascending/descending and toolbar icons now loaded only once (more efficient)					OK
-- (Internal) Create separate dialogs (CopyDialog, MoveDialog, MkDirDialog, DeleteDialog) to make CommandBarPanel leaner		OK
-- (Internal) Use EscapeKeyAdapater in FileSelectionDialog									OK
-- (Internal) Filetable.refresh() and Filetable.setCurrentFolder() now synchronized						OK
-- (Internal) Rework all dialogs (with BoxLayout / YBoxPanel)									OK
-- (Internal) configuration listeners -> call getVariable STUPID!! Check all configurationChanged() methods			OK
-- (Internal) configuration listeners -> check if classes that register as listeners, unregister after, otherwise memory leaks	OK
-- (Internal) AbstractFile.getAbstractFile(absPath, parent) & AbstractFile.setParent(parent) for increased file performance	OK
-- (Internal) SMBFile parent folder value cached	for increased SMB performance							OK
-- (Internal) Fixed OverlayProgressBar text placement problem visible under OS X / 1.4						OK
-- (Internal) Fixed Copy/Move issue when a folder needed to be created in destination and a file existed with the same name, the error message was cryptic, now gives a more understandable 'cannot create folder' message						OK
-- (Internal) File info cache, should yield to better table performance								OK
-
+Known issues:
+- Symbolic links are not detected in SMB folders
+- Folder cannot be renamed to upper/lower case variations of the same name
+- Pipe '|' and other shell operators cannot be used in 'Run Command'
+- 'Sound beep on question dialog' doesn't work under Mac OS X + Java 1.3.1
 
 
 History
