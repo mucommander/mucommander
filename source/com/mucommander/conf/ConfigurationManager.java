@@ -70,7 +70,7 @@ public class ConfigurationManager {
         }
 		
         // Sets muCommander version corresponding to this configuration file
-        setVariable("prefs.conf_version", "0.6");
+        setVariable("prefs.conf_version", com.mucommander.Launcher.MUCOMMANDER_VERSION);
 //        initConfiguration();
 //        initDaemon();
     }

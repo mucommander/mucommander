@@ -12,7 +12,7 @@ import com.muxml.*;
  */
 public class VersionChecker implements ContentHandler {
 
-// Until 0.6 release 2
+// Was this URL until 0.6 release 2
 //    private final static String VERSION_DOCUMENT_URL = "http://mu-j.com/mucommander/version/version.xml";
     private final static String VERSION_DOCUMENT_URL = "http://mucommander.com/version/version.xml";
 

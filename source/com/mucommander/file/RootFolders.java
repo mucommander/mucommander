@@ -18,27 +18,28 @@ import java.util.StringTokenizer;
  */
 public class RootFolders {
 
-	// First time init
-	static {
-		updateRootFolders();
-	}
+//	// First time init
+//	static {
+//		updateRootFolders();
+//	}
 
-	/** Resolved root folders */
-	private static AbstractFile rootFolders[];
+//	/** Resolved root folders */
+//	private static AbstractFile rootFolders[];
 	
 	
-	/**
-	 * Returns resolved root folders.
-	 */
+//	/**
+//	 * Returns resolved root folders.
+//	 */
+//	public static AbstractFile[] getRootFolders() {
+//		return rootFolders;
+//	}
+	
+	
+//	/**
+//	 * Updates root folders info.
+//	 */
+//	public static void updateRootFolders() {
 	public static AbstractFile[] getRootFolders() {
-		return rootFolders;
-	}
-	
-	
-	/**
-	 * Updates root folders info.
-	 */
-	public static void updateRootFolders() {
 		Vector rootFoldersV = new Vector();
 
 		// Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link 
@@ -70,8 +71,10 @@ public class RootFolders {
 			rootFoldersV.add(homeFolder);
 			
 		// Folders are cached for subsequent calls to getRootFolders()
-		rootFolders = new AbstractFile[rootFoldersV.size()];
+		AbstractFile rootFolders[] = new AbstractFile[rootFoldersV.size()];
 		rootFoldersV.toArray(rootFolders);
+	
+		return rootFolders;
 	}
 
 	

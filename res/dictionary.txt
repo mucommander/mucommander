@@ -503,8 +503,8 @@ move_dialog.error_title:FR:Erreur de déplacement
 
 move_dialog.same_source_destination:EN:$[copy_dialog.same_source_destination]
 
-move_dialog.cannot_move_to_itself:EN:Unable to move destination folder to itself.
-move_dialog.cannot_move_to_itself:FR:Impossible de déplacer le dossier de destination vers lui-même.
+#move_dialog.cannot_move_to_itself:EN:Cannot move files to a subfolder.
+#move_dialog.cannot_move_to_itself:FR:Impossible de déplacer les fichiers vers un sous-repertoire.
 
 move_dialog.moving:EN:Moving files
 move_dialog.moving:FR:Déplacement en cours
@@ -1140,8 +1140,8 @@ prefs_dialog.mail_server:FR:Serveur SMTP
 prefs_dialog.misc_tab:EN:Misc
 prefs_dialog.misc_tab:FR:Autres
 
-prefs_dialog.use_brushed_metal:EN:Use 'brushed metal' look (Experimental + requires restart)
-prefs_dialog.use_brushed_metal:FR:Utiliser le look 'brushed metal' (Expérimental + après redémarrage)
+prefs_dialog.use_brushed_metal:EN:Use 'brushed metal' look (requires restart)
+prefs_dialog.use_brushed_metal:FR:Utiliser le look 'brushed metal' (après redémarrage)
 
 prefs_dialog.confirm_on_quit:EN:Show confirmation dialog on quit
 prefs_dialog.confirm_on_quit:FR:Afficher un dialogue de confirmation en quittant

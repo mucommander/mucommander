@@ -44,12 +44,12 @@ public class CopyDialog extends DestinationDialog {
 			fieldText = destFolder.getAbsolutePath(true);
 			AbstractFile file = ((AbstractFile)files.elementAt(0));
 			AbstractFile testFile;
-			if(nbFiles==1 && 
-				!(file.isDirectory() && 
-				(testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory())) {
-				
+			// Append filename to destination path if there is only one file to copy
+			// and if the file is not a directory that already exists in destination
+			// (otherwise folder would be copied inside the destination folder)
+			if(nbFiles==1 
+			 &&	!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory()))
 				fieldText += file.getName();
-			}
 		}
 		
 		setTextField(fieldText);

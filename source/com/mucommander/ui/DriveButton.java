@@ -27,46 +27,25 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	
 	private JPopupMenu popupMenu;
 	private Vector menuItems;
+	private long lastPopupTime;
+	
 	private int rootsOffset;
 	
-	private static AbstractFile rootFolders[];
-
+	private static AbstractFile rootFolders[] = RootFolders.getRootFolders();
 	
-	static {
-		rootFolders = RootFolders.getRootFolders();
-	}
+	private final static int POPUP_DELAY = 1000;
 
 	
 	/**
 	 * Creates a new drive button which is to be added to the given FolderPanel.
 	 */
 	public DriveButton(FolderPanel folderPanel) {
-		super(rootFolders[0].toString());
-
 		this.folderPanel = folderPanel;
 		
 		// For Mac OS X whose minimum width for buttons is enormous
 		setMinimumSize(new Dimension(40, (int)getPreferredSize().getHeight()));
 		
 		addActionListener(this);
-		popupMenu = new JPopupMenu();
-		popupMenu.addPopupMenuListener(this);
-
-		menuItems = new Vector();
-
-		// Add root 'drives'
-		int nbRoots = rootFolders.length;
-		for(int i=0; i<nbRoots; i++)
-			addMenuItem(rootFolders[i].toString());
-
-		this.rootsOffset = nbRoots;
-		
-		// Add 'connect to server' shortcuts
-		popupMenu.add(new JSeparator());
-
-		addMenuItem("FTP...");
-		addMenuItem("SMB...");
-		addMenuItem("HTTP...");
 	}
 
 
@@ -84,7 +63,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	/**
 	 * Updates the button's text to reflect the new specified current folder.
 	 */
-	private void updateText(AbstractFile folder) {
+	public void updateText(AbstractFile folder) {
 		// Update button text
 		if(folder instanceof RemoteFile) {
 			setText(((RemoteFile)folder).getProtocol());
@@ -106,6 +85,8 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 			}
 			setText(rootFolders[bestIndex].getName());
 		}
+		
+		repaint();
 	}
 	
 	
@@ -113,6 +94,28 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	 * Pops up the menu and requests focus on the popup menu.
 	 */
 	public void popup() {
+		// Update root folders in case new drives were mounted
+		rootFolders = RootFolders.getRootFolders();
+
+		popupMenu = new JPopupMenu();
+		popupMenu.addPopupMenuListener(this);
+
+		menuItems = new Vector();
+
+		// Add root 'drives'
+		int nbRoots = rootFolders.length;
+		for(int i=0; i<nbRoots; i++)
+			addMenuItem(rootFolders[i].toString());
+
+		this.rootsOffset = nbRoots;
+		
+		// Add 'connect to server' shortcuts
+		popupMenu.add(new JSeparator());
+
+		addMenuItem("FTP...");
+		addMenuItem("SMB...");
+		addMenuItem("HTTP...");
+
 		popupMenu.show(this, 0, getHeight());		
 		FocusRequester.requestFocus(popupMenu);
 	}
@@ -133,9 +136,13 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	///////////////////////////////
 	 
 	public void popupMenuCanceled(PopupMenuEvent e) {
+		this.menuItems = null;
 	}
 
 	public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+		this.popupMenu = null;
+		this.lastPopupTime = System.currentTimeMillis();
+		
 		folderPanel.getFileTable().requestFocus();
 	}
 
@@ -150,15 +157,32 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 		
+		// The button was clicked
 		if (source == this)	 {
-			popup();
+			// Return (do not popup menu) if popup menu was last showing less than POPUP_DELAY ms ago
+			if((System.currentTimeMillis()-this.lastPopupTime)<POPUP_DELAY) {
+				// Reset time stamp
+				this.lastPopupTime = 0;
+				return;
+			}
+			
+			// Hide popup menu if it is currently showing
+//System.out.println("DriveButton.actionPerformed "+this.popupMenu+" "+(this.popupMenu==null?"":""+this.popupMenu.isVisible()));
+			if(this.popupMenu!=null && this.popupMenu.isVisible()) {
+				this.popupMenu.setVisible(false);
+				// Reset time stamp
+				this.lastPopupTime = 0;
+			}
+			// Show popup menu
+			else
+				popup();
 		}
-		// root menu items
+		// One of the popup menu items was clicked
 		else {
 			int index = menuItems.indexOf(source);
 			
-			// Hide popup
-			popupMenu.setVisible(false);
+			// Free vector since it won't be needed anymore
+			this.menuItems = null;
 
 			// Menu item corresponds to a root folder
 			if(index<rootsOffset) {

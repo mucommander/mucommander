@@ -118,6 +118,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		}
 
 		locationField.setText(currentFolder.getAbsolutePath(true));
+		driveButton.updateText(currentFolder);
 				
 		scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER) {
 			public Insets getInsets() {
@@ -185,9 +186,13 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 			fileTable.setCurrentFolder(folder);
 			this.currentFolder = folder;
 
+			// Update location field with new current folder's path
 			locationField.setText(currentFolder.getAbsolutePath(true));
 			locationField.repaint();
 
+			// Update drive button to reflect new current folder
+			driveButton.updateText(currentFolder);
+			
 			if (addToHistory) {
 				historyIndex++;
 

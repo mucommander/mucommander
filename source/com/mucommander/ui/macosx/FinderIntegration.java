@@ -28,7 +28,7 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 		//  "Allows you to display your main windows with the “textured” Aqua window appearance.
 		//   This property should be applied only to the primary application window,
 		//   and should not affect supporting windows like dialogs or preference windows."
-		System.setProperty("apple.awt.brushMetalLook", ConfigurationManager.getVariable("prefs.macosx.brushed_metal_look", "false"));
+		System.setProperty("apple.awt.brushMetalLook", ConfigurationManager.getVariable("prefs.macosx.brushed_metal_look", "true"));
 
 		// Enables/Disables screen menu bar (default is on) :
 		//  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."

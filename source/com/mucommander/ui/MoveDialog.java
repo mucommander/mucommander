@@ -43,8 +43,15 @@ public class MoveDialog extends DestinationDialog {
 		else {
 			AbstractFile destFolder = mainFrame.getUnactiveTable().getCurrentFolder();
 			fieldText = destFolder.getAbsolutePath(true);
-			if(nbFiles==1)
-				fieldText += ((AbstractFile)files.elementAt(0)).getName();
+			// Append filename to destination path if there is only one file to move
+			// and if the file is not a directory that already exists in destination
+			// (otherwise folder would be moved inside the destination folder)
+			AbstractFile file = ((AbstractFile)files.elementAt(0));
+			AbstractFile testFile;
+			if(nbFiles==1
+			 &&	!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory()))
+				fieldText += file.getName();
+
 			setTextField(fieldText);
 		}
 
@@ -58,15 +65,16 @@ public class MoveDialog extends DestinationDialog {
 	 * Starts a MoveJob. This method is trigged by the 'OK' button or return key.
 	 */
 	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-		if (newName==null && sourceFolder.equals(destFolder)) {
+//		if (newName==null && sourceFolder.equals(destFolder)) {
+		if (newName==null && sourceFolder.equals(destFolder) || files.contains(destFolder)) {
 			showErrorDialog(Translator.get("move_dialog.same_source_destination"));
 			return;
 		}
 
-		if (files.contains(destFolder)) {
-			showErrorDialog(Translator.get("move_dialog.cannot_move_to_itself"));
-			return;
-		}
+//		if (files.contains(destFolder)) {
+//			showErrorDialog(Translator.get("move_dialog.cannot_move_to_itself"));
+//			return;
+//		}
 		
 		// Starts moving files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));

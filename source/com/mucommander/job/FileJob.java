@@ -238,7 +238,8 @@ public abstract class FileJob implements Runnable {
 			return;
 		
 		this.currentFile = file;
-		if(file.getParent().equals(file.getParent()))
+		// Advance index only if file is a child of baseSourceFolder
+		if(file.getParent().equals(baseSourceFolder))
 			currentFileIndex++;
 	}
 
