@@ -318,7 +318,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 				if(tokenType=='\'' || tokenType=='"') {
 					try {
 //							if(token.toLowerCase().startsWith("http://") || (!token.equals("") && token.charAt(0)=='/')) {
-						if((prevToken.equalsIgnoreCase("href") || prevToken.equalsIgnoreCase("src")) && !(token.startsWith("mailto") || token.startsWith("MAILTO"))) {
+						if((prevToken.equalsIgnoreCase("href") || prevToken.equalsIgnoreCase("src")) && !(token.startsWith("mailto") || token.startsWith("MAILTO") || token.startsWith("#"))) {
 							if(!childrenURL.contains(token)) {
 if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+this.url);
 								child = new HTTPFile(new URL(this.url, token));
