@@ -6,6 +6,8 @@ import com.mucommander.ui.MainFrame;
 
 import com.mucommander.file.AbstractFile;
 
+import com.mucommander.text.Translator;
+
 import java.io.*;
 
 
@@ -67,8 +69,7 @@ public abstract class ExtendedFileJob extends FileJob {
 	
 	
 	/**
-	 * Copies the given source file to the specified destination file, resuming the operation if
-	 * told to do so.
+	 * Copies the given source file to the specified destination file, optionally resuming the operation.
 	 */
 	protected void copyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append) throws FileJobException {
 		OutputStream out = null;
@@ -113,6 +114,61 @@ public abstract class ExtendedFileJob extends FileJob {
 	}
 
 
+	/**
+	 * Tries to copy the given source file to the specified destination file (see {@link #copyFile(AbstractFile, AbstractFile, boolean} copyFile()}
+	 * displaying a generic error dialog {@link #showErrorDialog(String, String) #showErrorDialog()} if something went wrong, 
+	 * and giving the user to skip the file, retry or cancel.
+	 */
+	protected boolean tryCopyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append, String errorDialogTitle) {
+		// Copy file to destination
+		do {				// Loop for retry
+			try {
+				copyFile(sourceFile, destFile, append);
+				return true;
+			}
+			catch(FileJobException e) {
+				// Copy failed
+				if(com.mucommander.Debug.ON)
+					System.out.println(""+e);
+				
+				int reason = e.getReason();
+				String errorMsg;
+				switch(reason) {
+					// Could not open source file for read
+					case FileJobException.CANNOT_OPEN_SOURCE:
+						errorMsg = Translator.get("cannot_read_source", sourceFile.getName());
+						break;
+					// Could not open destination file for write
+					case FileJobException.CANNOT_OPEN_DESTINATION:
+						errorMsg = Translator.get("cannot_write_destination", sourceFile.getName());
+						break;
+					// An error occurred during file transfer
+					case FileJobException.ERROR_WHILE_TRANSFERRING:
+					default:
+						errorMsg = Translator.get("error_while_transferring", sourceFile.getName());
+						break;
+				}
+				
+				// Ask the user what to do
+				int ret = showErrorDialog(errorDialogTitle, errorMsg);
+				// Retry action
+				if(ret==RETRY_ACTION) {
+					// Resume transfer
+					if(reason==FileJobException.ERROR_WHILE_TRANSFERRING)
+						append = true;
+					continue;
+				}
+				// cancel action or close dialog
+				else if(ret==-1 || ret==CANCEL_ACTION) {
+					stop();
+				}
+				// skip, cancel or close return false
+				return false;
+			}
+		} while(true);
+	}
+	
+	
     /**
      * Computes and returns the percent done of current file. Returns 0 if current file's size is not available
      * (getNbCurrentFileBytesProcessed() returns -1).

@@ -82,15 +82,13 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 					return true;
 				}
 				catch(IOException e) {
-					int ret = showErrorDialog("Unable to delete symlink "+file.getAbsolutePath());
-					// Retry : loop
+					int ret = showErrorDialog(errorDialogTitle, "Unable to delete symlink "+file.getAbsolutePath());
+					// Retry loops
 					if(ret==RETRY_ACTION)
 						continue;
-					// Cancel or close dialog : stop job and return
-					else if(ret==-1 || ret==CANCEL_ACTION)
-						stop();
+					// Cancel, skip or close dialog returns false
+					return false;
 				}
-				return false;
 			} while(true);
 		}
 		// Move directory recursively
@@ -107,14 +105,12 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 						destFolder.mkdir(destFileName);
 					}
 					catch(IOException e) {
-						int ret = showErrorDialog("Unable to create folder "+destFile.getAbsolutePath());
-						// Retry : loop
+						int ret = showErrorDialog(errorDialogTitle, "Unable to create folder "+destFile.getAbsolutePath());
+						// Retry loops
 						if(ret==RETRY_ACTION)
 							continue;
-						// Cancel or close dialog : stop job and return
-						else if(ret==-1 || ret==CANCEL_ACTION)
-							stop();
-						return false;		// abort and return failure
+						// Cancel, skip or close dialog returns false
+						return false;
 					}
 				} while(true);
 			}
@@ -125,7 +121,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 					AbstractFile subFiles[] = file.ls();
 					boolean isFolderEmpty = true;
 					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
-						if(!moveRecurse(subFiles[i], destFile, null))
+						if(!processFile(subFiles[i], destFile, null))
 							isFolderEmpty = false;
 					// If one file could returned failure, return failure as well since this
 					// folder could not be moved totally
@@ -133,14 +129,12 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 						return false;
 				}
 				catch(IOException e) {
-					int ret = showErrorDialog("Unable to read contents of folder "+file.getAbsolutePath());
-					// Retry : loop
+					int ret = showErrorDialog(errorDialogTitle, "Unable to read contents of folder "+file.getAbsolutePath());
+					// Retry loops
 					if(ret==RETRY_ACTION)
 						continue;
-					// Cancel or close dialog : stop job and return
-					else if(ret==-1 || ret==CANCEL_ACTION)
-						stop();
-					return false;		// abort and return failure
+					// Cancel, skip or close dialog returns false
+					return false;
 				}
 			} while(true);
 
@@ -152,13 +146,12 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 					return true;
 				}
 				catch(IOException e) {
-					int ret = showErrorDialog("Unable to delete folder "+file.getAbsolutePath());
+					int ret = showErrorDialog(errorDialogTitle, "Unable to delete folder "+file.getAbsolutePath());
+					// Retry loops
 					if(ret==RETRY_ACTION)
 						continue;
-					// Cancel or close dialog : stop job and return
-					else if(ret==-1 || ret==CANCEL_ACTION)
-						stop();
-					return false;		// abort and return failure
+					// Cancel, skip or close dialog returns false
+					return false;
 				}
 			} while(true);
 		}
@@ -208,72 +201,31 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 						return false;
 				}
 			}
-			
+
 			// Let's try the easy way			
 			if(!append && fileMove(file, destFile))
 				return true;
 
-			// if moveTo() returned false or wasn't possible because of 'append'
-			byte buf[] = new byte[READ_BLOCK_SIZE];
-			
-			OutputStream out = null;
-			InputStream in = null;
-			
-			boolean moved = false;
-
-			
-			// true if file was moved successfully
-			boolean retValue = false;
-			try  {
-				in = file.getInputStream();
-				out = destFile.getOutputStream(append);
-
-				try  {
-					int read;
-					while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
-						out.write(buf, 0, read);
-                        nbBytesProcessed += read;
-						currentFileProcessed += read;
-                    }
-
-					moved = !isInterrupted();
-				}
-				catch(IOException e) {
-				    int ret = showErrorDialog("Error while moving file "+file.getAbsolutePath());
-				    if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-				        stop();                
-				}
+			// if moveTo() returned false it wasn't possible to this method because of 'append',
+			// try the hard way
+			if(tryCopyFile(file, destFile, append, errorDialogTitle)) {
+				do {		// Loop for retry
+					try  {
+						file.delete();
+						// All OK
+						return true;
+					}
+					catch(IOException e) {
+						int ret = showErrorDialog(errorDialogTitle, "Unable to delete file "+file.getAbsolutePath());
+						// Retry loops
+						if(ret==RETRY_ACTION)
+							continue;
+						// Cancel, skip or close dialog returns false
+						return false;
+					}
+				} while(true);
 			}
-			catch(IOException e) {
-			    int ret = showErrorDialog("Unable to move file "+file.getAbsolutePath());
-			    if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-			        stop();
-			}
-		
-			// Tries to close the streams no matter what happened before
-			try {
-				if(in!=null)
-					in.close();
-				if(out!=null)
-					out.close();
-			}
-			catch(IOException e) {
-			}
-			
-			// If the file was successfully moved, delete the original one
-			if (moved) {
-				try  {
-					file.delete();
-					retValue = true;
-				}
-				catch(IOException e) {
-				    int ret = showErrorDialog("Unable to delete file "+file.getAbsolutePath());
-				    if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-				        stop();
-				}
-			}
-		
-			return retValue;
+			return false;
 		}
 
 /*
@@ -427,9 +379,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 		try {
 			if(file.moveTo(destFile))
 				return true;		// return true in case of success
-		}
-		catch(IOException e) {
-		}
+		} catch(IOException e) {}
 		
 		return false;
 	}

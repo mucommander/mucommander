@@ -58,9 +58,9 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	// Abstract methods Implementation //
 	/////////////////////////////////////
 
-    protected void processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
+    protected boolean processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
 		if(isInterrupted())
-            return;
+            return false;
 		
 		// Notify job that we're starting to process this file
 		nextFile(file);
@@ -78,23 +78,20 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 				try {
 					// Recurse on zip's contents
 					AbstractFile zipSubFiles[] = currentFile.ls();
-					for(int j=0; j<zipSubFiles.length; j++) {
+					for(int j=0; j<zipSubFiles.length; j++)
 						processFile(zipSubFiles[j], destFolder, null);
-					}
+					return true;
 				}
 				catch(IOException e) {
 					// File could not be uncompressed properly
 					int ret = showErrorDialog(errorDialogTitle, Translator.get("unzip.unable_to_open_zip", currentFile.getName()));
+					// Retry loops
 					if(ret==RETRY_ACTION)
-						break;
-					else if (ret==-1 || ret==CANCEL_ACTION)	 {		// CANCEL_ACTION or close dialog
-						stop();
-						return;
-					}
+						continue;
+					// cancel, skip or close dialog will simply return false
+					return false;
 				}
-				break;
 			} while(true);
-			return;
 		}
 
 		// Determine filename in destination
@@ -108,9 +105,9 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 		// Destination file
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+destFileName);
 
-		// Do nothing if file is a symlink (skip file)
+		// Do nothing if file is a symlink (skip file and return)
 		if(file.isSymlink())
-			;
+			return true;
 		// Copy directory recursively
         else if(file.isDirectory()) {
             // Create the folder in the destination folder if it doesn't exist
@@ -123,13 +120,12 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 					catch(IOException e) {
 						// Unable to create folder
 						int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFileName));
-						// Retry : loop
+						// Retry loops
 						if(ret==RETRY_ACTION)
 							continue;
-						// Cancel or close dialog : stop job and return
-						else if(ret==-1 || ret==CANCEL_ACTION)		
-							stop();
-						return;		// Return for skip and cancel
+						// Cancel or close dialog return false
+						return false;
+						// Skip continues
 					}
 					break;
 				} while(true);
@@ -142,19 +138,17 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 					AbstractFile subFiles[] = file.ls();
 					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
 						processFile(subFiles[i], destFile, null);
+					return true;
 				}
 				catch(IOException e) {
 					// Unable to open source file
 					int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", destFile.getName()));
-					// Retry : loop
+					// Retry loops
 					if(ret==RETRY_ACTION)
 						continue;
-					// Cancel or close dialog : stop job and return
-					else if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-						stop();
-					// Do nothing for skip
+					// Cancel, skip or close dialog return false
+					return false;
 				}
-				break;
 			} while(true);
         }
 		// Copy file
@@ -179,14 +173,14 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 				else
 					choice = defaultFileExistsChoice;
 				
-				// Cancel job
+				// Cancel, skip or close dialog
 				if (choice==-1 || choice==FileExistsDialog.CANCEL_ACTION) {
 					stop();
-					return;
+					return false;
 				}
 				// Skip file
 				else if (choice==FileExistsDialog.SKIP_ACTION) {
-					return;
+					return false;
 				}
 				// Append to file (resume file copy)
 				else if (choice==FileExistsDialog.APPEND_ACTION) {
@@ -200,10 +194,12 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 				else if (choice==FileExistsDialog.OVERWRITE_IF_OLDER_ACTION) {
 					// Overwrite if file is newer (stricly)
 					if(file.getDate()<=destFile.getDate())
-						return;
+						return true;
 				}
 			}
-			
+
+			return tryCopyFile(file, destFile, append, errorDialogTitle);
+/*			
 			// Copy file to destination
 			do {				// Loop for retry
 				try {
@@ -245,6 +241,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 				}
 				break;
 			} while(true);
+*/
 		}
 	}
 

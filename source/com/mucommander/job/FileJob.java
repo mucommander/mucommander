@@ -256,7 +256,9 @@ public abstract class FileJob implements Runnable {
 	
 	/**
 	 * Displays an error dialog with the specified title and message,
-	 * wait for user choice and returns the result.
+	 * offers to skip the file, retry or cancel and waits for user choice.
+	 * The job is stopped if 'cancel' or 'close' was chosen, and the result 
+	 * is returned.
 	 */
     protected int showErrorDialog(String title, String message) {
 		QuestionDialog dialog = new QuestionDialog(progressDialog, 
@@ -267,8 +269,12 @@ public abstract class FileJob implements Runnable {
 			new int[]  {SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION},
 			0);
 
-		return waitForUserResponse(dialog);
-    }
+		int userChoice = waitForUserResponse(dialog);
+		if(userChoice==-1 || userChoice==CANCEL_ACTION)
+			stop();
+		
+		return userChoice;
+	}
 
 	
 	/**
@@ -386,8 +392,10 @@ public abstract class FileJob implements Runnable {
 	 * @param file the file or folder to copy
 	 * @param destFolder the destination folder
 	 * @param recurseParams array of parameters which can be used when calling this method recursively, contains <code>null</code> when called by {@link #run() run()}
+	 *
+	 * @return <code>true</code> if the operation was sucessful
 	 */
-    protected abstract void processFile(AbstractFile file, AbstractFile destFolder, Object[] recurseParams);
+    protected abstract boolean processFile(AbstractFile file, AbstractFile destFolder, Object[] recurseParams);
 
 	
 	/**
