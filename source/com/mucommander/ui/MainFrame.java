@@ -1,12 +1,16 @@
 package com.mucommander.ui;
 
 import com.mucommander.Launcher;
+import com.mucommander.PlatformManager;
+
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.pref.PreferencesDialog;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFile;
+
 import com.mucommander.job.SendMailJob;
 import com.mucommander.conf.ConfigurationManager;
 
@@ -59,14 +63,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		URL imageURL = getClass().getResource("/icon16.gif");
 		// Sets frame icon
 		setIconImage(new ImageIcon(imageURL).getImage());
-	
-		// Sets frame to a decent size without exceeding screen size
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-//		setBounds(0, 0, Math.min(d.width-44,800-44), Math.min(d.height-33, 600-33));		
-		Insets insets = getInsets();
-System.out.println("w "+d.width+" "+insets.left+" "+insets.right);
-System.out.println("h "+d.height+" "+insets.top+" "+insets.bottom);
-		setBounds(0, 0, d.width - insets.left - insets.right, d.height - insets.top - insets.bottom);		
+
+		// Sets window size and location to use as much screen space as possible
+		setBounds(PlatformManager.getFullScreenBounds(this));
 		setResizable(true);
 
 		Container contentPane = getContentPane();

@@ -45,6 +45,11 @@ public class RootFolders {
 		addFileRoots(rootFoldersV);
 		if(Debug.ON)
 			System.out.println("java.io.File's root folders: "+rootFoldersV);
+
+		// Add home folder
+		AbstractFile homeFolder = AbstractFile.getAbstractFile(System.getProperty("user.home"));
+		if(homeFolder!=null)
+			rootFoldersV.add(homeFolder);
 		
 		// Add /etc/fstab folders
 		int osType = PlatformManager.getOsType();

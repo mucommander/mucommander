@@ -4,7 +4,10 @@ package com.mucommander;
 import com.mucommander.file.AbstractFile;
 
 import java.io.IOException;
+
 import java.util.Vector;
+
+import java.awt.*;
 
 
 public class PlatformManager {
@@ -66,6 +69,45 @@ public class PlatformManager {
 	public static int getOsType() {
 		return osType;
 	}
+	
+	
+	public static Rectangle getFullScreenBounds(Frame frame) {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Dimension screenSize = toolkit.getScreenSize();
+
+		// Code for Java 1.4
+		try {
+			// Java 1.4 makes it easy to get full screen bounds
+			Insets screenInsets = toolkit.getScreenInsets(frame.getGraphicsConfiguration());		
+			return new Rectangle(screenInsets.left, screenInsets.top, screenSize.width-screenInsets.left-screenInsets.right, screenSize.height-screenInsets.top-screenInsets.bottom);		
+		}
+		// Code for Java 1.3
+		catch(NoSuchMethodError e) {
+			// Sets frame to a decent size usable screen size
+			int x = 0;
+			int y = 0;
+			int width = screenSize.width;
+			int height = screenSize.height;
+			
+			// Mac OS X, assuming that dock is at the bottom of the screen
+			if(getOsType()==MAC_OS_X) {
+				// Menu bar height
+				y += 22;
+				height -= 22;
+			}
+
+			// Try to give enough space for 'everyone' with a 4/3 pixel ratio:
+			// - for Window's task bar (ok)
+			// - for Mac OS X's dock (not so sure)  
+			width -= 60;
+			height -= 45;
+			
+			return new Rectangle(x, y, width, height);		
+		}
+
+		
+	}
+	
 	
 	
 	/**
