@@ -426,7 +426,8 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	 * Refreshes this panel's components: file table, root button and location field
 	 * and notifies the user if current folder could not be refreshed.
 	 */
-	public void refresh() {
+/*
+	 public void refresh() {
 		rootButton.repaint();
 		locationField.repaint();
 	
@@ -435,7 +436,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			showFolderAccessError(null);
 		}
 	}
-
+*/
 
 	/**
 	 * This method must be called when this FolderPanel isn't used anymore, otherwise
