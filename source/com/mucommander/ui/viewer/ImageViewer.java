@@ -18,9 +18,6 @@ import java.io.*;
 //public class ImageViewer extends FileViewer implements ComponentListener {
 public class ImageViewer extends FileViewer implements ActionListener {
 	
-//	private final static int MAX_WIDTH_SCALED = 480;
-//	private final static int MAX_HEIGHT_SCALED = 360;
-	
 	private Image image;
 	private Image scaledImage;
 
@@ -32,14 +29,9 @@ public class ImageViewer extends FileViewer implements ActionListener {
 	private JMenuItem zoomOutItem;
 	
 	
-//	public ImageViewer() {
-//	}
-	
-//	public ImageViewer(ViewerFrame frame) {
-//		super(frame);
 	public ImageViewer() {
-	}
-	
+	}	
+
 
 	public void view(AbstractFile file) throws IOException {
 
@@ -196,8 +188,8 @@ System.out.println("goToImage");
 		zoomInItem.setEnabled(zoomFactor<1.0 || (2*zoomFactor*image.getWidth(null) < d.width
 		 && 2*zoomFactor*image.getHeight(null) < d.height));
 
-		zoomOutItem.setEnabled(zoomFactor/2*image.getWidth(null)>160
-		 && zoomFactor/2*image.getHeight(null)>120);
+		zoomOutItem.setEnabled(zoomFactor>1.0 || (zoomFactor/2*image.getWidth(null)>160
+		 && zoomFactor/2*image.getHeight(null)>120));
 	}
 	
 
@@ -209,19 +201,19 @@ System.out.println("goToImage");
 //		else if(source == nextImageItem)
 //			goToImage(true);
 //		else {
-			if(source==zoomInItem && zoomInItem.isEnabled()) {
-				zoomFactor = zoomFactor*2;
-				zoom(zoomFactor);
-				updateFrame();
-			}
-			else if(source==zoomOutItem && zoomOutItem.isEnabled()) {
-				zoomFactor = zoomFactor/2;
-				zoom(zoomFactor);
-				updateFrame();
-			}
+
+		if(source==zoomInItem && zoomInItem.isEnabled()) {
+			zoomFactor = zoomFactor*2;
+			zoom(zoomFactor);
+			updateFrame();
+		}
+		else if(source==zoomOutItem && zoomOutItem.isEnabled()) {
+			zoomFactor = zoomFactor/2;
+			zoom(zoomFactor);
+			updateFrame();
+		}
 			
-			checkZoom();
-		
+		checkZoom();
 //		}
 	}
 }

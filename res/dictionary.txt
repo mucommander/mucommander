@@ -82,15 +82,6 @@ overwrite_if_older:FR:Remplacer si ancien
 apply_to_all:EN:Apply to all
 apply_to_all:FR:Appliquer à tous
 
-cannot_read_source:EN:Cannot read file %1
-cannot_read_source:FR:Erreur lors de la lecture de %1
-
-cannot_write_destination:EN:Cannot write file %1
-cannot_write_destination:FR:Erreur lors de l'écriture de %1
-
-error_while_transferring:EN:Error while transferring file %1
-error_while_transferring:FR:Erreur lors du transfert de %1
-
 copy:EN:Copy
 copy:FR:Copier
 
@@ -102,6 +93,31 @@ browse:FR:Explorer
 
 ask:EN:Ask
 ask:FR:Demander
+
+cannot_read_source:EN:Cannot read file %1
+cannot_read_source:FR:Erreur lors de la lecture de %1
+
+cannot_write_destination:EN:Cannot write file %1
+cannot_write_destination:FR:Erreur lors de l'écriture de %1
+
+cannot_create_folder:EN:Unable to create directory %1.
+cannot_create_folder:FR:Erreur lors de la création du répertoire %1.
+
+cannot_read_folder:EN:Unable to read contents of folder %1
+cannot_read_folder:FR:Erreur lors de la lecture du dossier %1
+
+cannot_delete_file:EN:Unable to delete file %1
+cannot_delete_file:FR:Erreur lors de la suppression du fichier %1
+
+cannot_delete_folder:EN:Unable to delete folder %1
+cannot_delete_folder:FR:Erreur lors de la suppression du répertoire %1
+
+error_while_transferring:EN:Error while transferring file %1
+error_while_transferring:FR:Erreur lors du transfert de %1
+
+same_source_destination:EN:Source and destination folders are the same.
+same_source_destination:FR:Les répertoires source et destination sont les mêmes.
+
 
 #############
 # Languages #
@@ -144,12 +160,6 @@ command_bar.refresh:FR:Rafraîchir
 
 command_bar.close:EN:Close
 command_bar.close:FR:Fermer
-
-command_bar.large_file_warning:EN:This file may be too large for this operation.
-command_bar.large_file_warning:FR:Ce fichier est peut-être trop large pour cette operation.
-
-command_bar.open_anyway:EN:Open anyway
-command_bar.open_anyway:FR:Ouvrir
 
 
 #############
@@ -362,7 +372,8 @@ table.folder_access_error_title:FR:Folder access error
 table.folder_access_error:EN:Unable to read folder contents
 table.folder_access_error:FR:Unable to read folder contents
 
-table.folder_does_not_exist:EN:$[folder_does_not_exist]
+table.folder_does_not_exist:EN:This folder doesn't exist or is not available.
+table.folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
 
 table.download_or_browse:EN:Would you like to browse or download this file ?
 table.download_or_browse:FR:Souhaitez-vous explorer ou télécharger ce fichier ?
@@ -434,22 +445,14 @@ copy_dialog.destination:FR:Copier les fichiers sélectionnés dans
 copy_dialog.error_title:EN:Copy error
 copy_dialog.error_title:FR:Erreur de copie
 
-copy_dialog.same_source_destination:EN:Source and destination folders are the same.
-copy_dialog.same_source_destination:FR:Les répertoires source et destination sont les mêmes.
-
 copy_dialog.copying:EN:Copying files
 copy_dialog.copying:FR:Copie en cours
 
-copy.cannot_create_folder:EN:$[mkdir_dialog.cannot_create_dir]
+#copy.error_on_file:EN:An error occurred while copying %1
+#copy.error_on_file:FR:Une erreur est survenue lors de la copie de %1
 
-copy.cannot_read_folder:EN:Unable to read contents of folder %1
-copy.cannot_read_folder:FR:Impossible de lire le contenu du dossier %1
-
-copy.error_on_file:EN:An error occurred while copying %1
-copy.error_on_file:FR:Une erreur est survenue lors de la copie de %1
-
-copy.cannot_copy_file:EN:Unable to copy file %1
-copy.cannot_copy_file:FR:Impossible de copier le fichier %1
+#copy.cannot_copy_file:EN:Unable to copy file %1
+#copy.cannot_copy_file:FR:Impossible de copier le fichier %1
 
 copy.copying_file:EN:Copying %1
 copy.copying_file:FR:Copie de %1 en cours
@@ -471,8 +474,8 @@ unzip_dialog.error_title:FR:Erreur de décompression
 unzip_dialog.unzipping:EN:Unzipping files
 unzip_dialog.unzipping:FR:Décompression en cours
 
-unzip.error_on_file:EN:An error occurred while unzipping %1
-unzip.error_on_file:FR:Une erreur est survenue lors de la décompression de %1
+#unzip.error_on_file:EN:An error occurred while unzipping %1
+#unzip.error_on_file:FR:Une erreur est survenue lors de la décompression de %1
 
 #unzip.cannot_unzip_file:EN:Unable to unzip file %1
 #unzip.cannot_unzip_file:FR:Impossible de décompresser le fichier %1
@@ -482,6 +485,17 @@ unzip.unzipping_file:FR:Décompression de %1 en cours
 
 unzip.unable_to_open_zip:EN:Unable to open zip file %1.
 unzip.unable_to_open_zip:FR:Erreur lors de l'ouverture du fichier zip %1.
+
+
+#######
+# Zip #
+#######
+
+zip.compressing_file:EN:Compressing %1
+zip.compressing_file:FR:Compression de %1 en cours
+
+zip.error_on_file:EN:Error while compressing %1
+zip.error_on_file:FR:Erreur lors de la compression de %1
 
 
 ########
@@ -503,10 +517,10 @@ move_dialog.move_description:FR:Déplacer vers
 move_dialog.error_title:EN:Move error
 move_dialog.error_title:FR:Erreur de déplacement
 
-move_dialog.same_source_destination:EN:$[copy_dialog.same_source_destination]
+#move_dialog.same_source_destination:EN:$[copy_dialog.same_source_destination]
 
 #move_dialog.cannot_move_to_itself:EN:Cannot move files to a subfolder.
-#move_dialog.cannot_move_to_itself:FR:Impossible de déplacer les fichiers vers un sous-repertoire.
+#move_dialog.cannot_move_to_itself:FR:Impossible de déplacer les fichiers vers un sous-répertoire.
 
 move_dialog.moving:EN:Moving files
 move_dialog.moving:FR:Déplacement en cours
@@ -519,25 +533,10 @@ move.moving_file:FR:Déplacement de %1 en cours
 # HTTP download #
 #################
 
-http_download.connecting:EN:Connecting to server...
-http_download.connecting:FR:Connection en cours...
-
-http_download.downloading:EN:Downloading
-http_download.downloading:FR:Téléchargement en cours
-
-http_download.downloading_file:EN:Downloading %1
-http_download.downloading_file:FR:Téléchargement de %1 en cours
-
-http_download.error_title:EN:Download error
-http_download.error_title:FR:Erreur lors du téléchargement
-
-http_download.cannot_download_file:EN:Unable to download %1
-http_download.cannot_download_file:FR:Impossible de télécharger %1
-
-http_download.cannot_create_destination:EN:Unable to create file %1 in destination.
-http_download.cannot_create_destination:FR:Impossible de créer le fichier %1 dans le dossier de destination.
-
 download_dialog.download:EN:$[download]
+
+download_dialog.downloading:EN:Downloading
+download_dialog.downloading:FR:Téléchargement en cours
 
 download_dialog.description:EN:Download file to
 download_dialog.description:FR:Télécharger le fichier dans
@@ -545,8 +544,9 @@ download_dialog.description:FR:Télécharger le fichier dans
 download_dialog.error_title:EN:Download error
 download_dialog.error_title:FR:Erreur de téléchargement
 
-download_dialog.downloading:EN:Downloading file
-download_dialog.downloading:FR:Téléchargement en cours
+download.downloading_file:EN:Downloading %1
+download.downloading_file:FR:Téléchargement de %1 en cours
+
 
 
 ##########
@@ -567,6 +567,18 @@ delete_dialog.error_title:FR:Erreur de suppression
 
 delete.deleting_file:EN:Deleting %1
 delete.deleting_file:FR:Suppression %1 en cours
+
+delete.symlink_warning_title:EN:Symlink found
+delete.symlink_warning_title:FR:Lien symbolique
+
+delete.symlink_warning:EN:This file looks like a symbolic link:\n\n  File: %1\n  Links to: %2\n\nDelete symlink only or\nFollow symlink and delete folder (CAUTION) ?
+delete.symlink_warning:FR:Ce fichier a l'air d'être un lien symbolique:\n\n  Fichier: %1\n  Pointe vers: %2\n\nSupprimer le lien seulement ou\nSuivre le lien symbolique et supprimer le répertoire (ATTENTION) ?
+
+delete.delete_link_only:EN:Delete link
+delete.delete_link_only:FR:Supprimer le lien
+
+delete.delete_linked_folder:EN:Delete folder
+delete.delete_linked_folder:FR:Supprimer le répertoire
 
 
 #########
@@ -600,11 +612,29 @@ email_dialog.error_title:FR:Erreur d'envoi
 email_dialog.read_error:EN:Unable to read files in subfolders.
 email_dialog.read_error:FR:Les fichiers ne peuvent être lus.
 
+email_dialog.nb_files:EN:%1 file(s)
+email_dialog.nb_files:FR:%1 fichier(s)
+
 email_dialog.sending:EN:Sending files
 email_dialog.sending:FR:Envoi en cours
 
-email_dialog.nb_files:EN:%1 file(s)
-email_dialog.nb_files:FR:%1 fichier(s)
+email.sending_file:EN:Sending %1
+email.sending_file:FR:Envoi de %1
+
+email.connecting_to_server:EN:Connecting to %1
+email.connecting_to_server:FR:Connexion à %1
+
+email.server_unavailable:EN:Unable to contact mail server %1, check your mail preferences or try again later.
+email.server_unavailable:FR:Echec de la connexion au serveur %1, vérifiez vos préférences de mail ou réessayez plus tard.
+
+email.connection_closed:EN:Connection closed by server, mail not sent.
+email.connection_closed:FR:Connexion fermée par le serveur, le message n'a pas été envoyé.
+
+email.goodbye_failed:EN:Error while closing connection, mail may not have been sent.
+email.goodbye_failed:FR:Erreur lors de la fermeture de connexion, le message n'a peut-être pas été envoyé.
+
+email.send_file_error:EN:Unable to send file %1, mail not sent.
+email.send_file_error:FR:Erreur lors de l'envoi du fichier %1, le message n'a pas été envoyé.
 
 
 #####################################
@@ -655,10 +685,10 @@ file_selection_dialog.include_folders:FR:Inclure les dossiers
 #########
 
 mkdir_dialog.title:EN:Make directory
-mkdir_dialog.title:FR:Créer repertoire
+mkdir_dialog.title:FR:Créer répertoire
 
 mkdir_dialog.description:EN:Create directory
-mkdir_dialog.description:FR:Créer le repertoire
+mkdir_dialog.description:FR:Créer le répertoire
 
 mkdir_dialog.error_title:EN:Make dir error
 mkdir_dialog.error_title:FR:Erreur de création
@@ -671,9 +701,6 @@ mkdir_dialog.invalid_path:FR:Chemin invalide: %1
 
 mkdir_dialog.dir_already_exists:EN:Directory %1 already exists.
 mkdir_dialog.dir_already_exists:FR:Le répertoire %1 existe déjà.
-
-mkdir_dialog.cannot_create_dir:EN:Unable to create directory %1.
-mkdir_dialog.cannot_create_dir:FR:Impossible de créer le répertoire %1.
 
 
 ################
@@ -766,7 +793,7 @@ server_connect_dialog.connect:EN:Connect
 server_connect_dialog.connect:FR:Se connecter
 
 server_connect_dialog.auth_error:EN:Invalid login or password.
-server_connect_dialog.auth_error:EN:Identifiant ou mot de passe incorrect.
+server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
 
 
 ###############
@@ -794,7 +821,7 @@ auth_dialog.server:EN:Server
 auth_dialog.server:FR:Serveur
 
 auth_dialog.login:EN:Login
-auth_dialog.login:EN:Identifiant
+auth_dialog.login:FR:Identifiant
 
 auth_dialog.password:EN:$[server_connect_dialog.password]
 
@@ -843,7 +870,12 @@ file_viewer.file_menu:FR:Fichier
 file_viewer.close:EN:Close
 file_viewer.close:FR:Fermer
 
-file_viewer.view_error:EN:
+file_viewer.large_file_warning:EN:This file may be too large for this operation.
+file_viewer.large_file_warning:FR:Ce fichier est peut-être trop large pour cette operation.
+
+file_viewer.open_anyway:EN:Open anyway
+file_viewer.open_anyway:FR:Ignorer and ouvrir
+
 
 ###############
 # Text viewer #
@@ -866,17 +898,17 @@ text_viewer.select_all:FR:Tout sélectionner
 image_viewer.controls_menu:EN:Controls
 image_viewer.controls_menu:FR:Contrôles
 
-image_viewer.previous_image:EN:Previous image
-image_viewer.previous_image:FR:Image précédente
-
-image_viewer.next_image:EN:Next image
-image_viewer.next_image:FR:Image suivante
-
 image_viewer.zoom_in:EN:Zoom in
 image_viewer.zoom_in:FR:Zoomer
 
 image_viewer.zoom_out:EN:Zoom out
 image_viewer.zoom_out:FR:Dézoomer
+
+#image_viewer.previous_image:EN:Previous image
+#image_viewer.previous_image:FR:Image précédente
+
+#image_viewer.next_image:EN:Next image
+#image_viewer.next_image:FR:Image suivante
 
 
 ###############
@@ -889,6 +921,32 @@ file_editor.edit_error_title:FR:Erreur d'édition
 file_editor.edit_error:EN:Unable to edit file.
 file_editor.edit_error:FR:Impossible d'éditer le fichier.
 
+file_editor.save:EN:Save
+file_editor.save:FR:Enregistrer
+
+file_editor.save_as:EN:Save as...
+file_editor.save_as:FR:Enregistrer sous...
+
+file_editor.save_warning:EN:Save changes made to this file before closing ?
+file_editor.save_warning:FR:Enregistrer les modifications avant de fermer ce fichier ?
+
+file_editor.cannot_write:EN:Unable to write file.
+file_editor.cannot_write:FR:Impossible d'écrire le fichier. 
+
+file_editor.write_error_title:EN:Write error
+file_editor.write_error_title:FR:Erreur d'écriture
+
+file_editor.file_already_exists:EN:%1 already exists, do you want to replace it ?
+file_editor.file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
+
+file_editor.file_menu:EN:$[file_viewer.file_menu]
+
+file_editor.close:EN:$[file_viewer.close]
+
+file_editor.large_file_warning:EN:$[file_viewer.large_file_warning]
+
+file_editor.open_anyway:EN:$[file_viewer.open_anyway]
+
 
 ###############
 # Text editor #
@@ -896,29 +954,17 @@ file_editor.edit_error:FR:Impossible d'éditer le fichier.
 
 # Text editor uses text viewer's entries
 
-text_editor.save:EN:Save
-text_editor.save:FR:Enregister
-
-text_editor.save_as:EN:Save As...
-text_editor.save_as:FR:Enregistrer sous...
-
-text_editor.cannot_write:EN:Unable to write file.
-text_editor.cannot_write:FR:Impossible d'écrire le fichier. 
-
-text_editor.write_error:EN:Write error
-text_editor.write_error:FR:Erreur d'écriture
-
-text_editor.file_already_exists:EN:%1 already exists, do you want to replace it ?
-text_editor.file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
-
-text_editor.save_warning:EN:Save changes made to this file before closing ?
-text_editor.save_warning:FR:Enregistrer les modifications avant de fermer ce fichier ?
-
 text_editor.cut:EN:Cut
 text_editor.cut:FR:Couper
 
 text_editor.paste:EN:Paste
 text_editor.paste:FR:Coller
+
+text_editor.edit:EN:$[text_viewer.edit]
+
+text_editor.copy:EN:$[text_viewer.copy]
+
+text_editor.select_all:EN:$[text_viewer.select_all]
 
 
 ####################
@@ -1169,14 +1215,4 @@ unit.mb:FR:Mo
 
 unit.gb:EN:GB
 unit.gb:FR:Go
-
-
-################
-#
-################
-
-################
-#
-################
-
 

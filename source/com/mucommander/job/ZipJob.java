@@ -136,7 +136,7 @@ public class ZipJob extends ExtendedFileJob {
 				}
 			}
 			catch(IOException e) {
-				int ret = showErrorDialog(errorDialogTitle, "Error while adding "+file.getAbsolutePath());
+				int ret = showErrorDialog(errorDialogTitle, Translator.get("zip.error_on_file", file.getAbsolutePath()));
 				// Retry loops
 				if(ret==RETRY_ACTION)
 					continue;
@@ -160,7 +160,7 @@ public class ZipJob extends ExtendedFileJob {
 
 
     public String getStatusString() {
-		return "Adding "+getCurrentFileInfo();
+		return Translator.get("zip.compressing_file", getCurrentFileInfo());
     }
 
 	// This job modifies baseFolder

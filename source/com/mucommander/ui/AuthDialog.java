@@ -49,7 +49,6 @@ public class AuthDialog extends FocusDialog implements ActionListener {
 
 		YBoxPanel yPanel = new YBoxPanel(5);
 		
-//		contentPane.add(new JLabel(Translator.get("auth_dialog.desc")), BorderLayout.NORTH);
 		yPanel.add(new JLabel(Translator.get("auth_dialog.desc")));
 		yPanel.addSpace(20);
 		
@@ -62,7 +61,6 @@ public class AuthDialog extends FocusDialog implements ActionListener {
 		JTextField serverField = new JTextField(publicURL);
 		serverField.setEditable(false);
 		textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.server"), serverField, 15);
-//		textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.server"), new JLabel(publicURL), 15);
 
 		// Login field
 		this.loginField = new JTextField(fileURL.getLogin());
@@ -89,7 +87,6 @@ public class AuthDialog extends FocusDialog implements ActionListener {
 		this.okButton = new JButton(Translator.get("ok"));
 		JButton cancelButton = new JButton(Translator.get("cancel"));
 		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
-//		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this));
 		
 		// initial focus
 		setInitialFocusComponent(loginField);

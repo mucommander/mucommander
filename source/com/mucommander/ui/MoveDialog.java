@@ -67,7 +67,7 @@ public class MoveDialog extends DestinationDialog {
 	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName, int defaultFileExistsAction) {
 //		if (newName==null && sourceFolder.equals(destFolder)) {
 		if (newName==null && sourceFolder.equals(destFolder) || files.contains(destFolder)) {
-			showErrorDialog(Translator.get("move_dialog.same_source_destination"));
+			showErrorDialog(Translator.get("same_source_destination"));
 			return;
 		}
 

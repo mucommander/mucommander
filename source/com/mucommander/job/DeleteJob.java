@@ -13,7 +13,7 @@ import com.mucommander.text.Translator;
 import java.io.IOException;
 import java.util.Vector;
 
-import javax.swing.JLabel;
+import javax.swing.*;
 
 /**
  * This class is responsible for deleting recursively a group of files.
@@ -31,15 +31,11 @@ public class DeleteJob extends FileJob {
 	private AbstractFile baseFolder;
 	private String baseFolderPath;	
 	
-	private final static int DELETE_LINK_ACTION = 0;
-	private final static int DELETE_FOLDER_ACTION = 1;
-	private final static int CANCEL_ACTION = 2;
-	private final static int SKIP_ACTION = 3;
+	private final static int DELETE_LINK_ACTION = 100;
+	private final static int DELETE_FOLDER_ACTION = 101;
 
-	private final static String DELETE_LINK_TEXT = "Delete Link only";
-	private final static String DELETE_FOLDER_TEXT = "Delete Folder";
-	private final static String CANCEL_TEXT = "Cancel";
-	private final static String SKIP_TEXT = "Skip";
+	private final static String DELETE_LINK_TEXT = Translator.get("delete.delete_link_only");
+	private final static String DELETE_FOLDER_TEXT = Translator.get("delete.delete_linked_folder");
 
 	
     /**
@@ -108,7 +104,8 @@ public class DeleteJob extends FileJob {
 					catch(IOException e) {
 						if(com.mucommander.Debug.ON) e.printStackTrace();
 
-						ret = showErrorDialog(errorDialogTitle, "Unable to read contents of folder "+filePath);
+//						ret = showErrorDialog(errorDialogTitle, "Unable to read contents of folder "+filePath);
+						ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_source", filePath));
 						// Retry loops
 						if(ret==RETRY_ACTION)
 							continue;
@@ -138,9 +135,12 @@ public class DeleteJob extends FileJob {
 			catch(IOException e) {
 				if(com.mucommander.Debug.ON) e.printStackTrace();
 	
-				ret = showErrorDialog(errorDialogTitle, "Unable to delete "
-					+(file.isDirectory()?"folder ":"file ")
-					+file.getName());
+//				ret = showErrorDialog(errorDialogTitle, "Unable to delete "
+//					+(file.isDirectory()?"folder ":"file ")
+//					+file.getName());
+				ret = showErrorDialog(errorDialogTitle,
+					Translator.get(file.isDirectory()?"cannot_delete_folder":"cannot_delete_file", file.getName())
+				);
 				// Retry loops
 				if(ret==RETRY_ACTION)
 					continue;
@@ -153,15 +153,20 @@ public class DeleteJob extends FileJob {
 	
 	private int showSymlinkDialog(String relativePath, String canonicalPath) {
 		YBoxPanel panel = new YBoxPanel();
-		panel.add(new JLabel("This file looks like a symbolic link."));
-		panel.add(new JLabel(" "));
-		panel.add(new JLabel("Delete symlink only (safe) or"));
-		panel.add(new JLabel("follow symlink and delete folder (caution) ?"));
-		panel.add(new JLabel(" "));
-		panel.add(new JLabel("  File: "+relativePath));
-		panel.add(new JLabel("  Links to: "+canonicalPath));
+
+//		panel.add(new JLabel("This file looks like a symbolic link."));
+//		panel.add(new JLabel(" "));
+//		panel.add(new JLabel("  File: "+relativePath));
+//		panel.add(new JLabel("  Links to: "+canonicalPath));
+//		panel.add(new JLabel(" "));
+//		panel.add(new JLabel("Delete symlink only (safe	) or "));
+//		panel.add(new JLabel("Follow symlink and delete folder (CAUTION) ?"));
+
+		JTextArea symlinkWarningArea = new JTextArea(Translator.get("delete.symlink_warning", relativePath, canonicalPath));
+		symlinkWarningArea.setEditable(false);
+		panel.add(symlinkWarningArea);
 		
-		QuestionDialog dialog = new QuestionDialog(progressDialog, "Symlink found", panel, mainFrame,
+		QuestionDialog dialog = new QuestionDialog(progressDialog, Translator.get("delete.symlink_warning_title"), panel, mainFrame,
 			new String[] {DELETE_LINK_TEXT, DELETE_FOLDER_TEXT, SKIP_TEXT, CANCEL_TEXT},
 			new int[]  {DELETE_LINK_ACTION, DELETE_FOLDER_ACTION, SKIP_ACTION, CANCEL_ACTION},
 			2);

@@ -119,7 +119,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 			}
 		}
 	    catch(IOException e) {
-	        showErrorDialog(Translator.get("mkdir_dialog.cannot_create_dir", dirPath), Translator.get("mkdir_dialog.error_title"));
+	        showErrorDialog(Translator.get("cannot_create_folder", dirPath), Translator.get("mkdir_dialog.error_title"));
 	    }    
 	}
 

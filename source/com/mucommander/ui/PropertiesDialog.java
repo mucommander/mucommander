@@ -56,35 +56,6 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		
 		Container contentPane = getContentPane();
 	
-/*	
-		JPanel gridPanel = new JPanel(new GridLayout(0,1));
-		
-		// Contents (set later)
-		JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		tempPanel.add(new JLabel("<html><b>"+Translator.get("properties_dialog.contents")+": </b></html>"));
-		counterLabel = new JLabel("");
-		tempPanel.add(counterLabel);
-		gridPanel.add(tempPanel);
-
-		// Location (set here)
-		tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		String folderString = firstFile.getParent().getAbsolutePath(true);
-		JLabel locationLabel = new JLabel("<html><b>"+Translator.get("properties_dialog.location")+": </b>"+folderString+"</html>");
-		locationLabel.setToolTipText(folderString);
-		tempPanel.add(locationLabel);
-		gridPanel.add(tempPanel);
-
-		// Size (set later)
-		tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		tempPanel.add(new JLabel("<html><b>"+Translator.get("properties_dialog.size")+": </b></html>"));
-		sizeLabel = new JLabel("");
-		tempPanel.add(sizeLabel);
-		gridPanel.add(tempPanel);
-
-		updateLabels();
-		contentPane.add(gridPanel, BorderLayout.NORTH);
-*/
-
 		TextFieldsPanel mainPanel = new TextFieldsPanel(10);
 		
 		// Contents (set later)
@@ -125,13 +96,14 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	private void updateLabels() {
 		int nbFiles = job.getNbFilesRecurse();
 		int nbFolders = job.getNbFolders();
-		counterLabel.setText("<html>"
-			+(nbFiles>0?Translator.get("properties_dialog.nb_files", ""+nbFiles):"")
+		counterLabel.setText(
+			(nbFiles>0?Translator.get("properties_dialog.nb_files", ""+nbFiles):"")
 			+(nbFiles>0&&nbFolders>0?", ":"")
-			+(nbFolders>0?Translator.get("properties_dialog.nb_folders", ""+nbFolders):"")+"</html>");
+			+(nbFolders>0?Translator.get("properties_dialog.nb_folders", ""+nbFolders):"")
+		);
 
 //		sizeLabel.setText("<html>"+Translator.get("properties_dialog.nb_bytes", NumberFormat.getInstance().format(job.getTotalBytes()))+"</html>");
-		sizeLabel.setText("<html>"+SizeFormatter.format(job.getTotalBytes(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE)+"</html>");
+		sizeLabel.setText(SizeFormatter.format(job.getTotalBytes(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE));
 		
 		counterLabel.repaint(REFRESH_RATE);
 		sizeLabel.repaint(REFRESH_RATE);

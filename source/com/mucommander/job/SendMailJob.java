@@ -246,10 +246,11 @@ public class SendMailJob extends ExtendedFileJob {
 
     public String getStatusString() {
 		if(connectedToMailServer)
-            return "Sending "+getCurrentFileInfo();
+            return Translator.get("email.sending_file", getCurrentFileInfo());
         else
-            return "Connecting to "+mailServer;
+            return Translator.get("email.connecting_to_server", mailServer);
     }
+
 
 	/**
 	 * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object) processFile()} is made.
@@ -261,7 +262,7 @@ public class SendMailJob extends ExtendedFileJob {
             openConnection();
         }
         catch(IOException e) {
-            showErrorDialog("Unable to contact mail server "+mailServer+", check mail server preferences.");
+            showErrorDialog(Translator.get("email.server_unavailable", mailServer));
         }
 
 		if(isInterrupted())
@@ -272,7 +273,7 @@ public class SendMailJob extends ExtendedFileJob {
             sendBody();
         }
         catch(IOException e) {
-            showErrorDialog("Connection terminated by server, mail not sent.");
+            showErrorDialog(Translator.get("email.connection_closed"));
 		}
 	}
 	
@@ -287,7 +288,7 @@ public class SendMailJob extends ExtendedFileJob {
 			sayGoodBye();
 		}
 		catch(IOException e) {
-			showErrorDialog("Unable to close connection, mail may not have been sent.");
+			showErrorDialog(Translator.get("email.goodbye_failed"));
 		}
 	}
 	
@@ -310,7 +311,7 @@ public class SendMailJob extends ExtendedFileJob {
 			return sendAttachment(file);
 		}
 		catch(IOException e) {
-			showErrorDialog("Unable to send "+file.getName()+", mail not sent.");
+			showErrorDialog(Translator.get("email.send_file_error", file.getName()));
 			return false;
 		}
     }    

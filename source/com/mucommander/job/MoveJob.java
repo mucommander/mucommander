@@ -117,7 +117,8 @@ public class MoveJob extends ExtendedFileJob {
 				catch(IOException e) {
 					if(com.mucommander.Debug.ON) e.printStackTrace();
 
-					int ret = showErrorDialog(errorDialogTitle, "Unable to delete symlink "+file.getAbsolutePath());
+//					int ret = showErrorDialog(errorDialogTitle, "Unable to delete symlink "+file.getAbsolutePath());
+					int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
 					// Retry loops
 					if(ret==RETRY_ACTION)
 						continue;
@@ -142,7 +143,8 @@ public class MoveJob extends ExtendedFileJob {
 					catch(IOException e) {
 						if(com.mucommander.Debug.ON) e.printStackTrace();
 
-						int ret = showErrorDialog(errorDialogTitle, "Unable to create folder "+destFile.getAbsolutePath());
+//						int ret = showErrorDialog(errorDialogTitle, "Unable to create folder "+destFile.getAbsolutePath());
+						int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFile.getAbsolutePath()));
 						// Retry loops
 						if(ret==RETRY_ACTION)
 							continue;
@@ -172,7 +174,8 @@ public class MoveJob extends ExtendedFileJob {
 				catch(IOException e) {
 					if(com.mucommander.Debug.ON) e.printStackTrace();
 
-					int ret = showErrorDialog(errorDialogTitle, "Unable to read contents of folder "+file.getAbsolutePath());
+//					int ret = showErrorDialog(errorDialogTitle, "Unable to read contents of folder "+file.getAbsolutePath());
+					int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_source", file.getAbsolutePath()));
 					// Retry loops
 					if(ret==RETRY_ACTION)
 						continue;
@@ -192,7 +195,8 @@ public class MoveJob extends ExtendedFileJob {
 				catch(IOException e) {
 					if(com.mucommander.Debug.ON) e.printStackTrace();
 					
-					int ret = showErrorDialog(errorDialogTitle, "Unable to delete folder "+file.getAbsolutePath());
+//					int ret = showErrorDialog(errorDialogTitle, "Unable to delete folder "+file.getAbsolutePath());
+					int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_folder", file.getAbsolutePath()));
 					// Retry loops
 					if(ret==RETRY_ACTION)
 						continue;
@@ -265,7 +269,8 @@ public class MoveJob extends ExtendedFileJob {
 					catch(IOException e) {
 						if(com.mucommander.Debug.ON) e.printStackTrace();
 
-						int ret = showErrorDialog(errorDialogTitle, "Unable to delete file "+file.getAbsolutePath());
+//						int ret = showErrorDialog(errorDialogTitle, "Unable to delete file "+file.getAbsolutePath());
+						int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
 						// Retry loops
 						if(ret==RETRY_ACTION)
 							continue;

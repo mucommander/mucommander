@@ -73,8 +73,8 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 			// Test if file is too large to be viewed and warns user
 			long max = viewer.getMaxRecommendedSize();
 			if (max!=-1 && file.getSize()>max) {
-				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("command_bar.large_file_warning"), mainFrame, 
-					new String[] {Translator.get("command_bar.open_anyway"), Translator.get("cancel")},
+				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("file_viewer.large_file_warning"), mainFrame, 
+					new String[] {Translator.get("file_viewer.open_anyway"), Translator.get("cancel")},
 					new int[]  {0, 1},
 					0);
 	

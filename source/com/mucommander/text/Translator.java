@@ -427,7 +427,12 @@ public class Translator {
 			return null;
 	}
 
-
+	
+	/**
+	 * Looks for and reports any missing or unused dictionary entry,
+	 * using the supplied source folder path to look inside source files
+	 * for references to dictionary entries.
+	 */
 	public static void main(String args[]) throws IOException {
 		Enumeration languages = dictionaries.keys();
 		Vector langsV = new Vector();
@@ -439,14 +444,20 @@ public class Translator {
 		
 		com.mucommander.file.AbstractFile sourceFolder = com.mucommander.file.AbstractFile.getAbstractFile(args[0]);
 	
-		System.out.println("\n##### Checking missing entries #####");
+		System.out.println("\n##### Looking for missing entries #####");
 		checkMissingEntries(sourceFolder, langs);
 
-		System.out.println("\n##### Checking unused entries #####");
+		System.out.println("\n##### Looking for unused entries #####");
 		checkUnusedEntries(sourceFolder, langs);
 	}
 
 
+	/**
+	 * Checks for any missing dictionary entry in the given file or folder and reports them on the standard output.
+	 * If the given file is a folder, recurse on each file that it contains, if it's a 'regular' file and the
+	 * extension is '.java', looks for any calls to {@link #Translator.get(String), Translator.get()} and checks
+	 * that the request entry has a value in each language's dictionary.
+	 */ 
 	private static void checkMissingEntries(com.mucommander.file.AbstractFile file, String languages[]) throws IOException {
 		if(file.isDirectory()) {
 //			System.out.println("Checking missing entries in "+file.getAbsolutePath());
@@ -460,6 +471,7 @@ public class Translator {
 			String line;
 			int pos;
 			String entry;
+			String value;
 			String language;
 			while((line=br.readLine())!=null) {
 				if(!line.trim().startsWith("//") && (pos=line.indexOf("Translator.get(\""))!=-1) {
@@ -468,8 +480,9 @@ public class Translator {
 //						System.out.println("Checking entry "+entry);
 						for(int i=0; i<languages.length; i++) {
 							language = languages[i];
-							if(((Hashtable)dictionaries.get(language)).get(entry)==null)
-								System.out.println("Missing "+language.toUpperCase()+" entry '"+entry+"' in "+file.getAbsolutePath());
+							if((String)((Hashtable)dictionaries.get(language)).get(entry)!=null || (!language.equalsIgnoreCase("en") && (value=(String)((Hashtable)dictionaries.get("en")).get(entry))!=null && value.startsWith("$")))
+								continue;
+							System.out.println("Missing "+language.toUpperCase()+" entry '"+entry+"' in "+file.getAbsolutePath());
 						}
 					}
 					catch(Exception e) {
@@ -481,6 +494,10 @@ public class Translator {
 	}
 
 
+	/**
+	 * Checks all enties in all dictionaries, checks that they are used in at least one source file
+	 * in or under the supplied folder, and reports unused entries on the standard output.
+	 */ 
 	private static void checkUnusedEntries(com.mucommander.file.AbstractFile sourceFolder, String languages[]) throws IOException {
 		Hashtable dictionary;
 		Enumeration entries;
@@ -489,12 +506,16 @@ public class Translator {
 			entries = ((Hashtable)dictionaries.get(languages[i])).keys();
 			while(entries.hasMoreElements()) {
 				entry = (String)entries.nextElement();
+
 				if(!isEntryUsed(entry, sourceFolder))
 					System.out.println("Unused "+languages[i].toUpperCase()+" entry "+entry);
 			}
 		}
 	}
 
+	/**
+	 * Checks if the given entry is used in the supplied file or folder.
+	 */
 	private static boolean isEntryUsed(String entry, com.mucommander.file.AbstractFile file) throws IOException {
 		if(file.isDirectory()) {
 			com.mucommander.file.AbstractFile children[] = file.ls();

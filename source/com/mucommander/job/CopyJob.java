@@ -236,7 +236,7 @@ public class CopyJob extends ExtendedFileJob {
 
     public String getStatusString() {
 //        return Translator.get(unzipMode?"unzip.unzipping_file":"copy.copying_file", getCurrentFileInfo());
-        return Translator.get(mode==UNZIP_MODE?"unzip.unzipping_file":mode==DOWNLOAD_MODE?"http_download.downloading_file":"copy.copying_file", getCurrentFileInfo());
+        return Translator.get(mode==UNZIP_MODE?"unzip.unzipping_file":mode==DOWNLOAD_MODE?"download.downloading_file":"copy.copying_file", getCurrentFileInfo());
     }
 	
 	// This job modifies baseDestFolder and its subfolders
