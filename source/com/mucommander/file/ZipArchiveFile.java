@@ -5,10 +5,7 @@ import java.util.*;
 import java.util.zip.*;
 
 
-public class ZipArchiveFile extends AbstractFile implements ArchiveFile {
-
-	/** Wrapped around file */
-	private AbstractFile file;
+public class ZipArchiveFile extends AbstractArchiveFile {
 
 	/** Zip entries contained by this zip file, loaded once for all when needed for the first time */
 	private ZipEntry entries[];
@@ -18,12 +15,12 @@ public class ZipArchiveFile extends AbstractFile implements ArchiveFile {
 	 * Creates a ZipArchiveFile around the given file.
 	 */
 	public ZipArchiveFile(AbstractFile file) {
-		this.file = file;
+		super(file);
 	}
 
 
 	/**
-	 * Loads ZipEntries contained in the zip file.
+	 * Loads all entries contained in the Zip file.
 	 */
 	private void loadEntries() throws IOException {
 		ZipInputStream zin = new ZipInputStream(file.getInputStream());
@@ -160,91 +157,5 @@ if(com.mucommander.Debug.ON) System.out.println("ZipArchiveFile.loadEntries(): c
 				}
 			return null;
 		}
-	}
-
-
-	/////////////////////////////////////////
-	// AbstractFile methods implementation //
-	/////////////////////////////////////////
-	
-	public String getProtocol() {
-		return file.getProtocol();
-	}
-
-	public String getName() {
-		return file.getName();
-	}
-
-	public String getAbsolutePath() {
-		return file.getAbsolutePath();
-	}
-
-	public String getSeparator() {
-		return file.getSeparator();
-	}
-
-	public long getDate() {
-		return file.getDate();
-	}
-	
-	public long getSize() {
-		return file.getSize();
-	}
-	
-	public AbstractFile getParent() {
-		return file.getParent();
-	}
-	
-	protected void setParent(AbstractFile parent) {
-		this.file.setParent(parent);	
-	}	
-
-	public boolean exists() {
-		return file.exists();
-	}
-	
-	public boolean canRead() {
-		return file.canRead();
-	}
-	
-	public boolean canWrite() {
-		return file.canWrite();
-	}
-
-	public boolean isBrowsable() {
-		return true;
-	}
-	
-	public boolean isDirectory() {
-		return false;
-	}
-
-	public boolean isHidden() {
-		return file.isHidden();
-	}
-
-	public boolean isSymlink() {
-		return file.isSymlink();
-	}
-
-	public InputStream getInputStream() throws IOException {
-		return file.getInputStream();
-	}
-	
-	public OutputStream getOutputStream(boolean append) throws IOException {
-		return file.getOutputStream(append);
-	}
-		
-	public boolean moveTo(AbstractFile dest) throws IOException  {
-		return file.moveTo(dest);
-	}
-
-	public void delete() throws IOException {
-		file.delete();
-	}
-
-	public void mkdir(String name) throws IOException {
-		// For the time being, Zip files are read-only so let's throw an exception
-		throw new IOException();
 	}
 }

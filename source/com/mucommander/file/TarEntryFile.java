@@ -1,0 +1,58 @@
+package com.mucommander.file;
+
+import java.io.*;
+import com.ice.tar.*;
+
+
+public class TarEntryFile extends AbstractEntryFile {
+
+	private TarEntry tarEntry;
+
+	protected TarEntryFile(TarArchiveFile archiveFile, AbstractFile parent, TarEntry tarEntry) {
+		super(archiveFile);
+		this.parent = parent;
+		this.tarEntry = tarEntry;
+	}
+
+
+	/**
+	 * Returns the TarEntry associated with this TarEntryFile
+	 */
+	public TarEntry getTarEntry() {
+		return tarEntry;
+	}
+
+	
+	/////////////////////////////////////////
+	// AbstractFile methods implementation //
+	/////////////////////////////////////////
+
+	public String getName() {
+		// TarEntry name is actually the full path within the TarFile		
+        String entryName = tarEntry.getName();
+		if(entryName.charAt(entryName.length()-1)=='/')
+			entryName = entryName.substring(0,entryName.length()-1);
+		int pos = entryName.lastIndexOf('/');
+		return pos==-1?entryName:entryName.substring(pos+1,entryName.length());
+	}
+	
+	public long getDate() {
+		return tarEntry.getModTime().getTime();
+	}
+	
+	public long getSize() {
+		return tarEntry.getSize();
+	}
+	
+	public boolean isDirectory() {
+		return tarEntry.isDirectory();
+	}
+
+	public InputStream getInputStream() throws IOException {
+		return ((TarArchiveFile)archiveFile).getEntryInputStream(tarEntry);
+	}
+	
+	public AbstractFile[] ls() throws IOException {
+		return ((TarArchiveFile)archiveFile).ls(this);
+	}
+}

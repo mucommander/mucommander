@@ -3,17 +3,15 @@ package com.mucommander.file;
 import java.io.*;
 import java.util.zip.ZipEntry;
 
-public class ZipEntryFile extends AbstractFile {
+public class ZipEntryFile extends AbstractEntryFile {
+
 	private ZipEntry zipEntry;
-	private ZipArchiveFile zipArchive;
-	private AbstractFile parent;
 	
-	// Sames as the FSFile one so that absolute paths have only one kind of separator
-	protected final static String separator = File.separator;
+//	// Sames as the FSFile one so that absolute paths have only one kind of separator
+//	protected final static String separator = File.separator;
 	
-	protected ZipEntryFile(ZipArchiveFile zipArchive, AbstractFile parent, ZipEntry zipEntry) {
-		super();
-		this.zipArchive = zipArchive;
+	protected ZipEntryFile(ZipArchiveFile archiveFile, AbstractFile parent, ZipEntry zipEntry) {
+		super(archiveFile);
 		this.parent = parent;
 		this.zipEntry = zipEntry;
 	}
@@ -31,10 +29,6 @@ public class ZipEntryFile extends AbstractFile {
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 	
-	public String getProtocol() {
-		return zipArchive.getProtocol();
-	}
-
 	public String getName() {
 		// ZipEntry name is actually the full path within the ZipFile		
         String entryName = zipEntry.getName();
@@ -44,15 +38,6 @@ public class ZipEntryFile extends AbstractFile {
 		return pos==-1?entryName:entryName.substring(pos+1,entryName.length());
 	}
 	
-	public String getAbsolutePath() {
-		//	return zipArchive.getAbsolutePath()+getName();
-		return parent.getAbsolutePath()+separator+getName();
-	}
-
-	public String getSeparator() {
-		return zipArchive.getSeparator();
-	}
-
 	public long getDate() {
 		return zipEntry.getTime();
 	}
@@ -61,61 +46,15 @@ public class ZipEntryFile extends AbstractFile {
 		return zipEntry.getSize();
 	}
 	
-	public AbstractFile getParent() {
-		return parent;
-	}
-	
-	protected void setParent(AbstractFile parent) {
-		this.parent = parent;	
-	}
-	
-	public boolean exists() {
-		// for now, ZipEntryFile instances should always exist as they can
-		// only be created by ZipArchiveFile.ls()
-		return true;
-	}
-	
-	public boolean canRead() {
-		return true;
-	}
-	
-	public boolean canWrite() {
-		return false;
-	}
-
-	public boolean isHidden() {
-		return false;
-	}									
-
 	public boolean isDirectory() {
 		return zipEntry.isDirectory();
 	}
 
-	public boolean isSymlink() {
-		return false;
-	}
-
 	public InputStream getInputStream() throws IOException {
-		return zipArchive.getEntryInputStream(zipEntry);
+		return ((ZipArchiveFile)archiveFile).getEntryInputStream(zipEntry);
 	}
 	
-	public OutputStream getOutputStream(boolean append) throws IOException {
-		throw new IOException();
-	}
-	
-	public boolean moveTo(AbstractFile dest) throws IOException {
-		return false;
-	}
-
-	public void delete() throws IOException {
-		throw new IOException();
-	}
-
 	public AbstractFile[] ls() throws IOException {
-		return zipArchive.ls(this);
-	}
-
-	public void mkdir(String name) throws IOException {
-		throw new IOException();
+		return ((ZipArchiveFile)archiveFile).ls(this);
 	}
 }

@@ -329,7 +329,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): recycle_parent="
 
 //if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): parent="+child.getParent());
 
-								children.add(child);
+								children.add(AbstractFile.wrapArchive(child));
 								childrenURL.add(token);
 							}
 						}
