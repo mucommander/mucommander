@@ -31,15 +31,15 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	private JButton refreshButton;
 	private JButton closeButton;
 	
-	private final static String VIEW_CAPTION = "[F3] View";
-	private final static String EDIT_CAPTION = "[F4] Edit";
-	private final static String COPY_CAPTION = "[F5] Copy";
-	private final static String MOVE_CAPTION = "[F6] Move";
-	private final static String RENAME_CAPTION = "[F6] Rename";
-	private final static String MKDIR_CAPTION = "[F7] Make dir";
-	private final static String DELETE_CAPTION = "[F8] Delete";
-	private final static String REFRESH_CAPTION = "[F9] Refresh";
-	private final static String CLOSE_CAPTION = "[F10] Close";
+	private final static String VIEW_CAPTION = "View [F3]";
+	private final static String EDIT_CAPTION = "Edit [F4]";
+	private final static String COPY_CAPTION = "Copy [F5]";
+	private final static String MOVE_CAPTION = "Move [F6]";
+	private final static String RENAME_CAPTION = "Rename [F6]";
+	private final static String MKDIR_CAPTION = "Make dir [F7]";
+	private final static String DELETE_CAPTION = "Delete [F8]";
+	private final static String REFRESH_CAPTION = "Refresh [F9]";
+	private final static String CLOSE_CAPTION = "Close [F10]";
 	
 
     // Dialog width should not exceed 360, height is not an issue (always the same)
