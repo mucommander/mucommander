@@ -295,7 +295,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
     private int showErrorDialog(String message) {
 		QuestionDialog dialog = new QuestionDialog(progressDialog, Translator.get(unzip?"unzip_dialog.error_title":"copy_dialog.error_title", message, mainFrame,
 			new String[] {SKIP_TEXT, CANCEL_TEXT},
-			new int[]  {SKIP_ACTION, CANCEL_ACTION},
+			new int[]  {SKIP_ACTION, CANCEL_ACTION}
 			0);
 
 		return waitForUserResponse(dialog);
@@ -324,7 +324,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 						}
 					}
 					catch(IOException e) {
-						int ret = showErrorDialog("Unable to open zip file "+currentFile.getName());
+						int ret = showErrorDialog(Translator.get("unzip.unable_to_open_zip", currentFile.getName()));
 						if (ret==-1 || ret==CANCEL_ACTION)	 {		// CANCEL_ACTION or close dialog
 						    stop();
 							break;

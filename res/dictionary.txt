@@ -429,6 +429,9 @@ unzip.cannot_unzip_file:FR:Impossible de décompresser le fichier %1
 unzip.unzipping_file:EN:Unzipping %1
 unzip.unzipping_file:FR:Décompression de %1 en cours
 
+unzip.unable_to_open_zip:EN:Unable to open zip file %1.
+unzip.unable_to_open_zip:FR:Impossible d'ouvrir l'archive %1.
+
 
 ###############
 # Move dialog #
