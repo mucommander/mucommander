@@ -62,6 +62,16 @@
   </target>
 
 
+  <!-- Obfuscate code to make it leaner -->
+  <target name="obfuscate">
+    <taskdef name="obfuscate" 
+        classname="com.yworks.yguard.ObfuscatorTask" 
+        classpath="yguard.jar"/>
+    <obfuscate mainclass="com.mucommander.Launcher" logfile="dist/yguard_log.xml" conservemanifest="true">
+        <inoutpair in="dist/mucommander.jar" out="dist/mucommander_obf.jar"/>
+    </obfuscate>
+  </target>
+
   <!-- Launches mucommander from the classes directory -->
   <target name="run">
     <java classname="com.mucommander.Launcher" fork="true">
@@ -97,7 +107,7 @@
 
 
   <!-- Build the project from scratch: copy resources, compile and run -->
-  <target name="build" depends="prepare,compile,run">
+  <target name="build" depends="prepare,compile">
   </target>
 
 
