@@ -98,11 +98,27 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 		din.close();
 
 		this.scaledImage = null;
-		this.zoomFactor = 1.0;
 		this.image = getToolkit().createImage(b);
-		this.scaledImage = image;
+
 		waitForImage(image);
+
+		int width = image.getWidth(null);
+		int height = image.getHeight(null);
+		this.zoomFactor = 1.0;
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+
+		while(width>d.width || height>d.height) {
+			width = width/2;
+			height = height/2;
+			zoomFactor = zoomFactor/2;
+		}
 		
+		if(zoomFactor==1.0)
+			this.scaledImage = image;
+		else
+			zoom(zoomFactor);
+			
+		checkZoom();
 		frame.setCursor(Cursor.getDefaultCursor());
 	}
 
@@ -118,9 +134,13 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 	
 	
 	private synchronized void zoom(double factor) {
+		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
 		this.scaledImage = image.getScaledInstance((int)(image.getWidth(null)*factor), (int)(image.getHeight(null)*factor), Image.SCALE_DEFAULT);
 		waitForImage(scaledImage);
 		updateFrame();
+
+		frame.setCursor(Cursor.getDefaultCursor());
 	}
 
 	private synchronized void goToImage(boolean next) {
@@ -211,6 +231,17 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 
 */
 
+	private void checkZoom() {
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		zoomInItem.setEnabled(2*zoomFactor*image.getWidth(null) < d.width
+		 && 2*zoomFactor*image.getHeight(null) < d.height);
+
+		zoomOutItem.setEnabled(zoomFactor/2*image.getWidth(null)>160
+		 && zoomFactor/2*image.getHeight(null)>120);
+	}
+	
+
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 		
@@ -219,21 +250,23 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 		else if(source == nextImageItem)
 			goToImage(true);
 		else {
-			if(source == zoomInItem) {
-				if(zoomFactor<2.0) {
+			if(source==zoomInItem && zoomInItem.isEnabled()) {
+//				if(zoomFactor<2.0) {
 					zoomFactor = zoomFactor*2;
 					zoom(zoomFactor);
-				}
+//				}
 			}
-			else if(source == zoomOutItem) {
-				if(zoomFactor>0.25) {
+			else if(source==zoomOutItem && zoomOutItem.isEnabled()) {
+//				if(zoomFactor>0.25) {
 					zoomFactor = zoomFactor/2;
 					zoom(zoomFactor);
-				}
+//				}
 			}
 			
-			zoomInItem.setEnabled(zoomFactor<2.0);
-			zoomOutItem.setEnabled(zoomFactor>0.25);
+			checkZoom();
+		
+//			zoomInItem.setEnabled(zoomFactor<2.0);
+//			zoomOutItem.setEnabled(zoomFactor>0.25);
 		}
 	}
 
