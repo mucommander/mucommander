@@ -1,0 +1,64 @@
+# This file contains localized text strings, each entry goes like this:
+# <key>:<lang>:<value>
+#
+# where:
+# - <key> is the key used by the application to designate this entry
+# - <lang> is a 2-letter country code (EN, FR, JP...)
+# - <value> is the
+#
+# IMPORTANT: This file should be saved in UTF-8 character encoding.
+#
+
+
+###########
+# General #
+###########
+
+ok:EN:OK
+ok:FR:OK
+
+yes:EN:Yes
+yes:FR:Oui
+#yes:JP:はい
+
+no:EN:No
+no:FR:No
+#no:JP:いいえ
+
+cancel:EN:Cancel
+cancel:FR:Annuler
+#cancel:JP:ｷｬﾝｾﾙ
+
+
+###############
+# Command bar #
+###############
+
+command_bar.view:EN:View [F3]
+command_bar.view:FR:Voir [F3]
+
+command_bar.edit:EN:Edit [F4]
+command_bar.edit:FR:Editer [F4]
+
+command_bar.copy:EN:Copy [F5]
+command_bar.copy:FR:Copier [F5]
+
+command_bar.move:EN:Move [F6]
+command_bar.move:FR:Déplacer [F6]
+
+command_bar.rename:EN:Rename [F6]
+command_bar.rename:FR:Renommer [F6]
+
+command_bar.mkdir:EN:Make dir [F7]
+command_bar.mkdir:FR:Créer rep [F7]
+
+command_bar.delete:EN:Delete [F8]
+command_bar.delete:FR:Effacer [F8]
+
+command_bar.refresh:EN:Refresh [F9]
+command_bar.refresh:FR:Raffraîchir [F9]
+
+command_bar.close:EN:Close [F10]
+command_bar.close:FR:Fermer [F10]
+
+

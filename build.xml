@@ -14,6 +14,12 @@
     <tstamp/>
     <!-- Create class directory used by compile -->
     <mkdir dir="${classes}"/>
+    <!-- Copy images files to {$classes} -->
+    <copy todir="${classes}">
+      <fileset dir="res">
+        <include name="**/*"/>
+      </fileset>
+    </copy>
   </target>
 
 
@@ -41,14 +47,7 @@
         <fileset dir="${lib}">
         <include name="**/*.jar"/>
     </fileset>                      -->
- 
-    <!-- Copy images files to {$classes} -->
-    <copy todir="${classes}">
-      <fileset dir="res">
-        <include name="**/*"/>
-      </fileset>
-    </copy>
- </target> 
+  </target> 
 
 
   <!-- Creates a distribution JAR file, including all resources and needed libraries -->

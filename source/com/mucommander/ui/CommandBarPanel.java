@@ -2,13 +2,15 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.file.*;
+import com.mucommander.Launcher;
 import com.mucommander.ui.table.*;
 import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.job.*;
-import com.mucommander.Launcher;
 import com.mucommander.ui.viewer.*;
 import com.mucommander.ui.editor.*;
+import com.mucommander.text.Translator;
+import com.mucommander.job.*;
+import com.mucommander.file.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -31,15 +33,15 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	private JButton refreshButton;
 	private JButton closeButton;
 	
-	private final static String VIEW_CAPTION = "View [F3]";
-	private final static String EDIT_CAPTION = "Edit [F4]";
-	private final static String COPY_CAPTION = "Copy [F5]";
-	private final static String MOVE_CAPTION = "Move [F6]";
-	private final static String RENAME_CAPTION = "Rename [F6]";
-	private final static String MKDIR_CAPTION = "Make dir [F7]";
-	private final static String DELETE_CAPTION = "Delete [F8]";
-	private final static String REFRESH_CAPTION = "Refresh [F9]";
-	private final static String CLOSE_CAPTION = "Close [F10]";
+	private final static String VIEW_TEXT = Translator.get("command_bar.view");
+	private final static String EDIT_TEXT = Translator.get("command_bar.edit");
+	private final static String COPY_TEXT = Translator.get("command_bar.copy");
+	private final static String MOVE_TEXT = Translator.get("command_bar.move");
+	private final static String RENAME_TEXT = Translator.get("command_bar.rename");
+	private final static String MKDIR_TEXT = Translator.get("command_bar.mkdir");
+	private final static String DELETE_TEXT = Translator.get("command_bar.delete");
+	private final static String REFRESH_TEXT = Translator.get("command_bar.refresh");
+	private final static String CLOSE_TEXT = Translator.get("command_bar.close");
 	
 
     // Dialog width should not exceed 360, height is not an issue (always the same)
@@ -51,14 +53,14 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 
         this.mainFrame = mainFrame;
 
-		viewButton = addButton(VIEW_CAPTION);
-		editButton = addButton(EDIT_CAPTION);
-		copyButton = addButton(COPY_CAPTION);
-		moveButton = addButton(MOVE_CAPTION);
-		mkdirButton = addButton(MKDIR_CAPTION);
-		deleteButton = addButton(DELETE_CAPTION);
-		refreshButton = addButton(REFRESH_CAPTION);
-		closeButton = addButton(CLOSE_CAPTION);
+		viewButton = addButton(VIEW_TEXT);
+		editButton = addButton(EDIT_TEXT);
+		copyButton = addButton(COPY_TEXT);
+		moveButton = addButton(MOVE_TEXT);
+		mkdirButton = addButton(MKDIR_TEXT);
+		deleteButton = addButton(DELETE_TEXT);
+		refreshButton = addButton(REFRESH_TEXT);
+		closeButton = addButton(CLOSE_TEXT);
 
 		// Shift+F6 renames a file but since shift-clicks cannot be caught using
 		// an ActionListener (because of a known bug), we use a MouseListener
@@ -85,7 +87,7 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	 * the action is different when shift is pressed.
 	 */
 	public void setShiftMode(boolean on) {
-		moveButton.setText(on?RENAME_CAPTION:MOVE_CAPTION);
+		moveButton.setText(on?RENAME_TEXT:MOVE_TEXT);
 		moveButton.repaint();
 	}
 

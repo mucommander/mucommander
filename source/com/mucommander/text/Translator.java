@@ -7,6 +7,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.Locale;
 
 
 /**
@@ -16,13 +17,15 @@ import java.util.Vector;
  * @author Maxence Bernard
  */
 public class Translator {
-	private final static String DICTIONARY_RESOURCE_FILE = "dictionary.txt";
+	private final static String DICTIONARY_RESOURCE_FILE = "/dictionary.txt";
 	private final static Translator dico = new Translator(DICTIONARY_RESOURCE_FILE);
 
 	private static Hashtable dictionaries;
 	private static String dictionaryFilePath;
 //	private static Vector orderedEntries;
 //	private static boolean needsToBeSaved;
+
+	private static String language = Locale.getDefault().getLanguage();
 
 
 	/**
@@ -32,6 +35,8 @@ public class Translator {
 	 */
 	private Translator(String filePath) {
 		dictionaryFilePath = filePath;
+//		Locale locale = getDefault();
+//		System.out.println(locale.getLanguage()+" ("+locale.getDisplayLanguage()+")"+" / "+locale.getCountry()+" ("+locale.getDisplayCountry()+")"+" / "+locale.getVariant()+"("+locale.getDisplayVariant());
 
 		try {
 			loadDictionnaryFile();
@@ -93,7 +98,7 @@ public class Translator {
 	public static void loadDictionnaryFile() throws IOException {
 		dictionaries = new Hashtable();
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(dictionaryFilePath), "UTF-8"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(dictionaries.getClass().getResourceAsStream(dictionaryFilePath), "UTF-8"));
 		String line;
 		String key;
 		String lang;
@@ -234,6 +239,7 @@ public class Translator {
 		if (dictionary==null) {
 			if (language.equals("en")) {
 //				LogManager.logError("Translator.get: Unknown key "+key, true);
+				System.out.println("Translator.get: Unknown key "+key);
 
 				return key;
 			} else
@@ -247,6 +253,7 @@ public class Translator {
 		if (text==null) {
 			if (language.equals("en")) {
 //				LogManager.logError("Translator.get: Unknown key "+key, true);
+				System.out.println("Translator.get: Unknown key "+key);
 
 				return key;
 			} else
@@ -293,11 +300,10 @@ public class Translator {
 	 * </p>
 	 *
 	 * @param key a case-insensitive key.
-	 * @param language a 2-letter language case-insensitive string.
 	 *
 	 * @return DOCUMENT ME!
 	 */
-	public static String get(String key, String language) {
+	public static String get(String key) {
 		return get(key, language, (String[])null);
 	}
 
@@ -309,12 +315,11 @@ public class Translator {
 	 * </p>
 	 *
 	 * @param key DOCUMENT ME!
-	 * @param language DOCUMENT ME!
 	 * @param paramValue1 DOCUMENT ME!
 	 *
 	 * @return DOCUMENT ME!
 	 */
-	public static String get(String key, String language, String paramValue1) {
+	public static String get(String key, String paramValue1) {
 		return get(key, language, new String[] {paramValue1});
 	}
 
@@ -326,13 +331,12 @@ public class Translator {
 	 * </p>
 	 *
 	 * @param key DOCUMENT ME!
-	 * @param language DOCUMENT ME!
 	 * @param paramValue1 DOCUMENT ME!
 	 * @param paramValue2 DOCUMENT ME!
 	 *
 	 * @return DOCUMENT ME!
 	 */
-	public static String get(String key, String language, String paramValue1, String paramValue2) {
+	public static String get(String key, String paramValue1, String paramValue2) {
 		return get(key, language, new String[] {paramValue1, paramValue2});
 	}
 
@@ -344,14 +348,13 @@ public class Translator {
 	 * </p>
 	 *
 	 * @param key DOCUMENT ME!
-	 * @param language DOCUMENT ME!
 	 * @param paramValue1 DOCUMENT ME!
 	 * @param paramValue2 DOCUMENT ME!
 	 * @param paramValue3 DOCUMENT ME!
 	 *
 	 * @return DOCUMENT ME!
 	 */
-	public static String get(String key, String language, String paramValue1, String paramValue2, String paramValue3) {
+	public static String get(String key, String paramValue1, String paramValue2, String paramValue3) {
 		return get(key, language, new String[] {
 			    paramValue1, paramValue2, paramValue3
 		    });
