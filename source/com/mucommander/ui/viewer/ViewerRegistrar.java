@@ -9,9 +9,9 @@ public class ViewerRegistrar {
 	public static FileViewer getViewer(AbstractFile file) throws IOException {
 		if(TextViewer.canViewFile(file))
 			return new TextViewer();
-//		if(ImageViewer.canViewFile(file))
-//			return new ImageViewer();
-//		
+//        if(ImageViewer.canViewFile(file))
+//            return new ImageViewer();
+
 		return null;		
 	}
 }

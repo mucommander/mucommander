@@ -8,22 +8,44 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class CheckVersionDialog extends FocusDialog implements ActionListener {
+
+/**
+ * This class takes care of checking on a remote server information about the latest muCommander
+ * version and displaying the result to the end user.
+ *
+ * @author Maxence Bernard
+ */
+public class CheckVersionDialog extends FocusDialog implements ActionListener, Runnable {
 
 	// Dialog's width has to be at least 240
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
 
 	private MainFrame mainFrame;
+    private boolean userInitiated;
 
 	private JButton okButton;
 	private JButton downloadButton;
 
-    private final static String DOWNLOAD_URL = "http:/www.mucommander.com/#download";
+    private String downloadURL;
 
-	public CheckVersionDialog(MainFrame mainFrame) {
+	/**
+     * Checks for updates and displays the result
+     *
+     * @param userInitiated if <code>true</code>, the user manually asked to check for updates,
+     * if not then this check is performed automatically by the application. This parameter is used
+     * to not display check results when
+     */
+    public CheckVersionDialog(MainFrame mainFrame, boolean userInitiated) {
 		super(mainFrame, "", mainFrame);
 		this.mainFrame = mainFrame;
-		
+        this.userInitiated = userInitiated;
+
+        // Do all the hard work in a separate thread
+        new Thread(this).start();
+    }
+	
+    
+    public void run() {    
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
         
@@ -31,25 +53,60 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener {
         String title;
         boolean downloadOption = false;
         try {
-            String version = new VersionChecker().getLatestVersion();
-            if(version.equals(Launcher.VERSION)) {
+            if(Debug.TRACE)
+                System.out.println("Checking for new version...");            
+            
+            // Retrieves version information
+            VersionChecker.getVersionInformation();
+            
+            String version = VersionChecker.getLatestVersion();
+            // We're already running latest version
+            if(version.equals(Launcher.MUCOMMANDER_VERSION)) {
+                if(Debug.TRACE)
+                    System.out.println("No new version.");            
+
+                // If the version check was not iniated by the user (i.e. was automatic),
+                // we do not need to inform the user that he already has the latest version
+                if(!userInitiated)
+                    return;
+                
                 title = "No new version";
                 text = "Congratulations, you already have the latest version.";
             }
+            // A newer version is available
             else {
+                if(Debug.TRACE)
+                    System.out.println("A new version is available!");            
+
                 title = "New version available";
-                text = "There is a new "+version+" version available for download.";
+
+                // Checks if the current platform can open a new browser window
                 downloadOption = PlatformManager.canOpenURL();
+                downloadURL = VersionChecker.getDownloadURL();
+                
+                // If the platform is not capable of opening a new browser window,
+                // display the download URL.
+                 text = "There is a new "+version+" version available for download"
+                    +(downloadOption?".":" that you can download at "+downloadURL);
             }
         }
+        // Check failed
         catch(Exception e) {
+            // If the version check was not iniated by the user (i.e. was automatic),
+            // we do not need to inform the user that the check failed
+            if(!userInitiated)
+                return;
+
             title = "No version information";
             text = "Unable to retrieve version information from server";
         }
+
+        setTitle(title);
         
         JLabel label = new JLabel(text);
         contentPane.add(label, BorderLayout.CENTER);
 
+        // Add buttons
         JButton okButton = new JButton("OK");
         JButton buttons[];
         if(downloadOption) {
@@ -59,7 +116,6 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener {
         else {
             buttons = new JButton[]{okButton};
         }
-
         JPanel buttonPanel = DialogToolkit.createButtonPanel(buttons, this);
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -69,8 +125,9 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener {
 		// Packs dialog
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		pack();
-	}
-	
+        showDialog();
+    }
+
 
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
@@ -79,7 +136,7 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener {
         dispose();
 		
 		if (source==downloadButton)  {
-                PlatformManager.open(DOWNLOAD_URL, mainFrame.getLastActiveTable().getCurrentFolder());
+                PlatformManager.open(downloadURL, mainFrame.getLastActiveTable().getCurrentFolder());
 		}
 	}
 }

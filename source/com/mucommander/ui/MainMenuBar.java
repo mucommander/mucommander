@@ -235,7 +235,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			mainFrame.showPreferencesDialog();
 		}
 		else if (source == checkForUpdatesItem) {
-			new CheckVersionDialog(mainFrame).showDialog();
+			new CheckVersionDialog(mainFrame, true);
 		}
 		else if (source == quitItem) {
 			Launcher.getLauncher().disposeMainFrame(mainFrame);

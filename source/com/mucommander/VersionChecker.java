@@ -13,31 +13,50 @@ public class VersionChecker implements ContentHandler {
 
     private final static String VERSION_DOCUMENT_URL = "http://127.0.0.1/~maxence/version.xml";
 
-    private String lastVersion;
-    private String elementName;
+    private static String lastVersion;
+    private static String downloadURL;
+    private static String elementName;
 
-    public VersionChecker() {
+    private VersionChecker() {
     }
 
     /**
-     * Parses a remote XML document and returns the latest version string.
+     * Parses the remote XML document containing version information about muCommander.<br>
+     * This method has to be called before any call to <code>getLatestVersion()</code> or
+     * <code>getDownloadURL()</code> is made.
      *
      * @throw Exception if the document could not be parsed (connection down, 404...) or if the XML
      * document did not contain any version information.
      */
-    public String getLatestVersion() throws Exception {
+    public static void getVersionInformation() throws Exception {
         Parser parser = new Parser();
-        parser.parse(new URL(VERSION_DOCUMENT_URL).openStream(), this);
+        parser.parse(new URL(VERSION_DOCUMENT_URL).openStream(), new VersionChecker());
     
         if(lastVersion==null || lastVersion.equals(""))
             throw new Exception();
-        
+    }
+    
+    
+    /**
+     * Returns latest version of muCommander.
+     */
+    public static String getLatestVersion() {
         return lastVersion;
     }
+    
+    /**
+     * Returns muCommander download URL.
+     */
+    public static String getDownloadURL() {
+        return downloadURL;
+    }
+    
 
     public void characters(String s) {
         if(elementName.equals("last_version"))
             lastVersion = s;
+        else if(elementName.equals("download_url"))
+            downloadURL = s;
     }
 
     public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) {

@@ -4,6 +4,7 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.MainMenuBar;
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.LocationListener;
+import com.mucommander.ui.CheckVersionDialog;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 import com.mucommander.conf.*;
@@ -18,10 +19,10 @@ import com.mucommander.Debug;
 
 public class Launcher implements ActionListener, WindowListener, LocationListener, ConfigurationListener {
 	/** Version string */
-	public final static String VERSION = "0.5";
+	public final static String MUCOMMANDER_VERSION = "0.5";
 		
 	private static Vector mainFrames;
-	
+    	
 	private MainFrame currentMainFrame;
 
 	private static Launcher launcher;
@@ -54,7 +55,7 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 		
 		// Create a MainFrame
 		mainFrames = new Vector();
-		createNewMainFrame();
+		MainFrame mainFrame = createNewMainFrame();
 
 //		// Turns on dynamic layout
 //		setDynamicLayout(true);
@@ -65,6 +66,11 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 		// Listens to certain configuration events
 		ConfigurationManager.addConfigurationListener(this);
 		
+        // Check for newer version unless it was disabled
+        String checkForUpdates = ConfigurationManager.getVariable("prefs.check_for_updates_on_startup", "true");
+        if(!(checkForUpdates==null || checkForUpdates.equals("false")))
+            new CheckVersionDialog(mainFrame, false);
+        
 		// Dispose splash screen
 		splashScreen.dispose();
 	}
