@@ -282,7 +282,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	 */
 	private boolean showFolderAccessError(IOException e) {
 		if(e instanceof AuthException) {
-			AuthDialog authDialog = new AuthDialog(mainFrame, (AuthException)e, null);
+			AuthDialog authDialog = new AuthDialog(mainFrame, (AuthException)e);
 			authDialog.showDialog();
 			return authDialog.okPressed();
 		}
@@ -426,17 +426,39 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	 * Refreshes this panel's components: file table, root button and location field
 	 * and notifies the user if current folder could not be refreshed.
 	 */
-/*
 	 public void refresh() {
+		boolean retry = false;
+		
+		// First try FileTable's refresh method to preserve selection
+		try {
+			fileTable.refresh();
+			return;
+		}
+		catch(IOException e) {
+			if(!showFolderAccessError(e))
+				return;
+		}
+
+		// Retry if user authentified, using setCurrentFolder which will lose selection
+		AbstractFile folder = currentFolder;
+		do {
+			try {
+				folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
+				_setCurrentFolder(folder, false);
+			}
+			catch(IOException e) {
+				// Retry (loop) if user authentified
+				if(showFolderAccessError(e))
+					continue;
+			}
+			break;
+		}
+		while(true);
+
 		rootButton.repaint();
 		locationField.repaint();
-	
-		if(!fileTable.refresh()) {
-			// Retry (loop) if user authentified
-			showFolderAccessError(null);
-		}
-	}
-*/
+	 }
+
 
 	/**
 	 * This method must be called when this FolderPanel isn't used anymore, otherwise

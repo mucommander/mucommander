@@ -138,7 +138,7 @@ command_bar.delete:EN:Delete
 command_bar.delete:FR:Supprimer
 
 command_bar.refresh:EN:Refresh
-command_bar.refresh:FR:Raffraîchir
+command_bar.refresh:FR:Rafraîchir
 
 command_bar.close:EN:Close
 command_bar.close:FR:Fermer
@@ -750,15 +750,22 @@ server_connect_dialog.connect:FR:Se connecter
 # AuthDialog #
 ##############
 
-auth_dialog.desc:EN:Enter a login and password
-auth_dialog.desc:FR:Entrez un identifiant et un mot de passe 
+auth_dialog.title:EN:Authentication
+auth_dialog.title:FR:Authentification
 
-auth_dialog.server:EN:$[server_connect_dialog.server_url]
+auth_dialog.desc:EN:Please enter a login and password:
+auth_dialog.desc:FR:Veuillez entrer un identifiant et un mot de passe:
+
+auth_dialog.server:EN:Server
+auth_dialog.server:FR:Serveur
 
 auth_dialog.login:EN:Login
 auth_dialog.login:EN:Identifiant
 
 auth_dialog.password:EN:$[server_connect_dialog.password]
+
+auth_dialog.error_was:EN:Error was: %1
+auth_dialog.error_was:FR:L'erreur était: %1
 
 
 #######

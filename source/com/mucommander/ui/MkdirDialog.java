@@ -97,33 +97,30 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 		    AbstractFile folder = (AbstractFile)ret[0];
 		    String newName = (String)ret[1];
 
+			// Create directory
 	        folder.mkdir(newName);
-	        activeTable.refresh();
-						
-			// Finds the row corresponding to the newly created folder
-			// and makes it the current row.
-			if (activeTable.getCurrentFolder().equals(folder)) {
-				AbstractFile createdFolder = AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName);
-				activeTable.selectFile(createdFolder);
+			
+			try {
+				// Refresh table
+				activeTable.refresh();
+
+				// Skip next auto refresh
+				activeTable.getMonitor().skipRefresh();
+							
+				// Finds the row corresponding to the newly created folder
+				// and makes it the current row.
+				if (activeTable.getCurrentFolder().equals(folder)) {
+					AbstractFile createdFolder = AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName);
+					activeTable.selectFile(createdFolder);
+				}
+			}
+			catch(IOException e) {
+				// Folder could not be refreshed, no big deal
 			}
 		}
-	    catch(IOException ex) {
+	    catch(IOException e) {
 	        showErrorDialog(Translator.get("mkdir_dialog.cannot_create_dir", dirPath), Translator.get("mkdir_dialog.error_title"));
 	    }    
-
-/*		
-		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
-		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
-	    FileTable unactiveTable = activeTable==table1?table2:table1;
-	    if (unactiveTable.getCurrentFolder().equals(activeTable.getCurrentFolder()))
-	    	try {
-	    		unactiveTable.refresh();
-			}
-		    catch(IOException e) {
-		    	// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
-		    	// like switching to a root folder        
-		    }
-*/	
 	}
 
 	

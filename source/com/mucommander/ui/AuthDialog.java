@@ -18,6 +18,13 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 
+
+/**
+ * This dialog asks the user to provide a login and password. It usually pops up when the user tries to access
+ * a folder on a server for which he doesn't have read rights
+ *
+ * @author Maxence Bernard
+ */
 public class AuthDialog extends FocusDialog implements ActionListener {
 
 	private JButton okButton;
@@ -29,45 +36,78 @@ public class AuthDialog extends FocusDialog implements ActionListener {
 	
 	private String publicURL;
 
+	// Dialog size constraints
+	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(480,10000);	
 	
-	public AuthDialog(MainFrame mainFrame, AuthException authException, String text) {
-		super(mainFrame, Translator.get("server_connect_dialog.server_connect"), mainFrame);
+	
+	public AuthDialog(MainFrame mainFrame, AuthException authException) {
+		super(mainFrame, Translator.get("auth_dialog.title"), mainFrame);
 	
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
-		
-		contentPane.add(new JLabel(Translator.get("auth_dialog.desc")), BorderLayout.NORTH);
 
+		YBoxPanel yPanel = new YBoxPanel(5);
+		
+//		contentPane.add(new JLabel(Translator.get("auth_dialog.desc")), BorderLayout.NORTH);
+		yPanel.add(new JLabel(Translator.get("auth_dialog.desc")));
+		yPanel.addSpace(20);
+		
 		FileURL fileURL = authException.getFileURL();
 		this.publicURL = fileURL.getURL(false);
 
-		TextFieldsPanel textFieldsPanel = new TextFieldsPanel(5); 
+		TextFieldsPanel textFieldsPanel = new TextFieldsPanel(10); 
 
-		textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.server"), new JLabel(publicURL), 15);
+		// Server URL for which the user has to authentify
+		JTextField serverField = new JTextField(publicURL);
+		serverField.setEditable(false);
+		textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.server"), serverField, 15);
+//		textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.server"), new JLabel(publicURL), 15);
 
+		// Login field
 		this.loginField = new JTextField(fileURL.getLogin());
 		textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.login"), loginField, 10);
 		
+		// Password field
 		this.passwordField = new JPasswordField();
 		textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.password"), passwordField, 10);
 	
-		contentPane.add(textFieldsPanel, BorderLayout.CENTER);
+//		contentPane.add(textFieldsPanel, BorderLayout.CENTER);
+		yPanel.add(textFieldsPanel);
 
+		String exceptionMsg = authException.getMessage();
+		if(exceptionMsg!=null) {
+			yPanel.addSpace(15);
+			yPanel.add(new JLabel(Translator.get("auth_dialog.error_was", exceptionMsg)));
+		}
+
+		yPanel.addSpace(10);
+		contentPane.add(yPanel, BorderLayout.NORTH);
+		
+		
+		// OK / Cancel buttons
 		this.okButton = new JButton(Translator.get("ok"));
 		JButton cancelButton = new JButton(Translator.get("cancel"));
 		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
+//		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this));
 		
 		// initial focus
-		setInitialFocusComponent(textFieldsPanel);
+		setInitialFocusComponent(loginField);
 		
 		// Selects OK when enter is pressed
 		getRootPane().setDefaultButton(okButton);
 
-//		// Packs dialog
-//		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
+		// Set minimum dimension
+		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
+
+		// Set minimum dimension
+		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 	}
 	
 	
+	/**
+	 * Returns true if the user pressed OK (did not cancel the dialog) and presumably authentified.
+	 */
 	public boolean okPressed() {
 		return dialogOked;
 	}
@@ -76,6 +116,7 @@ public class AuthDialog extends FocusDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==okButton) {
 			this.dialogOked = true;
+			// Dialog OKed, add login/password pair to AuthManager, mapped with the server URL
 			AuthManager.put(publicURL, new AuthInfo(loginField.getText(), new String(passwordField.getPassword())));
 		}
 

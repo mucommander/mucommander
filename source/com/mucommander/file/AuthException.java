@@ -15,9 +15,10 @@ public class AuthException extends IOException {
 		this(fileURL, null);
 	}
 	
-	public AuthException(FileURL fileURL, String msg) {
+	public AuthException(FileURL fileURL, IOException e) {
 		this.fileURL = fileURL;
-		this.msg = msg;
+		if(e!=null)
+			this.msg = e.getMessage();
 	}
 	
 	public FileURL getFileURL() {

@@ -266,7 +266,7 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 			return children;
 		}
 		catch(SmbAuthException e) {
-			throw new AuthException(fileURL);
+			throw new AuthException(fileURL, e);
 		}
 	}
 
