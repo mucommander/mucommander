@@ -51,7 +51,7 @@ Improvements:
 - Buttons in dialogs are now all of the same size
 
 Bug fixes:
-- Fixed a bug when manipulating files that have been changed since they were last refreshed 
+- Fixed weird behavior when manipulating files that have been changed since they were last refreshed 
 - Fixed several bugs in the file selection dialog
 - Fixed a bug which caused files to no longer be marked after F9/Refresh
 - Fixed a bug in copy/move operation: 'cancel' did not stop current file to be copied/moved
@@ -63,9 +63,9 @@ History
 -------
 
 v0.4 [8/22/02]
-New features: 
+New features:
 - SMB support: 'File->Connect to Server' to browse a remote SMB server
-- Add to zip: mark files and select 'File->Zip' 
+- Add to zip: mark files and select 'File->Zip'
 - Batch-unzip: mark .zip files and select 'File->Unzip'
 
 Improvements:
@@ -158,18 +158,3 @@ Bug fixes:
 v0.1 [2/17/02]
 - Initial release. Fully functional version with basic commander features.
   ZIP and JAR file support (read-only).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
