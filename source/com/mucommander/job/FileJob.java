@@ -6,10 +6,13 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.FileExistsDialog;
+import com.mucommander.ui.table.FileTable;
 
 import com.mucommander.text.Translator;
 
 import com.mucommander.file.AbstractFile;
+
+import java.io.IOException;
 
 
 /**
@@ -58,7 +61,7 @@ public abstract class FileJob implements Runnable {
     protected long nbBytesSkipped;
 
 	/** Index of file currently being processed, see {@link #getCurrentFileIndex() getCurrentFileIndex} */
-	protected int currentFileIndex = -1;
+	protected int currentFileIndex;
 
 
 	protected final static int CANCEL_ACTION = 0;
@@ -215,6 +218,28 @@ public abstract class FileJob implements Runnable {
 	
 	
 	/**
+	 * Refreshes the folder's content of the given file table.
+	 */
+	protected void refreshTable(FileTable table) {
+		try { table.refresh(); }
+		catch(IOException e) {
+			// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
+			// like switching to a root folder
+		}
+	}
+	
+
+	/**
+	 * Refreshes the folder's content of the given file table only
+	 * if the table's current folder equals the specified folder.
+	 */
+	protected void refreshTableIfFolderEquals(FileTable table, AbstractFile folder) {
+		if (table.getCurrentFolder().equals(folder))
+			refreshTable(table);
+	}
+	
+	
+	/**
 	 * Returns <code>true</code> if the file job is finished.
 	 */
 	public boolean hasFinished() {
@@ -226,6 +251,8 @@ public abstract class FileJob implements Runnable {
      * Returns the percent of job processed so far.
      */
     public int getTotalPercentDone() {
+//System.out.println("getTotalPercentDone: "+((int)(100*(getCurrentFileIndex()/(float)getNbFiles()))));
+//System.out.println("getTotalPercentDone(2): "+getCurrentFileIndex()+" "+getNbFiles());
         return (int)(100*(getCurrentFileIndex()/(float)getNbFiles()));
     }
 

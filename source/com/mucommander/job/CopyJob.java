@@ -30,8 +30,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 	/** Current file info (path) */
 	private String currentFileInfo = "";
 
-    /** Size of current file */
-    private long currentFileSize;
+//    /** Size of current file */
+//    private long currentFileSize;
 
     /** Number of files that this job contains */
     private int nbFiles;
@@ -66,16 +66,15 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 		if(isInterrupted())
             return;
 
-		nextFile();
-		
-		currentFileSize = file.getSize();        
+//		currentFileSize = file.getSize();        
 
 		String originalName = file.getName();
 		String destFileName = (newName==null?originalName:newName);
        	String destFilePath = destFolder.getAbsolutePath(true)
        		+destFileName;
 
-		currentFileInfo = "\""+originalName+ "\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
+//		currentFileInfo = "\""+originalName+ "\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
+		currentFileInfo = "\""+originalName+ "\" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
 
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
 
@@ -198,6 +197,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
         AbstractFile zipSubFiles[];
 		while(true) {
 			currentFile = (AbstractFile)filesToCopy.elementAt(currentFileIndex);
+
+			nextFile(currentFile);
 			
 			// Unzip files		
 			if (unzip) {
@@ -220,7 +221,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 			else {
 				copyRecurse(currentFile, baseDestFolder, newName);
 			}
-
+			
 			if(isInterrupted())
 				break;
 			
@@ -234,27 +235,9 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 
         stop();
 		
-        // Refreshes only if table's folder is destFolder
-        FileTable table1 = mainFrame.getBrowser1().getFileTable();
-		if (table1.getCurrentFolder().equals(baseDestFolder))
-        	try {
-        		table1.refresh();
-        	}
-        	catch(IOException e) {
-        		// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
-        		// like switching to a root folder        
-        	}
-
-        // Refreshes only if table's folder is destFolder
-        FileTable table2 = mainFrame.getBrowser2().getFileTable();
-        if (table2.getCurrentFolder().equals(baseDestFolder))
-        	try {
-        		table2.refresh();
-        	}
-        	catch(IOException e) {
-        		// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
-        		// like switching to a root folder        
-        	}
+        // Refresh tables only if folder is destFolder
+        refreshTableIfFolderEquals(mainFrame.getBrowser1().getFileTable(), baseDestFolder);
+        refreshTableIfFolderEquals(mainFrame.getBrowser2().getFileTable(), baseDestFolder);
 
 		cleanUp();
 	}
@@ -268,9 +251,9 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
         return nbFiles;
     }
     
-    public long getCurrentFileSize() {
-        return currentFileSize;
-    }
+//    public long getCurrentFileSize() {
+//        return currentFileSize;
+//    }
 
     public String getStatusString() {
         return Translator.get(unzip?"unzip.unzipping_file":"copy.copying_file", currentFileInfo);

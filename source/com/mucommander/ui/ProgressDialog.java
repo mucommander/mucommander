@@ -161,8 +161,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 				if(lastBytesTotal!=nbBytesTotal) {
 					now = System.currentTimeMillis();
 					speed = (long)((nbBytesTotal-nbBytesSkipped)/((now-startTime-pausedTime)/1000d));
-if(com.mucommander.Debug.ON)
-System.out.println("nbBytesTotal="+nbBytesTotal+"nbBytesSkipped="+nbBytesSkipped+" startTime="+startTime+" pausedTime="+pausedTime+" now="+now+" speed="+speed+" speedStr="+SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB));
+//if(com.mucommander.Debug.ON)
+//System.out.println("nbBytesTotal="+nbBytesTotal+"nbBytesSkipped="+nbBytesSkipped+" startTime="+startTime+" pausedTime="+pausedTime+" now="+now+" speed="+speed+" speedStr="+SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB));
 					statsLabel.setText(
 						Translator.get("progress_bar.transferred",
 						SizeFormatter.format(nbBytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB),
