@@ -156,13 +156,13 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 	
 	
 	public boolean exists() {
-		try {
-			url.openStream().close();
+//		try {
+//			url.openStream().close();
 			return true;
-		}
-		catch(Exception e) {
-			return false;
-		}
+//		}
+//		catch(Exception e) {
+//			return false;
+//		}
 	}
 	
 	public boolean canRead() {

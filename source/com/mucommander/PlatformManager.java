@@ -225,9 +225,12 @@ public class PlatformManager {
 
             if(com.mucommander.Debug.ON)
                 System.out.println("Opening "+filePath);
-            
-            Runtime.getRuntime().exec(getOpenTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
-            
+
+			if(currentFolder instanceof com.mucommander.file.FSFile)
+				Runtime.getRuntime().exec(getOpenTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
+            else
+				Runtime.getRuntime().exec(getOpenTokens(filePath), null);
+			
             return true;
 		}
 		catch(IOException e) {

@@ -4,6 +4,7 @@ package com.mucommander.ui;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.SMBFile;
+import com.mucommander.file.FileURL;
 import com.mucommander.text.Translator;
 
 import java.awt.*;
@@ -131,7 +132,16 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
 			dispose();
 		
-			mainFrame.getLastActiveTable().getFolderPanel().setCurrentFolder(AbstractFile.getAbstractFile(SMBFile.getPrivateURL(getSmbURL(), lastSmbUsername, lastSmbPassword)), true);
+//			mainFrame.getLastActiveTable().getFolderPanel().setCurrentFolder(AbstractFile.getAbstractFile(SMBFile.getPrivateURL(getSmbURL(), lastSmbUsername, lastSmbPassword)), true);
+			try {
+				FileURL fileURL = new FileURL(getSmbURL());
+				fileURL.setLogin(lastSmbUsername);
+				fileURL.setPassword(lastSmbPassword);
+				mainFrame.getLastActiveTable().getFolderPanel().setCurrentFolder(AbstractFile.getAbstractFile(fileURL.getURL(true)), true);
+			}
+			catch(java.net.MalformedURLException ex) {
+				// Not supposed to happen
+			}
 		}
 		else if (source==cancelButton)  {
 			dispose();			

@@ -22,7 +22,7 @@ import java.io.*;
 import java.util.Vector;
 
 
-public class FolderPanel extends JPanel implements ActionListener, PopupMenuListener, KeyListener, ConfigurationListener {
+public class FolderPanel extends JPanel implements ActionListener, PopupMenuListener, KeyListener, FocusListener, ConfigurationListener {
 	private MainFrame mainFrame;
     
     private AbstractFile currentFolder;
@@ -38,6 +38,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	private JPopupMenu rootPopup;
 	private Vector rootMenuItems;
 	private JTextField locationField;
+	private boolean locationFieldTextSet;
 	
 	private FileTable fileTable;
 	private JScrollPane scrollPane;
@@ -111,6 +112,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		locationField = new JTextField();
 		locationField.addActionListener(this);
 		locationField.addKeyListener(this);
+		locationField.addFocusListener(this);
 //		locationPanel.add(locationField, BorderLayout.CENTER);
 		locationPanel.add(locationField);
 
@@ -277,6 +279,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?".":": "+exceptionMsg);
 		if(!errorMsg.endsWith("."))
 			errorMsg += ".";
+
 		JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
 	}
 
@@ -417,11 +420,15 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			String location = locationField.getText();
 
 			AbstractFile file = AbstractFile.getAbstractFile(location);
-		
+
+if(com.mucommander.Debug.ON)
+	System.out.println("FolderPanel.actionPerformed file="+ (file==null?"null":file.getAbsolutePath()+" "+file.exists()));
+			
 			boolean browse = false;
-			if(file==null) {
+			if(file==null || !file.exists()) {
 				// Restore current folder's path
 				locationField.setText(currentFolder.getAbsolutePath(true));
+				locationFieldTextSet = true;
 				showFolderAccessError(null);
 				return;
 			}
@@ -511,21 +518,39 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	 * PopupMenuListener methods *
 	 *****************************/
 	 
-	 public void popupMenuCanceled(PopupMenuEvent e) {
-	 }
+	public void popupMenuCanceled(PopupMenuEvent e) {
+	}
 
-	 public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+	public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 		fileTable.requestFocus();
-	 }
+	}
 
-	 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-	 }
+	public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+	}
+	 
+	/**************************
+	 * Focus listener methods *
+	 **************************/
+	
+	public void focusGained(FocusEvent e) {
+		locationFieldTextSet = false;
+	}
+	
+	public void focusLost(FocusEvent e) {
+		// If location field's text was not already set between focus gained and lost 
+		if(!locationFieldTextSet) {
+			// Restore current folder's path
+			locationField.setText(currentFolder.getAbsolutePath(true));
+		}
+	}
+	
+	 
+	/*********************************
+	 * ConfigurationListener methods *
+	 *********************************/
 
-
-
-
-    /**
-     * Listens to certain configuration variables.
+    /** 
+	 * Listens to certain configuration variables.
      */
     public boolean configurationChanged(ConfigurationEvent event) {
     	String var = event.getVariable();
