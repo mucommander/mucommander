@@ -1,4 +1,4 @@
-
+ 
 package com.mucommander.ui.viewer;
 
 import com.mucommander.text.Translator;
@@ -19,7 +19,8 @@ public class ViewerFrame extends JFrame implements ActionListener, WindowListene
 	public ViewerFrame(AbstractFile file) {
 		super(file.getAbsolutePath());
 		
-		getContentPane().setLayout(new BorderLayout());
+//		getContentPane().setLayout(new BorderLayout());
+		getContentPane().setLayout(new GridLayout(1,0));
 		
 		// Create default menu
 		MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
@@ -36,51 +37,44 @@ public class ViewerFrame extends JFrame implements ActionListener, WindowListene
 		setJMenuBar(menuBar);
 
 		// Catches window close event
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		addWindowListener(this);
+//		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+//		addWindowListener(this);
+
+		setResizable(true);
 	}
 
 	
 	void setViewer(FileViewer viewer) {
 		getContentPane().add(viewer, BorderLayout.CENTER);
+//		getContentPane().add(viewer);
 	}
 	
-	
+
+/**	
 	public void show() {
 		// Sets panel to preferred size, without exceeding a maximum size and with a minumum size
 		super.pack();
-/*
-		Dimension d = getSize();
-		Dimension screend = Toolkit.getDefaultToolkit().getScreenSize();
-			
-		// width is 800 max and 480 min
-		int width = Math.max(480, Math.min(d.width, Math.min(screend.width-44, 800-44)));
-			
-		// height is 3/4 of width
-		setSize(
-			width, 
-			(int)(width*3/((float)4))
-		);
-*/
-		super.setResizable(true);
 		super.show();
 	}
-
+*/
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==closeItem)
-			close();
+//			close();
+			dispose();
 	}
 
+	/*
 	private void close() {
 //		setVisible(false);
 		dispose();
 	}
-
+*/
+	
     /**************************
      * WindowListener methods *
      **************************/	
-
+/*
     public void windowClosing(WindowEvent e) {
 		close();
 	}
@@ -102,4 +96,5 @@ public class ViewerFrame extends JFrame implements ActionListener, WindowListene
 
     public void windowClosed(WindowEvent e) {
     }	
+*/
 }

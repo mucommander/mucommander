@@ -12,6 +12,7 @@ import javax.swing.event.*;
 import java.io.*;
 
 import com.mucommander.ui.comp.MnemonicHelper;
+import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 
 import com.mucommander.conf.ConfigurationManager;
@@ -19,7 +20,8 @@ import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.text.Translator;
 
 
-public class TextViewer extends FileViewer implements ActionListener, WindowListener {
+//public class TextViewer extends FileViewer implements ActionListener, WindowListener {
+public class TextViewer extends FileViewer implements ActionListener {
 
 //	private String encoding;
 
@@ -50,13 +52,26 @@ public class TextViewer extends FileViewer implements ActionListener, WindowList
 		textArea.setEditable(false);
 
 		add(new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
-		frame.addWindowListener(this);
+
+		// Request focus on text area when visible
+		FocusRequester.requestFocus(textArea);
+//		frame.addWindowListener(this);
 	}
 
 	
 	public void startViewing(AbstractFile fileToView, boolean isSeparateWindow) throws IOException {
 		textArea.read(new InputStreamReader(fileToView.getInputStream()), null);
 		textArea.setCaretPosition(0);
+//		pack();
+	}
+
+
+	public Dimension getPreferredSize() {
+//		return new Dimension(Math.min(480, image.getWidth(null)), Math.min(360,image.getHeight(null)));
+		Dimension d = super.getPreferredSize();
+System.out.println("TextViewer.getPreferrredSize()="+d);		
+System.out.println("TextViewer.getPreferrredSize, textArea.getPrefferredSize()="+textArea.getPreferredSize());		
+		return d;
 	}
 
 	
@@ -93,7 +108,7 @@ public class TextViewer extends FileViewer implements ActionListener, WindowList
     /**************************
      * WindowListener methods *
      **************************/	
-
+/*
     public void windowClosing(WindowEvent e) {
 	}
 
@@ -115,5 +130,5 @@ public class TextViewer extends FileViewer implements ActionListener, WindowList
 
     public void windowClosed(WindowEvent e) {
     }
-
+*/
 }

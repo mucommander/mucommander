@@ -79,7 +79,7 @@ public class PlatformManager {
 	
 	/**
 	 * Returns screen insets: accurate information under Java 1.4,
-	 * null inset values for Java 1.3 (execept under OS X)
+	 * null inset values for Java 1.3 (except under OS X)
 	 */
 	private static Insets getScreenInsets(Frame frame) {
 		// Code for Java 1.4

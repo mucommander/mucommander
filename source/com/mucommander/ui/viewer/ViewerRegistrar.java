@@ -24,12 +24,15 @@ public class ViewerRegistrar {
 		ViewerFrame frame = new ViewerFrame(file);
 		
 		Class viewerClass = null;
+		Class candidateClass;
 		for(int i=0; i<viewersClassNames.length; i++) {
-			viewerClass = Class.forName(viewersClassNames[i]);
-			Method method = viewerClass.getMethod("canViewFile", new Class[]{Class.forName("com.mucommander.file.AbstractFile")});
-			boolean res = ((Boolean)method.invoke(null, new Object[]{file})).booleanValue();
-			if(res)
+			candidateClass = Class.forName(viewersClassNames[i]);
+			Method method = candidateClass.getMethod("canViewFile", new Class[]{Class.forName("com.mucommander.file.AbstractFile")});
+System.out.println("getViewer: "+viewersClassNames[i]+" "+(((Boolean)method.invoke(null, new Object[]{file})).booleanValue()));
+			if(((Boolean)method.invoke(null, new Object[]{file})).booleanValue()) {
+				viewerClass = candidateClass;
 				break;
+			}
 		}
 
 		if(viewerClass==null)

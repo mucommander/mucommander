@@ -134,6 +134,8 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			// All OK, start viewing
 			viewer.startViewing(file, true);
 		
+//			viewer.getFrame().show();
+			viewer.getFrame().pack();
 			viewer.getFrame().show();
 		}
 		catch(Exception e) {
