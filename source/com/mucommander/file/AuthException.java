@@ -1,11 +1,15 @@
 
 package com.mucommander.file;
 
+import com.mucommander.file.FileURL;
+
+
 import java.io.IOException;
 
 public class AuthException extends IOException {
 
 	private FileURL fileURL;
+	private String msg;
 	
 	public AuthException(FileURL fileURL) {
 		this(fileURL, null);

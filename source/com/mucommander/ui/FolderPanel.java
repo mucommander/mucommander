@@ -277,19 +277,24 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	
 	/**
 	 * Displays a popup message notifying the user that the request folder couldn't be opened.
+	 *
+	 * @return <code>true</code> if folder should be tried and opened again.
 	 */
-	private void showFolderAccessError(IOException e) {
+	private boolean showFolderAccessError(IOException e) {
 		if(e instanceof AuthException) {
-			
+			AuthDialog authDialog = new AuthDialog(mainFrame, (AuthException)e, null);
+			authDialog.showDialog();
+			return authDialog.okPressed();
 		}
 		else {
 			String exceptionMsg = e==null?null:e.getMessage();
 			String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?".":": "+exceptionMsg);
 			if(!errorMsg.endsWith("."))
 				errorMsg += ".";
+
+			JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+			return false;
 		}
-			
-		JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
 	}
 
 	
@@ -310,14 +315,21 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		
 		boolean hadFocus = fileTable.hasFocus();
 
-		try {
-			_setCurrentFolder(folder, addToHistory);
-			success = true;
-		}
-        catch(IOException e) {
-        	showFolderAccessError(e);
-		}
-    
+		do {
+			try {
+				_setCurrentFolder(folder, addToHistory);
+				success = true;
+			}
+			catch(IOException e) {
+				// Retry (loop) if user authentified
+				if(showFolderAccessError(e)) {
+					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
+					continue;
+				}
+			}
+			break;
+		} while(true);
+			
         if(hadFocus || mainFrame.getLastActiveTable()==fileTable)
 			fileTable.requestFocus();
 
@@ -331,16 +343,22 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			return false;
 		
 		boolean success = false;
-		try {
-			_setCurrentFolder((AbstractFile)history.elementAt(historyIndex-1), false);
-			historyIndex--;
-
-			success = true;
+		AbstractFile folder = (AbstractFile)history.elementAt(--historyIndex);
+		do {
+			try {
+				_setCurrentFolder(folder, false);
+				success = true;
+			}
+			catch(IOException e) {
+				// Retry (loop) if user authentified
+				if(showFolderAccessError(e)) {
+					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
+					continue;
+				}
+			}
+			break;
 		}
-		catch(IOException e) {
-//		    JOptionPane.showMessageDialog(mainFrame, "Unable to access folder contents.", "Access error", JOptionPane.ERROR_MESSAGE);
-			showFolderAccessError(e);
-		}
+		while(true);
 	
 		// Notifies listeners that location has changed
 		fireLocationChanged();
@@ -355,17 +373,22 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			return false;
 		
 		boolean success = false;
-		try {
-			_setCurrentFolder((AbstractFile)history.elementAt(historyIndex+1), false);
-			historyIndex++;
-
-			success = true;
-		}
-		catch(IOException e) {
-//		    JOptionPane.showMessageDialog(mainFrame, "Unable to access folder contents.", "Access error", JOptionPane.ERROR_MESSAGE);
-			showFolderAccessError(e);
-		}
-
+		AbstractFile folder = (AbstractFile)history.elementAt(++historyIndex);
+		do {
+			try {
+				_setCurrentFolder(folder, false);
+				success = true;
+			}
+			catch(IOException e) {
+				// Retry (loop) if user authentified
+				if(showFolderAccessError(e)) {
+					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
+					continue;
+				}
+			}
+			break;
+		} while(true);
+			
 		// Notifies listeners that location has changed
 		fireLocationChanged();
 
@@ -407,8 +430,10 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		rootButton.repaint();
 		locationField.repaint();
 	
-		if(!fileTable.refresh())
+		if(!fileTable.refresh()) {
+			// Retry (loop) if user authentified
 			showFolderAccessError(null);
+		}
 	}
 
 

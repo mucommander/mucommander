@@ -746,6 +746,21 @@ server_connect_dialog.connect:EN:Connect
 server_connect_dialog.connect:FR:Se connecter
 
 
+##############
+# AuthDialog #
+##############
+
+auth_dialog.desc:EN:Enter a login and password
+auth_dialog.desc:FR:Entrez un identifiant et un mot de passe 
+
+auth_dialog.server:EN:$[server_connect_dialog.server_url]
+
+auth_dialog.login:EN:Login
+auth_dialog.login:EN:Identifiant
+
+auth_dialog.password:EN:$[server_connect_dialog.password]
+
+
 #######
 # Zip #
 #######

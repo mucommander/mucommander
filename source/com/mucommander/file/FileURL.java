@@ -153,7 +153,15 @@ public class FileURL {
 	 * Sets the login part with the given one.
 	 */
 	public void setLogin(String login) {
-		this.login = login;
+		if(login==null)
+			this.login = null;
+		else {
+			login = login.trim();
+			if(login.equals(""))
+				this.login = null;
+			else
+				this.login = login;
+		}
 	}
 
 
@@ -169,7 +177,15 @@ public class FileURL {
 	 * Sets the password part with the given one.
 	 */
 	public void setPassword(String password) {
-		this.password = password;
+		if(password==null)
+			this.password = null;
+		else {
+			password = password.trim();
+			if(password.equals(""))
+				this.password = null;
+			else
+				this.password = password;
+		}
 	}
 	
 	
@@ -212,7 +228,7 @@ public class FileURL {
 		
 		if(includeAuthInfo && login!=null) {
 			s += login;
-			if(password!=null) 
+			if(password!=null)
 				s += ":"+password;
 			s += "@";
 		}

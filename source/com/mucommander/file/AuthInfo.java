@@ -16,7 +16,7 @@ public class AuthInfo  {
 	/**
 	 * Creates a new instance with the supplied login and password (password may be <code>null</code>.
 	 */
-	AuthInfo(String login, String password) {
+	public AuthInfo(String login, String password) {
 		this.login = login;
 		this.password = password;
 	}
@@ -24,14 +24,14 @@ public class AuthInfo  {
 	/**
 	 * Returns the login information.
 	 */
-	String getLogin() {
+	public String getLogin() {
 		return login;
 	}
 	
 	/**
 	 * Returns the password information.
 	 */
-	String getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
@@ -40,7 +40,7 @@ public class AuthInfo  {
 	 * Returns the login and password information contained in this url, wrapped in an AuthInfo instance.
 	 * Returns <code>null</code> if there is no login in the supplied URL.
 	 */
-	static AuthInfo getAuthInfo(FileURL fileURL) {
+	public static AuthInfo getAuthInfo(FileURL fileURL) {
 		String login = fileURL.getLogin();
 		if(login==null)
 			return null;
