@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
-public class ZipArchiveFile extends ArchiveFile {
+public class ZipArchiveFile extends AbstractFile implements ArchiveFile {
 	private AbstractFile file;
 
 	private ZipEntry entries[];

@@ -3,12 +3,13 @@ package com.mucommander.ui;
 
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.job.MoveJob;
+import com.mucommander.job.CopyJob;
 import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Vector;
 
 
 /**
@@ -18,19 +19,21 @@ import javax.swing.*;
  */
 public class DownloadDialog extends DestinationDialog {
 
+	private Vector fileV;
+	
 	private String fileURL;
 
 	private String fileName;
 	
 	
-	public DownloadDialog(MainFrame mainFrame, String URL) {
-		super(mainFrame,
+	public DownloadDialog(MainFrame mainFrame, Vector fileV) {
+		super(mainFrame, fileV,
 			Translator.get("download_dialog.download"),
 			Translator.get("download_dialog.description"),
-			Translator.get("download_dialog.download"));
-		
-		this.fileURL = URL;
+			Translator.get("download_dialog.download"),
+			Translator.get("download_dialog.error_title"));
 
+/*
 		int urlLen = fileURL.length();
 		// Remove ending '/' character(s)
 		while(fileURL.charAt(urlLen-1)=='/')
@@ -38,9 +41,12 @@ public class DownloadDialog extends DestinationDialog {
 		int lastSlashPos = fileURL.lastIndexOf('/');
 		// Determine local file name
 		this.fileName = java.net.URLDecoder.decode(fileURL.substring(lastSlashPos==-1||lastSlashPos<7?7:lastSlashPos+1, urlLen));
+*/
+		this.fileV = fileV;
+		AbstractFile file = (AbstractFile)fileV.elementAt(0);
 		
 		AbstractFile activeFolder = mainFrame.getLastActiveTable().getCurrentFolder();
-		setTextField(activeFolder.getAbsolutePath(true)+fileName);
+		setTextField(activeFolder.getAbsolutePath(true)+file.getName());
 		showDialog();
 	}
 
@@ -48,7 +54,9 @@ public class DownloadDialog extends DestinationDialog {
 	/**
 	 * Starts an HttpDownloadJob. This method is trigged by the 'OK' button or return key.
 	 */
-	protected void okPressed() {
+/*
+	 protected void okPressed() {
+
 		String destPath = pathField.getText();
 
 		// Resolves destination folder
@@ -69,10 +77,14 @@ public class DownloadDialog extends DestinationDialog {
 			// Create destination file
 			destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+fileName);
 		}
+*/
+
+	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName) {
 		
 		// Starts moving files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("http_download.downloading"));
-		com.mucommander.job.HttpDownloadJob downloadJob = new com.mucommander.job.HttpDownloadJob(mainFrame, progressDialog, fileURL, destFile);
+//		com.mucommander.job.HttpDownloadJob downloadJob = new com.mucommander.job.HttpDownloadJob(mainFrame, progressDialog, fileURL, destFile);
+		CopyJob downloadJob = new CopyJob(progressDialog, mainFrame, fileV, destFolder, newName, CopyJob.DOWNLOAD_MODE);
 		progressDialog.start(downloadJob);
 	}
 	

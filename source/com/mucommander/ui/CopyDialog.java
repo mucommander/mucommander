@@ -70,7 +70,7 @@ public class CopyDialog extends DestinationDialog {
 
 		// Starts copying files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-		CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, false);
+		CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.COPY_MODE);
 		progressDialog.start(job);
 	}
 

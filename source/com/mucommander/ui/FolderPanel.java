@@ -5,6 +5,8 @@ import com.mucommander.file.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableCellRenderer;
 import com.mucommander.ui.comp.FocusRequester;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
+
 import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
 
@@ -51,6 +53,14 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	private int historyIndex;
     
 	private String lastFolderOnExit;
+
+	private final static int CANCEL_ACTION = 0;
+	private final static int BROWSE_ACTION = 1;
+	private final static int COPY_ACTION = 2;
+	
+	private final static String CANCEL_TEXT = Translator.get("cancel");
+	private final static String BROWSE_TEXT = Translator.get("browse");
+	private final static String COPY_TEXT = Translator.get("copy");
 
 	
 	static {
@@ -387,6 +397,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 
+/*
 		if (source == locationField) {
 			String location = locationField.getText();
 
@@ -401,6 +412,60 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			// If folder could not be set, restore current folder's path
 			else if(!setCurrentFolder(AbstractFile.getAbstractFile(location), true))
 				locationField.setText(currentFolder.getAbsolutePath(true));
+		}
+*/
+		if (source == locationField) {
+			String location = locationField.getText();
+
+			AbstractFile file = AbstractFile.getAbstractFile(location);
+		
+			boolean browse = false;
+			if(file==null) {
+
+			}
+			else if(file.isDirectory()) {
+				// Browse directory
+				browse = true;
+			}
+			else if(file.isBrowsable() || file instanceof HTTPFile) {
+				// Copy or browse file ?
+				QuestionDialog dialog = new QuestionDialog(mainFrame, 
+				null,
+				Translator.get("table.copy_or_browse"),
+				mainFrame,
+				new String[] {BROWSE_TEXT, COPY_TEXT, CANCEL_TEXT},
+				new int[] {BROWSE_ACTION, COPY_ACTION, CANCEL_ACTION},
+				0);
+
+				int ret = dialog.getActionValue();
+				if(ret==-1 || ret==CANCEL_ACTION)
+					return;
+				if(ret==BROWSE_ACTION) {
+					if(file instanceof HTTPFile)
+						file = new HTMLFile((HTTPFile)file);
+					browse = true;
+				}
+			}
+			// else copy file
+			
+			if(browse) {
+				// If folder could not be set, restore current folder's path
+				if(!setCurrentFolder(file, true))
+					locationField.setText(currentFolder.getAbsolutePath(true));
+			}
+			else {
+				Vector fileV = new Vector();
+				fileV.add(file);
+				
+				// Show confirmation/path modification dialog
+				if(file instanceof HTTPFile)
+					new DownloadDialog(mainFrame, fileV);
+				else
+					new CopyDialog(mainFrame, fileV, false);
+					
+				// Restore current folder's path
+				locationField.setText(currentFolder.getAbsolutePath(true));
+			}
 		}
 		else if (source == rootButton)	 {
 			showRootBox();

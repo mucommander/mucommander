@@ -3,10 +3,10 @@ package com.mucommander.file;
 
 
 /**
- * Abstract class denoting a remote file. This class should be extended instead of AbstractFile whenever the file
- * is located remotely, that is somewhere with a substantial latency.
+ * Interface denoting a remote file. This interface should be implemented whenever the file is a remote file,
+ * i.e. when the file is located on a remote filesystem and access to this file can bring some latency.
  *
  * @author Maxence Bernard
  */
-public abstract class RemoteFile extends AbstractFile {
+public interface RemoteFile {
 }

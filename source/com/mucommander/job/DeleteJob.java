@@ -20,7 +20,7 @@ import javax.swing.JLabel;
  *
  * @author Maxence Bernard
  */
-public class DeleteJob extends FileJob implements Runnable, FileModifier {
+public class DeleteJob extends FileJob {
     
 	/** Default choice when encountering an existing file */
 	private int defaultFileExistsChoice = -1;

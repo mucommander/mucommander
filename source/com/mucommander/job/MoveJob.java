@@ -20,7 +20,7 @@ import java.io.IOException;
  *
  * @author Maxence Bernard
  */
-public class MoveJob extends ExtendedFileJob implements Runnable {
+public class MoveJob extends ExtendedFileJob {
 
 	/** Base destination folder */
 	protected AbstractFile baseDestFolder;

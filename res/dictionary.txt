@@ -345,6 +345,9 @@ table.folder_access_error:FR:Unable to read folder contents
 
 table.folder_does_not_exist:EN:$[folder_does_not_exist]
 
+table.browse_or_copy:EN:What would you like to do with that file ?
+table.browse_or_copy:FR:Que voulez-vous faire de ce fichier ?
+
 
 ##################
 # Version dialog #

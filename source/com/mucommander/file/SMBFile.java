@@ -6,7 +6,7 @@ import jcifs.smb.*;
 /**
  * SMBFile represents an SMB file.
  */
-public class SMBFile extends RemoteFile {
+public class SMBFile extends AbstractFile implements RemoteFile {
 
 	protected SmbFile file;
     protected String absPath;

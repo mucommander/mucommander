@@ -6,7 +6,6 @@ import java.util.Vector;
 public abstract class AbstractFile {
 
 
-	
 	protected abstract void setParent(AbstractFile parent);
 	
 	
@@ -30,9 +29,10 @@ public abstract class AbstractFile {
 	 */
 	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) {
 		AbstractFile file;
-
+		String absPathLC = absPath.toLowerCase();
+		
 		// SMB file
-		if (absPath.toLowerCase().startsWith("smb://")) {
+		if (absPathLC.startsWith("smb://")) {
 			try {
 				// Patch for jcifs 0.8.0b (path has to end with /)
 //				file = new SMBFile(absPath.endsWith("/")?absPath:absPath+"/");
@@ -42,16 +42,26 @@ public abstract class AbstractFile {
 				return null;
 			}
 		}
-/*		// HTML file
-		else if (absPath.toLowerCase().startsWith("http://")) {
+		// HTTP file
+		else if (absPathLC.startsWith("http://")) {
 			try {
-				file = new HTMLFile(absPath);
+				if(absPathLC.endsWith(".html") || absPathLC.endsWith(".htm") || absPathLC.endsWith(".xhtml")
+					|| absPathLC.endsWith(".xhtml")
+					|| absPathLC.endsWith(".jsp")
+					|| absPathLC.endsWith(".php") || absPathLC.endsWith(".php3") || absPathLC.endsWith(".php4")
+					|| absPathLC.endsWith(".pl")  || absPathLC.endsWith(".cgi")
+					|| absPathLC.endsWith(".jsp")
+					|| absPathLC.endsWith(".py"))
+					
+					file = new HTMLFile(absPath);
+				else
+					file = new HTTPFile(absPath);
 			}
 			catch(IOException e) {
 				return null;
 			}
 		}
-*/
+
 /*        else if (absPath.toLowerCase().startsWith("ftp://")) {
             try {
                 file = new FTPFile(absPath);

@@ -20,7 +20,7 @@ import java.io.IOException;
  *
  * @author Maxence Bernard
  */
-public class CopyJob extends ExtendedFileJob implements Runnable {
+public class CopyJob extends ExtendedFileJob {
 
 	/** Base destination folder */
 	protected AbstractFile baseDestFolder;
@@ -34,8 +34,14 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	/** Title used for error dialogs */
 	private String errorDialogTitle;
 	
-	/** if true, files will be unzipped in the destination folder instead of being copied */
-	private boolean unzipMode;
+//	/** if true, files will be unzipped in the destination folder instead of being copied */
+//	private boolean unzipMode;
+	
+	private int mode;
+	
+	public final static int COPY_MODE = 0;
+	public final static int UNZIP_MODE = 0;
+	public final static int DOWNLOAD_MODE = 0;
 	
 	
     /**
@@ -46,16 +52,18 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	 * @param files files which are going to be copied
 	 * @param destFolder destination folder where the files will be copied
 	 * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
-	 * @param unzipMode if true, files will be unzipped in the destination folder instead of being copied.
+//	 * @param unzipMode if true, files will be unzipped in the destination folder instead of being copied.
+	 * @param mode mode in which CopyJob is to operate: COPY_MODE, UNZIP_MODE or DOWNLOAD_MODE.
 	 */
 //	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, boolean unzipMode) {
-	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, boolean unzipMode) {
+	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, int mode) {
 		super(progressDialog, mainFrame, files);
 		
 		this.baseDestFolder = destFolder;
 		this.newName = newName;
-		this.unzipMode = unzipMode;
-		this.errorDialogTitle = Translator.get(unzipMode?"unzip_dialog.error_title":"copy_dialog.error_title");
+//		this.unzipMode = unzipMode;
+		this.mode = mode;
+		this.errorDialogTitle = Translator.get(mode==UNZIP_MODE?"unzip_dialog.error_title":mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
 	}
 
 	
@@ -87,7 +95,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 		boolean isFileInBaseFolder = file.getParent().equals(baseSourceFolder);
 
 		// If in unzip mode, unzip base source folder's zip files
-		if(unzipMode && isFileInBaseFolder) {
+		if(mode==UNZIP_MODE && isFileInBaseFolder) {
 			// If unzip mode and file is not a ZipArchiveFile (happens when extension is not .zip)
 			if(!(file instanceof ZipArchiveFile))
 				file = new ZipArchiveFile(file);
@@ -223,6 +231,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	}
 
     public String getStatusString() {
-        return Translator.get(unzipMode?"unzip.unzipping_file":"copy.copying_file", getCurrentFileInfo());
+//        return Translator.get(unzipMode?"unzip.unzipping_file":"copy.copying_file", getCurrentFileInfo());
+        return Translator.get(mode==UNZIP_MODE?"unzip.unzipping_file":mode==DOWNLOAD_MODE?"download.downloading_file":"copy.copying_file", getCurrentFileInfo());
     }
 }

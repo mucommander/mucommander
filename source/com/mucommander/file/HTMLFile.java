@@ -8,10 +8,8 @@ import javax.swing.text.html.*;
 
 /**
  */
-public class HTMLFile extends HTTPFile {
+public class HTMLFile extends HTTPFile implements ArchiveFile {
 
-	private boolean isFolder;
-	
 	
 	/**
 	 * Creates a new instance of HTMLFile.
@@ -19,21 +17,22 @@ public class HTMLFile extends HTTPFile {
 	public HTMLFile(String fileURL) throws MalformedURLException {
 		super(fileURL);
 	}
-	 
-	protected HTMLFile(String fileURL, URL context) throws MalformedURLException {
-		super(fileURL, context);
+	  
+//	protected HTMLFile(URL url) {
+//		super(url);
+//	} 
+
+	public HTMLFile(HTTPFile file) {
+		super(file.url);
 	}
-		 
-		 
-	protected HTMLFile(URL url) {
-		super(url);
+	
+	protected HTMLFile(String fileURL, URL context) throws MalformedURLException {
+		super(new URL(context, fileURL));
+	}
 
-		this.isFolder = name.endsWith("htm") || name.endsWith("html");
-	} 
-
-
-	public boolean isDirectory() {
-		return isFolder;
+			
+	public boolean isBrowsable() {
+		return true;
 	}
 
 	

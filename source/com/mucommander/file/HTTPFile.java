@@ -7,15 +7,14 @@ import java.util.Vector;
 
 /**
  */
-public class HTTPFile extends AbstractFile {
-
-	protected URL url;
+public class HTTPFile extends AbstractFile implements RemoteFile {
 
 	/** File separator is '/' for urls */
 	private final static String SEPARATOR = "/";
 	
 	protected String name;
 	protected String absPath;
+	protected URL url;
 	protected long date;
 //	private long size = -1;
 
@@ -25,8 +24,8 @@ public class HTTPFile extends AbstractFile {
 	/**
 	 * Creates a new instance of HTTPFile.
 	 */
-	public HTTPFile(String fileURL) throws MalformedURLException {
-		this(new URL(fileURL));
+	public HTTPFile(String absPath) throws MalformedURLException {
+		this(new URL(absPath));
 	}
 
 
@@ -35,20 +34,22 @@ public class HTTPFile extends AbstractFile {
 		
 //		this.absPath = url.toString();
 		this.absPath = url.toExternalForm();
-
-		// removes the ending separator character (if any)
-		this.absPath = absPath.endsWith(SEPARATOR)?absPath.substring(0,absPath.length()-1):absPath;
-
+		int urlLen = absPath.length();
 		int pos = absPath.lastIndexOf('/');
+		this.name = URLDecoder.decode(absPath.substring(pos<7?7:pos+1, absPath.endsWith(SEPARATOR)?urlLen-1:urlLen));
+
+/*
+		int urlLen = absPath.length();
+		// Remove ending '/' character(s)
+		while(absPath.charAt(urlLen-1)=='/')
+			absPath = absPath.substring(0, --urlLen);
+		int lastSlashPos = absPath.lastIndexOf('/');
+		// Determine local file name
+		this.fileName = java.net.URLDecoder.decode(absPath.substring(lastSlashPos==-1||lastSlashPos<7?7:lastSlashPos+1, urlLen));
+*/
 		
-		this.name = absPath.substring(pos<7?7:pos+1, absPath.length());
 		this.date = System.currentTimeMillis();
 	} 
-
-
-	protected HTTPFile(String fileURL, URL context) throws MalformedURLException {
-		this(new URL(context, fileURL));
-	}
 
 
 	protected void setParent(AbstractFile parent) {
