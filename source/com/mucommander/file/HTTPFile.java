@@ -38,8 +38,7 @@ public class HTTPFile extends AbstractFile {
 	 * Creates a new instance of HTTPFile.
 	 */
 	public HTTPFile(String absPath) throws IOException {
-		// The url needs to have a trailing slash if 'new URL(context, file)' is to be used
-		this(new URL(absPath.endsWith("/")?absPath:absPath+"/"));
+		this(new URL(absPath));
 	}
 
 	
@@ -50,21 +49,24 @@ public class HTTPFile extends AbstractFile {
 if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 		
 		// absPath is url-encoded
-		this.fileURL = new FileURL(absPath, true);
+		this.fileURL = new FileURL(absPath);
 		int urlLen = absPath.length();
 
-		if(!fileURL.getProtocol().toLowerCase().equals("http") || fileURL.getHost().equals(""))
+		if((!fileURL.getProtocol().toLowerCase().equals("http") && !fileURL.getProtocol().toLowerCase().equals("https")) || fileURL.getHost().equals(""))
 			throw new IOException();
 		
 		// Remove trailing / (if any)
 		if(absPath.endsWith(SEPARATOR))
 			absPath = absPath.substring(0, --urlLen);
 
-		// Determine file name (URL-encoded)
-		this.name = fileURL.getFilename();
+		// Determine file name (URL-decoded)
+		this.name = fileURL.getFilename(true);
+		// Name may contain '/' or '\' characters once decoded, let's remove them
+		name = name.replace('/', ' ');
+		name = name.replace('\\', ' ');
 
 		String mimeType;
-		// Test if based on the URL, the file looks like an HTML :
+		// Test if based on the URL, the file looks like an HTML file :
 		//  - URL contains no path after hostname (e.g. http://google.com)
 		//  - URL points to dynamic content (e.g. http://lulu.superblog.com?param=hola&val=...), even though dynamic scripts do not always return HTML
 		//  - No filename with a known mime type can be extracted from the last part of the URL (e.g. NOT http://mucommander.com/download/mucommander-0_7.tgz)
@@ -108,11 +110,6 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 	}
 	
 	
-	protected HTTPFile(String fileURL, URL context) throws IOException {
-		this(new URL(context, fileURL));
-	}
-
-
 	private HttpURLConnection getHttpURLConnection() throws IOException {
 		// Get URLConnection instance
 		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -306,6 +303,11 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 			String prevToken = "";
 			int tokenType;
 			HTTPFile child;
+			
+			// The url needs to have a trailing slash if 'new URL(context, file)' constructor is to be used (see main() test)
+			String urlString = this.url.toExternalForm();
+			URL contextURL = urlString.endsWith("/")?this.url:new URL(urlString+SEPARATOR);
+			
 			while((tokenType=st.nextToken())!=StreamTokenizer.TT_EOF) {
 				token = st.sval;
 //System.out.println("token= "+token+" "+st.ttype+" "+(st.ttype==st.TT_WORD)+" prevToken="+prevToken);
@@ -319,8 +321,14 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 						if(prevToken.equals("href") || prevToken.equals("src")) {
 							if(!childrenURL.contains(token)) {
 if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+this.url);
-								child = new HTTPFile(token, this.url);
-//								child.setParent(this);
+								child = new HTTPFile(new URL(this.url, token));
+								// Recycle this file for parent whenever possible
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): recycle_parent="+child.fileURL.equals(this.fileURL));
+								if(child.fileURL.equals(this.fileURL))
+									child.setParent(this);
+
+//if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): parent="+child.getParent());
+
 								children.add(child);
 								childrenURL.add(token);
 							}
@@ -405,11 +413,21 @@ System.out.println("att="+att);
 	
 	
 	
+	/**
+	 * Reveals a problem (?) with URL class, where a URL has to have a trailing '/' 
+	 * to be considered as a folder.
+	 */
 	public static void main(String args[]) throws IOException {
 		URL url1 = new URL("http://www.braingames.getput.com/mog");
 		System.out.println(""+url1);
 		
 		URL url2 = new URL(url1, "downloads/MoG-datafiles.zip");
+		System.out.println(""+url2);
+
+		url1 = new URL("http://www.braingames.getput.com/mog/");
+		System.out.println(""+url1);
+		
+		url2 = new URL(url1, "downloads/MoG-datafiles.zip");
 		System.out.println(""+url2);
 	}
 

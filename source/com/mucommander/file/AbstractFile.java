@@ -74,8 +74,8 @@ public abstract class AbstractFile {
 		// SMB file
 		if (absPathLC.startsWith("smb://"))
 			file = new SMBFile(absPath);
-		// HTTP file
-		else if (absPathLC.startsWith("http://"))
+		// HTTP/HTTPS file
+		else if (absPathLC.startsWith("http://") || absPathLC.startsWith("https://"))
 			file = new HTTPFile(absPath);
 		// FTP file
 		else if (absPathLC.startsWith("ftp://"))

@@ -222,10 +222,11 @@ if(com.mucommander.Debug.ON) e3.printStackTrace();
 	 * Advances file index and resets file bytes counter. This method should be called by subclasses whenever the job
 	 * starts processing a new file.
 	 */
-	protected void nextFile(AbstractFile file) {
-		super.nextFile(file);
+	protected boolean nextFile(AbstractFile file) {
+		topLevelFile = super.nextFile(file);
 		currentFileProcessed = 0;
-		topLevelFile = file.getParent().equals(baseSourceFolder);
+	
+		return topLevelFile;
 	}
 
 

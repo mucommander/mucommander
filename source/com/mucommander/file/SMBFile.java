@@ -37,7 +37,7 @@ public class SMBFile extends AbstractFile {
 
 		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
 		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem
-		FileURL fileURL = new FileURL(url, false);
+		FileURL fileURL = new FileURL(url);
 		
 		AuthManager.authenticate(fileURL, addAuthInfo);
 		
@@ -45,7 +45,7 @@ public class SMBFile extends AbstractFile {
 		// when file doesn't exist
 		this.file = new SmbFile(fileURL.getURL(true));
 		url = file.getCanonicalPath();
-		this.fileURL = new FileURL(url, false);
+		this.fileURL = new FileURL(url);
 		
 		this.privateURL = fileURL.getURL(true);
 		this.publicURL = fileURL.getURL(false);

@@ -232,15 +232,26 @@ public abstract class FileJob implements Runnable {
 	 * starts processing a new file other than a top-level file, i.e. one that was passed
 	 * as an argument to {@link #processFile(AbstractFile, Object) processFile()}.
 	 * ({#nextFile(AbstractFile) nextFile()} is automatically called for top-level files).
+	 *
+	 * @return true if the given file belongs to the base source folder. 
 	 */
-	protected void nextFile(AbstractFile file) {
+	protected boolean nextFile(AbstractFile file) {
+		// Is given file a child of baseSourceFolder or a file with a totally different path as it can be the case with HTTP folders which
+		// can contain files on other sites (for example, http://google.com?q... could link to http://apple.com/...
+		// and apple.com latter would appear as a child of google.com
+		AbstractFile parent = file.getParent();
+		boolean baseSourceFile = (parent==null || parent.equals(baseSourceFolder) || !file.getAbsolutePath().startsWith(baseSourceFolder.getAbsolutePath()));
+
+		// Return if file is already being processed
 		if(this.currentFile!=null && this.currentFile.equals(file))
-			return;
+			return baseSourceFile;
 		
-		this.currentFile = file;
 		// Advance index only if file is a child of baseSourceFolder
-		if(file.getParent().equals(baseSourceFolder))
+		this.currentFile = file;
+		if(baseSourceFile)
 			currentFileIndex++;
+	
+		return baseSourceFile;
 	}
 
 	

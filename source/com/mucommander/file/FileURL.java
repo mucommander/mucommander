@@ -25,17 +25,9 @@ public class FileURL implements Cloneable {
 	
 	
 	/**
-	 * Creates a new FileURL from the given URL string. The string is NOT considered as url-encoded (free of encoded values such as %3D%23...).
-	 */
-	public FileURL(String url) throws MalformedURLException {
-		this(url, false);
-	}
-	
-	
-	/**
 	 * Creates a new FileURL from the given URL string.
 	 */
-	public FileURL(String url, boolean urlDecode) throws MalformedURLException {
+	public FileURL(String url) throws MalformedURLException {
 		try {
 			int pos;
 			int urlLen = url.length();
@@ -87,35 +79,28 @@ public class FileURL implements Cloneable {
 			
 			// Parse query part (if any)
 			if(questionPos!=-1)
-				query = URLDecoder.decode(url.substring(questionPos, urlLen).trim());
+				query = url.substring(questionPos, urlLen).trim();
 		
 			// Extract filename and parent from path
-			if(path.equals("")||path.equals("/")) {
+			if(path.equals("") || path.equals("/")) {
 				filename = host;
 				// parent is null
 			}
 			else {	
+				// Extract filename from path
 				int len = path.length();
 				slashPos = (path.endsWith("/")?path.substring(0, --len):path).lastIndexOf('/');
 				filename = path.substring(slashPos+1, len).trim();
-				if(urlDecode)
-					try { filename = URLDecoder.decode(filename); }
-					catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
+//				if(urlDecode)
+//					try { filename = URLDecoder.decode(filename); }
+//					catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 				
-				// Extract filename from full URL
 				len = url.length();
 				slashPos = (url.endsWith("/")?url.substring(0, --len):url).lastIndexOf('/');
 				if(slashPos>7) {
 					parent = url.substring(0, slashPos);
-					if(urlDecode)
-						try { parent = URLDecoder.decode(parent); }
-						catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 				}
 			}
-				
-			if(urlDecode)
-				try { path = URLDecoder.decode(path); }
-				catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 		}
 		catch(MalformedURLException e) {
 			if(com.mucommander.Debug.ON) {
@@ -241,6 +226,17 @@ public class FileURL implements Cloneable {
 	 * <code>null</code> if no filename can be extracted from this URL (e.g. http://google.com).
 	 */
 	public String getFilename() {
+		return filename;
+	}
+	
+
+	/**
+	 * Returns the filename part of this URL, and if specified, decodes URL-encoded characters (e.g. %5D%35)
+	 */
+	public String getFilename(boolean urlDecode) {
+		if(urlDecode && filename!=null)
+			return URLDecoder.decode(filename);
+			
 		return filename;
 	}
 	
