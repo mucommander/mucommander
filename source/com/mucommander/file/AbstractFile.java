@@ -101,6 +101,13 @@ public abstract class AbstractFile {
 	}
 
 	/**
+	 * Returns true if this file *may* be a symbolic link and thus handled with care.
+	 */
+	public boolean mayBeSymlink() {
+		return false;
+	}
+	
+	/**
 	 * Returns the separator character for this kind of AbstractFile.
 	 */
 	public abstract String getSeparator();

@@ -10,26 +10,11 @@ public class SMBFile extends AbstractFile {
 
 	protected SmbFile file;
     protected String absPath;
+	protected boolean mayBeSymlink;
 
 	/** File separator is '/' for urls */
 	private String separator = "/";
 
-/*	
-	private String name = null;
-	private long date = -1;
-	private long size = -1;
-
-//	// Indicates whether or not the value has already been retrieved
-//	private boolean parentValCached = false;
-		
-	private boolean isFolder;
-	// Indicates whether or not the value has already been retrieved
-	private boolean isFolderValCached = false;
-	
-	private boolean isHidden;
-	// Indicates whether or not the value has already been retrieved
-	private boolean isHiddenValCached = false;
-*/
 	
 	/**
 	 * Creates a new instance of SMBFile.
@@ -57,6 +42,8 @@ public class SMBFile extends AbstractFile {
 	 		file = new SmbFile(fileURL);
 
 	 		this.absPath = file.getCanonicalPath();
+this.mayBeSymlink = !file.getCanonicalPath().equals(this.absPath);
+			
 	 		// removes the ending separator character (if any)
 	 		this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
 	 		// removes login and password from canonical path
@@ -174,6 +161,10 @@ public class SMBFile extends AbstractFile {
 
 	public String getSeparator() {
 		return separator;
+	}
+	
+	public boolean mayBeSymlink() {
+		return this.mayBeSymlink;
 	}
 
 	public long getDate() {

@@ -14,6 +14,7 @@ public class FSFile extends AbstractFile {
 	
 	protected File file;
     protected String absPath;
+protected boolean mayBeSymlink;
 	
 	/* These file attributes are cached first time they are accessed to avoid excessive I/O */
     	
@@ -66,6 +67,11 @@ public class FSFile extends AbstractFile {
 	public FSFile(File _file) {
 //System.out.println("F0");
 		this.absPath = _file.getAbsolutePath();
+try {
+this.mayBeSymlink = !_file.getCanonicalPath().equals(this.absPath);
+}
+catch(IOException e){}
+
         // removes the ending separator character (if any)
         this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
 
@@ -100,6 +106,10 @@ public class FSFile extends AbstractFile {
 	public String getSeparator() {
 		return separator;
 	}
+	
+public boolean mayBeSymlink() {
+	return this.mayBeSymlink;
+}
 
 	public long getDate() {
 //		// Retrieves date and caches it
