@@ -26,6 +26,9 @@ import java.util.Date;
  */
 public class FileExistsDialog extends QuestionDialog {
 
+	/** This value is used by some FileJob classes */
+	public final static int ASK_ACTION = -1;
+	
 	public final static int CANCEL_ACTION = 0;
 	public final static int SKIP_ACTION = 1;
 	public final static int OVERWRITE_ACTION = 2;
@@ -38,6 +41,11 @@ public class FileExistsDialog extends QuestionDialog {
 	private final static String OVERWRITE_IF_OLDER_TEXT = Translator.get("overwrite_if_older");
 	private final static String APPEND_TEXT = Translator.get("append");
 
+	public final static String CHOICES_TEXT[] = {CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, APPEND_TEXT};
+	public final static int CHOICES_ACTIONS[] = {CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, APPEND_ACTION};
+
+	private final static String CHOICES_NO_RESUME_TEXT[] = {CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT};
+	private final static int CHOICES_NO_RESUME_ACTIONS[] = {CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION};
 	
 	private JCheckBox applyToAllCheckBox;
 
@@ -65,9 +73,14 @@ public class FileExistsDialog extends QuestionDialog {
     	panel.add(new JLabel("  "+SizeFormatter.format(destFile.getSize(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE)
     			+", "+dateFormat.format(new Date(destFile.getDate()))));
     	
+		// Give resume option only if destination file is smaller than source file
+		boolean resumeOption = destFile.getSize()<sourceFile.getSize();
+		
     	init(parent, panel,
-    		new String[] {SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, APPEND_TEXT, CANCEL_TEXT},
-    		new int[]  {SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, APPEND_ACTION, CANCEL_ACTION},
+//    		new String[] {SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, APPEND_TEXT, CANCEL_TEXT},
+//    		new int[]  {SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, APPEND_ACTION, CANCEL_ACTION},
+    		resumeOption?CHOICES_TEXT:CHOICES_NO_RESUME_TEXT,
+			resumeOption?CHOICES_ACTIONS:CHOICES_NO_RESUME_ACTIONS,
     		3);
 		
 		if(applyToAllOption) {
@@ -76,25 +89,6 @@ public class FileExistsDialog extends QuestionDialog {
 		}
 	}
 
-	
-	public FileExistsDialog(Dialog parent, Component locationRelative, String sourceURL, AbstractFile destFile) {
-	    super(parent, "File already exists in destination", locationRelative);
- 
-	   	JPanel panel = new JPanel(new GridLayout(0,1));
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm a");
-    	panel.add(new JLabel("Source: "+sourceURL));
-    	panel.add(new JLabel(""));
-    	panel.add(new JLabel("Destination: "+destFile.getAbsolutePath()));
-    	panel.add(new JLabel("  "+SizeFormatter.format(destFile.getSize(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE)
-    			+", "+dateFormat.format(new Date(destFile.getDate()))));
-
-    	
-    	init(parent, panel,
-    		new String[] {OVERWRITE_TEXT, APPEND_TEXT, CANCEL_TEXT},
-    		new int[]  {OVERWRITE_ACTION, APPEND_ACTION, CANCEL_ACTION},
-    		3);
-	}
-	
 
 	/**
 	 * Returns <code>true</code> if the 'apply to all' checkbox has been selected.

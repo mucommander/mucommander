@@ -7,6 +7,7 @@ import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.pref.PreferencesDialog;
+import com.mucommander.ui.connect.ServerConnectDialog;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFile;
@@ -552,14 +553,14 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 			commandBar.getButton(CommandBarPanel.REFRESH_INDEX).doClick();
 //        	commandBar.doRefresh();
         }
-        else if(keyCode == KeyEvent.VK_F10 && !e.isControlDown()) {
+        else if(keyCode == KeyEvent.VK_F10 && !e.isControlDown()
+		 || (PlatformManager.getOsType()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_W && e.isMetaDown())) {
 			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
 //            commandBar.doExit();
         }
-        else if(keyCode == KeyEvent.VK_W && e.isMetaDown()) {
-			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
-//            commandBar.doExit();
-        }
+		else if(PlatformManager.getOsType()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_Q && e.isMetaDown()) {
+			System.exit(0);		
+		}
 		else if(keyCode == KeyEvent.VK_F1 && e.isAltDown()) {
 			folderPanel1.showRootBox();
         }

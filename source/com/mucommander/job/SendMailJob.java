@@ -247,7 +247,8 @@ public class SendMailJob extends ExtendedFileJob {
 			writeLine("Content-Disposition: attachment;filename=\""+file.getName()+"\"");
 			writeLine("Content-transfer-encoding: base64\r\n");
 			fileIn = file.getInputStream();
-			copyStream(fileIn, out64, 0);
+//			copyStream(fileIn, out64, 0);
+			copyStream(fileIn, out64);
 	
 			// Writes padding bytes without closing the stream.
 			out64.writePadding();

@@ -111,7 +111,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	 */
 	public void doView() {
 		AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-		if(file.isDirectory())
+		if(file==null || (file.isDirectory() && !file.isSymlink()))
 			return;
 		
 		try {
@@ -147,7 +147,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	 */
 	public void doEdit() {
 		AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-		if(file.isDirectory() && !file.isSymlink())
+		if(file==null || (file.isDirectory() && !file.isSymlink()))
 			return;
 
 		try {

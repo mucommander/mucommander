@@ -45,11 +45,11 @@ public class UnzipDialog extends DestinationDialog {
 	/**
 	 * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
 	 */
-	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName) {
+	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName, int defaultFileExistsAction) {
 
 		// Starts copying files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("unzip_dialog.unzipping"));
-		CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.UNZIP_MODE);
+		CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.UNZIP_MODE, defaultFileExistsAction);
 		progressDialog.start(job);
 	}
 

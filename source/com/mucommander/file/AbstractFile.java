@@ -203,6 +203,30 @@ public abstract class AbstractFile {
 	public abstract InputStream getInputStream() throws IOException;
 
 	/**
+	 * Returns an InputStream to read from this AbstractFile, skipping the
+	 * specified number of bytes. This method should be overridden whenever
+	 * possible to provide a more efficient implementation, as this implementation
+	 * simply use {@link #InputStream.skip(long) InputStream.skip()}
+	 * which *reads* bytes and discards them, which is bad (think of an ISO file on a remote server).
+	 *
+	 * @throw IOException if this AbstractFile cannot be read or is a folder.
+	 */
+	public InputStream getInputStream(long skipBytes) throws IOException {
+		InputStream in = getInputStream();
+		
+		// Call InputStream.skip() until the specified number of bytes have been skipped
+		long nbSkipped = 0;
+		long n;
+		while(nbSkipped<skipBytes) {
+			n = in.skip(skipBytes-nbSkipped);
+			if(n>0)
+				nbSkipped += n;
+		}
+
+		return in;
+	}
+	
+	/**
 	 * Returns an OuputStream to write to this AbstractFile.
 	 * @param append if true, data will be appended to the end of this file.
 	 * @throw IOException if this operation is not permitted or if this AbstractFile 

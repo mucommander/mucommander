@@ -14,7 +14,7 @@ import java.util.Vector;
 
 /**
  * Abstract Dialog which displays an input field in order to enter a destination path.
- * This dialog is used by CopyDialog, MoveDialog and HttpDownloadDialog.
+ * This dialog is used by CopyDialog, MoveDialog, UnzipDialog and DownloadDialog.
  *
  * @author Maxence Bernard
  */
@@ -24,6 +24,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 	protected Vector files;
 	
 	protected JTextField pathField;
+	protected JComboBox fileExistsActionComboBox;
 	protected JButton okButton;
 	protected JButton cancelButton;
 
@@ -70,31 +71,44 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 		JLabel label = new JLabel(labelText);
         mainPanel.add(label);
 
+		// Create path textfield
 		pathField = new JTextField();
         pathField.addActionListener(this);
-		
 		mainPanel.add(pathField);
 		mainPanel.addSpace(10);
-		
-        contentPane.add(mainPanel, BorderLayout.NORTH);
+
+		// Path field will receive initial focus
+		setInitialFocusComponent(pathField);		
 		
 		// OK / Cancel buttons panel
         okButton = new JButton(okText);
         cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
+        // Selects OK when enter is pressed
+        getRootPane().setDefaultButton(okButton);
+
+		// Checkbox that allows the user to choose the default action when a file exists
+		mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")));
+		fileExistsActionComboBox = new JComboBox();
+		fileExistsActionComboBox.addItem(Translator.get("ask"));
+		String choicesText[] = FileExistsDialog.CHOICES_TEXT;
+		int nbChoices = choicesText.length;
+		for(int i=0; i<nbChoices; i++)
+			fileExistsActionComboBox.addItem(choicesText[i]);
+		mainPanel.add(fileExistsActionComboBox);
+		mainPanel.addSpace(10);
+		
+        contentPane.add(mainPanel, BorderLayout.NORTH);
+
         // Escape key disposes dialog
 		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
 		pathField.addKeyListener(escapeKeyAdapter);
+		fileExistsActionComboBox.addKeyListener(escapeKeyAdapter);
 		okButton.addKeyListener(escapeKeyAdapter);
 		cancelButton.addKeyListener(escapeKeyAdapter);
-
-        // Selects OK when enter is pressed
-        getRootPane().setDefaultButton(okButton);
-        
-		// Path field will receive initial focus
-		setInitialFocusComponent(pathField);		
-			
+		
+		// Set minimum/maximum dimension
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 	}
@@ -105,6 +119,14 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
         // Text is selected so that user can directly type and replace path
         pathField.setSelectionStart(0);
         pathField.setSelectionEnd(text.length());
+	}
+
+
+	protected void setTextField(String text, int selStart, int selEnd) {
+		pathField.setText(text);
+        // Text is selected so that user can directly type and replace path
+        pathField.setSelectionStart(selStart);
+        pathField.setSelectionEnd(selEnd);
 	}
 	
 	
@@ -144,11 +166,21 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 		AbstractFile sourceFolder = mainFrame.getLastActiveTable().getCurrentFolder();
 		AbstractFile destFolder = (AbstractFile)ret[0];
 		String newName = (String)ret[1];
-
-		startJob(sourceFolder, destFolder, newName);
+		
+		// Retrieve default action when a file exists in destination, default choice
+		// (if not specified by the user) is 'Ask'
+		int defaultFileExistsAction = fileExistsActionComboBox.getSelectedIndex();
+		if(defaultFileExistsAction==0)
+			defaultFileExistsAction = FileExistsDialog.ASK_ACTION;
+		else
+			defaultFileExistsAction = FileExistsDialog.CHOICES_ACTIONS[defaultFileExistsAction-1];
+		// We don't remember default action on purpose: we want the user to specify it each time,
+		// it would be too dangerous otherwise.
+		
+		startJob(sourceFolder, destFolder, newName, defaultFileExistsAction);
 	}
 	
 	
-	protected abstract void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName);
+	protected abstract void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName, int defaultFileExistsAction);
 	
 }

@@ -38,59 +38,56 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 		this(new URL(absPath));
 	}
 
-
+	
 	protected HTTPFile(URL url) throws IOException {
 		this.url = url;
 		this.absPath = url.toExternalForm();
+		
+		FileURL fileURL = new FileURL(absPath);
 		int urlLen = absPath.length();
 
-		if(!absPath.startsWith("http://") || urlLen<=7)
+		if(!fileURL.getProtocol().toLowerCase().equals("http") || fileURL.getHost().equals(""))
 			throw new IOException();
 		
-//System.out.println("new HTTPFile1 = -"+absPath+"-");
-
 		// Remove trailing / (if any)
 		if(absPath.endsWith(SEPARATOR))
 			absPath = absPath.substring(0, --urlLen);
 
-//System.out.println("new HTTPFile2 = "+absPath);
-		
 		// Determine file name (URL-encoded)
-		int lastSlashPos = absPath.lastIndexOf('/');
-		this.name = URLDecoder.decode(absPath.substring(lastSlashPos<7?7:lastSlashPos+1, urlLen));
+		this.name = fileURL.getFilename();
 
-		// Determine parent URL (only if there is a slash after hostname)
-		if(lastSlashPos>7) {
+		// Determine parent URL (may be null) and create parent file (if there is one)
+		String parentURL = fileURL.getParent();
+		if(parentURL!=null) {
 			try {
-				this.parent = new HTTPFile(absPath.substring(0, lastSlashPos));
+				this.parent = new HTTPFile(parentURL);
 			}
 			catch(IOException e) {} // No problem, no parent that's all
 		}
-		// else no parent
 		
 		String mimeType;
 //System.out.println("MIME type = "+mimeType);
 		// Test if based on the URL, the file looks like an HTML :
-		//  - URL contains no slash after hostname (e.g. http://google.com)
+		//  - URL contains no path after hostname (e.g. http://google.com)
 		//  - URL points to dynamic content (e.g. http://lulu.superblog.com?param=hola&val=...), even though dynamic scripts do not always return HTML
 		//  - No filename with a known mime type can be extracted from the last part of the URL (e.g. NOT http://mucommander.com/download/mucommander-0_7.tgz)
-		// If based on the test, the file is considered as an HTML file, use default date (now) and size (-1),
+		// If based on this test, the file is considered to be an HTML file, use default date (now) and size (-1),
 		// and if not (URL points to file with a known mime type), connect to retrieve content-length, date headers, and verify that
 		// content-type is indeed not HTML
-		if(lastSlashPos<7 
-		|| absPath.indexOf('?')!=-1
-		|| ((mimeType=MimeTypes.getMimeType(this))==null || mimeType.equals("text/html"))) {
+		if(fileURL.getPath().equals("")
+		 || fileURL.getQuery()!=null
+		 || ((mimeType=MimeTypes.getMimeType(this))==null || mimeType.equals("text/html"))) {
 			date = System.currentTimeMillis();
 			size = -1;
 			isHTML = true;
 		}
 		else {
 			// Get URLConnection instance
-			URLConnection conn = url.openConnection();
-			
-			// Set user-agent header
-			conn.setRequestProperty("user-agent", com.mucommander.Launcher.USER_AGENT);
+			HttpURLConnection conn = getHttpURLConnection();
 	
+			// Use HEAD instead of GET as we don't need the body
+			conn.setRequestMethod("HEAD");
+			
 			// Open connection
 			conn.connect();
 			
@@ -112,11 +109,22 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 //System.out.println("contentType= "+contentType+" isHTML ="+isHTML); 
 		}
 	}
-
+	
+	
 	protected HTTPFile(String fileURL, URL context) throws IOException {
 		this(new URL(context, fileURL));
 	}
 
+	private HttpURLConnection getHttpURLConnection() throws IOException {
+		// Get URLConnection instance
+		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+		
+		// Set user-agent header
+		conn.setRequestProperty("user-agent", com.mucommander.Launcher.USER_AGENT);
+	
+		return conn;
+	}
+	
 	
 	protected void setParent(AbstractFile parent) {
 		this.parent = parent;
@@ -194,7 +202,21 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 	
 	
 	public InputStream getInputStream() throws IOException {
-		return url.openStream();
+		HttpURLConnection conn = getHttpURLConnection();
+		conn.connect();
+		return conn.getInputStream();
+	}
+
+	/** 
+	 * Overrides AbstractFile's getInputStream(long) method to provide a more efficient implementation : 
+	 * use the HTTP 1.1 header that resumes file transfer and skips a number of bytes.
+	 */
+	public InputStream getInputStream(long skipBytes) throws IOException {
+		HttpURLConnection conn = getHttpURLConnection();
+		// Set header that allows to resume transfer
+		conn.setRequestProperty("Range", "bytes="+skipBytes+"-");
+		conn.connect();
+		return conn.getInputStream();
 	}
 	
 	public OutputStream getOutputStream(boolean append) throws IOException {

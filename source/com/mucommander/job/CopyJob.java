@@ -29,7 +29,7 @@ public class CopyJob extends ExtendedFileJob {
 	private String newName;
 
 	/** Default choice when encountering an existing file */
-	private int defaultFileExistsChoice = -1;
+	private int defaultFileExistsAction = FileExistsDialog.ASK_ACTION;
 
 	/** Title used for error dialogs */
 	private String errorDialogTitle;
@@ -54,15 +54,17 @@ public class CopyJob extends ExtendedFileJob {
 	 * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
 //	 * @param unzipMode if true, files will be unzipped in the destination folder instead of being copied.
 	 * @param mode mode in which CopyJob is to operate: COPY_MODE, UNZIP_MODE or DOWNLOAD_MODE.
+	 * @param fileExistsAction default action to be triggered if a file already exists in the destination (action can be to ask the user)
 	 */
 //	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, boolean unzipMode) {
-	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, int mode) {
+	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, int mode, int fileExistsAction) {
 		super(progressDialog, mainFrame, files);
 		
 		this.baseDestFolder = destFolder;
 		this.newName = newName;
 //		this.unzipMode = unzipMode;
 		this.mode = mode;
+		this.defaultFileExistsAction = fileExistsAction;
 		this.errorDialogTitle = Translator.get(mode==UNZIP_MODE?"unzip_dialog.error_title":mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
 	}
 
@@ -190,17 +192,17 @@ public class CopyJob extends ExtendedFileJob {
 			if (destFile.exists())  {
 				int choice;
 				// No default choice
-				if(defaultFileExistsChoice==-1) {
+				if(defaultFileExistsAction==FileExistsDialog.ASK_ACTION) {
 					FileExistsDialog dialog = getFileExistsDialog(file, destFile, true);
 					choice = waitForUserResponse(dialog);
 					// If 'apply to all' was selected, this choice will be used
 					// for any files that already exist  (user will not be asked again)
 					if(dialog.applyToAllSelected())
-						defaultFileExistsChoice = choice;
+						defaultFileExistsAction = choice;
 				}
 				// Use previous choice
 				else
-					choice = defaultFileExistsChoice;
+					choice = defaultFileExistsAction;
 				
 				// Cancel, skip or close dialog
 				if (choice==-1 || choice==FileExistsDialog.CANCEL_ACTION) {
@@ -213,6 +215,9 @@ public class CopyJob extends ExtendedFileJob {
 				}
 				// Append to file (resume file copy)
 				else if (choice==FileExistsDialog.APPEND_ACTION) {
+					// Skip file if destination file is already larger than source file
+					if(destFile.getSize()>=file.getSize())
+						return false;
 					append = true;
 				}
 				// Overwrite file 
@@ -234,6 +239,6 @@ public class CopyJob extends ExtendedFileJob {
 
     public String getStatusString() {
 //        return Translator.get(unzipMode?"unzip.unzipping_file":"copy.copying_file", getCurrentFileInfo());
-        return Translator.get(mode==UNZIP_MODE?"unzip.unzipping_file":mode==DOWNLOAD_MODE?"download.downloading_file":"copy.copying_file", getCurrentFileInfo());
+        return Translator.get(mode==UNZIP_MODE?"unzip.unzipping_file":mode==DOWNLOAD_MODE?"http_download.downloading_file":"copy.copying_file", getCurrentFileInfo());
     }
 }

@@ -27,7 +27,46 @@ public class FSFile extends AbstractFile {
 	// Indicates whether or not the value has already been retrieved
 	private boolean parentValCached = false;
 		
-	
+
+//	/**
+//	 * RandomAccessFile does unfortunately not derive from InputStream
+//	 * as it also provides OutputStream methods, this class extends 
+//	 * InputStream and maps the methods on RandomAccessFile's.
+//	 *
+//	 * <p>The purpose of this class is to provide an effecient implementation of skip()
+//	 * by using RandomAccessFile's seek() method.</p>
+//	 */
+/*	 
+	private class RandomAccessInputStream extends InputStream {
+		RandomAccessFile raf;
+		
+		public RandomAccessInputStream(File f) throws IOException {
+			this.raf = new RandomAccessFile(f, "r");
+		}
+		
+		public int read() throws IOException {
+			return raf.read();
+		}
+
+		public int read(byte[] b, int off, int len) throws IOException {
+			return raf.read(b, off, len);
+		}
+		
+		public int read(byte[] b) throws IOException {
+			return raf.read(b);
+		}
+		
+		public long skip(long n) throws IOException {
+			raf.seek(n);
+			return n;
+		}
+		
+		public void close() throws IOException {
+			raf.close();
+		}
+	}
+*/		
+		
 	/**
 	 * Creates a new instance of FSFile. Although the existence
 	 * of the file is not checked, the given file path should exist.
@@ -176,6 +215,18 @@ public class FSFile extends AbstractFile {
 	public InputStream getInputStream() throws IOException {
         return new FileInputStream(file);
 	}
+
+//	/** 
+//	 * Overrides AbstractFile's getInputStream(long) method to provide a more efficient implementation
+//	 * which uses RandomAccessFile to skip bytes and not FileInputStream which still reads bytes.
+//	 */
+/*
+	public InputStream getInputStream(long skipBytes) throws IOException {
+        RandomAccessInputStream rain = new RandomAccessInputStream(file);
+		rain.skip(skipBytes);
+		return rain;
+	}
+*/
 	
 	public OutputStream getOutputStream(boolean append) throws IOException {
 		return new FileOutputStream(absPath, append);

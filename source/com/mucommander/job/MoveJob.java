@@ -29,7 +29,7 @@ public class MoveJob extends ExtendedFileJob {
 	private String newName;
 
 	/** Default choice when encountering an existing file */
-	private int defaultFileExistsChoice = -1;
+	private int defaultFileExistsAction = -1;
 
 	/** Title used for error dialogs */
 	private String errorDialogTitle;
@@ -43,12 +43,14 @@ public class MoveJob extends ExtendedFileJob {
 	 * @param files files which are going to be moved
 	 * @param destFolder destination folder where the files will be moved
 	 * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
+	 * @param fileExistsAction default action to be triggered if a file already exists in the destination (action can be to ask the user)
 	 */
-	public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName) {
+	public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, int fileExistsAction) {
 		super(progressDialog, mainFrame, files);
 
 		this.baseDestFolder = destFolder;
 		this.newName = newName;
+		this.defaultFileExistsAction = fileExistsAction;
 		this.errorDialogTitle = Translator.get("move_dialog.error_title");
 	}
 
@@ -192,17 +194,17 @@ public class MoveJob extends ExtendedFileJob {
 			if (destFile.exists())  {
 				int choice;
 				// No default choice
-				if(defaultFileExistsChoice==-1) {
+				if(defaultFileExistsAction==-1) {
 					FileExistsDialog dialog = getFileExistsDialog(file, destFile, true);
 					choice = waitForUserResponse(dialog);
 					// If 'apply to all' was selected, this choice will be used
 					// for any files that already exist  (user will not be asked again)
 					if(dialog.applyToAllSelected())
-						defaultFileExistsChoice = choice;
+						defaultFileExistsAction = choice;
 				}
 				// Use previous choice
 				else
-					choice = defaultFileExistsChoice;
+					choice = defaultFileExistsAction;
 				
 				// Cancel job
 				if (choice==-1 || choice==FileExistsDialog.CANCEL_ACTION) {

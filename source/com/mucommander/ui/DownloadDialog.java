@@ -79,12 +79,12 @@ public class DownloadDialog extends DestinationDialog {
 		}
 */
 
-	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName) {
+	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName, int defaultFileExistsAction) {
 		
 		// Starts moving files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("http_download.downloading"));
 //		com.mucommander.job.HttpDownloadJob downloadJob = new com.mucommander.job.HttpDownloadJob(mainFrame, progressDialog, fileURL, destFile);
-		CopyJob downloadJob = new CopyJob(progressDialog, mainFrame, fileV, destFolder, newName, CopyJob.DOWNLOAD_MODE);
+		CopyJob downloadJob = new CopyJob(progressDialog, mainFrame, fileV, destFolder, newName, CopyJob.DOWNLOAD_MODE, defaultFileExistsAction);
 		progressDialog.start(downloadJob);
 	}
 	

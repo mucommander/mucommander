@@ -39,6 +39,9 @@ public class SizeFormatter {
 	
 	
     public static String format(long size, int format) {
+		if(size==-1)
+			return "?";
+
         String digitsString;
 		String unitString;
 		

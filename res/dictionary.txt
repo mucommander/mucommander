@@ -70,8 +70,8 @@ skip:FR:Suivant
 retry:EN:Retry
 retry:FR:Réessayer
 
-append:EN:Append
-append:FR:Ajouter a la fin
+append:EN:Resume
+append:FR:Reprendre
 
 overwrite:EN:Overwrite
 overwrite:FR:Remplacer
@@ -96,6 +96,9 @@ copy:FR:Copier
 
 browse:EN:Browse
 browse:FR:Explorer
+
+ask:EN:Ask
+ask:FR:Demander
 
 
 #############
@@ -392,6 +395,14 @@ version_dialog.download:EN:Download
 version_dialog.download:FR:Télécharger
 
 
+######################
+# Destination dialog #
+######################
+
+destination_dialog.file_exists_action:EN:Default action when file exists
+destination_dialog.file_exists_action:FR:Action par défaut lorsqu'un fichier existe
+
+
 ########
 # Copy #
 ########
@@ -579,9 +590,9 @@ email_dialog.nb_files:EN:%1 file(s)
 email_dialog.nb_files:FR:%1 fichier(s)
 
 
-##############################
-# File already exists dialog #
-##############################
+#####################################
+# File exists in destination dialog #
+#####################################
 
 file_exists_dialog.title:EN:File already exists in destination
 file_exists_dialog.title:FR:Le fichier existe dans la destination
@@ -727,6 +738,9 @@ server_connect_dialog.password:FR:Mot de passe
 
 server_connect_dialog.server_url:EN:Server URL
 server_connect_dialog.server_url:FR:URL serveur
+
+server_connect_dialog.http_url:EN:Web site URL
+server_connect_dialog.http_url:FR:URL site web
 
 server_connect_dialog.connect:EN:Connect
 server_connect_dialog.connect:FR:Se connecter
