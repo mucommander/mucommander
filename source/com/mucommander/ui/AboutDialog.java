@@ -15,7 +15,7 @@ public class AboutDialog extends FocusDialog implements ActionListener, KeyListe
 	private static String aboutText = "<html><body text=\"#00FFFF\" bgcolor=\"#000084\">"
 		+"<table width=\"387\">"
 		+"<tr><td>"
-		+"<b>muCommander v"+com.mucommander.Launcher.VERSION+"</b>"
+		+"<b>muCommander v"+com.mucommander.Launcher.MUCOMMANDER_VERSION+"</b>"
 		+"<br>&copy;2002 Maxence Bernard, all rights reserved."
 		+"<br><br><i>Code &amp; design:</i> Maxence Bernard."
 		+"<br><i>Contributors:</i> Ewan Harrow, Nicolas Rinaudo, Roger Sondermann."

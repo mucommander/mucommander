@@ -226,7 +226,7 @@ public class MoveJob extends FileJob implements Runnable {
 					// the size is only used for progress bar (it can be wrong)
 					long currentFileSize = file.getSize();
 					long currentFileCopied = 0;
-					while ((read=in.read(buf, 0, buf.length))!=-1) {
+					while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
 						out.write(buf, 0, read);
 						currentFileCopied += read;
 						// currentFileSize can be wrong (for example with HTMLFiles)
