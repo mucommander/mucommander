@@ -5,7 +5,9 @@ import com.mucommander.file.AbstractFile;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
+import javax.swing.event.*;
 
 import java.io.*;
 
@@ -17,7 +19,7 @@ import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.text.Translator;
 
 
-public class TextViewer extends FileViewer implements ActionListener {
+public class TextViewer extends FileViewer implements ActionListener, WindowListener {
 
 //	private String encoding;
 
@@ -41,14 +43,14 @@ public class TextViewer extends FileViewer implements ActionListener {
 		JMenuBar menuBar = frame.getJMenuBar();
 		JMenu editMenu = MenuToolkit.addMenu(Translator.get("text_viewer.edit"), menuMnemonicHelper, null);
 		copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.copy"), menuItemMnemonicHelper, null, this);
-		editMenu.add(copyItem);
 		selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.select_all"), menuItemMnemonicHelper, null, this);
-		editMenu.add(selectAllItem);
 		menuBar.add(editMenu);
 		
 		textArea = new JTextArea();
 		textArea.setEditable(false);
+
 		add(new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
+		frame.addWindowListener(this);
 	}
 
 	
@@ -93,4 +95,32 @@ public class TextViewer extends FileViewer implements ActionListener {
 		else if(source == selectAllItem)
 			textArea.selectAll();
 	}
+
+
+    /**************************
+     * WindowListener methods *
+     **************************/	
+
+    public void windowClosing(WindowEvent e) {
+	}
+
+    public void windowActivated(WindowEvent e) {
+		textArea.requestFocus();
+    }
+
+    public void windowDeactivated(WindowEvent e) {
+    }
+
+    public void windowIconified(WindowEvent e) {
+    }
+
+    public void windowDeiconified(WindowEvent e) {
+    }
+
+    public void windowOpened(WindowEvent e) {
+    }
+
+    public void windowClosed(WindowEvent e) {
+    }
+
 }

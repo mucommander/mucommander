@@ -8,7 +8,7 @@
 #
 # IMPORTANT: This file should be saved in UTF-8 character encoding.
 #
-# Some things to keep in mind if you are kind enough to translate muCommander:
+# Some things to keep in mind when translating:
 #
 # - when translating an entry which has a variable (%1, %2...) placed at the end,
 #  it might be because its value at runtime can be very large and thus will be
@@ -43,8 +43,8 @@ cancel:FR:Annuler
 folder_does_not_exist:EN:Folder doesn't exist.
 folder_does_not_exist:FR:Le dossier n'existe pas.
 
-this_folder_does_not_exist:EN:This folder doesn't exist : %1
-this_folder_does_not_exist:FR:Ce dossier n'existe pas : %1
+this_folder_does_not_exist:EN:This folder doesn't exist: %1
+this_folder_does_not_exist:FR:Ce dossier n'existe pas: %1
 
 save:EN:Save
 save:FR:Enregistrer
@@ -60,6 +60,27 @@ dont_replace:FR:Ne pas remplacer
 
 warning:EN:Warning
 warning:FR:Avertissement
+
+skip:EN:Skip
+skip:FR:Ignorer
+
+skip_all:EN:Skip all
+skip_all:FR:Ignorer (tous)
+
+append:EN:Append
+append:FR:Ajouter a la fin
+
+append_all:EN:Append
+append_all:FR:Ajouter a la fin (tous)
+
+overwrite:EN:Overwrite
+overwrite:FR:Remplacer
+
+overwrite_all:EN:Overwrite all
+overwrite_all:FR:Remplacer (tous)
+
+overwrite_all_older:EN:Overwrite all older
+overwrite_all_older:FR:Remplacer si plus ancien (tous)
 
 
 ############
@@ -625,26 +646,15 @@ zip_dialog.error_title:FR:Erreur de compression
 zip_dialog.cannot_write:EN:Cannot create zip file in destination folder.
 zip_dialog.cannot_write:FR:Impossible de créer le fichier zip dans le dossier de destination.
 
-zip_dialog.:EN:
-zip_dialog.:FR:
+zip_dialog_description:EN:Add selected files to
+zip_dialog_description:FR:Ajouter les fichiers sélectionnés dans
 
-zip_dialog.:EN:
-zip_dialog.:FR:
+zip_dialog.comment:EN:Comment (optional)
+zip_dialog.comment:FR:Commentaire (optionnel)
 
-zip_dialog.:EN:
-zip_dialog.:FR:
+zip_dialog.file_already_exists:EN:%1 already exists in destination folder.
+zip_dialog.file_already_exists:FR:%1 existe déjà dans le dossier de destination.
 
-zip_dialog.:EN:
-zip_dialog.:FR:
-
-zip_dialog.:EN:
-zip_dialog.:FR:
-
-zip_dialog.:EN:
-zip_dialog.:FR:
-
-zip_dialog.:EN:
-zip_dialog.:FR:
 
 ###############
 # Text viewer #

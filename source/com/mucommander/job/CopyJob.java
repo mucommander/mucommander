@@ -7,6 +7,7 @@ import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.Translator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.Vector;
 import java.util.Date;
+
 import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 
@@ -61,14 +63,14 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 	private final static int APPEND_ALL_ACTION = 6;
 	private final static int OVERWRITE_ALL_OLDER_ACTION = 7;
 
-	private final static String CANCEL_TEXT = "Cancel";
-	private final static String SKIP_TEXT = "Skip";
-	private final static String OVERWRITE_TEXT = "Overwrite";
-	private final static String APPEND_TEXT = "Append";
-	private final static String SKIP_ALL_TEXT = "Skip all";
-	private final static String OVERWRITE_ALL_TEXT = "Overwrite all";
-	private final static String APPEND_ALL_TEXT = "Append all";
-	private final static String OVERWRITE_ALL_OLDER_TEXT = "Overwrite all older";
+	private final static String CANCEL_TEXT = Translator.get("cancel");
+	private final static String SKIP_TEXT = Translator.get("skip");
+	private final static String OVERWRITE_TEXT = Translator.get("overwrite");
+	private final static String APPEND_TEXT = Translator.get("append");
+	private final static String SKIP_ALL_TEXT = Translator.get("skip_all");
+	private final static String OVERWRITE_ALL_TEXT = Translator.get("overwrite_all");
+	private final static String APPEND_ALL_TEXT = Translator.get("append_all");
+	private final static String OVERWRITE_ALL_OLDER_TEXT = Translator.get("overwrite_all_older");
 
 	private final static int BLOCK_SIZE = 1024;
 

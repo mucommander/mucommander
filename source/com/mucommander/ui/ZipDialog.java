@@ -11,6 +11,13 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.Vector;
 
+
+/**
+ * This dialog allows the user to zip selected files to a specified file
+ * and add a comment in the zip file.
+ *
+ * @author Maxence Bernard
+ */
 public class ZipDialog extends FocusDialog implements ActionListener {
 
 	// Dialog's width has to be at least 240
@@ -27,17 +34,17 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 	private JButton cancelButton;
 
 	private final static int CANCEL_ACTION = 0;
-	private final static int OVERWRITE_ACTION = 1;
+	private final static int REPLACE_ACTION = 1;
 
 
 	public ZipDialog(MainFrame mainFrame, boolean isShiftDown) {
-		super(mainFrame, "Add to zip", mainFrame);
+		super(mainFrame, Translator.get("zip_dialog.title"), mainFrame);
 		this.mainFrame = mainFrame;
 		
 		Container contentPane = getContentPane();
 		
 		YBoxPanel mainPanel = new YBoxPanel(5);
-		JLabel label = new JLabel("Add selected files to:");
+		JLabel label = new JLabel(Translator.get("zip_dialog_description")+" :");
 		mainPanel.add(label);
 
 		FileTable activeTable = mainFrame.getUnactiveTable();
@@ -50,7 +57,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		
 		mainPanel.addSpace(10);
 		
-		label = new JLabel("Comment (optional)");
+		label = new JLabel(Translator.get("zip_dialog.comment"));
 		mainPanel.add(label);
 		commentArea = new JTextArea();
 		commentArea.setRows(4);
@@ -98,7 +105,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			Object dest[] = mainFrame.resolvePath(filePath);
 			if (dest==null || dest[1]==null) {
 				// Incorrect destination
-				QuestionDialog dialog = new QuestionDialog(mainFrame, "Incorrect destination", filePath+" is not a valid file path.", mainFrame,
+				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("zip_dialog.error_title"), Translator.get("this_folder_does_not_exist", filePath), mainFrame,
 					new String[] {Translator.get("ok")},
 					new int[]  {0},
 					0);
@@ -109,9 +116,9 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
 			if (destFile.exists()) {
 				// File already exists: cancel, append or overwrite?
-				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), "A file with the same name already exists.", mainFrame,
-					new String[] {Translator.get("cancel"), Translator.get("overwrite")},
-					new int[]  {CANCEL_ACTION, OVERWRITE_ACTION},
+				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("zip_dialog.file_already_exists", destFile.getName()), mainFrame,
+					new String[] {Translator.get("cancel"), Translator.get("replace")},
+					new int[]  {CANCEL_ACTION, REPLACE_ACTION},
 					0);
 				int ret = dialog.getActionValue();
 				
@@ -120,7 +127,6 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 					return;
 			}
 
-				
 			java.io.OutputStream destOut = null;
 			// Tries to open zip/destination file
 			try {
