@@ -19,7 +19,7 @@ import java.util.Vector;
 
 
 /**
- * This is the main frame, which contains all other UI components.
+ * This is the main frame, which contains all other UI components visible on a mucommander window.
  * 
  * @@author Maxence Bernard
  */
@@ -40,6 +40,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     
     private CommandBarPanel commandBar;
 
+	private ToolBar toolbar;
+	
     /** False until this window has been activated */
 	private boolean firstTimeActivated;
 
@@ -60,25 +62,23 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		setBounds(0, 0, Math.min(d.width-44,800-44), Math.min(d.height-33, 600-33));		
 		setResizable(true);
 
-		// Menu bar
-		MainMenuBar menuBar = new MainMenuBar(this);
-		setJMenuBar(menuBar);
-
 		Container contentPane = getContentPane();
 
-		// Icon toolbar
-		ToolBar toolbar = new ToolBar(this);
-		contentPane.add(toolbar, BorderLayout.NORTH);
-
-		// Browsers
+		// Folder panels
 		folderPanel1 = new FolderPanel(this, initialFolder1);
         folderPanel2 = new FolderPanel(this, initialFolder2);
 
+		// Create and show toolbar only if it hasn't been disabled in the preferences
+		if(ConfigurationManager.getVariable("prefs.show_toolbar_on_startup", "true").equals("true")) {
+			setToolbarVisible(true);
+		}
+
+		// Create menu bar (has to be created after toolbar)
+		MainMenuBar menuBar = new MainMenuBar(this);
+		setJMenuBar(menuBar);
+		
         folderPanel1.addLocationListener(Launcher.getLauncher());
         folderPanel2.addLocationListener(Launcher.getLauncher());
-
-        folderPanel1.addLocationListener(toolbar);
-        folderPanel2.addLocationListener(toolbar);
 
         folderPanel1.addLocationListener(menuBar);
         folderPanel2.addLocationListener(menuBar);
@@ -90,10 +90,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 
 		// Enables folderPanel window resizing
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
-//			public Insets getInsets() {
-//				return new Insets(0, 0, 0, 0);
-//			}
-		
 			public javax.swing.border.Border getBorder() {
 				return null;
 			}
@@ -118,11 +114,38 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     
         table1.addFocusListener(this);
 		table2.addFocusListener(this);
-    
+
 		// Catches window close event
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addWindowListener(this);
 	}
+	
+	
+	/**
+	 * Sets the toolbar visible.
+	 */
+	public void setToolbarVisible(boolean visible) {
+		if(this.toolbar!=null && !visible) {
+			getContentPane().remove(toolbar);
+			folderPanel1.removeLocationListener(toolbar);
+			folderPanel2.removeLocationListener(toolbar);
+			this.toolbar = null;
+			validate();
+		}
+		else if(this.toolbar==null && visible) {
+			this.toolbar = new ToolBar(this);
+			folderPanel1.addLocationListener(toolbar);
+			folderPanel2.addLocationListener(toolbar);
+			getContentPane().add(toolbar, BorderLayout.NORTH);
+			validate();
+		}
+	}
+	
+	
+	public boolean isToolbarVisible() {
+		return this.toolbar!=null;
+	}
+	
 
 	/**
 	 * Returns last active FileTable, that is the last FileTable that received focus.

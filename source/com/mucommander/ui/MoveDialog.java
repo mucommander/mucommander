@@ -49,7 +49,7 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 		Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel();
 		
-		JLabel label = new JLabel((isShiftDown && nbFiles==1)?"Move to":"Rename to");
+		JLabel label = new JLabel((isShiftDown && nbFiles==1)?"Rename to":"Move to");
         mainPanel.add(label);
 
 		String fieldText;

@@ -2,6 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
+import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFile;
 import com.mucommander.job.SendMailJob;
@@ -42,6 +43,18 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 		super(mainFrame, "Email files", mainFrame);
 		this.mainFrame = mainFrame;
 
+		// Notifies the user that mail preferences are not set and brings the preferences dialog 
+		if(!SendMailJob.mailPreferencesSet()) {
+			JOptionPane.showMessageDialog(mainFrame, "You need to set your mail preferences first.", "Mail preferences not set", JOptionPane.INFORMATION_MESSAGE);
+	
+			PreferencesDialog preferencesDialog = new PreferencesDialog(mainFrame);
+			preferencesDialog.setActiveTab(PreferencesDialog.MAIL_TAB);
+			preferencesDialog.showDialog();
+			
+			return;
+		}
+		
+		
 		try {
 			// Figures out which files to send and calculates the number of files and the number of bytes
 			Vector selectedFiles = mainFrame.getLastActiveTable().getSelectedFiles();
@@ -128,6 +141,8 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			// Packs dialog
 			setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 			setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
+		
+			showDialog();
 		}
 		catch(IOException e) {
 			JOptionPane.showMessageDialog(this, "Unable to read files in subfolders.", "Email files error", JOptionPane.ERROR_MESSAGE);	

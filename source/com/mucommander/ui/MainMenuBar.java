@@ -53,6 +53,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 
 	// Window menu
 	private JMenu windowMenu;
+	private JMenuItem showToolbarItem;
 //	private JMenuItem previousWindowItem;
 //	private JMenuItem nextWindowItem;
 
@@ -77,9 +78,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		fileMenu.add(new JSeparator());
 		serverConnectItem = addMenuItem(fileMenu, "Connect to Server...", KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.CTRL_MASK));
 		runItem = addMenuItem(fileMenu, "Run command...", KeyEvent.VK_R, KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
-		zipItem = addMenuItem(fileMenu, "Zip...", KeyEvent.VK_Z, KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
-		unzipItem = addMenuItem(fileMenu, "Unzip...", KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
+		zipItem = addMenuItem(fileMenu, "Zip files...", KeyEvent.VK_Z, KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
+		unzipItem = addMenuItem(fileMenu, "Unzip file...", KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
         emailFilesItem = addMenuItem(fileMenu, "Email files...", KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+
+		fileMenu.add(new JSeparator());
         propertiesItem = addMenuItem(fileMenu, "Properties", KeyEvent.VK_P, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.ALT_MASK));
 
 		fileMenu.add(new JSeparator());
@@ -101,7 +104,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		compareFoldersItem = addMenuItem(markMenu, "Compare folders", KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
 
 		// View menu
-		viewMenu = addMenu("View", KeyEvent.VK_V, false);
+		viewMenu = addMenu("View", KeyEvent.VK_V, true);
 		goBackItem = addMenuItem(viewMenu, "Go back", KeyEvent.VK_B, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
 		goForwardItem = addMenuItem(viewMenu, "Go forward", KeyEvent.VK_F, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK));
 		viewMenu.add(new JSeparator());
@@ -122,6 +125,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		setSameFolderItem = addMenuItem(viewMenu, "Set same folder", KeyEvent.VK_T, KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK));
 //		refreshItem = addMenuItem(viewMenu, "Refresh", KeyEvent.VK_R, null);
 
+		viewMenu.add(new JSeparator());
+		// Menu item's text will be set later, when menu is selected
+		showToolbarItem = addMenuItem(viewMenu, "", KeyEvent.VK_O, null);
+		
 		// Window menu
 		windowMenu = addMenu("Window", KeyEvent.VK_W, false);
 		
@@ -236,12 +243,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			new RunDialog(mainFrame);
 		}
 		else if (source == zipItem) {
-			new ZipDialog(mainFrame, false).show();
+			new ZipDialog(mainFrame, false);
 		}
 		else if (source == unzipItem) {
 			new CopyDialog(mainFrame, true, false);
 		}
         else if  (source == emailFilesItem) {
+/*
 			if(!SendMailJob.mailPreferencesSet()) {
 				JOptionPane.showMessageDialog(mainFrame, "You need to set your mail preferences first.", "Mail preferences not set", JOptionPane.INFORMATION_MESSAGE);
 
@@ -250,8 +258,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 				preferencesDialog.showDialog();
 			}
 			else {
-				new EmailFilesDialog(mainFrame).showDialog();
-			}
+*/
+				new EmailFilesDialog(mainFrame);
+//			}
 		}
 		else if (source == preferencesItem) {
 			mainFrame.showPreferencesDialog();
@@ -309,6 +318,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == setSameFolderItem) {
 			mainFrame.setSameFolder();	
 		}
+		else if (source == showToolbarItem) {
+			mainFrame.setToolbarVisible(!mainFrame.isToolbarVisible());
+		}
 		// Help menu
 		else if (source == keysItem) {
 			new ShortcutsDialog(mainFrame).showDialog();
@@ -331,7 +343,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 
 	public void menuSelected(MenuEvent e) {
 	 	Object source = e.getSource();
-		
 		if (source==fileMenu) {
 			boolean filesSelected = mainFrame.getLastActiveTable().getSelectedFiles().size()!=0;
 			
@@ -340,6 +351,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			zipItem.setEnabled(filesSelected);
 			unzipItem.setEnabled(filesSelected);
 			emailFilesItem.setEnabled(filesSelected);
+		}
+		else if(source==viewMenu) {
+			showToolbarItem.setText(mainFrame.isToolbarVisible()?"Hide toolbar":"Show Toolbar");
 		}
 	}
 	

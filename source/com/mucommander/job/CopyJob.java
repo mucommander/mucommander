@@ -121,8 +121,11 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
 
-//        if(file.isFolder() && (!(file instanceof ArchiveFile) || unzip)) {
-        if(file.isDirectory() || unzip) {
+		// Do nothing when encountering symlinks (skip file)
+		if(file.isSymlink())
+			;
+		// Copy directory recursively
+        else if(file.isDirectory() || unzip) {
             // creates the folder in the destination folder if it doesn't exist
 			
 			if(!destFile.exists())
@@ -141,8 +144,6 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
             try {
                 AbstractFile subFiles[] = file.ls();
 				for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
-//                    System.out.println("Copy recurse "+subFiles[i].getAbsolutePath()+" to "+destFile.getAbsolutePath());
-//					copyRecurse(subFiles[i], destFile, null, level+1);
 					copyRecurse(subFiles[i], destFile, null);
                 }
 			}
@@ -152,6 +153,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
                     stop();
 			}
         }
+		// Copy file
         else  {
         	byte buf[] = new byte[BLOCK_SIZE];
 //System.out.println("SOURCE: "+file.getAbsolutePath()+"\nDEST: "+destFilePath);

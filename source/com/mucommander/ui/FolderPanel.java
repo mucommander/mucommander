@@ -158,6 +158,10 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		locationListeners.add(listener);
 	}
 
+	public void removeLocationListener(LocationListener listener) {
+		locationListeners.remove(listener);
+	}
+	
 	public void showRootBox() {
 		rootPopup.show(rootButton, 0, rootButton.getHeight());		
 		rootPopup.requestFocus();

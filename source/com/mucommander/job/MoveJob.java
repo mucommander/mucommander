@@ -129,8 +129,21 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 		    // Let's try the other regular way
 		}
 		
-//		if(file.isFolder() && !(file instanceof ArchiveFile)) {
-		if(file.isDirectory()) {
+		// Do not follow symlinks, simply delete it
+		if(file.isSymlink()) {
+        	try  {
+				file.delete();
+        		return true;
+			}
+        	catch(IOException e) {
+        	    int ret = showErrorDialog("Unable to delete symlink "+file.getAbsolutePath());
+        	    if(ret==-1 || ret==CANCEL_ACTION) 		// CANCEL_ACTION or close dialog
+        	        stop();
+       	        return false;
+        	}
+		}
+		// Move directory recursively
+		else if(file.isDirectory()) {
             // creates the folder in the destination folder if it doesn't exist
 			if (!destFile.exists()) {
 				try {
@@ -178,6 +191,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
         	}
 			
 		}
+		// Move file
         else  {
 //System.out.println("SOURCE: "+file.getAbsolutePath()+"\nDEST: "+destFilePath);
 			boolean append = false;

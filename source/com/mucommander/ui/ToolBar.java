@@ -18,6 +18,9 @@ import java.awt.event.*;
 public class ToolBar extends JToolBar implements ActionListener, LocationListener, MouseListener {
 	private MainFrame mainFrame;
 
+	private JPopupMenu popupMenu;
+	private JMenuItem hideToolbarMenuItem;
+	
 	/** Buttons icons, loaded only once */
 	private static ImageIcon icons[][];
 	
@@ -95,12 +98,15 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			buttons[i] = addButton(icons[i][0], icons[i][1], BUTTONS_DESC[i][0]);
 			if(BUTTONS_DESC[i][3]!=null &&!BUTTONS_DESC[i][3].equals("false"))
 				addSeparator(separatorDimension);
-//				addSeparator();
 		}
 
 		// In order to catch Shift+clicks
 		buttons[ZIP_INDEX].addMouseListener(this);
 		buttons[UNZIP_INDEX].addMouseListener(this);
+	
+		// Add a mouse listener to create popup menu when right-clicking
+		// on the toolbar
+		this.addMouseListener(this);
 	}
 
 	
@@ -155,6 +161,14 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 	
+		// Hide toolbar
+		if(source == hideToolbarMenuItem) {
+			mainFrame.setToolbarVisible(false);
+			this.popupMenu.setVisible(false);
+			this.popupMenu = null;
+			this.hideToolbarMenuItem = null;
+		}
+		
 		if(!(source instanceof JButton))
 			return;
 		
@@ -192,13 +206,13 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			mainFrame.showPreferencesDialog();
 		}
 		else if (buttonIndex==RUNCMD_INDEX) {
-			;
+			new RunDialog(mainFrame);
 		}
 		else if (buttonIndex==EMAIL_INDEX) {
-			;
+			new EmailFilesDialog(mainFrame);
 		}
 		else if (buttonIndex==PROPERTIES_INDEX) {
-			;
+			mainFrame.showPropertiesDialog();
 		}
 	
 		mainFrame.getLastActiveTable().requestFocus();
@@ -210,14 +224,30 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	public void mouseClicked(MouseEvent e) {
 		Object source = e.getSource();
 		
-		JButton button = (JButton)source;
-		int buttonIndex=getButtonIndex(button);
-
-		if (buttonIndex==ZIP_INDEX) {
-			new ZipDialog(mainFrame, e.isShiftDown()).show();
+		// Right clicking on the toolbar brings up a popup menu
+		if(source == this) {
+			int modifiers = e.getModifiers();
+			if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {		
+				if(this.popupMenu==null) {
+					popupMenu = new JPopupMenu();
+					this.hideToolbarMenuItem = new JMenuItem("Hide Toolbar");
+					hideToolbarMenuItem.addActionListener(this);
+					popupMenu.add(hideToolbarMenuItem);
+				}
+				popupMenu.show(this, e.getX(), e.getY());
+				popupMenu.setVisible(true);
+			}
 		}
-		else if (buttonIndex==UNZIP_INDEX) {
-			new CopyDialog(mainFrame, true, false);
+		else if(source instanceof JButton) {
+			JButton button = (JButton)source;
+			int buttonIndex=getButtonIndex(button);
+	
+			if (buttonIndex==ZIP_INDEX) {
+				new ZipDialog(mainFrame, e.isShiftDown());
+			}
+			else if (buttonIndex==UNZIP_INDEX) {
+				new CopyDialog(mainFrame, true, false);
+			}
 		}
 	}
 

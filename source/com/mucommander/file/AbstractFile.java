@@ -118,9 +118,9 @@ public abstract class AbstractFile {
 	}
 
 	
-//	public String getCanonicalPath() {
-//		return getAbsolutePath();
-//	}
+	public String getCanonicalPath() {
+		return getAbsolutePath();
+	}
 	
 	
 	/**

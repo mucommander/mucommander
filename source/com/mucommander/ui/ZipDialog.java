@@ -85,6 +85,8 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		// Packs dialog
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
+	
+		showDialog();
 	}
 	
 

@@ -7,6 +7,7 @@ import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.FolderPanel;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.text.SizeFormatter;
 
 import javax.swing.*;
@@ -34,15 +35,22 @@ public class DeleteJob extends FileJob implements Runnable {
     private MainFrame mainFrame;
 	private String baseFolderPath;
 
-	private final static int CANCEL_ACTION = 0;
-	private final static int SKIP_ACTION = 1;
+	private final static int DELETE_LINK_ACTION = 0;
+	private final static int DELETE_FOLDER_ACTION = 1;
+	private final static int CANCEL_ACTION = 2;
+	private final static int SKIP_ACTION = 3;
 
+	private final static int DELETE_LINK_MNEMONIC = KeyEvent.VK_L;
+	private final static int DELETE_FOLDER_MNEMONIC = KeyEvent.VK_F;
 	private final static int CANCEL_MNEMONIC = KeyEvent.VK_C;
 	private final static int SKIP_MNEMONIC = KeyEvent.VK_S;
 
+	private final static String DELETE_LINK_CAPTION = "Delete Link only";
+	private final static String DELETE_FOLDER_CAPTION = "Delete Folder";
 	private final static String CANCEL_CAPTION = "Cancel";
 	private final static String SKIP_CAPTION = "Skip";
 
+	
     public DeleteJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToDelete) {
 		super(progressDialog);
 
@@ -67,36 +75,63 @@ public class DeleteJob extends FileJob implements Runnable {
 		if(isInterrupted())
             return false;
 
-//        if(file.isFolder() && !(file instanceof ArchiveFile) &&!file.mayBeSymlink()) {
-        if(file.isDirectory() && !file.isSymlink()) {
-            // Delete each file in this folder
-            try {
-                AbstractFile subFiles[] = file.ls();
-                for(int i=0; i<subFiles.length && !isInterrupted(); i++)
-                    deleteRecurse(subFiles[i]);
-            }
-            catch(IOException e) {
-                int ret = showErrorDialog("Unable to read contents of folder "+filePath);
-                if(ret==-1 || ret==CANCEL_ACTION)	// CANCEL_ACTION or close dialog
-                    stop();
-                return false;
-            }
+		int ret;
+		boolean followSymlink = false;
+        if(file.isDirectory()) {
+			// If folder is a symlink, asks the user what to do
+			boolean isSymlink = file.isSymlink();
+			if(isSymlink) {
+				ret = showSymlinkDialog(filePath, file.getCanonicalPath());
+				if(ret==-1 || ret==CANCEL_ACTION) {
+					stop();
+					return false;
+				}
+				else if(ret==SKIP_ACTION) {
+					return false;
+				}
+				// Delete file only
+				else if(ret==DELETE_FOLDER_ACTION) {
+					followSymlink = true;
+				}
+			}
+			
+			if(!isSymlink || followSymlink) {
+				// Delete each file in this folder
+				try {
+					AbstractFile subFiles[] = file.ls();
+					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
+						deleteRecurse(subFiles[i]);
+				}
+				catch(IOException e) {
+					ret = showErrorDialog("Unable to read contents of folder "+filePath);
+					if(ret==-1 || ret==CANCEL_ACTION)	// CANCEL_ACTION or close dialog
+						stop();
+					return false;
+				}
+			}
         }
         
         if(isInterrupted())
             return false;
 
         try {
-            file.delete();
+			// If file is a symlink to a folder and the user asked to follow the symlink,
+			// delete the empty folder
+			if(followSymlink) {
+				AbstractFile canonicalFile = AbstractFile.getAbstractFile(file.getCanonicalPath());
+				if(canonicalFile!=null)
+					canonicalFile.delete();
+			}
+
+			file.delete();
 			return true;
 		}
         catch(IOException e) {
 			if(com.mucommander.Debug.TRACE)
-				System.out.println(""+e);
+				e.printStackTrace();
 			
-            int ret = showErrorDialog("Unable to delete "
-//				+(file.isFolder() && !(file instanceof ArchiveFile)?"folder ":"file ")
-				+(file.isDirectory()&& !file.isSymlink()?"folder ":"file ")
+            ret = showErrorDialog("Unable to delete "
+				+(file.isDirectory()?"folder ":"file ")
 				+file.getName());
             if(ret==-1 || ret==CANCEL_ACTION) // CANCEL_ACTION or close dialog
                 stop();                
@@ -132,6 +167,28 @@ public class DeleteJob extends FileJob implements Runnable {
 	    return waitForUserResponse(dialog);
     }
 
+	
+	private int showSymlinkDialog(String relativePath, String canonicalPath) {
+		YBoxPanel panel = new YBoxPanel();
+		panel.add(new JLabel("This file looks like a symbolic link."));
+		panel.add(new JLabel(" "));
+		panel.add(new JLabel("Delete symlink only (safe) or"));
+		panel.add(new JLabel("follow symlink and delete folder (caution) ?"));
+		panel.add(new JLabel(" "));
+		panel.add(new JLabel("  File: "+relativePath));
+		panel.add(new JLabel("  Links to: "+canonicalPath));
+		
+		QuestionDialog dialog = new QuestionDialog(progressDialog, "Symlink found", panel, mainFrame,
+			new String[] {DELETE_LINK_CAPTION, DELETE_FOLDER_CAPTION, SKIP_CAPTION, CANCEL_CAPTION},
+			new int[]  {DELETE_LINK_ACTION, DELETE_FOLDER_ACTION, SKIP_ACTION, CANCEL_ACTION},
+			new int[]  {DELETE_LINK_MNEMONIC, DELETE_FOLDER_MNEMONIC, SKIP_MNEMONIC, CANCEL_MNEMONIC},
+			2);
+	
+	    return waitForUserResponse(dialog);
+	}
+	
+
+	
     public void run() {
         currentFileIndex = 0;
         int numFiles = filesToDelete.size();
@@ -143,6 +200,7 @@ public class DeleteJob extends FileJob implements Runnable {
         AbstractFile currentFile;
         while(!isInterrupted()) {
             currentFile = (AbstractFile)filesToDelete.elementAt(currentFileIndex);
+			
 			// if current file or folder was successfully deleted, remove it from file table
 			if (deleteRecurse(currentFile))
             	activeTable.excludeFile(currentFile);

@@ -72,7 +72,9 @@ public class FSFile extends AbstractFile {
 		try {
 			this.canonicalPath = _file.getCanonicalPath();
 		}
-		catch(IOException e) {}
+		catch(IOException e) {
+			this.canonicalPath = this.absPath;
+		}
 			
         // removes the ending separator character (if any)
         this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
@@ -112,9 +114,9 @@ public class FSFile extends AbstractFile {
 		return absPath;
 	}
 
-//	public String getCanonicalPath() {
-//		return canonicalPath;
-//	}
+	public String getCanonicalPath() {
+		return canonicalPath;
+	}
 	
 	public String getSeparator() {
 		return separator;
@@ -126,7 +128,7 @@ public class FSFile extends AbstractFile {
 			if(parent==null || this.canonicalPath==null)
 				this.isSymlink = false;
 			else
-				this.isSymlink = !this.canonicalPath.equals(parent.canonicalPath+separator+getName());
+				this.isSymlink = !this.canonicalPath.equals(parent.canonicalPath+(parent.canonicalPath.endsWith(separator)?"":separator)+getName());
 			
 			this.symlinkValueSet = true;
 		}
