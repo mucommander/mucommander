@@ -63,7 +63,8 @@ public class AuthDialog extends FocusDialog implements ActionListener {
 		textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.server"), serverField, 15);
 
 		// Login field
-		this.loginField = new JTextField(fileURL.getLogin());
+		String login = fileURL.getLogin();
+		this.loginField = new JTextField(login);
 		textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.login"), loginField, 10);
 		
 		// Password field
@@ -89,7 +90,7 @@ public class AuthDialog extends FocusDialog implements ActionListener {
 		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 		
 		// initial focus
-		setInitialFocusComponent(loginField);
+		setInitialFocusComponent(login==null||login.trim().equals("")?loginField:passwordField);
 		
 		// Selects OK when enter is pressed
 		getRootPane().setDefaultButton(okButton);

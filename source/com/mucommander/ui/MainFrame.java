@@ -154,6 +154,12 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// WindowManager takes of catching close events and do the rest
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
+		// Used by setNoEventsMode()
+		JComponent glassPane = (JComponent)getGlassPane();
+		glassPane.addMouseListener(new MouseAdapter() {});
+		glassPane.addKeyListener(new KeyAdapter() {});
+		//setNoEventsMode(true);	// for 'no events mode' testing
+
 // For testing purposes, full screen option could be nice to add someday
 //setUndecorated(true);
 //java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
@@ -161,13 +167,12 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	
 	
 	/**
-	 * Enables/disables 'no events mode' which prevents mouse and keyboard events from being caught
+	 * Enables/disables 'no events mode' which prevents mouse and keyboard events from being received
 	 * by the application (main frame and its subcomponents and menus).
 	 */
 	public void setNoEventsMode(boolean enabled) {
-		// Set cursor to hourglass/wait if enabled, to default cursor otherwise
-		setCursor(enabled?new Cursor(Cursor.WAIT_CURSOR):Cursor.getDefaultCursor());
-		
+		// Glass pane has empty mouse and key adapters (created in the constructor)
+		// which will catch all mouse and keyboard events 
 		getGlassPane().setVisible(enabled);
 		getJMenuBar().setEnabled(!enabled);
 
@@ -371,7 +376,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * Makes both folders the same, choosing the one which is currently active. 
 	 */
 	public void setSameFolder() {
-		(lastActiveTable==table1?table2:table1).getFolderPanel().setCurrentFolder(lastActiveTable.getCurrentFolder(), false);
+		(lastActiveTable==table1?table2:table1).getFolderPanel().trySetCurrentFolder(lastActiveTable.getCurrentFolder(), false);
 	}
 
 	/**

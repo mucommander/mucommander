@@ -194,7 +194,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 			// Menu item corresponds to a root folder
 			if(index<rootsOffset) {
 				// Tries to change current folder
-				folderPanel.setCurrentFolder(rootFolders[index], true);
+				folderPanel.trySetCurrentFolder(rootFolders[index], true);
 				// Request focus on this file table
 				folderPanel.getFileTable().requestFocus();
 			}

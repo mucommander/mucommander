@@ -235,6 +235,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		// Do nothing while in 'no events mode'
+		if(mainFrame.getNoEventsMode())
+			return;
+
 		Object source = e.getSource();
 
 		// Some actions need to work on selected files
@@ -306,7 +310,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		}
 		else if (source == goToParentItem) {
 			FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
-			folderPanel.setCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);	
+			folderPanel.trySetCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);	
 		}
 		else if (source == sortByNameItem) {
 			mainFrame.getLastActiveTable().sortBy(FileTable.NAME);	

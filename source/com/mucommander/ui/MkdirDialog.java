@@ -100,23 +100,26 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 			// Create directory
 	        folder.mkdir(newName);
 			
-			try {
+//			try {
 				// Refresh table
-				activeTable.refresh();
+//				activeTable.getFolderPanel().refresh();
+			activeTable.getFolderPanel().tryRefresh(AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName));
 
-				// Skip next auto refresh
-				activeTable.getMonitor().skipRefresh();
+//				activeTable.refresh();
+
+//				// Skip next auto refresh
+//				activeTable.getMonitor().skipRefresh();
 							
 				// Finds the row corresponding to the newly created folder
 				// and makes it the current row.
-				if (activeTable.getCurrentFolder().equals(folder)) {
-					AbstractFile createdFolder = AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName);
-					activeTable.selectFile(createdFolder);
-				}
-			}
-			catch(IOException e) {
-				// Folder could not be refreshed, no big deal
-			}
+//				if (activeTable.getCurrentFolder().equals(folder)) {
+//					AbstractFile createdFolder = AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName);
+//					activeTable.selectFile(createdFolder);
+//				}
+//			}
+//			catch(IOException e) {
+//				// Folder could not be refreshed, no big deal
+//			}
 		}
 	    catch(IOException e) {
 	        showErrorDialog(Translator.get("cannot_create_folder", dirPath), Translator.get("mkdir_dialog.error_title"));

@@ -407,12 +407,7 @@ public abstract class FileJob implements Runnable {
 		for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
 			currentTableFolder = table.getCurrentFolder();
 			if(hasFolderChanged(currentTableFolder)) {
-				try {
-					table.refresh();
-				}
-				catch(IOException e) {
-					// Refreshed failed, folder will be left as it was before
-				}
+				table.getFolderPanel().tryRefresh();
 			}
 		}
 

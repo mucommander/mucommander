@@ -66,6 +66,10 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 	public void run() {
 		MainFrame mainFrame = WindowManager.getInstance().getCurrentMainFrame();
 		
+		// Do nothing while in 'no events mode'
+		if(mainFrame.getNoEventsMode())
+			return;
+
 		switch(action) {
 			case ABOUT_ACTION:
 				new AboutDialog(mainFrame).showDialog();

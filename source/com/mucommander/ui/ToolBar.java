@@ -242,7 +242,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		}
 		else if(buttonIndex==PARENT_INDEX) {
 			FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
-			folderPanel.setCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);
+			folderPanel.trySetCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);
 		}
 		else if(buttonIndex==MARK_INDEX) {
 			mainFrame.showSelectionDialog(true);

@@ -66,37 +66,63 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		private AbstractFile folder;
 		private String folderPath;
 		private boolean addToHistory;
+		private AbstractFile fileToSelect;
 		
 		private boolean isKilled;
 		private boolean doNotKill;
+		private boolean noWaitDialog;
+	
+		private Object lock = new Object();
+	
+		private QuestionDialog waitDialog;
+	
+		private boolean hadFocus;
 	
 		public ChangeFolderThread(AbstractFile folder, boolean addToHistory) {
 			this.folder = folder;
 			this.addToHistory = addToHistory;
+			
+			setPriority(MAX_PRIORITY);
 		}
 
 		public ChangeFolderThread(String folderPath, boolean addToHistory) {
 			this.folderPath = folderPath;
 			this.addToHistory = addToHistory;
+
+			setPriority(MAX_PRIORITY);
 		}
+	
+	
+		public void setFileToSelect(AbstractFile fileToSelect) {
+			this.fileToSelect = fileToSelect;
+		}
+		
 	
 		public void tryKill() {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 			if(isKilled)
 				return;
-			
-			synchronized(this) {
+
+			synchronized(lock) {
 				isKilled = true;
 				if(!doNotKill) {
-					super.stop();
-					// Resume mouse/keybaord events and restore cursor
-					disableNoEventsMode();
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
+					super.stop();
+
+	if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("waitdialog = "+waitDialog);
+					if(waitDialog!=null) {
+	if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on waitdialog");
+						waitDialog.dispose();
+						waitDialog = null;
+					}
+
+					// post processing as it would normally have been done by run()
+					finish();
 				}
-				changeFolderThread = null;
 			}
 		}
 	
+		
 	
 		private void enableNoEventsMode() {
 			// Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
@@ -131,9 +157,54 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
 		public void run() {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
 
-			boolean hadFocus = fileTable.hasFocus();
+			mainFrame.setStatusBarText(Translator.get("status_bar.connecting_to_folder"));
+
+			// Start a new thread which will popup a dialog after a number of seconds
+			new Thread() {
+				public void run() {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting and waiting");
+
+					try { sleep(3000); }
+					catch(InterruptedException e) {}
+
+					while(noWaitDialog) {
+						try { sleep(200); }
+						catch(InterruptedException e) {}
+					}
+
+					synchronized(lock) {
+						if(changeFolderThread==null || changeFolderThread!=ChangeFolderThread.this || isKilled || !ChangeFolderThread.this.isAlive())
+							return;
+
+						// Download or browse file ?
+						waitDialog = new QuestionDialog(mainFrame, 
+						null,
+						Translator.get("table.connecting_to_folder"),
+						mainFrame,
+						new String[] {CANCEL_TEXT},
+						new int[] {CANCEL_ACTION},
+						0);
+					}
+
+					int ret = waitDialog.getActionValue();
+					if(ret==-1 || ret==CANCEL_ACTION)
+						tryKill();
+				}
+			}.start();
+			
+
+			// Disable automatic refresh
+			fileTable.setAutoRefreshActive(false);
+
+			// Save focus state
+			this.hadFocus = fileTable.hasFocus();
 			do {
-				// Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
+				noWaitDialog = false;
+
+				// Set cursor to hourglass/wait
+				mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+				// Prevents mouse and keybaord events from reaching the main frame and menus
 				enableNoEventsMode();
 
 				try {
@@ -141,18 +212,19 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFile()");
 						AbstractFile file = AbstractFile.getAbstractFile(folderPath, true);
 
-						synchronized(this) {
+						synchronized(lock) {
 							if(isKilled) {
 	if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
-								// Restore mouse/keybaord events and default cursor
-								disableNoEventsMode();
 								break;
 							}
 						}
 
 						if(file==null || !file.exists()) {
-							// Restore mouse/keybaord events and default cursor
-							disableNoEventsMode();
+							noWaitDialog = true;
+
+							// Restore default cursor
+							mainFrame.setCursor(Cursor.getDefaultCursor());
+
 							// Keep the text input by the user (do not restore current path) to give him a change to correct it
 							locationFieldTextSet = true;
 							JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
@@ -164,8 +236,10 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 							// Just continue
 						}
 						else if(file.isBrowsable()) {
-							// Restore mouse/keybaord events and default cursor
-							disableNoEventsMode();
+							noWaitDialog = true;
+
+							// Restore default cursor
+							mainFrame.setCursor(Cursor.getDefaultCursor());
 
 							// Download or browse file ?
 							QuestionDialog dialog = new QuestionDialog(mainFrame, 
@@ -179,8 +253,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 							int ret = dialog.getActionValue();
 							if(ret==-1 || ret==CANCEL_ACTION)
 								break;
+							
 							// Download file
 							if(ret==DOWNLOAD_ACTION) {
+								noWaitDialog = true;
+
 								FileSet fileSet = new FileSet(currentFolder);
 								fileSet.add(file);
 								
@@ -189,12 +266,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 									
 								// Restore current folder's path
 								locationField.setText(currentFolder.getAbsolutePath());
-							
+
 								break;
 							}
 							// Continue if BROWSE_ACTION
-							// Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
-							enableNoEventsMode();
+							// Set cursor to hourglass/wait
+							mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+							noWaitDialog = false;
 						}
 					
 						this.folder = file;
@@ -203,7 +281,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
 					AbstractFile children[] = folder.ls();
 
-					synchronized(this) {
+					synchronized(lock) {
 						if(isKilled) {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
 							break;
@@ -211,18 +289,25 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
 						doNotKill = true;
 					}
 					
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling _setCurrentFolder");
-					_setCurrentFolder(folder, children, addToHistory);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFolder");
+					setCurrentFolder(folder, children, addToHistory);
+					
+					// Select specified file if there is one
+					if(fileToSelect!=null)
+						fileTable.selectFile(fileToSelect);
 					
 					break;
 				}
 				catch(IOException e) {
-					// Restore mouse/keybaord events and default cursor
-					disableNoEventsMode();
+					noWaitDialog = true;
+
+					// Restore default cursor
+					mainFrame.setCursor(Cursor.getDefaultCursor());
 					
 					// Retry (loop) if user authentified
 					if(showAccessErrorDialog(e)) {
-						folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
+//						if(folder!=null)
+						folder = AbstractFile.getAbstractFile(folder==null?folderPath:folder.getAbsolutePath());
 						continue;
 					}
 					break;
@@ -230,15 +315,38 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling _setCurrentFol
 			}
 			while(true);
 
-			// Restore mouse/keybaord events and default cursor
-			disableNoEventsMode();
+			noWaitDialog = true;
 
+			synchronized(lock) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("waitdialog = "+waitDialog);
+				if(waitDialog!=null) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on waitdialog");
+					waitDialog.dispose();
+					waitDialog = null;
+				}
+
+				// Clean things up
+				finish();
+			}
+		}
+	
+	
+		public void finish() {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restoring focus...");
+			mainFrame.setCursor(Cursor.getDefaultCursor());
+
+			// Restore focus on table if it had it before
 			if(hadFocus || mainFrame.getLastActiveTable()==fileTable)
 				fileTable.requestFocus();
 
+			// Re-enable automatic refresh
+			fileTable.setAutoRefreshActive(true);
+
 			changeFolderThread = null;
+
+			// Restore mouse/keybaord events and default cursor
+			disableNoEventsMode();
 		}
-	
 	}
 
 
@@ -284,7 +392,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		try {
 			// Set initial folder to current directory
 //			_setCurrentFolder(initialFolder, true);
-			_setCurrentFolder(initialFolder, initialFolder.ls(), true);
+			setCurrentFolder(initialFolder, initialFolder.ls(), true);
 		}
 		catch(Exception e) {
 			AbstractFile rootFolders[] = RootFolders.getRootFolders();
@@ -292,7 +400,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 			for(int i=0; i<rootFolders.length; i++) {
 				try  {
 //					_setCurrentFolder(rootFolders[i], true);
-					_setCurrentFolder(rootFolders[i], rootFolders[i].ls(), true);
+					setCurrentFolder(rootFolders[i], rootFolders[i].ls(), true);
 					break;
 				}
 				catch(IOException e2) {
@@ -397,17 +505,31 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 		}
 	}
 
+
+	/**
+	 * Tries to change current folder, adding current folder to history if requested.
+	 * If something goes wrong, the user is notified by a dialog.
+	 * This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+	 */
+	public void trySetCurrentFolder(AbstractFile folder, boolean addToHistory) {
+		trySetCurrentFolder(folder, addToHistory, null);
+	}
+
 	
 	/**
-	 * Returns <code>true</code> if the folder was correctly set, <code>false</code> if
-	 * an Exception has been thrown and a error message has been displayed to the end user.
+	 * Tries to change current folder, adding current folder to history if requested, and selecting the
+	 * given file (if not null) after the folder has been set.
+	 * If something goes wrong, the user is notified by a dialog.
+	 * This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
 	 */
-	public boolean setCurrentFolder(AbstractFile folder, boolean addToHistory) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("FolderPanel.setCurrentFolder: "+folder+" ");
-        
+	public void trySetCurrentFolder(AbstractFile folder, boolean addToHistory, AbstractFile fileToSelect) {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" ");
+
+if(changeFolderThread!=null && com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
+		
 		if (folder==null || !folder.exists()) {
 			JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
-			return false;
+			return;
 		}
 
 /*		
@@ -455,25 +577,76 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 		return success;
 */
 		this.changeFolderThread = new ChangeFolderThread(folder, addToHistory);
+		if(fileToSelect!=null)
+			this.changeFolderThread.setFileToSelect(fileToSelect);
 		changeFolderThread.start();
-
-		return true;
 	}
+
+	
+	public void trySetCurrentFolder(String folderPath, boolean addToHistory) {
+		this.changeFolderThread = new ChangeFolderThread(folderPath, addToHistory);
+		changeFolderThread.start();
+	}
+	
+
+	/**
+	 * Refreshes file table contents and notifies the user if current folder could not be refreshed.
+	 */
+	 public void tryRefresh() {
+		trySetCurrentFolder(currentFolder, false, null);
+/*
+		boolean retry = false;
+		
+		// First try FileTable's refresh method to preserve selection
+		try {
+			fileTable.refresh();
+			return;
+		}
+		catch(IOException e) {
+			if(!showAccessErrorDialog(e))
+				return;
+
+			// Retry if user authentified, using setCurrentFolder which will lose selection
+			AbstractFile folder = currentFolder;
+			do {
+				try {
+					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
+					_setCurrentFolder(folder, false);
+				}
+				catch(IOException e2) {
+					// Retry (loop) if user authentified
+					if(showAccessErrorDialog(e))
+						continue;
+				}
+				break;
+			}
+			while(true);
+
+			setCurrentFolder(currentFolder, false);
+		}
+		finally {
+			driveButton.repaint();
+			locationField.repaint();
+
+			// Transfer focus from refresh button back to file table
+			fileTable.requestFocus();
+		}
+*/
+	 }
 		
 
-	public void stopChangeFolder() {
-		if(changeFolderThread!=null) {
-			changeFolderThread.tryKill();
-		}
+	/**
+	 * Refreshes file table contents and notifies the user if current folder could not be refreshed, and
+	 * selects the given file after the folder has been refreshed.
+	 */
+	public void tryRefresh(AbstractFile fileToSelect) {
+		trySetCurrentFolder(currentFolder, false, fileToSelect);
 	}
 
 
-	private void _setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory) {
-		// Set 'wait' cursor
-		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-
-        if(com.mucommander.Debug.ON)
-            System.out.println("FolderPanel._setCurrentFolder: "+folder+" ");
+	public void setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory) {
+//		// Set 'wait' cursor
+//		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 //		try {
 			fileTable.setCurrentFolder(folder, children);
@@ -510,10 +683,20 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 //		}
 //		finally {
 			// Restore cursor to default, no matter what happened before
-			mainFrame.setCursor(Cursor.getDefaultCursor());
+//			mainFrame.setCursor(Cursor.getDefaultCursor());
 //		}
 	}
 
+
+	public void setCurrentFolder(AbstractFile folder, boolean addToHistory) throws IOException {
+		setCurrentFolder(folder, folder.ls(), addToHistory);
+	}
+
+
+	public void refresh() throws IOException {
+		setCurrentFolder(currentFolder, false);
+	}
+	
 	
 	public void goBack() {
 
@@ -522,7 +705,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			return;
 		
 		AbstractFile folder = (AbstractFile)history.elementAt(--historyIndex);
-		setCurrentFolder(folder, false);
+		trySetCurrentFolder(folder, false);
 
 /*
 		boolean success = false;
@@ -554,7 +737,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			return;
 		
 		AbstractFile folder = (AbstractFile)history.elementAt(++historyIndex);
-		setCurrentFolder(folder, false);
+		trySetCurrentFolder(folder, false);
 
 /*
 		boolean success = false;
@@ -606,51 +789,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 	
 	
 	/**
-	 * Refreshes this panel's components: file table, drive button and location field
-	 * and notifies the user if current folder could not be refreshed.
-	 */
-	 public void refresh() {
-		boolean retry = false;
-		
-		// First try FileTable's refresh method to preserve selection
-		try {
-			fileTable.refresh();
-			return;
-		}
-		catch(IOException e) {
-			if(!showAccessErrorDialog(e))
-				return;
-
-/*
-			// Retry if user authentified, using setCurrentFolder which will lose selection
-			AbstractFile folder = currentFolder;
-			do {
-				try {
-					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
-					_setCurrentFolder(folder, false);
-				}
-				catch(IOException e2) {
-					// Retry (loop) if user authentified
-					if(showAccessErrorDialog(e))
-						continue;
-				}
-				break;
-			}
-			while(true);
-*/
-			setCurrentFolder(currentFolder, false);
-		}
-		finally {
-			driveButton.repaint();
-			locationField.repaint();
-
-			// Transfer focus from refresh button back to file table
-			fileTable.requestFocus();
-		}
-	 }
-
-
-	/**
 	 * This method must be called when this FolderPanel isn't used anymore, otherwise
 	 * resources associated to this FolderPanel won't be released.
 	 */
@@ -680,7 +818,10 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 		if (source == locationField) {
 			String location = locationField.getText();
 			
-			new ChangeFolderThread(location, true).start();
+			trySetCurrentFolder(location, true);
+
+//			(this.changeFolderThread = new ChangeFolderThread(location, true)).start();
+
 /*
 			AbstractFile file = null;
 			do {
@@ -810,6 +951,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file = "+file);
 		if (var.equals("prefs.colors.background"))  {
 			scrollPane.getViewport().setBackground(backgroundColor=FileTableCellRenderer.getColor(event.getValue()));
 			repaint();    		
+		}
+		else if (var.equals("prefs.show_hidden_files")) {
+			tryRefresh();
 		}
 		
     	return true;

@@ -160,7 +160,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
             new MkdirDialog(mainFrame);
         }
         else if(source == buttons[REFRESH_INDEX]) {
-			mainFrame.getLastActiveTable().getFolderPanel().refresh();
+			mainFrame.getLastActiveTable().getFolderPanel().tryRefresh();
 		}
         else if(source == buttons[CLOSE_INDEX]) {
 			WindowManager.getInstance().disposeMainFrame(mainFrame);
