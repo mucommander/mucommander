@@ -83,8 +83,6 @@ public class MIMEBase64Encoder {
         'w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/'
     };
 
-    private final static int BLOCK_SIZE = 1024;
-
 	private FileJob job;
     private long totalRead;
 
@@ -95,14 +93,14 @@ public class MIMEBase64Encoder {
     
     public void encode(AbstractFile file, OutputStream out) throws IOException {
         InputStream in = file.getInputStream();
-        byte bytes[] = new byte[BLOCK_SIZE];
+        byte bytes[] = new byte[FileJob.READ_BLOCK_SIZE];
 
         int n;
         totalRead = 0;
         int n3byt, nrest=0, k=0, linelength=0, i;
         byte buf[] = new byte[4];   // array of base64 characters
         
-        while ((n=in.read(bytes, nrest, BLOCK_SIZE-nrest))!=-1 && !job.isInterrupted()) {
+        while ((n=in.read(bytes, nrest, FileJob.READ_BLOCK_SIZE-nrest))!=-1 && !job.isInterrupted()) {
             totalRead += n;
             n += nrest;
             
@@ -135,8 +133,8 @@ public class MIMEBase64Encoder {
             if(nrest>0  && n3byt>0) {
                 // Move remaining bytes back to the beginning of the byte array
                 for(int j=0; j<nrest; j++)
-                    bytes[j] = bytes[BLOCK_SIZE-nrest+j];
-//                System.arraycopy(bytes, BLOCK_SIZE-nrest, bytes, 0, nrest);
+                    bytes[j] = bytes[FileJob.READ_BLOCK_SIZE-nrest+j];
+//                System.arraycopy(bytes, READ_BLOCK_SIZE-nrest, bytes, 0, nrest);
             }
         }
 

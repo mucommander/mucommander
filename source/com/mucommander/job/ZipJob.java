@@ -48,8 +48,9 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 	private final static String CANCEL_TEXT = "Cancel";
 	private final static String SKIP_TEXT = "Skip";
 
-	private byte buffer[] = new byte[1024];
+	private byte buffer[] = new byte[READ_BLOCK_SIZE];
 
+	
     public ZipJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToZip, String zipComment, OutputStream zipOut, AbstractFile destFolder) {
         super(progressDialog, mainFrame);
 		

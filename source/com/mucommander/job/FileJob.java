@@ -44,6 +44,9 @@ public abstract class FileJob implements Runnable {
 	/** Contains the timestamp when this job has been put in pause (if in pause) */
 	private long pauseStartTime;
 	
+	/** Size that should be allocated to read buffers */
+	public final static int READ_BLOCK_SIZE = 8192;
+
 	
 	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame) {
 		this.progressDialog = progressDialog;

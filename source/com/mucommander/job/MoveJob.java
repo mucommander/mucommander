@@ -69,8 +69,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
     private final static String APPEND_ALL_TEXT = "Append all";
 	private final static String OVERWRITE_ALL_OLDER_TEXT = "Overwrite older";
 
-	private final static int BLOCK_SIZE = 1024;
-
+	
     /**
 	 * @param newName in case where filesToMove contains a single file, newName can be used to rename the file in the
 	 * destination folder. Otherwise, a null is passed.
@@ -229,7 +228,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 				return true;
 
 			// if moveTo() returned false or wasn't possible because of 'append'
-			byte buf[] = new byte[BLOCK_SIZE];
+			byte buf[] = new byte[READ_BLOCK_SIZE];
 			
 			OutputStream out = null;
 			InputStream in = null;

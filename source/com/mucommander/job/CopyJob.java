@@ -12,11 +12,6 @@ import com.mucommander.ui.table.FileTable;
 import com.mucommander.text.SizeFormatter;
 import com.mucommander.text.Translator;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-
 import java.io.*;
 
 import java.util.Vector;
@@ -61,8 +56,6 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 
 	private final static String CANCEL_TEXT = Translator.get("cancel");
 	private final static String SKIP_TEXT = Translator.get("skip");
-
-	private final static int BLOCK_SIZE = 1024;
 
 	
     /**
@@ -139,7 +132,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
         }
 		// Copy file
         else  {
-        	byte buf[] = new byte[BLOCK_SIZE];
+        	byte buf[] = new byte[READ_BLOCK_SIZE];
 //System.out.println("SOURCE: "+file.getAbsolutePath()+"\nDEST: "+destFilePath);
 			boolean append = false;
 			
