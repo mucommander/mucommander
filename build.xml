@@ -67,9 +67,6 @@
 	<!-- Trigger proguard target -->
 	<antcall target="proguard"/>
 
-	<!-- Delete unobfuscated JAR file -->
-	<delete file="${dist}/mucommander_unobf.jar"/>
-
   </target>
 
 
