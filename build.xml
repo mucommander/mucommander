@@ -72,6 +72,7 @@
 		<!-- Needed for jCIFS -->
 		<expose>
 			<class name="jcifs.Config"/>
+			<class name="com.mucommander.ui.macosx.FinderIntegration"/>
 		</expose>
 	</obfuscate>
   </target>

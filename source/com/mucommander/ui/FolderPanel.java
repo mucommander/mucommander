@@ -90,7 +90,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		
 		rootButton = new JButton(rootFolders[0].toString());
 		// For Mac OS X whose minimum width for buttons is enormous
-		rootButton.setMinimumSize(new Dimension(40, (int)rootButton.getPreferredSize().getWidth()));
+		rootButton.setMinimumSize(new Dimension(40, (int)rootButton.getPreferredSize().getHeight()));
 		rootButton.setMargin(new Insets(6,8,6,8));
 		
 		rootButton.addActionListener(this);
