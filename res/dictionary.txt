@@ -806,6 +806,8 @@ status_bar.selected_files:ES:%1 de %2 seleccionados
 status_bar.selected_files:CS:%1 z %2 označeno
 status_bar.selected_files:zh_TW:%1 / %2 已選取
 
+status_bar.connecting_to_folder:EN:Connecting to folder, press ESCAPE to cancel.
+
 
 #########
 # Table #
@@ -859,6 +861,10 @@ table.download_or_browse:DE:Wollen sie zur Datei browsen oder sie downloaden?
 table.download_or_browse:ES:¿Desea explorar o descargar este fichero?
 table.download_or_browse:CS:Chcete soubor přechádzet nebo stáhnout?
 table.download_or_browse:zh_TW:你要瀏覽或是下載此檔案?
+
+table.connecting_to_folder:EN:Connecting to folder...
+
+
 
 ##################
 # Version dialog #
@@ -1705,12 +1711,12 @@ server_connect_dialog.connect:ES:Conectar
 server_connect_dialog.connect:CS:Připojit
 server_connect_dialog.connect:zh_TW:連接
 
-server_connect_dialog.auth_error:EN:Invalid login or password.
-server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
-server_connect_dialog.auth_error:DE:Ungültiger Login oder Paßwort.
-server_connect_dialog.auth_error:ES:Nombre o contraseña inválido
-server_connect_dialog.auth_error:CS:Nesprávné uživatelské jméno nebo heslo.
-server_connect_dialog.auth_error:zh_TW:不合法的帳號或密碼
+#server_connect_dialog.auth_error:EN:Invalid login or password.
+#server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
+#server_connect_dialog.auth_error:DE:Ungültiger Login oder Paßwort.
+#server_connect_dialog.auth_error:ES:Nombre o contraseña inválido
+#server_connect_dialog.auth_error:CS:Nesprávné uživatelské jméno nebo heslo.
+#server_connect_dialog.auth_error:zh_TW:不合法的帳號或密碼
 
 
 ###############

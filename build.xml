@@ -44,9 +44,10 @@
     <unjar src="${lib}/muxml.jar" dest="${classes}"/>
     <unjar src="${lib}/jcifs.jar" dest="${classes}"/>
     <unjar src="${lib}/commons-net.jar" dest="${classes}"/>
+    <unjar src="${lib}/commons-logging.jar" dest="${classes}"/>
     <unjar src="${lib}/jakarta-oro.jar" dest="${classes}"/> 
     <unjar src="${lib}/javatar.jar" dest="${classes}"/>
-    <unjar src="${lib}/j2ssh-core.jar" dest="${classes}"/>
+    <unjar src="${lib}/j2ssh.jar" dest="${classes}"/>
     <!-- Not supported by unjar, too bad
         <fileset dir="${lib}">
         <include name="**/*.jar"/>
@@ -121,6 +122,15 @@
 		<keep name="jcifs.Config">
 			<method access="public" name="*"/>
 		</keep>
+
+		<!-- Required by j2ssh library -->
+		<keep name="org.apache.commons.logging.*">
+                        <method access="public" name="*"/>
+                </keep> 
+                <keep name="org.apache.commons.logging.impl.LogFactoryImpl">
+                        <method access="public" name="*"/>
+                </keep>
+
 	</proguard>
   </target>
 
