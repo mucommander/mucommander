@@ -1,4 +1,5 @@
 
+
 package com.mucommander;
 
 import java.io.*;
@@ -16,7 +17,7 @@ import java.io.*;
  */
 public class Debug {
 	/** Sets whether or not debug messages should be output to the standard output */
-	public final static boolean ON = true;
+	public final static boolean ON = false;
 
 
 	/**

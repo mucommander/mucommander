@@ -122,6 +122,12 @@
 	</proguard>
   </target>
 
+
+<!--  <target name="signjar">
+     <copy file="${dist}/mucommander.jar" tofile="mucommander.com/webstart/mucommander.jar"/>
+     <signjar jar="mucommander.com/webstart/mucommander.jar" keystore="webstart/keystore" alias="maxence"/>
+  </target> -->
+
   <!-- Launches mucommander from the classes directory -->
   <target name="run">
     <java classname="com.mucommander.Launcher" fork="true">
