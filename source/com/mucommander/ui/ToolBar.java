@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Vector;
 
 
 /**
@@ -179,6 +180,10 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		if(buttonIndex==-1)
 			return;
 		
+		// Some actions need to work on selected files
+		Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
+		int nbSelectedFiles = files.size();
+
 		if (buttonIndex==NEW_WINDOW_INDEX) {
 			WindowManager.getInstance().createNewMainFrame();
 		}
@@ -210,7 +215,8 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			new RunDialog(mainFrame);
 		}
 		else if (buttonIndex==EMAIL_INDEX) {
-			new EmailFilesDialog(mainFrame);
+			if(nbSelectedFiles>0)
+				new EmailFilesDialog(mainFrame, files);
 		}
 		else if (buttonIndex==PROPERTIES_INDEX) {
 			mainFrame.showPropertiesDialog();
@@ -243,11 +249,16 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			JButton button = (JButton)source;
 			int buttonIndex=getButtonIndex(button);
 	
+			// Don't display dialog is file selection is empty
+			Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
+			if(files.size()==0)
+				return;
+
 			if (buttonIndex==ZIP_INDEX) {
-				new ZipDialog(mainFrame, e.isShiftDown());
+				new ZipDialog(mainFrame, files, e.isShiftDown());
 			}
 			else if (buttonIndex==UNZIP_INDEX) {
-				new CopyDialog(mainFrame, true, false);
+				new UnzipDialog(mainFrame, files, e.isShiftDown());
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.job.MoveJob;
 import com.mucommander.text.Translator;
@@ -20,34 +19,27 @@ import java.util.Vector;
  */
 public class MoveDialog extends DestinationDialog {
 
-	private Vector filesToMove;
 	
-	public MoveDialog(MainFrame mainFrame, boolean isShiftDown) {
-		super(mainFrame);
+	public MoveDialog(MainFrame mainFrame, Vector files, boolean isShiftDown) {
+		super(mainFrame, files);
 		
-		FileTable activeTable = mainFrame.getLastActiveTable();
-		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
-		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
-    	this.filesToMove = activeTable.getSelectedFiles();
-		int nbFiles = filesToMove.size();
-		if(nbFiles==0)
-    		return;
-
+		int nbFiles = files.size();
 		boolean rename = isShiftDown && nbFiles==1;
 
 		init(Translator.get(rename?"move_dialog.rename":"move_dialog.move"),
 			Translator.get(rename?"move_dialog.rename_description":"move_dialog.move_description"),
-			Translator.get(rename?"move_dialog.rename":"move_dialog.move"));
+			Translator.get(rename?"move_dialog.rename":"move_dialog.move"),
+			Translator.get("move_dialog.error_title"));
         
 		String fieldText;
 		if(isShiftDown && nbFiles==1) {
-			fieldText = ((AbstractFile)filesToMove.elementAt(0)).getName();
+			fieldText = ((AbstractFile)files.elementAt(0)).getName();
 		}
 		else {
-			AbstractFile destFolder = (activeTable==table1?table2:table1).getCurrentFolder();
+			AbstractFile destFolder = mainFrame.getUnactiveTable().getCurrentFolder();
 			fieldText = destFolder.getAbsolutePath(true);
 			if(nbFiles==1)
-				fieldText += ((AbstractFile)filesToMove.elementAt(0)).getName();
+				fieldText += ((AbstractFile)files.elementAt(0)).getName();
 		}
 
 		setTextField(fieldText);
@@ -60,34 +52,20 @@ public class MoveDialog extends DestinationDialog {
 	/**
 	 * Starts a MoveJob. This method is trigged by the 'OK' button or return key.
 	 */
-	protected void okPressed() {
-		String destPath = pathField.getText();
-	    FileTable activeTable = mainFrame.getLastActiveTable();
-
-		// Resolves destination folder
-		Object ret[] = mainFrame.resolvePath(destPath);
-		// The path entered doesn't correspond to any existing folder
-		if (ret==null || (filesToMove.size()>1 && ret[1]!=null)) {
-			showErrorDialog(Translator.get("this_folder_does_not_exist", destPath), Translator.get("move_dialog.error_title"));
+	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName) {
+		if (newName==null && sourceFolder.equals(destFolder)) {
+			showErrorDialog(Translator.get("move_dialog.same_source_destination"));
 			return;
 		}
 
-		AbstractFile destFolder = (AbstractFile)ret[0];
-		String newName = (String)ret[1];
-
-		if (newName==null && activeTable.getCurrentFolder().equals(destFolder)) {
-			showErrorDialog(Translator.get("move_dialog.same_source_destination"), Translator.get("move_dialog.error_title"));
-			return;
-		}
-
-		if (filesToMove.contains(destFolder)) {
-			showErrorDialog(Translator.get("move_dialog.cannot_move_to_itself"), Translator.get("move_dialog.error_title"));
+		if (files.contains(destFolder)) {
+			showErrorDialog(Translator.get("move_dialog.cannot_move_to_itself"));
 			return;
 		}
 		
 		// Starts moving files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
-		MoveJob moveJob = new MoveJob(progressDialog, mainFrame, filesToMove, destFolder, newName);
+		MoveJob moveJob = new MoveJob(progressDialog, mainFrame, files, destFolder, newName);
 	    progressDialog.start(moveJob);
 	}
 	

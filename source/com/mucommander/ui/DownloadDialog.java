@@ -31,11 +31,12 @@ public class DownloadDialog extends DestinationDialog {
 		
 		this.fileURL = URL;
 
-		// Determines local file name
 		int urlLen = fileURL.length();
+		// Remove ending '/' character(s)
 		while(fileURL.charAt(urlLen-1)=='/')
 			fileURL = fileURL.substring(0, --urlLen);
 		int lastSlashPos = fileURL.lastIndexOf('/');
+		// Determine local file name
 		this.fileName = java.net.URLDecoder.decode(fileURL.substring(lastSlashPos==-1||lastSlashPos<7?7:lastSlashPos+1, urlLen));
 		
 		AbstractFile activeFolder = mainFrame.getLastActiveTable().getCurrentFolder();

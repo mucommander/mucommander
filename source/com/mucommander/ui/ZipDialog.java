@@ -20,14 +20,11 @@ import java.util.Vector;
  */
 public class ZipDialog extends FocusDialog implements ActionListener {
 
-	// Dialog's width has to be at least 240
-	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
-
-	// Dialog's width has to be at most 320
-	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);	
-
 	private MainFrame mainFrame;
 
+	/** Files to zip */
+	private Vector files;
+	
 	private JTextField filePathField;
 	private JTextArea commentArea;
 	private JButton okButton;
@@ -36,10 +33,18 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 	private final static int CANCEL_ACTION = 0;
 	private final static int REPLACE_ACTION = 1;
 
+	// Dialog's width has to be at least 240
+	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
 
-	public ZipDialog(MainFrame mainFrame, boolean isShiftDown) {
+	// Dialog's width has to be at most 320
+	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);	
+
+
+	public ZipDialog(MainFrame mainFrame, Vector files, boolean isShiftDown) {
 		super(mainFrame, Translator.get("zip_dialog.title"), mainFrame);
+
 		this.mainFrame = mainFrame;
+		this.files = files;
 		
 		Container contentPane = getContentPane();
 		
@@ -96,9 +101,6 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			// Starts by disposing the dialog
 			dispose();
 
-			// Figures out which files to zip
-			Vector filesToZip = mainFrame.getLastActiveTable().getSelectedFiles();
-
 			// Checks that destination file can be resolved 
 			String filePath = filePathField.getText();
 			Object dest[] = mainFrame.resolvePath(filePath);
@@ -113,44 +115,10 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			}
 
 			AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
-/*			
-			boolean append = false;
-			if (destFile.exists()) {
-				// File already exists: cancel, append or overwrite?
-				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("zip_dialog.file_already_exists", destFile.getName()), mainFrame,
-					new String[] {Translator.get("cancel"), Translator.get("replace")},
-					new int[]  {CANCEL_ACTION, REPLACE_ACTION},
-					0);
-				int ret = dialog.getActionValue();
-				
-				// User cancelled
-				if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-					return;
-			}
-
-			java.io.OutputStream destOut = null;
-			// Tries to open zip/destination file
-			try {
-				destOut = destFile.getOutputStream(false);
-			}
-			catch(Exception ex) {
-				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("zip_dialog.error_title"), Translator.get("zip_dialog.cannot_write"), mainFrame,
-					new String[] {Translator.get("ok")},
-					new int[]  {0},
-					0);
-				dialog.getActionValue();
-				return;
-			}
-			
-			// Starts zipping
-			ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
-			ZipJob zipJob = new ZipJob(mainFrame, progressDialog, filesToZip, commentArea.getText(), destOut, destFile.getParent());
-			progressDialog.start(zipJob);
-*/
 
 			// Starts zipping
 			ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
-			ZipJob zipJob = new ZipJob(progressDialog, mainFrame, filesToZip, commentArea.getText(), destFile);
+			ZipJob zipJob = new ZipJob(progressDialog, mainFrame, files, commentArea.getText(), destFile);
 			progressDialog.start(zipJob);
 		}
 		else if (source==cancelButton)  {

@@ -56,57 +56,57 @@ public class ZipJob extends ExtendedFileJob {
 		this.errorDialogTitle = Translator.get("zip_dialog.error_title");
 	}
 
+	
+	/**
+	 * Overriden method to initialize zip output stream.
+	 */
+	protected void jobStarted() {
+		if (destFile.exists()) {
+			// File already exists: cancel, append or overwrite?
+			QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("zip_dialog.file_already_exists", destFile.getName()), mainFrame,
+				new String[] {CANCEL_TEXT, REPLACE_TEXT},
+				new int[]  {CANCEL_ACTION, REPLACE_ACTION},
+				0);
+			int ret = dialog.getActionValue();
+			
+			// Cancel or close returns false
+			if(ret==-1 || ret==CANCEL_ACTION)
+				return;
+			// Replace simply continues
+		}
 
+		// Tries to open zip/destination file
+		java.io.OutputStream destOut = null;
+		// Loop for retry
+		do {
+			try {
+				zipOut = new ZipOutputStream(destFile.getOutputStream(false));
+				if(zipComment!=null && !zipComment.equals(""))
+					zipOut.setComment(zipComment);
+				break;
+			}
+			catch(Exception ex) {
+				QuestionDialog dialog = new QuestionDialog(mainFrame, errorDialogTitle, Translator.get("zip_dialog.cannot_write"), mainFrame,
+					new String[] {CANCEL_TEXT, RETRY_TEXT},
+					new int[]  {CANCEL_ACTION, RETRY_ACTION},
+					0);
+				int ret = dialog.getActionValue();
+				// Retry loops
+				if(ret == RETRY_ACTION)
+					continue;
+				// Cancel or close dialog returns false
+				return;
+			}
+		} while(true);
+	}
+	
+	
 	protected boolean processFile(AbstractFile file, Object recurseParams) {
 		if(isInterrupted())
 			return false;
 
-		// First call to process file, initialize zip file
-		if(zipOut==null) {
-			if (destFile.exists()) {
-				// File already exists: cancel, append or overwrite?
-				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("zip_dialog.file_already_exists", destFile.getName()), mainFrame,
-					new String[] {CANCEL_TEXT, REPLACE_TEXT},
-					new int[]  {CANCEL_ACTION, REPLACE_ACTION},
-					0);
-				int ret = dialog.getActionValue();
-				
-				// Cancel or close returns false
-				if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-					return false;
-				// Replace simply continues
-			}
-
-			// Tries to open zip/destination file
-			java.io.OutputStream destOut = null;
-			// Loop for retry
-			do {
-				try {
-					zipOut = new ZipOutputStream(destFile.getOutputStream(false));
-					if(zipComment!=null && !zipComment.equals(""))
-						zipOut.setComment(zipComment);
-					break;
-				}
-				catch(Exception ex) {
-					QuestionDialog dialog = new QuestionDialog(mainFrame, errorDialogTitle, Translator.get("zip_dialog.cannot_write"), mainFrame,
-						new String[] {CANCEL_TEXT, RETRY_TEXT},
-						new int[]  {CANCEL_ACTION, RETRY_ACTION},
-						0);
-					int ret = dialog.getActionValue();
-					// Retry loops
-					if(ret == RETRY_ACTION)
-						continue;
-					// Cancel or close dialog returns false
-					return false;
-				}
-			} while(true);
-		}
-		
-//		currentFileProcessed = 0;
-//		currentFileSize = file.getSize();
 		String filePath = file.getAbsolutePath();
 		String zipEntryRelativePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
-//		currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
 
 		// Process current file
 		do {		// Loop for retry
@@ -126,13 +126,7 @@ public class ZipJob extends ExtendedFileJob {
 				}
 				else {
 					InputStream in = file.getInputStream();
-/*
-					int nbRead;
-					zipOut.putNextEntry(new ZipEntry(zipEntryRelativePath.replace('\\', '/')));
-					while ((nbRead=in.read(buffer, 0, buffer.length))!=-1) {
-						zipOut.write(buffer, 0, nbRead);
-					}
-*/
+
 					// Create new file entry in zip file
 					zipOut.putNextEntry(new ZipEntry(zipEntryRelativePath.replace('\\', '/')));
 					copyStream(in, zipOut, 0);
@@ -151,7 +145,7 @@ public class ZipJob extends ExtendedFileJob {
 		} while(true);
 	}
 
-
+	
 	/**
 	 * Overriden method to properly close zip output stream.
 	 */

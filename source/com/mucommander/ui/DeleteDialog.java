@@ -2,9 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.ProgressDialog;
-import com.mucommander.file.AbstractFile;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.text.Translator;
 
@@ -22,7 +20,11 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 public class DeleteDialog extends FocusDialog implements ActionListener {
+
 	private MainFrame mainFrame;
+
+	/** Files to delete */
+	private Vector files;
 	
 	private JButton okButton;
 	private JButton cancelButton;
@@ -32,17 +34,12 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
     // Dialog width should not exceed 360, height is not an issue (always the same)
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
 
-	private FileTable activeTable;
-
 	
-	public DeleteDialog(MainFrame mainFrame) {
+	public DeleteDialog(MainFrame mainFrame, Vector files) {
 	    super(mainFrame, Translator.get("delete_dialog.delete"), mainFrame);
 		this.mainFrame = mainFrame;
+		this.files = files;
 		
-		activeTable = mainFrame.getLastActiveTable();
-        if(activeTable.getSelectedFiles().size()==0)
-        	return;
-
         Container contentPane = getContentPane();
         
         YBoxPanel mainPanel = new YBoxPanel();
@@ -77,14 +74,9 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
 	 * Delete selected files. This method is trigged by the 'OK' button or return key.
 	 */
 	public void doDelete() {
-        // Figures out which files to delete
-        Vector filesToDelete = activeTable.getSelectedFiles();
-        if(filesToDelete.size()==0)
-        	return;
-                    
         // Starts deleting files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("delete_dialog.deleting"));
-		DeleteJob deleteJob = new DeleteJob(progressDialog, mainFrame, filesToDelete);
+		DeleteJob deleteJob = new DeleteJob(progressDialog, mainFrame, files);
     	progressDialog.start(deleteJob);
 	}
 	

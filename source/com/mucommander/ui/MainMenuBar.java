@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import java.util.Vector;
 
 
 public class MainMenuBar extends JMenuBar implements ActionListener, LocationListener, MenuListener {
@@ -213,6 +214,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 
+		// Some actions need to work on selected files
+		Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
+		int nbSelectedFiles = files.size();
+		
 		// File menu
 		if (source == newWindowItem) {
 			WindowManager.getInstance().createNewMainFrame();
@@ -227,13 +232,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			new RunDialog(mainFrame);
 		}
 		else if (source == zipItem) {
-			new ZipDialog(mainFrame, false);
+			if(nbSelectedFiles>0)
+				new ZipDialog(mainFrame, files, false);
 		}
 		else if (source == unzipItem) {
-			new CopyDialog(mainFrame, true, false);
+			if(nbSelectedFiles>0)
+				new CopyDialog(mainFrame, files, false);
 		}
         else if  (source == emailFilesItem) {
-			new EmailFilesDialog(mainFrame);
+			if(nbSelectedFiles>0)
+				new EmailFilesDialog(mainFrame, files);
 		}
 		else if (source == preferencesItem) {
 			mainFrame.showPreferencesDialog();

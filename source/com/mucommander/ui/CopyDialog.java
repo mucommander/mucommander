@@ -1,12 +1,8 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.table.FileTable;
-
 import com.mucommander.file.AbstractFile;
-
 import com.mucommander.job.CopyJob;
-
 import com.mucommander.text.Translator;
 
 import java.util.Vector;
@@ -19,59 +15,40 @@ import java.util.Vector;
  */
 public class CopyDialog extends DestinationDialog {
 
-	private boolean unzipDialog;
-
-	private Vector filesToCopy;
-
 	
 	/**
 	 * Creates and displays a new CopyDialog.
 	 *
 	 * @param mainFrame the main frame this dialog is attached to.
-	 * @param unzipDialog true if this dialog has been invoked by the 'unzip' action.
 	 * @param isShiftDown true if shift key was pressed when invoking this dialog.
 	 */
-	public CopyDialog(MainFrame mainFrame, boolean unzipDialog, boolean isShiftDown) {
-		super(mainFrame, 
-			Translator.get(unzipDialog?"unzip_dialog.unzip":"copy_dialog.copy"),
-			Translator.get(unzipDialog?"unzip_dialog.destination":"copy_dialog.destination"),
-			Translator.get(unzipDialog?"unzip_dialog.unzip":"copy_dialog.copy"));
+	public CopyDialog(MainFrame mainFrame, Vector files, boolean isShiftDown) {
+		super(mainFrame, files,
+			Translator.get("copy_dialog.copy"),
+			Translator.get("copy_dialog.destination"),
+			Translator.get("copy_dialog.copy"),
+			Translator.get("copy_dialog.error_title"));
 	    
-		this.unzipDialog = unzipDialog;
-		
-		FileTable activeTable = mainFrame.getLastActiveTable();
-		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
-		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
-    	this.filesToCopy = activeTable.getSelectedFiles();
-		int nbFiles = filesToCopy.size();
-		if(nbFiles==0)
-    		return;
+		int nbFiles = files.size();
         
-		AbstractFile destFolder = (activeTable==table1?table2:table1).getCurrentFolder();
+		AbstractFile destFolder = mainFrame.getUnactiveTable().getCurrentFolder();
         String fieldText;
-		if(unzipDialog) {
-			if(isShiftDown)
-				fieldText = ".";
-			else
-				fieldText = destFolder.getAbsolutePath(true);
+
+		// Fills text field with sole element's name
+		if(isShiftDown && nbFiles==1) {
+			fieldText = ((AbstractFile)files.elementAt(0)).getName();
 		}
+		// Fills text field with absolute path, and if there is only one file, append
+		// file's name
 		else {
-			// Fills text field with sole element's name
-			if(isShiftDown && nbFiles==1) {
-				fieldText = ((AbstractFile)filesToCopy.elementAt(0)).getName();
-			}
-			// Fills text field with absolute path, and if there is only one file, append
-			// file's name
-			else {
-				fieldText = destFolder.getAbsolutePath(true);
-				AbstractFile file = ((AbstractFile)filesToCopy.elementAt(0));
-				AbstractFile testFile;
-				if(nbFiles==1 && 
-					!(file.isDirectory() && 
-					(testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory())) {
-					
-					fieldText += file.getName();
-				}
+			fieldText = destFolder.getAbsolutePath(true);
+			AbstractFile file = ((AbstractFile)files.elementAt(0));
+			AbstractFile testFile;
+			if(nbFiles==1 && 
+				!(file.isDirectory() && 
+				(testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory())) {
+				
+				fieldText += file.getName();
 			}
 		}
 		
@@ -84,29 +61,16 @@ public class CopyDialog extends DestinationDialog {
 	/**
 	 * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
 	 */
-	protected void okPressed() {
-		String destPath = pathField.getText();
+	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName) {
 
-		// Resolves destination folder
-		Object ret[] = mainFrame.resolvePath(destPath);
-		// The path entered doesn't correspond to any existing folder
-		if (ret==null || ((filesToCopy.size()>1 || unzipDialog) && ret[1]!=null)) {
-			showErrorDialog(Translator.get("this_folder_does_not_exist", destPath), Translator.get(unzipDialog?"unzip_dialog.error_title":"copy_dialog.error_title"));
-			return;
-		}
-
-		AbstractFile sourceFolder = mainFrame.getLastActiveTable().getCurrentFolder();
-		AbstractFile destFolder = (AbstractFile)ret[0];
-		String newName = (String)ret[1];
-
-		if (!unzipDialog && newName==null && sourceFolder.equals(destFolder)) {
-			showErrorDialog(Translator.get("same_source_destination"), Translator.get("copy_dialog.error_title"));
+		if (newName==null && sourceFolder.equals(destFolder)) {
+			showErrorDialog(Translator.get("same_source_destination"));
 			return;
 		}
 
 		// Starts copying files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get(unzipDialog?"unzip_dialog.unzipping":"copy_dialog.copying"));
-		CopyJob job = new CopyJob(progressDialog, mainFrame, filesToCopy, destFolder, newName, unzipDialog);
+		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
+		CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, false);
 		progressDialog.start(job);
 	}
 

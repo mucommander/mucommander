@@ -160,6 +160,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 					// Cancel, skip or close dialog returns false
 					return false;
 				}
+				break;
 			} while(true);
 
 			

@@ -51,7 +51,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(550,400);	
 	
 	
-	public EmailFilesDialog(MainFrame mainFrame) {
+	public EmailFilesDialog(MainFrame mainFrame, Vector files) {
 		super(mainFrame, Translator.get("email_dialog.title"), mainFrame);
 		this.mainFrame = mainFrame;
 
@@ -69,8 +69,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 		
 		try {
 			// Figures out which files to send and calculates the number of files and the number of bytes
-			Vector selectedFiles = mainFrame.getLastActiveTable().getSelectedFiles();
-			files = getFlattenedFiles(selectedFiles);
+			files = getFlattenedFiles(files);
 			
 			Container contentPane = getContentPane();
 			EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);

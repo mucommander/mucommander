@@ -3,10 +3,13 @@ package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.text.Translator;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.table.FileTable;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Vector;
 
 
 /**
@@ -18,12 +21,14 @@ import javax.swing.*;
 public abstract class DestinationDialog extends FocusDialog implements ActionListener {
 
 	protected MainFrame mainFrame;
+	protected Vector files;
 	
 	protected JTextField pathField;
-	
 	protected JButton okButton;
 	protected JButton cancelButton;
 
+	protected String errorDialogTitle = Translator.get("move_dialog.error_title");
+	
 	// Dialog size constraints
 	protected final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
     // Dialog width should not exceed 360, height is not an issue (always the same)
@@ -35,9 +40,10 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 	 *
 	 * @param mainFrame the main frame this dialog is attached to.
 	 */
-	public DestinationDialog(MainFrame mainFrame) {
+	public DestinationDialog(MainFrame mainFrame, Vector files) {
 		super(mainFrame, null, mainFrame);
 		this.mainFrame = mainFrame;
+		this.files = files;
 	}
 	
 	
@@ -46,15 +52,16 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 	 *
 	 * @param mainFrame the main frame this dialog is attached to.
 	 */
-	public DestinationDialog(MainFrame mainFrame, String title, String labelText, String okText) {
-		super(mainFrame, null, mainFrame);
-		this.mainFrame = mainFrame;
-
-		init(title, labelText, okText);
+	public DestinationDialog(MainFrame mainFrame, Vector files, String title, String labelText, String okText, String errorDialogTitle) {
+		this(mainFrame, files);
+		
+		init(title, labelText, okText, errorDialogTitle);
 	}
 	
 	
-	protected void init(String title, String labelText, String okText) {
+	protected void init(String title, String labelText, String okText, String errorDialogTitle) {
+		this.errorDialogTitle = errorDialogTitle;
+
 		setTitle(title);
 		
 		Container contentPane = getContentPane();
@@ -104,8 +111,8 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 	/**
 	 * Displays an error message.
 	 */
-	protected void showErrorDialog(String msg, String title) {
-		JOptionPane.showMessageDialog(mainFrame, msg, title, JOptionPane.ERROR_MESSAGE);
+	protected void showErrorDialog(String msg) {
+		JOptionPane.showMessageDialog(mainFrame, msg, errorDialogTitle, JOptionPane.ERROR_MESSAGE);
 
 		// FileTable lost focus
 		mainFrame.getLastActiveTable().requestFocus();
@@ -116,15 +123,35 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 		Object source = e.getSource();
 		dispose();
 		
-		// OK Button
+		// OK action
 		if(source == okButton || source == pathField) {
 			okPressed();
 		}
 	}
+
 	
 	/**
 	 * This method is invoked when the OK button is pressed.
 	 */
-	protected abstract void okPressed();
+	private void okPressed() {
+		String destPath = pathField.getText();
+
+		// Resolves destination folder
+		Object ret[] = mainFrame.resolvePath(destPath);
+		// The path entered doesn't correspond to any existing folder
+		if (ret==null || (files.size()>1 && ret[1]!=null)) {
+			showErrorDialog(Translator.get("this_folder_does_not_exist", destPath));
+			return;
+		}
+
+		AbstractFile sourceFolder = mainFrame.getLastActiveTable().getCurrentFolder();
+		AbstractFile destFolder = (AbstractFile)ret[0];
+		String newName = (String)ret[1];
+
+		startJob(sourceFolder, destFolder, newName);
+	}
+	
+	
+	protected abstract void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName);
 	
 }

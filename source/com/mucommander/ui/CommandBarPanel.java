@@ -111,7 +111,6 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	 */
 	public void doView() {
 		AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-//		if(file.isFolder() && !(file instanceof ArchiveFile))
 		if(file.isDirectory())
 			return;
 		
@@ -148,7 +147,6 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	 */
 	public void doEdit() {
 		AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-//		if(file.isFolder() && !(file instanceof ArchiveFile))
 		if(file.isDirectory() && !file.isSymlink())
 			return;
 
@@ -199,55 +197,17 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	}
 	
 
-/*	
-	///////////////////////////////////////////////////////
-	// MouseListener methods to catch shift-clicked buttons
-	///////////////////////////////////////////////////////
-	public void mouseClicked(MouseEvent e) {
-		Object source = e.getSource();
-		
-		if(source == buttons[MOVE_INDEX]) {
-			new MoveDialog(mainFrame, e.isShiftDown());
-		}
-		else if(source == buttons[COPY_INDEX]) {
-			new CopyDialog(mainFrame, false, e.isShiftDown());	
-		}
-	}
-
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	public void mousePressed(MouseEvent e) {
-	}
-	
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	public void mouseExited(MouseEvent e) {
-	}
-*/	
-
-
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-//System.out.println("actionPerformed  "+source);        
-        if(source == buttons[VIEW_INDEX]) {
+        
+		if(source == buttons[VIEW_INDEX]) {
         	doView();
 		}
         else if(source == buttons[EDIT_INDEX]) {
         	doEdit();
 		}
-		else if(source == buttons[MOVE_INDEX]) {
-			new MoveDialog(mainFrame, shiftDown);
-		}
-		else if(source == buttons[COPY_INDEX]) {
-			new CopyDialog(mainFrame, false, shiftDown);
-		}
         else if(source == buttons[MKDIR_INDEX]) {
             new MkdirDialog(mainFrame);
-        }
-        else if(source == buttons[DELETE_INDEX]) {
-            new DeleteDialog(mainFrame);
         }
         else if(source == buttons[REFRESH_INDEX]) {
 			mainFrame.getLastActiveTable().refresh();
@@ -255,7 +215,24 @@ public class CommandBarPanel extends JPanel implements ActionListener {
         else if(source == buttons[CLOSE_INDEX]) {
 			WindowManager.getInstance().disposeMainFrame(mainFrame);
 		}
-
+		else {
+			// The following actions need to work on files, so return
+			// if no files are selected
+			Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
+			if(files.size()==0)
+				return;
+			
+			if(source == buttons[COPY_INDEX]) {
+				new CopyDialog(mainFrame, files, shiftDown);
+			}
+			else if(source == buttons[MOVE_INDEX]) {
+				new MoveDialog(mainFrame, files, shiftDown);
+			}
+			else if(source == buttons[DELETE_INDEX]) {
+				new DeleteDialog(mainFrame, files);
+			}
+		}
+		
         // FileTable lost focus since a button was clicked
         mainFrame.getLastActiveTable().requestFocus();
     }

@@ -48,8 +48,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	 * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
 	 * @param unzipMode if true, files will be unzipped in the destination folder instead of being copied.
 	 */
+//	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, boolean unzipMode) {
 	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, boolean unzipMode) {
-//		super(progressDialog, mainFrame, files, destFolder);
 		super(progressDialog, mainFrame, files);
 		
 		this.baseDestFolder = destFolder;
