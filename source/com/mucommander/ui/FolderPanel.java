@@ -257,11 +257,12 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			fireLocationChanged();
 		}
 		catch(IOException e) {
-			mainFrame.setCursor(Cursor.getDefaultCursor());
 			if(com.mucommander.Debug.ON) e.printStackTrace();
 			throw e;
 		}
-		mainFrame.setCursor(Cursor.getDefaultCursor());
+		finally {
+			mainFrame.setCursor(Cursor.getDefaultCursor());
+		}
 	}
 
 
@@ -278,11 +279,16 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	 * Displays a popup message notifying the user that the request folder couldn't be opened.
 	 */
 	private void showFolderAccessError(IOException e) {
-		String exceptionMsg = e==null?null:e.getMessage();
-		String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?".":": "+exceptionMsg);
-		if(!errorMsg.endsWith("."))
-			errorMsg += ".";
-
+		if(e instanceof AuthException) {
+			
+		}
+		else {
+			String exceptionMsg = e==null?null:e.getMessage();
+			String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?".":": "+exceptionMsg);
+			if(!errorMsg.endsWith("."))
+				errorMsg += ".";
+		}
+			
 		JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
 	}
 

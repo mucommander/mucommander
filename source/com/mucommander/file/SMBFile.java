@@ -16,6 +16,7 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	private final static String SEPARATOR = "/";
 
 	private SmbFile file;
+	private FileURL fileURL;
 	private String publicURL;
 	private String privateURL;
 //	private boolean isSymlink;
@@ -79,7 +80,7 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 
 	private void init(SmbFile smbFile) throws MalformedURLException {
 		String url = file.getCanonicalPath();
-		FileURL fileURL = new FileURL(url);
+		this.fileURL = new FileURL(url);
 		
 		this.privateURL = fileURL.getURL(true);
 		this.publicURL = fileURL.getURL(false);
@@ -240,27 +241,33 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	}
 
 	public void delete() throws IOException {
-		try{
+//		try{
 			file.delete();
-		}
-		catch(SmbException e) {
-			throw new IOException();
-		}
+//		}
+//		catch(SmbException e) {
+//			throw new IOException();
+//		}
 	}
 
+	
 	public AbstractFile[] ls() throws IOException {
-        SmbFile smbFiles[] = file.listFiles();
-		
-        if(smbFiles==null)
-            throw new IOException();
-        
-		// Create SMBFile by recycling SmbFile instance and sharing parent instance
-		// among children
-        AbstractFile children[] = new AbstractFile[smbFiles.length];
-		for(int i=0; i<smbFiles.length; i++)
-			children[i] = new SMBFile(smbFiles[i], this);
-
-        return children;
+        try {
+			SmbFile smbFiles[] = file.listFiles();
+			
+			if(smbFiles==null)
+				throw new IOException();
+			
+			// Create SMBFile by recycling SmbFile instance and sharing parent instance
+			// among children
+			AbstractFile children[] = new AbstractFile[smbFiles.length];
+			for(int i=0; i<smbFiles.length; i++)
+				children[i] = new SMBFile(smbFiles[i], this);
+	
+			return children;
+		}
+		catch(SmbAuthException e) {
+			throw new AuthException(fileURL);
+		}
 	}
 
 	
