@@ -96,17 +96,14 @@
 			<method access="public" name="handleQuit"/>
 		</keep>
 		<!-- Viewer API uses reflection -->
-		<keep name="com.mucommander.file.AbstractFile">
-			<method access="public" name="*"/>
-		</keep>
-		<keep name="com.mucommander.ui.viewer.FileViewer"/>
-		<keep extends="com.mucommander.ui.viewer.FileViewer">
-			<method access="public static" name="canViewFile" param="com.mucommander.file.AbstractFile"/>
-		</keep>
+		<keep name="com.mucommander.file.AbstractFile"/>
+		<keepclasseswithmembers extends="com.mucommander.ui.viewer.FileViewer">
+			<method access="public static" type="boolean" name="canViewFile" param="com.mucommander.file.AbstractFile"/> 
+		</keepclasseswithmembers>
 		<!-- Editor API uses reflection -->
-		<keep extends="com.mucommander.ui.editor.FileEditor">
-			<method access="public static" name="canEditFile" param="com.mucommander.file.AbstractFile"/>
-		</keep>
+		<keepclasseswithmembers extends="com.mucommander.ui.editor.FileEditor">
+			<method access="public static" type="boolean" name="canEditFile" param="com.mucommander.file.AbstractFile"/>
+		</keepclasseswithmembers>
 		<!-- Main class -->
 		<keep name="com.mucommander.Launcher">
 			<method access="public static" name="main" param="java.lang.String[]"/>
