@@ -325,7 +325,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		}
 		else if (source == autoSizeColumnsItem) {
 			boolean selected = autoSizeColumnsItem.isSelected();
-			mainFrame.getLastActiveTable().setAutoSizeColumns(selected);
+			mainFrame.getLastActiveTable().setAutoSizeColumnsEnabled(selected);
 			ConfigurationManager.setVariable("prefs.auto_size_columns", ""+selected);		
 		}
 		else if (source == swapFoldersItem) {
