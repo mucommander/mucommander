@@ -14,7 +14,7 @@ import java.io.*;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 
-import com.mucommander.conf.ConfigurationManager;
+//import com.mucommander.conf.ConfigurationManager;
 
 import com.mucommander.text.Translator;
 
@@ -23,16 +23,11 @@ import com.mucommander.text.Translator;
 public class TextViewer extends FileViewer implements ActionListener {
 
 //	private String encoding;
-	private AbstractFile file;
 
 	private JMenuItem copyItem;
 	private JMenuItem selectAllItem;
 	
 	private JTextArea textArea;
-	
-	
-//	public TextViewer() {
-//	}
 	
 	
 //	public TextViewer(ViewerFrame frame) {
@@ -47,24 +42,18 @@ public class TextViewer extends FileViewer implements ActionListener {
 	}
 
 	
-	public void view(AbstractFile fileToView) throws IOException {
-		this.file = fileToView;
-		textArea.read(new InputStreamReader(fileToView.getInputStream()), null);
+	public void view(AbstractFile file) throws IOException {
+		textArea.read(new InputStreamReader(file.getInputStream()), null);
 		textArea.setCaretPosition(0);
 //		pack();
 
 		ViewerFrame frame = getFrame();
 		if(frame!=null) {
-			// Create default menu
-			MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
+			// Create Edit menu
 			MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
-	
-			// Edit menu
-			JMenuBar menuBar = frame.getJMenuBar();
-			JMenu editMenu = MenuToolkit.addMenu(Translator.get("text_viewer.edit"), menuMnemonicHelper, null);
+			JMenu editMenu = frame.addMenu(Translator.get("text_viewer.edit"));
 			copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.copy"), menuItemMnemonicHelper, null, this);
 			selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.select_all"), menuItemMnemonicHelper, null, this);
-			menuBar.add(editMenu);
 		}
 	}
 

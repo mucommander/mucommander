@@ -17,11 +17,16 @@ import javax.swing.*;
 
 
 public class ViewerFrame extends JFrame implements ActionListener, Runnable {
-	private JMenuItem closeItem;
 	
 	private MainFrame mainFrame;
 	private AbstractFile file;
 	private FileViewer viewer;
+
+	private JMenuBar menuBar;
+	private MnemonicHelper menuMnemonicHelper;
+	private JMenuItem closeItem;
+
+	private final static Dimension MIN_DIMENSION = new Dimension(200, 150);
 	
 	
 	public ViewerFrame(MainFrame mainFrame, AbstractFile file) {
@@ -30,20 +35,19 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 		this.mainFrame = mainFrame;
 		this.file = file;
 		
-		getContentPane().setLayout(new BorderLayout());
+//		getContentPane().setLayout(new BorderLayout());
 		
 		// Create default menu
-		MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
+		this.menuMnemonicHelper = new MnemonicHelper();
 		MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 
 		// File menu
-		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = MenuToolkit.addMenu(Translator.get("file_viewer.file_menu"), menuMnemonicHelper, null);
+		this.menuBar = new JMenuBar();
+		JMenu menu = addMenu(Translator.get("file_viewer.file_menu"));
 		closeItem = MenuToolkit.addMenuItem(menu, Translator.get("file_viewer.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
 		menu.add(closeItem);
 
 		// Add menu to frame
-		menuBar.add(menu);
 		setJMenuBar(menuBar);
 		
 		// Catches window close event
@@ -53,6 +57,12 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 		setResizable(true);
 	}
 
+	protected JMenu addMenu(String menuTitle) {
+		JMenu menu = MenuToolkit.addMenu(menuTitle, menuMnemonicHelper, null);
+		this.menuBar.add(menu);
+		return menu;
+	}
+	
 	
 	public void run() {
 		try {
@@ -74,6 +84,7 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 
 			viewer.setFrame(this);
 			viewer.setCurrentFile(file);
+			viewer.view(file);
 			setViewer(viewer);
 
 			// Sets panel to preferred size, without exceeding a maximum size and with a minumum size
@@ -86,21 +97,21 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 		}
 	}
 
-	
+
 //	public MainFrame getMainFrame() {
 //		return mainFrame;
 //	}
+	
 	
 	private void setViewer(FileViewer viewer) {
 		this.viewer = viewer;
 	
 		//		setBackground(BG_COLOR);
-JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
-//JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS) {
-		public Insets getInsets() {
-			return new Insets(0, 0, 0, 0);
-		}
-	};
+		JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
+			public Insets getInsets() {
+				return new Insets(0, 0, 0, 0);
+			}
+		};
 //System.out.println("scrollPane insets = "+scrollPane.getInsets());
 		
 //		scrollPane.setBackground(BG_COLOR);
@@ -108,7 +119,8 @@ JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_
 //System.out.println("viewport insets = "+viewport.getInsets());
 		viewport.setBackground(FileViewer.BG_COLOR);
 //		viewport.setBorder(null);
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+//		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		setContentPane(scrollPane);
 //System.out.println("contentPane insets = "+getContentPane().getInsets());
 //System.out.println("viewer insets = "+viewer.getInsets());
 		// Request focus on text area when visible
@@ -122,7 +134,7 @@ JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_
 		setTitle(viewer.getTitle());
 
 		DialogToolkit.fitToScreen(this);
-		DialogToolkit.fitToMinDimension(this, new Dimension(160, 120));
+		DialogToolkit.fitToMinDimension(this, MIN_DIMENSION);
 	}
 	
 	
@@ -133,7 +145,6 @@ JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==closeItem)
-//			close();
 			dispose();
 	}
 

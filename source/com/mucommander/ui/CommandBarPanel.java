@@ -17,9 +17,11 @@ import java.io.*;
 import java.util.Vector;
 
 /**
- * Command bar panel 
+ * Command bar panel which contains buttons for a number of commands (view, edit, copy, move...) and
+ * appears at the bottom of a main window.
+ *
+ * @author Maxence Bernard
  */
-//public class CommandBarPanel extends JPanel implements ActionListener, MouseListener {
 public class CommandBarPanel extends JPanel implements ActionListener {
 
     private MainFrame mainFrame;
@@ -133,6 +135,13 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		if(file==null || (file.isDirectory() && !file.isSymlink()))
 			return;
 
+		EditorFrame frame = new EditorFrame(mainFrame, file);
+
+		// All OK, start viewing
+//			frame.setViewer(viewer);
+		frame.show();
+		
+/*
 		try {
 			FileEditor editor = EditorRegistrar.getEditor(file);
 			// Default file editor
@@ -177,6 +186,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		catch(IOException e) {
 			showErrorDialog(Translator.get("file_editor.edit_error"), Translator.get("file_editor.edit_error_title"));
 		}
+*/
 	}
 	
 

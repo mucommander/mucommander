@@ -12,22 +12,27 @@ import java.io.IOException;
 
 public abstract class FileViewer extends JPanel {
 	
+	/** ViewerFrame instance that contains this viewer (may be null) */
 	protected ViewerFrame frame;
+	
+	/** File currently being viewed */
 	protected AbstractFile file;
 	
+	/** Default background color */
 	public final static Color BG_COLOR = new Color(0xFFFFFF);
 
 	
 	/**
-	 * Creates a new FileViewer inside the given ViewerFrame.
+	 * Creates a new FileViewer.
 	 */
-//	public FileViewer(ViewerFrame frame) {
-//		this.frame = frame;
 	public FileViewer() {
 		setBackground(BG_COLOR);
 	}
 	
 
+	/**
+	 * Sets the ViewerFrame (separate window) that contains this FileViewer.
+	 */
 	public void setFrame(ViewerFrame frame) {
 		this.frame = frame;
 	}
@@ -70,14 +75,13 @@ public abstract class FileViewer extends JPanel {
 		return file.getName();
 	}
 	
-	
-	public void setCurrentFile(AbstractFile file) throws IOException {
+
+	/**
+	 * Sets the file that is to be viewed.
+	 * This method will automatically be called after a file viewer is created and should not be called directly.
+	 */
+	public final void setCurrentFile(AbstractFile file) {
 		this.file = file;
-		try {
-			view(file);
-		} catch(OutOfMemoryError e) {
-			throw new IOException();
-		}
 	}
 	
 /*
@@ -161,10 +165,10 @@ public abstract class FileViewer extends JPanel {
 	
 	/**
 	 * This method is invoked when the specified file is about to be viewed.
-	 * This method should retrieve the file so that this component can be displayed.
+	 * This method should retrieve the file and do the necessary so that this component can be displayed.
 	 *
-	 * @param fileToView the file that needs to be displayed.
+	 * @param file the file that is about to be viewed.
 	 */
-	protected abstract void view(AbstractFile fileToView) throws IOException;
+	public abstract void view(AbstractFile file) throws IOException;
 
 }

@@ -548,9 +548,9 @@ text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemo
 			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
 //            commandBar.doExit();
         }
-		else if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_Q && e.isMetaDown()) {
-			System.exit(0);		
-		}
+//		else if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_Q && e.isMetaDown()) {
+//			System.exit(0);
+//		}
 		else if(keyCode == KeyEvent.VK_F1 && e.isAltDown()) {
 			folderPanel1.showRootBox();
         }

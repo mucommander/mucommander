@@ -3,6 +3,7 @@ package com.mucommander.ui.viewer;
 
 import com.mucommander.text.Translator;
 import com.mucommander.file.AbstractFile;
+
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 
@@ -26,8 +27,6 @@ public class ImageViewer extends FileViewer implements ActionListener {
 
 	private double zoomFactor;
 	
-	private AbstractFile file;
-
 //	private JMenuItem prevImageItem;
 //	private JMenuItem nextImageItem;
 	private JMenuItem zoomInItem;
@@ -47,18 +46,15 @@ public class ImageViewer extends FileViewer implements ActionListener {
 
 		ViewerFrame frame = getFrame();
 		if(frame!=null) {
-			MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
 			MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 	
-			// Go menu
-			JMenuBar menuBar = frame.getJMenuBar();
-			JMenu controlsMenu = MenuToolkit.addMenu(Translator.get("image_viewer.controls_menu"), menuMnemonicHelper, null);
+			// Create Go menu
+			JMenu controlsMenu = frame.addMenu(Translator.get("image_viewer.controls_menu"));
 	//		nextImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.next_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), this);
 	//		prevImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.previous_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
 	//		controlsMenu.add(new JSeparator());
 			zoomInItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_in"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), this);
 			zoomOutItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_out"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), this);
-			menuBar.add(controlsMenu);
 		}
 
 		loadImage(file);
@@ -88,7 +84,6 @@ public class ImageViewer extends FileViewer implements ActionListener {
 	
 	private synchronized void loadImage(AbstractFile file) throws IOException {
 System.out.println("loadImage "+file);
-		this.file = file;
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
 		byte b[] = new byte[(int)file.getSize()];
