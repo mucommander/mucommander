@@ -174,14 +174,9 @@ public class DeleteJob extends FileJob {
         return Translator.get("delete.deleting_file", getCurrentFileInfo());
     }
 
-	// This job modifies baseFolder
-	
-	protected int getRefreshPolicy() {
-		return REFRESH_DESTINATION_FOLDER;
-	}
-		
-	protected AbstractFile getBaseDestinationFolder() {
-		return baseFolder;
-	}
+	// This job modifies baseFolder and subfolders
 
+	protected boolean hasFolderChanged(AbstractFile folder) {
+		return baseFolder.isParent(folder);
+	}
 }	

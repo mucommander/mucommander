@@ -99,7 +99,6 @@ public abstract class ExtendedFileJob extends FileJob {
 			}
 	
 			// Try to copy InputStream to OutputStream
-//			try  { copyStream(in, out, append?destFile.getSize():0); }
 			try  { return copyStream(in, out); }
 			catch(IOException e3) {
 				throw new FileJobException(FileJobException.ERROR_WHILE_TRANSFERRING);

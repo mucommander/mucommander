@@ -167,9 +167,12 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 		int nbFiles = fileCheckboxes.length;
 		int nbSelected = 0;
 		int bytesTotal = 0;
+		long fileSize;
 		for(int i=0; i<nbFiles; i++) {
 			if(fileCheckboxes[i].isSelected()) {
-				bytesTotal += ((AbstractFile)files.elementAt(i)).getSize();
+				fileSize = ((AbstractFile)files.elementAt(i)).getSize();
+				if(fileSize>0)
+					bytesTotal += fileSize;
 				nbSelected++;
 			}
 		}

@@ -36,7 +36,8 @@ public class AuthException extends IOException {
 	 */
 	public AuthException(FileURL fileURL, String msg) {
 		this.fileURL = fileURL;
-		this.msg = msg;
+		if(msg!=null)
+			this.msg = msg.trim();
 	}
 	
 

@@ -74,7 +74,9 @@ public class FileExistsDialog extends QuestionDialog {
     			+", "+dateFormat.format(new Date(destFile.getDate()))));
     	
 		// Give resume option only if destination file is smaller than source file
-		boolean resumeOption = destFile.getSize()<sourceFile.getSize();
+		long destSize = destFile.getSize();
+		long sourceSize = sourceFile.getSize();
+		boolean resumeOption = destSize!=-1 && (sourceSize==-1 || destSize<sourceSize);
 		
     	init(parent, panel,
 //    		new String[] {SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, APPEND_TEXT, CANCEL_TEXT},

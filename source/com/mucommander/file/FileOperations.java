@@ -4,20 +4,22 @@ package com.mucommander.file;
 import java.io.*;
 
 /**
- * This class contains methods which perform common file operations such as counting them or getting
- * the total byte size.
+ * This class contains methods which perform common file operations such as counting them or calculating
+ * their total size.
+ *
+ * @author Maxence Bernard
  */
 public class FileOperations {
 
     /**
      * Recursively computes the total size for the given files and folders.
      */
-    private static int getFileSize(AbstractFile files[]) {
+    private static long getFileSize(AbstractFile files[]) {
         AbstractFile file;
-        int total = 0;
+        long total = 0;
+		long fileSize;
         for(int i=0; i<files.length; i++) {
             file = files[i];
-//            if(file.isFolder() && !(file instanceof ArchiveFile)) {
 			if(file.isDirectory() && !file.isSymlink()) {
                 try {
                     total += getFileCount(file.ls());
@@ -25,9 +27,12 @@ public class FileOperations {
                 catch(IOException e) {
                 }
             }
-            else
-                total += file.getSize();
-        }
+            else {
+				fileSize = file.getSize();
+				if(fileSize>0)
+					total += fileSize;
+			}
+		}
         return total;
     }
 
@@ -39,7 +44,6 @@ public class FileOperations {
         int total = 0;
         for(int i=0; i<files.length; i++) {
             file = files[i];
-//            if(file.isFolder() && !(file instanceof ArchiveFile)) {
 			if(file.isDirectory() && !file.isSymlink()) {
                 try {
                     total += getFileCount(file.ls());

@@ -11,54 +11,82 @@ public abstract class AbstractFile {
 	
 	/**
 	 * Returns an instance of AbstractFile for the given absolute path.
+	 * 
+	 * <p>This method does not throw any IOException but returns <code>null</code> if the file could not be created.</p>
 	 *
-	 * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file).
+	 * @param absPath the absolute path to the file
+	 *
+	 * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file) or 
+	 * if something went wrong during file creation.
 	 */
 	public static AbstractFile getAbstractFile(String absPath) {
-		return getAbstractFile(absPath, null);
+		try {
+			return getAbstractFile(absPath, null);
+		}
+		catch(IOException e) {
+			if(com.mucommander.Debug.ON) e.printStackTrace();
+			return null;
+		}
 	}
 
 
+	/**
+	 * Returns an instance of AbstractFile for the given absolute path.
+	 * 
+	 * <p>This method does not throw any IOException but returns <code>null</code> if the file could not be created.</p>
+	 *
+	 * @param absPath the absolute path to the file
+	 * @param rethrowException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
+	 *
+	 * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file) 
+	 * @throws java.io.IOException  and rethrowException param was set to <code>true</code>.
+	 */
+	public static AbstractFile getAbstractFile(String absPath, boolean rethrowException) throws AuthException, IOException {
+		try {
+			return getAbstractFile(absPath, null);
+		}
+		catch(IOException e) {
+			if(com.mucommander.Debug.ON) e.printStackTrace();
+			if(rethrowException)
+				throw e;
+			return null;
+		}
+	}
 
+	
 	/**
 	 * Returns an instance of AbstractFile for the given absolute path and sets the giving parent. AbstractFile subclasses should
 	 * call this method rather than getAbstractFile(String) because it is more efficient.
 	 *
+	 * @param absPath the absolute path to the file
 	 * @param parent the returned file's parent
+	 *
 	 * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file).
+	 * @throws java.io.IOException if something went wrong during file creation.
 	 */
-	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) {
-		try {
-			AbstractFile file;
-			String absPathLC = absPath.toLowerCase();
-			
-			// SMB file
-			if (absPathLC.startsWith("smb://"))
-				file = new SMBFile(absPath);
-			// HTTP file
-			else if (absPathLC.startsWith("http://"))
-				file = new HTTPFile(absPath);
-			// FTP file
-			else if (absPath.toLowerCase().startsWith("ftp://"))
-				file = new FTPFile(absPath);
-			// FS file, test if the given path is indeed absolute
-			else if (new File(absPath).isAbsolute())
-				file = new FSFile(absPath);
-			else
-				return null;
-
-			if(parent!=null)
-				file.setParent(parent);
+	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) throws AuthException, IOException {
+		AbstractFile file;
+		String absPathLC = absPath.toLowerCase();
 		
-			return wrapArchive(file);
-		}
-		catch(IOException e) {
-			if(com.mucommander.Debug.ON) {
-				System.out.println(e);
-				e.printStackTrace();
-			}
+		// SMB file
+		if (absPathLC.startsWith("smb://"))
+			file = new SMBFile(absPath);
+		// HTTP file
+		else if (absPathLC.startsWith("http://"))
+			file = new HTTPFile(absPath);
+		// FTP file
+		else if (absPath.toLowerCase().startsWith("ftp://"))
+			file = new FTPFile(absPath);
+		// FS file, test if the given path is indeed absolute
+		else if (new File(absPath).isAbsolute())
+			file = new FSFile(absPath);
+		else
 			return null;
-		}
+
+		if(parent!=null)
+			file.setParent(parent);
+	
+		return wrapArchive(file);
 	}
 
 	

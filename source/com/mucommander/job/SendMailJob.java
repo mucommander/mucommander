@@ -317,11 +317,7 @@ public class SendMailJob extends ExtendedFileJob {
 
 	// This job does not modify anything
 	
-	protected int getRefreshPolicy() {
-		return DO_NOT_REFRESH;
+	protected boolean hasFolderChanged(AbstractFile folder) {
+		return false;
 	}
-		
-	protected AbstractFile getBaseDestinationFolder() {
-		return null;
-	}	
 }

@@ -119,11 +119,6 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 	}
 	
 	
-	protected void setParent(AbstractFile parent) {
-		this.parent = parent;
-	}
-
-	
 	public String getName() {
 		return name;
 	}
@@ -164,6 +159,12 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 		}
 		
 		return this.parent;
+	}
+	
+
+	protected void setParent(AbstractFile parent) {
+		this.parent = parent;
+		this.parentValSet = true;
 	}
 	
 	
@@ -309,7 +310,7 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 							if(!childrenURL.contains(token)) {
 								child = new HTTPFile(token, this.url);
 //									child = new HTTPFile(token);
-//								child.parent = this;
+								child.setParent(this);
 								children.add(child);
 								childrenURL.add(token);
 							}

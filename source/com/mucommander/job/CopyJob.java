@@ -215,9 +215,6 @@ public class CopyJob extends ExtendedFileJob {
 				}
 				// Append to file (resume file copy)
 				else if (choice==FileExistsDialog.APPEND_ACTION) {
-					// Skip file if destination file is already larger than source file
-					if(destFile.getSize()>=file.getSize())
-						return false;
 					append = true;
 				}
 				// Overwrite file 
@@ -244,11 +241,8 @@ public class CopyJob extends ExtendedFileJob {
 	
 	// This job modifies baseDestFolder and its subfolders
 	
-	protected int getRefreshPolicy() {
-		return REFRESH_DESTINATION_SUBFOLDERS;
+	protected boolean hasFolderChanged(AbstractFile folder) {
+		return baseDestFolder.isParent(folder);
 	}
-		
-	protected AbstractFile getBaseDestinationFolder() {
-		return baseDestFolder;
-	}
+
 }

@@ -82,7 +82,7 @@ public class ImageViewer extends FileViewer implements ActionListener {
 
 	
 	private synchronized void loadImage(AbstractFile file) throws IOException {
-System.out.println("loadImage "+file);
+//System.out.println("loadImage "+file);
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
 		int read;
@@ -128,12 +128,13 @@ System.out.println("loadImage "+file);
 		tracker.addImage(image, 0);
 		try { tracker.waitForID(0); }
 		catch(InterruptedException e) {}
+		tracker.removeImage(image);
 //if(com.mucommander.Debug.ON) System.out.println("Image loaded "+image);
 	}
 	
 	
 	private synchronized void zoom(double factor) {
-System.out.println("zoom "+factor);
+//System.out.println("zoom "+factor);
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		this.scaledImage = image.getScaledInstance((int)(image.getWidth(null)*factor), (int)(image.getHeight(null)*factor), Image.SCALE_DEFAULT);
@@ -165,7 +166,7 @@ System.out.println("goToImage");
 */
 	
 	private void updateFrame() {
-System.out.println("updateFrame");
+//System.out.println("updateFrame");
 		// Revalidate, pack and repaint should be called in this order
 		revalidate();
 		frame.pack();

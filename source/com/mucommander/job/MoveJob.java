@@ -287,11 +287,8 @@ public class MoveJob extends ExtendedFileJob {
 
 	// This job modifies baseDestFolder and its subfolders
 	
-	protected int getRefreshPolicy() {
-		return REFRESH_DESTINATION_SUBFOLDERS;
+	protected boolean hasFolderChanged(AbstractFile folder) {
+		return baseSourceFolder.isParent(folder) || baseDestFolder.isParent(folder);
 	}
-		
-	protected AbstractFile getBaseDestinationFolder() {
-		return baseDestFolder;
-	}
+
 }

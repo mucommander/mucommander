@@ -85,7 +85,9 @@ public class PropertiesJob extends FileJob {
 		// If not, increase file counter and bytes total
 		else {
 			nbFilesRecurse++;
-			totalBytes += file.getSize();
+			long fileSize = file.getSize();
+			if(fileSize>0)		// Can be equal to -1 if size not available
+				totalBytes += fileSize;
 		}
 	
 		return true;
@@ -101,11 +103,7 @@ public class PropertiesJob extends FileJob {
 
 	// This job does not modify anything
 	
-	protected int getRefreshPolicy() {
-		return DO_NOT_REFRESH;
-	}
-		
-	protected AbstractFile getBaseDestinationFolder() {
-		return null;
+	protected boolean hasFolderChanged(AbstractFile folder) {
+		return false;
 	}
 }

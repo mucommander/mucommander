@@ -234,7 +234,7 @@ System.out.println("initConnection: fileURL="+fileURL.getURL(true)+" authInfo="+
 	private void checkServerReply(FTPClient ftpClient, FileURL fileURL) throws IOException {
 		// Check that connection went ok
 		int replyCode = ftpClient.getReplyCode();
-if(com.mucommander.Debug.ON) System.out.println(ftpClient.getReplyString());
+if(com.mucommander.Debug.ON) System.out.println("checkServerReply: "+ftpClient.getReplyString());
 		// If not, throw an exception using the reply string
 		if(!FTPReply.isPositiveCompletion(replyCode)) {
 			if(replyCode==FTPReply.CODE_503 || replyCode==FTPReply.NEED_PASSWORD || replyCode==FTPReply.NOT_LOGGED_IN)
@@ -337,7 +337,7 @@ System.out.println("checkConnection: isConnected(2)= "+ftpClient.isConnected());
 System.out.println("getParent, parentURL="+parentFileURL.getURL(true));
 				try { this.parent = new FTPFile(parentFileURL.getURL(true), false); }
 				catch(IOException e) {
-if(com.mucommander.Debug.ON) e.printStackTrace();				
+//if(com.mucommander.Debug.ON) e.printStackTrace();				
 				}
 			}
 

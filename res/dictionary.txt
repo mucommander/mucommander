@@ -43,11 +43,11 @@ close:FR:Fermer
 apply:EN:Apply
 apply:FR:Appliquer
 
-folder_does_not_exist:EN:Folder doesn't exist.
-folder_does_not_exist:FR:Le dossier n'existe pas.
+folder_does_not_exist:EN:This folder doesn't exist or is not available.
+folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
 
-this_folder_does_not_exist:EN:This folder doesn't exist: %1
-this_folder_does_not_exist:FR:Ce dossier n'existe pas: %1
+this_folder_does_not_exist:EN:This folder doesn't exist or is not available: %1
+this_folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible: %1
 
 save:EN:Save
 save:FR:Enregistrer
@@ -744,6 +744,10 @@ server_connect_dialog.http_url:FR:URL site web
 
 server_connect_dialog.connect:EN:Connect
 server_connect_dialog.connect:FR:Se connecter
+
+server_connect_dialog.auth_error:EN:Invalid login or password.
+server_connect_dialog.auth_error:EN:Identifiant ou mot de passe incorrect.
+
 
 ###############
 # FTP connect #

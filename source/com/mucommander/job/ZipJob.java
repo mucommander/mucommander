@@ -165,12 +165,7 @@ public class ZipJob extends ExtendedFileJob {
 
 	// This job modifies baseFolder
 	
-	protected int getRefreshPolicy() {
-		return REFRESH_DESTINATION_FOLDER;
+	protected boolean hasFolderChanged(AbstractFile folder) {
+		return destFile.getParent().equals(folder);
 	}
-		
-	protected AbstractFile getBaseDestinationFolder() {
-		return destFile.getParent();
-	}
-	
 }	

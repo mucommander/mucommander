@@ -116,13 +116,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		if(file==null || (file.isDirectory() && !file.isSymlink()))
 			return;
 		
-//			FileViewer viewer = ViewerRegistrar.getViewer(file, frame);
-//			ViewerFrame frame = new ViewerFrame(mainFrame, file);
-//			FileViewer viewer = ViewerRegistrar.getViewer(file);
 		ViewerFrame frame = new ViewerFrame(mainFrame, file);
-
-		// All OK, start viewing
-//			frame.setViewer(viewer);
 		frame.show();
 	}
 	
@@ -136,57 +130,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			return;
 
 		EditorFrame frame = new EditorFrame(mainFrame, file);
-
-		// All OK, start viewing
-//			frame.setViewer(viewer);
 		frame.show();
-		
-/*
-		try {
-			FileEditor editor = EditorRegistrar.getEditor(file);
-			// Default file editor
-			if (editor==null) {
-				// we should ask the user if he wants to try the default editor
-				editor = new TextEditor();
-			}
-
-			// Tests if file is too large to be edited and warns user
-			long max = editor.getMaxRecommendedSize();
-			if (max!=-1 && file.getSize()>max) {
-				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("command_bar.large_file_warning"), mainFrame, 
-					new String[] {Translator.get("command_bar.open_anyway"), Translator.get("cancel")},
-					new int[]  {0, 1},
-					0);
-				int ret = dialog.getActionValue();
-				
-				if (ret==1 || ret==-1)
-					return;
-			}
-
-			// All OK, start editing
-			editor.startEditing(file);
-			
-			// Sets dialog to preferred size, without exceeding a maximum size and with a minumum size
-			editor.pack();
-			Dimension d = editor.getSize();
-			Dimension screend = Toolkit.getDefaultToolkit().getScreenSize();
-			
-			// Frame width is 800 max and 480 min
-			int width = Math.max(480, Math.min(d.width, Math.min(screend.width-44, 800-44)));
-			
-			// Frame height is 3/4 of width
-			editor.setSize(
-				width, 
-				(int)(width*3/((float)4))
-			);
-
-			
-			editor.setVisible(true);
-		}
-		catch(IOException e) {
-			showErrorDialog(Translator.get("file_editor.edit_error"), Translator.get("file_editor.edit_error_title"));
-		}
-*/
 	}
 	
 

@@ -96,13 +96,13 @@ public abstract class FileJob implements Runnable {
 	protected final static String CANCEL_TEXT = Translator.get("cancel");
 	protected final static String APPEND_TEXT = Translator.get("append");
 	
-	// getRefreshPolicy() return values
-	/** This job is 'read-only' and does not modify the folder's content */
-	protected final static int DO_NOT_REFRESH = 0;
-	/** This job only modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()} */
-	protected final static int REFRESH_DESTINATION_FOLDER = 1;
-	/** This job modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()} and its subfolders */
-	protected final static int REFRESH_DESTINATION_SUBFOLDERS = 2;
+//	// getRefreshPolicy() return values
+//	/** This job is 'read-only' and does not modify the folder's content */
+//	protected final static int DO_NOT_REFRESH = 0;
+//	/** This job only modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()} */
+//	protected final static int REFRESH_DESTINATION_FOLDER = 1;
+//	/** This job modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()} and its subfolders */
+//	protected final static int REFRESH_DESTINATION_SUBFOLDERS = 2;
 
 	
     /**
@@ -238,7 +238,7 @@ public abstract class FileJob implements Runnable {
 			return;
 		
 		this.currentFile = file;
-		if(file.getParent().equals(baseSourceFolder))
+		if(file.getParent().equals(file.getParent()))
 			currentFileIndex++;
 	}
 
@@ -430,20 +430,13 @@ public abstract class FileJob implements Runnable {
 	 * Check and if needed, refreshes both file tables's current folders, based on the job's refresh policy.
 	 */
 	protected void refreshTables() {
-		int refreshPolicy = getRefreshPolicy();
-
-		if(refreshPolicy == DO_NOT_REFRESH)
-			return;
-		
-		AbstractFile baseDestFolder = getBaseDestinationFolder();
 		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
 		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
+
 		AbstractFile currentTableFolder;
 		for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
 			currentTableFolder = table.getCurrentFolder();
-			if((refreshPolicy==REFRESH_DESTINATION_FOLDER && baseDestFolder.equals(currentTableFolder))
-			 || (refreshPolicy==REFRESH_DESTINATION_SUBFOLDERS && baseDestFolder.isParent(currentTableFolder))) {
-			
+			if(hasFolderChanged(currentTableFolder)) {
 				try {
 					table.refresh();
 				}
@@ -515,23 +508,30 @@ public abstract class FileJob implements Runnable {
 	//////////////////////
 
 	
-	/**
-	 * This method should return the job's refresh policy :
-	 * <ul>
-	 *  <li>- {@link #DO_NOT_REFRESH DO_NOT_REFRESH} : this job is 'read-only' and does not modify the folder's content</li>
-	 *  <li>- {@link #REFRESH_DESTINATION_FOLDER REFRESH_DESTINATION_FOLDER}: this job only modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()}</li>
-	 *  <li>- {@link #REFRESH_DESTINATION_SUBFOLDERS REFRESH_DESTINATION_SUBFOLDERS}: this job modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()}
-	 *  and its subfolders</li>
-	 * </ul>
-	 */
-	protected abstract int getRefreshPolicy();
+//	/**
+//	 * This method should return the job's refresh policy :
+//	 * <ul>
+//	 *  <li>- {@link #DO_NOT_REFRESH DO_NOT_REFRESH} : this job is 'read-only' and does not modify the folder's content</li>
+//	 *  <li>- {@link #REFRESH_DESTINATION_FOLDER REFRESH_DESTINATION_FOLDER}: this job only modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()}</li>
+//	 *  <li>- {@link #REFRESH_DESTINATION_SUBFOLDERS REFRESH_DESTINATION_SUBFOLDERS}: this job modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()}
+//	 *  and its subfolders</li>
+//	 * </ul>
+//	 */
+//	protected abstract int getRefreshPolicy();
+	
+	
+//	/**
+//	 * This method should return the base destination folder which this FileJob potentially modifies, <code>null</code> if
+//	 * this FileJob is 'read-only' and does not modify any files.
+//	 */
+//	protected abstract AbstractFile getBaseDestinationFolder();
 	
 	
 	/**
-	 * This method should return the base destination folder which this FileJob potentially modifies, <code>null</code> if
-	 * this FileJob is 'read-only' and does not modify any files.
+	 * This method should return <code>true</code> if the given folder has or may have been modified. This method is
+	 * used to determine if current table folders should be refreshed after this job.
 	 */
-	protected abstract AbstractFile getBaseDestinationFolder();
+	protected abstract boolean hasFolderChanged(AbstractFile folder);
 	
 	
 	/**

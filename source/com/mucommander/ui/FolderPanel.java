@@ -278,7 +278,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	/**
 	 * Displays a popup message notifying the user that the request folder couldn't be opened.
 	 *
-	 * @return <code>true</code> if folder should be tried and opened again.
+	 * @return <code>true</code> if the exception was due to authentication and the user was asked to authentify, in that case, caller may want to try and read the folder again.
 	 */
 	private boolean showFolderAccessError(IOException e) {
 		if(e instanceof AuthException) {
