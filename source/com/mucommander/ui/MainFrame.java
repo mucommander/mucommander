@@ -220,7 +220,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * Sets status bar text label. This method is called by FileTable.
 	 */
 	public void setStatusBarText(String text) {
-if(com.mucommander.Debug.ON) text += " - freeMem="+Runtime.getRuntime().freeMemory()+" - totalMem="+Runtime.getRuntime().totalMemory();
+	    //if(com.mucommander.Debug.ON) text += " - freeMem="+Runtime.getRuntime().freeMemory()+" - totalMem="+Runtime.getRuntime().totalMemory();
 		statusBarLabel.setText(text);
 	}
 	

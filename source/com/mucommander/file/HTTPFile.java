@@ -38,15 +38,19 @@ public class HTTPFile extends AbstractFile {
 	 * Creates a new instance of HTTPFile.
 	 */
 	public HTTPFile(String absPath) throws IOException {
-		this(new URL(absPath));
+		// The url needs to have a trailing slash if 'new URL(context, file)' is to be used
+		this(new URL(absPath.endsWith("/")?absPath:absPath+"/"));
 	}
 
 	
 	protected HTTPFile(URL url) throws IOException {
 		this.url = url;
 		this.absPath = url.toExternalForm();
+
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 		
-		this.fileURL = new FileURL(absPath);
+		// absPath is url-encoded
+		this.fileURL = new FileURL(absPath, true);
 		int urlLen = absPath.length();
 
 		if(!fileURL.getProtocol().toLowerCase().equals("http") || fileURL.getHost().equals(""))
@@ -60,7 +64,6 @@ public class HTTPFile extends AbstractFile {
 		this.name = fileURL.getFilename();
 
 		String mimeType;
-//System.out.println("MIME type = "+mimeType);
 		// Test if based on the URL, the file looks like an HTML :
 		//  - URL contains no path after hostname (e.g. http://google.com)
 		//  - URL points to dynamic content (e.g. http://lulu.superblog.com?param=hola&val=...), even though dynamic scripts do not always return HTML
@@ -108,6 +111,7 @@ public class HTTPFile extends AbstractFile {
 	protected HTTPFile(String fileURL, URL context) throws IOException {
 		this(new URL(context, fileURL));
 	}
+
 
 	private HttpURLConnection getHttpURLConnection() throws IOException {
 		// Get URLConnection instance
@@ -314,9 +318,9 @@ public class HTTPFile extends AbstractFile {
 //							if(token.toLowerCase().startsWith("http://") || (!token.equals("") && token.charAt(0)=='/')) {
 						if(prevToken.equals("href") || prevToken.equals("src")) {
 							if(!childrenURL.contains(token)) {
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+this.url);
 								child = new HTTPFile(token, this.url);
-//									child = new HTTPFile(token);
-								child.setParent(this);
+//								child.setParent(this);
 								children.add(child);
 								childrenURL.add(token);
 							}
@@ -397,6 +401,16 @@ System.out.println("att="+att);
 
 	public void mkdir(String name) throws IOException {
 		throw new IOException();
+	}
+	
+	
+	
+	public static void main(String args[]) throws IOException {
+		URL url1 = new URL("http://www.braingames.getput.com/mog");
+		System.out.println(""+url1);
+		
+		URL url2 = new URL(url1, "downloads/MoG-datafiles.zip");
+		System.out.println(""+url2);
 	}
 
 }

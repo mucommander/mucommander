@@ -25,9 +25,17 @@ public class FileURL implements Cloneable {
 	
 	
 	/**
-	 * Creates a new FileURL from the given URL string.
+	 * Creates a new FileURL from the given URL string. The string is NOT considered as url-encoded (free of encoded values such as %3D%23...).
 	 */
 	public FileURL(String url) throws MalformedURLException {
+		this(url, false);
+	}
+	
+	
+	/**
+	 * Creates a new FileURL from the given URL string.
+	 */
+	public FileURL(String url, boolean urlDecode) throws MalformedURLException {
 		try {
 			int pos;
 			int urlLen = url.length();
@@ -89,16 +97,25 @@ public class FileURL implements Cloneable {
 			else {	
 				int len = path.length();
 				slashPos = (path.endsWith("/")?path.substring(0, --len):path).lastIndexOf('/');
-				filename = URLDecoder.decode(path.substring(slashPos+1, len).trim());
+				filename = path.substring(slashPos+1, len).trim();
+				if(urlDecode)
+					try { filename = URLDecoder.decode(filename); }
+					catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 				
 				// Extract filename from full URL
 				len = url.length();
 				slashPos = (url.endsWith("/")?url.substring(0, --len):url).lastIndexOf('/');
-				if(slashPos>7)
-					parent = URLDecoder.decode(url.substring(0, slashPos));
+				if(slashPos>7) {
+					parent = url.substring(0, slashPos);
+					if(urlDecode)
+						try { parent = URLDecoder.decode(parent); }
+						catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
+				}
 			}
 				
-			path = URLDecoder.decode(path);
+			if(urlDecode)
+				try { path = URLDecoder.decode(path); }
+				catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 		}
 		catch(MalformedURLException e) {
 			if(com.mucommander.Debug.ON) {
@@ -110,7 +127,7 @@ public class FileURL implements Cloneable {
 		catch(Exception e2) {
 			if(com.mucommander.Debug.ON) {
 				System.out.println("Exception in FileURL() with "+url);
-//				e2.printStackTrace();
+				e2.printStackTrace();
 			}
 			throw new MalformedURLException();
 		}

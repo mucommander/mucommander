@@ -89,18 +89,21 @@ public abstract class ExtendedFileJob extends FileJob {
 				}
 			}
 			catch(IOException e1) {
+if(com.mucommander.Debug.ON) e1.printStackTrace();
 				throw new FileJobException(FileJobException.CANNOT_OPEN_SOURCE);
 			}
 	
 			// Try to open OutputStream
 			try  { out = destFile.getOutputStream(append); }
 			catch(IOException e2) {
+if(com.mucommander.Debug.ON) e2.printStackTrace();
 				throw new FileJobException(FileJobException.CANNOT_OPEN_DESTINATION);
 			}
 	
 			// Try to copy InputStream to OutputStream
 			try  { return copyStream(in, out); }
 			catch(IOException e3) {
+if(com.mucommander.Debug.ON) e3.printStackTrace();
 				throw new FileJobException(FileJobException.ERROR_WHILE_TRANSFERRING);
 			}
 		}

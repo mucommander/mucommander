@@ -85,7 +85,7 @@ if(com.mucommander.Debug.ON) System.out.println("FTPOutputStream.close: exceptio
 		
 		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
 		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem
-		this.fileURL = new FileURL(url);
+		this.fileURL = new FileURL(url, false);
 		this.absPath = this.fileURL.getPath();
 		
 		if(ftpClient==null)
@@ -470,7 +470,7 @@ if(com.mucommander.Debug.ON) System.out.println("FTPFile.ls(): ParserInitializat
 			parentURL += SEPARATOR;
 		
 		for(int i=0; i<nbFiles; i++) {
-			childURL = new FileURL(parentURL+files[i].getName());
+			childURL = new FileURL(parentURL+files[i].getName(), false);
 
 //			children[nbFiles] = AbstractFile.getAbstractFile(absPath+SEPARATOR+names[i], this);
 			child = AbstractFile.wrapArchive(new FTPFile(childURL, files[i], ftpClient));
