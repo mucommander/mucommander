@@ -2,6 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.Launcher;
+import com.mucommander.PlatformManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 import java.awt.*;
@@ -52,8 +53,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	// Help menu
 	private JMenu helpMenu;
 	private JMenuItem keysItem;
+	private JMenuItem forumsItem;
+	private JMenuItem homepageItem;
 	private JMenuItem aboutItem;
 	
+	private final static String MUCOMMANDER_HOMEPAGE_URL = "http://www.mucommander.com";
+	private final static String MUCOMMANDER_FORUMS_URL = "http://www.mucommander.com/forums/";
+
 	
 	public MainMenuBar(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
@@ -112,9 +118,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		
 		// Help menu
 		helpMenu = addMenu("Help", KeyEvent.VK_H, false);
-		keysItem = addMenuItem(helpMenu, "Shortcuts", KeyEvent.VK_K, null);
+		keysItem = addMenuItem(helpMenu, "Keyboard shortcuts", KeyEvent.VK_K, null);
 		helpMenu.add(new JSeparator());
-		aboutItem = addMenuItem(helpMenu, "About...", KeyEvent.VK_A, null);		
+		homepageItem = addMenuItem(helpMenu, "muCommander homepage", KeyEvent.VK_H, null);
+		forumsItem = addMenuItem(helpMenu, "muCommander forums", KeyEvent.VK_F, null);
+		helpMenu.add(new JSeparator());
+		aboutItem = addMenuItem(helpMenu, "About muCommander...", KeyEvent.VK_A, null);		
 	}
 	
 	/**
@@ -274,6 +283,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		// Help menu
 		else if (source == keysItem) {
 			new ShortcutsDialog(mainFrame).showDialog();
+		}
+		else if (source == forumsItem) {
+			PlatformManager.open(MUCOMMANDER_FORUMS_URL, mainFrame.getLastActiveTable().getCurrentFolder());
+		}
+		else if (source == homepageItem) {
+			PlatformManager.open(MUCOMMANDER_HOMEPAGE_URL, mainFrame.getLastActiveTable().getCurrentFolder());
 		}
 		else if (source == aboutItem) {
 			new AboutDialog(mainFrame).showDialog();
