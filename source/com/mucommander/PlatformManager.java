@@ -129,8 +129,8 @@ public class PlatformManager {
 			String tokens[] = new String[tokensV.size()];
 			tokensV.toArray(tokens);
 
-//			return Runtime.getRuntime().exec(tokens, null, new java.io.File(currentFolder.getAbsolutePath()));
-			return Runtime.getRuntime().exec(command, null, new java.io.File(currentFolder.getAbsolutePath()));
+			return Runtime.getRuntime().exec(tokens, null, new java.io.File(currentFolder.getAbsolutePath()));
+//			return Runtime.getRuntime().exec(command, null, new java.io.File(currentFolder.getAbsolutePath()));
 		}
 		catch(IOException e) {
             if(com.mucommander.Debug.ON)

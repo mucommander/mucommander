@@ -78,7 +78,7 @@ Known issues:
 - Symbolic links are not detected in SMB folders
 - Folder cannot be renamed to upper/lower case variations of the same name
 - Pipe '|' and other shell operators cannot be used in 'Run Command'
-- Mac OS X: muCommander is slow with Java 1.4.1 under Panther and buggy under Jaguar so Java 1.3.1 is used by default
+- Mac OS X: muCommander is buggy under Java 1.4 + Jaguar so Java 1.3.1 is used by default
 - Mac OS X: 'Sound beep on question dialog' doesn't work with Java 1.3.1
 
 

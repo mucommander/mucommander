@@ -68,6 +68,7 @@
         classname="com.yworks.yguard.ObfuscatorTask" 
         classpath="yguard.jar"/>
     <obfuscate mainclass="com.mucommander.Launcher" logfile="dist/yguard_log.xml" conservemanifest="true">
+    <property name="naming-scheme" value="small"/>
         <inoutpair in="dist/mucommander.jar" out="dist/mucommander_obf.jar"/>
     </obfuscate>
   </target>
