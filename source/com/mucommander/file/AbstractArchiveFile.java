@@ -15,6 +15,7 @@ public abstract class AbstractArchiveFile extends AbstractFile implements Archiv
 	 * Creates an ArchiveFile around the given file.
 	 */
 	protected AbstractArchiveFile(AbstractFile file) {
+		super(file.getURL());
 		this.file = file;
 	}
 
@@ -23,9 +24,9 @@ public abstract class AbstractArchiveFile extends AbstractFile implements Archiv
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 	
-	public String getProtocol() {
-		return file.getProtocol();
-	}
+//	public String getProtocol() {
+//		return file.getProtocol();
+//	}
 
 	public String getName() {
 		return file.getName();

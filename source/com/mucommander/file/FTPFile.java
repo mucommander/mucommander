@@ -13,6 +13,7 @@ public class FTPFile extends AbstractFile {
 
 	private org.apache.commons.net.ftp.FTPFile file;
 	private FTPClient ftpClient;
+
 	/** Sets whether passive mode should be used for data transfers (default is true) */ 
 	private boolean passiveMode = true;
 
@@ -120,11 +121,11 @@ if(com.mucommander.Debug.ON) System.out.println("getFTPFile "+fileURL+" parent="
 		}
 		else {
 	        // Check connection and reconnect if connection timed out
-			checkConnection(ftpClient);
+			checkConnection();
 
 			org.apache.commons.net.ftp.FTPFile files[] = ftpClient.listFiles(parentURL.getPath());
 			// Throw an IOException if server replied with an error
-			checkServerReply(ftpClient, fileURL);
+			checkServerReply();
 
 			// File doesn't exists
 			if(files==null || files.length==0)
@@ -147,7 +148,7 @@ if(com.mucommander.Debug.ON) System.out.println("getFTPFile "+fileURL+" parent="
 	
 	private org.apache.commons.net.ftp.FTPFile createFTPFile(String name, boolean isDirectory) {
 		org.apache.commons.net.ftp.FTPFile file = new org.apache.commons.net.ftp.FTPFile();
-		file.setName("/");
+		file.setName(name);
 		file.setSize(0);
 		file.setTimestamp(java.util.Calendar.getInstance());
 		file.setType(isDirectory?org.apache.commons.net.ftp.FTPFile.DIRECTORY_TYPE:org.apache.commons.net.ftp.FTPFile.FILE_TYPE);
@@ -174,7 +175,7 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: default timeout
 if(com.mucommander.Debug.ON) System.out.println("initConnection: "+ftpClient.getReplyString());
 
 			// Throw an IOException if server replied with an error
-			checkServerReply(ftpClient, fileURL);
+			checkServerReply();
 
 			AuthManager.authenticate(fileURL, addAuthInfo);
 			AuthInfo authInfo = AuthInfo.getAuthInfo(fileURL);
@@ -185,7 +186,7 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileU
 			
 			ftpClient.login(authInfo.getLogin(), authInfo.getPassword());
 			// Throw an IOException (possibly AuthException) if server replied with an error
-			checkServerReply(ftpClient, fileURL);
+			checkServerReply();
 			
 			// Enables/disables passive mode
 if(com.mucommander.Debug.ON) System.out.println("initConnection: passive mode ="+passiveMode);
@@ -221,7 +222,7 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: passive mode ="
 	}
 
 	
-	private void checkServerReply(FTPClient ftpClient, FileURL fileURL) throws IOException {
+	private void checkServerReply() throws IOException {
 		// Check that connection went ok
 		int replyCode = ftpClient.getReplyCode();
 if(com.mucommander.Debug.ON) System.out.println("checkServerReply: "+ftpClient.getReplyString());
@@ -235,7 +236,7 @@ if(com.mucommander.Debug.ON) System.out.println("checkServerReply: "+ftpClient.g
 	}
 
 	
-	private void checkConnection(FTPClient client) throws IOException {
+	private void checkConnection() throws IOException {
 if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected= "+ftpClient.isConnected());
 		// Reconnect if disconnected
 		if(!ftpClient.isConnected()) {
@@ -248,7 +249,7 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected= "
 		boolean noop = false;
 		try {
 			noop = ftpClient.sendNoOp();
-			checkServerReply(ftpClient, this.fileURL);
+			checkServerReply();
 		}
 		catch(IOException e) {
 			// Something went wrong
@@ -290,9 +291,9 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 
-	public String getProtocol() {
-		return "FTP";
-	}
+//	public String getProtocol() {
+//		return "FTP";
+//	}
 	
 	public String getName() {
 		String name = file.getName();
@@ -383,7 +384,7 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
 
 	public InputStream getInputStream(long skipBytes) throws IOException {
         // Check connection and reconnect if connection timed out
-		checkConnection(ftpClient);
+		checkConnection();
 
 		if(skipBytes>0) {
 			// Resume transfer at the given offset
@@ -405,7 +406,7 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
 	
 	public OutputStream getOutputStream(boolean append) throws IOException {
         // Check connection and reconnect if connection timed out
-		checkConnection(ftpClient);
+		checkConnection();
 
 		OutputStream out;
 		if(append)
@@ -426,7 +427,7 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
 			
 			if(destFTPFile.fileURL.getHost().equals(this.fileURL.getHost())) {
 				// Check connection and reconnect if connection timed out
-				checkConnection(ftpClient);
+				checkConnection();
 				
 				try {
 					return ftpClient.rename(absPath, destFTPFile.absPath);
@@ -443,17 +444,17 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
 	
 	public void delete() throws IOException {
         // Check connection and reconnect if connection timed out
-		checkConnection(ftpClient);
+		checkConnection();
 
 		ftpClient.deleteFile(absPath);
 
 		// Throw an IOException if server replied with an error
-		checkServerReply(ftpClient, this.fileURL);
+		checkServerReply();
 	}
 
 	public AbstractFile[] ls() throws IOException {
         // Check connection and reconnect if connection timed out
-		checkConnection(ftpClient);
+		checkConnection();
 		
 		org.apache.commons.net.ftp.FTPFile files[];
 		try { files = ftpClient.listFiles(absPath); }
@@ -464,7 +465,7 @@ if(com.mucommander.Debug.ON) System.out.println("FTPFile.ls(): ParserInitializat
 		}
 	
 		// Throw an IOException if server replied with an error
-		checkServerReply(ftpClient, fileURL);
+		checkServerReply();
 		
         if(files==null)
 			return new AbstractFile[] {};
@@ -509,10 +510,10 @@ if(com.mucommander.Debug.ON) System.out.println("FTPFile.ls(): ParserInitializat
 	
 	public void mkdir(String name) throws IOException {
         // Check connection and reconnect if connection timed out
-		checkConnection(ftpClient);
+		checkConnection();
 
 		ftpClient.makeDirectory(absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name);
 		// Throw an IOException if server replied with an error
-		checkServerReply(ftpClient, fileURL);
+		checkServerReply();
 	}
 }

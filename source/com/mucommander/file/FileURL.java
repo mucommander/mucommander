@@ -24,6 +24,12 @@ public class FileURL implements Cloneable {
 	private String query;
 	
 	
+	public FileURL(FileURL parentURL, String childPath) {
+		String parentURLString = parentURL.getURL(true);
+		this(parentURLString+(parentURLString.endsWith("/")?"":"/")+childPath);
+	}
+	
+	
 	/**
 	 * Creates a new FileURL from the given URL string.
 	 */

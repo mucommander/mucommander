@@ -29,69 +29,26 @@ public class FSFile extends AbstractFile {
 	// Indicates whether or not the value has already been retrieved
 	private boolean parentValCached = false;
 		
-
-//	/**
-//	 * RandomAccessFile does unfortunately not derive from InputStream
-//	 * as it also provides OutputStream methods, this class extends 
-//	 * InputStream and maps the methods on RandomAccessFile's.
-//	 *
-//	 * <p>The purpose of this class is to provide an effecient implementation of skip()
-//	 * by using RandomAccessFile's seek() method.</p>
-//	 */
-/*	 
-	private class RandomAccessInputStream extends InputStream {
-		RandomAccessFile raf;
-		
-		public RandomAccessInputStream(File f) throws IOException {
-			this.raf = new RandomAccessFile(f, "r");
-		}
-		
-		public int read() throws IOException {
-			return raf.read();
-		}
-
-		public int read(byte[] b, int off, int len) throws IOException {
-			return raf.read(b, off, len);
-		}
-		
-		public int read(byte[] b) throws IOException {
-			return raf.read(b);
-		}
-		
-		public long skip(long n) throws IOException {
-			raf.seek(n);
-			return n;
-		}
-		
-		public void close() throws IOException {
-			raf.close();
-		}
-	}
-*/		
 		
 	/**
-	 * Creates a new instance of FSFile. Although the existence
-	 * of the file is not checked, the given file path should exist.
-	 * @param absPath the absolute path of this AbstractFile.
+	 * Creates a new instance of FSFile.
 	 */
-	public FSFile(String absPath) {
-		this(new File(absPath));
+	public FSFile(FileURL fileURL) {
+		this(fileURL, new File(absPath));
 	}
 
 
 	/**
-	 * Creates a new instance of FSFile. Although the existence
-	 * of the file is not checked, the given file path should exist.
-	 * @param file the file of this AbstractFile.
+	 * Creates a new instance of FSFile.
 	 */
-	public FSFile(File _file) {
-//System.out.println("F0");
+	public FSFile(FileURL fileURL, File _file) {
+		super(fileURL);
+
 		this.absPath = _file.getAbsolutePath();
 
         // removes trailing separator (if any)
         this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
 
-//System.out.println("F1");
 		if(!_file.isAbsolute())
 			this.file = new File(absPath);
 		else
@@ -103,9 +60,9 @@ public class FSFile extends AbstractFile {
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 
-	public String getProtocol() {
-		return "FILE";
-	}
+//	public String getProtocol() {
+//		return "FILE";
+//	}
 	
 	public String getName() {
     	// Retrieves name and caches it

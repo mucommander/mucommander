@@ -60,9 +60,9 @@ public class SMBFile extends AbstractFile {
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 	
-	public String getProtocol() {
-		return "SMB";
-	}
+//	public String getProtocol() {
+//		return "SMB";
+//	}
 
 	public String getName() {
 		String name = file.getName();

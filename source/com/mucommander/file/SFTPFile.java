@@ -165,9 +165,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isConnected= "+sshClie
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 
-	public String getProtocol() {
-		return "SFTP";
-	}
+//	public String getProtocol() {
+//		return "SFTP";
+//	}
 	
 	public String getName() {
 		return file==null?fileURL.getFilename():file.getFilename();

@@ -5,6 +5,25 @@ import java.util.Vector;
 
 public abstract class AbstractFile {
 
+	/** URL representing this file */
+	protected FileURL fileURL;
+
+
+	/**
+	 * Creates a new file instance with the given URL.
+	 */
+	protected AbstractFile(FileURL url) {
+		this.fileURL = url;
+	}
+	
+
+	/**
+	 * Return the URL representing this file.
+	 */
+	public FileURL getURL() {
+		return fileURL;
+	}
+	
 	
 	/**
 	 * Returns an instance of AbstractFile for the given absolute path.
@@ -155,7 +174,7 @@ public abstract class AbstractFile {
 	/**
 	 * Returns a string describing the protocol used to access the file (e.g. SMB, FTP... or simply FILE for local files).
 	 */
-	public abstract String getProtocol();
+//	public abstract String getProtocol();
 	
 
 	/**
