@@ -345,22 +345,22 @@ version_dialog.no_new_version_title:EN:No new version
 version_dialog.no_new_version_title:FR:Pas de nouvelle version
 
 version_dialog.no_new_version:EN:Congratulations, you already have the latest version.
-version_dialog.no_new_version:EN:Félicitations, vous avez déjà la dernière version.
+version_dialog.no_new_version:FR:Félicitations, vous avez déjà la dernière version.
 
 version_dialog.new_version_title:EN:New version available
 version_dialog.new_version_title:FR:Nouvelle version disponible
 
 version_dialog.new_version:EN:There is a new version of muCommander available.
-version_dialog.new_version:EN:Il y a une nouvelle version de muCommander disponible.
+version_dialog.new_version:FR:Il y a une nouvelle version de muCommander disponible.
 
 version_dialog.new_version_url:EN:There is a new version of muCommander available at %1
-version_dialog.new_version_url:EN:Il y a une nouvelle version de muCommander disponible à %1
+version_dialog.new_version_url:FR:Il y a une nouvelle version de muCommander disponible à %1
 
 version_dialog.not_available_title:EN:Server not reachable
-version_dialog.not_available_title:EN:Serveur indisponible
+version_dialog.not_available_title:FR:Serveur indisponible
 
 version_dialog.not_available:EN:Unable to get version information from server.
-version_dialog.not_available:EN:L'information de version n'a pas pu être récupérée.
+version_dialog.not_available:FR:L'information de version n'a pas pu être récupérée.
 
 version_dialog.download:EN:Download
 version_dialog.download:FR:Télécharger
@@ -474,7 +474,7 @@ http_download.downloading_file:EN:Downloading %1
 http_download.downloading_file:FR:Téléchargement de %1 en cours
 
 http_download.error_title:EN:Download error
-http_download.error_title:EN:Erreur lors du téléchargement
+http_download.error_title:FR:Erreur lors du téléchargement
 
 http_download.cannot_copy_file:EN:Unable to download %1
 http_download.cannot_copy_file:FR:Impossible de télécharger %1
@@ -983,10 +983,10 @@ unit.byte:EN:byte
 unit.byte:FR:octet
 
 unit.bytes:EN:bytes
-unit.bytes:EN:octets
+unit.bytes:FR:octets
 
 unit.bytes_short:EN:b
-unit.bytes_short:EN:o
+unit.bytes_short:FR:o
 
 unit.kb:EN:KB
 unit.kb:FR:Ko
