@@ -10,7 +10,7 @@ import java.io.*;
 
 
 /**
- * ExtendedFileJob is a container for a 'file task' : basically an operation that involves files and bytes.<br>
+ * ExtendedFileJob is a container for a file task : basically an operation that involves files and bytes.<br>
  * <p>What makes it different from FileJob is that the class implementing ExtendedFileJob has to be able to give
  * information about the file currently being processed.</p>
  * 
@@ -27,11 +27,15 @@ public abstract class ExtendedFileJob extends FileJob {
 	/** Size that should be allocated to read buffer */
 	protected final static int READ_BLOCK_SIZE = 8192;
 
+	/** True if current file is at the top of the source/dest folder */
 	protected boolean topLevelFile;
 	
 	
-    public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile baseSourceFolder) {
-        super(progressDialog, mainFrame, baseSourceFolder);
+	/**
+	 * Creates a new ExtendedFileJob.
+	 */
+    public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame, java.util.Vector files, AbstractFile destFolder) {
+        super(progressDialog, mainFrame, files, destFolder);
     }
 
 
@@ -47,9 +51,9 @@ public abstract class ExtendedFileJob extends FileJob {
 		// Skip/do not read a number of bytes from the input stream
 		if(skipBytes>0) {
 			in.skip(skipBytes);
-			nbBytesProcessed += skipBytes;
 			currentFileProcessed += skipBytes;
-			nbBytesSkipped += skipBytes;
+//			nbBytesProcessed += skipBytes;
+//			nbBytesSkipped += skipBytes;
 		}
 		
 		// Copies the InputStream's content to the OutputStream
@@ -69,7 +73,6 @@ public abstract class ExtendedFileJob extends FileJob {
 	protected void copyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append) throws FileJobException {
 		OutputStream out = null;
 		InputStream in = null;
-		long bytesSkipped;
 
 		try {
 			// Try to open InputStream
@@ -147,8 +150,7 @@ public abstract class ExtendedFileJob extends FileJob {
 	protected void nextFile(AbstractFile file) {
 		super.nextFile(file);
 		currentFileProcessed = 0;
-		if(file.getParent().equals(baseSourceFolder))
-			topLevelFile = true;
+		topLevelFile = file.getParent().equals(baseSourceFolder);
 	}
 
 

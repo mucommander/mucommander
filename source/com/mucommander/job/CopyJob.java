@@ -5,11 +5,9 @@ import com.mucommander.file.*;
 
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.FileExistsDialog;
 
-import com.mucommander.text.SizeFormatter;
 import com.mucommander.text.Translator;
 
 import java.util.Vector;
@@ -18,250 +16,239 @@ import java.io.IOException;
 
 
 /**
- * This job copies recursively a group of files.
+ * This job recursively copies (or unzips) a group of files.
+ *
+ * @author Maxence Bernard
  */
-public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
+public class CopyJob extends ExtendedFileJob implements Runnable {
 
-	private Vector filesToCopy;
+	/** New filename in destination */
 	private String newName;
-	private AbstractFile baseDestFolder;
-	private boolean unzip;
 
-	/** Current file info (path) */
-	private String currentFileInfo = "";
+	/** Default choice when encountering an existing file */
+	private int defaultFileExistsChoice = -1;
 
-//    /** Size of current file */
-//    private long currentFileSize;
-
-    /** Number of files that this job contains */
-    private int nbFiles;
-    
-	private boolean skipAll;
-	private boolean overwriteAll;
-	private boolean appendAll;
-	private boolean overwriteAllOlder;
-
+	/** Title used for error dialogs */
 	private String errorDialogTitle;
+	
+	/** if true, files will be unzipped in the destination folder instead of being copied */
+	private boolean unzipMode;
 	
 	
     /**
-	 * @param indicates if this CopyJob corresponds to an 'unzip' operation.
+	 * Creates a new CopyJob without starting it.
+	 *
+	 * @param progressDialog dialog which shows this job's progress
+	 * @param mainFrame mainFrame this job has been triggered by
+	 * @param files files which are going to be copied
+	 * @param destFolder destination folder where the files will be copied
+	 * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
+	 * @param unzipMode if true, files will be unzipped in the destination folder instead of being copied.
 	 */
-	public CopyJob(MainFrame mainFrame, ProgressDialog progressDialog, AbstractFile baseSourceFolder, Vector filesToCopy, String newName, AbstractFile destFolder, boolean unzip) {
-		super(progressDialog, mainFrame, baseSourceFolder);
+	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, boolean unzipMode) {
+		super(progressDialog, mainFrame, files, destFolder);
 
-	    this.filesToCopy = filesToCopy;
-        this.nbFiles = filesToCopy.size();
-		this.baseDestFolder = destFolder;
 		this.newName = newName;
-		this.unzip = unzip;
-		this.errorDialogTitle = Translator.get(unzip?"unzip_dialog.error_title":"copy_dialog.error_title");
+		this.unzipMode = unzipMode;
+		this.errorDialogTitle = Translator.get(unzipMode?"unzip_dialog.error_title":"copy_dialog.error_title");
 	}
 
 	
-	/**
-	 * Recursively copies a file or folder.
-	 */
-    private void copyRecurse(AbstractFile file, AbstractFile destFolder, String newName) {
+	/////////////////////////////////////
+	// Abstract methods Implementation //
+	/////////////////////////////////////
+
+    protected void processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
 		if(isInterrupted())
             return;
+		
+		// Notify job that we're starting to process this file
+		nextFile(file);
 
-//		currentFileSize = file.getSize();        
+		// Is current file at the base folder level ?
+		boolean isFileInBaseFolder = file.getParent().equals(baseSourceFolder);
 
+		// If in unzip mode, unzip base source folder's zip files
+		if(unzipMode && isFileInBaseFolder) {
+			// If unzip mode and file is not a ZipArchiveFile (happens when extension is not .zip)
+			if(!(file instanceof ZipArchiveFile))
+				file = new ZipArchiveFile(file);
+			
+			do {
+				try {
+					// Recurse on zip's contents
+					AbstractFile zipSubFiles[] = currentFile.ls();
+					for(int j=0; j<zipSubFiles.length; j++) {
+						processFile(zipSubFiles[j], destFolder, null);
+					}
+				}
+				catch(IOException e) {
+					// File could not be uncompressed properly
+					int ret = showErrorDialog(errorDialogTitle, Translator.get("unzip.unable_to_open_zip", currentFile.getName()));
+					if(ret==RETRY_ACTION)
+						break;
+					else if (ret==-1 || ret==CANCEL_ACTION)	 {		// CANCEL_ACTION or close dialog
+						stop();
+						return;
+					}
+				}
+				break;
+			} while(true);
+			return;
+		}
+
+		// Determine filename in destination
 		String originalName = file.getName();
-		String destFileName = (newName==null?originalName:newName);
-       	String destFilePath = destFolder.getAbsolutePath(true)
-       		+destFileName;
+		String destFileName;
+		if(isFileInBaseFolder && newName!=null)
+			destFileName = newName;
+       	else
+			destFileName = originalName;
+		
+		// Destination file
+		AbstractFile destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+destFileName);
 
-//		currentFileInfo = "\""+originalName+ "\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
-		currentFileInfo = "\""+originalName+ "\" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
-
-		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
-
-		// Do nothing when encountering symlinks (skip file)
+		// Do nothing if file is a symlink (skip file)
 		if(file.isSymlink())
 			;
 		// Copy directory recursively
         else if(file.isDirectory()) {
-            // creates the folder in the destination folder if it doesn't exist
-			
+            // Create the folder in the destination folder if it doesn't exist
 			if(!(destFile.exists() && destFile.isDirectory())) {
-				try {
-					destFolder.mkdir(destFileName);
-				}
-            	catch(IOException e) {
-                	int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFileName));
-                	if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-	                    stop();
-            		return;		// abort in all cases
-				}
+				// Loop for retry
+				do {
+					try {
+						destFolder.mkdir(destFileName);
+					}
+					catch(IOException e) {
+						// Unable to create folder
+						int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFileName));
+						// Retry : loop
+						if(ret==RETRY_ACTION)
+							continue;
+						// Cancel or close dialog : stop job and return
+						else if(ret==-1 || ret==CANCEL_ACTION)		
+							stop();
+						return;		// Return for skip and cancel
+					}
+					break;
+				} while(true);
 			}
 			
 			// and copy each file in this folder recursively
-            try {
-                AbstractFile subFiles[] = file.ls();
-				for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
-					copyRecurse(subFiles[i], destFile, null);
-                }
-			}
-            catch(IOException e) {
-                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", destFile.getAbsolutePath()));
-                if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-                    stop();
-			}
+			do {		// Loop for retry
+				try {
+					// for each file in folder...
+					AbstractFile subFiles[] = file.ls();
+					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
+						processFile(subFiles[i], destFile, null);
+				}
+				catch(IOException e) {
+					// Unable to open source file
+					int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", destFile.getName()));
+					// Retry : loop
+					if(ret==RETRY_ACTION)
+						continue;
+					// Cancel or close dialog : stop job and return
+					else if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
+						stop();
+					// Do nothing for skip
+				}
+				break;
+			} while(true);
         }
 		// Copy file
         else  {
-//System.out.println("SOURCE: "+file.getAbsolutePath()+"\nDEST: "+destFilePath);
 			boolean append = false;
 			
-			// Tests if the file exists
-			// and resolves a potential conflicting situation
+			// Tests if the file already exists in destination
+			// and if it does, ask the user what to do or
+			// use a previous user global answer.
 			if (destFile.exists())  {
-				if(skipAll)
-					return;
-				else if(overwriteAll);
-				else if(appendAll)
-					append = true;
-				else if (overwriteAllOlder) {
-					if(file.getDate()<destFile.getDate())
-						return;
+				int choice;
+				// No default choice
+				if(defaultFileExistsChoice==-1) {
+					FileExistsDialog dialog = getFileExistsDialog(file, destFile);
+					choice = waitForUserResponse(dialog);
+					// If 'apply to all' was selected, this choice will be used
+					// for any files that already exist  (user will not be asked again)
+					if(dialog.applyToAllSelected())
+						defaultFileExistsChoice = choice;
 				}
-				else {
-					int ret = showFileExistsDialog(file, destFile);
-					
-			    	if (ret==-1 || ret==FileExistsDialog.CANCEL_ACTION) {
-			    		stop();                
-			    		return;
-			    	}
-			    	else if (ret==FileExistsDialog.SKIP_ACTION) {
-			    		return;
-			    	}
-					else if (ret==FileExistsDialog.APPEND_ACTION) {
-			    		append = true;
-					}
-					else if (ret==FileExistsDialog.SKIP_ALL_ACTION) {
-						skipAll = true;
+				// Use previous choice
+				else
+					choice = defaultFileExistsChoice;
+				
+				// Cancel job
+				if (choice==-1 || choice==FileExistsDialog.CANCEL_ACTION) {
+					stop();
+					return;
+				}
+				// Skip file
+				else if (choice==FileExistsDialog.SKIP_ACTION) {
+					return;
+				}
+				// Append to file (resume file copy)
+				else if (choice==FileExistsDialog.APPEND_ACTION) {
+					append = true;
+				}
+				// Overwrite file 
+				else if (choice==FileExistsDialog.OVERWRITE_ACTION) {
+					// Do nothing, simply continue
+				}
+				//  Overwrite file if destination is older
+				else if (choice==FileExistsDialog.OVERWRITE_IF_OLDER_ACTION) {
+					// Overwrite if file is newer (stricly)
+					if(file.getDate()<=destFile.getDate())
 						return;
-					}
-					else if (ret==FileExistsDialog.OVERWRITE_ALL_ACTION) {
-						overwriteAll = true;
-					}
-					else if (ret==FileExistsDialog.APPEND_ALL_ACTION) {
-						appendAll = true;
-						append = true;
-					}	
-					else if (ret==FileExistsDialog.OVERWRITE_ALL_OLDER_ACTION) {
-						overwriteAllOlder = true;
-						if(file.getDate()<destFile.getDate())
-							return;
-					}
 				}
 			}
 			
 			// Copy file to destination
-			try {
-				copyFile(file, destFile, append);
-			}
-			catch(FileJobException e) {
-				if(com.mucommander.Debug.ON)
-					System.out.println(""+e);
-				
-				int reason = e.getReason();
-//				String errorMsg = Translator.get(unzip?"unzip.cannot_unzip_file":"copy.cannot_copy_file", file.getName());
-				String errorMsg;
-				switch(reason) {
-					case FileJobException.CANNOT_OPEN_SOURCE:
-						errorMsg = Translator.get("cannot_open_source_file", file.getName());
-						break;
-					case FileJobException.CANNOT_OPEN_DESTINATION:
-						errorMsg = Translator.get("cannot_open_destination_file", file.getName());
-						break;
+			do {				// Loop for retry
+				try {
+					copyFile(file, destFile, append);
+				}
+				catch(FileJobException e) {
+					// Copy failed
+					if(com.mucommander.Debug.ON)
+						System.out.println(""+e);
 					
-					case FileJobException.ERROR_WHILE_TRANSFERRING:
-					default:
-						errorMsg = Translator.get("error_while_transferring", file.getName());
-						break;
-				}
-				
-				int ret = showErrorDialog(errorDialogTitle, errorMsg);
-			    if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-			        stop();
-			}
-		}
-    }
-
-
-    public void run() {
-//		currentFileIndex = 0;
-
-		FileTable activeTable = mainFrame.getLastActiveTable();
-		AbstractFile currentFile;
-        AbstractFile zipSubFiles[];
-		for(int i=0; i<nbFiles; i++) {
-//		while(true) {
-//			currentFile = (AbstractFile)filesToCopy.elementAt(currentFileIndex);
-			currentFile = (AbstractFile)filesToCopy.elementAt(i);
-			nextFile(currentFile);
-			
-			// Unzip files		
-			if (unzip) {
-				if (currentFile instanceof ZipArchiveFile) {
-					try {
-						zipSubFiles = currentFile.ls();
-						for(int j=0; j<zipSubFiles.length; j++) {
-                            copyRecurse(zipSubFiles[j], baseDestFolder, null);
-						}
-					}
-					catch(IOException e) {
-						int ret = showErrorDialog(errorDialogTitle, Translator.get("unzip.unable_to_open_zip", currentFile.getName()));
-						if (ret==-1 || ret==CANCEL_ACTION)	 {		// CANCEL_ACTION or close dialog
-						    stop();
+					int reason = e.getReason();
+					String errorMsg;
+					switch(reason) {
+						// Could not open source file for read
+						case FileJobException.CANNOT_OPEN_SOURCE:
+							errorMsg = Translator.get("cannot_read_source", file.getName());
 							break;
-						}
+						// Could not open destination file for write
+						case FileJobException.CANNOT_OPEN_DESTINATION:
+							errorMsg = Translator.get("cannot_write_destination", file.getName());
+							break;
+						// An error occurred during file transfer
+						case FileJobException.ERROR_WHILE_TRANSFERRING:
+						default:
+							errorMsg = Translator.get("error_while_transferring", file.getName());
+							break;
 					}
+					
+					// Ask the user what to do
+					int ret = showErrorDialog(errorDialogTitle, errorMsg);
+					if(ret==RETRY_ACTION) {
+						// Resume transfer
+						if(reason==FileJobException.ERROR_WHILE_TRANSFERRING)
+							append = true;
+						continue;
+					}
+					else if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
+						stop();
 				}
-			}
-			else {
-				copyRecurse(currentFile, baseDestFolder, newName);
-			}
-			
-			if(isInterrupted())
 				break;
-			
-			activeTable.setFileMarked(currentFile, false);
-			activeTable.repaint();
-
-//            if(currentFileIndex<nbFiles-1)	// This ensures that currentFileIndex is never out of bounds (cf getCurrentFile)
-//                currentFileIndex++;
-//            else break;
-        }
-
-        stop();
-		
-        // Refresh tables only if folder is destFolder
-        refreshTableIfFolderEquals(mainFrame.getBrowser1().getFileTable(), baseDestFolder);
-        refreshTableIfFolderEquals(mainFrame.getBrowser2().getFileTable(), baseDestFolder);
-
-		cleanUp();
+			} while(true);
+		}
 	}
 
-
-	/*******************************************
-	 *** ExtendedFileJob implemented methods ***
-	 *******************************************/
-
-    public int getNbFiles() {
-        return nbFiles;
-    }
-    
-//    public long getCurrentFileSize() {
-//        return currentFileSize;
-//    }
-
     public String getStatusString() {
-        return Translator.get(unzip?"unzip.unzipping_file":"copy.copying_file", currentFileInfo);
+        return Translator.get(unzipMode?"unzip.unzipping_file":"copy.copying_file", getCurrentFileInfo());
     }
- 
-
-}	
+}

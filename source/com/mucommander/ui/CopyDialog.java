@@ -2,8 +2,11 @@
 package com.mucommander.ui;
 
 import com.mucommander.ui.table.FileTable;
+
 import com.mucommander.file.AbstractFile;
+
 import com.mucommander.job.CopyJob;
+
 import com.mucommander.text.Translator;
 
 import java.util.Vector;
@@ -101,10 +104,10 @@ public class CopyDialog extends DestinationDialog {
 			return;
 		}
 
-		// Starts moving files
+		// Starts copying files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get(unzipDialog?"unzip_dialog.unzipping":"copy_dialog.copying"));
-		CopyJob copyJob = new CopyJob(mainFrame, progressDialog, sourceFolder, filesToCopy, newName, destFolder, unzipDialog);
-		progressDialog.start(copyJob);
+		CopyJob job = new CopyJob(progressDialog, mainFrame, filesToCopy, destFolder, newName, unzipDialog);
+		progressDialog.start(job);
 	}
 
 }

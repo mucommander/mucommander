@@ -9,10 +9,13 @@ import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.ui.table.FileTable;
 
 import com.mucommander.text.Translator;
+import com.mucommander.text.SizeFormatter;
 
 import com.mucommander.file.AbstractFile;
 
 import java.io.IOException;
+
+import java.util.Vector;
 
 
 /**
@@ -56,12 +59,21 @@ public abstract class FileJob implements Runnable {
 	/** Base source folder */
 	protected AbstractFile baseSourceFolder;
 	
+	/** Base destination folder */
+	protected AbstractFile baseDestFolder;
+
+	/** Files which are going to be processed */
+	protected Vector files;
+
+    /** Number of files that this job contains */
+    protected int nbFiles;
+    
 	
     /** Number of bytes processed so far, see {@link #getTotalBytesProcessed() getTotalBytesProcessed} */
     protected long nbBytesProcessed;
 
-    /** Number of bytes skipped so far, see {@link #getTotalBytesSkipped() getTotalBytesSkipped} */
-    protected long nbBytesSkipped;
+//    /** Number of bytes skipped so far, see {@link #getTotalBytesSkipped() getTotalBytesSkipped} */
+//    protected long nbBytesSkipped;
 
 	/** Index of file currently being processed, see {@link #getCurrentFileIndex() getCurrentFileIndex} */
 	protected int currentFileIndex = -1;
@@ -70,17 +82,31 @@ public abstract class FileJob implements Runnable {
 	protected AbstractFile currentFile;
 
 	
-	protected final static int CANCEL_ACTION = 0;
-	protected final static int SKIP_ACTION = 1;
+	protected final static int SKIP_ACTION = 0;
+	protected final static int RETRY_ACTION = 1;
+	protected final static int CANCEL_ACTION = 2;
 
 	protected final static String CANCEL_TEXT = Translator.get("cancel");
 	protected final static String SKIP_TEXT = Translator.get("skip");
+	protected final static String RETRY_TEXT = Translator.get("retry");
 	
-	
-	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile baseSourceFolder) {
+
+    /**
+	 * Creates a new FileJob without starting it.
+	 *
+	 * @param progressDialog dialog which shows this job's progress
+	 * @param mainFrame mainFrame this job has been triggered by
+	 * @param files files which are going to be processed
+	 * @param destFolder destination folder where the files will be transferred, can be <code>null</code> if there is no destination.
+	 */
+	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder) {
 		this.progressDialog = progressDialog;
 		this.mainFrame = mainFrame;
-		this.baseSourceFolder = baseSourceFolder;
+	    this.files = files;
+		
+        this.nbFiles = files.size();
+		this.baseSourceFolder = ((AbstractFile)files.elementAt(0)).getParent();
+		this.baseDestFolder = destFolder;
 	}
 
 	
@@ -88,15 +114,15 @@ public abstract class FileJob implements Runnable {
      * Starts file job in a separate thread.
      */
     public void start() {
-		if(com.mucommander.Debug.ON)
-			System.out.println("FileJob.start(): "+this+" modifier="+(this instanceof FileModifier));
+//		if(com.mucommander.Debug.ON)
+//			System.out.println("FileJob.start(): "+this+" modifier="+(this instanceof FileModifier));
 		
 		// Pause auto-refresh during file job if this job potentially modifies folders contents
 		// and would potentially cause table to auto-refresh
-		if(this instanceof FileModifier) {
-			mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(false);
-			mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(false);
-		}		
+//		if(this instanceof FileModifier) {
+		mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(false);
+		mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(false);
+//		}		
 		
         // Serves to differenciate between the 'stopped' and 'not started yet' states
         hasStarted = true;
@@ -122,27 +148,6 @@ public abstract class FileJob implements Runnable {
 	}
 
 
-// Not needed anymore, now ProgressDialog starts the job once it has been activated
-    /**
-	 * Waits for ProgressDialog to be activated (visible with keyboard focus)
-     * This is very important because we want ProgressDialog to be activated BEFORE 
-     * any other dialog, otherwise ProgressDialog could request focus after another FocusDialog
-     * but would be nested 'under' (weird).
-	 */
-/*
-	 protected void waitForDialog() {
-		if (progressDialog!=null) {
-//		    while (!progressDialog.isActivated() || !progressDialog.hasFocus()) {
-		    while (!progressDialog.isActivated()) {
-//if(com.mucommander.Debug.ON)
-//System.out.println("FileJob.waitForDialog "+progressDialog.isActivated()+" "+progressDialog.isShowing()+" "+progressDialog.hasFocus());
-		    	try { Thread.sleep(10);
-		    	} catch(InterruptedException e) {}
-			}
-		}
-	}
-*/
-
     /**
 	 * Asks to stop file job's thread.
 	 */	
@@ -152,15 +157,15 @@ public abstract class FileJob implements Runnable {
 
 		jobThread = null;
 		// Resume auto-refresh if auto-refresh has been paused
-		if(this instanceof FileModifier) {
-			mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(true);
-			mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(true);
-		}
+//		if(this instanceof FileModifier) {
+		mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(true);
+		mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(true);
+//		}
 	}
-
+	
 	
 	/**
-	 * This method should be called once after the job has been stopped
+	 * This method should be called once, after the job has been stopped
 	 */
 	public void cleanUp() {
 		// Dispose associated progress dialog
@@ -194,6 +199,62 @@ public abstract class FileJob implements Runnable {
 
 
 	/**
+	 * Advances file index. This method should be called by subclasses whenever the job
+	 * starts processing a new file.
+	 */
+	protected void nextFile(AbstractFile file) {
+		this.currentFile = file;
+		if(file.getParent().equals(baseSourceFolder))
+			currentFileIndex++;
+	}
+
+	
+	/**
+	 * Returns some info about the file currently being processed, for example : "test.zip" (14KB)
+	 */
+	protected String getCurrentFileInfo() {
+		// Update current file information used by status string
+		if(currentFile==null)
+			return "";
+		return "\""+currentFile.getName()+"\" ("+SizeFormatter.format(currentFile.getSize(), SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
+	}
+	
+	
+	/**
+	 * Actual job is performed in a separate thread.
+	 */
+    public void run() {
+		FileTable activeTable = mainFrame.getLastActiveTable();
+		AbstractFile currentFile;
+		// Loop on all source files
+		for(int i=0; i<nbFiles; i++) {
+			currentFile = (AbstractFile)files.elementAt(i);
+	
+			// Check if the job has been interrupted (stop copying in that case)
+			if(isInterrupted())
+				break;
+			
+			// Process current file
+			processFile(currentFile, baseDestFolder, null);
+			
+			// Unmark file in active table
+			activeTable.setFileMarked(currentFile, false);
+			activeTable.repaint();
+        }
+
+		// Stop job
+        stop();
+		
+        // Refresh tables only if folder is destFolder
+        refreshTableIfFolderEquals(mainFrame.getBrowser1().getFileTable(), baseDestFolder);
+        refreshTableIfFolderEquals(mainFrame.getBrowser2().getFileTable(), baseDestFolder);
+
+		// Clean 
+		cleanUp();
+	}
+
+	
+	/**
 	 * Displays an error dialog with the specified title and message,
 	 * wait for user choice and returns the result.
 	 */
@@ -202,8 +263,8 @@ public abstract class FileJob implements Runnable {
 			title,
 			message,
 			mainFrame,
-			new String[] {SKIP_TEXT, CANCEL_TEXT},
-			new int[]  {SKIP_ACTION, CANCEL_ACTION},
+			new String[] {SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT},
+			new int[]  {SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION},
 			0);
 
 		return waitForUserResponse(dialog);
@@ -224,6 +285,24 @@ public abstract class FileJob implements Runnable {
 	}
 	
 	
+//	/**
+//	 * Shows a dialog which notifies the user that a file already exists in the destination folder
+//	 * under the same name and asks for what to do.
+//	 */
+//    protected int showFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
+//		QuestionDialog dialog = new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
+//		return waitForUserResponse(dialog);
+//	}
+
+	/**
+	 * Creates and returns a dialog which notifies the user that a file already exists in the destination folder
+	 * under the same name and asks for what to do.
+	 */
+    protected FileExistsDialog getFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
+		return new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
+	}
+
+
 	/**
 	 * Refreshes the folder's content of the given file table.
 	 */
@@ -245,6 +324,10 @@ public abstract class FileJob implements Runnable {
 			refreshTable(table);
 	}
 	
+
+	////////////////////////////////////////////
+	// Control methods used by ProgressDialog //
+	////////////////////////////////////////////
 	
 	/**
 	 * Returns <code>true</code> if the file job is finished.
@@ -252,28 +335,15 @@ public abstract class FileJob implements Runnable {
 	public boolean hasFinished() {
 	    return hasStarted && jobThread == null;
 	}
-
 	
     /**
      * Returns the percent of job processed so far.
      */
     public int getTotalPercentDone() {
-//System.out.println("getTotalPercentDone: "+((int)(100*(getCurrentFileIndex()/(float)getNbFiles()))));
-//System.out.println("getTotalPercentDone(2): "+getCurrentFileIndex()+" "+getNbFiles());
         return (int)(100*(getCurrentFileIndex()/(float)getNbFiles()));
     }
 
 	
-	/**
-	 * Shows a dialog which notifies the user that a file already exists in the destination folder
-	 * under the same name and asks for what to do.
-	 */
-    protected int showFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
-		QuestionDialog dialog = new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
-		return waitForUserResponse(dialog);
-	}
-
-
     /**
      * Returns the number of bytes that have been processed by this job so far.
      */
@@ -281,14 +351,14 @@ public abstract class FileJob implements Runnable {
 		return nbBytesProcessed;
 	}
 
-    /**
-	 * Returns the number of bytes reported by {@link #getTotalBytesProcessed() getTotalBytesProcessed}
-	 * which have been skipped, for example when resuming a file transfer. This information must be
-	 * taken into account when calculating transfer speed.
-     */
-    public long getTotalBytesSkipped() {
-		return nbBytesSkipped;
-	}
+//    /**
+//	 * Returns the number of bytes reported by {@link #getTotalBytesProcessed() getTotalBytesProcessed}
+//	 * which have been skipped, for example when resuming a file transfer. This information must be
+//	 * taken into account when calculating transfer speed.
+//     */
+//    public long getTotalBytesSkipped() {
+//		return nbBytesSkipped;
+//	}
 	
 	
     /**
@@ -298,25 +368,31 @@ public abstract class FileJob implements Runnable {
         return currentFileIndex==-1?0:currentFileIndex;
     }
 
-	/**
-	 * Advances file index. This method should be called by subclasses whenever the job
-	 * starts processing a new file.
-	 */
-	protected void nextFile(AbstractFile file) {
-		this.currentFile = file;
-		if(file.getParent().equals(baseSourceFolder))
-			currentFileIndex++;
-	}
-	
-
-	/**
-	 * Returns a String describing what's currently being done (e.g. "Deleting file test.zip")
-	 */
-	public abstract String getStatusString();
-
     /**
      * Returns the number of file that this job contains.
      */
-    public abstract int getNbFiles();
+    public int getNbFiles() {
+        return nbFiles;
+	}
+
+	
+	//////////////////////
+	// Abstract methods //
+	//////////////////////
+
+	/**
+	 * Automatically called by {@link #run() run()} for each file that needs to be processed.
+	 *
+	 * @param file the file or folder to copy
+	 * @param destFolder the destination folder
+	 * @param recurseParams array of parameters which can be used when calling this method recursively, contains <code>null</code> when called by {@link #run() run()}
+	 */
+    protected abstract void processFile(AbstractFile file, AbstractFile destFolder, Object[] recurseParams);
+
+	
+	/**
+	 * Returns a String describing the file what is currently being done.
+	 */
+	public abstract String getStatusString();
 	
 }

@@ -2,108 +2,96 @@
 package com.mucommander.job;
 
 import com.mucommander.file.*;
+
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.FileExistsDialog;
-import com.mucommander.text.SizeFormatter;
+
 import com.mucommander.text.Translator;
 
-import java.io.*;
 import java.util.Vector;
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.text.NumberFormat;
+
+import java.io.IOException;
+
 
 /**
- * This class is responsible for moving recursively a group of files.
+ * This job recursively moves a group of files.
+ *
+ * @author Maxence Bernard
  */
-public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
+public class MoveJob extends ExtendedFileJob implements Runnable {
 
-	private Vector filesToMove;
+	/** New filename in destination */
 	private String newName;
-	private AbstractFile baseDestFolder;
 
-	/** Current file info (path) */
-	private String currentFileInfo = "";
+	/** Default choice when encountering an existing file */
+	private int defaultFileExistsChoice = -1;
 
-	/** Index of file currently being moved */
-	private int currentFileIndex;
-
-    /** Size of current file */
-    private long currentFileSize;
-
-    /** Number of bytes of current file that have been processed */
-    private long currentFileProcessed;
-    
-    /** Number of bytes processed so far */
-    private long nbBytesProcessed;
-
-    /** Number of files that this job contains */
-    private int nbFiles;
-	
-	private boolean skipAll;
-	private boolean overwriteAll;
-	private boolean appendAll;
-	private boolean overwriteAllOlder;
-
-	private final static int CANCEL_ACTION = 0;
-	private final static int SKIP_ACTION = 1;
-
-	private final static String CANCEL_TEXT = Translator.get("cancel");
-	private final static String SKIP_TEXT = Translator.get("skip");
-	
+	/** Title used for error dialogs */
+	private String errorDialogTitle;
 	
     /**
-	 * @param newName in case where filesToMove contains a single file, newName can be used to rename the file in the
-	 * destination folder. Otherwise, a null is passed.
+	 * Creates a new MoveJob without starting it.
+	 *
+	 * @param progressDialog dialog which shows this job's progress
+	 * @param mainFrame mainFrame this job has been triggered by
+	 * @param files files which are going to be moved
+	 * @param destFolder destination folder where the files will be moved
+	 * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
 	 */
-	public MoveJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToMove, String newName, AbstractFile destFolder) {
-//System.out.println("MOVE JOB: "+ " "+ filesToMove + " "+ destFolder.getAbsolutePath());
-		super(progressDialog, mainFrame);
+	public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName) {
+		super(progressDialog, mainFrame, files, destFolder);
 
-		this.filesToMove = filesToMove;
-        this.nbFiles = filesToMove.size();
 		this.newName = newName;
-		this.baseDestFolder = destFolder;
+		this.errorDialogTitle = Translator.get("move_dialog.error_title");
 	}
 
-	/**
-	 * Moves recursively a file to a destination folder.
-	 * @return <code>true</code> if the file was completely moved.
-	 */
-    private boolean moveRecurse(AbstractFile file, AbstractFile destFolder, String newName) {
+	
+	/////////////////////////////////////
+	// Abstract methods Implementation //
+	/////////////////////////////////////
 
+    protected boolean processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
 		if(isInterrupted())
             return false;
+		
+		// Notify job that we're starting to process this file
+		nextFile(file);
 
-//        if(level==0) {
-            currentFileProcessed = 0;
-            currentFileSize = file.getSize();
-//        }
+		// Is current file at the base folder level ?
+		boolean isFileInBaseFolder = file.getParent().equals(baseSourceFolder);
 
+		// Determine filename in destination
 		String originalName = file.getName();
-		String destFileName = (newName==null?originalName:newName);
-		String destFilePath = destFolder.getAbsolutePath(true)
-        	+destFileName;
+		String destFileName;
+		if(isFileInBaseFolder && newName!=null)
+			destFileName = newName;
+       	else
+			destFileName = originalName;
+		
+		// Destination file
+		AbstractFile destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+destFileName);
 
-		currentFileInfo = "\""+originalName+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
-
-		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
 
 		// Do not follow symlink, simply delete it
 		if(file.isSymlink()) {
-        	try  {
-				file.delete();
-        		return true;
-			}
-        	catch(IOException e) {
-        	    int ret = showErrorDialog("Unable to delete symlink "+file.getAbsolutePath());
-        	    if(ret==-1 || ret==CANCEL_ACTION) 		// CANCEL_ACTION or close dialog
-        	        stop();
-       	        return false;
-        	}
+			do {		// Loop for retry
+				try  {
+					file.delete();
+					return true;
+				}
+				catch(IOException e) {
+					int ret = showErrorDialog("Unable to delete symlink "+file.getAbsolutePath());
+					// Retry : loop
+					if(ret==RETRY_ACTION)
+						continue;
+					// Cancel or close dialog : stop job and return
+					else if(ret==-1 || ret==CANCEL_ACTION)
+						stop();
+				}
+				return false;
+			} while(true);
 		}
 		// Move directory recursively
 		else if(file.isDirectory()) {
@@ -114,98 +102,112 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 
             // creates the folder in the destination folder if it doesn't exist
 			if(!(destFile.exists() && destFile.isDirectory())) {
-				try {
-					destFolder.mkdir(destFileName);
-				}
-            	catch(IOException e) {
-                	int ret = showErrorDialog("Unable to create folder "+destFile.getAbsolutePath());
-                	if(ret==-1 || ret==CANCEL_ACTION) 		// CANCEL_ACTION or close dialog
-	                    stop();
-        	        return false;		// abort and return failure
-            	}
+				do {		// Loop for retry
+					try {
+						destFolder.mkdir(destFileName);
+					}
+					catch(IOException e) {
+						int ret = showErrorDialog("Unable to create folder "+destFile.getAbsolutePath());
+						// Retry : loop
+						if(ret==RETRY_ACTION)
+							continue;
+						// Cancel or close dialog : stop job and return
+						else if(ret==-1 || ret==CANCEL_ACTION)
+							stop();
+						return false;		// abort and return failure
+					}
+				} while(true);
 			}
 			
 			// move each file in this folder recursively
-            try {
-                AbstractFile subFiles[] = file.ls();
-                boolean isFolderEmpty = true;
-				for(int i=0; i<subFiles.length && !isInterrupted(); i++)
-                    if(!moveRecurse(subFiles[i], destFile, null))
-						isFolderEmpty = false;
-            	// If one file could returned failure, return failure as well since this
-				// folder could not be moved totally
-				if(!isFolderEmpty)
-					return false;
-			}
-            catch(IOException e) {
-                int ret = showErrorDialog("Unable to read contents of folder "+file.getAbsolutePath());
-                if(ret==-1 || ret==CANCEL_ACTION) 		// CANCEL_ACTION or close dialog
-                    stop();
-                return false;			// abort and return failure
-            }
-			
+			do {		// Loop for retry
+				try {
+					AbstractFile subFiles[] = file.ls();
+					boolean isFolderEmpty = true;
+					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
+						if(!moveRecurse(subFiles[i], destFile, null))
+							isFolderEmpty = false;
+					// If one file could returned failure, return failure as well since this
+					// folder could not be moved totally
+					if(!isFolderEmpty)
+						return false;
+				}
+				catch(IOException e) {
+					int ret = showErrorDialog("Unable to read contents of folder "+file.getAbsolutePath());
+					// Retry : loop
+					if(ret==RETRY_ACTION)
+						continue;
+					// Cancel or close dialog : stop job and return
+					else if(ret==-1 || ret==CANCEL_ACTION)
+						stop();
+					return false;		// abort and return failure
+				}
+			} while(true);
+
 			
 			// and finally deletes the empty folder
-        	try  {
-				file.delete();
-        		return true;
-			}
-        	catch(IOException e) {
-        	    int ret = showErrorDialog("Unable to delete folder "+file.getAbsolutePath());
-        	    if(ret==-1 || ret==CANCEL_ACTION) 		// CANCEL_ACTION or close dialog
-        	        stop();
-       	        return false;
-        	}
-			
+			do {		// Loop for retry
+				try  {
+					file.delete();
+					return true;
+				}
+				catch(IOException e) {
+					int ret = showErrorDialog("Unable to delete folder "+file.getAbsolutePath());
+					if(ret==RETRY_ACTION)
+						continue;
+					// Cancel or close dialog : stop job and return
+					else if(ret==-1 || ret==CANCEL_ACTION)
+						stop();
+					return false;		// abort and return failure
+				}
+			} while(true);
 		}
 		// Move file
         else  {
-//System.out.println("SOURCE: "+file.getAbsolutePath()+"\nDEST: "+destFilePath);
 			boolean append = false;
 
-	        // Tests if the file exists
-	        // and resolves a potential conflicting situation
-	        if (destFile.exists())  {
-	        	if(skipAll)
-					return false;
-				else if(overwriteAll);
-				else if(appendAll)
-					append = true;
-				else if (overwriteAllOlder) {
-					if(file.getDate()<destFile.getDate())
-						return false;
+			// Tests if the file already exists in destination
+			// and if it does, ask the user what to do or
+			// use a previous user global answer.
+			if (destFile.exists())  {
+				int choice;
+				// No default choice
+				if(defaultFileExistsChoice==-1) {
+					FileExistsDialog dialog = getFileExistsDialog(file, destFile);
+					choice = waitForUserResponse(dialog);
+					// If 'apply to all' was selected, this choice will be used
+					// for any files that already exist  (user will not be asked again)
+					if(dialog.applyToAllSelected())
+						defaultFileExistsChoice = choice;
 				}
-				else {	
-					int ret = showFileExistsDialog(file, destFile);
+				// Use previous choice
+				else
+					choice = defaultFileExistsChoice;
 				
-		        	if (ret==-1 || ret==FileExistsDialog.CANCEL_ACTION) {
-		        		stop();                
-		        		return false;
-		        	}
-		        	else if (ret==FileExistsDialog.SKIP_ACTION) {
-		        		return false;
-		        	}
-					else if (ret==FileExistsDialog.APPEND_ACTION) {
-		        		append = true;
-					}
-					else if (ret==FileExistsDialog.SKIP_ALL_ACTION) {
-	        			skipAll = true;
-						return false;
-	        		}
-					else if (ret==FileExistsDialog.OVERWRITE_ALL_ACTION) {
-						overwriteAll = true;
-					}
-					else if (ret==FileExistsDialog.APPEND_ALL_ACTION) {
-	        			appendAll = true;
-						append = true;
-					}	
-					else if (ret==FileExistsDialog.OVERWRITE_ALL_OLDER_ACTION) {
-						overwriteAllOlder = true;
-						if(file.getDate()<destFile.getDate())
-							return false;
-					}
+				// Cancel job
+				if (choice==-1 || choice==FileExistsDialog.CANCEL_ACTION) {
+					stop();
+					return false;
 				}
-	        }
+				// Skip file
+				else if (choice==FileExistsDialog.SKIP_ACTION) {
+					return false;
+				}
+				// Append to file (resume file copy)
+				else if (choice==FileExistsDialog.APPEND_ACTION) {
+					append = true;
+				}
+				// Overwrite file 
+				else if (choice==FileExistsDialog.OVERWRITE_ACTION) {
+					// Do nothing, simply continue
+				}
+				//  Overwrite file if destination is older
+				else if (choice==FileExistsDialog.OVERWRITE_IF_OLDER_ACTION) {
+					// Overwrite if file is newer (stricly)
+					if(file.getDate()<=destFile.getDate())
+						return false;
+				}
+			}
 			
 			// Let's try the easy way			
 			if(!append && fileMove(file, destFile))
@@ -218,6 +220,8 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 			InputStream in = null;
 			
 			boolean moved = false;
+
+			
 			// true if file was moved successfully
 			boolean retValue = false;
 			try  {
@@ -271,9 +275,150 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 		
 			return retValue;
 		}
+
+/*
+		// Do nothing if file is a symlink (skip file)
+		if(file.isSymlink())
+			;
+		// Copy directory recursively
+        else if(file.isDirectory()) {
+            // Create the folder in the destination folder if it doesn't exist
+			if(!(destFile.exists() && destFile.isDirectory())) {
+				// Loop for retry
+				do {
+					try {
+						destFolder.mkdir(destFileName);
+					}
+					catch(IOException e) {
+						// Unable to create folder
+						int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFileName));
+						// Retry : loop
+						if(ret==RETRY_ACTION)
+							continue;
+						// Cancel or close dialog : stop job and return
+						else if(ret==-1 || ret==CANCEL_ACTION)		
+							stop();
+						return;		// Return for skip and cancel
+					}
+					break;
+				} while(true);
+			}
+			
+			// and copy each file in this folder recursively
+			do {		// Loop for retry
+				try {
+					// for each file in folder...
+					AbstractFile subFiles[] = file.ls();
+					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
+						processFile(subFiles[i], destFile, null);
+				}
+				catch(IOException e) {
+					// Unable to open source file
+					int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", destFile.getName()));
+					// Retry : loop
+					if(ret==RETRY_ACTION)
+						continue;
+					// Cancel or close dialog : stop job and return
+					else if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
+						stop();
+					// Do nothing for skip
+				}
+				break;
+			} while(true);
+        }
+		// Copy file
+        else  {
+			boolean append = false;
+			
+			// Tests if the file already exists in destination
+			// and if it does, ask the user what to do or
+			// use a previous user global answer.
+			if (destFile.exists())  {
+				int choice;
+				// No default choice
+				if(defaultFileExistsChoice==-1) {
+					FileExistsDialog dialog = getFileExistsDialog(file, destFile);
+					choice = waitForUserResponse(dialog);
+					// If 'apply to all' was selected, this choice will be used
+					// for any files that already exist  (user will not be asked again)
+					if(dialog.applyToAllSelected())
+						defaultFileExistsChoice = choice;
+				}
+				// Use previous choice
+				else
+					choice = defaultFileExistsChoice;
+				
+				// Cancel job
+				if (choice==-1 || choice==FileExistsDialog.CANCEL_ACTION) {
+					stop();
+					return;
+				}
+				// Skip file
+				else if (choice==FileExistsDialog.SKIP_ACTION) {
+					return;
+				}
+				// Append to file (resume file copy)
+				else if (choice==FileExistsDialog.APPEND_ACTION) {
+					append = true;
+				}
+				// Overwrite file 
+				else if (choice==FileExistsDialog.OVERWRITE_ACTION) {
+					// Do nothing, simply continue
+				}
+				//  Overwrite file if destination is older
+				else if (choice==FileExistsDialog.OVERWRITE_IF_OLDER_ACTION) {
+					// Overwrite if file is newer (stricly)
+					if(file.getDate()<=destFile.getDate())
+						return;
+				}
+			}
+			
+			// Copy file to destination
+			do {				// Loop for retry
+				try {
+					copyFile(file, destFile, append);
+				}
+				catch(FileJobException e) {
+					// Copy failed
+					if(com.mucommander.Debug.ON)
+						System.out.println(""+e);
+					
+					int reason = e.getReason();
+					String errorMsg;
+					switch(reason) {
+						// Could not open source file for read
+						case FileJobException.CANNOT_OPEN_SOURCE:
+							errorMsg = Translator.get("cannot_read_source", file.getName());
+							break;
+						// Could not open destination file for write
+						case FileJobException.CANNOT_OPEN_DESTINATION:
+							errorMsg = Translator.get("cannot_write_destination", file.getName());
+							break;
+						// An error occurred during file transfer
+						case FileJobException.ERROR_WHILE_TRANSFERRING:
+						default:
+							errorMsg = Translator.get("error_while_transferring", file.getName());
+							break;
+					}
+					
+					// Ask the user what to do
+					int ret = showErrorDialog(errorDialogTitle, errorMsg);
+					if(ret==RETRY_ACTION) {
+						// Resume transfer
+						if(reason==FileJobException.ERROR_WHILE_TRANSFERRING)
+							append = true;
+						continue;
+					}
+					else if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
+						stop();
+				}
+				break;
+			} while(true);
+		}
+*/
 	}
 
-
+	
 	/**
 	 * Tries to move the file with AbstractFile.moveTo() 
 	 * skipping the whole manual recursive process
@@ -290,90 +435,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 	}
 
 	
-    private int showErrorDialog(String message) {
-		QuestionDialog dialog = new QuestionDialog(progressDialog, "Move error", message, mainFrame, 
-			new String[] {SKIP_TEXT, CANCEL_TEXT},
-			new int[]  {SKIP_ACTION, CANCEL_ACTION},
-			0);
-
-	    return waitForUserResponse(dialog);
-    }
-
-	
-    public void run() {
-		FileTable activeTable = mainFrame.getLastActiveTable();
-        AbstractFile currentFile;
-		while (!isInterrupted()) {
-            currentFile = (AbstractFile)filesToMove.elementAt(currentFileIndex);
-			
-			// if current file or folder was successfully moved, exclude it from the file table
-			if (moveRecurse(currentFile, baseDestFolder, newName))
-				activeTable.excludeFile(currentFile);
-			// else unmark it
-			else
-				activeTable.setFileMarked(currentFile, false);
-			activeTable.repaint();
-			
-			// This ensures that currentFileIndex is never out of bounds
-			if(currentFileIndex<nbFiles-1)
-                currentFileIndex++;
-            else break;
-        }
-
-        stop();
-		
-		try {
-		    activeTable.refresh();
-		}
-		catch(IOException e) {
-			// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
-			// like switching to a root folder        
-		}
-
-		// Refreshes only if table's folder is destFolder
-		FileTable unactiveTable = mainFrame.getUnactiveTable();
-		if (unactiveTable.getCurrentFolder().equals(baseDestFolder))
-			try {
-				unactiveTable.refresh();
-			}
-			catch(IOException e) {
-				// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
-				// like switching to a root folder        
-			}
-
-//		activeTable.requestFocus();
-//        new FocusRequester(activeTable).requestFocus();
-
-		cleanUp();
-	}
-
-
-	/*******************************************
-	 *** ExtendedFileJob implemented methods ***
-	 *******************************************/
-
-    public long getTotalBytesProcessed() {
-        return nbBytesProcessed;
-    }
-
-    public int getCurrentFileIndex() {
-        return currentFileIndex;
-    }
-
-    public int getNbFiles() {
-        return nbFiles;
-    }
-    
-    public long getCurrentFileBytesProcessed() {
-        return currentFileProcessed;
-    }
-
-    public long getCurrentFileSize() {
-        return currentFileSize;
-    }
-    
     public String getStatusString() {
-		return "Moving "+currentFileInfo;
+        return Translator.get("move.moving_file", getCurrentFileInfo());
     }
-
-}	
+}

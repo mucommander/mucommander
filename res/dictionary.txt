@@ -64,6 +64,9 @@ warning:FR:Avertissement
 skip:EN:Skip
 skip:FR:Suivant
 
+retry:EN:Retry
+retry:FR:Réessayer
+
 append:EN:Append
 append:FR:Ajouter a la fin
 
@@ -71,10 +74,19 @@ overwrite:EN:Overwrite
 overwrite:FR:Remplacer
 
 overwrite_if_older:EN:Overwrite if older
-overwrite_if_older:FR:Remplacer ancien
+overwrite_if_older:FR:Remplacer si ancien
 
 apply_to_all:EN:Apply to all
 apply_to_all:FR:Appliquer à tous
+
+cannot_read_source:EN:Cannot read file %1
+cannot_read_source:FR:Erreur lors de la lecture de %1
+
+cannot_write_destination:EN:Cannot write file %1
+cannot_write_destination:FR:Erreur lors de l'écriture de %1
+
+error_while_transferring:EN:Error while transferring file %1
+error_while_transferring:FR:Erreur lors du transfert de %1
 
 
 #############
@@ -344,8 +356,8 @@ version_dialog.no_new_version:FR:Félicitations, vous avez déjà la dernière v
 version_dialog.new_version_title:EN:New version available
 version_dialog.new_version_title:FR:Nouvelle version disponible
 
-version_dialog.new_version:EN:There is a new version of muCommander available.
-version_dialog.new_version:FR:Il y a une nouvelle version de muCommander disponible.
+version_dialog.new_version:EN:A new version of muCommander is available.
+version_dialog.new_version:FR:Une nouvelle version de muCommander est disponible.
 
 version_dialog.new_version_url:EN:There is a new version of muCommander available at %1
 version_dialog.new_version_url:FR:Il y a une nouvelle version de muCommander disponible à %1
@@ -420,7 +432,7 @@ unzip.unzipping_file:EN:Unzipping %1
 unzip.unzipping_file:FR:Décompression de %1 en cours
 
 unzip.unable_to_open_zip:EN:Unable to open zip file %1.
-unzip.unable_to_open_zip:FR:Impossible d'ouvrir l'archive %1.
+unzip.unable_to_open_zip:FR:Erreur lors de l'ouverture du fichier zip %1.
 
 
 ########
@@ -449,6 +461,9 @@ move_dialog.cannot_move_to_itself:FR:Impossible de déplacer le dossier de desti
 
 move_dialog.moving:EN:Moving files
 move_dialog.moving:FR:Déplacement en cours
+
+move.moving_file:EN:Moving %1
+move.moving_file:FR:Déplacement de %1 en cours
 
 
 #################
