@@ -15,7 +15,7 @@ public class TextViewer extends FileViewer {
 	private String encoding;
 	
 	public TextViewer() {
-		this.encoding = ConfigurationManager.getVariable("prefs.text_viewer.last_encoding");
+		this.encoding = ConfigurationManager.getVariable("prefs.text_viewer.last_encoding", "utf-8");
 	}
 	
 	public void startViewing(AbstractFile fileToView, boolean isSeparateWindow) throws IOException {
