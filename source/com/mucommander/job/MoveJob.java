@@ -93,7 +93,7 @@ public class MoveJob extends ExtendedFileJob {
 		AbstractFile destFolder = recurseParams==null?baseDestFolder:(AbstractFile)recurseParams;
 		
 		// Is current file at the base folder level ?
-		boolean isFileInBaseFolder = file.getParent().equals(baseSourceFolder);
+		boolean isFileInBaseFolder = files.indexOf(file)!=-1;
 
 		// Determine filename in destination
 		String originalName = file.getName();

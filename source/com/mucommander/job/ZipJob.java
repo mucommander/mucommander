@@ -50,7 +50,6 @@ public class ZipJob extends ExtendedFileJob {
 		this.destFile = destFile;
 		this.zipComment = zipComment;
 
-//		this.baseFolderPath = ((AbstractFile)filesToZip.elementAt(0)).getParent().getAbsolutePath();
 		this.baseFolderPath = baseSourceFolder.getAbsolutePath();
 		this.errorDialogTitle = Translator.get("zip_dialog.error_title");
 	}

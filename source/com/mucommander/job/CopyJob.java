@@ -85,8 +85,8 @@ public class CopyJob extends ExtendedFileJob {
 		// Destination folder
 		AbstractFile destFolder = recurseParams==null?baseDestFolder:(AbstractFile)recurseParams;
 		
-		// Is current file at the base folder level ?
-		boolean isFileInBaseFolder = file.getParent().equals(baseSourceFolder);
+		// Is current file in base folder ?
+		boolean isFileInBaseFolder = files.indexOf(file)!=-1;
 
 		// If in unzip mode, unzip base source folder's zip files
 		if(mode==UNZIP_MODE && isFileInBaseFolder) {

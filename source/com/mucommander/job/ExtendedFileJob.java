@@ -29,9 +29,6 @@ public abstract class ExtendedFileJob extends FileJob {
 	/** Size that should be allocated to read buffer */
 	protected final static int READ_BLOCK_SIZE = 8192;
 
-	/** True if current file is at the top of the source/dest folder */
-	protected boolean topLevelFile;
-	
 	
 	/**
 	 * Creates a new ExtendedFileJob.
@@ -222,11 +219,9 @@ if(com.mucommander.Debug.ON) e3.printStackTrace();
 	 * Advances file index and resets file bytes counter. This method should be called by subclasses whenever the job
 	 * starts processing a new file.
 	 */
-	protected boolean nextFile(AbstractFile file) {
-		topLevelFile = super.nextFile(file);
+	protected void nextFile(AbstractFile file) {
+		super.nextFile(file);
 		currentFileProcessed = 0;
-	
-		return topLevelFile;
 	}
 
 
@@ -237,7 +232,9 @@ if(com.mucommander.Debug.ON) e3.printStackTrace();
     public int getTotalPercentDone() {
         float nbFilesProcessed = getCurrentFileIndex();
 		
-		if(currentFile!=null && topLevelFile && !currentFile.isDirectory()) {
+		// If file is in base folder and is not a directory
+		if(currentFile!=null && files.indexOf(currentFile)!=-1 && !currentFile.isDirectory()) {
+			// Take into account current file's progress
 			long currentFileSize = currentFile.getSize();
 			if(currentFileSize>0)
 				nbFilesProcessed += getCurrentFileBytesProcessed()/(float)currentFileSize;

@@ -60,9 +60,6 @@ public abstract class FileJob implements Runnable {
 	/** Base source folder */
 	protected AbstractFile baseSourceFolder;
 	
-//	/** Base destination folder */
-//	protected AbstractFile baseDestFolder;
-
 	/** Files which are going to be processed */
 	protected Vector files;
 
@@ -72,9 +69,6 @@ public abstract class FileJob implements Runnable {
 	
     /** Number of bytes processed so far, see {@link #getTotalBytesProcessed() getTotalBytesProcessed} */
     protected long nbBytesProcessed;
-
-//    /** Number of bytes skipped so far, see {@link #getTotalBytesSkipped() getTotalBytesSkipped} */
-//    protected long nbBytesSkipped;
 
 	/** Index of file currently being processed, see {@link #getCurrentFileIndex() getCurrentFileIndex} */
 	protected int currentFileIndex = -1;
@@ -96,14 +90,6 @@ public abstract class FileJob implements Runnable {
 	protected final static String CANCEL_TEXT = Translator.get("cancel");
 	protected final static String APPEND_TEXT = Translator.get("append");
 	
-//	// getRefreshPolicy() return values
-//	/** This job is 'read-only' and does not modify the folder's content */
-//	protected final static int DO_NOT_REFRESH = 0;
-//	/** This job only modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()} */
-//	protected final static int REFRESH_DESTINATION_FOLDER = 1;
-//	/** This job modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()} and its subfolders */
-//	protected final static int REFRESH_DESTINATION_SUBFOLDERS = 2;
-
 	
     /**
 	 * Creates a new FileJob without starting it.
@@ -231,27 +217,10 @@ public abstract class FileJob implements Runnable {
 	 * Changes current file. This method should be called by subclasses whenever the job
 	 * starts processing a new file other than a top-level file, i.e. one that was passed
 	 * as an argument to {@link #processFile(AbstractFile, Object) processFile()}.
-	 * ({#nextFile(AbstractFile) nextFile()} is automatically called for top-level files).
-	 *
-	 * @return true if the given file belongs to the base source folder. 
+	 * ({#nextFile(AbstractFile) nextFile()} is automatically called for files in base folder).
 	 */
-	protected boolean nextFile(AbstractFile file) {
-		// Is given file a child of baseSourceFolder or a file with a totally different path as it can be the case with HTTP folders which
-		// can contain files on other sites (for example, http://google.com?q... could link to http://apple.com/...
-		// and apple.com latter would appear as a child of google.com
-		AbstractFile parent = file.getParent();
-		boolean baseSourceFile = (parent==null || parent.equals(baseSourceFolder) || !file.getAbsolutePath().startsWith(baseSourceFolder.getAbsolutePath()));
-
-		// Return if file is already being processed
-		if(this.currentFile!=null && this.currentFile.equals(file))
-			return baseSourceFile;
-		
-		// Advance index only if file is a child of baseSourceFolder
+	protected void nextFile(AbstractFile file) {
 		this.currentFile = file;
-		if(baseSourceFile)
-			currentFileIndex++;
-	
-		return baseSourceFile;
 	}
 
 	
@@ -316,6 +285,7 @@ public abstract class FileJob implements Runnable {
 			currentFile = (AbstractFile)files.elementAt(i);
 	
 			// Change current file and advance file index
+			currentFileIndex = i;
 			nextFile(currentFile);
 			
 			// Process current file
