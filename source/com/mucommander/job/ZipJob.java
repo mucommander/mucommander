@@ -8,10 +8,6 @@ import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.text.SizeFormatter;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
 import java.io.*;
 import java.util.zip.*;
 import java.util.Vector;
@@ -20,8 +16,8 @@ import java.util.Vector;
  * This FileJob is responsible for compressing a group files in the zip format.
  */
 public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
+
     private Vector filesToZip;
-    private MainFrame mainFrame;
 	private ZipOutputStream zipOut;
 	private AbstractFile destFolder;
 	private String currentFileInfo = "";
@@ -56,7 +52,6 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 		
 		this.filesToZip = filesToZip;
         this.nbFiles = filesToZip.size();
-        this.mainFrame = mainFrame;
 		this.zipOut = new ZipOutputStream(zipOut);
 		this.destFolder = destFolder;
 
@@ -66,30 +61,6 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 		this.baseFolderPath = ((AbstractFile)filesToZip.elementAt(0)).getParent().getAbsolutePath();
 	}
 
-
-    public long getTotalBytesProcessed() {
-		return nbBytesProcessed;
-    }
-
-    public int getCurrentFileIndex() {
-        return currentFileIndex;
-    }
-
-    public int getNbFiles() {
-        return nbFiles;
-    }
-    
-    public long getCurrentFileBytesProcessed() {
-        return currentFileProcessed;
-    }
-
-    public long getCurrentFileSize() {
-        return currentFileSize;
-    }
-
-    public String getStatusString() {
-		return "Adding "+currentFileInfo;
-    }
 
     private int showErrorDialog(String message) {
 		QuestionDialog dialog = new QuestionDialog(progressDialog, "Zip error", message, mainFrame,
@@ -204,4 +175,35 @@ public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
 //		mainFrame.getLastActiveTable().requestFocus();
 		cleanUp();
 	}
+
+
+
+	/*******************************************
+	 *** ExtendedFileJob implemented methods ***
+	 *******************************************/
+
+	 public long getTotalBytesProcessed() {
+		return nbBytesProcessed;
+    }
+
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
+    }
+
+    public int getNbFiles() {
+        return nbFiles;
+    }
+    
+    public long getCurrentFileBytesProcessed() {
+        return currentFileProcessed;
+    }
+
+    public long getCurrentFileSize() {
+        return currentFileSize;
+    }
+
+    public String getStatusString() {
+		return "Adding "+currentFileInfo;
+    }
+
 }	

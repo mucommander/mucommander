@@ -10,12 +10,11 @@ import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.text.SizeFormatter;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
 import java.io.IOException;
 import java.util.Vector;
+
+import javax.swing.*;
+
 
 /**
  * This class is responsible for deleting recursively a group of files.
@@ -32,7 +31,6 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 	private int currentFileIndex;
 	private String currentFileInfo = "";
     
-    private MainFrame mainFrame;
 	private String baseFolderPath;
 
 	private final static int DELETE_LINK_ACTION = 0;
@@ -51,7 +49,6 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 
 		this.filesToDelete = filesToDelete;
 		this.nbFiles = filesToDelete.size();
-        this.mainFrame = mainFrame;
 	
 		this.baseFolderPath = ((AbstractFile)filesToDelete.elementAt(0)).getParent().getAbsolutePath();
 	}
@@ -134,23 +131,6 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
         }
     }
 
-
-    public int getNbFiles() {
-        return nbFiles;
-    }
-
-    public int getCurrentFileIndex() {
-        return currentFileIndex;
-    }
-
-    public long getTotalBytesProcessed() {
-        return -1;
-    }
-
-    public String getStatusString() {
-		return "Deleting "+currentFileInfo;
-    }
-	
 	
     private int showErrorDialog(String message) {
 		QuestionDialog dialog = new QuestionDialog(progressDialog, "Delete error", message, mainFrame,
@@ -250,4 +230,27 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 //if(com.mucommander.Debug.ON) System.out.println("DeleteJob: #6");
 		
 	}
+
+
+	/***********************************
+	 *** FileJob implemented methods ***
+	 ***********************************/
+
+    public int getNbFiles() {
+        return nbFiles;
+    }
+
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
+    }
+
+    public long getTotalBytesProcessed() {
+        return -1;
+    }
+
+    public String getStatusString() {
+		return "Deleting "+currentFileInfo;
+    }
+	
+
 }	

@@ -5,6 +5,9 @@ import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.FocusRequester;
+import com.mucommander.ui.FileExistsDialog;
+
+import com.mucommander.file.AbstractFile;
 
 
 /**
@@ -184,6 +187,7 @@ public abstract class FileJob implements Runnable {
 	    return hasStarted && jobThread == null;
 	}
 
+	
     /**
      * Returns the percent of job processed so far.
      */
@@ -191,6 +195,16 @@ public abstract class FileJob implements Runnable {
         return (int)(100*(getCurrentFileIndex()/(float)getNbFiles()));
     }
 
+	
+	/**
+	 * Shows a dialog which notifies the user that a file already exists in the destination folder
+	 * under the same name.
+	 */
+    protected int showFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
+		QuestionDialog dialog = new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
+		return waitForUserResponse(dialog);
+	}
+	
 
     /**
      * Returns the number of file that this job contains.
@@ -198,7 +212,7 @@ public abstract class FileJob implements Runnable {
     public abstract int getNbFiles();
 
     /**
-     * Returns the index of the file currently being processed (has to be <getNbFile()).
+     * Returns the index of the file currently being processed (has to be < getNbFile()).
      */
     public abstract int getCurrentFileIndex();
 

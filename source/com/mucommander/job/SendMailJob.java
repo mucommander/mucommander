@@ -8,18 +8,19 @@ import com.mucommander.ui.ProgressDialog;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.text.SizeFormatter;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
 import java.io.*;
 import java.util.Vector;
 import java.util.StringTokenizer;
 import java.net.Socket;
 
+import javax.swing.*;
+
+
+/**
+ * This job sends one or several files by email.
+ */
 public class SendMailJob extends ExtendedFileJob {
 
-    private MainFrame mainFrame;
     private Vector filesToSend;
     private MIMEBase64Encoder base64Encoder;
 
@@ -58,14 +59,10 @@ public class SendMailJob extends ExtendedFileJob {
     /** Number of files that this job contains */
     private int nbFiles;
     
-    private final static int OK_ACTION = 0;
-    private final static int OK_MNEMONIC = KeyEvent.VK_O;
-    private final static String OK_CAPTION = "OK";
-    
+	
     public SendMailJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToSend, String recipientString, String mailSubject, String mailBody) {
         super(progressDialog, mainFrame);
 
-        this.mainFrame = mainFrame;
         this.filesToSend = filesToSend;
         this.nbFiles = filesToSend.size();
         this.base64Encoder = new MIMEBase64Encoder(this);
@@ -89,39 +86,7 @@ public class SendMailJob extends ExtendedFileJob {
 			&& ConfigurationManager.isVariableSet("prefs.mail.sender_address");
 	}
 
-
-    public long getTotalBytesProcessed() {
-        return nbBytesProcessed + base64Encoder.getTotalRead();
-    }
-
-    public int getCurrentFileIndex() {
-        return currentFileIndex;
-    }
-
-    public int getNbFiles() {
-        return nbFiles;
-    }
-    
-    public long getCurrentFileBytesProcessed() {
-        return connectedToMailServer?base64Encoder.getTotalRead():0;
-    }
-
-    public long getCurrentFileSize() {
-        return currentFileSize;
-    }
-
-
-    /**
-     * Returns a String describing what's currently being done.
-     */
-    public String getStatusString() {
-        AbstractFile currentFile;
-		if(connectedToMailServer)
-            return "Sending "+currentFileInfo;
-        else
-            return "Connecting to "+mailServer;
-    }
-
+	
     public void run() {
         // Open socket connection to the mail server, and say hello
         try {
@@ -195,7 +160,10 @@ public class SendMailJob extends ExtendedFileJob {
 		stop();
     }
 
-    /********* Methods taking care of mail sending *********/
+	
+    /**************************************************
+	 *** Methods taking care of actual mail sending ***
+	 **************************************************/
     
     private void openConnection() throws IOException {
         this.socket = new Socket(mailServer, 25);
@@ -295,5 +263,37 @@ public class SendMailJob extends ExtendedFileJob {
         out.write((s + "\r\n").getBytes("UTF-8"));
         out.flush();
     }
+
+
+	/*******************************************
+	 *** ExtendedFileJob implemented methods ***
+	 *******************************************/
+
+    public long getTotalBytesProcessed() {
+        return nbBytesProcessed + base64Encoder.getTotalRead();
+    }
+
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
+    }
+
+    public int getNbFiles() {
+        return nbFiles;
+    }
     
+    public long getCurrentFileBytesProcessed() {
+        return connectedToMailServer?base64Encoder.getTotalRead():0;
+    }
+
+    public long getCurrentFileSize() {
+        return currentFileSize;
+    }
+
+    public String getStatusString() {
+        AbstractFile currentFile;
+		if(connectedToMailServer)
+            return "Sending "+currentFileInfo;
+        else
+            return "Connecting to "+mailServer;
+    }
 }

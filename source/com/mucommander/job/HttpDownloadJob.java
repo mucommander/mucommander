@@ -4,10 +4,10 @@ package com.mucommander.job;
 import com.mucommander.file.*;
 
 import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.FileExistsDialog;
 
 import com.mucommander.text.SizeFormatter;
 import com.mucommander.text.Translator;
@@ -18,37 +18,21 @@ import java.util.Vector;
 
 
 /**
- * This job copies recursively a group of files.
+ * This job downloads a file over HTTP.
  */
-public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
+public class HttpDownloadJob extends FileJob implements Runnable, FileModifier {
 
-	private Vector filesToCopy;
-	private String newName;
-	private AbstractFile baseDestFolder;
-	private boolean unzip;
+	/** URL of the file to download */
+	private String fileURL;
+	
+	/** Destination folder where the file will be downloaded */
+	private AbstractFile destFolder;
 
-	/** Current file info (path) */
-	private String currentFileInfo = "";
-
-    /** Size of current file */
-    private long currentFileSize;
-
-    /** Number of bytes of current file that have been processed */
-    private long currentFileProcessed;
-    
 	/** Index of file currently being processed */
 	private int currentFileIndex;
 
     /** Number of bytes processed so far */
     private long nbBytesProcessed;
-
-    /** Number of files that this job contains */
-    private int nbFiles;
-    
-	private boolean skipAll;
-	private boolean overwriteAll;
-	private boolean appendAll;
-	private boolean overwriteAllOlder;
 
 	private final static int CANCEL_ACTION = 0;
 	private final static int SKIP_ACTION = 1;
@@ -58,16 +42,14 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 
 	
     /**
-	 * @param indicates if this CopyJob corresponds to an 'unzip' operation.
+	 *
 	 */
-	public CopyJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToCopy, String newName, AbstractFile destFolder, boolean unzip) {
+	public HttpDownloadJob(MainFrame mainFrame, ProgressDialog progressDialog, String fileURL, AbstractFile destFolder) {
 		super(progressDialog, mainFrame);
 
-	    this.filesToCopy = filesToCopy;
-        this.nbFiles = filesToCopy.size();
-		this.baseDestFolder = destFolder;
-		this.newName = newName;
-		this.unzip = unzip;
+		this.fileURL = fileURL;
+		this.destFolder = destFolder;
+
 	}
 
 	
@@ -75,21 +57,17 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 	 * Recursively copies a file or folder.
 	 */
     private void copyRecurse(AbstractFile file, AbstractFile destFolder, String newName) {
+/*
 		if(isInterrupted())
             return;
 
-//        if(level==0) {
-            currentFileProcessed = 0;
-            currentFileSize = file.getSize();        
-//        }
+		currentFileProcessed = 0;
+		currentFileSize = file.getSize();        
 
-//System.out.println("DEST FOLDER "+destFolder.getAbsolutePath());
 		String originalName = file.getName();
 		String destFileName = (newName==null?originalName:newName);
        	String destFilePath = destFolder.getAbsolutePath(true)
        		+destFileName;
-
-//System.out.println("SOURCE "+file.getAbsolutePath()+" DEST "+destFilePath);
 
 		currentFileInfo = "\""+originalName+ "\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
 
@@ -99,7 +77,6 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 		if(file.isSymlink())
 			;
 		// Copy directory recursively
-//        else if(file.isDirectory() || unzip) {
         else if(file.isDirectory()) {
             // creates the folder in the destination folder if it doesn't exist
 			
@@ -131,7 +108,6 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 		// Copy file
         else  {
         	byte buf[] = new byte[READ_BLOCK_SIZE];
-//System.out.println("SOURCE: "+file.getAbsolutePath()+"\nDEST: "+destFilePath);
 			boolean append = false;
 			
 			// Tests if the file exists
@@ -189,13 +165,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
                     while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
 						out.write(buf, 0, read);
                         nbBytesProcessed += read;
-//                        if(level==0)
 						currentFileProcessed += read;
-
-						// currentFileSize can be wrong (for example with HTMLFiles)
-						// currentFileSize = Math.max(currentFileProcessed, currentFileSize);
-//                        if(currentFileSize!=-1)
-//                            currentFilePercent = (int)(100*currentFileProcessed/(float)currentFileSize);
 					}
 				}
 				catch(IOException e) {
@@ -224,12 +194,93 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
         	catch(IOException e) {
         	}
 		}
+*/
     }
 
+	
+	private void downloadFile() {
+		// Determines local file name
+		int slashPos = fileURL.indexOf('/', 7);
+		String fileName = fileURL.substring(7, slashPos==-1?fileURL.length());
 		
+		// Create destination file
+		AbstractFile destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath()+destFolder.getSeparator()+fileName);
+		
+		// Tests if the file exists
+		// and resolves a potential conflicting situation
+		boolean append = false;
+		if (destFile.exists())  {
+			int ret = showFileExistsDialog(file, destFile, false);
+		
+			if (ret==-1 || ret==FileExistsDialog.CANCEL_ACTION) {
+				stop();
+				return;
+			}
+			else if (ret==FileExistsDialog.SKIP_ACTION) {
+				return;
+			}
+			else if (ret==FileExistsDialog.APPEND_ACTION) {
+				append = true;
+			}
+			else if (ret==FileExistsDialog.SKIP_ALL_ACTION) {
+				skipAll = true;
+				return;
+			}
+		}
+
+		// Open inputstream
+		InputStream in = null;
+		try {
+			in = new URL(fileURL).openStream();
+		}
+		catch(IOException e) {
+		
+		}
+
+		
+		OutputStream out = null;
+		try  {
+			out = destFile.getOutputStream(append);
+
+			try  {
+				byte buf[] = new byte[READ_BLOCK_SIZE];
+				int read;
+				while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
+					out.write(buf, 0, read);
+					nbBytesProcessed += read;
+				}
+			}
+			catch(IOException e) {
+				if(com.mucommander.Debug.ON)
+					System.out.println(""+e);
+				int ret = showErrorDialog(Translator.get(unzip?"unzip.error_on_file":"copy.error_on_file", file.getName()));
+				if(ret!=SKIP_ACTION)		// CANCEL_ACTION or close dialog
+					stop();                
+			}
+		}
+		catch(IOException e) {
+			if(com.mucommander.Debug.ON)
+				System.out.println(""+e);
+			int ret = showErrorDialog(Translator.get(unzip?"unzip.cannot_unzip_file":"copy.cannot_copy_file", file.getName()));
+			if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
+				stop();
+		}
+	
+		// Try to close the streams no matter what happened before
+		try {
+			if(in!=null)
+				in.close();
+			if(out!=null)
+				out.close();
+		}
+		catch(IOException e) {
+		}
+	}
+	
+	
     private int showErrorDialog(String message) {
 		QuestionDialog dialog = new QuestionDialog(progressDialog, 
-			Translator.get(unzip?"unzip_dialog.error_title":"copy_dialog.error_title"),
+			Translator.get("http_download.error_title"),
 			message,
 			mainFrame,
 			new String[] {SKIP_TEXT, CANCEL_TEXT},
@@ -240,6 +291,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
     }
 
     public void run() {
+/*
 		currentFileIndex = 0;
 
 		FileTable activeTable = mainFrame.getLastActiveTable();
@@ -308,36 +360,28 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
         	}
 
 		cleanUp();
+*/
 	}
-
-
-	/*******************************************
-	 *** ExtendedFileJob implemented methods ***
-	 *******************************************/
+	
+	
+	/***********************************
+	 *** FileJob implemented methods ***
+	 ***********************************/
 
     public long getTotalBytesProcessed() {
         return nbBytesProcessed;
     }
 
     public int getCurrentFileIndex() {
-        return currentFileIndex;
+        return 0;
     }
 
     public int getNbFiles() {
-        return nbFiles;
+        return 1;
     }
     
-    public long getCurrentFileBytesProcessed() {
-        return currentFileProcessed;
-    }
-
-    public long getCurrentFileSize() {
-        return currentFileSize;
-    }
-
     public String getStatusString() {
-        return Translator.get(unzip?"unzip.unzipping_file":"copy.copying_file", currentFileInfo);
+        return Translator.get("http_download.downloading", fileURL);
     }
  
-
 }	

@@ -6,11 +6,9 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.text.SizeFormatter;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import com.mucommander.text.Translator;
 
 import java.io.*;
 import java.util.Vector;
@@ -22,7 +20,6 @@ import java.text.NumberFormat;
  * This class is responsible for moving recursively a group of files.
  */
 public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
-    private MainFrame mainFrame;
 
 	private Vector filesToMove;
 	private String newName;
@@ -51,24 +48,12 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 	private boolean appendAll;
 	private boolean overwriteAllOlder;
 
-    private final static int CANCEL_ACTION = 0;
-    private final static int SKIP_ACTION = 1;
-    private final static int OVERWRITE_ACTION = 2;
-    private final static int APPEND_ACTION = 3;
-    private final static int SKIP_ALL_ACTION = 4;
-    private final static int OVERWRITE_ALL_ACTION = 5;
-    private final static int APPEND_ALL_ACTION = 6;
-	private final static int OVERWRITE_ALL_OLDER_ACTION = 7;
+	private final static int CANCEL_ACTION = 0;
+	private final static int SKIP_ACTION = 1;
 
-    private final static String CANCEL_TEXT = "Cancel";
-    private final static String SKIP_TEXT = "Skip";
-    private final static String OVERWRITE_TEXT = "Overwrite";
-    private final static String APPEND_TEXT = "Append";
-    private final static String SKIP_ALL_TEXT = "Skip all";
-    private final static String OVERWRITE_ALL_TEXT = "Overwrite all";
-    private final static String APPEND_ALL_TEXT = "Append all";
-	private final static String OVERWRITE_ALL_OLDER_TEXT = "Overwrite older";
-
+	private final static String CANCEL_TEXT = Translator.get("cancel");
+	private final static String SKIP_TEXT = Translator.get("skip");
+	
 	
     /**
 	 * @param newName in case where filesToMove contains a single file, newName can be used to rename the file in the
@@ -78,7 +63,6 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 //System.out.println("MOVE JOB: "+ " "+ filesToMove + " "+ destFolder.getAbsolutePath());
 		super(progressDialog, mainFrame);
 
-		this.mainFrame = mainFrame;
 		this.filesToMove = filesToMove;
         this.nbFiles = filesToMove.size();
 		this.newName = newName;
@@ -194,28 +178,28 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 				else {	
 					int ret = showFileExistsDialog(file, destFile);
 				
-		        	if (ret==-1 || ret==CANCEL_ACTION) {
+		        	if (ret==-1 || ret==FileExistsDialog.CANCEL_ACTION) {
 		        		stop();                
 		        		return false;
 		        	}
-		        	else if (ret==SKIP_ACTION) {
+		        	else if (ret==FileExistsDialog.SKIP_ACTION) {
 		        		return false;
 		        	}
-					else if (ret==APPEND_ACTION) {
+					else if (ret==FileExistsDialog.APPEND_ACTION) {
 		        		append = true;
 					}
-					else if (ret==SKIP_ALL_ACTION) {
+					else if (ret==FileExistsDialog.SKIP_ALL_ACTION) {
 	        			skipAll = true;
 						return false;
 	        		}
-					else if (ret==OVERWRITE_ALL_ACTION) {
+					else if (ret==FileExistsDialog.OVERWRITE_ALL_ACTION) {
 						overwriteAll = true;
 					}
-					else if (ret==APPEND_ALL_ACTION) {
+					else if (ret==FileExistsDialog.APPEND_ALL_ACTION) {
 	        			appendAll = true;
 						append = true;
 					}	
-					else if (ret==OVERWRITE_ALL_OLDER_ACTION) {
+					else if (ret==FileExistsDialog.OVERWRITE_ALL_OLDER_ACTION) {
 						overwriteAllOlder = true;
 						if(file.getDate()<destFile.getDate())
 							return false;
@@ -305,52 +289,6 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 		return false;
 	}
 
-
-    public long getTotalBytesProcessed() {
-        return nbBytesProcessed;
-    }
-
-    public int getCurrentFileIndex() {
-        return currentFileIndex;
-    }
-
-    public int getNbFiles() {
-        return nbFiles;
-    }
-    
-    public long getCurrentFileBytesProcessed() {
-        return currentFileProcessed;
-    }
-
-    public long getCurrentFileSize() {
-        return currentFileSize;
-    }
-    
-    public String getStatusString() {
-		return "Moving "+currentFileInfo;
-    }
- 
-
-	private int showFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
-		JPanel panel = new JPanel(new GridLayout(0,1));
-		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm a");
-		NumberFormat numberFormat = NumberFormat.getInstance();
-		panel.add(new JLabel("Source: "+sourceFile.getAbsolutePath()));
-		panel.add(new JLabel("  "+numberFormat.format(sourceFile.getSize())
-				+" bytes, "+dateFormat.format(new Date(sourceFile.getDate()))));
-		panel.add(new JLabel(""));
-		panel.add(new JLabel("Destination: "+destFile.getAbsolutePath()));
-		panel.add(new JLabel("  "+numberFormat.format(destFile.getSize())
-				+" bytes, "+dateFormat.format(new Date(destFile.getDate()))));
-		
-		QuestionDialog dialog = new QuestionDialog(progressDialog, "File already exists in destination", 
-			panel, mainFrame,
-			new String[] {SKIP_TEXT, OVERWRITE_TEXT, APPEND_TEXT, SKIP_ALL_TEXT, OVERWRITE_ALL_TEXT, APPEND_ALL_TEXT, CANCEL_TEXT, OVERWRITE_ALL_OLDER_TEXT},
-			new int[]  {SKIP_ACTION, OVERWRITE_ACTION, APPEND_ACTION, SKIP_ALL_ACTION, OVERWRITE_ALL_ACTION, APPEND_ALL_ACTION, CANCEL_ACTION, OVERWRITE_ALL_OLDER_ACTION},
-			3);
-	
-	    return waitForUserResponse(dialog);
-	}
 	
     private int showErrorDialog(String message) {
 		QuestionDialog dialog = new QuestionDialog(progressDialog, "Move error", message, mainFrame, 
@@ -361,6 +299,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 	    return waitForUserResponse(dialog);
     }
 
+	
     public void run() {
 		FileTable activeTable = mainFrame.getLastActiveTable();
         AbstractFile currentFile;
@@ -407,4 +346,34 @@ public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
 
 		cleanUp();
 	}
+
+
+	/*******************************************
+	 *** ExtendedFileJob implemented methods ***
+	 *******************************************/
+
+    public long getTotalBytesProcessed() {
+        return nbBytesProcessed;
+    }
+
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
+    }
+
+    public int getNbFiles() {
+        return nbFiles;
+    }
+    
+    public long getCurrentFileBytesProcessed() {
+        return currentFileProcessed;
+    }
+
+    public long getCurrentFileSize() {
+        return currentFileSize;
+    }
+    
+    public String getStatusString() {
+		return "Moving "+currentFileInfo;
+    }
+
 }	

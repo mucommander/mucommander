@@ -2,11 +2,9 @@
 package com.mucommander.job;
 
 import com.mucommander.file.*;
-
 import com.mucommander.ui.MainFrame;
 
 import java.util.Vector;
-
 import java.io.IOException;
 
 /**
@@ -30,26 +28,6 @@ public class PropertiesJob extends FileJob implements Runnable {
         this.nbFiles = files.size();
 	}
 
-
-    public int getNbFiles() {
-        return nbFiles;
-    }
-
-    public int getCurrentFileIndex() {
-        return currentFileIndex;
-    }
-
-    public long getTotalBytesProcessed() {
-        return -1;
-    }
-
-	/**
-	 * Returns "Calculating" or "Complete".
-	 */
-	public String getStatusString() {
-		return hasFinished()?"Complete":"Calculating";
-	}
- 
 	/**
 	 * Returns the size in bytes of all the files seen so far.
 	 */
@@ -105,4 +83,30 @@ public class PropertiesJob extends FileJob implements Runnable {
 
 		stop();
 	}
+
+
+
+	/***********************************
+	 *** FileJob implemented methods ***
+	 ***********************************/
+
+	 public int getNbFiles() {
+        return nbFiles;
+    }
+
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
+    }
+
+    public long getTotalBytesProcessed() {
+        return -1;
+    }
+
+	/**
+	 * Returns "Calculating" or "Complete".
+	 */
+	public String getStatusString() {
+		return hasFinished()?"Complete":"Calculating";
+	}
+	
 }
