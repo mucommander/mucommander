@@ -35,7 +35,7 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 	
 	
 	public MoveDialog(MainFrame mainFrame, boolean isShiftDown) {
-		super(mainFrame, ("Move/Rename"), mainFrame);
+		super(mainFrame, "Move/Rename", mainFrame);
 		this.mainFrame = mainFrame;
 		
 		FileTable activeTable = mainFrame.getLastActiveTable();
@@ -78,7 +78,7 @@ public class MoveDialog extends FocusDialog implements ActionListener {
         contentPane.add(mainPanel, BorderLayout.NORTH);
 		
 		// OK / Cancel buttons panel
-        okButton = new JButton("OK");
+        okButton = new JButton("Move");
         cancelButton = new JButton("Cancel");
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
@@ -106,7 +106,7 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 	/**
 	 * Starts a MoveJob. This method is trigged by the 'OK' button or return key.
 	 */
-	public void doMove() {
+	private void doMove() {
 		String destPath = movePathField.getText();
 	    FileTable activeTable = mainFrame.getLastActiveTable();
 

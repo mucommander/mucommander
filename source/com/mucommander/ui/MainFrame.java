@@ -43,6 +43,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     /** False until this window has been activated */
 	private boolean firstTimeActivated;
 
+	/** Used to determine whether or not this MainFrame is active, i.e. muCommander window is in the foreground */
+	private boolean isActive; 
+	
+	
 	public MainFrame(AbstractFile initialFolder1, AbstractFile initialFolder2) {
 		super(FRAME_TITLE);
 	
@@ -96,7 +100,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		folderPanel1.addComponentListener(this);
 		splitPane.addComponentListener(this);
 
-        commandBar = new CommandBarPanel(this, table1, table2);
+        commandBar = new CommandBarPanel(this);
 		contentPane.add(commandBar, BorderLayout.SOUTH);
 
         table1.addKeyListener(this);
@@ -335,6 +339,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		return new Object[] {destFolder, newName};
 	}
 
+	
+	/**
+	 * Returns whether or not this MainFrame is active, i.e. if muCommander window is in the foreground.
+	 */
+	public boolean isActive() {
+		return isActive;
+	}
 
 
 	/*****************************
@@ -395,18 +406,17 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
             commandBar.doEdit();
         }
         else if(keyCode == KeyEvent.VK_F5 && !e.isControlDown()) {
-//            commandBar.showCopyDialog(false);
 			new CopyDialog(this, false, e.isShiftDown());
         }
         else if(keyCode == KeyEvent.VK_F6 && !e.isControlDown()) {
 			new MoveDialog(this, e.isShiftDown());
         }
         else if(keyCode == KeyEvent.VK_F7 && !e.isControlDown()) {
-            commandBar.showMkdirDialog();
+			new MkdirDialog(this);
         }
         else if((keyCode == KeyEvent.VK_F8 || keyCode == KeyEvent.VK_DELETE)
 		 && !e.isControlDown()) {
-            commandBar.showDeleteDialog();
+			new DeleteDialog(this);
         }
         else if(keyCode == KeyEvent.VK_F9 && !e.isControlDown()) {
         	commandBar.doRefresh();
@@ -473,7 +483,12 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
      **************************/	
 
     public void windowActivated(WindowEvent e) {
-    	// Requests focus first time MainFrame is activated
+		this.isActive = true;
+
+    	if(com.mucommander.Debug.TRACE)
+			System.out.println("MainFrame.windowActivated");
+		
+		// Requests focus first time MainFrame is activated
     	// (this method is called each time MainFrame is activated)
     	if (!firstTimeActivated) {
     		FocusRequester.requestFocus(table1);
@@ -482,6 +497,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     }
 
     public void windowDeactivated(WindowEvent e) {
+		this.isActive = false;
+		
+    	if(com.mucommander.Debug.TRACE)
+			System.out.println("MainFrame.windowDeactivated");
     }
 
     public void windowIconified(WindowEvent e) {

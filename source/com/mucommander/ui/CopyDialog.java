@@ -86,7 +86,7 @@ public class CopyDialog extends FocusDialog implements ActionListener {
         contentPane.add(mainPanel, BorderLayout.NORTH);
 		
 			// OK / Cancel buttons panel
-        okButton = new JButton("OK");
+        okButton = new JButton("Copy");
         cancelButton = new JButton("Cancel");
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
@@ -113,7 +113,7 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 	/**
 	 * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
 	 */
-	public void doCopy() {
+	private void doCopy() {
 		String destPath = copyPathField.getText();
 		FileTable activeTable = mainFrame.getLastActiveTable();
 

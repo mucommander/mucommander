@@ -230,7 +230,6 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 
 		try {
 			_setCurrentFolder(folder, addToHistory);
-			
 			success = true;
 		}
         catch(IOException e) {

@@ -16,14 +16,12 @@ import java.io.*;
 import java.util.Vector;
 
 /**
- * Probably the dirtiest class of all...
+ * Command bar panel 
  */
 public class CommandBarPanel extends JPanel implements ActionListener, MouseListener {
+
     private MainFrame mainFrame;
     
-	private FileTable table1;
-    private FileTable table2;
-
 	private JButton viewButton;
 	private JButton editButton;
 	private JButton copyButton;
@@ -31,15 +29,7 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	private JButton mkdirButton;
 	private JButton deleteButton;
 	private JButton refreshButton;
-	private JButton exitButton;
-	
-    private JButton okButton;
-    private JButton cancelButton;
-    
-    private FocusDialog dialog;
-	private JTextField mkdirPathField;
-    private JTextField movePathField;
-//    private JTextField copyPathField;
+	private JButton closeButton;
 	
 	private final static String VIEW_CAPTION = "[F3] View";
 	private final static String EDIT_CAPTION = "[F4] Edit";
@@ -49,41 +39,35 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	private final static String MKDIR_CAPTION = "[F7] Make dir";
 	private final static String DELETE_CAPTION = "[F8] Delete";
 	private final static String REFRESH_CAPTION = "[F9] Refresh";
-	private final static String EXIT_CAPTION = "[F10] Exit";
+	private final static String CLOSE_CAPTION = "[F10] Close";
 	
-    private int dialogType;
-//	private boolean unzipDialog;
-    private final static int NO_DIALOG = 0;
-//	private final static int COPY_DIALOG = 1;
-//    private final static int MOVE_DIALOG = 2;
-    private final static int MKDIR_DIALOG = 3;
-    private final static int DELETE_DIALOG = 4;
 
     // Dialog width should not exceed 360, height is not an issue (always the same)
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
+
     
-	public CommandBarPanel(MainFrame mainFrame, FileTable table1, FileTable table2) {
+	public CommandBarPanel(MainFrame mainFrame) {
 		super(new GridLayout(0,8));
 
         this.mainFrame = mainFrame;
-		this.table1 = table1;
-		this.table2 = table2;
 
 		viewButton = addButton(VIEW_CAPTION);
 		editButton = addButton(EDIT_CAPTION);
 		copyButton = addButton(COPY_CAPTION);
 		moveButton = addButton(MOVE_CAPTION);
+		mkdirButton = addButton(MKDIR_CAPTION);
+		deleteButton = addButton(DELETE_CAPTION);
+		refreshButton = addButton(REFRESH_CAPTION);
+		closeButton = addButton(CLOSE_CAPTION);
+
 		// Shift+F6 renames a file but since shift-clicks cannot be caught using
 		// an ActionListener (because of a known bug), we use a MouseListener
 		moveButton.addMouseListener(this);
 		// Same for copy button
 		copyButton.addMouseListener(this);
-		mkdirButton = addButton(MKDIR_CAPTION);
-		deleteButton = addButton(DELETE_CAPTION);
-		refreshButton = addButton(REFRESH_CAPTION);
-		exitButton = addButton(EXIT_CAPTION);
 	}
 
+	
 	private JButton addButton(String caption) {
 		JButton button = new JButton(caption);
 		button.setMargin(new Insets(1,1,1,1));
@@ -95,6 +79,7 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 		return button;
 	}
 
+	
 	/**
 	 * Sets shift mode on or off : some buttons such as 'F6 Move' may want to indicate
 	 * the action is different when shift is pressed.
@@ -112,175 +97,16 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 		mainFrame.getLastActiveTable().requestFocus();
 	}
 
-/*
-    public void showCopyDialog(boolean unzipDialog) {
-	    this.unzipDialog = unzipDialog;
-		
-		FileTable activeTable = mainFrame.getLastActiveTable();
-    	Vector selectedFiles = activeTable.getSelectedFiles();
-		if(selectedFiles.size()==0)
-    		return;
-        
-        dialogType = COPY_DIALOG;
-        
-		AbstractFile destFolder = (activeTable==table1?table2:table1).getCurrentFolder();
-        String fieldText = destFolder.getAbsolutePath()+destFolder.getSeparator();
-        if(selectedFiles.size()==1 && !unzipDialog)
-			fieldText += ((AbstractFile)selectedFiles.elementAt(0)).getName();
-		
-		copyPathField = new JTextField(fieldText);
-        // Text is selected so that user can directly type and replace path
-        copyPathField.setSelectionStart(0);
-        copyPathField.setSelectionEnd(fieldText.length());
-        copyPathField.addActionListener(this);
 
-        dialog = new FocusDialog(mainFrame, (unzipDialog?"Unzip":"Copy"), mainFrame, copyPathField);
-		Container contentPane = dialog.getContentPane();
-
-        Panel tempPanel = new Panel(new BorderLayout());
-        tempPanel.add(new JLabel((unzipDialog?"Unzip":"Copy")+" selected file(s) to"), BorderLayout.NORTH);
-
-		tempPanel.add(copyPathField, BorderLayout.SOUTH);
-        contentPane.add(tempPanel, BorderLayout.CENTER);
-        
-        okButton = new JButton("OK");
-        cancelButton = new JButton("Cancel");
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
-
-        // Escape key disposes dialog
-		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(dialog);
-		copyPathField.addKeyListener(escapeKeyAdapter);
-		okButton.addKeyListener(escapeKeyAdapter);
-		cancelButton.addKeyListener(escapeKeyAdapter);
-
-        // Selects OK when enter is pressed
-        dialog.getRootPane().setDefaultButton(okButton);
-        
-		dialog.setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-		dialog.showDialog();
-	}
-  
-*/	
-	    
-/*
-    public void showMoveDialog() {
-        FileTable activeTable = mainFrame.getLastActiveTable();
-       	Vector selectedFiles = activeTable.getSelectedFiles();
-       	if(selectedFiles.size()==0)
-        	return;
-        
-        dialogType = MOVE_DIALOG;
-        
-		AbstractFile destFolder = (activeTable==table1?table2:table1).getCurrentFolder();
-        String fieldText = destFolder.getAbsolutePath()+destFolder.getSeparator();
-        if(selectedFiles.size()==1)
-        	fieldText += ((AbstractFile)selectedFiles.elementAt(0)).getName();
-
-        movePathField = new JTextField(fieldText);
-        // Text is selected so that user can directly type and replace path
-        movePathField.setSelectionStart(0);
-        movePathField.setSelectionEnd(fieldText.length());
-        movePathField.addActionListener(this);
-
-        dialog = new FocusDialog(mainFrame, "Move/Rename", mainFrame, movePathField);
-        Container contentPane = dialog.getContentPane();
-        
-        Panel tempPanel = new Panel(new BorderLayout());
-        tempPanel.add(new JLabel("Move/Rename to"), BorderLayout.NORTH);
-
-		tempPanel.add(movePathField, BorderLayout.SOUTH);
-        contentPane.add(tempPanel, BorderLayout.CENTER);
-
-        okButton = new JButton("OK");
-        cancelButton = new JButton("Cancel");
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
-
-        // Escape key disposes dialog
-        EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(dialog);
-        movePathField.addKeyListener(escapeKeyAdapter);
-        okButton.addKeyListener(escapeKeyAdapter);
-        cancelButton.addKeyListener(escapeKeyAdapter);
-
-        // Selects OK when enter is pressed
-        dialog.getRootPane().setDefaultButton(okButton);
-
-        dialog.setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-		dialog.showDialog();
-	}
-*/
-
-    public void showMkdirDialog() {
-	    FileTable activeTable = mainFrame.getLastActiveTable();
-
-        dialogType = MKDIR_DIALOG;
-        
-        Panel tempPanel = new Panel(new BorderLayout());
-        tempPanel.add(new JLabel("Create directory"), BorderLayout.NORTH);
-        mkdirPathField = new JTextField();
-        mkdirPathField.addActionListener(this);
-
-		dialog = new FocusDialog(mainFrame, "Make dir", mainFrame, mkdirPathField);
-		mkdirPathField.addKeyListener(new EscapeKeyAdapter(dialog));
-
-		Container contentPane = dialog.getContentPane();
-
-        tempPanel.add(mkdirPathField, BorderLayout.SOUTH);
-        contentPane.add(tempPanel, BorderLayout.CENTER);
-        
-        okButton = new JButton("OK");
-        cancelButton = new JButton("Cancel");
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
-
-        // Escape key disposes dialog
-        EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(dialog);
-        mkdirPathField.addKeyListener(escapeKeyAdapter);
-        okButton.addKeyListener(escapeKeyAdapter);
-        cancelButton.addKeyListener(escapeKeyAdapter);
-
-        // Selects OK when enter is pressed
-        dialog.getRootPane().setDefaultButton(okButton);
-        
-		dialog.setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-		dialog.showDialog();
-    }
-
-    public void showDeleteDialog() {
-        FileTable activeTable = mainFrame.getLastActiveTable();
-        if(activeTable.getSelectedFiles().size()==0)
-        	return;
-
-        dialogType = DELETE_DIALOG;
-
-        okButton = new JButton("OK");
-        dialog = new FocusDialog(mainFrame, "Delete", mainFrame, okButton);
-        Container contentPane = dialog.getContentPane();
-        
-        Panel tempPanel = new Panel(new BorderLayout());
-        contentPane.add(new JLabel("Permanently delete selected file(s) ?"), BorderLayout.CENTER);
-        
-		cancelButton = new JButton("Cancel");
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
-        
-		// Escape key disposes dialog
-        EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(dialog);
-        okButton.addKeyListener(escapeKeyAdapter);
-        cancelButton.addKeyListener(escapeKeyAdapter);
-
-        // Selects OK when enter is pressed
-        dialog.getRootPane().setDefaultButton(okButton);
-        
-		dialog.setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-		dialog.showDialog();
-	}
-
-
+	/**
+	 * Fires up the appropriate file viewer for the selected file.
+	 */
 	public void doView() {
 		AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
 		if(file.isFolder() && !(file instanceof ArchiveFile))
 			return;
 		
 		try {
-//System.out.println(Runtime.getRuntime().freeMemory());
 			FileViewer viewer = ViewerRegistrar.getViewer(file);
 			// Default file viewer
 			if (viewer==null) {
@@ -288,7 +114,6 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 				viewer = new TextViewer();
 			}
 
-//System.out.println(file.getSize()+" "+viewer.getMaxRecommendedSize());
 			// Tests if file is too large to be viewed and warns user
 			long max = viewer.getMaxRecommendedSize();
 			if (max!=-1 && file.getSize()>max) {
@@ -328,7 +153,6 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 
 			frame.setResizable(true);
 			frame.setVisible(true);
-//System.out.println(Runtime.getRuntime().freeMemory());
 		}
 		catch(IOException e) {
 			showErrorDialog("Unable to view file.", "View error");
@@ -336,6 +160,9 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	}
 	
 	
+	/**
+	 * Fires up the appropriate file editor for the selected file.
+	 */
 	public void doEdit() {
 		AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
 		if(file.isFolder() && !(file instanceof ArchiveFile))
@@ -389,110 +216,6 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 	}
 	
 	
-/*
-	private void doMove(String destPath) {
-	    FileTable activeTable = mainFrame.getLastActiveTable();
-
-	    // Figures out which files to move
-	    Vector filesToMove = activeTable.getSelectedFiles();
-
-		// Resolves destination folder
-		Object ret[] = mainFrame.resolvePath(destPath);
-		// The path entered doesn't correspond to any existing folder
-		if (ret==null || (filesToMove.size()>1 && ret[1]!=null)) {
-			showErrorDialog("Folder "+destPath+" doesn't exist.", "Move error");
-			return;
-		}
-
-		AbstractFile destFolder = (AbstractFile)ret[0];
-		String newName = (String)ret[1];
-
-		if (newName==null && activeTable.getCurrentFolder().equals(destFolder)) {
-			showErrorDialog("Source and destination are the same.", "Move error");
-			return;
-		}
-
-		if (filesToMove.contains(destFolder)) {
-			showErrorDialog("Cannot move destination folder to itself.", "Move error");
-			return;
-		}
-		
-		// Starts moving files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Moving files");
-		MoveJob moveJob = new MoveJob(mainFrame, progressDialog, filesToMove, newName, destFolder);
-	    moveJob.start();
-	    progressDialog.start(moveJob);
-	}
-*/
-
-	private void doMkdir(String dirPath) {
-		FileTable activeTable = mainFrame.getLastActiveTable();
-
-	    try {
-		    // Resolves destination folder
-		    Object ret[] = mainFrame.resolvePath(dirPath);
-		    // The path entered doesn't correspond to any existing folder
-		    if (ret==null) {
-		    	showErrorDialog("Incorrect path "+dirPath, "mkdir error");
-		    	return;
-		    }
-
-			if(ret[1]==null) {
-		    	showErrorDialog("Directory "+dirPath+" already exists.", "mkdir error");
-		    	return;
-		    }
-
-		    AbstractFile folder = (AbstractFile)ret[0];
-		    String newName = (String)ret[1];
-
-// System.out.println(folder.getAbsolutePath()+" "+newName);
-
-	        folder.mkdir(newName);
-	        activeTable.refresh();
-						
-			// Finds the row corresponding to the newly created folder
-			// and makes it the current row.
-			if (activeTable.getCurrentFolder().equals(folder)) {
-				AbstractFile createdFolder = AbstractFile.getAbstractFile(folder.getAbsolutePath()+folder.getSeparator()+newName);
-				activeTable.selectFile(createdFolder);
-			}
-		}
-	    catch(IOException ex) {
-//System.out.println(ex);            
-	        showErrorDialog("Unable to create directory "+dirPath, "mkdir error");
-	    }    
-
-	    FileTable unactiveTable = activeTable==table1?table2:table1;
-	    if (unactiveTable.getCurrentFolder().equals(activeTable.getCurrentFolder()))
-	    	try {
-	    		unactiveTable.refresh();
-			}
-		    catch(IOException e) {
-		    	// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
-		    	// like switching to a root folder        
-		    }
-
-	
-		activeTable.requestFocus();
-	}
-
-
-    public void doDelete() {
-	    FileTable activeTable = mainFrame.getLastActiveTable();
-
-        // Figures out which files to delete
-        Vector filesToDelete = activeTable.getSelectedFiles();
-        if(filesToDelete.size()==0)
-        	return;
-                    
-        // Starts deleting files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Deleting files");
-		DeleteJob deleteJob = new DeleteJob(mainFrame, progressDialog, filesToDelete);
-        deleteJob.start();
-    	progressDialog.start(deleteJob);
-    }
-
-
 	public void doRefresh()  {
 		try  {
 			mainFrame.getLastActiveTable().refresh();
@@ -545,61 +268,18 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
         	doEdit();
 		}
         else if(source == mkdirButton) {
-            showMkdirDialog();
+            new MkdirDialog(mainFrame);
         }
         else if(source == deleteButton) {
-            showDeleteDialog();
+            new DeleteDialog(mainFrame);
         }
         else if(source == refreshButton) {
 			doRefresh();
 		}
-        else if(source == exitButton) {
+        else if(source == closeButton) {
         	doExit();
 		}
-/*
-        // Dialog
-		else if(dialogType == COPY_DIALOG) {
-			dialog.dispose();
-			dialog = null;
-			dialogType = NO_DIALOG;
 
-			if(source == okButton || source == copyPathField) {
-                doCopy(copyPathField.getText(), unzipDialog);
-            }
-            copyPathField = null;
-		}
-*/
-/*
-        else if(dialogType == MOVE_DIALOG) {
-            dialog.dispose();
-            dialog = null;
-            dialogType = NO_DIALOG;
-
-            if(source == okButton || source == movePathField) {
-                doMove(movePathField.getText());
-            }
-            movePathField = null;
-        }
-*/		
-        else if(dialogType == MKDIR_DIALOG) {
-	        dialog.dispose();
-	        dialog = null;
-	        dialogType = NO_DIALOG;
-
-            if(source == okButton || source == mkdirPathField) {
-                doMkdir(mkdirPathField.getText());
-            }
-            mkdirPathField = null;
-        }
-        else if(dialogType == DELETE_DIALOG) {
-            dialog.dispose();
-            dialog = null;
-            dialogType = NO_DIALOG;
-
-            if(source == okButton)
-                doDelete();
-        }
-        
         // FileTable lost focus since a button was clicked
         mainFrame.getLastActiveTable().requestFocus();
     }
