@@ -13,63 +13,34 @@ public class FSFile extends AbstractFile {
 	private static FSFile roots[];
 	
 	protected File file;
-//	// If this is a folder, this field caches the children files after the ls method has been called.
-//    protected FSFile children[];
     protected String absPath;
 	
 	/* These file attributes are cached first time they are accessed to avoid excessive I/O */
-	
-	private long date = -1;
-	private long size = -1;
-	private String name = null;
+    	
+//	private long date = -1;
+//	private long size = -1;
+
+	private String name;
 
 	private FSFile parent;
 	// Indicates whether or not the value has already been retrieved
 	private boolean parentValCached = false;
 		
-	private boolean isFolder;
-	// Indicates whether or not the value has already been retrieved
-	private boolean isFolderValCached = false;
+//	private boolean isFolder;
+//	// Indicates whether or not the value has already been retrieved
+//	private boolean isFolderValCached = false;
 	
-	private boolean isHidden;
-	// Indicates whether or not the value has already been retrieved
-	private boolean isHiddenValCached = false;
-
+//	private boolean isHidden;
+//	// Indicates whether or not the value has already been retrieved
+//	private boolean isHiddenValCached = false;
 	
 	// Retreives fs roots once for all because File.listRoots() sometimes triggers a weird dialog
 	// about A:\, we only want this to happen once...
 	static {
-//		// Windows bug workaround
-//		if (System.getProperty("os.name").startsWith("Windows")) {
-//			Vector fileRoots = new Vector();
-//
-//System.out.println("L0");			
-//			// Create the A: drive whether it is mounted or not
-//			fileRoots.add(new File("A:\\"));
-//
-//System.out.println("L1");			
-//			
-//			File root;
-//			for(char c='C'; c<='Z'; c++) {
-//				root = new File(c+":\\");
-//				if(root.exists())
-//					fileRoots.add(root);
-//			}
-//
-//System.out.println("L2");			
-//			
-//			roots = new FSFile[fileRoots.size()];
-//			for(int i=0; i<fileRoots.size(); i++)
-//				roots[i] = new FSFile((File)fileRoots.elementAt(i));
-//
-//System.out.println("L3");			
-//		}
-//		else {
-			File fileRoots[] = File.listRoots();	
-			roots = new FSFile[fileRoots.length];
-			for(int i=0; i<fileRoots.length; i++)
-				roots[i] = new FSFile(fileRoots[i]);
-//		}
+        File fileRoots[] = File.listRoots();	
+        roots = new FSFile[fileRoots.length];
+        for(int i=0; i<fileRoots.length; i++)
+            roots[i] = new FSFile(fileRoots[i]);
 	}
 
 	public static FSFile[] listRoots() {
@@ -95,8 +66,7 @@ public class FSFile extends AbstractFile {
 	public FSFile(File _file) {
 //System.out.println("F0");
 		this.absPath = _file.getAbsolutePath();
-		
-		// removes the ending separator character (if any)
+        // removes the ending separator character (if any)
         this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
 
 //System.out.println("F1");
@@ -104,6 +74,8 @@ public class FSFile extends AbstractFile {
 			this.file = new File(absPath);
 		else
 			this.file = _file;
+
+        this.name = file.getName();
 
 //System.out.println("F2");		
 //		// Most frequently requested values are cached to avoid I/O accesses.
@@ -137,11 +109,12 @@ public class FSFile extends AbstractFile {
 
 	public String getName() {
     	// Retrieves name and caches it
-    	if (name==null) {
-	    	this.name = file.getParent()==null?absPath+separator:file.getName();
-	   	}
-    
-		return name;
+//    	if (name==null) {
+//	    	this.name = file.getParent()==null?absPath+separator:file.getName();
+//	   	}    
+//		return name;
+
+        return name;
 	}
 
 	/**
@@ -160,19 +133,21 @@ public class FSFile extends AbstractFile {
 	}
 
 	public long getDate() {
-		// Retrieves date and caches it
-		if(date==-1)
-			date = file.lastModified();
-		
-		return date;
+//		// Retrieves date and caches it
+//		if(date==-1)
+//			date = file.lastModified();		
+//		return date;
+
+        return file.lastModified();
 	}
 	
 	public long getSize() {
-		// Retrieves size and caches it
-		if(size==-1)
-			size = file.length();
-		
-		return size;
+//		// Retrieves size and caches it
+//		if(size==-1)
+//			size = file.length();		
+//		return size;
+
+        return file.length();
 	}
 	
 	public AbstractFile getParent() {
@@ -199,21 +174,25 @@ public class FSFile extends AbstractFile {
 	}
 	
 	public boolean isHidden() {
-		// Retrieves isHidden info and caches it
-		if (!isHiddenValCached) {
-			isHidden = file.isHidden();
-			isHiddenValCached = true;
-		}
-		return isHidden;
+//		// Retrieves isHidden info and caches it
+//		if (!isHiddenValCached) {
+//			isHidden = file.isHidden();
+//			isHiddenValCached = true;
+//		}
+//		return isHidden;
+
+        return file.isHidden();
 	}
 
 	public boolean isFolder() {
-		// Retrieves isFolder info and caches it
-		if (!isFolderValCached) {
-			isFolder = file.isDirectory();
-			isFolderValCached = true;
-		}
-		return isFolder;
+//		// Retrieves isFolder info and caches it
+//		if (!isFolderValCached) {
+//			isFolder = file.isDirectory();
+//			isFolderValCached = true;
+//		}
+//		return isFolder;
+
+        return file.isDirectory();
 	}
 
 	public boolean equals(AbstractFile f) {

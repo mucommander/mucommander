@@ -12,10 +12,9 @@ public abstract class AbstractFile {
 	}
 	
 	/**
-	 * Returns an instance of an AbstractFile for the given ABSOLUTE path.
+	 * Returns an instance of an AbstractFile for the given absolute path.
 	 * This method will return an instance of the correct AbstractFile class.
 	 * It will return <code>null</code> if the given path is not absolute or incorrect.
-	 *
 	 */
 	public static AbstractFile getAbstractFile(String absPath) {
 		AbstractFile file;
@@ -42,10 +41,11 @@ public abstract class AbstractFile {
 		else if (new File(absPath).isAbsolute()) {
 			file = new FSFile(absPath);
 		}
-		else
+		else {
 			return null;
-
-		String name = file.getName();
+        }
+		
+        String name = file.getName();
 //System.out.println("getAbstractFile "+absPath);
 		if(name!=null && !file.isFolder() && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")))
 			return new ZipArchiveFile(file);
@@ -53,6 +53,13 @@ public abstract class AbstractFile {
 		return file;		
 	}
 	
+    /**
+     * When called, this method should refresh all file properties (size, date, existence, 
+     * read/write/hidden flags) which are usually cached for performance reasons.<br>
+     * It is the responsability of all classes extending AbstractFile to correctly refresh those properties.
+     */
+    //public abstract void refresh();
+
 	
 	/**
 	 * <p>Tests a file for equality: returns <code>true</code> if the given file denotes the same
@@ -157,11 +164,6 @@ public abstract class AbstractFile {
 	 */
 	public abstract OutputStream getOutputStream(boolean append) throws IOException;
 
-//	/**
-//	 * Close any resource associated with this AbstractFile.
-//	 * This method should always be called when this AbstractFile is not used anymore.
-//	 */
-//	public abstract void close() throws IOException;
 
 	/**
 	 * Moves this AbstractFile to another one. This method will return true if the operation 
