@@ -271,12 +271,13 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			// Tests if file is too large to be viewed and warns user
 			long max = viewer.getMaxRecommendedSize();
 			if (max!=-1 && file.getSize()>max) {
-				QuestionDialog dialog = new QuestionDialog(mainFrame, null, "This file may be too large to be viewed, try anyway?", mainFrame, 
-					new String[] {"Yes", "No"},
+				QuestionDialog dialog = new QuestionDialog(mainFrame, "Warning", "This file may be too large to be viewed", mainFrame, 
+					new String[] {"Open anyway", "Cancel"},
 					new int[]  {0, 1},
-					new int[]  {KeyEvent.VK_Y, KeyEvent.VK_N},
+					new int[]  {KeyEvent.VK_O, KeyEvent.VK_C},
 					0);
-				int ret = dialog.getActionValue();
+
+                int ret = dialog.getActionValue();
 				
 				if (ret==1 || ret==-1)
 					return;
@@ -330,11 +331,11 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			// Tests if file is too large to be edited and warns user
 			long max = editor.getMaxRecommendedSize();
 			if (max!=-1 && file.getSize()>max) {
-				QuestionDialog dialog = new QuestionDialog(mainFrame, null, "This file may be too large to be edited, try anyway?", mainFrame, 
-					new String[] {"Yes", "No"},
-					new int[]  {0, 1},
-					new int[]  {KeyEvent.VK_Y, KeyEvent.VK_N},
-					0);
+				QuestionDialog dialog = new QuestionDialog(mainFrame, "Warning", "This file may be too large to be edited", mainFrame,
+                        new String[] {"Open anyway", "Cancel"},
+                        new int[]  {0, 1},
+                        new int[]  {KeyEvent.VK_O, KeyEvent.VK_C},
+                        0);
 				int ret = dialog.getActionValue();
 				
 				if (ret==1 || ret==-1)

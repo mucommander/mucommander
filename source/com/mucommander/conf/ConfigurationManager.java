@@ -60,11 +60,12 @@ public class ConfigurationManager {
             loadConfiguration();
         }
         catch(Exception e) {
-//			if(com.mucommander.Debug.TRACE)
-            System.out.println("No configuration file found.");
+            if(com.mucommander.Debug.TRACE)
+                System.out.println("No configuration file found.");
             File homeFolder = getConfigurationFolder();
             if(!homeFolder.exists()) {
-                System.out.println("Creating mucommander home folder (~/.mucommander)");
+                if(com.mucommander.Debug.TRACE)
+                    System.out.println("Creating mucommander home folder (~/.mucommander)");
                 if(!getConfigurationFolder().mkdir())
                     System.out.println("Warning: unable to create folder: "+homeFolder.getAbsolutePath()+"/.mucommander");
                 }

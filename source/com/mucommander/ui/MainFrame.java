@@ -189,13 +189,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	}
 
 	/**
-	 * Compares directories: marks files which name is in folder1 and not in folder2 and vice-versa.
+	 * Compares directories: marks files that are missing from a directory or that are newer.
 	 */
 	public void compareDirectories() {
 		AbstractFile tempFile;
 		AbstractFile files1[] = ((FileTableModel)table1.getModel()).getFileArray();
 		AbstractFile files2[] = ((FileTableModel)table2.getModel()).getFileArray();
-		boolean containsFile;
+        int fileIndex;
 		String tempFileName;
 		for(int i=table1.getCurrentFolder().getParent()==null?0:1; i<files1.length; i++) {
 			tempFile = files1[i];
@@ -203,13 +203,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 				continue;
 			
 			tempFileName = tempFile.getName();
-			containsFile = false;
+            fileIndex = -1;
 			for(int j=table2.getCurrentFolder().getParent()==null?0:1; j<files2.length; j++)
 				if (files2[j].getName().equals(tempFileName)) {
-					containsFile = true;
+                    fileIndex = j;
 					break;
 				}
-			if (!containsFile) {
+			if (fileIndex==-1 || files2[fileIndex].getDate()<tempFile.getDate()) {
 				table1.setFileMarked(tempFile, true);
 				table1.repaint();
 			}
@@ -221,13 +221,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 				continue;
 
 			tempFileName = tempFile.getName();
-			containsFile = false;
+            fileIndex = -1;
 			for(int j=table1.getCurrentFolder().getParent()==null?0:1; j<files1.length; j++)
 				if (files1[j].getName().equals(tempFileName)) {
-					containsFile = true;
+                    fileIndex = j;
 					break;
 				}
-			if (!containsFile) {
+			if (fileIndex==-1 || files1[fileIndex].getDate()<tempFile.getDate()) {
 				table2.setFileMarked(tempFile, true);
 				table2.repaint();
 			}

@@ -67,6 +67,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 		getRootPane().setDefaultButton(okButton);
 
 		// Packs dialog
+        setResizable(true);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 	}
 

@@ -21,6 +21,7 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
      */
     public void writeXML(PrintWriter out) {
         this.out = out;
+        out.println("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
         ConfigurationManager.buildConfigurationTree(this);
     }
     /* End ofmethod writeXML(PrintWriter) */

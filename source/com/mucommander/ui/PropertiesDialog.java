@@ -79,6 +79,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		// Selects OK when enter is pressed
 		getRootPane().setDefaultButton(okButton);
 
+        setResizable(true);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		

@@ -4,6 +4,8 @@ package com.mucommander;
 import com.mucommander.file.AbstractFile;
 import java.io.IOException;
 
+// public class PlatformManager implements Runnable {
+
 public class PlatformManager {
 
 	// OS types
@@ -22,7 +24,10 @@ public class PlatformManager {
 	private static String osVersion;
 	private static int osType;
 
+    private static Process currentProcess;
+//    private Process process;
 
+    
 	/**
 	 * Finds out what kind of OS muCommander is running on
 	 */
@@ -56,6 +61,11 @@ public class PlatformManager {
 		}
 	}
 
+/*
+    private PlatformManager(Process p) {
+        this.process = p;
+    }
+ */  
 	
 	/**
 	 * Returns <code>true</code> if the current platform is capable of opening the given URL
@@ -73,11 +83,22 @@ public class PlatformManager {
 		try {
 			// Here, we use exec(String[],String[],File) instead of exec(String,String[],File)
 			// so we parse the tokens ourself (messes up the command otherwise)
-			Process p = Runtime.getRuntime().exec(getCommandTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
-			return true;
+
+            if(com.mucommander.Debug.TRACE)
+                System.out.println("Opening "+filePath);
+            
+            Runtime.getRuntime().exec(getCommandTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
+            
+/*            if(com.mucommander.Debug.TRACE) {
+                new Thread(new PlatformManager(currentProcess)).start();
+            }
+*/                
+            return true;
 		}
 		catch(IOException e) {
-			return false;
+            if(com.mucommander.Debug.TRACE)
+                System.out.println("Error while opening "+filePath+": "+e);
+            return false;
 		}
 	}
 
@@ -112,6 +133,37 @@ public class PlatformManager {
 			return new String[] {filePath};
 		}
 	}
-	
-	
+
+
+    /**
+     * Prints a process' output to System.out (for debugging purposes)
+     */
+/*
+    public void run() {
+        java.io.InputStream pin = process.getInputStream();
+
+        byte b[] = new byte[512];
+        int nbRead;
+        int exitValue;
+
+        System.out.println("process "+process);
+
+        while(true) {
+            try {
+                while((nbRead=pin.read())!=-1) {
+                    System.out.print(process);
+                    System.out.write(b, 0, nbRead);
+                }
+
+                exitValue = process.exitValue();
+                System.out.println("process "+process+" exit: "+exitValue);
+
+                pin.close();
+                return;
+            }
+            catch(Exception e) {
+            }
+        }
+    }
+*/	
 }

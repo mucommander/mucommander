@@ -11,9 +11,9 @@ import com.muxml.*;
  */
 public class VersionChecker implements ContentHandler {
 
-    private final static String VERSION_DOCUMENT_URL = "http://127.0.0.1/~maxence/version.xml";
+    private final static String VERSION_DOCUMENT_URL = "http://mu-j.com/mucommander/version/version.xml";
 
-    private static String lastVersion;
+    private static String latestVersion;
     private static String downloadURL;
     private static String elementName;
 
@@ -30,9 +30,11 @@ public class VersionChecker implements ContentHandler {
      */
     public static void getVersionInformation() throws Exception {
         Parser parser = new Parser();
-        parser.parse(new URL(VERSION_DOCUMENT_URL).openStream(), new VersionChecker());
-    
-        if(lastVersion==null || lastVersion.equals(""))
+        InputStream in = new URL(VERSION_DOCUMENT_URL).openStream();
+        parser.parse(in, new VersionChecker());
+        in.close();
+        
+        if(latestVersion==null || latestVersion.equals(""))
             throw new Exception();
     }
     
@@ -41,7 +43,7 @@ public class VersionChecker implements ContentHandler {
      * Returns latest version of muCommander.
      */
     public static String getLatestVersion() {
-        return lastVersion;
+        return latestVersion;
     }
     
     /**
@@ -50,20 +52,32 @@ public class VersionChecker implements ContentHandler {
     public static String getDownloadURL() {
         return downloadURL;
     }
-    
 
+
+    public void startDocument() {
+        latestVersion = "";
+        downloadURL = "";
+    }
+    
     public void characters(String s) {
-        if(elementName.equals("last_version"))
-            lastVersion = s;
+        if(elementName.equals("latest_version"))
+            latestVersion += s;
         else if(elementName.equals("download_url"))
-            downloadURL = s;
+            downloadURL += s;
     }
 
     public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) {
         elementName = name;
     }
 
-    public void endElement(String uri, String name) {}
-    public void endDocument() {}
-    public void startDocument() {}
+    public void endElement(String uri, String name) {
+        elementName = "";
+    }
+
+    public void endDocument() {
+        if(com.mucommander.Debug.TRACE) {
+            System.out.println("download URL -"+downloadURL+"-");
+            System.out.println("latestVersion -"+latestVersion+"-");
+        }
+    }
 }

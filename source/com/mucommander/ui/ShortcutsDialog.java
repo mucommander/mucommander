@@ -36,6 +36,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
 			{"*", "Invert selection"},
 			{"CTRL+A", "Mark all"},
 			{"CTRL+D", "Unmark all"},
+            {"CTRL+M", "Compare directories"}
 		},
 		{	{"Actions"},
 			{"F3", "View"},

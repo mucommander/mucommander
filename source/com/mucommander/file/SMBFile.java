@@ -157,7 +157,8 @@ public class SMBFile extends AbstractFile {
 
 		return name;
 */
-        return file.getParent()==null?absPath+separator:file.getName();
+        return file.getName();
+        //return file.getParent()==null?absPath+separator:file.getName();
 	}
 
 	/**
@@ -242,7 +243,7 @@ public class SMBFile extends AbstractFile {
 //			return file==null?false:file.exists();
             return file.exists();
 		}
-		catch(SmbException e) {
+		catch(IOException e) {
 			return false;
 		}
 	}

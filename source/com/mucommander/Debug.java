@@ -10,5 +10,5 @@ package com.mucommander;
 
 public class Debug {
 	/** Sets whether or not debug messages should be output to the standard output */
-    public final static boolean TRACE = true;
+    public final static boolean TRACE = false;
 }

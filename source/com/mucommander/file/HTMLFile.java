@@ -50,7 +50,6 @@ public class HTMLFile extends AbstractFile {
 		// removes the ending separator character (if any)
 		this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
 
-System.out.println(absPath);
 		int pos = absPath.lastIndexOf('/');
 		
 		this.name = absPath.substring(pos<7?7:pos+1, absPath.length());
@@ -207,8 +206,7 @@ System.out.println(absPath);
 	      }
 	    } catch (Exception e) {
 		    if (com.mucommander.Debug.TRACE) {
-				System.out.println("Error while parsing HTML:");
-				e.printStackTrace();
+				System.out.println("Error while parsing HTML: "+e);
 		    }
 		}
 

@@ -138,7 +138,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener, 
 		// Selection field receives initial keyboard focus
 		setInitialFocusComponent(selectionField);
 
-		setResizable(false);
+        setResizable(true);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 	}

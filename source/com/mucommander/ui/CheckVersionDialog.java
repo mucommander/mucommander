@@ -86,8 +86,8 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
                 
                 // If the platform is not capable of opening a new browser window,
                 // display the download URL.
-                 text = "There is a new "+version+" version available for download"
-                    +(downloadOption?".":" that you can download at "+downloadURL);
+                 text = "There is a new version of muCommander available"
+                    +(downloadOption?".":" at "+downloadURL);
             }
         }
         // Check failed
@@ -97,8 +97,8 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
             if(!userInitiated)
                 return;
 
-            title = "No version information";
-            text = "Unable to retrieve version information from server";
+            title = "Not available";
+            text = "Unable to get version information from server.";
         }
 
         setTitle(title);
@@ -110,7 +110,7 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
         JButton okButton = new JButton("OK");
         JButton buttons[];
         if(downloadOption) {
-            JButton downloadButton = new JButton("Download");
+            this.downloadButton = new JButton("Download");
             buttons = new JButton[]{downloadButton, okButton};
         }
         else {
@@ -134,7 +134,7 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 
         // Starts by disposing the dialog
         dispose();
-		
+
 		if (source==downloadButton)  {
                 PlatformManager.open(downloadURL, mainFrame.getLastActiveTable().getCurrentFolder());
 		}
