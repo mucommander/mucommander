@@ -320,8 +320,8 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+absPath);
 //							if(token.toLowerCase().startsWith("http://") || (!token.equals("") && token.charAt(0)=='/')) {
 						if((prevToken.equalsIgnoreCase("href") || prevToken.equalsIgnoreCase("src")) && !(token.startsWith("mailto") || token.startsWith("MAILTO") || token.startsWith("#"))) {
 							if(!childrenURL.contains(token)) {
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+this.url);
-								child = new HTTPFile(new URL(this.url, token));
+if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+contextURL);
+								child = new HTTPFile(new URL(contextURL, token));
 								// Recycle this file for parent whenever possible
 if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): recycle_parent="+child.fileURL.equals(this.fileURL));
 								if(child.fileURL.equals(this.fileURL))
