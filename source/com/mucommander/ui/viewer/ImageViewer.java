@@ -9,13 +9,11 @@ import javax.swing.*;
 import java.io.DataInputStream;
 import java.io.*;
 
-public class ImageViewer extends FileViewer implements ComponentListener {
-//	private final static String SUPPORTED_EXTENSIONS[] =  {
-//		"txt", "nfo", "diz"
-//	};
+//public class ImageViewer extends FileViewer implements ComponentListener {
+public class ImageViewer extends FileViewer {
 	
-	private final static int MAX_WIDTH_SCALED = 480;
-	private final static int MAX_HEIGHT_SCALED = 360;
+//	private final static int MAX_WIDTH_SCALED = 480;
+//	private final static int MAX_HEIGHT_SCALED = 360;
 	
 	private Image image;
 	private JLabel label;
@@ -39,19 +37,16 @@ public class ImageViewer extends FileViewer implements ComponentListener {
 		// so that we can access its width and height
 		MediaTracker tracker = new MediaTracker(this);
 		tracker.addImage(image, 0);
-		try {
-			tracker.waitForID(0);
-		}
-		catch(InterruptedException e) {
-		}
+		try { tracker.waitForID(0); }
+		catch(InterruptedException e) {}
 		
 		setLayout(new BorderLayout());
 		label = new JLabel();
-		add(label, BorderLayout.CENTER);
-//System.out.println(this);
-//		add(new JScrollPane(label, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
+		label.setIcon(new ImageIcon(image));
+//		add(label, BorderLayout.CENTER);
+		add(new JScrollPane(label, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 		
-		addComponentListener(this);
+//		addComponentListener(this);
 	}
 	
 	public static boolean canViewFile(AbstractFile file) {
@@ -64,10 +59,12 @@ public class ImageViewer extends FileViewer implements ComponentListener {
 	}
 
 	public Dimension getPreferredSize() {
-		return new Dimension(Math.min(480, image.getWidth(null)), Math.min(360,image.getHeight(null)));
-//		return new Dimension(image.getWidth(null), image.getHeight(null));
+//		return new Dimension(Math.min(480, image.getWidth(null)), Math.min(360,image.getHeight(null)));
+System.out.println("ImageViewer.getPreferredSize()= "+image.getWidth(null)+" "+image.getHeight(null));
+		return new Dimension(image.getWidth(null), image.getHeight(null));
 	}
 
+/*
 	private Image getScaledImage(Image image, int maxScaledWidth, int maxScaledHeight) {
 		int imageWidth = image.getWidth(null);
 		int imageHeight = image.getHeight(null);
@@ -91,6 +88,7 @@ public class ImageViewer extends FileViewer implements ComponentListener {
 
 	
 	public void componentResized(ComponentEvent e) {
+
 //System.out.println("panel "+getWidth()+" "+getHeight());
 		Image scaledImage = getScaledImage(image, getWidth(), getHeight());
 //System.out.println("scaledImage "+scaledImage.getWidth(null)+" "+scaledImage.getHeight(null));
@@ -99,6 +97,7 @@ public class ImageViewer extends FileViewer implements ComponentListener {
 		label.setSize(scaledImage.getWidth(null), scaledImage.getHeight(null));
 //System.out.println("label "+label.getWidth()+" "+label.getHeight());
 		label.repaint();	
+
 	}
 
 	public void componentHidden(ComponentEvent e) {
@@ -109,4 +108,6 @@ public class ImageViewer extends FileViewer implements ComponentListener {
 
 	public void componentMoved(ComponentEvent e) {
 	}
+
+*/
 }

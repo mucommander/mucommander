@@ -28,7 +28,8 @@ import java.util.Vector;
  * 
  * @author Maxence Bernard
  */
-public class MainFrame extends JFrame implements ComponentListener, KeyListener, FocusListener, WindowListener {
+//public class MainFrame extends JFrame implements ComponentListener, KeyListener, FocusListener, WindowListener {
+public class MainFrame extends JFrame implements ComponentListener, KeyListener, FocusListener {
 	
 	private final static String FRAME_TITLE = "muCommander";
 
@@ -44,19 +45,21 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     private FileTable table2;
     
     private FileTable lastActiveTable;
-    
+
 	private ToolBar toolbar;
     
 	private JLabel statusBarLabel;
 	
 	private CommandBarPanel commandBar;
 	
-	/** Used to determine whether or not this MainFrame is active, i.e. muCommander window is in the foreground */
-	private boolean isActive; 
-	
-	private long lastFocusRequest;
+//	/** Used to determine whether or not this MainFrame is active, i.e. muCommander window is in the foreground */
+//	private boolean isActive; 
 
-	private final static int FOCUS_REQUEST_DELAY = 3000;
+//	/** Time at which the last focus request was made */	
+//	private long lastFocusRequest;
+
+//	/** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
+//	private final static int FOCUS_REQUEST_DELAY = 1000;
 	
 	
 	/**
@@ -117,20 +120,16 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		// Cool but way too slow
 //		splitPane.setContinuousLayout(true);
 
-//		contentPane.add(splitPane, BorderLayout.CENTER);
 		contentPane.add(splitPane);
 
 		// Create and add status bar
 		statusBarLabel = new JLabel("");
 		if(ConfigurationManager.getVariable("prefs.show_status_bar_on_startup", "true").equals("false"))
 			statusBarLabel.setVisible(false);
-//		else
-//			updateStatusBar();
 		contentPane.add(statusBarLabel);
 
 		// Show command bar only if it hasn't been disabled in the preferences
 		this.commandBar = new CommandBarPanel(this);
-//		contentPane.add(commandBar, BorderLayout.SOUTH);
 		if(ConfigurationManager.getVariable("prefs.show_command_bar_on_startup", "true").equals("false"))
 			commandBar.setVisible(false);
 		contentPane.add(commandBar);
@@ -147,7 +146,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 
 		// Catches window close event
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		addWindowListener(this);
+//		addWindowListener(this);
 	}
 	
 	
@@ -463,10 +462,11 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 
 	
 	/**
-	 * Returns whether or not this MainFrame is active, i.e. if this muCommander window is in the foreground.
+	 * Returns whether or not this MainFrame is active, i.e. if this window is in the foreground.
 	 */
 	public boolean isActive() {
-		return isActive;
+//		return isActive;
+		return isVisible() && hasFocus();
 	}
 
 
@@ -627,22 +627,16 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
      * WindowListener methods *
      **************************/	
 
+/*
     public void windowActivated(WindowEvent e) {
 		this.isActive = true;
-
-    	if(com.mucommander.Debug.ON)
-			System.out.println("MainFrame.windowActivated");
-
-//		// Requests focus first time MainFrame is activated
-//    	// (this method is called each time MainFrame is activated)
-//    	if (!firstTimeActivated) {
-//    		FocusRequester.requestFocus(table1);
-//    		firstTimeActivated = true;
-//    	}
 
 		// Requests focus if last active table doesn't already have focus
 		// Delay check is to avoid that 2 main frames fight over focus.
 		long now;
+if(com.mucommander.Debug.ON)
+	System.out.println("MainFrame.windowActivated "+!lastActiveTable.hasFocus()+" "+((now=System.currentTimeMillis())-lastFocusRequest>FOCUS_REQUEST_DELAY));
+
 		if(!lastActiveTable.hasFocus() && (now=System.currentTimeMillis())-lastFocusRequest>FOCUS_REQUEST_DELAY) {
 			lastFocusRequest = now;
 			requestFocus();
@@ -669,20 +663,27 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     }
 
     public void windowClosed(WindowEvent e) {
-		// Properly disposes folder panels and releases
-		// associated resources
-		this.folderPanel1.dispose();
-		this.folderPanel2.dispose();
 	}
+*/
 
 	/*********************
 	 * Overriden methods *
 	 *********************/
 
+	 public void dispose() {
+		// Properly disposes folder panels and releases
+		// associated resources
+		this.folderPanel1.dispose();
+		this.folderPanel2.dispose();
+
+		super.dispose();
+	 }
+	 
 // Adding custom insets to the Frame causes some weird sizing problems,
 // so insets are added to the content pane instead
 //	 public Insets getInsets() {
 //		 return new Insets(3, 4, 3, 4);
 //	 }
+
 
 }

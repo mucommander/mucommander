@@ -27,8 +27,8 @@ public class ViewerFrame extends JFrame implements ActionListener, WindowListene
 
 		// File menu
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = MenuToolkit.addMenu(Translator.get("text_viewer.file"), menuMnemonicHelper, null);
-		closeItem = MenuToolkit.addMenuItem(menu, Translator.get("text_viewer.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
+		JMenu menu = MenuToolkit.addMenu(Translator.get("file_viewer.file_menu"), menuMnemonicHelper, null);
+		closeItem = MenuToolkit.addMenuItem(menu, Translator.get("file_viewer.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
 		menu.add(closeItem);
 
 		// Add menu to frame
@@ -49,6 +49,7 @@ public class ViewerFrame extends JFrame implements ActionListener, WindowListene
 	public void show() {
 		// Sets panel to preferred size, without exceeding a maximum size and with a minumum size
 		super.pack();
+/*
 		Dimension d = getSize();
 		Dimension screend = Toolkit.getDefaultToolkit().getScreenSize();
 			
@@ -60,7 +61,7 @@ public class ViewerFrame extends JFrame implements ActionListener, WindowListene
 			width, 
 			(int)(width*3/((float)4))
 		);
-
+*/
 		super.setResizable(true);
 		super.show();
 	}
@@ -72,7 +73,8 @@ public class ViewerFrame extends JFrame implements ActionListener, WindowListene
 	}
 
 	private void close() {
-		setVisible(false);
+//		setVisible(false);
+		dispose();
 	}
 
     /**************************

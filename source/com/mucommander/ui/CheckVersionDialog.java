@@ -68,8 +68,10 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 
                 // If the version check was not iniated by the user (i.e. was automatic),
                 // we do not need to inform the user that he already has the latest version
-                if(!userInitiated)
-                    return;
+                if(!userInitiated) {
+                    dispose();
+					return;
+				}
                 
 				title = Translator.get("version_dialog.no_new_version_title");
                 text = Translator.get("version_dialog.no_new_version");
@@ -97,8 +99,10 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
         catch(Exception e) {
             // If the version check was not iniated by the user (i.e. was automatic),
             // we do not need to inform the user that the check failed
-            if(!userInitiated)
-                return;
+            if(!userInitiated) {
+                dispose();
+				return;
+			}
 
             title = Translator.get("version_dialog.not_available_title");
             text = Translator.get("version_dialog.not_available");

@@ -55,17 +55,10 @@ public class TextViewer extends FileViewer implements ActionListener, WindowList
 
 	
 	public void startViewing(AbstractFile fileToView, boolean isSeparateWindow) throws IOException {
-/*		
-		byte b[] = new byte[(int)fileToView.getSize()];
-		DataInputStream din = new DataInputStream(fileToView.getInputStream());
-		din.readFully(b);
-		din.close();
-*/
-
-//		JTextArea textArea = new JTextArea(new String(b));
 		textArea.read(new InputStreamReader(fileToView.getInputStream()), null);
 		textArea.setCaretPosition(0);
 	}
+
 	
 	public static boolean canViewFile(AbstractFile file) {
 		String name = file.getName();

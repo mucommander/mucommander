@@ -4,7 +4,7 @@ package com.mucommander.job;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
-import com.mucommander.ui.comp.FocusRequester;
+// import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.ui.table.FileTable;
 

@@ -136,8 +136,8 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		
 			viewer.getFrame().show();
 		}
-		catch(IOException e) {
-			showErrorDialog(Translator.get("view_error"), Translator.get("view_error_title"));
+		catch(Exception e) {
+			showErrorDialog(Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"));
 		}
 	}
 	
@@ -192,7 +192,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			editor.setVisible(true);
 		}
 		catch(IOException e) {
-			showErrorDialog(Translator.get("edit_error"), Translator.get("edit_error_title"));
+			showErrorDialog(Translator.get("file_editor.edit_error"), Translator.get("file_editor.edit_error_title"));
 		}
 	}
 	

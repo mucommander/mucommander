@@ -104,7 +104,6 @@ public class Base64OutputStream extends OutputStream {
     
 	
 	public void write(int i) throws IOException {
-//System.out.println("write "+i);
 		// We have a 3-byte group
 		if(nbBytesWaiting==2) {
 			// Write 3 bytes as 4 base64 characters
@@ -164,88 +163,4 @@ public class Base64OutputStream extends OutputStream {
 		out.close();
 	}
 	
-
-/*	
-    public void encode(AbstractFile file, OutputStream out) throws IOException {
-        InputStream in = file.getInputStream();
-        byte bytes[] = new byte[FileJob.READ_BLOCK_SIZE];
-
-        int n;
-        totalRead = 0;
-        int n3byt, nrest=0, k=0, linelength=0, i;
-        byte buf[] = new byte[4];   // array of base64 characters
-        
-        while ((n=in.read(bytes, nrest, FileJob.READ_BLOCK_SIZE-nrest))!=-1 && !job.isInterrupted()) {
-            n += nrest;
-            
-            n3byt      = n / 3;     // how 3 bytes groups?
-            nrest      = n % 3;     // the remaining bytes from the grouping
-            k          = n3byt * 3; // we are doing 3 bytes at a time
-            i          = 0;         // index
-
-            // do the 3-bytes groups ...
-            while ( i < k ) {
-                buf[0] = (byte)(( bytes[i]   & 0xFC) >> 2);
-                buf[1] = (byte)(((bytes[i]   & 0x03) << 4) |
-                            ((bytes[i+1] & 0xF0) >> 4));
-                buf[2] = (byte)(((bytes[i+1] & 0x0F) << 2) |
-                            ((bytes[i+2] & 0xC0) >> 6));
-                buf[3] = (byte)(  bytes[i+2] & 0x3F);
-                out.write(BASE_TABLE[buf[0]]);
-                out.write(BASE_TABLE[buf[1]]);
-                out.write(BASE_TABLE[buf[2]]);
-                out.write(BASE_TABLE[buf[3]]);
-
-                if ((linelength += 4) >= 76) {
-                    out.write('\r');
-                    out.write('\n');
-                    linelength = 0;
-                }
-                i += 3;
-            }
-
-            if(nrest>0  && n3byt>0) {
-                // Move remaining bytes back to the beginning of the byte array
-                for(int j=0; j<nrest; j++)
-                    bytes[j] = bytes[FileJob.READ_BLOCK_SIZE-nrest+j];
-//                System.arraycopy(bytes, READ_BLOCK_SIZE-nrest, bytes, 0, nrest);
-            }
-        }
-
-        // deals with with the padding ...
-        if (nrest==2) {
-            // 2 bytes left
-            buf[0] = (byte)(( bytes[k] & 0xFC)   >> 2);
-            buf[1] = (byte)(((bytes[k] & 0x03)   << 4) |
-                            ((bytes[k+1] & 0xF0) >> 4));
-            buf[2] = (byte)(( bytes[k+1] & 0x0F) << 2);
-        }
-        else if (nrest==1) {
-            // 1 byte left
-            buf[0] = (byte)((bytes[k] & 0xFC) >> 2);
-            buf[1] = (byte)((bytes[k] & 0x03) << 4);
-        }
-        
-        if (nrest > 0) {
-            // send the padding
-            if ((linelength += 4) >= 76) {
-                out.write('\r');
-                out.write('\n');
-            }
-            out.write(BASE_TABLE[buf[0]]);
-            out.write(BASE_TABLE[buf[1]]);
-
-            if (nrest==2) {
-                out.write(BASE_TABLE[buf[2]]);
-            }
-            else {
-                out.write('=');
-            }
-            out.write('=');
-        }
-        
-        in.close();
-        out.flush();
-    }
-*/
 }

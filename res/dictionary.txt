@@ -146,18 +146,6 @@ command_bar.large_file_warning:FR:Ce fichier est peut-être trop large pour cett
 command_bar.open_anyway:EN:Open anyway
 command_bar.open_anyway:FR:Ouvrir
 
-command_bar.view_error_title:EN:View error
-command_bar.view_error_title:FR:Erreur 'vue'
-
-command_bar.view_error:EN:Unable to view file.
-command_bar.view_error:FR:Impossible de voir le fichier.
-
-command_bar.edit_error_title:EN:Edit error
-command_bar.edit_error_title:FR:Erreur d'édition
-
-command_bar.edit_error:EN:Unable to edit file.
-command_bar.edit_error:FR:Impossible d'éditer le fichier.
-
 
 #############
 # File menu #
@@ -769,15 +757,27 @@ zip_dialog.comment:FR:Commentaire (optionnel)
 zip_dialog.file_already_exists:EN:%1 already exists in destination folder.
 zip_dialog.file_already_exists:FR:%1 existe déjà dans le dossier de destination.
 
+###############
+# File viewer #
+###############
+
+file_viewer.view_error_title:EN:View error
+file_viewer.view_error_title:FR:Erreur d'affichage
+
+file_viewer.view_error:EN:Unable to view file.
+file_viewer.view_error:FR:Impossible de voir le fichier.
+
+file_viewer.file_menu:EN:File
+file_viewer.file_menu:FR:Fichier
+
+file_viewer.close:EN:Close
+file_viewer.close:FR:Fermer
+
+file_viewer.view_error:EN:
 
 ###############
 # Text viewer #
 ###############
-
-text_viewer.file:EN:$[file_menu]
-
-text_viewer.close:EN:Close
-text_viewer.close:FR:Fermer
 
 text_viewer.edit:EN:Edit
 text_viewer.edit:FR:Edition
@@ -787,6 +787,17 @@ text_viewer.copy:FR:Copier
 
 text_viewer.select_all:EN:Select All
 text_viewer.select_all:FR:Tout sélectionner
+
+
+###############
+# File editor #
+###############
+
+file_editor.edit_error_title:EN:Edit error
+file_editor.edit_error_title:FR:Erreur d'édition
+
+file_editor.edit_error:EN:Unable to edit file.
+file_editor.edit_error:FR:Impossible d'éditer le fichier.
 
 
 ###############

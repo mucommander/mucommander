@@ -33,13 +33,20 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	 * or last frame to have been used if muCommander doesn't have focus */	
 	private static MainFrame currentMainFrame;
 
-	
 	private final static int MENU_ITEM_VK_TABLE[] = {
 		KeyEvent.VK_1,KeyEvent.VK_2,KeyEvent.VK_3,KeyEvent.VK_4,
 		KeyEvent.VK_5,KeyEvent.VK_6,KeyEvent.VK_7,KeyEvent.VK_8,
 		KeyEvent.VK_9, KeyEvent.VK_0};
 	
 	private static WindowManager instance;
+
+	/** Time at which the last focus request was made */	
+	private long lastFocusRequest;
+
+	private MainFrame lastMainFrameActivated;
+	
+	/** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
+	private final static int FOCUS_REQUEST_DELAY = 1000;
 
 	
 	static {
@@ -396,15 +403,45 @@ if(com.mucommander.Debug.ON)
 	 * WindowListener methods *
 	 **************************/	
 
+	public void windowActivated(WindowEvent e) {
+		this.currentMainFrame = (MainFrame)e.getSource();
+
+		// Requests focus if last active table doesn't already have focus
+		// Delay check is to avoid that 2 main frames fight over focus.
+		long now = System.currentTimeMillis();
+
+if(com.mucommander.Debug.ON)
+	System.out.println("WindowManager.windowActivated");
+
+		Window ownedWindows[] = currentMainFrame.getOwnedWindows();
+
+if(com.mucommander.Debug.ON) {
+	System.out.println("ownedWindows= "+ownedWindows);
+	for(int i=0; i<ownedWindows.length; i++)
+		System.out.println("ownedWindows #"+i+" ="+ownedWindows[i]);
+}
+
+		if(ownedWindows!=null)
+			for(int i=0; i<ownedWindows.length; i++)
+				if(ownedWindows[i].isShowing())
+					return;
+
+		if(!currentMainFrame.hasFocus()
+//			&& (ownedWindows==null || ownedWindows.length==0)
+			&& (lastMainFrameActivated==currentMainFrame || (now-lastFocusRequest>FOCUS_REQUEST_DELAY))) {
+if(com.mucommander.Debug.ON)
+	System.out.println("WindowManager.windowActivated: focus requested");
+			currentMainFrame.requestFocus();
+			lastFocusRequest = now;
+		}
+		lastMainFrameActivated = currentMainFrame;
+	}
+
 	public void windowClosing(WindowEvent e) {
 		disposeMainFrame((MainFrame)e.getSource());
 	}
 
 	public void windowClosed(WindowEvent e) {
-	}
-
-	public void windowActivated(WindowEvent e) {
-		this.currentMainFrame = (MainFrame)e.getSource();
 	}
 
 	public void windowDeactivated(WindowEvent e) {

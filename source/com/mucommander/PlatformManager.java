@@ -78,7 +78,7 @@ public class PlatformManager {
 	
 	
 	/**
-	 * Returns screen insets: accurate information under 1Java 1.4,
+	 * Returns screen insets: accurate information under Java 1.4,
 	 * null inset values for Java 1.3 (execept under OS X)
 	 */
 	private static Insets getScreenInsets(Frame frame) {
@@ -190,7 +190,6 @@ public class PlatformManager {
 			while(pos<len) {
 				c = command.charAt(pos);
 				if((c==' ' && command.charAt(pos-1)!='\\') || c=='\t' || c=='\n' || c=='\r' || c=='\f') {
-// if(com.mucommander.Debug.ON) System.out.println("token= "+token.toString());
 					tokensV.add(token.toString());
 					token = new StringBuffer();
 				}
@@ -201,12 +200,6 @@ public class PlatformManager {
 			}
 			tokensV.add(token.toString());
 
-
-//if(com.mucommander.Debug.ON) {
-//	for(int i=0; i<tokensV.size(); i++)
-//		System.out.println("token"+i+"= ["+tokensV.elementAt(i)+"]");
-//}
-	
 			String tokens[] = new String[tokensV.size()];
 			tokensV.toArray(tokens);
 
