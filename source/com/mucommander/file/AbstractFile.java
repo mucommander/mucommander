@@ -28,7 +28,7 @@ public abstract class AbstractFile {
 				return null;
 			}
 		}
-		// HTML file
+/*		// HTML file
 		else if (absPath.toLowerCase().startsWith("http://")) {
 			try {
 				file = new HTMLFile(absPath);
@@ -37,7 +37,8 @@ public abstract class AbstractFile {
 				return null;
 			}
 		}
-		// FS file, tests if the given path is indeed absolute
+*/
+        // FS file, tests if the given path is indeed absolute
 		else if (new File(absPath).isAbsolute()) {
 			file = new FSFile(absPath);
 		}
