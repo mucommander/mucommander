@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import java.util.Vector;
 import java.io.IOException;
 
 
@@ -33,6 +32,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
 
 	private FileTable activeTable;
+
 
 	public MkdirDialog(MainFrame mainFrame) {
 	    super(mainFrame, Translator.get("mkdir_dialog.title"), mainFrame);

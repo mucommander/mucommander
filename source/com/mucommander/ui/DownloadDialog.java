@@ -3,13 +3,13 @@ package com.mucommander.ui;
 
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.util.Vector;
 
 
 /**
@@ -19,22 +19,22 @@ import java.util.Vector;
  */
 public class DownloadDialog extends DestinationDialog {
 
-	private Vector fileV;
+	private FileSet files;
 	
 	private String fileURL;
 
 	private String fileName;
 	
 	
-	public DownloadDialog(MainFrame mainFrame, Vector fileV) {
-		super(mainFrame, fileV,
+	public DownloadDialog(MainFrame mainFrame, FileSet files) {
+		super(mainFrame, files,
 			Translator.get("download_dialog.download"),
 			Translator.get("download_dialog.description"),
 			Translator.get("download_dialog.download"),
 			Translator.get("download_dialog.error_title"));
 
-		this.fileV = fileV;
-		AbstractFile file = (AbstractFile)fileV.elementAt(0);
+		this.files = files;
+		AbstractFile file = (AbstractFile)files.elementAt(0);
 		
 		AbstractFile activeFolder = mainFrame.getLastActiveTable().getCurrentFolder();
 		// Fill text field with current folder's absolute path and file name
@@ -43,11 +43,10 @@ public class DownloadDialog extends DestinationDialog {
 	}
 
 	
-	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-		
+	protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
 		// Starts moving files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("download_dialog.downloading"));
-		CopyJob downloadJob = new CopyJob(progressDialog, mainFrame, fileV, destFolder, newName, CopyJob.DOWNLOAD_MODE, defaultFileExistsAction);
+		CopyJob downloadJob = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.DOWNLOAD_MODE, defaultFileExistsAction);
 		progressDialog.start(downloadJob);
 	}
 	

@@ -489,14 +489,14 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 					locationField.setText(currentFolder.getAbsolutePath(true));
 			}
 			else {
-				Vector fileV = new Vector();
-				fileV.add(file);
+				FileSet fileSet = new FileSet(currentFolder);
+				fileSet.add(file);
 				
 				// Show confirmation/path modification dialog
 //				if(file instanceof RemoteFile)	// Does not work coz file can be wrapped inside a ZipArchiveFile -> test is false 
-				new DownloadDialog(mainFrame, fileV);
+				new DownloadDialog(mainFrame, fileSet);
 //				else
-//					new CopyDialog(mainFrame, fileV, false);
+//					new CopyDialog(mainFrame, fileSet, false);
 					
 				// Restore current folder's path
 				locationField.setText(currentFolder.getAbsolutePath(true));

@@ -2,10 +2,9 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.text.Translator;
-
-import java.util.Vector;
 
 
 /**
@@ -22,7 +21,7 @@ public class UnzipDialog extends DestinationDialog {
 	 * @param mainFrame the main frame this dialog is attached to.
 	 * @param isShiftDown true if shift key was pressed when invoking this dialog.
 	 */
-	public UnzipDialog(MainFrame mainFrame, Vector files, boolean isShiftDown) {
+	public UnzipDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
 		super(mainFrame, files,
 			Translator.get("unzip_dialog.unzip"),
 			Translator.get("unzip_dialog.destination"),
@@ -45,7 +44,7 @@ public class UnzipDialog extends DestinationDialog {
 	/**
 	 * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
 	 */
-	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName, int defaultFileExistsAction) {
+	protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
 
 		// Starts copying files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("unzip_dialog.unzipping"));

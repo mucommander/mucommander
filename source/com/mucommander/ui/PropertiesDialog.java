@@ -2,6 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.job.PropertiesJob;
 import com.mucommander.text.Translator;
@@ -10,9 +11,6 @@ import com.mucommander.text.SizeFormatter;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.text.NumberFormat;
-
-import java.util.Vector;
 
 
 /**
@@ -22,6 +20,7 @@ import java.util.Vector;
  * @author Maxence Bernard
  */
 public class PropertiesDialog extends FocusDialog implements Runnable, ActionListener {
+	
 	private MainFrame mainFrame;
 	private PropertiesJob job;
 	private Thread repaintThread;
@@ -42,14 +41,18 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	private String title;
 
 	
-	public PropertiesDialog(MainFrame mainFrame, Vector files) {
+	public PropertiesDialog(MainFrame mainFrame, FileSet files) {
 		super(mainFrame, "", mainFrame);
 		this.mainFrame = mainFrame;
 
-		AbstractFile firstFile = (AbstractFile)files.elementAt(0);
-		this.title = files.size()==1?Translator.get("properties_dialog.file_properties", firstFile.getName()):Translator.get("properties_dialog.properties");
+		// Set dialog's title
+		if(files.size()==1)
+			this.title = Translator.get("properties_dialog.file_properties", files.fileAt(0).getName());
+		else
+			this.title = Translator.get("properties_dialog.properties");
 		setTitle(title+" ("+Translator.get("properties_dialog.calculating")+")");
 		
+		// Display wait cursor while calculating size
 		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
 		this.job = new PropertiesJob(files, mainFrame);
@@ -63,13 +66,10 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		mainPanel.addTextFieldRow(Translator.get("properties_dialog.contents")+":", counterLabel, 10);
 
 		// Location (set here)
-		AbstractFile parent = firstFile.getParent();
-		if(parent!=null) {
-			String location = parent.getAbsolutePath(true);
-			JLabel locationLabel = new JLabel(location);
-			locationLabel.setToolTipText(location);
-			mainPanel.addTextFieldRow(Translator.get("properties_dialog.location")+":", locationLabel, 10);
-		}
+		String location = files.getBaseFolder().getAbsolutePath(true);
+		JLabel locationLabel = new JLabel(location);
+		locationLabel.setToolTipText(location);
+		mainPanel.addTextFieldRow(Translator.get("properties_dialog.location")+":", locationLabel, 10);
 
 		// Size (set later)
 		sizeLabel = new JLabel("");
@@ -105,7 +105,6 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 			+(nbFolders>0?Translator.get("properties_dialog.nb_folders", ""+nbFolders):"")
 		);
 
-//		sizeLabel.setText("<html>"+Translator.get("properties_dialog.nb_bytes", NumberFormat.getInstance().format(job.getTotalBytes()))+"</html>");
 		sizeLabel.setText(SizeFormatter.format(job.getTotalBytes(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE));
 		
 		counterLabel.repaint(REFRESH_RATE);

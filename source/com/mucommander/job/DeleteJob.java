@@ -11,7 +11,6 @@ import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.text.Translator;
 
 import java.io.IOException;
-import java.util.Vector;
 
 import javax.swing.*;
 
@@ -42,7 +41,7 @@ public class DeleteJob extends FileJob {
 	 * @param mainFrame mainFrame this job has been triggered by
 	 * @param files files which are going to be deleted
 	 */
-    public DeleteJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files) {
+    public DeleteJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files) {
 		super(progressDialog, mainFrame, files);
 
 		this.errorDialogTitle = Translator.get("delete_dialog.error_title");

@@ -13,10 +13,9 @@ import com.mucommander.text.Translator;
 import com.mucommander.text.SizeFormatter;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 
 import java.io.IOException;
-
-import java.util.Vector;
 
 
 /**
@@ -61,7 +60,7 @@ public abstract class FileJob implements Runnable {
 	protected AbstractFile baseSourceFolder;
 	
 	/** Files which are going to be processed */
-	protected Vector files;
+	protected FileSet files;
 
     /** Number of files that this job contains */
     protected int nbFiles;
@@ -98,7 +97,7 @@ public abstract class FileJob implements Runnable {
 	 * @param mainFrame mainFrame this job has been triggered by
 	 * @param files files which are going to be processed
 	 */
-	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files) {
+	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files) {
 		this(mainFrame, files);
 		this.progressDialog = progressDialog;
 	}
@@ -110,12 +109,13 @@ public abstract class FileJob implements Runnable {
 	 * @param mainFrame mainFrame this job has been triggered by
 	 * @param files files which are going to be processed
 	 */
-	public FileJob(MainFrame mainFrame, Vector files) {
+	public FileJob(MainFrame mainFrame, FileSet files) {
 		this.mainFrame = mainFrame;
 	    this.files = files;
 		
         this.nbFiles = files.size();
-		this.baseSourceFolder = ((AbstractFile)files.elementAt(0)).getParent();
+//		this.baseSourceFolder = ((AbstractFile)files.elementAt(0)).getParent();
+		this.baseSourceFolder = files.getBaseFolder();
 	}
 	
 	
@@ -131,9 +131,6 @@ public abstract class FileJob implements Runnable {
      * Starts file job in a separate thread.
      */
     public void start() {
-//		if(com.mucommander.Debug.ON)
-//			System.out.println("FileJob.start(): "+this+" modifier="+(this instanceof FileModifier));
-		
 		// Pause auto-refresh during file job if this job potentially modifies folders contents
 		// and would potentially cause table to auto-refresh
 		mainFrame.getFolderPanel1().getFileTable().setAutoRefreshActive(false);
@@ -282,7 +279,7 @@ public abstract class FileJob implements Runnable {
 
 		// Loop on all source files, checking that job has not been interrupted
 		for(int i=0; i<nbFiles && !isInterrupted(); i++) {
-			currentFile = (AbstractFile)files.elementAt(i);
+			currentFile = files.fileAt(i);
 	
 			// Change current file and advance file index
 			currentFileIndex = i;
@@ -387,15 +384,6 @@ public abstract class FileJob implements Runnable {
 	}
 	
 	
-//	/**
-//	 * Shows a dialog which notifies the user that a file already exists in the destination folder
-//	 * under the same name and asks for what to do.
-//	 */
-//    protected int showFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile) {
-//		QuestionDialog dialog = new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile);
-//		return waitForUserResponse(dialog);
-//	}
-
 	/**
 	 * Creates and returns a dialog which notifies the user that a file already exists in the destination folder
 	 * under the same name and asks for what to do.
@@ -460,16 +448,7 @@ public abstract class FileJob implements Runnable {
 		return nbBytesProcessed;
 	}
 
-//    /**
-//	 * Returns the number of bytes reported by {@link #getTotalBytesProcessed() getTotalBytesProcessed}
-//	 * which have been skipped, for example when resuming a file transfer. This information must be
-//	 * taken into account when calculating transfer speed.
-//     */
-//    public long getTotalBytesSkipped() {
-//		return nbBytesSkipped;
-//	}
-	
-	
+
     /**
 	* Returns the index of the file currently being processed (has to be < {@link #getNbFiles() getNbFiles}).
      */
@@ -490,25 +469,6 @@ public abstract class FileJob implements Runnable {
 	//////////////////////
 
 	
-//	/**
-//	 * This method should return the job's refresh policy :
-//	 * <ul>
-//	 *  <li>- {@link #DO_NOT_REFRESH DO_NOT_REFRESH} : this job is 'read-only' and does not modify the folder's content</li>
-//	 *  <li>- {@link #REFRESH_DESTINATION_FOLDER REFRESH_DESTINATION_FOLDER}: this job only modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()}</li>
-//	 *  <li>- {@link #REFRESH_DESTINATION_SUBFOLDERS REFRESH_DESTINATION_SUBFOLDERS}: this job modifies the folder returned by {@link #getBaseDestinationFolder() getBaseDestinationFolder()}
-//	 *  and its subfolders</li>
-//	 * </ul>
-//	 */
-//	protected abstract int getRefreshPolicy();
-	
-	
-//	/**
-//	 * This method should return the base destination folder which this FileJob potentially modifies, <code>null</code> if
-//	 * this FileJob is 'read-only' and does not modify any files.
-//	 */
-//	protected abstract AbstractFile getBaseDestinationFolder();
-	
-	
 	/**
 	 * This method should return <code>true</code> if the given folder has or may have been modified. This method is
 	 * used to determine if current table folders should be refreshed after this job.
@@ -519,13 +479,11 @@ public abstract class FileJob implements Runnable {
 	/**
 	 * Automatically called by {@link #run() run()} for each file that needs to be processed.
 	 *
-	 * @param file the file or folder to copy
-	 * @param destFolder the destination folder
+	 * @param file the file or folder to process
 	 * @param recurseParams array of parameters which can be used when calling this method recursively, contains <code>null</code> when called by {@link #run() run()}
 	 *
 	 * @return <code>true</code> if the operation was sucessful
 	 */
-//    protected abstract boolean processFile(AbstractFile file, AbstractFile destFolder, Object[] recurseParams);
     protected abstract boolean processFile(AbstractFile file, Object recurseParams);
 
 	

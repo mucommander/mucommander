@@ -5,13 +5,11 @@ import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.text.Translator;
+import com.mucommander.file.FileSet;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-import java.util.Vector;
-import java.io.IOException;
 
 
 /**
@@ -24,7 +22,7 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
 	private MainFrame mainFrame;
 
 	/** Files to delete */
-	private Vector files;
+	private FileSet files;
 	
 	private JButton okButton;
 	private JButton cancelButton;
@@ -35,7 +33,7 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
 
 	
-	public DeleteDialog(MainFrame mainFrame, Vector files) {
+	public DeleteDialog(MainFrame mainFrame, FileSet files) {
 	    super(mainFrame, Translator.get("delete_dialog.delete"), mainFrame);
 		this.mainFrame = mainFrame;
 		this.files = files;

@@ -2,9 +2,9 @@
 package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 import com.mucommander.ui.MainFrame;
 
-import java.util.Vector;
 import java.io.IOException;
 
 
@@ -26,7 +26,7 @@ public class PropertiesJob extends FileJob {
 	private long totalBytes;
 	
 	
-	public PropertiesJob(Vector files, MainFrame mainFrame) {
+	public PropertiesJob(FileSet files, MainFrame mainFrame) {
 		super(mainFrame, files);
 		setAutoUnmark(false);
 	}

@@ -4,12 +4,12 @@ package com.mucommander.ui;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.text.Translator;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 import com.mucommander.ui.table.FileTable;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.util.Vector;
 
 
 /**
@@ -21,7 +21,7 @@ import java.util.Vector;
 public abstract class DestinationDialog extends FocusDialog implements ActionListener {
 
 	protected MainFrame mainFrame;
-	protected Vector files;
+	protected FileSet files;
 	
 	protected JTextField pathField;
 	protected JComboBox fileExistsActionComboBox;
@@ -41,7 +41,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 	 *
 	 * @param mainFrame the main frame this dialog is attached to.
 	 */
-	public DestinationDialog(MainFrame mainFrame, Vector files) {
+	public DestinationDialog(MainFrame mainFrame, FileSet files) {
 		super(mainFrame, null, mainFrame);
 		this.mainFrame = mainFrame;
 		this.files = files;
@@ -53,7 +53,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 	 *
 	 * @param mainFrame the main frame this dialog is attached to.
 	 */
-	public DestinationDialog(MainFrame mainFrame, Vector files, String title, String labelText, String okText, String errorDialogTitle) {
+	public DestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle) {
 		this(mainFrame, files);
 		
 		init(title, labelText, okText, errorDialogTitle);
@@ -100,13 +100,6 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 		mainPanel.addSpace(10);
 		
         contentPane.add(mainPanel, BorderLayout.NORTH);
-
-        // Escape key disposes dialog
-//		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
-//		pathField.addKeyListener(escapeKeyAdapter);
-//		fileExistsActionComboBox.addKeyListener(escapeKeyAdapter);
-//		okButton.addKeyListener(escapeKeyAdapter);
-//		cancelButton.addKeyListener(escapeKeyAdapter);
 		
 		// Set minimum/maximum dimension
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
@@ -163,7 +156,6 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 			return;
 		}
 
-		AbstractFile sourceFolder = mainFrame.getLastActiveTable().getCurrentFolder();
 		AbstractFile destFolder = (AbstractFile)ret[0];
 		String newName = (String)ret[1];
 		
@@ -177,10 +169,10 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 		// We don't remember default action on purpose: we want the user to specify it each time,
 		// it would be too dangerous otherwise.
 		
-		startJob(sourceFolder, destFolder, newName, defaultFileExistsAction);
+		startJob(destFolder, newName, defaultFileExistsAction);
 	}
 	
 	
-	protected abstract void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName, int defaultFileExistsAction);
+	protected abstract void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction);
 	
 }

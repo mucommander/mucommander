@@ -3,13 +3,13 @@ package com.mucommander.ui;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 import com.mucommander.job.ZipJob;
 import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.util.Vector;
 
 
 /**
@@ -23,7 +23,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 	private MainFrame mainFrame;
 
 	/** Files to zip */
-	private Vector files;
+	private FileSet files;
 	
 	private JTextField filePathField;
 	private JTextArea commentArea;
@@ -40,7 +40,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);	
 
 
-	public ZipDialog(MainFrame mainFrame, Vector files, boolean isShiftDown) {
+	public ZipDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
 		super(mainFrame, Translator.get("zip_dialog.title"), mainFrame);
 
 		this.mainFrame = mainFrame;

@@ -11,6 +11,7 @@ import com.mucommander.ui.connect.ServerConnectDialog;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFile;
+import com.mucommander.file.FileSet;
 
 import com.mucommander.job.SendMailJob;
 
@@ -21,7 +22,6 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
-import java.util.Vector;
 
 
 /**
@@ -353,7 +353,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * Brings up the properties dialog that displays information about currently marked files (if any).
 	 */
 	public void showPropertiesDialog() {
-		Vector files = getLastActiveTable().getSelectedFiles();
+		FileSet files = getLastActiveTable().getSelectedFiles();
 		if(files.size()>0)
 			new PropertiesDialog(this, files).showDialog();
 	}

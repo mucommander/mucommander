@@ -2,6 +2,7 @@
 package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
@@ -9,7 +10,6 @@ import com.mucommander.text.Translator;
 
 import java.io.*;
 import java.util.zip.*;
-import java.util.Vector;
 
 
 /**
@@ -20,7 +20,7 @@ import java.util.Vector;
 public class ZipJob extends ExtendedFileJob {
 
 	/** Files which are going to be zipped */
-    private Vector filesToZip;
+    private FileSet filesToZip;
 	
 	/** Destination (zip) file */
 	private AbstractFile destFile;
@@ -43,7 +43,7 @@ public class ZipJob extends ExtendedFileJob {
 	private int REPLACE_ACTION = 100;
 	
 
-    public ZipJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector filesToZip, String zipComment, AbstractFile destFile) {
+    public ZipJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToZip, String zipComment, AbstractFile destFile) {
         super(progressDialog, mainFrame, filesToZip);
 		
 		this.filesToZip = filesToZip;

@@ -14,7 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.Vector;
+
 
 /**
  * Command bar panel which contains buttons for a number of commands (view, edit, copy, move...) and
@@ -172,7 +172,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		else {
 			// The following actions need to work on files, so return
 			// if no files are selected
-			Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
+			FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
 			if(files.size()==0) {
 				// Request focus since focus currently belongs to a command bar button
 				// and no dialog will request focus

@@ -4,12 +4,12 @@ package com.mucommander.ui;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.text.Translator;
+import com.mucommander.file.FileSet;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Vector;
 
 
 /**
@@ -269,7 +269,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		}
 		else {
 			// The following actions need to operate on selected files
-			Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
+			FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
 			int nbSelectedFiles = files.size();
 			
 			// Return if no file is selected
@@ -314,7 +314,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			int buttonIndex=getButtonIndex(button);
 	
 			// Don't display dialog is file selection is empty
-			Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
+			FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
 			if(files.size()==0) {
 				mainFrame.requestFocus();
 				return;

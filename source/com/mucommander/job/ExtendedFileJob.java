@@ -5,6 +5,7 @@ import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.MainFrame;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 
 import com.mucommander.text.Translator;
 
@@ -33,7 +34,7 @@ public abstract class ExtendedFileJob extends FileJob {
 	/**
 	 * Creates a new ExtendedFileJob.
 	 */
-    public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame, java.util.Vector files) {
+    public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files) {
         super(progressDialog, mainFrame, files);
     }
 

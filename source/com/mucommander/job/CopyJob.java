@@ -10,8 +10,6 @@ import com.mucommander.ui.FileExistsDialog;
 
 import com.mucommander.text.Translator;
 
-import java.util.Vector;
-
 import java.io.IOException;
 
 
@@ -53,7 +51,7 @@ public class CopyJob extends ExtendedFileJob {
 	 * @param mode mode in which CopyJob is to operate: COPY_MODE, UNZIP_MODE or DOWNLOAD_MODE.
 	 * @param fileExistsAction default action to be triggered if a file already exists in the destination (action can be to ask the user)
 	 */
-	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, int mode, int fileExistsAction) {
+	public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, int mode, int fileExistsAction) {
 		super(progressDialog, mainFrame, files);
 
 		this.baseDestFolder = destFolder;

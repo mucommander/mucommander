@@ -12,6 +12,7 @@ import com.mucommander.ui.about.AboutDialog;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.file.FileSet;
 
 import com.mucommander.job.SendMailJob;
 
@@ -21,7 +22,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import java.util.Vector;
 
 
 public class MainMenuBar extends JMenuBar implements ActionListener, LocationListener, MenuListener {
@@ -228,7 +228,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		Object source = e.getSource();
 
 		// Some actions need to work on selected files
-		Vector files = mainFrame.getLastActiveTable().getSelectedFiles();
+		FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
 		int nbSelectedFiles = files.size();
 		
 		// File menu

@@ -22,7 +22,7 @@ import javax.swing.*;
 public class SendMailJob extends ExtendedFileJob {
 
     /** Files that are going to be sent */
-	private Vector filesToSend;
+	private FileSet filesToSend;
     
 	/** True after connection to mail server has been established */
 	private boolean connectedToMailServer;
@@ -66,7 +66,7 @@ public class SendMailJob extends ExtendedFileJob {
 	private final static int CLOSE_ACTION = 11;
 	
 	
-    public SendMailJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector filesToSend, String recipientString, String mailSubject, String mailBody) {
+    public SendMailJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToSend, String recipientString, String mailSubject, String mailBody) {
         super(progressDialog, mainFrame, filesToSend);
 
         this.filesToSend = filesToSend;

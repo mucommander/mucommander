@@ -10,8 +10,6 @@ import com.mucommander.ui.FileExistsDialog;
 
 import com.mucommander.text.Translator;
 
-import java.util.Vector;
-
 import java.io.IOException;
 
 
@@ -45,7 +43,7 @@ public class MoveJob extends ExtendedFileJob {
 	 * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
 	 * @param fileExistsAction default action to be triggered if a file already exists in the destination (action can be to ask the user)
 	 */
-	public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder, String newName, int fileExistsAction) {
+	public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, int fileExistsAction) {
 		super(progressDialog, mainFrame, files);
 
 		this.baseDestFolder = destFolder;

@@ -5,6 +5,7 @@ import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFile;
+import com.mucommander.file.FileSet;
 import com.mucommander.job.SendMailJob;
 import com.mucommander.text.SizeFormatter;
 import com.mucommander.text.Translator;
@@ -15,9 +16,6 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import java.io.IOException;
-
-import java.util.Vector;
-
 
 
 /**
@@ -32,7 +30,7 @@ import java.util.Vector;
 public class EmailFilesDialog extends FocusDialog implements ActionListener, ItemListener {
 	private MainFrame mainFrame;
 	
-	private Vector files;
+	private FileSet files;
 	
 	private JTextField toField;
 	private JTextField subjectField;
@@ -52,7 +50,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(550,400);	
 	
 	
-	public EmailFilesDialog(MainFrame mainFrame, Vector files) {
+	public EmailFilesDialog(MainFrame mainFrame, FileSet files) {
 		super(mainFrame, Translator.get("email_dialog.title"), mainFrame);
 		this.mainFrame = mainFrame;
 
@@ -186,14 +184,14 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 
 
 	/**
-	 * Returns a Vector of *files* (as opposed to folders) that have been found either in the given 
-	 * Vector or in one of the subfolders. 
+	 * Returns a FileSet of *files* (as opposed to folders) that have been found either in the given 
+	 * FileSet or in one of the subfolders. 
 	 *
 	 * @param originalFiles files as selected by the user which may contain folders
 	 */
-	private Vector getFlattenedFiles(Vector originalFiles) throws IOException {
+	private FileSet getFlattenedFiles(FileSet originalFiles) throws IOException {
 		int nbFiles = originalFiles.size();
-		Vector flattenedFiles = new Vector();
+		FileSet flattenedFiles = new FileSet(originalFiles.getBaseFolder());
 		for(int i=0; i<nbFiles; i++)
 			recurseOnFolder((AbstractFile)originalFiles.elementAt(i), flattenedFiles);
 
@@ -201,9 +199,9 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 	}
 
 	/**
-	 * Adds the given file to the Vector if it's not a folder, recurses otherwise.
+	 * Adds the given file to the FileSet if it's not a folder, recurses otherwise.
 	 */
-	private void recurseOnFolder(AbstractFile file, Vector flattenedFiles) throws IOException {
+	private void recurseOnFolder(AbstractFile file, FileSet flattenedFiles) throws IOException {
 //		if(file.isFolder() && !(file instanceof ArchiveFile)) {
 		if(file.isDirectory() && !file.isSymlink()) {
 			AbstractFile children[] = file.ls();
@@ -233,8 +231,8 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 				// Starts by disposing the dialog
 				dispose();
 
-				// Creates new Vector with files that have been selected
-				Vector filesToSend = new Vector();
+				// Creates new FileSet with files that have been selected
+				FileSet filesToSend = new FileSet(files.getBaseFolder());
 				int nbFiles = fileCheckboxes.length;
 				for(int i=0; i<nbFiles; i++)
 					if(fileCheckboxes[i].isSelected())

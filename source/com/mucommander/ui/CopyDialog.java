@@ -2,10 +2,9 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.text.Translator;
-
-import java.util.Vector;
 
 
 /**
@@ -15,14 +14,13 @@ import java.util.Vector;
  */
 public class CopyDialog extends DestinationDialog {
 
-	
 	/**
 	 * Creates and displays a new CopyDialog.
 	 *
 	 * @param mainFrame the main frame this dialog is attached to.
 	 * @param isShiftDown true if shift key was pressed when invoking this dialog.
 	 */
-	public CopyDialog(MainFrame mainFrame, Vector files, boolean isShiftDown) {
+	public CopyDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
 		super(mainFrame, files,
 			Translator.get("copy_dialog.copy"),
 			Translator.get("copy_dialog.destination"),
@@ -42,14 +40,15 @@ public class CopyDialog extends DestinationDialog {
 		// file's name
 		else {
 			fieldText = destFolder.getAbsolutePath(true);
-			AbstractFile file = ((AbstractFile)files.elementAt(0));
-			AbstractFile testFile;
 			// Append filename to destination path if there is only one file to copy
 			// and if the file is not a directory that already exists in destination
 			// (otherwise folder would be copied inside the destination folder)
-			if(nbFiles==1 
-			 &&	!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory()))
-				fieldText += file.getName();
+			if(nbFiles==1 ) {
+				AbstractFile file = ((AbstractFile)files.elementAt(0));
+				AbstractFile testFile;
+			 	if(!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory()))
+					fieldText += file.getName();
+			}
 		}
 		
 		setTextField(fieldText);
@@ -61,9 +60,9 @@ public class CopyDialog extends DestinationDialog {
 	/**
 	 * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
 	 */
-	protected void startJob(AbstractFile sourceFolder, AbstractFile destFolder, String newName, int defaultFileExistsAction) {
+	protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
 
-		if (newName==null && sourceFolder.equals(destFolder)) {
+		if (newName==null && files.getBaseFolder().equals(destFolder)) {
 			showErrorDialog(Translator.get("same_source_destination"));
 			return;
 		}
