@@ -119,17 +119,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
 
-		// Tries to move the file with AbstractFile.moveTo() 
-		// skipping the whole recursive process
-		try {
-			if(file.moveTo(destFile))
-				return true;		// if it succeeded return
-		}
-		catch(IOException e) {
-		    // Let's try the other regular way
-		}
-		
-		// Do not follow symlinks, simply delete it
+		// Do not follow symlink, simply delete it
 		if(file.isSymlink()) {
         	try  {
 				file.delete();
@@ -144,10 +134,14 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 		}
 		// Move directory recursively
 		else if(file.isDirectory()) {
+			// Let's try the easy way
+			if(fileMove(file, destFile))
+				return true;
+			// That didn't work, let's recurse
+
             // creates the folder in the destination folder if it doesn't exist
-			if (!destFile.exists()) {
+			if(!(destFile.exists() && destFile.isDirectory())) {
 				try {
-//System.out.println("CREATING FOLDER "+destFolder.getAbsolutePath()+"\\"+(newName==null?file.getName():newName));
 					destFolder.mkdir(destFileName);
 				}
             	catch(IOException e) {
@@ -240,7 +234,11 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 				}
 	        }
 			
-			// if moveTo() returned false or wasn't possible (append)
+			// Let's try the easy way			
+			if(!append && fileMove(file, destFile))
+				return true;
+
+			// if moveTo() returned false or wasn't possible because of 'append'
 			byte buf[] = new byte[BLOCK_SIZE];
 			
 			OutputStream out = null;
@@ -303,6 +301,20 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 	}
 
 
+	/**
+	 * Tries to move the file with AbstractFile.moveTo() 
+	 * skipping the whole manual recursive process
+	 */
+	public boolean fileMove(AbstractFile file, AbstractFile destFile) {
+		try {
+			if(file.moveTo(destFile))
+				return true;		// return true in case of success
+		}
+		catch(IOException e) {
+		}
+		
+		return false;
+	}
 
 
     public long getTotalBytesProcessed() {

@@ -2,6 +2,11 @@
 package com.mucommander.text;
 
 
+/**
+ * This class provides a way to format an integer/long size into a string reprensentation.
+ *
+ * @author Maxence Bernard.
+ */
 public class SizeFormatter {
 
 	/** Bit mask for short digits string, e.g. "15" */
@@ -29,9 +34,13 @@ public class SizeFormatter {
         String digitsString;
 		String unitString;
 		
+		// Whether the unit string should be long or not
 		boolean unitLong = (format&UNIT_LONG)!=0;
+		// Whether the unit string should be short or not
 		boolean unitShort = (format&UNIT_SHORT)!=0;
+		// Whether the digits string should be short or not
 		boolean digitsShort = (format&DIGITS_SHORT)!=0;
+		// Whether any size < 1000 bytes should be rounded to a kilobyte
 		boolean roundToKb = (format&ROUND_TO_KB)!=0;
 		
 		if((format&DIGITS_FULL)!=0) {
@@ -45,19 +54,20 @@ public class SizeFormatter {
 		}
 		else {
 			// size < 1KB
-			if(size<1000 && !roundToKb) {
-				digitsString = ""+size;
-				unitString = unitLong?(size<=1?"byte":"bytes"):unitShort?"b":"";
+			if(size<1000) {
+				if(roundToKb) {
+					digitsString = size==0?"0":"1";
+					unitString = unitLong?"KB":unitShort?"KB":"";;
+				}
+				else {
+					digitsString = ""+size;
+					unitString = unitLong?(size<=1?"byte":"bytes"):unitShort?"b":"";
+				}
 			}
 			// size < 10KB	-> "9,6 KB"
 			else if(size<10000 && !digitsShort) {
-				if(roundToKb) {
-					digitsString = size==0?"0":"1";
-				}
-				else {
-					int nKB = (int)size/1000;
-					digitsString = nKB+","+((""+(size-nKB*1000)).charAt(0));
-				}
+				int nKB = (int)size/1000;
+				digitsString = nKB+","+((""+(size-nKB*1000)).charAt(0));
 				unitString = unitLong?"KB":unitShort?"KB":"";;
 			}
 			// size < 1MB -> "436 KB"

@@ -397,6 +397,8 @@ public class SMBFile extends AbstractFile {
 	}
 
 	public void mkdir(String name) throws IOException {
+		// Unlike java.io.File.mkdir(), SmbFile does not return a boolean value
+		// to indicate if the folder could be created
 		new SmbFile(getPrivateURL()+separator+name).mkdir();
 	}
 }

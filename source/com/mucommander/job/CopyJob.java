@@ -128,9 +128,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
         else if(file.isDirectory() || unzip) {
             // creates the folder in the destination folder if it doesn't exist
 			
-			if(!destFile.exists())
+			if(!(destFile.exists() && destFile.isDirectory())) {
 				try {
-//System.out.println("CREATING FOLDER "+destFolder.getAbsolutePath()+"\\"+(newName==null?file.getName():newName));
 					destFolder.mkdir(destFileName);
 				}
             	catch(IOException e) {
@@ -139,6 +138,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	                    stop();
             		return;		// abort in all cases
 				}
+			}
 			
 			// and copy each file in this folder recursively
             try {

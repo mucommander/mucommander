@@ -69,13 +69,24 @@ public class CopyDialog extends FocusDialog implements ActionListener {
 				fieldText = destFolder.getAbsolutePath()+destFolder.getSeparator();
 		}
 		else {
+			// Fills text field with sole element's name
 			if(isShiftDown && nbFiles==1) {
 				fieldText = ((AbstractFile)filesToCopy.elementAt(0)).getName();
 			}
+			// Fills text field with absolute path, and if there is only one file, append
+			// file's name
 			else {
 				fieldText = destFolder.getAbsolutePath()+destFolder.getSeparator();
-				if(nbFiles==1)
-					fieldText += ((AbstractFile)filesToCopy.elementAt(0)).getName();
+//				if(nbFiles==1)
+//					fieldText += ((AbstractFile)filesToCopy.elementAt(0)).getName();
+				AbstractFile file = ((AbstractFile)filesToCopy.elementAt(0));
+				AbstractFile testFile;
+				if(nbFiles==1 && 
+					!(file.isDirectory() && 
+					(testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory())) {
+					
+					fieldText += file.getName();
+				}
 			}
 		}
 		
