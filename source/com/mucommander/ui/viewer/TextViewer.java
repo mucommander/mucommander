@@ -23,6 +23,7 @@ import com.mucommander.text.Translator;
 public class TextViewer extends FileViewer implements ActionListener {
 
 //	private String encoding;
+	private AbstractFile file;
 
 	private JMenuItem copyItem;
 	private JMenuItem selectAllItem;
@@ -30,41 +31,44 @@ public class TextViewer extends FileViewer implements ActionListener {
 	private JTextArea textArea;
 	
 	
+//	public TextViewer() {
+//	}
+	
+	
+//	public TextViewer(ViewerFrame frame) {
+//		super(frame);
 	public TextViewer() {
-	}
-	
-	
-	public TextViewer(ViewerFrame frame) {
-		super(frame);
 //		this.encoding = ConfigurationManager.getVariable("prefs.text_viewer.last_encoding", "utf-8");
 
 		setLayout(new BorderLayout());
-		
-		// Create default menu
-		MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
-		MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
-
-		// Edit menu
-		JMenuBar menuBar = frame.getJMenuBar();
-		JMenu editMenu = MenuToolkit.addMenu(Translator.get("text_viewer.edit"), menuMnemonicHelper, null);
-		copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.copy"), menuItemMnemonicHelper, null, this);
-		selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.select_all"), menuItemMnemonicHelper, null, this);
-		menuBar.add(editMenu);
-		
 		textArea = new JTextArea();
 		textArea.setEditable(false);
-
 		add(textArea, BorderLayout.NORTH);
 	}
 
 	
-	public void startViewing(AbstractFile fileToView, boolean isSeparateWindow) throws IOException {
+	public void view(AbstractFile fileToView) throws IOException {
+		this.file = fileToView;
 		textArea.read(new InputStreamReader(fileToView.getInputStream()), null);
 		textArea.setCaretPosition(0);
 //		pack();
+
+		ViewerFrame frame = getFrame();
+		if(frame!=null) {
+			// Create default menu
+			MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
+			MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+	
+			// Edit menu
+			JMenuBar menuBar = frame.getJMenuBar();
+			JMenu editMenu = MenuToolkit.addMenu(Translator.get("text_viewer.edit"), menuMnemonicHelper, null);
+			copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.copy"), menuItemMnemonicHelper, null, this);
+			selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.select_all"), menuItemMnemonicHelper, null, this);
+			menuBar.add(editMenu);
+		}
 	}
 
-
+	
 /*
 	public Dimension getPreferredSize() {
 //		return new Dimension(Math.min(480, image.getWidth(null)), Math.min(360,image.getHeight(null)));
@@ -80,7 +84,7 @@ public class TextViewer extends FileViewer implements ActionListener {
 	}
 	
 	
-	public boolean canViewFile(AbstractFile file) {
+	public static boolean canViewFile(AbstractFile file) {
 		String name = file.getName();
 		String nameLowerCase = name.toLowerCase();
 		return nameLowerCase.endsWith(".txt")

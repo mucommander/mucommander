@@ -7,7 +7,7 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.ui.comp.FocusRequester;
-import com.mucommander.ui.comp.dialog.DialogToolkit;
+import com.mucommander.ui.comp.dialog.*;
 
 import com.mucommander.file.AbstractFile;
 
@@ -16,24 +16,21 @@ import java.awt.event.*;
 import javax.swing.*;
 
 
-//public class ViewerFrame extends JFrame implements ActionListener, WindowListener {
-public class ViewerFrame extends JFrame implements ActionListener {
+public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 	private JMenuItem closeItem;
 	
 	private MainFrame mainFrame;
 	private AbstractFile file;
-	
-	public final static Color BG_COLOR = new Color(0xFFFFFF);
+	private FileViewer viewer;
 	
 	
 	public ViewerFrame(MainFrame mainFrame, AbstractFile file) {
 		super();
 	
 		this.mainFrame = mainFrame;
-		setCurrentFile(file);
+		this.file = file;
 		
 		getContentPane().setLayout(new BorderLayout());
-//		getContentPane().setLayout(new GridLayout(1,0));
 		
 		// Create default menu
 		MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
@@ -48,7 +45,7 @@ public class ViewerFrame extends JFrame implements ActionListener {
 		// Add menu to frame
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
-
+		
 		// Catches window close event
 //		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 //		addWindowListener(this);
@@ -57,12 +54,47 @@ public class ViewerFrame extends JFrame implements ActionListener {
 	}
 
 	
-	public MainFrame getMainFrame() {
-		return mainFrame;
-	}
+	public void run() {
+		try {
+			FileViewer viewer = ViewerRegistrar.getViewer(file);
+
+			// Test if file is too large to be viewed and warns user
+			long max = viewer.getMaxRecommendedSize();
+			if (max!=-1 && file.getSize()>max) {
+				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("command_bar.large_file_warning"), mainFrame, 
+					new String[] {Translator.get("command_bar.open_anyway"), Translator.get("cancel")},
+					new int[]  {0, 1},
+					0);
 	
-	void setViewer(FileViewer viewer) {
-//		setBackground(BG_COLOR);
+				int ret = dialog.getActionValue();
+				
+				if (ret==1 || ret==-1)
+					return;
+			}
+
+			viewer.setFrame(this);
+			viewer.setCurrentFile(file);
+			setViewer(viewer);
+
+			// Sets panel to preferred size, without exceeding a maximum size and with a minumum size
+			pack();
+			super.show();
+		}
+		catch(Exception e) {
+			JOptionPane.showMessageDialog(mainFrame, Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"), JOptionPane.ERROR_MESSAGE);
+if(com.mucommander.Debug.ON) e.printStackTrace();
+		}
+	}
+
+	
+//	public MainFrame getMainFrame() {
+//		return mainFrame;
+//	}
+	
+	private void setViewer(FileViewer viewer) {
+		this.viewer = viewer;
+	
+		//		setBackground(BG_COLOR);
 JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
 //JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS) {
 		public Insets getInsets() {
@@ -74,7 +106,7 @@ JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_
 //		scrollPane.setBackground(BG_COLOR);
 		JViewport viewport = scrollPane.getViewport();
 //System.out.println("viewport insets = "+viewport.getInsets());
-		viewport.setBackground(BG_COLOR);
+		viewport.setBackground(FileViewer.BG_COLOR);
 //		viewport.setBorder(null);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 //System.out.println("contentPane insets = "+getContentPane().getInsets());
@@ -83,23 +115,19 @@ JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_
 		FocusRequester.requestFocus(viewer);
 	}
 	
-	public void setCurrentFile(AbstractFile file) {
-		this.file = file;
-		setTitle(file.getAbsolutePath());
-	}
-
 
 	public void pack() {
 		super.pack();
+
+		setTitle(viewer.getTitle());
 
 		DialogToolkit.fitToScreen(this);
 		DialogToolkit.fitToMinDimension(this, new Dimension(160, 120));
 	}
 	
+	
 	public void show() {
-		// Sets panel to preferred size, without exceeding a maximum size and with a minumum size
-		pack();
-		super.show();
+		new Thread(this).start();
 	}
 
 	
@@ -109,37 +137,5 @@ JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_
 			dispose();
 	}
 
-	/*
-	private void close() {
-//		setVisible(false);
-		dispose();
-	}
-*/
 	
-    /**************************
-     * WindowListener methods *
-     **************************/	
-/*
-    public void windowClosing(WindowEvent e) {
-		close();
-	}
-
-    public void windowActivated(WindowEvent e) {
-    }
-
-    public void windowDeactivated(WindowEvent e) {
-    }
-
-    public void windowIconified(WindowEvent e) {
-    }
-
-    public void windowDeiconified(WindowEvent e) {
-    }
-
-    public void windowOpened(WindowEvent e) {
-    }
-
-    public void windowClosed(WindowEvent e) {
-    }	
-*/
 }

@@ -28,50 +28,49 @@ public class ImageViewer extends FileViewer implements ActionListener {
 	
 	private AbstractFile file;
 
-	private JMenuItem prevImageItem;
-	private JMenuItem nextImageItem;
+//	private JMenuItem prevImageItem;
+//	private JMenuItem nextImageItem;
 	private JMenuItem zoomInItem;
 	private JMenuItem zoomOutItem;
 	
-	private boolean isSeparateWindow;
 	
+//	public ImageViewer() {
+//	}
 	
+//	public ImageViewer(ViewerFrame frame) {
+//		super(frame);
 	public ImageViewer() {
 	}
 	
-		
-	public ImageViewer(ViewerFrame frame) {
-		super(frame);
-		
-		MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
-		MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 
-		// Go menu
-		JMenuBar menuBar = frame.getJMenuBar();
-		JMenu controlsMenu = MenuToolkit.addMenu(Translator.get("image_viewer.controls_menu"), menuMnemonicHelper, null);
-		nextImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.next_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), this);
-		prevImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.previous_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
-		controlsMenu.add(new JSeparator());
-		zoomInItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_in"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), this);
-		zoomOutItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_out"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), this);
-		menuBar.add(controlsMenu);
-	}
+	public void view(AbstractFile file) throws IOException {
+
+		ViewerFrame frame = getFrame();
+		if(frame!=null) {
+			MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
+			MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 	
-
-	public void startViewing(AbstractFile file, boolean isSeparateWindow) throws IOException {
-		this.isSeparateWindow = isSeparateWindow;
+			// Go menu
+			JMenuBar menuBar = frame.getJMenuBar();
+			JMenu controlsMenu = MenuToolkit.addMenu(Translator.get("image_viewer.controls_menu"), menuMnemonicHelper, null);
+	//		nextImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.next_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), this);
+	//		prevImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.previous_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
+	//		controlsMenu.add(new JSeparator());
+			zoomInItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_in"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), this);
+			zoomOutItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_out"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), this);
+			menuBar.add(controlsMenu);
+		}
 
 		loadImage(file);
-		
-//		setLayout(new BorderLayout());
-//		label = new JLabel();
-//		label.setIcon(new ImageIcon(image));
-
-//		addComponentListener(this);
 	}
 	
 	
-	public boolean canViewFile(AbstractFile file) {
+	public String getTitle() {
+		return file.getName()+" - "+image.getWidth(null)+"x"+image.getHeight(null)+" - "+((int)(zoomFactor*100))+"%";
+	}
+	
+	
+	public static boolean canViewFile(AbstractFile file) {
 		String name = file.getName();
 		String nameLowerCase = name.toLowerCase();
 		return nameLowerCase.endsWith(".png")
@@ -80,9 +79,9 @@ public class ImageViewer extends FileViewer implements ActionListener {
 			||nameLowerCase.endsWith(".jpeg");
 	}
 
+	
 	public synchronized Dimension getPreferredSize() {
-//		return new Dimension(Math.min(480, image.getWidth(null)), Math.min(360,image.getHeight(null)));
-System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)+" "+scaledImage.getHeight(null));
+//System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)+" "+scaledImage.getHeight(null));
 		return new Dimension(scaledImage.getWidth(null), scaledImage.getHeight(null));
 	}
 
@@ -143,6 +142,7 @@ System.out.println("zoom "+factor);
 		frame.setCursor(Cursor.getDefaultCursor());
 	}
 
+/*
 	private synchronized void goToImage(boolean next) {
 System.out.println("goToImage");
 
@@ -162,7 +162,7 @@ System.out.println("goToImage");
 			}
 		}
 	}
-
+*/
 	
 	private void updateFrame() {
 System.out.println("updateFrame");
@@ -177,7 +177,7 @@ System.out.println("updateFrame");
 		int width = getWidth();
 		int height = getHeight();
 		
-		g.setColor(ViewerFrame.BG_COLOR);
+		g.setColor(BG_COLOR);
 			g.fillRect(0, 0, width, height);
 		
 		if(scaledImage!=null) {
@@ -187,55 +187,8 @@ System.out.println("updateFrame");
 		}
 	}
 	
-/*
-	private Image getScaledImage(Image image, int maxScaledWidth, int maxScaledHeight) {
-		int imageWidth = image.getWidth(null);
-		int imageHeight = image.getHeight(null);
-
-		if(imageWidth<maxScaledWidth && imageHeight<maxScaledHeight)
-			return image;
-				
-		float ratio = imageWidth/(float)imageHeight;
-		int scaledWidth;
-		int scaledHeight;
-		if (imageWidth>imageHeight) {
-			scaledWidth = maxScaledWidth;
-			scaledHeight = (int)(scaledWidth/ratio);
-		}
-		else {
-			scaledHeight = maxScaledHeight;
-			scaledWidth = (int)(scaledHeight*ratio);
-		}
-		return image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_DEFAULT);
-	}
-
-	
-	public void componentResized(ComponentEvent e) {
-
-//System.out.println("panel "+getWidth()+" "+getHeight());
-		Image scaledImage = getScaledImage(image, getWidth(), getHeight());
-//System.out.println("scaledImage "+scaledImage.getWidth(null)+" "+scaledImage.getHeight(null));
-		label.setIcon(new ImageIcon(scaledImage));
-//System.out.println("scaledImage "+scaledImage.getWidth(null)+" "+scaledImage.getHeight(null));
-		label.setSize(scaledImage.getWidth(null), scaledImage.getHeight(null));
-//System.out.println("label "+label.getWidth()+" "+label.getHeight());
-		label.repaint();	
-
-	}
-
-	public void componentHidden(ComponentEvent e) {
-	}
-
-	public void componentShown(ComponentEvent e) {
-	}
-
-	public void componentMoved(ComponentEvent e) {
-	}
-
-*/
 
 	private void checkZoom() {
-		
 System.out.println("checkZoom");
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		
@@ -250,56 +203,24 @@ System.out.println("checkZoom");
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 		
-		if(source == prevImageItem)
-			goToImage(false);
-		else if(source == nextImageItem)
-			goToImage(true);
-		else {
+//		if(source == prevImageItem)
+//			goToImage(false);
+//		else if(source == nextImageItem)
+//			goToImage(true);
+//		else {
 			if(source==zoomInItem && zoomInItem.isEnabled()) {
-//				if(zoomFactor<2.0) {
-					zoomFactor = zoomFactor*2;
-					zoom(zoomFactor);
-					updateFrame();
-//				}
+				zoomFactor = zoomFactor*2;
+				zoom(zoomFactor);
+				updateFrame();
 			}
 			else if(source==zoomOutItem && zoomOutItem.isEnabled()) {
-//				if(zoomFactor>0.25) {
-					zoomFactor = zoomFactor/2;
-					zoom(zoomFactor);
-					updateFrame();
-//				}
+				zoomFactor = zoomFactor/2;
+				zoom(zoomFactor);
+				updateFrame();
 			}
 			
 			checkZoom();
 		
-//			zoomInItem.setEnabled(zoomFactor<2.0);
-//			zoomOutItem.setEnabled(zoomFactor>0.25);
-		}
+//		}
 	}
-
-/*
-	public void keyTyped(KeyEvent e) {
-
-	}
-
-	public void keyReleased(KeyEvent e) {
-	}
-
-	public void keyPressed(KeyEvent e) {
-System.out.println("keyPressed "+e);
-		int keyCode = e.getKeyCode();
-		AbstractFile newFile = null;
-
-		switch(keyCode) {
-			case KeyEvent.VK_SPACE:
-				goToImage(true);
-				break;
-				
-			case KeyEvent.VK_BACK_SPACE:
-				goToImage(false);
-				break;
-		}
-		
-	}
-*/
 }

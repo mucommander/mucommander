@@ -1,37 +1,56 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableModel;
+//import com.mucommander.ui.MainFrame;
+//import com.mucommander.ui.table.FileTable;
+//import com.mucommander.ui.table.FileTableModel;
 
 import javax.swing.*;
+import java.awt.Color;
 
 import java.io.IOException;
 
 public abstract class FileViewer extends JPanel {
 	
 	protected ViewerFrame frame;
+	protected AbstractFile file;
+	
+	public final static Color BG_COLOR = new Color(0xFFFFFF);
 
-
+	
+	/**
+	 * Creates a new FileViewer inside the given ViewerFrame.
+	 */
+//	public FileViewer(ViewerFrame frame) {
+//		this.frame = frame;
 	public FileViewer() {
+		setBackground(BG_COLOR);
 	}
 	
-	
-	/**
-	 * Creates a new instance of a FileViewer.
-	 */
-	public FileViewer(ViewerFrame frame) {
-		this.frame = frame;
-		setBackground(ViewerFrame.BG_COLOR);
-	}
 
+	public void setFrame(ViewerFrame frame) {
+		this.frame = frame;
+	}
+	
+	
 	/**
-	 * Returns the frame which contains this viewer.
+	 * Returns the frame which contains this viewer, may return <code>null</code>
+	 * if the viewer is not inside a ViewerFrame.
 	 */
-	public ViewerFrame getFrame() {
+	protected ViewerFrame getFrame() {
 		return frame;
 	}
+	
+	
+	/**
+	 * Returns <code>true</code> if the given file can be handled by this FileViewer.<br>
+	 * The FileViewer may base its decision only upon the filename and its extension or may
+	 * wish to read some of the file and compare it to a magic number.
+	 */
+	public static boolean canViewFile(AbstractFile file) {
+		return false;
+	}
+	
 	
 	/**
 	 * Returns maximum file size this FileViewer can handle for sure, -1 if there is no such limit.
@@ -43,6 +62,25 @@ public abstract class FileViewer extends JPanel {
 	}
 
 
+	/**
+	 * Returns a description of the file currently being viewed which will be used as a window title.
+	 * This method returns the file's name but it can be overridden to provide more information.
+	 */
+	public String getTitle() {
+		return file.getName();
+	}
+	
+	
+	public void setCurrentFile(AbstractFile file) throws IOException {
+		this.file = file;
+		try {
+			view(file);
+		} catch(OutOfMemoryError e) {
+			throw new IOException();
+		}
+	}
+	
+/*
 	protected AbstractFile getNextFileInFolder(AbstractFile file, boolean loop) {
 //System.out.println("getNextFileInFolder");
 		return getNextFile(file, true, loop);
@@ -116,30 +154,17 @@ public abstract class FileViewer extends JPanel {
 		return newFile;
 	}
 
+*/
 	//////////////////////
 	// Abstract methods //
 	//////////////////////
 	
 	/**
 	 * This method is invoked when the specified file is about to be viewed.
+	 * This method should retrieve the file so that this component can be displayed.
 	 *
 	 * @param fileToView the file that needs to be displayed.
-	 * @param isSeparateWindow <code>true</code> if the panel is displayed in a separate window
 	 */
-	public abstract void startViewing(AbstractFile fileToView, boolean isSeparateWindow) throws IOException;
-	
-	
-	/**
-	 * Returns <code>true</code> if the given file can be handled by this FileViewer.<br>
-	 * The FileViewer may base its decision only upon the filename and its extension or may
-	 * wish to read some of the file and compare it to a magic number.
-	 */
-	public abstract boolean canViewFile(AbstractFile file);
-	
-	
-	/**
-	 * Returns a String which describes the file currently viewed, it should at least 
-	 */
-	public abstract String getTitle();
-	
+	protected abstract void view(AbstractFile fileToView) throws IOException;
+
 }

@@ -114,32 +114,14 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		if(file==null || (file.isDirectory() && !file.isSymlink()))
 			return;
 		
-		try {
-			FileViewer viewer = ViewerRegistrar.getViewer(file, mainFrame);
+//			FileViewer viewer = ViewerRegistrar.getViewer(file, frame);
+//			ViewerFrame frame = new ViewerFrame(mainFrame, file);
+//			FileViewer viewer = ViewerRegistrar.getViewer(file);
+		ViewerFrame frame = new ViewerFrame(mainFrame, file);
 
-			// Test if file is too large to be viewed and warns user
-			long max = viewer.getMaxRecommendedSize();
-			if (max!=-1 && file.getSize()>max) {
-				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("command_bar.large_file_warning"), mainFrame, 
-					new String[] {Translator.get("command_bar.open_anyway"), Translator.get("cancel")},
-					new int[]  {0, 1},
-					0);
-
-                int ret = dialog.getActionValue();
-				
-				if (ret==1 || ret==-1)
-					return;
-			}
-			
-			// All OK, start viewing
-			viewer.startViewing(file, true);
-		
-			viewer.getFrame().show();
-		}
-		catch(Exception e) {
-			showErrorDialog(Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"));
-if(com.mucommander.Debug.ON) e.printStackTrace();
-		}
+		// All OK, start viewing
+//			frame.setViewer(viewer);
+		frame.show();
 	}
 	
 	

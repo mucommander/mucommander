@@ -218,6 +218,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 * Sets status bar text label. This method is called by FileTable.
 	 */
 	public void setStatusBarText(String text) {
+text += " "+Runtime.getRuntime().freeMemory()+" "+Runtime.getRuntime().totalMemory();
 		statusBarLabel.setText(text);
 	}
 	

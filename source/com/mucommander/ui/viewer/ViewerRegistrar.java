@@ -19,9 +19,8 @@ public class ViewerRegistrar {
 	};
 	
 	
-	public static FileViewer getViewer(AbstractFile file, MainFrame mainFrame) throws Exception {
-		ViewerFrame frame = new ViewerFrame(mainFrame, file);
-		
+//	public static FileViewer getViewer(AbstractFile file, ViewerFrame frame) throws Exception {
+	public static FileViewer getViewer(AbstractFile file) throws Exception {
 		Class viewerClass = null;
 		Class candidateClass;
 		Constructor constructor;
@@ -29,12 +28,13 @@ public class ViewerRegistrar {
 		Method method;
 		for(int i=0; i<viewersClassNames.length; i++) {
 			candidateClass = Class.forName(viewersClassNames[i]);
-			constructor = candidateClass.getConstructor(new Class[]{});
+//			constructor = candidateClass.getConstructor(new Class[]{});
 			method = candidateClass.getMethod("canViewFile", new Class[]{Class.forName("com.mucommander.file.AbstractFile")});
-			fileViewer = (FileViewer)constructor.newInstance(new Object[]{});
+//			fileViewer = (FileViewer)constructor.newInstance(new Object[]{});
 
 //if(com.mucommander.Debug.ON) System.out.println("getViewer: "+viewersClassNames[i]+" "+(((Boolean)method.invoke(null, new Object[]{file})).booleanValue()));
-			if(((Boolean)method.invoke(fileViewer, new Object[]{file})).booleanValue()) {
+//			if(((Boolean)method.invoke(fileViewer, new Object[]{file})).booleanValue()) {
+			if(((Boolean)method.invoke(null, new Object[]{file})).booleanValue()) {
 				viewerClass = candidateClass;
 				break;
 			}
@@ -43,9 +43,9 @@ public class ViewerRegistrar {
 		if(viewerClass==null)
 			viewerClass = Class.forName(defaultViewerClassName);
 
-		constructor = viewerClass.getConstructor(new Class[]{frame.getClass()});
-		fileViewer = (FileViewer)constructor.newInstance(new Object[]{frame});
-		frame.setViewer(fileViewer);
+//		constructor = viewerClass.getConstructor(new Class[]{frame.getClass()});
+		constructor = viewerClass.getConstructor(new Class[]{});
+		fileViewer = (FileViewer)constructor.newInstance(new Object[]{});
 		return fileViewer;
 	}
 }
