@@ -297,7 +297,7 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 		JWindow splashScreen = new JWindow();
 
 		// Resolves the URL of the image within the JAR file
-		URL imageURL = getClass().getResource("/logo.gif");
+		URL imageURL = getClass().getResource("/logo.png");
 
 		splashScreen.getContentPane().add(new JLabel(new ImageIcon(imageURL)));
 		splashScreen.pack();

@@ -41,7 +41,7 @@ public class AboutDialog extends FocusDialog implements ActionListener, KeyListe
 		Color bgColor = new Color(0, 0, 132);
 		contentPane.setBackground(bgColor);
 		// Resolves the URL of the image within the JAR file
-		URL imageURL = getClass().getResource("/logo.gif");
+		URL imageURL = getClass().getResource("/logo.png");
 //		effectPanel = new LifeEffectPanel(new ImageIcon(imageURL).getImage());
         effectPanel = new SinEffectPanel(new ImageIcon(imageURL).getImage());
         contentPane.add(effectPanel, BorderLayout.NORTH);
