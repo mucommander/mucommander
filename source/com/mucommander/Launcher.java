@@ -14,13 +14,12 @@ import java.io.File;
 import java.util.Vector;
 import java.awt.event.*;
 
+import com.mucommander.Debug;
+
 public class Launcher implements ActionListener, WindowListener, LocationListener, ConfigurationListener {
 	/** Version string */
 	public final static String VERSION = "0.5dev";
-	
-	/** Sets whether or not debug messages should be output to the standard output */
-	public final static boolean DEBUG = true;
-	
+		
 	private static Vector mainFrames;
 	
 	private MainFrame currentMainFrame;
@@ -120,7 +119,7 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 			}
 		}
 
-if(DEBUG)
+if(Debug.TRACE)
 	System.out.println("defaultPath "+defaultPath);
 		
 		AbstractFile folder = null;
@@ -130,7 +129,7 @@ if(DEBUG)
 		if(folder==null || !folder.exists())
 			folder = AbstractFile.getAbstractFile(defaultPath);
 
-if(DEBUG)
+if(Debug.TRACE)
 	System.out.println("initial folder "+folder.getAbsolutePath());
 		
 		return folder;
@@ -368,7 +367,7 @@ if(DEBUG)
     	// /!\ font.size is set after font.family in AppearancePrefPanel
     	// that's why we only listen to this one in order not to change Font twice
     	if (var.equals("prefs.lookAndFeel")) {
-if(com.mucommander.Launcher.DEBUG)
+if(Debug.TRACE)
 	System.out.println("LookAndFeel changed! "+event.getValue());
     		String lnfName = event.getValue();
 			
