@@ -2,6 +2,8 @@
 package com.mucommander.job;
 
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.MainFrame;
+
 
 /**
  * ExtendedFileJob is a container for a 'file task' : basically an operation that involves files and bytes.<br>
@@ -12,8 +14,8 @@ import com.mucommander.ui.ProgressDialog;
  */
 public abstract class ExtendedFileJob extends FileJob {
 
-    public ExtendedFileJob(ProgressDialog progressDialog) {
-        super(progressDialog);
+    public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame) {
+        super(progressDialog, mainFrame);
     }
     
     /**

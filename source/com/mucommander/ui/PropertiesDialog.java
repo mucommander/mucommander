@@ -2,7 +2,9 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
+
 import com.mucommander.ui.comp.dialog.*;
+
 import com.mucommander.job.PropertiesJob;
 
 import java.awt.*;
@@ -41,7 +43,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		setTitle((title=files.size()==1?firstFile.getName()+" Properties":"Properties"));
 		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
-		this.job = new PropertiesJob(files);
+		this.job = new PropertiesJob(files, mainFrame);
 		
 		Container contentPane = getContentPane();
 		

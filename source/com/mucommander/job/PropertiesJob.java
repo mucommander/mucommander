@@ -3,7 +3,10 @@ package com.mucommander.job;
 
 import com.mucommander.file.*;
 
+import com.mucommander.ui.MainFrame;
+
 import java.util.Vector;
+
 import java.io.IOException;
 
 /**
@@ -20,8 +23,8 @@ public class PropertiesJob extends FileJob implements Runnable {
 	private int nbFilesRecurse;
 	private long totalBytes;
 	
-	public PropertiesJob(Vector files) {
-		super(null);
+	public PropertiesJob(Vector files, MainFrame mainFrame) {
+		super(null, mainFrame);
 		
 		this.files = files;
         this.nbFiles = files.size();

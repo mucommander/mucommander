@@ -20,7 +20,7 @@ import java.util.Vector;
 /**
  * This class is responsible for deleting recursively a group of files.
  */
-public class DeleteJob extends FileJob implements Runnable {
+public class DeleteJob extends FileJob implements Runnable, FileModifier {
     
     /** Files to be deleted */
     private Vector filesToDelete;
@@ -52,7 +52,7 @@ public class DeleteJob extends FileJob implements Runnable {
 
 	
     public DeleteJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToDelete) {
-		super(progressDialog);
+		super(progressDialog, mainFrame);
 
 		this.filesToDelete = filesToDelete;
 		this.nbFiles = filesToDelete.size();

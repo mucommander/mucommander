@@ -21,7 +21,7 @@ import java.text.NumberFormat;
 /**
  * This class is responsible for moving recursively a group of files.
  */
-public class MoveJob extends ExtendedFileJob implements Runnable {
+public class MoveJob extends ExtendedFileJob implements Runnable, FileModifier {
     private MainFrame mainFrame;
 
 	private Vector filesToMove;
@@ -86,7 +86,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 	 */
 	public MoveJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToMove, String newName, AbstractFile destFolder) {
 //System.out.println("MOVE JOB: "+ " "+ filesToMove + " "+ destFolder.getAbsolutePath());
-		super(progressDialog);
+		super(progressDialog, mainFrame);
 
 		this.mainFrame = mainFrame;
 		this.filesToMove = filesToMove;

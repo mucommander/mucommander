@@ -2,6 +2,7 @@
 package com.mucommander.job;
 
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 
 
@@ -21,6 +22,9 @@ public abstract class FileJob implements Runnable {
 	
 	/** Associated dialog showing job progression */
 	protected ProgressDialog progressDialog;
+
+/** Main frame on which the job is to be performed */ 
+protected MainFrame mainFrame;
 	
 	/** Thread in which the file job is performed */
 	private Thread jobThread;
@@ -40,8 +44,9 @@ public abstract class FileJob implements Runnable {
 	private long pauseStartTime;
 	
 	
-	public FileJob(ProgressDialog progressDialog) {
+	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame) {
 		this.progressDialog = progressDialog;
+this.mainFrame = mainFrame;
 	}
 
 	
@@ -49,6 +54,16 @@ public abstract class FileJob implements Runnable {
      * Starts file job in a separate thread.
      */
     public void start() {
+		if(com.mucommander.Debug.ON)
+			System.out.println("FileJob.start(): "+this+" modifier="+(this instanceof FileModifier));
+		
+// Pause auto-refresh during file job if this job potentially modifies folders contents
+// and would potentially cause table to auto-refresh
+if(this instanceof FileModifier) {
+mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(false);
+mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(false);
+}		
+		
         // Serves to differenciate between the 'stopped' and 'not started yet' states
         hasStarted = true;
 		startTime = System.currentTimeMillis();
@@ -92,7 +107,15 @@ public abstract class FileJob implements Runnable {
 	 * Asks to stop file job's thread.
 	 */	
 	public void stop() {
+		if(com.mucommander.Debug.ON)
+			System.out.println("FileJob.stop(): modifier="+(this instanceof FileModifier));
+
 		jobThread = null;
+// Resuem auto-refresh if auto-refresh had been paused
+if(this instanceof FileModifier) {
+mainFrame.getBrowser1().getFileTable().setAutoRefreshActive(true);
+mainFrame.getBrowser2().getFileTable().setAutoRefreshActive(true);
+}		
 	}
 
 	/**

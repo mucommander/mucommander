@@ -19,7 +19,7 @@ import java.util.Vector;
 /**
  * This FileJob is responsible for compressing a group files in the zip format.
  */
-public class ZipJob extends ExtendedFileJob implements Runnable {
+public class ZipJob extends ExtendedFileJob implements Runnable, FileModifier {
     private Vector filesToZip;
     private MainFrame mainFrame;
 	private ZipOutputStream zipOut;
@@ -54,7 +54,7 @@ public class ZipJob extends ExtendedFileJob implements Runnable {
 	private byte buffer[] = new byte[1024];
 
     public ZipJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToZip, String zipComment, OutputStream zipOut, AbstractFile destFolder) {
-        super(progressDialog);
+        super(progressDialog, mainFrame);
 		
 		this.filesToZip = filesToZip;
         this.nbFiles = filesToZip.size();

@@ -21,7 +21,7 @@ import java.text.NumberFormat;
 /**
  * This class is responsible for copying recursively a group of files.
  */
-public class CopyJob extends ExtendedFileJob implements Runnable {
+public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 	private MainFrame mainFrame;
 
 	private Vector filesToCopy;
@@ -86,7 +86,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	 * @param indicates if this CopyJob corresponds to an 'unzip' operation.
 	 */
 	public CopyJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToCopy, String newName, AbstractFile destFolder, boolean unzip) {
-		super(progressDialog);
+		super(progressDialog, mainFrame);
 
 	    this.filesToCopy = filesToCopy;
         this.nbFiles = filesToCopy.size();

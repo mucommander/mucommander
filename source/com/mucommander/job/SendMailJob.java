@@ -63,7 +63,7 @@ public class SendMailJob extends ExtendedFileJob {
     private final static String OK_CAPTION = "OK";
     
     public SendMailJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToSend, String recipientString, String mailSubject, String mailBody) {
-        super(progressDialog);
+        super(progressDialog, mainFrame);
 
         this.mainFrame = mainFrame;
         this.filesToSend = filesToSend;
