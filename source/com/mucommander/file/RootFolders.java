@@ -90,7 +90,7 @@ public class RootFolders {
 
 		int nbFolders = fileRoots.length;
 		for(int i=0; i<nbFolders; i++)
-			try { v.add(new FSFile(fileRoots[i])); }
+			try { v.add(AbstractFile.getAbstractFile(fileRoots[i].getAbsolutePath(), true)); }
 			catch(IOException e) {}
 	}
 	

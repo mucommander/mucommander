@@ -34,42 +34,49 @@ public class FSFile extends AbstractFile {
 	/**
 	 * Convenience constructor.
 	 */
-	public FSFile(String absPath) throws IOException {
-		this(new FileURL("file://"+absPath), new File(absPath));
-	}
+//	public FSFile(String absPath) throws IOException {
+//		this(new FileURL("file://"+absPath), new File(absPath));
+//	}
 
 
 	/**
 	 * Convenience constructor.
 	 */
-	public FSFile(File file) throws IOException {
-		this(new FileURL("file://"+file.getAbsolutePath()), file);
-	}
+//	public FSFile(File file) throws IOException {
+//		this(new FileURL("file://"+file.getAbsolutePath()), file);
+//	}
 
 		
 	/**
 	 * Creates a new instance of FSFile.
 	 */
 	public FSFile(FileURL fileURL) throws IOException {
-		this(fileURL, new File(fileURL.getPath()));
+		super(fileURL);
+		
+		// Remove leading '/' if path is 'a la windows', i.e. starts with a drive like C:\
+		String path = fileURL.getPath();
+		if(path.indexOf(":\\")!=-1 && path.charAt(0)=='/')
+			path = path.substring(1, path.length());
+		init(new File(path));
 	}
 
 
 	/**
 	 * Creates a new FSFile using the given java.io.File instance.
 	 */
-	private FSFile(FileURL fileURL, File _file) throws IOException {
+	private FSFile(FileURL fileURL, File file) throws IOException {
 		super(fileURL);
+		init(file);
+	}
 
+	
+	private void init(File file) throws IOException {
 		// Throw an exception is the file's path is not absolute.
-//		// Host part in file URL should be null, if not it means that path is
-//		// relative, since file URL have no hostname
-//		if(!_file.isAbsolute() || fileURL.getHost()!=null)
-		if(!_file.isAbsolute())
+		if(!file.isAbsolute())
 			throw new IOException();
 
-		this.file = _file;
-		this.absPath = _file.getAbsolutePath();
+		this.file = file;
+		this.absPath = file.getAbsolutePath();
 
         // removes trailing separator (if any)
         this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;		

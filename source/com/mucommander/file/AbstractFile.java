@@ -90,19 +90,11 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 
 		// Create a FileURL instance using the given path
 		FileURL fileURL;
-		// If path contains no protocol, consider the file as a local file
-		if(absPath.indexOf("://")==-1) {
-			// Replace '~' by actual home directory if path contains no protocol
-			if(absPath.startsWith("~")) {
-				String home = System.getProperty("user.home");
-				if(home!=null)
-					absPath = home + absPath.substring(1, absPath.length());
-			}
+		// If path contains no protocol, consider the file to be a local file and add the 'file' protocol in the URL
+		if(absPath.indexOf("://")==-1)
 			fileURL = new FileURL("file://localhost"+(absPath.charAt(0)=='/'?absPath:'/'+absPath));
-		}
-		else {
+		else
 			fileURL = new FileURL(absPath);
-		}
 
 		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
 		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem		

@@ -86,33 +86,57 @@ public class FileURL implements Cloneable {
 
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw path = "+path);
 			
-			// Remove '.' and '..'
+			// Factor out '.' and '..' and replace '~' by home folder for 'file' protocol
 			if(!path.equals("/")) {
-				pos = 0;
-				int pos2;
-				String dir;
-				Vector pathV = new Vector();	// Contains directory hierachy
-				while(pos!=-1) {
-					// path may contain '/' or '\\' characters, find next separator character
-					pos2 = Math.min(path.indexOf('/', pos), path.indexOf('\\', pos));
-					if(pos2==-1)	// Last dir (or empty string)
+//				// Path may contain backslash characters, let's replace them by slash characters
+//				path.replace('\\', '/');
+				pos = 0;	// position of current '/' or '\' character
+				int pos2 = 0;	// position of next '/' or '\' character
+				int posb;		// temporary position of next '\\' character
+				String dir;		// Current directory
+				String dirWS;	// Current directory without trailing slash
+				Vector pathV = new Vector();	// Will contain directory hierachy
+				while((pos=pos2)!=-1) {
+					// Find next '/' or '\' character, whichever comes first
+					pos2 = path.indexOf('/', pos);
+					posb = path.indexOf('\\', pos);
+					if(posb!=-1 && posb<pos2)
+						pos2 = posb;
+
+					if(pos2==-1) {	// Last dir (or empty string)
 						dir = path.substring(pos, path.length());
-					else
+						dirWS = dir;
+					}
+					else {
 						dir = path.substring(pos, ++pos2);		// Dir name includes trailing slash
+						dirWS = dir.substring(0, dir.length()-1);
+					}
+					
+//					pos = pos2;
 
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw dir name = "+dir);
-					pos = pos2;
-					// Discard '.' and empty strings
-					if(dir.equals("") || dir.equals("."))
+					
+					// Discard '.' and empty directories
+					if((dirWS.equals("") && pathV.size()>0) || dirWS.equals(".")) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found . or empty dir");
 						continue;
+					}
 					// Remove last directory
-					else if(dir.equals("..")) {
+					else if(dirWS.equals("..")) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found .. dir");
 						if(pathV.size()==0)
 							throw new MalformedURLException();
 						pathV.removeElementAt(pathV.size()-1);
 						continue;
 					}
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Processed dir name = "+dir);
+					// Replace '~' by actual home directory if protocol is 'file' and '~' appears in the path
+					else if(dirWS.equals("~") && protocol.equalsIgnoreCase("file")) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found ~ dir");
+						path = path.substring(0, pos) + System.getProperty("user.home") + path.substring(pos+1, path.length());
+						// Will perform another pass at the same position
+						pos2 = pos;
+						continue;
+					}
 
 					// Add directory to the end of the list
 					pathV.add(dir);
@@ -138,14 +162,15 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Reconstructed path = "
 				// parent is null
 			}
 			else {	
+				String pathCopy =new String(path).replace('\\', '/');
 				// Extract filename from path
-				int len = path.length();
+				int len = pathCopy.length();
 				char c;
-				while((c=path.charAt(len-1))=='/'||c=='\\')
+				while((c=pathCopy.charAt(len-1))=='/')
 					--len;
 				 
-				filename = path.substring(0, len);
-				separatorPos = Math.min(filename.lastIndexOf('/'), filename.lastIndexOf('\\'));
+				filename = pathCopy.substring(0, len);
+				separatorPos = filename.lastIndexOf('/');
 				filename = path.substring(separatorPos+1, len).trim();
 				if(filename.equals(""))
 					filename = null;
@@ -387,8 +412,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Reconstructed path = "
 				System.out.println(" - host= "+f.getHost());
 				System.out.println(" - filename= "+f.getFilename());
 				System.out.println(" - parent= "+f.getParent()+"\n");
+				
+				if(f.getProtocol().equalsIgnoreCase("file"))
+					System.out.println(" FSFile's path="+AbstractFile.getAbstractFile(f.getPath(), true).getAbsolutePath());
 			}
-			catch(MalformedURLException e) {
+			catch(java.io.IOException e) {
 				if(com.mucommander.Debug.ON) {
 					System.out.println("Unexcepted exception in FileURL() with "+urls[i]);
 					e.printStackTrace();

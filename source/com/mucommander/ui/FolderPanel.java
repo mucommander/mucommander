@@ -58,13 +58,34 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	private final static String BROWSE_TEXT = Translator.get("browse");
 	private final static String DOWNLOAD_TEXT = Translator.get("download");
 
+
+	private class ChangeFolderThread implements Thread {
+	
+		private AbstractFile folder;
+		private boolean stopped;
+	
+		public Thread(AbstractFile folder) {
+			this.folder = folder;
+		}
+	
+		public void stop() {
+			this.stopped = true;
+			super.stop();
+		}
+	
+		public void run() {
+			try { AbstractFile children[] = folder.ls(); }
+			catch(IOException e) {}
+		}
+	}
+
 	
 	static {
 		// Set background color
 		backgroundColor = FileTableCellRenderer.getColor("prefs.colors.background", "000084");
 	}
 
-	
+
 	public FolderPanel(MainFrame mainFrame, AbstractFile initialFolder) {
 		super(new BorderLayout());
 
@@ -183,54 +204,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 //	}
 	
 
-	private void _setCurrentFolder(AbstractFile folder, boolean addToHistory) throws IOException {
-		// Set 'wait' cursor
-		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-
-        if(com.mucommander.Debug.ON)
-            System.out.println("FolderPanel._setCurrentFolder: "+folder+" ");
-
-		try {
-			fileTable.setCurrentFolder(folder);
-			this.currentFolder = folder;
-
-			// Update location field with new current folder's path
-			locationField.setText(currentFolder.getAbsolutePath());
-
-			// Update drive button to reflect new current folder
-			driveButton.updateText(currentFolder);
-			
-			if (addToHistory) {
-				historyIndex++;
-
-				// Deletes 'forward' history items if any
-				int size = history.size();
-				for(int i=historyIndex; i<size; i++) {
-					history.removeElementAt(historyIndex);
-				}
-				// Inserts previous folder in history
-				history.add(folder);
-			}
-
-			// Saves last folder recallable on startup
-//			if(!(folder instanceof RemoteFile))
-			if(folder.getURL().getProtocol().equals("file") && folder.isDirectory())
-				this.lastFolderOnExit = folder.getAbsolutePath();
-			
-			// Notifies listeners that location has changed
-			fireLocationChanged();
-		}
-		catch(IOException e) {
-			if(com.mucommander.Debug.ON) e.printStackTrace();
-			throw e;
-		}
-		finally {
-			// Restore cursor to default, no matter what happened before
-			mainFrame.setCursor(Cursor.getDefaultCursor());
-		}
-	}
-
-
 	/**
 	 * Notifies all listeners that have registered interest for notification on this event type.
 	 */
@@ -303,6 +276,54 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 		return success;
 	}
 	
+
+	private void _setCurrentFolder(AbstractFile folder, boolean addToHistory) throws IOException {
+		// Set 'wait' cursor
+		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+        if(com.mucommander.Debug.ON)
+            System.out.println("FolderPanel._setCurrentFolder: "+folder+" ");
+
+		try {
+			fileTable.setCurrentFolder(folder);
+			this.currentFolder = folder;
+
+			// Update location field with new current folder's path
+			locationField.setText(currentFolder.getAbsolutePath());
+
+			// Update drive button to reflect new current folder
+			driveButton.updateText(currentFolder);
+			
+			if (addToHistory) {
+				historyIndex++;
+
+				// Deletes 'forward' history items if any
+				int size = history.size();
+				for(int i=historyIndex; i<size; i++) {
+					history.removeElementAt(historyIndex);
+				}
+				// Inserts previous folder in history
+				history.add(folder);
+			}
+
+			// Saves last folder recallable on startup
+//			if(!(folder instanceof RemoteFile))
+			if(folder.getURL().getProtocol().equals("file") && folder.isDirectory())
+				this.lastFolderOnExit = folder.getAbsolutePath();
+			
+			// Notifies listeners that location has changed
+			fireLocationChanged();
+		}
+		catch(IOException e) {
+			if(com.mucommander.Debug.ON) e.printStackTrace();
+			throw e;
+		}
+		finally {
+			// Restore cursor to default, no matter what happened before
+			mainFrame.setCursor(Cursor.getDefaultCursor());
+		}
+	}
+
 	
 	public boolean goBack() {
 
