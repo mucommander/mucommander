@@ -85,7 +85,8 @@ Bug fixes :
  - Symbolic links to ZIP or JAR files are now handled correctly
  - Fixed a bug when moving a folder to a folder containing a folder with the same name
  - Fixed minor focus problem with drive button (focus would not be released)
- - Fixed minor bug in location field which would not always reflect current folder's path
+ - Fixed a minor bug in location field which would not always reflect current folder's path
+ - Fixed a bug in ZIP/JAR file handling which caused some archives to miss folders
 
 Mac OS X:
  - Screen menu bar enabled
@@ -96,6 +97,6 @@ Mac OS X:
 
 Known issues:
 - Image viewer doesn't free memory properly under Mac OS X
-- Folder cannot be renamed to upper/lower case variations of the same name
+- Folders cannot be renamed to upper/lower case variations of the same name
 - Pipe '|' and other shell operators cannot be used in 'Run Command'
 
