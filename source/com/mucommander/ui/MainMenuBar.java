@@ -253,18 +253,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			new CopyDialog(mainFrame, true, false);
 		}
         else if  (source == emailFilesItem) {
-/*
-			if(!SendMailJob.mailPreferencesSet()) {
-				JOptionPane.showMessageDialog(mainFrame, "You need to set your mail preferences first.", "Mail preferences not set", JOptionPane.INFORMATION_MESSAGE);
-
-				PreferencesDialog preferencesDialog = new PreferencesDialog(mainFrame);
-				preferencesDialog.setActiveTab(PreferencesDialog.MAIL_TAB);
-				preferencesDialog.showDialog();
-			}
-			else {
-*/
-				new EmailFilesDialog(mainFrame);
-//			}
+			new EmailFilesDialog(mainFrame);
 		}
 		else if (source == preferencesItem) {
 			mainFrame.showPreferencesDialog();
