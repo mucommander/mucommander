@@ -1,0 +1,274 @@
+package com.mucommander.file;
+
+import java.io.*;
+import java.util.Vector;
+
+/**
+ * FSFile represents a 'file system file', that is a regular native file.
+ */
+public class FSFile extends AbstractFile {
+	/** "/" for UNIX systems, "\" for Win32 */
+	protected final static String separator = File.separator;
+
+	private static FSFile roots[];
+	
+	protected File file;
+//	// If this is a folder, this field caches the children files after the ls method has been called.
+//    protected FSFile children[];
+    protected String absPath;
+	
+	/* These file attributes are cached first time they are accessed to avoid excessive I/O */
+	
+	private long date = -1;
+	private long size = -1;
+	private String name = null;
+
+	private FSFile parent;
+	// Indicates whether or not the value has already been retrieved
+	private boolean parentValCached = false;
+		
+	private boolean isFolder;
+	// Indicates whether or not the value has already been retrieved
+	private boolean isFolderValCached = false;
+	
+	private boolean isHidden;
+	// Indicates whether or not the value has already been retrieved
+	private boolean isHiddenValCached = false;
+
+	
+	// Retreives fs roots once for all because File.listRoots() sometimes triggers a weird dialog
+	// about A:\, we only want this to happen once...
+	static {
+//		// Windows bug workaround
+//		if (System.getProperty("os.name").startsWith("Windows")) {
+//			Vector fileRoots = new Vector();
+//
+//System.out.println("L0");			
+//			// Create the A: drive whether it is mounted or not
+//			fileRoots.add(new File("A:\\"));
+//
+//System.out.println("L1");			
+//			
+//			File root;
+//			for(char c='C'; c<='Z'; c++) {
+//				root = new File(c+":\\");
+//				if(root.exists())
+//					fileRoots.add(root);
+//			}
+//
+//System.out.println("L2");			
+//			
+//			roots = new FSFile[fileRoots.size()];
+//			for(int i=0; i<fileRoots.size(); i++)
+//				roots[i] = new FSFile((File)fileRoots.elementAt(i));
+//
+//System.out.println("L3");			
+//		}
+//		else {
+			File fileRoots[] = File.listRoots();	
+			roots = new FSFile[fileRoots.length];
+			for(int i=0; i<fileRoots.length; i++)
+				roots[i] = new FSFile(fileRoots[i]);
+//		}
+	}
+
+	public static FSFile[] listRoots() {
+		return roots;
+	}
+
+	
+	/**
+	 * Creates a new instance of FSFile. Although the existence
+	 * of the file is not checked, the given file path should exist.
+	 * @param absPath the absolute path of this AbstractFile.
+	 */
+	public FSFile(String absPath) {
+		this(new File(absPath));
+	}
+
+
+	/**
+	 * Creates a new instance of FSFile. Although the existence
+	 * of the file is not checked, the given file path should exist.
+	 * @param file the file of this AbstractFile.
+	 */
+	public FSFile(File _file) {
+//System.out.println("F0");
+		this.absPath = _file.getAbsolutePath();
+		
+		// removes the ending separator character (if any)
+        this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
+
+//System.out.println("F1");
+		if(!_file.isAbsolute())
+			this.file = new File(absPath);
+		else
+			this.file = _file;
+
+//System.out.println("F2");		
+//		// Most frequently requested values are cached to avoid I/O accesses.
+
+//		// Determines if this file is a folder (directory)
+//		this.isFolder = file.isDirectory();
+
+// Can't do this since a File does not necessarely exist at this time so there is way
+// to know if it is a folder or not.
+//		// Folder paths always end with a separator
+//		if (isFolder && !absPath.endsWith(separator))
+//			absPath += separator;
+
+//System.out.println("F3");
+	
+//		// Resolves name
+//		this.name = file.getParent()==null?absPath+separator:file.getName();
+
+//System.out.println("F4");	
+//		// Resolves date
+//		this.date = file.lastModified();
+		
+//System.out.println("F5");
+//		// Resolves size
+//		this.size = file.length();
+	
+//System.out.println("F6");
+//		// Determines if this file is hidden
+//		this.isHidden = file.isHidden();
+	}
+
+	public String getName() {
+    	// Retrieves name and caches it
+    	if (name==null) {
+	    	this.name = file.getParent()==null?absPath+separator:file.getName();
+	   	}
+    
+		return name;
+	}
+
+	/**
+	 * Returns a String representation of this AbstractFile which is the name as returned by getName().
+	 */
+	public String toString() {
+		return getName();
+	}
+	
+	public String getAbsolutePath() {
+		return absPath;
+	}
+
+	public String getSeparator() {
+		return separator;
+	}
+
+	public long getDate() {
+		// Retrieves date and caches it
+		if(date==-1)
+			date = file.lastModified();
+		
+		return date;
+	}
+	
+	public long getSize() {
+		// Retrieves size and caches it
+		if(size==-1)
+			size = file.length();
+		
+		return size;
+	}
+	
+	public AbstractFile getParent() {
+		// Retrieves parent and caches it
+		if (!parentValCached) {
+			String parentS = file.getParent();
+			if(parentS != null)
+				parent = new FSFile(new File(parentS));
+			parentValCached = true;
+		}
+        return parent;
+	}
+	
+	public boolean exists() {
+		return file.exists();
+	}
+	
+	public boolean canRead() {
+		return file.canRead();
+	}
+	
+	public boolean canWrite() {
+		return file.canWrite();
+	}
+	
+	public boolean isHidden() {
+		// Retrieves isHidden info and caches it
+		if (!isHiddenValCached) {
+			isHidden = file.isHidden();
+			isHiddenValCached = true;
+		}
+		return isHidden;
+	}
+
+	public boolean isFolder() {
+		// Retrieves isFolder info and caches it
+		if (!isFolderValCached) {
+			isFolder = file.isDirectory();
+			isFolderValCached = true;
+		}
+		return isFolder;
+	}
+
+	public boolean equals(AbstractFile f) {
+		if(!(f instanceof FSFile))
+			return super.equals(f);		// could be equal to a ZipArchiveFile
+
+		// Compares canonical path (which File does not do by default in its equals() method)
+		try {
+			return this.file.getCanonicalPath().equals(((FSFile)f).file.getCanonicalPath());
+		}
+		catch(IOException e) {
+			return this.file.equals(((FSFile)f).file);
+		}
+	}
+	
+
+	public InputStream getInputStream() throws IOException {
+		return new FileInputStream(file);
+	}
+	
+	public OutputStream getOutputStream(boolean append) throws IOException {
+		return new FileOutputStream(absPath, append);
+	}
+		
+	public boolean moveTo(AbstractFile dest) throws IOException  {
+		if (dest instanceof FSFile)
+			return file.renameTo(new File(dest.getAbsolutePath()));
+		return false;
+	}
+
+	public void delete() throws IOException {
+		boolean ret = file.delete();
+		
+		if(ret==false)
+			throw new IOException();
+	}
+
+	public AbstractFile[] ls() throws IOException {
+		// // returns a cached array if ls has already been called
+        //if(children!=null)
+        //    return children;
+        
+        String names[] = file.list();
+		
+        if(names==null)
+            throw new IOException();
+        
+        AbstractFile children[] = new AbstractFile[names.length];
+		for(int i=0; i<names.length; i++) {
+			children[i] = AbstractFile.getAbstractFile(absPath+separator+names[i]);
+		}		
+		return children;
+	}
+
+	public void mkdir(String name) throws IOException {
+		new File(absPath+separator+name).mkdir();
+	}
+}
