@@ -1,15 +1,10 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.job.CopyJob;
 import com.mucommander.text.Translator;
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 
 import java.util.Vector;
 

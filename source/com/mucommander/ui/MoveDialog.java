@@ -1,7 +1,6 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.job.MoveJob;
