@@ -68,7 +68,6 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
 		// Packs dialog
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-		pack();
 	}
 
 

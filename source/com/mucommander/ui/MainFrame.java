@@ -255,14 +255,21 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 * Brings up server connect dialog, which allows to connect to remote servers.
 	 */
 	public void showServerConnectDialog() {
-		new ServerConnectDialog(this).show();
+		new ServerConnectDialog(this).showDialog();
 	}
 	
 	/**
 	 * Brings up the preferences dialog.
 	 */ 
 	public void showPreferencesDialog() {
-		new PreferencesDialog(this).show();
+		new PreferencesDialog(this).showDialog();
+	}
+
+	/**
+	 * Brings up the file selection dialog.
+	 */
+	public void showSelectionDialog(boolean addToSelection) {
+		new FileSelectionDialog(this, addToSelection).showDialog();
 	}
 
 	/**
