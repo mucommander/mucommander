@@ -359,8 +359,8 @@ version_dialog.new_version_title:FR:Nouvelle version disponible
 version_dialog.new_version:EN:A new version of muCommander is available.
 version_dialog.new_version:FR:Une nouvelle version de muCommander est disponible.
 
-version_dialog.new_version_url:EN:There is a new version of muCommander available at %1
-version_dialog.new_version_url:FR:Il y a une nouvelle version de muCommander disponible à %1
+version_dialog.new_version_url:EN:A new version of muCommander is available at %1.
+version_dialog.new_version_url:FR:Une nouvelle version de muCommander est disponible à %1.
 
 version_dialog.not_available_title:EN:Server not reachable
 version_dialog.not_available_title:FR:Serveur indisponible
@@ -513,6 +513,12 @@ delete_dialog.confirmation:FR:Définitivement supprimer les fichiers sélectionn
 
 delete_dialog.deleting:EN:Deleting
 delete_dialog.deleting:FR:Suppression en cours
+
+move_dialog.error_title:EN:Delete error
+move_dialog.error_title:FR:Erreur de suppression
+
+delete.deleting_file:EN:Deleting %1
+delete.deleting_file:FR:Suppression %1 en cours
 
 
 #########

@@ -198,20 +198,6 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	
-	public void doRefresh()  {
-		try  {
-			mainFrame.getLastActiveTable().refresh();
-		}
-		catch(IOException e)  {
-		}
-	}
-	
-
-	public void doExit()  {
-		WindowManager.getInstance().disposeMainFrame(mainFrame);
-	}
-	
 
 /*	
 	///////////////////////////////////////////////////////
@@ -264,10 +250,10 @@ public class CommandBarPanel extends JPanel implements ActionListener {
             new DeleteDialog(mainFrame);
         }
         else if(source == buttons[REFRESH_INDEX]) {
-			doRefresh();
+			mainFrame.getLastActiveTable().refresh();
 		}
         else if(source == buttons[CLOSE_INDEX]) {
-        	doExit();
+			WindowManager.getInstance().disposeMainFrame(mainFrame);
 		}
 
         // FileTable lost focus since a button was clicked

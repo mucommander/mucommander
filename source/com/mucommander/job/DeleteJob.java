@@ -18,20 +18,17 @@ import javax.swing.*;
 
 /**
  * This class is responsible for deleting recursively a group of files.
+ *
+ * @author Maxence Bernard
  */
 public class DeleteJob extends FileJob implements Runnable, FileModifier {
     
-    /** Files to be deleted */
-    private Vector filesToDelete;
-    
-    /** Number of files to be deleted */
-    private int nbFiles;
-    
-    /** Index of file currently being deleted */ 
-	private int currentFileIndex;
-	private String currentFileInfo = "";
-    
-	private String baseFolderPath;
+	/** Default choice when encountering an existing file */
+	private int defaultFileExistsChoice = -1;
+
+	/** Title used for error dialogs */
+	private String errorDialogTitle;
+
 
 	private final static int DELETE_LINK_ACTION = 0;
 	private final static int DELETE_FOLDER_ACTION = 1;
@@ -44,26 +41,33 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 	private final static String SKIP_TEXT = "Skip";
 
 	
-    public DeleteJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToDelete) {
-		super(progressDialog, mainFrame);
+    /**
+	 * Creates a new DeleteJob without starting it.
+	 *
+	 * @param progressDialog dialog which shows this job's progress
+	 * @param mainFrame mainFrame this job has been triggered by
+	 * @param files files which are going to be deleted
+	 * @param destFolder destination folder where the files will be moved
+	 */
+    public DeleteJob(ProgressDialog progressDialog, MainFrame mainFrame, Vector files, AbstractFile destFolder) {
+		super(progressDialog, mainFrame, files, destFolder);
 
-		this.filesToDelete = filesToDelete;
-		this.nbFiles = filesToDelete.size();
-	
-		this.baseFolderPath = ((AbstractFile)filesToDelete.elementAt(0)).getParent().getAbsolutePath();
+		this.errorDialogTitle = Translator.get("delete_dialog.error_title");
 	}
 
+	
 	/**
 	 * Deletes recursively the given file or folder. 
 	 *
-	 * @return <code>true</code> if the file has completely been deleted.
+	 * @param file the file or folder to delete
+	 * @param recurseParams not used
+	 * 
+	 * @return <code>true</code> if the file has been completely deleted.
 	 */
-    private boolean deleteRecurse(AbstractFile file) {
+    private boolean processFile(AbstractFile file, Object recurseParams[]) {
 		String filePath = file.getAbsolutePath();
 		filePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
 
-        currentFileInfo = "\""+file.getName()+"\" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
-				
 		if(isInterrupted())
             return false;
 
@@ -88,57 +92,56 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 			}
 			
 			if(!isSymlink || followSymlink) {
-				// Delete each file in this folder
-				try {
-					AbstractFile subFiles[] = file.ls();
-					for(int i=0; i<subFiles.length && !isInterrupted(); i++)
-						deleteRecurse(subFiles[i]);
-				}
-				catch(IOException e) {
-					ret = showErrorDialog("Unable to read contents of folder "+filePath);
-					if(ret==-1 || ret==CANCEL_ACTION)	// CANCEL_ACTION or close dialog
-						stop();
-					return false;
-				}
+				do {		// Loop for retry
+					// Delete each file in this folder
+					try {
+						AbstractFile subFiles[] = file.ls();
+						for(int i=0; i<subFiles.length && !isInterrupted(); i++)
+							deleteRecurse(subFiles[i]);
+					}
+					catch(IOException e) {
+						if(com.mucommander.Debug.ON) e.printStackTrace();
+
+						ret = showErrorDialog(errorDialogTitle, "Unable to read contents of folder "+filePath);
+						// Retry loops
+						if(ret==RETRY_ACTION)
+							continue;
+						// Cancel, skip or close dialog returns false
+						return false;
+					}
+				} while(true);
 			}
         }
         
         if(isInterrupted())
             return false;
 
-        try {
-			// If file is a symlink to a folder and the user asked to follow the symlink,
-			// delete the empty folder
-			if(followSymlink) {
-				AbstractFile canonicalFile = AbstractFile.getAbstractFile(file.getCanonicalPath());
-				if(canonicalFile!=null)
-					canonicalFile.delete();
+		do {		// Loop for retry
+			try {
+				// If file is a symlink to a folder and the user asked to follow the symlink,
+				// delete the empty folder
+				if(followSymlink) {
+					AbstractFile canonicalFile = AbstractFile.getAbstractFile(file.getCanonicalPath());
+					if(canonicalFile!=null)
+						canonicalFile.delete();
+				}
+	
+				file.delete();
+				return true;
 			}
-
-			file.delete();
-			return true;
-		}
-        catch(IOException e) {
-			if(com.mucommander.Debug.ON)
-				e.printStackTrace();
-			
-            ret = showErrorDialog("Unable to delete "
-				+(file.isDirectory()?"folder ":"file ")
-				+file.getName());
-            if(ret==-1 || ret==CANCEL_ACTION) // CANCEL_ACTION or close dialog
-                stop();                
-			return false;
-        }
-    }
-
+			catch(IOException e) {
+				if(com.mucommander.Debug.ON) e.printStackTrace();
 	
-    private int showErrorDialog(String message) {
-		QuestionDialog dialog = new QuestionDialog(progressDialog, "Delete error", message, mainFrame,
-			new String[] {SKIP_TEXT, CANCEL_TEXT},
-			new int[]  {SKIP_ACTION, CANCEL_ACTION},
-			0);
-	
-	    return waitForUserResponse(dialog);
+				ret = showErrorDialog(errorDialogTitle, "Unable to delete "
+					+(file.isDirectory()?"folder ":"file ")
+					+file.getName());
+				// Retry loops
+				if(ret==RETRY_ACTION)
+					continue;
+				// Cancel, skip or close dialog returns false
+				return false;
+			}
+		} while(true);
     }
 
 	
@@ -214,25 +217,8 @@ public class DeleteJob extends FileJob implements Runnable, FileModifier {
 	}
 
 
-	/***********************************
-	 *** FileJob implemented methods ***
-	 ***********************************/
-
-    public int getNbFiles() {
-        return nbFiles;
-    }
-
-    public int getCurrentFileIndex() {
-        return currentFileIndex;
-    }
-
-    public long getTotalBytesProcessed() {
-        return -1;
-    }
-
     public String getStatusString() {
-		return "Deleting "+currentFileInfo;
+        return Translator.get("delete.deleting_file", getCurrentFileInfo());
     }
-	
 
 }	

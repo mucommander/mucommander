@@ -246,7 +246,7 @@ public abstract class FileJob implements Runnable {
         stop();
 		
         // Refresh tables only if folder is destFolder
-        refreshTableIfFolderEquals(mainFrame.getBrowser1().getFileTable(), baseDestFolder);
+		refreshTableIfFolderEquals(mainFrame.getBrowser1().getFileTable(), baseDestFolder);
         refreshTableIfFolderEquals(mainFrame.getBrowser2().getFileTable(), baseDestFolder);
 
 		// Clean 
@@ -313,11 +313,7 @@ public abstract class FileJob implements Runnable {
 	 * Refreshes the folder's content of the given file table.
 	 */
 	protected void refreshTable(FileTable table) {
-		try { table.refresh(); }
-		catch(IOException e) {
-			// Probably should do something when a folder becomes unreadable (probably doesn't exist anymore)
-			// like switching to a root folder
-		}
+		table.refresh();
 	}
 	
 

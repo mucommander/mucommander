@@ -58,6 +58,14 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	// Abstract methods Implementation //
 	/////////////////////////////////////
 
+	/**
+	 * Moves recursively the given file or folder. 
+	 *
+	 * @param file the file or folder to move
+	 * @param recurseParams not used
+	 * 
+	 * @return <code>true</code> if the file has been copied.
+	 */
     protected boolean processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
 		if(isInterrupted())
             return false;
@@ -78,7 +86,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 				try {
 					// Recurse on zip's contents
 					AbstractFile zipSubFiles[] = currentFile.ls();
-					for(int j=0; j<zipSubFiles.length; j++)
+					for(int j=0; j<zipSubFiles.length && !isInterrupted(); j++)
 						processFile(zipSubFiles[j], destFolder, null);
 					return true;
 				}
@@ -198,50 +206,8 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 				}
 			}
 
+			// Copy the file
 			return tryCopyFile(file, destFile, append, errorDialogTitle);
-/*			
-			// Copy file to destination
-			do {				// Loop for retry
-				try {
-					copyFile(file, destFile, append);
-				}
-				catch(FileJobException e) {
-					// Copy failed
-					if(com.mucommander.Debug.ON)
-						System.out.println(""+e);
-					
-					int reason = e.getReason();
-					String errorMsg;
-					switch(reason) {
-						// Could not open source file for read
-						case FileJobException.CANNOT_OPEN_SOURCE:
-							errorMsg = Translator.get("cannot_read_source", file.getName());
-							break;
-						// Could not open destination file for write
-						case FileJobException.CANNOT_OPEN_DESTINATION:
-							errorMsg = Translator.get("cannot_write_destination", file.getName());
-							break;
-						// An error occurred during file transfer
-						case FileJobException.ERROR_WHILE_TRANSFERRING:
-						default:
-							errorMsg = Translator.get("error_while_transferring", file.getName());
-							break;
-					}
-					
-					// Ask the user what to do
-					int ret = showErrorDialog(errorDialogTitle, errorMsg);
-					if(ret==RETRY_ACTION) {
-						// Resume transfer
-						if(reason==FileJobException.ERROR_WHILE_TRANSFERRING)
-							append = true;
-						continue;
-					}
-					else if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
-						stop();
-				}
-				break;
-			} while(true);
-*/
 		}
 	}
 
