@@ -38,6 +38,18 @@ public abstract class AbstractFile {
 			}
 		}
 */
+        else if (absPath.toLowerCase().startsWith("ftp://")) {
+            try {
+                file = new FTPFile(absPath);
+            }
+            catch(IOException e) {
+                if(com.mucommander.Debug.TRACE) {
+                    System.out.println(e);
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }
         // FS file, tests if the given path is indeed absolute
 		else if (new File(absPath).isAbsolute()) {
 			file = new FSFile(absPath);
@@ -53,15 +65,17 @@ public abstract class AbstractFile {
 		
 		return file;		
 	}
-	
-    /**
-     * When called, this method should refresh all file properties (size, date, existence, 
-     * read/write/hidden flags) which are usually cached for performance reasons.<br>
-     * It is the responsability of all classes extending AbstractFile to correctly refresh those properties.
-     */
-    //public abstract void refresh();
 
-	
+
+    /**
+     * Returns the MIME type of this file (determined by the file extension), <code>null</code> if it is
+     * unknown.
+     */
+    public String getMimeType() {
+        return isFolder()?null:MimeTypes.getMimeType(this);
+    }
+    
+    
 	/**
 	 * <p>Tests a file for equality: returns <code>true</code> if the given file denotes the same
 	 * file or directory. Note that two files can be equal and not have the exact same absolute

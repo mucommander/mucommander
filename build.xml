@@ -46,6 +46,8 @@
 
     <unjar src="${lib}/jcifs.jar" dest="${classes}"/>
 
+    <unjar src="${lib}/jftp.jar" dest="${classes}"/>
+
     <!-- Put everything in ${classes} into the ${dist}/mucommander.jar file -->
     <jar jarfile="${dist}/mucommander.jar" basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
   </target>

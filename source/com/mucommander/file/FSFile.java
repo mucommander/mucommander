@@ -159,8 +159,7 @@ public class FSFile extends AbstractFile {
 //			isFolder = file.isDirectory();
 //			isFolderValCached = true;
 //		}
-//		return isFolder;
-
+//		return isFolder;        
         return file.isDirectory();
 	}
 
@@ -179,7 +178,9 @@ public class FSFile extends AbstractFile {
 	
 
 	public InputStream getInputStream() throws IOException {
-		return new FileInputStream(file);
+System.out.println(getName()+" "+getMimeType());
+
+        return new FileInputStream(file);
 	}
 	
 	public OutputStream getOutputStream(boolean append) throws IOException {

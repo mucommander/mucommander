@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class AboutDialog extends FocusDialog implements ActionListener, KeyListener {
 	
-	private SinEffectPanel effectPanel;
+	private LifeEffectPanel effectPanel;
 	private JButton okButton;
 
 	private static String aboutText = "<html><body text=\"#00FFFF\" bgcolor=\"#000084\">"
@@ -41,7 +41,7 @@ public class AboutDialog extends FocusDialog implements ActionListener, KeyListe
 		contentPane.setBackground(bgColor);
 		// Resolves the URL of the image within the JAR file
 		URL imageURL = getClass().getResource("/logo.gif");
-		effectPanel = new SinEffectPanel(new ImageIcon(imageURL).getImage());
+		effectPanel = new LifeEffectPanel(new ImageIcon(imageURL).getImage());
 		contentPane.add(effectPanel, BorderLayout.NORTH);
 
 		JLabel label = new JLabel(aboutText);

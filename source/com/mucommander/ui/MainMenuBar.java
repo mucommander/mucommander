@@ -19,7 +19,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenuItem serverConnectItem;
 	private JMenuItem zipItem;
 	private JMenuItem unzipItem;
-	private JMenuItem propertiesItem;
+    private JMenuItem sendMailItem;
+    private JMenuItem propertiesItem;
 	private JMenuItem preferencesItem;
 	private JMenuItem checkForUpdatesItem;
 	private JMenuItem quitItem;
@@ -73,7 +74,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		serverConnectItem = addMenuItem(fileMenu, "Connect to Server...", KeyEvent.VK_C, KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.CTRL_MASK));
 		zipItem = addMenuItem(fileMenu, "Zip...", KeyEvent.VK_Z, KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
 		unzipItem = addMenuItem(fileMenu, "Unzip...", KeyEvent.VK_U, KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
-		propertiesItem = addMenuItem(fileMenu, "Properties", KeyEvent.VK_P, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.ALT_MASK));
+        sendMailItem = addMenuItem(fileMenu, "Send mail...", KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+        propertiesItem = addMenuItem(fileMenu, "Properties", KeyEvent.VK_P, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.ALT_MASK));
 
 		fileMenu.add(new JSeparator());
 		preferencesItem = addMenuItem(fileMenu, "Preferences...", KeyEvent.VK_R, null);
@@ -231,6 +233,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == unzipItem) {
 			mainFrame.getCommandBar().showCopyDialog(true);
 		}
+        else if  (source == sendMailItem) {
+            mainFrame.sendMail();
+        }
 		else if (source == preferencesItem) {
 			mainFrame.showPreferencesDialog();
 		}

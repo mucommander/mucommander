@@ -84,7 +84,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		// For Mac OS X whose minimum width for buttons is enormous
 		button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getWidth()));
 		button.addActionListener(this);
-		//button.setBorder(BorderFactory.createRaisedBevelBorder());
+//        button.setToolTipText(caption);
 		add(button);
 		return button;
 	}

@@ -7,6 +7,7 @@ import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFile;
+import com.mucommander.job.SendMailJob;
 import com.mucommander.conf.ConfigurationManager;
 
 import javax.swing.*;
@@ -272,6 +273,19 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		new FileSelectionDialog(this, addToSelection).showDialog();   
 	}
 
+
+    public void sendMail() {
+        // Figures out which files to send
+        Vector filesToSend = lastActiveTable.getSelectedFiles();
+
+        // Starts moving files
+        ProgressDialog progressDialog = new ProgressDialog(this, "Send mail", true);
+        SendMailJob sendJob = new SendMailJob(this, progressDialog, filesToSend, "maxence@maxence.info", "test subject", "test body");
+        sendJob.start();
+        progressDialog.setFileJob(sendJob);
+        progressDialog.start();
+    }        
+            
 	/**
 	 * Matches a path typed by the user (which can be relative to the current folder or absolute)
 	 * to an AbstractFile (folder). The folder returned will always exist.
