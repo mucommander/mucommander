@@ -84,12 +84,10 @@ public class FileURL implements Cloneable {
 			if(path.equals(""))
 				path = "/";
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw path = "+path);
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw path = "+path);
 			
 			// Factor out '.' and '..' and replace '~' by home folder for 'file' protocol
 			if(!path.equals("/")) {
-//				// Path may contain backslash characters, let's replace them by slash characters
-//				path.replace('\\', '/');
 				pos = 0;	// position of current '/' or '\' character
 				int pos2 = 0;	// position of next '/' or '\' character
 				int posb;		// temporary position of next '\\' character
@@ -112,18 +110,16 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw path = "+path);
 						dirWS = dir.substring(0, dir.length()-1);
 					}
 					
-//					pos = pos2;
-
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw dir name = "+dir);
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw dir name = "+dir);
 					
 					// Discard '.' and empty directories
 					if((dirWS.equals("") && pathV.size()>0) || dirWS.equals(".")) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found . or empty dir");
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found . or empty dir");
 						continue;
 					}
 					// Remove last directory
 					else if(dirWS.equals("..")) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found .. dir");
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found .. dir");
 						if(pathV.size()==0)
 							throw new MalformedURLException();
 						pathV.removeElementAt(pathV.size()-1);
@@ -131,7 +127,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found .. dir");
 					}
 					// Replace '~' by actual home directory if protocol is 'file' and '~' appears in the path
 					else if(dirWS.equals("~") && protocol.equalsIgnoreCase("file")) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found ~ dir");
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found ~ dir");
 						path = path.substring(0, pos) + System.getProperty("user.home") + path.substring(pos+1, path.length());
 						// Will perform another pass at the same position
 						pos2 = pos;
@@ -149,7 +145,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found ~ dir");
 					path += pathV.elementAt(i);
 				// We now have a path free of '.' and '..'
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Reconstructed path = "+path+" "+pathV);
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Reconstructed path = "+path+" "+pathV);
 			}
 			
 			// Parse query part (if any)

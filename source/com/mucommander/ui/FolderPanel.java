@@ -59,28 +59,65 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	private final static String DOWNLOAD_TEXT = Translator.get("download");
 
 
-	private class ChangeFolderThread implements Thread {
+	private class ChangeFolderThread extends Thread {
 	
 		private AbstractFile folder;
-		private boolean stopped;
+		private boolean addToHistory;
+		
+		private boolean interrupted;
+		private AbstractFile children[];
+		private IOException ioException;
+		
 	
-		public Thread(AbstractFile folder) {
+		public ChangeFolderThread(AbstractFile folder, boolean addToHistory) {
 			this.folder = folder;
+			this.addToHistory = addToHistory;
 		}
 	
-		public void stop() {
-			this.stopped = true;
+		public synchronized void startAndWait() {
+			super.start();
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("wait starts");
+			try {
+				wait();
+			}
+			catch(InterruptedException e) {
+			}
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("wait returns");
+		}
+	
+//		public void stop() {
+//			this.stopped = true;
+//			super.stop();
+//			notifyAll();
+//		}
+
+		public void kill() {
+//			this.interrupted = true;
+			synchronized(this) { notifyAll(); }
 			super.stop();
 		}
 	
 		public void run() {
 			try {
-				AbstractFile children[] = folder.ls();
-				if(stopped)
-					return;
-				setCurrentFolder(folder, children, true);
+				this.children = folder.ls();
 			}
-			catch(IOException e) {}
+			catch(IOException e) {
+				this.ioException = e;
+			}
+
+			synchronized(this) { notifyAll(); }
+		}
+	
+//		public boolean interrupted() {
+//			return interrupted;
+//		}
+	
+		public IOException getIOException() {
+			return ioException;
+		}
+		
+		public AbstractFile[] getChildren() {
+			return children;
 		}
 	}
 
@@ -125,14 +162,16 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 		try {
 			// Set initial folder to current directory
-			_setCurrentFolder(initialFolder, true);
+//			_setCurrentFolder(initialFolder, true);
+			_setCurrentFolder(initialFolder, initialFolder.ls(), true);
 		}
 		catch(Exception e) {
 			AbstractFile rootFolders[] = RootFolders.getRootFolders();
 			// If that failed, try to read any other drive
 			for(int i=0; i<rootFolders.length; i++) {
 				try  {
-					_setCurrentFolder(rootFolders[i], true);
+//					_setCurrentFolder(rootFolders[i], true);
+					_setCurrentFolder(rootFolders[i], rootFolders[i].ls(), true);
 					break;
 				}
 				catch(IOException e2) {
@@ -248,10 +287,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 	 * an Exception has been thrown and a error message has been displayed to the end user.
 	 */
 	public boolean setCurrentFolder(AbstractFile folder, boolean addToHistory) {
-		boolean success = false;
-
-        if(com.mucommander.Debug.ON)
-            System.out.println("FolderPanel.setCurrentFolder: "+folder+" ");
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("FolderPanel.setCurrentFolder: "+folder+" ");
         
 		if (folder==null || !folder.exists()) {
 			JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
@@ -260,37 +296,57 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 		
 		boolean hadFocus = fileTable.hasFocus();
 
+		boolean success = false;
 		do {
-			try {
-				_setCurrentFolder(folder, addToHistory);
-				success = true;
+			// Set 'wait' cursor
+			mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+			ChangeFolderThread thread = new ChangeFolderThread(folder, addToHistory);
+			thread.startAndWait();
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("wakes up");
+			if(thread.isInterrupted()) {
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("interrupted");
+				break;
 			}
-			catch(IOException e) {
+			
+			IOException ioException = thread.getIOException();
+			if(ioException!=null) {
+				// Restore cursor to default
+				mainFrame.setCursor(Cursor.getDefaultCursor());
+
 				// Retry (loop) if user authentified
-				if(showAccessErrorDialog(e)) {
+				if(showAccessErrorDialog(ioException)) {
 					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
 					continue;
 				}
+				break;
 			}
+			
+			_setCurrentFolder(folder, thread.getChildren(), addToHistory);
+			success = true;
 			break;
+			
 		} while(true);
+
+		// Restore cursor to default
+		mainFrame.setCursor(Cursor.getDefaultCursor());
 			
         if(hadFocus || mainFrame.getLastActiveTable()==fileTable)
 			fileTable.requestFocus();
 
 		return success;
 	}
-	
+		
 
-	private void _setCurrentFolder(AbstractFile folder, boolean addToHistory) throws IOException {
+	private void _setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory) {
 		// Set 'wait' cursor
 		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
         if(com.mucommander.Debug.ON)
             System.out.println("FolderPanel._setCurrentFolder: "+folder+" ");
 
-		try {
-			fileTable.setCurrentFolder(folder);
+//		try {
+			fileTable.setCurrentFolder(folder, children);
 			this.currentFolder = folder;
 
 			// Update location field with new current folder's path
@@ -312,31 +368,34 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			}
 
 			// Saves last folder recallable on startup
-//			if(!(folder instanceof RemoteFile))
 			if(folder.getURL().getProtocol().equals("file") && folder.isDirectory())
 				this.lastFolderOnExit = folder.getAbsolutePath();
 			
 			// Notifies listeners that location has changed
 			fireLocationChanged();
-		}
-		catch(IOException e) {
-			if(com.mucommander.Debug.ON) e.printStackTrace();
-			throw e;
-		}
-		finally {
+//		}
+//		catch(IOException e) {
+//			if(com.mucommander.Debug.ON) e.printStackTrace();
+//			throw e;
+//		}
+//		finally {
 			// Restore cursor to default, no matter what happened before
 			mainFrame.setCursor(Cursor.getDefaultCursor());
-		}
+//		}
 	}
 
 	
-	public boolean goBack() {
+	public void goBack() {
 
 		if (historyIndex==0)
-			return false;
+//			return false;
+			return;
 		
-		boolean success = false;
 		AbstractFile folder = (AbstractFile)history.elementAt(--historyIndex);
+		setCurrentFolder(folder, false);
+
+/*
+		boolean success = false;
 		do {
 			try {
 				_setCurrentFolder(folder, false);
@@ -352,21 +411,23 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			break;
 		}
 		while(true);
-	
-		// Notifies listeners that location has changed
-		fireLocationChanged();
-
+		// Transfer focus from back button back to file table
 		fileTable.requestFocus();
+*/		
 
-		return success;
+//		return success;
 	}
 	
-	public boolean goForward() {
+	public void goForward() {
 		if (historyIndex==history.size()-1)
-			return false;
+//			return false;
+			return;
 		
-		boolean success = false;
 		AbstractFile folder = (AbstractFile)history.elementAt(++historyIndex);
+		setCurrentFolder(folder, false);
+
+/*
+		boolean success = false;
 		do {
 			try {
 				_setCurrentFolder(folder, false);
@@ -382,12 +443,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			break;
 		} while(true);
 			
-		// Notifies listeners that location has changed
-		fireLocationChanged();
-
+		// Transfer focus from forward button back to file table
 		fileTable.requestFocus();
+*/
 
-		return success;
+//		return success;
 	}
 
 	/**
@@ -431,6 +491,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 			if(!showAccessErrorDialog(e))
 				return;
 
+/*
 			// Retry if user authentified, using setCurrentFolder which will lose selection
 			AbstractFile folder = currentFolder;
 			do {
@@ -446,12 +507,14 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scro
 				break;
 			}
 			while(true);
+*/
+			setCurrentFolder(currentFolder, false);
 		}
 		finally {
 			driveButton.repaint();
 			locationField.repaint();
 
-			// Request focus back from refresh button
+			// Transfer focus from refresh button back to file table
 			fileTable.requestFocus();
 		}
 	 }
