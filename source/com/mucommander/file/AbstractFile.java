@@ -5,9 +5,6 @@ import java.util.Vector;
 
 public abstract class AbstractFile {
 
-
-	protected abstract void setParent(AbstractFile parent);
-	
 	
 	/**
 	 * Returns an instance of AbstractFile for the given absolute path.
@@ -66,12 +63,14 @@ public abstract class AbstractFile {
 	 */
 	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) throws AuthException, IOException {
 		AbstractFile file;
-		String absPathLC = absPath.toLowerCase();
 
 		// Remove trailing slash or backslash
-		if(absPathLC.endsWith("/") || absPathLC.endsWith("\\"))
-			absPathLC.substring(0, absPathLC.length()-1);
-		
+		if(absPath.endsWith("/") || absPath.endsWith("\\"))
+			absPath = absPath.substring(0, absPath.length()-1);
+
+		// Lower case absolute path
+		String absPathLC = absPath.toLowerCase();
+
 		// SMB file
 		if (absPathLC.startsWith("smb://"))
 			file = new SMBFile(absPath);
@@ -79,7 +78,7 @@ public abstract class AbstractFile {
 		else if (absPathLC.startsWith("http://"))
 			file = new HTTPFile(absPath);
 		// FTP file
-		else if (absPath.toLowerCase().startsWith("ftp://"))
+		else if (absPathLC.startsWith("ftp://"))
 			file = new FTPFile(absPath);
 		// FS file, test if the given path is indeed absolute
 		else if (new File(absPath).isAbsolute())
@@ -139,6 +138,13 @@ public abstract class AbstractFile {
 	}
 	
 	
+
+	/**
+	 * Returns a string describing the protocol used to access the file (e.g. SMB, FTP... or simply FILE for local files).
+	 */
+	public abstract String getProtocol();
+	
+
 	/**
 	 * Returns the name of this AbstractFile.
 	 */
@@ -204,10 +210,15 @@ public abstract class AbstractFile {
 	public abstract long getSize();
 	
 	/**
-	 * Returns this AbstractFile's parent or null if it is root.
+	 * Returns this AbstractFile's parent or null if it doesn't have any parent.
 	 */
 	public abstract AbstractFile getParent();
 	
+	/**
+	 * Sets this file's parent or null if it doesn't have any parent.
+	 */
+	protected abstract void setParent(AbstractFile parent);
+
 	/**
 	 * Returns <code>true</code> if this file exists.
 	 */
@@ -314,4 +325,5 @@ public abstract class AbstractFile {
 	 * @throw IOException if this AbstractFile cannot be written.
 	 */	
 	public abstract void delete() throws IOException;
+
 }

@@ -19,16 +19,20 @@ public class ZipEntryFile extends AbstractFile {
 	}
 
 
-	protected void setParent(AbstractFile parent) {
-		this.parent = parent;	
-	}
-
-	
 	/**
 	 * Returns the ZipEntry associated with this ZipEntryFile
 	 */
 	public ZipEntry getZipEntry() {
 		return zipEntry;
+	}
+
+	
+	/////////////////////////////////////////
+	// AbstractFile methods implementation //
+	/////////////////////////////////////////
+	
+	public String getProtocol() {
+		return zipArchive.getProtocol();
 	}
 
 	public String getName() {
@@ -59,6 +63,10 @@ public class ZipEntryFile extends AbstractFile {
 	
 	public AbstractFile getParent() {
 		return parent;
+	}
+	
+	protected void setParent(AbstractFile parent) {
+		this.parent = parent;	
 	}
 	
 	public boolean exists() {

@@ -67,10 +67,14 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	 */
 	public void updateText(AbstractFile folder) {
 		// Update button text
-		if(folder instanceof RemoteFile) {
-			setText(((RemoteFile)folder).getProtocol());
+//		if(folder instanceof RemoteFile) {
+//			setText(((RemoteFile)folder).getProtocol());
+//		}
+		// Non local file using some remote protocol
+		if(!folder.getProtocol().equals("FILE")) {
+			setText(folder.getProtocol());
 		}
-		// FSFile
+		// Local file
 		else {
 			String currentPath = folder.getCanonicalPath(false).toLowerCase();
 			int bestLength = -1;

@@ -81,11 +81,15 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         	tempPanel.add(infoLabel);
         	fileProgressBar = new OverlayProgressBar();
 			tempPanel.add(fileProgressBar);
-			tempPanel.addSpace(15);
+			tempPanel.addSpace(10);
 		
 			statsLabel = new JLabel(Translator.get("progress_bar.starting"));
 			tempPanel.add(statsLabel);
-			tempPanel.add(totalProgressBar);
+			
+			// Do not show total progress bar if there is only one file
+			// (would show the exact same information as file progress bar)
+			if(job.getNbFiles()>1)
+				tempPanel.add(totalProgressBar);
 		}	
 		// Single progress bar
 		else {
@@ -176,16 +180,17 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         	
 		
             // Updates totalProgressBar if necessary
-            totalPercent = job.getTotalPercentDone();
-			if(lastTotalPercent!=totalPercent) {
-				// Updates total progress bar 
-                totalProgressBar.setValue(totalPercent);
-				totalProgressBar.setTextOverlay(totalPercent+"% ");
-                totalProgressBar.repaint(REFRESH_RATE);
-					            
-                lastTotalPercent = totalPercent;
-            }
-
+            if(totalProgressBar!=null) {
+				totalPercent = job.getTotalPercentDone();
+				if(lastTotalPercent!=totalPercent) {
+					// Updates total progress bar 
+					totalProgressBar.setValue(totalPercent);
+					totalProgressBar.setTextOverlay(totalPercent+"% ");
+					totalProgressBar.repaint(REFRESH_RATE);
+									
+					lastTotalPercent = totalPercent;
+				}
+			}
             
             // Updates infoLabel if necessary 
             currentInfo = job.getStatusString();

@@ -57,6 +57,63 @@ public class VersionChecker implements ContentHandler {
         return latestVersion;
     }
     
+	
+	/**
+	 * Returns true if a new version is available (a version with a greater number than the one currently running).
+	 */
+	public static boolean newVersionAvailable() {
+		String thisVersion = Launcher.MUCOMMANDER_VERSION.trim().toLowerCase();
+	
+		// Versions are perfectly equal (both version strings are trimmed and lower case) -> no new version
+		if(latestVersion.equals(thisVersion))
+			return false;
+
+		if(com.mucommander.Debug.ON)
+			System.out.println("newVersionAvailable: latestVersion="+latestVersion+" ("+parseVersion(latestVersion)+") thisVersion="+thisVersion+" ("+parseVersion(thisVersion)+")");
+
+		// This version number is greater than latestVersion (e.g. 0.7rc1 VS 0.6) -> no new version
+		if(parseVersion(thisVersion)>parseVersion(latestVersion))
+			return false;
+		
+		// For all other cases (this version number is lower than latest version: 0.6/0.7 or version strings differ: 0.6a/0.6b) -> new version available!
+		return true;
+	}
+	
+	
+	/**
+	 * Parse version number contained in given version string, ignoring non-numerical characters, and returns it as a float.
+	 */
+	private static float parseVersion(String version) {
+		StringBuffer sb = new StringBuffer();
+		int versionLength = version.length();
+		char c;
+		String versionNumber = "";
+		boolean dotAdded = false;
+		for(int i=0; i<versionLength; i++) {
+			c = version.charAt(i);
+			if(c>='0' && c<='9')
+				sb.append(c);
+			else if(c=='.') {
+				if(!dotAdded) {
+					sb.append('.');
+					dotAdded = true;
+				}
+			}
+			else
+				break;
+		}
+
+		try {
+			return Float.parseFloat(sb.toString());
+		}
+		catch(NumberFormatException e) {
+			if(com.mucommander.Debug.ON)
+				System.out.println("parseVersion: NumberFormatException while parsing version number: "+sb.toString()+" returning 0");
+			return 0;
+		}
+	}
+	
+	
     /**
      * Returns muCommander download URL.
      */
@@ -86,9 +143,20 @@ public class VersionChecker implements ContentHandler {
     }
 
     public void endDocument() {
+		latestVersion = latestVersion.toLowerCase().trim();
+		downloadURL = downloadURL.trim();
+		
         if(com.mucommander.Debug.ON) {
             System.out.println("download URL -"+downloadURL+"-");
             System.out.println("latestVersion -"+latestVersion+"-");
         }
     }
+
+
+	/** Test class to ensure that version number parsing works OK */
+	public static void main(String args[]) {
+		String versions[] = new String[]{"0.6", "0.6.1", "0.61", "0.7a", "0.7rc1", "1.1", "10.3.5"};
+		for(int i=0; i<versions.length; i++)
+			System.out.println("parseVersion("+versions[i]+") = "+parseVersion(versions[i]));
+	}
 }

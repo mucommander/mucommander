@@ -16,9 +16,13 @@ public class ZipArchiveFile extends AbstractFile implements ArchiveFile {
 		this.file = file;
 	}
 
-	protected void setParent(AbstractFile parent) {
-		this.file.setParent(parent);	
-	}	
+	/////////////////////////////////////////
+	// AbstractFile methods implementation //
+	/////////////////////////////////////////
+	
+	public String getProtocol() {
+		return file.getProtocol();
+	}
 
 	public String getName() {
 		return file.getName();
@@ -44,6 +48,10 @@ public class ZipArchiveFile extends AbstractFile implements ArchiveFile {
 		return file.getParent();
 	}
 	
+	protected void setParent(AbstractFile parent) {
+		this.file.setParent(parent);	
+	}	
+
 	public boolean exists() {
 		return file.exists();
 	}

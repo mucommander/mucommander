@@ -8,7 +8,8 @@ import java.io.*;
 /**
  * FTPFile represents a file on an FTP server.
  */
-public class FTPFile extends AbstractFile implements RemoteFile {
+//public class FTPFile extends AbstractFile implements RemoteFile {
+public class FTPFile extends AbstractFile {
 
 	protected org.apache.commons.net.ftp.FTPFile file;
 	protected FTPClient ftpClient;
@@ -32,48 +33,17 @@ public class FTPFile extends AbstractFile implements RemoteFile {
 		}
 		
 		public void close() throws IOException {
-//			try { 
-//System.out.println("FTPInputStream.close: aborting");
-//				boolean ret = ftpClient.abort();
-//System.out.println("FTPInputStream.close: abort="+ret);
-//			} catch(IOException e) {
-//System.out.println(ftpClient.getReplyString());
-//.printStackTrace();
-//			}
-
-/*
-System.out.println("FTPInputStream.close: closed");
-int read = read();
-System.out.println("FTPInputStream.close: read="+read);
-super.close();
-			if(read==-1) {
-System.out.println("FTPInputStream.close: complete pending commands");
-				ftpClient.completePendingCommand();
-System.out.println("FTPInputStream.close: commands completed");
-*/
-
-System.out.println("FTPInputStream.close: closing");
+if(com.mucommander.Debug.ON) System.out.println("FTPInputStream.close: closing");
 			super.close();
-System.out.println("FTPInputStream.close: closed");
-			
-/*
-			try { 
-System.out.println("FTPInputStream.close: aborting");
-				int ret = ftpClient.abor();
-System.out.println("FTPInputStream.close: abort="+ret);
-			} catch(IOException e) {
-System.out.println(ftpClient.getReplyString());
-e.printStackTrace();
-			}
-*/
+if(com.mucommander.Debug.ON) System.out.println("FTPInputStream.close: closed");
 
 			try {
-	System.out.println("FTPInputStream.close: complete pending commands");
+if(com.mucommander.Debug.ON) System.out.println("FTPInputStream.close: complete pending commands");
 				ftpClient.completePendingCommand();
-	System.out.println("FTPInputStream.close: commands completed");
+if(com.mucommander.Debug.ON) System.out.println("FTPInputStream.close: commands completed");
 			}
 			catch(IOException e) {
-	System.out.println("FTPInputStream.close: exception in complete pending commands, disconnecting");
+if(com.mucommander.Debug.ON) System.out.println("FTPInputStream.close: exception in complete pending commands, disconnecting");
 				ftpClient.disconnect();
 			}
 		}
@@ -89,12 +59,12 @@ e.printStackTrace();
 			super.close();
 
 			try {
-	System.out.println("FTPOutputStream.close: complete pending commands");
+if(com.mucommander.Debug.ON) System.out.println("FTPOutputStream.close: complete pending commands");
 				ftpClient.completePendingCommand();
-	System.out.println("FTPOutputStream.close: commands completed");
+if(com.mucommander.Debug.ON) System.out.println("FTPOutputStream.close: commands completed");
 			}
 			catch(IOException e) {
-	System.out.println("FTPOutputStream.close: exception in complete pending commands, disconnecting");
+if(com.mucommander.Debug.ON) System.out.println("FTPOutputStream.close: exception in complete pending commands, disconnecting");
 				ftpClient.disconnect();
 			}
 		}
@@ -134,14 +104,13 @@ e.printStackTrace();
 	
 	private org.apache.commons.net.ftp.FTPFile getFTPFile(FTPClient ftpClient, FileURL fileURL) throws IOException {
 		FileURL parentURL = fileURL.getParent();
-System.out.println("getFTPFile "+fileURL+" parent="+parentURL);
+if(com.mucommander.Debug.ON) System.out.println("getFTPFile "+fileURL+" parent="+parentURL);
 
 		// Parent is null, create '/' file
 		if(parentURL==null) {
 			return createFTPFile("/", true);
 		}
 		else {
-//System.out.println("getFTPFile parent="+parentURL.getPath());
 	        // Check connection and reconnect if connection timed out
 			checkConnection(ftpClient);
 
@@ -179,14 +148,14 @@ System.out.println("getFTPFile "+fileURL+" parent="+parentURL);
 	
 
 	private void initConnection(FileURL fileURL, boolean addAuthInfo) throws IOException {
-System.out.print("initConnection: connecting to "+fileURL.getHost());
+if(com.mucommander.Debug.ON) System.out.print("initConnection: connecting to "+fileURL.getHost());
 
 		this.ftpClient = new FTPClient();
 		
 		try {
 			// Connect
 			ftpClient.connect(fileURL.getHost());
-System.out.println("initConnection: "+ftpClient.getReplyString());
+if(com.mucommander.Debug.ON) System.out.println("initConnection: "+ftpClient.getReplyString());
 
 			// Throw an IOException if server replied with an error
 			checkServerReply(ftpClient, fileURL);
@@ -194,7 +163,7 @@ System.out.println("initConnection: "+ftpClient.getReplyString());
 			AuthManager.authenticate(this.fileURL, addAuthInfo);
 			AuthInfo authInfo = AuthInfo.getAuthInfo(fileURL);
 
-System.out.println("initConnection: fileURL="+fileURL.getURL(true)+" authInfo="+authInfo);
+if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileURL.getURL(true)+" authInfo="+authInfo);
 			if(authInfo!=null) {
 //				try { ftpClient.login(authInfo.getLogin(), authInfo.getPassword()); }
 //				catch(IOException e) {
@@ -245,7 +214,7 @@ if(com.mucommander.Debug.ON) System.out.println("checkServerReply: "+ftpClient.g
 
 	
 	private void checkConnection(FTPClient client) throws IOException {
-System.out.println("checkConnection: isConnected= "+ftpClient.isConnected());
+if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected= "+ftpClient.isConnected());
 		// Reconnect if disconnected
 		if(!ftpClient.isConnected()) {
 			// Connect again
@@ -261,13 +230,13 @@ System.out.println("checkConnection: isConnected= "+ftpClient.isConnected());
 		}
 		catch(IOException e) {
 			// Something went wrong
-System.out.println("checkConnection: exception in Noop "+e);
+if(com.mucommander.Debug.ON) System.out.println("checkConnection: exception in Noop "+e);
 		}
 
-System.out.println("checkConnection: noop returns "+noop);
+if(com.mucommander.Debug.ON) System.out.println("checkConnection: noop returns "+noop);
 		
 		if(!noop) {
-System.out.println("checkConnection: isConnected(2)= "+ftpClient.isConnected());
+if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)= "+ftpClient.isConnected());
 			if(ftpClient.isConnected()) {
 				// Let's be a good citizen and disconnect properly
 				try { ftpClient.disconnect(); } catch(IOException e) {}
@@ -286,18 +255,14 @@ System.out.println("checkConnection: isConnected(2)= "+ftpClient.isConnected());
 	}
 
 	
-	////////////////////////
-	// RemoteFile methods //
-	////////////////////////
+	/////////////////////////////////////////
+	// AbstractFile methods implementation //
+	/////////////////////////////////////////
 
 	public String getProtocol() {
 		return "FTP";
 	}
 	
-	//////////////////////////
-	// AbstractFile methods //
-	//////////////////////////
-
 	public String getName() {
 		String name = file.getName();
 		
@@ -333,11 +298,9 @@ System.out.println("checkConnection: isConnected(2)= "+ftpClient.isConnected());
 		if(!parentValSet) {
 			FileURL parentFileURL = this.fileURL.getParent();
 			if(parentFileURL!=null) {
-System.out.println("getParent, parentURL="+parentFileURL.getURL(true));
+if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getURL(true));
 				try { this.parent = new FTPFile(parentFileURL.getURL(true), false); }
-				catch(IOException e) {
-//if(com.mucommander.Debug.ON) e.printStackTrace();				
-				}
+				catch(IOException e) {}
 			}
 
 			this.parentValSet = true;

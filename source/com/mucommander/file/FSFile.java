@@ -99,11 +99,13 @@ public class FSFile extends AbstractFile {
 	}
 
 	
-	protected void setParent(AbstractFile parent) {
-		this.parent = (FSFile)parent;	
-		this.parentValCached = true;
+	/////////////////////////////////////////
+	// AbstractFile methods implementation //
+	/////////////////////////////////////////
+
+	public String getProtocol() {
+		return "FILE";
 	}
-	
 	
 	public String getName() {
     	// Retrieves name and caches it
@@ -184,6 +186,11 @@ public class FSFile extends AbstractFile {
         return parent;
 	}
 	
+	protected void setParent(AbstractFile parent) {
+		this.parent = (FSFile)parent;	
+		this.parentValCached = true;
+	}
+		
 	public boolean exists() {
 		return file.exists();
 	}

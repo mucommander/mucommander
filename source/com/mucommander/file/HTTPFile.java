@@ -14,7 +14,8 @@ import javax.swing.text.html.*;
  *
  * @author Maxence Bernard
  */
-public class HTTPFile extends AbstractFile implements RemoteFile {
+//public class HTTPFile extends AbstractFile implements RemoteFile {
+public class HTTPFile extends AbstractFile {
 
 	/** File separator is '/' for urls */
 	private final static String SEPARATOR = "/";
@@ -119,17 +120,18 @@ public class HTTPFile extends AbstractFile implements RemoteFile {
 	}
 	
 	
+	/////////////////////////////////////////
+	// AbstractFile methods implementation //
+	/////////////////////////////////////////
+	
+	public String getProtocol() {
+		return "HTTP";
+	}
+
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * Returns a String representation of this AbstractFile which is the name as returned by getName().
-	 */
-	public String toString() {
-		return getName();
-	}
-	
 	public String getAbsolutePath() {
 		return absPath;
 	}
@@ -397,12 +399,4 @@ System.out.println("att="+att);
 		throw new IOException();
 	}
 
-
-	///////////////////////////////
-	// RemoteFile implementation //
-	///////////////////////////////
-	
-	public String getProtocol() {
-		return "HTTP";
-	}
 }

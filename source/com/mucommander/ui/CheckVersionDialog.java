@@ -62,24 +62,8 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
             // Retrieves version information
             VersionChecker.getVersionInformation();
             
-            String version = VersionChecker.getLatestVersion();
-            // We're already running latest version
-            if(version.equals(Launcher.MUCOMMANDER_VERSION)) {
-                if(Debug.ON)
-                    System.out.println("No new version.");            
-
-                // If the version check was not iniated by the user (i.e. was automatic),
-                // we do not need to inform the user that he already has the latest version
-                if(!userInitiated) {
-                    dispose();
-					return;
-				}
-                
-				title = Translator.get("version_dialog.no_new_version_title");
-                text = Translator.get("version_dialog.no_new_version");
-            }
             // A newer version is available
-            else {
+            if(VersionChecker.newVersionAvailable()) {
                 if(Debug.ON)
                     System.out.println("A new version is available!");            
 
@@ -95,6 +79,21 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 					text = Translator.get("version_dialog.new_version");
 				else
 					text = Translator.get("version_dialog.new_version_url", downloadURL);
+            }
+            // We're already running latest version
+			else {
+                if(Debug.ON)
+                    System.out.println("No new version.");            
+
+                // If the version check was not iniated by the user (i.e. was automatic),
+                // we do not need to inform the user that he already has the latest version
+                if(!userInitiated) {
+                    dispose();
+					return;
+				}
+                
+				title = Translator.get("version_dialog.no_new_version_title");
+                text = Translator.get("version_dialog.no_new_version");
             }
         }
         // Check failed

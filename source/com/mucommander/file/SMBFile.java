@@ -10,7 +10,8 @@ import java.net.MalformedURLException;
  *
  * @author Maxence Bernard
  */
-public class SMBFile extends AbstractFile implements RemoteFile {
+//public class SMBFile extends AbstractFile implements RemoteFile {
+public class SMBFile extends AbstractFile {
 
 	/** File separator is '/' for urls */
 	private final static String SEPARATOR = "/";
@@ -28,10 +29,8 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 		this(url, true);
 	}
 	
-
-
+	
 	private SMBFile(String url, boolean addAuthInfo) throws IOException {	
-//System.out.println("SMBFile() "+url);
 		// all SMB URLs that represent  workgroups, servers, shares, or directories require a trailing slash '/'. 
 		if(!url.endsWith("/"))
 			url += '/';
@@ -39,10 +38,8 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
 		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem
 		FileURL fileURL = new FileURL(url);
-//		AuthInfo prevAuthInfo = null;
 		
 		AuthManager.authenticate(fileURL, addAuthInfo);
-//			prevAuthInfo = AuthManager.authenticate(fileURL);
 		
 		// Unlike java.io.File, SmbFile throws an SmbException
 		// when file doesn't exist
@@ -51,75 +48,22 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 	}
 	
 	
-/*
-	private SMBFile(String url, boolean addAuthInfo) throws IOException {	
-//System.out.println("SMBFile() "+url);
-		// all SMB URLs that represent  workgroups, servers, shares, or directories require a trailing slash '/'. 
-		if(!url.endsWith("/"))
-			url += '/';
-
-		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
-		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem
-		FileURL fileURL = new FileURL(url);
-		AuthInfo prevAuthInfo = null;
-		
-		if(addAuthInfo)
-			prevAuthInfo = AuthManager.authenticate(fileURL);
-		
-		// Unlike java.io.File, SmbFile throws an SmbException
-		// when file doesn't exist
-		try {
-			this.file = new SmbFile(fileURL.getURL(true));
-			init(file);
-		}
-		catch(Exception e) {
-// /!\ /!\ /!\  Recovery mechanism hereunder is pretty much useless since
-// user permissions are not checked in SmbFile's constructor, i.e. exception
-// won't be thrown here but later
-			if(addAuthInfo) {
-				// Remove newly created AuthInfo entry from AuthManager
-				if(prevAuthInfo==null)
-					AuthManager.remove(fileURL.getURL(false));
-				else
-					AuthManager.put(fileURL.getURL(false), prevAuthInfo);
-			}
-				
-			if(e instanceof IOException)
-				throw (IOException)e;
-			throw new IOException();
-		}	
-	}
-*/
-
-	
-//	/**
-//	 * Create a new SMBFile by using the given SmbFile instance and parent file.
-//	 */
-/*
-	 protected SMBFile(SmbFile file, SMBFile parent) throws MalformedURLException {
-		this.file = file;
-		init(file);
-		setParent(parent);
-	}
-*/
-
 	private void init(SmbFile smbFile) throws MalformedURLException {
 		String url = file.getCanonicalPath();
 		this.fileURL = new FileURL(url);
 		
 		this.privateURL = fileURL.getURL(true);
 		this.publicURL = fileURL.getURL(false);
-
-//System.out.println("SMBFile.init() private="+privateURL);
-//System.out.println("SMBFile.init() public="+publicURL);
 	}
 
 
-	protected void setParent(AbstractFile parent) {
-		this.parent = parent;	
-		this.parentValSet = true;
+	/////////////////////////////////////////
+	// AbstractFile methods implementation //
+	/////////////////////////////////////////
+	
+	public String getProtocol() {
+		return "HTTP";
 	}
-	 
 
 	public String getName() {
 		String name = file.getName();
@@ -175,6 +119,11 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 		return this.parent;
     }
 	
+	protected void setParent(AbstractFile parent) {
+		this.parent = parent;	
+		this.parentValSet = true;
+	}
+	 
 	public boolean exists() {
 		// Unlike java.io.File, SmbFile.exists() can throw an SmbException
 		try {
@@ -305,14 +254,5 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 		// Unlike java.io.File.mkdir(), SmbFile does not return a boolean value
 		// to indicate if the folder could be created
 		new SmbFile(privateURL+SEPARATOR+name).mkdir();
-	}
-
-
-	///////////////////////////////
-	// RemoteFile implementation //
-	///////////////////////////////
-	
-	public String getProtocol() {
-		return "SMB";
 	}
 }
