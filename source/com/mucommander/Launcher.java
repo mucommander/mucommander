@@ -52,7 +52,7 @@ public class Launcher {
 	private Launcher() {
 		// If muCommander is running under Mac OS X (how lucky!), add some
 		// glue for the main menu bar.
-		if(PlatformManager.getOsType()==PlatformManager.MAC_OS_X) {
+		if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X) {
 			try {
 				FinderIntegration finderIntegration = new FinderIntegration();
 			}

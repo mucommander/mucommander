@@ -52,7 +52,7 @@ public class RootFolders {
 			rootFoldersV.add(homeFolder);
 		
 		// Add /etc/fstab folders
-		int osType = PlatformManager.getOsType();
+		int osType = PlatformManager.getOSFamily();
 		// If we're running windows, we can just skip that
 		if(!(osType==PlatformManager.WINDOWS_9X || osType==PlatformManager.WINDOWS_NT)) {
 			addFstabEntries(rootFoldersV);

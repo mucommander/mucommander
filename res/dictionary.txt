@@ -804,6 +804,26 @@ text_viewer.select_all:FR:Tout sélectionner
 
 
 ###############
+# Image viewer #
+###############
+
+image_viewer.controls_menu:EN:Controls
+image_viewer.controls_menu:FR:Contrôles
+
+image_viewer.previous_image:EN:Previous image
+image_viewer.previous_image:FR:Image précédente
+
+image_viewer.next_image:EN:Next image
+image_viewer.next_image:FR:Image suivante
+
+image_viewer.zoom_in:EN:Zoom in
+image_viewer.zoom_in:FR:Zoomer
+
+image_viewer.zoom_out:EN:Zoom out
+image_viewer.zoom_out:FR:Dézoomer
+
+
+###############
 # File editor #
 ###############
 

@@ -81,6 +81,9 @@ public abstract class FileJob implements Runnable {
 	/** File currently being processed */
 	protected AbstractFile currentFile;
 
+	/** If set to true, processed files will be unmarked from current table */
+	private boolean autoUnmark = true;
+	
 	
 	protected final static int SKIP_ACTION = 0;
 	protected final static int RETRY_ACTION = 1;
@@ -119,6 +122,14 @@ public abstract class FileJob implements Runnable {
         this.nbFiles = files.size();
 		this.baseSourceFolder = ((AbstractFile)files.elementAt(0)).getParent();
 //		this.baseDestFolder = destFolder;
+	}
+	
+	
+	/**
+	 * Specifies whether or not files that have been processed should be unmarked from current table (enabled by default).
+	 */
+	public void setAutoUnmark(boolean autoUnmark) {
+		this.autoUnmark = autoUnmark;
 	}
 	
 	
@@ -291,8 +302,10 @@ public abstract class FileJob implements Runnable {
 			processFile(currentFile, null);
 			
 			// Unmark file in active table
-			activeTable.setFileMarked(currentFile, false);
-			activeTable.repaint();
+			if(autoUnmark) {
+				activeTable.setFileMarked(currentFile, false);
+				activeTable.repaint();
+			}
         }
 
 		// Notifies that job has been completed (all files have been processed).

@@ -115,7 +115,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			return;
 		
 		try {
-			FileViewer viewer = ViewerRegistrar.getViewer(file);
+			FileViewer viewer = ViewerRegistrar.getViewer(file, mainFrame);
 
 			// Test if file is too large to be viewed and warns user
 			long max = viewer.getMaxRecommendedSize();
@@ -134,12 +134,11 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			// All OK, start viewing
 			viewer.startViewing(file, true);
 		
-//			viewer.getFrame().show();
-			viewer.getFrame().pack();
 			viewer.getFrame().show();
 		}
 		catch(Exception e) {
 			showErrorDialog(Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"));
+if(com.mucommander.Debug.ON) e.printStackTrace();
 		}
 	}
 	

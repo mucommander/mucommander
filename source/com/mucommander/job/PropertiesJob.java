@@ -28,6 +28,7 @@ public class PropertiesJob extends FileJob {
 	
 	public PropertiesJob(Vector files, MainFrame mainFrame) {
 		super(mainFrame, files);
+		setAutoUnmark(false);
 	}
 
 	/**

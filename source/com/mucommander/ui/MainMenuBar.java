@@ -175,7 +175,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		}
 		
 		// About muCommander in Mac OS X already appears somewhere else (in the app menu)
-		if(PlatformManager.getOsType()!=PlatformManager.MAC_OS_X) {
+		if(PlatformManager.getOSFamily()!=PlatformManager.MAC_OS_X) {
 			helpMenu.add(new JSeparator());
 			aboutItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.about"), menuItemMnemonicHelper, null, this);		
 		}

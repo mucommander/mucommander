@@ -115,7 +115,7 @@ public class ConfigurationManager {
 	
     private static File getConfigurationFolder() {
 		// Mac OS X specific folder (~/Library/Preferences/)
-		if(PlatformManager.getOsType()==PlatformManager.MAC_OS_X)
+		if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X)
 			return new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");		
 		// For all other platforms, return generic folder (~/.mucommander)
 		else
@@ -162,7 +162,7 @@ public class ConfigurationManager {
 				System.out.println("No configuration file found at "+filePath);			
 		}
 
-		if(PlatformManager.getOsType()==PlatformManager.MAC_OS_X) {
+		if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X) {
 			try {
 				filePath = getGenericConfigurationFilePath();
 				loadConfiguration(filePath);

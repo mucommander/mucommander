@@ -12,7 +12,6 @@ import javax.swing.event.*;
 import java.io.*;
 
 import com.mucommander.ui.comp.MnemonicHelper;
-import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 
 import com.mucommander.conf.ConfigurationManager;
@@ -31,12 +30,16 @@ public class TextViewer extends FileViewer implements ActionListener {
 	private JTextArea textArea;
 	
 	
+	public TextViewer() {
+	}
+	
+	
 	public TextViewer(ViewerFrame frame) {
 		super(frame);
 //		this.encoding = ConfigurationManager.getVariable("prefs.text_viewer.last_encoding", "utf-8");
 
 		setLayout(new BorderLayout());
-
+		
 		// Create default menu
 		MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
 		MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
@@ -51,11 +54,7 @@ public class TextViewer extends FileViewer implements ActionListener {
 		textArea = new JTextArea();
 		textArea.setEditable(false);
 
-		add(new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
-
-		// Request focus on text area when visible
-		FocusRequester.requestFocus(textArea);
-//		frame.addWindowListener(this);
+		add(textArea, BorderLayout.NORTH);
 	}
 
 	
@@ -66,16 +65,22 @@ public class TextViewer extends FileViewer implements ActionListener {
 	}
 
 
+/*
 	public Dimension getPreferredSize() {
 //		return new Dimension(Math.min(480, image.getWidth(null)), Math.min(360,image.getHeight(null)));
 		Dimension d = super.getPreferredSize();
-System.out.println("TextViewer.getPreferrredSize()="+d);		
-System.out.println("TextViewer.getPreferrredSize, textArea.getPrefferredSize()="+textArea.getPreferredSize());		
+//System.out.println("TextViewer.getPreferrredSize()="+d);		
+//System.out.println("TextViewer.getPreferrredSize, textArea.getPrefferredSize()="+textArea.getPreferredSize());		
 		return d;
 	}
+*/
 
+	public Insets getInsets() {
+		return new Insets(4, 3, 4, 3);
+	}
 	
-	public static boolean canViewFile(AbstractFile file) {
+	
+	public boolean canViewFile(AbstractFile file) {
 		String name = file.getName();
 		String nameLowerCase = name.toLowerCase();
 		return nameLowerCase.endsWith(".txt")
@@ -104,31 +109,6 @@ System.out.println("TextViewer.getPreferrredSize, textArea.getPrefferredSize()="
 			textArea.selectAll();
 	}
 
+	
 
-    /**************************
-     * WindowListener methods *
-     **************************/	
-/*
-    public void windowClosing(WindowEvent e) {
-	}
-
-    public void windowActivated(WindowEvent e) {
-		textArea.requestFocus();
-    }
-
-    public void windowDeactivated(WindowEvent e) {
-    }
-
-    public void windowIconified(WindowEvent e) {
-    }
-
-    public void windowDeiconified(WindowEvent e) {
-    }
-
-    public void windowOpened(WindowEvent e) {
-    }
-
-    public void windowClosed(WindowEvent e) {
-    }
-*/
 }

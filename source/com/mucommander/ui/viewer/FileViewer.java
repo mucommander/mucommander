@@ -1,19 +1,29 @@
 package com.mucommander.ui.viewer;
 
-import javax.swing.*;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
+
+import javax.swing.*;
+
 import java.io.IOException;
 
 public abstract class FileViewer extends JPanel {
 	
 	protected ViewerFrame frame;
 
+
+	public FileViewer() {
+	}
+	
 	
 	/**
 	 * Creates a new instance of a FileViewer.
 	 */
 	public FileViewer(ViewerFrame frame) {
 		this.frame = frame;
+		setBackground(ViewerFrame.BG_COLOR);
 	}
 
 	/**
@@ -37,9 +47,7 @@ public abstract class FileViewer extends JPanel {
 	 * The FileViewer may base its decision only upon the filename and its extension or may
 	 * wish to read some of the file and compare it to a magic number.
 	 */
-	public static boolean canViewFile(AbstractFile file) {
-		return false;
-	}
+	public abstract boolean canViewFile(AbstractFile file);
 	
 	
 	/**
@@ -50,4 +58,79 @@ public abstract class FileViewer extends JPanel {
 	public long getMaxRecommendedSize() {
 		return -1;
 	}
+
+
+	protected AbstractFile getNextFileInFolder(AbstractFile file, boolean loop) {
+//System.out.println("getNextFileInFolder");
+		return getNextFile(file, true, loop);
+	}
+	
+	protected AbstractFile getPreviousFileInFolder(AbstractFile file, boolean loop) {
+//System.out.println("getPreviousFileInFolder");
+		return getNextFile(file, false, loop);
+	}
+	
+	private AbstractFile getNextFile(AbstractFile file, boolean forward, boolean loop) {
+		AbstractFile folder = file.getParent();
+		MainFrame mainFrame = frame.getMainFrame();
+		FileTable table = mainFrame.getLastActiveTable();
+
+//System.out.println("getNextFile : 0");
+		
+		if(!table.getCurrentFolder().equals(folder)) {
+			table = mainFrame.getUnactiveTable();
+//System.out.println("getNextFile : 1");
+			if(!table.getCurrentFolder().equals(folder))
+				return null;
+		}
+//System.out.println("getNextFile : 2");
+		
+		
+		FileTableModel model = (FileTableModel)table.getModel();
+		int rowCount = model.getRowCount();
+		int fileRow = table.getFileRow(file);
+		
+		int newFileRow = fileRow;
+		AbstractFile newFile;
+		if(forward) {
+			do {
+//System.out.println("forward1 "+fileRow+" "+newFileRow+" "+rowCount);
+
+				if(newFileRow==rowCount-1) {
+					if(loop)
+						newFileRow = 0;
+					else
+						return null;
+				}
+				else
+					newFileRow++;
+
+				newFile = model.getFileAtRow(newFileRow);
+
+//System.out.println("forward2 "+fileRow+" "+newFileRow+" "+newFile);
+			}
+			while(!canViewFile(newFile) && fileRow!=newFileRow);
+		}
+		else {
+			do {
+				if(newFileRow==0) {
+					if(loop)
+						newFileRow = rowCount-1;
+					else
+						return null;
+				}
+				else
+					newFileRow--;
+
+				newFile = model.getFileAtRow(newFileRow);
+			}
+			while(!canViewFile(newFile) && fileRow!=newFileRow);
+		}
+
+		if(fileRow==newFileRow)
+			return null;
+		
+		return newFile;
+	}
+	
 }

@@ -32,7 +32,7 @@ public class PlatformManager {
 	
 	private static String osName;
 	private static String osVersion;
-	private static int osType;
+	private static int osFamily;
 
     
 	/**
@@ -46,10 +46,10 @@ public class PlatformManager {
 		if (osName.startsWith("Windows")) {
 			// Windows 95, 98, Me
 			if (osName.startsWith("Windows 95") || osName.startsWith("Windows 98") || osName.startsWith("Windows Me"))
-				osType = WINDOWS_9X;
+				osFamily = WINDOWS_9X;
 			// Windows NT, 2000, XP and up
 			else
-				osType = WINDOWS_NT;
+				osFamily = WINDOWS_NT;
 		}
 		// Mac OS family
 		else if (osName.startsWith("Mac OS")) {
@@ -57,14 +57,14 @@ public class PlatformManager {
 			if(osVersion.startsWith("7.")
 			|| osVersion.startsWith("8.")
 			|| osVersion.startsWith("9."))
-				osType = MAC_OS;
+				osFamily = MAC_OS;
 			// Mac OS X or up
 			else		 
-				osType = MAC_OS_X;
+				osFamily = MAC_OS_X;
 		}
 		// Any other OS
 		else {
-			osType = OTHER;
+			osFamily = OTHER;
 		}
 	}
 
@@ -72,8 +72,8 @@ public class PlatformManager {
 	/**
 	 * Returns OS type (OS family if you wish).
 	 */
-	public static int getOsType() {
-		return osType;
+	public static int getOSFamily() {
+		return osFamily;
 	}
 	
 	
@@ -90,7 +90,7 @@ public class PlatformManager {
 		// Code for Java 1.3
 		catch(NoSuchMethodError e) {
 			// Apple menu bar
-			int top = getOsType()==MAC_OS_X?22:0;
+			int top = getOSFamily()==MAC_OS_X?22:0;
 			int left = 0;
 			// Could add windows task bar here ?
 			int bottom = 0;
@@ -120,26 +120,25 @@ public class PlatformManager {
 	 * Returns full-screen window bounds. The result is very accurate under Java 1.4, just an
 	 * estimate under Java 1.3.
 	 */
-	public static Rectangle getFullScreenBounds(Frame frame) {
+	public static Rectangle getFullScreenBounds(Window window) {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screenSize = toolkit.getScreenSize();
 
 		// Code for Java 1.4
 		try {
 			// Java 1.4 makes it easy to get full screen bounds
-			Insets screenInsets = toolkit.getScreenInsets(frame.getGraphicsConfiguration());		
+			Insets screenInsets = toolkit.getScreenInsets(window.getGraphicsConfiguration());		
 			return new Rectangle(screenInsets.left, screenInsets.top, screenSize.width-screenInsets.left-screenInsets.right, screenSize.height-screenInsets.top-screenInsets.bottom);		
 		}
 		// Code for Java 1.3
 		catch(NoSuchMethodError e) {
-			// Sets frame to a decent size usable screen size
 			int x = 0;
 			int y = 0;
 			int width = screenSize.width;
 			int height = screenSize.height;
 			
 			// Mac OS X, assuming that dock is at the bottom of the screen
-			if(getOsType()==MAC_OS_X) {
+			if(getOSFamily()==MAC_OS_X) {
 				// Menu bar height
 				y += 22;
 				height -= 22;
@@ -177,7 +176,7 @@ public class PlatformManager {
                 System.out.println("Executing "+command);
 
             Vector tokensV = new Vector();
-			if (osType == WINDOWS_NT) {
+			if (osFamily == WINDOWS_NT) {
 				tokensV.add("cmd");
 				tokensV.add("/c");
 			}
@@ -245,15 +244,15 @@ public class PlatformManager {
 		// Under Win32, the 'start' command opens a file with the program
 		// registered with this file's extension (great!)
 		// Windows 95, 98, Me : syntax is start "myfile"
-		if (osType == WINDOWS_9X) {
+		if (osFamily == WINDOWS_9X) {
 			return new String[] {"start", "\""+filePath+"\""};
 		}
 		// Windows NT, 2000, XP : syntax is cmd /c start "" "myfile"
-		else if (osType == WINDOWS_NT) {
+		else if (osFamily == WINDOWS_NT) {
 			return new String[] {"cmd", "/c", "start", "\"\"", "\""+filePath+"\""};
 		}
 		// Mac OS X can do the same with 'open'
-		else if (osType == MAC_OS_X)  {
+		else if (osFamily == MAC_OS_X)  {
 			return new String[] {"open", filePath};
 		}
 		else {

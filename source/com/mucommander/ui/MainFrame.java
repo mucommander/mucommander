@@ -308,41 +308,47 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		AbstractFile tempFile;
 		FileTableModel tableModel1 = (FileTableModel)table1.getModel();
 		FileTableModel tableModel2 = (FileTableModel)table2.getModel();
-        int nbFiles1 = tableModel1.getRowCount();
-        int nbFiles2 = tableModel2.getRowCount();
+//        int nbFiles1 = tableModel1.getRowCount();
+//        int nbFiles2 = tableModel2.getRowCount();
+        int nbFiles1 = tableModel1.getFileCount();
+        int nbFiles2 = tableModel2.getFileCount();
 		int fileIndex;
 		String tempFileName;
-		for(int i=table1.getCurrentFolder().getParent()==null?0:1; i<nbFiles1; i++) {
-			tempFile = tableModel1.getFileAtRow(i);
+//		for(int i=table1.getCurrentFolder().getParent()==null?0:1; i<nbFiles1; i++) {
+		for(int i=0; i<nbFiles1; i++) {
+			tempFile = tableModel1.getFile(i);
 			if(tempFile.isDirectory())
 				continue;
 			
 			tempFileName = tempFile.getName();
             fileIndex = -1;
-			for(int j=table2.getCurrentFolder().getParent()==null?0:1; j<nbFiles2; j++)
-				if (tableModel2.getFileAtRow(j).getName().equals(tempFileName)) {
+//			for(int j=table2.getCurrentFolder().getParent()==null?0:1; j<nbFiles2; j++)
+			for(int j=0; j<nbFiles2; j++)
+				if (tableModel2.getFile(j).getName().equals(tempFileName)) {
                     fileIndex = j;
 					break;
 				}
-			if (fileIndex==-1 || tableModel2.getFileAtRow(fileIndex).getDate()<tempFile.getDate()) {
+			if (fileIndex==-1 || tableModel2.getFile(fileIndex).getDate()<tempFile.getDate()) {
 				table1.setFileMarked(tempFile, true);
 				table1.repaint();
 			}
 		}
 
-		for(int i=table2.getCurrentFolder().getParent()==null?0:1; i<nbFiles2; i++) {
-			tempFile = tableModel2.getFileAtRow(i);
+//		for(int i=table2.getCurrentFolder().getParent()==null?0:1; i<nbFiles2; i++) {
+		for(int i=0; i<nbFiles2; i++) {
+			tempFile = tableModel2.getFile(i);
 			if(tempFile.isDirectory())
 				continue;
 
 			tempFileName = tempFile.getName();
             fileIndex = -1;
-			for(int j=table1.getCurrentFolder().getParent()==null?0:1; j<nbFiles1; j++)
-				if (tableModel1.getFileAtRow(j).getName().equals(tempFileName)) {
+//			for(int j=table1.getCurrentFolder().getParent()==null?0:1; j<nbFiles1; j++)
+			for(int j=0; j<nbFiles1; j++)
+				if (tableModel1.getFile(j).getName().equals(tempFileName)) {
                     fileIndex = j;
 					break;
 				}
-			if (fileIndex==-1 || tableModel1.getFileAtRow(fileIndex).getDate()<tempFile.getDate()) {
+			if (fileIndex==-1 || tableModel1.getFile(fileIndex).getDate()<tempFile.getDate()) {
 				table2.setFileMarked(tempFile, true);
 				table2.repaint();
 			}
@@ -554,11 +560,11 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 //        	commandBar.doRefresh();
         }
         else if(keyCode == KeyEvent.VK_F10 && !e.isControlDown()
-		 || (PlatformManager.getOsType()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_W && e.isMetaDown())) {
+		 || (PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_W && e.isMetaDown())) {
 			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
 //            commandBar.doExit();
         }
-		else if(PlatformManager.getOsType()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_Q && e.isMetaDown()) {
+		else if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_Q && e.isMetaDown()) {
 			System.exit(0);		
 		}
 		else if(keyCode == KeyEvent.VK_F1 && e.isAltDown()) {
