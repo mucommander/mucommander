@@ -86,7 +86,6 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 	 * @param indicates if this CopyJob corresponds to an 'unzip' operation.
 	 */
 	public CopyJob(MainFrame mainFrame, ProgressDialog progressDialog, Vector filesToCopy, String newName, AbstractFile destFolder, boolean unzip) {
-//System.out.println("COPY JOB: "+ " "+ filesToCopy + " "+ newName + " "+destFolder.getAbsolutePath());
 		super(progressDialog);
 
 	    this.filesToCopy = filesToCopy;

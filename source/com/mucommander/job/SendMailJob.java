@@ -276,8 +276,6 @@ public class SendMailJob extends ExtendedFileJob {
     }
     
     private void sendln(BufferedReader in, OutputStream out, String s) throws IOException {
-		if(com.mucommander.Debug.TRACE)
-			System.out.println("SendMailJob.sendln: "+s);
 		//        out.write((s + "\r\n").getBytes("8859_1"));
         out.write((s + "\r\n").getBytes("UTF-8"));
         out.flush();
@@ -285,7 +283,6 @@ public class SendMailJob extends ExtendedFileJob {
     }
 
     private void sendln(OutputStream out, String s) throws IOException {
-		System.out.println("SendMailJob.sendln: "+s);
 //        out.write((s + "\r\n").getBytes("8859_1"));
         out.write((s + "\r\n").getBytes("UTF-8"));
         out.flush();

@@ -122,15 +122,6 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 			return;
 		}
 
-/*		
-AbstractFile file;
-System.out.println("doMove: destFolder "+destFolder.getName()+" "+destFolder.getAbsolutePath()+" "+destFolder.getCanonicalPath());
-for(int i=0; i<filesToMove.size(); i++) {
-	file = (AbstractFile)filesToMove.elementAt(i);
-	System.out.println("doMove: file"+i+" "+file.getName()+" "+file.getAbsolutePath()+" "+file.getCanonicalPath());
-}
-*/
-
 		if (filesToMove.contains(destFolder)) {
 			showErrorDialog("Cannot move destination folder to itself.", "Move error");
 			return;

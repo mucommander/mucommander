@@ -121,10 +121,10 @@ public class PlatformManager {
 			tokensV.add(token.toString());
 
 
-if(com.mucommander.Debug.TRACE) {
-	for(int i=0; i<tokensV.size(); i++)
-		System.out.println("token"+i+"= ["+tokensV.elementAt(i)+"]");
-}
+//if(com.mucommander.Debug.TRACE) {
+//	for(int i=0; i<tokensV.size(); i++)
+//		System.out.println("token"+i+"= ["+tokensV.elementAt(i)+"]");
+//}
 	
 			String tokens[] = new String[tokensV.size()];
 			tokensV.toArray(tokens);
@@ -199,36 +199,4 @@ if(com.mucommander.Debug.TRACE) {
 		}
 	}
 
-
-    /**
-     * Prints a process' output to System.out (for debugging purposes)
-     */
-/*
-    public void run() {
-        java.io.InputStream pin = process.getInputStream();
-
-        byte b[] = new byte[512];
-        int nbRead;
-        int exitValue;
-
-        System.out.println("process "+process);
-
-        while(true) {
-            try {
-                while((nbRead=pin.read())!=-1) {
-                    System.out.print(process);
-                    System.out.write(b, 0, nbRead);
-                }
-
-                exitValue = process.exitValue();
-                System.out.println("process "+process+" exit: "+exitValue);
-
-                pin.close();
-                return;
-            }
-            catch(Exception e) {
-            }
-        }
-    }
-*/	
 }

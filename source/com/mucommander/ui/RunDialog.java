@@ -117,7 +117,6 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
 
 	public void actionPerformed(ActionEvent e) {
-System.out.println("RunDialog.actionPerformed "+e);
 		Object source = e.getSource();
 		
 		// Run button starts a new command

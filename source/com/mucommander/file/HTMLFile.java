@@ -56,10 +56,6 @@ public class HTMLFile extends AbstractFile {
 		
 		this.name = absPath.substring(pos<7?7:pos+1, absPath.length());
 
-	//System.out.println("getFile "+name);
-	//System.out.println("getPath "+url.getPath());
-	//System.out.println("toString "+url.toString());		
-		
 		this.isFolder = name.endsWith("htm") || name.endsWith("html");
 	} 
 
@@ -203,7 +199,6 @@ public class HTMLFile extends AbstractFile {
 					}
 				}
 				catch(IOException e) {
-//					System.out.println("1 "+e);
 				}
 			}
 	      }
