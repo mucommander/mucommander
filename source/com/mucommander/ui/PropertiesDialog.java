@@ -37,10 +37,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		setTitle((title=files.size()==1?firstFile.getName()+" Properties":"Properties"));
 		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
-		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-		
-		job = new PropertiesJob(files);
+		this.job = new PropertiesJob(files);
 		
 		Container contentPane = getContentPane();
 		
@@ -81,6 +78,9 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		
 		// Selects OK when enter is pressed
 		getRootPane().setDefaultButton(okButton);
+
+		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
+		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		
 		start();
 	}
