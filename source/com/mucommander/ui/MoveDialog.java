@@ -58,7 +58,7 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 		}
 		else {
 			AbstractFile destFolder = (activeTable==table1?table2:table1).getCurrentFolder();
-			fieldText = destFolder.getAbsolutePath()+destFolder.getSeparator();
+			fieldText = destFolder.getAbsolutePath(true);
 			if(nbFiles==1)
 				fieldText += ((AbstractFile)filesToMove.elementAt(0)).getName();
 		}

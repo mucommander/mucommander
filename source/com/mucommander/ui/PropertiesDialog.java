@@ -56,7 +56,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 
 		// Location (set here)
 		tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		String folderString = firstFile.getParent().getAbsolutePath()+firstFile.getSeparator();
+		String folderString = firstFile.getParent().getAbsolutePath(true);
 		JLabel locationLabel = new JLabel("<html><b>Location:</b> "+folderString+"</html>");
 		locationLabel.setToolTipText(folderString);
 		tempPanel.add(locationLabel);

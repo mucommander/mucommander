@@ -102,7 +102,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 			// Finds the row corresponding to the newly created folder
 			// and makes it the current row.
 			if (activeTable.getCurrentFolder().equals(folder)) {
-				AbstractFile createdFolder = AbstractFile.getAbstractFile(folder.getAbsolutePath()+folder.getSeparator()+newName);
+				AbstractFile createdFolder = AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName);
 				activeTable.selectFile(createdFolder);
 			}
 		}

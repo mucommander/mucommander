@@ -113,8 +113,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable {
 //System.out.println("DEST FOLDER "+destFolder.getAbsolutePath());
 		String originalName = file.getName();
 		String destFileName = (newName==null?originalName:newName);
-       	String destFilePath = destFolder.getAbsolutePath()
-       		+destFolder.getSeparator()
+       	String destFilePath = destFolder.getAbsolutePath(true)
        		+destFileName;
 
 //System.out.println("SOURCE "+file.getAbsolutePath()+" DEST "+destFilePath);

@@ -227,10 +227,14 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 	 */
 	public void disposeMainFrame(MainFrame mainFrameToDispose) {
 		// Saves last folders
+//		ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
+//			mainFrameToDispose.getBrowser1().getCurrentFolder().getAbsolutePath(true));
+//		ConfigurationManager.setVariable("prefs.startup_folder.right.last_folder", 
+//			mainFrameToDispose.getBrowser2().getCurrentFolder().getAbsolutePath(true));
 		ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
-			mainFrameToDispose.getBrowser1().getCurrentFolder().getAbsolutePath(true));
+			mainFrameToDispose.getBrowser1().getLastSavableFolder());
 		ConfigurationManager.setVariable("prefs.startup_folder.right.last_folder", 
-			mainFrameToDispose.getBrowser2().getCurrentFolder().getAbsolutePath(true));
+			mainFrameToDispose.getBrowser2().getLastSavableFolder());
 				
 		JMenu windowMenu;
 		int frameIndex = mainFrames.indexOf(mainFrameToDispose);
@@ -269,7 +273,7 @@ public class Launcher implements ActionListener, WindowListener, LocationListene
 	public void locationChanged(FolderPanel folderPanel) {
 		AbstractFile currentFolder = folderPanel.getCurrentFolder();
 		MainFrame mainFrame = folderPanel.getMainFrame();
-		String currentPath = currentFolder.getAbsolutePath()+currentFolder.getSeparator();
+		String currentPath = currentFolder.getAbsolutePath(true);
 		mainFrame.setTitle(currentPath+" - muCommander");
 
 		JMenu windowMenu;

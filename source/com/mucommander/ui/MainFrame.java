@@ -321,8 +321,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 */
 	public Object[] resolvePath(String destPath) {
 		AbstractFile currentFolder = lastActiveTable.getCurrentFolder();
-		String currentPath = currentFolder.getAbsolutePath();
-		String currentSeparator = currentFolder.getSeparator();
+		// Current path, including trailing separator
+		String currentPath = currentFolder.getAbsolutePath(true);
 		AbstractFile destFolder;
 
 		String newName = null;
@@ -336,7 +336,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		}
 
 		// destPath points to an existing folder relative to current folder
-		else if ((destFolder=AbstractFile.getAbstractFile(currentPath+currentSeparator+destPath))!=null
+		else if ((destFolder=AbstractFile.getAbstractFile(currentPath+destPath))!=null
 		 && destFolder.exists()
 //		 && destFolder.isFolder() && !(destFolder instanceof ArchiveFile)) {
 		 && destFolder.isDirectory()) {
@@ -366,7 +366,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 			}
 			
 			// destPath points to an existing folder relative to current folder
-			else if ((destFolder=AbstractFile.getAbstractFile(currentPath+currentSeparator+destPath))!=null && destFolder.exists()) {
+			else if ((destFolder=AbstractFile.getAbstractFile(currentPath+destPath))!=null && destFolder.exists()) {
 			}
 
 			else 

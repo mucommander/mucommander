@@ -111,8 +111,7 @@ public class MoveJob extends ExtendedFileJob implements Runnable {
 
 		String originalName = file.getName();
 		String destFileName = (newName==null?originalName:newName);
-		String destFilePath = destFolder.getAbsolutePath()
-        	+destFolder.getSeparator()
+		String destFilePath = destFolder.getAbsolutePath(true)
         	+destFileName;
 
 		currentFileInfo = "\""+originalName+"\" ("+SizeFormatter.format(currentFileSize, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";

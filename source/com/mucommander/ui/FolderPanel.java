@@ -10,10 +10,15 @@ import com.mucommander.conf.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
 import java.awt.event.*;
+
 import java.io.*;
+
 import java.util.Vector;
+
 
 public class FolderPanel extends JPanel implements ActionListener, PopupMenuListener, KeyListener, ConfigurationListener {
 	private MainFrame mainFrame;
@@ -44,6 +49,9 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	private Vector history;
 	private int historyIndex;
     
+	private String lastFolderOnExit;
+
+	
 	static {
 		roots = FSFile.listRoots();
 
@@ -51,6 +59,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		backgroundColor = FileTableCellRenderer.getColor("prefs.colors.background", "000084");
 	}
 
+	
 	public FolderPanel(MainFrame mainFrame, AbstractFile initialFolder) {
 		super(new BorderLayout());
 
@@ -60,7 +69,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 				return new Insets(0, 0, 0, 0);
 			}
 		
-			public javax.swing.border.Border getBorder() {
+			public Border getBorder() {
 				return null;
 			}
 		};
@@ -69,12 +78,6 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		// For Mac OS X whose minimum width for buttons is enormous
 		rootButton.setMinimumSize(new Dimension(40, (int)rootButton.getPreferredSize().getWidth()));
 		rootButton.setMargin(new Insets(0,5,0,5));
-		
-//		rootButton.setBorder(new javax.swing.border.BevelBorder(javax.swing.border.BevelBorder.RAISED) {
-//			public Insets getBorderInsets(Component c) {
-//				return new Insets(0,5,0,5);
-//			}
-//		});
 		
 		rootButton.addActionListener(this);
 		rootPopup = new JPopupMenu();
@@ -122,14 +125,14 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 				}
 		}
 
-		locationField.setText(currentFolder.getAbsolutePath()+currentFolder.getSeparator());
+		locationField.setText(currentFolder.getAbsolutePath(true));
 				
 		scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER) {
 			public Insets getInsets() {
 				return new Insets(0, 0, 0, 0);
 			}
 		
-			public javax.swing.border.Border getBorder() {
+			public Border getBorder() {
 				return null;
 			}
 		};
@@ -141,7 +144,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	}
 
 	
-	public javax.swing.border.Border getBorder() {
+	public Border getBorder() {
 		return null;
 	}
 	
@@ -154,6 +157,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		return mainFrame;
 	}
 
+	
 	public void addLocationListener(LocationListener listener) {
 		locationListeners.add(listener);
 	}
@@ -161,6 +165,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	public void removeLocationListener(LocationListener listener) {
 		locationListeners.remove(listener);
 	}
+
 	
 	public void showRootBox() {
 		rootPopup.show(rootButton, 0, rootButton.getHeight());		
@@ -193,7 +198,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 				}
 			}
 
-			locationField.setText(currentPath+folder.getSeparator());
+			locationField.setText(currentFolder.getAbsolutePath(true));
 			locationField.repaint();
 
 			if (addToHistory) {
@@ -208,6 +213,11 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 				history.add(folder);
 			}
 
+			// Saves last folder recallable on startup
+			if(!(folder instanceof RemoteFile))
+				this.lastFolderOnExit = folder.getAbsolutePath();
+System.out.println("+_setCurrentFolder: "+folder.getAbsolutePath()+" "+this.lastFolderOnExit);
+			
 			// Notifies listeners that location has changed
 			fireLocationChanged();
 		}
@@ -227,7 +237,10 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			((LocationListener)locationListeners.elementAt(i)).locationChanged(this);
 	}
 
-
+	
+	/**
+	 * Displays a popup message notifying the user that the request folder couldn't be opened.
+	 */
 	private void showFolderAccessError(IOException e) {
 		String exceptionMsg = e.getMessage();
 		String errorMsg = "Unable to access folder contents"+(exceptionMsg==null?".":": "+exceptionMsg);
@@ -235,6 +248,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			errorMsg += ".";
 		JOptionPane.showMessageDialog(mainFrame, errorMsg, "Access error", JOptionPane.ERROR_MESSAGE);
 	}
+
 	
 	/**
 	 * Returns <code>true</code> if the folder was correctly set, <code>false</code> if
@@ -332,6 +346,20 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 	}
 	
 	
+	/**
+	 * Returns the last folder the user went to before quitting the application.
+	 * This folder will be loaded on next mucommander startup, so the returned folder
+	 * should NOT be a folder on a remote filesystem (likely not to be reachable).
+	 */
+	public String getLastSavableFolder() {
+System.out.println("getLastSavableFolder: "+this.lastFolderOnExit);
+		return this.lastFolderOnExit;
+	}
+	
+	
+	/**
+	 * Refreshes this panel's components, file table, root button and location field.
+	 */
 	public void refresh() {
 		rootButton.repaint();
 		locationField.repaint();
@@ -362,7 +390,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		if (source == locationField) {
 			// If folder could not be set, restore current folder's path
 			if(!setCurrentFolder(AbstractFile.getAbstractFile(locationField.getText()), true))
-				locationField.setText(currentFolder.getAbsolutePath()+currentFolder.getSeparator());
+				locationField.setText(currentFolder.getAbsolutePath(true));
 		}
 		else if (source == rootButton)	 {
 			showRootBox();
@@ -392,7 +420,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 		if (e.getSource()==locationField) {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				// Restore current location string
-				locationField.setText(currentFolder.getAbsolutePath()+currentFolder.getSeparator());
+				locationField.setText(currentFolder.getAbsolutePath(true));
 				fileTable.requestFocus();
 			}
 		}

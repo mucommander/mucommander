@@ -1,16 +1,18 @@
-<project name="mucommander" default="run" basedir=".">
+<project name="mucommander" default="compileandrun" basedir=".">
 
-  <!-- set global properties for this build -->
+  <!-- Set global properties for this build -->
   <property name="source" value="source"/>
   <property name="classes" value="classes"/>
   <property name="dist"  value="dist"/>
   <property name="lib"   value="lib"/>
   <property name="res"	 value="res"/>
 
+
+  <!-- Prepares compile -->
   <target name="init">
-    <!-- Create the time stamp -->
+    <!-- Sets time stamp to current time/date -->
     <tstamp/>
-    <!-- Create the directory structure used by compile -->
+    <!-- Create class directory used by compile -->
     <mkdir dir="${classes}"/>
   </target>
 
@@ -30,16 +32,15 @@
   </target>
 
 
-  <!-- Extracts lib JAR files and copies resource files to the classes folder -->
+  <!-- Extracts lib JAR libraries files and copies resource files to the classes folder -->
   <target name="prepare">
     <!-- Unjar libraries to include them in the JAR file -->
     <unjar src="${lib}/muxml.jar" dest="${classes}"/>
-<!-- Not supported by unjar, too bad
+    <unjar src="${lib}/jcifs.jar" dest="${classes}"/>
+    <!-- Not supported by unjar, too bad
         <fileset dir="${lib}">
         <include name="**/*.jar"/>
     </fileset>                      -->
-
-    <unjar src="${lib}/jcifs.jar" dest="${classes}"/>
  
     <!-- Copy images files to {$classes} -->
     <copy todir="${classes}">
@@ -47,12 +48,11 @@
         <include name="**/*"/>
       </fileset>
     </copy>
-
  </target> 
 
 
   <!-- Creates a distribution JAR file, including all resources and needed libraries -->
-  <target name="jar" depends="compile,prepare">
+  <target name="jar" depends="build">
   
     <!-- Create dist subfolder where the JAR file will be put -->
     <mkdir dir="${dist}"/>
@@ -62,8 +62,8 @@
   </target>
 
 
-  <!-- launches mucommander from the classes directory -->
-  <target name="run" depends="compile">
+  <!-- Launches mucommander from the classes directory -->
+  <target name="run">
     <java classname="com.mucommander.Launcher" fork="true">
       <classpath>
         <pathelement location="classes"/>
@@ -76,17 +76,35 @@
   </target>
 
 
-   <!-- launches mucommander from the distribution JAR file -->
+   <!-- Launches mucommander from the distribution JAR file -->
   <target name="runjar">
     <java jar="${dist}/mucommander.jar" fork="true"/>
   </target>
 
 
+  <!-- Clean all compiles files and copied resources, virtually leaving
+       the project in the same state as after a CVS checkout --> 
   <target name="clean">
     <!-- Delete the ${classes} and ${dist} directory trees -->
     <delete dir="${classes}"/>
     <delete dir="${dist}"/>
   </target>
+
+
+  <!-- Compile and run project, default target -->
+  <target name="compileandrun" depends="compile,run">
+  </target>
+
+
+  <!-- Build the project from scratch: copy resources, compile and run -->
+  <target name="build" depends="prepare,compile,run">
+  </target>
+
+
+  <!-- Rebuild project that is: clean and build -->
+  <target name="rebuild" depends="clean,build">
+  </target>
+
 </project>
 
 

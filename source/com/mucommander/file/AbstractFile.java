@@ -100,25 +100,37 @@ public abstract class AbstractFile {
 		return getAbsolutePath().equals(((AbstractFile)f).getAbsolutePath());
 	}
 	
+	
 	/**
 	 * Returns the name of this AbstractFile.
 	 */
 	public abstract String getName();
 
+	
 	/**
-	 * Returns the absolute path of this AbstractFile.
+	 * Returns the absolute path of this AbstractFile, without trailing separators, except for root folders ('/', 'c:\' ...).
 	 */
 	public abstract String getAbsolutePath();
 	
 	/**
-	 * Returns the absolute path of this AbstractFile, appending a separator if <code>true</code>
-	 * is passed. 
+	 * Returns the absolute path of this AbstractFile, appending a separator character if <code>true</code> is passed. 
 	 */
 	public String getAbsolutePath(boolean appendSeparator) {
-		return getAbsolutePath()+getSeparator();
+		String absPath = getAbsolutePath();
+
+		// Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
+		// are exceptions that's why we still have to test if path ends with a separator
+		String separator = getSeparator();
+		if(appendSeparator && !absPath.endsWith(separator))
+			return absPath+getSeparator();
+
+		return absPath;
 	}
 
 	
+	/**
+	 * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences.
+	 */
 	public String getCanonicalPath() {
 		return getAbsolutePath();
 	}

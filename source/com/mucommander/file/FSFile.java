@@ -72,7 +72,7 @@ public class FSFile extends AbstractFile {
 			this.canonicalPath = this.absPath;
 		}
 			
-        // removes the ending separator character (if any)
+        // removes trailing separator (if any)
         this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
 
 //System.out.println("F1");
@@ -107,7 +107,7 @@ public class FSFile extends AbstractFile {
 	}
 	
 	public String getAbsolutePath() {
-		return absPath;
+		return file.getParent()==null?absPath+separator:absPath;
 	}
 
 	public String getCanonicalPath() {
