@@ -1,4 +1,4 @@
-<project name="mucommander" default="compile" basedir=".">
+<project name="mucommander" default="run" basedir=".">
 
   <!-- set global properties for this build -->
   <property name="source" value="source"/>
@@ -63,7 +63,7 @@
 
 
   <!-- launches mucommander from the classes directory -->
-  <target name="run">
+  <target name="run" depends="compile">
     <java classname="com.mucommander.Launcher" fork="true">
       <classpath>
         <pathelement location="classes"/>

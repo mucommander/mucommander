@@ -70,7 +70,7 @@ public class ZipJob extends ExtendedFileJob implements Runnable {
 
 
     public long getTotalBytesProcessed() {
-        return nbBytesProcessed;
+		return nbBytesProcessed;
     }
 
     public int getCurrentFileIndex() {
