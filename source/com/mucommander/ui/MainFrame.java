@@ -269,7 +269,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 * Brings up the file selection dialog.
 	 */
 	public void showSelectionDialog(boolean addToSelection) {
-		new FileSelectionDialog(this, addToSelection).showDialog();
+		new FileSelectionDialog(this, addToSelection).showDialog();   
 	}
 
 	/**
