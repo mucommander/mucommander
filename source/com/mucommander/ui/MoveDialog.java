@@ -19,25 +19,12 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class MoveDialog extends FocusDialog implements ActionListener {
-	private MainFrame mainFrame;
-	
-	private JTextField movePathField;
-	
-	private JButton okButton;
-	private JButton cancelButton;
+public class MoveDialog extends DestinationDialog {
 
 	private Vector filesToMove;
-
-	// Dialog size constraints
-	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
-    // Dialog width should not exceed 360, height is not an issue (always the same)
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
-	
 	
 	public MoveDialog(MainFrame mainFrame, boolean isShiftDown) {
-		super(mainFrame, null, mainFrame);
-		this.mainFrame = mainFrame;
+		super(mainFrame);
 		
 		FileTable activeTable = mainFrame.getLastActiveTable();
 		FileTable table1 = mainFrame.getBrowser1().getFileTable();
@@ -48,14 +35,11 @@ public class MoveDialog extends FocusDialog implements ActionListener {
     		return;
 
 		boolean rename = isShiftDown && nbFiles==1;
-		setTitle(Translator.get(rename?"move_dialog.rename":"move_dialog.move"));
-        
-		Container contentPane = getContentPane();
-        YBoxPanel mainPanel = new YBoxPanel();
-		
-		JLabel label = new JLabel(Translator.get(rename?"move_dialog.rename_description":"move_dialog.move_description"));
-        mainPanel.add(label);
 
+		init(Translator.get(rename?"move_dialog.rename":"move_dialog.move"),
+			Translator.get(rename?"move_dialog.rename_description":"move_dialog.move_description"),
+			Translator.get(rename?"move_dialog.rename":"move_dialog.move"));
+        
 		String fieldText;
 		if(isShiftDown && nbFiles==1) {
 			fieldText = ((AbstractFile)filesToMove.elementAt(0)).getName();
@@ -67,37 +51,8 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 				fieldText += ((AbstractFile)filesToMove.elementAt(0)).getName();
 		}
 
-		movePathField = new JTextField(fieldText);
-        // Text is selected so that user can directly type and replace path
-        movePathField.setSelectionStart(0);
-        movePathField.setSelectionEnd(fieldText.length());
-        movePathField.addActionListener(this);
-		
-		mainPanel.add(movePathField);
-		mainPanel.addSpace(10);
-		
-        contentPane.add(mainPanel, BorderLayout.NORTH);
-		
-		// OK / Cancel buttons panel
-        okButton = new JButton(Translator.get(rename?"move_dialog.rename":"move_dialog.move"));
-        cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
-
-        // Escape key disposes dialog
-		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
-		movePathField.addKeyListener(escapeKeyAdapter);
-		okButton.addKeyListener(escapeKeyAdapter);
-		cancelButton.addKeyListener(escapeKeyAdapter);
-
-        // Selects OK when enter is pressed
-        getRootPane().setDefaultButton(okButton);
-        
-		// Path field will receive initial focus
-		setInitialFocusComponent(movePathField);		
-			
-		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-		
+		setFieldText(fieldText);
+ 
 		showDialog();
 	}
 
@@ -106,8 +61,8 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 	/**
 	 * Starts a MoveJob. This method is trigged by the 'OK' button or return key.
 	 */
-	private void doMove() {
-		String destPath = movePathField.getText();
+	protected void okPressed() {
+		String destPath = pathField.getText();
 	    FileTable activeTable = mainFrame.getLastActiveTable();
 
 		// Resolves destination folder
@@ -136,25 +91,5 @@ public class MoveDialog extends FocusDialog implements ActionListener {
 		MoveJob moveJob = new MoveJob(mainFrame, progressDialog, filesToMove, newName, destFolder);
 	    progressDialog.start(moveJob);
 	}
-
-
-	private void showErrorDialog(String msg, String title) {
-		JOptionPane.showMessageDialog(mainFrame, msg, title, JOptionPane.ERROR_MESSAGE);
-
-		// FileTable lost focus
-		mainFrame.getLastActiveTable().requestFocus();
-	}
-
-
-	public void actionPerformed(ActionEvent e) {
-		Object source = e.getSource();
-		dispose();
-		
-		// OK Button
-		if(source == okButton || source == movePathField) {
-			doMove();
-		}
-	}
-	
 	
 }
