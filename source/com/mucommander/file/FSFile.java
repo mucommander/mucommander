@@ -12,9 +12,11 @@ public class FSFile extends AbstractFile {
 
 	private static FSFile roots[];
 	
-	protected File file;
-    protected String absPath;
-	protected boolean isSymlink;
+	private File file;
+    private String absPath;
+	private String canonicalPath;
+	private boolean isSymlink;
+	private boolean symlinkValueSet; 
 	
 	/* These file attributes are cached first time they are accessed to avoid excessive I/O */
     	
@@ -67,12 +69,11 @@ public class FSFile extends AbstractFile {
 	public FSFile(File _file) {
 //System.out.println("F0");
 		this.absPath = _file.getAbsolutePath();
-		// Tries to find out if the file may be a symbolic link
 		try {
-			this.isSymlink = !_file.getCanonicalPath().equals(this.absPath);
+			this.canonicalPath = _file.getCanonicalPath();
 		}
-		catch(IOException e){}
-
+		catch(IOException e) {}
+			
         // removes the ending separator character (if any)
         this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;
 
@@ -111,13 +112,25 @@ public class FSFile extends AbstractFile {
 		return absPath;
 	}
 
+//	public String getCanonicalPath() {
+//		return canonicalPath;
+//	}
+	
 	public String getSeparator() {
 		return separator;
 	}
 	
 	public boolean isSymlink() {
-//		AbstractFile parent = getParent();
-//		return this.isSymlink && (parent==null || !parent.isSymlink());
+		if(!symlinkValueSet) {
+			FSFile parent = (FSFile)getParent();
+			if(parent==null || this.canonicalPath==null)
+				this.isSymlink = false;
+			else
+				this.isSymlink = !this.canonicalPath.equals(parent.canonicalPath+separator+getName());
+			
+			this.symlinkValueSet = true;
+		}
+		
 		return this.isSymlink;
 	}
 

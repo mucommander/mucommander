@@ -117,6 +117,12 @@ public abstract class AbstractFile {
 		return getAbsolutePath()+getSeparator();
 	}
 
+	
+//	public String getCanonicalPath() {
+//		return getAbsolutePath();
+//	}
+	
+	
 	/**
 	 * Returns the separator character for this kind of AbstractFile.
 	 */

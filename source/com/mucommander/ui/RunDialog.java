@@ -98,6 +98,19 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 			
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 //		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
+
+		// Closing this dialog will invoke WindowListener's windowClosed() method
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+		// Closing this dialog kills the process
+		addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+				if(currentProcess!=null) {
+					currentProcess.destroy();
+					processMonitor.stopMonitoring();
+				}
+			}
+		});
 		
 		showDialog();
 	}
@@ -129,7 +142,7 @@ System.out.println("RunDialog.actionPerformed "+e);
 			this.currentProcess = null;
 			switchToRunState();
 		}
-		// Cancel button disposes the dialog without killing the process
+		// Cancel button disposes the dialog and kills the process
 		else if(source == cancelButton) {
 			dispose();			
 		}
