@@ -5,6 +5,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.job.PropertiesJob;
 import com.mucommander.text.Translator;
+import com.mucommander.text.SizeFormatter;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -95,13 +96,12 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		int nbFiles = job.getNbFilesRecurse();
 		int nbFolders = job.getNbFolders();
 		counterLabel.setText("<html>"
-//			+(nbFiles>0?nbFiles+" file"+(nbFiles>1?"s":""):"")
 			+(nbFiles>0?Translator.get("properties_dialog.nb_files", ""+nbFiles):"")
 			+(nbFiles>0&&nbFolders>0?", ":"")
-//			+(nbFolders>0?nbFolders+ " folder"+(nbFolders>1?"s":""):"")+"</html>");
 			+(nbFolders>0?Translator.get("properties_dialog.nb_folders", ""+nbFolders):"")+"</html>");
 
-		sizeLabel.setText("<html>"+Translator.get("properties_dialog.nb_bytes", NumberFormat.getInstance().format(job.getTotalBytes()))+"</html>");
+//		sizeLabel.setText("<html>"+Translator.get("properties_dialog.nb_bytes", NumberFormat.getInstance().format(job.getTotalBytes()))+"</html>");
+		sizeLabel.setText("<html>"+SizeFormatter.format(job.getTotalBytes(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE)+"</html>");
 		
 		counterLabel.repaint(REFRESH_RATE);
 		sizeLabel.repaint(REFRESH_RATE);

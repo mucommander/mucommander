@@ -129,7 +129,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 				}
 				else {
 					int ret = showFileExistsDialog(file, destFile);
-				
+					
 			    	if (ret==-1 || ret==FileExistsDialog.CANCEL_ACTION) {
 			    		stop();                
 			    		return;

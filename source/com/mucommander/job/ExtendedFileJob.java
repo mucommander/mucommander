@@ -27,6 +27,8 @@ public abstract class ExtendedFileJob extends FileJob {
 	/** Size that should be allocated to read buffer */
 	protected final static int READ_BLOCK_SIZE = 8192;
 
+	protected boolean topLevelFile;
+	
 	
     public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile baseSourceFolder) {
         super(progressDialog, mainFrame, baseSourceFolder);
@@ -61,9 +63,10 @@ public abstract class ExtendedFileJob extends FileJob {
 	
 	
 	/**
-	 * Copies the given source file to the specified destination file, resuming 
+	 * Copies the given source file to the specified destination file, resuming the operation if
+	 * told to do so.
 	 */
-	protected void copyFile(AbstractFile sourceFile, AbstractFile destFile, boolean resume) throws FileJobException {
+	protected void copyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append) throws FileJobException {
 		OutputStream out = null;
 		InputStream in = null;
 		long bytesSkipped;
@@ -76,13 +79,13 @@ public abstract class ExtendedFileJob extends FileJob {
 			}
 	
 			// Try to open OutputStream
-			try  { out = destFile.getOutputStream(resume); }
+			try  { out = destFile.getOutputStream(append); }
 			catch(IOException e2) {
 				throw new FileJobException(FileJobException.CANNOT_OPEN_DESTINATION);
 			}
 	
 			// Try to copy InputStream to OutputStream
-			try  { copyStream(in, out, resume?sourceFile.getSize():0); }
+			try  { copyStream(in, out, append?destFile.getSize():0); }
 			catch(IOException e3) {
 				throw new FileJobException(FileJobException.ERROR_WHILE_TRANSFERRING);
 			}
@@ -93,8 +96,9 @@ public abstract class ExtendedFileJob extends FileJob {
 		}
 		finally {
 			// Tries to close the streams no matter what happened before
-			// This block is always executed, even if an exception
-			// is thrown by the catch block
+			// This block will always be executed, even if an exception
+			// was thrown by the catch block
+			// Finally found a use for the finally block!
 			if(in!=null)
 				try { in.close(); }
 				catch(IOException e1) {}
@@ -143,8 +147,8 @@ public abstract class ExtendedFileJob extends FileJob {
 	protected void nextFile(AbstractFile file) {
 		super.nextFile(file);
 		currentFileProcessed = 0;
-		if(file.getParent(baseSourceFolder))
-			currentBaseFolderFile = file;
+		if(file.getParent().equals(baseSourceFolder))
+			topLevelFile = true;
 	}
 
 
@@ -154,9 +158,9 @@ public abstract class ExtendedFileJob extends FileJob {
      */
     public int getTotalPercentDone() {
         float nbFilesProcessed = getCurrentFileIndex();
-
-		if(currentFile!=null && currentFile==currentBaseFolderFile && !currentFile.isDirectory()) {
-			long currentFileSize = currentBaseFolderFile.getSize();
+		
+		if(currentFile!=null && topLevelFile && !currentFile.isDirectory()) {
+			long currentFileSize = currentFile.getSize();
 			if(currentFileSize>0)
 				nbFilesProcessed += getCurrentFileBytesProcessed()/(float)currentFileSize;
 		}

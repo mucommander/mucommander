@@ -62,25 +62,19 @@ warning:EN:Warning
 warning:FR:Avertissement
 
 skip:EN:Skip
-skip:FR:Ignorer
-
-skip_all:EN:Skip all
-skip_all:FR:Ignorer (tous)
+skip:FR:Suivant
 
 append:EN:Append
 append:FR:Ajouter a la fin
 
-append_all:EN:Append all
-append_all:FR:Ajouter a la fin (tous)
-
 overwrite:EN:Overwrite
 overwrite:FR:Remplacer
 
-overwrite_all:EN:Overwrite all
-overwrite_all:FR:Remplacer (tous)
+overwrite_if_older:EN:Overwrite if older
+overwrite_if_older:FR:Remplacer ancien
 
-overwrite_all_older:EN:Overwrite all older
-overwrite_all_older:FR:Remplacer si plus ancien (tous)
+apply_to_all:EN:Apply to all
+apply_to_all:FR:Appliquer à tous
 
 
 #############
@@ -541,6 +535,14 @@ email_dialog.nb_files:EN:%1 file(s)
 email_dialog.nb_files:FR:%1 fichier(s)
 
 
+##############################
+# File already exists dialog #
+##############################
+
+file_exists_dialog.title:EN:File already exists in destination
+file_exists_dialog.title:FR:Le fichier existe dans la destination
+
+
 #########################
 # File selection dialog #
 #########################
@@ -640,9 +642,6 @@ properties_dialog.nb_files:FR:%1 fichier(s)
 
 properties_dialog.nb_folders:EN:%1 folder(s)
 properties_dialog.nb_folders:FR:%1 dossier(s)
-
-properties_dialog.nb_bytes:EN:%1 bytes
-properties_dialog.nb_bytes:FR:%1 octets
 
 
 ##############

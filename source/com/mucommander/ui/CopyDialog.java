@@ -83,7 +83,6 @@ public class CopyDialog extends DestinationDialog {
 	 */
 	protected void okPressed() {
 		String destPath = pathField.getText();
-		FileTable activeTable = mainFrame.getLastActiveTable();
 
 		// Resolves destination folder
 		Object ret[] = mainFrame.resolvePath(destPath);
@@ -93,17 +92,18 @@ public class CopyDialog extends DestinationDialog {
 			return;
 		}
 
+		AbstractFile sourceFolder = mainFrame.getLastActiveTable().getCurrentFolder();
 		AbstractFile destFolder = (AbstractFile)ret[0];
 		String newName = (String)ret[1];
 
-		if (!unzipDialog && newName==null && activeTable.getCurrentFolder().equals(destFolder)) {
+		if (!unzipDialog && newName==null && sourceFolder.equals(destFolder)) {
 			showErrorDialog(Translator.get("same_source_destination"), Translator.get("copy_dialog.error_title"));
 			return;
 		}
 
 		// Starts moving files
 		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get(unzipDialog?"unzip_dialog.unzipping":"copy_dialog.copying"));
-		CopyJob copyJob = new CopyJob(mainFrame, progressDialog, filesToCopy, newName, destFolder, unzipDialog);
+		CopyJob copyJob = new CopyJob(mainFrame, progressDialog, sourceFolder, filesToCopy, newName, destFolder, unzipDialog);
 		progressDialog.start(copyJob);
 	}
 
