@@ -269,6 +269,12 @@ view_menu.show_command_bar:FR:Afficher la barre de commande
 view_menu.hide_command_bar:EN:Hide command bar
 view_menu.hide_command_bar:FR:Cacher la barre de commande
 
+view_menu.show_status_bar:EN:Show status bar
+view_menu.show_status_bar:FR:Afficher la barre de status
+
+view_menu.hide_status_bar:EN:Hide status bar
+view_menu.hide_status_bar:FR:Cacher la barre de status
+
 
 ###############
 # Window menu #
@@ -334,6 +340,14 @@ toolbar.properties:EN:$[file_menu.properties] (Alt+Enter)
 toolbar.preferences:EN:$[file_menu.preferences]
 
 toolbar.hide_toolbar:EN:$[view_menu.hide_toolbar]
+
+
+##############
+# Status bar #
+##############
+
+status_bar.selected_files:EN:%1 of %2 selected
+status_bar.selected_files:FR:%1 de %2 sélectionnés
 
 
 #########
@@ -551,6 +565,9 @@ email_dialog.prefs_not_set_title:FR:Paramètres absents
 
 email_dialog.prefs_not_set:EN:You need to set your mail parameters first.
 email_dialog.prefs_not_set:FR:Vous devez d'abord configurer vos paramètres email.
+
+email_dialog.from:EN:From
+email_dialog.from:FR:De
 
 email_dialog.to:EN:To
 email_dialog.to:FR:A

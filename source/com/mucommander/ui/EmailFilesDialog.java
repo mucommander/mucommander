@@ -8,6 +8,7 @@ import com.mucommander.file.ArchiveFile;
 import com.mucommander.job.SendMailJob;
 import com.mucommander.text.SizeFormatter;
 import com.mucommander.text.Translator;
+import com.mucommander.conf.ConfigurationManager;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -80,15 +81,21 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			TextFieldsPanel textFieldsPanel = new TextFieldsPanel(5);
 			textFieldsPanel.setAlignmentX(LEFT_ALIGNMENT);
 
+			// From (sender) field, non editable
+			JLabel fromLabel = new JLabel(ConfigurationManager.getVariable("prefs.mail.sender_name")
+				+" <"+ConfigurationManager.getVariable("prefs.mail.sender_address")+">");
+//			fromField.setEditable(false);
+			textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.from")+":", fromLabel, 10);
+			
 			// To (recipients) field
 			toField = new JTextField(lastTo);
 			toField.addKeyListener(escapeKeyAdapter);
-			textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.to"), toField, 10);
+			textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.to")+":", toField, 10);
 			
 			// Subject field
 			subjectField = new JTextField(lastSubject);
 			subjectField.addKeyListener(escapeKeyAdapter);
-			textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.subject"), subjectField, 15);
+			textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.subject")+":", subjectField, 15);
 
 			mainPanel.add(textFieldsPanel);		
 	

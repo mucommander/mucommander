@@ -113,6 +113,8 @@ public class Base64OutputStream extends OutputStream {
 			out.write(BASE_TABLE[(byte)(((byteAcc[1] & 0x0F) << 2) | ((i & 0xC0) >> 6))]);
 			out.write(BASE_TABLE[(byte)(i & 0x3F)]);
 
+			nbBytesWaiting = 0;
+
 			if ((lineLength += 4) >= 76) {
 				out.write('\r');
 				out.write('\n');

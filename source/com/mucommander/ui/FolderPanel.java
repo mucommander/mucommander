@@ -2,8 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.*;
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableCellRenderer;
+import com.mucommander.ui.table.*;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.*;
 
@@ -189,6 +188,7 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 //		rootPopup.requestFocus();
 		FocusRequester.requestFocus(rootPopup);
 	}
+	
 
 	public AbstractFile getCurrentFolder() {
 		return currentFolder;

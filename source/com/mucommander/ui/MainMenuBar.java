@@ -67,6 +67,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenu windowMenu;
 	private JMenuItem showToolbarItem;
 	private JMenuItem showCommandBarItem;
+	private JMenuItem showStatusBarItem;
 //	private JMenuItem previousWindowItem;
 //	private JMenuItem nextWindowItem;
 
@@ -152,6 +153,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		viewMenu.add(new JSeparator());
 		// Menu item's text will be set later, when menu is selected
 		showToolbarItem = MenuToolkit.addMenuItem(viewMenu, "", menuItemMnemonicHelper, null, this);
+		showStatusBarItem = MenuToolkit.addMenuItem(viewMenu, "", menuItemMnemonicHelper, null, this);
 		showCommandBarItem = MenuToolkit.addMenuItem(viewMenu, "", menuItemMnemonicHelper, null, this);
 		
 		add(viewMenu);
@@ -315,6 +317,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			mainFrame.setCommandBarVisible(commandBarVisible);
 			ConfigurationManager.setVariable("prefs.show_command_bar_on_startup", ""+commandBarVisible);		
 		}
+		else if (source == showStatusBarItem) {
+			boolean statusBarVisible = !mainFrame.isStatusBarVisible();
+			mainFrame.setStatusBarVisible(statusBarVisible);
+			ConfigurationManager.setVariable("prefs.show_status_bar_on_startup", ""+statusBarVisible);		
+		}
 		// Help menu
 		else if (source == keysItem) {
 			new ShortcutsDialog(mainFrame).showDialog();
@@ -349,6 +356,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if(source==viewMenu) {
 			showToolbarItem.setText(mainFrame.isToolbarVisible()?Translator.get("view_menu.hide_toolbar"):Translator.get("view_menu.show_toolbar"));
 			showCommandBarItem.setText(mainFrame.isCommandBarVisible()?Translator.get("view_menu.hide_command_bar"):Translator.get("view_menu.show_command_bar"));
+			showStatusBarItem.setText(mainFrame.isStatusBarVisible()?Translator.get("view_menu.hide_status_bar"):Translator.get("view_menu.show_status_bar"));
 		}
 	}
 	

@@ -5,12 +5,14 @@ import com.mucommander.PlatformManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.comp.FocusRequester;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.pref.PreferencesDialog;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveFile;
 
 import com.mucommander.job.SendMailJob;
+
 import com.mucommander.conf.ConfigurationManager;
 
 import javax.swing.*;
@@ -45,6 +47,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
     
 	private ToolBar toolbar;
     
+	private JLabel statusBarLabel;
+	
 	private CommandBarPanel commandBar;
 	
 	/** Used to determine whether or not this MainFrame is active, i.e. muCommander window is in the foreground */
@@ -70,21 +74,25 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		setResizable(true);
 
 		// Create a new content pane to specify custom insets
-		Container contentPane = new JPanel(new BorderLayout()) {
-			 public Insets getInsets() {
-				 // Gives some border space
-				 return new Insets(3, 4, 3, 4);
-			 }
-		};
+//		Container contentPane = new JPanel(new BorderLayout()) {
+//			 public Insets getInsets() {
+//				 // Gives some border space
+//				 return new Insets(3, 4, 3, 4);
+//			 }
+//		};
+		YBoxPanel contentPane = new YBoxPanel();
+		contentPane.setInsets(new Insets(3, 4, 3, 4));
 		setContentPane(contentPane);
 
 		// Folder panels
 		folderPanel1 = new FolderPanel(this, initialFolder1);
         folderPanel2 = new FolderPanel(this, initialFolder2);
 
-		// Create and show toolbar only if it hasn't been disabled in the preferences
-		if(ConfigurationManager.getVariable("prefs.show_toolbar_on_startup", "true").equals("true"))
-			setToolbarVisible(true);
+		// Create toolbar and show it only if it hasn't been disabled in the preferences
+		this.toolbar = new ToolBar(this);
+		contentPane.add(toolbar);
+		if(ConfigurationManager.getVariable("prefs.show_toolbar_on_startup", "true").equals("false"))
+			toolbar.setVisible(false);
 
 		// Create menu bar (has to be created after toolbar)
 		MainMenuBar menuBar = new MainMenuBar(this);
@@ -109,12 +117,23 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 		// Cool but way too slow
 //		splitPane.setContinuousLayout(true);
 
-		contentPane.add(splitPane, BorderLayout.CENTER);
+//		contentPane.add(splitPane, BorderLayout.CENTER);
+		contentPane.add(splitPane);
+
+		// Create and add status bar
+		statusBarLabel = new JLabel("");
+		if(ConfigurationManager.getVariable("prefs.show_status_bar_on_startup", "true").equals("false"))
+			statusBarLabel.setVisible(false);
+//		else
+//			updateStatusBar();
+		contentPane.add(statusBarLabel);
 
 		// Show command bar only if it hasn't been disabled in the preferences
 		this.commandBar = new CommandBarPanel(this);
-		contentPane.add(commandBar, BorderLayout.SOUTH);
-		setCommandBarVisible(ConfigurationManager.getVariable("prefs.show_command_bar_on_startup", "true").equals("true"));
+//		contentPane.add(commandBar, BorderLayout.SOUTH);
+		if(ConfigurationManager.getVariable("prefs.show_command_bar_on_startup", "true").equals("false"))
+			commandBar.setVisible(false);
+		contentPane.add(commandBar);
 				
 		// To monitor resizing actions
 		folderPanel1.addComponentListener(this);
@@ -144,28 +163,30 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	 * Shows/hide the toolbar.
 	 */
 	public void setToolbarVisible(boolean visible) {
-		if(this.toolbar!=null && !visible) {
-			getContentPane().remove(toolbar);
+		if(toolbar.isVisible() && !visible) {
+//			getContentPane().remove(toolbar);
 			folderPanel1.removeLocationListener(toolbar);
 			folderPanel2.removeLocationListener(toolbar);
-			this.toolbar = null;
+//			this.toolbar = null;
+			toolbar.setVisible(false);
 			validate();
 		}
-		else if(this.toolbar==null && visible) {
-			this.toolbar = new ToolBar(this);
+		else if(!toolbar.isVisible() && visible) {
+//			this.toolbar = new ToolBar(this);
 			folderPanel1.addLocationListener(toolbar);
 			folderPanel2.addLocationListener(toolbar);
-			getContentPane().add(toolbar, BorderLayout.NORTH);
+//			getContentPane().insert(toolbar, BorderLayout.NORTH);
+			toolbar.setVisible(true);
 			validate();
 		}
 	}
 	
 	
 	/**
-	 * Returns true if there is an icon toolbar visible on this frame.
+	 * Returns true if the icon toolbar is visible on this frame.
 	 */
 	public boolean isToolbarVisible() {
-		return this.toolbar!=null;
+		return toolbar.isVisible();
 	}
 	
 
@@ -179,13 +200,38 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
 	
 	
 	/**
-	 * Returns true if there is an command bar visible on this frame.
+	 * Returns true if the command bar is visible on this frame.
 	 */
 	public boolean isCommandBarVisible() {
 		return this.commandBar.isVisible();
 	}
 	
+
+	/**
+	 * Shows/hide the status bar.
+	 */
+	public void setStatusBarVisible(boolean visible) {
+		this.statusBarLabel.setVisible(visible);
+		validate();
+	}
 	
+	
+	/**
+	 * Returns true if the status bar is visible on this frame.
+	 */
+	public boolean isStatusBarVisible() {
+		return this.statusBarLabel.isVisible();
+	}
+	
+	
+	/**
+	 * Sets status bar text label. This method is called by FileTable.
+	 */
+	public void setStatusBarText(String text) {
+		statusBarLabel.setText(text);
+	}
+	
+
 	/**
 	 * Returns last active FileTable, that is the last FileTable that received focus.
 	 */
