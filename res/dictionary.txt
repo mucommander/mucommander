@@ -24,99 +24,158 @@
 
 ok:EN:OK
 ok:FR:OK
+ok:DE:OK
+ok:ES:Aceptar
 
 yes:EN:Yes
 yes:FR:Oui
-#yes:JP:はい
+yes:DE:Ja
+yes:ES:Sí
 
 no:EN:No
 no:FR:Non
-#no:JP:いいえ
+no:DE:Nein
+no:ES:No
 
 cancel:EN:Cancel
 cancel:FR:Annuler
-#cancel:JP:ｷｬﾝｾﾙ
+cancel:DE:Abbrechen
+cancel:ES:Cancelar
 
 close:EN:Close
 close:FR:Fermer
+close:DE:Schließen
+close:ES:Cerrar
 
 apply:EN:Apply
 apply:FR:Appliquer
+apply:DE:Zuweisen
+apply:ES:Aplicar
 
 folder_does_not_exist:EN:This folder doesn't exist or is not available.
 folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
+folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar.
+folder_does_not_exist:ES:El directoio no existe o no está disponible.
 
 this_folder_does_not_exist:EN:This folder doesn't exist or is not available: %1
 this_folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible: %1
+this_folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar: %1
+this_folder_does_not_exist:ES:El directoio no existe o no está disponible: %1
 
 save:EN:Save
 save:FR:Enregistrer
+save:DE:Speichern
+save:ES:Guardar
 
 dont_save:EN:Don't save
 dont_save:FR:Ne pas enregistrer
+dont_save:DE:Nicht speichern
+dont_save:ES:No guardar
 
 replace:EN:Replace
 replace:FR:Remplacer
+replace:DE:Ersetzen
+replace:ES:Reemplazar
 
 dont_replace:EN:Don't replace
 dont_replace:FR:Ne pas remplacer
+dont_replace:DE:Nicht ersetzen
+dont_replace:ES:No reemplazar
 
 warning:EN:Warning
 warning:FR:Avertissement
+warning:DE:Warnung
+warning:ES:Aviso
 
 skip:EN:Skip
 skip:FR:Suivant
+skip:DE:Überspringen
+skip:ES:Saltar
 
 retry:EN:Retry
 retry:FR:Réessayer
+retry:DE:Erneut versuchen
+retry:ES:
 
 append:EN:Resume
 append:FR:Reprendre
+append:DE:Weiter
+append:ES:Continuar
 
 overwrite:EN:Overwrite
 overwrite:FR:Remplacer
+overwrite:DE:Überschreiben
+overwrite:ES:Reemplazar
 
 overwrite_if_older:EN:Overwrite if older
 overwrite_if_older:FR:Remplacer si ancien
+overwrite_if_older:DE:Ältere überschreiben
+overwrite_if_older:ES:Reemplazar si es más antiguo
 
 apply_to_all:EN:Apply to all
 apply_to_all:FR:Appliquer à tous
+apply_to_all:DE:Zuweisen an alle
+apply_to_all:ES:Aplicar a todo
 
 copy:EN:Copy
 copy:FR:Copier
+copy:DE:Kopieren
+copy:ES:Copiar
 
 download:EN:Download
 download:FR:Télécharger
+download:DE:Download
+download:ES:Descargar
 
 browse:EN:Browse
 browse:FR:Explorer
+browse:DE:Browsen
+browse:ES:Navegar
 
 ask:EN:Ask
 ask:FR:Demander
+ask:DE:Fragen
+ask:ES:Preguntar
 
 cannot_read_source:EN:Cannot read file %1
 cannot_read_source:FR:Erreur lors de la lecture de %1
+cannot_read_source:DE:Kann Datei %1 nicht lesen
+cannot_read_source:ES:No se puede leer el archivo %1
 
 cannot_write_destination:EN:Cannot write file %1
 cannot_write_destination:FR:Erreur lors de l'écriture de %1
+cannot_write_destination:DE:Kann Datei %1 nicht schreiben
+cannot_write_destination:ES:No se puede escribir el archivo %1
 
 cannot_create_folder:EN:Unable to create directory %1.
 cannot_create_folder:FR:Erreur lors de la création du répertoire %1.
+cannot_create_folder:DE:Kann Ordner %1 nicht erstellen.
+cannot_create_folder:ES:No se puede crear el directorio %1
 
 cannot_read_folder:EN:Unable to read contents of folder %1
 cannot_read_folder:FR:Erreur lors de la lecture du dossier %1
+cannot_read_folder:DE:Kann Inhalt des Ordners %1 nicht lesen
+cannot_read_folder:ES:No se puede leer el directorio %1
 
 cannot_delete_file:EN:Unable to delete file %1
 cannot_delete_file:FR:Erreur lors de la suppression du fichier %1
+cannot_delete_file:DE:Kann Datei %1 nicht löschen
+cannot_delete_file:ES:No se puede borrar el fichero %1
 
 cannot_delete_folder:EN:Unable to delete folder %1
 cannot_delete_folder:FR:Erreur lors de la suppression du répertoire %1
+cannot_delete_folder:DE:Kann Ordner %1 nicht löschen
+cannot_delete_folder:ES:No se puede borrar el directorio %1
 
 error_while_transferring:EN:Error while transferring file %1
 error_while_transferring:FR:Erreur lors du transfert de %1
+error_while_transferring:DE:Fehler beim Transfer von Datei %1
+error_while_transferring:ES:Error al transferir %1
 
 same_source_destination:EN:Source and destination folders are the same.
 same_source_destination:FR:Les répertoires source et destination sont les mêmes.
+same_source_destination:DE:Quell-und Zielordner sind gleich.
+same_source_destination:ES:El directorio de origen y destino es el mismo.
 
 
 #############
@@ -125,9 +184,23 @@ same_source_destination:FR:Les répertoires source et destination sont les même
 
 language.en:EN:English
 language.en:FR:Anglais
+language.en:DE:Englisch
+language.en:ES:Inglés
 
 language.fr:EN:French
 language.fr:FR:Français
+language.fr:DE:Französisch
+language.fr:ES:Francés
+
+language.de:EN:German
+language.de:FR:Allemand
+language.de:DE:Deutsch
+language.de:ES:Alemán
+
+language.es:EN:Spanish
+language.es:FR:Espagnol
+language.es:DE:Spanisch
+language.es:ES:Español
 
 
 ###############
@@ -136,63 +209,103 @@ language.fr:FR:Français
 
 command_bar.view:EN:View
 command_bar.view:FR:Voir
+command_bar.view:DE:Ansicht
+command_bar.view:ES:Ver
 
 command_bar.view_tooltip:EN:View selected file
 command_bar.view_tooltip:FR:Voir le fichier sélectionné
+command_bar.view_tooltip:DE:Markierte Datei betrachten
+command_bar.view_tooltip:ES:Ver el fichero seleccionado
 
 command_bar.edit:EN:Edit
 command_bar.edit:FR:Editer
+command_bar.edit:DE:Bearbeiten
+command_bar.edit:ES:Editar
 
 command_bar.edit_tooltip:EN:Edit selected file
 command_bar.edit_tooltip:FR:Editer le fichier selectionné
+command_bar.edit_tooltip:DE:Markierte Datei bearbeiten
+command_bar.edit_tooltip:ES:Editar el fichero seleccionado
 
 command_bar.copy:EN:Copy
 command_bar.copy:FR:Copier
+command_bar.copy:DE:Kopieren
+command_bar.copy:ES:Copiar
 
 command_bar.copy_tooltip:EN:Copy marked files
 command_bar.copy_tooltip:FR:Copier les fichiers marqués
+command_bar.copy_tooltip:DE:Markierte Dateien kopieren
+command_bar.copy_tooltip:ES:Copiar los ficheros seleccionados
 
 command_bar.local_copy:EN:Local Copy
 command_bar.local_copy:FR:Copier local
+command_bar.local_copy:DE:Lokale Kopie
+command_bar.local_copy:ES:Copia local
 
 command_bar.local_copy_tooltip:EN:Copy selected file into current folder
 command_bar.local_copy_tooltip:FR:Copier le fichier selectionné dans le dossier courant
+command_bar.local_copy_tooltip:DE:Kopiert markierte Datei in den momentanen Ordner
+command_bar.local_copy_tooltip:ES:Copiar el fichero seleccionado en el directorio actual
 
 command_bar.move:EN:Move
 command_bar.move:FR:Déplacer
+command_bar.move:DE:Verschieben
+command_bar.move:ES:Mover
 
 command_bar.move_tooltip:EN:Move marked files
 command_bar.move_tooltip:FR:Déplacer les fichiers marqués
+command_bar.move_tooltip:DE:Markierte Dateien verschieben
+command_bar.move_tooltip:ES:Mover los ficheros seleccionados
 
 command_bar.rename:EN:Rename
 command_bar.rename:FR:Renommer
+command_bar.rename:DE:Umbenennen
+command_bar.rename:ES:Renombrar
 
 command_bar.rename_tooltip:EN:Rename selected file
 command_bar.rename_tooltip:FR:Renommer le fichier selectionné
+command_bar.rename_tooltip:DE:Markierte Dateien umbenennen
+command_bar.rename_tooltip:ES:Renombrar el fichero seccionado
 
 command_bar.mkdir:EN:Make dir
 command_bar.mkdir:FR:Créer rep
+command_bar.mkdir:DE:Ordner erstellen
+command_bar.mkdir:ES:Crear directorio
 
 command_bar.mkdir_tooltip:EN:Create a directory in current folder
 command_bar.mkdir_tooltip:FR:Créer un répertoire dans le dossier courant
+command_bar.mkdir_tooltip:DE:Erstellt einen Ordner im momentanen Ordner
+command_bar.mkdir_tooltip:ES:Crear subdirectorio en el directorio actual
 
 command_bar.delete:EN:Delete
 command_bar.delete:FR:Supprimer
+command_bar.delete:DE:Löschen
+command_bar.delete:ES:Eliminar
 
 command_bar.delete_tooltip:EN:Delete marked files
 command_bar.delete_tooltip:FR:Supprimer les fichiers marqués
+command_bar.delete_tooltip:DE:Markierte Dateien löschen
+command_bar.delete_tooltip:ES:Elimiar los ficheros marcados
 
 command_bar.refresh:EN:Refresh
-command_bar.refresh:FR:Rafraîchir
+command_bar.refresh:FR:Actualiser
+command_bar.refresh:DE:Aktualisieren
+command_bar.refresh:ES:Actualizar
 
 command_bar.refresh_tooltip:EN:Refresh current folder
-command_bar.refresh_tooltip:FR:Rafraîchir le répertoire courant
+command_bar.refresh_tooltip:FR:Actualiser le répertoire courant
+command_bar.refresh_tooltip:DE:Aktualisiere momentanen Ordner
+command_bar.refresh_tooltip:ES:Actualizar directorio actual
 
 command_bar.close:EN:Close
 command_bar.close:FR:Fermer
+command_bar.close:DE:Schließen
+command_bar.close:ES:Cerrar
 
 command_bar.close_tooltip:EN:Close this window
 command_bar.close_tooltip:FR:Fermer cette fenêtre
+command_bar.close_tooltip:DE:Schließt dieses Fenster
+command_bar.close_tooltip:ES:Cerrar esta ventana
 
 
 #############
@@ -201,36 +314,58 @@ command_bar.close_tooltip:FR:Fermer cette fenêtre
 
 file_menu:EN:File
 file_menu:FR:Fichier
+file_menu:DE:Datei
+file_menu:ES:Archivo
 
 file_menu.server_connect:EN:Connect to server...
 file_menu.server_connect:FR:Connexion à un serveur...
+file_menu.server_connect:DE:Verbinde zu Server...
+file_menu.server_connect:ES:Conectar a un servidor...
 
 file_menu.new_window:EN:New window
 file_menu.new_window:FR:Nouvelle fenêtre
+file_menu.new_window:DE:Neues Fenster
+file_menu.new_window:ES:Nueva ventana
 
 file_menu.run_command:EN:Run command
 file_menu.run_command:FR:Exécuter une commande
+file_menu.run_command:DE:Befehl ausführen
+file_menu.run_command:ES:Ejecutar un comando
 
 file_menu.zip:EN:Zip files...
 file_menu.zip:FR:Zipper fichiers...
+file_menu.zip:DE:Dateien packen...
+file_menu.zip:ES:Comprimir ficheros...
 
 file_menu.unzip:EN:Unzip files...
 file_menu.unzip:FR:Dézipper fichiers...
+file_menu.unzip:DE:Dateien entpacken...
+file_menu.unzip:ES:Descomprimir ficheros...
 
 file_menu.email:EN:Email files...
 file_menu.email:FR:Envoyer par email...
+file_menu.email:DE:Dateien mailen...
+file_menu.email:ES:Enviar por email...
 
 file_menu.properties:EN:Properties
 file_menu.properties:FR:Propriétés
+file_menu.properties:DE:Eigenschaften
+file_menu.properties:ES:Propiedades
 
 file_menu.preferences:EN:Preferences...
 file_menu.preferences:FR:Préférences...
+file_menu.preferences:DE:Einstellungen...
+file_menu.preferences:ES:Preferencias...
 
 file_menu.check_for_updates:EN:Check for updates
 file_menu.check_for_updates:FR:Mises à jour...
+file_menu.check_for_updates:DE:Nach Updates suchen
+file_menu.check_for_updates:ES:Comprobar actualizaciones
 
 file_menu.close_window:EN:Close window
 file_menu.close_window:FR:Fermer fenêtre
+file_menu.close_window:DE:Fenster schließen
+file_menu.close_window:ES:Cerrar ventana
 
 
 #############
@@ -239,24 +374,38 @@ file_menu.close_window:FR:Fermer fenêtre
 
 mark_menu:EN:Mark
 mark_menu:FR:Marquer
+mark_menu:DE:Markieren
+mark_menu:ES:Marcar
 
 mark_menu.mark:EN:Mark files...
 mark_menu.mark:FR:Marquer fichiers...
+mark_menu.mark:DE:Dateien markieren...
+mark_menu.mark:ES:Marcar ficheros...
 
 mark_menu.unmark:EN:Unmark files...
 mark_menu.unmark:FR:Dé-marquer fichiers...
+mark_menu.unmark:DE:Dateien demarkieren...
+mark_menu.unmark:ES:Desmarcar ficheros...
 
 mark_menu.mark_all:EN:Mark all
 mark_menu.mark_all:FR:Marquer tous
+mark_menu.mark_all:DE:Alle markieren
+mark_menu.mark_all:ES:Marcar todos
 
 mark_menu.unmark_all:EN:Unmark all
 mark_menu.unmark_all:FR:Dé-marquer tous
+mark_menu.unmark_all:DE:Alle demarkieren
+mark_menu.unmark_all:ES:Desmarcar todos
 
 mark_menu.invert_selection:EN:Invert selection
 mark_menu.invert_selection:FR:Inverser sélection
+mark_menu.invert_selection:DE:Auswahl umkehren
+mark_menu.invert_selection:ES:Invertir selección
 
 mark_menu.compare_folders:EN:Compare folders
 mark_menu.compare_folders:FR:Comparer dossiers
+mark_menu.compare_folders:DE:Ordner vergleichen
+mark_menu.compare_folders:ES:Comparar directorios
 
 
 #############
@@ -265,54 +414,88 @@ mark_menu.compare_folders:FR:Comparer dossiers
 
 view_menu:EN:View
 view_menu:FR:Vue
+view_menu:DE:Ansicht
+view_menu:ES:ver
 
 view_menu.go_back:EN:Go back
 view_menu.go_back:FR:Dossier précédent
+view_menu.go_back:DE:Zurueck gehen
+view_menu.go_back:ES:Volver
 
 view_menu.go_forward:EN:Go forward
 view_menu.go_forward:FR:Dossier suivant
+view_menu.go_forward:DE:Vorwärts gehen
+view_menu.go_forward:ES:Siguiente
 
 view_menu.go_to_parent:EN:Go to parent
 view_menu.go_to_parent:FR:Dossier parent
+view_menu.go_to_parent:DE:Gehe Ebene höher
+view_menu.go_to_parent:ES:Ir al padre
 
 view_menu.sort_by_name:EN:Sort by Name
 view_menu.sort_by_name:FR:Classer par nom
+view_menu.sort_by_name:DE:Nach Namen sortieren
+view_menu.sort_by_name:ES:Ordenar por Nombre
 
 view_menu.sort_by_date:EN:Sort by Date
 view_menu.sort_by_date:FR:Classer par date
+view_menu.sort_by_date:DE:Nach Datum sortieren
+view_menu.sort_by_date:ES:Ordenar por Fecha
 
 view_menu.sort_by_size:EN:Sort by Size
 view_menu.sort_by_size:FR:Classer par taille
+view_menu.sort_by_size:DE:Nach Größe sortieren
+view_menu.sort_by_size:ES:Ordenar por Tamaño
 
 view_menu.sort_by_extension:EN:Sort by Extension
 view_menu.sort_by_extension:FR:Classer par extension
+view_menu.sort_by_extension:DE:Nach Erweiterung sortieren
+view_menu.sort_by_extension:ES:Ordenar por Extensión
 
 view_menu.reverse_order:EN:Reverse order
 view_menu.reverse_order:FR:Inverser l'ordre
+view_menu.reverse_order:DE:Sortierung umdrehen
+view_menu.reverse_order:ES:Invertir el orden
 
 view_menu.swap_folders:EN:Swap folders
 view_menu.swap_folders:FR:Echanger les dossiers
+view_menu.swap_folders:DE:Fenster vertauschen
+view_menu.swap_folders:ES:Intercambiar directorios
 
 view_menu.set_same_folder:EN:Set same folder
 view_menu.set_same_folder:FR:Affecter le même dossier
+view_menu.set_same_folder:DE:Selber Ordner
+view_menu.set_same_folder:ES:Marcar el mismo directorio
 
 view_menu.show_toolbar:EN:Show toolbar
 view_menu.show_toolbar:FR:Afficher la barre d'outils
+view_menu.show_toolbar:DE:Toolbar anzeigen
+view_menu.show_toolbar:ES:Mostrar la barra de herramientas
 
 view_menu.hide_toolbar:EN:Hide toolbar
 view_menu.hide_toolbar:FR:Cacher la barre d'outils
+view_menu.hide_toolbar:DE:Werkzeugleiste verstecken
+view_menu.hide_toolbar:ES:Ocultar la barra de herramientas
 
 view_menu.show_command_bar:EN:Show command bar
 view_menu.show_command_bar:FR:Afficher la barre de commande
+view_menu.show_command_bar:DE:Befehlsleiste anzeigen
+view_menu.show_command_bar:ES:Mostar la barra de comandos
 
 view_menu.hide_command_bar:EN:Hide command bar
 view_menu.hide_command_bar:FR:Cacher la barre de commande
+view_menu.hide_command_bar:DE:Befehlsleiste verstecken
+view_menu.hide_command_bar:FR:Ocultar la barra de comandos
 
 view_menu.show_status_bar:EN:Show status bar
 view_menu.show_status_bar:FR:Afficher la barre de status
+view_menu.show_status_bar:DE:Statusleiste anzeigen
+view_menu.show_status_bar:FR:Mostrar barra de estado
 
 view_menu.hide_status_bar:EN:Hide status bar
 view_menu.hide_status_bar:FR:Cacher la barre de status
+view_menu.hide_status_bar:DE:Statusleiste verstecken
+view_menu.hide_status_bar:FR:Ocultar la barra de estado
 
 
 ###############
@@ -321,6 +504,8 @@ view_menu.hide_status_bar:FR:Cacher la barre de status
 
 window_menu:EN:Window
 window_menu:FR:Fenêtre
+window_menu:DE:Fenster
+window_menu:ES:Ventana
 
 
 #############
@@ -329,21 +514,33 @@ window_menu:FR:Fenêtre
 
 help_menu:EN:Help
 help_menu:FR:Aide
+help_menu:DE:Hilfe
+help_menu:ES:Ayuda
 
 help_menu.shortcuts:EN:Keyboard shortcuts
 help_menu.shortcuts:FR:Raccourcis clavier
+help_menu.shortcuts:DE:Tastaurkürzel
+help_menu.shortcuts:ES:Atajos de teclado
 
 help_menu.homepage:EN:Go to website
 help_menu.homepage:FR:Site web 
+help_menu.homepage:DE:Zur Internetseite
+help_menu.homepage:ES:Ir a sitio web
 
 help_menu.forums:EN:Go to forums
 help_menu.forums:FR:Forums
+help_menu.forums:DE:Zum Forum
+help_menu.forums:ES:Foros
 
 help_menu.donate:EN:Make a donation
 help_menu.donate:FR:Faire une donation
+help_menu.donate:DE:Geld spenden
+help_menu.donate:ES:Hacer una donación
 
 help_menu.about:EN:About muCommander
 help_menu.about:FR:A propos de muCommander
+help_menu.about:DE:Über muCommander
+help_menu.about:ES:Acerca de muCommander
 
 
 ###########
@@ -381,10 +578,12 @@ toolbar.email:EN:$[shortcuts_dialog.file_operations.email]
 
 toolbar.properties:EN:$[shortcuts_dialog.file_operations.properties]
 
+toolbar.hide_toolbar:EN:$[view_menu.hide_toolbar]
+
 toolbar.preferences:EN:Configure muCommander
 toolbar.preferences:FR:Configurer muCommander
-
-toolbar.hide_toolbar:EN:$[view_menu.hide_toolbar]
+toolbar.preferences:DE:muCommander konfigurieren
+toolbar.preferences:ES:Configurar muCommander
 
 
 ##############
@@ -393,6 +592,8 @@ toolbar.hide_toolbar:EN:$[view_menu.hide_toolbar]
 
 status_bar.selected_files:EN:%1 of %2 selected
 status_bar.selected_files:FR:%1 de %2 sélectionnés
+status_bar.selected_files:DE:%1 von %2 markiert
+status_bar.selected_files:ES:%1 de %2 seleccionados
 
 
 #########
@@ -401,24 +602,38 @@ status_bar.selected_files:FR:%1 de %2 sélectionnés
 
 table.name:EN:Name
 table.name:FR:Nom
+table.name:DE:Name
+table.name:ES:Nombre
 
 table.size:EN:Size
 table.size:FR:Taille
+table.size:DE:Größe
+table.size:ES:Tamaño
 
 table.date:EN:Date
 table.date:FR:Date
+table.date:DE:Datum
+table.date:ES:Fecha
 
 table.folder_access_error_title:EN:Folder access error
 table.folder_access_error_title:FR:Folder access error
+table.folder_access_error_title:DE:Fehler beim Ordnerzugriff
+table.folder_access_error_title:ES:Error al acceder al directorio
 
 table.folder_access_error:EN:Unable to read folder contents
 table.folder_access_error:FR:Unable to read folder contents
+table.folder_access_error:DE:Kann Ordnerinhalt nicht lesen
+table.folder_access_error:ES:Imposible leer el contenido del directorio
 
 table.folder_does_not_exist:EN:This folder doesn't exist or is not available.
 table.folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
+table.folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar.
+table.folder_does_not_exist:ES:El directorio no existe o no está disponible.
 
 table.download_or_browse:EN:Would you like to browse or download this file ?
 table.download_or_browse:FR:Souhaitez-vous explorer ou télécharger ce fichier ?
+table.download_or_browse:DE:Wollen sie zur Datei browsen oder sie downloaden?
+table.download_or_browse:ES:¿Desea explorar o descargar este fichero?
 
 
 ##################
@@ -427,24 +642,38 @@ table.download_or_browse:FR:Souhaitez-vous explorer ou télécharger ce fichier 
 
 version_dialog.no_new_version_title:EN:No new version
 version_dialog.no_new_version_title:FR:Pas de nouvelle version
+version_dialog.no_new_version_title:DE:Keine neue Version
+version_dialog.no_new_version_title:ES:No hay una versión nueva
 
 version_dialog.no_new_version:EN:Congratulations, you already have the latest version.
 version_dialog.no_new_version:FR:Félicitations, vous avez déjà la dernière version.
+version_dialog.no_new_version:DE:Gratulation, sie haben schon die aktuellste Version.
+version_dialog.no_new_version:ES:Felicitaciones, tienes la última versión.
 
 version_dialog.new_version_title:EN:New version available
 version_dialog.new_version_title:FR:Nouvelle version disponible
+version_dialog.new_version_title:DE:Neu Version verfügbar
+version_dialog.new_version_title:ES:Nueva versión disponible
 
 version_dialog.new_version:EN:A new version of muCommander is available.
 version_dialog.new_version:FR:Une nouvelle version de muCommander est disponible.
+version_dialog.new_version:DE:Eine neue Version des muCommander ist verfügbar.
+version_dialog.new_version:ES:Una nueva versión de muCommander está disponible.
 
 version_dialog.new_version_url:EN:A new version of muCommander is available at %1.
 version_dialog.new_version_url:FR:Une nouvelle version de muCommander est disponible à %1.
+version_dialog.new_version_url:DE:Eine neue Version des muCommander ist bei %1 erhältlich.
+version_dialog.new_version_url:ES:Una nueva versión de muCommander está disponible en %1.
 
 version_dialog.not_available_title:EN:Server not reachable
 version_dialog.not_available_title:FR:Serveur indisponible
+version_dialog.not_available_title:DE:Server nicht erreichbar
+version_dialog.not_available_title:ES:El servidor no está disponible
 
 version_dialog.not_available:EN:Unable to get version information from server.
 version_dialog.not_available:FR:L'information de version n'a pas pu être récupérée.
+version_dialog.not_available:DE:Kann die Versionsinformation nicht vom Server laden.
+version_dialog.not_available:ES:Imposible obtener la versión desde el servidor.
 
 version_dialog.download:EN:$[download]
 
@@ -455,15 +684,23 @@ version_dialog.download:EN:$[download]
 
 quit_dialog.title:EN:Quit muCommander
 quit_dialog.title:FR:Quitter muCommander
+quit_dialog.title:DE:muCommander beenden
+quit_dialog.title:ES:Salir de muCommander
 
 quit_dialog.desc:EN:Close all windows and quit muCommander ? 
 quit_dialog.desc:FR:Fermer toutes les fenêtres et quitter muCommander ?
+quit_dialog.desc:DE:Alle Fenster schließen und muCommander beenden ?
+quit_dialog.desc:ES:¿Desea cerrar todas las ventanas y salir de muCommander?
 
 quit_dialog.show_next_time:EN:Show next time
 quit_dialog.show_next_time:FR:Afficher la prochaine fois
+quit_dialog.show_next_time:DE:Nächstes Mal anzeigen
+quit_dialog.show_next_time:ES:Mostrar la próxima vez
 
 quit_dialog.quit:EN:Quit
 quit_dialog.quit:FR:Quitter
+quit_dialog.quit:DE:Beenden
+quit_dialog.quit:ES:Salir
 
 
 ######################
@@ -472,6 +709,8 @@ quit_dialog.quit:FR:Quitter
 
 destination_dialog.file_exists_action:EN:Default action when file exists
 destination_dialog.file_exists_action:FR:Action par défaut lorsqu'un fichier existe
+destination_dialog.file_exists_action:DE:Standard Aktion wenn Datei existiert
+destination_dialog.file_exists_action:ES:Acción por defecto cuando el fichero existe
 
 
 ########
@@ -480,24 +719,38 @@ destination_dialog.file_exists_action:FR:Action par défaut lorsqu'un fichier ex
 
 copy_dialog.copy:EN:Copy
 copy_dialog.copy:FR:Copier
+copy_dialog.copy:DE:Kopieren
+copy_dialog.copy:ES:Copiar
 
 copy_dialog.destination:EN:Copy selected file(s) to
 copy_dialog.destination:FR:Copier les fichiers sélectionnés dans
+copy_dialog.destination:DE:Kopiere markierte Datei(en) nach
+copy_dialog.destination:ES:Copiar fichero(s) a
 
 copy_dialog.error_title:EN:Copy error
 copy_dialog.error_title:FR:Erreur de copie
+copy_dialog.error_title:DE:Kopierfehler
+copy_dialog.error_title:ES:Error al copiar
 
 copy_dialog.copying:EN:Copying files
 copy_dialog.copying:FR:Copie en cours
+copy_dialog.copying:DE:Kopiere Dateien
+copy_dialog.copying:ES:Copiando
 
 #copy.error_on_file:EN:An error occurred while copying %1
 #copy.error_on_file:FR:Une erreur est survenue lors de la copie de %1
+#copy.error_on_file:DE:Ein Fehler trat beim Kopieren von %1 auf
+#copy.error_on_file:ES:Ha ocurrido un error al copiar %1
 
 #copy.cannot_copy_file:EN:Unable to copy file %1
 #copy.cannot_copy_file:FR:Impossible de copier le fichier %1
+#copy.cannot_copy_file:DE:Kann Datei %1 nicht kopieren
+#copy.cannot_copy_file:ES:Imposible copiar el fichero %1
 
 copy.copying_file:EN:Copying %1
 copy.copying_file:FR:Copie de %1 en cours
+copy.copying_file:DE:Kopiere %1
+copy.copying_file:ES:Copiando %1
 
 
 #########
@@ -506,27 +759,43 @@ copy.copying_file:FR:Copie de %1 en cours
 
 unzip_dialog.unzip:EN:Unzip
 unzip_dialog.unzip:FR:Dézipper
+unzip_dialog.unzip:DE:Entpacken
+unzip_dialog.unzip:ES:Descomprimir
 
 unzip_dialog.destination:EN:Unzip selected file(s) to
 unzip_dialog.destination:FR:Décompresser les fichiers selectionnés dans
+unzip_dialog.destination:DE:Entpacke markierte Datei(en) nach
+unzip_dialog.destination:ES:Descomprimir fichero(s) seleccionado(s) en
 
 unzip_dialog.error_title:EN:Unzip error
 unzip_dialog.error_title:FR:Erreur de décompression
+unzip_dialog.error_title:DE:Fehler beim Entpacken
+unzip_dialog.error_title:ES:Error al descomprimir
 
 unzip_dialog.unzipping:EN:Unzipping files
 unzip_dialog.unzipping:FR:Décompression en cours
+unzip_dialog.unzipping:DE:Entpacke Dateien
+unzip_dialog.unzipping:ES:Descomprimiendo
 
 #unzip.error_on_file:EN:An error occurred while unzipping %1
 #unzip.error_on_file:FR:Une erreur est survenue lors de la décompression de %1
+#unzip.error_on_file:DE:Ein Fehler trat beim Entpacken von %1 auf
+#unzip.error_on_file:ES:Un error ha ocurrido al descomprimir %1
 
 #unzip.cannot_unzip_file:EN:Unable to unzip file %1
 #unzip.cannot_unzip_file:FR:Impossible de décompresser le fichier %1
+#unzip.cannot_unzip_file:DE:Kann Dateie %1 nicht entpacken
+#unzip.cannot_unzip_file:ES:Imposible descomprimir el fichero %1
 
 unzip.unzipping_file:EN:Unzipping %1
 unzip.unzipping_file:FR:Décompression de %1 en cours
+unzip.unzipping_file:DE:Entpacke %1
+unzip.unzipping_file:ES:Descomprimiendo %1
 
 unzip.unable_to_open_zip:EN:Unable to open zip file %1.
 unzip.unable_to_open_zip:FR:Erreur lors de l'ouverture du fichier zip %1.
+unzip.unable_to_open_zip:DE:Kann ZIP Datei %1 nicht öffnen.
+unzip.unable_to_open_zip:ES:Error al abrir el fichero zip %1.
 
 
 #######
@@ -535,9 +804,13 @@ unzip.unable_to_open_zip:FR:Erreur lors de l'ouverture du fichier zip %1.
 
 zip.compressing_file:EN:Compressing %1
 zip.compressing_file:FR:Compression de %1 en cours
+zip.compressing_file:DE:Packe Datei %1
+zip.compressing_file:ES:Comprimiendo %1
 
 zip.error_on_file:EN:Error while compressing %1
 zip.error_on_file:FR:Erreur lors de la compression de %1
+zip.error_on_file:DE:Fehler beim Packen von %1
+zip.error_on_file:ES:Error al comprimir %1
 
 
 ########
@@ -546,29 +819,45 @@ zip.error_on_file:FR:Erreur lors de la compression de %1
 
 move_dialog.rename:EN:Rename
 move_dialog.rename:FR:Renommer
+move_dialog.rename:DE:Umbenennen
+move_dialog.rename:ES:Renombrar
 
 move_dialog.move:EN:Move
 move_dialog.move:FR:Déplacer
+move_dialog.move:DE:Verschieben
+move_dialog.move:ES:Mover
 
 move_dialog.rename_description:EN:Rename file to
 move_dialog.rename_description:FR:Renommer en
+move_dialog.rename_description:DE:Umbenennen nach
+move_dialog.rename_description:ES:Renombrar fichero a
 
 move_dialog.move_description:EN:Move to
 move_dialog.move_description:FR:Déplacer vers
+move_dialog.move_description:DE:Verschieben nach
+move_dialog.move_description:ES:Mover a
 
 move_dialog.error_title:EN:Move error
 move_dialog.error_title:FR:Erreur de déplacement
+move_dialog.error_title:DE:Fehler beim Verschieben
+move_dialog.error_title:ES:Error de movimiento # FIX
 
 #move_dialog.same_source_destination:EN:$[copy_dialog.same_source_destination]
 
 #move_dialog.cannot_move_to_itself:EN:Cannot move files to a subfolder.
 #move_dialog.cannot_move_to_itself:FR:Impossible de déplacer les fichiers vers un sous-répertoire.
+#move_dialog.cannot_move_to_itself:DE:Kann Dateien nicht in Unterordner verschieben.
+#move_dialog.cannot_move_to_itself:ES:Imposible mover los ficheros al subdirectorio.
 
 move_dialog.moving:EN:Moving files
 move_dialog.moving:FR:Déplacement en cours
+move_dialog.moving:DE:Verschiebe Dateien
+move_dialog.moving:ES:Moviendo ficheros
 
 move.moving_file:EN:Moving %1
 move.moving_file:FR:Déplacement de %1 en cours
+move.moving_file:DE:Verschiebe %1
+move.moving_file:ES:Moviendo %1
 
 
 #################
@@ -579,16 +868,23 @@ download_dialog.download:EN:$[download]
 
 download_dialog.downloading:EN:Downloading
 download_dialog.downloading:FR:Téléchargement en cours
+download_dialog.downloading:DE:Downloaden
+download_dialog.downloading:ES:Descargando
 
 download_dialog.description:EN:Download file to
 download_dialog.description:FR:Télécharger le fichier dans
+download_dialog.description:DE:Downloaden nach
+download_dialog.description:ES:Descargar fichero a
 
 download_dialog.error_title:EN:Download error
 download_dialog.error_title:FR:Erreur de téléchargement
+download_dialog.error_title:DE:Fehler beim Download
+download_dialog.error_title:ES:Error de descarga
 
 download.downloading_file:EN:Downloading %1
 download.downloading_file:FR:Téléchargement de %1 en cours
-
+download.downloading_file:DE:Downloade %1
+download.downloading_file:ES:Descargando %1
 
 
 ##########
@@ -597,30 +893,48 @@ download.downloading_file:FR:Téléchargement de %1 en cours
 
 delete_dialog.delete:EN:Delete
 delete_dialog.delete:FR:Supprimer
+delete_dialog.delete:DE:Löschen
+delete_dialog.delete:ES:Eliminar
 
 delete_dialog.confirmation:EN:Permanently delete selected file(s) ?
 delete_dialog.confirmation:FR:Définitivement supprimer les fichiers sélectionnés ?
+delete_dialog.confirmation:DE:Markierte Datei(en) permanent löschen ?
+delete_dialog.confirmation:ES:¿Eliminar permanentemene el/los archivo(s) seleccionado(s)?
 
 delete_dialog.deleting:EN:Deleting
 delete_dialog.deleting:FR:Suppression en cours
+delete_dialog.deleting:DE:Löschen
+delete_dialog.deleting:ES:Eliminando
 
 delete_dialog.error_title:EN:Delete error
 delete_dialog.error_title:FR:Erreur de suppression
+delete_dialog.error_title:DE:Fehler beim Löschen
+delete_dialog.error_title:ES:Error al eliminar
 
 delete.deleting_file:EN:Deleting %1
 delete.deleting_file:FR:Suppression %1 en cours
+delete.deleting_file:DE:Lösche %1
+delete.deleting_file:ES:Eliminando %1
 
 delete.symlink_warning_title:EN:Symlink found
 delete.symlink_warning_title:FR:Lien symbolique
+delete.symlink_warning_title:DE:Verknüpfung gefunden
+delete.symlink_warning_title:ES:Enlace simbólico encontrado
 
 delete.symlink_warning:EN:This file looks like a symbolic link:\n\n  File: %1\n  Links to: %2\n\nDelete symlink only or\nFollow symlink and delete folder (CAUTION) ?
 delete.symlink_warning:FR:Ce fichier a l'air d'être un lien symbolique:\n\n  Fichier: %1\n  Pointe vers: %2\n\nSupprimer le lien seulement ou\nSuivre le lien symbolique et supprimer le répertoire (ATTENTION) ?
+delete.symlink_warning:DE:Diese Datei scheint ein Symbolic Link zu sein:\n\n  Datei: %1\n  Verlinktt nach: %2\n\nLink löschen oder dem \nLink folgen und Ordner löschen (VORSICHT) ?
+delete.symlink_warning:ES:El fichero parece un enlace simbólico:\n\n Fichero: %1\n Enlace a: %2\n\n¿Eliminar enlace simbólico sólo o\nseguir el enlace y elimiar el directorio (PRECAUCIÓN)?
 
 delete.delete_link_only:EN:Delete link
 delete.delete_link_only:FR:Supprimer le lien
+delete.delete_link_only:DE:Link löschen
+delete.delete_link_only:ES:Eliminar enlace
 
 delete.delete_linked_folder:EN:Delete folder
 delete.delete_linked_folder:FR:Supprimer le répertoire
+delete.delete_linked_folder:DE:Ordner löschen
+delete.delete_linked_folder:ES:Eliminar directorio
 
 
 #########
@@ -629,54 +943,88 @@ delete.delete_linked_folder:FR:Supprimer le répertoire
 
 email_dialog.title:EN:Email files
 email_dialog.title:FR:Envoyer par email
+email_dialog.title:DE:Dateien mailen
+email_dialog.title:ES:Enviar por correo
 
 email_dialog.prefs_not_set_title:EN:Mail not configured
 email_dialog.prefs_not_set_title:FR:Paramètres absents
+email_dialog.prefs_not_set_title:DE:eMail nicht konfiguriert
+email_dialog.prefs_not_set_title:ES:Correo no configurado
 
 email_dialog.prefs_not_set:EN:You need to set your mail parameters first.
 email_dialog.prefs_not_set:FR:Vous devez d'abord configurer vos paramètres email.
+email_dialog.prefs_not_set:DE:Nehmen sie erst die eMail Einstellungen vor.
+email_dialog.prefs_not_set:ES:Debes ajustar los parámatros de correo primero.
 
 email_dialog.from:EN:From
 email_dialog.from:FR:De
+email_dialog.from:DE:Von
+email_dialog.from:ES:De
 
 email_dialog.to:EN:To
 email_dialog.to:FR:A
+email_dialog.to:DE:An
+email_dialog.to:ES:A
 
 email_dialog.subject:EN:Subject
 email_dialog.subject:FR:Sujet
+email_dialog.subject:DE:Betreff
+email_dialog.subject:ES:Asunto
 
 email_dialog.send:EN:Send
 email_dialog.send:FR:Envoyer
+email_dialog.send:DE:Senden
+email_dialog.send:ES:Enviar
 
 email_dialog.error_title:EN:Email files error
 email_dialog.error_title:FR:Erreur d'envoi
+email_dialog.error_title:DE:Fehler beim Mailen der Dateien
+email_dialog.error_title:ES:Error de envío
 
 email_dialog.read_error:EN:Unable to read files in subfolders.
 email_dialog.read_error:FR:Les fichiers ne peuvent être lus.
+email_dialog.read_error:DE:Kann Dateien im Unterordner nicht lesen.
+email_dialog.read_error:ES:Imposible leer ficheros en subdirectorios.
 
 email_dialog.nb_files:EN:%1 file(s)
 email_dialog.nb_files:FR:%1 fichier(s)
+email_dialog.nb_files:DE:%1 Datei(en)
+email_dialog.nb_files:ES:%1 fichero(s)
 
 email_dialog.sending:EN:Sending files
 email_dialog.sending:FR:Envoi en cours
+email_dialog.sending:DE:Sende Dateien
+email_dialog.sending:ES:Enviando ficheros
 
 email.sending_file:EN:Sending %1
 email.sending_file:FR:Envoi de %1
+email.sending_file:DE:Sende %1
+email.sending_file:ES:Enviando %1
 
 email.connecting_to_server:EN:Connecting to %1
 email.connecting_to_server:FR:Connexion à %1
+email.connecting_to_server:DE:Verbinde nach %1
+email.connecting_to_server:ES:Conectando a %1
 
 email.server_unavailable:EN:Unable to contact mail server %1, check your mail preferences or try again later.
 email.server_unavailable:FR:Echec de la connexion au serveur %1, vérifiez vos préférences de mail ou réessayez plus tard.
+email.server_unavailable:DE:Kann Verbindung zu Server %1 nicht herstellen, überprüfen sie die eMail Einstellungen oder versuchen sie es später.
+email.server_unavailable:ES:Imposible conectar al servidor %1, comprueba tus preferencias de correo o inténtalo más tarde.
 
 email.connection_closed:EN:Connection closed by server, mail not sent.
 email.connection_closed:FR:Connexion fermée par le serveur, le message n'a pas été envoyé.
+email.connection_closed:DE:Verbindung vom Server unterbrochen, eMail nicht gesendet.
+email.connection_closed:ES:Conexión cerrada por el servidor, el mensaje no ha sido enviado.
 
 email.goodbye_failed:EN:Error while closing connection, mail may not have been sent.
 email.goodbye_failed:FR:Erreur lors de la fermeture de connexion, le message n'a peut-être pas été envoyé.
+email.goodbye_failed:DE:Fehler beim Schließen der Verbindung, etvl. wurde die eMail nicht gesendet.
+email.goodbye_failed:ES:Error al cerrar la conexión, el mensaje no ha sido enviado.
 
 email.send_file_error:EN:Unable to send file %1, mail not sent.
 email.send_file_error:FR:Erreur lors de l'envoi du fichier %1, le message n'a pas été envoyé.
+email.send_file_error:DE:Kann Datei %1 nicht senden, eMail nicht gesendet.
+email.send_file_error:ES:Imposible enviar el fichero %1, el mensaje no ha sido enviado.
 
 
 #####################################
@@ -685,6 +1033,8 @@ email.send_file_error:FR:Erreur lors de l'envoi du fichier %1, le message n'a pa
 
 file_exists_dialog.title:EN:File already exists in destination
 file_exists_dialog.title:FR:Le fichier existe dans la destination
+file_exists_dialog.title:DE:Datei existiert schon am Zielort
+file_exists_dialog.title:ES:El fichero ya existe en el destino
 
 
 #########################
@@ -693,33 +1043,53 @@ file_exists_dialog.title:FR:Le fichier existe dans la destination
 
 file_selection_dialog.mark:EN:Mark
 file_selection_dialog.mark:FR:Marquer
+file_selection_dialog.mark:DE:Markieren
+file_selection_dialog.mark:ES:Marcar
 
 file_selection_dialog.unmark:EN:Unmark
 file_selection_dialog.unmark:FR:Dé-marquer
+file_selection_dialog.unmark:DE:Demarkieren
+file_selection_dialog.unmark:ES:Desmarcar
 
 file_selection_dialog.mark_description:EN:Mark files whose filename:
 file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom:
+file_selection_dialog.mark_description:DE:Markiere Dateien deren Name:
+file_selection_dialog.mark_description:ES:Marcar ficheros cuyo nombre:
 
 file_selection_dialog.unmark_description:EN:Unmark files whose filename:
 file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom:
+file_selection_dialog.unmark_description:DE:Demarkiere deren Name:
+file_selection_dialog.unmark_description:ES:Desmarcar ficheros cuyo nombre:
 
 file_selection_dialog.contains:EN:Contains
 file_selection_dialog.contains:FR:Contient
+file_selection_dialog.contains:DE:enthält
+file_selection_dialog.contains:ES:Contiene
 
 file_selection_dialog.starts_with:EN:Starts with
 file_selection_dialog.starts_with:FR:Commence par
+file_selection_dialog.starts_with:DE:anfängt mit
+file_selection_dialog.starts_with:ES:Comienza por
 
 file_selection_dialog.ends_with:EN:Ends with
 file_selection_dialog.ends_with:FR:Termine par
+file_selection_dialog.ends_with:DE:endet mit
+file_selection_dialog.ends_with:ES:Termina por
 
 file_selection_dialog.is:EN:Is
 file_selection_dialog.is:FR:Est
+file_selection_dialog.is:DE:ist
+file_selection_dialog.is:ES:Es
 
 file_selection_dialog.case_sensitive:EN:Case sensitive
 file_selection_dialog.case_sensitive:FR:Respecter la casse
+file_selection_dialog.case_sensitive:DE:Groß-/Kleinschreibung beachten
+file_selection_dialog.case_sensitive:ES:Sensible a las mayúsculas
 
 file_selection_dialog.include_folders:EN:Include folders
 file_selection_dialog.include_folders:FR:Inclure les dossiers
+file_selection_dialog.include_folders:DE:Ordner einschliessen
+file_selection_dialog.include_folders:ES:Incluir directorios
 
 
 #########
@@ -728,21 +1098,33 @@ file_selection_dialog.include_folders:FR:Inclure les dossiers
 
 mkdir_dialog.title:EN:Make directory
 mkdir_dialog.title:FR:Créer répertoire
+mkdir_dialog.title:DE:Ordner erstellen
+mkdir_dialog.title:ES:Crear directorio
 
 mkdir_dialog.description:EN:Create directory
 mkdir_dialog.description:FR:Créer le répertoire
+mkdir_dialog.description:DE:Ordner erstellen
+mkdir_dialog.description:ES:Crear directorio
 
 mkdir_dialog.error_title:EN:Make dir error
 mkdir_dialog.error_title:FR:Erreur de création
+mkdir_dialog.error_title:DE:Fehler beim Erstellen des Ordners
+mkdir_dialog.error_title:ES:Error al crear el directorio
 
 mkdir_dialog.create:EN:Create
 mkdir_dialog.create:FR:Créer
+mkdir_dialog.create:DE:Erstelle
+mkdir_dialog.create:ES:Crear
 
 mkdir_dialog.invalid_path:EN:Invalid path: %1
 mkdir_dialog.invalid_path:FR:Chemin invalide: %1
+mkdir_dialog.invalid_path:DE:Ungültiger Pfad: %1
+mkdir_dialog.invalid_path:ES:Dirección inválida: %1
 
 mkdir_dialog.dir_already_exists:EN:Directory %1 already exists.
 mkdir_dialog.dir_already_exists:FR:Le répertoire %1 existe déjà.
+mkdir_dialog.dir_already_exists:DE:Ordner %1 existiert bereits.
+mkdir_dialog.dir_already_exists:ES:El directorio %1 ya existe.
 
 
 ################
@@ -751,13 +1133,19 @@ mkdir_dialog.dir_already_exists:FR:Le répertoire %1 existe déjà.
 
 progress_bar.starting:EN:Transfer starting...
 progress_bar.starting:FR:Démarrage du transfert...
+progress_bar.starting:DE:Transfer startet...
+progress_bar.starting:ES:Comenzando transferencia...
 
 progress_bar.hide:EN:Hide
 progress_bar.hide:FR:Cacher
+progress_bar.hide:DE:Verstecken
+progress_bar.hide:ES:Ocultar
 
 # %1 is the amount of data transferred (already formatted+localized) and %2 the transfer speed.
 progress_bar.transferred:EN:Transferred %1 at %2/s.
 progress_bar.transferred:FR:%1 transférés à %2/s.
+progress_bar.transferred:DE:Transferiert %1 von %2/s.
+progress_bar.transferred:ES:%1 transferidos a %2/s.
 
 
 #####################
@@ -768,24 +1156,38 @@ properties_dialog.properties:EN:$[file_menu.properties]
 
 properties_dialog.file_properties:EN:%1 Properties
 properties_dialog.file_properties:FR:Propriétés de %1
+properties_dialog.file_properties:DE:Eigenschaften von %1
+properties_dialog.file_properties:ES:%1 Propiedades
 
 properties_dialog.contents:EN:Contents
 properties_dialog.contents:FR:Contenu
+properties_dialog.contents:DE:Inhalt
+properties_dialog.contents:ES:Contenido
 
 properties_dialog.location:EN:Location
 properties_dialog.location:FR:Emplacement
+properties_dialog.location:DE:Ort
+properties_dialog.location:ES:Localización
 
 properties_dialog.size:EN:Size
 properties_dialog.size:FR:Taille
+properties_dialog.size:DE:Größe
+properties_dialog.size:ES:Tamaño
 
 properties_dialog.nb_files:EN:%1 file(s)
 properties_dialog.nb_files:FR:%1 fichier(s)
+properties_dialog.nb_files:DE:%1 Datei(en)
+properties_dialog.nb_files:ES:%1 fichero(s)
 
 properties_dialog.nb_folders:EN:%1 folder(s)
 properties_dialog.nb_folders:FR:%1 dossier(s)
+properties_dialog.nb_folders:DE:%1 Ordner
+properties_dialog.nb_folders:ES:%1 directorio(s)
 
 properties_dialog.calculating:EN:calculating...
 properties_dialog.calculating:FR:calcul en cours...
+properties_dialog.calculating:DE:Kalkuliere...
+properties_dialog.calculating:ES:Calculando..
 
 
 ##############
@@ -796,15 +1198,23 @@ run_dialog.run_command:EN:$[file_menu.run_command]
 
 run_dialog.run_command_description:EN:Run in current folder
 run_dialog.run_command_description:FR:Exécuter dans le répertoire courant
+run_dialog.run_command_description:DE:Ausführen im momentanen Ordner
+run_dialog.run_command_description:ES:Ejecutar en el directorio actual
 
 run_dialog.command_output:EN:Command output
 run_dialog.command_output:FR:Sortie de la commande
+run_dialog.command_output:DE:Befehlsausgabe
+run_dialog.command_output:ES:Salida del comando
 
 run_dialog.run:EN:Run
 run_dialog.run:FR:Exécuter
+run_dialog.run:DE:Ausführen
+run_dialog.run:ES:Ejecutar
 
 run_dialog.stop:EN:Stop
 run_dialog.stop:FR:Arrêter
+run_dialog.stop:DE:Stopp
+run_dialog.stop:ES:Parar
 
 
 #########################
@@ -815,33 +1225,53 @@ server_connect_dialog.server_connect:EN:$[file_menu.server_connect]
 
 server_connect_dialog.server_type:EN:Connection type
 server_connect_dialog.server_type:FR:Type de connexion
+server_connect_dialog.server_type:DE:Verbindungstyp
+server_connect_dialog.server_type:ES:Tipo de conexión
 
 server_connect_dialog.server:EN:Server
 server_connect_dialog.server:FR:Serveur
+server_connect_dialog.server:DE:Server
+server_connect_dialog.server:ES:Servidor
 
 server_connect_dialog.username:EN:Username
 server_connect_dialog.username:FR:Nom d'utilisateur
+server_connect_dialog.username:DE:Benutzername
+server_connect_dialog.username:ES:Nombre de usuario
 
 server_connect_dialog.password:EN:Password
 server_connect_dialog.password:FR:Mot de passe
+server_connect_dialog.password:DE:Paßwort
+server_connect_dialog.password:ES:Contraseña
 
 server_connect_dialog.initial_dir:EN:Initial directory
 server_connect_dialog.initial_dir:FR:Répertoire initial
+server_connect_dialog.initial_dir:DE:Startordner
+server_connect_dialog.initial_dir:ES:Directorio inicial
 
 server_connect_dialog.port:EN:Port
 server_connect_dialog.port:FR:Port
+server_connect_dialog.port:DE:Port
+server_connect_dialog.port:ES:Puerto
 
 server_connect_dialog.server_url:EN:Server URL
 server_connect_dialog.server_url:FR:URL serveur
+server_connect_dialog.server_url:DE:URL Server
+server_connect_dialog.server_url:ES:Dirección del servidor
 
 server_connect_dialog.http_url:EN:Web site URL
 server_connect_dialog.http_url:FR:URL site web
+server_connect_dialog.http_url:DE:URL Internetseite
+server_connect_dialog.http_url:ES:Dirección del sitio web
 
 server_connect_dialog.connect:EN:Connect
 server_connect_dialog.connect:FR:Se connecter
+server_connect_dialog.connect:DE:Verbinden
+server_connect_dialog.connect:ES:Conectar
 
 server_connect_dialog.auth_error:EN:Invalid login or password.
 server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
+server_connect_dialog.auth_error:DE:Ungültiger Login oder Paßwort.
+server_connect_dialog.auth_error:ES:Nombre o contraseña inválido.
 
 
 ###############
@@ -850,9 +1280,13 @@ server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
 
 ftp_connect.passive_mode:EN:Enable passive mode
 ftp_connect.passive_mode:FR:Activer le mode passif
+ftp_connect.passive_mode:DE:Passive Mode aktivieren
+ftp_connect.passive_mode:ES:Activar modo pasivo
 
 ftp_connect.anonymous_user:EN:Anonymous user
 ftp_connect.anonymous_user:FR:Utilisateur anonyme
+ftp_connect.anonymous_user:DE:Anonymer Benutzer
+ftp_connect.anonymous_user:ES:Usuario anónimo
 
 
 ##############
@@ -861,20 +1295,30 @@ ftp_connect.anonymous_user:FR:Utilisateur anonyme
 
 auth_dialog.title:EN:Authentication
 auth_dialog.title:FR:Authentification
+auth_dialog.title:DE:Authentifizierung
+auth_dialog.title:ES:Autentificación
 
 auth_dialog.desc:EN:Please enter a login and password:
 auth_dialog.desc:FR:Veuillez entrer un identifiant et un mot de passe:
+auth_dialog.desc:DE:Bitte Login und Passwort eingeben:
+auth_dialog.desc:ES:Por favor, introduzca un nombre y una contraseña:
 
 auth_dialog.server:EN:Server
 auth_dialog.server:FR:Serveur
+auth_dialog.server:DE:Server
+auth_dialog.server:ES:Servidor
 
 auth_dialog.login:EN:Login
 auth_dialog.login:FR:Identifiant
+auth_dialog.login:DE:Login
+auth_dialog.login:ES:Identificación
 
 auth_dialog.password:EN:$[server_connect_dialog.password]
 
 auth_dialog.error_was:EN:Error was: %1
 auth_dialog.error_was:FR:L'erreur était: %1
+auth_dialog.error_was:DE:Fehler war: %1
+auth_dialog.error_was:ES:El error era: %1
 
 
 #######
@@ -883,24 +1327,39 @@ auth_dialog.error_was:FR:L'erreur était: %1
 
 zip_dialog.title:EN:Zip files
 zip_dialog.title:FR:Zipper fichiers
+zip_dialog.title:DE:Dateien packen
+zip_dialog.title:ES:Ficheros zip
 
 zip_dialog.zipping:EN:Zipping files
 zip_dialog.zipping:FR:Compression en cours
+zip_dialog.zipping:DE:Packe Dateien
+zip_dialog.zipping:ES:Comprimiendo
 
 zip_dialog.error_title:EN:Zip error
 zip_dialog.error_title:FR:Erreur de compression
+zip_dialog.error_title:DE:Fehler beim Packen
+zip_dialog.error_title:ES:Error de compresión
 
 zip_dialog.cannot_write:EN:Unable to create zip file in destination folder.
 zip_dialog.cannot_write:FR:Impossible de créer le fichier zip dans le dossier de destination.
+zip_dialog.cannot_write:DE:Kann ZIP Datei nicht im Zielordner erstellen.
+zip_dialog.cannot_write:ES:Imposible crear el fichero zip en el direcotorio de destino.
 
 zip_dialog_description:EN:Add selected files to
 zip_dialog_description:FR:Ajouter les fichiers sélectionnés dans
+zip_dialog_description:DE:Markierte Dateien hinzufügen zu
+zip_dialog_description:ES:Añadir los ficheros seleccionados a
 
 zip_dialog.comment:EN:Comment (optional)
 zip_dialog.comment:FR:Commentaire (optionnel)
+zip_dialog.comment:DE:Kommentar (optional)
+zip_dialog.comment:ES:Commentaire (optionnel)
 
 zip_dialog.file_already_exists:EN:%1 already exists in destination folder.
 zip_dialog.file_already_exists:FR:%1 existe déjà dans le dossier de destination.
+zip_dialog.file_already_exists:DE:%1 existiert bereits im Zielordner.
+zip_dialog.file_already_exists:ES:%1 existe dÃ©jÃ  en el directorio de destino.
+
 
 ###############
 # File viewer #
@@ -908,21 +1367,33 @@ zip_dialog.file_already_exists:FR:%1 existe déjà dans le dossier de destinatio
 
 file_viewer.view_error_title:EN:View error
 file_viewer.view_error_title:FR:Erreur d'affichage
+file_viewer.view_error_title:DE:Fehler beim Betrachten
+file_viewer.view_error_title:ES:Error de vista
 
 file_viewer.view_error:EN:Unable to view file.
 file_viewer.view_error:FR:Impossible de voir le fichier.
+file_viewer.view_error:DE:Datei kann nicht betrachtet werden.
+file_viewer.view_error:ES:Imposible ver el fichero.
 
 file_viewer.file_menu:EN:File
 file_viewer.file_menu:FR:Fichier
+file_viewer.file_menu:DE:Datei
+file_viewer.file_menu:ES:Archivo
 
 file_viewer.close:EN:Close
 file_viewer.close:FR:Fermer
+file_viewer.close:DE:Schließen
+file_viewer.close:ES:Cerrar
 
 file_viewer.large_file_warning:EN:This file may be too large for this operation.
 file_viewer.large_file_warning:FR:Ce fichier est peut-être trop large pour cette operation.
+file_viewer.large_file_warning:DE:Diese Datei könnte für diese Operation zu groß sein.
+file_viewer.large_file_warning:ES:Este fichero puede que sea demasiado largo para llevar a cabo la operación.
 
 file_viewer.open_anyway:EN:Open anyway
 file_viewer.open_anyway:FR:Ignorer and ouvrir
+file_viewer.open_anyway:DE:Trotzdem öffnen
+file_viewer.open_anyway:ES:Ignorar y abrir
 
 
 ###############
@@ -931,12 +1402,18 @@ file_viewer.open_anyway:FR:Ignorer and ouvrir
 
 text_viewer.edit:EN:Edit
 text_viewer.edit:FR:Edition
+text_viewer.edit:DE:Bearbeiten
+text_viewer.edit:ES:Editar
 
 text_viewer.copy:EN:Copy
 text_viewer.copy:FR:Copier
+text_viewer.copy:DE:Kopieren
+text_viewer.edit:ES:Copiar
 
 text_viewer.select_all:EN:Select All
 text_viewer.select_all:FR:Tout sélectionner
+text_viewer.select_all:DE:Alles markieren
+text_viewer.select_all:ES:Seleccionar todo
 
 
 ###############
@@ -945,18 +1422,28 @@ text_viewer.select_all:FR:Tout sélectionner
 
 image_viewer.controls_menu:EN:Controls
 image_viewer.controls_menu:FR:Contrôles
+image_viewer.controls_menu:DE:Kontrollen
+image_viewer.controls_menu:ES:Controles
 
 image_viewer.zoom_in:EN:Zoom in
 image_viewer.zoom_in:FR:Zoomer
+image_viewer.zoom_in:DE:Hinein zoomen
+image_viewer.zoom_in:ES:Acercar
 
 image_viewer.zoom_out:EN:Zoom out
 image_viewer.zoom_out:FR:Dézoomer
+image_viewer.zoom_out:DE:Heraus zoomen
+image_viewer.zoom_out:ES:Alejar
 
 #image_viewer.previous_image:EN:Previous image
 #image_viewer.previous_image:FR:Image précédente
+#image_viewer.previous_image:DE:Vorheriges Bild
+#image_viewer.previous_image:ES:Anterior
 
 #image_viewer.next_image:EN:Next image
 #image_viewer.next_image:FR:Image suivante
+#image_viewer.next_image:DE:Nächstes Bild
+#image_viewer.next_image:ES:Siguiente
 
 
 ###############
@@ -965,27 +1452,43 @@ image_viewer.zoom_out:FR:Dézoomer
 
 file_editor.edit_error_title:EN:Edit error
 file_editor.edit_error_title:FR:Erreur d'édition
+file_editor.edit_error_title:DE:Fehler beim Bearbeiten
+file_editor.edit_error_title:ES:Error al editar
 
 file_editor.edit_error:EN:Unable to edit file.
 file_editor.edit_error:FR:Impossible d'éditer le fichier.
+file_editor.edit_error:DE:Kann Datei nicht bearbeiten.
+file_editor.edit_error:ES:Imposible editar el fichero.
 
 file_editor.save:EN:Save
 file_editor.save:FR:Enregistrer
+file_editor.save:DE:Speichern
+file_editor.save:ES:Salvar
 
 file_editor.save_as:EN:Save as...
 file_editor.save_as:FR:Enregistrer sous...
+file_editor.save_as:DE:Speichern als...
+file_editor.save_as:ES:Salvar como...
 
 file_editor.save_warning:EN:Save changes made to this file before closing ?
 file_editor.save_warning:FR:Enregistrer les modifications avant de fermer ce fichier ?
+file_editor.save_warning:DE:Änderungen an der Datei speichern vor dem Schließen ?
+file_editor.save_warning:ES:¿Desea guardar los cambios realizados a este fichero antes de salir?
 
 file_editor.cannot_write:EN:Unable to write file.
 file_editor.cannot_write:FR:Impossible d'écrire le fichier. 
+file_editor.cannot_write:DE:Kann Datei nicht schreiben.
+file_editor.cannot_write:ES:Imposible escribir el fichero. 
 
 file_editor.write_error_title:EN:Write error
 file_editor.write_error_title:FR:Erreur d'écriture
+file_editor.write_error_title:DE:Schreibfehler
+file_editor.write_error_title:ES:Error de escritura
 
 file_editor.file_already_exists:EN:%1 already exists, do you want to replace it ?
 file_editor.file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
+file_editor.file_already_exists:DE:%1 existiert bereits, soll sie überschrieben werden ?
+file_editor.file_already_exists:ES:%1 ya existe , ¿desea reemplazarlo?
 
 file_editor.file_menu:EN:$[file_viewer.file_menu]
 
@@ -1004,9 +1507,13 @@ file_editor.open_anyway:EN:$[file_viewer.open_anyway]
 
 text_editor.cut:EN:Cut
 text_editor.cut:FR:Couper
+text_editor.cut:DE:Ausschneiden
+text_editor.cut:ES:Cortar
 
 text_editor.paste:EN:Paste
 text_editor.paste:FR:Coller
+text_editor.paste:DE:Einfügen
+text_editor.paste:ES:Pegar
 
 text_editor.edit:EN:$[text_viewer.edit]
 
@@ -1021,93 +1528,153 @@ text_editor.select_all:EN:$[text_viewer.select_all]
 
 shortcuts_dialog.navigation:EN:Navigation
 shortcuts_dialog.navigation:FR:Navigation
+shortcuts_dialog.navigation:DE:Navigation
+shortcuts_dialog.navigation:ES:Navigation
 
 shortcuts_dialog.navigation.change_left:EN:Change left folder
 shortcuts_dialog.navigation.change_left:FR:Changer le dossier de gauche
+shortcuts_dialog.navigation.change_left:DE:Linken Ordner ändern
+shortcuts_dialog.navigation.change_left:ES:Cambiar el directorio izquierdo
 
 shortcuts_dialog.navigation.change_right:EN:Change right folder
 shortcuts_dialog.navigation.change_right:FR:Changer le dossier de droite
+shortcuts_dialog.navigation.change_right:DE:Rechten Ordner ändern
+shortcuts_dialog.navigation.change_right:ES:Cambiar el directorio derecho
 
 shortcuts_dialog.navigation.tab:EN:Switch between left and right panels
 shortcuts_dialog.navigation.tab:FR:Basculer entre les dossiers de droite et de gauche
+shortcuts_dialog.navigation.tab:DE:Zwischen linken und rechten Fenster wechseln
+shortcuts_dialog.navigation.tab:ES:Cambiar entre los paneles izquierdo y derecho
 
 shortcuts_dialog.navigation.enter:EN:Enter folder / Enter archive / Execute
 shortcuts_dialog.navigation.enter:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
+shortcuts_dialog.navigation.enter:DE:Ordner öffnen / Archiv öffnen / Ausführen
+shortcuts_dialog.navigation.enter:ES:Entrar en el directorio / Entrar en el fichero / Ejecutar
 
 shortcuts_dialog.navigation.execute:EN:Execute selected file with system's file associations
 shortcuts_dialog.navigation.execute:FR:Exécuter le fichier sélectionné avec les associations de fichiers du système  
+shortcuts_dialog.navigation.execute:DE:Markierte Datei mit assoziiertem Programm öffnen
+shortcuts_dialog.navigation.execute:ES:Ejecutar el fichero seleccionado con la asosiación del sistema
 
 shortcuts_dialog.navigation.go_to_first:EN:Select first file in current folder
 shortcuts_dialog.navigation.go_to_first:FR:Selectionner le premier fichier du dossier
+shortcuts_dialog.navigation.go_to_first:DE:Zur ersten Datei momentanen Ordner springen
+shortcuts_dialog.navigation.go_to_first:ES:Seleccionar el primer fichero en el directorio actual
 
 shortcuts_dialog.navigation.go_to_last:EN:Select last file in current folder
 shortcuts_dialog.navigation.go_to_last:FR:Selectionner le dernier fichier du dossier
+shortcuts_dialog.navigation.go_to_last:DE:Zur letzte Datei im momentanen Ordner springen
+shortcuts_dialog.navigation.go_to_last:ES:Seleccionar el último fichero en el directorio actual
 
 shortcuts_dialog.view:EN:View
 shortcuts_dialog.view:FR:Vue
+shortcuts_dialog.view:DE:Ansicht
+shortcuts_dialog.view:ES:Ver
 
 shortcuts_dialog.view.go_to_parent:EN:Go to parent folder
 shortcuts_dialog.view.go_to_parent:FR:Remonter au dossier parent
+shortcuts_dialog.view.go_to_parent:DE:Zum übergeordneten Ordner gehen
+shortcuts_dialog.view.go_to_parent:ES:Ir al directorio padre
 
 shortcuts_dialog.view.go_back:EN:Go to previous folder
 shortcuts_dialog.view.go_back:FR:Aller au dossier précédent
+shortcuts_dialog.view.go_back:DE:Zum vorigen Ordner gehen
+shortcuts_dialog.view.go_back:ES:Ir al directorio anterior
 
 shortcuts_dialog.view.go_forward:EN:Go to next folder 
 shortcuts_dialog.view.go_forward:FR:Aller au dossier suivant
+shortcuts_dialog.view.go_forward:DE:Zum nächsten Ordner gehen 
+shortcuts_dialog.view.go_forward:ES:Ir al directorio siguiente
 
 shortcuts_dialog.view.swap_folders:EN:Swap left and right folders
 shortcuts_dialog.view.swap_folders:FR:Echanger les dossiers de gauche et de droite 
+shortcuts_dialog.view.swap_folders:DE:Linkes und rechtes Fenster vertauschen
+shortcuts_dialog.view.swap_folders:ES:Intercambiar directorios 
 
 shortcuts_dialog.view.set_same_folder:EN:Set same directory to left and right folders
 shortcuts_dialog.view.set_same_folder:FR:Affecter le même repertoire aux dossiers de gauche et de droite
+shortcuts_dialog.view.set_same_folder:DE:Gleicher Ordner für linkes und rechtes Fenster
+shortcuts_dialog.view.set_same_folder:ES:Ajustar el mismo directorio en ambos lados
 
 shortcuts_dialog.selection:EN:Selection
 shortcuts_dialog.selection:FR:Selection
+shortcuts_dialog.selection:DE:Auswahl
+shortcuts_dialog.selection:ES:Selección
 
 shortcuts_dialog.selection.mark_group:EN:Mark a group of files
 shortcuts_dialog.selection.mark_group:EN:Marquer un groupe de fichiers
+shortcuts_dialog.selection.mark_group:DE:Eine Gruppe von Dateien markieren
+shortcuts_dialog.selection.mark_group:ES:Marcar un grupo de ficheros
 
 shortcuts_dialog.selection.unmark_group:EN:Unmark a group of files
 shortcuts_dialog.selection.unmark_group:EN:Dé-marquer un groupe de fichiers
+shortcuts_dialog.selection.unmark_group:DE:Eine Gruppe von Dateien demarkieren
+shortcuts_dialog.selection.unmark_group:ES:Desmarcar un grupo de ficheros
 
 shortcuts_dialog.selection.mark_unmark:EN:Mark/Unmark selected file
 shortcuts_dialog.selection.mark_unmark:FR:Marquer/Dé-marquer le fichier sélectionné
+shortcuts_dialog.selection.mark_unmark:DE:Datei markieren/demarkieren
+shortcuts_dialog.selection.mark_unmark:ES:Marcar/Desmarcar los ficheros seleccionados
 
 shortcuts_dialog.file_operations:EN:File operations
 shortcuts_dialog.file_operations:FR:Opérations sur fichiers
+shortcuts_dialog.file_operations:DE:Dateioperationen
+shortcuts_dialog.file_operations:ES:Operaciones con ficheros
 
 shortcuts_dialog.file_operations.server_connect:EN:Connect to a remote server
 shortcuts_dialog.file_operations.server_connect:FR:Se connecter à un serveur distant
+shortcuts_dialog.file_operations.server_connect:DE:Zu einem Remote Server verbinden
+shortcuts_dialog.file_operations.server_connect:ES:Conectar a un servidor remoto
 
 shortcuts_dialog.file_operations.run_command:EN:Run a command in current folder
 shortcuts_dialog.file_operations.run_command:FR:Exécuter une commande dans le dossier courant
+shortcuts_dialog.file_operations.run_command:DE:Einen Befehl im momentanen Ordner ausführen
+shortcuts_dialog.file_operations.run_command:ES:Ejecutar un comando en el directorio actual
 
 shortcuts_dialog.file_operations.zip:EN:Compress marked files in a ZIP file
 shortcuts_dialog.file_operations.zip:FR:Compresser les fichiers marqués dans un fichier ZIP 
+shortcuts_dialog.file_operations.zip:DE:Markierte Datein in eine ZIP Datei packen
+shortcuts_dialog.file_operations.zip:ES:Comprimir los ficheros marcados en un fichero ZIP 
 
 shortcuts_dialog.file_operations.unzip:EN:Uncompress marked ZIP files
 shortcuts_dialog.file_operations.unzip:FR:Décompresser les fichiers ZIP marqués
+shortcuts_dialog.file_operations.unzip:DE:Markierte ZIP Dateien entpacken
+shortcuts_dialog.file_operations.unzip:ES:Descomprimir los ficheros ZIP seleccionados
 
 shortcuts_dialog.file_operations.email:EN:Send marked files as email attachments
 shortcuts_dialog.file_operations.email:FR:Envoyer les fichiers marqués en pièces jointes à un message
+shortcuts_dialog.file_operations.email:DE:Markierte Dateien als eMail Anhang versenden
+shortcuts_dialog.file_operations.email:ES:Enviar los ficheros seleccionados como adjuntos en un correo electrónico
 
 shortcuts_dialog.file_operations.properties:EN:Show properties of marked files
 shortcuts_dialog.file_operations.properties:FR:Afficher les propriétés des fichiers marqués
+shortcuts_dialog.file_operations.properties:DE:Eigenschaften der markierten Dateien anzeigen
+shortcuts_dialog.file_operations.properties:ES:Mostrar propiedades de los ficheros seleccionados
 
 shortcuts_dialog.windows:EN:Windows
 shortcuts_dialog.windows:FR:Fenêtres
+shortcuts_dialog.windows:DE:Fenster
+shortcuts_dialog.windows:ES:Ventanas
 
 shortcuts_dialog.windows.new_window:EN:Open a new window
 shortcuts_dialog.windows.new_window:FR:Ouvrir une nouvelle fenêtre
+shortcuts_dialog.windows.new_window:DE:Ein neues Fenster öffnen
+shortcuts_dialog.windows.new_window:ES:Abrir una nueva ventana
 
 shortcuts_dialog.windows.recall:EN:Recall a window
 shortcuts_dialog.windows.recall:FR:Rappeler une fenêtre
+shortcuts_dialog.windows.recall:DE:Ein Fenster aufrufen
+shortcuts_dialog.windows.recall:ES:Rellamar a una ventana
 
 shortcuts_dialog.windows.switch_previous:EN:Switch to previous window
 shortcuts_dialog.windows.switch_previous:FR:Aller à la fenêtre précédente
+shortcuts_dialog.windows.switch_previous:DE:Zum vorherigen Fenster wechseln
+shortcuts_dialog.windows.switch_previous:ES:Cambiar a la ventana anterior
 
 shortcuts_dialog.windows.switch_next:EN:Switch to next window
 shortcuts_dialog.windows.switch_next:FR:Aller à la fenêtre suivante
+shortcuts_dialog.windows.switch_next:DE:Zum nächsten Fenster wechseln
+shortcuts_dialog.windows.switch_next:ES:Cambiar a la siguiente ventana
 
 
 ######################
@@ -1116,160 +1683,255 @@ shortcuts_dialog.windows.switch_next:FR:Aller à la fenêtre suivante
 
 prefs_dialog.title:EN:Preferences
 prefs_dialog.title:FR:Préférences
+prefs_dialog.title:DE:Einstellungen
+prefs_dialog.title:ES:Preferencias
 
 # General tab
 
 prefs_dialog.general_tab:EN:General
 prefs_dialog.general_tab:FR:Général
+prefs_dialog.general_tab:DE:Allgemein
+prefs_dialog.general_tab:ES:General
 
 prefs_dialog.day:EN:Day
 prefs_dialog.day:FR:Jour
+prefs_dialog.day:DE:Tag
+prefs_dialog.day:ES:Día
 
 prefs_dialog.month:EN:Month
 prefs_dialog.month:FR:Mois
+prefs_dialog.month:DE:Monat
+prefs_dialog.month:ES:Mes
 
 prefs_dialog.year:EN:Year
 prefs_dialog.year:FR:Année
+prefs_dialog.year:DE:Jahr
+prefs_dialog.year:ES:Año
 
 prefs_dialog.language:EN:Language (requires restart)
 prefs_dialog.language:FR:Langage (après redémarrage)
+prefs_dialog.language:DE:Sprache (Neustart nötig)
+prefs_dialog.language:ES:Idioma (requiere reiniciar)
 
 prefs_dialog.date_time:EN:Date & time format
 prefs_dialog.date_time:FR:Format de date et d'heure
+prefs_dialog.date_time:DE:Datum- und Zeitformat
+prefs_dialog.date_time:ES:Formato de fecha y hora
 
 prefs_dialog.time:EN:Time
 prefs_dialog.time:FR:Heure
+prefs_dialog.time:DE:Zeit
+prefs_dialog.time:ES:Hora
 
 prefs_dialog.time_12_hour:EN:12-hour format
 prefs_dialog.time_12_hour:FR:Format 12 heures
+prefs_dialog.time_12_hour:DE:12-Stunden Format
+prefs_dialog.time_12_hour:ES:Formato 12 horas
 
 prefs_dialog.time_24_hour:EN:24-hour format
 prefs_dialog.time_24_hour:FR:Format 24 heures
+prefs_dialog.time_24_hour:DE:24-Stunden Format
+prefs_dialog.time_24_hour:ES:Formato 24 horas
 
 prefs_dialog.check_for_updates_on_startup:EN:Check for updates on startup
 prefs_dialog.check_for_updates_on_startup:FR:Chercher les mises à jour au démarrage
+prefs_dialog.check_for_updates_on_startup:DE:Beim Start nach Updates suchen
+prefs_dialog.check_for_updates_on_startup:ES:Comprobar actualizaciones al inicio
 
 prefs_dialog.example:EN:Example
 prefs_dialog.example:FR:Exemple
+prefs_dialog.example:DE:Beispiel
+prefs_dialog.example:ES:Ejemplo
 
 # Folders tab
 
 prefs_dialog.folders_tab:EN:Folders
 prefs_dialog.folders_tab:FR:Dossiers
+prefs_dialog.folders_tab:DE:Ordner
+prefs_dialog.folders_tab:ES:Directorios
 
 prefs_dialog.startup_folders:EN:Startup folders
 prefs_dialog.startup_folders:FR:Dossiers de démarrage
+prefs_dialog.startup_folders:DE:Startordner
+prefs_dialog.startup_folders:ES:Directorios de inicio
 
 prefs_dialog.left_folder:EN:Left folder
 prefs_dialog.left_folder:FR:Dossier de gauche
+prefs_dialog.left_folder:DE:Linker Ordner
+prefs_dialog.left_folder:ES:Directorio de la izquierda
 
 prefs_dialog.right_folder:EN:Right folder
 prefs_dialog.right_folder:FR:Dossier de droite
+prefs_dialog.right_folder:DE:Rechter Ordner
+prefs_dialog.right_folder:ES:Directorio de la derecha
 
 prefs_dialog.last_folder:EN:Last visited folder
 prefs_dialog.last_folder:FR:Dernier dossier visité
+prefs_dialog.last_folder:DE:Zuletzt besuchter Ordner
+prefs_dialog.last_folder:ES:Último directorio visitado
 
 prefs_dialog.custom_folder:EN:Custom folder
 prefs_dialog.custom_folder:FR:Dossier spécifique
+prefs_dialog.custom_folder:DE:Benutzerdefinierter Ordner
+prefs_dialog.custom_folder:ES:Directorio personalizado
 
 prefs_dialog.show_hidden_files:EN:Show Hidden files
 prefs_dialog.show_hidden_files:FR:Afficher les fichiers cachés
+prefs_dialog.show_hidden_files:DE:Versteckte Dateien anzeigen
+prefs_dialog.show_hidden_files:ES:Mostrar ficheros ocultos
 
 prefs_dialog.compact_file_size:EN:Round displayed file sizes
 prefs_dialog.compact_file_size:FR:Arrondir les tailles de fichiers affichées
+prefs_dialog.compact_file_size:DE:Dateigrößen gerundet anzeigen
+prefs_dialog.compact_file_size:ES:Redondear el tamaño de los ficheros seleccionados
 
 # Appearance tab
 
 prefs_dialog.appearance_tab:EN:Appearance
 prefs_dialog.appearance_tab:FR:Apparence
+prefs_dialog.appearance_tab:DE:Erscheinungsbild
+prefs_dialog.appearance_tab:ES:Apariencia
 
-prefs_dialog.look_and_feel:EN:Look and Feel
-prefs_dialog.look_and_feel:FR:Look and Feel
+prefs_dialog.look_and_feel:EN:Look & Feel
+prefs_dialog.look_and_feel:FR:Look & Feel
+prefs_dialog.look_and_feel:DE:Look & Feel
+prefs_dialog.look_and_feel:ES:Look & Feel
 
 prefs_dialog.font:EN:Font
 prefs_dialog.font:FR:Fonte
+prefs_dialog.font:DE:Schriftart
+prefs_dialog.font:ES:Fuente
 
 prefs_dialog.font_size:EN:Size
 prefs_dialog.font_size:FR:Taille
+prefs_dialog.font_size:DE:Größe
+prefs_dialog.font_size:ES:Tamaño
 
 prefs_dialog.font_style:EN:Style
 prefs_dialog.font_style:FR:Style
+prefs_dialog.font_style:DE:Stil
+prefs_dialog.font_style:ES:Estilo
 
 prefs_dialog.font_plain:EN:Plain
 prefs_dialog.font_plain:FR:Normal
+prefs_dialog.font_plain:DE:Normal
+prefs_dialog.font_plain:ES:Normal
 
 prefs_dialog.font_bold:EN:Bold
 prefs_dialog.font_bold:FR:Gras
+prefs_dialog.font_bold:DE:Fett
+prefs_dialog.font_bold:ES:Negrita
 
 prefs_dialog.font_italic:EN:Italic
 prefs_dialog.font_italic:FR:Italique
+prefs_dialog.font_italic:DE:Kursiv
+prefs_dialog.font_italic:ES:Itálica
 
 prefs_dialog.font_bold_italic:EN:Bold & italic
 prefs_dialog.font_bold_italic:FR:Gras et italique
+prefs_dialog.font_bold_italic:DE:Fett & Kursiv
+prefs_dialog.font_bold_italic:ES:Negrita e itálica
 
 prefs_dialog.background_colors:EN:Background colors
 prefs_dialog.background_colors:FR:Couleurs de fond
+prefs_dialog.background_colors:DE:Hintergrundfarben
+prefs_dialog.background_colors:ES:Colores de fonfo
 
 prefs_dialog.background_color:EN:Background
 prefs_dialog.background_color:FR:Fond
+prefs_dialog.background_color:DE:Hintergrund
+prefs_dialog.background_color:ES:Fondo
 
 prefs_dialog.selection_color:EN:Selection background
 prefs_dialog.selection_color:FR:Fond de la sélection
+prefs_dialog.selection_color:DE:Markierungshintergrund
+prefs_dialog.selection_color:ES:Seleccionar fondo
 
 prefs_dialog.font_colors:EN:Font colors
 prefs_dialog.font_colors:FR:Couleurs de la fonte
+prefs_dialog.font_colors:DE:Schriftfarben
+prefs_dialog.font_colors:ES:Colores de la fuente
 
 prefs_dialog.plain_file_color:EN:Plain file
 prefs_dialog.plain_file_color:FR:Fichier normal
+prefs_dialog.plain_file_color:DE:Normale Datei
+prefs_dialog.plain_file_color:ES:Fichero plano
 
 prefs_dialog.marked_file_color:EN:Marked file
 prefs_dialog.marked_file_color:FR:Fichier marqué
+prefs_dialog.marked_file_color:DE:Markierte Datei
+prefs_dialog.marked_file_color:ES:Fichero marcado
 
 prefs_dialog.selected_file_color:EN:Selected file
 prefs_dialog.selected_file_color:FR:Fichier sélectionné
+prefs_dialog.selected_file_color:DE:Momentane Datei
+prefs_dialog.selected_file_color:ES:Fichero seleccionado
 
 prefs_dialog.hidden_file_color:EN:Hidden file
 prefs_dialog.hidden_file_color:FR:Fichier caché
+prefs_dialog.hidden_file_color:DE:Versteckte Datei
+prefs_dialog.hidden_file_color:ES:Fichero oculto
 
 prefs_dialog.folder_color:EN:Folder
 prefs_dialog.folder_color:FR:Dossier
+prefs_dialog.folder_color:DE:Ordner
+prefs_dialog.folder_color:ES:Directorio
 
 prefs_dialog.archive_file_color:EN:Archive file
 prefs_dialog.archive_file_color:FR:Archive
+prefs_dialog.archive_file_color:DE:Archivdatei
+prefs_dialog.archive_file_color:ES:Archivar fichero
 
 prefs_dialog.symbolic_link_color:EN:Symbolic link
 prefs_dialog.symbolic_link_color:FR:Lien symbolique
+prefs_dialog.symbolic_link_color:DE:Symbolic Link
+prefs_dialog.symbolic_link_color:ES:Enlace simbólico
 
 prefs_dialog.pick_a_color:EN:Pick a color
 prefs_dialog.pick_a_color:FR:Choisir une couleur
+prefs_dialog.pick_a_color:DE:Farbe wählen
+prefs_dialog.pick_a_color:ES:Seleccionar un color
 
 # Mail tab
 
 prefs_dialog.mail_tab:EN:Mail
 prefs_dialog.mail_tab:FR:Email
+prefs_dialog.mail_tab:DE:eMail
+prefs_dialog.mail_tab:ES:Correo electrónico
 
 prefs_dialog.mail_settings:EN:Outgoing mail settings
 prefs_dialog.mail_settings:FR:Paramètres d'email sortant
+prefs_dialog.mail_settings:DE:Einstellungen für ausgehende eMails
+prefs_dialog.mail_settings:ES:Parámetros de correo saliente
 
 prefs_dialog.mail_name:EN:Your name
 prefs_dialog.mail_name:FR:Votre nom
+prefs_dialog.mail_name:DE:Ihr Name
+prefs_dialog.mail_name:ES:Su nombre
 
 prefs_dialog.mail_address:EN:Your email address
 prefs_dialog.mail_address:FR:Votre adresse email
+prefs_dialog.mail_address:DE:Ihre eMail Adresse
+prefs_dialog.mail_address:ES:Su correo electrónico
 
 prefs_dialog.mail_server:EN:SMTP server
 prefs_dialog.mail_server:FR:Serveur SMTP
+prefs_dialog.mail_server:DE:SMTP Server
+prefs_dialog.mail_server:ES:Servidor SMTP
 
 # Misc tab (Mac OS X only)
 
 prefs_dialog.misc_tab:EN:Misc
 prefs_dialog.misc_tab:FR:Autres
+prefs_dialog.misc_tab:DE:Verschiedenes
 
 prefs_dialog.use_brushed_metal:EN:Use 'brushed metal' look (requires restart)
 prefs_dialog.use_brushed_metal:FR:Utiliser le look 'brushed metal' (après redémarrage)
+prefs_dialog.use_brushed_metal:DE:'Brushed Metal' Look benutzen (Neustart nötig)
 
 prefs_dialog.confirm_on_quit:EN:Show confirmation dialog on quit
 prefs_dialog.confirm_on_quit:FR:Afficher un dialogue de confirmation en quittant
+prefs_dialog.confirm_on_quit:DE:Bestätigung beim Beenden
 
 
 #########
@@ -1278,19 +1940,30 @@ prefs_dialog.confirm_on_quit:FR:Afficher un dialogue de confirmation en quittant
 
 unit.byte:EN:byte
 unit.byte:FR:octet
+unit.byte:DE:Byte
+unit.byte:ES:Byte
 
 unit.bytes:EN:bytes
 unit.bytes:FR:octets
+unit.bytes:DE:Bytes
+unit.bytes:ES:Bytes
 
 unit.bytes_short:EN:b
 unit.bytes_short:FR:o
+unit.bytes_short:DE:B
+unit.bytes_short:ES:B
 
 unit.kb:EN:KB
 unit.kb:FR:Ko
+unit.kb:DE:KB
+unit.kb:ES:KBytes
 
 unit.mb:EN:MB
 unit.mb:FR:Mo
+unit.mb:DE:MB
+unit.mb:ES:MBytes
 
 unit.gb:EN:GB
 unit.gb:FR:Go
-
+unit.gb:DE:GB
+unit.gb:ES:GBytes

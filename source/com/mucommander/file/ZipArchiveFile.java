@@ -240,7 +240,6 @@ if(com.mucommander.Debug.ON) System.out.println("ZipArchiveFile.loadEntries(): c
 	}
 
 	public void delete() throws IOException {
-		// Although it's a folder, no need to recurse
 		file.delete();
 	}
 
