@@ -34,23 +34,6 @@ public abstract class FileViewer extends JPanel {
 	}
 	
 	/**
-	 * Starts viewing the given file.
-	 *
-	 * @param fileToView the file that needs to be displayed.
-	 * @param isSeparateWindow <code>true</code> if the panel is put in a separate window
-	 */
-	public abstract void startViewing(AbstractFile fileToView, boolean isSeparateWindow) throws IOException;
-	
-	
-	/**
-	 * Returns <code>true</code> if the given file can be handled by this FileViewer.<br>
-	 * The FileViewer may base its decision only upon the filename and its extension or may
-	 * wish to read some of the file and compare it to a magic number.
-	 */
-	public abstract boolean canViewFile(AbstractFile file);
-	
-	
-	/**
 	 * Returns maximum file size this FileViewer can handle for sure, -1 if there is no such limit.
 	 * If a user wish to view a file that exceeds this size, he/she will be asked if he/she still
 	 * wants to view it.
@@ -132,5 +115,31 @@ public abstract class FileViewer extends JPanel {
 		
 		return newFile;
 	}
+
+	//////////////////////
+	// Abstract methods //
+	//////////////////////
+	
+	/**
+	 * This method is invoked when the specified file is about to be viewed.
+	 *
+	 * @param fileToView the file that needs to be displayed.
+	 * @param isSeparateWindow <code>true</code> if the panel is displayed in a separate window
+	 */
+	public abstract void startViewing(AbstractFile fileToView, boolean isSeparateWindow) throws IOException;
+	
+	
+	/**
+	 * Returns <code>true</code> if the given file can be handled by this FileViewer.<br>
+	 * The FileViewer may base its decision only upon the filename and its extension or may
+	 * wish to read some of the file and compare it to a magic number.
+	 */
+	public abstract boolean canViewFile(AbstractFile file);
+	
+	
+	/**
+	 * Returns a String which describes the file currently viewed, it should at least 
+	 */
+	public abstract String getTitle();
 	
 }

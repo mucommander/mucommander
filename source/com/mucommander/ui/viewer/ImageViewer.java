@@ -16,7 +16,7 @@ import java.io.*;
 
 
 //public class ImageViewer extends FileViewer implements ComponentListener {
-public class ImageViewer extends FileViewer implements KeyListener, ActionListener {
+public class ImageViewer extends FileViewer implements ActionListener {
 	
 //	private final static int MAX_WIDTH_SCALED = 480;
 //	private final static int MAX_HEIGHT_SCALED = 360;
@@ -52,7 +52,7 @@ public class ImageViewer extends FileViewer implements KeyListener, ActionListen
 		nextImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.next_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), this);
 		prevImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.previous_image"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
 		controlsMenu.add(new JSeparator());
-		zoomInItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_in"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, 0), this);
+		zoomInItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_in"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), this);
 		zoomOutItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.zoom_out"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), this);
 		menuBar.add(controlsMenu);
 	}
@@ -67,7 +67,6 @@ public class ImageViewer extends FileViewer implements KeyListener, ActionListen
 //		label = new JLabel();
 //		label.setIcon(new ImageIcon(image));
 
-		addKeyListener(this);
 //		addComponentListener(this);
 	}
 	
@@ -89,6 +88,7 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 
 	
 	private synchronized void loadImage(AbstractFile file) throws IOException {
+System.out.println("loadImage "+file);
 		this.file = file;
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
@@ -134,16 +134,18 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 	
 	
 	private synchronized void zoom(double factor) {
+System.out.println("zoom "+factor);
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		this.scaledImage = image.getScaledInstance((int)(image.getWidth(null)*factor), (int)(image.getHeight(null)*factor), Image.SCALE_DEFAULT);
 		waitForImage(scaledImage);
-		updateFrame();
 
 		frame.setCursor(Cursor.getDefaultCursor());
 	}
 
 	private synchronized void goToImage(boolean next) {
+System.out.println("goToImage");
+
 		AbstractFile newFile;
 		if(next)
 			newFile = getNextFileInFolder(file, true);
@@ -163,6 +165,7 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 
 	
 	private void updateFrame() {
+System.out.println("updateFrame");
 		// Revalidate, pack and repaint should be called in this order
 		revalidate();
 		frame.pack();
@@ -232,10 +235,12 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 */
 
 	private void checkZoom() {
+		
+System.out.println("checkZoom");
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		zoomInItem.setEnabled(2*zoomFactor*image.getWidth(null) < d.width
-		 && 2*zoomFactor*image.getHeight(null) < d.height);
+		zoomInItem.setEnabled(zoomFactor<1.0 || (2*zoomFactor*image.getWidth(null) < d.width
+		 && 2*zoomFactor*image.getHeight(null) < d.height));
 
 		zoomOutItem.setEnabled(zoomFactor/2*image.getWidth(null)>160
 		 && zoomFactor/2*image.getHeight(null)>120);
@@ -254,12 +259,14 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 //				if(zoomFactor<2.0) {
 					zoomFactor = zoomFactor*2;
 					zoom(zoomFactor);
+					updateFrame();
 //				}
 			}
 			else if(source==zoomOutItem && zoomOutItem.isEnabled()) {
 //				if(zoomFactor>0.25) {
 					zoomFactor = zoomFactor/2;
 					zoom(zoomFactor);
+					updateFrame();
 //				}
 			}
 			
@@ -270,7 +277,7 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 		}
 	}
 
-
+/*
 	public void keyTyped(KeyEvent e) {
 
 	}
@@ -279,6 +286,7 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 	}
 
 	public void keyPressed(KeyEvent e) {
+System.out.println("keyPressed "+e);
 		int keyCode = e.getKeyCode();
 		AbstractFile newFile = null;
 
@@ -293,5 +301,5 @@ System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)
 		}
 		
 	}
-
+*/
 }
