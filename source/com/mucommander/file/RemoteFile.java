@@ -9,4 +9,9 @@ package com.mucommander.file;
  * @author Maxence Bernard
  */
 public interface RemoteFile {
+
+	/**
+	 * Returns a string describing the protocol used to access the remote file (e.g. SMB).
+	 */
+	public String getProtocol();
 }

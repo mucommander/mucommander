@@ -212,23 +212,28 @@ public class FolderPanel extends JPanel implements ActionListener, PopupMenuList
 			fileTable.setCurrentFolder(folder);
 			this.currentFolder = folder;
 
-			// Updates root button label if necessary
-			String currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
-			int bestLength = -1;
-			int bestIndex = 0;
-			String temp;
-			int len;
-			for(int i=0; i<rootFolders.length; i++) {
-				temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
-				len = temp.length();
-				if (currentPath.startsWith(temp) && len>bestLength) {
-					bestIndex = i;
-					bestLength = len;
-				}
+			// Update root button text
+			if(folder instanceof RemoteFile) {
+				rootButton.setText(((RemoteFile)folder).getProtocol());
 			}
-
-			rootButton.setText(rootFolders[bestIndex].getName());
-
+			// FSFile
+			else {
+				String currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
+				int bestLength = -1;
+				int bestIndex = 0;
+				String temp;
+				int len;
+				for(int i=0; i<rootFolders.length; i++) {
+					temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
+					len = temp.length();
+					if (currentPath.startsWith(temp) && len>bestLength) {
+						bestIndex = i;
+						bestLength = len;
+					}
+				}
+				rootButton.setText(rootFolders[bestIndex].getName());
+			}
+			
 			locationField.setText(currentFolder.getAbsolutePath(true));
 			locationField.repaint();
 

@@ -269,4 +269,13 @@ public class SMBFile extends AbstractFile implements RemoteFile {
 		// to indicate if the folder could be created
 		new SmbFile(privateURL+SEPARATOR+name).mkdir();
 	}
+
+
+	///////////////////////////////
+	// RemoteFile implementation //
+	///////////////////////////////
+	
+	public String getProtocol() {
+		return "SMB";
+	}
 }

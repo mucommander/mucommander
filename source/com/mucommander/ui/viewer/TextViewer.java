@@ -102,6 +102,4 @@ public class TextViewer extends FileViewer implements ActionListener {
 			textArea.selectAll();
 	}
 
-	
-
 }

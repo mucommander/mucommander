@@ -387,4 +387,13 @@ System.out.println("att="+att);
 	public void mkdir(String name) throws IOException {
 		throw new IOException();
 	}
+
+
+	///////////////////////////////
+	// RemoteFile implementation //
+	///////////////////////////////
+	
+	public String getProtocol() {
+		return "HTTP";
+	}
 }
