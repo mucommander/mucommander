@@ -286,6 +286,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 				// Retry (loop) if user authentified
 				if(showFolderAccessError(e)) {
 					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
+//					folder = AbstractFile.getAbstractFile(folder.getAbsolutePath());
 					continue;
 				}
 			}
