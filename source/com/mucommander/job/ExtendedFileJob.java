@@ -143,6 +143,8 @@ public abstract class ExtendedFileJob extends FileJob {
 	protected void nextFile(AbstractFile file) {
 		super.nextFile(file);
 		currentFileProcessed = 0;
+		if(file.getFolder(baseSourceFolder))
+			currentBaseFolderFile = file;
 	}
 
 
@@ -152,8 +154,8 @@ public abstract class ExtendedFileJob extends FileJob {
      */
     public int getTotalPercentDone() {
         float nbFilesProcessed = getCurrentFileIndex();
-        long currentFileSize = getCurrentFileSize();
-        if(currentFileSize>0 && (currentFile!=null && !currentFile.isDirectory()))
+        long currentFileSize = currentBaseFolderFile==null?-1:currentBaseFolderFile.getSize();
+        if(currentFileSize>0 && (currentBaseFolderFile!=null && !currentFile.isDirectory()))
             nbFilesProcessed += getCurrentFileBytesProcessed()/(float)currentFileSize;
 
         return (int)(100*(nbFilesProcessed/(float)getNbFiles()));

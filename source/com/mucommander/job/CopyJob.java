@@ -90,7 +90,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 					destFolder.mkdir(destFileName);
 				}
             	catch(IOException e) {
-                	int ret = showErrorDialog(errorDialogTitle, Translator.get("copy.cannot_create_folder", destFileName));
+                	int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFileName));
                 	if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
 	                    stop();
             		return;		// abort in all cases
@@ -105,7 +105,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
                 }
 			}
             catch(IOException e) {
-                int ret = showErrorDialog(errorDialogTitle, Translator.get("copy.cannot_read_folder", destFile.getAbsolutePath()));
+                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", destFile.getAbsolutePath()));
                 if(ret==-1 || ret==CANCEL_ACTION)		// CANCEL_ACTION or close dialog
                     stop();
 			}
@@ -127,7 +127,7 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 					if(file.getDate()<destFile.getDate())
 						return;
 				}
-				else {	
+				else {
 					int ret = showFileExistsDialog(file, destFile);
 				
 			    	if (ret==-1 || ret==FileExistsDialog.CANCEL_ACTION) {
@@ -168,16 +168,19 @@ public class CopyJob extends ExtendedFileJob implements Runnable, FileModifier {
 					System.out.println(""+e);
 				
 				int reason = e.getReason();
-				String errorMsg = Translator.get(unzip?"unzip.cannot_unzip_file":"copy.cannot_copy_file", file.getName());
+//				String errorMsg = Translator.get(unzip?"unzip.cannot_unzip_file":"copy.cannot_copy_file", file.getName());
+				String errorMsg;
 				switch(reason) {
 					case FileJobException.CANNOT_OPEN_SOURCE:
-						errorMsg = Translator.get(unzip?"unzip.cannot_unzip_file":"copy.cannot_copy_file", file.getName());
+						errorMsg = Translator.get("cannot_open_source_file", file.getName());
 						break;
 					case FileJobException.CANNOT_OPEN_DESTINATION:
-						errorMsg = Translator.get(unzip?"unzip.cannot_unzip_file":"copy.cannot_copy_file", file.getName());
+						errorMsg = Translator.get("cannot_open_destination_file", file.getName());
 						break;
+					
 					case FileJobException.ERROR_WHILE_TRANSFERRING:
-						errorMsg = Translator.get(unzip?"unzip.error_on_file":"copy.error_on_file", file.getName());
+					default:
+						errorMsg = Translator.get("error_while_transferring", file.getName());
 						break;
 				}
 				

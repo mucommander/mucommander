@@ -35,7 +35,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
 
 	/** How often should progress information be refreshed (in ms) */
-	private final static int REFRESH_RATE = 1000;
+	private final static int REFRESH_RATE = 500;
 
     private MainFrame mainFrame;
 

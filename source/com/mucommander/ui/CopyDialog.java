@@ -97,7 +97,7 @@ public class CopyDialog extends DestinationDialog {
 		String newName = (String)ret[1];
 
 		if (!unzipDialog && newName==null && activeTable.getCurrentFolder().equals(destFolder)) {
-			showErrorDialog(Translator.get("copy_dialog.same_source_destination"), Translator.get("copy_dialog.error_title"));
+			showErrorDialog(Translator.get("same_source_destination"), Translator.get("copy_dialog.error_title"));
 			return;
 		}
 

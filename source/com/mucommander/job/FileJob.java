@@ -53,6 +53,9 @@ public abstract class FileJob implements Runnable {
 	/** Main frame on which the job is to be performed */ 
 	protected MainFrame mainFrame;
 	
+	/** Base source folder */
+	protected AbstractFile baseSourceFolder;
+	
 	
     /** Number of bytes processed so far, see {@link #getTotalBytesProcessed() getTotalBytesProcessed} */
     protected long nbBytesProcessed;
@@ -74,9 +77,10 @@ public abstract class FileJob implements Runnable {
 	protected final static String SKIP_TEXT = Translator.get("skip");
 	
 	
-	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame) {
+	public FileJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile baseSourceFolder) {
 		this.progressDialog = progressDialog;
 		this.mainFrame = mainFrame;
+		this.baseSourceFolder = baseSourceFolder;
 	}
 
 	
@@ -300,7 +304,8 @@ public abstract class FileJob implements Runnable {
 	 */
 	protected void nextFile(AbstractFile file) {
 		this.currentFile = file;
-		currentFileIndex++;
+		if(file.getFolder().equals(baseSourceFolder)
+			currentFileIndex++;
 	}
 	
 
