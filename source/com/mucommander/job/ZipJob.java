@@ -16,17 +16,30 @@ import java.util.zip.*;
 import java.util.Vector;
 
 /**
- * This class is responsible for compressing a group files in the zip format.
+ * This FileJob is responsible for compressing a group files in the zip format.
  */
-public class ZipJob extends FileJob implements Runnable {
+public class ZipJob extends ExtendedFileJob implements Runnable {
     private Vector filesToZip;
     private MainFrame mainFrame;
 	private ZipOutputStream zipOut;
 	private AbstractFile destFolder;
-	private int currentFileIndex;
-	private int currentFileProgress;
 	private String currentFileInfo = "";
 	private String baseFolderPath;
+
+    /** Size of current file */
+    private long currentFileSize;
+
+    /** Number of bytes of current file that have been processed */
+    private long currentFileProcessed;
+    
+	/** Index of file currently being processed */
+	private int currentFileIndex;
+
+    /** Number of bytes processed so far */
+    private long nbBytesProcessed;
+
+    /** Number of files that this job contains */
+    private int nbFiles;
 
 	private final static int CANCEL_ACTION = 0;
 	private final static int SKIP_ACTION = 1;
@@ -43,6 +56,7 @@ public class ZipJob extends FileJob implements Runnable {
         super(progressDialog);
 		
 		this.filesToZip = filesToZip;
+        this.nbFiles = filesToZip.size();
         this.mainFrame = mainFrame;
 		this.zipOut = new ZipOutputStream(zipOut);
 		this.destFolder = destFolder;
@@ -53,16 +67,28 @@ public class ZipJob extends FileJob implements Runnable {
 		this.baseFolderPath = ((AbstractFile)filesToZip.elementAt(0)).getParent().getAbsolutePath();
 	}
 
-	public int getFilePercentDone() {
-		return currentFileProgress;
-	}
 
-    public int getTotalPercentDone() {
-        // We could refine and update the value for each file deleted within a folder
-		return (int)(100*(currentFileIndex/(float)filesToZip.size()));
+    public long getTotalBytesProcessed() {
+        return nbBytesProcessed;
+    }
+
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
+    }
+
+    public int getNbFiles() {
+        return nbFiles;
     }
     
-    public String getCurrentInfo() {
+    public long getCurrentFileBytesProcessed() {
+        return currentFileProcessed;
+    }
+
+    public long getCurrentFileSize() {
+        return currentFileSize;
+    }
+
+    public String getStatusString() {
 		return "Adding "+currentFileInfo;
     }
 
@@ -77,10 +103,15 @@ public class ZipJob extends FileJob implements Runnable {
     }
 
 
-	private boolean zipRecurse(AbstractFile file) {
+	private boolean zipRecurse(AbstractFile file, int level) {
 		if(isInterrupted())
 			return false;
-		
+
+        if(level==0) {
+            currentFileProcessed = 0;
+            currentFileSize = file.getSize();
+        }
+        
 		String filePath = file.getAbsolutePath();
 		String zipEntryRelativePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
 		currentFileInfo = zipEntryRelativePath;
@@ -93,28 +124,28 @@ public class ZipJob extends FileJob implements Runnable {
 				AbstractFile subFiles[] = file.ls();
 				boolean folderComplete = true;
 				for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
-					if(!zipRecurse(subFiles[i]))
+					if(!zipRecurse(subFiles[i], level+1))
 						folderComplete = false;
 				}
 				
 				return folderComplete;
 			}
 			else {
-				currentFileProgress = 0;
 				InputStream in = file.getInputStream();
-				long fileSize = file.getSize();
+				currentFileSize = file.getSize();
 				int nbRead;
-				int bytesTotal = 0;
+				currentFileProcessed = 0;
 
 				zipOut.putNextEntry(new ZipEntry(zipEntryRelativePath.replace('\\', '/')));
 				while ((nbRead=in.read(buffer, 0, buffer.length))!=-1) {
 					zipOut.write(buffer, 0, nbRead);
-					bytesTotal += nbRead;
-					fileSize = Math.max(bytesTotal, fileSize);
-					currentFileProgress = (int) (100 * (bytesTotal/(float)fileSize));
+                    nbBytesProcessed += nbRead;
+					if(level==0)
+                        currentFileProcessed += nbRead;
+//					fileSize = Math.max(bytesTotal, fileSize);
+//					currentFileProgress = (int) (100 * (bytesTotal/(float)fileSize));
 				}
-				currentFileProgress = 100;
-			
+                			
 				return true;
 			}
 		}
@@ -141,7 +172,7 @@ public class ZipJob extends FileJob implements Runnable {
 		
 		while(!isInterrupted()) {
             currentFile = (AbstractFile)filesToZip.elementAt(currentFileIndex);
-			zipRecurse(currentFile);
+			zipRecurse(currentFile, 0);
 			
 			activeTable.setFileMarked(currentFile, false);
 			activeTable.repaint();

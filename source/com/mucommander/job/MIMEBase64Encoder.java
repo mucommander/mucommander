@@ -82,24 +82,30 @@ public class MIMEBase64Encoder {
     };
 
     private final static int BLOCK_SIZE = 1024;
+
+    private static long totalRead;
+    
+    public MIMEBase64Encoder() {
+    }
     
     static void encode(AbstractFile file, OutputStream out) throws IOException {
         InputStream in = file.getInputStream();
         byte bytes[] = new byte[BLOCK_SIZE];
 
         int n;
+        totalRead = 0;
         int n3byt, nrest=0, k=0, linelength=0, i;
         byte buf[] = new byte[4];   // array of base64 characters
         
         while ((n=in.read(bytes, nrest, BLOCK_SIZE-nrest))!=-1) {
             System.out.println("nbread ="+n+" nrest="+nrest);
 
+            totalRead += n;
             n += nrest;
             
             n3byt      = n / 3;     // how 3 bytes groups?
             nrest      = n % 3;     // the remaining bytes from the grouping
             k          = n3byt * 3; // we are doing 3 bytes at a time
-//            linelength = 0;         // current linelength
             i          = 0;         // index
 
             // do the 3-bytes groups ...
@@ -168,4 +174,10 @@ public class MIMEBase64Encoder {
             
     }
 
+    /**
+     * Returns the number of bytes that have been read from the file that is currently being encoded
+     */
+    public long getTotalRead() {
+        return totalRead;
+    }
 }

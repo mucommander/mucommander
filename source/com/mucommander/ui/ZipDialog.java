@@ -144,11 +144,10 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 			}
 			
 			// Starts zipping
-			ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Zipping files", true);
+			ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Zipping files");
 			ZipJob zipJob = new ZipJob(mainFrame, progressDialog, filesToZip, commentArea.getText(), destOut, destFile.getParent());
 			zipJob.start();
-			progressDialog.setFileJob(zipJob);
-			progressDialog.start();
+			progressDialog.start(zipJob);
 		}
 		else if (source==cancelButton)  {
 			dispose();			

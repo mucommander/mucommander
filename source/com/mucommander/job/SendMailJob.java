@@ -15,10 +15,13 @@ import java.io.*;
 import java.util.Vector;
 import java.net.Socket;
 
-public class SendMailJob extends FileJob {
+public class SendMailJob extends ExtendedFileJob {
 
     private MainFrame mainFrame;
     private Vector filesToSend;
+    private MIMEBase64Encoder base64Encoder;
+
+    private boolean connectedToMailServer = false;
 
     /* Mail parameters */
     private String recipientString;
@@ -28,7 +31,7 @@ public class SendMailJob extends FileJob {
     private String fromName;
     private String fromAddress;
 
-    private final static String BOUNDARY = "muCommander_rednammoCum";
+    private final static String BOUNDARY = "mucommander";
 
     /* Connection variable */
 //    private BufferedWriter out;
@@ -36,9 +39,18 @@ public class SendMailJob extends FileJob {
     private OutputStream out;
     private Socket socket;
 
-    private int currentFilePercent;
-    private int currentFileIndex = -1;
+    /** Size of current file */
+    private long currentFileSize;
 
+	/** Index of file currently being processed */
+	private int currentFileIndex;
+
+    /** Number of bytes processed so far */
+    private long nbBytesProcessed;
+
+    /** Number of files that this job contains */
+    private int nbFiles;
+    
     private final static int OK_ACTION = 0;
     private final static int OK_MNEMONIC = KeyEvent.VK_O;
     private final static String OK_CAPTION = "OK";
@@ -48,6 +60,9 @@ public class SendMailJob extends FileJob {
 
         this.mainFrame = mainFrame;
         this.filesToSend = filesToSend;
+        this.nbFiles = filesToSend.size();
+        this.base64Encoder = new MIMEBase64Encoder();
+        
         this.recipientString = recipientString;
         this.mailSubject = mailSubject;
         this.mailBody = mailBody;
@@ -57,48 +72,80 @@ public class SendMailJob extends FileJob {
         this.fromAddress = ConfigurationManager.getVariable("prefs.mail.from");
     }
 
-    /**
-     * Returns the percent done for current file.
-     */
-    public int getFilePercentDone() {
-        return currentFilePercent;
+
+    public long getTotalBytesProcessed() {
+        return nbBytesProcessed;
     }
 
-    /**
-     * Returns the percent of job done so far.
-     */
-    public int getTotalPercentDone() {
-        return (int)(100*(currentFileIndex/(float)filesToSend.size()));
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
     }
+
+    public int getNbFiles() {
+        return nbFiles;
+    }
+    
+    public long getCurrentFileBytesProcessed() {
+        return connectedToMailServer?base64Encoder.getTotalRead():0;
+    }
+
+    public long getCurrentFileSize() {
+        return currentFileSize;
+    }
+
 
     /**
      * Returns a String describing what's currently being done.
      */
-    public String getCurrentInfo() {
-        if(currentFileIndex==-1)
-            return "Connecting to "+mailServer;
-        else {
+    public String getStatusString() {
+        if(connectedToMailServer)
             return "Sending "+((AbstractFile)filesToSend.elementAt(currentFileIndex)).getName();
-        }
+        else
+            return "Connecting to "+mailServer;
     }
 
     public void run() {
-        try { openConnection(); }
-        catch(IOException e) { showErrorDialog("Unable to contact server, check mail server settings."); return; }
-
-        try { sendBody(); }
-        catch(IOException e) { showErrorDialog("Mail refused by server."); }
-
-        int nbFiles = filesToSend.size();
-        for(int i=0; i<nbFiles; i++) {
-            this.currentFileIndex = i;
-            try { sendAttachment((AbstractFile)filesToSend.elementAt(i)); }
-            catch(IOException e) { showErrorDialog("Unable to send "+((AbstractFile)filesToSend.elementAt(i)).getName()+"."); return; }
+        // Open socket connection to the mail server, and say hello
+        try {
+            openConnection();
+        }
+        catch(IOException e) {
+            showErrorDialog("Unable to contact server, check mail server settings.");
+            return;
         }
 
-        try { sayGoodBye(); }
-        catch(IOException e) { showErrorDialog("Unable to terminate connection."); return; }
+        // Send mail body
+        try {
+            sendBody();
+        }
+        catch(IOException e) {
+            showErrorDialog("Mail refused by server.");
+        }
 
+        // Send attachments
+        AbstractFile file;
+        for(int i=0; i<nbFiles; i++) {
+            this.currentFileIndex = i;
+            file = (AbstractFile)filesToSend.elementAt(i);
+            this.currentFileSize = file.getSize();
+            try {
+                sendAttachment(file);
+                nbBytesProcessed += base64Encoder.getTotalRead();
+            }
+            catch(IOException e) {
+                showErrorDialog("Unable to send "+((AbstractFile)filesToSend.elementAt(i)).getName()+".");
+                return; }
+        }
+
+        // Notifies the mail server that the mail is over
+        try {
+            sayGoodBye();
+        }
+        catch(IOException e) {
+            showErrorDialog("Unable to terminate connection."); return;
+        }
+
+        // Close the connection
         closeConnection();
 
         stop();
@@ -120,7 +167,6 @@ public class SendMailJob extends FileJob {
     private void openConnection() throws IOException {
         this.socket = new Socket(mailServer, 25);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "8859_1"));
-//        this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "8859_1"));
         this.out = socket.getOutputStream();
     }
 
@@ -145,11 +191,11 @@ public class SendMailJob extends FileJob {
     }
     
     private void sendAttachment(AbstractFile file) throws IOException {
-            // send the GIF
-        sendln(out, "Content-Type:text/plain; name="+file.getName());
+        // sends MIME type of attachment file
+        sendln(out, "Content-Type:"+MimeTypes.getMimeType(file)+"; name="+file.getName());
         sendln(out, "Content-Disposition: attachment;filename=\""+file.getName()+"\"");
         sendln(out, "Content-transfer-encoding: base64\r\n");
-        MIMEBase64Encoder.encode(file, out);
+        base64Encoder.encode(file, out);
         sendln(out, "\r\n--" + BOUNDARY);
     }
 

@@ -2,6 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.job.FileJob;
+import com.mucommander.job.ExtendedFileJob;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.progress.ValueProgressBar;
 import com.mucommander.ui.comp.button.ButtonChoicePanel;
@@ -21,30 +22,33 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     private JButton cancelButton;
     private JButton hideButton;
 
-    private FileJob job;
+    private FileJob job;    
     private Thread repaintThread;
-	private boolean dualBar;
+    /* True if the current job is a MulitipleFileJob */
+    private boolean dualBar;
 
 	// Dialog width is constrained to 320, height is not an issue (always the same)
 	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);	
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
 
-private MainFrame mainFrame;
+    private MainFrame mainFrame;
 
-    public ProgressDialog(MainFrame mainFrame, String title, boolean dualBar) {
+    public ProgressDialog(MainFrame mainFrame, String title) {
         super(mainFrame, title, mainFrame);
 
-this.mainFrame = mainFrame;
+        this.mainFrame = mainFrame;
 
 		// Sets maximum and minimum dimensions for this dialog
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-				
-		this.dualBar = dualBar;
-		
+
+//        setVisible(false);
+    }
+    
+
+    public void initUI() {
         Container contentPane = getContentPane();
-        progressLabel = new JLabel();
-//        progressLabel = new JLabel(job.getCurrentInfo());
+        progressLabel = new JLabel(job.getStatusString());
         totalProgressBar = new ValueProgressBar();
         
 		Panel tempPanel;
@@ -67,10 +71,8 @@ this.mainFrame = mainFrame;
 			tempPanel.add(progressLabel, BorderLayout.NORTH);
 			tempPanel.add(totalProgressBar, BorderLayout.CENTER);
 		}
-		contentPane.add(tempPanel, BorderLayout.CENTER);
+		contentPane.add(tempPanel, BorderLayout.NORTH);
         
-//        tempPanel = new Panel(new FlowLayout(FlowLayout.CENTER));
-//        tempPanel = new Panel(new BorderLayout());
 		cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(this);
         cancelButton.addKeyListener(this);
@@ -82,24 +84,23 @@ this.mainFrame = mainFrame;
 		// Enter triggers cancel button
 		getRootPane().setDefaultButton(cancelButton);
 		contentPane.add(new ButtonChoicePanel(new JButton[] {cancelButton, hideButton}, 0, getRootPane()), BorderLayout.SOUTH);
+
+//        setVisible(true);
     }
 
-	/**
-	 * This method MUST be called before start().
-	 */
-	public void setFileJob(FileJob job) {
-		this.job = job;
-	}
-
-    public void start() {
-	    progressLabel.setText(job.getCurrentInfo());
-		
+    
+    public void start(FileJob job) {
+        this.job = job;
+        this.dualBar = job instanceof ExtendedFileJob;
+        initUI();
+        
         repaintThread = new Thread(this);
         repaintThread.start();
 
     	showDialog();
 	}
 
+    
     public void run() {
 	    // Used for dual bars
 		int filePercent;
@@ -110,14 +111,14 @@ this.mainFrame = mainFrame;
         String currentInfo;
         String lastInfo;
         
-        totalPercent = lastTotalPercent = job.getTotalPercentDone();
-        filePercent = lastFilePercent = job.getFilePercentDone();
-		currentInfo = lastInfo = job.getCurrentInfo();
+        totalPercent = lastTotalPercent = -1;
+        filePercent = lastFilePercent = -1;
+        currentInfo = lastInfo = "";
 
         while(repaintThread!=null && !job.hasFinished()) {
 	        // Updates totalProgressBar if necessary
 	        if (dualBar) {
-				filePercent = job.getFilePercentDone(); 
+				filePercent = ((ExtendedFileJob)job).getFilePercentDone(); 
 		        if(lastFilePercent!=filePercent) {
 		            fileProgressBar.setValue(filePercent);
 		            fileProgressBar.repaint();
@@ -135,15 +136,16 @@ this.mainFrame = mainFrame;
             }
             
             // Updates progressLabel if necessary 
-            currentInfo = job.getCurrentInfo();
+            currentInfo = job.getStatusString();
+// System.out.println("currentInfo "+currentInfo);
             if(!lastInfo.equals(currentInfo)) {
+// System.out.println("currentInfo changed");
                 progressLabel.setText(currentInfo);
                 progressLabel.repaint();
-                repaint();
                 lastInfo = currentInfo;
             }
 
-            try { Thread.sleep(100); }
+            try { Thread.sleep(200); }
             catch(InterruptedException e) {}
         }
 	

@@ -178,8 +178,6 @@ public class FSFile extends AbstractFile {
 	
 
 	public InputStream getInputStream() throws IOException {
-System.out.println(getName()+" "+getMimeType());
-
         return new FileInputStream(file);
 	}
 	

@@ -391,11 +391,10 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		}
 
 		// Starts moving files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, (unzip?"Unzipping":"Copying")+" files", true);
+		ProgressDialog progressDialog = new ProgressDialog(mainFrame, (unzip?"Unzipping":"Copying")+" files");
 		CopyJob copyJob = new CopyJob(mainFrame, progressDialog, filesToCopy, newName, destFolder, unzip);
 		copyJob.start();
-		progressDialog.setFileJob(copyJob);
-		progressDialog.start();
+		progressDialog.start(copyJob);
 	}
 
 
@@ -427,11 +426,10 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		}
 		
 		// Starts moving files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Moving files", true);
+		ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Moving files");
 		MoveJob moveJob = new MoveJob(mainFrame, progressDialog, filesToMove, newName, destFolder);
 	    moveJob.start();
-	    progressDialog.setFileJob(moveJob);
-	    progressDialog.start();
+	    progressDialog.start(moveJob);
 	}
 
 
@@ -496,11 +494,10 @@ public class CommandBarPanel extends JPanel implements ActionListener {
         	return;
                     
         // Starts deleting files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Deleting files", false);
+		ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Deleting files");
 		DeleteJob deleteJob = new DeleteJob(mainFrame, progressDialog, filesToDelete);
         deleteJob.start();
-	    progressDialog.setFileJob(deleteJob);
-    	progressDialog.start();
+    	progressDialog.start(deleteJob);
     }
 
 

@@ -20,19 +20,30 @@ import java.text.NumberFormat;
 /**
  * This class is responsible for moving recursively a group of files.
  */
-public class MoveJob extends FileJob implements Runnable {
+public class MoveJob extends ExtendedFileJob implements Runnable {
     private MainFrame mainFrame;
 
 	private Vector filesToMove;
 	private String newName;
 	private AbstractFile baseDestFolder;
 
-	// Current file info (path)
+	/** Current file info (path) */
 	private String currentFileInfo = "";
-	// Percent of current file copied
-	private int currentFilePercent;
-	// Current file index in filesToMove
+
+	/** Index of file currently being moved */
 	private int currentFileIndex;
+
+    /** Size of current file */
+    private long currentFileSize;
+
+    /** Number of bytes of current file that have been processed */
+    private long currentFileProcessed;
+    
+    /** Number of bytes processed so far */
+    private long nbBytesProcessed;
+
+    /** Number of files that this job contains */
+    private int nbFiles;
 	
 	private boolean skipAll;
 	private boolean overwriteAll;
@@ -78,6 +89,7 @@ public class MoveJob extends FileJob implements Runnable {
 
 		this.mainFrame = mainFrame;
 		this.filesToMove = filesToMove;
+        this.nbFiles = filesToMove.size();
 		this.newName = newName;
 		this.baseDestFolder = destFolder;
 	}
@@ -86,18 +98,21 @@ public class MoveJob extends FileJob implements Runnable {
 	 * Moves recursively a file to a destination folder.
 	 * @return <code>true</code> if the file was completely moved.
 	 */
-    private boolean moveRecurse(AbstractFile file, AbstractFile destFolder, String newName) {
-        currentFilePercent = 0;
-				
+    private boolean moveRecurse(AbstractFile file, AbstractFile destFolder, String newName, int level) {
+
 		if(isInterrupted())
             return false;
+
+        if(level==0) {
+            currentFileProcessed = 0;
+            currentFileSize = file.getSize();
+        }
 
 		String destFileName = (newName==null?file.getName():newName);
 		String destFilePath = destFolder.getAbsolutePath()
         	+destFolder.getSeparator()
         	+destFileName;
 
-//		currentFileInfo = file.getAbsolutePath();
 		currentFileInfo = destFilePath.substring(baseDestFolder.getAbsolutePath().length()+1, destFilePath.length());
 
 		AbstractFile destFile = AbstractFile.getAbstractFile(destFilePath);
@@ -132,7 +147,7 @@ public class MoveJob extends FileJob implements Runnable {
                 AbstractFile subFiles[] = file.ls();
                 boolean isFolderEmpty = true;
 				for(int i=0; i<subFiles.length && !isInterrupted(); i++)
-                    if(!moveRecurse(subFiles[i], destFile, null))
+                    if(!moveRecurse(subFiles[i], destFile, null, level+1))
 						isFolderEmpty = false;
             	// If one file could returned failure, return failure as well since this
 				// folder could not be moved totally
@@ -223,18 +238,15 @@ public class MoveJob extends FileJob implements Runnable {
 
 				try  {
 					int read;
-					// the size is only used for progress bar (it can be wrong)
-					long currentFileSize = file.getSize();
-					long currentFileCopied = 0;
 					while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
 						out.write(buf, 0, read);
-						currentFileCopied += read;
-						// currentFileSize can be wrong (for example with HTMLFiles)
-						currentFileSize = Math.max(currentFileCopied, currentFileSize);
-						currentFilePercent = (int)(100*currentFileCopied/(float)currentFileSize);
-					}
+                        nbBytesProcessed += read;
+						if(level==0) {
+                            currentFileProcessed += read;
+                        }
+                    }
 
-					moved = true;
+					moved = !isInterrupted();
 				}
 				catch(IOException e) {
 				    int ret = showErrorDialog("Error while moving file "+file.getAbsolutePath());
@@ -275,16 +287,30 @@ public class MoveJob extends FileJob implements Runnable {
 		}
 	}
 
-	public int getFilePercentDone() {
-		return currentFilePercent;
-	}
 
-    public int getTotalPercentDone() {
-        // We could refine and update the value for each file deleted within a folder
-        return (int)(100*(currentFileIndex/(float)filesToMove.size()));
+
+
+    public long getTotalBytesProcessed() {
+        return nbBytesProcessed;
+    }
+
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
+    }
+
+    public int getNbFiles() {
+        return nbFiles;
     }
     
-    public String getCurrentInfo() {
+    public long getCurrentFileBytesProcessed() {
+        return currentFileProcessed;
+    }
+
+    public long getCurrentFileSize() {
+        return currentFileSize;
+    }
+    
+    public String getStatusString() {
 		return "Moving "+currentFileInfo;
     }
  
@@ -324,8 +350,6 @@ public class MoveJob extends FileJob implements Runnable {
     }
 
     public void run() {
-	    int numFiles = filesToMove.size();
-
         // Important!
         waitForDialog();
 
@@ -335,16 +359,15 @@ public class MoveJob extends FileJob implements Runnable {
             currentFile = (AbstractFile)filesToMove.elementAt(currentFileIndex);
 			
 			// if current file or folder was successfully moved, exclude it from the file table
-			if (moveRecurse(currentFile, baseDestFolder, newName))
+			if (moveRecurse(currentFile, baseDestFolder, newName, 0))
 				activeTable.excludeFile(currentFile);
 			// else unmark it
 			else
 				activeTable.setFileMarked(currentFile, false);
 			activeTable.repaint();
-				
 			
 			// This ensures that currentFileIndex is never out of bounds
-			if(currentFileIndex<numFiles-1)
+			if(currentFileIndex<nbFiles-1)
                 currentFileIndex++;
             else break;
         }

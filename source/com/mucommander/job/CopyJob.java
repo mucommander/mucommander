@@ -20,7 +20,7 @@ import java.text.NumberFormat;
 /**
  * This class is responsible for copying recursively a group of files.
  */
-public class CopyJob extends FileJob implements Runnable {
+public class CopyJob extends ExtendedFileJob implements Runnable {
 	private MainFrame mainFrame;
 
 	private Vector filesToCopy;
@@ -28,13 +28,24 @@ public class CopyJob extends FileJob implements Runnable {
 	private AbstractFile baseDestFolder;
 	private boolean unzip;
 
-	// Current file info (path)
+	/** Current file info (path) */
 	private String currentFileInfo = "";
-	// Percent of current file copied
-	private int currentFilePercent;
-	// Current file index in filesToCopy
+
+    /** Size of current file */
+    private long currentFileSize;
+
+    /** Number of bytes of current file that have been processed */
+    private long currentFileProcessed;
+    
+	/** Index of file currently being processed */
 	private int currentFileIndex;
 
+    /** Number of bytes processed so far */
+    private long nbBytesProcessed;
+
+    /** Number of files that this job contains */
+    private int nbFiles;
+    
 	private boolean skipAll;
 	private boolean overwriteAll;
 	private boolean appendAll;
@@ -77,6 +88,7 @@ public class CopyJob extends FileJob implements Runnable {
 		super(progressDialog);
 
 	    this.filesToCopy = filesToCopy;
+        this.nbFiles = filesToCopy.size();
 		this.baseDestFolder = destFolder;
 		this.newName = newName;
 		this.mainFrame = mainFrame;
@@ -86,11 +98,14 @@ public class CopyJob extends FileJob implements Runnable {
 	/**
 	 * Recursively copies a file or folder.
 	 */
-    private void copyRecurse(AbstractFile file, AbstractFile destFolder, String newName) {
-        currentFilePercent = 0;
-				
+    private void copyRecurse(AbstractFile file, AbstractFile destFolder, String newName, int level) {
 		if(isInterrupted())
             return;
+
+        if(level==0) {
+            currentFileProcessed = 0;
+            currentFileSize = file.getSize();        
+        }
 
 //System.out.println("DEST FOLDER "+destFolder.getAbsolutePath());
 		
@@ -125,7 +140,7 @@ public class CopyJob extends FileJob implements Runnable {
                 AbstractFile subFiles[] = file.ls();
 				for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
 //                    System.out.println("Copy recurse "+subFiles[i].getAbsolutePath()+" to "+destFile.getAbsolutePath());
-					copyRecurse(subFiles[i], destFile, null);
+					copyRecurse(subFiles[i], destFile, null, level+1);
                 }
 			}
             catch(IOException e) {
@@ -191,15 +206,16 @@ public class CopyJob extends FileJob implements Runnable {
 
 				try  {
 					int read;
-					// the size is only used for progress bar (it can be wrong)
-					long currentFileSize = file.getSize();
-					long currentFileCopied = 0;
-					while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
+                    while ((read=in.read(buf, 0, buf.length))!=-1 && !isInterrupted()) {
 						out.write(buf, 0, read);
-						currentFileCopied += read;
+                        nbBytesProcessed += read;
+                        if(level==0)
+                            currentFileProcessed += read;
+
 						// currentFileSize can be wrong (for example with HTMLFiles)
-						currentFileSize = Math.max(currentFileCopied, currentFileSize);
-						currentFilePercent = (int)(100*currentFileCopied/(float)currentFileSize);
+						// currentFileSize = Math.max(currentFileProcessed, currentFileSize);
+//                        if(currentFileSize!=-1)
+//                            currentFilePercent = (int)(100*currentFileProcessed/(float)currentFileSize);
 					}
 				}
 				catch(IOException e) {
@@ -224,19 +240,30 @@ public class CopyJob extends FileJob implements Runnable {
         	catch(IOException e) {
         	}
 		}
-	}
+    }
 
-	public int getFilePercentDone() {
-		return currentFilePercent;
-	}
+    public long getTotalBytesProcessed() {
+        return nbBytesProcessed;
+    }
 
-    public int getTotalPercentDone() {
-        // We could refine and update the value for each file deleted within a folder
-        return (int)(100*(currentFileIndex/(float)filesToCopy.size()));
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
+    }
+
+    public int getNbFiles() {
+        return nbFiles;
     }
     
-    public String getCurrentInfo() {
-		return (unzip?"Unzipping ":"Copying ")+currentFileInfo;
+    public long getCurrentFileBytesProcessed() {
+        return currentFileProcessed;
+    }
+
+    public long getCurrentFileSize() {
+        return currentFileSize;
+    }
+
+    public String getStatusString() {
+        return (unzip?"Unzipping ":"Copying ")+currentFileInfo;
     }
  
 
@@ -275,7 +302,6 @@ public class CopyJob extends FileJob implements Runnable {
 
     public void run() {
 		currentFileIndex = 0;
-        int numFiles = filesToCopy.size();
 
 		// Important!
 		waitForDialog();
@@ -292,7 +318,7 @@ public class CopyJob extends FileJob implements Runnable {
 					try {
 						zipSubFiles = currentFile.ls();
 						for(int i=0; i<zipSubFiles.length; i++) {
-							copyRecurse(zipSubFiles[i], baseDestFolder, null);
+                            copyRecurse(zipSubFiles[i], baseDestFolder, null, 0);
 						}
 					}
 					catch(IOException e) {
@@ -305,13 +331,13 @@ public class CopyJob extends FileJob implements Runnable {
 				}
 			}
 			else {
-				copyRecurse(currentFile, baseDestFolder, newName);
+				copyRecurse(currentFile, baseDestFolder, newName, 0);
 			}
 			
 			activeTable.setFileMarked(currentFile, false);
 			activeTable.repaint();
 
-            if(currentFileIndex<numFiles-1)	// This ensures that currentFileIndex is never out of bounds (cf getCurrentFile)
+            if(currentFileIndex<nbFiles-1)	// This ensures that currentFileIndex is never out of bounds (cf getCurrentFile)
                 currentFileIndex++;
             else break;
         }

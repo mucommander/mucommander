@@ -88,7 +88,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 
 
 	private void updateLabels() {
-		int nbFiles = job.getNbFiles();
+		int nbFiles = job.getNbFilesRecurse();
 		int nbFolders = job.getNbFolders();
 		counterLabel.setText("<html>"
 			+(nbFiles>0?nbFiles+" file"+(nbFiles>1?"s":""):"")

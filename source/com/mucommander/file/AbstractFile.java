@@ -38,7 +38,7 @@ public abstract class AbstractFile {
 			}
 		}
 */
-        else if (absPath.toLowerCase().startsWith("ftp://")) {
+/*        else if (absPath.toLowerCase().startsWith("ftp://")) {
             try {
                 file = new FTPFile(absPath);
             }
@@ -50,6 +50,7 @@ public abstract class AbstractFile {
                 return null;
             }
         }
+*/
         // FS file, tests if the given path is indeed absolute
 		else if (new File(absPath).isAbsolute()) {
 			file = new FSFile(absPath);
@@ -66,15 +67,6 @@ public abstract class AbstractFile {
 		return file;		
 	}
 
-
-    /**
-     * Returns the MIME type of this file (determined by the file extension), <code>null</code> if it is
-     * unknown.
-     */
-    public String getMimeType() {
-        return isFolder()?null:MimeTypes.getMimeType(this);
-    }
-    
     
 	/**
 	 * <p>Tests a file for equality: returns <code>true</code> if the given file denotes the same

@@ -7,40 +7,43 @@ import java.util.Vector;
 import java.io.IOException;
 
 /**
- * This Job calculates the number of files contained in a list of file and folders and
+ * This FileJob calculates the number of files contained in a list of file and folders and
  * computes their size.
  */
 public class PropertiesJob extends FileJob implements Runnable {
 	private Vector files;
+    private int nbFiles;
 
+    private int currentFileIndex;
+    
 	private int nbFolders;
-	private int nbFiles;
+	private int nbFilesRecurse;
 	private long totalBytes;
 	
 	public PropertiesJob(Vector files) {
 		super(null);
 		
 		this.files = files;
+        this.nbFiles = files.size();
 	}
 
-    /**
-     * Always returns -1.
-     */
-    public int getFilePercentDone() {
-		return -1;
+
+    public int getNbFiles() {
+        return nbFiles;
     }
 
-    /**
-     * Always returns -1.
-     */
-    public int getTotalPercentDone() {
-		return -1;
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
     }
-	
+
+    public long getTotalBytesProcessed() {
+        return -1;
+    }
+
 	/**
 	 * Returns "Calculating" or "Complete".
 	 */
-	public String getCurrentInfo() {
+	public String getStatusString() {
 		return hasFinished()?"Complete":"Calculating";
 	}
  
@@ -61,8 +64,8 @@ public class PropertiesJob extends FileJob implements Runnable {
  	/**
  	 * Returns the number of files (folders excluded) counted so far.
  	 */
- 	public int getNbFiles() {
-		return nbFiles;
+ 	public int getNbFilesRecurse() {
+		return nbFilesRecurse;
  	}
  
 	/**
@@ -84,15 +87,17 @@ public class PropertiesJob extends FileJob implements Runnable {
 			}
 		}
 		else {
-			nbFiles++;
+			nbFilesRecurse++;
 			totalBytes += file.getSize();
 		}
 	}
 
 	public void run() {
-		for(int i=0; i<files.size(); i++)
+		for(int i=0; i<nbFiles; i++) {
 			addRecurse((AbstractFile)files.elementAt(i));
-//		System.out.println(totalBytes+" "+getCurrentInfo());
+            currentFileIndex++;
+        }
+//		System.out.println(totalBytes+" "+getStatusString());
 
 		stop();
 	}

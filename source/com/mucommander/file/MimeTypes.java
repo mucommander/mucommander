@@ -37,11 +37,18 @@ public class MimeTypes extends Hashtable {
     }
 
 
+    /**
+     * Returns the MIME type of the given file (determined by the file extension), <code>text/plain</code>
+     * if it is unknown (no or unknown extension), and <code>null</code> if it is a folder.
+     */
     public static String getMimeType(AbstractFile file) {
+        if(file.isFolder() && !(file instanceof ArchiveFile))
+            return null;
+        
         String name = file.getName();
         int pos = name.lastIndexOf('.');
         if(pos==-1)
-            return null;
+            return "text.plain";
 
         return (String)mimeTypes.get(name.substring(pos+1, name.length()).toLowerCase());        
     }

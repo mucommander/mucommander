@@ -279,11 +279,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener,
         Vector filesToSend = lastActiveTable.getSelectedFiles();
 
         // Starts moving files
-        ProgressDialog progressDialog = new ProgressDialog(this, "Send mail", true);
+        ProgressDialog progressDialog = new ProgressDialog(this, "Send mail");
         SendMailJob sendJob = new SendMailJob(this, progressDialog, filesToSend, "maxence@maxence.info", "test subject", "test body");
         sendJob.start();
-        progressDialog.setFileJob(sendJob);
-        progressDialog.start();
+        progressDialog.start(sendJob);
     }        
             
 	/**

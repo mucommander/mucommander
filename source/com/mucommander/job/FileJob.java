@@ -3,6 +3,15 @@ package com.mucommander.job;
 
 import com.mucommander.ui.ProgressDialog;
 
+/**
+ * FileJob is a container for a 'file task' : basically an operation that involves files and bytes.
+ * The class implementing FileJob is required to give some information about the status of the job that
+ * will be used to display visual indications of the job's progress.
+ *
+ * <p>The actual file operations are performed in a separate thread.</p>
+ *
+ * @author Maxence Bernard
+ */
 public abstract class FileJob implements Runnable {
 
 	/** Serves to differenciate between the 'stopped' and 'not started yet' states */
@@ -15,7 +24,7 @@ public abstract class FileJob implements Runnable {
 	private Thread jobThread;
 
 
-	protected FileJob(ProgressDialog progressDialog) {
+	public FileJob(ProgressDialog progressDialog) {
 		this.progressDialog = progressDialog;
 	}
 
@@ -66,19 +75,34 @@ public abstract class FileJob implements Runnable {
 	    return hasStarted && jobThread == null;
 	}
 
-	/**
-	 * Returns the percent done for current file, may not be available
-	 * for all jobs, if not -1 is returned.
-	 */
-	public abstract int getFilePercentDone();
+    /**
+     * Returns the percent of job processed so far.
+     */
+    public int getTotalPercentDone() {
+        return (int)(100*(getCurrentFileIndex()/(float)getNbFiles()));
+    }
 
-	/**
-	 * Returns the percent of job done so far.
-	 */
-	public abstract int getTotalPercentDone();
-	
+
+
+    /**
+     * Returns the number of file that this job contains.
+     */
+    public abstract int getNbFiles();
+
+    /**
+     * Returns the index of the file currently being processed (has to be <getNbFile()).
+     */
+    public abstract int getCurrentFileIndex();
+
+    /**
+     * Returns the number of bytes that have by been processed by this job so far.
+     */
+    public abstract long getTotalBytesProcessed();
+
 	/**
 	 * Returns a String describing what's currently being done (e.g. "Deleting file test.zip")
 	 */
-	public abstract String getCurrentInfo();
+	public abstract String getStatusString();
+
+    
 }

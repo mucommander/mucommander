@@ -19,11 +19,19 @@ import java.util.Vector;
  * This class is responsible for deleting recursively a group of files.
  */
 public class DeleteJob extends FileJob implements Runnable {
+    
+    /** Files to be deleted */
     private Vector filesToDelete;
-    private MainFrame mainFrame;
-	private String baseFolderPath;
+    
+    /** Number of files to be deleted */
+    private int nbFiles;
+    
+    /** Index of file currently being deleted */ 
 	private int currentFileIndex;
 	private String currentFileInfo = "";
+    
+    private MainFrame mainFrame;
+	private String baseFolderPath;
 
 	private final static int CANCEL_ACTION = 0;
 	private final static int SKIP_ACTION = 1;
@@ -88,17 +96,20 @@ public class DeleteJob extends FileJob implements Runnable {
         }
     }
 
-	public int getFilePercentDone() {
-		// Progress for current file is not available;
-		return -1;
-	}
 
-    public int getTotalPercentDone() {
-        // We could refine and update the value for each file deleted within a folder
-		return (int)(100*(currentFileIndex/(float)filesToDelete.size()));
+    public int getNbFiles() {
+        return nbFiles;
     }
-    
-    public String getCurrentInfo() {
+
+    public int getCurrentFileIndex() {
+        return currentFileIndex;
+    }
+
+    public long getTotalBytesProcessed() {
+        return -1;
+    }
+
+    public String getStatusString() {
 		return "Deleting "+currentFileInfo;
     }
 
