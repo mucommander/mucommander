@@ -57,6 +57,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JCheckBoxMenuItem sortByDateItem;
 	private JCheckBoxMenuItem sortByExtensionItem;
 	private JMenuItem reverseOrderItem;
+	private JCheckBoxMenuItem autoSizeColumnsItem;
 	private JMenuItem goBackItem;
 	private JMenuItem goForwardItem;
 	private JMenuItem goToParentItem;
@@ -154,6 +155,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		swapFoldersItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.swap_folders"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_MASK), this);
 		setSameFolderItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.set_same_folder"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK), this);
 //		refreshItem = addMenuItem(viewMenu, "Refresh", KeyEvent.VK_R, null);
+
+		viewMenu.add(new JSeparator());
+		// Auto column sizing
+		autoSizeColumnsItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.auto_size_columns"), menuItemMnemonicHelper, null, this);
 
 		viewMenu.add(new JSeparator());
 		// Menu item's text will be set later, when menu is selected
@@ -318,6 +323,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == reverseOrderItem) {
 			mainFrame.getLastActiveTable().reverseSortOrder();	
 		}
+		else if (source == autoSizeColumnsItem) {
+			boolean selected = autoSizeColumnsItem.isSelected();
+			mainFrame.getLastActiveTable().setAutoSizeColumns(selected);
+			ConfigurationManager.setVariable("prefs.auto_size_columns", ""+selected);		
+		}
 		else if (source == swapFoldersItem) {
 			mainFrame.swapFolders();	
 		}
@@ -377,6 +387,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			showToolbarItem.setText(mainFrame.isToolbarVisible()?Translator.get("view_menu.hide_toolbar"):Translator.get("view_menu.show_toolbar"));
 			showCommandBarItem.setText(mainFrame.isCommandBarVisible()?Translator.get("view_menu.hide_command_bar"):Translator.get("view_menu.show_command_bar"));
 			showStatusBarItem.setText(mainFrame.isStatusBarVisible()?Translator.get("view_menu.hide_status_bar"):Translator.get("view_menu.show_status_bar"));
+			autoSizeColumnsItem.setSelected(mainFrame.getLastActiveTable().getAutoSizeColumns());
 		}
 	}
 	

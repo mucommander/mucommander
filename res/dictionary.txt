@@ -544,12 +544,13 @@ view_menu.reverse_order:DE:Sortierung umdrehen
 view_menu.reverse_order:ES:Invertir el orden
 view_menu.reverse_order:CS:Obrátit pořadí
 
+view_menu.auto_size_columns:EN:Auto-size columns
+
 view_menu.swap_folders:EN:Swap folders
 view_menu.swap_folders:FR:Echanger les dossiers
 view_menu.swap_folders:DE:Fenster vertauschen
 view_menu.swap_folders:ES:Intercambiar directorios
 view_menu.swap_folders:CS:Prohodit složky
-
 
 view_menu.set_same_folder:EN:Set same folder
 view_menu.set_same_folder:FR:Affecter le même dossier

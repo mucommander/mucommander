@@ -95,7 +95,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		// Initialize history vector
 		history = new Vector();
     	historyIndex = -1;
-		
+
 		try {
 			// Set initial folder to current directory
 			_setCurrentFolder(initialFolder, true);
@@ -132,7 +132,9 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		};
 		scrollPane.getViewport().setBackground(backgroundColor);
 		add(scrollPane, BorderLayout.CENTER);
-	
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scrollPane.getSize());
+
 		// Listens to some configuration variables
 		ConfigurationManager.addConfigurationListener(this);
 	}

@@ -203,7 +203,9 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		// To catch user clicks on window menu items and change current MainFrame accordingly
 		windowMenu.addActionListener(this);
 
+		// Make this new frame visible
 		newMainFrame.show();
+		
 		return newMainFrame;
 	}
 
