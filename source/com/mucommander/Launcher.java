@@ -88,6 +88,10 @@ public class Launcher {
 		// Loads dictionary
 		com.mucommander.text.Translator.init();
 
+		// Inits CustomDateFormat to make sure that its ConfigurationListener is added
+		// before FileTable, so CustomDateFormat gets notified of date format changes first
+		com.mucommander.text.CustomDateFormat.init();
+
 		// Initialize WindowManager
 		WindowManager.checkInit();
 		

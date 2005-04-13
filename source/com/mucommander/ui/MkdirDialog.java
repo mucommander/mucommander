@@ -103,7 +103,11 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 //			try {
 				// Refresh table
 //				activeTable.getFolderPanel().refresh();
-			activeTable.getFolderPanel().tryRefresh(AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName));
+//			activeTable.getFolderPanel().tryRefresh(AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName));
+			// Refresh current folder
+			activeTable.getFolderPanel().tryRefresh();
+			// Selects newly created folder
+			activeTable.selectFile(AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName));
 
 //				activeTable.refresh();
 

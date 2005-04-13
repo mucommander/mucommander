@@ -8,12 +8,10 @@ import com.mucommander.file.AbstractFile;
 
 import com.mucommander.text.Translator;
 import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.CustomDateFormat;
 
 import java.awt.*;
 import javax.swing.*;
-
-import java.text.SimpleDateFormat;
-import java.text.NumberFormat;
 
 import java.util.Date;
 
@@ -63,15 +61,14 @@ public class FileExistsDialog extends QuestionDialog {
 	
 	private void init(AbstractFile sourceFile, AbstractFile destFile, boolean applyToAllOption) {
 		YBoxPanel panel = new YBoxPanel();
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm a");
     	panel.add(new JLabel("Source: "+sourceFile.getAbsolutePath()));
     	panel.add(new JLabel("  "+SizeFormatter.format(sourceFile.getSize(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE)
-    			+", "+dateFormat.format(new Date(sourceFile.getDate()))));
+    			+", "+CustomDateFormat.format(new Date(sourceFile.getDate()))));
     	panel.addSpace(10);
 		// Use canonical path for destination, to resolve '..', '.' and '~'
     	panel.add(new JLabel("Destination: "+destFile.getCanonicalPath()));
     	panel.add(new JLabel("  "+SizeFormatter.format(destFile.getSize(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE)
-    			+", "+dateFormat.format(new Date(destFile.getDate()))));
+    			+", "+CustomDateFormat.format(new Date(destFile.getDate()))));
     	
 		// Give resume option only if destination file is smaller than source file
 		long destSize = destFile.getSize();

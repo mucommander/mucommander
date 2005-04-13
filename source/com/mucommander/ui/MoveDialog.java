@@ -54,7 +54,6 @@ public class MoveDialog extends DestinationDialog {
 			
 			setTextField(fieldText);
 		}
-
  
 		showDialog();
 	}
@@ -65,7 +64,6 @@ public class MoveDialog extends DestinationDialog {
 	 * Starts a MoveJob. This method is trigged by the 'OK' button or return key.
 	 */
 	protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-//		if (newName==null && sourceFolder.equals(destFolder)) {
 		if (newName==null && files.getBaseFolder().equals(destFolder) || files.contains(destFolder)) {
 			showErrorDialog(Translator.get("same_source_destination"));
 			return;

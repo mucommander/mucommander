@@ -2327,6 +2327,15 @@ prefs_dialog.date:ES:Fecha
 prefs_dialog.date:CS:Datum
 prefs_dialog.date:zh_TW:日期
 
+prefs_dialog.date_separator:EN:Separator
+prefs_dialog.date_separator:FR:Séparateur
+
+
+
+
+
+
+
 prefs_dialog.time_12_hour:EN:12-hour format
 prefs_dialog.time_12_hour:FR:Format 12 heures
 prefs_dialog.time_12_hour:DE:12-Stunden Format
