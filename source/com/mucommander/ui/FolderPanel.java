@@ -907,10 +907,12 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file = "+file);
     public boolean configurationChanged(ConfigurationEvent event) {
     	String var = event.getVariable();
     
+		// Set new background color and repaint panel
 		if (var.equals("prefs.colors.background"))  {
 			scrollPane.getViewport().setBackground(backgroundColor=FileTableCellRenderer.getColor(event.getValue()));
 			repaint();    		
 		}
+		// Refresh to show or hide hidden files, depending on new preference
 		else if (var.equals("prefs.show_hidden_files")) {
 			tryRefresh();
 		}
