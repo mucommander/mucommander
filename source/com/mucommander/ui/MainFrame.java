@@ -175,6 +175,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// which will catch all mouse and keyboard events 
 		getGlassPane().setVisible(enabled);
 		getJMenuBar().setEnabled(!enabled);
+		// Remove focus from whatever component in FolderPanel which had focus
+		getGlassPane().requestFocus();
 
 		this.noEventsMode = enabled;
 	}
