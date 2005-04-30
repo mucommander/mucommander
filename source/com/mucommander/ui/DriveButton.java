@@ -212,7 +212,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	//////////////////////////////////
 	
 	public boolean isFocusTraversable() {
-		// This button will not get keyboard focus
+		// Prevents this button from getting keyboard focus
 		return false;
 	}
 }

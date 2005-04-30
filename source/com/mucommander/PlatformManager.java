@@ -172,8 +172,7 @@ public class PlatformManager {
 	 */
 	public static Process execute(String command, AbstractFile currentFolder) {
 		try {
-            if(com.mucommander.Debug.ON)
-                System.out.println("Executing "+command);
+            if(Debug.ON) Debug.trace("Executing "+command);
 
             Vector tokensV = new Vector();
 			if (osFamily == WINDOWS_NT) {
@@ -206,8 +205,7 @@ public class PlatformManager {
 //			return Runtime.getRuntime().exec(command, null, new java.io.File(currentFolder.getAbsolutePath()));
 		}
 		catch(IOException e) {
-            if(com.mucommander.Debug.ON)
-                System.out.println("Error while executing "+command+": "+e);
+            if(Debug.ON) Debug.trace("Error while executing "+command+": "+e);
             return null;
 		}
 	}
@@ -222,8 +220,7 @@ public class PlatformManager {
 			// Here, we use exec(String[],String[],File) instead of exec(String,String[],File)
 			// so we parse the tokens ourself (messes up the command otherwise)
 
-            if(com.mucommander.Debug.ON)
-                System.out.println("Opening "+filePath);
+            if(Debug.ON) Debug.trace("Opening "+filePath);
 
 			if(currentFolder instanceof com.mucommander.file.FSFile)
 				Runtime.getRuntime().exec(getOpenTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
@@ -233,8 +230,29 @@ public class PlatformManager {
             return true;
 		}
 		catch(IOException e) {
-            if(com.mucommander.Debug.ON)
-                System.out.println("Error while opening "+filePath+": "+e);
+            if(Debug.ON) Debug.trace("Error while opening "+filePath+": "+e);
+            return false;
+		}
+	}
+
+
+	/**
+	 * Opens/executes the given file in the Mac OS X Finder, from the given folder
+	 * and returns <code>true</code> if the operation succeeded.
+	 */
+	public static boolean openInFinder(String filePath, AbstractFile currentFolder) {
+		try {
+            if(Debug.ON) Debug.trace("Opening in finder "+filePath);
+
+			if(currentFolder instanceof com.mucommander.file.FSFile)
+				Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", filePath}, null, new java.io.File(currentFolder.getAbsolutePath()));
+            else
+				Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", filePath}, null);
+			
+            return true;
+		}
+		catch(IOException e) {
+            if(Debug.ON) Debug.trace("Error while opening "+filePath+": "+e);
             return false;
 		}
 	}

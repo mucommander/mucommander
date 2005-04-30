@@ -24,8 +24,9 @@ import java.util.Vector;
 
 
 public class FolderPanel extends JPanel implements ActionListener, KeyListener, FocusListener, ConfigurationListener {
+	
 	private MainFrame mainFrame;
-    
+
     private AbstractFile currentFolder;
 	private ChangeFolderThread changeFolderThread;
 
@@ -474,10 +475,19 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 			}
 		};
 		scrollPane.getViewport().setBackground(backgroundColor);		
-//		scrollPane.addComponentListener(fileTable);
-		add(scrollPane, BorderLayout.CENTER);
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("scrollPane size="+scrollPane.getSize());
+		// Trap mouse events to popup a contextual 'folder' menu
+		scrollPane.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				int modifiers = e.getModifiers();
+
+				// Right-click brings a contextual popup menu
+				if ((modifiers & MouseEvent.BUTTON3_MASK)!=0 || (com.mucommander.PlatformManager.getOSFamily()==com.mucommander.PlatformManager.MAC_OS_X && (modifiers & MouseEvent.BUTTON1_MASK)!=0 && e.isControlDown()))
+					new FolderPopupMenu(FolderPanel.this.mainFrame, new FileSet(getCurrentFolder())).show(scrollPane, e.getX(), e.getY());
+			}
+		});
+
+		add(scrollPane, BorderLayout.CENTER);
 
 		// Listens to some configuration variables
 		ConfigurationManager.addConfigurationListener(this);
