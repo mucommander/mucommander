@@ -130,11 +130,5 @@ public class ConfigurationParser implements ContentHandler {
     /* ------------------------ */
     public void endDocument() {}
     public void startDocument() {}
-//    public void startPrefixMapping(String prefix, String mapping) {}
-//    public void endPrefixMapping(java.lang.String prefix) {}
-//    public void ignorableWhitespace(char[] ch, int start, int length) {}
-//    public void processingInstruction(String target, String data) {}
-//    public void setDocumentLocator(Locator locator) {}
-//    public void skippedEntity(String name) {}
 }
 /* End of class ConfigurationParser */

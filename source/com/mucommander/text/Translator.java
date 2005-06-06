@@ -13,8 +13,10 @@ import java.util.Locale;
 
 
 /**
- * This class takes care of all text localization issues by looking up in a
- * dictionary localized text entries.
+ * This class takes care of all text localization issues by looking up text entries in a
+ * dictionary file and translating them into the current language.
+ *
+ * <p>See dictionary file for more information about translation features.</p>
  *
  * @author Maxence Bernard
  */

@@ -483,7 +483,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 				// Right-click brings a contextual popup menu
 				if ((modifiers & MouseEvent.BUTTON3_MASK)!=0 || (com.mucommander.PlatformManager.getOSFamily()==com.mucommander.PlatformManager.MAC_OS_X && (modifiers & MouseEvent.BUTTON1_MASK)!=0 && e.isControlDown()))
-					new FolderPopupMenu(FolderPanel.this.mainFrame, new FileSet(getCurrentFolder())).show(scrollPane, e.getX(), e.getY());
+					new TablePopupMenu(FolderPanel.this.mainFrame, new FileSet(getCurrentFolder())).show(scrollPane, e.getX(), e.getY());
 			}
 		});
 

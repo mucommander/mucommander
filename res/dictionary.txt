@@ -2632,6 +2632,41 @@ prefs_dialog.confirm_on_quit:CS:Zobrazit potvrzovací správu při ukončení
 prefs_dialog.confirm_on_quit:zh_TW:離開時顯示確認對話盒
 
 
+################
+# Table Popup menu #
+################
+
+table_popup.open:EN:Open
+table_popup.open:FR:Ouvrir
+
+
+table_popup.reveal_in_finder:EN:Reveal in Finder
+table_popup.reveal_in_finder:FR:Afficher dans le Finder
+
+
+table_popup.view:EN:$[command_bar.view]
+
+table_popup.edit:EN:$[command_bar.edit]
+
+table_popup.copy:EN:$[command_bar.copy]
+
+table_popup.move:EN:$[command_bar.move]
+
+table_popup.rename:EN:$[command_bar.rename]
+
+table_popup.delete:EN:$[command_bar.delete]
+
+table_popup.mark_all:EN:$[mark_menu.mark_all]
+
+table_popup.unmark_all:EN:$[mark_menu.unmark_all]
+
+table_popup.mkdir:EN:$[command_bar.mkdir]
+
+table_popup.refresh:EN:$[command_bar.refresh]
+
+table_popup.properties:EN:$[file_menu.properties]
+
+
 #########
 # Units #
 #########
