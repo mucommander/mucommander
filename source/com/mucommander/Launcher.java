@@ -89,6 +89,9 @@ public class Launcher {
 		// Checks that preferences folder exists and if not, creates it.
 		PlatformManager.checkCreatePreferencesFolder();
 
+		// Loads bookmarks
+		com.mucommander.bookmark.BookmarkManager.loadBookmarks();
+
 		// Loads dictionary
 		com.mucommander.text.Translator.init();
 

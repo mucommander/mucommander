@@ -19,10 +19,6 @@ public class BookmarkManager {
 
 	private static Vector bookmarks = new Vector();
 
-	static {
-		// Loads bookmarks first getBookmarks is called 
-		loadBookmarks();
-	}
 
 	private static File getBookmarksFile() {
 		return new File(com.mucommander.PlatformManager.getPreferencesFolder(), BOOKMARKS_FILE);

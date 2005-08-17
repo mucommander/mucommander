@@ -7,6 +7,9 @@ import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.ui.comp.FocusRequester;
 
+import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.bookmark.Bookmark;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -31,10 +34,15 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	/* Time when popup menu was last hidden */
 	private long lastPopupTime;
 	
-	private int rootsOffset;
-	
+	/** Root folders array */
 	private static AbstractFile rootFolders[] = RootFolders.getRootFolders();
 	
+	/** Bookmarks, loaded each time the menu pops up */
+	private Vector bookmarks;
+
+	private int rootFoldersOffset;
+	private int bookmarksOffset;
+		
 	private final static int POPUP_DELAY = 1000;
 
 	
@@ -111,7 +119,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		for(int i=0; i<nbRoots; i++)
 			addMenuItem(rootFolders[i].toString());
 
-		this.rootsOffset = nbRoots;
+		this.rootFoldersOffset = nbRoots;
 		
 		// Add 'connect to server' shortcuts
 		popupMenu.add(new JSeparator());
@@ -120,6 +128,15 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		addMenuItem("SFTP...");
 		addMenuItem("SMB...");
 		addMenuItem("HTTP...");
+
+		// Add boookmarks
+		popupMenu.add(new JSeparator());
+
+		this.bookmarks = BookmarkManager.getBookmarks();
+		this.bookmarksOffset = menuItems.size();
+		int nbBookmarks = bookmarks.size();
+		for(int i=0; i<nbBookmarks; i++)
+			addMenuItem(((Bookmark)bookmarks.elementAt(i)).getName());
 
 		popupMenu.show(this, 0, getHeight());		
 		FocusRequester.requestFocus(popupMenu);
@@ -191,17 +208,21 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 			// Free vector since it won't be needed anymore
 			this.menuItems = null;
 
-			// Menu item corresponds to a root folder
-			if(index<rootsOffset) {
+			// Menu item that corresponds to a root folder
+			if(index<rootFoldersOffset) {
 				// Tries to change current folder
 				folderPanel.trySetCurrentFolder(rootFolders[index], true);
 				// Request focus on this file table
 				folderPanel.getFileTable().requestFocus();
 			}
-			// Menu item corresponds to a shortcut to 'server connect' dialog
-			else {
+			// Menu item that corresponds to a shortcut to 'server connect' dialog
+			else if(index<bookmarksOffset) {
 				// Show server connect dialog with corresponding panel
-				new ServerConnectDialog(folderPanel.getMainFrame(), index-rootsOffset).showDialog();
+				new ServerConnectDialog(folderPanel.getMainFrame(), index-rootFoldersOffset).showDialog();
+			}
+			// Menu item that corresponds to a bookmark
+			else {
+				folderPanel.trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index-bookmarksOffset)).getURL(), true);
 			}
 		}
 	}
