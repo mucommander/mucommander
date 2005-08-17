@@ -4,6 +4,7 @@ package com.mucommander;
 import com.mucommander.file.AbstractFile;
 
 import java.io.IOException;
+import java.io.File;
 
 import java.util.Vector;
 
@@ -70,10 +71,47 @@ public class PlatformManager {
 
 	
 	/**
-	 * Returns OS type (OS family if you wish).
+	 * Returns OS family (check constants for potential returned values).
 	 */
 	public static int getOSFamily() {
 		return osFamily;
+	}
+
+
+	/**
+	 * Checks that muCommander's preferences folder exists, and if it doesn't tries to create it,
+	 * reporting any error to the standard output.
+	 * <p>This method should be called once during startup.</p>
+	 */
+	public static void checkCreatePreferencesFolder() {
+		File prefsFolder = getPreferencesFolder();
+		if(!prefsFolder.exists()) {
+			if(com.mucommander.Debug.ON) System.out.println("Creating mucommander preferences folder "+prefsFolder.getAbsolutePath());
+			if(!prefsFolder.mkdir())
+				System.out.println("Warning: unable to create mucommander prefs folder: "+prefsFolder.getAbsolutePath());
+		}
+	}
+
+	/**
+	 * Returns the preferences folder, where user-specific (configuration, bookmarks...) information
+	 * is stored. 
+	 */
+    public static File getPreferencesFolder() {
+		// Mac OS X specific folder (~/Library/Preferences/)
+		if(getOSFamily()==MAC_OS_X)
+			return new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");		
+		// For all other platforms, return generic folder (~/.mucommander)
+		else
+			return getGenericPreferencesFolder();
+    }
+	
+	/**
+	 * Returns the 'generic' preferences folder (.mucommander directory in user home folder), 
+	 * which is the same as the one returned by getPreferencesFolder() except for platforms which
+	 * have a special place to store preferences files (Mac OS X for example).
+	 */
+	public static File getGenericPreferencesFolder() {
+		return new File(System.getProperty("user.home")+"/.mucommander");		
 	}
 	
 	

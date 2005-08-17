@@ -364,8 +364,13 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	
 	/**
 	 * Returns true if this AbstractFile is hidden.
+	 *
+	 * <p>This is a default implementation solely based on file's name. This method should
+	 * be overriden if underlying filesystem offers hidden file detection.</p>
 	 */	
-	public abstract boolean isHidden();
+	public boolean isHidden() {
+		return getName().startsWith(".");
+	}
 
 	/**
 	 * Returns true if this AbstractFile is a 'regular' directory, not only a 'browsable' file (like an archive file).

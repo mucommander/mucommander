@@ -59,10 +59,6 @@ public abstract class AbstractEntryFile extends AbstractFile {
 		return false;
 	}
 
-	public boolean isHidden() {
-		return false;
-	}									
-
 	public boolean isSymlink() {
 		return false;
 	}

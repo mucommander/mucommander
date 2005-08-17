@@ -30,15 +30,34 @@ public class Bookmark {
 	/**
 	 * Returns this bookmark's name.
 	 */
-	private String getName() {
+	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Changes this bookmark's name to the given one.
+	 */
+	public void setName(String newName) {
+		this.name = newName;
 	}
 
 
 	/**
 	 * Returns this bookmark's file URL.
 	 */
-	private FileURL getURL() {
+	public FileURL getURL() {
 		return fileURL;
+	}
+
+	/**
+	 * Changes this bookmark's URL to the given one.
+	 */
+	public void setURL(FileURL newFileURL) {
+		this.fileURL = newFileURL;
+	}
+	
+
+	public String toString() {
+		return name+" -> "+fileURL;
 	}
 }

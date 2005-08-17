@@ -366,10 +366,6 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
 		return file.hasPermission(org.apache.commons.net.ftp.FTPFile.USER_ACCESS, org.apache.commons.net.ftp.FTPFile.WRITE_PERMISSION);
 	}
 	
-	public boolean isHidden() {
-		return false;
-	}
-
 	public boolean isDirectory() {
 		return file.isDirectory();
 	}

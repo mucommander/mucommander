@@ -52,7 +52,7 @@ public class SFTPFile extends AbstractFile {
 
 	
 	/**
-	 * Creates a new instance Sof FTPFile and reuses the given SSH/SFTP active connection.
+	 * Creates a new instance of SFTPFile and reuses the given SSH/SFTP active connection.
 	 */
 	private SFTPFile(FileURL fileURL, boolean addAuthInfo, SshClient sshClient, SftpSubsystemClient sftpChannel) throws IOException {
 		super(fileURL);
@@ -240,10 +240,6 @@ if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFi
 		return file==null?false:file.canWrite();
 	}
 	
-	public boolean isHidden() {
-		return false;
-	}
-
 	public boolean isDirectory() {
 		return file==null?false:file.isDirectory();
 	}
@@ -340,7 +336,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starts");
 		checkConnection();
 
 		List files = new Vector();
-		
+
+		// Modified J2SSH method
 		sftpChannel.listChildren(file, files);
 
 		// File doesn't exists

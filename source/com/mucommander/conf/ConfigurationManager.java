@@ -39,7 +39,7 @@ import com.mucommander.PlatformManager;
 public class ConfigurationManager {
     /** Contains all the registered configuration listeners. */
     private static LinkedList listeners = new LinkedList();
-    /** Name of the configuration file to parse. */
+    /** Name of the configuration file */
     private static final String CONFIGURATION_FILE = "preferences.xml";
     /** Instance of ConfigurationManager used to enfore configuration file loading. */
     private static ConfigurationManager singleton = new ConfigurationManager();
@@ -98,28 +98,13 @@ public class ConfigurationManager {
      * Returns the path to the configuration file.
      */
     private static String getConfigurationFilePath() {
-        return new File(getConfigurationFolder(), CONFIGURATION_FILE).getAbsolutePath();
+        return new File(PlatformManager.getPreferencesFolder(), CONFIGURATION_FILE).getAbsolutePath();
     }
 
 	
     private static String getGenericConfigurationFilePath() {
-        return new File(getGenericConfigurationFolder(), CONFIGURATION_FILE).getAbsolutePath();
+        return new File(PlatformManager.getGenericPreferencesFolder(), CONFIGURATION_FILE).getAbsolutePath();
     }	
-
-	
-    private static File getConfigurationFolder() {
-		// Mac OS X specific folder (~/Library/Preferences/)
-		if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X)
-			return new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");		
-		// For all other platforms, return generic folder (~/.mucommander)
-		else
-			return getGenericConfigurationFolder();
-    }
-
-	
-	private static File getGenericConfigurationFolder() {
-		return new File(System.getProperty("user.home")+"/.mucommander");		
-	}
 
 	
     /**
@@ -145,21 +130,21 @@ public class ConfigurationManager {
 
 		try {
 			loadConfiguration(getConfigurationFilePath());
-			if(com.mucommander.Debug.ON) System.out.println("Found and loaded configuration file: "+getConfigurationFilePath());						
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFilePath());						
 			return true;
 		}
 		catch(Exception e) {
-			if(com.mucommander.Debug.ON) System.out.println("No configuration file found at "+getConfigurationFilePath());			
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No configuration file found at "+getConfigurationFilePath());			
 		}
 
 		if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X) {
 			try {
 				loadConfiguration(getGenericConfigurationFilePath());
-				if(com.mucommander.Debug.ON) System.out.println("Found and loaded configuration file: "+getGenericConfigurationFilePath());						
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getGenericConfigurationFilePath());						
 				return true;
 			}
 			catch(Exception e) {
-				if(com.mucommander.Debug.ON) System.out.println("No configuration file found at "+getGenericConfigurationFilePath());			
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No configuration file found at "+getGenericConfigurationFilePath());			
 			}
 		}
 		
@@ -173,17 +158,9 @@ public class ConfigurationManager {
     public static synchronized void writeConfiguration() {
         PrintWriter out = null;
 		try {
-			// Makes sure that configuration folder exists and if it doesn't try to create it
-			File prefsFolder = getConfigurationFolder();
-			if(!prefsFolder.exists()) {
-				if(com.mucommander.Debug.ON) System.out.println("Creating mucommander preferences folder "+prefsFolder.getAbsolutePath());
-				if(!prefsFolder.mkdir())
-					System.out.println("Warning: unable to create mucommander prefs folder: "+prefsFolder.getAbsolutePath());
-			}
-
 			ConfigurationWriter writer = new ConfigurationWriter();
 			String filePath = getConfigurationFilePath();
-			if(com.mucommander.Debug.ON) System.out.println("Writing configuration file: "+filePath);						
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing configuration file: "+filePath);						
 		
 			out = new PrintWriter(new FileOutputStream(filePath));
 			writer.writeXML(out);
@@ -435,7 +412,7 @@ public class ConfigurationManager {
     public static synchronized void addConfigurationListener(ConfigurationListener listener) {
 		listeners.add(listener);
 		if(com.mucommander.Debug.ON)
-			System.out.println("ConfigurationManager.addConfigurationListener: "+listeners.size()+" listeners");
+			com.mucommander.Debug.trace("ConfigurationManager.addConfigurationListener: "+listeners.size()+" listeners");
 	}
 
     /**
@@ -445,7 +422,7 @@ public class ConfigurationManager {
     public static synchronized void removeConfigurationListener(ConfigurationListener listener) {
 		listeners.remove(listener);
 		if(com.mucommander.Debug.ON)
-			System.out.println("ConfigurationManager.removeConfigurationListener: "+listeners.size()+" listeners");
+			com.mucommander.Debug.trace("ConfigurationManager.removeConfigurationListener: "+listeners.size()+" listeners");
 	}
 
     /**

@@ -53,8 +53,15 @@ public class Launcher {
 	 * No-arg private constructor.
 	 */
 	private Launcher() {
+
+		//////////////////////////////////////////////////////////////////////
+		// Important: all JAR resource files need to be loaded from main    //
+		//  thread (here may be a good place), because of some weirdness of //
+		//  JNLP/Webstart's ClassLoader.                                    //
+		//////////////////////////////////////////////////////////////////////
+
 		// If muCommander is running under Mac OS X (how lucky!), add some
-		// glue for the main menu bar.
+		// glue for the main menu bar and other OS X specifics.
 		if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X) {
 			// Use reflection to create a FinderIntegration class so that ClassLoader
 			// doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
@@ -79,11 +86,8 @@ public class Launcher {
 		// Traps VM shutdown
 		Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
-		//////////////////////////////////////////////////////////////////////
-		// Important: all JAR resource files need to be loaded from main    //
-		//  thread (here may be a good place), because of some weirdness of //
-		//  JNLP/Webstart's ClassLoader.                                    //
-		//////////////////////////////////////////////////////////////////////
+		// Checks that preferences folder exists and if not, creates it.
+		PlatformManager.checkCreatePreferencesFolder();
 
 		// Loads dictionary
 		com.mucommander.text.Translator.init();
