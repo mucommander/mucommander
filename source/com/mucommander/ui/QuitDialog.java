@@ -44,7 +44,6 @@ public class QuitDialog extends FocusDialog implements ActionListener {
 
 		// Selects Quit when enter is pressed
 		getRootPane().setDefaultButton(quitButton);
-//		FocusRequester.requestFocus(quitButton);
 		
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		setResizable(false);

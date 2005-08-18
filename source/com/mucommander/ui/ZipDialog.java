@@ -30,9 +30,6 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 	private JButton okButton;
 	private JButton cancelButton;
 
-	private final static int CANCEL_ACTION = 0;
-	private final static int REPLACE_ACTION = 1;
-
 	// Dialog's width has to be at least 240
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
 
@@ -56,8 +53,6 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		String initialPath = (isShiftDown?"":activeTable.getCurrentFolder().getAbsolutePath(true))+".zip";
 		filePathField = new JTextField(initialPath);
 		filePathField.setCaretPosition(initialPath.length()-4);
-//		EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
-//		filePathField.addKeyListener(escapeKeyAdapter);
 		mainPanel.add(filePathField);
 		
 		mainPanel.addSpace(10);
@@ -66,18 +61,14 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		mainPanel.add(label);
 		commentArea = new JTextArea();
 		commentArea.setRows(4);
-//		commentArea.addKeyListener(escapeKeyAdapter);
 		mainPanel.add(commentArea);
 
 		mainPanel.addSpace(10);
 
 		contentPane.add(mainPanel, BorderLayout.NORTH);
 				
-		okButton = new JButton(Translator.get("ok"));
+		okButton = new JButton(Translator.get("zip_dialog.zip"));
 		cancelButton = new JButton(Translator.get("cancel"));
-		// Escape key disposes dialog
-//		okButton.addKeyListener(escapeKeyAdapter);
-//		cancelButton.addKeyListener(escapeKeyAdapter);
 		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
 		// text field will receive initial focus

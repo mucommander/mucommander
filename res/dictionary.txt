@@ -455,12 +455,7 @@ file_menu.new_window:ES:Nueva ventana
 file_menu.new_window:CS:Nové okno
 file_menu.new_window:zh_TW:新視窗
 
-file_menu.run_command:EN:Run command
-file_menu.run_command:FR:Exécuter une commande
-file_menu.run_command:DE:Befehl ausführen
-file_menu.run_command:ES:Ejecutar un comando
-file_menu.run_command:CS:Spustit příkaz
-file_menu.run_command:zh_TW:執行命令
+file_menu.run_command:EN:$[run_dialog.run_command]...
 
 file_menu.zip:EN:Zip files...
 file_menu.zip:FR:Zipper fichiers...
@@ -692,6 +687,16 @@ view_menu.hide_status_bar:ES:Ocultar la barra de estado
 view_menu.hide_status_bar:CS:Skrýt stavový řádek
 view_menu.hide_status_bar:zh_TW:隱藏狀態列
 
+#################
+# Bookmark menu #
+#################
+
+bookmark_menu:EN:Bookmarks
+bookmark_menu:FR:Favoris
+
+
+
+bookmark_menu.add_bookmark:EN:$[add_bookmark_dialog.title]...
 
 ###############
 # Window menu #
@@ -1477,9 +1482,9 @@ file_selection_dialog.include_folders:CS:Zahrnout složky
 file_selection_dialog.include_folders:zh_TW:包括資料夾
 
 
-#########
-# Mkdir #
-#########
+################
+# Mkdir dialog #
+################
 
 mkdir_dialog.title:EN:Make directory
 mkdir_dialog.title:FR:Créer répertoire
@@ -1611,7 +1616,12 @@ properties_dialog.calculating:zh_TW:計算中...
 # Run dialog #
 ##############
 
-run_dialog.run_command:EN:$[file_menu.run_command]
+run_dialog.run_command:EN:Run command
+run_dialog.run_command:FR:Exécuter une commande
+run_dialog.run_command:DE:Befehl ausführen
+run_dialog.run_command:ES:Ejecutar un comando
+run_dialog.run_command:CS:Spustit příkaz
+run_dialog.run_command:zh_TW:執行命令
 
 run_dialog.run_command_description:EN:Run in current folder
 run_dialog.run_command_description:FR:Exécuter dans le répertoire courant
@@ -1738,9 +1748,9 @@ ftp_connect.anonymous_user:CS:Anonymní uživatel
 ftp_connect.anonymous_user:zh_TW:匿名使用者
 
 
-##############
-# AuthDialog #
-##############
+###############
+# Auth dialog #
+###############
 
 auth_dialog.title:EN:Authentication
 auth_dialog.title:FR:Authentification
@@ -1780,9 +1790,16 @@ auth_dialog.error_was:CS:Chyba byla: %1
 auth_dialog.error_was:zh_TW:錯誤為: %1
 
 
-#######
-# Zip #
-#######
+##############
+# Zip dialog #
+##############
+
+zip_dialog.zip:EN:Zip
+zip_dialog.zip:FR:Zipper
+zip_dialog.zip:DE:Packen
+zip_dialog.zip:ES:Comprimir
+zip_dialog.zip:CS:Komprimovat
+zip_dialog.zip:zh_TW:壓縮檔
 
 zip_dialog.title:EN:Zip files
 zip_dialog.title:FR:Zipper fichiers
@@ -1832,6 +1849,37 @@ zip_dialog.file_already_exists:DE:%1 existiert bereits im Zielordner.
 zip_dialog.file_already_exists:ES:%1 existe dÃ©jÃ  en el directorio de destino.
 zip_dialog.file_already_exists:CS:%1 již existuje v cilové složce.
 zip_dialog.file_already_exists:zh_TW:%1 已經存在目的地.
+
+
+#######################
+# Add Bookmark dialog #
+#######################
+
+add_bookmark_dialog.title:EN:Add bookmark
+add_bookmark_dialog.title:FR:Ajouter aux favoris
+
+
+
+add_bookmark_dialog.name:EN:Name
+add_bookmark_dialog.name:FR:Nom
+
+
+
+add_bookmark_dialog.url:EN:Location
+add_bookmark_dialog.url:FR:Emplacement
+
+
+
+add_bookmark_dialog.include_auth_info:EN:Include login and password (will be saved in the clear!)
+add_bookmark_dialog.include_auth_info:FR:Inclure les identifiants et mot de passe (seront sauvegardés en clair!)
+
+
+
+add_bookmark_dialog.add:EN:Add
+add_bookmark_dialog.add:FR:Ajouter
+
+
+
 
 
 ###############
@@ -2640,8 +2688,11 @@ table_popup.open:EN:Open
 table_popup.open:FR:Ouvrir
 
 
+
 table_popup.reveal_in_finder:EN:Reveal in Finder
 table_popup.reveal_in_finder:FR:Afficher dans le Finder
+
+
 
 
 table_popup.view:EN:$[command_bar.view]

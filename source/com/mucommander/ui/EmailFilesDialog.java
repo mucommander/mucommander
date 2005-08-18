@@ -71,7 +71,6 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			this.files = getFlattenedFiles(files);
 			
 			Container contentPane = getContentPane();
-//			EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
 			
 			YBoxPanel mainPanel = new YBoxPanel(5);
 	
@@ -87,19 +86,16 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			
 			// To (recipients) field
 			toField = new JTextField(lastTo);
-//			toField.addKeyListener(escapeKeyAdapter);
 			textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.to")+":", toField, 10);
 			
 			// Subject field
 			subjectField = new JTextField(lastSubject);
-//			subjectField.addKeyListener(escapeKeyAdapter);
 			textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.subject")+":", subjectField, 15);
 
 			mainPanel.add(textFieldsPanel);		
 	
 			// Body area
 			bodyArea = new JTextArea(lastBody);
-//			bodyArea.addKeyListener(escapeKeyAdapter);
 			bodyArea.setRows(6);
 			bodyArea.setLineWrap(true);
 			JScrollPane scrollPane = new JScrollPane(bodyArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -124,7 +120,6 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 					fileCheckboxes[i] = new JCheckBox(file.getName()
 						+" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB)+")", true);
 					fileCheckboxes[i].addItemListener(this);
-//					fileCheckboxes[i].addKeyListener(escapeKeyAdapter);
 					tempPanel2.add(fileCheckboxes[i]);
 				}
 				scrollPane = new JScrollPane(tempPanel2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -135,9 +130,6 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			// OK / Cancel buttons panel
 			okButton = new JButton(Translator.get("email_dialog.send"));
 			cancelButton = new JButton(Translator.get("cancel"));
-			// Escape key disposes dialog
-//			okButton.addKeyListener(escapeKeyAdapter);
-//			cancelButton.addKeyListener(escapeKeyAdapter);
 			contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 	
 			// 'To' field will receive initial focus

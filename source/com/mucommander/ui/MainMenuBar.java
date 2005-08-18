@@ -11,6 +11,8 @@ import com.mucommander.ui.help.ShortcutsDialog;
 import com.mucommander.ui.about.AboutDialog;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
+import com.mucommander.ui.bookmark.AddBookmarkDialog;
+
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.FileSet;
 
@@ -64,6 +66,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenuItem swapFoldersItem;
 	private JMenuItem setSameFolderItem;
 	private JMenuItem refreshItem;
+
+	// Bookmark menu
+	private JMenu bookmarkMenu;
+	private JMenuItem addBookmarkItem;
 
 	// Window menu
 	private JMenu windowMenu;
@@ -167,6 +173,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		showCommandBarItem = MenuToolkit.addMenuItem(viewMenu, "", menuItemMnemonicHelper, null, this);
 		
 		add(viewMenu);
+		
+		// Bookmark menu
+		menuItemMnemonicHelper.clear();
+		bookmarkMenu = MenuToolkit.addMenu(Translator.get("bookmark_menu"), menuItemMnemonicHelper, null);
+		addBookmarkItem = MenuToolkit.addMenuItem(bookmarkMenu, Translator.get("bookmark_menu.add_bookmark"), menuItemMnemonicHelper, null, this);
+		
+		add(bookmarkMenu);
 		
 		// Window menu
 		menuItemMnemonicHelper.clear();
@@ -352,6 +365,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			boolean statusBarVisible = !mainFrame.isStatusBarVisible();
 			mainFrame.setStatusBarVisible(statusBarVisible);
 			ConfigurationManager.setVariable("prefs.show_status_bar", ""+statusBarVisible);		
+		}
+		// Bookmark menu
+		else if (source == addBookmarkItem) {
+			new AddBookmarkDialog(mainFrame);
 		}
 		// Help menu
 		else if (source == keysItem) {

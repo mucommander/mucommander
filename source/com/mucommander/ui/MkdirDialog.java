@@ -55,12 +55,6 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
         cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
-//        // Escape key disposes dialog
-//        EscapeKeyAdapter escapeKeyAdapter = new EscapeKeyAdapter(this);
-//        mkdirPathField.addKeyListener(escapeKeyAdapter);
-//        okButton.addKeyListener(escapeKeyAdapter);
-//        cancelButton.addKeyListener(escapeKeyAdapter);
-
 		// Path field will receive initial focus
 		setInitialFocusComponent(mkdirPathField);		
 
