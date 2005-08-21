@@ -40,8 +40,8 @@ public class SMBFile extends AbstractFile {
 
 		AuthManager.authenticate(fileURL, addAuthInfo);
 
-		this.privateURL = fileURL.getURL(true);
-		this.publicURL = fileURL.getURL(false);
+		this.privateURL = fileURL.getStringRep(true);
+		this.publicURL = fileURL.getStringRep(false);
 		
 		// Unlike java.io.File, SmbFile throws an SmbException
 		// when file doesn't exist.
@@ -216,7 +216,7 @@ public class SMBFile extends AbstractFile {
 				destSmbFile = ((SMBFile)destFile).file;		// Reuse SmbFile instance
 			// Destination file uses SMB protocol but is not an instance of SMBFile (an archive file wrapped over for instance)
 			else
-				try { destSmbFile = new SmbFile(destFile.fileURL.getURL(true)); }	// Create new SmbFile instance
+				try { destSmbFile = new SmbFile(destFile.fileURL.getStringRep(true)); }	// Create new SmbFile instance
 				catch(IOException e) { return false; }
 			
 			try{

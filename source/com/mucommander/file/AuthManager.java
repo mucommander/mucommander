@@ -71,7 +71,7 @@ if(com.mucommander.Debug.ON) System.out.println("AuthManager.get, entries = "+en
 	 * FileURL and ignoring the login/password info in it (if any).
 	 */
 	public static AuthInfo get(FileURL fileURL) {
-		return get(fileURL.getURL(false));
+		return get(fileURL.getStringRep(false));
 	}
 		
 	
@@ -87,7 +87,7 @@ if(com.mucommander.Debug.ON) System.out.println("AuthManager.get, entries = "+en
 	 * FileURL and ignoring the login/password info in it (if any).
 	 */
 	public static void remove(FileURL fileURL) {
-		remove(fileURL.getURL(false));
+		remove(fileURL.getStringRep(false));
 	}
 
 	
@@ -110,11 +110,11 @@ if(com.mucommander.Debug.ON) System.out.println("AuthManager.get, entries = "+en
 		// add it to AuthManager and use it
 		if (urlAuthInfo!=null) {
 			if(addAuthInfo)
-				put(fileURL.getURL(false), urlAuthInfo);
+				put(fileURL.getStringRep(false), urlAuthInfo);
 		}
 		// if not, check if AuthManager has a login/password matching this url
 		else {
-			AuthInfo authInfo = get(fileURL.getURL(false));
+			AuthInfo authInfo = get(fileURL.getStringRep(false));
 			// Add login and password to the URL	
 			if (authInfo!=null) {
 				fileURL.setLogin(authInfo.getLogin());

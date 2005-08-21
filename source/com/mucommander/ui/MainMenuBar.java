@@ -12,6 +12,7 @@ import com.mucommander.ui.about.AboutDialog;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.ui.bookmark.AddBookmarkDialog;
+import com.mucommander.ui.bookmark.EditBookmarksDialog;
 
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.FileSet;
@@ -70,6 +71,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	// Bookmark menu
 	private JMenu bookmarkMenu;
 	private JMenuItem addBookmarkItem;
+	private JMenuItem editBookmarksItem;
 
 	// Window menu
 	private JMenu windowMenu;
@@ -178,6 +180,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		menuItemMnemonicHelper.clear();
 		bookmarkMenu = MenuToolkit.addMenu(Translator.get("bookmark_menu"), menuItemMnemonicHelper, null);
 		addBookmarkItem = MenuToolkit.addMenuItem(bookmarkMenu, Translator.get("bookmark_menu.add_bookmark"), menuItemMnemonicHelper, null, this);
+		editBookmarksItem = MenuToolkit.addMenuItem(bookmarkMenu, Translator.get("bookmark_menu.edit_bookmarks"), menuItemMnemonicHelper, null, this);
 		
 		add(bookmarkMenu);
 		
@@ -369,6 +372,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		// Bookmark menu
 		else if (source == addBookmarkItem) {
 			new AddBookmarkDialog(mainFrame);
+		}
+		else if (source == editBookmarksItem) {
+			new EditBookmarksDialog(mainFrame);
 		}
 		// Help menu
 		else if (source == keysItem) {

@@ -351,15 +351,29 @@ public class FileURL implements Cloneable {
 	
 	
 	/**
-	 * Reconstructs the URL from all parsed fields and returns it.
+	 * Reconstructs the URL and returns its String representation.
+	 *
+	 * @param includeAuthInfo if <code>true</code>, login and password (if any) will be included in the returned URL.
+	 * Login and password in URLs should never be visible to the end user.
+	 * @param maskPassword if <code>true</code> (and includeAuthInfo param too), password will be replaced by '*' characters. This
+	 * can be used to display a full URL to the end user without displaying the actual password.
 	 */
-	public String getURL(boolean includeAuthInfo) {
+	public String getStringRep(boolean includeAuthInfo, boolean maskPassword) {
 		String s = protocol + "://";
 		
 		if(includeAuthInfo && login!=null) {
 			s += login;
-			if(password!=null)
-				s += ":"+password;
+			if(password!=null) {
+				s += ":";
+				if(maskPassword) {
+					int passwordLength = password.length();
+					for(int i=0; i<passwordLength; i++)
+						s += "*";
+				}
+				else {
+					s += password;
+				}
+			}
 			s += "@";
 		}
 
@@ -375,6 +389,17 @@ public class FileURL implements Cloneable {
 		
 		return s;
 	}
+
+
+	/**
+	 * Reconstructs the URL and returns its String representation.
+	 *
+	 * @param includeAuthInfo if <code>true</code>, login and password (if any) will be included in the returned URL and not masked.
+	 * Login and password in URLs should never be visible to the end user.
+	 */
+	public String getStringRep(boolean includeAuthInfo) {
+		return getStringRep(includeAuthInfo, false);
+	}
 	
 	
 	public Object clone() throws CloneNotSupportedException {
@@ -382,14 +407,14 @@ public class FileURL implements Cloneable {
 	}
 	
 	public String toString() {
-		return getURL(true);
+		return getStringRep(true);
 	}
 	
 	public boolean equals(Object o) {
 		if(!(o instanceof FileURL))
 			return false;
 		
-		return ((FileURL)o).getURL(true).equals(getURL(true));
+		return ((FileURL)o).getStringRep(true).equals(getStringRep(true));
 	}
 	
 	

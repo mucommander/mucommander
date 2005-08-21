@@ -39,7 +39,7 @@ public class HTTPFile extends AbstractFile {
 	 * Creates a new instance of HTTPFile.
 	 */
 	public HTTPFile(FileURL fileURL) throws IOException {
-		this(fileURL, new URL(fileURL.getURL(true)));
+		this(fileURL, new URL(fileURL.getStringRep(true)));
 	}
 
 	
@@ -140,7 +140,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+c
 
 	public String getAbsolutePath() {
 //		return urlString;
-		return fileURL.getURL(true);
+		return fileURL.getStringRep(true);
 	}
 
 	public String getSeparator() {

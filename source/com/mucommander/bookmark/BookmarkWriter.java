@@ -38,7 +38,7 @@ public class BookmarkWriter {
 			Bookmark bookmark = (Bookmark)bookmarks.elementAt(i);
 			ps.println("\t<bookmark>");
 			ps.println("\t\t<name>"+encodeEntities(bookmark.getName())+"</name>");
-			ps.println("\t\t<url>"+encodeEntities(bookmark.getURL().getURL(true))+"</url>");
+			ps.println("\t\t<url>"+encodeEntities(bookmark.getURL().getStringRep(true))+"</url>");
 			ps.println("\t</bookmark>");
 		}
 

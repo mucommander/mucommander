@@ -177,7 +177,7 @@ if(com.mucommander.Debug.ON) System.out.println("initConnection: "+ftpClient.get
 			AuthManager.authenticate(fileURL, addAuthInfo);
 			AuthInfo authInfo = AuthInfo.getAuthInfo(fileURL);
 
-if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileURL.getURL(true)+" authInfo="+authInfo);
+if(com.mucommander.Debug.ON) System.out.println("initConnection: fileURL="+fileURL.getStringRep(true)+" authInfo="+authInfo);
 			if(authInfo==null)
 				throw new AuthException(fileURL);
 			
@@ -305,7 +305,7 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 	
 	public String getAbsolutePath() {
 //		return absPath;
-		return fileURL.getURL(false);
+		return fileURL.getStringRep(false);
 	}
 
 	public String getSeparator() {
@@ -334,7 +334,7 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 		if(!parentValSet) {
 			FileURL parentFileURL = this.fileURL.getParent();
 			if(parentFileURL!=null) {
-if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getURL(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
+if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getStringRep(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
 				parentFileURL.setProperty("passiveMode", ""+passiveMode);
 				try { this.parent = new FTPFile(parentFileURL, false, this.ftpClient); }
 				catch(IOException e) {}
@@ -475,7 +475,7 @@ if(com.mucommander.Debug.ON) System.out.println("FTPFile.ls(): ParserInitializat
 		String childName;
 		int nbFiles = files.length;
 		int fileCount = 0;
-		String parentURL = fileURL.getURL(false);
+		String parentURL = fileURL.getStringRep(false);
 		if(!parentURL.endsWith(SEPARATOR))
 			parentURL += SEPARATOR;
 

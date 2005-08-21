@@ -53,7 +53,7 @@ public class AuthDialog extends FocusDialog implements ActionListener {
 		yPanel.addSpace(20);
 		
 		FileURL fileURL = authException.getFileURL();
-		this.publicURL = fileURL.getURL(false);
+		this.publicURL = fileURL.getStringRep(false);
 
 		TextFieldsPanel textFieldsPanel = new TextFieldsPanel(10); 
 

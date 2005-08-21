@@ -164,7 +164,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
 
 			// Set new folder's path in location field
-			locationField.setText(folder==null?folderPath==null?folderURL.getURL(false):folderPath:folder.getAbsolutePath());
+			locationField.setText(folder==null?folderPath==null?folderURL.getStringRep(false):folderPath:folder.getAbsolutePath());
 
 			// Show some progress in the progress bar to give hope
 			locationField.setProgressValue(10);

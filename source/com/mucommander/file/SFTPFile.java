@@ -109,7 +109,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("connecting to "+fileUR
 			AuthInfo authInfo = AuthInfo.getAuthInfo(fileURL);
 
 			// Throw an AuthException if no auth information
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL.getURL(true)+" authInfo="+authInfo);
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL.getStringRep(true)+" authInfo="+authInfo);
 			if(authInfo==null)
 				throw new AuthException(fileURL, "Login and password required");
 			
@@ -170,7 +170,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isConnected= "+sshClie
 	}
 	
 	public String getAbsolutePath() {
-		return fileURL.getURL(false);
+		return fileURL.getStringRep(false);
 	}
 
 	public String getSeparator() {
@@ -209,7 +209,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("return false "+e);
 		if(!parentValSet) {
 			FileURL parentFileURL = this.fileURL.getParent();
 			if(parentFileURL!=null) {
-if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getURL(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
+if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getStringRep(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
 				try { this.parent = new SFTPFile(parentFileURL, false, this.sshClient, this.sftpChannel); }
 				catch(IOException e) {}
 			}
@@ -346,7 +346,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("nbFiles="+nbFiles);
 		if(nbFiles==0)
 			return new AbstractFile[] {};
 	
-		String parentURL = fileURL.getURL(false);
+		String parentURL = fileURL.getStringRep(false);
 		if(!parentURL.endsWith(SEPARATOR))
 			parentURL += SEPARATOR;
 
