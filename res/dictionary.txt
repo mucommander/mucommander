@@ -29,6 +29,7 @@ ok:ES:Aceptar
 ok:CS:OK
 ok:zh_TW:確定
 
+
 yes:EN:Yes
 yes:FR:Oui
 yes:DE:Ja
@@ -688,15 +689,16 @@ view_menu.hide_status_bar:CS:Skrýt stavový řádek
 view_menu.hide_status_bar:zh_TW:隱藏狀態列
 
 #################
-# Bookmark menu #
+# Bookmarks menu #
 #################
 
-bookmark_menu:EN:Bookmarks
-bookmark_menu:FR:Favoris
+bookmarks_menu:EN:Bookmarks
+bookmarks_menu:FR:Favoris
 
+bookmarks_menu.add_bookmark:EN:$[add_bookmark_dialog.title]...
 
+bookmarks_menu.edit_bookmarks:EN:$[edit_bookmarks_dialog.title]...
 
-bookmark_menu.add_bookmark:EN:$[add_bookmark_dialog.title]...
 
 ###############
 # Window menu #
@@ -1865,8 +1867,8 @@ add_bookmark_dialog.name:FR:Nom
 
 
 
-add_bookmark_dialog.url:EN:Location
-add_bookmark_dialog.url:FR:Emplacement
+add_bookmark_dialog.location:EN:Location
+add_bookmark_dialog.location:FR:Emplacement
 
 
 
@@ -1877,6 +1879,47 @@ add_bookmark_dialog.include_auth_info:FR:Inclure les identifiants et mot de pass
 
 add_bookmark_dialog.add:EN:Add
 add_bookmark_dialog.add:FR:Ajouter
+
+
+
+
+#######################
+# Edit Bookmarks dialog #
+#######################
+
+edit_bookmarks_dialog.title:EN:Edit Bookmarks
+edit_bookmarks_dialog.title:FR:Éditer les favoris
+
+
+
+
+edit_bookmarks_dialog.name:EN:$[add_bookmark_dialog.name]
+
+edit_bookmarks_dialog.location:EN:$[add_bookmark_dialog.location]
+
+edit_bookmarks_dialog.remove:EN:Remove
+edit_bookmarks_dialog.remove:FR:Supprimer
+
+
+
+
+
+edit_bookmarks_dialog.move_up:EN:Move up
+edit_bookmarks_dialog.move_up:FR:Déplacer haut
+
+
+
+
+
+edit_bookmarks_dialog.move_down:EN:Move down
+edit_bookmarks_dialog.move_down:FR:Déplacer bas
+
+
+
+
+edit_bookmarks_dialog.done:EN:Done
+edit_bookmarks_dialog.done:FR:Terminé
+
 
 
 

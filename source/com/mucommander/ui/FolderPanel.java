@@ -392,10 +392,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 			// Restore mouse/keybaord events and default cursor
 			disableNoEventsMode();
 
-			// Restore focus on table if it had it before
 			// /!\ Focus should be restored after disableNoEventsMode has been called
+			// Restore focus on table if it had it before
 			if(hadFocus || mainFrame.getLastActiveTable()==fileTable)
 				fileTable.requestFocus();
+			// Focus must be moved away from glass pane
+			else
+				mainFrame.requestFocus();
 		}
 	}
 

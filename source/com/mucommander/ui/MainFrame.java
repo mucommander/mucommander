@@ -519,6 +519,7 @@ if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): destFo
 	 * Overrides JComponent's requestFocus() method to request focus on the last active FolderPanel.
 	 */
 	public void requestFocus() {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("focus requested, isVisible="+isVisible());
 		// If visible, call requestFocus() directly on the component
 		if(isVisible())
 			lastActiveTable.getFolderPanel().requestFocus();

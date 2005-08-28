@@ -21,12 +21,23 @@ import com.mucommander.job.SendMailJob;
 
 import com.mucommander.text.Translator;
 
+import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.bookmark.Bookmark;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import java.util.Vector;
 
+
+/**
+ * This class is the main menu bar. It takes care of displaying menu and menu items and triggering
+ * the proper actions.
+ *
+ * @author Maxence Bernard
+ */
 public class MainMenuBar extends JMenuBar implements ActionListener, LocationListener, MenuListener {
 	private MainFrame mainFrame;	
 	
@@ -51,7 +62,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenuItem unmarkAllItem;
 	private JMenuItem invertSelectionItem;
 	private JMenuItem compareFoldersItem;
-//private JMenuItem renamerItem;
 	
 	// View menu
 	private JMenu viewMenu;
@@ -69,9 +79,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenuItem refreshItem;
 
 	// Bookmark menu
-	private JMenu bookmarkMenu;
+	private JMenu bookmarksMenu;
 	private JMenuItem addBookmarkItem;
 	private JMenuItem editBookmarksItem;
+
+	private int bookmarksOffset;  // Index of first bookmark in menu
+	private Vector bookmarks;
+	private Vector bookmarksMenuItems;
 
 	// Window menu
 	private JMenu windowMenu;
@@ -103,7 +117,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		// File menu
 		fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
 		newWindowItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.new_window"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK), this);
-//
+
 		fileMenu.add(new JSeparator());
 		serverConnectItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.server_connect"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.CTRL_MASK), this);
 		runItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.run_command"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK), this);
@@ -134,8 +148,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 
 		markMenu.add(new JSeparator());
 		compareFoldersItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.compare_folders"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), this);
-//if(com.mucommander.Debug.ON)
-//	renamerItem = MenuToolkit.addMenuItem(markMenu, "[[[RENAMER]]]", menuItemMnemonicHelper, null, this);
 
 		add(markMenu);
 		
@@ -144,7 +156,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
 		goBackItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_back"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK), this);
 		goForwardItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_forward"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK), this);
-//		goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
 		goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, null, this);
 		viewMenu.add(new JSeparator());
 		sortByNameItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_name"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK), this);
@@ -162,7 +173,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		viewMenu.add(new JSeparator());
 		swapFoldersItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.swap_folders"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_MASK), this);
 		setSameFolderItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.set_same_folder"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK), this);
-//		refreshItem = addMenuItem(viewMenu, "Refresh", KeyEvent.VK_R, null);
 
 		viewMenu.add(new JSeparator());
 		// Auto column sizing
@@ -176,13 +186,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		
 		add(viewMenu);
 		
-		// Bookmark menu
+		// Bookmark menu, bookmarks will be added to the menu each it gets displayed
 		menuItemMnemonicHelper.clear();
-		bookmarkMenu = MenuToolkit.addMenu(Translator.get("bookmark_menu"), menuItemMnemonicHelper, null);
-		addBookmarkItem = MenuToolkit.addMenuItem(bookmarkMenu, Translator.get("bookmark_menu.add_bookmark"), menuItemMnemonicHelper, null, this);
-		editBookmarksItem = MenuToolkit.addMenuItem(bookmarkMenu, Translator.get("bookmark_menu.edit_bookmarks"), menuItemMnemonicHelper, null, this);
+		bookmarksMenu = MenuToolkit.addMenu(Translator.get("bookmarks_menu"), menuItemMnemonicHelper, this);
+		addBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.add_bookmark"), menuItemMnemonicHelper, null, this);
+		editBookmarksItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.edit_bookmarks"), menuItemMnemonicHelper, null, this);
+		bookmarksMenu.add(new JSeparator());
+		// Remember bookmarks offset (index of first bookmark in menu) for later
+		this.bookmarksOffset = bookmarksMenu.getItemCount();
 		
-		add(bookmarkMenu);
+		add(bookmarksMenu);
 		
 		// Window menu
 		menuItemMnemonicHelper.clear();
@@ -244,11 +257,21 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		return windowMenu;	
 	}
 
+
+	/////////////////////////////
+	// LocationListener method //
+	/////////////////////////////
+	
 	public void locationChanged(FolderPanel folderPanel) {
 		goBackItem.setEnabled(folderPanel.hasBackFolder());
 		goForwardItem.setEnabled(folderPanel.hasForwardFolder());
 		goToParentItem.setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
 	}
+
+
+	///////////////////////////
+	// ActionListener method //
+	///////////////////////////
 
 	public void actionPerformed(ActionEvent e) {
 		// Do nothing while in 'no events mode'
@@ -314,9 +337,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == compareFoldersItem) {
 			mainFrame.compareDirectories();	
 		}
-//		else if (source == renamerItem) {
-//			(new RenamerDialog(mainFrame)).showDialog();	
-//		}
 		// View menu
 		else if (source == goBackItem) {
 			mainFrame.getLastActiveTable().getFolderPanel().goBack();	
@@ -376,6 +396,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		else if (source == editBookmarksItem) {
 			new EditBookmarksDialog(mainFrame);
 		}
+		// Bookmark menu item
+		else if (bookmarksMenuItems.contains(source)) {
+			int index = bookmarksMenuItems.indexOf(source);
+			mainFrame.getLastActiveTable().getFolderPanel().trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getURL(), true);
+		}		
 		// Help menu
 		else if (source == keysItem) {
 			new ShortcutsDialog(mainFrame).showDialog();
@@ -395,9 +420,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	}
 
 
-	/************************
-	 * MenuListener methods *
-	 ************************/
+	//////////////////////////
+	// MenuListener methods //
+	//////////////////////////
 
 	public void menuSelected(MenuEvent e) {
 	 	Object source = e.getSource();
@@ -415,6 +440,26 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			showCommandBarItem.setText(mainFrame.isCommandBarVisible()?Translator.get("view_menu.hide_command_bar"):Translator.get("view_menu.show_command_bar"));
 			showStatusBarItem.setText(mainFrame.isStatusBarVisible()?Translator.get("view_menu.hide_status_bar"):Translator.get("view_menu.show_status_bar"));
 			autoSizeColumnsItem.setSelected(mainFrame.getLastActiveTable().getAutoSizeColumns());
+		}
+		else if(source==bookmarksMenu) {
+			// Remove any previous bookmarks menu items from menu
+			// as they might have been changed since menu was last evoked
+			if(bookmarksMenuItems!=null) {
+				int nbBookmarks = bookmarks.size();
+				for(int i=0; i<nbBookmarks; i++) {
+					bookmarksMenu.remove(bookmarksOffset);
+					// Remove ActionListeners as well
+					((JMenuItem)bookmarksMenuItems.elementAt(i)).removeActionListener(this);
+				}
+			}
+	
+			// Add bookmarks menu items
+			this.bookmarks = BookmarkManager.getBookmarks();
+			this.bookmarksMenuItems = new Vector();
+			int nbBookmarks = bookmarks.size();
+			MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+			for(int i=0; i<nbBookmarks; i++)
+				bookmarksMenuItems.add(MenuToolkit.addMenuItem(bookmarksMenu, ((Bookmark)bookmarks.elementAt(i)).getName(), menuItemMnemonicHelper, null, this));
 		}
 	}
 	
