@@ -104,10 +104,10 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	
 		public void tryKill() {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-			if(isKilled)
-				return;
-
 			synchronized(lock) {
+				if(isKilled)
+					return;
+
 				isKilled = true;
 				if(!doNotKill) {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
