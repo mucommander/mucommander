@@ -33,21 +33,20 @@ public class SMBFile extends AbstractFile {
 	private SMBFile(FileURL fileURL, boolean addAuthInfo) throws IOException {	
 		super(fileURL);
 
-//		if(!url.endsWith("/"))
-//			url += '/';
-//		url = file.getCanonicalPath();
-//		this.fileURL = new FileURL(url);
-
 		AuthManager.authenticate(fileURL, addAuthInfo);
 
 		this.privateURL = fileURL.getStringRep(true);
 		this.publicURL = fileURL.getStringRep(false);
-		
-		// Unlike java.io.File, SmbFile throws an SmbException
-		// when file doesn't exist.
-		// All SMB workgroups, servers, shares, or directories URLs require a trailing slash '/'. 
-		// Regular SMB files can have a trailing slash as well, so let's add a trailing slash.
-		this.file = new SmbFile(privateURL.endsWith("/")?privateURL:privateURL+"/");
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("publicURL= "+publicURL);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateURL);
+
+//		// Unlike java.io.File, SmbFile throws an SmbException
+//		// when file doesn't exist.
+//		// All SMB workgroups, servers, shares, or directories URLs require a trailing slash '/'. 
+//		// Regular SMB files can have a trailing slash as well, so let's add a trailing slash.
+//		this.file = new SmbFile(privateURL.endsWith("/")?privateURL:privateURL+"/");
+		this.file = new SmbFile(privateURL);
 	}
 	
 	

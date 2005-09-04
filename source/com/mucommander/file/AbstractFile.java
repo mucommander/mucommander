@@ -93,7 +93,7 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 
 		// Create a FileURL instance using the given path
 		FileURL fileURL;
-		// If path contains no protocol, consider the file to be a local file and add the 'file' protocol in the URL
+		// If path contains no protocol, consider the file to be a local file and add the 'file' protocol to the URL
 		if(absPath.indexOf("://")==-1)
 			fileURL = new FileURL("file://localhost"+(absPath.charAt(0)=='/'?absPath:'/'+absPath));
 		else

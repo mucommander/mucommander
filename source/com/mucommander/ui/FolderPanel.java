@@ -69,7 +69,6 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		private String folderPath;
 		private FileURL folderURL;
 		private boolean addToHistory;
-//		private AbstractFile fileToSelect;
 		
 		private boolean isKilled;
 		private boolean doNotKill;
@@ -85,20 +84,17 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		public ChangeFolderThread(AbstractFile folder, boolean addToHistory) {
 			this.folder = folder;
 			this.addToHistory = addToHistory;
-//			setPriority(MAX_PRIORITY);
 		}
 
 		public ChangeFolderThread(String folderPath, boolean addToHistory) {
 			this.folderPath = folderPath;
 			this.addToHistory = addToHistory;
-//			setPriority(MAX_PRIORITY);
 		}
 
 
 		public ChangeFolderThread(FileURL folderURL, boolean addToHistory) {
 			this.folderURL = folderURL;
 			this.addToHistory = addToHistory;
-//			setPriority(MAX_PRIORITY);
 		}
 	
 	
@@ -336,22 +332,25 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFold
 					break;
 				}
 				catch(IOException e) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException!");
 //					noWaitDialog = true;
-
+					
 					// Restore default cursor
 					mainFrame.setCursor(Cursor.getDefaultCursor());
-					
-					// Retry (loop) if user authentified
-					if(showAccessErrorDialog(e)) {
-						if(folderURL!=null)
-							folder = AbstractFile.getAbstractFile(folderURL);
-						else if(folder!=null)
-							folder = AbstractFile.getAbstractFile(folder.getURL());
-						else
-							folder = AbstractFile.getAbstractFile(folderPath);
 
-						continue;
+					if(e instanceof AuthException) {
+						AuthException authException = (AuthException)e;
+						// Retry (loop) if user authentified
+						if(showAuthDialog(authException)) {
+							folder = AbstractFile.getAbstractFile(authException.getFileURL().getStringRep(false));
+							continue;
+						}
 					}
+					else {
+						showAccessErrorDialog(e);				
+					}
+					
+					// Break!
 					break;
 				}
 			}
@@ -542,29 +541,29 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 			((LocationListener)locationListeners.elementAt(i)).locationChanged(this);
 	}
 
-	
-	/**
-	 * Depending on the given IOException kind :
-	 * - if AuthException : pops up an authentication window where the user can enter a new login and password
-	 * - if any other IOException : displays a popup message notifying the user that the request folder couldn't be opened.
-	 *
-	 * @return <code>true</code> if the exception was due to authentication and the user was asked to authentify, in that case, caller may want to try and read the folder again.
-	 */
-	private boolean showAccessErrorDialog(IOException e) {
-		if(e instanceof AuthException) {
-			AuthDialog authDialog = new AuthDialog(mainFrame, (AuthException)e);
-			authDialog.showDialog();
-			return authDialog.okPressed();
-		}
-		else {
-			String exceptionMsg = e==null?null:e.getMessage();
-			String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?".":": "+exceptionMsg);
-			if(!errorMsg.endsWith("."))
-				errorMsg += ".";
 
-			JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
+	/**
+	 * Displays a popup message notifying the user that the request folder couldn't be opened.
+	 */
+	private void showAccessErrorDialog(IOException e) {
+		String exceptionMsg = e==null?null:e.getMessage();
+		String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?".":": "+exceptionMsg);
+		if(!errorMsg.endsWith("."))
+			errorMsg += ".";
+
+		JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+	}
+
+
+	/**
+	 * Pops up an authentication window where the user can enter a new login and password
+	 *
+	 * @return true if the user entered a (potentially) new login and password and pressed OK.
+	 */
+	private boolean showAuthDialog(AuthException e) {
+		AuthDialog authDialog = new AuthDialog(mainFrame, e);
+		authDialog.showDialog();
+		return authDialog.okPressed();
 	}
 
 
@@ -574,7 +573,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	 * This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
 	 */
 	public void trySetCurrentFolder(AbstractFile folder, boolean addToHistory) {
-//		trySetCurrentFolder(folder, addToHistory, null);
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" ");
 
 if(changeFolderThread!=null && com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
