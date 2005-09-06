@@ -42,20 +42,22 @@ public class StressTester implements Runnable, ActionListener {
 				}
 				else {
 					AbstractFile randomChild = children[random.nextInt(children.length)];
+					if(!randomChild.isBrowsable())
+						continue;
 					// Try to ls() in RandomChild to trigger an IOException if folder is not readable
 					// so that no error dialog pops up when calling trySetCurrentFolder()
 					randomChild.ls();
+					folderPanel.getFileTable().selectFile(randomChild);
 					folderPanel.trySetCurrentFolder(randomChild, true);
 				}
 			}
-			catch(java.io.IOException e) {
+			catch(Exception e) {
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught Exception: "+e);
 			}
-		
-			try {
-				stressThread.sleep(100+random.nextInt(3000));
-			}
-			catch(InterruptedException e) {
-			}
+
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Sleeping for a bit...");		
+			try { stressThread.sleep(100+random.nextInt(3000)); }
+			catch(InterruptedException e) { if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught InterruptedException "+e);}
 		}
 	}
 
