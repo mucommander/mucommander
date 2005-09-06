@@ -153,6 +153,18 @@
     </java>
   </target>
 
+  <!-- Launches mucommander from the classes directory -->
+  <target name="stresstest">
+    <java classname="com.mucommander.StressTester" fork="true">
+      <classpath>
+        <pathelement location="classes"/>
+         <fileset dir="lib">
+          <include name="**/*.jar"/>
+         </fileset>
+        <pathelement path="${classpath}"/>
+      </classpath>
+    </java>
+  </target>
 
    <!-- Launches mucommander from the distribution JAR file -->
   <target name="runjar">

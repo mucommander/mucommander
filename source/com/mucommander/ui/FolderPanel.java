@@ -255,9 +255,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 						}
 
 						boolean browse = false;
+						// Directory
 						if(file.isDirectory()) {
 							// Just continue
 						}
+						// Browsable file (Zip archive for instance) : browse or download ?
 						else if(file.isBrowsable()) {
 //							noWaitDialog = true;
 
@@ -280,7 +282,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 							// Download file
 							if(ret==DOWNLOAD_ACTION) {
 //								noWaitDialog = true;
+								
+								showDownloadDialog(file);
+								break;
 
+/*
 								FileSet fileSet = new FileSet(currentFolder);
 								fileSet.add(file);
 								
@@ -288,11 +294,17 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 								new DownloadDialog(mainFrame, fileSet);
 
 								break;
+*/
 							}
 							// Continue if BROWSE_ACTION
 							// Set cursor to hourglass/wait
 							mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 //							noWaitDialog = false;
+						}
+						// Regular file: download
+						else {
+							showDownloadDialog(file);
+							break;
 						}
 					
 						this.folder = file;
@@ -556,7 +568,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 
 	/**
-	 * Pops up an authentication window where the user can enter a new login and password
+	 * Pops up an authentication dialog where the user can enter a new login and password.
 	 *
 	 * @return true if the user entered a (potentially) new login and password and pressed OK.
 	 */
@@ -568,11 +580,24 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 
 	/**
+	 * Displays a download dialog box where the user can choose where to download the given file
+	 * or cancel the operation.
+	 */
+	private void showDownloadDialog(AbstractFile file) {
+		FileSet fileSet = new FileSet(currentFolder);
+		fileSet.add(file);
+		
+		// Show confirmation/path modification dialog
+		new DownloadDialog(mainFrame, fileSet);
+	}
+	
+
+	/**
 	 * Tries to change current folder, adding current folder to history if requested.
 	 * If something goes wrong, the user is notified by a dialog.
 	 * This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
 	 */
-	public void trySetCurrentFolder(AbstractFile folder, boolean addToHistory) {
+	public synchronized void trySetCurrentFolder(AbstractFile folder, boolean addToHistory) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" ");
 
 if(changeFolderThread!=null && com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
@@ -589,13 +614,13 @@ if(changeFolderThread!=null && com.mucommander.Debug.ON) com.mucommander.Debug.t
 
 	
 	
-	public void trySetCurrentFolder(String folderPath, boolean addToHistory) {
+	public synchronized void trySetCurrentFolder(String folderPath, boolean addToHistory) {
 		this.changeFolderThread = new ChangeFolderThread(folderPath, addToHistory);
 		changeFolderThread.start();
 	}
 
 
-	public void trySetCurrentFolder(FileURL folderURL, boolean addToHistory) {
+	public synchronized void trySetCurrentFolder(FileURL folderURL, boolean addToHistory) {
 		this.changeFolderThread = new ChangeFolderThread(folderURL, addToHistory);
 		changeFolderThread.start();
 	}
@@ -604,12 +629,12 @@ if(changeFolderThread!=null && com.mucommander.Debug.ON) com.mucommander.Debug.t
 	/**
 	 * Refreshes file table contents and notifies the user if current folder could not be refreshed.
 	 */
-	 public void tryRefresh() {
+	public synchronized void tryRefresh() {
 		trySetCurrentFolder(currentFolder, false);
-	 }
+	}
 		
 
-	public void setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory) {
+	private void setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory) {
 		fileTable.setCurrentFolder(folder, children);
 		this.currentFolder = folder;
 
@@ -640,27 +665,26 @@ if(changeFolderThread!=null && com.mucommander.Debug.ON) com.mucommander.Debug.t
 	}
 
 
-	public void setCurrentFolder(AbstractFile folder, boolean addToHistory) throws IOException {
-		setCurrentFolder(folder, folder.ls(), addToHistory);
-	}
+//	private void setCurrentFolder(AbstractFile folder, boolean addToHistory) throws IOException {
+//		setCurrentFolder(folder, folder.ls(), addToHistory);
+//	}
 
 
-	public void refresh() throws IOException {
-		setCurrentFolder(currentFolder, false);
+	public synchronized void refresh() throws IOException {
+//		setCurrentFolder(currentFolder, false);
+		setCurrentFolder(currentFolder, currentFolder.ls(), false);
 	}
 	
 	
-	public void goBack() {
-
+	public synchronized void goBack() {
 		if (historyIndex==0)
-//			return false;
 			return;
 		
 		AbstractFile folder = (AbstractFile)history.elementAt(--historyIndex);
 		trySetCurrentFolder(folder, false);
 	}
 	
-	public void goForward() {
+	public synchronized void goForward() {
 		if (historyIndex==history.size()-1)
 			return;
 		
