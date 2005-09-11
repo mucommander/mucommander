@@ -34,11 +34,18 @@ public class StressTester implements Runnable, ActionListener {
 			FolderPanel folderPanel = random.nextInt(2)==0?folderPanel1:folderPanel2;
 			AbstractFile currentFolder = folderPanel.getCurrentFolder();
 			AbstractFile parentFolder = currentFolder.getParent();
+
+			mainFrame.toBack();
+			mainFrame.toFront();
+			
 			try {
 				AbstractFile children[] = currentFolder.ls();
+				FileTable fileTable = folderPanel.getFileTable();
 				// 1 in 3 chance to go up if folder has children
 				if(children.length==0 || (random.nextInt(3)==0 && parentFolder!=null)) {
-					folderPanel.trySetCurrentFolder(parentFolder, true);
+					fileTable.selectRow(0);
+					fileTable.enterAction(false);
+//					folderPanel.trySetCurrentFolder(parentFolder, true);
 				}
 				else {
 					AbstractFile randomChild = children[random.nextInt(children.length)];
@@ -47,8 +54,9 @@ public class StressTester implements Runnable, ActionListener {
 					// Try to ls() in RandomChild to trigger an IOException if folder is not readable
 					// so that no error dialog pops up when calling trySetCurrentFolder()
 					randomChild.ls();
-					folderPanel.getFileTable().selectFile(randomChild);
-					folderPanel.trySetCurrentFolder(randomChild, true);
+					fileTable.selectFile(randomChild);
+					fileTable.enterAction(false);
+//					folderPanel.trySetCurrentFolder(randomChild, true);
 				}
 			}
 			catch(Exception e) {

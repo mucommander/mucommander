@@ -540,7 +540,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	}
 	
 
-	public AbstractFile getCurrentFolder() {
+	public synchronized AbstractFile getCurrentFolder() {
 		return currentFolder;
 	}
 
@@ -600,14 +600,16 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	public synchronized void trySetCurrentFolder(AbstractFile folder, boolean addToHistory) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" ");
 
-if(changeFolderThread!=null && com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
+		if(changeFolderThread!=null) {
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
+			return;
+		}
 		
 		if (folder==null || !folder.exists()) {
 			JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
-//		this.changeFolderThread = new ChangeFolderThread(folder.getURL(), addToHistory);
 		this.changeFolderThread = new ChangeFolderThread(folder, addToHistory);
 		changeFolderThread.start();
 	}
@@ -665,13 +667,7 @@ if(changeFolderThread!=null && com.mucommander.Debug.ON) com.mucommander.Debug.t
 	}
 
 
-//	private void setCurrentFolder(AbstractFile folder, boolean addToHistory) throws IOException {
-//		setCurrentFolder(folder, folder.ls(), addToHistory);
-//	}
-
-
 	public synchronized void refresh() throws IOException {
-//		setCurrentFolder(currentFolder, false);
 		setCurrentFolder(currentFolder, currentFolder.ls(), false);
 	}
 	
