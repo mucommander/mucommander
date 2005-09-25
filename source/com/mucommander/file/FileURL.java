@@ -89,7 +89,7 @@ public class FileURL implements Cloneable {
 
 //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw path = "+path);
 			
-			// Factor out '.' and '..' and replace '~' by home folder for 'file' protocol
+			// Canonize path: factor out '.' and '..' and replace '~' by home folder for 'file' protocol
 			if(!path.equals("/")) {
 				pos = 0;	// position of current '/' or '\' character
 				int pos2 = 0;	// position of next '/' or '\' character
@@ -177,6 +177,8 @@ public class FileURL implements Cloneable {
 //					try { filename = URLDecoder.decode(filename); }
 //					catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 				
+				// Creates parent URL from reconstructed URL with canonized path
+				url = reconstructURL(path, true, true);
 				len = url.length();
 				String urlCopy = new String(url).replace('\\', '/');
 				separatorPos = (urlCopy.endsWith("/")?urlCopy.substring(0, --len):urlCopy).lastIndexOf('/');
@@ -360,6 +362,20 @@ public class FileURL implements Cloneable {
 	 * can be used to display a full URL to the end user without displaying the actual password.
 	 */
 	public String getStringRep(boolean includeAuthInfo, boolean maskPassword) {
+		return reconstructURL(this.path, includeAuthInfo, maskPassword);
+	}
+
+
+	/**
+	 * Reconstructs the URL with the given path and returns its String representation.
+	 *
+	 * @param path the file's path
+	 * @param includeAuthInfo if <code>true</code>, login and password (if any) will be included in the returned URL.
+	 * Login and password in URLs should never be visible to the end user.
+	 * @param maskPassword if <code>true</code> (and includeAuthInfo param too), password will be replaced by '*' characters. This
+	 * can be used to display a full URL to the end user without displaying the actual password.
+	 */
+	private String reconstructURL(String path, boolean includeAuthInfo, boolean maskPassword) {
 		String s = protocol + "://";
 		
 		if(includeAuthInfo && login!=null) {
@@ -449,6 +465,8 @@ public class FileURL implements Cloneable {
 			"file://localhost/C:\\Projects",
 			"file://localhost/C:\\Projects\\",
 			"file://localhost/C:\\Documents and Settings",
+			"file://localhost/~/../..",
+			"file://localhost/~/Projects/mucommander/../mucommander/./source/.."
 		};
 		
 		FileURL f;
@@ -460,9 +478,11 @@ public class FileURL implements Cloneable {
 				System.out.println(" - path= "+f.getPath());
 				System.out.println(" - host= "+f.getHost());
 				System.out.println(" - filename= "+f.getFilename());
-				System.out.println(" - parent= "+f.getParent()+"\n");
+				System.out.println(" - parent= "+f.getParent());
 				if(f.getParent()!=null)
 					System.out.println(" - parent path= "+f.getParent().getPath()+"\n");
+				else
+					System.out.println();
 				
 				if(f.getProtocol().equalsIgnoreCase("file"))
 					System.out.println(" FSFile's path="+AbstractFile.getAbstractFile(f.getPath(), true).getAbsolutePath());
