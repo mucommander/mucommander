@@ -1,4 +1,4 @@
-	package com.mucommander.file;
+package com.mucommander.file;
 
 import java.io.*;
 import java.util.Vector;
@@ -52,11 +52,13 @@ public class FSFile extends AbstractFile {
 	 */
 	public FSFile(FileURL fileURL) throws IOException {
 		super(fileURL);
-		
+
 		// Remove leading '/' if path is 'a la windows', i.e. starts with a drive like C:\
 		String path = fileURL.getPath();
+
 		if(path.indexOf(":\\")!=-1 && path.charAt(0)=='/')
 			path = path.substring(1, path.length());
+
 		init(new File(path));
 	}
 
@@ -112,11 +114,10 @@ public class FSFile extends AbstractFile {
 
 
 	public String getCanonicalPath() {
-		// To avoid drive seek and potential 'floppy drive not available' dialog under Win32
+		// To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
 		// triggered by java.io.File.getCanonicalPath() 
 		int osFamily = PlatformManager.getOSFamily();
 		if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
-//			String absPath = getAbsolutePath(true);
 			String absPath = getAbsolutePath();
 			if(absPath.equals("A:\\") || absPath.equals("B:\\"))
 				return absPath;
@@ -173,11 +174,6 @@ public class FSFile extends AbstractFile {
 	public AbstractFile getParent() {
 		// Retrieves parent and caches it
 		if (!parentValCached) {
-//			String parentS = file.getParent();
-//			if(parentS != null)
-//				try { parent = new FSFile(new FileURL("file://"+parentS), new File(parentS)); }
-//				catch(IOException e) {}
-
 			FileURL parentURL = getURL().getParent();
 			if(parentURL != null)
 				try { parent = new FSFile(parentURL, new File(parentURL.getPath())); }
@@ -193,8 +189,6 @@ public class FSFile extends AbstractFile {
 	}
 		
 	public boolean exists() {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exists= "+file.exists()+" path="+file.getAbsolutePath()+" absPath="+absPath, 2);
-
 		return file.exists();
 	}
 	
@@ -211,6 +205,14 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exists= "+file.exists(
 	}
 
 	public boolean isDirectory() {
+		// To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
+		// triggered by java.io.File.getCanonicalPath() 
+		int osFamily = PlatformManager.getOSFamily();
+		if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
+			if(absPath.equals("A:") || absPath.equals("B:"))
+				return true;
+		}
+
         return file.isDirectory();
 	}
 
@@ -275,7 +277,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exists= "+file.exists(
 	}
 
 	public void mkdir(String name) throws IOException {
-if(com.mucommander.Debug.ON) System.out.println("FSFile.mkdir "+absPath+separator+name);
 		if(!new File(absPath+separator+name).mkdir())
 			throw new IOException();
 	}

@@ -18,27 +18,10 @@ import java.util.StringTokenizer;
  */
 public class RootFolders {
 
-//	// First time init
-//	static {
-//		updateRootFolders();
-//	}
-
-//	/** Resolved root folders */
-//	private static AbstractFile rootFolders[];
-	
-	
-//	/**
-//	 * Returns resolved root folders.
-//	 */
-//	public static AbstractFile[] getRootFolders() {
-//		return rootFolders;
-//	}
-	
-	
-//	/**
-//	 * Updates root folders info.
-//	 */
-//	public static void updateRootFolders() {
+	/**
+	 * Resolves and returns an array of root (top level) folders. Those folders
+	 * are purposively not cached so that newly mounted folders will be returned.
+	 */
 	public static AbstractFile[] getRootFolders() {
 		Vector rootFoldersV = new Vector();
 
@@ -48,20 +31,20 @@ public class RootFolders {
 		if(osType==PlatformManager.MAC_OS_X) {
 			addMacOSXVolumes(rootFoldersV);
 			if(Debug.ON)
-				System.out.println("/Volumes's subfolders added: "+rootFoldersV);
+				Debug.trace("/Volumes's subfolders added: "+rootFoldersV);
 		}
 		else {
 			// Add java.io.File's root folders
 			addFileRoots(rootFoldersV);
 			if(Debug.ON)
-				System.out.println("java.io.File's root folders: "+rootFoldersV);
+				Debug.trace("java.io.File's root folders: "+rootFoldersV);
 	
 			// Add /etc/fstab folders
 			// If we're running Windows, we can just skip that
 			if(!(osType==PlatformManager.WINDOWS_9X || osType==PlatformManager.WINDOWS_NT)) {
 				addFstabEntries(rootFoldersV);
 				if(Debug.ON)
-					System.out.println("/etc/fstab mount points added: "+rootFoldersV);
+					Debug.trace("/etc/fstab mount points added: "+rootFoldersV);
 			}
 		}
 
@@ -70,7 +53,6 @@ public class RootFolders {
 		if(homeFolder!=null)
 			rootFoldersV.add(homeFolder);
 			
-		// Folders are cached for subsequent calls to getRootFolders()
 		AbstractFile rootFolders[] = new AbstractFile[rootFoldersV.size()];
 		rootFoldersV.toArray(rootFolders);
 	

@@ -161,7 +161,7 @@ public class FileURL implements Cloneable {
 				// parent is null
 			}
 			else {	
-				String pathCopy =new String(path).replace('\\', '/');
+				String pathCopy = new String(path).replace('\\', '/');
 				// Extract filename from path
 				int len = pathCopy.length();
 				char c;
@@ -178,9 +178,10 @@ public class FileURL implements Cloneable {
 //					catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 				
 				len = url.length();
-				separatorPos = (url.endsWith("/")?url.substring(0, --len):url).lastIndexOf('/');
+				String urlCopy = new String(url).replace('\\', '/');
+				separatorPos = (urlCopy.endsWith("/")?urlCopy.substring(0, --len):urlCopy).lastIndexOf('/');
 				if(separatorPos>7)
-					parent = url.substring(0, separatorPos);
+					parent = url.substring(0, separatorPos+1);	// Leave trailing separator
 			}
 		}
 		catch(MalformedURLException e) {
@@ -447,6 +448,7 @@ public class FileURL implements Cloneable {
 			"file://localhost/~/Projects/",
 			"file://localhost/C:\\Projects",
 			"file://localhost/C:\\Projects\\",
+			"file://localhost/C:\\Documents and Settings",
 		};
 		
 		FileURL f;
@@ -459,6 +461,8 @@ public class FileURL implements Cloneable {
 				System.out.println(" - host= "+f.getHost());
 				System.out.println(" - filename= "+f.getFilename());
 				System.out.println(" - parent= "+f.getParent()+"\n");
+				if(f.getParent()!=null)
+					System.out.println(" - parent path= "+f.getParent().getPath()+"\n");
 				
 				if(f.getProtocol().equalsIgnoreCase("file"))
 					System.out.println(" FSFile's path="+AbstractFile.getAbstractFile(f.getPath(), true).getAbsolutePath());

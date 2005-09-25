@@ -138,8 +138,12 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		for(int i=0; i<nbBookmarks; i++)
 			addMenuItem(((Bookmark)bookmarks.elementAt(i)).getName());
 
-		popupMenu.show(this, 0, getHeight());		
-		FocusRequester.requestFocus(popupMenu);
+		popupMenu.show(folderPanel, 0, getHeight());		
+
+		// Focus MUST NOT be requested on the popup menu because
+		// a/ it's not necessary, it grabs focus itself
+		// b/ creates a weird bug under windows which prevents enter key from selecting any menu item
+//		FocusRequester.requestFocus(popupMenu);
 	}
 
 	
@@ -191,7 +195,6 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 			}
 			
 			// Hide popup menu if it is currently showing
-//System.out.println("DriveButton.actionPerformed "+this.popupMenu+" "+(this.popupMenu==null?"":""+this.popupMenu.isVisible()));
 			if(this.popupMenu!=null && this.popupMenu.isVisible()) {
 				this.popupMenu.setVisible(false);
 				// Reset time stamp
@@ -212,8 +215,6 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 			if(index<rootFoldersOffset) {
 				// Tries to change current folder
 				folderPanel.trySetCurrentFolder(rootFolders[index], true);
-				// Request focus on this file table
-				folderPanel.getFileTable().requestFocus();
 			}
 			// Menu item that corresponds to a shortcut to 'server connect' dialog
 			else if(index<bookmarksOffset) {
