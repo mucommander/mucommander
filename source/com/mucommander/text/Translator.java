@@ -16,13 +16,13 @@ import java.util.Locale;
  * This class takes care of all text localization issues by looking up text entries in a
  * dictionary file and translating them into the current language.
  *
- * <p>See dictionary file for more information about translation features.</p>
+ * <p>See dictionary file for more information about dictionary file grammar.</p>
  *
  * @author Maxence Bernard
  */
 public class Translator {
 	private final static String DICTIONARY_RESOURCE_FILE = "/dictionary.txt";
-	private final static Translator dico = new Translator(DICTIONARY_RESOURCE_FILE);
+	private final static Translator instance = new Translator(DICTIONARY_RESOURCE_FILE);
 
 	private static Hashtable dictionaries;
 	private static String dictionaryFilePath;
@@ -135,10 +135,6 @@ public class Translator {
 	/**
 	 * Returns the dictionary for the given language, <code>null</code> if it
 	 * does not exist.
-	 *
-	 * @param language DOCUMENT ME!
-	 *
-	 * @return DOCUMENT ME!
 	 */
 	public Hashtable getDictionary(String language) {
 		return (Hashtable)dictionaries.get(language);
@@ -182,7 +178,7 @@ public class Translator {
 					key = st.nextToken(":");
 					lang = st.nextToken();
 
-					// Delimiter is now line break (otherwise st.nextToken())
+					// Delimiter is now line break
 					text = st.nextToken("\n");
 					text = text.substring(1, text.length());
 
@@ -430,21 +426,26 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 * for references to dictionary entries.
 	 */
 	public static void main(String args[]) throws IOException {
-		Enumeration languages = dictionaries.keys();
-		Vector langsV = new Vector();
-		while(languages.hasMoreElements())
-			langsV.add(languages.nextElement());
+		if(args.length<4) {
+			Enumeration languages = dictionaries.keys();
+			Vector langsV = new Vector();
+			while(languages.hasMoreElements())
+				langsV.add(languages.nextElement());
+				
+			String langs[] = new String[langsV.size()];
+			langsV.toArray(langs);
 			
-		String langs[] = new String[langsV.size()];
-		langsV.toArray(langs);
+			com.mucommander.file.AbstractFile sourceFolder = com.mucommander.file.AbstractFile.getAbstractFile(args[0]);
 		
-		com.mucommander.file.AbstractFile sourceFolder = com.mucommander.file.AbstractFile.getAbstractFile(args[0]);
-	
-		System.out.println("\n##### Looking for missing entries #####");
-		checkMissingEntries(sourceFolder, langs);
+			System.out.println("\n##### Looking for missing entries #####");
+			checkMissingEntries(sourceFolder, langs);
 
-		System.out.println("\n##### Looking for unused entries #####");
-		checkUnusedEntries(sourceFolder, langs);
+			System.out.println("\n##### Looking for unused entries #####");
+			checkUnusedEntries(sourceFolder, langs);
+		}
+		else {
+			addLanguageToDictionary(args[0], args[1], args[2], args[3]);
+		}
 	}
 
 
@@ -536,10 +537,94 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	}
 
 
+
+	private static void addLanguageToDictionary(String originalFile, String newLanguageFile, String resultingFile, String newLanguage) throws IOException {
+		// Initialize streams
+		BufferedReader originalFileReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(originalFile)), "UTF-8"));
+		BufferedReader newLanguageFileReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(newLanguageFile)), "UTF-8"));
+		PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(resultingFile), "UTF-8"));
+
+		// Parse new language's entries
+		String line;
+		String key;
+		String lang;
+		String text;
+		StringTokenizer st;
+		Hashtable newLanguageEntries = new Hashtable();
+		while ((line = newLanguageFileReader.readLine())!=null) {
+			if (!line.trim().startsWith("#") && !line.trim().equals("")) {
+				st = new StringTokenizer(line);
+
+				// Sets delimiter to ':'
+				key = st.nextToken(":");
+				lang = st.nextToken();
+
+				// Delimiter is now line break
+				text = st.nextToken("\n");
+				text = text.substring(1, text.length());
+
+				// Replace "\n" strings in the text by \n characters
+				int pos = 0;
+
+				while ((pos = text.indexOf("\\n", pos))!=-1)
+					text = text.substring(0, pos)+"\n"+text.substring(pos+2, text.length());
+
+				// Replace "\\uxxxx" unicode charcter strings by the designated character
+				pos = 0;
+
+				while ((pos = text.indexOf("\\u", pos))!=-1)
+					text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
+
+				newLanguageEntries.put(key, text);
+			}
+		}
+
+		boolean keyAlreadyHasNewLanguage = false;
+		String currentKey = null;
+		while ((line = originalFileReader.readLine())!=null) {
+			boolean emptyLine = line.trim().startsWith("#") || line.trim().equals("");
+			if (!keyAlreadyHasNewLanguage && (emptyLine || (currentKey!=null && !line.startsWith(currentKey+":")))) {
+				keyAlreadyHasNewLanguage = false;
+				if(currentKey!=null) {
+					String newLanguageValue = (String)newLanguageEntries.get(currentKey);
+					if(newLanguageValue!=null) {
+						// Insert new language's entry in resulting file
+						pw.println(currentKey+":"+newLanguage+":"+newLanguageValue);
+						keyAlreadyHasNewLanguage = true;
+					}
+				}
+			}
+
+			if(!emptyLine) {
+				// Parse entry
+				st = new StringTokenizer(line);
+
+				// Set delimiter to ':'
+				key = st.nextToken(":");
+				lang = st.nextToken();
+
+				if(!key.equals(currentKey)) {
+					currentKey = key;
+					keyAlreadyHasNewLanguage = false;
+				}
+		
+				if(lang.equalsIgnoreCase(newLanguage))
+					keyAlreadyHasNewLanguage = true;
+			}
+			
+			// Write current entry in resulting file
+			pw.println(line);
+		}
+
+		newLanguageFileReader.close();
+		originalFileReader.close();
+		pw.close();
+//		needsToBeSaved = false;
+	}
+
+
 	/**
 	 * Writes the dictionary file to the disk.
-	 *
-	 * @throws IOException DOCUMENT ME!
 	 */
 /*
 	 public static void writeFileToDisk() throws IOException {
@@ -589,8 +674,6 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 * (thru the 'put' method) and were not saved to the dictionary file.<br>
 	 * Calling writeFileToDisk() will reset the value to <code>false</code>
 	 * until the next call to put().
-	 *
-	 * @return DOCUMENT ME!
 	 */
 /*
 	 public static boolean needsToBeSaved() {
