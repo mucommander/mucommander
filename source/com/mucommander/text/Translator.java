@@ -537,7 +537,15 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	}
 
 
-
+	/**
+	 * Merges a dictionary file with another one, adding entries of the specified new language.
+	 * <p>This method is used to merge dictionary files sent by contributors.
+	 *
+	 * @param originalFile current version of the dictionary file
+	 * @param newLanguageFile dictionary file containing new language entries
+	 * @param resultingFile merged dictionary file
+	 * @param newLanguage new language
+	 */
 	private static void addLanguageToDictionary(String originalFile, String newLanguageFile, String resultingFile, String newLanguage) throws IOException {
 		// Initialize streams
 		BufferedReader originalFileReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(originalFile)), "UTF-8"));
@@ -559,26 +567,17 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 				key = st.nextToken(":");
 				lang = st.nextToken();
 
-				// Delimiter is now line break
-				text = st.nextToken("\n");
-				text = text.substring(1, text.length());
+				if(lang.equalsIgnoreCase(newLanguage)) {
+					// Delimiter is now line break
+					text = st.nextToken("\n");
+					text = text.substring(1, text.length());
 
-				// Replace "\n" strings in the text by \n characters
-				int pos = 0;
-
-				while ((pos = text.indexOf("\\n", pos))!=-1)
-					text = text.substring(0, pos)+"\n"+text.substring(pos+2, text.length());
-
-				// Replace "\\uxxxx" unicode charcter strings by the designated character
-				pos = 0;
-
-				while ((pos = text.indexOf("\\u", pos))!=-1)
-					text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
-
-				newLanguageEntries.put(key, text);
+					newLanguageEntries.put(key, text);
+				}
 			}
 		}
 
+		// Insert new language entries in resulting file
 		boolean keyAlreadyHasNewLanguage = false;
 		String currentKey = null;
 		while ((line = originalFileReader.readLine())!=null) {

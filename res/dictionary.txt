@@ -28,6 +28,8 @@ ok:DE:OK
 ok:ES:Aceptar
 ok:CS:OK
 ok:zh_TW:確定
+ok:PL:OK
+ok:HU:OK
 
 
 yes:EN:Yes
@@ -36,6 +38,8 @@ yes:DE:Ja
 yes:ES:Sí
 yes:CS:Ano
 yes:zh_TW:是
+yes:PL:TAK
+yes:HU:igen
 
 no:EN:No
 no:FR:Non
@@ -43,6 +47,8 @@ no:DE:Nein
 no:ES:No
 no:CS:Ne
 no:zh_TW:否
+no:PL:Nie
+no:HU:nem
 
 cancel:EN:Cancel
 cancel:FR:Annuler
@@ -50,6 +56,8 @@ cancel:DE:Abbrechen
 cancel:ES:Cancelar
 cancel:CS:Zrušit
 cancel:zh_TW:取消
+cancel:PL:Anuluj
+cancel:HU:töröl
 
 close:EN:Close
 close:FR:Fermer
@@ -57,6 +65,8 @@ close:DE:Schließen
 close:ES:Cerrar
 close:CS:Zavřít
 close:zh_TW:關閉
+close:PL:Zamknij
+close:HU:bezár
 
 apply:EN:Apply
 apply:FR:Appliquer
@@ -64,6 +74,8 @@ apply:DE:Auf alle anwenden
 apply:ES:Aplicar
 apply:CS:Použít
 apply:zh_TW:套用
+apply:PL:Zastosuj
+apply:HU:elfogad
 
 folder_does_not_exist:EN:This folder doesn't exist or is not available.
 folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
@@ -71,6 +83,8 @@ folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar
 folder_does_not_exist:ES:El directoio no existe o no está disponible.
 folder_does_not_exist:CS:Tato složka neexistuje.
 folder_does_not_exist:zh_TW:資料夾不存在或無法使用.
+folder_does_not_exist:PL:Ten katalog nie istnieje lub jest nieosiągalny.
+folder_does_not_exist:HU:A könyvtár nem létezik vagy nem található.
 
 this_folder_does_not_exist:EN:This folder doesn't exist or is not available: %1
 this_folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible: %1
@@ -78,6 +92,8 @@ this_folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verf�
 this_folder_does_not_exist:ES:El directoio no existe o no está disponible: %1
 this_folder_does_not_exist:CS:Tato složka neexistuje: %1
 this_folder_does_not_exist:zh_TW:資料夾不存在或無法使用: %1
+this_folder_does_not_exist:PL:Ten katalog nie istnieje lub jest nieosiągalny: %1
+this_folder_does_not_exist:HU:A könyvtár nem létezik vagy nem található. %1
 
 save:EN:Save
 save:FR:Enregistrer
@@ -85,6 +101,8 @@ save:DE:Speichern
 save:ES:Guardar
 save:CS:Uložit
 save:zh_TW:儲存
+save:PL:Zapisz
+save:HU:mentés
 
 dont_save:EN:Don't save
 dont_save:FR:Ne pas enregistrer
@@ -92,6 +110,8 @@ dont_save:DE:Nicht speichern
 dont_save:ES:No guardar
 dont_save:CS:Neukládat
 dont_save:zh_TW:不儲存
+dont_save:PL:Nie zapisuj
+dont_save:HU:nem ment
 
 replace:EN:Replace
 replace:FR:Remplacer
@@ -99,6 +119,8 @@ replace:DE:Ersetzen
 replace:ES:Reemplazar
 replace:CS:Nahradit
 replace:zh_TW:取代
+replace:PL:Zastąp
+replace:HU:áthelyez
 
 dont_replace:EN:Don't replace
 dont_replace:FR:Ne pas remplacer
@@ -106,6 +128,8 @@ dont_replace:DE:Nicht ersetzen
 dont_replace:ES:No reemplazar
 dont_replace:CS:Nenahrazovat
 dont_replace:zh_TW:不取代
+dont_replace:PL:Nie zastępuj
+dont_replace:HU:nem helyez áz
 
 warning:EN:Warning
 warning:FR:Avertissement
@@ -113,6 +137,8 @@ warning:DE:Warnung
 warning:ES:Aviso
 warning:CS:Varování
 warning:zh_TW:警告
+warning:PL:Uwaga
+warning:HU:figyelmeztetés
 
 skip:EN:Skip
 skip:FR:Suivant
@@ -120,6 +146,8 @@ skip:DE:Überspringen
 skip:ES:Saltar
 skip:CS:Přeskočit
 skip:zh_TW:跳過
+skip:PL:Pomiń
+skip:HU:kihagy
 
 retry:EN:Retry
 retry:FR:Réessayer
@@ -127,6 +155,8 @@ retry:DE:Erneut versuchen
 retry:ES:Reintentar
 retry:CS:Skusit znovu
 retry:zh_TW:重試
+retry:PL:Ponów
+retry:HU:újra próbál
 
 append:EN:Resume
 append:FR:Reprendre
@@ -134,6 +164,8 @@ append:DE:Weiter
 append:ES:Continuar
 append:CS:Pokračovat
 append:zh_TW:繼續
+append:PL:Wznów
+append:HU:folytat
 
 overwrite:EN:Overwrite
 overwrite:FR:Remplacer
@@ -141,6 +173,8 @@ overwrite:DE:Überschreiben
 overwrite:ES:Reemplazar
 overwrite:CS:Přepsat
 overwrite:zh_TW:覆寫
+overwrite:PL:Nadpisz
+overwrite:HU:felülír
 
 overwrite_if_older:EN:Overwrite if older
 overwrite_if_older:FR:Remplacer si ancien
@@ -148,6 +182,8 @@ overwrite_if_older:DE:Ältere überschreiben
 overwrite_if_older:ES:Reemplazar si es más antiguo
 overwrite_if_older:CS:Přepsat jen starší
 overwrite_if_older:zh_TW:若較舊則覆寫
+overwrite_if_older:PL:Nadpisz jeśli starszy
+overwrite_if_older:HU:felülír, ha régebbi
 
 apply_to_all:EN:Apply to all
 apply_to_all:FR:Appliquer à tous
@@ -155,6 +191,8 @@ apply_to_all:DE:Zuweisen an alle
 apply_to_all:ES:Aplicar a todo
 apply_to_all:CS:Aplikovat na všechny
 apply_to_all:zh_TW:全部套用
+apply_to_all:PL:Zastosuj do wszystkich
+apply_to_all:HU:mindent jóváhagy
 
 copy:EN:Copy
 copy:FR:Copier
@@ -162,6 +200,8 @@ copy:DE:Kopieren
 copy:ES:Copiar
 copy:CS:Kopírovat
 copy:zh_TW:複製
+copy:PL:Kopiuj
+copy:HU:másol
 
 download:EN:Download
 download:FR:Télécharger
@@ -169,6 +209,8 @@ download:DE:Download
 download:ES:Descargar
 download:CS:Stáhnout
 download:zh_TW:下載
+download:PL:Download
+download:HU:letölt
 
 browse:EN:Browse
 browse:FR:Explorer
@@ -176,6 +218,8 @@ browse:DE:Browsen
 browse:ES:Navegar
 browse:CS:Procházet
 browse:zh_TW:瀏覽
+browse:PL:Przeglądaj
+browse:HU:böngész
 
 ask:EN:Ask
 ask:FR:Demander
@@ -183,6 +227,8 @@ ask:DE:Fragen
 ask:ES:Preguntar
 ask:CS:Zeptat se
 ask:zh_TW:詢問
+ask:PL:Zapytaj
+ask:HU:kérdez
 
 cannot_read_source:EN:Cannot read file %1
 cannot_read_source:FR:Erreur lors de la lecture de %1
@@ -190,6 +236,8 @@ cannot_read_source:DE:Kann Datei %1 nicht lesen
 cannot_read_source:ES:No se puede leer el archivo %1
 cannot_read_source:CS:Nemůžu přečíst soubor %1
 cannot_read_source:zh_TW:無法讀取檔案 %1
+cannot_read_source:PL:Nie mogę czytać pliku %1
+cannot_read_source:HU:Nem írható fájl %1
 
 cannot_write_destination:EN:Cannot write file %1
 cannot_write_destination:FR:Erreur lors de l'écriture de %1
@@ -197,6 +245,8 @@ cannot_write_destination:DE:Kann Datei %1 nicht schreiben
 cannot_write_destination:ES:No se puede escribir el archivo %1
 cannot_write_destination:CS:Nemůžu zapisovat do souboru %1
 cannot_write_destination:zh_TW:無法寫入檔案 %1
+cannot_write_destination:PL:Nie mogę zapisać pliku %1
+cannot_write_destination:HU:Nem olvasható fájl %1
 
 cannot_create_folder:EN:Unable to create directory %1.
 cannot_create_folder:FR:Erreur lors de la création du répertoire %1.
@@ -204,6 +254,8 @@ cannot_create_folder:DE:Kann Ordner %1 nicht erstellen.
 cannot_create_folder:ES:No se puede crear el directorio %1
 cannot_create_folder:CS:Nemůžu vytvořit složku %1
 cannot_create_folder:zh_TW:無法產生資料夾 %1
+cannot_create_folder:PL:Nie mogę utworzyć katalogu %1
+cannot_create_folder:HU:Nem lehet könyvtárat létrehozni %1
 
 cannot_read_folder:EN:Unable to read contents of folder %1
 cannot_read_folder:FR:Erreur lors de la lecture du dossier %1
@@ -211,6 +263,8 @@ cannot_read_folder:DE:Kann Inhalt des Ordners %1 nicht lesen
 cannot_read_folder:ES:No se puede leer el directorio %1
 cannot_read_folder:CS:Nemůžu přečíst složku %1
 cannot_read_folder:zh_TW:無法讀取資料夾內容 %1
+cannot_read_folder:PL:Nie mogę odczytać zawartości katalogu %1
+cannot_read_folder:HU:Nem lehet könyvtár tartalmát olvasni %1
 
 cannot_delete_file:EN:Unable to delete file %1
 cannot_delete_file:FR:Erreur lors de la suppression du fichier %1
@@ -218,6 +272,8 @@ cannot_delete_file:DE:Kann Datei %1 nicht löschen
 cannot_delete_file:ES:No se puede borrar el fichero %1
 cannot_delete_file:CS:Nemůžu smazat soubor %1
 cannot_delete_file:zh_TW:無法刪除檔案 %1
+cannot_delete_file:PL:Nie mogę skasować pliku %1
+cannot_delete_file:HU:Nem lehet a fájlt törölni %1
 
 cannot_delete_folder:EN:Unable to delete folder %1
 cannot_delete_folder:FR:Erreur lors de la suppression du répertoire %1
@@ -225,6 +281,8 @@ cannot_delete_folder:DE:Kann Ordner %1 nicht löschen
 cannot_delete_folder:ES:No se puede borrar el directorio %1
 cannot_delete_folder:CS:Nemůžu smazat složku %1
 cannot_delete_folder:zh_TW:無法刪除資料夾 %1
+cannot_delete_folder:PL:Nie mogę skasować katalogu %1
+cannot_delete_folder:HU:Nem lehet a könyvtárat törölni %1
 
 error_while_transferring:EN:Error while transferring file %1
 error_while_transferring:FR:Erreur lors du transfert de %1
@@ -232,6 +290,8 @@ error_while_transferring:DE:Fehler beim Transfer von Datei %1
 error_while_transferring:ES:Error al transferir %1
 error_while_transferring:CS:Chyba při přenášení souboru %1
 error_while_transferring:zh_TW:在傳輸檔案時發生錯誤 %1
+error_while_transferring:PL:Błąd przenoszenia pliku %1
+error_while_transferring:HU:Hiba a fájlmozgatás közben %1
 
 same_source_destination:EN:Source and destination folders are the same.
 same_source_destination:FR:Les répertoires source et destination sont les mêmes.
@@ -239,6 +299,8 @@ same_source_destination:DE:Quell-und Zielordner sind gleich.
 same_source_destination:ES:El directorio de origen y destino es el mismo.
 same_source_destination:CS:Zdojová a cílová složka se shodují.
 same_source_destination:zh_TW:來源及目的資料夾一樣
+same_source_destination:PL:Taki sam katalog źródłowy i docelowy.
+same_source_destination:HU:A forrás és a célkönyvtár ugyanaz.
 
 #############
 # Languages #
@@ -280,11 +342,18 @@ language.cs:CS:Čeština
 #language.cs:zh_TW:捷克語
 
 #language.zh_TW:EN:Traditional Chinese
-#language.zh_TW:FR:Traditional Chinese
-#language.zh_TW:DE:Traditional Chinese
-#language.zh_TW:ES:Traditional Chinese
-#language.zh_TW:CS:Traditional Chinese
+#language.zh_TW:FR:Chinois traditionnel
 language.zh_TW:zh_TW:繁體中文
+
+#language.pl:EN:Polish
+language.pl:PL:Polski
+
+#language.hu:EN:Hungarian
+#language.hu:FR:Hongrois
+#language.hu:DE:Ungarisch
+#language.hu:ES:Húngara
+#language.hu:CS:Madarsky
+language.hu:HU:Magyar
 
 
 ###############
@@ -297,6 +366,8 @@ command_bar.view:DE:Ansicht
 command_bar.view:ES:Ver
 command_bar.view:CS:Zobrazit
 command_bar.view:zh_TW:檢視
+command_bar.view:PL:Podgląd
+command_bar.view:HU:megtekint
 
 command_bar.view_tooltip:EN:View selected file
 command_bar.view_tooltip:FR:Voir le fichier sélectionné
@@ -304,6 +375,8 @@ command_bar.view_tooltip:DE:Markierte Datei betrachten
 command_bar.view_tooltip:ES:Ver el fichero seleccionado
 command_bar.view_tooltip:CS:Zobrazit vybraný soubor
 command_bar.view_tooltip:zh_TW:檢視已選取檔案
+command_bar.view_tooltip:PL:Zobacz wybrany plik
+command_bar.view_tooltip:HU:A kijelölt fájl megtekintése
 
 command_bar.edit:EN:Edit
 command_bar.edit:FR:Editer
@@ -311,6 +384,8 @@ command_bar.edit:DE:Bearbeiten
 command_bar.edit:ES:Editar
 command_bar.edit:CS:Editovat
 command_bar.edit:zh_TW:編輯
+command_bar.edit:PL:Edycja
+command_bar.edit:HU:módosít
 
 command_bar.edit_tooltip:EN:Edit selected file
 command_bar.edit_tooltip:FR:Editer le fichier selectionné
@@ -318,6 +393,8 @@ command_bar.edit_tooltip:DE:Markierte Datei bearbeiten
 command_bar.edit_tooltip:ES:Editar el fichero seleccionado
 command_bar.edit_tooltip:CS:Editovat vybraný soubor
 command_bar.edit_tooltip:zh_TW:編輯已選取檔案
+command_bar.edit_tooltip:PL:Edytuj wybrany plik
+command_bar.edit_tooltip:HU:A kijelölt fájl módosítása
 
 command_bar.copy:EN:Copy
 command_bar.copy:FR:Copier
@@ -325,6 +402,8 @@ command_bar.copy:DE:Kopieren
 command_bar.copy:ES:Copiar
 command_bar.copy:CS:Kopírovat
 command_bar.copy:zh_TW:複製
+command_bar.copy:PL:Kopiuj
+command_bar.copy:HU:másol
 
 command_bar.copy_tooltip:EN:Copy marked files
 command_bar.copy_tooltip:FR:Copier les fichiers marqués
@@ -332,6 +411,8 @@ command_bar.copy_tooltip:DE:Markierte Dateien kopieren
 command_bar.copy_tooltip:ES:Copiar los ficheros seleccionados
 command_bar.copy_tooltip:CS:Kopírovat označené soubory
 command_bar.copy_tooltip:zh_TW:複製已標記檔案
+command_bar.copy_tooltip:PL:Kopiuj zaznaczone pliki
+command_bar.copy_tooltip:HU:A kijelölt fájlok másolása
 
 command_bar.local_copy:EN:Local Copy
 command_bar.local_copy:FR:Copier local
@@ -339,6 +420,8 @@ command_bar.local_copy:DE:Lokale Kopie
 command_bar.local_copy:ES:Copia local
 command_bar.local_copy:CS:Lokálni kopie
 command_bar.local_copy:zh_TW:本地複製
+command_bar.local_copy:PL:Kopiuj lokalnie
+command_bar.local_copy:HU:lokális másolás
 
 command_bar.local_copy_tooltip:EN:Copy selected file into current folder
 command_bar.local_copy_tooltip:FR:Copier le fichier selectionné dans le dossier courant
@@ -346,6 +429,8 @@ command_bar.local_copy_tooltip:DE:Kopiert markierte Datei in den aktuellen Ordne
 command_bar.local_copy_tooltip:ES:Copiar el fichero seleccionado en el directorio actual
 command_bar.local_copy_tooltip:CS:Kopírovat označené soubory do aktuální složky
 command_bar.local_copy_tooltip:zh_TW:複製已選取檔案至此資料夾
+command_bar.local_copy_tooltip:PL:Kopiuj zaznaczone pliki do aktywnego katalogu
+command_bar.local_copy_tooltip:HU:A kijelölt fájlok másolása az aktuális könyvtárba
 
 command_bar.move:EN:Move
 command_bar.move:FR:Déplacer
@@ -353,6 +438,8 @@ command_bar.move:DE:Verschieben
 command_bar.move:ES:Mover
 command_bar.move:CS:Přesunout
 command_bar.move:zh_TW:搬移
+command_bar.move:PL:Przenieś
+command_bar.move:HU:mozgat
 
 command_bar.move_tooltip:EN:Move marked files
 command_bar.move_tooltip:FR:Déplacer les fichiers marqués
@@ -360,6 +447,8 @@ command_bar.move_tooltip:DE:Markierte Dateien verschieben
 command_bar.move_tooltip:ES:Mover los ficheros seleccionados
 command_bar.move_tooltip:CS:Přesunout označené soubory
 command_bar.move_tooltip:zh_TW:搬移已標記檔案
+command_bar.move_tooltip:PL:Przenieś zaznaczone pliki
+command_bar.move_tooltip:HU:A kijelölt fájlok mozgatása
 
 command_bar.rename:EN:Rename
 command_bar.rename:FR:Renommer
@@ -367,6 +456,8 @@ command_bar.rename:DE:Umbenennen
 command_bar.rename:ES:Renombrar
 command_bar.rename:CS:Přejmenovat
 command_bar.rename:zh_TW:重新命名
+command_bar.rename:PL:Przemianuj
+command_bar.rename:HU:átnevez
 
 command_bar.rename_tooltip:EN:Rename selected file
 command_bar.rename_tooltip:FR:Renommer le fichier selectionné
@@ -374,6 +465,8 @@ command_bar.rename_tooltip:DE:Markierte Datei umbenennen
 command_bar.rename_tooltip:ES:Renombrar el fichero seccionado
 command_bar.rename_tooltip:CS:Přejmenovat označené soubory
 command_bar.rename_tooltip:zh_TW:重新命名已選取檔案
+command_bar.rename_tooltip:PL:Przemianuj zaznaczone pliki
+command_bar.rename_tooltip:HU:A kijelölt fájl átnevezése
 
 command_bar.mkdir:EN:Make dir
 command_bar.mkdir:FR:Créer rep
@@ -381,6 +474,8 @@ command_bar.mkdir:DE:Ordner erstellen
 command_bar.mkdir:ES:Crear directorio
 command_bar.mkdir:CS:Vytvořit složku
 command_bar.mkdir:zh_TW:新增資料夾
+command_bar.mkdir:PL:Utwórz katalog
+command_bar.mkdir:HU:új könyvtár
 
 command_bar.mkdir_tooltip:EN:Create a directory in current folder
 command_bar.mkdir_tooltip:FR:Créer un répertoire dans le dossier courant
@@ -388,6 +483,8 @@ command_bar.mkdir_tooltip:DE:Erstellt einen Ordner im aktuellen Ordner
 command_bar.mkdir_tooltip:ES:Crear subdirectorio en el directorio actual
 command_bar.mkdir_tooltip:CS:Vytvořit složku v aktuální složce
 command_bar.mkdir_tooltip:zh_TW:在此處新增資料夾
+command_bar.mkdir_tooltip:PL:Utwórz katalog w aktualnym katalogu
+command_bar.mkdir_tooltip:HU:Új könyvtár létrehozása az aktuális könyvtárban
 
 command_bar.delete:EN:Delete
 command_bar.delete:FR:Supprimer
@@ -395,6 +492,8 @@ command_bar.delete:DE:Löschen
 command_bar.delete:ES:Eliminar
 command_bar.delete:CS:Odstranit
 command_bar.delete:zh_TW:刪除
+command_bar.delete:PL:Usuń
+command_bar.delete:HU:törlés
 
 command_bar.delete_tooltip:EN:Delete marked files
 command_bar.delete_tooltip:FR:Supprimer les fichiers marqués
@@ -402,6 +501,8 @@ command_bar.delete_tooltip:DE:Markierte Dateien löschen
 command_bar.delete_tooltip:ES:Elimiar los ficheros marcados
 command_bar.delete_tooltip:CS:Odstranit označené soubory
 command_bar.delete_tooltip:zh_TW:刪除已標記檔案
+command_bar.delete_tooltip:PL:Usuń zaznaczone pliki
+command_bar.delete_tooltip:HU:A kijelölt fájlok törlése
 
 command_bar.refresh:EN:Refresh
 command_bar.refresh:FR:Actualiser
@@ -409,6 +510,8 @@ command_bar.refresh:DE:Aktualisieren
 command_bar.refresh:ES:Actualizar
 command_bar.refresh:CS:Aktualizovat
 command_bar.refresh:zh_TW:重新整理
+command_bar.refresh:PL:Odświerz
+command_bar.refresh:HU:frissítés
 
 command_bar.refresh_tooltip:EN:Refresh current folder
 command_bar.refresh_tooltip:FR:Actualiser le répertoire courant
@@ -416,6 +519,8 @@ command_bar.refresh_tooltip:DE:Aktualisiere aktuellen Ordner
 command_bar.refresh_tooltip:ES:Actualizar directorio actual
 command_bar.refresh_tooltip:CS:Aktualizovat aktuální složku
 command_bar.refresh_tooltip:zh_TW:重新整理此資料夾
+command_bar.refresh_tooltip:PL:Odświerz aktualny katalog
+command_bar.refresh_tooltip:HU:Az aktuális könyvtár frissítése
 
 command_bar.close:EN:Close
 command_bar.close:FR:Fermer
@@ -423,6 +528,7 @@ command_bar.close:DE:Schließen
 command_bar.close:ES:Cerrar
 command_bar.close:CS:Zavřít
 command_bar.close:zh_TW:關閉
+command_bar.close:PL:Zamknij
 
 command_bar.close_tooltip:EN:Close this window
 command_bar.close_tooltip:FR:Fermer cette fenêtre
@@ -430,6 +536,7 @@ command_bar.close_tooltip:DE:Schließt aktuelles Fenster
 command_bar.close_tooltip:ES:Cerrar esta ventana
 command_bar.close_tooltip:CS:Zavřít aktuální okno
 command_bar.close_tooltip:zh_TW:關閉此視窗
+command_bar.close_tooltip:PL:Zamknij aktualne okno
 
 #############
 # File menu #
@@ -441,6 +548,8 @@ file_menu:DE:Datei
 file_menu:ES:Archivo
 file_menu:CS:Soubor
 file_menu:zh_TW:檔案
+file_menu:PL:Plik
+file_menu:HU:fájl
 
 file_menu.server_connect:EN:Connect to server...
 file_menu.server_connect:FR:Connexion à un serveur...
@@ -448,6 +557,8 @@ file_menu.server_connect:DE:Verbinde mit Server...
 file_menu.server_connect:ES:Conectar a un servidor...
 file_menu.server_connect:CS:Připojit se k serveru...
 file_menu.server_connect:zh_TW:連接至伺服器...
+file_menu.server_connect:PL:Podłączam się do serwera...
+file_menu.server_connect:HU:Csatlakozás a szerverhez...
 
 file_menu.new_window:EN:New window
 file_menu.new_window:FR:Nouvelle fenêtre
@@ -455,8 +566,12 @@ file_menu.new_window:DE:Neues Fenster
 file_menu.new_window:ES:Nueva ventana
 file_menu.new_window:CS:Nové okno
 file_menu.new_window:zh_TW:新視窗
+file_menu.new_window:PL:Nowe okno
+file_menu.new_window:HU:új ablak
 
 file_menu.run_command:EN:$[run_dialog.run_command]...
+file_menu.run_command:PL:Uruchom
+file_menu.run_command:HU:parancsfuttatás
 
 file_menu.zip:EN:Zip files...
 file_menu.zip:FR:Zipper fichiers...
@@ -464,6 +579,8 @@ file_menu.zip:DE:Dateien packen...
 file_menu.zip:ES:Comprimir ficheros...
 file_menu.zip:CS:Komprimovat soubory...
 file_menu.zip:zh_TW:壓縮檔案...
+file_menu.zip:PL:Spakuj pliki...
+file_menu.zip:HU:tömörítés (Zip)...
 
 file_menu.unzip:EN:Unzip files...
 file_menu.unzip:FR:Dézipper fichiers...
@@ -471,6 +588,8 @@ file_menu.unzip:DE:Dateien entpacken...
 file_menu.unzip:ES:Descomprimir ficheros...
 file_menu.unzip:CS:Dekomprimovat soubory...
 file_menu.unzip:zh_TW:解壓縮檔案...
+file_menu.unzip:PL:Rozpakuj pliki...
+file_menu.unzip:HU:kicsomagolás (unZip)...
 
 file_menu.email:EN:Email files...
 file_menu.email:FR:Envoyer par email...
@@ -478,6 +597,8 @@ file_menu.email:DE:Dateien mailen...
 file_menu.email:ES:Enviar por email...
 file_menu.email:CS:Odeslat emailem...
 file_menu.email:zh_TW:郵寄檔案...
+file_menu.email:PL:Wyślij pliki pocztą...
+file_menu.email:HU:Küldés e-mailben...
 
 file_menu.properties:EN:Properties
 file_menu.properties:FR:Propriétés
@@ -485,6 +606,8 @@ file_menu.properties:DE:Eigenschaften
 file_menu.properties:ES:Propiedades
 file_menu.properties:CS:Vlastnosti
 file_menu.properties:zh_TW:內容
+file_menu.properties:PL:Właściwości
+file_menu.properties:HU:tulajdonságok
 
 file_menu.preferences:EN:Preferences...
 file_menu.preferences:FR:Préférences...
@@ -492,6 +615,8 @@ file_menu.preferences:DE:Einstellungen...
 file_menu.preferences:ES:Preferencias...
 file_menu.preferences:CS:Možnosti...
 file_menu.preferences:zh_TW:設定
+file_menu.preferences:PL:Preferencje...
+file_menu.preferences:HU:beállítások...
 
 file_menu.check_for_updates:EN:Check for updates
 file_menu.check_for_updates:FR:Mises à jour...
@@ -499,6 +624,8 @@ file_menu.check_for_updates:DE:Nach Updates suchen
 file_menu.check_for_updates:ES:Comprobar actualizaciones
 file_menu.check_for_updates:CS:Aktualizace
 file_menu.check_for_updates:zh_TW:檢查更新版本
+file_menu.check_for_updates:PL:Sprawdź aktualizacje
+file_menu.check_for_updates:HU:frissítések keresése
 
 file_menu.close_window:EN:Close window
 file_menu.close_window:FR:Fermer fenêtre
@@ -506,6 +633,8 @@ file_menu.close_window:DE:Fenster schließen
 file_menu.close_window:ES:Cerrar ventana
 file_menu.close_window:CS:Zavřít okno
 file_menu.close_window:zh_TW:關閉視窗
+file_menu.close_window:PL:Zamknij okno
+file_menu.close_window:HU:ablak bezárása
 
 
 #############
@@ -518,6 +647,8 @@ mark_menu:DE:Markieren
 mark_menu:ES:Marcar
 mark_menu:CS:Označit
 mark_menu:zh_TW:標記
+mark_menu:PL:Zaznacz
+mark_menu:HU:kijelöl
 
 mark_menu.mark:EN:Mark files...
 mark_menu.mark:FR:Marquer fichiers...
@@ -525,6 +656,8 @@ mark_menu.mark:DE:Dateien markieren...
 mark_menu.mark:ES:Marcar ficheros...
 mark_menu.mark:CS:Označit soubory...
 mark_menu.mark:zh_TW:標記檔案
+mark_menu.mark:PL:Zaznacz pliki...
+mark_menu.mark:HU:fájl(ok) kijelölése...
 
 mark_menu.unmark:EN:Unmark files...
 mark_menu.unmark:FR:Dé-marquer fichiers...
@@ -532,6 +665,8 @@ mark_menu.unmark:DE:Dateien demarkieren...
 mark_menu.unmark:ES:Desmarcar ficheros...
 mark_menu.unmark:CS:Odznačit soubory...
 mark_menu.unmark:zh_TW:取消標記
+mark_menu.unmark:PL:Odznacz pliki...
+mark_menu.unmark:HU:kijelölés megszüntetése...
 
 mark_menu.mark_all:EN:Mark all
 mark_menu.mark_all:FR:Marquer tous
@@ -539,6 +674,8 @@ mark_menu.mark_all:DE:Alle markieren
 mark_menu.mark_all:ES:Marcar todos
 mark_menu.mark_all:CS:Označit vše
 mark_menu.mark_all:zh_TW:全部標記
+mark_menu.mark_all:PL:Zaznacz wszystko
+mark_menu.mark_all:HU:összes kijelölése
 
 mark_menu.unmark_all:EN:Unmark all
 mark_menu.unmark_all:FR:Dé-marquer tous
@@ -546,6 +683,8 @@ mark_menu.unmark_all:DE:Alle demarkieren
 mark_menu.unmark_all:ES:Desmarcar todos
 mark_menu.unmark_all:CS:Odznačit vše
 mark_menu.unmark_all:zh_TW:取消全部標記
+mark_menu.unmark_all:PL:Odznacz wszystko
+mark_menu.unmark_all:HU:összes kijelölés megszüntetése
 
 mark_menu.invert_selection:EN:Invert selection
 mark_menu.invert_selection:FR:Inverser sélection
@@ -553,6 +692,8 @@ mark_menu.invert_selection:DE:Auswahl umkehren
 mark_menu.invert_selection:ES:Invertir selección
 mark_menu.invert_selection:CS:Invertovat označení
 mark_menu.invert_selection:zh_TW:反向標記
+mark_menu.invert_selection:PL:Odwróć zaznaczenie
+mark_menu.invert_selection:HU:fordított kijelölés
 
 mark_menu.compare_folders:EN:Compare folders
 mark_menu.compare_folders:FR:Comparer dossiers
@@ -560,6 +701,8 @@ mark_menu.compare_folders:DE:Ordner vergleichen
 mark_menu.compare_folders:ES:Comparar directorios
 mark_menu.compare_folders:CS:Porovnat složky
 mark_menu.compare_folders:zh_TW:比較資料夾
+mark_menu.compare_folders:PL:Porównaj katalogi
+mark_menu.compare_folders:HU:könyvtárak összehasonlítása
 
 
 #############
@@ -572,6 +715,8 @@ view_menu:DE:Ansicht
 view_menu:ES:Ver
 view_menu:CS:Zobrazit
 view_menu:zh_TW:檢視
+view_menu:PL:Podgląd
+view_menu:HU:megtekint
 
 view_menu.go_back:EN:Go back
 view_menu.go_back:FR:Dossier précédent
@@ -579,6 +724,8 @@ view_menu.go_back:DE:Zurueck gehen
 view_menu.go_back:ES:Volver
 view_menu.go_back:CS:Zpět
 view_menu.go_back:zh_TW:退回
+view_menu.go_back:PL:Wstecz
+view_menu.go_back:HU:vissza
 
 view_menu.go_forward:EN:Go forward
 view_menu.go_forward:FR:Dossier suivant
@@ -586,6 +733,8 @@ view_menu.go_forward:DE:Vorwärts gehen
 view_menu.go_forward:ES:Siguiente
 view_menu.go_forward:CS:Další
 view_menu.go_forward:zh_TW:前進
+view_menu.go_forward:PL:Dalej
+view_menu.go_forward:HU:előre
 
 view_menu.go_to_parent:EN:Go to parent
 view_menu.go_to_parent:FR:Dossier parent
@@ -593,6 +742,8 @@ view_menu.go_to_parent:DE:Gehe Ebene höher
 view_menu.go_to_parent:ES:Ir al padre
 view_menu.go_to_parent:CS:Složka nahoru
 view_menu.go_to_parent:zh_TW:上一層
+view_menu.go_to_parent:PL:Idź do katalogu nadrzędnego
+view_menu.go_to_parent:HU:kezdethez
 
 view_menu.sort_by_name:EN:Sort by Name
 view_menu.sort_by_name:FR:Classer par nom
@@ -600,6 +751,8 @@ view_menu.sort_by_name:DE:Nach Namen sortieren
 view_menu.sort_by_name:ES:Ordenar por Nombre
 view_menu.sort_by_name:CS:Setřídit dle jména
 view_menu.sort_by_name:zh_TW:依名稱排序
+view_menu.sort_by_name:PL:Sortuj po nazwie
+view_menu.sort_by_name:HU:név szerint rendez
 
 view_menu.sort_by_date:EN:Sort by Date
 view_menu.sort_by_date:FR:Classer par date
@@ -607,6 +760,8 @@ view_menu.sort_by_date:DE:Nach Datum sortieren
 view_menu.sort_by_date:ES:Ordenar por Fecha
 view_menu.sort_by_date:CS:Setřídit dle data
 view_menu.sort_by_date:zh_TW:依日期排序
+view_menu.sort_by_date:PL:Sortuj po dacie
+view_menu.sort_by_date:HU:dátum szerint rendez
 
 view_menu.sort_by_size:EN:Sort by Size
 view_menu.sort_by_size:FR:Classer par taille
@@ -614,6 +769,8 @@ view_menu.sort_by_size:DE:Nach Größe sortieren
 view_menu.sort_by_size:ES:Ordenar por Tamaño
 view_menu.sort_by_size:CS:Setřídit dle velikosti
 view_menu.sort_by_size:zh_TW:依大小排序
+view_menu.sort_by_size:PL:Sortuj po rozmiarze
+view_menu.sort_by_size:HU:méret szerint rendez
 
 view_menu.sort_by_extension:EN:Sort by Extension
 view_menu.sort_by_extension:FR:Classer par extension
@@ -621,6 +778,8 @@ view_menu.sort_by_extension:DE:Nach Erweiterung sortieren
 view_menu.sort_by_extension:ES:Ordenar por Extensión
 view_menu.sort_by_extension:CS:Setřídit dle přípony
 view_menu.sort_by_extension:zh_TW:依類型排序
+view_menu.sort_by_extension:PL:Sortuj po rozszeżeniu
+view_menu.sort_by_extension:HU:kiterjesztés szerint rendez
 
 view_menu.reverse_order:EN:Reverse order
 view_menu.reverse_order:FR:Inverser l'ordre
@@ -628,6 +787,8 @@ view_menu.reverse_order:DE:Sortierung umdrehen
 view_menu.reverse_order:ES:Invertir el orden
 view_menu.reverse_order:CS:Obrátit pořadí
 view_menu.reverse_order:zh_TW:反向排序
+view_menu.reverse_order:PL:Odwrotna kolejność
+view_menu.reverse_order:HU:fordított sorrend
 
 view_menu.auto_size_columns:EN:Auto-size columns
 view_menu.auto_size_columns:FR:Auto-dimensionnement des colonnes
@@ -638,6 +799,8 @@ view_menu.swap_folders:DE:Fenster vertauschen
 view_menu.swap_folders:ES:Intercambiar directorios
 view_menu.swap_folders:CS:Prohodit složky
 view_menu.swap_folders:zh_TW:資料夾互換
+view_menu.swap_folders:PL:Zamień katalogi
+view_menu.swap_folders:HU:oldalak felcserélése
 
 view_menu.set_same_folder:EN:Set same folder
 view_menu.set_same_folder:FR:Affecter le même dossier
@@ -645,6 +808,8 @@ view_menu.set_same_folder:DE:Auf selben Ordner setzen
 view_menu.set_same_folder:ES:Marcar el mismo directorio
 view_menu.set_same_folder:CS:Nastavit stejnou složku
 view_menu.set_same_folder:zh_TW:跳至同一資料夾
+view_menu.set_same_folder:PL:Źródłowy=Docelowy
+view_menu.set_same_folder:HU:ugyanaz mindkét oldalon
 
 view_menu.show_toolbar:EN:Show toolbar
 view_menu.show_toolbar:FR:Afficher la barre d'outils
@@ -652,6 +817,8 @@ view_menu.show_toolbar:DE:Toolbar anzeigen
 view_menu.show_toolbar:ES:Mostrar la barra de herramientas
 view_menu.show_toolbar:CS:Zobrazit panel nástrojů
 view_menu.show_toolbar:zh_TW:顯示工具列
+view_menu.show_toolbar:PL:Pokaż pasek narzędzi
+view_menu.show_toolbar:HU:látszik az eszköztár
 
 view_menu.hide_toolbar:EN:Hide toolbar
 view_menu.hide_toolbar:FR:Cacher la barre d'outils
@@ -659,6 +826,8 @@ view_menu.hide_toolbar:DE:Werkzeugleiste verstecken
 view_menu.hide_toolbar:ES:Ocultar la barra de herramientas
 view_menu.hide_toolbar:CS:Skrýt panel nástrojů
 view_menu.hide_toolbar:zh_TW:隱藏工具列
+view_menu.hide_toolbar:PL:Ukryj pasek narzędzi
+view_menu.hide_toolbar:HU:az eszköztár rejtése
 
 view_menu.show_command_bar:EN:Show command bar
 view_menu.show_command_bar:FR:Afficher la barre de commande
@@ -666,6 +835,8 @@ view_menu.show_command_bar:DE:Befehlsleiste anzeigen
 view_menu.show_command_bar:ES:Mostar la barra de comandos
 view_menu.show_command_bar:CS:Zobrazit panel příkazů
 view_menu.show_command_bar:zh_TW:顯示命令列
+view_menu.show_command_bar:PL:Pokaż pasek komend
+view_menu.show_command_bar:HU:látszik a parancssor
 
 view_menu.hide_command_bar:EN:Hide command bar
 view_menu.hide_command_bar:FR:Cacher la barre de commande
@@ -673,6 +844,8 @@ view_menu.hide_command_bar:DE:Befehlsleiste verstecken
 view_menu.hide_command_bar:ES:Ocultar la barra de comandos
 view_menu.hide_command_bar:CS:Skrýt panel příkazů
 view_menu.hide_command_bar:zh_TW:隱藏命令列
+view_menu.hide_command_bar:PL:Ukryj pasek komend
+view_menu.hide_command_bar:HU:a parncssor rejtése
 
 view_menu.show_status_bar:EN:Show status bar
 view_menu.show_status_bar:FR:Afficher la barre de status
@@ -680,6 +853,8 @@ view_menu.show_status_bar:DE:Statusleiste anzeigen
 view_menu.show_status_bar:ES:Mostrar barra de estado
 view_menu.show_status_bar:CS:Zobrazit stavový řádek
 view_menu.show_status_bar:zh_TW:顯示狀態列
+view_menu.show_status_bar:PL:Pokaż pasek statusu
+view_menu.show_status_bar:HU:látszik az állapotsor
 
 view_menu.hide_status_bar:EN:Hide status bar
 view_menu.hide_status_bar:FR:Cacher la barre de status
@@ -687,6 +862,8 @@ view_menu.hide_status_bar:DE:Statusleiste verstecken
 view_menu.hide_status_bar:ES:Ocultar la barra de estado
 view_menu.hide_status_bar:CS:Skrýt stavový řádek
 view_menu.hide_status_bar:zh_TW:隱藏狀態列
+view_menu.hide_status_bar:PL:Ukryj pasek statusu
+view_menu.hide_status_bar:HU:az állapotsor rejtése
 
 #################
 # Bookmarks menu #
@@ -710,6 +887,8 @@ window_menu:DE:Fenster
 window_menu:ES:Ventana
 window_menu:CS:Okno
 window_menu:zh_TW:視窗
+window_menu:PL:Okno
+window_menu:HU:ablak
 
 #############
 # Help menu #
@@ -721,6 +900,8 @@ help_menu:DE:Hilfe
 help_menu:ES:Ayuda
 help_menu:CS:Pomoc
 help_menu:zh_TW:求助
+help_menu:PL:Pomoc
+help_menu:HU:segítség
 
 help_menu.shortcuts:EN:Keyboard shortcuts
 help_menu.shortcuts:FR:Raccourcis clavier
@@ -728,6 +909,8 @@ help_menu.shortcuts:DE:Tastaurkürzel
 help_menu.shortcuts:ES:Atajos de teclado
 help_menu.shortcuts:CS:Klávesové skratky
 help_menu.shortcuts:zh_TW:快捷鍵
+help_menu.shortcuts:PL:Skróty klawiaturowe
+help_menu.shortcuts:HU:gyorsbillentyűk
 
 help_menu.homepage:EN:Go to website
 help_menu.homepage:FR:Site web 
@@ -735,6 +918,8 @@ help_menu.homepage:DE:Zur Internetseite
 help_menu.homepage:ES:Ir a sitio web
 help_menu.homepage:CS:Zobrazit web stránku
 help_menu.homepage:zh_TW:連至網站
+help_menu.homepage:PL:Idź do strony internetowej
+help_menu.homepage:HU:muCommander website
 
 help_menu.forums:EN:Go to forums
 help_menu.forums:FR:Forums
@@ -742,6 +927,8 @@ help_menu.forums:DE:Zum Forum
 help_menu.forums:ES:Foros
 help_menu.forums:CS:Zobrazit fóra
 help_menu.forums:zh_TW:連至討論區
+help_menu.forums:PL:Zobacz forum
+help_menu.forums:HU:muCommander fórum
 
 help_menu.donate:EN:Make a donation
 help_menu.donate:FR:Faire une donation
@@ -749,6 +936,8 @@ help_menu.donate:DE:Geld spenden
 help_menu.donate:ES:Hacer una donación
 help_menu.donate:CS:Přispět dotací
 help_menu.donate:zh_TW:捐贈
+help_menu.donate:PL:Wesprzyj
+help_menu.donate:HU:adomány
 
 help_menu.about:EN:About muCommander
 help_menu.about:FR:A propos de muCommander
@@ -756,6 +945,8 @@ help_menu.about:DE:Über muCommander
 help_menu.about:ES:Acerca de muCommander
 help_menu.about:CS:O programu muCommander
 help_menu.about:zh_TW:有關 muCommander
+help_menu.about:PL:O programie muCommander
+help_menu.about:HU:muCommander névjegy
 
 ###########
 # Toolbar #
@@ -800,6 +991,8 @@ toolbar.preferences:DE:muCommander konfigurieren
 toolbar.preferences:ES:Configurar muCommander
 toolbar.preferences:CS:Konfigurovat muCommander
 toolbar.preferences:zh_TW:設定 muCommander
+toolbar.preferences:PL:Konfiguruj muCommandera
+toolbar.preferences:HU:muCommander beállítás
 
 
 ##############
@@ -812,6 +1005,8 @@ status_bar.selected_files:DE:%1 von %2 markiert
 status_bar.selected_files:ES:%1 de %2 seleccionados
 status_bar.selected_files:CS:%1 z %2 označeno
 status_bar.selected_files:zh_TW:%1 / %2 已選取
+status_bar.selected_files:PL:%1 z %2 zaznaczonych
+status_bar.selected_files:HU:%1 ból %2 kijelölt
 
 status_bar.connecting_to_folder:EN:Connecting to folder, press ESCAPE to cancel.
 
@@ -826,6 +1021,8 @@ table.name:DE:Name
 table.name:ES:Nombre
 table.name:CS:Jméno
 table.name:zh_TW:名稱
+table.name:PL:Nazwa
+table.name:HU:név
 
 table.size:EN:Size
 table.size:FR:Taille
@@ -833,6 +1030,8 @@ table.size:DE:Größe
 table.size:ES:Tamaño
 table.size:CS:Velikost
 table.size:zh_TW:大小
+table.size:PL:Rozmiar
+table.size:HU:méret
 
 table.date:EN:Date
 table.date:FR:Date
@@ -840,6 +1039,8 @@ table.date:DE:Datum
 table.date:ES:Fecha
 table.date:CS:Datum
 table.date:zh_TW:日期
+table.date:PL:Data
+table.date:HU:dátum
 
 table.folder_access_error_title:EN:Folder access error
 table.folder_access_error_title:FR:Folder access error
@@ -847,6 +1048,8 @@ table.folder_access_error_title:DE:Fehler beim Ordnerzugriff
 table.folder_access_error_title:ES:Error al acceder al directorio
 table.folder_access_error_title:CS:Chyba přístupu k složce
 table.folder_access_error_title:zh_TW:資料夾存取錯誤
+table.folder_access_error_title:PL:Błąd dostępu do katalogu
+table.folder_access_error_title:HU:könyvtárhozzáférési hiba
 
 table.folder_access_error:EN:Unable to read folder contents
 table.folder_access_error:FR:Unable to read folder contents
@@ -854,6 +1057,8 @@ table.folder_access_error:DE:Kann Ordnerinhalt nicht lesen
 table.folder_access_error:ES:Imposible leer el contenido del directorio
 table.folder_access_error:CS:Nemůžu přečíst obsah složky
 table.folder_access_error:zh_TW:無法讀取資料夾內容
+table.folder_access_error:PL:Nie mogę odczytać zawartości katalogu
+table.folder_access_error:HU:A könyvártartalmat nem lehet olvasni
 
 table.folder_does_not_exist:EN:This folder doesn't exist or is not available.
 table.folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
@@ -861,6 +1066,8 @@ table.folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verf
 table.folder_does_not_exist:ES:El directorio no existe o no está disponible.
 table.folder_does_not_exist:CS:Složka neexistuje nebo není přístupná
 table.folder_does_not_exist:zh_TW:資料夾不存在或無法使用
+table.folder_does_not_exist:PL:Katalog nie istnieje lub nie jest dostępny
+table.folder_does_not_exist:HU:Ez a könyvtár nem létezik vagy nem elérhető
 
 table.download_or_browse:EN:Would you like to browse or download this file ?
 table.download_or_browse:FR:Souhaitez-vous explorer ou télécharger ce fichier ?
@@ -868,6 +1075,8 @@ table.download_or_browse:DE:Wollen sie zur Datei browsen oder sie downloaden?
 table.download_or_browse:ES:¿Desea explorar o descargar este fichero?
 table.download_or_browse:CS:Chcete soubor přechádzet nebo stáhnout?
 table.download_or_browse:zh_TW:你要瀏覽或是下載此檔案?
+table.download_or_browse:PL:Chcesz przeglądać lub ściągnąć ten plik?
+table.download_or_browse:HU:Szeretné böngészni vagy letölteni ezt fájlt?
 
 table.connecting_to_folder:EN:Connecting to folder...
 
@@ -883,6 +1092,8 @@ version_dialog.no_new_version_title:DE:Keine neue Version
 version_dialog.no_new_version_title:ES:No hay una versión nueva
 version_dialog.no_new_version_title:CS:Žádna nová verze
 version_dialog.no_new_version_title:zh_TW:沒有新版本
+version_dialog.no_new_version_title:PL:Brak nowych wersji
+version_dialog.no_new_version_title:HU:Nincs új verzió
 
 version_dialog.no_new_version:EN:Congratulations, you already have the latest version.
 version_dialog.no_new_version:FR:Félicitations, vous avez déjà la dernière version.
@@ -890,6 +1101,8 @@ version_dialog.no_new_version:DE:Gratulation, sie haben schon die aktuellste Ver
 version_dialog.no_new_version:ES:Felicitaciones, tienes la última versión.
 version_dialog.no_new_version:CS:Blahopřejeme, máte nejaktuálnejší verzi.
 version_dialog.no_new_version:zh_TW:恭喜, 你已經安裝最新版本了
+version_dialog.no_new_version:PL:Gratulacje, posiadasz najnowszą wersję.
+version_dialog.no_new_version:HU:Gratulálunk, Önnek már a legújabb verziója van.
 
 version_dialog.new_version_title:EN:New version available
 version_dialog.new_version_title:FR:Nouvelle version disponible
@@ -897,6 +1110,8 @@ version_dialog.new_version_title:DE:Neu Version verfügbar
 version_dialog.new_version_title:ES:Nueva versión disponible
 version_dialog.new_version_title:CS:Novější verze je k dispozici
 version_dialog.new_version_title:zh_TW:找到新版本
+version_dialog.new_version_title:PL:Dostępna jest nowsza wersja
+version_dialog.new_version_title:HU:Az új verzió elérhető
 
 version_dialog.new_version:EN:A new version of muCommander is available.
 version_dialog.new_version:FR:Une nouvelle version de muCommander est disponible.
@@ -904,6 +1119,8 @@ version_dialog.new_version:DE:Eine neue Version des muCommander ist verfügbar.
 version_dialog.new_version:ES:Una nueva versión de muCommander está disponible.
 version_dialog.new_version:CS:Nová verze muCommander je k dispozici.
 version_dialog.new_version:zh_TW:找到 muCommander 的新版本
+version_dialog.new_version:PL:Dostępna jest nowsza wersja muCommandera.
+version_dialog.new_version:HU:Egy új muCommander verzió elérhető.
 
 version_dialog.new_version_url:EN:A new version of muCommander is available at %1.
 version_dialog.new_version_url:FR:Une nouvelle version de muCommander est disponible à %1.
@@ -911,6 +1128,8 @@ version_dialog.new_version_url:DE:Eine neue Version des muCommander ist bei %1 e
 version_dialog.new_version_url:ES:Una nueva versión de muCommander está disponible en %1.
 version_dialog.new_version_url:CS:Nová verze muCommander je k dispozici na adrese %1.
 version_dialog.new_version_url:zh_TW:找到 muCommander 的新版本在 %1.
+version_dialog.new_version_url:PL:Dostępna jest nowsza wersja muCommandera pod adresem %1.
+version_dialog.new_version_url:HU:Egy új muCommander verzió elérhető itt %1.
 
 version_dialog.not_available_title:EN:Server not reachable
 version_dialog.not_available_title:FR:Serveur indisponible
@@ -918,6 +1137,8 @@ version_dialog.not_available_title:DE:Server nicht erreichbar
 version_dialog.not_available_title:ES:El servidor no está disponible
 version_dialog.not_available_title:CS:Server neodpovída
 version_dialog.not_available_title:zh_TW:伺服器無法連結
+version_dialog.not_available_title:PL:Serwer nie odpowiada
+version_dialog.not_available_title:HU:A szerver nem elérhető
 
 version_dialog.not_available:EN:Unable to get version information from server.
 version_dialog.not_available:FR:L'information de version n'a pas pu être récupérée.
@@ -925,6 +1146,8 @@ version_dialog.not_available:DE:Kann die Versionsinformation nicht vom Server la
 version_dialog.not_available:ES:Imposible obtener la versión desde el servidor.
 version_dialog.not_available:CS:Nemůžu získat informace o verzi.
 version_dialog.not_available:zh_TW:無法從伺服器上取得版本資訊
+version_dialog.not_available:PL:Nie mogę uzyskać informacji o wersji z serwera.
+version_dialog.not_available:HU:A verzióinformáció elérése nem lehetséges a szerverről.
 
 version_dialog.download:EN:$[download]
 
@@ -939,6 +1162,8 @@ quit_dialog.title:DE:muCommander beenden
 quit_dialog.title:ES:Salir de muCommander
 quit_dialog.title:CS:Ukončit muCommander
 quit_dialog.title:zh_TW:離開 muCommander
+quit_dialog.title:PL:Zakończ muCommandera
+quit_dialog.title:HU:kilépés a muCommanderből
 
 quit_dialog.desc:EN:Close all windows and quit muCommander ? 
 quit_dialog.desc:FR:Fermer toutes les fenêtres et quitter muCommander ?
@@ -946,6 +1171,8 @@ quit_dialog.desc:DE:Alle Fenster schließen und muCommander beenden ?
 quit_dialog.desc:ES:¿Desea cerrar todas las ventanas y salir de muCommander?
 quit_dialog.desc:CS:Zavřít všechna okna a ukončit muCommander ?
 quit_dialog.desc:zh_TW:關閉所有視窗並離開 muCommander ?
+quit_dialog.desc:PL:Zamknąć wszystkie okna i zakończyć pracę muCommandera ?
+quit_dialog.desc:HU:Minden ablak bázárása és kilépés a muCommanderből?
 
 quit_dialog.show_next_time:EN:Show next time
 quit_dialog.show_next_time:FR:Afficher la prochaine fois
@@ -953,6 +1180,8 @@ quit_dialog.show_next_time:DE:Nächstes Mal anzeigen
 quit_dialog.show_next_time:ES:Mostrar la próxima vez
 quit_dialog.show_next_time:CS:Zobrazit příšte
 quit_dialog.show_next_time:zh_TW:下次再顯示
+quit_dialog.show_next_time:PL:Do zobaczenia następnym razem
+quit_dialog.show_next_time:HU:megtekintés legközelebb
 
 quit_dialog.quit:EN:Quit
 quit_dialog.quit:FR:Quitter
@@ -960,6 +1189,8 @@ quit_dialog.quit:DE:Beenden
 quit_dialog.quit:ES:Salir
 quit_dialog.quit:CS:Ukončit
 quit_dialog.quit:zh_TW:離開
+quit_dialog.quit:PL:Koniec
+quit_dialog.quit:HU:kilépés
 
 
 ######################
@@ -972,6 +1203,8 @@ destination_dialog.file_exists_action:DE:Standard Aktion wenn Datei existiert
 destination_dialog.file_exists_action:ES:Acción por defecto cuando el fichero existe
 destination_dialog.file_exists_action:CS:Předvolená akce když soubor existuje
 destination_dialog.file_exists_action:zh_TW:當檔案存在時的預設動作
+destination_dialog.file_exists_action:PL:Domyślna akcja kiedy plik istnieje
+destination_dialog.file_exists_action:HU:Alapértelmezett művelet, ha ha fájl létezik
 
 
 ########
@@ -984,6 +1217,8 @@ copy_dialog.copy:DE:Kopieren
 copy_dialog.copy:ES:Copiar
 copy_dialog.copy:CS:Kopírovat
 copy_dialog.copy:zh_TW:複製
+copy_dialog.copy:PL:Kopiowanie
+copy_dialog.copy:HU:másol
 
 copy_dialog.destination:EN:Copy selected file(s) to
 copy_dialog.destination:FR:Copier les fichiers sélectionnés dans
@@ -991,6 +1226,8 @@ copy_dialog.destination:DE:Kopiere markierte Datei(en) nach
 copy_dialog.destination:ES:Copiar fichero(s) a
 copy_dialog.destination:CS:Kopírovat označené soubory do
 copy_dialog.destination:zh_TW:複製已選取檔案至
+copy_dialog.destination:PL:Kopiuj zaznaczone pliki do
+copy_dialog.destination:HU:A kiválasztott fájl(ok) másolása
 
 copy_dialog.error_title:EN:Copy error
 copy_dialog.error_title:FR:Erreur de copie
@@ -998,6 +1235,8 @@ copy_dialog.error_title:DE:Kopierfehler
 copy_dialog.error_title:ES:Error al copiar
 copy_dialog.error_title:CS:Chyba při kopírováni
 copy_dialog.error_title:zh_TW:複製錯誤
+copy_dialog.error_title:PL:Błąd kopiowania
+copy_dialog.error_title:HU:másolási hiba
 
 copy_dialog.copying:EN:Copying files
 copy_dialog.copying:FR:Copie en cours
@@ -1005,6 +1244,8 @@ copy_dialog.copying:DE:Kopiere Dateien
 copy_dialog.copying:ES:Copiando
 copy_dialog.copying:CS:Kopíruji soubory
 copy_dialog.copying:zh_TW:複製檔案
+copy_dialog.copying:PL:Kopiuje pliki
+copy_dialog.copying:HU:fájl(ok) másolása
 
 #copy.error_on_file:EN:An error occurred while copying %1
 #copy.error_on_file:FR:Une erreur est survenue lors de la copie de %1
@@ -1026,6 +1267,8 @@ copy.copying_file:DE:Kopiere %1
 copy.copying_file:ES:Copiando %1
 copy.copying_file:CS:Kopíruji %1
 copy.copying_file:zh_TW:正在複製 %1
+copy.copying_file:PL:Kopiuję %1
+copy.copying_file:HU:másolás %1
 
 
 #########
@@ -1038,6 +1281,8 @@ unzip_dialog.unzip:DE:Entpacken
 unzip_dialog.unzip:ES:Descomprimir
 unzip_dialog.unzip:CS:Dekomprimovat
 unzip_dialog.unzip:zh_TW:解壓縮
+unzip_dialog.unzip:PL:Rozpakuj
+unzip_dialog.unzip:HU:kicsomagolás (unZip)
 
 unzip_dialog.destination:EN:Unzip selected file(s) to
 unzip_dialog.destination:FR:Décompresser les fichiers selectionnés dans
@@ -1045,6 +1290,8 @@ unzip_dialog.destination:DE:Entpacke markierte Datei(en) nach
 unzip_dialog.destination:ES:Descomprimir fichero(s) seleccionado(s) en
 unzip_dialog.destination:CS:Dekomprimovat soubor(y) do
 unzip_dialog.destination:zh_TW:解壓縮已選取檔案至
+unzip_dialog.destination:PL:Rozpakuj zaznaczone pliki do
+unzip_dialog.destination:HU:A kijelölt fájl(ok) kicsomagolása
 
 unzip_dialog.error_title:EN:Unzip error
 unzip_dialog.error_title:FR:Erreur de décompression
@@ -1052,6 +1299,8 @@ unzip_dialog.error_title:DE:Fehler beim Entpacken
 unzip_dialog.error_title:ES:Error al descomprimir
 unzip_dialog.error_title:CS:Chyba při dekomprimaci
 unzip_dialog.error_title:zh_TW:解壓縮錯誤
+unzip_dialog.error_title:PL:Błąd rozpakowania
+unzip_dialog.error_title:HU:Kicsomagolási hiba
 
 unzip_dialog.unzipping:EN:Unzipping files
 unzip_dialog.unzipping:FR:Décompression en cours
@@ -1059,6 +1308,8 @@ unzip_dialog.unzipping:DE:Entpacke Dateien
 unzip_dialog.unzipping:ES:Descomprimiendo
 unzip_dialog.unzipping:CS:Dekomprimuju soubory
 unzip_dialog.unzipping:zh_TW:正在解壓縮檔案
+unzip_dialog.unzipping:PL:Rozpakuj pliki
+unzip_dialog.unzipping:HU:Fájl(ok) kicsomagolása
 
 #unzip.error_on_file:EN:An error occurred while unzipping %1
 #unzip.error_on_file:FR:Une erreur est survenue lors de la décompression de %1
@@ -1080,6 +1331,8 @@ unzip.unzipping_file:DE:Entpacke %1
 unzip.unzipping_file:ES:Descomprimiendo %1
 unzip.unzipping_file:CS:Dekomprimuju %1
 unzip.unzipping_file:zh_TW:正在解壓縮 %1
+unzip.unzipping_file:PL:Rozpakuj %1
+unzip.unzipping_file:HU:kicsomagolás %1
 
 unzip.unable_to_open_zip:EN:Unable to open zip file %1.
 unzip.unable_to_open_zip:FR:Erreur lors de l'ouverture du fichier zip %1.
@@ -1087,6 +1340,8 @@ unzip.unable_to_open_zip:DE:Kann ZIP Datei %1 nicht öffnen.
 unzip.unable_to_open_zip:ES:Error al abrir el fichero zip %1.
 unzip.unable_to_open_zip:cS:Chyba při otevíraní souboru %1.
 unzip.unable_to_open_zip:zh_TW:無法打開壓縮檔 %1
+unzip.unable_to_open_zip:PL:Nie mogę otworzyć archiwum %1.
+unzip.unable_to_open_zip:HU:A Zip fájl megnyitása nem lehetséges %1.
 
 
 #######
@@ -1099,6 +1354,8 @@ zip.compressing_file:DE:Packe Datei %1
 zip.compressing_file:ES:Comprimiendo %1
 zip.compressing_file:CS:Komprimuju %1
 zip.compressing_file:zh_TW:正在壓縮 %1
+zip.compressing_file:PL:Spakuj %1
+zip.compressing_file:HU:tömörítés %1
 
 zip.error_on_file:EN:Error while compressing %1
 zip.error_on_file:FR:Erreur lors de la compression de %1
@@ -1106,6 +1363,8 @@ zip.error_on_file:DE:Fehler beim Packen von %1
 zip.error_on_file:ES:Error al comprimir %1
 zip.error_on_file:CS:Chyba při kompresi %1
 zip.error_on_file:zh_TW:當壓縮時發生錯誤 %1
+zip.error_on_file:PL:Błąd podczas kompresji %1
+zip.error_on_file:HU:Hiba a tömörítés közben %1
 
 ########
 # Move #
@@ -1117,6 +1376,8 @@ move_dialog.rename:DE:Umbenennen
 move_dialog.rename:ES:Renombrar
 move_dialog.rename:CS:Přejmenovat
 move_dialog.rename:zh_TW:重新命名
+move_dialog.rename:PL:Zmień nazwę
+move_dialog.rename:HU:átnevez
 
 move_dialog.move:EN:Move
 move_dialog.move:FR:Déplacer
@@ -1124,6 +1385,8 @@ move_dialog.move:DE:Verschieben
 move_dialog.move:ES:Mover
 move_dialog.move:CS:Přesunout
 move_dialog.move:zh_TW:搬移
+move_dialog.move:PL:Przenieś
+move_dialog.move:HU:áthelyez
 
 move_dialog.rename_description:EN:Rename file to
 move_dialog.rename_description:FR:Renommer en
@@ -1131,6 +1394,8 @@ move_dialog.rename_description:DE:Umbenennen nach
 move_dialog.rename_description:ES:Renombrar fichero a
 move_dialog.rename_description:CS:Přejmenovat soubor na
 move_dialog.rename_description:zh_TW:重新命名檔案為
+move_dialog.rename_description:PL:Zmień nazwę na
+move_dialog.rename_description:HU:átnevezés ide
 
 move_dialog.move_description:EN:Move to
 move_dialog.move_description:FR:Déplacer vers
@@ -1138,6 +1403,8 @@ move_dialog.move_description:DE:Verschieben nach
 move_dialog.move_description:ES:Mover a
 move_dialog.move_description:CS:Přesunout do
 move_dialog.move_description:zh_TW:搬移至
+move_dialog.move_description:PL:Przenieś do
+move_dialog.move_description:HU:áthelyezés ide
 
 move_dialog.error_title:EN:Move error
 move_dialog.error_title:FR:Erreur de déplacement
@@ -1145,6 +1412,8 @@ move_dialog.error_title:DE:Fehler beim Verschieben
 move_dialog.error_title:ES:Error de movimiento # FIX
 move_dialog.error_title:CS:Chyba při přesunu
 move_dialog.error_title:zh_TW:搬移錯誤
+move_dialog.error_title:PL:Błąd przenoszenia
+move_dialog.error_title:HU:áthelyezési hiba
 
 #move_dialog.same_source_destination:EN:$[copy_dialog.same_source_destination]
 
@@ -1161,6 +1430,8 @@ move_dialog.moving:DE:Verschiebe Dateien
 move_dialog.moving:ES:Moviendo ficheros
 move_dialog.moving:CS:Přesouvám soubory
 move_dialog.moving:zh_TW:正在搬移檔案
+move_dialog.moving:PL:Przenoszę pliki
+move_dialog.moving:HU:fálj(ok) áthelyezése
 
 move.moving_file:EN:Moving %1
 move.moving_file:FR:Déplacement de %1 en cours
@@ -1168,6 +1439,7 @@ move.moving_file:DE:Verschiebe %1
 move.moving_file:ES:Moviendo %1
 move.moving_file:CS:Přesouvám %1
 move.moving_file:zh_TW:正在搬移 %1
+move.moving_file:PL:Przenoszę %1
 
 
 #################
@@ -1182,6 +1454,8 @@ download_dialog.downloading:DE:Downloaden
 download_dialog.downloading:ES:Descargando
 download_dialog.downloading:CS:Stahuju
 download_dialog.downloading:zh_TW:正在下載
+download_dialog.downloading:PL:Pobierz
+download_dialog.downloading:HU:letöltés
 
 download_dialog.description:EN:Download file to
 download_dialog.description:FR:Télécharger le fichier dans
@@ -1189,6 +1463,8 @@ download_dialog.description:DE:Downloaden nach
 download_dialog.description:ES:Descargar fichero a
 download_dialog.description:CS:Stáhnout soubor do
 download_dialog.description:zh_TW:下載檔案至
+download_dialog.description:PL:Pobierz plik do
+download_dialog.description:HU:fájl(ok) letöltése ide
 
 download_dialog.error_title:EN:Download error
 download_dialog.error_title:FR:Erreur de téléchargement
@@ -1196,6 +1472,8 @@ download_dialog.error_title:DE:Fehler beim Download
 download_dialog.error_title:ES:Error de descarga
 download_dialog.error_title:CS:Chyba při stahování
 download_dialog.error_title:zh_TW:下載錯誤
+download_dialog.error_title:PL:Błąd pobierania
+download_dialog.error_title:HU:letöltési hiba
 
 download.downloading_file:EN:Downloading %1
 download.downloading_file:FR:Téléchargement de %1 en cours
@@ -1203,6 +1481,8 @@ download.downloading_file:DE:Download %1
 download.downloading_file:ES:Descargando %1
 download.downloading_file:CS:Stahuju %1
 download.downloading_file:zh_TW:正在下載 %1
+download.downloading_file:PL:Pobieram %1
+download.downloading_file:HU:letöltés %1
 
 
 ##########
@@ -1215,6 +1495,8 @@ delete_dialog.delete:DE:Löschen
 delete_dialog.delete:ES:Eliminar
 delete_dialog.delete:CS:Odstranit
 delete_dialog.delete:zh_TW:刪除
+delete_dialog.delete:PL:Usuń
+delete_dialog.delete:HU:törlés
 
 delete_dialog.confirmation:EN:Permanently delete selected file(s) ?
 delete_dialog.confirmation:FR:Définitivement supprimer les fichiers sélectionnés ?
@@ -1222,6 +1504,8 @@ delete_dialog.confirmation:DE:Markierte Datei(en) permanent löschen ?
 delete_dialog.confirmation:ES:¿Eliminar permanentemene el/los archivo(s) seleccionado(s)?
 delete_dialog.confirmation:CS:Trvale odstranit vybrané soubory ?
 delete_dialog.confirmation:zh_TW:永久刪除已選取檔案 ?
+delete_dialog.confirmation:PL:Trwale usunąć zaznaczone pliki ?
+delete_dialog.confirmation:HU:Folyamatosan törli a kijelölt fájl(oka)t?
 
 delete_dialog.deleting:EN:Deleting
 delete_dialog.deleting:FR:Suppression en cours
@@ -1229,6 +1513,8 @@ delete_dialog.deleting:DE:Löschen
 delete_dialog.deleting:ES:Eliminando
 delete_dialog.deleting:CS:Odstraňuji
 delete_dialog.deleting:zh_TW:正在刪除
+delete_dialog.deleting:PL:Usuwam
+delete_dialog.deleting:HU:törlés
 
 delete_dialog.error_title:EN:Delete error
 delete_dialog.error_title:FR:Erreur de suppression
@@ -1236,6 +1522,8 @@ delete_dialog.error_title:DE:Fehler beim Löschen
 delete_dialog.error_title:ES:Error al eliminar
 delete_dialog.error_title:CS:Chyba při odstraňování
 delete_dialog.error_title:zh_TW:刪除錯誤
+delete_dialog.error_title:PL:Błąd usuwania
+delete_dialog.error_title:HU:törlési hiba
 
 delete.deleting_file:EN:Deleting %1
 delete.deleting_file:FR:Suppression %1 en cours
@@ -1243,6 +1531,8 @@ delete.deleting_file:DE:Lösche %1
 delete.deleting_file:ES:Eliminando %1
 delete.deleting_file:CS:Odstraňuji %1
 delete.deleting_file:zh_TW:正在刪除 %1
+delete.deleting_file:PL:Usuwam %1
+delete.deleting_file:HU:törlés %1
 
 delete.symlink_warning_title:EN:Symlink found
 delete.symlink_warning_title:FR:Lien symbolique
@@ -1250,6 +1540,8 @@ delete.symlink_warning_title:DE:Verknüpfung gefunden
 delete.symlink_warning_title:ES:Enlace simbólico encontrado
 delete.symlink_warning_title:CS:Nájden symbolický odkaz
 delete.symlink_warning_title:zh_TW:發現符號連結
+delete.symlink_warning_title:PL:Znaleziono łącze symboliczne
+delete.symlink_warning_title:HU:parancsikont találtam
 
 delete.symlink_warning:EN:This file looks like a symbolic link:\n\n  File: %1\n  Links to: %2\n\nDelete symlink only or\nFollow symlink and delete folder (CAUTION) ?
 delete.symlink_warning:FR:Ce fichier a l'air d'être un lien symbolique:\n\n  Fichier: %1\n  Pointe vers: %2\n\nSupprimer le lien seulement ou\nSuivre le lien symbolique et supprimer le répertoire (ATTENTION) ?
@@ -1257,6 +1549,8 @@ delete.symlink_warning:DE:Diese Datei scheint ein symbolischer Link zu sein:\n\n
 delete.symlink_warning:ES:El fichero parece un enlace simbólico:\n\n Fichero: %1\n Enlace a: %2\n\n¿Eliminar enlace simbólico sólo o\nseguir el enlace y elimiar el directorio (PRECAUCIÓN)?
 delete.symlink_warning:CS:Tento soubor vypadá jako symbolický odkaz:\n\n Soubor: %1\n Odkazujuje na: %2\n\nOdstranit pouze odkaz nebo\nSledovat odkaz a odstranit složku (VAROVÁNÍ) ?
 delete.symlink_warning:zh_TW:此檔案可能為符號連結:\n\n 檔案: %1\n 連結至: %2\n\n只刪除符號連結或\n根據連結來刪除資料夾 (小心使用) ?
+delete.symlink_warning:PL:Ten plik wygląda jak łącze symboliczne:\n\n Plik: %1\n wskazuje na: %2\n\nSkasuj łącze symboliczne tylko lub\npodąż za dowiązaniem i skasuj katalog (UWAGA) ?
+delete.symlink_warning:HU:Ez a fájl egy parancsikonnak néz ki:\n\n  Fájl: %1\n  Link: %2\n\nCsak a parancsikon törlése vagy\nkövesse a parancsikont és törölje a könyvtárat (VIGYÁZAT)?
 
 delete.delete_link_only:EN:Delete link
 delete.delete_link_only:FR:Supprimer le lien
@@ -1264,6 +1558,8 @@ delete.delete_link_only:DE:Link löschen
 delete.delete_link_only:ES:Eliminar enlace
 delete.delete_link_only:CS:Odstanit odkaz
 delete.delete_link_only:zh_TW:刪除連結
+delete.delete_link_only:PL:Usuń dowiązanie (link)
+delete.delete_link_only:HU:link törlése
 
 delete.delete_linked_folder:EN:Delete folder
 delete.delete_linked_folder:FR:Supprimer le répertoire
@@ -1271,6 +1567,8 @@ delete.delete_linked_folder:DE:Ordner löschen
 delete.delete_linked_folder:ES:Eliminar directorio
 delete.delete_linked_folder:CS:Odstranit složku
 delete.delete_linked_folder:zh_TW:刪除資料夾
+delete.delete_linked_folder:PL:Usuń katalog
+delete.delete_linked_folder:HU:könyvtár törlése
 
 
 #########
@@ -1283,6 +1581,8 @@ email_dialog.title:DE:Dateien mailen
 email_dialog.title:ES:Enviar por correo
 email_dialog.title:CS:Odeslat soubory emailem
 email_dialog.title:zh_TW:郵寄檔案
+email_dialog.title:PL:Wyślij pliki pocztą e-mail
+email_dialog.title:HU:fájlküldés e-mailben
 
 email_dialog.prefs_not_set_title:EN:Mail not configured
 email_dialog.prefs_not_set_title:FR:Paramètres absents
@@ -1290,6 +1590,8 @@ email_dialog.prefs_not_set_title:DE:eMail nicht konfiguriert
 email_dialog.prefs_not_set_title:ES:Correo no configurado
 email_dialog.prefs_not_set_title:CS:Pošta není nastavena
 email_dialog.prefs_not_set_title:zh_TW:郵件尚未設定
+email_dialog.prefs_not_set_title:PL:Poczta nie skonfigurowana
+email_dialog.prefs_not_set_title:HU:A levelező nincs konfigurálva
 
 email_dialog.prefs_not_set:EN:You need to set your mail parameters first.
 email_dialog.prefs_not_set:FR:Vous devez d'abord configurer vos paramètres email.
@@ -1297,6 +1599,8 @@ email_dialog.prefs_not_set:DE:Nehmen sie erst die eMail Einstellungen vor.
 email_dialog.prefs_not_set:ES:Debes ajustar los parámatros de correo primero.
 email_dialog.prefs_not_set:CS:Nejdřív nastavte parametry vaší pošty.
 email_dialog.prefs_not_set:zh_TW:你必須要先設定郵件參數
+email_dialog.prefs_not_set:PL:Musisz ustwaić najpierw parametry poczty.
+email_dialog.prefs_not_set:HU:Önnek be kell állítania a levelező paramétereit.
 
 email_dialog.from:EN:From
 email_dialog.from:FR:De
@@ -1304,6 +1608,8 @@ email_dialog.from:DE:Von
 email_dialog.from:ES:De
 email_dialog.from:CS:Od
 email_dialog.from:zh_TW:寄件者
+email_dialog.from:PL:Od
+email_dialog.from:HU:feladó
 
 email_dialog.to:EN:To
 email_dialog.to:FR:A
@@ -1311,6 +1617,8 @@ email_dialog.to:DE:An
 email_dialog.to:ES:A
 email_dialog.to:CS:Komu
 email_dialog.to:zh_TW:收件者
+email_dialog.to:PL:Do
+email_dialog.to:HU:címzett
 
 email_dialog.subject:EN:Subject
 email_dialog.subject:FR:Sujet
@@ -1318,6 +1626,8 @@ email_dialog.subject:DE:Betreff
 email_dialog.subject:ES:Asunto
 email_dialog.subject:CS:Předmět
 email_dialog.subject:zh_TW:主旨
+email_dialog.subject:PL:Temat
+email_dialog.subject:HU:tárgy
 
 email_dialog.send:EN:Send
 email_dialog.send:FR:Envoyer
@@ -1325,6 +1635,8 @@ email_dialog.send:DE:Senden
 email_dialog.send:ES:Enviar
 email_dialog.send:CS:Odeslat
 email_dialog.send:zh_TW:傳送
+email_dialog.send:PL:Wyślij
+email_dialog.send:HU:küldés
 
 email_dialog.error_title:EN:Email files error
 email_dialog.error_title:FR:Erreur d'envoi
@@ -1332,6 +1644,8 @@ email_dialog.error_title:DE:Fehler beim Senden der Dateien
 email_dialog.error_title:ES:Error de envío
 email_dialog.error_title:CS:Chyba při odesílání
 email_dialog.error_title:zh_TW:郵寄檔案錯誤
+email_dialog.error_title:PL:Błąd wysyłania plików
+email_dialog.error_title:HU:E-mail fájl hiba
 
 email_dialog.read_error:EN:Unable to read files in subfolders.
 email_dialog.read_error:FR:Les fichiers ne peuvent être lus.
@@ -1339,6 +1653,8 @@ email_dialog.read_error:DE:Kann Dateien im Unterordner nicht lesen.
 email_dialog.read_error:ES:Imposible leer ficheros en subdirectorios.
 email_dialog.read_error:CS:Nemůžu přečíst soubory v podsložce
 email_dialog.read_error:zh_TW:無法讀取在子目錄中的檔案.
+email_dialog.read_error:PL:Nie mogę czytać plików w podkatalogu.
+email_dialog.read_error:HU:Az alkönyvtár(ak)ban lévő fájl(ok) olvasása nem lehetséges
 
 email_dialog.nb_files:EN:%1 file(s)
 email_dialog.nb_files:FR:%1 fichier(s)
@@ -1346,6 +1662,8 @@ email_dialog.nb_files:DE:%1 Datei(en)
 email_dialog.nb_files:ES:%1 fichero(s)
 email_dialog.nb_files:CS:%1 soubor(y)
 email_dialog.nb_files:zh_TW:%1 檔案
+email_dialog.nb_files:PL:%1 plik(i)
+email_dialog.nb_files:HU:%1 fájl(ok)
 
 email_dialog.sending:EN:Sending files
 email_dialog.sending:FR:Envoi en cours
@@ -1353,6 +1671,8 @@ email_dialog.sending:DE:Sende Dateien
 email_dialog.sending:ES:Enviando ficheros
 email_dialog.sending:CS:Odesílam soubory
 email_dialog.sending:zh_TW:傳送檔案
+email_dialog.sending:PL:Wysyłam pliki
+email_dialog.sending:HU:fájlok küldése
 
 email.sending_file:EN:Sending %1
 email.sending_file:FR:Envoi de %1
@@ -1360,6 +1680,8 @@ email.sending_file:DE:Sende %1
 email.sending_file:ES:Enviando %1
 email.sending_file:CS:Odesílám %1
 email.sending_file:zh_TW:正在傳送 %1
+email.sending_file:PL:Wysyłam %1
+email.sending_file:HU:küldés %1
 
 email.connecting_to_server:EN:Connecting to %1
 email.connecting_to_server:FR:Connexion à %1
@@ -1367,6 +1689,8 @@ email.connecting_to_server:DE:Verbinden mit %1
 email.connecting_to_server:ES:Conectando a %1
 email.connecting_to_server:CS:Připojuji se k %1
 email.connecting_to_server:zh_TW:連接至 %1
+email.connecting_to_server:PL:Podłączam się do %1
+email.connecting_to_server:HU:kapcsolódás %1
 
 email.server_unavailable:EN:Unable to contact mail server %1, check your mail preferences or try again later.
 email.server_unavailable:FR:Echec de la connexion au serveur %1, vérifiez vos préférences de mail ou réessayez plus tard.
@@ -1374,6 +1698,8 @@ email.server_unavailable:DE:Kann Verbindung zu Server %1 nicht herstellen, über
 email.server_unavailable:ES:Imposible conectar al servidor %1, comprueba tus preferencias de correo o inténtalo más tarde.
 email.server_unavailable:CS:Nemůžu se připojit na poštovní server %1, skontolujte své nastavení nebo skuste později.
 email.server_unavailable:zh_TW:無法連接至郵件伺服器 %1, 檢查你的郵件設定並重試
+email.server_unavailable:PL:Nie mogę się z kontaktować z serwerem poczyowym %1, sprawdź ustawienia lub spróbuj ponownie.
+email.server_unavailable:HU:Nem lehet kapcsolódni a levelezőszerverhez %1, kérjük, ellenőrizze a levelező beállításait és próbálja újra.
 
 email.connection_closed:EN:Connection closed by server, mail not sent.
 email.connection_closed:FR:Connexion fermée par le serveur, le message n'a pas été envoyé.
@@ -1381,6 +1707,8 @@ email.connection_closed:DE:Verbindung vom Server unterbrochen, eMail nicht gesen
 email.connection_closed:ES:Conexión cerrada por el servidor, el mensaje no ha sido enviado.
 email.connection_closed:CS:Připojení ukončeno serverem, pošta nebyla odeslaná.
 email.connection_closed:zh_TW:連線被伺服器關閉, 郵件未寄出
+email.connection_closed:PL:Połączenie przerwane przez serwer, poczta nie wysłana.
+email.connection_closed:HU:A szerver megszűntette a kapcsolatot, a levél nem elküldve.
 
 email.goodbye_failed:EN:Error while closing connection, mail may not have been sent.
 email.goodbye_failed:FR:Erreur lors de la fermeture de connexion, le message n'a peut-être pas été envoyé.
@@ -1388,6 +1716,8 @@ email.goodbye_failed:DE:Fehler beim Schließen der Verbindung, etvl. wurde die e
 email.goodbye_failed:ES:Error al cerrar la conexión, el mensaje no ha sido enviado.
 email.goodbye_failed:CS:Chyba při ukončování spojení, pošta nemusela odejít.
 email.goodbye_failed:zh_TW:當關閉連線時發生錯誤, 郵件可能尚未寄出
+email.goodbye_failed:PL:Błąd podczas zamykania połączenia, poczta może zostać niewysłana.
+email.goodbye_failed:HU:Kapcsolatbontás közben hiba történt, így a levél nem biztos, hogy elment.
 
 email.send_file_error:EN:Unable to send file %1, mail not sent.
 email.send_file_error:FR:Erreur lors de l'envoi du fichier %1, le message n'a pas été envoyé.
@@ -1395,6 +1725,8 @@ email.send_file_error:DE:Kann Datei %1 nicht senden, eMail nicht gesendet.
 email.send_file_error:ES:Imposible enviar el fichero %1, el mensaje no ha sido enviado.
 email.send_file_error:CS:Nemůžu odeslat soubor %1, správa nebyla odeslaná.
 email.send_file_error:zh_TW:無法傳送檔案 %1, 郵件未寄出
+email.send_file_error:PL:Nie mogę wysłać pliku %1, poczta nie wysłana.
+email.send_file_error:HU:A fájl küldése nem lehetséges %1, a levél nincs elküldve.
 
 
 #####################################
@@ -1407,6 +1739,8 @@ file_exists_dialog.title:DE:Datei existiert schon am Ziel
 file_exists_dialog.title:ES:El fichero ya existe en el destino
 file_exists_dialog.title:CS:Soubor již v cíli existuje
 file_exists_dialog.title:zh_TW:檔案已經存在目的地
+file_exists_dialog.title:PL:Plik już istnieje w miejscu docelowym
+file_exists_dialog.title:HU:A fájl már létezik a megadott helyen
 
 
 #########################
@@ -1419,6 +1753,8 @@ file_selection_dialog.mark:DE:Markieren
 file_selection_dialog.mark:ES:Marcar
 file_selection_dialog.mark:CS:Označit
 file_selection_dialog.mark:zh_TW:標記
+file_selection_dialog.mark:PL:Zaznacz
+file_selection_dialog.mark:HU:kijelöl
 
 file_selection_dialog.unmark:EN:Unmark
 file_selection_dialog.unmark:FR:Dé-marquer
@@ -1426,6 +1762,8 @@ file_selection_dialog.unmark:DE:Demarkieren
 file_selection_dialog.unmark:ES:Desmarcar
 file_selection_dialog.unmark:CS:Odznačit
 file_selection_dialog.unmark:zh_TW:取消標記
+file_selection_dialog.unmark:PL:Odznacz
+file_selection_dialog.unmark:HU:kijölést visszavonása
 
 file_selection_dialog.mark_description:EN:Mark files whose filename:
 file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom:
@@ -1433,6 +1771,8 @@ file_selection_dialog.mark_description:DE:Markiere Dateien deren Name:
 file_selection_dialog.mark_description:ES:Marcar ficheros cuyo nombre:
 file_selection_dialog.mark_description:CS:Označit soubory s jménem:
 file_selection_dialog.mark_description:zh_TW:標記檔名為:
+file_selection_dialog.mark_description:PL:Zaznacz pliki nazywające się:
+file_selection_dialog.mark_description:HU:Kijelöli a fájlokat, amelyeknek a neve:
 
 file_selection_dialog.unmark_description:EN:Unmark files whose filename:
 file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom:
@@ -1440,6 +1780,8 @@ file_selection_dialog.unmark_description:DE:Demarkiere Dateien deren Name:
 file_selection_dialog.unmark_description:ES:Desmarcar ficheros cuyo nombre:
 file_selection_dialog.unmark_description:CS:Odznačit soubory s jménem:
 file_selection_dialog.unmark_description:zh_TW:取消標記檔名為:
+file_selection_dialog.unmark_description:PL:Odznacz pliki nazywające się:
+file_selection_dialog.unmark_description:HU:Kijelölés visszavonása azon fájloknál, amelyeknek a neve:
 
 file_selection_dialog.contains:EN:Contains
 file_selection_dialog.contains:FR:Contient
@@ -1447,6 +1789,8 @@ file_selection_dialog.contains:DE:enthält
 file_selection_dialog.contains:ES:Contiene
 file_selection_dialog.contains:CS:Obsahuji
 file_selection_dialog.contains:zh_TW:包含
+file_selection_dialog.contains:PL:Zawierające
+file_selection_dialog.contains:HU:tartalmaz
 
 file_selection_dialog.starts_with:EN:Starts with
 file_selection_dialog.starts_with:FR:Commence par
@@ -1454,6 +1798,8 @@ file_selection_dialog.starts_with:DE:anfängt mit
 file_selection_dialog.starts_with:ES:Comienza por
 file_selection_dialog.starts_with:CS:Začínají na
 file_selection_dialog.starts_with:zh_TW:開頭為
+file_selection_dialog.starts_with:PL:Zaczynające się na
+file_selection_dialog.starts_with:HU:Ezzel kezd
 
 file_selection_dialog.ends_with:EN:Ends with
 file_selection_dialog.ends_with:FR:Termine par
@@ -1461,6 +1807,8 @@ file_selection_dialog.ends_with:DE:endet mit
 file_selection_dialog.ends_with:ES:Termina por
 file_selection_dialog.ends_with:CS:Končí na
 file_selection_dialog.ends_with:zh_TW:結束為
+file_selection_dialog.ends_with:PL:Kończące się na
+file_selection_dialog.ends_with:HU:Ezzel végez
 
 file_selection_dialog.is:EN:Is
 file_selection_dialog.is:FR:Est
@@ -1468,6 +1816,8 @@ file_selection_dialog.is:DE:ist
 file_selection_dialog.is:ES:Es
 file_selection_dialog.is:CS:Je
 file_selection_dialog.is:zh_TW:是
+file_selection_dialog.is:PL:Jest
+file_selection_dialog.is:HU:van
 
 file_selection_dialog.case_sensitive:EN:Case sensitive
 file_selection_dialog.case_sensitive:FR:Respecter la casse
@@ -1475,6 +1825,8 @@ file_selection_dialog.case_sensitive:DE:Groß-/Kleinschreibung beachten
 file_selection_dialog.case_sensitive:ES:Sensible a las mayúsculas
 file_selection_dialog.case_sensitive:CS:Rozlišovat velká/malá písmena
 file_selection_dialog.case_sensitive:zh_TW:分大小寫
+file_selection_dialog.case_sensitive:PL:Rozróżniaj wielkość liter
+file_selection_dialog.case_sensitive:HU:kis- és NAGYBETŰ érzékeny
 
 file_selection_dialog.include_folders:EN:Include folders
 file_selection_dialog.include_folders:FR:Inclure les dossiers
@@ -1482,6 +1834,8 @@ file_selection_dialog.include_folders:DE:Ordner einschliessen
 file_selection_dialog.include_folders:ES:Incluir directorios
 file_selection_dialog.include_folders:CS:Zahrnout složky
 file_selection_dialog.include_folders:zh_TW:包括資料夾
+file_selection_dialog.include_folders:PL:Uwzględnij podfoldery
+file_selection_dialog.include_folders:HU:könyvtárakkal együtt
 
 
 ################
@@ -1494,6 +1848,8 @@ mkdir_dialog.title:DE:Ordner erstellen
 mkdir_dialog.title:ES:Crear directorio
 mkdir_dialog.title:CS:Vytvořit složku
 mkdir_dialog.title:zh_TW:新增資料夾
+mkdir_dialog.title:PL:Utwórz katalog
+mkdir_dialog.title:HU:új könyvtár
 
 mkdir_dialog.description:EN:Create directory
 mkdir_dialog.description:FR:Créer le répertoire
@@ -1501,6 +1857,8 @@ mkdir_dialog.description:DE:Ordner erstellen
 mkdir_dialog.description:ES:Crear directorio
 mkdir_dialog.description:CS:Vytvoř složku
 mkdir_dialog.description:zh_TW:新增資料夾
+mkdir_dialog.description:PL:Utwórz katalog
+mkdir_dialog.description:HU:új könyvtár létrehozása
 
 mkdir_dialog.error_title:EN:Make dir error
 mkdir_dialog.error_title:FR:Erreur de création
@@ -1508,6 +1866,8 @@ mkdir_dialog.error_title:DE:Fehler beim Erstellen des Ordners
 mkdir_dialog.error_title:ES:Error al crear el directorio
 mkdir_dialog.error_title:CS:Chyba při vytváření složky
 mkdir_dialog.error_title:zh_TW:新增資料夾錯誤
+mkdir_dialog.error_title:PL:Błąd tworzenia katalogu
+mkdir_dialog.error_title:HU:könyvtár létrehozási hiba
 
 mkdir_dialog.create:EN:Create
 mkdir_dialog.create:FR:Créer
@@ -1515,6 +1875,8 @@ mkdir_dialog.create:DE:Erstelle
 mkdir_dialog.create:ES:Crear
 mkdir_dialog.create:CS:Vytvoř
 mkdir_dialog.create:zh_TW:新增
+mkdir_dialog.create:PL:Utwórz
+mkdir_dialog.create:HU:létrehoz
 
 mkdir_dialog.invalid_path:EN:Invalid path: %1
 mkdir_dialog.invalid_path:FR:Chemin invalide: %1
@@ -1522,6 +1884,8 @@ mkdir_dialog.invalid_path:DE:Ungültiger Pfad: %1
 mkdir_dialog.invalid_path:ES:Dirección inválida: %1
 mkdir_dialog.invalid_path:CS:Neexistujíci cesta: %1
 mkdir_dialog.invalid_path:zh_TW:不合法的路徑: %1
+mkdir_dialog.invalid_path:PL:Błędna ścieżka: %1
+mkdir_dialog.invalid_path:HU:érvénytelen út: %1
 
 mkdir_dialog.dir_already_exists:EN:Directory %1 already exists.
 mkdir_dialog.dir_already_exists:FR:Le répertoire %1 existe déjà.
@@ -1529,6 +1893,8 @@ mkdir_dialog.dir_already_exists:DE:Ordner %1 existiert bereits.
 mkdir_dialog.dir_already_exists:ES:El directorio %1 ya existe.
 mkdir_dialog.dir_already_exists:CS:Složka %1 již existuje.
 mkdir_dialog.dir_already_exists:zh_TW:資料夾 %1 已存在.
+mkdir_dialog.dir_already_exists:PL:Katalog %1 już istnieje.
+mkdir_dialog.dir_already_exists:HU:%1 könyvtár már létezik.
 
 
 ################
@@ -1541,6 +1907,8 @@ progress_bar.starting:DE:Transfer startet...
 progress_bar.starting:ES:Comenzando transferencia...
 progress_bar.starting:CS:Přenos zahájen...
 progress_bar.starting:zh_TW:傳送開始...
+progress_bar.starting:PL:Transfer rozpoczęty...
+progress_bar.starting:HU:Átvitel kezdődik...
 
 progress_bar.hide:EN:Hide
 progress_bar.hide:FR:Cacher
@@ -1548,6 +1916,8 @@ progress_bar.hide:DE:Verstecken
 progress_bar.hide:ES:Ocultar
 progress_bar.hide:CS:Skrýt
 progress_bar.hide:zh_TW:隱藏
+progress_bar.hide:PL:Ukryj
+progress_bar.hide:HU:rejt
 
 # %1 is the amount of data transferred (already formatted+localized) and %2 the transfer speed.
 progress_bar.transferred:EN:Transferred %1 at %2/s.
@@ -1556,6 +1926,8 @@ progress_bar.transferred:DE:Transferiert %1 von %2/s.
 progress_bar.transferred:ES:%1 transferidos a %2/s.
 progress_bar.transferred:CS:Přeneseno %1 při %2/s.
 progress_bar.transferred:zh_TW:已傳送 %1 速度 %s.
+progress_bar.transferred:PL:Przesłano %1 z %2/s.
+progress_bar.transferred:HU:%1 átvitel %2/s alatt megtörtént.
 
 
 #####################
@@ -1570,6 +1942,8 @@ properties_dialog.file_properties:DE:Eigenschaften von %1
 properties_dialog.file_properties:ES:%1 Propiedades
 properties_dialog.file_properties:CS:%1 Vlastnosti
 properties_dialog.file_properties:zh_TW:%1 內容
+properties_dialog.file_properties:PL:%1 Właściwości
+properties_dialog.file_properties:HU:%1 tulajdonságok
 
 properties_dialog.contents:EN:Contents
 properties_dialog.contents:FR:Contenu
@@ -1577,6 +1951,8 @@ properties_dialog.contents:DE:Inhalt
 properties_dialog.contents:ES:Contenido
 properties_dialog.contents:CS:Obsahuje
 properties_dialog.contents:zh_TW:內容
+properties_dialog.contents:PL:Zawartość
+properties_dialog.contents:HU:tartalom (tartalmak)
 
 properties_dialog.location:EN:Location
 properties_dialog.location:FR:Emplacement
@@ -1584,6 +1960,8 @@ properties_dialog.location:DE:Ort
 properties_dialog.location:ES:Localización
 properties_dialog.location:CS:Umístnění
 properties_dialog.location:zh_TW:位置
+properties_dialog.location:PL:Lokalizacja
+properties_dialog.location:HU:hely
 
 properties_dialog.size:EN:Size
 properties_dialog.size:FR:Taille
@@ -1591,6 +1969,8 @@ properties_dialog.size:DE:Größe
 properties_dialog.size:ES:Tamaño
 properties_dialog.size:CS:Velikost
 properties_dialog.size:zh_TW:大小
+properties_dialog.size:PL:Rozmiar
+properties_dialog.size:HU:méret
 
 properties_dialog.nb_files:EN:%1 file(s)
 properties_dialog.nb_files:FR:%1 fichier(s)
@@ -1598,6 +1978,8 @@ properties_dialog.nb_files:DE:%1 Datei(en)
 properties_dialog.nb_files:ES:%1 fichero(s)
 properties_dialog.nb_files:CS:%1 soubor(y)
 properties_dialog.nb_files:zh_TW:%1 檔案
+properties_dialog.nb_files:PL:%1 plik(i)
+properties_dialog.nb_files:HU:%1 fájl(ok)
 
 properties_dialog.nb_folders:EN:%1 folder(s)
 properties_dialog.nb_folders:FR:%1 dossier(s)
@@ -1605,6 +1987,8 @@ properties_dialog.nb_folders:DE:%1 Ordner
 properties_dialog.nb_folders:ES:%1 directorio(s)
 properties_dialog.nb_folders:CS:%1 složka(y)
 properties_dialog.nb_folders:zh_TW:%1 資料夾
+properties_dialog.nb_folders:PL:%1 katalog(i)
+properties_dialog.nb_folders:HU:%1 könyvtár(ak)
 
 properties_dialog.calculating:EN:calculating...
 properties_dialog.calculating:FR:calcul en cours...
@@ -1612,6 +1996,7 @@ properties_dialog.calculating:DE:Kalkuliere...
 properties_dialog.calculating:ES:Calculando..
 properties_dialog.calculating:CS:počítám...
 properties_dialog.calculating:zh_TW:計算中...
+properties_dialog.calculating:PL:Obliczam...
 
 
 ##############
@@ -1631,6 +2016,8 @@ run_dialog.run_command_description:DE:Ausführen im aktuellen Ordner
 run_dialog.run_command_description:ES:Ejecutar en el directorio actual
 run_dialog.run_command_description:CS:Spustit v aktuální složce
 run_dialog.run_command_description:zh_TW:在此資料夾執行
+run_dialog.run_command_description:PL:Uruchom w aktywnym katalogu
+run_dialog.run_command_description:HU:futat az aktuális könyvtárból
 
 run_dialog.command_output:EN:Command output
 run_dialog.command_output:FR:Sortie de la commande
@@ -1638,6 +2025,8 @@ run_dialog.command_output:DE:Befehlsausgabe
 run_dialog.command_output:ES:Salida del comando
 run_dialog.command_output:CS:Výstup příkazu
 run_dialog.command_output:zh_TW:命令結果輸出
+run_dialog.command_output:PL:Wynik polecenia
+run_dialog.command_output:HU:parancs kimenet
 
 run_dialog.run:EN:Run
 run_dialog.run:FR:Exécuter
@@ -1645,6 +2034,8 @@ run_dialog.run:DE:Ausführen
 run_dialog.run:ES:Ejecutar
 run_dialog.run:CS:Spustit
 run_dialog.run:zh_TW:執行
+run_dialog.run:PL:Uruchom
+run_dialog.run:HU:futtat
 
 run_dialog.stop:EN:Stop
 run_dialog.stop:FR:Arrêter
@@ -1652,6 +2043,8 @@ run_dialog.stop:DE:Stopp
 run_dialog.stop:ES:Parar
 run_dialog.stop:CS:Zastavit
 run_dialog.stop:zh_TW:停止
+run_dialog.stop:PL:Zatrzymaj
+run_dialog.stop:HU:megállít
 
 
 #########################
@@ -1666,6 +2059,8 @@ server_connect_dialog.server_type:DE:Verbindungstyp
 server_connect_dialog.server_type:ES:Tipo de conexión
 server_connect_dialog.server_type:CS:Typ připojení
 server_connect_dialog.server_type:zh_TW:連接類型
+server_connect_dialog.server_type:PL:Typ połączenia
+server_connect_dialog.server_type:HU:kapcsolat típusa
 
 server_connect_dialog.server:EN:Server
 server_connect_dialog.server:FR:Serveur
@@ -1673,6 +2068,8 @@ server_connect_dialog.server:DE:Server
 server_connect_dialog.server:ES:Servidor
 server_connect_dialog.server:CS:Server
 server_connect_dialog.server:zh_TW:伺服器
+server_connect_dialog.server:PL:Serwer
+server_connect_dialog.server:HU:szerver
 
 server_connect_dialog.username:EN:Username
 server_connect_dialog.username:FR:Nom d'utilisateur
@@ -1680,6 +2077,8 @@ server_connect_dialog.username:DE:Benutzername
 server_connect_dialog.username:ES:Nombre de usuario
 server_connect_dialog.username:CS:Uživatelské jméno
 server_connect_dialog.username:zh_TW:帳號
+server_connect_dialog.username:PL:Nazwa użytkownika
+server_connect_dialog.username:HU:felhasználónév
 
 server_connect_dialog.password:EN:Password
 server_connect_dialog.password:FR:Mot de passe
@@ -1687,6 +2086,8 @@ server_connect_dialog.password:DE:Paßwort
 server_connect_dialog.password:ES:Contraseña
 server_connect_dialog.password:CS:Heslo
 server_connect_dialog.password:zh_TW:密碼
+server_connect_dialog.password:PL:Hasło
+server_connect_dialog.password:HU:jelszó
 
 server_connect_dialog.initial_dir:EN:Initial directory
 server_connect_dialog.initial_dir:FR:Répertoire initial
@@ -1694,6 +2095,8 @@ server_connect_dialog.initial_dir:DE:Startordner
 server_connect_dialog.initial_dir:ES:Directorio inicial
 server_connect_dialog.initial_dir:CS:Počáteční složka
 server_connect_dialog.initial_dir:zh_TW:初始位置
+server_connect_dialog.initial_dir:PL:Katalog początkowy
+server_connect_dialog.initial_dir:HU:kezdő könyvtár
 
 server_connect_dialog.port:EN:Port
 server_connect_dialog.port:FR:Port
@@ -1701,6 +2104,8 @@ server_connect_dialog.port:DE:Port
 server_connect_dialog.port:ES:Puerto
 server_connect_dialog.port:CS:Port
 server_connect_dialog.port:zh_TW:埠號
+server_connect_dialog.port:PL:Port
+server_connect_dialog.port:HU:port
 
 server_connect_dialog.server_url:EN:Server URL
 server_connect_dialog.server_url:FR:URL serveur
@@ -1708,6 +2113,8 @@ server_connect_dialog.server_url:DE:Server URL
 server_connect_dialog.server_url:ES:Dirección del servidor
 server_connect_dialog.server_url:CS:Adresa serveru
 server_connect_dialog.server_url:zh_TW:伺服器URL
+server_connect_dialog.server_url:PL:Adres serwera
+server_connect_dialog.server_url:HU:szerver URL
 
 server_connect_dialog.http_url:EN:Web site URL
 server_connect_dialog.http_url:FR:URL site web
@@ -1715,6 +2122,8 @@ server_connect_dialog.http_url:DE:URL Webseite
 server_connect_dialog.http_url:ES:Dirección del sitio web
 server_connect_dialog.http_url:CS:Adresa web stránky
 server_connect_dialog.http_url:zh_TW:網站URL
+server_connect_dialog.http_url:PL:Adres strony internetowej
+server_connect_dialog.http_url:HU:website URL
 
 server_connect_dialog.connect:EN:Connect
 server_connect_dialog.connect:FR:Se connecter
@@ -1722,6 +2131,8 @@ server_connect_dialog.connect:DE:Verbinden
 server_connect_dialog.connect:ES:Conectar
 server_connect_dialog.connect:CS:Připojit
 server_connect_dialog.connect:zh_TW:連接
+server_connect_dialog.connect:PL:Połącz
+server_connect_dialog.connect:HU:kapcsolat
 
 #server_connect_dialog.auth_error:EN:Invalid login or password.
 #server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
@@ -1741,6 +2152,8 @@ ftp_connect.passive_mode:DE:Passiven Modus aktivieren
 ftp_connect.passive_mode:ES:Activar modo pasivo
 ftp_connect.passive_mode:CS:Zapnout pasivní mód
 ftp_connect.passive_mode:zh_TW:啟動被動模式(Passive)
+ftp_connect.passive_mode:PL:Użyj trybu pasywnego
+ftp_connect.passive_mode:HU:A passzív mód engedélyezése
 
 ftp_connect.anonymous_user:EN:Anonymous user
 ftp_connect.anonymous_user:FR:Utilisateur anonyme
@@ -1748,6 +2161,8 @@ ftp_connect.anonymous_user:DE:Anonymer Benutzer
 ftp_connect.anonymous_user:ES:Usuario anónimo
 ftp_connect.anonymous_user:CS:Anonymní uživatel
 ftp_connect.anonymous_user:zh_TW:匿名使用者
+ftp_connect.anonymous_user:PL:Użytkownik anonimowy
+ftp_connect.anonymous_user:HU:névtelen felhasználó
 
 
 ###############
@@ -1760,6 +2175,8 @@ auth_dialog.title:DE:Authentifizierung
 auth_dialog.title:ES:Autentificación
 auth_dialog.title:CS:Autentifikace
 auth_dialog.title:zh_TW:驗證
+auth_dialog.title:PL:Autoryzacja
+auth_dialog.title:HU:hitelesítés
 
 auth_dialog.desc:EN:Please enter a login and password:
 auth_dialog.desc:FR:Veuillez entrer un identifiant et un mot de passe:
@@ -1767,6 +2184,8 @@ auth_dialog.desc:DE:Bitte Login und Passwort eingeben:
 auth_dialog.desc:ES:Por favor, introduzca un nombre y una contraseña:
 auth_dialog.desc:CS:Zadejte prosím uživatelské jméno a heslo:
 auth_dialog.desc:zh_TW:請輸入帳號及密碼:
+auth_dialog.desc:PL:Proszę wprowadzić nazwę użytkownika i hasło:
+auth_dialog.desc:HU:Kérjük, adja meg felhasználónevét vagy jelszavát:
 
 auth_dialog.server:EN:Server
 auth_dialog.server:FR:Serveur
@@ -1774,6 +2193,8 @@ auth_dialog.server:DE:Server
 auth_dialog.server:ES:Servidor
 auth_dialog.server:CS:Server
 auth_dialog.server:zh_TW:伺服器
+auth_dialog.server:PL:Serwer
+auth_dialog.server:HU:szerver
 
 auth_dialog.login:EN:Login
 auth_dialog.login:FR:Identifiant
@@ -1781,6 +2202,8 @@ auth_dialog.login:DE:Login
 auth_dialog.login:ES:Identificación
 auth_dialog.login:CS:Login
 auth_dialog.login:zh_TW:登入
+auth_dialog.login:PL:Login
+auth_dialog.login:HU:login
 
 auth_dialog.password:EN:$[server_connect_dialog.password]
 
@@ -1790,6 +2213,8 @@ auth_dialog.error_was:DE:Fehler war: %1
 auth_dialog.error_was:ES:El error era: %1
 auth_dialog.error_was:CS:Chyba byla: %1
 auth_dialog.error_was:zh_TW:錯誤為: %1
+auth_dialog.error_was:PL:Wystąpił błąd: %1
+auth_dialog.error_was:HU:hiba történt: %1
 
 
 ##############
@@ -1809,6 +2234,8 @@ zip_dialog.title:DE:Dateien packen
 zip_dialog.title:ES:Ficheros zip
 zip_dialog.title:CS:Komprimovat soubory
 zip_dialog.title:zh_TW:壓縮檔案
+zip_dialog.title:PL:Spakuj pliki
+zip_dialog.title:HU:tömrített Zip fájl(ok)
 
 zip_dialog.zipping:EN:Zipping files
 zip_dialog.zipping:FR:Compression en cours
@@ -1816,6 +2243,8 @@ zip_dialog.zipping:DE:Packe Dateien
 zip_dialog.zipping:ES:Comprimiendo
 zip_dialog.zipping:CS:Komprimuju
 zip_dialog.zipping:zh_TW:正在壓縮檔案
+zip_dialog.zipping:PL:Pakuję
+zip_dialog.zipping:HU:fájltömörítés (Zip)
 
 zip_dialog.error_title:EN:Zip error
 zip_dialog.error_title:FR:Erreur de compression
@@ -1823,6 +2252,8 @@ zip_dialog.error_title:DE:Fehler beim Packen
 zip_dialog.error_title:ES:Error de compresión
 zip_dialog.error_title:CS:Chyba komprimace
 zip_dialog.error_title:zh_TW:壓縮錯誤
+zip_dialog.error_title:PL:Błąd kompresji
+zip_dialog.error_title:HU:tömörítési hiba
 
 zip_dialog.cannot_write:EN:Unable to create zip file in destination folder.
 zip_dialog.cannot_write:FR:Impossible de créer le fichier zip dans le dossier de destination.
@@ -1830,6 +2261,8 @@ zip_dialog.cannot_write:DE:Kann ZIP Datei nicht im Zielordner erstellen.
 zip_dialog.cannot_write:ES:Imposible crear el fichero zip en el direcotorio de destino.
 zip_dialog.cannot_write:CS:Nemůžu vytvořit archív v cílové složce.
 zip_dialog.cannot_write:zh_TW:無法在目的地產生壓縮檔
+zip_dialog.cannot_write:PL:Nie mogę utworzyć archiwum w katalogu docelowym
+zip_dialog.cannot_write:HU:A célkönyvtárba nem lehetséges tömörített (Zip) fájlt készíteni.
 
 zip_dialog_description:EN:Add selected files to
 zip_dialog_description:FR:Ajouter les fichiers sélectionnés dans
@@ -1837,6 +2270,8 @@ zip_dialog_description:DE:Markierte Dateien hinzufügen zu
 zip_dialog_description:ES:Añadir los ficheros seleccionados a
 zip_dialog_description:CS:Přidat vybrané soubory do
 zip_dialog_description:zh_TW:增加選取檔案至
+zip_dialog_description:PL:Dodaj wybrane pliki do
+zip_dialog_description:HU:A kiválasztott fájlok hozzáadása
 
 zip_dialog.comment:EN:Comment (optional)
 zip_dialog.comment:FR:Commentaire (optionnel)
@@ -1844,6 +2279,8 @@ zip_dialog.comment:DE:Kommentar (optional)
 zip_dialog.comment:ES:Commentaire (optionnel)
 zip_dialog.comment:CS:Komentář (volitelný)
 zip_dialog.comment:zh_TW:備註 (可有可無)
+zip_dialog.comment:PL:Komentarz (Opcjonalnie)
+zip_dialog.comment:HU:megjegyzés (opció)
 
 zip_dialog.file_already_exists:EN:%1 already exists in destination folder.
 zip_dialog.file_already_exists:FR:%1 existe déjà dans le dossier de destination.
@@ -1851,6 +2288,8 @@ zip_dialog.file_already_exists:DE:%1 existiert bereits im Zielordner.
 zip_dialog.file_already_exists:ES:%1 existe dÃ©jÃ  en el directorio de destino.
 zip_dialog.file_already_exists:CS:%1 již existuje v cilové složce.
 zip_dialog.file_already_exists:zh_TW:%1 已經存在目的地.
+zip_dialog.file_already_exists:PL:%1 już istnieje w katalogu docelowym.
+zip_dialog.file_already_exists:HU:%1 már létezik célkönyvtárban.
 
 
 #######################
@@ -1905,14 +2344,14 @@ edit_bookmarks_dialog.remove:FR:Supprimer
 
 
 edit_bookmarks_dialog.move_up:EN:Move up
-edit_bookmarks_dialog.move_up:FR:Déplacer haut
+edit_bookmarks_dialog.move_up:FR:Monter
 
 
 
 
 
 edit_bookmarks_dialog.move_down:EN:Move down
-edit_bookmarks_dialog.move_down:FR:Déplacer bas
+edit_bookmarks_dialog.move_down:FR:Descendre
 
 
 
@@ -1935,6 +2374,8 @@ file_viewer.view_error_title:DE:Fehler beim Betrachten
 file_viewer.view_error_title:ES:Error de vista
 file_viewer.view_error_title:CS:Chyba při zobrazení
 file_viewer.view_error_title:zh_TW:檢視錯誤
+file_viewer.view_error_title:PL:Błąd podglądu pliku
+file_viewer.view_error_title:HU:megtekintési hiba
 
 file_viewer.view_error:EN:Unable to view file.
 file_viewer.view_error:FR:Impossible de voir le fichier.
@@ -1942,6 +2383,8 @@ file_viewer.view_error:DE:Datei kann nicht betrachtet werden.
 file_viewer.view_error:ES:Imposible ver el fichero.
 file_viewer.view_error:CS:Nemůžu zobrazit soubor.
 file_viewer.view_error:zh_TW:無法檢視檔案
+file_viewer.view_error:PL:Nie mogę wyświetlić pliku
+file_viewer.view_error:HU:A fájl megtekintése nem lehetséges.
 
 file_viewer.file_menu:EN:File
 file_viewer.file_menu:FR:Fichier
@@ -1949,6 +2392,8 @@ file_viewer.file_menu:DE:Datei
 file_viewer.file_menu:ES:Archivo
 file_viewer.file_menu:CS:Soubor
 file_viewer.file_menu:zh_TW:檔案
+file_viewer.file_menu:PL:Plik
+file_viewer.file_menu:HU:fájl
 
 file_viewer.close:EN:Close
 file_viewer.close:FR:Fermer
@@ -1956,6 +2401,8 @@ file_viewer.close:DE:Schließen
 file_viewer.close:ES:Cerrar
 file_viewer.close:CS:Zavřít
 file_viewer.close:zh_TW:關閉
+file_viewer.close:PL:Zamknij
+file_viewer.close:HU:bezár
 
 file_viewer.large_file_warning:EN:This file may be too large for this operation.
 file_viewer.large_file_warning:FR:Ce fichier est peut-être trop large pour cette operation.
@@ -1963,6 +2410,8 @@ file_viewer.large_file_warning:DE:Diese Datei könnte für diese Operation zu gr
 file_viewer.large_file_warning:ES:Este fichero puede que sea demasiado largo para llevar a cabo la operación.
 file_viewer.large_file_warning:CS:Vybraný soubor může být moc velký pro tuhle operaci.
 file_viewer.large_file_warning:zh_TW:檔案可能太大而無法進行此操作
+file_viewer.large_file_warning:PL:Wybrany plik może być zbyt duży dla tej operacji.
+file_viewer.large_file_warning:HU:Ez a fájl túl nagy lehet ehhez a művelethez.
 
 file_viewer.open_anyway:EN:Open anyway
 file_viewer.open_anyway:FR:Ignorer and ouvrir
@@ -1970,6 +2419,8 @@ file_viewer.open_anyway:DE:Trotzdem öffnen
 file_viewer.open_anyway:ES:Ignorar y abrir
 file_viewer.open_anyway:CS:Přesto otevřít
 file_viewer.open_anyway:zh_TW:強迫開啟
+file_viewer.open_anyway:PL:Otwórz mimo wszystko
+file_viewer.open_anyway:HU:megnyit mindenképpen
 
 
 ###############
@@ -1982,6 +2433,8 @@ text_viewer.edit:DE:Bearbeiten
 text_viewer.edit:ES:Editar
 text_viewer.edit:CS:Editovat
 text_viewer.edit:zh_TW:編輯
+text_viewer.edit:PL:Edytuj
+text_viewer.edit:HU:módosít
 
 text_viewer.copy:EN:Copy
 text_viewer.copy:FR:Copier
@@ -1989,6 +2442,8 @@ text_viewer.copy:DE:Kopieren
 text_viewer.copy:ES:Copiar
 text_viewer.copy:CS:Kopírovat
 text_viewer.copy:zh_TW:複製
+text_viewer.copy:PL:Kopiuj
+text_viewer.copy:HU:másol
 
 text_viewer.select_all:EN:Select All
 text_viewer.select_all:FR:Tout sélectionner
@@ -1996,6 +2451,8 @@ text_viewer.select_all:DE:Alles markieren
 text_viewer.select_all:ES:Seleccionar todo
 text_viewer.select_all:CS:Vybrat vše
 text_viewer.select_all:zh_TW:全部選取
+text_viewer.select_all:PL:Zaznacz wszystko
+text_viewer.select_all:HU:összes kijelölése
 
 
 ###############
@@ -2008,6 +2465,8 @@ image_viewer.controls_menu:DE:Kontrollen
 image_viewer.controls_menu:ES:Controles
 image_viewer.controls_menu:CS:Ovládání
 image_viewer.controls_menu:zh_TW:控制
+image_viewer.controls_menu:PL:Sterowanie
+image_viewer.controls_menu:HU:beállítás
 
 image_viewer.zoom_in:EN:Zoom in
 image_viewer.zoom_in:FR:Zoomer
@@ -2015,6 +2474,8 @@ image_viewer.zoom_in:DE:Hinein zoomen
 image_viewer.zoom_in:ES:Acercar
 image_viewer.zoom_in:CS:Zvětšit
 image_viewer.zoom_in:zh_TW:放大
+image_viewer.zoom_in:PL:Powiększ
+image_viewer.zoom_in:HU:nagyít
 
 image_viewer.zoom_out:EN:Zoom out
 image_viewer.zoom_out:FR:Dézoomer
@@ -2022,6 +2483,8 @@ image_viewer.zoom_out:DE:Heraus zoomen
 image_viewer.zoom_out:ES:Alejar
 image_viewer.zoom_out:CS:Zmenšit
 image_viewer.zoom_out:zh_TW:縮小
+image_viewer.zoom_out:PL:Pomniejsz
+image_viewer.zoom_out:HU:kicsinyít
 
 #image_viewer.previous_image:EN:Previous image
 #image_viewer.previous_image:FR:Image précédente
@@ -2048,6 +2511,8 @@ file_editor.edit_error_title:DE:Fehler beim Bearbeiten
 file_editor.edit_error_title:ES:Error al editar
 file_editor.edit_error_title:CS:Chyba při zápisu
 file_editor.edit_error_title:zh_TW:編輯錯誤
+file_editor.edit_error_title:PL:Błąd edycji
+file_editor.edit_error_title:HU:módosítási hiba
 
 file_editor.edit_error:EN:Unable to edit file.
 file_editor.edit_error:FR:Impossible d'éditer le fichier.
@@ -2055,6 +2520,8 @@ file_editor.edit_error:DE:Kann Datei nicht bearbeiten.
 file_editor.edit_error:ES:Imposible editar el fichero.
 file_editor.edit_error:CS:Chyba při editaci souboru.
 file_editor.edit_error:zh_TW:無法編輯檔案
+file_editor.edit_error:PL:Błąd edycji pliku.
+file_editor.edit_error:HU:A fájlmódosítás nem lehetséges.
 
 file_editor.save:EN:Save
 file_editor.save:FR:Enregistrer
@@ -2062,6 +2529,8 @@ file_editor.save:DE:Speichern
 file_editor.save:ES:Salvar
 file_editor.save:CS:Uložit
 file_editor.save:zh_TW:儲存
+file_editor.save:PL:Zapisz
+file_editor.save:HU:mentés
 
 file_editor.save_as:EN:Save as...
 file_editor.save_as:FR:Enregistrer sous...
@@ -2069,6 +2538,8 @@ file_editor.save_as:DE:Speichern als...
 file_editor.save_as:ES:Salvar como...
 file_editor.save_as:CS:Uložit jako...
 file_editor.save_as:zh_TW:另存為...
+file_editor.save_as:PL:Zapisz jako...
+file_editor.save_as:HU:mentés másként...
 
 file_editor.save_warning:EN:Save changes made to this file before closing ?
 file_editor.save_warning:FR:Enregistrer les modifications avant de fermer ce fichier ?
@@ -2076,6 +2547,8 @@ file_editor.save_warning:DE:Änderungen an der Datei vor dem Schließen speicher
 file_editor.save_warning:ES:¿Desea guardar los cambios realizados a este fichero antes de salir?
 file_editor.save_warning:CS:Uložit změny před zavřením ?
 file_editor.save_warning:zh_TW:在關閉之前是否儲存變更 ?
+file_editor.save_warning:PL:Zapisać zmiany przed zamknięciem ?
+file_editor.save_warning:HU:Menti a váltaztatásokat ebben a fájlban a bezárás előtt?
 
 file_editor.cannot_write:EN:Unable to write file.
 file_editor.cannot_write:FR:Impossible d'écrire le fichier. 
@@ -2083,6 +2556,8 @@ file_editor.cannot_write:DE:Kann Datei nicht schreiben.
 file_editor.cannot_write:ES:Imposible escribir el fichero.
 file_editor.cannot_write:CS:Nemůžu zapisovat do souboru.
 file_editor.cannot_write:zh_TW:無法寫入檔案.
+file_editor.cannot_write:PL:Nie mogę zapisać pliku.
+file_editor.cannot_write:HU:A fájl írása nem lehetséges.
 
 file_editor.write_error_title:EN:Write error
 file_editor.write_error_title:FR:Erreur d'écriture
@@ -2090,6 +2565,8 @@ file_editor.write_error_title:DE:Schreibfehler
 file_editor.write_error_title:ES:Error de escritura
 file_editor.write_error_title:CS:Chyba zápisu
 file_editor.write_error_title:zh_TW:寫入錯誤
+file_editor.write_error_title:PL:Błąd zapisu
+file_editor.write_error_title:HU:Írás hiba
 
 file_editor.file_already_exists:EN:%1 already exists, do you want to replace it ?
 file_editor.file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
@@ -2097,6 +2574,7 @@ file_editor.file_already_exists:DE:%1 existiert bereits, soll sie überschrieben
 file_editor.file_already_exists:ES:%1 ya existe , ¿desea reemplazarlo?
 file_editor.file_already_exists:CS:%1 již existuje, chcete ho přepsat ?
 file_editor.file_already_exists:zh_TW:%1 已存在, 你是否要取代它 ?
+file_editor.file_already_exists:HU:%1 már létezik, lecseréli?
 
 file_editor.file_menu:EN:$[file_viewer.file_menu]
 
@@ -2119,6 +2597,8 @@ text_editor.cut:DE:Ausschneiden
 text_editor.cut:ES:Cortar
 text_editor.cut:CS:Vyjmout
 text_editor.cut:zh_TW:剪下
+text_editor.cut:PL:Wytnij
+text_editor.cut:HU:kivág
 
 text_editor.paste:EN:Paste
 text_editor.paste:FR:Coller
@@ -2126,6 +2606,8 @@ text_editor.paste:DE:Einfügen
 text_editor.paste:ES:Pegar
 text_editor.paste:CS:Vložit
 text_editor.paste:zh_TW:貼上
+text_editor.paste:PL:Wklej
+text_editor.paste:HU:behelyez
 
 text_editor.edit:EN:$[text_viewer.edit]
 
@@ -2144,6 +2626,8 @@ shortcuts_dialog.navigation:DE:Navigation
 shortcuts_dialog.navigation:ES:Navigation
 shortcuts_dialog.navigation:CS:Navigace
 shortcuts_dialog.navigation:zh_TW:導覽
+shortcuts_dialog.navigation:PL:Nawigacja
+shortcuts_dialog.navigation:HU:navigáció
 
 shortcuts_dialog.navigation.change_left:EN:Change left folder
 shortcuts_dialog.navigation.change_left:FR:Changer le dossier de gauche
@@ -2151,6 +2635,8 @@ shortcuts_dialog.navigation.change_left:DE:Linken Ordner ändern
 shortcuts_dialog.navigation.change_left:ES:Cambiar el directorio izquierdo
 shortcuts_dialog.navigation.change_left:CS:Změnit složku vlevo
 shortcuts_dialog.navigation.change_left:zh_TW:變更左方資料夾
+shortcuts_dialog.navigation.change_left:PL:Zmień lewy katalog
+shortcuts_dialog.navigation.change_left:HU:A bal panel megváltoztatása
 
 shortcuts_dialog.navigation.change_right:EN:Change right folder
 shortcuts_dialog.navigation.change_right:FR:Changer le dossier de droite
@@ -2158,6 +2644,8 @@ shortcuts_dialog.navigation.change_right:DE:Rechten Ordner ändern
 shortcuts_dialog.navigation.change_right:ES:Cambiar el directorio derecho
 shortcuts_dialog.navigation.change_right:CS:Změnit složku vpravo
 shortcuts_dialog.navigation.change_right:zh_TW:變更右方資料夾
+shortcuts_dialog.navigation.change_right:PL:Zmień prawy katalog
+shortcuts_dialog.navigation.change_right:HU:A jobb panel megváltoztatása
 
 shortcuts_dialog.navigation.tab:EN:Switch between left and right panels
 shortcuts_dialog.navigation.tab:FR:Basculer entre les dossiers de droite et de gauche
@@ -2165,6 +2653,8 @@ shortcuts_dialog.navigation.tab:DE:Zwischen linkem und rechtem Fenster wechseln
 shortcuts_dialog.navigation.tab:ES:Cambiar entre los paneles izquierdo y derecho
 shortcuts_dialog.navigation.tab:CS:Změnit aktuální panel
 shortcuts_dialog.navigation.tab:zh_TW:在左右面板間交互切換
+shortcuts_dialog.navigation.tab:PL:Zamień aktualne panel
+shortcuts_dialog.navigation.tab:HU:A bal és jobb panel megcserélése
 
 shortcuts_dialog.navigation.enter:EN:Enter folder / Enter archive / Execute
 shortcuts_dialog.navigation.enter:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
@@ -2172,6 +2662,8 @@ shortcuts_dialog.navigation.enter:DE:Ordner öffnen / Archiv öffnen / Ausführe
 shortcuts_dialog.navigation.enter:ES:Entrar en el directorio / Entrar en el fichero / Ejecutar
 shortcuts_dialog.navigation.enter:CS:Otevřít složku / Otevřít archív / Spustit
 shortcuts_dialog.navigation.enter:zh_TW:進入資料夾 / 進入壓縮檔 / 執行
+shortcuts_dialog.navigation.enter:PL:Otwórz katalog / Otwórz archiwum / Wykonaj
+shortcuts_dialog.navigation.enter:HU:belép a könyvtárba / belép az archív fájlba / futtat
 
 shortcuts_dialog.navigation.execute:EN:Execute selected file with system's file associations
 shortcuts_dialog.navigation.execute:FR:Exécuter le fichier sélectionné avec les associations de fichiers du système  
@@ -2179,6 +2671,8 @@ shortcuts_dialog.navigation.execute:DE:Markierte Datei mit assoziiertem Programm
 shortcuts_dialog.navigation.execute:ES:Ejecutar el fichero seleccionado con la asosiación del sistema
 shortcuts_dialog.navigation.execute:CS:Spustit vybraný soubor asociovaným programem
 shortcuts_dialog.navigation.execute:zh_TW:利用系統的檔案關聯來執行選取檔案
+shortcuts_dialog.navigation.execute:PL:Uruchom wybrany plik za pomocą skojarzonego programu
+shortcuts_dialog.navigation.execute:HU:A kijelölt fájl futtatása a rendszer által hozzárendelt programmal
 
 shortcuts_dialog.navigation.go_to_first:EN:Select first file in current folder
 shortcuts_dialog.navigation.go_to_first:FR:Selectionner le premier fichier du dossier
@@ -2186,6 +2680,8 @@ shortcuts_dialog.navigation.go_to_first:DE:Erste Datei im aktuellen Ordner marki
 shortcuts_dialog.navigation.go_to_first:ES:Seleccionar el primer fichero en el directorio actual
 shortcuts_dialog.navigation.go_to_first:CS:Vybrat první soubor v aktuální složce
 shortcuts_dialog.navigation.go_to_first:zh_TW:選取此資料夾的第一個檔案
+shortcuts_dialog.navigation.go_to_first:PL:Zaznacz pierwszy plik w aktualnym katalogu
+shortcuts_dialog.navigation.go_to_first:HU:Az első fájl kiválasztása az aktuális könyvtárban
 
 shortcuts_dialog.navigation.go_to_last:EN:Select last file in current folder
 shortcuts_dialog.navigation.go_to_last:FR:Selectionner le dernier fichier du dossier
@@ -2193,6 +2689,8 @@ shortcuts_dialog.navigation.go_to_last:DE:Letzte Datei im aktuellen Ordner marki
 shortcuts_dialog.navigation.go_to_last:ES:Seleccionar el último fichero en el directorio actual
 shortcuts_dialog.navigation.go_to_last:CS:Vybrat poslední soubor v aktuální složce
 shortcuts_dialog.navigation.go_to_last:zh_TW:選取此資料夾的最後一個檔案
+shortcuts_dialog.navigation.go_to_last:PL:Zaznacz ostatnij plik w aktualnym katalogu
+shortcuts_dialog.navigation.go_to_last:HU:Az utolsó fájl kiválasztása az aktuális könyvtárban
 
 shortcuts_dialog.view:EN:View
 shortcuts_dialog.view:FR:Vue
@@ -2200,6 +2698,8 @@ shortcuts_dialog.view:DE:Ansicht
 shortcuts_dialog.view:ES:Ver
 shortcuts_dialog.view:CS:Zobrazit
 shortcuts_dialog.view:zh_TW:檢視
+shortcuts_dialog.view:PL:Podgląd
+shortcuts_dialog.view:HU:megtekint
 
 shortcuts_dialog.view.go_to_parent:EN:Go to parent folder
 shortcuts_dialog.view.go_to_parent:FR:Remonter au dossier parent
@@ -2207,6 +2707,8 @@ shortcuts_dialog.view.go_to_parent:DE:Zum übergeordneten Ordner gehen
 shortcuts_dialog.view.go_to_parent:ES:Ir al directorio padre
 shortcuts_dialog.view.go_to_parent:CS:Složka nahoru
 shortcuts_dialog.view.go_to_parent:zh_TW:到上一層資料夾
+shortcuts_dialog.view.go_to_parent:PL:Idź do katalogu nadżędnego
+shortcuts_dialog.view.go_to_parent:HU:Menjen a kezdeti könyvtárhoz
 
 shortcuts_dialog.view.go_back:EN:Go to previous folder
 shortcuts_dialog.view.go_back:FR:Aller au dossier précédent
@@ -2214,6 +2716,8 @@ shortcuts_dialog.view.go_back:DE:Zum vorigen Ordner gehen
 shortcuts_dialog.view.go_back:ES:Ir al directorio anterior
 shortcuts_dialog.view.go_back:CS:Předchodzí složka
 shortcuts_dialog.view.go_back:zh_TW:到前一個資料夾
+shortcuts_dialog.view.go_back:PL:Idź do poprzedniego katalogu
+shortcuts_dialog.view.go_back:HU:Menjen az előző könyvtárhoz
 
 shortcuts_dialog.view.go_forward:EN:Go to next folder 
 shortcuts_dialog.view.go_forward:FR:Aller au dossier suivant
@@ -2221,6 +2725,8 @@ shortcuts_dialog.view.go_forward:DE:Zum nächsten Ordner gehen
 shortcuts_dialog.view.go_forward:ES:Ir al directorio siguiente
 shortcuts_dialog.view.go_forward:CS:Další složka
 shortcuts_dialog.view.go_forward:zh_TW:到後一個資料夾
+shortcuts_dialog.view.go_forward:PL:Idź do następnego katalogu
+shortcuts_dialog.view.go_forward:HU:Menjen a következő könyvtárhoz
 
 shortcuts_dialog.view.swap_folders:EN:Swap left and right folders
 shortcuts_dialog.view.swap_folders:FR:Echanger les dossiers de gauche et de droite 
@@ -2228,6 +2734,8 @@ shortcuts_dialog.view.swap_folders:DE:Linkes und rechtes Fenster vertauschen
 shortcuts_dialog.view.swap_folders:ES:Intercambiar directorios
 shortcuts_dialog.view.swap_folders:CS:Prohodit složky
 shortcuts_dialog.view.swap_folders:zh_TW:切換左右方的資料夾
+shortcuts_dialog.view.swap_folders:PL:Zmień katalogi  z lewej i prawej strony
+shortcuts_dialog.view.swap_folders:HU:A bal és jobb panel felcserélése
 
 shortcuts_dialog.view.set_same_folder:EN:Set same directory to left and right folders
 shortcuts_dialog.view.set_same_folder:FR:Affecter le même repertoire aux dossiers de gauche et de droite
@@ -2235,6 +2743,8 @@ shortcuts_dialog.view.set_same_folder:DE:Gleicher Ordner für linkes und rechtes
 shortcuts_dialog.view.set_same_folder:ES:Ajustar el mismo directorio en ambos lados
 shortcuts_dialog.view.set_same_folder:CS:Nastavit stejnou složku
 shortcuts_dialog.view.set_same_folder:zh_TW:設定左右資料夾成一樣
+shortcuts_dialog.view.set_same_folder:PL:Ustawe te same katalogi w obu oknach
+shortcuts_dialog.view.set_same_folder:HU:A bal és jobb oldalon ugyanaz a panel legyen
 
 shortcuts_dialog.selection:EN:Selection
 shortcuts_dialog.selection:FR:Selection
@@ -2242,6 +2752,8 @@ shortcuts_dialog.selection:DE:Auswahl
 shortcuts_dialog.selection:ES:Selección
 shortcuts_dialog.selection:CS:Výber
 shortcuts_dialog.selection:zh_TW:選取
+shortcuts_dialog.selection:PL:Wybór
+shortcuts_dialog.selection:HU:választás
 
 shortcuts_dialog.selection.mark_group:EN:Mark a group of files
 shortcuts_dialog.selection.mark_group:FR:Marquer un groupe de fichiers
@@ -2249,6 +2761,8 @@ shortcuts_dialog.selection.mark_group:DE:Eine Gruppe von Dateien markieren
 shortcuts_dialog.selection.mark_group:ES:Marcar un grupo de ficheros
 shortcuts_dialog.selection.mark_group:CS:Označit skupinu souborů
 shortcuts_dialog.selection.mark_group:zh_TW:標記檔案群組
+shortcuts_dialog.selection.mark_group:PL:Zaznacz grupę plików
+shortcuts_dialog.selection.mark_group:HU:csoportos fájlkijelölés
 
 shortcuts_dialog.selection.unmark_group:EN:Unmark a group of files
 shortcuts_dialog.selection.unmark_group:FR:Dé-marquer un groupe de fichiers
@@ -2256,6 +2770,8 @@ shortcuts_dialog.selection.unmark_group:DE:Eine Gruppe von Dateien demarkieren
 shortcuts_dialog.selection.unmark_group:ES:Desmarcar un grupo de ficheros
 shortcuts_dialog.selection.unmark_group:CS:Odznačit skupinu souborů
 shortcuts_dialog.selection.unmark_group:zh_TW:取消檔案群組標記
+shortcuts_dialog.selection.unmark_group:PL:Odznacz grupę plików
+shortcuts_dialog.selection.unmark_group:HU:csoportos fájlkijelölés visszavonása
 
 shortcuts_dialog.selection.mark_unmark:EN:Mark/Unmark selected file
 shortcuts_dialog.selection.mark_unmark:FR:Marquer/Dé-marquer le fichier sélectionné
@@ -2263,6 +2779,8 @@ shortcuts_dialog.selection.mark_unmark:DE:Datei markieren/demarkieren
 shortcuts_dialog.selection.mark_unmark:ES:Marcar/Desmarcar los ficheros seleccionados
 shortcuts_dialog.selection.mark_unmark:CS:Označit/Odznačit vybraný soubor
 shortcuts_dialog.selection.mark_unmark:zh_TW:標記/取消標記 已選取檔案
+shortcuts_dialog.selection.mark_unmark:PL:Zaznacz/Odznacz wybrany plik
+shortcuts_dialog.selection.mark_unmark:HU:kijelöli/visszavonja a kiválasztott fájlt
 
 shortcuts_dialog.file_operations:EN:File operations
 shortcuts_dialog.file_operations:FR:Opérations sur fichiers
@@ -2270,6 +2788,8 @@ shortcuts_dialog.file_operations:DE:Dateioperationen
 shortcuts_dialog.file_operations:ES:Operaciones con ficheros
 shortcuts_dialog.file_operations:CS:Operace se soubory
 shortcuts_dialog.file_operations:zh_TW:檔案操作
+shortcuts_dialog.file_operations:PL:Operacje na plikach
+shortcuts_dialog.file_operations:HU:fájl műveletek
 
 shortcuts_dialog.file_operations.server_connect:EN:Connect to a remote server
 shortcuts_dialog.file_operations.server_connect:FR:Se connecter à un serveur distant
@@ -2277,6 +2797,8 @@ shortcuts_dialog.file_operations.server_connect:DE:Mit einem Remote Server verbi
 shortcuts_dialog.file_operations.server_connect:ES:Conectar a un servidor remoto
 shortcuts_dialog.file_operations.server_connect:CS:Připojit se k vzdálenému serveru
 shortcuts_dialog.file_operations.server_connect:zh_TW:連接至遠端伺服器
+shortcuts_dialog.file_operations.server_connect:PL:Podłącz do zdalnego serwera
+shortcuts_dialog.file_operations.server_connect:HU:Kapcsolodás a távoli szerverhez
 
 shortcuts_dialog.file_operations.run_command:EN:Run a command in current folder
 shortcuts_dialog.file_operations.run_command:FR:Exécuter une commande dans le dossier courant
@@ -2284,6 +2806,8 @@ shortcuts_dialog.file_operations.run_command:DE:Einen Befehl im aktuellen Ordner
 shortcuts_dialog.file_operations.run_command:ES:Ejecutar un comando en el directorio actual
 shortcuts_dialog.file_operations.run_command:CS:Spustit příkaz v aktuální složce
 shortcuts_dialog.file_operations.run_command:zh_TW:在此資料夾執行命令
+shortcuts_dialog.file_operations.run_command:PL:Wykonaj polecenie w aktualnym katalogu
+shortcuts_dialog.file_operations.run_command:HU:Parancs futtatása az aktuális könyvtárból
 
 shortcuts_dialog.file_operations.zip:EN:Compress marked files in a ZIP file
 shortcuts_dialog.file_operations.zip:FR:Compresser les fichiers marqués dans un fichier ZIP 
@@ -2291,6 +2815,8 @@ shortcuts_dialog.file_operations.zip:DE:Markierte Dateien in eine ZIP Datei pack
 shortcuts_dialog.file_operations.zip:ES:Comprimir los ficheros marcados en un fichero ZIP
 shortcuts_dialog.file_operations.zip:CS:Komprimovat označené soubory do ZIP archívu
 shortcuts_dialog.file_operations.zip:zh_TW:壓縮已標記檔案至ZIP檔案
+shortcuts_dialog.file_operations.zip:PL:spakuj zaznaczone pliku do archiwum ZIP
+shortcuts_dialog.file_operations.zip:HU:A kijelölt fájl(ok) tömörítése egy Zip fájlba
 
 shortcuts_dialog.file_operations.unzip:EN:Uncompress marked ZIP files
 shortcuts_dialog.file_operations.unzip:FR:Décompresser les fichiers ZIP marqués
@@ -2298,6 +2824,8 @@ shortcuts_dialog.file_operations.unzip:DE:Markierte ZIP Dateien entpacken
 shortcuts_dialog.file_operations.unzip:ES:Descomprimir los ficheros ZIP seleccionados
 shortcuts_dialog.file_operations.unzip:CS:Dekomprimovat označené soubory ze ZIP archívu
 shortcuts_dialog.file_operations.unzip:zh_TW:解壓縮已標記的ZIP檔案
+shortcuts_dialog.file_operations.unzip:PL:Rozpakuj zaznaczone archiwum ZIP
+shortcuts_dialog.file_operations.unzip:HU:A kijelölt Zip fájl(ok) kicsomagolása
 
 shortcuts_dialog.file_operations.email:EN:Send marked files as email attachments
 shortcuts_dialog.file_operations.email:FR:Envoyer les fichiers marqués en pièces jointes à un message
@@ -2305,6 +2833,8 @@ shortcuts_dialog.file_operations.email:DE:Markierte Dateien als eMail Anhang ver
 shortcuts_dialog.file_operations.email:ES:Enviar los ficheros seleccionados como adjuntos en un correo electrónico
 shortcuts_dialog.file_operations.email:CS:Odeslat označené soubory jako poštovní přílohu
 shortcuts_dialog.file_operations.email:zh_TW:傳送已標記檔案成電郵附件
+shortcuts_dialog.file_operations.email:PL:Wyślij zaznaczone pliki jako załącznik
+shortcuts_dialog.file_operations.email:HU:A kijelölt fájl(ok) küldése mellékletként
 
 shortcuts_dialog.file_operations.properties:EN:Show properties of marked files
 shortcuts_dialog.file_operations.properties:FR:Afficher les propriétés des fichiers marqués
@@ -2312,6 +2842,8 @@ shortcuts_dialog.file_operations.properties:DE:Eigenschaften der markierten Date
 shortcuts_dialog.file_operations.properties:ES:Mostrar propiedades de los ficheros seleccionados
 shortcuts_dialog.file_operations.properties:CS:Zobrazit vlastnosti označených souborů
 shortcuts_dialog.file_operations.properties:zh_TW:顯示已標記檔案的內容
+shortcuts_dialog.file_operations.properties:PL:Pokaż właściwości zaznaczonych plików
+shortcuts_dialog.file_operations.properties:HU:Mutassa a kijelölt fájl(ok) tulajdonságait
 
 shortcuts_dialog.windows:EN:Windows
 shortcuts_dialog.windows:FR:Fenêtres
@@ -2319,6 +2851,8 @@ shortcuts_dialog.windows:DE:Fenster
 shortcuts_dialog.windows:ES:Ventanas
 shortcuts_dialog.windows:CS:Okna
 shortcuts_dialog.windows:zh_TW:視窗
+shortcuts_dialog.windows:PL:Okna
+shortcuts_dialog.windows:HU:ablak
 
 shortcuts_dialog.windows.new_window:EN:Open a new window
 shortcuts_dialog.windows.new_window:FR:Ouvrir une nouvelle fenêtre
@@ -2326,6 +2860,8 @@ shortcuts_dialog.windows.new_window:DE:Ein neues Fenster öffnen
 shortcuts_dialog.windows.new_window:ES:Abrir una nueva ventana
 shortcuts_dialog.windows.new_window:CS:Otevřít nové okno
 shortcuts_dialog.windows.new_window:zh_TW:開啟一個新視窗
+shortcuts_dialog.windows.new_window:PL:Otwórz nowe okno
+shortcuts_dialog.windows.new_window:HU:megnyitás új ablakban
 
 shortcuts_dialog.windows.recall:EN:Recall a window
 shortcuts_dialog.windows.recall:FR:Rappeler une fenêtre
@@ -2333,6 +2869,8 @@ shortcuts_dialog.windows.recall:DE:Ein Fenster aufrufen
 shortcuts_dialog.windows.recall:ES:Rellamar a una ventana
 shortcuts_dialog.windows.recall:CS:Vyvolat okno
 shortcuts_dialog.windows.recall:zh_TW:還原一個視窗
+shortcuts_dialog.windows.recall:PL:Wywołaj okno
+shortcuts_dialog.windows.recall:HU:ablak visszavonása
 
 shortcuts_dialog.windows.switch_previous:EN:Switch to previous window
 shortcuts_dialog.windows.switch_previous:FR:Aller à la fenêtre précédente
@@ -2340,6 +2878,8 @@ shortcuts_dialog.windows.switch_previous:DE:Zum vorherigen Fenster wechseln
 shortcuts_dialog.windows.switch_previous:ES:Cambiar a la ventana anterior
 shortcuts_dialog.windows.switch_previous:CS:Přepnout na předchodzí okno
 shortcuts_dialog.windows.switch_previous:zh_TW:切換至前一個視窗
+shortcuts_dialog.windows.switch_previous:PL:Przełącz do poprzedniego okna
+shortcuts_dialog.windows.switch_previous:HU:Válts az előző ablakra
 
 shortcuts_dialog.windows.switch_next:EN:Switch to next window
 shortcuts_dialog.windows.switch_next:FR:Aller à la fenêtre suivante
@@ -2347,6 +2887,8 @@ shortcuts_dialog.windows.switch_next:DE:Zum nächsten Fenster wechseln
 shortcuts_dialog.windows.switch_next:ES:Cambiar a la siguiente ventana
 shortcuts_dialog.windows.switch_next:CS:Přepnout na další okno
 shortcuts_dialog.windows.switch_next:zh_TW:切換至後一個視窗
+shortcuts_dialog.windows.switch_next:PL:Przełącz do następnego okna
+shortcuts_dialog.windows.switch_next:HU:Válts a következő ablakra
 
 
 ######################
@@ -2359,6 +2901,8 @@ prefs_dialog.title:DE:Einstellungen
 prefs_dialog.title:ES:Preferencias
 prefs_dialog.title:CS:Možnosti
 prefs_dialog.title:zh_TW:設定
+prefs_dialog.title:PL:Ustawienia
+prefs_dialog.title:HU:tulajdonságok
 
 # General tab
 
@@ -2368,6 +2912,8 @@ prefs_dialog.general_tab:DE:Allgemein
 prefs_dialog.general_tab:ES:General
 prefs_dialog.general_tab:CS:Obecné
 prefs_dialog.general_tab:zh_TW:一般
+prefs_dialog.general_tab:PL:Główne
+prefs_dialog.general_tab:HU:általános
 
 prefs_dialog.day:EN:Day
 prefs_dialog.day:FR:Jour
@@ -2375,6 +2921,8 @@ prefs_dialog.day:DE:Tag
 prefs_dialog.day:ES:Día
 prefs_dialog.day:CS:Den
 prefs_dialog.day:zh_TW:日
+prefs_dialog.day:PL:Dzień
+prefs_dialog.day:HU:nap
 
 prefs_dialog.month:EN:Month
 prefs_dialog.month:FR:Mois
@@ -2382,6 +2930,8 @@ prefs_dialog.month:DE:Monat
 prefs_dialog.month:ES:Mes
 prefs_dialog.month:CS:Měsíc
 prefs_dialog.month:zh_TW:月
+prefs_dialog.month:PL:Miesiąc
+prefs_dialog.month:HU:hónap
 
 prefs_dialog.year:EN:Year
 prefs_dialog.year:FR:Année
@@ -2389,6 +2939,8 @@ prefs_dialog.year:DE:Jahr
 prefs_dialog.year:ES:Año
 prefs_dialog.year:CS:Rok
 prefs_dialog.year:zh_TW:年
+prefs_dialog.year:PL:Rok
+prefs_dialog.year:HU:év
 
 prefs_dialog.language:EN:Language (requires restart)
 prefs_dialog.language:FR:Langage (après redémarrage)
@@ -2396,6 +2948,8 @@ prefs_dialog.language:DE:Sprache (Neustart nötig)
 prefs_dialog.language:ES:Idioma (requiere reiniciar)
 prefs_dialog.language:CS:Jazyk (vyžaduje restart)
 prefs_dialog.language:zh_TW:語言 (需重新啟動)
+prefs_dialog.language:PL:Język (Wymaga restartu)
+prefs_dialog.language:HU:nyelv (újraindítást igényel)
 
 prefs_dialog.date_time:EN:Date & time format
 prefs_dialog.date_time:FR:Format de date et d'heure
@@ -2403,6 +2957,8 @@ prefs_dialog.date_time:DE:Datum- und Zeitformat
 prefs_dialog.date_time:ES:Formato de fecha y hora
 prefs_dialog.date_time:CS:Formát datumu a času
 prefs_dialog.date_time:zh_TW:日期及時間格式
+prefs_dialog.date_time:PL:Format daty i czasu
+prefs_dialog.date_time:HU:dátum és idő formátum
 
 prefs_dialog.time:EN:Time
 prefs_dialog.time:FR:Heure
@@ -2410,6 +2966,8 @@ prefs_dialog.time:DE:Zeit
 prefs_dialog.time:ES:Hora
 prefs_dialog.time:CS:Čas
 prefs_dialog.time:zh_TW:時間
+prefs_dialog.time:PL:Czas
+prefs_dialog.time:HU:idő
 
 prefs_dialog.date:EN:Date
 prefs_dialog.date:FR:Date
@@ -2417,6 +2975,8 @@ prefs_dialog.date:DE:Datum
 prefs_dialog.date:ES:Fecha
 prefs_dialog.date:CS:Datum
 prefs_dialog.date:zh_TW:日期
+prefs_dialog.date:PL:Data
+prefs_dialog.date:HU:dátum
 
 prefs_dialog.date_separator:EN:Separator
 prefs_dialog.date_separator:FR:Séparateur
@@ -2433,6 +2993,8 @@ prefs_dialog.time_12_hour:DE:12-Stunden Format
 prefs_dialog.time_12_hour:ES:Formato 12 horas
 prefs_dialog.time_12_hour:CS:12 hodinový formát
 prefs_dialog.time_12_hour:zh_TW:12小時制
+prefs_dialog.time_12_hour:PL:format 12 godzinny
+prefs_dialog.time_12_hour:HU:12 órás megjelenítés
 
 prefs_dialog.time_24_hour:EN:24-hour format
 prefs_dialog.time_24_hour:FR:Format 24 heures
@@ -2440,6 +3002,8 @@ prefs_dialog.time_24_hour:DE:24-Stunden Format
 prefs_dialog.time_24_hour:ES:Formato 24 horas
 prefs_dialog.time_24_hour:CS:24 hodinový formát
 prefs_dialog.time_24_hour:zh_TW:24小時制
+prefs_dialog.time_24_hour:PL:format 24 godzinny
+prefs_dialog.time_24_hour:HU:24 órás megjelenítés
 
 prefs_dialog.check_for_updates_on_startup:EN:Check for updates on startup
 prefs_dialog.check_for_updates_on_startup:FR:Chercher les mises à jour au démarrage
@@ -2447,6 +3011,8 @@ prefs_dialog.check_for_updates_on_startup:DE:Beim Start nach Updates suchen
 prefs_dialog.check_for_updates_on_startup:ES:Comprobar actualizaciones al inicio
 prefs_dialog.check_for_updates_on_startup:CS:Při startu zjistit aktualizace
 prefs_dialog.check_for_updates_on_startup:zh_TW:啟動時檢查是否有更新版本
+prefs_dialog.check_for_updates_on_startup:PL:Sprawdź czy są aktulizacje przy starcie
+prefs_dialog.check_for_updates_on_startup:HU:Ellenőrizze a frissítéseket induláskor
 
 prefs_dialog.example:EN:Example
 prefs_dialog.example:FR:Exemple
@@ -2454,6 +3020,8 @@ prefs_dialog.example:DE:Beispiel
 prefs_dialog.example:ES:Ejemplo
 prefs_dialog.example:CS:Příklad
 prefs_dialog.example:zh_TW:範例
+prefs_dialog.example:PL:Przykład
+prefs_dialog.example:HU:példa
 
 # Folders tab
 
@@ -2463,6 +3031,8 @@ prefs_dialog.folders_tab:DE:Ordner
 prefs_dialog.folders_tab:ES:Directorios
 prefs_dialog.folders_tab:CS:Složky
 prefs_dialog.folders_tab:zh_TW:資料夾
+prefs_dialog.folders_tab:PL:Katalogi
+prefs_dialog.folders_tab:HU:könyvtárak
 
 prefs_dialog.startup_folders:EN:Startup folders
 prefs_dialog.startup_folders:FR:Dossiers de démarrage
@@ -2470,6 +3040,8 @@ prefs_dialog.startup_folders:DE:Startordner
 prefs_dialog.startup_folders:ES:Directorios de inicio
 prefs_dialog.startup_folders:CS:Počáteční složky
 prefs_dialog.startup_folders:zh_TW:開始資料夾
+prefs_dialog.startup_folders:PL:Katalogi startowe
+prefs_dialog.startup_folders:HU:indítási panelek
 
 prefs_dialog.left_folder:EN:Left folder
 prefs_dialog.left_folder:FR:Dossier de gauche
@@ -2477,6 +3049,8 @@ prefs_dialog.left_folder:DE:Linker Ordner
 prefs_dialog.left_folder:ES:Directorio de la izquierda
 prefs_dialog.left_folder:CS:Složka vlevo
 prefs_dialog.left_folder:zh_TW:左方資料夾
+prefs_dialog.left_folder:PL:Lewy panel
+prefs_dialog.left_folder:HU:bal panel
 
 prefs_dialog.right_folder:EN:Right folder
 prefs_dialog.right_folder:FR:Dossier de droite
@@ -2484,6 +3058,8 @@ prefs_dialog.right_folder:DE:Rechter Ordner
 prefs_dialog.right_folder:ES:Directorio de la derecha
 prefs_dialog.right_folder:CS:Složka vpravo
 prefs_dialog.right_folder:zh_TW:右方資料夾
+prefs_dialog.right_folder:PL:Prawy panel
+prefs_dialog.right_folder:HU:jobb panel
 
 prefs_dialog.last_folder:EN:Last visited folder
 prefs_dialog.last_folder:FR:Dernier dossier visité
@@ -2491,6 +3067,8 @@ prefs_dialog.last_folder:DE:Zuletzt besuchter Ordner
 prefs_dialog.last_folder:ES:Último directorio visitado
 prefs_dialog.last_folder:CS:Poslední navštívená složka
 prefs_dialog.last_folder:zh_TW:上次所在的資料夾
+prefs_dialog.last_folder:PL:Ostatnio przeglądany katalog
+prefs_dialog.last_folder:HU:utoljára megtekintett könyvtár
 
 prefs_dialog.custom_folder:EN:Custom folder
 prefs_dialog.custom_folder:FR:Dossier spécifique
@@ -2498,6 +3076,8 @@ prefs_dialog.custom_folder:DE:Benutzerdefinierter Ordner
 prefs_dialog.custom_folder:ES:Directorio personalizado
 prefs_dialog.custom_folder:CS:Vlastní složka
 prefs_dialog.custom_folder:zh_TW:自訂資料夾
+prefs_dialog.custom_folder:PL:Katalog użytkownika
+prefs_dialog.custom_folder:HU:egyedi könyvtár
 
 prefs_dialog.show_hidden_files:EN:Show Hidden files
 prefs_dialog.show_hidden_files:FR:Afficher les fichiers cachés
@@ -2505,6 +3085,8 @@ prefs_dialog.show_hidden_files:DE:Versteckte Dateien anzeigen
 prefs_dialog.show_hidden_files:ES:Mostrar ficheros ocultos
 prefs_dialog.show_hidden_files:CS:Zobrazit skryté soubory
 prefs_dialog.show_hidden_files:zh_TW:顯示隱藏檔案
+prefs_dialog.show_hidden_files:PL:Pokaż ukryte pliki
+prefs_dialog.show_hidden_files:HU:mutassa a rejtett fájlokat
 
 prefs_dialog.compact_file_size:EN:Round displayed file sizes
 prefs_dialog.compact_file_size:FR:Arrondir les tailles de fichiers affichées
@@ -2512,6 +3094,8 @@ prefs_dialog.compact_file_size:DE:Dateigrößen gerundet anzeigen
 prefs_dialog.compact_file_size:ES:Redondear el tamaño de los ficheros seleccionados
 prefs_dialog.compact_file_size:CS:Zaokrouhlovat zobrazenou velikost souborů
 prefs_dialog.compact_file_size:zh_TW:顯示檔案約略大小
+prefs_dialog.compact_file_size:PL:Zaokrągl rozmiar wyświetlanych plików
+prefs_dialog.compact_file_size:HU:mutassa a fájl méreteket
 
 # Appearance tab
 
@@ -2521,6 +3105,8 @@ prefs_dialog.appearance_tab:DE:Erscheinungsbild
 prefs_dialog.appearance_tab:ES:Apariencia
 prefs_dialog.appearance_tab:CS:Vzhled
 prefs_dialog.appearance_tab:zh_TW:呈現
+prefs_dialog.appearance_tab:PL:Wygląd
+prefs_dialog.appearance_tab:HU:megjelenés
 
 prefs_dialog.look_and_feel:EN:Look & Feel
 prefs_dialog.look_and_feel:FR:Look & Feel
@@ -2528,6 +3114,8 @@ prefs_dialog.look_and_feel:DE:Look & Feel
 prefs_dialog.look_and_feel:ES:Look & Feel
 prefs_dialog.look_and_feel:CS:Look & Feel
 prefs_dialog.look_and_feel:zh_TW:風格(Look & Feel)
+prefs_dialog.look_and_feel:PL:Look & Feel
+prefs_dialog.look_and_feel:HU:Look & Feel
 
 prefs_dialog.font:EN:Font
 prefs_dialog.font:FR:Fonte
@@ -2535,6 +3123,8 @@ prefs_dialog.font:DE:Schriftart
 prefs_dialog.font:ES:Fuente
 prefs_dialog.font:CS:Písmo
 prefs_dialog.font:zh_TW:字型
+prefs_dialog.font:PL:Czcionka
+prefs_dialog.font:HU:betű
 
 prefs_dialog.font_size:EN:Size
 prefs_dialog.font_size:FR:Taille
@@ -2542,6 +3132,8 @@ prefs_dialog.font_size:DE:Größe
 prefs_dialog.font_size:ES:Tamaño
 prefs_dialog.font_size:CS:Velikost
 prefs_dialog.font_size:zh_TW:大小
+prefs_dialog.font_size:PL:Rozmiar
+prefs_dialog.font_size:HU:méret
 
 prefs_dialog.font_style:EN:Style
 prefs_dialog.font_style:FR:Style
@@ -2549,6 +3141,8 @@ prefs_dialog.font_style:DE:Stil
 prefs_dialog.font_style:ES:Estilo
 prefs_dialog.font_style:CS:Styl
 prefs_dialog.font_style:zh_TW:格式
+prefs_dialog.font_style:PL:Styl
+prefs_dialog.font_style:HU:stílus
 
 prefs_dialog.font_plain:EN:Plain
 prefs_dialog.font_plain:FR:Normal
@@ -2556,6 +3150,8 @@ prefs_dialog.font_plain:DE:Normal
 prefs_dialog.font_plain:ES:Normal
 prefs_dialog.font_plain:CS:Normalní
 prefs_dialog.font_plain:zh_TW:一般
+prefs_dialog.font_plain:PL:Normaly
+prefs_dialog.font_plain:HU:egyszerű
 
 prefs_dialog.font_bold:EN:Bold
 prefs_dialog.font_bold:FR:Gras
@@ -2563,6 +3159,8 @@ prefs_dialog.font_bold:DE:Fett
 prefs_dialog.font_bold:ES:Negrita
 prefs_dialog.font_bold:CS:Tučné
 prefs_dialog.font_bold:zh_TW:粗體
+prefs_dialog.font_bold:PL:Pogrubiony
+prefs_dialog.font_bold:HU:vastag
 
 prefs_dialog.font_italic:EN:Italic
 prefs_dialog.font_italic:FR:Italique
@@ -2570,6 +3168,8 @@ prefs_dialog.font_italic:DE:Kursiv
 prefs_dialog.font_italic:ES:Itálica
 prefs_dialog.font_italic:CS:Kurzíva
 prefs_dialog.font_italic:zh_TW:斜體
+prefs_dialog.font_italic:PL:Kursywa
+prefs_dialog.font_italic:HU:dőlt
 
 prefs_dialog.font_bold_italic:EN:Bold & italic
 prefs_dialog.font_bold_italic:FR:Gras et italique
@@ -2577,6 +3177,8 @@ prefs_dialog.font_bold_italic:DE:Fett & Kursiv
 prefs_dialog.font_bold_italic:ES:Negrita e itálica
 prefs_dialog.font_bold_italic:CS:Tučné a kurzíva
 prefs_dialog.font_bold_italic:zh_TW:粗斜體
+prefs_dialog.font_bold_italic:PL:Pogrubiona kursywa
+prefs_dialog.font_bold_italic:HU:vastag és dőlt
 
 prefs_dialog.background_colors:EN:Background colors
 prefs_dialog.background_colors:FR:Couleurs de fond
@@ -2584,6 +3186,8 @@ prefs_dialog.background_colors:DE:Hintergrundfarben
 prefs_dialog.background_colors:ES:Colores de fonfo
 prefs_dialog.background_colors:CS:Barvy pozadí
 prefs_dialog.background_colors:zh_TW:背景顏色
+prefs_dialog.background_colors:PL:Kolor tła
+prefs_dialog.background_colors:HU:háttérszínek
 
 prefs_dialog.background_color:EN:Background
 prefs_dialog.background_color:FR:Fond
@@ -2591,6 +3195,8 @@ prefs_dialog.background_color:DE:Hintergrund
 prefs_dialog.background_color:ES:Fondo
 prefs_dialog.background_color:CS:Pozadí
 prefs_dialog.background_color:zh_TW:背景
+prefs_dialog.background_color:PL:Tło
+prefs_dialog.background_color:HU:háttér
 
 prefs_dialog.selection_color:EN:Selection background
 prefs_dialog.selection_color:FR:Fond de la sélection
@@ -2598,6 +3204,8 @@ prefs_dialog.selection_color:DE:Markierungshintergrund
 prefs_dialog.selection_color:ES:Seleccionar fondo
 prefs_dialog.selection_color:CS:Pozadí selekce
 prefs_dialog.selection_color:zh_TW:選取項目的背景
+prefs_dialog.selection_color:PL:Tło zaznaczenia
+prefs_dialog.selection_color:HU:kiválasztás háttere
 
 prefs_dialog.font_colors:EN:Font colors
 prefs_dialog.font_colors:FR:Couleurs de la fonte
@@ -2605,6 +3213,8 @@ prefs_dialog.font_colors:DE:Schriftfarben
 prefs_dialog.font_colors:ES:Colores de la fuente
 prefs_dialog.font_colors:CS:Barva písma 
 prefs_dialog.font_colors:zh_TW:字型顏色
+prefs_dialog.font_colors:PL:Kolor czcionki 
+prefs_dialog.font_colors:HU:betű szín
 
 prefs_dialog.plain_file_color:EN:Plain file
 prefs_dialog.plain_file_color:FR:Fichier normal
@@ -2612,6 +3222,8 @@ prefs_dialog.plain_file_color:DE:Normale Datei
 prefs_dialog.plain_file_color:ES:Fichero plano
 prefs_dialog.plain_file_color:CS:Všední soubor
 prefs_dialog.plain_file_color:zh_TW:一般檔案
+prefs_dialog.plain_file_color:PL:Zwykły plik
+prefs_dialog.plain_file_color:HU:fájl
 
 prefs_dialog.marked_file_color:EN:Marked file
 prefs_dialog.marked_file_color:FR:Fichier marqué
@@ -2619,6 +3231,8 @@ prefs_dialog.marked_file_color:DE:Markierte Datei
 prefs_dialog.marked_file_color:ES:Fichero marcado
 prefs_dialog.marked_file_color:CS:Označený soubor
 prefs_dialog.marked_file_color:zh_TW:已標記檔案
+prefs_dialog.marked_file_color:PL:Zaznaczony plik
+prefs_dialog.marked_file_color:HU:megjelölt fájl
 
 prefs_dialog.selected_file_color:EN:Selected file
 prefs_dialog.selected_file_color:FR:Fichier sélectionné
@@ -2626,6 +3240,8 @@ prefs_dialog.selected_file_color:DE:Selektierte Datei
 prefs_dialog.selected_file_color:ES:Fichero seleccionado
 prefs_dialog.selected_file_color:CS:Vybraný soubor
 prefs_dialog.selected_file_color:zh_TW:已選取檔案
+prefs_dialog.selected_file_color:PL:Wybraný plik
+prefs_dialog.selected_file_color:HU:kiválasztott fájl
 
 prefs_dialog.hidden_file_color:EN:Hidden file
 prefs_dialog.hidden_file_color:FR:Fichier caché
@@ -2633,6 +3249,8 @@ prefs_dialog.hidden_file_color:DE:Versteckte Datei
 prefs_dialog.hidden_file_color:ES:Fichero oculto
 prefs_dialog.hidden_file_color:CS:Skrytý soubor
 prefs_dialog.hidden_file_color:zh_TW:隱藏檔
+prefs_dialog.hidden_file_color:PL:Ukryty plik
+prefs_dialog.hidden_file_color:HU:rejtett fájl
 
 prefs_dialog.folder_color:EN:Folder
 prefs_dialog.folder_color:FR:Dossier
@@ -2640,6 +3258,8 @@ prefs_dialog.folder_color:DE:Ordner
 prefs_dialog.folder_color:ES:Directorio
 prefs_dialog.folder_color:CS:Složka
 prefs_dialog.folder_color:zh_TW:資料夾
+prefs_dialog.folder_color:PL:Katalog
+prefs_dialog.folder_color:HU:könyvtár
 
 prefs_dialog.archive_file_color:EN:Archive file
 prefs_dialog.archive_file_color:FR:Archive
@@ -2647,6 +3267,8 @@ prefs_dialog.archive_file_color:DE:Archivdatei
 prefs_dialog.archive_file_color:ES:Archivar fichero
 prefs_dialog.archive_file_color:CS:Archív
 prefs_dialog.archive_file_color:zh_TW:壓縮檔
+prefs_dialog.archive_file_color:PL:Plik archiwum
+prefs_dialog.archive_file_color:HU:archív fájlok
 
 prefs_dialog.symbolic_link_color:EN:Symbolic link
 prefs_dialog.symbolic_link_color:FR:Lien symbolique
@@ -2654,6 +3276,8 @@ prefs_dialog.symbolic_link_color:DE:Symbolic Link
 prefs_dialog.symbolic_link_color:ES:Enlace simbólico
 prefs_dialog.symbolic_link_color:CS:Symbolický odkaz
 prefs_dialog.symbolic_link_color:zh_TW:符號連結
+prefs_dialog.symbolic_link_color:PL:Dowiązanie symboliczne
+prefs_dialog.symbolic_link_color:HU:parancsikon fájlok
 
 prefs_dialog.pick_a_color:EN:Pick a color
 prefs_dialog.pick_a_color:FR:Choisir une couleur
@@ -2661,6 +3285,8 @@ prefs_dialog.pick_a_color:DE:Farbe wählen
 prefs_dialog.pick_a_color:ES:Seleccionar un color
 prefs_dialog.pick_a_color:CS:Vyberte barvu
 prefs_dialog.pick_a_color:zh_TW:挑選一個顏色
+prefs_dialog.pick_a_color:PL:Wybierz kolor
+prefs_dialog.pick_a_color:HU:Válasszon színt
 
 # Mail tab
 
@@ -2670,6 +3296,8 @@ prefs_dialog.mail_tab:DE:eMail
 prefs_dialog.mail_tab:ES:Correo electrónico
 prefs_dialog.mail_tab:CS:Email
 prefs_dialog.mail_tab:zh_TW:郵件
+prefs_dialog.mail_tab:PL:Poczta elektroniczna
+prefs_dialog.mail_tab:HU:e-mail
 
 prefs_dialog.mail_settings:EN:Outgoing mail settings
 prefs_dialog.mail_settings:FR:Paramètres d'email sortant
@@ -2677,6 +3305,8 @@ prefs_dialog.mail_settings:DE:Einstellungen für ausgehende eMails
 prefs_dialog.mail_settings:ES:Parámetros de correo saliente
 prefs_dialog.mail_settings:CS:Nastavení odchodzí pošty
 prefs_dialog.mail_settings:zh_TW:外送郵件設定
+prefs_dialog.mail_settings:PL:Ustawienia poczty wychodzącej
+prefs_dialog.mail_settings:HU:kimenő levelezési beállítások
 
 prefs_dialog.mail_name:EN:Your name
 prefs_dialog.mail_name:FR:Votre nom
@@ -2684,6 +3314,8 @@ prefs_dialog.mail_name:DE:Ihr Name
 prefs_dialog.mail_name:ES:Su nombre
 prefs_dialog.mail_name:CS:Jméno
 prefs_dialog.mail_name:zh_TW:你的名稱
+prefs_dialog.mail_name:PL:Twoie imię
+prefs_dialog.mail_name:HU:az Ön neve
 
 prefs_dialog.mail_address:EN:Your email address
 prefs_dialog.mail_address:FR:Votre adresse email
@@ -2691,6 +3323,8 @@ prefs_dialog.mail_address:DE:Ihre eMail Adresse
 prefs_dialog.mail_address:ES:Su correo electrónico
 prefs_dialog.mail_address:CS:Emailová adresa
 prefs_dialog.mail_address:zh_TW:你的電郵地址
+prefs_dialog.mail_address:PL:Twój adres email
+prefs_dialog.mail_address:HU:az Ön e-mail címe
 
 prefs_dialog.mail_server:EN:SMTP server
 prefs_dialog.mail_server:FR:Serveur SMTP
@@ -2698,6 +3332,8 @@ prefs_dialog.mail_server:DE:SMTP Server
 prefs_dialog.mail_server:ES:Servidor SMTP
 prefs_dialog.mail_server:CS:Server odzchodzí pošty SMTP
 prefs_dialog.mail_server:zh_TW:SMTP伺服器
+prefs_dialog.mail_server:PL:Serwer poczty wychodzącej SMTP
+prefs_dialog.mail_server:HU:kimenő levélkiszolgáló (SMTP) szerver
 
 # Misc tab (Mac OS X only)
 
@@ -2707,6 +3343,8 @@ prefs_dialog.misc_tab:DE:Verschiedenes
 prefs_dialog.misc_tab:ES:Miscelánea
 prefs_dialog.misc_tab:CS:Různé
 prefs_dialog.misc_tab:zh_TW:其它
+prefs_dialog.misc_tab:PL:Różne
+prefs_dialog.misc_tab:HU:egyebek
 
 prefs_dialog.use_brushed_metal:EN:Use 'brushed metal' look (requires restart)
 prefs_dialog.use_brushed_metal:FR:Utiliser le look 'brushed metal' (après redémarrage)
@@ -2714,6 +3352,8 @@ prefs_dialog.use_brushed_metal:DE:'Brushed Metal' Look benutzen (Neustart nötig
 prefs_dialog.use_brushed_metal:ES:Usar la apariencia 'brocha de metal' (requiere volver a arrancar)
 prefs_dialog.use_brushed_metal:CS:Použít vzhled 'brushed metal' (vyžaduje restart)
 prefs_dialog.use_brushed_metal:zh_TW:使用 'brushed metal' 風格 (需重新啟動)
+prefs_dialog.use_brushed_metal:PL:Użyj wyglądu 'brushed metal' (Wymaga restartu)
+prefs_dialog.use_brushed_metal:HU:használja a 'brushed metal' felületet (újraindítást igényel)
 
 prefs_dialog.confirm_on_quit:EN:Show confirmation dialog on quit
 prefs_dialog.confirm_on_quit:FR:Afficher un dialogue de confirmation en quittant
@@ -2721,6 +3361,8 @@ prefs_dialog.confirm_on_quit:DE:Bestätigung beim Beenden
 prefs_dialog.confirm_on_quit:ES:Mostrar diálogo de confirmación al salir
 prefs_dialog.confirm_on_quit:CS:Zobrazit potvrzovací správu při ukončení
 prefs_dialog.confirm_on_quit:zh_TW:離開時顯示確認對話盒
+prefs_dialog.confirm_on_quit:PL:Pokaż okno potwierdzające przy wyjściu
+prefs_dialog.confirm_on_quit:HU:kérjen megerősítést kilépéskor
 
 
 ################
@@ -2771,6 +3413,8 @@ unit.byte:DE:Byte
 unit.byte:ES:byte
 unit.byte:CS:bajt
 unit.byte:zh_TW:byte
+unit.byte:PL:bajt
+unit.byte:HU:bájt
 
 unit.bytes:EN:bytes
 unit.bytes:FR:octets
@@ -2778,6 +3422,8 @@ unit.bytes:DE:Bytes
 unit.bytes:ES:bytes
 unit.bytes:CS:bajtů
 unit.bytes:zh_TW:bytes
+unit.bytes:PL:bajty
+unit.bytes:HU:bájt
 
 unit.bytes_short:EN:b
 unit.bytes_short:FR:o
@@ -2785,6 +3431,8 @@ unit.bytes_short:DE:B
 unit.bytes_short:ES:b
 unit.bytes_short:CS:b
 unit.bytes_short:zh_TW:b
+unit.bytes_short:PL:b
+unit.bytes_short:HU:b
 
 unit.kb:EN:KB
 unit.kb:FR:Ko
@@ -2792,6 +3440,8 @@ unit.kb:DE:KB
 unit.kb:ES:KB
 unit.kb:CS:KB
 unit.kb:zh_TW:KB
+unit.kb:PL:KB
+unit.kb:HU:KB
 
 unit.mb:EN:MB
 unit.mb:FR:Mo
@@ -2799,6 +3449,8 @@ unit.mb:DE:MB
 unit.mb:ES:MB
 unit.mb:CS:MB
 unit.mb:zh_TW:MB
+unit.mb:PL:MB
+unit.mb:HU:MB
 
 unit.gb:EN:GB
 unit.gb:FR:Go
