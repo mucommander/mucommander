@@ -24,10 +24,6 @@ public abstract class AbstractArchiveFile extends AbstractFile implements Archiv
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 	
-//	public String getProtocol() {
-//		return file.getProtocol();
-//	}
-
 	public String getName() {
 		return file.getName();
 	}

@@ -239,12 +239,6 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	
 
 	/**
-	 * Returns a string describing the protocol used to access the file (e.g. SMB, FTP... or simply FILE for local files).
-	 */
-//	public abstract String getProtocol();
-	
-
-	/**
 	 * Returns the name of this AbstractFile.
 	 */
 	public abstract String getName();

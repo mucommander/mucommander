@@ -89,17 +89,8 @@ public class FSFile extends AbstractFile {
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 
-//	public String getProtocol() {
-//		return "FILE";
-//	}
-	
 	public String getName() {
     	// Retrieves name and caches it
-//    	if (name==null) {
-//	    	this.name = file.getParent()==null?absPath+separator:file.getName();
-//	   	}    
-//		return name;
-
 		return file.getParent()==null?absPath+separator:file.getName();
 	}
 
@@ -221,7 +212,6 @@ public class FSFile extends AbstractFile {
 			return super.equals(f);		// could be equal to a ZipArchiveFile
 
 		// Compares canonical path (which File does not do by default in its equals() method)
-//		return this.canonicalPath.equals(((FSFile)f).canonicalPath);
 		return getCanonicalPath().equals(((FSFile)f).getCanonicalPath());
 	}
 	

@@ -19,10 +19,6 @@ public abstract class AbstractEntryFile extends AbstractFile {
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 
-//	public String getProtocol() {
-//		return archiveFile.getProtocol();
-//	}
-	
 	public String getAbsolutePath() {
 		String path = getParent().getAbsolutePath(true)+getName();
 		String separator = getSeparator();

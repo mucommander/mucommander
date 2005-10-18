@@ -54,10 +54,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 	
-//	public String getProtocol() {
-//		return "SMB";
-//	}
-
 	public String getName() {
 		String name = file.getName();
 
@@ -105,14 +101,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 	
 	public AbstractFile getParent() {
 		if(!parentValSet) {
-			// SmbFile.getParent() never returns null
-//			if(this.publicURL.get("smb://"))
-//				this.parent = null;
-
 			FileURL parentURL = fileURL.getParent();
 			if(parentURL!=null) {
-//				String parentS = file.getParent();
-//				try { this.parent = new SMBFile(parentS, false); }
 				try { this.parent = new SMBFile(parentURL, false); }
 				catch(IOException e) { this.parent = null; }
 			}
@@ -155,7 +145,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 	public boolean canWrite() {
 		// Unlike java.io.File, SmbFile.canWrite() can throw an SmbException
 		try {
-//			return file==null?false:file.canWrite();
             return file.canWrite();
 		}
 		catch(SmbException e) {
@@ -182,7 +171,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 	}
 	
 	public boolean isSymlink() {
-		// Symlinks are not supported under jCIFS (or in CIFS/SMB?)
+		// Symlinks are not supported with jCIFS (or in CIFS/SMB?)
 		return false;
 	}
 

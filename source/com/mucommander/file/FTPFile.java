@@ -290,10 +290,6 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 
-//	public String getProtocol() {
-//		return "FTP";
-//	}
-	
 	public String getName() {
 		String name = file.getName();
 		
@@ -304,7 +300,6 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
 
 	
 	public String getAbsolutePath() {
-//		return absPath;
 		return fileURL.getStringRep(false);
 	}
 

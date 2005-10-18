@@ -128,10 +128,6 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+c
 	// AbstractFile methods implementation //
 	/////////////////////////////////////////
 	
-//	public String getProtocol() {
-//		return "HTTP";
-//	}
-
 	public String getName() {
 		if(name==null)
 			return fileURL.getHost();
