@@ -44,10 +44,13 @@ public class FileURL implements Cloneable {
 			// Advance string index
 			pos += 3;
 			
-			// Parse login and password and they have been specified
-			int atPos = url.lastIndexOf('@');		// Last index because password can contain an '@' if it's an email address
+			// Parse login and password if they have been specified in the URL
+			int atPos = url.lastIndexOf('@');		// we use last index because URL's password (if any) may contain @ characters
+//com.mucommander.Debug.trace("url="+url+" pos="+pos+" atPos="+atPos);			
 			int colonPos;
-			if(atPos!=-1) {
+			int separatorPos = url.indexOf('/', pos);
+			// Filenames may contain @ chars, so atPos must be lower than next separator's position (if any)
+			if(atPos!=-1 && (separatorPos==-1 || atPos<separatorPos)) {
 				colonPos = url.indexOf(':', pos);
 				login = url.substring(pos, colonPos==-1?atPos:colonPos).trim();
 				if(colonPos!=-1)
@@ -55,13 +58,14 @@ public class FileURL implements Cloneable {
 				// Advance string index
 				pos = atPos+1;
 			}
-			
+
 			// Parse host and port (if specified)
 			colonPos = url.indexOf(':', pos);
+//com.mucommander.Debug.trace("pos="+pos+" colonPos="+colonPos+" atPos="+atPos);			
 			int questionPos = url.indexOf('?', pos);
-			int separatorPos = url.indexOf('/', pos);
+			separatorPos = url.indexOf('/', pos);
 			int hostEndPos;
-			// Separator is necessarely before question mark
+			// Separator is necessarily before question mark
 			if(separatorPos!=-1)
 				hostEndPos = separatorPos;
 			else if(questionPos!=-1)
@@ -448,8 +452,8 @@ public class FileURL implements Cloneable {
 			"http://mucommander.com/webstart/index.php?dummy=1&useless=true",
 			"smb://",
 			"smb://maxence@garfield",
-			"smb://maxence:blah@garfield",
-			"smb://maxence:blah@garfield/shared/music",
+			"smb://maxence:yep@garfield",
+			"smb://maxence:yep@garfield/shared/music",
 			"ftp://mucommander.com",
 			"ftp://mucommander.com:21",
 			"ftp://mucommander.com:21/",
@@ -457,7 +461,7 @@ public class FileURL implements Cloneable {
 			"ftp://mucommander.com:21/pub/incoming/",
 			"ftp://mucommander.com:21/pub/incoming/0day-warez.zip",
 			"ftp://anonymous:john.doe@somewhere.net@mucommander.com:21/pub/incoming/0day-warez.zip",
-			"sftp://maxence:blah@192.168.1.2",
+			"sftp://maxence:yep@192.168.1.2",
 			"file://relative_path",
 			"file:///absolute_path",
 			"file://localhost/absolute_path",
@@ -466,7 +470,8 @@ public class FileURL implements Cloneable {
 			"file://localhost/C:\\Projects\\",
 			"file://localhost/C:\\Documents and Settings",
 			"file://localhost/~/../..",
-			"file://localhost/~/Projects/mucommander/../mucommander/./source/.."
+			"file://localhost/~/Projects/mucommander/../mucommander/./source/..",
+			"file://localhost/Users/maxence/Desktop/en@boldquot.header"
 		};
 		
 		FileURL f;
@@ -477,6 +482,8 @@ public class FileURL implements Cloneable {
 				System.out.println("FileURL.toString()= "+f.toString());
 				System.out.println(" - path= "+f.getPath());
 				System.out.println(" - host= "+f.getHost());
+				if(f.getLogin()!=null)
+					System.out.println(" - login/pass= "+f.getLogin()+"/"+f.getPassword());
 				System.out.println(" - filename= "+f.getFilename());
 				System.out.println(" - parent= "+f.getParent());
 				if(f.getParent()!=null)

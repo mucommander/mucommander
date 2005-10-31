@@ -98,7 +98,6 @@ public class DeleteJob extends FileJob {
 					catch(IOException e) {
 						if(com.mucommander.Debug.ON) e.printStackTrace();
 
-//						ret = showErrorDialog(errorDialogTitle, "Unable to read contents of folder "+filePath);
 						ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_source", filePath));
 						// Retry loops
 						if(ret==RETRY_ACTION)
@@ -129,9 +128,6 @@ public class DeleteJob extends FileJob {
 			catch(IOException e) {
 				if(com.mucommander.Debug.ON) e.printStackTrace();
 	
-//				ret = showErrorDialog(errorDialogTitle, "Unable to delete "
-//					+(file.isDirectory()?"folder ":"file ")
-//					+file.getName());
 				ret = showErrorDialog(errorDialogTitle,
 					Translator.get(file.isDirectory()?"cannot_delete_folder":"cannot_delete_file", file.getName())
 				);
@@ -147,14 +143,6 @@ public class DeleteJob extends FileJob {
 	
 	private int showSymlinkDialog(String relativePath, String canonicalPath) {
 		YBoxPanel panel = new YBoxPanel();
-
-//		panel.add(new JLabel("This file looks like a symbolic link."));
-//		panel.add(new JLabel(" "));
-//		panel.add(new JLabel("  File: "+relativePath));
-//		panel.add(new JLabel("  Links to: "+canonicalPath));
-//		panel.add(new JLabel(" "));
-//		panel.add(new JLabel("Delete symlink only (safe	) or "));
-//		panel.add(new JLabel("Follow symlink and delete folder (CAUTION) ?"));
 
 		JTextArea symlinkWarningArea = new JTextArea(Translator.get("delete.symlink_warning", relativePath, canonicalPath));
 		symlinkWarningArea.setEditable(false);
