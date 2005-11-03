@@ -17,7 +17,6 @@ public class SMBFile extends AbstractFile {
 	private final static String SEPARATOR = "/";
 
 	private SmbFile file;
-//	private FileURL fileURL;
 	private String publicURL;
 	private String privateURL;
 
@@ -238,9 +237,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 			for(int i=0; i<smbFiles.length; i++) {
 				child = AbstractFile.wrapArchive(new SMBFile(new FileURL(smbFiles[i].getCanonicalPath()), false));
 				child.setParent(this);
-				children[i] = child;
-				
-//				children[i] = AbstractFile.getAbstractFile(smbFiles[i].getCanonicalPath(), this);
+				children[i] = child;		
 			}
 			
 			return children;
