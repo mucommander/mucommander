@@ -2854,6 +2854,15 @@ shortcuts_dialog.file_operations.properties:zh_TW:顯示已標記檔案的內容
 shortcuts_dialog.file_operations.properties:PL:Pokaż właściwości zaznaczonych plików
 shortcuts_dialog.file_operations.properties:HU:Mutassa a kijelölt fájl(ok) tulajdonságait
 
+shortcuts_dialog.file_operations.add_bookmark:EN:Bookmark current folder
+shortcuts_dialog.file_operations.add_bookmark:FR:Ajouter le dossier courant aux favoris
+
+
+
+
+
+
+
 shortcuts_dialog.windows:EN:Windows
 shortcuts_dialog.windows:FR:Fenêtres
 shortcuts_dialog.windows:DE:Fenster

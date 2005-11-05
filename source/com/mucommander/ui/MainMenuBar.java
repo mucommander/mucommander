@@ -189,7 +189,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		// Bookmark menu, bookmarks will be added to the menu each it gets displayed
 		menuItemMnemonicHelper.clear();
 		bookmarksMenu = MenuToolkit.addMenu(Translator.get("bookmarks_menu"), menuItemMnemonicHelper, this);
-		addBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.add_bookmark"), menuItemMnemonicHelper, null, this);
+		addBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.add_bookmark"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_B, KeyEvent.CTRL_MASK), this);
 		editBookmarksItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.edit_bookmarks"), menuItemMnemonicHelper, null, this);
 		bookmarksMenu.add(new JSeparator());
 		// Remember bookmarks offset (index of first bookmark in menu) for later
@@ -397,7 +397,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			new EditBookmarksDialog(mainFrame);
 		}
 		// Bookmark menu item
-		else if (bookmarksMenuItems.contains(source)) {
+		else if (bookmarksMenuItems!=null && bookmarksMenuItems.contains(source)) {
 			int index = bookmarksMenuItems.indexOf(source);
 			mainFrame.getLastActiveTable().getFolderPanel().trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getURL(), true);
 		}		
