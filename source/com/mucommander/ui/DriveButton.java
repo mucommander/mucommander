@@ -10,6 +10,8 @@ import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.bookmark.Bookmark;
 
+import com.mucommander.text.Translator;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -62,11 +64,12 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	/**
 	 * Creates and add a new item to the popup menu.
 	 */
-	private void addMenuItem(String text) {
+	private JMenuItem addMenuItem(String text) {
 		JMenuItem menuItem = new JMenuItem(text);
 		menuItem.addActionListener(this);
 		menuItems.add(menuItem);
 		popupMenu.add(menuItem);
+		return menuItem;
 	}
 	
 
@@ -135,8 +138,14 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		this.bookmarks = BookmarkManager.getBookmarks();
 		this.bookmarksOffset = menuItems.size();
 		int nbBookmarks = bookmarks.size();
-		for(int i=0; i<nbBookmarks; i++)
-			addMenuItem(((Bookmark)bookmarks.elementAt(i)).getName());
+		
+		if(nbBookmarks>0) {
+			for(int i=0; i<nbBookmarks; i++)
+				addMenuItem(((Bookmark)bookmarks.elementAt(i)).getName());
+		}
+		else {
+			addMenuItem(Translator.get("bookmarks_menu.no_bookmark")).setEnabled(false);
+		}
 
 		popupMenu.show(folderPanel, 0, getHeight());		
 

@@ -872,9 +872,18 @@ view_menu.hide_status_bar:HU:az állapotsor rejtése
 bookmarks_menu:EN:Bookmarks
 bookmarks_menu:FR:Favoris
 
+
+
+
 bookmarks_menu.add_bookmark:EN:$[add_bookmark_dialog.title]...
 
 bookmarks_menu.edit_bookmarks:EN:$[edit_bookmarks_dialog.title]...
+
+bookmarks_menu.no_bookmark:EN:No bookmark
+bookmarks_menu.no_bookmark:FR:Pas de favori
+
+
+
 
 
 ###############

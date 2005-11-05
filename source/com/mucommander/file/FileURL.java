@@ -404,7 +404,9 @@ public class FileURL implements Cloneable {
 		if(port!=-1)
 			s += ":"+port;
 
-		s += path;
+		if(host!=null || !path.equals("/"))	// Test to avoid URLs like 'smb:///'
+			s += path;
+		
 		if(query!=null)
 			s += query;
 		

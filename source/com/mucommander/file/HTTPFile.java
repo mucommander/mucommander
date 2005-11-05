@@ -153,7 +153,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+c
 	}
 	
 	public long getSize() {
-		return size;
+		return size;	// Size == -1 if not known
 	}
 	
 	public AbstractFile getParent() {

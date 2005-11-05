@@ -326,7 +326,7 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	public abstract boolean changeDate(long lastModified);
 	
 	/**
-	 * Returns the size in bytes of this AbstractFile.
+	 * Returns the size in bytes of this AbstractFile, -1 if not known.
 	 */
 	public abstract long getSize();
 	

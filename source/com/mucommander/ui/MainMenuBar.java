@@ -443,13 +443,19 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		}
 		else if(source==bookmarksMenu) {
 			// Remove any previous bookmarks menu items from menu
-			// as they might have been changed since menu was last evoked
+			// as they might have been changed since menu was last invoked
 			if(bookmarksMenuItems!=null) {
 				int nbBookmarks = bookmarks.size();
-				for(int i=0; i<nbBookmarks; i++) {
+				if(nbBookmarks>0) {
+					for(int i=0; i<nbBookmarks; i++) {
+						bookmarksMenu.remove(bookmarksOffset);
+						// Remove ActionListeners as well
+						((JMenuItem)bookmarksMenuItems.elementAt(i)).removeActionListener(this);
+					}
+				}
+				else {
+					// Need to remove the 'No bookmark' menu item
 					bookmarksMenu.remove(bookmarksOffset);
-					// Remove ActionListeners as well
-					((JMenuItem)bookmarksMenuItems.elementAt(i)).removeActionListener(this);
 				}
 			}
 	
@@ -458,8 +464,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			this.bookmarksMenuItems = new Vector();
 			int nbBookmarks = bookmarks.size();
 			MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
-			for(int i=0; i<nbBookmarks; i++)
-				bookmarksMenuItems.add(MenuToolkit.addMenuItem(bookmarksMenu, ((Bookmark)bookmarks.elementAt(i)).getName(), menuItemMnemonicHelper, null, this));
+			if(nbBookmarks>0) {
+				for(int i=0; i<nbBookmarks; i++)
+					bookmarksMenuItems.add(MenuToolkit.addMenuItem(bookmarksMenu, ((Bookmark)bookmarks.elementAt(i)).getName(), menuItemMnemonicHelper, null, this));
+			}
+			else {
+				// Show 'No bookmark' as a disabled menu item instead of nothing
+				JMenuItem noBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.no_bookmark"), menuItemMnemonicHelper, null, this);
+				noBookmarkItem.setEnabled(false);
+				bookmarksMenuItems.add(noBookmarkItem);
+			}
 		}
 	}
 	
