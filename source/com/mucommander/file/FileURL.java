@@ -21,17 +21,26 @@ public class FileURL implements Cloneable {
 	private String login;
 	private String password;
 	private String path;
-	private String parent;
+	private FileURL parentURL;
 	private String filename;
 	private String query;
 	
 	private Hashtable properties;
-	
-	
+
+
 	/**
-	 * Creates a new FileURL from the given URL string.
+	 * Creates a new FileURL object from the given string.
 	 */
 	public FileURL(String url) throws MalformedURLException {
+		this(url, null);
+	}
+	
+	/**
+	 * Creates a new FileURL object from the given string and using the given FileURL as the parent URL.
+	 * 
+	 * <p>If the parent URL contains authentication information (login/password), it will used in the child URL.</p>
+	 */
+	public FileURL(String url, FileURL parentURL) throws MalformedURLException {
 		try {
 			int pos;
 			int urlLen = url.length();
@@ -162,7 +171,7 @@ public class FileURL implements Cloneable {
 			// Extract filename and parent from path
 			if(path.equals("") || path.equals("/")) {
 				filename = null;
-				// parent is null
+				// No parent (parentURL will be null)
 			}
 			else {	
 				String pathCopy = new String(path).replace('\\', '/');
@@ -182,12 +191,29 @@ public class FileURL implements Cloneable {
 //					catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 				
 				// Creates parent URL from reconstructed URL with canonized path
-				url = reconstructURL(path, true, true);
-				len = url.length();
-				String urlCopy = new String(url).replace('\\', '/');
-				separatorPos = (urlCopy.endsWith("/")?urlCopy.substring(0, --len):urlCopy).lastIndexOf('/');
-				if(separatorPos>7)
-					parent = url.substring(0, separatorPos+1);	// Leave trailing separator
+				if(parentURL==null) {
+					url = reconstructURL(path, true, true);
+					len = url.length();
+					String urlCopy = new String(url).replace('\\', '/');
+					separatorPos = (urlCopy.endsWith("/")?urlCopy.substring(0, --len):urlCopy).lastIndexOf('/');
+					if(separatorPos>7) {
+						try { 
+							// Leave trailing separator
+							this.parentURL = new FileURL(url.substring(0, separatorPos+1)); 
+						}
+						catch(MalformedURLException e) {
+							// No parent (parentURL will be null)
+						}
+					}
+				
+				}
+				// Use the given FileURL as parent
+				else {
+					this.parentURL = parentURL;
+					// Use parent's login and password
+					this.login = parentURL.getLogin();
+					this.password = parentURL.getPassword();
+				}
 			}
 		}
 		catch(MalformedURLException e) {
@@ -299,11 +325,14 @@ public class FileURL implements Cloneable {
 	 * Returns the parent URL of this file based on the path, null if there is no parent file (path is '/').
 	 */
 	public FileURL getParent() {
-		if(parent==null)
+		if(parentURL==null)
 			return null;
 		
-		try { return new FileURL(parent); }
-		catch(MalformedURLException e) {
+		try {
+			// Return a cloned instance of parentURL since it is mutable
+			return (FileURL)parentURL.clone();
+		}
+		catch(CloneNotSupportedException e) {
 			return null;
 		}
 	}
@@ -424,7 +453,9 @@ public class FileURL implements Cloneable {
 		return getStringRep(includeAuthInfo, false);
 	}
 	
-	
+	/**
+	 * Returns a clone of this FileURL, useful because FileURL is mutable.
+	 */
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}

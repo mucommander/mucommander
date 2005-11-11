@@ -235,7 +235,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 			AbstractFile children[] = new AbstractFile[smbFiles.length];
 			AbstractFile child;
 			for(int i=0; i<smbFiles.length; i++) {
-				child = AbstractFile.wrapArchive(new SMBFile(new FileURL(smbFiles[i].getCanonicalPath()), false));
+				child = AbstractFile.wrapArchive(new SMBFile(new FileURL(smbFiles[i].getCanonicalPath(), fileURL), false));
 				child.setParent(this);
 				children[i] = child;		
 			}

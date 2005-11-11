@@ -257,6 +257,9 @@ public class MoveJob extends ExtendedFileJob {
 			// if moveTo() returned false it wasn't possible to this method because of 'append',
 			// try the hard way by copying the file first, and then deleting the source file
 			if(tryCopyFile(file, destFile, append, errorDialogTitle) && !isInterrupted()) {
+				// Preserve original file's date
+				destFile.changeDate(file.getDate());
+
 				// Delete the source file
 				do {		// Loop for retry
 					try  {

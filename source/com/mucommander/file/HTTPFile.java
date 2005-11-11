@@ -345,7 +345,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): Location header 
 							if(!childrenURL.contains(token)) {
 if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+contextURL);
 								childURL = new URL(contextURL, token);
-								childFileURL = new FileURL(childURL.toExternalForm());
+								childFileURL = new FileURL(childURL.toExternalForm(), fileURL);
 								child = new HTTPFile(childFileURL, childURL);
 								// Recycle this file for parent whenever possible
 if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): recycle_parent="+child.fileURL.equals(this.fileURL));

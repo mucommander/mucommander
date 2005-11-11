@@ -82,18 +82,15 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenu bookmarksMenu;
 	private JMenuItem addBookmarkItem;
 	private JMenuItem editBookmarksItem;
-
 	private int bookmarksOffset;  // Index of first bookmark in menu
 	private Vector bookmarks;
-	private Vector bookmarksMenuItems;
+	private Vector bookmarkMenuItems;
 
 	// Window menu
 	private JMenu windowMenu;
 	private JMenuItem showToolbarItem;
 	private JMenuItem showCommandBarItem;
 	private JMenuItem showStatusBarItem;
-//	private JMenuItem previousWindowItem;
-//	private JMenuItem nextWindowItem;
 
 	// Help menu
 	private JMenu helpMenu;
@@ -397,8 +394,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			new EditBookmarksDialog(mainFrame);
 		}
 		// Bookmark menu item
-		else if (bookmarksMenuItems!=null && bookmarksMenuItems.contains(source)) {
-			int index = bookmarksMenuItems.indexOf(source);
+		else if (bookmarkMenuItems!=null && bookmarkMenuItems.contains(source)) {
+			int index = bookmarkMenuItems.indexOf(source);
 			mainFrame.getLastActiveTable().getFolderPanel().trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getURL(), true);
 		}		
 		// Help menu
@@ -429,7 +426,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		if (source==fileMenu) {
 			boolean filesSelected = mainFrame.getLastActiveTable().getSelectedFiles().size()!=0;
 			
-			// disables menu items if no file is selected
+			// disable menu items if no file is selected
 			propertiesItem.setEnabled(filesSelected);
 			zipItem.setEnabled(filesSelected);
 			unzipItem.setEnabled(filesSelected);
@@ -442,37 +439,27 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			autoSizeColumnsItem.setSelected(mainFrame.getLastActiveTable().getAutoSizeColumns());
 		}
 		else if(source==bookmarksMenu) {
-			// Remove any previous bookmarks menu items from menu
-			// as they might have been changed since menu was last invoked
-			if(bookmarksMenuItems!=null) {
-				int nbBookmarks = bookmarks.size();
-				if(nbBookmarks>0) {
-					for(int i=0; i<nbBookmarks; i++) {
-						bookmarksMenu.remove(bookmarksOffset);
-						// Remove ActionListeners as well
-						((JMenuItem)bookmarksMenuItems.elementAt(i)).removeActionListener(this);
-					}
-				}
-				else {
-					// Need to remove the 'No bookmark' menu item
+			if(this.bookmarkMenuItems != null) {
+				// Remove any previous bookmarks menu items from menu
+				// as bookmarks might have changed since menu was last selected
+				for(int i=bookmarksMenu.getItemCount(); i>bookmarksOffset; i--)
 					bookmarksMenu.remove(bookmarksOffset);
-				}
 			}
-	
+
 			// Add bookmarks menu items
 			this.bookmarks = BookmarkManager.getBookmarks();
-			this.bookmarksMenuItems = new Vector();
+			this.bookmarkMenuItems = new Vector();
 			int nbBookmarks = bookmarks.size();
 			MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 			if(nbBookmarks>0) {
 				for(int i=0; i<nbBookmarks; i++)
-					bookmarksMenuItems.add(MenuToolkit.addMenuItem(bookmarksMenu, ((Bookmark)bookmarks.elementAt(i)).getName(), menuItemMnemonicHelper, null, this));
+					bookmarkMenuItems.add(MenuToolkit.addMenuItem(bookmarksMenu, ((Bookmark)bookmarks.elementAt(i)).getName(), menuItemMnemonicHelper, null, this));
 			}
 			else {
-				// Show 'No bookmark' as a disabled menu item instead of nothing
-				JMenuItem noBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.no_bookmark"), menuItemMnemonicHelper, null, this);
+				// Show 'No bookmark' as a disabled menu item instead showing nothing
+				JMenuItem noBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.no_bookmark"), menuItemMnemonicHelper, null, null);
 				noBookmarkItem.setEnabled(false);
-				bookmarksMenuItems.add(noBookmarkItem);
+				bookmarkMenuItems.add(noBookmarkItem);
 			}
 		}
 	}

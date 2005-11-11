@@ -479,7 +479,7 @@ if(com.mucommander.Debug.ON) System.out.println("FTPFile.ls(): ParserInitializat
 			if(childName.equals(".") || childName.equals(".."))
 				continue;
 				
-			childURL = new FileURL(parentURL+childName);
+			childURL = new FileURL(parentURL+childName, fileURL);
 			childURL.setProperty("passiveMode", ""+passiveMode);
 			
 			// Discard '.' and '..' files

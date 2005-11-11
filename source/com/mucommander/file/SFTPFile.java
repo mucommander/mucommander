@@ -360,8 +360,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("nbFiles="+nbFiles);
 			// Discard '.' and '..' files
 			if(filename.equals(".") || filename.equals(".."))
 				continue;
-			childURL = new FileURL(parentURL+filename);
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("sftpFile="+sftpFile);
+			childURL = new FileURL(parentURL+filename, fileURL);
+// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("sftpFile="+sftpFile);
 			child = AbstractFile.wrapArchive(new SFTPFile(childURL, sftpFile, sshClient, sftpChannel));
 			child.setParent(this);
 

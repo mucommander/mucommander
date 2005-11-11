@@ -234,7 +234,7 @@ public class CopyJob extends ExtendedFileJob {
 			// Copy the file
 			boolean success = tryCopyFile(file, destFile, append, errorDialogTitle);
 			
-			// Set file date to original's
+			// Preserve original file's date
 			destFile.changeDate(file.getDate());
 			
 			return success;
