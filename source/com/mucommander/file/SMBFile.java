@@ -80,10 +80,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 
 	public boolean changeDate(long lastModified) {
 		try {
+			// SmbFile.setLastModified() returns "jcifs.smb.SmbAuthException: Access is denied" exceptions
+			// don't know if it's a bug in the library or a server limitation (tested with Samba)
 			file.setLastModified(lastModified);
 			return true;
 		}
 		catch(SmbException e) {
+			if(com.mucommander.Debug.ON) { com.mucommander.Debug.trace("return false "+e);}
 			return false;
 		}
 	}
