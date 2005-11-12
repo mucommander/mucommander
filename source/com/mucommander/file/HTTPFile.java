@@ -436,24 +436,13 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): ends");
 		throw new IOException();
 	}
 	
-	
-	
-	/**
-	 * Reveals a problem (?) with URL class, where a URL has to have a trailing '/' 
-	 * to be considered as a folder.
-	 */
-	public static void main(String args[]) throws IOException {
-		URL url1 = new URL("http://www.braingames.getput.com/mog");
-		System.out.println(""+url1);
-		
-		URL url2 = new URL(url1, "downloads/MoG-datafiles.zip");
-		System.out.println(""+url2);
-
-		url1 = new URL("http://www.braingames.getput.com/mog/");
-		System.out.println(""+url1);
-		
-		url2 = new URL(url1, "downloads/MoG-datafiles.zip");
-		System.out.println(""+url2);
+	public long getFreeSpace() {
+		// This information is obviously not available over HTTP, return -1
+		return -1;
 	}
 
+	public long getTotalSpace() {
+		// This information is obviously not available over HTTP, return -1
+		return -1;
+	}	
 }

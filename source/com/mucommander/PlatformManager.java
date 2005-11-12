@@ -240,7 +240,6 @@ public class PlatformManager {
 			tokensV.toArray(tokens);
 
 			return Runtime.getRuntime().exec(tokens, null, new java.io.File(currentFolder.getAbsolutePath()));
-//			return Runtime.getRuntime().exec(command, null, new java.io.File(currentFolder.getAbsolutePath()));
 		}
 		catch(IOException e) {
             if(Debug.ON) Debug.trace("Error while executing "+command+": "+e);

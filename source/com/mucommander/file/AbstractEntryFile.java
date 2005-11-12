@@ -75,4 +75,13 @@ public abstract class AbstractEntryFile extends AbstractFile {
 		throw new IOException();
 	}
 
+	public long getFreeSpace() {
+		// All archive formats are read-only (for now)
+		return 0;
+	}
+
+	public long getTotalSpace() {
+		// We consider archive files as volumes, thus return the archive file's size
+		return archiveFile.getSize();
+	}	
 }

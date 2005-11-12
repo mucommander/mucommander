@@ -108,4 +108,12 @@ public abstract class AbstractArchiveFile extends AbstractFile implements Archiv
 		// By default archive entries are read-only, let's throw an exception
 		throw new IOException();
 	}
+
+	public long getFreeSpace() {
+		return file.getFreeSpace();
+	}
+
+	public long getTotalSpace() {
+		return file.getTotalSpace();
+	}	
 }

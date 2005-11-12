@@ -452,4 +452,15 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 */	
 	public abstract void delete() throws IOException;
 
+	
+	/**
+	 * Returns free space (in bytes) on the disk/volume where this file is, -1 if this information is not available.
+	 */
+	public abstract long getFreeSpace();
+
+	/**
+	 * Returns the total space (in bytes) of the disk/volume where this file is, -1 if this information is not available. 
+	 */
+	public abstract long getTotalSpace();
+	
 }

@@ -256,4 +256,20 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 		// to indicate if the folder could be created
 		new SmbFile(privateURL+SEPARATOR+name).mkdir();
 	}
+
+
+	public long getFreeSpace() {
+		try {
+			return file.getDiskFreeSpace();
+		}
+		catch(SmbException e) {
+			// Error occured, return -1 (not available)
+			return -1;
+		}
+	}
+
+	public long getTotalSpace() {
+		// No way to retrieve this information with jCIFS/SMB, return -1 (not available)
+		return -1;
+	}
 }

@@ -5,10 +5,13 @@ import org.apache.commons.net.ftp.*;
 
 import java.io.*;
 
+import java.util.Calendar;
+import java.util.Date;
+
+
 /**
  * FTPFile represents a file on an FTP server.
  */
-//public class FTPFile extends AbstractFile implements RemoteFile {
 public class FTPFile extends AbstractFile {
 
 	private org.apache.commons.net.ftp.FTPFile file;
@@ -16,8 +19,6 @@ public class FTPFile extends AbstractFile {
 
 	/** Sets whether passive mode should be used for data transfers (default is true) */ 
 	private boolean passiveMode = true;
-
-//	private FileURL fileURL;
 
     protected String absPath;
 
@@ -316,7 +317,8 @@ if(com.mucommander.Debug.ON) System.out.println("checkConnection: isConnected(2)
     }
 	
 	public boolean changeDate(long lastModified) {
-		// No way that I know of to change date in Commons-net API
+		// No way that I know of to date this with Commons-Net API, maybe there isn't even an FTP command to change a file's date 
+		// Note: FTPFile.setTimeStamp only changes the instance's date, but doesn't change it on the server-side.
 		return false;
 	}
 	
@@ -510,5 +512,16 @@ if(com.mucommander.Debug.ON) System.out.println("FTPFile.ls(): ParserInitializat
 		ftpClient.makeDirectory(absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name);
 		// Throw an IOException if server replied with an error
 		checkServerReply();
+	}
+	
+	
+	public long getFreeSpace() {
+		// No way to retrieve this information with J2SSH, return -1 (not available)
+		return -1;
+	}
+
+	public long getTotalSpace() {
+		// No way to retrieve this information with J2SSH, return -1 (not available)
+		return -1;
 	}
 }

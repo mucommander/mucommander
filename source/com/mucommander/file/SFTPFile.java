@@ -386,4 +386,15 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("nbFiles="+nbFiles);
 //		sftpChannel.changePermissions(dirPath, 700);
 		sftpChannel.changePermissions(dirPath, "rwx------");
 	}
+
+
+	public long getFreeSpace() {
+		// No way to retrieve this information with J2SSH, return -1 (not available)
+		return -1;
+	}
+
+	public long getTotalSpace() {
+		// No way to retrieve this information with J2SSH, return -1 (not available)
+		return -1;
+	}
 }

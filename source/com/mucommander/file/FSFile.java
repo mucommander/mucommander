@@ -1,7 +1,7 @@
 package com.mucommander.file;
 
 import java.io.*;
-import java.util.Vector;
+import java.util.*;
 
 import com.mucommander.PlatformManager;
 
@@ -269,5 +269,75 @@ public class FSFile extends AbstractFile {
 	public void mkdir(String name) throws IOException {
 		if(!new File(absPath+separator+name).mkdir())
 			throw new IOException();
+	}
+	
+
+	public long getFreeSpace() {
+		long volumeInfo[] = getVolumeInfo();
+		if(volumeInfo==null)
+			return -1;	// Not available on this platform
+		return volumeInfo[1];
+	}
+	
+	public long getTotalSpace() {
+		long volumeInfo[] = getVolumeInfo();
+		if(volumeInfo==null)
+			return -1;	// Not available on this platform
+		return volumeInfo[0];
+	}	
+	
+	/**
+	 * Uses platform dependant commands to extract free and total volume (where this file resides) space.
+	 *
+	 * @return [totalSpace, freeSpace], or <code>null</code> if information could not be retrieved from the current platform. 
+	 */
+	private long[] getVolumeInfo() {
+		int osFamily = PlatformManager.getOSFamily();
+		// Parses 'df -k' command's output on UNIX/BSD-based systems to determine free space on the volume where this file is
+		if(osFamily!=PlatformManager.WINDOWS_9X && osFamily!=PlatformManager.WINDOWS_NT) {
+			// 'df -k' returns totals in block of 1K = 1024 bytes
+			Process process = PlatformManager.execute("df -k "+getAbsolutePath(), this);
+			// Check that the process was correctly started
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process= "+process);
+			if(process!=null) {
+				BufferedReader br = null;
+				try {
+					br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("br created");
+					// Discard the first line ("Filesystem   1K-blocks     Used    Avail Capacity  Mounted on");
+					br.readLine();
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 1 line");
+					String line = br.readLine();
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 2 line");
+					if(line!=null) {
+						try {
+							StringTokenizer st = new StringTokenizer(line);
+							// Discard 'Filesystem' field
+							st.nextToken();
+							long dfInfo[] = new long[2];
+							// Parse 'volume total' field
+							dfInfo[0] = Long.parseLong(st.nextToken()) * 1024;
+							// Discard 'Used' field
+							st.nextToken();
+							// Parse 'volume free' field
+							dfInfo[1] = Long.parseLong(st.nextToken()) * 1024;
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");				
+							return dfInfo;
+						}
+						catch(NoSuchElementException e) {}
+						catch(NumberFormatException e2) {}
+					}
+				}
+				catch(IOException e) {
+					if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("An error occured while executing 'df -k "+getAbsolutePath()+"' command: "+e);
+				}
+				finally {
+					if(br!=null)
+						try { br.close(); } catch(IOException e) {}
+				}
+			}
+		}
+		return null;		// Not available
 	}
 }
