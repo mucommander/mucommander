@@ -791,7 +791,15 @@ view_menu.reverse_order:PL:Odwrotna kolejność
 view_menu.reverse_order:HU:fordított sorrend
 
 view_menu.auto_size_columns:EN:Auto-size columns
-view_menu.auto_size_columns:FR:Auto-dimensionnement des colonnes
+view_menu.auto_size_columns:FR:Auto-dimensionner les colonnes
+
+
+
+
+
+
+
+
 
 view_menu.swap_folders:EN:Swap folders
 view_menu.swap_folders:FR:Echanger les dossiers

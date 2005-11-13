@@ -297,10 +297,10 @@ long now = System.currentTimeMillis();
 
 		try {
 			int osFamily = PlatformManager.getOSFamily();
-			// Parses the output of 'dir filePath' command to retrieve free space information
-			if(osFamily==PlatformManager.WINDOWS_9X && osFamily==PlatformManager.WINDOWS_NT) {
+			// Parses the output of 'dir "filePath"' command to retrieve free space information
+			if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
 				// 'dir' command returns free space on the last line
-				Process process = PlatformManager.execute("dir "+getAbsolutePath(), this);
+				Process process = PlatformManager.execute("dir \""+getAbsolutePath()+"\"", this);
 				// Check that the process was correctly started
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process= "+process);
 				if(process!=null) {
@@ -309,13 +309,16 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("br created");
 					String line;
 					String lastLine = null;
 					// Retrieves last line of dir
-					while((line=br.readLine())!=null)
-						lastLine = line;
+					while((line=br.readLine())!=null) {
+						if(!line.trim().equals(""))
+							lastLine = line;
+					}
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastLine="+lastLine);		
 					
 					// Last dir line may look like something this (might vary depending on system's language, below in French):
 					// 6 Rep(s)  14 767 521 792 octets libres		
 					if(lastLine!=null) {
-						StringTokenizer st = new StringTokenizer(lastLine);
+						StringTokenizer st = new StringTokenizer(lastLine, " \t\n\r\f,.");
 						// Discard first token
 						st.nextToken();
 						long dfInfo[] = new long[2];
@@ -332,6 +335,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("br created");
 							else if(!freeSpace.equals(""))
 								break;
 						}
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("freeSpace="+freeSpace);		
 
 						dfInfo[1] = Long.parseLong(freeSpace);
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");				
@@ -339,10 +343,10 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");
 					}
 				}
 			}
-			// Parses the output of 'df -k filePath' command on UNIX/BSD-based systems to retrieve free and total space information
+			// Parses the output of 'df -k "filePath"' command on UNIX/BSD-based systems to retrieve free and total space information
 			else {
 				// 'df -k' returns totals in block of 1K = 1024 bytes
-				Process process = PlatformManager.execute("df -k "+getAbsolutePath(), this);
+				Process process = PlatformManager.execute("df -k \""+getAbsolutePath()+"\"", this);
 				// Check that the process was correctly started
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process= "+process);
 				if(process!=null) {

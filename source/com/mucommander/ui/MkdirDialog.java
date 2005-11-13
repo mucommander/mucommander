@@ -1,16 +1,18 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
+import com.mucommander.job.MkdirJob;
+import com.mucommander.ui.comp.dialog.*;
+// import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import java.io.IOException;
+// import java.io.IOException;
 
 
 /**
@@ -19,27 +21,23 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 public class MkdirDialog extends FocusDialog implements ActionListener {
+
 	private MainFrame mainFrame;
 	
 	private JTextField mkdirPathField;
 	
 	private JButton okButton;
-	private JButton cancelButton;
 
 	// Dialog size constraints
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
     // Dialog width should not exceed 360, height is not an issue (always the same)
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 
-	private FileTable activeTable;
-
 
 	public MkdirDialog(MainFrame mainFrame) {
 	    super(mainFrame, Translator.get("mkdir_dialog.title"), mainFrame);
 		this.mainFrame = mainFrame;
 		
-		activeTable = mainFrame.getLastActiveTable();
-
 		Container contentPane = getContentPane();
 
 		YBoxPanel mainPanel = new YBoxPanel();
@@ -52,7 +50,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
         contentPane.add(mainPanel, BorderLayout.NORTH);
         
         okButton = new JButton(Translator.get("mkdir_dialog.create"));
-        cancelButton = new JButton(Translator.get("cancel"));
+        JButton cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
 		// Path field will receive initial focus
@@ -73,7 +71,8 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 	 */
 	public void doMkdir() {
 		String dirPath = mkdirPathField.getText();
-		
+
+/*		
 	    try {
 		    // Resolves destination folder
 		    Object ret[] = mainFrame.resolvePath(dirPath);
@@ -94,34 +93,37 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 			// Create directory
 	        folder.mkdir(newName);
 			
-//			try {
-				// Refresh table
-//				activeTable.getFolderPanel().refresh();
-//			activeTable.getFolderPanel().tryRefresh(AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName));
 			// Refresh current folder
 			activeTable.getFolderPanel().tryRefresh();
+
 			// Selects newly created folder
 			activeTable.selectFile(AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName));
-
-//				activeTable.refresh();
-
-//				// Skip next auto refresh
-//				activeTable.getMonitor().skipRefresh();
-							
-				// Finds the row corresponding to the newly created folder
-				// and makes it the current row.
-//				if (activeTable.getCurrentFolder().equals(folder)) {
-//					AbstractFile createdFolder = AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName);
-//					activeTable.selectFile(createdFolder);
-//				}
-//			}
-//			catch(IOException e) {
-//				// Folder could not be refreshed, no big deal
-//			}
 		}
 	    catch(IOException e) {
 	        showErrorDialog(Translator.get("cannot_create_folder", dirPath), Translator.get("mkdir_dialog.error_title"));
 	    }    
+*/
+
+		// Resolves destination folder
+		Object ret[] = mainFrame.resolvePath(dirPath);
+		// The path entered doesn't correspond to any existing folder
+		if (ret==null) {
+			showErrorDialog(Translator.get("mkdir_dialog.invalid_path", dirPath), Translator.get("mkdir_dialog.error_title"));
+			return;
+		}
+
+		if(ret[1]==null) {
+			showErrorDialog(Translator.get("mkdir_dialog.dir_already_exists", dirPath), Translator.get("mkdir_dialog.error_title"));
+			return;
+		}
+
+		AbstractFile folder = (AbstractFile)ret[0];
+		String newName = (String)ret[1];
+
+		FileSet fileSet = new FileSet(folder);
+		// Job's FileSet needs to contain at least one file
+		fileSet.add(folder);
+		new MkdirJob(mainFrame, fileSet, newName).start();
 	}
 
 	
