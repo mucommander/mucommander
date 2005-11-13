@@ -292,16 +292,60 @@ public class FSFile extends AbstractFile {
 	 * @return [totalSpace, freeSpace], or <code>null</code> if information could not be retrieved from the current platform. 
 	 */
 	private long[] getVolumeInfo() {
-		int osFamily = PlatformManager.getOSFamily();
-		// Parses 'df -k' command's output on UNIX/BSD-based systems to determine free space on the volume where this file is
-		if(osFamily!=PlatformManager.WINDOWS_9X && osFamily!=PlatformManager.WINDOWS_NT) {
-			// 'df -k' returns totals in block of 1K = 1024 bytes
-			Process process = PlatformManager.execute("df -k "+getAbsolutePath(), this);
-			// Check that the process was correctly started
+		BufferedReader br = null;
+long now = System.currentTimeMillis();
+
+		try {
+			int osFamily = PlatformManager.getOSFamily();
+			// Parses the output of 'dir filePath' command to retrieve free space information
+			if(osFamily==PlatformManager.WINDOWS_9X && osFamily==PlatformManager.WINDOWS_NT) {
+				// 'dir' command returns free space on the last line
+				Process process = PlatformManager.execute("dir "+getAbsolutePath(), this);
+				// Check that the process was correctly started
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process= "+process);
-			if(process!=null) {
-				BufferedReader br = null;
-				try {
+				if(process!=null) {
+					br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("br created");
+					String line;
+					String lastLine = null;
+					// Retrieves last line of dir
+					while((line=br.readLine())!=null)
+						lastLine = line;
+					
+					// Last dir line may look like something this (might vary depending on system's language, below in French):
+					// 6 Rep(s)  14 767 521 792 octets libres		
+					if(lastLine!=null) {
+						StringTokenizer st = new StringTokenizer(lastLine);
+						// Discard first token
+						st.nextToken();
+						long dfInfo[] = new long[2];
+						dfInfo[0] = -1;
+						
+						// Concatenates as many contiguous groups of numbers
+						String token;
+						String freeSpace = "";
+						while(st.hasMoreTokens()) {
+							token = st.nextToken();
+							char c = token.charAt(0);
+							if(c>='0' && c<='9')
+								freeSpace += token;
+							else if(!freeSpace.equals(""))
+								break;
+						}
+
+						dfInfo[1] = Long.parseLong(freeSpace);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");				
+						return dfInfo;
+					}
+				}
+			}
+			// Parses the output of 'df -k filePath' command on UNIX/BSD-based systems to retrieve free and total space information
+			else {
+				// 'df -k' returns totals in block of 1K = 1024 bytes
+				Process process = PlatformManager.execute("df -k "+getAbsolutePath(), this);
+				// Check that the process was correctly started
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process= "+process);
+				if(process!=null) {
 					br = new BufferedReader(new InputStreamReader(process.getInputStream()));
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("br created");
 					// Discard the first line ("Filesystem   1K-blocks     Used    Avail Capacity  Mounted on");
@@ -310,34 +354,33 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 1 line");
 					String line = br.readLine();
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 2 line");
 					if(line!=null) {
-						try {
-							StringTokenizer st = new StringTokenizer(line);
-							// Discard 'Filesystem' field
-							st.nextToken();
-							long dfInfo[] = new long[2];
-							// Parse 'volume total' field
-							dfInfo[0] = Long.parseLong(st.nextToken()) * 1024;
-							// Discard 'Used' field
-							st.nextToken();
-							// Parse 'volume free' field
-							dfInfo[1] = Long.parseLong(st.nextToken()) * 1024;
+						StringTokenizer st = new StringTokenizer(line);
+						// Discard 'Filesystem' field
+						st.nextToken();
+						long dfInfo[] = new long[2];
+						// Parse 'volume total' field
+						dfInfo[0] = Long.parseLong(st.nextToken()) * 1024;
+						// Discard 'Used' field
+						st.nextToken();
+						// Parse 'volume free' field
+						dfInfo[1] = Long.parseLong(st.nextToken()) * 1024;
 
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");				
-							return dfInfo;
-						}
-						catch(NoSuchElementException e) {}
-						catch(NumberFormatException e2) {}
+						return dfInfo;
 					}
-				}
-				catch(IOException e) {
-					if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("An error occured while executing 'df -k "+getAbsolutePath()+"' command: "+e);
-				}
-				finally {
-					if(br!=null)
-						try { br.close(); } catch(IOException e) {}
 				}
 			}
 		}
-		return null;		// Not available
+		catch(Exception e) {	// Could be IOException, NoSuchElementException or NumberFormatException, but better be safe and catch Exception
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("An error occured while executing 'df -k "+getAbsolutePath()+"' command: "+e);
+		}
+		finally {
+			if(br!=null)
+				try { br.close(); } catch(IOException e) {}
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Time spent: "+(System.currentTimeMillis()-now));
+		}
+
+		return null;		// Information not available
 	}
 }

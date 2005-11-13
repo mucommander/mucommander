@@ -4,7 +4,6 @@ package com.mucommander.ui;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.ArchiveFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.job.SendMailJob;
 import com.mucommander.text.SizeFormatter;
@@ -30,7 +29,7 @@ import java.io.IOException;
 public class EmailFilesDialog extends FocusDialog implements ActionListener, ItemListener {
 	private MainFrame mainFrame;
 	
-	private FileSet files;
+	private FileSet flattenedFiles;
 	
 	private JTextField toField;
 	private JTextField subjectField;
@@ -68,7 +67,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 		
 		try {
 			// Figures out which files to send and calculates the number of files and the number of bytes
-			this.files = getFlattenedFiles(files);
+			this.flattenedFiles = getFlattenedFiles(files);
 			
 			Container contentPane = getContentPane();
 			
@@ -110,13 +109,13 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 			contentPane.add(mainPanel, BorderLayout.NORTH);
 			
 			// checkbox showing all files that are to be sent, allowing them to be unselected
-			int nbFiles = files.size();
+			int nbFiles = flattenedFiles.size();
 			fileCheckboxes = new JCheckBox[nbFiles];
 			if(nbFiles>0) {
 				YBoxPanel tempPanel2 = new YBoxPanel();
 				AbstractFile file;
 				for(int i=0; i<nbFiles; i++) {
-					file = (AbstractFile)files.elementAt(i);
+					file = (AbstractFile)flattenedFiles.elementAt(i);
 					fileCheckboxes[i] = new JCheckBox(file.getName()
 						+" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB)+")", true);
 					fileCheckboxes[i].addItemListener(this);
@@ -160,14 +159,13 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 		long fileSize;
 		for(int i=0; i<nbFiles; i++) {
 			if(fileCheckboxes[i].isSelected()) {
-				fileSize = ((AbstractFile)files.elementAt(i)).getSize();
+				fileSize = ((AbstractFile)flattenedFiles.elementAt(i)).getSize();
 				if(fileSize>0)
 					bytesTotal += fileSize;
 				nbSelected++;
 			}
 		}
 		String text = 
-//			nbSelected + (nbSelected>1?" files":" file")
 			Translator.get("email_dialog.nb_files", ""+nbSelected)
 			+(nbSelected==0?"":" ("+SizeFormatter.format(bytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB)+")");
 		infoLabel.setText(text);
@@ -194,7 +192,6 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 	 * Adds the given file to the FileSet if it's not a folder, recurses otherwise.
 	 */
 	private void recurseOnFolder(AbstractFile file, FileSet flattenedFiles) throws IOException {
-//		if(file.isFolder() && !(file instanceof ArchiveFile)) {
 		if(file.isDirectory() && !file.isSymlink()) {
 			AbstractFile children[] = file.ls();
 			for(int i=0; i<children.length; i++)
@@ -224,11 +221,11 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 				dispose();
 
 				// Creates new FileSet with files that have been selected
-				FileSet filesToSend = new FileSet(files.getBaseFolder());
+				FileSet filesToSend = new FileSet(flattenedFiles.getBaseFolder());
 				int nbFiles = fileCheckboxes.length;
 				for(int i=0; i<nbFiles; i++)
 					if(fileCheckboxes[i].isSelected())
-						filesToSend.add(files.elementAt(i));
+						filesToSend.add(flattenedFiles.elementAt(i));
 
 				// Starts sending files
 				ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("email_dialog.sending"));

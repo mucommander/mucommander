@@ -165,7 +165,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
 			// Show some progress in the progress bar to give hope
 			locationField.setProgressValue(10);
 
-			mainFrame.setStatusBarText(Translator.get("status_bar.connecting_to_folder"));
+			// No need to waste precious cycles if status bar is not visible
+			if(mainFrame.isStatusBarVisible())
+				mainFrame.setStatusBarText(Translator.get("status_bar.connecting_to_folder"), "");
 
 /*
 			// Start a new thread which will popup a dialog after a number of seconds

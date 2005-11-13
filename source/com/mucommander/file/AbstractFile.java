@@ -374,7 +374,7 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 * Returns true if this AbstractFile can be browsed (entered): true for directories and supported archive files.
 	 */
 	public boolean isBrowsable() {
-		return isDirectory() || (this instanceof ArchiveFile);
+		return isDirectory() || (this instanceof AbstractArchiveFile);
 	}
 
 	/**

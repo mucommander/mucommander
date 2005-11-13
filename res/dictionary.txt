@@ -1020,6 +1020,30 @@ status_bar.selected_files:HU:%1 ból %2 kijelölt
 status_bar.connecting_to_folder:EN:Connecting to folder, press ESCAPE to cancel.
 
 
+
+
+
+
+
+
+status_bar.volume_free:EN:Free: %1
+status_bar.volume_free:FR:Libre: %1
+
+
+
+
+
+
+status_bar.volume_total:EN:Total: %1
+status_bar.volume_total:FR:Total: %1
+
+
+
+
+
+
+
+
 #########
 # Table #
 #########

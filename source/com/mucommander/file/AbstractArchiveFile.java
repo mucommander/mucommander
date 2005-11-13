@@ -5,14 +5,14 @@ import java.util.*;
 import java.util.zip.*;
 
 
-public abstract class AbstractArchiveFile extends AbstractFile implements ArchiveFile {
+public abstract class AbstractArchiveFile extends AbstractFile {
 
 	/** Wrapped around file */
 	protected AbstractFile file;
 
 
 	/**
-	 * Creates an ArchiveFile around the given file.
+	 * Creates an AbstractArchiveFile on top of the given file.
 	 */
 	protected AbstractArchiveFile(AbstractFile file) {
 		super(file.getURL());
@@ -105,15 +105,17 @@ public abstract class AbstractArchiveFile extends AbstractFile implements Archiv
 	}
 
 	public void mkdir(String name) throws IOException {
-		// By default archive entries are read-only, let's throw an exception
+		// All archive files are read-only (for now), let's throw an exception
 		throw new IOException();
 	}
 
 	public long getFreeSpace() {
-		return file.getFreeSpace();
+		// All archive files are read-only (for now), return 0
+		return 0;
 	}
 
 	public long getTotalSpace() {
-		return file.getTotalSpace();
+		// An archive is considered as a volume by itself, let's return the archive's size
+		return file.getSize();
 	}	
 }

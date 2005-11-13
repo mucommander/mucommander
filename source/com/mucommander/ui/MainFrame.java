@@ -10,7 +10,6 @@ import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.ui.connect.ServerConnectDialog;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.ArchiveFile;
 import com.mucommander.file.FileSet;
 
 import com.mucommander.job.SendMailJob;
@@ -47,8 +46,11 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
     private FileTable lastActiveTable;
 
 	private ToolBar toolbar;
-    
-	private JLabel statusBarLabel;
+
+	// Status bar fields
+	private JPanel statusBarPanel;
+	private JLabel statusBarFilesLabel;
+	private JLabel statusBarVolumeLabel;
 	
 	private CommandBarPanel commandBar;
 	
@@ -130,11 +132,15 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		southPanel.setInsets(new Insets(3, 0, 0, 0));
 	
 		// Create and add status bar
-		statusBarLabel = new JLabel("");
+		this.statusBarPanel = new JPanel(new BorderLayout());
+		statusBarFilesLabel = new JLabel("");
+		statusBarPanel.add(statusBarFilesLabel, BorderLayout.CENTER);
+		statusBarVolumeLabel = new JLabel("");
+		statusBarPanel.add(statusBarVolumeLabel, BorderLayout.EAST);
 		if(ConfigurationManager.getVariable("prefs.show_status_bar", "true").equals("false"))
-			statusBarLabel.setVisible(false);
-		southPanel.add(statusBarLabel);
-
+			statusBarPanel.setVisible(false);
+		southPanel.add(statusBarPanel);
+		
 		// Show command bar only if it hasn't been disabled in the preferences
 		this.commandBar = new CommandBarPanel(this);
 		if(ConfigurationManager.getVariable("prefs.show_command_bar", "true").equals("false"))
@@ -226,7 +232,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * Shows/hide the status bar.
 	 */
 	public void setStatusBarVisible(boolean visible) {
-		this.statusBarLabel.setVisible(visible);
+		// Update status bar info if status bar was previouly hidden and now visible
+		// as FileTable doesn't update status bar info when it is hidden
+		boolean updateStatusBarInfo = visible && !isStatusBarVisible();
+		this.statusBarPanel.setVisible(visible);
+		// Status bar needs to be visible before calling updateStatusBar()
+		if(updateStatusBarInfo)
+			lastActiveTable.updateStatusBar();
 		validate();
 	}
 	
@@ -235,16 +247,17 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * Returns true if the status bar is visible on this frame.
 	 */
 	public boolean isStatusBarVisible() {
-		return this.statusBarLabel.isVisible();
+		return this.statusBarPanel.isVisible();
 	}
 	
 	
 	/**
 	 * Sets status bar text label. This method is called by FileTable.
 	 */
-	public void setStatusBarText(String text) {
+	public void setStatusBarText(String filesInfo, String volumeInfo) {
 	    //if(com.mucommander.Debug.ON) text += " - freeMem="+Runtime.getRuntime().freeMemory()+" - totalMem="+Runtime.getRuntime().totalMemory();
-		statusBarLabel.setText(text);
+		statusBarFilesLabel.setText(filesInfo);
+		statusBarVolumeLabel.setText(volumeInfo);
 	}
 	
 
