@@ -66,7 +66,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+
 			return true;		// Success
 		}
 	    catch(IOException e) {
-	        showErrorDialog(Translator.get("cannot_create_folder", destFolder.getAbsolutePath()), Translator.get("mkdir_dialog.error_title"));
+	        showErrorDialog(Translator.get("mkdir_dialog.error_title"), Translator.get("cannot_create_folder", destFolder.getAbsolutePath(true)+dirName));
 			return false;		// Failure
 		}    
 	}

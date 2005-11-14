@@ -248,9 +248,9 @@ cannot_write_destination:zh_TW:無法寫入檔案 %1
 cannot_write_destination:PL:Nie mogę zapisać pliku %1
 cannot_write_destination:HU:Nem olvasható fájl %1
 
-cannot_create_folder:EN:Unable to create directory %1.
-cannot_create_folder:FR:Erreur lors de la création du répertoire %1.
-cannot_create_folder:DE:Kann Ordner %1 nicht erstellen.
+cannot_create_folder:EN:Unable to create directory %1
+cannot_create_folder:FR:Erreur lors de la création du répertoire %1
+cannot_create_folder:DE:Kann Ordner %1 nicht erstellen
 cannot_create_folder:ES:No se puede crear el directorio %1
 cannot_create_folder:CS:Nemůžu vytvořit složku %1
 cannot_create_folder:zh_TW:無法產生資料夾 %1
