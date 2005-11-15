@@ -301,8 +301,8 @@ long now = System.currentTimeMillis();
 			// Parses the output of 'dir "filePath"' command to retrieve free space information
 			if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
 				// 'dir' command returns free space on the last line
-//				Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
-				Process process = Runtime.getRuntime().exec(new String[]{"dir", absPath}, null, file);
+				Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
+//				Process process = Runtime.getRuntime().exec(new String[]{"dir", absPath}, null, file);
 
 				// Check that the process was correctly started
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process= "+process);
