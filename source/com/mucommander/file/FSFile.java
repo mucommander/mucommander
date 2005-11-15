@@ -293,7 +293,6 @@ public class FSFile extends AbstractFile {
 	 */
 	private long[] getVolumeInfo() {
 		BufferedReader br = null;
-long now = System.currentTimeMillis();
 		String absPath = getAbsolutePath();
 
 		try {
@@ -302,13 +301,10 @@ long now = System.currentTimeMillis();
 			if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
 				// 'dir' command returns free space on the last line
 				Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
-//				Process process = Runtime.getRuntime().exec(new String[]{"dir", absPath}, null, file);
 
 				// Check that the process was correctly started
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process= "+process);
 				if(process!=null) {
 					br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("br created");
 					String line;
 					String lastLine = null;
 					// Retrieves last line of dir
@@ -316,8 +312,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("br created");
 						if(!line.trim().equals(""))
 							lastLine = line;
 					}
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastLine="+lastLine);		
-					
+
 					// Last dir line may look like something this (might vary depending on system's language, below in French):
 					// 6 Rep(s)  14 767 521 792 octets libres		
 					if(lastLine!=null) {
@@ -338,10 +333,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastLine="+lastLine);
 							else if(!freeSpace.equals(""))
 								break;
 						}
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("freeSpace="+freeSpace);		
 
 						dfInfo[1] = Long.parseLong(freeSpace);
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");				
 						return dfInfo;
 					}
 				}
@@ -352,15 +345,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");
 				Process process = Runtime.getRuntime().exec(new String[]{"df", "-k", absPath}, null, file);
 				
 				// Check that the process was correctly started
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process= "+process);
 				if(process!=null) {
 					br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("br created");
 					// Discard the first line ("Filesystem   1K-blocks     Used    Avail Capacity  Mounted on");
 					br.readLine();
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 1 line");
 					String line = br.readLine();
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 2 line = "+line);
 					if(line!=null) {
 						StringTokenizer st = new StringTokenizer(line);
 						// Discard 'Filesystem' field
@@ -373,9 +362,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 2 line = "+line);
 						// Parse 'volume free' field
 						dfInfo[1] = Long.parseLong(st.nextToken()) * 1024;
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("dfInfo= "+dfInfo);
-if(com.mucommander.Debug.ON && dfInfo!=null) com.mucommander.Debug.trace("dfInfo[0]= "+dfInfo[0]+" dfInfo[1]"+dfInfo[1]);
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");				
 						return dfInfo;
 					}
 				}
@@ -387,8 +373,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");
 		finally {
 			if(br!=null)
 				try { br.close(); } catch(IOException e) {}
-
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Time spent: "+(System.currentTimeMillis()-now));
 		}
 
 		return null;		// Information not available
