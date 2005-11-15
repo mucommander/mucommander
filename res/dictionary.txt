@@ -1042,8 +1042,8 @@ status_bar.volume_free:FR:Libre: %1
 
 
 
-status_bar.volume_total:EN:Total: %1
-status_bar.volume_total:FR:Total: %1
+status_bar.volume_capacity:EN:Capacity: %1
+status_bar.volume_capacity:FR:Capacité: %1
 
 
 
