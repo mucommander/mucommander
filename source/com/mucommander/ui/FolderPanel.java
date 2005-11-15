@@ -69,6 +69,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		private String folderPath;
 		private FileURL folderURL;
 		private boolean addToHistory;
+		private AbstractFile fileToSelect;
 		
 		private boolean isKilled;
 		private boolean doNotKill;
@@ -78,7 +79,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	
 		private Object lock = new Object();	
 
-		private boolean hadFocus;
+//		private boolean hadFocus;
 	
 		
 		public ChangeFolderThread(AbstractFile folder, boolean addToHistory) {
@@ -97,6 +98,9 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 			this.addToHistory = addToHistory;
 		}
 	
+		public void selectThisFileAfter(AbstractFile fileToSelect) {
+			this.fileToSelect = fileToSelect;
+		}	
 	
 		public void tryKill() {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
@@ -214,8 +218,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting and waiting")
 			// Disable automatic refresh
 			fileTable.setAutoRefreshActive(false);
 
-			// Save focus state
-			this.hadFocus = fileTable.hasFocus();
+//			// Save focus state
+//			this.hadFocus = fileTable.hasFocus();
 			do {
 //				noWaitDialog = false;
 
@@ -338,7 +342,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
 					locationField.setProgressValue(75);
 					
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFolder");
-					setCurrentFolder(folder, children, addToHistory);
+					setCurrentFolder(folder, children, addToHistory, fileToSelect);
 
 					// folder set -> 100% complete
 					locationField.setProgressValue(95);
@@ -406,12 +410,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 			disableNoEventsMode();
 
 			// /!\ Focus should be restored after disableNoEventsMode has been called
-			// Restore focus on table if it had it before
-			if(hadFocus || mainFrame.getLastActiveTable()==fileTable)
-				fileTable.requestFocus();
-			// Focus must be moved away from glass pane
-			else
-				mainFrame.requestFocus();
+			// Use FocusRequester to request focus after all other UI events have been processed,
+			// calling requestFocus() on table directly could get ignored 
+			FocusRequester.requestFocus(mainFrame.getLastActiveTable());
 		}
 	}
 
@@ -457,16 +458,14 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 		try {
 			// Set initial folder to current directory
-//			_setCurrentFolder(initialFolder, true);
-			setCurrentFolder(initialFolder, initialFolder.ls(), true);
+			setCurrentFolder(initialFolder, initialFolder.ls(), true, null);
 		}
 		catch(Exception e) {
 			AbstractFile rootFolders[] = RootFolders.getRootFolders();
 			// If that failed, try to read any other drive
 			for(int i=0; i<rootFolders.length; i++) {
 				try  {
-//					_setCurrentFolder(rootFolders[i], true);
-					setCurrentFolder(rootFolders[i], rootFolders[i].ls(), true);
+					setCurrentFolder(rootFolders[i], rootFolders[i].ls(), true, null);
 					break;
 				}
 				catch(IOException e2) {
@@ -594,13 +593,32 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	}
 	
 
+
 	/**
-	 * Tries to change current folder, adding current folder to history if requested.
+	 * Tries to change current folder, adding current folder to history if specified.
 	 * If something goes wrong, the user is notified by a dialog.
-	 * This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+	 * 
+	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+	 *
+	 * @param folder folder to be made current folder. If folder is null or doesn't exist, a dialog will popup and inform the user
+	 * @param addToHistory if true, folder will be added to history
 	 */
 	public synchronized void trySetCurrentFolder(AbstractFile folder, boolean addToHistory) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" ");
+		trySetCurrentFolder(folder, addToHistory, null);
+	}
+
+	/**
+	 * Tries to change current folder, adding current folder to history if specified.
+	 * If something goes wrong, the user is notified by a dialog.
+	 * 
+	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+	 *
+	 * @param folder folder to be made current folder. If folder is null or doesn't exist, a dialog will popup and inform the user
+	 * @param addToHistory if true, folder will be added to history
+	 * @param selectThisFileAfter file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
+	 */
+	public synchronized void trySetCurrentFolder(AbstractFile folder, boolean addToHistory, AbstractFile selectThisFileAfter) {
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" ");
 
 		if(changeFolderThread!=null) {
 			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
@@ -613,33 +631,68 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		}
 
 		this.changeFolderThread = new ChangeFolderThread(folder, addToHistory);
+
+		if(selectThisFileAfter!=null)
+			this.changeFolderThread.selectThisFileAfter(selectThisFileAfter);
+
 		changeFolderThread.start();
 	}
-
 	
-	
+	/**
+	 * Tries to change current folder, adding current folder to history if specified.
+	 * 
+	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+	 *
+	 * @param folder folder to be made current folder
+	 * @param addToHistory if true, folder will be added to history
+	 */
 	public synchronized void trySetCurrentFolder(String folderPath, boolean addToHistory) {
 		this.changeFolderThread = new ChangeFolderThread(folderPath, addToHistory);
 		changeFolderThread.start();
 	}
 
-
+	/**
+	 * Tries to change current folder, adding current folder to history if specified.
+	 * 
+	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+	 *
+	 * @param folder folder to be made current folder
+	 * @param addToHistory if true, folder will be added to history
+	 */
 	public synchronized void trySetCurrentFolder(FileURL folderURL, boolean addToHistory) {
 		this.changeFolderThread = new ChangeFolderThread(folderURL, addToHistory);
 		changeFolderThread.start();
 	}
-	
 
 	/**
 	 * Refreshes file table contents and notifies the user if current folder could not be refreshed.
+	 *
+	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
 	 */
 	public synchronized void tryRefresh() {
-		trySetCurrentFolder(currentFolder, false);
+		trySetCurrentFolder(currentFolder, false, null);
+	}
+
+	/**
+	 * Refreshes file table contents and notifies the user if current folder could not be refreshed.
+	 *
+	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
+	 *
+	 * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
+	 */
+	public synchronized void tryRefresh(AbstractFile selectThisFileAfter) {
+		trySetCurrentFolder(currentFolder, false, selectThisFileAfter);
 	}
 		
 
-	private void setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory) {
+	private void setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory, AbstractFile fileToSelect) {
+
 		fileTable.setCurrentFolder(folder, children);
+
+		// Select passed file if not null
+		if(fileToSelect!=null)
+			fileTable.selectFile(fileToSelect);
+
 		this.currentFolder = folder;
 
 		// Update location field with new current folder's path
@@ -670,7 +723,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 
 	public synchronized void refresh() throws IOException {
-		setCurrentFolder(currentFolder, currentFolder.ls(), false);
+		setCurrentFolder(currentFolder, currentFolder.ls(), false, null);
 	}
 	
 	

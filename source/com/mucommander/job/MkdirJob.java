@@ -44,7 +44,7 @@ public class MkdirJob extends FileJob {
 	protected boolean processFile(AbstractFile file, Object recurseParams) {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Called");
 
-		// Stop if interrupted
+		// Stop if interrupted (although there is no way to stop the job at this time)
 		if(isInterrupted())
             return false;
 
@@ -54,14 +54,18 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+
 			// Create directory
 	        destFolder.mkdir(dirName);
 			
-//			// Refresh current folder
-//			FileTable lastActiveTable = mainFrame.getLastActiveTable();
-//			lastActiveTable.getFolderPanel().tryRefresh();
-
-//			// Selects newly created folder
-//			lastActiveTable.selectFile(AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+dirName));
-
-//			mainFrame.getLastActiveTable().getFolderPanel().requestFocus();
+			// Refresh and selects newly created folder in active table
+			AbstractFile newFolder = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+dirName);
+			FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
+			FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
+			FileTable lastActiveTable = mainFrame.getLastActiveTable();
+			for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
+				if(destFolder.equals(table.getCurrentFolder())) {
+					table.getFolderPanel().tryRefresh(lastActiveTable==table?newFolder:null);
+				}
+			}
+			
+//			.getFolderPanel().requestFocus();
 			
 			return true;		// Success
 		}
@@ -80,6 +84,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+
 	}
 
 	protected boolean hasFolderChanged(AbstractFile folder) {
-		return destFolder.equals(folder);
+		// Refresh is done manually
+		return false;
 	}
 }

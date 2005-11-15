@@ -294,13 +294,16 @@ public class FSFile extends AbstractFile {
 	private long[] getVolumeInfo() {
 		BufferedReader br = null;
 long now = System.currentTimeMillis();
+		String absPath = getAbsolutePath();
 
 		try {
 			int osFamily = PlatformManager.getOSFamily();
 			// Parses the output of 'dir "filePath"' command to retrieve free space information
 			if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
 				// 'dir' command returns free space on the last line
-				Process process = PlatformManager.execute("dir \""+getAbsolutePath()+"\"", this);
+//				Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
+				Process process = Runtime.getRuntime().exec(new String[]{"dir", absPath}, null, file);
+
 				// Check that the process was correctly started
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process= "+process);
 				if(process!=null) {
@@ -346,7 +349,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");
 			// Parses the output of 'df -k "filePath"' command on UNIX/BSD-based systems to retrieve free and total space information
 			else {
 				// 'df -k' returns totals in block of 1K = 1024 bytes
-				Process process = PlatformManager.execute("df -k \""+getAbsolutePath()+"\"", this);
+				Process process = Runtime.getRuntime().exec(new String[]{"df", "-k", absPath}, null, file);
+				
 				// Check that the process was correctly started
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process= "+process);
 				if(process!=null) {
@@ -356,7 +360,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("br created");
 					br.readLine();
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 1 line");
 					String line = br.readLine();
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 2 line");
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 2 line = "+line);
 					if(line!=null) {
 						StringTokenizer st = new StringTokenizer(line);
 						// Discard 'Filesystem' field
@@ -369,6 +373,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("read 2 line");
 						// Parse 'volume free' field
 						dfInfo[1] = Long.parseLong(st.nextToken()) * 1024;
 
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("dfInfo= "+dfInfo);
+if(com.mucommander.Debug.ON && dfInfo!=null) com.mucommander.Debug.trace("dfInfo[0]= "+dfInfo[0]+" dfInfo[1]"+dfInfo[1]);
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");				
 						return dfInfo;
 					}
@@ -376,7 +382,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning");
 			}
 		}
 		catch(Exception e) {	// Could be IOException, NoSuchElementException or NumberFormatException, but better be safe and catch Exception
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("An error occured while executing 'df -k "+getAbsolutePath()+"' command: "+e);
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("An error occured while executing 'df -k "+absPath+"' command: "+e);
 		}
 		finally {
 			if(br!=null)

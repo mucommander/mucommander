@@ -306,7 +306,7 @@ public abstract class FileJob implements Runnable {
 			stop();
 		}
 		
-        // Refresh tables only if displayed folder are 'under' or equal destFolder
+        // Refresh tables's current folders, based on the job's refresh policy.
 		refreshTables();
 
 		// Clean 
@@ -403,10 +403,8 @@ public abstract class FileJob implements Runnable {
 		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
 		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
 
-		AbstractFile currentTableFolder;
 		for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
-			currentTableFolder = table.getCurrentFolder();
-			if(hasFolderChanged(currentTableFolder)) {
+			if(hasFolderChanged(table.getCurrentFolder())) {
 				table.getFolderPanel().tryRefresh();
 			}
 		}

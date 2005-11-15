@@ -217,7 +217,7 @@ public class PlatformManager {
 				tokensV.add("cmd");
 				tokensV.add("/c");
 			}
-			// Splits the command into tokens ourself, as exec() does it anyway
+			// Split the command into tokens
 			command.trim();
 			char c;
 			int pos = 0;
