@@ -28,7 +28,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	private JLabel counterLabel;
 	private JLabel sizeLabel;
 
-	private JButton okButton;
+	private JButton okCancelButton;
 
 	// Dialog width is constrained to 320, height is not an issue (always the same)
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
@@ -80,14 +80,14 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		yPanel.add(mainPanel);
 		contentPane.add(yPanel, BorderLayout.NORTH);
 		
-		okButton = new JButton(Translator.get("ok"));
-		contentPane.add(DialogToolkit.createOKPanel(okButton, this), BorderLayout.SOUTH);
+		okCancelButton = new JButton(Translator.get("cancel"));
+		contentPane.add(DialogToolkit.createOKPanel(okCancelButton, this), BorderLayout.SOUTH);
 
 		// OK button will receive initial focus
-		setInitialFocusComponent(okButton);		
+		setInitialFocusComponent(okCancelButton);		
 		
 		// Selects OK when enter is pressed
-		getRootPane().setDefaultButton(okButton);
+		getRootPane().setDefaultButton(okCancelButton);
 
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
@@ -135,13 +135,15 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 			catch(InterruptedException e) {}
 		}
 
+		// Change title and button's label to indicate that calculation is over
 		updateLabels();
 		setTitle(title);
+		okCancelButton.setText(Translator.get("ok"));
 		mainFrame.setCursor(Cursor.getDefaultCursor());
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource()==okButton) {
+		if (e.getSource()==okCancelButton) {
 			stop();
 			dispose();
 		}

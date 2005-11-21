@@ -50,31 +50,41 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Called");
 
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+" "+dirName);
 
-		try {
-			// Create directory
-	        destFolder.mkdir(dirName);
-			
-			// Refresh and selects newly created folder in active table
-			AbstractFile newFolder = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+dirName);
-			FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
-			FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
-			FileTable lastActiveTable = mainFrame.getLastActiveTable();
-			for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
-				if(destFolder.equals(table.getCurrentFolder())) {
-					table.getFolderPanel().tryRefresh(lastActiveTable==table?newFolder:null);
+		do {
+			try {
+				// Create directory
+				destFolder.mkdir(dirName);
+				
+				// Refresh and selects newly created folder in active table
+				AbstractFile newFolder = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+dirName);
+				FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
+				FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
+				FileTable lastActiveTable = mainFrame.getLastActiveTable();
+				for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
+					if(destFolder.equals(table.getCurrentFolder())) {
+						table.getFolderPanel().tryRefresh(lastActiveTable==table?newFolder:null);
+					}
 				}
+				
+				return true;		// Return Success
 			}
-			
-//			.getFolderPanel().requestFocus();
-			
-			return true;		// Success
+			catch(IOException e) {
+				int action = showErrorDialog(
+						Translator.get("mkdir_dialog.error_title"),
+						Translator.get("cannot_create_folder", destFolder.getAbsolutePath(true)+dirName),
+						new String[]{RETRY_TEXT, CANCEL_TEXT},
+						new int[]{RETRY_ACTION, CANCEL_ACTION}
+				);
+				// Retry (loop)
+				if(action==RETRY_ACTION)
+					continue;
+				
+				// Cancel action
+				return false;		// Return Failure
+			}    
 		}
-	    catch(IOException e) {
-	        showErrorDialog(Translator.get("mkdir_dialog.error_title"), Translator.get("cannot_create_folder", destFolder.getAbsolutePath(true)+dirName));
-			return false;		// Failure
-		}    
+		while(true);
 	}
-
 
 	/**
 	 * Not used.

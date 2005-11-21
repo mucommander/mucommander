@@ -175,6 +175,7 @@ if(com.mucommander.Debug.ON) e3.printStackTrace();
 				// Retry action (append or retry)
 				else {
 					if(reason==FileJobException.ERROR_WHILE_TRANSFERRING) {
+						// Reset processed bytes counter
 						currentFileProcessed = 0;
 						// Append resumes transfer
 						append = choice==APPEND_ACTION;
