@@ -75,6 +75,8 @@ Improvements:
  - 'Connect to server' dialog now uses tabs instead of a combo box
  - Improved location field behavior : no longer loses entered path when focus is lost
  - Custom date format is now used in 'File already exists' dialog
+ - jCIFS library (SMB) upgraded to version 1.2.7
+ - Commons Net library (FTP) upgraded to version 1.4.0
 
 Bug fixes :
  - Fixed 'Enter' key not working properly in drive selection menu under Windows (http://mucommander.com/forums/viewtopic.php?p=172)

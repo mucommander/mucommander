@@ -23,7 +23,12 @@ public class SMBFile extends AbstractFile {
 	private AbstractFile parent;
 	private boolean parentValSet;
 
-
+	private boolean isDirectory;
+	private boolean isDirectoryValSet;
+	
+	private String name;
+	
+	
 	public SMBFile(FileURL fileURL) throws IOException {	
 		this(fileURL, true);
 	}
@@ -37,8 +42,8 @@ public class SMBFile extends AbstractFile {
 		this.privateURL = fileURL.getStringRep(true);
 		this.publicURL = fileURL.getStringRep(false);
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("publicURL= "+publicURL);
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateURL);
+// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("publicURL= "+publicURL);
+// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateURL);
 
 //		// Unlike java.io.File, SmbFile throws an SmbException
 //		// when file doesn't exist.
@@ -46,6 +51,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 //		// Regular SMB files can have a trailing slash as well, so let's add a trailing slash.
 //		this.file = new SmbFile(privateURL.endsWith("/")?privateURL:privateURL+"/");
 		this.file = new SmbFile(privateURL);
+
+		// Cache SmbFile.getName()'s return value which parses name each time it is called
+		this.name = file.getName();
+		if(name.endsWith("/"))
+			name = name.substring(0, name.length()-1);
 	}
 	
 	
@@ -54,10 +64,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 	/////////////////////////////////////////
 	
 	public String getName() {
-		String name = file.getName();
-
-		if(name.endsWith("/"))
-			return name.substring(0, name.length()-1);
 		return name;
 	}
 
@@ -164,12 +170,19 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateU
 	}
 
 	public boolean isDirectory() {
-        try {
-            return file.isDirectory();
-        }
-        catch(SmbException e) {
-            return false;
-        }
+		// Cache SmbFile.isDirectory()'s return value as this method triggers network calls
+		// (calls exists() which checks file existence on the server) and will report
+		// false if connection is lost.
+		if(!isDirectoryValSet) {
+			try {
+				this.isDirectory = file.isDirectory();
+				this.isDirectoryValSet = true;
+			}
+			catch(SmbException e) {
+				return false;
+			}
+		}
+		return this.isDirectory;
 	}
 	
 	public boolean isSymlink() {

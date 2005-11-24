@@ -685,6 +685,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	}
 		
 
+	public synchronized void refresh() throws IOException {
+		setCurrentFolder(currentFolder, currentFolder.ls(), false, null);
+	}
+
+
 	private void setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory, AbstractFile fileToSelect) {
 
 		fileTable.setCurrentFolder(folder, children);
@@ -722,11 +727,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	}
 
 
-	public synchronized void refresh() throws IOException {
-		setCurrentFolder(currentFolder, currentFolder.ls(), false, null);
-	}
-	
-	
 	public synchronized void goBack() {
 		if (historyIndex==0)
 			return;
