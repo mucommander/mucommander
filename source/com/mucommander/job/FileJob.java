@@ -176,19 +176,6 @@ public abstract class FileJob implements Runnable {
 	
 	
 	/**
-	 * This method is called once, after the job has been stopped.
-	 */
-	private void cleanUp() {
-		// Dispose associated progress dialog
-		if(progressDialog!=null)
-			progressDialog.dispose();
-	
-//		// Request focus on last active table
-//        FocusRequester.requestFocus(mainFrame.getLastActiveTable());
-	}
-
-	
-	/**
 	 * Returns <code>true</code> if file job has been interrupted.
 	 */
 	public boolean isInterrupted() {
@@ -306,11 +293,12 @@ public abstract class FileJob implements Runnable {
 			stop();
 		}
 		
+		// Dispose progress dialog (if any) 
+		if(progressDialog!=null)
+			progressDialog.dispose();
+
         // Refresh tables's current folders, based on the job's refresh policy.
 		refreshTables();
-
-		// Clean 
-		cleanUp();
 	}
 
 	
@@ -405,7 +393,14 @@ public abstract class FileJob implements Runnable {
 
 		for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
 			if(hasFolderChanged(table.getCurrentFolder())) {
-				table.getFolderPanel().tryRefresh();
+//				table.getFolderPanel().tryRefresh();
+				try {
+					// Refresh folder in the same thread
+					table.getFolderPanel().refreshCurrentFolder();
+				}
+				catch(IOException e) {
+					if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Folder couldn't be refreshed: "+e);
+				}
 			}
 		}
 

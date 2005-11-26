@@ -62,7 +62,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+
 				FileTable lastActiveTable = mainFrame.getLastActiveTable();
 				for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
 					if(destFolder.equals(table.getCurrentFolder())) {
-						table.getFolderPanel().tryRefresh(lastActiveTable==table?newFolder:null);
+						// Refresh folder panel in a separate thread
+						table.getFolderPanel().tryRefreshCurrentFolder(lastActiveTable==table?newFolder:null);
 					}
 				}
 				

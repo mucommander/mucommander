@@ -39,7 +39,6 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	*/
 	private DriveButton driveButton;
 	private ProgressTextField locationField;
-//	private boolean locationFieldTextSet;
 	
 	private FileTable fileTable;
 	private JScrollPane scrollPane;
@@ -92,7 +91,6 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 			this.addToHistory = addToHistory;
 		}
 
-
 		public ChangeFolderThread(FileURL folderURL, boolean addToHistory) {
 			this.folderURL = folderURL;
 			this.addToHistory = addToHistory;
@@ -127,7 +125,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
 			}
 		}
 	
-		
 	
 		private void enableNoEventsMode() {
 			// Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
@@ -147,7 +144,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "customEscapeAction");
 			actionMap.put("customEscapeAction", killAction);
 		}
-		
 
 		private void disableNoEventsMode() {
 			// Restore mouse/keybaord events and default cursor
@@ -230,8 +226,12 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting and waiting")
 				enableNoEventsMode();
 
 				try {
+					// 2 cases here :
+					// - Thread was created using an AbstractFile instance
+					// - Thread was created using a FileURL or FolderPath, corresponding AbstractFile needs to be resolved
+
+					// Thread was created using a FileURL or FolderPath
 					if(folder==null) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFile()");
 						AbstractFile file;
 						if(folderURL!=null)
 							file = AbstractFile.getAbstractFile(folderURL, true);
@@ -240,7 +240,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 
 						synchronized(lock) {
 							if(isKilled) {
-	if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
+								if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
 								break;
 							}
 						}
@@ -254,18 +254,16 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 							// Restore default cursor
 							mainFrame.setCursor(Cursor.getDefaultCursor());
 
-//							// Keep the text input by the user (do not restore current path) to give him a change to correct it
-//							locationFieldTextSet = true;
 							JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
 							break;
 						}
 
 						boolean browse = false;
-						// Directory
+						// File is a regualar directory, all good
 						if(file.isDirectory()) {
 							// Just continue
 						}
-						// Browsable file (Zip archive for instance) : browse or download ?
+						// File is a browsable file (Zip archive for instance) but not a directory : Browse or Download ? => ask the user
 						else if(file.isBrowsable()) {
 //							noWaitDialog = true;
 
@@ -307,13 +305,18 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling getAbstractFil
 							mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 //							noWaitDialog = false;
 						}
-						// Regular file: download
+						// File is a regular file: show download dialog
 						else {
 							showDownloadDialog(file);
 							break;
 						}
 					
 						this.folder = file;
+					}
+					// Thread was created using an AbstractFile instance, check for existence
+					else if(!folder.exists()) {
+						JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+						break;
 					}
 
 					synchronized(lock) {
@@ -344,7 +347,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFolder");
 					setCurrentFolder(folder, children, addToHistory, fileToSelect);
 
-					// folder set -> 100% complete
+					// folder set -> 95% complete
 					locationField.setProgressValue(95);
 					
 					break;
@@ -596,7 +599,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 	/**
 	 * Tries to change current folder, adding current folder to history if specified.
-	 * If something goes wrong, the user is notified by a dialog.
+	 * The user is notified by a dialog if the folder could not be changed.
 	 * 
 	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
 	 *
@@ -609,7 +612,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 	/**
 	 * Tries to change current folder, adding current folder to history if specified.
-	 * If something goes wrong, the user is notified by a dialog.
+	 * The user is notified by a dialog if the folder could not be changed.
 	 * 
 	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
 	 *
@@ -618,17 +621,19 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	 * @param selectThisFileAfter file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
 	 */
 	public synchronized void trySetCurrentFolder(AbstractFile folder, boolean addToHistory, AbstractFile selectThisFileAfter) {
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" ");
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder);
 
+		// Make sure there is not an existing thread running,
+		// this should not normally happen but if it does, report the error
 		if(changeFolderThread!=null) {
 			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
 			return;
 		}
 		
-		if (folder==null || !folder.exists()) {
-			JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
-			return;
-		}
+//		if (folder==null || !folder.exists()) {
+//			JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+//			return;
+//		}
 
 		this.changeFolderThread = new ChangeFolderThread(folder, addToHistory);
 
@@ -640,61 +645,92 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	
 	/**
 	 * Tries to change current folder, adding current folder to history if specified.
+	 * The user is notified by a dialog if the folder could not be changed.
 	 * 
 	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
 	 *
-	 * @param folder folder to be made current folder
+	 * @param folderPath folder's path to be made current folder. If this path does not resolve into an existing file, an error message will be displayed
 	 * @param addToHistory if true, folder will be added to history
 	 */
 	public synchronized void trySetCurrentFolder(String folderPath, boolean addToHistory) {
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderPath="+folderPath);
+
+		// Make sure there is not an existing thread running,
+		// this should not normally happen but if it does, report the error
+		if(changeFolderThread!=null) {
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
+			return;
+		}
+
 		this.changeFolderThread = new ChangeFolderThread(folderPath, addToHistory);
 		changeFolderThread.start();
 	}
 
 	/**
 	 * Tries to change current folder, adding current folder to history if specified.
+	 * The user is notified by a dialog if the folder could not be changed.
 	 * 
 	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
 	 *
-	 * @param folder folder to be made current folder
+	 * @param folderURL folder's URL to be made current folder. If this URL does not resolve into an existing file, an error message will be displayed
 	 * @param addToHistory if true, folder will be added to history
 	 */
 	public synchronized void trySetCurrentFolder(FileURL folderURL, boolean addToHistory) {
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderURL="+folderURL);
+
+		// Make sure there is not an existing thread running,
+		// this should not normally happen but if it does, report the error
+		if(changeFolderThread!=null) {
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
+			return;
+		}
+
 		this.changeFolderThread = new ChangeFolderThread(folderURL, addToHistory);
 		changeFolderThread.start();
 	}
 
 	/**
-	 * Refreshes file table contents and notifies the user if current folder could not be refreshed.
+	 * Refreshes current folder's contents and notifies the user if current folder could not be refreshed.
 	 *
 	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
 	 */
-	public synchronized void tryRefresh() {
+	public synchronized void tryRefreshCurrentFolder() {
 		trySetCurrentFolder(currentFolder, false, null);
 	}
 
 	/**
-	 * Refreshes file table contents and notifies the user if current folder could not be refreshed.
+	 * Refreshes current folder's contents and notifies the user if current folder could not be refreshed.
 	 *
 	 * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
 	 *
 	 * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
 	 */
-	public synchronized void tryRefresh(AbstractFile selectThisFileAfter) {
+	public synchronized void tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
 		trySetCurrentFolder(currentFolder, false, selectThisFileAfter);
 	}
 		
-
-	public synchronized void refresh() throws IOException {
+	/**
+	 * Refreshes current folder's contents in the same thread and throws an IOException if current folder could not be refreshed.
+	 *
+	 * @throws IOException if current folder could not be refreshed.
+	 */
+	public synchronized void refreshCurrentFolder() throws IOException {
 		setCurrentFolder(currentFolder, currentFolder.ls(), false, null);
 	}
 
 
+	/**
+	 * Changes current folder using the given folder and files.
+	 *
+	 * @param folder folder to be made current folder
+	 * @param children current folder's files (value of folder.ls())
+	 * @param addToHistory if true, folder will be added to history
+	 * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
+	 */
 	private void setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory, AbstractFile fileToSelect) {
-
 		fileTable.setCurrentFolder(folder, children);
 
-		// Select passed file if not null
+		// Select given file if not null
 		if(fileToSelect!=null)
 			fileTable.selectFile(fileToSelect);
 
@@ -709,20 +745,20 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		if (addToHistory) {
 			historyIndex++;
 
-			// Deletes 'forward' history items if any
+			// Delete 'forward' history items if any
 			int size = history.size();
 			for(int i=historyIndex; i<size; i++) {
 				history.removeElementAt(historyIndex);
 			}
-			// Inserts previous folder in history
+			// Insert previous folder in history
 			history.add(folder);
 		}
 
-		// Saves last folder recallable on startup
+		// Save last folder recallable on startup (local directory)
 		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory())
 			this.lastFolderOnExit = folder.getAbsolutePath();
 		
-		// Notifies listeners that location has changed
+		// Notifie listeners that location has changed
 		fireLocationChanged();
 	}
 
@@ -833,21 +869,12 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		Object source = e.getSource();
 		this.lastFocusedComponent = source;
 		
-//		if(source==locationField)
-//			locationFieldTextSet = false;
-		
 		// Notify MainFrame that we are in control now! (our table/location field is active)
 		mainFrame.setLastActiveTable(fileTable);
 	}
 	
 	public void focusLost(FocusEvent e) {
 		Object source = e.getSource();
-
-//		// If location field's text was not already set between focus gained and lost 
-//		if(source==locationField && !locationFieldTextSet) {
-//			// Restore current folder's path
-//			locationField.setText(currentFolder.getAbsolutePath());
-//		}
 	}
 	
 	 
@@ -868,7 +895,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		}
 		// Refresh to show or hide hidden files, depending on new preference
 		else if (var.equals("prefs.show_hidden_files")) {
-			tryRefresh();
+			// Refresh current folder in a separate thread
+			tryRefreshCurrentFolder();
 		}
 		
     	return true;
