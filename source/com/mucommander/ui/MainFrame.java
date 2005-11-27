@@ -439,6 +439,14 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("destPath="+destPath+" currentPath="+currentPath);
 
+		// If destination starts with './' or '.', replace '.' by current folder's path
+		if(destPath.startsWith(".\\") || destPath.startsWith("./"))
+			destPath = currentPath + destPath.substring(2, destPath.length());
+		else if(destPath.equals("."))
+			destPath = currentPath + destPath.substring(1, destPath.length());
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("destPath ="+destPath);
+
 		String newName = null;
 
 		// Level 0, folder exists, newName is null
@@ -482,7 +490,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("level1, destPath="+des
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+destPath+" newname="+newName);
 			}
 			
-//if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): level1b, destPath="+currentPath+destPath+" exists="+AbstractFile.getAbstractFile(currentPath+destPath).exists());
 			// destPath points to an existing folder relative to current folder
 			else if ((destFolder=AbstractFile.getAbstractFile(currentPath+destPath))!=null && destFolder.exists()) {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+currentPath+destPath+" newname="+newName);
@@ -494,7 +501,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("no match, returning nu
 			}
 		}
 
-if(com.mucommander.Debug.ON) System.out.println("MainFrame.resolvePath(): destFolder="+(destFolder==null?null:destFolder.getAbsolutePath())+" newName="+newName);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("MainFrame.resolvePath(): destFolder="+(destFolder==null?null:destFolder.getAbsolutePath())+" newName="+newName);
 		return new Object[] {destFolder, newName};
 	}
 

@@ -162,9 +162,8 @@ public class ZipJob extends ExtendedFileJob {
 		return Translator.get("zip.compressing_file", getCurrentFileInfo());
     }
 
-	// This job modifies baseFolder
-	
 	protected boolean hasFolderChanged(AbstractFile folder) {
+		// This job modifies baseFolder
 		return destFile.getParent().equals(folder);
 	}
 }	

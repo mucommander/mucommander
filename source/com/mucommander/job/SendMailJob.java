@@ -316,9 +316,9 @@ public class SendMailJob extends ExtendedFileJob {
 		}
     }    
 
-	// This job does not modify anything
-	
+
 	protected boolean hasFolderChanged(AbstractFile folder) {
+		// This job does not modify anything
 		return false;
 	}
 }

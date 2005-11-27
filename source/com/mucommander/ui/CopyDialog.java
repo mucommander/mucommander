@@ -43,7 +43,7 @@ public class CopyDialog extends DestinationDialog {
 			// Append filename to destination path if there is only one file to copy
 			// and if the file is not a directory that already exists in destination
 			// (otherwise folder would be copied inside the destination folder)
-			if(nbFiles==1 ) {
+			if(nbFiles==1) {
 				AbstractFile file = ((AbstractFile)files.elementAt(0));
 				AbstractFile testFile;
 			 	if(!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory()))

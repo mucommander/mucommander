@@ -48,20 +48,22 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Called");
 		if(isInterrupted())
             return false;
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+" "+dirName);
-
 		do {
 			try {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+" "+dirName);
+
 				// Create directory
 				destFolder.mkdir(dirName);
-				
+
 				// Refresh and selects newly created folder in active table
 				AbstractFile newFolder = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+dirName);
 				FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
 				FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
 				FileTable lastActiveTable = mainFrame.getLastActiveTable();
 				for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Determining if folders need to be refreshed, tableFolder="+table.getCurrentFolder().getAbsolutePath()+" destFolder="+destFolder.getAbsolutePath());
 					if(destFolder.equals(table.getCurrentFolder())) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Refreshing tableFolder="+table.getCurrentFolder().getAbsolutePath());
 						// Refresh folder panel in a separate thread
 						table.getFolderPanel().tryRefreshCurrentFolder(lastActiveTable==table?newFolder:null);
 					}

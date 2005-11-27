@@ -464,11 +464,38 @@ public class FileURL implements Cloneable {
 		return getStringRep(true);
 	}
 	
+	
+	/**
+	 * Tests FileURL instances for equality :<br>
+	 *  - authentication info (login and password) are not taken into account when testing equality
+	 *  - there can be a trailing slash or backslash difference between 2 identical URLs, true will be returned
+	 *
+	 * @return true if both FileURL are equal.
+	 */
 	public boolean equals(Object o) {
 		if(!(o instanceof FileURL))
 			return false;
 		
-		return ((FileURL)o).getStringRep(true).equals(getStringRep(true));
+//		return ((FileURL)o).getStringRep(true).equals(getStringRep(true));
+
+		// Do not take into account authentication info (login and password) to test equality
+		String rep1 = getStringRep(false);
+		String rep2 = ((FileURL)o).getStringRep(false);
+		
+		// If strings are equal, return true
+		if(rep1.equals(rep2))
+			return true;
+		
+		// If difference between the 2 strings is just a trailing slash or backslash, then we consider them equal and return true  
+		int len1 = rep1.length();
+		int len2 = rep2.length();
+		if(Math.abs(len1-len2)==1 && (len1>len2 ? rep1.startsWith(rep2) : rep2.startsWith(rep1))) {
+			char cdiff = len1>len2 ? rep1.charAt(len1-1) : rep2.charAt(len2-1);
+			if(cdiff=='/' || cdiff=='\\')
+				return true;
+		}
+	
+		return false;
 	}
 	
 	
