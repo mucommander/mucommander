@@ -421,11 +421,16 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 
 
 	/**
-	 * Looks for and reports any missing or unused dictionary entry,
+	 * Based on the number of supplied command line parameters, this method either :
+	 * <ul>
+	 * <li>Looks for and reports any missing or unused dictionary entry,
 	 * using the supplied source folder path to look inside source files
 	 * for references to dictionary entries.
+	 * <li>Merges a new language's entries from a dictionary file into a new one.
+	 * </ul>
 	 */
 	public static void main(String args[]) throws IOException {
+		// Looks for missing and unused entries
 		if(args.length<4) {
 			Enumeration languages = dictionaries.keys();
 			Vector langsV = new Vector();
@@ -443,7 +448,9 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 			System.out.println("\n##### Looking for unused entries #####");
 			checkUnusedEntries(sourceFolder, langs);
 		}
+		// Integrates a new language into the dictionary
 		else {
+			// Parameters order: originalFile newLanguageFile resultingFile newLanguage
 			addLanguageToDictionary(args[0], args[1], args[2], args[3]);
 		}
 	}
@@ -547,6 +554,8 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 * @param newLanguage new language
 	 */
 	private static void addLanguageToDictionary(String originalFile, String newLanguageFile, String resultingFile, String newLanguage) throws IOException {
+		newLanguage = newLanguage.toUpperCase();
+		
 		// Initialize streams
 		BufferedReader originalFileReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(originalFile)), "UTF-8"));
 		BufferedReader newLanguageFileReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(newLanguageFile)), "UTF-8"));
