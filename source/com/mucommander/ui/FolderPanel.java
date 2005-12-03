@@ -480,8 +480,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 			}
 		}
 
+		// Change location field's text to reflect new current folder's path
 		locationField.setText(currentFolder.getAbsolutePath());
-		driveButton.updateText(currentFolder);
 				
 		scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER) {
 			public Insets getInsets() {
@@ -736,12 +736,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 		this.currentFolder = folder;
 
-		// Update location field with new current folder's path
+		// Change location field's text to reflect new current folder's path
 		locationField.setText(folder.getAbsolutePath());
 
-		// Update drive button to reflect new current folder
-		driveButton.updateText(currentFolder);
-		
 		if (addToHistory) {
 			historyIndex++;
 

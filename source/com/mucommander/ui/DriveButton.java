@@ -60,6 +60,15 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		addActionListener(this);
 	}
 
+	public Dimension getPreferredSize() {
+		// Limit button's maximum width to something reasonable and leave enough space for location field, as bookmarks name can be as long as users want them to be
+		// Note: would be better to use JButton.setMaximumSize() but it doesn't seem to work
+		Dimension d = super.getPreferredSize();
+		if(d.width > 160)
+			d.width = 160;
+		return d;
+	}
+
 
 	/**
 	 * Creates and add a new item to the popup menu.
@@ -74,34 +83,57 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	
 
 	/**
-	 * Updates the button's text to reflect the new specified current folder.
+	 * Updates this drive button's label with the specified new current folder to match one of the drive button's shortcuts.
+	 * <<ul>
+	 *	<li>If the specified folder corresponds to a bookmark, the bookmark's name will be displayed
+	 *	<li>If the specified folder corresponds to a local file, the enclosing volume's name will be displayed
+	 *	<li>If the specified folder corresponds to a remote file, the protocol's name will be displayed
+	 * </ul>
 	 */
-	public void updateText(AbstractFile folder) {
-		// Update button text
-		String protocol = folder.getURL().getProtocol();
-		// Non local file
-		if(!protocol.equals("file")) {
-			setText(protocol.toUpperCase());
-		}
-		// Local file
-		else {
-			String currentPath = folder.getCanonicalPath(false).toLowerCase();
-			int bestLength = -1;
-			int bestIndex = 0;
-			String temp;
-			int len;
-			for(int i=0; i<rootFolders.length; i++) {
-				temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
-				len = temp.length();
-				if (currentPath.startsWith(temp) && len>bestLength) {
-					bestIndex = i;
-					bestLength = len;
-				}
+	private void updateLabel(AbstractFile folder) {
+		String newLabel = null;
+		
+		// First tries to find a bookmark matching the specified folder
+		Vector bookmarks = BookmarkManager.getBookmarks();
+		FileURL currentURL = folder.getURL();
+		int nbBookmarks = bookmarks.size();
+		Bookmark b;
+		for(int i=0; i<nbBookmarks; i++) {
+			b = (Bookmark)bookmarks.elementAt(i);
+			if(b.getURL().equals(currentURL)) {
+				// Note: if several bookmarks match current folder, the first one will be used
+				newLabel = b.getName();
+				break;
 			}
-			setText(rootFolders[bestIndex].getName());
 		}
 		
-		repaint();
+		// If no bookmark matched current folder
+		if(newLabel == null) {
+			String protocol = folder.getURL().getProtocol();
+			// Remote file, use protocol's name
+			if(!protocol.equals("file")) {
+				newLabel = protocol.toUpperCase();
+			}
+			// Local file, use enclosing volume's name 
+			else {
+				String currentPath = folder.getCanonicalPath(false).toLowerCase();
+				int bestLength = -1;
+				int bestIndex = 0;
+				String temp;
+				int len;
+				for(int i=0; i<rootFolders.length; i++) {
+					temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
+					len = temp.length();
+					if (currentPath.startsWith(temp) && len>bestLength) {
+						bestIndex = i;
+						bestLength = len;
+					}
+				}
+				newLabel = rootFolders[bestIndex].getName();
+			}
+		}
+		
+		setText(newLabel);
 	}
 	
 	
@@ -162,7 +194,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	
 	public void locationChanged(FolderPanel folderPanel) {
 		// Update button text with new location
-		updateText(folderPanel.getCurrentFolder());
+		updateLabel(folderPanel.getCurrentFolder());
 	}
 	
 		
