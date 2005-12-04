@@ -89,6 +89,7 @@ Bug fixes :
  - Email files: fixed folders not being handled properly since v0.7
 
 Known issues:
+ - Translations for new features are missing
  - Slow TAR and Zip extraction for small files because extraction is not performed sequentially (yet)
  - Mac OS X-specific files not transferred properly
  - Image viewer doesn't free memory properly under Mac OS X

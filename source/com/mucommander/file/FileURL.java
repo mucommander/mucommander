@@ -217,17 +217,11 @@ public class FileURL implements Cloneable {
 			}
 		}
 		catch(MalformedURLException e) {
-			if(com.mucommander.Debug.ON) {
-				System.out.println("Unexcepted exception in FileURL() with "+url);
-//				e.printStackTrace();
-			}
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception in FileURL(), malformed FileURL "+url+" : "+e);
 			throw e;
 		}
 		catch(Exception e2) {
-			if(com.mucommander.Debug.ON) {
-				System.out.println("Exception in FileURL() with "+url);
-				e2.printStackTrace();
-			}
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unexcepted exception in FileURL() with "+url+" : "+e2);
 			throw new MalformedURLException();
 		}
 	}

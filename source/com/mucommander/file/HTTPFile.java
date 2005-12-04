@@ -52,7 +52,7 @@ public class HTTPFile extends AbstractFile {
 		
 		this.url = url;
 
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+url.toExternalForm()+" content-type guess="+URLConnection.guessContentTypeFromName(url.getFile()));
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(url.toExternalForm()+" content-type guess="+URLConnection.guessContentTypeFromName(url.getFile()));
 		
 //		// urlString is url-encoded
 //		this.fileURL = new FileURL(urlString);
@@ -91,7 +91,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): "+url.toExternalFor
 			// Open connection
 			conn.connect();
 
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+conn.getResponseCode());
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("response code = "+conn.getResponseCode());
 			
 			// Resolve date: last-modified header, if not set date header, and if still not set System.currentTimeMillis
 			date = conn.getLastModified();
@@ -108,7 +108,6 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+c
 			String contentType = conn.getContentType();
 			if(contentType!=null && contentType.trim().startsWith("text/html"))
 				isHTML = true;
-//System.out.println("contentType= "+contentType+" isHTML ="+isHTML); 
 		}
 	}
 	
@@ -252,7 +251,6 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+c
 	}
 
 	public AbstractFile[] ls() throws IOException {
-//System.out.println("parsing "+getAbsolutePath()); 
 //			EditorKit kit = new HTMLEditorKit();
 //			Document doc = kit.createDefaultDocument();
 
@@ -273,14 +271,14 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile(): response code = "+c
 
 				// Establish connection
 				conn.connect();
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): response code = "+conn.getResponseCode());
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("response code = "+conn.getResponseCode());
 
 				// Test if reponse code is in the 3xx range and if 'Location' field is set
 				int responseCode = conn.getResponseCode();
 				String locationField = conn.getHeaderField("Location");
 				if(responseCode>=300 && responseCode<400 && locationField!=null) {
 					// Redirect to Location field and remember context url
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): Location header = "+conn.getHeaderField("Location"));
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Location header = "+conn.getHeaderField("Location"));
 					contextURL = new URL(locationField);
 					// One more time
 					continue;
@@ -333,7 +331,6 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): Location header 
 			
 			while((tokenType=st.nextToken())!=StreamTokenizer.TT_EOF) {
 				token = st.sval;
-//System.out.println("token= "+token+" "+st.ttype+" "+(st.ttype==st.TT_WORD)+" prevToken="+prevToken);
 //					if(st.ttype!=StreamTokenizer.TT_WORD)
 				if(token==null)
 					continue;
@@ -343,12 +340,12 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): Location header 
 //							if(token.toLowerCase().startsWith("http://") || (!token.equals("") && token.charAt(0)=='/')) {
 						if((prevToken.equalsIgnoreCase("href") || prevToken.equalsIgnoreCase("src")) && !(token.startsWith("mailto") || token.startsWith("MAILTO") || token.startsWith("#"))) {
 							if(!childrenURL.contains(token)) {
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): creating child "+token+" context="+contextURL);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating child "+token+" context="+contextURL);
 								childURL = new URL(contextURL, token);
 								childFileURL = new FileURL(childURL.toExternalForm(), fileURL);
 								child = new HTTPFile(childFileURL, childURL);
 								// Recycle this file for parent whenever possible
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): recycle_parent="+child.fileURL.equals(this.fileURL));
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("recycle_parent="+child.fileURL.equals(this.fileURL));
 								if(childFileURL.equals(this.fileURL))
 									child.setParent(this);
 
@@ -359,7 +356,7 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): recycle_parent="
 					}
 					catch(IOException e) {
 						if (com.mucommander.Debug.ON) {
-							System.out.println("Cannot create child : "+token+" "+e);
+							com.mucommander.Debug.trace("Cannot create child : "+token+" "+e);
 						}
 					}
 				}
@@ -378,20 +375,20 @@ if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): recycle_parent="
 			AttributeSet atts;
 			SimpleAttributeSet s;
 			while ((elem = it.next()) != null) {
-System.out.println("Parsing "+elem.getName());
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Parsing "+elem.getName());
 				att = null;
 //					try {
 					atts = elem.getAttributes();
-System.out.println("atts "+atts);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("atts "+atts);
 					if ((s=(SimpleAttributeSet)atts.getAttribute(HTML.Tag.A)) != null)
 						att = ""+s.getAttribute(HTML.Attribute.HREF);
 					else if ((s=(SimpleAttributeSet)atts.getAttribute(HTML.Tag.IMG)) != null)
 						att = ""+s.getAttribute(HTML.Attribute.SRC);
-System.out.println("att="+att);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("att="+att);
 
 //					}
 //					catch(IOException e) {
-//						if (com.mucommander.Debug.ON) System.out.println("Error while parsing HTML element: "+e);
+//						if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Error while parsing HTML element: "+e);
 //					}
 
 				if (att!=null && att.toLowerCase().startsWith("http://")) {
@@ -403,7 +400,7 @@ System.out.println("att="+att);
 					}
 					catch(IOException e) {
 						if (com.mucommander.Debug.ON) {
-							System.out.println("Unable to create child file : "+att+" "+e);
+							com.mucommander.Debug.trace("Unable to create child file : "+att+" "+e);
 							e.printStackTrace();
 						}
 					}
@@ -415,13 +412,13 @@ System.out.println("att="+att);
 		}
 		catch (Exception e) {
 			if (com.mucommander.Debug.ON) {
-				System.out.println("Error while parsing HTML: "+e);
-					e.printStackTrace();
+				com.mucommander.Debug.trace("Error while parsing HTML: "+e);
+				e.printStackTrace();
 			}
 			throw new IOException();
 		}
 		finally {
-if(com.mucommander.Debug.ON) System.out.println("HTTPFile.ls(): ends");
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("ends");
 
 			try {
 				// Try and close URL connection

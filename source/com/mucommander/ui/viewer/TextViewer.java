@@ -61,16 +61,6 @@ public class TextViewer extends FileViewer implements ActionListener {
 	}
 
 	
-/*
-	public Dimension getPreferredSize() {
-//		return new Dimension(Math.min(480, image.getWidth(null)), Math.min(360,image.getHeight(null)));
-		Dimension d = super.getPreferredSize();
-//System.out.println("TextViewer.getPreferrredSize()="+d);		
-//System.out.println("TextViewer.getPreferrredSize, textArea.getPrefferredSize()="+textArea.getPreferredSize());		
-		return d;
-	}
-*/
-
 	public Insets getInsets() {
 		return new Insets(4, 3, 4, 3);
 	}

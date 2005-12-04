@@ -38,8 +38,6 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
 		out.print('<');
         out.print(name);
         out.println('>');
-
-//System.out.println("writer addNode "+name);
     }
     /* End of method addNode(String) */
 
@@ -55,8 +53,6 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
         out.print("</");
         out.print(name);
         out.println('>');
-
-//System.out.println("writer closeNode "+name);
     }
     /* End of method closeNode(String) */
 
@@ -73,8 +69,6 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
         out.print("</");
         out.print(name);
         out.println(">");
-
-//System.out.println("writer addLeaf "+name+" "+value);
     }
     /* End of method addLeaf(String, String) */
 }

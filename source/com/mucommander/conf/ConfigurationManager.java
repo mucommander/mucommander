@@ -160,13 +160,14 @@ public class ConfigurationManager {
 		try {
 			ConfigurationWriter writer = new ConfigurationWriter();
 			String filePath = getConfigurationFilePath();
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing configuration file: "+filePath);						
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: "+filePath);						
 		
 			out = new PrintWriter(new FileOutputStream(filePath));
 			writer.writeXML(out);
 		}
 		catch(IOException e) {
-			System.out.println("muCommander was unable to write configuration file: "+e);
+			// Notify user that preferences file could not be written
+			System.out.println("muCommander was unable to write preferences file: "+e);
 		}
 		finally {
 			if(out!=null)
@@ -412,7 +413,7 @@ public class ConfigurationManager {
     public static synchronized void addConfigurationListener(ConfigurationListener listener) {
 		listeners.add(listener);
 		if(com.mucommander.Debug.ON)
-			com.mucommander.Debug.trace("ConfigurationManager.addConfigurationListener: "+listeners.size()+" listeners");
+			com.mucommander.Debug.trace(listeners.size()+" listeners");
 	}
 
     /**
@@ -422,7 +423,7 @@ public class ConfigurationManager {
     public static synchronized void removeConfigurationListener(ConfigurationListener listener) {
 		listeners.remove(listener);
 		if(com.mucommander.Debug.ON)
-			com.mucommander.Debug.trace("ConfigurationManager.removeConfigurationListener: "+listeners.size()+" listeners");
+			com.mucommander.Debug.trace(listeners.size()+" listeners");
 	}
 
     /**

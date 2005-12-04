@@ -68,8 +68,7 @@ public class VersionChecker implements ContentHandler {
 		if(latestVersion.equals(thisVersion))
 			return false;
 
-		if(com.mucommander.Debug.ON)
-			System.out.println("newVersionAvailable: latestVersion="+latestVersion+" ("+parseVersion(latestVersion)+") thisVersion="+thisVersion+" ("+parseVersion(thisVersion)+")");
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("newVersionAvailable: latestVersion="+latestVersion+" ("+parseVersion(latestVersion)+") thisVersion="+thisVersion+" ("+parseVersion(thisVersion)+")");
 
 		// This version number is greater than latestVersion (e.g. 0.7rc1 VS 0.6) -> no new version
 		if(parseVersion(thisVersion)>parseVersion(latestVersion))
@@ -107,8 +106,7 @@ public class VersionChecker implements ContentHandler {
 			return Float.parseFloat(sb.toString());
 		}
 		catch(NumberFormatException e) {
-			if(com.mucommander.Debug.ON)
-				System.out.println("parseVersion: NumberFormatException while parsing version number: "+sb.toString()+" returning 0");
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("NumberFormatException while parsing version number: "+sb.toString()+" returning 0");
 			return 0;
 		}
 	}
@@ -147,8 +145,8 @@ public class VersionChecker implements ContentHandler {
 		downloadURL = downloadURL.trim();
 		
         if(com.mucommander.Debug.ON) {
-            System.out.println("download URL -"+downloadURL+"-");
-            System.out.println("latestVersion -"+latestVersion+"-");
+            com.mucommander.Debug.trace("download URL -"+downloadURL+"-");
+            com.mucommander.Debug.trace("latestVersion -"+latestVersion+"-");
         }
     }
 

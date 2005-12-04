@@ -56,16 +56,14 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
         String title;
         boolean downloadOption = false;
         try {
-            if(Debug.ON)
-                System.out.println("Checking for new version...");            
+            if(Debug.ON) Debug.trace("Checking for new version...");            
             
             // Retrieves version information
             VersionChecker.getVersionInformation();
             
             // A newer version is available
             if(VersionChecker.newVersionAvailable()) {
-                if(Debug.ON)
-                    System.out.println("A new version is available!");            
+                if(Debug.ON) Debug.trace("A new version is available!");            
 
                 title = Translator.get("version_dialog.new_version_title");
 
@@ -82,8 +80,7 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
             }
             // We're already running latest version
 			else {
-                if(Debug.ON)
-                    System.out.println("No new version.");            
+                if(Debug.ON) Debug.trace("No new version.");            
 
                 // If the version check was not iniated by the user (i.e. was automatic),
                 // we do not need to inform the user that he already has the latest version

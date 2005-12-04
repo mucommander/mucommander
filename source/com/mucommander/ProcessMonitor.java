@@ -41,8 +41,6 @@ public class ProcessMonitor implements Runnable {
 	
 	
 	public void stopMonitoring() {
-//System.out.println("ProcessMonitor.stopMonitoring");
-		
 		this.stillMonitoring = false;
 		
 		// Stop running threads
@@ -54,7 +52,6 @@ public class ProcessMonitor implements Runnable {
 	 * Prints the command output to the dialog's text area as it comes
      */
     public void run() {
-//System.out.println("ProcessMonitor.run");
         InputStream pin = process.getInputStream();	
 		InputStream perr = process.getErrorStream();
 		
@@ -62,7 +59,6 @@ public class ProcessMonitor implements Runnable {
         int nbRead = 0;
 
         while(outputMonitorThread!=null && nbRead!=-1) {
-//System.out.println("ProcessMonitor.run2 (main loop)");
 			try {
 				// Try to read stdout
 				if((nbRead=pin.read(b, 0, 512))>0) {
@@ -76,20 +72,15 @@ public class ProcessMonitor implements Runnable {
 				}
 			}
 			catch(IOException e) {
-//System.out.println("ProcessMonitor.run2b (IOException) "+e);
 				break;
 			}
 
-//System.out.println("ProcessMonitor.run3 (sleeping) "+outputMonitorThread+" "+nbRead+" "+stillMonitoring);
-				
 			try {
 				outputMonitorThread.sleep(outputCheckPeriod);
 			}
 			catch(InterruptedException e) {
-//System.out.println("ProcessMonitor.run3b (InterruptedException)");
 			}
 		}
-//System.out.println("ProcessMonitor.run4");
 
 		if(stillMonitoring)
 			listener.processDied(process, process.exitValue());

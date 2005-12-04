@@ -501,7 +501,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("no match, returning nu
 			}
 		}
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("MainFrame.resolvePath(): destFolder="+(destFolder==null?null:destFolder.getAbsolutePath())+" newName="+newName);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("destFolder="+(destFolder==null?null:destFolder.getAbsolutePath())+" newName="+newName);
 		return new Object[] {destFolder, newName};
 	}
 
@@ -516,7 +516,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("MainFrame.resolvePath(
 	 * will return true, until the app is moved to the foreground and back to the background.
 	 */
 	public boolean isActive() {
-//if(com.mucommander.Debug.ON) System.out.println("MainFrame.isActive(): isActive="+super.isActive()+" isFocused="+isFocused());
 		return super.isActive() && isFocused();
 	}
 

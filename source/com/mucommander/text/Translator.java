@@ -48,7 +48,7 @@ public class Translator {
 		}
 		
 		String langVal = ConfigurationManager.getVariable("prefs.language");
-		if(com.mucommander.Debug.ON) System.out.println("Language in prefs: "+langVal);
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language in prefs: "+langVal);
 
 		// If language is not set in preferences 
 		if(langVal==null) {
@@ -57,7 +57,7 @@ public class Translator {
 			String languages[] = getAvailableLanguages();
 			String localeLang = Locale.getDefault().getLanguage();
 
-			if(com.mucommander.Debug.ON) System.out.println("Language not set, trying to match system's language ("+localeLang+")");
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language not set, trying to match system's language ("+localeLang+")");
 			
 			for(int i=0; i<languages.length; i++) {
 				if(languages[i].equalsIgnoreCase(localeLang)) {
@@ -70,10 +70,10 @@ public class Translator {
 			if(Translator.language==null) {
 				Translator.language = "en";
 
-				if(com.mucommander.Debug.ON) System.out.println("No dictionary matching "+localeLang+", falling back to English");
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No dictionary matching "+localeLang+", falling back to English");
 			}
 			
-			if(com.mucommander.Debug.ON) System.out.println("Language has been set to "+Translator.language);
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language has been set to "+Translator.language);
 
 				// Set language to configuration file
 			ConfigurationManager.setVariable("prefs.language", Translator.language);
@@ -82,7 +82,7 @@ public class Translator {
 			Translator.language = langVal;
 		}
 
-		if(com.mucommander.Debug.ON) System.out.println("Translator language: "+Translator.language);
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Translator language: "+Translator.language);
 	}
 
 
@@ -194,14 +194,14 @@ public class Translator {
 					while ((pos = text.indexOf("\\u", pos))!=-1)
 						text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
 
-if(com.mucommander.Debug.ON && entryExists(key, lang)) System.out.println("Translator init: duplicate "+lang+" entry "+key);
+if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.trace("Translator init: duplicate "+lang+" entry "+key);
 					
 					put(key, lang, text);
 //					orderedEntries.add(key+":"+lang);
 					nbEntries++;
 				} catch (Exception e) {
-if(com.mucommander.Debug.ON) e.printStackTrace();
-					System.out.println("Translator init: error in line "+line+" ("+e+")");
+					if(com.mucommander.Debug.ON) e.printStackTrace();
+					com.mucommander.Debug.trace("Translator init: error in line "+line+" ("+e+")");
 				}
 			} else {
 //				orderedEntries.add(line);
@@ -309,7 +309,7 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 		// Dictionary for this language doesn't exist 
 		if (dictionary==null) {
 			if (language.equals("en")) {
-				if(com.mucommander.Debug.ON) System.out.println("Translator.get: Unknown key "+key);
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unknown key "+key);
 
 				return key;
 			} else
@@ -322,7 +322,7 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 
 		if (text==null) {
 			if (language.equals("en")) {
-				if(com.mucommander.Debug.ON) System.out.println("Translator.get: Unknown key "+key);
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unknown key "+key);
 
 				return key;
 			} else

@@ -166,8 +166,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 					now = System.currentTimeMillis();
 //					speed = (long)((nbBytesTotal-nbBytesSkipped)/((now-startTime-pausedTime)/1000d));
 					speed = (long)(nbBytesTotal/((now-startTime-pausedTime)/1000d));
-//if(com.mucommander.Debug.ON)
-//System.out.println("nbBytesTotal="+nbBytesTotal+"nbBytesSkipped="+nbBytesSkipped+" startTime="+startTime+" pausedTime="+pausedTime+" now="+now+" speed="+speed+" speedStr="+SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB));
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("nbBytesTotal="+nbBytesTotal+"nbBytesSkipped="+nbBytesSkipped+" startTime="+startTime+" pausedTime="+pausedTime+" now="+now+" speed="+speed+" speedStr="+SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB));
 					statsLabel.setText(
 						Translator.get("progress_bar.transferred",
 							SizeFormatter.format(nbBytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB),
@@ -249,8 +248,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
 	public void windowOpened(WindowEvent e) {
 		// (this method is called first time the dialog is made visible)
-		if(com.mucommander.Debug.ON)
-			System.out.println("ProgressDialog.windowOpened");
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 		super.windowOpened(e);
 	}
 
@@ -258,8 +256,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 		// (this method is called each time the dialog is activated)
 		super.windowActivated(e);
 		if(firstTimeActivated) {
-			if(com.mucommander.Debug.ON)
-				System.out.println("ProgressDialog.windowActivated: first time activated, starting job!");
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("first time activated, starting job!");
 			firstTimeActivated = false;
 			this.job.start();
 		}

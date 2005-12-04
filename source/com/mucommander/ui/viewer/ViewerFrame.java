@@ -108,11 +108,9 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 				return new Insets(0, 0, 0, 0);
 			}
 		};
-//System.out.println("scrollPane insets = "+scrollPane.getInsets());
 		
 //		scrollPane.setBackground(BG_COLOR);
 		JViewport viewport = scrollPane.getViewport();
-//System.out.println("viewport insets = "+viewport.getInsets());
 		viewport.setBackground(FileViewer.BG_COLOR);
 //		viewport.setBorder(null);
 //		getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -128,8 +126,6 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 			});
 		}
 
-//System.out.println("contentPane insets = "+getContentPane().getInsets());
-//System.out.println("viewer insets = "+viewer.getInsets());
 		// Request focus on text area when visible
 		FocusRequester.requestFocus(viewer);
 	}

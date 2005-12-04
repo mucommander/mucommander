@@ -252,7 +252,7 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		if(folder==null || !folder.exists())
 			folder = AbstractFile.getAbstractFile(defaultPath);
 
-		if(Debug.ON) System.out.println("initial folder= "+folder);
+		if(Debug.ON) Debug.trace("initial folder= "+folder);
 		
 		return folder;
 	}
@@ -262,8 +262,7 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	 * Properly disposes the given MainFrame.
 	 */
 	public void disposeMainFrame(MainFrame mainFrameToDispose) {
-if(com.mucommander.Debug.ON)
-	System.out.println("WindowManager.disposeMainFrame");
+		if(com.mucommander.Debug.ON) Debug.trace("");
 
 		// Saves last folders
 		ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
@@ -462,8 +461,7 @@ if(com.mucommander.Debug.ON)
 		
 		// Do not request focus if focus was requested on another MainFrame less than FOCUS_REQUEST_DELAY milliseconds ago
 		if (lastFocusedMainFrame==currentMainFrame || (now-lastFocusRequest>FOCUS_REQUEST_DELAY)) {
-if(com.mucommander.Debug.ON)
-	System.out.println("WindowManager.windowActivated: focus requested");
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("requesting focus");
 			currentMainFrame.requestFocus();
 			lastFocusRequest = now;
 			lastFocusedMainFrame = currentMainFrame;
@@ -500,8 +498,7 @@ if(com.mucommander.Debug.ON)
     	// /!\ font.size is set after font.family in AppearancePrefPanel
     	// that's why we only listen to this one in order not to change Font twice
     	if (var.equals("prefs.lookAndFeel")) {
-			if(Debug.ON)
-				System.out.println("LookAndFeel changed! "+event.getValue());
+			if(Debug.ON) Debug.trace("LookAndFeel changed! "+event.getValue());
     		String lnfName = event.getValue();
 			
 			setLookAndFeel(lnfName);

@@ -85,7 +85,7 @@ class BookmarkParser implements ContentHandler {
 
 
 	/**
-	 *  Unitary test method
+	 * Test method
 	 */
 	public static void main(String args[]) throws Exception {
 		new BookmarkParser().parse(new File("/Users/maxence/Projects/mucommander/bookmarks.xml"));

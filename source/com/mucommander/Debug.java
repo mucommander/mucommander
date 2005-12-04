@@ -11,15 +11,15 @@ import java.util.Vector;
  * Simple class which controls the output of debug messages.
  *
  * <p>Checking against a final static field value before sending debug output
- * (e.g. <code>if(com.mucommander.Debug.ON) System.out.println("Crashed!"); </code>)
- * instead of directly calling a debug method (e.g. com.mucommander.Debug.output("Crashed!");)
- * is a little heavier to type but allows removing debug-related method calls at compile time.</p>
+ * (e.g. <code>if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("method called!"); </code>)
+ * instead of directly calling a debug method (e.g. com.mucommander.Debug.trace("method called");)
+ * is a little heavier to type but allows method calls to be removed at compile time when ON is set to false (makes class files lighter).</p>
  *
  * @author Maxence Bernard
  */
 public class Debug {
 	/** Sets whether or not debug messages should be output to the standard output */
-	public final static boolean ON = true;
+	public final static boolean ON = false;
 
 
 	public static void trace(String message) {

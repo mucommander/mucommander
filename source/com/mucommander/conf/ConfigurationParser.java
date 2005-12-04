@@ -118,7 +118,6 @@ public class ConfigurationParser implements ContentHandler {
         if(inNode)
             builder.closeNode(name);
         else {
-            //System.out.println("defineNode(" + node + ")");
             node = buffer;
             inNode = true;
         }

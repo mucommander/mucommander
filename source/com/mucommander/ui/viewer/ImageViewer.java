@@ -68,13 +68,11 @@ public class ImageViewer extends FileViewer implements ActionListener {
 
 	
 	public synchronized Dimension getPreferredSize() {
-//System.out.println("ImageViewer.getPreferredSize()= "+scaledImage.getWidth(null)+" "+scaledImage.getHeight(null));
 		return new Dimension(scaledImage.getWidth(null), scaledImage.getHeight(null));
 	}
 
 	
 	private synchronized void loadImage(AbstractFile file) throws IOException {
-//System.out.println("loadImage "+file);
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
 		int read;
@@ -115,18 +113,17 @@ public class ImageViewer extends FileViewer implements ActionListener {
 
 	
 	private void waitForImage(Image image) {
-//if(com.mucommander.Debug.ON) System.out.println("Waiting for image to load "+image);
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Waiting for image to load "+image);
 		MediaTracker tracker = new MediaTracker(this);
 		tracker.addImage(image, 0);
 		try { tracker.waitForID(0); }
 		catch(InterruptedException e) {}
 		tracker.removeImage(image);
-//if(com.mucommander.Debug.ON) System.out.println("Image loaded "+image);
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Image loaded "+image);
 	}
 	
 	
 	private synchronized void zoom(double factor) {
-//System.out.println("zoom "+factor);
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		this.scaledImage = image.getScaledInstance((int)(image.getWidth(null)*factor), (int)(image.getHeight(null)*factor), Image.SCALE_DEFAULT);
@@ -137,8 +134,6 @@ public class ImageViewer extends FileViewer implements ActionListener {
 
 /*
 	private synchronized void goToImage(boolean next) {
-System.out.println("goToImage");
-
 		AbstractFile newFile;
 		if(next)
 			newFile = getNextFileInFolder(file, true);
@@ -158,7 +153,6 @@ System.out.println("goToImage");
 */
 	
 	private void updateFrame() {
-//System.out.println("updateFrame");
 		// Revalidate, pack and repaint should be called in this order
 		revalidate();
 		frame.pack();
@@ -182,7 +176,6 @@ System.out.println("goToImage");
 	
 
 	private void checkZoom() {
-//System.out.println("checkZoom");
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		zoomInItem.setEnabled(zoomFactor<1.0 || (2*zoomFactor*image.getWidth(null) < d.width

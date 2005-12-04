@@ -86,12 +86,10 @@ public abstract class FileViewer extends JPanel {
 	
 /*
 	protected AbstractFile getNextFileInFolder(AbstractFile file, boolean loop) {
-//System.out.println("getNextFileInFolder");
 		return getNextFile(file, true, loop);
 	}
 	
 	protected AbstractFile getPreviousFileInFolder(AbstractFile file, boolean loop) {
-//System.out.println("getPreviousFileInFolder");
 		return getNextFile(file, false, loop);
 	}
 	
@@ -100,16 +98,11 @@ public abstract class FileViewer extends JPanel {
 		MainFrame mainFrame = frame.getMainFrame();
 		FileTable table = mainFrame.getLastActiveTable();
 
-//System.out.println("getNextFile : 0");
-		
 		if(!table.getCurrentFolder().equals(folder)) {
 			table = mainFrame.getUnactiveTable();
-//System.out.println("getNextFile : 1");
 			if(!table.getCurrentFolder().equals(folder))
 				return null;
 		}
-//System.out.println("getNextFile : 2");
-		
 		
 		FileTableModel model = (FileTableModel)table.getModel();
 		int rowCount = model.getRowCount();
@@ -119,8 +112,6 @@ public abstract class FileViewer extends JPanel {
 		AbstractFile newFile;
 		if(forward) {
 			do {
-//System.out.println("forward1 "+fileRow+" "+newFileRow+" "+rowCount);
-
 				if(newFileRow==rowCount-1) {
 					if(loop)
 						newFileRow = 0;
@@ -131,8 +122,6 @@ public abstract class FileViewer extends JPanel {
 					newFileRow++;
 
 				newFile = model.getFileAtRow(newFileRow);
-
-//System.out.println("forward2 "+fileRow+" "+newFileRow+" "+newFile);
 			}
 			while(!canViewFile(newFile) && fileRow!=newFileRow);
 		}

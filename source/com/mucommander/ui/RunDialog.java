@@ -140,20 +140,20 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 	
 	
 	public void processDied(Process process, int retValue) {
-if(com.mucommander.Debug.ON) System.out.println("process "+process+" exit, return value= "+retValue);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process "+process+" exit, return value= "+retValue);
 		this.currentProcess = null;
 		switchToRunState();
 	}	
 
 	
 	public void processOutput(Process process, byte buffer[], int offset, int length) {
-if(com.mucommander.Debug.ON) System.out.println("processOutput "+process+" output= "+new String(buffer, 0, length));
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("processOutput "+process+" output= "+new String(buffer, 0, length));
 		addToTextArea(buffer, offset, length);
 	}
 
 	
 	public void processError(Process process, byte buffer[], int offset, int length) {
-if(com.mucommander.Debug.ON) System.out.println("processError "+process+" output= "+new String(buffer, 0, length));
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("processError "+process+" output= "+new String(buffer, 0, length));
 		addToTextArea(buffer, offset, length);
 	}
 

@@ -138,8 +138,7 @@ if(com.mucommander.Debug.ON) e3.printStackTrace();
 			}
 			catch(FileJobException e) {
 				// Copy failed
-				if(com.mucommander.Debug.ON)
-					System.out.println(""+e);
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Copy failed: "+e);
 				
 				int reason = e.getReason();
 				int choice;

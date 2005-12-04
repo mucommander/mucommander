@@ -20,7 +20,6 @@ class ConfigurationLoader implements ConfigurationTreeBuilder {
             variable = name;
         else
             variable += '.' + name;
-//System.out.println("loader addNode "+variable);
     }
     /* End of method addNode(String) */
 
@@ -30,8 +29,6 @@ class ConfigurationLoader implements ConfigurationTreeBuilder {
      */
     public void closeNode(String name) {
 		int index;
-
-//System.out.println("loader addNode "+variable);
 		
 		index = variable.lastIndexOf('.');
 		if(index > 0)
@@ -44,7 +41,6 @@ class ConfigurationLoader implements ConfigurationTreeBuilder {
      * @param value variable's value.
      */
     public void addLeaf(String name, String value) {
-//System.out.println("loader addLeaf "+variable+" "+value);
 		ConfigurationManager.setVariable(variable + '.' + name, value);
 	}
 }

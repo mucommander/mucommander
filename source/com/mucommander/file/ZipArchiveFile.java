@@ -27,7 +27,7 @@ public class ZipArchiveFile extends AbstractArchiveFile {
 		Vector entriesV = new Vector();
 		ZipEntry entry;
 		while ((entry=zin.getNextEntry())!=null) {
-if(com.mucommander.Debug.ON) System.out.println("ZipArchiveFile.loadEntries(): found entry "+entry.getName());
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found entry "+entry.getName());
 			entriesV.add(entry);
 		}
 		zin.close();
@@ -40,7 +40,7 @@ if(com.mucommander.Debug.ON) System.out.println("ZipArchiveFile.loadEntries(): f
 			ZipEntry currentEntry = ((ZipEntry)entriesV.elementAt(i));
 			String entryPath = currentEntry.getName();	// entry path will include a trailing '/' if entry is a directory
 			int entryLevel = getEntryLevel(entryPath);
-if(com.mucommander.Debug.ON) System.out.println("ZipArchiveFile.loadEntries(): checking entry #"+i+" "+entryPath+" level="+entryLevel);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("checking entry #"+i+" "+entryPath+" level="+entryLevel);
 			// Entry is not directly visible
 			if (entryLevel>0) {
 				int slashPos = 0;
@@ -48,7 +48,7 @@ if(com.mucommander.Debug.ON) System.out.println("ZipArchiveFile.loadEntries(): c
 					// Extract directory name at level l
 					String dirName = entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
 
-if(com.mucommander.Debug.ON) System.out.println("ZipArchiveFile.loadEntries(): checking for an existing entry for directory "+dirName);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("checking for an existing entry for directory "+dirName);
 					boolean entryFound = false;
 					// Is there an entry for this directory ?
 					for(int j=0; j<entriesV.size(); j++)
@@ -60,7 +60,7 @@ if(com.mucommander.Debug.ON) System.out.println("ZipArchiveFile.loadEntries(): c
 						continue;
 
 					// Directory has no entry, let's manually create and add a ZipEntry for it
-if(com.mucommander.Debug.ON) System.out.println("ZipArchiveFile.loadEntries(): creating new entry for directory "+dirName);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating new entry for directory "+dirName);
 					ZipEntry newEntry = new ZipEntry(dirName);
 					newEntry.setTime(currentEntry.getTime());	// Let's use current entry's time, better that 01/01/70
 					entriesV.add(newEntry);

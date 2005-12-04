@@ -19,7 +19,6 @@ public class ViewerRegistrar {
 	};
 	
 	
-//	public static FileViewer getViewer(AbstractFile file, ViewerFrame frame) throws Exception {
 	public static FileViewer getViewer(AbstractFile file) throws Exception {
 		Class viewerClass = null;
 		Class candidateClass;
@@ -32,7 +31,6 @@ public class ViewerRegistrar {
 			method = candidateClass.getMethod("canViewFile", new Class[]{Class.forName("com.mucommander.file.AbstractFile")});
 //			fileViewer = (FileViewer)constructor.newInstance(new Object[]{});
 
-//if(com.mucommander.Debug.ON) System.out.println("getViewer: "+viewersClassNames[i]+" "+(((Boolean)method.invoke(null, new Object[]{file})).booleanValue()));
 //			if(((Boolean)method.invoke(fileViewer, new Object[]{file})).booleanValue()) {
 			if(((Boolean)method.invoke(null, new Object[]{file})).booleanValue()) {
 				viewerClass = candidateClass;

@@ -205,7 +205,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("return false "+e);
 		if(!parentValSet) {
 			FileURL parentFileURL = this.fileURL.getParent();
 			if(parentFileURL!=null) {
-if(com.mucommander.Debug.ON) System.out.println("getParent, parentURL="+parentFileURL.getStringRep(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("getParent, parentURL="+parentFileURL.getStringRep(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
 				try { this.parent = new SFTPFile(parentFileURL, false, this.sshClient, this.sftpChannel); }
 				catch(IOException e) {}
 			}

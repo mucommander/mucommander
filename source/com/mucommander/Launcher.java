@@ -72,8 +72,7 @@ public class Launcher {
 				constructor.newInstance(new Object[]{});
 			}
 			catch(Exception e) {
-				if(Debug.ON)
-					System.out.println("Launcher.init: exception thrown while initializing Mac Finder integration");
+				if(Debug.ON) Debug.trace("Launcher.init: exception thrown while initializing Mac Finder integration");
 			}
 		}
 

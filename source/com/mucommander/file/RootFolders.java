@@ -103,8 +103,7 @@ public class RootFolders {
 			}
 		}
 		catch(Exception e) {
-			if(Debug.ON)
-				System.out.println("Error reading /etc/fstab entries: "+ e);
+			if(Debug.ON) Debug.trace("Error reading /etc/fstab entries: "+ e);
 		}
 		
 	}
@@ -134,8 +133,7 @@ public class RootFolders {
 				}
 		}
 		catch(IOException e) {
-			if(Debug.ON)
-				System.out.println("Can't get /Volumes subfolders: "+ e);
+			if(Debug.ON) com.mucommander.Debug.trace("Can't get /Volumes subfolders: "+ e);
 		}
 	}
 }
