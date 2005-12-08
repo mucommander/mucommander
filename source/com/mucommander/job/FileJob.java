@@ -309,8 +309,6 @@ public abstract class FileJob implements Runnable {
 	 * is returned.
 	 */
     protected int showErrorDialog(String title, String message) {
-		QuestionDialog dialog;
-
 		String actionTexts[] = new String[]{SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT};
 		int actionValues[] = new int[]{SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION};
 		

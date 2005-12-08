@@ -501,7 +501,6 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 	 * in or under the supplied folder, and reports unused entries on the standard output.
 	 */ 
 	private static void checkUnusedEntries(com.mucommander.file.AbstractFile sourceFolder, String languages[]) throws IOException {
-		Hashtable dictionary;
 		Enumeration entries;
 		String entry;
 		for(int i=0; i<languages.length; i++) {

@@ -44,9 +44,9 @@ public class GzipEntryFile extends AbstractEntryFile {
 	public String getName() {
 		String name = archiveFile.getName();
 		String nameLC = name.toLowerCase();
-		if(name.endsWith(".tgz"))
+		if(nameLC.endsWith(".tgz"))
 			return name.substring(0, name.lastIndexOf(".tgz"))+".tar";
-		else if(name.endsWith(".gz"))
+		else if(nameLC.endsWith(".gz"))
 			return name.substring(0, name.lastIndexOf(".gz"));
 		else
 			return name;

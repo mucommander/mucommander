@@ -21,9 +21,6 @@ import javax.swing.*;
  */
 public class DeleteJob extends FileJob {
     
-	/** Default choice when encountering an existing file */
-	private int defaultFileExistsChoice = -1;
-
 	/** Title used for error dialogs */
 	private String errorDialogTitle;
 

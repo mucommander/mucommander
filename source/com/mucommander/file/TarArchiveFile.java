@@ -102,7 +102,6 @@ public class TarArchiveFile extends AbstractArchiveFile {
 			loadEntries();
 		Vector subFiles = new Vector();
 		
-		AbstractFile file;
 		for(int i=0; i<entries.length; i++) {
 			if (getEntryLevel(entries[i].getName())==0) {
 				subFiles.add(AbstractFile.wrapArchive(new TarEntryFile(this, this, entries[i])));

@@ -84,8 +84,6 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 * @throws java.io.IOException if something went wrong during file or file url creation.
 	 */
 	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) throws AuthException, IOException {
-		AbstractFile file;
-
 //		// Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
 //		// (Reminder: C: is C's current folder, while C:\ is C's root)
 //		if((path.endsWith("/") && path.length()>1) || (path.endsWith("\\") && path.charAt(path.length()-2)!=':'))

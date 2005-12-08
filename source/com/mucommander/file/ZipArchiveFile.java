@@ -81,7 +81,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating new entry for
 			loadEntries();
 		Vector subFiles = new Vector();
 		
-		AbstractFile file;
 		for(int i=0; i<entries.length; i++) {
 			if (getEntryLevel(entries[i].getName())==0) {
 				subFiles.add(AbstractFile.wrapArchive(new ZipEntryFile(this, this, entries[i])));

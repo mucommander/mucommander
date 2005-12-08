@@ -73,11 +73,10 @@ public class ZipJob extends ExtendedFileJob {
 			// Replace simply continues
 		}
 
-		// Tries to open zip/destination file
-		java.io.OutputStream destOut = null;
 		// Loop for retry
 		do {
 			try {
+				// Tries to open zip/destination file
 				zipOut = new ZipOutputStream(destFile.getOutputStream(false));
 				if(zipComment!=null && !zipComment.equals(""))
 					zipOut.setComment(zipComment);
