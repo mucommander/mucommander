@@ -3,7 +3,6 @@ package com.mucommander.job;
 
 import com.mucommander.file.*;
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.text.Translator;
@@ -12,8 +11,6 @@ import java.io.*;
 import java.util.Vector;
 import java.util.StringTokenizer;
 import java.net.Socket;
-
-import javax.swing.*;
 
 
 /**

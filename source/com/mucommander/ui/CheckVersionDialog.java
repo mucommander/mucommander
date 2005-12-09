@@ -2,7 +2,6 @@
 package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.*;
 import com.mucommander.text.Translator;
 
@@ -25,7 +24,6 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 	private MainFrame mainFrame;
     private boolean userInitiated;
 
-	private JButton okButton;
 	private JButton downloadButton;
 
     private String downloadURL;

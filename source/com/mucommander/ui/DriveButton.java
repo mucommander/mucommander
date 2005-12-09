@@ -3,9 +3,7 @@ package com.mucommander.ui;
 
 import com.mucommander.file.*;
 
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.connect.ServerConnectDialog;
-import com.mucommander.ui.comp.FocusRequester;
 
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.bookmark.Bookmark;

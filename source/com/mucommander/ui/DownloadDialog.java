@@ -1,15 +1,10 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.text.Translator;
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 
 
 /**
@@ -20,10 +15,6 @@ import javax.swing.*;
 public class DownloadDialog extends DestinationDialog {
 
 	private FileSet files;
-	
-	private String fileURL;
-
-	private String fileName;
 	
 	
 	public DownloadDialog(MainFrame mainFrame, FileSet files) {

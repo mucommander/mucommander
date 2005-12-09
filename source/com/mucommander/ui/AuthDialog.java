@@ -18,7 +18,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 
-
 /**
  * This dialog asks the user to provide a login and password. It usually pops up when the user tries to access
  * a folder on a server for which he doesn't have read rights

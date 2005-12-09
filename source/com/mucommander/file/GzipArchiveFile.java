@@ -1,8 +1,6 @@
 package com.mucommander.file;
 
 import java.io.*;
-import java.util.Vector;
-
 
 
 public class GzipArchiveFile extends AbstractArchiveFile {

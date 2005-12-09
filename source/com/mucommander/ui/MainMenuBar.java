@@ -6,7 +6,6 @@ import com.mucommander.PlatformManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.EmailFilesDialog;
-import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.ui.help.ShortcutsDialog;
 import com.mucommander.ui.about.AboutDialog;
 import com.mucommander.ui.comp.MnemonicHelper;
@@ -17,14 +16,11 @@ import com.mucommander.ui.bookmark.EditBookmarksDialog;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.FileSet;
 
-import com.mucommander.job.SendMailJob;
-
 import com.mucommander.text.Translator;
 
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.bookmark.Bookmark;
 
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -76,7 +72,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	private JMenuItem goToParentItem;
 	private JMenuItem swapFoldersItem;
 	private JMenuItem setSameFolderItem;
-	private JMenuItem refreshItem;
 
 	// Bookmark menu
 	private JMenu bookmarksMenu;

@@ -2,7 +2,6 @@ package com.mucommander.file;
 
 import java.io.*;
 import java.util.Vector;
-import java.util.Hashtable;
 
 import com.ice.tar.*;
 import java.util.zip.GZIPInputStream;

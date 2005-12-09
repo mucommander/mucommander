@@ -11,8 +11,6 @@ import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
 
 import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.event.*;
 import javax.swing.border.Border;
 
 import java.awt.*;
@@ -258,7 +256,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting and waiting")
 							break;
 						}
 
-						boolean browse = false;
 						// File is a regualar directory, all good
 						if(file.isDirectory()) {
 							// Just continue
@@ -871,7 +868,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	}
 	
 	public void focusLost(FocusEvent e) {
-		Object source = e.getSource();
 	}
 	
 	 

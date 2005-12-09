@@ -86,7 +86,6 @@ public class VersionChecker implements ContentHandler {
 		StringBuffer sb = new StringBuffer();
 		int versionLength = version.length();
 		char c;
-		String versionNumber = "";
 		boolean dotAdded = false;
 		for(int i=0; i<versionLength; i++) {
 			c = version.charAt(i);

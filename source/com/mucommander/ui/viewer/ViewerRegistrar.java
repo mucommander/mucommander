@@ -2,11 +2,8 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.MainFrame;
 
 import java.lang.reflect.*;
-import java.awt.*;
-import java.io.IOException;
 
 
 public class ViewerRegistrar {

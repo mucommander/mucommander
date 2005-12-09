@@ -1,13 +1,11 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.text.Translator;
 import com.mucommander.file.FileSet;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 

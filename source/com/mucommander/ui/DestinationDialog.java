@@ -5,7 +5,6 @@ import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.text.Translator;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
-import com.mucommander.ui.table.FileTable;
 
 import java.awt.*;
 import java.awt.event.*;

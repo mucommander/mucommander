@@ -3,7 +3,6 @@ package com.mucommander.ui;
 
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.text.Translator;
 import com.mucommander.conf.ConfigurationManager;
 

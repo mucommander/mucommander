@@ -5,8 +5,6 @@ import com.mucommander.PlatformManager;
 import com.mucommander.ProcessMonitor;
 import com.mucommander.ProcessListener;
 import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 
 import java.awt.*;

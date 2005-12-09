@@ -1,7 +1,6 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.table.FileTable;
 
 public interface LocationListener {
 	/**

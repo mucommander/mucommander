@@ -12,12 +12,9 @@ import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 
-import com.mucommander.job.SendMailJob;
-
 import com.mucommander.conf.ConfigurationManager;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;

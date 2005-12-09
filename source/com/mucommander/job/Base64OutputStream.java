@@ -1,9 +1,8 @@
 
 package com.mucommander.job;
 
-import com.mucommander.file.AbstractFile;
-
 import java.io.*;
+
 
 /**
  * This OuputStream encodes data in MIME Base64. It is used to by SendMailJob to send email attachments.

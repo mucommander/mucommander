@@ -5,7 +5,6 @@ import com.mucommander.conf.*;
 import com.mucommander.PlatformManager;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FSFile;
 
 import com.mucommander.Debug;
 

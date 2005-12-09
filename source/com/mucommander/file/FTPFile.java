@@ -5,9 +5,6 @@ import org.apache.commons.net.ftp.*;
 
 import java.io.*;
 
-import java.util.Calendar;
-import java.util.Date;
-
 
 /**
  * FTPFile represents a file on an FTP server.

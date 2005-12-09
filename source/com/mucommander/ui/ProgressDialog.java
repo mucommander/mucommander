@@ -127,7 +127,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         String lastInfo;
 
 		long nbBytesTotal;
-		long nbBytesSkipped;
 		long lastBytesTotal = 0;
         
         totalPercent = lastTotalPercent = -1;

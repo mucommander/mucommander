@@ -112,10 +112,7 @@ public class ConfigurationManager {
      * @param path path to the configuration file to load in memory.
      */
     private static synchronized void loadConfiguration(String path) throws Exception {
-        ConfigurationParser parser;
-        ConfigurationLoader loader;
-
-        parser = new ConfigurationParser(loader = new ConfigurationLoader());
+        ConfigurationParser parser = new ConfigurationParser(new ConfigurationLoader());
         parser.parse(path);
     }
 

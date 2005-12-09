@@ -3,7 +3,7 @@ package com.mucommander.file;
 import jcifs.smb.*;
 
 import java.io.*;
-import java.net.MalformedURLException;
+
 
 /**
  * SMBFile represents a file shared through the SMB protocol.

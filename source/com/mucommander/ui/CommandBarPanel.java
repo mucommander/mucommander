@@ -112,14 +112,6 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	
-	private void showErrorDialog(String msg, String title) {
-		JOptionPane.showMessageDialog(mainFrame, msg, title, JOptionPane.ERROR_MESSAGE);
-
-//		// FileTable lost focus
-//		mainFrame.getLastActiveTable().requestFocus();
-	}
-
 
 	/**
 	 * Fires up the appropriate file viewer for the selected file.

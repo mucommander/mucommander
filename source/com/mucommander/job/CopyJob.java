@@ -5,7 +5,6 @@ import com.mucommander.file.*;
 
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.FileExistsDialog;
 
 import com.mucommander.text.Translator;
