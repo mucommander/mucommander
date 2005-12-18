@@ -126,6 +126,7 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		
 		// Create frame
 		MainFrame newMainFrame = new MainFrame(folder1, folder2);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 		// Set window size and location
 
@@ -139,24 +140,29 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 			int lastScreenWidth = ConfigurationManager.getVariableInt("prefs.last_window.screen_width");
 			int lastScreenHeight = ConfigurationManager.getVariableInt("prefs.last_window.screen_height");
 			
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			// Set same window bounds as before if resolution hasn't changed since then and if
+			// Set same window bounds as last run if resolution hasn't changed since then and if
 			// window size is not substantially larger than screen size (safety check)
-			if(x!=-1 && y!=-1 && width!=-1 && height!=-1
+			if((x!=-1 || y!=-1) && width!=-1 && height!=-1
 				&& screenSize.width==lastScreenWidth && screenSize.height==lastScreenHeight
-				&& width<=screenSize.width+5 && height<=screenSize.height+5) {
+				&& width+x<=screenSize.width+5 && height+y<=screenSize.height+5) {
 				
 				newMainFrame.setBounds(x, y, width, height);
 			}
-			else {
-				// Set window size and location to use as much screen space as possible
-				newMainFrame.setBounds(PlatformManager.getFullScreenBounds(newMainFrame));
+			// No saved window bounds or resolution has changed, use defaults
+			else {		
+//				// Set window size and location to use as much screen space as possible
+//				newMainFrame.setBounds(PlatformManager.getFullScreenBounds(newMainFrame));
+
+				// Full screen bounds are not reliable enough, in particular under Linux+Gnome
+				// so we simply make the initial window 4/5 of screen's size, and center it.
+				// This should fit under any window manager / platform
+				newMainFrame.setBounds(new Rectangle(screenSize.width/10, screenSize.height/10, (int)(screenSize.width*0.8), (int)(screenSize.height*0.8)));
 			}
 		}
 		else {
 			// Use current's main frame size and location
-			// and shift new frame a little so the we can see
-			// previous one underneath
+			// and shift new frame a little so we can see
+			// the previous one underneath
 			Rectangle bounds = currentMainFrame.getBounds();
 			int x = bounds.x + 22;
 			int y = bounds.y + 22;
@@ -166,7 +172,9 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 			if(!PlatformManager.isInsideUsableScreen(currentMainFrame, -1, y+bounds.height))
 				y = 0;
 
-			newMainFrame.setBounds(new Rectangle(x, y, bounds.width, bounds.height));
+			// Set new frame bounds and make sure that they don't exceed screen size
+			// (check is necessary in particular under Linux+Gnome where getBounds returns weird values)
+			newMainFrame.setBounds(new Rectangle(x, y, bounds.width+x>screenSize.width?screenSize.width-x:bounds.width, bounds.height+y>screenSize.height?screenSize.height-y:bounds.height));
 		}
 		// To catch user window closing actions
 		newMainFrame.addWindowListener(this);

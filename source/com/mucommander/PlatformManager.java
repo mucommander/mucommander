@@ -155,8 +155,8 @@ public class PlatformManager {
 	
 	
 	/**
-	 * Returns full-screen window bounds. The result is very accurate under Java 1.4, just an
-	 * estimate under Java 1.3.
+	 * Returns full-screen window bounds. The result is pretty accurate under Java 1.4 (not under Linux+Gnome though),
+	 * just an estimate under Java 1.3.
 	 */
 	public static Rectangle getFullScreenBounds(Window window) {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -190,8 +190,6 @@ public class PlatformManager {
 			
 			return new Rectangle(x, y, width, height);		
 		}
-
-		
 	}
 	
 	
