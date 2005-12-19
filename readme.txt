@@ -14,6 +14,19 @@ Official website: http://www.mucommander.com
 (c) 2002-2005 Maxence Bernard. All rights reserved.
 
 
+Requirements
+------------
+
+Java Runtime Environment 1.3.0 (JRE) or later is required to run
+muCommander. JRE 1.4 or 1.5 recommended, you can download it at http://java.com.
+
+Mac OS X users: Your favorite OS already comes with a Java runtime so you're good to go!
+
+If you're having problems launching muCommander, make sure the
+$JAVA_HOME environment variable points to the directory where your
+JRE or JDK is installed.
+
+
 Legal stuff
 -----------
 
@@ -35,19 +48,6 @@ muCommander uses the following libraries:
  Java TAR can be found at http://www.trustice.com/java/tar/ .
 
 
-Requirements
-------------
-
-Java Runtime Environment 1.3.0 (JRE) or later is required to run
-muCommander. JRE 1.4 or 1.5 recommended, you can download it at http://java.com.
-
-Mac OS X users: Your favorite OS already comes with a Java runtime so you're good to go!
-
-If you're having problems launching muCommander, make sure the
-$JAVA_HOME environment variable points to the directory where your
-JRE or JDK is installed.
-
-
 What's new in v0.8 beta 1 ?
 ---------------------------
 
@@ -63,12 +63,13 @@ New features:
  - Traditional Chinese translation by Kent Hsu
  - Polish translation by Andrzej Kosiński
  - Hungarian translation by Tamás Balogh-Walder
+ - Russian translation by 'XXXX Pro'
 
 Improvements:
  - New file table spacing
  - 'Size' and 'Date' columns are now right-justified for clarity
  - Location field shows progress when changing current folder
- - Dates are preserved when copying/moving a file (doesn't work when writing to an SMB or FTP folder)
+ - Dates are preserved when copying/moving a file (except when writing to an SMB or FTP folder)
  - Date separator can now be customized in preferences
  - Marked color is also used for selected and marked files (selected color only was formerly used)
  - Improved hidden files detection for some filesystems: files starting with '.' are considered as hidden
@@ -89,8 +90,8 @@ Bug fixes :
  - Email files: fixed folders not being handled properly since v0.7
 
 Known issues:
- - Translations for new features are missing
- - Slow TAR and Zip extraction for small files because extraction is not performed sequentially (yet)
+ - Translations for new features are temporarily missing
+ - Slow TAR and Zip extraction for small files because extraction is not performed sequentially
  - Mac OS X-specific files not transferred properly
  - Image viewer doesn't free memory properly under Mac OS X
  - Pipe '|' and other shell operators cannot be used in 'Run Command'
