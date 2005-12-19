@@ -63,7 +63,7 @@ New features:
  - Traditional Chinese translation by Kent Hsu
  - Polish translation by Andrzej Kosiński
  - Hungarian translation by Tamás Balogh-Walder
- - Russian translation by 'XXXX Pro'
+ - Russian translation by XXXX Pro
 
 Improvements:
  - New file table spacing

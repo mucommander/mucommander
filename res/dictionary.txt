@@ -531,6 +531,7 @@ command_bar.mkdir_tooltip:CS:Vytvořit složku v aktuální složce
 command_bar.mkdir_tooltip:zh_TW:在此處新增資料夾
 command_bar.mkdir_tooltip:PL:Utwórz katalog w aktualnym katalogu
 command_bar.mkdir_tooltip:HU:Új könyvtár létrehozása az aktuális könyvtárban
+command_bar.mkdir_tooltip:RU:Создание подкаталог в текущем каталоге
 
 command_bar.delete:EN:Delete
 command_bar.delete:FR:Supprimer
@@ -868,6 +869,7 @@ view_menu.reverse_order:RU:В обратном порядке
 
 view_menu.auto_size_columns:EN:Auto-size columns
 view_menu.auto_size_columns:FR:Auto-dimensionner les colonnes
+view_menu.auto_size_columns:RU:Автоподбор размера колонок
 
 
 
@@ -963,6 +965,7 @@ view_menu.hide_status_bar:RU:Скрыть панель статуса
 
 bookmarks_menu:EN:Bookmarks
 bookmarks_menu:FR:Favoris
+bookmarks_menu:RU:Закладки
 
 
 
@@ -973,6 +976,7 @@ bookmarks_menu.edit_bookmarks:EN:$[edit_bookmarks_dialog.title]...
 
 bookmarks_menu.no_bookmark:EN:No bookmark
 bookmarks_menu.no_bookmark:FR:Pas de favori
+bookmarks_menu.no_bookmark:RU:Закладок нет
 
 
 
@@ -1119,7 +1123,8 @@ status_bar.selected_files:HU:%1 ból %2 kijelölt
 status_bar.selected_files:RU:%1 из %2 файлов выбрано
 
 status_bar.connecting_to_folder:EN:Connecting to folder, press ESCAPE to cancel.
-
+status_bar.connecting_to_folder:FR:Connexion en cours, appuyer sur ESCAPE pour annuler 
+status_bar.connecting_to_folder:RU:Подключаемся к каталогу...
 
 
 
@@ -1129,6 +1134,7 @@ status_bar.connecting_to_folder:EN:Connecting to folder, press ESCAPE to cancel.
 
 status_bar.volume_free:EN:Free: %1
 status_bar.volume_free:FR:Libre: %1
+status_bar.volume_free:RU:Свободно: %1
 
 
 
@@ -1137,6 +1143,7 @@ status_bar.volume_free:FR:Libre: %1
 
 status_bar.volume_capacity:EN:Capacity: %1
 status_bar.volume_capacity:FR:Capacité: %1
+status_bar.volume_capacity:RU:Емкость диска: %1
 
 
 
@@ -1218,11 +1225,6 @@ table.download_or_browse:zh_TW:你要瀏覽或是下載此檔案?
 table.download_or_browse:PL:Chcesz przeglądać lub ściągnąć ten plik?
 table.download_or_browse:HU:Szeretné böngészni vagy letölteni ezt fájlt?
 table.download_or_browse:RU:Вы хотите просмотреть или скачать данный файл?
-
-table.connecting_to_folder:EN:Connecting to folder...
-
-
-
 
 
 ##################
@@ -2483,6 +2485,7 @@ zip_dialog.zip:DE:Packen
 zip_dialog.zip:ES:Comprimir
 zip_dialog.zip:CS:Komprimovat
 zip_dialog.zip:zh_TW:壓縮檔
+zip_dialog.zip:RU:Архивация
 
 
 
@@ -2565,26 +2568,31 @@ zip_dialog.file_already_exists:RU:%1 уже существует в катало
 
 add_bookmark_dialog.title:EN:Add bookmark
 add_bookmark_dialog.title:FR:Ajouter aux favoris
+add_bookmark_dialog.title:RU:Добавить закладку
 
 
 
 add_bookmark_dialog.name:EN:Name
 add_bookmark_dialog.name:FR:Nom
+add_bookmark_dialog.name:RU:Название
 
 
 
 add_bookmark_dialog.location:EN:Location
 add_bookmark_dialog.location:FR:Emplacement
+add_bookmark_dialog.location:RU:Расположение
 
 
 
 add_bookmark_dialog.include_auth_info:EN:Include login and password (will be saved in the clear!)
 add_bookmark_dialog.include_auth_info:FR:Inclure les identifiants et mot de passe (seront sauvegardés en clair!)
+add_bookmark_dialog.include_auth_info:RU:Включить логин и пароль (будут сохранены без шифрования)
 
 
 
 add_bookmark_dialog.add:EN:Add
 add_bookmark_dialog.add:FR:Ajouter
+add_bookmark_dialog.add:RU:Добавить
 
 
 
@@ -2595,6 +2603,7 @@ add_bookmark_dialog.add:FR:Ajouter
 
 edit_bookmarks_dialog.title:EN:Edit Bookmarks
 edit_bookmarks_dialog.title:FR:Éditer les favoris
+edit_bookmarks_dialog.title:RU:Редактировать закладки
 
 
 
@@ -2605,6 +2614,7 @@ edit_bookmarks_dialog.location:EN:$[add_bookmark_dialog.location]
 
 edit_bookmarks_dialog.remove:EN:Remove
 edit_bookmarks_dialog.remove:FR:Supprimer
+edit_bookmarks_dialog.remove:RU:Удалить
 
 
 
@@ -2612,6 +2622,7 @@ edit_bookmarks_dialog.remove:FR:Supprimer
 
 edit_bookmarks_dialog.move_up:EN:Move up
 edit_bookmarks_dialog.move_up:FR:Monter
+edit_bookmarks_dialog.move_up:RU:Выше
 
 
 
@@ -2619,12 +2630,14 @@ edit_bookmarks_dialog.move_up:FR:Monter
 
 edit_bookmarks_dialog.move_down:EN:Move down
 edit_bookmarks_dialog.move_down:FR:Descendre
+edit_bookmarks_dialog.move_down:RU:Ниже
 
 
 
 
 edit_bookmarks_dialog.done:EN:Done
 edit_bookmarks_dialog.done:FR:Terminé
+edit_bookmarks_dialog.done:RU:Готово
 
 
 
@@ -3161,6 +3174,7 @@ shortcuts_dialog.file_operations.properties:RU:Показать свойства
 
 shortcuts_dialog.file_operations.add_bookmark:EN:Bookmark current folder
 shortcuts_dialog.file_operations.add_bookmark:FR:Ajouter le dossier courant aux favoris
+shortcuts_dialog.file_operations.add_bookmark:RU:Добавить текущий каталог в закладки
 
 
 
@@ -3317,6 +3331,7 @@ prefs_dialog.date:RU:Дата
 
 prefs_dialog.date_separator:EN:Separator
 prefs_dialog.date_separator:FR:Séparateur
+prefs_dialog.date_separator:RU:Разделитель
 
 
 
@@ -3656,6 +3671,7 @@ prefs_dialog.pick_a_color:CS:Vyberte barvu
 prefs_dialog.pick_a_color:zh_TW:挑選一個顏色
 prefs_dialog.pick_a_color:PL:Wybierz kolor
 prefs_dialog.pick_a_color:HU:Válasszon színt
+prefs_dialog.pick_a_color:RU:Выбор цвета
 
 
 # Mail tab
@@ -3749,11 +3765,13 @@ prefs_dialog.confirm_on_quit:RU:Запрашивать подтверждени�
 
 table_popup.open:EN:Open
 table_popup.open:FR:Ouvrir
+table_popup.open:RU:Открыть
 
 
 
 table_popup.reveal_in_finder:EN:Reveal in Finder
 table_popup.reveal_in_finder:FR:Afficher dans le Finder
+table_popup.reveal_in_finder:RU:Отобразить в найденном
 
 
 
