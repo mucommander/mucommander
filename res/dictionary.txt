@@ -157,7 +157,7 @@ skip:FR:Suivant
 skip:DE:Überspringen
 skip:ES:Saltar
 skip:CS:Přeskočit
-skip:zh_TW:跳過
+skip:zh_TW:略過
 skip:PL:Pomiń
 skip:HU:kihagy
 skip:RU:Пропустить
@@ -377,6 +377,7 @@ language.zh_TW:zh_TW:繁體中文
 
 #language.pl:EN:Polish
 language.pl:PL:Polski
+#language.pl:zh_TW:波蘭語
 
 #language.hu:EN:Hungarian
 #language.hu:FR:Hongrois
@@ -384,9 +385,11 @@ language.pl:PL:Polski
 #language.hu:ES:Húngara
 #language.hu:CS:Madarsky
 language.hu:HU:Magyar
+#language.hu:zh_TW:匈牙利語
 
 #language.ru:EN:Russian
 language.ru:RU:Русский
+#language.ru:zh_TW:俄羅斯語
 
 
 ###############
@@ -662,7 +665,7 @@ file_menu.properties:FR:Propriétés
 file_menu.properties:DE:Eigenschaften
 file_menu.properties:ES:Propiedades
 file_menu.properties:CS:Vlastnosti
-file_menu.properties:zh_TW:內容
+file_menu.properties:zh_TW:屬性
 file_menu.properties:PL:Właściwości
 file_menu.properties:HU:tulajdonságok
 file_menu.properties:RU:Свойства
@@ -870,6 +873,7 @@ view_menu.reverse_order:RU:В обратном порядке
 view_menu.auto_size_columns:EN:Auto-size columns
 view_menu.auto_size_columns:FR:Auto-dimensionner les colonnes
 view_menu.auto_size_columns:RU:Автоподбор размера колонок
+view_menu.auto_size_columns:zh_TW:自動調寬欄位
 
 
 
@@ -966,6 +970,7 @@ view_menu.hide_status_bar:RU:Скрыть панель статуса
 bookmarks_menu:EN:Bookmarks
 bookmarks_menu:FR:Favoris
 bookmarks_menu:RU:Закладки
+bookmarks_menu:zh_TW:書籤
 
 
 
@@ -977,6 +982,7 @@ bookmarks_menu.edit_bookmarks:EN:$[edit_bookmarks_dialog.title]...
 bookmarks_menu.no_bookmark:EN:No bookmark
 bookmarks_menu.no_bookmark:FR:Pas de favori
 bookmarks_menu.no_bookmark:RU:Закладок нет
+bookmarks_menu.no_bookmark:zh_TW:沒有書籤
 
 
 
@@ -1125,6 +1131,7 @@ status_bar.selected_files:RU:%1 из %2 файлов выбрано
 status_bar.connecting_to_folder:EN:Connecting to folder, press ESCAPE to cancel.
 status_bar.connecting_to_folder:FR:Connexion en cours, appuyer sur ESCAPE pour annuler 
 status_bar.connecting_to_folder:RU:Подключаемся к каталогу...
+status_bar.connecting_to_folder:zh_TW:連接至資料夾, 按ESCAPE取消.
 
 
 
@@ -1135,6 +1142,7 @@ status_bar.connecting_to_folder:RU:Подключаемся к каталогу.
 status_bar.volume_free:EN:Free: %1
 status_bar.volume_free:FR:Libre: %1
 status_bar.volume_free:RU:Свободно: %1
+status_bar.volume_free:zh_TW:可用空間: %1
 
 
 
@@ -1144,6 +1152,7 @@ status_bar.volume_free:RU:Свободно: %1
 status_bar.volume_capacity:EN:Capacity: %1
 status_bar.volume_capacity:FR:Capacité: %1
 status_bar.volume_capacity:RU:Емкость диска: %1
+status_bar.volume_capacity:zh_TW:全部空間: %1
 
 
 
@@ -1211,7 +1220,7 @@ table.folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
 table.folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar.
 table.folder_does_not_exist:ES:El directorio no existe o no está disponible.
 table.folder_does_not_exist:CS:Složka neexistuje nebo není přístupná
-table.folder_does_not_exist:zh_TW:資料夾不存在或無法使用
+table.folder_does_not_exist:zh_TW:資料夾不存在或無法使用.
 table.folder_does_not_exist:PL:Katalog nie istnieje lub nie jest dostępny
 table.folder_does_not_exist:HU:Ez a könyvtár nem létezik vagy nem elérhető
 table.folder_does_not_exist:RU:Такой каталог не существует или недоступен
@@ -1246,7 +1255,7 @@ version_dialog.no_new_version:FR:Félicitations, vous avez déjà la dernière v
 version_dialog.no_new_version:DE:Gratulation, sie haben schon die aktuellste Version.
 version_dialog.no_new_version:ES:Felicitaciones, tienes la última versión.
 version_dialog.no_new_version:CS:Blahopřejeme, máte nejaktuálnejší verzi.
-version_dialog.no_new_version:zh_TW:恭喜, 你已經安裝最新版本了
+version_dialog.no_new_version:zh_TW:恭喜, 你已經安裝最新版本了.
 version_dialog.no_new_version:PL:Gratulacje, posiadasz najnowszą wersję.
 version_dialog.no_new_version:HU:Gratulálunk, Önnek már a legújabb verziója van.
 version_dialog.no_new_version:RU:У вас уже установлена самая последняя версия
@@ -1266,7 +1275,7 @@ version_dialog.new_version:FR:Une nouvelle version de muCommander est disponible
 version_dialog.new_version:DE:Eine neue Version des muCommander ist verfügbar.
 version_dialog.new_version:ES:Una nueva versión de muCommander está disponible.
 version_dialog.new_version:CS:Nová verze muCommander je k dispozici.
-version_dialog.new_version:zh_TW:找到 muCommander 的新版本
+version_dialog.new_version:zh_TW:找到 muCommander 的新版本.
 version_dialog.new_version:PL:Dostępna jest nowsza wersja muCommandera.
 version_dialog.new_version:HU:Egy új muCommander verzió elérhető.
 version_dialog.new_version:RU:Доступна новая версия muCommander.
@@ -1296,7 +1305,7 @@ version_dialog.not_available:FR:L'information de version n'a pas pu être récup
 version_dialog.not_available:DE:Kann die Versionsinformation nicht vom Server laden.
 version_dialog.not_available:ES:Imposible obtener la versión desde el servidor.
 version_dialog.not_available:CS:Nemůžu získat informace o verzi.
-version_dialog.not_available:zh_TW:無法從伺服器上取得版本資訊
+version_dialog.not_available:zh_TW:無法從伺服器上取得版本資訊.
 version_dialog.not_available:PL:Nie mogę uzyskać informacji o wersji z serwera.
 version_dialog.not_available:HU:A verzióinformáció elérése nem lehetséges a szerverről.
 version_dialog.not_available:RU:Не удается получить информацию о новых версиях с сервера.
@@ -1900,7 +1909,7 @@ email.server_unavailable:FR:Echec de la connexion au serveur %1, vérifiez vos p
 email.server_unavailable:DE:Kann Verbindung zu Server %1 nicht herstellen, überprüfen sie die eMail Einstellungen oder versuchen sie es später.
 email.server_unavailable:ES:Imposible conectar al servidor %1, comprueba tus preferencias de correo o inténtalo más tarde.
 email.server_unavailable:CS:Nemůžu se připojit na poštovní server %1, skontolujte své nastavení nebo skuste později.
-email.server_unavailable:zh_TW:無法連接至郵件伺服器 %1, 檢查你的郵件設定並重試
+email.server_unavailable:zh_TW:無法連接至郵件伺服器 %1, 檢查你的郵件設定或稍後重試.
 email.server_unavailable:PL:Nie mogę się z kontaktować z serwerem poczyowym %1, sprawdź ustawienia lub spróbuj ponownie.
 email.server_unavailable:HU:Nem lehet kapcsolódni a levelezőszerverhez %1, kérjük, ellenőrizze a levelező beállításait és próbálja újra.
 email.server_unavailable:RU:Не удалось соединиться с почтовым сервером %1, проверьте настройки почты и попробуйте еще раз позже.
@@ -1910,7 +1919,7 @@ email.connection_closed:FR:Connexion fermée par le serveur, le message n'a pas 
 email.connection_closed:DE:Verbindung vom Server unterbrochen, eMail nicht gesendet.
 email.connection_closed:ES:Conexión cerrada por el servidor, el mensaje no ha sido enviado.
 email.connection_closed:CS:Připojení ukončeno serverem, pošta nebyla odeslaná.
-email.connection_closed:zh_TW:連線被伺服器關閉, 郵件未寄出
+email.connection_closed:zh_TW:連線被伺服器關閉, 郵件未寄出.
 email.connection_closed:PL:Połączenie przerwane przez serwer, poczta nie wysłana.
 email.connection_closed:HU:A szerver megszűntette a kapcsolatot, a levél nem elküldve.
 email.connection_closed:RU:Соединение закрыто сервером, почта не была отправлена.
@@ -1920,7 +1929,7 @@ email.goodbye_failed:FR:Erreur lors de la fermeture de connexion, le message n'a
 email.goodbye_failed:DE:Fehler beim Schließen der Verbindung, etvl. wurde die eMail nicht gesendet.
 email.goodbye_failed:ES:Error al cerrar la conexión, el mensaje no ha sido enviado.
 email.goodbye_failed:CS:Chyba při ukončování spojení, pošta nemusela odejít.
-email.goodbye_failed:zh_TW:當關閉連線時發生錯誤, 郵件可能尚未寄出
+email.goodbye_failed:zh_TW:當關閉連線時發生錯誤, 郵件可能尚未寄出.
 email.goodbye_failed:PL:Błąd podczas zamykania połączenia, poczta może zostać niewysłana.
 email.goodbye_failed:HU:Kapcsolatbontás közben hiba történt, így a levél nem biztos, hogy elment.
 email.goodbye_failed:RU:Ошибка при завершении соединения, возможно, почта не была отправлена.
@@ -1930,7 +1939,7 @@ email.send_file_error:FR:Erreur lors de l'envoi du fichier %1, le message n'a pa
 email.send_file_error:DE:Kann Datei %1 nicht senden, eMail nicht gesendet.
 email.send_file_error:ES:Imposible enviar el fichero %1, el mensaje no ha sido enviado.
 email.send_file_error:CS:Nemůžu odeslat soubor %1, správa nebyla odeslaná.
-email.send_file_error:zh_TW:無法傳送檔案 %1, 郵件未寄出
+email.send_file_error:zh_TW:無法傳送檔案 %1, 郵件未寄出.
 email.send_file_error:PL:Nie mogę wysłać pliku %1, poczta nie wysłana.
 email.send_file_error:HU:A fájl küldése nem lehetséges %1, a levél nincs elküldve.
 email.send_file_error:RU:Невозможно отправить файл %1, почта не была отправлена.
@@ -1945,7 +1954,7 @@ file_exists_dialog.title:FR:Le fichier existe dans la destination
 file_exists_dialog.title:DE:Datei existiert schon am Ziel
 file_exists_dialog.title:ES:El fichero ya existe en el destino
 file_exists_dialog.title:CS:Soubor již v cíli existuje
-file_exists_dialog.title:zh_TW:檔案已經存在目的地
+file_exists_dialog.title:zh_TW:檔案已經存在於目的地
 file_exists_dialog.title:PL:Plik już istnieje w miejscu docelowym
 file_exists_dialog.title:HU:A fájl már létezik a megadott helyen
 file_exists_dialog.title:RU:Файл уже существует
@@ -1980,7 +1989,7 @@ file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom:
 file_selection_dialog.mark_description:DE:Markiere Dateien deren Name:
 file_selection_dialog.mark_description:ES:Marcar ficheros cuyo nombre:
 file_selection_dialog.mark_description:CS:Označit soubory s jménem:
-file_selection_dialog.mark_description:zh_TW:標記檔名為:
+file_selection_dialog.mark_description:zh_TW:標記檔案, 若檔名為:
 file_selection_dialog.mark_description:PL:Zaznacz pliki nazywające się:
 file_selection_dialog.mark_description:HU:Kijelöli a fájlokat, amelyeknek a neve:
 file_selection_dialog.mark_description:RU:Выделить файлы по маске:
@@ -1990,7 +1999,7 @@ file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom
 file_selection_dialog.unmark_description:DE:Demarkiere Dateien deren Name:
 file_selection_dialog.unmark_description:ES:Desmarcar ficheros cuyo nombre:
 file_selection_dialog.unmark_description:CS:Odznačit soubory s jménem:
-file_selection_dialog.unmark_description:zh_TW:取消標記檔名為:
+file_selection_dialog.unmark_description:zh_TW:取消標記, 若檔名為:
 file_selection_dialog.unmark_description:PL:Odznacz pliki nazywające się:
 file_selection_dialog.unmark_description:HU:Kijelölés visszavonása azon fájloknál, amelyeknek a neve:
 file_selection_dialog.unmark_description:RU:Снять выделение с файлов по маске:
@@ -2151,7 +2160,7 @@ progress_bar.transferred:FR:%1 transférés à %2/s.
 progress_bar.transferred:DE:Transferiert %1 von %2/s.
 progress_bar.transferred:ES:%1 transferidos a %2/s.
 progress_bar.transferred:CS:Přeneseno %1 při %2/s.
-progress_bar.transferred:zh_TW:已傳送 %1 速度 %s.
+progress_bar.transferred:zh_TW:已傳送 %1 速度 %2/s.
 progress_bar.transferred:PL:Przesłano %1 z %2/s.
 progress_bar.transferred:HU:%1 átvitel %2/s alatt megtörtént.
 progress_bar.transferred:RU:Передано %1, средняя скорость %2/сек.
@@ -2168,7 +2177,7 @@ properties_dialog.file_properties:FR:Propriétés de %1
 properties_dialog.file_properties:DE:Eigenschaften von %1
 properties_dialog.file_properties:ES:%1 Propiedades
 properties_dialog.file_properties:CS:%1 Vlastnosti
-properties_dialog.file_properties:zh_TW:%1 內容
+properties_dialog.file_properties:zh_TW:%1 屬性
 properties_dialog.file_properties:PL:%1 Właściwości
 properties_dialog.file_properties:HU:%1 tulajdonságok
 properties_dialog.file_properties:RU:Своства %1
@@ -2370,7 +2379,7 @@ server_connect_dialog.http_url:FR:URL site web
 server_connect_dialog.http_url:DE:URL Webseite
 server_connect_dialog.http_url:ES:Dirección del sitio web
 server_connect_dialog.http_url:CS:Adresa web stránky
-server_connect_dialog.http_url:zh_TW:網站URL
+server_connect_dialog.http_url:zh_TW:Web網址
 server_connect_dialog.http_url:PL:Adres strony internetowej
 server_connect_dialog.http_url:HU:website URL
 server_connect_dialog.http_url:RU:URL сайта
@@ -2484,7 +2493,7 @@ zip_dialog.zip:FR:Zipper
 zip_dialog.zip:DE:Packen
 zip_dialog.zip:ES:Comprimir
 zip_dialog.zip:CS:Komprimovat
-zip_dialog.zip:zh_TW:壓縮檔
+zip_dialog.zip:zh_TW:壓縮
 zip_dialog.zip:RU:Архивация
 
 
@@ -2526,7 +2535,7 @@ zip_dialog.cannot_write:FR:Impossible de créer le fichier zip dans le dossier d
 zip_dialog.cannot_write:DE:Kann ZIP Datei nicht im Zielordner erstellen.
 zip_dialog.cannot_write:ES:Imposible crear el fichero zip en el direcotorio de destino.
 zip_dialog.cannot_write:CS:Nemůžu vytvořit archív v cílové složce.
-zip_dialog.cannot_write:zh_TW:無法在目的地產生壓縮檔
+zip_dialog.cannot_write:zh_TW:無法在目的資料夾產生壓縮檔
 zip_dialog.cannot_write:PL:Nie mogę utworzyć archiwum w katalogu docelowym
 zip_dialog.cannot_write:HU:A célkönyvtárba nem lehetséges tömörített (Zip) fájlt készíteni.
 zip_dialog.cannot_write:RU:Невозможно создать архив в каталоге-получателе
@@ -2536,7 +2545,7 @@ zip_dialog_description:FR:Ajouter les fichiers sélectionnés dans
 zip_dialog_description:DE:Markierte Dateien hinzufügen zu
 zip_dialog_description:ES:Añadir los ficheros seleccionados a
 zip_dialog_description:CS:Přidat vybrané soubory do
-zip_dialog_description:zh_TW:增加選取檔案至
+zip_dialog_description:zh_TW:新增已選取檔案至
 zip_dialog_description:PL:Dodaj wybrane pliki do
 zip_dialog_description:HU:A kiválasztott fájlok hozzáadása
 zip_dialog_description:RU:Добавить выбранные файлы в
@@ -2556,7 +2565,7 @@ zip_dialog.file_already_exists:FR:%1 existe déjà dans le dossier de destinatio
 zip_dialog.file_already_exists:DE:%1 existiert bereits im Zielordner.
 zip_dialog.file_already_exists:ES:%1 existe dÃ©jÃ  en el directorio de destino.
 zip_dialog.file_already_exists:CS:%1 již existuje v cilové složce.
-zip_dialog.file_already_exists:zh_TW:%1 已經存在目的地.
+zip_dialog.file_already_exists:zh_TW:%1 已經存在於目的資料夾.
 zip_dialog.file_already_exists:PL:%1 już istnieje w katalogu docelowym.
 zip_dialog.file_already_exists:HU:%1 már létezik célkönyvtárban.
 zip_dialog.file_already_exists:RU:%1 уже существует в каталоге-получателе.
@@ -2569,30 +2578,35 @@ zip_dialog.file_already_exists:RU:%1 уже существует в катало
 add_bookmark_dialog.title:EN:Add bookmark
 add_bookmark_dialog.title:FR:Ajouter aux favoris
 add_bookmark_dialog.title:RU:Добавить закладку
+add_bookmark_dialog.title:zh_TW:新增書籤
 
 
 
 add_bookmark_dialog.name:EN:Name
 add_bookmark_dialog.name:FR:Nom
 add_bookmark_dialog.name:RU:Название
+add_bookmark_dialog.name:zh_TW:名稱
 
 
 
 add_bookmark_dialog.location:EN:Location
 add_bookmark_dialog.location:FR:Emplacement
 add_bookmark_dialog.location:RU:Расположение
+add_bookmark_dialog.location:zh_TW:位置
 
 
 
 add_bookmark_dialog.include_auth_info:EN:Include login and password (will be saved in the clear!)
 add_bookmark_dialog.include_auth_info:FR:Inclure les identifiants et mot de passe (seront sauvegardés en clair!)
 add_bookmark_dialog.include_auth_info:RU:Включить логин и пароль (будут сохранены без шифрования)
+add_bookmark_dialog.include_auth_info:zh_TW:包含登入帳號及密碼(將會以明文儲存!)
 
 
 
 add_bookmark_dialog.add:EN:Add
 add_bookmark_dialog.add:FR:Ajouter
 add_bookmark_dialog.add:RU:Добавить
+add_bookmark_dialog.add:zh_TW:新增
 
 
 
@@ -2604,6 +2618,7 @@ add_bookmark_dialog.add:RU:Добавить
 edit_bookmarks_dialog.title:EN:Edit Bookmarks
 edit_bookmarks_dialog.title:FR:Éditer les favoris
 edit_bookmarks_dialog.title:RU:Редактировать закладки
+edit_bookmarks_dialog.title:zh_TW:編輯書籤
 
 
 
@@ -2615,6 +2630,7 @@ edit_bookmarks_dialog.location:EN:$[add_bookmark_dialog.location]
 edit_bookmarks_dialog.remove:EN:Remove
 edit_bookmarks_dialog.remove:FR:Supprimer
 edit_bookmarks_dialog.remove:RU:Удалить
+edit_bookmarks_dialog.remove:zh_TW:移除
 
 
 
@@ -2623,6 +2639,7 @@ edit_bookmarks_dialog.remove:RU:Удалить
 edit_bookmarks_dialog.move_up:EN:Move up
 edit_bookmarks_dialog.move_up:FR:Monter
 edit_bookmarks_dialog.move_up:RU:Выше
+edit_bookmarks_dialog.move_up:zh_TW:上移
 
 
 
@@ -2631,6 +2648,7 @@ edit_bookmarks_dialog.move_up:RU:Выше
 edit_bookmarks_dialog.move_down:EN:Move down
 edit_bookmarks_dialog.move_down:FR:Descendre
 edit_bookmarks_dialog.move_down:RU:Ниже
+edit_bookmarks_dialog.move_down:zh_TW:下移
 
 
 
@@ -2638,6 +2656,7 @@ edit_bookmarks_dialog.move_down:RU:Ниже
 edit_bookmarks_dialog.done:EN:Done
 edit_bookmarks_dialog.done:FR:Terminé
 edit_bookmarks_dialog.done:RU:Готово
+edit_bookmarks_dialog.done:zh_TW:完成
 
 
 
@@ -2842,7 +2861,7 @@ file_editor.save_warning:FR:Enregistrer les modifications avant de fermer ce fic
 file_editor.save_warning:DE:Änderungen an der Datei vor dem Schließen speichern ?
 file_editor.save_warning:ES:¿Desea guardar los cambios realizados a este fichero antes de salir?
 file_editor.save_warning:CS:Uložit změny před zavřením ?
-file_editor.save_warning:zh_TW:在關閉之前是否儲存變更 ?
+file_editor.save_warning:zh_TW:在關閉之前是否儲存檔案變更 ?
 file_editor.save_warning:PL:Zapisać zmiany przed zamknięciem ?
 file_editor.save_warning:HU:Menti a váltaztatásokat ebben a fájlban a bezárás előtt?
 file_editor.save_warning:RU:Сохранить сделанные изменения в файл перед выходом ?
@@ -2977,7 +2996,7 @@ shortcuts_dialog.navigation.execute:FR:Exécuter le fichier sélectionné avec l
 shortcuts_dialog.navigation.execute:DE:Markierte Datei mit assoziiertem Programm öffnen
 shortcuts_dialog.navigation.execute:ES:Ejecutar el fichero seleccionado con la asosiación del sistema
 shortcuts_dialog.navigation.execute:CS:Spustit vybraný soubor asociovaným programem
-shortcuts_dialog.navigation.execute:zh_TW:利用系統的檔案關聯來執行選取檔案
+shortcuts_dialog.navigation.execute:zh_TW:利用系統的檔案關聯來執行已選取檔案
 shortcuts_dialog.navigation.execute:PL:Uruchom wybrany plik za pomocą skojarzonego programu
 shortcuts_dialog.navigation.execute:HU:A kijelölt fájl futtatása a rendszer által hozzárendelt programmal
 shortcuts_dialog.navigation.execute:RU:Выполнить выделенный файл с помощью программы, связанной с ним в настройках системы 
@@ -3167,7 +3186,7 @@ shortcuts_dialog.file_operations.properties:FR:Afficher les propriétés des fic
 shortcuts_dialog.file_operations.properties:DE:Eigenschaften der markierten Dateien anzeigen
 shortcuts_dialog.file_operations.properties:ES:Mostrar propiedades de los ficheros seleccionados
 shortcuts_dialog.file_operations.properties:CS:Zobrazit vlastnosti označených souborů
-shortcuts_dialog.file_operations.properties:zh_TW:顯示已標記檔案的內容
+shortcuts_dialog.file_operations.properties:zh_TW:顯示已標記檔案的屬性
 shortcuts_dialog.file_operations.properties:PL:Pokaż właściwości zaznaczonych plików
 shortcuts_dialog.file_operations.properties:HU:Mutassa a kijelölt fájl(ok) tulajdonságait
 shortcuts_dialog.file_operations.properties:RU:Показать свойства выбранных файлов
@@ -3175,6 +3194,7 @@ shortcuts_dialog.file_operations.properties:RU:Показать свойства
 shortcuts_dialog.file_operations.add_bookmark:EN:Bookmark current folder
 shortcuts_dialog.file_operations.add_bookmark:FR:Ajouter le dossier courant aux favoris
 shortcuts_dialog.file_operations.add_bookmark:RU:Добавить текущий каталог в закладки
+shortcuts_dialog.file_operations.add_bookmark:zh_TW:加入目前資料夾為書籤
 
 
 
@@ -3197,7 +3217,7 @@ shortcuts_dialog.windows.new_window:FR:Ouvrir une nouvelle fenêtre
 shortcuts_dialog.windows.new_window:DE:Ein neues Fenster öffnen
 shortcuts_dialog.windows.new_window:ES:Abrir una nueva ventana
 shortcuts_dialog.windows.new_window:CS:Otevřít nové okno
-shortcuts_dialog.windows.new_window:zh_TW:開啟一個新視窗
+shortcuts_dialog.windows.new_window:zh_TW:開啟新視窗
 shortcuts_dialog.windows.new_window:PL:Otwórz nowe okno
 shortcuts_dialog.windows.new_window:HU:megnyitás új ablakban
 shortcuts_dialog.windows.new_window:RU:Открыть новое окно
@@ -3207,7 +3227,7 @@ shortcuts_dialog.windows.recall:FR:Rappeler une fenêtre
 shortcuts_dialog.windows.recall:DE:Ein Fenster aufrufen
 shortcuts_dialog.windows.recall:ES:Rellamar a una ventana
 shortcuts_dialog.windows.recall:CS:Vyvolat okno
-shortcuts_dialog.windows.recall:zh_TW:還原一個視窗
+shortcuts_dialog.windows.recall:zh_TW:還原視窗
 shortcuts_dialog.windows.recall:PL:Wywołaj okno
 shortcuts_dialog.windows.recall:HU:ablak visszavonása
 shortcuts_dialog.windows.recall:RU:Восстановить окно
@@ -3332,6 +3352,7 @@ prefs_dialog.date:RU:Дата
 prefs_dialog.date_separator:EN:Separator
 prefs_dialog.date_separator:FR:Séparateur
 prefs_dialog.date_separator:RU:Разделитель
+prefs_dialog.date_separator:zh_TW:分隔符號
 
 
 
@@ -3478,7 +3499,7 @@ prefs_dialog.look_and_feel:FR:Look & Feel
 prefs_dialog.look_and_feel:DE:Look & Feel
 prefs_dialog.look_and_feel:ES:Look & Feel
 prefs_dialog.look_and_feel:CS:Look & Feel
-prefs_dialog.look_and_feel:zh_TW:風格(Look & Feel)
+prefs_dialog.look_and_feel:zh_TW:Look & Feel
 prefs_dialog.look_and_feel:PL:Look & Feel
 prefs_dialog.look_and_feel:HU:Look & Feel
 prefs_dialog.look_and_feel:RU:Настройки отображения
@@ -3766,12 +3787,14 @@ prefs_dialog.confirm_on_quit:RU:Запрашивать подтверждени�
 table_popup.open:EN:Open
 table_popup.open:FR:Ouvrir
 table_popup.open:RU:Открыть
+table_popup.open:zh_TW:開啟
 
 
 
 table_popup.reveal_in_finder:EN:Reveal in Finder
 table_popup.reveal_in_finder:FR:Afficher dans le Finder
 table_popup.reveal_in_finder:RU:Отобразить в найденном
+table_popup.reveal_in_finder:zh_TW:顯示在Finder
 
 
 
@@ -3862,4 +3885,8 @@ unit.gb:zh_TW:GB
 unit.gb:PL:GB
 unit.gb:HU:GB
 unit.gb:RU:Гб
+
+
+
+
 
