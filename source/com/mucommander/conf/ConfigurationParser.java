@@ -5,15 +5,12 @@ import java.io.*;
 import com.muxml.ContentHandler;
 import com.muxml.Parser;
 
-//import org.xml.sax.*;
-//import org.apache.xerces.parsers.SAXParser;
 
 /**
- * Parses Muwire configuration files.
+ * Parses configuration files.
  * <p>
- * This class will parse a Muwire configuration file and pass all the
- * configuration items it finds to the specified
- * {@link net.muwire.common.manager.ConfigurationTreeBuilder}.
+ * This class will parse a muCommander configuration file and pass all the
+ * configuration items it finds to the specified {@link com.mucommander.conf.ConfigurationTreeBuilder}.
  *
  * /!\ /!\ /!\ This parser is known to bug when it encounters empty elements (containing
  *  only whitespace characters) /!\ /!\ /!\
@@ -21,12 +18,16 @@ import com.muxml.Parser;
  * @author Nicolas Rinaudo
  */
 public class ConfigurationParser implements ContentHandler {
+
     /** True if the parser is in a node, false otherwise. */
     private boolean inNode = false;
+
     /** Name of the currently parsed node. */
     private String node;
+
     /** Name of the currently parsed XML node(can be either a configuration node or leaf). */
     private String buffer;
+
     /** Class notified whenever a new configuration item is found. */
     private ConfigurationTreeBuilder builder;
 
@@ -78,9 +79,9 @@ public class ConfigurationParser implements ContentHandler {
             throw new IllegalStateException("Cannot parse a file without a tree builder.");
 
         parser = new Parser();
-        parser.parse(new FileInputStream(file), this);
+		// Use UTF-8 encoding
+        parser.parse(new FileInputStream(file), this, "UTF-8");
     }
-    /* End of method parse(String) */
 
     /**
      * Method called when some PCDATA has been found in an XML node.
@@ -96,7 +97,6 @@ public class ConfigurationParser implements ContentHandler {
             buffer = null;
         }
     }
-    /* End of method characters(String) */
 
     /**
      * Notifies the parser that a new XML node has been found.
@@ -109,7 +109,6 @@ public class ConfigurationParser implements ContentHandler {
         }
         buffer = name;
     }
-    /* End of method startElement(String, String, Hashtable, Hashtable) */
 
     /**
      * Notifies the parser that an XML node has been closed.
@@ -122,7 +121,6 @@ public class ConfigurationParser implements ContentHandler {
             inNode = true;
         }
     }
-    /* End of method endElement(String) */
 
     /* ------------------------ */
     /*      Unused methods      */
@@ -130,4 +128,3 @@ public class ConfigurationParser implements ContentHandler {
     public void endDocument() {}
     public void startDocument() {}
 }
-/* End of class ConfigurationParser */

@@ -21,15 +21,18 @@ import java.util.*;
  * <p>
  * Leafs are retrieved and created in the same way as nodes, with the exception that
  * there is no <i>createLeaf</i> method(it was not deemed usefull, but may be added
- * in later releases).
+ * in an upcoming release).
  * </p>
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 class ConfigurationTree {
+
     /** Name of the root node. */
     private String     name;
+
     /** Different subnodes. */
     private LinkedList nodes;
+
     /** Different leafs. */
     private LinkedList leafs;
 
@@ -45,7 +48,6 @@ class ConfigurationTree {
         nodes = new LinkedList();
         leafs = new LinkedList();
     }
-    /* End of constructor ConfigurationTree(String) */
 
     /* ------------------------ */
     /*        Name access       */
@@ -81,7 +83,6 @@ class ConfigurationTree {
         }
         return null;
     }
-    /* End of method getLeafInstance(String) */
 
     /**
      * Returns the value of the specified leaf.
@@ -93,7 +94,6 @@ class ConfigurationTree {
         leaf = getLeafInstance(name);
         return leaf == null ? null : leaf.getValue();
     }
-    /* End of method getLeaf(String) */
 
     /**
      * Sets the specified leaf's value.
@@ -146,7 +146,6 @@ class ConfigurationTree {
 
         }
     }
-    /* End of method setLeaf(String, String) */
 
     /**
      * Returns the number of leafs contained by this tree.
@@ -187,7 +186,6 @@ class ConfigurationTree {
         nodes.add(node = new ConfigurationTree(name));
         return node;
     }
-    /* End of method createNode(String) */
 
     /**
      * Adds a node with the specified name.
@@ -201,7 +199,6 @@ class ConfigurationTree {
             nodes.add(node = new ConfigurationTree(name));
         return node;
     }
-    /* End of method addNode(String) */
 
     /**
      * Returns the specified node.
@@ -219,7 +216,6 @@ class ConfigurationTree {
         }
         return null;
     }
-    /* End of method getNode(String) */
 
     /**
      * Returns the number of nodes contained in this tree.
@@ -252,4 +248,3 @@ class ConfigurationTree {
      */
     void addNode(ConfigurationTree node) {nodes.add(node);}
 }
-/* End of class ConfigurationTree */

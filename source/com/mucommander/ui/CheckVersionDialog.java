@@ -11,17 +11,20 @@ import javax.swing.*;
 
 
 /**
- * This class takes care of checking on a remote server information about the latest muCommander
- * version and displaying the result to the end user.
+ * This class takes care of retrieving information about the latest muCommander
+ * version from a remote server and displaying the result to the end user.
  *
  * @author Maxence Bernard
  */
 public class CheckVersionDialog extends FocusDialog implements ActionListener, Runnable {
 
-	// Dialog's width has to be at least 240
+	/** Dialog's width has to be at least 240 */
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
 
 	private MainFrame mainFrame;
+
+	/** true if the user manually clicked on the 'Check for updates' menu item,
+	 * false if the update check was automatically triggered on startup */
     private boolean userInitiated;
 
 	private JButton downloadButton;
@@ -30,11 +33,12 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 
 	
 	/**
-     * Checks for updates and displays the result
+     * Checks for updates and notifies the user of the outcome. The check itself is performed in a separate thread
+	 * to prevent the app from waiting for the request's result.
      *
-     * @param userInitiated if <code>true</code>, the user manually asked to check for updates,
-     * if not then this check is performed automatically by the application. This parameter is used
-     * to not display check results when
+     * @param userInitiated true if the user manually clicked on the 'Check for updates' menu item,
+	 * false if the update check was automatically triggered on startup. If the check was automatically triggered,
+	 * the user won't be notified if there is no new version (current version is the latest).
      */
     public CheckVersionDialog(MainFrame mainFrame, boolean userInitiated) {
 		super(mainFrame, "", mainFrame);
@@ -46,6 +50,9 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
     }
 	
     
+	/**
+	 * Checks for updates and notifies the user of the outcome.
+	 */
     public void run() {    
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
@@ -127,13 +134,16 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 
 		// Selects OK when enter is pressed
 		getRootPane().setDefaultButton(downloadButton);
-//		FocusRequester.requestFocus(downloadButton);
 		
 		// Packs dialog
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         showDialog();
     }
 
+
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
 
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();

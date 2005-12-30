@@ -2,9 +2,11 @@ package com.mucommander.conf;
 
 /**
  * Event used to notify registered listeners that a configuration variable has been modified.
+ *
  * @author Nicolas Rinaudo
  */
 public class ConfigurationEvent {
+
     /** Name of the variable that has been modified. */
     private String variable;
     /** New value of the variable that has been modified. */
@@ -22,7 +24,6 @@ public class ConfigurationEvent {
         setVariable(variable);
         setValue(value);
     }
-    /* End of constructor ConfigurationEvent(String, String) */
 
     /* ------------------------ */
     /*        Name access       */
@@ -58,4 +59,3 @@ public class ConfigurationEvent {
      */
     public String getValue() {return value;}
 }
-/* End of class ConfigurationEvent */

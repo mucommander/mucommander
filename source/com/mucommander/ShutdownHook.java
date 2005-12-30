@@ -5,7 +5,7 @@ import com.mucommander.conf.ConfigurationManager;
 
 /**
  * The run method of this thread is called when the program shuts down, either because
- * the user chooe to quit the program or because the user logged off, shut down...
+ * the user chose to quit the program or because the program was interrupted by a logoff...
  *
  * @author Maxence Bernard
  */

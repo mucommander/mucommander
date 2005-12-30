@@ -42,7 +42,8 @@ public class VersionChecker implements ContentHandler {
 		conn.connect();
 
 		InputStream in = conn.getInputStream();
-		parser.parse(in, new VersionChecker());
+		// Use UTF-8 encoding
+		parser.parse(in, new VersionChecker(), "UTF-8");
         in.close();
         
         if(latestVersion==null || latestVersion.equals(""))

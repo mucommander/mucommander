@@ -24,7 +24,6 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
         out.println("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
         ConfigurationManager.buildConfigurationTree(this);
     }
-    /* End ofmethod writeXML(PrintWriter) */
 
     /**
      * Method called when a new node is opened.
@@ -39,7 +38,6 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
         out.print(name);
         out.println('>');
     }
-    /* End of method addNode(String) */
 
     /**
      * Method called when a node is closed.
@@ -54,7 +52,6 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
         out.print(name);
         out.println('>');
     }
-    /* End of method closeNode(String) */
 
     /**
      * Method called when a new leaf is found in the tree.
@@ -70,6 +67,4 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
         out.print(name);
         out.println(">");
     }
-    /* End of method addLeaf(String, String) */
 }
-/* End of class ConfigurationWriter */

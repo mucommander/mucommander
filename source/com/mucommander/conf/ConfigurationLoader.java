@@ -8,6 +8,7 @@ package com.mucommander.conf;
  * @author Nicolas Rinaudo
  */
 class ConfigurationLoader implements ConfigurationTreeBuilder {
+
     /** Buffer for the configuration path. */
     private String variable = null;
 
@@ -21,7 +22,6 @@ class ConfigurationLoader implements ConfigurationTreeBuilder {
         else
             variable += '.' + name;
     }
-    /* End of method addNode(String) */
 
     /**
      * Removes the last entry in the path.
@@ -44,4 +44,3 @@ class ConfigurationLoader implements ConfigurationTreeBuilder {
 		ConfigurationManager.setVariable(variable + '.' + name, value);
 	}
 }
-/* End of class ConfigurationLoader */

@@ -10,6 +10,7 @@ package com.mucommander.conf;
  * @author Nicolas Rinaudo
  */
 class ConfigurationLeaf {
+
     /** Leaf's name. */
     private String name;
     /** Leaf's value. */
@@ -27,7 +28,6 @@ class ConfigurationLeaf {
         setName(name);
         setValue(value);
     }
-    /* End of constructor ConfigurationLeaf(String, String) */
 
     /* ----------------------- */
     /*       Name access       */
@@ -59,4 +59,3 @@ class ConfigurationLeaf {
      */
     public void setValue(String value) {this.value = value;}
 }
-/* End of class ConfigurationLeaf */

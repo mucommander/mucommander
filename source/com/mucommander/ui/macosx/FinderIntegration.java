@@ -25,7 +25,7 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 	public FinderIntegration() {
 		
 		// Turn on/off brush metal look (default is off because still buggy when scrolling and panning dialog windows) :
-		//  "Allows you to display your main windows with the “textured” Aqua window appearance.
+		//  "Allows you to display your main windows with the 'textured' Aqua window appearance.
 		//   This property should be applied only to the primary application window,
 		//   and should not affect supporting windows like dialogs or preference windows."
 		System.setProperty("apple.awt.brushMetalLook", ConfigurationManager.getVariable("prefs.macosx.brushed_metal_look", "true"));

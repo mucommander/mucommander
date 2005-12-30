@@ -110,6 +110,10 @@ public class AuthDialog extends FocusDialog implements ActionListener {
 	}
 	
 
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
+
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==okButton) {
 			this.dialogOked = true;

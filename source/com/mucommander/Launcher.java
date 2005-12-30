@@ -20,7 +20,7 @@ import java.net.URL;
 
 /**
  * muCommander launcher: displays a splash screen and starts up the app
- * when triggered by its main() method.
+ * throught the main() method.
  *
  * @author Maxence Bernard
  */

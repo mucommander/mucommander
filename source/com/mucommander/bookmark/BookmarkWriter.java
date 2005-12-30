@@ -5,7 +5,7 @@ import java.util.Vector;
 
 
 /**
- * This class provides a method to write bookmarks to a file as XML.
+ * This class provides a method to write bookmarks to a file in XML format.
  *
  * @author Maxence Bernard
  */
@@ -19,8 +19,8 @@ public class BookmarkWriter {
 	 * Writes the bookmarks XML file in the user's preferences folder.
 	 */
 	static void write(File file) throws IOException {
-		// Use utf-8 encoding
-		PrintStream ps = new PrintStream(new FileOutputStream(file), false, "utf-8");
+		// Use UTF-8 encoding
+		PrintStream ps = new PrintStream(new FileOutputStream(file), false, "UTF-8");
 		
 		// Write XML header
 		ps.println("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");

@@ -3,7 +3,7 @@ package com.mucommander.conf;
 /**
  * Class used to build a configuration tree.
  * <p>
- * When passed to the {@link net.muwire.common.manager.ConfigurationManager#buildConfigurationTree(ConfigurationTreeBuilder)}
+ * When passed to the {@link com.mucommander.conf.ConfigurationManager#buildConfigurationTree(ConfigurationTreeBuilder)}
  * method, an instance of the ConfigurationTreeBuilder interface will receive a description of the whole configuration tree.<br>
  * For example, a client software used to modify the server configuration could use this interface to create a graphical
  * representation of the configuration tree.
@@ -11,6 +11,7 @@ package com.mucommander.conf;
  * @author Nicolas Rinaudo
  */
 public interface ConfigurationTreeBuilder {
+
     /**
      * Method called when a new node is found in the tree.
      * @param name node's name.
@@ -30,4 +31,3 @@ public interface ConfigurationTreeBuilder {
      */
     public void addLeaf(String name, String value);
 }
-/* End of interface ConfigurationTreeBuilder */

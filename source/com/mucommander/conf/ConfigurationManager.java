@@ -2,7 +2,6 @@ package com.mucommander.conf;
 
 import java.util.*;
 import java.io.*;
-//import org.xml.sax.*;
 
 import com.mucommander.PlatformManager;
 
@@ -11,8 +10,6 @@ import com.mucommander.PlatformManager;
  * Handles configuration.
  * <p>
  * When it is first accessed, this class will try to load the configuration file.
- * It will look for it in the <i>home</i> directory of the user who started the JVM
- * (or in the <i>user.home</i> System property if it has been modified).
  * </p>
  * <p>
  * Once the configuration file has been loaded in memory, variables can be set or
@@ -20,36 +17,31 @@ import com.mucommander.PlatformManager;
  * methods.<br>
  * Configuration variable names follow the same syntax as the Java System properties. Each
  * variable is contained in a section, which can itself be contained in a section. Each section
- * name is separated by a '.' character. For example: <i>muwire.someSection.someVariable</i> refers to
- * the <i>someVariable</i> variable found in the <i>someSection</i> section of <i>muwire</i>.
+ * name is separated by a '.' character. For example: <i>mucommander.someSection.someVariable</i> refers to
+ * the <i>someVariable</i> variable found in the <i>someSection</i> section of <i>mucommander</i>.
  * </p>
  * <p>
  * It is possible to monitor configuration file changes with a system of listeners.<br>
- * Any class implementing the {net.muwire.common.manager.ConfigurationListener} interface
+ * Any class implementing the {com.mucommander.conf.ConfigurationListener} interface
  * can be registered through the {@link #addConfigurationListener(ConfigurationListener)}
  * method. It will then be warned as soon as a configuration variable has been modified.<br>
- * </p>
- * <p>
-// * Upon system initialisation, the configuration manager will start a configuration monitoring daemon.
-// * This daemon will check every {@link #CONTROL_DELAY_ENTRY} milliseconds for a modification of the configuration
-// * file, and will reload it if necessary.
  * </p>
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class ConfigurationManager {
+
     /** Contains all the registered configuration listeners. */
     private static LinkedList listeners = new LinkedList();
+
     /** Name of the configuration file */
-    private static final String CONFIGURATION_FILE = "preferences.xml";
+    private static final String CONFIGURATION_FILENAME = "preferences.xml";
+
     /** Instance of ConfigurationManager used to enfore configuration file loading. */
     private static ConfigurationManager singleton = new ConfigurationManager();
+
     /** Holds the content of the configuration file. */
     private static ConfigurationTree tree;
-//    /** Configuration file monitoring daemon. */
-//    private static Thread daemon;
-//    public static final String CONTROL_DELAY_ENTRY = "muwire.conf.control";
-//    private static final int DEFAULT_CONTROL_DELAY = 1000;
-//    private static int controlDelay;
+
 
     /* ------------------------ */
     /*      Initialisation      */
@@ -65,45 +57,24 @@ public class ConfigurationManager {
 		
         // Sets muCommander version corresponding to this configuration file
         setVariable("prefs.conf_version", com.mucommander.Launcher.MUCOMMANDER_VERSION);
-//        initConfiguration();
-//        initDaemon();
     }
-    /* End of contructor ConfigurationManager() */
-
-//    /**
-//     * Initialises the ConfigurationManager's configuration.
-//     */
-//    private void initConfiguration() {
-//        try {controlDelay = Integer.parseInt(CONTROL_DELAY_ENTRY);}
-//        catch(Exception e) {controlDelay = DEFAULT_CONTROL_DELAY;}
-//    }
-//    /* End of method initConfiguration() */
-//
-//    /**
-//     * Initialises the configuration file monitoring daemon.
-//     */
-//    private void initDaemon() {
-//        daemon = new Thread(this);
-//        daemon.setDaemon(true);
-//        daemon.setPriority(Thread.MIN_PRIORITY);
-//        daemon.start();
-//    }
-//    /* End of method initDaemon() */
-
 
     /* ------------------------ */
     /*       File handling      */
     /* ------------------------ */
+
     /**
-     * Returns the path to the configuration file.
+     * Returns the path to the configuration file on the current platform.
      */
     private static String getConfigurationFilePath() {
-        return new File(PlatformManager.getPreferencesFolder(), CONFIGURATION_FILE).getAbsolutePath();
+        return new File(PlatformManager.getPreferencesFolder(), CONFIGURATION_FILENAME).getAbsolutePath();
     }
-
 	
+    /**
+     * Returns the generic path to the configuration file.
+     */
     private static String getGenericConfigurationFilePath() {
-        return new File(PlatformManager.getGenericPreferencesFolder(), CONFIGURATION_FILE).getAbsolutePath();
+        return new File(PlatformManager.getGenericPreferencesFolder(), CONFIGURATION_FILENAME).getAbsolutePath();
     }	
 
 	
@@ -158,8 +129,9 @@ public class ConfigurationManager {
 			ConfigurationWriter writer = new ConfigurationWriter();
 			String filePath = getConfigurationFilePath();
 			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: "+filePath);						
-		
-			out = new PrintWriter(new FileOutputStream(filePath));
+			
+			// Use UTF-8 encoding
+			out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePath), "UTF-8"));
 			writer.writeXML(out);
 		}
 		catch(IOException e) {
@@ -308,11 +280,7 @@ public class ConfigurationManager {
      * @param value value for the specified variable.
      */
     public static synchronized void setVariable(String var, String value) {
-//        // Maxence patch: ConfigurationParser does not handle empty elements
-//		// (containing whitespace characters) properly
-//		if(value.trim().equals(""))
-//			return;
-		
+
 		StringTokenizer   parser;
         String            buffer;
         ConfigurationTree node;
@@ -350,59 +318,6 @@ public class ConfigurationManager {
 	}
 	
 		
-//    /* ------------------------ */
-//    /*      File monitoring     */
-//    /* ------------------------ */
-//    /**
-//     * Main file monitoring deamon loop.
-//     */
-//    public void run() {
-//        long lastAccessed;
-//        long buffer;
-//
-//        lastAccessed = getAccessedTime();
-//
-//        while(true) {
-//            try {daemon.sleep(controlDelay);}
-//            catch(Exception e) {}
-//
-//            /* Checks whether the configuration file should be reloaded. */
-//            buffer = getAccessedTime();
-//            if(buffer != lastAccessed) {
-//                try {loadConfiguration();}
-//                catch(Exception e) {}
-//                lastAccessed = buffer;
-//            }
-//        }
-//    }
-//    /* End of method run() */
-
-//    /**
-//     * Returns the last time the configuration file has been modified.
-//     * @return the last time the configuration file has been modified.
-//     */
-//    private static final long getAccessedTime() {return new File(getConfigurationFilePath()).lastModified();}
-
-//    /* ------------------------ */
-//    /*    Listeners handling    */
-//    /* ------------------------ */
-//    /**
-//     * Method called when a configuration variable has been modified.
-//     * <p>
-//     * This method will check for the {@link #CONTROL_DELAY_ENTRY}
-//     * configuration variable, and return false if its value is not correct.
-//     * </p>
-//     * @return false if the event concerns {@link #CONTROL_DELAY_ENTRY} and the value is illegal, true otherwise.
-//     */
-//    public boolean configurationChanged(ConfigurationEvent event) {
-//        if(event.getVariable().equals(CONTROL_DELAY_ENTRY)) {
-//            try {controlDelay = Integer.parseInt(event.getValue());}
-//            catch(Exception e) {return false;}
-//        }
-//        return true;
-//    }
-//    /* End of method configurationChanged(ConfigurationEvent) */
-
     /**
      * Adds the specified configuration listener to the list of registered listeners.
      * @param listener listener to insert in the list.

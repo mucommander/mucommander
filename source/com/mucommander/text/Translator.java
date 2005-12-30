@@ -635,7 +635,7 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 	 */
 /*
 	 public static void writeFileToDisk() throws IOException {
-		PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(KContext.getValue("translation.file")), "utf-8"));
+		PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(dictionaryFilePath), "utf-8"));
 
 		String entry;
 		String line;

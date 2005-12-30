@@ -6,29 +6,41 @@ import java.util.Vector;
 import java.io.File;
 import java.io.IOException;
 
+import com.mucommander.PlatformManager;
+
 /**
  * This class manages boomarks and provides add/get/remove methods.
- * Bookmarks are initially loaded from a file, and automatically saved when a bookmark has been added or removed.
+ *
+ * <p>Bookmarks are initially loaded from a file on startup, and automatically saved when a bookmark has been added or removed.
  *
  * @author Maxence Bernard
  */
 public class BookmarkManager {
 
-    /** Name of the bookmarks file */
-    private static final String BOOKMARKS_FILE = "bookmarks.xml";
+	/** Bookmark file name */
+    private static final String BOOKMARKS_FILENAME = "bookmarks.xml";
 
+	/** Bookmark instances */
 	private static Vector bookmarks = new Vector();
 
-
+	/**
+	 * Return a java.io.File instance that points to the bookmarks file location.
+	 */
 	private static File getBookmarksFile() {
-		return new File(com.mucommander.PlatformManager.getPreferencesFolder(), BOOKMARKS_FILE);
+		return new File(PlatformManager.getPreferencesFolder(), BOOKMARKS_FILENAME);
 	}
 
+	
+	/**
+	 * Tries to load bookmarks from the bookmarks file if it exists, and reports any error that occur during parsing
+	 * to the standard output. Does nothing if the bookmarks file doesn't exist.
+	 */
 	public static void loadBookmarks() {
 		File bookmarksFile = getBookmarksFile();
 		try {
 			if(bookmarksFile.exists()) {
 				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found bookmarks file: "+bookmarksFile.getAbsolutePath());
+				// Parse the bookmarks file
 				new BookmarkParser().parse(bookmarksFile);
 				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Bookmarks file loaded.");
 			}
@@ -37,11 +49,15 @@ public class BookmarkManager {
 			}
 		}
 		catch(Exception e) {
-			// Notify user that something went wrong while parsing the bookmarks file
+			// Report on the standard output that something went wrong while parsing the bookmarks file
+			// as this shouldn't normally happen
 			System.out.println("An error occurred while loading bookmarks file "+bookmarksFile.getAbsolutePath()+": "+e);			
 		}
 	}
 	
+	/**
+	 * Tries to write the bookmarks file.
+	 */
 	public static void writeBookmarks() {
 		File bookmarksFile = getBookmarksFile();
 		try {
@@ -56,7 +72,7 @@ public class BookmarkManager {
 
 
 	/**
-	 * Returns a Vector of bookmarks.
+	 * Returns a Vector filled with all bookmarks.
 	 */
 	public static Vector getBookmarks() {
 		return bookmarks;
@@ -65,6 +81,8 @@ public class BookmarkManager {
 	
 	/**
 	 * Adds a bookmark.
+	 *
+	 * @param bm the Bookmark instance to add.
 	 */
 	public static void addBookmark(Bookmark bm) {
 		bookmarks.add(bm);
@@ -73,6 +91,8 @@ public class BookmarkManager {
 
 	/**
 	 * Removes a bookmark.
+	 *
+	 * @param bm the Bookmark instance to remove.
 	 */
 	public static void removeBookmark(Bookmark bm) {
 		bookmarks.remove(bm);

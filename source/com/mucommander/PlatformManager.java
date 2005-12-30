@@ -12,7 +12,7 @@ import java.awt.*;
 
 
 /**
- * This class takes care of Platform-specific issues, such as getting screen dimensions
+ * This class takes care of platform-specific issues, such as getting screen dimensions
  * and issuing commands.
  *
  * @author Maxence Bernard

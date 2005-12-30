@@ -10,14 +10,17 @@ import com.muxml.Parser;
 
 
 /**
- * This class takes care of parsing the bookmarks XML file and feeding them to the BookmarkManager.
+ * This class takes care of parsing the bookmarks XML file and passing Bookmark instance to BookmarkManager.
  *
  * @author Maxence Bernard
  */
 class BookmarkParser implements ContentHandler {
 	
+	/** Variable used for XML parsing */
 	private String bookmarkName;
+	/** Variable used for XML parsing */
 	private String bookmarkURL;
+	/** Variable used for XML parsing */
 	private String characters;
 
 	/**
@@ -30,7 +33,8 @@ class BookmarkParser implements ContentHandler {
 	 * Parses the given XML bookmarks file. Should only be called by BookmarkManager.
 	 */
     void parse(File file) throws Exception {
-        new Parser().parse(new FileInputStream(file), this);
+		// Use UTF-8 encoding
+        new Parser().parse(new FileInputStream(file), this, "UTF-8");
     }
 
 
@@ -88,12 +92,12 @@ class BookmarkParser implements ContentHandler {
 	 * Test method
 	 */
 	public static void main(String args[]) throws Exception {
-		new BookmarkParser().parse(new File("/Users/maxence/Projects/mucommander/bookmarks.xml"));
+		new BookmarkParser().parse(new File("~/Projects/mucommander/bookmarks.xml"));
 
 		System.out.println("1- "+BookmarkManager.getBookmarks());
 		
-		BookmarkWriter.write(new File("/Users/maxence/Projects/mucommander/bookmarks2.xml"));
-		new BookmarkParser().parse(new File("/Users/maxence/Projects/mucommander/bookmarks2.xml"));
+		BookmarkWriter.write(new File("~/Projects/mucommander/bookmarks2.xml"));
+		new BookmarkParser().parse(new File("~/Projects/mucommander/bookmarks2.xml"));
 
 		System.out.println("2- "+BookmarkManager.getBookmarks());
 	}
