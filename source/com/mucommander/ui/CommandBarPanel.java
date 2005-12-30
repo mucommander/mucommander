@@ -17,15 +17,26 @@ import java.io.*;
 
 
 /**
- * Command bar panel which contains buttons for a number of commands (view, edit, copy, move...) and
- * appears at the bottom of a main window.
+ * CommandBarPanel is the button bar that sits at the bottom of the main window and provides access to
+ * a number of commands (view, edit, copy, move...).
  *
  * @author Maxence Bernard
  */
 public class CommandBarPanel extends JPanel implements ActionListener {
 
+	/** Parent MainFrame instance */
     private MainFrame mainFrame;
+
+	/** True when Shift key is pressed */ 
+	private boolean shiftDown;
+	
+	/** Buttons */
+	private JButton buttons[];
     
+	////////////////////
+	// Button indexes //
+	////////////////////
+	
 	public final static int VIEW_INDEX = 0;
 	public final static int EDIT_INDEX = 1;
 	public final static int COPY_INDEX = 2;
@@ -37,9 +48,9 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	
 	private final static int NB_BUTTONS = 8;
 
-	private boolean shiftDown;
-	
-	private JButton buttons[];
+	//////////////////////////
+	// Locatlized text keys //
+	//////////////////////////
 
 	private final static String MOVE_TEXT = "command_bar.move";
 	private final static String RENAME_TEXT = "command_bar.rename";
@@ -60,6 +71,9 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	};
 
     
+	/**
+	 * Creates a new CommandBarPanel instance associated with the given MainFrame.
+	 */
 	public CommandBarPanel(MainFrame mainFrame) {
 		super(new GridLayout(0,8));
         this.mainFrame = mainFrame;
@@ -71,14 +85,24 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			);	
 	}
 
-	
+
+	/**
+	 * Returns the button correponding to the given index, to be used in conjunction
+	 * with final static fields.  
+	 */
 	public JButton getButton(int buttonIndex) {
 		return buttons[buttonIndex];
 	}
 	
 	
-	private JButton addButton(String text, String tooltipText) {
-		JButton button = new JButton(text);
+	/**
+	 * Creates and adds a button to the command bar using the provided label and tooltip text.
+	 *
+	 * @param label the button's label
+	 * @param tooltipText the tooltip text that will get displayed when the mouse stays over the button
+	 */
+	private JButton addButton(String label, String tooltipText) {
+		JButton button = new JButton(label);
         button.setToolTipText(tooltipText);
 		button.setMargin(new Insets(1,1,1,1));
 		// For Mac OS X whose minimum width for buttons is enormous
@@ -138,29 +162,38 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		frame.show();
 	}
 	
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         
+		// View button
 		if(source == buttons[VIEW_INDEX]) {
         	doView();
 		}
+		// Edit button
         else if(source == buttons[EDIT_INDEX]) {
-        	doEdit();
+			doEdit();
 		}
+		// Mkdir button
         else if(source == buttons[MKDIR_INDEX]) {
+			// Trigger Mkdir action
             new MkdirDialog(mainFrame);
         }
+		// Refresh button
         else if(source == buttons[REFRESH_INDEX]) {
 			// Try to refresh current folder in a separate thread
 			mainFrame.getLastActiveTable().getFolderPanel().tryRefreshCurrentFolder();
 		}
+		// Close window button
         else if(source == buttons[CLOSE_INDEX]) {
 			WindowManager.getInstance().disposeMainFrame(mainFrame);
 		}
 		else {
-			// The following actions need to work on files, so return
-			// if no files are selected
+			// The following actions need to work on files, 
+			// simply return if no file is selected
 			FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
 			if(files.size()==0) {
 				// Request focus since focus currently belongs to a command bar button
@@ -169,12 +202,15 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 				return;
 			}
 			
+			// Copy button
 			if(source == buttons[COPY_INDEX]) {
 				new CopyDialog(mainFrame, files, shiftDown);
 			}
+			// Move/Rename button
 			else if(source == buttons[MOVE_INDEX]) {
 				new MoveDialog(mainFrame, files, shiftDown);
 			}
+			// Delete button
 			else if(source == buttons[DELETE_INDEX]) {
 				new DeleteDialog(mainFrame, files);
 			}

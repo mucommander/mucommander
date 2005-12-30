@@ -13,47 +13,59 @@ import java.util.Locale;
 
 
 /**
- * This class takes care of all text localization issues by looking up text entries in a
- * dictionary file and translating them into the current language.
+ * This class takes care of all text localization issues by loading all text entries from 
+ * a dictionary file on startup and translating them into the current language on demand.
+ *
+ * <p>All public methods are static to make it easy to call them throughout the application</p>
  *
  * <p>See dictionary file for more information about dictionary file grammar.</p>
  *
  * @author Maxence Bernard
  */
 public class Translator {
-	private final static String DICTIONARY_RESOURCE_FILE = "/dictionary.txt";
-	private final static Translator instance = new Translator(DICTIONARY_RESOURCE_FILE);
 
+	/** Path to the dictionary file inside the JAR file */
+	private final static String DICTIONARY_FILE_PATH = "/dictionary.txt";
+
+	/** Default language when no language is specified in the preferences file
+		and system's language has no dictionary */
+	private final static String DEFAULT_LANGUAGE = "en";
+
+	/** Preferred language's configuration key */
+	private final static String LANGUAGE_CONFIGURATION_KEY = "prefs.language";
+
+	/** Singleton instance */
+	private final static Translator instance = new Translator(DICTIONARY_FILE_PATH);
+
+	/** Hashtable that maps one language to a dictionary */
 	private static Hashtable dictionaries;
-	private static String dictionaryFilePath;
+
+	/** Current language (2-letter language code) */
+	private static String language;
+
+//	private static String dictionaryFilePath;
 //	private static Vector orderedEntries;
 //	private static boolean needsToBeSaved;
 
-	/** Current language (2-letter language code). Uses default locale's language if language hasn't been set yet */
-	private static String language;
-
-
 	/**
-	 * Creates a new Translator instance.
+	 * Creates a Translator instance and loads all entries from the dictionary file. 
 	 *
-	 * @param filePath the path of the dictionnary file.
+	 * @param filePath the path to the dictionary file.
 	 */
 	private Translator(String filePath) {
-		dictionaryFilePath = filePath;
-
 		try {
-			loadDictionnaryFile();
+			loadDictionaryFile(filePath);
 		} catch (IOException e) {
 			new RuntimeException("Translator.init: unable to load dictionary file "+e);
 		}
 		
-		String langVal = ConfigurationManager.getVariable("prefs.language");
+		String langVal = ConfigurationManager.getVariable(LANGUAGE_CONFIGURATION_KEY);
 		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language in prefs: "+langVal);
 
 		// If language is not set in preferences 
 		if(langVal==null) {
-			// Try to set language to the system's language, if system's language
-			// has a dictionary, otherwise English is used by default.
+			// Try to match language with the system's language, only if the system's language
+			// has a dictionary, otherwise use default language (English).
 			String languages[] = getAvailableLanguages();
 			String localeLang = Locale.getDefault().getLanguage();
 
@@ -66,9 +78,9 @@ public class Translator {
 				}
 			}
 
-			// Fall back to English (system's language doesn't have a dictionary)
+			// System's language doesn't have a dictionary, fall back to default language (English)
 			if(Translator.language==null) {
-				Translator.language = "en";
+				Translator.language = DEFAULT_LANGUAGE;
 
 				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No dictionary matching "+localeLang+", falling back to English");
 			}
@@ -76,7 +88,7 @@ public class Translator {
 			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language has been set to "+Translator.language);
 
 				// Set language to configuration file
-			ConfigurationManager.setVariable("prefs.language", Translator.language);
+			ConfigurationManager.setVariable(LANGUAGE_CONFIGURATION_KEY, Translator.language);
 		}
 		else {
 			Translator.language = langVal;
@@ -85,82 +97,14 @@ public class Translator {
 		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Translator language: "+Translator.language);
 	}
 
-
-	/**
-	 * Empty method that does nothing but trigger the static initializer block.
-	 */
-	public static void init() {
-	}
-	
 	
 	/**
-	 * Sets language used by <code>get()</code> methods when language parameter isn't specified.
-	 *
-	 * @param lang 2-letter language code
+	 * Reads the dictionary file which contains localized text entries.
 	 */
-	public static void setLanguage(String lang) {
-		Translator.language = lang;
-	}
-	
-	
-	/**
-	 * Returns language used by <code>get()</code> methods when language parameter isn't specified.
-	 *
-	 * @return lang 2-letter language code
-	 */
-	public static String getLanguage() {
-		return language;
-	}
-	
-	
-	/**
-	 * Returns an array of available languages, each described by a 2-letter
-	 * String ("fr", "en", "jp"...).
-	 *
-	 * @return a String array of 2-letter language codes.
-	 */
-	public static String[] getAvailableLanguages() {
-		String[] languages = new String[dictionaries.size()];
-		Enumeration keys = dictionaries.keys();
-		int i = 0;
-
-		while (keys.hasMoreElements()) {
-			languages[i++] = (String)keys.nextElement();
-		}
-
-		return languages;
-	}
-
-
-	/**
-	 * Returns the dictionary for the given language, <code>null</code> if it
-	 * does not exist.
-	 */
-	public Hashtable getDictionary(String language) {
-		return (Hashtable)dictionaries.get(language);
-	}
-
-
-	/**
-	 * Reloads dictionnary entries (reloads dictionnary file).
-	 *
-	 * @throws IOException if dictionary file could not be opened/read.
-	 */
-/*
-	public static void reloadEntries() throws IOException {
-		loadDictionnaryFile();
-	}
-*/
-	
-
-	/**
-	 * Opens, reads and closes dictionnary file which contain localized text
-	 * entries.
-	 */
-	public void loadDictionnaryFile() throws IOException {
+	private void loadDictionaryFile(String filePath) throws IOException {
 		dictionaries = new Hashtable();
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(dictionaryFilePath), "UTF-8"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filePath), "UTF-8"));
 		String line;
 		String key;
 		String lang;
@@ -212,6 +156,62 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 //		needsToBeSaved = false;
 	}
 
+
+	/**
+	 * Empty method that does nothing but trigger the static initializer block.
+	 */
+	public static void init() {
+	}
+
+	
+	/**
+	 * Sets language used by <code>get()</code> methods when language parameter isn't specified.
+	 *
+	 * @param lang 2-letter language code
+	 */
+	public static void setLanguage(String lang) {
+		Translator.language = lang;
+	}
+	
+	
+	/**
+	 * Returns language used by <code>get()</code> methods when language parameter isn't specified.
+	 *
+	 * @return lang 2-letter language code
+	 */
+	public static String getLanguage() {
+		return language;
+	}
+	
+	
+	/**
+	 * Returns an array of available languages, each described by a 2-letter
+	 * String ("fr", "en", "jp"...).
+	 *
+	 * @return a String array of 2-letter language codes.
+	 */
+	public static String[] getAvailableLanguages() {
+		String[] languages = new String[dictionaries.size()];
+		Enumeration keys = dictionaries.keys();
+		int i = 0;
+
+		while (keys.hasMoreElements()) {
+			languages[i++] = (String)keys.nextElement();
+		}
+
+		return languages;
+	}
+
+
+	/**
+	 * Returns the dictionary for the given language, <code>null</code> if it
+	 * does not exist.
+	 */
+	public Hashtable getDictionary(String language) {
+		return (Hashtable)dictionaries.get(language);
+	}
+
+
 	/**
 	 * Returns true if the given key exists (has a corresponding value) in the given language.
 	 */
@@ -249,47 +249,6 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 //		needsToBeSaved = true;
 	}
 
-
-	/**
-	 * Returns the localized text String corresponding to the given key and
-	 * language in its 'raw' form, that is without parameters and variables
-	 * replaced by their value.
-	 *
-	 * @param key a case-insensitive key.
-	 * @param language a 2-letter language case-insensitive string.
-	 *
-	 * @return DOCUMENT ME!
-	 */
-/*
-	 private static String getRawValue(String key, String language) {
-		// Gets the dictionary for this language
-		language = language.toLowerCase();
-
-		Hashtable dictionary = (Hashtable)dictionaries.get(language);
-
-		// Dictionary for this language doesn't exist 
-		if (dictionary==null) {
-			if (language.equals("en"))
-				return "";
-			else
-
-				return getRawValue(key, "en");
-		}
-
-		// Returns the localized text
-		String text = (String)dictionary.get(key.toLowerCase());
-
-		if (text==null) {
-			if (language.equals("en"))
-				return "";
-			else
-
-				return getRawValue(key, "en");
-		}
-
-		return text;
-	}
-*/
 
 	/**
 	 * Returns the localized text String corresponding to the given key and
@@ -629,6 +588,57 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 //		needsToBeSaved = false;
 	}
 
+	/**
+	 * Reloads dictionary entries (reloads dictionary file).
+	 *
+	 * @throws IOException if dictionary file could not be opened/read.
+	 */
+/*
+	public static void reloadEntries() throws IOException {
+		loadDictionaryFile();
+	}
+*/
+
+	/**
+	 * Returns the localized text String corresponding to the given key and
+	 * language in its 'raw' form, that is without parameters and variables
+	 * replaced by their value.
+	 *
+	 * @param key a case-insensitive key.
+	 * @param language a 2-letter language case-insensitive string.
+	 *
+	 * @return the raw value associated with the given key
+	 */
+/*
+	 private static String getRawValue(String key, String language) {
+		// Gets the dictionary for this language
+		language = language.toLowerCase();
+
+		Hashtable dictionary = (Hashtable)dictionaries.get(language);
+
+		// Dictionary for this language doesn't exist 
+		if (dictionary==null) {
+			if (language.equals("en"))
+				return "";
+			else
+
+				return getRawValue(key, "en");
+		}
+
+		// Returns the localized text
+		String text = (String)dictionary.get(key.toLowerCase());
+
+		if (text==null) {
+			if (language.equals("en"))
+				return "";
+			else
+
+				return getRawValue(key, "en");
+		}
+
+		return text;
+	}
+*/
 
 	/**
 	 * Writes the dictionary file to the disk.

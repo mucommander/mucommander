@@ -21,7 +21,8 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 	/** Dialog's width has to be at least 240 */
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
 
-	private MainFrame mainFrame;
+	/** Parent MainFrame instance */
+    private MainFrame mainFrame;
 
 	/** true if the user manually clicked on the 'Check for updates' menu item,
 	 * false if the update check was automatically triggered on startup */

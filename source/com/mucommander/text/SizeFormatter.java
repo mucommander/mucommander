@@ -29,6 +29,9 @@ public class SizeFormatter {
 	/** Bit mask to round any size < 1KB to 1KB (except 0 which will be 0 KB) */
 	public final static int ROUND_TO_KB = 32;
 
+	//////////////////////////
+	// Locatlized text keys //
+	//////////////////////////
 
 	private final static String BYTE = Translator.get("unit.byte");
 	private final static String BYTES = Translator.get("unit.bytes");
