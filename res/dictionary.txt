@@ -873,6 +873,7 @@ view_menu.reverse_order:RU:В обратном порядке
 # Displayed in the View menu
 view_menu.auto_size_columns:EN:Auto-size columns
 view_menu.auto_size_columns:FR:Auto-dimensionner les colonnes
+view_menu.auto_size_columns:ES:Autodimensionar las columnas
 view_menu.auto_size_columns:RU:Автоподбор размера колонок
 view_menu.auto_size_columns:zh_TW:自動調寬欄位
 view_menu.auto_size_columns:PL:Automatycznie rozszerz kolumny
@@ -971,6 +972,7 @@ view_menu.hide_status_bar:RU:Скрыть панель статуса
 # Title of the Bookmarks menu
 bookmarks_menu:EN:Bookmarks
 bookmarks_menu:FR:Favoris
+bookmarks_menu:ES:Favoritos
 bookmarks_menu:RU:Закладки
 bookmarks_menu:zh_TW:書籤
 bookmarks_menu:PL:Zakładki
@@ -985,6 +987,7 @@ bookmarks_menu.edit_bookmarks:EN:$[edit_bookmarks_dialog.title]...
 # Displayed in the Bookmarks menu when user hasn't defined any bookmark
 bookmarks_menu.no_bookmark:EN:No bookmark
 bookmarks_menu.no_bookmark:FR:Pas de favori
+bookmarks_menu.no_bookmark:ES:No existe favorito
 bookmarks_menu.no_bookmark:RU:Закладок нет
 bookmarks_menu.no_bookmark:zh_TW:沒有書籤
 bookmarks_menu.no_bookmark:PL:Brak zakładek
@@ -1137,6 +1140,7 @@ status_bar.selected_files:RU:%1 из %2 файлов выбрано
 # Displayed in the status bar when connecting to a folder
 status_bar.connecting_to_folder:EN:Connecting to folder, press ESCAPE to cancel.
 status_bar.connecting_to_folder:FR:Connexion en cours, appuyer sur ESCAPE pour annuler 
+status_bar.connecting_to_folder:ES:Conectando al directorio, presiona ESCAPE para cancelar...
 status_bar.connecting_to_folder:RU:Подключаемся к каталогу...
 status_bar.connecting_to_folder:zh_TW:連接至資料夾, 按ESCAPE取消.
 status_bar.connecting_to_folder:PL:Podłączam do katalogu, naciśnij ESCAPE  aby anulować.
@@ -1148,6 +1152,7 @@ status_bar.connecting_to_folder:PL:Podłączam do katalogu, naciśnij ESCAPE  ab
 # Displayed in the status bar to indicate free space on current volume
 status_bar.volume_free:EN:Free: %1
 status_bar.volume_free:FR:Libre: %1
+status_bar.volume_free:ES:Libre: %1
 status_bar.volume_free:RU:Свободно: %1
 status_bar.volume_free:zh_TW:可用空間: %1
 status_bar.volume_free:PL:Wolne: %1
@@ -1158,6 +1163,7 @@ status_bar.volume_free:PL:Wolne: %1
 # Displayed in the status bar to indicate total space on current volume (not available under Windows)
 status_bar.volume_capacity:EN:Capacity: %1
 status_bar.volume_capacity:FR:Capacité: %1
+status_bar.volume_capacity:ES:Capacidad: %1
 status_bar.volume_capacity:RU:Емкость диска: %1
 status_bar.volume_capacity:zh_TW:全部空間: %1
 status_bar.volume_capacity:PL:Pojemność: %1
@@ -2585,6 +2591,7 @@ zip_dialog.file_already_exists:RU:%1 уже существует в катало
 # Title of the Add bookmark dialog
 add_bookmark_dialog.title:EN:Add bookmark
 add_bookmark_dialog.title:FR:Ajouter aux favoris
+add_bookmark_dialog.title:ES:Añadir favorito
 add_bookmark_dialog.title:RU:Добавить закладку
 add_bookmark_dialog.title:zh_TW:新增書籤
 add_bookmark_dialog.title:PL:Dodaj zakładkę
@@ -2594,6 +2601,7 @@ add_bookmark_dialog.title:PL:Dodaj zakładkę
 # Displayed before the Name text field in the Add bookmark dialog
 add_bookmark_dialog.name:EN:Name
 add_bookmark_dialog.name:FR:Nom
+add_bookmark_dialog.name:ES:Nombre
 add_bookmark_dialog.name:RU:Название
 add_bookmark_dialog.name:zh_TW:名稱
 add_bookmark_dialog.name:PL:Nazwa
@@ -2603,6 +2611,7 @@ add_bookmark_dialog.name:PL:Nazwa
 # Displayed before the Location text field in the Add bookmark dialog
 add_bookmark_dialog.location:EN:Location
 add_bookmark_dialog.location:FR:Emplacement
+add_bookmark_dialog.location:ES:Localización
 add_bookmark_dialog.location:RU:Расположение
 add_bookmark_dialog.location:zh_TW:位置
 add_bookmark_dialog.location:PL:Położenie
@@ -2612,6 +2621,7 @@ add_bookmark_dialog.location:PL:Położenie
 # Checkbox's title in the Add bookmark dialog, displayed only for locations that have an associated login and password (SMB/FTP/SFTP...) 
 add_bookmark_dialog.include_auth_info:EN:Include login and password (will be saved in the clear!)
 add_bookmark_dialog.include_auth_info:FR:Inclure les identifiants et mot de passe (seront sauvegardés en clair!)
+add_bookmark_dialog.include_auth_info:ES:Incluir nombre de usuario y contraseña (¡será salvada en blanco!)
 add_bookmark_dialog.include_auth_info:RU:Включить логин и пароль (будут сохранены без шифрования)
 add_bookmark_dialog.include_auth_info:zh_TW:包含登入帳號及密碼(將會以明文儲存!)
 add_bookmark_dialog.include_auth_info:PL:Dołącz login i hasło (zostaną zapisane bez szyfrowania!)
@@ -2621,6 +2631,7 @@ add_bookmark_dialog.include_auth_info:PL:Dołącz login i hasło (zostaną zapis
 # Add confirmation button in the Add bookmark dialog
 add_bookmark_dialog.add:EN:Add
 add_bookmark_dialog.add:FR:Ajouter
+add_bookmark_dialog.add:ES:Añadir
 add_bookmark_dialog.add:RU:Добавить
 add_bookmark_dialog.add:zh_TW:新增
 add_bookmark_dialog.add:PL:Dodaj
@@ -2636,6 +2647,7 @@ add_bookmark_dialog.add:PL:Dodaj
 # Title of the Edit bookmarks dialog
 edit_bookmarks_dialog.title:EN:Edit Bookmarks
 edit_bookmarks_dialog.title:FR:Éditer les favoris
+edit_bookmarks_dialog.title:ES:Editar favoritos
 edit_bookmarks_dialog.title:RU:Редактировать закладки
 edit_bookmarks_dialog.title:zh_TW:編輯書籤
 edit_bookmarks_dialog.title:PL:Edytuj Zakładki
@@ -2650,6 +2662,7 @@ edit_bookmarks_dialog.location:EN:$[add_bookmark_dialog.location]
 # Remove button in the Edit bookmarks dialog
 edit_bookmarks_dialog.remove:EN:Remove
 edit_bookmarks_dialog.remove:FR:Supprimer
+edit_bookmarks_dialog.remove:ES:Eliminar
 edit_bookmarks_dialog.remove:RU:Удалить
 edit_bookmarks_dialog.remove:zh_TW:移除
 edit_bookmarks_dialog.remove:PL:Usuń
@@ -2660,6 +2673,7 @@ edit_bookmarks_dialog.remove:PL:Usuń
 # Move up button in the Edit bookmarks dialog
 edit_bookmarks_dialog.move_up:EN:Move up
 edit_bookmarks_dialog.move_up:FR:Monter
+edit_bookmarks_dialog.move_up:ES:Subir
 edit_bookmarks_dialog.move_up:RU:Выше
 edit_bookmarks_dialog.move_up:zh_TW:上移
 edit_bookmarks_dialog.move_up:PL:Przenieś do góry
@@ -2671,6 +2685,7 @@ edit_bookmarks_dialog.move_up:PL:Przenieś do góry
 # Move down button in the Edit bookmarks dialog
 edit_bookmarks_dialog.move_down:EN:Move down
 edit_bookmarks_dialog.move_down:FR:Descendre
+edit_bookmarks_dialog.move_down:ES:Bajar
 edit_bookmarks_dialog.move_down:RU:Ниже
 edit_bookmarks_dialog.move_down:zh_TW:下移
 edit_bookmarks_dialog.move_down:PL:Przenieś na dół
@@ -2681,6 +2696,7 @@ edit_bookmarks_dialog.move_down:PL:Przenieś na dół
 # Done button that closes the Edit bookmarks dialog
 edit_bookmarks_dialog.done:EN:Done
 edit_bookmarks_dialog.done:FR:Terminé
+edit_bookmarks_dialog.done:ES:Terminado
 edit_bookmarks_dialog.done:RU:Готово
 edit_bookmarks_dialog.done:zh_TW:完成
 edit_bookmarks_dialog.done:PL:Zrobione
@@ -3221,6 +3237,7 @@ shortcuts_dialog.file_operations.properties:RU:Показать свойства
 # Displayed in the Shortcuts dialog 
 shortcuts_dialog.file_operations.add_bookmark:EN:Bookmark current folder
 shortcuts_dialog.file_operations.add_bookmark:FR:Ajouter le dossier courant aux favoris
+shortcuts_dialog.file_operations.add_bookmark:ES:Añadir a favoritos el directorio actual
 shortcuts_dialog.file_operations.add_bookmark:RU:Добавить текущий каталог в закладки
 shortcuts_dialog.file_operations.add_bookmark:zh_TW:加入目前資料夾為書籤
 shortcuts_dialog.file_operations.add_bookmark:PL:Dodaj do zakładek aktualny katalog
@@ -3380,6 +3397,7 @@ prefs_dialog.date:RU:Дата
 # Title of the Date separator field in the General preferences
 prefs_dialog.date_separator:EN:Separator
 prefs_dialog.date_separator:FR:Séparateur
+prefs_dialog.date_separator:ES:Separador
 prefs_dialog.date_separator:RU:Разделитель
 prefs_dialog.date_separator:zh_TW:分隔符號
 prefs_dialog.date_separator:PL:Separator/Odstęp
@@ -3816,6 +3834,7 @@ prefs_dialog.confirm_on_quit:RU:Запрашивать подтверждени�
 # Displayed when right-clicking on a folder
 table_popup.open:EN:Open
 table_popup.open:FR:Ouvrir
+table_popup.open:ES:Abrir
 table_popup.open:RU:Открыть
 table_popup.open:zh_TW:開啟
 table_popup.open:PL:Otwórz
@@ -3826,6 +3845,7 @@ table_popup.open:PL:Otwórz
 # Displayed when right-clicking on a file under Mac OS X (Note: Finder is the equivalent of Windows' Explorer)
 table_popup.reveal_in_finder:EN:Reveal in Finder
 table_popup.reveal_in_finder:FR:Afficher dans le Finder
+table_popup.reveal_in_finder:ES:Mostrar en Finder
 table_popup.reveal_in_finder:RU:Отобразить в найденном
 table_popup.reveal_in_finder:zh_TW:顯示在Finder
 table_popup.reveal_in_finder:PL:Wyszukaj
@@ -3919,8 +3939,3 @@ unit.gb:zh_TW:GB
 unit.gb:PL:GB
 unit.gb:HU:GB
 unit.gb:RU:Гб
-
-
-
-
-
