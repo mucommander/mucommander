@@ -82,16 +82,19 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 		public ChangeFolderThread(AbstractFile folder, boolean addToHistory) {
 			this.folder = folder;
 			this.addToHistory = addToHistory;
+			setPriority(Thread.MAX_PRIORITY);
 		}
 
 		public ChangeFolderThread(String folderPath, boolean addToHistory) {
 			this.folderPath = folderPath;
 			this.addToHistory = addToHistory;
+			setPriority(Thread.MAX_PRIORITY);
 		}
 
 		public ChangeFolderThread(FileURL folderURL, boolean addToHistory) {
 			this.folderURL = folderURL;
 			this.addToHistory = addToHistory;
+			setPriority(Thread.MAX_PRIORITY);
 		}
 	
 		public void selectThisFileAfter(AbstractFile fileToSelect) {
