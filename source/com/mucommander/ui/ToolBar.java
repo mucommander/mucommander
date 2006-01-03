@@ -207,6 +207,10 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 
 
 	public void actionPerformed(ActionEvent e) {
+		// Discard action events while in 'no events mode'
+		if(mainFrame.getNoEventsMode())
+			return;
+
 		Object source = e.getSource();
 	
 		// Hide toolbar
@@ -291,6 +295,10 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	// MouseListener methods to catch shift-clicked buttons
 	///////////////////////////////////////////////////////
 	public void mouseClicked(MouseEvent e) {
+		// Discard mouse events while in 'no events mode'
+		if(mainFrame.getNoEventsMode())
+			return;
+
 		Object source = e.getSource();
 		
 		// Right clicking on the toolbar brings up a popup menu

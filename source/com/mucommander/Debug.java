@@ -19,8 +19,19 @@ import java.util.Vector;
  */
 public class Debug {
 	/** Sets whether or not debug messages should be output to the standard output */
-	public final static boolean ON = false;
+	public final static boolean ON = true;
 
+	private static long lastTime;
+
+	public static void resetTimer() {
+		lastTime = System.currentTimeMillis();
+	}
+
+	public static void time() {
+		long currentTime = System.currentTimeMillis();
+		trace((currentTime - lastTime)+" ms since last call");
+		lastTime = currentTime;
+	}
 
 	public static void trace(String message) {
 		trace(message, 0);

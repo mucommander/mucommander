@@ -76,8 +76,6 @@ public class FileExistsDialog extends QuestionDialog {
 		boolean resumeOption = destSize!=-1 && (sourceSize==-1 || destSize<sourceSize);
 		
     	init(parent, panel,
-//    		new String[] {SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, APPEND_TEXT, CANCEL_TEXT},
-//    		new int[]  {SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, APPEND_ACTION, CANCEL_ACTION},
     		resumeOption?CHOICES_TEXT:CHOICES_NO_RESUME_TEXT,
 			resumeOption?CHOICES_ACTIONS:CHOICES_NO_RESUME_ACTIONS,
     		3);

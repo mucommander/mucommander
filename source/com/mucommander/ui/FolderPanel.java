@@ -131,14 +131,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
 			// Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
 			mainFrame.setNoEventsMode(true);
 
-			// Catch escape key clicks and have them close the dialog
-			// by mapping the escape keystroke to a custom Action
-			JPanel contentPane = (JPanel)mainFrame.getContentPane();
-			InputMap inputMap = contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-			ActionMap actionMap = contentPane.getActionMap();
+			// Register a cutom action for the ESCAPE key which stops current folder change
+			JRootPane rootPane = (JRootPane)mainFrame.getRootPane();
+			InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+			ActionMap actionMap = rootPane.getActionMap();
 			AbstractAction killAction = new AbstractAction() {
 				public void actionPerformed(ActionEvent e){
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("escape pressed");
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("escape pressed");
 					tryKill();
 				}
 			};
@@ -150,10 +149,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
 			// Restore mouse/keybaord events and default cursor
 			mainFrame.setNoEventsMode(false);
 			// Remove 'escape' action
-			JPanel contentPane = (JPanel)mainFrame.getContentPane();
-			contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
-//			contentPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
-			contentPane.getActionMap().remove("customEscapeAction");
+			JRootPane rootPane = (JRootPane)mainFrame.getRootPane();
+			rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
+			rootPane.getActionMap().remove("customEscapeAction");
 		}
 		
 		
@@ -278,7 +276,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting and waiting")
 							new String[] {BROWSE_TEXT, DOWNLOAD_TEXT, CANCEL_TEXT},
 							new int[] {BROWSE_ACTION, DOWNLOAD_ACTION, CANCEL_ACTION},
 							0);
-
+							
 							int ret = dialog.getActionValue();
 							if(ret==-1 || ret==CANCEL_ACTION)
 								break;
@@ -817,7 +815,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	 * on the last focused component inside this FolderPanel: on the file able or on the location field
 	 */
 	public void requestFocus() {
-//		if(lastFocusedComponent!=locationField || !mainFrame.getNoEventsMode())
 		if(!mainFrame.getNoEventsMode())
 			((JComponent)lastFocusedComponent).requestFocus();
 	}
@@ -828,6 +825,10 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	////////////////////////////
 	
 	public void actionPerformed(ActionEvent e) {
+		// Discard action events while in 'no events mode'
+		if(mainFrame.getNoEventsMode())
+			return;
+
 		Object source = e.getSource();
 
 		if (source == locationField) {

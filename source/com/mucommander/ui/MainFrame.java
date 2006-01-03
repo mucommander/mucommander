@@ -157,11 +157,11 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// WindowManager takes of catching close events and do the rest
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-		// Used by setNoEventsMode()
-		JComponent glassPane = (JComponent)getGlassPane();
-		glassPane.addMouseListener(new MouseAdapter() {});
-		glassPane.addKeyListener(new KeyAdapter() {});
-		//setNoEventsMode(true);	// for 'no events mode' testing
+//		// Used by setNoEventsMode()
+//		JComponent glassPane = (JComponent)getGlassPane();
+//		glassPane.addMouseListener(new MouseAdapter() {});
+//		glassPane.addKeyListener(new KeyAdapter() {});
+//		//setNoEventsMode(true);	// for 'no events mode' testing
 
 // For testing purposes, full screen option could be nice to add someday
 //setUndecorated(true);
@@ -174,12 +174,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * by the application (main frame and its subcomponents and menus).
 	 */
 	public void setNoEventsMode(boolean enabled) {
-		// Glass pane has empty mouse and key adapters (created in the constructor)
-		// which will catch all mouse and keyboard events 
-		getGlassPane().setVisible(enabled);
-		getJMenuBar().setEnabled(!enabled);
-		// Remove focus from whatever component in FolderPanel which had focus
-		getGlassPane().requestFocus();
+// Piece of code used in 0.8 beta1 and removed after because it's way too slow, kept here for the record 
+//		// Glass pane has empty mouse and key adapters (created in the constructor)
+//		// which will catch all mouse and keyboard events 
+//		getGlassPane().setVisible(enabled);
+//		getJMenuBar().setEnabled(!enabled);
+//		// Remove focus from whatever component in FolderPanel which had focus
+//		getGlassPane().requestFocus();
 
 		this.noEventsMode = enabled;
 	}
@@ -517,11 +518,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("destFolder="+(destFold
 	}
 
 	
-	/*********************
-	 * Overriden methods *
-	 *********************/
+	///////////////////////
+	// Overriden methods //
+	///////////////////////
 
-	 public void dispose() {
+	public void dispose() {
 		// Properly disposes folder panels and releases
 		// associated resources
 		this.folderPanel1.dispose();
@@ -552,9 +553,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("focus requested, isVis
 //	 }
 
 	
-	/*****************************
-	 * ComponentListener methods *
-	 *****************************/
+	///////////////////////////////
+	// ComponentListener methods //
+	///////////////////////////////
 	 
 	/**
 	 * Sets the divider location when the ContentPane has been resized so that it stays at the
@@ -593,12 +594,12 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("focus requested, isVis
 		// never called, weird ...
     }     
 
-    /***********************
-     * KeyListener methods *
-     ***********************/
+    /////////////////////////
+	// KeyListener methods //
+    /////////////////////////
     
     public void keyPressed(KeyEvent e) {
-		// Disable key presses if 'noEventsMode' enabled 
+		// Discard key events while in 'no events mode'
 		if(noEventsMode)
 			return;
 

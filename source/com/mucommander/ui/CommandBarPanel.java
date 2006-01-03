@@ -167,6 +167,10 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
+		// Discard action events while in 'no events mode'
+		if(mainFrame.getNoEventsMode())
+			return;
+
         Object source = e.getSource();
         
 		// View button

@@ -266,7 +266,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	///////////////////////////
 
 	public void actionPerformed(ActionEvent e) {
-		// Do nothing while in 'no events mode'
+		// Discard action events while in 'no events mode'
 		if(mainFrame.getNoEventsMode())
 			return;
 
