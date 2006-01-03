@@ -5,6 +5,7 @@ import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.text.Translator;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
+import com.mucommander.file.FileToolkit;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -148,7 +149,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 		String destPath = pathField.getText();
 
 		// Resolves destination folder
-		Object ret[] = mainFrame.resolvePath(destPath);
+		Object ret[] = FileToolkit.resolvePath(destPath, mainFrame.getLastActiveTable().getCurrentFolder());
 		// The path entered doesn't correspond to any existing folder
 		if (ret==null || (files.size()>1 && ret[1]!=null)) {
 			showErrorDialog(Translator.get("this_folder_does_not_exist", destPath));

@@ -66,7 +66,7 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 	public void run() {
 		MainFrame mainFrame = WindowManager.getInstance().getCurrentMainFrame();
 		
-		// Do nothing while in 'no events mode'
+		// Do nothing (return) when in 'no events mode'
 		if(mainFrame.getNoEventsMode())
 			return;
 
@@ -74,15 +74,14 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 			case ABOUT_ACTION:
 				new AboutDialog(mainFrame).showDialog();
 				break;
-				
 			case PREFS_ACTION:
 				mainFrame.showPreferencesDialog();
 				break;
 			case QUIT_ACTION:
 				// Show confirmation dialog if it hasn't been disabled
 				if(ConfigurationManager.getVariable("prefs.quit_confirmation", "true").equals("true"))
-					new QuitDialog(mainFrame).showDialog();
-				// Quit directly otherwisee
+					new QuitDialog(mainFrame);
+				// Quit directly otherwise
 				else
 					WindowManager.getInstance().quit();
 				break;

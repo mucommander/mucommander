@@ -104,38 +104,6 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 		showDialog();
 	}
 
-
-	public void actionPerformed(ActionEvent e) {
-		Object source = e.getSource();
-		
-		// Run button starts a new command
-		if(this.currentProcess==null && (source == runStopButton || source == commandField)) {
-			String command = commandField.getText();
-			this.lastCommand = command;
-			this.currentProcess = PlatformManager.execute(command, mainFrame.getLastActiveTable().getCurrentFolder());
-			// If command could be executed
-			if(currentProcess!=null) {
-				// Reset caret position
-				caretPos = 0;
-				switchToStopState();
-				// And start monitoring the process and outputting to the text area
-				processMonitor = new ProcessMonitor(this.currentProcess, this);
-			}
-			// Probably should notify the user if the command could not be executed
-		}
-		// Stop button stops current process
-		else if(this.currentProcess!=null && source==runStopButton) {
-			processMonitor.stopMonitoring();
-			currentProcess.destroy();
-			this.currentProcess = null;
-			switchToRunState();
-		}
-		// Cancel button disposes the dialog and kills the process
-		else if(source == cancelButton) {
-			dispose();			
-		}
-	}
-	
 	
 	public void processDied(Process process, int retValue) {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process "+process+" exit, return value= "+retValue);
@@ -188,5 +156,39 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("processError "+process
 		repaint();
 	}	
 
+
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
 	
+	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
+		
+		// Run button starts a new command
+		if(this.currentProcess==null && (source == runStopButton || source == commandField)) {
+			String command = commandField.getText();
+			this.lastCommand = command;
+			this.currentProcess = PlatformManager.execute(command, mainFrame.getLastActiveTable().getCurrentFolder());
+			// If command could be executed
+			if(currentProcess!=null) {
+				// Reset caret position
+				caretPos = 0;
+				switchToStopState();
+				// And start monitoring the process and outputting to the text area
+				processMonitor = new ProcessMonitor(this.currentProcess, this);
+			}
+			// Probably should notify the user if the command could not be executed
+		}
+		// Stop button stops current process
+		else if(this.currentProcess!=null && source==runStopButton) {
+			processMonitor.stopMonitoring();
+			currentProcess.destroy();
+			this.currentProcess = null;
+			switchToRunState();
+		}
+		// Cancel button disposes the dialog and kills the process
+		else if(source == cancelButton) {
+			dispose();			
+		}
+	}	
 }

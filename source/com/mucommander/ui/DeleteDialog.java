@@ -17,16 +17,11 @@ import javax.swing.*;
  *
  * @author Maxence Bernard
  */
-public class DeleteDialog extends FocusDialog implements ActionListener {
+public class DeleteDialog extends QuestionDialog {
 
-	private MainFrame mainFrame;
-
-	/** Files to delete */
-	private FileSet files;
+	private final static int DELETE_ACTION = 0;
+	private final static int CANCEL_ACTION = 1;
 	
-	private JButton okButton;
-	private JButton cancelButton;
-
 	// Dialog size constraints
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
     // Dialog width should not exceed 360, height is not an issue (always the same)
@@ -34,53 +29,22 @@ public class DeleteDialog extends FocusDialog implements ActionListener {
 
 	
 	public DeleteDialog(MainFrame mainFrame, FileSet files) {
-	    super(mainFrame, Translator.get("delete_dialog.delete"), mainFrame);
-		this.mainFrame = mainFrame;
-		this.files = files;
-		
-        Container contentPane = getContentPane();
-        
-        YBoxPanel mainPanel = new YBoxPanel();
-        mainPanel.add(new JLabel(Translator.get("delete_dialog.confirmation")));
+		super(mainFrame, 
+			Translator.get("delete_dialog.delete"),
+			Translator.get("delete_dialog.confirmation"),
+			mainFrame,
+			new String[] {Translator.get("delete_dialog.delete"), Translator.get("cancel")},
+			new int[] {DELETE_ACTION, CANCEL_ACTION},
+			0);
 
-		mainPanel.addSpace(10);
-		contentPane.add(mainPanel, BorderLayout.NORTH);
-        
-        okButton = new JButton(Translator.get("delete_dialog.delete"));
-		cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
-        		
-		// OK button will receive initial focus
-		setInitialFocusComponent(okButton);		
-
-        // Selects OK when enter is pressed
-        getRootPane().setDefaultButton(okButton);
-        
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-		showDialog();
-	}
 
-
-
-	/**
-	 * Delete selected files. This method is trigged by the 'OK' button or return key.
-	 */
-	public void doDelete() {
-        // Starts deleting files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("delete_dialog.deleting"));
-		DeleteJob deleteJob = new DeleteJob(progressDialog, mainFrame, files);
-    	progressDialog.start(deleteJob);
-	}
-	
-
-	public void actionPerformed(ActionEvent e) {
-		Object source = e.getSource();
-		dispose();
-		
-		// OK Button
-		if(source == okButton) {
-			doDelete();
+		if(getActionValue()==DELETE_ACTION) {
+			// Starts deleting files
+			ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("delete_dialog.deleting"));
+			DeleteJob deleteJob = new DeleteJob(progressDialog, mainFrame, files);
+			progressDialog.start(deleteJob);
 		}
 	}
 }

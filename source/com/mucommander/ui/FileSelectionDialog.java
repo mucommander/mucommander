@@ -130,7 +130,10 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 	}
 
-
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
+	
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 

@@ -3,16 +3,14 @@ package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
+import com.mucommander.file.FileToolkit;
 import com.mucommander.job.MkdirJob;
 import com.mucommander.ui.comp.dialog.*;
-// import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-// import java.io.IOException;
 
 
 /**
@@ -72,40 +70,8 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 	public void doMkdir() {
 		String dirPath = mkdirPathField.getText();
 
-/*		
-	    try {
-		    // Resolves destination folder
-		    Object ret[] = mainFrame.resolvePath(dirPath);
-		    // The path entered doesn't correspond to any existing folder
-		    if (ret==null) {
-		    	showErrorDialog(Translator.get("mkdir_dialog.invalid_path", dirPath), Translator.get("mkdir_dialog.error_title"));
-		    	return;
-		    }
-
-			if(ret[1]==null) {
-		    	showErrorDialog(Translator.get("mkdir_dialog.dir_already_exists", dirPath), Translator.get("mkdir_dialog.error_title"));
-		    	return;
-		    }
-
-		    AbstractFile folder = (AbstractFile)ret[0];
-		    String newName = (String)ret[1];
-
-			// Create directory
-	        folder.mkdir(newName);
-			
-			// Refresh current folder
-			activeTable.getFolderPanel().tryRefresh();
-
-			// Selects newly created folder
-			activeTable.selectFile(AbstractFile.getAbstractFile(folder.getAbsolutePath(true)+newName));
-		}
-	    catch(IOException e) {
-	        showErrorDialog(Translator.get("cannot_create_folder", dirPath), Translator.get("mkdir_dialog.error_title"));
-	    }    
-*/
-
 		// Resolves destination folder
-		Object ret[] = mainFrame.resolvePath(dirPath);
+		Object ret[] = FileToolkit.resolvePath(dirPath, mainFrame.getLastActiveTable().getCurrentFolder());
 		// The path entered doesn't correspond to any existing folder
 		if (ret==null) {
 			showErrorDialog(Translator.get("mkdir_dialog.invalid_path", dirPath), Translator.get("mkdir_dialog.error_title"));
@@ -132,6 +98,10 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 	}
 
 
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
+	
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 		dispose();

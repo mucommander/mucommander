@@ -203,7 +203,10 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 	}
 	
 	
-
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
+	
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 		
@@ -239,7 +242,10 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 		}
 	}
 	
-	
+	//////////////////////////
+	// ItemListener methods //
+	//////////////////////////
+		
 	/**
 	 * Updates label text whenever a checkbox has been checked or unchecked.
 	 */

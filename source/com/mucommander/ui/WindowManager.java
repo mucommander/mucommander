@@ -377,7 +377,10 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		}
 	}
 
-
+	//////////////////////////////
+	// LocationListener methods //
+	//////////////////////////////
+	
 	/**
 	 * Notifies this MainFrame's currentFolder has changed so
 	 * that window title and menu items can be updated.
@@ -402,6 +405,10 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		}
 	}	
 
+
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
 	
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
@@ -429,9 +436,9 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		}
 	}
 
-	/**************************
-	 * WindowListener methods *
-	 **************************/	
+	////////////////////////////
+	// WindowListener methods //
+	////////////////////////////
 
 	/**
 	 * Requests focus on the activated MainFrame if it doesn't already have focus, and
@@ -495,6 +502,10 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	public void windowOpened(WindowEvent e) {
 	}
 
+
+	///////////////////////////////////
+	// ConfigurationListener methods //
+	///////////////////////////////////
 
     /**
      * Listens to certain configuration variables.

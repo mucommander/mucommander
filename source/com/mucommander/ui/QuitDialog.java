@@ -11,50 +11,30 @@ import java.awt.event.*;
 import javax.swing.*;
 
 
-public class QuitDialog extends FocusDialog implements ActionListener {
+public class QuitDialog extends QuestionDialog {
 
-	private JCheckBox showNextTimeCheckBox;
-	private JButton quitButton;
-	
 	// Dialog's width has to be at least 240
 	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
 
+	private final static int QUIT_ACTION = 0;
+	private final static int CANCEL_ACTION = 1;
 	
+			
 	public QuitDialog(MainFrame mainFrame) {
-		super(mainFrame, Translator.get("quit_dialog.title"), mainFrame);
-
-		Container contentPane = getContentPane();
-		contentPane.setLayout(new BorderLayout());
-
-		// Text label and 'show next time' checkbox
-		YBoxPanel mainPanel = new YBoxPanel(5);
-        mainPanel.add(new JLabel(Translator.get("quit_dialog.desc")));
-		mainPanel.addSpace(5);
-		this.showNextTimeCheckBox = new JCheckBox(Translator.get("quit_dialog.show_next_time"), true);
-		// Insert a 10-pixel gap before checkbox
-		mainPanel.add(showNextTimeCheckBox, 10);
-		mainPanel.addSpace(10);
-		contentPane.add(mainPanel, BorderLayout.CENTER);
-
-		// Quit and cancel buttons
-		this.quitButton = new JButton(Translator.get("quit_dialog.quit"));
-		JButton cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createButtonPanel(new JButton[]{quitButton, cancelButton}, this), BorderLayout.SOUTH);
-
-		// Selects Quit when enter is pressed
-		getRootPane().setDefaultButton(quitButton);
+		super(mainFrame, 
+			Translator.get("quit_dialog.title"),
+			Translator.get("quit_dialog.desc"),
+			mainFrame,
+			new String[] {Translator.get("quit_dialog.quit"), Translator.get("cancel")},
+			new int[] {QUIT_ACTION, CANCEL_ACTION},
+			0);
+		
+		JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("quit_dialog.show_next_time"), true);
+		addCheckBox(showNextTimeCheckBox);
 		
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-		setResizable(false);
-	}
-	
-	
-	public void actionPerformed(ActionEvent e) {
-		Object source = e.getSource();
-		
-		dispose();
 
-		if(source==quitButton) {
+		if(getActionValue()==QUIT_ACTION) {
 			// Remember user preference
 			ConfigurationManager.setVariable("prefs.quit_confirmation", ""+showNextTimeCheckBox.isSelected());
 
@@ -62,5 +42,4 @@ public class QuitDialog extends FocusDialog implements ActionListener {
 			WindowManager.getInstance().quit();
 		}
 	}
-	
 }

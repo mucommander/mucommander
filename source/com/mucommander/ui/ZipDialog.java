@@ -4,6 +4,7 @@ import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
+import com.mucommander.file.FileToolkit;
 import com.mucommander.job.ZipJob;
 import com.mucommander.text.Translator;
 
@@ -84,7 +85,11 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 		showDialog();
 	}
 	
-
+	
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
+	
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
 		
@@ -94,7 +99,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 
 			// Checks that destination file can be resolved 
 			String filePath = filePathField.getText();
-			Object dest[] = mainFrame.resolvePath(filePath);
+			Object dest[] = FileToolkit.resolvePath(filePath, mainFrame.getLastActiveTable().getCurrentFolder());
 			if (dest==null || dest[1]==null) {
 				// Incorrect destination
 				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("zip_dialog.error_title"), Translator.get("this_folder_does_not_exist", filePath), mainFrame,

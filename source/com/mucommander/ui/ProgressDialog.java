@@ -55,18 +55,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 	}
     
     
-    public void start(FileJob job) {
-        this.job = job;
-        this.dualBar = job instanceof ExtendedFileJob;
-        initUI();
-        
-        repaintThread = new Thread(this, "com.mucommander.ui.ProgressDialog's Thread");
-        repaintThread.start();
-
-    	showDialog();
-	}
-
-
     private void initUI() {
         Container contentPane = getContentPane();
 
@@ -114,6 +102,21 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 		contentPane.add(new ButtonChoicePanel(new JButton[] {cancelButton, hideButton}, 0, getRootPane()), BorderLayout.SOUTH);
     }
 
+
+    //////////////////////
+	// Runnable methods //
+    //////////////////////
+
+    public void start(FileJob job) {
+        this.job = job;
+        this.dualBar = job instanceof ExtendedFileJob;
+        initUI();
+        
+        repaintThread = new Thread(this, "com.mucommander.ui.ProgressDialog's Thread");
+        repaintThread.start();
+
+    	showDialog();
+	}
     
     public void run() {
 	    // Used for dual bars
@@ -205,6 +208,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         dispose();
 	}
 
+    ////////////////////////////
+	// ActionListener methods //
+    ////////////////////////////
+
     public void actionPerformed(ActionEvent e) {
 	    Object source = e.getSource();
     	
@@ -220,9 +227,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     }
 
 
-    /***********************
-     * KeyListener methods *
-     ***********************/
+    /////////////////////////
+	// KeyListener methods //
+    /////////////////////////
 
      public void keyPressed(KeyEvent e) {
      	int keyCode = e.getKeyCode();
@@ -241,9 +248,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     }
 
 
-	/**************************
-	 * WindowListener methods *
-	 **************************/	
+	////////////////////////////
+	// WindowListener methods // 
+	////////////////////////////
 
 	public void windowOpened(WindowEvent e) {
 		// (this method is called first time the dialog is made visible)

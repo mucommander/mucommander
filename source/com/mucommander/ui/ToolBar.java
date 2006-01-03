@@ -198,6 +198,9 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		return false;
 	}
 
+	//////////////////////////////
+	// LocationListener methods //
+	//////////////////////////////
 	
 	public void locationChanged(FolderPanel folderPanel) {
 		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
@@ -205,6 +208,10 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		buttons[PARENT_INDEX].setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
 	}
 
+
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
 
 	public void actionPerformed(ActionEvent e) {
 		// Discard action events while in 'no events mode'
@@ -291,9 +298,11 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			mainFrame.requestFocus();
 	}
 	
-	///////////////////////////////////////////////////////
-	// MouseListener methods to catch shift-clicked buttons
-	///////////////////////////////////////////////////////
+	
+	///////////////////////////
+	// MouseListener methods //
+	///////////////////////////
+	
 	public void mouseClicked(MouseEvent e) {
 		// Discard mouse events while in 'no events mode'
 		if(mainFrame.getNoEventsMode())
