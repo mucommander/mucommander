@@ -40,15 +40,16 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
     private FileTable table1;
     private FileTable table2;
     
+	/** Table that that has/had focus last */
     private FileTable lastActiveTable;
 
+	/** Tool bar instance */
 	private ToolBar toolbar;
 
-	// Status bar fields
-	private JPanel statusBarPanel;
-	private JLabel statusBarFilesLabel;
-	private JLabel statusBarVolumeLabel;
+	/** Status bar instance */
+	private StatusBar statusBar;
 	
+	/** Command bar instance */
 	private CommandBarPanel commandBar;
 	
 	/** Is no events mode enabled ? */
@@ -129,14 +130,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		southPanel.setInsets(new Insets(3, 0, 0, 0));
 	
 		// Create and add status bar
-		this.statusBarPanel = new JPanel(new BorderLayout());
-		statusBarFilesLabel = new JLabel("");
-		statusBarPanel.add(statusBarFilesLabel, BorderLayout.CENTER);
-		statusBarVolumeLabel = new JLabel("");
-		statusBarPanel.add(statusBarVolumeLabel, BorderLayout.EAST);
-		if(ConfigurationManager.getVariable("prefs.show_status_bar", "true").equals("false"))
-			statusBarPanel.setVisible(false);
-		southPanel.add(statusBarPanel);
+		this.statusBar = new StatusBar(this);
+		southPanel.add(statusBar);
 		
 		// Show command bar only if it hasn't been disabled in the preferences
 		this.commandBar = new CommandBarPanel(this);
@@ -168,6 +163,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 //java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
 	}
 	
+
+	/**
+	 * Returns true if 'no events mode' is enabled.
+	 */
+	public boolean getNoEventsMode() {
+		return this.noEventsMode;
+	}
 	
 	/**
 	 * Enables/disables 'no events mode' which prevents mouse and keyboard events from being received
@@ -185,20 +187,21 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		this.noEventsMode = enabled;
 	}
 
+
 	/**
-	 * Returns true if 'no events mode' is enabled.
+	 * Returns the toolbar where shortcut buttons (go back, go forward, ...) are.
 	 */
-	public boolean getNoEventsMode() {
-		return this.noEventsMode;
+	public ToolBar getToolBar() {
+		return toolbar;
 	}
-	
-	
+
 	/**
 	 * Shows/hide the toolbar.
 	 */
 	public void setToolbarVisible(boolean visible) {
 		toolbar.setVisible(visible);
 		validate();
+		ConfigurationManager.setVariable("prefs.show_toolbar", ""+visible);		
 	}
 	
 	/**
@@ -207,16 +210,15 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	public boolean isToolbarVisible() {
 		return toolbar.isVisible();
 	}
-	
+		
 
 	/**
-	 * Shows/hide the command bar.
+	 * Returns the command bar, i.e. the panel that contains
+	 * F3, F6... F10 buttons.
 	 */
-	public void setCommandBarVisible(boolean visible) {
-		this.commandBar.setVisible(visible);
-		validate();
+	public CommandBarPanel getCommandBar() {
+		return commandBar;
 	}
-	
 	
 	/**
 	 * Returns true if the command bar is visible on this frame.
@@ -224,7 +226,30 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	public boolean isCommandBarVisible() {
 		return this.commandBar.isVisible();
 	}
+
+	/**
+	 * Shows/hide the command bar.
+	 */
+	public void setCommandBarVisible(boolean visible) {
+		this.commandBar.setVisible(visible);
+		validate();
+		ConfigurationManager.setVariable("prefs.show_command_bar", ""+visible);		
+	}
 	
+
+	/**
+	 * Returns the status bar where information about selected files and volume are displayed.
+	 */
+	public StatusBar getStatusBar() {
+		return this.statusBar;
+	}
+
+	/**
+	 * Returns true if the status bar is visible on this frame.
+	 */
+	public boolean isStatusBarVisible() {
+		return this.statusBar.isVisible();
+	}
 
 	/**
 	 * Shows/hide the status bar.
@@ -233,29 +258,12 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// Update status bar info if status bar was previouly hidden and now visible
 		// as FileTable doesn't update status bar info when it is hidden
 		boolean updateStatusBarInfo = visible && !isStatusBarVisible();
-		this.statusBarPanel.setVisible(visible);
+		this.statusBar.setVisible(visible);
 		// Status bar needs to be visible before calling updateStatusBar()
 		if(updateStatusBarInfo)
 			lastActiveTable.updateStatusBar();
 		validate();
-	}
-	
-	
-	/**
-	 * Returns true if the status bar is visible on this frame.
-	 */
-	public boolean isStatusBarVisible() {
-		return this.statusBarPanel.isVisible();
-	}
-	
-	
-	/**
-	 * Sets status bar text label. This method is called by FileTable.
-	 */
-	public void setStatusBarText(String filesInfo, String volumeInfo) {
-	    //if(com.mucommander.Debug.ON) text += " - freeMem="+Runtime.getRuntime().freeMemory()+" - totalMem="+Runtime.getRuntime().totalMemory();
-		statusBarFilesLabel.setText(filesInfo);
-		statusBarVolumeLabel.setText(volumeInfo);
+		ConfigurationManager.setVariable("prefs.show_status_bar", ""+visible);		
 	}
 	
 
@@ -293,22 +301,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 */
 	public FolderPanel getFolderPanel2() {
 		return folderPanel2;
-	}
-
-	/**
-	 * Returns the instance of CommandBarPanel, i.e. the panel that contains
-	 * F3, F6... F10 buttons.
-	 */
-	public CommandBarPanel getCommandBar() {
-		return commandBar;
-	}
-
-
-	/**
-	 * Returns the toolbar where all buttons like go back, go forward, ... are 
-	 */
-	public ToolBar getToolBar() {
-		return toolbar;
 	}
 
 

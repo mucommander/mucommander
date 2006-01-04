@@ -367,19 +367,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			mainFrame.setSameFolder();	
 		}
 		else if (source == showToolbarItem) {
-			boolean toolbarVisible = !mainFrame.isToolbarVisible(); 
-			mainFrame.setToolbarVisible(toolbarVisible);
-			ConfigurationManager.setVariable("prefs.show_toolbar", ""+toolbarVisible);		
+			mainFrame.setToolbarVisible(!mainFrame.isToolbarVisible());
 		}
 		else if (source == showCommandBarItem) {
-			boolean commandBarVisible = !mainFrame.isCommandBarVisible();
-			mainFrame.setCommandBarVisible(commandBarVisible);
-			ConfigurationManager.setVariable("prefs.show_command_bar", ""+commandBarVisible);		
+			mainFrame.setCommandBarVisible(!mainFrame.isCommandBarVisible());
 		}
 		else if (source == showStatusBarItem) {
-			boolean statusBarVisible = !mainFrame.isStatusBarVisible();
-			mainFrame.setStatusBarVisible(statusBarVisible);
-			ConfigurationManager.setVariable("prefs.show_status_bar", ""+statusBarVisible);		
+			mainFrame.setStatusBarVisible(!mainFrame.isStatusBarVisible());
 		}
 		// Bookmark menu
 		else if (source == addBookmarkItem) {

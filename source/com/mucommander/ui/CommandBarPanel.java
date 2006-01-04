@@ -22,7 +22,7 @@ import java.io.*;
  *
  * @author Maxence Bernard
  */
-public class CommandBarPanel extends JPanel implements ActionListener {
+public class CommandBarPanel extends JPanel implements ActionListener, MouseListener {
 
 	/** Parent MainFrame instance */
     private MainFrame mainFrame;
@@ -33,6 +33,12 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 	/** Buttons */
 	private JButton buttons[];
     
+	/** Right-click popup menu */
+	private JPopupMenu popupMenu;
+	/** Popup menu item that hides the toolbar */
+	private JMenuItem hideMenuItem;	
+
+	
 	////////////////////
 	// Button indexes //
 	////////////////////
@@ -83,6 +89,8 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			buttons[i] = addButton(Translator.get(BUTTONS_TEXT[i][0])+" "+BUTTONS_TEXT[i][1],
 				Translator.get(BUTTONS_TEXT[i][0]+"_tooltip")
 			);	
+	
+		addMouseListener(this);
 	}
 
 
@@ -108,6 +116,7 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 		// For Mac OS X whose minimum width for buttons is enormous
 		button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getWidth()));
 		button.addActionListener(this);
+//		button.addMouseListener(this);
 		add(button);
 		return button;
 	}
@@ -172,9 +181,17 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			return;
 
         Object source = e.getSource();
-        
+
+		// Hide command bar
+		if(source == hideMenuItem) {
+			mainFrame.setCommandBarVisible(false);
+			this.popupMenu.setVisible(false);
+			this.popupMenu = null;
+			this.hideMenuItem = null;
+			return;
+		}        
 		// View button
-		if(source == buttons[VIEW_INDEX]) {
+		else if(source == buttons[VIEW_INDEX]) {
         	doView();
 		}
 		// Edit button
@@ -220,4 +237,40 @@ public class CommandBarPanel extends JPanel implements ActionListener {
 			}
 		}
     }
+
+	///////////////////////////
+	// MouseListener methods //
+	///////////////////////////
+	
+	public void mouseClicked(MouseEvent e) {
+		// Discard mouse events while in 'no events mode'
+		if(mainFrame.getNoEventsMode())
+			return;
+
+		// Right clicking on the toolbar brings up a popup menu
+		int modifiers = e.getModifiers();
+		if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {
+//		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
+			if(this.popupMenu==null) {
+				popupMenu = new JPopupMenu();
+				this.hideMenuItem = new JMenuItem(Translator.get("command_bar.hide_command_bar"));
+				hideMenuItem.addActionListener(this);
+				popupMenu.add(hideMenuItem);
+			}
+			popupMenu.show(this, e.getX(), e.getY());
+			popupMenu.setVisible(true);
+		}
+	}
+
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+	}
+	
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}	
 }

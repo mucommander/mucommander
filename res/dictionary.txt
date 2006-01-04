@@ -594,6 +594,9 @@ command_bar.close_tooltip:zh_TW:關閉此視窗
 command_bar.close_tooltip:PL:Zamknij aktualne okno
 command_bar.close_tooltip:RU:Закрытие окна
 
+command_bar.hide_command_bar:EN:$[view_menu.hide_command_bar]
+
+
 #############
 # File menu #
 #############
@@ -1172,6 +1175,7 @@ status_bar.volume_capacity:PL:Pojemność: %1
 
 
 
+status_bar.hide_status_bar:EN:$[view_menu.hide_status_bar]
 
 
 #########

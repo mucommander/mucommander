@@ -18,7 +18,9 @@ import java.awt.event.*;
 public class ToolBar extends JToolBar implements ActionListener, LocationListener, MouseListener {
 	private MainFrame mainFrame;
 
+	/** Right-click popup menu */
 	private JPopupMenu popupMenu;
+	/** Popup menu item that hides the toolbar */
 	private JMenuItem hideToolbarMenuItem;
 	
 	/** Buttons icons, loaded only once */
@@ -314,6 +316,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		if(source == this) {
 			int modifiers = e.getModifiers();
 			if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {		
+//			if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
 				if(this.popupMenu==null) {
 					popupMenu = new JPopupMenu();
 					this.hideToolbarMenuItem = new JMenuItem(Translator.get("toolbar.hide_toolbar"));
