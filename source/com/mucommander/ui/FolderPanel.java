@@ -21,6 +21,11 @@ import java.io.*;
 import java.util.Vector;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class FolderPanel extends JPanel implements ActionListener, KeyListener, FocusListener, ConfigurationListener {
 	
 	private MainFrame mainFrame;

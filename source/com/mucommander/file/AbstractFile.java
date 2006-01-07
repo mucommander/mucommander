@@ -5,6 +5,11 @@ import java.io.OutputStream;
 import java.io.IOException;
 
 
+/**
+ *
+ *
+ * @author Maxence Bernard
+ */
 public abstract class AbstractFile {
 
 	/** URL representing this file */

@@ -8,6 +8,8 @@ import java.io.*;
 
 /**
  * FTPFile represents a file on an FTP server.
+ *
+ * @author Maxence Bernard
  */
 public class FTPFile extends AbstractFile {
 

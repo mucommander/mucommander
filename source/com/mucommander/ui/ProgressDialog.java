@@ -16,6 +16,8 @@ import java.awt.event.*;
 
 /**
  * This dialog informs the user of the progress made by a Job.
+ *
+ * @author Maxence Bernard
  */
 public class ProgressDialog extends FocusDialog implements Runnable, ActionListener, KeyListener, WindowListener {
     private JLabel infoLabel;

@@ -3,6 +3,12 @@ package com.mucommander.file;
 import java.io.*;
 import java.util.zip.ZipEntry;
 
+
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class ZipEntryFile extends AbstractEntryFile {
 
 	private ZipEntry zipEntry;

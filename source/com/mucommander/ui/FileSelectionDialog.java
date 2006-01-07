@@ -13,6 +13,8 @@ import java.awt.event.*;
 /**
  * This dialog allows the user to add (mark) or remove (unmark)
  * files from current selection, matching a specified keyword.
+ *
+ * @author Maxence Bernard
  */
 public class FileSelectionDialog extends FocusDialog implements ActionListener {
 

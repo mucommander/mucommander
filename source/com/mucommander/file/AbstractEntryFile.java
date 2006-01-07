@@ -2,6 +2,11 @@ package com.mucommander.file;
 
 import java.io.*;
 
+/**
+ *
+ *
+ * @author Maxence Bernard
+ */
 public abstract class AbstractEntryFile extends AbstractFile {
 
 	protected AbstractFile archiveFile;

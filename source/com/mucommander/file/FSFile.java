@@ -7,6 +7,8 @@ import com.mucommander.PlatformManager;
 
 /**
  * FSFile represents a 'file system file', that is a regular native file.
+ *
+ * @author Maxence Bernard
  */
 public class FSFile extends AbstractFile {
 

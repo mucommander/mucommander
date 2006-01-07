@@ -6,6 +6,11 @@ import com.mucommander.file.AbstractFile;
 import java.lang.reflect.*;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class ViewerRegistrar {
 	
 	private final static String defaultViewerClassName = "com.mucommander.ui.viewer.TextViewer";

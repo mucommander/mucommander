@@ -15,6 +15,8 @@ import java.net.Socket;
 
 /**
  * This job sends one or several files by email.
+ *
+ * @author Maxence Bernard
  */
 public class SendMailJob extends ExtendedFileJob {
 

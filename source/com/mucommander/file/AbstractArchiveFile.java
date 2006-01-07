@@ -5,6 +5,11 @@ import java.util.*;
 import java.util.zip.*;
 
 
+/**
+ *
+ *
+ * @author Maxence Bernard
+ */
 public abstract class AbstractArchiveFile extends AbstractFile {
 
 	/** Wrapped around file */

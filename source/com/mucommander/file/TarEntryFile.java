@@ -4,6 +4,11 @@ import java.io.*;
 import com.ice.tar.*;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class TarEntryFile extends AbstractEntryFile {
 
 	private TarEntry tarEntry;

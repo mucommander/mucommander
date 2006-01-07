@@ -10,6 +10,11 @@ import java.awt.Color;
 
 import java.io.IOException;
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public abstract class FileViewer extends JPanel {
 	
 	/** ViewerFrame instance that contains this viewer (may be null) */

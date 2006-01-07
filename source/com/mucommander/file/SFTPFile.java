@@ -17,6 +17,8 @@ import java.util.Iterator;
 
 /**
  * SFTPFile represents a file on an SSH/SFTP server.
+ *
+ * @author Maxence Bernard
  */
 public class SFTPFile extends AbstractFile {
 

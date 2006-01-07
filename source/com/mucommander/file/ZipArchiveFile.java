@@ -5,6 +5,11 @@ import java.util.*;
 import java.util.zip.*;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class ZipArchiveFile extends AbstractArchiveFile {
 
 	/** Zip entries contained by this zip file, loaded once for all when needed for the first time */

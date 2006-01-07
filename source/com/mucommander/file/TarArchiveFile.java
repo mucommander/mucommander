@@ -7,6 +7,11 @@ import com.ice.tar.*;
 import java.util.zip.GZIPInputStream;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class TarArchiveFile extends AbstractArchiveFile {
 
 	/** Entries contained by this tar file, loaded once for all when needed for the first time */

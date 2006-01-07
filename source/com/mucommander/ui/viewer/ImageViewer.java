@@ -15,6 +15,11 @@ import javax.swing.*;
 import java.io.*;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 //public class ImageViewer extends FileViewer implements ComponentListener {
 public class ImageViewer extends FileViewer implements ActionListener {
 	

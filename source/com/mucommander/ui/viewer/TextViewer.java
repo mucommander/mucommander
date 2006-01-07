@@ -19,6 +19,11 @@ import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.text.Translator;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 //public class TextViewer extends FileViewer implements ActionListener, WindowListener {
 public class TextViewer extends FileViewer implements ActionListener {
 

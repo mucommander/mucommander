@@ -2,7 +2,11 @@ package com.mucommander.file;
 
 import java.io.*;
 
-
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class GzipArchiveFile extends AbstractArchiveFile {
 
 	/**

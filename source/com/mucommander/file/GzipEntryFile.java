@@ -5,6 +5,11 @@ import java.io.*;
 import java.util.zip.GZIPInputStream;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class GzipEntryFile extends AbstractEntryFile {
 
 	/**

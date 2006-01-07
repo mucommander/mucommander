@@ -16,6 +16,11 @@ import java.awt.event.*;
 import javax.swing.*;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 	
 	private MainFrame mainFrame;

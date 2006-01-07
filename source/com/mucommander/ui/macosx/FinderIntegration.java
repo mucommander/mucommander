@@ -14,6 +14,11 @@ import com.mucommander.ui.about.AboutDialog;
 //import com.apple.mrj.MRJApplicationUtils;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandler, com.apple.mrj.MRJPrefsHandler, com.apple.mrj.MRJQuitHandler {
 
 	private final static int ABOUT_ACTION = 0;

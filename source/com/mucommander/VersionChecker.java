@@ -9,6 +9,8 @@ import com.muxml.*;
 
 /**
  * Checks latest version by parsing an XML document located at some remote URL.
+ *
+ * @author Maxence Bernard
  */
 public class VersionChecker implements ContentHandler {
 

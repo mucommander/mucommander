@@ -11,6 +11,11 @@ import java.awt.event.*;
 import javax.swing.*;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class QuitDialog extends QuestionDialog {
 
 	// Dialog's width has to be at least 240

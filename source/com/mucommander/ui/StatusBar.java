@@ -9,6 +9,11 @@ import com.mucommander.text.Translator;
 import com.mucommander.conf.ConfigurationManager;
 
 
+/**
+ * 
+ *
+ * @author Maxence Bernard
+ */
 public class StatusBar extends JPanel implements ActionListener, MouseListener {
 
 	private MainFrame mainFrame;

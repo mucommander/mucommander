@@ -12,6 +12,7 @@ import javax.swing.text.html.*;
 
 /**
  *
+ *
  * @author Maxence Bernard
  */
 //public class HTTPFile extends AbstractFile implements RemoteFile {

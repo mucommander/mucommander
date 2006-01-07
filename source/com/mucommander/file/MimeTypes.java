@@ -7,6 +7,8 @@ import java.io.*;
 
 /**
  * This Hashtable maps file extensions to their mime type.
+ *
+ * @author Maxence Bernard
  */
 public class MimeTypes extends Hashtable {
 
