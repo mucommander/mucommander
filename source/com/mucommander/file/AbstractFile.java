@@ -25,14 +25,6 @@ public abstract class AbstractFile {
 	
 
 	/**
-	 * Return the URL representing this file.
-	 */
-	public FileURL getURL() {
-		return fileURL;
-	}
-	
-	
-	/**
 	 * Returns an instance of AbstractFile for the given absolute path.
 	 * 
 	 * <p>This method does not throw any IOException but returns <code>null</code> if the file could not be created.</p>
@@ -203,6 +195,29 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 		}
 
 		return file;		
+	}
+
+
+	/**
+	 * Returns the URL representing this file.
+	 */
+	public FileURL getURL() {
+		return fileURL;
+	}
+
+
+	/**
+	 * Returns the file's extension, <code>null</code> if the file doesn't have an extension.
+	 */
+	public String getExtension() {
+		String name = getName();
+		int lastDotPos = name.lastIndexOf('.');
+
+		int len;
+		if(lastDotPos==-1 || lastDotPos==(len=name.length())-1)
+			return null;
+	
+		return name.substring(lastDotPos+1, len);
 	}
 	
     

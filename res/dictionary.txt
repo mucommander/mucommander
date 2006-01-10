@@ -1093,6 +1093,10 @@ toolbar.go_forward:EN:$[shortcuts_dialog.view.go_forward]
 
 toolbar.go_to_parent:EN:$[shortcuts_dialog.view.go_to_parent]
 
+toolbar.add_bookmark:EN:$[add_bookmark_dialog.title]
+
+toolbar.edit_bookmarks:EN:$[edit_bookmarks_dialog.title]
+
 toolbar.mark:EN:$[shortcuts_dialog.selection.mark_group]
 
 toolbar.unmark:EN:$[shortcuts_dialog.selection.unmark_group]

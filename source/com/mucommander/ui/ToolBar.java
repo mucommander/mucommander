@@ -2,6 +2,8 @@
 package com.mucommander.ui;
 
 import com.mucommander.ui.comp.button.RolloverButton;
+import com.mucommander.ui.bookmark.AddBookmarkDialog;
+import com.mucommander.ui.bookmark.EditBookmarksDialog;
 import com.mucommander.text.Translator;
 import com.mucommander.file.FileSet;
 
@@ -31,23 +33,28 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	/** JButton instances */
 	private JButton buttons[];
 	
-	/** Buttons descriptions */
-	private String BUTTONS_DESC[][] = {
-		{Translator.get("toolbar.new_window")+" (Ctrl+N)", "/newwindow.gif", null, "true"},
-		{Translator.get("toolbar.go_back")+" (Alt+Left)", "/back.gif", "/backg.gif", null},
-		{Translator.get("toolbar.go_forward")+" (Alt+Right)", "/forward.gif", "/forwardg.gif", "true"},
-		{Translator.get("toolbar.go_to_parent")+" (Backspace)", "/up.gif", "/upd.gif", "true"},
-		{Translator.get("toolbar.mark")+" (NumPad +)", "/mark.gif", null, null},
-		{Translator.get("toolbar.unmark")+" (NumPad -)", "/unmark.gif", null, "true"},
-		{Translator.get("toolbar.swap_folders")+" (Ctrl+U)", "/switch.gif", null, null},
-		{Translator.get("toolbar.set_same_folder")+" (Ctrl+E)", "/same.gif", null, "true"},
-		{Translator.get("toolbar.server_connect")+" (Ctrl+K)", "/sconnect.gif", null, null},
-		{Translator.get("toolbar.run_command")+" (Ctrl+R)", "/runcmd.gif", null, null},
-		{Translator.get("toolbar.zip")+" (Ctrl+I)", "/zip.gif", null, null},
-		{Translator.get("toolbar.unzip")+" (Ctrl+P)", "/unzip.gif", null, null},
-		{Translator.get("toolbar.email")+" (Ctrl+S)", "/mail.gif", null, null},
-		{Translator.get("toolbar.properties")+" (Alt+Enter)", "/properties.gif", null, "true"},
-		{Translator.get("toolbar.preferences"), "/configure.gif", null, null}
+	/** Icon folder within JAR file */
+	private final static String ICON_FOLDER = "/toolbar_icons/";
+	
+	/** Buttons descriptions: label, enabled icon, disabled icon, separator */
+	private final static String BUTTONS_DESC[][] = {
+		{Translator.get("toolbar.new_window")+" (Ctrl+N)", "new_window.png", null, "true"},
+		{Translator.get("toolbar.go_back")+" (Alt+Left)", "back.gif", "back_grayed.gif", null},
+		{Translator.get("toolbar.go_forward")+" (Alt+Right)", "forward.gif", "forward_grayed.gif", "true"},
+		{Translator.get("toolbar.go_to_parent")+" (Backspace)", "parent.gif", "parent_grayed.gif", "true"},
+		{Translator.get("toolbar.add_bookmark")+" (Ctrl+B)", "add_bookmark.png", null, null},
+		{Translator.get("toolbar.edit_bookmarks"), "edit_bookmarks.png", null, "true"},
+		{Translator.get("toolbar.mark")+" (NumPad +)", "mark.png", null, null},
+		{Translator.get("toolbar.unmark")+" (NumPad -)", "unmark.png", null, "true"},
+		{Translator.get("toolbar.swap_folders")+" (Ctrl+U)", "swap_folders.png", null, null},
+		{Translator.get("toolbar.set_same_folder")+" (Ctrl+E)", "set_same_folder.png", null, "true"},
+		{Translator.get("toolbar.zip")+" (Ctrl+I)", "zip.png", null, null},
+		{Translator.get("toolbar.unzip")+" (Ctrl+P)", "unzip.png", null, "true"},
+		{Translator.get("toolbar.server_connect")+" (Ctrl+K)", "server_connect.png", null, null},
+		{Translator.get("toolbar.run_command")+" (Ctrl+R)", "run_command.png", null, null},
+		{Translator.get("toolbar.email")+" (Ctrl+S)", "email.png", null, null},
+		{Translator.get("toolbar.properties")+" (Alt+Enter)", "properties.png", null, "true"},
+		{Translator.get("toolbar.preferences"), "preferences.png", null, null}
 	};
 
 	
@@ -55,17 +62,19 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	private final static int BACK_INDEX = 1;
 	private final static int FORWARD_INDEX = 2;
 	private final static int PARENT_INDEX = 3;
-	private final static int MARK_INDEX = 4;
-	private final static int UNMARK_INDEX = 5;
-	private final static int SWAP_FOLDERS_INDEX = 6;
-	private final static int SET_SAME_FOLDER_INDEX = 7;
-	private final static int SERVER_CONNECT_INDEX = 8;
-	private final static int RUNCMD_INDEX = 9;
+	private final static int ADD_BOOKMARK_INDEX = 4;
+	private final static int EDIT_BOOKMARKS_INDEX = 5;
+	private final static int MARK_INDEX = 6;
+	private final static int UNMARK_INDEX = 7;
+	private final static int SWAP_FOLDERS_INDEX = 8;
+	private final static int SET_SAME_FOLDER_INDEX = 9;
 	private final static int ZIP_INDEX = 10;
 	private final static int UNZIP_INDEX = 11;
-	private final static int EMAIL_INDEX = 12;
-	private final static int PROPERTIES_INDEX = 13;
-	private final static int PREFERENCES_INDEX = 14;
+	private final static int SERVER_CONNECT_INDEX = 12;
+	private final static int RUNCMD_INDEX = 13;
+	private final static int EMAIL_INDEX = 14;
+	private final static int PROPERTIES_INDEX = 15;
+	private final static int PREFERENCES_INDEX = 16;
 		
 	
 	/**
@@ -83,7 +92,6 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		buttons = new JButton[nbButtons];
 		Dimension separatorDimension = new Dimension(10, 16);
 		for(int i=0; i<nbButtons; i++) {
-//			buttons[i] = addButton(icons[i][0], icons[i][1], BUTTONS_DESC[i][0]);
 			buttons[i] = addButton(BUTTONS_DESC[i][0]);
 			if(BUTTONS_DESC[i][3]!=null &&!BUTTONS_DESC[i][3].equals("false"))
 				addSeparator(separatorDimension);
@@ -114,10 +122,10 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		
 		for(int i=0; i<nbIcons; i++) {
 			// Load 'enabled' icon
-			icons[i][0] = new ImageIcon(getClass().getResource(BUTTONS_DESC[i][1]));
+			icons[i][0] = new ImageIcon(getClass().getResource(ICON_FOLDER+BUTTONS_DESC[i][1]));
 			// Load 'disabled' icon if available
 			if(BUTTONS_DESC[i][2]!=null)
-				icons[i][1] = new ImageIcon(getClass().getResource(BUTTONS_DESC[i][2]));
+				icons[i][1] = new ImageIcon(getClass().getResource(ICON_FOLDER+BUTTONS_DESC[i][2]));
 		}
 	}
 	
@@ -162,7 +170,8 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 
 	
 	/**
-	 * Overridden method to load toolbar icons.
+	 * Overridden method to load/unload toolbar icons depending on this Toolbar's visible state.
+	 * In other words, icons are only loaded when Toolbar is visible.
 	 */
 	public void setVisible(boolean visible) {
 		if(visible) {
@@ -254,6 +263,12 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		else if(buttonIndex==PARENT_INDEX) {
 			FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
 			folderPanel.trySetCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);
+		}
+		else if(buttonIndex==ADD_BOOKMARK_INDEX) {
+			new AddBookmarkDialog(mainFrame);
+		}
+		else if(buttonIndex==EDIT_BOOKMARKS_INDEX) {
+			new EditBookmarksDialog(mainFrame);
 		}
 		else if(buttonIndex==MARK_INDEX) {
 			mainFrame.showSelectionDialog(true);
