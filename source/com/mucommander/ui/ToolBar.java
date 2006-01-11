@@ -34,7 +34,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	private JButton buttons[];
 	
 	/** Icon folder within JAR file */
-	private final static String ICON_FOLDER = "/toolbar_icons/";
+	public final static String ICON_FOLDER = "/toolbar_icons/";
 	
 	/** Buttons descriptions: label, enabled icon, disabled icon, separator */
 	private final static String BUTTONS_DESC[][] = {
