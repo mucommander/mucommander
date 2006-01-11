@@ -117,7 +117,15 @@ public class FileIcons {
 	 * @param iconName the icon's filename
 	 */
 	private ImageIcon loadIcon(String iconName) {
-		return new ImageIcon(getClass().getResource(ICON_FOLDER+iconName));
+		try {
+			return new ImageIcon(getClass().getResource(ICON_FOLDER+iconName));
+		}
+		catch(Exception e) {
+			// An exception is thrown by ImageIcon if the image doesn't exist or could not be properly read
+			if(com.mucommander.Debug.ON)
+				com.mucommander.Debug.trace("/!\\/!\\/!\\ "+e+" caught while trying to load icon "+ICON_FOLDER+iconName+" , using default file icon instead.");
+			return fileIcon;
+		}
 	}
 	
 	/**

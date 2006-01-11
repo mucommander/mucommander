@@ -40,9 +40,11 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	/** Bookmarks, loaded each time the menu pops up */
 	private Vector bookmarks;
 
-	private int rootFoldersOffset;
+	/** Index of the first bookmark in the popup menu */
 	private int bookmarksOffset;
-		
+	/** Index of the first server shorcut in the popup menu */
+	private int serverShortcutsOffset;
+
 	private final static int POPUP_DELAY = 1000;
 
 	
@@ -152,21 +154,13 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		for(int i=0; i<nbRoots; i++)
 			addMenuItem(rootFolders[i].toString());
 
-		this.rootFoldersOffset = nbRoots;
-		
-		// Add 'connect to server' shortcuts
 		popupMenu.add(new JSeparator());
-
-		addMenuItem("FTP...");
-		addMenuItem("SFTP...");
-		addMenuItem("SMB...");
-		addMenuItem("HTTP...");
 
 		// Add boookmarks
-		popupMenu.add(new JSeparator());
+
+		this.bookmarksOffset = menuItems.size();
 
 		this.bookmarks = BookmarkManager.getBookmarks();
-		this.bookmarksOffset = menuItems.size();
 		int nbBookmarks = bookmarks.size();
 		
 		if(nbBookmarks>0) {
@@ -176,6 +170,16 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		else {
 			addMenuItem(Translator.get("bookmarks_menu.no_bookmark")).setEnabled(false);
 		}
+
+		popupMenu.add(new JSeparator());
+
+		// Add 'connect to server' shortcuts
+
+		this.serverShortcutsOffset = menuItems.size();
+		addMenuItem("FTP...");
+		addMenuItem("SFTP...");
+		addMenuItem("SMB...");
+		addMenuItem("HTTP...");
 
 		popupMenu.show(folderPanel, 0, getHeight());		
 
@@ -247,22 +251,22 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		else {
 			int index = menuItems.indexOf(source);
 			
-			// Free vector since it won't be needed anymore
+			// GC vector since it won't be needed anymore
 			this.menuItems = null;
 
 			// Menu item that corresponds to a root folder
-			if(index<rootFoldersOffset) {
+			if(index<bookmarksOffset) {
 				// Tries to change current folder
 				folderPanel.trySetCurrentFolder(rootFolders[index], true);
 			}
-			// Menu item that corresponds to a shortcut to 'server connect' dialog
-			else if(index<bookmarksOffset) {
-				// Show server connect dialog with corresponding panel
-				new ServerConnectDialog(folderPanel.getMainFrame(), index-rootFoldersOffset).showDialog();
-			}
 			// Menu item that corresponds to a bookmark
-			else {
+			else if(index<serverShortcutsOffset) {
 				folderPanel.trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index-bookmarksOffset)).getURL(), true);
+			}
+			// Menu item that corresponds to a server shortcut
+			else {
+				// Show server connect dialog with corresponding panel
+				new ServerConnectDialog(folderPanel.getMainFrame(), index-serverShortcutsOffset).showDialog();
 			}
 		}
 	}
