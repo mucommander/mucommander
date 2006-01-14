@@ -449,7 +449,7 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		this.currentMainFrame = (MainFrame)e.getSource();
 
 		// Resets shift mode to false, since keyReleased events may have been lost during window switching
-		CommandBarPanel commandBar = currentMainFrame.getCommandBar();
+		CommandBar commandBar = currentMainFrame.getCommandBar();
 		if(commandBar!=null)
 			commandBar.setShiftMode(false);
 

@@ -17,12 +17,12 @@ import java.io.*;
 
 
 /**
- * CommandBarPanel is the button bar that sits at the bottom of the main window and provides access to
+ * CommandBar is the button bar that sits at the bottom of the main window and provides access to
  * a number of commands (view, edit, copy, move...).
  *
  * @author Maxence Bernard
  */
-public class CommandBarPanel extends JPanel implements ActionListener, MouseListener {
+public class CommandBar extends JPanel implements ActionListener, MouseListener {
 
 	/** Parent MainFrame instance */
     private MainFrame mainFrame;
@@ -82,9 +82,9 @@ public class CommandBarPanel extends JPanel implements ActionListener, MouseList
 
 
 	/**
-	 * Creates a new CommandBarPanel instance associated with the given MainFrame.
+	 * Creates a new CommandBar instance associated with the given MainFrame.
 	 */
-	public CommandBarPanel(MainFrame mainFrame) {
+	public CommandBar(MainFrame mainFrame) {
 		super(new GridLayout(0,8));
         this.mainFrame = mainFrame;
 

@@ -50,7 +50,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	private StatusBar statusBar;
 	
 	/** Command bar instance */
-	private CommandBarPanel commandBar;
+	private CommandBar commandBar;
 	
 	/** Is no events mode enabled ? */
 	private boolean noEventsMode;
@@ -134,7 +134,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		southPanel.add(statusBar);
 		
 		// Show command bar only if it hasn't been disabled in the preferences
-		this.commandBar = new CommandBarPanel(this);
+		this.commandBar = new CommandBar(this);
 		if(ConfigurationManager.getVariable("prefs.show_command_bar", "true").equals("false"))
 			commandBar.setVisible(false);
 		southPanel.add(commandBar);
@@ -216,7 +216,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * Returns the command bar, i.e. the panel that contains
 	 * F3, F6... F10 buttons.
 	 */
-	public CommandBarPanel getCommandBar() {
+	public CommandBar getCommandBar() {
 		return commandBar;
 	}
 	
@@ -516,33 +516,33 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("focus requested, isVis
         Object source = e.getSource();
         int keyCode = e.getKeyCode();
         if(keyCode == KeyEvent.VK_F3 && !e.isControlDown()) {
-			commandBar.getButton(CommandBarPanel.VIEW_INDEX).doClick();
+			commandBar.getButton(CommandBar.VIEW_INDEX).doClick();
         }
         else if(keyCode == KeyEvent.VK_F4 && e.isAltDown()) {
-			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
+			commandBar.getButton(CommandBar.CLOSE_INDEX).doClick();
         }
         else if(keyCode == KeyEvent.VK_F4 && !e.isControlDown()) {
-			commandBar.getButton(CommandBarPanel.EDIT_INDEX).doClick();
+			commandBar.getButton(CommandBar.EDIT_INDEX).doClick();
         }
         else if(keyCode == KeyEvent.VK_F5 && !e.isControlDown()) {
-			commandBar.getButton(CommandBarPanel.COPY_INDEX).doClick();
+			commandBar.getButton(CommandBar.COPY_INDEX).doClick();
         }
         else if(keyCode == KeyEvent.VK_F6 && !e.isControlDown()) {
-			commandBar.getButton(CommandBarPanel.MOVE_INDEX).doClick();
+			commandBar.getButton(CommandBar.MOVE_INDEX).doClick();
         }
         else if(keyCode == KeyEvent.VK_F7 && !e.isControlDown()) {
-			commandBar.getButton(CommandBarPanel.MKDIR_INDEX).doClick();
+			commandBar.getButton(CommandBar.MKDIR_INDEX).doClick();
         }
         else if((keyCode == KeyEvent.VK_F8 || keyCode == KeyEvent.VK_DELETE)
 		 && !e.isControlDown()) {
-			commandBar.getButton(CommandBarPanel.DELETE_INDEX).doClick();
+			commandBar.getButton(CommandBar.DELETE_INDEX).doClick();
         }
         else if(keyCode == KeyEvent.VK_F9 && !e.isControlDown()) {
-			commandBar.getButton(CommandBarPanel.REFRESH_INDEX).doClick();
+			commandBar.getButton(CommandBar.REFRESH_INDEX).doClick();
         }
         else if(keyCode == KeyEvent.VK_F10 && !e.isControlDown()
 		 || (PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_W && e.isMetaDown())) {
-			commandBar.getButton(CommandBarPanel.CLOSE_INDEX).doClick();
+			commandBar.getButton(CommandBar.CLOSE_INDEX).doClick();
         }
 		else if(keyCode == KeyEvent.VK_F1 && e.isAltDown()) {
 			folderPanel1.showRootBox();
