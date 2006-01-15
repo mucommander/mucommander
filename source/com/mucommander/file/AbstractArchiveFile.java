@@ -12,7 +12,7 @@ import java.util.zip.*;
  */
 public abstract class AbstractArchiveFile extends AbstractFile {
 
-	/** Wrapped around file */
+	/** Wrapped-around file */
 	protected AbstractFile file;
 
 
@@ -22,6 +22,16 @@ public abstract class AbstractArchiveFile extends AbstractFile {
 	protected AbstractArchiveFile(AbstractFile file) {
 		super(file.getURL());
 		this.file = file;
+	}
+
+
+	/**
+	 * Returns the AbstractFile instance this archive is wrapped around.
+	 *
+	 * @return the AbstractFile instance this archive is wrapped around
+	 */
+	public AbstractFile getEnclosedFile() {
+		return file;
 	}
 
 

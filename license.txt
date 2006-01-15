@@ -2,7 +2,7 @@
 muCommander license
 Version 1.0
 
-Copyright (c) 2002-2005 Maxence Bernard
+Copyright (c) 2002-2006 Maxence Bernard
 All rights reserved.
 
 Redistribution and use of the accompanying software are permitted provided
@@ -663,4 +663,22 @@ The CommonsNet library is used by muCommander under the terms of the Apache lice
       defend, and hold each Contributor harmless for any liability
       incurred by, or claims asserted against, such Contributor by reason
       of your accepting any such warranty or additional liability.
+
+
+****************************************************************
+The icons by Mark James (famfamfam.com) are used under the terms
+of the Creative Commons Attribution License:
+****************************************************************
+
+Attribution 2.5
+
+You are free:
+to copy, distribute, display, and perform the work
+to make derivative works
+to make commercial use of the work
+
+Under the following conditions:
+Attribution. You must attribute the work in the manner specified by the author or licensor.
+For any reuse or distribution, you must make clear to others the license terms of this work.
+Any of these conditions can be waived if you get permission from the copyright holder.
 

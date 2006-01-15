@@ -1,5 +1,5 @@
 -----------------------
-muCommander v0.8 beta 1
+muCommander v0.8 beta 2
 -----------------------
 
 muCommander is a cross-platform file manager featuring a Norton Commander
@@ -11,7 +11,7 @@ to post your questions, suggestions or bug reports. Your feedback is
 important and always welcome!
 
 Official website: http://www.mucommander.com
-(c) 2002-2005 Maxence Bernard. All rights reserved.
+(c) 2002-2006 Maxence Bernard. All rights reserved.
 
 
 Requirements
@@ -30,10 +30,10 @@ JRE or JDK is installed.
 Legal stuff
 -----------
 
-You must read and accept the licenses contained in this package prior
-to using muCommander.
+You must read and accept the license located in the 'license.txt' file
+in this package prior to using muCommander.
 
-muCommander uses the following libraries:
+muCommander uses the following 3rd party works :
 
 - the jCIFS library released under the LGPL license to provide SMB support.
  jCIFS can be found at http://jcifs.samba.org .
@@ -46,6 +46,28 @@ muCommander uses the following libraries:
 
 - Java TAR released under the Public Domain to provide TAR support.
  Java TAR can be found at http://www.trustice.com/java/tar/ .
+
+- Icons by Mark James under the Creative Commons Attribution License (http://famfamfam.com)
+
+
+What's new in v0.8 beta 2 ?
+---------------------------
+
+New features:
+ -
+
+Improvements:
+ -
+
+Bug fixes:
+ -
+
+Known issues:
+ - Translations for new features are temporarily missing
+ - Slow TAR and Zip extraction for small files because extraction is not performed sequentially
+ - Mac OS X-specific files not copied properly
+ - Image viewer doesn't free memory properly under Mac OS X
+ - Pipe '|' and other shell operators cannot be used in 'Run Command'
 
 
 What's new in v0.8 beta 1 ?
@@ -88,11 +110,4 @@ Bug fixes :
  - FTP: improved FTP reconnection
  - FTP: fixed duplicate '.' and '..' files which happened with some FTP servers
  - Email files: fixed folders not being handled properly since v0.7
-
-Known issues:
- - Translations for new features are temporarily missing
- - Slow TAR and Zip extraction for small files because extraction is not performed sequentially
- - Mac OS X-specific files not transferred properly
- - Image viewer doesn't free memory properly under Mac OS X
- - Pipe '|' and other shell operators cannot be used in 'Run Command'
 

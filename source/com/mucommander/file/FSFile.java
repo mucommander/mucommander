@@ -275,32 +275,33 @@ public class FSFile extends AbstractFile {
 	
 
 	public long getFreeSpace() {
-		long volumeInfo[] = getVolumeInfo();
-		if(volumeInfo==null)
-			return -1;	// Not available on this platform
-		return volumeInfo[1];
+		return getVolumeInfo()[1];
 	}
 	
 	public long getTotalSpace() {
-		long volumeInfo[] = getVolumeInfo();
-		if(volumeInfo==null)
-			return -1;	// Not available on this platform
-		return volumeInfo[0];
+		return getVolumeInfo()[0];
 	}	
 	
 	/**
 	 * Uses platform dependant commands to extract free and total volume (where this file resides) space.
 	 *
+	 * <p>This method has been made public as it is more efficient to retrieve both free space and volume space
+	 * info than calling getFreeSpace() and getTotalSpace() separately, since a single command retrieves both.
+	 *
 	 * @return [totalSpace, freeSpace], or <code>null</code> if information could not be retrieved from the current platform. 
 	 */
-	private long[] getVolumeInfo() {
+	public long[] getVolumeInfo() {
 		BufferedReader br = null;
 		String absPath = getAbsolutePath();
+		long dfInfo[] = new long[]{-1, -1};
 
 		try {
 			int osFamily = PlatformManager.getOSFamily();
-			// Parses the output of 'dir "filePath"' command to retrieve free space information
+			// OS is Windows
 			if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
+				// Parses the output of 'dir "filePath"' command to retrieve free space information
+				// Note : total space information not available under Windows
+
 				// 'dir' command returns free space on the last line
 				Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
 
@@ -321,9 +322,7 @@ public class FSFile extends AbstractFile {
 						StringTokenizer st = new StringTokenizer(lastLine, " \t\n\r\f,.");
 						// Discard first token
 						st.nextToken();
-						long dfInfo[] = new long[2];
-						dfInfo[0] = -1;
-						
+
 						// Concatenates as many contiguous groups of numbers
 						String token;
 						String freeSpace = "";
@@ -337,7 +336,6 @@ public class FSFile extends AbstractFile {
 						}
 
 						dfInfo[1] = Long.parseLong(freeSpace);
-						return dfInfo;
 					}
 				}
 			}
@@ -356,15 +354,12 @@ public class FSFile extends AbstractFile {
 						StringTokenizer st = new StringTokenizer(line);
 						// Discard 'Filesystem' field
 						st.nextToken();
-						long dfInfo[] = new long[2];
 						// Parse 'volume total' field
 						dfInfo[0] = Long.parseLong(st.nextToken()) * 1024;
 						// Discard 'Used' field
 						st.nextToken();
 						// Parse 'volume free' field
 						dfInfo[1] = Long.parseLong(st.nextToken()) * 1024;
-
-						return dfInfo;
 					}
 				}
 			}
@@ -377,6 +372,6 @@ public class FSFile extends AbstractFile {
 				try { br.close(); } catch(IOException e) {}
 		}
 
-		return null;		// Information not available
+		return dfInfo;
 	}
 }

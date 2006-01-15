@@ -19,7 +19,7 @@ import java.util.Vector;
  */
 public class Debug {
 	/** Sets whether or not debug messages should be output to the standard output */
-	public final static boolean ON = true;
+	public final static boolean ON = false;
 
 	private static long lastTime;
 
