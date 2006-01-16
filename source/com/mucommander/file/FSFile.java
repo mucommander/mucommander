@@ -5,6 +5,8 @@ import java.util.*;
 
 import com.mucommander.PlatformManager;
 
+import javax.swing.filechooser.FileSystemView;
+
 /**
  * FSFile represents a 'file system file', that is a regular native file.
  *
@@ -12,10 +14,8 @@ import com.mucommander.PlatformManager;
  */
 public class FSFile extends AbstractFile {
 
-	/** "/" for UNIX systems, "\" for Win32 */
-	protected final static String separator = File.separator;
-
 	private File file;
+	private File parentFile;
     private String absPath;
 	private String canonicalPath;
 	private boolean isSymlink;
@@ -32,6 +32,21 @@ public class FSFile extends AbstractFile {
 	// Indicates whether or not the value has already been retrieved
 	private boolean parentValCached = false;
 		
+
+	/** "/" for UNIX systems, "\" for Win32 */
+	protected final static String separator = File.separator;
+
+	/** Are we running Windows ? */
+	private final static boolean IS_WINDOWS;
+
+	/** Used under Windows to determine if a root folder is a floppy drive */
+	private final static FileSystemView fileSystemView;
+		
+	static {
+		int osFamily = PlatformManager.getOSFamily();
+		IS_WINDOWS = osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT;
+		fileSystemView = IS_WINDOWS?FileSystemView.getFileSystemView():null;
+	}
 
 	/**
 	 * Convenience constructor.
@@ -80,6 +95,7 @@ public class FSFile extends AbstractFile {
 			throw new IOException();
 
 		this.file = file;
+		this.parentFile = file.getParent();
 		this.absPath = file.getAbsolutePath();
 
         // removes trailing separator (if any)
@@ -92,14 +108,13 @@ public class FSFile extends AbstractFile {
 	/////////////////////////////////////////
 
 	public String getName() {
-    	// Retrieves name and caches it
-		return file.getParent()==null?absPath+separator:file.getName();
+		return parentFile==null?absPath+separator:file.getName();
 	}
 
 
 	public String getAbsolutePath() {
 		// Append separator for root folders (C:\ , /) and for directories
-		if(file.getParent()==null || (isDirectory() && !absPath.endsWith(separator)))
+		if(parentFile==null || (isDirectory() && !absPath.endsWith(separator)))
 			return absPath+separator;
 	
 		return absPath;
@@ -109,10 +124,10 @@ public class FSFile extends AbstractFile {
 	public String getCanonicalPath() {
 		// To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
 		// triggered by java.io.File.getCanonicalPath() 
-		int osFamily = PlatformManager.getOSFamily();
-		if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
-			String absPath = getAbsolutePath();
-			if(absPath.equals("A:\\") || absPath.equals("B:\\"))
+		if(IS_WINDOWS) {
+//			String absPath = getAbsolutePath();
+//			if(absPath.equals("A:\\") || absPath.equals("B:\\"))
+			if(fileSystemView.isFloppyDrive(new File(absPath)))
 				return absPath;
 		}
 		
@@ -167,10 +182,13 @@ public class FSFile extends AbstractFile {
 	public AbstractFile getParent() {
 		// Retrieves parent and caches it
 		if (!parentValCached) {
-			FileURL parentURL = getURL().getParent();
-			if(parentURL != null)
-				try { parent = new FSFile(parentURL, new File(parentURL.getPath())); }
-				catch(IOException e) {}
+			if(parentFile!=null) {
+				FileURL parentURL = getURL().getParent();
+				if(parentURL != null) {
+					try { parent = new FSFile(parentURL, new File(parentURL.getPath())); }
+					catch(IOException e) {}
+				}
+			}
 			parentValCached = true;
 		}
         return parent;
@@ -200,9 +218,9 @@ public class FSFile extends AbstractFile {
 	public boolean isDirectory() {
 		// To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
 		// triggered by java.io.File.getCanonicalPath() 
-		int osFamily = PlatformManager.getOSFamily();
-		if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
-			if(absPath.equals("A:") || absPath.equals("B:"))
+		if(IS_WINDOWS) {
+//			if(absPath.equals("A:") || absPath.equals("B:"))
+			if(fileSystemView.isFloppyDrive(new File(absPath)))
 				return true;
 		}
 
@@ -296,9 +314,8 @@ public class FSFile extends AbstractFile {
 		long dfInfo[] = new long[]{-1, -1};
 
 		try {
-			int osFamily = PlatformManager.getOSFamily();
 			// OS is Windows
-			if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
+			if(IS_WINDOWS) {
 				// Parses the output of 'dir "filePath"' command to retrieve free space information
 				// Note : total space information not available under Windows
 

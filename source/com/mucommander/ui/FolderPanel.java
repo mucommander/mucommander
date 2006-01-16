@@ -16,6 +16,7 @@ import com.mucommander.PlatformManager;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.filechooser.FileSystemView;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -55,7 +56,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	private Vector history;
 	private int historyIndex;
     
-	private String lastFolderOnExit;
+	private String lastSavableFolder;
 
 	private Object lastFocusedComponent;
 	
@@ -765,17 +766,19 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		//  - a folder that is on a local filesytem
 		//  - if running Windows, the root drive should not look like a removable media drive (cd/dvd/floppy) to
 		// prevent Java from triggering that dreaded 'Drive not ready' popup. A weak way to characterize such a drive
-		// is to check if the corresponding root folder is read-only. A better way would be to create a JNI interface
-		// as described here: http://forum.java.sun.com/thread.jspa?forumID=256&threadID=363074
+		// is to check if the corresponding root folder is read-only or a floppy (FileSystemView class provides 
+		// a method for that). A better way would be to create a JNI interface as described here: http://forum.java.sun.com/thread.jspa?forumID=256&threadID=363074
 		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory()) {
 			int osFamily = PlatformManager.getOSFamily();
-			if((osFamily!=PlatformManager.WINDOWS_9X && osFamily!=PlatformManager.WINDOWS_NT) || folder.getRoot().canWrite()) {
-				this.lastFolderOnExit = folder.getAbsolutePath();
-				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastFolderOnExit= "+lastFolderOnExit);
+			AbstractFile rootFolder = folder.getRoot();
+			if((osFamily!=PlatformManager.WINDOWS_9X && osFamily!=PlatformManager.WINDOWS_NT)
+			 || (rootFolder.canWrite() && !FileSystemView.getFileSystemView().isFloppyDrive(new java.io.File(rootFolder.getAbsolutePath())))) {
+				this.lastSavableFolder = folder.getAbsolutePath();
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastSavableFolder= "+lastSavableFolder);
 			}
 		}
 		
-		// Notifie listeners that location has changed
+		// Notify listeners that location has changed
 		fireLocationChanged();
 	}
 
@@ -819,7 +822,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	 * 'drive not ready' popup dialog.
 	 */
 	public String getLastSavableFolder() {
-		return this.lastFolderOnExit;
+		return this.lastSavableFolder;
 	}
 	
 	

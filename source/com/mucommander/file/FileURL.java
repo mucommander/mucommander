@@ -520,6 +520,8 @@ public class FileURL implements Cloneable {
 			"file:///absolute_path",
 			"file://localhost/absolute_path",
 			"file://localhost/~/Projects/",
+			"file://localhost/C:",
+			"file://localhost/C:\\",
 			"file://localhost/C:\\Projects",
 			"file://localhost/C:\\Projects\\",
 			"file://localhost/C:\\Documents and Settings",

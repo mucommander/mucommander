@@ -359,7 +359,9 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	public AbstractFile getRoot() {
 		AbstractFile parent;
 		AbstractFile child = this; 
-		while((parent=child.getParent())!=null);
+		while((parent=child.getParent())!=null && !parent.equals(child)) {
+			child = parent;
+		}
 		
 		return child;
 	}
