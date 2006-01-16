@@ -121,7 +121,7 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 		contentPane.add(mainPanel, BorderLayout.CENTER);
 
         // Add buttons
-        JButton okButton = new JButton(Translator.get("ok"));
+        JButton okButton = new JButton(Translator.get("cancel"));
         JButton buttons[];
         if(downloadOption) {
             this.downloadButton = new JButton(Translator.get("version_dialog.download"));

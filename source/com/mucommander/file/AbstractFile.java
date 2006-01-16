@@ -351,6 +351,20 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 */
 	public abstract AbstractFile getParent();
 	
+
+	/**
+	 * Returns the root folder that contains this AbstractFile. If this file is already
+	 * a root folder (no parent), it will simply be returned.
+	 */
+	public AbstractFile getRoot() {
+		AbstractFile parent;
+		AbstractFile child = this; 
+		while((parent=child.getParent())!=null);
+		
+		return child;
+	}
+	
+
 	/**
 	 * Sets this file's parent or null if it doesn't have any parent.
 	 */

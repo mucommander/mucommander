@@ -3,6 +3,8 @@ package com.mucommander.ui;
 
 import com.mucommander.file.*;
 
+import com.mucommander.PlatformManager;
+
 import com.mucommander.ui.connect.ServerConnectDialog;
 
 import com.mucommander.bookmark.BookmarkManager;
@@ -15,6 +17,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.FileSystemView;
 
 import java.util.Vector;
 
@@ -71,10 +74,22 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 
 
 	/**
-	 * Creates and add a new item to the popup menu.
+	 * Creates and add a new menu item to the popup menu.
+	 *
+	 * @param label the menu item's label
 	 */
-	private JMenuItem addMenuItem(String text) {
-		JMenuItem menuItem = new JMenuItem(text);
+	private JMenuItem addMenuItem(String label) {
+		return addMenuItem(label, null);
+	}
+
+	/**
+	 * Creates and add a new menu item to the popup menu.
+	 *
+	 * @param label the menu item's label
+	 * @param icon the menu item's icon (can be null)
+	 */
+	private JMenuItem addMenuItem(String label, javax.swing.Icon icon) {
+		JMenuItem menuItem = new JMenuItem(label, icon);
 		menuItem.addActionListener(this);
 		menuItems.add(menuItem);
 		popupMenu.add(menuItem);
@@ -151,8 +166,18 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 
 		// Add root 'drives'
 		int nbRoots = rootFolders.length;
-		for(int i=0; i<nbRoots; i++)
-			addMenuItem(rootFolders[i].toString());
+		int osFamily = PlatformManager.getOSFamily();
+		// Add the system's drives icons under Windows, icons looks like crap under Mac OS X,
+		// and most likely look like crap under Linux as well (untested though)
+		if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
+			FileSystemView fileSystemView = FileSystemView.getFileSystemView();
+			for(int i=0; i<nbRoots; i++)
+				addMenuItem(rootFolders[i].getName(), fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath())));
+		}
+		else {
+			for(int i=0; i<nbRoots; i++)
+				addMenuItem(rootFolders[i].getName());
+		}
 
 		popupMenu.add(new JSeparator());
 

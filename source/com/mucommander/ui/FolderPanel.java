@@ -2,13 +2,17 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.*;
+
 import com.mucommander.ui.table.*;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.comp.ProgressTextField;
 
 import com.mucommander.conf.*;
+
 import com.mucommander.text.Translator;
+
+import com.mucommander.PlatformManager;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -755,8 +759,21 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		}
 
 		// Save last folder recallable on startup (local directory)
-		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory())
-			this.lastFolderOnExit = folder.getAbsolutePath();
+//		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory())
+
+		// Save last folder recallable on startup, that is :
+		//  - a folder that is on a local filesytem
+		//  - if running Windows, the root drive should not look like a removable media drive (cd/dvd/floppy) to
+		// prevent Java from triggering that dreaded 'Drive not ready' popup. A weak way to characterize such a drive
+		// is to check if the corresponding root folder is read-only. A better way would be to create a JNI interface
+		// as described here: http://forum.java.sun.com/thread.jspa?forumID=256&threadID=363074
+		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory()) {
+			int osFamily = PlatformManager.getOSFamily();
+			if((osFamily!=PlatformManager.WINDOWS_9X && osFamily!=PlatformManager.WINDOWS_NT) || folder.getRoot().canWrite()) {
+				this.lastFolderOnExit = folder.getAbsolutePath();
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastFolderOnExit= "+lastFolderOnExit);
+			}
+		}
 		
 		// Notifie listeners that location has changed
 		fireLocationChanged();
@@ -796,8 +813,10 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	
 	/**
 	 * Returns the last folder the user went to before quitting the application.
-	 * This folder will be loaded on next mucommander startup, so the returned folder
-	 * should NOT be a folder on a remote filesystem (likely not to be reachable).
+	 * This folder will be loaded on next mucommander startup, so the returned folder should NOT be
+	 * a folder on a remote filesystem (likely not to be reachable next time the app is started)
+	 * or a removable media drive (cd/dvd/floppy) if under Windows, as it would trigger a nasty 
+	 * 'drive not ready' popup dialog.
 	 */
 	public String getLastSavableFolder() {
 		return this.lastFolderOnExit;
