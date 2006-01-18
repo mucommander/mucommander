@@ -300,7 +300,12 @@ public class ConfigurationManager {
             }
             else {
                 oldValue = node.getLeaf(buffer);
-                if(node.setLeaf(buffer, value))
+				
+				// Since 0.8 beta2: do nothing (return) if value hasn't changed
+				if((oldValue==null && value==null) || (oldValue!=null && oldValue.equals(value)))
+					return;
+					
+				if(node.setLeaf(buffer, value))
                     if(!fireConfigurationEvent(new ConfigurationEvent(var, value)))
                         node.setLeaf(buffer, oldValue);
             }

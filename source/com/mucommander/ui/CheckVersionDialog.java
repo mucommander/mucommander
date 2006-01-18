@@ -2,8 +2,11 @@
 package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.*;
 import com.mucommander.text.Translator;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.VersionChecker;
+import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -16,10 +19,7 @@ import javax.swing.*;
  *
  * @author Maxence Bernard
  */
-public class CheckVersionDialog extends FocusDialog implements ActionListener, Runnable {
-
-	/** Dialog's width has to be at least 240 */
-	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+public class CheckVersionDialog extends QuestionDialog implements Runnable {
 
 	/** Parent MainFrame instance */
     private MainFrame mainFrame;
@@ -28,10 +28,12 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 	 * false if the update check was automatically triggered on startup */
     private boolean userInitiated;
 
-	private JButton downloadButton;
+	/** Dialog's width has to be at least 240 */
+	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
 
-    private String downloadURL;
-
+	private final static int OK_ACTION = 0;
+	private final static int DOWNLOAD_ACTION = 1;
+	
 	
 	/**
      * Checks for updates and notifies the user of the outcome. The check itself is performed in a separate thread
@@ -60,6 +62,7 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
         
         String text;
         String title;
+		String downloadURL = null;
         boolean downloadOption = false;
         try {
             if(Debug.ON) Debug.trace("Checking for new version...");            
@@ -79,11 +82,13 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
                 
                 // If the platform is not capable of opening a new browser window,
                 // display the download URL.
-                if(downloadOption)
+                if(downloadOption) {
 					text = Translator.get("version_dialog.new_version");
-				else
+				}
+				else {
 					text = Translator.get("version_dialog.new_version_url", downloadURL);
-            }
+				}
+			}
             // We're already running latest version
 			else {
                 if(Debug.ON) Debug.trace("No new version.");            
@@ -97,7 +102,7 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
                 
 				title = Translator.get("version_dialog.no_new_version_title");
                 text = Translator.get("version_dialog.no_new_version");
-            }
+			}
         }
         // Check failed
         catch(Exception e) {
@@ -110,50 +115,27 @@ public class CheckVersionDialog extends FocusDialog implements ActionListener, R
 
             title = Translator.get("version_dialog.not_available_title");
             text = Translator.get("version_dialog.not_available");
-        }
+		}
 
+		// Set title
         setTitle(title);
         
-		// Text message
-		YBoxPanel mainPanel = new YBoxPanel(5);
-        mainPanel.add(new JLabel(text));
-		mainPanel.addSpace(10);
-		contentPane.add(mainPanel, BorderLayout.CENTER);
+		String okText = Translator.get("ok");
+		init(mainFrame, new JLabel(text), 
+			downloadOption?new String[]{Translator.get("version_dialog.download"), okText}:new String[]{okText},
+			downloadOption?new int[]{DOWNLOAD_ACTION, OK_ACTION}:new int[]{OK_ACTION},
+			0);
+			
+		JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"), ConfigurationManager.getVariable("prefs.check_for_updates_on_startup", "true").equals("true"));
+		addCheckBox(showNextTimeCheckBox);
 
-        // Add buttons
-        JButton okButton = new JButton(Translator.get("cancel"));
-        JButton buttons[];
-        if(downloadOption) {
-            this.downloadButton = new JButton(Translator.get("version_dialog.download"));
-            buttons = new JButton[]{downloadButton, okButton};
-        }
-        else {
-            buttons = new JButton[]{okButton};
-        }
-        JPanel buttonPanel = DialogToolkit.createButtonPanel(buttons, this);
-        contentPane.add(buttonPanel, BorderLayout.SOUTH);
-
-		// Selects OK when enter is pressed
-		getRootPane().setDefaultButton(downloadButton);
-		
-		// Packs dialog
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-        showDialog();
-    }
-
-
-	////////////////////////////
-	// ActionListener methods //
-	////////////////////////////
-
-	public void actionPerformed(ActionEvent e) {
-		Object source = e.getSource();
-
-        // Starts by disposing the dialog
-        dispose();
-
-		if (source==downloadButton)  {
-			PlatformManager.open(downloadURL, mainFrame.getLastActiveTable().getCurrentFolder());
-		}
+		
+		// Show dialog and get user action
+		if(getActionValue()==DOWNLOAD_ACTION)
+			PlatformManager.open(downloadURL, mainFrame.getLastActiveTable().getCurrentFolder());	// Open URL in browser
+		
+		// Remember user preference
+		ConfigurationManager.setVariable("prefs.check_for_updates_on_startup", ""+showNextTimeCheckBox.isSelected());
 	}
 }
