@@ -41,6 +41,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
     // Registered LocationListeners
     private Vector locationListeners = new Vector();
 	
+	private XBoxPanel locationPanel;
 	/*  We're NOT using JComboBox anymore because of its strange behavior: 
 		it calls actionPerformed() each time an item is highlighted with the arrow (UP/DOWN) keys,
 		so there is no way to tell if it's the final selection (ENTER) or not.
@@ -441,7 +442,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initialFolder);
         this.mainFrame = mainFrame;
 
-		XBoxPanel locationPanel = new XBoxPanel();
+		this.locationPanel = new XBoxPanel();
 		locationPanel.setInsets(new Insets(0, 6, 6, 0));
 
 		this.driveButton = new DriveButton(this);
@@ -780,6 +781,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		
 		// Notify listeners that location has changed
 		fireLocationChanged();
+
+SwingUtilities.invokeLater(new Thread() { public void run() { locationPanel.revalidate(); locationPanel.repaint(); driveButton.repaint(); locationPanel.repaint(); }});
 	}
 
 

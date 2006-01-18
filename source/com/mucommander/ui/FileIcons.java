@@ -56,6 +56,8 @@ public class FileIcons {
 		{"certificate.png", "cer", "crt", "key"},	// Certificate file
 		{"configuration.png", "cnf", "conf", "config", "inf", "ini", "pif", "prefs", "prf"},	// Configuration file
 		{"database.png", "myi", "myd", "frm", "sql", "sqc", "sqr"},	// Database file
+		{"executable.png", "bat", "com", "exe"},	// Executable files
+		{"feed.png", "rdf", "rss"},	// RSS/RDF feed
 		{"font.gif", "fnt", "fon", "otf"},	// Non-TrueType font formats
 		{"font_truetype.gif", "ttc", "ttf"},	// TrueType font formats
 		{"image_bitmap.png", "exif", "ico", "gif", "j2k", "jpg", "jpeg", "jpg2", "jp2", "bmp", "ico", "iff", "mng", "pcd", "pic", "pict", "png", "psd", "psp", "pbm", "pgm", "ppm", "raw", "tga", "tiff", "tif", "wbmp", "xbm", "xcf", "xpm"},	// Bitmap image formats, see http://en.wikipedia.org/wiki/Graphics_file_format and http://en.wikipedia.org/wiki/Image_file_formats
@@ -69,7 +71,7 @@ public class FileIcons {
 		{"ms_office.png", "pcb", "pot", "ppa", "ppi", "pps", "ppt", "pwz"},	// Microsoft Office (Powerpoint)
 		{"pdf.png", "pdf"},		// Adobe Acrobat / PDF
 		{"source.png", "asm", "asp", "bas", "bcp", "cbl", "cob", "f", "fpp", "inc", "java", "js", "jsp", "lsp", "m4", "pas", "pl", "py", "src", "vb", "vbe", "vbs", "x"},	// Languages for which there is no special icon (generic source icon)
-		{"source.png", "awk", "bat", "com", "csh", "esh", "sh", "ksh", "ws", "wsf"},	// Shell scripts
+		{"source.png", "awk", "csh", "esh", "sh", "ksh", "ws", "wsf"},	// Shell scripts
 		{"source_c.png", "c", "cc"},	// C source
 		{"source_c_header.png", "h", "hh", "hhh"},	// C header
 		{"source_cplusplus.png", "cpp", "c++"},	// C++ source
@@ -79,6 +81,7 @@ public class FileIcons {
 		{"source_web.png", "html", "htm", "xhtml", "wml", "wmlc", "wmls", "wmlsc", "hdml", "xhdml", "chtml", "vrml", "torrent", "url", "css"},	// Web formats
 		{"source_xml.png", "xml", "dtd", "xfd", "xfdl", "xmap", "xmi", "xsc", "xsd", "xsl", "xslt", "xtd", "xul", "rss", "jnlp", "plist"},	// XML-based formats
 		{"text.png", "1st", "ans", "asc", "ascii", "diz", "err", "faq", "latex", "log", "man", "msg", "nfo", "readme", "rtf", "sig", "tex", "text", "txt"},	// Text formats
+		{"vcard.png", "vcf"},	// vCard
 		{"video.png", "3g2", "3gp", "3gp2", "3gpp", "asf", "asx", "avi", "dir", "dv", "dxr", "m1v", "m4e", "m4u", "moov", "mov", "movie", "mp4", "mpe", "mpeg", "mpg", "mpv2", "qt", "rm", "rmvb", "rts", "vob", "wmv"}		// Video formats
 	};
 

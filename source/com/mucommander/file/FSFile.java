@@ -15,7 +15,7 @@ import javax.swing.filechooser.FileSystemView;
 public class FSFile extends AbstractFile {
 
 	private File file;
-	private File parentFile;
+	private String parentFile;
     private String absPath;
 	private String canonicalPath;
 	private boolean isSymlink;
