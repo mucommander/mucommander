@@ -141,7 +141,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
 					}
 */
 					// post processing as it would normally have been done by run()
-					finish();
+					finish(false);
 				}
 			}
 		}
@@ -177,6 +177,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("escape pressed");
 		
 		public void run() {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
+			boolean folderChangedSuccessfully = false;
 
 			// Set new folder's path in location field
 			locationField.setText(folder==null?folderPath==null?folderURL.getStringRep(false):folderPath:folder.getAbsolutePath());
@@ -184,6 +185,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
 			// Show some progress in the progress bar to give hope
 			locationField.setProgressValue(10);
 
+			// Show a message in the status bar saying that folder is being changed
 			// No need to waste precious cycles if status bar is not visible
 			if(mainFrame.isStatusBarVisible())
 				mainFrame.getStatusBar().setStatusInfo(Translator.get("status_bar.connecting_to_folder"));
@@ -368,6 +370,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFold
 					// folder set -> 95% complete
 					locationField.setProgressValue(95);
 					
+					// All good !
+					folderChangedSuccessfully = true;
+
 					break;
 				}
 				catch(IOException e) {
@@ -407,12 +412,12 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on w
 				}
 */				
 				// Clean things up
-				finish();
+				finish(folderChangedSuccessfully);
 			}
 		}
 	
 	
-		public void finish() {
+		public void finish(boolean folderChangedSuccessfully) {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restoring focus...");
 			// Set current folder's path (might have been done already in setCurrentFolder())
 			locationField.setText(currentFolder.getAbsolutePath());
@@ -428,6 +433,12 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 
 			// Restore mouse/keybaord events and default cursor
 			disableNoEventsMode();
+
+			// Restore status bar info only if folder change wasn't completed
+			// as FileTable automatically updates status bar if folder has changed.
+			// No need to waste precious cycles if status bar is not visible
+			if(!folderChangedSuccessfully && mainFrame.isStatusBarVisible())
+				fileTable.updateStatusBar();
 
 //			// /!\ Focus should be restored after disableNoEventsMode has been called
 //			// Use FocusRequester to request focus after all other UI events have been processed,
