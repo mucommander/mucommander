@@ -6,7 +6,7 @@ import com.mucommander.file.*;
 import com.mucommander.ui.table.*;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.comp.ProgressTextField;
+import com.mucommander.ui.comp.progress.ProgressTextField;
 
 import com.mucommander.conf.*;
 
@@ -409,7 +409,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 			locationField.setText(currentFolder.getAbsolutePath());
 			// Reset location field's progress bar
 			locationField.setProgressValue(0);
-			locationField.paintImmediately(0, 0, locationField.getWidth(), locationField.getHeight());
+//			locationField.paintImmediately(0, 0, locationField.getWidth(), locationField.getHeight());
 
 			mainFrame.setCursor(Cursor.getDefaultCursor());
 
@@ -782,7 +782,12 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		// Notify listeners that location has changed
 		fireLocationChanged();
 
-SwingUtilities.invokeLater(new Thread() { public void run() { locationPanel.revalidate(); locationPanel.repaint(); driveButton.repaint(); locationPanel.repaint(); }});
+		// LocationPanel and FileTable already ask for repaint on their own, but since they are executed from a
+		// separate thread (not from the event dispatcher thread), they can occur before the components have properly
+		// updated themselves and thus cause visual glitches.
+		// So we ask for an extra repaint here which will occur after any pending events
+//		SwingUtilities.invokeLater(new Thread() { public void run() { locationPanel.repaint(); fileTable.repaint(); }});
+		SwingUtilities.invokeLater(new Thread() { public void run() { locationPanel.repaint(); }});
 	}
 
 

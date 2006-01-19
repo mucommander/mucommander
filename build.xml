@@ -66,14 +66,16 @@
 
     <!-- Put everything in ${classes} into the ${dist}/mucommander_unobf.jar file -->
     <jar jarfile="${dist}/mucommander_unobf.jar" basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
+  </target>
 
-	<!-- Trigger proguard target -->
-	<antcall target="proguard"/>
-
+  <!-- Create an obfuscated JAR file to make the app smaller and faster -->
+  <target name="obfuscate">
+        <!-- Trigger proguard target -->
+        <antcall target="proguard"/>
   </target>
 
 
-  <!-- Obfuscate code using yGuard to app the app leaner -->
+  <!-- Obfuscate code using yGuard -->
   <target name="yguard">
     <taskdef name="obfuscate" 
         classname="com.yworks.yguard.ObfuscatorTask" 
@@ -89,7 +91,7 @@
 	</obfuscate>
   </target>
 
-  <!-- Obfuscate code using ProGuard to make the app smaller and faster -->
+  <!-- Obfuscate code using ProGuard -->
   <target name="proguard">
 	<!-- Delete any existing obfuscated JAR file -->
 	<delete file="${dist}/mucommander.jar"/>
