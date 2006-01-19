@@ -421,10 +421,10 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 			// Restore mouse/keybaord events and default cursor
 			disableNoEventsMode();
 
-			// /!\ Focus should be restored after disableNoEventsMode has been called
-			// Use FocusRequester to request focus after all other UI events have been processed,
-			// calling requestFocus() on table directly could get ignored 
-			FocusRequester.requestFocus(mainFrame.getLastActiveTable());
+//			// /!\ Focus should be restored after disableNoEventsMode has been called
+//			// Use FocusRequester to request focus after all other UI events have been processed,
+//			// calling requestFocus() on table directly could get ignored 
+//			FocusRequester.requestFocus(mainFrame.getLastActiveTable());
 		}
 	}
 
