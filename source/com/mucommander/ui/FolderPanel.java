@@ -70,7 +70,16 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	private final static String DOWNLOAD_TEXT = Translator.get("download");
 
 
-
+	/**
+	 * This thread takes care of changing current folder without locking the main
+	 * thread. The folder change can be cancelled.
+	 * 
+	 * <p>A little note out of nowhere: never ever call JComponent.paintImmedialtely() from a thread
+	 * other than the Event Dispatcher Thread, as will create nasty repaint glitches that
+	 * then become very hard to track. Sun's Javadoc doesn't make it clear enough... just don't!
+	 * 
+	 * @author Maxence Bernard
+	 */
 	private class ChangeFolderThread extends Thread {
 	
 		private AbstractFile folder;
@@ -409,7 +418,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 			locationField.setText(currentFolder.getAbsolutePath());
 			// Reset location field's progress bar
 			locationField.setProgressValue(0);
-//			locationField.paintImmediately(0, 0, locationField.getWidth(), locationField.getHeight());
 
 			mainFrame.setCursor(Cursor.getDefaultCursor());
 
