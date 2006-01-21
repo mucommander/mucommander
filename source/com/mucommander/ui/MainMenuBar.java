@@ -21,6 +21,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.bookmark.Bookmark;
 
+import com.mucommander.event.*;
+
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -254,13 +256,19 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	// LocationListener method //
 	/////////////////////////////
 	
-	public void locationChanged(FolderPanel folderPanel) {
+	public void locationChanged(LocationEvent e) {
+		FolderPanel folderPanel = e.getFolderPanel();
 		goBackItem.setEnabled(folderPanel.hasBackFolder());
 		goForwardItem.setEnabled(folderPanel.hasForwardFolder());
 		goToParentItem.setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
 	}
 
-
+	public void locationChanging(LocationEvent e) {
+	}
+	
+	public void locationCancelled(LocationEvent e) {
+	}
+	
 	///////////////////////////
 	// ActionListener method //
 	///////////////////////////

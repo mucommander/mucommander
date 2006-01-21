@@ -12,6 +12,8 @@ import com.mucommander.bookmark.Bookmark;
 
 import com.mucommander.text.Translator;
 
+import com.mucommander.event.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -219,9 +221,15 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	// LocationListener methods //
 	//////////////////////////////
 	
-	public void locationChanged(FolderPanel folderPanel) {
+	public void locationChanged(LocationEvent e) {
 		// Update button text with new location
-		updateLabel(folderPanel.getCurrentFolder());
+		updateLabel(e.getFolderPanel().getCurrentFolder());
+	}
+	
+	public void locationChanging(LocationEvent e) {
+	}
+	
+	public void locationCancelled(LocationEvent e) {
 	}
 	
 		

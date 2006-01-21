@@ -14,6 +14,8 @@ import com.mucommander.text.Translator;
 
 import com.mucommander.PlatformManager;
 
+import com.mucommander.event.*;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileSystemView;
@@ -80,7 +82,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	 * 
 	 * @author Maxence Bernard
 	 */
-	private class ChangeFolderThread extends Thread {
+	public class ChangeFolderThread extends Thread {
 	
 		private AbstractFile folder;
 		private String folderPath;
@@ -178,6 +180,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("escape pressed");
 		public void run() {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
 			boolean folderChangedSuccessfully = false;
+
+			// Notify listeners that location is changing
+			fireLocationChanging();
 
 			// Set new folder's path in location field
 			locationField.setText(folder==null?folderPath==null?folderURL.getStringRep(false):folderPath:folder.getAbsolutePath());
@@ -419,11 +424,10 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on w
 	
 		public void finish(boolean folderChangedSuccessfully) {
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restoring focus...");
-			// Set current folder's path (might have been done already in setCurrentFolder())
-			locationField.setText(currentFolder.getAbsolutePath());
 			// Reset location field's progress bar
 			locationField.setProgressValue(0);
 
+			// Restore normal mouse cursor
 			mainFrame.setCursor(Cursor.getDefaultCursor());
 
 			// Re-enable automatic refresh
@@ -434,16 +438,24 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 			// Restore mouse/keybaord events and default cursor
 			disableNoEventsMode();
 
-			// Restore status bar info only if folder change wasn't completed
-			// as FileTable automatically updates status bar if folder has changed.
-			// No need to waste precious cycles if status bar is not visible
-			if(!folderChangedSuccessfully && mainFrame.isStatusBarVisible())
-				fileTable.updateStatusBar();
+			if(!folderChangedSuccessfully) {
+				// Restore status bar info only if folder change wasn't completed
+				// as FileTable automatically updates status bar if folder has changed.
+				// No need to waste precious cycles if status bar is not visible
+				if(mainFrame.isStatusBarVisible())
+					fileTable.updateStatusBar();
 
-//			// /!\ Focus should be restored after disableNoEventsMode has been called
-//			// Use FocusRequester to request focus after all other UI events have been processed,
-//			// calling requestFocus() on table directly could get ignored 
-//			FocusRequester.requestFocus(mainFrame.getLastActiveTable());
+				// Restore current folder's path
+				locationField.setText(currentFolder.getAbsolutePath());
+
+				// Notifies listeners that location change has been cancelled
+				fireLocationCancelled();
+			}
+
+			// /!\ Focus should be restored after disableNoEventsMode has been called
+			// Use FocusRequester to request focus after all other UI events have been processed,
+			// calling requestFocus() on table directly could get ignored 
+			FocusRequester.requestFocus(mainFrame.getLastActiveTable());
 		}
 	}
 
@@ -508,8 +520,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 			}
 		}
 
-		// Change location field's text to reflect new current folder's path
-		locationField.setText(currentFolder.getAbsolutePath());
+//		// Change location field's text to reflect new current folder's path
+//		locationField.setText(currentFolder.getAbsolutePath());
 				
 		scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER) {
 			public Insets getInsets() {
@@ -557,35 +569,63 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		return mainFrame;
 	}
 
-	
+
+	/**
+	 * Registers a LocationListener to receive LocationEvents whenever the current folder
+	 * of this FolderPanel has or is being changed. 
+	 */
 	public void addLocationListener(LocationListener listener) {
 		locationListeners.add(listener);
 	}
 
+	/**
+	 * Unsubscribes the LocationListener as to not receive LocationEvents anymore. 
+	 */
 	public void removeLocationListener(LocationListener listener) {
 		locationListeners.remove(listener);
 	}
 
-	
-	public void showRootBox() {
+	/**
+	 * Notifies all registered listeners that current folder is being changed on this FolderPanel.
+	 */
+	private void fireLocationChanging() {
+		for(int i=0; i<locationListeners.size(); i++)
+			((LocationListener)locationListeners.elementAt(i)).locationChanging(new LocationEvent(this));
+	}
+
+	/**
+	 * Notifies all registered listeners that current folder has changed on this FolderPanel.
+	 */
+	public void fireLocationChanged() {
+		for(int i=0; i<locationListeners.size(); i++)
+			((LocationListener)locationListeners.elementAt(i)).locationChanged(new LocationEvent(this));
+	}
+
+	/**
+	 * Notifies all registered listeners that folder change has been cancelled.
+	 */
+	private void fireLocationCancelled() {
+		for(int i=0; i<locationListeners.size(); i++)
+			((LocationListener)locationListeners.elementAt(i)).locationCancelled(new LocationEvent(this));
+	}
+
+
+	/**
+	 * Causes the DriveButton to popup and show root folder, bookmarks, server shortcuts...
+	 */
+	public void popDriveButton() {
 		driveButton.popup();
 	}
 	
 
+	/**
+	 * Returns the folder that is currently being displayed by this FolderPanel.
+	 */
 	public synchronized AbstractFile getCurrentFolder() {
 		return currentFolder;
 	}
 
 	
-	/**
-	 * Notifies all listeners that have registered interest for notification on this event type.
-	 */
-	public void fireLocationChanged() {
-		for(int i=0; i<locationListeners.size(); i++)
-			((LocationListener)locationListeners.elementAt(i)).locationChanged(this);
-	}
-
-
 	/**
 	 * Displays a popup message notifying the user that the request folder couldn't be opened.
 	 */
@@ -797,16 +837,21 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastSavableFolder= "+lastSavableFolder);
 			}
 		}
-		
+
 		// Notify listeners that location has changed
 		fireLocationChanged();
-
+		
 		// LocationPanel and FileTable already ask for repaint on their own, but since they are executed from a
 		// separate thread (not from the event dispatcher thread), they can occur before the components have properly
 		// updated themselves and thus cause visual glitches.
 		// So we ask for an extra repaint here which will occur after any pending events
 //		SwingUtilities.invokeLater(new Thread() { public void run() { locationPanel.repaint(); fileTable.repaint(); }});
-		SwingUtilities.invokeLater(new Thread() { public void run() { locationPanel.repaint(); }});
+//		SwingUtilities.invokeLater(new Thread() { public void run() { locationPanel.repaint(); }});
+	}
+
+
+	public ChangeFolderThread getChangeFolderThread() {
+		return changeFolderThread;
 	}
 
 

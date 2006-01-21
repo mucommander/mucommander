@@ -545,10 +545,10 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("focus requested, isVis
 			commandBar.getButton(CommandBar.CLOSE_INDEX).doClick();
         }
 		else if(keyCode == KeyEvent.VK_F1 && e.isAltDown()) {
-			folderPanel1.showRootBox();
+			folderPanel1.popDriveButton();
         }
         else if(keyCode == KeyEvent.VK_F2 && e.isAltDown()) {
-        	folderPanel2.showRootBox();
+        	folderPanel2.popDriveButton();
 		}
         else if(e.isControlDown() && keyCode==KeyEvent.VK_LEFT) {
 			WindowManager.getInstance().switchToPreviousWindow();

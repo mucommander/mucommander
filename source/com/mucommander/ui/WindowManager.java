@@ -6,6 +6,8 @@ import com.mucommander.PlatformManager;
 
 import com.mucommander.file.AbstractFile;
 
+import com.mucommander.event.*;
+
 import com.mucommander.Debug;
 
 import javax.swing.*;
@@ -385,7 +387,8 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	 * Notifies this MainFrame's currentFolder has changed so
 	 * that window title and menu items can be updated.
 	 */
-	public void locationChanged(FolderPanel folderPanel) {
+	public void locationChanged(LocationEvent e) {
+		FolderPanel folderPanel = e.getFolderPanel();
 		AbstractFile currentFolder = folderPanel.getCurrentFolder();
 		MainFrame mainFrame = folderPanel.getMainFrame();
 		String currentPath = currentFolder.getAbsolutePath();
@@ -404,6 +407,12 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		}
 	}	
 
+	public void locationChanging(LocationEvent e) {
+	}
+	
+	public void locationCancelled(LocationEvent e) {
+	}
+	
 
 	////////////////////////////
 	// ActionListener methods //

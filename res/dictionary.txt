@@ -332,6 +332,17 @@ same_source_destination:PL:Taki sam katalog źródłowy i docelowy.
 same_source_destination:HU:A forrás és a célkönyvtár ugyanaz.
 same_source_destination:RU:Исходный и конечный каталог - один и тот же.
 
+stop:EN:Stop
+stop:FR:Arrêter
+stop:DE:Stopp
+stop:ES:Parar
+stop:CS:Zastavit
+stop:zh_TW:停止
+stop:PL:Zatrzymaj
+stop:HU:megállít
+stop:RU:Прервать
+
+
 #############
 # Languages #
 #############
@@ -1092,6 +1103,8 @@ toolbar.go_back:EN:$[shortcuts_dialog.view.go_back]
 toolbar.go_forward:EN:$[shortcuts_dialog.view.go_forward]
 
 toolbar.go_to_parent:EN:$[shortcuts_dialog.view.go_to_parent]
+
+toolbar.stop:EN:$[stop]
 
 toolbar.add_bookmark:EN:$[add_bookmark_dialog.title]
 
@@ -2308,15 +2321,7 @@ run_dialog.run:PL:Uruchom
 run_dialog.run:HU:futtat
 run_dialog.run:RU:Запустить
 
-run_dialog.stop:EN:Stop
-run_dialog.stop:FR:Arrêter
-run_dialog.stop:DE:Stopp
-run_dialog.stop:ES:Parar
-run_dialog.stop:CS:Zastavit
-run_dialog.stop:zh_TW:停止
-run_dialog.stop:PL:Zatrzymaj
-run_dialog.stop:HU:megállít
-run_dialog.stop:RU:Прервать
+run_dialog.stop:EN:$[stop]
 
 
 #########################

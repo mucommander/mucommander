@@ -4,8 +4,10 @@ package com.mucommander.ui;
 import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.ui.bookmark.AddBookmarkDialog;
 import com.mucommander.ui.bookmark.EditBookmarksDialog;
+
 import com.mucommander.text.Translator;
 import com.mucommander.file.FileSet;
+import com.mucommander.event.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,6 +44,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		{Translator.get("toolbar.go_back")+" (Alt+Left)", "back.gif", "back_grayed.gif", null},
 		{Translator.get("toolbar.go_forward")+" (Alt+Right)", "forward.gif", "forward_grayed.gif", "true"},
 		{Translator.get("toolbar.go_to_parent")+" (Backspace)", "parent.gif", "parent_grayed.gif", "true"},
+		{Translator.get("toolbar.stop")+" (Escape)", "stop.png", "stop_grayed.png", "true"},
 		{Translator.get("toolbar.add_bookmark")+" (Ctrl+B)", "add_bookmark.png", null, null},
 		{Translator.get("toolbar.edit_bookmarks"), "edit_bookmarks.png", null, "true"},
 		{Translator.get("toolbar.mark")+" (NumPad +)", "mark.png", null, null},
@@ -62,19 +65,20 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	private final static int BACK_INDEX = 1;
 	private final static int FORWARD_INDEX = 2;
 	private final static int PARENT_INDEX = 3;
-	private final static int ADD_BOOKMARK_INDEX = 4;
-	private final static int EDIT_BOOKMARKS_INDEX = 5;
-	private final static int MARK_INDEX = 6;
-	private final static int UNMARK_INDEX = 7;
-	private final static int SWAP_FOLDERS_INDEX = 8;
-	private final static int SET_SAME_FOLDER_INDEX = 9;
-	private final static int ZIP_INDEX = 10;
-	private final static int UNZIP_INDEX = 11;
-	private final static int SERVER_CONNECT_INDEX = 12;
-	private final static int RUNCMD_INDEX = 13;
-	private final static int EMAIL_INDEX = 14;
-	private final static int PROPERTIES_INDEX = 15;
-	private final static int PREFERENCES_INDEX = 16;
+	private final static int STOP_INDEX = 4;
+	private final static int ADD_BOOKMARK_INDEX = 5;
+	private final static int EDIT_BOOKMARKS_INDEX = 6;
+	private final static int MARK_INDEX = 7;
+	private final static int UNMARK_INDEX = 8;
+	private final static int SWAP_FOLDERS_INDEX = 9;
+	private final static int SET_SAME_FOLDER_INDEX = 10;
+	private final static int ZIP_INDEX = 11;
+	private final static int UNZIP_INDEX = 12;
+	private final static int SERVER_CONNECT_INDEX = 13;
+	private final static int RUNCMD_INDEX = 14;
+	private final static int EMAIL_INDEX = 15;
+	private final static int PROPERTIES_INDEX = 16;
+	private final static int PREFERENCES_INDEX = 17;
 		
 	
 	/**
@@ -213,23 +217,43 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 	// LocationListener methods //
 	//////////////////////////////
 	
-	public void locationChanged(FolderPanel folderPanel) {
+	public void locationChanged(LocationEvent e) {
+		FolderPanel folderPanel = e.getFolderPanel();
 		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
 		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
+		buttons[STOP_INDEX].setEnabled(false);
 		buttons[PARENT_INDEX].setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
 	}
 
+	public void locationChanging(LocationEvent e) {
+		buttons[STOP_INDEX].setEnabled(true);
+	}
+	
+	public void locationCancelled(LocationEvent e) {
+		buttons[STOP_INDEX].setEnabled(false);
+	}
+	
 
 	////////////////////////////
 	// ActionListener methods //
 	////////////////////////////
 
 	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
+		JButton button = (JButton)source;
+		int buttonIndex = getButtonIndex(button);
+		
+		if(buttonIndex==STOP_INDEX) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+			FolderPanel.ChangeFolderThread changeFolderThread = mainFrame.getLastActiveTable().getFolderPanel().getChangeFolderThread();
+			if(changeFolderThread!=null)
+				changeFolderThread.tryKill();
+			mainFrame.requestFocus();
+		}
+
 		// Discard action events while in 'no events mode'
 		if(mainFrame.getNoEventsMode())
 			return;
-
-		Object source = e.getSource();
 	
 		// Hide toolbar
 		if(source == hideToolbarMenuItem) {
@@ -241,9 +265,6 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 			return;
 		}
 				
-		JButton button = (JButton)source;
-		int buttonIndex = getButtonIndex(button);
-
 //		if(buttonIndex==-1)
 //			return;
 
@@ -263,6 +284,7 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		else if(buttonIndex==PARENT_INDEX) {
 			FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
 			folderPanel.trySetCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);
+			requestFocus = true;
 		}
 		else if(buttonIndex==ADD_BOOKMARK_INDEX) {
 			new AddBookmarkDialog(mainFrame);
