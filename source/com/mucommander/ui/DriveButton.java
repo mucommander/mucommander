@@ -174,20 +174,11 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
 			FileSystemView fileSystemView = FileSystemView.getFileSystemView();
 			for(int i=0; i<nbRoots; i++) {
-				// FileSystemView.getSystemIcon is only available in Java 1.4 and up,
-				// so we try to call it and catch NoSuchMethodError and stop trying
-				// after the first exception we catch
 				Icon driveIcon = null;
-				boolean exceptionThrown = false;
-				if(!exceptionThrown) {
-					try {
-						driveIcon = fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath()));
-					}
-					catch(NoSuchMethodError e) {
-						// We're running Java 1.3
-						exceptionThrown = true;
-					}
-				}
+				// FileSystemView.getSystemIcon is only available in Java 1.4 and up
+				if(PlatformManager.getJavaVersion()>=PlatformManager.JAVA_1_4)
+					driveIcon = fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath()));
+
 				addMenuItem(rootFolders[i].getName(), driveIcon);
 			}
 		}

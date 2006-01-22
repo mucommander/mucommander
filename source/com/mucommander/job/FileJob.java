@@ -224,6 +224,7 @@ public abstract class FileJob implements Runnable {
 	 * The method implementation here does nothing but it can be overriden by subclasses to perform some first-time initializations.
 	 */
 	protected void jobStarted() {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 	}
 	
 
@@ -237,6 +238,7 @@ public abstract class FileJob implements Runnable {
 	 * <p>Note that this method will NOT be called if a call to {@link #stop() stop()} was made before all files were processed.</p>
 	 */
 	protected void jobCompleted() {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 	}
 	
 	
@@ -250,6 +252,7 @@ public abstract class FileJob implements Runnable {
 	 * files were processed) or has been interrupted in the middle.</p>
 	 */
 	protected void jobStopped() {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 	}
 	
 	

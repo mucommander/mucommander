@@ -234,6 +234,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     /////////////////////////
 
      public void keyPressed(KeyEvent e) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
      	int keyCode = e.getKeyCode();
 		
      	// Disposes the dialog on escape key
@@ -255,12 +256,13 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 	////////////////////////////
 
 	public void windowOpened(WindowEvent e) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 		// (this method is called first time the dialog is made visible)
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 		super.windowOpened(e);
 	}
 
 	public void windowActivated(WindowEvent e) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 		// (this method is called each time the dialog is activated)
 		super.windowActivated(e);
 		if(firstTimeActivated) {
@@ -271,18 +273,23 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 	}
 
 	public void windowClosing(WindowEvent e) {
+		super.windowClosing(e);
 	}
 
 	public void windowClosed(WindowEvent e) {
+		super.windowClosed(e);
 	}
 
 	public void windowDeactivated(WindowEvent e) {
+		super.windowDeactivated(e);
 	}
 
 	public void windowIconified(WindowEvent e) {
+		super.windowIconified(e);
 	}
 
 	public void windowDeiconified(WindowEvent e) {
+		super.windowDeiconified(e);
 	}
 
 }

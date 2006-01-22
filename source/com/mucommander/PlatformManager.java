@@ -19,32 +19,71 @@ import java.awt.*;
  */
 public class PlatformManager {
 
-	// OS types
-	// Windows 95, 98, Me
-	public final static int WINDOWS_9X = 11;
-	// Windows NT, 2000, XP and up
-	public final static int WINDOWS_NT = 12;
-	// Mac OS 7.x, 8.x or 9.x
-	public final static int MAC_OS = 21;
-	// Mac OS X and up
-	public final static int MAC_OS_X = 22;
-	// Other OS
-	public final static int OTHER = 0;
-	
-	private static String osName;
-	private static String osVersion;
-	private static int osFamily;
+	/** OS family we're running on (see constants) */
+	private final static int osFamily;
 
-    
+	/** Java version we're running (see constants) */
+	private final static int javaVersion;
+
+	// OS types
+	
+	/** Windows 95, 98, Me */
+	public final static int WINDOWS_9X = 10;
+	/** Windows NT, 2000, XP and up */
+	public final static int WINDOWS_NT = 11;
+
+	/** Mac OS classic (not supported) */
+	public final static int MAC_OS = 20;
+	/** Mac OS X */
+	public final static int MAC_OS_X = 21;
+
+	/** Linux */
+	public final static int LINUX = 30;
+	
+	/** Solaris */
+	public final static int SOLARIS = 40;
+	
+	/** OS/2 */
+	public final static int OS_2 = 50;
+
+	/** Other OS */
+	public final static int OTHER = 0;
+
+	// Java versions
+
+	/** Java 1.0.x */
+	public final static int JAVA_1_0 = 0;
+
+	/** Java 1.1.x */
+	public final static int JAVA_1_1 = 1;
+
+	/** Java 1.2.x */
+	public final static int JAVA_1_2 = 2;
+
+	/** Java 1.3.x */
+	public final static int JAVA_1_3 = 3;
+
+	/** Java 1.4.x */
+	public final static int JAVA_1_4 = 4;
+
+	/** Java 1.5.x */
+	public final static int JAVA_1_5 = 5;
+
+	/** Java 1.6.x */
+	public final static int JAVA_1_6 = 6;
+	
+	
 	/**
-	 * Finds out what kind of OS muCommander is running on.
+	 * Finds out what kind of OS and Java version muCommander is running on.
 	 */
 	static {
-		osName = System.getProperty("os.name");
-		osVersion = System.getProperty("os.version");
+		String osName = System.getProperty("os.name");
+		String osVersion = System.getProperty("os.version");
+		
+		// OS Family detection //
 		
 		// Windows family
-		if (osName.startsWith("Windows")) {
+		if(osName.startsWith("Windows")) {
 			// Windows 95, 98, Me
 			if (osName.startsWith("Windows 95") || osName.startsWith("Windows 98") || osName.startsWith("Windows Me"))
 				osFamily = WINDOWS_9X;
@@ -53,8 +92,8 @@ public class PlatformManager {
 				osFamily = WINDOWS_NT;
 		}
 		// Mac OS family
-		else if (osName.startsWith("Mac OS")) {
-			// Mac OS 7.x, 8.x or 9.x
+		else if(osName.startsWith("Mac OS")) {
+			// Mac OS 7.x, 8.x or 9.x (doesn't run under Mac OS classic)
 			if(osVersion.startsWith("7.")
 			|| osVersion.startsWith("8.")
 			|| osVersion.startsWith("9."))
@@ -63,18 +102,84 @@ public class PlatformManager {
 			else		 
 				osFamily = MAC_OS_X;
 		}
+		// Linux family
+		else if(osName.startsWith("Linux")) {
+			osFamily = LINUX;
+		}
+		// Solaris family
+		else if(osName.startsWith("Solaris") || osName.startsWith("SunOS")) {
+			osFamily = SOLARIS;
+		}
+		// OS/2 family
+		else if(osName.startsWith("OS/2")) {
+			osFamily = OS_2;
+		}
 		// Any other OS
 		else {
 			osFamily = OTHER;
 		}
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected OS family value = "+osFamily);
+
+		// Java version detection //
+		
+		String javaVersionProp = System.getProperty("java.version");
+
+		// Java version property should never be null or empty, but better be safe than sorry ... 
+		if(javaVersionProp==null || (javaVersionProp=javaVersionProp.trim()).equals("")) {
+			// Assume java 1.3 (first supported Java version)
+			javaVersion = JAVA_1_3;
+		}
+		// Java 1.6
+		else if(javaVersionProp.startsWith("1.6")) {
+			javaVersion = JAVA_1_6;
+		}
+		// Java 1.5
+		else if(javaVersionProp.startsWith("1.5")) {
+			javaVersion = JAVA_1_5;
+		}
+		// Java 1.4
+		else if(javaVersionProp.startsWith("1.4")) {
+			javaVersion = JAVA_1_4;
+		}
+		// Java 1.3
+		else if(javaVersionProp.startsWith("1.3")) {
+			javaVersion = JAVA_1_3;
+		}
+		// Java 1.2
+		else if(javaVersionProp.startsWith("1.2")) {
+			javaVersion = JAVA_1_2;
+		}
+		// Java 1.1
+		else if(javaVersionProp.startsWith("1.1")) {
+			javaVersion = JAVA_1_1;
+		}
+		// Java 1.0
+		else if(javaVersionProp.startsWith("1.0")) {
+			javaVersion = JAVA_1_0;
+		}
+		// Newer version we don't know of yet, assume latest supported Java version
+		else {
+			javaVersion = JAVA_1_5;
+		}
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version value = "+javaVersion);
 	}
 
 	
 	/**
-	 * Returns OS family (check constants for potential returned values).
+	 * Returns the OS family we're currently running on (check constants for returned values).
 	 */
 	public static int getOSFamily() {
 		return osFamily;
+	}
+
+
+	/**
+	 * Returns the Java version we're currently running.
+	 */
+	public static int getJavaVersion() {
+		return javaVersion;
 	}
 
 
@@ -116,17 +221,17 @@ public class PlatformManager {
 	
 	
 	/**
-	 * Returns screen insets: accurate information under Java 1.4,
-	 * null inset values for Java 1.3 (except under OS X)
+	 * Returns screen insets: accurate information under Java 1.4 and up,
+	 * empty inset values for Java 1.3 (except under OS X)
 	 */
 	private static Insets getScreenInsets(Frame frame) {
-		// Code for Java 1.4
-		try {
+		// Code for Java 1.4 and up
+		if(PlatformManager.getJavaVersion()>=PlatformManager.JAVA_1_4) {
 			// Java 1.4 has a method which returns real screen insets 
 			return Toolkit.getDefaultToolkit().getScreenInsets(frame.getGraphicsConfiguration());		
 		}
 		// Code for Java 1.3
-		catch(NoSuchMethodError e) {
+		else {
 			// Apple menu bar
 			int top = getOSFamily()==MAC_OS_X?22:0;
 			int left = 0;
@@ -162,14 +267,14 @@ public class PlatformManager {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screenSize = toolkit.getScreenSize();
 
-		// Code for Java 1.4
-		try {
+		// Code for Java 1.4 and up
+		if(PlatformManager.getJavaVersion()>=PlatformManager.JAVA_1_4) {
 			// Java 1.4 makes it easy to get full screen bounds
 			Insets screenInsets = toolkit.getScreenInsets(window.getGraphicsConfiguration());		
 			return new Rectangle(screenInsets.left, screenInsets.top, screenSize.width-screenInsets.left-screenInsets.right, screenSize.height-screenInsets.top-screenInsets.bottom);		
 		}
 		// Code for Java 1.3
-		catch(NoSuchMethodError e) {
+		else {
 			int x = 0;
 			int y = 0;
 			int width = screenSize.width;
@@ -198,7 +303,7 @@ public class PlatformManager {
 	 * in a new browser window.
 	 */
 	public static boolean canOpenURL() {
-		return osName.startsWith("Mac OS") || osName.startsWith("Windows");
+		return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT;
 	}
 
 

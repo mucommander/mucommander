@@ -126,6 +126,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	
 
 	public void run() {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 		
 		while(repaintThread!=null && !job.hasFinished()) {
 			updateLabels();
@@ -138,6 +139,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		updateLabels();
 		setTitle(title);
 		okCancelButton.setText(Translator.get("ok"));
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("default cursor set");
 		mainFrame.setCursor(Cursor.getDefaultCursor());
 	}
 

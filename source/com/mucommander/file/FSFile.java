@@ -205,17 +205,16 @@ public class FSFile extends AbstractFile {
 	 */
 	public boolean guessFloppyDrive() {
 		// Use FileSystemView.isFloppyDrive(File) to determine if this file
-		// is a floppy drive. This method being available only in Java 1.4 and up,
-		// we catch NoSuchMethodError and try to guess if file is floppy drive
-		try {
+		// is a floppy drive. This method being available only in Java 1.4 and up.
+		if(PlatformManager.getJavaVersion()>=PlatformManager.JAVA_1_4)
 			return fileSystemView.isFloppyDrive(file);
-		}
-		catch(NoSuchMethodError e) {
-			// We're running Java 1.3 or below
-			if(IS_WINDOWS && absPath.equals("A:") || absPath.equals("B:"))
-				return true;
-			return false;
-		}
+
+		// We're running Java 1.3 or below, try to guess if file is floppy drive under Windows
+		if(IS_WINDOWS && absPath.equals("A:") || absPath.equals("B:"))
+			return true;
+
+		// No clue, return false
+		return false;
 	}
 	
 	/**
