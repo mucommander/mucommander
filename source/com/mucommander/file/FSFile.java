@@ -45,7 +45,7 @@ public class FSFile extends AbstractFile {
 	static {
 		int osFamily = PlatformManager.getOSFamily();
 		IS_WINDOWS = osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT;
-		fileSystemView = IS_WINDOWS?FileSystemView.getFileSystemView():null;
+		fileSystemView = FileSystemView.getFileSystemView();
 	}
 
 	/**
@@ -102,6 +102,134 @@ public class FSFile extends AbstractFile {
         this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;		
 	}
 
+
+	/**
+	 * Uses platform dependant commands to extract free and total volume (where this file resides) space.
+	 *
+	 * <p>This method has been made public as it is more efficient to retrieve both free space and volume space
+	 * info than calling getFreeSpace() and getTotalSpace() separately, since a single command process retrieves both.
+	 *
+	 * @return [totalSpace, freeSpace], or <code>null</code> if information could not be retrieved from the current platform. 
+	 */
+	public long[] getVolumeInfo() {
+		BufferedReader br = null;
+		String absPath = getAbsolutePath();
+		long dfInfo[] = new long[]{-1, -1};
+
+		try {
+			// OS is Windows
+			if(IS_WINDOWS) {
+				// Parses the output of 'dir "filePath"' command to retrieve free space information
+				// Note : total space information not available under Windows
+
+				// 'dir' command returns free space on the last line
+				Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
+
+				// Check that the process was correctly started
+				if(process!=null) {
+					br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+					String line;
+					String lastLine = null;
+					// Retrieves last line of dir
+					while((line=br.readLine())!=null) {
+						if(!line.trim().equals(""))
+							lastLine = line;
+					}
+
+					// Last dir line may look like something this (might vary depending on system's language, below in French):
+					// 6 Rep(s)  14 767 521 792 octets libres		
+					if(lastLine!=null) {
+						StringTokenizer st = new StringTokenizer(lastLine, " \t\n\r\f,.");
+						// Discard first token
+						st.nextToken();
+
+						// Concatenates as many contiguous groups of numbers
+						String token;
+						String freeSpace = "";
+						while(st.hasMoreTokens()) {
+							token = st.nextToken();
+							char c = token.charAt(0);
+							if(c>='0' && c<='9')
+								freeSpace += token;
+							else if(!freeSpace.equals(""))
+								break;
+						}
+
+						dfInfo[1] = Long.parseLong(freeSpace);
+					}
+				}
+			}
+			// Parses the output of 'df -k "filePath"' command on UNIX/BSD-based systems to retrieve free and total space information
+			else {
+				// 'df -k' returns totals in block of 1K = 1024 bytes
+				Process process = Runtime.getRuntime().exec(new String[]{"df", "-k", absPath}, null, file);
+				
+				// Check that the process was correctly started
+				if(process!=null) {
+					br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+					// Discard the first line ("Filesystem   1K-blocks     Used    Avail Capacity  Mounted on");
+					br.readLine();
+					String line = br.readLine();
+					if(line!=null) {
+						StringTokenizer st = new StringTokenizer(line);
+						// Discard 'Filesystem' field
+						st.nextToken();
+						// Parse 'volume total' field
+						dfInfo[0] = Long.parseLong(st.nextToken()) * 1024;
+						// Discard 'Used' field
+						st.nextToken();
+						// Parse 'volume free' field
+						dfInfo[1] = Long.parseLong(st.nextToken()) * 1024;
+					}
+				}
+			}
+		}
+		catch(Exception e) {	// Could be IOException, NoSuchElementException or NumberFormatException, but better be safe and catch Exception
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("An error occured while executing 'df -k "+absPath+"' command: "+e);
+		}
+		finally {
+			if(br!=null)
+				try { br.close(); } catch(IOException e) {}
+		}
+
+		return dfInfo;
+	}
+
+	
+	/**
+	 * Guesses if this drive is a floppy drive. This method should only be called on a file corresponding
+	 * to a drive's root folder.
+	 *
+	 * <p>The result of this method should be accurate under Java 1.4 and up, just a guess under Java 1.3
+	 * running under Windows, will return false for Java 1.3 running under a non-Windows platform.</p>
+	 */
+	public boolean guessFloppyDrive() {
+		// Use FileSystemView.isFloppyDrive(File) to determine if this file
+		// is a floppy drive. This method being available only in Java 1.4 and up,
+		// we catch NoSuchMethodError and try to guess if file is floppy drive
+		try {
+			return fileSystemView.isFloppyDrive(file);
+		}
+		catch(NoSuchMethodError e) {
+			// We're running Java 1.3 or below
+			if(IS_WINDOWS && absPath.equals("A:") || absPath.equals("B:"))
+				return true;
+			return false;
+		}
+	}
+	
+	/**
+	 * Guesses if this drive is a removable media drive (Floppy/CD/DVD). This method should only be called on a file
+	 * corresponding to a drive's root folder.
+	 *
+	 * <p>The result is just a guess that works well under Windows.</p>
+	 */
+	public boolean guessRemovableDrive() {
+		// A weak way to characterize such a drive is to check if the corresponding root folder is a floppy drive or 
+		// read-only. A better way would be to create a JNI interface as described here: http://forum.java.sun.com/thread.jspa?forumID=256&threadID=363074
+		return guessFloppyDrive() || (IS_WINDOWS && (!canWrite()));
+	}
+	
 	
 	/////////////////////////////////////////
 	// AbstractFile methods implementation //
@@ -124,12 +252,8 @@ public class FSFile extends AbstractFile {
 	public String getCanonicalPath() {
 		// To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
 		// triggered by java.io.File.getCanonicalPath() 
-		if(IS_WINDOWS) {
-//			String absPath = getAbsolutePath();
-//			if(absPath.equals("A:\\") || absPath.equals("B:\\"))
-			if(fileSystemView.isFloppyDrive(new File(absPath)))
-				return absPath;
-		}
+		if(IS_WINDOWS && guessFloppyDrive())
+			return absPath;
 		
 		if(this.canonicalPath==null) {
 			try {
@@ -218,11 +342,8 @@ public class FSFile extends AbstractFile {
 	public boolean isDirectory() {
 		// To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
 		// triggered by java.io.File.getCanonicalPath() 
-		if(IS_WINDOWS) {
-//			if(absPath.equals("A:") || absPath.equals("B:"))
-			if(fileSystemView.isFloppyDrive(new File(absPath)))
-				return true;
-		}
+		if(IS_WINDOWS && guessFloppyDrive())
+			return true;
 
         return file.isDirectory();
 	}
@@ -299,96 +420,4 @@ public class FSFile extends AbstractFile {
 	public long getTotalSpace() {
 		return getVolumeInfo()[0];
 	}	
-	
-	/**
-	 * Uses platform dependant commands to extract free and total volume (where this file resides) space.
-	 *
-	 * <p>This method has been made public as it is more efficient to retrieve both free space and volume space
-	 * info than calling getFreeSpace() and getTotalSpace() separately, since a single command retrieves both.
-	 *
-	 * @return [totalSpace, freeSpace], or <code>null</code> if information could not be retrieved from the current platform. 
-	 */
-	public long[] getVolumeInfo() {
-		BufferedReader br = null;
-		String absPath = getAbsolutePath();
-		long dfInfo[] = new long[]{-1, -1};
-
-		try {
-			// OS is Windows
-			if(IS_WINDOWS) {
-				// Parses the output of 'dir "filePath"' command to retrieve free space information
-				// Note : total space information not available under Windows
-
-				// 'dir' command returns free space on the last line
-				Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
-
-				// Check that the process was correctly started
-				if(process!=null) {
-					br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-					String line;
-					String lastLine = null;
-					// Retrieves last line of dir
-					while((line=br.readLine())!=null) {
-						if(!line.trim().equals(""))
-							lastLine = line;
-					}
-
-					// Last dir line may look like something this (might vary depending on system's language, below in French):
-					// 6 Rep(s)  14 767 521 792 octets libres		
-					if(lastLine!=null) {
-						StringTokenizer st = new StringTokenizer(lastLine, " \t\n\r\f,.");
-						// Discard first token
-						st.nextToken();
-
-						// Concatenates as many contiguous groups of numbers
-						String token;
-						String freeSpace = "";
-						while(st.hasMoreTokens()) {
-							token = st.nextToken();
-							char c = token.charAt(0);
-							if(c>='0' && c<='9')
-								freeSpace += token;
-							else if(!freeSpace.equals(""))
-								break;
-						}
-
-						dfInfo[1] = Long.parseLong(freeSpace);
-					}
-				}
-			}
-			// Parses the output of 'df -k "filePath"' command on UNIX/BSD-based systems to retrieve free and total space information
-			else {
-				// 'df -k' returns totals in block of 1K = 1024 bytes
-				Process process = Runtime.getRuntime().exec(new String[]{"df", "-k", absPath}, null, file);
-				
-				// Check that the process was correctly started
-				if(process!=null) {
-					br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-					// Discard the first line ("Filesystem   1K-blocks     Used    Avail Capacity  Mounted on");
-					br.readLine();
-					String line = br.readLine();
-					if(line!=null) {
-						StringTokenizer st = new StringTokenizer(line);
-						// Discard 'Filesystem' field
-						st.nextToken();
-						// Parse 'volume total' field
-						dfInfo[0] = Long.parseLong(st.nextToken()) * 1024;
-						// Discard 'Used' field
-						st.nextToken();
-						// Parse 'volume free' field
-						dfInfo[1] = Long.parseLong(st.nextToken()) * 1024;
-					}
-				}
-			}
-		}
-		catch(Exception e) {	// Could be IOException, NoSuchElementException or NumberFormatException, but better be safe and catch Exception
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("An error occured while executing 'df -k "+absPath+"' command: "+e);
-		}
-		finally {
-			if(br!=null)
-				try { br.close(); } catch(IOException e) {}
-		}
-
-		return dfInfo;
-	}
 }

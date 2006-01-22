@@ -822,12 +822,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		// Save last folder recallable on startup (local directory)
 //		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory())
 
-		// Save last folder recallable on startup, that is :
-		//  - a folder that is on a local filesytem
-		//  - if running Windows, the root drive should not look like a removable media drive (cd/dvd/floppy) to
-		// prevent Java from triggering that dreaded 'Drive not ready' popup. A weak way to characterize such a drive
-		// is to check if the corresponding root folder is read-only or a floppy (FileSystemView class provides 
-		// a method for that). A better way would be to create a JNI interface as described here: http://forum.java.sun.com/thread.jspa?forumID=256&threadID=363074
+		// Save last folder recallable on startup only if :
+		//  - it is a directory on a local filesytem
+		//  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
+		// Java from triggering that dreaded 'Drive not ready' popup.
+/*
 		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory()) {
 			int osFamily = PlatformManager.getOSFamily();
 			AbstractFile rootFolder = folder.getRoot();
@@ -836,6 +835,12 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 				this.lastSavableFolder = folder.getAbsolutePath();
 				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastSavableFolder= "+lastSavableFolder);
 			}
+		}
+*/
+		
+		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory() && !((FSFile)folder.getRoot()).guessRemovableDrive()) {
+			this.lastSavableFolder = folder.getAbsolutePath();
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastSavableFolder= "+lastSavableFolder);
 		}
 
 		// Notify listeners that location has changed

@@ -169,13 +169,29 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		// Add root 'drives'
 		int nbRoots = rootFolders.length;
 		int osFamily = PlatformManager.getOSFamily();
-		// Add the system's drives icons under Windows, icons looks like crap under Mac OS X,
+		// Retreive and use system drives icons under Windows only, icons looks like crap under Mac OS X,
 		// and most likely look like crap under Linux as well (untested though)
 		if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
 			FileSystemView fileSystemView = FileSystemView.getFileSystemView();
-			for(int i=0; i<nbRoots; i++)
-				addMenuItem(rootFolders[i].getName(), fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath())));
+			for(int i=0; i<nbRoots; i++) {
+				// FileSystemView.getSystemIcon is only available in Java 1.4 and up,
+				// so we try to call it and catch NoSuchMethodError and stop trying
+				// after the first exception we catch
+				Icon driveIcon = null;
+				boolean exceptionThrown = false;
+				if(!exceptionThrown) {
+					try {
+						driveIcon = fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath()));
+					}
+					catch(NoSuchMethodError e) {
+						// We're running Java 1.3
+						exceptionThrown = true;
+					}
+				}
+				addMenuItem(rootFolders[i].getName(), driveIcon);
+			}
 		}
+		// For any OS other than Windows
 		else {
 			for(int i=0; i<nbRoots; i++)
 				addMenuItem(rootFolders[i].getName());
@@ -184,9 +200,9 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		popupMenu.add(new JSeparator());
 
 		// Add boookmarks
-
+		
 		this.bookmarksOffset = menuItems.size();
-
+		
 		this.bookmarks = BookmarkManager.getBookmarks();
 		int nbBookmarks = bookmarks.size();
 		
@@ -195,6 +211,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 				addMenuItem(((Bookmark)bookmarks.elementAt(i)).getName());
 		}
 		else {
+			// No bookmark : add a disabled menu item saying there is no bookmark
 			addMenuItem(Translator.get("bookmarks_menu.no_bookmark")).setEnabled(false);
 		}
 

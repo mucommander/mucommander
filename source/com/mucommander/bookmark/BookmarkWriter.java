@@ -19,31 +19,46 @@ public class BookmarkWriter {
 	 * Writes the bookmarks XML file in the user's preferences folder.
 	 */
 	static void write(File file) throws IOException {
-		// Use UTF-8 encoding
-		PrintStream ps = new PrintStream(new FileOutputStream(file), false, "UTF-8");
-		
-		// Write XML header
-		ps.println("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
+		PrintWriter pw = null;
+		try {
+			// Use UTF-8 encoding
+	//		PrintStream ps = new PrintStream(new OutputStreamWriter(new FileOutputStream(file), false, "UTF-8"));
+			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+			
+			// Write XML header
+			pw.println("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
 
-		// Start root element
-		ps.println("<bookmarks>");
+			// Start root element
+			pw.println("<bookmarks>");
 
-		// Write muCommander version
-		ps.println("\t<version>"+encodeEntities(com.mucommander.Launcher.MUCOMMANDER_VERSION)+"</version>");		
+			// Write muCommander version
+			pw.println("\t<version>"+encodeEntities(com.mucommander.Launcher.MUCOMMANDER_VERSION)+"</version>");		
 
-		// Write bookmarks
-		Vector bookmarks = BookmarkManager.getBookmarks();
-		int nbBookmarks = bookmarks.size();
-		for(int i=0; i<nbBookmarks; i++) {
-			Bookmark bookmark = (Bookmark)bookmarks.elementAt(i);
-			ps.println("\t<bookmark>");
-			ps.println("\t\t<name>"+encodeEntities(bookmark.getName())+"</name>");
-			ps.println("\t\t<url>"+encodeEntities(bookmark.getURL().getStringRep(true))+"</url>");
-			ps.println("\t</bookmark>");
+			// Write bookmarks
+			Vector bookmarks = BookmarkManager.getBookmarks();
+			int nbBookmarks = bookmarks.size();
+			for(int i=0; i<nbBookmarks; i++) {
+				Bookmark bookmark = (Bookmark)bookmarks.elementAt(i);
+				pw.println("\t<bookmark>");
+				pw.println("\t\t<name>"+encodeEntities(bookmark.getName())+"</name>");
+				pw.println("\t\t<url>"+encodeEntities(bookmark.getURL().getStringRep(true))+"</url>");
+				pw.println("\t</bookmark>");
+			}
+
+			// End root element
+			pw.println("</bookmarks>");
 		}
-
-		// End root element
-		ps.println("</bookmarks>");
+		catch(IOException e) {
+			// Rethrow exception
+			throw e;
+		}
+		finally {
+			// Close stream, IOException is thrown under Java 1.3 but no longer under 1.4 and up,
+			// so we catch Exception instead of IOException to let javac compile without bitching
+			// about the exception never being thrown
+			if(pw!=null)
+				try { pw.close(); } catch(Exception e2) {}
+		}
 	}
 	
 	

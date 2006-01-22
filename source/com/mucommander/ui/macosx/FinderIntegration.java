@@ -39,17 +39,14 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 		//  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."
 		System.setProperty("apple.laf.useScreenMenuBar", ConfigurationManager.getVariable("prefs.macosx.screen_menu_bar", "true"));
 
-		// Have to catch exceptions (NoClassDefFoundError and NoSuchMethodException)
+		// Have to catch Errors (NoClassDefFoundError and NoSuchMethodError)
 		// because they seem not to be available under Mac OS X 10.1 (reported by Lanch)
 		try {com.apple.mrj.MRJApplicationUtils.registerAboutHandler(this);}
-		catch(NoClassDefFoundError e){}
-		catch(Exception e2){}
+		catch(Error e){}
 		try {com.apple.mrj.MRJApplicationUtils.registerPrefsHandler(this);}
-		catch(NoClassDefFoundError e){}
-		catch(Exception e2){}
+		catch(Error e){}
 		try {com.apple.mrj.MRJApplicationUtils.registerQuitHandler(this);}
-		catch(NoClassDefFoundError e){}
-		catch(Exception e2){}
+		catch(Error e){}
 	}
 
 	public void handleAbout() {

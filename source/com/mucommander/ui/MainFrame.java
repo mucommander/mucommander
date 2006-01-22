@@ -55,6 +55,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	/** Is no events mode enabled ? */
 	private boolean noEventsMode;
 
+	/** Is this MainFrame active in the foreground ? */
+	private boolean foregroundActive;
+
+
 	/**
 	 * Creates a new main frame, set to the given initial folders.
 	 */
@@ -415,18 +419,20 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	}
 
 	/**
-	 * Returns whether or not this MainFrame is active, i.e. if this window is in the foreground and has focus
-	 * (one of its components has focus). There may only be one active MainFrame at any given time, and none
-	 * if the muCommander application is not in the foreground.
-	 *
-	 * Note: Window.isActive() and Window.isFocused() are highly inaccurate (at least under Java 1.4.2 and OS X):
-	 * if the app is started (or a new window is created) and the app is not in the foreground, isActive() and isFocused()
-	 * will return true, until the app is moved to the foreground and back to the background.
+	 * Returns <code>true</code> if this MainFrame is active in the foreground.
 	 */
-	public boolean isActive() {
-		return super.isActive() && isFocused();
+	public boolean isForegroundActive() {
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("foregroundActive="+foregroundActive);
+		return foregroundActive;
 	}
 
+	/**
+	 * Sets whether this MainFrame is active in the foreground. Method to be called solely by WindowManager.
+	 */
+	void setForegroundActive(boolean foregroundActive) {
+//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("foregroundActive="+foregroundActive);
+		this.foregroundActive = foregroundActive;
+	}
 	
 	///////////////////////
 	// Overriden methods //
@@ -582,5 +588,4 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("focus requested, isVis
 
     public void keyTyped(KeyEvent e) {
     }
-
 }

@@ -53,7 +53,7 @@ public class HTTPFile extends AbstractFile {
 		
 		this.url = url;
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(url.toExternalForm()+" content-type guess="+URLConnection.guessContentTypeFromName(url.getFile()));
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(url.toExternalForm());
 		
 //		// urlString is url-encoded
 //		this.fileURL = new FileURL(urlString);

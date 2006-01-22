@@ -455,6 +455,8 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	 */
 	public void windowActivated(WindowEvent e) {
 		this.currentMainFrame = (MainFrame)e.getSource();
+		// Let MainFrame know that is active in the foreground
+		currentMainFrame.setForegroundActive(true);
 
 		// Resets shift mode to false, since keyReleased events may have been lost during window switching
 		CommandBar commandBar = currentMainFrame.getCommandBar();
@@ -490,15 +492,16 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		}
 	}
 
+	public void windowDeactivated(WindowEvent e) {
+		((MainFrame)e.getSource()).setForegroundActive(false);
+	}
+
 	public void windowClosing(WindowEvent e) {
 		// Dispose MainFrame instance
 		disposeMainFrame((MainFrame)e.getSource());
 	}
 
 	public void windowClosed(WindowEvent e) {
-	}
-
-	public void windowDeactivated(WindowEvent e) {
 	}
 
 	public void windowIconified(WindowEvent e) {
