@@ -347,60 +347,16 @@ stop:RU:Прервать
 # Languages #
 #############
 
+# Language names, in their respective language
 language.en:EN:English
-#language.en:FR:Anglais
-#language.en:DE:Englisch
-#language.en:ES:Inglés
-#language.en:CS:Angličtina
-#language.en:zh_TW:英語
-
-#language.fr:EN:French
-language.fr:FR:Français
-#language.fr:DE:Französisch
-#language.fr:ES:Francés
-#language.fr:CS:Francouzština
-#language.fr:zh_TW:法語
-
-#language.de:EN:German
-#language.de:FR:Allemand
-language.de:DE:Deutsch
-#language.de:ES:Alemán
-#language.de:CS:Němčina
-#language.de:zh_TW:德語
-
-#language.es:EN:Spanish
-#language.es:FR:Espagnol
-#language.es:DE:Spanisch
-language.es:ES:Español
-#language.es:CS:Španělština
-#language.es:zh_TW:西班牙語
-
-#language.cs:EN:Czech
-#language.cs:FR:Tchéque
-#language.cs:DE:
-#language.cs:ES:
-language.cs:CS:Čeština
-#language.cs:zh_TW:捷克語
-
-#language.zh_TW:EN:Traditional Chinese
-#language.zh_TW:FR:Chinois traditionnel
-language.zh_TW:zh_TW:繁體中文
-
-#language.pl:EN:Polish
-language.pl:PL:Polski
-#language.pl:zh_TW:波蘭語
-
-#language.hu:EN:Hungarian
-#language.hu:FR:Hongrois
-#language.hu:DE:Ungarisch
-#language.hu:ES:Húngara
-#language.hu:CS:Madarsky
-language.hu:HU:Magyar
-#language.hu:zh_TW:匈牙利語
-
-#language.ru:EN:Russian
-language.ru:RU:Русский
-#language.ru:zh_TW:俄羅斯語
+language.fr:EN:Français
+language.de:EN:Deutsch
+language.es:EN:Español
+language.cs:EN:Čeština
+language.zh_TW:EN:繁體中文
+language.pl:EN:Polski
+language.hu:EN:Magyar
+language.ru:EN:Русский
 
 
 ###############

@@ -24,6 +24,16 @@ import java.util.Locale;
  */
 public class Translator {
 
+	/** Hashtable that maps text keys to values */
+	private static Hashtable dictionary;
+
+	/** List of all available languages in the dictionary file */
+	private static Vector availableLanguages;
+
+	/** Current language (2-letter language code) */
+	private static String language;
+
+
 	/** Path to the dictionary file inside the JAR file */
 	private final static String DICTIONARY_FILE_PATH = "/dictionary.txt";
 
@@ -37,15 +47,6 @@ public class Translator {
 	/** Singleton instance */
 	private final static Translator instance = new Translator(DICTIONARY_FILE_PATH);
 
-	/** Hashtable that maps one language to a dictionary */
-	private static Hashtable dictionaries;
-
-	/** Current language (2-letter language code) */
-	private static String language;
-
-//	private static String dictionaryFilePath;
-//	private static Vector orderedEntries;
-//	private static boolean needsToBeSaved;
 
 	/**
 	 * Creates a Translator instance and loads all entries from the dictionary file. 
@@ -53,11 +54,6 @@ public class Translator {
 	 * @param filePath the path to the dictionary file.
 	 */
 	private Translator(String filePath) {
-		try {
-			loadDictionaryFile(filePath);
-		} catch (IOException e) {
-			new RuntimeException("Translator.init: unable to load dictionary file "+e);
-		}
 		
 		String langVal = ConfigurationManager.getVariable(LANGUAGE_CONFIGURATION_KEY);
 		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language in prefs: "+langVal);
@@ -87,22 +83,29 @@ public class Translator {
 			
 			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language has been set to "+Translator.language);
 
-				// Set language to configuration file
+			// Set language to configuration file
 			ConfigurationManager.setVariable(LANGUAGE_CONFIGURATION_KEY, Translator.language);
 		}
 		else {
 			Translator.language = langVal;
 		}
 
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Translator language: "+Translator.language);
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Translator language= "+Translator.language);
+
+		try {
+			loadDictionaryFile(filePath, language);
+		} catch (IOException e) {
+			new RuntimeException("Translator.init: unable to load dictionary file "+e);
+		}
 	}
 
 	
 	/**
 	 * Reads the dictionary file which contains localized text entries.
 	 */
-	private void loadDictionaryFile(String filePath) throws IOException {
-		dictionaries = new Hashtable();
+	private void loadDictionaryFile(String filePath, String language) throws IOException {
+		availableLanguages = new Vector();
+		dictionary = new Hashtable();
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filePath), "UTF-8"));
 		String line;
@@ -111,7 +114,6 @@ public class Translator {
 		String text;
 		StringTokenizer st;
 		int nbEntries = 0;
-//		orderedEntries = new Vector();
 
 		while ((line = br.readLine())!=null) {
 			if (!line.trim().startsWith("#") && !line.trim().equals("")) {
@@ -120,7 +122,7 @@ public class Translator {
 				try {
 					// Sets delimiter to ':'
 					key = st.nextToken(":");
-					lang = st.nextToken();
+					lang = st.nextToken().toLowerCase();
 
 					// Delimiter is now line break
 					text = st.nextToken("\n");
@@ -138,22 +140,24 @@ public class Translator {
 					while ((pos = text.indexOf("\\u", pos))!=-1)
 						text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
 
-if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.trace("Translator init: duplicate "+lang+" entry "+key);
-					
-					put(key, lang, text);
-//					orderedEntries.add(key+":"+lang);
+					if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.trace("duplicate "+lang+" entry for "+key);
+
+					// Add any new language to the list of available languages
+					if(!availableLanguages.contains(lang))
+						availableLanguages.add(lang);
+
+					// Add entry for current language, or for default language if a value for current language wasn't already set
+					if(lang.equalsIgnoreCase(language) || (lang.equalsIgnoreCase(DEFAULT_LANGUAGE) && dictionary.get(key)==null))
+						put(key, text);
+						
 					nbEntries++;
 				} catch (Exception e) {
 					if(com.mucommander.Debug.ON) e.printStackTrace();
-					com.mucommander.Debug.trace("Translator init: error in line "+line+" ("+e+")");
+					com.mucommander.Debug.trace("error in line "+line+" ("+e+")");
 				}
-			} else {
-//				orderedEntries.add(line);
 			}
 		}
-
 		br.close();
-//		needsToBeSaved = false;
 	}
 
 
@@ -165,17 +169,7 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 
 	
 	/**
-	 * Sets language used by <code>get()</code> methods when language parameter isn't specified.
-	 *
-	 * @param lang 2-letter language code
-	 */
-	public static void setLanguage(String lang) {
-		Translator.language = lang;
-	}
-	
-	
-	/**
-	 * Returns language used by <code>get()</code> methods when language parameter isn't specified.
+	 * Returns the current language.
 	 *
 	 * @return lang 2-letter language code
 	 */
@@ -186,29 +180,12 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 	
 	/**
 	 * Returns an array of available languages, each described by a 2-letter
-	 * String ("fr", "en", "jp"...).
+	 * String ("en", "fr", "jp"...).
 	 *
 	 * @return a String array of 2-letter language codes.
 	 */
 	public static String[] getAvailableLanguages() {
-		String[] languages = new String[dictionaries.size()];
-		Enumeration keys = dictionaries.keys();
-		int i = 0;
-
-		while (keys.hasMoreElements()) {
-			languages[i++] = (String)keys.nextElement();
-		}
-
-		return languages;
-	}
-
-
-	/**
-	 * Returns the dictionary for the given language, <code>null</code> if it
-	 * does not exist.
-	 */
-	public Hashtable getDictionary(String language) {
-		return (Hashtable)dictionaries.get(language);
+		return (String[])availableLanguages.toArray(new String[]{});
 	}
 
 
@@ -216,79 +193,41 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 	 * Returns true if the given key exists (has a corresponding value) in the given language.
 	 */
 	public static boolean entryExists(String key, String lang) {
-		Hashtable dictionary = (Hashtable)dictionaries.get(lang.toLowerCase());
-		if(dictionary==null)
-			return false;
-		
-		String entry = (String)dictionary.get(key.toLowerCase());
-		return entry!=null; 
+		return (String)dictionary.get(key.toLowerCase())!=null;
 	}
 
 
 	/**
-	 * Adds the key/text value to the dictionary corresponding to the given
-	 * language.
+	 * Adds the key/text value to the dictionary.
 	 *
 	 * @param key a case-insensitive key.
-	 * @param language a 2-letter language case-insensitive string.
 	 * @param text localized text.
 	 */
-	public static void put(String key, String language, String text) {
-		// Gets the dictionary for this language
-		Hashtable dictionary = (Hashtable)dictionaries.get(language.toLowerCase());
-
-		// Dictionary for this language doesn't exist yet, let's create it
-		if (dictionary==null) {
-			dictionary = new Hashtable();
-			dictionaries.put(language.toLowerCase(), dictionary);
-		}
-
+	private static void put(String key, String text) {
 		// Adds a new entry to the dictionary
 		dictionary.put(key.toLowerCase(), text);
-
-//		needsToBeSaved = true;
 	}
 
 
 	/**
 	 * Returns the localized text String corresponding to the given key and
-	 * language, and replaces  the %1, %2... parameters by their given value.
+	 * current language (or default language if a value for current language is not available),
+	 * and replaces  the %1, %2... parameters by their given value.
 	 *
 	 * @param key a case-insensitive key.
-	 * @param language the language (2-letter code) in which the value will be returned.
-	 * @param originalLanguage used for recursive calls to this method, to keep track of language originally requested.
-	 * @param paramValues array of parameters which will be used to for variables in values.
+	 * @param paramValues array of parameters which will be used as values for variables.
 	 */
-	private static String get(String key, String language, String originalLanguage, String[] paramValues) {
+	public static String get(String key, String paramValues[]) {
 		// Gets the dictionary for this language
 		language = language.toLowerCase();
-
-		Hashtable dictionary = (Hashtable)dictionaries.get(language);
-
-		// Dictionary for this language doesn't exist 
-		if (dictionary==null) {
-			if (language.equals("en")) {
-				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unknown key "+key);
-
-				return key;
-			} else
-
-				return get(key, "en", originalLanguage, paramValues);
-		}
 
 		// Returns the localized text
 		String text = (String)dictionary.get(key.toLowerCase());
 
 		if (text==null) {
-			if (language.equals("en")) {
-				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unknown key "+key);
-
-				return key;
-			} else
-
-				return get(key, "en", originalLanguage, paramValues);
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unknown key "+key);
+			return key;
 		}
-
 
 		// Replace %1, %2 ... parameters by their value
 		if (paramValues!=null) {
@@ -299,15 +238,15 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 			}
 		}
 
-		// Replace $[] constants by their value
+		// Replace $[key] occurrences by their value
 		int pos = 0;
 		int pos2;
-		String var;
+		String variable;
 
 		while ((pos = text.indexOf("$[", pos))!=-1) {
 			pos2 = text.indexOf("]", pos+1);
-			var = text.substring(pos+2, pos2);
-			text = text.substring(0, pos)+get(var, originalLanguage, originalLanguage, paramValues)+text.substring(pos2+1, text.length());
+			variable = text.substring(pos+2, pos2);
+			text = text.substring(0, pos)+get(variable, paramValues)+text.substring(pos2+1, text.length());
 		}
 
 		return text;
@@ -315,57 +254,40 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 
 
 	/**
-	 * Returns the localized text String corresponding to the given key and
-	 * language, with the specified parameters (can be null).
-	 * 
-	 * @param key a case-insensitive key.
-	 * @param language the language (2-letter code) in which the value will be returned.
-	 * @param params array of parameters which will be used to for variables in values.
-	 */
-	public static String get(String key, String language, String params[]) {
-		return get(key, language, language, params);
-	}
-
-
-	/**
-	 * Returns the localized text String corresponding to the given key in the current language.
-	 * 
-	 * <p>
-	 * Equivalent to <code>get(key, language, ((paramValues[])null)</code>.
-	 * </p>
+	 * Convenience method, equivalent to <code>get(key, (String[])null)</code>.
 	 *
 	 * @param key a case-insensitive key.
 	 */
 	public static String get(String key) {
-		return get(key, language, language, (String[])null);
+		return get(key, (String[])null);
 	}
 
 
 	/**
-	 * Convenience method, equivalent to <code>get(key, Translator.getLanguage(), new String[]{paramValue1})</code>)</code>.
+	 * Convenience method, equivalent to <code>get(key, new String[]{paramValue1})</code>)</code>.
 	 *
 	 * @param key a case-insensitive key.
 	 * @param paramValue1 first parameter which will be used to replace %1 variables.
 	 */
 	public static String get(String key, String paramValue1) {
-		return get(key, language, language, new String[] {paramValue1});
+		return get(key, new String[] {paramValue1});
 	}
 
 
 	/**
-	 * Convenience method, equivalent to <code>get(key, Translator.getLanguage(), new String[]{paramValue1, paramValue2})</code>)</code>.
+	 * Convenience method, equivalent to <code>get(key, new String[]{paramValue1, paramValue2})</code>)</code>.
 	 *
 	 * @param key a case-insensitive key.
 	 * @param paramValue1 first parameter which will be used to replace %1 variables.
 	 * @param paramValue2 second parameter which will be used to replace %2 variables.
 	 */
 	public static String get(String key, String paramValue1, String paramValue2) {
-		return get(key, language, language, new String[] {paramValue1, paramValue2});
+		return get(key, new String[] {paramValue1, paramValue2});
 	}
 
 
 	/**
-	 * Convenience method, equivalent to <code>get(key, Translator.getLanguage(), new String[]{paramValue1, paramValue2, paramValue3})</code>)</code>.
+	 * Convenience method, equivalent to <code>get(key, new String[]{paramValue1, paramValue2, paramValue3})</code>)</code>.
 	 *
 	 * @param key a case-insensitive key.
 	 * @param paramValue1 first parameter which will be used to replace %1 variables.
@@ -373,7 +295,7 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 	 * @param paramValue3 third parameter which will be used to replace %3 variables.
 	 */
 	public static String get(String key, String paramValue1, String paramValue2, String paramValue3) {
-		return get(key, language, language, new String[] {
+		return get(key, new String[] {
 			    paramValue1, paramValue2, paramValue3
 		    });
 	}
@@ -389,6 +311,7 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 	 * </ul>
 	 */
 	public static void main(String args[]) throws IOException {
+/*	
 		// Looks for missing and unused entries
 		if(args.length<4) {
 			Enumeration languages = dictionaries.keys();
@@ -409,9 +332,12 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 		}
 		// Integrates a new language into the dictionary
 		else {
+*/
 			// Parameters order: originalFile newLanguageFile resultingFile newLanguage
 			addLanguageToDictionary(args[0], args[1], args[2], args[3]);
+/*
 		}
+*/
 	}
 
 
@@ -421,6 +347,7 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 	 * extension is '.java', looks for any calls to {@link #Translator.get(String), Translator.get()} and checks
 	 * that the request entry has a value in each language's dictionary.
 	 */ 
+/*
 	private static void checkMissingEntries(com.mucommander.file.AbstractFile file, String languages[]) throws IOException {
 		if(file.isDirectory()) {
 			com.mucommander.file.AbstractFile children[] = file.ls();
@@ -452,13 +379,14 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 			br.close();
 		} 
 	}
-
+*/
 
 
 	/**
 	 * Checks all enties in all dictionaries, checks that they are used in at least one source file
 	 * in or under the supplied folder, and reports unused entries on the standard output.
 	 */ 
+/*
 	private static void checkUnusedEntries(com.mucommander.file.AbstractFile sourceFolder, String languages[]) throws IOException {
 		Enumeration entries;
 		String entry;
@@ -472,10 +400,12 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 			}
 		}
 	}
+*/
 
 	/**
 	 * Checks if the given entry is used in the supplied file or folder.
 	 */
+/*
 	private static boolean isEntryUsed(String entry, com.mucommander.file.AbstractFile file) throws IOException {
 		if(file.isDirectory()) {
 			com.mucommander.file.AbstractFile children[] = file.ls();
@@ -500,7 +430,7 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 		
 		return false;
 	}
-
+*/
 
 	/**
 	 * Merges a dictionary file with another one, adding entries of the specified new language.
@@ -585,116 +515,5 @@ if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.tra
 		newLanguageFileReader.close();
 		originalFileReader.close();
 		pw.close();
-//		needsToBeSaved = false;
 	}
-
-	/**
-	 * Reloads dictionary entries (reloads dictionary file).
-	 *
-	 * @throws IOException if dictionary file could not be opened/read.
-	 */
-/*
-	public static void reloadEntries() throws IOException {
-		loadDictionaryFile();
-	}
-*/
-
-	/**
-	 * Returns the localized text String corresponding to the given key and
-	 * language in its 'raw' form, that is without parameters and variables
-	 * replaced by their value.
-	 *
-	 * @param key a case-insensitive key.
-	 * @param language a 2-letter language case-insensitive string.
-	 *
-	 * @return the raw value associated with the given key
-	 */
-/*
-	 private static String getRawValue(String key, String language) {
-		// Gets the dictionary for this language
-		language = language.toLowerCase();
-
-		Hashtable dictionary = (Hashtable)dictionaries.get(language);
-
-		// Dictionary for this language doesn't exist 
-		if (dictionary==null) {
-			if (language.equals("en"))
-				return "";
-			else
-
-				return getRawValue(key, "en");
-		}
-
-		// Returns the localized text
-		String text = (String)dictionary.get(key.toLowerCase());
-
-		if (text==null) {
-			if (language.equals("en"))
-				return "";
-			else
-
-				return getRawValue(key, "en");
-		}
-
-		return text;
-	}
-*/
-
-	/**
-	 * Writes the dictionary file to the disk.
-	 */
-/*
-	 public static void writeFileToDisk() throws IOException {
-		PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(dictionaryFilePath), "utf-8"));
-
-		String entry;
-		String line;
-		String rawValue;
-		String rawValue2;
-		int pos;
-		int pos2;
-		int nbEntries = orderedEntries.size();
-
-		for (int i = 0; i<nbEntries; i++) {
-			entry = ((String)orderedEntries.elementAt(i)).trim();
-
-			if (entry.startsWith("#") || entry.equals("")) {
-				line = entry;
-			} else {
-				pos = entry.indexOf(":");
-				rawValue = getRawValue(entry.substring(0, pos), entry.substring(pos+1, pos+3));
-
-				// Replace <eol> characters by \n
-				pos2 = 0;
-				rawValue2 = "";
-
-				while ((pos = rawValue.indexOf(System.getProperty("line.separator"), pos2))!=-1) {
-					rawValue2 += (rawValue.substring(pos2, pos)+"\\n");
-					pos2 = pos+1;
-				}
-
-				rawValue2 += rawValue.substring(pos2, rawValue.length());
-
-				line = entry+":"+rawValue2;
-			}
-
-			pw.println(line);
-		}
-
-		pw.close();
-		needsToBeSaved = false;
-	}
-*/
-
-	/**
-	 * Returns <code>true</code> if some changes were made to the dictionary
-	 * (thru the 'put' method) and were not saved to the dictionary file.<br>
-	 * Calling writeFileToDisk() will reset the value to <code>false</code>
-	 * until the next call to put().
-	 */
-/*
-	 public static boolean needsToBeSaved() {
-		return needsToBeSaved;
-	}
-*/
 }
