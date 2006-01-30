@@ -19,7 +19,8 @@ import java.awt.event.*;
  *
  * @author Maxence Bernard
  */
-public class ProgressDialog extends FocusDialog implements Runnable, ActionListener, KeyListener, WindowListener {
+public class ProgressDialog extends FocusDialog implements Runnable, ActionListener {
+
     private JLabel infoLabel;
     private JLabel statsLabel;
     private OverlayProgressBar totalProgressBar;
@@ -43,7 +44,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
 	private boolean firstTimeActivated = true;
 	
-	
     public ProgressDialog(MainFrame mainFrame, String title) {
         super(mainFrame, title, mainFrame);
 
@@ -52,8 +52,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 		// Sets maximum and minimum dimensions for this dialog
 		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-    
-//addWindowListener(this);
 	}
     
     
@@ -93,10 +91,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         
 		cancelButton = new JButton(Translator.get("cancel"));
         cancelButton.addActionListener(this);
-        cancelButton.addKeyListener(this);
 		hideButton = new JButton(Translator.get("progress_bar.hide"));
 		hideButton.addActionListener(this);
-		hideButton.addKeyListener(this);
 		// Cancel button receives initial focus
 		setInitialFocusComponent(cancelButton);
 		// Enter triggers cancel button
@@ -104,10 +100,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 		contentPane.add(new ButtonChoicePanel(new JButton[] {cancelButton, hideButton}, 0, getRootPane()), BorderLayout.SOUTH);
     }
 
-
-    //////////////////////
-	// Runnable methods //
-    //////////////////////
 
     public void start(FileJob job) {
         this.job = job;
@@ -120,6 +112,11 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     	showDialog();
 	}
     
+
+    //////////////////////
+	// Runnable methods //
+    //////////////////////
+
     public void run() {
 	    // Used for dual bars
 		int filePercent;
@@ -143,7 +140,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             extendedJob = (ExtendedFileJob)job;
 
 		long speed;
-//		long startTime = job.getStartTime();
 		// Start time will only be available after this dialog has been activated
 		long startTime;
 		long now;
@@ -163,14 +159,11 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
 				// Update stats if necessary
 				nbBytesTotal = job.getTotalBytesProcessed();
-//				nbBytesSkipped = job.getTotalBytesSkipped();
 				pausedTime = job.getPausedTime();
 				startTime = job.getStartTime();
 				if(lastBytesTotal!=nbBytesTotal) {
 					now = System.currentTimeMillis();
-//					speed = (long)((nbBytesTotal-nbBytesSkipped)/((now-startTime-pausedTime)/1000d));
 					speed = (long)(nbBytesTotal/((now-startTime-pausedTime)/1000d));
-//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("nbBytesTotal="+nbBytesTotal+"nbBytesSkipped="+nbBytesSkipped+" startTime="+startTime+" pausedTime="+pausedTime+" now="+now+" speed="+speed+" speedStr="+SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB));
 					statsLabel.setText(
 						Translator.get("progress_bar.transferred",
 							SizeFormatter.format(nbBytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB),
@@ -218,9 +211,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 	    Object source = e.getSource();
     	
 		if (source==cancelButton) {
-			// Cancel button pressed, let's stop deleting
-	        job.stop();
-	        repaintThread = null;
+			// Cancel button pressed, dispose dialog (job will be stopped as a result of the dialog being closed)
 	        dispose();
 		}
 		else if(source==hideButton) {
@@ -229,41 +220,12 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     }
 
 
-    /////////////////////////
-	// KeyListener methods //
-    /////////////////////////
-
-     public void keyPressed(KeyEvent e) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-     	int keyCode = e.getKeyCode();
-		
-     	// Disposes the dialog on escape key
-     	if (keyCode==KeyEvent.VK_ESCAPE) {
-     		job.stop();
-			dispose();
-     	}
-     }
-
-    public void keyReleased(KeyEvent e) {
-    }
-
-    public void keyTyped(KeyEvent e) {
-    }
-
-
-	////////////////////////////
-	// WindowListener methods // 
-	////////////////////////////
-
-	public void windowOpened(WindowEvent e) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-		// (this method is called first time the dialog is made visible)
-		super.windowOpened(e);
-	}
+	///////////////////////////////////////
+	// Overridden WindowListener methods // 
+	///////////////////////////////////////
 
 	public void windowActivated(WindowEvent e) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-		// (this method is called each time the dialog is activated)
+		// This method is called each time the dialog is activated
 		super.windowActivated(e);
 		if(firstTimeActivated) {
 			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("first time activated, starting job!");
@@ -272,24 +234,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 		}
 	}
 
-	public void windowClosing(WindowEvent e) {
-		super.windowClosing(e);
-	}
-
 	public void windowClosed(WindowEvent e) {
 		super.windowClosed(e);
-	}
 
-	public void windowDeactivated(WindowEvent e) {
-		super.windowDeactivated(e);
+		// Stop threads
+		repaintThread = null;
+		job.stop();
 	}
-
-	public void windowIconified(WindowEvent e) {
-		super.windowIconified(e);
-	}
-
-	public void windowDeiconified(WindowEvent e) {
-		super.windowDeiconified(e);
-	}
-
 }

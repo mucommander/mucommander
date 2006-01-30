@@ -119,15 +119,11 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	}
 
 	
-	public void stop() {
-		job.stop();
-		repaintThread = null;
-	}
-	
+	//////////////////////
+	// Runnable methods //
+	//////////////////////
 
 	public void run() {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-		
 		while(repaintThread!=null && !job.hasFinished()) {
 			updateLabels();
 			
@@ -139,14 +135,29 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 		updateLabels();
 		setTitle(title);
 		okCancelButton.setText(Translator.get("ok"));
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("default cursor set");
 		mainFrame.setCursor(Cursor.getDefaultCursor());
 	}
 
+
+	////////////////////////////
+	// ActionListener methods //
+	////////////////////////////
+
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource()==okCancelButton) {
-			stop();
+		if (e.getSource()==okCancelButton)
 			dispose();
-		}
+	}
+
+
+	///////////////////////////////////////
+	// Overridden WindowListener methods // 
+	///////////////////////////////////////
+
+	public void windowClosed(WindowEvent e) {
+		super.windowClosed(e);
+		
+		// Stop threads
+		job.stop();
+		repaintThread = null;
 	}
 }

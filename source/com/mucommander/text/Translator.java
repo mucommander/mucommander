@@ -140,8 +140,6 @@ public class Translator {
 					while ((pos = text.indexOf("\\u", pos))!=-1)
 						text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
 
-					if(com.mucommander.Debug.ON && entryExists(key, lang)) com.mucommander.Debug.trace("duplicate "+lang+" entry for "+key);
-
 					// Add any new language to the list of available languages
 					if(!availableLanguages.contains(lang))
 						availableLanguages.add(lang);
@@ -149,7 +147,7 @@ public class Translator {
 					// Add entry for current language, or for default language if a value for current language wasn't already set
 					if(lang.equalsIgnoreCase(language) || (lang.equalsIgnoreCase(DEFAULT_LANGUAGE) && dictionary.get(key)==null))
 						put(key, text);
-						
+					
 					nbEntries++;
 				} catch (Exception e) {
 					if(com.mucommander.Debug.ON) e.printStackTrace();
@@ -190,9 +188,9 @@ public class Translator {
 
 
 	/**
-	 * Returns true if the given key exists (has a corresponding value) in the given language.
+	 * Returns true if the given key exists (has a corresponding value) in the current language.
 	 */
-	public static boolean entryExists(String key, String lang) {
+	public static boolean entryExists(String key) {
 		return (String)dictionary.get(key.toLowerCase())!=null;
 	}
 
@@ -451,26 +449,34 @@ public class Translator {
 
 		// Parse new language's entries
 		String line;
+		int lineNum = 0;
 		String key;
 		String lang;
 		String text;
 		StringTokenizer st;
 		Hashtable newLanguageEntries = new Hashtable();
 		while ((line = newLanguageFileReader.readLine())!=null) {
-			if (!line.trim().startsWith("#") && !line.trim().equals("")) {
-				st = new StringTokenizer(line);
+			try {
+				if (!line.trim().startsWith("#") && !line.trim().equals("")) {
+					st = new StringTokenizer(line);
 
-				// Sets delimiter to ':'
-				key = st.nextToken(":");
-				lang = st.nextToken();
+					// Sets delimiter to ':'
+					key = st.nextToken(":");
+					lang = st.nextToken();
 
-				if(lang.equalsIgnoreCase(newLanguage)) {
-					// Delimiter is now line break
-					text = st.nextToken("\n");
-					text = text.substring(1, text.length());
+					if(lang.equalsIgnoreCase(newLanguage)) {
+						// Delimiter is now line break
+						text = st.nextToken("\n");
+						text = text.substring(1, text.length());
 
-					newLanguageEntries.put(key, text);
+						newLanguageEntries.put(key, text);
+					}
 				}
+				lineNum++;
+			}
+			catch(Exception e) {
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("caught "+e+" at line "+lineNum);
+				return;
 			}
 		}
 
