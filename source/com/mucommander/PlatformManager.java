@@ -362,10 +362,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 
             if(Debug.ON) Debug.trace("Opening "+filePath);
 
+            Process p;
 			if(currentFolder instanceof com.mucommander.file.FSFile)
-				Runtime.getRuntime().exec(getOpenTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
+				p = Runtime.getRuntime().exec(getOpenTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
             else
-				Runtime.getRuntime().exec(getOpenTokens(filePath), null);
+				p = Runtime.getRuntime().exec(getOpenTokens(filePath), null);
+			
+			if(Debug.ON) showProcessOutput(p);
 			
             return true;
 		}
@@ -384,11 +387,14 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 		try {
             if(Debug.ON) Debug.trace("Opening in finder "+filePath);
 
-			if(currentFolder instanceof com.mucommander.file.FSFile)
-				Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", filePath}, null, new java.io.File(currentFolder.getAbsolutePath()));
+            Process p;
+            if(currentFolder instanceof com.mucommander.file.FSFile)
+				p = Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", filePath}, null, new java.io.File(currentFolder.getAbsolutePath()));
             else
-				Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", filePath}, null);
-			
+				p = Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", filePath}, null);
+
+			if(Debug.ON) showProcessOutput(p);
+
             return true;
 		}
 		catch(IOException e) {
@@ -402,16 +408,17 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 		// Under Win32, the 'start' command opens a file with the program
 		// registered with this file's extension (great!)
 		// Windows 95, 98, Me : syntax is start "myfile"
+		String tokens[];
 		if (osFamily == WINDOWS_9X) {
-			return new String[] {"start", "\""+filePath+"\""};
+			tokens = new String[] {"start", "\""+filePath+"\""};
 		}
 		// Windows NT, 2000, XP : syntax is cmd /c start "" "myfile"
 		else if (osFamily == WINDOWS_NT) {
-			return new String[] {"cmd", "/c", "start", "\"\"", "\""+filePath+"\""};
+			tokens = new String[] {"cmd", "/c", "start", "\"\"", "\""+filePath+"\""};
 		}
 		// Mac OS X can do the same with 'open'
 		else if (osFamily == MAC_OS_X)  {
-			return new String[] {"open", filePath};
+			tokens = new String[] {"open", filePath};
 		}
 		else {
 			StringBuffer sb = new StringBuffer();
@@ -425,8 +432,19 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 			}
 			filePath = sb.toString();
 
-			return new String[] {filePath};
+			tokens = new String[] {filePath};
 		}
+	
+		if(Debug.ON)
+			for(int i=0; i<tokens.length; i++)
+				Debug.trace("token["+i+"]")
+		
+		return tokens;
 	}
 
+	
+	private static showProcessOutput(Process p) {
+		p.waitFor();
+		Debug.trace("")
+	}
 }
