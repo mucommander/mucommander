@@ -652,14 +652,10 @@ command_bar.close:ES:Cerrar
 command_bar.close:CS:Zavřít
 command_bar.close:zh_TW:關閉
 command_bar.close:PL:Zamknij
+command_bar.close:HU:bezár
 command_bar.close:RU:Закрыть
 command_bar.close:ZH_CN:关闭
 command_bar.close:SI:Zapri
-
-
-
-
-
 
 command_bar.close_tooltip:EN:Close this window
 command_bar.close_tooltip:FR:Fermer cette fenêtre
@@ -668,12 +664,10 @@ command_bar.close_tooltip:ES:Cerrar esta ventana
 command_bar.close_tooltip:CS:Zavřít aktuální okno
 command_bar.close_tooltip:zh_TW:關閉此視窗
 command_bar.close_tooltip:PL:Zamknij aktualne okno
+command_bar.close_tooltip:HU:ablakbezárás
 command_bar.close_tooltip:RU:Закрытие окна
 command_bar.close_tooltip:ZH_CN:关闭此窗口
 command_bar.close_tooltip:SI:Zapri okno
-
-
-
 
 command_bar.hide_command_bar:EN:$[view_menu.hide_command_bar]
 
@@ -3423,12 +3417,11 @@ file_editor.file_already_exists:DE:%1 existiert bereits, soll sie überschrieben
 file_editor.file_already_exists:ES:%1 ya existe , ¿desea reemplazarlo?
 file_editor.file_already_exists:CS:%1 již existuje, chcete ho přepsat ?
 file_editor.file_already_exists:zh_TW:%1 已存在, 你是否要取代它 ?
+file_editor.file_already_exists:PL:%1 już istnieje, chcesz zastąpić ?
 file_editor.file_already_exists:HU:%1 már létezik, lecseréli?
 file_editor.file_already_exists:RU:Файл %1 уже существует. Вы хотите его заменить?
 file_editor.file_already_exists:ZH_CN:%1 已存在, 你是否要取代它 ?
 file_editor.file_already_exists:SI:%1 že obstaja, ali jo želi zamenjati?
-
-
 
 file_editor.file_menu:EN:$[file_viewer.file_menu]
 
