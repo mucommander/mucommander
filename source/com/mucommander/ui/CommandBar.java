@@ -165,8 +165,10 @@ public class CommandBar extends JPanel implements ActionListener, MouseListener 
 	 */
 	public void doView() {
 		AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-		if(file==null || (file.isDirectory() && !file.isSymlink()))
+		if(file==null || (file.isDirectory() && !file.isSymlink())) {
+			mainFrame.requestFocus();
 			return;
+		}
 		
 		ViewerFrame frame = new ViewerFrame(mainFrame, file);
 		frame.show();
@@ -178,8 +180,10 @@ public class CommandBar extends JPanel implements ActionListener, MouseListener 
 	 */
 	public void doEdit() {
 		AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-		if(file==null || (file.isDirectory() && !file.isSymlink()))
+		if(file==null || (file.isDirectory() && !file.isSymlink())) {
+			mainFrame.requestFocus();
 			return;
+		}
 
 		EditorFrame frame = new EditorFrame(mainFrame, file);
 		frame.show();
