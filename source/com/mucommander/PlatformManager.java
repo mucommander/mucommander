@@ -380,26 +380,26 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 
 
 	/**
-	 * Opens/executes the given file in the Mac OS X Finder, from the given folder
-	 * and returns <code>true</code> if the operation succeeded.
+	 * Opens the given file in the Mac OS X Finder. A Finder window will be opened, revealing:
+	 * <ul>
+	 *  <li>if the given file is a folder, the folder contents
+	 *  <li>if the given file is a regular file, the enclosing folder's contents (Finder is unable to jump to the file unfortunately)
+	 * </ul>
 	 */
-	public static boolean openInFinder(String filePath, AbstractFile currentFolder) {
+	public static void openInFinder(AbstractFile file) {
 		try {
-            if(Debug.ON) Debug.trace("Opening in finder "+filePath);
+			// Return if file is not on a local/mounted filesytem
+			if(!file.getURL().getProtocol().equals("file"))
+				return;
 
-            Process p;
-            if(currentFolder instanceof com.mucommander.file.FSFile)
-				p = Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", filePath}, null, new java.io.File(currentFolder.getAbsolutePath()));
-            else
-				p = Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", filePath}, null);
-
-			if(Debug.ON) showProcessOutput(p);
-
-            return true;
+			if(!file.isDirectory())
+				file = file.getParent();
+			
+            if(Debug.ON) Debug.trace("Opening in finder "+file.getAbsolutePath());
+            	Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", file.getAbsolutePath()}, null);
 		}
 		catch(IOException e) {
-            if(Debug.ON) Debug.trace("Error while opening "+filePath+": "+e);
-            return false;
+            if(Debug.ON) Debug.trace("Error while opening "+file.getAbsolutePath()+" in Finder: "+e);
 		}
 	}
 
@@ -437,14 +437,31 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 	
 		if(Debug.ON)
 			for(int i=0; i<tokens.length; i++)
-				Debug.trace("token["+i+"]")
+				Debug.trace("token["+i+"]");
 		
 		return tokens;
 	}
 
 	
-	private static showProcessOutput(Process p) {
-		p.waitFor();
-		Debug.trace("")
+	private static void showProcessOutput(Process p) {
+		try {
+			p.waitFor();
+			Debug.trace("exitValue="+p.exitValue());
+	
+			Debug.trace("reading process inputstream");
+			int i;
+			java.io.InputStream is = p.getInputStream();
+			while((i=is.read())!=-1)
+				System.out.print(i);
+			is.close();
+			
+			Debug.trace("reading process errorstream");
+			is = p.getErrorStream();
+			while((i=is.read())!=-1)
+				System.out.print(i);
+			is.close();
+		}
+		catch(Exception e) {
+		}
 	}
 }

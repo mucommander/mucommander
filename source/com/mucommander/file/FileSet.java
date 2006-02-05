@@ -30,7 +30,16 @@ public class FileSet extends Vector {
 		this.baseFolder = baseFolder;
 	}
 
+	
+	/**
+	 * Creates a new empty FileSet with the specified base folder, and adds the given file.
+	 */
+	public FileSet(AbstractFile baseFolder, AbstractFile file) {
+		this.baseFolder = baseFolder;
+		add(file);
+	}
 
+	
 	/**
 	 * Returns the base folder associated with this FileSet, null if there isn't any.
 	 */
