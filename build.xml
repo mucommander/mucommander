@@ -25,7 +25,7 @@
 
   <!-- Compiles .java files, adding libraries to classpath -->
   <target name="compile" depends="init">
-    <!-- Compile the java code from ${source} into ${classes} -->
+    <!-- Compile java source from ${source} to ${classes} and generate Java 1.3 compatible class files -->
     <javac srcdir="${source}" destdir="${classes}" debug="on" deprecation="on" encoding="utf-8" source="1.3" target="1.3">
       <classpath>
         <pathelement location="classes"/>
@@ -39,7 +39,7 @@
 
 
   <!-- Extracts lib JAR libraries files and copies resource files to the classes folder -->
-  <target name="prepare">
+  <target name="includelibs">
     <!-- Unjar libraries to include them in the JAR file -->
     <unjar src="${lib}/muxml.jar" dest="${classes}"/>
     <unjar src="${lib}/jcifs.jar" dest="${classes}"/>
@@ -96,12 +96,12 @@
 	<!-- Delete any existing obfuscated JAR file -->
 	<delete file="${dist}/mucommander.jar"/>
 	<!-- Imports ProGuard obfuscator ant task -->
-	<taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="proguard.jar"/>
+	<taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${lib}/proguard.jar"/>
 	<proguard overloadaggressively="on" usemixedclassnames="off" ignorewarnings="on" printseeds="on">
 		<injar name="${dist}/mucommander_unobf.jar"/> 
 		<outjar name="${dist}/mucommander.jar"/>
 		<libraryjar name="/System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Classes/classes.jar"/>
-		<!-- Mac OS X specific -->
+		<!-- Mac OS X specifics -->
 		<keep name="com.mucommander.ui.macosx.FinderIntegration">
 			<method access="public" name="handleAbout"/>
 			<method access="public" name="handlePrefs"/>
@@ -189,7 +189,7 @@
 
 
   <!-- Build the project from scratch: copy resources, compile and run -->
-  <target name="build" depends="prepare,compile">
+  <target name="build" depends="includelibs,compile">
   </target>
 
 
