@@ -73,7 +73,6 @@ public class CopyJob extends ExtendedFileJob {
 	 * 
 	 * @return <code>true</code> if the file has been copied.
 	 */
-//    protected boolean processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
     protected boolean processFile(AbstractFile file, Object recurseParams) {
 		// Stop if interrupted
 		if(isInterrupted())
@@ -241,7 +240,6 @@ public class CopyJob extends ExtendedFileJob {
 	}
 
     public String getStatusString() {
-//        return Translator.get(unzipMode?"unzip.unzipping_file":"copy.copying_file", getCurrentFileInfo());
         return Translator.get(mode==UNZIP_MODE?"unzip.unzipping_file":mode==DOWNLOAD_MODE?"download.downloading_file":"copy.copying_file", getCurrentFileInfo());
     }
 	

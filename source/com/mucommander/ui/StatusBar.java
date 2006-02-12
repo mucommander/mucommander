@@ -41,10 +41,15 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 	/** Popup menu item that hides the toolbar */
 	private JMenuItem hideMenuItem;	
 
-	private final static int VOLUME_INFO_CACHE_CAPACITY = 100;
+	/** Number of volume info strings that can be temporarily cached */
+	private final static int VOLUME_INFO_CACHE_CAPACITY = 50;
 
-	private final static int VOLUME_INFO_TIME_TO_LIVE = 10000;
+	/** Number of milliseconds before cached volume info strings expire */
+	private final static int VOLUME_INFO_TIME_TO_LIVE = 60000;
 
+	/** Caches volume info strings (free/total space) for a while, since it is quite costly and we don't want
+	 * to recalculate it each time this information is requested.
+	 * Each cache item maps a path to a volume info string */
 	private static LRUCache volumeInfoCache = new LRUCache(VOLUME_INFO_CACHE_CAPACITY);
 	
 	/** SizeFormatter's format used to display volume info in status bar */
