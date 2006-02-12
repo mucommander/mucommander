@@ -13,6 +13,9 @@ import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 
+import com.mucommander.cache.LRUCache;
+import com.mucommander.cache.LRUObject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -38,6 +41,12 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 	/** Popup menu item that hides the toolbar */
 	private JMenuItem hideMenuItem;	
 
+	private final static int VOLUME_INFO_CACHE_CAPACITY = 100;
+
+	private final static int VOLUME_INFO_TIME_TO_LIVE = 10000;
+
+	private static LRUCache volumeInfoCache = new LRUCache(VOLUME_INFO_CACHE_CAPACITY);
+	
 	/** SizeFormatter's format used to display volume info in status bar */
 	private final static int VOLUME_INFO_SIZE_FORMAT = SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB;
 
@@ -146,50 +155,60 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 		if(!isVisible())
 			return;
 
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-
 		final AbstractFile currentFolder = mainFrame.getLastActiveTable().getCurrentFolder();
 
-		// Retrieves free and total volume space.
-		// Perform volume info retrieval in a separate thread as this method may be called
-		// by the event thread and it can take a while, we want to return as soon as possible
-		new Thread() {
-			public void run() {
-				// Free space on current volume, -1 if this information is not available 
-				long volumeFree;
-				// Total space on current volume, -1 if this information is not available 
-				long volumeTotal;
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, currentFolder="+currentFolder);
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cache state="+volumeInfoCache);
 
-				// Folder is a local file : call getVolumeInfo() instead of separate calls to getFreeSpace()
-				// and getTotalSpace() as it is twice as fast
-				if(currentFolder instanceof FSFile) {
-					long volumeInfo[] = ((FSFile)currentFolder).getVolumeInfo();
-					volumeTotal = volumeInfo[0];
-					volumeFree = volumeInfo[1];
-				}
-				// Any other file kind
-				else {
-					volumeFree = currentFolder.getFreeSpace();
-					volumeTotal = currentFolder.getTotalSpace();
-				}
+		String cachedVolumeInfo = (String)volumeInfoCache.get(currentFolder.getAbsolutePath());
+		if(cachedVolumeInfo!=null) {
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Cache hit!");
+			statusBarVolumeLabel.setText(cachedVolumeInfo);
+		}
+		else {
+			// Retrieves free and total volume space.
+			// Perform volume info retrieval in a separate thread as this method may be called
+			// by the event thread and it can take a while, we want to return as soon as possible
+			new Thread() {
+				public void run() {
+					// Free space on current volume, -1 if this information is not available 
+					long volumeFree;
+					// Total space on current volume, -1 if this information is not available 
+					long volumeTotal;
 
-				String volumeInfo;
-				if(volumeFree!=-1) {
-					volumeInfo = SizeFormatter.format(volumeFree, VOLUME_INFO_SIZE_FORMAT);
-					if(volumeTotal!=-1)
-						volumeInfo += " / "+ SizeFormatter.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
-					volumeInfo = Translator.get("status_bar.volume_free", volumeInfo);
+					// Folder is a local file : call getVolumeInfo() instead of separate calls to getFreeSpace()
+					// and getTotalSpace() as it is twice as fast
+					if(currentFolder instanceof FSFile) {
+						long volumeInfo[] = ((FSFile)currentFolder).getVolumeInfo();
+						volumeTotal = volumeInfo[0];
+						volumeFree = volumeInfo[1];
+					}
+					// Any other file kind
+					else {
+						volumeFree = currentFolder.getFreeSpace();
+						volumeTotal = currentFolder.getTotalSpace();
+					}
+
+					String volumeInfo;
+					if(volumeFree!=-1) {
+						volumeInfo = SizeFormatter.format(volumeFree, VOLUME_INFO_SIZE_FORMAT);
+						if(volumeTotal!=-1)
+							volumeInfo += " / "+ SizeFormatter.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
+						volumeInfo = Translator.get("status_bar.volume_free", volumeInfo);
+					}
+					else if(volumeTotal!=-1) {
+						volumeInfo = SizeFormatter.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
+						volumeInfo = Translator.get("status_bar.volume_capacity", volumeInfo);
+					}
+					else {
+						volumeInfo = "";
+					}
+					statusBarVolumeLabel.setText(volumeInfo);
+					if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Adding to cache");
+					volumeInfoCache.add(currentFolder.getAbsolutePath(), volumeInfo, VOLUME_INFO_TIME_TO_LIVE);
 				}
-				else if(volumeTotal!=-1) {
-					volumeInfo = SizeFormatter.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
-					volumeInfo = Translator.get("status_bar.volume_capacity", volumeInfo);
-				}
-				else {
-					volumeInfo = "";
-				}
-				statusBarVolumeLabel.setText(volumeInfo);
-			}
-		}.start();
+			}.start();
+		}
 	}
 
 

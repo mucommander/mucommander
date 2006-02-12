@@ -1,5 +1,7 @@
 package com.mucommander.file;
 
+import com.mucommander.cache.LRUCache;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
@@ -15,6 +17,10 @@ public abstract class AbstractFile {
 	/** URL representing this file */
 	protected FileURL fileURL;
 
+	/** Static LRUCache instance that caches frequently accessed files */
+	private static LRUCache fileCache = new LRUCache(1000);
+	/** Static LRUCache instance that caches frequently accessed file urls */
+	private static LRUCache urlCache = new LRUCache(1000);
 
 	/**
 	 * Creates a new file instance with the given URL.
@@ -86,12 +92,27 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 
 		// Create a FileURL instance using the given path
 		FileURL fileURL;
-		// If path contains no protocol, consider the file as a local file and add the 'file' protocol to the URL
-		if(absPath.indexOf("://")==-1)
-			fileURL = new FileURL("file://localhost"+((absPath.equals("")||(absPath.charAt(0)=='/'))?absPath:'/'+absPath));
-		else
-			fileURL = new FileURL(absPath);
 
+		// If path contains no protocol, consider the file as a local file and add the 'file' protocol to the URL.
+		// Frequently used local FileURL instances are cached for performance  
+		if(absPath.indexOf("://")==-1) {
+			// Try to find a cached FileURL instance
+			fileURL = (FileURL)urlCache.get(absPath);
+//			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getNbHits()+"/"+urlCache.getNbMisses());
+
+			if(fileURL==null) {
+				// No cached value found, create the FileURL and add it to the FileURL cache 
+				fileURL = new FileURL("file://localhost"+((absPath.equals("")||(absPath.charAt(0)=='/'))?absPath:'/'+absPath));
+				urlCache.add(absPath, fileURL);
+			}
+		}
+		else {
+			// FileURL cache is not used for now as FileURL are mutable (setLogin, setPassword, setPort) and it
+			// may cause some weird side effects
+			fileURL = new FileURL(absPath);
+		}
+		
 		return getAbstractFile(fileURL, parent);
 	}
 	
@@ -146,15 +167,22 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 * @throws java.io.IOException if something went wrong during file creation.
 	 */
 	public static AbstractFile getAbstractFile(FileURL fileURL, AbstractFile parent) throws IOException {
-		// At this point . and .. are not yet factored out, so authentication for paths which contain . or ..
-		// will not behave properly  -> FileURL should factor out . and .. directly to fix the problem		
-
 		String protocol = fileURL.getProtocol().toLowerCase();
 		
-		// FS file (local filesystem)
 		AbstractFile file;
-		if (protocol.equals("file"))
-			file = new FSFile(fileURL);
+
+		// FS file (local filesystem) : an LRU file cache is used to recycle frequently used file instances
+		if (protocol.equals("file")) {
+			String urlRep = fileURL.getStringRep(true);
+			file = (AbstractFile)fileCache.get(urlRep);
+//			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((file==null?"Adding to file cache:":"File cache hit: ")+urlRep);
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getNbHits()+"/"+fileCache.getNbMisses());
+
+			if(file==null) {
+				file = new FSFile(fileURL);
+				fileCache.add(urlRep, file);
+			}
+		}
 		// SMB file
 		else if (protocol.equals("smb"))
 			file = new SMBFile(fileURL);
@@ -494,5 +522,24 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 * Returns the total space (in bytes) of the disk/volume where this file is, -1 if this information is not available. 
 	 */
 	public abstract long getTotalSpace();
+
+
+	/**
+	 * Simple bench method.
+	 */
+	public static void main(String args[]) throws IOException {
+		AbstractFile folder = AbstractFile.getAbstractFile("/usr/bin/", null);
+		folder.ls();
+
+		long totalTime = 0;
+		long now;
+		int nbIter = 100;
+		for(int i=0; i<nbIter; i++) {
+			now = System.currentTimeMillis();
+			folder.ls();
+			totalTime += System.currentTimeMillis()-now;
+		}
 	
+		System.out.println("Average ls() time = "+totalTime/nbIter);
+	}	
 }

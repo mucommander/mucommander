@@ -21,14 +21,7 @@ public class FSFile extends AbstractFile {
 	private boolean isSymlink;
 	private boolean symlinkValueSet; 
 	
-	// These file attributes are cached first time they are accessed to avoid excessive I/O
-    	
-//	private long date = -1;
-//	private long size = -1;
-
-//	private String name;
-
-	private FSFile parent;
+	private AbstractFile parent;
 	// Indicates whether or not the value has already been retrieved
 	private boolean parentValCached = false;
 		
@@ -48,22 +41,7 @@ public class FSFile extends AbstractFile {
 		fileSystemView = FileSystemView.getFileSystemView();
 	}
 
-	/**
-	 * Convenience constructor.
-	 */
-//	public FSFile(String absPath) throws IOException {
-//		this(new FileURL("file://"+absPath), new File(absPath));
-//	}
 
-
-	/**
-	 * Convenience constructor.
-	 */
-//	public FSFile(File file) throws IOException {
-//		this(new FileURL("file://"+file.getAbsolutePath()), file);
-//	}
-
-		
 	/**
 	 * Creates a new instance of FSFile.
 	 */
@@ -308,8 +286,7 @@ public class FSFile extends AbstractFile {
 			if(parentFile!=null) {
 				FileURL parentURL = getURL().getParent();
 				if(parentURL != null) {
-					try { parent = new FSFile(parentURL, new File(parentURL.getPath())); }
-					catch(IOException e) {}
+					parent = AbstractFile.getAbstractFile(getURL().getParent());
 				}
 			}
 			parentValCached = true;
@@ -360,18 +337,6 @@ public class FSFile extends AbstractFile {
         return new FileInputStream(file);
 	}
 
-//	/** 
-//	 * Overrides AbstractFile's getInputStream(long) method to provide a more efficient implementation
-//	 * which uses RandomAccessFile to skip bytes and not FileInputStream which still reads bytes.
-//	 */
-/*
-	public InputStream getInputStream(long skipBytes) throws IOException {
-        RandomAccessInputStream rain = new RandomAccessInputStream(file);
-		rain.skip(skipBytes);
-		return rain;
-	}
-*/
-	
 	public OutputStream getOutputStream(boolean append) throws IOException {
 		return new FileOutputStream(absPath, append);
 	}
@@ -390,18 +355,15 @@ public class FSFile extends AbstractFile {
 	}
 
 	public AbstractFile[] ls() throws IOException {
-		// // returns a cached array if ls has already been called
-        //if(children!=null)
-        //    return children;
-        
         String names[] = file.list();
 		
         if(names==null)
             throw new IOException();
         
         AbstractFile children[] = new AbstractFile[names.length];
-		for(int i=0; i<names.length; i++)
+		for(int i=0; i<names.length; i++) {
 			children[i] = AbstractFile.getAbstractFile(absPath+separator+names[i], this);
+		}
 
 		return children;
 	}

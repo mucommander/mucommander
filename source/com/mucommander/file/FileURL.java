@@ -392,6 +392,16 @@ public class FileURL implements Cloneable {
 		return reconstructURL(this.path, includeAuthInfo, maskPassword);
 	}
 
+	/**
+	 * Reconstructs the URL and returns its String representation.
+	 *
+	 * @param includeAuthInfo if <code>true</code>, login and password (if any) will be included in the returned URL and not masked.
+	 * Login and password in URLs should never be visible to the end user.
+	 */
+	public String getStringRep(boolean includeAuthInfo) {
+		return getStringRep(includeAuthInfo, false);
+	}
+
 
 	/**
 	 * Reconstructs the URL with the given path and returns its String representation.
@@ -437,16 +447,6 @@ public class FileURL implements Cloneable {
 	}
 
 
-	/**
-	 * Reconstructs the URL and returns its String representation.
-	 *
-	 * @param includeAuthInfo if <code>true</code>, login and password (if any) will be included in the returned URL and not masked.
-	 * Login and password in URLs should never be visible to the end user.
-	 */
-	public String getStringRep(boolean includeAuthInfo) {
-		return getStringRep(includeAuthInfo, false);
-	}
-	
 	/**
 	 * Returns a clone of this FileURL, useful because FileURL is mutable.
 	 */
