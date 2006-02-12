@@ -36,7 +36,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class MainMenuBar extends JMenuBar implements ActionListener, LocationListener, MenuListener {
+public class MainMenuBar extends JMenuBar implements ActionListener, MenuListener {
 	private MainFrame mainFrame;	
 	
 	// File menu
@@ -219,30 +219,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 		add(helpMenu);
 	}
 	
-	
-	/**
-	 * Called to notify that sort order has changed and that menu items need to reflect
-	 * that change.
-	 *
-	 * @param criteria sort-by criteria.
-	 */	
-	public void sortOrderChanged(int criteria) {
-		switch (criteria) {
-			case FileTableModel.NAME:
-				sortByNameItem.setState(true);
-				break;
-			case FileTableModel.DATE:
-				sortByDateItem.setState(true);
-				break;
-			case FileTableModel.SIZE:
-				sortBySizeItem.setState(true);
-				break;
-			case FileTableModel.EXTENSION:
-				sortByExtensionItem.setState(true);
-				break;
-		}
-	}
-
 	public MainFrame getMainFrame() {
 		return mainFrame;
 	}
@@ -252,23 +228,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 	}
 
 
-	/////////////////////////////
-	// LocationListener method //
-	/////////////////////////////
-	
-	public void locationChanged(LocationEvent e) {
-		FolderPanel folderPanel = e.getFolderPanel();
-		goBackItem.setEnabled(folderPanel.hasBackFolder());
-		goForwardItem.setEnabled(folderPanel.hasForwardFolder());
-		goToParentItem.setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
-	}
-
-	public void locationChanging(LocationEvent e) {
-	}
-	
-	public void locationCancelled(LocationEvent e) {
-	}
-	
 	///////////////////////////
 	// ActionListener method //
 	///////////////////////////
@@ -345,8 +304,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			mainFrame.getLastActiveTable().getFolderPanel().goForward();	
 		}
 		else if (source == goToParentItem) {
-			FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
-			folderPanel.trySetCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);	
+			mainFrame.getLastActiveTable().getFolderPanel().goToParent();
 		}
 		else if (source == sortByNameItem) {
 			mainFrame.getLastActiveTable().sortBy(FileTable.NAME);	
@@ -430,6 +388,29 @@ public class MainMenuBar extends JMenuBar implements ActionListener, LocationLis
 			emailFilesItem.setEnabled(filesSelected);
 		}
 		else if(source==viewMenu) {
+			FileTable activeTable = mainFrame.getLastActiveTable();
+			FolderPanel folderPanel = activeTable.getFolderPanel();
+			goBackItem.setEnabled(folderPanel.hasBackFolder());
+			goForwardItem.setEnabled(folderPanel.hasForwardFolder());
+			goToParentItem.setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
+
+			// Toggle current sort by menu item
+			int criteria = activeTable.getSortByCriteria();
+			switch (criteria) {
+				case FileTableModel.NAME:
+					sortByNameItem.setState(true);
+					break;
+				case FileTableModel.DATE:
+					sortByDateItem.setState(true);
+					break;
+				case FileTableModel.SIZE:
+					sortBySizeItem.setState(true);
+					break;
+				case FileTableModel.EXTENSION:
+					sortByExtensionItem.setState(true);
+					break;
+			}
+
 			showToolbarItem.setText(mainFrame.isToolbarVisible()?Translator.get("view_menu.hide_toolbar"):Translator.get("view_menu.show_toolbar"));
 			showCommandBarItem.setText(mainFrame.isCommandBarVisible()?Translator.get("view_menu.hide_command_bar"):Translator.get("view_menu.show_command_bar"));
 			showStatusBarItem.setText(mainFrame.isStatusBarVisible()?Translator.get("view_menu.hide_status_bar"):Translator.get("view_menu.show_status_bar"));

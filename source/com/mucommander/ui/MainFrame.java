@@ -9,6 +9,8 @@ import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.ui.connect.ServerConnectDialog;
 
+import com.mucommander.event.TableChangeListener;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 
@@ -17,7 +19,7 @@ import com.mucommander.conf.ConfigurationManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.URL;
+import java.util.Vector;
 
 
 /**
@@ -27,8 +29,6 @@ import java.net.URL;
  */
 public class MainFrame extends JFrame implements ComponentListener, KeyListener {
 	
-	private final static String FRAME_TITLE = "muCommander";
-
 	// Variables related to split pane	
 	private JSplitPane splitPane;
 	private int splitPaneWidth = -1;
@@ -58,17 +58,18 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	/** Is this MainFrame active in the foreground ? */
 	private boolean foregroundActive;
 
+	/** Registered TableChangeListener instances that receive events when current table changes */
+	private Vector tableChangeListeners = new Vector();
+
 
 	/**
 	 * Creates a new main frame, set to the given initial folders.
 	 */
 	public MainFrame(AbstractFile initialFolder1, AbstractFile initialFolder2) {
-		super(FRAME_TITLE);
+		super();
 	
-		// Resolve the URL of the image within the JAR file
-		URL imageURL = getClass().getResource("/icon16.gif");
-		// Set frame icon
-		setIconImage(new ImageIcon(imageURL).getImage());
+		// Set frame icon fetched in an image inside the JAR file
+		setIconImage(new ImageIcon(getClass().getResource("/icon16.gif")).getImage());
 
 		// Enable window resize
 		setResizable(true);
@@ -89,10 +90,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		table1 = folderPanel1.getFileTable();
         table2 = folderPanel2.getFileTable();
 
+		// Left table is the first to be active
 		lastActiveTable = table1;
 
-		folderPanel1.addLocationListener(WindowManager.getInstance());
-        folderPanel2.addLocationListener(WindowManager.getInstance());
+		// Register WindowManager to receive location evvents
+		WindowManager windowManager = WindowManager.getInstance();
+		folderPanel1.addLocationListener(windowManager);
+        folderPanel2.addLocationListener(windowManager);
 
 		// Create toolbar and show it only if it hasn't been disabled in the preferences
 		this.toolbar = new ToolBar(this);
@@ -101,13 +105,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 
 		folderPanel1.addLocationListener(toolbar);
 		folderPanel2.addLocationListener(toolbar);
+
+		// Register WindowManager to receive table change events
+		addTableChangeListener(windowManager);
 		
 		// Create menu bar (has to be created after toolbar)
 		MainMenuBar menuBar = new MainMenuBar(this);
 		setJMenuBar(menuBar);
-
-        folderPanel1.addLocationListener(menuBar);
-        folderPanel2.addLocationListener(menuBar);
 
 		// Enables folderPanel window resizing
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
@@ -133,7 +137,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// Add a 3-pixel gap between table and status/command bar
 		southPanel.setInsets(new Insets(3, 0, 0, 0));
 	
-		// Create and add status bar
+		// Add status bar
 		this.statusBar = new StatusBar(this);
 		southPanel.add(statusBar);
 		
@@ -156,6 +160,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// WindowManager takes of catching close events and do the rest
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
+		// Set window title
+		updateWindowTitle();
+
 //		// Used by setNoEventsMode()
 //		JComponent glassPane = (JComponent)getGlassPane();
 //		glassPane.addMouseListener(new MouseAdapter() {});
@@ -166,7 +173,31 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 //setUndecorated(true);
 //java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
 	}
-	
+
+
+	/**
+	 * Registers the given TableChangeListener to receive events when current table changes.
+	 */
+	public void addTableChangeListener(TableChangeListener tableChangeListener) {
+		tableChangeListeners.add(tableChangeListener);
+	}
+
+	/**
+	 * Unregisters the given TableChangeListener so that it will no longer receive events when current table changes.
+	 */
+	public void removeTableChangeListener(TableChangeListener tableChangeListener) {
+		tableChangeListeners.remove(tableChangeListener);
+	}
+
+	/**
+	 * Fires table change events on registered TableChangeListener instances.
+	 */
+	private void fireTableChanged(FolderPanel folderPanel) {
+		int nbListeners = tableChangeListeners.size();
+		for(int i=0; i<nbListeners; i++)
+			((TableChangeListener)tableChangeListeners.elementAt(i)).tableChanged(folderPanel);
+	}
+
 
 	/**
 	 * Returns true if 'no events mode' is enabled.
@@ -259,13 +290,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * Shows/hide the status bar.
 	 */
 	public void setStatusBarVisible(boolean visible) {
-		// Update status bar info if status bar was previouly hidden and now visible
-		// as FileTable doesn't update status bar info when it is hidden
-		boolean updateStatusBarInfo = visible && !isStatusBarVisible();
+//		// Update status bar info if status bar was previouly hidden and now visible
+//		// as FileTable doesn't update status bar info when it is hidden
+//		boolean updateStatusBarInfo = visible && !isStatusBarVisible();
 		this.statusBar.setVisible(visible);
-		// Status bar needs to be visible before calling updateStatusBar()
-		if(updateStatusBarInfo)
-			lastActiveTable.updateStatusBar();
+//		// Status bar needs to be visible before calling updateStatusBar()
+//		if(updateStatusBarInfo)
+//			this.statusBar.updateStatusInfo();
 		validate();
 		ConfigurationManager.setVariable("prefs.show_status_bar", ""+visible);		
 	}
@@ -282,7 +313,14 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * Sets currently active FileTable (called by FolderPanel).
 	 */
 	void setLastActiveTable(FileTable table) {
-        this.lastActiveTable = table;
+        boolean activeTableChanged = lastActiveTable!=table;
+
+		if(activeTableChanged) {
+			this.lastActiveTable = table;
+
+			// Fire table change events on registered TableChangeListener instances.
+			fireTableChanged(table.getFolderPanel());
+		}
     }
 
 	
@@ -432,6 +470,15 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	void setForegroundActive(boolean foregroundActive) {
 //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("foregroundActive="+foregroundActive);
 		this.foregroundActive = foregroundActive;
+	}
+
+
+	/**
+	 * Update window title to reflect current active folder. To be called by WindowManager.
+	 */
+	public void updateWindowTitle() {
+		// Update window title
+		setTitle(getLastActiveTable().getCurrentFolder().getAbsolutePath()+" - muCommander");
 	}
 	
 	///////////////////////

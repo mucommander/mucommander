@@ -1,8 +1,9 @@
 package com.mucommander.ui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
+
+import com.mucommander.event.*;
 
 import com.mucommander.text.SizeFormatter;
 import com.mucommander.text.Translator;
@@ -10,13 +11,19 @@ import com.mucommander.text.Translator;
 import com.mucommander.conf.ConfigurationManager;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FSFile;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
 
 /**
  * 
  *
  * @author Maxence Bernard
  */
-public class StatusBar extends JPanel implements ActionListener, MouseListener {
+public class StatusBar extends JPanel implements ActionListener, MouseListener, TableChangeListener, LocationListener, ComponentListener {
 
 	private MainFrame mainFrame;
 
@@ -50,26 +57,58 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener {
 		this.statusBarVolumeLabel = new JLabel("");
 		add(statusBarVolumeLabel, BorderLayout.EAST);
 
+		// Show/hide this status bar based on user preferences
 		if(ConfigurationManager.getVariable("prefs.show_status_bar", "true").equals("false"))
 			setVisible(false);
 		
+		// Catch location events to update status bar info when folder is changed
+		mainFrame.getFolderPanel1().addLocationListener(this);
+		mainFrame.getFolderPanel2().addLocationListener(this);
+		
+		// Catch table change events to update status bar info when current table has changed
+		mainFrame.addTableChangeListener(this);
+		
+		// Catch mouse events to pop up a menu on right-click
 		statusBarFilesLabel.addMouseListener(this);
 		statusBarVolumeLabel.addMouseListener(this);
 		addMouseListener(this);
+		
+		// Catch component events to be notified when this component is made visible
+		// and update status info
+		addComponentListener(this);
 	}
 
 
 	/**
-	 * Sets info (nb of selected files, total size) about currently selected files, displayed on the left-side of this status bar.
-	 * 
-	 * <p>This method should only be called by FileTable.</p>
-	 *
-	 * @param selectedFile currently select file, can be <code>null</code>
-	 * @param nbMarkedFiles number of marked files, can be 0
-	 * @param markedTotalSize combined size of marked files, 0 if no file has been marked
-	 * @param fileCount number of files in folder
+	 * Updates info displayed on the status bar (currently selected files and volume info).
 	 */
-	public void setSelectedFilesInfo(AbstractFile selectedFile, int nbMarkedFiles, long markedTotalSize, int fileCount) {
+	public void updateStatusInfo() {
+		updateSelectedFilesInfo();
+		updateVolumeInfo();
+	}
+	
+
+	/**
+	 * Updates info about currently selected files ((nb of selected files, combined size), displayed on the left-side of this status bar.
+	 */
+	public void updateSelectedFilesInfo() {
+		if(!isVisible())
+			return;
+
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+
+		FileTable currentFileTable = mainFrame.getLastActiveTable();
+
+		// Currently select file, can be null
+		AbstractFile selectedFile = currentFileTable.getSelectedFile();
+		FileTableModel tableModel = (FileTableModel)currentFileTable.getModel();
+		// Number of marked files, can be 0
+		int nbMarkedFiles = tableModel.getNbMarkedFiles();
+		// Combined size of marked files, 0 if no file has been marked
+		long markedTotalSize = tableModel.getTotalMarkedSize();
+		// number of files in folder
+		int fileCount = tableModel.getFileCount();
+
 		// Update files info based on marked files if there are some, or currently selected file otherwise
 		int nbSelectedFiles = 0;
 		if(nbMarkedFiles==0 && selectedFile!=null)
@@ -101,31 +140,56 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener {
 	
 	
 	/**
-	 * Sets info (free space, total space) about current volume, displayed on the right-side of this status bar.
-	 *
-	 * <p>This method should only be called by FileTable.</p>
-	 *
-	 * @param volumeFree free space on current volume, -1 if this information is not available 
-	 * @param volumeTotal total space on current volume, -1 if this information is not available 
+	 * Updates info about current volume (free space, total space), displayed on the right-side of this status bar.
 	 */
-	public void setVolumeInfo(long volumeFree, long volumeTotal) {
-		String volumeInfo;
+	private void updateVolumeInfo() {
+		if(!isVisible())
+			return;
 
-		if(volumeFree!=-1) {
-			volumeInfo = SizeFormatter.format(volumeFree, VOLUME_INFO_SIZE_FORMAT);
-			if(volumeTotal!=-1)
-				volumeInfo += " / "+ SizeFormatter.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
-			volumeInfo = Translator.get("status_bar.volume_free", volumeInfo);
-		}
-		else if(volumeTotal!=-1) {
-			volumeInfo = SizeFormatter.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
-			volumeInfo = Translator.get("status_bar.volume_capacity", volumeInfo);
-		}
-		else {
-			volumeInfo = "";
-		}
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
-		statusBarVolumeLabel.setText(volumeInfo);
+		final AbstractFile currentFolder = mainFrame.getLastActiveTable().getCurrentFolder();
+
+		// Retrieves free and total volume space.
+		// Perform volume info retrieval in a separate thread as this method may be called
+		// by the event thread and it can take a while, we want to return as soon as possible
+		new Thread() {
+			public void run() {
+				// Free space on current volume, -1 if this information is not available 
+				long volumeFree;
+				// Total space on current volume, -1 if this information is not available 
+				long volumeTotal;
+
+				// Folder is a local file : call getVolumeInfo() instead of separate calls to getFreeSpace()
+				// and getTotalSpace() as it is twice as fast
+				if(currentFolder instanceof FSFile) {
+					long volumeInfo[] = ((FSFile)currentFolder).getVolumeInfo();
+					volumeTotal = volumeInfo[0];
+					volumeFree = volumeInfo[1];
+				}
+				// Any other file kind
+				else {
+					volumeFree = currentFolder.getFreeSpace();
+					volumeTotal = currentFolder.getTotalSpace();
+				}
+
+				String volumeInfo;
+				if(volumeFree!=-1) {
+					volumeInfo = SizeFormatter.format(volumeFree, VOLUME_INFO_SIZE_FORMAT);
+					if(volumeTotal!=-1)
+						volumeInfo += " / "+ SizeFormatter.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
+					volumeInfo = Translator.get("status_bar.volume_free", volumeInfo);
+				}
+				else if(volumeTotal!=-1) {
+					volumeInfo = SizeFormatter.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
+					volumeInfo = Translator.get("status_bar.volume_capacity", volumeInfo);
+				}
+				else {
+					volumeInfo = "";
+				}
+				statusBarVolumeLabel.setText(volumeInfo);
+			}
+		}.start();
 	}
 
 
@@ -163,6 +227,36 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener {
 		}        
 	}
 
+	/////////////////////////////////
+	// TableChangeListener methods //
+	/////////////////////////////////
+	
+	public void tableChanged(FolderPanel folderPanel) {
+		if(isVisible())
+			updateStatusInfo();
+	}
+
+	//////////////////////////////
+	// LocationListener methods //
+	//////////////////////////////
+	
+	public void locationChanged(LocationEvent e) {
+		if(isVisible())
+			updateStatusInfo();
+	}
+
+	public void locationChanging(LocationEvent e) {
+		// Show a message in the status bar saying that folder is being changed
+		// No need to waste precious cycles if status bar is not visible
+		if(isVisible())
+			setStatusInfo(Translator.get("status_bar.connecting_to_folder"));
+	}
+	
+	public void locationCancelled(LocationEvent e) {
+		if(isVisible())
+			updateStatusInfo();
+	}
+	
 	
 	///////////////////////////
 	// MouseListener methods //
@@ -173,7 +267,7 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener {
 		if(mainFrame.getNoEventsMode())
 			return;
 
-		// Right clicking on the toolbar brings up a popup menu
+		// Right clicking on the toolbar brings up a popup menu that allows the user to hide this status bar
 		int modifiers = e.getModifiers();
 		if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {
 //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
@@ -198,5 +292,25 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener {
 	}
 
 	public void mouseExited(MouseEvent e) {
-	}		
+	}	
+	
+	
+	///////////////////////////////
+	// ComponentListener methods //
+	///////////////////////////////
+	
+	public void componentShown(ComponentEvent e) {
+		// Invoked when the component has been made visible.
+		// Status bar needs to be updated sihce it is not updated when not visible
+		updateStatusInfo();
+	}     
+
+	public void componentHidden(ComponentEvent e) {
+	}
+
+	public void componentMoved(ComponentEvent e) {
+	}
+
+	public void componentResized(ComponentEvent e) {
+	}
 }

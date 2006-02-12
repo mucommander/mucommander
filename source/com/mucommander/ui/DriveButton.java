@@ -61,7 +61,11 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		
 		// For Mac OS X whose minimum width for buttons is enormous
 		setMinimumSize(new Dimension(40, (int)getPreferredSize().getHeight()));
+
+		// Listen to location events to update drive button when folder changes
+		folderPanel.addLocationListener(this);
 		
+		// Listen to action events to popup a list of drives when button is pressed
 		addActionListener(this);
 	}
 

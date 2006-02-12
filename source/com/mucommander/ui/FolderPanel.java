@@ -190,11 +190,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
 			// Show some progress in the progress bar to give hope
 			locationField.setProgressValue(10);
 
-			// Show a message in the status bar saying that folder is being changed
-			// No need to waste precious cycles if status bar is not visible
-			if(mainFrame.isStatusBarVisible())
-				mainFrame.getStatusBar().setStatusInfo(Translator.get("status_bar.connecting_to_folder"));
-
 /*
 			// Start a new thread which will popup a dialog after a number of seconds
 			new Thread() {
@@ -439,12 +434,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 			disableNoEventsMode();
 
 			if(!folderChangedSuccessfully) {
-				// Restore status bar info only if folder change wasn't completed
-				// as FileTable automatically updates status bar if folder has changed.
-				// No need to waste precious cycles if status bar is not visible
-				if(mainFrame.isStatusBarVisible())
-					fileTable.updateStatusBar();
-
 				// Restore current folder's path
 				locationField.setText(currentFolder.getAbsolutePath());
 
@@ -476,10 +465,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		this.locationPanel = new XBoxPanel();
 		locationPanel.setInsets(new Insets(0, 6, 6, 0));
 
+		// Create and add drive button
 		this.driveButton = new DriveButton(this);
-		// Listen to location changed events to update button's text when folder changes
-		addLocationListener(driveButton);
-		
 		locationPanel.add(driveButton);
 		locationPanel.addSpace(6);
 
@@ -598,7 +585,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	/**
 	 * Notifies all registered listeners that current folder has changed on this FolderPanel.
 	 */
-	public void fireLocationChanged() {
+	private void fireLocationChanged() {
 		for(int i=0; i<locationListeners.size(); i++)
 			((LocationListener)locationListeners.elementAt(i)).locationChanged(new LocationEvent(this));
 	}
@@ -821,25 +808,10 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 			history.add(folder);
 		}
 
-		// Save last folder recallable on startup (local directory)
-//		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory())
-
 		// Save last folder recallable on startup only if :
 		//  - it is a directory on a local filesytem
 		//  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
 		// Java from triggering that dreaded 'Drive not ready' popup.
-/*
-		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory()) {
-			int osFamily = PlatformManager.getOSFamily();
-			AbstractFile rootFolder = folder.getRoot();
-			if((osFamily!=PlatformManager.WINDOWS_9X && osFamily!=PlatformManager.WINDOWS_NT)
-			 || (rootFolder.canWrite() && !FileSystemView.getFileSystemView().isFloppyDrive(new java.io.File(rootFolder.getAbsolutePath())))) {
-				this.lastSavableFolder = folder.getAbsolutePath();
-				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastSavableFolder= "+lastSavableFolder);
-			}
-		}
-*/
-		
 		if(folder.getURL().getProtocol().equals("file") && folder.isDirectory() && !((FSFile)folder.getRoot()).guessRemovableDrive()) {
 			this.lastSavableFolder = folder.getAbsolutePath();
 			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastSavableFolder= "+lastSavableFolder);
@@ -847,13 +819,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 		// Notify listeners that location has changed
 		fireLocationChanged();
-		
-		// LocationPanel and FileTable already ask for repaint on their own, but since they are executed from a
-		// separate thread (not from the event dispatcher thread), they can occur before the components have properly
-		// updated themselves and thus cause visual glitches.
-		// So we ask for an extra repaint here which will occur after any pending events
-//		SwingUtilities.invokeLater(new Thread() { public void run() { locationPanel.repaint(); fileTable.repaint(); }});
-//		SwingUtilities.invokeLater(new Thread() { public void run() { locationPanel.repaint(); }});
 	}
 
 
@@ -877,6 +842,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		AbstractFile folder = (AbstractFile)history.elementAt(++historyIndex);
 		trySetCurrentFolder(folder, false);
 	}
+
+	public synchronized void goToParent() {
+		AbstractFile parent = getCurrentFolder().getParent();
+		if(parent!=null)
+			trySetCurrentFolder(parent, true);	
+	}
+
 
 	/**
 	 * Returns <code>true</code> if there is at least one folder 'back' in the history.

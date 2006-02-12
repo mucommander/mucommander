@@ -4,6 +4,7 @@ package com.mucommander.ui;
 import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.ui.bookmark.AddBookmarkDialog;
 import com.mucommander.ui.bookmark.EditBookmarksDialog;
+import com.mucommander.ui.table.FileTable;
 
 import com.mucommander.text.Translator;
 import com.mucommander.file.FileSet;
@@ -19,7 +20,7 @@ import java.awt.event.*;
  *
  * @author Maxence Bernard
  */
-public class ToolBar extends JToolBar implements ActionListener, LocationListener, MouseListener {
+public class ToolBar extends JToolBar implements ActionListener, TableChangeListener, LocationListener, MouseListener {
 	private MainFrame mainFrame;
 
 	/** Right-click popup menu */
@@ -111,8 +112,10 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		buttons[ZIP_INDEX].addMouseListener(this);
 		buttons[UNZIP_INDEX].addMouseListener(this);
 	
-		// Add a mouse listener to create popup menu when right-clicking
-		// on the toolbar
+		// Register for table change events to update buttons state when current table has changed
+		mainFrame.addTableChangeListener(this);
+	
+		// Register for mouse events to popup a menu on right-clicks on the toolbar
 		this.addMouseListener(this);
 	}
 
@@ -172,7 +175,21 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		return -1;
 	}
 
+
+	/**
+	 * Update buttons state (enabled/disabled) based on current FolderPanel's state.
+	 */
+	private void updateButtonsState(FolderPanel folderPanel) {
+		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
+		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
+		buttons[STOP_INDEX].setEnabled(false);
+		buttons[PARENT_INDEX].setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
+	}
 	
+	////////////////////////
+	// Overridden methods //
+	////////////////////////
+
 	/**
 	 * Overridden method to load/unload toolbar icons depending on this Toolbar's visible state.
 	 * In other words, icons are only loaded when Toolbar is visible.
@@ -213,16 +230,22 @@ public class ToolBar extends JToolBar implements ActionListener, LocationListene
 		return false;
 	}
 
+
+	/////////////////////////////////
+	// TableChangeListener methods //
+	/////////////////////////////////
+	
+	public void tableChanged(FolderPanel folderPanel) {
+		updateButtonsState(folderPanel);
+	}
+
+
 	//////////////////////////////
 	// LocationListener methods //
 	//////////////////////////////
 	
 	public void locationChanged(LocationEvent e) {
-		FolderPanel folderPanel = e.getFolderPanel();
-		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
-		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
-		buttons[STOP_INDEX].setEnabled(false);
-		buttons[PARENT_INDEX].setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
+		updateButtonsState(e.getFolderPanel());
 	}
 
 	public void locationChanging(LocationEvent e) {

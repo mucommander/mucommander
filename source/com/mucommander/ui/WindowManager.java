@@ -24,7 +24,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class WindowManager implements ActionListener, WindowListener, LocationListener, ConfigurationListener {
+public class WindowManager implements ActionListener, WindowListener, TableChangeListener, LocationListener, ConfigurationListener {
 
 	/** MainFrame (main muCommander window) instances */
 	private static Vector mainFrames;
@@ -102,6 +102,13 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 	 */
 	public MainFrame getCurrentMainFrame() {
 		return currentMainFrame;
+	}
+	
+	/**
+	 * Returns a Vector of all MainFrame instances the application has.
+	 */
+	public Vector getMainFrames() {
+		return mainFrames;
 	}
 	
 	
@@ -379,32 +386,46 @@ public class WindowManager implements ActionListener, WindowListener, LocationLi
 		}
 	}
 
-	//////////////////////////////
-	// LocationListener methods //
-	//////////////////////////////
-	
-	/**
-	 * Notifies this MainFrame's currentFolder has changed so
-	 * that window title and menu items can be updated.
-	 */
-	public void locationChanged(LocationEvent e) {
-		FolderPanel folderPanel = e.getFolderPanel();
-		AbstractFile currentFolder = folderPanel.getCurrentFolder();
-		MainFrame mainFrame = folderPanel.getMainFrame();
-		String currentPath = currentFolder.getAbsolutePath();
-		mainFrame.setTitle(currentPath+" - muCommander");
 
+	/**
+	 * Updates the content of Window menus of every MainFrame instances,
+	 * to reflect a folder or table change on a MainFrame.
+	 *
+	 * param folderPanel the folderPanel which change needs to be reflected.
+	 */
+	private void updateWindowMenus(FolderPanel folderPanel) {
 		JMenu windowMenu;
-		int frameIndex = mainFrames.indexOf(mainFrame);
-		
+		MainFrame mainFrame = folderPanel.getMainFrame();
+		int frameIndex = mainFrames.indexOf(mainFrame);		
 		// frameIndex==-1 each time a new MainFrame is created by createNewMainFrame()
 		// since it is not yet in the mainFrames vector
 		if (frameIndex!=-1) {
 			for(int i=0; i<mainFrames.size(); i++) {
 				windowMenu = ((MainMenuBar)((MainFrame)mainFrames.elementAt(i)).getJMenuBar()).getWindowMenu();
-				windowMenu.getItem(frameIndex).setText((frameIndex+1)+" "+currentPath);
+				windowMenu.getItem(frameIndex).setText((frameIndex+1)+" "+folderPanel.getCurrentFolder().getAbsolutePath());
 			}
 		}
+		
+		// Update window title to reflect new active folder
+		mainFrame.updateWindowTitle();
+	}
+
+	/////////////////////////////////
+	// TableChangeListener methods //
+	/////////////////////////////////
+	
+	public void tableChanged(FolderPanel folderPanel) {
+		// Update main frames' window menus to reflect current table's folder
+		updateWindowMenus(folderPanel);
+	}
+
+	//////////////////////////////
+	// LocationListener methods //
+	//////////////////////////////
+	
+	public void locationChanged(LocationEvent e) {
+		// Update main frames' window menus to reflect new folder's location
+		updateWindowMenus(e.getFolderPanel());
 	}	
 
 	public void locationChanging(LocationEvent e) {
