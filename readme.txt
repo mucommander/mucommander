@@ -32,7 +32,7 @@ Legal stuff
 You must read and accept the license located in the 'license.txt' file
 in this package prior to using muCommander.
 
-muCommander uses the following 3rd party works :
+muCommander uses the great following 3rd party works :
 
 - the jCIFS library released under the LGPL license to provide SMB support.
  jCIFS can be found at http://jcifs.samba.org .
