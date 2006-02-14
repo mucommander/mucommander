@@ -29,7 +29,7 @@ public class LRUCache {
 	private long eldestExpirationDate = Long.MAX_VALUE;
 
 	/** Specifies whether cache hit/miss counters should be updated */ 
-	private final static boolean UPDATE_CACHE_COUNTERS = true;	
+	private final static boolean UPDATE_CACHE_COUNTERS = false;	
 	private int nbHits;
 	private int nbMisses;	
 

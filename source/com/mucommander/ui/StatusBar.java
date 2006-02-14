@@ -14,7 +14,6 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 
 import com.mucommander.cache.LRUCache;
-import com.mucommander.cache.LRUObject;
 
 import javax.swing.*;
 import java.awt.*;

@@ -17,9 +17,9 @@ public abstract class AbstractFile {
 	/** URL representing this file */
 	protected FileURL fileURL;
 
-	/** Static LRUCache instance that caches frequently accessed files */
+	/** Static LRUCache instance that caches frequently accessed AbstractFile instances */
 	private static LRUCache fileCache = new LRUCache(1000);
-	/** Static LRUCache instance that caches frequently accessed file urls */
+	/** Static LRUCache instance that caches frequently accessed FileURL instances */
 	private static LRUCache urlCache = new LRUCache(1000);
 
 	/**
@@ -99,7 +99,7 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 			// Try to find a cached FileURL instance
 			fileURL = (FileURL)urlCache.get(absPath);
 //			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getNbHits()+"/"+urlCache.getNbMisses());
+//			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getNbHits()+"/"+urlCache.getNbMisses());
 
 			if(fileURL==null) {
 				// No cached value found, create the FileURL and add it to the FileURL cache 
@@ -176,7 +176,7 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 			String urlRep = fileURL.getStringRep(true);
 			file = (AbstractFile)fileCache.get(urlRep);
 //			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((file==null?"Adding to file cache:":"File cache hit: ")+urlRep);
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getNbHits()+"/"+fileCache.getNbMisses());
+//			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getNbHits()+"/"+fileCache.getNbMisses());
 
 			if(file==null) {
 				file = new FSFile(fileURL);

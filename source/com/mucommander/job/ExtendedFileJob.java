@@ -54,7 +54,7 @@ public abstract class ExtendedFileJob extends FileJob {
 		while ((read=in.read(buffer, 0, buffer.length))!=-1) {
 			if(isInterrupted())
 				return false;
-			
+
 			out.write(buffer, 0, read);
 			nbBytesProcessed += read;
 			currentFileProcessed += read;
