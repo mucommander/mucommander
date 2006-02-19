@@ -56,7 +56,7 @@ New features:
  - New icon set for toolbar and command bar
  - New column that shows file type icons and allows to sort by extension
  - New toolbar shortcuts: 'Add bookmark', 'Edit bookmarks', 'Stop'
- - Drives system icons now shown in the drive selection menu under Windows
+ - Drives system icons now displayed in the drive selection menu under Windows
  - Simplified Chinese translation by Woodie
  - Slovenian translation by Joze Kovacic
 
@@ -71,8 +71,8 @@ Improvements:
  - Commons Net FTP library upgraded to version 1.4.1
 
 Bug fixes:
- - Restored compatibility for Java 1.3 broken in beta1 (SFTP not available under Java 1.3)
- - Fixed 'Drive not ready' Windows problem when last folder before app shutdown was a CD/floppy drive
+ - Restored compatibility for Java 1.3 broken in beta1 (Note: SFTP not available under Java 1.3)
+ - Fixed 'Drive not ready' Windows problem when last drive before app shutdown was a CD/floppy drive
  - Fixed character encoding issues in bookmarks and preferences files
  - Fixed 'Reveal in Finder' not working for regular files in beta1
  - Fixed some unwanted blinkings when changing current folder in beta1
@@ -80,7 +80,7 @@ Bug fixes:
  - Fixed status bar not being refreshed under some rare circumstances
 
 Known issues:
- - Incomplete Czech, German and Hungarian translations (0.8 features missing) 
+ - Incomplete Czech, German and Hungarian translations (new 0.8 features untranslated) 
  - SFTP unavailble under Java 1.3
  - Mac OS X-specific files not copied properly
  - Image viewer doesn't free up memory properly under Mac OS X
