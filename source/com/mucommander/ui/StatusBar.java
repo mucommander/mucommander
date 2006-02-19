@@ -73,6 +73,8 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 		// Show/hide this status bar based on user preferences
 		if(ConfigurationManager.getVariable("prefs.show_status_bar", "true").equals("false"))
 			setVisible(false);
+		else
+			updateStatusInfo();
 		
 		// Catch location events to update status bar info when folder is changed
 		mainFrame.getFolderPanel1().addLocationListener(this);
@@ -96,6 +98,8 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 	 * Updates info displayed on the status bar (currently selected files and volume info).
 	 */
 	public void updateStatusInfo() {
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+
 		updateSelectedFilesInfo();
 		updateVolumeInfo();
 	}
@@ -323,8 +327,8 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 	///////////////////////////////
 	
 	public void componentShown(ComponentEvent e) {
-		// Invoked when the component has been made visible.
-		// Status bar needs to be updated sihce it is not updated when not visible
+		// Invoked when the component has been made visible (apparently not called when just created)
+		// Status bar needs to be updated sihce it is not updated anymore when not visible
 		updateStatusInfo();
 	}     
 
