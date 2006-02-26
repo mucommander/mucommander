@@ -27,22 +27,23 @@ public class Translator {
 	/** Hashtable that maps text keys to values */
 	private static Hashtable dictionary;
 
-	/** List of all available languages in the dictionary file */
+	/** List of all available languages in the dictionary file (UPPER CASED) */
 	private static Vector availableLanguages;
 
-	/** Current language (2-letter language code) */
+	/** Current language (UPPER CASED) */
 	private static String language;
-
 
 	/** Path to the dictionary file inside the JAR file */
 	private final static String DICTIONARY_FILE_PATH = "/dictionary.txt";
 
-	/** Default language when no language is specified in the preferences file
-		and system's language has no dictionary */
-	private final static String DEFAULT_LANGUAGE = "en";
+	/** Default language (UPPER CASED) */
+	private final static String DEFAULT_LANGUAGE = "EN";
 
 	/** Preferred language's configuration key */
 	private final static String LANGUAGE_CONFIGURATION_KEY = "prefs.language";
+
+	/** Key for available languages */
+	private final static String AVAILABLE_LANGUAGES_KEY = "available_languages";
 
 	/** Singleton instance */
 	private final static Translator instance = new Translator(DICTIONARY_FILE_PATH);
@@ -54,56 +55,59 @@ public class Translator {
 	 * @param filePath the path to the dictionary file.
 	 */
 	private Translator(String filePath) {
-		
-		String langVal = ConfigurationManager.getVariable(LANGUAGE_CONFIGURATION_KEY);
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language in prefs: "+langVal);
-
-		// If language is not set in preferences 
-		if(langVal==null) {
-			// Try to match language with the system's language, only if the system's language
-			// has a dictionary, otherwise use default language (English).
-			String languages[] = getAvailableLanguages();
-			String localeLang = Locale.getDefault().getLanguage();
-
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language not set, trying to match system's language ("+localeLang+")");
-			
-			for(int i=0; i<languages.length; i++) {
-				if(languages[i].equalsIgnoreCase(localeLang)) {
-					Translator.language = localeLang;
-					break;
-				}
-			}
-
-			// System's language doesn't have a dictionary, fall back to default language (English)
-			if(Translator.language==null) {
-				Translator.language = DEFAULT_LANGUAGE;
-
-				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No dictionary matching "+localeLang+", falling back to English");
-			}
-			
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language has been set to "+Translator.language);
-
-			// Set language to configuration file
-			ConfigurationManager.setVariable(LANGUAGE_CONFIGURATION_KEY, Translator.language);
-		}
-		else {
-			Translator.language = langVal;
-		}
-
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Translator language= "+Translator.language);
-
 		try {
-			loadDictionaryFile(filePath, language);
+			loadDictionaryFile(filePath);
 		} catch (IOException e) {
 			new RuntimeException("Translator.init: unable to load dictionary file "+e);
 		}
 	}
 
+
+	/**
+	 * Determines and sets current language based on the given list of available languages
+	 * and language in preferences if it has been set and if not, on system's language.
+	 * <p>
+	 * If the language set in preferences or the system's language is not available, use default language (English).
+	 */
+	private static void determineCurrentLanguage(Vector availableLanguages) {
+		String lang = ConfigurationManager.getVariable(LANGUAGE_CONFIGURATION_KEY);
+
+		if(lang==null) {
+			// language is not set in preferences, use system's language
+			// Try to match language with the system's language, only if the system's language
+			// has values in dictionary, otherwise use default language (English).
+			lang = Locale.getDefault().getLanguage();
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language not set in preferences, trying to match system's language ("+lang+")");
+		}
+		else {
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language in prefs: "+lang);
+		}
+		
+		lang = lang.toUpperCase();
+		
+		// Determines if language is one of the languages declared as available
+		if(availableLanguages.contains(lang)) {
+			// Language is available
+			Translator.language = lang;
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language "+lang+" is available.");
+		}
+		else {
+			// Language is not available, fall back to default language (English)
+			Translator.language = DEFAULT_LANGUAGE;
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language "+lang+" is not available, falling back to default language "+DEFAULT_LANGUAGE);
+		}
+		
+		// Set preferred language in configuration file
+		ConfigurationManager.setVariable(LANGUAGE_CONFIGURATION_KEY, Translator.language);
+
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Current language has been set to "+Translator.language);
+	}
+	
 	
 	/**
 	 * Reads the dictionary file which contains localized text entries.
 	 */
-	private void loadDictionaryFile(String filePath, String language) throws IOException {
+	private void loadDictionaryFile(String filePath) throws IOException {
 		availableLanguages = new Vector();
 		dictionary = new Hashtable();
 
@@ -121,8 +125,25 @@ public class Translator {
 
 				try {
 					// Sets delimiter to ':'
-					key = st.nextToken(":");
-					lang = st.nextToken().toLowerCase();
+					key = st.nextToken(":").trim();
+					
+					// Special key that lists available languages, must
+					// be defined before any other entry
+					if(Translator.language==null && key.equals(AVAILABLE_LANGUAGES_KEY)) {
+						// Parse comma separated languages
+						st = new StringTokenizer(st.nextToken(), ",\n");
+						while(st.hasMoreTokens())
+							availableLanguages.add(st.nextToken().trim().toUpperCase());
+
+						if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Available languages= "+availableLanguages);
+
+						// Determines current language based on available languages and preferred language (if set) or sytem's language 
+						determineCurrentLanguage(availableLanguages);
+
+						continue;
+					}
+					
+					lang = st.nextToken().toUpperCase().trim();
 
 					// Delimiter is now line break
 					text = st.nextToken("\n");
@@ -140,12 +161,8 @@ public class Translator {
 					while ((pos = text.indexOf("\\u", pos))!=-1)
 						text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
 
-					// Add any new language to the list of available languages
-					if(!availableLanguages.contains(lang))
-						availableLanguages.add(lang);
-
 					// Add entry for current language, or for default language if a value for current language wasn't already set
-					if(lang.equalsIgnoreCase(language) || (lang.equalsIgnoreCase(DEFAULT_LANGUAGE) && dictionary.get(key)==null))
+					if(lang.equals(language) || (lang.equals(DEFAULT_LANGUAGE) && dictionary.get(key)==null))
 						put(key, text);
 					
 					nbEntries++;
@@ -216,9 +233,6 @@ public class Translator {
 	 * @param paramValues array of parameters which will be used as values for variables.
 	 */
 	public static String get(String key, String paramValues[]) {
-		// Gets the dictionary for this language
-		language = language.toLowerCase();
-
 		// Returns the localized text
 		String text = (String)dictionary.get(key.toLowerCase());
 

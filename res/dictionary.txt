@@ -16,6 +16,9 @@
 #  puts the variable at the end as well.
 #  
 
+# Available languages, must be declared before any other entry
+available_languages:EN,FR,DE,ES,CS,ZH_CN,ZH_TW,PL,HU,RU,SI
+
 #############
 # Languages #
 #############
