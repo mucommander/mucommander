@@ -3,7 +3,6 @@ package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
 
-import java.io.IOException;
 import java.io.File;
 
 import java.util.Vector;
@@ -19,13 +18,17 @@ import java.awt.*;
  */
 public class PlatformManager {
 
-	/** OS family we're running on (see constants) */
+	/** OS family muCommander is running on (see constants) */
 	private final static int osFamily;
 
-	/** Java version we're running (see constants) */
+	/** Java version muCommander is running on (see constants) */
 	private final static int javaVersion;
 
-	// OS types
+	/** Unix desktop muCommander is running on (see constants), used only if OS family
+	 * is LINUX, SOLARIS or OTHER */
+	private static int unixDesktop;
+
+	// OS families
 	
 	/** Windows 95, 98, Me */
 	public final static int WINDOWS_9X = 10;
@@ -48,6 +51,19 @@ public class PlatformManager {
 
 	/** Other OS */
 	public final static int OTHER = 0;
+
+
+	// Unix desktops
+
+	/** Unknown desktop */
+	public final static int UNKNOWN_DESKTOP = 0;
+
+	/** KDE desktop */
+	public final static int KDE_DESKTOP = 1;
+
+	/** GNOME desktop */
+	public final static int GNOME_DESKTOP = 2;
+
 
 	// Java versions
 
@@ -119,10 +135,50 @@ public class PlatformManager {
 			osFamily = OTHER;
 		}
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected OS family value = "+osFamily);
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected OS family value = "+osFamily);
+
+		// Unix desktop (KDE/GNOME) detection, only if OS is Linux, Solaris or Other (BSD)
+
+//		if(osFamily==LINUX || osFamily==SOLARIS || osFamily==OTHER) {
+		if(osFamily==MAC_OS_X) {
+			unixDesktop = UNKNOWN_DESKTOP;
+
+			// Are we running on KDE or GNOME ?
+			// First, we look for typical KDE/GNOME environment variables, 
+			// but we can't rely on them being defined, as they only have a value if muCommander was launched
+			// with proper java -D options (-> mucommander.sh script), and will be null otherwise (-> java -jar mucommander.jar)
+			String envVar;
+			if((envVar=System.getProperty("KDE_FULL_SESSION"))!=null && !envVar.equals(""))
+				unixDesktop = KDE_DESKTOP;
+			else if((envVar=System.getProperty("GOME_DESKTOP_SESSION_ID"))!=null && !envVar.equals(""))
+				unixDesktop = GNOME_DESKTOP;
+			else {
+				// At this point, muCommander was either not started from the shell script (null environment variables)
+				// or it is simply not running on KDE or GNOME, let's figure out.
+				// -> check if 'kfmclient' (KDE's equivalent of OS X's open command) or 'gnome-open' (GNOME's equivalent of OS X's open command) is available
+				try {
+					if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("trying to execute kfmclient");
+					
+					// Try to execute 'kfmclient' and see if exit value is 0 (normal termination)
+					if(Runtime.getRuntime().exec("kfmclient").waitFor()==0)
+						unixDesktop = KDE_DESKTOP;
+				} catch(Exception e) {}
+			
+				if(unixDesktop == UNKNOWN_DESKTOP)
+					// Try to execute 'gnome-open' and see if exit value is 0 (normal termination)
+					try {
+						if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("trying to execute gnome-open");
+						
+						if(Runtime.getRuntime().exec("gnome-open").waitFor()==0)
+							unixDesktop = GNOME_DESKTOP;
+					} catch(Exception e) {}
+			}
+
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected desktop value = "+unixDesktop);
+		}
+
 
 		// Java version detection //
-		
 		String javaVersionProp = System.getProperty("java.version");
 
 		// Java version property should never be null or empty, but better be safe than sorry ... 
@@ -163,7 +219,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected OS family val
 			javaVersion = JAVA_1_5;
 		}
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version value = "+javaVersion);
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version value = "+javaVersion);
 	}
 
 	
@@ -303,7 +359,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 	 * in a new browser window.
 	 */
 	public static boolean canOpenURL() {
-		return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT;
+		return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT || unixDesktop==KDE_DESKTOP || unixDesktop==GNOME_DESKTOP;
 	}
 
 
@@ -344,7 +400,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 
 			return Runtime.getRuntime().exec(tokens, null, new java.io.File(currentFolder.getAbsolutePath()));
 		}
-		catch(IOException e) {
+		catch(Exception e) {
             if(Debug.ON) Debug.trace("Error while executing "+command+": "+e);
             return null;
 		}
@@ -358,7 +414,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 	public static boolean open(String filePath, AbstractFile currentFolder) {
 		try {
 			// Here, we use exec(String[],String[],File) instead of exec(String,String[],File)
-			// so we parse the tokens ourself (messes up the command otherwise)
+			// so we can parse the tokens ourself (messes up the command otherwise)
 
             if(Debug.ON) Debug.trace("Opening "+filePath);
 
@@ -372,7 +428,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 			
             return true;
 		}
-		catch(IOException e) {
+		catch(Exception e) {
             if(Debug.ON) Debug.trace("Error while opening "+filePath+": "+e);
             return false;
 		}
@@ -398,7 +454,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
             if(Debug.ON) Debug.trace("Opening in finder "+file.getAbsolutePath());
             	Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", file.getAbsolutePath()}, null);
 		}
-		catch(IOException e) {
+		catch(Exception e) {
             if(Debug.ON) Debug.trace("Error while opening "+file.getAbsolutePath()+" in Finder: "+e);
 		}
 	}
