@@ -406,7 +406,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version 
 
 	private static String[] getOpenTokens(String filePath) {
 		// Under Win32, the 'start' command opens a file with the program
-		// registered with this file's extension (great!)
+		// registered for this file's extension (great!)
 		// Windows 95, 98, Me : syntax is start "myfile"
 		String tokens[];
 		if (osFamily == WINDOWS_9X) {
