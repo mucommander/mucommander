@@ -203,7 +203,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		// Keyboard shortuts
 		keysItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.shortcuts"), menuItemMnemonicHelper, null, this);
 		// Links to website, only shows for OSes that can launch the default browser to open URLs
-		if (PlatformManager.canOpenURL()) {
+		if (PlatformManager.canOpenURLInBrowser()) {
 			helpMenu.add(new JSeparator());
 			homepageItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.homepage"), menuItemMnemonicHelper, null, this);
 			forumsItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.forums"), menuItemMnemonicHelper, null, this);
@@ -358,13 +358,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 			new ShortcutsDialog(mainFrame).showDialog();
 		}
 		else if (source == homepageItem) {
-			PlatformManager.open(MUCOMMANDER_HOMEPAGE_URL, mainFrame.getLastActiveTable().getCurrentFolder());
+			PlatformManager.openURLInBrowser(MUCOMMANDER_HOMEPAGE_URL);
 		}
 		else if (source == forumsItem) {
-			PlatformManager.open(MUCOMMANDER_FORUMS_URL, mainFrame.getLastActiveTable().getCurrentFolder());
+			PlatformManager.openURLInBrowser(MUCOMMANDER_FORUMS_URL);
 		}
 		else if (source == donateItem) {
-			PlatformManager.open(MUCOMMANDER_DONATE_URL, mainFrame.getLastActiveTable().getCurrentFolder());
+			PlatformManager.openURLInBrowser(MUCOMMANDER_DONATE_URL);
 		}
 		else if (source == aboutItem) {
 			new AboutDialog(mainFrame).showDialog();

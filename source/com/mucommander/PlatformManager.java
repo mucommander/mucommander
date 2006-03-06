@@ -139,8 +139,7 @@ public class PlatformManager {
 
 		// Unix desktop (KDE/GNOME) detection, only if OS is Linux, Solaris or Other (BSD)
 
-//		if(osFamily==LINUX || osFamily==SOLARIS || osFamily==OTHER) {
-		if(osFamily==MAC_OS_X) {
+		if(osFamily==LINUX || osFamily==SOLARIS || osFamily==OTHER) {
 			unixDesktop = UNKNOWN_DESKTOP;
 
 			// Are we running on KDE or GNOME ?
@@ -355,15 +354,6 @@ public class PlatformManager {
 	
 	
 	/**
-	 * Returns <code>true</code> if the current platform is capable of opening the given URL
-	 * in a new browser window.
-	 */
-	public static boolean canOpenURL() {
-		return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT || unixDesktop==KDE_DESKTOP || unixDesktop==GNOME_DESKTOP;
-	}
-
-
-	/**
 	 * Executes an arbitrary command in the given folder and returns the corresponding Process object,
 	 * or <code>null</code> if the command failed to execute
 	 */
@@ -445,6 +435,7 @@ public class PlatformManager {
 	 *  <li>if the given file is a regular file, the enclosing folder's contents (Finder is unable to jump to the file unfortunately)
 	 * </ul>
 	 */
+/*
 	public static void openInFinder(AbstractFile file) {
 		try {
 			// Return if file is not on a local/mounted filesytem
@@ -461,12 +452,18 @@ public class PlatformManager {
             if(Debug.ON) Debug.trace("Error while opening "+file.getAbsolutePath()+" in Finder: "+e);
 		}
 	}
+*/
 
 
+	/**
+	 * Escapes space characters in the given string (replaces space characters ' ' instances by '\ ')
+	 * and returns the escaped string.
+	 */
 	private static String escapeSpaceCharacters(String filePath) {
 		StringBuffer sb = new StringBuffer();
 		char c;
-		for(int i=0; i<filePath.length(); i++) {
+		int len = filePath.length();
+		for(int i=0; i<len; i++) {
 			c = filePath.charAt(i);
 			if(c==' ')
 				sb.append("\\ ");
@@ -505,14 +502,12 @@ public class PlatformManager {
 		else if(unixDesktop == GNOME_DESKTOP) {
 			tokens = new String[] {"gnome-open", "\""+filePath+"\""};
 		}
+		// No launcher command for this platform, let's just execute the file in
+		// case it's an executable
 		else {
 			tokens = new String[] {escapeSpaceCharacters(filePath)};
 		}
 	
-		if(Debug.ON)
-			for(int i=0; i<tokens.length; i++)
-				Debug.trace("token["+i+"]");
-		
 		return tokens;
 	}
 
@@ -521,7 +516,7 @@ public class PlatformManager {
 	 * Opens/executes the given file, from the given folder and returns <code>true</code>
 	 * if the operation succeeded.
 	 */
-	public static boolean open(AbstractFile file) {
+	public static void open(AbstractFile file) {
 	    if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath());
 
 		AbstractFile currentFolder = file.getURL().getProtocol().equals("file") && (currentFolder=file.getParent())!=null?currentFolder:null;
@@ -531,13 +526,31 @@ public class PlatformManager {
 		// GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
 		// so if 'gnome-open' returned an error, we try to execute the file
 		if(unixDesktop==GNOME_DESKTOP && p!=null) {
-			 int exitCode = p.waitFor();
-			 if(exitCode!=0)
-				open(new String[]{escapeSpaceCharacters(filePath)}, currentFolder);
+			 try {
+				int exitCode = p.waitFor();
+				if(exitCode!=0)
+					open(new String[]{escapeSpaceCharacters(filePath)}, currentFolder);
+			} catch(Exception e) {
+				if(Debug.ON) Debug.trace("Error while executing "+filePath+": "+e);
+			}
 		}
 	}
 
 
+	/**
+	 * Returns <code>true</code> if the current platform is capable of opening a URL in a new (default) browser window.
+	 */
+	public static boolean canOpenURLInBrowser() {
+		return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT || unixDesktop==KDE_DESKTOP || unixDesktop==GNOME_DESKTOP;
+	}
+
+	
+	/**
+	 * Opens the given URL in a new (default) browser window.
+	 *
+	 * <p>Not all OS/desktops are capable of doing this, {@link #canOpenURLInBrowser() canOpenURLInBrowser} 
+	 * should be called before to ensure the current platform can do it.
+	 */
 	public static void openURLInBrowser(String url) {
         if(Debug.ON) Debug.trace("Opening "+url+" in a new browser window");
 
@@ -551,16 +564,88 @@ public class PlatformManager {
 	}
 
 
-	private static Process open(String tokens[], AbstractFile currentFolder) {
+	/**
+	 * Returns <code>true</code> if the current platform is capable of opening a file or folder in the desktop's default file manager
+	 * (Finder for Mac OS X, Explorer for Windows...).
+	 */
+	public static boolean canOpenInDesktop() {
+		return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT || unixDesktop==KDE_DESKTOP || unixDesktop==GNOME_DESKTOP;
+	}	
+
+
+	/**
+	 * Opens the given file in the Mac OS X Finder. A Finder window will be opened, revealing:
+	 * <ul>
+	 *  <li>if the given file is a folder, the folder contents
+	 *  <li>if the given file is a regular file, the enclosing folder's contents (Finder is unable to jump to the file unfortunately)
+	 * </ul>
+	 */
+	public static void openInDesktop(AbstractFile file) {
 		try {
-            Process p = Runtime.getRuntime().exec(tokens, currentFolder==null?null:new java.io.File(currentFolder.getAbsolutePath()));
+			// Return if file is not a local file
+			if(!file.getURL().getProtocol().equals("file"))
+				return;
+
+			if(!file.isDirectory())
+				file = file.getParent();
+			
+            if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath()+" in desktop");
+
+			String filePath = file.getAbsolutePath();
+			String tokens[];
+           	if (osFamily == MAC_OS_X)
+				tokens = new String[] {"open", "-a", "Finder", filePath};
+			else
+				tokens = getOpenTokens(filePath);
+				
+			open(tokens, null);
+		}
+		catch(Exception e) {
+            if(Debug.ON) Debug.trace("Error while opening "+file.getAbsolutePath()+" in desktop: "+e);
+		}
+	}
+	
+	
+	public static void getDefaultDesktopFMName() {
+		if (osFamily==WINDOWS_9X || osFamily == WINDOWS_NT) {
+			return "Explorer";
+		}
+		else if (osFamily == MAC_OS_X)  {
+			return "Finder";
+		}
+		else if(unixDesktop == KDE_DESKTOP) {
+			return "Konqueror";			
+		}
+		else if(unixDesktop == GNOME_DESKTOP) {
+			return "Nautilus";
+		}	
+	}
+
+
+	private static Process open(String tokens[], AbstractFile currentFolder) {
+		if(Debug.ON) Debug.trace("executing : "+tokensToString(tokens));
+		try {
+            Process p = Runtime.getRuntime().exec(tokens, null, currentFolder==null?null:new java.io.File(currentFolder.getAbsolutePath()));
 			if(Debug.ON) showProcessOutput(p);
 			return p;
 		}
 		catch(Exception e) {
-			if(Debug.ON) Debug.trace("Error while opening "+filePath+": "+e);
+			if(Debug.ON) Debug.trace("Error while executing "+tokensToString(tokens)+": "+e);
 			return null;
 		}
+	}
+
+	///////////////////
+	// Debug methods //
+	///////////////////
+
+	private static String tokensToString(String tokens[]) {
+		StringBuffer sb = new StringBuffer();
+		int nbTokens = tokens.length;
+		for(int i=0; i<nbTokens; i++)
+			sb.append(tokens[i]+" ");
+			
+		return sb.toString();
 	}
 
 	

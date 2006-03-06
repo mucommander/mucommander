@@ -77,7 +77,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
                 title = Translator.get("version_dialog.new_version_title");
 
                 // Checks if the current platform can open a new browser window
-                downloadOption = PlatformManager.canOpenURL();
+                downloadOption = PlatformManager.canOpenURLInBrowser();
                 downloadURL = VersionChecker.getDownloadURL();
                 
                 // If the platform is not capable of opening a new browser window,
@@ -133,7 +133,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
 		
 		// Show dialog and get user action
 		if(getActionValue()==DOWNLOAD_ACTION)
-			PlatformManager.open(downloadURL, mainFrame.getLastActiveTable().getCurrentFolder());	// Open URL in browser
+			PlatformManager.openURLInBrowser(downloadURL); // Open URL in a new browser windoow
 		
 		// Remember user preference
 		ConfigurationManager.setVariable("prefs.check_for_updates_on_startup", ""+showNextTimeCheckBox.isSelected());

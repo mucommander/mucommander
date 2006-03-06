@@ -4500,17 +4500,24 @@ table_popup.open:SI:Odpri
 
 
 # Displayed when right-clicking on a file under Mac OS X (Note: Finder is the equivalent of Windows' Explorer)
-table_popup.reveal_in_finder:EN:Reveal in Finder
-table_popup.reveal_in_finder:FR:Afficher dans le Finder
-table_popup.reveal_in_finder:ES:Mostrar en Finder
-table_popup.reveal_in_finder:RU:Отобразить в найденном
-table_popup.reveal_in_finder:zh_TW:顯示在Finder
-table_popup.reveal_in_finder:PL:Wyszukaj
-table_popup.reveal_in_finder:ZH_CN:在查找器中展示
-table_popup.reveal_in_finder:SI:Razkrij
+#table_popup.reveal_in_finder:EN:Reveal in Finder
+#table_popup.reveal_in_finder:FR:Afficher dans le Finder
+#table_popup.reveal_in_finder:ES:Mostrar en Finder
+#table_popup.reveal_in_finder:RU:Отобразить в найденном
+#table_popup.reveal_in_finder:zh_TW:顯示在Finder
+#table_popup.reveal_in_finder:PL:Wyszukaj
+#table_popup.reveal_in_finder:ZH_CN:在查找器中展示
+#table_popup.reveal_in_finder:SI:Razkrij
 
-
-
+# Displayed when right-clicking on a file under Mac OS X (Note: Finder is the equivalent of Windows' Explorer)
+table_popup.reveal_in_desktop:EN:Reveal in %1
+table_popup.reveal_in_desktop:FR:Afficher dans %1
+table_popup.reveal_in_desktop:ES:Mostrar en %1
+table_popup.reveal_in_desktop:RU:Отобразить в найденном
+table_popup.reveal_in_desktop:zh_TW:顯示在%1
+table_popup.reveal_in_desktop:PL:Wyszukaj
+table_popup.reveal_in_desktop:ZH_CN:在查找器中展示
+table_popup.reveal_in_desktop:SI:Razkrij
 
 table_popup.view:EN:$[command_bar.view]
 
