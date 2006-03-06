@@ -135,7 +135,7 @@ public class PlatformManager {
 			osFamily = OTHER;
 		}
 
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected OS family value = "+osFamily);
+		if(Debug.ON) Debug.trace("detected OS family value = "+osFamily);
 
 		// Unix desktop (KDE/GNOME) detection, only if OS is Linux, Solaris or Other (BSD)
 
@@ -157,7 +157,7 @@ public class PlatformManager {
 				// or it is simply not running on KDE or GNOME, let's figure out.
 				// -> check if 'kfmclient' (KDE's equivalent of OS X's open command) or 'gnome-open' (GNOME's equivalent of OS X's open command) is available
 				try {
-					if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("trying to execute kfmclient");
+					if(Debug.ON) Debug.trace("trying to execute kfmclient");
 					
 					// Try to execute 'kfmclient' and see if exit value is 0 (normal termination)
 					if(Runtime.getRuntime().exec("kfmclient").waitFor()==0)
@@ -167,14 +167,14 @@ public class PlatformManager {
 				if(unixDesktop == UNKNOWN_DESKTOP)
 					// Try to execute 'gnome-open' and see if exit value is 0 (normal termination)
 					try {
-						if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("trying to execute gnome-open");
+						if(Debug.ON) Debug.trace("trying to execute gnome-open");
 						
 						if(Runtime.getRuntime().exec("gnome-open").waitFor()==0)
 							unixDesktop = GNOME_DESKTOP;
 					} catch(Exception e) {}
 			}
 
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected desktop value = "+unixDesktop);
+			if(Debug.ON) Debug.trace("detected desktop value = "+unixDesktop);
 		}
 
 
@@ -219,7 +219,7 @@ public class PlatformManager {
 			javaVersion = JAVA_1_5;
 		}
 
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("detected Java version value = "+javaVersion);
+		if(Debug.ON) Debug.trace("detected Java version value = "+javaVersion);
 	}
 
 	
@@ -247,7 +247,7 @@ public class PlatformManager {
 	public static void checkCreatePreferencesFolder() {
 		File prefsFolder = getPreferencesFolder();
 		if(!prefsFolder.exists()) {
-			if(com.mucommander.Debug.ON) System.out.println("Creating mucommander preferences folder "+prefsFolder.getAbsolutePath());
+			if(Debug.ON) System.out.println("Creating mucommander preferences folder "+prefsFolder.getAbsolutePath());
 			if(!prefsFolder.mkdir())
 				System.out.println("Warning: unable to create mucommander prefs folder: "+prefsFolder.getAbsolutePath());
 		}
@@ -398,6 +398,9 @@ public class PlatformManager {
 			String tokens[] = new String[tokensV.size()];
 			tokensV.toArray(tokens);
 
+			// Here, we use Runtime.exec(String[],String[],File) instead of Runtime.exec(String,String[],File)
+			// so we can parse the tokens ourself (messes up the command otherwise)
+
 			return Runtime.getRuntime().exec(tokens, null, new java.io.File(currentFolder.getAbsolutePath()));
 		}
 		catch(Exception e) {
@@ -411,12 +414,11 @@ public class PlatformManager {
 	 * Opens/executes the given file, from the given folder and returns <code>true</code>
 	 * if the operation succeeded.
 	 */
+/*
 	public static boolean open(String filePath, AbstractFile currentFolder) {
 		try {
-			// Here, we use exec(String[],String[],File) instead of exec(String,String[],File)
-			// so we can parse the tokens ourself (messes up the command otherwise)
-
             if(Debug.ON) Debug.trace("Opening "+filePath);
+
 
             Process p;
 			if(currentFolder instanceof com.mucommander.file.FSFile)
@@ -433,6 +435,7 @@ public class PlatformManager {
             return false;
 		}
 	}
+*/
 
 
 	/**
@@ -460,9 +463,24 @@ public class PlatformManager {
 	}
 
 
+	private static String escapeSpaceCharacters(String filePath) {
+		StringBuffer sb = new StringBuffer();
+		char c;
+		for(int i=0; i<filePath.length(); i++) {
+			c = filePath.charAt(i);
+			if(c==' ')
+				sb.append("\\ ");
+			else
+				sb.append(c);
+		}
+		return sb.toString();
+	}
+
+
 	private static String[] getOpenTokens(String filePath) {
-		// Under Win32, the 'start' command opens a file with the program
-		// registered for this file's extension (great!)
+		// Under Windows, the 'start' command opens a file with the program
+		// registered for the file's extension, or executes the file if the file is executable, or opens 
+		// up a new browser window if the given file is a web URL 
 		// Windows 95, 98, Me : syntax is start "myfile"
 		String tokens[];
 		if (osFamily == WINDOWS_9X) {
@@ -472,23 +490,23 @@ public class PlatformManager {
 		else if (osFamily == WINDOWS_NT) {
 			tokens = new String[] {"cmd", "/c", "start", "\"\"", "\""+filePath+"\""};
 		}
-		// Mac OS X can do the same with 'open'
+		// Mac OS X can do the same with the 'open' command 
 		else if (osFamily == MAC_OS_X)  {
 			tokens = new String[] {"open", filePath};
 		}
+		// KDE has 'kfmclient exec' which opens/executes a file, but it won't work with web URLs.
+		// For web URLs, 'kfmclient openURL' has to be called. 
+		else if(unixDesktop == KDE_DESKTOP) {
+			tokens = new String[] {"kfmclient", "exec", "\""+filePath+"\""};			
+		}
+		// GNOME has 'gnome-open' which opens a file with a registered extension / opens a web URL in a new window,
+		// but it won't execute an executable file.
+		// For executable files, the file's path has to be executed as a command 
+		else if(unixDesktop == GNOME_DESKTOP) {
+			tokens = new String[] {"gnome-open", "\""+filePath+"\""};
+		}
 		else {
-			StringBuffer sb = new StringBuffer();
-			char c;
-			for(int i=0; i<filePath.length(); i++) {
-				c = filePath.charAt(i);
-				if(c==' ')
-					sb.append("\\ ");
-				else
-					sb.append(c);
-			}
-			filePath = sb.toString();
-
-			tokens = new String[] {filePath};
+			tokens = new String[] {escapeSpaceCharacters(filePath)};
 		}
 	
 		if(Debug.ON)
@@ -496,6 +514,53 @@ public class PlatformManager {
 				Debug.trace("token["+i+"]");
 		
 		return tokens;
+	}
+
+
+	/**
+	 * Opens/executes the given file, from the given folder and returns <code>true</code>
+	 * if the operation succeeded.
+	 */
+	public static boolean open(AbstractFile file) {
+	    if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath());
+
+		AbstractFile currentFolder = file.getURL().getProtocol().equals("file") && (currentFolder=file.getParent())!=null?currentFolder:null;
+		String filePath = file.getAbsolutePath();
+		Process p = open(getOpenTokens(filePath), currentFolder);
+	
+		// GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
+		// so if 'gnome-open' returned an error, we try to execute the file
+		if(unixDesktop==GNOME_DESKTOP && p!=null) {
+			 int exitCode = p.waitFor();
+			 if(exitCode!=0)
+				open(new String[]{escapeSpaceCharacters(filePath)}, currentFolder);
+		}
+	}
+
+
+	public static void openURLInBrowser(String url) {
+        if(Debug.ON) Debug.trace("Opening "+url+" in a new browser window");
+
+		String tokens[];
+		if(unixDesktop == KDE_DESKTOP)
+			tokens = new String[] {"kfmclient", "openURL", url};
+		else
+			tokens = getOpenTokens(url);
+	
+		open(tokens, null);
+	}
+
+
+	private static Process open(String tokens[], AbstractFile currentFolder) {
+		try {
+            Process p = Runtime.getRuntime().exec(tokens, currentFolder==null?null:new java.io.File(currentFolder.getAbsolutePath()));
+			if(Debug.ON) showProcessOutput(p);
+			return p;
+		}
+		catch(Exception e) {
+			if(Debug.ON) Debug.trace("Error while opening "+filePath+": "+e);
+			return null;
+		}
 	}
 
 	
