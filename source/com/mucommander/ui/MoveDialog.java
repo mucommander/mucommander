@@ -33,7 +33,7 @@ public class MoveDialog extends DestinationDialog {
 		String fieldText;
 		if(isShiftDown && nbFiles==1) {
 			fieldText = ((AbstractFile)files.elementAt(0)).getName();
-			// If rename mode, select the filename without extension, only if filename is not empty (unlike '.DS_Store' for example)
+			// If rename mode, select the filename without extension, only if filename part is not empty (unlike '.DS_Store' for example)
 			int extPos = fieldText.indexOf('.');
 			int len = fieldText.length();
 			

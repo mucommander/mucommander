@@ -80,7 +80,6 @@ public class MoveJob extends ExtendedFileJob {
 	 * 
 	 * @return <code>true</code> if the file has been moved completly (copied + deleted).
 	 */
-//    protected boolean processFile(AbstractFile file, AbstractFile destFolder, Object recurseParams[]) {
     protected boolean processFile(AbstractFile file, Object recurseParams) {
 		// Stop if interrupted
 		if(isInterrupted())

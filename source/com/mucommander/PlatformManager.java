@@ -606,7 +606,7 @@ public class PlatformManager {
 	}
 	
 	
-	public static void getDefaultDesktopFMName() {
+	public static String getDefaultDesktopFMName() {
 		if (osFamily==WINDOWS_9X || osFamily == WINDOWS_NT) {
 			return "Explorer";
 		}
@@ -619,6 +619,8 @@ public class PlatformManager {
 		else if(unixDesktop == GNOME_DESKTOP) {
 			return "Nautilus";
 		}	
+		else
+			return "";
 	}
 
 
