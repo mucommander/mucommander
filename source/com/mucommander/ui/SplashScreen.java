@@ -6,7 +6,13 @@ import java.awt.*;
 
 
 /**
- * Splash screen that gets displayed on muCommander startup. It 
+ * Splash screen that gets displayed on muCommander startup.
+ *
+ * <p>The splash screen is made of a background image on top of which is displayed muCommander version number (in the top right corner)
+ * and a loading message (in the lower left corner) which is updated by {@link #com.mucommander.Launcher} to show startup progress. 
+ * It is then closed by {@link #com.mucommander.Launcher} when muCommander is fully started and ready to use.</p> 
+ *
+ * @author Maxence Bernard
  */
 public class SplashScreen extends JWindow {
 
