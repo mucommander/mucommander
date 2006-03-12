@@ -14,7 +14,7 @@ import java.lang.reflect.*;
 
 /**
  * muCommander launcher: displays a splash screen and starts up the app
- * throught the main() method.
+ * through the main() method.
  *
  * @author Maxence Bernard
  */
@@ -34,15 +34,12 @@ public class Launcher {
 		+" (Java "+System.getProperty("java.vm.version")
 		+"; "+System.getProperty("os.name")+" "+System.getProperty("os.version")+" "+System.getProperty("os.arch")+")";
 	
-	/** Launcher's sole instance */
-	private static Launcher launcher;
-
 	
 	/**
 	 * Main method used to startup muCommander.
 	 */
 	public static void main(String args[]) {
-		launcher = new Launcher();
+		new Launcher();
 	}
 
 	
@@ -51,11 +48,11 @@ public class Launcher {
 	 */
 	private Launcher() {
 
-		//////////////////////////////////////////////////////////////////////
-		// Important: all JAR resource files need to be loaded from main    //
-		//  thread (here may be a good place), because of some weirdness of //
-		//  JNLP/Webstart's ClassLoader.                                    //
-		//////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////
+		// Important: all JAR resource files need to be loaded from the main    //
+		//  thread (here may be a good place), because of some weirdness of     //
+		//  JNLP/Webstart's ClassLoader.                                        //
+		//////////////////////////////////////////////////////////////////////////
 
 		// If muCommander is running under Mac OS X (how lucky!), add some
 		// glue for the main menu bar and other OS X specifics.
@@ -63,7 +60,6 @@ public class Launcher {
 			// Use reflection to create a FinderIntegration class so that ClassLoader
 			// doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
 			try {
-//				FinderIntegration finderIntegration = new FinderIntegration();
 				Class finderIntegrationClass = Class.forName("com.mucommander.ui.macosx.FinderIntegration");
 				Constructor constructor = finderIntegrationClass.getConstructor(new Class[]{});
 				constructor.newInstance(new Object[]{});
@@ -73,8 +69,8 @@ public class Launcher {
 			}
 		}
 
-		// Show splash screen before anything else
-		SplashScreen splashScreen = new SplashScreen(MUCOMMANDER_VERSION, "Loading preferences...");
+		// Show up the splash screen
+		SplashScreen splashScreen = new SplashScreen(SHORT_VERSION_STRING, "Loading preferences...");
 
 		// Triggers initialization of ConfigurationManager (preferences file parsing and loading)
 		ConfigurationManager.init();
@@ -128,14 +124,6 @@ public class Launcher {
 	}
 
 	
-	/**
-	 * Returns Launcher's unique instance.
-	 */
-	public static Launcher getLauncher() {
-		return launcher;
-	}
-
-
 //	/**
 //	 * Turns on or off dynamic layout which updates layout while resizing a frame. This
 //	 * is a 1.4 only feature and may not be supported by the underlying OS and window manager.
@@ -147,32 +135,5 @@ public class Launcher {
 //		catch(NoSuchMethodError e) {
 //		}
 //	}
-
-	
-    /**
-	 * Shows a spash screen
-	 */
-/*
-	private JWindow showSplashScreen() {
-		JWindow splashScreen = new JWindow();
-
-		// Resolves the URL of the image within the JAR file
-		java.net.URL imageURL = getClass().getResource("/logo.png");
-
-		ImageIcon imageIcon = new ImageIcon(imageURL);
-		splashScreen.setContentPane(new JLabel(imageIcon));
-		
-//		splashScreen.pack();
-		// Set size manually instead of using pack(), because of a bug under 1.3.1/Win32 which
-		// eats a 1-pixel row of the image
-		splashScreen.setSize(imageIcon.getIconWidth(), imageIcon.getIconHeight());
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		splashScreen.setLocation(screenSize.width/2 - splashScreen.getSize().width/2,
-					     screenSize.height/2 - splashScreen.getSize().height/2);
-	    splashScreen.show();
-	
-		return splashScreen;
-	} 
-*/
 
 }
