@@ -43,11 +43,16 @@ public class ConfigurationManager {
     private static ConfigurationTree tree;
 
 
-    /* ------------------------ */
-    /*      Initialisation      */
-    /* ------------------------ */
+	/**
+	 * Dummy method which does nothing but trigger static fields execution.
+	 * Calling this method early enough at launch time makes initialization predictable.
+	 */
+	public static void init() {
+	}
+	
+
     /**
-     * Constructor used to ensure that the configuration file is loaded at boot time.
+     * Private constructor used to ensure that the configuration file is loaded at boot time.
      */
     private ConfigurationManager() {
         tree = new ConfigurationTree("root");
@@ -58,7 +63,8 @@ public class ConfigurationManager {
         // Sets muCommander version corresponding to this configuration file
         setVariable("prefs.conf_version", com.mucommander.Launcher.MUCOMMANDER_VERSION);
     }
-
+	
+	
     /* ------------------------ */
     /*       File handling      */
     /* ------------------------ */
@@ -98,7 +104,7 @@ public class ConfigurationManager {
 
 		try {
 			loadConfiguration(getConfigurationFilePath());
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFilePath());						
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFilePath(), -1);						
 			return true;
 		}
 		catch(Exception e) {

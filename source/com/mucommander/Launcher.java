@@ -3,19 +3,13 @@ package com.mucommander;
 import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.CheckVersionDialog;
 
-//import com.mucommander.ui.macosx.FinderIntegration;
-import java.lang.reflect.*;
-
 import com.mucommander.conf.ConfigurationManager;
 
 import com.mucommander.Debug;
 
-import javax.swing.*;
-import javax.swing.*;
+import com.mucommander.ui.SplashScreen;
 
-import java.awt.*;
-
-import java.net.URL;
+import java.lang.reflect.*;
 
 
 /**
@@ -29,8 +23,11 @@ public class Launcher {
 	/** Version string */
 	public final static String MUCOMMANDER_VERSION = "0.8 beta2 r2";
 
+	/** Version string */
+	public final static String SHORT_VERSION_STRING = "0.8 beta2";
+
 	/** muCommander app string */
-	public final static String MUCOMMANDER_APP_STRING = "muCommander v"+MUCOMMANDER_VERSION;
+	public final static String MUCOMMANDER_APP_STRING = "muCommander v"+SHORT_VERSION_STRING;
 
 	/** Custom user agent for HTTP requests */
 	public final static String USER_AGENT = MUCOMMANDER_APP_STRING
@@ -77,19 +74,26 @@ public class Launcher {
 		}
 
 		// Show splash screen before anything else
-		JWindow splashScreen = showSplashScreen();
+		SplashScreen splashScreen = new SplashScreen(MUCOMMANDER_VERSION, "Loading preferences...");
 
-//		// Turns on dynamic layout
-//		setDynamicLayout(true);
-
-		// Traps VM shutdown
-		Runtime.getRuntime().addShutdownHook(new ShutdownHook());
+		// Triggers initialization of ConfigurationManager (preferences file parsing and loading)
+		ConfigurationManager.init();
 
 		// Checks that preferences folder exists and if not, creates it.
 		PlatformManager.checkCreatePreferencesFolder();
 
+		// Traps VM shutdown
+		Runtime.getRuntime().addShutdownHook(new ShutdownHook());
+		
+//		// Turns on dynamic layout
+//		setDynamicLayout(true);
+
+		splashScreen.setLoadingMessage("Loading bookmarks...");
+
 		// Loads bookmarks
 		com.mucommander.bookmark.BookmarkManager.loadBookmarks();
+
+		splashScreen.setLoadingMessage("Loading dictionary...");
 
 		// Loads dictionary
 		com.mucommander.text.Translator.init();
@@ -98,7 +102,16 @@ public class Launcher {
 		// before FileTable, so CustomDateFormat gets notified of date format changes first
 		com.mucommander.text.CustomDateFormat.init();
 
-		// Initialize WindowManager
+		splashScreen.setLoadingMessage("Loading icons...");
+
+		// Preload icons
+		com.mucommander.ui.FileIcons.init();
+		com.mucommander.ui.ToolBar.init();
+		com.mucommander.ui.CommandBar.init();
+
+		splashScreen.setLoadingMessage("Initializing window...");
+
+		// Initialize WindowManager and create a new window
 		WindowManager.checkInit();
 		
         // Check for newer version unless it was disabled
@@ -107,7 +120,7 @@ public class Launcher {
 		
 		// Silence jCIFS's output if not in debug mode
 		// To quote jCIFS's documentation : "0 - No log messages are printed -- not even crticial exceptions."
-		if(!com.mucommander.Debug.ON)
+		if(!Debug.ON)
 			System.setProperty("jcifs.util.loglevel", "0");
 		
 		// Dispose splash screen
@@ -139,18 +152,19 @@ public class Launcher {
     /**
 	 * Shows a spash screen
 	 */
+/*
 	private JWindow showSplashScreen() {
 		JWindow splashScreen = new JWindow();
 
 		// Resolves the URL of the image within the JAR file
-		URL imageURL = getClass().getResource("/logo.png");
+		java.net.URL imageURL = getClass().getResource("/logo.png");
 
 		ImageIcon imageIcon = new ImageIcon(imageURL);
 		splashScreen.setContentPane(new JLabel(imageIcon));
 		
 //		splashScreen.pack();
 		// Set size manually instead of using pack(), because of a bug under 1.3.1/Win32 which
-		// would eat a 1-pixel row of the image
+		// eats a 1-pixel row of the image
 		splashScreen.setSize(imageIcon.getIconWidth(), imageIcon.getIconHeight());
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		splashScreen.setLocation(screenSize.width/2 - splashScreen.getSize().width/2,
@@ -159,5 +173,6 @@ public class Launcher {
 	
 		return splashScreen;
 	} 
+*/
 
 }

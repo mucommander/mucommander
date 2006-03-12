@@ -84,14 +84,14 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 
 		// Start by creating folder panels as they are used
 		// below (by Toolbar)
-		folderPanel1 = new FolderPanel(this, initialFolder1);
-        folderPanel2 = new FolderPanel(this, initialFolder2);
+		this.folderPanel1 = new FolderPanel(this, initialFolder1);
+        this.folderPanel2 = new FolderPanel(this, initialFolder2);
 
-		table1 = folderPanel1.getFileTable();
-        table2 = folderPanel2.getFileTable();
+		this.table1 = folderPanel1.getFileTable();
+        this.table2 = folderPanel2.getFileTable();
 
 		// Left table is the first to be active
-		lastActiveTable = table1;
+		this.lastActiveTable = table1;
 
 		// Register WindowManager to receive location evvents
 		WindowManager windowManager = WindowManager.getInstance();
@@ -100,7 +100,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 
 		// Create toolbar and show it only if it hasn't been disabled in the preferences
 		this.toolbar = new ToolBar(this);
+		// Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, to be properly initialized
 		this.toolbar.setVisible(ConfigurationManager.getVariable("prefs.show_toolbar", "true").equals("true"));
+			
 		contentPane.add(toolbar, BorderLayout.NORTH);
 
 		folderPanel1.addLocationListener(toolbar);
@@ -144,7 +146,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// Show command bar only if it hasn't been disabled in the preferences
 		this.commandBar = new CommandBar(this);
 		if(ConfigurationManager.getVariable("prefs.show_command_bar", "true").equals("false"))
-			commandBar.setVisible(false);
+			this.commandBar.setVisible(false);
 		southPanel.add(commandBar);
 		
 		contentPane.add(southPanel, BorderLayout.SOUTH);

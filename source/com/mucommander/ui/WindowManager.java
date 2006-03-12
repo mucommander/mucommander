@@ -57,8 +57,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 	
 	
 	/**
-	 * Method that does nothing but ensures that static initialization has
-	 * been done.
+	 * Dummy method that does nothing but trigger static fields initialization.
 	 */
 	public static void checkInit() {
 	}

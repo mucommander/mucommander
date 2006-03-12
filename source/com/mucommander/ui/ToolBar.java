@@ -80,7 +80,22 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 	private final static int EMAIL_INDEX = 15;
 	private final static int PROPERTIES_INDEX = 16;
 	private final static int PREFERENCES_INDEX = 17;
-		
+	
+	static {
+		if(com.mucommander.conf.ConfigurationManager.getVariable("prefs.show_toolbar", "true").equals("true")) {
+			// Preload icons if toolbar is to become visible
+			loadIcons();
+			iconsLoaded = true;
+		}
+	}
+	
+	/**
+	 * Dummy method which does nothing but trigger static block execution.
+	 * Calling this method early enough at launch time makes initialization predictable.
+	 */
+	public static void init() {
+	}
+	
 	
 	/**
 	 * Creates a new toolbar and attaches it to the given frame.
@@ -123,16 +138,19 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 	/**
 	 * Loads all the icons used by the toolbar buttons.
 	 */
-	private void loadIcons() {
+	private static void loadIcons() {
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading toolbar icons");
+
 		int nbIcons = BUTTONS_DESC.length;
 		icons = new ImageIcon[nbIcons][2];
+		Class classInstance = Runtime.getRuntime().getClass();
 		
 		for(int i=0; i<nbIcons; i++) {
 			// Load 'enabled' icon
-			icons[i][0] = new ImageIcon(getClass().getResource(ICON_FOLDER+BUTTONS_DESC[i][1]));
+			icons[i][0] = new ImageIcon(classInstance.getResource(ICON_FOLDER+BUTTONS_DESC[i][1]));
 			// Load 'disabled' icon if available
 			if(BUTTONS_DESC[i][2]!=null)
-				icons[i][1] = new ImageIcon(getClass().getResource(ICON_FOLDER+BUTTONS_DESC[i][2]));
+				icons[i][1] = new ImageIcon(classInstance.getResource(ICON_FOLDER+BUTTONS_DESC[i][2]));
 		}
 	}
 	
@@ -267,7 +285,6 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 		int buttonIndex = getButtonIndex(button);
 		
 		if(buttonIndex==STOP_INDEX) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 			FolderPanel.ChangeFolderThread changeFolderThread = mainFrame.getLastActiveTable().getFolderPanel().getChangeFolderThread();
 			if(changeFolderThread!=null)
 				changeFolderThread.tryKill();

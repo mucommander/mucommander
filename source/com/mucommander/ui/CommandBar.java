@@ -81,19 +81,31 @@ public class CommandBar extends JPanel implements ActionListener, MouseListener 
 	};
 
 
+	static {
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading command bar icons");
+
+		// Create ImageIcon instances, executed only once
+		iconImages = new ImageIcon[NB_BUTTONS];
+		Class classInstance = Runtime.getRuntime().getClass();
+		for(int i=0; i<NB_BUTTONS; i++)
+			iconImages[i] = new ImageIcon(classInstance.getResource(ICON_FOLDER+BUTTONS_DESC[i][2]));
+	}
+
+
+	/**
+	 * Dummy method which does nothing but trigger static block execution.
+	 * Calling this method early enough at launch time makes initialization predictable.
+	 */
+	public static void init() {
+	}
+
+
 	/**
 	 * Creates a new CommandBar instance associated with the given MainFrame.
 	 */
 	public CommandBar(MainFrame mainFrame) {
 		super(new GridLayout(0,8));
         this.mainFrame = mainFrame;
-
-		// Create IconImage instances, executed only once
-		if(iconImages==null) {
-			iconImages = new ImageIcon[NB_BUTTONS];
-			for(int i=0; i<NB_BUTTONS; i++)
-				iconImages[i] = new ImageIcon(getClass().getResource(ICON_FOLDER+BUTTONS_DESC[i][2]));
-		}
 
 		this.buttons = new JButton[NB_BUTTONS];
 		for(int i=0; i<NB_BUTTONS; i++)

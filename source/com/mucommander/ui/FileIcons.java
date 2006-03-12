@@ -88,11 +88,21 @@ public class FileIcons {
 	/** Singleton instance */
 	private final static FileIcons instance = new FileIcons(); 
 
+	
+	/**
+	 * Dummy method which does nothing but trigger static block execution.
+	 * Calling this method early enough at launch time makes initialization predictable.
+	 */
+	public static void init() {
+	}
+
 
 	/**
 	 * Initializes icons hash maps and instances.
 	 */
 	private FileIcons() {
+		com.mucommander.Debug.trace("Initializing file icons");
+		
 		int nbIcons = ICON_EXTENSIONS.length;
 		
 		// Create hashtables
