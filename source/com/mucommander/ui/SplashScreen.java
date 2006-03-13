@@ -8,9 +8,9 @@ import java.awt.*;
 /**
  * Splash screen that gets displayed on muCommander startup.
  *
- * <p>The splash screen is made of a background image on top of which is displayed muCommander version number (in the top right corner)
+ * <p>The splash screen is made of a logo image on top of which is displayed muCommander version number (in the top right corner)
  * and a loading message (in the lower left corner) which is updated by {@link #com.mucommander.Launcher} to show startup progress. 
- * It is then closed by {@link #com.mucommander.Launcher} when muCommander is fully started and ready to use.</p> 
+ * It is then closed by {@link #com.mucommander.Launcher} when muCommander is fully started and ready for use.</p> 
  *
  * @author Maxence Bernard
  */
@@ -49,11 +49,17 @@ public class SplashScreen extends JWindow {
 	private final static int VERSION_MARGIN_Y = 3;
 
 
+	/**
+	 * Creates and displays a new SplashScreen, with the given version string and initial loading message.
+	 *
+	 * @param version muCommander version string which will be displayed in the top right corner
+	 * @param loadingMessage initial loading message, displayed in the lower left corner
+	 */
 	public SplashScreen(String version, String loadingMessage) {
-
 		this.version = version;
 		this.loadingMessage = loadingMessage;
 
+		// Create a custom font
 		this.customFont = new Font(FONT_NAME, FONT_STYLE, FONT_SIZE);
 
 		// Resolves the URL of the splash logo image within the JAR file and create an ImageIcon
@@ -67,34 +73,46 @@ public class SplashScreen extends JWindow {
 
 		setContentPane(new JLabel(imageIcon));
 		
-//		pack();
 		// Set size manually instead of using pack(), because of a bug under 1.3.1/Win32 which
 		// eats a 1-pixel row of the image
+//		pack();
 		int width = imageIcon.getIconWidth();
 		int height = imageIcon.getIconHeight();
 		setSize(width, height);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation(screenSize.width/2 - width/2,
 					     screenSize.height/2 - height/2);
+
+		// Display the splash screen
 	    show();
 	}
 
 
+	/**
+	 * Repaints this SplashScreen to display the new given loading message, replacing the previous one. 
+	 *
+	 * @param msg the new loading message to be displayed
+	 */
 	public void setLoadingMessage(String msg) {
 		this.loadingMessage = msg;
 		repaint();
 	}
 
-	
+
+	/**
+	 * Overridden paint method.
+	 */
 	public void paint(Graphics g) {
 		super.paint(g);
 
 		g.setFont(customFont);
 		g.setColor(TEXT_COLOR);
 		
+		// Get FontRenderContext instance to calculate text width and height
 		java.awt.font.FontRenderContext fontRenderContext = ((Graphics2D)g).getFontRenderContext();
-		// (int)(customFont.getStringBounds(loadingMessage, fontRenderContext)).getHeight()
+		// Display loading message in the lower left corner
 		g.drawString(loadingMessage, LOADING_MSG_MARGIN_X, getHeight()-LOADING_MSG_MARGIN_Y);
+		// Display version in the top right corner
 		java.awt.geom.Rectangle2D textBounds = new java.awt.font.TextLayout(version, customFont, fontRenderContext).getBounds();
 		g.drawString(version, getWidth()-(int)textBounds.getWidth()-VERSION_MARGIN_X, (int)textBounds.getHeight()+VERSION_MARGIN_Y);
 	}	
