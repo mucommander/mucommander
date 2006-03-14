@@ -147,29 +147,35 @@ public class PlatformManager {
 			// but we can't rely on them being defined, as they only have a value if muCommander was launched
 			// with proper java -D options (-> mucommander.sh script), and will be null otherwise (-> java -jar mucommander.jar)
 			String envVar;
-			if((envVar=System.getProperty("KDE_FULL_SESSION"))!=null && !envVar.equals(""))
-				unixDesktop = KDE_DESKTOP;
-			else if((envVar=System.getProperty("GOME_DESKTOP_SESSION_ID"))!=null && !envVar.equals(""))
+			if((envVar=System.getProperty("GOME_DESKTOP_SESSION_ID"))!=null && !envVar.equals(""))
 				unixDesktop = GNOME_DESKTOP;
+			else if((envVar=System.getProperty("KDE_FULL_SESSION"))!=null && !envVar.equals(""))
+				unixDesktop = KDE_DESKTOP;
 			else {
 				// At this point, muCommander was either not started from the shell script (null environment variables)
 				// or it is simply not running on KDE or GNOME, let's figure out.
 				// -> check if 'kfmclient' (KDE's equivalent of OS X's open command) or 'gnome-open' (GNOME's equivalent of OS X's open command) is available
+
+				// Since GNOME seems to be more popular than KDE, GNOME test comes first
 				try {
-					if(Debug.ON) Debug.trace("trying to execute kfmclient");
+					if(Debug.ON) Debug.trace("trying to execute gnome-open");
 					
-					// Try to execute 'kfmclient' and see if exit value is 0 (normal termination)
-					if(Runtime.getRuntime().exec("kfmclient").waitFor()==0)
-						unixDesktop = KDE_DESKTOP;
+//					// Try to execute 'gnome-open --usage' and see if exit value is 0 (normal termination)
+//					if(Runtime.getRuntime().exec(new String[]{"gnome-open", "--usage"}).waitFor()==0)
+					// Try to execute 'gnome-open' to see if command exists (will thrown an IOException if it doesn't)
+					Runtime.getRuntime().exec("gnome-open");
+					unixDesktop = GNOME_DESKTOP;
 				} catch(Exception e) {}
 			
 				if(unixDesktop == UNKNOWN_DESKTOP)
-					// Try to execute 'gnome-open' and see if exit value is 0 (normal termination)
 					try {
-						if(Debug.ON) Debug.trace("trying to execute gnome-open");
+						if(Debug.ON) Debug.trace("trying to execute kfmclient");
 						
-						if(Runtime.getRuntime().exec("gnome-open").waitFor()==0)
-							unixDesktop = GNOME_DESKTOP;
+//						// Try to execute 'kfmclient --help' and see if exit value is 0 (normal termination)
+//						if(Runtime.getRuntime().exec(new String[]{"kfmclient", "--help"}).waitFor()==0)
+						// Try to execute 'kfmclient' to see if command exists (will thrown an IOException if it doesn't)
+						Runtime.getRuntime().exec("kfmclient");
+						unixDesktop = KDE_DESKTOP;
 					} catch(Exception e) {}
 			}
 
@@ -355,7 +361,7 @@ public class PlatformManager {
 	
 	/**
 	 * Executes an arbitrary command in the given folder and returns the corresponding Process object,
-	 * or <code>null</code> if the command failed to execute
+	 * or <code>null</code> if the command failed to execute.
 	 */
 	public static Process execute(String command, AbstractFile currentFolder) {
 		try {
@@ -494,13 +500,13 @@ public class PlatformManager {
 		// KDE has 'kfmclient exec' which opens/executes a file, but it won't work with web URLs.
 		// For web URLs, 'kfmclient openURL' has to be called. 
 		else if(unixDesktop == KDE_DESKTOP) {
-			tokens = new String[] {"kfmclient", "exec", "\""+filePath+"\""};			
+			tokens = new String[] {"kfmclient", "exec", filePath};			
 		}
 		// GNOME has 'gnome-open' which opens a file with a registered extension / opens a web URL in a new window,
 		// but it won't execute an executable file.
 		// For executable files, the file's path has to be executed as a command 
 		else if(unixDesktop == GNOME_DESKTOP) {
-			tokens = new String[] {"gnome-open", "\""+filePath+"\""};
+			tokens = new String[] {"gnome-open", filePath};
 		}
 		// No launcher command for this platform, let's just execute the file in
 		// case it's an executable
@@ -660,16 +666,20 @@ public class PlatformManager {
 			int i;
 			java.io.InputStream is = p.getInputStream();
 			while((i=is.read())!=-1)
-				System.out.print(i);
+				System.out.print((char)i);
 			is.close();
 			
 			Debug.trace("reading process errorstream");
 			is = p.getErrorStream();
 			while((i=is.read())!=-1)
-				System.out.print(i);
+				System.out.print((char)i);
 			is.close();
 		}
 		catch(Exception e) {
 		}
+	}
+
+	public static void main(String args[]) {
+		open(args, null);
 	}
 }
