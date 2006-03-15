@@ -7,7 +7,9 @@ import com.mucommander.ui.bookmark.EditBookmarksDialog;
 import com.mucommander.ui.table.FileTable;
 
 import com.mucommander.text.Translator;
+import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
+import com.mucommander.PlatformManager;
 import com.mucommander.event.*;
 
 import javax.swing.*;
@@ -39,7 +41,7 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 	/** Icon folder within JAR file */
 	public final static String ICON_FOLDER = "/toolbar_icons/";
 	
-	/** Buttons descriptions: label, enabled icon, disabled icon, separator */
+	/** Buttons descriptions: label, enabled icon, disabled icon (null for no disabled icon), separator ("true" or null for false)  */
 	private final static String BUTTONS_DESC[][] = {
 		{Translator.get("toolbar.new_window")+" (Ctrl+N)", "new_window.png", null, "true"},
 		{Translator.get("toolbar.go_back")+" (Alt+Left)", "back.gif", "back_grayed.gif", null},
@@ -57,7 +59,8 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 		{Translator.get("toolbar.server_connect")+" (Ctrl+K)", "server_connect.png", null, null},
 		{Translator.get("toolbar.run_command")+" (Ctrl+R)", "run_command.png", null, null},
 		{Translator.get("toolbar.email")+" (Ctrl+S)", "email.png", null, null},
-		{Translator.get("toolbar.properties")+" (Alt+Enter)", "properties.png", null, "true"},
+		{Translator.get("toolbar.properties")+" (Alt+Enter)", "properties.png", null, null},
+		{Translator.get("toolbar.reveal_in_desktop"), "reveal_in_desktop.png", "reveal_in_desktop_grayed.png", "true"},
 		{Translator.get("toolbar.preferences"), "preferences.png", null, null}
 	};
 
@@ -79,7 +82,9 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 	private final static int RUNCMD_INDEX = 14;
 	private final static int EMAIL_INDEX = 15;
 	private final static int PROPERTIES_INDEX = 16;
-	private final static int PREFERENCES_INDEX = 17;
+	private final static int OPEN_IN_DESKTOP_INDEX = 17;
+	private final static int PREFERENCES_INDEX = 18;
+	
 	
 	static {
 		if(com.mucommander.conf.ConfigurationManager.getVariable("prefs.show_toolbar", "true").equals("true")) {
@@ -112,25 +117,26 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 		buttons = new JButton[nbButtons];
 		Dimension separatorDimension = new Dimension(10, 16);
 		for(int i=0; i<nbButtons; i++) {
+			// Add 'reveal in desktop' button only if current platform is capable of doing this
+			if(i==OPEN_IN_DESKTOP_INDEX && !PlatformManager.canOpenInDesktop())
+				continue;
+			
 			buttons[i] = addButton(BUTTONS_DESC[i][0]);
 			if(BUTTONS_DESC[i][3]!=null &&!BUTTONS_DESC[i][3].equals("false"))
 				addSeparator(separatorDimension);
 		}
 
-		// Back (forward) is enabled only if there is a previous (next) folder
-		FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
-		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
-		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
-		buttons[PARENT_INDEX].setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
-		
-		// In order to catch Shift+clicks
+		// Set inital enabled/disabled state for contextual buttons
+		updateButtonsState(mainFrame.getLastActiveTable().getFolderPanel());
+				
+		// Listen to mouse events in order to catch Shift+clicks
 		buttons[ZIP_INDEX].addMouseListener(this);
 		buttons[UNZIP_INDEX].addMouseListener(this);
 	
-		// Register for table change events to update buttons state when current table has changed
+		// Listen to table change events to update buttons state when current table has changed
 		mainFrame.addTableChangeListener(this);
 	
-		// Register for mouse events to popup a menu on right-clicks on the toolbar
+		// Listen to mouse events to popup a menu on right-clicks on the toolbar
 		this.addMouseListener(this);
 	}
 
@@ -198,10 +204,13 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 	 * Update buttons state (enabled/disabled) based on current FolderPanel's state.
 	 */
 	private void updateButtonsState(FolderPanel folderPanel) {
+		AbstractFile currentFolder = folderPanel.getCurrentFolder();
 		buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
 		buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
 		buttons[STOP_INDEX].setEnabled(false);
-		buttons[PARENT_INDEX].setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
+		buttons[PARENT_INDEX].setEnabled(currentFolder.getParent()!=null);
+		if(buttons[OPEN_IN_DESKTOP_INDEX]!=null)
+			buttons[OPEN_IN_DESKTOP_INDEX].setEnabled(currentFolder.getURL().getProtocol().equals("file"));
 	}
 	
 	////////////////////////
@@ -284,8 +293,10 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 		JButton button = (JButton)source;
 		int buttonIndex = getButtonIndex(button);
 		
+		FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
+		
 		if(buttonIndex==STOP_INDEX) {
-			FolderPanel.ChangeFolderThread changeFolderThread = mainFrame.getLastActiveTable().getFolderPanel().getChangeFolderThread();
+			FolderPanel.ChangeFolderThread changeFolderThread = folderPanel.getChangeFolderThread();
 			if(changeFolderThread!=null)
 				changeFolderThread.tryKill();
 			mainFrame.requestFocus();
@@ -316,13 +327,12 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 			WindowManager.getInstance().createNewMainFrame();
 		}
 		else if (buttonIndex==BACK_INDEX) {
-			mainFrame.getLastActiveTable().getFolderPanel().goBack();
+			folderPanel.goBack();
 		}
 		else if(buttonIndex==FORWARD_INDEX) {
-			mainFrame.getLastActiveTable().getFolderPanel().goForward();
+			folderPanel.goForward();
 		}
 		else if(buttonIndex==PARENT_INDEX) {
-			FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
 			folderPanel.trySetCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);
 			requestFocus = true;
 		}
@@ -348,6 +358,9 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 		}
 		else if(buttonIndex==SERVER_CONNECT_INDEX) {
 			mainFrame.showServerConnectDialog();
+		}
+		else if(buttonIndex==OPEN_IN_DESKTOP_INDEX) {
+			PlatformManager.openInDesktop(folderPanel.getCurrentFolder());
 		}
 		else if (buttonIndex==PREFERENCES_INDEX) {
 			mainFrame.showPreferencesDialog();

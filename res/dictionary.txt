@@ -355,7 +355,7 @@ cannot_create_folder:RU:Не удается создать каталог %1.
 cannot_create_folder:ZH_CN:无法创建文件夹 %1
 cannot_create_folder:SI:Ne morem ustvariti mape %1
 
-cannot_read_folder:EN:Unable to read contents of folder %1
+cannot_read_folder:EN:Unable to read content of folder %1
 cannot_read_folder:FR:Erreur lors de la lecture du dossier %1
 cannot_read_folder:DE:Kann Inhalt des Ordners %1 nicht lesen
 cannot_read_folder:ES:No se puede leer el directorio %1
@@ -1288,6 +1288,8 @@ toolbar.properties:EN:$[shortcuts_dialog.file_operations.properties]
 
 toolbar.hide_toolbar:EN:$[view_menu.hide_toolbar]
 
+toolbar.reveal_in_desktop:EN:$[table_popup.reveal_in_desktop]
+
 toolbar.preferences:EN:Configure muCommander
 toolbar.preferences:FR:Configurer muCommander
 toolbar.preferences:DE:muCommander konfigurieren
@@ -1413,8 +1415,8 @@ table.folder_access_error_title:RU:Ошибка: нет доступа в кат
 table.folder_access_error_title:ZH_CN:文件夹存取错误
 table.folder_access_error_title:SI:Napaka pri dostopu do mape
 
-table.folder_access_error:EN:Unable to read folder contents
-table.folder_access_error:FR:Unable to read folder contents
+table.folder_access_error:EN:Unable to read folder content
+table.folder_access_error:FR:Unable to read folder content
 table.folder_access_error:DE:Kann Ordnerinhalt nicht lesen
 table.folder_access_error:ES:Imposible leer el contenido del directorio
 table.folder_access_error:CS:Nemůžu přečíst obsah složky
@@ -2562,7 +2564,7 @@ properties_dialog.file_properties:RU:Своства %1
 properties_dialog.file_properties:ZH_CN:%1 属性
 properties_dialog.file_properties:SI:%1 Lastnosti
 
-properties_dialog.contents:EN:Contents
+properties_dialog.contents:EN:Content
 properties_dialog.contents:FR:Contenu
 properties_dialog.contents:DE:Inhalt
 properties_dialog.contents:ES:Contenido

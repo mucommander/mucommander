@@ -264,6 +264,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("response code = "+conn
 			URL contextURL = this.url;
 			HttpURLConnection conn;
 			do {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("contextURL="+contextURL+" hostname="+contextURL.getHost());
 				// Open connection
 				conn = getHttpURLConnection(contextURL);
 				
