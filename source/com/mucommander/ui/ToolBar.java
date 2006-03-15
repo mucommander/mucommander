@@ -58,9 +58,9 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 		{Translator.get("toolbar.unzip")+" (Ctrl+P)", "unzip.png", null, "true"},
 		{Translator.get("toolbar.server_connect")+" (Ctrl+K)", "server_connect.png", null, null},
 		{Translator.get("toolbar.run_command")+" (Ctrl+R)", "run_command.png", null, null},
-		{Translator.get("toolbar.email")+" (Ctrl+S)", "email.png", null, null},
-		{Translator.get("toolbar.properties")+" (Alt+Enter)", "properties.png", null, null},
-		{Translator.get("toolbar.reveal_in_desktop"), "reveal_in_desktop.png", "reveal_in_desktop_grayed.png", "true"},
+		{Translator.get("toolbar.email")+" (Ctrl+S)", "email.png", null, "true"},
+		{Translator.get("toolbar.reveal_in_desktop", PlatformManager.getDefaultDesktopFMName()), "reveal_in_desktop.png", "reveal_in_desktop_grayed.png", null},
+		{Translator.get("toolbar.properties")+" (Alt+Enter)", "properties.png", null, "true"},
 		{Translator.get("toolbar.preferences"), "preferences.png", null, null}
 	};
 
@@ -81,8 +81,8 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 	private final static int SERVER_CONNECT_INDEX = 13;
 	private final static int RUNCMD_INDEX = 14;
 	private final static int EMAIL_INDEX = 15;
-	private final static int PROPERTIES_INDEX = 16;
-	private final static int OPEN_IN_DESKTOP_INDEX = 17;
+	private final static int OPEN_IN_DESKTOP_INDEX = 16;
+	private final static int PROPERTIES_INDEX = 17;
 	private final static int PREFERENCES_INDEX = 18;
 	
 	
@@ -167,6 +167,9 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 	private void setIcons() {
 		int nbIcons = BUTTONS_DESC.length;
 		for(int i=0; i<nbIcons; i++) {
+			if(buttons[i]==null)
+				continue;
+			
 			// Set 'enabled' icon
 			buttons[i].setIcon(icons[i][0]);
 			// Set 'disabled' icon if available
