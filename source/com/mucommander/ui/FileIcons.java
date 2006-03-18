@@ -68,14 +68,17 @@ public class FileIcons {
 		{"macromedia_freehand.png", "fh", "fhd"},	// Macromedia Freehand
 		{"ms_excel.png", "xls", "xla", "xlb", "xlc", "xld", "xlk", "xll", "xlm", "xlr", "xlt", "xlv", "xlw", "xlshtml", "xlsmhtml", "xlsx", "xlthtml"},	// Microsoft Excel
 		{"ms_word.png", "doc", "wbk", "wiz", "wpg", "wpk", "wpm", "wpt", "wrs", "wwl"},	// Microsoft Word
-		{"ms_office.png", "pcb", "pot", "ppa", "ppi", "pps", "ppt", "pwz"},	// Microsoft Office (Powerpoint)
+		{"ms_powerpoint.png", "pcb", "pot", "ppa", "ppi", "pps", "ppt", "pwz"},	// Microsoft Office (Powerpoint)
+		{"ms_visualstudio.png",	"atp", "dbp", "hxc", "ncb", "pch", "pdb", "sln", "suo", "srf", "vaf", "vam", "vbg", "vbp", "vbproj", "vcproj", "vdp", "vdproj", "vip", "vmx", "vsdir", "vsmacros",	"vsmproj", "vup"},	// Microsoft Visual Studio
+		{"ms_windows_shortcut.png", "lnk"},	// MS Windows .lnk shortcut files
 		{"pdf.png", "pdf"},		// Adobe Acrobat / PDF
-		{"source.png", "asm", "asp", "bas", "bcp", "cbl", "cob", "f", "fpp", "inc", "java", "js", "jsp", "lsp", "m4", "pas", "pl", "py", "src", "vb", "vbe", "vbs", "x"},	// Languages for which there is no special icon (generic source icon)
+		{"source.png", "asm", "asp", "bas", "bcp", "cbl", "cob", "f", "fpp", "inc", "js", "lsp", "m4", "pas", "pl", "py", "src", "vb", "vbe", "vbs", "x"},	// Languages for which there is no special icon (generic source icon)
 		{"source.png", "awk", "csh", "esh", "sh", "ksh", "ws", "wsf"},	// Shell scripts
 		{"source_c.png", "c", "cc"},	// C source
 		{"source_c_header.png", "h", "hh", "hhh"},	// C header
 		{"source_cplusplus.png", "cpp", "c++"},	// C++ source
 		{"source_csharp.png", "c#=", "cs"},	// C# source
+		{"source_java.png", "java", "jsp"},	// Java source
 		{"source_php.png", "php", "php3", "php4", "php5", "phtm", "phtml"},	// PHP source
 		{"source_ruby.png", "rb", "rbx", "rhtml"},	// Ruby source
 		{"source_web.png", "html", "htm", "xhtml", "wml", "wmlc", "wmls", "wmlsc", "hdml", "xhdml", "chtml", "vrml", "torrent", "url", "css"},	// Web formats

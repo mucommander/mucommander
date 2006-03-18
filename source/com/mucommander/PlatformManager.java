@@ -580,7 +580,8 @@ public class PlatformManager {
 
 
 	/**
-	 * Opens the given file in the Mac OS X Finder. A Finder window will be opened, revealing:
+	 * Opens the given file in the current OS/desktop's file manager : Explorer for Windows, Finder for Mac OS X,
+	 * Nautilus for GNOME, Konqueror for KDE.
 	 * <ul>
 	 *  <li>if the given file is a folder, the folder contents
 	 *  <li>if the given file is a regular file, the enclosing folder's contents (Finder is unable to jump to the file unfortunately)

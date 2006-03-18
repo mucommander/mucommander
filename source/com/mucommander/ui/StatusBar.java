@@ -98,8 +98,6 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 	 * Updates info displayed on the status bar (currently selected files and volume info).
 	 */
 	public void updateStatusInfo() {
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-
 		updateSelectedFilesInfo();
 		updateVolumeInfo();
 	}
