@@ -5,6 +5,7 @@ import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.ui.bookmark.AddBookmarkDialog;
 import com.mucommander.ui.bookmark.EditBookmarksDialog;
 import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.icon.IconManager;
 
 import com.mucommander.text.Translator;
 import com.mucommander.file.AbstractFile;
@@ -23,6 +24,7 @@ import java.awt.event.*;
  * @author Maxence Bernard
  */
 public class ToolBar extends JToolBar implements ActionListener, TableChangeListener, LocationListener, MouseListener {
+
 	private MainFrame mainFrame;
 
 	/** Right-click popup menu */
@@ -32,14 +34,12 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 	
 	/** Buttons icons, loaded only once */
 	private static ImageIcon icons[][];
-
+	
+	/** True if icons (ImageIcon instances) have been loaded */
 	private static boolean iconsLoaded;
 	
 	/** JButton instances */
 	private JButton buttons[];
-	
-	/** Icon folder within JAR file */
-	public final static String ICON_FOLDER = "/toolbar_icons/";
 	
 	/** Buttons descriptions: label, enabled icon, disabled icon (null for no disabled icon), separator ("true" or null for false)  */
 	private final static String BUTTONS_DESC[][] = {
@@ -149,20 +149,19 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 
 		int nbIcons = BUTTONS_DESC.length;
 		icons = new ImageIcon[nbIcons][2];
-		Class classInstance = Runtime.getRuntime().getClass();
 		
 		for(int i=0; i<nbIcons; i++) {
 			// Load 'enabled' icon
-			icons[i][0] = new ImageIcon(classInstance.getResource(ICON_FOLDER+BUTTONS_DESC[i][1]));
+			icons[i][0] = IconManager.getToolBarIcon(BUTTONS_DESC[i][1]);
 			// Load 'disabled' icon if available
 			if(BUTTONS_DESC[i][2]!=null)
-				icons[i][1] = new ImageIcon(classInstance.getResource(ICON_FOLDER+BUTTONS_DESC[i][2]));
+				icons[i][1] = IconManager.getToolBarIcon(BUTTONS_DESC[i][2]);
 		}
 	}
 	
 
 	/**
-	 * Sets icons to toolbar buttons.
+	 * Sets icons in toolbar buttons.
 	 */
 	private void setIcons() {
 		int nbIcons = BUTTONS_DESC.length;

@@ -101,7 +101,7 @@ public class Launcher {
 		splashScreen.setLoadingMessage("Loading icons...");
 
 		// Preload icons
-		com.mucommander.ui.FileIcons.init();
+		com.mucommander.ui.icon.FileIcons.init();
 		com.mucommander.ui.ToolBar.init();
 		com.mucommander.ui.CommandBar.init();
 

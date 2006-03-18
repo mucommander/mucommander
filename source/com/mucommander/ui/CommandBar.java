@@ -6,6 +6,8 @@ import com.mucommander.ui.table.*;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.viewer.*;
 import com.mucommander.ui.editor.*;
+import com.mucommander.ui.icon.IconManager;
+
 import com.mucommander.text.Translator;
 import com.mucommander.job.*;
 import com.mucommander.file.*;
@@ -66,9 +68,6 @@ public class CommandBar extends JPanel implements ActionListener, MouseListener 
 	private final static String COPY_TEXT = "command_bar.copy";
 	private final static String LOCAL_COPY_TEXT = "command_bar.local_copy";
 	
-	/** Icon folder within JAR file */
-	private final static String ICON_FOLDER = "/command_bar_icons/";
-	
 	private final static String BUTTONS_DESC[][] =  {
 		{"command_bar.view", "[F3]", "view.png"},
 		{"command_bar.edit", "[F4]", "edit.png"},
@@ -86,9 +85,8 @@ public class CommandBar extends JPanel implements ActionListener, MouseListener 
 
 		// Create ImageIcon instances, executed only once
 		iconImages = new ImageIcon[NB_BUTTONS];
-		Class classInstance = Runtime.getRuntime().getClass();
 		for(int i=0; i<NB_BUTTONS; i++)
-			iconImages[i] = new ImageIcon(classInstance.getResource(ICON_FOLDER+BUTTONS_DESC[i][2]));
+			iconImages[i] = IconManager.getCommandBarIcon(BUTTONS_DESC[i][2]);
 	}
 
 

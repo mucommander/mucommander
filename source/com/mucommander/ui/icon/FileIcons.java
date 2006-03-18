@@ -1,5 +1,5 @@
 
-package com.mucommander.ui;
+package com.mucommander.ui.icon;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractArchiveFile;
@@ -24,23 +24,14 @@ public class FileIcons {
 	/** Hashtable that associates icon names with ImageIcon instances */ 
 	private static Hashtable iconImages;
 
-	/** Icon instance for directories */
-	private static ImageIcon folderIcon;
-	/** Icon instance for file without a known extension */
-	private static ImageIcon fileIcon;
-	/** Icon instance for supported archives (browsable) */
-	private static ImageIcon archiveIcon;
+	/** Icon for directories */
+	private final static ImageIcon folderIcon = IconManager.getFileIcon("folder.png");
+	/** Default icon for files without a known extension */
+	private final static ImageIcon fileIcon = IconManager.getFileIcon("file.png");
+	/** Icon for supported archives (browsable) */
+	private final static ImageIcon archiveIcon = IconManager.getFileIcon("archive_supported.png");
 
-	/** Icon folder within JAR file */	
-	private final static String ICON_FOLDER = "/file_icons/";
 
-	/** Icon filename for directories */
-	private final static String FOLDER_ICON = "folder.png";
-	/** Icon filename for file without a known extension */
-	private final static String FILE_ICON = "file.png";
-	/** Icon filename for supported archives (browsable) */
-	private final static String ARCHIVE_ICON = "archive_supported.png";
-	
 	/** File icon <-> extensions association. For information about file extensions, see:
 	 * <ul>
 	 *  <li><a href="http://en.wikipedia.org/wiki/File_format">http://en.wikipedia.org/wiki/File_format</a>
@@ -88,8 +79,27 @@ public class FileIcons {
 		{"video.png", "3g2", "3gp", "3gp2", "3gpp", "asf", "asx", "avi", "dir", "dv", "dxr", "m1v", "m4e", "m4u", "moov", "mov", "movie", "mp4", "mpe", "mpeg", "mpg", "mpv2", "qt", "rm", "rmvb", "rts", "vob", "wmv"}		// Video formats
 	};
 
-	/** Singleton instance */
-	private final static FileIcons instance = new FileIcons(); 
+
+	/**
+	 * Initializes extensions and images hashtables.
+	 */
+	static {
+		com.mucommander.Debug.trace("Initializing file icons");
+		
+		int nbIcons = ICON_EXTENSIONS.length;
+		
+		// Create hashtables
+		iconExtensions = new Hashtable();
+		iconImages = new Hashtable();
+		
+		// Maps known file extensions to icon names, and icon names to ImageIcon instances 
+		for(int i=0; i<nbIcons; i++) {
+			int nbExtensions = ICON_EXTENSIONS[i].length;
+			String iconName = ICON_EXTENSIONS[i][0];
+			for(int j=1; j<nbExtensions; j++)
+				iconExtensions.put(ICON_EXTENSIONS[i][j], iconName);
+		}
+	}
 
 	
 	/**
@@ -103,6 +113,7 @@ public class FileIcons {
 	/**
 	 * Initializes icons hash maps and instances.
 	 */
+/*
 	private FileIcons() {
 		com.mucommander.Debug.trace("Initializing file icons");
 		
@@ -113,9 +124,9 @@ public class FileIcons {
 		iconImages = new Hashtable();
 		
 		// Create basic file icons, which we're sure to use
-		folderIcon = loadIcon(FOLDER_ICON);
-		fileIcon = loadIcon(FILE_ICON);
-		archiveIcon = loadIcon(ARCHIVE_ICON);
+		folderIcon = IconManager.getFileIcon(FOLDER_ICON);
+		fileIcon = IconManager.getFileIcon(FILE_ICON);
+		archiveIcon = IconManager.getFileIcon(ARCHIVE_ICON);
 		
 		// Maps known file extensions to icon names, and icon names to ImageIcon instances 
 		for(int i=0; i<nbIcons; i++) {
@@ -125,13 +136,14 @@ public class FileIcons {
 				iconExtensions.put(ICON_EXTENSIONS[i][j], iconName);
 		}
 	}
-
+*/
 
 	/**
 	 * Loads the icon with the given filename from the icon folder and returns the ImageIcon instance.
 	 *
 	 * @param iconName the icon's filename
 	 */
+/*
 	private ImageIcon loadIcon(String iconName) {
 		try {
 			return new ImageIcon(getClass().getResource(ICON_FOLDER+iconName));
@@ -143,6 +155,8 @@ public class FileIcons {
 			return fileIcon;
 		}
 	}
+*/
+
 	
 	/**
 	 * Returns an ImageIcon instance for the given file. The icon is chosen based on the file kind (archive, folder...) and extension.
@@ -174,7 +188,10 @@ public class FileIcons {
 			ImageIcon icon = (ImageIcon)iconImages.get(iconName);
 			// Icon not loaded yet, load it now and add it to icon name<->image hashtable
 			if(icon==null) {
-				icon = instance.loadIcon(iconName);
+				icon = IconManager.getFileIcon(iconName);
+				// If icon couldn't be loaded (shouldn't happen if icon exists), use default file icon instead
+				if(icon==null)
+					icon = fileIcon;
 				iconImages.put(iconName, icon);
 			}
 			
