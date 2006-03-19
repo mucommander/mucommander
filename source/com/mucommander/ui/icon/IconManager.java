@@ -2,6 +2,7 @@
 package com.mucommander.ui.icon;
 
 import javax.swing.ImageIcon;
+import java.awt.Image;
 
 
 /**
@@ -26,13 +27,23 @@ public class IconManager {
 	/** Table icons folder within the application's JAR file */	
 	private final static String TABLE_ICONS_FOLDER = "/table_icons/";
 	
+	public final static float SCALE_100 = 1;
+	public final static float SCALE_150 = 1.5f;
+	public final static float SCALE_200 = 2.0f;
+	
 	
 	/**
 	 * 
 	 */
-	public static ImageIcon getIcon(String iconPath) {
+	public static ImageIcon getIcon(String iconPath, float scaleFactor) {
 		try {
-			return new ImageIcon(classInstance.getResource(iconPath));
+			ImageIcon icon = new ImageIcon(classInstance.getResource(iconPath));
+			
+			if(scaleFactor==SCALE_100)
+				return icon;
+			
+			Image image = icon.getImage();
+			return new ImageIcon(image.getScaledInstance((int)(scaleFactor*image.getWidth(null)), (int)(scaleFactor*image.getHeight(null)), Image.SCALE_AREA_AVERAGING));
 		}
 		catch(Exception e) {
 			// An exception is thrown by ImageIcon if the image doesn't exist or could not be properly read
@@ -42,28 +53,31 @@ public class IconManager {
 		}
 	}
 
+	public static ImageIcon getIcon(String iconPath) {
+		return getIcon(iconPath, SCALE_100);
+	}
 
 	public static ImageIcon getFileIcon(String iconName) {
-		return getIcon(FILE_ICONS_FOLDER+iconName);
+		return getIcon(FILE_ICONS_FOLDER+iconName, SCALE_100);
 	}
 
 
 	public static ImageIcon getToolBarIcon(String iconName) {
-		return getIcon(TOOLBAR_ICONS_FOLDER+iconName);
+		return getIcon(TOOLBAR_ICONS_FOLDER+iconName, SCALE_200);
 	}
 
 
 	public static ImageIcon getCommandBarIcon(String iconName) {
-		return getIcon(COMMANDBAR_ICONS_FOLDER+iconName);
+		return getIcon(COMMANDBAR_ICONS_FOLDER+iconName, SCALE_200);
 	}
 
 
 	public static ImageIcon getPreferencesIcon(String iconName) {
-		return getIcon(PREFERENCES_ICONS_FOLDER+iconName);	
+		return getIcon(PREFERENCES_ICONS_FOLDER+iconName, SCALE_100);	
 	}
 
 
 	public static ImageIcon getTableIcon(String iconName) {
-		return getIcon(TABLE_ICONS_FOLDER+iconName);	
+		return getIcon(TABLE_ICONS_FOLDER+iconName, SCALE_100);	
 	}
 }

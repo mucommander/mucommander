@@ -1,5 +1,7 @@
 package com.mucommander.ui;
 
+import com.mucommander.ui.icon.IconManager;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -63,7 +65,7 @@ public class SplashScreen extends JWindow {
 		this.customFont = new Font(FONT_NAME, FONT_STYLE, FONT_SIZE);
 
 		// Resolves the URL of the splash logo image within the JAR file and create an ImageIcon
-		ImageIcon imageIcon = new ImageIcon(getClass().getResource(LOGO_IMAGE_PATH));
+		ImageIcon imageIcon = IconManager.getIcon(LOGO_IMAGE_PATH);
 
 		// Wait for the image to be fully loaded
 		MediaTracker mediaTracker = new MediaTracker(this);
