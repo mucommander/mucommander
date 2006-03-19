@@ -109,54 +109,6 @@ public class FileIcons {
 	public static void init() {
 	}
 
-
-	/**
-	 * Initializes icons hash maps and instances.
-	 */
-/*
-	private FileIcons() {
-		com.mucommander.Debug.trace("Initializing file icons");
-		
-		int nbIcons = ICON_EXTENSIONS.length;
-		
-		// Create hashtables
-		iconExtensions = new Hashtable();
-		iconImages = new Hashtable();
-		
-		// Create basic file icons, which we're sure to use
-		folderIcon = IconManager.getFileIcon(FOLDER_ICON);
-		fileIcon = IconManager.getFileIcon(FILE_ICON);
-		archiveIcon = IconManager.getFileIcon(ARCHIVE_ICON);
-		
-		// Maps known file extensions to icon names, and icon names to ImageIcon instances 
-		for(int i=0; i<nbIcons; i++) {
-			int nbExtensions = ICON_EXTENSIONS[i].length;
-			String iconName = ICON_EXTENSIONS[i][0];
-			for(int j=1; j<nbExtensions; j++)
-				iconExtensions.put(ICON_EXTENSIONS[i][j], iconName);
-		}
-	}
-*/
-
-	/**
-	 * Loads the icon with the given filename from the icon folder and returns the ImageIcon instance.
-	 *
-	 * @param iconName the icon's filename
-	 */
-/*
-	private ImageIcon loadIcon(String iconName) {
-		try {
-			return new ImageIcon(getClass().getResource(ICON_FOLDER+iconName));
-		}
-		catch(Exception e) {
-			// An exception is thrown by ImageIcon if the image doesn't exist or could not be properly read
-			if(com.mucommander.Debug.ON)
-				com.mucommander.Debug.trace("/!\\/!\\/!\\ "+e+" caught while trying to load icon "+ICON_FOLDER+iconName+" , using default file icon instead.");
-			return fileIcon;
-		}
-	}
-*/
-
 	
 	/**
 	 * Returns an ImageIcon instance for the given file. The icon is chosen based on the file kind (archive, folder...) and extension.

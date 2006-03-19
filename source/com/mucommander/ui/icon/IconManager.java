@@ -4,6 +4,12 @@ package com.mucommander.ui.icon;
 import javax.swing.ImageIcon;
 
 
+/**
+ * IconManager takes care of loading icons inside the application's JAR file and provides
+ * simple methods to retrieve icon instances.
+ *
+ * @author Maxence Bernard
+ */
 public class IconManager {
 	
 	/** A Class instance, used to retrieve JAR resource files  */
@@ -17,8 +23,13 @@ public class IconManager {
 	private final static String COMMANDBAR_ICONS_FOLDER = "/command_bar_icons/";
 	/** Preferences icons folder within the application's JAR file */	
 	private final static String PREFERENCES_ICONS_FOLDER = "/preferences_icons/";
+	/** Table icons folder within the application's JAR file */	
+	private final static String TABLE_ICONS_FOLDER = "/table_icons/";
 	
 	
+	/**
+	 * 
+	 */
 	public static ImageIcon getIcon(String iconPath) {
 		try {
 			return new ImageIcon(classInstance.getResource(iconPath));
@@ -49,5 +60,10 @@ public class IconManager {
 
 	public static ImageIcon getPreferencesIcon(String iconName) {
 		return getIcon(PREFERENCES_ICONS_FOLDER+iconName);	
+	}
+
+
+	public static ImageIcon getTableIcon(String iconName) {
+		return getIcon(TABLE_ICONS_FOLDER+iconName);	
 	}
 }

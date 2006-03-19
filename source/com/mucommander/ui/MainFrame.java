@@ -8,6 +8,7 @@ import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.ui.connect.ServerConnectDialog;
+import com.mucommander.ui.icon.IconManager;
 
 import com.mucommander.event.TableChangeListener;
 
@@ -69,7 +70,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		super();
 	
 		// Set frame icon fetched in an image inside the JAR file
-		setIconImage(new ImageIcon(getClass().getResource("/icon16.gif")).getImage());
+		setIconImage(IconManager.getIcon("/icon16.gif").getImage());
 
 		// Enable window resize
 		setResizable(true);
