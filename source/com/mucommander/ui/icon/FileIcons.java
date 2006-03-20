@@ -21,16 +21,15 @@ public class FileIcons {
 	/** Hashtable that associates file extensions with icon names */
 	private static Hashtable iconExtensions;
 
-	/** Hashtable that associates icon names with ImageIcon instances */ 
-	private static Hashtable iconImages;
-
 	/** Icon for directories */
-	private final static ImageIcon folderIcon = IconManager.getFileIcon("folder.png");
+	private final static String FOLDER_ICON_NAME = "folder.png";
 	/** Default icon for files without a known extension */
-	private final static ImageIcon fileIcon = IconManager.getFileIcon("file.png");
+	private final static String FILE_ICON_NAME = "file.png";
 	/** Icon for supported archives (browsable) */
-	private final static ImageIcon archiveIcon = IconManager.getFileIcon("archive_supported.png");
-
+	private final static String ARCHIVE_ICON_NAME = "archive.png";
+	/** Icon for parent folder (..) */
+	private final static String PARENT_FOLDER_ICON_NAME = "parent.gif";
+	
 
 	/** File icon <-> extensions association. For information about file extensions, see:
 	 * <ul>
@@ -81,24 +80,23 @@ public class FileIcons {
 
 
 	/**
-	 * Initializes extensions and images hashtables.
+	 * Initializes extensions hashtables and preloads icons we're sure to use.
 	 */
 	static {
-		com.mucommander.Debug.trace("Initializing file icons");
-		
-		int nbIcons = ICON_EXTENSIONS.length;
-		
-		// Create hashtables
+		// Maps known file extensions to icon names
 		iconExtensions = new Hashtable();
-		iconImages = new Hashtable();
-		
-		// Maps known file extensions to icon names, and icon names to ImageIcon instances 
+		int nbIcons = ICON_EXTENSIONS.length;
 		for(int i=0; i<nbIcons; i++) {
 			int nbExtensions = ICON_EXTENSIONS[i].length;
 			String iconName = ICON_EXTENSIONS[i][0];
 			for(int j=1; j<nbExtensions; j++)
 				iconExtensions.put(ICON_EXTENSIONS[i][j], iconName);
 		}
+
+		// Preloads icons so they're in IconManager's cache for when we need them
+		IconManager.getFileIcon(FOLDER_ICON_NAME);
+		IconManager.getFileIcon(FILE_ICON_NAME);
+		IconManager.getFileIcon(ARCHIVE_ICON_NAME);
 	}
 
 	
@@ -118,36 +116,52 @@ public class FileIcons {
 	public static ImageIcon getFileIcon(AbstractFile file) {
 		// Directory
 		if(file.isDirectory()) {
-			return folderIcon;
+			return IconManager.getFileIcon(FOLDER_ICON_NAME);
 		}
 		// Supported archive
 		else if(file.isBrowsable()) {
-			return archiveIcon;
+			return IconManager.getFileIcon(ARCHIVE_ICON_NAME);
 		}
 		// Regular file
 		else {
 			// Determine if the extension has an associated icon
 			String fileExtension = file.getExtension();
 			if(fileExtension==null)	// File has no extension, return default file icon
-				return fileIcon;
+				return IconManager.getFileIcon(FILE_ICON_NAME);
 
 			// Compare extension against lower-cased extensions
 			String iconName = (String)iconExtensions.get(fileExtension.toLowerCase());
 			if(iconName==null)	// No icon associated to extension, return default file icon
-				return fileIcon;
+				return IconManager.getFileIcon(FILE_ICON_NAME);
 			
-			// Retrieves ImageIcon instance corresponding to the icon's name
-			ImageIcon icon = (ImageIcon)iconImages.get(iconName);
-			// Icon not loaded yet, load it now and add it to icon name<->image hashtable
-			if(icon==null) {
-				icon = IconManager.getFileIcon(iconName);
-				// If icon couldn't be loaded (shouldn't happen if icon exists), use default file icon instead
-				if(icon==null)
-					icon = fileIcon;
-				iconImages.put(iconName, icon);
-			}
-			
+			// Retrieves the cached (or freshly loaded if not in cache already) ImageIcon instance corresponding to the icon's name
+			ImageIcon icon = IconManager.getFileIcon(iconName);
+			// Returned IconImage should never be null, but if it is (icon file missing), return default file icon
+			if(icon==null)
+				return IconManager.getFileIcon(FILE_ICON_NAME);
+				
 			return icon;
+		}
+	}
+
+	
+	/**
+	 * Returns the icon for the parent folder (..).
+	 */
+	public static ImageIcon getParentFolderIcon() {
+		return IconManager.getFileIcon(PARENT_FOLDER_ICON_NAME);
+	}
+	
+	
+	/**
+	 * Tries to load all file icons and reports on their status : OK/FAILED.
+	 */
+	public static void main(String args[]) {
+		for(int i=0; i<ICON_EXTENSIONS.length; i++) {
+			String iconName = ICON_EXTENSIONS[i][0];
+			System.out.print("Loading icon "+iconName+": ");
+			ImageIcon icon = IconManager.getFileIcon(ICON_EXTENSIONS[i][0]);
+			System.out.println(icon==null?"FAILED!":"OK");
 		}
 	}
 }

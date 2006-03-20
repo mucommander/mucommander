@@ -101,7 +101,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 
 		// Create toolbar and show it only if it hasn't been disabled in the preferences
 		this.toolbar = new ToolBar(this);
-		// Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, to be properly initialized
+		// Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be properly initialized
 		this.toolbar.setVisible(ConfigurationManager.getVariableBoolean("prefs.toolbar.visible", true));
 			
 		contentPane.add(toolbar, BorderLayout.NORTH);
@@ -146,8 +146,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		
 		// Show command bar only if it hasn't been disabled in the preferences
 		this.commandBar = new CommandBar(this);
-		if(!ConfigurationManager.getVariableBoolean("prefs.command_bar.visible", true))
-			this.commandBar.setVisible(false);
+		// Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
+		this.commandBar.setVisible(ConfigurationManager.getVariableBoolean("prefs.command_bar.visible", true));
+
 		southPanel.add(commandBar);
 		
 		contentPane.add(southPanel, BorderLayout.SOUTH);

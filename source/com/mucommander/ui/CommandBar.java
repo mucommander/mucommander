@@ -11,6 +11,7 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.text.Translator;
 import com.mucommander.job.*;
 import com.mucommander.file.*;
+import com.mucommander.conf.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,9 +41,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 	/** Popup menu item that hides the toolbar */
 	private JMenuItem hideMenuItem;	
 
-	/** Icon images, initialized in static block */
-	private static ImageIcon iconImages[];
-	
 	////////////////////
 	// Button indexes //
 	////////////////////
@@ -80,13 +78,18 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 	};
 
 
+	/**
+	 * Preloads icons if command bar is to become visible after launch. 
+	 * Icons will then be in IconManager's cache, ready for use when the first command bar is created.
+	 */
 	static {
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading command bar icons");
+		if(com.mucommander.conf.ConfigurationManager.getVariableBoolean("prefs.command_bar.visible", true)) {
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Preloading command bar icons");
 
-		// Create ImageIcon instances, executed only once
-		iconImages = new ImageIcon[NB_BUTTONS];
-		for(int i=0; i<NB_BUTTONS; i++)
-			iconImages[i] = IconManager.getCommandBarIcon(BUTTONS_DESC[i][2]);
+			// For each button
+			for(int i=0; i<NB_BUTTONS; i++)
+				IconManager.getCommandBarIcon(BUTTONS_DESC[i][2]);
+		}
 	}
 
 
@@ -109,11 +112,13 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 		for(int i=0; i<NB_BUTTONS; i++)
 			buttons[i] = addButton(
 				Translator.get(BUTTONS_DESC[i][0])+" "+BUTTONS_DESC[i][1],
-				Translator.get(BUTTONS_DESC[i][0]+"_tooltip"),
-				iconImages[i]
+				Translator.get(BUTTONS_DESC[i][0]+"_tooltip")
 			);	
 	
 		addMouseListener(this);
+
+		// Listen to configuration changes to reload command bar buttons when icon size has changed
+		ConfigurationManager.addConfigurationListener(this);
 	}
 
 
@@ -132,10 +137,9 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 	 * @param label the button's label
 	 * @param tooltipText the tooltip text that will get displayed when the mouse stays over the button
 	 */
-	private JButton addButton(String label, String tooltipText, ImageIcon iconImage) {
-		JButton button = new JButton(label, iconImage);
+	private JButton addButton(String label, String tooltipText) {
+		JButton button = new JButton(label);
         button.setToolTipText(tooltipText);
-//		button.setMargin(new Insets(1,1,1,1));
 		button.setMargin(new Insets(3,4,3,4));
 		// For Mac OS X whose default minimum width for buttons is enormous
 		button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getWidth()));
@@ -145,6 +149,25 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 		return button;
 	}
 
+
+	/**
+	 * Sets icons in command bar buttons, called when this command bar is about to become visible.
+	 */
+	private void setButtonIcons() {
+		// For each button
+		for(int i=0; i<NB_BUTTONS; i++)
+			buttons[i].setIcon(IconManager.getCommandBarIcon(BUTTONS_DESC[i][2]));
+	}
+	
+	/**
+	 * Remove icons from command bar buttons, called when this command bar is about to become invisible in order to garbage-collect icon instances.
+	 */
+	private void removeButtonIcons() {
+		// For each button
+		for(int i=0; i<NB_BUTTONS; i++)
+			buttons[i].setIcon(null);
+	}
+	
 	
 	/**
 	 * Sets shift mode on or off : some buttons such as 'F6 Move' may want to indicate
@@ -199,6 +222,27 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 		frame.show();
 	}
 	
+
+	////////////////////////
+	// Overridden methods //
+	////////////////////////
+
+	/**
+	 * Overridden method to set/remove toolbar icons depending on the specified new visible state.
+	 */
+	public void setVisible(boolean visible) {
+		if(visible) {
+			// Set icons to buttons
+			setButtonIcons();
+		}
+		else {
+			// Remove icon from buttons
+			removeButtonIcons();
+		}
+		
+		super.setVisible(visible);
+	}
+
 	
 	///////////////////////////////////
 	// ConfigurationListener methods //
@@ -208,17 +252,14 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
      * Listens to certain configuration variables.
      */
     public boolean configurationChanged(ConfigurationEvent event) {
-/*
     	String var = event.getVariable();
 
-		// Reload toolbar icons if their size has changed 
+		// Reload toolbar icons if their size has changed and command bar is visible
 		if (var.equals(IconManager.COMMAND_BAR_ICON_SCALE_CONF_VAR)) {
-			if(isVisible()) {
-				loadIcons();
-				setIcons();
-			}
+			if(isVisible())
+				setButtonIcons();
 		}
-*/
+
 		return true;
 	}
 	

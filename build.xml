@@ -155,9 +155,22 @@
     </java>
   </target>
 
-  <!-- Launches mucommander from the classes directory -->
+  <!-- Launches muCommander in stress test mode, changing current folder every second or so -->
   <target name="stresstest">
     <java classname="com.mucommander.StressTester" fork="true">
+      <classpath>
+        <pathelement location="classes"/>
+         <fileset dir="lib">
+          <include name="**/*.jar"/>
+         </fileset>
+        <pathelement path="${classpath}"/>
+      </classpath>
+    </java>
+  </target>
+
+  <!-- Launches muCommander in stress test mode, changing current folder every second or so -->
+  <target name="testicons">
+    <java classname="com.mucommander.ui.icon.FileIcons" fork="true">
       <classpath>
         <pathelement location="classes"/>
          <fileset dir="lib">

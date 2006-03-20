@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.Dimension;
 
+import java.util.Hashtable;
 
 /**
  * IconManager takes care of loading icons inside the application's JAR file and provides
@@ -21,6 +22,13 @@ public class IconManager implements ConfigurationListener {
 	
 	/** Class instance used to retrieve JAR resource files  */
 	private final static Class classInstance = instance.getClass();
+	
+	private static Hashtable fileIconsCache = new Hashtable();
+
+	private static Hashtable toolBarIconsCache = new Hashtable();
+
+	private static Hashtable commandBarIconsCache = new Hashtable();
+	
 	
 	/** File icons folder within the application's JAR file */	
 	private final static String FILE_ICONS_FOLDER = "/file_icons/";
@@ -75,22 +83,44 @@ public class IconManager implements ConfigurationListener {
 		return getIcon(iconPath, 1.0f);
 	}
 
-	public static ImageIcon getFileIcon(String iconName) {
-		return getIcon(FILE_ICONS_FOLDER+iconName, fileIconScaleFactor);
+
+	private static ImageIcon getCachedIcon(Hashtable iconsCache, String iconFolder, String iconName, float iconScaleFactor) {
+		ImageIcon icon = (ImageIcon)iconsCache.get(iconName);
+		
+		if(icon==null) {
+			com.mucommander.Debug.trace("icon "+iconFolder+iconName+" not in cache");
+			// Icon is not in cache, let's create it
+			icon = getIcon(iconFolder+iconName, iconScaleFactor);
+			// and add it to the cache if it is not null (should never be)
+			if(icon!=null)
+				iconsCache.put(iconName, icon);
+		}
+		else if(com.mucommander.Debug.ON) {
+			com.mucommander.Debug.trace("retrieved cached "+iconFolder+iconName+" icon");
+		}
+		
+		return icon;
 	}
+
+
+	public static ImageIcon getFileIcon(String iconName) {
+		return getCachedIcon(fileIconsCache, FILE_ICONS_FOLDER, iconName, fileIconScaleFactor);
+	}
+
 
 	public static Dimension getFileIconSize() {
 		int dim = (int)(16 * fileIconScaleFactor);
 		return new Dimension(dim, dim);
 	}
 
+
 	public static ImageIcon getToolBarIcon(String iconName) {
-		return getIcon(TOOLBAR_ICONS_FOLDER+iconName, toolBarIconScaleFactor);
+		return getCachedIcon(toolBarIconsCache, TOOLBAR_ICONS_FOLDER, iconName, toolBarIconScaleFactor);
 	}
 
 
 	public static ImageIcon getCommandBarIcon(String iconName) {
-		return getIcon(COMMANDBAR_ICONS_FOLDER+iconName, commandBarIconScaleFactor);
+		return getCachedIcon(commandBarIconsCache, COMMANDBAR_ICONS_FOLDER, iconName, commandBarIconScaleFactor);
 	}
 
 
@@ -116,12 +146,15 @@ public class IconManager implements ConfigurationListener {
 
 		if (var.equals(FILE_TABLE_ICON_SCALE_CONF_VAR)) {
 			fileIconScaleFactor = event.getFloatValue();
+			fileIconsCache = new Hashtable();
 		}
 		else if (var.equals(TOOLBAR_ICON_SCALE_CONF_VAR)) {
 			toolBarIconScaleFactor = event.getFloatValue();
+			toolBarIconsCache = new Hashtable();
 		}
 		else if (var.equals(COMMAND_BAR_ICON_SCALE_CONF_VAR)) {
 			commandBarIconScaleFactor = event.getFloatValue();
+			commandBarIconsCache = new Hashtable();
 		}
 	
 		return true;

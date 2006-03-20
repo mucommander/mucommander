@@ -33,12 +33,6 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
 	/** Popup menu item that hides the toolbar */
 	private JMenuItem hideToolbarMenuItem;
 	
-	/** Buttons icons, loaded only once */
-	private static ImageIcon icons[][];
-	
-	/** True if icons (ImageIcon instances) have been loaded */
-	private static boolean iconsLoaded;
-	
 	/** JButton instances */
 	private JButton buttons[];
 	
@@ -87,11 +81,23 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
 	private final static int PREFERENCES_INDEX = 18;
 	
 	
+	/**
+	 * Preloads icons if toolbar is to become visible after launch. 
+	 * Icons will then be in IconManager's cache, ready for use when the first ToolBar is created.
+	 */
 	static {
 		if(com.mucommander.conf.ConfigurationManager.getVariableBoolean("prefs.toolbar.visible", true)) {
-			// Preload icons if toolbar is to become visible
-			loadIcons();
-			iconsLoaded = true;
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Preloading toolbar icons");
+			
+			// For each icon
+			int nbIcons = BUTTONS_DESC.length;
+			for(int i=0; i<nbIcons; i++) {
+				// Preload 'enabled' icon
+				IconManager.getToolBarIcon(BUTTONS_DESC[i][1]);
+				// Preload 'disabled' icon if available
+				if(BUTTONS_DESC[i][2]!=null)
+					IconManager.getToolBarIcon(BUTTONS_DESC[i][2]);
+			}
 		}
 	}
 	
@@ -145,41 +151,48 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
 	}
 
 	
-	/**
-	 * Loads all the icons used by the toolbar buttons.
-	 */
-	private static void loadIcons() {
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading toolbar icons");
 
+	/**
+	 * Sets icons in toolbar buttons, called when this toolbar is about to become visible.
+	 */
+	private void setButtonIcons() {
 		int nbIcons = BUTTONS_DESC.length;
-		icons = new ImageIcon[nbIcons][2];
 		
+		// For each button
 		for(int i=0; i<nbIcons; i++) {
-			// Load 'enabled' icon
-			icons[i][0] = IconManager.getToolBarIcon(BUTTONS_DESC[i][1]);
-			// Load 'disabled' icon if available
-			if(BUTTONS_DESC[i][2]!=null)
-				icons[i][1] = IconManager.getToolBarIcon(BUTTONS_DESC[i][2]);
+			JButton button = buttons[i];
+			if(button==null)
+				continue;
+
+			String buttonDesc[] = BUTTONS_DESC[i];
+			// Set 'enabled' icon
+			button.setIcon(IconManager.getToolBarIcon(buttonDesc[1]));
+			// Set 'disabled' icon if available
+			if(buttonDesc[2]!=null)
+				button.setDisabledIcon(IconManager.getToolBarIcon(buttonDesc[2]));
 		}
 	}
 	
-
 	/**
-	 * Sets icons in toolbar buttons.
+	 * Remove icons from toolbar buttons, called when this toolbar is about to become invisible in order to garbage-collect icon instances.
 	 */
-	private void setIcons() {
+	private void removeButtonIcons() {
 		int nbIcons = BUTTONS_DESC.length;
+		
+		// For each button
 		for(int i=0; i<nbIcons; i++) {
-			if(buttons[i]==null)
+			JButton button = buttons[i];
+			if(button==null)
 				continue;
-			
-			// Set 'enabled' icon
-			buttons[i].setIcon(icons[i][0]);
-			// Set 'disabled' icon if available
-			if(icons[i][1]!=null)
-				buttons[i].setDisabledIcon(icons[i][1]);
+
+			// Remove 'enabled' icon
+			button.setIcon(null);
+			// Remove 'disabled' icon if available
+			if(BUTTONS_DESC[i][2]!=null)
+				button.setDisabledIcon(null);
 		}
-	}
+	}	
+	
 	
 	
 	/**
@@ -224,29 +237,16 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
 	////////////////////////
 
 	/**
-	 * Overridden method to load/unload toolbar icons depending on this Toolbar's visible state.
-	 * In other words, icons are only loaded when Toolbar is visible.
+	 * Overridden method to set/remove toolbar icons depending on the specified new visible state.
 	 */
 	public void setVisible(boolean visible) {
 		if(visible) {
-			if(!iconsLoaded) {
-				// Load icon images
-				loadIcons();
-				iconsLoaded = true;
-			}
 			// Set icons to buttons
-			setIcons();
+			setButtonIcons();
 		}
 		else {
-			if(iconsLoaded) {
-				// Unload icon images (set values to null)
-				int nbButtons = buttons.length;
-				for(int i=0; i<nbButtons; i++) {
-					icons[i][0] = null;
-					icons[i][1] = null;
-				}
-				iconsLoaded = false;
-			}
+			// Remove icon from buttons
+			removeButtonIcons();
 		}
 		
 		super.setVisible(visible);
@@ -300,12 +300,10 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
     public boolean configurationChanged(ConfigurationEvent event) {
     	String var = event.getVariable();
 
-		// Reload toolbar icons if their size has changed 
+		// Reload toolbar icons if their size has changed and toolbar is visible
 		if (var.equals(IconManager.TOOLBAR_ICON_SCALE_CONF_VAR)) {
-			if(isVisible()) {
-				loadIcons();
-				setIcons();
-			}
+			if(isVisible())
+				setButtonIcons();
 		}
 	
 		return true;
