@@ -4154,7 +4154,7 @@ prefs_dialog.look_and_feel:RU:Настройки отображения
 prefs_dialog.look_and_feel:ZH_CN:外观(Look & Feel)
 prefs_dialog.look_and_feel:SI:Shema
 
-prefs_dialog.icons_size:EN:Icons size
+prefs_dialog.icons_size:EN:Icon size
 prefs_dialog.icons_size:FR:Taille des icônes
 
 
