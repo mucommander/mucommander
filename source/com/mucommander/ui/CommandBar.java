@@ -24,7 +24,7 @@ import java.io.*;
  *
  * @author Maxence Bernard
  */
-public class CommandBar extends JPanel implements ActionListener, MouseListener {
+public class CommandBar extends JPanel implements ConfigurationListener, ActionListener, MouseListener {
 
 	/** Parent MainFrame instance */
     private MainFrame mainFrame;
@@ -198,6 +198,30 @@ public class CommandBar extends JPanel implements ActionListener, MouseListener 
 		EditorFrame frame = new EditorFrame(mainFrame, file);
 		frame.show();
 	}
+	
+	
+	///////////////////////////////////
+	// ConfigurationListener methods //
+	///////////////////////////////////
+	
+    /**
+     * Listens to certain configuration variables.
+     */
+    public boolean configurationChanged(ConfigurationEvent event) {
+/*
+    	String var = event.getVariable();
+
+		// Reload toolbar icons if their size has changed 
+		if (var.equals(IconManager.COMMAND_BAR_ICON_SCALE_CONF_VAR)) {
+			if(isVisible()) {
+				loadIcons();
+				setIcons();
+			}
+		}
+*/
+		return true;
+	}
+	
 	
 	////////////////////////////
 	// ActionListener methods //

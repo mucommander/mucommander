@@ -7,6 +7,7 @@ import com.mucommander.ui.bookmark.EditBookmarksDialog;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.icon.IconManager;
 
+import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
@@ -23,7 +24,7 @@ import java.awt.event.*;
  *
  * @author Maxence Bernard
  */
-public class ToolBar extends JToolBar implements ActionListener, TableChangeListener, LocationListener, MouseListener {
+public class ToolBar extends JToolBar implements TableChangeListener, LocationListener, ConfigurationListener, MouseListener, ActionListener {
 
 	private MainFrame mainFrame;
 
@@ -136,6 +137,9 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 		// Listen to table change events to update buttons state when current table has changed
 		mainFrame.addTableChangeListener(this);
 	
+		// Listen to configuration changes to reload toolbar buttons when icon size has changed
+		ConfigurationManager.addConfigurationListener(this);
+		
 		// Listen to mouse events to popup a menu on right-clicks on the toolbar
 		this.addMouseListener(this);
 	}
@@ -285,6 +289,28 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 		buttons[STOP_INDEX].setEnabled(false);
 	}
 	
+
+	///////////////////////////////////
+	// ConfigurationListener methods //
+	///////////////////////////////////
+	
+    /**
+     * Listens to certain configuration variables.
+     */
+    public boolean configurationChanged(ConfigurationEvent event) {
+    	String var = event.getVariable();
+
+		// Reload toolbar icons if their size has changed 
+		if (var.equals(IconManager.TOOLBAR_ICON_SCALE_CONF_VAR)) {
+			if(isVisible()) {
+				loadIcons();
+				setIcons();
+			}
+		}
+	
+		return true;
+	}
+
 
 	////////////////////////////
 	// ActionListener methods //
