@@ -76,13 +76,6 @@ public class ConfigurationManager {
         return new File(PlatformManager.getPreferencesFolder(), CONFIGURATION_FILENAME).getAbsolutePath();
     }
 	
-    /**
-     * Returns the generic path to the configuration file.
-     */
-    private static String getGenericConfigurationFilePath() {
-        return new File(PlatformManager.getGenericPreferencesFolder(), CONFIGURATION_FILENAME).getAbsolutePath();
-    }	
-
 	
     /**
      * Loads the specified configuration file in memory.
@@ -95,36 +88,48 @@ public class ConfigurationManager {
 
 	
     /**
-     * Loads the configuration file in memory.
+     * Opens and reads the configuration file.
      */
-    public static synchronized boolean loadConfiguration() {
+    private static synchronized boolean loadConfiguration() {
 		
-		// under Mac OS X, since v0.6 : try to open preferences file from ~/Library/muCommander/
-		// and if it failed, try to open file from ~/.mucommander/
-
 		try {
 			loadConfiguration(getConfigurationFilePath());
 			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFilePath(), -1);						
+			
+			// If version in configuration differs from current version, 
+			// import and move variables which have moved in the configuration tree
+			String confVersion = getVariable("prefs.conf_version");
+			if(confVersion!=null && !confVersion.equals(com.mucommander.Launcher.MUCOMMANDER_VERSION)) {
+				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Version changed, looking for variables to migrate");
+				migrateVariable("prefs.show_hidden_files", "prefs.file_table.show_hidden_files");
+				migrateVariable("prefs.auto_size_columns", "prefs.file_table.auto_size_columns");
+				migrateVariable("prefs.show_toolbar", "prefs.toolbar.visible");
+				migrateVariable("prefs.show_status_bar", "prefs.status_bar.visible");
+				migrateVariable("prefs.show_command_bar", "prefs.command_bar.visible");
+			}
+						
 			return true;
 		}
 		catch(Exception e) {
 			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No configuration file found at "+getConfigurationFilePath());			
 		}
 
-		if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X) {
-			try {
-				loadConfiguration(getGenericConfigurationFilePath());
-				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getGenericConfigurationFilePath());						
-				return true;
-			}
-			catch(Exception e) {
-				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No configuration file found at "+getGenericConfigurationFilePath());			
-			}
-		}
-		
 		return false;
 	}
 
+
+	/**
+	 * Moves the value of a variable to another.
+	 */
+	private static void migrateVariable(String fromVar, String toVar) {
+		String fromValue = getVariable(fromVar);
+		if(fromValue!=null) {
+			setVariable(toVar, fromValue);
+			setVariable(fromVar, null);
+			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Variable "+fromVar+" migrated to "+toVar);
+		}
+	}
+	
 	
     /**
      * Writes the configuration to the configuration file.
@@ -193,7 +198,7 @@ public class ConfigurationManager {
 
 
     /**
-     * Retrieves the value of the specified configuration variable.
+     * Returns the value of the specified configuration variable.
      * @param  var name of the variable to retrieve.
      * @return the value of the specified configuration variable.
      */
@@ -218,7 +223,7 @@ public class ConfigurationManager {
 
 	
     /**
-     * Retrieves the value of the specified configuration variable and assigns it
+     * Returns the value of the specified configuration variable and assigns it
 	 * a given default value if the the value returned by {@link #getVariable(String)} is
 	 * <code>null</code>.
      *
@@ -260,25 +265,85 @@ public class ConfigurationManager {
 
 
 	/**
-	 * Retrieves the value of the given configuration variable and assigns it
-	 * a given default value if the the value returned by {@link #getVariable(String)} is
-	 * <code>null</code>. 
+	 * Returns the value of the given configuration variable and assigns it
+	 * a given default int value if the the value returned by {@link #getVariable(String)} is
+	 * <code>null</code> or could not be parsed as an int. 
 	 *
-	 * <p>Returns <code>-1</code> if the variable cannot be parsed as an integer.</p>
+	 * <p>Returns <code>-1</code> if the variable cannot be parsed as an int.</p>
 	 *
 	 * @param  var name of the variable to retrieve.
-     * @param defaultValue defaultValue assigned if the variable's value is <code>null</code>.
+     * @param defaultValue defaultValue assigned if the variable's value is <code>null</code> or could not be parsed as an int.
      * @return the value of the specified configuration variable.
 	 */
 	public static synchronized int getVariableInt(String var, int defaultValue) {
+    	String value = getVariable(var);
+		
+		if (value==null) {
+			setVariable(var, ""+defaultValue);
+			return defaultValue;
+		}
+
 		try {
-			return Integer.parseInt(getVariable(var, ""+defaultValue));
+			return Integer.parseInt(value);
 		}
 		catch(NumberFormatException e) {
-			return -1;
+			setVariable(var, ""+defaultValue);
+			return defaultValue;
+		}
+	}
+
+
+	/**
+	 * Returns the value of the given configuration variable and assigns it
+	 * a given default float value if the the value returned by {@link #getVariable(String)} is
+	 * <code>null</code> or could not be parsed as a float. 
+	 *
+	 * <p>Returns <code>-1</code> if the variable cannot be parsed as a float.</p>
+	 *
+	 * @param var name of the variable to retrieve.
+     * @param defaultValue defaultValue assigned if the variable's value is <code>null</code> or could not be parsed as a float.
+     * @return the value of the specified configuration variable.
+	 */
+	public static synchronized float getVariableFloat(String var, float defaultValue) {
+    	String value = getVariable(var);
+		
+		if (value==null) {
+			setVariable(var, ""+defaultValue);
+			return defaultValue;
+		}
+
+		try {
+			return Float.parseFloat(value);
+		}
+		catch(NumberFormatException e) {
+			setVariable(var, ""+defaultValue);
+			return defaultValue;
 		}
 	}
 	
+
+	/**
+	 * Retrieves the boolean value of the given configuration variable and assigns it
+	 * a given default value if the the value returned by {@link #getVariable(String)} is
+	 * <code>null</code>. 
+	 *
+	 * <p>Returns <code>false</code> if the variable cannot be parsed as a boolean.</p>
+	 *
+	 * @param var name of the variable to retrieve.
+     * @param defaultValue defaultValue assigned if the variable's value is <code>null</code>.
+     * @return the value of the specified configuration variable.
+	 */
+	public static synchronized boolean getVariableBoolean(String var, boolean defaultValue) {
+    	String value = getVariable(var);
+		
+		if (value==null) {
+			setVariable(var, ""+defaultValue);
+			return defaultValue;
+		}
+
+		return value.equals("true");
+	}
+
 
     /**
      * Sets the value of the specified configuration variable.
@@ -321,10 +386,33 @@ public class ConfigurationManager {
 	
     /**
      * Sets the value of the specified configuration variable.
-     * @param var   name of the variable to set.
+	 *
+     * @param var name of the variable to set.
      * @param value value for the specified variable.
      */
     public static synchronized void setVariableInt(String var, int value) {
+		setVariable(var, ""+value);
+	}
+
+
+    /**
+     * Sets the value of the specified configuration variable.
+	 *
+     * @param var name of the variable to set.
+     * @param value value for the specified variable.
+     */
+    public static synchronized void setVariableFloat(String var, float value) {
+		setVariable(var, ""+value);
+	}
+
+
+    /**
+     * Sets the value of the specified configuration variable.
+	 *
+     * @param var name of the variable to set.
+     * @param value value for the specified variable.
+     */
+    public static synchronized void setVariableBoolean(String var, boolean value) {
 		setVariable(var, ""+value);
 	}
 	

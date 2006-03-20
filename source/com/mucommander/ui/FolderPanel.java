@@ -969,7 +969,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 			repaint();    		
 		}
 		// Refresh to show or hide hidden files, depending on new preference
-		else if (var.equals("prefs.show_hidden_files")) {
+		else if (var.equals("prefs.file_table.show_hidden_files")) {
 			// Refresh current folder in a separate thread
 			tryRefreshCurrentFolder();
 		}

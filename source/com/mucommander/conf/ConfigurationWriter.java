@@ -9,11 +9,15 @@ import java.util.*;
  * This class is pretty straightforward to use: just call the {@link #writeXML(PrintWriter)}
  * method, and everything will be automatically done.
  * </p>
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class ConfigurationWriter implements ConfigurationTreeBuilder {
+
     /** Where to print the configuration tree. */
     private PrintWriter out;
+
+	/** Current depth of the XML tree */
+	private int depth = 0;
 
     /**
      * Writes the configuration tree's content to the specified output stream.
@@ -30,13 +34,16 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
      * @param name node's name.
      */
     public void addNode(String name) {
-        // Maxence's patch: otherwise root is added to the xml tree
+	    // Remove 'root' element from the xml tree
 		if(name.equals("root"))
 			return;
 		
-		out.print('<');
-        out.print(name);
-        out.println('>');
+		// Indent statement
+		indent();
+		// Increase depth
+		depth++;
+		
+		out.println("<"+name+">");
     }
 
     /**
@@ -44,13 +51,16 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
      * @param name node's name.
      */
     public void closeNode(String name) {
-	    // Maxence's patch: otherwise root is added to the xml tree
+	    // Remove 'root' element from the xml tree
 	    if(name.equals("root"))
 	    	return;
 
-        out.print("</");
-        out.print(name);
-        out.println('>');
+		// Decrease depth
+		depth--;
+		// Indent statement
+		indent();
+
+        out.println("</"+name+">");
     }
 
     /**
@@ -59,12 +69,17 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
      * @param value leaf's value.
      */
     public void addLeaf(String name, String value) {
-        out.print('<');
-        out.print(name);
-        out.print('>');
-        out.print(value);
-        out.print("</");
-        out.print(name);
-        out.println(">");
+		// Indent element
+		indent();
+        out.println("<"+name+">"+value+"</"+name+">");
     }
+	
+	
+	/**
+	 * Adds tab characters to the stream based on the current XML tree's depth.
+	 */
+	private void indent() {
+		for(int i=0; i<depth; i++)
+			out.print("\t");
+	}
 }

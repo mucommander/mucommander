@@ -71,7 +71,7 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 		add(statusBarVolumeLabel, BorderLayout.EAST);
 
 		// Show/hide this status bar based on user preferences
-		if(ConfigurationManager.getVariable("prefs.show_status_bar", "true").equals("false"))
+		if(!ConfigurationManager.getVariableBoolean("prefs.status_bar.visible", true))
 			setVisible(false);
 		else
 			updateStatusInfo();
@@ -131,7 +131,7 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 		else
 			nbSelectedFiles = nbMarkedFiles;
 
-		boolean compactFileSize = ConfigurationManager.getVariable("prefs.display_compact_file_size", "true").equals("true");
+		boolean compactFileSize = ConfigurationManager.getVariableBoolean("prefs.display_compact_file_size", true);
 		String filesInfo;
 		
 		if(fileCount==0) {

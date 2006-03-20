@@ -21,10 +21,11 @@ import java.lang.reflect.*;
 public class Launcher {
 
 	/** Version string */
-	public final static String MUCOMMANDER_VERSION = "0.8 beta2 r2";
+	public final static String MUCOMMANDER_VERSION = "0.8 beta3";
+//	public final static String MUCOMMANDER_VERSION = "0.8 beta2 r2";
 
 	/** Version string */
-	public final static String SHORT_VERSION_STRING = "0.8 beta2";
+	public final static String SHORT_VERSION_STRING = "0.8 beta3";
 
 	/** muCommander app string */
 	public final static String MUCOMMANDER_APP_STRING = "muCommander v"+SHORT_VERSION_STRING;
@@ -111,7 +112,7 @@ public class Launcher {
 		WindowManager.checkInit();
 		
         // Check for newer version unless it was disabled
-        if(ConfigurationManager.getVariable("prefs.check_for_updates_on_startup", "true").equals("true"))
+        if(ConfigurationManager.getVariableBoolean("prefs.check_for_updates_on_startup", true))
             new CheckVersionDialog(WindowManager.getInstance().getCurrentMainFrame(), false);
 		
 		// Silence jCIFS's output if not in debug mode

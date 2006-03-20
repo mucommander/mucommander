@@ -4154,6 +4154,46 @@ prefs_dialog.look_and_feel:RU:Настройки отображения
 prefs_dialog.look_and_feel:ZH_CN:外观(Look & Feel)
 prefs_dialog.look_and_feel:SI:Shema
 
+prefs_dialog.icons_size:EN:Icons size
+prefs_dialog.icons_size:FR:Taille des icônes
+
+
+
+
+
+
+
+
+prefs_dialog.toolbar_icons:EN:Toolbar
+prefs_dialog.toolbar_icons:FR:Barre d'outils
+
+
+
+
+
+
+
+
+prefs_dialog.command_bar_icons:EN:Command bar
+prefs_dialog.command_bar_icons:FR:Barre de commande
+
+
+
+
+
+
+
+
+prefs_dialog.file_icons:EN:File types
+prefs_dialog.file_icons:FR:Type de fichiers
+
+
+
+
+
+
+
+
 prefs_dialog.font:EN:Font
 prefs_dialog.font:FR:Fonte
 prefs_dialog.font:DE:Schriftart

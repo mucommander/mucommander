@@ -324,7 +324,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		else if (source == autoSizeColumnsItem) {
 			boolean selected = autoSizeColumnsItem.isSelected();
 			mainFrame.getLastActiveTable().setAutoSizeColumnsEnabled(selected);
-			ConfigurationManager.setVariable("prefs.auto_size_columns", ""+selected);		
+			ConfigurationManager.setVariableBoolean("prefs.file_table.auto_size_columns", selected);		
 		}
 		else if (source == swapFoldersItem) {
 			mainFrame.swapFolders();	

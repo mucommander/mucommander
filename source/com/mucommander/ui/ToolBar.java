@@ -87,7 +87,7 @@ public class ToolBar extends JToolBar implements ActionListener, TableChangeList
 	
 	
 	static {
-		if(com.mucommander.conf.ConfigurationManager.getVariable("prefs.show_toolbar", "true").equals("true")) {
+		if(com.mucommander.conf.ConfigurationManager.getVariableBoolean("prefs.toolbar.visible", true)) {
 			// Preload icons if toolbar is to become visible
 			loadIcons();
 			iconsLoaded = true;

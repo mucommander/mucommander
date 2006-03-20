@@ -126,7 +126,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
 			downloadOption?new int[]{DOWNLOAD_ACTION, OK_ACTION}:new int[]{OK_ACTION},
 			0);
 			
-		JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"), ConfigurationManager.getVariable("prefs.check_for_updates_on_startup", "true").equals("true"));
+		JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"), ConfigurationManager.getVariableBoolean("prefs.check_for_updates_on_startup", true));
 		addCheckBox(showNextTimeCheckBox);
 
 		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
@@ -136,6 +136,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
 			PlatformManager.openURLInBrowser(downloadURL); // Open URL in a new browser windoow
 		
 		// Remember user preference
-		ConfigurationManager.setVariable("prefs.check_for_updates_on_startup", ""+showNextTimeCheckBox.isSelected());
+		ConfigurationManager.setVariableBoolean("prefs.check_for_updates_on_startup", showNextTimeCheckBox.isSelected());
 	}
 }

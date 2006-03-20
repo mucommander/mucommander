@@ -102,7 +102,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// Create toolbar and show it only if it hasn't been disabled in the preferences
 		this.toolbar = new ToolBar(this);
 		// Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, to be properly initialized
-		this.toolbar.setVisible(ConfigurationManager.getVariable("prefs.show_toolbar", "true").equals("true"));
+		this.toolbar.setVisible(ConfigurationManager.getVariableBoolean("prefs.toolbar.visible", true));
 			
 		contentPane.add(toolbar, BorderLayout.NORTH);
 
@@ -146,7 +146,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		
 		// Show command bar only if it hasn't been disabled in the preferences
 		this.commandBar = new CommandBar(this);
-		if(ConfigurationManager.getVariable("prefs.show_command_bar", "true").equals("false"))
+		if(!ConfigurationManager.getVariableBoolean("prefs.command_bar.visible", true))
 			this.commandBar.setVisible(false);
 		southPanel.add(commandBar);
 		
@@ -239,7 +239,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	public void setToolbarVisible(boolean visible) {
 		toolbar.setVisible(visible);
 		validate();
-		ConfigurationManager.setVariable("prefs.show_toolbar", ""+visible);		
+		ConfigurationManager.setVariableBoolean("prefs.toolbar.visible", visible);		
 	}
 	
 	/**
@@ -271,7 +271,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	public void setCommandBarVisible(boolean visible) {
 		this.commandBar.setVisible(visible);
 		validate();
-		ConfigurationManager.setVariable("prefs.show_command_bar", ""+visible);		
+		ConfigurationManager.setVariableBoolean("prefs.command_bar.visible", visible);		
 	}
 	
 
@@ -301,7 +301,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 //		if(updateStatusBarInfo)
 //			this.statusBar.updateStatusInfo();
 		validate();
-		ConfigurationManager.setVariable("prefs.show_status_bar", ""+visible);		
+		ConfigurationManager.setVariableBoolean("prefs.status_bar.visible", visible);		
 	}
 	
 

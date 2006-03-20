@@ -1,8 +1,11 @@
 
 package com.mucommander.ui.icon;
 
+import com.mucommander.conf.*;
+
 import javax.swing.ImageIcon;
 import java.awt.Image;
+import java.awt.Dimension;
 
 
 /**
@@ -11,10 +14,13 @@ import java.awt.Image;
  *
  * @author Maxence Bernard
  */
-public class IconManager {
+public class IconManager implements ConfigurationListener {
 	
-	/** A Class instance, used to retrieve JAR resource files  */
-	private static Class classInstance = Runtime.getRuntime().getClass();
+	/** Singleton instance */
+	private final static IconManager instance = new IconManager();
+	
+	/** Class instance used to retrieve JAR resource files  */
+	private final static Class classInstance = instance.getClass();
 	
 	/** File icons folder within the application's JAR file */	
 	private final static String FILE_ICONS_FOLDER = "/file_icons/";
@@ -26,12 +32,24 @@ public class IconManager {
 	private final static String PREFERENCES_ICONS_FOLDER = "/preferences_icons/";
 	/** Table icons folder within the application's JAR file */	
 	private final static String TABLE_ICONS_FOLDER = "/table_icons/";
+
+	public final static String FILE_TABLE_ICON_SCALE_CONF_VAR = "prefs.file_table.icon_scale";
+	public final static String TOOLBAR_ICON_SCALE_CONF_VAR = "prefs.toolbar.icon_scale";
+	public final static String COMMAND_BAR_ICON_SCALE_CONF_VAR = "prefs.command_bar.icon_scale";
+
+	/** Scale factor for file icons, default is 1.0 */
+	private static float fileIconScaleFactor = ConfigurationManager.getVariableFloat(FILE_TABLE_ICON_SCALE_CONF_VAR, 1.0f);
+	/** Scale factor for toolbar icons, default is 1.0 */
+	private static float toolBarIconScaleFactor = ConfigurationManager.getVariableFloat(TOOLBAR_ICON_SCALE_CONF_VAR, 1.0f);
+	/** Scale factor for command bar icons, default is 1.0 */
+	private static float commandBarIconScaleFactor = ConfigurationManager.getVariableFloat(COMMAND_BAR_ICON_SCALE_CONF_VAR, 1.0f);
 	
-	public final static float SCALE_100 = 1;
-	public final static float SCALE_150 = 1.5f;
-	public final static float SCALE_200 = 2.0f;
 	
+	private IconManager() {
+		ConfigurationManager.addConfigurationListener(this);
+	}
 	
+
 	/**
 	 * 
 	 */
@@ -39,7 +57,7 @@ public class IconManager {
 		try {
 			ImageIcon icon = new ImageIcon(classInstance.getResource(iconPath));
 			
-			if(scaleFactor==SCALE_100)
+			if(scaleFactor==1.0f)
 				return icon;
 			
 			Image image = icon.getImage();
@@ -54,30 +72,58 @@ public class IconManager {
 	}
 
 	public static ImageIcon getIcon(String iconPath) {
-		return getIcon(iconPath, SCALE_100);
+		return getIcon(iconPath, 1.0f);
 	}
 
 	public static ImageIcon getFileIcon(String iconName) {
-		return getIcon(FILE_ICONS_FOLDER+iconName, SCALE_100);
+		return getIcon(FILE_ICONS_FOLDER+iconName, fileIconScaleFactor);
 	}
 
+	public static Dimension getFileIconSize() {
+		int dim = (int)(16 * fileIconScaleFactor);
+		return new Dimension(dim, dim);
+	}
 
 	public static ImageIcon getToolBarIcon(String iconName) {
-		return getIcon(TOOLBAR_ICONS_FOLDER+iconName, SCALE_200);
+		return getIcon(TOOLBAR_ICONS_FOLDER+iconName, toolBarIconScaleFactor);
 	}
 
 
 	public static ImageIcon getCommandBarIcon(String iconName) {
-		return getIcon(COMMANDBAR_ICONS_FOLDER+iconName, SCALE_200);
+		return getIcon(COMMANDBAR_ICONS_FOLDER+iconName, commandBarIconScaleFactor);
 	}
 
 
 	public static ImageIcon getPreferencesIcon(String iconName) {
-		return getIcon(PREFERENCES_ICONS_FOLDER+iconName, SCALE_100);	
+		return getIcon(PREFERENCES_ICONS_FOLDER+iconName, 1.0f);	
 	}
 
 
 	public static ImageIcon getTableIcon(String iconName) {
-		return getIcon(TABLE_ICONS_FOLDER+iconName, SCALE_100);	
+		return getIcon(TABLE_ICONS_FOLDER+iconName, 1.0f);	
+	}
+
+
+	///////////////////////////////////
+	// ConfigurationListener methods //
+	///////////////////////////////////
+	
+    /**
+     * Listens to certain configuration variables.
+     */
+    public boolean configurationChanged(ConfigurationEvent event) {
+    	String var = event.getVariable();
+
+		if (var.equals(FILE_TABLE_ICON_SCALE_CONF_VAR)) {
+			fileIconScaleFactor = event.getFloatValue();
+		}
+		else if (var.equals(TOOLBAR_ICON_SCALE_CONF_VAR)) {
+			toolBarIconScaleFactor = event.getFloatValue();
+		}
+		else if (var.equals(COMMAND_BAR_ICON_SCALE_CONF_VAR)) {
+			commandBarIconScaleFactor = event.getFloatValue();
+		}
+	
+		return true;
 	}
 }

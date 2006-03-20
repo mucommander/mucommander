@@ -12,7 +12,11 @@ import javax.swing.*;
 
 
 /**
+ * Quit confirmation dialog invoked when the user asked the application to quit, which gives the user a chance
+ * to cancel the operatoin in case the quit shortcut was hit by mistake. 
  * 
+ * <p>A checkbox allows the user to disable this confirmation dialog for the next the application is quit. It can
+ * later be re-enabled in the application preferences.</p>
  *
  * @author Maxence Bernard
  */
@@ -41,7 +45,7 @@ public class QuitDialog extends QuestionDialog {
 
 		if(getActionValue()==QUIT_ACTION) {
 			// Remember user preference
-			ConfigurationManager.setVariable("prefs.quit_confirmation", ""+showNextTimeCheckBox.isSelected());
+			ConfigurationManager.setVariableBoolean("prefs.quit_confirmation", showNextTimeCheckBox.isSelected());
 
 			// Quit
 			WindowManager.getInstance().quit();

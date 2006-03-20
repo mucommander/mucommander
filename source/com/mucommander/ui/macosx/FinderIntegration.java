@@ -33,11 +33,11 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 		//  "Allows you to display your main windows with the 'textured' Aqua window appearance.
 		//   This property should be applied only to the primary application window,
 		//   and should not affect supporting windows like dialogs or preference windows."
-		System.setProperty("apple.awt.brushMetalLook", ConfigurationManager.getVariable("prefs.macosx.brushed_metal_look", "true"));
+		System.setProperty("apple.awt.brushMetalLook", ""+ConfigurationManager.getVariableBoolean("prefs.macosx.brushed_metal_look", true));
 
 		// Enables/Disables screen menu bar (default is on) :
 		//  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."
-		System.setProperty("apple.laf.useScreenMenuBar", ConfigurationManager.getVariable("prefs.macosx.screen_menu_bar", "true"));
+		System.setProperty("apple.laf.useScreenMenuBar", ""+ConfigurationManager.getVariableBoolean("prefs.macosx.screen_menu_bar", true));
 
 		// Have to catch Errors (NoClassDefFoundError and NoSuchMethodError)
 		// because they seem not to be available under Mac OS X 10.1 (reported by Lanch)
@@ -81,7 +81,7 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 				break;
 			case QUIT_ACTION:
 				// Show confirmation dialog if it hasn't been disabled
-				if(ConfigurationManager.getVariable("prefs.quit_confirmation", "true").equals("true"))
+				if(ConfigurationManager.getVariableBoolean("prefs.quit_confirmation", true))
 					new QuitDialog(mainFrame);
 				// Quit directly otherwise
 				else
