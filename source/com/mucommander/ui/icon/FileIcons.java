@@ -28,7 +28,7 @@ public class FileIcons {
 	/** Icon for supported archives (browsable) */
 	private final static String ARCHIVE_ICON_NAME = "archive.png";
 	/** Icon for parent folder (..) */
-	private final static String PARENT_FOLDER_ICON_NAME = "parent.gif";
+	private final static String PARENT_FOLDER_ICON_NAME = "parent.png";
 	
 
 	/** File icon <-> extensions association. For information about file extensions, see:
@@ -48,8 +48,8 @@ public class FileIcons {
 		{"database.png", "myi", "myd", "frm", "sql", "sqc", "sqr"},	// Database file
 		{"executable.png", "bat", "com", "exe"},	// Executable files
 		{"feed.png", "rdf", "rss"},	// RSS/RDF feed
-		{"font.gif", "fnt", "fon", "otf"},	// Non-TrueType font formats
-		{"font_truetype.gif", "ttc", "ttf"},	// TrueType font formats
+		{"font.png", "fnt", "fon", "otf"},	// Non-TrueType font formats
+		{"font_truetype.png", "ttc", "ttf"},	// TrueType font formats
 		{"image_bitmap.png", "exif", "ico", "gif", "j2k", "jpg", "jpeg", "jpg2", "jp2", "bmp", "ico", "iff", "mng", "pcd", "pic", "pict", "png", "psd", "psp", "pbm", "pgm", "ppm", "raw", "tga", "tiff", "tif", "wbmp", "xbm", "xcf", "xpm"},	// Bitmap image formats, see http://en.wikipedia.org/wiki/Graphics_file_format and http://en.wikipedia.org/wiki/Image_file_formats
 		{"image_vector.png", "ai", "cgm", "dpx", "dxf", "eps", "emf", "ps", "svg", "svgz", "wmf", "xar"},	// Vector image formats, http://en.wikipedia.org/wiki/Graphics_file_format
 		{"linux.png", "deb", "rpm"},	// Linux packages

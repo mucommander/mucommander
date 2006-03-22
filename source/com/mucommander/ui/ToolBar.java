@@ -39,9 +39,9 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
 	/** Buttons descriptions: label, enabled icon, disabled icon (null for no disabled icon), separator ("true" or null for false)  */
 	private final static String BUTTONS_DESC[][] = {
 		{Translator.get("toolbar.new_window")+" (Ctrl+N)", "new_window.png", null, "true"},
-		{Translator.get("toolbar.go_back")+" (Alt+Left)", "back.gif", "back_grayed.gif", null},
-		{Translator.get("toolbar.go_forward")+" (Alt+Right)", "forward.gif", "forward_grayed.gif", "true"},
-		{Translator.get("toolbar.go_to_parent")+" (Backspace)", "parent.gif", "parent_grayed.gif", "true"},
+		{Translator.get("toolbar.go_back")+" (Alt+Left)", "back.png", "back_grayed.png", null},
+		{Translator.get("toolbar.go_forward")+" (Alt+Right)", "forward.png", "forward_grayed.png", "true"},
+		{Translator.get("toolbar.go_to_parent")+" (Backspace)", "parent.png", "parent_grayed.png", "true"},
 		{Translator.get("toolbar.stop")+" (Escape)", "stop.png", "stop_grayed.png", "true"},
 		{Translator.get("toolbar.add_bookmark")+" (Ctrl+B)", "add_bookmark.png", null, null},
 		{Translator.get("toolbar.edit_bookmarks"), "edit_bookmarks.png", null, "true"},
