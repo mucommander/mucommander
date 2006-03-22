@@ -110,8 +110,6 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 		if(!isVisible())
 			return;
 
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-
 		FileTable currentFileTable = mainFrame.getLastActiveTable();
 
 		// Currently select file, can be null

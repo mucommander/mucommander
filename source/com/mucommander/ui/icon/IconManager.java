@@ -88,16 +88,16 @@ public class IconManager implements ConfigurationListener {
 		ImageIcon icon = (ImageIcon)iconsCache.get(iconName);
 		
 		if(icon==null) {
-			com.mucommander.Debug.trace("icon "+iconFolder+iconName+" not in cache");
+//			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("icon "+iconFolder+iconName+" not in cache");
 			// Icon is not in cache, let's create it
 			icon = getIcon(iconFolder+iconName, iconScaleFactor);
 			// and add it to the cache if it is not null (should never be)
 			if(icon!=null)
 				iconsCache.put(iconName, icon);
 		}
-		else if(com.mucommander.Debug.ON) {
-			com.mucommander.Debug.trace("retrieved cached "+iconFolder+iconName+" icon");
-		}
+//		else if(com.mucommander.Debug.ON) {
+//			com.mucommander.Debug.trace("retrieved cached "+iconFolder+iconName+" icon");
+//		}
 		
 		return icon;
 	}
