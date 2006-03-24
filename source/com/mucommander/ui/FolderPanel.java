@@ -1,24 +1,19 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.file.*;
-
 import com.mucommander.ui.table.*;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.comp.progress.ProgressTextField;
 
-import com.mucommander.conf.*;
-
-import com.mucommander.text.Translator;
-
-import com.mucommander.PlatformManager;
-
 import com.mucommander.event.*;
+import com.mucommander.file.*;
+import com.mucommander.conf.*;
+import com.mucommander.text.Translator;
+import com.mucommander.PlatformManager;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.filechooser.FileSystemView;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -26,7 +21,6 @@ import java.awt.event.*;
 import java.io.*;
 
 import java.util.Vector;
-
 
 /**
  * 
@@ -452,7 +446,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 	
 	static {
 		// Set background color
-		backgroundColor = FileTableCellRenderer.getColor("prefs.colors.background", "000084");
+		backgroundColor = ConfigurationManager.getVariableColor("prefs.colors.background", "000084");
 	}
 
 
@@ -965,7 +959,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
     
 		// Set new background color and repaint panel
 		if (var.equals("prefs.colors.background"))  {
-			scrollPane.getViewport().setBackground(backgroundColor=FileTableCellRenderer.getColor(event.getValue()));
+			scrollPane.getViewport().setBackground(backgroundColor=event.getColorValue());
 			repaint();    		
 		}
 		// Refresh to show or hide hidden files, depending on new preference

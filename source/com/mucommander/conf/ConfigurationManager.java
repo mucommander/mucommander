@@ -2,6 +2,7 @@ package com.mucommander.conf;
 
 import java.util.*;
 import java.io.*;
+import java.awt.Color;
 
 import com.mucommander.PlatformManager;
 
@@ -345,6 +346,16 @@ public class ConfigurationManager {
 	}
 
 
+	/*
+	 * Returns the pref color value if there is one, if not the default one.
+	 */
+	public static Color getVariableColor(String colorVariableName, String defaultColorVal) {
+		String colorValue = getVariable(colorVariableName, defaultColorVal);
+
+		return colorValue==null?null:new Color(Integer.parseInt(colorValue, 16));
+	}
+	
+
     /**
      * Sets the value of the specified configuration variable.
      * @param var   name of the variable to set.
@@ -416,6 +427,18 @@ public class ConfigurationManager {
 		setVariable(var, ""+value);
 	}
 	
+	
+    /**
+     * Sets the value of the specified configuration variable.
+	 *
+     * @param var name of the variable to set.
+     * @param value value for the specified variable.
+     */
+	public static synchronized void setVariableColor(String var, Color value) {
+		String colorString = Integer.toHexString(value.getRGB());
+		setVariable(var, colorString.substring(2, colorString.length()));
+	}
+
 		
     /**
      * Adds the specified configuration listener to the list of registered listeners.

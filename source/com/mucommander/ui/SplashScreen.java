@@ -41,12 +41,12 @@ public class SplashScreen extends JWindow {
 	private final static Color TEXT_COLOR = new Color(192, 238, 241);
 
 	/** Number of pixels between the loading message and the left side of the splash image */
-	private final static int LOADING_MSG_MARGIN_X = 3;
+	private final static int LOADING_MSG_MARGIN_X = 4;
 	/** Number of pixels between the loading message and the bottom of the splash image */
 	private final static int LOADING_MSG_MARGIN_Y = 6;
 
 	/** Number of pixels between the version information and the right side of the splash image */
-	private final static int VERSION_MARGIN_X = 4;
+	private final static int VERSION_MARGIN_X = 5;
 	/** Number of pixels between the version information and the top of the splash image */
 	private final static int VERSION_MARGIN_Y = 3;
 

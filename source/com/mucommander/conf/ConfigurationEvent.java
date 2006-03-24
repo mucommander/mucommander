@@ -1,9 +1,11 @@
 package com.mucommander.conf;
 
+import java.awt.Color;
+
 /**
  * Event used to notify registered listeners that a configuration variable has been modified.
  *
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class ConfigurationEvent {
 
@@ -121,9 +123,16 @@ public class ConfigurationEvent {
      * @return the boolean value of the variable that has been modified.
      */
     public boolean getBooleanValue() {
-		if(value==null)
-			return false;
-		
-		return value.equals("true");
+		return value==null?false:value.equals("true");
+	}
+
+
+    /**
+     * Returns the new value of the variable that has been modified, parsed as a color represented in hexadecimal RGB format.
+     * 
+     * @return the Color value of the variable that has been modified, <code>null</code> if it has been destroyed.
+     */
+    public Color getColorValue() {
+		return value==null?null:new Color(Integer.parseInt(value, 16));
 	}
 }

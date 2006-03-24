@@ -142,7 +142,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
         button.setToolTipText(tooltipText);
 		button.setMargin(new Insets(3,4,3,4));
 		// For Mac OS X whose default minimum width for buttons is enormous
-		button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getWidth()));
+		button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getHeight()));
 		button.addActionListener(this);
 		button.addMouseListener(this);
 		add(button);

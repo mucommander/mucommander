@@ -26,7 +26,7 @@ public class FileIcons {
 	/** Default icon for files without a known extension */
 	private final static String FILE_ICON_NAME = "file.png";
 	/** Icon for supported archives (browsable) */
-	private final static String ARCHIVE_ICON_NAME = "archive.png";
+	private final static String ARCHIVE_ICON_NAME = "archive_supported.png";
 	/** Icon for parent folder (..) */
 	private final static String PARENT_FOLDER_ICON_NAME = "parent.png";
 	

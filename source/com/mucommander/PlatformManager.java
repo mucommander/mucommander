@@ -223,7 +223,7 @@ public class PlatformManager {
 		else {
 			javaVersion = JAVA_1_5;
 		}
-
+		
 		if(Debug.ON) Debug.trace("detected Java version value = "+javaVersion);
 	}
 
