@@ -22,6 +22,7 @@ public class FileURL implements Cloneable {
 	private String password;
 	private String path;
 	private FileURL parentURL;
+	private boolean parentURLSet;
 	private String filename;
 	private String query;
 	
@@ -190,29 +191,15 @@ public class FileURL implements Cloneable {
 //					try { filename = URLDecoder.decode(filename); }
 //					catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 				
-				// Creates parent URL from reconstructed URL with canonized path
-				if(parentURL==null) {
-					url = reconstructURL(path, true, true);
-					len = url.length();
-					String urlCopy = new String(url).replace('\\', '/');
-					separatorPos = (urlCopy.endsWith("/")?urlCopy.substring(0, --len):urlCopy).lastIndexOf('/');
-					if(separatorPos>7) {
-						try { 
-							// Leave trailing separator
-							this.parentURL = new FileURL(url.substring(0, separatorPos+1)); 
-						}
-						catch(MalformedURLException e) {
-							// No parent (parentURL will be null)
-						}
-					}
-				
-				}
-				// Use the given FileURL as parent
-				else {
+				// If parent URL is not null, keep it for getParent()
+				if(parentURL!=null) {
 					this.parentURL = parentURL;
-					// Use parent's login and password
-					this.login = parentURL.getLogin();
-					this.password = parentURL.getPassword();
+					this.parentURLSet = true;
+					// Use parent's login and password if login and password not specified in the url
+					if((login==null||login.equals("")) && (password==null||password.equals(""))) {
+						this.login = parentURL.getLogin();
+						this.password = parentURL.getPassword();
+					}
 				}
 			}
 		}
@@ -319,16 +306,37 @@ public class FileURL implements Cloneable {
 	 * Returns the parent URL of this file based on the path, null if there is no parent file (path is '/').
 	 */
 	public FileURL getParent() {
-		if(parentURL==null)
-			return null;
+		// ParentURL not set yet
+		if(!this.parentURLSet && parentURL==null) {
+			// Creates parent URL from reconstructed URL with canonized path
+			String url = reconstructURL(path, true, true);
+			int len = url.length();
+			String urlCopy = new String(url).replace('\\', '/');
+			int separatorPos = (urlCopy.endsWith("/")?urlCopy.substring(0, --len):urlCopy).lastIndexOf('/');
+			if(separatorPos>7) {
+				try { 
+					// Leave trailing separator
+					this.parentURL = new FileURL(url.substring(0, separatorPos+1)); 
+				}
+				catch(MalformedURLException e) {
+					// No parent (parentURL will be null)
+				}
+			}
+			this.parentURLSet = true;
+		}
 		
-		try {
-			// Return a cloned instance of parentURL since it is mutable
-			return (FileURL)parentURL.clone();
+		if(parentURL!=null) {
+			// Return a cloned instance of parentURL since it is mutable and changes made in the returned
+			// FileURL instance should not impact this instance 
+			try {
+				return (FileURL)parentURL.clone();
+			}
+			catch(CloneNotSupportedException e) {
+				return null;
+			}
 		}
-		catch(CloneNotSupportedException e) {
-			return null;
-		}
+	
+		return parentURL;
 	}
 	
 

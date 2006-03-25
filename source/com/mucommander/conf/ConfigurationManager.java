@@ -31,8 +31,8 @@ import com.mucommander.PlatformManager;
  */
 public class ConfigurationManager {
 
-    /** Contains all the registered configuration listeners. */
-    private static LinkedList listeners = new LinkedList();
+    /** Contains all registered configuration listeners, stored as weak references */
+    private static WeakHashMap listeners = new WeakHashMap();
 
     /** Name of the configuration file */
     private static final String CONFIGURATION_FILENAME = "preferences.xml";
@@ -442,33 +442,41 @@ public class ConfigurationManager {
 		
     /**
      * Adds the specified configuration listener to the list of registered listeners.
+	 *
+	 * <p>Listeners are stored as weak references so {@link #removeConfigurationListener(ConfigurationListener) removeConfigurationListener()}
+	 * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
+	 *
      * @param listener listener to insert in the list.
      */
     public static synchronized void addConfigurationListener(ConfigurationListener listener) {
-		listeners.add(listener);
+		if(listener==null)
+			return;
+		
+		listeners.put(listener, null);
 		if(com.mucommander.Debug.ON)
 			com.mucommander.Debug.trace(listeners.size()+" listeners");
 	}
 
     /**
      * Removes the specified configuration listener from the list of registered listeners.
-     * @param listener listener to remove from the list.
+     *
+	 * @param listener listener to remove from the list.
      */
     public static synchronized void removeConfigurationListener(ConfigurationListener listener) {
-		listeners.remove(listener);
+        listeners.remove(listener);
+			
 		if(com.mucommander.Debug.ON)
 			com.mucommander.Debug.trace(listeners.size()+" listeners");
 	}
 
     /**
      * Notifies all the registered configuration listeners of a configuration change event.
-     * @param  event describes the configuration change.
+     *
+	 * @param  event describes the configuration change.
      * @return true if the change wasn't vetoed, false otherwise.
      */
     static synchronized boolean fireConfigurationEvent(ConfigurationEvent event) {
-        Iterator iterator;
-
-        iterator = listeners.iterator();
+        Iterator iterator = listeners.keySet().iterator();
         while(iterator.hasNext())
             if(!((ConfigurationListener)iterator.next()).configurationChanged(event))
                 return false;

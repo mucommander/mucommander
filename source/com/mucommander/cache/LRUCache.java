@@ -9,7 +9,7 @@ import java.util.Hashtable;
  * Simple LRU (Least Recently Used) cache implementation.
  *
  * <p>Implementation note: it would have been more efficient to use LinkedHashMap but it is only available
- * in Java 1.4 and above.
+ * in Java 1.4 and above.</p>
  *
  * @author Maxence Bernard
  */
@@ -28,7 +28,7 @@ public class LRUCache {
 	/** Current eldest expiration date amongst all items */
 	private long eldestExpirationDate = Long.MAX_VALUE;
 
-	/** Specifies whether cache hit/miss counters should be updated */ 
+	/** Specifies whether cache hit/miss counters should be updated (should be enabled for Debug purposes only) */ 
 	private final static boolean UPDATE_CACHE_COUNTERS = false;	
 	private int nbHits;
 	private int nbMisses;	
@@ -271,7 +271,7 @@ public class LRUCache {
 	
 
 	/**
-	 * Test class : simple test case + stress/sanity test
+	 * Test method : simple test case + stress/sanity test
 	 */
 	public static void main(String args[]) {
 		// Simple test case

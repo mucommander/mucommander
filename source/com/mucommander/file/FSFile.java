@@ -286,7 +286,7 @@ public class FSFile extends AbstractFile {
 			if(parentFile!=null) {
 				FileURL parentURL = getURL().getParent();
 				if(parentURL != null) {
-					parent = AbstractFile.getAbstractFile(getURL().getParent());
+					parent = AbstractFile.getAbstractFile(parentURL);
 				}
 			}
 			parentValCached = true;

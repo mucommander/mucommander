@@ -20,7 +20,7 @@ import java.awt.event.*;
 
 import java.io.*;
 
-import java.util.Vector;
+import java.util.*;
 
 /**
  * 
@@ -34,8 +34,8 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
     private AbstractFile currentFolder;
 	private ChangeFolderThread changeFolderThread;
 
-    // Registered LocationListeners
-    private Vector locationListeners = new Vector();
+    /** Contains all registered location listeners, stored as weak references */
+    private WeakHashMap locationListeners = new WeakHashMap();
 	
 	private XBoxPanel locationPanel;
 	/*  We're NOT using JComboBox anymore because of its strange behavior: 
@@ -556,9 +556,12 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	/**
 	 * Registers a LocationListener to receive LocationEvents whenever the current folder
 	 * of this FolderPanel has or is being changed. 
+	 *
+	 * <p>Listeners are stored as weak references so {@link #removeLocationListener(LocationListener) removeLocationListener()}
+	 * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
 	 */
 	public void addLocationListener(LocationListener listener) {
-		locationListeners.add(listener);
+		locationListeners.put(listener, null);
 	}
 
 	/**
@@ -572,24 +575,27 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 	 * Notifies all registered listeners that current folder is being changed on this FolderPanel.
 	 */
 	private void fireLocationChanging() {
-		for(int i=0; i<locationListeners.size(); i++)
-			((LocationListener)locationListeners.elementAt(i)).locationChanging(new LocationEvent(this));
+		Iterator iterator = locationListeners.keySet().iterator();
+		while(iterator.hasNext())
+			((LocationListener)iterator.next()).locationChanging(new LocationEvent(this));
 	}
 
 	/**
 	 * Notifies all registered listeners that current folder has changed on this FolderPanel.
 	 */
 	private void fireLocationChanged() {
-		for(int i=0; i<locationListeners.size(); i++)
-			((LocationListener)locationListeners.elementAt(i)).locationChanged(new LocationEvent(this));
+		Iterator iterator = locationListeners.keySet().iterator();
+		while(iterator.hasNext())
+			((LocationListener)iterator.next()).locationChanged(new LocationEvent(this));
 	}
 
 	/**
 	 * Notifies all registered listeners that folder change has been cancelled.
 	 */
 	private void fireLocationCancelled() {
-		for(int i=0; i<locationListeners.size(); i++)
-			((LocationListener)locationListeners.elementAt(i)).locationCancelled(new LocationEvent(this));
+		Iterator iterator = locationListeners.keySet().iterator();
+		while(iterator.hasNext())
+			((LocationListener)iterator.next()).locationCancelled(new LocationEvent(this));
 	}
 
 
@@ -870,17 +876,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		return this.lastSavableFolder;
 	}
 	
-	
-	/**
-	 * This method must be called when this FolderPanel isn't used anymore, otherwise
-	 * resources associated to this FolderPanel won't be released.
-	 */
-	public void dispose() {
-		ConfigurationManager.removeConfigurationListener(this);
-		removeLocationListener(driveButton);
-		fileTable.dispose();
-	}
-
 	
 	/**
 	 * Overrides JComponent's requestFocus() method to request focus

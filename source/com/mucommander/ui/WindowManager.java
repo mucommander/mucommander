@@ -112,9 +112,9 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 	
 	
 	/**
-	 * Creates a new MainFrame
+	 * Creates a new MainFrame and makes it visible on the screen, on top of any other frames.
 	 */
-	public MainFrame createNewMainFrame() {
+	public synchronized MainFrame createNewMainFrame() {
 		// Initial folders are home and/or last folder if it's the first MainFrame,
 		// the same folders as the current MainFrame otherwise
 		AbstractFile folder1;
@@ -224,59 +224,11 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 		return newMainFrame;
 	}
 
-	
-	/**
-	 * Returns the initial left/right folder according to user preferences.
-	 */ 
-	private AbstractFile getInitialFolder(boolean left) {
 		
-//		// Default path (if home folder or last folder doesn't exist or fails) is current drive
-//		// for left folder and user home for right folder
-		String defaultPath;
-//		if (left) {				
-//			AbstractFile tempFolder = new FSFile(new java.io.File(""));
-//			AbstractFile tempParent;
-//			while((tempParent=tempFolder.getParent())!=null)
-//				tempFolder = tempParent;
-
-//			defaultPath = tempFolder.getAbsolutePath(true);
-//		}		
-//		else {
-			defaultPath = System.getProperty("user.home");
-//		}
-
-		// Initial path according to user preferences: either last folder or custom folder
-		String goTo = ConfigurationManager.getVariable("prefs.startup_folder."+(left?"left":"right")+".on_startup", "lastFolder");
-		String folderPath = null;
-
-		// go to home folder
-		if (goTo.equals("customFolder")) {
-			folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(left?"left":"right")+".custom_folder", defaultPath);
-		}
-		// go to last folder
-		else {
-			folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(left?"left":"right")+".last_folder", defaultPath);
-		}
-
-		if(Debug.ON) Debug.trace("defaultPath "+defaultPath);
-		
-		AbstractFile folder = null;
-		if(folderPath!=null)
-			folder = AbstractFile.getAbstractFile(folderPath);
-		
-		if(folder==null || !folder.exists())
-			folder = AbstractFile.getAbstractFile(defaultPath);
-
-		if(Debug.ON) Debug.trace("initial folder= "+folder);
-		
-		return folder;
-	}
-	
-	
 	/**
 	 * Properly disposes the given MainFrame.
 	 */
-	public void disposeMainFrame(MainFrame mainFrameToDispose) {
+	public synchronized void disposeMainFrame(MainFrame mainFrameToDispose) {
 		if(com.mucommander.Debug.ON) Debug.trace("");
 
 		// Saves last folders
@@ -320,7 +272,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 
 		// If no mainFrame is currently visible, exit
 		if(mainFrames.size()==0)
-			System.exit(0);		
+			System.exit(0);
 	}
 
 	
@@ -367,6 +319,42 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 		int frameIndex = mainFrames.indexOf(currentMainFrame);
 		MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==0?mainFrames.size()-1:frameIndex-1);
 		mainFrame.toFront();
+	}
+
+
+	/**
+	 * Returns the initial left or right folder according to user preferences: either custom folder or
+	 * last folder. If custom or last folder couldn't be retrieved, return the user's home folder. 
+	 */ 
+	private AbstractFile getInitialFolder(boolean leftFolder) {
+		
+		// Initial path according to user preferences: either last folder or custom folder
+		String pref = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".on_startup", "lastFolder");
+		String userHomePath = System.getProperty("user.home");
+		String folderPath = null;
+
+		// Fetch custom folder
+		if (pref.equals("customFolder")) {
+			folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".custom_folder", userHomePath);
+		}
+		// Fetch last folder
+		else {
+			folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".last_folder", userHomePath);
+		}
+
+		// Create an AbstractFile instance from the initial folder's path
+		AbstractFile folder = null;
+		if(folderPath!=null)
+			folder = AbstractFile.getAbstractFile(folderPath);
+		
+		// If initial folder is null (file couldn't be created) or doesn't exist, return
+		// user home folder 
+		if(folder==null || !folder.exists())
+			folder = AbstractFile.getAbstractFile(userHomePath);
+
+		if(Debug.ON) Debug.trace("initial folder= "+folder);
+		
+		return folder;
 	}
 
 	

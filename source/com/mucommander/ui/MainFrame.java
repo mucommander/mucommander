@@ -20,7 +20,7 @@ import com.mucommander.conf.ConfigurationManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Vector;
+import java.util.*;
 
 
 /**
@@ -59,8 +59,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	/** Is this MainFrame active in the foreground ? */
 	private boolean foregroundActive;
 
-	/** Registered TableChangeListener instances that receive events when current table changes */
-	private Vector tableChangeListeners = new Vector();
+	/** Contains all registered TableChangeListener instances, stored as weak references */
+	private WeakHashMap tableChangeListeners = new WeakHashMap();
 
 
 	/**
@@ -181,9 +181,12 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 
 	/**
 	 * Registers the given TableChangeListener to receive events when current table changes.
+	 *
+	 * <p>Listeners are stored as weak references so {@link #removeLocationListener(LocationListener) removeLocationListener()}
+	 * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
 	 */
 	public void addTableChangeListener(TableChangeListener tableChangeListener) {
-		tableChangeListeners.add(tableChangeListener);
+		tableChangeListeners.put(tableChangeListener, null);
 	}
 
 	/**
@@ -197,9 +200,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * Fires table change events on registered TableChangeListener instances.
 	 */
 	private void fireTableChanged(FolderPanel folderPanel) {
-		int nbListeners = tableChangeListeners.size();
-		for(int i=0; i<nbListeners; i++)
-			((TableChangeListener)tableChangeListeners.elementAt(i)).tableChanged(folderPanel);
+		Iterator iterator = tableChangeListeners.keySet().iterator();
+		while(iterator.hasNext())
+			((TableChangeListener)iterator.next()).tableChanged(folderPanel);
 	}
 
 
@@ -489,17 +492,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	// Overriden methods //
 	///////////////////////
 
-	public void dispose() {
-		// Properly disposes folder panels and releases
-		// associated resources
-		this.folderPanel1.dispose();
-		this.folderPanel2.dispose();
-
-		super.dispose();
-	 }
-	 
-
-	 /**
+	/**
 	 * Overrides JComponent's requestFocus() method to request focus on the last active FolderPanel.
 	 */
 	public void requestFocus() {

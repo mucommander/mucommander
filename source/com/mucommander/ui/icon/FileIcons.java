@@ -46,10 +46,11 @@ public class FileIcons {
 		{"certificate.png", "cer", "crt", "key"},	// Certificate file
 		{"configuration.png", "cnf", "conf", "config", "inf", "ini", "pif", "prefs", "prf"},	// Configuration file
 		{"database.png", "myi", "myd", "frm", "sql", "sqc", "sqr"},	// Database file
-		{"executable.png", "bat", "com", "exe"},	// Executable files
+		{"executable_windows.png", "bat", "com", "exe"},	// Windows executables
+		{"executable_osx.png", "app"},	// Windows executables
 		{"feed.png", "rdf", "rss"},	// RSS/RDF feed
-		{"font.png", "fnt", "fon", "otf"},	// Non-TrueType font formats
-		{"font_truetype.png", "ttc", "ttf"},	// TrueType font formats
+		{"font.png", "fnt", "fon", "otf"},	// Non-TrueType font
+		{"font_truetype.png", "ttc", "ttf"},	// TrueType font
 		{"image_bitmap.png", "exif", "ico", "gif", "j2k", "jpg", "jpeg", "jpg2", "jp2", "bmp", "ico", "iff", "mng", "pcd", "pic", "pict", "png", "psd", "psp", "pbm", "pgm", "ppm", "raw", "tga", "tiff", "tif", "wbmp", "xbm", "xcf", "xpm"},	// Bitmap image formats, see http://en.wikipedia.org/wiki/Graphics_file_format and http://en.wikipedia.org/wiki/Image_file_formats
 		{"image_vector.png", "ai", "cgm", "dpx", "dxf", "eps", "emf", "ps", "svg", "svgz", "wmf", "xar"},	// Vector image formats, http://en.wikipedia.org/wiki/Graphics_file_format
 		{"linux.png", "deb", "rpm"},	// Linux packages
