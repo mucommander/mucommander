@@ -28,7 +28,9 @@ public class FileIcons {
 	/** Icon for supported archives (browsable) */
 	private final static String ARCHIVE_ICON_NAME = "archive_supported.png";
 	/** Icon for parent folder (..) */
-	private final static String PARENT_FOLDER_ICON_NAME = "parent.png";
+	private final static String PARENT_FOLDER_ICON_NAME = "parent.png";	
+	/** Icon for Mac OS X applications */
+	private final static String MAC_OS_X_APP_ICON_NAME = "executable_osx.png";
 	
 
 	/** File icon <-> extensions association. For information about file extensions, see:
@@ -47,7 +49,7 @@ public class FileIcons {
 		{"configuration.png", "cnf", "conf", "config", "inf", "ini", "pif", "prefs", "prf"},	// Configuration file
 		{"database.png", "myi", "myd", "frm", "sql", "sqc", "sqr"},	// Database file
 		{"executable_windows.png", "bat", "com", "exe"},	// Windows executables
-		{"executable_osx.png", "app"},	// Windows executables
+		{"executable_osx.png", "app"},	// Mac OS X executables
 		{"feed.png", "rdf", "rss"},	// RSS/RDF feed
 		{"font.png", "fnt", "fon", "otf"},	// Non-TrueType font
 		{"font_truetype.png", "ttc", "ttf"},	// TrueType font
@@ -115,18 +117,23 @@ public class FileIcons {
 	 * @param file the AbstractFile instance for which an icon will be returned
 	 */
 	public static ImageIcon getFileIcon(AbstractFile file) {
-		// Directory
+		// Retrieve file's extension, null if file has no extension
+		String fileExtension = file.getExtension();
+
+		// If file is a directory, return folder icon. One exception is made for Mac OS X's applications
+		// which are directories with .app extension and have a dedicated icon
 		if(file.isDirectory()) {
+			if(fileExtension!=null && fileExtension.equals("app"))
+				return IconManager.getFileIcon(MAC_OS_X_APP_ICON_NAME);
 			return IconManager.getFileIcon(FOLDER_ICON_NAME);
 		}
-		// Supported archive
+		// If file is browsable (supported archive or other), return archive icon
 		else if(file.isBrowsable()) {
 			return IconManager.getFileIcon(ARCHIVE_ICON_NAME);
 		}
 		// Regular file
 		else {
-			// Determine if the extension has an associated icon
-			String fileExtension = file.getExtension();
+			// Determine if the file's extension has an associated icon
 			if(fileExtension==null)	// File has no extension, return default file icon
 				return IconManager.getFileIcon(FILE_ICON_NAME);
 
