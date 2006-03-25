@@ -29,7 +29,7 @@ public class FileIcons {
 	private final static String ARCHIVE_ICON_NAME = "archive_supported.png";
 	/** Icon for parent folder (..) */
 	private final static String PARENT_FOLDER_ICON_NAME = "parent.png";	
-	/** Icon for Mac OS X applications */
+	/** Icon for Mac OS X's applications */
 	private final static String MAC_OS_X_APP_ICON_NAME = "executable_osx.png";
 	
 
@@ -55,6 +55,7 @@ public class FileIcons {
 		{"font_truetype.png", "ttc", "ttf"},	// TrueType font
 		{"image_bitmap.png", "exif", "ico", "gif", "j2k", "jpg", "jpeg", "jpg2", "jp2", "bmp", "ico", "iff", "mng", "pcd", "pic", "pict", "png", "psd", "psp", "pbm", "pgm", "ppm", "raw", "tga", "tiff", "tif", "wbmp", "xbm", "xcf", "xpm"},	// Bitmap image formats, see http://en.wikipedia.org/wiki/Graphics_file_format and http://en.wikipedia.org/wiki/Image_file_formats
 		{"image_vector.png", "ai", "cgm", "dpx", "dxf", "eps", "emf", "ps", "svg", "svgz", "wmf", "xar"},	// Vector image formats, http://en.wikipedia.org/wiki/Graphics_file_format
+		{"library.png", "dylib", "la", "o", "so"},	// Libraries
 		{"linux.png", "deb", "rpm"},	// Linux packages
 		{"macromedia_actionscript.png", "as"},	// Macromedia Actionscript
 		{"macromedia_flash.png", "swf", "swd", "swa", "swc", "fla", "flv", "flp", "jsfl"},	// Macromedia Flash
