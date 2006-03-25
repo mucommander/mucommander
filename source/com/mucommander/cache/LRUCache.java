@@ -29,7 +29,7 @@ public class LRUCache {
 	private long eldestExpirationDate = Long.MAX_VALUE;
 
 	/** Specifies whether cache hit/miss counters should be updated (should be enabled for Debug purposes only) */ 
-	private final static boolean UPDATE_CACHE_COUNTERS = false;	
+	private final static boolean UPDATE_CACHE_COUNTERS = com.mucommander.Debug.ON;	
 	private int nbHits;
 	private int nbMisses;	
 
@@ -98,10 +98,20 @@ public class LRUCache {
 		// Look for expired items and purge them (if any)
 		purgeExpiredItems();	
 
+		// Remove any existing key that is equal to the specified one
+		int keyIndex = keys.indexOf(key);
+		Object lruKey;
+		if(keyIndex!=-1) {
+			lruKey = keys.elementAt(keyIndex);
+			keys.removeElementAt(keyIndex);
+			expirationDates.removeElementAt(keyIndex);
+			values.remove(lruKey);
+		}
+
 		// Test if capacity has been reached
 		if(keys.size()>=capacity) {
 			// Remove least recently used key and associated value
-			Object lruKey = keys.elementAt(0);
+			lruKey = keys.elementAt(0);
 			keys.removeElementAt(0);
 			expirationDates.removeElementAt(0);
 			values.remove(lruKey);
@@ -229,11 +239,16 @@ public class LRUCache {
 		int size = keys.size();
 		String s = super.toString()+" size="+size+"/"+expirationDates.size()+"/"+values.size()+" capacity="+capacity+" eldestExpirationDate="+eldestExpirationDate+"\n";
 
+/*
 		Object key;
 		for(int i=0; i<size; i++) {
 			key = keys.elementAt(i);
 			s += i+"- key="+key+" value="+values.get(key)+" expirationDate="+expirationDates.elementAt(i)+"\n";
 		}
+*/
+		
+		if(UPDATE_CACHE_COUNTERS)
+			s += "nbCacheHits="+getNbHits()+" nbCacheMisses="+getNbMisses()+"\n";
 		
 		return s;
 	}
@@ -274,8 +289,11 @@ public class LRUCache {
 	 * Test method : simple test case + stress/sanity test
 	 */
 	public static void main(String args[]) {
+		LRUCache cache;
+
+/*
 		// Simple test case
-		LRUCache cache = new LRUCache(3);
+		cache = new LRUCache(3);
 
 		cache.add("orange", "ORANGE");
 		System.out.println(cache.toString());
@@ -297,19 +315,27 @@ public class LRUCache {
 		System.out.println(cache.toString());
 
 		System.out.println("get(banana)= "+cache.get("banana"));
+*/
 
+		long timeStamp = System.currentTimeMillis();
 
 		// Stress test to see if everything looks OK after a few thousand iterations
-		cache = new LRUCache(100);
+		int capacity = 1000;
+		cache = new LRUCache(capacity);
 		java.util.Random random = new java.util.Random();
-		for(int i=0; i<5000; i++) {
+		for(int i=0; i<100000; i++) {
 			// 50% chance to add a new element with a random value and expiration date (50% chance for no expiration date)
-			if(cache.size()==0 || random.nextBoolean())
-				cache.add(new Integer(random.nextInt()), new Integer(random.nextInt()), random.nextBoolean()?-1:random.nextInt(10));
+			if(cache.size()==0 || random.nextBoolean()) {
+//				System.out.println("cache.add()");				
+				cache.add(new Integer(random.nextInt(capacity)), new Integer(random.nextInt()), random.nextBoolean()?-1:random.nextInt(10));
+			}
 			// 50% chance to retrieve a random existing element
-			else
-				cache.get(cache.keys.get(random.nextInt(cache.size())));
-			
+			else {
+//				System.out.println("cache.get()");
+				cache.get(new Integer(random.nextInt(capacity)));
+			}
+
+/*		
 			try {
 				// Test the cache for corruption
 				cache.testCorruption();
@@ -318,7 +344,13 @@ public class LRUCache {
 				System.out.println("Cache corrupted after "+i+" iterations, cache state="+cache);
 				return;
 			}
+*/
+
+//			// Print the cache's state
+//			System.out.println(cache.toString());
 		}
+
+		System.out.println("Stress test took "+(System.currentTimeMillis()-timeStamp)+" ms.\n");
 
 		// Print the cache's state
 		System.out.println(cache.toString());
