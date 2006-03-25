@@ -101,16 +101,16 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 //			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
 //			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getNbHits()+"/"+urlCache.getNbMisses());
 
+			// FileURL not in cache, let's create it and add it to the cache
 			if(fileURL==null) {
-				// No cached value found, create the FileURL and add it to the FileURL cache 
-				fileURL = new FileURL("file://localhost"+((absPath.equals("")||(absPath.charAt(0)=='/'))?absPath:'/'+absPath));
+				fileURL = new FileURL("file://localhost"+((absPath.equals("")||(absPath.charAt(0)=='/'))?absPath:'/'+absPath), parent==null?null:parent.getURL());	// Reuse parent file's FileURL (if any)
 				urlCache.add(absPath, fileURL);
 			}
 		}
 		else {
 			// FileURL cache is not used for now as FileURL are mutable (setLogin, setPassword, setPort) and it
 			// may cause some weird side effects
-			fileURL = new FileURL(absPath);
+			fileURL = new FileURL(absPath, parent==null?null:parent.getURL());		// Reuse parent file's FileURL (if any)
 		}
 		
 		return getAbstractFile(fileURL, parent);
