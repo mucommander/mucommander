@@ -7,15 +7,25 @@ import java.util.Iterator;
 
 
 /**
- * Simple LRU (Least Recently Used) cache implementation.
+ * LRU cache implementation which uses <code>LinkedHashMap</code> and thus provides fast retrieval 
+ * and insertion operations, faster by an order of magnitude than {@link com.mucommander.cache.LegacyLRUCache LegacyLRUCache}.
+ * 
+ * <p><code>java.util.LinkedHashMap</code> being available only in Java 1.4 and above, this LRU cache can only be used
+ * with Java 1.4+. Use the {@link #createInstance(int) createInstance()} method to retrieve an instance 
+ * of the best implementation for the current Java runtime.</p>
  *
- * <p>Implementation note: it would have been more efficient to use LinkedHashMap but it is only available
- * in Java 1.4 and above.</p>
+ * <p>The only area this implemenation is slow at, is checking for and removing expired elements which 
+ * requires traversing all values and <code>LinkedHashMap</code> is slow at that. 
+ * To minimize the impact this could have on performance, this operation is not systematically performed
+ * for each call to <code>get()</code> and <code>set()</code> methods, unless the cache is full. 
+ * That means this implementation is not as agressive as it could be in terms of releasing expired items' memory
+ * but favors performance instead, which is what caches are for.</p>
  *
  * @author Maxence Bernard
  */
 public class FastLRUCache extends LRUCache {
 
+	/** Cache key->value/expirationDate map */
 	private LinkedHashMap cacheMap;
 
 	/** Timestamp of last expired items purge */
@@ -25,13 +35,10 @@ public class FastLRUCache extends LRUCache {
 	private final static int PURGE_EXPIRED_DELAY = 1000;
 		
 
-	/**
-	 * Creates an initially empty FastLRUCache with the specified maximum capacity.
-	 */
 	public FastLRUCache(int capacity) {
 		super(capacity);
-		this.cacheMap = new LinkedHashMap(capacity+1, 0.75f, true) {
-//		this.cacheMap = new LinkedHashMap(16, 0.75f, true) {
+		this.cacheMap = new LinkedHashMap(16, 0.75f, true) {
+			// Override this method to automatically remove eldest entry before insertion when cache is full
 			protected final boolean removeEldestEntry(Map.Entry eldest) {
 				return cacheMap.size() > FastLRUCache.this.capacity;
 			}
@@ -70,23 +77,19 @@ public class FastLRUCache extends LRUCache {
 	 */
 	private void purgeExpiredItems() {
 		long now = System.currentTimeMillis();
-// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("now="+System.currentTimeMillis()+" eldestExpirationDate="+eldestExpirationDate);
 		// No need to go any further if eldestExpirationDate is in the future.
 		// Also, since iterating on the values is an expensive operation (especially for LinkedHashMap),
 		// wait PURGE_EXPIRED_DELAY between two purges, unless cache is full
 		if(this.eldestExpirationDate>now || (cacheMap.size()<capacity && now-lastExpiredPurge<PURGE_EXPIRED_DELAY))
 			return;
 
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("iterating...");
-
 		// Look for expired items and remove them and recalculate eldestExpirationDate for next time
 		this.eldestExpirationDate = Long.MAX_VALUE;
 		Long expirationDateL;
 		long expirationDate;
 		Object value[];
-
-		// Iterate on all cached values
 		Iterator iterator = cacheMap.values().iterator();
+		// Iterate on all cached values
 		while(iterator.hasNext()) {
 			expirationDateL = (Long)((Object[])iterator.next())[1];
 			
@@ -106,6 +109,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("iterating...");
 			}
 		}
 		
+		// Set last purge timestamp to now
 		lastExpiredPurge = now;
 	}
 
@@ -122,7 +126,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("iterating...");
 		Object[] value = (Object[])cacheMap.get(key);
 
 		if(value==null) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("key="+key+" has no matching value");
 			// No value matching key, better luck next time!
 			if(UPDATE_CACHE_COUNTERS)
 				nbMisses++;	// Increase cache miss counter
@@ -134,7 +137,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("key="+key+" has no mat
 		// to check this
 		Long expirationDateL = (Long)value[1];
 		if(expirationDateL!=null && System.currentTimeMillis()>expirationDateL.longValue()) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("key="+key+" : value is expired ("+expirationDateL.longValue()+", now="+System.currentTimeMillis());
 			// Value has expired, let's remove it
 			if(UPDATE_CACHE_COUNTERS)
 				nbMisses++;	// Increase cache miss counter
@@ -150,18 +152,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("key="+key+" : value is
 	}
 
 	
-	/**
-	 * Adds a new key/value pair to the cache, which become the most recently used element.
-	 * <p>If capacity has been reached:
-	 * <ul>
-	 * <li>any object with a past expiration date will be removed<li>
-	 * <li>if no expired item could be removed, the least recently used item will be removed
-	 * <ul> 
-	 *
-	 * @param key the key for the object to store
-	 * @param value the value to cache
-	 * @param timeToLive time to live for the object in the cache, in milliseconds
-	 */
 	public synchronized void add(Object key, Object value, long timeToLive) {
 		// Look for expired items and purge them (if any)
 		purgeExpiredItems();	
@@ -202,7 +192,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("key="+key+" : value is
 	/**
 	 * Tests this LRUCache for corruption and throws a RuntimeException if something is wrong.
 	 */
-	private void testCorruption() throws RuntimeException {
+	protected void testCorruption() throws RuntimeException {
 		Object key;
 		Object value[];
 		long expirationDate;

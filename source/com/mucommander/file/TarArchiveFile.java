@@ -30,9 +30,12 @@ public class TarArchiveFile extends AbstractArchiveFile {
 	 * Returns an InputStream which can be used to read TAR entries.
 	 */
 	private TarInputStream openTarStream() throws IOException {
+		String ext = getExtension();
+		
 		// TGZ file
-		if(getName().toLowerCase().endsWith(".tgz") || getName().toLowerCase().endsWith(".gz"))
+		if(ext!=null && (ext=ext.toLowerCase()).equals("tgz") || ext.equals("gz"))
 			return new TarInputStream(new GZIPInputStream(file.getInputStream()));
+
 		// TAR-only file
 		return new TarInputStream(file.getInputStream());
 	}

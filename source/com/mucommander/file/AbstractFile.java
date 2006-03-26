@@ -85,11 +85,6 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 * @throws java.io.IOException if something went wrong during file or file url creation.
 	 */
 	protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) throws AuthException, IOException {
-//		// Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
-//		// (Reminder: C: is C's current folder, while C:\ is C's root)
-//		if((path.endsWith("/") && path.length()>1) || (path.endsWith("\\") && path.charAt(path.length()-2)!=':'))
-//			path = path.substring(0, path.length()-1);
-
 		// Create a FileURL instance using the given path
 		FileURL fileURL;
 
@@ -98,8 +93,8 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 		if(absPath.indexOf("://")==-1) {
 			// Try to find a cached FileURL instance
 			fileURL = (FileURL)urlCache.get(absPath);
-//			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
-//			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getNbHits()+"/"+urlCache.getNbMisses());
+// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
+// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getHitCount()+"/"+urlCache.getMissCount());
 
 			// FileURL not in cache, let's create it and add it to the cache
 			if(fileURL==null) {
@@ -175,8 +170,8 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 		if (protocol.equals("file")) {
 			String urlRep = fileURL.getStringRep(true);
 			file = (AbstractFile)fileCache.get(urlRep);
-//			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((file==null?"Adding to file cache:":"File cache hit: ")+urlRep);
-//			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getNbHits()+"/"+fileCache.getNbMisses());
+// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((file==null?"Adding to file cache:":"File cache hit: ")+urlRep);
+// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
 
 			if(file==null) {
 				file = new FSFile(fileURL);
@@ -210,15 +205,18 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	 * on top of the base file object.
 	 */
 	static AbstractFile wrapArchive(AbstractFile file) {
-        String name = file.getName();
+		if(!file.isDirectory()) {
+			String ext = file.getExtension();
+			if(ext==null)
+				return file;
+				
+			ext = ext.toLowerCase();
 
-		if(name!=null && !file.isDirectory()) {
-			String nameLC = name.toLowerCase();
-			if(nameLC.endsWith(".zip") || nameLC.endsWith(".jar"))
+			if(ext.equals("zip") || ext.equals("jar"))
 				return new ZipArchiveFile(file);
-			else if(nameLC.endsWith(".tar") || nameLC.endsWith(".tgz") || nameLC.endsWith(".tar.gz"))
+			else if(ext.equals("tar") || ext.equals("tgz") || file.getName().toLowerCase().endsWith(".tar.gz"))
 				return new TarArchiveFile(file);
-			else if(nameLC.endsWith(".gz"))
+			else if(ext.equals("gz"))
 				return new GzipArchiveFile(file);
 		}
 

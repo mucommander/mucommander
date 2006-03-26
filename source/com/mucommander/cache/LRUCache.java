@@ -5,10 +5,33 @@ import com.mucommander.PlatformManager;
 
 
 /**
- * Simple LRU (Least Recently Used) cache implementation.
+ * An abstract LRU cache.
  *
- * <p>Implementation note: it would have been more efficient to use LinkedHashMap but it is only available
- * in Java 1.4 and above.</p>
+ * <p>An LRU (Least Recently Used) cache can contain a fixed number of items (the capacity). When capacity is reached,
+ * the least recently used is removed. Each object retrieved with the {@link #get(Object) get()} method
+ * makes the requested item the most recently used one. Similarly, each object inserted using the 
+ * {@link #add(Object, Object) add()} method makes the added item the most recently used one.</p>
+ *
+ * <p>This LRUCache provides an optional feature : the ability to assign a time-to-live for each or part of the
+ * items added. When the time-to-live of an item expires, the item is automatically removed from the cache and won't
+ * be returned by the {@link #get(Object) get()} method anymore.</p>
+ *
+ * <p>Two implementations are provided, for use with the following Java runtimes:
+ * <ul>
+ * <li>{@link com.mucommander.cache.FastLRU FastLRU} for Java 1.4 and above
+ * <li>{@link com.mucommander.cache.LegacyLRU LegacyLRU} for Java 1.3
+ * </ul>
+ * Use the {@link #createInstance(int) createInstance()} method to retrieve an instance of the best implementation
+ * for the current Java runtime.</p>
+ *
+ * <p><b>Implementation note:</b> checking for expired items can be an expensive operation so it doesn't have
+ * to be done as soon as the item has expired, the expired items can live a bit longer in the cache if necessary.
+ * <br>The LRUCache implementation must however guarantee two things :
+ * <ul>
+ * <li>as soon as an item has expired, it cannot be returned by {@link #get(Object) get()}.
+ * <li>when cache capacity is reached (cache is full) and a new item needs to be added, any expired item must be 
+ * immediately removed. This prevents least recently used items from being removed unnecessarily.
+ * </ul></p>
  *
  * @author Maxence Bernard
  */
@@ -43,6 +66,35 @@ public abstract class LRUCache {
 		return capacity;
 	}
 
+
+	/**
+	 * Returns the number of cache hits since this LRUCache was created.
+	 *
+	 * @return the number of cache hits since this LRUCache was created
+	 */
+	public int getHitCount() {
+		return nbHits;
+	}
+
+
+	/**
+	 * Returns the number of cache misses since this LRUCache was created.
+	 *
+	 * @return the number of cache misses since this LRUCache was created
+	 */
+	public int getMissCount() {
+		return nbMisses;
+	}
+
+
+	/**
+	 * Creates and returns a new LRUCache using the best implementation for the current
+	 * Java runtime version: {@link com.mucommander.cache.FastLRU FastLRU} for Java 1.4 and above, 
+	 * {@link com.mucommander.cache.LegacyLRU LegacyLRU} for Java 1.3.
+	 *
+	 * @param capacity the new LRUCache's capacity
+	 * @return an instance of the best LRUCache implementation for the current Java runtime 
+	 */
 	public static LRUCache createInstance(int capacity) {
 		if(PlatformManager.getJavaVersion()>=PlatformManager.JAVA_1_4)
 			return new FastLRUCache(capacity);
@@ -50,32 +102,40 @@ public abstract class LRUCache {
 			return new LegacyLRUCache(capacity);
 	}
 	
+	
 	///////////////////////
 	// Absctract methods //
 	///////////////////////
 
 	/**
-	 * Returns the cached object value corresponding to the given key. This method will return null if:
+	 * Returns the cached object value corresponding to the given key and marks the cached item as the most
+	 * recently used one.
+	 *
+	 * <p>This method will return <code>null</code> if:
 	 * <ul>
 	 * <li>the given key doesn't exist
-	 * <li>the cached value corresponding to the key has expired, in which case the key and value will be removed
-	 * <ul>
+	 * <li>the cached value corresponding to the key has expired
+	 * <ul></p>
 	 *
-	 * @param key the object key
+	 * @param key the cached item's key
+	 * @return the cached value corresponding to the specified key, or <code>null</code> if a value could not
+	 * found or has expired
 	 */
 	public abstract Object get(Object key);
 	
 	/**
-	 * Adds a new key/value pair to the cache, which become the most recently used element.
-	 * <p>If capacity has been reached:
+	 * Adds a new key/value pair to the cache and marks it as the most recently used.
+	 *
+	 * <p>If the cache's capacity has been reached (cache is full):
 	 * <ul>
 	 * <li>any object with a past expiration date will be removed<li>
 	 * <li>if no expired item could be removed, the least recently used item will be removed
-	 * <ul> 
+	 * <ul></p>
 	 *
 	 * @param key the key for the object to store
 	 * @param value the value to cache
-	 * @param timeToLive time to live for the object in the cache, in milliseconds
+	 * @param timeToLive the time-to-live of the object in the cache in milliseconds, or -1 for no time-to-live,
+	 * the object will just be removed when it becomes the least recently used one.
 	 */
 	public abstract void add(Object key, Object value, long timeToLive);
 
@@ -89,13 +149,15 @@ public abstract class LRUCache {
 	
 
 	/**
-	 * Clears all items from this cache, returning in the same state as after creation.
+	 * Removes all items from this cache, leaving the cache in the same state as when it was just created.
 	 */
 	public abstract void clearAll();
 		
 
 	/**
-	 * Returns the current size of this cache.
+	 * Returns the current size of this cache, i.e. the number of cached elements it contains.
+	 * <br><b>Note: </b>Some items that have expired and have not yet been removed might be accounted for
+	 * in the returned size.
 	 */
 	public abstract int size();
 
@@ -107,8 +169,7 @@ public abstract class LRUCache {
 	/**
 	 * Tests this LRUCache for corruption and throws a RuntimeException if something is wrong.
 	 */
-	private void testCorruption() throws RuntimeException {
-	}
+	protected abstract void testCorruption() throws RuntimeException;
 	
 
 	/**

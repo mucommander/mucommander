@@ -6,10 +6,13 @@ import java.util.Hashtable;
 
 
 /**
- * Simple LRU (Least Recently Used) cache implementation.
+ * LRU cache implementation which uses a mix of <code>Vector</code> and <code>Hashtable</code> for all operations, and
+ * thus is slow because of Vector's inherent lookup complexity.
  *
- * <p>Implementation note: it would have been more efficient to use LinkedHashMap but it is only available
- * in Java 1.4 and above.</p>
+ * <p>{@link com.mucommander.cache.LegacyLRUCache FastLRUCache} being faster by an order of magnitude, 
+ * this implementation should only be used under Java 1.3.
+ * Use the {@link #createInstance(int) createInstance()} method to retrieve an instance 
+ * of the best implementation for the current Java runtime.</p>
  *
  * @author Maxence Bernard
  */
@@ -23,14 +26,31 @@ public class LegacyLRUCache extends LRUCache {
 	private Vector expirationDates;
 
 
-	/**
-	 * Creates an initially empty LegacyLRUCache with the specified maximum capacity.
-	 */
 	public LegacyLRUCache(int capacity) {
 		super(capacity);
 		keys = new Vector(capacity+1);
 		values = new Hashtable();
 		expirationDates = new Vector(capacity+1);
+	}
+
+
+	/**
+	 * Returns a String representation of this cache.
+	 */
+	public String toString() {
+		int size = keys.size();
+		String s = super.toString()+" size="+size+"/"+expirationDates.size()+"/"+values.size()+" capacity="+capacity+" eldestExpirationDate="+eldestExpirationDate+"\n";
+
+		Object key;
+		for(int i=0; i<size; i++) {
+			key = keys.elementAt(i);
+			s += i+"- key="+key+" value="+values.get(key)+" expirationDate="+expirationDates.elementAt(i)+"\n";
+		}
+		
+		if(UPDATE_CACHE_COUNTERS)
+			s += "nbCacheHits="+nbHits+" nbCacheMisses="+nbMisses+"\n";
+		
+		return s;
 	}
 
 
@@ -77,29 +97,7 @@ public class LegacyLRUCache extends LRUCache {
 		}
 	}
 
-
 	
-	
-	/**
-	 * Returns a String representation of this cache.
-	 */
-	public String toString() {
-		int size = keys.size();
-		String s = super.toString()+" size="+size+"/"+expirationDates.size()+"/"+values.size()+" capacity="+capacity+" eldestExpirationDate="+eldestExpirationDate+"\n";
-
-		Object key;
-		for(int i=0; i<size; i++) {
-			key = keys.elementAt(i);
-			s += i+"- key="+key+" value="+values.get(key)+" expirationDate="+expirationDates.elementAt(i)+"\n";
-		}
-		
-		if(UPDATE_CACHE_COUNTERS)
-			s += "nbCacheHits="+nbHits+" nbCacheMisses="+nbMisses+"\n";
-		
-		return s;
-	}
-
-
 	/////////////////////////////////////
 	// LRUCache methods implementation //
 	/////////////////////////////////////
@@ -132,18 +130,6 @@ public class LegacyLRUCache extends LRUCache {
 	}
 
 	
-	/**
-	 * Adds a new key/value pair to the cache, which become the most recently used element.
-	 * <p>If capacity has been reached:
-	 * <ul>
-	 * <li>any object with a past expiration date will be removed<li>
-	 * <li>if no expired item could be removed, the least recently used item will be removed
-	 * <ul> 
-	 *
-	 * @param key the key for the object to store
-	 * @param value the value to cache
-	 * @param timeToLive time to live for the object in the cache, in milliseconds
-	 */
 	public synchronized void add(Object key, Object value, long timeToLive) {
 		// Look for expired items and purge them (if any)
 		purgeExpiredItems();	
@@ -206,10 +192,7 @@ public class LegacyLRUCache extends LRUCache {
 	// Test methods //
 	//////////////////
 
-	/**
-	 * Tests this LRUCache for corruption and throws a RuntimeException if something is wrong.
-	 */
-	private void testCorruption() throws RuntimeException {
+	protected void testCorruption() throws RuntimeException {
 		int keysSize = keys.size();
 		if(keysSize!=expirationDates.size() || keysSize!=values.size())
 			throw new RuntimeException("cache corrupted: internal sizes don't match");

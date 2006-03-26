@@ -22,10 +22,9 @@ public class FSFile extends AbstractFile {
 	private boolean symlinkValueSet; 
 	
 	private AbstractFile parent;
-	// Indicates whether or not the value has already been retrieved
-	private boolean parentValCached = false;
-		
-
+	// Indicates if the parent folder's value has been retrieved
+	private boolean parentValueSet;
+	
 	/** "/" for UNIX systems, "\" for Win32 */
 	protected final static String separator = File.separator;
 
@@ -282,21 +281,21 @@ public class FSFile extends AbstractFile {
 	
 	public AbstractFile getParent() {
 		// Retrieves parent and caches it
-		if (!parentValCached) {
+		if (!parentValueSet) {
 			if(parentFile!=null) {
 				FileURL parentURL = getURL().getParent();
 				if(parentURL != null) {
 					parent = AbstractFile.getAbstractFile(parentURL);
 				}
 			}
-			parentValCached = true;
+			parentValueSet = true;
 		}
         return parent;
 	}
 	
 	public void setParent(AbstractFile parent) {
 		this.parent = (FSFile)parent;	
-		this.parentValCached = true;
+		this.parentValueSet = true;
 	}
 		
 	public boolean exists() {
