@@ -39,6 +39,9 @@ public class Bookmark {
 	 */
 	public void setName(String newName) {
 		this.name = newName;
+
+		// Notify registered listeners of the change
+		BookmarkManager.fireBookmarkChanged(this);
 	}
 
 
@@ -54,6 +57,9 @@ public class Bookmark {
 	 */
 	public void setURL(FileURL newFileURL) {
 		this.fileURL = newFileURL;
+
+		// Notify registered listeners of the change
+		BookmarkManager.fireBookmarkChanged(this);
 	}
 	
 

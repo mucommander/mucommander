@@ -554,33 +554,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 
 
 	/**
-	 * Registers a LocationListener to receive LocationEvents whenever the current folder
-	 * of this FolderPanel has or is being changed. 
-	 *
-	 * <p>Listeners are stored as weak references so {@link #removeLocationListener(LocationListener) removeLocationListener()}
-	 * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
-	 */
-	public void addLocationListener(LocationListener listener) {
-		locationListeners.put(listener, null);
-	}
-
-	/**
-	 * Unsubscribes the LocationListener as to not receive LocationEvents anymore. 
-	 */
-	public void removeLocationListener(LocationListener listener) {
-		locationListeners.remove(listener);
-	}
-
-	/**
-	 * Notifies all registered listeners that current folder is being changed on this FolderPanel.
-	 */
-	private void fireLocationChanging() {
-		Iterator iterator = locationListeners.keySet().iterator();
-		while(iterator.hasNext())
-			((LocationListener)iterator.next()).locationChanging(new LocationEvent(this));
-	}
-
-	/**
 	 * Notifies all registered listeners that current folder has changed on this FolderPanel.
 	 */
 	private void fireLocationChanged() {
@@ -885,8 +858,35 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		if(!mainFrame.getNoEventsMode())
 			((JComponent)lastFocusedComponent).requestFocus();
 	}
-	
-	
+
+
+	/**
+	 * Registers a LocationListener to receive LocationEvents whenever the current folder
+	 * of this FolderPanel has or is being changed. 
+	 *
+	 * <p>Listeners are stored as weak references so {@link #removeLocationListener(LocationListener) removeLocationListener()}
+	 * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
+	 */
+	public synchronized void addLocationListener(LocationListener listener) {
+		locationListeners.put(listener, null);
+	}
+
+	/**
+	 * Unsubscribes the LocationListener as to not receive LocationEvents anymore. 
+	 */
+	public synchronized void removeLocationListener(LocationListener listener) {
+		locationListeners.remove(listener);
+	}
+
+	/**
+	 * Notifies all registered listeners that current folder is being changed on this FolderPanel.
+	 */
+	private synchronized void fireLocationChanging() {
+		Iterator iterator = locationListeners.keySet().iterator();
+		while(iterator.hasNext())
+			((LocationListener)iterator.next()).locationChanging(new LocationEvent(this));
+	}
+
 	////////////////////////////
 	// ActionListener methods //
 	////////////////////////////

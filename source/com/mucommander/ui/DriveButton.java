@@ -7,8 +7,7 @@ import com.mucommander.PlatformManager;
 
 import com.mucommander.ui.connect.ServerConnectDialog;
 
-import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.bookmark.Bookmark;
+import com.mucommander.bookmark.*;
 
 import com.mucommander.text.Translator;
 
@@ -29,7 +28,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class DriveButton extends JButton implements ActionListener, PopupMenuListener, LocationListener {
+public class DriveButton extends JButton implements ActionListener, PopupMenuListener, LocationListener, BookmarkListener {
 
 	private FolderPanel folderPanel;
 	
@@ -64,6 +63,10 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 
 		// Listen to location events to update drive button when folder changes
 		folderPanel.addLocationListener(this);
+
+		// Listen to bookmark changes to update drive button if a bookmark corresponding
+		// to the current folder has been added/edited/removed
+		BookmarkManager.addBookmarkListener(this);
 		
 		// Listen to action events to popup a list of drives when button is pressed
 		addActionListener(this);
@@ -104,19 +107,21 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	
 
 	/**
-	 * Updates this drive button's label with the specified new current folder to match one of the drive button's shortcuts.
+	 * Updates this drive button's label to reflect current folder and match one of the drive button's shortcuts.
 	 * <<ul>
 	 *	<li>If the specified folder corresponds to a bookmark, the bookmark's name will be displayed
 	 *	<li>If the specified folder corresponds to a local file, the enclosing volume's name will be displayed
 	 *	<li>If the specified folder corresponds to a remote file, the protocol's name will be displayed
 	 * </ul>
 	 */
-	private void updateLabel(AbstractFile folder) {
+	private void updateLabel() {
+		AbstractFile currentFolder = folderPanel.getCurrentFolder();
+		FileURL currentURL = currentFolder.getURL();
+
 		String newLabel = null;
 		
 		// First tries to find a bookmark matching the specified folder
 		Vector bookmarks = BookmarkManager.getBookmarks();
-		FileURL currentURL = folder.getURL();
 		int nbBookmarks = bookmarks.size();
 		Bookmark b;
 		for(int i=0; i<nbBookmarks; i++) {
@@ -130,14 +135,14 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 		
 		// If no bookmark matched current folder
 		if(newLabel == null) {
-			String protocol = folder.getURL().getProtocol();
+			String protocol = currentURL.getProtocol();
 			// Remote file, use protocol's name
 			if(!protocol.equals("file")) {
 				newLabel = protocol.toUpperCase();
 			}
-			// Local file, use enclosing volume's name 
+			// Local file, use volume's name 
 			else {
-				String currentPath = folder.getCanonicalPath(false).toLowerCase();
+				String currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
 				int bestLength = -1;
 				int bestIndex = 0;
 				String temp;
@@ -228,14 +233,25 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 //		FocusRequester.requestFocus(popupMenu);
 	}
 
+
+
+	//////////////////////////////////
+	// Overriden JComponent methods //
+	//////////////////////////////////
+	
+	public boolean isFocusTraversable() {
+		// Prevents this button from getting keyboard focus
+		return false;
+	}
+
 	
 	//////////////////////////////
 	// LocationListener methods //
 	//////////////////////////////
 	
 	public void locationChanged(LocationEvent e) {
-		// Update button text with new location
-		updateLabel(e.getFolderPanel().getCurrentFolder());
+		// Update the button's label to reflect the new current folder
+		updateLabel();
 	}
 	
 	public void locationChanging(LocationEvent e) {
@@ -263,6 +279,22 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 	}
 	
+
+	//////////////////////////////
+	// BookmarkListener methods //
+	//////////////////////////////
+	
+	public void bookmarkChanged(Bookmark b) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("bookmark="+b+" currentURL="+folderPanel.getCurrentFolder().getURL()+" equal="+folderPanel.getCurrentFolder().getURL().equals(b.getURL()));
+
+		// If a bookmark has been added/edited/removed, check if the bookmark's URL corresponds 
+		// to the current folder's. If it so, update the button's label to reflect the new current folder
+		if(folderPanel.getCurrentFolder().getURL().equals(b.getURL())) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling updateLabel()");
+			updateLabel();
+		}
+	}
+
 	
 	////////////////////////////
 	// ActionListener methods //
@@ -302,7 +334,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 			// Menu item that corresponds to a root folder
 			if(index<bookmarksOffset) {
 				// Tries to change current folder
-				folderPanel.trySetCurrentFolder(rootFolders[index], true);
+				folderPanel.trySetCurrentFolder(rootFolders[index].getCanonicalPath(), true);
 			}
 			// Menu item that corresponds to a bookmark
 			else if(index<serverShortcutsOffset) {
@@ -314,15 +346,5 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 				new ServerConnectDialog(folderPanel.getMainFrame(), index-serverShortcutsOffset).showDialog();
 			}
 		}
-	}
-
-
-	//////////////////////////////////
-	// Overriden JComponent methods //
-	//////////////////////////////////
-	
-	public boolean isFocusTraversable() {
-		// Prevents this button from getting keyboard focus
-		return false;
 	}
 }

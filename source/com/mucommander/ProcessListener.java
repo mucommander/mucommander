@@ -3,7 +3,7 @@ package com.mucommander;
 
 
 /**
- * This interface provides a way for classes to be notified of a process's activity
+ * This interface provides a way for classes to be notified of a process's activity.
  *
  * @author Maxence Bernard
  */

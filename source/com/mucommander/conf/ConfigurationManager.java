@@ -446,7 +446,7 @@ public class ConfigurationManager {
 	 * <p>Listeners are stored as weak references so {@link #removeConfigurationListener(ConfigurationListener) removeConfigurationListener()}
 	 * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
 	 *
-     * @param listener listener to insert in the list.
+     * @param listener the listener to add to the list of registered listeners.
      */
     public static synchronized void addConfigurationListener(ConfigurationListener listener) {
 		if(listener==null)
@@ -460,7 +460,7 @@ public class ConfigurationManager {
     /**
      * Removes the specified configuration listener from the list of registered listeners.
      *
-	 * @param listener listener to remove from the list.
+     * @param listener the listener to remove from the list of registered listeners.
      */
     public static synchronized void removeConfigurationListener(ConfigurationListener listener) {
         listeners.remove(listener);

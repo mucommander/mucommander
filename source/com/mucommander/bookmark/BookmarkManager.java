@@ -6,6 +6,9 @@ import java.util.Vector;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.WeakHashMap;
+import java.util.Iterator;
+
 import com.mucommander.PlatformManager;
 
 /**
@@ -22,6 +25,10 @@ public class BookmarkManager {
 
 	/** Bookmark instances */
 	private static Vector bookmarks = new Vector();
+
+    /** Contains all registered bookmark listeners, stored as weak references */
+    private static WeakHashMap listeners = new WeakHashMap();
+
 
 	/**
 	 * Return a java.io.File instance that points to the bookmarks file location.
@@ -73,6 +80,10 @@ public class BookmarkManager {
 
 	/**
 	 * Returns a Vector filled with all bookmarks.
+	 * 
+	 * <p>Important: the returned Vector should not directly be used to
+	 * add or remove bookmarks, doing so won't trigger any event to registered bookmark listeners.
+	 * However, it is safe to modify bookmarks individually, events will be properly fired.</p>
 	 */
 	public static Vector getBookmarks() {
 		return bookmarks;
@@ -84,8 +95,11 @@ public class BookmarkManager {
 	 *
 	 * @param bm the Bookmark instance to add.
 	 */
-	public static void addBookmark(Bookmark bm) {
-		bookmarks.add(bm);
+	public static void addBookmark(Bookmark b) {
+		bookmarks.add(b);
+
+		// Notify registered listeners of the change
+		fireBookmarkChanged(b);
 	}
 
 
@@ -94,7 +108,51 @@ public class BookmarkManager {
 	 *
 	 * @param bm the Bookmark instance to remove.
 	 */
-	public static void removeBookmark(Bookmark bm) {
-		bookmarks.remove(bm);
+	public static void removeBookmark(Bookmark b) {
+		bookmarks.remove(b);
+
+		// Notify registered listeners of the change
+		fireBookmarkChanged(b);
 	}
+	
+	
+    /**
+     * Adds the specified BookmarkListener to the list of registered listeners.
+	 *
+	 * <p>Listeners are stored as weak references so {@link #removeBookmarkListener(BookmarkListener) removeBookmarkListener()}
+	 * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
+	 *
+     * @param listener the BookmarkListener to add to the list of registered listeners.
+     */
+    public static synchronized void addBookmarkListener(BookmarkListener listener) {
+		if(listener==null)
+			return;
+		
+		listeners.put(listener, null);
+	}
+
+    /**
+     * Removes the specified BookmarkListener from the list of registered listeners.
+     *
+     * @param listener the BookmarkListener to remove from the list of registered listeners.
+     */
+    public static synchronized void removeBookmarkListener(BookmarkListener listener) {
+        listeners.remove(listener);
+	}
+
+    /**
+     * Notifies all the registered bookmark listeners of a bookmark change. This can be :
+	 * <ul>
+	 * <li>A new bookmark which has just been added
+	 * <li>An existing bookmark which has been modified
+	 * <li>An existing bookmark which has been removed
+	 * </ul>
+     *
+	 * @param b the bookmark that has been added/edited/removed
+     */
+    public static synchronized void fireBookmarkChanged(Bookmark b) {
+        Iterator iterator = listeners.keySet().iterator();
+        while(iterator.hasNext())
+            ((BookmarkListener)iterator.next()).bookmarkChanged(b);
+    }
 }

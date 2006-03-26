@@ -392,9 +392,8 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 		FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
 		FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
 
-		for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
+		for(FileTable table=table1; ; table=table2) {
 			if(hasFolderChanged(table.getCurrentFolder())) {
-//				table.getFolderPanel().tryRefresh();
 				try {
 					// Refresh folder in the same thread
 					table.getFolderPanel().refreshCurrentFolder();
@@ -403,6 +402,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 					if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Folder couldn't be refreshed: "+e);
 				}
 			}
+		
+			if(table==table2)
+				break;
 		}
 
 		// Resume auto-refresh if auto-refresh has been paused

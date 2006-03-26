@@ -185,21 +185,21 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 	 * <p>Listeners are stored as weak references so {@link #removeLocationListener(LocationListener) removeLocationListener()}
 	 * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
 	 */
-	public void addTableChangeListener(TableChangeListener tableChangeListener) {
+	public synchronized void addTableChangeListener(TableChangeListener tableChangeListener) {
 		tableChangeListeners.put(tableChangeListener, null);
 	}
 
 	/**
 	 * Unregisters the given TableChangeListener so that it will no longer receive events when current table changes.
 	 */
-	public void removeTableChangeListener(TableChangeListener tableChangeListener) {
+	public synchronized void removeTableChangeListener(TableChangeListener tableChangeListener) {
 		tableChangeListeners.remove(tableChangeListener);
 	}
 
 	/**
 	 * Fires table change events on registered TableChangeListener instances.
 	 */
-	private void fireTableChanged(FolderPanel folderPanel) {
+	private synchronized void fireTableChanged(FolderPanel folderPanel) {
 		Iterator iterator = tableChangeListeners.keySet().iterator();
 		while(iterator.hasNext())
 			((TableChangeListener)iterator.next()).tableChanged(folderPanel);

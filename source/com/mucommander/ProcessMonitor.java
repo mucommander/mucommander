@@ -4,8 +4,8 @@ package com.mucommander;
 import java.io.*;
 
 /**
- * Monitors a Process state and notifies the ProcessListener when the process output something to
- * standard output or error streams, or when it died.
+ * Monitors a Process state and notifies the ProcessListener when the process sent something to
+ * standard output or error streams, and when it died.
  *
  * @author Maxence Bernard
  */
@@ -33,7 +33,7 @@ public class ProcessMonitor implements Runnable {
 	
 	/**
 	 * Sets the period in milliseconds between 2 checks to see if the process did output something new.
-	 * Lower period means faster notification but more CPU overhead.
+	 * A shorter period means faster notification but more CPU overhead.
 	 */
 	public void setOutputCheckPeriod(int msPeriod) {
 		this.outputCheckPeriod = msPeriod;	
