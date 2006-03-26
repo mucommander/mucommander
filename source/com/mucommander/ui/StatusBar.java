@@ -49,7 +49,7 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 	/** Caches volume info strings (free/total space) for a while, since it is quite costly and we don't want
 	 * to recalculate it each time this information is requested.
 	 * Each cache item maps a path to a volume info string */
-	private static LRUCache volumeInfoCache = new LRUCache(VOLUME_INFO_CACHE_CAPACITY);
+	private static LRUCache volumeInfoCache = LRUCache.createInstance(VOLUME_INFO_CACHE_CAPACITY);
 	
 	/** SizeFormatter's format used to display volume info in status bar */
 	private final static int VOLUME_INFO_SIZE_FORMAT = SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB;

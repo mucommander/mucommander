@@ -18,9 +18,9 @@ public abstract class AbstractFile {
 	protected FileURL fileURL;
 
 	/** Static LRUCache instance that caches frequently accessed AbstractFile instances */
-	private static LRUCache fileCache = new LRUCache(1000);
+	private static LRUCache fileCache = LRUCache.createInstance(1000);
 	/** Static LRUCache instance that caches frequently accessed FileURL instances */
-	private static LRUCache urlCache = new LRUCache(1000);
+	private static LRUCache urlCache = LRUCache.createInstance(1000);
 
 	/**
 	 * Creates a new file instance with the given URL.
