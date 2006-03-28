@@ -88,15 +88,62 @@ public class PlatformManager {
 	/** Java 1.6.x */
 	public final static int JAVA_1_6 = 6;
 	
+
+	/** Environment variable used to determine if GNOME is the desktop currently running */
+	private final static String GNOME_ENV_VAR = "GOME_DESKTOP_SESSION_ID";
+
+	/** Environment variable used to determine if KDE is the desktop currently running */
+	private final static String KDE_ENV_VAR = "KDE_FULL_SESSION";
+	
 	
 	/**
 	 * Finds out what kind of OS and Java version muCommander is running on.
 	 */
 	static {
+		// Java version detection //
+		String javaVersionProp = System.getProperty("java.version");
+
+		// Java version property should never be null or empty, but better be safe than sorry ... 
+		if(javaVersionProp==null || (javaVersionProp=javaVersionProp.trim()).equals("")) {
+			// Assume java 1.3 (first supported Java version)
+			javaVersion = JAVA_1_3;
+		}
+		// Java 1.5
+		else if(javaVersionProp.startsWith("1.5")) {
+			javaVersion = JAVA_1_5;
+		}
+		// Java 1.4
+		else if(javaVersionProp.startsWith("1.4")) {
+			javaVersion = JAVA_1_4;
+		}
+		// Java 1.3
+		else if(javaVersionProp.startsWith("1.3")) {
+			javaVersion = JAVA_1_3;
+		}
+		// Java 1.2
+		else if(javaVersionProp.startsWith("1.2")) {
+			javaVersion = JAVA_1_2;
+		}
+		// Java 1.1
+		else if(javaVersionProp.startsWith("1.1")) {
+			javaVersion = JAVA_1_1;
+		}
+		// Java 1.0
+		else if(javaVersionProp.startsWith("1.0")) {
+			javaVersion = JAVA_1_0;
+		}
+		// Newer version we don't know of yet, assume latest supported Java version
+		else {
+			javaVersion = JAVA_1_5;
+		}
+		
+		if(Debug.ON) Debug.trace("detected Java version value = "+javaVersion);
+
+
+		// OS Family detection //
+
 		String osName = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
-		
-		// OS Family detection //
 		
 		// Windows family
 		if(osName.startsWith("Windows")) {
@@ -137,31 +184,48 @@ public class PlatformManager {
 
 		if(Debug.ON) Debug.trace("detected OS family value = "+osFamily);
 
-		// Unix desktop (KDE/GNOME) detection, only if OS is Linux, Solaris or Other (BSD)
+		// Desktop (KDE/GNOME) detection, only if OS is Linux, Solaris or other (maybe *BSD)
 
 		if(osFamily==LINUX || osFamily==SOLARIS || osFamily==OTHER) {
 			unixDesktop = UNKNOWN_DESKTOP;
 
-			// Are we running on KDE or GNOME ?
-			// First, we look for typical KDE/GNOME environment variables, 
-			// but we can't rely on them being defined, as they only have a value if muCommander was launched
-			// with proper java -D options (-> mucommander.sh script), and will be null otherwise (-> java -jar mucommander.jar)
-			String envVar;
-			if((envVar=System.getProperty("GOME_DESKTOP_SESSION_ID"))!=null && !envVar.equals(""))
+			// Are we running on KDE, GNOME or some other desktop ?
+			// First, we look for typical KDE/GNOME environment variables
+			// but we can't rely on them being defined, as they only have a value under Java 1.5 (using System.getenv())
+			// or under Java 1.3 and 1.4 if muCommander was launched with proper java -D options (-> mucommander.sh script)
+
+			String gnomeEnvValue;
+			String kdeEnvValue;
+			// System.getenv() has been deprecated and not usable (throws an exception) under Java 1.3 and 1.4,
+			// let's use System.getProperty() instead
+			if(javaVersion<=JAVA_1_4) {
+				gnomeEnvValue = System.getProperty("GOME_DESKTOP_SESSION_ID");
+				kdeEnvValue = System.getProperty("KDE_FULL_SESSION");
+			}
+			// System.getenv() has been un-deprecated (reprecated?) under Java 1.5, great!
+			else {
+				gnomeEnvValue = System.getenv("GOME_DESKTOP_SESSION_ID");
+				kdeEnvValue = System.getenv("KDE_FULL_SESSION");
+			}
+
+			// Does the GOME_DESKTOP_SESSION_ID environment variable have a value ?
+			if(gnomeEnvValue!=null && !gnomeEnvValue.trim().equals(""))
 				unixDesktop = GNOME_DESKTOP;
-			else if((envVar=System.getProperty("KDE_FULL_SESSION"))!=null && !envVar.equals(""))
+			// Does the KDE_FULL_SESSION environment variable have a value ?
+			else if(kdeEnvValue!=null && !kdeEnvValue.trim().equals(""))
 				unixDesktop = KDE_DESKTOP;
 			else {
-				// At this point, muCommander was either not started from the shell script (null environment variables)
-				// or it is simply not running on KDE or GNOME, let's figure out.
-				// -> check if 'kfmclient' (KDE's equivalent of OS X's open command) or 'gnome-open' (GNOME's equivalent of OS X's open command) is available
+				// At this point, neither GNOME nor KDE environment variables had a value :
+				// Either those variables could not be retrieved (muCommander is running on Java 1.4 or 1.3
+				//  and was not started from the mucommander.sh script with the proper java -D parameters)
+				// or it is simply not running on KDE or GNOME, let's give it one more try:
+				// -> check if 'kfmclient' (KDE's equivalent of OS X's open command) 
+				//  or 'gnome-open' (GNOME's equivalent of OS X's open command) is available
 
-				// Since GNOME seems to be more popular than KDE, GNOME test comes first
+				// Since this test has a cost and GNOME seems to be more widespread than KDE, GNOME test comes first
 				try {
 					if(Debug.ON) Debug.trace("trying to execute gnome-open");
 					
-//					// Try to execute 'gnome-open --usage' and see if exit value is 0 (normal termination)
-//					if(Runtime.getRuntime().exec(new String[]{"gnome-open", "--usage"}).waitFor()==0)
 					// Try to execute 'gnome-open' to see if command exists (will thrown an IOException if it doesn't)
 					Runtime.getRuntime().exec("gnome-open");
 					unixDesktop = GNOME_DESKTOP;
@@ -171,8 +235,6 @@ public class PlatformManager {
 					try {
 						if(Debug.ON) Debug.trace("trying to execute kfmclient");
 						
-//						// Try to execute 'kfmclient --help' and see if exit value is 0 (normal termination)
-//						if(Runtime.getRuntime().exec(new String[]{"kfmclient", "--help"}).waitFor()==0)
 						// Try to execute 'kfmclient' to see if command exists (will thrown an IOException if it doesn't)
 						Runtime.getRuntime().exec("kfmclient");
 						unixDesktop = KDE_DESKTOP;
@@ -181,50 +243,6 @@ public class PlatformManager {
 
 			if(Debug.ON) Debug.trace("detected desktop value = "+unixDesktop);
 		}
-
-
-		// Java version detection //
-		String javaVersionProp = System.getProperty("java.version");
-
-		// Java version property should never be null or empty, but better be safe than sorry ... 
-		if(javaVersionProp==null || (javaVersionProp=javaVersionProp.trim()).equals("")) {
-			// Assume java 1.3 (first supported Java version)
-			javaVersion = JAVA_1_3;
-		}
-		// Java 1.6
-		else if(javaVersionProp.startsWith("1.6")) {
-			javaVersion = JAVA_1_6;
-		}
-		// Java 1.5
-		else if(javaVersionProp.startsWith("1.5")) {
-			javaVersion = JAVA_1_5;
-		}
-		// Java 1.4
-		else if(javaVersionProp.startsWith("1.4")) {
-			javaVersion = JAVA_1_4;
-		}
-		// Java 1.3
-		else if(javaVersionProp.startsWith("1.3")) {
-			javaVersion = JAVA_1_3;
-		}
-		// Java 1.2
-		else if(javaVersionProp.startsWith("1.2")) {
-			javaVersion = JAVA_1_2;
-		}
-		// Java 1.1
-		else if(javaVersionProp.startsWith("1.1")) {
-			javaVersion = JAVA_1_1;
-		}
-		// Java 1.0
-		else if(javaVersionProp.startsWith("1.0")) {
-			javaVersion = JAVA_1_0;
-		}
-		// Newer version we don't know of yet, assume latest supported Java version
-		else {
-			javaVersion = JAVA_1_5;
-		}
-		
-		if(Debug.ON) Debug.trace("detected Java version value = "+javaVersion);
 	}
 
 	
@@ -410,76 +428,144 @@ public class PlatformManager {
 	 * Opens/executes the given file, from the given folder and returns <code>true</code>
 	 * if the operation succeeded.
 	 */
-/*
-	public static boolean open(String filePath, AbstractFile currentFolder) {
-		try {
-            if(Debug.ON) Debug.trace("Opening "+filePath);
+	public static void open(AbstractFile file) {
+	    if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath());
 
-
-            Process p;
-			if(currentFolder instanceof com.mucommander.file.FSFile)
-				p = Runtime.getRuntime().exec(getOpenTokens(filePath), null, new java.io.File(currentFolder.getAbsolutePath()));
-            else
-				p = Runtime.getRuntime().exec(getOpenTokens(filePath), null);
-			
-			if(Debug.ON) showProcessOutput(p);
-			
-            return true;
-		}
-		catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while opening "+filePath+": "+e);
-            return false;
+		AbstractFile currentFolder = file.getURL().getProtocol().equals("file") && (currentFolder=file.getParent())!=null?currentFolder:null;
+		String filePath = file.getAbsolutePath();
+		Process p = execute(getOpenTokens(filePath), currentFolder);
+	
+		// GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
+		// so if 'gnome-open' returned an error, we try to execute the file
+		if(unixDesktop==GNOME_DESKTOP && p!=null) {
+			 try {
+				int exitCode = p.waitFor();
+				if(exitCode!=0)
+					execute(new String[]{escapeSpaceCharacters(filePath)}, currentFolder);
+			} catch(Exception e) {
+				if(Debug.ON) Debug.trace("Error while executing "+filePath+": "+e);
+			}
 		}
 	}
-*/
 
 
 	/**
-	 * Opens the given file in the Mac OS X Finder. A Finder window will be opened, revealing:
+	 * Returns <code>true</code> if the current platform is capable of opening a URL in a new (default) browser window.
+	 */
+	public static boolean canOpenURLInBrowser() {
+		return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT || unixDesktop==KDE_DESKTOP || unixDesktop==GNOME_DESKTOP;
+	}
+
+	
+	/**
+	 * Opens the given URL in a new (default) browser window.
+	 *
+	 * <p>Not all OS/desktops are capable of doing this, {@link #canOpenURLInBrowser() canOpenURLInBrowser} 
+	 * should be called before to ensure the current platform can do it.
+	 */
+	public static void openURLInBrowser(String url) {
+        if(Debug.ON) Debug.trace("Opening "+url+" in a new browser window");
+
+		String tokens[];
+		if(unixDesktop == KDE_DESKTOP)
+			tokens = new String[] {"kfmclient", "openURL", url};
+		else
+			tokens = getOpenTokens(url);
+	
+		execute(tokens, null);
+	}
+
+
+	/**
+	 * Returns <code>true</code> if the current platform is capable of opening a file or folder in the desktop's
+	 * default file manager (Finder for Mac OS X, Explorer for Windows...).
+	 */
+	public static boolean canOpenInDesktop() {
+		return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT || unixDesktop==KDE_DESKTOP || unixDesktop==GNOME_DESKTOP;
+	}	
+
+
+	/**
+	 * Opens the given file in the currently running OS/desktop's file manager : 
+	 * Explorer for Windows, Finder for Mac OS X, Nautilus for GNOME, Konqueror for KDE.
 	 * <ul>
 	 *  <li>if the given file is a folder, the folder contents
 	 *  <li>if the given file is a regular file, the enclosing folder's contents (Finder is unable to jump to the file unfortunately)
 	 * </ul>
 	 */
-/*
-	public static void openInFinder(AbstractFile file) {
+	public static void openInDesktop(AbstractFile file) {
 		try {
-			// Return if file is not on a local/mounted filesytem
+			// Return if file is not a local file
 			if(!file.getURL().getProtocol().equals("file"))
 				return;
 
 			if(!file.isDirectory())
 				file = file.getParent();
 			
-            if(Debug.ON) Debug.trace("Opening in finder "+file.getAbsolutePath());
-            	Runtime.getRuntime().exec(new String[]{"open", "-a", "Finder", file.getAbsolutePath()}, null);
+            if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath()+" in desktop");
+
+			String filePath = file.getAbsolutePath();
+			String tokens[];
+           	if (osFamily == MAC_OS_X)
+				tokens = new String[] {"open", "-a", "Finder", filePath};
+			else
+				tokens = getOpenTokens(filePath);
+				
+			execute(tokens, null);
 		}
 		catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while opening "+file.getAbsolutePath()+" in Finder: "+e);
+            if(Debug.ON) Debug.trace("Error while opening "+file.getAbsolutePath()+" in desktop: "+e);
 		}
 	}
-*/
+	
+	
+	/**
+	 * Returns the name of the default file manager on the currently running OS/Desktop: 
+	 * "Explorer" for Windows, "Finder" for Mac OS X, "Nautilus" for GNOME, "Konqueror" for KDE, or an empty
+	 * String if unknown.
+	 */
+	public static String getDefaultDesktopFMName() {
+		if (osFamily==WINDOWS_9X || osFamily == WINDOWS_NT) {
+			return "Explorer";
+		}
+		else if (osFamily == MAC_OS_X)  {
+			return "Finder";
+		}
+		else if(unixDesktop == KDE_DESKTOP) {
+			return "Konqueror";			
+		}
+		else if(unixDesktop == GNOME_DESKTOP) {
+			return "Nautilus";
+		}	
+		else
+			return "";
+	}
 
 
 	/**
-	 * Escapes space characters in the given string (replaces space characters ' ' instances by '\ ')
-	 * and returns the escaped string.
+	 * Executes the given command tokens from the specifed current folder.
+	 *
+	 * @param tokens an array of command tokens to execute
+	 * @param currentFolder the folder to execute the command from, can be <code>null</code>
 	 */
-	private static String escapeSpaceCharacters(String filePath) {
-		StringBuffer sb = new StringBuffer();
-		char c;
-		int len = filePath.length();
-		for(int i=0; i<len; i++) {
-			c = filePath.charAt(i);
-			if(c==' ')
-				sb.append("\\ ");
-			else
-				sb.append(c);
+	private static Process execute(String tokens[], AbstractFile currentFolder) {
+		if(Debug.ON) Debug.trace("executing : "+tokensToString(tokens));
+		try {
+            Process p = Runtime.getRuntime().exec(tokens, null, currentFolder==null?null:new java.io.File(currentFolder.getAbsolutePath()));
+			if(Debug.ON) showProcessOutput(p);
+			return p;
 		}
-		return sb.toString();
+		catch(Exception e) {
+			if(Debug.ON) Debug.trace("Error while executing "+tokensToString(tokens)+": "+e);
+			return null;
+		}
 	}
 
 
+	/**
+	 * Returns an array of command tokens that can be used to open the given file in the OS/Desktop's
+	 * default file manager.
+	 */
 	private static String[] getOpenTokens(String filePath) {
 		// Under Windows, the 'start' command opens a file with the program
 		// registered for the file's extension, or executes the file if the file is executable, or opens 
@@ -519,130 +605,23 @@ public class PlatformManager {
 
 
 	/**
-	 * Opens/executes the given file, from the given folder and returns <code>true</code>
-	 * if the operation succeeded.
+	 * Escapes space characters in the given string (replaces space characters ' ' instances by '\ ')
+	 * and returns the escaped string.
 	 */
-	public static void open(AbstractFile file) {
-	    if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath());
-
-		AbstractFile currentFolder = file.getURL().getProtocol().equals("file") && (currentFolder=file.getParent())!=null?currentFolder:null;
-		String filePath = file.getAbsolutePath();
-		Process p = open(getOpenTokens(filePath), currentFolder);
-	
-		// GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
-		// so if 'gnome-open' returned an error, we try to execute the file
-		if(unixDesktop==GNOME_DESKTOP && p!=null) {
-			 try {
-				int exitCode = p.waitFor();
-				if(exitCode!=0)
-					open(new String[]{escapeSpaceCharacters(filePath)}, currentFolder);
-			} catch(Exception e) {
-				if(Debug.ON) Debug.trace("Error while executing "+filePath+": "+e);
-			}
-		}
-	}
-
-
-	/**
-	 * Returns <code>true</code> if the current platform is capable of opening a URL in a new (default) browser window.
-	 */
-	public static boolean canOpenURLInBrowser() {
-		return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT || unixDesktop==KDE_DESKTOP || unixDesktop==GNOME_DESKTOP;
-	}
-
-	
-	/**
-	 * Opens the given URL in a new (default) browser window.
-	 *
-	 * <p>Not all OS/desktops are capable of doing this, {@link #canOpenURLInBrowser() canOpenURLInBrowser} 
-	 * should be called before to ensure the current platform can do it.
-	 */
-	public static void openURLInBrowser(String url) {
-        if(Debug.ON) Debug.trace("Opening "+url+" in a new browser window");
-
-		String tokens[];
-		if(unixDesktop == KDE_DESKTOP)
-			tokens = new String[] {"kfmclient", "openURL", url};
-		else
-			tokens = getOpenTokens(url);
-	
-		open(tokens, null);
-	}
-
-
-	/**
-	 * Returns <code>true</code> if the current platform is capable of opening a file or folder in the desktop's default file manager
-	 * (Finder for Mac OS X, Explorer for Windows...).
-	 */
-	public static boolean canOpenInDesktop() {
-		return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT || unixDesktop==KDE_DESKTOP || unixDesktop==GNOME_DESKTOP;
-	}	
-
-
-	/**
-	 * Opens the given file in the current OS/desktop's file manager : Explorer for Windows, Finder for Mac OS X,
-	 * Nautilus for GNOME, Konqueror for KDE.
-	 * <ul>
-	 *  <li>if the given file is a folder, the folder contents
-	 *  <li>if the given file is a regular file, the enclosing folder's contents (Finder is unable to jump to the file unfortunately)
-	 * </ul>
-	 */
-	public static void openInDesktop(AbstractFile file) {
-		try {
-			// Return if file is not a local file
-			if(!file.getURL().getProtocol().equals("file"))
-				return;
-
-			if(!file.isDirectory())
-				file = file.getParent();
-			
-            if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath()+" in desktop");
-
-			String filePath = file.getAbsolutePath();
-			String tokens[];
-           	if (osFamily == MAC_OS_X)
-				tokens = new String[] {"open", "-a", "Finder", filePath};
+	private static String escapeSpaceCharacters(String filePath) {
+		StringBuffer sb = new StringBuffer();
+		char c;
+		int len = filePath.length();
+		for(int i=0; i<len; i++) {
+			c = filePath.charAt(i);
+			if(c==' ')
+				sb.append("\\ ");
 			else
-				tokens = getOpenTokens(filePath);
-				
-			open(tokens, null);
+				sb.append(c);
 		}
-		catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while opening "+file.getAbsolutePath()+" in desktop: "+e);
-		}
-	}
-	
-	
-	public static String getDefaultDesktopFMName() {
-		if (osFamily==WINDOWS_9X || osFamily == WINDOWS_NT) {
-			return "Explorer";
-		}
-		else if (osFamily == MAC_OS_X)  {
-			return "Finder";
-		}
-		else if(unixDesktop == KDE_DESKTOP) {
-			return "Konqueror";			
-		}
-		else if(unixDesktop == GNOME_DESKTOP) {
-			return "Nautilus";
-		}	
-		else
-			return "";
+		return sb.toString();
 	}
 
-
-	private static Process open(String tokens[], AbstractFile currentFolder) {
-		if(Debug.ON) Debug.trace("executing : "+tokensToString(tokens));
-		try {
-            Process p = Runtime.getRuntime().exec(tokens, null, currentFolder==null?null:new java.io.File(currentFolder.getAbsolutePath()));
-			if(Debug.ON) showProcessOutput(p);
-			return p;
-		}
-		catch(Exception e) {
-			if(Debug.ON) Debug.trace("Error while executing "+tokensToString(tokens)+": "+e);
-			return null;
-		}
-	}
 
 	///////////////////
 	// Debug methods //
@@ -681,6 +660,7 @@ public class PlatformManager {
 	}
 
 	public static void main(String args[]) {
-		open(args, null);
+//		open(args, null);
+		System.out.println("$"+args[0]+"="+System.getenv(args[0]));
 	}
 }
