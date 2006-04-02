@@ -54,4 +54,12 @@ public class FileSet extends Vector {
 	public AbstractFile fileAt(int i) {
 		return (AbstractFile)super.elementAt(i);
 	}
+	
+	
+	/**
+	 * 
+	 */
+//	public Object clone() {
+//		return super.clone();
+//	}
 }

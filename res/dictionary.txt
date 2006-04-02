@@ -4524,9 +4524,9 @@ prefs_dialog.confirm_on_quit:ZH_CN:退出时显示确认对话框
 prefs_dialog.confirm_on_quit:SI:Pokaži pogovorno okno za potrditev izhoda
 
 
-################
+####################
 # Table Popup menu #
-################
+####################
 
 # Displayed when right-clicking on a folder
 table_popup.open:EN:Open
@@ -4537,7 +4537,6 @@ table_popup.open:zh_TW:開啟
 table_popup.open:PL:Otwórz
 table_popup.open:ZH_CN:打开
 table_popup.open:SI:Odpri
-
 
 
 
@@ -4555,33 +4554,44 @@ table_popup.open:SI:Odpri
 table_popup.reveal_in_desktop:EN:Reveal in %1
 table_popup.reveal_in_desktop:FR:Afficher dans %1
 table_popup.reveal_in_desktop:ES:Mostrar en %1
-table_popup.reveal_in_desktop:RU:Отобразить в найденном
-table_popup.reveal_in_desktop:zh_TW:顯示在%1
-table_popup.reveal_in_desktop:PL:Wyszukaj
-table_popup.reveal_in_desktop:ZH_CN:在查找器中展示
-table_popup.reveal_in_desktop:SI:Razkrij
-
-table_popup.view:EN:$[command_bar.view]
-
-table_popup.edit:EN:$[command_bar.edit]
-
-table_popup.copy:EN:$[command_bar.copy]
-
-table_popup.move:EN:$[command_bar.move]
 
 table_popup.rename:EN:$[command_bar.rename]
 
-table_popup.delete:EN:$[command_bar.delete]
+table_popup.copy_names:EN:Copy name(s)
+table_popup.copy_names:FR:Copier nom(s)
+
+
+
+
+
+
+table_popup.copy_paths:EN:Copy path(s)
+table_popup.copy_paths:FR:Copier chemin(s)
+
+
+
+
+
 
 table_popup.mark_all:EN:$[mark_menu.mark_all]
 
 table_popup.unmark_all:EN:$[mark_menu.unmark_all]
 
-table_popup.mkdir:EN:$[command_bar.mkdir]
-
-table_popup.refresh:EN:$[command_bar.refresh]
-
 table_popup.properties:EN:$[file_menu.properties]
+
+#table_popup.view:EN:$[command_bar.view]
+
+#table_popup.edit:EN:$[command_bar.edit]
+
+#table_popup.copy:EN:$[command_bar.copy]
+
+#table_popup.move:EN:$[command_bar.move]
+
+#table_popup.delete:EN:$[command_bar.delete]
+
+#table_popup.mkdir:EN:$[command_bar.mkdir]
+
+#table_popup.refresh:EN:$[command_bar.refresh]
 
 
 #########
