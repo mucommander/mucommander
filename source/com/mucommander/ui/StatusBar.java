@@ -162,7 +162,6 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 		final AbstractFile currentFolder = mainFrame.getLastActiveTable().getCurrentFolder();
 
 		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, currentFolder="+currentFolder);
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cache state="+volumeInfoCache);
 
 		String cachedVolumeInfo = (String)volumeInfoCache.get(currentFolder.getAbsolutePath());
 		if(cachedVolumeInfo!=null) {
