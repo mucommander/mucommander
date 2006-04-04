@@ -88,7 +88,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 
 			// For each button
 			for(int i=0; i<NB_BUTTONS; i++)
-				IconManager.getCommandBarIcon(BUTTONS_DESC[i][2]);
+				IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, BUTTONS_DESC[i][2]);
 		}
 	}
 
@@ -156,7 +156,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 	private void setButtonIcons() {
 		// For each button
 		for(int i=0; i<NB_BUTTONS; i++)
-			buttons[i].setIcon(IconManager.getCommandBarIcon(BUTTONS_DESC[i][2]));
+			buttons[i].setIcon(IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, BUTTONS_DESC[i][2]));
 	}
 	
 	/**

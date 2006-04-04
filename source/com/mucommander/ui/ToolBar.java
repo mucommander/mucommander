@@ -93,10 +93,10 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
 			int nbIcons = BUTTONS_DESC.length;
 			for(int i=0; i<nbIcons; i++) {
 				// Preload 'enabled' icon
-				IconManager.getToolBarIcon(BUTTONS_DESC[i][1]);
+				IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, BUTTONS_DESC[i][1]);
 				// Preload 'disabled' icon if available
 				if(BUTTONS_DESC[i][2]!=null)
-					IconManager.getToolBarIcon(BUTTONS_DESC[i][2]);
+					IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, BUTTONS_DESC[i][2]);
 			}
 		}
 	}
@@ -166,10 +166,10 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
 
 			String buttonDesc[] = BUTTONS_DESC[i];
 			// Set 'enabled' icon
-			button.setIcon(IconManager.getToolBarIcon(buttonDesc[1]));
+			button.setIcon(IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, buttonDesc[1]));
 			// Set 'disabled' icon if available
 			if(buttonDesc[2]!=null)
-				button.setDisabledIcon(IconManager.getToolBarIcon(buttonDesc[2]));
+				button.setDisabledIcon(IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, buttonDesc[2]));
 		}
 	}
 	

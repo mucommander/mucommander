@@ -5,6 +5,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractArchiveFile;
 
 import java.util.Hashtable;
+
+import java.awt.Dimension;
 import javax.swing.ImageIcon;
 
 
@@ -83,6 +85,13 @@ public class FileIcons {
 	};
 
 
+	/** Width of all file icons */
+	private final static int STANDARD_WIDTH = 16;
+
+	/** Height of all file icons */
+	private final static int STANDARD_HEIGHT = 16;
+	
+
 	/**
 	 * Initializes extensions hashtables and preloads icons we're sure to use.
 	 */
@@ -98,9 +107,9 @@ public class FileIcons {
 		}
 
 		// Preloads icons so they're in IconManager's cache for when we need them
-		IconManager.getFileIcon(FOLDER_ICON_NAME);
-		IconManager.getFileIcon(FILE_ICON_NAME);
-		IconManager.getFileIcon(ARCHIVE_ICON_NAME);
+		IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME);
+		IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
+		IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME);
 	}
 
 	
@@ -125,29 +134,29 @@ public class FileIcons {
 		// which are directories with .app extension and have a dedicated icon
 		if(file.isDirectory()) {
 			if(fileExtension!=null && fileExtension.equals("app"))
-				return IconManager.getFileIcon(MAC_OS_X_APP_ICON_NAME);
-			return IconManager.getFileIcon(FOLDER_ICON_NAME);
+				return IconManager.getIcon(IconManager.FILE_ICON_SET, MAC_OS_X_APP_ICON_NAME);
+			return IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME);
 		}
 		// If file is browsable (supported archive or other), return archive icon
 		else if(file.isBrowsable()) {
-			return IconManager.getFileIcon(ARCHIVE_ICON_NAME);
+			return IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME);
 		}
 		// Regular file
 		else {
 			// Determine if the file's extension has an associated icon
 			if(fileExtension==null)	// File has no extension, return default file icon
-				return IconManager.getFileIcon(FILE_ICON_NAME);
+				return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
 
 			// Compare extension against lower-cased extensions
 			String iconName = (String)iconExtensions.get(fileExtension.toLowerCase());
 			if(iconName==null)	// No icon associated to extension, return default file icon
-				return IconManager.getFileIcon(FILE_ICON_NAME);
+				return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
 			
 			// Retrieves the cached (or freshly loaded if not in cache already) ImageIcon instance corresponding to the icon's name
-			ImageIcon icon = IconManager.getFileIcon(iconName);
+			ImageIcon icon = IconManager.getIcon(IconManager.FILE_ICON_SET, iconName);
 			// Returned IconImage should never be null, but if it is (icon file missing), return default file icon
 			if(icon==null)
-				return IconManager.getFileIcon(FILE_ICON_NAME);
+				return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
 				
 			return icon;
 		}
@@ -155,10 +164,19 @@ public class FileIcons {
 
 	
 	/**
+	 * Returns the standard size of a file icon, multiplied by the current scale factor for the file icon set.
+	 */
+	public static Dimension getStandardSize() {
+		float scaleFactor = IconManager.getScaleFactor(IconManager.FILE_ICON_SET);
+		return new Dimension((int)(STANDARD_WIDTH*scaleFactor), (int)(STANDARD_HEIGHT*scaleFactor));
+	}
+
+	
+	/**
 	 * Returns the icon for the parent folder (..).
 	 */
 	public static ImageIcon getParentFolderIcon() {
-		return IconManager.getFileIcon(PARENT_FOLDER_ICON_NAME);
+		return IconManager.getIcon(IconManager.FILE_ICON_SET, PARENT_FOLDER_ICON_NAME);
 	}
 	
 	
@@ -169,7 +187,7 @@ public class FileIcons {
 		for(int i=0; i<ICON_EXTENSIONS.length; i++) {
 			String iconName = ICON_EXTENSIONS[i][0];
 			System.out.print("Loading icon "+iconName+": ");
-			ImageIcon icon = IconManager.getFileIcon(ICON_EXTENSIONS[i][0]);
+			ImageIcon icon = IconManager.getIcon(IconManager.FILE_ICON_SET, ICON_EXTENSIONS[i][0]);
 			System.out.println(icon==null?"FAILED!":"OK");
 		}
 	}
