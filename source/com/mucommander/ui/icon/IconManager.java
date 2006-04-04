@@ -10,7 +10,7 @@ import java.awt.Dimension;
 import java.util.Hashtable;
 
 /**
- * IconManager takes care of loading, caching, scaling the icons contained inside the application's JAR file.s
+ * IconManager takes care of loading, caching, rescaling the icons contained inside the application's JAR file.
  *
  * @author Maxence Bernard
  */
