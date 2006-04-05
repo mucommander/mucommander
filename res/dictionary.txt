@@ -1360,6 +1360,16 @@ status_bar.volume_capacity:SI:Kapaciteta: %1
 
 
 
+status_bar.quick_search:EN:Looking up: %1
+status_bar.quick_search:FR:Recherche de: %1
+
+
+
+
+
+
+
+
 status_bar.hide_status_bar:EN:$[view_menu.hide_status_bar]
 
 

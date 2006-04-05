@@ -65,6 +65,8 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 		this.mainFrame = mainFrame;
 		
 		this.statusBarFilesLabel = new JLabel("");
+		// Display any icon after the text
+		this.statusBarFilesLabel.setHorizontalTextPosition(JLabel.LEADING);
 		add(statusBarFilesLabel, BorderLayout.CENTER);
 
 		this.statusBarVolumeLabel = new JLabel("");
@@ -95,7 +97,7 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 
 
 	/**
-	 * Updates info displayed on the status bar (currently selected files and volume info).
+	 * Updates info displayed on the status bar: currently selected files and volume info.
 	 */
 	public void updateStatusInfo() {
 		updateSelectedFilesInfo();
@@ -148,7 +150,7 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 		}		
 
 		// Update label
-		statusBarFilesLabel.setText(filesInfo);
+		setStatusInfo(filesInfo);
 	}
 	
 	
@@ -216,16 +218,29 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 
 
 	/**
-	 * Displays a message on the left-side of the status bar, discarding current info about currently selected files and volume.
+	 * Displays the specified text and icon on the left-side of the status bar, 
+	 * replacing any previous information.
 	 *
-	 * @param infoMessage the message to display
+	 * @param text the piece of text to display
+	 * @param icon the icon to display next to the text (on the left side of the text)
+	 */
+	public void setStatusInfo(String text, Icon icon) {
+	    //if(com.mucommander.Debug.ON) text += " - freeMem="+Runtime.getRuntime().freeMemory()+" - totalMem="+Runtime.getRuntime().totalMemory();
+		statusBarFilesLabel.setText(text);
+		statusBarFilesLabel.setIcon(icon);
+//		statusBarVolumeLabel.setText("");
+	}
+
+	
+	/**
+	 * Displays the specified text on the left-side of the status bar, 
+	 * replacing any previous information.
+	 *
+	 * @param text the piece of text to display
 	 */
 	public void setStatusInfo(String infoMessage) {
-	    //if(com.mucommander.Debug.ON) text += " - freeMem="+Runtime.getRuntime().freeMemory()+" - totalMem="+Runtime.getRuntime().totalMemory();
-		statusBarFilesLabel.setText(infoMessage);
-		statusBarVolumeLabel.setText("");
+		setStatusInfo(infoMessage, null);
 	}
-	
 	
 	
 	////////////////////////////
@@ -323,7 +338,7 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
 	
 	public void componentShown(ComponentEvent e) {
 		// Invoked when the component has been made visible (apparently not called when just created)
-		// Status bar needs to be updated sihce it is not updated anymore when not visible
+		// Status bar needs to be updated sihce it is not updated when not visible
 		updateStatusInfo();
 	}     
 

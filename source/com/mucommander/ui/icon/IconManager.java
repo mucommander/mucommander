@@ -157,7 +157,6 @@ public class IconManager {
 	public static ImageIcon getIcon(int iconSet, String iconName) {
 		Hashtable cache = caches[iconSet];
 		if(cache==null) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("no cache for icon set="+iconSet);
 			// No caching, simply create the icon and return it
 			return getIcon(ICON_SET_FOLDERS[iconSet]+iconName, scaleFactors[iconSet]);
 		}
@@ -165,7 +164,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("no cache for icon set=
 			// Look for the icon in the cache
 			ImageIcon icon = (ImageIcon)cache.get(iconName);
 			if(icon==null) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cache miss for icon="+iconName+" icon set="+iconSet);
 				// Icon is not in the cache, let's create it
 				icon = getIcon(ICON_SET_FOLDERS[iconSet]+iconName, scaleFactors[iconSet]);
 				// and add it to the cache
