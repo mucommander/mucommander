@@ -10,7 +10,7 @@ import java.io.*;
 public class GzipArchiveFile extends AbstractArchiveFile {
 
 	/**
-	 * Creates a GzipArchiveFile around the given file.
+	 * Creates a GzipArchiveFile on top of the given file.
 	 */
 	public GzipArchiveFile(AbstractFile file) {
 		super(file);
@@ -18,7 +18,7 @@ public class GzipArchiveFile extends AbstractArchiveFile {
 
 
 	/**
-	 * Returns this Gzipped file's sole entry.
+	 * Returns the sole entry of this Gzip file.
 	 */
 	public AbstractFile[] ls() throws IOException {
 		return new AbstractFile[]{AbstractFile.wrapArchive(new GzipEntryFile(this))};

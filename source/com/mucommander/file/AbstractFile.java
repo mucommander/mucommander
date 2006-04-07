@@ -211,13 +211,16 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 				return file;
 				
 			ext = ext.toLowerCase();
+			String nameLC = file.getName().toLowerCase();
 
 			if(ext.equals("zip") || ext.equals("jar"))
 				return new ZipArchiveFile(file);
-			else if(ext.equals("tar") || ext.equals("tgz") || file.getName().toLowerCase().endsWith(".tar.gz"))
+			else if(ext.equals("tar") || ext.equals("tgz") || nameLC.endsWith(".tar.gz") || ext.equals("tbz2") || nameLC.endsWith(".tar.bz2"))
 				return new TarArchiveFile(file);
 			else if(ext.equals("gz"))
 				return new GzipArchiveFile(file);
+			else if(ext.equals("bz2"))
+				return new Bzip2ArchiveFile(file);
 		}
 
 		return file;		

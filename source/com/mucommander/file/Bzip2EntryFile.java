@@ -1,21 +1,20 @@
 
 package com.mucommander.file;
 
-import java.util.zip.GZIPInputStream;
+import org.apache.tools.bzip2.CBZip2InputStream;
 import java.io.*;
-
 
 /**
  * 
  *
  * @author Maxence Bernard
  */
-public class GzipEntryFile extends AbstractEntryFile {
+public class Bzip2EntryFile extends AbstractEntryFile {
 
 	/**
 	 * Creates a GzipEntryFile around the given file.
 	 */
-	public GzipEntryFile(GzipArchiveFile archiveFile) {
+	public Bzip2EntryFile(Bzip2ArchiveFile archiveFile) {
 		super(archiveFile);
 		this.parent = archiveFile;
 	}
@@ -52,19 +51,20 @@ public class GzipEntryFile extends AbstractEntryFile {
 		
 		if(extension==null)
 			return name;
-		
+			
 		extension = extension.toLowerCase();
 		
-		if(extension.equals("tgz"))
-			return name.substring(0, name.length()-3)+"tar";
+		if(extension.equals("tbz2"))
+			return name.substring(0, name.length()-4)+"tar";
 
-		if(extension.equals("gz"))
-			return name.substring(0, name.length()-3);
-			
+		if(extension.equals("bz2"))
+			return name.substring(0, name.length()-4);
+	
 		return name;
 	}
 	
+	
 	public InputStream getInputStream() throws IOException {
-		return new GZIPInputStream(archiveFile.getInputStream());
+		return new CBZip2InputStream(archiveFile.getInputStream());
 	}
 }

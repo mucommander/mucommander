@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import com.ice.tar.*;
 import java.util.zip.GZIPInputStream;
+import org.apache.tools.bzip2.CBZip2InputStream;
 
 
 /**
@@ -31,13 +32,20 @@ public class TarArchiveFile extends AbstractArchiveFile {
 	 */
 	private TarInputStream openTarStream() throws IOException {
 		String ext = getExtension();
+		InputStream inputStream = file.getInputStream();
 		
-		// TGZ file
-		if(ext!=null && (ext=ext.toLowerCase()).equals("tgz") || ext.equals("gz"))
-			return new TarInputStream(new GZIPInputStream(file.getInputStream()));
-
+		if(ext!=null) {
+			ext = ext.toLowerCase();
+			// TGZ file
+			if(ext.equals("tgz") || ext.equals("gz"))
+				inputStream = new GZIPInputStream(inputStream);
+			// TBZ2 file
+			else if(ext.equals("tbz2") || ext.equals("bz2"))
+				inputStream = new CBZip2InputStream(inputStream);
+		}
+		
 		// TAR-only file
-		return new TarInputStream(file.getInputStream());
+		return new TarInputStream(inputStream);
 	}
 
 
