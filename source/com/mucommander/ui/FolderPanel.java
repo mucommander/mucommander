@@ -70,7 +70,7 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
 	 * This thread takes care of changing current folder without locking the main
 	 * thread. The folder change can be cancelled.
 	 * 
-	 * <p>A little note out of nowhere: never ever call JComponent.paintImmedialtely() from a thread
+	 * <p>A little note out of nowhere: never ever call JComponent.paintImmediately() from a thread
 	 * other than the Event Dispatcher Thread, as will create nasty repaint glitches that
 	 * then become very hard to track. Sun's Javadoc doesn't make it clear enough... just don't!
 	 * 
@@ -513,9 +513,12 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 				return null;
 			}
 		};
+//		// Enable double buffering on scroll pane
+//		scrollPane.setDoubleBuffered(true);
+		// Set scroll pane's background color to match the one of this panel and FileTable
 		scrollPane.getViewport().setBackground(backgroundColor);		
 
-		// Trap mouse events to popup a contextual 'folder' menu
+		// Catch mouse events to popup a contextual 'folder' menu
 		scrollPane.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				int modifiers = e.getModifiers();
