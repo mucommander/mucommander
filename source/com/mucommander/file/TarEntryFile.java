@@ -1,7 +1,6 @@
 package com.mucommander.file;
 
 import java.io.*;
-import com.ice.tar.*;
 
 
 /**
@@ -33,8 +32,7 @@ public class TarEntryFile extends AbstractEntryFile {
 	/////////////////////////////////////////
 
 	public String getName() {
-		// TarEntry name is actually the full path within the TarFile		
-        String entryName = tarEntry.getName();
+        String entryName = tarEntry.getPath();
 		if(entryName.charAt(entryName.length()-1)=='/')
 			entryName = entryName.substring(0,entryName.length()-1);
 		int pos = entryName.lastIndexOf('/');
@@ -42,7 +40,7 @@ public class TarEntryFile extends AbstractEntryFile {
 	}
 	
 	public long getDate() {
-		return tarEntry.getModTime().getTime();
+		return tarEntry.getDate();
 	}
 	
 	public boolean changeDate(long lastModified) {

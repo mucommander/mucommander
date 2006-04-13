@@ -143,14 +143,13 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 
 		// Action coming from the selection dialog
 		if ((source==okButton || source==selectionField)) {
-			// Saves values for next dialog
+			// Save values for next time this dialog is invoked
 			caseSensitive = caseSensitiveCheckBox.isSelected();
 			includeFolders = includeFoldersCheckBox.isSelected();
 			comparison = comparisonComboBox.getSelectedIndex();
 
-			// Removes '*' characters
+			// Remove '*' characters
 			this.keywordString = selectionField.getText();
-
 			StringBuffer sb = new StringBuffer();
 			char c;
 			String testString;
@@ -168,11 +167,9 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 			AbstractFile file;
 			String fileName;
 			FileTableModel tableModel = (FileTableModel)activeTable.getModel();
-//			int nbFiles = tableModel.getRowCount();
-			int nbFiles = tableModel.getFileCount();
-//			for(int i=activeTable.getCurrentFolder().getParent()==null?0:1; i<nbFiles; i++) {
-			for(int i=0; i<nbFiles; i++) {
-			    file = tableModel.getFile(i);
+			int nbFiles = tableModel.getRowCount();
+			for(int i=activeTable.getCurrentFolder().getParent()==null?0:1; i<nbFiles; i++) {
+			    file = tableModel.getFileAtRow(i);
 				if (includeFolders || !file.isDirectory())  {
 					fileName = file.getName();
 					if(!caseSensitive)
@@ -195,7 +192,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 					}
 					
 					if(markFile)
-						tableModel.setFileMarked(file, addToSelection);
+						tableModel.setRowMarked(i, addToSelection);
 				}
 			}
 			activeTable.repaint();

@@ -1,7 +1,6 @@
 package com.mucommander.file;
 
 import java.io.*;
-import java.util.zip.ZipEntry;
 
 
 /**
@@ -12,9 +11,6 @@ import java.util.zip.ZipEntry;
 public class ZipEntryFile extends AbstractEntryFile {
 
 	private ZipEntry zipEntry;
-	
-//	// Sames as the FSFile one so that absolute paths have only one kind of separator
-//	protected final static String separator = File.separator;
 	
 	protected ZipEntryFile(ZipArchiveFile archiveFile, AbstractFile parent, ZipEntry zipEntry) {
 		super(archiveFile);
@@ -37,7 +33,7 @@ public class ZipEntryFile extends AbstractEntryFile {
 	
 	public String getName() {
 		// ZipEntry name is actually the full path within the ZipFile		
-        String entryName = zipEntry.getName();
+        String entryName = zipEntry.getPath();
 		if(entryName.charAt(entryName.length()-1)=='/')
 			entryName = entryName.substring(0,entryName.length()-1);
 		int pos = entryName.lastIndexOf('/');
@@ -45,7 +41,7 @@ public class ZipEntryFile extends AbstractEntryFile {
 	}
 	
 	public long getDate() {
-		return zipEntry.getTime();
+		return zipEntry.getDate();
 	}
 	
 	public boolean changeDate(long lastModified) {

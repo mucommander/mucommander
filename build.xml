@@ -48,6 +48,7 @@
     <unjar src="${lib}/jakarta-oro.jar" dest="${classes}"/> 
     <unjar src="${lib}/javatar.jar" dest="${classes}"/>
     <unjar src="${lib}/j2ssh.jar" dest="${classes}"/>
+    <unjar src="${lib}/bzip2.jar" dest="${classes}"/>
     <!-- Not supported by unjar, too bad
         <fileset dir="${lib}">
         <include name="**/*.jar"/>

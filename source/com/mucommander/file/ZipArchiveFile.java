@@ -2,8 +2,9 @@ package com.mucommander.file;
 
 import java.io.*;
 import java.util.*;
-import java.util.zip.*;
-
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+// do not import java.util.zip.ZipEntry !
 
 /**
  * 
@@ -28,50 +29,36 @@ public class ZipArchiveFile extends AbstractArchiveFile {
 	 * Loads all entries contained in the Zip file.
 	 */
 	private void loadEntries() throws IOException {
-		ZipInputStream zin = new ZipInputStream(file.getInputStream());
+long start = System.currentTimeMillis();
+
+		// Load all zip entries
 		Vector entriesV = new Vector();
-		ZipEntry entry;
-		while ((entry=zin.getNextEntry())!=null) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found entry "+entry.getName());
-			entriesV.add(entry);
+		
+		// If the underlying file is a local file, use the ZipFile.getEntries() method as it 
+		// is *way* faster than using ZipInputStream to iterate over the entries.
+		// Note: under Mac OS X at least, ZipFile.getEntries() method is native
+		if(file instanceof FSFile) {
+			Enumeration entriesEnum = new ZipFile(getAbsolutePath()).entries();
+			while(entriesEnum.hasMoreElements())
+				entriesV.add(new ZipEntry((java.util.zip.ZipEntry)entriesEnum.nextElement()));
 		}
-		zin.close();
-			
-		// Checks for all entries below top level that there are entries from parent folders and if not,
-		// create those entries. This is a tedious but necessary process, otherwise some entries would
-		//  simply not appear.
-		int nbEntries = entriesV.size();
-		for(int i=0; i<nbEntries; i++) {
-			ZipEntry currentEntry = ((ZipEntry)entriesV.elementAt(i));
-			String entryPath = currentEntry.getName();	// entry path will include a trailing '/' if entry is a directory
-			int entryLevel = getEntryLevel(entryPath);
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("checking entry #"+i+" "+entryPath+" level="+entryLevel);
-			// Entry is not directly visible
-			if (entryLevel>0) {
-				int slashPos = 0;
-				for(int l=0; l<entryLevel; l++) {
-					// Extract directory name at level l
-					String dirName = entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
-
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("checking for an existing entry for directory "+dirName);
-					boolean entryFound = false;
-					// Is there an entry for this directory ?
-					for(int j=0; j<entriesV.size(); j++)
-						if(((ZipEntry)entriesV.elementAt(j)).getName().equals(dirName))
-							entryFound = true;
-	
-					// An existing entry for this directory has been found, nothing to do, go to the next directory
-					if(entryFound)
-						continue;
-
-					// Directory has no entry, let's manually create and add a ZipEntry for it
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating new entry for directory "+dirName);
-					ZipEntry newEntry = new ZipEntry(dirName);
-					newEntry.setTime(currentEntry.getTime());	// Let's use current entry's time, better that 01/01/70
-					entriesV.add(newEntry);
-				}
+		else {
+			// works but it is *way* slower
+			ZipInputStream zin = new ZipInputStream(file.getInputStream());
+			java.util.zip.ZipEntry entry;
+			while ((entry=zin.getNextEntry())!=null) {
+	//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found entry "+entry.getPath());
+				entriesV.add(new ZipEntry(entry));
 			}
+			zin.close();
 		}
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries loaded in "+(System.currentTimeMillis()-start)+" ms");
+start = System.currentTimeMillis();
+
+		addMissingDirectoryEntries(entriesV);
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries checked in "+(System.currentTimeMillis()-start)+" ms");
 
 		entries = new ZipEntry[entriesV.size()];
 		entriesV.toArray(entries);
@@ -79,7 +66,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating new entry for
 
 
 	/**
-	 *  Returns top (level 0) zip entries only
+	 *  Returns top level (depth==0) zip entries.
 	 */
 	public AbstractFile[] ls() throws IOException {
 		if (entries==null)
@@ -87,7 +74,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating new entry for
 		Vector subFiles = new Vector();
 		
 		for(int i=0; i<entries.length; i++) {
-			if (getEntryLevel(entries[i].getName())==0) {
+			if (getEntryDepth(entries[i].getPath())==0) {
 				subFiles.add(AbstractFile.wrapArchive(new ZipEntryFile(this, this, entries[i])));
 			}
 		}
@@ -98,22 +85,22 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating new entry for
 	}
 
 	/**
-	 * Returns zip entries directly below given entry.
+	 * Returns the entries the given entry contains.
 	 */
 	public AbstractFile[] ls(ZipEntryFile entryFile) throws IOException {
 		if (entries==null)
 			loadEntries();
 		Vector subFiles = new Vector();
 		
-		// Returns the zip entries under the given one and of 1 level below
-		String entryName = entryFile.getZipEntry().getName();
-		int level = getEntryLevel(entryName)+1;
+		// Return the entries the given entry contains (entries of depth+1)
+		String entryPath = entryFile.getZipEntry().getPath();
+		int depth = getEntryDepth(entryPath)+1;
 		ZipEntry subEntry;
-		String subEntryName;
+		String subEntryPath;
 		for(int i=0; i<entries.length; i++) {
 			subEntry = entries[i];
-			subEntryName = subEntry.getName();
-			if (subEntryName.startsWith(entryName) && getEntryLevel(subEntryName)==level)
+			subEntryPath = subEntry.getPath();
+			if (subEntryPath.startsWith(entryPath) && getEntryDepth(subEntryPath)==depth)
 				subFiles.add(AbstractFile.wrapArchive(new ZipEntryFile(this, entryFile, subEntry)));
 		}
 
@@ -124,41 +111,23 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating new entry for
 
 
 	/**
-	 * Returns the level of a ZipEntry based on the number of '/' characters the entry's path contains.
-	 * Top level is 0.
-	 */
-	private static int getEntryLevel(String name) {
-		int count=0;
-		int pos=0;
-
-		while ((pos=name.indexOf('/', pos+1))!=-1)
-			count++;
-		
-		// Directories in a ZipFile end with a '/'
-		if(name.charAt(name.length()-1)=='/')
-			count--;
-		return count;	
-	}
-
-
-	/**
 	 * Returns an InputStream to read from the given entry.
 	 */
 	public InputStream getEntryInputStream(ZipEntry entry) throws IOException {
-		// If this zip file is an FSFile, we use the ZipFile.getInputStream() method as it 
-		// is way way way faster than ZipInputStream
+		// If the underlying file is a local file, use the ZipFile.getInputStream() method as it 
+		// is *way* faster than using ZipInputStream and looking for the entry
 		if (file instanceof FSFile) {
-			return new ZipFile(getAbsolutePath()).getInputStream(entry);
+			return new ZipFile(getAbsolutePath()).getInputStream((java.util.zip.ZipEntry)entry.getEntry());
 		}
-		// works but it is VERY slow!
+		// works but it is *way* slower
 		else {
 			ZipInputStream zin = new ZipInputStream(file.getInputStream());
-			ZipEntry tempEntry;
-			String entryName = entry.getName();
+			java.util.zip.ZipEntry tempEntry;
+			String entryPath = entry.getPath();
+			// Iterate until we find the entry we're looking for
 			while ((tempEntry=zin.getNextEntry())!=null)
-				if (tempEntry.getName().equals(entryName)) {
+				if (tempEntry.getName().equals(entryPath)) // That's the one, return it
 					return zin;
-				}
 			return null;
 		}
 	}
