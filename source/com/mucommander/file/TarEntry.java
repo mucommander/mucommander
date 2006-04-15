@@ -3,7 +3,7 @@ package com.mucommander.file;
 
 
 /**
- * TarEntry encapsulates JavaTar library's tar entries.
+ * TarEntry encapsulates a JavaTar library's tar entry.
  *
  * @author Maxence Bernard
  */
@@ -41,7 +41,7 @@ class TarEntry extends ArchiveEntry {
 		return tarEntry.isDirectory();
 	}
 	
-	ArchiveEntry createEntry(String name) {
-		return new TarEntry(new com.ice.tar.TarEntry(name));
+	ArchiveEntry createDirectoryEntry(String path) {
+		return new TarEntry(new com.ice.tar.TarEntry(path));
 	}
 }

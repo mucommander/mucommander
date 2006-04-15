@@ -25,6 +25,25 @@ abstract class ArchiveEntry {
 	}
 
 
+	/**
+	 * Returns the depth of this entry based on the number of slash character ('/') occurrences its path contains.
+	 * Minimum depth is 0.
+	 */
+	int getDepth() {
+		int count=0;
+		int pos=0;
+		String path = getPath();
+
+		while ((pos=path.indexOf('/', pos+1))!=-1)
+			count++;
+		
+		// Directories in archives end with a '/'
+		if(path.charAt(path.length()-1)=='/')
+			count--;
+		return count;	
+	}
+
+
 	//////////////////////
 	// Abstract methods //
 	//////////////////////
@@ -55,7 +74,7 @@ abstract class ArchiveEntry {
 	abstract boolean isDirectory();
 	
 	/**
-	 * Creates and returns a new archive entry using the given name.
+	 * Creates and returns a new directory archive entry with the specified path.
 	 */
-	abstract ArchiveEntry createEntry(String name);
+	abstract ArchiveEntry createDirectoryEntry(String path);
 }

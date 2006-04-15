@@ -49,76 +49,33 @@ public class TarArchiveFile extends AbstractArchiveFile {
 	}
 
 
-	/**
-	 * Loads all entries contained in this TAR file.
-	 */
-	private void loadEntries() throws IOException {
-		TarInputStream tin = openTarStream();
+	////////////////////////////////////////
+	// AbstractArchiveFile implementation //
+	////////////////////////////////////////
+	
+	protected ArchiveEntry[] getEntries() throws IOException {
+		if(this.entries==null) {
+			TarInputStream tin = openTarStream();
 
-		// Load TAR entries
-		Vector entriesV = new Vector();
-		com.ice.tar.TarEntry entry;
-		while ((entry=tin.getNextEntry())!=null) {
-			entriesV.add(new TarEntry(entry));
-		}
-		tin.close();
-
-		addMissingDirectoryEntries(entriesV);
-
-		entries = new TarEntry[entriesV.size()];
-		entriesV.toArray(entries);
-	}
-
-
-	/**
-	 *  Returns top level (depth==0) entries.
-	 */
-	public AbstractFile[] ls() throws IOException {
-		if (entries==null)
-			loadEntries();
-		Vector subFiles = new Vector();
-		
-		for(int i=0; i<entries.length; i++) {
-			if (getEntryDepth(entries[i].getPath())==0) {
-				subFiles.add(AbstractFile.wrapArchive(new TarEntryFile(this, this, entries[i])));
+			// Load TAR entries
+			Vector entriesV = new Vector();
+			com.ice.tar.TarEntry entry;
+			while ((entry=tin.getNextEntry())!=null) {
+				entriesV.add(new TarEntry(entry));
 			}
-		}
-		
-		AbstractFile subFilesArray[] = new AbstractFile[subFiles.size()];
-		subFiles.toArray(subFilesArray);
-		return subFilesArray;
-	}
+			tin.close();
 
-	/**
-	 * Returns the entries the given entry contains.
-	 */
-	public AbstractFile[] ls(TarEntryFile entryFile) throws IOException {
-		if (entries==null)
-			loadEntries();
-		Vector subFiles = new Vector();
-		
-		// Return entryPaththe entries the given entry contains (entries of depth+1)
-		String entryPath = entryFile.getTarEntry().getPath();
-		int level = getEntryDepth(entryPath)+1;
-		TarEntry subEntry;
-		String subEntryPath;
-		for(int i=0; i<entries.length; i++) {
-			subEntry = entries[i];
-			subEntryPath = subEntry.getPath();
-			if (subEntryPath.startsWith(entryPath) && getEntryDepth(subEntryPath)==level)
-				subFiles.add(AbstractFile.wrapArchive(new TarEntryFile(this, entryFile, subEntry)));
+			addMissingDirectoryEntries(entriesV);
+
+			this.entries = new TarEntry[entriesV.size()];
+			entriesV.toArray(entries);
 		}
 
-		AbstractFile subFilesArray[] = new AbstractFile[subFiles.size()];
-		subFiles.toArray(subFilesArray);
-		return subFilesArray;
+		return this.entries;
 	}
 
 
-	/**
-	 * Returns an InputStream to read from the given entry.
-	 */
-	public InputStream getEntryInputStream(TarEntry entry) throws IOException {
+	InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
 		TarInputStream tin = openTarStream();
 		com.ice.tar.TarEntry tempEntry;
 		String entryPath = entry.getPath();

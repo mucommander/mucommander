@@ -11,7 +11,7 @@ import java.util.Vector;
  */
 public abstract class AbstractArchiveFile extends AbstractFile {
 
-	/** Wrapped-around file */
+	/** Underlying file */
 	protected AbstractFile file;
 
 
@@ -35,24 +35,6 @@ public abstract class AbstractArchiveFile extends AbstractFile {
 
 
 	/**
-	 * Returns the depth of an entry based on the number of slash character ('/') occurrences
-	 * in the given entry's path. Minimum depth is 0.
-	 */
-	protected static int getEntryDepth(String entryPath) {
-		int count=0;
-		int pos=0;
-
-		while ((pos=entryPath.indexOf('/', pos+1))!=-1)
-			count++;
-		
-		// Directories in archives end with a '/'
-		if(entryPath.charAt(entryPath.length()-1)=='/')
-			count--;
-		return count;	
-	}
-
-
-	/**
 	 * Checks all the given entries below top level (depth>0) and make sure they have a corresponding parent directory
 	 * entry, and if not create it and add it to the entries Vector.
 	 */
@@ -61,7 +43,7 @@ public abstract class AbstractArchiveFile extends AbstractFile {
 		for(int i=0; i<nbEntries; i++) {
 			ArchiveEntry currentEntry = ((ArchiveEntry)entriesV.elementAt(i));
 			String entryPath = currentEntry.getPath();	// entry path will include a trailing '/' if entry is a directory
-			int entryDepth = getEntryDepth(entryPath);
+			int entryDepth = currentEntry.getDepth();
 // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("checking entry #"+i+" "+entryPath+" depth="+entryDepth);
 			// Entry is not at the top level
 			if (entryDepth>0) {
@@ -83,13 +65,55 @@ public abstract class AbstractArchiveFile extends AbstractFile {
 
 					// Directory has no entry, let's manually create and add an ArchiveEntry for it
 // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating new entry for directory "+dirName);
-					ArchiveEntry newEntry = currentEntry.createEntry(dirName);
+					ArchiveEntry newEntry = currentEntry.createDirectoryEntry(dirName);
 					newEntry.setDate(currentEntry.getDate());	// Use current entry's time, not accurate
 					entriesV.add(newEntry);
 				}
 			}
 		}
 	}
+
+
+	/**
+	 *  Returns top level (depth==0) entries containted by this archive.
+	 */
+	public AbstractFile[] ls() throws IOException {
+		ArchiveEntry entries[] = getEntries();
+
+		Vector subFiles = new Vector();		
+		AbstractFile entryFile;
+		for(int i=0; i<entries.length; i++) {
+			if (entries[i].getDepth()==0) {
+				entryFile = AbstractFile.wrapArchive(new ArchiveEntryFile(this, entries[i]));
+				entryFile.setParent(this);
+				subFiles.add(entryFile);
+			}
+		}
+		
+		AbstractFile subFilesArray[] = new AbstractFile[subFiles.size()];
+		subFiles.toArray(subFilesArray);
+		return subFilesArray;
+	}
+
+
+	//////////////////////
+	// Abstract methods //
+	//////////////////////
+	
+	/**
+	 * Returns an array of all the entries this archive file contains.
+	 */
+	abstract ArchiveEntry[] getEntries() throws IOException;
+
+//	/**
+//	 * Creates and returns an ArchiveEntryFile instance using the given ArchiveEntry.
+//	 */
+//	protected abstract ArchiveEntryFile createArchiveEntryFile(ArchiveEntry entry);
+	
+	/**
+	 * Returns an InputStream to read from the given entry.
+	 */
+	abstract InputStream getEntryInputStream(ArchiveEntry entry) throws IOException;
 
 
 	/////////////////////////////////////////

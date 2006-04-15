@@ -3,7 +3,7 @@ package com.mucommander.file;
 
 
 /**
- * ZipEntry encapsulates java.util.zip zip entries.
+ * ZipEntry encapsulates a java.util.zip zip entry.
  *
  * @author Maxence Bernard
  */
@@ -40,7 +40,7 @@ class ZipEntry extends ArchiveEntry {
 		return zipEntry.isDirectory();
 	}
 	
-	ArchiveEntry createEntry(String name) {
-		return new ZipEntry(new java.util.zip.ZipEntry(name));
+	ArchiveEntry createDirectoryEntry(String path) {
+		return new ZipEntry(new java.util.zip.ZipEntry(path));
 	}
 }
