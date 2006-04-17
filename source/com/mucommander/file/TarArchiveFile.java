@@ -15,10 +15,6 @@ import org.apache.tools.bzip2.CBZip2InputStream;
  */
 public class TarArchiveFile extends AbstractArchiveFile {
 
-	/** Entries contained by this tar file, loaded once for all when needed for the first time */
-	private TarEntry entries[];
-
-
 	/**
 	 * Creates a TarArchiveFile around the given file.
 	 */
@@ -28,23 +24,28 @@ public class TarArchiveFile extends AbstractArchiveFile {
 
 
 	/**
-	 * Returns an InputStream which can be used to read TAR entries.
+	 * Returns a TarInputStream which can be used to read TAR entries.
 	 */
-	private TarInputStream openTarStream() throws IOException {
+	private TarInputStream createTarStream() throws IOException {
 		String ext = getExtension();
 		InputStream inputStream = file.getInputStream();
-		
+
+// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(this+" inputStream="+inputStream+" fileClass="+file.getClass());
+	
 		if(ext!=null) {
 			ext = ext.toLowerCase();
-			// TGZ file
-			if(ext.equals("tgz") || ext.equals("gz"))
+			// Gzip-compressed file
+			if(ext.equals("tgz") || ext.equals("gz")) {
+				// Note: this will fail for gz/tgz entries inside a tar file (IOException: Not in GZIP format),
+				// why is a complete mystery: the gz/tgz entry can be extracted and then properly browsed
 				inputStream = new GZIPInputStream(inputStream);
-			// TBZ2 file
-			else if(ext.equals("tbz2") || ext.equals("bz2"))
+			}
+			// Bzip2-compressed file
+			else if(ext.equals("tbz2") || ext.equals("bz2")) {
 				inputStream = new CBZip2InputStream(inputStream);
+			}
 		}
-		
-		// TAR-only file
+
 		return new TarInputStream(inputStream);
 	}
 
@@ -53,30 +54,26 @@ public class TarArchiveFile extends AbstractArchiveFile {
 	// AbstractArchiveFile implementation //
 	////////////////////////////////////////
 	
-	protected ArchiveEntry[] getEntries() throws IOException {
-		if(this.entries==null) {
-			TarInputStream tin = openTarStream();
+	protected Vector getEntries() throws IOException {
+		// Note: JavaTar's FastTarStream can unfortunately not be used
+		// because it fails on many tar files that TarInputStream can read
+		// without any problem.
+		TarInputStream tin = createTarStream();
 
-			// Load TAR entries
-			Vector entriesV = new Vector();
-			com.ice.tar.TarEntry entry;
-			while ((entry=tin.getNextEntry())!=null) {
-				entriesV.add(new TarEntry(entry));
-			}
-			tin.close();
-
-			addMissingDirectoryEntries(entriesV);
-
-			this.entries = new TarEntry[entriesV.size()];
-			entriesV.toArray(entries);
+		// Load TAR entries
+		Vector entries = new Vector();
+		com.ice.tar.TarEntry entry;
+		while ((entry=tin.getNextEntry())!=null) {
+			entries.add(new TarEntry(entry));
 		}
+		tin.close();
 
-		return this.entries;
+		return entries;
 	}
 
 
 	InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
-		TarInputStream tin = openTarStream();
+		TarInputStream tin = createTarStream();
 		com.ice.tar.TarEntry tempEntry;
 		String entryPath = entry.getPath();
 		while ((tempEntry=tin.getNextEntry())!=null) {

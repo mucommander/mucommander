@@ -2,6 +2,7 @@ package com.mucommander.file;
 
 import java.io.*;
 import org.apache.tools.bzip2.CBZip2InputStream;
+import java.util.Vector;
 
 /**
  * 
@@ -9,8 +10,6 @@ import org.apache.tools.bzip2.CBZip2InputStream;
  * @author Maxence Bernard
  */
 public class Bzip2ArchiveFile extends AbstractArchiveFile {
-
-	private SingleEntry entries[];
 
 	/**
 	 * Creates a BzipArchiveFile on top of the given file.
@@ -24,25 +23,23 @@ public class Bzip2ArchiveFile extends AbstractArchiveFile {
 	// AbstractArchiveFile implementation //
 	////////////////////////////////////////
 	
-	protected ArchiveEntry[] getEntries() throws IOException {
-		if(this.entries==null) {
-			String extension = getExtension();
-			String name = getName();
+	protected Vector getEntries() throws IOException {
+		String extension = getExtension();
+		String name = getName();
+		
+		if(extension!=null) {
+			extension = extension.toLowerCase();
 			
-			if(extension!=null) {
-				extension = extension.toLowerCase();
-				
-				// Remove the 'bz2' or 'tbz2' extension from the entry's name
-				if(extension.equals("tbz2"))
-					name = name.substring(0, name.length()-4)+"tar";
-				else if(extension.equals("bz2"))
-					name = name.substring(0, name.length()-4);
-			}
-
-			this.entries = new SingleEntry[]{new SingleEntry("/"+name, getDate(), -1)};
+			// Remove the 'bz2' or 'tbz2' extension from the entry's name
+			if(extension.equals("tbz2"))
+				name = name.substring(0, name.length()-4)+"tar";
+			else if(extension.equals("bz2"))
+				name = name.substring(0, name.length()-4);
 		}
-	
-		return this.entries;
+
+		Vector entries = new Vector();
+		entries.add(new SimpleEntry("/"+name, getDate(), -1, false));
+		return entries;
 	}
 
 

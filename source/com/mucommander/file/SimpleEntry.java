@@ -6,17 +6,19 @@ package com.mucommander.file;
  *
  * @author Maxence Bernard
  */
-class SingleEntry extends ArchiveEntry {
+class SimpleEntry extends ArchiveEntry {
 
 	private String path;
 	private long date;
 	private long size;
+	private boolean isDirectory;
 	
-	SingleEntry(String path, long date, long size) {
+	SimpleEntry(String path, long date, long size, boolean isDirectory) {
 		super(null);
 		this.path = path;
 		this.date = date;
 		this.size = size;
+		this.isDirectory = isDirectory;
 	}
 	
 	/////////////////////////////////////
@@ -31,20 +33,11 @@ class SingleEntry extends ArchiveEntry {
 		return date;
 	}
 	
-	void setDate(long date) {
-		this.date = date;
-	}
-
 	long getSize() {
 		return size;
 	}
 
 	boolean isDirectory() {
-		return false;
-	}
-	
-	ArchiveEntry createDirectoryEntry(String path) {
-		// No-op
-		return null;
+		return isDirectory;
 	}
 }

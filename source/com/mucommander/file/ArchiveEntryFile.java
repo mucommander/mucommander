@@ -69,6 +69,7 @@ public class ArchiveEntryFile extends AbstractFile {
 	}
 	
 	public AbstractFile[] ls() throws IOException {
+/*
 		ArchiveEntry entries[] = archiveFile.getEntries();
 		Vector subFiles = new Vector();
 		
@@ -91,6 +92,9 @@ public class ArchiveEntryFile extends AbstractFile {
 		AbstractFile subFilesArray[] = new AbstractFile[subFiles.size()];
 		subFiles.toArray(subFilesArray);
 		return subFilesArray;
+*/
+
+		return archiveFile.ls(this);
 	}
 	
 	public String getAbsolutePath() {

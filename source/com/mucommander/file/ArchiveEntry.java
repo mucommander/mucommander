@@ -2,13 +2,18 @@
 package com.mucommander.file;
 
 /**
- * This abstract class encapsulates any 3rd-party archive entry.
+ * This abstract class encapsulates 3rd-party archive entries.
  *
  * @author Maxence Bernard 
  */
 abstract class ArchiveEntry {
 	
+	/** Underlying entry object */
 	protected Object entry;
+
+	/** Depth of this entry based on the number of '/' character occurrences */
+	private int depth = -1;
+	
 	
 	/**
 	 * Creates a new ArchiveEntry that encapsulates the given 3rd party entry.
@@ -30,17 +35,21 @@ abstract class ArchiveEntry {
 	 * Minimum depth is 0.
 	 */
 	int getDepth() {
-		int count=0;
-		int pos=0;
-		String path = getPath();
+		// Depth is only calculated once as it never changes (this class is immutable)
+		if(depth == -1) {
+			depth = 0;
+			int pos=0;
+			String path = getPath();
 
-		while ((pos=path.indexOf('/', pos+1))!=-1)
-			count++;
-		
-		// Directories in archives end with a '/'
-		if(path.charAt(path.length()-1)=='/')
-			count--;
-		return count;	
+			while ((pos=path.indexOf('/', pos+1))!=-1)
+				depth++;
+			
+			// Directories in archives end with a '/'
+			if(path.charAt(path.length()-1)=='/')
+				depth--;
+		}
+
+		return depth;	
 	}
 
 
@@ -59,11 +68,6 @@ abstract class ArchiveEntry {
 	abstract long getDate();
 
 	/**
-	 * Sets the encapsulated entry's date.
-	 */
-	abstract void setDate(long date);
-
-	/**
 	 * Returns the encapsulated entry's size.
 	 */
 	abstract long getSize();
@@ -72,9 +76,4 @@ abstract class ArchiveEntry {
 	 * Returns <code>true</code> if the encapsulated entry is a directory.
 	 */
 	abstract boolean isDirectory();
-	
-	/**
-	 * Creates and returns a new directory archive entry with the specified path.
-	 */
-	abstract ArchiveEntry createDirectoryEntry(String path);
 }

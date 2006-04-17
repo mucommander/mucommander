@@ -370,7 +370,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFold
 					break;
 				}
 				catch(IOException e) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException!");
+if(com.mucommander.Debug.ON) { com.mucommander.Debug.trace("IOException caught: "); e.printStackTrace(); }
 //					noWaitDialog = true;
 					
 					// Restore default cursor

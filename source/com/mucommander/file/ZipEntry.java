@@ -28,19 +28,11 @@ class ZipEntry extends ArchiveEntry {
 		return zipEntry.getTime();
 	}
 	
-	void setDate(long date) {
-		zipEntry.setTime(date);
-	}
-
 	long getSize() {
 		return zipEntry.getSize();
 	}
 
 	boolean isDirectory() {
 		return zipEntry.isDirectory();
-	}
-	
-	ArchiveEntry createDirectoryEntry(String path) {
-		return new ZipEntry(new java.util.zip.ZipEntry(path));
 	}
 }

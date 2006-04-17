@@ -28,20 +28,11 @@ class TarEntry extends ArchiveEntry {
 		return tarEntry.getModTime().getTime();
 	}
 	
-	void setDate(long date) {
-		tarEntry.setModTime(date);
-	}
-
-
 	long getSize() {
 		return tarEntry.getSize();
 	}
 
 	boolean isDirectory() {
 		return tarEntry.isDirectory();
-	}
-	
-	ArchiveEntry createDirectoryEntry(String path) {
-		return new TarEntry(new com.ice.tar.TarEntry(path));
 	}
 }

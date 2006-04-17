@@ -13,10 +13,6 @@ import java.util.zip.ZipInputStream;
  */
 public class ZipArchiveFile extends AbstractArchiveFile {
 
-	/** Zip entries contained by this zip file, loaded once for all when needed for the first time */
-	private ZipEntry entries[];
-
-
 	/**
 	 * Creates a new ZipArchiveFile.
 	 */
@@ -29,44 +25,29 @@ public class ZipArchiveFile extends AbstractArchiveFile {
 	// AbstractArchiveFile implementation //
 	////////////////////////////////////////
 	
-	protected ArchiveEntry[] getEntries() throws IOException {
-		if(this.entries==null) {
-long start = System.currentTimeMillis();
-
-			// Load all zip entries
-			Vector entriesV = new Vector();
-			
-			// If the underlying file is a local file, use the ZipFile.getEntries() method as it 
-			// is *way* faster than using ZipInputStream to iterate over the entries.
-			// Note: under Mac OS X at least, ZipFile.getEntries() method is native
-			if(file instanceof FSFile) {
-				Enumeration entriesEnum = new ZipFile(getAbsolutePath()).entries();
-				while(entriesEnum.hasMoreElements())
-					entriesV.add(new ZipEntry((java.util.zip.ZipEntry)entriesEnum.nextElement()));
-			}
-			else {
-				// works but it is *way* slower
-				ZipInputStream zin = new ZipInputStream(file.getInputStream());
-				java.util.zip.ZipEntry entry;
-				while ((entry=zin.getNextEntry())!=null) {
-		//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found entry "+entry.getPath());
-					entriesV.add(new ZipEntry(entry));
-				}
-				zin.close();
-			}
-
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries loaded in "+(System.currentTimeMillis()-start)+" ms");
-start = System.currentTimeMillis();
-
-			addMissingDirectoryEntries(entriesV);
-
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("missing directory entries added in "+(System.currentTimeMillis()-start)+" ms");
-
-			this.entries = new ZipEntry[entriesV.size()];
-			entriesV.toArray(entries);
-		}
+	protected Vector getEntries() throws IOException {
+		// Load all zip entries
+		Vector entries = new Vector();
 		
-		return this.entries;
+		// If the underlying file is a local file, use the ZipFile.getEntries() method as it 
+		// is *way* faster than using ZipInputStream to iterate over the entries.
+		// Note: under Mac OS X at least, ZipFile.getEntries() method is native
+		if(file instanceof FSFile) {
+			Enumeration entriesEnum = new ZipFile(getAbsolutePath()).entries();
+			while(entriesEnum.hasMoreElements())
+				entries.add(new ZipEntry((java.util.zip.ZipEntry)entriesEnum.nextElement()));
+		}
+		else {
+			// works but it is *way* slower
+			ZipInputStream zin = new ZipInputStream(file.getInputStream());
+			java.util.zip.ZipEntry entry;
+			while ((entry=zin.getNextEntry())!=null) {
+				entries.add(new ZipEntry(entry));
+			}
+			zin.close();
+		}
+
+		return entries;
 	}
 
 
