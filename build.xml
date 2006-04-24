@@ -1,14 +1,29 @@
 <project name="mucommander" default="compileandrun" basedir=".">
 
-  <!-- Set global properties for this build -->
-  <property name="source" value="source"/>
-  <property name="classes" value="classes"/>
-  <property name="dist"  value="dist"/>
-  <property name="lib"   value="lib"/>
-  <property name="res"	 value="res"/>
+  <!-- = Project architecture ================================ -->
+  <!-- ======================================================= -->
+  <!-- The following properties define the directory structure -->
+  <!-- of the muCommander project.                             -->
+
+  <!-- Directory containing the project's sources.             -->
+  <property name="source"  location="source"/>
+  <!-- Where to store the application's binaries.              -->
+  <property name="classes" location="classes"/>
+  <!-- Where to store the application's release files.         -->
+  <property name="dist"    location="dist"/>
+  <!-- Directory containing all of the project's external      -->
+  <!-- libraries.                                              -->
+  <property name="lib"     location="lib"/>
+  <!-- Directory containing the application's resources.       -->
+  <property name="res"	   location="res"/>
 
 
-  <!-- Prepares compile -->
+
+  <!-- = Maintenance tasks =================================== -->
+  <!-- ======================================================= -->
+  <!-- Tasks used for the maintenance of the project.          -->
+
+  <!-- Prepares the project's compilations.                    -->
   <target name="init">
     <!-- Sets time stamp to current time/date -->
     <tstamp/>
@@ -22,141 +37,109 @@
     </copy>
   </target>
 
+  <!-- Deletes any dynamically generated file, effectively     -->
+  <!-- re-initialising the whole project.                      -->
+  <target name="clean">
+    <!-- Delete the ${classes} and ${dist} directory trees -->
+    <delete dir="${classes}"/>
+    <delete dir="${dist}"/>
+  </target>
 
-  <!-- Compiles .java files, adding libraries to classpath -->
+
+
+  <!-- = Compilation tasks =================================== -->
+  <!-- ======================================================= -->
+  <!-- Cleans and rebuilds the project from scratch.           -->
+  <target name="rebuild" depends="clean,build"/>
+
+  <!-- Creates all the files required for JAR generation in    -->
+  <!-- ${classes}.                                             -->
+  <target name="build" depends="includelibs,compile"/>
+
+  <!-- Compiles all java files found in ${source} and stores   -->
+  <!-- the resulting bytecode in {$classes}.                   -->
   <target name="compile" depends="init">
-    <!-- Compile java source from ${source} to ${classes} and generate Java 1.3 compatible class files -->
-    <javac srcdir="${source}" destdir="${classes}" debug="on" deprecation="on" encoding="utf-8" source="1.3" target="1.3">
+    <javac srcdir="${source}" destdir="${classes}" debug="on" deprecation="on"
+           encoding="utf-8" source="1.3" target="1.3">
+      <!-- Includes the application's libraries in the classpath. -->
       <classpath>
         <pathelement location="classes"/>
-         <fileset dir="lib">
+         <fileset dir="${lib}">
           <include name="**/*.jar"/>
          </fileset>
-        <pathelement path="${classpath}"/>
+         <pathelement path="${classpath}"/>
       </classpath>
     </javac>
   </target>
 
-
-  <!-- Extracts lib JAR libraries files and copies resource files to the classes folder -->
-  <target name="includelibs">
-    <!-- Unjar libraries to include them in the JAR file -->
-    <unjar src="${lib}/muxml.jar" dest="${classes}"/>
-    <unjar src="${lib}/jcifs.jar" dest="${classes}"/>
-    <unjar src="${lib}/commons-net.jar" dest="${classes}"/>
+  <!-- Includes the application's libraries with its binaries. -->
+  <target name="includelibs" depends="init">
+    <unjar src="${lib}/muxml.jar"           dest="${classes}"/>
+    <unjar src="${lib}/jcifs.jar"           dest="${classes}"/>
+    <unjar src="${lib}/commons-net.jar"     dest="${classes}"/>
     <unjar src="${lib}/commons-logging.jar" dest="${classes}"/>
-    <unjar src="${lib}/jakarta-oro.jar" dest="${classes}"/> 
-    <unjar src="${lib}/javatar.jar" dest="${classes}"/>
-    <unjar src="${lib}/j2ssh.jar" dest="${classes}"/>
-    <unjar src="${lib}/bzip2.jar" dest="${classes}"/>
-    <!-- Not supported by unjar, too bad
-        <fileset dir="${lib}">
-        <include name="**/*.jar"/>
-    </fileset>                      -->
+    <unjar src="${lib}/jakarta-oro.jar"     dest="${classes}"/> 
+    <unjar src="${lib}/javatar.jar"         dest="${classes}"/>
+    <unjar src="${lib}/j2ssh.jar"           dest="${classes}"/>
+    <unjar src="${lib}/bzip2.jar"           dest="${classes}"/>
   </target> 
 
-
-  <!-- Creates a distribution JAR file, including all resources and needed libraries -->
+  <!-- Generates the application's unobfuscated jar file.      -->
   <target name="jar" depends="build">
-  
-    <!-- Create dist subfolder where the JAR file will be put -->
-    <mkdir dir="${dist}"/>
-    
-	<!-- Delete any existing JAR file -->
-	<delete file="${dist}/mucommander_unobf.jar"/>
-
-    <!-- Put everything in ${classes} into the ${dist}/mucommander_unobf.jar file -->
-    <jar jarfile="${dist}/mucommander_unobf.jar" basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
+    <mkdir  dir="${dist}"/>
+    <delete file="${dist}/mucommander_unobf.jar"/>
+    <jar    jarfile="${dist}/mucommander_unobf.jar"
+            basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
   </target>
 
-  <!-- Create an obfuscated JAR file to make the app smaller and faster -->
-  <target name="obfuscate">
-        <!-- Trigger proguard target -->
-        <antcall target="proguard"/>
-  </target>
+  <!-- Generates the application's obfuscated jar file.        -->
+  <target name="obfuscate" depends="jar">
+    <delete file="${dist}/mucommander.jar"/>
+    <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${lib}/proguard.jar"/>
+    <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="false">
+      <injar name="${dist}/mucommander_unobf.jar"/> 
+      <outjar name="${dist}/mucommander.jar"/>
+      <libraryjar name="/System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Classes/classes.jar"/>
+      <!-- Mac OS X specifics -->
+      <keep name="com.mucommander.ui.macosx.FinderIntegration">
+	<method access="public" name="handleAbout"/>
+	<method access="public" name="handlePrefs"/>
+	<method access="public" name="handleQuit"/>
+      </keep>
+      <!-- Viewer API uses reflection -->
+      <keep name="com.mucommander.file.AbstractFile"/>
+      <keepclasseswithmembers extends="com.mucommander.ui.viewer.FileViewer">
+	<method access="public static" type="boolean" name="canViewFile" parameters="com.mucommander.file.AbstractFile"/> 
+      </keepclasseswithmembers>
+      <!-- Editor API uses reflection -->
+      <keepclasseswithmembers extends="com.mucommander.ui.editor.FileEditor">
+	<method access="public static" type="boolean" name="canEditFile" parameters="com.mucommander.file.AbstractFile"/>
+      </keepclasseswithmembers>
+      <!-- Main class -->
+      <keep name="com.mucommander.Launcher">
+	<method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
+      </keep>
+      <!-- jCIFS uses forName -->
+      <keep name="jcifs.Config">
+	<method access="public" name="*"/>
+      </keep>
 
-
-  <!-- Obfuscate code using yGuard -->
-  <target name="yguard">
-    <taskdef name="obfuscate" 
-        classname="com.yworks.yguard.ObfuscatorTask" 
-        classpath="yguard.jar"/>
-    <obfuscate mainclass="com.mucommander.Launcher" logfile="${dist}/yguard_log.xml" conservemanifest="true">
-	    <property name="naming-scheme" value="small"/>
-		<inoutpair in="${dist}/mucommander_unobf.jar" out="${dist}/mucommander.jar"/>
-		<!-- Needed for jCIFS -->
-		<expose>
-			<class name="jcifs.Config"/>
-			<class name="com.mucommander.ui.macosx.FinderIntegration"/>
-		</expose>
-	</obfuscate>
-  </target>
-
-  <!-- Obfuscate code using ProGuard -->
-  <target name="proguard">
-	<!-- Delete any existing obfuscated JAR file -->
-	<delete file="${dist}/mucommander.jar"/>
-	<!-- Imports ProGuard obfuscator ant task -->
-	<taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${lib}/proguard.jar"/>
-	<proguard overloadaggressively="on" usemixedclassnames="off" ignorewarnings="on" printseeds="on">
-		<injar name="${dist}/mucommander_unobf.jar"/> 
-		<outjar name="${dist}/mucommander.jar"/>
-		<libraryjar name="/System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Classes/classes.jar"/>
-		<!-- Mac OS X specifics -->
-		<keep name="com.mucommander.ui.macosx.FinderIntegration">
-			<method access="public" name="handleAbout"/>
-			<method access="public" name="handlePrefs"/>
-			<method access="public" name="handleQuit"/>
-		</keep>
-		<!-- Viewer API uses reflection -->
-		<keep name="com.mucommander.file.AbstractFile"/>
-		<keepclasseswithmembers extends="com.mucommander.ui.viewer.FileViewer">
-			<method access="public static" type="boolean" name="canViewFile" param="com.mucommander.file.AbstractFile"/> 
-		</keepclasseswithmembers>
-		<!-- Editor API uses reflection -->
-		<keepclasseswithmembers extends="com.mucommander.ui.editor.FileEditor">
-			<method access="public static" type="boolean" name="canEditFile" param="com.mucommander.file.AbstractFile"/>
-		</keepclasseswithmembers>
-		<!-- Main class -->
-		<keep name="com.mucommander.Launcher">
-			<method access="public static" name="main" param="java.lang.String[]"/>
-		</keep>
-		<!-- jCIFS uses forName -->
-		<keep name="jcifs.Config">
-			<method access="public" name="*"/>
-		</keep>
-
-		<!-- Required by j2ssh library -->
-		<keep name="org.apache.commons.logging.*">
-                        <method access="public" name="*"/>
-                </keep> 
-                <keep name="org.apache.commons.logging.impl.LogFactoryImpl">
-                        <method access="public" name="*"/>
-                </keep>
-
-	</proguard>
+      <!-- Required by j2ssh library -->
+      <keep name="org.apache.commons.logging.*">
+        <method access="public" name="*"/>
+      </keep> 
+      <keep name="org.apache.commons.logging.impl.LogFactoryImpl">
+        <method access="public" name="*"/>
+      </keep>
+    </proguard>
   </target>
 
 
-<!--  <target name="signjar">
-     <copy file="${dist}/mucommander.jar" tofile="mucommander.com/webstart/mucommander.jar"/>
-     <signjar jar="mucommander.com/webstart/mucommander.jar" keystore="webstart/keystore" alias="maxence"/>
-  </target> -->
 
-  <!-- Launches mucommander from the classes directory -->
-  <target name="run">
-    <java classname="com.mucommander.Launcher" fork="true">
-      <classpath>
-        <pathelement location="classes"/>
-         <fileset dir="lib">
-          <include name="**/*.jar"/>
-         </fileset>
-        <pathelement path="${classpath}"/>
-      </classpath>
-    </java>
-  </target>
-
-  <!-- Launches muCommander in stress test mode, changing current folder every second or so -->
+  <!-- = Test tasks ========================================== -->
+  <!-- ======================================================= -->
+  <!-- Launches muCommander in stress test mode, changing      -->
+  <!-- current folder every second or so.                      -->
   <target name="stresstest">
     <java classname="com.mucommander.StressTester" fork="true">
       <classpath>
@@ -169,7 +152,7 @@
     </java>
   </target>
 
-  <!-- Launches muCommander in stress test mode, changing current folder every second or so -->
+  <!-- Makes sure all of the required icons are present.       -->
   <target name="testicons">
     <java classname="com.mucommander.ui.icon.FileIcons" fork="true">
       <classpath>
@@ -182,43 +165,29 @@
     </java>
   </target>
 
-   <!-- Launches mucommander from the distribution JAR file -->
+
+
+  <!-- = Application lauching tasks ========================= -->
+  <!-- ====================================================== -->
+   <!-- Launches mucommander from the distribution JAR file.  -->
   <target name="runjar">
     <java jar="${dist}/mucommander.jar" fork="true"/>
   </target>
 
+   <!-- Compile and run project, default target.              -->
+  <target name="compileandrun" depends="compile,run"/>
 
-  <!-- Clean all compiles files and copied resources, virtually leaving
-       the project in the same state as after a CVS checkout --> 
-  <target name="clean">
-    <!-- Delete the ${classes} and ${dist} directory trees -->
-    <delete dir="${classes}"/>
-    <delete dir="${dist}"/>
-  </target>
-
-
-  <!-- Compile and run project, default target -->
-  <target name="compileandrun" depends="compile,run">
-  </target>
-
-
-  <!-- Build the project from scratch: copy resources, compile and run -->
-  <target name="build" depends="includelibs,compile">
-  </target>
-
-
-  <!-- Rebuild project that is: clean and build -->
-  <target name="rebuild" depends="clean,build">
+  <!-- Runs the application from unpackaged binaries.         -->
+  <target name="run">
+    <java classname="com.mucommander.Launcher" fork="true">
+      <classpath>
+        <pathelement location="${classes}"/>
+        <fileset dir="lib">
+          <include name="**/*.jar"/>
+        </fileset>
+        <pathelement path="${classpath}"/>
+      </classpath>
+    </java>
   </target>
 
 </project>
-
-
-
-
-
-
-
-
-
-
