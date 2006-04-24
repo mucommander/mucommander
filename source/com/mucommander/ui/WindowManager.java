@@ -218,6 +218,9 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 		// To catch user clicks on window menu items and change current MainFrame accordingly
 		windowMenu.addActionListener(this);
 
+		// Set window title with frame # only if there is more than one
+		newMainFrame.updateWindowTitle(nbFrames==1?-1:nbFrames);
+
 		// Make this new frame visible
 		newMainFrame.show();
 		
@@ -268,6 +271,10 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 				if(j<10)
 					item.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[j], ActionEvent.CTRL_MASK));
 			}
+
+			// Update window title (frame #) for frames which index is greater than the one that was disposed
+			if(i>=frameIndex)
+				mainFrame.updateWindowTitle(nbFrames==1?-1:i+1);
 		}
 
 		// If no mainFrame is currently visible, exit
@@ -394,7 +401,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 		}
 		
 		// Update window title to reflect new active folder
-		mainFrame.updateWindowTitle();
+		mainFrame.updateWindowTitle(mainFrames.size()==1?-1:frameIndex+1);
 	}
 
 	/////////////////////////////////

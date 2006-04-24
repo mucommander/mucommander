@@ -164,8 +164,8 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		// WindowManager takes of catching close events and do the rest
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-		// Set window title
-		updateWindowTitle();
+//		// Set window title
+//		updateWindowTitle();
 
 //		// Used by setNoEventsMode()
 //		JComponent glassPane = (JComponent)getGlassPane();
@@ -481,11 +481,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 
 
 	/**
-	 * Update window title to reflect current active folder. To be called by WindowManager.
+	 * Update window title to reflect current active folder and window number. To be called by WindowManager.
+	 *
+	 * @param frameNumber frame number, if -1 frame number should not be displayed in the title 
 	 */
-	public void updateWindowTitle() {
+	public void updateWindowTitle(int frameNumber) {
 		// Update window title
-		setTitle(getLastActiveTable().getCurrentFolder().getAbsolutePath()+" - muCommander");
+		setTitle(getLastActiveTable().getCurrentFolder().getAbsolutePath()+" - muCommander"+(frameNumber==-1?"":" ["+(frameNumber)+"]"));
 	}
 	
 	///////////////////////

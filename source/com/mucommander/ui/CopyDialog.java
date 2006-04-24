@@ -32,12 +32,18 @@ public class CopyDialog extends DestinationDialog {
 		AbstractFile destFolder = mainFrame.getUnactiveTable().getCurrentFolder();
         String fieldText;
 
-		// Fills text field with sole element's name
+		// Local copy: fill text field with the sole file's name
 		if(isShiftDown && nbFiles==1) {
 			fieldText = ((AbstractFile)files.elementAt(0)).getName();
+
+			// Select the filename without extension, only if filename part is not empty (unlike '.DS_Store' for example)
+			int extPos = fieldText.indexOf('.');
+			int len = fieldText.length();
+			
+			setTextField(fieldText, 0, extPos>0?extPos:len);
 		}
-		// Fills text field with absolute path, and if there is only one file, append
-		// file's name
+		// Fill text field with absolute path, and if there is only one file, 
+		// append file's name
 		else {
 			fieldText = destFolder.getAbsolutePath(true);
 			// Append filename to destination path if there is only one file to copy
@@ -49,9 +55,9 @@ public class CopyDialog extends DestinationDialog {
 			 	if(!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory()))
 					fieldText += file.getName();
 			}
+
+			setTextField(fieldText);
 		}
-		
-		setTextField(fieldText);
 		
 		showDialog();
 	}
