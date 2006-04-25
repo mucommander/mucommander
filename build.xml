@@ -1,21 +1,36 @@
 <project name="mucommander" default="compileandrun" basedir=".">
-
   <!-- = Project architecture ================================ -->
   <!-- ======================================================= -->
   <!-- The following properties define the directory structure -->
   <!-- of the muCommander project.                             -->
 
   <!-- Directory containing the project's sources.             -->
-  <property name="source"  location="source"/>
+  <property name="source"    location="source"/>
   <!-- Where to store the application's binaries.              -->
-  <property name="classes" location="classes"/>
+  <property name="classes"   location="classes"/>
   <!-- Where to store the application's release files.         -->
-  <property name="dist"    location="dist"/>
+  <property name="dist"      location="dist"/>
   <!-- Directory containing all of the project's external      -->
   <!-- libraries.                                              -->
-  <property name="lib"     location="lib"/>
+  <!-- Any jar file contained in that directory will be added  -->
+  <!-- to the classpath at compile time, and bundled in the    -->
+  <!-- application's final JAR file.                           -->
+  <property name="lib"       location="lib"/>
   <!-- Directory containing the application's resources.       -->
-  <property name="res"	   location="res"/>
+  <property name="res"	     location="res"/>
+  <!-- Directory containing the tools used to compile the      -->
+  <!-- project.                                                -->
+  <property name="tools"     location="tools"/>
+  <!-- Path to the file in which to store the unobfuscated     -->
+  <!-- application JAR file.                                   -->
+  <property name="clear-jar" location="${dist}/mucommander_unobf.jar"/>
+  <!-- Path to the file in which to store the obfuscated       -->
+  <!-- application JAR file.                                   -->
+  <property name="obf-jar"   location="${dist}/mucommander.jar"/>
+
+
+  <!-- Imports the system dependant definitions.               -->
+  <import file="local.xml"/>
 
 
 
@@ -63,7 +78,7 @@
            encoding="utf-8" source="1.3" target="1.3">
       <!-- Includes the application's libraries in the classpath. -->
       <classpath>
-        <pathelement location="classes"/>
+        <pathelement location="${classes}"/>
          <fileset dir="${lib}">
           <include name="**/*.jar"/>
          </fileset>
@@ -74,32 +89,29 @@
 
   <!-- Includes the application's libraries with its binaries. -->
   <target name="includelibs" depends="init">
-    <unjar src="${lib}/muxml.jar"           dest="${classes}"/>
-    <unjar src="${lib}/jcifs.jar"           dest="${classes}"/>
-    <unjar src="${lib}/commons-net.jar"     dest="${classes}"/>
-    <unjar src="${lib}/commons-logging.jar" dest="${classes}"/>
-    <unjar src="${lib}/jakarta-oro.jar"     dest="${classes}"/> 
-    <unjar src="${lib}/javatar.jar"         dest="${classes}"/>
-    <unjar src="${lib}/j2ssh.jar"           dest="${classes}"/>
-    <unjar src="${lib}/bzip2.jar"           dest="${classes}"/>
+    <unjar dest="${classes}">
+      <fileset dir="${lib}">
+        <include name="**/*.jar"/>
+    </fileset>
+    </unjar>
   </target> 
 
   <!-- Generates the application's unobfuscated jar file.      -->
   <target name="jar" depends="build">
     <mkdir  dir="${dist}"/>
-    <delete file="${dist}/mucommander_unobf.jar"/>
-    <jar    jarfile="${dist}/mucommander_unobf.jar"
+    <delete file="${clear-jar}"/>
+    <jar    jarfile="${clear-jar}"
             basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
   </target>
 
   <!-- Generates the application's obfuscated jar file.        -->
   <target name="obfuscate" depends="jar">
-    <delete file="${dist}/mucommander.jar"/>
-    <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${lib}/proguard.jar"/>
+    <delete file="${obf-jar}"/>
+    <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
     <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="false">
-      <injar name="${dist}/mucommander_unobf.jar"/> 
-      <outjar name="${dist}/mucommander.jar"/>
-      <libraryjar name="/System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Classes/classes.jar"/>
+      <injar name="${clear-jar}"/> 
+      <outjar name="${obf-jar}"/>
+      <libraryjar name="${java-lib}"/>
       <!-- Mac OS X specifics -->
       <keep name="com.mucommander.ui.macosx.FinderIntegration">
 	<method access="public" name="handleAbout"/>
@@ -143,7 +155,7 @@
   <target name="stresstest">
     <java classname="com.mucommander.StressTester" fork="true">
       <classpath>
-        <pathelement location="classes"/>
+        <pathelement location="${classes}"/>
          <fileset dir="lib">
           <include name="**/*.jar"/>
          </fileset>
@@ -156,8 +168,8 @@
   <target name="testicons">
     <java classname="com.mucommander.ui.icon.FileIcons" fork="true">
       <classpath>
-        <pathelement location="classes"/>
-         <fileset dir="lib">
+        <pathelement location="${classes}"/>
+         <fileset dir="${lib}">
           <include name="**/*.jar"/>
          </fileset>
         <pathelement path="${classpath}"/>
@@ -171,7 +183,7 @@
   <!-- ====================================================== -->
    <!-- Launches mucommander from the distribution JAR file.  -->
   <target name="runjar">
-    <java jar="${dist}/mucommander.jar" fork="true"/>
+    <java jar="${clear-jar}" fork="true"/>
   </target>
 
    <!-- Compile and run project, default target.              -->
@@ -182,7 +194,7 @@
     <java classname="com.mucommander.Launcher" fork="true">
       <classpath>
         <pathelement location="${classes}"/>
-        <fileset dir="lib">
+        <fileset dir="${lib}">
           <include name="**/*.jar"/>
         </fileset>
         <pathelement path="${classpath}"/>
