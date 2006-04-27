@@ -306,9 +306,10 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 			WindowManager.getInstance().disposeMainFrame(mainFrame);
 		}
 		else {
+			FileTable activeTable = mainFrame.getLastActiveTable();
+			FileSet files = activeTable.getSelectedFiles();
 			// The following actions need to work on files, 
 			// simply return if no file is selected
-			FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
 			if(files.size()==0) {
 				// Request focus since focus currently belongs to a command bar button
 				// and no dialog will request focus
@@ -322,7 +323,12 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 			}
 			// Move/Rename button
 			else if(source == buttons[MOVE_INDEX]) {
-				new MoveDialog(mainFrame, files, shiftDown);
+				// Trigger in-table renaming if shift down and only one file is selected (not marked)
+				if(shiftDown && files.size()==1 && files.elementAt(0).equals(activeTable.getSelectedFile()))
+					activeTable.editCurrentFilename();
+				// Show up move dialog
+				else
+					new MoveDialog(mainFrame, files, shiftDown);
 			}
 			// Delete button
 			else if(source == buttons[DELETE_INDEX]) {

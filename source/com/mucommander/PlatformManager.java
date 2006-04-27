@@ -387,6 +387,9 @@ public class PlatformManager {
     }
 	
 	
+	/**
+	 * Returns the default shell command of the current platform. 
+	 */
 	public static String getDefaultShellCommand() {
 		String shellCommand;
 		
@@ -418,7 +421,8 @@ public class PlatformManager {
 
 			String defaultShellCommand = getDefaultShellCommand();
 			String shellCommand;
-			// Retrieve preferred shell command
+			// Did the user choose to use a custom shell ?
+			// If not use the system's default shell command
 			if(ConfigurationManager.getVariableBoolean(USE_CUSTOM_SHELL_CONF_VAR, false))
 				shellCommand = ConfigurationManager.getVariable(CUSTOM_SHELL_CONF_VAR, defaultShellCommand);
 			else
