@@ -21,106 +21,116 @@ import javax.swing.*;
  */
 public class ZipDialog extends FocusDialog implements ActionListener {
 
-	private MainFrame mainFrame;
+    private MainFrame mainFrame;
 
-	/** Files to zip */
-	private FileSet files;
+    /** Files to zip */
+    private FileSet files;
 	
-	private JTextField filePathField;
-	private JTextArea commentArea;
-	private JButton okButton;
-	private JButton cancelButton;
+    private JTextField filePathField;
+    private JTextArea commentArea;
+    private JButton okButton;
+    private JButton cancelButton;
 
-	// Dialog's width has to be at least 240
-	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
+    // Dialog's width has to be at least 240
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
 
-	// Dialog's width has to be at most 320
-	private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
+    // Dialog's width has to be at most 320
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 
 
-	public ZipDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
-		super(mainFrame, Translator.get("zip_dialog.title"), mainFrame);
+    public ZipDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
+        super(mainFrame, Translator.get("zip_dialog.title"), mainFrame);
 
-		this.mainFrame = mainFrame;
-		this.files = files;
+        this.mainFrame = mainFrame;
+        this.files = files;
 		
-		Container contentPane = getContentPane();
+        Container contentPane = getContentPane();
 		
-		YBoxPanel mainPanel = new YBoxPanel(5);
-		JLabel label = new JLabel(Translator.get("zip_dialog_description")+" :");
-		mainPanel.add(label);
+        YBoxPanel mainPanel = new YBoxPanel(5);
+        JLabel label = new JLabel(Translator.get("zip_dialog_description")+" :");
+        mainPanel.add(label);
 
-		FileTable activeTable = mainFrame.getUnactiveTable();
-		String initialPath = (isShiftDown?"":activeTable.getCurrentFolder().getAbsolutePath(true))+".zip";
-		filePathField = new JTextField(initialPath);
-		filePathField.setCaretPosition(initialPath.length()-4);
-		mainPanel.add(filePathField);
+        FileTable activeTable = mainFrame.getUnactiveTable();
+        String initialPath = (isShiftDown?"":activeTable.getCurrentFolder().getAbsolutePath(true));
+
+        // Computes the archive's default name:
+        // - if it only contains one file, uses that file's name.
+        // - if it contains more than one file, uses the FileSet's parent folder's name.
+        if(files.size() == 1)
+            initialPath += files.fileAt(0).getName();
+        else if(files.getBaseFolder().getParent() != null)
+            initialPath += files.getBaseFolder().getName();
+
+        initialPath += ".zip";
+        filePathField = new JTextField(initialPath);
+        filePathField.setCaretPosition(initialPath.length()-4);
+        mainPanel.add(filePathField);
 		
-		mainPanel.addSpace(10);
+        mainPanel.addSpace(10);
 		
-		label = new JLabel(Translator.get("zip_dialog.comment"));
-		mainPanel.add(label);
-		commentArea = new JTextArea();
-		commentArea.setRows(4);
-		mainPanel.add(commentArea);
+        label = new JLabel(Translator.get("zip_dialog.comment"));
+        mainPanel.add(label);
+        commentArea = new JTextArea();
+        commentArea.setRows(4);
+        mainPanel.add(commentArea);
 
-		mainPanel.addSpace(10);
+        mainPanel.addSpace(10);
 
-		contentPane.add(mainPanel, BorderLayout.NORTH);
+        contentPane.add(mainPanel, BorderLayout.NORTH);
 				
-		okButton = new JButton(Translator.get("zip_dialog.zip"));
-		cancelButton = new JButton(Translator.get("cancel"));
-		contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
+        okButton = new JButton(Translator.get("zip_dialog.zip"));
+        cancelButton = new JButton(Translator.get("cancel"));
+        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
-		// text field will receive initial focus
-		setInitialFocusComponent(filePathField);		
+        // text field will receive initial focus
+        setInitialFocusComponent(filePathField);		
 		
-		// Selects OK when enter is pressed
-		getRootPane().setDefaultButton(okButton);
+        // Selects OK when enter is pressed
+        getRootPane().setDefaultButton(okButton);
 
-		// Packs dialog
-		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
+        // Packs dialog
+        setMinimumSize(MINIMUM_DIALOG_DIMENSION);
+        setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 	
-		showDialog();
-	}
+        showDialog();
+    }
 	
 	
-	////////////////////////////
-	// ActionListener methods //
-	////////////////////////////
+    ////////////////////////////
+    // ActionListener methods //
+    ////////////////////////////
 	
-	public void actionPerformed(ActionEvent e) {
-		Object source = e.getSource();
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
 		
-		if (source==okButton)  {
-			// Starts by disposing the dialog
-			dispose();
+        if (source==okButton)  {
+            // Starts by disposing the dialog
+            dispose();
 
-			// Checks that destination file can be resolved 
-			String filePath = filePathField.getText();
-			Object dest[] = FileToolkit.resolvePath(filePath, mainFrame.getLastActiveTable().getCurrentFolder());
-			if (dest==null || dest[1]==null) {
-				// Incorrect destination
-				QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("zip_dialog.error_title"), Translator.get("this_folder_does_not_exist", filePath), mainFrame,
-					new String[] {Translator.get("ok")},
-					new int[]  {0},
-					0);
-				dialog.getActionValue();
-				return;
-			}
+            // Checks that destination file can be resolved 
+            String filePath = filePathField.getText();
+            Object dest[] = FileToolkit.resolvePath(filePath, mainFrame.getLastActiveTable().getCurrentFolder());
+            if (dest==null || dest[1]==null) {
+                // Incorrect destination
+                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("zip_dialog.error_title"), Translator.get("this_folder_does_not_exist", filePath), mainFrame,
+                                                           new String[] {Translator.get("ok")},
+                                                           new int[]  {0},
+                                                           0);
+                dialog.getActionValue();
+                return;
+            }
 
-			AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
+            AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
 
-			// Starts zipping
-			ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
-			ZipJob zipJob = new ZipJob(progressDialog, mainFrame, files, commentArea.getText(), destFile);
-			progressDialog.start(zipJob);
-		}
-		else if (source==cancelButton)  {
-			dispose();			
-		}
-	}
+            // Starts zipping
+            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
+            ZipJob zipJob = new ZipJob(progressDialog, mainFrame, files, commentArea.getText(), destFile);
+            progressDialog.start(zipJob);
+        }
+        else if (source==cancelButton)  {
+            dispose();			
+        }
+    }
 
 
 }
