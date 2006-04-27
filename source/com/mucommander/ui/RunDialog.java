@@ -63,7 +63,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         commandField.setSelectionStart(0);
         commandField.setSelectionEnd(lastCommand.length());
         commandField.addActionListener(this);
-		
+
         mainPanel.add(commandField);
         mainPanel.addSpace(10);
 
@@ -75,10 +75,12 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         outputTextArea.setRows(10);
         outputTextArea.setEditable(false);
 
-        // Use a monospace font in the process output text area, as most terminals do.
+        // Use a monospaced font in the command field and process output text area, as most terminals do.
 		// The logical "Monospaced" font name is always available in Java.
 		// The font size is the one of the default JTextArea, style is plain.
-		outputTextArea.setFont(new Font("Monospaced", Font.PLAIN, outputTextArea.getFont().getSize()));
+		Font monospacedFont = new Font("Monospaced", Font.PLAIN, outputTextArea.getFont().getSize());
+		commandField.setFont(monospacedFont);
+		outputTextArea.setFont(monospacedFont);
 
         JScrollPane scrollPane = new JScrollPane(outputTextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
