@@ -401,7 +401,7 @@ public class PlatformManager {
 		// All other OSes are assumed to be POSIX compliant
 		// and to have a /bin/sh shell.
 		else {
-			shellCommand = "/bin/bash -c";
+			shellCommand = "/bin/sh -c";
 		}
 		
 		return shellCommand;
