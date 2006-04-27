@@ -4,6 +4,8 @@ package com.mucommander;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 
+import com.mucommander.conf.ConfigurationManager;
+
 import java.io.File;
 
 import java.util.Vector;
@@ -95,6 +97,10 @@ public class PlatformManager {
 
     /** Environment variable used to determine if KDE is the desktop currently running */
     private final static String KDE_ENV_VAR = "KDE_FULL_SESSION";
+	
+	
+	/** Configuration variable used to store the preferred shell */
+	private final static String SHELL_VARIABLE = "prefs.shell";
 	
 	
     /**
@@ -386,50 +392,36 @@ public class PlatformManager {
         try {
             if(Debug.ON) Debug.trace("Executing "+command);
 
-            Vector tokensV = new Vector();
+			// Retrieve preferred shell command
+			String shellCommand;
             // Windows NT OSes use cmd.exe.
             if (osFamily == WINDOWS_NT) {
-                tokensV.add("cmd");
-                tokensV.add("/c");
+				shellCommand = ConfigurationManager.getVariable(SHELL_VARIABLE, "cmd /c");
             }
             // Windows 9X OSes use command.com.
             else if(osFamily == WINDOWS_9X) {
-                tokensV.add("command.com");
-                tokensV.add("/c");
+				shellCommand = ConfigurationManager.getVariable(SHELL_VARIABLE, "command.com /c");
             }
             // All other OSes are assumed to be POSIX compliant
             // and to have a /bin/sh shell.
             else {
-                tokensV.add("/bin/sh");
-                tokensV.add("-c");
+				shellCommand = ConfigurationManager.getVariable(SHELL_VARIABLE, "/bin/bash -c");
             }
-            // Split the command into tokens
-            command.trim();
 
-            // We now let the shell do the splitting itself.
-            /*
-            char c;
-            int pos = 0;
-            int len = command.length();
-            StringBuffer token = new StringBuffer();
-            while(pos<len) {
-                c = command.charAt(pos);
-                if((c==' ' && command.charAt(pos-1)!='\\') || c=='\t' || c=='\n' || c=='\r' || c=='\f') {
-                    tokensV.add(token.toString());
-                    token = new StringBuffer();
-                }
-                else if(!(c=='\\' && pos!=len-1 && command.charAt(pos+1)==' ')) {
-                    token.append(c);
-                }
-                pos ++;
-            }
-            */
-            tokensV.add(command);
-            String tokens[] = new String[tokensV.size()];
+			// Split the shell command into tokens
+            Vector tokensV = splitCommand(shellCommand);
+            // Add the command as a single token to let the shell parse it
+			tokensV.add(command);
+
+			if(Debug.ON) Debug.trace("Tokens= "+tokensV);
+
+            // Convert the tokens Vector into a good old array
+			String tokens[] = new String[tokensV.size()];
             tokensV.toArray(tokens);
 
-            // Here, we use Runtime.exec(String[],String[],File) instead of Runtime.exec(String,String[],File)
-            // so we can parse the tokens ourself (messes up the command otherwise)
+            // We use Runtime.exec(String[],String[],File) instead of Runtime.exec(String,String[],File)
+            // so that we can provide the tokens instead of letting Runtime.exec() parse the command and mess up 
+			// the command otherwise
 
             // Command is run from a folder which is either :
 			// - the current folder of muCommander's active panel, only if the folder is on a local filesystem
@@ -446,6 +438,40 @@ public class PlatformManager {
             return null;
         }
     }
+
+
+	/**
+	 * Splits the given command into an arrary of tokens.
+	 */
+	private static Vector splitCommand(String command) {
+		char c;
+		int pos = 0;
+		int len = command.length();
+		StringBuffer tokenSB = new StringBuffer();
+		String token;
+		Vector tokensV = new Vector();
+		while(pos<len) {
+			c = command.charAt(pos);
+// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("char="+c+" ("+(int)c+")"+" pos="+pos+" len="+len+" token="+tokenSB);
+			if((c==' ' && command.charAt(pos-1)!='\\') || c=='\t' || c=='\n' || c=='\r' || c=='\f') {
+				token = tokenSB.toString().trim();
+				if(!token.equals(""))
+					tokensV.add(token.toString());
+				tokenSB = new StringBuffer();
+			}
+			else if(!(c=='\\' && pos!=len-1 && command.charAt(pos+1)==' ')) {
+				tokenSB.append(c);
+			}
+			
+			pos ++;
+		}
+
+		token = tokenSB.toString().trim();
+		if(!token.equals(""))
+			tokensV.add(token.toString());
+
+		return tokensV;
+	}
 
 
     /**

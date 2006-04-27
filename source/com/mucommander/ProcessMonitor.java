@@ -71,7 +71,7 @@ public class ProcessMonitor implements Runnable {
 				break;
 			}
 		}
-		// Close input stream
+		// Close the input stream
 		try { in.close(); }
 		catch(IOException e) {}
 		
@@ -90,7 +90,7 @@ public class ProcessMonitor implements Runnable {
 				break;
 			}
 		}
-		// Close input stream
+		// Close the input stream
 		try { in.close(); }
 		catch(IOException e) {}
 
