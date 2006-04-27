@@ -4488,7 +4488,7 @@ prefs_dialog.mail_server:RU:SMTP-сервер
 prefs_dialog.mail_server:ZH_CN:SMTP服务器
 prefs_dialog.mail_server:SI:SMTP strežnik
 
-# Misc tab (Mac OS X only)
+# Misc tab
 
 prefs_dialog.misc_tab:EN:Misc
 prefs_dialog.misc_tab:FR:Autres
@@ -4502,6 +4502,7 @@ prefs_dialog.misc_tab:RU:Дополнительно
 prefs_dialog.misc_tab:ZH_CN:其它
 prefs_dialog.misc_tab:SI:Razno
 
+# Mac OS X only
 prefs_dialog.use_brushed_metal:EN:Use 'brushed metal' look (requires restart)
 prefs_dialog.use_brushed_metal:FR:Utiliser le look 'brushed metal' (après redémarrage)
 prefs_dialog.use_brushed_metal:DE:'Brushed Metal' Look benutzen (Neustart nötig)
@@ -4514,6 +4515,7 @@ prefs_dialog.use_brushed_metal:RU:Использовать тему 'brushed met
 prefs_dialog.use_brushed_metal:ZH_CN:使用 'brushed metal' 外观 (需重新启动)
 prefs_dialog.use_brushed_metal:SI:Uporabi shemo "brušena kovina" (zahteva ponovni zagon)
 
+# Mac OS X only
 prefs_dialog.confirm_on_quit:EN:Show confirmation dialog on quit
 prefs_dialog.confirm_on_quit:FR:Afficher un dialogue de confirmation en quittant
 prefs_dialog.confirm_on_quit:DE:Bestätigung beim Beenden
@@ -4525,6 +4527,18 @@ prefs_dialog.confirm_on_quit:HU:kérjen megerősítést kilépéskor
 prefs_dialog.confirm_on_quit:RU:Запрашивать подтверждение при выходе 
 prefs_dialog.confirm_on_quit:ZH_CN:退出时显示确认对话框
 prefs_dialog.confirm_on_quit:SI:Pokaži pogovorno okno za potrditev izhoda
+
+prefs_dialog.shell_command:EN:Shell command
+prefs_dialog.shell_command:FR:Commande shell
+
+
+
+
+
+
+
+
+
 
 
 ####################

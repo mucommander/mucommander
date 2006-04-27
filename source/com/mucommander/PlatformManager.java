@@ -100,7 +100,7 @@ public class PlatformManager {
 	
 	
 	/** Configuration variable used to store the preferred shell */
-	private final static String SHELL_VARIABLE = "prefs.shell";
+	private final static String SHELL_CONF_VAR = "prefs.shell";
 	
 	
     /**
@@ -384,6 +384,27 @@ public class PlatformManager {
     }
 	
 	
+	public static String getDefaultShellCommand() {
+		String shellCommand;
+		
+		// Windows NT OSes use cmd.exe.
+		if (osFamily == WINDOWS_NT) {
+			shellCommand = "cmd /c";
+		}
+		// Windows 9X OSes use command.com.
+		else if(osFamily == WINDOWS_9X) {
+			shellCommand = "command.com /c";
+		}
+		// All other OSes are assumed to be POSIX compliant
+		// and to have a /bin/sh shell.
+		else {
+			shellCommand = "/bin/bash -c";
+		}
+		
+		return shellCommand;
+	}
+	
+	
     /**
      * Executes an arbitrary command in the given folder and returns the corresponding Process object,
      * or <code>null</code> if the command failed to execute.
@@ -393,20 +414,7 @@ public class PlatformManager {
             if(Debug.ON) Debug.trace("Executing "+command);
 
 			// Retrieve preferred shell command
-			String shellCommand;
-            // Windows NT OSes use cmd.exe.
-            if (osFamily == WINDOWS_NT) {
-				shellCommand = ConfigurationManager.getVariable(SHELL_VARIABLE, "cmd /c");
-            }
-            // Windows 9X OSes use command.com.
-            else if(osFamily == WINDOWS_9X) {
-				shellCommand = ConfigurationManager.getVariable(SHELL_VARIABLE, "command.com /c");
-            }
-            // All other OSes are assumed to be POSIX compliant
-            // and to have a /bin/sh shell.
-            else {
-				shellCommand = ConfigurationManager.getVariable(SHELL_VARIABLE, "/bin/bash -c");
-            }
+			String shellCommand = ConfigurationManager.getVariable(SHELL_CONF_VAR, getDefaultShellCommand());
 
 			// Split the shell command into tokens
             Vector tokensV = splitCommand(shellCommand);
