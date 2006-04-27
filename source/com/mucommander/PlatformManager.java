@@ -93,7 +93,7 @@ public class PlatformManager {
 	
 
     /** Environment variable used to determine if GNOME is the desktop currently running */
-    private final static String GNOME_ENV_VAR = "GOME_DESKTOP_SESSION_ID";
+    private final static String GNOME_ENV_VAR = "GNOME_DESKTOP_SESSION_ID";
 
     /** Environment variable used to determine if KDE is the desktop currently running */
     private final static String KDE_ENV_VAR = "KDE_FULL_SESSION";
@@ -206,16 +206,16 @@ public class PlatformManager {
             // System.getenv() has been deprecated and not usable (throws an exception) under Java 1.3 and 1.4,
             // let's use System.getProperty() instead
             if(javaVersion<=JAVA_1_4) {
-                gnomeEnvValue = System.getProperty("GOME_DESKTOP_SESSION_ID");
-                kdeEnvValue = System.getProperty("KDE_FULL_SESSION");
+                gnomeEnvValue = System.getProperty(GNOME_ENV_VAR);
+                kdeEnvValue = System.getProperty(KDE_ENV_VAR);
             }
             // System.getenv() has been un-deprecated (reprecated?) under Java 1.5, great!
             else {
-                gnomeEnvValue = System.getenv("GOME_DESKTOP_SESSION_ID");
-                kdeEnvValue = System.getenv("KDE_FULL_SESSION");
+                gnomeEnvValue = System.getenv(GNOME_ENV_VAR);
+                kdeEnvValue = System.getenv(KDE_ENV_VAR);
             }
 
-            // Does the GOME_DESKTOP_SESSION_ID environment variable have a value ?
+            // Does the GNOME_DESKTOP_SESSION_ID environment variable have a value ?
             if(gnomeEnvValue!=null && !gnomeEnvValue.trim().equals(""))
                 unixDesktop = GNOME_DESKTOP;
             // Does the KDE_FULL_SESSION environment variable have a value ?
