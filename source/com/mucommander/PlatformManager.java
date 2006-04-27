@@ -2,6 +2,7 @@
 package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FSFile;
 
 import java.io.File;
 
@@ -430,7 +431,15 @@ public class PlatformManager {
             // Here, we use Runtime.exec(String[],String[],File) instead of Runtime.exec(String,String[],File)
             // so we can parse the tokens ourself (messes up the command otherwise)
 
-            return Runtime.getRuntime().exec(tokens, null, new java.io.File(currentFolder.getAbsolutePath()));
+            // Command is run from a folder which is either :
+			// - the current folder of muCommander's active panel, only if the folder is on a local filesystem
+			//	(and is not an archive)
+			// - user's home in all other cases (archive, remote filesystem such as SMB, FTP, ...), since the os/shell
+			//	can't access those 'folders'
+
+			return Runtime.getRuntime().exec(tokens, null, 
+				new java.io.File((currentFolder instanceof FSFile)?currentFolder.getAbsolutePath():System.getProperty("user.home"))
+			);
         }
         catch(Exception e) {
             if(Debug.ON) Debug.trace("Error while executing "+command+": "+e);
