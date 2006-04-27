@@ -4528,13 +4528,28 @@ prefs_dialog.confirm_on_quit:RU:Запрашивать подтверждени�
 prefs_dialog.confirm_on_quit:ZH_CN:退出时显示确认对话框
 prefs_dialog.confirm_on_quit:SI:Pokaži pogovorno okno za potrditev izhoda
 
-prefs_dialog.shell_command:EN:Shell command
-prefs_dialog.shell_command:FR:Commande shell
+
+prefs_dialog.shell:EN:Shell
+prefs_dialog.shell:FR:Shell
 
 
 
 
 
+
+
+
+prefs_dialog.default_shell:EN:Default system shell
+prefs_dialog.default_shell:FR:Shell par défaut du système
+
+
+
+
+
+
+
+prefs_dialog.custom_shell:EN:Custom shell command
+prefs_dialog.default_shell:FR:Shell spécifique
 
 
 

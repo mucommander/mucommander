@@ -99,8 +99,11 @@ public class PlatformManager {
     private final static String KDE_ENV_VAR = "KDE_FULL_SESSION";
 	
 	
-	/** Configuration variable used to store the preferred shell */
-	private final static String SHELL_CONF_VAR = "prefs.shell";
+	/** Configuration variable used to store the custom shell command */
+	private final static String CUSTOM_SHELL_CONF_VAR = "prefs.shell.custom_command";
+
+	/** Configuration variable used to store the custom shell command */
+	private final static String USE_CUSTOM_SHELL_CONF_VAR = "prefs.shell.use_custom";
 	
 	
     /**
@@ -413,8 +416,13 @@ public class PlatformManager {
         try {
             if(Debug.ON) Debug.trace("Executing "+command);
 
+			String defaultShellCommand = getDefaultShellCommand();
+			String shellCommand;
 			// Retrieve preferred shell command
-			String shellCommand = ConfigurationManager.getVariable(SHELL_CONF_VAR, getDefaultShellCommand());
+			if(ConfigurationManager.getVariableBoolean(USE_CUSTOM_SHELL_CONF_VAR, false))
+				shellCommand = ConfigurationManager.getVariable(CUSTOM_SHELL_CONF_VAR, defaultShellCommand);
+			else
+				shellCommand = defaultShellCommand;
 
 			// Split the shell command into tokens
             Vector tokensV = splitCommand(shellCommand);
