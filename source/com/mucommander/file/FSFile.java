@@ -49,7 +49,6 @@ public class FSFile extends AbstractFile {
 
 		// Remove leading '/' if path is 'a la windows', i.e. starts with a drive like C:\
 		String path = fileURL.getPath();
-
 		if(path.indexOf(":\\")!=-1 && path.charAt(0)=='/')
 			path = path.substring(1, path.length());
 

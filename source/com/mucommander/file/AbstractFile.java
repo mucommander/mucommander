@@ -98,6 +98,10 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 
 			// FileURL not in cache, let's create it and add it to the cache
 			if(fileURL==null) {
+				// Make sure path is absolute and throw an exception if it is not
+				if(!(new java.io.File(absPath)).isAbsolute())
+					throw new IOException();
+			
 				fileURL = new FileURL("file://localhost"+((absPath.equals("")||(absPath.charAt(0)=='/'))?absPath:'/'+absPath), parent==null?null:parent.getURL());	// Reuse parent file's FileURL (if any)
 				urlCache.add(absPath, fileURL);
 			}

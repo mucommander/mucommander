@@ -38,7 +38,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("destPath ="+destPath);
 		if ((destFolder=AbstractFile.getAbstractFile(destPath))!=null 
 		 && destFolder.exists()
 		 && destFolder.isDirectory()) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+destPath);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder for "+destPath+" destFolder="+destFolder.getAbsolutePath()+" destURL="+destFolder.getURL()+" URL filename="+destFolder.getURL().getFilename());
 		}
 
 		// destPath points to an existing folder relative to current folder
