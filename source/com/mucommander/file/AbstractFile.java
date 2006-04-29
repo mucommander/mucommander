@@ -239,6 +239,44 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	}
 
 
+    /**
+     * Computes the name of the file without its extension.
+     * <p>
+     * Within the context of this method, a file will have an
+     * extension if and only if:<br/>
+     * - it's not a directory.<br/>
+     * - it contains at least one <code>.</code> character.<br/>
+     * - the last <code>.</code> is not the last character in the file's name.<br/>
+     * - the last <code>.</code> is not the first character in the file's name.<br/>
+     * If a file is found not to have an extension, its full name is returned.
+     * </p>
+     * @return the file's name, without its extension.
+     * @see    #getName()
+     * @see    #getExtension()
+     */
+    public String getNameWithoutExtension() {
+        String name;
+        int    position;
+
+        // Directories do not have extension.
+        if(isDirectory())
+            return getName();
+
+        name     = getName();
+        position = name.lastIndexOf('.');
+
+        // If the extension 'dot' eiter:
+        // - does not exist
+        // - is the first character of the file's name
+        // - is the last character of the file's name
+        // then we don't have an extension.
+        if((position == -1) || (position == name.length() - 1) ||
+           (position == 0))
+            return name;
+
+        return name.substring(0, position);
+    }
+
 	/**
 	 * Returns the file's extension, <code>null</code> if the file doesn't have an extension.
 	 */
