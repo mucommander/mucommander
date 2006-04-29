@@ -3003,17 +3003,17 @@ zip_dialog.comment:RU:Комментарий (не обязателен)
 zip_dialog.comment:ZH_CN:注释 (可选)
 zip_dialog.comment:SI:Komentar (neobvezno)
 
-zip_dialog.file_already_exists:EN:%1 already exists in destination folder.
-zip_dialog.file_already_exists:FR:%1 existe déjà dans le dossier de destination.
-zip_dialog.file_already_exists:DE:%1 existiert bereits im Zielordner.
-zip_dialog.file_already_exists:ES:%1 existe dÃ©jÃ  en el directorio de destino.
-zip_dialog.file_already_exists:CS:%1 již existuje v cilové složce.
-zip_dialog.file_already_exists:zh_TW:%1 已經存在於目的資料夾.
-zip_dialog.file_already_exists:PL:%1 już istnieje w katalogu docelowym.
-zip_dialog.file_already_exists:HU:%1 már létezik célkönyvtárban.
-zip_dialog.file_already_exists:RU:%1 уже существует в каталоге-получателе.
-zip_dialog.file_already_exists:ZH_CN:%1 已经在目的文件夹里.
-zip_dialog.file_already_exists:SI:%1 že obstaja v ciljni mapi.
+#zip_dialog.file_already_exists:EN:%1 already exists in destination folder.
+#zip_dialog.file_already_exists:FR:%1 existe déjà dans le dossier de destination.
+#zip_dialog.file_already_exists:DE:%1 existiert bereits im Zielordner.
+#zip_dialog.file_already_exists:ES:%1 existe dÃ©jÃ  en el directorio de destino.
+#zip_dialog.file_already_exists:CS:%1 již existuje v cilové složce.
+#zip_dialog.file_already_exists:zh_TW:%1 已經存在於目的資料夾.
+#zip_dialog.file_already_exists:PL:%1 już istnieje w katalogu docelowym.
+#zip_dialog.file_already_exists:HU:%1 már létezik célkönyvtárban.
+#zip_dialog.file_already_exists:RU:%1 уже существует в каталоге-получателе.
+#zip_dialog.file_already_exists:ZH_CN:%1 已经在目的文件夹里.
+#zip_dialog.file_already_exists:SI:%1 že obstaja v ciljni mapi.
 
 
 #######################

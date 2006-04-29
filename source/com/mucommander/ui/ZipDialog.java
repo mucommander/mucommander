@@ -2,11 +2,14 @@ package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.ui.table.FileTable;
+
+import com.mucommander.text.Translator;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.file.FileToolkit;
-import com.mucommander.job.ZipJob;
-import com.mucommander.text.Translator;
+
+import com.mucommander.job.ArchiveJob;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -32,7 +35,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
     private JButton cancelButton;
 
     // Dialog's width has to be at least 240
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
 
     // Dialog's width has to be at most 320
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
@@ -124,8 +127,8 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 
             // Starts zipping
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
-            ZipJob zipJob = new ZipJob(progressDialog, mainFrame, files, commentArea.getText(), destFile);
-            progressDialog.start(zipJob);
+            ArchiveJob archiveJob = new ArchiveJob(progressDialog, mainFrame, files, commentArea.getText(), destFile);
+            progressDialog.start(archiveJob);
         }
         else if (source==cancelButton)  {
             dispose();			

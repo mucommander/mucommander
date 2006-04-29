@@ -34,6 +34,23 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 	protected final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
     // Dialog width should not exceed 360, height is not an issue (always the same)
     protected final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
+
+	
+	private final static int DEFAULT_ACTIONS[] = {
+		FileExistsDialog.CANCEL_ACTION,
+		FileExistsDialog.SKIP_ACTION,
+		FileExistsDialog.OVERWRITE_ACTION,
+		FileExistsDialog.OVERWRITE_IF_OLDER_ACTION,
+		FileExistsDialog.RESUME_ACTION
+	};
+
+	private final static String DEFAULT_ACTIONS_TEXT[] = {
+		FileExistsDialog.CANCEL_TEXT,
+		FileExistsDialog.SKIP_TEXT,
+		FileExistsDialog.OVERWRITE_TEXT,
+		FileExistsDialog.OVERWRITE_IF_OLDER_TEXT,
+		FileExistsDialog.RESUME_TEXT
+	};
 	
 
 	/**
@@ -92,10 +109,9 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 		mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")));
 		fileExistsActionComboBox = new JComboBox();
 		fileExistsActionComboBox.addItem(Translator.get("ask"));
-		String choicesText[] = FileExistsDialog.CHOICES_TEXT;
-		int nbChoices = choicesText.length;
+		int nbChoices = DEFAULT_ACTIONS_TEXT.length;
 		for(int i=0; i<nbChoices; i++)
-			fileExistsActionComboBox.addItem(choicesText[i]);
+			fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
 		mainPanel.add(fileExistsActionComboBox);
 		mainPanel.addSpace(10);
 		
@@ -165,7 +181,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 		if(defaultFileExistsAction==0)
 			defaultFileExistsAction = FileExistsDialog.ASK_ACTION;
 		else
-			defaultFileExistsAction = FileExistsDialog.CHOICES_ACTIONS[defaultFileExistsAction-1];
+			defaultFileExistsAction = DEFAULT_ACTIONS[defaultFileExistsAction-1];
 		// We don't remember default action on purpose: we want the user to specify it each time,
 		// it would be too dangerous otherwise.
 		

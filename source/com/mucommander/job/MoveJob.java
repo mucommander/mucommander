@@ -233,7 +233,7 @@ public class MoveJob extends ExtendedFileJob {
 					return false;
 				}
 				// Append to file (resume file copy)
-				else if (choice==FileExistsDialog.APPEND_ACTION) {
+				else if (choice==FileExistsDialog.RESUME_ACTION) {
 					append = true;
 				}
 				// Overwrite file 

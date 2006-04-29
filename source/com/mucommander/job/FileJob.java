@@ -377,11 +377,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 	 * Creates and returns a dialog which notifies the user that a file already exists in the destination folder
 	 * under the same name and asks for what to do.
 	 */
-    protected FileExistsDialog getFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile, boolean applyToAllOption) {
+    protected FileExistsDialog getFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
 		if(progressDialog==null)
-			return new FileExistsDialog(mainFrame, mainFrame, sourceFile, destFile, applyToAllOption);
+			return new FileExistsDialog(mainFrame, mainFrame, sourceFile, destFile, multipleFilesMode);
 		else
-			return new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile, applyToAllOption);
+			return new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile, multipleFilesMode);
 	}
 
 
