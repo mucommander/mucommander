@@ -42,7 +42,7 @@ public abstract class Archiver {
 	/** Tar archive compressed with Bzip2 format (many files format) */
 	public final static int TAR_BZ2_FORMAT = 5;
 
-	/** Boolean array describing whether a format supports many files or not */
+	/** Boolean array describing for each format if it can store more than one file */
 	private final static boolean SUPPORTS_MANY_FILES[] = {
 		true,
 		false,
@@ -91,8 +91,6 @@ public abstract class Archiver {
 	};
 	
 
-	/** OutputStream used by this Archiver to write the archive */
-	protected OutputStream outputStream;
 	/** Archive format of this Archiver */
 	protected int format;
 	/** Archive format's name of this Archiver */
@@ -100,12 +98,9 @@ public abstract class Archiver {
 	
 	
 	/**
-	 * Creates a new Archiver using the specified OutputStream to write the archive to.
-	 *
-	 * @param outputStream the OutputStream to write the archive to
+	 * Creates a new Archiver.
 	 */
-	Archiver(OutputStream outputStream) {	
-		this.outputStream = outputStream;
+	Archiver() {	
 	}
 	
 	
@@ -136,16 +131,29 @@ public abstract class Archiver {
 	 * Returns true if the format used by this Archiver can store more than one file.
 	 */
 	public boolean supportsManyFiles() {
-		return SUPPORTS_MANY_FILES[this.format];
+		return formatSupportsManyFiles(this.format);
 	}
 
 
 	/**
-	 * Closes the underlying OuputStream used by this Archiver to write the archive. This method
-	 * must be called when all entries have been added to the archive.
+	 * Returns true if the format used by this Archiver can store an optional comment.
 	 */
-	public void close() throws IOException {
-		this.outputStream.close();
+	public boolean supportsComment() {
+		return formatSupportsComment(this.format);
+	}
+
+
+	/**
+	 * Sets an optional comment in the archive, the {@link supportsComment() supportsComment} or
+	 * {@link formatSupportsComment(int) formatSupportsComment} must first be called to make sure
+	 * the archive format supports comment, otherwise calling this method will have no effect.
+	 *
+	 * <p>Implementation note: Archiver implementations must override this method
+	 *
+	 * @param comment the comment to be stored in the archive
+	 */
+	public void setComment(String comment) {
+		// No-op
 	}
 
 
@@ -177,7 +185,7 @@ public abstract class Archiver {
 	 * if the specified format is not valid. 
 	 *
 	 * @param outputStream the OutputStream the returned Archiver will use to write entries
-	 * @param 
+	 * @param format an archive format
 	 */
 	public static Archiver getArchiver(OutputStream outputStream, int format) throws IOException {
 		Archiver archiver;
@@ -196,10 +204,10 @@ public abstract class Archiver {
 				archiver = new TarArchiver(outputStream);
 				break;
 			case TAR_GZ_FORMAT:
-				archiver = new TarArchiver(outputStream);
+				archiver = new TarArchiver(new GZIPOutputStream(outputStream));
 				break;
 			case TAR_BZ2_FORMAT:
-				archiver = new TarArchiver(outputStream);
+				archiver = new TarArchiver(new CBZip2OutputStream(outputStream));
 				break;
 			
 			default:
@@ -217,6 +225,7 @@ public abstract class Archiver {
 	 * depending on the value of the specified boolean parameter. 
 	 *
 	 * @param manyFiles if true, a list many files formats (a subset of single file formats) will be returned
+	 * @param format an archive format
 	 */
 	public static int[] getFormats(boolean manyFiles) {
 		return manyFiles?MANY_FILES_FORMATS:SINGLE_FILE_FORMATS;
@@ -225,6 +234,8 @@ public abstract class Archiver {
 	
 	/**
 	 * Returns the name of the given archive format. The returned name can be used for display in a GUI.
+	 *
+	 * @param format an archive format
 	 */
 	public static String getFormatName(int format) {
 		return FORMAT_NAMES[format];
@@ -234,9 +245,31 @@ public abstract class Archiver {
 	/**
 	 * Returns the default archive format extension. Note: some formats such as Tar/Gzip have several common
 	 * extensions (e.g. tar.gz or tgz), the most common one will be returned.
+	 *
+	 * @param format an archive format	 
 	 */
 	public static String getFormatExtension(int format) {
 		return FORMAT_EXTENSIONS[format];
+	}
+	
+	
+	/**
+	 * Returns true if the specified archive format supports storage of more than one file.
+	 *
+	 * @param format an archive format
+	 */
+	public static boolean formatSupportsManyFiles(int format) {
+		return SUPPORTS_MANY_FILES[format];
+	}
+	
+	
+	/**
+	 * Returns true if the specified archive format can store an optional comment.
+	 *
+	 * @param format an archive format	 
+	 */
+	public static boolean formatSupportsComment(int format) {
+		return format==ZIP_FORMAT;
 	}
 	
 	
@@ -246,7 +279,7 @@ public abstract class Archiver {
 
 	/**
 	 * Creates a new entry in the archive with the given path. The specified file will be used to determine
-	 * whether the entry is a directory or a regular file, and the file's date will be used as the entry's date.
+	 * whether the entry is a directory or a regular file, and set the entry's length and date.
 	 * 
 	 * <p>If the entry is a regular file (not a directory), an OutputStream which can be used to write the contents
 	 * of the entry will be returned, <code>null</code> otherwise. The OutputStream <b>must not</b> be closed once
@@ -257,7 +290,7 @@ public abstract class Archiver {
 	 * Also in this case, this method must be invoked only once (single file), it will throw an IOException
 	 * if invoked more than once.
 	 *
-	 * @param entryPath the path to be used to create the entry in the archive. '/' means the archive's root.
+	 * @param entryPath the path to be used to create the entry in the archive.
 	 *	This parameter is simply ignored if the archive is a single file format.
 	 * @param file AbstractFile instance used to determine if the entry is a directory, and to set the entry's date.
 	 *	This parameter is simply ignored if the archive is a single file format.
@@ -266,4 +299,11 @@ public abstract class Archiver {
 	 * this method was called more than once.
 	 */
 	public abstract OutputStream createEntry(String entryPath, AbstractFile file) throws IOException;
+
+
+	/**
+	 * Closes the underlying OuputStream and ressources used by this Archiver to write the archive. This method
+	 * must be called when all entries have been added to the archive.
+	 */
+	public abstract void close() throws IOException;
 }

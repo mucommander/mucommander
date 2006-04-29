@@ -3016,6 +3016,22 @@ zip_dialog.comment:SI:Komentar (neobvezno)
 #zip_dialog.file_already_exists:SI:%1 že obstaja v ciljni mapi.
 
 
+###############
+# Pack dialog #
+###############
+
+pack_dialog.archive_format:EN:Archive format
+pack_dialog.archive_format:FR:Format de l'archive
+
+
+
+
+
+
+
+
+
+
 #######################
 # Add Bookmark dialog #
 #######################

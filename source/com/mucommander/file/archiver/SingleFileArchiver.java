@@ -14,10 +14,12 @@ import java.io.IOException;
  */
 class SingleFileArchiver extends Archiver {
 
-	private boolean createEntryCalled;
+	private OutputStream outputStream;
+	private boolean firstEntry = true;
+
 
 	protected SingleFileArchiver(OutputStream outputStream) {
-		super(outputStream);
+		this.outputStream = outputStream;
 	}
 
 
@@ -30,11 +32,16 @@ class SingleFileArchiver extends Archiver {
 	 * which should never be the case as this Archiver is only meant to store one file. 
 	 */
 	public OutputStream createEntry(String entryPath, AbstractFile file) throws IOException {
-		if(!createEntryCalled)
-			createEntryCalled = true;
+		if(firstEntry)
+			firstEntry = false;
 		else
 			throw new IOException();
 
 		return outputStream;
+	}
+	
+	
+	public void close() throws IOException {
+		outputStream.close();
 	}
 }

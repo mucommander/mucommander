@@ -258,7 +258,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		}
 		else if (source == zipItem) {
 			if(nbSelectedFiles>0)
-				new ZipDialog(mainFrame, files, false);
+				new PackDialog(mainFrame, files, false);
 		}
 		else if (source == unzipItem) {
 			if(nbSelectedFiles>0)

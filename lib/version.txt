@@ -1,0 +1,8 @@
+ant-bzip2.jar	-> from Ant 1.6.5 (compiled for Java 1.3)
+ant-tar.jar	-> from Ant 1.6.5 (compiled for Java 1.3)
+commons-logging.jar    -> Commons-logging ?
+commons-net.jar	       -> Commons-net 1.4.1
+j2ssh.jar	       -> J2SSH 0.2.7 (patched and compiled for Java 1.3)
+jakarta-oro.jar	       -> Jakarta Oro 2.0.8
+jcifs.jar	       -> jCIFS 1.2.8 (compiled for Java 1.3)
+muxml.jar	       -> muXML 1.0

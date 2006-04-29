@@ -1,3 +1,4 @@
+
 package com.mucommander.ui;
 
 import com.mucommander.ui.comp.dialog.*;
@@ -8,6 +9,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.file.FileToolkit;
+import com.mucommander.file.archiver.Archiver;
 
 import com.mucommander.job.ArchiveJob;
 
@@ -22,15 +24,20 @@ import javax.swing.*;
  *
  * @author Maxence Bernard
  */
-public class ZipDialog extends FocusDialog implements ActionListener {
+public class PackDialog extends FocusDialog implements ActionListener, ItemListener {
 
     private MainFrame mainFrame;
 
-    /** Files to zip */
+    /** Files to archive */
     private FileSet files;
 	
     private JTextField filePathField;
+	
+	private JComboBox formatsComboBox;
+	private int formats[];
+	
     private JTextArea commentArea;
+
     private JButton okButton;
     private JButton cancelButton;
 
@@ -41,7 +48,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 
 
-    public ZipDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
+    public PackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
         super(mainFrame, Translator.get("zip_dialog.title"), mainFrame);
 
         this.mainFrame = mainFrame;
@@ -70,8 +77,25 @@ public class ZipDialog extends FocusDialog implements ActionListener {
         mainPanel.add(filePathField);
 		
         mainPanel.addSpace(10);
+
+		// Archive formats combo box
+
+		JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		tempPanel.add(new JLabel(Translator.get("pack_dialog.archive_format")));		
+		this.formatsComboBox = new JComboBox();
+		this.formats = Archiver.getFormats(files.size()>1);
+		int nbFormats = formats.length;
+		for(int i=0; i<nbFormats; i++)
+			formatsComboBox.addItem(Archiver.getFormatName(formats[i]));
+		formatsComboBox.addItemListener(this);
+		tempPanel.add(formatsComboBox);
 		
-        label = new JLabel(Translator.get("zip_dialog.comment"));
+		mainPanel.add(tempPanel);		
+        mainPanel.addSpace(10);
+		
+        // Comment area, enabled only if selected archive format has comment support
+		
+		label = new JLabel(Translator.get("zip_dialog.comment"));
         mainPanel.add(label);
         commentArea = new JTextArea();
         commentArea.setRows(4);
@@ -85,7 +109,7 @@ public class ZipDialog extends FocusDialog implements ActionListener {
         cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
-        // text field will receive initial focus
+        // Text field will receive initial focus
         setInitialFocusComponent(filePathField);		
 		
         // Selects OK when enter is pressed
@@ -107,10 +131,10 @@ public class ZipDialog extends FocusDialog implements ActionListener {
         Object source = e.getSource();
 		
         if (source==okButton)  {
-            // Starts by disposing the dialog
+            // Start by disposing the dialog
             dispose();
 
-            // Checks that destination file can be resolved 
+            // Check that destination file can be resolved 
             String filePath = filePathField.getText();
             Object dest[] = FileToolkit.resolvePath(filePath, mainFrame.getLastActiveTable().getCurrentFolder());
             if (dest==null || dest[1]==null) {
@@ -125,9 +149,11 @@ public class ZipDialog extends FocusDialog implements ActionListener {
 
             AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
 
-            // Starts zipping
+            // Start zipping
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
-            ArchiveJob archiveJob = new ArchiveJob(progressDialog, mainFrame, files, commentArea.getText(), destFile);
+            int format = formats[formatsComboBox.getSelectedIndex()];
+			
+			ArchiveJob archiveJob = new ArchiveJob(progressDialog, mainFrame, files, destFile, format, Archiver.formatSupportsComment(format)?commentArea.getText():null);
             progressDialog.start(archiveJob);
         }
         else if (source==cancelButton)  {
@@ -136,4 +162,11 @@ public class ZipDialog extends FocusDialog implements ActionListener {
     }
 
 
+	//////////////////////////
+	// ItemListener methods //
+	//////////////////////////
+
+	public void itemStateChanged(ItemEvent e) {
+		commentArea.setEnabled(Archiver.formatSupportsComment(formats[formatsComboBox.getSelectedIndex()]));
+	}
 }

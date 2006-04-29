@@ -3,7 +3,7 @@ package com.mucommander.file;
 import java.io.*;
 import java.util.Vector;
 
-import com.ice.tar.TarInputStream;
+import org.apache.tools.tar.TarInputStream;
 import java.util.zip.GZIPInputStream;
 import org.apache.tools.bzip2.CBZip2InputStream;
 
@@ -62,7 +62,7 @@ public class TarArchiveFile extends AbstractArchiveFile {
 
 		// Load TAR entries
 		Vector entries = new Vector();
-		com.ice.tar.TarEntry entry;
+		org.apache.tools.tar.TarEntry entry;
 		while ((entry=tin.getNextEntry())!=null) {
 			entries.add(new TarEntry(entry));
 		}
@@ -74,7 +74,7 @@ public class TarArchiveFile extends AbstractArchiveFile {
 
 	InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
 		TarInputStream tin = createTarStream();
-		com.ice.tar.TarEntry tempEntry;
+		org.apache.tools.tar.TarEntry tempEntry;
 		String entryPath = entry.getPath();
 		while ((tempEntry=tin.getNextEntry())!=null) {
 			if (tempEntry.getName().equals(entryPath))

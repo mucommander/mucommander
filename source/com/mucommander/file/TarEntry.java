@@ -9,9 +9,9 @@ package com.mucommander.file;
  */
 class TarEntry extends ArchiveEntry {
 	
-	private com.ice.tar.TarEntry tarEntry;
+	private org.apache.tools.tar.TarEntry tarEntry;
 	
-	TarEntry(com.ice.tar.TarEntry tarEntry) {
+	TarEntry(org.apache.tools.tar.TarEntry tarEntry) {
 		super(tarEntry);
 		this.tarEntry = tarEntry;
 	}

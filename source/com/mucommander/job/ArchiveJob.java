@@ -22,7 +22,7 @@ public class ArchiveJob extends ExtendedFileJob {
 	/** Files to be archived */
     private FileSet files;
 	
-	/** Destination (zip) file */
+	/** Destination archive file */
 	private AbstractFile destFile;
 
 	/** Base destination folder's path */
@@ -30,9 +30,12 @@ public class ArchiveJob extends ExtendedFileJob {
 
 	/** Archiver instance that does the actual archiving */
 	private Archiver archiver;
+
+	/** Archive format */
+	private int archiveFormat;
 	
-	/** Optional zip comment */
-	private String zipComment;
+	/** Optional archive comment */
+	private String archiveComment;
 	
 //	/** Replace action's text */
 //	private String REPLACE_TEXT = Translator.get("replace");
@@ -40,19 +43,20 @@ public class ArchiveJob extends ExtendedFileJob {
 //	private int REPLACE_ACTION = 100;
 	
 
-    public ArchiveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, String zipComment, AbstractFile destFile) {
+    public ArchiveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFile, int archiveFormat, String archiveComment) {
         super(progressDialog, mainFrame, files);
 		
 		this.files = files;
 		this.destFile = destFile;
-		this.zipComment = zipComment;
+		this.archiveFormat = archiveFormat;
+		this.archiveComment = archiveComment;
 
 		this.baseFolderPath = baseSourceFolder.getAbsolutePath(false);
 	}
 
 	
 	/**
-	 * Overriden method to initialize zip output stream.
+	 * Overriden method to initialize the archiver and handle the case where the destination file already exists.
 	 */
 	protected void jobStarted() {
 		if (destFile.exists()) {
@@ -76,9 +80,8 @@ public class ArchiveJob extends ExtendedFileJob {
 		do {
 			try {
 				// Tries to open destination file and create Archiver
-				this.archiver = Archiver.getArchiver(destFile.getOutputStream(false), Archiver.ZIP_FORMAT);
-//				if(zipComment!=null && !zipComment.equals(""))
-//					zipOut.setComment(zipComment);
+				this.archiver = Archiver.getArchiver(destFile.getOutputStream(false), archiveFormat);
+				this.archiver.setComment(archiveComment);
 				break;
 			}
 			catch(Exception e) {
@@ -132,6 +135,11 @@ public class ArchiveJob extends ExtendedFileJob {
 				}
 			}
 			catch(IOException e) {
+				if(com.mucommander.Debug.ON) {
+					com.mucommander.Debug.trace("IOException caught:");
+					e.printStackTrace();
+				}
+				
 				int ret = showErrorDialog(Translator.get("zip_dialog.error_title"), Translator.get("zip.error_on_file", file.getAbsolutePath()));
 				// Retry loops
 				if(ret==RETRY_ACTION)
@@ -144,7 +152,7 @@ public class ArchiveJob extends ExtendedFileJob {
 
 	
 	/**
-	 * Overriden method to properly close zip output stream.
+	 * Overriden method to close the archiver.
 	 */
 	protected void jobStopped() {
 		// Try to close archiver

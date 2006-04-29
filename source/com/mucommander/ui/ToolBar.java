@@ -455,7 +455,7 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
 			}
 				
 			if (buttonIndex==ZIP_INDEX) {
-				new ZipDialog(mainFrame, files, e.isShiftDown());
+				new PackDialog(mainFrame, files, e.isShiftDown());
 			}
 			else if (buttonIndex==UNZIP_INDEX) {
 				new UnzipDialog(mainFrame, files, e.isShiftDown());
