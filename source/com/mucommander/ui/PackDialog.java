@@ -25,7 +25,8 @@ import javax.swing.*;
  * @author Maxence Bernard
  */
 public class PackDialog extends FocusDialog implements ActionListener, ItemListener {
-
+    /** Used to keep track of the last selected archive format. */
+    private int oldFormatIndex;
     private MainFrame mainFrame;
 
     /** Files to archive */
@@ -33,8 +34,8 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 	
     private JTextField filePathField;
 	
-	private JComboBox formatsComboBox;
-	private int formats[];
+    private JComboBox formatsComboBox;
+    private int formats[];
 	
     private JTextArea commentArea;
 
@@ -47,8 +48,8 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
     // Dialog's width has to be at most 320
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 
-	/** Last archive format used (Zip initially), selected by default when this dialog is created */
-	private static int lastFormat = Archiver.ZIP_FORMAT;
+    /** Last archive format used (Zip initially), selected by default when this dialog is created */
+    private static int lastFormat = Archiver.ZIP_FORMAT;
 
 
     public PackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
@@ -57,19 +58,20 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
         this.mainFrame = mainFrame;
         this.files = files;
 		
-		// Retrieve available formats for single file or many file archives
-		this.formats = Archiver.getFormats(files.size()>1 || (files.size()==1 && files.fileAt(0).isDirectory()));
-		int nbFormats = formats.length;
+        // Retrieve available formats for single file or many file archives
+        this.formats = Archiver.getFormats(files.size()>1);
+        int nbFormats = formats.length;
 
-		int initialFormat = formats[0];		// this value will only be used if last format is not available
-		int initialFormatIndex = 0;			// this value will only be used if last format is not available
-		for(int i=0; i<nbFormats; i++) {
-			if(formats[i]==lastFormat) {
-				initialFormat = formats[i];
-				initialFormatIndex = i;
-				break;
-			}
-		}
+        int initialFormat = formats[0];		// this value will only be used if last format is not available
+        int initialFormatIndex = 0;			// this value will only be used if last format is not available
+        for(int i=0; i<nbFormats; i++) {
+            if(formats[i]==lastFormat) {
+                initialFormat = formats[i];
+                initialFormatIndex = i;
+                break;
+            }
+        }
+        oldFormatIndex = initialFormat;
 		
         Container contentPane = getContentPane();
 		
@@ -100,25 +102,25 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 		
         mainPanel.addSpace(10);
 
-		// Archive formats combo box
+        // Archive formats combo box
 
-		JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		tempPanel.add(new JLabel(Translator.get("pack_dialog.archive_format")));		
-		this.formatsComboBox = new JComboBox();
-		for(int i=0; i<nbFormats; i++)
-			formatsComboBox.addItem(Archiver.getFormatName(formats[i]));
+        JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        tempPanel.add(new JLabel(Translator.get("pack_dialog.archive_format")));		
+        this.formatsComboBox = new JComboBox();
+        for(int i=0; i<nbFormats; i++)
+            formatsComboBox.addItem(Archiver.getFormatName(formats[i]));
 
-		formatsComboBox.setSelectedIndex(initialFormatIndex);
+        formatsComboBox.setSelectedIndex(initialFormatIndex);
 		
-		formatsComboBox.addItemListener(this);
-		tempPanel.add(formatsComboBox);
+        formatsComboBox.addItemListener(this);
+        tempPanel.add(formatsComboBox);
 		
-		mainPanel.add(tempPanel);		
+        mainPanel.add(tempPanel);		
         mainPanel.addSpace(10);
 		
         // Comment area, enabled only if selected archive format has comment support
 		
-		label = new JLabel(Translator.get("zip_dialog.comment"));
+        label = new JLabel(Translator.get("zip_dialog.comment"));
         mainPanel.add(label);
         commentArea = new JTextArea();
         commentArea.setRows(4);
@@ -175,25 +177,56 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
             // Start zipping
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
             int format = formats[formatsComboBox.getSelectedIndex()];
-			
-			ArchiveJob archiveJob = new ArchiveJob(progressDialog, mainFrame, files, destFile, format, Archiver.formatSupportsComment(format)?commentArea.getText():null);
+
+            ArchiveJob archiveJob = new ArchiveJob(progressDialog, mainFrame, files, destFile, format, Archiver.formatSupportsComment(format)?commentArea.getText():null);
             progressDialog.start(archiveJob);
         
-			// Remember last format used, for next time this dialog is invoked
-			lastFormat = format;
-		}
+            // Remember last format used, for next time this dialog is invoked
+            lastFormat = format;
+        }
         else if (source==cancelButton)  {
             // Simply dispose the dialog
-			dispose();			
+            dispose();			
         }
     }
 
 
-	//////////////////////////
-	// ItemListener methods //
-	//////////////////////////
+    //////////////////////////
+    // ItemListener methods //
+    //////////////////////////
 
-	public void itemStateChanged(ItemEvent e) {
-		commentArea.setEnabled(Archiver.formatSupportsComment(formats[formatsComboBox.getSelectedIndex()]));
-	}
+    public void itemStateChanged(ItemEvent e) {
+        int newFormatIndex;
+
+        // Updates the GUI if, and only if, the format selection has changed.
+        if(oldFormatIndex != (newFormatIndex = formatsComboBox.getSelectedIndex())) {
+            String fileName;  // Name of the destination archive file.
+
+            fileName = filePathField.getText();
+            if(fileName.endsWith("." + Archiver.getFormatExtension(oldFormatIndex))) {
+                int selectionStart;
+                int selectionEnd;
+
+                // Saves the old selection.
+                selectionStart = filePathField.getSelectionStart();
+                selectionEnd   = filePathField.getSelectionEnd();
+
+                // Computes the new file name.
+                fileName = fileName.substring(0, fileName.length() - Archiver.getFormatExtension(oldFormatIndex).length()) +
+                           Archiver.getFormatExtension(newFormatIndex);
+
+                // Makes sure that the selection stays somewhat coherent.
+                if(selectionEnd == filePathField.getText().length())
+                    selectionEnd = fileName.length();
+
+                // Resets the file path field.
+                filePathField.setText(fileName);
+                filePathField.setSelectionStart(selectionStart);
+                filePathField.setSelectionEnd(selectionEnd);
+            }
+
+            commentArea.setEnabled(Archiver.formatSupportsComment(formats[formatsComboBox.getSelectedIndex()]));
+            oldFormatIndex = newFormatIndex;
+        }
+    }
 }
