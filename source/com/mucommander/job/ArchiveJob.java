@@ -80,7 +80,7 @@ public class ArchiveJob extends ExtendedFileJob {
 		do {
 			try {
 				// Tries to open destination file and create Archiver
-				this.archiver = Archiver.getArchiver(destFile.getOutputStream(false), archiveFormat);
+				this.archiver = Archiver.getArchiver(getBufferedOutputStream(destFile.getOutputStream(false)), archiveFormat);
 				this.archiver.setComment(archiveComment);
 				break;
 			}

@@ -27,9 +27,12 @@ public abstract class ExtendedFileJob extends FileJob {
 	/** Read buffer */
 	protected byte buffer[];
 	
-	/** Size that should be allocated to read buffer */
+	/** Size allocated to read buffer */
 	protected final static int READ_BLOCK_SIZE = 8192;
 
+	/** Default buffer size for BufferedOutputStream */
+	protected final static int OUTPUT_BUFFER_SIZE = 8192;
+	
 	
 	/**
 	 * Creates a new ExtendedFileJob.
@@ -37,6 +40,14 @@ public abstract class ExtendedFileJob extends FileJob {
     public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files) {
         super(progressDialog, mainFrame, files);
     }
+
+	
+	/**
+	 * Returns a BufferedOutputStream using the given OutputStream, and initialized with a large enough buffer.
+	 */
+	protected BufferedOutputStream getBufferedOutputStream(OutputStream out) {
+		return new BufferedOutputStream(out, OUTPUT_BUFFER_SIZE);
+	}
 
 
 	/**
@@ -92,7 +103,7 @@ if(com.mucommander.Debug.ON) e1.printStackTrace();
 			}
 	
 			// Try to open OutputStream
-			try  { out = destFile.getOutputStream(append); }
+			try  { out = getBufferedOutputStream(destFile.getOutputStream(append)); }
 			catch(IOException e2) {
 if(com.mucommander.Debug.ON) e2.printStackTrace();
 				throw new FileJobException(FileJobException.CANNOT_OPEN_DESTINATION);
