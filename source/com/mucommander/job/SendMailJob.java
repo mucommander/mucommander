@@ -227,7 +227,7 @@ public class SendMailJob extends ExtendedFileJob {
 //        out.flush();
 		// We use DataInputStream's readLine method even though it's deprecated
 		// because we need the input stream to be an InputStream and not a Reader,
-		// and we cannot both a InputStream and a BufferedReader above since BufferedReader
+		// and we cannot use both an InputStream and a BufferedReader since BufferedReader
 		// is, well, buffered.
         s = in.readLine();
     }

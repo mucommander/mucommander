@@ -86,7 +86,7 @@ public class SplashScreen extends JWindow {
 					     screenSize.height/2 - height/2);
 
 		// Display the splash screen
-	    show();
+	    setVisible(true);
 	}
 
 

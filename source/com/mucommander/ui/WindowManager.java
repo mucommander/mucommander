@@ -222,7 +222,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 		newMainFrame.updateWindowTitle(nbFrames==1?-1:nbFrames);
 
 		// Make this new frame visible
-		newMainFrame.show();
+		newMainFrame.setVisible(true);
 		
 		return newMainFrame;
 	}

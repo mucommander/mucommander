@@ -204,7 +204,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 		}
 		
 		ViewerFrame frame = new ViewerFrame(mainFrame, file);
-		frame.show();
 	}
 	
 	
@@ -219,7 +218,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 		}
 
 		EditorFrame frame = new EditorFrame(mainFrame, file);
-		frame.show();
 	}
 	
 

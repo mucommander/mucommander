@@ -42,8 +42,6 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 		this.mainFrame = mainFrame;
 		this.file = file;
 		
-//		getContentPane().setLayout(new BorderLayout());
-		
 		// Create default menu
 		this.menuMnemonicHelper = new MnemonicHelper();
 		MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
@@ -61,6 +59,8 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		setResizable(true);
+
+		new Thread(ViewerFrame.this, "com.mucommander.ui.viewer.ViewerFrame's Thread").start();
 	}
 
 	protected JMenu addMenu(String menuTitle) {
@@ -95,11 +95,16 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 
 			// Sets panel to preferred size, without exceeding a maximum size and with a minumum size
 			pack();
-			super.show();
+//			super.show();
+			setVisible(true);
 		}
 		catch(Exception e) {
 			JOptionPane.showMessageDialog(mainFrame, Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"), JOptionPane.ERROR_MESSAGE);
-if(com.mucommander.Debug.ON) e.printStackTrace();
+
+			if(com.mucommander.Debug.ON) {
+				com.mucommander.Debug.trace("Exception caught:");
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -107,18 +112,14 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	private void setViewer(FileViewer viewer) {
 		this.viewer = viewer;
 	
-		//		setBackground(BG_COLOR);
 		JScrollPane scrollPane = new JScrollPane(viewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
 			public Insets getInsets() {
 				return new Insets(0, 0, 0, 0);
 			}
 		};
 		
-//		scrollPane.setBackground(BG_COLOR);
 		JViewport viewport = scrollPane.getViewport();
 		viewport.setBackground(FileViewer.BG_COLOR);
-//		viewport.setBorder(null);
-//		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		setContentPane(scrollPane);
 
 		// Catch Apple+W keystrokes under Mac OS X to close the window
@@ -145,11 +146,6 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 		DialogToolkit.fitToMinDimension(this, MIN_DIMENSION);
 	}
 	
-	
-	public void show() {
-		new Thread(this, "com.mucommander.ui.viewer.ViewerFrame's Thread").start();
-	}
-
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==closeItem)
