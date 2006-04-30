@@ -38,7 +38,7 @@ class ZipArchiver extends Archiver {
 	/////////////////////////////
 
 	public OutputStream createEntry(String entryPath, AbstractFile file) throws IOException {
-		// Start by closing the previous entry
+		// Start by closing current entry
 		if(!firstEntry)
 			zos.closeEntry();
 
@@ -48,7 +48,8 @@ class ZipArchiver extends Archiver {
 		ZipEntry entry = new ZipEntry(normalizePath(entryPath, isDirectory));
 		// Use provided file's size and date
 		entry.setTime(file.getDate());
-		entry.setSize(file.getSize());
+		if(!isDirectory)		// Do not set size if file is directory!
+			entry.setSize(file.getSize());
 		
 		// Add the entry
 		zos.putNextEntry(entry);
@@ -62,6 +63,7 @@ class ZipArchiver extends Archiver {
 
 
 	public void close() throws IOException {
+		// Close current entry
 		if(!firstEntry)
 			zos.closeEntry();
 		

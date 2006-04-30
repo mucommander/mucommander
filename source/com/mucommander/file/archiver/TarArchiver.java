@@ -22,6 +22,7 @@ class TarArchiver extends Archiver {
 
 	protected TarArchiver(OutputStream outputStream) {
 		this.tos = new TarOutputStream(outputStream);
+		// Specify how to handle files whose name is > 100 chars (default is to fail!)
 		this.tos.setLongFileMode(TarOutputStream.LONGFILE_GNU);
 	}
 
@@ -31,7 +32,7 @@ class TarArchiver extends Archiver {
 	/////////////////////////////
 
 	public OutputStream createEntry(String entryPath, AbstractFile file) throws IOException {
-		// Start by closing the previous entry
+		// Start by closing current entry
 		if(!firstEntry)
 			tos.closeEntry();
 
@@ -40,7 +41,7 @@ class TarArchiver extends Archiver {
 		// Create the entry
 		TarEntry entry = new TarEntry(normalizePath(entryPath, isDirectory));
 		// Use provided file's size (required by TarOutputStream) and date
-		if(!isDirectory)
+		if(!isDirectory)		// Do not set size if file is directory!
 			entry.setSize(file.getSize());
 		entry.setModTime(file.getDate());
 
@@ -58,6 +59,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating entry, name="
 
 
 	public void close() throws IOException {
+		// Close current entry
 		if(!firstEntry)
 			tos.closeEntry();
 		
