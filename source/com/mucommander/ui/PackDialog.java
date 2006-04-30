@@ -62,18 +62,23 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 
         FileTable activeTable = mainFrame.getUnactiveTable();
         String initialPath = (isShiftDown?"":activeTable.getCurrentFolder().getAbsolutePath(true));
-
+        String fileName;
         // Computes the archive's default name:
         // - if it only contains one file, uses that file's name.
         // - if it contains more than one file, uses the FileSet's parent folder's name.
         if(files.size() == 1)
-            initialPath += files.fileAt(0).getName();
+            fileName = files.fileAt(0).getNameWithoutExtension();
         else if(files.getBaseFolder().getParent() != null)
-            initialPath += files.getBaseFolder().getName();
+            fileName = files.getBaseFolder().getName();
+        else
+            fileName = "";
 
-        initialPath += ".zip";
-        filePathField = new JTextField(initialPath);
-        filePathField.setCaretPosition(initialPath.length()-4);
+        filePathField = new JTextField(initialPath + fileName + ".zip");
+
+        // Selects the file name.
+        filePathField.setSelectionStart(initialPath.length());
+        filePathField.setSelectionEnd(initialPath.length() + fileName.length());
+
         mainPanel.add(filePathField);
 		
         mainPanel.addSpace(10);
