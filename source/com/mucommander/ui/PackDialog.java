@@ -58,7 +58,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
         this.files = files;
 		
 		// Retrieve available formats for single file or many file archives
-		this.formats = Archiver.getFormats(files.size()>1);
+		this.formats = Archiver.getFormats(files.size()>1 || (files.size()==1 && files.fileAt(0).isDirectory()));
 		int nbFormats = formats.length;
 
 		int initialFormat = formats[0];		// this value will only be used if last format is not available
