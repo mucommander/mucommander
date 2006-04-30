@@ -47,12 +47,29 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
     // Dialog's width has to be at most 320
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
 
+	/** Last archive format used (Zip initially), selected by default when this dialog is created */
+	private static int lastFormat = Archiver.ZIP_FORMAT;
+
 
     public PackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
         super(mainFrame, Translator.get("zip_dialog.title"), mainFrame);
 
         this.mainFrame = mainFrame;
         this.files = files;
+		
+		// Retrieve available formats for single file or many file archives
+		this.formats = Archiver.getFormats(files.size()>1);
+		int nbFormats = formats.length;
+
+		int initialFormat = formats[0];		// this value will only be used if last format is not available
+		int initialFormatIndex = 0;			// this value will only be used if last format is not available
+		for(int i=0; i<nbFormats; i++) {
+			if(formats[i]==lastFormat) {
+				initialFormat = formats[i];
+				initialFormatIndex = i;
+				break;
+			}
+		}
 		
         Container contentPane = getContentPane();
 		
@@ -73,7 +90,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
         else
             fileName = "";
 
-        filePathField = new JTextField(initialPath + fileName + ".zip");
+        filePathField = new JTextField(initialPath + fileName + "." + Archiver.getFormatExtension(initialFormat));
 
         // Selects the file name.
         filePathField.setSelectionStart(initialPath.length());
@@ -88,10 +105,11 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 		JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		tempPanel.add(new JLabel(Translator.get("pack_dialog.archive_format")));		
 		this.formatsComboBox = new JComboBox();
-		this.formats = Archiver.getFormats(files.size()>1);
-		int nbFormats = formats.length;
 		for(int i=0; i<nbFormats; i++)
 			formatsComboBox.addItem(Archiver.getFormatName(formats[i]));
+
+		formatsComboBox.setSelectedIndex(initialFormatIndex);
+		
 		formatsComboBox.addItemListener(this);
 		tempPanel.add(formatsComboBox);
 		
@@ -160,9 +178,13 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 			
 			ArchiveJob archiveJob = new ArchiveJob(progressDialog, mainFrame, files, destFile, format, Archiver.formatSupportsComment(format)?commentArea.getText():null);
             progressDialog.start(archiveJob);
-        }
+        
+			// Remember last format used, for next time this dialog is invoked
+			lastFormat = format;
+		}
         else if (source==cancelButton)  {
-            dispose();			
+            // Simply dispose the dialog
+			dispose();			
         }
     }
 
