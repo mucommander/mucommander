@@ -95,7 +95,6 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 
 			// Sets panel to preferred size, without exceeding a maximum size and with a minumum size
 			pack();
-//			super.show();
 			setVisible(true);
 		}
 		catch(Exception e) {
