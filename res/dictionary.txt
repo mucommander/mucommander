@@ -907,6 +907,21 @@ view_menu:RU:Просмтор
 view_menu:ZH_CN:查看
 view_menu:SI:Pogled
 
+view_menu.change_current_location:EN:Change current location
+view_menu.change_current_location:FR:Changer le chemin courant
+
+
+
+
+
+
+
+
+
+
+
+
+
 view_menu.go_back:EN:Go back
 view_menu.go_back:FR:Dossier précédent
 view_menu.go_back:DE:Zurueck gehen
@@ -3545,6 +3560,32 @@ shortcuts_dialog.navigation.tab:RU:Переключение между лево�
 shortcuts_dialog.navigation.tab:ZH_CN:在左右面板间切换
 shortcuts_dialog.navigation.tab:SI:Preklopi med levo in desno stranjo
 
+shortcuts_dialog.navigation.change_current_location:EN:Change current folder's location
+shortcuts_dialog.navigation.change_current_location:FR:Changer le chemin du répertoire courant
+
+
+
+
+
+
+
+
+
+
+
+
+shortcuts_dialog.navigation.go_to_parent:EN:Go to parent folder
+shortcuts_dialog.navigation.go_to_parent:FR:Remonter au dossier parent
+shortcuts_dialog.navigation.go_to_parent:DE:Zum übergeordneten Ordner gehen
+shortcuts_dialog.navigation.go_to_parent:ES:Ir al directorio padre
+shortcuts_dialog.navigation.go_to_parent:CS:Složka nahoru
+shortcuts_dialog.navigation.go_to_parent:zh_TW:到上一層資料夾
+shortcuts_dialog.navigation.go_to_parent:PL:Idź do katalogu nadrzędnego
+shortcuts_dialog.navigation.go_to_parent:HU:Menjen a kezdeti könyvtárhoz
+shortcuts_dialog.navigation.go_to_parent:RU:Перейти к родительскому каталогу
+shortcuts_dialog.navigation.go_to_parent:ZH_CN:到父文件夹
+shortcuts_dialog.navigation.go_to_parent:SI:Izvorna mapa
+
 shortcuts_dialog.navigation.enter:EN:Enter folder / Enter archive / Execute
 shortcuts_dialog.navigation.enter:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
 shortcuts_dialog.navigation.enter:DE:Ordner öffnen / Archiv öffnen / Ausführen
@@ -3604,18 +3645,6 @@ shortcuts_dialog.view:HU:megtekint
 shortcuts_dialog.view:RU:Просмотр
 shortcuts_dialog.view:ZH_CN:查看
 shortcuts_dialog.view:SI:Pogled
-
-shortcuts_dialog.view.go_to_parent:EN:Go to parent folder
-shortcuts_dialog.view.go_to_parent:FR:Remonter au dossier parent
-shortcuts_dialog.view.go_to_parent:DE:Zum übergeordneten Ordner gehen
-shortcuts_dialog.view.go_to_parent:ES:Ir al directorio padre
-shortcuts_dialog.view.go_to_parent:CS:Složka nahoru
-shortcuts_dialog.view.go_to_parent:zh_TW:到上一層資料夾
-shortcuts_dialog.view.go_to_parent:PL:Idź do katalogu nadrzędnego
-shortcuts_dialog.view.go_to_parent:HU:Menjen a kezdeti könyvtárhoz
-shortcuts_dialog.view.go_to_parent:RU:Перейти к родительскому каталогу
-shortcuts_dialog.view.go_to_parent:ZH_CN:到父文件夹
-shortcuts_dialog.view.go_to_parent:SI:Izvorna mapa
 
 shortcuts_dialog.view.go_back:EN:Go to previous folder
 shortcuts_dialog.view.go_back:FR:Aller au dossier précédent

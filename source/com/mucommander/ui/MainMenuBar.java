@@ -63,17 +63,18 @@ public class MainMenuBar extends JMenuBar implements LocationListener, TableChan
 	
 	// View menu
 	private JMenu viewMenu;
+	private JMenuItem changeFolderItem;
+	private JMenuItem goBackItem;
+	private JMenuItem goForwardItem;
+	private JMenuItem goToParentItem;
+	private JMenuItem swapFoldersItem;
+	private JMenuItem setSameFolderItem;
 	private JCheckBoxMenuItem sortByNameItem;
 	private JCheckBoxMenuItem sortBySizeItem;
 	private JCheckBoxMenuItem sortByDateItem;
 	private JCheckBoxMenuItem sortByExtensionItem;
 	private JMenuItem reverseOrderItem;
 	private JCheckBoxMenuItem autoSizeColumnsItem;
-	private JMenuItem goBackItem;
-	private JMenuItem goForwardItem;
-	private JMenuItem goToParentItem;
-	private JMenuItem swapFoldersItem;
-	private JMenuItem setSameFolderItem;
 
 	// Bookmark menu
 	private JMenu bookmarksMenu;
@@ -155,6 +156,7 @@ public class MainMenuBar extends JMenuBar implements LocationListener, TableChan
 		goBackItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_back"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK), this);
 		goForwardItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_forward"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK), this);
 		goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
+		changeFolderItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.change_current_location"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK), this);
 		viewMenu.add(new JSeparator());
 		sortByNameItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_name"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK), this);
 		sortByDateItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_date"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.CTRL_MASK), this);
@@ -366,6 +368,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 			mainFrame.compareDirectories();	
 		}
 		// View menu
+		else if (source == changeFolderItem) {
+			mainFrame.getLastActiveTable().getFolderPanel().changeFolder();	
+		}
 		else if (source == goBackItem) {
 			mainFrame.getLastActiveTable().getFolderPanel().goBack();	
 		}

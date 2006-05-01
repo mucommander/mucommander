@@ -582,6 +582,17 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 		driveButton.popup();
 	}
 	
+	
+	/**
+	 * Allows the user to easily change the current folder and type a new one: requests focus 
+	 * on the location field and selects the folder string.
+	 */
+	public void changeFolder() {
+		locationField.setSelectionStart(0);
+		locationField.setSelectionEnd(locationField.getText().length());
+		locationField.requestFocus();
+	}
+	
 
 	/**
 	 * Returns the folder that is currently being displayed by this FolderPanel.
