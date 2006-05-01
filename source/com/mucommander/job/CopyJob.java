@@ -58,6 +58,11 @@ public class CopyJob extends ExtendedFileJob {
 		this.mode = mode;
 		this.defaultFileExistsAction = fileExistsAction;
 		this.errorDialogTitle = Translator.get(mode==UNZIP_MODE?"unzip_dialog.error_title":mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
+
+		// If this job correponds to a 'local copy' of a single file and in the same directory, 
+		// select the copied file in the active table after this job has finished (and hasn't been cancelled)
+		if(files.size()==1 && newName!=null && destFolder.equals(files.fileAt(0).getParent()))
+			selectFileAfter(AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+newName));
 	}
 
 	

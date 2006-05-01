@@ -78,6 +78,9 @@ public abstract class FileJob implements Runnable {
 	/** If set to true, processed files will be unmarked from current table */
 	private boolean autoUnmark = true;
 	
+	/** File to be selected after job has finished (can be null if not set) */
+	private AbstractFile fileToSelect;
+	
 	
 	protected final static int SKIP_ACTION = 0;
 	protected final static int RETRY_ACTION = 1;
@@ -114,7 +117,6 @@ public abstract class FileJob implements Runnable {
 	    this.files = files;
 		
         this.nbFiles = files.size();
-//		this.baseSourceFolder = ((AbstractFile)files.elementAt(0)).getParent();
 		this.baseSourceFolder = files.getBaseFolder();
 	}
 	
@@ -124,6 +126,16 @@ public abstract class FileJob implements Runnable {
 	 */
 	public void setAutoUnmark(boolean autoUnmark) {
 		this.autoUnmark = autoUnmark;
+	}
+	
+	
+	/**
+	 * Sets the given file to be selected in the active table after this job has finished.
+	 * The file will only be selected if it exists in the active table's folder and if this job hasn't
+	 * been cancelled. The selection will occur after the tables have been refreshed (if they are refreshed).
+	 */
+	public void selectFileAfter(AbstractFile file) {
+		this.fileToSelect = file;
 	}
 	
 	
@@ -224,7 +236,7 @@ public abstract class FileJob implements Runnable {
 	 * The method implementation here does nothing but it can be overriden by subclasses to perform some first-time initializations.
 	 */
 	protected void jobStarted() {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 	}
 	
 
@@ -238,7 +250,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 	 * <p>Note that this method will NOT be called if a call to {@link #stop() stop()} was made before all files were processed.</p>
 	 */
 	protected void jobCompleted() {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 	}
 	
 	
@@ -252,7 +264,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 	 * files were processed) or has been interrupted in the middle.</p>
 	 */
 	protected void jobStopped() {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 	}
 	
 	
@@ -290,8 +302,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 			}
         }
 
+
+		boolean jobInterrupted = isInterrupted();
+
 		// If this job hasn't already been stopped, call stop()
-		if(!isInterrupted()) {
+		if(!jobInterrupted) {
 			// Stop job
 			stop();
 		}
@@ -302,6 +317,11 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
         // Refresh tables's current folders, based on the job's refresh policy.
 		refreshTables();
+		
+		// Select file specified by selectFileAfter (if any) only if job hasn't been interrupted
+		// and file exists in the active table's folder
+		if(fileToSelect!=null && !jobInterrupted && activeTable.getCurrentFolder().equals(fileToSelect.getParent()) && fileToSelect.exists())
+			activeTable.selectFile(fileToSelect);
 	}
 
 	
@@ -315,13 +335,6 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 		String actionTexts[] = new String[]{SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT};
 		int actionValues[] = new int[]{SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION};
 		
-/*
-		int userChoice = showErrorDialog(title, message, actionTexts, actionValues);
-		if(userChoice==-1 || userChoice==CANCEL_ACTION)
-			stop();
-		
-		return userChoice;
-*/
 		return showErrorDialog(title, message, actionTexts, actionValues);
 	}
 

@@ -389,36 +389,36 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 		int fileIndex;
 		String tempFileName;
 		for(int i=0; i<nbFiles1; i++) {
-			tempFile = tableModel1.getFile(i);
+			tempFile = tableModel1.getFileAt(i);
 			if(tempFile.isDirectory())
 				continue;
 			
 			tempFileName = tempFile.getName();
             fileIndex = -1;
 			for(int j=0; j<nbFiles2; j++)
-				if (tableModel2.getFile(j).getName().equals(tempFileName)) {
+				if (tableModel2.getFileAt(j).getName().equals(tempFileName)) {
                     fileIndex = j;
 					break;
 				}
-			if (fileIndex==-1 || tableModel2.getFile(fileIndex).getDate()<tempFile.getDate()) {
+			if (fileIndex==-1 || tableModel2.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
 				tableModel1.setFileMarked(tempFile, true);
 				table1.repaint();
 			}
 		}
 
 		for(int i=0; i<nbFiles2; i++) {
-			tempFile = tableModel2.getFile(i);
+			tempFile = tableModel2.getFileAt(i);
 			if(tempFile.isDirectory())
 				continue;
 
 			tempFileName = tempFile.getName();
             fileIndex = -1;
 			for(int j=0; j<nbFiles1; j++)
-				if (tableModel1.getFile(j).getName().equals(tempFileName)) {
+				if (tableModel1.getFileAt(j).getName().equals(tempFileName)) {
                     fileIndex = j;
 					break;
 				}
-			if (fileIndex==-1 || tableModel1.getFile(fileIndex).getDate()<tempFile.getDate()) {
+			if (fileIndex==-1 || tableModel1.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
 				tableModel2.setFileMarked(tempFile, true);
 				table2.repaint();
 			}
