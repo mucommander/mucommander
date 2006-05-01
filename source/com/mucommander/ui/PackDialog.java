@@ -25,8 +25,7 @@ import javax.swing.*;
  * @author Maxence Bernard
  */
 public class PackDialog extends FocusDialog implements ActionListener, ItemListener {
-    /** Used to keep track of the last selected archive format. */
-    private int oldFormatIndex;
+
     private MainFrame mainFrame;
 
     /** Files to archive */
@@ -41,6 +40,9 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 
     private JButton okButton;
     private JButton cancelButton;
+
+    /** Used to keep track of the last selected archive format. */
+    private int oldFormatIndex;
 
     // Dialog's width has to be at least 240
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
@@ -59,7 +61,8 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
         this.files = files;
 		
         // Retrieve available formats for single file or many file archives
-        this.formats = Archiver.getFormats(files.size()>1);
+        int nbFiles = files.size();
+		this.formats = Archiver.getFormats(nbFiles>1 || (nbFiles>0 && files.fileAt(0).isDirectory()));
         int nbFormats = formats.length;
 
         int initialFormat = formats[0];		// this value will only be used if last format is not available
@@ -199,11 +202,10 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
         int newFormatIndex;
 
         // Updates the GUI if, and only if, the format selection has changed.
-        if(oldFormatIndex != (newFormatIndex = formatsComboBox.getSelectedIndex())) {
-            String fileName;  // Name of the destination archive file.
-
-            fileName = filePathField.getText();
-            if(fileName.endsWith("." + Archiver.getFormatExtension(oldFormatIndex))) {
+		if(oldFormatIndex != (newFormatIndex = formatsComboBox.getSelectedIndex())) {
+            String fileName = filePathField.getText();  // Name of the destination archive file.
+			String oldFormatExtension = Archiver.getFormatExtension(formats[oldFormatIndex]);	// Old/current format's extension
+            if(fileName.endsWith("." + oldFormatExtension)) {
                 int selectionStart;
                 int selectionEnd;
 
@@ -212,8 +214,8 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
                 selectionEnd   = filePathField.getSelectionEnd();
 
                 // Computes the new file name.
-                fileName = fileName.substring(0, fileName.length() - Archiver.getFormatExtension(oldFormatIndex).length()) +
-                           Archiver.getFormatExtension(newFormatIndex);
+                fileName = fileName.substring(0, fileName.length() - oldFormatExtension.length()) +
+                           Archiver.getFormatExtension(formats[newFormatIndex]);
 
                 // Makes sure that the selection stays somewhat coherent.
                 if(selectionEnd == filePathField.getText().length())
@@ -223,10 +225,13 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
                 filePathField.setText(fileName);
                 filePathField.setSelectionStart(selectionStart);
                 filePathField.setSelectionEnd(selectionEnd);
-            }
+			}
 
             commentArea.setEnabled(Archiver.formatSupportsComment(formats[formatsComboBox.getSelectedIndex()]));
             oldFormatIndex = newFormatIndex;
         }
+
+		// Transfer focus back to the text field 
+		filePathField.requestFocus();
     }
 }
