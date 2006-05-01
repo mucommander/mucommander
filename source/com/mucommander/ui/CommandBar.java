@@ -322,8 +322,11 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 			// Move/Rename button
 			else if(source == buttons[MOVE_INDEX]) {
 				// Trigger in-table renaming if shift down and only one file is selected (not marked)
-				if(shiftDown && files.size()==1 && files.elementAt(0).equals(activeTable.getSelectedFile()))
+				if(shiftDown && files.size()==1 && files.elementAt(0).equals(activeTable.getSelectedFile())) {
 					activeTable.editCurrentFilename();
+					// Disable shift mode as it has no other way of being disabled
+					setShiftMode(false);
+				}
 				// Show up move dialog
 				else
 					new MoveDialog(mainFrame, files, shiftDown);

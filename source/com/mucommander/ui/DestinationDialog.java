@@ -105,7 +105,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
         // Selects OK when enter is pressed
         getRootPane().setDefaultButton(okButton);
 
-		// Checkbox that allows the user to choose the default action when a file exists
+		// Checkbox that allows the user to choose the default action when a file already exists in destination
 		mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")));
 		fileExistsActionComboBox = new JComboBox();
 		fileExistsActionComboBox.addItem(Translator.get("ask"));
