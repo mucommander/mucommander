@@ -991,7 +991,7 @@ view_menu.sort_by_extension:RU:Сортировать по расширению
 view_menu.sort_by_extension:ZH_CN:按类型排序
 view_menu.sort_by_extension:SI:Razvrsti po podaljšku
 
-view_menu.reverse_order:EN:Reverse order
+view_menu.reverse_order:EN:Invert order
 view_menu.reverse_order:FR:Inverser l'ordre
 view_menu.reverse_order:DE:Sortierung umdrehen
 view_menu.reverse_order:ES:Invertir el orden

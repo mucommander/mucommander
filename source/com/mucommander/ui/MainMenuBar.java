@@ -36,7 +36,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class MainMenuBar extends JMenuBar implements ActionListener, MenuListener {
+public class MainMenuBar extends JMenuBar implements LocationListener, TableChangeListener, ActionListener, MenuListener {
 	private MainFrame mainFrame;	
 	
 	// File menu
@@ -122,8 +122,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		fileMenu.add(new JSeparator());
         propertiesItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.properties"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.ALT_MASK), this);
 
-		fileMenu.add(new JSeparator());
-		preferencesItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.preferences"), menuItemMnemonicHelper, null, this);
+		// Under Mac OS X, 'Preferences' already appears in the application (muCommander) menu, do not display it again
+		if(PlatformManager.getOSFamily()!=PlatformManager.MAC_OS_X) {
+			fileMenu.add(new JSeparator());
+			preferencesItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.preferences"), menuItemMnemonicHelper, null, this);
+		}
+
 		checkForUpdatesItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.check_for_updates"), menuItemMnemonicHelper, null, this);
 		
 		fileMenu.add(new JSeparator());
@@ -150,7 +154,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
 		goBackItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_back"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK), this);
 		goForwardItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_forward"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK), this);
-		goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, null, this);
+		goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
 		viewMenu.add(new JSeparator());
 		sortByNameItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_name"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK), this);
 		sortByDateItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_date"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.CTRL_MASK), this);
@@ -169,7 +173,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		setSameFolderItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.set_same_folder"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK), this);
 
 		viewMenu.add(new JSeparator());
-		// Auto column sizing
 		autoSizeColumnsItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.auto_size_columns"), menuItemMnemonicHelper, null, this);
 
 		viewMenu.add(new JSeparator());
@@ -210,23 +213,85 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 			donateItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.donate"), menuItemMnemonicHelper, null, this);
 		}
 		
-		// 'About' in Mac OS X already appears in the app menu, no need to add it again
+		// Under Mac OS X, 'About' already appears in the application (muCommander) menu, do not display it again
 		if(PlatformManager.getOSFamily()!=PlatformManager.MAC_OS_X) {
 			helpMenu.add(new JSeparator());
 			aboutItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.about"), menuItemMnemonicHelper, null, this);		
 		}
 		
 		add(helpMenu);
+		
+		// Set initial enabled state of contextual menu items 
+		toggleContextualMenuItems(mainFrame.getLastActiveTable().getFolderPanel());
+		
+		// Listen to location and table change events to change the state of contextual menu items
+		// when current folder or active table has changed
+		mainFrame.getFolderPanel1().addLocationListener(this);
+		mainFrame.getFolderPanel2().addLocationListener(this);
+		mainFrame.addTableChangeListener(this);
 	}
 	
-	public MainFrame getMainFrame() {
-		return mainFrame;
-	}
-	
+
+	/**
+	 * Returns the 'Window' JMenu instance.
+	 */
 	public JMenu getWindowMenu() {
-		return windowMenu;	
+		return windowMenu;
 	}
 
+
+	/**
+	 * Enables/disables contextual menu items.
+	 *
+	 * @param folderPanel currently active FolderPanel instance 
+	 */
+	private void toggleContextualMenuItems(FolderPanel folderPanel) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+
+		FileTable fileTable = folderPanel.getFileTable();
+			
+		// disable certain menu items if no file is selected
+		boolean filesSelected = fileTable.getSelectedFiles().size()!=0;
+		propertiesItem.setEnabled(filesSelected);
+		zipItem.setEnabled(filesSelected);
+		unzipItem.setEnabled(filesSelected);
+		emailFilesItem.setEnabled(filesSelected);
+
+		goBackItem.setEnabled(folderPanel.hasBackFolder());
+		goForwardItem.setEnabled(folderPanel.hasForwardFolder());
+		goToParentItem.setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
+	}
+
+
+	/////////////////////////////////
+	// TableChangeListener methods //
+	/////////////////////////////////
+	
+	public void tableChanged(FolderPanel folderPanel) {
+		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+
+		// Toggle contextual menu items on/off to reflect current table's folder
+		toggleContextualMenuItems(folderPanel);
+	}
+	
+
+	//////////////////////////////
+	// LocationListener methods //
+	//////////////////////////////
+	
+	public void locationChanged(LocationEvent e) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+
+		// Toggle contextual menu items on/off to reflect new folder's location
+		toggleContextualMenuItems(e.getFolderPanel());
+	}
+
+	public void locationChanging(LocationEvent e) {
+	}
+	
+	public void locationCancelled(LocationEvent e) {
+	}
+	
 
 	///////////////////////////
 	// ActionListener method //
@@ -237,18 +302,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		if(mainFrame.getNoEventsMode())
 			return;
 
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+		
 		Object source = e.getSource();
 
-		// Some actions need to work on selected files
-		FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
-		int nbSelectedFiles = files.size();
-		
 		// File menu
 		if (source == newWindowItem) {
 			WindowManager.getInstance().createNewMainFrame();
-		}
-		else if (source == propertiesItem) {
-			mainFrame.showPropertiesDialog();
 		}
 		else if (source == serverConnectItem) {
 			mainFrame.showServerConnectDialog();
@@ -256,17 +316,26 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		else if (source == runItem) {
 			new RunDialog(mainFrame);
 		}
-		else if (source == zipItem) {
-			if(nbSelectedFiles>0)
-				new PackDialog(mainFrame, files, false);
+		else if (source==zipItem || source==unzipItem || source==emailFilesItem) {
+			// This actions need to work on selected files
+			FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
+			int nbSelectedFiles = files.size();
+		
+			if (source == zipItem) {
+				if(nbSelectedFiles>0)
+					new PackDialog(mainFrame, files, false);
+			}
+			else if (source == unzipItem) {
+				if(nbSelectedFiles>0)
+					new UnzipDialog(mainFrame, files, false);
+			}
+			else {
+				if(nbSelectedFiles>0)
+					new EmailFilesDialog(mainFrame, files);
+			}
 		}
-		else if (source == unzipItem) {
-			if(nbSelectedFiles>0)
-				new UnzipDialog(mainFrame, files, false);
-		}
-        else if  (source == emailFilesItem) {
-			if(nbSelectedFiles>0)
-				new EmailFilesDialog(mainFrame, files);
+		else if (source == propertiesItem) {
+			mainFrame.showPropertiesDialog();
 		}
 		else if (source == preferencesItem) {
 			mainFrame.showPreferencesDialog();
@@ -378,21 +447,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
 	public void menuSelected(MenuEvent e) {
 	 	Object source = e.getSource();
-		if (source==fileMenu) {
-			boolean filesSelected = mainFrame.getLastActiveTable().getSelectedFiles().size()!=0;
-			
-			// disable menu items if no file is selected
-			propertiesItem.setEnabled(filesSelected);
-			zipItem.setEnabled(filesSelected);
-			unzipItem.setEnabled(filesSelected);
-			emailFilesItem.setEnabled(filesSelected);
-		}
-		else if(source==viewMenu) {
+		if(source==viewMenu) {
 			FileTable activeTable = mainFrame.getLastActiveTable();
-			FolderPanel folderPanel = activeTable.getFolderPanel();
-			goBackItem.setEnabled(folderPanel.hasBackFolder());
-			goForwardItem.setEnabled(folderPanel.hasForwardFolder());
-			goToParentItem.setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
 
 			// Toggle current sort by menu item
 			int criteria = activeTable.getSortByCriteria();
@@ -414,7 +470,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 			showToolbarItem.setText(mainFrame.isToolbarVisible()?Translator.get("view_menu.hide_toolbar"):Translator.get("view_menu.show_toolbar"));
 			showCommandBarItem.setText(mainFrame.isCommandBarVisible()?Translator.get("view_menu.hide_command_bar"):Translator.get("view_menu.show_command_bar"));
 			showStatusBarItem.setText(mainFrame.isStatusBarVisible()?Translator.get("view_menu.hide_status_bar"):Translator.get("view_menu.show_status_bar"));
-			autoSizeColumnsItem.setSelected(mainFrame.getLastActiveTable().getAutoSizeColumns());
+			autoSizeColumnsItem.setSelected(activeTable.getAutoSizeColumns());
 		}
 		else if(source==bookmarksMenu) {
 			if(this.bookmarkMenuItems != null) {
