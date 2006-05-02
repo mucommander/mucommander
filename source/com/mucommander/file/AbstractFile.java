@@ -317,10 +317,10 @@ if(com.mucommander.Debug.ON) e.printStackTrace();
 	
 	
 	/**
-	 * Returns a String representation of this AbstractFile which is the name as returned by getName().
+	 * Returns a String representation of this AbstractFile which is the path as returned by getAbsolutePath().
 	 */
 	public String toString() {
-		return getName();
+		return getAbsolutePath();
 	}
 	
 	

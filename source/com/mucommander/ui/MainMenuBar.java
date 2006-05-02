@@ -270,7 +270,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 	/////////////////////////////////
 	
 	public void tableChanged(FolderPanel folderPanel) {
-		if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
 		// Toggle contextual menu items on/off to reflect current table's folder
 		toggleContextualMenuItems(folderPanel);

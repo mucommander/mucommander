@@ -27,7 +27,7 @@ import java.util.*;
  *
  * @author Maxence Bernard
  */
-public class FolderPanel extends JPanel implements ActionListener, KeyListener, FocusListener, ConfigurationListener {
+public class FolderPanel extends JPanel implements FocusListener, ConfigurationListener {
 	
 	private MainFrame mainFrame;
 
@@ -37,7 +37,6 @@ public class FolderPanel extends JPanel implements ActionListener, KeyListener, 
     /** Contains all registered location listeners, stored as weak references */
     private WeakHashMap locationListeners = new WeakHashMap();
 	
-	private XBoxPanel locationPanel;
 	/*  We're NOT using JComboBox anymore because of its strange behavior: 
 		it calls actionPerformed() each time an item is highlighted with the arrow (UP/DOWN) keys,
 		so there is no way to tell if it's the final selection (ENTER) or not.
@@ -456,19 +455,25 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restor
 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initialFolder);
         this.mainFrame = mainFrame;
 
-		this.locationPanel = new XBoxPanel();
-		locationPanel.setInsets(new Insets(0, 6, 6, 0));
+		JPanel locationPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridy = 0;
 
 		// Create and add drive button
 		this.driveButton = new DriveButton(this);
-		locationPanel.add(driveButton);
-		locationPanel.addSpace(6);
+		c.weightx = 0;
+		c.gridx = 0;
+		locationPanel.add(driveButton, c);
 
-		locationField = new ProgressTextField(0, new Color(0, 255, 255, 64));
-		locationField.addActionListener(this);
-		locationField.addKeyListener(this);
+		// Create location combo box and retrieve location field instance
+		LocationComboBox locationComboBox = new LocationComboBox(this);
+		this.locationField = locationComboBox.getLocationField();
 		locationField.addFocusListener(this);
-		locationPanel.add(locationField);
+		// Give location field all the remaining space
+		c.weightx = 1;
+		c.gridx = 1;
+		locationPanel.add(locationComboBox, c);
 
 		add(locationPanel, BorderLayout.NORTH);
 		
@@ -901,45 +906,7 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initi
 			((LocationListener)iterator.next()).locationChanging(new LocationEvent(this));
 	}
 
-	////////////////////////////
-	// ActionListener methods //
-	////////////////////////////
-	
-	public void actionPerformed(ActionEvent e) {
-		// Discard action events while in 'no events mode'
-		if(mainFrame.getNoEventsMode())
-			return;
 
-		Object source = e.getSource();
-
-		if (source == locationField) {
-			String location = locationField.getText();
-			
-			trySetCurrentFolder(location, true);
-		}
-	}
-
-	/////////////////////////
-	// KeyListener methods //
-	/////////////////////////
-
-	public void keyPressed(KeyEvent e) {
-		if (e.getSource()==locationField) {
-			// Restore current location string if ESC was pressed
-			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				locationField.setText(currentFolder.getAbsolutePath());
-				fileTable.requestFocus();
-			}
-		}
-	}
-
-	public void keyTyped(KeyEvent e) {
-	}
-
-	public void keyReleased(KeyEvent e) {
-	}
-
-	 
 	///////////////////////////
 	// FocusListener methods //
 	///////////////////////////
