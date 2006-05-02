@@ -9,30 +9,30 @@ package com.mucommander.file;
  */
 class ZipEntry extends ArchiveEntry {
 	
-	private java.util.zip.ZipEntry zipEntry;
+    private java.util.zip.ZipEntry zipEntry;
 	
-	ZipEntry(java.util.zip.ZipEntry zipEntry) {
-		super(zipEntry);
-		this.zipEntry = zipEntry;
-	}
+    ZipEntry(java.util.zip.ZipEntry zipEntry) {
+        super(zipEntry);
+        this.zipEntry = zipEntry;
+    }
 	
-	/////////////////////////////////////
-	// Abstract methods implementation //
-	/////////////////////////////////////
+    /////////////////////////////////////
+    // Abstract methods implementation //
+    /////////////////////////////////////
 		
-	String getPath() {
-		return zipEntry.getName();
-	}
+    String getPath() {
+        return zipEntry.getName();
+    }
 	
-	long getDate() {
-		return zipEntry.getTime();
-	}
+    long getDate() {
+        return zipEntry.getTime();
+    }
 	
-	long getSize() {
-		return zipEntry.getSize();
-	}
+    long getSize() {
+        return zipEntry.getSize();
+    }
 
-	boolean isDirectory() {
-		return zipEntry.isDirectory();
-	}
+    boolean isDirectory() {
+        return zipEntry.isDirectory();
+    }
 }

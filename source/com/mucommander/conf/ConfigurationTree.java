@@ -107,19 +107,19 @@ class ConfigurationTree {
     public boolean setLeaf(String name, String value) {
         ConfigurationLeaf leaf;
 
-//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, name="+name+" value="+value);
+        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, name="+name+" value="+value);
 
         leaf = getLeafInstance(name);
-//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("leaf="+leaf);
+        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("leaf="+leaf);
         if(leaf == null) {
-			if(value==null || value.trim().equals(""))
-				return false;
-			leafs.add(new ConfigurationLeaf(name, value));
-			return true;
+            if(value==null || value.trim().equals(""))
+                return false;
+            leafs.add(new ConfigurationLeaf(name, value));
+            return true;
         }
         else {
             if(value==null) {
-//if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("removing leaf");
+                //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("removing leaf");
                 leafs.remove(leaf);
                 return true;
             }

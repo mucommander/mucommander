@@ -17,56 +17,56 @@ import java.io.IOException;
  */
 class ZipArchiver extends Archiver {
 
-	private ZipOutputStream zos;
-	private boolean firstEntry = true;
+    private ZipOutputStream zos;
+    private boolean firstEntry = true;
 	
-	protected ZipArchiver(OutputStream outputStream) {
-		this.zos = new ZipOutputStream(outputStream);
-	}
+    protected ZipArchiver(OutputStream outputStream) {
+        this.zos = new ZipOutputStream(outputStream);
+    }
 
 
-	/**
-	 * Overrides Archiver's no-op setComment method as Zip supports archive comment.
-	 */
-	public void setComment(String comment) {
-		zos.setComment(comment);
-	} 
+    /**
+     * Overrides Archiver's no-op setComment method as Zip supports archive comment.
+     */
+    public void setComment(String comment) {
+        zos.setComment(comment);
+    } 
 	
 
-	/////////////////////////////
-	// Archiver implementation //
-	/////////////////////////////
+    /////////////////////////////
+    // Archiver implementation //
+    /////////////////////////////
 
-	public OutputStream createEntry(String entryPath, AbstractFile file) throws IOException {
-		// Start by closing current entry
-		if(!firstEntry)
-			zos.closeEntry();
+    public OutputStream createEntry(String entryPath, AbstractFile file) throws IOException {
+        // Start by closing current entry
+        if(!firstEntry)
+            zos.closeEntry();
 
-		boolean isDirectory = file.isDirectory();
+        boolean isDirectory = file.isDirectory();
 		
-		// Create the entry and use the provided file's date
-		ZipEntry entry = new ZipEntry(normalizePath(entryPath, isDirectory));
-		// Use provided file's size and date
-		entry.setTime(file.getDate());
-		if(!isDirectory)		// Do not set size if file is directory!
-			entry.setSize(file.getSize());
+        // Create the entry and use the provided file's date
+        ZipEntry entry = new ZipEntry(normalizePath(entryPath, isDirectory));
+        // Use provided file's size and date
+        entry.setTime(file.getDate());
+        if(!isDirectory)		// Do not set size if file is directory!
+            entry.setSize(file.getSize());
 		
-		// Add the entry
-		zos.putNextEntry(entry);
+        // Add the entry
+        zos.putNextEntry(entry);
 
-		if(firstEntry)
-			firstEntry = false;
+        if(firstEntry)
+            firstEntry = false;
 		
-		// Return the OutputStream that allows to write to the entry, only if it isn't a directory 
-		return isDirectory?null:zos;
-	}
+        // Return the OutputStream that allows to write to the entry, only if it isn't a directory 
+        return isDirectory?null:zos;
+    }
 
 
-	public void close() throws IOException {
-		// Close current entry
-		if(!firstEntry)
-			zos.closeEntry();
+    public void close() throws IOException {
+        // Close current entry
+        if(!firstEntry)
+            zos.closeEntry();
 		
-		zos.close();
-	}
+        zos.close();
+    }
 }

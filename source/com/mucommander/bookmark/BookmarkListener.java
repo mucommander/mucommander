@@ -11,11 +11,11 @@ package com.mucommander.bookmark;
  */
 public interface BookmarkListener {
 	
-	/**
-	 * This method is invoked when a bookmark has been added, edited or removed.
-	 *
-	 * @param b the bookmark which has been added, edited or removed.
-	 */
-	public void bookmarkChanged(Bookmark b);
+    /**
+     * This method is invoked when a bookmark has been added, edited or removed.
+     *
+     * @param b the bookmark which has been added, edited or removed.
+     */
+    public void bookmarkChanged(Bookmark b);
 
 }

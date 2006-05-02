@@ -15,41 +15,41 @@ import com.mucommander.text.Translator;
 public class UnzipDialog extends DestinationDialog {
 
 	
-	/**
-	 * Creates and displays a new UnzipDialog.
-	 *
-	 * @param mainFrame the main frame this dialog is attached to.
-	 * @param isShiftDown true if shift key was pressed when invoking this dialog.
-	 */
-	public UnzipDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
-		super(mainFrame, files,
-			Translator.get("unzip_dialog.unzip"),
-			Translator.get("unzip_dialog.destination"),
-			Translator.get("unzip_dialog.unzip"),
-			Translator.get("unzip_dialog.error_title"));
+    /**
+     * Creates and displays a new UnzipDialog.
+     *
+     * @param mainFrame the main frame this dialog is attached to.
+     * @param isShiftDown true if shift key was pressed when invoking this dialog.
+     */
+    public UnzipDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
+        super(mainFrame, files,
+              Translator.get("unzip_dialog.unzip"),
+              Translator.get("unzip_dialog.destination"),
+              Translator.get("unzip_dialog.unzip"),
+              Translator.get("unzip_dialog.error_title"));
 	    
-		AbstractFile destFolder = mainFrame.getUnactiveTable().getCurrentFolder();
+        AbstractFile destFolder = mainFrame.getUnactiveTable().getCurrentFolder();
         String fieldText;
-		if(isShiftDown)
-			fieldText = ".";
-		else
-			fieldText = destFolder.getAbsolutePath(true);
+        if(isShiftDown)
+            fieldText = ".";
+        else
+            fieldText = destFolder.getAbsolutePath(true);
 		
-		setTextField(fieldText);
+        setTextField(fieldText);
 		
-		showDialog();
-	}
+        showDialog();
+    }
 
 
-	/**
-	 * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
-	 */
-	protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
+    /**
+     * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
+     */
+    protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
 
-		// Starts copying files
-		ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("unzip_dialog.unzipping"));
-		CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.UNZIP_MODE, defaultFileExistsAction);
-		progressDialog.start(job);
-	}
+        // Starts copying files
+        ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("unzip_dialog.unzipping"));
+        CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.UNZIP_MODE, defaultFileExistsAction);
+        progressDialog.start(job);
+    }
 
 }

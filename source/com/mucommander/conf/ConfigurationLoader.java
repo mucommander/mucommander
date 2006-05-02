@@ -28,12 +28,12 @@ class ConfigurationLoader implements ConfigurationTreeBuilder {
      * @param name name of the entry that was closed.
      */
     public void closeNode(String name) {
-		int index;
+        int index;
 		
-		index = variable.lastIndexOf('.');
-		if(index > 0)
-			variable = variable.substring(0, index);
-	}
+        index = variable.lastIndexOf('.');
+        if(index > 0)
+            variable = variable.substring(0, index);
+    }
 
     /**
      * Defines a new variable with the specified name and value.
@@ -41,6 +41,7 @@ class ConfigurationLoader implements ConfigurationTreeBuilder {
      * @param value variable's value.
      */
     public void addLeaf(String name, String value) {
-		ConfigurationManager.setVariable(variable + '.' + name, value);
-	}
+        ConfigurationManager.setVariable(variable + '.' + name, value);
+    }
 }
+

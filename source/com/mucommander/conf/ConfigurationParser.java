@@ -79,7 +79,7 @@ public class ConfigurationParser implements ContentHandler {
             throw new IllegalStateException("Cannot parse a file without a tree builder.");
 
         parser = new Parser();
-		// Use UTF-8 encoding
+        // Use UTF-8 encoding
         parser.parse(new FileInputStream(file), this, "UTF-8");
     }
 

@@ -22,33 +22,33 @@ import javax.swing.*;
  */
 public class QuitDialog extends QuestionDialog {
 
-	// Dialog's width has to be at least 240
-	private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
+    // Dialog's width has to be at least 240
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(240,0);	
 
-	private final static int QUIT_ACTION = 0;
-	private final static int CANCEL_ACTION = 1;
+    private final static int QUIT_ACTION = 0;
+    private final static int CANCEL_ACTION = 1;
 	
 			
-	public QuitDialog(MainFrame mainFrame) {
-		super(mainFrame, 
-			Translator.get("quit_dialog.title"),
-			Translator.get("quit_dialog.desc"),
-			mainFrame,
-			new String[] {Translator.get("quit_dialog.quit"), Translator.get("cancel")},
-			new int[] {QUIT_ACTION, CANCEL_ACTION},
-			0);
+    public QuitDialog(MainFrame mainFrame) {
+        super(mainFrame, 
+              Translator.get("quit_dialog.title"),
+              Translator.get("quit_dialog.desc"),
+              mainFrame,
+              new String[] {Translator.get("quit_dialog.quit"), Translator.get("cancel")},
+              new int[] {QUIT_ACTION, CANCEL_ACTION},
+              0);
 		
-		JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("quit_dialog.show_next_time"), true);
-		addCheckBox(showNextTimeCheckBox);
+        JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("quit_dialog.show_next_time"), true);
+        addCheckBox(showNextTimeCheckBox);
 		
-		setMinimumSize(MINIMUM_DIALOG_DIMENSION);
+        setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 
-		if(getActionValue()==QUIT_ACTION) {
-			// Remember user preference
-			ConfigurationManager.setVariableBoolean("prefs.quit_confirmation", showNextTimeCheckBox.isSelected());
+        if(getActionValue()==QUIT_ACTION) {
+            // Remember user preference
+            ConfigurationManager.setVariableBoolean("prefs.quit_confirmation", showNextTimeCheckBox.isSelected());
 
-			// Quit
-			WindowManager.getInstance().quit();
-		}
-	}
+            // Quit
+            WindowManager.getInstance().quit();
+        }
+    }
 }

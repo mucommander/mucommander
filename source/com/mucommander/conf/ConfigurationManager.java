@@ -44,12 +44,12 @@ public class ConfigurationManager {
     private static ConfigurationTree tree;
 
 
-	/**
-	 * Dummy method which does nothing but trigger static fields execution.
-	 * Calling this method early enough at launch time makes initialization predictable.
-	 */
-	public static void init() {
-	}
+    /**
+     * Dummy method which does nothing but trigger static fields execution.
+     * Calling this method early enough at launch time makes initialization predictable.
+     */
+    public static void init() {
+    }
 	
 
     /**
@@ -58,8 +58,8 @@ public class ConfigurationManager {
     private ConfigurationManager() {
         tree = new ConfigurationTree("root");
         
-		// Load configuration
-		loadConfiguration();
+        // Load configuration
+        loadConfiguration();
 		
         // Sets muCommander version corresponding to this configuration file
         setVariable("prefs.conf_version", com.mucommander.Launcher.MUCOMMANDER_VERSION);
@@ -93,43 +93,43 @@ public class ConfigurationManager {
      */
     private static synchronized boolean loadConfiguration() {
 		
-		try {
-			loadConfiguration(getConfigurationFilePath());
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFilePath(), -1);						
+        try {
+            loadConfiguration(getConfigurationFilePath());
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFilePath(), -1);						
 			
-			// If version in configuration differs from current version, 
-			// import and move variables which have moved in the configuration tree
-			String confVersion = getVariable("prefs.conf_version");
-			if(confVersion!=null && !confVersion.equals(com.mucommander.Launcher.MUCOMMANDER_VERSION)) {
-				if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Version changed, looking for variables to migrate");
-				migrateVariable("prefs.show_hidden_files", "prefs.file_table.show_hidden_files");
-				migrateVariable("prefs.auto_size_columns", "prefs.file_table.auto_size_columns");
-				migrateVariable("prefs.show_toolbar", "prefs.toolbar.visible");
-				migrateVariable("prefs.show_status_bar", "prefs.status_bar.visible");
-				migrateVariable("prefs.show_command_bar", "prefs.command_bar.visible");
-			}
+            // If version in configuration differs from current version, 
+            // import and move variables which have moved in the configuration tree
+            String confVersion = getVariable("prefs.conf_version");
+            if(confVersion!=null && !confVersion.equals(com.mucommander.Launcher.MUCOMMANDER_VERSION)) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Version changed, looking for variables to migrate");
+                migrateVariable("prefs.show_hidden_files", "prefs.file_table.show_hidden_files");
+                migrateVariable("prefs.auto_size_columns", "prefs.file_table.auto_size_columns");
+                migrateVariable("prefs.show_toolbar", "prefs.toolbar.visible");
+                migrateVariable("prefs.show_status_bar", "prefs.status_bar.visible");
+                migrateVariable("prefs.show_command_bar", "prefs.command_bar.visible");
+            }
 						
-			return true;
-		}
-		catch(Exception e) {
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No configuration file found at "+getConfigurationFilePath());			
-		}
+            return true;
+        }
+        catch(Exception e) {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No configuration file found at "+getConfigurationFilePath());			
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 
-	/**
-	 * Moves the value of a variable to another.
-	 */
-	private static void migrateVariable(String fromVar, String toVar) {
-		String fromValue = getVariable(fromVar);
-		if(fromValue!=null) {
-			setVariable(toVar, fromValue);
-			setVariable(fromVar, null);
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Variable "+fromVar+" migrated to "+toVar);
-		}
-	}
+    /**
+     * Moves the value of a variable to another.
+     */
+    private static void migrateVariable(String fromVar, String toVar) {
+        String fromValue = getVariable(fromVar);
+        if(fromValue!=null) {
+            setVariable(toVar, fromValue);
+            setVariable(fromVar, null);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Variable "+fromVar+" migrated to "+toVar);
+        }
+    }
 	
 	
     /**
@@ -137,23 +137,23 @@ public class ConfigurationManager {
      */
     public static synchronized void writeConfiguration() {
         PrintWriter out = null;
-		try {
-			ConfigurationWriter writer = new ConfigurationWriter();
-			String filePath = getConfigurationFilePath();
-			if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: "+filePath);						
+        try {
+            ConfigurationWriter writer = new ConfigurationWriter();
+            String filePath = getConfigurationFilePath();
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: "+filePath);						
 			
-			// Use UTF-8 encoding
-			out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePath), "UTF-8"));
-			writer.writeXML(out);
-		}
-		catch(IOException e) {
-			// Notify user that preferences file could not be written
-			System.out.println("muCommander was unable to write preferences file: "+e);
-		}
-		finally {
-			if(out!=null)
-				out.close();
-		}
+            // Use UTF-8 encoding
+            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePath), "UTF-8"));
+            writer.writeXML(out);
+        }
+        catch(IOException e) {
+            // Notify user that preferences file could not be written
+            System.out.println("muCommander was unable to write preferences file: "+e);
+        }
+        finally {
+            if(out!=null)
+                out.close();
+        }
     }
 
 		
@@ -188,14 +188,14 @@ public class ConfigurationManager {
     public static synchronized void buildConfigurationTree(ConfigurationTreeBuilder builder) {buildConfigurationTree(builder, tree);}
 
 
-	/**
-	 * Returns true if the given variable has a value (not null and not equals to "" after being trimmed).
-	 * @param var the name of the variable to test.
-	 */
-	public static boolean isVariableSet(String var) {
-		String value = getVariable(var);
-		return value!=null && !value.trim().equals("");
-	}
+    /**
+     * Returns true if the given variable has a value (not null and not equals to "" after being trimmed).
+     * @param var the name of the variable to test.
+     */
+    public static boolean isVariableSet(String var) {
+        String value = getVariable(var);
+        return value!=null && !value.trim().equals("");
+    }
 
 
     /**
@@ -225,135 +225,135 @@ public class ConfigurationManager {
 	
     /**
      * Returns the value of the specified configuration variable and assigns it
-	 * a given default value if the the value returned by {@link #getVariable(String)} is
-	 * <code>null</code>.
+     * a given default value if the the value returned by {@link #getVariable(String)} is
+     * <code>null</code>.
      *
-	 * @param var name of the variable to retrieve.
+     * @param var name of the variable to retrieve.
      * @param defaultValue defaultValue assigned if the variable's value is <code>null</code>.
-	 *
-	 * @return the value of the specified configuration variable.
+     *
+     * @return the value of the specified configuration variable.
      */
     public static synchronized String getVariable(String var, String defaultValue) {
     	String value = getVariable(var);
 		
-		if (value==null) {
-			setVariable(var, defaultValue);
-			return defaultValue;
-		}
-		return value;
-	}
+        if (value==null) {
+            setVariable(var, defaultValue);
+            return defaultValue;
+        }
+        return value;
+    }
 
 	
-	/**
-	 * Returns the value of the given configuration variable, <code>-1</code>
-	 * if the variable has no value OR if the variable cannot be parsed as an integer.
-	 *
-	 * @param  var name of the variable to retrieve.
+    /**
+     * Returns the value of the given configuration variable, <code>-1</code>
+     * if the variable has no value OR if the variable cannot be parsed as an integer.
+     *
+     * @param  var name of the variable to retrieve.
      * @return the value of the specified configuration variable.
-	 */
-	public static synchronized int getVariableInt(String var) {
-		String val = getVariable(var);
-		if(val==null)
-			return -1;
+     */
+    public static synchronized int getVariableInt(String var) {
+        String val = getVariable(var);
+        if(val==null)
+            return -1;
 		
-		try {
-			return Integer.parseInt(val);
-		}
-		catch(NumberFormatException e) {
-			return -1;
-		}
-	}
+        try {
+            return Integer.parseInt(val);
+        }
+        catch(NumberFormatException e) {
+            return -1;
+        }
+    }
 
 
-	/**
-	 * Returns the value of the given configuration variable and assigns it
-	 * a given default int value if the the value returned by {@link #getVariable(String)} is
-	 * <code>null</code> or could not be parsed as an int. 
-	 *
-	 * <p>Returns <code>-1</code> if the variable cannot be parsed as an int.</p>
-	 *
-	 * @param  var name of the variable to retrieve.
+    /**
+     * Returns the value of the given configuration variable and assigns it
+     * a given default int value if the the value returned by {@link #getVariable(String)} is
+     * <code>null</code> or could not be parsed as an int. 
+     *
+     * <p>Returns <code>-1</code> if the variable cannot be parsed as an int.</p>
+     *
+     * @param  var name of the variable to retrieve.
      * @param defaultValue defaultValue assigned if the variable's value is <code>null</code> or could not be parsed as an int.
      * @return the value of the specified configuration variable.
-	 */
-	public static synchronized int getVariableInt(String var, int defaultValue) {
+     */
+    public static synchronized int getVariableInt(String var, int defaultValue) {
     	String value = getVariable(var);
 		
-		if (value==null) {
-			setVariable(var, ""+defaultValue);
-			return defaultValue;
-		}
+        if (value==null) {
+            setVariable(var, ""+defaultValue);
+            return defaultValue;
+        }
 
-		try {
-			return Integer.parseInt(value);
-		}
-		catch(NumberFormatException e) {
-			setVariable(var, ""+defaultValue);
-			return defaultValue;
-		}
-	}
+        try {
+            return Integer.parseInt(value);
+        }
+        catch(NumberFormatException e) {
+            setVariable(var, ""+defaultValue);
+            return defaultValue;
+        }
+    }
 
 
-	/**
-	 * Returns the value of the given configuration variable and assigns it
-	 * a given default float value if the the value returned by {@link #getVariable(String)} is
-	 * <code>null</code> or could not be parsed as a float. 
-	 *
-	 * <p>Returns <code>-1</code> if the variable cannot be parsed as a float.</p>
-	 *
-	 * @param var name of the variable to retrieve.
+    /**
+     * Returns the value of the given configuration variable and assigns it
+     * a given default float value if the the value returned by {@link #getVariable(String)} is
+     * <code>null</code> or could not be parsed as a float. 
+     *
+     * <p>Returns <code>-1</code> if the variable cannot be parsed as a float.</p>
+     *
+     * @param var name of the variable to retrieve.
      * @param defaultValue defaultValue assigned if the variable's value is <code>null</code> or could not be parsed as a float.
      * @return the value of the specified configuration variable.
-	 */
-	public static synchronized float getVariableFloat(String var, float defaultValue) {
+     */
+    public static synchronized float getVariableFloat(String var, float defaultValue) {
     	String value = getVariable(var);
 		
-		if (value==null) {
-			setVariable(var, ""+defaultValue);
-			return defaultValue;
-		}
+        if (value==null) {
+            setVariable(var, ""+defaultValue);
+            return defaultValue;
+        }
 
-		try {
-			return Float.parseFloat(value);
-		}
-		catch(NumberFormatException e) {
-			setVariable(var, ""+defaultValue);
-			return defaultValue;
-		}
-	}
+        try {
+            return Float.parseFloat(value);
+        }
+        catch(NumberFormatException e) {
+            setVariable(var, ""+defaultValue);
+            return defaultValue;
+        }
+    }
 	
 
-	/**
-	 * Retrieves the boolean value of the given configuration variable and assigns it
-	 * a given default value if the the value returned by {@link #getVariable(String)} is
-	 * <code>null</code>. 
-	 *
-	 * <p>Returns <code>false</code> if the variable cannot be parsed as a boolean.</p>
-	 *
-	 * @param var name of the variable to retrieve.
+    /**
+     * Retrieves the boolean value of the given configuration variable and assigns it
+     * a given default value if the the value returned by {@link #getVariable(String)} is
+     * <code>null</code>. 
+     *
+     * <p>Returns <code>false</code> if the variable cannot be parsed as a boolean.</p>
+     *
+     * @param var name of the variable to retrieve.
      * @param defaultValue defaultValue assigned if the variable's value is <code>null</code>.
      * @return the value of the specified configuration variable.
-	 */
-	public static synchronized boolean getVariableBoolean(String var, boolean defaultValue) {
+     */
+    public static synchronized boolean getVariableBoolean(String var, boolean defaultValue) {
     	String value = getVariable(var);
 		
-		if (value==null) {
-			setVariable(var, ""+defaultValue);
-			return defaultValue;
-		}
+        if (value==null) {
+            setVariable(var, ""+defaultValue);
+            return defaultValue;
+        }
 
-		return value.equals("true");
-	}
+        return value.equals("true");
+    }
 
 
-	/*
-	 * Returns the pref color value if there is one, if not the default one.
-	 */
-	public static Color getVariableColor(String colorVariableName, String defaultColorVal) {
-		String colorValue = getVariable(colorVariableName, defaultColorVal);
+    /*
+     * Returns the pref color value if there is one, if not the default one.
+     */
+    public static Color getVariableColor(String colorVariableName, String defaultColorVal) {
+        String colorValue = getVariable(colorVariableName, defaultColorVal);
 
-		return colorValue==null?null:new Color(Integer.parseInt(colorValue, 16));
-	}
+        return colorValue==null?null:new Color(Integer.parseInt(colorValue, 16));
+    }
 	
 
     /**
@@ -363,13 +363,13 @@ public class ConfigurationManager {
      */
     public static synchronized void setVariable(String var, String value) {
 
-		StringTokenizer   parser;
+        StringTokenizer   parser;
         String            buffer;
         ConfigurationTree node;
         ConfigurationTree temporaryNode;
         String            oldValue;
         
-		parser = new StringTokenizer(var, ".");
+        parser = new StringTokenizer(var, ".");
         node   = tree;
 
         while(parser.hasMoreTokens()) {
@@ -383,11 +383,11 @@ public class ConfigurationManager {
             else {
                 oldValue = node.getLeaf(buffer);
 				
-				// Since 0.8 beta2: do nothing (return) if value hasn't changed
-				if((oldValue==null && value==null) || (oldValue!=null && oldValue.equals(value)))
-					return;
+                // Since 0.8 beta2: do nothing (return) if value hasn't changed
+                if((oldValue==null && value==null) || (oldValue!=null && oldValue.equals(value)))
+                    return;
 					
-				if(node.setLeaf(buffer, value))
+                if(node.setLeaf(buffer, value))
                     if(!fireConfigurationEvent(new ConfigurationEvent(var, value)))
                         node.setLeaf(buffer, oldValue);
             }
@@ -397,65 +397,65 @@ public class ConfigurationManager {
 	
     /**
      * Sets the value of the specified configuration variable.
-	 *
+     *
      * @param var name of the variable to set.
      * @param value value for the specified variable.
      */
     public static synchronized void setVariableInt(String var, int value) {
-		setVariable(var, ""+value);
-	}
+        setVariable(var, ""+value);
+    }
 
 
     /**
      * Sets the value of the specified configuration variable.
-	 *
+     *
      * @param var name of the variable to set.
      * @param value value for the specified variable.
      */
     public static synchronized void setVariableFloat(String var, float value) {
-		setVariable(var, ""+value);
-	}
+        setVariable(var, ""+value);
+    }
 
 
     /**
      * Sets the value of the specified configuration variable.
-	 *
+     *
      * @param var name of the variable to set.
      * @param value value for the specified variable.
      */
     public static synchronized void setVariableBoolean(String var, boolean value) {
-		setVariable(var, ""+value);
-	}
+        setVariable(var, ""+value);
+    }
 	
 	
     /**
      * Sets the value of the specified configuration variable.
-	 *
+     *
      * @param var name of the variable to set.
      * @param value value for the specified variable.
      */
-	public static synchronized void setVariableColor(String var, Color value) {
-		String colorString = Integer.toHexString(value.getRGB());
-		setVariable(var, colorString.substring(2, colorString.length()));
-	}
+    public static synchronized void setVariableColor(String var, Color value) {
+        String colorString = Integer.toHexString(value.getRGB());
+        setVariable(var, colorString.substring(2, colorString.length()));
+    }
 
 		
     /**
      * Adds the specified configuration listener to the list of registered listeners.
-	 *
-	 * <p>Listeners are stored as weak references so {@link #removeConfigurationListener(ConfigurationListener) removeConfigurationListener()}
-	 * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
-	 *
+     *
+     * <p>Listeners are stored as weak references so {@link #removeConfigurationListener(ConfigurationListener) removeConfigurationListener()}
+     * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
+     *
      * @param listener the listener to add to the list of registered listeners.
      */
     public static synchronized void addConfigurationListener(ConfigurationListener listener) {
-		if(listener==null)
-			return;
+        if(listener==null)
+            return;
 		
-		listeners.put(listener, null);
-		if(com.mucommander.Debug.ON)
-			com.mucommander.Debug.trace(listeners.size()+" listeners");
-	}
+        listeners.put(listener, null);
+        if(com.mucommander.Debug.ON)
+            com.mucommander.Debug.trace(listeners.size()+" listeners");
+    }
 
     /**
      * Removes the specified configuration listener from the list of registered listeners.
@@ -465,14 +465,14 @@ public class ConfigurationManager {
     public static synchronized void removeConfigurationListener(ConfigurationListener listener) {
         listeners.remove(listener);
 			
-		if(com.mucommander.Debug.ON)
-			com.mucommander.Debug.trace(listeners.size()+" listeners");
-	}
+        if(com.mucommander.Debug.ON)
+            com.mucommander.Debug.trace(listeners.size()+" listeners");
+    }
 
     /**
      * Notifies all the registered configuration listeners of a configuration change event.
      *
-	 * @param  event describes the configuration change.
+     * @param  event describes the configuration change.
      * @return true if the change wasn't vetoed, false otherwise.
      */
     static synchronized boolean fireConfigurationEvent(ConfigurationEvent event) {

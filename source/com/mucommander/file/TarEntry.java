@@ -9,30 +9,30 @@ package com.mucommander.file;
  */
 class TarEntry extends ArchiveEntry {
 	
-	private org.apache.tools.tar.TarEntry tarEntry;
+    private org.apache.tools.tar.TarEntry tarEntry;
 	
-	TarEntry(org.apache.tools.tar.TarEntry tarEntry) {
-		super(tarEntry);
-		this.tarEntry = tarEntry;
-	}
+    TarEntry(org.apache.tools.tar.TarEntry tarEntry) {
+        super(tarEntry);
+        this.tarEntry = tarEntry;
+    }
 	
-	/////////////////////////////////////
-	// Abstract methods implementation //
-	/////////////////////////////////////
+    /////////////////////////////////////
+    // Abstract methods implementation //
+    /////////////////////////////////////
 		
-	String getPath() {
-		return tarEntry.getName();
-	}
+    String getPath() {
+        return tarEntry.getName();
+    }
 	
-	long getDate() {
-		return tarEntry.getModTime().getTime();
-	}
+    long getDate() {
+        return tarEntry.getModTime().getTime();
+    }
 	
-	long getSize() {
-		return tarEntry.getSize();
-	}
+    long getSize() {
+        return tarEntry.getSize();
+    }
 
-	boolean isDirectory() {
-		return tarEntry.isDirectory();
-	}
+    boolean isDirectory() {
+        return tarEntry.isDirectory();
+    }
 }

@@ -99,11 +99,11 @@ public class PlatformManager {
     private final static String KDE_ENV_VAR = "KDE_FULL_SESSION";
 	
 	
-	/** Configuration variable used to store the custom shell command */
-	private final static String CUSTOM_SHELL_CONF_VAR = "prefs.shell.custom_command";
+    /** Configuration variable used to store the custom shell command */
+    private final static String CUSTOM_SHELL_CONF_VAR = "prefs.shell.custom_command";
 
-	/** Configuration variable used to store the custom shell command */
-	private final static String USE_CUSTOM_SHELL_CONF_VAR = "prefs.shell.use_custom";
+    /** Configuration variable used to store the custom shell command */
+    private final static String USE_CUSTOM_SHELL_CONF_VAR = "prefs.shell.use_custom";
 	
 	
     /**
@@ -387,28 +387,28 @@ public class PlatformManager {
     }
 	
 	
-	/**
-	 * Returns the default shell command of the current platform. 
-	 */
-	public static String getDefaultShellCommand() {
-		String shellCommand;
+    /**
+     * Returns the default shell command of the current platform. 
+     */
+    public static String getDefaultShellCommand() {
+        String shellCommand;
 		
-		// Windows NT OSes use cmd.exe.
-		if (osFamily == WINDOWS_NT) {
-			shellCommand = "cmd /c";
-		}
-		// Windows 9X OSes use command.com.
-		else if(osFamily == WINDOWS_9X) {
-			shellCommand = "command.com /c";
-		}
-		// All other OSes are assumed to be POSIX compliant
-		// and to have a /bin/sh shell.
-		else {
-			shellCommand = "/bin/sh -c";
-		}
+        // Windows NT OSes use cmd.exe.
+        if (osFamily == WINDOWS_NT) {
+            shellCommand = "cmd /c";
+        }
+        // Windows 9X OSes use command.com.
+        else if(osFamily == WINDOWS_9X) {
+            shellCommand = "command.com /c";
+        }
+        // All other OSes are assumed to be POSIX compliant
+        // and to have a /bin/sh shell.
+        else {
+            shellCommand = "/bin/sh -c";
+        }
 		
-		return shellCommand;
-	}
+        return shellCommand;
+    }
 	
 	
     /**
@@ -419,39 +419,39 @@ public class PlatformManager {
         try {
             if(Debug.ON) Debug.trace("Executing "+command);
 
-			String defaultShellCommand = getDefaultShellCommand();
-			String shellCommand;
-			// Did the user choose to use a custom shell ?
-			// If not use the system's default shell command
-			if(ConfigurationManager.getVariableBoolean(USE_CUSTOM_SHELL_CONF_VAR, false))
-				shellCommand = ConfigurationManager.getVariable(CUSTOM_SHELL_CONF_VAR, defaultShellCommand);
-			else
-				shellCommand = defaultShellCommand;
+            String defaultShellCommand = getDefaultShellCommand();
+            String shellCommand;
+            // Did the user choose to use a custom shell ?
+            // If not use the system's default shell command
+            if(ConfigurationManager.getVariableBoolean(USE_CUSTOM_SHELL_CONF_VAR, false))
+                shellCommand = ConfigurationManager.getVariable(CUSTOM_SHELL_CONF_VAR, defaultShellCommand);
+            else
+                shellCommand = defaultShellCommand;
 
-			// Split the shell command into tokens
+            // Split the shell command into tokens
             Vector tokensV = splitCommand(shellCommand);
             // Add the command as a single token to let the shell parse it
-			tokensV.add(command);
+            tokensV.add(command);
 
-			if(Debug.ON) Debug.trace("Tokens= "+tokensV);
+            if(Debug.ON) Debug.trace("Tokens= "+tokensV);
 
             // Convert the tokens Vector into a good old array
-			String tokens[] = new String[tokensV.size()];
+            String tokens[] = new String[tokensV.size()];
             tokensV.toArray(tokens);
 
             // We use Runtime.exec(String[],String[],File) instead of Runtime.exec(String,String[],File)
             // so that we can provide the tokens instead of letting Runtime.exec() parse the command and mess up 
-			// the command otherwise
+            // the command otherwise
 
             // Command is run from a folder which is either :
-			// - the current folder of muCommander's active panel, only if the folder is on a local filesystem
-			//	(and is not an archive)
-			// - user's home in all other cases (archive, remote filesystem such as SMB, FTP, ...), since the os/shell
-			//	can't access those 'folders'
+            // - the current folder of muCommander's active panel, only if the folder is on a local filesystem
+            //	(and is not an archive)
+            // - user's home in all other cases (archive, remote filesystem such as SMB, FTP, ...), since the os/shell
+            //	can't access those 'folders'
 
-			return Runtime.getRuntime().exec(tokens, null, 
-				new java.io.File((currentFolder instanceof FSFile)?currentFolder.getAbsolutePath():System.getProperty("user.home"))
-			);
+            return Runtime.getRuntime().exec(tokens, null, 
+                                             new java.io.File((currentFolder instanceof FSFile)?currentFolder.getAbsolutePath():System.getProperty("user.home"))
+                                             );
         }
         catch(Exception e) {
             if(Debug.ON) Debug.trace("Error while executing "+command+": "+e);
@@ -460,38 +460,38 @@ public class PlatformManager {
     }
 
 
-	/**
-	 * Splits the given command into an arrary of tokens.
-	 */
-	private static Vector splitCommand(String command) {
-		char c;
-		int pos = 0;
-		int len = command.length();
-		StringBuffer tokenSB = new StringBuffer();
-		String token;
-		Vector tokensV = new Vector();
-		while(pos<len) {
-			c = command.charAt(pos);
-// if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("char="+c+" ("+(int)c+")"+" pos="+pos+" len="+len+" token="+tokenSB);
-			if((c==' ' && command.charAt(pos-1)!='\\') || c=='\t' || c=='\n' || c=='\r' || c=='\f') {
-				token = tokenSB.toString().trim();
-				if(!token.equals(""))
-					tokensV.add(token.toString());
-				tokenSB = new StringBuffer();
-			}
-			else if(!(c=='\\' && pos!=len-1 && command.charAt(pos+1)==' ')) {
-				tokenSB.append(c);
-			}
+    /**
+     * Splits the given command into an arrary of tokens.
+     */
+    private static Vector splitCommand(String command) {
+        char c;
+        int pos = 0;
+        int len = command.length();
+        StringBuffer tokenSB = new StringBuffer();
+        String token;
+        Vector tokensV = new Vector();
+        while(pos<len) {
+            c = command.charAt(pos);
+            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("char="+c+" ("+(int)c+")"+" pos="+pos+" len="+len+" token="+tokenSB);
+            if((c==' ' && command.charAt(pos-1)!='\\') || c=='\t' || c=='\n' || c=='\r' || c=='\f') {
+                token = tokenSB.toString().trim();
+                if(!token.equals(""))
+                    tokensV.add(token.toString());
+                tokenSB = new StringBuffer();
+            }
+            else if(!(c=='\\' && pos!=len-1 && command.charAt(pos+1)==' ')) {
+                tokenSB.append(c);
+            }
 			
-			pos ++;
-		}
+            pos ++;
+        }
 
-		token = tokenSB.toString().trim();
-		if(!token.equals(""))
-			tokensV.add(token.toString());
+        token = tokenSB.toString().trim();
+        if(!token.equals(""))
+            tokensV.add(token.toString());
 
-		return tokensV;
-	}
+        return tokensV;
+    }
 
 
     /**

@@ -11,16 +11,16 @@ import com.mucommander.conf.ConfigurationManager;
  */
 public class ShutdownHook extends Thread {
 
-	public ShutdownHook() {
-		super("com.mucommander.ShutDownHook's thread");
-	}
+    public ShutdownHook() {
+        super("com.mucommander.ShutDownHook's thread");
+    }
 
-	/**
-	 * Called by the VM when the program shuts down, this method writes the configuration.
-	 */
-	public void run() {
-		// Saves preferences
-		ConfigurationManager.writeConfiguration();
-	}
+    /**
+     * Called by the VM when the program shuts down, this method writes the configuration.
+     */
+    public void run() {
+        // Saves preferences
+        ConfigurationManager.writeConfiguration();
+    }
 
 }

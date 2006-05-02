@@ -12,54 +12,54 @@ import java.util.Vector;
  */
 public class FileSet extends Vector {
 
-	/** Parent folder of all contained files */
-	private AbstractFile baseFolder;
+    /** Parent folder of all contained files */
+    private AbstractFile baseFolder;
 	
 	
-	/**
-	 * Creates a new empty FileSet.
-	 */
-	public FileSet() {
-	}
+    /**
+     * Creates a new empty FileSet.
+     */
+    public FileSet() {
+    }
 
 
-	/**
-	 * Creates a new empty FileSet with the specified base folder.
-	 */
-	public FileSet(AbstractFile baseFolder) {
-		this.baseFolder = baseFolder;
-	}
+    /**
+     * Creates a new empty FileSet with the specified base folder.
+     */
+    public FileSet(AbstractFile baseFolder) {
+        this.baseFolder = baseFolder;
+    }
 
 	
-	/**
-	 * Creates a new empty FileSet with the specified base folder, and adds the given file.
-	 */
-	public FileSet(AbstractFile baseFolder, AbstractFile file) {
-		this.baseFolder = baseFolder;
-		add(file);
-	}
+    /**
+     * Creates a new empty FileSet with the specified base folder, and adds the given file.
+     */
+    public FileSet(AbstractFile baseFolder, AbstractFile file) {
+        this.baseFolder = baseFolder;
+        add(file);
+    }
 
 	
-	/**
-	 * Returns the base folder associated with this FileSet, null if there isn't any.
-	 */
-	public AbstractFile getBaseFolder() {
-		return baseFolder;
-	}
+    /**
+     * Returns the base folder associated with this FileSet, null if there isn't any.
+     */
+    public AbstractFile getBaseFolder() {
+        return baseFolder;
+    }
 	
 
-	/**
-	 * Convenience method to avoid casts to AbstractFile.
-	 */
-	public AbstractFile fileAt(int i) {
-		return (AbstractFile)super.elementAt(i);
-	}
+    /**
+     * Convenience method to avoid casts to AbstractFile.
+     */
+    public AbstractFile fileAt(int i) {
+        return (AbstractFile)super.elementAt(i);
+    }
 	
 	
-	/**
-	 * 
-	 */
-//	public Object clone() {
-//		return super.clone();
-//	}
+    /**
+     * 
+     */
+    //	public Object clone() {
+    //		return super.clone();
+    //	}
 }
