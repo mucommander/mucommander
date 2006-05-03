@@ -23,7 +23,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
         this.locationField = new ProgressTextField(0, new Color(0, 255, 255, 64));
 		
         setEditable(true);
-		
+
         setEditor(new BasicComboBoxEditor() {
                 public Component getEditorComponent() {
                     return LocationComboBox.this.locationField;
@@ -33,7 +33,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
         addActionListener(this);
         locationField.addKeyListener(this);
         //		addKeyListener(this);
-        locationField.addActionListener(this);
+//        locationField.addActionListener(this);
         folderPanel.addLocationListener(this);
     }
 
@@ -54,9 +54,10 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
         removeAllItems();
 		
         AbstractFile folder = e.getFolderPanel().getCurrentFolder();
-        while((folder=folder.getParent())!=null) {
+        do {
             addItem(folder);
         }
+        while((folder=folder.getParent())!=null);
 
         setEnabled(true);
         addActionListener(this);
@@ -78,11 +79,22 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     ////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, source="+e.getSource()+" selectedIndex="+getSelectedIndex()+", selectedItem="+getSelectedItem());
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, "+"selectedIndex="+getSelectedIndex()+", selectedItem="+getSelectedItem());
 
+
+        Object selectedItem = getSelectedItem();
+        if(selectedItem!=null) {
+            setEnabled(false);
+            folderPanel.trySetCurrentFolder((AbstractFile)selectedItem, true);
+        }
+        else {
+            setEnabled(false);
+            folderPanel.trySetCurrentFolder(locationField.getText(), true);
+        }
+/*
         Object source = e.getSource();
 
-        if (source == locationField) {
+        if (source==locationField && !isPopupVisible()) {
             folderPanel.trySetCurrentFolder(locationField.getText(), true);
         }
         else {
@@ -92,6 +104,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
                 folderPanel.trySetCurrentFolder((AbstractFile)selectedItem, true);
             }
         }
+*/
     }
 
 
@@ -100,13 +113,16 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     /////////////////////////
 
     public void keyPressed(KeyEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, source="+e.getSource());
-        if (e.getSource()==locationField) {
-            // Restore current location string if ESC was pressed
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
-                folderPanel.getFileTable().requestFocus();
-            }
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, keyCode="+e.getKeyCode());
+
+        // Restore current location string if ESC was pressed
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
+            folderPanel.getFileTable().requestFocus();
+        }
+        else if(e.getKeyCode()==KeyEvent.VK_ENTER && !isPopupVisible()) {
+            setEnabled(false);
+            folderPanel.trySetCurrentFolder(locationField.getText(), true);
         }
     }
 
