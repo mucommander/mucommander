@@ -592,7 +592,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * Allows the user to easily change the current folder and type a new one: requests focus 
      * on the location field and selects the folder string.
      */
-    public void changeFolder() {
+    public void changeCurrentLocation() {
         locationField.setSelectionStart(0);
         locationField.setSelectionEnd(locationField.getText().length());
         locationField.requestFocus();
@@ -819,6 +819,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
 
+    /**
+     * Changes current folder to be the previous one in folder history.
+     * Does nothing if there is no previous folder in history. 
+     */
     public synchronized void goBack() {
         if (historyIndex==0)
             return;
@@ -827,6 +831,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         trySetCurrentFolder(folder, false);
     }
 	
+    /**
+     * Changes current folder to be the next one in folder history.
+     * Does nothing if there is no next folder in history. 
+     */
     public synchronized void goForward() {
         if (historyIndex==history.size()-1)
             return;
@@ -835,10 +843,15 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         trySetCurrentFolder(folder, false);
     }
 
+
+    /**
+     * Changes current folder to be the current folder's parent.
+     * Does nothing if current folder doesn't have a parent. 
+     */
     public synchronized void goToParent() {
-        AbstractFile parent = getCurrentFolder().getParent();
-        if(parent!=null)
-            trySetCurrentFolder(parent, true);	
+        AbstractFile parent;
+        if(!fileTable.getQuickSearch().isActive() && (parent=getCurrentFolder().getParent())!=null)
+            trySetCurrentFolder(parent, true);
     }
 
 

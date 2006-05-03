@@ -36,7 +36,8 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class MainMenuBar extends JMenuBar implements LocationListener, TableChangeListener, ActionListener, MenuListener {
+//public class MainMenuBar extends JMenuBar implements LocationListener, TableChangeListener, ActionListener, MenuListener {
+public class MainMenuBar extends JMenuBar implements ActionListener, MenuListener {
     private MainFrame mainFrame;	
 	
     // File menu
@@ -223,14 +224,14 @@ public class MainMenuBar extends JMenuBar implements LocationListener, TableChan
 		
         add(helpMenu);
 		
-        // Set initial enabled state of contextual menu items 
-        toggleContextualMenuItems(mainFrame.getLastActiveTable().getFolderPanel());
+//        // Set initial enabled state of contextual menu items 
+//        toggleContextualMenuItems(mainFrame.getLastActiveTable().getFolderPanel());
 		
-        // Listen to location and table change events to change the state of contextual menu items
-        // when current folder or active table has changed
-        mainFrame.getFolderPanel1().addLocationListener(this);
-        mainFrame.getFolderPanel2().addLocationListener(this);
-        mainFrame.addTableChangeListener(this);
+//        // Listen to location and table change events to change the state of contextual menu items
+//        // when current folder or active table has changed
+//        mainFrame.getFolderPanel1().addLocationListener(this);
+//        mainFrame.getFolderPanel2().addLocationListener(this);
+//        mainFrame.addTableChangeListener(this);
     }
 	
 
@@ -243,28 +244,37 @@ public class MainMenuBar extends JMenuBar implements LocationListener, TableChan
 
 
     /**
-     * Enables/disables contextual menu items.
+     * Enables/disables contextual menu items of the given menu, based on the current context. 
+     * This method is called when a menu is pulled down, and called again when menu is deselected or cancelled, 
+     * to enable all menu items (unconditional) so that their shortcuts are properly caught.
      *
-     * @param folderPanel currently active FolderPanel instance 
+     * @param menu menu that just got selected/deselected/cancelled
+     * @param enableUnconditional if true, all conditional menu items in the given menu have to be enabled
      */
-    private void toggleContextualMenuItems(FolderPanel folderPanel) {
+    private void toggleContextualMenuItems(JMenu menu, boolean enableUnconditional) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
-        FileTable fileTable = folderPanel.getFileTable();
-			
-        // disable certain menu items if no file is selected
-        boolean filesSelected = fileTable.getSelectedFiles().size()!=0;
-        propertiesItem.setEnabled(filesSelected);
-        zipItem.setEnabled(filesSelected);
-        unzipItem.setEnabled(filesSelected);
-        emailFilesItem.setEnabled(filesSelected);
+        if(menu == fileMenu) {
+            FileTable fileTable = mainFrame.getLastActiveTable();
+            boolean filesSelected = enableUnconditional || fileTable.getSelectedFiles().size()>0;
+                
+            // enable/disable thos menu items if no file is selected
+            propertiesItem.setEnabled(filesSelected);
+            zipItem.setEnabled(filesSelected);
+            unzipItem.setEnabled(filesSelected);
+            emailFilesItem.setEnabled(filesSelected);
+        }
+        else if(menu == viewMenu) {
+            FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
 
-        goBackItem.setEnabled(folderPanel.hasBackFolder());
-        goForwardItem.setEnabled(folderPanel.hasForwardFolder());
-        goToParentItem.setEnabled(folderPanel.getCurrentFolder().getParent()!=null);
+            goBackItem.setEnabled(enableUnconditional || folderPanel.hasBackFolder());
+            goForwardItem.setEnabled(enableUnconditional || folderPanel.hasForwardFolder());
+            goToParentItem.setEnabled(enableUnconditional || folderPanel.getCurrentFolder().getParent()!=null);
+        }
     }
 
 
+/*
     /////////////////////////////////
     // TableChangeListener methods //
     /////////////////////////////////
@@ -293,7 +303,7 @@ public class MainMenuBar extends JMenuBar implements LocationListener, TableChan
 	
     public void locationCancelled(LocationEvent e) {
     }
-	
+*/	
 
     ///////////////////////////
     // ActionListener method //
@@ -318,26 +328,25 @@ public class MainMenuBar extends JMenuBar implements LocationListener, TableChan
         else if (source == runItem) {
             new RunDialog(mainFrame);
         }
-        else if (source==zipItem || source==unzipItem || source==emailFilesItem) {
+        else if (source==zipItem || source==unzipItem || source==emailFilesItem || source==propertiesItem) {
             // This actions need to work on selected files
             FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
             int nbSelectedFiles = files.size();
 		
-            if (source == zipItem) {
-                if(nbSelectedFiles>0)
+            if(nbSelectedFiles>0) {
+                if (source == zipItem) {
                     new PackDialog(mainFrame, files, false);
-            }
-            else if (source == unzipItem) {
-                if(nbSelectedFiles>0)
+                }
+                else if (source == unzipItem) {
                     new UnzipDialog(mainFrame, files, false);
-            }
-            else {
-                if(nbSelectedFiles>0)
+                }
+                else if (source == emailFilesItem) {
                     new EmailFilesDialog(mainFrame, files);
+                }
+                else {      // propertiesItem
+                    mainFrame.showPropertiesDialog();
+                }
             }
-        }
-        else if (source == propertiesItem) {
-            mainFrame.showPropertiesDialog();
         }
         else if (source == preferencesItem) {
             mainFrame.showPreferencesDialog();
@@ -369,7 +378,7 @@ public class MainMenuBar extends JMenuBar implements LocationListener, TableChan
         }
         // View menu
         else if (source == changeFolderItem) {
-            mainFrame.getLastActiveTable().getFolderPanel().changeFolder();	
+            mainFrame.getLastActiveTable().getFolderPanel().changeCurrentLocation();	
         }
         else if (source == goBackItem) {
             mainFrame.getLastActiveTable().getFolderPanel().goBack();	
@@ -452,6 +461,10 @@ public class MainMenuBar extends JMenuBar implements LocationListener, TableChan
 
     public void menuSelected(MenuEvent e) {
         Object source = e.getSource();
+
+        // Enable/disable contextual menu items depending on the current context
+        toggleContextualMenuItems((JMenu)source, false); 
+
         if(source==viewMenu) {
             FileTable activeTable = mainFrame.getLastActiveTable();
 
@@ -504,8 +517,14 @@ public class MainMenuBar extends JMenuBar implements LocationListener, TableChan
     }
 	
     public void menuDeselected(MenuEvent e) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");    
+        // Enable all contextual menu items
+        toggleContextualMenuItems((JMenu)e.getSource(), true); 
     }
 	 
     public void menuCanceled(MenuEvent e) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");    
+        // Enable all contextual menu items
+        toggleContextualMenuItems((JMenu)e.getSource(), true); 
     }
 }
