@@ -95,6 +95,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
         if(selectedItem!=null) {
             ignoreEvents = true;
             setEnabled(false);
+            hidePopup();    // Seems to be necessary under Windows/Java 1.5
             folderPanel.trySetCurrentFolder((AbstractFile)selectedItem, true);
         }
 //        else {
