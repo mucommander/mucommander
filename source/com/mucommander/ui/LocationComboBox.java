@@ -81,30 +81,15 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     public void actionPerformed(ActionEvent e) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, "+"selectedIndex="+getSelectedIndex()+", selectedItem="+getSelectedItem());
 
-
         Object selectedItem = getSelectedItem();
         if(selectedItem!=null) {
             setEnabled(false);
             folderPanel.trySetCurrentFolder((AbstractFile)selectedItem, true);
         }
-        else {
-            setEnabled(false);
-            folderPanel.trySetCurrentFolder(locationField.getText(), true);
-        }
-/*
-        Object source = e.getSource();
-
-        if (source==locationField && !isPopupVisible()) {
-            folderPanel.trySetCurrentFolder(locationField.getText(), true);
-        }
-        else {
-            Object selectedItem = getSelectedItem();
-            if(selectedItem!=null) {
-                setEnabled(false);
-                folderPanel.trySetCurrentFolder((AbstractFile)selectedItem, true);
-            }
-        }
-*/
+//        else {
+//            setEnabled(false);
+//            folderPanel.trySetCurrentFolder(locationField.getText(), true);
+//        }
     }
 
 
