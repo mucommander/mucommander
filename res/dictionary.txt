@@ -1273,7 +1273,7 @@ toolbar.go_back:EN:$[shortcuts_dialog.view.go_back]
 
 toolbar.go_forward:EN:$[shortcuts_dialog.view.go_forward]
 
-toolbar.go_to_parent:EN:$[shortcuts_dialog.view.go_to_parent]
+toolbar.go_to_parent:EN:$[shortcuts_dialog.navigation.go_to_parent]
 
 toolbar.stop:EN:$[stop]
 

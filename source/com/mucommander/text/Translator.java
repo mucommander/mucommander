@@ -234,7 +234,7 @@ public class Translator {
         String text = (String)dictionary.get(key.toLowerCase());
 
         if (text==null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unknown key "+key);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unknown key "+key, -1);
             return key;
         }
 

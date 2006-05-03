@@ -17,6 +17,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     private FolderPanel folderPanel;
     private ProgressTextField locationField;
 
+    private boolean ignoreEvents;
 
     public LocationComboBox(FolderPanel folderPanel) {
         this.folderPanel = folderPanel;
@@ -32,9 +33,14 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
 		
         addActionListener(this);
         locationField.addKeyListener(this);
-        //		addKeyListener(this);
-//        locationField.addActionListener(this);
+
         folderPanel.addLocationListener(this);
+    
+        // Prevent up/down keys from firing ActionEvents 
+        // Java 1.3
+        putClientProperty("JComboBox.lightweightKeyboardNavigation","Lightweight");
+        // Java 1.4 and up
+        putClientProperty("JComboBox.isTableCellEditor", Boolean.TRUE);
     }
 
 
@@ -49,8 +55,8 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
 	
     public void locationChanged(LocationEvent e) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+        ignoreEvents = true;      // Necessary for first time
 
-        removeActionListener(this);
         removeAllItems();
 		
         AbstractFile folder = e.getFolderPanel().getCurrentFolder();
@@ -60,8 +66,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
         while((folder=folder.getParent())!=null);
 
         setEnabled(true);
-        addActionListener(this);
-
+        ignoreEvents = false;
     }
 
     public void locationChanging(LocationEvent e) {
@@ -70,7 +75,9 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
 	
     public void locationCancelled(LocationEvent e) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+
         setEnabled(true);
+        ignoreEvents = false;
     }
 	
 
@@ -79,10 +86,14 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     ////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, "+"selectedIndex="+getSelectedIndex()+", selectedItem="+getSelectedItem());
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, "+"selectedIndex="+getSelectedIndex()+", selectedItem="+getSelectedItem()+" ignoreEvents="+ignoreEvents);
+
+        if(ignoreEvents)
+            return;
 
         Object selectedItem = getSelectedItem();
         if(selectedItem!=null) {
+            ignoreEvents = true;
             setEnabled(false);
             folderPanel.trySetCurrentFolder((AbstractFile)selectedItem, true);
         }
@@ -98,14 +109,18 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     /////////////////////////
 
     public void keyPressed(KeyEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, keyCode="+e.getKeyCode());
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, keyCode="+e.getKeyCode()+" ignoreEvents="+ignoreEvents);
+
+        if(ignoreEvents)
+            return;
 
         // Restore current location string if ESC was pressed
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE  && !isPopupVisible()) {
             locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
             folderPanel.getFileTable().requestFocus();
         }
         else if(e.getKeyCode()==KeyEvent.VK_ENTER && !isPopupVisible()) {
+            ignoreEvents = true;
             setEnabled(false);
             folderPanel.trySetCurrentFolder(locationField.getText(), true);
         }
