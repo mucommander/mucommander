@@ -30,21 +30,18 @@ public class RootFolders {
         int osType = PlatformManager.getOSFamily();
         if(osType==PlatformManager.MAC_OS_X) {
             addMacOSXVolumes(rootFoldersV);
-            if(Debug.ON)
-                Debug.trace("/Volumes's subfolders added: "+rootFoldersV);
+            if(Debug.ON) Debug.trace("/Volumes's subfolders added: "+rootFoldersV);
         }
         else {
             // Add java.io.File's root folders
             addFileRoots(rootFoldersV);
-            if(Debug.ON)
-                Debug.trace("java.io.File's root folders: "+rootFoldersV);
+            if(Debug.ON) Debug.trace("java.io.File's root folders: "+rootFoldersV);
 	
             // Add /etc/fstab folders
             // If we're running Windows, we can just skip that
             if(!(osType==PlatformManager.WINDOWS_9X || osType==PlatformManager.WINDOWS_NT)) {
                 addFstabEntries(rootFoldersV);
-                if(Debug.ON)
-                    Debug.trace("/etc/fstab mount points added: "+rootFoldersV);
+                if(Debug.ON) Debug.trace("/etc/fstab mount points added: "+rootFoldersV);
             }
         }
 

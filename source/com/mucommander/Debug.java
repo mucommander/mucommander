@@ -20,8 +20,16 @@ import java.util.Vector;
 public class Debug {
     /** Sets whether or not debug messages should be output to the standard output */
     public final static boolean ON = true;
+    /** Used to disable debug messages even though debug instructions have been compiled in. */
+    private static      boolean enabled = true;
 
     private static long lastTime;
+
+    /**
+     * Enables / disables debut output.
+     * @param b whether or not debug messages should be enabled.
+     */
+    public static final void setEnabled(boolean b) {enabled = b;}
 
     public static void resetTimer() {
         lastTime = System.currentTimeMillis();
@@ -36,9 +44,10 @@ public class Debug {
     public static void trace(String message) {
         trace(message, 0);
     }
-	
+
     public static void trace(String message, int level) {
-        System.out.println(getCallerSignature(level)+" : "+message);
+        if(enabled)
+            System.out.println(getCallerSignature(level)+" : "+message);
     }
 
 

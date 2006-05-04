@@ -710,16 +710,16 @@ public class PlatformManager {
     private static void showProcessOutput(Process p) {
         try {
             p.waitFor();
-            Debug.trace("exitValue="+p.exitValue());
+            if(Debug.ON) Debug.trace("exitValue="+p.exitValue());
 	
-            Debug.trace("reading process inputstream");
+            if(Debug.ON) Debug.trace("reading process inputstream");
             int i;
             java.io.InputStream is = p.getInputStream();
             while((i=is.read())!=-1)
                 System.out.print((char)i);
             is.close();
 			
-            Debug.trace("reading process errorstream");
+            if(Debug.ON) Debug.trace("reading process errorstream");
             is = p.getErrorStream();
             while((i=is.read())!=-1)
                 System.out.print((char)i);

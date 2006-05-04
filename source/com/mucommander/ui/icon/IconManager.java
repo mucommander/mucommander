@@ -102,8 +102,7 @@ public class IconManager {
         }
         catch(Exception e) {
             // An exception is thrown by ImageIcon if the image doesn't exist or could not be properly read
-            if(com.mucommander.Debug.ON)
-                com.mucommander.Debug.trace("/!\\/!\\/!\\ "+e+" caught while trying to load icon "+iconPath+", icon missing ?");
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("/!\\/!\\/!\\ "+e+" caught while trying to load icon "+iconPath+", icon missing ?");
             return null;
         }
     }

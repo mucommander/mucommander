@@ -30,6 +30,8 @@ import com.mucommander.PlatformManager;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class ConfigurationManager {
+    /** Path to the configuraation file. */
+    private static String configurationFile;
 
     /** Contains all registered configuration listeners, stored as weak references */
     private static WeakHashMap listeners = new WeakHashMap();
@@ -37,33 +39,15 @@ public class ConfigurationManager {
     /** Name of the configuration file */
     private static final String CONFIGURATION_FILENAME = "preferences.xml";
 
-    /** Instance of ConfigurationManager used to enfore configuration file loading. */
-    private static ConfigurationManager singleton = new ConfigurationManager();
-
     /** Holds the content of the configuration file. */
-    private static ConfigurationTree tree;
+    private static ConfigurationTree tree = new ConfigurationTree("root");
 
-
-    /**
-     * Dummy method which does nothing but trigger static fields execution.
-     * Calling this method early enough at launch time makes initialization predictable.
-     */
-    public static void init() {
-    }
-	
+    static {setVariable("prefs.conf_version", com.mucommander.Launcher.MUCOMMANDER_VERSION);}
 
     /**
-     * Private constructor used to ensure that the configuration file is loaded at boot time.
+     * Prevents the class from being instanciated.
      */
-    private ConfigurationManager() {
-        tree = new ConfigurationTree("root");
-        
-        // Load configuration
-        loadConfiguration();
-		
-        // Sets muCommander version corresponding to this configuration file
-        setVariable("prefs.conf_version", com.mucommander.Launcher.MUCOMMANDER_VERSION);
-    }
+    private ConfigurationManager() {}
 	
 	
     /* ------------------------ */
@@ -74,7 +58,10 @@ public class ConfigurationManager {
      * Returns the path to the configuration file on the current platform.
      */
     private static String getConfigurationFilePath() {
-        return new File(PlatformManager.getPreferencesFolder(), CONFIGURATION_FILENAME).getAbsolutePath();
+        if(configurationFile == null)
+            return new File(PlatformManager.getPreferencesFolder(), CONFIGURATION_FILENAME).getAbsolutePath();
+        else
+            return configurationFile;
     }
 	
 	
@@ -82,19 +69,27 @@ public class ConfigurationManager {
      * Loads the specified configuration file in memory.
      * @param path path to the configuration file to load in memory.
      */
-    private static synchronized void loadConfiguration(String path) throws Exception {
+    private static synchronized void parseConfiguration(String path) throws Exception {
         ConfigurationParser parser = new ConfigurationParser(new ConfigurationLoader());
         parser.parse(path);
     }
 
-	
     /**
-     * Opens and reads the configuration file.
+     * Reads configuration from the specified file.
+     * <p>
+     * The <code>path</code> parameter can be set to <code>null</code>, in which case the default
+     * configuration file will used.
+     * </p>
+     * @param path path to the configuration file.
      */
-    private static synchronized boolean loadConfiguration() {
-		
+    public static synchronized boolean loadConfiguration(String path) {
         try {
-            loadConfiguration(getConfigurationFilePath());
+            if(path == null)
+                parseConfiguration(getConfigurationFilePath());
+            else {
+                setConfigurationFile(path);
+                parseConfiguration(path);
+            }
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFilePath(), -1);						
 			
             // If version in configuration differs from current version, 
@@ -117,6 +112,11 @@ public class ConfigurationManager {
 
         return false;
     }
+
+    /**
+     * Opens and reads the configuration file.
+     */
+    public static synchronized boolean loadConfiguration() {return loadConfiguration(null);}
 
 
     /**
@@ -453,8 +453,7 @@ public class ConfigurationManager {
             return;
 		
         listeners.put(listener, null);
-        if(com.mucommander.Debug.ON)
-            com.mucommander.Debug.trace(listeners.size()+" listeners");
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(listeners.size()+" listeners");
     }
 
     /**
@@ -465,8 +464,7 @@ public class ConfigurationManager {
     public static synchronized void removeConfigurationListener(ConfigurationListener listener) {
         listeners.remove(listener);
 			
-        if(com.mucommander.Debug.ON)
-            com.mucommander.Debug.trace(listeners.size()+" listeners");
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(listeners.size()+" listeners");
     }
 
     /**
@@ -482,5 +480,21 @@ public class ConfigurationManager {
                 return false;
         return true;
     }
-}
 
+    // - Custom configuration file handling -----------------------------------------
+    // ------------------------------------------------------------------------------
+    /**
+     * Sets the path to the configuration file.
+     * <p>
+     * Note that this will not trigger a reloading of the configuration. In order for this
+     * method to have any effect on the configuration file that is loaded, it must be called
+     * before any call to {@link getVariable(String)}.
+     * </p>
+     * <p>
+     * The <code>file</code> can be <code>null</code>. If such is the case, the configuration
+     * file will revert to the default one.
+     * </p>
+     * @param file path to the configuration file that should be loaded.
+     */
+    public static void setConfigurationFile(String file) {configurationFile = file;}
+}

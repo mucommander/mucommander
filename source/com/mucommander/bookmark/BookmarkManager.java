@@ -19,6 +19,7 @@ import com.mucommander.PlatformManager;
  * @author Maxence Bernard
  */
 public class BookmarkManager {
+    private static File bookmarksFile;
 
     /** Bookmark file name */
     private static final String BOOKMARKS_FILENAME = "bookmarks.xml";
@@ -34,7 +35,10 @@ public class BookmarkManager {
      * Return a java.io.File instance that points to the bookmarks file location.
      */
     private static File getBookmarksFile() {
-        return new File(PlatformManager.getPreferencesFolder(), BOOKMARKS_FILENAME);
+        if(bookmarksFile == null)
+            return new File(PlatformManager.getPreferencesFolder(), BOOKMARKS_FILENAME);
+        else
+            return bookmarksFile;
     }
 
 	
@@ -155,4 +159,6 @@ public class BookmarkManager {
         while(iterator.hasNext())
             ((BookmarkListener)iterator.next()).bookmarkChanged(b);
     }
+
+    public static void setBookmarksFile(String file) {bookmarksFile = new File(file);}
 }

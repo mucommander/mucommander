@@ -66,14 +66,15 @@ class BookmarkParser implements ContentHandler {
      */
     public void endElement(String uri, String name) {
         if(name.equals("bookmark")) {
-            if(com.mucommander.Debug.ON && (bookmarkName==null || bookmarkName.equals("") || bookmarkURL==null || bookmarkURL.equals("")))
-                com.mucommander.Debug.trace("Missing value, bookmark ignored: name="+bookmarkName+" url="+bookmarkURL);
+            if(bookmarkName==null || bookmarkName.equals("") || bookmarkURL==null || bookmarkURL.equals("")) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Missing value, bookmark ignored: name="+bookmarkName+" url="+bookmarkURL);
+            }
             else
                 try {
                     BookmarkManager.addBookmark(new Bookmark(bookmarkName, new com.mucommander.file.FileURL(bookmarkURL)));
                 }
                 catch(java.net.MalformedURLException e) {
-                    com.mucommander.Debug.trace("Invalid bookmark URL: "+bookmarkURL+", "+e);
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Invalid bookmark URL: "+bookmarkURL+", "+e);
                 }
         }	
         else if(name.equals("name")) {

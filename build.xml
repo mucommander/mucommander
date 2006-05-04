@@ -105,7 +105,7 @@
   </target>
 
   <!-- Generates the application's obfuscated jar file.        -->
-  <target name="obfuscate" depends="jar">
+  <target name="obfuscate" depends="clean,jar">
     <delete file="${obf-jar}"/>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
     <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="false">

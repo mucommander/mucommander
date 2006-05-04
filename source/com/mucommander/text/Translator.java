@@ -164,8 +164,10 @@ public class Translator {
 					
                     nbEntries++;
                 } catch (Exception e) {
-                    if(com.mucommander.Debug.ON) e.printStackTrace();
-                    com.mucommander.Debug.trace("error in line "+line+" ("+e+")");
+                    if(com.mucommander.Debug.ON) {
+                        e.printStackTrace();
+                        com.mucommander.Debug.trace("error in line "+line+" ("+e+")");
+                    }
                 }
             }
         }
