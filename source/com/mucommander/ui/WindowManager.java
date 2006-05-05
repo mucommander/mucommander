@@ -236,9 +236,9 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 
         // Saves last folders
         ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
-                                         mainFrameToDispose.getFolderPanel1().getFolderHistory().getLastSavableFolder());
+                                         mainFrameToDispose.getFolderPanel1().getFolderHistory().getLastRecallableFolder());
         ConfigurationManager.setVariable("prefs.startup_folder.right.last_folder", 
-                                         mainFrameToDispose.getFolderPanel2().getFolderHistory().getLastSavableFolder());
+                                         mainFrameToDispose.getFolderPanel2().getFolderHistory().getLastRecallableFolder());
 
         // Saves window position, size and screen resolution
         Rectangle bounds = mainFrameToDispose.getBounds();

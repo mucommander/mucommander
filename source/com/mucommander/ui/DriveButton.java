@@ -334,11 +334,11 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
             // Menu item that corresponds to a root folder
             if(index<bookmarksOffset) {
                 // Tries to change current folder
-                folderPanel.trySetCurrentFolder(rootFolders[index].getCanonicalPath(), true);
+                folderPanel.trySetCurrentFolder(rootFolders[index].getCanonicalPath());
             }
             // Menu item that corresponds to a bookmark
             else if(index<serverShortcutsOffset) {
-                folderPanel.trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index-bookmarksOffset)).getURL(), true);
+                folderPanel.trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index-bookmarksOffset)).getURL());
             }
             // Menu item that corresponds to a server shortcut
             else {

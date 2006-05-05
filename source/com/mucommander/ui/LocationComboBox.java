@@ -96,11 +96,11 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
             ignoreEvents = true;
             setEnabled(false);
             hidePopup();    // Seems to be necessary under Windows/Java 1.5
-            folderPanel.trySetCurrentFolder((AbstractFile)selectedItem, true);
+            folderPanel.trySetCurrentFolder((AbstractFile)selectedItem);
         }
 //        else {
 //            setEnabled(false);
-//            folderPanel.trySetCurrentFolder(locationField.getText(), true);
+//            folderPanel.trySetCurrentFolder(locationField.getText());
 //        }
     }
 
@@ -123,7 +123,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
         else if(e.getKeyCode()==KeyEvent.VK_ENTER && !isPopupVisible()) {
             ignoreEvents = true;
             setEnabled(false);
-            folderPanel.trySetCurrentFolder(locationField.getText(), true);
+            folderPanel.trySetCurrentFolder(locationField.getText());
         }
     }
 

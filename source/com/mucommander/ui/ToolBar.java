@@ -359,7 +359,7 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
             folderPanel.getFolderHistory().goForward();
         }
         else if(buttonIndex==PARENT_INDEX) {
-            folderPanel.trySetCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);
+            folderPanel.trySetCurrentFolder(folderPanel.getCurrentFolder().getParent());
             requestFocus = true;
         }
         else if(buttonIndex==ADD_BOOKMARK_INDEX) {

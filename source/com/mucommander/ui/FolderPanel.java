@@ -76,7 +76,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         private AbstractFile folder;
         private String folderPath;
         private FileURL folderURL;
-        private boolean addToHistory;
         private AbstractFile fileToSelect;
 		
         private boolean isKilled;
@@ -90,21 +89,18 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         //		private boolean hadFocus;
 	
 		
-        public ChangeFolderThread(AbstractFile folder, boolean addToHistory) {
+        public ChangeFolderThread(AbstractFile folder) {
             this.folder = folder;
-            this.addToHistory = addToHistory;
             setPriority(Thread.MAX_PRIORITY);
         }
 
-        public ChangeFolderThread(String folderPath, boolean addToHistory) {
+        public ChangeFolderThread(String folderPath) {
             this.folderPath = folderPath;
-            this.addToHistory = addToHistory;
             setPriority(Thread.MAX_PRIORITY);
         }
 
-        public ChangeFolderThread(FileURL folderURL, boolean addToHistory) {
+        public ChangeFolderThread(FileURL folderURL) {
             this.folderURL = folderURL;
-            this.addToHistory = addToHistory;
             setPriority(Thread.MAX_PRIORITY);
         }
 	
@@ -354,7 +350,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     locationField.setProgressValue(75);
 					
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFolder");
-                    setCurrentFolder(folder, children, addToHistory, fileToSelect);
+                    setCurrentFolder(folder, children, fileToSelect);
 
                     // folder set -> 95% complete
                     locationField.setProgressValue(95);
@@ -482,14 +478,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 		
         try {
             // Set initial folder to current directory
-            setCurrentFolder(initialFolder, initialFolder.ls(), false, null);
+            setCurrentFolder(initialFolder, initialFolder.ls(), null);
         }
         catch(Exception e) {
             AbstractFile rootFolders[] = RootFolders.getRootFolders();
             // If that failed, try to read any other drive
             for(int i=0; i<rootFolders.length; i++) {
                 try  {
-                    setCurrentFolder(rootFolders[i], rootFolders[i].ls(), false, null);
+                    setCurrentFolder(rootFolders[i], rootFolders[i].ls(), null);
                     break;
                 }
                 catch(IOException e2) {
@@ -618,29 +614,27 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
     /**
-     * Tries to change current folder, adding current folder to history if specified.
+     * Tries to change current folder to the new specified one. 
      * The user is notified by a dialog if the folder could not be changed.
      * 
      * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
      *
      * @param folder folder to be made current folder. If folder is null or doesn't exist, a dialog will popup and inform the user
-     * @param addToHistory if true, folder will be added to history
      */
-    public synchronized void trySetCurrentFolder(AbstractFile folder, boolean addToHistory) {
-        trySetCurrentFolder(folder, addToHistory, null);
+    public synchronized void trySetCurrentFolder(AbstractFile folder) {
+        trySetCurrentFolder(folder, null);
     }
 
     /**
-     * Tries to change current folder, adding current folder to history if specified.
+     * Tries to change current folder to the new specified one, and select the given file after the folder has been changed.
      * The user is notified by a dialog if the folder could not be changed.
      * 
      * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
      *
      * @param folder folder to be made current folder. If folder is null or doesn't exist, a dialog will popup and inform the user
-     * @param addToHistory if true, folder will be added to history
      * @param selectThisFileAfter file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
      */
-    public synchronized void trySetCurrentFolder(AbstractFile folder, boolean addToHistory, AbstractFile selectThisFileAfter) {
+    public synchronized void trySetCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder);
 
         // Make sure there is not an existing thread running,
@@ -655,7 +649,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         //			return;
         //		}
 
-        this.changeFolderThread = new ChangeFolderThread(folder, addToHistory);
+        this.changeFolderThread = new ChangeFolderThread(folder);
 
         if(selectThisFileAfter!=null)
             this.changeFolderThread.selectThisFileAfter(selectThisFileAfter);
@@ -664,15 +658,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 	
     /**
-     * Tries to change current folder, adding current folder to history if specified.
+     * Tries to change current folder to the new specified path.
      * The user is notified by a dialog if the folder could not be changed.
      * 
      * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
      *
      * @param folderPath folder's path to be made current folder. If this path does not resolve into an existing file, an error message will be displayed
-     * @param addToHistory if true, folder will be added to history
      */
-    public synchronized void trySetCurrentFolder(String folderPath, boolean addToHistory) {
+    public synchronized void trySetCurrentFolder(String folderPath) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderPath="+folderPath);
 
         // Make sure there is not an existing thread running,
@@ -682,20 +675,19 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             return;
         }
 
-        this.changeFolderThread = new ChangeFolderThread(folderPath, addToHistory);
+        this.changeFolderThread = new ChangeFolderThread(folderPath);
         changeFolderThread.start();
     }
 
     /**
-     * Tries to change current folder, adding current folder to history if specified.
+     * Tries to change current folder to the new specified URL.
      * The user is notified by a dialog if the folder could not be changed.
      * 
      * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
      *
      * @param folderURL folder's URL to be made current folder. If this URL does not resolve into an existing file, an error message will be displayed
-     * @param addToHistory if true, folder will be added to history
      */
-    public synchronized void trySetCurrentFolder(FileURL folderURL, boolean addToHistory) {
+    public synchronized void trySetCurrentFolder(FileURL folderURL) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderURL="+folderURL);
 
         // Make sure there is not an existing thread running,
@@ -705,7 +697,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             return;
         }
 
-        this.changeFolderThread = new ChangeFolderThread(folderURL, addToHistory);
+        this.changeFolderThread = new ChangeFolderThread(folderURL);
         changeFolderThread.start();
     }
 
@@ -715,7 +707,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
      */
     public synchronized void tryRefreshCurrentFolder() {
-        trySetCurrentFolder(currentFolder, false, null);
+        trySetCurrentFolder(currentFolder, null);
     }
 
     /**
@@ -726,7 +718,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
      */
     public synchronized void tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
-        trySetCurrentFolder(currentFolder, false, selectThisFileAfter);
+        trySetCurrentFolder(currentFolder, selectThisFileAfter);
     }
 		
     /**
@@ -735,19 +727,18 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @throws IOException if current folder could not be refreshed.
      */
     public synchronized void refreshCurrentFolder() throws IOException {
-        setCurrentFolder(currentFolder, currentFolder.ls(), false, null);
+        setCurrentFolder(currentFolder, currentFolder.ls(), null);
     }
 
 
     /**
-     * Changes current folder using the given folder and files.
+     * Changes current folder using the given folder and children files.
      *
      * @param folder folder to be made current folder
      * @param children current folder's files (value of folder.ls())
-     * @param addToHistory if true, folder will be added to history
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      */
-    private void setCurrentFolder(AbstractFile folder, AbstractFile children[], boolean addToHistory, AbstractFile fileToSelect) {
+    private void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
         fileTable.setCurrentFolder(folder, children);
 
         // Select given file if not null
@@ -758,6 +749,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         // Change location field's text to reflect new current folder's path
         locationField.setText(folder.getAbsolutePath());
+
+        // Add folder to history
+        folderHistory.addToHistory(folder);
 
         // Notify listeners that location has changed
         fireLocationChanged();
@@ -776,7 +770,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     public synchronized void goToParent() {
         AbstractFile parent;
         if(!fileTable.getQuickSearch().isActive() && (parent=getCurrentFolder().getParent())!=null)
-            trySetCurrentFolder(parent, true);
+            trySetCurrentFolder(parent);
     }
 
 
