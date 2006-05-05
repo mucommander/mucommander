@@ -224,8 +224,8 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
      */
     private void updateButtonsState(FolderPanel folderPanel) {
         AbstractFile currentFolder = folderPanel.getCurrentFolder();
-        buttons[BACK_INDEX].setEnabled(folderPanel.hasBackFolder());
-        buttons[FORWARD_INDEX].setEnabled(folderPanel.hasForwardFolder());
+        buttons[BACK_INDEX].setEnabled(folderPanel.getFolderHistory().hasBackFolder());
+        buttons[FORWARD_INDEX].setEnabled(folderPanel.getFolderHistory().hasForwardFolder());
         buttons[STOP_INDEX].setEnabled(false);
         buttons[PARENT_INDEX].setEnabled(currentFolder.getParent()!=null);
         if(buttons[OPEN_IN_DESKTOP_INDEX]!=null)
@@ -353,10 +353,10 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
             WindowManager.getInstance().createNewMainFrame();
         }
         else if (buttonIndex==BACK_INDEX) {
-            folderPanel.goBack();
+            folderPanel.getFolderHistory().goBack();
         }
         else if(buttonIndex==FORWARD_INDEX) {
-            folderPanel.goForward();
+            folderPanel.getFolderHistory().goForward();
         }
         else if(buttonIndex==PARENT_INDEX) {
             folderPanel.trySetCurrentFolder(folderPanel.getCurrentFolder().getParent(), true);

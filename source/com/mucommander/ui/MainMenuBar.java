@@ -267,8 +267,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         else if(menu == viewMenu) {
             FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
 
-            goBackItem.setEnabled(enableUnconditional || folderPanel.hasBackFolder());
-            goForwardItem.setEnabled(enableUnconditional || folderPanel.hasForwardFolder());
+            goBackItem.setEnabled(enableUnconditional || folderPanel.getFolderHistory().hasBackFolder());
+            goForwardItem.setEnabled(enableUnconditional || folderPanel.getFolderHistory().hasForwardFolder());
             goToParentItem.setEnabled(enableUnconditional || folderPanel.getCurrentFolder().getParent()!=null);
         }
     }
@@ -381,10 +381,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             mainFrame.getLastActiveTable().getFolderPanel().changeCurrentLocation();	
         }
         else if (source == goBackItem) {
-            mainFrame.getLastActiveTable().getFolderPanel().goBack();	
+            mainFrame.getLastActiveTable().getFolderPanel().getFolderHistory().goBack();	
         }
         else if (source == goForwardItem) {
-            mainFrame.getLastActiveTable().getFolderPanel().goForward();	
+            mainFrame.getLastActiveTable().getFolderPanel().getFolderHistory().goForward();	
         }
         else if (source == goToParentItem) {
             mainFrame.getLastActiveTable().getFolderPanel().goToParent();

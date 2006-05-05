@@ -43,17 +43,13 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     */
     private DriveButton driveButton;
     private ProgressTextField locationField;
-	
-    private FileTable fileTable;
+	private FileTable fileTable;
     private JScrollPane scrollPane;
 	
-    private static Color backgroundColor;
-
-    private Vector history;
-    private int historyIndex;
+    private FolderHistory folderHistory = new FolderHistory(this);
     
-    private String lastSavableFolder;
-
+    private static Color backgroundColor;
+    
     private Object lastFocusedComponent;
 	
     private final static int CANCEL_ACTION = 0;
@@ -455,6 +451,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" initialFolder="+initialFolder);
         this.mainFrame = mainFrame;
 
+        // No decoration for this panel
+        setBorder(null);
+
         JPanel locationPanel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -481,20 +480,16 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         this.lastFocusedComponent = fileTable;
         fileTable.addFocusListener(this);
 		
-        // Initialize history vector
-        history = new Vector();
-    	historyIndex = -1;
-
         try {
             // Set initial folder to current directory
-            setCurrentFolder(initialFolder, initialFolder.ls(), true, null);
+            setCurrentFolder(initialFolder, initialFolder.ls(), false, null);
         }
         catch(Exception e) {
             AbstractFile rootFolders[] = RootFolders.getRootFolders();
             // If that failed, try to read any other drive
             for(int i=0; i<rootFolders.length; i++) {
                 try  {
-                    setCurrentFolder(rootFolders[i], rootFolders[i].ls(), true, null);
+                    setCurrentFolder(rootFolders[i], rootFolders[i].ls(), false, null);
                     break;
                 }
                 catch(IOException e2) {
@@ -543,42 +538,18 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
 	
-    public Border getBorder() {
-        return null;
-    }
-	
-    //  Not needed, default insets seem to be null
-    //	public Insets getInsets() {
-    //		return new Insets(0, 0, 0, 0);
-    //	}
-
     public FileTable getFileTable() {
-        return fileTable;
+        return this.fileTable;
     }
 
     public MainFrame getMainFrame() {
-        return mainFrame;
+        return this.mainFrame;
     }
 
-
-    /**
-     * Notifies all registered listeners that current folder has changed on this FolderPanel.
-     */
-    private void fireLocationChanged() {
-        Iterator iterator = locationListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationChanged(new LocationEvent(this));
+    public FolderHistory getFolderHistory() {
+        return this.folderHistory;
     }
-
-    /**
-     * Notifies all registered listeners that folder change has been cancelled.
-     */
-    private void fireLocationCancelled() {
-        Iterator iterator = locationListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationCancelled(new LocationEvent(this));
-    }
-
+    
 
     /**
      * Causes the DriveButton to popup and show root folder, bookmarks, server shortcuts...
@@ -788,27 +759,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Change location field's text to reflect new current folder's path
         locationField.setText(folder.getAbsolutePath());
 
-        if (addToHistory) {
-            historyIndex++;
-
-            // Delete 'forward' history items if any
-            int size = history.size();
-            for(int i=historyIndex; i<size; i++) {
-                history.removeElementAt(historyIndex);
-            }
-            // Insert previous folder in history
-            history.add(folder);
-        }
-
-        // Save last folder recallable on startup only if :
-        //  - it is a directory on a local filesytem
-        //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
-        // Java from triggering that dreaded 'Drive not ready' popup.
-        if(folder.getURL().getProtocol().equals("file") && folder.isDirectory() && !((FSFile)folder.getRoot()).guessRemovableDrive()) {
-            this.lastSavableFolder = folder.getAbsolutePath();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastSavableFolder= "+lastSavableFolder);
-        }
-
         // Notify listeners that location has changed
         fireLocationChanged();
     }
@@ -816,31 +766,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     public ChangeFolderThread getChangeFolderThread() {
         return changeFolderThread;
-    }
-
-
-    /**
-     * Changes current folder to be the previous one in folder history.
-     * Does nothing if there is no previous folder in history. 
-     */
-    public synchronized void goBack() {
-        if (historyIndex==0)
-            return;
-		
-        AbstractFile folder = (AbstractFile)history.elementAt(--historyIndex);
-        trySetCurrentFolder(folder, false);
-    }
-	
-    /**
-     * Changes current folder to be the next one in folder history.
-     * Does nothing if there is no next folder in history. 
-     */
-    public synchronized void goForward() {
-        if (historyIndex==history.size()-1)
-            return;
-		
-        AbstractFile folder = (AbstractFile)history.elementAt(++historyIndex);
-        trySetCurrentFolder(folder, false);
     }
 
 
@@ -855,33 +780,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
 
-    /**
-     * Returns <code>true</code> if there is at least one folder 'back' in the history.
-     */
-    public boolean hasBackFolder() {
-        return historyIndex!=0;
-    }
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
 
-    /**
-     * Returns <code>true</code> if there is at least one folder 'forward' in the history.
-     */
-    public boolean hasForwardFolder() {
-        return historyIndex!=history.size()-1;
-    }
-	
-	
-    /**
-     * Returns the last folder the user went to before quitting the application.
-     * This folder will be loaded on next mucommander startup, so the returned folder should NOT be
-     * a folder on a remote filesystem (likely not to be reachable next time the app is started)
-     * or a removable media drive (cd/dvd/floppy) if under Windows, as it would trigger a nasty 
-     * 'drive not ready' popup dialog.
-     */
-    public String getLastSavableFolder() {
-        return this.lastSavableFolder;
-    }
-	
-	
     /**
      * Overrides JComponent's requestFocus() method to request focus
      * on the last focused component inside this FolderPanel: on the file able or on the location field
@@ -891,6 +793,18 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             ((JComponent)lastFocusedComponent).requestFocus();
     }
 
+
+//    /**
+//     *
+//     */
+//    public Border getBorder() {
+//        return null;
+//    }
+    
+
+    //////////////////////////////////////
+    // LocationListener-related methods //
+    //////////////////////////////////////
 
     /**
      * Registers a LocationListener to receive LocationEvents whenever the current folder
@@ -917,6 +831,24 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         Iterator iterator = locationListeners.keySet().iterator();
         while(iterator.hasNext())
             ((LocationListener)iterator.next()).locationChanging(new LocationEvent(this));
+    }
+
+    /**
+     * Notifies all registered listeners that current folder has changed on this FolderPanel.
+     */
+    private void fireLocationChanged() {
+        Iterator iterator = locationListeners.keySet().iterator();
+        while(iterator.hasNext())
+            ((LocationListener)iterator.next()).locationChanged(new LocationEvent(this));
+    }
+
+    /**
+     * Notifies all registered listeners that folder change has been cancelled.
+     */
+    private void fireLocationCancelled() {
+        Iterator iterator = locationListeners.keySet().iterator();
+        while(iterator.hasNext())
+            ((LocationListener)iterator.next()).locationCancelled(new LocationEvent(this));
     }
 
 
