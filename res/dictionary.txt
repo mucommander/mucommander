@@ -1275,7 +1275,7 @@ toolbar.go_forward:EN:$[shortcuts_dialog.view.go_forward]
 
 toolbar.go_to_parent:EN:$[shortcuts_dialog.navigation.go_to_parent]
 
-toolbar.stop:EN:$[stop]
+toolbar.stop:EN:$[shortcuts_dialog.navigation.stop_folder_change]
 
 toolbar.add_bookmark:EN:$[add_bookmark_dialog.title]
 
@@ -3548,20 +3548,33 @@ shortcuts_dialog.navigation.change_right:RU:Изменить правый кат
 shortcuts_dialog.navigation.change_right:ZH_CN:改变右边文件夹
 shortcuts_dialog.navigation.change_right:SI:Zamenjaj mapo na desni strani
 
-shortcuts_dialog.navigation.tab:EN:Switch between left and right panels
-shortcuts_dialog.navigation.tab:FR:Basculer entre les dossiers de droite et de gauche
-shortcuts_dialog.navigation.tab:DE:Zwischen linkem und rechtem Fenster wechseln
-shortcuts_dialog.navigation.tab:ES:Cambiar entre los paneles izquierdo y derecho
-shortcuts_dialog.navigation.tab:CS:Změnit aktuální panel
-shortcuts_dialog.navigation.tab:zh_TW:在左右面板間交互切換
-shortcuts_dialog.navigation.tab:PL:Zamień aktualne panel
-shortcuts_dialog.navigation.tab:HU:A bal és jobb panel megcserélése
-shortcuts_dialog.navigation.tab:RU:Переключение между левой и правой панелью
-shortcuts_dialog.navigation.tab:ZH_CN:在左右面板间切换
-shortcuts_dialog.navigation.tab:SI:Preklopi med levo in desno stranjo
+shortcuts_dialog.navigation.switch_folder:EN:Switch between left and right panels
+shortcuts_dialog.navigation.switch_folder:FR:Basculer entre les dossiers de droite et de gauche
+shortcuts_dialog.navigation.switch_folder:DE:Zwischen linkem und rechtem Fenster wechseln
+shortcuts_dialog.navigation.switch_folder:ES:Cambiar entre los paneles izquierdo y derecho
+shortcuts_dialog.navigation.switch_folder:CS:Změnit aktuální panel
+shortcuts_dialog.navigation.switch_folder:zh_TW:在左右面板間交互切換
+shortcuts_dialog.navigation.switch_folder:PL:Zamień aktualne panel
+shortcuts_dialog.navigation.switch_folder:HU:A bal és jobb panel megcserélése
+shortcuts_dialog.navigation.switch_folder:RU:Переключение между левой и правой панелью
+shortcuts_dialog.navigation.switch_folder:ZH_CN:在左右面板间切换
+shortcuts_dialog.navigation.switch_folder:SI:Preklopi med levo in desno stranjo
 
 shortcuts_dialog.navigation.change_current_location:EN:Change current folder's location
 shortcuts_dialog.navigation.change_current_location:FR:Changer le chemin du répertoire courant
+
+
+
+
+
+
+
+
+
+
+
+shortcuts_dialog.navigation.stop_folder_change:EN:Stop folder change
+shortcuts_dialog.navigation.stop_folder_change:FR:Arrêter le changement de dossier 
 
 
 
@@ -3586,17 +3599,17 @@ shortcuts_dialog.navigation.go_to_parent:RU:Перейти к родительс
 shortcuts_dialog.navigation.go_to_parent:ZH_CN:到父文件夹
 shortcuts_dialog.navigation.go_to_parent:SI:Izvorna mapa
 
-shortcuts_dialog.navigation.enter:EN:Enter folder / Enter archive / Execute
-shortcuts_dialog.navigation.enter:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
-shortcuts_dialog.navigation.enter:DE:Ordner öffnen / Archiv öffnen / Ausführen
-shortcuts_dialog.navigation.enter:ES:Entrar en el directorio / Entrar en el fichero / Ejecutar
-shortcuts_dialog.navigation.enter:CS:Otevřít složku / Otevřít archív / Spustit
-shortcuts_dialog.navigation.enter:zh_TW:進入資料夾 / 進入壓縮檔 / 執行
-shortcuts_dialog.navigation.enter:PL:Otwórz katalog / Otwórz archiwum / Wykonaj
-shortcuts_dialog.navigation.enter:HU:belép a könyvtárba / belép az archív fájlba / futtat
-shortcuts_dialog.navigation.enter:RU:Войти в каталог / Войти в архив / Выполнить
-shortcuts_dialog.navigation.enter:ZH_CN:进入文件夹 / 进入压缩包 / 执行
-shortcuts_dialog.navigation.enter:SI:Odpri mapo / Odpri arhiv / Zaženi
+shortcuts_dialog.navigation.enter_folder:EN:Enter folder / Enter archive / Execute
+shortcuts_dialog.navigation.enter_folder:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
+shortcuts_dialog.navigation.enter_folder:DE:Ordner öffnen / Archiv öffnen / Ausführen
+shortcuts_dialog.navigation.enter_folder:ES:Entrar en el directorio / Entrar en el fichero / Ejecutar
+shortcuts_dialog.navigation.enter_folder:CS:Otevřít složku / Otevřít archív / Spustit
+shortcuts_dialog.navigation.enter_folder:zh_TW:進入資料夾 / 進入壓縮檔 / 執行
+shortcuts_dialog.navigation.enter_folder:PL:Otwórz katalog / Otwórz archiwum / Wykonaj
+shortcuts_dialog.navigation.enter_folder:HU:belép a könyvtárba / belép az archív fájlba / futtat
+shortcuts_dialog.navigation.enter_folder:RU:Войти в каталог / Войти в архив / Выполнить
+shortcuts_dialog.navigation.enter_folder:ZH_CN:进入文件夹 / 进入压缩包 / 执行
+shortcuts_dialog.navigation.enter_folder:SI:Odpri mapo / Odpri arhiv / Zaženi
 
 shortcuts_dialog.navigation.execute:EN:Execute selected file with system's file associations
 shortcuts_dialog.navigation.execute:FR:Exécuter le fichier sélectionné avec les associations de fichiers du système  
@@ -3835,6 +3848,90 @@ shortcuts_dialog.file_operations.add_bookmark:zh_TW:加入目前資料夾為書�
 shortcuts_dialog.file_operations.add_bookmark:PL:Dodaj do zakładek aktualny katalog
 shortcuts_dialog.file_operations.add_bookmark:ZH_CN:收藏当前文件夹
 shortcuts_dialog.file_operations.add_bookmark:SI:Dodaj trenutno mapo med priljubljene
+
+
+
+
+
+
+
+
+shortcuts_dialog.quick_search:EN:Quick search
+shortcuts_dialog.quick_search:FR:Recherche rapide
+
+
+
+
+
+
+
+
+
+
+shortcuts_dialog.quick_search.start_search:EN:Type in any character to start a quick search
+shortcuts_dialog.quick_search.start_search:FR:Entrez un caractère pour commencer une recherche rapide
+
+
+
+
+
+
+
+
+
+shortcuts_dialog.quick_search.cancel_search:EN:Cancel quick search
+shortcuts_dialog.quick_search.cancel_search:FR:Annuler la recherche rapide
+
+
+
+
+
+
+
+
+
+
+shortcuts_dialog.quick_search.remove_last_char:EN:Remove last character from quick search string
+shortcuts_dialog.quick_search.remove_last_char:FR:Supprimer le dernier caractère de recherche
+
+
+
+
+
+
+
+
+
+
+shortcuts_dialog.quick_search.jump_to_previous:EN:Jump to previous quick search result
+shortcuts_dialog.quick_search.jump_to_previous:FR:Aller au résultat précédent
+
+
+
+
+
+
+
+
+
+
+shortcuts_dialog.quick_search.jump_to_next:EN:Jump to next quick search result
+shortcuts_dialog.quick_search.jump_to_next:FR:Aller au résultat suivant
+
+
+
+
+
+
+
+
+
+shortcuts_dialog.quick_search.mark_jump_next:EN:Mark/Unmark current file and jump to next search result
+shortcuts_dialog.quick_search.mark_jump_next:FR:Marquer/Dé-marquer le fichier courant et aller au résultat suivant
+
+
+
+
 
 
 
