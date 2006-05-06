@@ -8,14 +8,13 @@ import com.mucommander.ui.QuitDialog;
 import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.about.AboutDialog;
 
-//import com.apple.mrj.MRJAboutHandler;
-//import com.apple.mrj.MRJPrefsHandler;
-//import com.apple.mrj.MRJQuitHandler;
-//import com.apple.mrj.MRJApplicationUtils;
-
-
 /**
- * 
+ * This class handles Mac OS X specifics when muCommander is started:
+ * <ul>
+ *  <li>Creates hooks for the 'About', 'Preferences' and 'Quit' application menu items
+ *  <li>Turns on/off brush metal based on preferences (default is on)
+ *  <li>Turns screen menu bar based on preferences (default is on, no GUI for that pref)
+ * </ul>
  *
  * @author Maxence Bernard
  */
