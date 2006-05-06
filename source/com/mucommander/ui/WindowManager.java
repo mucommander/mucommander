@@ -48,35 +48,27 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 
     /** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
     private final static int FOCUS_REQUEST_DELAY = 1000;
+	
+	
+    /**
+     * Initialises the window manager.
+     * @param leftPath initial path for the left frame.
+     * @param rightPath initial path for the right frame.
+     */
+    public static void init(String leftPath, String rightPath) {
+        if(instance == null)
+            instance = new WindowManager(leftPath, rightPath);
+    }
+	
+	
+    /**
+     * Creates a new instance of WindowManager.
+     * @param leftPath  initial path for the left frame.
+     * @param rightPath initial path for the right frame.
+     */
+    private WindowManager(String leftPath, String rightPath) {
+        AbstractFile leftFile, rightFile;
 
-	
-    static {
-        instance = new WindowManager();
-        instance.init();
-    }
-	
-	
-    /**
-     * Dummy method that does nothing but trigger static fields initialization.
-     */
-    public static void checkInit() {
-    }
-	
-	
-    /**
-     * Empty no-arg constructor.
-     */
-    private WindowManager() {
-        // do nothing here so that
-        // getInstance() returns a non-null value
-        // during initialization (performed in init method)
-    }
-	
-	
-    /**
-     * Performs first-time initialization and creates a first frame.
-     */
-    private void init() {
         // Sets custom lookAndFeel if different from current lookAndFeel
         String lnfName = ConfigurationManager.getVariable("prefs.lookAndFeel");
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
@@ -87,9 +79,20 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 		
         // Create a MainFrame
         this.mainFrames = new Vector();
-        currentMainFrame = createNewMainFrame();
+
+        // Makes sure the requested initial left path exists, uses home otherwise.
+        if((leftFile = AbstractFile.getAbstractFile(leftPath)) == null || !leftFile.exists())
+            leftFile = AbstractFile.getAbstractFile(System.getProperty("user.home"));
+
+        // Makes sure the requested initial rigth path exists, uses home otherwise.
+        if((rightFile = AbstractFile.getAbstractFile(rightPath)) == null || !rightFile.exists())
+            rightFile = AbstractFile.getAbstractFile(System.getProperty("user.home"));
+        currentMainFrame = createNewMainFrame(leftFile, rightFile);
+
+        // do nothing here so that
+        // getInstance() returns a non-null value
+        // during initialization (performed in init method)
     }
-	
 	
     public static WindowManager getInstance() {
         return instance;
@@ -109,28 +112,22 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
     public Vector getMainFrames() {
         return mainFrames;
     }
-	
-	
+
     /**
      * Creates a new MainFrame and makes it visible on the screen, on top of any other frames.
-     */
+     */	
     public synchronized MainFrame createNewMainFrame() {
-        // Initial folders are home and/or last folder if it's the first MainFrame,
-        // the same folders as the current MainFrame otherwise
-        AbstractFile folder1;
-        AbstractFile folder2;
-		
-        // If first window, set initial folders
+        return createNewMainFrame(currentMainFrame.getFolderPanel1().getFileTable().getCurrentFolder(),
+                                  currentMainFrame.getFolderPanel2().getFileTable().getCurrentFolder());
+    }
+
+    /**
+     * Creates a new MainFrame and makes it visible on the screen, on top of any other frames.
+     * @param folder1 initial path for the left frame.
+     * @param folder2 initial path for the right frame.
+     */
+    private synchronized MainFrame createNewMainFrame(AbstractFile folder1, AbstractFile folder2) {
         boolean firstWindow = mainFrames.size()==0;
-        if (firstWindow) {
-            folder1 = getInitialFolder(true);
-            folder2 = getInitialFolder(false);
-        }
-        // If not, use previous window's folders 
-        else {
-            folder1 = currentMainFrame.getFolderPanel1().getFileTable().getCurrentFolder();
-            folder2 = currentMainFrame.getFolderPanel2().getFileTable().getCurrentFolder();
-        }
 		
         // Create frame
         MainFrame newMainFrame = new MainFrame(folder1, folder2);
@@ -329,42 +326,6 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
     }
 
 
-    /**
-     * Returns the initial left or right folder according to user preferences: either custom folder or
-     * last folder. If custom or last folder couldn't be retrieved, return the user's home folder. 
-     */ 
-    private AbstractFile getInitialFolder(boolean leftFolder) {
-		
-        // Initial path according to user preferences: either last folder or custom folder
-        String pref = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".on_startup", "lastFolder");
-        String userHomePath = System.getProperty("user.home");
-        String folderPath = null;
-
-        // Fetch custom folder
-        if (pref.equals("customFolder")) {
-            folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".custom_folder", userHomePath);
-        }
-        // Fetch last folder
-        else {
-            folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".last_folder", userHomePath);
-        }
-
-        // Create an AbstractFile instance from the initial folder's path
-        AbstractFile folder = null;
-        if(folderPath!=null)
-            folder = AbstractFile.getAbstractFile(folderPath);
-		
-        // If initial folder is null (file couldn't be created) or doesn't exist, return
-        // user home folder 
-        if(folder==null || !folder.exists())
-            folder = AbstractFile.getAbstractFile(userHomePath);
-
-        if(Debug.ON) Debug.trace("initial folder= "+folder);
-		
-        return folder;
-    }
-
-	
     /**
      * Changes LooknFeel to the given one, updating the UI of each MainFrame.
      */

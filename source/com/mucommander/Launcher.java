@@ -4,7 +4,9 @@ import com.mucommander.ui.*;
 import com.mucommander.conf.*;
 import com.mucommander.*;
 import com.mucommander.ui.*;
+import com.mucommander.file.*;
 import java.lang.reflect.*;
+import java.io.*;
 
 /**
  * muCommander launcher: displays a splash screen and starts up the app
@@ -52,6 +54,10 @@ public class Launcher {
             System.out.println(" -d, --debug                     Enable debug output to stdout (default)");
         }
 
+        // Default folders.
+        System.out.println(" -p1 PATH, --left-path PATH      Open PATH in left frame.");
+        System.out.println(" -p2 PATH, --right-path PATH     Open PATH in right frame.");
+
         // Text commands.
         System.out.println(" -h, --help                      Print the help text and exit");
         System.out.println(" -v, --version                   Print the version and exit");
@@ -88,6 +94,17 @@ public class Launcher {
      * Main method used to startup muCommander.
      */
     public static void main(String args[]) {
+        // Both those variables as kept as Strings instead of AbstractFiles to
+        // avoid triggering untimely initialisation of PlatformManager, if only
+        // because we don't want to make calls to Debug.trace before we've analysed
+        // a potential -n argument.
+        String leftPath;  // Initial path for the left frame.
+        String rightPath; // Initial path for the right frame.
+
+        // Default values.
+        leftPath  = null;
+        rightPath = null;
+
         // Parses command line arguments.
         for(int i = 0; i < args.length; i++) {
             // Print version.
@@ -112,6 +129,18 @@ public class Launcher {
                 ConfigurationManager.setConfigurationFile(args[++i]);
             }
 
+            // Initial folders handling.
+            else if(args[i].equals("-p1") || args[i].equals("--left-path")) {
+                if(i >= args.length -1)
+                    printError("Missing PATH parameter to " + args[i]);
+                leftPath = new File(args[++i]).getAbsolutePath();
+            }
+            else if(args[i].equals("-p2") || args[i].equals("--right-path")) {
+                if(i >= args.length -1)
+                    printError("Missing PATH parameter to " + args[i]);
+                rightPath = new File(args[++i]).getAbsolutePath();
+            }
+
             // Debug options.
             else if(Debug.ON && args[i].equals("-n") || args[i].equals("--no-debug"))
                 Debug.setEnabled(false);
@@ -123,7 +152,7 @@ public class Launcher {
                 printError("Illegal argument: " + args[i]);
         }
 
-        new Launcher();
+        new Launcher(leftPath, rightPath);
     }
 
 
@@ -131,9 +160,10 @@ public class Launcher {
     // - muCommander boot -------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
-     * No-arg private constructor.
+     * @param leftPath  initial path for the left frame.
+     * @parma rightPath initial path for the right frame.
      */
-    private Launcher() {
+    private Launcher(String leftPath, String rightPath) {
 
         //////////////////////////////////////////////////////////////////////////
         // Important: all JAR resource files need to be loaded from the main    //
@@ -202,8 +232,18 @@ public class Launcher {
         splashScreen.setLoadingMessage("Initializing window...");
 
         // Initialize WindowManager and create a new window
-        WindowManager.checkInit();
-		
+        if(leftPath == null)
+            leftPath = getInitialPath(true);
+        if(rightPath == null)
+            rightPath = getInitialPath(false);
+
+        if(Debug.ON) {
+            Debug.trace("Left frame initial path: " + leftPath);
+            Debug.trace("Right frame initial path: " + rightPath);
+        }
+
+        WindowManager.init(leftPath, rightPath);
+
         // Check for newer version unless it was disabled
         if(ConfigurationManager.getVariableBoolean("prefs.check_for_updates_on_startup", true))
             new CheckVersionDialog(WindowManager.getInstance().getCurrentMainFrame(), false);
@@ -217,7 +257,45 @@ public class Launcher {
         splashScreen.dispose();
     }
 
-	
+    /**
+     * Returns the initial left or right paths according to user preferences: either custom folder or
+     * last folder. If custom or last folder couldn't be retrieved, return the user's home folder. 
+     */ 
+    private String getInitialPath(boolean leftFolder) {
+		
+        // Initial path according to user preferences: either last folder or custom folder
+        String pref = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".on_startup", "lastFolder");
+        String userHomePath = System.getProperty("user.home");
+        String folderPath = null;
+
+        // Fetch custom folder
+        if (pref.equals("customFolder")) {
+            folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".custom_folder", userHomePath);
+        }
+        // Fetch last folder
+        else {
+            folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".last_folder", userHomePath);
+        }
+
+        if(Debug.ON) Debug.trace("initial folder= "+folderPath);
+        return folderPath;
+
+        /*
+        // Create an AbstractFile instance from the initial folder's path
+        AbstractFile folder = null;
+        if(folderPath!=null)
+            folder = AbstractFile.getAbstractFile(folderPath);
+		
+        // If initial folder is null (file couldn't be created) or doesn't exist, return
+        // user home folder 
+        if(folder==null || !folder.exists())
+            folder = AbstractFile.getAbstractFile(userHomePath);
+
+		
+        return folder;
+        */
+    }
+
     //	/**
     //	 * Turns on or off dynamic layout which updates layout while resizing a frame. This
     //	 * is a 1.4 only feature and may not be supported by the underlying OS and window manager.
@@ -229,5 +307,4 @@ public class Launcher {
     //		catch(NoSuchMethodError e) {
     //		}
     //	}
-
 }
