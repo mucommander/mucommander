@@ -788,14 +788,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
 
-//    /**
-//     *
-//     */
-//    public Border getBorder() {
-//        return null;
-//    }
-    
-
     //////////////////////////////////////
     // LocationListener-related methods //
     //////////////////////////////////////
