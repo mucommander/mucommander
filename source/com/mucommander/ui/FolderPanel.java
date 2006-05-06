@@ -821,7 +821,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     /**
      * Notifies all registered listeners that current folder is being changed on this FolderPanel.
      */
-    private synchronized void fireLocationChanging() {
+    private synchronized void fireLocationChanging() {        
         Iterator iterator = locationListeners.keySet().iterator();
         while(iterator.hasNext())
             ((LocationListener)iterator.next()).locationChanging(new LocationEvent(this));

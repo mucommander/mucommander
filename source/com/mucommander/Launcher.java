@@ -133,12 +133,12 @@ public class Launcher {
             else if(args[i].equals("-p1") || args[i].equals("--left-path")) {
                 if(i >= args.length -1)
                     printError("Missing PATH parameter to " + args[i]);
-                leftPath = new File(args[++i]).getAbsolutePath();
+                leftPath = args[++i];
             }
             else if(args[i].equals("-p2") || args[i].equals("--right-path")) {
                 if(i >= args.length -1)
                     printError("Missing PATH parameter to " + args[i]);
-                rightPath = new File(args[++i]).getAbsolutePath();
+                rightPath = args[++i];
             }
 
             // Debug options.
@@ -257,12 +257,12 @@ public class Launcher {
         splashScreen.dispose();
     }
 
+
     /**
      * Returns the initial left or right paths according to user preferences: either custom folder or
      * last folder. If custom or last folder couldn't be retrieved, return the user's home folder. 
      */ 
     private String getInitialPath(boolean leftFolder) {
-		
         // Initial path according to user preferences: either last folder or custom folder
         String pref = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".on_startup", "lastFolder");
         String userHomePath = System.getProperty("user.home");
@@ -279,21 +279,6 @@ public class Launcher {
 
         if(Debug.ON) Debug.trace("initial folder= "+folderPath);
         return folderPath;
-
-        /*
-        // Create an AbstractFile instance from the initial folder's path
-        AbstractFile folder = null;
-        if(folderPath!=null)
-            folder = AbstractFile.getAbstractFile(folderPath);
-		
-        // If initial folder is null (file couldn't be created) or doesn't exist, return
-        // user home folder 
-        if(folder==null || !folder.exists())
-            folder = AbstractFile.getAbstractFile(userHomePath);
-
-		
-        return folder;
-        */
     }
 
     //	/**

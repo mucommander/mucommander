@@ -15,7 +15,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import java.util.Vector;
+import java.util.*;
+import java.io.*;
 
 
 /**
@@ -49,26 +50,46 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
     /** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
     private final static int FOCUS_REQUEST_DELAY = 1000;
 	
-	
     /**
      * Initialises the window manager.
      * @param leftPath initial path for the left frame.
      * @param rightPath initial path for the right frame.
      */
     public static void init(String leftPath, String rightPath) {
-        if(instance == null)
-            instance = new WindowManager(leftPath, rightPath);
+        if(instance == null) {
+            instance = new WindowManager();
+            instance.initMainFrame(leftPath, rightPath);
+        }
     }
-	
-	
+
+    private AbstractFile getInitialPath(String path) {
+        AbstractFile file;
+
+        // Tries the specified path as-is.
+        if((file = AbstractFile.getAbstractFile(path)) == null || !file.exists())
+            // Tries the specified path as a relative path.
+            if((file = AbstractFile.getAbstractFile(new File(path).getAbsolutePath())) == null || !file.exists())
+                // Defaults to home.
+                file = AbstractFile.getAbstractFile(System.getProperty("user.home"));
+
+        // If the specified path is a non-browsable, uses its parent.
+        if(!file.isBrowsable())
+            // This is just playing things safe, as I doubt there might ever be a case of
+            // a file without a parent directory.
+            if((file = file.getParent()) == null)
+                file = AbstractFile.getAbstractFile(System.getProperty("user.home"));
+        return file;
+    }
+
+
+    private void initMainFrame(String leftPath, String rightPath) {
+        currentMainFrame = createNewMainFrame(getInitialPath(leftPath), getInitialPath(rightPath));
+    }
+
     /**
      * Creates a new instance of WindowManager.
-     * @param leftPath  initial path for the left frame.
-     * @param rightPath initial path for the right frame.
      */
-    private WindowManager(String leftPath, String rightPath) {
-        AbstractFile leftFile, rightFile;
-
+    private WindowManager() {
         // Sets custom lookAndFeel if different from current lookAndFeel
         String lnfName = ConfigurationManager.getVariable("prefs.lookAndFeel");
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
@@ -79,16 +100,6 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 		
         // Create a MainFrame
         this.mainFrames = new Vector();
-
-        // Makes sure the requested initial left path exists, uses home otherwise.
-        if((leftFile = AbstractFile.getAbstractFile(leftPath)) == null || !leftFile.exists())
-            leftFile = AbstractFile.getAbstractFile(System.getProperty("user.home"));
-
-        // Makes sure the requested initial rigth path exists, uses home otherwise.
-        if((rightFile = AbstractFile.getAbstractFile(rightPath)) == null || !rightFile.exists())
-            rightFile = AbstractFile.getAbstractFile(System.getProperty("user.home"));
-        currentMainFrame = createNewMainFrame(leftFile, rightFile);
-
         // do nothing here so that
         // getInstance() returns a non-null value
         // during initialization (performed in init method)
