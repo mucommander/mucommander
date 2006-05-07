@@ -3,18 +3,12 @@ package com.mucommander.ui;
 
 import com.mucommander.conf.*;
 import com.mucommander.PlatformManager;
-
-import com.mucommander.file.AbstractFile;
-
+import com.mucommander.file.*;
 import com.mucommander.event.*;
-
 import com.mucommander.Debug;
-
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
-
 import java.util.*;
 import java.io.*;
 
@@ -133,18 +127,56 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
             return getInitialPath(frame);
 
         // Tries the specified path as-is.
-        if((file = AbstractFile.getAbstractFile(path)) == null || !file.exists())
+        file = null;
+        while(true) {
+            try {
+                file = AbstractFile.getAbstractFile(path, true);
+                if(!file.exists())
+                    file = null;
+                break;
+            }
+            // If an AuthException occured, gets login credential from the user.
+            catch(Exception e) {
+                if(e instanceof AuthException) {
+                    AuthException exception;
+                    AuthDialog    authDialog;
+
+                    // Prompts the user for login and password.
+                    exception = (AuthException)e;
+                    authDialog = new AuthDialog(currentMainFrame, exception);
+                    authDialog.showDialog();
+                    if(authDialog.okPressed())
+                        path = exception.getFileURL().getStringRep(false);
+
+                    // If the user cancels, we fall back on the default path.
+                    else
+                        return getInitialPath(frame);
+                }
+                else {
+                    file = null;
+                    break;
+                }
+            }
+        }
+
+        // If the specified path does not work out, 
+        if(file == null)
             // Tries the specified path as a relative path.
             if((file = AbstractFile.getAbstractFile(new File(path).getAbsolutePath())) == null || !file.exists())
                 // Defaults to home.
                 return getInitialPath(frame);
 
         // If the specified path is a non-browsable, uses its parent.
-        if(!file.isBrowsable())
+        if(!file.isBrowsable()) {
+            System.out.println("here");
             // This is just playing things safe, as I doubt there might ever be a case of
             // a file without a parent directory.
-            if((file = file.getParent()) == null)
+            if((file = file.getParent()) == null) {
+                System.out.println("there");
                 return getInitialPath(frame);
+            }
+        }
+
         return file;
     }
 
