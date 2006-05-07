@@ -26,6 +26,9 @@ import java.io.*;
  * @author Maxence Bernard
  */
 public class WindowManager implements ActionListener, WindowListener, TableChangeListener, LocationListener, ConfigurationListener {
+    private static final String LEFT_FRAME  = "left";
+    private static final String RIGHT_FRAME = "right";
+
 
     /** MainFrame (main muCommander window) instances */
     private static Vector mainFrames;
@@ -39,8 +42,8 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 
     /** Last main frame on which focus has been explicitely requested */
     private MainFrame lastFocusedMainFrame;
-	
-    private static WindowManager instance;
+
+    private static WindowManager instance = new WindowManager();
 
     private final static int MENU_ITEM_VK_TABLE[] = {
         KeyEvent.VK_1,KeyEvent.VK_2,KeyEvent.VK_3,KeyEvent.VK_4,
@@ -49,42 +52,10 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 
     /** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
     private final static int FOCUS_REQUEST_DELAY = 1000;
-	
-    /**
-     * Initialises the window manager.
-     * @param leftPath initial path for the left frame.
-     * @param rightPath initial path for the right frame.
-     */
-    public static void init(String leftPath, String rightPath) {
-        if(instance == null) {
-            instance = new WindowManager();
-            instance.initMainFrame(leftPath, rightPath);
-        }
-    }
-
-    private AbstractFile getInitialPath(String path) {
-        AbstractFile file;
-
-        // Tries the specified path as-is.
-        if((file = AbstractFile.getAbstractFile(path)) == null || !file.exists())
-            // Tries the specified path as a relative path.
-            if((file = AbstractFile.getAbstractFile(new File(path).getAbsolutePath())) == null || !file.exists())
-                // Defaults to home.
-                file = AbstractFile.getAbstractFile(System.getProperty("user.home"));
-
-        // If the specified path is a non-browsable, uses its parent.
-        if(!file.isBrowsable())
-            // This is just playing things safe, as I doubt there might ever be a case of
-            // a file without a parent directory.
-            if((file = file.getParent()) == null)
-                file = AbstractFile.getAbstractFile(System.getProperty("user.home"));
-        return file;
-    }
 
 
-    private void initMainFrame(String leftPath, String rightPath) {
-        currentMainFrame = createNewMainFrame(getInitialPath(leftPath), getInitialPath(rightPath));
-    }
+    // - Initialisation ---------------------------------------------------------
+    // --------------------------------------------------------------------------
 
     /**
      * Creates a new instance of WindowManager.
@@ -98,16 +69,90 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
         // Listens to certain configuration events
         ConfigurationManager.addConfigurationListener(this);
 		
-        // Create a MainFrame
         this.mainFrames = new Vector();
-        // do nothing here so that
-        // getInstance() returns a non-null value
-        // during initialization (performed in init method)
     }
-	
-    public static WindowManager getInstance() {
-        return instance;
+
+    /**
+     * Retrieves the user's initial path for the specified frame.
+     * <p>
+     * If the path found in preferences is either illegal or does not exist, this method will
+     * return the user's home directory - we assume this will always exist, which might be a bit
+     * of a leap of faith.
+     * </p>
+     * @param  frame frame for which the initial path should be returned (either {@link #LEFT_FRAME} or
+     *               {@link #RIGHT_FRAME}).
+     * @return       the user's initial path for the specified frame.
+     */ 
+    private static final AbstractFile getInitialPath(String frame) {
+        boolean      isCustom;   // Whether the initial path is a custom one or the last used folder.
+        String       folderPath; // Path to the initial folder.
+        AbstractFile folder;     // Initial folder.
+
+        // Checks which kind of initial path we're dealing with.
+        isCustom = ConfigurationManager.getVariable("prefs.startup_folder." + frame + ".on_startup",
+                                                    "lastFolder").equals("customFolder");
+
+        // Handles custom initial paths.
+        if (isCustom)
+            folderPath = ConfigurationManager.getVariable("prefs.startup_folder." + frame + ".custom_folder");
+
+        // Handles "last folder" initial paths.
+        else
+            folderPath = ConfigurationManager.getVariable("prefs.startup_folder." +frame + ".last_folder");
+
+        // If the initial path is not legal or does not exist, defaults to the user's home.
+        if(folderPath == null || (folder = AbstractFile.getAbstractFile(folderPath)) == null || !folder.exists())
+            folder = AbstractFile.getAbstractFile(System.getProperty("user.home"));
+
+        if(Debug.ON) Debug.trace("initial folder= "+folder);
+        return folder;
     }
+
+    /**
+     * Returns a valid initial abstract path for the specified frame.
+     * <p>
+     * This method does its best to interpret <code>path</code> properly, or to fail
+     * politely if it can't. This means that:<br/>
+     * - we first try to see whether <code>path</code> is a legal, existing URI.<br/>
+     * - if it's not, we check whether it might be a legal local, existing file path.<br/>
+     * - if it's not, we'll just use the default initial path for the frame.<br/>
+     * - if <code>path</code> is browsable (eg directory, archive, ...), use it as is.<br/>
+     * - if it's not, use its parent.<br/>
+     * - if it does not have a parent, use the default initial path for the frame.<br/>
+     * </p>
+     * @param  path  path to the folder we want to open in <code>frame</code>.
+     * @param  frame identifer of the frame we want to compute the path for (either {@link #LEFT_FRAME} or
+     *               {@link #RIGHT_FRAME}).
+     * @return       our best shot at what was actually requested.
+     */
+    private static final AbstractFile getInitialAbstractPath(String path, String frame) {
+        AbstractFile file;
+
+        // This is one of those cases where a null value actually has a proper meaning.
+        if(path == null)
+            return getInitialPath(frame);
+
+        // Tries the specified path as-is.
+        if((file = AbstractFile.getAbstractFile(path)) == null || !file.exists())
+            // Tries the specified path as a relative path.
+            if((file = AbstractFile.getAbstractFile(new File(path).getAbsolutePath())) == null || !file.exists())
+                // Defaults to home.
+                return getInitialPath(frame);
+
+        // If the specified path is a non-browsable, uses its parent.
+        if(!file.isBrowsable())
+            // This is just playing things safe, as I doubt there might ever be a case of
+            // a file without a parent directory.
+            if((file = file.getParent()) == null)
+                return getInitialPath(frame);
+        return file;
+    }
+
+    /**
+     * Returns the instance of WindowManager this application is running with.
+     * @return the instance of WindowManager this application is running with.
+     */
+    public static WindowManager getInstance() {return instance;}
 	
 	
     /**
@@ -126,10 +171,30 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 
     /**
      * Creates a new MainFrame and makes it visible on the screen, on top of any other frames.
+     * <p>
+     * The initial path of each frame will differ depending on whether this is the first mainframe
+     * we create or not.<br/>
+     * If it is, we'll use the user's default paths. If it's not, the current mainframe's paths will
+     * be used.
+     * </p>
+     * @return a fully initialised mainframe.
      */	
     public synchronized MainFrame createNewMainFrame() {
+        if(currentMainFrame == null)
+            return createNewMainFrame(getInitialPath(LEFT_FRAME), getInitialPath(RIGHT_FRAME));
         return createNewMainFrame(currentMainFrame.getFolderPanel1().getFileTable().getCurrentFolder(),
                                   currentMainFrame.getFolderPanel2().getFileTable().getCurrentFolder());
+    }
+
+    /**
+     * Creates a new MainFrame and makes it visible on the screen, on top of any other frame.
+     * @param  folder1 path on which the left frame will be opened.
+     * @param  folder2 path on which the right frame will be opened.
+     * @return         a fully initialised mainframe.
+     */
+    public synchronized MainFrame createNewMainFrame(String folder1, String folder2) {
+        return createNewMainFrame(getInitialAbstractPath(folder1, LEFT_FRAME),
+                                  getInitialAbstractPath(folder2, RIGHT_FRAME));
     }
 
     /**
@@ -137,7 +202,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
      * @param folder1 initial path for the left frame.
      * @param folder2 initial path for the right frame.
      */
-    private synchronized MainFrame createNewMainFrame(AbstractFile folder1, AbstractFile folder2) {
+    public synchronized MainFrame createNewMainFrame(AbstractFile folder1, AbstractFile folder2) {
         boolean firstWindow = mainFrames.size()==0;
 		
         // Create frame
@@ -148,6 +213,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 
         // If first window
         if(firstWindow) {
+            currentMainFrame = newMainFrame;
             // Retrieve last saved window bounds
             int x = ConfigurationManager.getVariableInt("prefs.last_window.x");
             int y = ConfigurationManager.getVariableInt("prefs.last_window.y");

@@ -231,18 +231,8 @@ public class Launcher {
 
         splashScreen.setLoadingMessage("Initializing window...");
 
-        // Initialize WindowManager and create a new window
-        if(leftPath == null)
-            leftPath = getInitialPath(true);
-        if(rightPath == null)
-            rightPath = getInitialPath(false);
-
-        if(Debug.ON) {
-            Debug.trace("Left frame initial path: " + leftPath);
-            Debug.trace("Right frame initial path: " + rightPath);
-        }
-
-        WindowManager.init(leftPath, rightPath);
+        // Creates the initial main frame.
+        WindowManager.getInstance().createNewMainFrame(leftPath, rightPath);
 
         // Check for newer version unless it was disabled
         if(ConfigurationManager.getVariableBoolean("prefs.check_for_updates_on_startup", true))
@@ -255,30 +245,6 @@ public class Launcher {
 		
         // Dispose splash screen
         splashScreen.dispose();
-    }
-
-
-    /**
-     * Returns the initial left or right paths according to user preferences: either custom folder or
-     * last folder. If custom or last folder couldn't be retrieved, return the user's home folder. 
-     */ 
-    private String getInitialPath(boolean leftFolder) {
-        // Initial path according to user preferences: either last folder or custom folder
-        String pref = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".on_startup", "lastFolder");
-        String userHomePath = System.getProperty("user.home");
-        String folderPath = null;
-
-        // Fetch custom folder
-        if (pref.equals("customFolder")) {
-            folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".custom_folder", userHomePath);
-        }
-        // Fetch last folder
-        else {
-            folderPath = ConfigurationManager.getVariable("prefs.startup_folder."+(leftFolder?"left":"right")+".last_folder", userHomePath);
-        }
-
-        if(Debug.ON) Debug.trace("initial folder= "+folderPath);
-        return folderPath;
     }
 
     //	/**
