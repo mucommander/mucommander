@@ -26,9 +26,9 @@ that the following conditions are met:
    THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-**********************************************************************************
-The jCIFS and J2SSH libraries are used by muCommander under the terms of the LGPL:
-**********************************************************************************
+***************************************************************************
+The jCIFS and J2SSH libraries are used under the terms of the LGPL license:
+***************************************************************************
 
 		  GNU LESSER GENERAL PUBLIC LICENSE
 		       Version 2.1, February 1999
@@ -485,9 +485,9 @@ SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGES.
 
 
-************************************************************************************
-The CommonsNet library is used by muCommander under the terms of the Apache license:
-************************************************************************************
+********************************************************************************
+The CommonsNet and Ant libraries are used under the terms of the Apache License:
+********************************************************************************
 
                                  Apache License
                            Version 2.0, January 2004
@@ -665,10 +665,10 @@ The CommonsNet library is used by muCommander under the terms of the Apache lice
       of your accepting any such warranty or additional liability.
 
 
-****************************************************************
-The icons by Mark James (famfamfam.com) are used under the terms
+************************************************************
+Icons by Mark James (famfamfam.com) are used under the terms
 of the Creative Commons Attribution License:
-****************************************************************
+************************************************************
 
 Attribution 2.5
 

@@ -31,6 +31,15 @@ public class SMBFile extends AbstractFile {
 	
     public SMBFile(FileURL fileURL) throws IOException {	
         this(fileURL, true);
+
+        // Forces SmbFile to trigger an SmbAuthException if access to the file requires authentication.
+        // This test comes at a cost, so it's only performed in the public constructor used by AbstractFile.
+        try {
+            this.file.exists();
+        }
+        catch(SmbAuthException e) {
+            throw new AuthException(fileURL, e.getMessage());
+        }
     }
 	
 	
