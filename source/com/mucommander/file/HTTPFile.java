@@ -92,7 +92,11 @@ public class HTTPFile extends AbstractFile {
             // Open connection
             conn.connect();
 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("response code = "+conn.getResponseCode());
+            int responseCode = conn.getResponseCode();
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("response code = "+responseCode);
+
+            if(responseCode<200 || responseCode>=400)
+                throw new IOException();
 			
             // Resolve date: last-modified header, if not set date header, and if still not set System.currentTimeMillis
             date = conn.getLastModified();
@@ -277,11 +281,11 @@ public class HTTPFile extends AbstractFile {
 
                 // Test if reponse code is in the 3xx range and if 'Location' field is set
                 int responseCode = conn.getResponseCode();
-                String locationField = conn.getHeaderField("Location");
-                if(responseCode>=300 && responseCode<400 && locationField!=null) {
+                String locationHeader = conn.getHeaderField("Location");
+                if(responseCode>=300 && responseCode<400 && locationHeader!=null) {
                     // Redirect to Location field and remember context url
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Location header = "+conn.getHeaderField("Location"));
-                    contextURL = new URL(locationField);
+                    contextURL = new URL(contextURL, locationHeader);
                     // One more time
                     continue;
                 }
