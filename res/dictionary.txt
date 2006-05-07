@@ -4682,7 +4682,7 @@ prefs_dialog.default_shell:FR:Utiliser le shell par défaut du système
 
 
 prefs_dialog.custom_shell:EN:Use custom shell
-prefs_dialog.default_shell:FR:Utiliser un shell spécifique
+prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
 
 
 
