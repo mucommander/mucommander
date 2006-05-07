@@ -9,27 +9,34 @@ import java.lang.reflect.*;
 import java.io.*;
 
 /**
- * muCommander launcher: displays a splash screen and starts up the app
- * through the main() method.
- *
- * @author Maxence Bernard
+ * muCommander launcher.
+ * <p>
+ * This class is used to start muCommander. It will analyse command line
+ * arguments, initialise the whole software and start the main window.
+ * </p>
+ * <p>
+ * For a list of legal command line arguments, use <code>mucommander -h</code>.
+ * </p>
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class Launcher {
+    // - Misc. constants --------------------------------------------------------
+    // --------------------------------------------------------------------------
 
     /** Version string */
-    public final static String MUCOMMANDER_VERSION = "0.8 beta3";
-    //	public final static String MUCOMMANDER_VERSION = "0.8 beta2 r2";
+    public final static String MUCOMMANDER_VERSION    = "0.8 beta3";
 
     /** Version string */
-    public final static String SHORT_VERSION_STRING = "0.8 beta3";
+    public final static String SHORT_VERSION_STRING   = "0.8 beta3";
 
     /** muCommander app string */
     public final static String MUCOMMANDER_APP_STRING = "muCommander v"+SHORT_VERSION_STRING;
 
     /** Custom user agent for HTTP requests */
-    public final static String USER_AGENT = MUCOMMANDER_APP_STRING
-        +" (Java "+System.getProperty("java.vm.version")
-        +"; "+System.getProperty("os.name")+" "+System.getProperty("os.version")+" "+System.getProperty("os.arch")+")";
+    public final static String USER_AGENT             = MUCOMMANDER_APP_STRING  + " (Java "+System.getProperty("java.vm.version")
+                                                        + "; " + System.getProperty("os.name") + " " + 
+                                                        System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
+
 
 
     // - Commandline handling methods -------------------------------------------
@@ -38,7 +45,7 @@ public class Launcher {
      * Prints muCommander's command line usage and exits.
      */
     private static final void printUsage() {
-        System.out.println("Usage: mucommander [options]");
+        System.out.println("Usage: mucommander [options] [folders]");
         System.out.println("Options:");
 
         // Allows users to tweak how bookmarks are loaded / saved.
@@ -53,10 +60,6 @@ public class Launcher {
             System.out.println(" -n, --no-debug                  Disable debug output to stdout");
             System.out.println(" -d, --debug                     Enable debug output to stdout (default)");
         }
-
-        // Default folders.
-        System.out.println(" -p1 PATH, --left-path PATH      Open PATH in left frame.");
-        System.out.println(" -p2 PATH, --right-path PATH     Open PATH in right frame.");
 
         // Text commands.
         System.out.println(" -h, --help                      Print the help text and exit");
@@ -90,23 +93,21 @@ public class Launcher {
         System.exit(1);
     }
 
+
+
+    // - Boot code --------------------------------------------------------------
+    // --------------------------------------------------------------------------
+
     /**
      * Main method used to startup muCommander.
      */
     public static void main(String args[]) {
-        // Both those variables as kept as Strings instead of AbstractFiles to
-        // avoid triggering untimely initialisation of PlatformManager, if only
-        // because we don't want to make calls to Debug.trace before we've analysed
-        // a potential -n argument.
-        String leftPath;  // Initial path for the left frame.
-        String rightPath; // Initial path for the right frame.
+        SplashScreen splashScreen; // Splashscreen instance.
+        int          i;            // Index in the command line arguments.
 
-        // Default values.
-        leftPath  = null;
-        rightPath = null;
-
-        // Parses command line arguments.
-        for(int i = 0; i < args.length; i++) {
+        // - Command line parsing -------------------------------------
+        // ------------------------------------------------------------
+        for(i = 0; i < args.length; i++) {
             // Print version.
             if(args[i].equals("-v") || args[i].equals("--version"))
                 printVersion();
@@ -129,18 +130,6 @@ public class Launcher {
                 ConfigurationManager.setConfigurationFile(args[++i]);
             }
 
-            // Initial folders handling.
-            else if(args[i].equals("-p1") || args[i].equals("--left-path")) {
-                if(i >= args.length -1)
-                    printError("Missing PATH parameter to " + args[i]);
-                leftPath = args[++i];
-            }
-            else if(args[i].equals("-p2") || args[i].equals("--right-path")) {
-                if(i >= args.length -1)
-                    printError("Missing PATH parameter to " + args[i]);
-                rightPath = args[++i];
-            }
-
             // Debug options.
             else if(Debug.ON && args[i].equals("-n") || args[i].equals("--no-debug"))
                 Debug.setEnabled(false);
@@ -149,32 +138,15 @@ public class Launcher {
 
             // Illegal argument.
             else
-                printError("Illegal argument: " + args[i]);
+                break;
         }
 
-        new Launcher(leftPath, rightPath);
-    }
-
-
-
-    // - muCommander boot -------------------------------------------------------
-    // --------------------------------------------------------------------------
-    /**
-     * @param leftPath  initial path for the left frame.
-     * @parma rightPath initial path for the right frame.
-     */
-    private Launcher(String leftPath, String rightPath) {
-
-        //////////////////////////////////////////////////////////////////////////
-        // Important: all JAR resource files need to be loaded from the main    //
-        //  thread (here may be a good place), because of some weirdness of     //
-        //  JNLP/Webstart's ClassLoader.                                        //
-        //////////////////////////////////////////////////////////////////////////
+        // - MAC OS init ----------------------------------------------
+        // ------------------------------------------------------------
 
         // If muCommander is running under Mac OS X (how lucky!), add some
         // glue for the main menu bar and other OS X specifics.
         if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X) {
-
             // Configuration needs to be loaded before any sort of GUI creation
             // is performed - if we're to use the metal look, we need to know about
             // it right about now.
@@ -192,8 +164,10 @@ public class Launcher {
             }
         }
 
-        // Show up the splash screen
-        SplashScreen splashScreen = new SplashScreen(SHORT_VERSION_STRING, "Loading preferences...");
+        // - muCommander boot -----------------------------------------
+        // ------------------------------------------------------------
+        // Shows the splash screen.
+        splashScreen = new SplashScreen(SHORT_VERSION_STRING, "Loading preferences...");
 
         // If we're not running under OS_X, preferences haven't been loaded yet.
         if(PlatformManager.getOSFamily() != PlatformManager.MAC_OS_X)
@@ -205,34 +179,35 @@ public class Launcher {
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 		
-        //		// Turns on dynamic layout
-        //		setDynamicLayout(true);
-
-        splashScreen.setLoadingMessage("Loading bookmarks...");
-
         // Loads bookmarks
+        splashScreen.setLoadingMessage("Loading bookmarks...");
         com.mucommander.bookmark.BookmarkManager.loadBookmarks();
 
-        splashScreen.setLoadingMessage("Loading dictionary...");
-
         // Loads dictionary
+        splashScreen.setLoadingMessage("Loading dictionary...");
         com.mucommander.text.Translator.init();
 
         // Inits CustomDateFormat to make sure that its ConfigurationListener is added
         // before FileTable, so CustomDateFormat gets notified of date format changes first
         com.mucommander.text.CustomDateFormat.init();
 
-        splashScreen.setLoadingMessage("Loading icons...");
-
         // Preload icons
+        splashScreen.setLoadingMessage("Loading icons...");
         com.mucommander.ui.icon.FileIcons.init();
         com.mucommander.ui.ToolBar.init();
         com.mucommander.ui.CommandBar.init();
 
+        // Creates the initial main frame using any initial path specified by the command line.
         splashScreen.setLoadingMessage("Initializing window...");
-
-        // Creates the initial main frame.
-        WindowManager.getInstance().createNewMainFrame(leftPath, rightPath);
+        for(; i < args.length; i += 2) {
+            if(i < args.length - 1)
+                WindowManager.getInstance().createNewMainFrame(args[i], args[i + 1]);
+            else
+                WindowManager.getInstance().createNewMainFrame(args[i], null);
+        }
+        // If no initial path was specified, start a default main window.
+        if(WindowManager.getInstance().getCurrentMainFrame() == null)
+            WindowManager.getInstance().createNewMainFrame();
 
         // Check for newer version unless it was disabled
         if(ConfigurationManager.getVariableBoolean("prefs.check_for_updates_on_startup", true))
@@ -246,16 +221,4 @@ public class Launcher {
         // Dispose splash screen
         splashScreen.dispose();
     }
-
-    //	/**
-    //	 * Turns on or off dynamic layout which updates layout while resizing a frame. This
-    //	 * is a 1.4 only feature and may not be supported by the underlying OS and window manager.
-    //	 */
-    //	public static void setDynamicLayout(boolean b) {
-    //		try {
-    //			java.awt.Toolkit.getDefaultToolkit().setDynamicLayout(b);
-    //		}
-    //		catch(NoSuchMethodError e) {
-    //		}
-    //	}
 }
