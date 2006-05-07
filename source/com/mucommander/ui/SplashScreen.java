@@ -1,6 +1,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.comp.dialog.DialogToolkit;
 
 import javax.swing.*;
 
@@ -83,9 +84,11 @@ public class SplashScreen extends JWindow {
         int width = imageIcon.getIconWidth();
         int height = imageIcon.getIconHeight();
         setSize(width, height);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(screenSize.width/2 - width/2,
-                    screenSize.height/2 - height/2);
+        
+        DialogToolkit.centerOnScreen(this);
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        setLocation(screenSize.width/2 - width/2,
+//                    screenSize.height/2 - height/2);
 
         // Display the splash screen
         setVisible(true);
