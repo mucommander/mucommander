@@ -22,15 +22,8 @@ import java.io.*;
 public class Launcher {
     // - Misc. constants --------------------------------------------------------
     // --------------------------------------------------------------------------
-
-    /** Version string */
-    public final static String MUCOMMANDER_VERSION    = "0.8 beta3";
-
-    /** Version string */
-    public final static String SHORT_VERSION_STRING   = "0.8 beta3";
-
     /** muCommander app string */
-    public final static String MUCOMMANDER_APP_STRING = "muCommander v"+SHORT_VERSION_STRING;
+    public final static String MUCOMMANDER_APP_STRING = "muCommander v" + RuntimeConstants.MUCOMMANDER_VERSION;
 
     /** Custom user agent for HTTP requests */
     public final static String USER_AGENT             = MUCOMMANDER_APP_STRING  + " (Java "+System.getProperty("java.vm.version")
@@ -75,8 +68,10 @@ public class Launcher {
         // to update the copyright at some point, which might result in some confusion.
         // Updating the copyright notice to include today's year might be a bit dodgy, though.
         System.out.print("muCommander ");
-        System.out.println(MUCOMMANDER_VERSION);
-        System.out.println("Copyright (c) 2002-2006 Maxence Bernard");
+        System.out.println(RuntimeConstants.MUCOMMANDER_VERSION);
+        System.out.print("Copyright (c) ");
+        System.out.print(RuntimeConstants.MUCOMMANDER_COPYRIGHT);
+        System.out.println(" Maxence Bernard");
         System.out.println("All rights reserved.");
         System.out.println("There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A");
         System.out.println("PARTICULAR PURPOSE.");
@@ -167,7 +162,7 @@ public class Launcher {
         // - muCommander boot -----------------------------------------
         // ------------------------------------------------------------
         // Shows the splash screen.
-        splashScreen = new SplashScreen(SHORT_VERSION_STRING, "Loading preferences...");
+        splashScreen = new SplashScreen(RuntimeConstants.MUCOMMANDER_VERSION, "Loading preferences...");
 
         // If we're not running under OS_X, preferences haven't been loaded yet.
         if(PlatformManager.getOSFamily() != PlatformManager.MAC_OS_X)

@@ -1,32 +1,40 @@
 <project name="mucommander" default="compileandrun" basedir=".">
+  <!-- = Application constants =============================== -->
+  <!-- ======================================================= -->
+  <property name="app-version"   value="0.8 beta 3"/>
+  <property name="app-copyright" value="2002-2006"/>
+
+
   <!-- = Project architecture ================================ -->
   <!-- ======================================================= -->
   <!-- The following properties define the directory structure -->
   <!-- of the muCommander project.                             -->
 
   <!-- Directory containing the project's sources.             -->
-  <property name="source"    location="source"/>
-  <!-- Where to store the application's binaries.              -->
-  <property name="classes"   location="classes"/>
+  <property name="source"     location="source"/>
   <!-- Where to store the application's release files.         -->
-  <property name="dist"      location="dist"/>
+  <property name="dist"       location="dist"/>
   <!-- Directory containing all of the project's external      -->
   <!-- libraries.                                              -->
   <!-- Any jar file contained in that directory will be added  -->
   <!-- to the classpath at compile time, and bundled in the    -->
   <!-- application's final JAR file.                           -->
-  <property name="lib"       location="lib"/>
+  <property name="lib"        location="lib"/>
   <!-- Directory containing the application's resources.       -->
-  <property name="res"	     location="res"/>
+  <property name="res"	      location="res"/>
   <!-- Directory containing the tools used to compile the      -->
   <!-- project.                                                -->
-  <property name="tools"     location="tools"/>
+  <property name="tools"      location="tools"/>
   <!-- Path to the file in which to store the unobfuscated     -->
   <!-- application JAR file.                                   -->
-  <property name="clear-jar" location="${dist}/mucommander_unobf.jar"/>
+  <property name="clear-jar"  location="${dist}/mucommander_unobf.jar"/>
   <!-- Path to the file in which to store the obfuscated       -->
   <!-- application JAR file.                                   -->
-  <property name="obf-jar"   location="${dist}/mucommander.jar"/>
+  <property name="obf-jar"    location="${dist}/mucommander.jar"/>
+  <property name="tmp"        location="tmp"/>
+  <property name="tmp-source" location="${tmp}/source"/>
+  <!-- Where to store the application's binaries.              -->
+  <property name="classes"    location="${tmp}/classes"/>
 
 
   <!-- Imports the system dependant definitions.               -->
@@ -43,6 +51,8 @@
     <!-- Sets time stamp to current time/date -->
     <tstamp/>
     <!-- Create class directory used by compile -->
+    <mkdir dir="${tmp}"/>
+    <mkdir dir="${tmp-source}"/>
     <mkdir dir="${classes}"/>
     <!-- Copy images files to {$classes} -->
     <copy todir="${classes}">
@@ -55,8 +65,9 @@
   <!-- Deletes any dynamically generated file, effectively     -->
   <!-- re-initialising the whole project.                      -->
   <target name="clean">
-    <!-- Delete the ${classes} and ${dist} directory trees -->
+    <delete dir="${tmp-source}"/>
     <delete dir="${classes}"/>
+    <delete dir="${tmp}"/>
     <delete dir="${dist}"/>
   </target>
 
@@ -64,6 +75,11 @@
 
   <!-- = Compilation tasks =================================== -->
   <!-- ======================================================= -->
+  <!-- Turns debug output on in the resulting binary.          -->
+  <target name="debug">
+    <property name="is-debug" value="true"/>
+  </target>
+
   <!-- Cleans and rebuilds the project from scratch.           -->
   <target name="rebuild" depends="clean,build"/>
 
@@ -71,11 +87,25 @@
   <!-- ${classes}.                                             -->
   <target name="build" depends="includelibs,compile"/>
 
+  <!-- Creates the runtime constant class.                     -->
+  <target name="constants">
+    <property name="is-debug" value="false"/>
+    <taskdef name="javaw" classname="com.nrinaudo.java.JavaTask" classpath="${tools}/javatask.jar"/>
+    <javaw name="${tmp-source}/com.mucommander.RuntimeConstants">
+      <field name="DEBUG"                 value="${is-debug}"    type="boolean"/>
+      <field name="MUCOMMANDER_VERSION"   value="${app-version}"/>
+      <field name="MUCOMMANDER_COPYRIGHT" value="${app-copyright}"/>
+    </javaw>
+
+  </target>
+
   <!-- Compiles all java files found in ${source} and stores   -->
   <!-- the resulting bytecode in {$classes}.                   -->
-  <target name="compile" depends="init">
+  <target name="compile" depends="init,constants">
     <javac srcdir="${source}" destdir="${classes}" debug="on" deprecation="on"
            encoding="utf-8" source="1.3" target="1.3">
+      <src path="${source}"/>
+      <src path="${tmp-source}"/>
       <!-- Includes the application's libraries in the classpath. -->
       <classpath>
         <pathelement location="${classes}"/>
