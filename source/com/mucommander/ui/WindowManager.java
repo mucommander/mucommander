@@ -167,15 +167,11 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
                 return getInitialPath(frame);
 
         // If the specified path is a non-browsable, uses its parent.
-        if(!file.isBrowsable()) {
-            System.out.println("here");
+        if(!file.isBrowsable())
             // This is just playing things safe, as I doubt there might ever be a case of
             // a file without a parent directory.
-            if((file = file.getParent()) == null) {
-                System.out.println("there");
+            if((file = file.getParent()) == null)
                 return getInitialPath(frame);
-            }
-        }
 
         return file;
     }
