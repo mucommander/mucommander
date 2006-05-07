@@ -273,7 +273,6 @@ public abstract class FileJob implements Runnable {
      */
     public void run() {
         FileTable activeTable = mainFrame.getLastActiveTable();
-        FileTableModel activeTableModel = (FileTableModel)activeTable.getModel();
         AbstractFile currentFile;
 
         // Notifies that this job starts
@@ -292,8 +291,7 @@ public abstract class FileJob implements Runnable {
 			
             // Unmark file in active table
             if(autoUnmark && success && !isInterrupted()) {
-                activeTableModel.setFileMarked(currentFile, false);
-                activeTable.repaint();
+                activeTable.setFileMarked(currentFile, false);
             }
 
             if(i==nbFiles-1) {
