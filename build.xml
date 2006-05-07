@@ -92,6 +92,8 @@
     <unjar dest="${classes}">
       <fileset dir="${lib}">
         <include name="**/*.jar"/>
+	<!-- Exclude Apple MRJ skeletons, used only for compilation -->
+	<exclude name="apple-mrj-skel.jar"/>
     </fileset>
     </unjar>
   </target> 

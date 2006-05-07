@@ -1,6 +1,7 @@
-ant-bzip2.jar	-> from Ant 1.6.5 (compiled for Java 1.3)
-ant-tar.jar	-> from Ant 1.6.5 (compiled for Java 1.3)
-commons-logging.jar    -> Commons-logging ?
+ant-bzip2.jar	       -> from Ant 1.6.5 (compiled for Java 1.3)
+ant-tar.jar	       -> from Ant 1.6.5 (compiled for Java 1.3)
+apple-mrj-skel.jar     -> Skeleton files for Apple's MRJ handlers
+commons-logging.jar    -> Commons-logging v?
 commons-net.jar	       -> Commons-net 1.4.1
 j2ssh.jar	       -> J2SSH 0.2.7 (patched and compiled for Java 1.3)
 jakarta-oro.jar	       -> Jakarta Oro 2.0.8
