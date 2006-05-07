@@ -89,7 +89,7 @@
 
   <!-- Creates the runtime constant class.                     -->
   <target name="constants">
-    <property name="is-debug" value="false"/>
+    <property name="is-debug" value="true"/>
     <taskdef name="javaw" classname="com.nrinaudo.java.JavaTask" classpath="${tools}/javatask.jar"/>
     <javaw name="${tmp-source}/com.mucommander.RuntimeConstants">
       <field name="DEBUG"                 value="${is-debug}"    type="boolean"/>
@@ -136,8 +136,12 @@
             basedir="${classes}" manifest="${res}/MANIFEST.MF"/>
   </target>
 
+  <target name="disable-debug">
+    <property name="is-debug" value="false"/>
+  </target>
+
   <!-- Generates the application's obfuscated jar file.        -->
-  <target name="obfuscate" depends="clean,jar">
+  <target name="obfuscate" depends="disable-debug,clean,jar">
     <delete file="${obf-jar}"/>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
     <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="false">
