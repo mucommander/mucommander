@@ -65,7 +65,7 @@ public class VersionChecker implements ContentHandler {
      * Returns true if a new version is available (a version with a greater number than the one currently running).
      */
     public static boolean newVersionAvailable() {
-        String thisVersion = Launcher.MUCOMMANDER_VERSION.trim().toLowerCase();
+        String thisVersion = RuntimeConstants.MUCOMMANDER_VERSION.trim().toLowerCase();
 	
         // Versions are perfectly equal (both version strings are trimmed and lower case) -> no new version
         if(latestVersion.equals(thisVersion))

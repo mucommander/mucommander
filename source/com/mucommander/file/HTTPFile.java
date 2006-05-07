@@ -289,7 +289,7 @@ public class HTTPFile extends AbstractFile {
                 break;
             } while(true);
 
-			
+
             // Extract encoding information (if any)
             String contentType = conn.getContentType();
             if(contentType==null || !contentType.trim().startsWith("text/html"))
