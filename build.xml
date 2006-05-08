@@ -90,7 +90,7 @@
   <!-- Creates the runtime constant class.                     -->
   <target name="constants">
     <property name="is-debug" value="true"/>
-    <taskdef name="javaw" classname="com.nrinaudo.java.JavaTask" classpath="${tools}/javatask.jar"/>
+    <taskdef name="javaw" classname="com.nrinaudo.java.JavaTask" classpath="${javatask}"/>
     <javaw name="${tmp-source}/com.mucommander.RuntimeConstants">
       <field name="DEBUG"                 value="${is-debug}"    type="boolean"/>
       <field name="MUCOMMANDER_VERSION"   value="${app-version}"/>
