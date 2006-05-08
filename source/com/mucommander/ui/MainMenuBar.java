@@ -159,10 +159,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
         changeFolderItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.change_current_location"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK), this);
         viewMenu.add(new JSeparator());
-        sortByNameItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_name"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK), this);
-        sortByDateItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_date"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.CTRL_MASK), this);
-        sortBySizeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_size"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.CTRL_MASK), this);
-        sortByExtensionItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_extension"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.CTRL_MASK), this);
+        sortByExtensionItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_extension"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK), this);
+        sortByNameItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_name"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.CTRL_MASK), this);
+        sortBySizeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_size"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.CTRL_MASK), this);
+        sortByDateItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_date"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.CTRL_MASK), this);
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(sortByNameItem);
         buttonGroup.add(sortByDateItem);
@@ -389,6 +389,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         else if (source == goToParentItem) {
             mainFrame.getLastActiveTable().getFolderPanel().goToParent();
         }
+        else if (source == sortByExtensionItem) {
+            mainFrame.getLastActiveTable().sortBy(FileTable.EXTENSION);	
+        }
         else if (source == sortByNameItem) {
             mainFrame.getLastActiveTable().sortBy(FileTable.NAME);	
         }
@@ -397,9 +400,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
         else if (source == sortByDateItem) {
             mainFrame.getLastActiveTable().sortBy(FileTable.DATE);	
-        }
-        else if (source == sortByExtensionItem) {
-            mainFrame.getLastActiveTable().sortBy(FileTable.EXTENSION);	
         }
         else if (source == reverseOrderItem) {
             mainFrame.getLastActiveTable().reverseSortOrder();	
@@ -471,18 +471,18 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             // Toggle current sort by menu item
             int criteria = activeTable.getSortByCriteria();
             switch (criteria) {
-            case FileTableModel.NAME:
-                sortByNameItem.setState(true);
-                break;
-            case FileTableModel.DATE:
-                sortByDateItem.setState(true);
-                break;
-            case FileTableModel.SIZE:
-                sortBySizeItem.setState(true);
-                break;
-            case FileTableModel.EXTENSION:
-                sortByExtensionItem.setState(true);
-                break;
+                case FileTableModel.NAME:
+                    sortByNameItem.setState(true);
+                    break;
+                case FileTableModel.DATE:
+                    sortByDateItem.setState(true);
+                    break;
+                case FileTableModel.SIZE:
+                    sortBySizeItem.setState(true);
+                    break;
+                case FileTableModel.EXTENSION:
+                    sortByExtensionItem.setState(true);
+                    break;
             }
 
             showToolbarItem.setText(mainFrame.isToolbarVisible()?Translator.get("view_menu.hide_toolbar"):Translator.get("view_menu.show_toolbar"));

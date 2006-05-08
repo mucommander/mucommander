@@ -1,7 +1,7 @@
 <project name="mucommander" default="compileandrun" basedir=".">
   <!-- = Application constants =============================== -->
   <!-- ======================================================= -->
-  <property name="app-version"   value="0.8 beta 3"/>
+  <property name="app-version"   value="0.8 beta3"/>
   <property name="app-copyright" value="2002-2006"/>
 
 

@@ -19,6 +19,8 @@ public class ShutdownHook extends Thread {
      * Called by the VM when the program shuts down, this method writes the configuration.
      */
     public void run() {
+        if(Debug.ON) Debug.trace("called");
+
         // Saves preferences
         ConfigurationManager.writeConfiguration();
     }
