@@ -144,7 +144,7 @@
   <target name="obfuscate" depends="disable-debug,clean,jar">
     <delete file="${obf-jar}"/>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
-    <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="true">
+    <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="false">
       <injar name="${clear-jar}"/> 
       <outjar name="${obf-jar}"/>
       <libraryjar name="${java-lib}"/>
