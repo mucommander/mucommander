@@ -389,7 +389,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
      * Disposes all opened windows, ending with the one that is currently active if there is one, 
      * or the last one which was activated.
      */
-    public void quit() {
+    public synchronized void quit() {
         int nbFrames = mainFrames.size();
         // Retrieve current MainFrame's index
         int currentMainFrameIndex = mainFrames.indexOf(this.currentMainFrame);
