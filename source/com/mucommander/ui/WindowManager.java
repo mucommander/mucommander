@@ -318,8 +318,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // To catch user window closing actions
         newMainFrame.addWindowListener(instance);
 
-        int nbFrames = mainFrames.size();
 /*		
+        int nbFrames = mainFrames.size();
         // Adds a new menu item in each existing MainFrame's window menu
         JMenu windowMenu;
         JCheckBoxMenuItem checkBox;
@@ -334,7 +334,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 */		
         // Adds the new MainFrame to the vector
         mainFrames.add(newMainFrame);
-        nbFrames++;
+
+//        nbFrames++;
 
 /*
         // Sets the 'window menu' items of the new MainFrame with an item
@@ -355,8 +356,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         newMainFrame.addLocationListener(instance);
         newMainFrame.addTableChangeListener(instance);
 */
-        // Set window title with frame # only if there is more than one
-        newMainFrame.updateWindowTitle(nbFrames==1?-1:nbFrames);
+//        // Set window title with frame # only if there is more than one frame
+//        newMainFrame.updateWindowTitle(nbFrames==1?-1:nbFrames);
+
+        newMainFrame.updateWindowTitle();
+        if(mainFrames.size()==2)
+            ((MainFrame)mainFrames.elementAt(0)).updateWindowTitle();
 
         // Make this new frame visible
         newMainFrame.setVisible(true);
@@ -390,15 +395,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         int frameIndex = mainFrames.indexOf(mainFrameToDispose);
         mainFrameToDispose.dispose();
         mainFrames.remove(mainFrameToDispose);
-
-		
+        
+/*
         int nbFrames = mainFrames.size();
         MainFrame mainFrame;
-//        JMenuItem item;
-//        JMenu windowMenu;
+        JMenuItem item;
+        JMenu windowMenu;
         for(int i=0; i<nbFrames; i++) {
             mainFrame = (MainFrame)mainFrames.elementAt(i);
-/*
             windowMenu = ((MainMenuBar)mainFrame.getJMenuBar()).getWindowMenu();
             // Removes the MainFrame disposed for every MainFrame's window menu
             windowMenu.remove(frameIndex);
@@ -409,10 +413,19 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 if(j<10)
                     item.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[j], ActionEvent.CTRL_MASK));
             }
-*/
+
             // Update window title (frame #) for frames which index is greater than the one that was disposed
             if(i>=frameIndex)
                 mainFrame.updateWindowTitle(nbFrames==1?-1:i+1);
+        }
+*/
+        int nbFrames = mainFrames.size();
+        if(nbFrames==1) {
+            ((MainFrame)mainFrames.elementAt(0)).updateWindowTitle();
+        }
+        else {
+            for(int i=frameIndex; i<nbFrames; i++)
+                ((MainFrame)mainFrames.elementAt(i)).updateWindowTitle();
         }
 
         // If no mainFrame is currently visible, exit

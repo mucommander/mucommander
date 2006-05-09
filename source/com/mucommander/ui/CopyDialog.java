@@ -29,7 +29,7 @@ public class CopyDialog extends DestinationDialog {
 	    
         int nbFiles = files.size();
         
-        AbstractFile destFolder = mainFrame.getUnactiveTable().getCurrentFolder();
+        AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
         String fieldText;
 
         // Local copy: fill text field with the sole file's name

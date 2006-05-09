@@ -753,9 +753,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Add folder to history
         folderHistory.addToHistory(folder);
 
-        // Update window's title
-        mainFrame.updateWindowTitle();
-
         // Notify listeners that location has changed
         fireLocationChanged();
     }

@@ -82,7 +82,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
         JLabel label = new JLabel(Translator.get("zip_dialog_description")+" :");
         mainPanel.add(label);
 
-        FileTable activeTable = mainFrame.getUnactiveTable();
+        FileTable activeTable = mainFrame.getInactiveTable();
         String initialPath = (isShiftDown?"":activeTable.getCurrentFolder().getAbsolutePath(true));
         String fileName;
         // Computes the archive's default name:

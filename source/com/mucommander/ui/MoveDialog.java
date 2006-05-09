@@ -40,7 +40,7 @@ public class MoveDialog extends DestinationDialog {
             setTextField(fieldText, 0, extPos>0?extPos:len);
         }
         else {
-            AbstractFile destFolder = mainFrame.getUnactiveTable().getCurrentFolder();
+            AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
             fieldText = destFolder.getAbsolutePath(true);
             // Append filename to destination path if there is only one file to move
             // and if the file is not a directory that already exists in destination

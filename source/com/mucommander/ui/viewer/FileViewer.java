@@ -104,7 +104,7 @@ public abstract class FileViewer extends JPanel {
       FileTable table = mainFrame.getLastActiveTable();
 
       if(!table.getCurrentFolder().equals(folder)) {
-      table = mainFrame.getUnactiveTable();
+      table = mainFrame.getInactiveTable();
       if(!table.getCurrentFolder().equals(folder))
       return null;
       }

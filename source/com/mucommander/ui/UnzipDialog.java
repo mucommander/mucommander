@@ -28,7 +28,7 @@ public class UnzipDialog extends DestinationDialog {
               Translator.get("unzip_dialog.unzip"),
               Translator.get("unzip_dialog.error_title"));
 	    
-        AbstractFile destFolder = mainFrame.getUnactiveTable().getCurrentFolder();
+        AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
         String fieldText;
         if(isShiftDown)
             fieldText = ".";

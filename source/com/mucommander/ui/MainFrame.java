@@ -28,7 +28,7 @@ import java.util.*;
  * 
  * @author Maxence Bernard
  */
-public class MainFrame extends JFrame implements ComponentListener, KeyListener {
+public class MainFrame extends JFrame implements LocationListener, ComponentListener, KeyListener {
 	
     // Variables related to split pane	
     private JSplitPane splitPane;
@@ -103,6 +103,9 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
 
         folderPanel1.addLocationListener(toolbar);
         folderPanel2.addLocationListener(toolbar);
+
+        folderPanel1.addLocationListener(this);
+        folderPanel2.addLocationListener(this);
 
         // Create menu bar (has to be created after toolbar)
         MainMenuBar menuBar = new MainMenuBar(this);
@@ -315,8 +318,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
         boolean activeTableChanged = lastActiveTable!=table;
 
         if(activeTableChanged) {
-            updateWindowTitle();
             this.lastActiveTable = table;
+
+            // Update window title to reflect new active table
+            updateWindowTitle();
 
             // Fire table change events on registered TableChangeListener instances.
             fireTableChanged(table.getFolderPanel());
@@ -327,7 +332,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
     /**
      * Returns the complement to getLastActiveTable().
      */
-    public FileTable getUnactiveTable() {
+    public FileTable getInactiveTable() {
         return lastActiveTable==table1?table2:table1;
     }
     
@@ -476,20 +481,36 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
     /**
      * Update window title to reflect current active folder and window number. To be called by WindowManager.
      *
-     * @param frameNumber frame number, if -1 frame number should not be displayed in the title 
+//     * @param frameNumber frame number, if -1 frame number should not be displayed in the title 
      */
-    public void updateWindowTitle(int frameNumber) {
+//    public void updateWindowTitle(int frameNumber) {
+    public void updateWindowTitle() {
         // Update window title
-        setTitle(getLastActiveTable().getCurrentFolder().getAbsolutePath()+" - muCommander"+(frameNumber==-1?"":" ["+(frameNumber)+"]"));
+//        setTitle(getLastActiveTable().getCurrentFolder().getAbsolutePath()+" - muCommander"+(frameNumber==-1?"":" ["+(frameNumber)+"]"));
+        String title = lastActiveTable.getCurrentFolder().getAbsolutePath()+" - muCommander";
+        Vector mainFrames = WindowManager.getMainFrames();
+        if(mainFrames.size()>1)
+            title += " ["+(mainFrames.indexOf(this)+1)+"]";
+        setTitle(title);
     }
     
-    
-//    public void addLocationListener(LocationListener listener) {
-//        folderPanel1.addLocationListener(listener);
-//        folderPanel2.addLocationListener(listener);
-//    }
-    
+
+    //////////////////////////////
+    // LocationListener methods //
+    //////////////////////////////
 	
+    public void locationChanged(LocationEvent e) {
+        // Update window title to reflect new location
+        updateWindowTitle();
+    }
+
+    public void locationChanging(LocationEvent e) {
+    }
+	
+    public void locationCancelled(LocationEvent e) {
+    }
+
+    
     ///////////////////////
     // Overriden methods //
     ///////////////////////
@@ -564,8 +585,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
         // Discard key events while in 'no events mode'
         if(noEventsMode)
             return;
-
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("keyEvent ="+e);
 
         Object source = e.getSource();
         int keyCode = e.getKeyCode();
