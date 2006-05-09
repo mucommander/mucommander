@@ -315,6 +315,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
         boolean activeTableChanged = lastActiveTable!=table;
 
         if(activeTableChanged) {
+            updateWindowTitle();
             this.lastActiveTable = table;
 
             // Fire table change events on registered TableChangeListener instances.
