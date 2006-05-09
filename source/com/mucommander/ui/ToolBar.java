@@ -350,7 +350,7 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
         boolean requestFocus = false;
 		
         if (buttonIndex==NEW_WINDOW_INDEX) {
-            WindowManager.getInstance().createNewMainFrame();
+            WindowManager.createNewMainFrame();
         }
         else if (buttonIndex==BACK_INDEX) {
             folderPanel.getFolderHistory().goBack();

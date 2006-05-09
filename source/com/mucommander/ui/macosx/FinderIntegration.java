@@ -65,7 +65,7 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
 
 	
     public void run() {
-        MainFrame mainFrame = WindowManager.getInstance().getCurrentMainFrame();
+        MainFrame mainFrame = WindowManager.getCurrentMainFrame();
 		
         // Do nothing (return) when in 'no events mode'
         if(mainFrame.getNoEventsMode())
@@ -84,7 +84,7 @@ public class FinderIntegration implements Runnable, com.apple.mrj.MRJAboutHandle
                 new QuitDialog(mainFrame);
             // Quit directly otherwise
             else
-                WindowManager.getInstance().quit();
+                WindowManager.quit();
             break;
         }
     }

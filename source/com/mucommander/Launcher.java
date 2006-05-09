@@ -196,17 +196,17 @@ public class Launcher {
         splashScreen.setLoadingMessage("Initializing window...");
         for(; i < args.length; i += 2) {
             if(i < args.length - 1)
-                WindowManager.getInstance().createNewMainFrame(args[i], args[i + 1]);
+                WindowManager.createNewMainFrame(args[i], args[i + 1]);
             else
-                WindowManager.getInstance().createNewMainFrame(args[i], null);
+                WindowManager.createNewMainFrame(args[i], null);
         }
         // If no initial path was specified, start a default main window.
-        if(WindowManager.getInstance().getCurrentMainFrame() == null)
-            WindowManager.getInstance().createNewMainFrame();
+        if(WindowManager.getCurrentMainFrame() == null)
+            WindowManager.createNewMainFrame();
 
         // Check for newer version unless it was disabled
         if(ConfigurationManager.getVariableBoolean("prefs.check_for_updates_on_startup", true))
-            new CheckVersionDialog(WindowManager.getInstance().getCurrentMainFrame(), false);
+            new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
 		
         // Silence jCIFS's output if not in debug mode
         // To quote jCIFS's documentation : "0 - No log messages are printed -- not even crticial exceptions."

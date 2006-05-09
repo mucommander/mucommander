@@ -10,7 +10,7 @@ import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.ui.icon.IconManager;
 
-import com.mucommander.event.TableChangeListener;
+import com.mucommander.event.*;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
@@ -94,11 +94,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
         // Left table is the first to be active
         this.lastActiveTable = table1;
 
-        // Register WindowManager to receive location evvents
-        WindowManager windowManager = WindowManager.getInstance();
-        folderPanel1.addLocationListener(windowManager);
-        folderPanel2.addLocationListener(windowManager);
-
         // Create toolbar and show it only if it hasn't been disabled in the preferences
         this.toolbar = new ToolBar(this);
         // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be properly initialized
@@ -109,9 +104,6 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
         folderPanel1.addLocationListener(toolbar);
         folderPanel2.addLocationListener(toolbar);
 
-        // Register WindowManager to receive table change events
-        addTableChangeListener(windowManager);
-		
         // Create menu bar (has to be created after toolbar)
         MainMenuBar menuBar = new MainMenuBar(this);
         setJMenuBar(menuBar);
@@ -603,10 +595,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
             folderPanel2.popDriveButton();
         }
         else if(e.isControlDown() && keyCode==KeyEvent.VK_LEFT) {
-            WindowManager.getInstance().switchToPreviousWindow();
+            WindowManager.switchToPreviousWindow();
         }
         else if(e.isControlDown() && keyCode==KeyEvent.VK_RIGHT) {
-            WindowManager.getInstance().switchToNextWindow();	
+            WindowManager.switchToNextWindow();	
         }
         else if(keyCode == KeyEvent.VK_TAB) {
             if(source == table1)
@@ -633,5 +625,10 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
     }
 
     public void keyTyped(KeyEvent e) {
+    }
+
+    public void addLocationListener(LocationListener listener) {
+        folderPanel1.addLocationListener(listener);
+        folderPanel2.addLocationListener(listener);
     }
 }

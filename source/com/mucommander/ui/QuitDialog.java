@@ -48,7 +48,7 @@ public class QuitDialog extends QuestionDialog {
             ConfigurationManager.setVariableBoolean("prefs.quit_confirmation", showNextTimeCheckBox.isSelected());
 
             // Quit
-            WindowManager.getInstance().quit();
+            WindowManager.quit();
         }
     }
 }

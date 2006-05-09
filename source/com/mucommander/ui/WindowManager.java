@@ -2,10 +2,10 @@
 package com.mucommander.ui;
 
 import com.mucommander.conf.*;
-import com.mucommander.PlatformManager;
+import com.mucommander.*;
 import com.mucommander.file.*;
 import com.mucommander.event.*;
-import com.mucommander.Debug;
+import com.mucommander.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -20,8 +20,27 @@ import java.io.*;
  * @author Maxence Bernard
  */
 public class WindowManager implements ActionListener, WindowListener, TableChangeListener, LocationListener, ConfigurationListener {
+    // - Folder frame identifiers -----------------------------------------------
+    // --------------------------------------------------------------------------
+    // The following constants are used to identify the left and right folder frames
+    // in the configuration file.
+
+    /** Configuration identifier for the left folder frame. */
     private static final String LEFT_FRAME  = "left";
+    /** Configuration identifier for the right folder frame. */
     private static final String RIGHT_FRAME = "right";
+
+
+
+    // - MainFrame positioning --------------------------------------------------
+    // --------------------------------------------------------------------------
+    // The following constants are used to compute the proper position of a new MainFrame.
+
+    /** Number of pixels a new MainFrame will be moved to the left from its parent. */
+    private static final int X_OFFSET = 22;
+    /** Number of pixels a new MainFrame will be moved down from its parent. */
+    private static final int Y_OFFSET = 22;
+
 
 
     /** MainFrame (main muCommander window) instances */
@@ -35,7 +54,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
     private long lastFocusRequest;
 
     /** Last main frame on which focus has been explicitely requested */
-    private MainFrame lastFocusedMainFrame;
+    private static MainFrame lastFocusedMainFrame;
 
     private static WindowManager instance = new WindowManager();
 
@@ -51,20 +70,25 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
 
-    /**
-     * Creates a new instance of WindowManager.
-     */
-    private WindowManager() {
+    static {
         // Sets custom lookAndFeel if different from current lookAndFeel
         String lnfName = ConfigurationManager.getVariable("prefs.lookAndFeel");
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
             setLookAndFeel(lnfName);
-		
-        // Listens to certain configuration events
-        ConfigurationManager.addConfigurationListener(this);
-		
-        this.mainFrames = new Vector();
+
+        // In debug mode, trace un-initialised preference files.
+        if(Debug.ON)
+            if(lnfName == null)
+                Debug.trace("Could load look'n feel from preferences");
+
+        mainFrames = new Vector();
+        instance   = new WindowManager();
     }
+
+    /**
+     * Creates a new instance of WindowManager.
+     */
+    private WindowManager() {ConfigurationManager.addConfigurationListener(this);}
 
     /**
      * Retrieves the user's initial path for the specified frame.
@@ -175,25 +199,18 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 
         return file;
     }
-
-    /**
-     * Returns the instance of WindowManager this application is running with.
-     * @return the instance of WindowManager this application is running with.
-     */
-    public static WindowManager getInstance() {return instance;}
-	
 	
     /**
      * Returns the MainFrame instance that currently is active.
      */
-    public MainFrame getCurrentMainFrame() {
+    public static MainFrame getCurrentMainFrame() {
         return currentMainFrame;
     }
 	
     /**
      * Returns a Vector of all MainFrame instances the application has.
      */
-    public Vector getMainFrames() {
+    public static Vector getMainFrames() {
         return mainFrames;
     }
 
@@ -207,7 +224,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
      * </p>
      * @return a fully initialised mainframe.
      */	
-    public synchronized MainFrame createNewMainFrame() {
+    public static synchronized MainFrame createNewMainFrame() {
         if(currentMainFrame == null)
             return createNewMainFrame(getInitialPath(LEFT_FRAME), getInitialPath(RIGHT_FRAME));
         return createNewMainFrame(currentMainFrame.getFolderPanel1().getFileTable().getCurrentFolder(),
@@ -220,7 +237,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
      * @param  folder2 path on which the right frame will be opened.
      * @return         a fully initialised mainframe.
      */
-    public synchronized MainFrame createNewMainFrame(String folder1, String folder2) {
+    public static synchronized MainFrame createNewMainFrame(String folder1, String folder2) {
         return createNewMainFrame(getInitialAbstractPath(folder1, LEFT_FRAME),
                                   getInitialAbstractPath(folder2, RIGHT_FRAME));
     }
@@ -230,64 +247,74 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
      * @param folder1 initial path for the left frame.
      * @param folder2 initial path for the right frame.
      */
-    public synchronized MainFrame createNewMainFrame(AbstractFile folder1, AbstractFile folder2) {
-        boolean firstWindow = mainFrames.size()==0;
-		
-        // Create frame
-        MainFrame newMainFrame = new MainFrame(folder1, folder2);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    public static synchronized MainFrame createNewMainFrame(AbstractFile folder1, AbstractFile folder2) {
+        MainFrame newMainFrame; // New MainFrame.
+        Dimension screenSize;   // Used to compute the new MainFrame's proper location.
+        int       x;            // Horizontal position of the new MainFrame.
+        int       y;            // Vertical position of the new MainFrame.
+        int       width;        // Width of the new MainFrame.
+        int       height;       // Height of the new MainFrame.
 
-        // Set window size and location
+        // Initialisation.
+        newMainFrame = new MainFrame(folder1, folder2);
+        screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
 
-        // If first window
-        if(firstWindow) {
+
+        // - Initial window dimensions --------------------------
+        // ------------------------------------------------------
+        // If this is the first window, retrieve initial dimensions from preferences.
+        if(mainFrames.isEmpty()) {
             currentMainFrame = newMainFrame;
             // Retrieve last saved window bounds
-            int x = ConfigurationManager.getVariableInt("prefs.last_window.x");
-            int y = ConfigurationManager.getVariableInt("prefs.last_window.y");
-            int width = ConfigurationManager.getVariableInt("prefs.last_window.width");
-            int height = ConfigurationManager.getVariableInt("prefs.last_window.height");
-            int lastScreenWidth = ConfigurationManager.getVariableInt("prefs.last_window.screen_width");
+            x      = ConfigurationManager.getVariableInt("prefs.last_window.x");
+            y      = ConfigurationManager.getVariableInt("prefs.last_window.y");
+            width  = ConfigurationManager.getVariableInt("prefs.last_window.width");
+            height = ConfigurationManager.getVariableInt("prefs.last_window.height");
+
+            // Retrieves the last known size of the screen.
+            int lastScreenWidth  = ConfigurationManager.getVariableInt("prefs.last_window.screen_width");
             int lastScreenHeight = ConfigurationManager.getVariableInt("prefs.last_window.screen_height");
-			
-            // Set same window bounds as last run if resolution hasn't changed since then and if
-            // window size is not substantially larger than screen size (safety check)
-            if((x!=-1 || y!=-1) && width!=-1 && height!=-1
-               && screenSize.width==lastScreenWidth && screenSize.height==lastScreenHeight
-               && width+x<=screenSize.width+5 && height+y<=screenSize.height+5) {
-				
-                newMainFrame.setBounds(x, y, width, height);
-            }
-            // No saved window bounds or resolution has changed, use defaults
-            else {		
-                //				// Set window size and location to use as much screen space as possible
-                //				newMainFrame.setBounds(PlatformManager.getFullScreenBounds(newMainFrame));
+
+            // If no previous location was saved, or if the resolution has changed,
+            // reset the window's dimensions to their default values.
+            if(x == -1 || y == -1 || width == -1 || height == -1 ||
+               screenSize.width != lastScreenWidth ||  screenSize.height != lastScreenHeight
+               || width + x > screenSize.width + 5 || height + y > screenSize.height + 5) {
 
                 // Full screen bounds are not reliable enough, in particular under Linux+Gnome
                 // so we simply make the initial window 4/5 of screen's size, and center it.
                 // This should fit under any window manager / platform
-                newMainFrame.setBounds(new Rectangle(screenSize.width/10, screenSize.height/10, (int)(screenSize.width*0.8), (int)(screenSize.height*0.8)));
+                x      = screenSize.width / 10;
+                y      = screenSize.height / 10;
+                width  = (int)(screenSize.width * 0.8);
+                height = (int)(screenSize.height * 0.8);
             }
         }
-        else {
-            // Use current's main frame size and location
-            // and shift new frame a little so we can see
-            // the previous one underneath
-            Rectangle bounds = currentMainFrame.getBounds();
-            int x = bounds.x + 22;
-            int y = bounds.y + 22;
-            // If frame is outside window (on x or y), set corresponding coordinate to 0
-            if(!PlatformManager.isInsideUsableScreen(currentMainFrame, x+bounds.width, -1))
-                x = 0;
-            if(!PlatformManager.isInsideUsableScreen(currentMainFrame, -1, y+bounds.height))
-                y = 0;
 
-            // Set new frame bounds and make sure that they don't exceed screen size
-            // (check is necessary in particular under Linux+Gnome where getBounds returns weird values)
-            newMainFrame.setBounds(new Rectangle(x, y, bounds.width+x>screenSize.width?screenSize.width-x:bounds.width, bounds.height+y>screenSize.height?screenSize.height-y:bounds.height));
+        // If this is *not* the first window, use the same dimensions as the previous MainFrame, with
+        // a slight horizontal and vertical offset to make sure we keep both of them visible.
+        else {
+            x             = currentMainFrame.getX() + X_OFFSET;
+            y             = currentMainFrame.getY() + Y_OFFSET;
+            width         = currentMainFrame.getWidth();
+            height        = currentMainFrame.getHeight();
+
+            // Make sure we're still within the screen.
+            // Note that while the width and height tests look redundant, they are required. Some
+            // window managers, such as Gnome, return rather peculiar results.
+            if(!PlatformManager.isInsideUsableScreen(currentMainFrame, x + width, -1))
+                x = 0;
+            if(!PlatformManager.isInsideUsableScreen(currentMainFrame, -1, y + height))
+                y = 0;
+            if(width + x > screenSize.width)
+                width = screenSize.width - x;
+            if(height + y > screenSize.height)
+                height = screenSize.height - y;
         }
+        newMainFrame.setBounds(new Rectangle(x, y, width, height));
+
         // To catch user window closing actions
-        newMainFrame.addWindowListener(this);
+        newMainFrame.addWindowListener(instance);
 		
         // Adds a new menu item in each existing MainFrame's window menu
         JMenu windowMenu;
@@ -296,7 +323,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
         for(int i=0; i<nbFrames; i++) {
             windowMenu = ((MainMenuBar)((MainFrame)mainFrames.elementAt(i)).getJMenuBar()).getWindowMenu();
             checkBox = new JCheckBoxMenuItem((nbFrames)+" "+newMainFrame.getLastActiveTable().getCurrentFolder().getAbsolutePath(), false);
-            checkBox.addActionListener(this);
+            checkBox.addActionListener(instance);
             if(nbFrames<10)
                 checkBox.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[nbFrames], ActionEvent.CTRL_MASK));
             windowMenu.add(checkBox);
@@ -311,29 +338,32 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
         windowMenu = ((MainMenuBar)newMainFrame.getJMenuBar()).getWindowMenu();
         for(int i=0; i<nbFrames; i++) {
             checkBox = new JCheckBoxMenuItem((i+1)+" "+((MainFrame)mainFrames.elementAt(i)).getLastActiveTable().getCurrentFolder().getAbsolutePath(), i==nbFrames-1);
-            checkBox.addActionListener(this);
+            checkBox.addActionListener(instance);
             if(i<10)
                 checkBox.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[i], ActionEvent.CTRL_MASK));
             windowMenu.add(checkBox);
         }
 
         // To catch user clicks on window menu items and change current MainFrame accordingly
-        windowMenu.addActionListener(this);
+        windowMenu.addActionListener(instance);
+
+        // Listens to main frame events.
+        newMainFrame.addLocationListener(instance);
+        newMainFrame.addTableChangeListener(instance);
 
         // Set window title with frame # only if there is more than one
         newMainFrame.updateWindowTitle(nbFrames==1?-1:nbFrames);
 
         // Make this new frame visible
         newMainFrame.setVisible(true);
-		
+
         return newMainFrame;
     }
 
-		
     /**
      * Properly disposes the given MainFrame.
      */
-    public synchronized void disposeMainFrame(MainFrame mainFrameToDispose) {
+    public static synchronized void disposeMainFrame(MainFrame mainFrameToDispose) {
         if(com.mucommander.Debug.ON) Debug.trace("");
 
         // Saves last folders
@@ -383,16 +413,15 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
         if(mainFrames.size()==0)
             System.exit(0);
     }
-
 	
     /**
      * Disposes all opened windows, ending with the one that is currently active if there is one, 
      * or the last one which was activated.
      */
-    public synchronized void quit() {
+    public static synchronized void quit() {
         int nbFrames = mainFrames.size();
         // Retrieve current MainFrame's index
-        int currentMainFrameIndex = mainFrames.indexOf(this.currentMainFrame);
+        int currentMainFrameIndex = mainFrames.indexOf(currentMainFrame);
         MainFrame mainFrame;
         int index = 0;
 		
@@ -415,7 +444,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
     /**
      * Switches to the next MainFrame, in the order of which they were created.
      */
-    public void switchToNextWindow() {
+    public static void switchToNextWindow() {
         int frameIndex = mainFrames.indexOf(currentMainFrame);
         MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==mainFrames.size()-1?0:frameIndex+1);
         mainFrame.toFront();
@@ -424,7 +453,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
     /**
      * Switches to previous MainFrame, in the order of which they were created.
      */
-    public void switchToPreviousWindow() {
+    public static void switchToPreviousWindow() {
         int frameIndex = mainFrames.indexOf(currentMainFrame);
         MainFrame mainFrame = (MainFrame)mainFrames.elementAt(frameIndex==0?mainFrames.size()-1:frameIndex-1);
         mainFrame.toFront();
@@ -434,7 +463,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
     /**
      * Changes LooknFeel to the given one, updating the UI of each MainFrame.
      */
-    private void setLookAndFeel(String lnfName) {
+    private static void setLookAndFeel(String lnfName) {
         try {
             UIManager.setLookAndFeel(lnfName);
 
@@ -453,7 +482,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
      *
      * param folderPanel the folderPanel which change needs to be reflected.
      */
-    private void updateWindowMenus(FolderPanel folderPanel) {
+    private static void updateWindowMenus(FolderPanel folderPanel) {
         JMenu windowMenu;
         MainFrame mainFrame = folderPanel.getMainFrame();
         int frameIndex = mainFrames.indexOf(mainFrame);		

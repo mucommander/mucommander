@@ -301,7 +301,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
         }
         // Close window button
         else if(source == buttons[CLOSE_INDEX]) {
-            WindowManager.getInstance().disposeMainFrame(mainFrame);
+            WindowManager.disposeMainFrame(mainFrame);
         }
         else {
             FileTable activeTable = mainFrame.getLastActiveTable();

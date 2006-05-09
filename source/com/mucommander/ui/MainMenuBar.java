@@ -320,7 +320,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         // File menu
         if (source == newWindowItem) {
-            WindowManager.getInstance().createNewMainFrame();
+            WindowManager.createNewMainFrame();
         }
         else if (source == serverConnectItem) {
             mainFrame.showServerConnectDialog();
@@ -355,7 +355,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             new CheckVersionDialog(mainFrame, true);
         }
         else if (source == closeItem) {
-            WindowManager.getInstance().disposeMainFrame(mainFrame);
+            WindowManager.disposeMainFrame(mainFrame);
         }
         // Mark menu
         else if (source == markGroupItem) {

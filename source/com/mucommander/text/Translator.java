@@ -178,8 +178,7 @@ public class Translator {
     /**
      * Empty method that does nothing but trigger the static initializer block.
      */
-    public static void init() {
-    }
+    public static void init() {}
 
 	
     /**

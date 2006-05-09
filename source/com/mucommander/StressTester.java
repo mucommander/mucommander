@@ -26,7 +26,7 @@ public class StressTester implements Runnable, ActionListener {
 
     public void run() {
         Random random = new Random();
-        MainFrame mainFrame = WindowManager.getInstance().getCurrentMainFrame();
+        MainFrame mainFrame = WindowManager.getCurrentMainFrame();
         FolderPanel folderPanel1 = mainFrame.getFolderPanel1();
         FolderPanel folderPanel2 = mainFrame.getFolderPanel2();
 		
