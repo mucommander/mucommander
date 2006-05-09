@@ -186,7 +186,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		
         add(viewMenu);
 		
-        // Bookmark menu, bookmarks will be added to the menu each it gets displayed
+        // Bookmark menu, menu items will be added when the menu gets selected
         menuItemMnemonicHelper.clear();
         bookmarksMenu = MenuToolkit.addMenu(Translator.get("bookmarks_menu"), menuItemMnemonicHelper, this);
         addBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.add_bookmark"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_B, KeyEvent.CTRL_MASK), this);
@@ -197,9 +197,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		
         add(bookmarksMenu);
 		
-        // Window menu
+        // Window menu, menu items will be added when the menu gets selected
         menuItemMnemonicHelper.clear();
-//        windowMenu = MenuToolkit.addMenu(Translator.get("window_menu"), menuItemMnemonicHelper, null);
+
         windowMenu = MenuToolkit.addMenu(Translator.get("window_menu"), menuItemMnemonicHelper, this);
 		
         add(windowMenu);
@@ -274,11 +274,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             goToParentItem.setEnabled(enableUnconditional || folderPanel.getCurrentFolder().getParent()!=null);
         }
         else if(menu == windowMenu && !menu.isSelected()) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-            // Disable all window menu items if menu is disabled, shortcuts are handled by MainFrame
+            // Disable accelerators on all menu items but do not remove or disable them,
+            // this would cause the actionPerformed() method not be called when item is clicked.            
             int nbWindowMenuItems = windowMenu.getItemCount();
             for(int i=0; i<nbWindowMenuItems; i++)
-                windowMenu.getItem(i).setEnabled(false);
+                windowMenu.getItem(i).setAccelerator(null);
         }
     }
 
@@ -461,12 +461,13 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
         else if (source == aboutItem) {
             new AboutDialog(mainFrame).showDialog();
         }
-        // Window item
+        // Window menu item
         else {
             int nbWindowMenuItems = windowMenu.getItemCount();
-            // Recall MainFrame corresponding to the clicked menu item
+            // Recall MainFrame corresponding to the clicked menu item.
+            // Unfortunately there's such method as getItemIndex() in JMenu, so we need
+            // to interate thru all menu items to find the clicked menu item's index.
             for(int i=0; i<nbWindowMenuItems; i++) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("#"+i+(source==windowMenu.getItem(i)));
                 if(source==windowMenu.getItem(i)) {
                     ((MainFrame)WindowManager.getMainFrames().elementAt(i)).toFront();
                     break;
@@ -550,6 +551,9 @@ if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("#"+i+(source==windowMe
                 mainFrame = (MainFrame)mainFrames.elementAt(i);
                 checkBox = new JCheckBoxMenuItem((i+1)+" "+mainFrame.getLastActiveTable().getCurrentFolder().getAbsolutePath(), mainFrame==this.mainFrame);
                 checkBox.addActionListener(this);
+                // The accelator is set just for 'decoration' purposes, i.e. just to indicate what the shortcut is.
+                // All accelators are removed after the menu is deselected as window shortcuts are managed
+                // by MainFrame directly.
                 if(i<10)
                     checkBox.setAccelerator(KeyStroke.getKeyStroke(i==9?KeyEvent.VK_0:i+KeyEvent.VK_1, ActionEvent.CTRL_MASK));
                 windowMenu.add(checkBox);
