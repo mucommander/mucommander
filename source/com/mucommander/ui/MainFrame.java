@@ -481,6 +481,13 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
         // Update window title
         setTitle(getLastActiveTable().getCurrentFolder().getAbsolutePath()+" - muCommander"+(frameNumber==-1?"":" ["+(frameNumber)+"]"));
     }
+    
+    
+//    public void addLocationListener(LocationListener listener) {
+//        folderPanel1.addLocationListener(listener);
+//        folderPanel2.addLocationListener(listener);
+//    }
+    
 	
     ///////////////////////
     // Overriden methods //
@@ -557,47 +564,61 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
         if(noEventsMode)
             return;
 
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("keyEvent ="+e);
+
         Object source = e.getSource();
         int keyCode = e.getKeyCode();
-        if(keyCode == KeyEvent.VK_F3 && !e.isControlDown()) {
+        boolean isControlDown = e.isControlDown();
+        boolean isAltDown = e.isAltDown();
+        
+        // CTRL+1 ... CTRL+0 brings MainFrame #1 ... #10 to front
+        if(isControlDown && (keyCode>=KeyEvent.VK_0 && keyCode<=KeyEvent.VK_9)) {
+            // Compute the MainFrame's index corresponding to the key pressed
+            int frameIndex = keyCode==KeyEvent.VK_0?9:keyCode - KeyEvent.VK_1;
+            java.util.Vector mainFrames = WindowManager.getMainFrames();
+            // Is there a MainFrame at the index ?
+            if(frameIndex<mainFrames.size())
+                ((MainFrame)mainFrames.elementAt(frameIndex)).toFront();
+        }
+        else if(keyCode == KeyEvent.VK_F3 && !isControlDown) {
             commandBar.getButton(CommandBar.VIEW_INDEX).doClick();
         }
-        else if(keyCode == KeyEvent.VK_F4 && e.isAltDown()) {
+        else if(keyCode == KeyEvent.VK_F4 && isAltDown) {
             commandBar.getButton(CommandBar.CLOSE_INDEX).doClick();
         }
-        else if(keyCode == KeyEvent.VK_F4 && !e.isControlDown()) {
+        else if(keyCode == KeyEvent.VK_F4 && !isControlDown) {
             commandBar.getButton(CommandBar.EDIT_INDEX).doClick();
         }
-        else if(keyCode == KeyEvent.VK_F5 && !e.isControlDown()) {
+        else if(keyCode == KeyEvent.VK_F5 && !isControlDown) {
             commandBar.getButton(CommandBar.COPY_INDEX).doClick();
         }
-        else if(keyCode == KeyEvent.VK_F6 && !e.isControlDown()) {
+        else if(keyCode == KeyEvent.VK_F6 && !isControlDown) {
             commandBar.getButton(CommandBar.MOVE_INDEX).doClick();
         }
-        else if(keyCode == KeyEvent.VK_F7 && !e.isControlDown()) {
+        else if(keyCode == KeyEvent.VK_F7 && !isControlDown) {
             commandBar.getButton(CommandBar.MKDIR_INDEX).doClick();
         }
         else if((keyCode == KeyEvent.VK_F8 || keyCode == KeyEvent.VK_DELETE)
-                && !e.isControlDown()) {
+                && !isControlDown) {
             commandBar.getButton(CommandBar.DELETE_INDEX).doClick();
         }
-        else if(keyCode == KeyEvent.VK_F9 && !e.isControlDown()) {
+        else if(keyCode == KeyEvent.VK_F9 && !isControlDown) {
             commandBar.getButton(CommandBar.REFRESH_INDEX).doClick();
         }
-        else if(keyCode == KeyEvent.VK_F10 && !e.isControlDown()
+        else if(keyCode == KeyEvent.VK_F10 && !isControlDown
                 || (PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_W && e.isMetaDown())) {
             commandBar.getButton(CommandBar.CLOSE_INDEX).doClick();
         }
-        else if(keyCode == KeyEvent.VK_F1 && e.isAltDown()) {
+        else if(keyCode == KeyEvent.VK_F1 && isAltDown) {
             folderPanel1.popDriveButton();
         }
-        else if(keyCode == KeyEvent.VK_F2 && e.isAltDown()) {
+        else if(keyCode == KeyEvent.VK_F2 && isAltDown) {
             folderPanel2.popDriveButton();
         }
-        else if(e.isControlDown() && keyCode==KeyEvent.VK_LEFT) {
+        else if(isControlDown && keyCode==KeyEvent.VK_LEFT) {
             WindowManager.switchToPreviousWindow();
         }
-        else if(e.isControlDown() && keyCode==KeyEvent.VK_RIGHT) {
+        else if(isControlDown && keyCode==KeyEvent.VK_RIGHT) {
             WindowManager.switchToNextWindow();	
         }
         else if(keyCode == KeyEvent.VK_TAB) {
@@ -606,7 +627,7 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
             else if(source == table2)
                 table1.requestFocus();
         }
-        else if(keyCode == KeyEvent.VK_ENTER && e.isAltDown()) {
+        else if(keyCode == KeyEvent.VK_ENTER && isAltDown) {
             showPropertiesDialog();
         }
         else if(keyCode == KeyEvent.VK_SHIFT) {
@@ -625,10 +646,5 @@ public class MainFrame extends JFrame implements ComponentListener, KeyListener 
     }
 
     public void keyTyped(KeyEvent e) {
-    }
-
-    public void addLocationListener(LocationListener listener) {
-        folderPanel1.addLocationListener(listener);
-        folderPanel2.addLocationListener(listener);
     }
 }

@@ -6,11 +6,12 @@ import com.mucommander.*;
 import com.mucommander.file.*;
 import com.mucommander.event.*;
 import com.mucommander.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
-import java.io.*;
+import java.util.Vector;
+import java.io.File;
 
 
 /**
@@ -19,7 +20,8 @@ import java.io.*;
  *
  * @author Maxence Bernard
  */
-public class WindowManager implements ActionListener, WindowListener, TableChangeListener, LocationListener, ConfigurationListener {
+//public class WindowManager implements ActionListener, WindowListener, TableChangeListener, LocationListener, ConfigurationListener {
+public class WindowManager implements WindowListener, ConfigurationListener {
     // - Folder frame identifiers -----------------------------------------------
     // --------------------------------------------------------------------------
     // The following constants are used to identify the left and right folder frames
@@ -58,10 +60,10 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 
     private static WindowManager instance = new WindowManager();
 
-    private final static int MENU_ITEM_VK_TABLE[] = {
-        KeyEvent.VK_1,KeyEvent.VK_2,KeyEvent.VK_3,KeyEvent.VK_4,
-        KeyEvent.VK_5,KeyEvent.VK_6,KeyEvent.VK_7,KeyEvent.VK_8,
-        KeyEvent.VK_9, KeyEvent.VK_0};
+//    private final static int MENU_ITEM_VK_TABLE[] = {
+//        KeyEvent.VK_1,KeyEvent.VK_2,KeyEvent.VK_3,KeyEvent.VK_4,
+//        KeyEvent.VK_5,KeyEvent.VK_6,KeyEvent.VK_7,KeyEvent.VK_8,
+//        KeyEvent.VK_9, KeyEvent.VK_0};
 
     /** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
     private final static int FOCUS_REQUEST_DELAY = 1000;
@@ -315,11 +317,12 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 
         // To catch user window closing actions
         newMainFrame.addWindowListener(instance);
-		
+
+        int nbFrames = mainFrames.size();
+/*		
         // Adds a new menu item in each existing MainFrame's window menu
         JMenu windowMenu;
         JCheckBoxMenuItem checkBox;
-        int nbFrames = mainFrames.size();
         for(int i=0; i<nbFrames; i++) {
             windowMenu = ((MainMenuBar)((MainFrame)mainFrames.elementAt(i)).getJMenuBar()).getWindowMenu();
             checkBox = new JCheckBoxMenuItem((nbFrames)+" "+newMainFrame.getLastActiveTable().getCurrentFolder().getAbsolutePath(), false);
@@ -328,11 +331,12 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
                 checkBox.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[nbFrames], ActionEvent.CTRL_MASK));
             windowMenu.add(checkBox);
         }
-		
+*/		
         // Adds the new MainFrame to the vector
         mainFrames.add(newMainFrame);
         nbFrames++;
 
+/*
         // Sets the 'window menu' items of the new MainFrame with an item
         // for each MainFrame (including the new one)
         windowMenu = ((MainMenuBar)newMainFrame.getJMenuBar()).getWindowMenu();
@@ -350,7 +354,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
         // Listens to main frame events.
         newMainFrame.addLocationListener(instance);
         newMainFrame.addTableChangeListener(instance);
-
+*/
         // Set window title with frame # only if there is more than one
         newMainFrame.updateWindowTitle(nbFrames==1?-1:nbFrames);
 
@@ -386,13 +390,15 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
         int frameIndex = mainFrames.indexOf(mainFrameToDispose);
         mainFrameToDispose.dispose();
         mainFrames.remove(mainFrameToDispose);
+
 		
         int nbFrames = mainFrames.size();
         MainFrame mainFrame;
-        JMenuItem item;
-        JMenu windowMenu;
+//        JMenuItem item;
+//        JMenu windowMenu;
         for(int i=0; i<nbFrames; i++) {
             mainFrame = (MainFrame)mainFrames.elementAt(i);
+/*
             windowMenu = ((MainMenuBar)mainFrame.getJMenuBar()).getWindowMenu();
             // Removes the MainFrame disposed for every MainFrame's window menu
             windowMenu.remove(frameIndex);
@@ -403,7 +409,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
                 if(j<10)
                     item.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[j], ActionEvent.CTRL_MASK));
             }
-
+*/
             // Update window title (frame #) for frames which index is greater than the one that was disposed
             if(i>=frameIndex)
                 mainFrame.updateWindowTitle(nbFrames==1?-1:i+1);
@@ -482,6 +488,7 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
      *
      * param folderPanel the folderPanel which change needs to be reflected.
      */
+/*
     private static void updateWindowMenus(FolderPanel folderPanel) {
         JMenu windowMenu;
         MainFrame mainFrame = folderPanel.getMainFrame();
@@ -522,7 +529,6 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
 	
     public void locationCancelled(LocationEvent e) {
     }
-	
 
     ////////////////////////////
     // ActionListener methods //
@@ -553,6 +559,8 @@ public class WindowManager implements ActionListener, WindowListener, TableChang
             }
         }
     }
+*/	
+
 
     ////////////////////////////
     // WindowListener methods //

@@ -199,7 +199,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		
         // Window menu
         menuItemMnemonicHelper.clear();
-        windowMenu = MenuToolkit.addMenu(Translator.get("window_menu"), menuItemMnemonicHelper, null);
+//        windowMenu = MenuToolkit.addMenu(Translator.get("window_menu"), menuItemMnemonicHelper, null);
+        windowMenu = MenuToolkit.addMenu(Translator.get("window_menu"), menuItemMnemonicHelper, this);
 		
         add(windowMenu);
 		
@@ -235,12 +236,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     }
 	
 
-    /**
-     * Returns the 'Window' JMenu instance.
-     */
-    public JMenu getWindowMenu() {
-        return windowMenu;
-    }
+//    /**
+//     * Returns the 'Window' JMenu instance.
+//     */
+//    public JMenu getWindowMenu() {
+//        return windowMenu;
+//    }
 
 
     /**
@@ -249,7 +250,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
      * to enable all menu items (unconditional) so that their shortcuts are properly caught.
      *
      * @param menu menu that just got selected/deselected/cancelled
-     * @param enableUnconditional if true, all conditional menu items in the given menu have to be enabled
+     * @param enableUnconditional if true, all conditional menu items in the given menu have to be enabled for
+     * the shortcuts to be active
      */
     private void toggleContextualMenuItems(JMenu menu, boolean enableUnconditional) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
@@ -270,6 +272,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             goBackItem.setEnabled(enableUnconditional || folderPanel.getFolderHistory().hasBackFolder());
             goForwardItem.setEnabled(enableUnconditional || folderPanel.getFolderHistory().hasForwardFolder());
             goToParentItem.setEnabled(enableUnconditional || folderPanel.getCurrentFolder().getParent()!=null);
+        }
+        else if(menu == windowMenu && !menu.isSelected()) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+            // Disable all window menu items if menu is disabled, shortcuts are handled by MainFrame
+            int nbWindowMenuItems = windowMenu.getItemCount();
+            for(int i=0; i<nbWindowMenuItems; i++)
+                windowMenu.getItem(i).setEnabled(false);
         }
     }
 
@@ -435,7 +444,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         else if (bookmarkMenuItems!=null && bookmarkMenuItems.contains(source)) {
             int index = bookmarkMenuItems.indexOf(source);
             mainFrame.getLastActiveTable().getFolderPanel().trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getURL());
-        }		
+        }
         // Help menu
         else if (source == keysItem) {
             new ShortcutsDialog(mainFrame).showDialog();
@@ -451,6 +460,18 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
         else if (source == aboutItem) {
             new AboutDialog(mainFrame).showDialog();
+        }
+        // Window item
+        else {
+            int nbWindowMenuItems = windowMenu.getItemCount();
+            // Recall MainFrame corresponding to the clicked menu item
+            for(int i=0; i<nbWindowMenuItems; i++) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("#"+i+(source==windowMenu.getItem(i)));
+                if(source==windowMenu.getItem(i)) {
+                    ((MainFrame)WindowManager.getMainFrames().elementAt(i)).toFront();
+                    break;
+                }
+            }
         }
     }
 
@@ -512,6 +533,26 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 JMenuItem noBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.no_bookmark"), menuItemMnemonicHelper, null, null);
                 noBookmarkItem.setEnabled(false);
                 bookmarkMenuItems.add(noBookmarkItem);
+            }
+        }
+        else if(source==windowMenu) {
+            // Start by removing any menu item previously added
+            // Note: menu item cannot be removed by menuDeselected() as actionPerformed() can be called after
+            // menu has been deselected.
+            windowMenu.removeAll();
+            // Create a menu item for each of the MainFrame instances, that displays the MainFrame's path
+            // and associated shortcut to recall the frame. 
+            java.util.Vector mainFrames = WindowManager.getMainFrames();
+            MainFrame mainFrame;
+            JCheckBoxMenuItem checkBox;
+            int nbFrames = mainFrames.size();
+            for(int i=0; i<nbFrames; i++) {
+                mainFrame = (MainFrame)mainFrames.elementAt(i);
+                checkBox = new JCheckBoxMenuItem((i+1)+" "+mainFrame.getLastActiveTable().getCurrentFolder().getAbsolutePath(), mainFrame==this.mainFrame);
+                checkBox.addActionListener(this);
+                if(i<10)
+                    checkBox.setAccelerator(KeyStroke.getKeyStroke(i==9?KeyEvent.VK_0:i+KeyEvent.VK_1, ActionEvent.CTRL_MASK));
+                windowMenu.add(checkBox);
             }
         }
     }
