@@ -7,6 +7,12 @@ import com.apple.mrj.MRJPrefsHandler;
 import com.apple.mrj.MRJQuitHandler;
 
 
+/**
+ * This class registers the About, Preferences and Quit handlers using the com.apple.mrj API available
+ * under Java 1.3 (deprecated under Java 1.4 and up).
+ *
+ * @author Maxence Bernard
+ */
 class MRJHandler implements MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Runnable {
 
     private int action;
@@ -16,8 +22,9 @@ class MRJHandler implements MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Ru
     private final static int QUIT_ACTION = 2;
 		    
     public MRJHandler() {
-        // Have to catch Errors (NoClassDefFoundError and NoSuchMethodError)
-        // because they seem not to be available under Mac OS X 10.1 (reported by Lanch)
+        // Register the handlers. Error has to be caught for NoClassDefFoundError and NoSuchMethodError
+        // because MRJ toolkit doesn't seem to be available under Mac OS X 10.1 (reported by Lanch).
+        // Note: As a result, under Mac OS X 10.1, About, Preferences and Quit won't be available
         try {MRJApplicationUtils.registerAboutHandler(this);}
         catch(Error e){}
         try {MRJApplicationUtils.registerPrefsHandler(this);}

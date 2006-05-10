@@ -14,10 +14,10 @@ import com.mucommander.ui.about.AboutDialog;
  * <ul>
  *  <li>Turns on/off brush metal based on preferences (default is on)
  *  <li>Turns screen menu bar based on preferences (default is on, no GUI for that pref)
- *  <li>Creates hooks for the 'About', 'Preferences' and 'Quit' application menu items
+ *  <li>Registers handlers for the 'About', 'Preferences' and 'Quit' application menu items
  * </ul>
  *
- * <p>The Apple API used to register the hooks depends on the Java runtime version:
+ * <p>The Apple API used to register the handlers depends on the Java runtime version:
  * <ul>
  *  <li>com.apple.eawt is used for Java 1.4 and up
  *  <li>com.apple.mrj is used for Java 1.3 (deprecated in Java 1.4)
@@ -48,6 +48,9 @@ public class OSXIntegration {
         }
     }
 
+    /**
+     * Shows the 'About' dialog.
+     */
     public static void showAbout() {
         MainFrame mainFrame = WindowManager.getCurrentMainFrame();
         
@@ -58,6 +61,9 @@ public class OSXIntegration {
         new AboutDialog(mainFrame).showDialog();
     }
 
+    /**
+     * Shows the 'Preferences' dialog.
+     */
     public static void showPreferences() {
         MainFrame mainFrame = WindowManager.getCurrentMainFrame();
 
@@ -68,6 +74,10 @@ public class OSXIntegration {
         mainFrame.showPreferencesDialog();
     }
 
+    /**
+     * Quits the application after displaying a confirmation dialog if it hasn't been disabled
+     * in the preferences.
+     */
     public static void doQuit() {
         // Show confirmation dialog if it hasn't been disabled
         if(ConfigurationManager.getVariableBoolean("prefs.quit_confirmation", true))
