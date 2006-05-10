@@ -123,7 +123,8 @@
       <fileset dir="${lib}">
         <include name="**/*.jar"/>
 	<!-- Exclude Apple MRJ skeletons, used only for compilation -->
-	<exclude name="apple-mrj-skel.jar"/>
+	<exclude name="osx-mrj-stubs.jar"/>
+        <exclude name="osx-eawt-stubs.jar"/>
     </fileset>
     </unjar>
   </target> 
