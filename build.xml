@@ -150,7 +150,7 @@
       <outjar name="${obf-jar}"/>
       <libraryjar name="${java-lib}"/>
       <!-- Mac OS X specifics -->
-      <keep name="com.mucommander.ui.macosx.FinderIntegration">
+      <keep name="com.mucommander.ui.macosx.OSXIntegration">
 	<method access="public" name="handleAbout"/>
 	<method access="public" name="handlePrefs"/>
 	<method access="public" name="handleQuit"/>

@@ -147,15 +147,15 @@ public class Launcher {
             // it right about now.
             ConfigurationManager.loadConfiguration();
 
-            // Use reflection to create a FinderIntegration class so that ClassLoader
+            // Use reflection to create an OSXIntegration instance so that ClassLoader
             // doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
             try {
-                Class finderIntegrationClass = Class.forName("com.mucommander.ui.macosx.FinderIntegration");
-                Constructor constructor = finderIntegrationClass.getConstructor(new Class[]{});
+                Class osxIntegrationClass = Class.forName("com.mucommander.ui.macosx.OSXIntegration");
+                Constructor constructor = osxIntegrationClass.getConstructor(new Class[]{});
                 constructor.newInstance(new Object[]{});
             }
             catch(Exception e) {
-                if(Debug.ON) Debug.trace("Launcher.init: exception thrown while initializing Mac Finder integration");
+                if(Debug.ON) Debug.trace("Exception thrown while initializing Mac OS X integration");
             }
         }
 

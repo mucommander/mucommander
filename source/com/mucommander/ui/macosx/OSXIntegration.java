@@ -21,12 +21,12 @@ import com.apple.mrj.MRJQuitHandler;
 /**
  * This class handles Mac OS X specifics when muCommander is started:
  * <ul>
- *  <li>Creates hooks for the 'About', 'Preferences' and 'Quit' application menu items
  *  <li>Turns on/off brush metal based on preferences (default is on)
  *  <li>Turns screen menu bar based on preferences (default is on, no GUI for that pref)
+ *  <li>Creates hooks for the 'About', 'Preferences' and 'Quit' application menu items
  * </ul>
  *
- * <p>The Apple API used to register the hooks depends on the version of the Java runtime:
+ * <p>The Apple API used to register the hooks depends on the Java runtime version:
  * <ul>
  *  <li>com.apple.eawt is used for Java 1.4 and up
  *  <li>com.apple.mrj is used for Java 1.3 (deprecated in Java 1.4)
@@ -34,7 +34,7 @@ import com.apple.mrj.MRJQuitHandler;
  *
  * @author Maxence Bernard
  */
-public class FinderIntegration implements ApplicationListener, MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Runnable {
+public class OSXIntegration implements ApplicationListener, MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Runnable {
 
     private final static int ABOUT_ACTION = 0;
     private final static int PREFS_ACTION = 1;
@@ -42,7 +42,7 @@ public class FinderIntegration implements ApplicationListener, MRJAboutHandler, 
 	
     private int action;
 	
-    public FinderIntegration() {
+    public OSXIntegration() {
         // Turn on/off brush metal look (default is off because still buggy when scrolling and panning dialog windows) :
         //  "Allows you to display your main windows with the 'textured' Aqua window appearance.
         //   This property should be applied only to the primary application window,
