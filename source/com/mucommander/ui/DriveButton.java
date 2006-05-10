@@ -58,9 +58,6 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
     public DriveButton(FolderPanel folderPanel) {
         this.folderPanel = folderPanel;
 		
-        // For Mac OS X whose minimum width for buttons is enormous
-        setMinimumSize(new Dimension(40, (int)getPreferredSize().getHeight()));
-
         // Listen to location events to update drive button when folder changes
         folderPanel.addLocationListener(this);
 
@@ -73,7 +70,8 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
     }
 
     public Dimension getPreferredSize() {
-        // Limit button's maximum width to something reasonable and leave enough space for location field, as bookmarks name can be as long as users want them to be
+        // Limit button's maximum width to something reasonable and leave enough space for location field, 
+        // as bookmarks name can be as long as users want them to be.
         // Note: would be better to use JButton.setMaximumSize() but it doesn't seem to work
         Dimension d = super.getPreferredSize();
         if(d.width > 160)

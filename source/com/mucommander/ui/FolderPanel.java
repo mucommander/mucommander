@@ -458,7 +458,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Create and add drive button
         this.driveButton = new DriveButton(this);
         c.weightx = 0;
-        c.gridx = 0;
+        c.gridx = 0;        
         locationPanel.add(driveButton, c);
 
         // Create location combo box and retrieve location field instance
@@ -468,6 +468,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Give location field all the remaining space
         c.weightx = 1;
         c.gridx = 1;
+        // Add some space between drive button and location combo box (none by default)
+        c.insets = new Insets(0, 4, 0, 0);
         locationPanel.add(locationComboBox, c);
 
         add(locationPanel, BorderLayout.NORTH);
