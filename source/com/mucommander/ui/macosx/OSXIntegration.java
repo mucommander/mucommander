@@ -8,15 +8,6 @@ import com.mucommander.ui.QuitDialog;
 import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.about.AboutDialog;
 
-import com.apple.eawt.ApplicationListener;
-import com.apple.eawt.ApplicationEvent;
-import com.apple.eawt.Application;
-
-import com.apple.mrj.MRJApplicationUtils;
-import com.apple.mrj.MRJAboutHandler;
-import com.apple.mrj.MRJPrefsHandler;
-import com.apple.mrj.MRJQuitHandler;
-
 
 /**
  * This class handles Mac OS X specifics when muCommander is started:
@@ -34,14 +25,8 @@ import com.apple.mrj.MRJQuitHandler;
  *
  * @author Maxence Bernard
  */
-public class OSXIntegration implements ApplicationListener, MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Runnable {
+public class OSXIntegration {
 
-    private final static int ABOUT_ACTION = 0;
-    private final static int PREFS_ACTION = 1;
-    private final static int QUIT_ACTION = 2;
-	
-    private int action;
-	
     public OSXIntegration() {
         // Turn on/off brush metal look (default is off because still buggy when scrolling and panning dialog windows) :
         //  "Allows you to display your main windows with the 'textured' Aqua window appearance.
@@ -55,27 +40,15 @@ public class OSXIntegration implements ApplicationListener, MRJAboutHandler, MRJ
 
         if(PlatformManager.getJavaVersion() >= PlatformManager.JAVA_1_4) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("registering EAWT hooks");
-
-            Application app = new Application();
-            app.setEnabledAboutMenu(true);
-            app.setEnabledPreferencesMenu(true);
-            app.addApplicationListener(this);
+            new EAWTHandler();
         }
         else {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("registering MRJ hooks");
-            
-            // Have to catch Errors (NoClassDefFoundError and NoSuchMethodError)
-            // because they seem not to be available under Mac OS X 10.1 (reported by Lanch)
-            try {MRJApplicationUtils.registerAboutHandler(this);}
-            catch(Error e){}
-            try {MRJApplicationUtils.registerPrefsHandler(this);}
-            catch(Error e){}
-            try {MRJApplicationUtils.registerQuitHandler(this);}
-            catch(Error e){}
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("registering MRJ hooks");            
+            new MRJHandler();
         }
     }
 
-    private void showAbout() {
+    public static void showAbout() {
         MainFrame mainFrame = WindowManager.getCurrentMainFrame();
         
         // Do nothing (return) when in 'no events mode'
@@ -85,7 +58,7 @@ public class OSXIntegration implements ApplicationListener, MRJAboutHandler, MRJ
         new AboutDialog(mainFrame).showDialog();
     }
 
-    private void showPreferences() {
+    public static void showPreferences() {
         MainFrame mainFrame = WindowManager.getCurrentMainFrame();
 
         // Do nothing (return) when in 'no events mode'
@@ -95,81 +68,12 @@ public class OSXIntegration implements ApplicationListener, MRJAboutHandler, MRJ
         mainFrame.showPreferencesDialog();
     }
 
-    private void doQuit() {
+    public static void doQuit() {
         // Show confirmation dialog if it hasn't been disabled
         if(ConfigurationManager.getVariableBoolean("prefs.quit_confirmation", true))
             new QuitDialog(WindowManager.getCurrentMainFrame());
         // Quit directly otherwise
         else
             WindowManager.quit();
-    }
-
-    ////////////////////////////////////
-    // EAWT hooks for Java 1.4 and up //
-    ////////////////////////////////////
-
-    public void handleAbout(ApplicationEvent event) {
-        event.setHandled(true);
-        showAbout();
-    }
-
-    public void handlePreferences(ApplicationEvent event) {
-        event.setHandled(true);
-        showPreferences();
-    }
-
-    public void handleQuit(ApplicationEvent event) {
-        event.setHandled(true);
-        doQuit();
-    }
-
-    public void handleOpenApplication(ApplicationEvent event) {
-        // No-op
-    }
-
-    public void handleReOpenApplication(ApplicationEvent event) {
-        // No-op
-    }
-
-    public void handleOpenFile(ApplicationEvent event) {
-        // No-op
-    }
-
-    public void handlePrintFile(ApplicationEvent event) {
-        // No-op
-    }
-
-
-    ////////////////////////////
-    // MRJ hooks for Java 1.3 //
-    ////////////////////////////
-
-    public void handleAbout() {
-        this.action = ABOUT_ACTION;
-        new Thread(this).start();
-    }
-	
-    public void handlePrefs() {
-        this.action = PREFS_ACTION;
-        new Thread(this).start();
-    }
-	
-    public void handleQuit() {
-        this.action = QUIT_ACTION;
-        new Thread(this).start();
-    }
-
-    public void run() {
-        switch(action) {
-            case ABOUT_ACTION:
-                showAbout();
-                break;
-            case PREFS_ACTION:
-                showPreferences();
-                break;
-            case QUIT_ACTION:
-                doQuit();
-                break;
-        }
     }
 }

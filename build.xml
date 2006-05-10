@@ -122,8 +122,8 @@
     <unjar dest="${classes}">
       <fileset dir="${lib}">
         <include name="**/*.jar"/>
-	<!-- Exclude Apple MRJ skeletons, used only for compilation -->
-	<exclude name="osx-mrj-stubs.jar"/>
+        <!-- Exclude Apple API stubs, used only at compile time -->
+        <exclude name="osx-mrj-stubs.jar"/>
         <exclude name="osx-eawt-stubs.jar"/>
     </fileset>
     </unjar>
@@ -149,11 +149,13 @@
       <injar name="${clear-jar}"/> 
       <outjar name="${obf-jar}"/>
       <libraryjar name="${java-lib}"/>
+      <libraryjar name="${lib}"/>
       <!-- Mac OS X specifics -->
-      <keep name="com.mucommander.ui.macosx.OSXIntegration">
-	<method access="public" name="handleAbout"/>
-	<method access="public" name="handlePrefs"/>
-	<method access="public" name="handleQuit"/>
+      <keep name="com.mucommander.ui.macosx.EAWTHandler">
+        <method access="public"/>
+      </keep>
+      <keep name="com.mucommander.ui.macosx.MRJHandler">
+        <method access="public"/>
       </keep>
       <!-- Viewer API uses reflection -->
       <keep name="com.mucommander.file.AbstractFile"/>
