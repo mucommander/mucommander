@@ -19,11 +19,11 @@ import java.util.Vector;
  */
 public class Debug {
     /** Sets whether or not debug messages should be output to the standard output */
-    public final static boolean ON = RuntimeConstants.DEBUG;
+    public final static boolean ON        = RuntimeConstants.DEBUG;
     /** Used to disable debug messages even though debug instructions have been compiled in. */
-    private static      boolean enabled = true;
-
-    private static long lastTime;
+    private static      boolean enabled   = true;
+    /** Used to time blocks of code in the application. */
+    private static      long    lastTime;
 
     /**
      * Enables / disables debut output.
@@ -31,9 +31,7 @@ public class Debug {
      */
     public static final void setEnabled(boolean b) {enabled = b;}
 
-    public static void resetTimer() {
-        lastTime = System.currentTimeMillis();
-    }
+    public static void resetTimer() {lastTime = System.currentTimeMillis();}
 
     public static void time() {
         long currentTime = System.currentTimeMillis();
@@ -41,9 +39,7 @@ public class Debug {
         lastTime = currentTime;
     }
 
-    public static void trace(String message) {
-        trace(message, 0);
-    }
+    public static void trace(String message) {trace(message, 0);}
 
     public static void trace(String message, int level) {
         if(enabled)
@@ -124,8 +120,5 @@ public class Debug {
         }
     }
 
-
-    public static void printStackTrace() {
-        new Throwable().printStackTrace();
-    }
+    public static void printStackTrace() {new Throwable().printStackTrace();}
 }

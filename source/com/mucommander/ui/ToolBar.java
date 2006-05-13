@@ -85,7 +85,7 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
      * Preloads icons if toolbar is to become visible after launch. 
      * Icons will then be in IconManager's cache, ready for use when the first ToolBar is created.
      */
-    static {
+    public static void init() {
         if(com.mucommander.conf.ConfigurationManager.getVariableBoolean("prefs.toolbar.visible", true)) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Preloading toolbar icons");
 			
@@ -99,13 +99,6 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
                     IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, BUTTONS_DESC[i][2]);
             }
         }
-    }
-	
-    /**
-     * Dummy method which does nothing but trigger static block execution.
-     * Calling this method early enough at launch time makes initialization predictable.
-     */
-    public static void init() {
     }
 	
 	

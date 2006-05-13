@@ -13,17 +13,11 @@ import com.muxml.*;
  * @author Maxence Bernard
  */
 public class VersionChecker implements ContentHandler {
-
-    // Was this URL until 0.6 release 2
-    //    private final static String VERSION_DOCUMENT_URL = "http://mu-j.com/mucommander/version/version.xml";
-    private final static String VERSION_DOCUMENT_URL = "http://mucommander.com/version/version.xml";
-
     private static String latestVersion;
     private static String downloadURL;
     private static String elementName;
 
-    private VersionChecker() {
-    }
+    private VersionChecker() {}
 
     /**
      * Parses the remote XML document containing version information about muCommander.<br>
@@ -35,10 +29,10 @@ public class VersionChecker implements ContentHandler {
      */
     public static void getVersionInformation() throws Exception {
         Parser parser = new Parser();
-        URLConnection conn = new URL(VERSION_DOCUMENT_URL).openConnection();
+        URLConnection conn = new URL(RuntimeConstants.VERSION_URL).openConnection();
 		
         // Set user-agent header
-        conn.setRequestProperty("user-agent", Launcher.USER_AGENT);
+        conn.setRequestProperty("user-agent", PlatformManager.USER_AGENT);
 
         // Establish connection
         conn.connect();
@@ -56,9 +50,7 @@ public class VersionChecker implements ContentHandler {
     /**
      * Returns latest version of muCommander.
      */
-    public static String getLatestVersion() {
-        return latestVersion;
-    }
+    public static String getLatestVersion() {return latestVersion;}
     
 	
     /**

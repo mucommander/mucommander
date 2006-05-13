@@ -31,7 +31,7 @@ public class Translator {
     private static String language;
 
     /** Path to the dictionary file inside the JAR file */
-    private final static String DICTIONARY_FILE_PATH = "/dictionary.txt";
+    public final static String DICTIONARY_FILE_PATH = "/dictionary.txt";
 
     /** Default language (UPPER CASED) */
     private final static String DEFAULT_LANGUAGE = "EN";
@@ -42,22 +42,10 @@ public class Translator {
     /** Key for available languages */
     private final static String AVAILABLE_LANGUAGES_KEY = "available_languages";
 
-    /** Singleton instance */
-    private final static Translator instance = new Translator(DICTIONARY_FILE_PATH);
-
-
     /**
-     * Creates a Translator instance and loads all entries from the dictionary file. 
-     *
-     * @param filePath the path to the dictionary file.
+     * Prevents instance creation.
      */
-    private Translator(String filePath) {
-        try {
-            loadDictionaryFile(filePath);
-        } catch (IOException e) {
-            new RuntimeException("Translator.init: unable to load dictionary file "+e);
-        }
-    }
+    private Translator() {}
 
 
     /**
@@ -99,88 +87,88 @@ public class Translator {
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Current language has been set to "+Translator.language);
     }
-	
-	
+
+    /**
+     * Loads the default dictionary file.
+     */
+    public static void loadDictionaryFile() {loadDictionaryFile(com.mucommander.text.Translator.DICTIONARY_FILE_PATH);}
+
     /**
      * Reads the dictionary file which contains localized text entries.
      */
-    private void loadDictionaryFile(String filePath) throws IOException {
-        availableLanguages = new Vector();
-        dictionary = new Hashtable();
+    public static void loadDictionaryFile(String filePath)  {
+        try {
+            availableLanguages = new Vector();
+            dictionary = new Hashtable();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filePath), "UTF-8"));
-        String line;
-        String key;
-        String lang;
-        String text;
-        StringTokenizer st;
-        int nbEntries = 0;
+            BufferedReader br = new BufferedReader(new InputStreamReader(dictionary.getClass().getResourceAsStream(filePath), "UTF-8"));
+            String line;
+            String key;
+            String lang;
+            String text;
+            StringTokenizer st;
+            int nbEntries = 0;
 
-        while ((line = br.readLine())!=null) {
-            if (!line.trim().startsWith("#") && !line.trim().equals("")) {
-                st = new StringTokenizer(line);
+            while ((line = br.readLine())!=null) {
+                if (!line.trim().startsWith("#") && !line.trim().equals("")) {
+                    st = new StringTokenizer(line);
 
-                try {
-                    // Sets delimiter to ':'
-                    key = st.nextToken(":").trim();
+                    try {
+                        // Sets delimiter to ':'
+                        key = st.nextToken(":").trim();
 					
-                    // Special key that lists available languages, must
-                    // be defined before any other entry
-                    if(Translator.language==null && key.equals(AVAILABLE_LANGUAGES_KEY)) {
-                        // Parse comma separated languages
-                        st = new StringTokenizer(st.nextToken(), ",\n");
-                        while(st.hasMoreTokens())
-                            availableLanguages.add(st.nextToken().trim().toUpperCase());
+                        // Special key that lists available languages, must
+                        // be defined before any other entry
+                        if(Translator.language==null && key.equals(AVAILABLE_LANGUAGES_KEY)) {
+                            // Parse comma separated languages
+                            st = new StringTokenizer(st.nextToken(), ",\n");
+                            while(st.hasMoreTokens())
+                                availableLanguages.add(st.nextToken().trim().toUpperCase());
 
-                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Available languages= "+availableLanguages);
+                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Available languages= "+availableLanguages);
 
-                        // Determines current language based on available languages and preferred language (if set) or sytem's language 
-                        determineCurrentLanguage(availableLanguages);
+                            // Determines current language based on available languages and preferred language (if set) or sytem's language 
+                            determineCurrentLanguage(availableLanguages);
 
-                        continue;
-                    }
+                            continue;
+                        }
 					
-                    lang = st.nextToken().toUpperCase().trim();
+                        lang = st.nextToken().toUpperCase().trim();
 
-                    // Delimiter is now line break
-                    text = st.nextToken("\n");
-                    text = text.substring(1, text.length());
+                        // Delimiter is now line break
+                        text = st.nextToken("\n");
+                        text = text.substring(1, text.length());
 
-                    // Replace "\n" strings in the text by \n characters
-                    int pos = 0;
+                        // Replace "\n" strings in the text by \n characters
+                        int pos = 0;
 
-                    while ((pos = text.indexOf("\\n", pos))!=-1)
-                        text = text.substring(0, pos)+"\n"+text.substring(pos+2, text.length());
+                        while ((pos = text.indexOf("\\n", pos))!=-1)
+                            text = text.substring(0, pos)+"\n"+text.substring(pos+2, text.length());
 
-                    // Replace "\\uxxxx" unicode charcter strings by the designated character
-                    pos = 0;
+                        // Replace "\\uxxxx" unicode charcter strings by the designated character
+                        pos = 0;
 
-                    while ((pos = text.indexOf("\\u", pos))!=-1)
-                        text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
+                        while ((pos = text.indexOf("\\u", pos))!=-1)
+                            text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
 
-                    // Add entry for current language, or for default language if a value for current language wasn't already set
-                    if(lang.equals(language) || (lang.equals(DEFAULT_LANGUAGE) && dictionary.get(key)==null))
-                        put(key, text);
+                        // Add entry for current language, or for default language if a value for current language wasn't already set
+                        if(lang.equals(language) || (lang.equals(DEFAULT_LANGUAGE) && dictionary.get(key)==null))
+                            put(key, text);
 					
-                    nbEntries++;
-                } catch (Exception e) {
-                    if(com.mucommander.Debug.ON) {
-                        e.printStackTrace();
-                        com.mucommander.Debug.trace("error in line "+line+" ("+e+")");
+                        nbEntries++;
+                    } catch (Exception e) {
+                        if(com.mucommander.Debug.ON) {
+                            e.printStackTrace();
+                            com.mucommander.Debug.trace("error in line "+line+" ("+e+")");
+                        }
                     }
                 }
             }
+            br.close();
         }
-        br.close();
+        catch(IOException e) {throw new RuntimeException("Could not load dictionary", e);}
     }
 
-
-    /**
-     * Empty method that does nothing but trigger the static initializer block.
-     */
-    public static void init() {}
-
-	
     /**
      * Returns the current language.
      *

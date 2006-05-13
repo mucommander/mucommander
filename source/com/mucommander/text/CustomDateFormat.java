@@ -14,31 +14,21 @@ import java.util.Date;
  * @author Maxence Bernard
  */
 public class CustomDateFormat implements ConfigurationListener {
-
-    /** Single instance which allows methods to be static */
-    private final static CustomDateFormat instance = new CustomDateFormat();
-
     /** Custom SimpleDateFormat instance */
-    private static SimpleDateFormat dateFormat = createDateFormat();
+    private static SimpleDateFormat dateFormat;
 
-
-    static {
-        // Monitors some configuration variables
-        ConfigurationManager.addConfigurationListener(instance);
-    }
-
-	
     /**
      * Creates a new CustomDateFormat instance.
      */
-    private CustomDateFormat() {
-    }
+    private CustomDateFormat() {}
 
 
     /**
      * Forces static fields to be initialized
      */
     public static void init() {
+        dateFormat = createDateFormat();
+        ConfigurationManager.addConfigurationListener(new CustomDateFormat());
     }
 
 

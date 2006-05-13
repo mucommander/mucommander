@@ -20,7 +20,10 @@ import java.awt.*;
  * @author Maxence Bernard
  */
 public class PlatformManager {
-
+    /** Custom user agent for HTTP requests */
+    public static final String USER_AGENT = RuntimeConstants.MUCOMMANDER_APP_STRING  + " (Java "+System.getProperty("java.vm.version")
+                                            + "; " + System.getProperty("os.name") + " " + 
+                                            System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
     /** OS family muCommander is running on (see constants) */
     private final static int osFamily;
 

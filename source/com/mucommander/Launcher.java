@@ -20,18 +20,6 @@ import java.io.*;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class Launcher {
-    // - Misc. constants --------------------------------------------------------
-    // --------------------------------------------------------------------------
-    /** muCommander app string */
-    public final static String MUCOMMANDER_APP_STRING = "muCommander v" + RuntimeConstants.MUCOMMANDER_VERSION;
-
-    /** Custom user agent for HTTP requests */
-    public final static String USER_AGENT             = MUCOMMANDER_APP_STRING  + " (Java "+System.getProperty("java.vm.version")
-                                                        + "; " + System.getProperty("os.name") + " " + 
-                                                        System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
-
-
-
     // - Commandline handling methods -------------------------------------------
     // --------------------------------------------------------------------------
     /**
@@ -126,9 +114,9 @@ public class Launcher {
             }
 
             // Debug options.
-            else if(Debug.ON && args[i].equals("-n") || args[i].equals("--no-debug"))
+            else if(Debug.ON && (args[i].equals("-n") || args[i].equals("--no-debug")))
                 Debug.setEnabled(false);
-            else if(Debug.ON && args[i].equals("-d") || args[i].equals("--debug"))
+            else if(Debug.ON && (args[i].equals("-d") || args[i].equals("--debug")))
                 Debug.setEnabled(true);
 
             // Illegal argument.
@@ -180,7 +168,7 @@ public class Launcher {
 
         // Loads dictionary
         splashScreen.setLoadingMessage("Loading dictionary...");
-        com.mucommander.text.Translator.init();
+        com.mucommander.text.Translator.loadDictionaryFile();
 
         // Inits CustomDateFormat to make sure that its ConfigurationListener is added
         // before FileTable, so CustomDateFormat gets notified of date format changes first
@@ -207,7 +195,8 @@ public class Launcher {
         // Check for newer version unless it was disabled
         if(ConfigurationManager.getVariableBoolean("prefs.check_for_updates_on_startup", true))
             new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
-		
+
+
         // Silence jCIFS's output if not in debug mode
         // To quote jCIFS's documentation : "0 - No log messages are printed -- not even crticial exceptions."
         if(!Debug.ON)

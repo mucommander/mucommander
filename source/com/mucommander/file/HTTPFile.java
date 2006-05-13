@@ -122,7 +122,7 @@ public class HTTPFile extends AbstractFile {
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 		
         // Set user-agent header
-        conn.setRequestProperty("user-agent", com.mucommander.Launcher.USER_AGENT);
+        conn.setRequestProperty("user-agent", com.mucommander.PlatformManager.USER_AGENT);
 	
         return conn;
     }

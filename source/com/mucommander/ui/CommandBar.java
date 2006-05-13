@@ -44,7 +44,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
     ////////////////////
     // Button indexes //
     ////////////////////
-	
     public final static int VIEW_INDEX = 0;
     public final static int EDIT_INDEX = 1;
     public final static int COPY_INDEX = 2;
@@ -77,12 +76,11 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
         {"command_bar.close", "[F10]", "close.png"}
     };
 
-
     /**
      * Preloads icons if command bar is to become visible after launch. 
      * Icons will then be in IconManager's cache, ready for use when the first command bar is created.
      */
-    static {
+    public static void init() {
         if(com.mucommander.conf.ConfigurationManager.getVariableBoolean("prefs.command_bar.visible", true)) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Preloading command bar icons");
 
@@ -90,14 +88,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
             for(int i=0; i<NB_BUTTONS; i++)
                 IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, BUTTONS_DESC[i][2]);
         }
-    }
 
-
-    /**
-     * Dummy method which does nothing but trigger static block execution.
-     * Calling this method early enough at launch time makes initialization predictable.
-     */
-    public static void init() {
     }
 
 

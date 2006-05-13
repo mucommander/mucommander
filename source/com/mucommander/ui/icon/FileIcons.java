@@ -90,12 +90,12 @@ public class FileIcons {
 
     /** Height of all file icons */
     private final static int STANDARD_HEIGHT = 16;
-	
+
 
     /**
      * Initializes extensions hashtables and preloads icons we're sure to use.
      */
-    static {
+    public static void init() {
         // Maps known file extensions to icon names
         iconExtensions = new Hashtable();
         int nbIcons = ICON_EXTENSIONS.length;
@@ -110,14 +110,6 @@ public class FileIcons {
         IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME);
         IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
         IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME);
-    }
-
-	
-    /**
-     * Dummy method which does nothing but trigger static block execution.
-     * Calling this method early enough at launch time makes initialization predictable.
-     */
-    public static void init() {
     }
 
 	
