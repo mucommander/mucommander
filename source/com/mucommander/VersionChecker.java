@@ -1,4 +1,3 @@
-
 package com.mucommander;
 
 import java.net.URL;
@@ -13,6 +12,8 @@ import com.muxml.*;
  * @author Maxence Bernard
  */
 public class VersionChecker implements ContentHandler {
+    // - Commandline handling methods -------------------------------------------
+    // --------------------------------------------------------------------------
     private static String latestVersion;
     private static String downloadURL;
     private static String elementName;
@@ -120,9 +121,9 @@ public class VersionChecker implements ContentHandler {
     }
     
     public void characters(String s) {
-        if(elementName.equals("latest_version"))
+        if(elementName.equals(com.mucommander.ant.version.VersionConstants.VERSION_TAG))
             latestVersion += s;
-        else if(elementName.equals("download_url"))
+        else if(elementName.equals(com.mucommander.ant.version.VersionConstants.URL_TAG))
             downloadURL += s;
     }
 
