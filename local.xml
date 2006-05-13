@@ -9,6 +9,6 @@
   <!-- be changed to another version by editing this value.    -->
   <property name="proguard" location="${tools}/proguard.jar"/>
 
-  <!-- Path to the Java task binaries.                         -->
-  <property name="javatask" location="${tools}/javatask.jar"/>
+  <!-- Path to the Ant core libraries (used to compile tools). -->
+  <property name="ant-lib"  location="/usr/local/ant/lib/ant.jar"/>
 </project>
