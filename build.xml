@@ -1,8 +1,15 @@
 <project name="mucommander" default="compileandrun" basedir=".">
   <!-- = Application constants =============================== -->
   <!-- ======================================================= -->
-  <property name="app-version"   value="0.8 beta3"/>
-  <property name="app-copyright" value="2002-2006"/>
+  <!-- Version number of the application.                      -->
+  <property name="app-version"      value="0.8 beta3"/>
+  <!-- Copyright line of the application.                      -->
+  <property name="app-copyright"    value="2002-2006"/>
+  <!-- URL at which to download the latest version data.       -->
+  <property name="app-version-url"  value="http://mucommander.com/version/version.xml"/>
+  <!-- URL at which to download the latest muco binaries.      -->
+  <property name="app-download-url" value="http://www.mucommander.com/#download"/>
+
 
 
   <!-- = Project architecture ================================ -->
@@ -11,30 +18,40 @@
   <!-- of the muCommander project.                             -->
 
   <!-- Directory containing the project's sources.             -->
-  <property name="source"     location="source"/>
+  <property name="source"         location="source"/>
   <!-- Where to store the application's release files.         -->
-  <property name="dist"       location="dist"/>
+  <property name="dist"           location="dist"/>
   <!-- Directory containing all of the project's external      -->
   <!-- libraries.                                              -->
   <!-- Any jar file contained in that directory will be added  -->
   <!-- to the classpath at compile time, and bundled in the    -->
   <!-- application's final JAR file.                           -->
-  <property name="lib"        location="lib"/>
+  <property name="lib"            location="lib"/>
   <!-- Directory containing the application's resources.       -->
-  <property name="res"	      location="res"/>
+  <property name="res"	          location="res"/>
   <!-- Directory containing the tools used to compile the      -->
   <!-- project.                                                -->
-  <property name="tools"      location="tools"/>
+  <property name="tools"          location="tools"/>
   <!-- Path to the file in which to store the unobfuscated     -->
   <!-- application JAR file.                                   -->
-  <property name="clear-jar"  location="${dist}/mucommander_unobf.jar"/>
+  <property name="clear-jar"      location="${dist}/mucommander_unobf.jar"/>
   <!-- Path to the file in which to store the obfuscated       -->
   <!-- application JAR file.                                   -->
-  <property name="obf-jar"    location="${dist}/mucommander.jar"/>
-  <property name="tmp"        location="tmp"/>
-  <property name="tmp-source" location="${tmp}/source"/>
+  <property name="obf-jar"        location="${dist}/mucommander.jar"/>
+  <!-- Where to store temporary files.                         -->
+  <property name="tmp"            location="tmp"/>
+  <!-- Where to write temporary Java sources.                  -->
+  <property name="tmp-source"     location="${tmp}/source"/>
   <!-- Where to store the application's binaries.              -->
-  <property name="classes"    location="${tmp}/classes"/>
+  <property name="classes"        location="${tmp}/classes"/>
+  <!-- Where to store the tools binaries.                      -->
+  <property name="tool-classes"   location="${tmp}/tools"/>
+  <!-- Where to store the unobfuscated tools jar file.         -->
+  <property name="tool-clear-jar" location="${tmp}/tools_unobf.jar"/>
+  <!-- Where to store the obfuscated tools jar file.           -->
+  <property name="tool-obf-jar"   location="${tools}/mutasks.jar"/>
+  <!-- Where to store the muCommander verison file.            -->
+  <property name="version-file"   location="${dist}/version.xml"/>
 
 
   <!-- Imports the system dependant definitions.               -->
@@ -54,6 +71,7 @@
     <mkdir dir="${tmp}"/>
     <mkdir dir="${tmp-source}"/>
     <mkdir dir="${classes}"/>
+    <mkdir dir="${tool-classes}"/>
     <!-- Copy images files to {$classes} -->
     <copy todir="${classes}">
       <fileset dir="res">
@@ -67,6 +85,7 @@
   <target name="clean">
     <delete dir="${tmp-source}"/>
     <delete dir="${classes}"/>
+    <delete dir="${tool-classes}"/>
     <delete dir="${tmp}"/>
     <delete dir="${dist}"/>
   </target>
@@ -90,20 +109,22 @@
   <!-- Creates the runtime constant class.                     -->
   <target name="constants">
     <property name="is-debug" value="true"/>
-    <taskdef name="javaw" classname="com.nrinaudo.java.JavaTask" classpath="${javatask}"/>
+    <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tool-obf-jar}"/>
     <javaw name="${tmp-source}/com.mucommander.RuntimeConstants">
-      <field name="DEBUG"                 value="${is-debug}"    type="boolean"/>
-      <field name="MUCOMMANDER_VERSION"   value="${app-version}"/>
-      <field name="MUCOMMANDER_COPYRIGHT" value="${app-copyright}"/>
+      <field name="DEBUG"                  value="${is-debug}"    type="boolean"/>
+      <field name="MUCOMMANDER_VERSION"    value="${app-version}"/>
+      <field name="MUCOMMANDER_COPYRIGHT"  value="${app-copyright}"/>
+      <field name="MUCOMMANDER_APP_STRING" value="muCommander v${app-copyright}"/>
+      <field name="VERSION_URL"            value="${app-version-url}"/>
     </javaw>
-
   </target>
 
   <!-- Compiles all java files found in ${source} and stores   -->
   <!-- the resulting bytecode in {$classes}.                   -->
   <target name="compile" depends="init,constants">
-    <javac srcdir="${source}" destdir="${classes}" debug="on" deprecation="on"
-           encoding="utf-8" source="1.3" target="1.3">
+    <javac destdir="${classes}" debug="on" deprecation="on"
+           encoding="utf-8" source="1.3" target="1.3"
+           excludes="${source}/com/mucommander/ant/**">
       <src path="${source}"/>
       <src path="${tmp-source}"/>
       <!-- Includes the application's libraries in the classpath. -->
@@ -141,11 +162,17 @@
     <property name="is-debug" value="false"/>
   </target>
 
+  <target name="version">
+    <taskdef name="muversion" classname="com.mucommander.ant.version.VersionTask" classpath="${tool-obf-jar}"/>
+    <muversion version="${app-version}" url="${app-download-url}" dest="${version-file}"/>
+  </target>
+
   <!-- Generates the application's obfuscated jar file.        -->
-  <target name="obfuscate" depends="disable-debug,clean,jar">
+  <target name="obfuscate" depends="disable-debug,clean,jar,version">
     <delete file="${obf-jar}"/>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
-    <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="false">
+    <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="true"
+              printusage="${tmp}/obf-usage.txt">
       <injar name="${clear-jar}"/> 
       <outjar name="${obf-jar}"/>
       <libraryjar name="${java-lib}"/>
@@ -214,6 +241,51 @@
         <pathelement path="${classpath}"/>
       </classpath>
     </java>
+  </target>
+
+
+
+  <!-- = Ant tools compilation ============================== -->
+  <!-- ====================================================== -->
+  <target name="tools-compile" depends="init">
+    <javac srcdir="${source}/com/mucommander/ant" destdir="${tool-classes}" debug="on" deprecation="on"
+           encoding="utf-8" source="1.3" target="1.3"/>
+  </target>
+
+  <target name="tools-jar" depends="tools-compile">
+    <jar destfile="${tool-clear-jar}" basedir="${tool-classes}"/>
+  </target>
+
+  <target name="tools-obfuscate" depends="clean,tools-jar">
+    <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
+    <proguard shrink="true" optimize="true" obfuscate="true" allowaccessmodification="true" overloadaggressively="true"
+              usemixedcaseclassnames="off" printusage="${tmp}/tools-obf-usage.txt">
+      <injar      name="${tool-clear-jar}"/>
+      <outjar     name="${tool-obf-jar}"/>
+      <libraryjar name="${java-lib}"/>
+      <libraryjar name="${ant-lib}"/>
+
+      <!-- Prevents obfuscation of anything that Ant *may* need for nested elements. -->
+      <keepclasseswithmembers access="public" type="class">
+        <method access="public" name="set*"/>
+      </keepclasseswithmembers>
+
+      <keepclasseswithmembers access="public" type="class">
+        <method access="public" name="create*"/>
+      </keepclasseswithmembers>
+
+      <keepclasseswithmembers access="public" type="class">
+        <method access="public" name="main*"/>
+      </keepclasseswithmembers>
+
+      <!-- Prevents obfuscation of anything that Ant will need for Tasks. -->
+      <keep access="public" type="class" extends="org.apache.tools.ant.Task">
+        <method access="public" name="add*"/>
+        <method access="public" name="create*"/>
+        <method access="public" name="createConfigured*"/>
+        <method access="public" name="execute"/>
+      </keep>
+    </proguard>
   </target>
 
 
