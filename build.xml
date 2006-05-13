@@ -114,7 +114,7 @@
       <field name="DEBUG"                  value="${is-debug}"    type="boolean"/>
       <field name="MUCOMMANDER_VERSION"    value="${app-version}"/>
       <field name="MUCOMMANDER_COPYRIGHT"  value="${app-copyright}"/>
-      <field name="MUCOMMANDER_APP_STRING" value="muCommander v${app-copyright}"/>
+      <field name="MUCOMMANDER_APP_STRING" value="muCommander v${app-version}"/>
       <field name="VERSION_URL"            value="${app-version-url}"/>
     </javaw>
   </target>
