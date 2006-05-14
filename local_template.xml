@@ -1,0 +1,14 @@
+<project name="local">
+  <!-- = Project configuration =============================== -->
+  <!-- ======================================================= -->
+  <!-- Path to the Java core libraries.                        -->
+  <property name="java-lib" location=""/>
+
+  <!-- Path to the ProGuard binaries.                          -->
+  <!-- Defaults to the one bundled with the project, but can   -->
+  <!-- be changed to another version by editing this value.    -->
+  <property name="proguard" location="${tools}/proguard.jar"/>
+
+  <!-- Path to the Ant core libraries (used to compile tools). -->
+  <property name="ant-lib"  location=""/>
+</project>
