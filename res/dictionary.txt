@@ -3254,7 +3254,7 @@ file_viewer.large_file_warning:ZH_CN:文件可能太大无法进行此项操作
 file_viewer.large_file_warning:SI:Datoteka je morda prevelika za to opreacijo.
 
 file_viewer.open_anyway:EN:Open anyway
-file_viewer.open_anyway:FR:Ignorer and ouvrir
+file_viewer.open_anyway:FR:Ignorer et ouvrir
 file_viewer.open_anyway:DE:Trotzdem öffnen
 file_viewer.open_anyway:ES:Ignorar y abrir
 file_viewer.open_anyway:CS:Přesto otevřít

@@ -36,7 +36,13 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
     private final static String CUSTOM_DISPOSE_EVENT = "CUSTOM_DISPOSE_EVENT";
 
 	
-    public ViewerFrame(MainFrame mainFrame, AbstractFile file) {
+    /**
+     * Creates a new ViewerFrame to start viewing the given file.
+     *
+     * <p>This constructor has package access only, ViewerFrame need to be created can
+     * {@link ViewerRegistrar#getViewerFrame(AbstractFile) ViewerRegistrar.getViewerFrame(AbstractFile)}. 
+     */
+    ViewerFrame(MainFrame mainFrame, AbstractFile file) {
         super();
 	
         this.mainFrame = mainFrame;
@@ -72,7 +78,7 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
 	
     public void run() {
         try {
-            FileViewer viewer = ViewerRegistrar.getViewer(file);
+            FileViewer viewer = ViewerRegistrar.createFileViewer(file);
 
             // Test if file is too large to be viewed and warns user
             long max = viewer.getMaxRecommendedSize();

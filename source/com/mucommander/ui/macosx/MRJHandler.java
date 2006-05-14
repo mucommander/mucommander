@@ -6,6 +6,8 @@ import com.apple.mrj.MRJAboutHandler;
 import com.apple.mrj.MRJPrefsHandler;
 import com.apple.mrj.MRJQuitHandler;
 
+import com.mucommander.ui.QuitDialog;
+
 
 /**
  * This class registers the About, Preferences and Quit handlers using the com.apple.mrj API available
@@ -33,6 +35,7 @@ class MRJHandler implements MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Ru
         catch(Error e){}
     }
 
+
     public void handleAbout() {
         this.action = ABOUT_ACTION;
         new Thread(this).start();
@@ -46,6 +49,10 @@ class MRJHandler implements MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Ru
     public void handleQuit() {
         this.action = QUIT_ACTION;
         new Thread(this).start();
+
+        // The javadocs for MRJQuitHandler state that to abort the quit, IllegalStateException must be thrown
+        if(QuitDialog.askConfirmation())
+            throw new IllegalStateException();
     }
 
     public void run() {

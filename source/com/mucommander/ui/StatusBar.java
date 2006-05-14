@@ -25,7 +25,7 @@ import java.awt.event.*;
  *
  * @author Maxence Bernard
  */
-public class StatusBar extends JPanel implements ActionListener, MouseListener, TableChangeListener, LocationListener, ComponentListener {
+public class StatusBar extends JPanel implements Runnable, ActionListener, MouseListener, TableChangeListener, LocationListener, ComponentListener {
 
     private MainFrame mainFrame;
 
@@ -39,6 +39,9 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
     private JPopupMenu popupMenu;
     /** Popup menu item that hides the toolbar */
     private JMenuItem hideMenuItem;	
+
+    /** Thread which auto updates volume info */
+    private Thread autoUpdateThread;
 
     /** Number of volume info strings that can be temporarily cached */
     private final static int VOLUME_INFO_CACHE_CAPACITY = 50;
@@ -93,6 +96,12 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
         // Catch component events to be notified when this component is made visible
         // and update status info
         addComponentListener(this);
+        
+        // Start volume info auto-update thread
+        autoUpdateThread = new Thread(this);
+        // Set the thread as a daemon thread
+        autoUpdateThread.setDaemon(true);
+        autoUpdateThread.start();
     }
 
 
@@ -108,7 +117,7 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
     /**
      * Updates info about currently selected files ((nb of selected files, combined size), displayed on the left-side of this status bar.
      */
-    public void updateSelectedFilesInfo() {
+    public synchronized void updateSelectedFilesInfo() {
         if(!isVisible())
             return;
 
@@ -157,7 +166,7 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
     /**
      * Updates info about current volume (free space, total space), displayed on the right-side of this status bar.
      */
-    private void updateVolumeInfo() {
+    private synchronized void updateVolumeInfo() {
         if(!isVisible())
             return;
 
@@ -242,6 +251,30 @@ public class StatusBar extends JPanel implements ActionListener, MouseListener, 
         setStatusInfo(infoMessage, null);
     }
 	
+    
+    //////////////////////
+    // Runnable methods //
+    //////////////////////
+
+    /**
+     * Periodically updates volume info (free / total space)
+     */
+    public void run() {
+        do {
+            // Sleep for a while
+            try { autoUpdateThread.sleep(VOLUME_INFO_TIME_TO_LIVE/10); }
+            catch (InterruptedException e) {};
+            // Update volume info if:
+            // - status bar is visible
+            // - MainFrame isn't changing folders
+            // - MainFrame is active and in the foreground
+            // Volume info update will potentially hit the LRU cache and not actually update volume info
+            if(isVisible() && !mainFrame.getNoEventsMode() && mainFrame.isForegroundActive())
+                updateVolumeInfo();
+        }
+        while(mainFrame.isVisible());   // Stop when MainFrame is disposed
+    }
+    
 	
     ////////////////////////////
     // ActionListener methods //

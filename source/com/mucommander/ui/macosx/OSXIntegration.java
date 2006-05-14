@@ -76,14 +76,20 @@ public class OSXIntegration {
 
     /**
      * Quits the application after displaying a confirmation dialog if it hasn't been disabled
-     * in the preferences.
+     * in the preferences. Return <code>true</code> if the operation has been aborted by user.
      */
-    public static void doQuit() {
-        // Show confirmation dialog if it hasn't been disabled
-        if(ConfigurationManager.getVariableBoolean("prefs.quit_confirmation", true))
-            new QuitDialog(WindowManager.getCurrentMainFrame());
-        // Quit directly otherwise
-        else
-            WindowManager.quit();
+    public static boolean doQuit() {
+        // Show confirmation dialog if it hasn't been disabled in the preferences
+        if(QuitDialog.askConfirmation()) {
+            QuitDialog quitDialog = new QuitDialog(WindowManager.getCurrentMainFrame());
+            // If quit has been cancelled, abort and return false
+            if(!quitDialog.quitSelected())
+                return false;
+        }
+
+        // We got a green -> quit!
+        WindowManager.quit();
+                
+        return true;
     }
 }

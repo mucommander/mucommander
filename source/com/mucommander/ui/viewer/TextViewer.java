@@ -72,19 +72,9 @@ public class TextViewer extends FileViewer implements ActionListener {
 	
 	
     public static boolean canViewFile(AbstractFile file) {
-        String name = file.getName();
-        String nameLowerCase = name.toLowerCase();
-        return nameLowerCase.endsWith(".txt")
-            ||nameLowerCase.endsWith(".conf")
-            ||nameLowerCase.endsWith(".xml")
-            ||nameLowerCase.endsWith(".ini")
-            ||nameLowerCase.endsWith(".nfo")
-            ||nameLowerCase.endsWith(".diz")
-            ||nameLowerCase.endsWith(".sh")
-            ||nameLowerCase.equals("readme")
-            ||nameLowerCase.equals("read.me")
-            ||nameLowerCase.equals("license");
+        return true;
     }
+
 
     public long getMaxRecommendedSize() {
         return 131072;

@@ -35,8 +35,8 @@ class EAWTHandler implements ApplicationListener {
     }
 
     public void handleQuit(ApplicationEvent event) {
-        event.setHandled(true);
-        OSXIntegration.doQuit();
+        // Accept or reject the request to quit based on user's response
+        event.setHandled(OSXIntegration.doQuit());
     }
 
     public void handleOpenApplication(ApplicationEvent event) {

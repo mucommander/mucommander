@@ -5,7 +5,6 @@ import com.mucommander.conf.*;
 import com.mucommander.*;
 import com.mucommander.file.*;
 import com.mucommander.event.*;
-import com.mucommander.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,11 +58,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     private static MainFrame lastFocusedMainFrame;
 
     private static WindowManager instance = new WindowManager();
-
-//    private final static int MENU_ITEM_VK_TABLE[] = {
-//        KeyEvent.VK_1,KeyEvent.VK_2,KeyEvent.VK_3,KeyEvent.VK_4,
-//        KeyEvent.VK_5,KeyEvent.VK_6,KeyEvent.VK_7,KeyEvent.VK_8,
-//        KeyEvent.VK_9, KeyEvent.VK_0};
 
     /** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
     private final static int FOCUS_REQUEST_DELAY = 1000;
@@ -201,6 +195,15 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         return file;
     }
+    
+    
+    /**
+     * Returns the sole instance of WindowManager.
+     */
+    public static WindowManager getInstance() {
+        return instance;
+    }
+    
 	
     /**
      * Returns the MainFrame instance that currently is active.
@@ -318,47 +321,11 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // To catch user window closing actions
         newMainFrame.addWindowListener(instance);
 
-/*		
-        int nbFrames = mainFrames.size();
-        // Adds a new menu item in each existing MainFrame's window menu
-        JMenu windowMenu;
-        JCheckBoxMenuItem checkBox;
-        for(int i=0; i<nbFrames; i++) {
-            windowMenu = ((MainMenuBar)((MainFrame)mainFrames.elementAt(i)).getJMenuBar()).getWindowMenu();
-            checkBox = new JCheckBoxMenuItem((nbFrames)+" "+newMainFrame.getLastActiveTable().getCurrentFolder().getAbsolutePath(), false);
-            checkBox.addActionListener(instance);
-            if(nbFrames<10)
-                checkBox.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[nbFrames], ActionEvent.CTRL_MASK));
-            windowMenu.add(checkBox);
-        }
-*/		
         // Adds the new MainFrame to the vector
         mainFrames.add(newMainFrame);
 
-//        nbFrames++;
-
-/*
-        // Sets the 'window menu' items of the new MainFrame with an item
-        // for each MainFrame (including the new one)
-        windowMenu = ((MainMenuBar)newMainFrame.getJMenuBar()).getWindowMenu();
-        for(int i=0; i<nbFrames; i++) {
-            checkBox = new JCheckBoxMenuItem((i+1)+" "+((MainFrame)mainFrames.elementAt(i)).getLastActiveTable().getCurrentFolder().getAbsolutePath(), i==nbFrames-1);
-            checkBox.addActionListener(instance);
-            if(i<10)
-                checkBox.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[i], ActionEvent.CTRL_MASK));
-            windowMenu.add(checkBox);
-        }
-
-        // To catch user clicks on window menu items and change current MainFrame accordingly
-        windowMenu.addActionListener(instance);
-
-        // Listens to main frame events.
-        newMainFrame.addLocationListener(instance);
-        newMainFrame.addTableChangeListener(instance);
-*/
-//        // Set window title with frame # only if there is more than one frame
-//        newMainFrame.updateWindowTitle(nbFrames==1?-1:nbFrames);
-
+        // Set new window's title. Window titles show window number only if there is more than one window.
+        // So if a second window was just created, we update first window's title so that it shows window number (#1).
         newMainFrame.updateWindowTitle();
         if(mainFrames.size()==2)
             ((MainFrame)mainFrames.elementAt(0)).updateWindowTitle();
@@ -396,29 +363,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         mainFrameToDispose.dispose();
         mainFrames.remove(mainFrameToDispose);
         
-/*
-        int nbFrames = mainFrames.size();
-        MainFrame mainFrame;
-        JMenuItem item;
-        JMenu windowMenu;
-        for(int i=0; i<nbFrames; i++) {
-            mainFrame = (MainFrame)mainFrames.elementAt(i);
-            windowMenu = ((MainMenuBar)mainFrame.getJMenuBar()).getWindowMenu();
-            // Removes the MainFrame disposed for every MainFrame's window menu
-            windowMenu.remove(frameIndex);
-            // and renames menu items that were after the disposed MainFrame (their index has changed)			
-            for(int j=frameIndex; j<nbFrames; j++) {
-                item = windowMenu.getItem(j);
-                item.setText((j+1)+" "+mainFrame.getLastActiveTable().getCurrentFolder().getAbsolutePath());
-                if(j<10)
-                    item.setAccelerator(KeyStroke.getKeyStroke(MENU_ITEM_VK_TABLE[j], ActionEvent.CTRL_MASK));
-            }
-
-            // Update window title (frame #) for frames which index is greater than the one that was disposed
-            if(i>=frameIndex)
-                mainFrame.updateWindowTitle(nbFrames==1?-1:i+1);
-        }
-*/
+        // Update following window titles to reflect the MainFrame's disposal. 
+        // Window titles show window number only if there is more than one window.
+        // So if there is only one window left, we update first window's title so that it removes window number (#1).
         int nbFrames = mainFrames.size();
         if(nbFrames==1) {
             ((MainFrame)mainFrames.elementAt(0)).updateWindowTitle();
@@ -427,11 +374,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             for(int i=frameIndex; i<nbFrames; i++)
                 ((MainFrame)mainFrames.elementAt(i)).updateWindowTitle();
         }
-
-        // If no mainFrame is currently visible, exit
-        if(mainFrames.size()==0)
-            System.exit(0);
     }
+    
 	
     /**
      * Disposes all opened windows, ending with the one that is currently active if there is one, 
@@ -452,11 +396,23 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             }
             disposeMainFrame((MainFrame)mainFrames.elementAt(index));
         }
-
-        // There should normally be one and only one MainFrame remaining
+        
+        // There should normally be one and only one MainFrame remaining: the current one
         nbFrames = mainFrames.size();
         for(int i=0; i<nbFrames; i++)
             disposeMainFrame((MainFrame)mainFrames.elementAt(i));
+
+        Frame frames[] = Frame.getFrames();
+        nbFrames = frames.length;
+        Frame frame;
+        for(int i=0; i<nbFrames; i++) {
+            frame = frames[i];
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("frame#"+i+"= "+frame);
+            if(frame.isShowing()) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("disposing frame#"+i);
+                frame.dispose();
+            }
+        }
     }
 	
 	
@@ -495,86 +451,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     }
 
 
-    /**
-     * Updates the content of Window menus of every MainFrame instances,
-     * to reflect a folder or table change on a MainFrame.
-     *
-     * param folderPanel the folderPanel which change needs to be reflected.
-     */
-/*
-    private static void updateWindowMenus(FolderPanel folderPanel) {
-        JMenu windowMenu;
-        MainFrame mainFrame = folderPanel.getMainFrame();
-        int frameIndex = mainFrames.indexOf(mainFrame);		
-        // frameIndex==-1 each time a new MainFrame is created by createNewMainFrame()
-        // since it is not yet in the mainFrames vector
-        if (frameIndex!=-1) {
-            for(int i=0; i<mainFrames.size(); i++) {
-                windowMenu = ((MainMenuBar)((MainFrame)mainFrames.elementAt(i)).getJMenuBar()).getWindowMenu();
-                windowMenu.getItem(frameIndex).setText((frameIndex+1)+" "+folderPanel.getCurrentFolder().getAbsolutePath());
-            }
-        }
-		
-        // Update window title to reflect new active folder
-        mainFrame.updateWindowTitle(mainFrames.size()==1?-1:frameIndex+1);
-    }
-
-    /////////////////////////////////
-    // TableChangeListener methods //
-    /////////////////////////////////
-	
-    public void tableChanged(FolderPanel folderPanel) {
-        // Update main frames' window menus to reflect current table's folder
-        updateWindowMenus(folderPanel);
-    }
-
-    //////////////////////////////
-    // LocationListener methods //
-    //////////////////////////////
-	
-    public void locationChanged(LocationEvent e) {
-        // Update main frames' window menus to reflect new folder's location
-        updateWindowMenus(e.getFolderPanel());
-    }	
-
-    public void locationChanging(LocationEvent e) {
-    }
-	
-    public void locationCancelled(LocationEvent e) {
-    }
-
-    ////////////////////////////
-    // ActionListener methods //
-    ////////////////////////////
-	
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-				
-        if (source instanceof JCheckBoxMenuItem) {
-            // Leaves check box as it was
-            JCheckBoxMenuItem checkBox = ((JCheckBoxMenuItem)source);
-            checkBox.setState(!checkBox.getState());
-			
-            // Finds item index
-            JMenu windowMenu = ((MainMenuBar)currentMainFrame.getJMenuBar()).getWindowMenu();
-            int itemIndex = -1;
-            for(int i=0; i<mainFrames.size(); i++)
-                if(windowMenu.getItem(i)==source)
-                    itemIndex = i;
-            // Should never happen
-            if(itemIndex==-1)
-                return;
-		
-            // Request focus on the corresponding MainFrame
-            MainFrame mainFrameToFront = (MainFrame)mainFrames.elementAt(itemIndex);
-            if (mainFrameToFront != currentMainFrame) {
-                mainFrameToFront.toFront();
-            }
-        }
-    }
-*/	
-
-
     ////////////////////////////
     // WindowListener methods //
     ////////////////////////////
@@ -585,6 +461,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * requested on another MainFrame (to avoid having 2 main frames fight over focus).
      */
     public void windowActivated(WindowEvent e) {
+        Object source = e.getSource();
+        
+        // Return if event doesn't originate from a MainFrame (e.g. ViewerFrame or EditorFrame)
+        if(!(source instanceof MainFrame))
+            return;
+
         this.currentMainFrame = (MainFrame)e.getSource();
         // Let MainFrame know that is active in the foreground
         currentMainFrame.setForegroundActive(true);
@@ -624,15 +506,56 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     }
 
     public void windowDeactivated(WindowEvent e) {
+        Object source = e.getSource();
+
+        // Return if event doesn't originate from a MainFrame (e.g. ViewerFrame or EditorFrame)
+        if(!(source instanceof MainFrame))
+            return;
+
         ((MainFrame)e.getSource()).setForegroundActive(false);
     }
 
     public void windowClosing(WindowEvent e) {
+        Object source = e.getSource();
+
+        // Return if event doesn't originate from a MainFrame (e.g. ViewerFrame or EditorFrame)
+        if(!(source instanceof MainFrame))
+            return;
+
         // Dispose MainFrame instance
         disposeMainFrame((MainFrame)e.getSource());
     }
 
     public void windowClosed(WindowEvent e) {
+        Object source = e.getSource();
+
+//        // Return if event originates from a MainFrame
+//        if(e instanceof MainFrame)
+//            return;
+    
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+
+        Frame frames[] = Frame.getFrames();
+        int nbFrames = frames.length;
+        Frame frame;
+        for(int i=0; i<nbFrames; i++) {
+            frame = frames[i];
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("frame#"+i+"= "+frame);
+            if(frame.isShowing()) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found active frame#"+i);
+                return;
+            }
+        }
+
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("shutting down");
+
+        // If no mainFrame is currently visible, exit
+        if(PlatformManager.getJavaVersion()>= PlatformManager.JAVA_1_4) {
+            ShutdownHook.performShutdownTasks();
+        }
+        else {
+            System.exit(0);     // will trigger ShutdownHook
+        }
     }
 
     public void windowIconified(WindowEvent e) {

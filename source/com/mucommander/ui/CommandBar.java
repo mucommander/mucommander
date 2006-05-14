@@ -4,8 +4,8 @@ package com.mucommander.ui;
 
 import com.mucommander.ui.table.*;
 import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.viewer.*;
-import com.mucommander.ui.editor.*;
+import com.mucommander.ui.viewer.ViewerRegistrar;
+import com.mucommander.ui.editor.EditorRegistrar;
 import com.mucommander.ui.icon.IconManager;
 
 import com.mucommander.text.Translator;
@@ -194,7 +194,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
             return;
         }
 		
-        ViewerFrame frame = new ViewerFrame(mainFrame, file);
+        ViewerRegistrar.createViewerFrame(mainFrame, file);
     }
 	
 	
@@ -208,7 +208,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
             return;
         }
 
-        EditorFrame frame = new EditorFrame(mainFrame, file);
+        EditorRegistrar.createEditorFrame(mainFrame, file);
     }
 	
 

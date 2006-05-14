@@ -5,7 +5,7 @@ import com.mucommander.conf.ConfigurationManager;
 
 /**
  * The run method of this thread is called when the program shuts down, either because
- * the user chose to quit the program or because the program was interrupted by a logoff...
+ * the user chose to quit the program or because the program was interrupted by a logoff.
  *
  * @author Maxence Bernard
  */
@@ -21,8 +21,15 @@ public class ShutdownHook extends Thread {
     public void run() {
         if(Debug.ON) Debug.trace("called");
 
+        performShutdownTasks();
+    }
+
+
+    /**
+     * Performs tasks before shut down, such as writing the configuration file.
+     */
+    public static void performShutdownTasks() {
         // Saves preferences
         ConfigurationManager.writeConfiguration();
     }
-
 }

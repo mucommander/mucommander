@@ -159,14 +159,11 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         // WindowManager takes of catching close events and do the rest
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        //		// Set window title
-        //		updateWindowTitle();
-
+        // Piece of code used in 0.8 beta1 and removed after because it's way too slow, kept here for the record 
         //		// Used by setNoEventsMode()
         //		JComponent glassPane = (JComponent)getGlassPane();
         //		glassPane.addMouseListener(new MouseAdapter() {});
         //		glassPane.addKeyListener(new KeyAdapter() {});
-        //		//setNoEventsMode(true);	// for 'no events mode' testing
 
         // For testing purposes, full screen option could be nice to add someday
         //setUndecorated(true);
@@ -292,14 +289,9 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
      * Shows/hide the status bar.
      */
     public void setStatusBarVisible(boolean visible) {
-        //		// Update status bar info if status bar was previouly hidden and now visible
-        //		// as FileTable doesn't update status bar info when it is hidden
-        //		boolean updateStatusBarInfo = visible && !isStatusBarVisible();
         this.statusBar.setVisible(visible);
-        //		// Status bar needs to be visible before calling updateStatusBar()
-        //		if(updateStatusBarInfo)
-        //			this.statusBar.updateStatusInfo();
         validate();
+
         ConfigurationManager.setVariableBoolean("prefs.status_bar.visible", visible);		
     }
 	
@@ -479,14 +471,11 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
 
     /**
-     * Update window title to reflect current active folder and window number. To be called by WindowManager.
-     *
-//     * @param frameNumber frame number, if -1 frame number should not be displayed in the title 
+     * Updates this window's title to show currently active folder and window number.
+     * This method is called by this class and WindowManager.
      */
-//    public void updateWindowTitle(int frameNumber) {
     public void updateWindowTitle() {
         // Update window title
-//        setTitle(getLastActiveTable().getCurrentFolder().getAbsolutePath()+" - muCommander"+(frameNumber==-1?"":" ["+(frameNumber)+"]"));
         String title = lastActiveTable.getCurrentFolder().getAbsolutePath()+" - muCommander";
         Vector mainFrames = WindowManager.getMainFrames();
         if(mainFrames.size()>1)
