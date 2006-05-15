@@ -32,24 +32,27 @@ public class IconManager {
     public final static int FILE_ICON_SET = 0;
     /** Designates toolbar icon set */	
     public final static int TOOLBAR_ICON_SET = 1;
+    /** Designates toolbar icon set */	
+    public final static int STATUS_BAR_ICON_SET = 2;
     /** Designates command bar icon set */	
-    public final static int COMMAND_BAR_ICON_SET = 2;
+    public final static int COMMAND_BAR_ICON_SET = 3;
     /** Designates table icon set */	
-    public final static int TABLE_ICON_SET = 3;
+    public final static int TABLE_ICON_SET = 4;
     /** Designates preferences icon set */	
-    public final static int PREFERENCES_ICON_SET = 4;
+    public final static int PREFERENCES_ICON_SET = 5;
 	
     /** Icon sets folders within the application's JAR file */	
     private final static String ICON_SET_FOLDERS[] = {
         "/file_icons/",
         "/toolbar_icons/",
+        "/status_bar_icons/",
         "/command_bar_icons/",
         "/table_icons/",
         "/preferences_icons/"
     };
 
     /** Number of icon sets */
-    private final static int NB_ICON_SETS = 5;
+    private final static int NB_ICON_SETS = 6;
 
     /** Configuration variable key for table icons scale */
     public final static String FILE_ICON_SCALE_CONF_VAR = "prefs.file_table.icon_scale";
@@ -75,6 +78,7 @@ public class IconManager {
         caches = new Hashtable[NB_ICON_SETS];
         caches[FILE_ICON_SET] = new Hashtable();
         caches[TOOLBAR_ICON_SET] = new Hashtable();
+        caches[STATUS_BAR_ICON_SET] = new Hashtable();
         caches[COMMAND_BAR_ICON_SET] = new Hashtable();
         caches[TABLE_ICON_SET] = new Hashtable();
     }

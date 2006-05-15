@@ -2,6 +2,7 @@ package com.mucommander.ui;
 
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.ui.icon.IconManager;
 
 import com.mucommander.event.*;
 
@@ -73,6 +74,9 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
     /** SizeFormatter's format used to display volume info in status bar */
     private final static int VOLUME_INFO_SIZE_FORMAT = SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB;
 
+    /** Icon that is displayed when folder is changing */
+    private final static String WAITING_ICON = "waiting.png";
+
 
     /**
      * Creates a new StatusBar instance.
@@ -84,8 +88,8 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
         this.mainFrame = mainFrame;
 		
         this.statusBarFilesLabel = new JLabel("");
-        // Display any icon after the text
-        this.statusBarFilesLabel.setHorizontalTextPosition(JLabel.LEADING);
+//        // Display any icon after the text
+//        this.statusBarFilesLabel.setHorizontalTextPosition(JLabel.LEADING);
         add(statusBarFilesLabel, BorderLayout.CENTER);
 
         this.statusBarVolumeLabel = new JLabel("");
@@ -239,24 +243,27 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
      * replacing any previous information.
      *
      * @param text the piece of text to display
-     * @param icon the icon to display next to the text (on the left side of the text)
+     * @param icon the icon to display next to the text
+     * @param iconBeforeText if true, icon will be placed on the left side of the text, if not on the right side
      */
-    public void setStatusInfo(String text, Icon icon) {
+    public void setStatusInfo(String text, Icon icon, boolean iconBeforeText) {
         //if(com.mucommander.Debug.ON) text += " - freeMem="+Runtime.getRuntime().freeMemory()+" - totalMem="+Runtime.getRuntime().totalMemory();
         statusBarFilesLabel.setText(text);
         statusBarFilesLabel.setIcon(icon);
+        if(icon!=null)
+            statusBarFilesLabel.setHorizontalTextPosition(iconBeforeText?JLabel.TRAILING:JLabel.LEADING);
         //		statusBarVolumeLabel.setText("");
     }
 
 	
     /**
      * Displays the specified text on the left-side of the status bar, 
-     * replacing any previous information.
+     * replacing any previous text and icon.
      *
      * @param text the piece of text to display
      */
     public void setStatusInfo(String infoMessage) {
-        setStatusInfo(infoMessage, null);
+        setStatusInfo(infoMessage, null, false);
     }
 	
 
@@ -361,7 +368,7 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
         // Show a message in the status bar saying that folder is being changed
         // No need to waste precious cycles if status bar is not visible
         if(isVisible())
-            setStatusInfo(Translator.get("status_bar.connecting_to_folder"));
+            setStatusInfo(Translator.get("status_bar.connecting_to_folder"), IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, WAITING_ICON), true);
     }
 	
     public void locationCancelled(LocationEvent e) {
