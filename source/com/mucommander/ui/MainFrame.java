@@ -155,9 +155,12 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         table1.addKeyListener(this);
         table2.addKeyListener(this);
     
-        // Do nothing on close (default is to hide window),
-        // WindowManager takes of catching close events and do the rest
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+//        // Do nothing on close (default is to hide window),
+//        // WindowManager takes of catching close events and do the rest
+//        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        // Dispose window on close
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         // Piece of code used in 0.8 beta1 and removed after because it's way too slow, kept here for the record 
         //		// Used by setNoEventsMode()
@@ -503,6 +506,35 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     ///////////////////////
     // Overriden methods //
     ///////////////////////
+
+    /**
+     * Overrides java.awt.Window's dispose method to save last MainFrame's attributes in the preferences
+     * before disposing this MainFrame.
+     */
+    public void dispose() {
+        // Save last MainFrame's attributes (last folders, window position) in the preferences.
+        if(WindowManager.getMainFrames().size()==1) {
+            // Save last folders
+            ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
+                                             getFolderPanel1().getFolderHistory().getLastRecallableFolder());
+            ConfigurationManager.setVariable("prefs.startup_folder.right.last_folder", 
+                                             getFolderPanel2().getFolderHistory().getLastRecallableFolder());
+
+            // Save window position, size and screen resolution
+            Rectangle bounds = getBounds();
+            ConfigurationManager.setVariableInt("prefs.last_window.x", (int)bounds.getX());
+            ConfigurationManager.setVariableInt("prefs.last_window.y", (int)bounds.getY());
+            ConfigurationManager.setVariableInt("prefs.last_window.width", (int)bounds.getWidth());
+            ConfigurationManager.setVariableInt("prefs.last_window.height", (int)bounds.getHeight());
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            ConfigurationManager.setVariableInt("prefs.last_window.screen_width", screenSize.width);
+            ConfigurationManager.setVariableInt("prefs.last_window.screen_height", screenSize.height);
+        }
+    
+        // Finally, dispose the frame
+        super.dispose(); 
+    }
+
 
     /**
      * Overrides JComponent's requestFocus() method to request focus on the last active FolderPanel.

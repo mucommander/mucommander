@@ -339,6 +339,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     /**
      * Properly disposes the given MainFrame.
      */
+/*
     public static synchronized void disposeMainFrame(MainFrame mainFrameToDispose) {
         if(com.mucommander.Debug.ON) Debug.trace("");
 
@@ -375,7 +376,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 ((MainFrame)mainFrames.elementAt(i)).updateWindowTitle();
         }
     }
-    
+*/    
 	
     /**
      * Disposes all opened windows, ending with the one that is currently active if there is one, 
@@ -388,20 +389,21 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         MainFrame mainFrame;
         int index = 0;
 		
-        // Dispose all MainFrame but the current one
+        // Dispose all MainFrames but the current one
         for(int i=0; i<nbFrames; i++) {
             if(i==currentMainFrameIndex) {
                 index++;
                 continue;
             }
-            disposeMainFrame((MainFrame)mainFrames.elementAt(index));
+            ((MainFrame)mainFrames.elementAt(index)).dispose();
         }
         
-        // There should normally be one and only one MainFrame remaining: the current one
+        // There should normally be one and only one MainFrame remaining: the current one -> dispose it
         nbFrames = mainFrames.size();
         for(int i=0; i<nbFrames; i++)
-            disposeMainFrame((MainFrame)mainFrames.elementAt(i));
+            ((MainFrame)mainFrames.elementAt(i)).dispose();
 
+        // Dispose all other frames (viewers, editors...)
         Frame frames[] = Frame.getFrames();
         nbFrames = frames.length;
         Frame frame;
@@ -413,6 +415,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 frame.dispose();
             }
         }
+
+        // Initiate shutdown sequence.
+        // Important note: we cannot rely on windowClosed() triggering the shutdown sequence as
+        // Quit under OS X shuts down the app as soon as this method returns and as a result, 
+        // windowClosed() events are never dispatched to the MainFrames
+        ShutdownHook.initiateShutdown();
     }
 	
 	
@@ -516,25 +524,49 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     }
 
     public void windowClosing(WindowEvent e) {
+/*
         Object source = e.getSource();
+
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
         // Return if event doesn't originate from a MainFrame (e.g. ViewerFrame or EditorFrame)
         if(!(source instanceof MainFrame))
             return;
-
-        // Dispose MainFrame instance
-        disposeMainFrame((MainFrame)e.getSource());
+*/
     }
 
     public void windowClosed(WindowEvent e) {
         Object source = e.getSource();
 
 //        // Return if event originates from a MainFrame
-//        if(e instanceof MainFrame)
+//        if(source instanceof MainFrame)
 //            return;
     
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
+        if(source instanceof MainFrame) {
+            // Remove disposed MainFrame from the MainFrame list
+            int frameIndex = mainFrames.indexOf(source);
+            mainFrames.remove(source);
+            
+            // Update following windows\ titles to reflect the MainFrame's disposal. 
+            // Window titles show window number only if there is more than one window.
+            // So if there is only one window left, we update first window's title so that it removes window number (#1).
+            int nbFrames = mainFrames.size();
+            if(nbFrames==1) {
+                ((MainFrame)mainFrames.elementAt(0)).updateWindowTitle();
+            }
+            else {
+                for(int i=frameIndex; i<nbFrames; i++)
+                    ((MainFrame)mainFrames.elementAt(i)).updateWindowTitle();
+            }
+        }
+
+        // Test if there is at least one MainFrame still showing
+        if(mainFrames.size()>0)
+            return;
+
+        // Test if there is at least one window (viewer, editor...) still showing
         Frame frames[] = Frame.getFrames();
         int nbFrames = frames.length;
         Frame frame;
@@ -547,15 +579,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             }
         }
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("shutting down");
-
-        // If no mainFrame is currently visible, exit
-        if(PlatformManager.getJavaVersion()>= PlatformManager.JAVA_1_4) {
-            ShutdownHook.performShutdownTasks();
-        }
-        else {
-            System.exit(0);     // will trigger ShutdownHook
-        }
+        // No more window showing, initiate shutdown sequence
+        ShutdownHook.initiateShutdown();
     }
 
     public void windowIconified(WindowEvent e) {

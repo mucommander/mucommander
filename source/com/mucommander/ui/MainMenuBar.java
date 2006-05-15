@@ -364,7 +364,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             new CheckVersionDialog(mainFrame, true);
         }
         else if (source == closeItem) {
-            WindowManager.disposeMainFrame(mainFrame);
+            mainFrame.dispose();
         }
         // Mark menu
         else if (source == markGroupItem) {
