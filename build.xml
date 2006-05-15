@@ -2,13 +2,18 @@
   <!-- = Application constants =============================== -->
   <!-- ======================================================= -->
   <!-- Version number of the application.                      -->
-  <property name="app-version"      value="0.8 beta3"/>
+  <property name="app-version"         value="0.8 beta3"/>
   <!-- Copyright line of the application.                      -->
-  <property name="app-copyright"    value="2002-2006"/>
+  <property name="app-copyright"       value="2002-2006"/>
   <!-- URL at which to download the latest version data.       -->
-  <property name="app-version-url"  value="http://mucommander.com/version/version.xml"/>
+  <property name="app-version-url"     value="http://mucommander.com/version/version.xml"/>
+  <!-- URL at which to download the latest nightly data.       -->
+  <property name="nightly-version-url" value="http://mucommander.com/version/nightly.xml"/>
   <!-- URL at which to download the latest muco binaries.      -->
-  <property name="app-download-url" value="http://www.mucommander.com/#download"/>
+  <property name="app-download-url"    value="http://www.mucommander.com/#download"/>
+  <property name="homepage-url"        value="http://www.mucommander.com"/>
+  <property name="forums-url"          value="http://www.mucommander.com/forums/"/>
+  <property name="donation-url"        value="http://www.mucommander.com/#donate"/>
 
 
 
@@ -108,14 +113,21 @@
 
   <!-- Creates the runtime constant class.                     -->
   <target name="constants">
-    <property name="is-debug" value="true"/>
+    <property name="is-debug"    value="true"/>
+    <property name="version-url" value="${app-version-url}"/>
+    <taskdef name="date" classname="com.mucommander.ant.util.DateTask" classpath="${tool-obf-jar}"/>
+    <date name="release-date"/>
     <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tool-obf-jar}"/>
     <javaw name="${tmp-source}/com.mucommander.RuntimeConstants">
-      <field name="DEBUG"                  value="${is-debug}"    type="boolean"/>
-      <field name="MUCOMMANDER_VERSION"    value="${app-version}"/>
-      <field name="MUCOMMANDER_COPYRIGHT"  value="${app-copyright}"/>
-      <field name="MUCOMMANDER_APP_STRING" value="muCommander v${app-version}"/>
-      <field name="VERSION_URL"            value="${app-version-url}"/>
+      <field name="DEBUG"        value="${is-debug}"    type="boolean"/>
+      <field name="VERSION"      value="${app-version}"/>
+      <field name="COPYRIGHT"    value="${app-copyright}"/>
+      <field name="APP_STRING"   value="muCommander v${app-version}"/>
+      <field name="VERSION_URL"  value="${version-url}"/>
+      <field name="RELEASE_DATE" value="${release-date}" type="String"/>
+      <field name="HOMEPAGE_URL" value="${homepage-url}"/>
+      <field name="FORUMS_URL"   value="${forums-url}"/>
+      <field name="DONATION_URL" value="${donation-url}"/>
     </javaw>
   </target>
 
@@ -123,8 +135,7 @@
   <!-- the resulting bytecode in {$classes}.                   -->
   <target name="compile" depends="init,constants">
     <javac destdir="${classes}" debug="on" deprecation="on"
-           encoding="utf-8" source="1.3" target="1.3"
-           excludes="${source}/com/mucommander/ant/**">
+           encoding="utf-8" source="1.3" target="1.3">
       <src path="${source}"/>
       <src path="${tmp-source}"/>
       <!-- Includes the application's libraries in the classpath. -->
@@ -167,6 +178,12 @@
     <muversion version="${app-version}" url="${app-download-url}" dest="${version-file}"/>
   </target>
 
+  <target name="set-nightly">
+    <property name="version-url" value="${nightly-version-url}"/>
+  </target>
+
+  <target name="nightly" depends="set-nightly,obfuscate"/>
+
   <!-- Generates the application's obfuscated jar file.        -->
   <target name="obfuscate" depends="disable-debug,clean,jar,version">
     <delete file="${obf-jar}"/>
@@ -177,6 +194,7 @@
       <outjar name="${obf-jar}"/>
       <libraryjar name="${java-lib}"/>
       <libraryjar name="${lib}"/>
+      <libraryjar name="${ant-lib}"/>
       <!-- Mac OS X specifics -->
       <keep name="com.mucommander.ui.macosx.EAWTHandler">
         <method access="public"/>
@@ -247,15 +265,18 @@
 
   <!-- = Ant tools compilation ============================== -->
   <!-- ====================================================== -->
+  <!-- Compiles the tools soure code.                         -->
   <target name="tools-compile" depends="init">
     <javac srcdir="${source}/com/mucommander/ant" destdir="${tool-classes}" debug="on" deprecation="on"
            encoding="utf-8" source="1.3" target="1.3"/>
   </target>
 
+  <!-- Generates the clear tools JAR file.                     -->
   <target name="tools-jar" depends="tools-compile">
     <jar destfile="${tool-clear-jar}" basedir="${tool-classes}"/>
   </target>
 
+  <!-- Generates the tools distribution JAR file.              -->
   <target name="tools-obfuscate" depends="clean,tools-jar">
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
     <proguard shrink="true" optimize="true" obfuscate="true" allowaccessmodification="true" overloadaggressively="true"
