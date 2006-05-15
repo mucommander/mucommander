@@ -383,25 +383,19 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * or the last one which was activated.
      */
     public static synchronized void quit() {
-        int nbFrames = mainFrames.size();
         // Retrieve current MainFrame's index
         int currentMainFrameIndex = mainFrames.indexOf(currentMainFrame);
-        MainFrame mainFrame;
-        int index = 0;
 		
         // Dispose all MainFrames but the current one
+        int nbFrames = mainFrames.size();
         for(int i=0; i<nbFrames; i++) {
-            if(i==currentMainFrameIndex) {
-                index++;
-                continue;
-            }
-            ((MainFrame)mainFrames.elementAt(index)).dispose();
+            if(i!=currentMainFrameIndex)
+                ((MainFrame)mainFrames.elementAt(i)).dispose();
         }
         
-        // There should normally be one and only one MainFrame remaining: the current one -> dispose it
-        nbFrames = mainFrames.size();
-        for(int i=0; i<nbFrames; i++)
-            ((MainFrame)mainFrames.elementAt(i)).dispose();
+        // Dispose current MainFrame last so that its attributes (last folders, window position...) are saved last
+        // in the preferences
+        ((MainFrame)mainFrames.elementAt(currentMainFrameIndex)).dispose();
 
         // Dispose all other frames (viewers, editors...)
         Frame frames[] = Frame.getFrames();
@@ -534,14 +528,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             return;
 */
     }
-
-    public void windowClosed(WindowEvent e) {
+ 
+    
+    /**
+     * windowClosed is synchronized so that it doesn't get called while quit() is executing.
+     */
+    public synchronized void windowClosed(WindowEvent e) {
         Object source = e.getSource();
 
-//        // Return if event originates from a MainFrame
-//        if(source instanceof MainFrame)
-//            return;
-    
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
         if(source instanceof MainFrame) {
