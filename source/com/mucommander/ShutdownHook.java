@@ -17,7 +17,7 @@ public class ShutdownHook extends Thread {
     }
 
 
-    public synchronized static void initiateShutdown() {
+    public static void initiateShutdown() {
         if(Debug.ON) Debug.trace("shutting down");
 
         if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
