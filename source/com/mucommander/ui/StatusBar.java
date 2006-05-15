@@ -21,7 +21,20 @@ import java.awt.event.*;
 
 
 /**
- * 
+ * StatusBar is the component that sits at the bottom of each MainFrame, between the folder panels and command bar.
+ * There is one and only one StatusBar per MainFrame, created by the associated MainFrame. It can be hidden, 
+ * but the instance will always remain, until the MainFrame is disposed. 
+ *
+ * <p>StatusBar is used to display info about the total/selected number of files in the current folder and current volume's
+ * free/total space. When a folder is being changed, a waiting message is displayed. When quick search is being used,
+ * the current quick search string is displayed.
+ *
+ * <p>StatusBar receives LocationListener events when the folder has or is being changed, and automatically updates
+ * selected files and volume info, and display the waiting message when the folder is changing. Quick search info
+ * is set by FileTable.QuickSearch.
+ *
+ * <p>When StatusBar is visible, a Thread runs in the background to periodically update free/total space volume info.
+ * This thread stops when the StatusBar is hidden.
  *
  * @author Maxence Bernard
  */
@@ -48,6 +61,9 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
 
     /** Number of milliseconds before cached volume info strings expire */
     private final static int VOLUME_INFO_TIME_TO_LIVE = 60000;
+
+    /** Number of milliseconds between each volume info update by auto-update thread */
+    private final static int AUTO_UPDATE_PERIOD = 6000;
 
     /** Caches volume info strings (free/total space) for a while, since it is quite costly and we don't want
      * to recalculate it each time this information is requested.
@@ -76,11 +92,9 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
         add(statusBarVolumeLabel, BorderLayout.EAST);
 
         // Show/hide this status bar based on user preferences
-        if(!ConfigurationManager.getVariableBoolean("prefs.status_bar.visible", true))
-            setVisible(false);
-        else
-            updateStatusInfo();
-		
+        // Note: setVisible has to be called even with true for the auto-update thread to be initialized
+        setVisible(ConfigurationManager.getVariableBoolean("prefs.status_bar.visible", true));
+        
         // Catch location events to update status bar info when folder is changed
         mainFrame.getFolderPanel1().addLocationListener(this);
         mainFrame.getFolderPanel2().addLocationListener(this);
@@ -96,19 +110,13 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
         // Catch component events to be notified when this component is made visible
         // and update status info
         addComponentListener(this);
-        
-        // Start volume info auto-update thread
-        autoUpdateThread = new Thread(this);
-        // Set the thread as a daemon thread
-        autoUpdateThread.setDaemon(true);
-        autoUpdateThread.start();
     }
 
 
     /**
      * Updates info displayed on the status bar: currently selected files and volume info.
      */
-    public void updateStatusInfo() {
+    private void updateStatusInfo() {
         updateSelectedFilesInfo();
         updateVolumeInfo();
     }
@@ -251,19 +259,53 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
         setStatusInfo(infoMessage, null);
     }
 	
+
+    /**
+     * Starts a volume info auto-update thread, only if there isn't already one running.
+     */    
+    private synchronized void startAutoUpdate() {
+        if(autoUpdateThread==null) {
+            // Start volume info auto-update thread
+            autoUpdateThread = new Thread(this);
+            // Set the thread as a daemon thread
+            autoUpdateThread.setDaemon(true);
+            autoUpdateThread.start();
+        }
+    }
+
+    
+    /**
+     * Overrides JComponent.setVisible(boolean) to start/stop volume info auto-update thread.
+     */
+    public void setVisible(boolean visible) {
+        if(visible) {
+            // Update status bar info
+            updateStatusInfo();
+            // Start auto-update thread
+            startAutoUpdate();
+            super.setVisible(true);
+        }
+        else {
+            // Stop auto-update thread
+            this.autoUpdateThread = null;
+            super.setVisible(false);
+        }
+    }
+    
     
     //////////////////////
     // Runnable methods //
     //////////////////////
 
     /**
-     * Periodically updates volume info (free / total space)
+     * Periodically updates volume info (free / total space).
      */
     public void run() {
         do {
             // Sleep for a while
-            try { autoUpdateThread.sleep(VOLUME_INFO_TIME_TO_LIVE/10); }
-            catch (InterruptedException e) {};
+            try { Thread.sleep(AUTO_UPDATE_PERIOD); }
+            catch (InterruptedException e) {}
+            
             // Update volume info if:
             // - status bar is visible
             // - MainFrame isn't changing folders
@@ -272,7 +314,7 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
             if(isVisible() && !mainFrame.getNoEventsMode() && mainFrame.isForegroundActive())
                 updateVolumeInfo();
         }
-        while(mainFrame.isVisible());   // Stop when MainFrame is disposed
+        while(autoUpdateThread!=null && mainFrame.isVisible());   // Stop when MainFrame is disposed
     }
     
 	

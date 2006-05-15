@@ -45,7 +45,8 @@ public class ShutdownHook extends Thread {
 
 
     /**
-     * Performs tasks before shut down, such as writing the configuration file.
+     * Performs tasks before shut down, such as writing the configuration file. This method can only
+     * be called once, any further call will be ignored (no-op).
      */
     private synchronized static void performShutdownTasks() {
         // Return if shutdown tasks have already been performed
