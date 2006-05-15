@@ -28,15 +28,15 @@ public class QuitDialog extends QuestionDialog {
     private final static int QUIT_ACTION = 0;
     private final static int CANCEL_ACTION = 1;
 	
-    private boolean quitSelected;
+    private boolean quitConfirmed;
 	
     /**
      * Creates a new instance of QuitDialog, displays the dialog and waits for a user's choice. This dialog
      * doesn't quit the application when 'Quit' is confirmed, it is up to the method that invoked this dialog
-     * to perform that task, only if {@link quitSelected() quitSelected()} returns <code>true</code>.
+     * to perform that task, only if {@link #quitConfirmed()} returns <code>true</code>.
      *
      * <p>If 'Quit' is selected and the 'Show next time' checkbox is unchecked, the preference will be saved and
-     * {@link #askConfirmation() askConfirmation()} will return <code>true</code>.
+     * {@link #askConfirmation()} will return <code>true</code>.
      *
      * @param mainFrame the parent MainFrame
      */
@@ -54,8 +54,8 @@ public class QuitDialog extends QuestionDialog {
 		
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 
-        this.quitSelected = getActionValue()==QUIT_ACTION;
-        if(quitSelected) {
+        this.quitConfirmed = getActionValue()==QUIT_ACTION;
+        if(quitConfirmed) {
             // Remember user preference
             ConfigurationManager.setVariableBoolean("prefs.quit_confirmation", showNextTimeCheckBox.isSelected());
         }
@@ -65,16 +65,24 @@ public class QuitDialog extends QuestionDialog {
     /**
      * Returns <code>true</code> if the user confirmed and pressed the Quit button. 
      */
-    public boolean quitSelected() {
-        return quitSelected;
+    public boolean quitConfirmed() {
+        return quitConfirmed;
     }
     
     
     /**
-     * Returns whether or not the user wants this quit confirmation dialog to be displayed when quitting,
-     * based on the preferences. This method should be queried prior to creating an instance of this dialog.
+     * Shows up a QuitDialog asking the user for confirmation to quit, and returns <code>true</code> if user confirmed
+     * the operation. The dialog will not be shown if it quit confirmation has been disabled in the preferences.
+     * In this case, <code>true</code> will simply be returned.
      */
-    public static boolean askConfirmation() {
-        return ConfigurationManager.getVariableBoolean("prefs.quit_confirmation", true);
+    public static boolean confirmQuit() {
+        // Show confirmation dialog only if it hasn't been disabled in the preferences
+        if(ConfigurationManager.getVariableBoolean("prefs.quit_confirmation", true)) {
+            QuitDialog quitDialog = new QuitDialog(WindowManager.getCurrentMainFrame());
+            // Return true if user confirmed quit
+            return quitDialog.quitConfirmed();
+        }
+        
+        return true;
     }
 }

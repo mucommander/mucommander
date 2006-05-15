@@ -367,7 +367,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             mainFrame.dispose();
         }
         else if (source == quitItem) {
-            WindowManager.quit();
+            // Quit after asking user for confirmation
+            if(QuitDialog.confirmQuit())
+                WindowManager.quit();
         }
         // Mark menu
         else if (source == markGroupItem) {

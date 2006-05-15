@@ -79,13 +79,9 @@ public class OSXIntegration {
      * in the preferences. Return <code>true</code> if the operation has been aborted by user.
      */
     public static boolean doQuit() {
-        // Show confirmation dialog if it hasn't been disabled in the preferences
-        if(QuitDialog.askConfirmation()) {
-            QuitDialog quitDialog = new QuitDialog(WindowManager.getCurrentMainFrame());
-            // If quit has been cancelled, abort and return false
-            if(!quitDialog.quitSelected())
-                return false;
-        }
+        // Ask the user for confirmation and abort if user refused to quit.
+        if(!QuitDialog.confirmQuit())
+            return false;
 
         // We got a green -> quit!
         WindowManager.quit();
