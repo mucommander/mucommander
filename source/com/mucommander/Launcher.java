@@ -15,7 +15,17 @@ import java.io.*;
  * arguments, initialise the whole software and start the main window.
  * </p>
  * <p>
- * For a list of legal command line arguments, use <code>mucommander -h</code>.
+ * Valid command line options are:<br/>
+ * - <code>-b FILE</code>, <code>--bookmarks FILE</code>: load bookmarks from <code>FILE</code>.<br/>
+ * - <code>-c FILE</code>, <code>--configuration FILE</code>: load configuration
+ *   from <code>FILE</code>.<br/>
+ * - <code>-h</code>, <code>--help</code>: print command line argument help.<br/>
+ * - <code>-v</code>, <code>--version</code>: print muCommander's version.<br/>
+ * Debug versions of the application also accept two additional parameters:<br/>
+ * - <code>-n</code>, <code>--no-debug</code>: silence debug output.<br/>
+ * - <code>-d</code>, <code>--debug</code>: enable debug output.<br/>
+ * Any argument that follows the last command line option will be interpreted as an URL which
+ * muCommander will try to open in its main frame.
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
@@ -52,13 +62,9 @@ public class Launcher {
      * Prints muCommander's version to stdout and exits.
      */
     private static final void printVersion() {
-        // NOTE: this is a sub-optimal way of doing things. Someone's bound to forget
-        // to update the copyright at some point, which might result in some confusion.
-        // Updating the copyright notice to include today's year might be a bit dodgy, though.
-        System.out.print("muCommander ");
-        System.out.println(RuntimeConstants.MUCOMMANDER_VERSION);
+        System.out.println(RuntimeConstants.APP_STRING);
         System.out.print("Copyright (c) ");
-        System.out.print(RuntimeConstants.MUCOMMANDER_COPYRIGHT);
+        System.out.print(RuntimeConstants.COPYRIGHT);
         System.out.println(" Maxence Bernard");
         System.out.println("All rights reserved.");
         System.out.println("There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A");
@@ -67,7 +73,7 @@ public class Launcher {
     }
 
     /**
-     * Prints the specified error message to stderr and exits.
+     * Prints the specified error message to stderr and exits with an error code.
      * @param msg error message to print to stder.
      */
     private static final void printError(String msg) {
@@ -129,7 +135,7 @@ public class Launcher {
 
         // If muCommander is running under Mac OS X (how lucky!), add some
         // glue for the main menu bar and other OS X specifics.
-        if(PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X) {
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
             // Configuration needs to be loaded before any sort of GUI creation
             // is performed - if we're to use the metal look, we need to know about
             // it right about now.
@@ -150,14 +156,11 @@ public class Launcher {
         // - muCommander boot -----------------------------------------
         // ------------------------------------------------------------
         // Shows the splash screen.
-        splashScreen = new SplashScreen(RuntimeConstants.MUCOMMANDER_VERSION, "Loading preferences...");
+        splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
 
         // If we're not running under OS_X, preferences haven't been loaded yet.
-        if(PlatformManager.getOSFamily() != PlatformManager.MAC_OS_X)
+        if(PlatformManager.OS_FAMILY != PlatformManager.MAC_OS_X)
             ConfigurationManager.loadConfiguration();
-
-        // Checks that preferences folder exists and if not, creates it.
-        PlatformManager.checkCreatePreferencesFolder();
 
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());

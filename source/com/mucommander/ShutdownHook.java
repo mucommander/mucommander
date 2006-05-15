@@ -1,4 +1,3 @@
-
 package com.mucommander;
 
 import com.mucommander.conf.ConfigurationManager;
@@ -21,7 +20,7 @@ public class ShutdownHook extends Thread {
     public static void initiateShutdown() {
         if(Debug.ON) Debug.trace("shutting down");
 
-        if(PlatformManager.getJavaVersion()>= PlatformManager.JAVA_1_4) {
+        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
             // No need to call System.exit() under Java 1.4, application will naturally exit
             // when no there is no more window showing and no non-daemon thread still running.
             // However, natural application death will not trigger ShutdownHook so we need to explicitly

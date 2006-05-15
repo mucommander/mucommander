@@ -27,8 +27,7 @@ public class RootFolders {
 
         // Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link 
         // (like 'Hard drive' or whatever silly name the user gave his primary hard disk) to /
-        int osType = PlatformManager.getOSFamily();
-        if(osType==PlatformManager.MAC_OS_X) {
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
             addMacOSXVolumes(rootFoldersV);
             if(Debug.ON) Debug.trace("/Volumes's subfolders added: "+rootFoldersV);
         }
@@ -39,7 +38,7 @@ public class RootFolders {
 	
             // Add /etc/fstab folders
             // If we're running Windows, we can just skip that
-            if(!(osType==PlatformManager.WINDOWS_9X || osType==PlatformManager.WINDOWS_NT)) {
+            if(!(PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_9X || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT)) {
                 addFstabEntries(rootFoldersV);
                 if(Debug.ON) Debug.trace("/etc/fstab mount points added: "+rootFoldersV);
             }

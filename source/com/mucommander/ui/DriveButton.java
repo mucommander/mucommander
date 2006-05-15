@@ -175,15 +175,14 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 
         // Add root 'drives'
         int nbRoots = rootFolders.length;
-        int osFamily = PlatformManager.getOSFamily();
         // Retreive and use system drives icons under Windows only, icons looks like crap under Mac OS X,
         // and most likely look like crap under Linux as well (untested though)
-        if(osFamily==PlatformManager.WINDOWS_9X || osFamily==PlatformManager.WINDOWS_NT) {
+        if(PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_9X || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT) {
             FileSystemView fileSystemView = FileSystemView.getFileSystemView();
             for(int i=0; i<nbRoots; i++) {
                 Icon driveIcon = null;
                 // FileSystemView.getSystemIcon is only available in Java 1.4 and up
-                if(PlatformManager.getJavaVersion()>=PlatformManager.JAVA_1_4)
+                if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_4)
                     driveIcon = fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath()));
 
                 addMenuItem(rootFolders[i].getName(), driveIcon);

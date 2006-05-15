@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-
 /**
  * This class takes care of retrieving information about the latest muCommander
  * version from a remote server and displaying the result to the end user.
@@ -60,25 +59,24 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         
-        String text;
-        String title;
-        String downloadURL = null;
-        boolean downloadOption = false;
+        String         text;
+        String         title;
+        String         downloadURL = null;
+        VersionChecker version;
+        boolean        downloadOption = false;
         try {
             if(Debug.ON) Debug.trace("Checking for new version...");            
-            
-            // Retrieves version information
-            VersionChecker.getVersionInformation();
-            
+
+            version = VersionChecker.getInstance();
             // A newer version is available
-            if(VersionChecker.newVersionAvailable()) {
+            if(version.isNewVersionAvailable()) {
                 if(Debug.ON) Debug.trace("A new version is available!");            
 
                 title = Translator.get("version_dialog.new_version_title");
 
                 // Checks if the current platform can open a new browser window
                 downloadOption = PlatformManager.canOpenURLInBrowser();
-                downloadURL = VersionChecker.getDownloadURL();
+                downloadURL = version.getDownloadURL();
                 
                 // If the platform is not capable of opening a new browser window,
                 // display the download URL.

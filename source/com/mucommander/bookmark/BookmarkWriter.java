@@ -32,7 +32,7 @@ public class BookmarkWriter {
             pw.println("<bookmarks>");
 
             // Write muCommander version
-            pw.println("\t<version>"+encodeEntities(com.mucommander.RuntimeConstants.MUCOMMANDER_VERSION)+"</version>");		
+            pw.println("\t<version>"+encodeEntities(com.mucommander.RuntimeConstants.VERSION)+"</version>");		
 
             // Write bookmarks
             Vector bookmarks = BookmarkManager.getBookmarks();

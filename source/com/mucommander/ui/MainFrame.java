@@ -646,7 +646,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
             commandBar.getButton(CommandBar.REFRESH_INDEX).doClick();
         }
         else if(keyCode == KeyEvent.VK_F10 && !isControlDown
-                || (PlatformManager.getOSFamily()==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_W && e.isMetaDown())) {
+                || (PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_W && e.isMetaDown())) {
             commandBar.getButton(CommandBar.CLOSE_INDEX).doClick();
         }
         else if(keyCode == KeyEvent.VK_F1 && isAltDown) {

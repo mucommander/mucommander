@@ -128,7 +128,7 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
         setContentPane(scrollPane);
 
         // Catch Apple+W keystrokes under Mac OS X to close the window
-        if(com.mucommander.PlatformManager.getOSFamily()==com.mucommander.PlatformManager.MAC_OS_X) {
+        if(com.mucommander.PlatformManager.OS_FAMILY==com.mucommander.PlatformManager.MAC_OS_X) {
             scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
             scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
                     public void actionPerformed(ActionEvent e){

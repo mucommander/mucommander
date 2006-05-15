@@ -3,13 +3,9 @@ package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
-
 import com.mucommander.conf.ConfigurationManager;
-
 import java.io.File;
-
 import java.util.Vector;
-
 import java.awt.*;
 
 
@@ -20,152 +16,141 @@ import java.awt.*;
  * @author Maxence Bernard
  */
 public class PlatformManager {
+    // - Misc. constants --------------------------------------------------------
+    // --------------------------------------------------------------------------
+    /** Configuration variable used to store the custom shell command */
+    private final static String CUSTOM_SHELL_CONF_VAR     = "prefs.shell.custom_command";
+
+    /** Configuration variable used to store the custom shell command */
+    private final static String USE_CUSTOM_SHELL_CONF_VAR = "prefs.shell.use_custom";
+
     /** Custom user agent for HTTP requests */
-    public static final String USER_AGENT = RuntimeConstants.MUCOMMANDER_APP_STRING  + " (Java "+System.getProperty("java.vm.version")
+    public static final String USER_AGENT = RuntimeConstants.APP_STRING  + " (Java "+System.getProperty("java.vm.version")
                                             + "; " + System.getProperty("os.name") + " " + 
                                             System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
-    /** OS family muCommander is running on (see constants) */
-    private final static int osFamily;
 
-    /** Java version muCommander is running on (see constants) */
-    private final static int javaVersion;
 
-    /** Unix desktop muCommander is running on (see constants), used only if OS family
-     * is LINUX, SOLARIS or OTHER */
-    private static int unixDesktop;
 
-    // OS families
-	
+    // - OS definition ----------------------------------------------------------
+    // --------------------------------------------------------------------------
     /** Windows 95, 98, Me */
     public final static int WINDOWS_9X = 10;
     /** Windows NT, 2000, XP and up */
     public final static int WINDOWS_NT = 11;
-
     /** Mac OS classic (not supported) */
-    public final static int MAC_OS = 20;
+    public final static int MAC_OS     = 20;
     /** Mac OS X */
-    public final static int MAC_OS_X = 21;
-
+    public final static int MAC_OS_X   = 21;
     /** Linux */
-    public final static int LINUX = 30;
-	
+    public final static int LINUX      = 30;
     /** Solaris */
-    public final static int SOLARIS = 40;
-	
+    public final static int SOLARIS    = 40;
     /** OS/2 */
-    public final static int OS_2 = 50;
-
+    public final static int OS_2       = 50;
     /** Other OS */
-    public final static int OTHER = 0;
+    public final static int OTHER      = 0;
+
+    /** OS family muCommander is running on (see constants) */
+    public final static int OS_FAMILY;
 
 
-    // Unix desktops
 
-    /** Unknown desktop */
-    public final static int UNKNOWN_DESKTOP = 0;
-
-    /** KDE desktop */
-    public final static int KDE_DESKTOP = 1;
-
-    /** GNOME desktop */
-    public final static int GNOME_DESKTOP = 2;
-
-
-    // Java versions
-
+    // - Java version -----------------------------------------------------------
+    // --------------------------------------------------------------------------
     /** Java 1.0.x */
     public final static int JAVA_1_0 = 0;
-
     /** Java 1.1.x */
     public final static int JAVA_1_1 = 1;
-
     /** Java 1.2.x */
     public final static int JAVA_1_2 = 2;
-
     /** Java 1.3.x */
     public final static int JAVA_1_3 = 3;
-
     /** Java 1.4.x */
     public final static int JAVA_1_4 = 4;
-
     /** Java 1.5.x */
     public final static int JAVA_1_5 = 5;
-
     /** Java 1.6.x */
     public final static int JAVA_1_6 = 6;
-	
+
+    /** Java version muCommander is running on (see constants) */
+    public final static int JAVA_VERSION;
+
+
+
+    // - Unix desktop -----------------------------------------------------------
+    // --------------------------------------------------------------------------
+    /** Unknown desktop */
+    public final static int UNKNOWN_DESKTOP = 0;
+    /** KDE desktop */
+    public final static int KDE_DESKTOP     = 1;
+    /** GNOME desktop */
+    public final static int GNOME_DESKTOP   = 2;
 
     /** Environment variable used to determine if GNOME is the desktop currently running */
     private final static String GNOME_ENV_VAR = "GNOME_DESKTOP_SESSION_ID";
-
     /** Environment variable used to determine if KDE is the desktop currently running */
     private final static String KDE_ENV_VAR = "KDE_FULL_SESSION";
-	
-	
-    /** Configuration variable used to store the custom shell command */
-    private final static String CUSTOM_SHELL_CONF_VAR = "prefs.shell.custom_command";
 
-    /** Configuration variable used to store the custom shell command */
-    private final static String USE_CUSTOM_SHELL_CONF_VAR = "prefs.shell.use_custom";
-	
-	
+    /** Unix desktop muCommander is running on (see constants), used only if OS family
+     * is LINUX, SOLARIS or OTHER */
+    public static final int UNIX_DESKTOP;
+
+
+
+    // - Initialisation ---------------------------------------------------------
+    // --------------------------------------------------------------------------
     /**
-     * Finds out what kind of OS and Java version muCommander is running on.
+     * Finds out all the information it can about the system it'so currenty running.
      */
     static {
+        // - Java version ----------------------------
+        // -------------------------------------------
         // Java version detection //
-        String javaVersionProp = System.getProperty("java.version");
+        String javaVersion = System.getProperty("java.version");
 
         // Java version property should never be null or empty, but better be safe than sorry ... 
-        if(javaVersionProp==null || (javaVersionProp=javaVersionProp.trim()).equals("")) {
+        if(javaVersion==null || (javaVersion=javaVersion.trim()).equals(""))
             // Assume java 1.3 (first supported Java version)
-            javaVersion = JAVA_1_3;
-        }
+            JAVA_VERSION = JAVA_1_3;
         // Java 1.5
-        else if(javaVersionProp.startsWith("1.5")) {
-            javaVersion = JAVA_1_5;
-        }
+        else if(javaVersion.startsWith("1.5"))
+            JAVA_VERSION = JAVA_1_5;
         // Java 1.4
-        else if(javaVersionProp.startsWith("1.4")) {
-            javaVersion = JAVA_1_4;
-        }
+        else if(javaVersion.startsWith("1.4"))
+            JAVA_VERSION = JAVA_1_4;
         // Java 1.3
-        else if(javaVersionProp.startsWith("1.3")) {
-            javaVersion = JAVA_1_3;
-        }
+        else if(javaVersion.startsWith("1.3"))
+            JAVA_VERSION = JAVA_1_3;
         // Java 1.2
-        else if(javaVersionProp.startsWith("1.2")) {
-            javaVersion = JAVA_1_2;
-        }
+        else if(javaVersion.startsWith("1.2"))
+            JAVA_VERSION = JAVA_1_2;
         // Java 1.1
-        else if(javaVersionProp.startsWith("1.1")) {
-            javaVersion = JAVA_1_1;
-        }
+        else if(javaVersion.startsWith("1.1"))
+            JAVA_VERSION = JAVA_1_1;
         // Java 1.0
-        else if(javaVersionProp.startsWith("1.0")) {
-            javaVersion = JAVA_1_0;
-        }
+        else if(javaVersion.startsWith("1.0"))
+            JAVA_VERSION = JAVA_1_0;
         // Newer version we don't know of yet, assume latest supported Java version
-        else {
-            javaVersion = JAVA_1_5;
-        }
+        else
+            JAVA_VERSION = JAVA_1_5;
 		
-        if(Debug.ON) Debug.trace("detected Java version value = "+javaVersion);
+        if(Debug.ON) Debug.trace("detected Java version value = "+JAVA_VERSION);
 
 
-        // OS Family detection //
+        // - OS family -------------------------------
+        // -------------------------------------------
 
-        String osName = System.getProperty("os.name");
+        String osName    = System.getProperty("os.name");
         String osVersion = System.getProperty("os.version");
 		
         // Windows family
         if(osName.startsWith("Windows")) {
             // Windows 95, 98, Me
             if (osName.startsWith("Windows 95") || osName.startsWith("Windows 98") || osName.startsWith("Windows Me"))
-                osFamily = WINDOWS_9X;
+                OS_FAMILY = WINDOWS_9X;
             // Windows NT, 2000, XP and up
             else
-                osFamily = WINDOWS_NT;
+                OS_FAMILY = WINDOWS_NT;
         }
         // Mac OS family
         else if(osName.startsWith("Mac OS")) {
@@ -173,35 +158,36 @@ public class PlatformManager {
             if(osVersion.startsWith("7.")
                || osVersion.startsWith("8.")
                || osVersion.startsWith("9."))
-                osFamily = MAC_OS;
+                OS_FAMILY = MAC_OS;
             // Mac OS X or up
             else		 
-                osFamily = MAC_OS_X;
+                OS_FAMILY = MAC_OS_X;
         }
         // Linux family
         else if(osName.startsWith("Linux")) {
-            osFamily = LINUX;
+            OS_FAMILY = LINUX;
         }
         // Solaris family
         else if(osName.startsWith("Solaris") || osName.startsWith("SunOS")) {
-            osFamily = SOLARIS;
+            OS_FAMILY = SOLARIS;
         }
         // OS/2 family
         else if(osName.startsWith("OS/2")) {
-            osFamily = OS_2;
+            OS_FAMILY = OS_2;
         }
         // Any other OS
         else {
-            osFamily = OTHER;
+            OS_FAMILY = OTHER;
         }
 
-        if(Debug.ON) Debug.trace("detected OS family value = "+osFamily);
+        if(Debug.ON) Debug.trace("detected OS family value = "+OS_FAMILY);
 
+
+        // - Unix desktop ----------------------------
+        // -------------------------------------------
         // Desktop (KDE/GNOME) detection, only if OS is Linux, Solaris or other (maybe *BSD)
 
-        if(osFamily==LINUX || osFamily==SOLARIS || osFamily==OTHER) {
-            unixDesktop = UNKNOWN_DESKTOP;
-
+        if(OS_FAMILY==LINUX || OS_FAMILY==SOLARIS || OS_FAMILY==OTHER) {
             // Are we running on KDE, GNOME or some other desktop ?
             // First, we look for typical KDE/GNOME environment variables
             // but we can't rely on them being defined, as they only have a value under Java 1.5 (using System.getenv())
@@ -211,22 +197,22 @@ public class PlatformManager {
             String kdeEnvValue;
             // System.getenv() has been deprecated and not usable (throws an exception) under Java 1.3 and 1.4,
             // let's use System.getProperty() instead
-            if(javaVersion<=JAVA_1_4) {
+            if(JAVA_VERSION<=JAVA_1_4) {
                 gnomeEnvValue = System.getProperty(GNOME_ENV_VAR);
-                kdeEnvValue = System.getProperty(KDE_ENV_VAR);
+                kdeEnvValue   = System.getProperty(KDE_ENV_VAR);
             }
             // System.getenv() has been un-deprecated (reprecated?) under Java 1.5, great!
             else {
                 gnomeEnvValue = System.getenv(GNOME_ENV_VAR);
-                kdeEnvValue = System.getenv(KDE_ENV_VAR);
+                kdeEnvValue   = System.getenv(KDE_ENV_VAR);
             }
 
             // Does the GNOME_DESKTOP_SESSION_ID environment variable have a value ?
             if(gnomeEnvValue!=null && !gnomeEnvValue.trim().equals(""))
-                unixDesktop = GNOME_DESKTOP;
+                UNIX_DESKTOP = GNOME_DESKTOP;
             // Does the KDE_FULL_SESSION environment variable have a value ?
             else if(kdeEnvValue!=null && !kdeEnvValue.trim().equals(""))
-                unixDesktop = KDE_DESKTOP;
+                UNIX_DESKTOP = KDE_DESKTOP;
             else {
                 // At this point, neither GNOME nor KDE environment variables had a value :
                 // Either those variables could not be retrieved (muCommander is running on Java 1.4 or 1.3
@@ -236,96 +222,50 @@ public class PlatformManager {
                 //  or 'gnome-open' (GNOME's equivalent of OS X's open command) is available
 
                 // Since this test has a cost and GNOME seems to be more widespread than KDE, GNOME test comes first
-                try {
-                    if(Debug.ON) Debug.trace("trying to execute gnome-open");
-					
-                    // Try to execute 'gnome-open' to see if command exists (will thrown an IOException if it doesn't)
-                    Runtime.getRuntime().exec("gnome-open");
-                    unixDesktop = GNOME_DESKTOP;
-                } catch(Exception e) {}
-			
-                if(unixDesktop == UNKNOWN_DESKTOP)
-                    try {
-                        if(Debug.ON) Debug.trace("trying to execute kfmclient");
-						
-                        // Try to execute 'kfmclient' to see if command exists (will thrown an IOException if it doesn't)
-                        Runtime.getRuntime().exec("kfmclient");
-                        unixDesktop = KDE_DESKTOP;
-                    } catch(Exception e) {}
+                if(couldExec("gnome-open"))
+                    UNIX_DESKTOP = GNOME_DESKTOP;
+                else if(couldExec("kfmclient"))
+                    UNIX_DESKTOP = KDE_DESKTOP;
+                else
+                    UNIX_DESKTOP = UNKNOWN_DESKTOP;
             }
 
-            if(Debug.ON) Debug.trace("detected desktop value = "+unixDesktop);
+            if(Debug.ON) Debug.trace("detected desktop value = "+UNIX_DESKTOP);
         }
-    }
-
-	
-    /**
-     * Returns the OS family we're currently running on (check constants for returned values).
-     */
-    public static int getOSFamily() {
-        return osFamily;
-    }
-
-
-    /**
-     * Returns the Java version we're currently running.
-     */
-    public static int getJavaVersion() {
-        return javaVersion;
-    }
-
-
-    /**
-     * Checks that muCommander's preferences folder exists, and if it doesn't tries to create it,
-     * reporting any error to the standard output.
-     * <p>This method should be called once during startup.</p>
-     */
-    public static void checkCreatePreferencesFolder() {
-        File prefsFolder = getPreferencesFolder();
-        if(!prefsFolder.exists()) {
-            if(Debug.ON) System.out.println("Creating mucommander preferences folder "+prefsFolder.getAbsolutePath());
-            if(!prefsFolder.mkdir())
-                System.out.println("Warning: unable to create mucommander prefs folder: "+prefsFolder.getAbsolutePath());
-        }
-    }
-
-    /**
-     * Returns the preferences folder, where user-specific (configuration, bookmarks...) information
-     * is stored. 
-     */
-    public static File getPreferencesFolder() {
-        // Mac OS X specific folder (~/Library/Preferences/)
-        if(getOSFamily()==MAC_OS_X)
-            return new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");		
-        // For all other platforms, return generic folder (~/.mucommander)
         else
-            return getGenericPreferencesFolder();
+            UNIX_DESKTOP = UNKNOWN_DESKTOP;
     }
-	
+
     /**
-     * Returns the 'generic' preferences folder (.mucommander directory in user home folder), 
-     * which is the same as the one returned by getPreferencesFolder() except for platforms which
-     * have a special place to store preferences files (Mac OS X for example).
+     * Returns true if the specified command could be executed.
+     * @param  cmd command to execute.
+     * @return     <code>true</code> if executing the specified command didn't trigger an Exception.
      */
-    public static File getGenericPreferencesFolder() {
-        return new File(System.getProperty("user.home")+"/.mucommander");		
+    private static final boolean couldExec(String cmd) {
+        try {
+            Runtime.getRuntime().exec(cmd);
+            return true;
+        }
+        catch(Exception e) {return false;}
     }
-	
-	
+
+
+
+
     /**
      * Returns screen insets: accurate information under Java 1.4 and up,
      * empty inset values for Java 1.3 (except under OS X)
      */
     private static Insets getScreenInsets(Frame frame) {
         // Code for Java 1.4 and up
-        if(PlatformManager.getJavaVersion()>=PlatformManager.JAVA_1_4) {
+        if(JAVA_VERSION>=JAVA_1_4) {
             // Java 1.4 has a method which returns real screen insets 
             return Toolkit.getDefaultToolkit().getScreenInsets(frame.getGraphicsConfiguration());		
         }
         // Code for Java 1.3
         else {
             // Apple menu bar
-            int top = getOSFamily()==MAC_OS_X?22:0;
+            int top = OS_FAMILY==MAC_OS_X?22:0;
             int left = 0;
             // Could add windows task bar here ?
             int bottom = 0;
@@ -360,7 +300,7 @@ public class PlatformManager {
         Dimension screenSize = toolkit.getScreenSize();
 
         // Code for Java 1.4 and up
-        if(PlatformManager.getJavaVersion()>=PlatformManager.JAVA_1_4) {
+        if(JAVA_VERSION>=JAVA_1_4) {
             // Java 1.4 makes it easy to get full screen bounds
             Insets screenInsets = toolkit.getScreenInsets(window.getGraphicsConfiguration());		
             return new Rectangle(screenInsets.left, screenInsets.top, screenSize.width-screenInsets.left-screenInsets.right, screenSize.height-screenInsets.top-screenInsets.bottom);		
@@ -373,7 +313,7 @@ public class PlatformManager {
             int height = screenSize.height;
 			
             // Mac OS X, assuming that dock is at the bottom of the screen
-            if(getOSFamily()==MAC_OS_X) {
+            if(OS_FAMILY==MAC_OS_X) {
                 // Menu bar height
                 y += 22;
                 height -= 22;
@@ -397,11 +337,11 @@ public class PlatformManager {
         String shellCommand;
 		
         // Windows NT OSes use cmd.exe.
-        if (osFamily == WINDOWS_NT) {
+        if (OS_FAMILY == WINDOWS_NT) {
             shellCommand = "cmd /c";
         }
         // Windows 9X OSes use command.com.
-        else if(osFamily == WINDOWS_9X) {
+        else if(OS_FAMILY == WINDOWS_9X) {
             shellCommand = "command.com /c";
         }
         // All other OSes are assumed to be POSIX compliant
@@ -510,7 +450,7 @@ public class PlatformManager {
 	
         // GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
         // so if 'gnome-open' returned an error, we try to execute the file
-        if(unixDesktop==GNOME_DESKTOP && p!=null) {
+        if(UNIX_DESKTOP==GNOME_DESKTOP && p!=null) {
             try {
                 int exitCode = p.waitFor();
                 if(exitCode!=0)
@@ -526,7 +466,7 @@ public class PlatformManager {
      * Returns <code>true</code> if the current platform is capable of opening a URL in a new (default) browser window.
      */
     public static boolean canOpenURLInBrowser() {
-        return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT || unixDesktop==KDE_DESKTOP || unixDesktop==GNOME_DESKTOP;
+        return OS_FAMILY==MAC_OS_X || OS_FAMILY==WINDOWS_9X || OS_FAMILY==WINDOWS_NT || UNIX_DESKTOP==KDE_DESKTOP || UNIX_DESKTOP==GNOME_DESKTOP;
     }
 
 	
@@ -540,7 +480,7 @@ public class PlatformManager {
         if(Debug.ON) Debug.trace("Opening "+url+" in a new browser window");
 
         String tokens[];
-        if(unixDesktop == KDE_DESKTOP)
+        if(UNIX_DESKTOP == KDE_DESKTOP)
             tokens = new String[] {"kfmclient", "openURL", url};
         else
             tokens = getOpenTokens(url);
@@ -554,7 +494,7 @@ public class PlatformManager {
      * default file manager (Finder for Mac OS X, Explorer for Windows...).
      */
     public static boolean canOpenInDesktop() {
-        return osFamily==MAC_OS_X || osFamily==WINDOWS_9X || osFamily==WINDOWS_NT || unixDesktop==KDE_DESKTOP || unixDesktop==GNOME_DESKTOP;
+        return OS_FAMILY==MAC_OS_X || OS_FAMILY==WINDOWS_9X || OS_FAMILY==WINDOWS_NT || UNIX_DESKTOP==KDE_DESKTOP || UNIX_DESKTOP==GNOME_DESKTOP;
     }	
 
 
@@ -579,7 +519,7 @@ public class PlatformManager {
 
             String filePath = file.getAbsolutePath();
             String tokens[];
-            if (osFamily == MAC_OS_X)
+            if (OS_FAMILY == MAC_OS_X)
                 tokens = new String[] {"open", "-a", "Finder", filePath};
             else
                 tokens = getOpenTokens(filePath);
@@ -598,16 +538,16 @@ public class PlatformManager {
      * String if unknown.
      */
     public static String getDefaultDesktopFMName() {
-        if (osFamily==WINDOWS_9X || osFamily == WINDOWS_NT) {
+        if (OS_FAMILY==WINDOWS_9X || OS_FAMILY == WINDOWS_NT) {
             return "Explorer";
         }
-        else if (osFamily == MAC_OS_X)  {
+        else if (OS_FAMILY == MAC_OS_X)  {
             return "Finder";
         }
-        else if(unixDesktop == KDE_DESKTOP) {
+        else if(UNIX_DESKTOP == KDE_DESKTOP) {
             return "Konqueror";			
         }
-        else if(unixDesktop == GNOME_DESKTOP) {
+        else if(UNIX_DESKTOP == GNOME_DESKTOP) {
             return "Nautilus";
         }	
         else
@@ -645,26 +585,26 @@ public class PlatformManager {
         // up a new browser window if the given file is a web URL 
         // Windows 95, 98, Me : syntax is start "myfile"
         String tokens[];
-        if (osFamily == WINDOWS_9X) {
+        if (OS_FAMILY == WINDOWS_9X) {
             tokens = new String[] {"start", "\""+filePath+"\""};
         }
         // Windows NT, 2000, XP : syntax is cmd /c start "" "myfile"
-        else if (osFamily == WINDOWS_NT) {
+        else if (OS_FAMILY == WINDOWS_NT) {
             tokens = new String[] {"cmd", "/c", "start", "\"\"", "\""+filePath+"\""};
         }
         // Mac OS X can do the same with the 'open' command 
-        else if (osFamily == MAC_OS_X)  {
+        else if (OS_FAMILY == MAC_OS_X)  {
             tokens = new String[] {"open", filePath};
         }
         // KDE has 'kfmclient exec' which opens/executes a file, but it won't work with web URLs.
         // For web URLs, 'kfmclient openURL' has to be called. 
-        else if(unixDesktop == KDE_DESKTOP) {
+        else if(UNIX_DESKTOP == KDE_DESKTOP) {
             tokens = new String[] {"kfmclient", "exec", filePath};			
         }
         // GNOME has 'gnome-open' which opens a file with a registered extension / opens a web URL in a new window,
         // but it won't execute an executable file.
         // For executable files, the file's path has to be executed as a command 
-        else if(unixDesktop == GNOME_DESKTOP) {
+        else if(UNIX_DESKTOP == GNOME_DESKTOP) {
             tokens = new String[] {"gnome-open", filePath};
         }
         // No launcher command for this platform, let's just execute the file in
@@ -695,6 +635,36 @@ public class PlatformManager {
         return sb.toString();
     }
 
+
+
+    // - Misc. ------------------------------------------------------------------
+    // --------------------------------------------------------------------------
+    /**
+     * Returns the path to the folder that contains all the user specific data (configuration,
+     * bookmarks, ...).
+     * <p>
+     * If the folder does not exist, this method will try to create it.
+     * </p>
+     * @return the path to the user's preference folder.
+     */
+    public static File getPreferencesFolder() {
+        File folder;
+
+        // Mac OS X specific folder (~/Library/Preferences/muCommander)
+        if(OS_FAMILY==MAC_OS_X)
+            folder = new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");
+        // For all other platforms, use generic folder (~/.mucommander)
+        else
+            folder = new File(System.getProperty("user.home"), "/.mucommander");
+
+        // Makes sure the folder exists.
+        if(!folder.exists())
+            if(!folder.mkdir())
+                if(Debug.ON)
+                    Debug.trace("Could not create preference folder: " + folder.getAbsolutePath());
+
+        return folder;
+    }
 
     ///////////////////
     // Debug methods //

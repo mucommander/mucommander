@@ -38,7 +38,7 @@ public class OSXIntegration {
         //  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."
         System.setProperty("apple.laf.useScreenMenuBar", ""+ConfigurationManager.getVariableBoolean("prefs.macosx.screen_menu_bar", true));
 
-        if(PlatformManager.getJavaVersion() >= PlatformManager.JAVA_1_4) {
+        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("registering EAWT hooks");
             new EAWTHandler();
         }

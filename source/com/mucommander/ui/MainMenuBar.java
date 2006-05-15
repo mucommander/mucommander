@@ -99,10 +99,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JMenuItem donateItem;
     private JMenuItem aboutItem;
 	
-    private final static String MUCOMMANDER_HOMEPAGE_URL = "http://www.mucommander.com";
-    private final static String MUCOMMANDER_FORUMS_URL = "http://www.mucommander.com/forums/";
-    private final static String MUCOMMANDER_DONATE_URL = "http://www.mucommander.com/#donate";
-
 	
     public MainMenuBar(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -125,7 +121,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         propertiesItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.properties"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.ALT_MASK), this);
 
         // Under Mac OS X, 'Preferences' already appears in the application (muCommander) menu, do not display it again
-        if(PlatformManager.getOSFamily()!=PlatformManager.MAC_OS_X) {
+        if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X) {
             fileMenu.add(new JSeparator());
             preferencesItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.preferences"), menuItemMnemonicHelper, null, this);
         }
@@ -218,7 +214,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
 		
         // Under Mac OS X, 'About' already appears in the application (muCommander) menu, do not display it again
-        if(PlatformManager.getOSFamily()!=PlatformManager.MAC_OS_X) {
+        if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X) {
             helpMenu.add(new JSeparator());
             aboutItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.about"), menuItemMnemonicHelper, null, this);		
         }
@@ -450,13 +446,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             new ShortcutsDialog(mainFrame).showDialog();
         }
         else if (source == homepageItem) {
-            PlatformManager.openURLInBrowser(MUCOMMANDER_HOMEPAGE_URL);
+            PlatformManager.openURLInBrowser(com.mucommander.RuntimeConstants.HOMEPAGE_URL);
         }
         else if (source == forumsItem) {
-            PlatformManager.openURLInBrowser(MUCOMMANDER_FORUMS_URL);
+            PlatformManager.openURLInBrowser(com.mucommander.RuntimeConstants.FORUMS_URL);
         }
         else if (source == donateItem) {
-            PlatformManager.openURLInBrowser(MUCOMMANDER_DONATE_URL);
+            PlatformManager.openURLInBrowser(com.mucommander.RuntimeConstants.DONATION_URL);
         }
         else if (source == aboutItem) {
             new AboutDialog(mainFrame).showDialog();

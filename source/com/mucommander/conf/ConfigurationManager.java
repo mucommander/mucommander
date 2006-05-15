@@ -42,7 +42,7 @@ public class ConfigurationManager {
     /** Holds the content of the configuration file. */
     private static ConfigurationTree tree = new ConfigurationTree("root");
 
-    static {setVariable("prefs.conf_version", RuntimeConstants.MUCOMMANDER_VERSION);}
+    static {setVariable("prefs.conf_version", RuntimeConstants.VERSION);}
 
     /**
      * Prevents the class from being instanciated.
@@ -96,14 +96,14 @@ public class ConfigurationManager {
             // import and move variables which have moved in the configuration tree
             // and set new version string
             String confVersion = getVariable("prefs.conf_version");
-            if(confVersion!=null && !confVersion.equals(RuntimeConstants.MUCOMMANDER_VERSION)) {
+            if(confVersion!=null && !confVersion.equals(RuntimeConstants.VERSION)) {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Version changed, looking for variables to migrate");
                 migrateVariable("prefs.show_hidden_files", "prefs.file_table.show_hidden_files");
                 migrateVariable("prefs.auto_size_columns", "prefs.file_table.auto_size_columns");
                 migrateVariable("prefs.show_toolbar", "prefs.toolbar.visible");
                 migrateVariable("prefs.show_status_bar", "prefs.status_bar.visible");
                 migrateVariable("prefs.show_command_bar", "prefs.command_bar.visible");
-                setVariable("prefs.conf_version", RuntimeConstants.MUCOMMANDER_VERSION);
+                setVariable("prefs.conf_version", RuntimeConstants.VERSION);
             }
 						
             return true;
