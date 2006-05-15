@@ -52,6 +52,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JMenuItem preferencesItem;
     private JMenuItem checkForUpdatesItem;
     private JMenuItem closeItem;
+    private JMenuItem quitItem;
 
     // Mark menu
     private JMenu markMenu;
@@ -130,7 +131,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 		
         fileMenu.add(new JSeparator());
         closeItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.close_window"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0), this);
-		
+        // Under Mac OS X, 'Quit' already appears in the application (muCommander) menu, do not display it again
+		if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X)
+            quitItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.quit"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK), this);
+        
         add(fileMenu);
 	
         // Mark menu
@@ -361,6 +365,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
         else if (source == closeItem) {
             mainFrame.dispose();
+        }
+        else if (source == quitItem) {
+            WindowManager.quit();
         }
         // Mark menu
         else if (source == markGroupItem) {

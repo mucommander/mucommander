@@ -801,6 +801,8 @@ file_menu.close_window:RU:Закрыть окно
 file_menu.close_window:ZH_CN:关闭窗口
 file_menu.close_window:SI:Zapri okno
 
+file_menu.quit:EN:$[quit_dialog.quit]
+
 
 #############
 # Mark menu #
