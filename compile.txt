@@ -1,0 +1,46 @@
+               --------------------------------------------
+                   muCommander compilation instructions
+               --------------------------------------------
+
+1. Configuration
+
+  The first step in compiling muCommander is making sure all the proper
+libraries and tools are installed.
+In order to do that, you must move the local_template.xml file at the root
+of the project to local.xml and edit it:
+- java-lib must point to your java installation's classes jar file. Under
+  most versions of the JRE, this is going to be in
+  /path/to/jre/lib/rt.jar.
+  However, Apple decided to use non-standards paths for reasons of their own,
+  and you'll find the proper jar in
+  /System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Classes/classes.jar
+- proguard must point to the ProGuard jar file. The one used by muCommander
+  comes bundles with the sources in tools/proguard.jar, but you can modify
+  that if you wish to try out other versions.
+- ant-lib must point to the Ant jar file. Ant libraries are necessary to compile
+  the various custom tasks used by our compile process.
+
+
+2. Compiling the tools
+
+  Once the system is set up, you need to compile the custom muCommander tools.
+This is simply achieved by typing "ant tools-obfuscate" at the root of the
+project tree.
+
+  This will generate /path/to/mucommander/tools/mutasks.jar, which contains all
+the custom tasks that muCommander need to compile.
+
+
+3. Compiling muCommander
+
+  There are various ways of compiling muCommander. The most common ways are:
+- ant. This will compile all the modified Java files, store the binaries in
+  /path/to/mucommander/tmp/classes, and run the resulting application.
+- ant jar. This will compile all the modified Java files and store the binaries
+  in /path/to/mucommander/dist/mucommander_unobf.jar.
+  This jar file is meant for debug, and running it will output a fair amount
+  of tracing information.
+- ant obfuscate. This will compile and obfuscate all the Java files and store
+  the binaries in /path/to/mucommander/dist/mucommander.jar. The resulting
+  jar file will not contain debug code anymore, and is the one we use for
+  release.
