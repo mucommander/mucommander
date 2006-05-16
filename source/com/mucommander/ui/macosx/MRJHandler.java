@@ -13,6 +13,9 @@ import com.mucommander.ui.QuitDialog;
  * This class registers the About, Preferences and Quit handlers using the com.apple.mrj API available
  * under Java 1.3 (deprecated under Java 1.4 and up).
  *
+ * Note: the code executed in response to handle methods has to be run in a separate thread because of a bug 
+ * in Mac OS X 10.1, which will otherwise cause the app to hang if a dialog is invoked. 
+ *
  * @author Maxence Bernard
  */
 class MRJHandler implements MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Runnable {
@@ -25,8 +28,9 @@ class MRJHandler implements MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Ru
 		    
     public MRJHandler() {
         // Register the handlers. Error has to be caught for NoClassDefFoundError and NoSuchMethodError
-        // because MRJ toolkit doesn't seem to be available under Mac OS X 10.1 (reported by Lanch).
-        // Note: As a result, under Mac OS X 10.1, About, Preferences and Quit won't be available
+        // because MRJ toolkit seems not to be available under Mac OS X 10.1 with some early Java runtimes
+        // (reported by Lanch). For those particular configurations, about/preferences/quit menu items won't
+        // be available.
         try {MRJApplicationUtils.registerAboutHandler(this);}
         catch(Error e){}
         try {MRJApplicationUtils.registerPrefsHandler(this);}
@@ -50,10 +54,14 @@ class MRJHandler implements MRJAboutHandler, MRJPrefsHandler, MRJQuitHandler, Ru
         this.action = QUIT_ACTION;
         new Thread(this).start();
 
-        // The javadocs for MRJQuitHandler state that to abort the quit, IllegalStateException must be thrown
-        if(QuitDialog.askConfirmation())
+        // The javadocs for MRJQuitHandler state that to abort the quit, IllegalStateException must be thrown.
+        // Although we're not cancelling quit at this point, we're giving ourselves a chance to cancel quit
+        // if quit confirmation dialog is enabled and user chooses to cancel quit.
+        // If we didn't, Mac OS X would just terminate the VM when this method returns.
+        if(QuitDialog.confirmationRequired())
             throw new IllegalStateException();
     }
+    
 
     public void run() {
         switch(action) {
