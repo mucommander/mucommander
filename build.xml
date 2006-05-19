@@ -45,6 +45,7 @@
   <!-- Path to the file in which to store the obfuscated       -->
   <!-- application JAR file.                                   -->
   <property name="obf-jar"        location="${dist}/mucommander.jar"/>
+  <property name="signed-jar"     location="${dist}/mucommander_signed.jar"/>
   <!-- Where to store temporary files.                         -->
   <property name="tmp"            location="tmp"/>
   <!-- Where to write temporary Java sources.                  -->
@@ -99,6 +100,9 @@
     <delete dir="${tool-classes}"/>
     <delete dir="${tmp}"/>
     <delete dir="${dist}"/>
+    <delete includeEmptyDirs="true">
+      <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+    </delete>
   </target>
 
 
@@ -188,7 +192,7 @@
     <property name="version-url" value="${nightly-version-url}"/>
   </target>
 
-  <target name="nightly" depends="set-nightly,clean,tools-obfuscate,tgz"/>
+  <target name="nightly" depends="set-nightly,tools-obfuscate,tgz,signed"/>
 
   <!-- Generates the application's obfuscated jar file.        -->
   <target name="obfuscate" depends="disable-debug,clean,jar,version">
@@ -374,6 +378,9 @@
   <target name="dmg" depends="obfuscate">
   </target>
 
-  <target name="webstart" depends="obfuscate">
+  <!-- Signs the obfuscated jar file.                         -->
+  <target name="signed" depends="obfuscate">
+    <signjar jar="${obf-jar}" signedjar="${signed-jar}" alias="maxence" keystore="${res}/keystore"
+             storepass="${store-pass}"/>
   </target>
 </project>
