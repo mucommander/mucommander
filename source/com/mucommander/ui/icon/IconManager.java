@@ -43,12 +43,12 @@ public class IconManager {
 	
     /** Icon sets folders within the application's JAR file */	
     private final static String ICON_SET_FOLDERS[] = {
-        "/file_icons/",
-        "/toolbar_icons/",
-        "/status_bar_icons/",
-        "/command_bar_icons/",
-        "/table_icons/",
-        "/preferences_icons/"
+        "/file/",
+        "/toolbar/",
+        "/status_bar/",
+        "/command_bar/",
+        "/table/",
+        "/preferences/"
     };
 
     /** Number of icon sets */

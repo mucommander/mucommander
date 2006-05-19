@@ -180,16 +180,18 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         if(this.currentProcess==null && (source == runStopButton || source == commandField)) {
             String command = commandField.getText();
             this.lastCommand = command;
-            this.currentProcess = PlatformManager.execute(command, mainFrame.getLastActiveTable().getCurrentFolder());
-            // If command could be executed
-            if(currentProcess!=null) {
+            try {
+                currentProcess = PlatformManager.execute(command, mainFrame.getLastActiveTable().getCurrentFolder());
+                // If command could be executed
                 // Reset caret position
                 caretPos = 0;
                 switchToStopState();
                 // And start monitoring the process and outputting to the text area
                 processMonitor = new ProcessMonitor(this.currentProcess, this);
             }
-            // Probably should notify the user if the command could not be executed
+            catch(Exception e1) {
+                // Probably should notify the user if the command could not be executed
+            }
         }
         // Stop button stops current process
         else if(this.currentProcess!=null && source==runStopButton) {

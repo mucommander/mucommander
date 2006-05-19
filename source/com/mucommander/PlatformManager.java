@@ -1,10 +1,9 @@
-
 package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 import com.mucommander.conf.ConfigurationManager;
-import java.io.File;
+import java.io.*;
 import java.util.Vector;
 import java.awt.*;
 
@@ -251,215 +250,172 @@ public class PlatformManager {
 
 
 
-
+    // - Shell management -------------------------------------------------------
+    // --------------------------------------------------------------------------	
     /**
-     * Returns screen insets: accurate information under Java 1.4 and up,
-     * empty inset values for Java 1.3 (except under OS X)
-     */
-    private static Insets getScreenInsets(Frame frame) {
-        // Code for Java 1.4 and up
-        if(JAVA_VERSION>=JAVA_1_4) {
-            // Java 1.4 has a method which returns real screen insets 
-            return Toolkit.getDefaultToolkit().getScreenInsets(frame.getGraphicsConfiguration());		
-        }
-        // Code for Java 1.3
-        else {
-            // Apple menu bar
-            int top = OS_FAMILY==MAC_OS_X?22:0;
-            int left = 0;
-            // Could add windows task bar here ?
-            int bottom = 0;
-            int right = 0;
-            return new Insets(top, left, bottom, right);		
-        }
-    }
-	
-	
-    /**
-     * Returns <code>true</code> if given coordinates are inside 'usable' screen space,
-     * taking into accounts screen insets. The result is very accurate under Java 1.4, not
-     * so accurate under Java 1.3.
-     *
-     * @param x x-coordinate, if value is below 0, this coordinate will not be used for the test
-     * @param y y-coordinate, if value is below 0, this coordinate will not be used for the test
-     */
-    public static boolean isInsideUsableScreen(Frame frame, int x, int y) {
-        Insets screenInsets = getScreenInsets(frame);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        return (x<0 || (x >= screenInsets.left && x <screenSize.width-screenInsets.right))
-            && (y<0 || (y >= screenInsets.top && y<screenSize.height-screenInsets.bottom));
-    }
-	
-	
-    /**
-     * Returns full-screen window bounds. The result is pretty accurate under Java 1.4 (not under Linux+Gnome though),
-     * just an estimate under Java 1.3.
-     */
-    public static Rectangle getFullScreenBounds(Window window) {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = toolkit.getScreenSize();
-
-        // Code for Java 1.4 and up
-        if(JAVA_VERSION>=JAVA_1_4) {
-            // Java 1.4 makes it easy to get full screen bounds
-            Insets screenInsets = toolkit.getScreenInsets(window.getGraphicsConfiguration());		
-            return new Rectangle(screenInsets.left, screenInsets.top, screenSize.width-screenInsets.left-screenInsets.right, screenSize.height-screenInsets.top-screenInsets.bottom);		
-        }
-        // Code for Java 1.3
-        else {
-            int x = 0;
-            int y = 0;
-            int width = screenSize.width;
-            int height = screenSize.height;
-			
-            // Mac OS X, assuming that dock is at the bottom of the screen
-            if(OS_FAMILY==MAC_OS_X) {
-                // Menu bar height
-                y += 22;
-                height -= 22;
-            }
-
-            // Try to give enough space for 'everyone' with a 4/3 pixel ratio:
-            // - for Window's task bar (ok)
-            // - for Mac OS X's dock (not so sure)  
-            width -= 60;
-            height -= 45;
-			
-            return new Rectangle(x, y, width, height);		
-        }
-    }
-	
-	
-    /**
-     * Returns the default shell command of the current platform. 
+     * Returns the default shell command of the current platform.
+     * <p>
+     * At the time of writing, this means:<br/>
+     * - <code>cmd /c</code> for the Windows NT family of operating systems.<br/>
+     * - <code>command.com /c</code> for the Windows 9X family of operating systems.<br/>
+     * - <code>/bin/sh -c</code> for any other OS.<br/>
+     * </p>
+     * <p>
+     * Please note that this method is not returning the shell <b>binary</b>, but the shell
+     * <b>command</b>. Due to some persistant bugs on some platforms, it's not always possible
+     * to open a shell and write to its standard input. muCommander chooses to run commands
+     * as shell scripts to work around that problem, and thus needs the full <i>run command under</i>
+     * shell command.
+     * </p>
+     * @return the default shell command of the current platform.
      */
     public static String getDefaultShellCommand() {
-        String shellCommand;
-		
-        // Windows NT OSes use cmd.exe.
-        if (OS_FAMILY == WINDOWS_NT) {
-            shellCommand = "cmd /c";
+        switch(OS_FAMILY) {
+            // NT systems use cmd.exe
+        case WINDOWS_NT:
+            return "cmd /c";
+            // Win9x systems use command.com
+        case WINDOWS_9X:
+            return "command.com /c";
+            // Any other OS is assumed to be POSIX compliant,
+            // and thus have a valid /bin/sh shell.
+        default:
+            return "/bin/sh -c";
         }
-        // Windows 9X OSes use command.com.
-        else if(OS_FAMILY == WINDOWS_9X) {
-            shellCommand = "command.com /c";
-        }
-        // All other OSes are assumed to be POSIX compliant
-        // and to have a /bin/sh shell.
-        else {
-            shellCommand = "/bin/sh -c";
-        }
-		
-        return shellCommand;
     }
-	
-	
+
     /**
-     * Executes an arbitrary command in the given folder and returns the corresponding Process object,
-     * or <code>null</code> if the command failed to execute.
+     * Returns the shell command muCommander uses.
+     * <p>
+     * This can be either the system's {@link #getDefaultShellCommand() default} or what the
+     * user defined in his preferences.
+     * </p>
+     * <p>
+     * This method should be prefered to {@link #getDefaultShellCommand()}, as it takes
+     * the user's preferences into account.
+     * </p>
+     * @return the shell command muCommander uses.
      */
-    public static Process execute(String command, AbstractFile currentFolder) {
-        try {
-            if(Debug.ON) Debug.trace("Executing "+command);
-
-            String defaultShellCommand = getDefaultShellCommand();
-            String shellCommand;
-            // Did the user choose to use a custom shell ?
-            // If not use the system's default shell command
-            if(ConfigurationManager.getVariableBoolean(USE_CUSTOM_SHELL_CONF_VAR, false))
-                shellCommand = ConfigurationManager.getVariable(CUSTOM_SHELL_CONF_VAR, defaultShellCommand);
-            else
-                shellCommand = defaultShellCommand;
-
-            // Split the shell command into tokens
-            Vector tokensV = splitCommand(shellCommand);
-            // Add the command as a single token to let the shell parse it
-            tokensV.add(command);
-
-            if(Debug.ON) Debug.trace("Tokens= "+tokensV);
-
-            // Convert the tokens Vector into a good old array
-            String tokens[] = new String[tokensV.size()];
-            tokensV.toArray(tokens);
-
-            // We use Runtime.exec(String[],String[],File) instead of Runtime.exec(String,String[],File)
-            // so that we can provide the tokens instead of letting Runtime.exec() parse the command and mess up 
-            // the command otherwise
-
-            // Command is run from a folder which is either :
-            // - the current folder of muCommander's active panel, only if the folder is on a local filesystem
-            //	(and is not an archive)
-            // - user's home in all other cases (archive, remote filesystem such as SMB, FTP, ...), since the os/shell
-            //	can't access those 'folders'
-
-            return Runtime.getRuntime().exec(tokens, null, 
-                                             new java.io.File((currentFolder instanceof FSFile)?currentFolder.getAbsolutePath():System.getProperty("user.home"))
-                                             );
-        }
-        catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while executing "+command+": "+e);
-            return null;
-        }
+    public static String getShellCommand() {
+        if(ConfigurationManager.getVariableBoolean(USE_CUSTOM_SHELL_CONF_VAR, false))
+            return ConfigurationManager.getVariable(CUSTOM_SHELL_CONF_VAR, getDefaultShellCommand());
+        return getDefaultShellCommand();
     }
 
+    /**
+     * Executes the specified command in the specified folder.
+     * <p>
+     * The command will be executed within a shell as returned by {@link #getShellCommand()}.
+     * </p>
+     * <p>
+     * The <code>currentFolder</code> folder parameter will only be used if it's neither a
+     * remote directory nor an archive. Otherwise, the command will run from the user's
+     * home directory.
+     * </p>
+     * @param     command       command to run.
+     * @param     currentFolder where to run the command from.
+     * @return                  the resulting process.
+     * @exception IOException   thrown if any error occurs while trying to run the command.
+     */
+    public static Process execute(String command, AbstractFile currentFolder) throws IOException {
+        Vector   commandTokens;
+        String[] tokens;
+
+        if(Debug.ON) Debug.trace("Executing " + command);
+
+        // Stores the command as a vector.
+        commandTokens = splitCommand(getShellCommand());
+        commandTokens.add(command);
+
+        // Stores the tokens in an array for Runtime.exec(String[],String[],File).
+        tokens = new String[commandTokens.size()];
+        commandTokens.toArray(tokens);
+
+        return Runtime.getRuntime().exec(tokens, null, new java.io.File((currentFolder instanceof FSFile) ?
+                                                                        currentFolder.getAbsolutePath() :
+                                                                        System.getProperty("user.home")));
+    }
 
     /**
-     * Splits the given command into an arrary of tokens.
+     * Splits the specified command into a vector of tokens.
+     * <p>
+     * This method tries to be about its parsing, meaning that it will
+     * escape what it thinks should be escaped.<br/>
+     * Any <code>\</code> character will be understood to mean that the following
+     * character will not be parsed, but added to the current token as is.<br/>
+     * Any <code>"</code> character will be understood to mean that all following
+     * characters until the next <code>"</code> should be added to the current token.<br/>
+     * Any un-escaped whitespace character will mark the end of the current token.
+     * </p>
+     * <p>
+     * Note that while this should be sufficient for most cases, this parsing has limitations.
+     * Since <code>"</code> has priority over <code>\</code>, it's impossible to encapsulate
+     * a <code>"</code> character within an escaped block.
+     * </p>
+     * @param  command the command to split.
+     * @return         the tokens that compose the specified command.
      */
     private static Vector splitCommand(String command) {
-        char c;
-        int pos = 0;
-        int len = command.length();
-        StringBuffer tokenSB = new StringBuffer();
-        String token;
-        Vector tokensV = new Vector();
-        while(pos<len) {
-            c = command.charAt(pos);
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("char="+c+" ("+(int)c+")"+" pos="+pos+" len="+len+" token="+tokenSB);
-            if((c==' ' && command.charAt(pos-1)!='\\') || c=='\t' || c=='\n' || c=='\r' || c=='\f') {
-                token = tokenSB.toString().trim();
-                if(!token.equals(""))
-                    tokensV.add(token.toString());
-                tokenSB = new StringBuffer();
+        int          length;
+        char         c;
+        StringBuffer token;
+        Vector       tokens;
+        String       value;
+
+
+        length = command.length();
+        token  = new StringBuffer();
+        tokens = new Vector();
+
+        for(int i = 0; i < length; i++) {
+            c = command.charAt(i);
+            // Escape the next character.
+            if(c == '\\') {
+                // Ignores trailing \ characters.
+                if(++i >= length)
+                    break;
+                token.append(command.charAt(i));
             }
-            else if(!(c=='\\' && pos!=len-1 && command.charAt(pos+1)==' ')) {
-                tokenSB.append(c);
+
+            // Ignores escaping until matching " is found.
+            else if(c == '\"') {
+                while(++i < length) {
+                    c = command.charAt(i);
+                    if(c == '"') {
+                        i++;
+                        break;
+                    }
+                    else
+                        token.append(c);
+                }
+                if(i >= length)
+                    break;
             }
-			
-            pos ++;
+
+            // End of token.
+            else if(Character.isWhitespace(c)) {
+                value = token.toString().trim();
+                if(value.length() != 0)
+                    tokens.add(token.toString().trim());
+                token.setLength(0);
+            }
+
+            // Regular character.
+            else
+                token.append(c);
         }
+        // Makes sure that trailing tokens are not ignored.
+        value = token.toString().trim();
+        if(value.length() != 0)
+            tokens.add(value);
 
-        token = tokenSB.toString().trim();
-        if(!token.equals(""))
-            tokensV.add(token.toString());
-
-        return tokensV;
+        return tokens;
     }
 
 
-    /**
-     * Opens/executes the given file, from the given folder and returns <code>true</code>
-     * if the operation succeeded.
-     */
-    public static void open(AbstractFile file) {
-        if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath());
 
-        AbstractFile currentFolder = file.getURL().getProtocol().equals("file") && (currentFolder=file.getParent())!=null?currentFolder:null;
-        String filePath = file.getAbsolutePath();
-        Process p = execute(getOpenTokens(filePath), currentFolder);
-	
-        // GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
-        // so if 'gnome-open' returned an error, we try to execute the file
-        if(UNIX_DESKTOP==GNOME_DESKTOP && p!=null) {
-            try {
-                int exitCode = p.waitFor();
-                if(exitCode!=0)
-                    execute(new String[]{escapeSpaceCharacters(filePath)}, currentFolder);
-            } catch(Exception e) {
-                if(Debug.ON) Debug.trace("Error while executing "+filePath+": "+e);
-            }
-        }
-    }
+    // - System browser ---------------------------------------------------------
+    // --------------------------------------------------------------------------
 
 
     /**
@@ -486,6 +442,51 @@ public class PlatformManager {
             tokens = getOpenTokens(url);
 	
         execute(tokens, null);
+    }
+
+
+
+    /**
+     * Executes the given command tokens from the specifed current folder.
+     *
+     * @param tokens an array of command tokens to execute
+     * @param currentFolder the folder to execute the command from, can be <code>null</code>
+     */
+    private static Process execute(String tokens[], AbstractFile currentFolder) {
+        if(Debug.ON) Debug.trace("executing : "+tokensToString(tokens));
+        try {
+            Process p = Runtime.getRuntime().exec(tokens, null, currentFolder==null?null:new java.io.File(currentFolder.getAbsolutePath()));
+            if(Debug.ON) showProcessOutput(p);
+            return p;
+        }
+        catch(Exception e) {
+            if(Debug.ON) Debug.trace("Error while executing "+tokensToString(tokens)+": "+e);
+            return null;
+        }
+    }
+
+    /**
+     * Opens/executes the given file, from the given folder and returns <code>true</code>
+     * if the operation succeeded.
+     */
+    public static void open(AbstractFile file) {
+        if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath());
+
+        AbstractFile currentFolder = file.getURL().getProtocol().equals("file") && (currentFolder=file.getParent())!=null?currentFolder:null;
+        String filePath = file.getAbsolutePath();
+        Process p = execute(getOpenTokens(filePath), currentFolder);
+	
+        // GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
+        // so if 'gnome-open' returned an error, we try to execute the file
+        if(UNIX_DESKTOP==GNOME_DESKTOP && p!=null) {
+            try {
+                int exitCode = p.waitFor();
+                if(exitCode!=0)
+                    execute(new String[]{escapeSpaceCharacters(filePath)}, currentFolder);
+            } catch(Exception e) {
+                if(Debug.ON) Debug.trace("Error while executing "+filePath+": "+e);
+            }
+        }
     }
 
 
@@ -553,27 +554,6 @@ public class PlatformManager {
         else
             return "";
     }
-
-
-    /**
-     * Executes the given command tokens from the specifed current folder.
-     *
-     * @param tokens an array of command tokens to execute
-     * @param currentFolder the folder to execute the command from, can be <code>null</code>
-     */
-    private static Process execute(String tokens[], AbstractFile currentFolder) {
-        if(Debug.ON) Debug.trace("executing : "+tokensToString(tokens));
-        try {
-            Process p = Runtime.getRuntime().exec(tokens, null, currentFolder==null?null:new java.io.File(currentFolder.getAbsolutePath()));
-            if(Debug.ON) showProcessOutput(p);
-            return p;
-        }
-        catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while executing "+tokensToString(tokens)+": "+e);
-            return null;
-        }
-    }
-
 
     /**
      * Returns an array of command tokens that can be used to open the given file in the OS/Desktop's
@@ -700,10 +680,5 @@ public class PlatformManager {
         }
         catch(Exception e) {
         }
-    }
-
-    public static void main(String args[]) {
-        //		open(args, null);
-        System.out.println("$"+args[0]+"="+System.getenv(args[0]));
     }
 }
