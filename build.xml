@@ -192,7 +192,7 @@
     <property name="version-url" value="${nightly-version-url}"/>
   </target>
 
-  <target name="nightly" depends="set-nightly,tools-obfuscate,tgz,signed"/>
+  <target name="nightly" depends="set-nightly,tools-obfuscate,tgz,sign"/>
 
   <!-- Generates the application's obfuscated jar file.        -->
   <target name="obfuscate" depends="disable-debug,clean,jar,version">
