@@ -2,13 +2,17 @@
   <!-- = Project configuration =============================== -->
   <!-- ======================================================= -->
   <!-- Path to the Java core libraries.                        -->
-  <property name="java-lib" location=""/>
+  <property name="java-lib"   location=""/>
 
   <!-- Path to the ProGuard binaries.                          -->
   <!-- Defaults to the one bundled with the project, but can   -->
   <!-- be changed to another version by editing this value.    -->
-  <property name="proguard" location="${tools}/proguard.jar"/>
+  <property name="proguard"   location="${tools}/proguard.jar"/>
 
   <!-- Path to the Ant core libraries (used to compile tools). -->
-  <property name="ant-lib"  location=""/>
+  <property name="ant-lib"    location=""/>
+
+  <!-- Password for the JAR keystore. If you're not Maxence,   -->
+  <!-- then don't bother with this.                            -->
+  <property name="store-pass" value=""/>
 </project>
