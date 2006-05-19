@@ -34,6 +34,8 @@
   <property name="lib"            location="lib"/>
   <!-- Directory containing the application's resources.       -->
   <property name="res"	          location="res"/>
+  <!-- Directory containing the application's images.          -->
+  <property name="images"         location="${res}/images"/>
   <!-- Directory containing the tools used to compile the      -->
   <!-- project.                                                -->
   <property name="tools"          location="tools"/>
@@ -55,9 +57,12 @@
   <property name="tool-clear-jar" location="${tmp}/tools_unobf.jar"/>
   <!-- Where to store the obfuscated tools jar file.           -->
   <property name="tool-obf-jar"   location="${tools}/mutasks.jar"/>
-  <!-- Where to store the muCommander verison file.            -->
+  <!-- Where to store the muCommander version file.            -->
   <property name="version-file"   location="${dist}/version.xml"/>
-
+  <!-- Where to store the muCommander tar.gz unix release.     -->
+  <property name="dist-tgz"       location="${dist}/mucommander.tar.gz"/>
+  <!-- Where to store the muCommander tar.gz unix release.     -->
+  <property name="tmp-tgz"       location="${tmp}/tgz"/>
 
   <!-- Imports the system dependant definitions.               -->
   <import file="local.xml"/>
@@ -79,10 +84,11 @@
     <mkdir dir="${tool-classes}"/>
     <!-- Copy images files to {$classes} -->
     <copy todir="${classes}">
-      <fileset dir="res">
+      <fileset dir="${images}">
         <include name="**/*"/>
       </fileset>
     </copy>
+    <copy file="${res}/dictionary.txt" todir="${classes}"/>
   </target>
 
   <!-- Deletes any dynamically generated file, effectively     -->
@@ -182,7 +188,7 @@
     <property name="version-url" value="${nightly-version-url}"/>
   </target>
 
-  <target name="nightly" depends="set-nightly,tools-obfuscate,obfuscate"/>
+  <target name="nightly" depends="set-nightly,clean,tools-obfuscate,tgz"/>
 
   <!-- Generates the application's obfuscated jar file.        -->
   <target name="obfuscate" depends="disable-debug,clean,jar,version">
@@ -334,4 +340,40 @@
     </java>
   </target>
 
+
+
+  <!-- = Release tasks ======================================= -->
+  <!-- ======================================================= -->
+
+   <!-- Generates a UNIX tar.gz distribution of muCommander.  -->
+  <target name="tgz" depends="obfuscate">
+    <!-- Stores the content of the tgz in a directory.        -->
+    <mkdir dir="${tmp-tgz}"/>
+    <copy todir="${tmp-tgz}">
+      <fileset file="${obf-jar}"/>
+      <fileset file="license.txt"/>
+      <fileset file="readme.txt"/>
+      <fileset file="${res}/mucommander.sh"/>
+    </copy>
+
+    <!-- Escapes the version number for the TGZ prefix.       -->
+    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tool-obf-jar}"/>
+    <strreplace from="mucommander-${app-version}" to="tgz-prefix" what="[ .]" with="_"/>
+
+    <!-- Generates the TGZ file, keeping execution flags.     -->
+    <tar destfile="${dist-tgz}" compression="gzip">
+      <tarfileset dir="${tmp-tgz}" mode="755" prefix="${tgz-prefix}">
+        <include name="**.sh"/>
+      </tarfileset>
+      <tarfileset dir="${tmp-tgz}" prefix="${tgz-prefix}">
+        <exclude name="**.sh"/>
+      </tarfileset>
+    </tar>
+  </target>
+
+  <target name="dmg" depends="obfuscate">
+  </target>
+
+  <target name="webstart" depends="obfuscate">
+  </target>
 </project>
