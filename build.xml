@@ -379,7 +379,7 @@
   </target>
 
   <!-- Signs the obfuscated jar file.                         -->
-  <target name="signed" depends="obfuscate">
+  <target name="sign" depends="obfuscate">
     <signjar jar="${obf-jar}" signedjar="${signed-jar}" alias="maxence" keystore="${res}/keystore"
              storepass="${store-pass}"/>
   </target>
