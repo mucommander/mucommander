@@ -2,6 +2,10 @@ package com.mucommander.ant.util;
 
 import org.apache.tools.ant.*;
 
+/**
+ * Ant task meant to modify strings and store the results in properties.
+ * @author Nicolas Rinaudo
+ */
 public class ReplaceTask extends Task {
     /** Describes the tokens that should be replaced. */
     private String what;
@@ -27,6 +31,14 @@ public class ReplaceTask extends Task {
     public void setWhat(String s) {what = s;}
 
     public void execute() throws BuildException {
+        if(with == null)
+            throw new BuildException("Unspecified with - please fill in the with attribute.");
+        if(what == null)
+            throw new BuildException("Unspecified what - please fill in the what attribute.");
+        if(from == null)
+            throw new BuildException("Unspecified from - please fill in the from attribute.");
+        if(to == null)
+            throw new BuildException("Unspecified to - please fill in the to attribute.");
         getProject().setProperty(to, from.replaceAll(what, with));
     }
 }
