@@ -12,6 +12,8 @@ import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.ui.bookmark.AddBookmarkDialog;
 import com.mucommander.ui.bookmark.EditBookmarksDialog;
+import com.mucommander.ui.viewer.ViewerFrame;
+import com.mucommander.ui.editor.EditorFrame;
 
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.FileSet;
@@ -24,20 +26,27 @@ import com.mucommander.bookmark.Bookmark;
 import com.mucommander.event.*;
 
 import java.awt.event.*;
+import java.awt.Frame;
 import javax.swing.*;
 import javax.swing.event.*;
 
 import java.util.Vector;
+import java.util.WeakHashMap;
 
 
 /**
  * This class is the main menu bar. It takes care of displaying menu and menu items and triggering
  * the proper actions.
  *
+ * <p><b>Implementation note</b>: for performance reasons, dynamic menu items are created/enabled/disabled when corresponding menus
+ * are selected, instead of monitoring the MainFrame's state and unnecessarily creating/enabling/disabling menu items
+ * when they are not visible. However, this prevents keyboard shortcuts from being managed by the menu bar for those
+ * dynamic items.
+ *
  * @author Maxence Bernard
  */
-//public class MainMenuBar extends JMenuBar implements LocationListener, TableChangeListener, ActionListener, MenuListener {
 public class MainMenuBar extends JMenuBar implements ActionListener, MenuListener {
+
     private MainFrame mainFrame;	
 	
     // File menu
@@ -92,6 +101,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JMenuItem showCommandBarItem;
     private JMenuItem showStatusBarItem;
 
+    /** Maps window menu items onto weakly-referenced frames */
+    private WeakHashMap windowMenuFrames;
+
     // Help menu
     private JMenu helpMenu;
     private JMenuItem keysItem;
@@ -101,6 +113,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JMenuItem aboutItem;
 	
 	
+    /**
+     * Creates a new MenuBar for the given MainFrame.
+     */
     public MainMenuBar(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
 		
@@ -224,25 +239,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
 		
         add(helpMenu);
-		
-//        // Set initial enabled state of contextual menu items 
-//        toggleContextualMenuItems(mainFrame.getLastActiveTable().getFolderPanel());
-		
-//        // Listen to location and table change events to change the state of contextual menu items
-//        // when current folder or active table has changed
-//        mainFrame.getFolderPanel1().addLocationListener(this);
-//        mainFrame.getFolderPanel2().addLocationListener(this);
-//        mainFrame.addTableChangeListener(this);
     }
 	
-
-//    /**
-//     * Returns the 'Window' JMenu instance.
-//     */
-//    public JMenu getWindowMenu() {
-//        return windowMenu;
-//    }
-
 
     /**
      * Enables/disables contextual menu items of the given menu, based on the current context. 
@@ -277,42 +275,15 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             // Disable accelerators on all menu items but do not remove or disable them,
             // this would cause the actionPerformed() method not be called when item is clicked.            
             int nbWindowMenuItems = windowMenu.getItemCount();
-            for(int i=0; i<nbWindowMenuItems; i++)
-                windowMenu.getItem(i).setAccelerator(null);
+            JMenuItem menuItem;
+            for(int i=0; i<nbWindowMenuItems; i++) {
+                menuItem = windowMenu.getItem(i);
+                if(menuItem!=null)
+                    menuItem.setAccelerator(null);
+            }
         }
     }
 
-
-/*
-    /////////////////////////////////
-    // TableChangeListener methods //
-    /////////////////////////////////
-	
-    public void tableChanged(FolderPanel folderPanel) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-
-        // Toggle contextual menu items on/off to reflect current table's folder
-        toggleContextualMenuItems(folderPanel);
-    }
-	
-
-    //////////////////////////////
-    // LocationListener methods //
-    //////////////////////////////
-	
-    public void locationChanged(LocationEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-
-        // Toggle contextual menu items on/off to reflect new folder's location
-        toggleContextualMenuItems(e.getFolderPanel());
-    }
-
-    public void locationChanging(LocationEvent e) {
-    }
-	
-    public void locationCancelled(LocationEvent e) {
-    }
-*/	
 
     ///////////////////////////
     // ActionListener method //
@@ -468,16 +439,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
         // Window menu item
         else {
-            int nbWindowMenuItems = windowMenu.getItemCount();
-            // Recall MainFrame corresponding to the clicked menu item.
-            // Unfortunately there's such method as getItemIndex() in JMenu, so we need
-            // to interate thru all menu items to find the clicked menu item's index.
-            for(int i=0; i<nbWindowMenuItems; i++) {
-                if(source==windowMenu.getItem(i)) {
-                    ((MainFrame)WindowManager.getMainFrames().elementAt(i)).toFront();
-                    break;
-                }
-            }
+            // Bring the frame corresponding to the clicked menu item to the front
+            ((JFrame)windowMenuFrames.get(source)).toFront();
         }
     }
 
@@ -543,37 +506,66 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
         else if(source==windowMenu) {
             // Start by removing any menu item previously added
-            // Note: menu item cannot be removed by menuDeselected() as actionPerformed() can be called after
+            // Note: menu item cannot be removed by menuDeselected() as actionPerformed() will be called after
             // menu has been deselected.
             windowMenu.removeAll();
+            // This WeakHashMap maps menu items to frame instances. It has to be a weakly referenced hash map
+            // and not a regular hash map, since it will not (and cannot) be emptied when the menu has been deselected
+            // and we really do not want this hash map to prevent the frames to be GCed 
+            windowMenuFrames = new WeakHashMap();
+            
             // Create a menu item for each of the MainFrame instances, that displays the MainFrame's path
-            // and associated shortcut to recall the frame. 
+            // and a keyboard shortcut to recall the frame (for the first 10 frames only). 
             java.util.Vector mainFrames = WindowManager.getMainFrames();
             MainFrame mainFrame;
-            JCheckBoxMenuItem checkBox;
+            JCheckBoxMenuItem checkBoxMenuItem;
             int nbFrames = mainFrames.size();
             for(int i=0; i<nbFrames; i++) {
                 mainFrame = (MainFrame)mainFrames.elementAt(i);
-                checkBox = new JCheckBoxMenuItem((i+1)+" "+mainFrame.getLastActiveTable().getCurrentFolder().getAbsolutePath(), mainFrame==this.mainFrame);
-                checkBox.addActionListener(this);
+                checkBoxMenuItem = new JCheckBoxMenuItem((i+1)+" "+mainFrame.getLastActiveTable().getCurrentFolder().getAbsolutePath(), mainFrame==this.mainFrame);
+                checkBoxMenuItem.addActionListener(this);
                 // The accelator is set just for 'decoration' purposes, i.e. just to indicate what the shortcut is.
                 // All accelators are removed after the menu is deselected as window shortcuts are managed
                 // by MainFrame directly.
                 if(i<10)
-                    checkBox.setAccelerator(KeyStroke.getKeyStroke(i==9?KeyEvent.VK_0:i+KeyEvent.VK_1, ActionEvent.CTRL_MASK));
-                windowMenu.add(checkBox);
+                    checkBoxMenuItem.setAccelerator(KeyStroke.getKeyStroke(i==9?KeyEvent.VK_0:i+KeyEvent.VK_1, ActionEvent.CTRL_MASK));
+
+                windowMenu.add(checkBoxMenuItem);                
+                windowMenuFrames.put(checkBoxMenuItem, mainFrame);
+            }
+            
+            // Add 'other' (non-MainFrame) windows : viewer and editor frames.
+            Frame frames[] = Frame.getFrames();
+            nbFrames = frames.length;
+            Frame frame;
+            JMenuItem menuItem;
+            boolean firstFrame = true;
+            for(int i=0; i<nbFrames; i++) {
+                frame = frames[i];
+                // Test if Frame is not hidden (disposed), Frame.getFrames() returns both active and disposed frames
+                if(frame.isShowing() && (frame instanceof ViewerFrame) || (frame instanceof EditorFrame)) {
+                    // Add a separator before the first non-MainFrame frame to mark a separation between MainFrames
+                    // and other frames
+                    if(firstFrame) {
+                        windowMenu.add(new JSeparator());
+                        firstFrame = false;
+                    }
+                    // Use frame's window title
+                    menuItem = new JMenuItem(frame.getTitle());
+                    menuItem.addActionListener(this);
+                    windowMenu.add(menuItem);
+                    windowMenuFrames.put(menuItem, frame);
+                }
             }
         }
     }
 	
     public void menuDeselected(MenuEvent e) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");    
         // Enable all contextual menu items
         toggleContextualMenuItems((JMenu)e.getSource(), true); 
     }
 	 
     public void menuCanceled(MenuEvent e) {
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");    
         // Enable all contextual menu items
         toggleContextualMenuItems((JMenu)e.getSource(), true); 
     }
