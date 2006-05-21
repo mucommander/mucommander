@@ -581,9 +581,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      */
     private void showAccessErrorDialog(IOException e) {
         String exceptionMsg = e==null?null:e.getMessage();
-        String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?".":": "+exceptionMsg);
-        if(!errorMsg.endsWith("."))
-            errorMsg += ".";
+        String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?"":": "+exceptionMsg);
 
         JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
     }

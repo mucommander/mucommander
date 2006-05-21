@@ -5,6 +5,7 @@ import com.mucommander.cache.LRUCache;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.io.File;
 
 
 /**
@@ -98,11 +99,8 @@ public abstract class AbstractFile {
 
             // FileURL not in cache, let's create it and add it to the cache
             if(fileURL==null) {
-                // Make sure path is absolute and throw an exception if it is not
-                if(!(new java.io.File(absPath)).isAbsolute())
-                    throw new IOException();
-			
-                fileURL = new FileURL("file://localhost"+((absPath.equals("")||(absPath.charAt(0)=='/'))?absPath:'/'+absPath), parent==null?null:parent.getURL());	// Reuse parent file's FileURL (if any)
+                // A MalformedURLException will be thrown if the path is not absolute
+                fileURL = FileURL.getLocalFileURL(absPath, parent==null?null:parent.getURL());	// Reuse parent file's FileURL (if any)
                 urlCache.add(absPath, fileURL);
             }
         }

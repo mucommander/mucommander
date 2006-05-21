@@ -213,6 +213,28 @@ public class FileURL implements Cloneable {
         }
     }
 
+
+    /**
+     * Returns a FileURL constructed from the specified absolute path that must point to a local file. 
+     * If the path is not absolute, a <code>MalformedURLException</code> will be thrown.<b>
+     * The returned URL will start with <code>file://localhost</code>.
+     *
+     * @param absPath an absolute path to a local file, the path may start with user home '~'.
+     * @param parentURL optional parent's URL, may be <code>null</code>
+     * @throws java.net.MalformedURLException if the path is not absolute
+     */
+    public static FileURL getLocalFileURL(String absPath, FileURL parentURL) throws MalformedURLException {
+        if(!absPath.equals("")) {
+            char firstChar = absPath.charAt(0);
+            if(firstChar=='/')
+                return new FileURL("file://localhost"+absPath, parentURL);
+            else if(firstChar=='~' || absPath.indexOf(":\\")!=-1)
+                return new FileURL("file://localhost/"+absPath, parentURL);
+        }
+
+        throw new MalformedURLException("Path not absolute: "+absPath);
+    }
+
 	
     /**
      * Returns the protocol part of this URL (e.g. smb)
