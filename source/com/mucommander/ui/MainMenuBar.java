@@ -54,8 +54,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JMenuItem newWindowItem;
     private JMenuItem serverConnectItem;
     private JMenuItem runItem;
-    private JMenuItem zipItem;
-    private JMenuItem unzipItem;
+    private JMenuItem packItem;
+    private JMenuItem unpackItem;
     private JMenuItem emailFilesItem;
     private JMenuItem propertiesItem;
     private JMenuItem preferencesItem;
@@ -129,8 +129,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         fileMenu.add(new JSeparator());
         serverConnectItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.server_connect"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.CTRL_MASK), this);
         runItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.run_command"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK), this);
-        zipItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.zip"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK), this);
-        unzipItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.unzip"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK), this);
+        packItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.pack"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK), this);
+        unpackItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.unpack"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK), this);
         emailFilesItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.email"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK), this);
 
         fileMenu.add(new JSeparator());
@@ -260,8 +260,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 
             // enable/disable thos menu items if no file is selected
             propertiesItem.setEnabled(filesSelected);
-            zipItem.setEnabled(filesSelected);
-            unzipItem.setEnabled(filesSelected);
+            packItem.setEnabled(filesSelected);
+            unpackItem.setEnabled(filesSelected);
             emailFilesItem.setEnabled(filesSelected);
         }
         else if(menu == viewMenu) {
@@ -308,17 +308,17 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         else if (source == runItem) {
             new RunDialog(mainFrame);
         }
-        else if (source==zipItem || source==unzipItem || source==emailFilesItem || source==propertiesItem) {
+        else if (source==packItem || source==unpackItem || source==emailFilesItem || source==propertiesItem) {
             // This actions need to work on selected files
             FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
             int nbSelectedFiles = files.size();
 		
             if(nbSelectedFiles>0) {
-                if (source == zipItem) {
+                if (source == packItem) {
                     new PackDialog(mainFrame, files, false);
                 }
-                else if (source == unzipItem) {
-                    new UnzipDialog(mainFrame, files, false);
+                else if (source == unpackItem) {
+                    new UnpackDialog(mainFrame, files, false);
                 }
                 else if (source == emailFilesItem) {
                     new EmailFilesDialog(mainFrame, files);

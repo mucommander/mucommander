@@ -42,7 +42,16 @@ public class TarArchiveFile extends AbstractArchiveFile {
             }
             // Bzip2-compressed file
             else if(ext.equals("tbz2") || ext.equals("bz2")) {
-                inputStream = new CBZip2InputStream(inputStream);
+                try { inputStream = new CBZip2InputStream(inputStream); }
+                catch(Exception e) {
+                    // CBZip2InputStream is known to throw NullPointerException if file is not properly Bzip2-encoded
+                    // so we need to catch those and throw them as IOException
+                    if(com.mucommander.Debug.ON) {
+                        com.mucommander.Debug.trace("Exception caught while creating CBZip2InputStream, throwing IOException");
+                        e.printStackTrace();
+                    }
+                    throw new IOException();
+                }
             }
         }
 

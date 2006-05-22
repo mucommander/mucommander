@@ -19,8 +19,8 @@ import javax.swing.*;
 
 
 /**
- * This dialog allows the user to zip selected files to a specified file
- * and add a comment in the zip file.
+ * This dialog allows the user to pack marked files to an archive file of a selected format (Zip, TAR, ...)
+ * and add an optional comment to the archive (for the formats that support it).
  *
  * @author Maxence Bernard
  */
@@ -55,7 +55,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 
 
     public PackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
-        super(mainFrame, Translator.get("zip_dialog.title"), mainFrame);
+        super(mainFrame, Translator.get("pack_dialog.title"), mainFrame);
 
         this.mainFrame = mainFrame;
         this.files = files;
@@ -79,7 +79,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
         Container contentPane = getContentPane();
 		
         YBoxPanel mainPanel = new YBoxPanel(5);
-        JLabel label = new JLabel(Translator.get("zip_dialog_description")+" :");
+        JLabel label = new JLabel(Translator.get("pack_dialog_description")+" :");
         mainPanel.add(label);
 
         FileTable activeTable = mainFrame.getInactiveTable();
@@ -123,7 +123,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 		
         // Comment area, enabled only if selected archive format has comment support
 		
-        label = new JLabel(Translator.get("zip_dialog.comment"));
+        label = new JLabel(Translator.get("pack_dialog.comment"));
         mainPanel.add(label);
         commentArea = new JTextArea();
         commentArea.setRows(4);
@@ -133,7 +133,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 
         contentPane.add(mainPanel, BorderLayout.NORTH);
 				
-        okButton = new JButton(Translator.get("zip_dialog.zip"));
+        okButton = new JButton(Translator.get("pack_dialog.pack"));
         cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
@@ -167,7 +167,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
             Object dest[] = FileToolkit.resolvePath(filePath, mainFrame.getLastActiveTable().getCurrentFolder());
             if (dest==null || dest[1]==null) {
                 // Incorrect destination
-                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("zip_dialog.error_title"), Translator.get("this_folder_does_not_exist", filePath), mainFrame,
+                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("pack_dialog.error_title"), Translator.get("this_folder_does_not_exist", filePath), mainFrame,
                                                            new String[] {Translator.get("ok")},
                                                            new int[]  {0},
                                                            0);
@@ -177,8 +177,8 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 
             AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
 
-            // Start zipping
-            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("zip_dialog.zipping"));
+            // Start packing
+            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("pack_dialog.packing"));
             int format = formats[formatsComboBox.getSelectedIndex()];
 
             ArchiveJob archiveJob = new ArchiveJob(progressDialog, mainFrame, files, destFile, format, Archiver.formatSupportsComment(format)?commentArea.getText():null);

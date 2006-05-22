@@ -717,29 +717,9 @@ file_menu.new_window:SI:Novo okno
 
 file_menu.run_command:EN:$[run_dialog.run_command]...
 
-file_menu.zip:EN:Zip files...
-file_menu.zip:FR:Zipper fichiers...
-file_menu.zip:DE:Dateien packen...
-file_menu.zip:ES:Comprimir ficheros...
-file_menu.zip:CS:Komprimovat soubory...
-file_menu.zip:zh_TW:壓縮檔案...
-file_menu.zip:PL:Spakuj pliki...
-file_menu.zip:HU:tömörítés (Zip)...
-file_menu.zip:RU:Архивировать файлы...
-file_menu.zip:ZH_CN:压缩文件...
-file_menu.zip:SI:Stiskanje datotek...
+file_menu.pack:EN:$[pack_dialog.title]...
 
-file_menu.unzip:EN:Unzip files...
-file_menu.unzip:FR:Dézipper fichiers...
-file_menu.unzip:DE:Dateien entpacken...
-file_menu.unzip:ES:Descomprimir ficheros...
-file_menu.unzip:CS:Dekomprimovat soubory...
-file_menu.unzip:zh_TW:解壓縮檔案...
-file_menu.unzip:PL:Rozpakuj pliki...
-file_menu.unzip:HU:kicsomagolás (unZip)...
-file_menu.unzip:RU:Разархивировать файлы...
-file_menu.unzip:ZH_CN:解压缩文件...
-file_menu.unzip:SI:Razširjanje datotek...
+file_menu.unpack:EN:$[unpack_dialog.title]...
 
 file_menu.email:EN:Email files...
 file_menu.email:FR:Envoyer par email...
@@ -1295,9 +1275,9 @@ toolbar.server_connect:EN:$[shortcuts_dialog.file_operations.server_connect]
 
 toolbar.run_command:EN:$[shortcuts_dialog.file_operations.run_command]
 
-toolbar.zip:EN:$[shortcuts_dialog.file_operations.zip]
+toolbar.pack:EN:$[shortcuts_dialog.file_operations.pack]
 
-toolbar.unzip:EN:$[shortcuts_dialog.file_operations.unzip]
+toolbar.unpack:EN:$[shortcuts_dialog.file_operations.unpack]
 
 toolbar.email:EN:$[shortcuts_dialog.file_operations.email]
 
@@ -1685,150 +1665,198 @@ copy_dialog.copying:RU:Копирование файлов
 copy_dialog.copying:ZH_CN:复制文件中
 copy_dialog.copying:SI:Kopiram datoteke
 
-#copy.error_on_file:EN:An error occurred while copying %1
-#copy.error_on_file:FR:Une erreur est survenue lors de la copie de %1
-#copy.error_on_file:DE:Ein Fehler trat beim Kopieren von %1 auf
-#copy.error_on_file:ES:Ha ocurrido un error al copiar %1
-#copy.error_on_file:CS:Chyba při kopírováni %1
-#copy.error_on_file:zh_TW:當複製時發生錯誤 %1
-
-#copy.cannot_copy_file:EN:Unable to copy file %1
-#copy.cannot_copy_file:FR:Impossible de copier le fichier %1
-#copy.cannot_copy_file:DE:Kann Datei %1 nicht kopieren
-#copy.cannot_copy_file:ES:Imposible copiar el fichero %1
-#copy.cannot_copy_file:CS:Nemůžu skopírovat soubor %1
-#copy.cannot_copy_file:zh_TW:無法複製檔案 %1
-
-copy.copying_file:EN:Copying %1
-copy.copying_file:FR:Copie de %1 en cours
-copy.copying_file:DE:Kopiere %1
-copy.copying_file:ES:Copiando %1
-copy.copying_file:CS:Kopíruji %1
-copy.copying_file:zh_TW:正在複製 %1
-copy.copying_file:PL:Kopiuję %1
-copy.copying_file:HU:másolás %1
-copy.copying_file:RU:Копирование файла %1
-copy.copying_file:ZH_CN:正在复制 %1
-copy.copying_file:SI:Kopiram %1
+copy_dialog.copying_file:EN:Copying %1
+copy_dialog.copying_file:FR:Copie de %1 en cours
+copy_dialog.copying_file:DE:Kopiere %1
+copy_dialog.copying_file:ES:Copiando %1
+copy_dialog.copying_file:CS:Kopíruji %1
+copy_dialog.copying_file:zh_TW:正在複製 %1
+copy_dialog.copying_file:PL:Kopiuję %1
+copy_dialog.copying_file:HU:másolás %1
+copy_dialog.copying_file:RU:Копирование файла %1
+copy_dialog.copying_file:ZH_CN:正在复制 %1
+copy_dialog.copying_file:SI:Kopiram %1
 
 
-#########
-# Unzip #
-#########
+########
+# Pack #
+########
 
-unzip_dialog.unzip:EN:Unzip
-unzip_dialog.unzip:FR:Dézipper
-unzip_dialog.unzip:DE:Entpacken
-unzip_dialog.unzip:ES:Descomprimir
-unzip_dialog.unzip:CS:Dekomprimovat
-unzip_dialog.unzip:zh_TW:解壓縮
-unzip_dialog.unzip:PL:Rozpakuj
-unzip_dialog.unzip:HU:kicsomagolás (unZip)
-unzip_dialog.unzip:RU:Разархивация
-unzip_dialog.unzip:ZH_CN:解压缩
-unzip_dialog.unzip:SI:Razširjanje
+pack_dialog.pack:EN:Pack
+pack_dialog.pack:FR:Compresser
+pack_dialog.pack:DE:Packen
+pack_dialog.pack:ES:Comprimir
+pack_dialog.pack:CS:Komprimovat
+pack_dialog.pack:zh_TW:壓縮
+pack_dialog.pack:RU:Архивация
+pack_dialog.pack:PL:Spakuj
+pack_dialog.pack:ZH_CN:压缩
+pack_dialog.pack:SI:Stiskanje
 
-unzip_dialog.destination:EN:Unzip selected file(s) to
-unzip_dialog.destination:FR:Décompresser les fichiers selectionnés dans
-unzip_dialog.destination:DE:Entpacke markierte Datei(en) nach
-unzip_dialog.destination:ES:Descomprimir fichero(s) seleccionado(s) en
-unzip_dialog.destination:CS:Dekomprimovat soubor(y) do
-unzip_dialog.destination:zh_TW:解壓縮已選取檔案至
-unzip_dialog.destination:PL:Rozpakuj zaznaczone pliki do
-unzip_dialog.destination:HU:A kijelölt fájl(ok) kicsomagolása
-unzip_dialog.destination:RU:Разархивировать выбранные файлы в
-unzip_dialog.destination:ZH_CN:选定文件解压到
-unzip_dialog.destination:SI:Razširi izbrano v
 
-unzip_dialog.error_title:EN:Unzip error
-unzip_dialog.error_title:FR:Erreur de décompression
-unzip_dialog.error_title:DE:Fehler beim Entpacken
-unzip_dialog.error_title:ES:Error al descomprimir
-unzip_dialog.error_title:CS:Chyba při dekomprimaci
-unzip_dialog.error_title:zh_TW:解壓縮錯誤
-unzip_dialog.error_title:PL:Błąd rozpakowania
-unzip_dialog.error_title:HU:Kicsomagolási hiba
-unzip_dialog.error_title:RU:Ошибка разархивации
-unzip_dialog.error_title:ZH_CN:解压错误
-unzip_dialog.error_title:SI:Napaka pri razširjanju
 
-unzip_dialog.unzipping:EN:Unzipping files
-unzip_dialog.unzipping:FR:Décompression en cours
-unzip_dialog.unzipping:DE:Entpacke Dateien
-unzip_dialog.unzipping:ES:Descomprimiendo
-unzip_dialog.unzipping:CS:Dekomprimuju soubory
-unzip_dialog.unzipping:zh_TW:正在解壓縮檔案
-unzip_dialog.unzipping:PL:Rozpakuj pliki
-unzip_dialog.unzipping:HU:Fájl(ok) kicsomagolása
-unzip_dialog.unzipping:RU:Разархивация файлов
-unzip_dialog.unzipping:ZH_CN:正在解文件
-unzip_dialog.unzipping:SI:Razširjam datoteke
 
-#unzip.error_on_file:EN:An error occurred while unzipping %1
-#unzip.error_on_file:FR:Une erreur est survenue lors de la décompression de %1
-#unzip.error_on_file:DE:Ein Fehler trat beim Entpacken von %1 auf
-#unzip.error_on_file:ES:Un error ha ocurrido al descomprimir %1
-#unzip.error_on_file:CS:Nastala chyba při dekomprimaci %1
-#unzip.error_on_file:zh_TW:當解壓縮時產生錯誤 %1
 
-#unzip.cannot_unzip_file:EN:Unable to unzip file %1
-#unzip.cannot_unzip_file:FR:Impossible de décompresser le fichier %1
-#unzip.cannot_unzip_file:DE:Kann Datei %1 nicht entpacken
-#unzip.cannot_unzip_file:ES:Imposible descomprimir el fichero %1
-#unzip.cannot_unzip_file:CS:Nemůžu dekomprimovat soubor %1
-#unzip.cannot_unzip_file:zh_TW:無法解壓縮檔案 %1
+pack_dialog.title:EN:Pack files
+pack_dialog.title:FR:Compresser fichiers
+pack_dialog.title:DE:Dateien packen
+pack_dialog.title:ES:Comprimir ficheros
+pack_dialog.title:CS:Komprimovat soubory
+pack_dialog.title:zh_TW:壓縮檔案
+pack_dialog.title:PL:Spakuj pliki
+pack_dialog.title:HU:tömörítés
+pack_dialog.title:RU:Архивировать файлы
+pack_dialog.title:ZH_CN:压缩文件
+pack_dialog.title:SI:Stiskanje datotek
 
-unzip.unzipping_file:EN:Unzipping %1
-unzip.unzipping_file:FR:Décompression de %1 en cours
-unzip.unzipping_file:DE:Entpacke %1
-unzip.unzipping_file:ES:Descomprimiendo %1
-unzip.unzipping_file:CS:Dekomprimuju %1
-unzip.unzipping_file:zh_TW:正在解壓縮 %1
-unzip.unzipping_file:PL:Rozpakuj %1
-unzip.unzipping_file:HU:kicsomagolás %1
-unzip.unzipping_file:RU:Разархивируется файл %1
-unzip.unzipping_file:ZH_CN:正在解压 %1
-unzip.unzipping_file:SI:Razširjam %1
+pack_dialog.packing:EN:Packing files
+pack_dialog.packing:FR:Compression en cours
+pack_dialog.packing:DE:Packe Dateien
+pack_dialog.packing:ES:Comprimiendo
+pack_dialog.packing:CS:Komprimuju
+pack_dialog.packing:zh_TW:正在壓縮檔案
+pack_dialog.packing:PL:Pakuję
+pack_dialog.packing:HU:fájltömörítés
+pack_dialog.packing:RU:Архивируются файлы
+pack_dialog.packing:ZH_CN:正在压缩文件
+pack_dialog.packing:SI:Stiskanje datotek
 
-unzip.unable_to_open_zip:EN:Unable to open zip file %1.
-unzip.unable_to_open_zip:FR:Erreur lors de l'ouverture du fichier zip %1.
-unzip.unable_to_open_zip:DE:Kann ZIP Datei %1 nicht öffnen.
-unzip.unable_to_open_zip:ES:Error al abrir el fichero zip %1.
-unzip.unable_to_open_zip:CS:Chyba při otevíraní souboru %1.
-unzip.unable_to_open_zip:zh_TW:無法打開壓縮檔 %1
-unzip.unable_to_open_zip:PL:Nie mogę otworzyć archiwum %1.
-unzip.unable_to_open_zip:HU:A Zip fájl megnyitása nem lehetséges %1.
-unzip.unable_to_open_zip:RU:Не удается открыть архив %1.
-unzip.unable_to_open_zip:ZH_CN:无法打开压缩文件 %1
-unzip.unable_to_open_zip:SI:Ne morem odpreti stisnjene datoteke %1.
+pack_dialog.packing_file:EN:Compressing %1
+pack_dialog.packing_file:FR:Compression de %1 en cours
+pack_dialog.packing_file:DE:Packe Datei %1
+pack_dialog.packing_file:ES:Comprimiendo %1
+pack_dialog.packing_file:CS:Komprimuju %1
+pack_dialog.packing_file:zh_TW:正在壓縮 %1
+pack_dialog.packing_file:PL:Spakuj %1
+pack_dialog.packing_file:HU:tömörítés %1
+pack_dialog.packing_file:RU:Архивируется файл %1
+pack_dialog.packing_file:ZH_CN:正在压缩 %1
+pack_dialog.packing_file:SI:Stiskanje %1
 
-#######
-# Zip #
-#######
+pack_dialog.error_title:EN:Pack error
+pack_dialog.error_title:FR:Erreur de compression
+pack_dialog.error_title:DE:Fehler beim Packen
+pack_dialog.error_title:ES:Error de compresión
+pack_dialog.error_title:CS:Chyba komprimace
+pack_dialog.error_title:zh_TW:壓縮錯誤
+pack_dialog.error_title:PL:Błąd kompresji
+pack_dialog.error_title:HU:tömörítési hiba
+pack_dialog.error_title:RU:Ошибка архивации
+pack_dialog.error_title:ZH_CN:压缩错误
+pack_dialog.error_title:SI:Napaka pri stiskanju
 
-zip.compressing_file:EN:Compressing %1
-zip.compressing_file:FR:Compression de %1 en cours
-zip.compressing_file:DE:Packe Datei %1
-zip.compressing_file:ES:Comprimiendo %1
-zip.compressing_file:CS:Komprimuju %1
-zip.compressing_file:zh_TW:正在壓縮 %1
-zip.compressing_file:PL:Spakuj %1
-zip.compressing_file:HU:tömörítés %1
-zip.compressing_file:RU:Архивируется файл %1
-zip.compressing_file:ZH_CN:正在压缩 %1
-zip.compressing_file:SI:Stiskanje %1
+pack_dialog_description:EN:Add selected files to
+pack_dialog_description:FR:Ajouter les fichiers sélectionnés dans
+pack_dialog_description:DE:Markierte Dateien hinzufügen zu
+pack_dialog_description:ES:Añadir los ficheros seleccionados a
+pack_dialog_description:CS:Přidat vybrané soubory do
+pack_dialog_description:zh_TW:新增已選取檔案至
+pack_dialog_description:PL:Dodaj wybrane pliki do
+pack_dialog_description:HU:A kiválasztott fájlok hozzáadása
+pack_dialog_description:RU:Добавить выбранные файлы в
+pack_dialog_description:ZH_CN:添加选定文件到
+pack_dialog_description:SI:Dodaj izbrane datoteke v
 
-zip.error_on_file:EN:Error while compressing %1
-zip.error_on_file:FR:Erreur lors de la compression de %1
-zip.error_on_file:DE:Fehler beim Packen von %1
-zip.error_on_file:ES:Error al comprimir %1
-zip.error_on_file:CS:Chyba při kompresi %1
-zip.error_on_file:zh_TW:當壓縮時發生錯誤 %1
-zip.error_on_file:PL:Błąd podczas kompresji %1
-zip.error_on_file:HU:Hiba a tömörítés közben %1
-zip.error_on_file:RU:Ошибка при архивации файла %1
-zip.error_on_file:ZH_CN:压缩时发生错误 %1
-zip.error_on_file:SI:Napaka med stiskanjem %1
+pack_dialog.comment:EN:Comment (optional)
+pack_dialog.comment:FR:Commentaire (optionnel)
+pack_dialog.comment:DE:Kommentar (optional)
+pack_dialog.comment:ES:Commentaire (optionnel)
+pack_dialog.comment:CS:Komentář (volitelný)
+pack_dialog.comment:zh_TW:備註 (可有可無)
+pack_dialog.comment:PL:Komentarz (Opcjonalnie)
+pack_dialog.comment:HU:megjegyzés (opció)
+pack_dialog.comment:RU:Комментарий (не обязателен)
+pack_dialog.comment:ZH_CN:注释 (可选)
+pack_dialog.comment:SI:Komentar (neobvezno)
+
+pack_dialog.archive_format:EN:Archive format
+pack_dialog.archive_format:FR:Format de l'archive
+
+
+
+
+
+
+
+
+
+
+##########
+# Unpack #
+##########
+
+unpack_dialog.title:EN:Unpack files
+unpack_dialog.title:FR:Décompresser fichiers
+unpack_dialog.title:DE:Dateien entpacken
+unpack_dialog.title:ES:Descomprimir ficheros
+unpack_dialog.title:CS:Dekomprimovat soubory
+unpack_dialog.title:zh_TW:解壓縮檔案
+unpack_dialog.title:PL:Rozpakuj pliki
+unpack_dialog.title:HU:kicsomagolás
+unpack_dialog.title:RU:Разархивировать файлы
+unpack_dialog.title:ZH_CN:解压缩文件
+unpack_dialog.title:SI:Razširjanje datotek
+
+unpack_dialog.unpack:EN:Unpack
+unpack_dialog.unpack:FR:Décompresser
+unpack_dialog.unpack:DE:Entpacken
+unpack_dialog.unpack:ES:Descomprimir
+unpack_dialog.unpack:CS:Dekomprimovat
+unpack_dialog.unpack:zh_TW:解壓縮
+unpack_dialog.unpack:PL:Rozpakuj
+unpack_dialog.unpack:HU:kicsomagolás
+unpack_dialog.unpack:RU:Разархивация
+unpack_dialog.unpack:ZH_CN:解压缩
+unpack_dialog.unpack:SI:Razširjanje
+
+unpack_dialog.destination:EN:Unpack selected file(s) to
+unpack_dialog.destination:FR:Décompresser les fichiers selectionnés dans
+unpack_dialog.destination:DE:Entpacke markierte Datei(en) nach
+unpack_dialog.destination:ES:Descomprimir fichero(s) seleccionado(s) en
+unpack_dialog.destination:CS:Dekomprimovat soubor(y) do
+unpack_dialog.destination:zh_TW:解壓縮已選取檔案至
+unpack_dialog.destination:PL:Rozpakuj zaznaczone pliki do
+unpack_dialog.destination:HU:A kijelölt fájl(ok) kicsomagolása
+unpack_dialog.destination:RU:Разархивировать выбранные файлы в
+unpack_dialog.destination:ZH_CN:选定文件解压到
+unpack_dialog.destination:SI:Razširi izbrano v
+
+unpack_dialog.error_title:EN:Unpack error
+unpack_dialog.error_title:FR:Erreur de décompression
+unpack_dialog.error_title:DE:Fehler beim Entpacken
+unpack_dialog.error_title:ES:Error al descomprimir
+unpack_dialog.error_title:CS:Chyba při dekomprimaci
+unpack_dialog.error_title:zh_TW:解壓縮錯誤
+unpack_dialog.error_title:PL:Błąd rozpakowania
+unpack_dialog.error_title:HU:Kicsomagolási hiba
+unpack_dialog.error_title:RU:Ошибка разархивации
+unpack_dialog.error_title:ZH_CN:解压错误
+unpack_dialog.error_title:SI:Napaka pri razširjanju
+
+unpack_dialog.unpacking:EN:Unpacking files
+unpack_dialog.unpacking:FR:Décompression en cours
+unpack_dialog.unpacking:DE:Entpacke Dateien
+unpack_dialog.unpacking:ES:Descomprimiendo
+unpack_dialog.unpacking:CS:Dekomprimuju soubory
+unpack_dialog.unpacking:zh_TW:正在解壓縮檔案
+unpack_dialog.unpacking:PL:Rozpakuj pliki
+unpack_dialog.unpacking:HU:Fájl(ok) kicsomagolása
+unpack_dialog.unpacking:RU:Разархивация файлов
+unpack_dialog.unpacking:ZH_CN:正在解文件
+unpack_dialog.unpacking:SI:Razširjam datoteke
+
+unpack_dialog.unpacking_file:EN:Unpacking %1
+unpack_dialog.unpacking_file:FR:Décompression de %1 en cours
+unpack_dialog.unpacking_file:DE:Entpacke %1
+unpack_dialog.unpacking_file:ES:Descomprimiendo %1
+unpack_dialog.unpacking_file:CS:Dekomprimuju %1
+unpack_dialog.unpacking_file:zh_TW:正在解壓縮 %1
+unpack_dialog.unpacking_file:PL:Rozpakuj %1
+unpack_dialog.unpacking_file:HU:kicsomagolás %1
+unpack_dialog.unpacking_file:RU:Разархивируется файл %1
+unpack_dialog.unpacking_file:ZH_CN:正在解压 %1
+unpack_dialog.unpacking_file:SI:Razširjam %1
+
 
 ########
 # Move #
@@ -1894,15 +1922,6 @@ move_dialog.error_title:RU:Ошибка при переносе
 move_dialog.error_title:ZH_CN:移动错误
 move_dialog.error_title:SI:Napaka pri premikanju
 
-#move_dialog.same_source_destination:EN:$[copy_dialog.same_source_destination]
-
-#move_dialog.cannot_move_to_itself:EN:Cannot move files to a subfolder.
-#move_dialog.cannot_move_to_itself:FR:Impossible de déplacer les fichiers vers un sous-répertoire.
-#move_dialog.cannot_move_to_itself:DE:Kann Dateien nicht in Unterordner verschieben.
-#move_dialog.cannot_move_to_itself:ES:Imposible mover los ficheros al subdirectorio.
-#move_dialog.cannot_move_to_itself:CS:Nemůžu přesunout soubory do podsložky.
-#move_dialog.cannot_move_to_itself:zh_TW:無法搬移檔案至子目錄
-
 move_dialog.moving:EN:Moving files
 move_dialog.moving:FR:Déplacement en cours
 move_dialog.moving:DE:Verschiebe Dateien
@@ -1915,36 +1934,22 @@ move_dialog.moving:RU:Перемещение файлов
 move_dialog.moving:ZH_CN:正在移动文件
 move_dialog.moving:SI:Premikam datoteke
 
-move.moving_file:EN:Moving %1
-move.moving_file:FR:Déplacement de %1 en cours
-move.moving_file:DE:Verschiebe %1
-move.moving_file:ES:Moviendo %1
-move.moving_file:CS:Přesouvám %1
-move.moving_file:zh_TW:正在搬移 %1
-move.moving_file:PL:Przenoszę %1
-move.moving_file:HU:áthelyezés %1
-move.moving_file:RU:Перемещается файл %1
-move.moving_file:ZH_CN:正在移动 %1
-move.moving_file:SI:Premikanje %1
+move_dialog.moving_file:EN:Moving %1
+move_dialog.moving_file:FR:Déplacement de %1 en cours
+move_dialog.moving_file:DE:Verschiebe %1
+move_dialog.moving_file:ES:Moviendo %1
+move_dialog.moving_file:CS:Přesouvám %1
+move_dialog.moving_file:zh_TW:正在搬移 %1
+move_dialog.moving_file:PL:Przenoszę %1
+move_dialog.moving_file:HU:áthelyezés %1
+move_dialog.moving_file:RU:Перемещается файл %1
+move_dialog.moving_file:ZH_CN:正在移动 %1
+move_dialog.moving_file:SI:Premikanje %1
 
 
 #################
 # HTTP download #
 #################
-
-download_dialog.download:EN:$[download]
-
-download_dialog.downloading:EN:Downloading
-download_dialog.downloading:FR:Téléchargement en cours
-download_dialog.downloading:DE:Downloaden
-download_dialog.downloading:ES:Descargando
-download_dialog.downloading:CS:Stahuju
-download_dialog.downloading:zh_TW:正在下載
-download_dialog.downloading:PL:Pobierz
-download_dialog.downloading:HU:letöltés
-download_dialog.downloading:RU:Скачивание
-download_dialog.downloading:ZH_CN:正在下载
-download_dialog.downloading:SI:Prenašam na disk
 
 download_dialog.description:EN:Download file to
 download_dialog.description:FR:Télécharger le fichier dans
@@ -1958,6 +1963,8 @@ download_dialog.description:RU:Скачать файл в
 download_dialog.description:ZH_CN:下载文件到
 download_dialog.description:SI:Prenesi datoteko v
 
+download_dialog.download:EN:$[download]
+
 download_dialog.error_title:EN:Download error
 download_dialog.error_title:FR:Erreur de téléchargement
 download_dialog.error_title:DE:Fehler beim Download
@@ -1970,17 +1977,29 @@ download_dialog.error_title:RU:Ошибка при скачивании
 download_dialog.error_title:ZH_CN:下载错误
 download_dialog.error_title:SI:Napaka pri prenosu
 
-download.downloading_file:EN:Downloading %1
-download.downloading_file:FR:Téléchargement de %1 en cours
-download.downloading_file:DE:Download %1
-download.downloading_file:ES:Descargando %1
-download.downloading_file:CS:Stahuju %1
-download.downloading_file:zh_TW:正在下載 %1
-download.downloading_file:PL:Pobieram %1
-download.downloading_file:HU:letöltés %1
-download.downloading_file:RU:Скачивается файл %1
-download.downloading_file:ZH_CN:正在下载 %1
-download.downloading_file:SI:Prenašam %1
+download_dialog.downloading:EN:Downloading
+download_dialog.downloading:FR:Téléchargement en cours
+download_dialog.downloading:DE:Downloaden
+download_dialog.downloading:ES:Descargando
+download_dialog.downloading:CS:Stahuju
+download_dialog.downloading:zh_TW:正在下載
+download_dialog.downloading:PL:Pobierz
+download_dialog.downloading:HU:letöltés
+download_dialog.downloading:RU:Скачивание
+download_dialog.downloading:ZH_CN:正在下载
+download_dialog.downloading:SI:Prenašam na disk
+
+download_dialog.downloading_file:EN:Downloading %1
+download_dialog.downloading_file:FR:Téléchargement de %1 en cours
+download_dialog.downloading_file:DE:Download %1
+download_dialog.downloading_file:ES:Descargando %1
+download_dialog.downloading_file:CS:Stahuju %1
+download_dialog.downloading_file:zh_TW:正在下載 %1
+download_dialog.downloading_file:PL:Pobieram %1
+download_dialog.downloading_file:HU:letöltés %1
+download_dialog.downloading_file:RU:Скачивается файл %1
+download_dialog.downloading_file:ZH_CN:正在下载 %1
+download_dialog.downloading_file:SI:Prenašam %1
 
 
 ##########
@@ -2826,14 +2845,6 @@ server_connect_dialog.connect:RU:Соединиться
 server_connect_dialog.connect:ZH_CN:连接
 server_connect_dialog.connect:SI:Poveži
 
-#server_connect_dialog.auth_error:EN:Invalid login or password.
-#server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
-#server_connect_dialog.auth_error:DE:Ungültiger Login oder Paßwort.
-#server_connect_dialog.auth_error:ES:Nombre o contraseña inválido
-#server_connect_dialog.auth_error:CS:Nesprávné uživatelské jméno nebo heslo.
-#server_connect_dialog.auth_error:zh_TW:不合法的帳號或密碼
-
-
 ###############
 # FTP connect #
 ###############
@@ -2928,125 +2939,6 @@ auth_dialog.error_was:HU:hiba történt: %1
 auth_dialog.error_was:RU:Ошибка: %1
 auth_dialog.error_was:ZH_CN:错误: %1
 auth_dialog.error_was:SI:Napaka: %1
-
-
-##############
-# Zip dialog #
-##############
-
-zip_dialog.zip:EN:Zip
-zip_dialog.zip:FR:Zipper
-zip_dialog.zip:DE:Packen
-zip_dialog.zip:ES:Comprimir
-zip_dialog.zip:CS:Komprimovat
-zip_dialog.zip:zh_TW:壓縮
-zip_dialog.zip:RU:Архивация
-zip_dialog.zip:PL:Spakuj
-zip_dialog.zip:ZH_CN:压缩
-zip_dialog.zip:SI:Stiskanje
-
-
-
-
-zip_dialog.title:EN:Zip files
-zip_dialog.title:FR:Zipper fichiers
-zip_dialog.title:DE:Dateien packen
-zip_dialog.title:ES:Ficheros zip
-zip_dialog.title:CS:Komprimovat soubory
-zip_dialog.title:zh_TW:壓縮檔案
-zip_dialog.title:PL:Spakuj pliki
-zip_dialog.title:HU:tömrített Zip fájl(ok)
-zip_dialog.title:RU:Архивация файлов
-zip_dialog.title:ZH_CN:压缩文件
-zip_dialog.title:SI:Stisni datoteke
-
-zip_dialog.zipping:EN:Zipping files
-zip_dialog.zipping:FR:Compression en cours
-zip_dialog.zipping:DE:Packe Dateien
-zip_dialog.zipping:ES:Comprimiendo
-zip_dialog.zipping:CS:Komprimuju
-zip_dialog.zipping:zh_TW:正在壓縮檔案
-zip_dialog.zipping:PL:Pakuję
-zip_dialog.zipping:HU:fájltömörítés (Zip)
-zip_dialog.zipping:RU:Архивируются файлы
-zip_dialog.zipping:ZH_CN:正在压缩文件
-zip_dialog.zipping:SI:Stiskanje datotek
-
-zip_dialog.error_title:EN:Zip error
-zip_dialog.error_title:FR:Erreur de compression
-zip_dialog.error_title:DE:Fehler beim Packen
-zip_dialog.error_title:ES:Error de compresión
-zip_dialog.error_title:CS:Chyba komprimace
-zip_dialog.error_title:zh_TW:壓縮錯誤
-zip_dialog.error_title:PL:Błąd kompresji
-zip_dialog.error_title:HU:tömörítési hiba
-zip_dialog.error_title:RU:Ошибка архивации
-zip_dialog.error_title:ZH_CN:压缩错误
-zip_dialog.error_title:SI:Napaka pri stiskanju
-
-zip_dialog.cannot_write:EN:Unable to create zip file in destination folder.
-zip_dialog.cannot_write:FR:Impossible de créer le fichier zip dans le dossier de destination.
-zip_dialog.cannot_write:DE:Kann ZIP Datei nicht im Zielordner erstellen.
-zip_dialog.cannot_write:ES:Imposible crear el fichero zip en el direcotorio de destino.
-zip_dialog.cannot_write:CS:Nemůžu vytvořit archív v cílové složce.
-zip_dialog.cannot_write:zh_TW:無法在目的資料夾產生壓縮檔
-zip_dialog.cannot_write:PL:Nie mogę utworzyć archiwum w katalogu docelowym
-zip_dialog.cannot_write:HU:A célkönyvtárba nem lehetséges tömörített (Zip) fájlt készíteni.
-zip_dialog.cannot_write:RU:Невозможно создать архив в каталоге-получателе
-zip_dialog.cannot_write:ZH_CN:无法在目的文件夹创建压缩文件
-zip_dialog.cannot_write:SI:Ne morem ustvariti stisnjene datoteke v ciljni mapi.
-
-zip_dialog_description:EN:Add selected files to
-zip_dialog_description:FR:Ajouter les fichiers sélectionnés dans
-zip_dialog_description:DE:Markierte Dateien hinzufügen zu
-zip_dialog_description:ES:Añadir los ficheros seleccionados a
-zip_dialog_description:CS:Přidat vybrané soubory do
-zip_dialog_description:zh_TW:新增已選取檔案至
-zip_dialog_description:PL:Dodaj wybrane pliki do
-zip_dialog_description:HU:A kiválasztott fájlok hozzáadása
-zip_dialog_description:RU:Добавить выбранные файлы в
-zip_dialog_description:ZH_CN:添加选定文件到
-zip_dialog_description:SI:Dodaj izbrane datoteke v
-
-zip_dialog.comment:EN:Comment (optional)
-zip_dialog.comment:FR:Commentaire (optionnel)
-zip_dialog.comment:DE:Kommentar (optional)
-zip_dialog.comment:ES:Commentaire (optionnel)
-zip_dialog.comment:CS:Komentář (volitelný)
-zip_dialog.comment:zh_TW:備註 (可有可無)
-zip_dialog.comment:PL:Komentarz (Opcjonalnie)
-zip_dialog.comment:HU:megjegyzés (opció)
-zip_dialog.comment:RU:Комментарий (не обязателен)
-zip_dialog.comment:ZH_CN:注释 (可选)
-zip_dialog.comment:SI:Komentar (neobvezno)
-
-#zip_dialog.file_already_exists:EN:%1 already exists in destination folder.
-#zip_dialog.file_already_exists:FR:%1 existe déjà dans le dossier de destination.
-#zip_dialog.file_already_exists:DE:%1 existiert bereits im Zielordner.
-#zip_dialog.file_already_exists:ES:%1 existe dÃ©jÃ  en el directorio de destino.
-#zip_dialog.file_already_exists:CS:%1 již existuje v cilové složce.
-#zip_dialog.file_already_exists:zh_TW:%1 已經存在於目的資料夾.
-#zip_dialog.file_already_exists:PL:%1 już istnieje w katalogu docelowym.
-#zip_dialog.file_already_exists:HU:%1 már létezik célkönyvtárban.
-#zip_dialog.file_already_exists:RU:%1 уже существует в каталоге-получателе.
-#zip_dialog.file_already_exists:ZH_CN:%1 已经在目的文件夹里.
-#zip_dialog.file_already_exists:SI:%1 že obstaja v ciljni mapi.
-
-
-###############
-# Pack dialog #
-###############
-
-pack_dialog.archive_format:EN:Archive format
-pack_dialog.archive_format:FR:Format de l'archive
-
-
-
-
-
-
-
-
 
 
 #######################
@@ -3349,19 +3241,6 @@ image_viewer.zoom_out:RU:Уменьшить
 image_viewer.zoom_out:ZH_CN:缩小
 image_viewer.zoom_out:SI:Oddalji
 
-#image_viewer.previous_image:EN:Previous image
-#image_viewer.previous_image:FR:Image précédente
-#image_viewer.previous_image:DE:Vorheriges Bild
-#image_viewer.previous_image:ES:Anterior
-#image_viewer.previous_image:CS:Předchozí obrázek
-#image_viewer.previous_image:zh_TW:前一個圖片
-
-#image_viewer.next_image:EN:Next image
-#image_viewer.next_image:FR:Image suivante
-#image_viewer.next_image:DE:Nächstes Bild
-#image_viewer.next_image:ES:Siguiente
-#image_viewer.next_image:CS:Další obrázek
-#image_viewer.next_image:zh_TW:後一個圖片
 
 
 ###############
@@ -3793,29 +3672,59 @@ shortcuts_dialog.file_operations.run_command:RU:Выполнить команд�
 shortcuts_dialog.file_operations.run_command:ZH_CN:在当前文件夹执行命令
 shortcuts_dialog.file_operations.run_command:SI:Zaženi ukaz s trenutne mape
 
-shortcuts_dialog.file_operations.zip:EN:Compress marked files in a ZIP file
-shortcuts_dialog.file_operations.zip:FR:Compresser les fichiers marqués dans un fichier ZIP 
-shortcuts_dialog.file_operations.zip:DE:Markierte Dateien in eine ZIP Datei packen
-shortcuts_dialog.file_operations.zip:ES:Comprimir los ficheros marcados en un fichero ZIP
-shortcuts_dialog.file_operations.zip:CS:Komprimovat označené soubory do ZIP archívu
-shortcuts_dialog.file_operations.zip:zh_TW:壓縮已標記檔案至ZIP檔案
-shortcuts_dialog.file_operations.zip:PL:spakuj zaznaczone pliku do archiwum ZIP
-shortcuts_dialog.file_operations.zip:HU:A kijelölt fájl(ok) tömörítése egy Zip fájlba
-shortcuts_dialog.file_operations.zip:RU:Поместить выделенные файлы в ZIP-архив
-shortcuts_dialog.file_operations.zip:ZH_CN:压缩选定文件为ZIP文件
-shortcuts_dialog.file_operations.zip:SI:Stisni označene datoteke v ZIP datoteko
+#shortcuts_dialog.file_operations.zip:EN:Compress marked files in a ZIP file
+#shortcuts_dialog.file_operations.zip:FR:Compresser les fichiers marqués dans un fichier ZIP 
+#shortcuts_dialog.file_operations.zip:DE:Markierte Dateien in eine ZIP Datei packen
+#shortcuts_dialog.file_operations.zip:ES:Comprimir los ficheros marcados en un fichero ZIP
+#shortcuts_dialog.file_operations.zip:CS:Komprimovat označené soubory do ZIP archívu
+#shortcuts_dialog.file_operations.zip:zh_TW:壓縮已標記檔案至ZIP檔案
+#shortcuts_dialog.file_operations.zip:PL:spakuj zaznaczone pliku do archiwum ZIP
+#shortcuts_dialog.file_operations.zip:HU:A kijelölt fájl(ok) tömörítése egy Zip fájlba
+#shortcuts_dialog.file_operations.zip:RU:Поместить выделенные файлы в ZIP-архив
+#shortcuts_dialog.file_operations.zip:ZH_CN:压缩选定文件为ZIP文件
+#shortcuts_dialog.file_operations.zip:SI:Stisni označene datoteke v ZIP datoteko
 
-shortcuts_dialog.file_operations.unzip:EN:Uncompress marked ZIP files
-shortcuts_dialog.file_operations.unzip:FR:Décompresser les fichiers ZIP marqués
-shortcuts_dialog.file_operations.unzip:DE:Markierte ZIP Dateien entpacken
-shortcuts_dialog.file_operations.unzip:ES:Descomprimir los ficheros ZIP seleccionados
-shortcuts_dialog.file_operations.unzip:CS:Dekomprimovat označené soubory ze ZIP archívu
-shortcuts_dialog.file_operations.unzip:zh_TW:解壓縮已標記的ZIP檔案
-shortcuts_dialog.file_operations.unzip:PL:Rozpakuj zaznaczone archiwum ZIP
-shortcuts_dialog.file_operations.unzip:HU:A kijelölt Zip fájl(ok) kicsomagolása
-shortcuts_dialog.file_operations.unzip:RU:Разархивировать выделенные файлы
-shortcuts_dialog.file_operations.unzip:ZH_CN:解压已标记的ZIP文件
-shortcuts_dialog.file_operations.unzip:SI:Razširi označene ZIP datoteke
+shortcuts_dialog.file_operations.pack:EN:Pack marked files into an archive
+shortcuts_dialog.file_operations.pack:FR:Compresser les fichiers marqués dans une archive
+
+
+
+
+
+
+
+
+
+
+
+
+
+#shortcuts_dialog.file_operations.unzip:EN:Uncompress marked ZIP files
+#shortcuts_dialog.file_operations.unzip:FR:Décompresser les fichiers ZIP marqués
+#shortcuts_dialog.file_operations.unzip:DE:Markierte ZIP Dateien entpacken
+#shortcuts_dialog.file_operations.unzip:ES:Descomprimir los ficheros ZIP seleccionados
+#shortcuts_dialog.file_operations.unzip:CS:Dekomprimovat označené soubory ze ZIP archívu
+#shortcuts_dialog.file_operations.unzip:zh_TW:解壓縮已標記的ZIP檔案
+#shortcuts_dialog.file_operations.unzip:PL:Rozpakuj zaznaczone archiwum ZIP
+#shortcuts_dialog.file_operations.unzip:HU:A kijelölt Zip fájl(ok) kicsomagolása
+#shortcuts_dialog.file_operations.unzip:RU:Разархивировать выделенные файлы
+#shortcuts_dialog.file_operations.unzip:ZH_CN:解压已标记的ZIP文件
+#shortcuts_dialog.file_operations.unzip:SI:Razširi označene ZIP datoteke
+
+shortcuts_dialog.file_operations.unpack:EN:Unpack marked archive files
+shortcuts_dialog.file_operations.unpack:FR:Décompresser les archives marquées
+
+
+
+
+
+
+
+
+
+
+
+
 
 shortcuts_dialog.file_operations.email:EN:Send marked files as email attachments
 shortcuts_dialog.file_operations.email:FR:Envoyer les fichiers marqués en pièces jointes à un message
@@ -4838,3 +4747,74 @@ unit.gb:HU:GB
 unit.gb:RU:Гб
 unit.gb:zh_CN:GB
 unit.gb:SI:GB
+
+
+######################
+# Deprecated entries #
+# (not used anymore) #
+######################
+
+#server_connect_dialog.auth_error:EN:Invalid login or password.
+#server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
+#server_connect_dialog.auth_error:DE:Ungültiger Login oder Paßwort.
+#server_connect_dialog.auth_error:ES:Nombre o contraseña inválido
+#server_connect_dialog.auth_error:CS:Nesprávné uživatelské jméno nebo heslo.
+#server_connect_dialog.auth_error:zh_TW:不合法的帳號或密碼
+
+#move_dialog.cannot_move_to_itself:EN:Cannot move files to a subfolder.
+#move_dialog.cannot_move_to_itself:FR:Impossible de déplacer les fichiers vers un sous-répertoire.
+#move_dialog.cannot_move_to_itself:DE:Kann Dateien nicht in Unterordner verschieben.
+#move_dialog.cannot_move_to_itself:ES:Imposible mover los ficheros al subdirectorio.
+#move_dialog.cannot_move_to_itself:CS:Nemůžu přesunout soubory do podsložky.
+#move_dialog.cannot_move_to_itself:zh_TW:無法搬移檔案至子目錄
+
+#pack.error_on_file:EN:Error while compressing %1
+#pack.error_on_file:FR:Erreur lors de la compression de %1
+#pack.error_on_file:DE:Fehler beim Packen von %1
+#pack.error_on_file:ES:Error al comprimir %1
+#pack.error_on_file:CS:Chyba při kompresi %1
+#pack.error_on_file:zh_TW:當壓縮時發生錯誤 %1
+#pack.error_on_file:PL:Błąd podczas kompresji %1
+#pack.error_on_file:HU:Hiba a tömörítés közben %1
+#pack.error_on_file:RU:Ошибка при архивации файла %1
+#pack.error_on_file:ZH_CN:压缩时发生错误 %1
+#pack.error_on_file:SI:Napaka med stiskanjem %1
+
+#pack_dialog.cannot_write:EN:Unable to create file in destination folder.
+#pack_dialog.cannot_write:FR:Impossible de créer le fichier dans le dossier de destination.
+#pack_dialog.cannot_write:DE:Kann Datei nicht im Zielordner erstellen.
+#pack_dialog.cannot_write:ES:Imposible crear el fichero zip en el direcotorio de destino.
+#pack_dialog.cannot_write:CS:Nemůžu vytvořit archív v cílové složce.
+#pack_dialog.cannot_write:zh_TW:無法在目的資料夾產生壓縮檔
+#pack_dialog.cannot_write:PL:Nie mogę utworzyć archiwum w katalogu docelowym
+#pack_dialog.cannot_write:HU:A célkönyvtárba nem lehetséges tömörített fájlt készíteni.
+#pack_dialog.cannot_write:RU:Невозможно создать архив в каталоге-получателе
+#pack_dialog.cannot_write:ZH_CN:无法在目的文件夹创建压缩文件
+#pack_dialog.cannot_write:SI:Ne morem ustvariti stisnjene datoteke v ciljni mapi.
+
+#unpack.unable_to_open_zip:EN:Unable to open zip file %1.
+#unpack.unable_to_open_zip:FR:Erreur lors de l'ouverture du fichier zip %1.
+#unpack.unable_to_open_zip:DE:Kann ZIP Datei %1 nicht öffnen.
+#unpack.unable_to_open_zip:ES:Error al abrir el fichero zip %1.
+#unpack.unable_to_open_zip:CS:Chyba při otevíraní souboru %1.
+#unpack.unable_to_open_zip:zh_TW:無法打開壓縮檔 %1
+#unpack.unable_to_open_zip:PL:Nie mogę otworzyć archiwum %1.
+#unpack.unable_to_open_zip:HU:A Zip fájl megnyitása nem lehetséges %1.
+#unpack.unable_to_open_zip:RU:Не удается открыть архив %1.
+#unpack.unable_to_open_zip:ZH_CN:无法打开压缩文件 %1
+#unpack.unable_to_open_zip:SI:Ne morem odpreti stisnjene datoteke %1.
+
+#image_viewer.previous_image:EN:Previous image
+#image_viewer.previous_image:FR:Image précédente
+#image_viewer.previous_image:DE:Vorheriges Bild
+#image_viewer.previous_image:ES:Anterior
+#image_viewer.previous_image:CS:Předchozí obrázek
+#image_viewer.previous_image:zh_TW:前一個圖片
+
+#image_viewer.next_image:EN:Next image
+#image_viewer.next_image:FR:Image suivante
+#image_viewer.next_image:DE:Nächstes Bild
+#image_viewer.next_image:ES:Siguiente
+#image_viewer.next_image:CS:Další obrázek
+#image_viewer.next_image:zh_TW:後一個圖片
+

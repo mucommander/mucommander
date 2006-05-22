@@ -139,7 +139,7 @@ public abstract class ExtendedFileJob extends FileJob {
     /**
      * Tries to copy the given source file to the specified destination file (see {@link #copyFile(AbstractFile, AbstractFile, boolean} copyFile()}
      * displaying a generic error dialog {@link #showErrorDialog(String, String) #showErrorDialog()} if something went wrong, 
-     * and giving the user to skip the file, retry or cancel.
+     * and giving the user the choice to skip the file, retry or cancel.
      */
     protected boolean tryCopyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append, String errorDialogTitle) {
         // Copy file to destination

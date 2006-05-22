@@ -8,7 +8,7 @@ import com.mucommander.text.Translator;
 
 
 /**
- * Dialog invoked when the user wants to copy (F5) or unzip (thru file menu) files.
+ * Dialog invoked when the user wants to copy (F5) files.
  *
  * @author Maxence Bernard
  */

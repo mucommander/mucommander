@@ -37,11 +37,6 @@ public class ArchiveJob extends ExtendedFileJob {
     /** Optional archive comment */
     private String archiveComment;
 	
-    //	/** Replace action's text */
-    //	private String REPLACE_TEXT = Translator.get("replace");
-    //	/** Replace action's value */
-    //	private int REPLACE_ACTION = 100;
-	
 
     public ArchiveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFile, int archiveFormat, String archiveComment) {
         super(progressDialog, mainFrame, files);
@@ -86,7 +81,7 @@ public class ArchiveJob extends ExtendedFileJob {
             }
             catch(Exception e) {
                 int choice = showErrorDialog(Translator.get("warning"),
-                                             Translator.get("zip_dialog.cannot_write", destFile.getName()),
+                                             Translator.get("cannot_write_destination", destFile.getName()),
                                              new String[] {CANCEL_TEXT, RETRY_TEXT},
                                              new int[]  {CANCEL_ACTION, RETRY_ACTION}
                                              );
@@ -140,7 +135,7 @@ public class ArchiveJob extends ExtendedFileJob {
                     e.printStackTrace();
                 }
 				
-                int ret = showErrorDialog(Translator.get("zip_dialog.error_title"), Translator.get("zip.error_on_file", file.getAbsolutePath()));
+                int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops
                 if(ret==RETRY_ACTION)
                     continue;
@@ -164,7 +159,7 @@ public class ArchiveJob extends ExtendedFileJob {
 
 
     public String getStatusString() {
-        return Translator.get("zip.compressing_file", getCurrentFileInfo());
+        return Translator.get("pack_dialog.packing_file", getCurrentFileInfo());
     }
 
     protected boolean hasFolderChanged(AbstractFile folder) {

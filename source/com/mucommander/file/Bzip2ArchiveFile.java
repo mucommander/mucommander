@@ -44,6 +44,15 @@ public class Bzip2ArchiveFile extends AbstractArchiveFile {
 
 
     InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
-        return new CBZip2InputStream(getInputStream());
+        try { return new CBZip2InputStream(getInputStream()); }
+        catch(Exception e) {
+            // CBZip2InputStream is known to throw NullPointerException if file is not properly Bzip2-encoded
+            // so we need to catch those and throw them as IOException
+            if(com.mucommander.Debug.ON) {
+                com.mucommander.Debug.trace("Exception caught while creating CBZip2InputStream, throwing IOException");
+                e.printStackTrace();
+            }
+            throw new IOException();
+        }
     }
 }

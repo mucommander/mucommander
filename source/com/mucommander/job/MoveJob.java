@@ -285,7 +285,7 @@ public class MoveJob extends ExtendedFileJob {
 
 	
     public String getStatusString() {
-        return Translator.get("move.moving_file", getCurrentFileInfo());
+        return Translator.get("move_dialog.moving_file", getCurrentFileInfo());
     }
 
 

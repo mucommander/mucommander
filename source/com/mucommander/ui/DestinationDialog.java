@@ -14,7 +14,7 @@ import javax.swing.*;
 
 /**
  * Abstract Dialog which displays an input field in order to enter a destination path.
- * This dialog is used by CopyDialog, MoveDialog, UnzipDialog and DownloadDialog.
+ * This dialog is used by CopyDialog, MoveDialog, UnpackDialog and DownloadDialog.
  *
  * @author Maxence Bernard
  */

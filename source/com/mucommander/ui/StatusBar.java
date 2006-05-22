@@ -129,7 +129,9 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
     /**
      * Updates info about currently selected files ((nb of selected files, combined size), displayed on the left-side of this status bar.
      */
-    public synchronized void updateSelectedFilesInfo() {
+// Making this method synchronized creates a deadlock with FileTable
+//    public synchronized void updateSelectedFilesInfo() {
+    public void updateSelectedFilesInfo() {
         if(!isVisible())
             return;
 

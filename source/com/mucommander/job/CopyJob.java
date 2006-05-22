@@ -13,7 +13,7 @@ import java.io.IOException;
 
 
 /**
- * This job recursively copies (or unzips) a group of files.
+ * This job recursively copies (or unpacks) a group of files.
  *
  * @author Maxence Bernard
  */
@@ -31,11 +31,11 @@ public class CopyJob extends ExtendedFileJob {
     /** Title used for error dialogs */
     private String errorDialogTitle;
 	
-    /** Operating mode : COPY_MODE, UNZIP_MODE or DOWNLOAD_MODE */
+    /** Operating mode : COPY_MODE, UNPACK_MODE or DOWNLOAD_MODE */
     private int mode;
 	
     public final static int COPY_MODE = 0;
-    public final static int UNZIP_MODE = 1;
+    public final static int UNPACK_MODE = 1;
     public final static int DOWNLOAD_MODE = 2;
 	
 	
@@ -47,7 +47,7 @@ public class CopyJob extends ExtendedFileJob {
      * @param files files which are going to be copied
      * @param destFolder destination folder where the files will be copied
      * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
-     * @param mode mode in which CopyJob is to operate: COPY_MODE, UNZIP_MODE or DOWNLOAD_MODE.
+     * @param mode mode in which CopyJob is to operate: COPY_MODE, UNPACK_MODE or DOWNLOAD_MODE.
      * @param fileExistsAction default action to be triggered if a file already exists in the destination (action can be to ask the user)
      */
     public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, int mode, int fileExistsAction) {
@@ -57,7 +57,7 @@ public class CopyJob extends ExtendedFileJob {
         this.newName = newName;
         this.mode = mode;
         this.defaultFileExistsAction = fileExistsAction;
-        this.errorDialogTitle = Translator.get(mode==UNZIP_MODE?"unzip_dialog.error_title":mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
+        this.errorDialogTitle = Translator.get(mode==UNPACK_MODE?"unpack_dialog.error_title":mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
 
         // If this job correponds to a 'local copy' of a single file and in the same directory, 
         // select the copied file in the active table after this job has finished (and hasn't been cancelled)
@@ -89,30 +89,31 @@ public class CopyJob extends ExtendedFileJob {
         // Is current file in base folder ?
         boolean isFileInBaseFolder = files.indexOf(file)!=-1;
 
-        // If in unzip mode, unzip base source folder's zip files
-        if(mode==UNZIP_MODE && isFileInBaseFolder) {
-            // If unzip mode and file is not a ZipArchiveFile (happens when extension is not .zip)
-            if(!(file instanceof ZipArchiveFile))
-                file = new ZipArchiveFile(file);
+        // If in unpack mode, copy files contained by the archive file
+        if(mode==UNPACK_MODE && isFileInBaseFolder) {
+//            // If unpack mode and file is not a ZipArchiveFile (happens when extension is not .zip)
+//            if(!(file instanceof ZipArchiveFile))
+//                file = new ZipArchiveFile(file);
 
-            // Recursively unzip files
+            // Recursively unpack files
             do {		// Loop for retries
                 try {
-                    // List files inside zip (can throw an IOException)
-                    AbstractFile zipSubFiles[] = currentFile.ls();
+                    // List files inside archive file (can throw an IOException)
+                    AbstractFile archiveFiles[] = currentFile.ls();
                     // Recurse on zip's contents
-                    for(int j=0; j<zipSubFiles.length && !isInterrupted(); j++) {
+                    for(int j=0; j<archiveFiles.length && !isInterrupted(); j++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
-                        nextFile(zipSubFiles[j]);
+                        nextFile(archiveFiles[j]);
                         // Recurse
-                        processFile(zipSubFiles[j], destFolder);
+                        processFile(archiveFiles[j], destFolder);
                     }
                     // Return true when complete
                     return true;
                 }
                 catch(IOException e) {
                     // File could not be uncompressed properly
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("unzip.unable_to_open_zip", currentFile.getName()));
+//                    int ret = showErrorDialog(errorDialogTitle, Translator.get("unpack.unable_to_open_zip", currentFile.getName()));
+                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_source", currentFile.getName()));
                     // Retry loops
                     if(ret==RETRY_ACTION)
                         continue;
@@ -245,7 +246,7 @@ public class CopyJob extends ExtendedFileJob {
     }
 
     public String getStatusString() {
-        return Translator.get(mode==UNZIP_MODE?"unzip.unzipping_file":mode==DOWNLOAD_MODE?"download.downloading_file":"copy.copying_file", getCurrentFileInfo());
+        return Translator.get(mode==UNPACK_MODE?"unpack_dialog.unpacking_file":mode==DOWNLOAD_MODE?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFileInfo());
     }
 	
     // This job modifies baseDestFolder and its subfolders

@@ -49,8 +49,8 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
         {Translator.get("toolbar.unmark")+" (NumPad -)", "unmark.png", null, "true"},
         {Translator.get("toolbar.swap_folders")+" (Ctrl+U)", "swap_folders.png", null, null},
         {Translator.get("toolbar.set_same_folder")+" (Ctrl+E)", "set_same_folder.png", null, "true"},
-        {Translator.get("toolbar.zip")+" (Ctrl+I)", "zip.png", null, null},
-        {Translator.get("toolbar.unzip")+" (Ctrl+P)", "unzip.png", null, "true"},
+        {Translator.get("toolbar.pack")+" (Ctrl+I)", "pack.png", null, null},
+        {Translator.get("toolbar.unpack")+" (Ctrl+P)", "unpack.png", null, "true"},
         {Translator.get("toolbar.server_connect")+" (Ctrl+K)", "server_connect.png", null, null},
         {Translator.get("toolbar.run_command")+" (Ctrl+R)", "run_command.png", null, null},
         {Translator.get("toolbar.email")+" (Ctrl+S)", "email.png", null, "true"},
@@ -71,8 +71,8 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
     private final static int UNMARK_INDEX = 8;
     private final static int SWAP_FOLDERS_INDEX = 9;
     private final static int SET_SAME_FOLDER_INDEX = 10;
-    private final static int ZIP_INDEX = 11;
-    private final static int UNZIP_INDEX = 12;
+    private final static int PACK_INDEX = 11;
+    private final static int UNPACK_INDEX = 12;
     private final static int SERVER_CONNECT_INDEX = 13;
     private final static int RUNCMD_INDEX = 14;
     private final static int EMAIL_INDEX = 15;
@@ -130,8 +130,8 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
         updateButtonsState(mainFrame.getLastActiveTable().getFolderPanel());
 				
         // Listen to mouse events in order to catch Shift+clicks
-        buttons[ZIP_INDEX].addMouseListener(this);
-        buttons[UNZIP_INDEX].addMouseListener(this);
+        buttons[PACK_INDEX].addMouseListener(this);
+        buttons[UNPACK_INDEX].addMouseListener(this);
 	
         // Listen to table change events to update buttons state when current table has changed
         mainFrame.addTableChangeListener(this);
@@ -447,11 +447,11 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
                 return;
             }
 				
-            if (buttonIndex==ZIP_INDEX) {
+            if (buttonIndex==PACK_INDEX) {
                 new PackDialog(mainFrame, files, e.isShiftDown());
             }
-            else if (buttonIndex==UNZIP_INDEX) {
-                new UnzipDialog(mainFrame, files, e.isShiftDown());
+            else if (buttonIndex==UNPACK_INDEX) {
+                new UnpackDialog(mainFrame, files, e.isShiftDown());
             }
         }
     }
