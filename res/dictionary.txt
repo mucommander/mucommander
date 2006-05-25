@@ -4748,6 +4748,18 @@ unit.gb:RU:Гб
 unit.gb:zh_CN:GB
 unit.gb:SI:GB
 
+unit.tb:EN:TB
+unit.tb:FR:To
+unit.tb:DE:TB
+unit.tb:ES:TB
+unit.tb:CS:TB
+unit.tb:zh_TW:TB
+unit.tb:PL:TB
+unit.tb:HU:TB
+unit.tb:RU:ТБ
+unit.tb:zh_CN:TB
+unit.tb:SI:TB
+
 
 ######################
 # Deprecated entries #

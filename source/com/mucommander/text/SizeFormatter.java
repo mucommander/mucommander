@@ -29,6 +29,16 @@ public class SizeFormatter {
     /** Bit mask to round any size < 1KB to 1KB (except 0 which will be 0 KB) */
     public final static int ROUND_TO_KB = 32;
 
+    private final static int KB_1 = 1024;
+    private final static int KB_10 = 10240;
+    private final static int MB_1 = 1048576;
+    private final static int MB_10 = 10485760;
+    private final static int GB_1 = 1073741824;
+    private final static long GB_10 = 10737418240l;
+    private final static long TB_1 = 1099511627776l;
+    private final static long TB_10 = 10995116277760l;
+    
+
     //////////////////////////
     // Locatlized text keys //
     //////////////////////////
@@ -39,10 +49,11 @@ public class SizeFormatter {
     private final static String KB = Translator.get("unit.kb");
     private final static String MB = Translator.get("unit.mb");
     private final static String GB = Translator.get("unit.gb");
+    private final static String TB = Translator.get("unit.tb");
 	
 	
     public static String format(long size, int format) {
-        if(size==-1)
+        if(size<0)
             return "?";
 
         String digitsString;
@@ -52,9 +63,11 @@ public class SizeFormatter {
         boolean unitLong = (format&UNIT_LONG)!=0;
         // Whether the unit string should be short or not
         boolean unitShort = (format&UNIT_SHORT)!=0;
+        // Whether the unit string should be short or not
+        boolean noUnit = !(unitLong||unitShort);
         // Whether the digits string should be short or not
         boolean digitsShort = (format&DIGITS_SHORT)!=0;
-        // Whether any size < 1000 bytes should be rounded to a kilobyte
+        // Whether any size < 1024 bytes should be rounded to a kilobyte
         boolean roundToKb = (format&ROUND_TO_KB)!=0;
 		
         if((format&DIGITS_FULL)!=0) {
@@ -68,10 +81,10 @@ public class SizeFormatter {
         }
         else {
             // size < 1KB
-            if(size<1000) {
+            if(size<KB_1) {
                 if(roundToKb) {
                     digitsString = size==0?"0":"1";
-                    unitString = unitLong?"KB":unitShort?"KB":"";;
+                    unitString = noUnit?"":KB;
                 }
                 else {
                     digitsString = ""+size;
@@ -79,38 +92,48 @@ public class SizeFormatter {
                 }
             }
             // size < 10KB	-> "9,6 KB"
-            else if(size<10000 && !digitsShort) {
-                int nKB = (int)size/1000;
-                digitsString = nKB+","+((""+(size-nKB*1000)/(double)1000).charAt(2));
-                unitString = unitLong?KB:unitShort?KB:"";;
+            else if(size<KB_10 && !digitsShort) {
+                int nKB = (int)size/KB_1;
+                digitsString = nKB+","+((""+(size-nKB*KB_1)/(float)KB_1).charAt(2));
+                unitString = noUnit?"":KB;
             }
             // size < 1MB -> "436 KB"
-            else if(size<1000000) {
-                digitsString = ""+size/1000;
-                unitString = unitLong?KB:unitShort?KB:"";
+            else if(size<MB_1) {
+                digitsString = ""+size/KB_1;
+                unitString = noUnit?"":KB;
             }
             // size < 10MB -> "4,3 MB"
-            else if(size<10000000 && !digitsShort) {
-                int nMB = (int)size/1000000;
-                digitsString = nMB+","+((""+(size-nMB*1000000)/(double)1000000).charAt(2));
-                unitString = unitLong?MB:unitShort?MB:"";
+            else if(size<MB_10 && !digitsShort) {
+                int nMB = (int)size/MB_1;
+                digitsString = nMB+","+((""+(size-nMB*MB_1)/(float)MB_1).charAt(2));
+                unitString = noUnit?"":MB;
             }
             // size < 1GB -> "548 MB"
-            else if(size<1000000000) {
-                digitsString = ""+size/1000000;
-                unitString = unitLong?MB:unitShort?MB:"";
-            }
-	
+            else if(size<GB_1) {
+                digitsString = ""+size/MB_1;
+                unitString = noUnit?"":MB;
+            }	
             // size < 10GB -> "4,8 GB"
-            else if(size<10000000000l && !digitsShort) {
-                long nGB = size/1000000000;
-                digitsString = nGB+","+((""+(size-nGB*1000000000)/(double)1000000000).charAt(2));
-                unitString = unitLong?GB:unitShort?GB:"";
+            else if(size<GB_10 && !digitsShort) {
+                long nGB = size/GB_1;
+                digitsString = nGB+","+((""+(size-nGB*GB_1)/(float)GB_1).charAt(2));
+                unitString = noUnit?"":GB;
             }
-            // size > 1TB -> "216 GB"
+            // size < 1TB -> "216 GB"
+            else if(size<TB_1) {
+                digitsString = ""+size/GB_1;
+                unitString = noUnit?"":GB;
+            }
+            // size < 10TB -> "4,8 TB"
+            else if(size<TB_10 && !digitsShort) {
+                long nTB = size/TB_1;
+                digitsString = nTB+","+((""+(size-nTB*TB_1)/(float)TB_1).charAt(2));
+                unitString = noUnit?"":TB;
+            }
             else {
-                digitsString = ""+size/1000000000;
-                unitString = unitLong?GB:unitShort?GB:"";
+                // Will I live long enough to see files that large ??
+                digitsString = ""+size/TB_1;
+                unitString = noUnit?"":TB;
             }
         }
 

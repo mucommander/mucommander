@@ -289,6 +289,7 @@
 
   <!-- Generates the tools distribution JAR file.              -->
   <target name="tools-obfuscate" depends="clean,tools-jar">
+    <echo>${proguard}</echo>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
     <proguard shrink="true" optimize="true" obfuscate="true" allowaccessmodification="true" overloadaggressively="true"
               usemixedcaseclassnames="off" printusage="${tmp}/tools-obf-usage.txt">
