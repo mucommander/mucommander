@@ -90,6 +90,7 @@
       </fileset>
     </copy>
     <copy file="${res}/dictionary.txt" todir="${classes}"/>
+    <copy file="${res}/mime.types" todir="${classes}"/>
   </target>
 
   <!-- Deletes any dynamically generated file, effectively     -->
