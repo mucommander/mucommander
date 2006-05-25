@@ -14,8 +14,13 @@ import java.util.Date;
  * @author Maxence Bernard
  */
 public class CustomDateFormat implements ConfigurationListener {
+
+    /** Singleton instance */
+    private static CustomDateFormat singleton;
+
     /** Custom SimpleDateFormat instance */
     private static SimpleDateFormat dateFormat;
+
 
     /**
      * Creates a new CustomDateFormat instance.
@@ -27,8 +32,13 @@ public class CustomDateFormat implements ConfigurationListener {
      * Forces static fields to be initialized
      */
     public static void init() {
+        // Create a singleton instance and keep it as a static member of this class.
+        // Not doing it so would cause the garbage collector to GC it as ConfigurationManager holds
+        // weak references of its listeners.
+        singleton = new CustomDateFormat();
+        ConfigurationManager.addConfigurationListener(singleton);
+
         dateFormat = createDateFormat();
-        ConfigurationManager.addConfigurationListener(new CustomDateFormat());
     }
 
 
@@ -82,7 +92,9 @@ public class CustomDateFormat implements ConfigurationListener {
      */
     public boolean configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
-		
+
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("variable changed : "+var+"="+event.getValue());
+        		
         if (var.equals("prefs.time_format") || var.equals("prefs.date_format") || var.equals("prefs.date_separator"))
             dateFormat = createDateFormat();
 
