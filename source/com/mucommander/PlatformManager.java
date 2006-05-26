@@ -318,22 +318,37 @@ public class PlatformManager {
      * @exception IOException   thrown if any error occurs while trying to run the command.
      */
     public static Process execute(String command, AbstractFile currentFolder) throws IOException {
-        Vector   commandTokens;
-        String[] tokens;
-
         if(Debug.ON) Debug.trace("Executing " + command);
 
         // Stores the command as a vector.
-        commandTokens = splitCommand(getShellCommand());
+        Vector commandTokens = splitCommand(getShellCommand());
         commandTokens.add(command);
+        
+        // Determine if specified folder can be used as a working directory
+        File workingDirectory = new java.io.File((currentFolder instanceof FSFile) ?
+            currentFolder.getAbsolutePath() :
+            System.getProperty("user.home"));
 
-        // Stores the tokens in an array for Runtime.exec(String[],String[],File).
-        tokens = new String[commandTokens.size()];
-        commandTokens.toArray(tokens);
+        // Under Java 1.5 and up, use ProcessBuilder to merge the created process's output and error streams.
+        // The benefit of doing so is that error messages will be displayed in the context of the normal process' output
+        // (mixed), whereas otherwise error messages are displayed after all normal output has been read and displayed.
+        if(JAVA_VERSION >= JAVA_1_5) {
+            ProcessBuilder pb = new ProcessBuilder(commandTokens);
+            // Set the process' working directory
+            pb.directory(workingDirectory);
+            // Merge the process' stdout and stderr 
+            pb.redirectErrorStream(true);
+            
+            return pb.start();
+        }
+        // Java 1.4 or below, use Runtime.exec() which separates stdout and stderr (harder to manipulate) 
+        else {
+            // Stores the tokens in an array for Runtime.exec(String[],String[],File).
+            String tokens[] = new String[commandTokens.size()];
+            commandTokens.toArray(tokens);
 
-        return Runtime.getRuntime().exec(tokens, null, new java.io.File((currentFolder instanceof FSFile) ?
-                                                                        currentFolder.getAbsolutePath() :
-                                                                        System.getProperty("user.home")));
+            return Runtime.getRuntime().exec(tokens, null, workingDirectory);
+        }
     }
 
     /**
