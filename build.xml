@@ -63,7 +63,10 @@
   <!-- Where to store the muCommander tar.gz unix release.     -->
   <property name="dist-tgz"       location="${dist}/mucommander.tar.gz"/>
   <!-- Where to store the muCommander tar.gz unix release.     -->
-  <property name="tmp-tgz"       location="${tmp}/tgz"/>
+  <property name="tmp-tgz"        location="${tmp}/tgz"/>
+  <!-- Where to store the muCommander app Mac OS X release.    -->
+  <property name="app-folder"     location="${dist}/muCommander.app"/>
+  <property name="main-class"     value="com.mucommander.Launcher"/>
 
   <!-- Imports the system dependant definitions.               -->
   <import file="local.xml"/>
@@ -193,7 +196,7 @@
     <property name="version-url" value="${nightly-version-url}"/>
   </target>
 
-  <target name="nightly" depends="set-nightly,tools-obfuscate,tgz,sign"/>
+  <target name="nightly" depends="set-nightly,tools-obfuscate,tgz,sign,app"/>
 
   <!-- Generates the application's obfuscated jar file.        -->
   <target name="obfuscate" depends="disable-debug,clean,jar,version">
@@ -284,12 +287,12 @@
 
   <!-- Generates the clear tools JAR file.                     -->
   <target name="tools-jar" depends="tools-compile">
+    <copy file="${res}/JavaApplicationStub" todir="${tool-classes}"/>
     <jar destfile="${tool-clear-jar}" basedir="${tool-classes}"/>
   </target>
 
   <!-- Generates the tools distribution JAR file.              -->
   <target name="tools-obfuscate" depends="clean,tools-jar">
-    <echo>${proguard}</echo>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
     <proguard shrink="true" optimize="true" obfuscate="true" allowaccessmodification="true" overloadaggressively="true"
               usemixedcaseclassnames="off" printusage="${tmp}/tools-obf-usage.txt">
@@ -375,6 +378,32 @@
         <exclude name="**.sh"/>
       </tarfileset>
     </tar>
+  </target>
+
+   <!-- Generates a Mac OS X .app distribution of muCommander.  -->
+  <target name="app" depends="obfuscate">
+    <taskdef name="app" classname="com.mucommander.ant.macosx.AppTask" classpath="${tool-obf-jar}"/>
+    <app jar="${obf-jar}" dest="${app-folder}" type="APPL" signature="MUCO" icon="${images}/icon.icns">
+      <info version="0.9">
+        <string name="CFBundleName"                    value="muCommander"/>
+        <string name="CFBundleVersion"                 value="${app-version}"/>
+        <string name="CFBundleAllowMixedLocalizations" value="true"/>
+        <string name="CFBundleDevelopmentRegion"       value="English"/>
+        <string name="CFBundleShortVersionString"      value="${app-version}"/>
+        <string name="CFBundleGetInfoString"           value="muCommander ${app-version}, (c) ${app-copyright} Maxence Bernard, ${homepage-url}"/>
+        <string name="CFBundleInfoDictionaryVersion"   value="6.0"/>
+        <dict name="Java">
+          <string name="MainClass"  value="${main-class}"/>
+          <string name="JVMVersion" value="1.4*"/>
+          <string name="ClassPath"  value="$JAVAROOT/mucommander.jar"/>
+          <dict name="Properties">
+            <string name="com.apple.smallTabs"        value="true"/>
+            <string name="com.apple.hwaccel"          value="true"/>
+            <string name="apple.laf.useScreenMenuBar" value="true"/>
+          </dict>
+        </dict>
+      </info>
+    </app>
   </target>
 
   <target name="dmg" depends="obfuscate">
