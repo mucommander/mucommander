@@ -13,7 +13,7 @@ of the project to local.xml and edit it:
   /path/to/jre/lib/rt.jar.
   However, Apple decided to use non-standards paths for reasons of their own,
   and you'll find the proper jar in
-  /System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Classes/classes.jar
+  /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Classes/classes.jar
 - proguard must point to the ProGuard jar file. The one used by muCommander
   comes bundles with the sources in tools/proguard.jar, but you can modify
   that if you wish to try out other versions.
