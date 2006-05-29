@@ -383,7 +383,7 @@
    <!-- Generates a Mac OS X .app distribution of muCommander.  -->
   <target name="app" depends="obfuscate">
     <taskdef name="app" classname="com.mucommander.ant.macosx.AppTask" classpath="${tool-obf-jar}"/>
-    <app jar="${obf-jar}" dest="${app-folder}" type="APPL" signature="MUCO" icon="${images}/icon.icns">
+    <app jar="${obf-jar}" dest="${app-folder}" type="APPL" signature="MUCO" icon="${res}/icons/icon.icns">
       <info version="0.9">
         <string name="CFBundleName"                    value="muCommander"/>
         <string name="CFBundleVersion"                 value="${app-version}"/>
