@@ -262,7 +262,7 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
      * Displays the specified text on the left-side of the status bar, 
      * replacing any previous text and icon.
      *
-     * @param text the piece of text to display
+     * @param infoMessage the piece of text to display
      */
     public void setStatusInfo(String infoMessage) {
         setStatusInfo(infoMessage, null, false);

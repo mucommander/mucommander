@@ -123,8 +123,8 @@ public class IconManager {
      * Sets a new scale factor for the specified icon set. If the scale factor has changed and the icon set
      * has a cache, the cache will be reset so that it won't return icons of the previous scale. 
      *
-     * @param iconSet an icon set (see public constants)
-     * @scaleFactor the icon scale factor, <code>1.0f</code> to use the original icon's size (no rescaling)
+     * @param iconSet     an icon set (see public constants)
+     * @param scaleFactor the icon scale factor, <code>1.0f</code> to use the original icon's size (no rescaling)
      */
     public static void setScaleFactor(int iconSet, float scaleFactor) {
         // Empty icon set's cache if scale factor has changed for this icon set

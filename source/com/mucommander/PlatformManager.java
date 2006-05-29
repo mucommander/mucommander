@@ -338,7 +338,7 @@ public class PlatformManager {
             pb.directory(workingDirectory);
             // Merge the process' stdout and stderr 
             pb.redirectErrorStream(true);
-            
+
             return pb.start();
         }
         // Java 1.4 or below, use Runtime.exec() which separates stdout and stderr (harder to manipulate) 

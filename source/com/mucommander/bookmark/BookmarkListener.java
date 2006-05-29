@@ -5,7 +5,7 @@ package com.mucommander.bookmark;
 /**
  * Interface to be implemented by classes that wish to be notified of bookmark changes.
  * Those classes need to be registered to receive those events, this can be done by calling
- * {@link BookmarkManager#addLocationListener(BookmarkListener) BookmarkManager.addLocationListener()}.
+ * {@link BookmarkManager#addBookmarkListener(BookmarkListener)}.
  *
  * @author Maxence Bernard
  */

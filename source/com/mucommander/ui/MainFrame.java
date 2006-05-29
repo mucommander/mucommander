@@ -176,9 +176,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
     /**
      * Registers the given TableChangeListener to receive events when current table changes.
-     *
-     * <p>Listeners are stored as weak references so {@link #removeLocationListener(LocationListener) removeLocationListener()}
-     * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
      */
     public synchronized void addTableChangeListener(TableChangeListener tableChangeListener) {
         tableChangeListeners.put(tableChangeListener, null);

@@ -256,11 +256,11 @@ public abstract class FileJob implements Runnable {
 	
     /**
      * This method is called when this job has been stopped. The call after any call to {@link #processFile(AbstractFile,Object) processFile()} and
-     * {@link jobComplete() jobComplete()} is made.
+     * {@link #jobCompleted()} is made.
      * The method implementation here does nothing but it can be overriden by subclasses to properly terminate the job. This is where you want to close
      * any opened connections.
      *
-     * <p>Note that unlike {@link jobComplete() jobComplete()} this method is always called, whether the job has been completed (all
+     * <p>Note that unlike {@link #jobCompleted()} this method is always called, whether the job has been completed (all
      * files were processed) or has been interrupted in the middle.</p>
      */
     protected void jobStopped() {

@@ -41,7 +41,7 @@ public class QuitDialog extends QuestionDialog {
      * to perform that task, only if {@link #quitConfirmed()} returns <code>true</code>.
      *
      * <p>If 'Quit' is selected and the 'Show next time' checkbox is unchecked, the preference will be saved and
-     * {@link #askConfirmation()} will return <code>true</code>.
+     * {@link #confirmQuit()} will return <code>true</code>.
      *
      * @param mainFrame the parent MainFrame
      */

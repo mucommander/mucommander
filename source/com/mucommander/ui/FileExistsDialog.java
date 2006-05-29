@@ -64,7 +64,7 @@ public class FileExistsDialog extends QuestionDialog {
     /**
      * Creates a new FileExistsDialog.
      *
-     * @param Frame parent parent
+     * @param parent parent
      * @param locationRelative component the location of this dialog will be based on
      * @param sourceFile the source file that 'conflicts' with the destination file, can be null.
      * @param destFile the destination file which already exists

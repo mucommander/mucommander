@@ -29,7 +29,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     /**
      * Creates a new LocationComboBox for use in the given FolderPanel.
      *
-     * @param FolderPanel FolderPanel this combo box is displayed in
+     * @param folderPanel FolderPanel this combo box is displayed in
      */
     public LocationComboBox(FolderPanel folderPanel) {
         this.folderPanel = folderPanel;

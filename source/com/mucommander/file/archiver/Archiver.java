@@ -144,8 +144,8 @@ public abstract class Archiver {
 
 
     /**
-     * Sets an optional comment in the archive, the {@link supportsComment() supportsComment} or
-     * {@link formatSupportsComment(int) formatSupportsComment} must first be called to make sure
+     * Sets an optional comment in the archive, the {@link #supportsComment()} or
+     * {@link #formatSupportsComment(int)} must first be called to make sure
      * the archive format supports comment, otherwise calling this method will have no effect.
      *
      * <p>Implementation note: Archiver implementations must override this method
@@ -225,7 +225,6 @@ public abstract class Archiver {
      * depending on the value of the specified boolean parameter. 
      *
      * @param manyFiles if true, a list many files formats (a subset of single file formats) will be returned
-     * @param format an archive format
      */
     public static int[] getFormats(boolean manyFiles) {
         return manyFiles?MANY_FILES_FORMATS:SINGLE_FILE_FORMATS;
@@ -295,7 +294,7 @@ public abstract class Archiver {
      * @param file AbstractFile instance used to determine if the entry is a directory, and to set the entry's date.
      *	This parameter is simply ignored if the archive is a single file format.
      *
-     * @throw IOException if this Archiver failed to write the entry, or in the case of a single file archiver, if
+     * @exception IOException if this Archiver failed to write the entry, or in the case of a single file archiver, if
      * this method was called more than once.
      */
     public abstract OutputStream createEntry(String entryPath, AbstractFile file) throws IOException;

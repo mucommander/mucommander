@@ -61,7 +61,7 @@ public abstract class AbstractFile {
      * @param throwException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
      *
      * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file) 
-     * @throws java.io.IOException  and throwException param was set to <code>true</code>.
+     * @exception java.io.IOException  and throwException param was set to <code>true</code>.
      */
     public static AbstractFile getAbstractFile(String absPath, boolean throwException) throws AuthException, IOException {
         try {
@@ -83,7 +83,7 @@ public abstract class AbstractFile {
      * @param absPath the absolute path to the file
      * @param parent the returned file's parent
      *
-     * @throws java.io.IOException if something went wrong during file or file url creation.
+     * @exception java.io.IOException if something went wrong during file or file url creation.
      */
     protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) throws AuthException, IOException {
         // Create a FileURL instance using the given path
@@ -139,7 +139,7 @@ public abstract class AbstractFile {
      * @param throwException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
      *
      * @return the created file
-     * @throws java.io.IOException if something went wrong during file creation
+     * @exception java.io.IOException if something went wrong during file creation
      */
     public static AbstractFile getAbstractFile(FileURL fileURL, boolean throwException) throws IOException {
         try {
@@ -161,7 +161,7 @@ public abstract class AbstractFile {
      * @param fileURL the file URL
      * @param parent the returned file's parent
      *
-     * @throws java.io.IOException if something went wrong during file creation.
+     * @exception java.io.IOException if something went wrong during file creation.
      */
     public static AbstractFile getAbstractFile(FileURL fileURL, AbstractFile parent) throws IOException {
         String protocol = fileURL.getProtocol().toLowerCase();
@@ -485,19 +485,19 @@ public abstract class AbstractFile {
 	
     /**
      * Returns the contents of this AbstractFile is a folder.
-     * @throws an IOException if this operation is not possible.
+     * @exception an IOException if this operation is not possible.
      */
     public abstract AbstractFile[] ls() throws IOException;
 
     /**
      * Creates a new directory if this AbstractFile is a folder.
-     * @throws an IOException if this operation is not possible.
+     * @exception an IOException if this operation is not possible.
      */
     public abstract void mkdir(String name) throws IOException;
 
     /**
      * Returns an InputStream to read from this AbstractFile.
-     * @throw IOException if this AbstractFile cannot be read or is a folder.
+     * @exception IOException if this AbstractFile cannot be read or is a folder.
      */
     public abstract InputStream getInputStream() throws IOException;
 
@@ -505,10 +505,9 @@ public abstract class AbstractFile {
      * Returns an InputStream to read from this AbstractFile, skipping the
      * specified number of bytes. This method should be overridden whenever
      * possible to provide a more efficient implementation, as this implementation
-     * simply use {@link #InputStream.skip(long) InputStream.skip()}
+     * simply use {@link java.io.InputStream#skip(long)}
      * which *reads* bytes and discards them, which is bad (think of an ISO file on a remote server).
-     *
-     * @throw IOException if this AbstractFile cannot be read or is a folder.
+     * @exception IOException if this AbstractFile cannot be read or is a folder.
      */
     public InputStream getInputStream(long skipBytes) throws IOException {
         InputStream in = getInputStream();
@@ -528,7 +527,7 @@ public abstract class AbstractFile {
     /**
      * Returns an OuputStream to write to this AbstractFile.
      * @param append if true, data will be appended to the end of this file.
-     * @throw IOException if this operation is not permitted or if this AbstractFile 
+     * @exception IOException if this operation is not permitted or if this AbstractFile 
      * is a folder.
      */
     public abstract OutputStream getOutputStream(boolean append) throws IOException;
@@ -542,14 +541,14 @@ public abstract class AbstractFile {
      * For now, the operation will be performed only when source and destination are both FSFiles,
      * i.e. using the underlying File.renameTo() method.
      * </p>
-     * @throw IOException is this AbstractFile cannot be written.
+     * @exception IOException is this AbstractFile cannot be written.
      */
     public abstract boolean moveTo(AbstractFile dest) throws IOException;
 
     /**
      * Deletes this AbstractFile and this one only (does not recurse), throws an IOException
      * if it failed.
-     * @throw IOException if this AbstractFile cannot be written.
+     * @exception IOException if this AbstractFile cannot be written.
      */	
     public abstract void delete() throws IOException;
 

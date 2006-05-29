@@ -97,7 +97,7 @@ public class BookmarkManager {
     /**
      * Adds a bookmark.
      *
-     * @param bm the Bookmark instance to add.
+     * @param b the Bookmark instance to add.
      */
     public static void addBookmark(Bookmark b) {
         bookmarks.add(b);
@@ -110,7 +110,7 @@ public class BookmarkManager {
     /**
      * Removes a bookmark.
      *
-     * @param bm the Bookmark instance to remove.
+     * @param b the Bookmark instance to remove.
      */
     public static void removeBookmark(Bookmark b) {
         bookmarks.remove(b);

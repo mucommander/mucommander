@@ -18,8 +18,8 @@ import com.mucommander.PlatformManager;
  *
  * <p>Two implementations are provided, for use with the following Java runtimes:
  * <ul>
- * <li>{@link com.mucommander.cache.FastLRU FastLRU} for Java 1.4 and above
- * <li>{@link com.mucommander.cache.LegacyLRU LegacyLRU} for Java 1.3
+ * <li>{@link com.mucommander.cache.FastLRUCache} for Java 1.4 and above
+ * <li>{@link com.mucommander.cache.LegacyLRUCache} for Java 1.3
  * </ul>
  * Use the {@link #createInstance(int) createInstance()} method to retrieve an instance of the best implementation
  * for the current Java runtime.</p>
@@ -89,8 +89,8 @@ public abstract class LRUCache {
 
     /**
      * Creates and returns a new LRUCache using the best implementation for the current
-     * Java runtime version: {@link com.mucommander.cache.FastLRU FastLRU} for Java 1.4 and above, 
-     * {@link com.mucommander.cache.LegacyLRU LegacyLRU} for Java 1.3.
+     * Java runtime version: {@link com.mucommander.cache.FastLRUCache} for Java 1.4 and above, 
+     * {@link com.mucommander.cache.LegacyLRUCache} for Java 1.3.
      *
      * @param capacity the new LRUCache's capacity
      * @return an instance of the best LRUCache implementation for the current Java runtime 

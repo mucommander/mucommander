@@ -490,7 +490,7 @@ public class ConfigurationManager {
      * <p>
      * Note that this will not trigger a reloading of the configuration. In order for this
      * method to have any effect on the configuration file that is loaded, it must be called
-     * before any call to {@link getVariable(String)}.
+     * before any call to {@link #getVariable(String)}.
      * </p>
      * <p>
      * The <code>file</code> can be <code>null</code>. If such is the case, the configuration
