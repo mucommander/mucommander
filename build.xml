@@ -196,10 +196,10 @@
     <property name="version-url" value="${nightly-version-url}"/>
   </target>
 
-  <target name="nightly" depends="set-nightly,tools-obfuscate,tgz,sign,app"/>
+  <target name="nightly" depends="set-nightly,tools-obfuscate,tgz,sign,app,version"/>
 
   <!-- Generates the application's obfuscated jar file.        -->
-  <target name="obfuscate" depends="disable-debug,clean,jar,version">
+  <target name="obfuscate" depends="disable-debug,clean,jar">
     <delete file="${obf-jar}"/>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
     <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="true"
