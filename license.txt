@@ -1,3 +1,4 @@
+test
 
 muCommander license
 Version 1.0
