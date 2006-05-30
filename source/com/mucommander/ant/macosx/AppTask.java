@@ -3,34 +3,62 @@ package com.mucommander.ant.macosx;
 import org.apache.tools.ant.*;
 import java.io.*;
 import java.util.*;
+import java.net.URL;
+import com.mucommander.xml.*;
 
 /**
  * @author Nicolas Rinaudo
  */
 public class AppTask extends Task {
-    // - Info.plist constants --------------------------------------------
+    // - Info.plist structure --------------------------------------------
     // -------------------------------------------------------------------
-    private static final String TAG_DICT         = "dict";
-    private static final String TAG_KEY          = "key";
-    private static final String TAG_STRING       = "string";
-    private static final int    OFFSET_INCREMENT = 4;
-    private static final String KEY_EXECUTABLE   = "CFBundleExecutable";
-    private static final String KEY_PACKAGE_TYPE = "CFBundlePackageType";
-    private static final String KEY_SIGNATURE    = "CFBundleSignature";
-    private static final String KEY_ICON         = "CFBundleIconFile";
-    private static final String DICT_JAVA        = "Java";
-    private static final String KEY_CLASSPATH    = "ClassPath";
+    /** Label of the dictionary tag in Info.plist. */
+    private static final String TAG_DICT          = "dict";
+    /** Label of the property list tag in Info.plist. */
+    private static final String TAG_PLIST         = "plist";
+    /** Label of they key tag in Info.plist. */
+    private static final String TAG_KEY           = "key";
+    /** Label of the string tag in Info.plist. */
+    private static final String TAG_STRING        = "string";
+    /** Label of the property list's version attribute in Info.plist. */
+    private static final String ATTRIBUTE_VERSION = "version";
+    /** URL of the property list DTD file. */
+    private static final String URL_PLIST_DTD     = "file://localhost/System/Library/DTDs/PropertyList.dtd";
+
+
+
+    // - Info.plist keys -------------------------------------------------
+    // -------------------------------------------------------------------
+    /** Label of the 'path to executable' key in Info.plist. */
+    private static final String KEY_EXECUTABLE    = "CFBundleExecutable";
+    /** Label of the 'package type' key in Info.plist. */
+    private static final String KEY_PACKAGE_TYPE  = "CFBundlePackageType";
+    /** Label of the 'bundle signature' key in Info.plist. */
+    private static final String KEY_SIGNATURE     = "CFBundleSignature";
+    /** Label of the 'bundle icon' in Info.plist. */
+    private static final String KEY_ICON          = "CFBundleIconFile";
+    /** Label of the 'java' list of properties in Info.plist. */
+    private static final String DICT_JAVA         = "Java";
+    /** Label of the 'classpath' key in Info.plist. */
+    private static final String KEY_CLASSPATH     = "ClassPath";
 
 
 
     // - .app constants --------------------------------------------------
     // -------------------------------------------------------------------
+    /** Name of the Java application stub file. */
     private static final String APPLICATION_STUB = "JavaApplicationStub";
+    /** Name of the package info file. */
     private static final String PACKAGE_INFO     = "PkgInfo";
+    /** Name of the Contents folder. */
     private static final String CONTENTS_FOLDER  = "Contents";
+    /** Name of the Resources folder. */
     private static final String RESOURCES_FOLDER = "Resources";
+    /** Name of the Java folder. */
     private static final String JAVA_FOLDER      = "Java";
+    /** Name of the MacOS folder. */
     private static final String MACOS_FOLDER     = "MacOS";
+    /** Name of the propery list file. */
     private static final String PROPERTIES_LIST  = "Info.plist";
 
 
@@ -75,16 +103,52 @@ public class AppTask extends Task {
 
     // - Ant interaction -------------------------------------------------
     // -------------------------------------------------------------------
+    /**
+     * Sets the path to which the app file should be generated.
+     * @param f path to which the app file should be generated.
+     */
     public void setDest(File f) {destination = f;}
+
+    /**
+     * Sets the bundle type of the app file.
+     * @param s bundle type.
+     */
     public void setType(String s) {type = s;}
+
+    /**
+     * Sets the application's signature.
+     * @param s application's signature.
+     */
     public void setSignature(String s) {signature = s;}
+
+    /**
+     * Sets the path to the application's icon.
+     * @param f path to the application's icon.
+     */
     public void setIcon(File f) {icon = f;}
+
+    /**
+     * Sets the path to the application's JAR file.
+     * @param f path to the application's JAR file.
+     */
     public void setJar(File f) {jar = f;}
+
+    /**
+     * Returns a fully initialised RootDictionary instance.
+     * <p>
+     * This instance is the one that will be used for the <code>Info.plist</code>
+     * file generation.
+     * </p>
+     * @return a fully initialised RootDictionary instance.
+     */
     public RootDictionary createInfo() {return info;}
 
+    /**
+     * Entry point of the task.
+     * @exception BuildException thrown if any error occurs during .app generation.
+     */
     public void execute() throws BuildException {
-        InfoString buffer; // Used to create dynamicaly generated keys.
-        Dictionary java;   // Java dictionary.
+        File current; // Used to create the various directories needed by the .app.
 
         // Checks whether the proper parameters were passed to the application.
         if(destination == null)
@@ -102,58 +166,101 @@ public class AppTask extends Task {
         else if(!jar.exists())
             throw new BuildException("File not found: " + jar);
 
+        // Makes sure we create the application in a proper .app directory.
+        if(!destination.getName().endsWith(".app"))
+            destination = new File(destination.getParent(), destination.getName() + ".app");
+
+        // Creates all the necessary directories and files.
+        mkdir(destination);
+        mkdir(current = new File(destination, CONTENTS_FOLDER));
+        writePkgInfo(current);
+        writeJavaStub(current);
+        writeInfo(current);
+        mkdir(current = new File(current, RESOURCES_FOLDER));
+        writeIcon(current);
+        mkdir(current = new File(current, JAVA_FOLDER));
+        writeJar(current);
+    }
+
+
+
+    // - Info.plist generation -------------------------------------------
+    // -------------------------------------------------------------------
+    /**
+     * Adds default keys to the property list.
+     * <p>
+     * Default keys are:<br/>
+     * - {@link #KEY_EXECUTABLE}: this will always be {@link #APPLICATION_STUB}.<br/>
+     * - {@link #KEY_PACKAGE_TYPE}: value specified by {@link #setType(String)}.<br/>
+     * - {@link #KEY_SIGNATURE}: value specified by {@link #setSignature(String)}.<br/>
+     * - {@link #KEY_ICON}: path to the copy of the file specified in {@link #setIcon(File)}.<br/>
+     * - {@link #KEY_CLASSPATH}: path to the copy of the file specified in {@link #setJar(File)}.<br/>
+     * </p>
+     * <p>
+     * Note that the {@link #KEY_CLASSPATH} needs to be stored in the {@link #DICT_JAVA} dictionary.
+     * If this has not been created by the user yet, a new dictionary will be added.
+     * </p>
+     */
+    private void addDefaultKeys() {
+        InfoString buffer; // Used to create dynamicaly generated keys.
+        Dictionary java;   // Java dictionary.
+
+        // Adds the KEY_EXECUTABLE key.
         buffer = info.createString();
         buffer.setName(KEY_EXECUTABLE);
         buffer.setValue(APPLICATION_STUB);
 
+        // Adds the KEY_PACKAGE_TYPE key.
         buffer = info.createString();
         buffer.setName(KEY_PACKAGE_TYPE);
         buffer.setValue(type);
 
+        // Adds the KEY_SIGNATURE key.
         buffer = info.createString();
         buffer.setName(KEY_SIGNATURE);
         buffer.setValue(signature);
 
+        // Adds the KEY_ICON key.
         buffer = info.createString();
         buffer.setName(KEY_ICON);
         buffer.setValue(icon.getName());
 
+        // If the DICT_JAVA dictionary hasn't been created yet,
+        // creates it.
         if((java = info.getDictionary(DICT_JAVA)) == null) {
             java = info.createDict();
             java.setName(DICT_JAVA);
         }
 
+        // Adds the DICT_JAVA/KEY_CLASSPATH key.
         buffer = java.createString();
         buffer.setName(KEY_CLASSPATH);
         buffer.setValue("$JAVAROOT/" + jar.getName());
 
-        makeApp();
     }
 
-
-
-    // - App generation --------------------------------------------------
-    // -------------------------------------------------------------------
     private void writeInfo(File contents) throws BuildException {
-        PrintStream out;
+        XmlWriter     out;
+        XmlAttributes attr;
 
         // Initialises the Info.plist writing.
         out = null;
+        addDefaultKeys();
         info.check();
 
         try {
-            out = new PrintStream(new FileOutputStream(new File(contents, PROPERTIES_LIST)));
+            out = new XmlWriter(new File(contents, PROPERTIES_LIST));
 
             // Writes the Info.plist header.
-            out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            out.println("<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">");
-            out.print("<plist version=\"");
-            out.print(info.getVersion());
-            out.println("\">");
+            out.writeDocType(TAG_PLIST, XmlWriter.AVAILABILITY_SYSTEM, null, URL_PLIST_DTD);
+            attr = new XmlAttributes();
+            attr.add(ATTRIBUTE_VERSION, info.getVersion());
+            out.openTag(TAG_PLIST, attr);
+            out.println();
 
-            writeDictContent(out, info, OFFSET_INCREMENT);
+            writeDictContent(out, info);
 
-            out.println("</plist>");
+            out.closeTag(TAG_PLIST);
         }
         catch(IOException e) {throw new BuildException("Could not open " + PROPERTIES_LIST + " for writing", e);}
 
@@ -166,44 +273,43 @@ public class AppTask extends Task {
         }
     }
 
-    private static void writeDictContent(PrintStream out, AbstractDictionary dict, int offset) throws BuildException {
+    private static void writeDictContent(XmlWriter out, AbstractDictionary dict) throws BuildException {
         Iterator elements;
         Object   element;
 
-        openTag(out, TAG_DICT, offset, true);
-
+        out.openTag(TAG_DICT);
+        out.println();
+        
         elements = dict.elements();
         while(elements.hasNext()) {
             element = elements.next();
-            if(element instanceof InfoString)
-                writeString(out, (InfoString)element, offset + OFFSET_INCREMENT);
-            else if(element instanceof Dictionary)
-                writeDict(out, (Dictionary)element, offset + OFFSET_INCREMENT);
+            if(element instanceof InfoString) {
+                InfoString string = (InfoString)element;
+                string.check();
+                out.openTag(TAG_KEY);
+                out.writeCData(string.getName());
+                out.closeTag(TAG_KEY);
+
+                out.openTag(TAG_STRING);
+                out.writeCData(string.getValue());
+                out.closeTag(TAG_STRING);
+            }
+            else if(element instanceof Dictionary) {
+                Dictionary dictionary = (Dictionary)element;
+                dictionary.check();
+                out.openTag(TAG_KEY);
+                out.writeCData(dictionary.getName());
+                out.closeTag(TAG_KEY);
+                writeDictContent(out, dictionary);
+            }
         }
-
-        closeTag(out, TAG_DICT, offset, true);
+        out.closeTag(TAG_DICT);
     }
 
-    private static void writeDict(PrintStream out, Dictionary dict, int offset) throws BuildException {
-        dict.check();
-        openTag(out, TAG_KEY, offset, false);
-        out.print(dict.getName());
-        closeTag(out, TAG_KEY, offset, false);
 
-        writeDictContent(out, dict, offset);
-    }
 
-    private static void writeString(PrintStream out, InfoString string, int offset) throws BuildException {
-        string.check();
-        openTag(out, TAG_KEY, offset, false);
-        out.print(string.getName());
-        closeTag(out, TAG_KEY, offset, false);
-
-        openTag(out, TAG_STRING, offset, false);
-        out.print(string.getValue());
-        closeTag(out, TAG_STRING, offset, false);
-    }
-
+    // - PkgInfo generation ----------------------------------------------
+    // -------------------------------------------------------------------
     /**
      * Writes the Package Info file in the specified folder.
      * @param     contents       path to the .app's Contents folder.
@@ -221,40 +327,24 @@ public class AppTask extends Task {
         catch(Exception e) {throw new BuildException("Could not write " + PACKAGE_INFO + " file", e);}
     }
 
+
+
+    // - JavaApplicationStub generation ----------------------------------
+    // -------------------------------------------------------------------
     /**
      * Writes the JavaApplicationStub in the proper folder.
      * @param     file           Path to the .app's Contents folder.
      * @exception BuildException thrown if anything goes wrong.
      */
     private void writeJavaStub(File file) throws BuildException {
-        InputStream  in;     // Input stream on the stored JavaApplicationStub file.
-        OutputStream out;    // Output stream on the .app's JavaApplicationStub file.
-
         // Makes sure the MacOS folder exists.
         mkdir(file = new File(file, MACOS_FOLDER));
 
-        // Initialises the transfer.
-        in     = null;
-        out    = null;
-
         try {
-            // Opens the streams.
-            in  = this.getClass().getResourceAsStream('/' + APPLICATION_STUB);
-            out = new FileOutputStream(new File(file, APPLICATION_STUB));
-
-            transfer(in, out);
+            transfer(this.getClass().getResource('/' + APPLICATION_STUB),
+                     new File(file, APPLICATION_STUB));
         }
         catch(Exception e) {throw new BuildException("Could not generate " + APPLICATION_STUB, e);}
-        // Releases resources.
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
-            }
-            if(out != null)
-                try {out.close();}
-                catch(Exception e) {}
-        }
 
         // Tries to set the file's permissions for Unix like systems.
         // Since we're compiling something for Mac OS X here, this is
@@ -277,92 +367,34 @@ public class AppTask extends Task {
         }
     }
 
+
+
+    // - Icon.icns generation --------------------------------------------
+    // -------------------------------------------------------------------
     /**
      * Writes the application's icon.
      * @param     resources      path to the application's Resources folder.
      * @exception BuildException thrown if any error occurs.
      */
     private void writeIcon(File resources) throws BuildException {
-        InputStream  in;  // Where to read the content of the icons from.
-        OutputStream out; // Where to write the content of the icons to.
-
-        in  = null;
-        out = null;
-
         // Copies the icon.
-        try {
-            in = new FileInputStream(icon);
-            out = new FileOutputStream(new File(resources, icon.getName()));
-
-            transfer(in, out);
-        }
+        try {transfer(icon.toURL(), new File(resources, icon.getName()));}
         catch(Exception e) {throw new BuildException("Could not generate application icon", e);}
-        // Releases resources.
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
-            }
-            if(out != null)
-                try {out.close();}
-                catch(Exception e) {}
-        }
     }
 
+
+
+    // - JAR file generation ---------------------------------------------
+    // -------------------------------------------------------------------
     /**
      * Writes the application's jar file to jar.icns.
      * @param     java           path to the application's Resources/Java folder.
      * @exception BuildException thrown if any error occurs.
      */
     private void writeJar(File java) throws BuildException {
-        InputStream  in;  // Where to read the content of the jars from.
-        OutputStream out; // Where to write the content of the jars to.
-
-        in  = null;
-        out = null;
-
         // Copies the jar.
-        try {
-            in = new FileInputStream(jar);
-            out = new FileOutputStream(new File(java, jar.getName()));
-
-            transfer(in, out);
-        }
+        try {transfer(jar.toURL(), new File(java, jar.getName()));}
         catch(Exception e) {throw new BuildException("Could not generate application jar", e);}
-        // Releases resources.
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
-            }
-            if(out != null)
-                try {out.close();}
-                catch(Exception e) {}
-        }
-    }
-
-
-    /**
-     * Creates the whole .app directory tree.
-     * @exception BuildException thrown if anything went wrong.
-     */
-    private void makeApp() throws BuildException {
-        File current; // Used to create the various directories needed by the .app.
-
-        // Makes sure we create the application in a proper .app directory.
-        if(!destination.getName().endsWith(".app"))
-            destination = new File(destination.getParent(), destination.getName() + ".app");
-
-        // Creates all the necessary directories and files.x
-        mkdir(destination);
-        mkdir(current = new File(destination, CONTENTS_FOLDER));
-        writePkgInfo(current);
-        writeJavaStub(current);
-        writeInfo(current);
-        mkdir(current = new File(current, RESOURCES_FOLDER));
-        writeIcon(current);
-        mkdir(current = new File(current, JAVA_FOLDER));
-        writeJar(current);
     }
 
 
@@ -386,44 +418,37 @@ public class AppTask extends Task {
     }
 
     /**
-     * Transfers the content of <code>in</code> to <code>out</code>.
-     * @param     in          where to read from.
-     * @param     out         where to write to.
-     * @exception IOException thrown if any IO related error occurs.
      */
-    private static void transfer(InputStream in, OutputStream out) throws IOException {
+    private static void transfer(URL from, File to) throws IOException {
+        InputStream  in;
+        OutputStream out;
         int    count;  // Number of bytes read in the latest iteration.
         byte[] buffer; // Stores bytes before they're transfered.
 
         buffer = new byte[1024];
+        in     = null;
+        out    = null;
 
-        // Transfers the content of in to out.
-        while(true) {
-            if((count = in.read(buffer)) == -1)
-                break;
-            out.write(buffer, 0, count);
+        try {
+            in  = from.openStream();
+            out = new FileOutputStream(to);
+            // Transfers the content of in to out.
+            while(true) {
+                if((count = in.read(buffer)) == -1)
+                    break;
+                out.write(buffer, 0, count);
+            }
         }
-    }
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
+            }
 
-    private static void printOffset(PrintStream out, int offset) {
-        for(int i = 0; i < offset; i++)
-            out.print(' ');
-    }
-
-    private static void openTag(PrintStream out, String name, int offset, boolean lineBreak) {
-        printOffset(out, offset);
-        out.print('<');
-        out.print(name);
-        out.print('>');
-        if(lineBreak)
-            out.println();
-    }
-
-    private static void closeTag(PrintStream out, String name, int offset, boolean printOffset) {
-        if(printOffset)
-            printOffset(out, offset);
-        out.print("</");
-        out.print(name);
-        out.println('>');
+            if(out != null) {
+                try {out.close();}
+                catch(Exception e) {}
+            }
+        }
     }
 }

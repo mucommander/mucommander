@@ -18,7 +18,7 @@ public class ReplaceTask extends Task {
 
     public ReplaceTask() {}
 
-    private void flush() {
+    public void init() {
         what = null;
         with = null;
         from = null;

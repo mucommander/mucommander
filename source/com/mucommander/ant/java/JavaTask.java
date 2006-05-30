@@ -25,12 +25,12 @@ public class JavaTask extends Task {
     /**
      * Builds a new Java task.
      */
-    public JavaTask() {flush();}
+    public JavaTask() {}
 
     /**
      * Resets the task, in case of instance re-use.
      */
-    private void flush() {
+    public void init() {
         name   = null;
         fields = new Vector();
     }
@@ -102,9 +102,6 @@ public class JavaTask extends Task {
             out.close();
         }
         catch(Exception e) {throw new BuildException(e);}
-
-        // Clears the task (in case of instance re-use).
-        flush();
     }
 
 

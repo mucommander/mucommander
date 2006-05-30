@@ -26,6 +26,7 @@ public class DateTask extends Task {
      */
     public DateTask() {}
 
+    public void init() {propertyName = null;}
 
 
     // - Misc. -----------------------------------------------------------
@@ -108,8 +109,5 @@ public class DateTask extends Task {
             throw new BuildException("Unspecified name - please fill in the name attribute.");
 
         getProject().setProperty(propertyName, getDate());
-
-        // Flushes the instance.
-        propertyName = null;
     }
 }
