@@ -112,10 +112,9 @@
   <!-- Tasks used for the maintenance of the project.          -->
 
   <!-- Prepares the project's compilations.                    -->
-  <!-- This will create compilation folders and copy resources -->
-  <!-- in their proper destinations.                           -->
+  <!-- This will create compilation folders in ${tmp}.         -->
   <target name="init">
-    <echo>Creating compilating directories...</echo>
+    <echo>Creating compilation directories...</echo>
     <!-- Sets time stamp to current time/date -->
     <tstamp/>
     <!-- Create class directory used by compile -->
@@ -123,9 +122,12 @@
     <mkdir dir="${tmp-source}"/>
     <mkdir dir="${classes}"/>
     <mkdir dir="${tool-classes}"/>
+  </target>
 
+  <!-- Copies the project's resources.                         -->
+  <!-- All resources will be copied in ${classes}.             -->
+  <target name="resources">
     <echo>Copying resources...</echo>
-    <!-- Copy images files to {$classes} -->
     <copy todir="${classes}">
       <fileset dir="${images}">
         <include name="**/*"/>
@@ -191,7 +193,7 @@
 
   <!-- Includes the application's libraries with its binaries. -->
   <!-- All libraries will be unpacked in ${classes}.           -->
-  <target name="includelibs" depends="init">
+  <target name="includelibs">
     <echo>Unpacking libraries in ${classes}...</echo>
     <unjar dest="${classes}">
       <fileset dir="${lib}">
@@ -251,7 +253,7 @@
 
   <!-- Generates the application's unobfuscated jar file.      -->
   <!-- Output will be stored in {$clear-jar}.                  -->
-  <target name="jar" depends="includelibs,compile">
+  <target name="jar" depends="compile,resources,includelibs">
     <echo>Creating unobfuscated JAR file in ${clear-jar}...</echo>
     <mkdir  dir="${dist}"/>
     <manifest file="${tmp}/MANIFEST.MF">
@@ -345,8 +347,11 @@
   <!-- Output will be stored in ${tool-classes}.              -->
   <target name="tools-compile" depends="init">
     <echo>Compiling tools in ${tool-classes}...</echo>
-    <javac srcdir="${source}/com/mucommander/ant" destdir="${tool-classes}" debug="on" deprecation="on"
-           encoding="utf-8" source="1.3" target="1.3"/>
+    <javac destdir="${tool-classes}" debug="on" deprecation="on"
+           encoding="utf-8" source="1.3" target="1.3">
+      <src path="${source}/com/mucommander/ant"/>
+      <src path="${source}/com/mucommander/xml"/>
+    </javac>
   </target>
 
   <!-- Generates the clear tools JAR file.                    -->
