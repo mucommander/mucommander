@@ -2,6 +2,7 @@ package com.mucommander.conf;
 
 import java.io.*;
 import java.util.*;
+import com.mucommander.xml.*;
 
 /**
  * Writes the configuration tree to an output stream.
@@ -12,20 +13,14 @@ import java.util.*;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class ConfigurationWriter implements ConfigurationTreeBuilder {
-
-    /** Where to print the configuration tree. */
-    private PrintWriter out;
-
-    /** Current depth of the XML tree */
-    private int depth = 0;
+    private XmlWriter out;
 
     /**
      * Writes the configuration tree's content to the specified output stream.
-     * @param out where to write the tree's content.
+     * @param stream where to write the tree's content.
      */
-    public void writeXML(PrintWriter out) {
-        this.out = out;
-        out.println("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
+    public void writeXML(OutputStream stream) {
+        out = new XmlWriter(stream);
         ConfigurationManager.buildConfigurationTree(this);
     }
 
@@ -37,13 +32,8 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
         // Remove 'root' element from the xml tree
         if(name.equals("root"))
             return;
-		
-        // Indent statement
-        indent();
-        // Increase depth
-        depth++;
-		
-        out.println("<"+name+">");
+        out.openTag(name);
+        out.println();
     }
 
     /**
@@ -54,13 +44,7 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
         // Remove 'root' element from the xml tree
         if(name.equals("root"))
             return;
-
-        // Decrease depth
-        depth--;
-        // Indent statement
-        indent();
-
-        out.println("</"+name+">");
+        out.closeTag(name);
     }
 
     /**
@@ -69,17 +53,8 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
      * @param value leaf's value.
      */
     public void addLeaf(String name, String value) {
-        // Indent element
-        indent();
-        out.println("<"+name+">"+value+"</"+name+">");
-    }
-	
-	
-    /**
-     * Adds tab characters to the stream based on the current XML tree's depth.
-     */
-    private void indent() {
-        for(int i=0; i<depth; i++)
-            out.print("\t");
+        out.openTag(name);
+        out.writeCData(value);
+        out.closeTag(name);
     }
 }

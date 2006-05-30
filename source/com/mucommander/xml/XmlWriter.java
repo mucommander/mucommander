@@ -1,7 +1,7 @@
 package com.mucommander.xml;
 
 import java.io.*;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Used to write pretty-printed XML content.
@@ -28,6 +28,17 @@ public class XmlWriter {
     public  static final String AVAILABILITY_PUBLIC = "PUBLIC";
     /** Identifier for system resources. */
     public  static final String AVAILABILITY_SYSTEM = "SYSTEM";
+    /** Default output encoding. */
+    public static final String  DEFAULT_ENCODING    = "UTF-8";
+
+
+    // - XML standard entities -------------------------------------------
+    // -------------------------------------------------------------------
+    /** Forbiden XML characters. */
+    private final static String[] ENTITIES            = new String[] {"&", "\"" , "'", "<", ">"};
+    /** What to replace forbiden XML characters with. */
+    private final static String[] ENTITY_REPLACEMENTS = new String[] {"&amp;", "&quot;", "&apos;", "&lt;", "&gt;"};
+
 
 
 
@@ -44,16 +55,16 @@ public class XmlWriter {
 
     // - Initialisation --------------------------------------------------
     // -------------------------------------------------------------------
+
     /**
      * Creates an XmlWriter that will write to the specified file.
      * <p>
      * The generated XML content will be encoded using <code>UTF-8</code>.
      * </p>
-     * @param     file                         where the XmlWriter should write its content to.
-     * @exception FileNotFoundException        thrown if <code>file</code> could not be found.
-     * @exception UnsupportedEncodingException thrown if <code>UTF-8</code> is not supported.
+     * @param     file                  where the XmlWriter should write its content to.
+     * @exception FileNotFoundException thrown if <code>file</code> could not be found.
      */
-    public XmlWriter(File file) throws FileNotFoundException, UnsupportedEncodingException {this(new FileOutputStream(file));}
+    public XmlWriter(File file) throws FileNotFoundException {this(new FileOutputStream(file));}
 
     /**
      * Creates an XmlWriter that will write to the specified file using the specified encoding.
@@ -71,12 +82,13 @@ public class XmlWriter {
      * <p>
      * The generated XML content will be encoded using <code>UTF-8</code>.
      * </p>
-     * @param     stream                       where the XmlWriter should write its content to.
-     * @exception FileNotFoundException        thrown if <code>file</code> could not be found.
-     * @exception UnsupportedEncodingException thrown if <code>UTF-8</code> is not supported.
+     * @param stream where the XmlWriter should write its content to.
      */
-    public XmlWriter(OutputStream stream) throws FileNotFoundException, UnsupportedEncodingException {
-        this(stream, "UTF-8");
+    public XmlWriter(OutputStream stream) {
+        try {out = new PrintStream(stream, true, DEFAULT_ENCODING);}
+        // We can safely assume that any JVM knows how to encode text in UTF-8.
+        catch(Exception e) {}
+        writeHeader(DEFAULT_ENCODING);
     }
 
     /**
@@ -89,12 +101,14 @@ public class XmlWriter {
     public XmlWriter(OutputStream stream, String encoding) throws UnsupportedEncodingException {
         out = new PrintStream(stream, true, encoding);
 
-        // XML header
+        writeHeader(encoding);
+    }
+
+    private void writeHeader(String encoding) {
         out.print("<?xml version=\"1.0\" encoding=\"");
         out.print(encoding);
         out.println("\"?>");
     }
-
 
 
     // - Tag operations --------------------------------------------------
@@ -218,7 +232,7 @@ public class XmlWriter {
                 out.print(' ');
                 out.print(attName);
                 out.print("=\"");
-                out.print(attributes.getValue(attName));
+                out.print(escape(attributes.getValue(attName)));
                 out.print("\"");
             }
         }
@@ -264,7 +278,27 @@ public class XmlWriter {
      */
     public void writeCData(String cdata) {
         indent();
-        out.print(cdata);
+        out.print(escape(cdata));
+    }
+
+    /**
+     * Escapes XML content, replacing special characters by their proper value.
+     * @param  data data to escape.
+     * @return the escaped content.
+     */
+    private String escape(String data) {
+        int position;
+
+        for(int i = 0; i < ENTITIES.length; i++) {
+            position = 0;
+            while((position = data.indexOf(ENTITIES[i], position)) != -1) {
+                data = data.substring(0, position) + ENTITY_REPLACEMENTS[i] +
+                    (position == data.length() -1 ? "" : data.substring(position + 1, data.length()));
+                position = position + ENTITY_REPLACEMENTS[i].length();
+            }
+        }
+
+        return data;
     }
 
 

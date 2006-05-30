@@ -138,23 +138,22 @@ public class ConfigurationManager {
      * Writes the configuration to the configuration file.
      */
     public static synchronized void writeConfiguration() {
-        PrintWriter out = null;
+        OutputStream out = null;
         try {
             ConfigurationWriter writer = new ConfigurationWriter();
             String filePath = getConfigurationFilePath();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: "+filePath);						
-			
-            // Use UTF-8 encoding
-            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePath), "UTF-8"));
-            writer.writeXML(out);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: "+filePath);
+            writer.writeXML(out = new FileOutputStream(filePath));
         }
         catch(IOException e) {
             // Notify user that preferences file could not be written
             System.out.println("muCommander was unable to write preferences file: "+e);
         }
         finally {
-            if(out!=null)
-                out.close();
+            if(out!=null) {
+                try {out.close();}
+                catch(Exception e) {}
+            }
         }
     }
 
