@@ -11,11 +11,11 @@ import com.mucommander.xml.XmlWriter;
  * @author Maxence Bernard
  */
 public class BookmarkWriter {
-    private static final String TAG_ROOT     = "bookmarks";
-    private static final String TAG_VERSION  = "version";
-    private static final String TAG_BOOKMARK = "bookmark";
-    private static final String TAG_NAME     = "name";
-    private static final String TAG_URL      = "url";
+    private static final String ELEMENT_ROOT     = "bookmarks";
+    private static final String ELEMENT_VERSION  = "version";
+    private static final String ELEMENT_BOOKMARK = "bookmark";
+    private static final String ELEMENT_NAME     = "name";
+    private static final String ELEMENT_URL      = "url";
 
 
     /**
@@ -32,31 +32,31 @@ public class BookmarkWriter {
             out = new XmlWriter(file);
 
             // Root element.
-            out.openTag(TAG_ROOT);
+            out.startElement(ELEMENT_ROOT);
             out.println();
 
             // muCommander version.
-            out.openTag(TAG_VERSION);
+            out.startElement(ELEMENT_VERSION);
             out.writeCData(com.mucommander.RuntimeConstants.VERSION);
-            out.closeTag(TAG_VERSION);
+            out.endElement(ELEMENT_VERSION);
 
             bookmarks = BookmarkManager.getBookmarks().iterator();
             while(bookmarks.hasNext()) {
                 bookmark = (Bookmark)bookmarks.next();
 
-                out.openTag(TAG_BOOKMARK);
+                out.startElement(ELEMENT_BOOKMARK);
                 out.println();
-                out.openTag(TAG_NAME);
+                out.startElement(ELEMENT_NAME);
                 out.writeCData(bookmark.getName());
-                out.closeTag(TAG_NAME);
-                out.openTag(TAG_URL);
+                out.endElement(ELEMENT_NAME);
+                out.startElement(ELEMENT_URL);
                 out.writeCData(bookmark.getURL().getStringRep(true));
-                out.closeTag(TAG_URL);
-                out.closeTag(TAG_BOOKMARK);
+                out.endElement(ELEMENT_URL);
+                out.endElement(ELEMENT_BOOKMARK);
             }
 
             // End root element
-            out.closeTag(TAG_ROOT);
+            out.endElement(ELEMENT_ROOT);
         }
         finally {
             // Close stream, IOException is thrown under Java 1.3 but no longer under 1.4 and up,

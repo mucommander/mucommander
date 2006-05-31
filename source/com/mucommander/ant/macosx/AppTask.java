@@ -12,14 +12,14 @@ import com.mucommander.xml.*;
 public class AppTask extends Task {
     // - Info.plist structure --------------------------------------------
     // -------------------------------------------------------------------
-    /** Label of the dictionary tag in Info.plist. */
-    private static final String TAG_DICT          = "dict";
-    /** Label of the property list tag in Info.plist. */
-    private static final String TAG_PLIST         = "plist";
-    /** Label of they key tag in Info.plist. */
-    private static final String TAG_KEY           = "key";
-    /** Label of the string tag in Info.plist. */
-    private static final String TAG_STRING        = "string";
+    /** Label of the dictionary element in Info.plist. */
+    private static final String ELEMENT_DICT      = "dict";
+    /** Label of the property list element in Info.plist. */
+    private static final String ELEMENT_PLIST     = "plist";
+    /** Label of they key element in Info.plist. */
+    private static final String ELEMENT_KEY       = "key";
+    /** Label of the string element in Info.plist. */
+    private static final String ELEMENT_STRING    = "string";
     /** Label of the property list's version attribute in Info.plist. */
     private static final String ATTRIBUTE_VERSION = "version";
     /** URL of the property list DTD file. */
@@ -252,15 +252,15 @@ public class AppTask extends Task {
             out = new XmlWriter(new File(contents, PROPERTIES_LIST));
 
             // Writes the Info.plist header.
-            out.writeDocType(TAG_PLIST, XmlWriter.AVAILABILITY_SYSTEM, null, URL_PLIST_DTD);
+            out.writeDocType(ELEMENT_PLIST, XmlWriter.AVAILABILITY_SYSTEM, null, URL_PLIST_DTD);
             attr = new XmlAttributes();
             attr.add(ATTRIBUTE_VERSION, info.getVersion());
-            out.openTag(TAG_PLIST, attr);
+            out.startElement(ELEMENT_PLIST, attr);
             out.println();
 
             writeDictContent(out, info);
 
-            out.closeTag(TAG_PLIST);
+            out.endElement(ELEMENT_PLIST);
         }
         catch(IOException e) {throw new BuildException("Could not open " + PROPERTIES_LIST + " for writing", e);}
 
@@ -277,7 +277,7 @@ public class AppTask extends Task {
         Iterator elements;
         Object   element;
 
-        out.openTag(TAG_DICT);
+        out.startElement(ELEMENT_DICT);
         out.println();
         
         elements = dict.elements();
@@ -286,24 +286,24 @@ public class AppTask extends Task {
             if(element instanceof InfoString) {
                 InfoString string = (InfoString)element;
                 string.check();
-                out.openTag(TAG_KEY);
+                out.startElement(ELEMENT_KEY);
                 out.writeCData(string.getName());
-                out.closeTag(TAG_KEY);
+                out.endElement(ELEMENT_KEY);
 
-                out.openTag(TAG_STRING);
+                out.startElement(ELEMENT_STRING);
                 out.writeCData(string.getValue());
-                out.closeTag(TAG_STRING);
+                out.endElement(ELEMENT_STRING);
             }
             else if(element instanceof Dictionary) {
                 Dictionary dictionary = (Dictionary)element;
                 dictionary.check();
-                out.openTag(TAG_KEY);
+                out.startElement(ELEMENT_KEY);
                 out.writeCData(dictionary.getName());
-                out.closeTag(TAG_KEY);
+                out.endElement(ELEMENT_KEY);
                 writeDictContent(out, dictionary);
             }
         }
-        out.closeTag(TAG_DICT);
+        out.endElement(ELEMENT_DICT);
     }
 
 

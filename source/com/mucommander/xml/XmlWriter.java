@@ -9,12 +9,12 @@ import java.util.*;
  * Writing XML content with this class is meant to be just about as easy and straightforward
  * as possible:<br/>
  * - open your XML stream ({@link #XmlWriter(File)} or {@link #XmlWriter(OutputStream)}).<br/>
- * - open and close tags ({@link #openTag(String)} and {@link #closeTag(String)}).<br/>
+ * - open and close elements ({@link #startElement(String)} and {@link #endElement(String)}).<br/>
  * - add any CDATA you need ({@link #writeCData(String)}).
  * </p>
  * <p>
  * It's important to realize that no coherency checking whatsoever is performed.
- * There's nothing to prevent developers from closing tags they haven't opened yet, or
+ * There's nothing to prevent developers from closing elements they haven't opened yet, or
  * duplicating attribute names, or pretty much any other silly thing you can think of in XML.
  * </p>
  * @author Nicolas Rinaudo
@@ -23,7 +23,7 @@ public class XmlWriter {
     // - Constants -------------------------------------------------------
     // -------------------------------------------------------------------
     /** Number of space characters used for one level of indentation. */
-    private static final int OFFSET_INCREMENT       = 4;
+    private static final int    OFFSET_INCREMENT    = 4;
     /** Identifier for publicly accessible objects. */
     public  static final String AVAILABILITY_PUBLIC = "PUBLIC";
     /** Identifier for system resources. */
@@ -48,7 +48,7 @@ public class XmlWriter {
     private PrintStream out;
     /** Current indentation offset. */
     private int         offset;
-    /** Whether the next tag opening or closing operation should be indented. */
+    /** Whether the next element opening or closing operation should be indented. */
     private boolean     printIndentation;
 
 
@@ -104,6 +104,10 @@ public class XmlWriter {
         writeHeader(encoding);
     }
 
+    /**
+     * Prints the XML header.
+     * @param encoding encoding used to write the XML content.
+     */
     private void writeHeader(String encoding) {
         out.print("<?xml version=\"1.0\" encoding=\"");
         out.print(encoding);
@@ -111,7 +115,7 @@ public class XmlWriter {
     }
 
 
-    // - Tag operations --------------------------------------------------
+    // - Element operations --------------------------------------------------
     // -------------------------------------------------------------------
     /**
      * Writes the document type declaration of the XML file.
@@ -156,68 +160,68 @@ public class XmlWriter {
     }
 
     /**
-     * Writes a tag opening sequence.
+     * Writes a element opening sequence.
      * <p>
-     * Tags opened using this method will not have any attribute, and will
-     * need to be closed using a {@link #closeTag(String)} call.
+     * Elements opened using this method will not have any attribute, and will
+     * need to be closed using a {@link #endElement(String)} call.
      * </p>
-     * @param name name of the tag to open.
-     * @see #openTag(XmlAttributes)
-     * @see @writeStandAloneTag(String)
-     * @see @writeStandAloneTag(String,XmlAttributes)
+     * @param name name of the element to open.
+     * @see #startElement(XmlAttributes)
+     * @see @writeStandAloneElement(String)
+     * @see @writeStandAloneElement(String,XmlAttributes)
      */
-    public void openTag(String name) {openTag(name, false, null);}
+    public void startElement(String name) {startElement(name, false, null);}
 
     /**
-     * Writes a stand-alone tag.
+     * Writes a stand-alone element.
      * <p>
-     * Tags opened using this method will not have any attributes, and will be
+     * Elements opened using this method will not have any attributes, and will be
      * closed immediately.
      * </p>
-     * @param name name of the tag to write.
-     * @see #openTag(String,XmlAttributes)
-     * @see #openTag(String)
-     * @see @writeStandAloneTag(String)
+     * @param name name of the element to write.
+     * @see #startElement(String,XmlAttributes)
+     * @see #startElement(String)
+     * @see @writeStandAloneElement(String)
      */
-    public void writeStandAloneTag(String name) {openTag(name, true, null);}
+    public void writeStandAloneElement(String name) {startElement(name, true, null);}
 
     /**
-     * Writes a tag opening sequence.
+     * Writes a element opening sequence.
      * <p>
-     * Tags opened using this method will need to be closed using a {@link #closeTag(String)} call.
+     * Elements opened using this method will need to be closed using a {@link #endElement(String)} call.
      * </p>
-     * @param name       name of the tag to open.
-     * @param attributes attributes that this tag will have.
-     * @see #openTag(String)
-     * @see @writeStandAloneTag(String)
-     * @see @writeStandAloneTag(String,XmlAttributes)
+     * @param name       name of the element to open.
+     * @param attributes attributes that this element will have.
+     * @see #startElement(String)
+     * @see @writeStandAloneElement(String)
+     * @see @writeStandAloneElement(String,XmlAttributes)
      */
-    public void openTag(String name, XmlAttributes attributes) {openTag(name, false, attributes);}
+    public void startElement(String name, XmlAttributes attributes) {startElement(name, false, attributes);}
 
     /**
-     * Writes a stand-alone tag.
+     * Writes a stand-alone element.
      * <p>
-     * Tags opened using this method will not need to be closed
+     * Elements opened using this method will not need to be closed
      * </p>
-     * @param name       name of the tag to write.
-     * @param attributes attributes that this tag will be closed immediately.
-     * @see #openTag(String)
-     * @see #openTag(String,XmlAttributes)
-     * @see @writeStandAloneTag(String)
+     * @param name       name of the element to write.
+     * @param attributes attributes that this element will be closed immediately.
+     * @see #startElement(String)
+     * @see #startElement(String,XmlAttributes)
+     * @see @writeStandAloneElement(String)
      */
-    public void writeStandAloneTag(String name, XmlAttributes attributes) {openTag(name, true, attributes);}
+    public void writeStandAloneElement(String name, XmlAttributes attributes) {startElement(name, true, attributes);}
 
     /**
-     * Writes a tag opening sequence.
-     * @param name         name of the tag to open.
-     * @param isStandAlone whether or not this tag should be closed immediately.
-     * @param attributes   XML attributes for this tag.
+     * Writes a element opening sequence.
+     * @param name         name of the element to open.
+     * @param isStandAlone whether or not this element should be closed immediately.
+     * @param attributes   XML attributes for this element.
      */
-    private void openTag(String name, boolean isStandAlone, XmlAttributes attributes) {
+    private void startElement(String name, boolean isStandAlone, XmlAttributes attributes) {
         // Prints indentation if necessary.
         indent();
 
-        // Opens the tag.
+        // Opens the element.
         out.print('<');
         out.print(name);
 
@@ -237,26 +241,26 @@ public class XmlWriter {
             }
         }
 
-        // Closes the tag if necessary.
+        // Closes the element if necessary.
         if(isStandAlone)
             out.print('/');
         else
             offset += OFFSET_INCREMENT;
 
-        // Finishes the tag opening sequence.
+        // Finishes the element opening sequence.
         out.print('>');
     }
 
     /**
-     * Writes a tag closing sequence.
-     * @param name name of the tag to close.
+     * Writes a element closing sequence.
+     * @param name name of the element to close.
      */
-    public void closeTag(String name) {
+    public void endElement(String name) {
         // Updates the indentation, and prints it if necessary.
         offset -= OFFSET_INCREMENT;
         indent();
 
-        // Writes the tag closing sequence.
+        // Writes the element closing sequence.
         out.print("</");
         out.print(name);
         out.print('>');
@@ -272,7 +276,7 @@ public class XmlWriter {
      * <p>
      * Note that you can use this method whenever you want. While this might seem obvious,
      * it means that you can use it, for example, to add XML headers before you even opened
-     * your first tag.
+     * your first element.
      * </p>
      * @param cdata content to write to the XML stream.
      */

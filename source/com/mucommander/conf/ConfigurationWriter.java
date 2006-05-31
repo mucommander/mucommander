@@ -32,7 +32,7 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
         // Remove 'root' element from the xml tree
         if(name.equals("root"))
             return;
-        out.openTag(name);
+        out.startElement(name);
         out.println();
     }
 
@@ -44,7 +44,7 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
         // Remove 'root' element from the xml tree
         if(name.equals("root"))
             return;
-        out.closeTag(name);
+        out.endElement(name);
     }
 
     /**
@@ -53,8 +53,8 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
      * @param value leaf's value.
      */
     public void addLeaf(String name, String value) {
-        out.openTag(name);
+        out.startElement(name);
         out.writeCData(value);
-        out.closeTag(name);
+        out.endElement(name);
     }
 }
