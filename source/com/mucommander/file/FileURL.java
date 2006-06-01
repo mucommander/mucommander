@@ -50,7 +50,8 @@ public class FileURL implements Cloneable {
             pos = url.indexOf("://");
             if(pos==-1)
                 throw new MalformedURLException("Protocol not specified");
-            protocol =  url.substring(0, pos).trim();
+//            protocol =  url.substring(0, pos).trim();
+            protocol =  url.substring(0, pos);
             // Advance string index
             pos += 3;
 			
@@ -62,9 +63,11 @@ public class FileURL implements Cloneable {
             // Filenames may contain @ chars, so atPos must be lower than next separator's position (if any)
             if(atPos!=-1 && (separatorPos==-1 || atPos<separatorPos)) {
                 colonPos = url.indexOf(':', pos);
-                login = url.substring(pos, colonPos==-1?atPos:colonPos).trim();
+//                login = url.substring(pos, colonPos==-1?atPos:colonPos).trim();
+                login = url.substring(pos, colonPos==-1?atPos:colonPos);
                 if(colonPos!=-1)
-                    password = url.substring(colonPos+1, atPos).trim();
+                    password = url.substring(colonPos+1, atPos);
+//                    password = url.substring(colonPos+1, atPos).trim();
                 // Advance string index
                 pos = atPos+1;
             }
@@ -84,11 +87,14 @@ public class FileURL implements Cloneable {
                 hostEndPos = urlLen;
 
             if(colonPos!=-1 && colonPos<hostEndPos) {
-                host = url.substring(pos, colonPos).trim();
-                port = Integer.parseInt(url.substring(colonPos+1, hostEndPos).trim());
+//                host = url.substring(pos, colonPos).trim();
+                host = url.substring(pos, colonPos);
+//                port = Integer.parseInt(url.substring(colonPos+1, hostEndPos).trim());
+                port = Integer.parseInt(url.substring(colonPos+1, hostEndPos));
             }
             else {
-                host = url.substring(pos, hostEndPos).trim();
+//                host = url.substring(pos, hostEndPos).trim();
+                host = url.substring(pos, hostEndPos);
             }
 			
             if(host.equals(""))
@@ -96,7 +102,8 @@ public class FileURL implements Cloneable {
 				
             // Parse path part excluding query part
             pos = hostEndPos;
-            path = url.substring(pos, questionPos==-1?urlLen:questionPos).trim();
+//            path = url.substring(pos, questionPos==-1?urlLen:questionPos).trim();
+            path = url.substring(pos, questionPos==-1?urlLen:questionPos);
             // Empty path means '/'
             if(path.equals(""))
                 path = "/";
@@ -167,7 +174,8 @@ public class FileURL implements Cloneable {
 			
             // Parse query part (if any)
             if(questionPos!=-1)
-                query = url.substring(questionPos, urlLen).trim();
+                query = url.substring(questionPos, urlLen);
+//                query = url.substring(questionPos, urlLen).trim();
 		
             // Extract filename and parent from path
             if(path.equals("") || path.equals("/")) {
@@ -184,7 +192,8 @@ public class FileURL implements Cloneable {
 				 
                 filename = pathCopy.substring(0, len);
                 separatorPos = filename.lastIndexOf('/');
-                filename = path.substring(separatorPos+1, len).trim();
+//                filename = path.substring(separatorPos+1, len).trim();
+                filename = path.substring(separatorPos+1, len);
                 if(filename.equals(""))
                     filename = null;
                 //				if(urlDecode)
@@ -283,7 +292,8 @@ public class FileURL implements Cloneable {
         if(login==null)
             this.login = null;
         else {
-            login = login.trim();
+//            login = login.trim();
+            login = login;
             if(login.equals(""))
                 this.login = null;
             else
@@ -307,7 +317,8 @@ public class FileURL implements Cloneable {
         if(password==null)
             this.password = null;
         else {
-            password = password.trim();
+//            password = password.trim();
+            password = password;
             if(password.equals(""))
                 this.password = null;
             else
