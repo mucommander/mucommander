@@ -249,6 +249,10 @@ public class XmlWriter {
 
         // Finishes the element opening sequence.
         out.print('>');
+
+        // Stand-alone tags are followed by a line break.
+        if(isStandAlone)
+            println();
     }
 
     /**
