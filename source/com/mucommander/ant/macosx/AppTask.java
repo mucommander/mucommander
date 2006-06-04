@@ -10,23 +10,6 @@ import com.mucommander.xml.*;
  * @author Nicolas Rinaudo
  */
 public class AppTask extends Task {
-    // - Info.plist structure --------------------------------------------
-    // -------------------------------------------------------------------
-    /** Label of the dictionary element in Info.plist. */
-    private static final String ELEMENT_DICT      = "dict";
-    /** Label of the property list element in Info.plist. */
-    private static final String ELEMENT_PLIST     = "plist";
-    /** Label of they key element in Info.plist. */
-    private static final String ELEMENT_KEY       = "key";
-    /** Label of the string element in Info.plist. */
-    private static final String ELEMENT_STRING    = "string";
-    /** Label of the property list's version attribute in Info.plist. */
-    private static final String ATTRIBUTE_VERSION = "version";
-    /** URL of the property list DTD file. */
-    private static final String URL_PLIST_DTD     = "file://localhost/System/Library/DTDs/PropertyList.dtd";
-
-
-
     // - Info.plist keys -------------------------------------------------
     // -------------------------------------------------------------------
     /** Label of the 'path to executable' key in Info.plist. */
@@ -74,7 +57,7 @@ public class AppTask extends Task {
     /** Path to the application's icon. */
     private File           icon;
     /** Application's info description. */
-    private RootDictionary info;
+    private RootKey        info;
     /** Path to the application's JAR file. */
     private File           jar;
 
@@ -95,7 +78,7 @@ public class AppTask extends Task {
         type        = null;
         signature   = null;
         icon        = null;
-        info        = new RootDictionary();
+        info        = new RootKey();
         jar         = null;
     }
 
@@ -134,14 +117,14 @@ public class AppTask extends Task {
     public void setJar(File f) {jar = f;}
 
     /**
-     * Returns a fully initialised RootDictionary instance.
+     * Returns a fully initialised RootKey instance.
      * <p>
      * This instance is the one that will be used for the <code>Info.plist</code>
      * file generation.
      * </p>
-     * @return a fully initialised RootDictionary instance.
+     * @return a fully initialised RootKey instance.
      */
-    public RootDictionary createInfo() {return info;}
+    public RootKey createInfo() {return info;}
 
     /**
      * Entry point of the task.
@@ -202,8 +185,8 @@ public class AppTask extends Task {
      * </p>
      */
     private void addDefaultKeys() {
-        InfoString buffer; // Used to create dynamicaly generated keys.
-        Dictionary java;   // Java dictionary.
+        StringKey buffer; // Used to create dynamicaly generated keys.
+        DictKey   java;   // Java dictionary.
 
         // Adds the KEY_EXECUTABLE key.
         buffer = info.createString();
@@ -227,7 +210,7 @@ public class AppTask extends Task {
 
         // If the DICT_JAVA dictionary hasn't been created yet,
         // creates it.
-        if((java = info.getDictionary(DICT_JAVA)) == null) {
+        if((java = info.getDict(DICT_JAVA)) == null) {
             java = info.createDict();
             java.setName(DICT_JAVA);
         }
@@ -241,26 +224,14 @@ public class AppTask extends Task {
 
     private void writeInfo(File contents) throws BuildException {
         XmlWriter     out;
-        XmlAttributes attr;
 
         // Initialises the Info.plist writing.
         out = null;
         addDefaultKeys();
-        info.check();
 
         try {
-            out = new XmlWriter(new File(contents, PROPERTIES_LIST));
+            info.write(out = new XmlWriter(new File(contents, PROPERTIES_LIST)));
 
-            // Writes the Info.plist header.
-            out.writeDocType(ELEMENT_PLIST, XmlWriter.AVAILABILITY_SYSTEM, null, URL_PLIST_DTD);
-            attr = new XmlAttributes();
-            attr.add(ATTRIBUTE_VERSION, info.getVersion());
-            out.startElement(ELEMENT_PLIST, attr);
-            out.println();
-
-            writeDictContent(out, info);
-
-            out.endElement(ELEMENT_PLIST);
         }
         catch(IOException e) {throw new BuildException("Could not open " + PROPERTIES_LIST + " for writing", e);}
 
@@ -272,40 +243,6 @@ public class AppTask extends Task {
             }
         }
     }
-
-    private static void writeDictContent(XmlWriter out, AbstractDictionary dict) throws BuildException {
-        Iterator elements;
-        Object   element;
-
-        out.startElement(ELEMENT_DICT);
-        out.println();
-        
-        elements = dict.elements();
-        while(elements.hasNext()) {
-            element = elements.next();
-            if(element instanceof InfoString) {
-                InfoString string = (InfoString)element;
-                string.check();
-                out.startElement(ELEMENT_KEY);
-                out.writeCData(string.getName());
-                out.endElement(ELEMENT_KEY);
-
-                out.startElement(ELEMENT_STRING);
-                out.writeCData(string.getValue());
-                out.endElement(ELEMENT_STRING);
-            }
-            else if(element instanceof Dictionary) {
-                Dictionary dictionary = (Dictionary)element;
-                dictionary.check();
-                out.startElement(ELEMENT_KEY);
-                out.writeCData(dictionary.getName());
-                out.endElement(ELEMENT_KEY);
-                writeDictContent(out, dictionary);
-            }
-        }
-        out.endElement(ELEMENT_DICT);
-    }
-
 
 
     // - PkgInfo generation ----------------------------------------------
@@ -333,6 +270,11 @@ public class AppTask extends Task {
     // -------------------------------------------------------------------
     /**
      * Writes the JavaApplicationStub in the proper folder.
+     * <p>
+     * This method is system dependant: the application stub file must be set
+     * to executable, which cannot be done in a system independant way with any version
+     * older than Java 1.6.
+     * </p>
      * @param     file           Path to the .app's Contents folder.
      * @exception BuildException thrown if anything goes wrong.
      */
@@ -349,6 +291,7 @@ public class AppTask extends Task {
         // Tries to set the file's permissions for Unix like systems.
         // Since we're compiling something for Mac OS X here, this is
         // more than likely to be the case anyway.
+        // TODO: Java 1.6 offers file attribute modification methods. Use those.
         boolean failed;
         Process process;
         try {
@@ -387,7 +330,7 @@ public class AppTask extends Task {
     // - JAR file generation ---------------------------------------------
     // -------------------------------------------------------------------
     /**
-     * Writes the application's jar file to jar.icns.
+     * Creates the application's JAR file.
      * @param     java           path to the application's Resources/Java folder.
      * @exception BuildException thrown if any error occurs.
      */
@@ -418,20 +361,27 @@ public class AppTask extends Task {
     }
 
     /**
+     * Transfers the content of the specified URL to the specified file.
+     * @param     from        where to read data from.
+     * @param     to          where to write data to.
+     * @exception IOException thrown if any IO related error occurs.
      */
     private static void transfer(URL from, File to) throws IOException {
-        InputStream  in;
-        OutputStream out;
-        int    count;  // Number of bytes read in the latest iteration.
-        byte[] buffer; // Stores bytes before they're transfered.
+        InputStream  in;  // Stream on the input URL.
+        OutputStream out; // Stream on the output file.
+        int    count;     // Number of bytes read in the latest iteration.
+        byte[] buffer;    // Stores bytes before they're transfered.
 
+        // Initialises reading.
         buffer = new byte[1024];
         in     = null;
         out    = null;
 
         try {
+            // Opens the streams.
             in  = from.openStream();
             out = new FileOutputStream(to);
+
             // Transfers the content of in to out.
             while(true) {
                 if((count = in.read(buffer)) == -1)
@@ -439,6 +389,7 @@ public class AppTask extends Task {
                 out.write(buffer, 0, count);
             }
         }
+        // Releases resources.
         finally {
             if(in != null) {
                 try {in.close();}
