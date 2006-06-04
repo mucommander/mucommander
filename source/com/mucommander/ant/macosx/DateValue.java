@@ -44,12 +44,66 @@ public class DateValue implements InfoElement {
 
     // - Ant interaction -------------------------------------------------
     // -------------------------------------------------------------------
+    /**
+     * Allows Ant to set the date's year.
+     * <p>
+     * If not specified, the current year will be used.
+     * </p>
+     * @param i date's year.
+     */
     public void setYear(int i) {year = new Integer(i);}
+
+    /**
+     * Allows Ant to set the date's month.
+     * <p>
+     * If not specified and <code>year</code> was, the current month will be used.
+     * </p>
+     * @param i date's month.
+     */
     public void setMonth(int i) {month = new Integer(i);}
+
+    /**
+     * Allows Ant to set the date's day.
+     * <p>
+     * If not specified and <code>year</code> and <code>month</code> were,
+     * the current day will be used.
+     * </p>
+     * @param i date's month.
+     */
     public void setDay(int i) {day = new Integer(i);}
+
+    /**
+     * Allows Ant to set the date's hours.
+     * <p>
+     * This value is non-compulsory. If not specified, any minute and second
+     * data will be discarded.
+     * </p>
+     * @param i date's hour.
+     */
     public void setHours(int i) {hours = new Integer(i);}
+
+    /**
+     * Allows Ant to set the date's minutes.
+     * <p>
+     * This value is non-compulsory. If not specified, any seconds data
+     * will be discarded.
+     * </p>
+     * <p>
+     * This will be ignored if no hours information was set.
+     * </p>
+     * @param i date's minutes.
+     */
     public void setMinutes(int i) {minutes = new Integer(i);}
+
+    /**
+     * Allows Ant to set the date's seconds.
+     * <p>
+     * This will be ignored if no hours and minutes information was set.
+     * </p>
+     * @param i date's seconds.
+     */
     public void setSeconds(int i) {seconds = new Integer(i);}
+
 
 
     // - XML output ------------------------------------------------------
@@ -65,22 +119,26 @@ public class DateValue implements InfoElement {
         now = Calendar.getInstance();
 
         // Makes sure year is initialised properly.
-        if(year == null)
+        if(year == null) {
+            // Uses default values where applicable.
             year = new Integer(now.get(Calendar.YEAR));
+            if(month == null) {
+                month = new Integer(getMonthNumber(now.get(Calendar.MONTH)));
+                if(day == null)
+                    day = new Integer(now.get(Calendar.DAY_OF_MONTH));
+            }
+        }
         else if(year.intValue() < 0)
             throw new BuildException("Illegal year value: " + year);
 
         // Makes sure month is initialised properly.
-        if(month == null)
-            month = new Integer(getMonthNumber(now.get(Calendar.MONTH)));
-        else if(month.intValue() < 1 || month.intValue() > 12)
-            throw new BuildException("Illegal month value: " + month);
-
-        // Makes sure day is initialised properly.
-        if(day == null)
-            day = new Integer(now.get(Calendar.DAY_OF_MONTH));
-        else if(day.intValue() < 0 || !checkDay(year.intValue(), month.intValue(), day.intValue()))
-            throw new BuildException("Illegal day value: " + day);
+        if(month != null) {
+            if(month.intValue() < 1 || month.intValue() > 12)
+                throw new BuildException("Illegal month value: " + month);
+            // Makes sure day is initialised properly.
+            if(day != null && (day.intValue() < 0 || !checkDay(year.intValue(), month.intValue(), day.intValue())))
+                throw new BuildException("Illegal day value: " + day);
+        }
 
         // Makes sure time is initialised properly.
         if(hours != null) {
@@ -97,10 +155,18 @@ public class DateValue implements InfoElement {
         // Writes the date value.
         out.startElement(ELEMENT_DATE);
         writeValue(out, year, 4);
-        out.writeCData("-");
-        writeValue(out, month, 2);
-        out.writeCData("-");
-        writeValue(out, day, 2);
+
+        // Writes the month and day information if they were specified.
+        if(month != null) {
+            out.writeCData("-");
+            writeValue(out, month, 2);
+            if(day != null) {
+                out.writeCData("-");
+                writeValue(out, day, 2);
+            }
+        }
+
+        // Writes the time information if it was specified.
         if(hours != null) {
             out.writeCData("T");
             writeValue(out, hours, 2);
@@ -120,15 +186,34 @@ public class DateValue implements InfoElement {
 
     // - Helper methods --------------------------------------------------
     // -------------------------------------------------------------------
+    /**
+     * Writes a 0-padded integer value to the specified XML output stream.
+     * @param out    where to write the integer value.
+     * @param value  value to write to the XML output stream.
+     * @param digits minimum number of digits the value must have.
+     */
     private static final void writeValue(XmlWriter out, Integer value, int digits) {
         String buffer;
 
         buffer = value.toString();
+
+        // Padds the value.
         for(int i = digits - buffer.length(); i > 0; i--)
             out.writeCData("0");
+
         out.writeCData(buffer);
     }
 
+    /**
+     * Retrieves the proper number of the specified month.
+     * <p>
+     * This method is necessary as:<br/>
+     * - the Java month constants start from 0, not 1.<br/>
+     * - there is no guaranty that the value will not change in fugure VMs.
+     * </p>
+     * @param month identifier of the month as defined in {@link java.util.Calendar}.
+     * @return      the number of the month in the year.
+     */
     private static final int getMonthNumber(int month) throws BuildException {
         switch(month) {
         case Calendar.JANUARY:
@@ -159,6 +244,13 @@ public class DateValue implements InfoElement {
         throw new BuildException("System error: cannot compute the current month.");
     }
 
+    /**
+     * Makes sure that the specified day is valid for the given year and month.
+     * @param  year  year in which the day is located.
+     * @param  month month in which the day is located.
+     * @param  day   day whose validity must be checked.
+     * @return       <code>true</code> if the day is valid, <code>false</code> otherwise.
+     */
     private static final boolean checkDay(int year, int month, int day) {
         Calendar date;
 
