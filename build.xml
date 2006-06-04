@@ -510,21 +510,21 @@
     <taskdef name="app" classname="com.mucommander.ant.macosx.AppTask" classpath="${tool-obf-jar}"/>
     <app jar="${obf-jar}" dest="${app-folder}" type="APPL" signature="MUCO" icon="${res}/icons/icon.icns">
       <info version="0.9">
-        <string name="CFBundleName"                    value="muCommander"/>
-        <string name="CFBundleVersion"                 value="${app-version}"/>
-        <string name="CFBundleAllowMixedLocalizations" value="true"/>
-        <string name="CFBundleDevelopmentRegion"       value="English"/>
-        <string name="CFBundleShortVersionString"      value="${app-version}"/>
-        <string name="CFBundleGetInfoString"           value="muCommander ${app-version}, (c) ${app-copyright} Maxence Bernard, ${homepage-url}"/>
+        <string  name="CFBundleName"                    value="muCommander"/>
+        <string  name="CFBundleVersion"                 value="${app-version}"/>
+        <boolean name="CFBundleAllowMixedLocalizations" value="true"/>
+        <string  name="CFBundleDevelopmentRegion"       value="English"/>
+        <string  name="CFBundleShortVersionString"      value="${app-version}"/>
+        <string  name="CFBundleGetInfoString"           value="muCommander ${app-version}, (c) ${app-copyright} Maxence Bernard, ${homepage-url}"/>
         <string name="CFBundleInfoDictionaryVersion"   value="6.0"/>
         <dict name="Java">
           <string name="MainClass"  value="${main-class}"/>
           <string name="JVMVersion" value="1.4*"/>
           <string name="ClassPath"  value="$JAVAROOT/mucommander.jar"/>
           <dict name="Properties">
-            <string name="com.apple.smallTabs"        value="true"/>
-            <string name="com.apple.hwaccel"          value="true"/>
-            <string name="apple.laf.useScreenMenuBar" value="true"/>
+            <boolean name="com.apple.smallTabs"        value="true"/>
+            <boolean name="com.apple.hwaccel"          value="true"/>
+            <boolean name="apple.laf.useScreenMenuBar" value="true"/>
           </dict>
         </dict>
       </info>
