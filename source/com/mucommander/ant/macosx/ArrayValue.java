@@ -61,6 +61,14 @@ public class ArrayValue implements InfoElement {
         return value;
     }
 
+    public DateValue createDate() {
+        DateValue value;
+
+        keys.add(value = new DateValue());
+
+        return value;
+    }
+
     public void write(XmlWriter out) throws BuildException {
         Iterator iterator;
 

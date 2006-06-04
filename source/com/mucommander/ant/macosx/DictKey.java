@@ -12,4 +12,5 @@ public class DictKey extends NamedInfoElement {
     public DictKey createDict() {return ((DictValue)getValue()).createDict();}
     public IntegerKey createInteger() {return ((DictValue)getValue()).createInteger();}
     public RealKey createReal() {return ((DictValue)getValue()).createReal();}
+    public DateKey createDate() {return ((DictValue)getValue()).createDate();}
 }
