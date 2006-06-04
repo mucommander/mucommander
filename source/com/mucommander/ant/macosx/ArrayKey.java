@@ -13,4 +13,5 @@ public class ArrayKey extends NamedInfoElement {
     public IntegerValue createInteger() {return ((ArrayValue)getValue()).createInteger();}
     public RealValue createReal() {return ((ArrayValue)getValue()).createReal();}
     public DateValue createDate() {return ((ArrayValue)getValue()).createDate();}
+    public DataValue createData() {return ((ArrayValue)getValue()).createData();}
 }

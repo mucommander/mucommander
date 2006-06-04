@@ -69,6 +69,14 @@ public class DictValue implements InfoElement {
         return value;
     }
 
+    public DataKey createData() {
+        DataKey value;
+
+        keys.add(value = new DataKey());
+
+        return value;
+    }
+
     DictKey getDict(String name) {
         Iterator         iterator;
         NamedInfoElement key;
