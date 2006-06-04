@@ -7,6 +7,19 @@ import java.io.InputStream;
 import java.util.Vector;
 import java.util.Calendar;
 
+/*
+    http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
+
+    buglist:
+        * ISO9660 file without extension have unneeded trailing "."
+    todo:
+        * test with more images
+        * Read docs about SVD (supplementary volume descriptor), fix the fuzzy search
+        * rewrite/sanitize InputStream for cooked
+        * add RockRidge, UDF and others extensions
+        * add DiscJuggler & other weirdos file format
+*/
+
 public class IsoArchiveFile extends AbstractArchiveFile {
     long sector_offset = 0;
     byte buffer[] = new byte[2048];
@@ -34,12 +47,38 @@ public class IsoArchiveFile extends AbstractArchiveFile {
                 start += 150;
                 sector_offset = -150;
             }
-            isoPvd pvd = new isoPvd(raf, start, cooked);
+
+            isoPvd pvd = null;
+
+            int level = 0;
+            for (int i = 1; i < 3; i++) {  // fuzzy search, can have type=0 (bootable el torito), type=2 (svd)
+                pvd = new isoPvd(raf, start + i, cooked);
+                if (pvd.type[0] == 2 && pvd.id[0] == 'C' && pvd.id[1] == 'D' && pvd.id[2] == '0' && pvd.id[3] == '0' && pvd.id[4] == '1')
+                {
+                    // gotta read docs a little more about those UCS-2 Escape Sequences
+                    switch (pvd.unused3[2]) {
+                        case 0x40:
+                            level = 1;
+                            break;
+                        case 0x43:
+                            level = 2;
+                            break;
+                        case 0x45:
+                            level = 3;
+                    }
+                    start += i;
+                    break;
+                }
+            }
+
+            if (level == 0) // if no SVD with Joliet, fallback to plain-old ISO9660
+                pvd = new isoPvd(raf, start, cooked);
+
             isoDr idr = new isoDr(pvd.root_directory_record, 0);
-            parse_dir("", isonum_733(idr.extent), isonum_733(idr.size), raf, entries, cooked);
+            parse_dir("", isonum_733(idr.extent), isonum_733(idr.size), raf, entries, cooked, level);
             todo td = todo_idr;
             while (td != null) {
-                parse_dir(td.name, td.extent, td.length, raf, entries, cooked);
+                parse_dir(td.name, td.extent, td.length, raf, entries, cooked, level);
                 td = td.next;
             }
         } catch (Exception e) {
@@ -59,17 +98,23 @@ public class IsoArchiveFile extends AbstractArchiveFile {
 
     }
 
-    private String newString(byte b[], int len) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0, max = b.length; i < max && i < len; i++) {
-            if (b[i] == 0)
-                break;
-            sb.append((char) (b[i] & 0xff));
+    private String newString(byte b[], int len, int level) throws Exception {
+        if (level == 0) {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0, max = b.length; i < max && i < len; i++) {
+                if (b[i] == 0)
+                    break;
+                sb.append((char) (b[i] & 0xff));
+            }
+            return sb.toString();
+
         }
-        return sb.toString();
+        byte d[] = new byte[len];
+        System.arraycopy(b, 0, d, 0, len);
+        return new String(d, "UnicodeBigUnmarked");
     }
 
-    private void parse_dir(String rootname, int extent, int len, RandomAccessFile raf, Vector entries, boolean cooked) throws Exception {
+    private void parse_dir(String rootname, int extent, int len, RandomAccessFile raf, Vector entries, boolean cooked, int level) throws Exception {
         todo td;
         int i;
         isoDr idr;
@@ -90,16 +135,17 @@ public class IsoArchiveFile extends AbstractArchiveFile {
                     fstat_buf.st_mode |= S_IFDIR;
                 else
                     fstat_buf.st_mode |= S_IFREG;
-
                 if (idr.name_len[0] == 1 && idr.name[0] == 0)
                     name_buf = ".";
                 else if (idr.name_len[0] == 1 && idr.name[0] == 1)
                     name_buf = "..";
                 else {
-                    name_buf = name_buf + newString(idr.name, idr.name_len[0]);
-                    int p = name_buf.lastIndexOf(";");
-                    if (p != -1)
-                        name_buf = name_buf.substring(0, p);
+                    name_buf = name_buf + newString(idr.name, idr.name_len[0] & 0xff, level);
+                    if (level == 0) {
+                        int p = name_buf.lastIndexOf(";");
+                        if (p != -1)
+                            name_buf = name_buf.substring(0, p);
+                    }
                 }
                 System.arraycopy(idr.date, 0, date_buf, 0, idr.date.length);
 
@@ -265,9 +311,10 @@ public class IsoArchiveFile extends AbstractArchiveFile {
         public byte[] interleave = new byte[ISODCL(28, 28)];
         public byte[] volume_sequence_number = new byte[ISODCL(29, 32)];
         public byte[] name_len = new byte[ISODCL(33, 33)];
-        public byte[] name = new byte[38];
+        public byte[] name = new byte[/*38*/128];   // quickly bumped to 128 for Joliet : doesn't lead to a crash yet :)
 
         public int s_length = 34;
+        ;
 
         public byte dataDr[][] = {length, ext_attr_length, extent, size,
                 date, flags, file_unit_size, interleave,
