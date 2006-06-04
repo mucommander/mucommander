@@ -223,6 +223,8 @@ public abstract class AbstractFile {
                 return new GzipArchiveFile(file);
             else if(ext.equals("bz2"))
                 return new Bzip2ArchiveFile(file);
+            else if(ext.equals("iso") || ext.equals("nrg"))
+                return new IsoArchiveFile(file);
         }
 
         return file;		
