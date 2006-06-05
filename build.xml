@@ -81,6 +81,9 @@
   <!-- Path toe the file in which to store the application's   -->
   <!-- API documentation as a zip file.                        -->
   <property name="api-zip"        location="${dist}/mucommander-api.zip"/>
+  <!-- Path toe the file in which to store the tools'          -->
+  <!-- API documentation as a zip file.                        -->
+  <property name="tools-api-zip"  location="${dist}/mucommander-tools-api.zip"/>
   <property name="app-tgz"        location="${app-folder}.tar.gz"/>
 
   <!-- Where to store temporary files.                         -->
@@ -98,6 +101,8 @@
   <property name="docs"           location="docs"/>
   <!-- Where to generate the muCommander API javadoc.          -->
   <property name="api-docs"       location="${docs}/api"/>
+  <!-- Where to generate the muCommander tools API javadoc.    -->
+  <property name="tools-docs"     location="${docs}/tools"/>
 
   <!-- Application's main class.                               -->
   <property name="main-class"     value="com.mucommander.Launcher"/>
@@ -256,11 +261,11 @@
   <target name="jar" depends="compile,resources,includelibs">
     <echo>Creating unobfuscated JAR file in ${clear-jar}...</echo>
     <mkdir  dir="${dist}"/>
-    <manifest file="${tmp}/MANIFEST.MF">
-      <attribute name="Main-Class" value="${main-class}"/>
-    </manifest>
-    <jar    jarfile="${clear-jar}"
-            basedir="${classes}" manifest="${tmp}/MANIFEST.MF"/>
+    <jar jarfile="${clear-jar}" basedir="${classes}">
+      <manifest>
+        <attribute name="Main-Class" value="${main-class}"/>
+      </manifest>
+    </jar>
   </target>
 
   <!-- Generates the application's obfuscated jar file.        -->
@@ -384,6 +389,10 @@
       </keepclasseswithmembers>
 
       <keepclasseswithmembers access="public" type="class">
+        <method access="public" name="addText"/>
+      </keepclasseswithmembers>
+
+      <keepclasseswithmembers access="public" type="class">
         <method access="public" name="main*"/>
       </keepclasseswithmembers>
 
@@ -451,6 +460,18 @@
     </javadoc>
   </target>
 
+  <!-- Generates muCommander's tools API javadoc.              -->
+  <!-- Output is stored in ${tools-docs}.                      -->
+  <target name="tools-doc">
+    <echo>Generating tools API javadoc in ${tools-docs}...</echo>
+    <mkdir dir="${tools-docs}"/>
+    <javadoc destdir="${tools-docs}" author="true" windowtitle="muTools API">
+      <packageset dir="${source}">
+        <include name="com/mucommander/ant/**"/>
+      </packageset>
+    </javadoc>
+  </target>
+
 
 
   <!-- = Release targets ===================================== -->
@@ -473,6 +494,11 @@
     <mkdir dir="${dist}"/>
     <zip destfile="${api-zip}">
       <zipfileset dir="${api-docs}" prefix="${archive-prefix}"/>
+    </zip>
+
+    <echo>Packaging tools API documentation in ${tools-api-zip}...</echo>
+    <zip destfile="${tools-api-zip}">
+      <zipfileset dir="${tools-docs}" prefix="${archive-prefix}"/>
     </zip>
   </target>
 
@@ -508,26 +534,25 @@
   <target name="app" depends="obfuscate">
     <echo>Creating Mac OS X application in ${app-folder}...</echo>
     <taskdef name="app" classname="com.mucommander.ant.macosx.AppTask" classpath="${tool-obf-jar}"/>
-    <app jar="${obf-jar}" dest="${app-folder}" type="APPL" signature="MUCO" icon="${res}/icons/icon.icns">
-      <info version="0.9">
-        <string  name="CFBundleName"                    value="muCommander"/>
-        <string  name="CFBundleVersion"                 value="${app-version}"/>
-        <boolean name="CFBundleAllowMixedLocalizations" value="true"/>
-        <string  name="CFBundleDevelopmentRegion"       value="English"/>
-        <string  name="CFBundleShortVersionString"      value="${app-version}"/>
-        <string  name="CFBundleGetInfoString"           value="muCommander ${app-version}, (c) ${app-copyright} Maxence Bernard, ${homepage-url}"/>
-        <string name="CFBundleInfoDictionaryVersion"   value="6.0"/>
-        <dict name="Java">
-          <string name="MainClass"  value="${main-class}"/>
-          <string name="JVMVersion" value="1.4*"/>
-          <string name="ClassPath"  value="$JAVAROOT/mucommander.jar"/>
-          <dict name="Properties">
-            <boolean name="com.apple.smallTabs"        value="true"/>
-            <boolean name="com.apple.hwaccel"          value="true"/>
-            <boolean name="apple.laf.useScreenMenuBar" value="true"/>
-          </dict>
+    <app jar="${obf-jar}" dest="${app-folder}" type="APPL" signature="MUCO" icon="${res}/icons/icon.icns"
+         infoversion="0.9">
+      <string  name="CFBundleName"                    value="muCommander"/>
+      <string  name="CFBundleVersion"                 value="${app-version}"/>
+      <boolean name="CFBundleAllowMixedLocalizations" value="true"/>
+      <string  name="CFBundleDevelopmentRegion"       value="English"/>
+      <string  name="CFBundleShortVersionString"      value="${app-version}"/>
+      <string  name="CFBundleGetInfoString"           value="muCommander ${app-version}, (c) ${app-copyright} Maxence Bernard, ${homepage-url}"/>
+      <string name="CFBundleInfoDictionaryVersion"   value="6.0"/>
+      <dict name="Java">
+        <string name="MainClass"  value="${main-class}"/>
+        <string name="JVMVersion" value="1.4*"/>
+        <string name="ClassPath"  value="$JAVAROOT/mucommander.jar"/>
+        <dict name="Properties">
+          <boolean name="com.apple.smallTabs"        value="true"/>
+          <boolean name="com.apple.hwaccel"          value="true"/>
+          <boolean name="apple.laf.useScreenMenuBar" value="true"/>
         </dict>
-      </info>
+      </dict>
     </app>
   </target>
 
