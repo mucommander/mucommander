@@ -7,6 +7,148 @@ import java.net.URL;
 import com.mucommander.xml.*;
 
 /**
+ * Ant task used to generate Mac OS X application files.
+ * <h3>Description</h3>
+ * <p>
+ * Creates a Mac OS X application file.<br/>
+ * This Ant task has been written for Java applications, and is not usable
+ * for anything else such as, for example, native ones.
+ * </p>
+ * <p>
+ * Mac OS X Java applications are wrapped around some native code, which this
+ * task will generate. It does, however, make it system dependant: the wrapper
+ * application must be set to executable, which is only possible under Unix
+ * system (or any system which supports the <code>chmod</code> command).
+ * </p>
+ * <p>
+ * For the resulting application to behave properly, its JAR file must be made
+ * executable. More information on how to do that can be found
+ * <a href="http://java.sun.com/j2se/javadoc/">here</a>.
+ * </p>
+ * <h3>Parameters</h3>
+ * <p>
+ * <table border="1" cellpadding="2" cellspacing="0">
+ *   <tr>
+ *     <td valign="top"><b>Attribute</b></td>
+ *     <td valign="top"><b>Description</b></td>
+ *     <td valign="top"><b>Required</b></td>
+ *   </tr>
+ *   <tr>
+ *     <td valign="top">{@link #setDest(File) dest}</td>
+ *     <td valign="top">
+ *       Where to store the application file. This path is expected to have the
+ *       <code>.app</code> extension, although this will be added if not found.<br/>
+ *       It is expected to be an non-existing or empty directory. The task will not
+ *       fail if such is not the case, but results may be unpredictable.
+ *     </td>
+ *     <td valign="top">Yes</td>
+ *   </tr>
+ *   <tr>
+ *     <td valign="top">{@link #setIcon(File) icon}</td>
+ *     <td valign="top">Path to the aplication's icon file.</td>
+ *     <td valign="top">Yes</td>
+ *   </tr>
+ *   <tr>
+ *     <td valign="top">{@link #setJar(File) jar}</td>
+ *     <td valign="top">
+ *       Path to the application's executable JAR file.
+ *     </td>
+ *     <td valign="top">Yes</td>
+ *   </tr>
+ *   <tr>
+ *     <td valign="top">{@link #setSignature(String) signature}</td>
+ *     <td valign="top">Application's signature</td>
+ *     <td valign="top">Yes</td>
+ *   </tr>
+ *   <tr>
+ *     <td valign="top">{@link #setType(String) type}</td>
+ *     <td valign="top">Application's type.</td>
+ *     <td valign="top">No (defaults to {@link #TYPE_APPL APPL})</td>
+ *   </tr>
+ *   <tr>
+ *     <td valign="top">{@link #setInfoVersion(String) infoversion}</td>
+ *     <td valign="top">Version number of the <code>Info.plist</code> DTD.</td>
+ *     <td valign="top">No (defaults to {@link #DEFAULT_VERSION 1.0})</td>
+ *   </tr>
+ * </table>
+ * </p>
+ * <h3>Nested elements</h3>
+ * <p>
+ * Nested elements are used to describe the <code>Info.plist</code>
+ * Mac OS X file, in a format that we feel is slightly less dodgy
+ * than Apple's own implementation.
+ * </p>
+ * <h4>array</h4>
+ * <p>
+ * Describes an unnamed property collection.<br/>
+ * See the {@link com.mucommander.ant.macosx.ArrayKey documentation} for more information.
+ * </p>
+ * <h4>boolean</h4>
+ * <p>
+ * Describes a boolean property.<br/>
+ * See the {@link com.mucommander.ant.macosx.BooleanKey documentation} for more information.
+ * </p>
+ * <h4>data</h4>
+ * <p>
+ * Describes a raw data property.<br/>
+ * See the {@link com.mucommander.ant.macosx.DataKey documentation} for more information.
+ * </p>
+ * <h4>date</h4>
+ * <p>
+ * Describes a date property.<br/>
+ * See the {@link com.mucommander.ant.macosx.DateKey documentation} for more information.
+ * </p>
+ * <h4>dict</h4>
+ * <p>
+ * Describes a named property collection.<br/>
+ * See the {@link com.mucommander.ant.macosx.DictKey documentation} for more information.
+ * </p>
+ * <h4>integer</h4>
+ * <p>
+ * Describes an integer property.<br/>
+ * See the {@link com.mucommander.ant.macosx.IntegerKey documentation} for more information.
+ * </p>
+ * <h4>real</h4>
+ * <p>
+ * Describes a floating point number property.<br/>
+ * See the {@link com.mucommander.ant.macosx.RealKey documentation} for more information.
+ * </p>
+ * <h3><code>Info.plist</code> keys</h3>
+ * <p>
+ * Some <code>Info.plist</code> are generated dynamically by this task. They should not be overwritten,
+ * as this will result in incoherent property lists.
+ * </p>
+ * <p>
+ * The automatically generated keys are:
+ * <ul>
+ *   <li>
+ *     {@link #KEY_EXECUTABLE CFBundleExecutable}: set to the path to the java application
+ *     stub (<code>/Contents/MacOS/JavaApplicationStub</code>).
+ *   </li>
+ *   <li>
+ *     {@link #KEY_PACKAGE_TYPE CfBundlePackageType}: set to the application's {@link #setType(String) type}.
+ *   </li>
+ *   <li>
+ *     {@link #KEY_SIGNATURE CFBundleSignature}: set to the application's {@link #setSignature(String) signature}.
+ *   </li>
+ *   <li>
+ *     {@link #KEY_ICON CfBundleIconFile}: set to the path to the application's {@link #setIcon(File) icon}.
+ *   </li>
+ *   <li>
+ *     {@link #KEY_CLASSPATH Java/ClassPath}: set to the path to the application's {@link #setJar(File) jar}.
+ *   </li>
+ * </ul>
+ * </p>
+ * <h3>Examples</h3>
+ * <blockquote>
+ * <code>
+ * &lt;app jar=&quot;bin/application.jar&quot; dest=&quot;dist/Application.app&quot; signature=&quot;TEST&quot; icon=&quot;res/Icons.icns&quot;/&gt;
+ * </code>
+ * </blockquote>
+ * <p>
+ * creates a MacOS X application in <code>dist/Application.app</code> which will run the <code>bin/application.jar</code>
+ * executable JAR file, using <code>res/Icons.icns</code> as icons.
+ * </p>
  * @author Nicolas Rinaudo
  */
 public class AppTask extends Task {
@@ -27,6 +169,15 @@ public class AppTask extends Task {
 
 
 
+    // - Info.plist constants --------------------------------------------
+    // -------------------------------------------------------------------
+    private static final String ELEMENT_PLIST     = "plist";
+    private static final String ATTRIBUTE_VERSION = "version";
+    private static final String URL_PLIST_DTD     = "file://localhost/System/Library/DTDs/PropertyList.dtd";
+    private static final String DEFAULT_VERSION   = "1.0";
+
+
+
     // - .app constants --------------------------------------------------
     // -------------------------------------------------------------------
     /** Name of the Java application stub file. */
@@ -43,6 +194,8 @@ public class AppTask extends Task {
     private static final String MACOS_FOLDER     = "MacOS";
     /** Name of the propery list file. */
     private static final String PROPERTIES_LIST  = "Info.plist";
+    /** Default bundle type. */
+    private static final String TYPE_APPL        = "APPL";
 
 
 
@@ -57,9 +210,11 @@ public class AppTask extends Task {
     /** Path to the application's icon. */
     private File           icon;
     /** Application's info description. */
-    private RootKey        info;
+    private DictValue      properties;
     /** Path to the application's JAR file. */
     private File           jar;
+    /** DTD version of the <code>Info.plist</code> file. */
+    private String         infoVersion;
 
 
 
@@ -78,7 +233,7 @@ public class AppTask extends Task {
         type        = null;
         signature   = null;
         icon        = null;
-        info        = new RootKey();
+        properties  = new DictValue();
         jar         = null;
     }
 
@@ -87,13 +242,22 @@ public class AppTask extends Task {
     // - Ant interaction -------------------------------------------------
     // -------------------------------------------------------------------
     /**
-     * Sets the path to which the app file should be generated.
-     * @param f path to which the app file should be generated.
+     * Sets the path to which the application file should be generated.
+     * <p>
+     * <code>f</code> is expected to be a valid path to an either non-existing
+     * or empty directory. While the task won't fail if such is not the case,
+     * results are not predictable.<br/>
+     * Note that the task <i>will</i> fail if <code>f</code> is an existing file.
+     * </p>
+     * @param f path to which the application file should be generated.
      */
     public void setDest(File f) {destination = f;}
 
     /**
      * Sets the bundle type of the app file.
+     * <p>
+     * This attribute is non compulsory, and will default to {@link #TYPE_APPL}.
+     * </p>
      * @param s bundle type.
      */
     public void setType(String s) {type = s;}
@@ -112,23 +276,36 @@ public class AppTask extends Task {
 
     /**
      * Sets the path to the application's JAR file.
+     * <p>
+     * In order for the application to start, the JAR file must be
+     * executable. Click <a href="http://java.sun.com/j2se/javadoc/">here</a> to
+     * learn more about making JAR files executable.
+     * </p>
      * @param f path to the application's JAR file.
      */
     public void setJar(File f) {jar = f;}
 
     /**
-     * Returns a fully initialised RootKey instance.
+     * Sets the DTD version of the <code>Info.plist</code> file.
      * <p>
-     * This instance is the one that will be used for the <code>Info.plist</code>
-     * file generation.
+     * This parameter is non-compulsory and defaults to <code>1.0</code>
      * </p>
-     * @return a fully initialised RootKey instance.
+     * @param s DTD version of the <code>Info.plist</code> file.
      */
-    public RootKey createInfo() {return info;}
+    public void setInfoVersion(String s) {infoVersion = s;}
+
+    public ArrayKey createArray() {return properties.createArray();}
+    public BooleanKey createBoolean() {return properties.createBoolean();}
+    public StringKey createString() {return properties.createString();}
+    public DictKey createDict() {return properties.createDict();}
+    public IntegerKey createInteger() {return properties.createInteger();}
+    public RealKey createReal() {return properties.createReal();}
+    public DateKey createDate() {return properties.createDate();}
+    public DataKey createData() {return properties.createData();}
 
     /**
      * Entry point of the task.
-     * @exception BuildException thrown if any error occurs during .app generation.
+     * @exception BuildException thrown if any error occurs during application file generation.
      */
     public void execute() throws BuildException {
         File current; // Used to create the various directories needed by the .app.
@@ -137,7 +314,7 @@ public class AppTask extends Task {
         if(destination == null)
             throw new BuildException("No destination folder specified. Please fill in the dest argument.");
         if(type == null)
-            throw new BuildException("No application bundle type specified. Please fill in the type argument.");
+            type = TYPE_APPL;
         if(signature == null)
             throw new BuildException("No application signature specified. Please fill in the signature argument.");
         if(icon == null)
@@ -189,29 +366,29 @@ public class AppTask extends Task {
         DictKey   java;   // Java dictionary.
 
         // Adds the KEY_EXECUTABLE key.
-        buffer = info.createString();
+        buffer = properties.createString();
         buffer.setName(KEY_EXECUTABLE);
         buffer.setValue(APPLICATION_STUB);
 
         // Adds the KEY_PACKAGE_TYPE key.
-        buffer = info.createString();
+        buffer = properties.createString();
         buffer.setName(KEY_PACKAGE_TYPE);
         buffer.setValue(type);
 
         // Adds the KEY_SIGNATURE key.
-        buffer = info.createString();
+        buffer = properties.createString();
         buffer.setName(KEY_SIGNATURE);
         buffer.setValue(signature);
 
         // Adds the KEY_ICON key.
-        buffer = info.createString();
+        buffer = properties.createString();
         buffer.setName(KEY_ICON);
         buffer.setValue(icon.getName());
 
         // If the DICT_JAVA dictionary hasn't been created yet,
         // creates it.
-        if((java = info.getDict(DICT_JAVA)) == null) {
-            java = info.createDict();
+        if((java = properties.getDict(DICT_JAVA)) == null) {
+            java = properties.createDict();
             java.setName(DICT_JAVA);
         }
 
@@ -222,16 +399,39 @@ public class AppTask extends Task {
 
     }
 
+    /**
+     * Writes the application's <code>Info.plist</code> file.
+     * @param     contents       path to the application's Contents folder.
+     * @exception BuildException thrown if any error occurs.
+     */
     private void writeInfo(File contents) throws BuildException {
         XmlWriter     out;
+        XmlAttributes attr;
 
         // Initialises the Info.plist writing.
         out = null;
         addDefaultKeys();
 
         try {
-            info.write(out = new XmlWriter(new File(contents, PROPERTIES_LIST)));
+            out = new XmlWriter(new File(contents, PROPERTIES_LIST));
 
+            // Makes sure we have an Info.plist version.
+            if(infoVersion == null)
+                infoVersion = DEFAULT_VERSION;
+
+            // Writes the DTD path.
+            out.writeDocType(ELEMENT_PLIST, XmlWriter.AVAILABILITY_SYSTEM, null, URL_PLIST_DTD);
+
+            // Writes the root tag.
+            attr = new XmlAttributes();
+            attr.add(ATTRIBUTE_VERSION, infoVersion);
+            out.startElement(ELEMENT_PLIST, attr);
+            out.println();
+
+            // Writes the content of the Info.plist file.
+            properties.write(out);
+
+            out.endElement(ELEMENT_PLIST);
         }
         catch(IOException e) {throw new BuildException("Could not open " + PROPERTIES_LIST + " for writing", e);}
 
@@ -249,19 +449,30 @@ public class AppTask extends Task {
     // -------------------------------------------------------------------
     /**
      * Writes the Package Info file in the specified folder.
-     * @param     contents       path to the .app's Contents folder.
+     * @param     contents       path to the application's Contents folder.
      * @exception BuildException thrown if anything goes tits up.
      */
     private void writePkgInfo(File contents) throws BuildException {
         PrintStream out;
 
+        out = null;
+
         try {
+            // Writes the applications PkgInfo file.
             out = new PrintStream(new FileOutputStream(new File(contents, PACKAGE_INFO)));
             out.print(type);
             out.print(signature);
             out.close();
         }
         catch(Exception e) {throw new BuildException("Could not write " + PACKAGE_INFO + " file", e);}
+
+        // Releases resources.
+        finally {
+            if(out != null) {
+                try {out.close();}
+                catch(Exception e) {}
+            }
+        }
     }
 
 
@@ -282,10 +493,7 @@ public class AppTask extends Task {
         // Makes sure the MacOS folder exists.
         mkdir(file = new File(file, MACOS_FOLDER));
 
-        try {
-            transfer(this.getClass().getResource('/' + APPLICATION_STUB),
-                     new File(file, APPLICATION_STUB));
-        }
+        try {transfer(this.getClass().getResource('/' + APPLICATION_STUB),new File(file, APPLICATION_STUB));}
         catch(Exception e) {throw new BuildException("Could not generate " + APPLICATION_STUB, e);}
 
         // Tries to set the file's permissions for Unix like systems.
