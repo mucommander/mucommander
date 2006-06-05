@@ -166,9 +166,9 @@ public class XmlWriter {
      * need to be closed using a {@link #endElement(String)} call.
      * </p>
      * @param name name of the element to open.
-     * @see #startElement(XmlAttributes)
-     * @see @writeStandAloneElement(String)
-     * @see @writeStandAloneElement(String,XmlAttributes)
+     * @see #startElement(String,XmlAttributes)
+     * @see #writeStandAloneElement(String)
+     * @see #writeStandAloneElement(String,XmlAttributes)
      */
     public void startElement(String name) {startElement(name, false, null);}
 
@@ -181,7 +181,7 @@ public class XmlWriter {
      * @param name name of the element to write.
      * @see #startElement(String,XmlAttributes)
      * @see #startElement(String)
-     * @see @writeStandAloneElement(String)
+     * @see #writeStandAloneElement(String)
      */
     public void writeStandAloneElement(String name) {startElement(name, true, null);}
 
@@ -193,8 +193,8 @@ public class XmlWriter {
      * @param name       name of the element to open.
      * @param attributes attributes that this element will have.
      * @see #startElement(String)
-     * @see @writeStandAloneElement(String)
-     * @see @writeStandAloneElement(String,XmlAttributes)
+     * @see #writeStandAloneElement(String)
+     * @see #writeStandAloneElement(String,XmlAttributes)
      */
     public void startElement(String name, XmlAttributes attributes) {startElement(name, false, attributes);}
 
@@ -207,7 +207,7 @@ public class XmlWriter {
      * @param attributes attributes that this element will be closed immediately.
      * @see #startElement(String)
      * @see #startElement(String,XmlAttributes)
-     * @see @writeStandAloneElement(String)
+     * @see #writeStandAloneElement(String)
      */
     public void writeStandAloneElement(String name, XmlAttributes attributes) {startElement(name, true, attributes);}
 
