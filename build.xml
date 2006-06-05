@@ -140,19 +140,6 @@
     </copy>
     <copy file="${res}/dictionary.txt" todir="${classes}"/>
     <copy file="${res}/mime.types" todir="${classes}"/>
-
-    <!-- Generates the application's MANIFEST.MF file.         -->
-    <mkdir dir="${classes}/META-INF"/>
-    <manifest file="${classes}/META-INF/MANIFEST.MF">
-      <attribute name="Main-Class" value="${main-class}"/>
-    </manifest>
-    <!-- Ant's MANIFEST task suffers from a serious lack of   -->
-    <!-- modesty and will generate text files bordering on    -->
-    <!-- intelectual property theft.                          -->
-    <!-- Deletes them.                                        -->
-    <delete>
-      <fileset dir="${classes}/META-INF/" excludes="MANIFEST.MF"/>
-    </delete>
   </target>
 
   <!-- Deletes any dynamically generated file, effectively     -->
@@ -221,17 +208,21 @@
         <exclude name="osx-eawt-stubs.jar"/>
     </fileset>
     </unjar>
+
+    <!-- Makes sure that muCommander's JAR file does not        -->
+    <!-- inherit license and copyright from libraries.          -->
+    <delete dir="${classes}/META-INF"/>
   </target> 
 
 
 
-  <!-- = Compilation targets ================================= -->
-  <!-- ======================================================= -->
-  <!-- The following targets are used to generate the various  -->
-  <!-- muCommander JAR files.                                  -->
+  <!-- = Compilation targets ================================== -->
+  <!-- ======================================================== -->
+  <!-- The following targets are used to generate the various   -->
+  <!-- muCommander JAR files.                                   -->
 
-  <!-- Creates the runtime constant class.                     -->
-  <!-- Output will be stored in ${tmp-source}.                 -->
+  <!-- Creates the runtime constant class.                      -->
+  <!-- Output will be stored in ${tmp-source}.                  -->
   <target name="constants">
     <echo>Creating ${tmp-source}/com.mucommander.RuntimeConstants...</echo>
     <property name="is-debug"    value="true"/>
@@ -273,8 +264,12 @@
   <!-- Output will be stored in {$clear-jar}.                  -->
   <target name="jar" depends="compile,resources,includelibs">
     <echo>Creating unobfuscated JAR file in ${clear-jar}...</echo>
-    <mkdir  dir="${dist}"/>
-    <jar zipfile="${clear-jar}" basedir="${classes}"/>
+    <mkdir dir="${dist}"/>
+    <jar jarfile="${clear-jar}" basedir="${classes}">
+      <manifest>
+        <attribute name="Main-Class" value="${main-class}"/>
+      </manifest>
+    </jar>
   </target>
 
   <!-- Generates the application's obfuscated jar file.        -->
