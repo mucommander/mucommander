@@ -140,6 +140,19 @@
     </copy>
     <copy file="${res}/dictionary.txt" todir="${classes}"/>
     <copy file="${res}/mime.types" todir="${classes}"/>
+
+    <!-- Generates the application's MANIFEST.MF file.         -->
+    <mkdir dir="${classes}/META-INF"/>
+    <manifest file="${classes}/META-INF/MANIFEST.MF">
+      <attribute name="Main-Class" value="${main-class}"/>
+    </manifest>
+    <!-- Ant's MANIFEST task suffers from a serious lack of   -->
+    <!-- modesty and will generate text files bordering on    -->
+    <!-- intelectual property theft.                          -->
+    <!-- Deletes them.                                        -->
+    <delete>
+      <fileset dir="${classes}/META-INF/" excludes="MANIFEST.MF"/>
+    </delete>
   </target>
 
   <!-- Deletes any dynamically generated file, effectively     -->
@@ -261,11 +274,7 @@
   <target name="jar" depends="compile,resources,includelibs">
     <echo>Creating unobfuscated JAR file in ${clear-jar}...</echo>
     <mkdir  dir="${dist}"/>
-    <jar jarfile="${clear-jar}" basedir="${classes}">
-      <manifest>
-        <attribute name="Main-Class" value="${main-class}"/>
-      </manifest>
-    </jar>
+    <jar zipfile="${clear-jar}" basedir="${classes}"/>
   </target>
 
   <!-- Generates the application's obfuscated jar file.        -->
