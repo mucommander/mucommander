@@ -12,7 +12,6 @@ import java.util.Calendar;
 
     todo:
         * test with more images
-        * Read docs about SVD (supplementary volume descriptor), fix the fuzzy search
         * rewrite/sanitize InputStream for cooked
         * add RockRidge, UDF and others extensions
         * add DiscJuggler & other weirdos file format
@@ -24,6 +23,7 @@ public class IsoArchiveFile extends AbstractArchiveFile {
     Calendar calendar = Calendar.getInstance();
     todo todo_idr;
     boolean cooked;
+    RandomAccessFile raf;
 
     public IsoArchiveFile(AbstractFile file) {
         super(file);
@@ -36,7 +36,7 @@ public class IsoArchiveFile extends AbstractArchiveFile {
         Vector entries = new Vector();
 
         try {
-            RandomAccessFile raf = new RandomAccessFile(new File(file.getAbsolutePath()), "r");
+            raf = new RandomAccessFile(new File(file.getAbsolutePath()), "r");
             int start = 16;
             if ("nrg".equals(getExtension())) {
                 start += 150;
@@ -46,7 +46,7 @@ public class IsoArchiveFile extends AbstractArchiveFile {
             isoPvd pvd = null;
 
             int level = 0;
-            for (int i = 1; i < 3; i++) {  // fuzzy search, can have type=0 (bootable el torito), type=2 (svd)
+            for (int i = 1; i < 17; i++) {  // fuzzy search, can have type=0 (bootable el torito), type=2 (svd)
                 pvd = new isoPvd(raf, start + i, cooked);
                 if (pvd.type[0] == 2 && pvd.id[0] == 'C' && pvd.id[1] == 'D' && pvd.id[2] == '0' && pvd.id[3] == '0' && pvd.id[4] == '1')
                 {
@@ -86,7 +86,7 @@ public class IsoArchiveFile extends AbstractArchiveFile {
 
 
     InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
-        return new isoInputStream(new RandomAccessFile(new File(file.getAbsolutePath()), "r"), (IsoEntry) entry, cooked);
+        return new isoInputStream(raf, (IsoEntry) entry, cooked);
     }
 
     private void newString(byte b[], int len, int level, StringBuffer name) throws Exception {
@@ -123,11 +123,11 @@ public class IsoArchiveFile extends AbstractArchiveFile {
                     name_buf.append("..");
                 else {
                     newString(idr.name, idr.name_len[0] & 0xff, level, name_buf);
-                    if (level == 0) {
+                    if (level == 0) { // strip ;VERSION
                         int p = name_buf.lastIndexOf(";");
                         if (p != -1)
                             name_buf.setLength(p);
-                        p = name_buf.lastIndexOf(".");
+                        p = name_buf.lastIndexOf("."); // strip empty extension
                         if (p != -1) {
                             int s = name_buf.length() - 1;
                             if (p == s)
