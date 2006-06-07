@@ -68,7 +68,7 @@
   <!-- Where to store the muCommander tar.gz unix release.     -->
   <property name="dist-tgz"       location="${dist}/mucommander.tar.gz"/>
   <!-- Where to store the muCommander app Mac OS X release.    -->
-  <property name="app-name"       value="muCommander.app"/>
+  <property name="app-name"       value="mucommander.app"/>
   <property name="app-folder"     location="${dist}/${app-name}"/>
   <!-- Path to the file in which to store the unobfuscated     -->
   <!-- application JAR file.                                   -->
@@ -82,7 +82,7 @@
   <!-- Path toe the file in which to store the application's   -->
   <!-- API documentation as a zip file.                        -->
   <property name="api-zip"        location="${dist}/mucommander-api.zip"/>
-  <!-- Path toe the file in which to store the tools'          -->
+  <!-- Path to the file in which to store the tools'          -->
   <!-- API documentation as a zip file.                        -->
   <property name="tools-api-zip"  location="${dist}/mucommander-tools-api.zip"/>
   <property name="app-tgz"        location="${app-folder}.tar.gz"/>
