@@ -68,7 +68,8 @@
   <!-- Where to store the muCommander tar.gz unix release.     -->
   <property name="dist-tgz"       location="${dist}/mucommander.tar.gz"/>
   <!-- Where to store the muCommander app Mac OS X release.    -->
-  <property name="app-folder"     location="${dist}/muCommander.app"/>
+  <property name="app-name"       value="muCommander.app"/>
+  <property name="app-folder"     location="${dist}/${app-name}"/>
   <!-- Path to the file in which to store the unobfuscated     -->
   <!-- application JAR file.                                   -->
   <property name="clear-jar"      location="${dist}/mucommander_unobf.jar"/>
@@ -493,7 +494,7 @@
 
   <!-- Generates a zip file with muCommander's API docs.       -->
   <!-- The output will be stored in ${api-zip}.                -->
-  <target name="docs-zip" depends="api-doc,archive-prefix">
+  <target name="docs-zip" depends="api-doc,tools-doc,archive-prefix">
     <echo>Packaging API documentation in ${api-zip}...</echo>
     <mkdir dir="${dist}"/>
     <zip destfile="${api-zip}">
@@ -527,7 +528,7 @@
   <target name="app-tgz" depends="app,archive-prefix">
     <echo>Packaging Mac OS X distribution as ${app-tgz}...</echo>
     <tar destfile="${app-tgz}" compression="gzip">
-      <tarfileset file="${app-folder}" prefix="${archive-prefix}"/>
+      <tarfileset dir="${app-folder}" prefix="${archive-prefix}/${app-name}"/>
       <tarfileset file="license.txt" prefix="${archive-prefix}"/>
       <tarfileset file="readme.txt" prefix="${archive-prefix}"/>
     </tar>
