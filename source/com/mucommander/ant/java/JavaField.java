@@ -65,7 +65,7 @@ public class JavaField {
 
     /**
      * Sets the java field's type.
-     * @param str java field's type, as defined in {@link com.nrinaudo.util.JavaWriter}.
+     * @param str java field's type, as defined in {@link com.mucommander.ant.java.JavaWriter}.
      * @exception BuildException thrown if <code>str</code> is not a recognized type.
      */
     public void setType(String str) throws BuildException {
