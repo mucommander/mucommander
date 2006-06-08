@@ -7,7 +7,7 @@ import com.mucommander.xml.*;
 /**
  * Writes the configuration tree to an output stream.
  * <p>
- * This class is pretty straightforward to use: just call the {@link #writeXML(PrintWriter)}
+ * This class is pretty straightforward to use: just call the {@link #writeXML(OutputStream)}
  * method, and everything will be automatically done.
  * </p>
  * @author Nicolas Rinaudo, Maxence Bernard

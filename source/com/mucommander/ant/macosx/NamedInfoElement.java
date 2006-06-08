@@ -11,8 +11,7 @@ import org.apache.tools.ant.BuildException;
  * {@link com.mucommander.ant.macosx.BooleanKey booleans},
  * {@link com.mucommander.ant.macosx.ArrayKey arrays} and
  * {@link com.mucommander.ant.macosx.DictKey dictionaries}. Some elements might
- * not have a name however, such as the
- * {@link com.mucommander.ant.macosx.RootKey plist} or array values.
+ * not have a name however, such as array values.
  * </p>
  * <p>
  * Named elements are composed of two items: a name and a value.<br/>
