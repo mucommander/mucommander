@@ -556,6 +556,7 @@
           <boolean name="com.apple.smallTabs"        value="true"/>
           <boolean name="com.apple.hwaccel"          value="true"/>
           <boolean name="apple.laf.useScreenMenuBar" value="true"/>
+	  <string name="file.encoding" value="UTF-8"/>
         </dict>
       </dict>
     </app>
