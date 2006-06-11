@@ -214,8 +214,8 @@ public abstract class AbstractFile {
         else if (protocol.equals("sftp"))
             file = new SFTPFile(fileURL);
         // WebDAV file
-        else if (protocol.equals("webdav") || protocol.equals("webdavs"))
-            file = new WebDAVFile(fileURL);
+//        else if (protocol.equals("webdav") || protocol.equals("webdavs"))
+//            file = new WebDAVFile(fileURL);
         else
             throw new IOException("Unkown protocol "+protocol);
 
