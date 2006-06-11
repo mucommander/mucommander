@@ -1,11 +1,12 @@
 package com.mucommander.file;
 
-import java.io.*;
-import java.util.*;
-
+import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.PlatformManager;
 
+import java.io.*;
+import java.util.StringTokenizer;
 import javax.swing.filechooser.FileSystemView;
+
 
 /**
  * FSFile represents a 'file system file', that is a regular native file.
@@ -26,7 +27,7 @@ public class FSFile extends AbstractFile {
     private boolean parentValueSet;
 	
     /** "/" for UNIX systems, "\" for Win32 */
-    protected final static String separator = File.separator;
+    protected final static String SEPARATOR = File.separator;
 
     /** Are we running Windows ? */
     private final static boolean IS_WINDOWS;
@@ -55,13 +56,13 @@ public class FSFile extends AbstractFile {
     }
 
 
-    /**
-     * Creates a new FSFile using the given java.io.File instance.
-     */
-    private FSFile(FileURL fileURL, File file) throws IOException {
-        super(fileURL);
-        init(file);
-    }
+//    /**
+//     * Creates a new FSFile using the given java.io.File instance.
+//     */
+//    private FSFile(FileURL fileURL, File file) throws IOException {
+//        super(fileURL);
+//        init(file);
+//    }
 
 	
     private void init(File file) throws IOException {
@@ -74,7 +75,7 @@ public class FSFile extends AbstractFile {
         this.absPath = file.getAbsolutePath();
 
         // removes trailing separator (if any)
-        this.absPath = absPath.endsWith(separator)?absPath.substring(0,absPath.length()-1):absPath;		
+        this.absPath = absPath.endsWith(SEPARATOR)?absPath.substring(0,absPath.length()-1):absPath;
     }
 
 
@@ -209,45 +210,6 @@ public class FSFile extends AbstractFile {
     // AbstractFile methods implementation //
     /////////////////////////////////////////
 
-    public String getName() {
-        return parentFile==null?absPath+separator:file.getName();
-    }
-
-
-    public String getAbsolutePath() {
-        // Append separator for root folders (C:\ , /) and for directories
-        if(parentFile==null || (isDirectory() && !absPath.endsWith(separator)))
-            return absPath+separator;
-	
-        return absPath;
-    }
-
-
-    public String getCanonicalPath() {
-        // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
-        // triggered by java.io.File.getCanonicalPath() 
-        if(IS_WINDOWS && guessFloppyDrive())
-            return absPath;
-		
-        if(this.canonicalPath==null) {
-            try {
-                this.canonicalPath = file.getCanonicalPath();
-                // Append separator for directories
-                if(isDirectory() && !this.canonicalPath.endsWith(separator))
-                    this.canonicalPath = this.canonicalPath + separator;
-            }
-            catch(IOException e) {
-                this.canonicalPath = this.absPath;
-            }
-        }
-		
-        return this.canonicalPath;
-    }
-	
-    public String getSeparator() {
-        return separator;
-    }
-	
     public boolean isSymlink() {
         if(!symlinkValueSet) {
             FSFile parent = (FSFile)getParent();
@@ -292,7 +254,7 @@ public class FSFile extends AbstractFile {
     }
 	
     public void setParent(AbstractFile parent) {
-        this.parent = (FSFile)parent;	
+        this.parent = parent;
         this.parentValueSet = true;
     }
 		
@@ -308,10 +270,6 @@ public class FSFile extends AbstractFile {
         return file.canWrite();
     }
 	
-    public boolean isHidden() {
-        return file.isHidden();
-    }
-
     public boolean isDirectory() {
         // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
         // triggered by java.io.File.getCanonicalPath() 
@@ -321,15 +279,6 @@ public class FSFile extends AbstractFile {
         return file.isDirectory();
     }
 
-    public boolean equals(Object f) {
-        if(!(f instanceof FSFile))
-            return super.equals(f);		// could be equal to a ZipArchiveFile
-
-        // Compares canonical path (which File does not do by default in its equals() method)
-        return getCanonicalPath().equals(((FSFile)f).getCanonicalPath());
-    }
-	
-
     public InputStream getInputStream() throws IOException {
         return new FileInputStream(file);
     }
@@ -337,20 +286,16 @@ public class FSFile extends AbstractFile {
     public OutputStream getOutputStream(boolean append) throws IOException {
         return new FileOutputStream(absPath, append);
     }
-		
-    public boolean moveTo(AbstractFile destFile) throws IOException  {
-        if(destFile.fileURL.getProtocol().equals("file"))
-            return file.renameTo(new File(destFile.getAbsolutePath()));
-        return false;
-    }
+
 
     public void delete() throws IOException {
         boolean ret = file.delete();
 		
-        if(ret==false)
+        if(!ret)
             throw new IOException();
     }
 
+/*
     public AbstractFile[] ls() throws IOException {
         String names[] = file.list();
 		
@@ -359,14 +304,21 @@ public class FSFile extends AbstractFile {
         
         AbstractFile children[] = new AbstractFile[names.length];
         for(int i=0; i<names.length; i++) {
-            children[i] = AbstractFile.getAbstractFile(absPath+separator+names[i], this);
+            // Retrieves an AbstractFile (FSFile or archive) instance potentially fetched from the LRUCache
+            // and reuse this file as parent
+            children[i] = AbstractFile.getAbstractFile(absPath+SEPARATOR+names[i], this);
         }
 
         return children;
     }
+*/
+
+    public AbstractFile[] ls() throws IOException {
+        return ls((FilenameFilter)null);
+    }
 
     public void mkdir(String name) throws IOException {
-        if(!new File(absPath+separator+name).mkdir())
+        if(!new File(absPath+SEPARATOR+name).mkdir())
             throw new IOException();
     }
 	
@@ -378,4 +330,109 @@ public class FSFile extends AbstractFile {
     public long getTotalSpace() {
         return getVolumeInfo()[0];
     }	
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    public String getName() {
+        return parentFile==null?absPath+SEPARATOR:file.getName();
+    }
+
+    public String getAbsolutePath() {
+        // Append separator for root folders (C:\ , /) and for directories
+        if(parentFile==null || (isDirectory() && !absPath.endsWith(SEPARATOR)))
+            return absPath+SEPARATOR;
+
+        return absPath;
+    }
+
+
+    public String getCanonicalPath() {
+        // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
+        // triggered by java.io.File.getCanonicalPath()
+        if(IS_WINDOWS && guessFloppyDrive())
+            return absPath;
+
+        if(this.canonicalPath==null) {
+            try {
+                this.canonicalPath = file.getCanonicalPath();
+                // Append separator for directories
+                if(isDirectory() && !this.canonicalPath.endsWith(SEPARATOR))
+                    this.canonicalPath = this.canonicalPath + SEPARATOR;
+            }
+            catch(IOException e) {
+                this.canonicalPath = this.absPath;
+            }
+        }
+
+        return this.canonicalPath;
+    }
+
+
+    public String getSeparator() {
+        return SEPARATOR;
+    }
+
+
+    public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
+        String names[] = file.list();
+
+        if(names==null)
+            throw new IOException();
+
+        if(filenameFilter!=null)
+            names = filenameFilter.filter(names);
+
+        AbstractFile children[] = new AbstractFile[names.length];
+        for(int i=0; i<names.length; i++) {
+            // Retrieves an AbstractFile (FSFile or archive) instance potentially fetched from the LRUCache
+            // and reuse this file as parent
+            children[i] = AbstractFile.getAbstractFile(absPath+SEPARATOR+names[i], this);
+        }
+
+        return children;
+    }
+
+
+    /**
+     * Overrides {@link AbstractFile#moveTo(AbstractFile)} to move/rename the file directly if the destination file
+     * is also a local file.
+     */
+    public void moveTo(AbstractFile destFile) throws IOException  {
+        if(!destFile.fileURL.getProtocol().equals("file")) {
+            super.moveTo(destFile);
+            return;
+        }
+
+        // If file is an archive file, retrieve the enclosed file, which is likely to be an FSFile but not necessarily
+        // (may be an ArchiveEntryFile)
+        if(destFile instanceof AbstractArchiveFile)
+            destFile = ((AbstractArchiveFile)destFile).getProxiedFile();
+
+        // If destination file is not an FSFile (for instance an archive entry), renaming won't work
+        // so use the default moveTo() implementation instead
+        if(!(destFile instanceof FSFile)) {
+            super.moveTo(destFile);
+            return;
+        }
+
+        // Move file
+        if(!file.renameTo(((FSFile)destFile).file))
+            throw new IOException();    // Report that move failed
+    }
+
+
+    public boolean isHidden() {
+        return file.isHidden();
+    }
+
+    public boolean equals(Object f) {
+        if(!(f instanceof FSFile))
+            return super.equals(f);		// could be equal to a ZipArchiveFile
+
+        // Compares canonical path (which File does not do by default in its equals() method)
+        return getCanonicalPath().equals(((FSFile)f).getCanonicalPath());
+    }
 }

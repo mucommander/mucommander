@@ -8,6 +8,8 @@ import com.mucommander.ui.comp.progress.ProgressTextField;
 
 import com.mucommander.event.*;
 import com.mucommander.file.*;
+import com.mucommander.file.filter.HiddenFileFilter;
+
 import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
 import com.mucommander.PlatformManager;
@@ -51,6 +53,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private static Color backgroundColor;
     
     private Object lastFocusedComponent;
+
+    /** Filters out hidden files, null when 'show hidden files' option is enabled */
+    private static HiddenFileFilter hiddenFileFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_hidden_files", true)?null:new HiddenFileFilter();
 	
     private final static int CANCEL_ACTION = 0;
     private final static int BROWSE_ACTION = 1;
@@ -335,7 +340,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     locationField.setProgressValue(50);
 
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
-                    AbstractFile children[] = folder.ls();
+                    AbstractFile children[] = folder.ls(hiddenFileFilter);
 
                     synchronized(lock) {
                         if(isKilled) {
@@ -480,14 +485,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 		
         try {
             // Set initial folder to current directory
-            setCurrentFolder(initialFolder, initialFolder.ls(), null);
+            setCurrentFolder(initialFolder, initialFolder.ls(hiddenFileFilter), null);
         }
         catch(Exception e) {
             AbstractFile rootFolders[] = RootFolders.getRootFolders();
             // If that failed, try to read any other drive
             for(int i=0; i<rootFolders.length; i++) {
                 try  {
-                    setCurrentFolder(rootFolders[i], rootFolders[i].ls(), null);
+                    setCurrentFolder(rootFolders[i], rootFolders[i].ls(hiddenFileFilter), null);
                     break;
                 }
                 catch(IOException e2) {
@@ -727,7 +732,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @throws IOException if current folder could not be refreshed.
      */
     public synchronized void refreshCurrentFolder() throws IOException {
-        setCurrentFolder(currentFolder, currentFolder.ls(), null);
+        setCurrentFolder(currentFolder, currentFolder.ls(hiddenFileFilter), null);
     }
 
 
@@ -871,6 +876,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         }
         // Refresh to show or hide hidden files, depending on new preference
         else if (var.equals("prefs.file_table.show_hidden_files")) {
+            hiddenFileFilter = event.getBooleanValue()?null:new HiddenFileFilter();
             // Refresh current folder in a separate thread
             tryRefreshCurrentFolder();
         }

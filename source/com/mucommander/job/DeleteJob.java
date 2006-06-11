@@ -160,6 +160,6 @@ public class DeleteJob extends FileJob {
 
     // This job modifies baseFolder and subfolders
     protected boolean hasFolderChanged(AbstractFile folder) {
-        return baseSourceFolder.isParent(folder);
+        return baseSourceFolder.isParentOf(folder);
     }
 }	

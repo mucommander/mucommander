@@ -53,6 +53,25 @@ abstract class ArchiveEntry {
     }
 
 
+    /**
+     * Extracts this entry's filename from its path and returns it.
+     *
+     * @return this entry's filename
+     */
+    public String getName() {
+        String path = getPath();
+        int len = path.length();
+        // Remove trailing '/' if any
+        if(path.charAt(len-1)=='/')
+            path = path.substring(0, --len);
+
+        int lastSlash = path.lastIndexOf('/');
+        return lastSlash==-1?
+          path:
+          path.substring(lastSlash+1, len);
+    }
+
+
     //////////////////////
     // Abstract methods //
     //////////////////////

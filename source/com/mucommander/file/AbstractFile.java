@@ -1,16 +1,15 @@
 package com.mucommander.file;
 
+import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.cache.LRUCache;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.IOException;
-import java.io.File;
-
+import java.io.*;
 
 /**
+ * The superclass of all files, all your files are belong to it.
  *
- *
+ * @see ProxyFile
  * @author Maxence Bernard
  */
 public abstract class AbstractFile {
@@ -18,10 +17,29 @@ public abstract class AbstractFile {
     /** URL representing this file */
     protected FileURL fileURL;
 
+    /** Default path separator */
+    public final static String DEFAULT_SEPARATOR = "/";
+
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
     private static LRUCache fileCache = LRUCache.createInstance(1000);
     /** Static LRUCache instance that caches frequently accessed FileURL instances */
     private static LRUCache urlCache = LRUCache.createInstance(1000);
+
+    /** Indicates copyTo()/moveTo() *should* be used to copy/move the file (e.g. more efficient) */
+    public final static int SHOULD_HINT = 0;
+    /** Indicates copyTo()/moveTo() *should not* be used to copy/move the file (default) */
+    public final static int SHOULD_NOT_HINT = 1;
+    /** Indicates copyTo()/moveTo() *must* be used to copy/move the file (e.g. no other way to do so) */
+    public final static int MUST_HINT = 2;
+    /** Indicates copyTo()/moveTo() *must not* be used to copy/move the file (e.g. not implemented) */
+    public final static int MUST_NOT_HINT = 3;
+
+    /** Size allocated to read buffer */
+    public final static int READ_BUFFER_SIZE = 8192;
+
+    /** Default buffer size for BufferedOutputStream */
+    public final static int WRITE_BUFFER_SIZE = 8192;
+	
 
     /**
      * Creates a new file instance with the given URL.
@@ -30,6 +48,10 @@ public abstract class AbstractFile {
         this.fileURL = url;
     }
 	
+    
+    ////////////////////
+    // Static methods //
+    ////////////////////
 
     /**
      * Returns an instance of AbstractFile for the given absolute path.
@@ -61,7 +83,7 @@ public abstract class AbstractFile {
      * @param throwException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
      *
      * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file) 
-     * @exception java.io.IOException  and throwException param was set to <code>true</code>.
+     * @throws java.io.IOException  and throwException param was set to <code>true</code>.
      */
     public static AbstractFile getAbstractFile(String absPath, boolean throwException) throws AuthException, IOException {
         try {
@@ -83,7 +105,7 @@ public abstract class AbstractFile {
      * @param absPath the absolute path to the file
      * @param parent the returned file's parent
      *
-     * @exception java.io.IOException if something went wrong during file or file url creation.
+     * @throws java.io.IOException if something went wrong during file or file url creation.
      */
     protected static AbstractFile getAbstractFile(String absPath, AbstractFile parent) throws AuthException, IOException {
         // Create a FileURL instance using the given path
@@ -139,7 +161,7 @@ public abstract class AbstractFile {
      * @param throwException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
      *
      * @return the created file
-     * @exception java.io.IOException if something went wrong during file creation
+     * @throws java.io.IOException if something went wrong during file creation
      */
     public static AbstractFile getAbstractFile(FileURL fileURL, boolean throwException) throws IOException {
         try {
@@ -154,14 +176,13 @@ public abstract class AbstractFile {
     }
 
 
-	
     /**
      * Returns an instance of AbstractFile for the given FileURL instance and sets the giving parent.
      *
      * @param fileURL the file URL
      * @param parent the returned file's parent
      *
-     * @exception java.io.IOException if something went wrong during file creation.
+     * @throws java.io.IOException if something went wrong during file creation.
      */
     public static AbstractFile getAbstractFile(FileURL fileURL, AbstractFile parent) throws IOException {
         String protocol = fileURL.getProtocol().toLowerCase();
@@ -172,8 +193,8 @@ public abstract class AbstractFile {
         if (protocol.equals("file")) {
             String urlRep = fileURL.getStringRep(true);
             file = (AbstractFile)fileCache.get(urlRep);
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((file==null?"Adding to file cache:":"File cache hit: ")+urlRep);
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
+            //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((file==null?"Adding to file cache:":"File cache hit: ")+urlRep);
+            //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
 
             if(file==null) {
                 file = new FSFile(fileURL);
@@ -192,6 +213,9 @@ public abstract class AbstractFile {
         // SFTP file
         else if (protocol.equals("sftp"))
             file = new SFTPFile(fileURL);
+        // WebDAV file
+        else if (protocol.equals("webdav") || protocol.equals("webdavs"))
+            file = new WebDAVFile(fileURL);
         else
             throw new IOException("Unkown protocol "+protocol);
 
@@ -203,10 +227,10 @@ public abstract class AbstractFile {
 
 	
     /**
-     * Tests if given file is an archive and if it is, create the appropriate archive file
-     * on top of the base file object.
+     * Tests if based on its extension, the given file corresponds to a supported archive format. If it is, it creates
+     * the appropriate {@link AbstractArchiveFile} on top of the provided file and returns it.
      */
-    static AbstractFile wrapArchive(AbstractFile file) {
+    protected static AbstractFile wrapArchive(AbstractFile file) {
         if(!file.isDirectory()) {
             String ext = file.getExtension();
             if(ext==null)
@@ -231,11 +255,25 @@ public abstract class AbstractFile {
     }
 
 
+    //////////////////////////////////////
+    // Implemented AbstractFile methods //
+    //////////////////////////////////////
+
     /**
      * Returns the URL representing this file.
      */
     public FileURL getURL() {
         return fileURL;
+    }
+
+
+    /**
+     * Returns the name of this AbstractFile.
+     * <p>This method should be overridden if a special treatment (e.g. URL-decoding)
+     * needs to be applied to the returned filename.
+     */
+    public String getName() {
+        return fileURL.getFilename();        
     }
 
 
@@ -277,6 +315,7 @@ public abstract class AbstractFile {
         return name.substring(0, position);
     }
 
+
     /**
      * Returns the file's extension, <code>null</code> if the file doesn't have an extension.
      */
@@ -290,54 +329,17 @@ public abstract class AbstractFile {
 	
         return name.substring(lastDotPos+1, len);
     }
-	
-    
-    /**
-     * <p>Tests a file for equality: returns <code>true</code> if the given file denotes the same
-     * file or directory. Note that two files can be equal and not have the exact same absolute
-     * path.</p>
-     *
-     * <p>This method should be overriden as it only compares the absolute path.</p>
-     */
-    public boolean equals(Object f) {
-        if(f==null || !(f instanceof AbstractFile))
-            return false;
-		
-        return getAbsolutePath().equals(((AbstractFile)f).getAbsolutePath());
-    }
 
-	
-    /**
-     * Returns <code>true</code> if this file is a parent of the given file, or if the 2 files
-     * point to the same path.
-     */
-    public boolean isParent(AbstractFile file) {
-        return getCanonicalPath(false).startsWith(file.getCanonicalPath(false));
-    }
-	
-	
-    /**
-     * Returns a String representation of this AbstractFile which is the path as returned by getAbsolutePath().
-     */
-    public String toString() {
-        return getAbsolutePath();
-    }
-	
-	
 
     /**
-     * Returns the name of this AbstractFile.
+     * Returns the absolute path of this AbstractFile. The returned path will be free of any login and password and thus
+     * can be safely displayed or stored.
      */
-    public abstract String getName();
+    public String getAbsolutePath() {
+        return getURL().getStringRep(false);
+    }
 
-	
-    /**
-     * Returns the absolute path of this AbstractFile, usually with a trailing separator for directories and root folders ('/', 'c:\' ...) and
-     * no trailing separator for 'regular' files.
-     */
-    public abstract String getAbsolutePath();
-	
-	
+
     /**
      * Returns the absolute path of this AbstractFile with a trailing separator character if <code>true</code> is passed,
      * or without one if <code>false</code> is passed.
@@ -356,6 +358,7 @@ public abstract class AbstractFile {
         return getAbsolutePath();
     }
 
+
     /**
      * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences,
      * and with a separator character if <code>true</code> is passed or without one if <code>false</code> is passed.
@@ -365,63 +368,46 @@ public abstract class AbstractFile {
         String path = getCanonicalPath();
         return appendSeparator?addTrailingSeparator(path):removeTrailingSlash(path);
     }
+	
+
+    /**
+     * Returns the path separator of this AbstractFile.
+     * <p>This implementation returns the default separator "/", this method should be overridden
+     * if the path separator is different.
+     */
+    public String getSeparator() {
+        return DEFAULT_SEPARATOR;
+    }
+
+
+    /**
+     * Returns <code>true</code> if this file is a parent of the given file, or if the 2 files
+     * have the same path.
+     */
+    public boolean isParentOf(AbstractFile file) {
+        return getCanonicalPath(false).startsWith(file.getCanonicalPath(false));
+    }
 
 	
     /**
-     * Tests if the given path contains a trailing separator character, and if not, adds one and returns the path.
+     * Returns true if this AbstractFile can be browsed (entered): true for directories and supported archive files.
      */
-    protected String addTrailingSeparator(String path) {
-        // Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
-        // are exceptions that's why we still have to test if path ends with a separator
-        String separator = getSeparator();
-        if(!path.endsWith(separator))
-            return path+separator;
-        return path;
+    public boolean isBrowsable() {
+        return isDirectory() || (this instanceof AbstractArchiveFile);
     }
-	
-	
+
+
     /**
-     * Tests if the given path contains a trailing separator character, and if it does, removes it and returns the path.
-     */
-    private String removeTrailingSlash(String path) {
-        // Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
-        // (Reminder: C: is C's current folder, while C:\ is C's root)
-        String separator = getSeparator();
-        if(path.endsWith(separator)
-           && !((separator.equals("/") && path.length()==1) || (separator.equals("\\") && path.charAt(path.length()-2)==':')))
-            path = path.substring(0, path.length()-1);
-        return path;
-    }
-	
-	
-    /**
-     * Returns the separator character for this kind of AbstractFile.
-     */
-    public abstract String getSeparator();
-	
-    /**
-     * Returns the last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
-     */
-    public abstract long getDate();
-	
-    /**
-     * Changes last modified date and returns <code>true</code> if date was changed successfully.
+     * Returns true if this AbstractFile is hidden.
      *
-     * @param lastModified last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
-     * @return <code>true</code> if date was changed successfully.
-     */
-    public abstract boolean changeDate(long lastModified);
-	
-    /**
-     * Returns the size in bytes of this AbstractFile, -1 if not known.
-     */
-    public abstract long getSize();
-	
-    /**
-     * Returns this AbstractFile's parent or null if it doesn't have any parent.
-     */
-    public abstract AbstractFile getParent();
-	
+     * <p>This default implementation is solely based on the filename and returns <code>true</code> if this
+     * file's name starts with '.'. This method should be overriden if the underlying filesystem has a notion 
+     * of hidden files.</p>
+     */	
+    public boolean isHidden() {
+        return getName().startsWith(".");
+    }
+
 
     /**
      * Returns the root folder that contains this AbstractFile. If this file is already
@@ -438,6 +424,293 @@ public abstract class AbstractFile {
     }
 	
 
+    /**
+     * Tests if the given path contains a trailing separator character, and if not, adds one and returns the path.
+     */
+    protected String addTrailingSeparator(String path) {
+        // Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
+        // are exceptions that's why we still have to test if path ends with a separator
+        String separator = getSeparator();
+        if(!path.endsWith(separator))
+            return path+separator;
+        return path;
+    }
+	
+	
+    /**
+     * Tests if the given path contains a trailing separator character, and if it does, removes it and returns the new path.
+     */
+    protected String removeTrailingSlash(String path) {
+        // Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
+        // (Reminder: C: is C's current folder, while C:\ is C's root)
+        String separator = getSeparator();
+        if(path.endsWith(separator)
+           && !((separator.equals("/") && path.length()==1) || (separator.equals("\\") && path.charAt(path.length()-2)==':')))
+            path = path.substring(0, path.length()-1);
+        return path;
+    }
+	
+
+    /**
+     * Returns an InputStream to read from this AbstractFile, skipping the
+     * specified number of bytes. This method should be overridden whenever
+     * possible to provide a more efficient implementation, as this implementation
+     * uses {@link java.io.InputStream#skip(long)}
+     * which may *read* bytes and discards them, which is bad (think of an ISO file on a remote server).
+     *
+     * @throws IOException if this AbstractFile cannot be read or is a folder.
+     */
+    public InputStream getInputStream(long skipBytes) throws IOException {
+        InputStream in = getInputStream();
+		
+        // Call InputStream.skip() until the specified number of bytes have been skipped
+        long nbSkipped = 0;
+        long n;
+        while(nbSkipped<skipBytes) {
+            n = in.skip(skipBytes-nbSkipped);
+            if(n>0)
+                nbSkipped += n;
+        }
+
+        return in;
+    }
+	
+
+    /**
+     * Copies the contents of the given <code>InputStream</code> to the specified </code>OutputStream</code>
+     * and throws an IOException if something went wrong. The streams will *NOT* be closed by this method.
+     *
+     * <p>A read buffer is used of {@link #READ_BUFFER_SIZE} bytes is used to read from the InputStream.
+     * For optimal performance, a <code>BufferedOutputStream</code> should be provided. It is useless though to
+     * provide a BufferInputStream as read operations are already buffered.
+     *
+     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}
+     * and/or {@link com.mucommander.io.CounterOutputStream}.
+     *
+     * @param in the InputStream to read from
+     * @param out the OutputStream to write to
+     * @throws IOException if something went wrong while reading from or writing to one of the provided streams
+     */
+    public static void copyStream(InputStream in, OutputStream out) throws IOException {
+        // Init read buffer
+        byte buffer[] = new byte[READ_BUFFER_SIZE];
+
+        // Copies the InputStream's content to the OutputStream chunks by chunks
+        int read;
+        while ((read=in.read(buffer, 0, buffer.length))!=-1)
+            out.write(buffer, 0, read);
+    }
+
+
+    /**
+     * Copies the contents of the given <code>InputStream</code> to this file. The provided <code>InputStream</code>
+     * will *NOT* be closed by this method.
+     * 
+     * <p>Read and write operations are buffered, with a respective buffer of {@link #READ_BUFFER_SIZE} and
+     * {@link #WRITE_BUFFER_SIZE} bytes.
+     *
+     * <p>This method should be overridden by file protocols that do not offer a {@link #getOutputStream(boolean)}
+     * implementation, but that can take an <code>InputStream</code> and use it to write the file.
+     *
+     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}.
+     *
+     * @param in the InputStream to read from
+     * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any existing data will be overwritten.
+     * @throws IOException if something went wrong while reading from the InputStream or writing to this file
+     */
+    public void copyStream(InputStream in, boolean append) throws IOException {
+        // Create a BufferedOutputStream to speed up the output
+        OutputStream out = new BufferedOutputStream(getOutputStream(append), WRITE_BUFFER_SIZE); 
+
+        try {
+            copyStream(in, out);
+        }
+        finally {
+            // Close stream even if copyStream() threw an IOException
+            if(out!=null)
+                out.close();
+        }
+    }
+    
+
+    /**
+     * Copies this AbstractFile to another specified one and throws an <code>IOException</code> if the operation
+     * failed. The contents of the destination file will be overwritten.
+     *
+     * <p>This generic implementation should be overridden by file protocols which are able to perform
+     * a server-to-server copy.
+     *
+     * @param destFile the destination file this file should be copied to
+     * @throws IOException if this AbstractFile could be read, or the destination could be written, or if 
+     * the operation failed for any other reason.
+     */
+    public void copyTo(AbstractFile destFile) throws IOException {
+        InputStream in = getInputStream();
+
+        try {
+            destFile.copyStream(in, false);
+        }
+        finally {
+            // Close stream even if copyStream() threw an IOException
+            if(in!=null)
+                in.close();
+        }
+    }
+
+    
+    /**
+     * Returns a hint that indicates whether the {@link #copyTo(AbstractFile)} method should be used to
+     * copy this file to the specified destination file, rather than copying the file using
+     * {@link #copyStream(InputStream, boolean)} or {@link #getInputStream()} and {@link #getOutputStream(boolean)}.
+     *
+     * <p>Potential returned values are:
+     * <ul>
+     * <li>{@link #SHOULD_HINT} if copyTo() should be preferred (more efficient)
+     * <li>{@link #SHOULD_NOT_HINT} if the file should rather be copied using copyStream()
+     * <li>{@link #MUST_HINT} if the file can only be copied using copyTo(), that's the case when getOutputStream() or copyStream() is not implemented
+     * <li>{@link #MUST_NOT_HINT} if the file can only be copied using copyStream()
+     * </ul>
+     *
+     * <p>This default implementation returns {@link #SHOULD_NOT_HINT} as some granularity is lost when using
+     *  <code>copyTo()</code> making it impossible to monitor progress when copying a file.
+     * This method should be overridden when <code>copyTo()</code> should be favored over <code>copyStream()</code>.
+     *
+     * @param destFile the destination file that is considered being copied
+     * @return the hint int indicating whether the {@link #copyTo(AbstractFile)} method should be used
+     * @see constants
+     */
+    public int getCopyToHint(AbstractFile destFile) {
+        return SHOULD_NOT_HINT;
+    }
+
+
+    /**
+     * Moves this AbstractFile to another specified one and throws an <code>IOException</code> if the operation
+     * failed. This generic implementation copies this file to the destination one, overwriting any data it contains,
+     * and if (and only if) the copy was successful, deletes the original file (this file).
+     *
+     * <p>This method should be overridden by file protocols which are able to perform a server-to-server move.
+     *
+     * @param destFile the destination file this file should be moved to
+     * @throws IOException if this AbstractFile or destination cannot be written or if the operation failed
+     *  for any other reason.
+     */
+    public void moveTo(AbstractFile destFile) throws IOException {
+        try {
+            copyTo(destFile);
+            // The file won't be deleted if copyTo() failed (threw an IOException);
+            delete();
+        }
+        catch(IOException e) {
+            // Rethrow exception
+            throw e;
+        }
+    }
+
+
+    /**
+     * Returns a hint that indicates whether the {@link #moveTo(AbstractFile)} method should be used to
+     * move this file to the specified destination file, rather than moving the file using
+     * {@link #copyStream(InputStream, boolean)} or {@link #getInputStream()} and {@link #getOutputStream(boolean)}.
+     *
+     * <p>Potential returned values are:
+     * <ul>
+     * <li>{@link #SHOULD_HINT} if copyTo() should be preferred (more efficient)
+     * <li>{@link #SHOULD_NOT_HINT} if the file should rather be copied using copyStream()
+     * <li>{@link #MUST_HINT} if the file can only be copied using copyTo(), that's the case when getOutputStream() or copyStream() is not implemented
+     * <li>{@link #MUST_NOT_HINT} if the file can only be copied using copyStream()
+     * </ul>
+     *
+     * <p>This default implementation returns {@link #SHOULD_HINT} if both this file and the specified destination file
+     * use the same and are located on the same host, {@link #SHOULD_NOT_HINT} otherwise. This method should be
+     * overridden to return {@link #SHOULD_NOT_HINT} if the underlying file protocol doesn't not allow 
+     * direct move/renaming without copying the contents of the source (this) file.
+     *
+     * @param destFile the destination file that is considered being copied
+     * @return the hint int indicating whether the {@link #moveTo(AbstractFile)} method should be used
+     * @see constants
+     */
+    public int getMoveToHint(AbstractFile destFile) {
+        return fileURL.getProtocol().equals(destFile.fileURL.getProtocol())
+            && fileURL.getHost().equals(destFile.fileURL.getHost())
+        ? SHOULD_HINT : SHOULD_NOT_HINT;
+    }
+
+
+    /**
+     *
+     *
+     * @param filter FileFilter which will be used to filter out files, may be <code>null</code>
+     */
+    public AbstractFile[] ls(FileFilter filter) throws IOException {
+        return filter==null?ls():filter.filter(ls());
+    }
+
+
+    /**
+     *
+     *
+     * <p>This default implementation filters out files *after* they have been created. This method
+     * should be overridden if a more efficient implementation can be provided.
+     *
+     * @param filter FilenameFilter which will be used to filter out files, may be <code>null</code>
+     */
+    public AbstractFile[] ls(FilenameFilter filter) throws IOException {
+        return filter==null?ls():filter.filter(ls());
+    }
+
+		
+    /**
+     * <p>Tests a file for equality: returns <code>true</code> if the given file denotes the same
+     * file or directory. Note that two files can be equal and not have the exact same absolute
+     * path.</p>
+     *
+     * <p>This method should be overriden as it only compares the absolute path.</p>
+     */
+    public boolean equals(Object f) {
+        if(f==null || !(f instanceof AbstractFile))
+            return false;
+		
+        return getAbsolutePath().equals(((AbstractFile)f).getAbsolutePath());
+    }
+
+	
+    /**
+     * Returns a String representation of this AbstractFile which is the path as returned by getAbsolutePath().
+     */
+    public String toString() {
+        return getAbsolutePath();
+    }
+
+
+    //////////////////////
+    // Abstract Methods //
+    //////////////////////
+
+    /**
+     * Returns the last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
+     */
+    public abstract long getDate();
+	
+    /**
+     * Changes last modified date and returns <code>true</code> if date was changed successfully, false if the
+     * operation is not implemented or could not be successfully completed.
+     *
+     * @param lastModified last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
+     * @return <code>true</code> if date was changed successfully.
+     */
+    public abstract boolean changeDate(long lastModified);
+	
+    /**
+     * Returns the size in bytes of this AbstractFile, -1 if not known.
+     */
+    public abstract long getSize();
+	
+    /**
+     * Returns this AbstractFile's parent or null if it doesn't have any parent.
+     */
+    public abstract AbstractFile getParent();
+	
     /**
      * Sets this file's parent or null if it doesn't have any parent.
      */
@@ -459,26 +732,9 @@ public abstract class AbstractFile {
     public abstract boolean canWrite();
 	
     /**
-     * Returns true if this AbstractFile is hidden.
-     *
-     * <p>This is a default implementation solely based on file's name. This method should
-     * be overriden if underlying filesystem offers hidden file detection.</p>
-     */	
-    public boolean isHidden() {
-        return getName().startsWith(".");
-    }
-
-    /**
      * Returns true if this AbstractFile is a 'regular' directory, not only a 'browsable' file (like an archive file).
      */
     public abstract boolean isDirectory();
-
-    /**
-     * Returns true if this AbstractFile can be browsed (entered): true for directories and supported archive files.
-     */
-    public boolean isBrowsable() {
-        return isDirectory() || (this instanceof AbstractArchiveFile);
-    }
 
     /**
      * Returns true if this file *may* be a symbolic link and thus handled with care.
@@ -486,74 +742,39 @@ public abstract class AbstractFile {
     public abstract boolean isSymlink();
 	
     /**
-     * Returns the contents of this AbstractFile is a folder.
-     * @exception an IOException if this operation is not possible.
+     * Returns the files containted by this AbstractFile. For this operation to be successful, {@link #isBrowsable()}
+     * must return <code>true</code>.
+     *
+     * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
      */
     public abstract AbstractFile[] ls() throws IOException;
 
     /**
      * Creates a new directory if this AbstractFile is a folder.
-     * @exception an IOException if this operation is not possible.
+     * @throws IOException if this operation is not possible.
      */
     public abstract void mkdir(String name) throws IOException;
 
     /**
      * Returns an InputStream to read from this AbstractFile.
-     * @exception IOException if this AbstractFile cannot be read or is a folder.
+     * @throws IOException if this AbstractFile cannot be read or is a folder.
      */
     public abstract InputStream getInputStream() throws IOException;
 
     /**
-     * Returns an InputStream to read from this AbstractFile, skipping the
-     * specified number of bytes. This method should be overridden whenever
-     * possible to provide a more efficient implementation, as this implementation
-     * simply use {@link java.io.InputStream#skip(long)}
-     * which *reads* bytes and discards them, which is bad (think of an ISO file on a remote server).
-     * @exception IOException if this AbstractFile cannot be read or is a folder.
-     */
-    public InputStream getInputStream(long skipBytes) throws IOException {
-        InputStream in = getInputStream();
-		
-        // Call InputStream.skip() until the specified number of bytes have been skipped
-        long nbSkipped = 0;
-        long n;
-        while(nbSkipped<skipBytes) {
-            n = in.skip(skipBytes-nbSkipped);
-            if(n>0)
-                nbSkipped += n;
-        }
-
-        return in;
-    }
-	
-    /**
      * Returns an OuputStream to write to this AbstractFile.
-     * @param append if true, data will be appended to the end of this file.
-     * @exception IOException if this operation is not permitted or if this AbstractFile 
+     * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any existing data will be overwritten.
+     * @throws IOException if this operation is not permitted or if this AbstractFile 
      * is a folder.
      */
     public abstract OutputStream getOutputStream(boolean append) throws IOException;
 
-
-    /**
-     * Moves this AbstractFile to another one. This method will return true if the operation 
-     * can/has been completed. If not, the operation will need to be performed using the source
-     * InputStream, destination OutputStream and the delete method.
-     * <p>
-     * For now, the operation will be performed only when source and destination are both FSFiles,
-     * i.e. using the underlying File.renameTo() method.
-     * </p>
-     * @exception IOException is this AbstractFile cannot be written.
-     */
-    public abstract boolean moveTo(AbstractFile dest) throws IOException;
-
     /**
      * Deletes this AbstractFile and this one only (does not recurse), throws an IOException
      * if it failed.
-     * @exception IOException if this AbstractFile cannot be written.
+     * @throws IOException if this AbstractFile is not writable or could not be deleted.
      */	
     public abstract void delete() throws IOException;
-
 	
     /**
      * Returns free space (in bytes) on the disk/volume where this file is, -1 if this information is not available.
@@ -565,6 +786,10 @@ public abstract class AbstractFile {
      */
     public abstract long getTotalSpace();
 
+
+    //////////////////
+    // Test methods //
+    //////////////////
 
     /**
      * Simple bench method.

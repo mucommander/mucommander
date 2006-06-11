@@ -30,12 +30,13 @@ public class FileURL implements Cloneable {
 
 
     /**
-     * Creates a new FileURL object from the given string.
+     * Creates a new FileURL from the given URL string.
      */
     public FileURL(String url) throws MalformedURLException {
         this(url, null);
     }
-	
+
+
     /**
      * Creates a new FileURL object from the given string and using the given FileURL as the parent URL.
      * 
@@ -196,9 +197,6 @@ public class FileURL implements Cloneable {
                 filename = path.substring(separatorPos+1, len);
                 if(filename.equals(""))
                     filename = null;
-                //				if(urlDecode)
-                //					try { filename = URLDecoder.decode(filename); }
-                //					catch(Exception e) {} // URLDecoder can throw an exception if name contains % character that are not followed by a numerical value
 				
                 // If parent URL is not null, keep it for getParent()
                 if(parentURL!=null) {
@@ -252,7 +250,7 @@ public class FileURL implements Cloneable {
         return protocol;
     }
 	
-	
+
     /**
      * Returns the host part of this URL (e.g. google.com)
      */

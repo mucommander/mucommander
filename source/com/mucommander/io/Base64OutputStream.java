@@ -1,5 +1,5 @@
 
-package com.mucommander.job;
+package com.mucommander.io;
 
 import java.io.*;
 

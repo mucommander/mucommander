@@ -1,8 +1,9 @@
 package com.mucommander.file;
 
-import java.io.*;
+import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.file.filter.FileFilter;
 
-import java.util.Vector;
+import java.io.*;
 
 
 /**
@@ -19,8 +20,8 @@ public class ArchiveEntryFile extends AbstractFile {
     protected ArchiveEntry entry;
 
 
-    protected ArchiveEntryFile(AbstractArchiveFile archiveFile, ArchiveEntry entry) {
-        super(archiveFile.getURL());
+    protected ArchiveEntryFile(AbstractArchiveFile archiveFile, ArchiveEntry entry, FileURL fileURL) {
+        super(fileURL);
         this.archiveFile = archiveFile;
         this.entry = entry;
     }
@@ -38,21 +39,12 @@ public class ArchiveEntryFile extends AbstractFile {
     // AbstractFile implementation //
     /////////////////////////////////
 
-    public String getName() {
-        // Extract the entry's filename from path 
-        String entryName = entry.getPath();
-        if(entryName.charAt(entryName.length()-1)=='/')
-            entryName = entryName.substring(0,entryName.length()-1);
-        int pos = entryName.lastIndexOf('/');
-        return pos==-1?entryName:entryName.substring(pos+1,entryName.length());
-    }
-	
     public long getDate() {
         return entry.getDate();
     }
 	
     public boolean changeDate(long lastModified) {
-        // Entries are read-only
+        // Archive entries are read-only
         return false;
     }
 
@@ -64,52 +56,16 @@ public class ArchiveEntryFile extends AbstractFile {
         return entry.isDirectory();
     }
 
-    public InputStream getInputStream() throws IOException {
-        return archiveFile.getEntryInputStream(entry);
-    }
-	
     public AbstractFile[] ls() throws IOException {
-        /*
-          ArchiveEntry entries[] = archiveFile.getEntries();
-          Vector subFiles = new Vector();
-		
-          // Return the entries the given entry contains (entries of depth+1)
-          String entryPath = entry.getPath();
-          int depth = entry.getDepth()+1;
-          ArchiveEntry subEntry;
-          String subEntryPath;
-          ArchiveEntryFile subEntryFile;
-          for(int i=0; i<entries.length; i++) {
-          subEntry = entries[i];
-          subEntryPath = subEntry.getPath();
-          if (subEntryPath.startsWith(entryPath) && subEntry.getDepth()==depth) {
-          subEntryFile = new ArchiveEntryFile(archiveFile, subEntry);
-          subEntryFile.setParent(this);
-          subFiles.add(subEntryFile);
-          }
-          }
-
-          AbstractFile subFilesArray[] = new AbstractFile[subFiles.size()];
-          subFiles.toArray(subFilesArray);
-          return subFilesArray;
-        */
-
-        return archiveFile.ls(this);
-    }
-	
-    public String getAbsolutePath() {
-        String path = getParent().getAbsolutePath(true)+getName();
-        String separator = getSeparator();
-
-        // Append a trailing separator character for directories
-        if(isDirectory() && !path.endsWith(getSeparator()))
-            return path+separator;
-	
-        return path;
+        return archiveFile.ls(this, null, null);
     }
 
-    public String getSeparator() {
-        return archiveFile.getSeparator();
+    public AbstractFile[] ls(FilenameFilter filter) throws IOException {
+        return archiveFile.ls(this, filter, null);
+    }
+	
+    public AbstractFile[] ls(FileFilter filter) throws IOException {
+        return archiveFile.ls(this, null, filter);
     }
 
     public AbstractFile getParent() {
@@ -130,6 +86,7 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 	
     public boolean canWrite() {
+        // Archive entries are read-only
         return false;
     }
 
@@ -138,18 +95,17 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
+        // Archive entries are read-only
         throw new IOException();
     }
 	
-    public boolean moveTo(AbstractFile dest) throws IOException {
-        return false;
-    }
-
     public void delete() throws IOException {
+        // Archive entries are read-only
         throw new IOException();
     }
 
     public void mkdir(String name) throws IOException {
+        // Archive entries are read-only
         throw new IOException();
     }
 
@@ -161,5 +117,45 @@ public class ArchiveEntryFile extends AbstractFile {
     public long getTotalSpace() {
         // We consider archive files as volumes, thus return the archive file's size
         return archiveFile.getSize();
-    }	
+    }
+
+    public InputStream getInputStream() throws IOException {
+        return archiveFile.getEntryInputStream(entry);
+    }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    public String getSeparator() {
+        return archiveFile.getSeparator();
+    }
+
+    public void moveTo(AbstractFile dest) throws IOException  {
+        // Archive entries are read-only
+        throw new IOException();
+    }
+
+    public int getMoveToHint(AbstractFile destFile) {
+        return MUST_NOT_HINT;
+    }
+
+/*
+    public String getName() {
+        return entry.getName();
+    }
+
+
+    public String getAbsolutePath() {
+        String path = getParent().getAbsolutePath(true)+getName();
+        String separator = getSeparator();
+
+        // Append a trailing separator character for directories
+        if(isDirectory() && !path.endsWith(getSeparator()))
+            return path+separator;
+
+        return path;
+    }
+*/
 }

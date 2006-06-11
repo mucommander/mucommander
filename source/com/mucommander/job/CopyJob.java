@@ -252,7 +252,7 @@ public class CopyJob extends ExtendedFileJob {
     // This job modifies baseDestFolder and its subfolders
 	
     protected boolean hasFolderChanged(AbstractFile folder) {
-        return baseDestFolder.isParent(folder);
+        return baseDestFolder.isParentOf(folder);
     }
 
 }

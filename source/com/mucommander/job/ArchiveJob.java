@@ -37,6 +37,9 @@ public class ArchiveJob extends ExtendedFileJob {
     /** Optional archive comment */
     private String archiveComment;
 	
+    /** Size of the buffer used to write archived data */
+    private final static int WRITE_BUFFER_SIZE = 8192;
+    
 
     public ArchiveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFile, int archiveFormat, String archiveComment) {
         super(progressDialog, mainFrame, files);
@@ -75,7 +78,7 @@ public class ArchiveJob extends ExtendedFileJob {
         do {
             try {
                 // Tries to open destination file and create Archiver
-                this.archiver = Archiver.getArchiver(getBufferedOutputStream(destFile.getOutputStream(false)), archiveFormat);
+                this.archiver = Archiver.getArchiver(new BufferedOutputStream(destFile.getOutputStream(false), WRITE_BUFFER_SIZE), archiveFormat);
                 this.archiver.setComment(archiveComment);
                 break;
             }
@@ -125,8 +128,12 @@ public class ArchiveJob extends ExtendedFileJob {
                 else {
                     InputStream in = file.getInputStream();
 
-                    // Create new file entry in archive and copy file
-                    return copyStream(in, archiver.createEntry(entryRelativePath, file));
+                    // Create a new file entry in archive and copy the current file
+                    AbstractFile.copyStream(in, archiver.createEntry(entryRelativePath, file));
+
+                    in.close();
+                
+                    return true;
                 }
             }
             catch(IOException e) {

@@ -72,6 +72,11 @@ public class MkdirJob extends FileJob {
                 return true;		// Return Success
             }
             catch(IOException e) {
+if(com.mucommander.Debug.ON) {
+    com.mucommander.Debug.trace("caught "+e);
+    e.printStackTrace();
+}
+
                 int action = showErrorDialog(
                                              Translator.get("mkdir_dialog.error_title"),
                                              Translator.get("cannot_create_folder", destFolder.getAbsolutePath(true)+dirName),

@@ -18,9 +18,6 @@ import javax.swing.text.html.*;
 //public class HTTPFile extends AbstractFile implements RemoteFile {
 public class HTTPFile extends AbstractFile {
 
-    /** File separator is '/' for urls */
-    private final static String SEPARATOR = "/";
-	
     private String name;
     private long date;
     private long size;
@@ -132,21 +129,6 @@ public class HTTPFile extends AbstractFile {
     // AbstractFile methods implementation //
     /////////////////////////////////////////
 	
-    public String getName() {
-        if(name==null)
-            return fileURL.getHost();
-        return name;
-    }
-
-    public String getAbsolutePath() {
-        //		return urlString;
-        return fileURL.getStringRep(true);
-    }
-
-    public String getSeparator() {
-        return SEPARATOR;
-    }
-
     public long getDate() {
         return date;
     }
@@ -200,60 +182,57 @@ public class HTTPFile extends AbstractFile {
         return false;
     }
 	
-    public boolean isHidden() {
-        return false;
-    }
-
     public boolean isDirectory() {
         return false;
-    }
-	
-    public boolean isBrowsable() {
-        return isHTML;
     }
 	
     public boolean isSymlink() {
         return false;
     }
 
-    public boolean equals(Object f) {
-        if(!(f instanceof HTTPFile))
-            return super.equals(f);		// could be equal to a ZipArchiveFile
-		
-        return ((HTTPFile)f).getAbsolutePath(false).equals(getAbsolutePath(false));
-    }
-	
-	
     public InputStream getInputStream() throws IOException {
         HttpURLConnection conn = getHttpURLConnection(this.url);
         conn.connect();
         return conn.getInputStream();
     }
 
-    /** 
-     * Overrides AbstractFile's getInputStream(long) method to provide a more efficient implementation : 
-     * use the HTTP 1.1 header that resumes file transfer and skips a number of bytes.
+    /**
+     * Not available, always throws an <code>IOException</code>.
      */
-    public InputStream getInputStream(long skipBytes) throws IOException {
-        HttpURLConnection conn = getHttpURLConnection(this.url);
-        // Set header that allows to resume transfer
-        conn.setRequestProperty("Range", "bytes="+skipBytes+"-");
-        conn.connect();
-        return conn.getInputStream();
-    }
-	
-	
     public OutputStream getOutputStream(boolean append) throws IOException {
         throw new IOException();
     }
-		
-    public boolean moveTo(AbstractFile dest) throws IOException  {
-        return false;
-    }
-
+    
+    /**
+     * Not available, always throws an <code>IOException</code>.
+     */
     public void delete() throws IOException {
         throw new IOException();
     }
+
+    /**
+     * Not available, always throws an <code>IOException</code>.
+     */
+    public void mkdir(String name) throws IOException {
+        throw new IOException();
+    }
+
+    /**
+     * Not available, always returns <code>-1</code>.
+     */
+    public long getFreeSpace() {
+        // This information is obviously not available over HTTP, return -1
+        return -1;
+    }
+
+    /**
+     * Not available, always returns <code>-1</code>.
+     */
+    public long getTotalSpace() {
+        // This information is obviously not available over HTTP, return -1
+        return -1;
+    }	
+	
 
     public AbstractFile[] ls() throws IOException {
         //			EditorKit kit = new HTMLEditorKit();
@@ -435,17 +414,45 @@ public class HTTPFile extends AbstractFile {
         }
     }
 
-    public void mkdir(String name) throws IOException {
-        throw new IOException();
-    }
-	
-    public long getFreeSpace() {
-        // This information is obviously not available over HTTP, return -1
-        return -1;
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    public String getName() {
+        if(name==null)
+            return fileURL.getHost();
+        return name;
     }
 
-    public long getTotalSpace() {
-        // This information is obviously not available over HTTP, return -1
-        return -1;
-    }	
+
+    public boolean isHidden() {
+        return false;
+    }
+
+
+    public boolean isBrowsable() {
+        return isHTML;
+    }
+
+
+    public boolean equals(Object f) {
+        if(!(f instanceof HTTPFile))
+            return super.equals(f);		// could be equal to a ZipArchiveFile
+
+        return ((HTTPFile)f).getAbsolutePath(false).equals(getAbsolutePath(false));
+    }
+
+
+    /**
+     * Overrides AbstractFile's getInputStream(long) method to provide a more efficient implementation :
+     * use the HTTP 1.1 header that resumes file transfer and skips a number of bytes.
+     */
+    public InputStream getInputStream(long skipBytes) throws IOException {
+        HttpURLConnection conn = getHttpURLConnection(this.url);
+        // Set header that allows to resume transfer
+        conn.setRequestProperty("Range", "bytes="+skipBytes+"-");
+        conn.connect();
+        return conn.getInputStream();
+    }
 }

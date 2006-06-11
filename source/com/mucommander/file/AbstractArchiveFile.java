@@ -1,5 +1,8 @@
 package com.mucommander.file;
 
+import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.file.filter.FileFilter;
+
 import java.io.*;
 import java.util.Vector;
 
@@ -10,11 +13,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  * @author Maxence Bernard
  */
-public abstract class AbstractArchiveFile extends AbstractFile {
+public abstract class AbstractArchiveFile extends ProxyFile {
 
-    /** Underlying file */
-    protected AbstractFile file;
-
+    /** Archive entries tree */
     private DefaultMutableTreeNode entriesTree;
 	
 
@@ -22,19 +23,9 @@ public abstract class AbstractArchiveFile extends AbstractFile {
      * Creates an AbstractArchiveFile on top of the given file.
      */
     protected AbstractArchiveFile(AbstractFile file) {
-        super(file.getURL());
-        this.file = file;
+        super(file);
     }
 
-
-    /**
-     * Returns the AbstractFile instance this archive is wrapped around.
-     *
-     * @return the AbstractFile instance this archive is wrapped around
-     */
-    public AbstractFile getEnclosedFile() {
-        return file;
-    }
 
     private void createEntriesTree() throws IOException {
         DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode();
@@ -107,15 +98,7 @@ public abstract class AbstractArchiveFile extends AbstractFile {
     }
 
 	
-    public AbstractFile[] ls() throws IOException {
-        if(this.entriesTree == null)
-            createEntriesTree();
-		
-        return ls(entriesTree, this);
-    }
-	
-	
-    AbstractFile[] ls(ArchiveEntryFile entryFile) throws IOException {
+    AbstractFile[] ls(ArchiveEntryFile entryFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException {
         if(this.entriesTree == null)
             createEntriesTree();
 
@@ -147,104 +130,61 @@ public abstract class AbstractArchiveFile extends AbstractFile {
             currentNode = matchNode;
         }
 		
-        return ls(currentNode, entryFile);
+        return ls(currentNode, entryFile, filenameFilter, fileFilter);
     }
 
 
-    private AbstractFile[] ls(DefaultMutableTreeNode treeNode, AbstractFile parentFile) {
+    private AbstractFile[] ls(DefaultMutableTreeNode treeNode, AbstractFile parentFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException {
+        AbstractFile files[];
         int nbChildren = treeNode.getChildCount();
-        AbstractFile files[] = new AbstractFile[nbChildren];
-		
-        for(int c=0; c<nbChildren; c++) {
-            AbstractFile entryFile = AbstractFile.wrapArchive(
-                                                              new ArchiveEntryFile(
-                                                                                   this, 
-                                                                                   (ArchiveEntry)(((DefaultMutableTreeNode)treeNode.getChildAt(c)).getUserObject())
-                                                                                   )
-                                                              );
-            entryFile.setParent(parentFile);
-            files[c] = entryFile;
+
+        // No FilenameFilter, create entry files and store them directly into an array
+        if(filenameFilter==null) {
+            files = new AbstractFile[nbChildren];
+
+            for(int c=0; c<nbChildren; c++) {
+                files[c] = createArchiveEntryFile((ArchiveEntry)(((DefaultMutableTreeNode)treeNode.getChildAt(c)).getUserObject()), parentFile);
+            }
+        }
+        // Use provided FilenameFilter and temporarily store created entry files that match the filter in a Vector
+        else {
+            Vector filesV = new Vector();
+            for(int c=0; c<nbChildren; c++) {
+                ArchiveEntry entry = (ArchiveEntry)(((DefaultMutableTreeNode)treeNode.getChildAt(c)).getUserObject());
+                if(!filenameFilter.accept(entry.getName()))
+                    continue;
+
+                filesV.add(createArchiveEntryFile(entry, parentFile));
+            }
+
+            files = new AbstractFile[filesV.size()];
+            filesV.toArray(files);
         }
 
-        return files;
+        return fileFilter==null?files:fileFilter.filter(files);
     }
 
 
-    /**
-     * Checks all the given entries below top level (depth>0) and make sure they have a corresponding parent directory
-     * entry, and if not create it and add it to the entries Vector.
-     */
-    /*
-      protected static void addMissingDirectoryEntries(Vector entriesV) {
-      long start = System.currentTimeMillis();
+    private AbstractFile createArchiveEntryFile(ArchiveEntry entry, AbstractFile parentFile) throws java.net.MalformedURLException {
+        String separator = getSeparator();
+        FileURL archiveURL = getURL();
+        String entryURLString = archiveURL.getStringRep(false);
+        if(!entryURLString.endsWith(separator))
+            entryURLString += separator;
+        entryURLString += entry.getPath();
 
-      int nbEntries = entriesV.size();
-      for(int i=0; i<nbEntries; i++) {
-      ArchiveEntry currentEntry = ((ArchiveEntry)entriesV.elementAt(i));
-      String entryPath = currentEntry.getPath();	// entry path will include a trailing '/' if entry is a directory
-      int entryDepth = currentEntry.getDepth();
-      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("checking entry #"+i+" "+entryPath+" depth="+entryDepth);
-      // Entry is not at the top level
-      if (entryDepth>0) {
-      int slashPos = 0;
-      for(int l=0; l<entryDepth; l++) {
-      // Extract directory name at depth l
-      String dirName = entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
+        AbstractFile entryFile = AbstractFile.wrapArchive(
+          new ArchiveEntryFile(
+            this,
+            entry,
+            new FileURL(entryURLString, archiveURL)
+          )
+        );
+        entryFile.setParent(parentFile);
 
-      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("checking for an existing entry for directory "+dirName);
-      boolean entryFound = false;
-      // Is there an entry for this directory ?
-      for(int j=0; j<entriesV.size(); j++)
-      if(((ArchiveEntry)entriesV.elementAt(j)).getPath().equals(dirName))
-      entryFound = true;
-	
-      // An entry for this directory has been found, nothing to do, go to the next directory
-      if(entryFound)
-      continue;
+        return entryFile;
+    }
 
-      // Directory has no entry, let's manually create and add an ArchiveEntry for it
-      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating new entry for directory "+dirName);
-      ArchiveEntry newEntry = currentEntry.createDirectoryEntry(dirName);
-      newEntry.setDate(currentEntry.getDate());	// Use current entry's time, not accurate
-      entriesV.add(newEntry);
-      }
-      }
-      }
-
-      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("missing directory entries added in "+(System.currentTimeMillis()-start)+" ms, nbEntries="+entriesV.size());
-      }
-    */
-
-    /**
-     *  Returns top level (depth==0) entries containted by this archive.
-     */
-    /*
-      public AbstractFile[] ls() throws IOException {
-      long start = System.currentTimeMillis();
-      // Load entries
-      ArchiveEntry entries[] = getEntries();
-
-      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries loaded in "+(System.currentTimeMillis()-start)+" ms, nbEntries="+entries.length);
-      start = System.currentTimeMillis();
-
-      // Create entry files
-      Vector subFiles = new Vector();		
-      AbstractFile entryFile;
-      for(int i=0; i<entries.length; i++) {
-      if (entries[i].getDepth()==0) {
-      entryFile = AbstractFile.wrapArchive(new ArchiveEntryFile(this, entries[i]));
-      entryFile.setParent(this);
-      subFiles.add(entryFile);
-      }
-      }
-
-      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entry files created in "+(System.currentTimeMillis()-start)+" ms, nbEntries="+entries.length);
-
-      AbstractFile subFilesArray[] = new AbstractFile[subFiles.size()];
-      subFiles.toArray(subFilesArray);
-      return subFilesArray;
-      }
-    */
 
 
     //////////////////////
@@ -263,102 +203,54 @@ public abstract class AbstractArchiveFile extends AbstractFile {
     abstract InputStream getEntryInputStream(ArchiveEntry entry) throws IOException;
 
 
-    /////////////////////////////////////////
-    // AbstractFile methods implementation //
-    /////////////////////////////////////////
-	
-    public String getName() {
-        return file.getName();
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    public AbstractFile[] ls() throws IOException {
+        if(this.entriesTree == null)
+            createEntriesTree();
+
+        return ls(entriesTree, this, null, null);
     }
 
-    public String getAbsolutePath() {
-        return file.getAbsolutePath();
+    public AbstractFile[] ls(FilenameFilter filter) throws IOException {
+        if(this.entriesTree == null)
+            createEntriesTree();
+
+        return ls(entriesTree, this, filter, null);
     }
 
-    public String getSeparator() {
-        return file.getSeparator();
+    public AbstractFile[] ls(FileFilter filter) throws IOException {
+        if(this.entriesTree == null)
+            createEntriesTree();
+
+        return ls(entriesTree, this, null, filter);
     }
 
-    public long getDate() {
-        return file.getDate();
-    }
-	
-    public boolean changeDate(long date) {
-        return file.changeDate(date);
-    }
-	
-    public long getSize() {
-        return file.getSize();
-    }
-	
-    public AbstractFile getParent() {
-        return file.getParent();
-    }
-	
-    public void setParent(AbstractFile parent) {
-        this.file.setParent(parent);	
-    }	
-
-    public boolean exists() {
-        return file.exists();
-    }
-	
-    public boolean canRead() {
-        return file.canRead();
-    }
-	
-    public boolean canWrite() {
-        return file.canWrite();
-    }
 
     public boolean isBrowsable() {
+        // Archive files are browsable but are not directories
         return true;
     }
 	
     public boolean isDirectory() {
+        // Archive files are browsable but are not directories
         return false;
     }
 
-    public boolean isHidden() {
-        return file.isHidden();
-    }
-
-    public boolean isSymlink() {
-        return file.isSymlink();
-    }
-
-    public InputStream getInputStream() throws IOException {
-        return file.getInputStream();
-    }
-	
-    public InputStream getInputStream(long skipBytes) throws IOException {
-        return file.getInputStream(skipBytes);
-    }
-	
-    public OutputStream getOutputStream(boolean append) throws IOException {
-        return file.getOutputStream(append);
-    }
-		
-    public boolean moveTo(AbstractFile dest) throws IOException  {
-        return file.moveTo(dest);
-    }
-
-    public void delete() throws IOException {
-        file.delete();
-    }
-
     public void mkdir(String name) throws IOException {
-        // All archive files are read-only (for now), let's throw an exception
+        // All archive files are read-only, let's throw an exception
         throw new IOException();
     }
 
     public long getFreeSpace() {
-        // All archive files are read-only (for now), return 0
+        // All archive files are read-only, return 0
         return 0;
     }
 
     public long getTotalSpace() {
-        // An archive is considered as a volume by itself, let's return the archive's size
+        // An archive is considered as a volume by itself, let's return the proxied file's size
         return file.getSize();
     }	
 }

@@ -211,8 +211,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         Object source = e.getSource();
     	
         if (source==cancelButton) {
-            // Cancel button pressed, dispose dialog (job will be stopped as a result of the dialog being closed)
+            // Cancel button pressed, dispose dialog and stop job immediately
+            // (job will be stopped a second time in windowClosed() but that will just be a no-op)
             dispose();
+            job.stop();
         }
         else if(source==hideButton) {
             mainFrame.setState(Frame.ICONIFIED);
@@ -239,6 +241,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
         // Stop threads
         repaintThread = null;
+        // Job may have already been stopped if cancel button was pressed
         job.stop();
     }
 }

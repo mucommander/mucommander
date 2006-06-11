@@ -21,14 +21,13 @@ public class FTPFile extends AbstractFile {
 
     protected String absPath;
 
-    /** File separator is '/' for urls */
-    private final static String SEPARATOR = "/";
-
     private AbstractFile parent;
     private boolean parentValSet;
     
     private boolean fileExists;
-	
+
+    private final static String SEPARATOR = DEFAULT_SEPARATOR;
+
 
     private class FTPInputStream extends FilterInputStream {
 		
@@ -288,23 +287,6 @@ public class FTPFile extends AbstractFile {
     // AbstractFile methods implementation //
     /////////////////////////////////////////
 
-    public String getName() {
-        String name = file.getName();
-		
-        if(name.endsWith(SEPARATOR))
-            return name.substring(0, name.length()-1);
-        return name;
-    }
-
-	
-    public String getAbsolutePath() {
-        return fileURL.getStringRep(false);
-    }
-
-    public String getSeparator() {
-        return SEPARATOR;
-    }
-	
     public boolean isSymlink() {
         return file.isSymbolicLink();
     }
@@ -364,38 +346,8 @@ public class FTPFile extends AbstractFile {
         return file.isDirectory();
     }
 	
-    public boolean equals(Object f) {
-        if(!(f instanceof FTPFile))
-            return super.equals(f);		// could be equal to a ZipArchiveFile
-		
-        return fileURL.equals(((FTPFile)f).fileURL);
-    }
-	
-	
     public InputStream getInputStream() throws IOException {
         return getInputStream(0);
-    }
-	
-
-    public InputStream getInputStream(long skipBytes) throws IOException {
-        // Check connection and reconnect if connection timed out
-        checkConnection();
-
-        if(skipBytes>0) {
-            // Resume transfer at the given offset
-            this.ftpClient.setRestartOffset(skipBytes);
-        }
-		
-        InputStream in = ftpClient.retrieveFileStream(absPath);
-        if(in==null) {
-            if(skipBytes>0) {
-                // Reset offset
-                this.ftpClient.setRestartOffset(0);
-            }
-            throw new IOException();
-        }
-		
-        return new FTPInputStream(in);
     }
 
 	
@@ -416,25 +368,6 @@ public class FTPFile extends AbstractFile {
     }
 
 		
-    public boolean moveTo(AbstractFile destFile) throws IOException {
-        // If destination file is an FTP file located on the same server,
-        // have the server rename the file.
-        if(destFile.fileURL.getProtocol().equals("ftp") && destFile.fileURL.getHost().equals(this.fileURL.getHost())) {
-            // Check connection and reconnect if connection timed out
-            checkConnection();
-			
-            try {
-                return ftpClient.rename(absPath, destFile.getURL().getPath());
-            }
-            catch(IOException e) {
-                return false;
-            }
-        }
-		
-        return false;
-    }
-
-	
     public void delete() throws IOException {
         // Check connection and reconnect if connection timed out
         checkConnection();
@@ -444,6 +377,7 @@ public class FTPFile extends AbstractFile {
         // Throw an IOException if server replied with an error
         checkServerReply();
     }
+
 
     public AbstractFile[] ls() throws IOException {
         // Check connection and reconnect if connection timed out
@@ -520,5 +454,82 @@ public class FTPFile extends AbstractFile {
     public long getTotalSpace() {
         // No way to retrieve this information with J2SSH, return -1 (not available)
         return -1;
+    }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+//    public String getName() {
+//        String name = file.getName();
+//
+//        if(name.endsWith(SEPARATOR))
+//            return name.substring(0, name.length()-1);
+//        return name;
+//    }
+
+
+    /**
+     * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
+     * uses FTP and is located on the same host.
+     */
+    public void moveTo(AbstractFile destFile) throws IOException {
+        // If destination file is an FTP file located on the same server, tells the server to rename the file.
+
+        // Use the default moveTo() implementation if the destination file doesn't use FTP
+        // or is not on the same host
+        if(!destFile.fileURL.getProtocol().equals("ftp") || !destFile.fileURL.getHost().equals(this.fileURL.getHost())) {
+            super.moveTo(destFile);
+            return;
+        }
+
+        // If file is an archive file, retrieve the enclosed file, which is likely to be an FTPFile but not necessarily
+        // (may be an ArchiveEntryFile)
+        if(destFile instanceof AbstractArchiveFile)
+            destFile = ((AbstractArchiveFile)destFile).getProxiedFile();
+
+        // If destination file is not an FTPFile (for instance an archive entry), server renaming won't work
+        // so use default moveTo() implementation instead
+        if(!(destFile instanceof FTPFile)) {
+            super.moveTo(destFile);
+            return;
+        }
+
+        // Check connection and reconnect if connection timed out
+        checkConnection();
+
+        if(!ftpClient.rename(absPath, destFile.getURL().getPath()))
+            throw new IOException();    // Report that move failed
+    }
+
+
+    public InputStream getInputStream(long skipBytes) throws IOException {
+        // Check connection and reconnect if connection timed out
+        checkConnection();
+
+        if(skipBytes>0) {
+            // Resume transfer at the given offset
+            this.ftpClient.setRestartOffset(skipBytes);
+        }
+
+        InputStream in = ftpClient.retrieveFileStream(absPath);
+        if(in==null) {
+            if(skipBytes>0) {
+                // Reset offset
+                this.ftpClient.setRestartOffset(0);
+            }
+            throw new IOException();
+        }
+
+        return new FTPInputStream(in);
+    }
+
+
+    public boolean equals(Object f) {
+        if(!(f instanceof FTPFile))
+            return super.equals(f);		// could be equal to a ZipArchiveFile
+
+        return fileURL.equals(((FTPFile)f).fileURL);
     }
 }

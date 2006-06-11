@@ -173,7 +173,7 @@ public abstract class FileJob implements Runnable {
 
 
     /**
-     * Asks to stop file job's thread.
+     * Stops this job.
      */	
     public void stop() {
         // Return if job has already been stopped
@@ -405,6 +405,7 @@ public abstract class FileJob implements Runnable {
 
         for(FileTable table=table1; ; table=table2) {
             if(hasFolderChanged(table.getCurrentFolder())) {
+/*
                 try {
                     // Refresh folder in the same thread
                     table.getFolderPanel().refreshCurrentFolder();
@@ -412,6 +413,9 @@ public abstract class FileJob implements Runnable {
                 catch(IOException e) {
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Folder couldn't be refreshed: "+e);
                 }
+*/
+                table.getFolderPanel().tryRefreshCurrentFolder();
+
             }
 		
             if(table==table2)

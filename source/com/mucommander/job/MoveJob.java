@@ -58,18 +58,24 @@ public class MoveJob extends ExtendedFileJob {
 
 	
     /**
-     * Tries to move the file with AbstractFile.moveTo() 
-     * skipping the whole manual recursive process
+     * Moves the file with AbstractFile.moveTo() if it is more efficient than copying the streams,
+     * skipping the whole manual recursive process.
+     *
+     * @return <code>true</code> if the file has been moved using AbstractFile.moveTo()
      */
     private boolean fileMove(AbstractFile file, AbstractFile destFile) {
+        int moveToHint = file.getMoveToHint(destFile);
+        
+        if(!(moveToHint==AbstractFile.SHOULD_HINT || moveToHint==AbstractFile.MUST_HINT))
+            return false;
+        
         try {
-            if(file.moveTo(destFile))
-                return true;		// return true in case of success
+            file.moveTo(destFile);
+            return true; 
         } catch(IOException e) { 
             if(com.mucommander.Debug.ON) e.printStackTrace();
+            return false;
         }
-		
-        return false;
     }
 
 	
@@ -292,7 +298,7 @@ public class MoveJob extends ExtendedFileJob {
     // This job modifies baseDestFolder and its subfolders
 	
     protected boolean hasFolderChanged(AbstractFile folder) {
-        return baseSourceFolder.isParent(folder) || baseDestFolder.isParent(folder);
+        return baseSourceFolder.isParentOf(folder) || baseDestFolder.isParentOf(folder);
     }
 
 }

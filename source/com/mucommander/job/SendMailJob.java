@@ -1,9 +1,13 @@
 
 package com.mucommander.job;
 
+import com.mucommander.io.Base64OutputStream;
+
 import com.mucommander.file.*;
+
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
+
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.text.Translator;
 
@@ -184,10 +188,9 @@ public class SendMailJob extends ExtendedFileJob {
             writeLine("Content-Disposition: attachment;filename=\""+file.getName()+"\"");
             writeLine("Content-transfer-encoding: base64\r\n");
             fileIn = file.getInputStream();
-            //			copyStream(fileIn, out64, 0);
-            // Stop and return false if job was interrupted
-            if(!copyStream(fileIn, out64))
-                return false;
+
+            // Write file to socket
+            AbstractFile.copyStream(fileIn, out64);
 	
             // Writes padding bytes without closing the stream.
             out64.writePadding();

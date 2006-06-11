@@ -4,6 +4,9 @@ package com.mucommander.job;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.MainFrame;
 
+import com.mucommander.io.CounterInputStream;
+import com.mucommander.io.ByteCounter;
+
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 
@@ -21,17 +24,21 @@ import java.io.*;
  */
 public abstract class ExtendedFileJob extends FileJob {
 
-    /** Number of bytes of current file that have been processed, see {@link #getCurrentFileBytesProcessed() getCurrentFileBytesProcessed} */
-    protected long currentFileProcessed;
+//    /** Number of bytes of current file that have been processed, see {@link #getCurrentFileBytesProcessed() getCurrentFileBytesProcessed} */
+//    private long currentFileProcessed;
 
-    /** Read buffer */
-    protected byte buffer[];
+    private CounterInputStream cin;
+
+    private ByteCounter counter = new ByteCounter();
+
+//    /** Read buffer */
+//    protected byte buffer[];
 	
-    /** Size allocated to read buffer */
-    protected final static int READ_BLOCK_SIZE = 8192;
+//    /** Size allocated to read buffer */
+//    protected final static int READ_BLOCK_SIZE = 8192;
 
-    /** Default buffer size for BufferedOutputStream */
-    protected final static int OUTPUT_BUFFER_SIZE = 8192;
+//    /** Default buffer size for BufferedOutputStream */
+//    protected final static int OUTPUT_BUFFER_SIZE = 8192;
 	
 	
     /**
@@ -45,16 +52,18 @@ public abstract class ExtendedFileJob extends FileJob {
     /**
      * Returns a BufferedOutputStream using the given OutputStream, and initialized with a large enough buffer.
      */
+/*
     protected BufferedOutputStream getBufferedOutputStream(OutputStream out) {
         return new BufferedOutputStream(out, OUTPUT_BUFFER_SIZE);
     }
-
+*/
 
     /**
      * Copies the given InputStream's content to the given OutputStream.
      *
      * @return true if the stream was completely copied (i.e. job was not interrupted during the transfer)
      */
+/*
     protected boolean copyStream(InputStream in, OutputStream out) throws IOException {
         // Init read buffer the first time
         if(buffer==null)
@@ -73,7 +82,7 @@ public abstract class ExtendedFileJob extends FileJob {
 		
         return true;
     }
-
+*/
 
     /**
      * Copies the given source file to the specified destination file, optionally resuming the operation.
@@ -81,58 +90,76 @@ public abstract class ExtendedFileJob extends FileJob {
      * @return true if the file was completely copied (i.e. job was not interrupted during the transfer)
      */
     protected boolean copyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append) throws FileJobException {
-        OutputStream out = null;
-        InputStream in = null;
+        // Determine whether AbstractFile.copyTo() should be used to copy file or streams should be copied manually.
+        // Some file protocols do not provide a getOutputStream() method and require the use of copyTo(). Some other
+        // may also offer server to server copy which is more efficient than stream copy.
+        int copyToHint = sourceFile.getCopyToHint(destFile);
 
+        // copyTo() should or must be used
+        if(copyToHint==AbstractFile.SHOULD_HINT || copyToHint==AbstractFile.MUST_HINT) {
+            try {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling copyTo()");
+                sourceFile.copyTo(destFile);
+                return true;
+            }
+            catch(IOException e) {
+                if(com.mucommander.Debug.ON) e.printStackTrace();
+                throw new FileJobException(FileJobException.ERROR_WHILE_TRANSFERRING);
+            }
+        }
+
+        // Copy streams manually
+        OutputStream out = null;
         try {
             // Try to open InputStream
             try  {
                 long destFileSize = destFile.getSize();
-		
+        
                 if(append && destFileSize!=-1) {
-                    in = sourceFile.getInputStream(destFileSize); 
-                    currentFileProcessed += destFileSize;
+                    this.cin = new CounterInputStream(sourceFile.getInputStream(destFileSize), counter); 
+//                    currentFileProcessed += destFileSize;
+                    counter.add(destFileSize);
                 }
                 else {
-                    in = sourceFile.getInputStream();
+                    this.cin = new CounterInputStream(sourceFile.getInputStream(), counter);
                 }
             }
             catch(IOException e1) {
                 if(com.mucommander.Debug.ON) e1.printStackTrace();
                 throw new FileJobException(FileJobException.CANNOT_OPEN_SOURCE);
             }
-	
-            // Try to open OutputStream
-            try  { out = getBufferedOutputStream(destFile.getOutputStream(append)); }
-            catch(IOException e2) {
-                if(com.mucommander.Debug.ON) e2.printStackTrace();
-                throw new FileJobException(FileJobException.CANNOT_OPEN_DESTINATION);
+    
+            try  {
+                // Copy stream to destination file
+                destFile.copyStream(cin, append);
+                return true;
             }
-
-            // Try to copy InputStream to OutputStream
-            try  { return copyStream(in, out); }
             catch(IOException e3) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isInterrupted() "+isInterrupted());
+                if(isInterrupted())
+                    return false;
+                    
                 if(com.mucommander.Debug.ON) e3.printStackTrace();
                 throw new FileJobException(FileJobException.ERROR_WHILE_TRANSFERRING);
             }
         }
-        catch(FileJobException e) {
-            // Rethrow exception 
-            throw e;
-        }
         finally {
-            // Tries to close the streams no matter what happened before
             // This block will always be executed, even if an exception
-            // was thrown by the catch block
-            // Finally found a use for the finally block!
-            if(in!=null)
-                try { in.close(); }
+            // was thrown in the catch block
+
+            // Update total number of bytes processed
+            this.nbBytesProcessed += counter.getByteCount();
+
+            // Tries to close the streams no matter what happened before
+            if(cin!=null) {
+                try { cin.close(); }
                 catch(IOException e1) {}
+            }
+
             if(out!=null)
                 try { out.close(); }
                 catch(IOException e2) {}
         }
-		
     }
 
 
@@ -186,7 +213,8 @@ public abstract class ExtendedFileJob extends FileJob {
                 else {
                     if(reason==FileJobException.ERROR_WHILE_TRANSFERRING) {
                         // Reset processed bytes counter
-                        currentFileProcessed = 0;
+//                        currentFileProcessed = 0;
+                        counter.reset();
                         // Append resumes transfer
                         append = choice==APPEND_ACTION;
                     }
@@ -196,6 +224,24 @@ public abstract class ExtendedFileJob extends FileJob {
         } while(true);
     }
 	
+    
+    /**
+     * Overrides FileJob.stop() to stop any file copy (closes the InputStream).
+     */
+    public void stop() {
+        // Stop job BEFORE closing the stream so that the IOException thrown by copyStream
+        // is not interpreted as a failure
+        super.stop();
+
+        if(cin!=null) {
+            try {
+                cin.close();
+            }
+            catch(IOException e) {}
+        }
+    }
+
+    
 	
     /**
      * Computes and returns the percent done of current file. Returns 0 if current file's size is not available
@@ -215,7 +261,8 @@ public abstract class ExtendedFileJob extends FileJob {
      * Returns the number of bytes of the current file that have been processed.
      */
     public long getCurrentFileBytesProcessed() {
-        return currentFileProcessed;
+//        return currentFileProcessed;
+        return counter.getByteCount();
     }
 
 
@@ -233,7 +280,8 @@ public abstract class ExtendedFileJob extends FileJob {
      */
     protected void nextFile(AbstractFile file) {
         super.nextFile(file);
-        currentFileProcessed = 0;
+//        currentFileProcessed = 0;
+        counter.reset();
     }
 
 
