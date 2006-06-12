@@ -4,7 +4,7 @@ commons-logging.jar    -> Commons-logging v?
 commons-net.jar	       -> Commons-net 1.4.1
 j2ssh.jar	       -> J2SSH 0.2.7 (patched and compiled for Java 1.3)
 jakarta-oro.jar	       -> Jakarta Oro 2.0.8
-jcifs.jar	       -> jCIFS 1.2.8 (compiled for Java 1.3)
+jcifs.jar	       -> jCIFS 1.2.8 (one line patch + compiled for Java 1.3)
 muxml.jar	       -> muXML 1.0
 osx-mrj-stubs.jar      -> Stubs for Mac OS X's MRJ API (for Java 1.3)
 osx-eawt-stubs.jar      -> Stubs for Mac OS X's EAWT API (for Java 1.4+)
