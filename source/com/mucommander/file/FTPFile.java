@@ -1,6 +1,8 @@
 
 package com.mucommander.file;
 
+import com.mucommander.io.RandomAccessInputStream;
+
 import org.apache.commons.net.ftp.*;
 
 import java.io.*;
@@ -16,25 +18,25 @@ public class FTPFile extends AbstractFile {
     private org.apache.commons.net.ftp.FTPFile file;
     private FTPClient ftpClient;
 
-    /** Sets whether passive mode should be used for data transfers (default is true) */ 
+    /** Sets whether passive mode should be used for data transfers (default is true) */
     private boolean passiveMode = true;
 
     protected String absPath;
 
     private AbstractFile parent;
     private boolean parentValSet;
-    
+
     private boolean fileExists;
 
     private final static String SEPARATOR = DEFAULT_SEPARATOR;
 
 
     private class FTPInputStream extends FilterInputStream {
-		
+
         private FTPInputStream(InputStream in) {
             super(in);
         }
-		
+
         public void close() throws IOException {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("closing");
             super.close();
@@ -51,13 +53,13 @@ public class FTPFile extends AbstractFile {
             }
         }
     }
-	
+
     private class FTPOutputStream extends BufferedOutputStream {
-		
+
         private FTPOutputStream(OutputStream out) {
             super(out);
         }
-		
+
         public void close() throws IOException {
             super.close();
 
@@ -73,30 +75,30 @@ public class FTPFile extends AbstractFile {
         }
     }
 
-	
+
     public FTPFile(FileURL fileURL) throws IOException {
         this(fileURL, true, null);
     }
 
-	
+
     /**
      * Creates a new instance of FTPFile and initializes the FTP connection to the server.
      */
     private FTPFile(FileURL fileURL, boolean addAuthInfo, FTPClient ftpClient) throws IOException {
         super(fileURL);
-		
+
         this.absPath = this.fileURL.getPath();
-				
+
         if(ftpClient==null)
             // Initialize connection
             initConnection(fileURL, addAuthInfo);
         else
             this.ftpClient = ftpClient;
-	
+
         initFile(fileURL);
     }
 
-	
+
     private FTPFile(FileURL fileURL, org.apache.commons.net.ftp.FTPFile file, FTPClient ftpClient) {
         super(fileURL);
 
@@ -106,7 +108,7 @@ public class FTPFile extends AbstractFile {
         this.fileExists = true;
     }
 
-	
+
     private org.apache.commons.net.ftp.FTPFile getFTPFile(FTPClient ftpClient, FileURL fileURL) throws IOException {
         FileURL parentURL = fileURL.getParent();
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL+" parent="+parentURL);
@@ -126,7 +128,7 @@ public class FTPFile extends AbstractFile {
             // File doesn't exists
             if(files==null || files.length==0)
                 return null;
-		
+
             // Find file from parent folder
             int nbFiles = files.length;
             String wantedName = fileURL.getFilename();
@@ -138,8 +140,8 @@ public class FTPFile extends AbstractFile {
             return null;
         }
     }
-	
-	
+
+
     private org.apache.commons.net.ftp.FTPFile createFTPFile(String name, boolean isDirectory) {
         org.apache.commons.net.ftp.FTPFile file = new org.apache.commons.net.ftp.FTPFile();
         file.setName(name);
@@ -148,13 +150,13 @@ public class FTPFile extends AbstractFile {
         file.setType(isDirectory?org.apache.commons.net.ftp.FTPFile.DIRECTORY_TYPE:org.apache.commons.net.ftp.FTPFile.FILE_TYPE);
         return file;
     }
-	
+
 
     private void initConnection(FileURL fileURL, boolean addAuthInfo) throws IOException {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("connecting to "+fileURL.getHost());
 
         this.ftpClient = new FTPClient();
-		
+
         try {
             // Override default port (21) if a custom port was specified in the URL
             int port = fileURL.getPort();
@@ -163,7 +165,7 @@ public class FTPFile extends AbstractFile {
                 ftpClient.setDefaultPort(port);
 
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("default timeout="+ftpClient.getDefaultTimeout());
-		
+
             // Connect
             ftpClient.connect(fileURL.getHost());
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(ftpClient.getReplyString());
@@ -177,11 +179,11 @@ public class FTPFile extends AbstractFile {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL.getStringRep(true)+" authInfo="+authInfo);
             if(authInfo==null)
                 throw new AuthException(fileURL);
-			
+
             ftpClient.login(authInfo.getLogin(), authInfo.getPassword());
             // Throw an IOException (possibly AuthException) if server replied with an error
             checkServerReply();
-			
+
             // Enables/disables passive mode
             String passiveModeProperty = fileURL.getProperty("passiveMode");
             this.passiveMode = passiveModeProperty==null||!passiveModeProperty.equals("false");
@@ -217,7 +219,7 @@ public class FTPFile extends AbstractFile {
         }
     }
 
-	
+
     private void checkServerReply() throws IOException {
         // Check that connection went ok
         int replyCode = ftpClient.getReplyCode();
@@ -231,7 +233,7 @@ public class FTPFile extends AbstractFile {
         }
     }
 
-	
+
     private void checkConnection() throws IOException {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isConnected= "+ftpClient.isConnected());
         // Reconnect if disconnected
@@ -240,7 +242,7 @@ public class FTPFile extends AbstractFile {
             initConnection(this.fileURL, false);
             return;
         }
-		
+
         // Send Noop to check connection
         boolean noop = false;
         try {
@@ -253,7 +255,7 @@ public class FTPFile extends AbstractFile {
         }
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("noop returned "+noop);
-		
+
         if(!noop) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isConnected= "+ftpClient.isConnected());
             if(ftpClient.isConnected()) {
@@ -265,7 +267,7 @@ public class FTPFile extends AbstractFile {
         }
     }
 
-	
+
     //	/**
     //	 * Enables / disables passive mode mode.
     //	 * <p>Default is enabled, so no need to call this method to enable passive mode, this would result in 
@@ -282,7 +284,7 @@ public class FTPFile extends AbstractFile {
     //		}
     //	}
 
-	
+
     /////////////////////////////////////////
     // AbstractFile methods implementation //
     /////////////////////////////////////////
@@ -294,18 +296,18 @@ public class FTPFile extends AbstractFile {
     public long getDate() {
         return file.getTimestamp().getTime().getTime();
     }
-	
+
     public boolean changeDate(long lastModified) {
         // No way that I know of to date this with Commons-Net API, maybe there isn't even an FTP command to change a file's date 
         // Note: FTPFile.setTimeStamp only changes the instance's date, but doesn't change it on the server-side.
         return false;
     }
-	
+
     public long getSize() {
         return file.getSize();
     }
-	
-	
+
+
     public AbstractFile getParent() {
         if(!parentValSet) {
             FileURL parentFileURL = this.fileURL.getParent();
@@ -319,38 +321,42 @@ public class FTPFile extends AbstractFile {
             this.parentValSet = true;
             return this.parent;
         }
-		
+
         return this.parent;
     }
-	
-	
+
+
     public void setParent(AbstractFile parent) {
         this.parent = parent;
         this.parentValSet = true;
     }
-	
-	
+
+
     public boolean exists() {
         return this.fileExists;
     }
-	
+
     public boolean canRead() {
         return file.hasPermission(org.apache.commons.net.ftp.FTPFile.USER_ACCESS, org.apache.commons.net.ftp.FTPFile.READ_PERMISSION);
     }
-	
+
     public boolean canWrite() {
         return file.hasPermission(org.apache.commons.net.ftp.FTPFile.USER_ACCESS, org.apache.commons.net.ftp.FTPFile.WRITE_PERMISSION);
     }
-	
+
     public boolean isDirectory() {
         return file.isDirectory();
     }
-	
+
     public InputStream getInputStream() throws IOException {
         return getInputStream(0);
     }
 
-	
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        // No random access for FTP files unfortunately
+        throw new IOException();
+    }
+
     public OutputStream getOutputStream(boolean append) throws IOException {
         // Check connection and reconnect if connection timed out
         checkConnection();
@@ -363,11 +369,11 @@ public class FTPFile extends AbstractFile {
 
         if(out==null)
             throw new IOException();
-		
+
         return new FTPOutputStream(out);
     }
 
-		
+
     public void delete() throws IOException {
         // Check connection and reconnect if connection timed out
         checkConnection();
@@ -382,7 +388,7 @@ public class FTPFile extends AbstractFile {
     public AbstractFile[] ls() throws IOException {
         // Check connection and reconnect if connection timed out
         checkConnection();
-		
+
         org.apache.commons.net.ftp.FTPFile files[];
         try { files = ftpClient.listFiles(absPath); }
         // This exception is not an IOException and needs to be caught and rethrown
@@ -390,13 +396,13 @@ public class FTPFile extends AbstractFile {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("ParserInitializationException caught");
             throw new IOException();
         }
-	
+
         // Throw an IOException if server replied with an error
         checkServerReply();
-		
+
         if(files==null)
             return new AbstractFile[] {};
-        
+
         AbstractFile children[] = new AbstractFile[files.length];
         AbstractFile child;
         FileURL childURL;
@@ -411,10 +417,10 @@ public class FTPFile extends AbstractFile {
             childName = files[i].getName();
             if(childName.equals(".") || childName.equals(".."))
                 continue;
-				
+
             childURL = new FileURL(parentURL+childName, fileURL);
             childURL.setProperty("passiveMode", ""+passiveMode);
-			
+
             // Discard '.' and '..' files
             if(childName.equals(".") || childName.equals(".."))
                 continue;
@@ -424,18 +430,18 @@ public class FTPFile extends AbstractFile {
             child.setParent(this);
             children[fileCount++] = child;
         }
-		
+
         // Create new array of the exact file count
         if(fileCount<nbFiles) {
             AbstractFile newChildren[] = new AbstractFile[fileCount];
             System.arraycopy(children, 0, newChildren, 0, fileCount);
             return newChildren;
         }
-		
+
         return children;
     }
 
-	
+
     public void mkdir(String name) throws IOException {
         // Check connection and reconnect if connection timed out
         checkConnection();
@@ -444,8 +450,8 @@ public class FTPFile extends AbstractFile {
         // Throw an IOException if server replied with an error
         checkServerReply();
     }
-	
-	
+
+
     public long getFreeSpace() {
         // No way to retrieve this information with J2SSH, return -1 (not available)
         return -1;

@@ -3,6 +3,8 @@ package com.mucommander.file;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.cache.LRUCache;
+import com.mucommander.io.RandomAccessInputStream;
+
 
 import java.io.*;
 
@@ -751,15 +753,27 @@ public abstract class AbstractFile {
 
     /**
      * Creates a new directory if this AbstractFile is a folder.
+     *
      * @throws IOException if this operation is not possible.
      */
     public abstract void mkdir(String name) throws IOException;
 
     /**
-     * Returns an InputStream to read from this AbstractFile.
-     * @throws IOException if this AbstractFile cannot be read or is a folder.
+     * Returns an <code>InputStream</code> to read from this AbstractFile.
+     *
+     * @throws IOException if this AbstractFile could not be read or if an <code>InputStream</code> could not be
+     * provided for any other reason (e.g. file is a directory).
      */
     public abstract InputStream getInputStream() throws IOException;
+
+    /**
+     * Returns an <code>InputStream</code> to read from this AbstractFile with random access.
+     *
+     * @throws IOException if this AbstractFile could not be read or if a <code>RandomAccessInputStream</code> could not
+     * be provided because the underlying file protocol doesn't have random access support or for any other reason
+     * (e.g. file is a directory).
+     */
+    public abstract RandomAccessInputStream getRandomAccessInputStream() throws IOException;
 
     /**
      * Returns an OuputStream to write to this AbstractFile.

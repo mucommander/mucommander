@@ -2,6 +2,7 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.PlatformManager;
+import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.*;
 import java.util.StringTokenizer;
@@ -40,6 +41,47 @@ public class FSFile extends AbstractFile {
         fileSystemView = FileSystemView.getFileSystemView();
     }
 
+
+    /**
+     * FSRandomAccessInputStream extends RandomAccessInputStream to provide random access to an <code>FSFile</code>'s
+     * content.
+     */
+    public class FSRandomAccessInputStream extends RandomAccessInputStream {
+
+        private RandomAccessFile raf;
+
+        public FSRandomAccessInputStream(RandomAccessFile raf) {
+            this.raf = raf;
+        }
+
+        public int read() throws IOException {
+            return raf.read();
+        }
+
+        public int read(byte b[]) throws IOException {
+            return raf.read(b);
+        }
+
+        public int read(byte b[], int off, int len) throws IOException {
+            return raf.read(b, off, len);
+        }
+
+        public void close() throws IOException {
+            raf.close();
+        }
+
+        public long getOffset() throws IOException {
+            return raf.getFilePointer();
+        }
+
+        public long getLength() throws IOException {
+            return raf.length();
+        }
+
+        public void seek(long pos) throws IOException {
+            raf.seek(pos);
+        }
+    }
 
     /**
      * Creates a new instance of FSFile.
@@ -281,6 +323,10 @@ public class FSFile extends AbstractFile {
 
     public InputStream getInputStream() throws IOException {
         return new FileInputStream(file);
+    }
+
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        return new FSRandomAccessInputStream(new RandomAccessFile(file, "r"));
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {

@@ -1,9 +1,10 @@
 package com.mucommander.file;
 
+import com.mucommander.io.RandomAccessInputStream;
+
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.File;
 import java.io.InputStream;
+
 import java.util.Vector;
 import java.util.Calendar;
 
@@ -18,12 +19,12 @@ import java.util.Calendar;
 */
 
 public class IsoArchiveFile extends AbstractArchiveFile {
-    long sector_offset = 0;
-    byte buffer[] = new byte[2048];
-    Calendar calendar = Calendar.getInstance();
-    todo todo_idr;
-    boolean cooked;
-    RandomAccessFile raf;
+    private long sector_offset = 0;
+    private byte buffer[] = new byte[2048];
+    private Calendar calendar = Calendar.getInstance();
+    private todo todo_idr;
+    private boolean cooked;
+    private RandomAccessInputStream rais;
 
     public IsoArchiveFile(AbstractFile file) {
         super(file);
@@ -36,7 +37,7 @@ public class IsoArchiveFile extends AbstractArchiveFile {
         Vector entries = new Vector();
 
         try {
-            raf = new RandomAccessFile(new File(file.getAbsolutePath()), "r");
+            this.rais = getRandomAccessInputStream();
             int start = 16;
             if ("nrg".equals(getExtension())) {
                 start += 150;
@@ -47,7 +48,7 @@ public class IsoArchiveFile extends AbstractArchiveFile {
 
             int level = 0;
             for (int i = 1; i < 17; i++) {  // fuzzy search, can have type=0 (bootable el torito), type=2 (svd)
-                pvd = new isoPvd(raf, start + i, cooked);
+                pvd = new isoPvd(rais, start + i, cooked);
                 if (pvd.type[0] == 2 && pvd.id[0] == 'C' && pvd.id[1] == 'D' && pvd.id[2] == '0' && pvd.id[3] == '0' && pvd.id[4] == '1')
                 {
                     // gotta read docs a little more about those UCS-2 Escape Sequences
@@ -65,13 +66,13 @@ public class IsoArchiveFile extends AbstractArchiveFile {
                 }
             }
             if (level == 0) // if no SVD with Joliet, fallback to plain-old ISO9660
-                pvd = new isoPvd(raf, start, cooked);
+                pvd = new isoPvd(rais, start, cooked);
 
             isoDr idr = new isoDr(pvd.root_directory_record, 0);
-            parse_dir("", isonum_733(idr.extent), isonum_733(idr.size), raf, entries, cooked, level);
+            parse_dir("", isonum_733(idr.extent), isonum_733(idr.size), rais, entries, cooked, level);
             todo td = todo_idr;
             while (td != null) {
-                parse_dir(td.name, td.extent, td.length, raf, entries, cooked, level);
+                parse_dir(td.name, td.extent, td.length, rais, entries, cooked, level);
                 td = td.next;
             }
         } catch (Exception e) {
@@ -86,7 +87,7 @@ public class IsoArchiveFile extends AbstractArchiveFile {
 
 
     InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
-        return new isoInputStream(raf, (IsoEntry) entry, cooked);
+        return new isoInputStream(rais, (IsoEntry) entry, cooked);
     }
 
     private void newString(byte b[], int len, int level, StringBuffer name) throws Exception {
@@ -96,14 +97,14 @@ public class IsoArchiveFile extends AbstractArchiveFile {
         name.append((level == 0) ? new String(d) : new String(d, "UnicodeBigUnmarked"));
     }
 
-    private void parse_dir(String rootname, int extent, int len, RandomAccessFile raf, Vector entries, boolean cooked, int level) throws Exception {
+    private void parse_dir(String rootname, int extent, int len, RandomAccessInputStream rais, Vector entries, boolean cooked, int level) throws Exception {
         todo td;
         int i;
         isoDr idr;
 
         while (len > 0) {
-            raf.seek(sector(extent - sector_offset, cooked));
-            raf.read(buffer);
+            rais.seek(sector(extent - sector_offset, cooked));
+            rais.read(buffer);
             len -= buffer.length;
             extent++;
             i = 0;
@@ -223,21 +224,21 @@ public class IsoArchiveFile extends AbstractArchiveFile {
 
     // WIP rewrite it cleanly for cooked
     private class isoInputStream extends InputStream {
-        RandomAccessFile raf;
-        int pos;
-        long size;
-        boolean cooked;
+        private RandomAccessInputStream rais;
+        private int pos;
+        private long size;
+        private boolean cooked;
 
-        public isoInputStream(RandomAccessFile raf, IsoEntry entry, boolean cooked) throws IOException {
-            this.raf = raf;
+        public isoInputStream(RandomAccessInputStream rais, IsoEntry entry, boolean cooked) throws IOException {
+            this.rais = rais;
             this.size = entry.getSize();
             this.pos = 0;
             this.cooked = cooked;
-            raf.seek(sector(entry.getExtent(), cooked));
+            rais.seek(sector(entry.getExtent(), cooked));
         }
 
         public int read() throws IOException {
-            return raf.read();
+            return rais.read();
         }
 
         public int read(byte b[]) throws IOException {
@@ -264,18 +265,18 @@ public class IsoArchiveFile extends AbstractArchiveFile {
 
                 int cur = off;
                 for (int i = 0; i < full; i++) {
-                    ret = raf.read(b, cur, 2048);
+                    ret = rais.read(b, cur, 2048);
                     if (ret != -1)
                         pos += ret;
-                    raf.skipBytes(280 + 24);
+                    rais.skip(280 + 24);
                     cur += 2048;
                 }
-                ret = raf.read(b, cur, half);
+                ret = rais.read(b, cur, half);
                 if (ret != -1)
                     pos += ret;
                 ret = toRead;
             } else {
-                ret = raf.read(b, off, toRead);
+                ret = rais.read(b, off, toRead);
                 if (ret != -1)
                     pos += ret;
             }
@@ -365,11 +366,11 @@ public class IsoArchiveFile extends AbstractArchiveFile {
 
         boolean cooked;
 
-        public isoPvd(RandomAccessFile raf, int start, boolean cooked) throws Exception {
+        public isoPvd(RandomAccessInputStream rais, int start, boolean cooked) throws Exception {
             byte[] pvd = new byte[2048];
             this.cooked = cooked;
-            raf.seek(sector(start, cooked));
-            raf.read(pvd);
+            rais.seek(sector(start, cooked));
+            rais.read(pvd);
             load(pvd);
         }
 

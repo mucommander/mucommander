@@ -1,6 +1,8 @@
 
 package com.mucommander.file;
 
+import com.mucommander.io.RandomAccessInputStream;
+
 import com.sshtools.j2ssh.*;
 import com.sshtools.j2ssh.sftp.*;
 import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
@@ -232,6 +234,10 @@ public class SFTPFile extends AbstractFile {
         return getInputStream(0);
     }
 
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        // No random access for SFTP files unfortunately
+        throw new IOException();
+    }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
         // Check connection and reconnect if connection timed out

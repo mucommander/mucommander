@@ -2,6 +2,7 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -109,6 +110,10 @@ public abstract class ProxyFile extends AbstractFile {
 
     public InputStream getInputStream() throws IOException {
         return file.getInputStream();
+    }
+
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        return file.getRandomAccessInputStream();
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {

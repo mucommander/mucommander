@@ -4,6 +4,8 @@ import jcifs.smb.*;
 
 import java.io.*;
 
+import com.mucommander.io.RandomAccessInputStream;
+
 
 /**
  * SMBFile represents a file shared through the SMB protocol.
@@ -20,13 +22,55 @@ public class SMBFile extends AbstractFile {
 
     private boolean isDirectory;
     private boolean isDirectoryValSet;
-	
+
 //    private String name;
 
     private final static String SEPARATOR = DEFAULT_SEPARATOR;
 
-	
-    public SMBFile(FileURL fileURL) throws IOException {	
+
+    /**
+     * SMBRandomAccessInputStream extends RandomAccessInputStream to provide random access to an <code>SMBFile</code>'s
+     * content.
+     */
+    public class SMBRandomAccessInputStream extends RandomAccessInputStream {
+
+        private SmbRandomAccessFile raf;
+
+        public SMBRandomAccessInputStream(SmbRandomAccessFile raf) {
+            this.raf = raf;
+        }
+
+        public int read() throws IOException {
+            return raf.read();
+        }
+
+        public int read(byte b[]) throws IOException {
+            return raf.read(b);
+        }
+
+        public int read(byte b[], int off, int len) throws IOException {
+            return raf.read(b, off, len);
+        }
+
+        public void close() throws IOException {
+            raf.close();
+        }
+
+        public long getOffset() throws IOException {
+            return raf.getFilePointer();
+        }
+
+        public long getLength() throws IOException {
+            return raf.length();
+        }
+
+        public void seek(long pos) throws IOException {
+            raf.seek(pos);
+        }
+    }
+
+
+    public SMBFile(FileURL fileURL) throws IOException {
         this(fileURL, null, true);
 
         // Forces SmbFile to trigger an SmbAuthException if access to the file requires authentication.
@@ -38,9 +82,9 @@ public class SMBFile extends AbstractFile {
             throw new AuthException(fileURL, e.getMessage());
         }
     }
-	
-	
-    private SMBFile(FileURL fileURL, SmbFile smbFile, boolean addAuthInfo) throws IOException {	
+
+
+    private SMBFile(FileURL fileURL, SmbFile smbFile, boolean addAuthInfo) throws IOException {
         super(fileURL);
 
         AuthManager.authenticate(fileURL, addAuthInfo);
@@ -58,18 +102,18 @@ public class SMBFile extends AbstractFile {
             this.file = new SmbFile(privateURL);
         else
             this.file = smbFile;
-    
+
 //        // Cache SmbFile.getName()'s return value which parses name each time it is called
 //        this.name = file.getName();
 //        if(name.endsWith("/"))
 //            name = name.substring(0, name.length()-1);
     }
-	
-	
+
+
     /////////////////////////////////////////
     // AbstractFile methods implementation //
     /////////////////////////////////////////
-	
+
     public long getDate() {
         try {
             return file.lastModified();
@@ -91,7 +135,7 @@ public class SMBFile extends AbstractFile {
             return false;
         }
     }
-	
+
     public long getSize() {
         try {
             return file.length();
@@ -100,8 +144,8 @@ public class SMBFile extends AbstractFile {
             return 0;
         }
     }
-	
-	
+
+
     public AbstractFile getParent() {
         if(!parentValSet) {
             FileURL parentURL = fileURL.getParent();
@@ -109,19 +153,19 @@ public class SMBFile extends AbstractFile {
                 try { this.parent = new SMBFile(parentURL, null, false); }
                 catch(IOException e) { this.parent = null; }
             }
-				
+
             this.parentValSet = true;
             return this.parent;
         }
-		
+
         return this.parent;
     }
-	
+
     public void setParent(AbstractFile parent) {
-        this.parent = parent;	
+        this.parent = parent;
         this.parentValSet = true;
     }
-	 
+
     public boolean exists() {
         // Unlike java.io.File, SmbFile.exists() can throw an SmbException
         try {
@@ -134,7 +178,7 @@ public class SMBFile extends AbstractFile {
         }
 
     }
-	
+
     public boolean canRead() {
         // Unlike java.io.File, SmbFile.canRead() can throw an SmbException
         try {
@@ -144,7 +188,7 @@ public class SMBFile extends AbstractFile {
             return false;
         }
     }
-	
+
     public boolean canWrite() {
         // Unlike java.io.File, SmbFile.canWrite() can throw an SmbException
         try {
@@ -154,7 +198,7 @@ public class SMBFile extends AbstractFile {
             return false;
         }
     }
-	
+
 
     public boolean isDirectory() {
         // Cache SmbFile.isDirectory()'s return value as this method triggers network calls
@@ -171,7 +215,7 @@ public class SMBFile extends AbstractFile {
         }
         return this.isDirectory;
     }
-	
+
     public boolean isSymlink() {
         // Symlinks are not supported with jCIFS (or in CIFS/SMB?)
         return false;
@@ -180,23 +224,27 @@ public class SMBFile extends AbstractFile {
     public InputStream getInputStream() throws IOException {
         return new SmbFileInputStream(privateURL);
     }
-	
+
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        return new SMBRandomAccessInputStream(new SmbRandomAccessFile(file, "rw"));
+    }
+
     public OutputStream getOutputStream(boolean append) throws IOException {
         return new SmbFileOutputStream(privateURL, append);
     }
-		
+
     public void delete() throws IOException {
         file.delete();
     }
 
-	
+
     public AbstractFile[] ls() throws IOException {
         try {
             SmbFile smbFiles[] = file.listFiles();
-			
+
             if(smbFiles==null)
                 throw new IOException();
-			
+
             // Create SMBFile by recycling SmbFile instance and sharing parent instance
             // among children
             AbstractFile children[] = new AbstractFile[smbFiles.length];
@@ -204,9 +252,9 @@ public class SMBFile extends AbstractFile {
             for(int i=0; i<smbFiles.length; i++) {
                 child = AbstractFile.wrapArchive(new SMBFile(new FileURL(smbFiles[i].getCanonicalPath(), fileURL), smbFiles[i], false));
                 child.setParent(this);
-                children[i] = child;		
+                children[i] = child;
             }
-			
+
             return children;
         }
         catch(SmbAuthException e) {
@@ -214,7 +262,7 @@ public class SMBFile extends AbstractFile {
         }
     }
 
-	
+
     public void mkdir(String name) throws IOException {
         // Unlike java.io.File.mkdir(), SmbFile does not return a boolean value
         // to indicate if the folder could be created

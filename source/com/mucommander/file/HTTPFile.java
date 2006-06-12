@@ -1,5 +1,7 @@
 package com.mucommander.file;
 
+import com.mucommander.io.RandomAccessInputStream;
+
 import java.io.*;
 import java.net.*;
 import java.util.Vector;
@@ -194,6 +196,11 @@ public class HTTPFile extends AbstractFile {
         HttpURLConnection conn = getHttpURLConnection(this.url);
         conn.connect();
         return conn.getInputStream();
+    }
+
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        // No random access for HTTP files unfortunately
+        throw new IOException();
     }
 
     /**

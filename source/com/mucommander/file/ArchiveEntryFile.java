@@ -2,6 +2,7 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.filter.FileFilter;
+import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.*;
 
@@ -123,6 +124,10 @@ public class ArchiveEntryFile extends AbstractFile {
         return archiveFile.getEntryInputStream(entry);
     }
 
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        // No random access for archive entries unfortunately
+        throw new IOException();
+    }
 
     ////////////////////////
     // Overridden methods //
