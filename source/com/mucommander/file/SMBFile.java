@@ -226,7 +226,7 @@ public class SMBFile extends AbstractFile {
     }
 
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        return new SMBRandomAccessInputStream(new SmbRandomAccessFile(file, "rw"));
+        return new SMBRandomAccessInputStream(new SmbRandomAccessFile(file, "r"));
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
