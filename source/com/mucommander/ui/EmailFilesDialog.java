@@ -1,19 +1,24 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.pref.PreferencesDialog;
+import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.job.SendMailJob;
 import com.mucommander.text.SizeFormatter;
 import com.mucommander.text.Translator;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.ui.comp.dialog.DialogToolkit;
+import com.mucommander.ui.comp.dialog.FocusDialog;
+import com.mucommander.ui.comp.dialog.TextFieldsPanel;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.pref.PreferencesDialog;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 
 

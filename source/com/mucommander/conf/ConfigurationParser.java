@@ -1,9 +1,10 @@
 package com.mucommander.conf;
 
-import java.util.*;
-import java.io.*;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
+
+import java.io.FileInputStream;
+import java.util.Hashtable;
 
 
 /**

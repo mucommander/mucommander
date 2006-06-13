@@ -1,12 +1,12 @@
 package com.mucommander.file;
 
-import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.filter.FileFilter;
-
-import java.io.*;
-import java.util.Vector;
+import com.mucommander.file.filter.FilenameFilter;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
 
 /**
  *

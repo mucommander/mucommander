@@ -1,7 +1,8 @@
 
 package com.mucommander;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Monitors a Process and notifies the registered {@link com.mucommander.ProcessListener ProcessListener} of the

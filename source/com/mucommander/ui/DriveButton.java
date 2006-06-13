@@ -1,25 +1,25 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.file.*;
-
 import com.mucommander.PlatformManager;
-
+import com.mucommander.bookmark.Bookmark;
+import com.mucommander.bookmark.BookmarkListener;
+import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.event.LocationEvent;
+import com.mucommander.event.LocationListener;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileURL;
+import com.mucommander.file.RootFolders;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.connect.ServerConnectDialog;
 
-import com.mucommander.bookmark.*;
-
-import com.mucommander.text.Translator;
-
-import com.mucommander.event.*;
-
-import java.awt.*;
-import java.awt.event.*;
-
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileSystemView;
-
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 

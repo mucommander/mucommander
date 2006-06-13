@@ -1,18 +1,19 @@
 
 package com.mucommander.ui.viewer;
 
-import com.mucommander.text.Translator;
 import com.mucommander.file.AbstractFile;
-
+import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 
-import java.awt.*;
-import java.awt.event.*;
-
 import javax.swing.*;
-
-import java.io.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**

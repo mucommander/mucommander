@@ -4,9 +4,8 @@ import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import java.util.Vector;
 import java.util.Calendar;
+import java.util.Vector;
 
 /*
     http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf

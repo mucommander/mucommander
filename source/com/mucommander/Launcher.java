@@ -1,12 +1,11 @@
 package com.mucommander;
 
-import com.mucommander.ui.*;
-import com.mucommander.conf.*;
-import com.mucommander.*;
-import com.mucommander.ui.*;
-import com.mucommander.file.*;
-import java.lang.reflect.*;
-import java.io.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.ui.CheckVersionDialog;
+import com.mucommander.ui.SplashScreen;
+import com.mucommander.ui.WindowManager;
+
+import java.lang.reflect.Constructor;
 
 /**
  * muCommander launcher.

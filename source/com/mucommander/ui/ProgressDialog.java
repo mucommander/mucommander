@@ -1,18 +1,20 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.job.FileJob;
 import com.mucommander.job.ExtendedFileJob;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.progress.OverlayProgressBar;
-import com.mucommander.ui.comp.button.ButtonChoicePanel;
-import com.mucommander.ui.comp.dialog.*;
+import com.mucommander.job.FileJob;
 import com.mucommander.text.SizeFormatter;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.comp.button.ButtonChoicePanel;
+import com.mucommander.ui.comp.dialog.FocusDialog;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.comp.progress.OverlayProgressBar;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 /**
  * This dialog informs the user of the progress made by a Job.

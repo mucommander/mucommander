@@ -1,10 +1,12 @@
 package com.mucommander.file;
 
-import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.RandomAccessInputStream;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 /**

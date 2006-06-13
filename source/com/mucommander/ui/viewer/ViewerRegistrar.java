@@ -1,11 +1,12 @@
 
 package com.mucommander.ui.viewer;
 
+import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.WindowManager;
-import com.mucommander.file.AbstractFile;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.Vector;
 
 

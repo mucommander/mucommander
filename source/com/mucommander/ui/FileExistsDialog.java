@@ -1,18 +1,15 @@
 
 package com.mucommander.ui;
 
+import com.mucommander.file.AbstractFile;
+import com.mucommander.text.CustomDateFormat;
+import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 
-import com.mucommander.file.AbstractFile;
-
-import com.mucommander.text.Translator;
-import com.mucommander.text.SizeFormatter;
-import com.mucommander.text.CustomDateFormat;
-
-import java.awt.*;
 import javax.swing.*;
-
+import java.awt.*;
 import java.util.Date;
 
 

@@ -1,13 +1,12 @@
 
 package com.mucommander.file;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 
 import java.io.*;
-
-import java.util.Vector;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 /**

@@ -3,9 +3,8 @@ package com.mucommander.file;
 
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
-
-import java.util.Vector;
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * This class parses a file URL without any knowledge of the underlying protocol. URL are expected to respect the following format :<br>

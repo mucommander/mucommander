@@ -1,6 +1,7 @@
 package com.mucommander.xml.writer;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Iterator;
 
 /**
  * Container for XML attributes.

@@ -1,15 +1,13 @@
 
 package com.mucommander.bookmark;
 
-import java.util.Vector;
+import com.mucommander.PlatformManager;
 
 import java.io.File;
 import java.io.IOException;
-
-import java.util.WeakHashMap;
 import java.util.Iterator;
-
-import com.mucommander.PlatformManager;
+import java.util.Vector;
+import java.util.WeakHashMap;
 
 /**
  * This class manages boomarks and provides add/get/remove methods.

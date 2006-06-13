@@ -2,14 +2,19 @@
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
-import com.mucommander.ProcessMonitor;
 import com.mucommander.ProcessListener;
-import com.mucommander.ui.comp.dialog.*;
+import com.mucommander.ProcessMonitor;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.comp.dialog.DialogToolkit;
+import com.mucommander.ui.comp.dialog.FocusDialog;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 

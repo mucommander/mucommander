@@ -1,11 +1,10 @@
 
 package com.mucommander.ui.macosx;
 
-import com.apple.mrj.MRJApplicationUtils;
 import com.apple.mrj.MRJAboutHandler;
+import com.apple.mrj.MRJApplicationUtils;
 import com.apple.mrj.MRJPrefsHandler;
 import com.apple.mrj.MRJQuitHandler;
-
 import com.mucommander.ui.QuitDialog;
 
 

@@ -1,19 +1,20 @@
  
 package com.mucommander.ui.viewer;
 
-import com.mucommander.text.Translator;
-
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.MnemonicHelper;
-import com.mucommander.ui.comp.menu.MenuToolkit;
-import com.mucommander.ui.comp.FocusRequester;
-import com.mucommander.ui.comp.dialog.*;
-
 import com.mucommander.file.AbstractFile;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.comp.FocusRequester;
+import com.mucommander.ui.comp.MnemonicHelper;
+import com.mucommander.ui.comp.dialog.DialogToolkit;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
+import com.mucommander.ui.comp.menu.MenuToolkit;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 
 /**

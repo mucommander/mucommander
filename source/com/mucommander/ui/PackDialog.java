@@ -1,21 +1,24 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.table.FileTable;
-
-import com.mucommander.text.Translator;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.file.FileToolkit;
 import com.mucommander.file.archiver.Archiver;
-
 import com.mucommander.job.ArchiveJob;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.comp.dialog.DialogToolkit;
+import com.mucommander.ui.comp.dialog.FocusDialog;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.table.FileTable;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 
 /**

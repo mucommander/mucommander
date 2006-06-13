@@ -2,19 +2,19 @@
 package com.mucommander.file;
 
 import com.mucommander.io.RandomAccessInputStream;
-
-import com.sshtools.j2ssh.*;
-import com.sshtools.j2ssh.sftp.*;
-import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
+import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.authentication.AuthenticationProtocolState;
+import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
 import com.sshtools.j2ssh.io.UnsignedInteger32;
+import com.sshtools.j2ssh.sftp.*;
 import com.sshtools.j2ssh.transport.IgnoreHostKeyVerification;
 
-import java.io.*;
-
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.Iterator;
 
 
 /**

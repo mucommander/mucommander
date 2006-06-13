@@ -1,12 +1,12 @@
 package com.mucommander.text;
 
 import com.mucommander.conf.ConfigurationManager;
+
 import java.io.*;
-import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.Locale;
 
 
 /**

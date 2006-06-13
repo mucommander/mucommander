@@ -1,6 +1,7 @@
 package com.mucommander.ant.util;
 
-import org.apache.tools.ant.*;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
 
 /**
  * Ant task meant to modify strings and store the results in properties.

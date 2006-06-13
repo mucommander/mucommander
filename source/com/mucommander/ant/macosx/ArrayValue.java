@@ -2,7 +2,9 @@ package com.mucommander.ant.macosx;
 
 import com.mucommander.xml.writer.XmlWriter;
 import org.apache.tools.ant.BuildException;
-import java.util.*;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  *

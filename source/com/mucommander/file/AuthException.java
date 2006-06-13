@@ -1,8 +1,6 @@
 
 package com.mucommander.file;
 
-import com.mucommander.file.FileURL;
-
 import java.io.IOException;
 
 

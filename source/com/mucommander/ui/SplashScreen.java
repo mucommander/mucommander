@@ -1,10 +1,8 @@
 package com.mucommander.ui;
 
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 
 import javax.swing.*;
-
 import java.awt.*;
 
 

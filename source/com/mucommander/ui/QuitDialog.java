@@ -1,14 +1,12 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.text.Translator;
 import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
 
 
 /**

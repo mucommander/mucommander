@@ -2,12 +2,11 @@
 package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
-
 import org.apache.tools.bzip2.CBZip2OutputStream;
-import java.util.zip.GZIPOutputStream;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.zip.GZIPOutputStream;
 
 
 /**

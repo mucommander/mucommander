@@ -1,10 +1,11 @@
 package com.mucommander.file;
 
+import com.mucommander.io.RandomAccessInputStream;
 import jcifs.smb.*;
 
-import java.io.*;
-
-import com.mucommander.io.RandomAccessInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 /**

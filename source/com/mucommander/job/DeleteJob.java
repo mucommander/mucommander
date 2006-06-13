@@ -1,18 +1,16 @@
 
 package com.mucommander.job;
 
-import com.mucommander.file.*;
-
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 
-import com.mucommander.text.Translator;
-
-import java.io.IOException;
-
 import javax.swing.*;
+import java.io.IOException;
 
 /**
  * This class is responsible for deleting recursively a group of files.

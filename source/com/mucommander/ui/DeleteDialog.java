@@ -1,15 +1,12 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.ProgressDialog;
+import com.mucommander.file.FileSet;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.text.Translator;
-import com.mucommander.file.FileSet;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
 
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 
 
 /**

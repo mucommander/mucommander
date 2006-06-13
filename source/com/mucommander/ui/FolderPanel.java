@@ -1,28 +1,28 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.table.*;
-import com.mucommander.ui.comp.FocusRequester;
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.comp.progress.ProgressTextField;
-
-import com.mucommander.event.*;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.event.LocationEvent;
+import com.mucommander.event.LocationListener;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.HiddenFileFilter;
-
-import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
-import com.mucommander.PlatformManager;
+import com.mucommander.ui.comp.FocusRequester;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
+import com.mucommander.ui.comp.progress.ProgressTextField;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.ui.table.TablePopupMenu;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-
 import java.awt.*;
 import java.awt.event.*;
-
-import java.io.*;
-
-import java.util.*;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.WeakHashMap;
 
 /**
  * 

@@ -1,9 +1,9 @@
 
 package com.mucommander.ui.macosx;
 
-import com.apple.eawt.ApplicationListener;
-import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.Application;
+import com.apple.eawt.ApplicationEvent;
+import com.apple.eawt.ApplicationListener;
 
 
 /**

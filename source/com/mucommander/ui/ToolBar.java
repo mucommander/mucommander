@@ -1,22 +1,27 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.button.RolloverButton;
-import com.mucommander.ui.bookmark.AddBookmarkDialog;
-import com.mucommander.ui.bookmark.EditBookmarksDialog;
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.icon.IconManager;
-
-import com.mucommander.conf.*;
-import com.mucommander.text.Translator;
+import com.mucommander.PlatformManager;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.event.LocationEvent;
+import com.mucommander.event.LocationListener;
+import com.mucommander.event.TableChangeListener;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
-import com.mucommander.PlatformManager;
-import com.mucommander.event.*;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.bookmark.AddBookmarkDialog;
+import com.mucommander.ui.bookmark.EditBookmarksDialog;
+import com.mucommander.ui.comp.button.RolloverButton;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 
 /**

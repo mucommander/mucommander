@@ -1,7 +1,9 @@
 package com.mucommander.ant.util;
 
-import org.apache.tools.ant.*;
-import java.util.*;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
+
+import java.util.Calendar;
 
 /**
  * Ant task used to make the current date available to the rest of the project.

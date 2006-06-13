@@ -1,9 +1,7 @@
 package com.mucommander.xml.writer;
 
-import com.mucommander.xml.writer.XmlAttributes;
-
 import java.io.*;
-import java.util.*;
+import java.util.Iterator;
 
 /**
  * Used to write pretty-printed XML content.

@@ -1,20 +1,17 @@
 package com.mucommander.ui;
 
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.ui.icon.IconManager;
-
-import com.mucommander.event.*;
-
-import com.mucommander.text.SizeFormatter;
-import com.mucommander.text.Translator;
-
+import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationManager;
-
+import com.mucommander.event.LocationEvent;
+import com.mucommander.event.LocationListener;
+import com.mucommander.event.TableChangeListener;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
-
-import com.mucommander.cache.LRUCache;
+import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
 
 import javax.swing.*;
 import java.awt.*;

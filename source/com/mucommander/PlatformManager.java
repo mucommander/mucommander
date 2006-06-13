@@ -1,11 +1,12 @@
 package com.mucommander;
 
+import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
-import com.mucommander.conf.ConfigurationManager;
-import java.io.*;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
-import java.awt.*;
 
 
 /**

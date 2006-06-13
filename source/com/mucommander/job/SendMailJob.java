@@ -1,20 +1,22 @@
 
 package com.mucommander.job;
 
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
+import com.mucommander.file.MimeTypes;
 import com.mucommander.io.Base64OutputStream;
-
-import com.mucommander.file.*;
-
+import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.text.Translator;
-
-import java.io.*;
-import java.util.Vector;
-import java.util.StringTokenizer;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 /**

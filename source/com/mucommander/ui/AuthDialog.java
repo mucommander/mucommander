@@ -2,20 +2,20 @@
 package com.mucommander.ui;
 
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.dialog.*;
-
-import com.mucommander.text.Translator;
-
-import com.mucommander.file.FileURL;
 import com.mucommander.file.AuthException;
-import com.mucommander.file.AuthManager;
 import com.mucommander.file.AuthInfo;
+import com.mucommander.file.AuthManager;
+import com.mucommander.file.FileURL;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.comp.dialog.DialogToolkit;
+import com.mucommander.ui.comp.dialog.FocusDialog;
+import com.mucommander.ui.comp.dialog.TextFieldsPanel;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 /**

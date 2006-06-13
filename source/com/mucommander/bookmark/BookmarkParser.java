@@ -1,12 +1,11 @@
 package com.mucommander.bookmark;
 
-import java.util.Hashtable;
+import com.mucommander.xml.parser.ContentHandler;
+import com.mucommander.xml.parser.Parser;
 
 import java.io.File;
 import java.io.FileInputStream;
-
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
+import java.util.Hashtable;
 
 
 /**

@@ -1,6 +1,6 @@
 package com.mucommander.ant.java;
 
-import org.apache.tools.ant.*;
+import org.apache.tools.ant.BuildException;
 
 /*
  * - Class documentation -

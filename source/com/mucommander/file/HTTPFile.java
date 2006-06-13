@@ -3,13 +3,11 @@ package com.mucommander.file;
 import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.*;
-import java.net.*;
-import java.util.Vector;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-
-import javax.swing.text.*;
-import javax.swing.text.html.*;
+import java.util.Vector;
 
 
 /**

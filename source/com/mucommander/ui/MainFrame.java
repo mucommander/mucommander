@@ -1,26 +1,29 @@
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
-
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.ui.comp.FocusRequester;
-import com.mucommander.ui.comp.dialog.YBoxPanel;
-import com.mucommander.ui.pref.PreferencesDialog;
-import com.mucommander.ui.connect.ServerConnectDialog;
-import com.mucommander.ui.icon.IconManager;
-
-import com.mucommander.event.*;
-
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.event.LocationEvent;
+import com.mucommander.event.LocationListener;
+import com.mucommander.event.TableChangeListener;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
-
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.ui.comp.FocusRequester;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.connect.ServerConnectDialog;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.pref.PreferencesDialog;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.WeakHashMap;
 
 
 /**

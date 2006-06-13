@@ -1,7 +1,9 @@
 package com.mucommander.file;
 
-import java.io.*;
 import org.apache.tools.bzip2.CBZip2InputStream;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Vector;
 
 /**

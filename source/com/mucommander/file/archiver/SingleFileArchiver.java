@@ -3,8 +3,8 @@ package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 
 /**

@@ -3,11 +3,9 @@ package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
-
+import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
-
-import com.mucommander.text.Translator;
 
 import java.io.IOException;
 

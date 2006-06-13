@@ -4,12 +4,14 @@ package com.mucommander.job;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.file.archiver.Archiver;
-
-import com.mucommander.ui.*;
-
 import com.mucommander.text.Translator;
+import com.mucommander.ui.FileExistsDialog;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.ProgressDialog;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**

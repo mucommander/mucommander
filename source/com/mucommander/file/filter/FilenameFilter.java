@@ -2,6 +2,7 @@
 package com.mucommander.file.filter;
 
 import com.mucommander.file.AbstractFile;
+
 import java.util.Vector;
 
 public abstract class FilenameFilter extends FileFilter {

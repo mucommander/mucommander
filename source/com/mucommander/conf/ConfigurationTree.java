@@ -1,6 +1,7 @@
 package com.mucommander.conf;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * Holds a tree representation of the configuration file.

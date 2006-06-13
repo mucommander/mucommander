@@ -1,15 +1,18 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.progress.ProgressTextField;
-import com.mucommander.event.*;
+import com.mucommander.event.LocationEvent;
+import com.mucommander.event.LocationListener;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.comp.progress.ProgressTextField;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
-
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 
 public class LocationComboBox extends JComboBox implements LocationListener, ActionListener, KeyListener {

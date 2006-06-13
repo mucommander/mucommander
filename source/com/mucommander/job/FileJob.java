@@ -1,21 +1,15 @@
 
 package com.mucommander.job;
 
-import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
-// import com.mucommander.ui.comp.FocusRequester;
-import com.mucommander.ui.FileExistsDialog;
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableModel;
-
-import com.mucommander.text.Translator;
-import com.mucommander.text.SizeFormatter;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
-
-import java.io.IOException;
+import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.FileExistsDialog;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
+import com.mucommander.ui.table.FileTable;
 
 
 /**

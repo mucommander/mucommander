@@ -1,6 +1,6 @@
 package com.mucommander.conf;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Event used to notify registered listeners that a configuration variable has been modified.

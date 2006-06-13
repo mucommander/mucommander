@@ -1,12 +1,14 @@
 package com.mucommander.file;
 
+import com.mucommander.cache.LRUCache;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.cache.LRUCache;
 import com.mucommander.io.RandomAccessInputStream;
 
-
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * The superclass of all files, all your files are belong to it.

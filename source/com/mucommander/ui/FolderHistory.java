@@ -1,10 +1,6 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.FolderPanel;
-import com.mucommander.event.LocationListener;
-import com.mucommander.event.LocationEvent;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 

@@ -1,11 +1,16 @@
 package com.mucommander.conf;
 
-import java.util.*;
-import java.io.*;
-import java.awt.Color;
-
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
+
+import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+import java.util.WeakHashMap;
 
 /**
  * Handles configuration.

@@ -1,8 +1,10 @@
 package com.mucommander.bookmark;
 
-import java.io.*;
-import java.util.*;
 import com.mucommander.xml.writer.XmlWriter;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 
 
 /**

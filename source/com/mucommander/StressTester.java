@@ -1,15 +1,17 @@
 
 package com.mucommander;
 
-import com.mucommander.ui.*;
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.FolderPanel;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.WindowManager;
+import com.mucommander.ui.table.FileTable;
 
-import java.util.Random;
-
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
 
 
 public class StressTester implements Runnable, ActionListener {

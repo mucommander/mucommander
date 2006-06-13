@@ -3,7 +3,6 @@
 package com.mucommander;
 
 import java.io.*;
-
 import java.util.Vector;
 
 

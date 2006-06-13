@@ -1,10 +1,12 @@
 package com.mucommander;
 
-import java.net.URLConnection;
+import com.mucommander.xml.parser.ContentHandler;
+import com.mucommander.xml.parser.Parser;
+
+import java.io.InputStream;
 import java.net.URL;
-import java.io.*;
-import java.util.*;
-import com.mucommander.xml.parser.*;
+import java.net.URLConnection;
+import java.util.Hashtable;
 
 /**
  * Retrieves information about the latest release of muCommander.

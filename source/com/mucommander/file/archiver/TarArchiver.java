@@ -2,12 +2,11 @@
 package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
-
-import org.apache.tools.tar.TarOutputStream;
 import org.apache.tools.tar.TarEntry;
+import org.apache.tools.tar.TarOutputStream;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 
 /**

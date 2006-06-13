@@ -2,14 +2,19 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.FileSet;
-import com.mucommander.ui.comp.dialog.*;
 import com.mucommander.job.PropertiesJob;
-import com.mucommander.text.Translator;
 import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.comp.dialog.DialogToolkit;
+import com.mucommander.ui.comp.dialog.FocusDialog;
+import com.mucommander.ui.comp.dialog.TextFieldsPanel;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 
 /**

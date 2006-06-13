@@ -3,11 +3,10 @@ package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
 
-import java.util.zip.ZipOutputStream;
-import java.util.zip.ZipEntry;
-
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 /**

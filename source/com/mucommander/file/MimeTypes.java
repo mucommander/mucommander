@@ -1,9 +1,11 @@
 
 package com.mucommander.file;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-import java.io.*;
 
 /**
  * This Hashtable maps file extensions to their mime type.

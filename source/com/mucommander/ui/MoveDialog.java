@@ -6,10 +6,6 @@ import com.mucommander.file.FileSet;
 import com.mucommander.job.MoveJob;
 import com.mucommander.text.Translator;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-
 
 /**
  * Dialog invoked when the user wants to move or rename (F6) files.

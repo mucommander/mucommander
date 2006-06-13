@@ -1,12 +1,10 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
 
-import javax.swing.ImageIcon;
-import java.awt.Image;
-import java.awt.Dimension;
-
+import javax.swing.*;
+import java.awt.*;
 import java.util.Hashtable;
 
 /**

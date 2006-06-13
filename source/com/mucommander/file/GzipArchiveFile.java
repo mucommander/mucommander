@@ -1,8 +1,9 @@
 package com.mucommander.file;
 
-import java.io.*;
-import java.util.zip.GZIPInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Vector;
+import java.util.zip.GZIPInputStream;
 
 /**
  * 

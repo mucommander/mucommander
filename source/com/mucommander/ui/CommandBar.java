@@ -2,21 +2,24 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.table.*;
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.viewer.ViewerRegistrar;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.editor.EditorRegistrar;
 import com.mucommander.ui.icon.IconManager;
-
-import com.mucommander.text.Translator;
-import com.mucommander.job.*;
-import com.mucommander.file.*;
-import com.mucommander.conf.*;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.ui.viewer.ViewerRegistrar;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 
 /**

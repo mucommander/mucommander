@@ -1,13 +1,9 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.file.AbstractFile;
-//import com.mucommander.ui.MainFrame;
-//import com.mucommander.ui.table.FileTable;
-//import com.mucommander.ui.table.FileTableModel;
 
 import javax.swing.*;
-import java.awt.Color;
-
+import java.awt.*;
 import java.io.IOException;
 
 /**

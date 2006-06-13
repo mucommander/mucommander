@@ -1,7 +1,7 @@
 package com.mucommander.ant.java;
 
 import java.io.*;
-import java.util.*;
+import java.util.StringTokenizer;
 
 /**
  * Utility class for Java source code generation.

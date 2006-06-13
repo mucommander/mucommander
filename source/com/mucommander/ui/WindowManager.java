@@ -1,16 +1,21 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.conf.*;
-import com.mucommander.*;
-import com.mucommander.file.*;
-import com.mucommander.event.*;
+import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
+import com.mucommander.ShutdownHook;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AuthException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.Vector;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.Vector;
 
 
 /**

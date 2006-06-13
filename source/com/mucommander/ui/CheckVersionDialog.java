@@ -1,16 +1,15 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.text.Translator;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.VersionChecker;
-import com.mucommander.PlatformManager;
 import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
+import com.mucommander.VersionChecker;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.comp.dialog.QuestionDialog;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * This class takes care of retrieving information about the latest muCommander

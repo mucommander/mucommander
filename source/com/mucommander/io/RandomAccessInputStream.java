@@ -1,7 +1,7 @@
 package com.mucommander.io;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * <code>RandomAccessInputStream</code> is an <code>InputStream</code> with random access.

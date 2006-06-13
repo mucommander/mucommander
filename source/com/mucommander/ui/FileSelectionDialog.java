@@ -1,14 +1,17 @@
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.table.*;
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.comp.dialog.DialogToolkit;
+import com.mucommander.ui.comp.dialog.FocusDialog;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * This dialog allows the user to add (mark) or remove (unmark)

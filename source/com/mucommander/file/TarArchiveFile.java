@@ -1,11 +1,12 @@
 package com.mucommander.file;
 
-import java.io.*;
-import java.util.Vector;
-
-import org.apache.tools.tar.TarInputStream;
-import java.util.zip.GZIPInputStream;
 import org.apache.tools.bzip2.CBZip2InputStream;
+import org.apache.tools.tar.TarInputStream;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
+import java.util.zip.GZIPInputStream;
 
 
 /**

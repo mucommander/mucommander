@@ -2,34 +2,29 @@
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
-
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.ui.EmailFilesDialog;
-import com.mucommander.ui.help.ShortcutsDialog;
-import com.mucommander.ui.about.AboutDialog;
-import com.mucommander.ui.comp.MnemonicHelper;
-import com.mucommander.ui.comp.menu.MenuToolkit;
-import com.mucommander.ui.bookmark.AddBookmarkDialog;
-import com.mucommander.ui.bookmark.EditBookmarksDialog;
-import com.mucommander.ui.viewer.ViewerFrame;
-import com.mucommander.ui.editor.EditorFrame;
-
+import com.mucommander.bookmark.Bookmark;
+import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.FileSet;
-
 import com.mucommander.text.Translator;
+import com.mucommander.ui.about.AboutDialog;
+import com.mucommander.ui.bookmark.AddBookmarkDialog;
+import com.mucommander.ui.bookmark.EditBookmarksDialog;
+import com.mucommander.ui.comp.MnemonicHelper;
+import com.mucommander.ui.comp.menu.MenuToolkit;
+import com.mucommander.ui.editor.EditorFrame;
+import com.mucommander.ui.help.ShortcutsDialog;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.ui.viewer.ViewerFrame;
 
-import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.bookmark.Bookmark;
-
-import com.mucommander.event.*;
-
-import java.awt.event.*;
-import java.awt.Frame;
 import javax.swing.*;
-import javax.swing.event.*;
-
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
