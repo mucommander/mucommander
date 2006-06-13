@@ -1,13 +1,13 @@
-package com.mucommander.xml;
+package com.mucommander.xml.writer;
 
 import java.util.*;
 
 /**
  * Container for XML attributes.
  * <p>
- * This class is meant for use with {@link com.mucommander.xml.XmlWriter}.
+ * This class is meant for use with {@link com.mucommander.xml.writer.XmlWriter}.
  * It's used to hold a list of XML attributes that will be passed to one of
- * the {@link com.mucommander.xml.XmlWriter#startElement(String,XmlAttributes) tag opening}
+ * the {@link com.mucommander.xml.writer.XmlWriter#startElement(String,XmlAttributes) tag opening}
  * methods.
  * </p>
  * @author Nicolas Rinaudo

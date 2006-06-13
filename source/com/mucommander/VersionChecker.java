@@ -4,7 +4,7 @@ import java.net.URLConnection;
 import java.net.URL;
 import java.io.*;
 import java.util.*;
-import com.muxml.*;
+import com.mucommander.xml.parser.*;
 
 /**
  * Retrieves information about the latest release of muCommander.

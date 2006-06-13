@@ -1,8 +1,7 @@
 package com.mucommander.conf;
 
 import java.io.*;
-import java.util.*;
-import com.mucommander.xml.*;
+import com.mucommander.xml.writer.XmlWriter;
 
 /**
  * Writes the configuration tree to an output stream.

@@ -2,8 +2,8 @@ package com.mucommander.conf;
 
 import java.util.*;
 import java.io.*;
-import com.muxml.ContentHandler;
-import com.muxml.Parser;
+import com.mucommander.xml.parser.ContentHandler;
+import com.mucommander.xml.parser.Parser;
 
 
 /**

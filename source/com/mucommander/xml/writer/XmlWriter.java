@@ -1,4 +1,6 @@
-package com.mucommander.xml;
+package com.mucommander.xml.writer;
+
+import com.mucommander.xml.writer.XmlAttributes;
 
 import java.io.*;
 import java.util.*;
@@ -168,7 +170,7 @@ public class XmlWriter {
      * @param name name of the element to open.
      * @see #startElement(String,XmlAttributes)
      * @see #writeStandAloneElement(String)
-     * @see #writeStandAloneElement(String,XmlAttributes)
+     * @see #writeStandAloneElement(String,com.mucommander.xml.writer.XmlAttributes)
      */
     public void startElement(String name) {startElement(name, false, null);}
 
@@ -194,7 +196,7 @@ public class XmlWriter {
      * @param attributes attributes that this element will have.
      * @see #startElement(String)
      * @see #writeStandAloneElement(String)
-     * @see #writeStandAloneElement(String,XmlAttributes)
+     * @see #writeStandAloneElement(String,com.mucommander.xml.writer.XmlAttributes)
      */
     public void startElement(String name, XmlAttributes attributes) {startElement(name, false, attributes);}
 

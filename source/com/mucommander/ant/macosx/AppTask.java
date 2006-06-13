@@ -2,9 +2,9 @@ package com.mucommander.ant.macosx;
 
 import org.apache.tools.ant.*;
 import java.io.*;
-import java.util.*;
 import java.net.URL;
-import com.mucommander.xml.*;
+import com.mucommander.xml.writer.XmlAttributes;
+import com.mucommander.xml.writer.XmlWriter;
 
 /**
  * Ant task used to generate Mac OS X application files.

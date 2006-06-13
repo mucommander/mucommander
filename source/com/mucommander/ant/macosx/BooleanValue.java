@@ -1,6 +1,6 @@
 package com.mucommander.ant.macosx;
 
-import com.mucommander.xml.XmlWriter;
+import com.mucommander.xml.writer.XmlWriter;
 import org.apache.tools.ant.BuildException;
 
 /**

@@ -5,8 +5,8 @@ import java.util.Hashtable;
 import java.io.File;
 import java.io.FileInputStream;
 
-import com.muxml.ContentHandler;
-import com.muxml.Parser;
+import com.mucommander.xml.parser.ContentHandler;
+import com.mucommander.xml.parser.Parser;
 
 
 /**

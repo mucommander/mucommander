@@ -2,7 +2,7 @@ package com.mucommander.bookmark;
 
 import java.io.*;
 import java.util.*;
-import com.mucommander.xml.XmlWriter;
+import com.mucommander.xml.writer.XmlWriter;
 
 
 /**
