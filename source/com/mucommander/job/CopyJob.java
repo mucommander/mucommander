@@ -131,8 +131,22 @@ public class CopyJob extends ExtendedFileJob {
        	else
             destFileName = originalName;
 		
-        // Destination file
+        // Create destination AbstractFile instance
         AbstractFile destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+destFileName);
+        if(destFile==null) {
+            // Destination file couldn't be created
+
+            // Loop for retry
+            do {
+                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_destination", destFileName));
+                // Retry loops
+                if(ret==RETRY_ACTION)
+                    continue;
+                // Cancel or close dialog return false
+                return false;
+                // Skip continues
+            } while(true);
+        }
 
         // Do nothing if file is a symlink (skip file and return)
         if(file.isSymlink())

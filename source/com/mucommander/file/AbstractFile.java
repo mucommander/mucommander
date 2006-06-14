@@ -72,7 +72,7 @@ public abstract class AbstractFile {
             return getAbstractFile(absPath, null);
         }
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) e.printStackTrace();
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught exception: "+e);
             return null;
         }
     }
@@ -94,7 +94,7 @@ public abstract class AbstractFile {
             return getAbstractFile(absPath, null);
         }
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) e.printStackTrace();
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught exception: "+e);
             if(throwException)
                 throw e;
             return null;
@@ -152,7 +152,7 @@ public abstract class AbstractFile {
             return getAbstractFile(fileURL, null);
         }
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) e.printStackTrace();
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught exception: "+e);
             return null;
         }
     }
@@ -172,7 +172,7 @@ public abstract class AbstractFile {
             return getAbstractFile(fileURL, null);
         }
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) e.printStackTrace();
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught exception: "+e);
             if(throwException)
                 throw e;
             return null;
@@ -273,11 +273,26 @@ public abstract class AbstractFile {
 
     /**
      * Returns the name of this AbstractFile.
+     *
+     * <p>The returned name is the filename extracted from this file's {@link FileURL}
+     * as returned by {@link FileURL#getFilename()}. If the filename is <code>null</code> (e.g. http://google.com), the
+     * <code>FileURL</code>'s host will be returned instead. If the host is <code>null</code> (e.g. smb://), an empty
+     * String will be returned. Thus, the returned name will never be <code>null</code>.
+     *
      * <p>This method should be overridden if a special treatment (e.g. URL-decoding)
      * needs to be applied to the returned filename.
      */
     public String getName() {
-        return fileURL.getFilename();        
+        String name = fileURL.getFilename();
+        // If filename is null, use host instead
+        if(name==null) {
+            name = fileURL.getHost();
+            // If host is null, return an empty string
+            if(name==null)
+                return "";
+        }
+
+        return name;
     }
 
 
@@ -581,7 +596,6 @@ public abstract class AbstractFile {
      *
      * @param destFile the destination file that is considered being copied
      * @return the hint int indicating whether the {@link #copyTo(AbstractFile)} method should be used
-     * @see constants
      */
     public int getCopyToHint(AbstractFile destFile) {
         return SHOULD_NOT_HINT;
@@ -632,12 +646,19 @@ public abstract class AbstractFile {
      *
      * @param destFile the destination file that is considered being copied
      * @return the hint int indicating whether the {@link #moveTo(AbstractFile)} method should be used
-     * @see constants
      */
     public int getMoveToHint(AbstractFile destFile) {
-        return fileURL.getProtocol().equals(destFile.fileURL.getProtocol())
-            && fileURL.getHost().equals(destFile.fileURL.getHost())
-        ? SHOULD_HINT : SHOULD_NOT_HINT;
+        // Return false if protocols differ
+        if(!fileURL.getProtocol().equals(destFile.fileURL.getProtocol()))
+          return SHOULD_NOT_HINT;
+
+        // Are both fileURL's hosts equal ?
+        // This test is a bit complicated because each of the hosts can potentially be null (e.g. smb://)
+        String host = fileURL.getHost();
+        String destHost = destFile.fileURL.getHost();
+        boolean hostsEqual = host==null?(destHost==null?true:destHost.equals(host)):host.equals(destHost);
+
+        return hostsEqual ? SHOULD_HINT : SHOULD_NOT_HINT;
     }
 
 

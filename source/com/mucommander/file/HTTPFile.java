@@ -401,10 +401,7 @@ public class HTTPFile extends AbstractFile {
             return (AbstractFile[])children.toArray(childrenArray);
         }
         catch (Exception e) {
-            if (com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Error while parsing HTML: "+e);
-                e.printStackTrace();
-            }
+            if (com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught while parsing HTML:"+e+", throwing IOException");
             throw new IOException();
         }
         finally {
@@ -423,13 +420,6 @@ public class HTTPFile extends AbstractFile {
     ////////////////////////
     // Overridden methods //
     ////////////////////////
-
-    public String getName() {
-        if(name==null)
-            return fileURL.getHost();
-        return name;
-    }
-
 
     public boolean isHidden() {
         return false;

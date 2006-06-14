@@ -149,14 +149,26 @@ public class SMBFile extends AbstractFile {
 
     public AbstractFile getParent() {
         if(!parentValSet) {
-            FileURL parentURL = fileURL.getParent();
-            if(parentURL!=null) {
-                try { this.parent = new SMBFile(parentURL, null, false); }
-                catch(IOException e) { this.parent = null; }
-            }
+            try {
+                FileURL parentURL = fileURL.getParent();
+                // If parent URL as returned by fileURL.getParent() is null and URL's host is not null,
+                // create an 'smb://' parent to browse network workgroups
+                if(parentURL==null) {
+                    if(fileURL.getHost()!=null)
+                        parentURL = new FileURL("smb://");
+                    else
+                        return null;    // This file is smb://
+                }
 
-            this.parentValSet = true;
-            return this.parent;
+                this.parent = new SMBFile(parentURL, null, false);
+                return this.parent;
+            }
+            catch(IOException e) {
+                // this.parent and returned parent will be null
+            }
+            finally {
+                this.parentValSet = true;
+            }
         }
 
         return this.parent;

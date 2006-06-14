@@ -192,7 +192,6 @@ public class FileURL implements Cloneable {
 				 
                 filename = pathCopy.substring(0, len);
                 separatorPos = filename.lastIndexOf('/');
-//                filename = path.substring(separatorPos+1, len).trim();
                 filename = path.substring(separatorPos+1, len);
                 if(filename.equals(""))
                     filename = null;
@@ -243,7 +242,7 @@ public class FileURL implements Cloneable {
 
 	
     /**
-     * Returns the protocol part of this URL (e.g. smb)
+     * Returns the protocol part of this URL (e.g. smb). The returned protocol may never be <code>null</code>.
      */
     public String getProtocol() {
         return protocol;
@@ -251,7 +250,8 @@ public class FileURL implements Cloneable {
 	
 
     /**
-     * Returns the host part of this URL (e.g. google.com)
+     * Returns the host part of this URL (e.g. google.com), <code>null</code> if this URL doesn't contain
+     * any host.
      */
     public String getHost() {
         return host;
@@ -372,7 +372,7 @@ public class FileURL implements Cloneable {
 
     /**
      * Returns the filename part of this URL (e.g. mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp)
-     * <code>null</code> if no filename can be extracted from this URL (e.g. http://google.com).
+     * <code>null</code> if this URL doesn't contain any URL (e.g. http://google.com)
      */
     public String getFilename() {
         return filename;

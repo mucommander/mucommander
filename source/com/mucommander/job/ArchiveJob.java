@@ -139,11 +139,8 @@ public class ArchiveJob extends ExtendedFileJob {
                 }
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.ON) {
-                    com.mucommander.Debug.trace("IOException caught:");
-                    e.printStackTrace();
-                }
-				
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+
                 int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops
                 if(ret==RETRY_ACTION)

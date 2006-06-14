@@ -366,7 +366,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     break;
                 }
                 catch(IOException e) {
-                    if(com.mucommander.Debug.ON) { com.mucommander.Debug.trace("IOException caught: "); e.printStackTrace(); }
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
                     //					noWaitDialog = true;
 					
                     // Restore default cursor

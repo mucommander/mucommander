@@ -167,6 +167,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 
             // Check that destination file can be resolved 
             String filePath = filePathField.getText();
+            // TODO: this should be done in the job's thread because AbstractFile creation can lock the main thread if the file is on a remote filesystem
             Object dest[] = FileToolkit.resolvePath(filePath, mainFrame.getLastActiveTable().getCurrentFolder());
             if (dest==null || dest[1]==null) {
                 // Incorrect destination
@@ -178,6 +179,8 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
                 return;
             }
 
+            // TODO: this should be done in the job's thread because AbstractFile creation can lock the main thread if the file is on a remote filesystem
+            // TODO: destFile could potentially be null !
             AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
 
             // Start packing

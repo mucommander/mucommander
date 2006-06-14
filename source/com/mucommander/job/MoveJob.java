@@ -72,7 +72,7 @@ public class MoveJob extends ExtendedFileJob {
             file.moveTo(destFile);
             return true; 
         } catch(IOException e) { 
-            if(com.mucommander.Debug.ON) e.printStackTrace();
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
             return false;
         }
     }
@@ -109,9 +109,22 @@ public class MoveJob extends ExtendedFileJob {
        	else
             destFileName = originalName;
 		
-        // Destination file
+        // Create destination AbstractFile instance
         AbstractFile destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+destFileName);
+        if(destFile==null) {
+            // Destination file couldn't be created
 
+            // Loop for retry
+            do {
+                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_destination", destFileName));
+                // Retry loops
+                if(ret==RETRY_ACTION)
+                    continue;
+                // Cancel or close dialog return false
+                return false;
+                // Skip continues
+            } while(true);
+        }
 
         // Do not follow symlink, simply delete it
         if(file.isSymlink()) {
@@ -121,7 +134,7 @@ public class MoveJob extends ExtendedFileJob {
                     return true;
                 }
                 catch(IOException e) {
-                    if(com.mucommander.Debug.ON) e.printStackTrace();
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
 
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                     // Retry loops
@@ -146,7 +159,7 @@ public class MoveJob extends ExtendedFileJob {
                         destFolder.mkdir(destFileName);
                     }
                     catch(IOException e) {
-                        if(com.mucommander.Debug.ON) e.printStackTrace();
+                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
 
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFile.getAbsolutePath()));
                         // Retry loops
@@ -176,7 +189,7 @@ public class MoveJob extends ExtendedFileJob {
                         return false;
                 }
                 catch(IOException e) {
-                    if(com.mucommander.Debug.ON) e.printStackTrace();
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
 
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_source", file.getAbsolutePath()));
                     // Retry loops
@@ -196,8 +209,8 @@ public class MoveJob extends ExtendedFileJob {
                     return true;
                 }
                 catch(IOException e) {
-                    if(com.mucommander.Debug.ON) e.printStackTrace();
-					
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_folder", file.getAbsolutePath()));
                     // Retry loops
                     if(ret==RETRY_ACTION)
@@ -272,7 +285,7 @@ public class MoveJob extends ExtendedFileJob {
                         return true;
                     }
                     catch(IOException e) {
-                        if(com.mucommander.Debug.ON) e.printStackTrace();
+                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
 
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                         // Retry loops

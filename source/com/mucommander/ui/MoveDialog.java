@@ -44,7 +44,8 @@ public class MoveDialog extends DestinationDialog {
             if(nbFiles==1) {
                 AbstractFile file = ((AbstractFile)files.elementAt(0));
                 AbstractFile testFile;
-                if(!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName())).exists() && testFile.isDirectory()))
+                // TODO: find a way to remove this AbstractFile.getAbstractFile() which can lock the main thread if the file is on a remote filesystem
+                if(!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory()))
                     fieldText += file.getName();
             }
 			

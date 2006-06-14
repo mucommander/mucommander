@@ -211,7 +211,8 @@ public class FTPFile extends AbstractFile {
         this.file = getFTPFile(ftpClient, fileURL);
         // If file doesn't exist (could not be resolved), create it
         if(this.file==null) {
-            this.file = createFTPFile(fileURL.getFilename(), false);
+            String name = fileURL.getFilename();    // Filename could potentially be null
+            this.file = createFTPFile(name==null?"":name, false);
             this.fileExists = false;
         }
         else {

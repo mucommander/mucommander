@@ -105,12 +105,9 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
             setVisible(true);
         }
         catch(Exception e) {
-            JOptionPane.showMessageDialog(mainFrame, Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"), JOptionPane.ERROR_MESSAGE);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
 
-            if(com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Exception caught:");
-                e.printStackTrace();
-            }
+            JOptionPane.showMessageDialog(mainFrame, Translator.get("file_viewer.view_error"), Translator.get("file_viewer.view_error_title"), JOptionPane.ERROR_MESSAGE);
         }
     }
 

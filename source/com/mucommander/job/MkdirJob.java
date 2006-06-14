@@ -55,6 +55,7 @@ public class MkdirJob extends FileJob {
 
                 // Refresh and selects newly created folder in active table
                 AbstractFile newFolder = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+dirName);
+                
                 FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
                 FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
                 FileTable lastActiveTable = mainFrame.getLastActiveTable();
@@ -70,10 +71,7 @@ public class MkdirJob extends FileJob {
                 return true;		// Return Success
             }
             catch(IOException e) {
-if(com.mucommander.Debug.ON) {
-    com.mucommander.Debug.trace("caught "+e);
-    e.printStackTrace();
-}
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
 
                 int action = showErrorDialog(
                                              Translator.get("mkdir_dialog.error_title"),

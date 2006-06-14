@@ -75,10 +75,8 @@ public class IsoArchiveFile extends AbstractArchiveFile {
                 td = td.next;
             }
         } catch (Exception e) {
-            if (com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Exception caught while parsing iso, throwing IOException");
-                e.printStackTrace();
-            }
+            if (com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught while parsing iso:"+e+", throwing IOException");
+
             throw new IOException();
         }
         return entries;

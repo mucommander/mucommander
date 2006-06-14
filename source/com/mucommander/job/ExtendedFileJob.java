@@ -103,7 +103,7 @@ public abstract class ExtendedFileJob extends FileJob {
                 return true;
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.ON) e.printStackTrace();
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e+", throwing FileJobException");
                 throw new FileJobException(FileJobException.ERROR_WHILE_TRANSFERRING);
             }
         }
@@ -125,7 +125,7 @@ public abstract class ExtendedFileJob extends FileJob {
                 }
             }
             catch(IOException e1) {
-                if(com.mucommander.Debug.ON) e1.printStackTrace();
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e1+", throwing FileJobException");
                 throw new FileJobException(FileJobException.CANNOT_OPEN_SOURCE);
             }
     
@@ -134,12 +134,11 @@ public abstract class ExtendedFileJob extends FileJob {
                 destFile.copyStream(cin, append);
                 return true;
             }
-            catch(IOException e3) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isInterrupted() "+isInterrupted());
+            catch(IOException e2) {
                 if(isInterrupted())
                     return false;
                     
-                if(com.mucommander.Debug.ON) e3.printStackTrace();
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e2+", throwing FileJobException");
                 throw new FileJobException(FileJobException.ERROR_WHILE_TRANSFERRING);
             }
         }
