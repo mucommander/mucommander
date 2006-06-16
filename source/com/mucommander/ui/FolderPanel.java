@@ -774,7 +774,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      */
     public synchronized void goToParent() {
         AbstractFile parent;
-        if(!fileTable.getQuickSearch().isActive() && (parent=getCurrentFolder().getParent())!=null)
+        if((parent=getCurrentFolder().getParent())!=null)
             trySetCurrentFolder(parent);
     }
 
