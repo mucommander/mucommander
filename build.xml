@@ -292,19 +292,23 @@
       <!-- Viewer API uses reflection -->
       <keep name="com.mucommander.file.AbstractFile"/>
       <keepclasseswithmembers extends="com.mucommander.ui.viewer.FileViewer">
-	<method access="public static" type="boolean" name="canViewFile" parameters="com.mucommander.file.AbstractFile"/> 
+	    <method access="public static" type="boolean" name="canViewFile" parameters="com.mucommander.file.AbstractFile"/>
       </keepclasseswithmembers>
       <!-- Editor API uses reflection -->
       <keepclasseswithmembers extends="com.mucommander.ui.editor.FileEditor">
-	<method access="public static" type="boolean" name="canEditFile" parameters="com.mucommander.file.AbstractFile"/>
+	    <method access="public static" type="boolean" name="canEditFile" parameters="com.mucommander.file.AbstractFile"/>
+      </keepclasseswithmembers>
+      <!-- Action API uses reflection -->
+      <keepclasseswithmembers extends="com.mucommander.ui.action.MucoAction">
+        <constructor access="public" name="*"/>
       </keepclasseswithmembers>
       <!-- Main class -->
       <keep name="${main-class}">
-	<method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
+	    <method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
       </keep>
       <!-- jCIFS uses forName -->
       <keep name="jcifs.Config">
-	<method access="public" name="*"/>
+	    <method access="public" name="*"/>
       </keep>
 
       <!-- Required by j2ssh library -->
