@@ -715,6 +715,71 @@ file_menu.new_window:RU:Новое окно
 file_menu.new_window:ZH_CN:新窗口
 file_menu.new_window:SI:Novo okno
 
+file_menu.open:EN:Open
+file_menu.open:FR:Ouvrir
+file_menu.open:ES:Abrir
+file_menu.open:RU:Открыть
+file_menu.open:zh_TW:開啟
+file_menu.open:PL:Otwórz
+file_menu.open:ZH_CN:打开
+file_menu.open:SI:Odpri
+
+
+
+
+
+file_menu.open_natively:EN:Open natively
+file_menu.open_natively:FR:Ouvrir nativement
+
+
+
+
+
+
+
+
+
+
+
+#file_menu.reveal_in_finder:EN:Reveal in Finder
+#file_menu.reveal_in_finder:FR:Afficher dans le Finder
+#file_menu.reveal_in_finder:ES:Mostrar en Finder
+#file_menu.reveal_in_finder:RU:Отобразить в найденном
+#file_menu.reveal_in_finder:zh_TW:顯示在Finder
+#file_menu.reveal_in_finder:PL:Wyszukaj
+#file_menu.reveal_in_finder:ZH_CN:在查找器中展示
+#file_menu.reveal_in_finder:SI:Razkrij
+
+file_menu.reveal_in_desktop:EN:Reveal in %1
+file_menu.reveal_in_desktop:FR:Afficher dans %1
+file_menu.reveal_in_desktop:ES:Mostrar en %1
+
+
+
+
+
+
+
+file_menu.copy_filenames:EN:Copy name(s)
+file_menu.copy_filenames:FR:Copier nom(s)
+
+
+
+
+
+
+
+
+file_menu.copy_paths:EN:Copy path(s)
+file_menu.copy_paths:FR:Copier chemin(s)
+
+
+
+
+
+
+
+
 file_menu.run_command:EN:$[run_dialog.run_command]...
 
 file_menu.pack:EN:$[pack_dialog.title]...
@@ -4606,50 +4671,17 @@ prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
 # Table Popup menu #
 ####################
 
-# Displayed when right-clicking on a folder
-table_popup.open:EN:Open
-table_popup.open:FR:Ouvrir
-table_popup.open:ES:Abrir
-table_popup.open:RU:Открыть
-table_popup.open:zh_TW:開啟
-table_popup.open:PL:Otwórz
-table_popup.open:ZH_CN:打开
-table_popup.open:SI:Odpri
+table_popup.open:EN:$[file_menu.open]
 
+table_popup.open_natively:EN:$[file_menu.open_natively]
 
-
-# Displayed when right-clicking on a file under Mac OS X (Note: Finder is the equivalent of Windows' Explorer)
-#table_popup.reveal_in_finder:EN:Reveal in Finder
-#table_popup.reveal_in_finder:FR:Afficher dans le Finder
-#table_popup.reveal_in_finder:ES:Mostrar en Finder
-#table_popup.reveal_in_finder:RU:Отобразить в найденном
-#table_popup.reveal_in_finder:zh_TW:顯示在Finder
-#table_popup.reveal_in_finder:PL:Wyszukaj
-#table_popup.reveal_in_finder:ZH_CN:在查找器中展示
-#table_popup.reveal_in_finder:SI:Razkrij
-
-# Displayed when right-clicking on a file under Mac OS X (Note: Finder is the equivalent of Windows' Explorer)
-table_popup.reveal_in_desktop:EN:Reveal in %1
-table_popup.reveal_in_desktop:FR:Afficher dans %1
-table_popup.reveal_in_desktop:ES:Mostrar en %1
+table_popup.reveal_in_desktop:EN:$[file_menu.reveal_in_desktop]
 
 table_popup.rename:EN:$[command_bar.rename]
 
-table_popup.copy_names:EN:Copy name(s)
-table_popup.copy_names:FR:Copier nom(s)
+table_popup.copy_filenames:EN:$[file_menu.copy_filenames]
 
-
-
-
-
-
-table_popup.copy_paths:EN:Copy path(s)
-table_popup.copy_paths:FR:Copier chemin(s)
-
-
-
-
-
+table_popup.copy_paths:EN:$[file_menu.copy_paths]
 
 table_popup.mark_all:EN:$[mark_menu.mark_all]
 

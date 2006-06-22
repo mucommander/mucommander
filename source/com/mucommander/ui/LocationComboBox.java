@@ -70,7 +70,11 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
         return this.locationField;
     }
 
-    
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
     /**
      * Overrides this method to ignore events received when this component is disabled.
      */
@@ -78,7 +82,6 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
         super.setEnabled(enabled);
         this.ignoreEvents = !enabled;
     }
-
 
     //////////////////////////////
     // LocationListener methods //

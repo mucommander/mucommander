@@ -15,6 +15,7 @@ import com.mucommander.ui.bookmark.AddBookmarkDialog;
 import com.mucommander.ui.bookmark.EditBookmarksDialog;
 import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.action.ActionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,7 +60,7 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
         {Translator.get("toolbar.server_connect")+" (Ctrl+K)", "server_connect.png", null, null},
         {Translator.get("toolbar.run_command")+" (Ctrl+R)", "run_command.png", null, null},
         {Translator.get("toolbar.email")+" (Ctrl+S)", "email.png", null, "true"},
-        {Translator.get("toolbar.reveal_in_desktop", PlatformManager.getDefaultDesktopFMName()), "reveal_in_desktop.png", "reveal_in_desktop_grayed.png", null},
+        {Translator.get("toolbar.reveal_in_desktop", PlatformManager.getDefaultDesktopFMName())+" (Ctrl+L)", "reveal_in_desktop.png", "reveal_in_desktop_grayed.png", null},
         {Translator.get("toolbar.properties")+" (Alt+Enter)", "properties.png", null, "true"},
         {Translator.get("toolbar.preferences"), "preferences.png", null, null}
     };
@@ -126,6 +127,10 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
             if(i==OPEN_IN_DESKTOP_INDEX && !PlatformManager.canOpenInDesktop())
                 continue;
 			
+//if(i==BACK_INDEX) {
+//    buttons[i] = (JButton)add(new JButton(ActionManager.getAction("com.mucommander.ui.action.GoBackAction", mainFrame)));
+//}
+//else
             buttons[i] = addButton(BUTTONS_DESC[i][0]);
             if(BUTTONS_DESC[i][3]!=null &&!BUTTONS_DESC[i][3].equals("false"))
                 addSeparator(separatorDimension);
@@ -250,7 +255,7 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
         super.setVisible(visible);
     }
 
-	
+/*
     // For JDK 1.3 (deprecated in 1.4)
     public boolean isFocusTraversable() {
         return false;
@@ -260,7 +265,7 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
     public boolean isFocusable() {
         return false;
     }
-
+*/
 
     /////////////////////////////////
     // TableChangeListener methods //
@@ -314,6 +319,16 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
+
+        // Hide toolbar menu item
+        if(source == hideToolbarMenuItem) {
+            mainFrame.setToolbarVisible(false);
+            this.popupMenu.setVisible(false);
+            this.popupMenu = null;
+            this.hideToolbarMenuItem = null;
+            return;
+        }
+
         JButton button = (JButton)source;
         int buttonIndex = getButtonIndex(button);
 		
@@ -323,30 +338,12 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
             FolderPanel.ChangeFolderThread changeFolderThread = folderPanel.getChangeFolderThread();
             if(changeFolderThread!=null)
                 changeFolderThread.tryKill();
-            mainFrame.requestFocus();
         }
 
         // Discard action events while in 'no events mode'
         if(mainFrame.getNoEventsMode())
             return;
-	
-        // Hide toolbar
-        if(source == hideToolbarMenuItem) {
-            mainFrame.setToolbarVisible(false);
-            this.popupMenu.setVisible(false);
-            this.popupMenu = null;
-            this.hideToolbarMenuItem = null;
-            mainFrame.requestFocus();
-            return;
-        }
-				
-        //		if(buttonIndex==-1)
-        //			return;
 
-        // Actions that do not invoke a dialog must request focus on the main frame,
-        // since ToolBar has the focus when a button is clicked.
-        boolean requestFocus = false;
-		
         if (buttonIndex==NEW_WINDOW_INDEX) {
             WindowManager.createNewMainFrame();
         }
@@ -358,7 +355,6 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
         }
         else if(buttonIndex==PARENT_INDEX) {
             folderPanel.trySetCurrentFolder(folderPanel.getCurrentFolder().getParent());
-            requestFocus = true;
         }
         else if(buttonIndex==ADD_BOOKMARK_INDEX) {
             new AddBookmarkDialog(mainFrame);
@@ -374,11 +370,9 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
         }
         else if(buttonIndex==SWAP_FOLDERS_INDEX) {
             mainFrame.swapFolders();
-            requestFocus = true;
         }
         else if(buttonIndex==SET_SAME_FOLDER_INDEX) {
             mainFrame.setSameFolder();
-            requestFocus = true;
         }
         else if(buttonIndex==SERVER_CONNECT_INDEX) {
             mainFrame.showServerConnectDialog();
@@ -398,20 +392,16 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
             int nbSelectedFiles = files.size();
 			
             // Return if no file is selected
-            if(nbSelectedFiles<=0) {
-                requestFocus = true;
-            }
-            else if (buttonIndex==EMAIL_INDEX) {
+            if(nbSelectedFiles==0)
+                return;
+
+            if (buttonIndex==EMAIL_INDEX) {
                 new EmailFilesDialog(mainFrame, files);
             }
             else if (buttonIndex==PROPERTIES_INDEX) {
                 mainFrame.showPropertiesDialog();
             }
         }
-		
-        // Request focus for actions that did not invoke a dialog
-        if(requestFocus)
-            mainFrame.requestFocus();
     }
 	
 	
@@ -447,11 +437,9 @@ public class ToolBar extends JToolBar implements TableChangeListener, LocationLi
 	
             // Don't display dialog is file selection is empty
             FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
-            if(files.size()==0) {
-                mainFrame.requestFocus();
+            if(files.size()==0)
                 return;
-            }
-				
+
             if (buttonIndex==PACK_INDEX) {
                 new PackDialog(mainFrame, files, e.isShiftDown());
             }

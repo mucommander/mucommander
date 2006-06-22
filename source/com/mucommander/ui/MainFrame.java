@@ -127,7 +127,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
             };
 			
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(((double)0.5));
+        splitPane.setDividerLocation(0.5);
         // Cool but way too slow
         //		splitPane.setContinuousLayout(true);
 
@@ -235,6 +235,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Shows/hide the toolbar.
      */
+    // TODO: remove this method
     public void setToolbarVisible(boolean visible) {
         toolbar.setVisible(visible);
         validate();
@@ -244,6 +245,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Returns true if the icon toolbar is visible on this frame.
      */
+    // TODO: remove this method
     public boolean isToolbarVisible() {
         return toolbar.isVisible();
     }
@@ -260,6 +262,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Returns true if the command bar is visible on this frame.
      */
+    // TODO: remove this method
     public boolean isCommandBarVisible() {
         return this.commandBar.isVisible();
     }
@@ -267,6 +270,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Shows/hide the command bar.
      */
+    // TODO: remove this method
     public void setCommandBarVisible(boolean visible) {
         this.commandBar.setVisible(visible);
         validate();
@@ -284,6 +288,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Returns true if the status bar is visible on this frame.
      */
+    // TODO: remove this method
     public boolean isStatusBarVisible() {
         return this.statusBar.isVisible();
     }
@@ -291,6 +296,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Shows/hide the status bar.
      */
+    // TODO: remove this method
     public void setStatusBarVisible(boolean visible) {
         this.statusBar.setVisible(visible);
         validate();
@@ -429,6 +435,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Brings up the properties dialog that displays information about currently marked files (if any).
      */
+    // TODO: remove this method
     public void showPropertiesDialog() {
         FileSet files = getLastActiveTable().getSelectedFiles();
         if(files.size()>0)
@@ -438,6 +445,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Brings up server connect dialog, which allows to connect to remote servers.
      */
+    // TODO: remove this method
     public void showServerConnectDialog() {
         new ServerConnectDialog(this).showDialog();
     }
@@ -445,6 +453,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Brings up the preferences dialog.
      */ 
+    // TODO: remove this method
     public void showPreferencesDialog() {
         new PreferencesDialog(this).showDialog();
     }
@@ -452,6 +461,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Brings up the file selection dialog.
      */
+    // TODO: remove this method
     public void showSelectionDialog(boolean addToSelection) {
         new FileSelectionDialog(this, addToSelection).showDialog();   
     }
@@ -573,7 +583,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
             if (splitPaneWidth==-1) {
                 splitPaneWidth = splitPane.getWidth();
                 //				splitPane.setDividerLocation(((int)splitPane.getWidth()/2));
-                splitPane.setDividerLocation(((double)0.5));
+                splitPane.setDividerLocation(0.5);
             }
             else {
                 float ratio = dividerLocation/(float)splitPaneWidth;

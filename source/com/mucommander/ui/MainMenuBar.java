@@ -17,6 +17,7 @@ import com.mucommander.ui.help.ShortcutsDialog;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.viewer.ViewerFrame;
+import com.mucommander.ui.action.ActionManager;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -47,6 +48,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     // File menu
     private JMenu fileMenu;
     private JMenuItem newWindowItem;
+    private JMenuItem openItem;
+    private JMenuItem openNativelyItem;
+    private JMenuItem revealInDesktopItem;
+    private JMenuItem copyNamesItem;
+    private JMenuItem copyPathsItem;
     private JMenuItem serverConnectItem;
     private JMenuItem runItem;
     private JMenuItem packItem;
@@ -121,6 +127,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
         newWindowItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.new_window"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK), this);
 
+//        fileMenu.add(new JSeparator());
+//        openItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.open"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), this);
+//        openItem = MenuToolkit.addMenuItem(fileMenu, ActionManager.getAction("com.mucommander.ui.action.OpenAction", mainFrame), menuItemMnemonicHelper);
+//        openNativelyItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.open_natively"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.SHIFT_MASK), this);
+//        revealInDesktopItem  = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.reveal_in_desktop", PlatformManager.getDefaultDesktopFMName()), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK), this);
+
         fileMenu.add(new JSeparator());
         serverConnectItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.server_connect"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_K, ActionEvent.CTRL_MASK), this);
         runItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.run_command"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK), this);
@@ -149,24 +161,30 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 	
         // Mark menu
         menuItemMnemonicHelper.clear();
-        markMenu = MenuToolkit.addMenu(Translator.get("mark_menu"), menuMnemonicHelper, null);
-        markGroupItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.mark"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), this);
-        unmarkGroupItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.unmark"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), this);
-        markAllItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.mark_all"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK), this);
-        unmarkAllItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.unmark_all"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK), this);
-        invertSelectionItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.invert_selection"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_MULTIPLY, 0), this);
+        markMenu = MenuToolkit.addMenu(Translator.get("mark_menu"), menuMnemonicHelper, this);
+        // Accelerators (keyboard shortcuts) for the following menu items will be set/unset when the menu is selected/deselected
+        markGroupItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.mark"), menuItemMnemonicHelper, null, this);
+        unmarkGroupItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.unmark"), menuItemMnemonicHelper, null, this);
+        markAllItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.mark_all"), menuItemMnemonicHelper, null, this);
+        unmarkAllItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.unmark_all"), menuItemMnemonicHelper, null, this);
+        invertSelectionItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.invert_selection"), menuItemMnemonicHelper, null, this);
 
         markMenu.add(new JSeparator());
         compareFoldersItem = MenuToolkit.addMenuItem(markMenu, Translator.get("mark_menu.compare_folders"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), this);
+
+        markMenu.add(new JSeparator());
+        copyNamesItem = MenuToolkit.addMenuItem(markMenu, Translator.get("file_menu.copy_filenames"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK), this);
+        copyPathsItem = MenuToolkit.addMenuItem(markMenu, Translator.get("file_menu.copy_paths"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.SHIFT_MASK|ActionEvent.CTRL_MASK), this);
 
         add(markMenu);
 		
         // View menu
         menuItemMnemonicHelper.clear();
         viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
-        goBackItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_back"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK), this);
-        goForwardItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_forward"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK), this);
-        goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), this);
+        goBackItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_back"), menuItemMnemonicHelper, null, this);
+        // Accelerators (keyboard shortcuts) for the following menu items will be set/unset when the menu is selected/deselected
+        goForwardItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_forward"), menuItemMnemonicHelper, null, this);
+        goToParentItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.go_to_parent"), menuItemMnemonicHelper, null, this);
         changeFolderItem = MenuToolkit.addMenuItem(viewMenu, Translator.get("view_menu.change_current_location"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK), this);
         viewMenu.add(new JSeparator());
         sortByExtensionItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("view_menu.sort_by_extension"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK), this);
@@ -247,27 +265,55 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
      * the shortcuts to be active
      */
     private void toggleContextualMenuItems(JMenu menu, boolean enableUnconditional) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-
         if(menu == fileMenu) {
             FileTable fileTable = mainFrame.getLastActiveTable();
             boolean filesSelected = enableUnconditional || fileTable.getSelectedFiles().size()>0;
                 
-            // enable/disable thos menu items if no file is selected
+            // enable/disable those menu items if no file is selected
             propertiesItem.setEnabled(filesSelected);
             packItem.setEnabled(filesSelected);
             unpackItem.setEnabled(filesSelected);
             emailFilesItem.setEnabled(filesSelected);
         }
+        else if(menu == markMenu) {
+            // Display accelerators when menu is selected and remove them when it get deselected (keyboard shortcut is caught in FileTable)
+            if(menu.isSelected()) {
+                markGroupItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0));
+                unmarkGroupItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0));
+                markAllItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+                unmarkAllItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
+                invertSelectionItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MULTIPLY, 0));
+            }
+            else {
+                markGroupItem.setAccelerator(null);
+                unmarkGroupItem.setAccelerator(null);
+                markAllItem.setAccelerator(null);
+                unmarkAllItem.setAccelerator(null);
+                invertSelectionItem.setAccelerator(null);
+            }
+        }
         else if(menu == viewMenu) {
-            FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
+            // Display accelerators when menu is selected and remove them when it get deselected (keyboard shortcut is caught in FileTable)
+            if(menu.isSelected()) {
+                FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
 
-            goBackItem.setEnabled(enableUnconditional || folderPanel.getFolderHistory().hasBackFolder());
-            goForwardItem.setEnabled(enableUnconditional || folderPanel.getFolderHistory().hasForwardFolder());
-            goToParentItem.setEnabled(enableUnconditional || folderPanel.getCurrentFolder().getParent()!=null);
+                goBackItem.setEnabled(enableUnconditional || folderPanel.getFolderHistory().hasBackFolder());
+                goBackItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
+
+                goForwardItem.setEnabled(enableUnconditional || folderPanel.getFolderHistory().hasForwardFolder());
+                goForwardItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK));
+
+                goToParentItem.setEnabled(enableUnconditional || folderPanel.getCurrentFolder().getParent()!=null);
+                goToParentItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0));
+            }
+            else {
+                goBackItem.setAccelerator(null);
+                goForwardItem.setAccelerator(null);
+                goToParentItem.setAccelerator(null);
+            }
         }
         else if(menu == windowMenu && !menu.isSelected()) {
-            // Disable accelerators on all menu items but do not remove or disable them,
+            // Remove accelerators from all menu items but do not remove or disable menu items,
             // this would cause the actionPerformed() method not be called when item is clicked.            
             int nbWindowMenuItems = windowMenu.getItemCount();
             JMenuItem menuItem;
@@ -289,8 +335,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         if(mainFrame.getNoEventsMode())
             return;
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-		
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("mainFrame.getFocusOwner()="+mainFrame.getFocusOwner()+" isSelected()="+isSelected());
+//        if(!(mainFrame.getFocusOwner() instanceof FileTable))
+//            return;
+
         Object source = e.getSource();
 
         // File menu

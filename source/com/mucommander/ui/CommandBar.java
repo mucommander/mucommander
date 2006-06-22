@@ -13,6 +13,7 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.viewer.ViewerRegistrar;
+import com.mucommander.ui.comp.button.NonFocusableButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -132,7 +133,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
      * @param tooltipText the tooltip text that will get displayed when the mouse stays over the button
      */
     private JButton addButton(String label, String tooltipText) {
-        JButton button = new JButton(label);
+        JButton button = new NonFocusableButton(label);
+
         button.setToolTipText(tooltipText);
         button.setMargin(new Insets(3,4,3,4));
         // For Mac OS X whose default minimum width for buttons is enormous
@@ -190,13 +192,12 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
     /**
      * Fires up the appropriate file viewer for the selected file.
      */
+    // TODO: remove this method
     public void doView() {
         AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-        if(file==null || (file.isDirectory() && !file.isSymlink())) {
-            mainFrame.requestFocus();
+        if(file==null || (file.isDirectory() && !file.isSymlink()))
             return;
-        }
-		
+
         ViewerRegistrar.createViewerFrame(mainFrame, file);
     }
 	
@@ -204,12 +205,11 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
     /**
      * Fires up the appropriate file editor for the selected file.
      */
+    // TODO: remove this method
     public void doEdit() {
         AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-        if(file==null || (file.isDirectory() && !file.isSymlink())) {
-            mainFrame.requestFocus();
+        if(file==null || (file.isDirectory() && !file.isSymlink()))
             return;
-        }
 
         EditorRegistrar.createEditorFrame(mainFrame, file);
     }
@@ -235,7 +235,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
         super.setVisible(visible);
     }
 
-	
+
     ///////////////////////////////////
     // ConfigurationListener methods //
     ///////////////////////////////////
@@ -273,7 +273,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
             this.popupMenu.setVisible(false);
             this.popupMenu = null;
             this.hideMenuItem = null;
-            return;
         }        
         // View button
         else if(source == buttons[VIEW_INDEX]) {
@@ -302,13 +301,9 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
             FileSet files = activeTable.getSelectedFiles();
             // The following actions need to work on files, 
             // simply return if no file is selected
-            if(files.size()==0) {
-                // Request focus since focus currently belongs to a command bar button
-                // and no dialog will request focus
-                mainFrame.requestFocus();
+            if(files.size()==0)
                 return;
-            }
-			
+
             // Copy button
             if(source == buttons[COPY_INDEX]) {
                 new CopyDialog(mainFrame, files, shiftDown);
