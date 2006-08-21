@@ -25,6 +25,8 @@ public class GoToParentAction extends MucoAction implements TableChangeListener,
         // Listen to location change events
         mainFrame.getFolderPanel1().addLocationListener(this);
         mainFrame.getFolderPanel2().addLocationListener(this);
+
+        toggleEnabledState();
     }
 
 

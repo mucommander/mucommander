@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class EditAction extends MucoAction {
 
     public EditAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.edit", KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
+        super(mainFrame, "command_bar.edit", KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), "command_bar.edit_tooltip");
     }
 
     public void performAction(MainFrame mainFrame) {

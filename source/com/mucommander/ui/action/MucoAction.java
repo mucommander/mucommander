@@ -5,6 +5,7 @@ import com.mucommander.ui.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * @author Maxence Bernard
@@ -40,7 +41,7 @@ public abstract class MucoAction extends AbstractAction {
         return this.mainFrame;
     }
 
-    
+
     public String getLabel() {
         return (String)getValue(Action.NAME);
     }
@@ -67,6 +68,25 @@ public abstract class MucoAction extends AbstractAction {
         putValue(Action.ACCELERATOR_KEY, keyStroke);
     }
 
+
+    /**
+     * Returns a String representation of the accelerator, in the [MODIFIER+]KEY format, for instance CTRL+S.
+     * This method will return <code>null</code> if this action has no accelerator.
+     *
+     * @return a String representation of the accelerator, or <code>null</code> if this action has no accelerator.
+     */
+    public String getAcceleratorText() {
+        KeyStroke accelerator = getAccelerator();
+        if(accelerator==null)
+            return null;
+
+        String text = KeyEvent.getKeyText(accelerator.getKeyCode());
+        int modifiers = accelerator.getModifiers();
+        if(modifiers!=0)
+            text = KeyEvent.getKeyModifiersText(modifiers)+"+"+text;
+
+        return text;
+    }
 
     ///////////////////////////////////
     // AbstractAction implementation //

@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 public class RefreshAction extends MucoAction {
 
     public RefreshAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.refresh", KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0));
+        super(mainFrame, "command_bar.refresh", KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0), "command_bar.refresh_tooltip");
     }
 
     public void performAction(MainFrame mainFrame) {

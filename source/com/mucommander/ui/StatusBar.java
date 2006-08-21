@@ -12,6 +12,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.ui.action.ActionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +37,7 @@ import java.awt.event.*;
  *
  * @author Maxence Bernard
  */
-public class StatusBar extends JPanel implements Runnable, ActionListener, MouseListener, TableChangeListener, LocationListener, ComponentListener {
+public class StatusBar extends JPanel implements Runnable, MouseListener, TableChangeListener, LocationListener, ComponentListener {
 
     private MainFrame mainFrame;
 
@@ -45,11 +46,6 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
 	
     /** Label that displays info about current volume (free/total space) */
     private JLabel statusBarVolumeLabel;
-
-    /** Right-click popup menu */
-    private JPopupMenu popupMenu;
-    /** Popup menu item that hides the toolbar */
-    private JMenuItem hideMenuItem;	
 
     /** Thread which auto updates volume info */
     private Thread autoUpdateThread;
@@ -145,7 +141,7 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
         int fileCount = tableModel.getFileCount();
 
         // Update files info based on marked files if there are some, or currently selected file otherwise
-        int nbSelectedFiles = 0;
+        int nbSelectedFiles;
         if(nbMarkedFiles==0 && selectedFile!=null)
             nbSelectedFiles = 1;
         else
@@ -323,27 +319,6 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
         while(autoUpdateThread!=null && mainFrame.isVisible());   // Stop when MainFrame is disposed
     }
     
-	
-    ////////////////////////////
-    // ActionListener methods //
-    ////////////////////////////
-
-    public void actionPerformed(ActionEvent e) {
-        // Discard action events while in 'no events mode'
-        if(mainFrame.getNoEventsMode())
-            return;
-
-        Object source = e.getSource();
-
-        // Hide status bar
-        if(source == hideMenuItem) {
-            mainFrame.setStatusBarVisible(false);
-            this.popupMenu.setVisible(false);
-            this.popupMenu = null;
-            this.hideMenuItem = null;
-            return;
-        }        
-    }
 
     /////////////////////////////////
     // TableChangeListener methods //
@@ -389,12 +364,8 @@ public class StatusBar extends JPanel implements Runnable, ActionListener, Mouse
         int modifiers = e.getModifiers();
         if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
-            if(this.popupMenu==null) {
-                popupMenu = new JPopupMenu();
-                this.hideMenuItem = new JMenuItem(Translator.get("status_bar.hide_status_bar"));
-                hideMenuItem.addActionListener(this);
-                popupMenu.add(hideMenuItem);
-            }
+            JPopupMenu popupMenu = new JPopupMenu();
+            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleStatusBarAction.class, mainFrame));
             popupMenu.show(this, e.getX(), e.getY());
             popupMenu.setVisible(true);
         }

@@ -17,7 +17,7 @@ import java.awt.event.KeyEvent;
 public class RenameAction extends MucoAction {
 
     public RenameAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.rename", KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.SHIFT_MASK));
+        super(mainFrame, "command_bar.rename", KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.SHIFT_MASK), "command_bar.rename_tooltip");
     }
 
     public void performAction(MainFrame mainFrame) {

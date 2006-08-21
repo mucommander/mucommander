@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class CopyAction extends MucoAction {
 
     public CopyAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.copy", KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+        super(mainFrame, "command_bar.copy", KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "command_bar.copy_tooltip");
     }
 
     public void performAction(MainFrame mainFrame) {

@@ -30,7 +30,7 @@ public class ToggleCommandBarAction extends MucoAction {
         // Change the label to reflect the new command bar state
         setLabel(Translator.get(visible?"view_menu.hide_command_bar":"view_menu.show_command_bar"));
         // Show/hide the command bar
-        commandBar.setVisible(!visible);
+        commandBar.setVisible(visible);
         mainFrame.validate();
     }
 }

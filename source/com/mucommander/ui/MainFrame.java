@@ -14,6 +14,7 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.ui.action.ActionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -104,8 +105,8 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 			
         contentPane.add(toolbar, BorderLayout.NORTH);
 
-        folderPanel1.addLocationListener(toolbar);
-        folderPanel2.addLocationListener(toolbar);
+//        folderPanel1.addLocationListener(toolbar);
+//        folderPanel2.addLocationListener(toolbar);
 
         folderPanel1.addLocationListener(this);
         folderPanel2.addLocationListener(this);
@@ -232,24 +233,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         return toolbar;
     }
 
-    /**
-     * Shows/hide the toolbar.
-     */
-    // TODO: remove this method
-    public void setToolbarVisible(boolean visible) {
-        toolbar.setVisible(visible);
-        validate();
-        ConfigurationManager.setVariableBoolean("prefs.toolbar.visible", visible);		
-    }
-	
-    /**
-     * Returns true if the icon toolbar is visible on this frame.
-     */
-    // TODO: remove this method
-    public boolean isToolbarVisible() {
-        return toolbar.isVisible();
-    }
-		
 
     /**
      * Returns the command bar, i.e. the panel that contains
@@ -258,25 +241,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     public CommandBar getCommandBar() {
         return commandBar;
     }
-	
-    /**
-     * Returns true if the command bar is visible on this frame.
-     */
-    // TODO: remove this method
-    public boolean isCommandBarVisible() {
-        return this.commandBar.isVisible();
-    }
 
-    /**
-     * Shows/hide the command bar.
-     */
-    // TODO: remove this method
-    public void setCommandBarVisible(boolean visible) {
-        this.commandBar.setVisible(visible);
-        validate();
-        ConfigurationManager.setVariableBoolean("prefs.command_bar.visible", visible);		
-    }
-	
 
     /**
      * Returns the status bar where information about selected files and volume are displayed.
@@ -285,25 +250,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         return this.statusBar;
     }
 
-    /**
-     * Returns true if the status bar is visible on this frame.
-     */
-    // TODO: remove this method
-    public boolean isStatusBarVisible() {
-        return this.statusBar.isVisible();
-    }
-
-    /**
-     * Shows/hide the status bar.
-     */
-    // TODO: remove this method
-    public void setStatusBarVisible(boolean visible) {
-        this.statusBar.setVisible(visible);
-        validate();
-
-        ConfigurationManager.setVariableBoolean("prefs.status_bar.visible", visible);		
-    }
-	
 
     /**
      * Returns last active FileTable, that is the last FileTable that received focus.
@@ -375,55 +321,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         requestFocus();
     }
 
-    /**
-     * Compares directories: marks files that are missing from a directory or that are newer.
-     */
-    public void compareDirectories() {
-        AbstractFile tempFile;
-        FileTableModel tableModel1 = (FileTableModel)table1.getModel();
-        FileTableModel tableModel2 = (FileTableModel)table2.getModel();
-
-        int nbFiles1 = tableModel1.getFileCount();
-        int nbFiles2 = tableModel2.getFileCount();
-        int fileIndex;
-        String tempFileName;
-        for(int i=0; i<nbFiles1; i++) {
-            tempFile = tableModel1.getFileAt(i);
-            if(tempFile.isDirectory())
-                continue;
-			
-            tempFileName = tempFile.getName();
-            fileIndex = -1;
-            for(int j=0; j<nbFiles2; j++)
-                if (tableModel2.getFileAt(j).getName().equals(tempFileName)) {
-                    fileIndex = j;
-                    break;
-                }
-            if (fileIndex==-1 || tableModel2.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
-                tableModel1.setFileMarked(tempFile, true);
-                table1.repaint();
-            }
-        }
-
-        for(int i=0; i<nbFiles2; i++) {
-            tempFile = tableModel2.getFileAt(i);
-            if(tempFile.isDirectory())
-                continue;
-
-            tempFileName = tempFile.getName();
-            fileIndex = -1;
-            for(int j=0; j<nbFiles1; j++)
-                if (tableModel1.getFileAt(j).getName().equals(tempFileName)) {
-                    fileIndex = j;
-                    break;
-                }
-            if (fileIndex==-1 || tableModel1.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
-                tableModel2.setFileMarked(tempFile, true);
-                table2.repaint();
-            }
-        }
-
-    }
 
     /**
      * Makes both folders the same, choosing the one which is currently active. 
@@ -432,39 +329,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         (lastActiveTable==table1?table2:table1).getFolderPanel().trySetCurrentFolder(lastActiveTable.getCurrentFolder());
     }
 
-    /**
-     * Brings up the properties dialog that displays information about currently marked files (if any).
-     */
-    // TODO: remove this method
-    public void showPropertiesDialog() {
-        FileSet files = getLastActiveTable().getSelectedFiles();
-        if(files.size()>0)
-            new PropertiesDialog(this, files).showDialog();
-    }
-	
-    /**
-     * Brings up server connect dialog, which allows to connect to remote servers.
-     */
-    // TODO: remove this method
-    public void showServerConnectDialog() {
-        new ServerConnectDialog(this).showDialog();
-    }
-	
-    /**
-     * Brings up the preferences dialog.
-     */ 
-    // TODO: remove this method
-    public void showPreferencesDialog() {
-        new PreferencesDialog(this).showDialog();
-    }
-
-    /**
-     * Brings up the file selection dialog.
-     */
-    // TODO: remove this method
-    public void showSelectionDialog(boolean addToSelection) {
-        new FileSelectionDialog(this, addToSelection).showDialog();   
-    }
 
     /**
      * Returns <code>true</code> if this MainFrame is active in the foreground.
@@ -678,10 +542,11 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
                 table1.requestFocus();
         }
         else if(keyCode == KeyEvent.VK_ENTER && isAltDown) {
-            showPropertiesDialog();
+            // Show file properties dialog
+            ActionManager.performAction(com.mucommander.ui.action.PropertiesAction.class, this);
         }
         else if(keyCode == KeyEvent.VK_SHIFT) {
-            // Set shift mode on : displays Rename instead of Move
+            // Set shift mode to on : display alternate actions in the command bar
             commandBar.setShiftMode(true);
         }
     }
@@ -690,7 +555,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         int keyCode = e.getKeyCode();
 
         if(keyCode == KeyEvent.VK_SHIFT) {
-            // Set shift mode back to off : displays Move instead of Rename
+            // Set shift mode back to off : display regular (non-shifted) actions in the command bar
             commandBar.setShiftMode(false);
         }
     }

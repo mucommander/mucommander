@@ -5,31 +5,25 @@ package com.mucommander.ui;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileSet;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.editor.EditorRegistrar;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.ui.viewer.ViewerRegistrar;
 import com.mucommander.ui.comp.button.NonFocusableButton;
+import com.mucommander.ui.action.MucoAction;
+import com.mucommander.ui.action.ActionManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 
 /**
  * CommandBar is the button bar that sits at the bottom of the main window and provides access to
- * a number of commands (view, edit, copy, move...).
+ * main commander actions (view, edit, copy, move...).
  *
  * @author Maxence Bernard
  */
-public class CommandBar extends JPanel implements ConfigurationListener, ActionListener, MouseListener {
+public class CommandBar extends JPanel implements ConfigurationListener, MouseListener {
 
     /** Parent MainFrame instance */
     private MainFrame mainFrame;
@@ -40,10 +34,10 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
     /** Buttons */
     private JButton buttons[];
     
-    /** Right-click popup menu */
-    private JPopupMenu popupMenu;
-    /** Popup menu item that hides the toolbar */
-    private JMenuItem hideMenuItem;	
+//    /** Right-click popup menu */
+//    private JPopupMenu popupMenu;
+//    /** Popup menu item that hides the toolbar */
+//    private JMenuItem hideMenuItem;
 
     ////////////////////
     // Button indexes //
@@ -56,28 +50,46 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
     public final static int DELETE_INDEX = 5;
     public final static int REFRESH_INDEX = 6;
     public final static int CLOSE_INDEX = 7;
-	
+
     private final static int NB_BUTTONS = 8;
 
-    //////////////////////////
-    // Locatlized text keys //
-    //////////////////////////
+    ////////////////////////////////////
+    // Buttons actions/images mapping //
+    ////////////////////////////////////
+/*
+    private final static String COPY_ACTION = "com.mucommander.ui.action.CopyAction";
+    private final static String LOCAL_COPY_ACTION = "com.mucommander.ui.action.LocalCopyAction";
 
-    private final static String MOVE_TEXT = "command_bar.move";
-    private final static String RENAME_TEXT = "command_bar.rename";
+    private final static String MOVE_ACTION = "com.mucommander.ui.action.MoveAction";
+    private final static String RENAME_ACTION = "com.mucommander.ui.action.RenameAction";
 
-    private final static String COPY_TEXT = "command_bar.copy";
-    private final static String LOCAL_COPY_TEXT = "command_bar.local_copy";
-	
     private final static String BUTTONS_DESC[][] =  {
-        {"command_bar.view", "[F3]", "view.png"},
-        {"command_bar.edit", "[F4]", "edit.png"},
-        {COPY_TEXT, "[F5]", "copy.png"},
-        {MOVE_TEXT, "[F6]", "move.png"},
-        {"command_bar.mkdir", "[F7]", "mkdir.png"},
-        {"command_bar.delete", "[F8]", "delete.png"},
-        {"command_bar.refresh", "[F9]", "refresh.png"},
-        {"command_bar.close", "[F10]", "close.png"}
+        {"com.mucommander.ui.action.ViewAction", "view.png"},
+        {"com.mucommander.ui.action.EditAction", "edit.png"},
+        {COPY_ACTION, "copy.png"},
+        {MOVE_ACTION, "move.png"},
+        {"com.mucommander.ui.action.MkdirAction", "mkdir.png"},
+        {"com.mucommander.ui.action.DeleteAction", "delete.png"},
+        {"com.mucommander.ui.action.RefreshAction", "refresh.png"},
+        {"com.mucommander.ui.action.CloseWindowAction", "close.png"}
+    };
+*/
+
+    private final static Class COPY_ACTION = com.mucommander.ui.action.CopyAction.class;
+    private final static Class LOCAL_COPY_ACTION = com.mucommander.ui.action.LocalCopyAction.class;
+
+    private final static Class MOVE_ACTION = com.mucommander.ui.action.MoveAction.class;
+    private final static Class RENAME_ACTION = com.mucommander.ui.action.RenameAction.class;
+
+    private final static Object BUTTONS_DESC[][] =  {
+        {com.mucommander.ui.action.ViewAction.class, "view.png"},
+        {com.mucommander.ui.action.EditAction.class, "edit.png"},
+        {COPY_ACTION, "copy.png"},
+        {MOVE_ACTION, "move.png"},
+        {com.mucommander.ui.action.MkdirAction.class, "mkdir.png"},
+        {com.mucommander.ui.action.DeleteAction.class, "delete.png"},
+        {com.mucommander.ui.action.RefreshAction.class, "refresh.png"},
+        {com.mucommander.ui.action.CloseWindowAction.class, "close.png"}
     };
 
     /**
@@ -90,7 +102,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 
             // For each button
             for(int i=0; i<NB_BUTTONS; i++)
-                IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, BUTTONS_DESC[i][2]);
+                IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, (String)BUTTONS_DESC[i][1]);
         }
 
     }
@@ -105,11 +117,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 
         this.buttons = new JButton[NB_BUTTONS];
         for(int i=0; i<NB_BUTTONS; i++)
-            buttons[i] = addButton(
-                                   Translator.get(BUTTONS_DESC[i][0])+" "+BUTTONS_DESC[i][1],
-                                   Translator.get(BUTTONS_DESC[i][0]+"_tooltip")
-                                   );	
-	
+            buttons[i] = addButton((Class)BUTTONS_DESC[i][0]);
+
         addMouseListener(this);
 
         // Listen to configuration changes to reload command bar buttons when icon size has changed
@@ -127,19 +136,23 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 	
 	
     /**
-     * Creates and adds a button to the command bar using the provided label and tooltip text.
+     * Creates and adds a button to the command bar using the provided MucoAction's class.
      *
-     * @param label the button's label
-     * @param tooltipText the tooltip text that will get displayed when the mouse stays over the button
+//     * @param actionClassname Class name of a MucoAction
+     * @param actionClass A MucoAction class
      */
-    private JButton addButton(String label, String tooltipText) {
-        JButton button = new NonFocusableButton(label);
+//    private JButton addButton(String actionClassname) {
+    private JButton addButton(Class actionClass) {
+        MucoAction action = ActionManager.getActionInstance(actionClass, mainFrame);
 
-        button.setToolTipText(tooltipText);
+        JButton button = new NonFocusableButton(action);
+
+        // Append the action's shortcut to the button's label
+        button.setText(action.getLabel()+" ["+action.getAcceleratorText()+"]");
+
         button.setMargin(new Insets(3,4,3,4));
         // For Mac OS X whose default minimum width for buttons is enormous
         button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getHeight()));
-        button.addActionListener(this);
         button.addMouseListener(this);
         add(button);
         return button;
@@ -152,7 +165,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
     private void setButtonIcons() {
         // For each button
         for(int i=0; i<NB_BUTTONS; i++)
-            buttons[i].setIcon(IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, BUTTONS_DESC[i][2]));
+            buttons[i].setIcon(IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, (String)BUTTONS_DESC[i][1]));
     }
 	
     /**
@@ -166,54 +179,34 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
 	
 	
     /**
-     * Sets shift mode on or off : some buttons such as 'F6 Move' may want to indicate
-     * the action is different when shift is pressed.
+     * Sets shift mode on or off : some buttons such as 'F6 Move' indicate
+     * that action is different when shift is pressed.
      */
     public void setShiftMode(boolean on) {
+        // Do nothing if command bar is not currently visible
+        if(!isVisible())
+            return;
+
         if(shiftDown!=on) {
             this.shiftDown = on;
             boolean singleFileMode = on&&((FileTableModel)(mainFrame.getLastActiveTable().getModel())).getNbMarkedFiles()<=1;
 
-            // Change Move/Rename button's text and tooltip
-            String textKey = singleFileMode?RENAME_TEXT:MOVE_TEXT;
-            buttons[MOVE_INDEX].setText(Translator.get(textKey)+" "+BUTTONS_DESC[MOVE_INDEX][1]);
-            buttons[MOVE_INDEX].setToolTipText(Translator.get(textKey+"_tooltip"));
-            buttons[MOVE_INDEX].repaint();
-
             // Change Copy/Local copy button's text and tooltip
-            textKey = singleFileMode?LOCAL_COPY_TEXT:COPY_TEXT;
-            buttons[COPY_INDEX].setText(Translator.get(textKey)+" "+BUTTONS_DESC[COPY_INDEX][1]);
-            buttons[COPY_INDEX].setToolTipText(Translator.get(textKey+"_tooltip"));
-            buttons[COPY_INDEX].repaint();
+            MucoAction action = ActionManager.getActionInstance(singleFileMode?LOCAL_COPY_ACTION:COPY_ACTION, mainFrame);
+            Icon icon = buttons[COPY_INDEX].getIcon();      // Save icon
+            buttons[COPY_INDEX].setAction(action);
+            buttons[COPY_INDEX].setIcon(icon);              // Restore icon
+            buttons[COPY_INDEX].setText(action.getLabel()+" ["+action.getAcceleratorText()+"]");
+
+            // Change Move/Rename button's text and tooltip
+            action = ActionManager.getActionInstance(singleFileMode?RENAME_ACTION:MOVE_ACTION, mainFrame);
+            icon = buttons[MOVE_INDEX].getIcon();           // Save icon
+            buttons[MOVE_INDEX].setAction(action);
+            buttons[MOVE_INDEX].setIcon(icon);              // Restore icon
+            buttons[MOVE_INDEX].setText(action.getLabel()+" ["+action.getAcceleratorText()+"]");
         }
     }
 
-
-    /**
-     * Fires up the appropriate file viewer for the selected file.
-     */
-    // TODO: remove this method
-    public void doView() {
-        AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-        if(file==null || (file.isDirectory() && !file.isSymlink()))
-            return;
-
-        ViewerRegistrar.createViewerFrame(mainFrame, file);
-    }
-	
-	
-    /**
-     * Fires up the appropriate file editor for the selected file.
-     */
-    // TODO: remove this method
-    public void doEdit() {
-        AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
-        if(file==null || (file.isDirectory() && !file.isSymlink()))
-            return;
-
-        EditorRegistrar.createEditorFrame(mainFrame, file);
-    }
-	
 
     ////////////////////////
     // Overridden methods //
@@ -255,7 +248,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
         return true;
     }
 	
-	
+/*
     ////////////////////////////
     // ActionListener methods //
     ////////////////////////////
@@ -274,58 +267,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
             this.popupMenu = null;
             this.hideMenuItem = null;
         }        
-        // View button
-        else if(source == buttons[VIEW_INDEX]) {
-            doView();
-        }
-        // Edit button
-        else if(source == buttons[EDIT_INDEX]) {
-            doEdit();
-        }
-        // Mkdir button
-        else if(source == buttons[MKDIR_INDEX]) {
-            // Trigger Mkdir action
-            new MkdirDialog(mainFrame);
-        }
-        // Refresh button
-        else if(source == buttons[REFRESH_INDEX]) {
-            // Try to refresh current folder in a separate thread
-            mainFrame.getLastActiveTable().getFolderPanel().tryRefreshCurrentFolder();
-        }
-        // Close window button
-        else if(source == buttons[CLOSE_INDEX]) {
-            mainFrame.dispose();
-        }
-        else {
-            FileTable activeTable = mainFrame.getLastActiveTable();
-            FileSet files = activeTable.getSelectedFiles();
-            // The following actions need to work on files, 
-            // simply return if no file is selected
-            if(files.size()==0)
-                return;
-
-            // Copy button
-            if(source == buttons[COPY_INDEX]) {
-                new CopyDialog(mainFrame, files, shiftDown);
-            }
-            // Move/Rename button
-            else if(source == buttons[MOVE_INDEX]) {
-                // Trigger in-table renaming if shift down and only one file is selected (not marked)
-                if(shiftDown && files.size()==1 && files.elementAt(0).equals(activeTable.getSelectedFile())) {
-                    activeTable.editCurrentFilename();
-                    // Disable shift mode as it has no other way of being disabled
-                    setShiftMode(false);
-                }
-                // Show up move dialog
-                else
-                    new MoveDialog(mainFrame, files, shiftDown);
-            }
-            // Delete button
-            else if(source == buttons[DELETE_INDEX]) {
-                new DeleteDialog(mainFrame, files);
-            }
-        }
     }
+*/
 
     ///////////////////////////
     // MouseListener methods //
@@ -340,12 +283,15 @@ public class CommandBar extends JPanel implements ConfigurationListener, ActionL
         int modifiers = e.getModifiers();
         if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
-            if(this.popupMenu==null) {
-                popupMenu = new JPopupMenu();
-                this.hideMenuItem = new JMenuItem(Translator.get("command_bar.hide_command_bar"));
-                hideMenuItem.addActionListener(this);
-                popupMenu.add(hideMenuItem);
-            }
+//            if(this.popupMenu==null) {
+//                popupMenu = new JPopupMenu();
+//                this.hideMenuItem = new JMenuItem(Translator.get("command_bar.hide_command_bar"));
+//                hideMenuItem.addActionListener(this);
+//                popupMenu.add(hideMenuItem);
+//            }
+
+            JPopupMenu popupMenu = new JPopupMenu();
+            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleCommandBarAction.class, mainFrame));
             popupMenu.show(this, e.getX(), e.getY());
             popupMenu.setVisible(true);
         }

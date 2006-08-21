@@ -30,7 +30,7 @@ public class ToggleToolBarAction extends MucoAction {
         // Change the label to reflect the new toolbar state
         setLabel(Translator.get(visible?"view_menu.hide_toolbar":"view_menu.show_toolbar"));
         // Show/hide the toolbar
-        toolBar.setVisible(!visible);
+        toolBar.setVisible(visible);
         mainFrame.validate();
     }
 }

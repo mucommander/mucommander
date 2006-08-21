@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class MoveAction extends MucoAction {
 
     public MoveAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.move", KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
+        super(mainFrame, "command_bar.move", KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0), "command_bar.move_tooltip");
     }
 
     public void performAction(MainFrame mainFrame) {

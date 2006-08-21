@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class ViewAction extends MucoAction {
 
     public ViewAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.view", KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+        super(mainFrame, "command_bar.view", KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "command_bar.view_tooltip");
     }
 
     public void performAction(MainFrame mainFrame) {

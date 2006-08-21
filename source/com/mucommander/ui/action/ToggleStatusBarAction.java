@@ -30,7 +30,7 @@ public class ToggleStatusBarAction extends MucoAction {
         // Change the label to reflect the new status bar state
         setLabel(Translator.get(visible?"view_menu.hide_status_bar":"view_menu.show_status_bar"));
         // Show/hide the status bar
-        statusBar.setVisible(!visible);
+        statusBar.setVisible(visible);
         mainFrame.validate();
     }
 }

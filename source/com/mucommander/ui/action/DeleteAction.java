@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class DeleteAction extends MucoAction {
 
     public DeleteAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.delete", KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
+        super(mainFrame, "command_bar.delete", KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0), "command_bar.delete_tooltip");
     }
 
     public void performAction(MainFrame mainFrame) {

@@ -25,6 +25,8 @@ public class GoBackAction extends MucoAction implements TableChangeListener, Loc
         // Listen to location change events
         mainFrame.getFolderPanel1().addLocationListener(this);
         mainFrame.getFolderPanel2().addLocationListener(this);
+
+        toggleEnabledState();
     }
 
 

@@ -6,6 +6,7 @@ import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.QuitDialog;
 import com.mucommander.ui.WindowManager;
+import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.about.AboutDialog;
 
 
@@ -71,7 +72,7 @@ public class OSXIntegration {
         if(mainFrame.getNoEventsMode())
             return;
 
-        mainFrame.showPreferencesDialog();
+        ActionManager.performAction(com.mucommander.ui.action.PreferencesAction.class, mainFrame);
     }
 
     /**
