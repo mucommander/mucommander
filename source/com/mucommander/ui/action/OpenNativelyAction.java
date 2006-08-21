@@ -1,6 +1,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
+import com.mucommander.PlatformManager;
+import com.mucommander.file.AbstractFile;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -17,6 +19,12 @@ public class OpenNativelyAction extends MucoAction {
     }
 
     public void performAction(MainFrame mainFrame) {
-        mainFrame.getLastActiveTable().enterAction(true);
+        AbstractFile selectedFile = mainFrame.getLastActiveTable().getSelectedFile(true);
+
+        if(selectedFile==null)
+            return;
+
+        // Tries to execute file
+        PlatformManager.open(selectedFile);
     }
 }

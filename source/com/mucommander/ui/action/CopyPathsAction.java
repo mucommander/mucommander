@@ -17,6 +17,6 @@ public class CopyPathsAction extends MucoAction {
     }
 
     public void performAction(MainFrame mainFrame) {
-        mainFrame.getLastActiveTable().copyFilenamesToClipboard(true);
+        CopyFilenamesAction.copyFilenamesToClipboard(mainFrame, true);
     }
 }

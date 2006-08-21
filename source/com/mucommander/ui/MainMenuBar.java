@@ -121,13 +121,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.NewWindowAction.class, mainFrame), menuItemMnemonicHelper);
 
-/*
         fileMenu.add(new JSeparator());
-        openItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.open"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), this);
-        openItem = MenuToolkit.addMenuItem(fileMenu, ActionManager.getAction(com.mucommander.ui.action.OpenAction.class, mainFrame), menuItemMnemonicHelper);
-        openNativelyItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.open_natively"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.SHIFT_MASK), this);
-        revealInDesktopItem  = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.reveal_in_desktop", PlatformManager.getDefaultDesktopFMName()), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK), this);
-*/
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.OpenAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.open_natively"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.SHIFT_MASK), this);
+        MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.reveal_in_desktop", PlatformManager.getDefaultDesktopFMName()), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK), this);
 
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ConnectToServerAction.class, mainFrame), menuItemMnemonicHelper);

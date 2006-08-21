@@ -1,6 +1,9 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.PlatformManager;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -17,6 +20,18 @@ public class OpenAction extends MucoAction {
     }
 
     public void performAction(MainFrame mainFrame) {
-        mainFrame.getLastActiveTable().enterAction(false);
+        FileTable fileTable = mainFrame.getLastActiveTable();
+        AbstractFile selectedFile = fileTable.getSelectedFile(true);
+
+        if(selectedFile==null)
+            return;
+
+        if(selectedFile.isBrowsable()) {
+            fileTable.getFolderPanel().trySetCurrentFolder(selectedFile);
+        }
+        else {
+            // Tries to execute file
+            PlatformManager.open(selectedFile);
+        }
     }
 }

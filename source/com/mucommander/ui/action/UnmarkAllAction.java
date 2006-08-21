@@ -1,6 +1,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -17,6 +19,15 @@ public class UnmarkAllAction extends MucoAction {
     }
 
     public void performAction(MainFrame mainFrame) {
-        mainFrame.getLastActiveTable().unmarkAll();
+        FileTable fileTable = mainFrame.getLastActiveTable();
+        FileTableModel tableModel = (FileTableModel)fileTable.getModel();
+
+        int nbRows = tableModel.getRowCount();
+        for(int i=fileTable.getParent()==null?0:1; i<nbRows; i++)
+            tableModel.setRowMarked(i, false);
+        fileTable.repaint();
+
+        // Update status bar info
+        mainFrame.getStatusBar().updateSelectedFilesInfo();
     }
 }

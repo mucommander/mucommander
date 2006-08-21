@@ -1,8 +1,11 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
 import java.awt.event.KeyEvent;
 
 /**
@@ -17,6 +20,15 @@ public class MarkAllAction extends MucoAction {
     }
 
     public void performAction(MainFrame mainFrame) {
-        mainFrame.getLastActiveTable().markAll();
+        FileTable fileTable = mainFrame.getLastActiveTable();
+        FileTableModel tableModel = (FileTableModel)fileTable.getModel();
+
+        int nbRows = tableModel.getRowCount();
+        for(int i=fileTable.getParent()==null?0:1; i<nbRows; i++)
+            tableModel.setRowMarked(i, true);
+        fileTable.repaint();
+
+        // Update status bar info
+        mainFrame.getStatusBar().updateSelectedFilesInfo();
     }
 }
