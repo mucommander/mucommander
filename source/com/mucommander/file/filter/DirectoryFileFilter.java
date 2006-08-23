@@ -1,22 +1,23 @@
-
 package com.mucommander.file.filter;
 
 import com.mucommander.file.AbstractFile;
 
-
 /**
- * FileFilter that only accepts visible (non-hidden) files.
+ * FileFilter that only accepts regular files that are not directories.
+ *
+ * @author Maxence Bernard
  */
-public class HiddenFileFilter extends FileFilter {
+public class DirectoryFileFilter extends FileFilter {
 
-    public HiddenFileFilter() {
+    public DirectoryFileFilter() {
     }
-    
+
     ///////////////////////////////
     // FileFilter implementation //
     ///////////////////////////////
-    
+
     public boolean accept(AbstractFile file) {
-        return !file.isHidden();
+        return !file.isDirectory();
     }
+
 }

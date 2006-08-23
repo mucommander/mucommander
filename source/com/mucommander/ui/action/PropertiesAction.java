@@ -12,7 +12,7 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class PropertiesAction extends MucoAction {
+public class PropertiesAction extends SelectedFilesAction {
 
     public PropertiesAction(MainFrame mainFrame) {
         super(mainFrame, "file_menu.properties", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.ALT_MASK));

@@ -197,7 +197,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.SetSameFolderAction.class, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
-        MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper).setSelected(mainFrame.getLastActiveTable().isAutoSizeColumnsEnabled());
 
         viewMenu.add(new JSeparator());
         // Menu item's text will be set later, when menu is selected

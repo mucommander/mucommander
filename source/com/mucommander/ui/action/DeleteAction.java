@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class DeleteAction extends MucoAction {
+public class DeleteAction extends SelectedFilesAction {
 
     public DeleteAction(MainFrame mainFrame) {
         super(mainFrame, "command_bar.delete", KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0), "command_bar.delete_tooltip");

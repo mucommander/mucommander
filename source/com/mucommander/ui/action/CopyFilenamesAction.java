@@ -14,7 +14,7 @@ import java.awt.*;
  *
  * @author Maxence Bernard
  */
-public class CopyFilenamesAction extends MucoAction {
+public class CopyFilenamesAction extends SelectedFilesAction {
 
     public CopyFilenamesAction(MainFrame mainFrame) {
         super(mainFrame, "file_menu.copy_filenames", KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK));

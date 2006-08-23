@@ -4,6 +4,7 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.MoveDialog;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.FileSet;
+import com.mucommander.file.AbstractFile;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -14,7 +15,7 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class RenameAction extends MucoAction {
+public class RenameAction extends SelectedFileAction {
 
     public RenameAction(MainFrame mainFrame) {
         super(mainFrame, "command_bar.rename", KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.SHIFT_MASK), "command_bar.rename_tooltip");
@@ -22,17 +23,13 @@ public class RenameAction extends MucoAction {
 
     public void performAction(MainFrame mainFrame) {
         FileTable activeTable = mainFrame.getLastActiveTable();
-        FileSet files = activeTable.getSelectedFiles();
+        AbstractFile file = activeTable.getSelectedFile(false);
 
-        // Display move dialog only if at least one file is selected/marked
-        if(files.size()>0) {
-            // Trigger in-table renaming if only one file is selected (not marked)
-            if(files.size()==1 && files.elementAt(0).equals(activeTable.getSelectedFile())) {
-                activeTable.editCurrentFilename();
-            }
-            // Show up move dialog
-            else
-                new MoveDialog(mainFrame, files, true);
-        }
+        // Return if no file other than parent folder '..' is selected
+        if(file==null)
+            return;
+
+        // Trigger in-table renaming
+        activeTable.editCurrentFilename();
     }
 }

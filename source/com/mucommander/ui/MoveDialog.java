@@ -15,43 +15,31 @@ import com.mucommander.text.Translator;
 public class MoveDialog extends DestinationDialog {
 
 	
-    public MoveDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
+    public MoveDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files);
 		
-        int nbFiles = files.size();
-        boolean rename = isShiftDown && nbFiles==1;
-
-        init(Translator.get(rename?"move_dialog.rename":"move_dialog.move"),
-             Translator.get(rename?"move_dialog.rename_description":"move_dialog.move_description"),
-             Translator.get(rename?"move_dialog.rename":"move_dialog.move"),
+        init(Translator.get("move_dialog.move"),
+             Translator.get("move_dialog.move_description"),
+             Translator.get("move_dialog.move"),
              Translator.get("move_dialog.error_title"));
         
         String fieldText;
-        if(isShiftDown && nbFiles==1) {
-            fieldText = ((AbstractFile)files.elementAt(0)).getName();
-            // If rename mode, select the filename without extension, only if filename part is not empty (unlike '.DS_Store' for example)
-            int extPos = fieldText.indexOf('.');
-            int len = fieldText.length();
-			
-            setTextField(fieldText, 0, extPos>0?extPos:len);
+        AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
+        fieldText = destFolder.getAbsolutePath(true);
+        // Append filename to destination path if there is only one file to move
+        // and if the file is not a directory that already exists in destination
+        // (otherwise folder would be moved inside the destination folder)
+        int nbFiles = files.size();
+        if(nbFiles==1) {
+            AbstractFile file = ((AbstractFile)files.elementAt(0));
+            AbstractFile testFile;
+            // TODO: find a way to remove this AbstractFile.getAbstractFile() which can lock the main thread if the file is on a remote filesystem
+            if(!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory()))
+                fieldText += file.getName();
         }
-        else {
-            AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
-            fieldText = destFolder.getAbsolutePath(true);
-            // Append filename to destination path if there is only one file to move
-            // and if the file is not a directory that already exists in destination
-            // (otherwise folder would be moved inside the destination folder)
-            if(nbFiles==1) {
-                AbstractFile file = ((AbstractFile)files.elementAt(0));
-                AbstractFile testFile;
-                // TODO: find a way to remove this AbstractFile.getAbstractFile() which can lock the main thread if the file is on a remote filesystem
-                if(!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory()))
-                    fieldText += file.getName();
-            }
-			
-            setTextField(fieldText);
-        }
- 
+
+        setTextField(fieldText);
+
         showDialog();
     }
 

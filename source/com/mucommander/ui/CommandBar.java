@@ -34,11 +34,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
     /** Buttons */
     private JButton buttons[];
     
-//    /** Right-click popup menu */
-//    private JPopupMenu popupMenu;
-//    /** Popup menu item that hides the toolbar */
-//    private JMenuItem hideMenuItem;
-
     ////////////////////
     // Button indexes //
     ////////////////////
@@ -56,24 +51,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
     ////////////////////////////////////
     // Buttons actions/images mapping //
     ////////////////////////////////////
-/*
-    private final static String COPY_ACTION = "com.mucommander.ui.action.CopyAction";
-    private final static String LOCAL_COPY_ACTION = "com.mucommander.ui.action.LocalCopyAction";
-
-    private final static String MOVE_ACTION = "com.mucommander.ui.action.MoveAction";
-    private final static String RENAME_ACTION = "com.mucommander.ui.action.RenameAction";
-
-    private final static String BUTTONS_DESC[][] =  {
-        {"com.mucommander.ui.action.ViewAction", "view.png"},
-        {"com.mucommander.ui.action.EditAction", "edit.png"},
-        {COPY_ACTION, "copy.png"},
-        {MOVE_ACTION, "move.png"},
-        {"com.mucommander.ui.action.MkdirAction", "mkdir.png"},
-        {"com.mucommander.ui.action.DeleteAction", "delete.png"},
-        {"com.mucommander.ui.action.RefreshAction", "refresh.png"},
-        {"com.mucommander.ui.action.CloseWindowAction", "close.png"}
-    };
-*/
 
     private final static Class COPY_ACTION = com.mucommander.ui.action.CopyAction.class;
     private final static Class LOCAL_COPY_ACTION = com.mucommander.ui.action.LocalCopyAction.class;
@@ -138,10 +115,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
     /**
      * Creates and adds a button to the command bar using the provided MucoAction's class.
      *
-//     * @param actionClassname Class name of a MucoAction
      * @param actionClass A MucoAction class
      */
-//    private JButton addButton(String actionClassname) {
     private JButton addButton(Class actionClass) {
         MucoAction action = ActionManager.getActionInstance(actionClass, mainFrame);
 
@@ -247,28 +222,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
 
         return true;
     }
-	
-/*
-    ////////////////////////////
-    // ActionListener methods //
-    ////////////////////////////
 
-    public void actionPerformed(ActionEvent e) {
-        // Discard action events while in 'no events mode'
-        if(mainFrame.getNoEventsMode())
-            return;
-
-        Object source = e.getSource();
-
-        // Hide command bar
-        if(source == hideMenuItem) {
-            mainFrame.setCommandBarVisible(false);
-            this.popupMenu.setVisible(false);
-            this.popupMenu = null;
-            this.hideMenuItem = null;
-        }        
-    }
-*/
 
     ///////////////////////////
     // MouseListener methods //
@@ -283,13 +237,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
         int modifiers = e.getModifiers();
         if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
-//            if(this.popupMenu==null) {
-//                popupMenu = new JPopupMenu();
-//                this.hideMenuItem = new JMenuItem(Translator.get("command_bar.hide_command_bar"));
-//                hideMenuItem.addActionListener(this);
-//                popupMenu.add(hideMenuItem);
-//            }
-
             JPopupMenu popupMenu = new JPopupMenu();
             popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleCommandBarAction.class, mainFrame));
             popupMenu.show(this, e.getX(), e.getY());

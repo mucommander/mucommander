@@ -12,7 +12,7 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class UnpackAction extends MucoAction {
+public class UnpackAction extends SelectedFilesAction {
 
     public UnpackAction(MainFrame mainFrame) {
         super(mainFrame, "file_menu.unpack", KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_MASK));

@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class CopyPathsAction extends MucoAction {
+public class CopyPathsAction extends SelectedFilesAction {
 
     public CopyPathsAction(MainFrame mainFrame) {
         super(mainFrame, "file_menu.copy_paths", KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.SHIFT_MASK|KeyEvent.CTRL_MASK));

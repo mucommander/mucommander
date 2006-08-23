@@ -793,9 +793,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
 
-    //////////////////////////////////////
-    // LocationListener-related methods //
-    //////////////////////////////////////
+    //////////////////////////////
+    // LocationListener methods //
+    //////////////////////////////
 
     /**
      * Registers a LocationListener to receive LocationEvents whenever the current folder

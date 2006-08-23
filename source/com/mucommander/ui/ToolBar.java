@@ -25,11 +25,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
     private MainFrame mainFrame;
 
-//    /** Right-click popup menu */
-//    private JPopupMenu popupMenu;
-//    /** Popup menu item that hides the toolbar */
-//    private JMenuItem hideToolbarMenuItem;
-	
     /** JButton instances */
     private JButton buttons[];
 	
@@ -212,24 +207,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         return true;
     }
 
-/*
-    ////////////////////////////
-    // ActionListener methods //
-    ////////////////////////////
 
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-
-        // Hide toolbar menu item
-        if(source == hideToolbarMenuItem) {
-            mainFrame.setToolbarVisible(false);
-            this.popupMenu.setVisible(false);
-            this.popupMenu = null;
-            this.hideToolbarMenuItem = null;
-        }
-    }
-*/
-	
     ///////////////////////////
     // MouseListener methods //
     ///////////////////////////
@@ -246,12 +224,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             int modifiers = e.getModifiers();
             if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {		
                 //			if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
-//                if(this.popupMenu==null) {
-//                    popupMenu = new JPopupMenu();
-//                    this.hideToolbarMenuItem = new JMenuItem(Translator.get("toolbar.hide_toolbar"));
-//                    hideToolbarMenuItem.addActionListener(this);
-//                    popupMenu.add(hideToolbarMenuItem);
-//                }
                 JPopupMenu popupMenu = new JPopupMenu();
                 popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleToolBarAction.class, mainFrame));
                 popupMenu.show(this, e.getX(), e.getY());

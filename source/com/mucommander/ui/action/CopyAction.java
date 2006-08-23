@@ -12,7 +12,7 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class CopyAction extends MucoAction {
+public class CopyAction extends SelectedFilesAction {
 
     public CopyAction(MainFrame mainFrame) {
         super(mainFrame, "command_bar.copy", KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "command_bar.copy_tooltip");

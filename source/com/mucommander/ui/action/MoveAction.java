@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class MoveAction extends MucoAction {
+public class MoveAction extends SelectedFilesAction {
 
     public MoveAction(MainFrame mainFrame) {
         super(mainFrame, "command_bar.move", KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0), "command_bar.move_tooltip");
@@ -24,6 +24,6 @@ public class MoveAction extends MucoAction {
 
         // Display move dialog only if at least one file is selected/marked
         if(files.size()>0)
-            new MoveDialog(mainFrame, files, false);
+            new MoveDialog(mainFrame, files);
     }
 }

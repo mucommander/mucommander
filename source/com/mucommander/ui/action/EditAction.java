@@ -3,6 +3,7 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.editor.EditorRegistrar;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.DirectoryFileFilter;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -12,10 +13,13 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class EditAction extends MucoAction {
+public class EditAction extends SelectedFileAction {
 
     public EditAction(MainFrame mainFrame) {
         super(mainFrame, "command_bar.edit", KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), "command_bar.edit_tooltip");
+
+        // Only enable this action if currently selected file is not a directory
+        setFileFilter(new DirectoryFileFilter());
     }
 
     public void performAction(MainFrame mainFrame) {

@@ -12,7 +12,7 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class EmailAction extends MucoAction {
+public class EmailAction extends SelectedFilesAction {
 
     public EmailAction(MainFrame mainFrame) {
         super(mainFrame, "file_menu.email", KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
