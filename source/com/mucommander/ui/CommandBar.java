@@ -7,6 +7,7 @@ import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.button.NonFocusableButton;
 import com.mucommander.ui.action.MucoAction;
 import com.mucommander.ui.action.ActionManager;
@@ -33,7 +34,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
 	
     /** Buttons */
     private JButton buttons[];
-    
+
     ////////////////////
     // Button indexes //
     ////////////////////
@@ -164,7 +165,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
 
         if(shiftDown!=on) {
             this.shiftDown = on;
-            boolean singleFileMode = on&&((FileTableModel)(mainFrame.getLastActiveTable().getModel())).getNbMarkedFiles()<=1;
+            FileTable fileTable = mainFrame.getLastActiveTable();
+            boolean singleFileMode = on&&((FileTableModel)(fileTable.getModel())).getNbMarkedFiles()<=1;
 
             // Change Copy/Local copy button's text and tooltip
             MucoAction action = ActionManager.getActionInstance(singleFileMode?LOCAL_COPY_ACTION:COPY_ACTION, mainFrame);
