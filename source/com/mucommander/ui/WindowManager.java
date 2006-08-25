@@ -102,7 +102,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      *               {@link #RIGHT_FRAME}).
      * @return       the user's initial path for the specified frame.
      */ 
-    private static final AbstractFile getInitialPath(String frame) {
+    private static AbstractFile getInitialPath(String frame) {
         boolean      isCustom;   // Whether the initial path is a custom one or the last used folder.
         String       folderPath; // Path to the initial folder.
         AbstractFile folder;     // Initial folder.
@@ -144,15 +144,13 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      *               {@link #RIGHT_FRAME}).
      * @return       our best shot at what was actually requested.
      */
-    private static final AbstractFile getInitialAbstractPath(String path, String frame) {
-        AbstractFile file;
-
+    private static AbstractFile getInitialAbstractPath(String path, String frame) {
         // This is one of those cases where a null value actually has a proper meaning.
         if(path == null)
             return getInitialPath(frame);
 
         // Tries the specified path as-is.
-        file = null;
+        AbstractFile file;
         while(true) {
             try {
                 file = AbstractFile.getAbstractFile(path, true);
@@ -523,6 +521,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     }
 
     public void windowClosing(WindowEvent e) {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("source="+e.getSource());
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("frameIndex="+mainFrames.indexOf(e.getSource())+" nbFrames="+mainFrames.size());
+
 /*
         Object source = e.getSource();
 
@@ -544,11 +545,18 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
         if(source instanceof MainFrame) {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("mainFrames="+mainFrames);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("source="+source);
+
             // Remove disposed MainFrame from the MainFrame list
             int frameIndex = mainFrames.indexOf(source);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("frameIndex="+frameIndex+" nbFrames="+mainFrames.size());
+
             mainFrames.remove(source);
-            
-            // Update following windows\ titles to reflect the MainFrame's disposal. 
+
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("nbFrames="+mainFrames.size());
+
+            // Update following windows titles to reflect the MainFrame's disposal.
             // Window titles show window number only if there is more than one window.
             // So if there is only one window left, we update first window's title so that it removes window number (#1).
             int nbFrames = mainFrames.size();
@@ -556,8 +564,10 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 ((MainFrame)mainFrames.elementAt(0)).updateWindowTitle();
             }
             else {
-                for(int i=frameIndex; i<nbFrames; i++)
-                    ((MainFrame)mainFrames.elementAt(i)).updateWindowTitle();
+                if(frameIndex!=-1) {
+                    for(int i=frameIndex; i<nbFrames; i++)
+                        ((MainFrame)mainFrames.elementAt(i)).updateWindowTitle();
+                }
             }
         }
 

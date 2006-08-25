@@ -30,25 +30,25 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 	
     /** Buttons descriptions: action classname, enabled icon, disabled icon (null for no disabled icon), separator ("true" or null for false)  */
     private final static Object BUTTONS_DESC[][] = {
-        {com.mucommander.ui.action.NewWindowAction.class, "new_window.png", null, Boolean.TRUE},
-        {com.mucommander.ui.action.GoBackAction.class, "back.png", "back_grayed.png", Boolean.FALSE},
-        {com.mucommander.ui.action.GoForwardAction.class, "forward.png", "forward_grayed.png", Boolean.TRUE},
-        {com.mucommander.ui.action.GoToParentAction.class, "parent.png", "parent_grayed.png", Boolean.TRUE},
-        {com.mucommander.ui.action.StopAction.class, "stop.png", "stop_grayed.png", Boolean.TRUE},
-        {com.mucommander.ui.action.AddBookmarkAction.class, "add_bookmark.png", null, Boolean.FALSE},
-        {com.mucommander.ui.action.EditBookmarksAction.class, "edit_bookmarks.png", null, Boolean.TRUE},
-        {com.mucommander.ui.action.MarkGroupAction.class, "mark.png", null, Boolean.FALSE},
-        {com.mucommander.ui.action.UnmarkGroupAction.class, "unmark.png", null, Boolean.TRUE},
-        {com.mucommander.ui.action.SwapFoldersAction.class, "swap_folders.png", null, Boolean.FALSE},
-        {com.mucommander.ui.action.SetSameFolderAction.class, "set_same_folder.png", null, Boolean.TRUE},
-        {com.mucommander.ui.action.PackAction.class, "pack.png", null, Boolean.FALSE},
-        {com.mucommander.ui.action.UnpackAction.class, "unpack.png", null, Boolean.TRUE},
-        {com.mucommander.ui.action.ConnectToServerAction.class, "server_connect.png", null, Boolean.FALSE},
-        {com.mucommander.ui.action.RunCommandAction.class, "run_command.png", null, Boolean.FALSE},
-        {com.mucommander.ui.action.EmailAction.class, "email.png", null, Boolean.TRUE},
-        {com.mucommander.ui.action.RevealInDesktopAction.class, "reveal_in_desktop.png", "reveal_in_desktop_grayed.png", Boolean.FALSE},
-        {com.mucommander.ui.action.PropertiesAction.class, "properties.png", null, Boolean.TRUE},
-        {com.mucommander.ui.action.PreferencesAction.class, "preferences.png", null, Boolean.FALSE}
+        {com.mucommander.ui.action.NewWindowAction.class, "new_window.png", Boolean.TRUE},
+        {com.mucommander.ui.action.GoBackAction.class, "back.png", Boolean.FALSE},
+        {com.mucommander.ui.action.GoForwardAction.class, "forward.png", Boolean.TRUE},
+        {com.mucommander.ui.action.GoToParentAction.class, "parent.png", Boolean.TRUE},
+        {com.mucommander.ui.action.StopAction.class, "stop.png", Boolean.TRUE},
+        {com.mucommander.ui.action.AddBookmarkAction.class, "add_bookmark.png", Boolean.FALSE},
+        {com.mucommander.ui.action.EditBookmarksAction.class, "edit_bookmarks.png", Boolean.TRUE},
+        {com.mucommander.ui.action.MarkGroupAction.class, "mark.png", Boolean.FALSE},
+        {com.mucommander.ui.action.UnmarkGroupAction.class, "unmark.png", Boolean.TRUE},
+        {com.mucommander.ui.action.SwapFoldersAction.class, "swap_folders.png", Boolean.FALSE},
+        {com.mucommander.ui.action.SetSameFolderAction.class, "set_same_folder.png", Boolean.TRUE},
+        {com.mucommander.ui.action.PackAction.class, "pack.png", Boolean.FALSE},
+        {com.mucommander.ui.action.UnpackAction.class, "unpack.png", Boolean.TRUE},
+        {com.mucommander.ui.action.ConnectToServerAction.class, "server_connect.png", Boolean.FALSE},
+        {com.mucommander.ui.action.RunCommandAction.class, "run_command.png", Boolean.FALSE},
+        {com.mucommander.ui.action.EmailAction.class, "email.png", Boolean.TRUE},
+        {com.mucommander.ui.action.RevealInDesktopAction.class, "reveal_in_desktop.png", Boolean.FALSE},
+        {com.mucommander.ui.action.PropertiesAction.class, "properties.png", Boolean.TRUE},
+        {com.mucommander.ui.action.PreferencesAction.class, "preferences.png", Boolean.FALSE}
     };
 
 	
@@ -68,9 +68,9 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             for(int i=0; i<nbIcons; i++) {
                 // Preload 'enabled' icon
                 IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)BUTTONS_DESC[i][1]);
-                // Preload 'disabled' icon if available
-                if(BUTTONS_DESC[i][2]!=null)
-                    IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)BUTTONS_DESC[i][2]);
+//                // Preload 'disabled' icon if available
+//                if(BUTTONS_DESC[i][2]!=null)
+//                    IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)BUTTONS_DESC[i][2]);
             }
         }
     }
@@ -96,7 +96,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
                 continue;
 			
             buttons[i] = addButton((Class)BUTTONS_DESC[i][0]);
-            if((BUTTONS_DESC[i][3]).equals(Boolean.TRUE))
+            if((BUTTONS_DESC[i][2]).equals(Boolean.TRUE))
                 addSeparator(separatorDimension);
         }
 
@@ -124,9 +124,9 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             Object buttonDesc[] = BUTTONS_DESC[i];
             // Set 'enabled' icon
             button.setIcon(IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)buttonDesc[1]));
-            // Set 'disabled' icon if available
-            if(buttonDesc[2]!=null)
-                button.setDisabledIcon(IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)buttonDesc[2]));
+//            // Set 'disabled' icon if available
+//            if(buttonDesc[2]!=null)
+//                button.setDisabledIcon(IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)buttonDesc[2]));
         }
     }
 	
@@ -144,9 +144,9 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
             // Remove 'enabled' icon
             button.setIcon(null);
-            // Remove 'disabled' icon if available
-            if(BUTTONS_DESC[i][2]!=null)
-                button.setDisabledIcon(null);
+//            // Remove 'disabled' icon if available
+//            if(BUTTONS_DESC[i][2]!=null)
+//                button.setDisabledIcon(null);
         }
     }	
 

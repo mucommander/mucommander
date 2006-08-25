@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 public class CloseWindowAction extends MucoAction {
 
     public CloseWindowAction(MainFrame mainFrame) {
-        super(mainFrame, "file_menu.close_window", KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0), "file_menu.close_window_tooltip");
+        super(mainFrame, "file_menu.close_window", KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
     }
 
     public void performAction(MainFrame mainFrame) {

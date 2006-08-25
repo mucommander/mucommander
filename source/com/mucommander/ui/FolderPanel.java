@@ -8,6 +8,7 @@ import com.mucommander.event.LocationEvent;
 import com.mucommander.event.LocationListener;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.HiddenFileFilter;
+import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
@@ -56,7 +57,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     /** Filters out hidden files, null when 'show hidden files' option is enabled */
     private static HiddenFileFilter hiddenFileFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_hidden_files", true)?null:new HiddenFileFilter();
-	
+
+    /** Filters out Mac OS X .DS_Store files, null when 'show DS_Store files' option is enabled */
+    private static DSStoreFileFilter dsStoreFilenameFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_ds_store_files", true)?null:new DSStoreFileFilter();
+
     private final static int CANCEL_ACTION = 0;
     private final static int BROWSE_ACTION = 1;
     private final static int DOWNLOAD_ACTION = 2;
@@ -89,7 +93,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         //		private boolean noWaitDialog;
         //		private QuestionDialog waitDialog;
 	
-        private Object lock = new Object();	
+        private final Object lock = new Object();
 
         //		private boolean hadFocus;
 	
@@ -144,7 +148,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             mainFrame.setNoEventsMode(true);
 
             // Register a cutom action for the ESCAPE key which stops current folder change
-            JRootPane rootPane = (JRootPane)mainFrame.getRootPane();
+            JRootPane rootPane = mainFrame.getRootPane();
             InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
             ActionMap actionMap = rootPane.getActionMap();
             AbstractAction killAction = new AbstractAction() {
@@ -161,7 +165,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             // Restore mouse/keybaord events and default cursor
             mainFrame.setNoEventsMode(false);
             // Remove 'escape' action
-            JRootPane rootPane = (JRootPane)mainFrame.getRootPane();
+            JRootPane rootPane = mainFrame.getRootPane();
             rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
             rootPane.getActionMap().remove("customEscapeAction");
         }
@@ -340,7 +344,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     locationField.setProgressValue(50);
 
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
-                    AbstractFile children[] = folder.ls(hiddenFileFilter);
+                    AbstractFile children[] = applyFilters(folder.ls());
+
+                    // Filter out Mac OS X .DS_Store files if the option is enabled
+                    if(dsStoreFilenameFilter!=null)
+                        children = dsStoreFilenameFilter.filter(children);
 
                     synchronized(lock) {
                         if(isKilled) {
@@ -485,14 +493,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 		
         try {
             // Set initial folder to current directory
-            setCurrentFolder(initialFolder, initialFolder.ls(hiddenFileFilter), null);
+            setCurrentFolder(initialFolder, applyFilters(initialFolder.ls()), null);
         }
         catch(Exception e) {
             AbstractFile rootFolders[] = RootFolders.getRootFolders();
             // If that failed, try to read any other drive
             for(int i=0; i<rootFolders.length; i++) {
                 try  {
-                    setCurrentFolder(rootFolders[i], rootFolders[i].ls(hiddenFileFilter), null);
+                    setCurrentFolder(rootFolders[i], applyFilters(rootFolders[i].ls()), null);
                     break;
                 }
                 catch(IOException e2) {
@@ -540,7 +548,19 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         ConfigurationManager.addConfigurationListener(this);
     }
 
-	
+
+    private AbstractFile[] applyFilters(AbstractFile[] files) {
+        // Filter out hidden files (if enabled)
+        if(hiddenFileFilter!=null)
+            files = hiddenFileFilter.filter(files);
+
+        // Filter out Mac OS X .DS_Store files (if enabled)
+        if(dsStoreFilenameFilter!=null)
+            files = dsStoreFilenameFilter.filter(files);
+
+        return files;
+    }
+
     public FileTable getFileTable() {
         return this.fileTable;
     }
@@ -732,7 +752,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @throws IOException if current folder could not be refreshed.
      */
     public synchronized void refreshCurrentFolder() throws IOException {
-        setCurrentFolder(currentFolder, currentFolder.ls(hiddenFileFilter), null);
+        setCurrentFolder(currentFolder, applyFilters(currentFolder.ls()), null);
     }
 
 
@@ -848,8 +868,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     ///////////////////////////
 	
     public void focusGained(FocusEvent e) {
-        Object source = e.getSource();
-        this.lastFocusedComponent = source;
+        this.lastFocusedComponent = e.getSource();
 		
         // Notify MainFrame that we are in control now! (our table/location field is active)
         mainFrame.setLastActiveTable(fileTable);
@@ -874,13 +893,20 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             scrollPane.getViewport().setBackground(backgroundColor=event.getColorValue());
             repaint();    		
         }
-        // Refresh to show or hide hidden files, depending on new preference
+        // Show or hide hidden files
         else if (var.equals("prefs.file_table.show_hidden_files")) {
             hiddenFileFilter = event.getBooleanValue()?null:new HiddenFileFilter();
             // Refresh current folder in a separate thread
             tryRefreshCurrentFolder();
         }
-		
-    	return true;
+        // Show or hide .DS_Store files
+        else if (var.equals("prefs.file_table.show_ds_store_files")) {
+            dsStoreFilenameFilter = event.getBooleanValue()?null:new DSStoreFileFilter();
+            // Refresh current folder in a separate thread
+            tryRefreshCurrentFolder();
+        }
+
+
+        return true;
     }
 }

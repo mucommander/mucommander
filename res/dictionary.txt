@@ -2607,6 +2607,14 @@ mkdir_dialog.dir_already_exists:RU:Каталог %1 уже существует
 mkdir_dialog.dir_already_exists:zh_TW:文件夹 %1 已存在.
 mkdir_dialog.dir_already_exists:SI:Mapa %1 že obstaja.
 
+#################
+# Mkfile dialog #
+#################
+
+
+
+
+
 
 ################
 # Progress bar #
@@ -4237,6 +4245,22 @@ prefs_dialog.show_hidden_files:RU:Показывать скрытые файлы
 prefs_dialog.show_hidden_files:ZH_CN:显示隐藏文件
 prefs_dialog.show_hidden_files:SI:Prikaži skrite datoteke
 
+prefs_dialog.show_ds_store_files:EN:Show .DS_Store files
+prefs_dialog.show_ds_store_files:FR:Afficher les fichiers .DS_Store
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 prefs_dialog.compact_file_size:EN:Round displayed file sizes
 prefs_dialog.compact_file_size:FR:Arrondir les tailles de fichiers affichées
 prefs_dialog.compact_file_size:DE:Dateigrößen gerundet anzeigen
@@ -4667,42 +4691,6 @@ prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
 
 
 
-####################
-# Table Popup menu #
-####################
-
-table_popup.open:EN:$[file_menu.open]
-
-table_popup.open_natively:EN:$[file_menu.open_natively]
-
-table_popup.reveal_in_desktop:EN:$[file_menu.reveal_in_desktop]
-
-table_popup.rename:EN:$[command_bar.rename]
-
-table_popup.copy_filenames:EN:$[file_menu.copy_filenames]
-
-table_popup.copy_paths:EN:$[file_menu.copy_paths]
-
-table_popup.mark_all:EN:$[mark_menu.mark_all]
-
-table_popup.unmark_all:EN:$[mark_menu.unmark_all]
-
-table_popup.properties:EN:$[file_menu.properties]
-
-#table_popup.view:EN:$[command_bar.view]
-
-#table_popup.edit:EN:$[command_bar.edit]
-
-#table_popup.copy:EN:$[command_bar.copy]
-
-#table_popup.move:EN:$[command_bar.move]
-
-#table_popup.delete:EN:$[command_bar.delete]
-
-#table_popup.mkdir:EN:$[command_bar.mkdir]
-
-#table_popup.refresh:EN:$[command_bar.refresh]
-
 
 #########
 # Units #
@@ -4795,8 +4783,9 @@ unit.tb:SI:TB
 
 ######################
 # Deprecated entries #
-# (not used anymore) #
 ######################
+
+# Entries that are not used anymore, kept here for the record in case they are reused later
 
 #server_connect_dialog.auth_error:EN:Invalid login or password.
 #server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
