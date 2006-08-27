@@ -344,8 +344,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
 /*
     public static synchronized void disposeMainFrame(MainFrame mainFrameToDispose) {
-        if(com.mucommander.Debug.ON) Debug.trace("");
-
         // Saves last folders
         ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
                                          mainFrameToDispose.getFolderPanel1().getFolderHistory().getLastRecallableFolder());
@@ -364,10 +362,11 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Disposes the MainFrame
         int frameIndex = mainFrames.indexOf(mainFrameToDispose);
+
         mainFrameToDispose.dispose();
         mainFrames.remove(mainFrameToDispose);
-        
-        // Update following window titles to reflect the MainFrame's disposal. 
+
+        // Update following window titles to reflect the MainFrame's disposal.
         // Window titles show window number only if there is more than one window.
         // So if there is only one window left, we update first window's title so that it removes window number (#1).
         int nbFrames = mainFrames.size();
@@ -379,8 +378,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 ((MainFrame)mainFrames.elementAt(i)).updateWindowTitle();
         }
     }
-*/    
-	
+*/
+
     /**
      * Disposes all opened windows, ending with the one that is currently active if there is one, 
      * or the last one which was activated.
@@ -521,18 +520,16 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     }
 
     public void windowClosing(WindowEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("source="+e.getSource());
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("frameIndex="+mainFrames.indexOf(e.getSource())+" nbFrames="+mainFrames.size());
+  //      Object source = e.getSource();
 
-/*
-        Object source = e.getSource();
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+//        // Return if event doesn't originate from a MainFrame (e.g. ViewerFrame or EditorFrame)
+//        if(!(source instanceof MainFrame))
+//            return;
 
-        // Return if event doesn't originate from a MainFrame (e.g. ViewerFrame or EditorFrame)
-        if(!(source instanceof MainFrame))
-            return;
-*/
+//        if(source instanceof MainFrame)
+//            disposeMainFrame((MainFrame)source);
     }
  
     
@@ -540,21 +537,15 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * windowClosed is synchronized so that it doesn't get called while quit() is executing.
      */
     public synchronized void windowClosed(WindowEvent e) {
-        Object source = e.getSource();
-
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
-        if(source instanceof MainFrame) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("mainFrames="+mainFrames);
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("source="+source);
+        Object source = e.getSource();
 
+        if(source instanceof MainFrame) {
             // Remove disposed MainFrame from the MainFrame list
             int frameIndex = mainFrames.indexOf(source);
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("frameIndex="+frameIndex+" nbFrames="+mainFrames.size());
 
             mainFrames.remove(source);
-
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("nbFrames="+mainFrames.size());
 
             // Update following windows titles to reflect the MainFrame's disposal.
             // Window titles show window number only if there is more than one window.

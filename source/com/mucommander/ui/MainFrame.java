@@ -6,14 +6,10 @@ import com.mucommander.event.LocationEvent;
 import com.mucommander.event.LocationListener;
 import com.mucommander.event.TableChangeListener;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileSet;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
-import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.pref.PreferencesDialog;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.action.ActionManager;
 
 import javax.swing.*;

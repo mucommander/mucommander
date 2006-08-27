@@ -5,6 +5,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.WindowManager;
+import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.table.FileTable;
 
 import javax.swing.*;
@@ -46,8 +47,7 @@ public class StressTester implements Runnable, ActionListener {
                 // 1 in 3 chance to go up if folder has children
                 if(children.length==0 || (random.nextInt(3)==0 && parentFolder!=null)) {
                     fileTable.selectRow(0);
-                    fileTable.enterAction(false);
-                    //					folderPanel.trySetCurrentFolder(parentFolder, true);
+                    ActionManager.performAction(com.mucommander.ui.action.OpenAction.class, mainFrame);
                 }
                 else {
                     AbstractFile randomChild = children[random.nextInt(children.length)];
@@ -57,7 +57,7 @@ public class StressTester implements Runnable, ActionListener {
                     // so that no error dialog pops up when calling trySetCurrentFolder()
                     randomChild.ls();
                     fileTable.selectFile(randomChild);
-                    fileTable.enterAction(false);
+                    ActionManager.performAction(com.mucommander.ui.action.OpenAction.class, mainFrame);
                     //					folderPanel.trySetCurrentFolder(randomChild, true);
                 }
             }
@@ -65,7 +65,7 @@ public class StressTester implements Runnable, ActionListener {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught Exception: "+e);
             }
 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Sleeping for a bit...");		
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Sleeping for a bit...");
             try { stressThread.sleep(100+random.nextInt(3000)); }
             catch(InterruptedException e) { if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught InterruptedException "+e);}
         }

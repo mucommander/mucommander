@@ -93,6 +93,8 @@ public abstract class MucoAction extends AbstractAction {
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("this="+this+" mainFrame="+mainFrame, -1);
+
         // Discard this event while in 'no events mode'
         if(!mainFrame.getNoEventsMode())
             performAction(mainFrame);
