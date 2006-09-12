@@ -56,7 +56,7 @@ public class FileURL implements Cloneable {
             pos += 3;
 			
             // Parse login and password if they have been specified in the URL
-            int atPos = url.lastIndexOf('@');		// we use last index because URL's password (if any) may contain @ characters
+            int atPos = url.indexOf('@');		// passwords containing an @ character will not work, but they're not normally allowed in URLs
             //com.mucommander.Debug.trace("url="+url+" pos="+pos+" atPos="+atPos);			
             int colonPos;
             int separatorPos = url.indexOf('/', pos);
@@ -213,7 +213,7 @@ public class FileURL implements Cloneable {
             throw e;
         }
         catch(Exception e2) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unexcepted exception in FileURL() with "+url+" : "+e2);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unexpected exception in FileURL() with "+url+" : "+e2);
             throw new MalformedURLException();
         }
     }

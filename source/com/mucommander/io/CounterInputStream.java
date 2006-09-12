@@ -27,7 +27,7 @@ public class CounterInputStream extends InputStream {
     /**
      * Creates a new CounterInputStream using the specified InputStream. A new {@link ByteCounter} will be created.
      *
-     * @param InputStream the underlying InputStream the data will be read from
+     * @param in the underlying InputStream the data will be read from
      */
     public CounterInputStream(InputStream in) {
         this.in = in;
@@ -38,7 +38,7 @@ public class CounterInputStream extends InputStream {
      * Creates a new CounterInputStream using the specified InputStream and {@link ByteCounter}.
      * The provided <code>ByteCounter</code> will NOT be reset, whatever value it contains will be kept.
      *
-     * @param InputStream the underlying InputStream the data will be read from
+     * @param in the underlying InputStream the data will be read from
      */
     public CounterInputStream(InputStream in, ByteCounter counter) {
         this.in = in;

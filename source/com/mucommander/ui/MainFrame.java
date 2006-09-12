@@ -2,9 +2,9 @@ package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.event.LocationEvent;
-import com.mucommander.event.LocationListener;
-import com.mucommander.event.TableChangeListener;
+import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
+import com.mucommander.ui.event.TableChangeListener;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
@@ -104,8 +104,8 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 //        folderPanel1.addLocationListener(toolbar);
 //        folderPanel2.addLocationListener(toolbar);
 
-        folderPanel1.addLocationListener(this);
-        folderPanel2.addLocationListener(this);
+        folderPanel1.getLocationManager().addLocationListener(this);
+        folderPanel2.getLocationManager().addLocationListener(this);
 
         // Create menu bar (has to be created after toolbar)
         MainMenuBar menuBar = new MainMenuBar(this);

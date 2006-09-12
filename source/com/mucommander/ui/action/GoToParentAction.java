@@ -2,9 +2,9 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.FolderPanel;
-import com.mucommander.event.LocationEvent;
-import com.mucommander.event.TableChangeListener;
-import com.mucommander.event.LocationListener;
+import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.TableChangeListener;
+import com.mucommander.ui.event.LocationListener;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -23,8 +23,8 @@ public class GoToParentAction extends MucoAction implements TableChangeListener,
         mainFrame.addTableChangeListener(this);
 
         // Listen to location change events
-        mainFrame.getFolderPanel1().addLocationListener(this);
-        mainFrame.getFolderPanel2().addLocationListener(this);
+        mainFrame.getFolderPanel1().getLocationManager().addLocationListener(this);
+        mainFrame.getFolderPanel2().getLocationManager().addLocationListener(this);
 
         toggleEnabledState();
     }

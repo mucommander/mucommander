@@ -285,6 +285,14 @@ public abstract class ExtendedFileJob extends FileJob {
 
 
     /**
+     * .
+     */
+    public long getTotalBytesProcessed() {
+        return getCurrentFileBytesProcessed() + nbBytesProcessed;
+    }
+
+
+    /**
      * Overrides this method to returns a more accurate percent value of the job processed so far, taking
      * into account current file's percent.
      */

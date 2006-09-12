@@ -4,8 +4,7 @@ package com.mucommander.ui;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.event.LocationEvent;
-import com.mucommander.event.LocationListener;
+import com.mucommander.ui.event.LocationManager;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.HiddenFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
@@ -22,8 +21,6 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.WeakHashMap;
 
 /**
  * 
@@ -37,10 +34,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private AbstractFile currentFolder;
     private ChangeFolderThread changeFolderThread;
 
-    /** Contains all registered location listeners, stored as weak references */
-    private WeakHashMap locationListeners = new WeakHashMap();
-	
-    /*  We're NOT using JComboBox anymore because of its strange behavior: 
+    private LocationManager locationManager = new LocationManager(this);
+
+    /*  We're NOT using JComboBox anymore because of its strange behavior:
         it calls actionPerformed() each time an item is highlighted with the arrow (UP/DOWN) keys,
         so there is no way to tell if it's the final selection (ENTER) or not.
     */
@@ -176,7 +172,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             boolean folderChangedSuccessfully = false;
 
             // Notify listeners that location is changing
-            fireLocationChanging();
+            locationManager.fireLocationChanging();
 
             // Set new folder's path in location field
             locationField.setText(folder==null?folderPath==null?folderURL.getStringRep(false):folderPath:folder.getAbsolutePath());
@@ -436,7 +432,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                 locationField.setText(currentFolder.getAbsolutePath());
 
                 // Notifies listeners that location change has been cancelled
-                fireLocationCancelled();
+                locationManager.fireLocationCancelled();
             }
 
             // /!\ Focus should be restored after disableNoEventsMode has been called
@@ -572,7 +568,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     public FolderHistory getFolderHistory() {
         return this.folderHistory;
     }
-    
+
+    public LocationManager getLocationManager() {
+        return locationManager;
+    }
 
     /**
      * Causes the DriveButton to popup and show root folder, bookmarks, server shortcuts...
@@ -779,7 +778,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         folderHistory.addToHistory(folder);
 
         // Notify listeners that location has changed
-        fireLocationChanged();
+        locationManager.fireLocationChanged();
     }
 
 
@@ -812,55 +811,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             ((JComponent)lastFocusedComponent).requestFocus();
     }
 
-
-    //////////////////////////////
-    // LocationListener methods //
-    //////////////////////////////
-
-    /**
-     * Registers a LocationListener to receive LocationEvents whenever the current folder
-     * of this FolderPanel has or is being changed. 
-     *
-     * <p>Listeners are stored as weak references so {@link #removeLocationListener(LocationListener) removeLocationListener()}
-     * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
-     */
-    public synchronized void addLocationListener(LocationListener listener) {
-        locationListeners.put(listener, null);
-    }
-
-    /**
-     * Unsubscribes the LocationListener as to not receive LocationEvents anymore. 
-     */
-    public synchronized void removeLocationListener(LocationListener listener) {
-        locationListeners.remove(listener);
-    }
-
-    /**
-     * Notifies all registered listeners that current folder is being changed on this FolderPanel.
-     */
-    private synchronized void fireLocationChanging() {        
-        Iterator iterator = locationListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationChanging(new LocationEvent(this));
-    }
-
-    /**
-     * Notifies all registered listeners that current folder has changed on this FolderPanel.
-     */
-    private void fireLocationChanged() {
-        Iterator iterator = locationListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationChanged(new LocationEvent(this));
-    }
-
-    /**
-     * Notifies all registered listeners that folder change has been cancelled.
-     */
-    private void fireLocationCancelled() {
-        Iterator iterator = locationListeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationCancelled(new LocationEvent(this));
-    }
 
 
     ///////////////////////////

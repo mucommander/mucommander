@@ -2,9 +2,9 @@ package com.mucommander.ui;
 
 import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.event.LocationEvent;
-import com.mucommander.event.LocationListener;
-import com.mucommander.event.TableChangeListener;
+import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
+import com.mucommander.ui.event.TableChangeListener;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 import com.mucommander.text.SizeFormatter;
@@ -93,8 +93,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, TableC
         setVisible(ConfigurationManager.getVariableBoolean("prefs.status_bar.visible", true));
         
         // Catch location events to update status bar info when folder is changed
-        mainFrame.getFolderPanel1().addLocationListener(this);
-        mainFrame.getFolderPanel2().addLocationListener(this);
+        mainFrame.getFolderPanel1().getLocationManager().addLocationListener(this);
+        mainFrame.getFolderPanel2().getLocationManager().addLocationListener(this);
 		
         // Catch table change events to update status bar info when current table has changed
         mainFrame.addTableChangeListener(this);

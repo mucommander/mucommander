@@ -5,8 +5,8 @@ import com.mucommander.PlatformManager;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.event.LocationEvent;
-import com.mucommander.event.LocationListener;
+import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.RootFolders;
@@ -59,7 +59,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
         this.folderPanel = folderPanel;
 		
         // Listen to location events to update drive button when folder changes
-        folderPanel.addLocationListener(this);
+        folderPanel.getLocationManager().addLocationListener(this);
 
         // Listen to bookmark changes to update drive button if a bookmark corresponding
         // to the current folder has been added/edited/removed

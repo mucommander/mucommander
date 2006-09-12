@@ -2,8 +2,8 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.event.TableSelectionListener;
-import com.mucommander.event.TableChangeListener;
+import com.mucommander.ui.event.TableSelectionListener;
+import com.mucommander.ui.event.TableChangeListener;
 import com.mucommander.file.AbstractFile;
 
 import javax.swing.*;

@@ -204,12 +204,13 @@ public class CopyJob extends ExtendedFileJob {
         // Copy file
         else  {
             boolean append = false;
-			
+            boolean overwrite = false;
+            int choice;
+
             // Tests if the file already exists in destination
             // and if it does, ask the user what to do or
             // use a previous user global answer.
             if (destFile.exists())  {
-                int choice;
                 // No default choice
                 if(defaultFileExistsAction==FileExistsDialog.ASK_ACTION) {
                     FileExistsDialog dialog = getFileExistsDialog(file, destFile, true);
@@ -239,13 +240,23 @@ public class CopyJob extends ExtendedFileJob {
                 // Overwrite file 
                 else if (choice==FileExistsDialog.OVERWRITE_ACTION) {
                     // Do nothing, simply continue
+                    overwrite = true;
                 }
                 //  Overwrite file if destination is older
                 else if (choice==FileExistsDialog.OVERWRITE_IF_OLDER_ACTION) {
                     // Overwrite if file is newer (stricly)
                     if(file.getDate()<=destFile.getDate())
                         return true;
+                    overwrite = true;
                 }
+            }
+
+            // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
+            // file is renamed to <filename>.1
+            // TODO: fix this in the commons-net library
+            if(overwrite=true && destFile.getURL().getProtocol().equals("ftp")) {
+                try { destFile.delete(); }
+                catch(IOException e) {};
             }
 
             // Copy the file
