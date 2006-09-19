@@ -75,14 +75,17 @@ public class FileURL implements Cloneable {
             // Parse host and port (if specified)
             colonPos = url.indexOf(':', pos);
             //com.mucommander.Debug.trace("pos="+pos+" colonPos="+colonPos+" atPos="+atPos);			
-            int questionPos = url.indexOf('?', pos);
+            // The question mark character (if any) marks the beginning of the query part, only for the http/https protocol.
+            // No other supported protocols have a use for the query part, and some protocols such as 'file' allow the '?'
+            // character in filenames which thus would be ambiguous.
+            int questionMarkPos = "http".equals(protocol)||"https".equals(protocol)?url.indexOf('?', pos):-1;
             separatorPos = url.indexOf('/', pos);
             int hostEndPos;
             // Separator is necessarily before question mark
             if(separatorPos!=-1)
                 hostEndPos = separatorPos;
-            else if(questionPos!=-1)
-                hostEndPos = questionPos;
+            else if(questionMarkPos !=-1)
+                hostEndPos = questionMarkPos;
             else
                 hostEndPos = urlLen;
 
@@ -102,8 +105,8 @@ public class FileURL implements Cloneable {
 				
             // Parse path part excluding query part
             pos = hostEndPos;
-//            path = url.substring(pos, questionPos==-1?urlLen:questionPos).trim();
-            path = url.substring(pos, questionPos==-1?urlLen:questionPos);
+//            path = url.substring(pos, questionMarkPos==-1?urlLen:questionMarkPos).trim();
+            path = url.substring(pos, questionMarkPos ==-1?urlLen:questionMarkPos);
             // Empty path means '/'
             if(path.equals(""))
                 path = "/";
@@ -173,9 +176,9 @@ public class FileURL implements Cloneable {
             }
 			
             // Parse query part (if any)
-            if(questionPos!=-1)
-                query = url.substring(questionPos, urlLen);
-//                query = url.substring(questionPos, urlLen).trim();
+            if(questionMarkPos !=-1)
+                query = url.substring(questionMarkPos, urlLen);
+//                query = url.substring(questionMarkPos, urlLen).trim();
 		
             // Extract filename and parent from path
             if(path.equals("") || path.equals("/")) {
@@ -186,8 +189,7 @@ public class FileURL implements Cloneable {
                 String pathCopy = new String(path).replace('\\', '/');
                 // Extract filename from path
                 int len = pathCopy.length();
-                char c;
-                while((c=pathCopy.charAt(len-1))=='/')
+                while(pathCopy.charAt(len-1)=='/')
                     --len;
 				 
                 filename = pathCopy.substring(0, len);
@@ -290,7 +292,6 @@ public class FileURL implements Cloneable {
             this.login = null;
         else {
 //            login = login.trim();
-            login = login;
             if(login.equals(""))
                 this.login = null;
             else
@@ -315,7 +316,6 @@ public class FileURL implements Cloneable {
             this.password = null;
         else {
 //            password = password.trim();
-            password = password;
             if(password.equals(""))
                 this.password = null;
             else
@@ -585,7 +585,7 @@ public class FileURL implements Cloneable {
                 else
                     System.out.println();
 				
-                if(f.getProtocol().equalsIgnoreCase("file"))
+                if(f.getProtocol().equals("file"))
                     System.out.println(" FSFile's path="+AbstractFile.getAbstractFile(f.getPath(), true).getAbsolutePath());
             }
             catch(java.io.IOException e) {

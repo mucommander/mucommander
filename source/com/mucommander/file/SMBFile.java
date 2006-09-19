@@ -1,6 +1,7 @@
 package com.mucommander.file;
 
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.FileTransferException;
 import jcifs.smb.*;
 
 import java.io.IOException;
@@ -318,7 +319,7 @@ public class SMBFile extends AbstractFile {
     }
 
 
-    public void copyTo(AbstractFile destFile) throws IOException {
+    public void copyTo(AbstractFile destFile) throws FileTransferException {
         // File can only be copied by SMB if the destination is on an SMB share (but not necessarily on the same host)
         if(!destFile.fileURL.getProtocol().equals("smb")) {
             super.copyTo(destFile);
@@ -340,8 +341,13 @@ public class SMBFile extends AbstractFile {
         // Reuse the destination SmbFile instance
         SmbFile destSmbFile = ((SMBFile)destFile).file;
 
-        // Copy the SMB file
-        file.copyTo(destSmbFile);
+        try {
+            // Copy the SMB file
+            file.copyTo(destSmbFile);
+        }
+        catch(SmbException e) {
+            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that the copy failed
+        }
     }
 
 
@@ -349,7 +355,7 @@ public class SMBFile extends AbstractFile {
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
      * uses SMB.
      */
-    public void moveTo(AbstractFile destFile) throws IOException  {
+    public void moveTo(AbstractFile destFile) throws FileTransferException  {
         // File can only be moved directly if the destination if it is on an SMB share
         // (but not necessarily on the same host).
         // Use the default moveTo() implementation if the destination file doesn't use the same protocol (webdav/webdavs)
@@ -372,7 +378,12 @@ public class SMBFile extends AbstractFile {
         }
 
         // Move file
-        file.renameTo(((SMBFile)destFile).file);
+        try {
+            file.renameTo(((SMBFile)destFile).file);
+        }
+        catch(SmbException e) {
+            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
+        }
     }
 
 

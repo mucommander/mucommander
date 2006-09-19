@@ -3,6 +3,7 @@ package com.mucommander.file;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.FileTransferException;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
@@ -446,7 +447,7 @@ public class FSFile extends AbstractFile {
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to move/rename the file directly if the destination file
      * is also a local file.
      */
-    public void moveTo(AbstractFile destFile) throws IOException  {
+    public void moveTo(AbstractFile destFile) throws FileTransferException  {
         if(!destFile.fileURL.getProtocol().equals("file")) {
             super.moveTo(destFile);
             return;
@@ -466,7 +467,7 @@ public class FSFile extends AbstractFile {
 
         // Move file
         if(!file.renameTo(((FSFile)destFile).file))
-            throw new IOException();    // Report that move failed
+            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
     }
 
 

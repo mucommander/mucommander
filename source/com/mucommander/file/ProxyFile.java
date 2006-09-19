@@ -3,6 +3,7 @@ package com.mucommander.file;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.FileTransferException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -200,11 +201,11 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getInputStream(skipBytes);
     }
 
-    public void copyStream(InputStream in, boolean append) throws IOException {
+    public void copyStream(InputStream in, boolean append) throws FileTransferException {
         file.copyStream(in, append);
     }
 
-    public void copyTo(AbstractFile destFile) throws IOException {
+    public void copyTo(AbstractFile destFile) throws FileTransferException {
         file.copyTo(destFile);
     }
 
@@ -212,7 +213,7 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getCopyToHint(destFile);
     }
 
-    public void moveTo(AbstractFile destFile) throws IOException {
+    public void moveTo(AbstractFile destFile) throws FileTransferException {
         file.moveTo(destFile);
     }
 

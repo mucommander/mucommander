@@ -1,9 +1,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.MoveDialog;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.file.FileSet;
 import com.mucommander.file.AbstractFile;
 
 import javax.swing.*;

@@ -2,6 +2,7 @@
 package com.mucommander.file;
 
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.FileTransferException;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
@@ -481,7 +482,7 @@ public class FTPFile extends AbstractFile {
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
      * uses FTP and is located on the same host.
      */
-    public void moveTo(AbstractFile destFile) throws IOException {
+    public void moveTo(AbstractFile destFile) throws FileTransferException {
         // If destination file is an FTP file located on the same server, tells the server to rename the file.
 
         // Use the default moveTo() implementation if the destination file doesn't use FTP
@@ -503,11 +504,16 @@ public class FTPFile extends AbstractFile {
             return;
         }
 
-        // Check connection and reconnect if connection timed out
-        checkConnection();
+        try {
+            // Check connection and reconnect if connection timed out
+            checkConnection();
 
-        if(!ftpClient.rename(absPath, destFile.getURL().getPath()))
-            throw new IOException();    // Report that move failed
+            if(!ftpClient.rename(absPath, destFile.getURL().getPath()))
+                throw new IOException();
+        }
+        catch(IOException e) {
+            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
+        }
     }
 
 

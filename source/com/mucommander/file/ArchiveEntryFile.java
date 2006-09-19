@@ -3,6 +3,7 @@ package com.mucommander.file;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.FileTransferException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -139,9 +140,9 @@ public class ArchiveEntryFile extends AbstractFile {
         return archiveFile.getSeparator();
     }
 
-    public void moveTo(AbstractFile dest) throws IOException  {
+    public void moveTo(AbstractFile dest) throws FileTransferException {
         // Archive entries are read-only
-        throw new IOException();
+        throw new FileTransferException(FileTransferException.UNKNOWN_REASON);
     }
 
     public int getMoveToHint(AbstractFile destFile) {

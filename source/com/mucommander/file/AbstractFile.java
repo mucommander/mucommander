@@ -4,6 +4,7 @@ import com.mucommander.cache.LRUCache;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.FileTransferException;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -221,7 +222,7 @@ public abstract class AbstractFile {
 //        else if (protocol.equals("webdav") || protocol.equals("webdavs"))
 //            file = new WebDAVFile(fileURL);
         else
-            throw new IOException("Unkown protocol "+protocol);
+            throw new IOException("Unknown protocol "+protocol);
 
         if(parent!=null)
             file.setParent(parent);
@@ -253,6 +254,8 @@ public abstract class AbstractFile {
                 return new Bzip2ArchiveFile(file);
             else if(ext.equals("iso") || ext.equals("nrg"))
                 return new IsoArchiveFile(file);
+            else if(ext.equals("ar") || ext.equals("deb"))
+                return new ArArchiveFile(file);
         }
 
         return file;		
@@ -508,16 +511,36 @@ public abstract class AbstractFile {
      *
      * @param in the InputStream to read from
      * @param out the OutputStream to write to
-     * @throws IOException if something went wrong while reading from or writing to one of the provided streams
+     * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
      */
-    public static void copyStream(InputStream in, OutputStream out) throws IOException {
+    public static void copyStream(InputStream in, OutputStream out) throws FileTransferException {
         // Init read buffer
         byte buffer[] = new byte[READ_BUFFER_SIZE];
 
         // Copies the InputStream's content to the OutputStream chunks by chunks
-        int read;
-        while ((read=in.read(buffer, 0, buffer.length))!=-1)
-            out.write(buffer, 0, read);
+        int nbRead;
+
+//        while ((nbRead=in.read(buffer, 0, buffer.length))!=-1)
+//            out.write(buffer, 0, nbRead);
+
+        while(true) {
+            try {
+                nbRead = in.read(buffer, 0, buffer.length);
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.READING_SOURCE);
+            }
+
+            if(nbRead==-1)
+                break;
+
+            try {
+                out.write(buffer, 0, nbRead);
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+            }
+        }
     }
 
 
@@ -535,19 +558,30 @@ public abstract class AbstractFile {
      *
      * @param in the InputStream to read from
      * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any existing data will be overwritten.
-     * @throws IOException if something went wrong while reading from the InputStream or writing to this file
+     * @throws FileTransferException if something went wrong while reading from the InputStream or writing to this file
      */
-    public void copyStream(InputStream in, boolean append) throws IOException {
-        // Create a BufferedOutputStream to speed up the output
-        OutputStream out = new BufferedOutputStream(getOutputStream(append), WRITE_BUFFER_SIZE); 
+    public void copyStream(InputStream in, boolean append) throws FileTransferException {
+        OutputStream out;
+
+        try {
+            // Create a BufferedOutputStream to speed up the output
+            out = new BufferedOutputStream(getOutputStream(append), WRITE_BUFFER_SIZE);
+        }
+        catch(IOException e) {
+            throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
+        }
 
         try {
             copyStream(in, out);
         }
         finally {
             // Close stream even if copyStream() threw an IOException
-            if(out!=null)
+            try {
                 out.close();
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.CLOSING_DESTINATION);
+            }
         }
     }
     
@@ -560,19 +594,30 @@ public abstract class AbstractFile {
      * a server-to-server copy.
      *
      * @param destFile the destination file this file should be copied to
-     * @throws IOException if this AbstractFile could be read, or the destination could be written, or if 
+     * @throws FileTransferException if this AbstractFile could be read, or the destination could be written, or if
      * the operation failed for any other reason.
      */
-    public void copyTo(AbstractFile destFile) throws IOException {
-        InputStream in = getInputStream();
+    public void copyTo(AbstractFile destFile) throws FileTransferException {
+        InputStream in;
+
+        try {
+            in = getInputStream();
+        }
+        catch(IOException e) {
+            throw new FileTransferException(FileTransferException.OPENING_SOURCE);
+        }
 
         try {
             destFile.copyStream(in, false);
         }
         finally {
             // Close stream even if copyStream() threw an IOException
-            if(in!=null)
+            try {
                 in.close();
+            }
+            catch(IOException e) {
+                throw new FileTransferException(FileTransferException.CLOSING_SOURCE);
+            }
         }
     }
 
@@ -610,18 +655,18 @@ public abstract class AbstractFile {
      * <p>This method should be overridden by file protocols which are able to perform a server-to-server move.
      *
      * @param destFile the destination file this file should be moved to
-     * @throws IOException if this AbstractFile or destination cannot be written or if the operation failed
+     * @throws FileTransferException if this AbstractFile or destination cannot be written or if the operation failed
      *  for any other reason.
      */
-    public void moveTo(AbstractFile destFile) throws IOException {
+    public void moveTo(AbstractFile destFile) throws FileTransferException {
+        copyTo(destFile);
+
+        // The file won't be deleted if copyTo() failed (threw an IOException)
         try {
-            copyTo(destFile);
-            // The file won't be deleted if copyTo() failed (threw an IOException);
             delete();
         }
         catch(IOException e) {
-            // Rethrow exception
-            throw e;
+            throw new FileTransferException(FileTransferException.DELETING_SOURCE);
         }
     }
 

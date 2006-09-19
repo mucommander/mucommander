@@ -13,6 +13,9 @@ import java.io.InputStream;
  * <code>ByteCounter</code> instead of creating a new one. The ByteCounter will always remain accessible, even
  * after this stream has been closed.
  *
+ * <p>Implementation note: java.io.FilterInputStream could have been extended in order to reduce the amount of code,
+ * but it would have had an impact on performance.
+ *
  * @see ByteCounter
  * @author Maxence Bernard
  */
@@ -23,7 +26,7 @@ public class CounterInputStream extends InputStream {
     /** Counter */
     private ByteCounter counter;
 
-    
+
     /**
      * Creates a new CounterInputStream using the specified InputStream. A new {@link ByteCounter} will be created.
      *
@@ -55,35 +58,39 @@ public class CounterInputStream extends InputStream {
     ////////////////////////////////
 
     public int read() throws IOException {
-        int nbRead = in.read();
-        counter.add(nbRead);
-        
+        int i = in.read();
+        if(i>0)
+            counter.add(1);
+
+        return i;
+    }
+
+
+    public int read(byte b[]) throws IOException {
+        int nbRead = in.read(b);
+        if(nbRead>0)
+            counter.add(nbRead);
+
         return nbRead;
     }
 
-    
-    public int read(byte b[]) throws IOException {
-        int nbRead = in.read(b);
-        counter.add(nbRead);
-                
-        return nbRead;
-    }
-    
     public int read(byte b[], int off, int len) throws IOException {
         int nbRead = in.read(b, off, len);
-        counter.add(nbRead);
-        
+        if(nbRead>0)
+            counter.add(nbRead);
+
         return nbRead;
     }
-    
+
     public long skip(long n) throws IOException {
         long nbSkipped = in.skip(n);
-        counter.add(nbSkipped);
-        
+        if(nbSkipped>0)
+            counter.add(nbSkipped);
+
         return nbSkipped;
     }
 
-    
+
     public int available() throws IOException {
         return in.available();
     }
@@ -97,8 +104,8 @@ public class CounterInputStream extends InputStream {
     public void mark(int readLimit) {
         in.mark(readLimit);
     }
-    
-    
+
+
     public boolean markSupported() {
         return in.markSupported();
     }
