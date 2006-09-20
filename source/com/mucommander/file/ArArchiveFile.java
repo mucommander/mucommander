@@ -11,6 +11,9 @@ import java.io.InputStream;
  */
 public class ArArchiveFile extends AbstractArchiveFile {
 
+    private byte gnuExtendedNames[];
+
+
     /**
      * Creates a ArArchiveFile around the given file.
      */
@@ -23,7 +26,6 @@ public class ArArchiveFile extends AbstractArchiveFile {
      * Skips the global header: "!<arch>" string followed by LF char (8 characters in total).
      */
     private static void skipGlobalHeader(InputStream in) throws IOException {
-
         skipFully(in, 8);
     }
 
@@ -31,7 +33,7 @@ public class ArArchiveFile extends AbstractArchiveFile {
     /**
      * Reads the next file header and returns an ArchiveEntry representing the entry.
      */
-    private static ArchiveEntry getNextEntry(InputStream in) throws IOException {
+    private ArchiveEntry getNextEntry(InputStream in) throws IOException {
         byte fileHeader[] = new byte[60];
 
         try {
@@ -44,17 +46,22 @@ public class ArArchiveFile extends AbstractArchiveFile {
         }
 
         try {
-            // Read the 16 filename characters and trim string to remove any trailing space characters
+            // Read the 16 filename characters and trim string to remove any trailing white space
             String name = new String(fileHeader, 0, 16).trim();
 
-            // Read the 16 file date characters, trim string to remove any trailing space characters
-            long date = Long.parseLong(new String(fileHeader, 16, 12).trim()) * 1000;
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("name= "+name);
+
+            // Read the 12 file date characters, trim string to remove any trailing white space
+            // and parse date as a long
+            long date = name.equals("//")?0:Long.parseLong(new String(fileHeader, 16, 12).trim()) * 1000;
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("date= "+date);
 
             // No use for file's Owner ID, Group ID and mode at the moment, skip them
 
-            // Read the 10 file size characters, trim string to remove any trailing space characters
+            // Read the 10 file size characters, trim string to remove any trailing white space
             // and parse size as a long
             long size = Long.parseLong(new String(fileHeader, 48, 10).trim());
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("size= "+size);
 
             // BSD variant : BSD ar store extended filenames by placing the string "#1/" followed by the file name length
             // in the file name field, and appending the real filename to the file header.
@@ -62,7 +69,31 @@ public class ArArchiveFile extends AbstractArchiveFile {
                 // Read extended name
                 int extendedNameLength = Integer.parseInt(name.substring(3, name.length()));
                 name = new String(readFully(in, new byte[extendedNameLength])).trim();
+                // Decrease remaining file size
                 size -= extendedNameLength;
+            }
+            // GNU variant: GNU ar stores multiple extended filenames in the data section of a file with the name "//",
+            // this record is referred to by future headers. A header references an extended filename by storing a "/"
+            // followed by a decimal offset to the start of the filename in the extended filename data section.
+            // This entry appears first in the archive, i.e. before any other entries.
+            else if(name.equals("//")) {
+                this.gnuExtendedNames = readFully(in, new byte[(int)size]);
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Parsed extended names map="+new String(gnuExtendedNames));
+
+                // Skip one padding byte if size is odd
+                if(size%2!=0)
+                    skipFully(in, 1);
+
+                // Don't return this entry which should not be visible, but recurse to return next entry instead
+                return getNextEntry(in);
+            }
+            // GNU variant: entry with an extended name, look up extended name in // entry
+            else if(this.gnuExtendedNames!=null && name.startsWith("/")) {
+                int off = Integer.parseInt(name.substring(1, name.length()));
+                name = "";
+                byte b;
+                while((b=this.gnuExtendedNames[off++])!='/')
+                    name += (char)b;
             }
 
             return new SimpleEntry(name, date, size, false);
@@ -88,7 +119,7 @@ public class ArArchiveFile extends AbstractArchiveFile {
     private static void skipEntryData(InputStream in, ArchiveEntry entry) throws IOException {
         long size = entry.getSize();
 
-        // Skip file's data, plus 1 padding character if size is not even
+        // Skip file's data, plus 1 padding byte if size is odd
         skipFully(in, size + (size%2));
     }
 
