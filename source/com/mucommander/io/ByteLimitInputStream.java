@@ -1,18 +1,24 @@
 package com.mucommander.io;
 
-import java.io.FilterInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 
 /**
+ * An InputStream that has a set limit to the number of bytes that can be read from it before the EOF is reached.
+ * The limit will have no effect if it is higher than the number of remaining bytes in the underlying stream.
+ *
+ * <p>This class is particularly useful for reading archive formats which contain concatenated files.
+ *
  * @author Maxence Bernard
+ * @see com.mucommander.file.ArArchiveFile
  */
-public class ByteLimitInputStream extends FilterInputStream {
+public class ByteLimitInputStream extends InputStream {
 
+    private InputStream in;
     private long bytesRemaining;
 
     public ByteLimitInputStream(InputStream in, long size) {
-        super(in);
+        this.in = in;
         this.bytesRemaining = size;
     }
 

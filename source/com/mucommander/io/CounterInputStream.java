@@ -13,9 +13,6 @@ import java.io.InputStream;
  * <code>ByteCounter</code> instead of creating a new one. The ByteCounter will always remain accessible, even
  * after this stream has been closed.
  *
- * <p>Implementation note: java.io.FilterInputStream could have been extended in order to reduce the amount of code,
- * but it would have had an impact on performance.
- *
  * @see ByteCounter
  * @author Maxence Bernard
  */

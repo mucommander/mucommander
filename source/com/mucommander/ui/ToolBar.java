@@ -28,7 +28,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     /** JButton instances */
     private JButton buttons[];
 	
-    /** Buttons descriptions: action classname, enabled icon, disabled icon (null for no disabled icon), separator ("true" or null for false)  */
+    /** Buttons descriptions: action classname, icon name, separator (Boolean.TRUE for a separator, Boolean.FALSE for no separator) */
     private final static Object BUTTONS_DESC[][] = {
         {com.mucommander.ui.action.NewWindowAction.class, "new_window.png", Boolean.TRUE},
         {com.mucommander.ui.action.GoBackAction.class, "back.png", Boolean.FALSE},

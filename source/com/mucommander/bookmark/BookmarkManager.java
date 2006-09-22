@@ -91,7 +91,27 @@ public class BookmarkManager {
         return bookmarks;
     }
 
-	
+
+    /**
+     * Looks for a Bookmark with the given name (case ignored) and returns it, or null if none was found.
+     * If several bookmarks have the given name, the first one is returned.
+     *
+     * @param name the bookmark's name
+     * @return a Bookmark instance with the given name, null if none was found
+     */
+    public static Bookmark getBookmark(String name) {
+        int nbBookmarks = bookmarks.size();
+        Bookmark b;
+        for(int i=0; i<nbBookmarks; i++) {
+            b = (Bookmark)bookmarks.elementAt(i);
+            if(b.getName().equalsIgnoreCase(name))
+                return b;
+        }
+
+        return null;
+    }
+
+
     /**
      * Adds a bookmark.
      *

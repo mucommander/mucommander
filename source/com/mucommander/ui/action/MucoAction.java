@@ -88,13 +88,19 @@ public abstract class MucoAction extends AbstractAction {
         return text;
     }
 
+
+    public boolean ignoreEventsWhileInNoEventsMode() {
+        return true;
+    }
+
+
     ///////////////////////////////////
     // AbstractAction implementation //
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
         // Discard this event while in 'no events mode'
-        if(!mainFrame.getNoEventsMode())
+        if(!(mainFrame.getNoEventsMode() && ignoreEventsWhileInNoEventsMode()))
             performAction(mainFrame);
     }
 

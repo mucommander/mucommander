@@ -4,7 +4,10 @@ package com.mucommander.ui;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.RootFolders;
 import com.mucommander.ui.comp.progress.ProgressTextField;
+import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.bookmark.Bookmark;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
@@ -164,12 +167,34 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
             locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
             folderPanel.getFileTable().requestFocus();
         }
-        // ENTER changes current folder to the folder entered in the location field
+        // ENTER changes current folder to the folder entered in the location field,
+        // or to a bookmark or root folder that match the entered string
         else if(e.getKeyCode()==KeyEvent.VK_ENTER) {
             // Disable component and ignore events until folder has been changed (or cancelled)
             setEnabled(false);
+
+            String locationText = locationField.getText();
+
+            // Look for a bookmark which name is the entered string (case insensitive)
+            Bookmark b = BookmarkManager.getBookmark(locationText);
+            if(b!=null) {
+                // Change the current folder to the bookmark's location
+                folderPanel.trySetCurrentFolder(b.getURL());
+                return;
+            }
+
+            // Look for a root folder which name is the entered string (case insensitive)
+            AbstractFile rootFolders[] = RootFolders.getRootFolders();
+            for(int i=0; i<rootFolders.length; i++) {
+                if(rootFolders[i].getName().equalsIgnoreCase(locationText)) {
+                    // Change the current folder to the root folder
+                    folderPanel.trySetCurrentFolder(rootFolders[i]);
+                    return;
+                }
+            }
+
             // Change folder
-            folderPanel.trySetCurrentFolder(locationField.getText());
+            folderPanel.trySetCurrentFolder(locationText);
         }
     }
 

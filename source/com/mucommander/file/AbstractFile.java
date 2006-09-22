@@ -254,7 +254,7 @@ public abstract class AbstractFile {
                 return new Bzip2ArchiveFile(file);
             else if(ext.equals("iso") || ext.equals("nrg"))
                 return new IsoArchiveFile(file);
-            else if(ext.equals("ar") || ext.equals("deb"))
+            else if(ext.equals("ar") || ext.equals("ar") || ext.equals("deb"))
                 return new ArArchiveFile(file);
         }
 
@@ -354,11 +354,23 @@ public abstract class AbstractFile {
 
 
     /**
-     * Returns the absolute path of this AbstractFile. The returned path will be free of any login and password and thus
-     * can be safely displayed or stored.
+     * Returns the absolute path of this AbstractFile:
+     * <ul>
+     * <li>For local files, the path is returned 'sans' the protocol and host parts (i.e. without file://localhost)
+     * <li>For any other file protocol, the full URL including the protocol and host parts is returned (e.g. smb://192.168.1.1/root/blah)
+     * </ul>
+     *
+     * <p>The returned path will always be free of any login and password and thus can be safely displayed or stored.
      */
     public String getAbsolutePath() {
-        return getURL().getStringRep(false);
+        FileURL fileURL = getURL();
+
+        // For local files: return file's path 'sans' the protocol and host parts
+        if(fileURL.getProtocol().equals("file"))
+            return fileURL.getPath();
+
+        // For any other file protocols: return the full URL that includes the protocol and host parts
+        return fileURL.getStringRep(false);
     }
 
 
