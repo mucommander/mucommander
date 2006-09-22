@@ -21,17 +21,8 @@ of the project to local.xml and edit it:
   the various custom tasks used by our compile process.
 
 
-2. Compiling the tools
 
-  Once the system is set up, you need to compile the custom muCommander tools.
-This is simply achieved by typing "ant tools-obfuscate" at the root of the
-project tree.
-
-  This will generate /path/to/mucommander/tools/mutasks.jar, which contains all
-the custom tasks that muCommander need to compile.
-
-
-3. Compiling muCommander
+2. Compiling muCommander
 
   There are various ways of compiling muCommander. The most common ways are:
 - ant. This will compile all the modified Java files, store the binaries in
