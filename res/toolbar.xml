@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolbar>
+    <button action="com.mucommander.ui.action.NewWindowAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.GoBackAction"/>
+    <button action="com.mucommander.ui.action.GoForwardAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.GoToParentAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.StopAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.AddBookmarkAction"/>
+    <button action="com.mucommander.ui.action.EditBookmarksAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.MarkGroupAction"/>
+    <button action="com.mucommander.ui.action.UnmarkGroupAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.SwapFoldersAction"/>
+    <button action="com.mucommander.ui.action.SetSameFolderAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.PackAction"/>
+    <button action="com.mucommander.ui.action.UnpackAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.ConnectToServerAction"/>
+    <button action="com.mucommander.ui.action.RunCommandAction"/>
+    <button action="com.mucommander.ui.action.EmailAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.RevealInDesktopAction"/>
+    <button action="com.mucommander.ui.action.PropertiesAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.PreferencesAction"/>
+    <separator/>
+</toolbar>
