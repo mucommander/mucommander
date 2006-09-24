@@ -4,6 +4,7 @@ package com.mucommander.ui;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.file.FileToolkit;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.archiver.Archiver;
 import com.mucommander.job.ArchiveJob;
 import com.mucommander.text.Translator;
@@ -181,7 +182,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 
             // TODO: this should be done in the job's thread because AbstractFile creation can lock the main thread if the file is on a remote filesystem
             // TODO: destFile could potentially be null !
-            AbstractFile destFile = AbstractFile.getAbstractFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
+            AbstractFile destFile = FileFactory.getFile(((AbstractFile)dest[0]).getAbsolutePath(true)+(String)dest[1]);
 
             // Start packing
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("pack_dialog.packing"));

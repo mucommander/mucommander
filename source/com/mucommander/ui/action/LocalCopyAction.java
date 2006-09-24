@@ -3,6 +3,7 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.CopyDialog;
 import com.mucommander.file.FileSet;
+import com.mucommander.file.AbstractFile;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -22,10 +23,11 @@ public class LocalCopyAction extends SelectedFileAction {
     }
 
     public void performAction(MainFrame mainFrame) {
-        FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
+        AbstractFile selectedFile = mainFrame.getLastActiveTable().getSelectedFile(false);
 
-        // Display copy dialog only if at least one file is selected/marked
-        if(files.size()>0)
-            new CopyDialog(mainFrame, files, true);
+        // Display local copy dialog only if a file other than '..' is currently selected
+        if(selectedFile!=null) {
+            new CopyDialog(mainFrame, new FileSet(selectedFile.getParent(), selectedFile), true);
+        }
     }
 }

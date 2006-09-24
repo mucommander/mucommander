@@ -2,6 +2,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.WindowManager;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -2,6 +2,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.FolderPanel;
+import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 

@@ -320,7 +320,7 @@ public class Translator {
         String langs[] = new String[langsV.size()];
         langsV.toArray(langs);
 			
-        com.mucommander.file.AbstractFile sourceFolder = com.mucommander.file.AbstractFile.getAbstractFile(args[0]);
+        com.mucommander.file.AbstractFile sourceFolder = com.mucommander.file.AbstractFile.getFile(args[0]);
 		
         System.out.println("\n##### Looking for missing entries #####");
         checkMissingEntries(sourceFolder, langs);

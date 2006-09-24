@@ -3,6 +3,7 @@ package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
+import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.ui.MainFrame;
@@ -61,7 +62,7 @@ public class CopyJob extends ExtendedFileJob {
         // If this job correponds to a 'local copy' of a single file and in the same directory, 
         // select the copied file in the active table after this job has finished (and hasn't been cancelled)
         if(files.size()==1 && newName!=null && destFolder.equals(files.fileAt(0).getParent()))
-            selectFileAfter(AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+newName));
+            selectFileAfter(FileFactory.getFile(destFolder.getAbsolutePath(true)+newName));
     }
 
 	
@@ -132,7 +133,7 @@ public class CopyJob extends ExtendedFileJob {
             destFileName = originalName;
 		
         // Create destination AbstractFile instance
-        AbstractFile destFile = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+destFileName);
+        AbstractFile destFile = FileFactory.getFile(destFolder.getAbsolutePath(true)+destFileName);
         if(destFile==null) {
             // Destination file couldn't be created
 

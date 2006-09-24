@@ -2,6 +2,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.icon.IconManager;
 import com.mucommander.PlatformManager;
 import com.mucommander.text.Translator;
 
@@ -21,6 +22,10 @@ public class RevealInDesktopAction extends MucoAction {
         super(mainFrame);
         setLabel(Translator.get("file_menu.reveal_in_desktop", PlatformManager.getDefaultDesktopFMName()));
         setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_MASK));
+
+        // Disable this action if the platform is not capable of opening files in the default file manager
+        if(!PlatformManager.canOpenInDesktop())
+            setEnabled(false);
     }
 
     public void performAction(MainFrame mainFrame) {

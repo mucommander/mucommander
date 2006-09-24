@@ -35,14 +35,14 @@ public class FileToolkit {
         // Level 0, folder exists, newName is null
 		
         // destPath points to an absolute and existing folder
-        if ((destFolder=AbstractFile.getAbstractFile(destPath))!=null 
+        if ((destFolder=FileFactory.getFile(destPath))!=null
             && destFolder.exists()
             && destFolder.isDirectory()) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder for "+destPath+" destFolder="+destFolder.getAbsolutePath()+" destURL="+destFolder.getURL()+" URL filename="+destFolder.getURL().getFilename());
         }
 
         // destPath points to an existing folder relative to current folder
-        else if ((destFolder=AbstractFile.getAbstractFile(currentPath+destPath))!=null
+        else if ((destFolder=FileFactory.getFile(currentPath+destPath))!=null
 		 && destFolder.exists()
 		 && destFolder.isDirectory()) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+currentPath+destPath);
@@ -69,12 +69,12 @@ public class FileToolkit {
 
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("level1, destPath="+destPath+" newname="+newName);
             // destPath points to an absolute and existing folder
-            if (!destPath.equals("") && (destFolder=AbstractFile.getAbstractFile(destPath))!=null && destFolder.exists()) {
+            if (!destPath.equals("") && (destFolder=FileFactory.getFile(destPath))!=null && destFolder.exists()) {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+destPath+" newname="+newName);
             }
 			
             // destPath points to an existing folder relative to current folder
-            else if ((destFolder=AbstractFile.getAbstractFile(currentPath+destPath))!=null && destFolder.exists()) {
+            else if ((destFolder=FileFactory.getFile(currentPath+destPath))!=null && destFolder.exists()) {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+currentPath+destPath+" newname="+newName);
             }
 

@@ -427,8 +427,8 @@ public class FTPFile extends AbstractFile {
             if(childName.equals(".") || childName.equals(".."))
                 continue;
 
-            //			children[nbFiles] = AbstractFile.getAbstractFile(absPath+SEPARATOR+names[i], this);
-            child = AbstractFile.wrapArchive(new FTPFile(childURL, files[i], ftpClient));
+            //			children[nbFiles] = AbstractFile.getFile(absPath+SEPARATOR+names[i], this);
+            child = FileFactory.wrapArchive(new FTPFile(childURL, files[i], ftpClient));
             child.setParent(this);
             children[fileCount++] = child;
         }

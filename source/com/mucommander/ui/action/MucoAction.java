@@ -2,6 +2,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -16,25 +17,38 @@ public abstract class MucoAction extends AbstractAction {
 
 
     public MucoAction(MainFrame mainFrame) {
-        this.mainFrame = mainFrame;
+        this(mainFrame, null, null, null);
     }
 
     public MucoAction(MainFrame mainFrame, String labelKey) {
-        this.mainFrame = mainFrame;
-        setLabel(Translator.get(labelKey));
+        this(mainFrame, labelKey, null, null);
     }
 
     public MucoAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator) {
-        this.mainFrame = mainFrame;
-        setLabel(Translator.get(labelKey));
-        setAccelerator(accelerator);
+        this(mainFrame, labelKey, accelerator, null);
     }
 
     public MucoAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator, String toolTipKey) {
         this.mainFrame = mainFrame;
-        setLabel(Translator.get(labelKey));
-        setToolTipText(Translator.get(toolTipKey));
-        setAccelerator(accelerator);
+
+        if(labelKey!=null)
+            setLabel(Translator.get(labelKey));
+
+        if(toolTipKey!=null)
+            setToolTipText(Translator.get(toolTipKey));
+
+        if(accelerator!=null)
+            setAccelerator(accelerator);
+
+        Class classInstance = getClass();
+        String className = classInstance.getName();
+        String iconPath = "/action/"+className+".png";
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("iconPath = "+iconPath);
+
+        if(classInstance.getResource(iconPath)!=null)
+            putValue(Action.SMALL_ICON, IconManager.getIcon(iconPath));
+
+if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("icon = "+getIcon());
     }
 
     public MainFrame getMainFrame() {
@@ -66,6 +80,15 @@ public abstract class MucoAction extends AbstractAction {
 
     public void setAccelerator(KeyStroke keyStroke) {
         putValue(Action.ACCELERATOR_KEY, keyStroke);
+    }
+
+
+    public ImageIcon getIcon() {
+        return (ImageIcon)getValue(Action.SMALL_ICON);
+    }
+
+    public void setIcon(ImageIcon icon) {
+        putValue(Action.SMALL_ICON, icon);
     }
 
 

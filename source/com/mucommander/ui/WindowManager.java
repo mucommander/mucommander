@@ -9,6 +9,7 @@ import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AuthException;
+import com.mucommander.file.FileFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -120,8 +121,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             folderPath = ConfigurationManager.getVariable("prefs.startup_folder." +frame + ".last_folder");
 
         // If the initial path is not legal or does not exist, defaults to the user's home.
-        if(folderPath == null || (folder = AbstractFile.getAbstractFile(folderPath)) == null || !folder.exists())
-            folder = AbstractFile.getAbstractFile(System.getProperty("user.home"));
+        if(folderPath == null || (folder = FileFactory.getFile(folderPath)) == null || !folder.exists())
+            folder = FileFactory.getFile(System.getProperty("user.home"));
 
         if(Debug.ON) Debug.trace("initial folder= "+folder);
         return folder;
@@ -153,7 +154,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         AbstractFile file;
         while(true) {
             try {
-                file = AbstractFile.getAbstractFile(path, true);
+                file = FileFactory.getFile(path, true);
                 if(!file.exists())
                     file = null;
                 break;
@@ -185,7 +186,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // If the specified path does not work out, 
         if(file == null)
             // Tries the specified path as a relative path.
-            if((file = AbstractFile.getAbstractFile(new File(path).getAbsolutePath())) == null || !file.exists())
+            if((file = FileFactory.getFile(new File(path).getAbsolutePath())) == null || !file.exists())
                 // Defaults to home.
                 return getInitialPath(frame);
 

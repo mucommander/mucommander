@@ -2,6 +2,10 @@
 package com.mucommander.ui.icon;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.ui.action.MucoAction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +15,7 @@ import java.util.Hashtable;
 /**
  * Class that is responsible for providing icons for given files. Icons are chosen based on the files kind (archive, folder...) and extension.
  * 
- * <p>For memory efficiency reasons, icon instances are created only the first the icon is requested, and then
+ * <p>For memory efficiency reasons, icon instances are created only when the first the icon is requested, and then
  * shared across the application.<p>
  *
  * @author Maxence Bernard
@@ -20,6 +24,12 @@ public class FileIcons {
 
     /** Hashtable that associates file extensions with icon names */
     private static Hashtable iconExtensions;
+
+    /** Configuration variable that holds the file icons scale factor */
+    public final static String FILE_ICON_SCALE_CONF_VAR = "prefs.file_table.icon_scale";
+
+    /** Current icon scale factor */
+    private static float scaleFactor = ConfigurationManager.getVariableFloat(FILE_ICON_SCALE_CONF_VAR, 1.0f);
 
     /** Icon for directories */
     private final static String FOLDER_ICON_NAME = "folder.png";
@@ -105,9 +115,9 @@ public class FileIcons {
         }
 
         // Preloads icons so they're in IconManager's cache for when we need them
-        IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME);
-        IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
-        IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME);
+        IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME, scaleFactor);
+        IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME, scaleFactor);
+        IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME, scaleFactor);
     }
 
 	
@@ -124,29 +134,29 @@ public class FileIcons {
         // which are directories with .app extension and have a dedicated icon
         if(file.isDirectory()) {
             if(fileExtension!=null && fileExtension.equals("app"))
-                return IconManager.getIcon(IconManager.FILE_ICON_SET, MAC_OS_X_APP_ICON_NAME);
-            return IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME);
+                return IconManager.getIcon(IconManager.FILE_ICON_SET, MAC_OS_X_APP_ICON_NAME, scaleFactor);
+            return IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME, scaleFactor);
         }
         // If file is browsable (supported archive or other), return archive icon
         else if(file.isBrowsable()) {
-            return IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME);
+            return IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME, scaleFactor);
         }
         // Regular file
         else {
             // Determine if the file's extension has an associated icon
             if(fileExtension==null)	// File has no extension, return default file icon
-                return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
+                return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME, scaleFactor);
 
             // Compare extension against lower-cased extensions
             String iconName = (String)iconExtensions.get(fileExtension.toLowerCase());
             if(iconName==null)	// No icon associated to extension, return default file icon
-                return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
+                return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME, scaleFactor);
 			
             // Retrieves the cached (or freshly loaded if not in cache already) ImageIcon instance corresponding to the icon's name
-            ImageIcon icon = IconManager.getIcon(IconManager.FILE_ICON_SET, iconName);
+            ImageIcon icon = IconManager.getIcon(IconManager.FILE_ICON_SET, iconName, scaleFactor);
             // Returned IconImage should never be null, but if it is (icon file missing), return default file icon
             if(icon==null)
-                return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
+                return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME, scaleFactor);
 				
             return icon;
         }
@@ -154,10 +164,9 @@ public class FileIcons {
 
 	
     /**
-     * Returns the standard size of a file icon, multiplied by the current scale factor for the file icon set.
+     * Returns the standard size of a file icon, multiplied by the current scale factor.
      */
     public static Dimension getStandardSize() {
-        float scaleFactor = IconManager.getScaleFactor(IconManager.FILE_ICON_SET);
         return new Dimension((int)(STANDARD_WIDTH*scaleFactor), (int)(STANDARD_HEIGHT*scaleFactor));
     }
 
@@ -166,10 +175,23 @@ public class FileIcons {
      * Returns the icon for the parent folder (..).
      */
     public static ImageIcon getParentFolderIcon() {
-        return IconManager.getIcon(IconManager.FILE_ICON_SET, PARENT_FOLDER_ICON_NAME);
+        return IconManager.getIcon(IconManager.FILE_ICON_SET, PARENT_FOLDER_ICON_NAME, scaleFactor);
     }
 	
-	
+
+    public static float getScaleFactor() {
+        return scaleFactor;
+    }
+
+    public static void setScaleFactor(float factor) {
+        scaleFactor = factor;
+    }
+
+
+    /////////////////
+    // Test method //
+    /////////////////
+
     /**
      * Tries to load all file icons and reports on their status : OK/FAILED.
      */
@@ -177,7 +199,7 @@ public class FileIcons {
         for(int i=0; i<ICON_EXTENSIONS.length; i++) {
             String iconName = ICON_EXTENSIONS[i][0];
             System.out.print("Loading icon "+iconName+": ");
-            ImageIcon icon = IconManager.getIcon(IconManager.FILE_ICON_SET, ICON_EXTENSIONS[i][0]);
+            ImageIcon icon = IconManager.getIcon(IconManager.FILE_ICON_SET, ICON_EXTENSIONS[i][0], scaleFactor);
             System.out.println(icon==null?"FAILED!":"OK");
         }
     }

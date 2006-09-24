@@ -339,7 +339,7 @@ public class HTTPFile extends AbstractFile {
                                 if(childFileURL.equals(this.fileURL))
                                     child.setParent(this);
 
-                                children.add(AbstractFile.wrapArchive(child));
+                                children.add(FileFactory.wrapArchive(child));
                                 childrenURL.add(token);
                             }
                         }

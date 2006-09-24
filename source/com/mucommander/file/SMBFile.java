@@ -264,7 +264,7 @@ public class SMBFile extends AbstractFile {
             AbstractFile children[] = new AbstractFile[smbFiles.length];
             AbstractFile child;
             for(int i=0; i<smbFiles.length; i++) {
-                child = AbstractFile.wrapArchive(new SMBFile(new FileURL(smbFiles[i].getCanonicalPath(), fileURL), smbFiles[i], false));
+                child = FileFactory.wrapArchive(new SMBFile(new FileURL(smbFiles[i].getCanonicalPath(), fileURL), smbFiles[i], false));
                 child.setParent(this);
                 children[i] = child;
             }

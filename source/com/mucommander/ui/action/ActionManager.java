@@ -42,7 +42,7 @@ public class ActionManager {
         }
 
         // Looks for an existing MucoAction instance used by the specified MainFrame
-        MucoAction action = (MucoAction)mainFrameActionsMap.get(actionClass);
+        MucoAction action = (MucoAction)mainFrameActions.get(actionClass);
         if(action==null) {
             try {
                 // Looks for an existing cached Constructor instance
@@ -53,11 +53,17 @@ public class ActionManager {
                     // Not found, retrieve a Constructor instance and caches it
                     actionConstructor = actionClass.getConstructor(new Class[]{MainFrame.class});
                     actionConstructors.put(actionClass, actionConstructor);
+
+                    if(Debug.ON) Debug.trace("nb constructors = "+actionConstructors.size());
                 }
 
                 // Instanciate the MucoAction class
+                if(Debug.ON) Debug.trace("creating instance");
+
                 action = (MucoAction)actionConstructor.newInstance(new Object[]{mainFrame});
                 mainFrameActions.put(actionClass, action);
+
+                if(Debug.ON) Debug.trace("nb instances = "+mainFrameActions.size());
             }
             catch(Exception e) {   // Catches ClassNotFoundException, NoSuchMethodException, InstanciationException, IllegalAccessException, InvocateTargetException
                 if(Debug.ON) Debug.trace("WARNING: returning null !");

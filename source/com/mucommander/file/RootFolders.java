@@ -44,7 +44,7 @@ public class RootFolders {
         }
 
         // Add home folder
-        AbstractFile homeFolder = AbstractFile.getAbstractFile(System.getProperty("user.home"));
+        AbstractFile homeFolder = FileFactory.getFile(System.getProperty("user.home"));
         if(homeFolder!=null)
             rootFoldersV.add(homeFolder);
 			
@@ -67,7 +67,7 @@ public class RootFolders {
 
         int nbFolders = fileRoots.length;
         for(int i=0; i<nbFolders; i++)
-            try { v.add(AbstractFile.getAbstractFile(fileRoots[i].getAbsolutePath(), true)); }
+            try { v.add(FileFactory.getFile(fileRoots[i].getAbsolutePath(), true)); }
             catch(IOException e) {}
     }
 	
@@ -90,7 +90,7 @@ public class RootFolders {
                     st.nextToken();
                     folderPath = st.nextToken();
                     if(!(folderPath.equals("/proc") || folderPath.equals("none"))) {
-                        file = AbstractFile.getAbstractFile(folderPath);
+                        file = FileFactory.getFile(folderPath);
                         if(file!=null && !v.contains(file))
                             v.add(file);
                     }
@@ -109,7 +109,7 @@ public class RootFolders {
      */
     private static void addMacOSXVolumes(Vector v) {
         // /Volumes not resolved for some reason, giving up
-        AbstractFile volumesFolder = AbstractFile.getAbstractFile("/Volumes");
+        AbstractFile volumesFolder = FileFactory.getFile("/Volumes");
         if(volumesFolder==null)
             return;
 		

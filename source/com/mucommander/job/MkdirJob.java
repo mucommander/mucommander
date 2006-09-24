@@ -3,6 +3,7 @@ package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
+import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
@@ -54,7 +55,7 @@ public class MkdirJob extends FileJob {
                 destFolder.mkdir(dirName);
 
                 // Refresh and selects newly created folder in active table
-                AbstractFile newFolder = AbstractFile.getAbstractFile(destFolder.getAbsolutePath(true)+dirName);
+                AbstractFile newFolder = FileFactory.getFile(destFolder.getAbsolutePath(true)+dirName);
                 
                 FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
                 FileTable table2 = mainFrame.getFolderPanel2().getFileTable();

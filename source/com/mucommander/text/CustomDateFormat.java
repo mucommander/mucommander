@@ -95,8 +95,6 @@ public class CustomDateFormat implements ConfigurationListener {
     public boolean configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("variable changed : "+var+"="+event.getValue());
-        		
         if (var.equals("prefs.time_format") || var.equals("prefs.date_format") || var.equals("prefs.date_separator"))
             dateFormat = createDateFormat();
 

@@ -288,7 +288,7 @@ public class FSFile extends AbstractFile {
             if(parentFile!=null) {
                 FileURL parentURL = getURL().getParent();
                 if(parentURL != null) {
-                    parent = AbstractFile.getAbstractFile(parentURL);
+                    parent = FileFactory.getFile(parentURL);
                 }
             }
             parentValueSet = true;
@@ -353,7 +353,7 @@ public class FSFile extends AbstractFile {
         for(int i=0; i<names.length; i++) {
             // Retrieves an AbstractFile (FSFile or archive) instance potentially fetched from the LRUCache
             // and reuse this file as parent
-            children[i] = AbstractFile.getAbstractFile(absPath+SEPARATOR+names[i], this);
+            children[i] = AbstractFile.getFile(absPath+SEPARATOR+names[i], this);
         }
 
         return children;
@@ -436,7 +436,7 @@ public class FSFile extends AbstractFile {
         for(int i=0; i<names.length; i++) {
             // Retrieves an AbstractFile (FSFile or archive) instance potentially fetched from the LRUCache
             // and reuse this file as parent
-            children[i] = AbstractFile.getAbstractFile(absPath+SEPARATOR+names[i], this);
+            children[i] = FileFactory.getFile(absPath+SEPARATOR+names[i], this);
         }
 
         return children;

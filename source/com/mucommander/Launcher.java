@@ -179,8 +179,8 @@ public class Launcher {
         // Preload icons
         splashScreen.setLoadingMessage("Loading icons...");
         com.mucommander.ui.icon.FileIcons.init();
-        com.mucommander.ui.ToolBar.init();
-        com.mucommander.ui.CommandBar.init();
+//        com.mucommander.ui.ToolBar.init();
+//        com.mucommander.ui.CommandBar.init();
 
         // Creates the initial main frame using any initial path specified by the command line.
         splashScreen.setLoadingMessage("Initializing window...");

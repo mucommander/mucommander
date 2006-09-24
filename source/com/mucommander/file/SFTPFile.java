@@ -311,7 +311,7 @@ public class SFTPFile extends AbstractFile {
                 continue;
             childURL = new FileURL(parentURL+filename, fileURL);
             // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("sftpFile="+sftpFile);
-            child = AbstractFile.wrapArchive(new SFTPFile(childURL, sftpFile, sshClient, sftpChannel));
+            child = FileFactory.wrapArchive(new SFTPFile(childURL, sftpFile, sshClient, sftpChannel));
             child.setParent(this);
 
             children[fileCount++] = child;

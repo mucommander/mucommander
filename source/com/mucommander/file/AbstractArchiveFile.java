@@ -173,7 +173,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
             entryURLString += separator;
         entryURLString += entry.getPath();
 
-        AbstractFile entryFile = AbstractFile.wrapArchive(
+        AbstractFile entryFile = FileFactory.wrapArchive(
           new ArchiveEntryFile(
             this,
             entry,

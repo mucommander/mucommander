@@ -586,7 +586,7 @@ public class FileURL implements Cloneable {
                     System.out.println();
 				
                 if(f.getProtocol().equals("file"))
-                    System.out.println(" FSFile's path="+AbstractFile.getAbstractFile(f.getPath(), true).getAbsolutePath());
+                    System.out.println(" FSFile's path="+FileFactory.getFile(f.getPath(), true).getAbsolutePath());
             }
             catch(java.io.IOException e) {
                 if(com.mucommander.Debug.ON) {

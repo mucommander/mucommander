@@ -3,6 +3,7 @@ package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
+import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
@@ -112,7 +113,7 @@ public class DeleteJob extends FileJob {
                 // If file is a symlink to a folder and the user asked to follow the symlink,
                 // delete the empty folder
                 if(followSymlink) {
-                    AbstractFile canonicalFile = AbstractFile.getAbstractFile(file.getCanonicalPath());
+                    AbstractFile canonicalFile = FileFactory.getFile(file.getCanonicalPath());
                     if(canonicalFile!=null)
                         canonicalFile.delete();
                 }

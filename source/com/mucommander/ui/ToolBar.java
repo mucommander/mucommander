@@ -1,19 +1,21 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.xml.parser.ContentHandler;
+import com.mucommander.xml.parser.Parser;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.ui.comp.button.RolloverButton;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MucoAction;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Hashtable;
 
 
 /**
@@ -21,44 +23,28 @@ import java.awt.event.MouseListener;
  *
  * @author Maxence Bernard
  */
-public class ToolBar extends JToolBar implements ConfigurationListener, MouseListener {
+public class ToolBar extends JToolBar implements ConfigurationListener, ContentHandler, MouseListener {
 
     private MainFrame mainFrame;
 
-    /** JButton instances */
-    private JButton buttons[];
-	
-    /** Buttons descriptions: action classname, icon name, separator (Boolean.TRUE for a separator, Boolean.FALSE for no separator) */
-    private final static Object BUTTONS_DESC[][] = {
-        {com.mucommander.ui.action.NewWindowAction.class, "new_window.png", Boolean.TRUE},
-        {com.mucommander.ui.action.GoBackAction.class, "back.png", Boolean.FALSE},
-        {com.mucommander.ui.action.GoForwardAction.class, "forward.png", Boolean.TRUE},
-        {com.mucommander.ui.action.GoToParentAction.class, "parent.png", Boolean.TRUE},
-        {com.mucommander.ui.action.StopAction.class, "stop.png", Boolean.TRUE},
-        {com.mucommander.ui.action.AddBookmarkAction.class, "add_bookmark.png", Boolean.FALSE},
-        {com.mucommander.ui.action.EditBookmarksAction.class, "edit_bookmarks.png", Boolean.TRUE},
-        {com.mucommander.ui.action.MarkGroupAction.class, "mark.png", Boolean.FALSE},
-        {com.mucommander.ui.action.UnmarkGroupAction.class, "unmark.png", Boolean.TRUE},
-        {com.mucommander.ui.action.SwapFoldersAction.class, "swap_folders.png", Boolean.FALSE},
-        {com.mucommander.ui.action.SetSameFolderAction.class, "set_same_folder.png", Boolean.TRUE},
-        {com.mucommander.ui.action.PackAction.class, "pack.png", Boolean.FALSE},
-        {com.mucommander.ui.action.UnpackAction.class, "unpack.png", Boolean.TRUE},
-        {com.mucommander.ui.action.ConnectToServerAction.class, "server_connect.png", Boolean.FALSE},
-        {com.mucommander.ui.action.RunCommandAction.class, "run_command.png", Boolean.FALSE},
-        {com.mucommander.ui.action.EmailAction.class, "email.png", Boolean.TRUE},
-        {com.mucommander.ui.action.RevealInDesktopAction.class, "reveal_in_desktop.png", Boolean.FALSE},
-        {com.mucommander.ui.action.PropertiesAction.class, "properties.png", Boolean.TRUE},
-        {com.mucommander.ui.action.PreferencesAction.class, "preferences.png", Boolean.FALSE}
-    };
+    /** Path to the XML file specifying the toolbar buttons */
+    private final static String TOOLBAR_XML_FILE_PATH = "/toolbar.xml";
 
-	
-    private final static int OPEN_IN_DESKTOP_INDEX = 16;
+    /** Dimension of button separators */
+    private final static Dimension SEPARATOR_DIMENSION = new Dimension(10, 16);
 
-	
+    /** Name of the configuration variable that holds the toolbar's icon scale */
+    public final static String TOOLBAR_ICON_SCALE_CONF_VAR = "prefs.toolbar.icon_scale";
+
+    /** Current icon scale value */
+    private static float scaleFactor = ConfigurationManager.getVariableFloat(TOOLBAR_ICON_SCALE_CONF_VAR, 1.0f);
+
+
     /**
      * Preloads icons if toolbar is to become visible after launch. 
      * Icons will then be in IconManager's cache, ready for use when the first ToolBar is created.
      */
+/*
     public static void init() {
         if(com.mucommander.conf.ConfigurationManager.getVariableBoolean("prefs.toolbar.visible", true)) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Preloading toolbar icons");
@@ -68,142 +54,113 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             for(int i=0; i<nbIcons; i++) {
                 // Preload 'enabled' icon
                 IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)BUTTONS_DESC[i][1]);
-//                // Preload 'disabled' icon if available
-//                if(BUTTONS_DESC[i][2]!=null)
-//                    IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)BUTTONS_DESC[i][2]);
             }
         }
     }
-	
-	
+*/
+
+
     /**
      * Creates a new toolbar and attaches it to the given frame.
      */
     public ToolBar(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-		
+
+        // Decoration properties
         setBorderPainted(false);
         setFloatable(false);
         putClientProperty("JToolBar.isRollover", Boolean.TRUE);
-
-        // Create buttons
-        int nbButtons = BUTTONS_DESC.length;
-        buttons = new JButton[nbButtons];
-        Dimension separatorDimension = new Dimension(10, 16);
-        for(int i=0; i<nbButtons; i++) {
-            // Add 'reveal in desktop' button only if current platform is capable of doing this
-            if(i==OPEN_IN_DESKTOP_INDEX && !PlatformManager.canOpenInDesktop())
-                continue;
-			
-            buttons[i] = addButton((Class)BUTTONS_DESC[i][0]);
-            if((BUTTONS_DESC[i][2]).equals(Boolean.TRUE))
-                addSeparator(separatorDimension);
-        }
 
         // Listen to mouse events in order to popup a menu when toolbar is right-clicked
         addMouseListener(this);
 
         // Listen to configuration changes to reload toolbar buttons when icon size has changed
         ConfigurationManager.addConfigurationListener(this);
-    }
 
-	
-
-    /**
-     * Sets icons in toolbar buttons, called when this toolbar is about to become visible.
-     */
-    private void setButtonIcons() {
-        int nbIcons = BUTTONS_DESC.length;
-		
-        // For each button
-        for(int i=0; i<nbIcons; i++) {
-            JButton button = buttons[i];
-            if(button==null)
-                continue;
-
-            Object buttonDesc[] = BUTTONS_DESC[i];
-            // Set 'enabled' icon
-            button.setIcon(IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)buttonDesc[1]));
-//            // Set 'disabled' icon if available
-//            if(buttonDesc[2]!=null)
-//                button.setDisabledIcon(IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)buttonDesc[2]));
+        try {
+            // Use UTF-8 encoding
+            new Parser().parse(getClass().getResourceAsStream(TOOLBAR_XML_FILE_PATH), this, "UTF-8");
+        }
+        catch(Exception e) {
+            if(com.mucommander.Debug.ON) {
+                com.mucommander.Debug.trace("Exception thrown while parsing Toolbar XML file "+TOOLBAR_XML_FILE_PATH+" :"+e);
+                e.printStackTrace();
+            }
         }
     }
-	
-    /**
-     * Remove icons from toolbar buttons, called when this toolbar is about to become invisible in order to garbage-collect icon instances.
-     */
-    private void removeButtonIcons() {
-        int nbIcons = BUTTONS_DESC.length;
-		
-        // For each button
-        for(int i=0; i<nbIcons; i++) {
-            JButton button = buttons[i];
-            if(button==null)
-                continue;
 
-            // Remove 'enabled' icon
-            button.setIcon(null);
-//            // Remove 'disabled' icon if available
-//            if(BUTTONS_DESC[i][2]!=null)
-//                button.setDisabledIcon(null);
-        }
-    }	
 
-	
-    private JButton addButton(Class actionClass) {
-        MucoAction action = ActionManager.getActionInstance(actionClass, mainFrame);
+    private void addButton(MucoAction action) {
         JButton button = new RolloverButton(action);
+
         // Remove label
         button.setText(null);
+
         // Add tooltip using the action's label and accelerator
         String toolTipText = action.getLabel();
         String acceleratorText = action.getAcceleratorText();
         if(acceleratorText!=null)
             toolTipText += " ("+acceleratorText+")";
         button.setToolTipText(toolTipText);
+
+        // Scale icon if scale factor is different from 1.0
+        if(scaleFactor!=1.0f)
+            button.setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
+
         add(button);
-        return button;
     }
 
-	
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
 
-    /**
-     * Overridden method to set/remove toolbar icons depending on the specified new visible state.
-     */
-    public void setVisible(boolean visible) {
-        if(visible) {
-            // Set icons to buttons
-            setButtonIcons();
-        }
-        else {
-            // Remove icon from buttons
-            removeButtonIcons();
-        }
-		
-        super.setVisible(visible);
+    ////////////////////////////
+    // ContentHandler methods //
+    ////////////////////////////
+
+    public void startDocument() throws Exception {
     }
 
+    public void endDocument() throws Exception {
+    }
+
+    public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
+        if(name.equals("button")) {
+            addButton(ActionManager.getActionInstance((String)attValues.get("action"), mainFrame));
+        }
+        else if(name.equals("separator")) {
+            addSeparator(SEPARATOR_DIMENSION);
+        }
+    }
+
+    public void endElement(String uri, String name) throws Exception {
+    }
+
+    public void characters(String s) throws Exception {
+    }
 
     ///////////////////////////////////
     // ConfigurationListener methods //
     ///////////////////////////////////
-	
+
     /**
      * Listens to certain configuration variables.
      */
     public boolean configurationChanged(ConfigurationEvent event) {
-    	String var = event.getVariable();
+        String var = event.getVariable();
 
-        // Reload toolbar icons if their size has changed and toolbar is visible
-        if (var.equals(IconManager.TOOLBAR_ICON_SCALE_CONF_VAR)) {
-            if(isVisible())
-                setButtonIcons();
+        // Rescale buttons icon
+        if (var.equals(TOOLBAR_ICON_SCALE_CONF_VAR)) {
+            scaleFactor = event.getFloatValue();
+            Component components[] = getComponents();
+            int nbComponents = components.length;
+
+            for(int i=0; i<nbComponents; i++) {
+                if(components[i] instanceof JButton) {
+                    JButton button = (JButton)components[i];
+                    // Change the button's icon but NOT the action's icon which has to remain in its original non-scaled size
+                    button.setIcon(IconManager.getScaledIcon(((MucoAction)button.getAction()).getIcon(), scaleFactor));
+                }
+            }
         }
-	
+
         return true;
     }
 
@@ -211,18 +168,18 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     ///////////////////////////
     // MouseListener methods //
     ///////////////////////////
-	
+
     public void mouseClicked(MouseEvent e) {
         // Discard mouse events while in 'no events mode'
         if(mainFrame.getNoEventsMode())
             return;
 
         Object source = e.getSource();
-		
+
         // Right clicking on the toolbar brings up a popup menu
         if(source == this) {
             int modifiers = e.getModifiers();
-            if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {		
+            if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {
                 //			if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
                 JPopupMenu popupMenu = new JPopupMenu();
                 popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleToolBarAction.class, mainFrame));
@@ -237,7 +194,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
     public void mousePressed(MouseEvent e) {
     }
-	
+
     public void mouseEntered(MouseEvent e) {
     }
 

@@ -245,9 +245,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     if(folder==null) {
                         AbstractFile file;
                         if(folderURL!=null)
-                            file = AbstractFile.getAbstractFile(folderURL, true);
+                            file = FileFactory.getFile(folderURL, true);
                         else
-                            file = AbstractFile.getAbstractFile(folderPath, true);
+                            file = FileFactory.getFile(folderPath, true);
 
                         synchronized(lock) {
                             if(isKilled) {
@@ -380,7 +380,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         AuthException authException = (AuthException)e;
                         // Retry (loop) if user authentified
                         if(showAuthDialog(authException)) {
-                            folder = AbstractFile.getAbstractFile(authException.getFileURL().getStringRep(false));
+                            folder = FileFactory.getFile(authException.getFileURL().getStringRep(false));
                             continue;
                         }
                     }

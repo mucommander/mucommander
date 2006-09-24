@@ -288,8 +288,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         else if(menu == viewMenu) {
             // Display accelerators when menu is selected and remove them when it get deselected (keyboard shortcut is caught in FileTable)
             if(menu.isSelected()) {
-                FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
-
                 restoreAccelerator(goBackItem);
                 restoreAccelerator(goForwardItem);
                 restoreAccelerator(goToParentItem);

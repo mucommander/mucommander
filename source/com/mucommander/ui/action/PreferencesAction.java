@@ -1,6 +1,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.pref.PreferencesDialog;
 
 /**

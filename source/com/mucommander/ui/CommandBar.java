@@ -5,12 +5,10 @@ package com.mucommander.ui;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.comp.button.NonFocusableButton;
 import com.mucommander.ui.action.MucoAction;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,31 +57,38 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
     private final static Class MOVE_ACTION = com.mucommander.ui.action.MoveAction.class;
     private final static Class RENAME_ACTION = com.mucommander.ui.action.RenameAction.class;
 
-    private final static Object BUTTONS_DESC[][] =  {
-        {com.mucommander.ui.action.ViewAction.class, "view.png"},
-        {com.mucommander.ui.action.EditAction.class, "edit.png"},
-        {COPY_ACTION, "copy.png"},
-        {MOVE_ACTION, "move.png"},
-        {com.mucommander.ui.action.MkdirAction.class, "mkdir.png"},
-        {com.mucommander.ui.action.DeleteAction.class, "delete.png"},
-        {com.mucommander.ui.action.RefreshAction.class, "refresh.png"},
-        {com.mucommander.ui.action.CloseWindowAction.class, "close.png"}
+    private final static Class BUTTON_ACTIONS[] =  {
+        com.mucommander.ui.action.ViewAction.class,
+        com.mucommander.ui.action.EditAction.class,
+        COPY_ACTION,
+        MOVE_ACTION,
+        com.mucommander.ui.action.MkdirAction.class,
+        com.mucommander.ui.action.DeleteAction.class,
+        com.mucommander.ui.action.RefreshAction.class,
+        com.mucommander.ui.action.CloseWindowAction.class
     };
+
+
+    public final static String COMMAND_BAR_ICON_SCALE_CONF_VAR = "prefs.command_bar.icon_scale";
+
+    private static float scaleFactor = ConfigurationManager.getVariableFloat(COMMAND_BAR_ICON_SCALE_CONF_VAR, 1.0f);
+
 
     /**
      * Preloads icons if command bar is to become visible after launch. 
      * Icons will then be in IconManager's cache, ready for use when the first command bar is created.
      */
+/*
     public static void init() {
         if(com.mucommander.conf.ConfigurationManager.getVariableBoolean("prefs.command_bar.visible", true)) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Preloading command bar icons");
 
             // For each button
             for(int i=0; i<NB_BUTTONS; i++)
-                IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, (String)BUTTONS_DESC[i][1]);
+                IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, (String)BUTTON_ACTIONS[i][1]);
         }
-
     }
+*/
 
 
     /**
@@ -95,7 +100,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
 
         this.buttons = new JButton[NB_BUTTONS];
         for(int i=0; i<NB_BUTTONS; i++)
-            buttons[i] = addButton((Class)BUTTONS_DESC[i][0]);
+            buttons[i] = addButton(BUTTON_ACTIONS[i]);
 
         addMouseListener(this);
 
@@ -126,6 +131,10 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
         // Append the action's shortcut to the button's label
         button.setText(action.getLabel()+" ["+action.getAcceleratorText()+"]");
 
+        // Scale icon if scale factor is different from 1.0
+        if(scaleFactor!=1.0f)
+            button.setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
+
         button.setMargin(new Insets(3,4,3,4));
         // For Mac OS X whose default minimum width for buttons is enormous
         button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getHeight()));
@@ -136,25 +145,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
 
 
     /**
-     * Sets icons in command bar buttons, called when this command bar is about to become visible.
-     */
-    private void setButtonIcons() {
-        // For each button
-        for(int i=0; i<NB_BUTTONS; i++)
-            buttons[i].setIcon(IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, (String)BUTTONS_DESC[i][1]));
-    }
-	
-    /**
-     * Remove icons from command bar buttons, called when this command bar is about to become invisible in order to garbage-collect icon instances.
-     */
-    private void removeButtonIcons() {
-        // For each button
-        for(int i=0; i<NB_BUTTONS; i++)
-            buttons[i].setIcon(null);
-    }
-	
-	
-    /**
      * Sets shift mode on or off : some buttons such as 'F6 Move' indicate
      * that action is different when shift is pressed.
      */
@@ -163,46 +153,19 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
         if(!isVisible())
             return;
 
-        if(shiftDown!=on) {
+        if(this.shiftDown!=on) {
             this.shiftDown = on;
-            FileTable fileTable = mainFrame.getLastActiveTable();
-            boolean singleFileMode = on&&((FileTableModel)(fileTable.getModel())).getNbMarkedFiles()<=1;
 
             // Change Copy/Local copy button's text and tooltip
-            MucoAction action = ActionManager.getActionInstance(singleFileMode?LOCAL_COPY_ACTION:COPY_ACTION, mainFrame);
-            Icon icon = buttons[COPY_INDEX].getIcon();      // Save icon
+            MucoAction action = ActionManager.getActionInstance(on?LOCAL_COPY_ACTION:COPY_ACTION, mainFrame);
             buttons[COPY_INDEX].setAction(action);
-            buttons[COPY_INDEX].setIcon(icon);              // Restore icon
             buttons[COPY_INDEX].setText(action.getLabel()+" ["+action.getAcceleratorText()+"]");
 
             // Change Move/Rename button's text and tooltip
-            action = ActionManager.getActionInstance(singleFileMode?RENAME_ACTION:MOVE_ACTION, mainFrame);
-            icon = buttons[MOVE_INDEX].getIcon();           // Save icon
+            action = ActionManager.getActionInstance(on?RENAME_ACTION:MOVE_ACTION, mainFrame);
             buttons[MOVE_INDEX].setAction(action);
-            buttons[MOVE_INDEX].setIcon(icon);              // Restore icon
             buttons[MOVE_INDEX].setText(action.getLabel()+" ["+action.getAcceleratorText()+"]");
         }
-    }
-
-
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
-
-    /**
-     * Overridden method to set/remove toolbar icons depending on the specified new visible state.
-     */
-    public void setVisible(boolean visible) {
-        if(visible) {
-            // Set icons to buttons
-            setButtonIcons();
-        }
-        else {
-            // Remove icon from buttons
-            removeButtonIcons();
-        }
-		
-        super.setVisible(visible);
     }
 
 
@@ -217,9 +180,18 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
     	String var = event.getVariable();
 
         // Reload toolbar icons if their size has changed and command bar is visible
-        if (var.equals(IconManager.COMMAND_BAR_ICON_SCALE_CONF_VAR)) {
-            if(isVisible())
-                setButtonIcons();
+        if (var.equals(COMMAND_BAR_ICON_SCALE_CONF_VAR)) {
+            scaleFactor = event.getFloatValue();
+            Component components[] = getComponents();
+            int nbComponents = components.length;
+
+            for(int i=0; i<nbComponents; i++) {
+                if(components[i] instanceof JButton) {
+                    JButton button = (JButton)components[i];
+                    // Change the button's icon but NOT the action's icon which has to remain in its original non-scaled size
+                    button.setIcon(IconManager.getScaledIcon(((MucoAction)button.getAction()).getIcon(), scaleFactor));
+                }
+            }
         }
 
         return true;

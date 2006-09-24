@@ -3,6 +3,7 @@ package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
+import com.mucommander.file.FileFactory;
 import com.mucommander.job.MoveJob;
 import com.mucommander.text.Translator;
 
@@ -33,8 +34,8 @@ public class MoveDialog extends DestinationDialog {
         if(nbFiles==1) {
             AbstractFile file = ((AbstractFile)files.elementAt(0));
             AbstractFile testFile;
-            // TODO: find a way to remove this AbstractFile.getAbstractFile() which can lock the main thread if the file is on a remote filesystem
-            if(!(file.isDirectory() && (testFile=AbstractFile.getAbstractFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory()))
+            // TODO: find a way to remove this AbstractFile.getFile() which can lock the main thread if the file is on a remote filesystem
+            if(!(file.isDirectory() && (testFile= FileFactory.getFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory()))
                 fieldText += file.getName();
         }
 
