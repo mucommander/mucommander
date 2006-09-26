@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class UnpackAction extends SelectedFilesAction {
 
     public UnpackAction(MainFrame mainFrame) {
-        super(mainFrame, "file_menu.unpack", KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_MASK));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

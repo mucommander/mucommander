@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class RenameAction extends SelectedFileAction {
 
     public RenameAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.rename", KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.SHIFT_MASK), "command_bar.rename_tooltip");
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.SHIFT_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

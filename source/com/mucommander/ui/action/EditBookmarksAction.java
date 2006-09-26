@@ -13,7 +13,7 @@ import com.mucommander.ui.bookmark.EditBookmarksDialog;
 public class EditBookmarksAction extends MucoAction {
 
     public EditBookmarksAction(MainFrame mainFrame) {
-        super(mainFrame, "bookmarks_menu.edit_bookmarks");
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

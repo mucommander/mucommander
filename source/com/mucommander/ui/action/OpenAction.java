@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class OpenAction extends MucoAction {
 
     public OpenAction(MainFrame mainFrame) {
-        super(mainFrame, "file_menu.open", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
     }
 
     public void performAction(MainFrame mainFrame) {

@@ -11,7 +11,7 @@ import com.mucommander.ui.CheckVersionDialog;
 public class CheckForUpdatesAction extends MucoAction {
 
     public CheckForUpdatesAction(MainFrame mainFrame) {
-        super(mainFrame, "file_menu.check_for_updates");
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

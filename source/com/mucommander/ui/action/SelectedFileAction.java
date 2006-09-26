@@ -23,16 +23,8 @@ public abstract class SelectedFileAction extends FileAction implements TableSele
         super(mainFrame);
     }
 
-    public SelectedFileAction(MainFrame mainFrame, String labelKey) {
-        super(mainFrame, labelKey);
-    }
-
-    public SelectedFileAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator) {
-        super(mainFrame, labelKey, accelerator);
-    }
-
-    public SelectedFileAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator, String toolTipKey) {
-        super(mainFrame, labelKey, accelerator, toolTipKey);
+    public SelectedFileAction(MainFrame mainFrame, KeyStroke accelerator) {
+        super(mainFrame, accelerator);
     }
 
 

@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class QuitAction extends MucoAction {
 
     public QuitAction(MainFrame mainFrame) {
-        super(mainFrame, "file_menu.quit", KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_MASK));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

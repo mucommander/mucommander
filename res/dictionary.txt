@@ -427,309 +427,674 @@ stop:RU:Прервать
 stop:zh_CN:停止
 stop:Si:Ustavi
 
+###########
+# Actions #
+###########
 
-###############
-# Command bar #
-###############
+com.mucommander.ui.action.AddBookmarkAction.label:EN:$[add_bookmark_dialog.title]...
 
-command_bar.view:EN:View
-command_bar.view:FR:Voir
-command_bar.view:DE:Ansicht
-command_bar.view:ES:Ver
-command_bar.view:CS:Zobrazit
-command_bar.view:zh_TW:檢視
-command_bar.view:PL:Podgląd
-command_bar.view:HU:megtekint
-command_bar.view:RU:Просмотреть
-command_bar.view:ZH_CN:查看
-command_bar.view:SI:Pogled
-
-command_bar.view_tooltip:EN:View selected file
-command_bar.view_tooltip:FR:Voir le fichier sélectionné
-command_bar.view_tooltip:DE:Markierte Datei betrachten
-command_bar.view_tooltip:ES:Ver el fichero seleccionado
-command_bar.view_tooltip:CS:Zobrazit vybraný soubor
-command_bar.view_tooltip:zh_TW:檢視已選取檔案
-command_bar.view_tooltip:PL:Zobacz wybrany plik
-command_bar.view_tooltip:HU:A kijelölt fájl megtekintése
-command_bar.view_tooltip:RU:Просмотр выбранного файла
-command_bar.view_tooltip:ZH_CN:查看所选文件
-command_bar.view_tooltip:SI:Poglej izbrano datoteko
-
-command_bar.edit:EN:Edit
-command_bar.edit:FR:Editer
-command_bar.edit:DE:Bearbeiten
-command_bar.edit:ES:Editar
-command_bar.edit:CS:Editovat
-command_bar.edit:zh_TW:編輯
-command_bar.edit:PL:Edycja
-command_bar.edit:HU:módosít
-command_bar.edit:RU:Редактировать
-command_bar.edit:ZH_CN:编辑
-command_bar.edit:SI:Uredi
-
-command_bar.edit_tooltip:EN:Edit selected file
-command_bar.edit_tooltip:FR:Editer le fichier selectionné
-command_bar.edit_tooltip:DE:Markierte Datei bearbeiten
-command_bar.edit_tooltip:ES:Editar el fichero seleccionado
-command_bar.edit_tooltip:CS:Editovat vybraný soubor
-command_bar.edit_tooltip:zh_TW:編輯已選取檔案
-command_bar.edit_tooltip:PL:Edytuj wybrany plik
-command_bar.edit_tooltip:HU:A kijelölt fájl módosítása
-command_bar.edit_tooltip:RU:Редактирование выбранного файла
-command_bar.edit_tooltip:ZH_CN:编辑所选文件
-command_bar.edit_tooltip:SI:Uredi izbrano datoteko
-
-command_bar.copy:EN:Copy
-command_bar.copy:FR:Copier
-command_bar.copy:DE:Kopieren
-command_bar.copy:ES:Copiar
-command_bar.copy:CS:Kopírovat
-command_bar.copy:zh_TW:複製
-command_bar.copy:PL:Kopiuj
-command_bar.copy:HU:másol
-command_bar.copy:RU:Копировать
-command_bar.copy:ZH_CN:复制
-command_bar.copy:SI:Kopiraj
-
-command_bar.copy_tooltip:EN:Copy marked files
-command_bar.copy_tooltip:FR:Copier les fichiers marqués
-command_bar.copy_tooltip:DE:Markierte Dateien kopieren
-command_bar.copy_tooltip:ES:Copiar los ficheros seleccionados
-command_bar.copy_tooltip:CS:Kopírovat označené soubory
-command_bar.copy_tooltip:zh_TW:複製已標記檔案
-command_bar.copy_tooltip:PL:Kopiuj zaznaczone pliki
-command_bar.copy_tooltip:HU:A kijelölt fájlok másolása
-command_bar.copy_tooltip:RU:Копирование выделенных файлов
-command_bar.copy_tooltip:ZH_CN:复制已标记文件
-command_bar.copy_tooltip:SI:Kopiraj označene datoteke
-
-command_bar.local_copy:EN:Local Copy
-command_bar.local_copy:FR:Copier local
-command_bar.local_copy:DE:Lokale Kopie
-command_bar.local_copy:ES:Copia local
-command_bar.local_copy:CS:Lokálni kopie
-command_bar.local_copy:zh_TW:本地複製
-command_bar.local_copy:PL:Kopiuj lokalnie
-command_bar.local_copy:HU:lokális másolás
-command_bar.local_copy:RU:Копировать локально
-command_bar.local_copy:ZH_CN:本地复制
-command_bar.local_copy:SI:Lokalno kopiranje
-
-command_bar.local_copy_tooltip:EN:Copy selected file into current folder
-command_bar.local_copy_tooltip:FR:Copier le fichier selectionné dans le dossier courant
-command_bar.local_copy_tooltip:DE:Kopiert markierte Datei in den aktuellen Ordner
-command_bar.local_copy_tooltip:ES:Copiar el fichero seleccionado en el directorio actual
-command_bar.local_copy_tooltip:CS:Kopírovat označené soubory do aktuální složky
-command_bar.local_copy_tooltip:zh_TW:複製已選取檔案至此資料夾
-command_bar.local_copy_tooltip:PL:Kopiuj zaznaczone pliki do aktywnego katalogu
-command_bar.local_copy_tooltip:HU:A kijelölt fájlok másolása az aktuális könyvtárba
-command_bar.local_copy_tooltip:RU:Копирование выбранного файла в текущий каталог
-command_bar.local_copy_tooltip:ZH_CN:复制所选文件到此文件夹
-command_bar.local_copy_tooltip:SI:Kopiraj označeno datoteko v trenutno mapo
-
-command_bar.move:EN:Move
-command_bar.move:FR:Déplacer
-command_bar.move:DE:Verschieben
-command_bar.move:ES:Mover
-command_bar.move:CS:Přesunout
-command_bar.move:zh_TW:搬移
-command_bar.move:PL:Przenieś
-command_bar.move:HU:mozgat
-command_bar.move:RU:Перенести
-command_bar.move:ZH_CN:移动
-command_bar.move:SI:Premakni
-
-command_bar.move_tooltip:EN:Move marked files
-command_bar.move_tooltip:FR:Déplacer les fichiers marqués
-command_bar.move_tooltip:DE:Markierte Dateien verschieben
-command_bar.move_tooltip:ES:Mover los ficheros seleccionados
-command_bar.move_tooltip:CS:Přesunout označené soubory
-command_bar.move_tooltip:zh_TW:搬移已標記檔案
-command_bar.move_tooltip:PL:Przenieś zaznaczone pliki
-command_bar.move_tooltip:HU:A kijelölt fájlok mozgatása
-command_bar.move_tooltip:RU:Перенос выделенных файлов
-command_bar.move_tooltip:ZH_CN:移动已标记文件
-command_bar.move_tooltip:SI:Premakni označene datoteke
-
-command_bar.rename:EN:Rename
-command_bar.rename:FR:Renommer
-command_bar.rename:DE:Umbenennen
-command_bar.rename:ES:Renombrar
-command_bar.rename:CS:Přejmenovat
-command_bar.rename:zh_TW:重新命名
-command_bar.rename:PL:Przemianuj
-command_bar.rename:HU:átnevez
-command_bar.rename:RU:Переименовать
-command_bar.rename:ZH_CN:重新命名
-command_bar.rename:SI:Preimenuj
-
-command_bar.rename_tooltip:EN:Rename selected file
-command_bar.rename_tooltip:FR:Renommer le fichier selectionné
-command_bar.rename_tooltip:DE:Markierte Datei umbenennen
-command_bar.rename_tooltip:ES:Renombrar el fichero seccionado
-command_bar.rename_tooltip:CS:Přejmenovat označené soubory
-command_bar.rename_tooltip:zh_TW:重新命名已選取檔案
-command_bar.rename_tooltip:PL:Przemianuj zaznaczone pliki
-command_bar.rename_tooltip:HU:A kijelölt fájl átnevezése
-command_bar.rename_tooltip:RU:Переименоание выбранного файла
-command_bar.rename_tooltip:ZH_CN:重新命名选定文件
-command_bar.rename_tooltip:SI:Preimenuj označeno datoteko
-
-command_bar.mkdir:EN:Make dir
-command_bar.mkdir:FR:Créer rep
-command_bar.mkdir:DE:Ordner erstellen
-command_bar.mkdir:ES:Crear directorio
-command_bar.mkdir:CS:Vytvořit složku
-command_bar.mkdir:zh_TW:新增資料夾
-command_bar.mkdir:PL:Utwórz katalog
-command_bar.mkdir:HU:új könyvtár
-command_bar.mkdir:RU:Создать каталог
-command_bar.mkdir:ZH_CN:新建文件夹
-command_bar.mkdir:SI:Nova mapa
-
-command_bar.mkdir_tooltip:EN:Create a directory in current folder
-command_bar.mkdir_tooltip:FR:Créer un répertoire dans le dossier courant
-command_bar.mkdir_tooltip:DE:Erstellt einen Ordner im aktuellen Ordner
-command_bar.mkdir_tooltip:ES:Crear subdirectorio en el directorio actual
-command_bar.mkdir_tooltip:CS:Vytvořit složku v aktuální složce
-command_bar.mkdir_tooltip:zh_TW:在此處新增資料夾
-command_bar.mkdir_tooltip:PL:Utwórz katalog w aktualnym katalogu
-command_bar.mkdir_tooltip:HU:Új könyvtár létrehozása az aktuális könyvtárban
-command_bar.mkdir_tooltip:RU:Создание подкаталог в текущем каталоге
-command_bar.mkdir_tooltip:ZH_CN:在此新建文件夹
-command_bar.mkdir_tooltip:SI:Ustvari mapo v trenutni mapi
-
-command_bar.delete:EN:Delete
-command_bar.delete:FR:Supprimer
-command_bar.delete:DE:Löschen
-command_bar.delete:ES:Eliminar
-command_bar.delete:CS:Odstranit
-command_bar.delete:zh_TW:刪除
-command_bar.delete:PL:Usuń
-command_bar.delete:HU:törlés
-command_bar.delete:RU:Удалить
-command_bar.delete:ZH_CN:刪除
-command_bar.delete:SI:Brisanje
-
-command_bar.delete_tooltip:EN:Delete marked files
-command_bar.delete_tooltip:FR:Supprimer les fichiers marqués
-command_bar.delete_tooltip:DE:Markierte Dateien löschen
-command_bar.delete_tooltip:ES:Elimiar los ficheros marcados
-command_bar.delete_tooltip:CS:Odstranit označené soubory
-command_bar.delete_tooltip:zh_TW:刪除已標記檔案
-command_bar.delete_tooltip:PL:Usuń zaznaczone pliki
-command_bar.delete_tooltip:HU:A kijelölt fájlok törlése
-command_bar.delete_tooltip:RU:Удаление выделенных файлов
-command_bar.delete_tooltip:ZH_CN:刪除已标记文件
-command_bar.delete_tooltip:SI:Izbriši označene datoteke
-
-command_bar.refresh:EN:Refresh
-command_bar.refresh:FR:Actualiser
-command_bar.refresh:DE:Aktualisieren
-command_bar.refresh:ES:Actualizar
-command_bar.refresh:CS:Aktualizovat
-command_bar.refresh:zh_TW:重新整理
-command_bar.refresh:PL:Odśwież
-command_bar.refresh:HU:frissítés
-command_bar.refresh:RU:Обновить
-command_bar.refresh:ZH_CN:重新整理
-command_bar.refresh:SI:Osveži
-
-command_bar.refresh_tooltip:EN:Refresh current folder
-command_bar.refresh_tooltip:FR:Actualiser le répertoire courant
-command_bar.refresh_tooltip:DE:Aktualisiere aktuellen Ordner
-command_bar.refresh_tooltip:ES:Actualizar directorio actual
-command_bar.refresh_tooltip:CS:Aktualizovat aktuální složku
-command_bar.refresh_tooltip:zh_TW:重新整理此資料夾
-command_bar.refresh_tooltip:PL:Odśwież aktualny katalog
-command_bar.refresh_tooltip:HU:Az aktuális könyvtár frissítése
-command_bar.refresh_tooltip:RU:Обновление списка файлов в текущем каталоге
-command_bar.refresh_tooltip:ZH_CN:刷新此文件夹
-command_bar.refresh_tooltip:SI:Osveži trenutno mapo
-
-command_bar.close:EN:Close
-command_bar.close:FR:Fermer
-command_bar.close:DE:Schließen
-command_bar.close:ES:Cerrar
-command_bar.close:CS:Zavřít
-command_bar.close:zh_TW:關閉
-command_bar.close:PL:Zamknij
-command_bar.close:HU:bezár
-command_bar.close:RU:Закрыть
-command_bar.close:ZH_CN:关闭
-command_bar.close:SI:Zapri
-
-command_bar.close_tooltip:EN:Close this window
-command_bar.close_tooltip:FR:Fermer cette fenêtre
-command_bar.close_tooltip:DE:Schließt aktuelles Fenster
-command_bar.close_tooltip:ES:Cerrar esta ventana
-command_bar.close_tooltip:CS:Zavřít aktuální okno
-command_bar.close_tooltip:zh_TW:關閉此視窗
-command_bar.close_tooltip:PL:Zamknij aktualne okno
-command_bar.close_tooltip:HU:ablakbezárás
-command_bar.close_tooltip:RU:Закрытие окна
-command_bar.close_tooltip:ZH_CN:关闭此窗口
-command_bar.close_tooltip:SI:Zapri okno
-
-command_bar.hide_command_bar:EN:$[view_menu.hide_command_bar]
-
-
-#############
-# File menu #
-#############
-
-file_menu:EN:File
-file_menu:FR:Fichier
-file_menu:DE:Datei
-file_menu:ES:Archivo
-file_menu:CS:Soubor
-file_menu:zh_TW:檔案
-file_menu:PL:Plik
-file_menu:HU:fájl
-file_menu:RU:Файл
-file_menu:ZH_CN:文件
-file_menu:SI:Datoteka
-
-file_menu.server_connect:EN:Connect to server...
-file_menu.server_connect:FR:Connexion à un serveur...
-file_menu.server_connect:DE:Verbinde mit Server...
-file_menu.server_connect:ES:Conectar a un servidor...
-file_menu.server_connect:CS:Připojit se k serveru...
-file_menu.server_connect:zh_TW:連接至伺服器...
-file_menu.server_connect:PL:Połączenie z serwerem...
-file_menu.server_connect:HU:Csatlakozás a szerverhez...
-file_menu.server_connect:RU:Соединение с сервером...
-file_menu.server_connect:ZH_CN:连接到服务器...
-file_menu.server_connect:SI:Povezava s strežnikom...
-
-file_menu.new_window:EN:New window
-file_menu.new_window:FR:Nouvelle fenêtre
-file_menu.new_window:DE:Neues Fenster
-file_menu.new_window:ES:Nueva ventana
-file_menu.new_window:CS:Nové okno
-file_menu.new_window:zh_TW:新視窗
-file_menu.new_window:PL:Nowe okno
-file_menu.new_window:HU:új ablak
-file_menu.new_window:RU:Новое окно
-file_menu.new_window:ZH_CN:新窗口
-file_menu.new_window:SI:Novo okno
-
-file_menu.open:EN:Open
-file_menu.open:FR:Ouvrir
-file_menu.open:ES:Abrir
-file_menu.open:RU:Открыть
-file_menu.open:zh_TW:開啟
-file_menu.open:PL:Otwórz
-file_menu.open:ZH_CN:打开
-file_menu.open:SI:Odpri
+# Displayed in the Shortcuts dialog
+com.mucommander.ui.action.AddBookmarkAction.tooltip:EN:Bookmark current folder
+com.mucommander.ui.action.AddBookmarkAction.tooltip:FR:Ajouter le dossier courant aux favoris
+com.mucommander.ui.action.AddBookmarkAction.tooltip:ES:Añadir a favoritos el directorio actual
+com.mucommander.ui.action.AddBookmarkAction.tooltip:RU:Добавить текущий каталог в закладки
+com.mucommander.ui.action.AddBookmarkAction.tooltip:zh_TW:加入目前資料夾為書籤
+com.mucommander.ui.action.AddBookmarkAction.tooltip:PL:Dodaj do zakładek aktualny katalog
+com.mucommander.ui.action.AddBookmarkAction.tooltip:ZH_CN:收藏当前文件夹
+com.mucommander.ui.action.AddBookmarkAction.tooltip:SI:Dodaj trenutno mapo med priljubljene
+# Translation missing
 
 
 
 
 
-file_menu.open_natively:EN:Open natively
-file_menu.open_natively:FR:Ouvrir nativement
+
+
+com.mucommander.ui.action.EditBookmarksAction.label:EN:$[edit_bookmarks_dialog.title]...
+
+com.mucommander.ui.action.ChangeLocationAction.label:EN:Change current location
+com.mucommander.ui.action.ChangeLocationAction.label:FR:Changer le chemin courant
+# Translation missing
+
+com.mucommander.ui.action.CheckForUpdatesAction.label:EN:Check for updates
+com.mucommander.ui.action.CheckForUpdatesAction.label:FR:Mises à jour...
+com.mucommander.ui.action.CheckForUpdatesAction.label:DE:Nach Updates suchen
+com.mucommander.ui.action.CheckForUpdatesAction.label:ES:Comprobar actualizaciones
+com.mucommander.ui.action.CheckForUpdatesAction.label:CS:Aktualizace
+com.mucommander.ui.action.CheckForUpdatesAction.label:zh_TW:檢查更新版本
+com.mucommander.ui.action.CheckForUpdatesAction.label:PL:Sprawdź aktualizacje
+com.mucommander.ui.action.CheckForUpdatesAction.label:HU:frissítések keresése
+com.mucommander.ui.action.CheckForUpdatesAction.label:RU:Проверить обновления
+com.mucommander.ui.action.CheckForUpdatesAction.label:ZH_CN:检查更新
+com.mucommander.ui.action.CheckForUpdatesAction.label:SI:Nadgradnja programa
+
+com.mucommander.ui.action.CompareFoldersAction.label:EN:Compare folders
+com.mucommander.ui.action.CompareFoldersAction.label:FR:Comparer dossiers
+com.mucommander.ui.action.CompareFoldersAction.label:DE:Ordner vergleichen
+com.mucommander.ui.action.CompareFoldersAction.label:ES:Comparar directorios
+com.mucommander.ui.action.CompareFoldersAction.label:CS:Porovnat složky
+com.mucommander.ui.action.CompareFoldersAction.label:zh_TW:比較資料夾
+com.mucommander.ui.action.CompareFoldersAction.label:PL:Porównaj katalogi
+com.mucommander.ui.action.CompareFoldersAction.label:HU:könyvtárak összehasonlítása
+com.mucommander.ui.action.CompareFoldersAction.label:RU:Сравнить каталоги
+com.mucommander.ui.action.CompareFoldersAction.label:ZH_CN:比较文件夹
+com.mucommander.ui.action.CompareFoldersAction.label:SI:Primerjaj mapi
+
+com.mucommander.ui.action.ConnectToServerAction.label:EN:Connect to server...
+com.mucommander.ui.action.ConnectToServerAction.label:FR:Connexion à un serveur...
+com.mucommander.ui.action.ConnectToServerAction.label:DE:Verbinde mit Server...
+com.mucommander.ui.action.ConnectToServerAction.label:ES:Conectar a un servidor...
+com.mucommander.ui.action.ConnectToServerAction.label:CS:Připojit se k serveru...
+com.mucommander.ui.action.ConnectToServerAction.label:zh_TW:連接至伺服器...
+com.mucommander.ui.action.ConnectToServerAction.label:PL:Połączenie z serwerem...
+com.mucommander.ui.action.ConnectToServerAction.label:HU:Csatlakozás a szerverhez...
+com.mucommander.ui.action.ConnectToServerAction.label:RU:Соединение с сервером...
+com.mucommander.ui.action.ConnectToServerAction.label:ZH_CN:连接到服务器...
+com.mucommander.ui.action.ConnectToServerAction.label:SI:Povezava s strežnikom...
+
+com.mucommander.ui.action.ConnectToServerAction.tooltip:EN:Connect to a remote server
+com.mucommander.ui.action.ConnectToServerAction.tooltip:FR:Se connecter à un serveur distant
+com.mucommander.ui.action.ConnectToServerAction.tooltip:DE:Mit einem Remote Server verbinden
+com.mucommander.ui.action.ConnectToServerAction.tooltip:ES:Conectar a un servidor remoto
+com.mucommander.ui.action.ConnectToServerAction.tooltip:CS:Připojit se k vzdálenému serveru
+com.mucommander.ui.action.ConnectToServerAction.tooltip:zh_TW:連接至遠端伺服器
+com.mucommander.ui.action.ConnectToServerAction.tooltip:PL:Podłącz do zdalnego serwera
+com.mucommander.ui.action.ConnectToServerAction.tooltip:HU:Kapcsolodás a távoli szerverhez
+com.mucommander.ui.action.ConnectToServerAction.tooltip:RU:Соединиться с удаленным сервером
+com.mucommander.ui.action.ConnectToServerAction.tooltip:ZH_CN:连接到远程服务器
+com.mucommander.ui.action.ConnectToServerAction.tooltip:SI:Poveži z oddaljenim strežnikom
+
+com.mucommander.ui.action.ViewAction.label:EN:View
+com.mucommander.ui.action.ViewAction.label:FR:Voir
+com.mucommander.ui.action.ViewAction.label:DE:Ansicht
+com.mucommander.ui.action.ViewAction.label:ES:Ver
+com.mucommander.ui.action.ViewAction.label:CS:Zobrazit
+com.mucommander.ui.action.ViewAction.label:zh_TW:檢視
+com.mucommander.ui.action.ViewAction.label:PL:Podgląd
+com.mucommander.ui.action.ViewAction.label:HU:megtekint
+com.mucommander.ui.action.ViewAction.label:RU:Просмотреть
+com.mucommander.ui.action.ViewAction.label:ZH_CN:查看
+com.mucommander.ui.action.ViewAction.label:SI:Pogled
+
+com.mucommander.ui.action.ViewAction.tooltip:EN:View selected file
+com.mucommander.ui.action.ViewAction.tooltip:FR:Voir le fichier sélectionné
+com.mucommander.ui.action.ViewAction.tooltip:DE:Markierte Datei betrachten
+com.mucommander.ui.action.ViewAction.tooltip:ES:Ver el fichero seleccionado
+com.mucommander.ui.action.ViewAction.tooltip:CS:Zobrazit vybraný soubor
+com.mucommander.ui.action.ViewAction.tooltip:zh_TW:檢視已選取檔案
+com.mucommander.ui.action.ViewAction.tooltip:PL:Zobacz wybrany plik
+com.mucommander.ui.action.ViewAction.tooltip:HU:A kijelölt fájl megtekintése
+com.mucommander.ui.action.ViewAction.tooltip:RU:Просмотр выбранного файла
+com.mucommander.ui.action.ViewAction.tooltip:ZH_CN:查看所选文件
+com.mucommander.ui.action.ViewAction.tooltip:SI:Poglej izbrano datoteko
+
+com.mucommander.ui.action.EditAction.label:EN:Edit
+com.mucommander.ui.action.EditAction.label:FR:Editer
+com.mucommander.ui.action.EditAction.label:DE:Bearbeiten
+com.mucommander.ui.action.EditAction.label:ES:Editar
+com.mucommander.ui.action.EditAction.label:CS:Editovat
+com.mucommander.ui.action.EditAction.label:zh_TW:編輯
+com.mucommander.ui.action.EditAction.label:PL:Edycja
+com.mucommander.ui.action.EditAction.label:HU:módosít
+com.mucommander.ui.action.EditAction.label:RU:Редактировать
+com.mucommander.ui.action.EditAction.label:ZH_CN:编辑
+com.mucommander.ui.action.EditAction.label:SI:Uredi
+
+com.mucommander.ui.action.EditAction.tooltip:EN:Edit selected file
+com.mucommander.ui.action.EditAction.tooltip:FR:Editer le fichier selectionné
+com.mucommander.ui.action.EditAction.tooltip:DE:Markierte Datei bearbeiten
+com.mucommander.ui.action.EditAction.tooltip:ES:Editar el fichero seleccionado
+com.mucommander.ui.action.EditAction.tooltip:CS:Editovat vybraný soubor
+com.mucommander.ui.action.EditAction.tooltip:zh_TW:編輯已選取檔案
+com.mucommander.ui.action.EditAction.tooltip:PL:Edytuj wybrany plik
+com.mucommander.ui.action.EditAction.tooltip:HU:A kijelölt fájl módosítása
+com.mucommander.ui.action.EditAction.tooltip:RU:Редактирование выбранного файла
+com.mucommander.ui.action.EditAction.tooltip:ZH_CN:编辑所选文件
+com.mucommander.ui.action.EditAction.tooltip:SI:Uredi izbrano datoteko
+
+com.mucommander.ui.action.CopyAction.label:EN:Copy
+com.mucommander.ui.action.CopyAction.label:FR:Copier
+com.mucommander.ui.action.CopyAction.label:DE:Kopieren
+com.mucommander.ui.action.CopyAction.label:ES:Copiar
+com.mucommander.ui.action.CopyAction.label:CS:Kopírovat
+com.mucommander.ui.action.CopyAction.label:zh_TW:複製
+com.mucommander.ui.action.CopyAction.label:PL:Kopiuj
+com.mucommander.ui.action.CopyAction.label:HU:másol
+com.mucommander.ui.action.CopyAction.label:RU:Копировать
+com.mucommander.ui.action.CopyAction.label:ZH_CN:复制
+com.mucommander.ui.action.CopyAction.label:SI:Kopiraj
+
+com.mucommander.ui.action.CopyAction.tooltip:EN:Copy marked files
+com.mucommander.ui.action.CopyAction.tooltip:FR:Copier les fichiers marqués
+com.mucommander.ui.action.CopyAction.tooltip:DE:Markierte Dateien kopieren
+com.mucommander.ui.action.CopyAction.tooltip:ES:Copiar los ficheros seleccionados
+com.mucommander.ui.action.CopyAction.tooltip:CS:Kopírovat označené soubory
+com.mucommander.ui.action.CopyAction.tooltip:zh_TW:複製已標記檔案
+com.mucommander.ui.action.CopyAction.tooltip:PL:Kopiuj zaznaczone pliki
+com.mucommander.ui.action.CopyAction.tooltip:HU:A kijelölt fájlok másolása
+com.mucommander.ui.action.CopyAction.tooltip:RU:Копирование выделенных файлов
+com.mucommander.ui.action.CopyAction.tooltip:ZH_CN:复制已标记文件
+com.mucommander.ui.action.CopyAction.tooltip:SI:Kopiraj označene datoteke
+
+com.mucommander.ui.action.LocalCopyAction.label:EN:Local Copy
+com.mucommander.ui.action.LocalCopyAction.label:FR:Copier local
+com.mucommander.ui.action.LocalCopyAction.label:DE:Lokale Kopie
+com.mucommander.ui.action.LocalCopyAction.label:ES:Copia local
+com.mucommander.ui.action.LocalCopyAction.label:CS:Lokálni kopie
+com.mucommander.ui.action.LocalCopyAction.label:zh_TW:本地複製
+com.mucommander.ui.action.LocalCopyAction.label:PL:Kopiuj lokalnie
+com.mucommander.ui.action.LocalCopyAction.label:HU:lokális másolás
+com.mucommander.ui.action.LocalCopyAction.label:RU:Копировать локально
+com.mucommander.ui.action.LocalCopyAction.label:ZH_CN:本地复制
+com.mucommander.ui.action.LocalCopyAction.label:SI:Lokalno kopiranje
+
+com.mucommander.ui.action.LocalCopyAction.tooltip:EN:Copy selected file into current folder
+com.mucommander.ui.action.LocalCopyAction.tooltip:FR:Copier le fichier selectionné dans le dossier courant
+com.mucommander.ui.action.LocalCopyAction.tooltip:DE:Kopiert markierte Datei in den aktuellen Ordner
+com.mucommander.ui.action.LocalCopyAction.tooltip:ES:Copiar el fichero seleccionado en el directorio actual
+com.mucommander.ui.action.LocalCopyAction.tooltip:CS:Kopírovat označené soubory do aktuální složky
+com.mucommander.ui.action.LocalCopyAction.tooltip:zh_TW:複製已選取檔案至此資料夾
+com.mucommander.ui.action.LocalCopyAction.tooltip:PL:Kopiuj zaznaczone pliki do aktywnego katalogu
+com.mucommander.ui.action.LocalCopyAction.tooltip:HU:A kijelölt fájlok másolása az aktuális könyvtárba
+com.mucommander.ui.action.LocalCopyAction.tooltip:RU:Копирование выбранного файла в текущий каталог
+com.mucommander.ui.action.LocalCopyAction.tooltip:ZH_CN:复制所选文件到此文件夹
+com.mucommander.ui.action.LocalCopyAction.tooltip:SI:Kopiraj označeno datoteko v trenutno mapo
+
+com.mucommander.ui.action.MoveAction.label:EN:Move
+com.mucommander.ui.action.MoveAction.label:FR:Déplacer
+com.mucommander.ui.action.MoveAction.label:DE:Verschieben
+com.mucommander.ui.action.MoveAction.label:ES:Mover
+com.mucommander.ui.action.MoveAction.label:CS:Přesunout
+com.mucommander.ui.action.MoveAction.label:zh_TW:搬移
+com.mucommander.ui.action.MoveAction.label:PL:Przenieś
+com.mucommander.ui.action.MoveAction.label:HU:mozgat
+com.mucommander.ui.action.MoveAction.label:RU:Перенести
+com.mucommander.ui.action.MoveAction.label:ZH_CN:移动
+com.mucommander.ui.action.MoveAction.label:SI:Premakni
+
+com.mucommander.ui.action.MoveAction.tooltip:EN:Move marked files
+com.mucommander.ui.action.MoveAction.tooltip:FR:Déplacer les fichiers marqués
+com.mucommander.ui.action.MoveAction.tooltip:DE:Markierte Dateien verschieben
+com.mucommander.ui.action.MoveAction.tooltip:ES:Mover los ficheros seleccionados
+com.mucommander.ui.action.MoveAction.tooltip:CS:Přesunout označené soubory
+com.mucommander.ui.action.MoveAction.tooltip:zh_TW:搬移已標記檔案
+com.mucommander.ui.action.MoveAction.tooltip:PL:Przenieś zaznaczone pliki
+com.mucommander.ui.action.MoveAction.tooltip:HU:A kijelölt fájlok mozgatása
+com.mucommander.ui.action.MoveAction.tooltip:RU:Перенос выделенных файлов
+com.mucommander.ui.action.MoveAction.tooltip:ZH_CN:移动已标记文件
+com.mucommander.ui.action.MoveAction.tooltip:SI:Premakni označene datoteke
+
+com.mucommander.ui.action.RenameAction.label:EN:Rename
+com.mucommander.ui.action.RenameAction.label:FR:Renommer
+com.mucommander.ui.action.RenameAction.label:DE:Umbenennen
+com.mucommander.ui.action.RenameAction.label:ES:Renombrar
+com.mucommander.ui.action.RenameAction.label:CS:Přejmenovat
+com.mucommander.ui.action.RenameAction.label:zh_TW:重新命名
+com.mucommander.ui.action.RenameAction.label:PL:Przemianuj
+com.mucommander.ui.action.RenameAction.label:HU:átnevez
+com.mucommander.ui.action.RenameAction.label:RU:Переименовать
+com.mucommander.ui.action.RenameAction.label:ZH_CN:重新命名
+com.mucommander.ui.action.RenameAction.label:SI:Preimenuj
+
+com.mucommander.ui.action.RenameAction.tooltip:EN:Rename selected file
+com.mucommander.ui.action.RenameAction.tooltip:FR:Renommer le fichier selectionné
+com.mucommander.ui.action.RenameAction.tooltip:DE:Markierte Datei umbenennen
+com.mucommander.ui.action.RenameAction.tooltip:ES:Renombrar el fichero seccionado
+com.mucommander.ui.action.RenameAction.tooltip:CS:Přejmenovat označené soubory
+com.mucommander.ui.action.RenameAction.tooltip:zh_TW:重新命名已選取檔案
+com.mucommander.ui.action.RenameAction.tooltip:PL:Przemianuj zaznaczone pliki
+com.mucommander.ui.action.RenameAction.tooltip:HU:A kijelölt fájl átnevezése
+com.mucommander.ui.action.RenameAction.tooltip:RU:Переименоание выбранного файла
+com.mucommander.ui.action.RenameAction.tooltip:ZH_CN:重新命名选定文件
+com.mucommander.ui.action.RenameAction.tooltip:SI:Preimenuj označeno datoteko
+
+com.mucommander.ui.action.MkdirAction.label:EN:Make dir
+com.mucommander.ui.action.MkdirAction.label:FR:Créer rep
+com.mucommander.ui.action.MkdirAction.label:DE:Ordner erstellen
+com.mucommander.ui.action.MkdirAction.label:ES:Crear directorio
+com.mucommander.ui.action.MkdirAction.label:CS:Vytvořit složku
+com.mucommander.ui.action.MkdirAction.label:zh_TW:新增資料夾
+com.mucommander.ui.action.MkdirAction.label:PL:Utwórz katalog
+com.mucommander.ui.action.MkdirAction.label:HU:új könyvtár
+com.mucommander.ui.action.MkdirAction.label:RU:Создать каталог
+com.mucommander.ui.action.MkdirAction.label:ZH_CN:新建文件夹
+com.mucommander.ui.action.MkdirAction.label:SI:Nova mapa
+
+com.mucommander.ui.action.MkdirAction.tooltip:EN:Create a directory in current folder
+com.mucommander.ui.action.MkdirAction.tooltip:FR:Créer un répertoire dans le dossier courant
+com.mucommander.ui.action.MkdirAction.tooltip:DE:Erstellt einen Ordner im aktuellen Ordner
+com.mucommander.ui.action.MkdirAction.tooltip:ES:Crear subdirectorio en el directorio actual
+com.mucommander.ui.action.MkdirAction.tooltip:CS:Vytvořit složku v aktuální složce
+com.mucommander.ui.action.MkdirAction.tooltip:zh_TW:在此處新增資料夾
+com.mucommander.ui.action.MkdirAction.tooltip:PL:Utwórz katalog w aktualnym katalogu
+com.mucommander.ui.action.MkdirAction.tooltip:HU:Új könyvtár létrehozása az aktuális könyvtárban
+com.mucommander.ui.action.MkdirAction.tooltip:RU:Создание подкаталог в текущем каталоге
+com.mucommander.ui.action.MkdirAction.tooltip:ZH_CN:在此新建文件夹
+com.mucommander.ui.action.MkdirAction.tooltip:SI:Ustvari mapo v trenutni mapi
+
+com.mucommander.ui.action.DeleteAction.label:EN:Delete
+com.mucommander.ui.action.DeleteAction.label:FR:Supprimer
+com.mucommander.ui.action.DeleteAction.label:DE:Löschen
+com.mucommander.ui.action.DeleteAction.label:ES:Eliminar
+com.mucommander.ui.action.DeleteAction.label:CS:Odstranit
+com.mucommander.ui.action.DeleteAction.label:zh_TW:刪除
+com.mucommander.ui.action.DeleteAction.label:PL:Usuń
+com.mucommander.ui.action.DeleteAction.label:HU:törlés
+com.mucommander.ui.action.DeleteAction.label:RU:Удалить
+com.mucommander.ui.action.DeleteAction.label:ZH_CN:刪除
+com.mucommander.ui.action.DeleteAction.label:SI:Brisanje
+
+com.mucommander.ui.action.DeleteAction.tooltip:EN:Delete marked files
+com.mucommander.ui.action.DeleteAction.tooltip:FR:Supprimer les fichiers marqués
+com.mucommander.ui.action.DeleteAction.tooltip:DE:Markierte Dateien löschen
+com.mucommander.ui.action.DeleteAction.tooltip:ES:Elimiar los ficheros marcados
+com.mucommander.ui.action.DeleteAction.tooltip:CS:Odstranit označené soubory
+com.mucommander.ui.action.DeleteAction.tooltip:zh_TW:刪除已標記檔案
+com.mucommander.ui.action.DeleteAction.tooltip:PL:Usuń zaznaczone pliki
+com.mucommander.ui.action.DeleteAction.tooltip:HU:A kijelölt fájlok törlése
+com.mucommander.ui.action.DeleteAction.tooltip:RU:Удаление выделенных файлов
+com.mucommander.ui.action.DeleteAction.tooltip:ZH_CN:刪除已标记文件
+com.mucommander.ui.action.DeleteAction.tooltip:SI:Izbriši označene datoteke
+
+com.mucommander.ui.action.RefreshAction.label:EN:Refresh
+com.mucommander.ui.action.RefreshAction.label:FR:Actualiser
+com.mucommander.ui.action.RefreshAction.label:DE:Aktualisieren
+com.mucommander.ui.action.RefreshAction.label:ES:Actualizar
+com.mucommander.ui.action.RefreshAction.label:CS:Aktualizovat
+com.mucommander.ui.action.RefreshAction.label:zh_TW:重新整理
+com.mucommander.ui.action.RefreshAction.label:PL:Odśwież
+com.mucommander.ui.action.RefreshAction.label:HU:frissítés
+com.mucommander.ui.action.RefreshAction.label:RU:Обновить
+com.mucommander.ui.action.RefreshAction.label:ZH_CN:重新整理
+com.mucommander.ui.action.RefreshAction.label:SI:Osveži
+
+com.mucommander.ui.action.RefreshAction.tooltip:EN:Refresh current folder
+com.mucommander.ui.action.RefreshAction.tooltip:FR:Actualiser le répertoire courant
+com.mucommander.ui.action.RefreshAction.tooltip:DE:Aktualisiere aktuellen Ordner
+com.mucommander.ui.action.RefreshAction.tooltip:ES:Actualizar directorio actual
+com.mucommander.ui.action.RefreshAction.tooltip:CS:Aktualizovat aktuální složku
+com.mucommander.ui.action.RefreshAction.tooltip:zh_TW:重新整理此資料夾
+com.mucommander.ui.action.RefreshAction.tooltip:PL:Odśwież aktualny katalog
+com.mucommander.ui.action.RefreshAction.tooltip:HU:Az aktuális könyvtár frissítése
+com.mucommander.ui.action.RefreshAction.tooltip:RU:Обновление списка файлов в текущем каталоге
+com.mucommander.ui.action.RefreshAction.tooltip:ZH_CN:刷新此文件夹
+com.mucommander.ui.action.RefreshAction.tooltip:SI:Osveži trenutno mapo
+
+com.mucommander.ui.action.CloseWindowAction.label:EN:Close
+com.mucommander.ui.action.CloseWindowAction.label:FR:Fermer
+com.mucommander.ui.action.CloseWindowAction.label:DE:Schließen
+com.mucommander.ui.action.CloseWindowAction.label:ES:Cerrar
+com.mucommander.ui.action.CloseWindowAction.label:CS:Zavřít
+com.mucommander.ui.action.CloseWindowAction.label:zh_TW:關閉
+com.mucommander.ui.action.CloseWindowAction.label:PL:Zamknij
+com.mucommander.ui.action.CloseWindowAction.label:HU:bezár
+com.mucommander.ui.action.CloseWindowAction.label:RU:Закрыть
+com.mucommander.ui.action.CloseWindowAction.label:ZH_CN:关闭
+com.mucommander.ui.action.CloseWindowAction.label:SI:Zapri
+
+# Dup!
+#com.mucommander.ui.action.CloseWindowAction.label:EN:Close window
+#com.mucommander.ui.action.CloseWindowAction.label:FR:Fermer fenêtre
+#com.mucommander.ui.action.CloseWindowAction.label:DE:Fenster schließen
+#com.mucommander.ui.action.CloseWindowAction.label:ES:Cerrar ventana
+#com.mucommander.ui.action.CloseWindowAction.label:CS:Zavřít okno
+#com.mucommander.ui.action.CloseWindowAction.label:zh_TW:關閉視窗
+#com.mucommander.ui.action.CloseWindowAction.label:PL:Zamknij okno
+#com.mucommander.ui.action.CloseWindowAction.label:HU:ablak bezárása
+#com.mucommander.ui.action.CloseWindowAction.label:RU:Закрыть окно
+#com.mucommander.ui.action.CloseWindowAction.label:ZH_CN:关闭窗口
+#com.mucommander.ui.action.CloseWindowAction.label:SI:Zapri okno
+
+com.mucommander.ui.action.CloseWindowAction.tooltip:EN:Close this window
+com.mucommander.ui.action.CloseWindowAction.tooltip:FR:Fermer cette fenêtre
+com.mucommander.ui.action.CloseWindowAction.tooltip:DE:Schließt aktuelles Fenster
+com.mucommander.ui.action.CloseWindowAction.tooltip:ES:Cerrar esta ventana
+com.mucommander.ui.action.CloseWindowAction.tooltip:CS:Zavřít aktuální okno
+com.mucommander.ui.action.CloseWindowAction.tooltip:zh_TW:關閉此視窗
+com.mucommander.ui.action.CloseWindowAction.tooltip:PL:Zamknij aktualne okno
+com.mucommander.ui.action.CloseWindowAction.tooltip:HU:ablakbezárás
+com.mucommander.ui.action.CloseWindowAction.tooltip:RU:Закрытие окна
+com.mucommander.ui.action.CloseWindowAction.tooltip:ZH_CN:关闭此窗口
+com.mucommander.ui.action.CloseWindowAction.tooltip:SI:Zapri okno
+
+com.mucommander.ui.action.ToggleCommandBarAction.label:EN:$[view_menu.hide_command_bar]
+
+com.mucommander.ui.action.CopyFileNamesAction.label:EN:Copy name(s)
+com.mucommander.ui.action.CopyFileNamesAction.label:FR:Copier nom(s)
+# Translation missing
+
+
+
+
+
+
+
+com.mucommander.ui.action.CopyFilePathsAction.label:EN:Copy path(s)
+com.mucommander.ui.action.CopyFilePathsAction.label:FR:Copier chemin(s)
+# Translation missing
+
+
+
+
+
+
+
+com.mucommander.ui.action.EmailAction.label:EN:Email files...
+com.mucommander.ui.action.EmailAction.label:FR:Envoyer par email...
+com.mucommander.ui.action.EmailAction.label:DE:Dateien mailen...
+com.mucommander.ui.action.EmailAction.label:ES:Enviar por email...
+com.mucommander.ui.action.EmailAction.label:CS:Odeslat emailem...
+com.mucommander.ui.action.EmailAction.label:zh_TW:郵寄檔案...
+com.mucommander.ui.action.EmailAction.label:PL:Wyślij pliki pocztą...
+com.mucommander.ui.action.EmailAction.label:HU:Küldés e-mailben...
+com.mucommander.ui.action.EmailAction.label:RU:Отправить файлы по Email...
+com.mucommander.ui.action.EmailAction.label:ZH_CN:邮寄文件...
+com.mucommander.ui.action.EmailAction.label:SI:Pošiljanje prek e-pošte...
+
+com.mucommander.ui.action.EmailAction.tooltip:EN:Send marked files as email attachments
+com.mucommander.ui.action.EmailAction.tooltip:FR:Envoyer les fichiers marqués en pièces jointes à un message
+com.mucommander.ui.action.EmailAction.tooltip:DE:Markierte Dateien als eMail Anhang versenden
+com.mucommander.ui.action.EmailAction.tooltip:ES:Enviar los ficheros seleccionados como adjuntos en un correo electrónico
+com.mucommander.ui.action.EmailAction.tooltip:CS:Odeslat označené soubory jako poštovní přílohu
+com.mucommander.ui.action.EmailAction.tooltip:zh_TW:傳送已標記檔案成電郵附件
+com.mucommander.ui.action.EmailAction.tooltip:PL:Wyślij zaznaczone pliki jako załącznik
+com.mucommander.ui.action.EmailAction.tooltip:HU:A kijelölt fájl(ok) küldése mellékletként
+com.mucommander.ui.action.EmailAction.tooltip:RU:Отправить выделенные файлы как приложения по Email
+com.mucommander.ui.action.EmailAction.tooltip:ZH_CN:作为邮件附件发送文件
+com.mucommander.ui.action.EmailAction.tooltip:SI:Pošlji označene datoteke kot priponko e-pošte
+
+com.mucommander.ui.action.GoBackAction.label:EN:Go back
+com.mucommander.ui.action.GoBackAction.label:FR:Dossier précédent
+com.mucommander.ui.action.GoBackAction.label:DE:Zurueck gehen
+com.mucommander.ui.action.GoBackAction.label:ES:Volver
+com.mucommander.ui.action.GoBackAction.label:CS:Zpět
+com.mucommander.ui.action.GoBackAction.label:zh_TW:退回
+com.mucommander.ui.action.GoBackAction.label:PL:Wstecz
+com.mucommander.ui.action.GoBackAction.label:HU:vissza
+com.mucommander.ui.action.GoBackAction.label:RU:Назад
+com.mucommander.ui.action.GoBackAction.label:ZH_CN:退回
+com.mucommander.ui.action.GoBackAction.label:SI:Nazaj
+
+com.mucommander.ui.action.GoBackAction.tooltip:EN:Go to previous folder
+com.mucommander.ui.action.GoBackAction.tooltip:FR:Aller au dossier précédent
+com.mucommander.ui.action.GoBackAction.tooltip:DE:Zum vorigen Ordner gehen
+com.mucommander.ui.action.GoBackAction.tooltip:ES:Ir al directorio anterior
+com.mucommander.ui.action.GoBackAction.tooltip:CS:Předchodzí složka
+com.mucommander.ui.action.GoBackAction.tooltip:zh_TW:到前一個資料夾
+com.mucommander.ui.action.GoBackAction.tooltip:PL:Idź do poprzedniego katalogu
+com.mucommander.ui.action.GoBackAction.tooltip:HU:Menjen az előző könyvtárhoz
+com.mucommander.ui.action.GoBackAction.tooltip:RU:Перейти к предыдущему каталогу
+com.mucommander.ui.action.GoBackAction.tooltip:ZH_CN:到前一个文件夹
+com.mucommander.ui.action.GoBackAction.tooltip:SI:Prejšnja mapa
+
+com.mucommander.ui.action.GoForwardAction.label:EN:Go forward
+com.mucommander.ui.action.GoForwardAction.label:FR:Dossier suivant
+com.mucommander.ui.action.GoForwardAction.label:DE:Vorwärts gehen
+com.mucommander.ui.action.GoForwardAction.label:ES:Siguiente
+com.mucommander.ui.action.GoForwardAction.label:CS:Další
+com.mucommander.ui.action.GoForwardAction.label:zh_TW:前進
+com.mucommander.ui.action.GoForwardAction.label:PL:Dalej
+com.mucommander.ui.action.GoForwardAction.label:HU:előre
+com.mucommander.ui.action.GoForwardAction.label:RU:Вперед
+com.mucommander.ui.action.GoForwardAction.label:ZH_CN:前进
+com.mucommander.ui.action.GoForwardAction.label:SI:Naprej
+
+com.mucommander.ui.action.GoForwardAction.tooltip:EN:Go to next folder
+com.mucommander.ui.action.GoForwardAction.tooltip:FR:Aller au dossier suivant
+com.mucommander.ui.action.GoForwardAction.tooltip:DE:Zum nächsten Ordner gehen
+com.mucommander.ui.action.GoForwardAction.tooltip:ES:Ir al directorio siguiente
+com.mucommander.ui.action.GoForwardAction.tooltip:CS:Další složka
+com.mucommander.ui.action.GoForwardAction.tooltip:zh_TW:到後一個資料夾
+com.mucommander.ui.action.GoForwardAction.tooltip:PL:Idź do następnego katalogu
+com.mucommander.ui.action.GoForwardAction.tooltip:HU:Menjen a következő könyvtárhoz
+com.mucommander.ui.action.GoForwardAction.tooltip:RU:Перейти к следующему каталогу
+com.mucommander.ui.action.GoForwardAction.tooltip:ZH_CN:到后一个文件夹
+com.mucommander.ui.action.GoForwardAction.tooltip:SI:Naslednja mapa
+
+com.mucommander.ui.action.GoToParentAction.label:EN:Go to parent
+com.mucommander.ui.action.GoToParentAction.label:FR:Dossier parent
+com.mucommander.ui.action.GoToParentAction.label:DE:Gehe Ebene höher
+com.mucommander.ui.action.GoToParentAction.label:ES:Ir al padre
+com.mucommander.ui.action.GoToParentAction.label:CS:Složka nahoru
+com.mucommander.ui.action.GoToParentAction.label:zh_TW:上一層
+com.mucommander.ui.action.GoToParentAction.label:PL:Idź do katalogu nadrzędnego
+com.mucommander.ui.action.GoToParentAction.label:HU:kezdethez
+com.mucommander.ui.action.GoToParentAction.label:RU:Перейти в родительский каталог
+com.mucommander.ui.action.GoToParentAction.label:ZH_CN:上一级
+com.mucommander.ui.action.GoToParentAction.label:SI:Izvor
+
+com.mucommander.ui.action.GoToParentAction.tooltip:EN:Go to parent folder
+com.mucommander.ui.action.GoToParentAction.tooltip:FR:Remonter au dossier parent
+com.mucommander.ui.action.GoToParentAction.tooltip:DE:Zum übergeordneten Ordner gehen
+com.mucommander.ui.action.GoToParentAction.tooltip:ES:Ir al directorio padre
+com.mucommander.ui.action.GoToParentAction.tooltip:CS:Složka nahoru
+com.mucommander.ui.action.GoToParentAction.tooltip:zh_TW:到上一層資料夾
+com.mucommander.ui.action.GoToParentAction.tooltip:PL:Idź do katalogu nadrzędnego
+com.mucommander.ui.action.GoToParentAction.tooltip:HU:Menjen a kezdeti könyvtárhoz
+com.mucommander.ui.action.GoToParentAction.tooltip:RU:Перейти к родительскому каталогу
+com.mucommander.ui.action.GoToParentAction.tooltip:ZH_CN:到父文件夹
+com.mucommander.ui.action.GoToParentAction.tooltip:SI:Izvorna mapa
+
+com.mucommander.ui.action.SortByNameAction.label:EN:Sort by Name
+com.mucommander.ui.action.SortByNameAction.label:FR:Classer par nom
+com.mucommander.ui.action.SortByNameAction.label:DE:Nach Namen sortieren
+com.mucommander.ui.action.SortByNameAction.label:ES:Ordenar por Nombre
+com.mucommander.ui.action.SortByNameAction.label:CS:Setřídit dle jména
+com.mucommander.ui.action.SortByNameAction.label:zh_TW:依名稱排序
+com.mucommander.ui.action.SortByNameAction.label:PL:Sortuj po nazwie
+com.mucommander.ui.action.SortByNameAction.label:HU:név szerint rendez
+com.mucommander.ui.action.SortByNameAction.label:RU:Сортировать по имени
+com.mucommander.ui.action.SortByNameAction.label:ZH_CN:按名称排序
+com.mucommander.ui.action.SortByNameAction.label:SI:Razvrsti po imenu
+
+com.mucommander.ui.action.SortByDateAction.label:EN:Sort by Date
+com.mucommander.ui.action.SortByDateAction.label:FR:Classer par date
+com.mucommander.ui.action.SortByDateAction.label:DE:Nach Datum sortieren
+com.mucommander.ui.action.SortByDateAction.label:ES:Ordenar por Fecha
+com.mucommander.ui.action.SortByDateAction.label:CS:Setřídit dle data
+com.mucommander.ui.action.SortByDateAction.label:zh_TW:依日期排序
+com.mucommander.ui.action.SortByDateAction.label:PL:Sortuj po dacie
+com.mucommander.ui.action.SortByDateAction.label:HU:dátum szerint rendez
+com.mucommander.ui.action.SortByDateAction.label:RU:Сортировать по дате
+com.mucommander.ui.action.SortByDateAction.label:ZH_CN:按日期排序
+com.mucommander.ui.action.SortByDateAction.label:SI:Razvrsti po datumu
+
+com.mucommander.ui.action.SortBySizeAction.label:EN:Sort by Size
+com.mucommander.ui.action.SortBySizeAction.label:FR:Classer par taille
+com.mucommander.ui.action.SortBySizeAction.label:DE:Nach Größe sortieren
+com.mucommander.ui.action.SortBySizeAction.label:ES:Ordenar por Tamaño
+com.mucommander.ui.action.SortBySizeAction.label:CS:Setřídit dle velikosti
+com.mucommander.ui.action.SortBySizeAction.label:zh_TW:依大小排序
+com.mucommander.ui.action.SortBySizeAction.label:PL:Sortuj po rozmiarze
+com.mucommander.ui.action.SortBySizeAction.label:HU:méret szerint rendez
+com.mucommander.ui.action.SortBySizeAction.label:RU:Сортировать по размеру
+com.mucommander.ui.action.SortBySizeAction.label:ZH_CN:按大小排序
+com.mucommander.ui.action.SortBySizeAction.label:SI:Razvrsti po velikosti
+
+com.mucommander.ui.action.SortByExtensionAction.label:EN:Sort by Extension
+com.mucommander.ui.action.SortByExtensionAction.label:FR:Classer par extension
+com.mucommander.ui.action.SortByExtensionAction.label:DE:Nach Erweiterung sortieren
+com.mucommander.ui.action.SortByExtensionAction.label:ES:Ordenar por Extensión
+com.mucommander.ui.action.SortByExtensionAction.label:CS:Setřídit dle přípony
+com.mucommander.ui.action.SortByExtensionAction.label:zh_TW:依類型排序
+com.mucommander.ui.action.SortByExtensionAction.label:PL:Sortuj po rozszerzeniu
+com.mucommander.ui.action.SortByExtensionAction.label:HU:kiterjesztés szerint rendez
+com.mucommander.ui.action.SortByExtensionAction.label:RU:Сортировать по расширению
+com.mucommander.ui.action.SortByExtensionAction.label:ZH_CN:按类型排序
+com.mucommander.ui.action.SortByExtensionAction.label:SI:Razvrsti po podaljšku
+
+com.mucommander.ui.action.MarkGroupAction.label:EN:Mark files...
+com.mucommander.ui.action.MarkGroupAction.label:FR:Marquer fichiers...
+com.mucommander.ui.action.MarkGroupAction.label:DE:Dateien markieren...
+com.mucommander.ui.action.MarkGroupAction.label:ES:Marcar ficheros...
+com.mucommander.ui.action.MarkGroupAction.label:CS:Označit soubory...
+com.mucommander.ui.action.MarkGroupAction.label:zh_TW:標記檔案
+com.mucommander.ui.action.MarkGroupAction.label:PL:Zaznacz pliki...
+com.mucommander.ui.action.MarkGroupAction.label:HU:fájl(ok) kijelölése...
+com.mucommander.ui.action.MarkGroupAction.label:RU:Выделить файлы...
+com.mucommander.ui.action.MarkGroupAction.label:ZH_CN:标记文件
+com.mucommander.ui.action.MarkGroupAction.label:SI:Označi datoteke...
+
+com.mucommander.ui.action.MarkGroupAction.tooltip:EN:Mark a group of files
+com.mucommander.ui.action.MarkGroupAction.tooltip:FR:Marquer un groupe de fichiers
+com.mucommander.ui.action.MarkGroupAction.tooltip:DE:Eine Gruppe von Dateien markieren
+com.mucommander.ui.action.MarkGroupAction.tooltip:ES:Marcar un grupo de ficheros
+com.mucommander.ui.action.MarkGroupAction.tooltip:CS:Označit skupinu souborů
+com.mucommander.ui.action.MarkGroupAction.tooltip:zh_TW:標記檔案群組
+com.mucommander.ui.action.MarkGroupAction.tooltip:PL:Zaznacz grupę plików
+com.mucommander.ui.action.MarkGroupAction.tooltip:HU:csoportos fájlkijelölés
+com.mucommander.ui.action.MarkGroupAction.tooltip:RU:Выделить группу файлов
+com.mucommander.ui.action.MarkGroupAction.tooltip:ZH_CN:标记一组文件
+com.mucommander.ui.action.MarkGroupAction.tooltip:SI:Označi skupino datotek
+
+com.mucommander.ui.action.UnmarkGroupAction.label:EN:Unmark files...
+com.mucommander.ui.action.UnmarkGroupAction.label:FR:Dé-marquer fichiers...
+com.mucommander.ui.action.UnmarkGroupAction.label:DE:Dateien demarkieren...
+com.mucommander.ui.action.UnmarkGroupAction.label:ES:Desmarcar ficheros...
+com.mucommander.ui.action.UnmarkGroupAction.label:CS:Odznačit soubory...
+com.mucommander.ui.action.UnmarkGroupAction.label:zh_TW:取消標記
+com.mucommander.ui.action.UnmarkGroupAction.label:PL:Odznacz pliki...
+com.mucommander.ui.action.UnmarkGroupAction.label:HU:kijelölés megszüntetése...
+com.mucommander.ui.action.UnmarkGroupAction.label:RU:Снять выделение с файлов...
+com.mucommander.ui.action.UnmarkGroupAction.label:ZH_CN:取消标记
+com.mucommander.ui.action.UnmarkGroupAction.label:SI:Odznači datoteke...
+
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:EN:Unmark a group of files
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:FR:Dé-marquer un groupe de fichiers
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:DE:Eine Gruppe von Dateien demarkieren
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:ES:Desmarcar un grupo de ficheros
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:CS:Odznačit skupinu souborů
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:zh_TW:取消檔案群組標記
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:PL:Odznacz grupę plików
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:HU:csoportos fájlkijelölés visszavonása
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:RU:Отменить выделение группы файлов
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:ZH_CN:取消一组文件
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:SI:Odznači skupino datotek
+
+com.mucommander.ui.action.MarkAllAction.label:EN:Mark all
+com.mucommander.ui.action.MarkAllAction.label:FR:Marquer tous
+com.mucommander.ui.action.MarkAllAction.label:DE:Alle markieren
+com.mucommander.ui.action.MarkAllAction.label:ES:Marcar todos
+com.mucommander.ui.action.MarkAllAction.label:CS:Označit vše
+com.mucommander.ui.action.MarkAllAction.label:zh_TW:全部標記
+com.mucommander.ui.action.MarkAllAction.label:PL:Zaznacz wszystko
+com.mucommander.ui.action.MarkAllAction.label:HU:összes kijelölése
+com.mucommander.ui.action.MarkAllAction.label:RU:Выделить все
+com.mucommander.ui.action.MarkAllAction.label:ZH_CN:全部标记
+com.mucommander.ui.action.MarkAllAction.label:SI:Označi vse
+
+com.mucommander.ui.action.UnmarkAllAction.label:EN:Unmark all
+com.mucommander.ui.action.UnmarkAllAction.label:FR:Dé-marquer tous
+com.mucommander.ui.action.UnmarkAllAction.label:DE:Alle demarkieren
+com.mucommander.ui.action.UnmarkAllAction.label:ES:Desmarcar todos
+com.mucommander.ui.action.UnmarkAllAction.label:CS:Odznačit vše
+com.mucommander.ui.action.UnmarkAllAction.label:zh_TW:取消全部標記
+com.mucommander.ui.action.UnmarkAllAction.label:PL:Odznacz wszystko
+com.mucommander.ui.action.UnmarkAllAction.label:HU:összes kijelölés megszüntetése
+com.mucommander.ui.action.UnmarkAllAction.label:RU:Снять выделение со всего
+com.mucommander.ui.action.UnmarkAllAction.label:ZH_CN:取消全部标记
+com.mucommander.ui.action.UnmarkAllAction.label:SI:Odznači vse
+
+com.mucommander.ui.action.InvertSelectionAction.label:EN:Invert selection
+com.mucommander.ui.action.InvertSelectionAction.label:FR:Inverser sélection
+com.mucommander.ui.action.InvertSelectionAction.label:DE:Auswahl umkehren
+com.mucommander.ui.action.InvertSelectionAction.label:ES:Invertir selección
+com.mucommander.ui.action.InvertSelectionAction.label:CS:Invertovat označení
+com.mucommander.ui.action.InvertSelectionAction.label:zh_TW:反向標記
+com.mucommander.ui.action.InvertSelectionAction.label:PL:Odwróć zaznaczenie
+com.mucommander.ui.action.InvertSelectionAction.label:HU:fordított kijelölés
+com.mucommander.ui.action.InvertSelectionAction.label:RU:Инвертировать выделение
+com.mucommander.ui.action.InvertSelectionAction.label:ZH_CN:反向标记
+com.mucommander.ui.action.InvertSelectionAction.label:SI:Obrni izbor
+
+com.mucommander.ui.action.SwapFoldersAction.label:EN:Swap folders
+com.mucommander.ui.action.SwapFoldersAction.label:FR:Echanger les dossiers
+com.mucommander.ui.action.SwapFoldersAction.label:DE:Fenster vertauschen
+com.mucommander.ui.action.SwapFoldersAction.label:ES:Intercambiar directorios
+com.mucommander.ui.action.SwapFoldersAction.label:CS:Prohodit složky
+com.mucommander.ui.action.SwapFoldersAction.label:zh_TW:資料夾互換
+com.mucommander.ui.action.SwapFoldersAction.label:PL:Zamień katalogi
+com.mucommander.ui.action.SwapFoldersAction.label:HU:oldalak felcserélése
+com.mucommander.ui.action.SwapFoldersAction.label:RU:Поменять местами каталоги
+com.mucommander.ui.action.SwapFoldersAction.label:ZH_CN:文件夾互換
+com.mucommander.ui.action.SwapFoldersAction.label:SI:Zamenjaj mapi
+
+com.mucommander.ui.action.SwapFoldersAction.tooltip:EN:Swap left and right folders
+com.mucommander.ui.action.SwapFoldersAction.tooltip:FR:Echanger les dossiers de gauche et de droite
+com.mucommander.ui.action.SwapFoldersAction.tooltip:DE:Linkes und rechtes Fenster vertauschen
+com.mucommander.ui.action.SwapFoldersAction.tooltip:ES:Intercambiar directorios
+com.mucommander.ui.action.SwapFoldersAction.tooltip:CS:Prohodit složky
+com.mucommander.ui.action.SwapFoldersAction.tooltip:zh_TW:切換左右方的資料夾
+com.mucommander.ui.action.SwapFoldersAction.tooltip:PL:Zmień katalogi  z lewej i prawej strony
+com.mucommander.ui.action.SwapFoldersAction.tooltip:HU:A bal és jobb panel felcserélése
+com.mucommander.ui.action.SwapFoldersAction.tooltip:RU:Поменять местами панели
+com.mucommander.ui.action.SwapFoldersAction.tooltip:ZH_CN:交换左右文件夹
+com.mucommander.ui.action.SwapFoldersAction.tooltip:SI:Zamenjaj levo in desno okno
+
+com.mucommander.ui.action.SetSameFolderAction.label:EN:Set same folder
+com.mucommander.ui.action.SetSameFolderAction.label:FR:Affecter le même dossier
+com.mucommander.ui.action.SetSameFolderAction.label:DE:Auf selben Ordner setzen
+com.mucommander.ui.action.SetSameFolderAction.label:ES:Marcar el mismo directorio
+com.mucommander.ui.action.SetSameFolderAction.label:CS:Nastavit stejnou složku
+com.mucommander.ui.action.SetSameFolderAction.label:zh_TW:跳至同一資料夾
+com.mucommander.ui.action.SetSameFolderAction.label:PL:Źródłowy=Docelowy
+com.mucommander.ui.action.SetSameFolderAction.label:HU:ugyanaz mindkét oldalon
+com.mucommander.ui.action.SetSameFolderAction.label:RU:Сделать каталоги одинаковыми
+com.mucommander.ui.action.SetSameFolderAction.label:ZH_CN:设为同一文件夹
+com.mucommander.ui.action.SetSameFolderAction.label:SI:Nastavi isto mapo
+
+com.mucommander.ui.action.SetSameFolderAction.tooltip:EN:Set same directory to left and right folders
+com.mucommander.ui.action.SetSameFolderAction.tooltip:FR:Affecter le même repertoire aux dossiers de gauche et de droite
+com.mucommander.ui.action.SetSameFolderAction.tooltip:DE:Gleicher Ordner für linkes und rechtes Fenster
+com.mucommander.ui.action.SetSameFolderAction.tooltip:ES:Ajustar el mismo directorio en ambos lados
+com.mucommander.ui.action.SetSameFolderAction.tooltip:CS:Nastavit stejnou složku
+com.mucommander.ui.action.SetSameFolderAction.tooltip:zh_TW:設定左右資料夾成一樣
+com.mucommander.ui.action.SetSameFolderAction.tooltip:PL:Ustawe te same katalogi w obu oknach
+com.mucommander.ui.action.SetSameFolderAction.tooltip:HU:A bal és jobb oldalon ugyanaz a panel legyen
+com.mucommander.ui.action.SetSameFolderAction.tooltip:RU:Одинаковые каталоги в обеих панелях
+com.mucommander.ui.action.SetSameFolderAction.tooltip:ZH_CN:设置左右文件夹为同一目录
+com.mucommander.ui.action.SetSameFolderAction.tooltip:SI:Nastavi enako mapo v levem in dsenem oknu
+
+com.mucommander.ui.action.NewWindowAction.label:EN:New window
+com.mucommander.ui.action.NewWindowAction.label:FR:Nouvelle fenêtre
+com.mucommander.ui.action.NewWindowAction.label:DE:Neues Fenster
+com.mucommander.ui.action.NewWindowAction.label:ES:Nueva ventana
+com.mucommander.ui.action.NewWindowAction.label:CS:Nové okno
+com.mucommander.ui.action.NewWindowAction.label:zh_TW:新視窗
+com.mucommander.ui.action.NewWindowAction.label:PL:Nowe okno
+com.mucommander.ui.action.NewWindowAction.label:HU:új ablak
+com.mucommander.ui.action.NewWindowAction.label:RU:Новое окно
+com.mucommander.ui.action.NewWindowAction.label:ZH_CN:新窗口
+com.mucommander.ui.action.NewWindowAction.label:SI:Novo okno
+
+com.mucommander.ui.action.NewWindowAction.tooltip:EN:Open a new window
+com.mucommander.ui.action.NewWindowAction.tooltip:FR:Ouvrir une nouvelle fenêtre
+com.mucommander.ui.action.NewWindowAction.tooltip:DE:Ein neues Fenster öffnen
+com.mucommander.ui.action.NewWindowAction.tooltip:ES:Abrir una nueva ventana
+com.mucommander.ui.action.NewWindowAction.tooltip:CS:Otevřít nové okno
+com.mucommander.ui.action.NewWindowAction.tooltip:zh_TW:開啟新視窗
+com.mucommander.ui.action.NewWindowAction.tooltip:PL:Otwórz nowe okno
+com.mucommander.ui.action.NewWindowAction.tooltip:HU:megnyitás új ablakban
+com.mucommander.ui.action.NewWindowAction.tooltip:RU:Открыть новое окно
+com.mucommander.ui.action.NewWindowAction.tooltip:ZH_CN:打开新窗口
+com.mucommander.ui.action.NewWindowAction.tooltip:SI:Odpri v novem oknu
+
+com.mucommander.ui.action.OpenAction.label:EN:Open
+com.mucommander.ui.action.OpenAction.label:FR:Ouvrir
+com.mucommander.ui.action.OpenAction.label:ES:Abrir
+com.mucommander.ui.action.OpenAction.label:RU:Открыть
+com.mucommander.ui.action.OpenAction.label:zh_TW:開啟
+com.mucommander.ui.action.OpenAction.label:PL:Otwórz
+com.mucommander.ui.action.OpenAction.label:ZH_CN:打开
+com.mucommander.ui.action.OpenAction.label:SI:Odpri
+# Translation missing
+
+
+
+
+com.mucommander.ui.action.OpenNativelyAction.label:EN:Open natively
+com.mucommander.ui.action.OpenNativelyAction.label:FR:Ouvrir nativement
+# Translation missing
 
 
 
@@ -750,18 +1115,10 @@ file_menu.open_natively:FR:Ouvrir nativement
 #file_menu.reveal_in_finder:ZH_CN:在查找器中展示
 #file_menu.reveal_in_finder:SI:Razkrij
 
-file_menu.reveal_in_desktop:EN:Reveal in %1
-file_menu.reveal_in_desktop:FR:Afficher dans %1
-file_menu.reveal_in_desktop:ES:Mostrar en %1
-
-
-
-
-
-
-
-file_menu.copy_filenames:EN:Copy name(s)
-file_menu.copy_filenames:FR:Copier nom(s)
+com.mucommander.ui.action.RevealInDesktopAction.label:EN:Reveal in %1
+com.mucommander.ui.action.RevealInDesktopAction.label:FR:Afficher dans %1
+com.mucommander.ui.action.RevealInDesktopAction.label:ES:Mostrar en %1
+# Translation missing
 
 
 
@@ -770,8 +1127,37 @@ file_menu.copy_filenames:FR:Copier nom(s)
 
 
 
-file_menu.copy_paths:EN:Copy path(s)
-file_menu.copy_paths:FR:Copier chemin(s)
+com.mucommander.ui.action.RunCommandAction.label:EN:$[run_dialog.run_command]...
+
+com.mucommander.ui.action.RunCommandAction.tooltip:EN:Run a command in current folder
+com.mucommander.ui.action.RunCommandAction.tooltip:FR:Exécuter une commande dans le dossier courant
+com.mucommander.ui.action.RunCommandAction.tooltip:DE:Einen Befehl im aktuellen Ordner ausführen
+com.mucommander.ui.action.RunCommandAction.tooltip:ES:Ejecutar un comando en el directorio actual
+com.mucommander.ui.action.RunCommandAction.tooltip:CS:Spustit příkaz v aktuální složce
+com.mucommander.ui.action.RunCommandAction.tooltip:zh_TW:在此資料夾執行命令
+com.mucommander.ui.action.RunCommandAction.tooltip:PL:Wykonaj polecenie w aktualnym katalogu
+com.mucommander.ui.action.RunCommandAction.tooltip:HU:Parancs futtatása az aktuális könyvtárból
+com.mucommander.ui.action.RunCommandAction.tooltip:RU:Выполнить команду из текущего каталога
+com.mucommander.ui.action.RunCommandAction.tooltip:ZH_CN:在当前文件夹执行命令
+com.mucommander.ui.action.RunCommandAction.tooltip:SI:Zaženi ukaz s trenutne mape
+
+com.mucommander.ui.action.PackAction.label:EN:$[pack_dialog.title]...
+
+#shortcuts_dialog.file_operations.zip:EN:Compress marked files in a ZIP file
+#shortcuts_dialog.file_operations.zip:FR:Compresser les fichiers marqués dans un fichier ZIP
+#shortcuts_dialog.file_operations.zip:DE:Markierte Dateien in eine ZIP Datei packen
+#shortcuts_dialog.file_operations.zip:ES:Comprimir los ficheros marcados en un fichero ZIP
+#shortcuts_dialog.file_operations.zip:CS:Komprimovat označené soubory do ZIP archívu
+#shortcuts_dialog.file_operations.zip:zh_TW:壓縮已標記檔案至ZIP檔案
+#shortcuts_dialog.file_operations.zip:PL:spakuj zaznaczone pliku do archiwum ZIP
+#shortcuts_dialog.file_operations.zip:HU:A kijelölt fájl(ok) tömörítése egy Zip fájlba
+#shortcuts_dialog.file_operations.zip:RU:Поместить выделенные файлы в ZIP-архив
+#shortcuts_dialog.file_operations.zip:ZH_CN:压缩选定文件为ZIP文件
+#shortcuts_dialog.file_operations.zip:SI:Stisni označene datoteke v ZIP datoteko
+
+com.mucommander.ui.action.PackAction.tooltip:EN:Pack marked files into an archive
+com.mucommander.ui.action.PackAction.tooltip:FR:Compresser les fichiers marqués dans une archive
+# Translation missing
 
 
 
@@ -780,73 +1166,218 @@ file_menu.copy_paths:FR:Copier chemin(s)
 
 
 
-file_menu.run_command:EN:$[run_dialog.run_command]...
 
-file_menu.pack:EN:$[pack_dialog.title]...
 
-file_menu.unpack:EN:$[unpack_dialog.title]...
 
-file_menu.email:EN:Email files...
-file_menu.email:FR:Envoyer par email...
-file_menu.email:DE:Dateien mailen...
-file_menu.email:ES:Enviar por email...
-file_menu.email:CS:Odeslat emailem...
-file_menu.email:zh_TW:郵寄檔案...
-file_menu.email:PL:Wyślij pliki pocztą...
-file_menu.email:HU:Küldés e-mailben...
-file_menu.email:RU:Отправить файлы по Email...
-file_menu.email:ZH_CN:邮寄文件...
-file_menu.email:SI:Pošiljanje prek e-pošte...
 
-file_menu.properties:EN:Properties
-file_menu.properties:FR:Propriétés
-file_menu.properties:DE:Eigenschaften
-file_menu.properties:ES:Propiedades
-file_menu.properties:CS:Vlastnosti
-file_menu.properties:zh_TW:屬性
-file_menu.properties:PL:Właściwości
-file_menu.properties:HU:tulajdonságok
-file_menu.properties:RU:Свойства
-file_menu.properties:ZH_CN:內容
-file_menu.properties:SI:Lastnosti
 
-file_menu.preferences:EN:Preferences...
-file_menu.preferences:FR:Préférences...
-file_menu.preferences:DE:Einstellungen...
-file_menu.preferences:ES:Preferencias...
-file_menu.preferences:CS:Možnosti...
-file_menu.preferences:zh_TW:設定
-file_menu.preferences:PL:Preferencje...
-file_menu.preferences:HU:beállítások...
-file_menu.preferences:RU:Настройки...
-file_menu.preferences:ZH_CN:偏好
-file_menu.preferences:SI:Nastavitve...
+com.mucommander.ui.action.UnpackAction.label:EN:$[unpack_dialog.title]...
 
-file_menu.check_for_updates:EN:Check for updates
-file_menu.check_for_updates:FR:Mises à jour...
-file_menu.check_for_updates:DE:Nach Updates suchen
-file_menu.check_for_updates:ES:Comprobar actualizaciones
-file_menu.check_for_updates:CS:Aktualizace
-file_menu.check_for_updates:zh_TW:檢查更新版本
-file_menu.check_for_updates:PL:Sprawdź aktualizacje
-file_menu.check_for_updates:HU:frissítések keresése
-file_menu.check_for_updates:RU:Проверить обновления
-file_menu.check_for_updates:ZH_CN:检查更新
-file_menu.check_for_updates:SI:Nadgradnja programa
+#shortcuts_dialog.file_operations.unzip:EN:Uncompress marked ZIP files
+#shortcuts_dialog.file_operations.unzip:FR:Décompresser les fichiers ZIP marqués
+#shortcuts_dialog.file_operations.unzip:DE:Markierte ZIP Dateien entpacken
+#shortcuts_dialog.file_operations.unzip:ES:Descomprimir los ficheros ZIP seleccionados
+#shortcuts_dialog.file_operations.unzip:CS:Dekomprimovat označené soubory ze ZIP archívu
+#shortcuts_dialog.file_operations.unzip:zh_TW:解壓縮已標記的ZIP檔案
+#shortcuts_dialog.file_operations.unzip:PL:Rozpakuj zaznaczone archiwum ZIP
+#shortcuts_dialog.file_operations.unzip:HU:A kijelölt Zip fájl(ok) kicsomagolása
+#shortcuts_dialog.file_operations.unzip:RU:Разархивировать выделенные файлы
+#shortcuts_dialog.file_operations.unzip:ZH_CN:解压已标记的ZIP文件
+#shortcuts_dialog.file_operations.unzip:SI:Razširi označene ZIP datoteke
 
-file_menu.close_window:EN:Close window
-file_menu.close_window:FR:Fermer fenêtre
-file_menu.close_window:DE:Fenster schließen
-file_menu.close_window:ES:Cerrar ventana
-file_menu.close_window:CS:Zavřít okno
-file_menu.close_window:zh_TW:關閉視窗
-file_menu.close_window:PL:Zamknij okno
-file_menu.close_window:HU:ablak bezárása
-file_menu.close_window:RU:Закрыть окно
-file_menu.close_window:ZH_CN:关闭窗口
-file_menu.close_window:SI:Zapri okno
+com.mucommander.ui.action.UnpackAction.tooltip:EN:Unpack marked archive files
+com.mucommander.ui.action.UnpackAction.tooltip:FR:Décompresser les archives marquées
 
-file_menu.quit:EN:$[quit_dialog.quit]
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.ShowFilePropertiesAction.label:EN:Properties
+com.mucommander.ui.action.ShowFilePropertiesAction.label:FR:Propriétés
+com.mucommander.ui.action.ShowFilePropertiesAction.label:DE:Eigenschaften
+com.mucommander.ui.action.ShowFilePropertiesAction.label:ES:Propiedades
+com.mucommander.ui.action.ShowFilePropertiesAction.label:CS:Vlastnosti
+com.mucommander.ui.action.ShowFilePropertiesAction.label:zh_TW:屬性
+com.mucommander.ui.action.ShowFilePropertiesAction.label:PL:Właściwości
+com.mucommander.ui.action.ShowFilePropertiesAction.label:HU:tulajdonságok
+com.mucommander.ui.action.ShowFilePropertiesAction.label:RU:Свойства
+com.mucommander.ui.action.ShowFilePropertiesAction.label:ZH_CN:內容
+com.mucommander.ui.action.ShowFilePropertiesAction.label:SI:Lastnosti
+
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:EN:Show properties of marked files
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:FR:Afficher les propriétés des fichiers marqués
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:DE:Eigenschaften der markierten Dateien anzeigen
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:ES:Mostrar propiedades de los ficheros seleccionados
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:CS:Zobrazit vlastnosti označených souborů
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:zh_TW:顯示已標記檔案的屬性
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:PL:Pokaż właściwości zaznaczonych plików
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:HU:Mutassa a kijelölt fájl(ok) tulajdonságait
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:RU:Показать свойства выбранных файлов
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:ZH_CN:显示已标记文件的属性
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:SI:Prikaži podrobnosti označenih datotek
+
+com.mucommander.ui.action.ShowPreferencesAction.label:EN:Preferences...
+com.mucommander.ui.action.ShowPreferencesAction.label:FR:Préférences...
+com.mucommander.ui.action.ShowPreferencesAction.label:DE:Einstellungen...
+com.mucommander.ui.action.ShowPreferencesAction.label:ES:Preferencias...
+com.mucommander.ui.action.ShowPreferencesAction.label:CS:Možnosti...
+com.mucommander.ui.action.ShowPreferencesAction.label:zh_TW:設定
+com.mucommander.ui.action.ShowPreferencesAction.label:PL:Preferencje...
+com.mucommander.ui.action.ShowPreferencesAction.label:HU:beállítások...
+com.mucommander.ui.action.ShowPreferencesAction.label:RU:Настройки...
+com.mucommander.ui.action.ShowPreferencesAction.label:ZH_CN:偏好
+com.mucommander.ui.action.ShowPreferencesAction.label:SI:Nastavitve...
+
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:EN:Configure muCommander
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:FR:Configurer muCommander
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:DE:muCommander konfigurieren
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:ES:Configurar muCommander
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:CS:Konfigurovat muCommander
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:zh_TW:設定 muCommander
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:PL:Konfiguruj muCommandera
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:HU:muCommander beállítás
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:RU:Настройка muCommander
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:ZH_CN:首选项
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:SI:Konfiguriraj muCommander
+
+com.mucommander.ui.action.QuitAction.label:EN:$[quit_dialog.quit]
+
+com.mucommander.ui.action.ReverseSortOrderAction.label:EN:Invert order
+com.mucommander.ui.action.ReverseSortOrderAction.label:FR:Inverser l'ordre
+com.mucommander.ui.action.ReverseSortOrderAction.label:DE:Sortierung umdrehen
+com.mucommander.ui.action.ReverseSortOrderAction.label:ES:Invertir el orden
+com.mucommander.ui.action.ReverseSortOrderAction.label:CS:Obrátit pořadí
+com.mucommander.ui.action.ReverseSortOrderAction.label:zh_TW:反向排序
+com.mucommander.ui.action.ReverseSortOrderAction.label:PL:Odwrotna kolejność
+com.mucommander.ui.action.ReverseSortOrderAction.label:HU:fordított sorrend
+com.mucommander.ui.action.ReverseSortOrderAction.label:RU:В обратном порядке
+com.mucommander.ui.action.ReverseSortOrderAction.label:ZH_CN:反向排序
+com.mucommander.ui.action.ReverseSortOrderAction.label:SI:Obrni vrstni red
+
+com.mucommander.ui.action.ToggleAutoSizeAction.label:EN:Auto-size columns
+com.mucommander.ui.action.ToggleAutoSizeAction.label:FR:Auto-dimensionner les colonnes
+com.mucommander.ui.action.ToggleAutoSizeAction.label:ES:Autodimensionar las columnas
+com.mucommander.ui.action.ToggleAutoSizeAction.label:RU:Автоподбор размера колонок
+com.mucommander.ui.action.ToggleAutoSizeAction.label:zh_TW:自動調寬欄位
+com.mucommander.ui.action.ToggleAutoSizeAction.label:PL:Automatycznie rozszerz kolumny
+com.mucommander.ui.action.ToggleAutoSizeAction.label:ZH_CN:自动设置栏宽
+com.mucommander.ui.action.ToggleAutoSizeAction.label:SI:Samodejna širina stolpcev
+# Translation missing
+
+
+
+
+
+
+
+com.mucommander.ui.action.StopAction.label:EN:Stop folder change
+com.mucommander.ui.action.StopAction.label:FR:Arrêter le changement de dossier
+# Translation missing
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.ToggleCommandBarAction.show:EN:Show command bar
+com.mucommander.ui.action.ToggleCommandBarAction.show:FR:Afficher la barre de commande
+com.mucommander.ui.action.ToggleCommandBarAction.show:DE:Befehlsleiste anzeigen
+com.mucommander.ui.action.ToggleCommandBarAction.show:ES:Mostar la barra de comandos
+com.mucommander.ui.action.ToggleCommandBarAction.show:CS:Zobrazit panel příkazů
+com.mucommander.ui.action.ToggleCommandBarAction.show:zh_TW:顯示命令列
+com.mucommander.ui.action.ToggleCommandBarAction.show:PL:Pokaż pasek komend
+com.mucommander.ui.action.ToggleCommandBarAction.show:HU:látszik a parancssor
+com.mucommander.ui.action.ToggleCommandBarAction.show:RU:Показать панель команд
+com.mucommander.ui.action.ToggleCommandBarAction.show:ZH_CN:显示命令条
+com.mucommander.ui.action.ToggleCommandBarAction.show:SI:Prikaži ukazno vrstico
+
+com.mucommander.ui.action.ToggleCommandBarAction.hide:EN:Hide command bar
+com.mucommander.ui.action.ToggleCommandBarAction.hide:FR:Cacher la barre de commande
+com.mucommander.ui.action.ToggleCommandBarAction.hide:DE:Befehlsleiste verstecken
+com.mucommander.ui.action.ToggleCommandBarAction.hide:ES:Ocultar la barra de comandos
+com.mucommander.ui.action.ToggleCommandBarAction.hide:CS:Skrýt panel příkazů
+com.mucommander.ui.action.ToggleCommandBarAction.hide:zh_TW:隱藏命令列
+com.mucommander.ui.action.ToggleCommandBarAction.hide:PL:Ukryj pasek komend
+com.mucommander.ui.action.ToggleCommandBarAction.hide:HU:a parncssor rejtése
+com.mucommander.ui.action.ToggleCommandBarAction.hide:RU:Скрыть панель команд
+com.mucommander.ui.action.ToggleCommandBarAction.hide:ZH_CN:隐藏命令条
+com.mucommander.ui.action.ToggleCommandBarAction.hide:SI:Skrij ukazno vrstico
+
+com.mucommander.ui.action.ToggleToolBarAction.show:EN:Show toolbar
+com.mucommander.ui.action.ToggleToolBarAction.show:FR:Afficher la barre d'outils
+com.mucommander.ui.action.ToggleToolBarAction.show:DE:Toolbar anzeigen
+com.mucommander.ui.action.ToggleToolBarAction.show:ES:Mostrar la barra de herramientas
+com.mucommander.ui.action.ToggleToolBarAction.show:CS:Zobrazit panel nástrojů
+com.mucommander.ui.action.ToggleToolBarAction.show:zh_TW:顯示工具列
+com.mucommander.ui.action.ToggleToolBarAction.show:PL:Pokaż pasek narzędzi
+com.mucommander.ui.action.ToggleToolBarAction.show:HU:látszik az eszköztár
+com.mucommander.ui.action.ToggleToolBarAction.show:RU:Показать панель инструментов
+com.mucommander.ui.action.ToggleToolBarAction.show:ZH_CN:显示工具条
+com.mucommander.ui.action.ToggleToolBarAction.show:SI:Prikaži orodno vrstico
+
+com.mucommander.ui.action.ToggleToolBarAction.hide:EN:Hide toolbar
+com.mucommander.ui.action.ToggleToolBarAction.hide:FR:Cacher la barre d'outils
+com.mucommander.ui.action.ToggleToolBarAction.hide:DE:Werkzeugleiste verstecken
+com.mucommander.ui.action.ToggleToolBarAction.hide:ES:Ocultar la barra de herramientas
+com.mucommander.ui.action.ToggleToolBarAction.hide:CS:Skrýt panel nástrojů
+com.mucommander.ui.action.ToggleToolBarAction.hide:zh_TW:隱藏工具列
+com.mucommander.ui.action.ToggleToolBarAction.hide:PL:Ukryj pasek narzędzi
+com.mucommander.ui.action.ToggleToolBarAction.hide:HU:az eszköztár rejtése
+com.mucommander.ui.action.ToggleToolBarAction.hide:RU:Скрыть панель инструментов
+com.mucommander.ui.action.ToggleToolBarAction.hide:ZH_CN:隐藏工具条
+com.mucommander.ui.action.ToggleToolBarAction.hide:SI:Skrij orodno vrstico
+
+com.mucommander.ui.action.ToggleStatusBarAction.show:EN:Show status bar
+com.mucommander.ui.action.ToggleStatusBarAction.show:FR:Afficher la barre de status
+com.mucommander.ui.action.ToggleStatusBarAction.show:DE:Statusleiste anzeigen
+com.mucommander.ui.action.ToggleStatusBarAction.show:ES:Mostrar barra de estado
+com.mucommander.ui.action.ToggleStatusBarAction.show:CS:Zobrazit stavový řádek
+com.mucommander.ui.action.ToggleStatusBarAction.show:zh_TW:顯示狀態列
+com.mucommander.ui.action.ToggleStatusBarAction.show:PL:Pokaż pasek statusu
+com.mucommander.ui.action.ToggleStatusBarAction.show:HU:látszik az állapotsor
+com.mucommander.ui.action.ToggleStatusBarAction.show:RU:Показать панель статуса
+com.mucommander.ui.action.ToggleStatusBarAction.show:ZH_CN:显示状态行
+com.mucommander.ui.action.ToggleStatusBarAction.show:SI:Prikaži statusno vrstico
+
+com.mucommander.ui.action.ToggleStatusBarAction.hide:EN:Hide status bar
+com.mucommander.ui.action.ToggleStatusBarAction.hide:FR:Cacher la barre de status
+com.mucommander.ui.action.ToggleStatusBarAction.hide:DE:Statusleiste verstecken
+com.mucommander.ui.action.ToggleStatusBarAction.hide:ES:Ocultar la barra de estado
+com.mucommander.ui.action.ToggleStatusBarAction.hide:CS:Skrýt stavový řádek
+com.mucommander.ui.action.ToggleStatusBarAction.hide:zh_TW:隱藏狀態列
+com.mucommander.ui.action.ToggleStatusBarAction.hide:PL:Ukryj pasek statusu
+com.mucommander.ui.action.ToggleStatusBarAction.hide:HU:az állapotsor rejtése
+com.mucommander.ui.action.ToggleStatusBarAction.hide:RU:Скрыть панель статуса
+com.mucommander.ui.action.ToggleStatusBarAction.hide:ZH_CN:隐藏状态行
+com.mucommander.ui.action.ToggleStatusBarAction.hide:SI:Skrij statusno vrstico
+
+
+#############
+# File menu #
+#############
+
+file_menu:EN:File
+file_menu:FR:Fichier
+file_menu:DE:Datei
+file_menu:ES:Archivo
+file_menu:CS:Soubor
+file_menu:zh_TW:檔案
+file_menu:PL:Plik
+file_menu:HU:fájl
+file_menu:RU:Файл
+file_menu:ZH_CN:文件
+file_menu:SI:Datoteka
 
 
 #############
@@ -865,78 +1396,6 @@ mark_menu:RU:Выделение
 mark_menu:ZH_CN:标记
 mark_menu:SI:Označevanje
 
-mark_menu.mark:EN:Mark files...
-mark_menu.mark:FR:Marquer fichiers...
-mark_menu.mark:DE:Dateien markieren...
-mark_menu.mark:ES:Marcar ficheros...
-mark_menu.mark:CS:Označit soubory...
-mark_menu.mark:zh_TW:標記檔案
-mark_menu.mark:PL:Zaznacz pliki...
-mark_menu.mark:HU:fájl(ok) kijelölése...
-mark_menu.mark:RU:Выделить файлы...
-mark_menu.mark:ZH_CN:标记文件
-mark_menu.mark:SI:Označi datoteke...
-
-mark_menu.unmark:EN:Unmark files...
-mark_menu.unmark:FR:Dé-marquer fichiers...
-mark_menu.unmark:DE:Dateien demarkieren...
-mark_menu.unmark:ES:Desmarcar ficheros...
-mark_menu.unmark:CS:Odznačit soubory...
-mark_menu.unmark:zh_TW:取消標記
-mark_menu.unmark:PL:Odznacz pliki...
-mark_menu.unmark:HU:kijelölés megszüntetése...
-mark_menu.unmark:RU:Снять выделение с файлов...
-mark_menu.unmark:ZH_CN:取消标记
-mark_menu.unmark:SI:Odznači datoteke...
-
-mark_menu.mark_all:EN:Mark all
-mark_menu.mark_all:FR:Marquer tous
-mark_menu.mark_all:DE:Alle markieren
-mark_menu.mark_all:ES:Marcar todos
-mark_menu.mark_all:CS:Označit vše
-mark_menu.mark_all:zh_TW:全部標記
-mark_menu.mark_all:PL:Zaznacz wszystko
-mark_menu.mark_all:HU:összes kijelölése
-mark_menu.mark_all:RU:Выделить все
-mark_menu.mark_all:ZH_CN:全部标记
-mark_menu.mark_all:SI:Označi vse
-
-mark_menu.unmark_all:EN:Unmark all
-mark_menu.unmark_all:FR:Dé-marquer tous
-mark_menu.unmark_all:DE:Alle demarkieren
-mark_menu.unmark_all:ES:Desmarcar todos
-mark_menu.unmark_all:CS:Odznačit vše
-mark_menu.unmark_all:zh_TW:取消全部標記
-mark_menu.unmark_all:PL:Odznacz wszystko
-mark_menu.unmark_all:HU:összes kijelölés megszüntetése
-mark_menu.unmark_all:RU:Снять выделение со всего
-mark_menu.unmark_all:ZH_CN:取消全部标记
-mark_menu.unmark_all:SI:Odznači vse
-
-mark_menu.invert_selection:EN:Invert selection
-mark_menu.invert_selection:FR:Inverser sélection
-mark_menu.invert_selection:DE:Auswahl umkehren
-mark_menu.invert_selection:ES:Invertir selección
-mark_menu.invert_selection:CS:Invertovat označení
-mark_menu.invert_selection:zh_TW:反向標記
-mark_menu.invert_selection:PL:Odwróć zaznaczenie
-mark_menu.invert_selection:HU:fordított kijelölés
-mark_menu.invert_selection:RU:Инвертировать выделение
-mark_menu.invert_selection:ZH_CN:反向标记
-mark_menu.invert_selection:SI:Obrni izbor
-
-mark_menu.compare_folders:EN:Compare folders
-mark_menu.compare_folders:FR:Comparer dossiers
-mark_menu.compare_folders:DE:Ordner vergleichen
-mark_menu.compare_folders:ES:Comparar directorios
-mark_menu.compare_folders:CS:Porovnat složky
-mark_menu.compare_folders:zh_TW:比較資料夾
-mark_menu.compare_folders:PL:Porównaj katalogi
-mark_menu.compare_folders:HU:könyvtárak összehasonlítása
-mark_menu.compare_folders:RU:Сравнить каталоги
-mark_menu.compare_folders:ZH_CN:比较文件夹
-mark_menu.compare_folders:SI:Primerjaj mapi
-
 
 #############
 # View menu #
@@ -954,229 +1413,6 @@ view_menu:RU:Просмтор
 view_menu:ZH_CN:查看
 view_menu:SI:Pogled
 
-view_menu.change_current_location:EN:Change current location
-view_menu.change_current_location:FR:Changer le chemin courant
-
-
-
-
-
-
-
-
-
-
-
-
-
-view_menu.go_back:EN:Go back
-view_menu.go_back:FR:Dossier précédent
-view_menu.go_back:DE:Zurueck gehen
-view_menu.go_back:ES:Volver
-view_menu.go_back:CS:Zpět
-view_menu.go_back:zh_TW:退回
-view_menu.go_back:PL:Wstecz
-view_menu.go_back:HU:vissza
-view_menu.go_back:RU:Назад
-view_menu.go_back:ZH_CN:退回
-view_menu.go_back:SI:Nazaj
-
-view_menu.go_forward:EN:Go forward
-view_menu.go_forward:FR:Dossier suivant
-view_menu.go_forward:DE:Vorwärts gehen
-view_menu.go_forward:ES:Siguiente
-view_menu.go_forward:CS:Další
-view_menu.go_forward:zh_TW:前進
-view_menu.go_forward:PL:Dalej
-view_menu.go_forward:HU:előre
-view_menu.go_forward:RU:Вперед
-view_menu.go_forward:ZH_CN:前进
-view_menu.go_forward:SI:Naprej
-
-view_menu.go_to_parent:EN:Go to parent
-view_menu.go_to_parent:FR:Dossier parent
-view_menu.go_to_parent:DE:Gehe Ebene höher
-view_menu.go_to_parent:ES:Ir al padre
-view_menu.go_to_parent:CS:Složka nahoru
-view_menu.go_to_parent:zh_TW:上一層
-view_menu.go_to_parent:PL:Idź do katalogu nadrzędnego
-view_menu.go_to_parent:HU:kezdethez
-view_menu.go_to_parent:RU:Перейти в родительский каталог
-view_menu.go_to_parent:ZH_CN:上一级
-view_menu.go_to_parent:SI:Izvor
-
-view_menu.sort_by_name:EN:Sort by Name
-view_menu.sort_by_name:FR:Classer par nom
-view_menu.sort_by_name:DE:Nach Namen sortieren
-view_menu.sort_by_name:ES:Ordenar por Nombre
-view_menu.sort_by_name:CS:Setřídit dle jména
-view_menu.sort_by_name:zh_TW:依名稱排序
-view_menu.sort_by_name:PL:Sortuj po nazwie
-view_menu.sort_by_name:HU:név szerint rendez
-view_menu.sort_by_name:RU:Сортировать по имени
-view_menu.sort_by_name:ZH_CN:按名称排序
-view_menu.sort_by_name:SI:Razvrsti po imenu
-
-view_menu.sort_by_date:EN:Sort by Date
-view_menu.sort_by_date:FR:Classer par date
-view_menu.sort_by_date:DE:Nach Datum sortieren
-view_menu.sort_by_date:ES:Ordenar por Fecha
-view_menu.sort_by_date:CS:Setřídit dle data
-view_menu.sort_by_date:zh_TW:依日期排序
-view_menu.sort_by_date:PL:Sortuj po dacie
-view_menu.sort_by_date:HU:dátum szerint rendez
-view_menu.sort_by_date:RU:Сортировать по дате
-view_menu.sort_by_date:ZH_CN:按日期排序
-view_menu.sort_by_date:SI:Razvrsti po datumu
-
-view_menu.sort_by_size:EN:Sort by Size
-view_menu.sort_by_size:FR:Classer par taille
-view_menu.sort_by_size:DE:Nach Größe sortieren
-view_menu.sort_by_size:ES:Ordenar por Tamaño
-view_menu.sort_by_size:CS:Setřídit dle velikosti
-view_menu.sort_by_size:zh_TW:依大小排序
-view_menu.sort_by_size:PL:Sortuj po rozmiarze
-view_menu.sort_by_size:HU:méret szerint rendez
-view_menu.sort_by_size:RU:Сортировать по размеру
-view_menu.sort_by_size:ZH_CN:按大小排序
-view_menu.sort_by_size:SI:Razvrsti po velikosti
-
-view_menu.sort_by_extension:EN:Sort by Extension
-view_menu.sort_by_extension:FR:Classer par extension
-view_menu.sort_by_extension:DE:Nach Erweiterung sortieren
-view_menu.sort_by_extension:ES:Ordenar por Extensión
-view_menu.sort_by_extension:CS:Setřídit dle přípony
-view_menu.sort_by_extension:zh_TW:依類型排序
-view_menu.sort_by_extension:PL:Sortuj po rozszerzeniu
-view_menu.sort_by_extension:HU:kiterjesztés szerint rendez
-view_menu.sort_by_extension:RU:Сортировать по расширению
-view_menu.sort_by_extension:ZH_CN:按类型排序
-view_menu.sort_by_extension:SI:Razvrsti po podaljšku
-
-view_menu.reverse_order:EN:Invert order
-view_menu.reverse_order:FR:Inverser l'ordre
-view_menu.reverse_order:DE:Sortierung umdrehen
-view_menu.reverse_order:ES:Invertir el orden
-view_menu.reverse_order:CS:Obrátit pořadí
-view_menu.reverse_order:zh_TW:反向排序
-view_menu.reverse_order:PL:Odwrotna kolejność
-view_menu.reverse_order:HU:fordított sorrend
-view_menu.reverse_order:RU:В обратном порядке
-view_menu.reverse_order:ZH_CN:反向排序
-view_menu.reverse_order:SI:Obrni vrstni red
-
-# Displayed in the View menu
-view_menu.auto_size_columns:EN:Auto-size columns
-view_menu.auto_size_columns:FR:Auto-dimensionner les colonnes
-view_menu.auto_size_columns:ES:Autodimensionar las columnas
-view_menu.auto_size_columns:RU:Автоподбор размера колонок
-view_menu.auto_size_columns:zh_TW:自動調寬欄位
-view_menu.auto_size_columns:PL:Automatycznie rozszerz kolumny
-view_menu.auto_size_columns:ZH_CN:自动设置栏宽
-view_menu.auto_size_columns:SI:Samodejna širina stolpcev
-
-
-
-
-
-
-
-
-view_menu.swap_folders:EN:Swap folders
-view_menu.swap_folders:FR:Echanger les dossiers
-view_menu.swap_folders:DE:Fenster vertauschen
-view_menu.swap_folders:ES:Intercambiar directorios
-view_menu.swap_folders:CS:Prohodit složky
-view_menu.swap_folders:zh_TW:資料夾互換
-view_menu.swap_folders:PL:Zamień katalogi
-view_menu.swap_folders:HU:oldalak felcserélése
-view_menu.swap_folders:RU:Поменять местами каталоги
-view_menu.swap_folders:ZH_CN:文件夾互換
-view_menu.swap_folders:SI:Zamenjaj mapi
-
-view_menu.set_same_folder:EN:Set same folder
-view_menu.set_same_folder:FR:Affecter le même dossier
-view_menu.set_same_folder:DE:Auf selben Ordner setzen
-view_menu.set_same_folder:ES:Marcar el mismo directorio
-view_menu.set_same_folder:CS:Nastavit stejnou složku
-view_menu.set_same_folder:zh_TW:跳至同一資料夾
-view_menu.set_same_folder:PL:Źródłowy=Docelowy
-view_menu.set_same_folder:HU:ugyanaz mindkét oldalon
-view_menu.set_same_folder:RU:Сделать каталоги одинаковыми
-view_menu.set_same_folder:ZH_CN:设为同一文件夹
-view_menu.set_same_folder:SI:Nastavi isto mapo
-
-view_menu.show_toolbar:EN:Show toolbar
-view_menu.show_toolbar:FR:Afficher la barre d'outils
-view_menu.show_toolbar:DE:Toolbar anzeigen
-view_menu.show_toolbar:ES:Mostrar la barra de herramientas
-view_menu.show_toolbar:CS:Zobrazit panel nástrojů
-view_menu.show_toolbar:zh_TW:顯示工具列
-view_menu.show_toolbar:PL:Pokaż pasek narzędzi
-view_menu.show_toolbar:HU:látszik az eszköztár
-view_menu.show_toolbar:RU:Показать панель инструментов
-view_menu.show_toolbar:ZH_CN:显示工具条
-view_menu.show_toolbar:SI:Prikaži orodno vrstico
-
-view_menu.hide_toolbar:EN:Hide toolbar
-view_menu.hide_toolbar:FR:Cacher la barre d'outils
-view_menu.hide_toolbar:DE:Werkzeugleiste verstecken
-view_menu.hide_toolbar:ES:Ocultar la barra de herramientas
-view_menu.hide_toolbar:CS:Skrýt panel nástrojů
-view_menu.hide_toolbar:zh_TW:隱藏工具列
-view_menu.hide_toolbar:PL:Ukryj pasek narzędzi
-view_menu.hide_toolbar:HU:az eszköztár rejtése
-view_menu.hide_toolbar:RU:Скрыть панель инструментов
-view_menu.hide_toolbar:ZH_CN:隐藏工具条
-view_menu.hide_toolbar:SI:Skrij orodno vrstico
-
-view_menu.show_command_bar:EN:Show command bar
-view_menu.show_command_bar:FR:Afficher la barre de commande
-view_menu.show_command_bar:DE:Befehlsleiste anzeigen
-view_menu.show_command_bar:ES:Mostar la barra de comandos
-view_menu.show_command_bar:CS:Zobrazit panel příkazů
-view_menu.show_command_bar:zh_TW:顯示命令列
-view_menu.show_command_bar:PL:Pokaż pasek komend
-view_menu.show_command_bar:HU:látszik a parancssor
-view_menu.show_command_bar:RU:Показать панель команд
-view_menu.show_command_bar:ZH_CN:显示命令条
-view_menu.show_command_bar:SI:Prikaži ukazno vrstico
-
-view_menu.hide_command_bar:EN:Hide command bar
-view_menu.hide_command_bar:FR:Cacher la barre de commande
-view_menu.hide_command_bar:DE:Befehlsleiste verstecken
-view_menu.hide_command_bar:ES:Ocultar la barra de comandos
-view_menu.hide_command_bar:CS:Skrýt panel příkazů
-view_menu.hide_command_bar:zh_TW:隱藏命令列
-view_menu.hide_command_bar:PL:Ukryj pasek komend
-view_menu.hide_command_bar:HU:a parncssor rejtése
-view_menu.hide_command_bar:RU:Скрыть панель команд
-view_menu.hide_command_bar:ZH_CN:隐藏命令条
-view_menu.hide_command_bar:SI:Skrij ukazno vrstico
-
-view_menu.show_status_bar:EN:Show status bar
-view_menu.show_status_bar:FR:Afficher la barre de status
-view_menu.show_status_bar:DE:Statusleiste anzeigen
-view_menu.show_status_bar:ES:Mostrar barra de estado
-view_menu.show_status_bar:CS:Zobrazit stavový řádek
-view_menu.show_status_bar:zh_TW:顯示狀態列
-view_menu.show_status_bar:PL:Pokaż pasek statusu
-view_menu.show_status_bar:HU:látszik az állapotsor
-view_menu.show_status_bar:RU:Показать панель статуса
-view_menu.show_status_bar:ZH_CN:显示状态行
-view_menu.show_status_bar:SI:Prikaži statusno vrstico
-
-view_menu.hide_status_bar:EN:Hide status bar
-view_menu.hide_status_bar:FR:Cacher la barre de status
-view_menu.hide_status_bar:DE:Statusleiste verstecken
-view_menu.hide_status_bar:ES:Ocultar la barra de estado
-view_menu.hide_status_bar:CS:Skrýt stavový řádek
-view_menu.hide_status_bar:zh_TW:隱藏狀態列
-view_menu.hide_status_bar:PL:Ukryj pasek statusu
-view_menu.hide_status_bar:HU:az állapotsor rejtése
-view_menu.hide_status_bar:RU:Скрыть панель статуса
-view_menu.hide_status_bar:ZH_CN:隐藏状态行
-view_menu.hide_status_bar:SI:Skrij statusno vrstico
 
 #################
 # Bookmarks menu #
@@ -1194,11 +1430,6 @@ bookmarks_menu:SI:Priljubljene
 
 
 
-
-bookmarks_menu.add_bookmark:EN:$[add_bookmark_dialog.title]...
-bookmarks_menu.add_bookmark:ZH_CN:$[add_bookmark_dialog.title]...
-
-bookmarks_menu.edit_bookmarks:EN:$[edit_bookmarks_dialog.title]...
 
 # Displayed in the Bookmarks menu when user hasn't defined any bookmark
 bookmarks_menu.no_bookmark:EN:No bookmark
@@ -1306,63 +1537,6 @@ help_menu.about:HU:muCommander névjegy
 help_menu.about:RU:О программе muCommander
 help_menu.about:ZH_CN:关于 muCommander
 help_menu.about:SI:O programu muCommander
-
-###########
-# Toolbar #
-###########
-
-# Keyboard shortcuts should soon be removed from here
-# and be inserted dynamically
-
-toolbar.new_window:EN:$[shortcuts_dialog.windows.new_window]
-
-toolbar.go_back:EN:$[shortcuts_dialog.view.go_back]
-
-toolbar.go_forward:EN:$[shortcuts_dialog.view.go_forward]
-
-toolbar.go_to_parent:EN:$[shortcuts_dialog.navigation.go_to_parent]
-
-toolbar.stop:EN:$[shortcuts_dialog.navigation.stop_folder_change]
-
-toolbar.add_bookmark:EN:$[add_bookmark_dialog.title]
-
-toolbar.edit_bookmarks:EN:$[edit_bookmarks_dialog.title]
-
-toolbar.mark:EN:$[shortcuts_dialog.selection.mark_group]
-
-toolbar.unmark:EN:$[shortcuts_dialog.selection.unmark_group]
-
-toolbar.swap_folders:EN:$[shortcuts_dialog.view.swap_folders]
-
-toolbar.set_same_folder:EN:$[shortcuts_dialog.view.set_same_folder]
-
-toolbar.server_connect:EN:$[shortcuts_dialog.file_operations.server_connect]
-
-toolbar.run_command:EN:$[shortcuts_dialog.file_operations.run_command]
-
-toolbar.pack:EN:$[shortcuts_dialog.file_operations.pack]
-
-toolbar.unpack:EN:$[shortcuts_dialog.file_operations.unpack]
-
-toolbar.email:EN:$[shortcuts_dialog.file_operations.email]
-
-toolbar.properties:EN:$[shortcuts_dialog.file_operations.properties]
-
-toolbar.hide_toolbar:EN:$[view_menu.hide_toolbar]
-
-toolbar.reveal_in_desktop:EN:$[table_popup.reveal_in_desktop]
-
-toolbar.preferences:EN:Configure muCommander
-toolbar.preferences:FR:Configurer muCommander
-toolbar.preferences:DE:muCommander konfigurieren
-toolbar.preferences:ES:Configurar muCommander
-toolbar.preferences:CS:Konfigurovat muCommander
-toolbar.preferences:zh_TW:設定 muCommander
-toolbar.preferences:PL:Konfiguruj muCommandera
-toolbar.preferences:HU:muCommander beállítás
-toolbar.preferences:RU:Настройка muCommander
-toolbar.preferences:ZH_CN:首选项
-toolbar.preferences:SI:Konfiguriraj muCommander
 
 
 ##############
@@ -2808,7 +2982,7 @@ run_dialog.stop:EN:$[stop]
 # Server connect dialog #
 #########################
 
-server_connect_dialog.server_connect:EN:$[file_menu.server_connect]
+server_connect_dialog.server_connect:EN:$[com.mucommander.ui.action.ConnectToServerAction.label]
 
 server_connect_dialog.server_type:EN:Connection type
 server_connect_dialog.server_type:FR:Type de connexion
@@ -3527,31 +3701,6 @@ shortcuts_dialog.navigation.change_current_location:FR:Changer le chemin du rép
 
 
 
-shortcuts_dialog.navigation.stop_folder_change:EN:Stop folder change
-shortcuts_dialog.navigation.stop_folder_change:FR:Arrêter le changement de dossier 
-
-
-
-
-
-
-
-
-
-
-
-
-shortcuts_dialog.navigation.go_to_parent:EN:Go to parent folder
-shortcuts_dialog.navigation.go_to_parent:FR:Remonter au dossier parent
-shortcuts_dialog.navigation.go_to_parent:DE:Zum übergeordneten Ordner gehen
-shortcuts_dialog.navigation.go_to_parent:ES:Ir al directorio padre
-shortcuts_dialog.navigation.go_to_parent:CS:Složka nahoru
-shortcuts_dialog.navigation.go_to_parent:zh_TW:到上一層資料夾
-shortcuts_dialog.navigation.go_to_parent:PL:Idź do katalogu nadrzędnego
-shortcuts_dialog.navigation.go_to_parent:HU:Menjen a kezdeti könyvtárhoz
-shortcuts_dialog.navigation.go_to_parent:RU:Перейти к родительскому каталогу
-shortcuts_dialog.navigation.go_to_parent:ZH_CN:到父文件夹
-shortcuts_dialog.navigation.go_to_parent:SI:Izvorna mapa
 
 shortcuts_dialog.navigation.enter_folder:EN:Enter folder / Enter archive / Execute
 shortcuts_dialog.navigation.enter_folder:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
@@ -3613,54 +3762,6 @@ shortcuts_dialog.view:RU:Просмотр
 shortcuts_dialog.view:ZH_CN:查看
 shortcuts_dialog.view:SI:Pogled
 
-shortcuts_dialog.view.go_back:EN:Go to previous folder
-shortcuts_dialog.view.go_back:FR:Aller au dossier précédent
-shortcuts_dialog.view.go_back:DE:Zum vorigen Ordner gehen
-shortcuts_dialog.view.go_back:ES:Ir al directorio anterior
-shortcuts_dialog.view.go_back:CS:Předchodzí složka
-shortcuts_dialog.view.go_back:zh_TW:到前一個資料夾
-shortcuts_dialog.view.go_back:PL:Idź do poprzedniego katalogu
-shortcuts_dialog.view.go_back:HU:Menjen az előző könyvtárhoz
-shortcuts_dialog.view.go_back:RU:Перейти к предыдущему каталогу
-shortcuts_dialog.view.go_back:ZH_CN:到前一个文件夹
-shortcuts_dialog.view.go_back:SI:Prejšnja mapa
-
-shortcuts_dialog.view.go_forward:EN:Go to next folder 
-shortcuts_dialog.view.go_forward:FR:Aller au dossier suivant
-shortcuts_dialog.view.go_forward:DE:Zum nächsten Ordner gehen 
-shortcuts_dialog.view.go_forward:ES:Ir al directorio siguiente
-shortcuts_dialog.view.go_forward:CS:Další složka
-shortcuts_dialog.view.go_forward:zh_TW:到後一個資料夾
-shortcuts_dialog.view.go_forward:PL:Idź do następnego katalogu
-shortcuts_dialog.view.go_forward:HU:Menjen a következő könyvtárhoz
-shortcuts_dialog.view.go_forward:RU:Перейти к следующему каталогу
-shortcuts_dialog.view.go_forward:ZH_CN:到后一个文件夹
-shortcuts_dialog.view.go_forward:SI:Naslednja mapa
-
-shortcuts_dialog.view.swap_folders:EN:Swap left and right folders
-shortcuts_dialog.view.swap_folders:FR:Echanger les dossiers de gauche et de droite 
-shortcuts_dialog.view.swap_folders:DE:Linkes und rechtes Fenster vertauschen
-shortcuts_dialog.view.swap_folders:ES:Intercambiar directorios
-shortcuts_dialog.view.swap_folders:CS:Prohodit složky
-shortcuts_dialog.view.swap_folders:zh_TW:切換左右方的資料夾
-shortcuts_dialog.view.swap_folders:PL:Zmień katalogi  z lewej i prawej strony
-shortcuts_dialog.view.swap_folders:HU:A bal és jobb panel felcserélése
-shortcuts_dialog.view.swap_folders:RU:Поменять местами панели
-shortcuts_dialog.view.swap_folders:ZH_CN:交换左右文件夹
-shortcuts_dialog.view.swap_folders:SI:Zamenjaj levo in desno okno
-
-shortcuts_dialog.view.set_same_folder:EN:Set same directory to left and right folders
-shortcuts_dialog.view.set_same_folder:FR:Affecter le même repertoire aux dossiers de gauche et de droite
-shortcuts_dialog.view.set_same_folder:DE:Gleicher Ordner für linkes und rechtes Fenster
-shortcuts_dialog.view.set_same_folder:ES:Ajustar el mismo directorio en ambos lados
-shortcuts_dialog.view.set_same_folder:CS:Nastavit stejnou složku
-shortcuts_dialog.view.set_same_folder:zh_TW:設定左右資料夾成一樣
-shortcuts_dialog.view.set_same_folder:PL:Ustawe te same katalogi w obu oknach
-shortcuts_dialog.view.set_same_folder:HU:A bal és jobb oldalon ugyanaz a panel legyen
-shortcuts_dialog.view.set_same_folder:RU:Одинаковые каталоги в обеих панелях
-shortcuts_dialog.view.set_same_folder:ZH_CN:设置左右文件夹为同一目录
-shortcuts_dialog.view.set_same_folder:SI:Nastavi enako mapo v levem in dsenem oknu
-
 shortcuts_dialog.selection:EN:Selection
 shortcuts_dialog.selection:FR:Selection
 shortcuts_dialog.selection:DE:Auswahl
@@ -3672,30 +3773,6 @@ shortcuts_dialog.selection:HU:választás
 shortcuts_dialog.selection:RU:Выбор
 shortcuts_dialog.selection:ZH_CN:选择
 shortcuts_dialog.selection:SI:Izbira
-
-shortcuts_dialog.selection.mark_group:EN:Mark a group of files
-shortcuts_dialog.selection.mark_group:FR:Marquer un groupe de fichiers
-shortcuts_dialog.selection.mark_group:DE:Eine Gruppe von Dateien markieren
-shortcuts_dialog.selection.mark_group:ES:Marcar un grupo de ficheros
-shortcuts_dialog.selection.mark_group:CS:Označit skupinu souborů
-shortcuts_dialog.selection.mark_group:zh_TW:標記檔案群組
-shortcuts_dialog.selection.mark_group:PL:Zaznacz grupę plików
-shortcuts_dialog.selection.mark_group:HU:csoportos fájlkijelölés
-shortcuts_dialog.selection.mark_group:RU:Выделить группу файлов
-shortcuts_dialog.selection.mark_group:ZH_CN:标记一组文件
-shortcuts_dialog.selection.mark_group:SI:Označi skupino datotek
-
-shortcuts_dialog.selection.unmark_group:EN:Unmark a group of files
-shortcuts_dialog.selection.unmark_group:FR:Dé-marquer un groupe de fichiers
-shortcuts_dialog.selection.unmark_group:DE:Eine Gruppe von Dateien demarkieren
-shortcuts_dialog.selection.unmark_group:ES:Desmarcar un grupo de ficheros
-shortcuts_dialog.selection.unmark_group:CS:Odznačit skupinu souborů
-shortcuts_dialog.selection.unmark_group:zh_TW:取消檔案群組標記
-shortcuts_dialog.selection.unmark_group:PL:Odznacz grupę plików
-shortcuts_dialog.selection.unmark_group:HU:csoportos fájlkijelölés visszavonása
-shortcuts_dialog.selection.unmark_group:RU:Отменить выделение группы файлов
-shortcuts_dialog.selection.unmark_group:ZH_CN:取消一组文件
-shortcuts_dialog.selection.unmark_group:SI:Odznači skupino datotek
 
 shortcuts_dialog.selection.mark_unmark:EN:Mark/Unmark selected file
 shortcuts_dialog.selection.mark_unmark:FR:Marquer/Dé-marquer le fichier sélectionné
@@ -3720,125 +3797,6 @@ shortcuts_dialog.file_operations:HU:fájl műveletek
 shortcuts_dialog.file_operations:RU:Файловые операции
 shortcuts_dialog.file_operations:ZH_CN:文件操作
 shortcuts_dialog.file_operations:SI:Akcije z datotekami
-
-shortcuts_dialog.file_operations.server_connect:EN:Connect to a remote server
-shortcuts_dialog.file_operations.server_connect:FR:Se connecter à un serveur distant
-shortcuts_dialog.file_operations.server_connect:DE:Mit einem Remote Server verbinden
-shortcuts_dialog.file_operations.server_connect:ES:Conectar a un servidor remoto
-shortcuts_dialog.file_operations.server_connect:CS:Připojit se k vzdálenému serveru
-shortcuts_dialog.file_operations.server_connect:zh_TW:連接至遠端伺服器
-shortcuts_dialog.file_operations.server_connect:PL:Podłącz do zdalnego serwera
-shortcuts_dialog.file_operations.server_connect:HU:Kapcsolodás a távoli szerverhez
-shortcuts_dialog.file_operations.server_connect:RU:Соединиться с удаленным сервером
-shortcuts_dialog.file_operations.server_connect:ZH_CN:连接到远程服务器
-shortcuts_dialog.file_operations.server_connect:SI:Poveži z oddaljenim strežnikom
-
-shortcuts_dialog.file_operations.run_command:EN:Run a command in current folder
-shortcuts_dialog.file_operations.run_command:FR:Exécuter une commande dans le dossier courant
-shortcuts_dialog.file_operations.run_command:DE:Einen Befehl im aktuellen Ordner ausführen
-shortcuts_dialog.file_operations.run_command:ES:Ejecutar un comando en el directorio actual
-shortcuts_dialog.file_operations.run_command:CS:Spustit příkaz v aktuální složce
-shortcuts_dialog.file_operations.run_command:zh_TW:在此資料夾執行命令
-shortcuts_dialog.file_operations.run_command:PL:Wykonaj polecenie w aktualnym katalogu
-shortcuts_dialog.file_operations.run_command:HU:Parancs futtatása az aktuális könyvtárból
-shortcuts_dialog.file_operations.run_command:RU:Выполнить команду из текущего каталога
-shortcuts_dialog.file_operations.run_command:ZH_CN:在当前文件夹执行命令
-shortcuts_dialog.file_operations.run_command:SI:Zaženi ukaz s trenutne mape
-
-#shortcuts_dialog.file_operations.zip:EN:Compress marked files in a ZIP file
-#shortcuts_dialog.file_operations.zip:FR:Compresser les fichiers marqués dans un fichier ZIP 
-#shortcuts_dialog.file_operations.zip:DE:Markierte Dateien in eine ZIP Datei packen
-#shortcuts_dialog.file_operations.zip:ES:Comprimir los ficheros marcados en un fichero ZIP
-#shortcuts_dialog.file_operations.zip:CS:Komprimovat označené soubory do ZIP archívu
-#shortcuts_dialog.file_operations.zip:zh_TW:壓縮已標記檔案至ZIP檔案
-#shortcuts_dialog.file_operations.zip:PL:spakuj zaznaczone pliku do archiwum ZIP
-#shortcuts_dialog.file_operations.zip:HU:A kijelölt fájl(ok) tömörítése egy Zip fájlba
-#shortcuts_dialog.file_operations.zip:RU:Поместить выделенные файлы в ZIP-архив
-#shortcuts_dialog.file_operations.zip:ZH_CN:压缩选定文件为ZIP文件
-#shortcuts_dialog.file_operations.zip:SI:Stisni označene datoteke v ZIP datoteko
-
-shortcuts_dialog.file_operations.pack:EN:Pack marked files into an archive
-shortcuts_dialog.file_operations.pack:FR:Compresser les fichiers marqués dans une archive
-
-
-
-
-
-
-
-
-
-
-
-
-
-#shortcuts_dialog.file_operations.unzip:EN:Uncompress marked ZIP files
-#shortcuts_dialog.file_operations.unzip:FR:Décompresser les fichiers ZIP marqués
-#shortcuts_dialog.file_operations.unzip:DE:Markierte ZIP Dateien entpacken
-#shortcuts_dialog.file_operations.unzip:ES:Descomprimir los ficheros ZIP seleccionados
-#shortcuts_dialog.file_operations.unzip:CS:Dekomprimovat označené soubory ze ZIP archívu
-#shortcuts_dialog.file_operations.unzip:zh_TW:解壓縮已標記的ZIP檔案
-#shortcuts_dialog.file_operations.unzip:PL:Rozpakuj zaznaczone archiwum ZIP
-#shortcuts_dialog.file_operations.unzip:HU:A kijelölt Zip fájl(ok) kicsomagolása
-#shortcuts_dialog.file_operations.unzip:RU:Разархивировать выделенные файлы
-#shortcuts_dialog.file_operations.unzip:ZH_CN:解压已标记的ZIP文件
-#shortcuts_dialog.file_operations.unzip:SI:Razširi označene ZIP datoteke
-
-shortcuts_dialog.file_operations.unpack:EN:Unpack marked archive files
-shortcuts_dialog.file_operations.unpack:FR:Décompresser les archives marquées
-
-
-
-
-
-
-
-
-
-
-
-
-
-shortcuts_dialog.file_operations.email:EN:Send marked files as email attachments
-shortcuts_dialog.file_operations.email:FR:Envoyer les fichiers marqués en pièces jointes à un message
-shortcuts_dialog.file_operations.email:DE:Markierte Dateien als eMail Anhang versenden
-shortcuts_dialog.file_operations.email:ES:Enviar los ficheros seleccionados como adjuntos en un correo electrónico
-shortcuts_dialog.file_operations.email:CS:Odeslat označené soubory jako poštovní přílohu
-shortcuts_dialog.file_operations.email:zh_TW:傳送已標記檔案成電郵附件
-shortcuts_dialog.file_operations.email:PL:Wyślij zaznaczone pliki jako załącznik
-shortcuts_dialog.file_operations.email:HU:A kijelölt fájl(ok) küldése mellékletként
-shortcuts_dialog.file_operations.email:RU:Отправить выделенные файлы как приложения по Email
-shortcuts_dialog.file_operations.email:ZH_CN:作为邮件附件发送文件
-shortcuts_dialog.file_operations.email:SI:Pošlji označene datoteke kot priponko e-pošte
-
-shortcuts_dialog.file_operations.properties:EN:Show properties of marked files
-shortcuts_dialog.file_operations.properties:FR:Afficher les propriétés des fichiers marqués
-shortcuts_dialog.file_operations.properties:DE:Eigenschaften der markierten Dateien anzeigen
-shortcuts_dialog.file_operations.properties:ES:Mostrar propiedades de los ficheros seleccionados
-shortcuts_dialog.file_operations.properties:CS:Zobrazit vlastnosti označených souborů
-shortcuts_dialog.file_operations.properties:zh_TW:顯示已標記檔案的屬性
-shortcuts_dialog.file_operations.properties:PL:Pokaż właściwości zaznaczonych plików
-shortcuts_dialog.file_operations.properties:HU:Mutassa a kijelölt fájl(ok) tulajdonságait
-shortcuts_dialog.file_operations.properties:RU:Показать свойства выбранных файлов
-shortcuts_dialog.file_operations.properties:ZH_CN:显示已标记文件的属性
-shortcuts_dialog.file_operations.properties:SI:Prikaži podrobnosti označenih datotek
-
-# Displayed in the Shortcuts dialog 
-shortcuts_dialog.file_operations.add_bookmark:EN:Bookmark current folder
-shortcuts_dialog.file_operations.add_bookmark:FR:Ajouter le dossier courant aux favoris
-shortcuts_dialog.file_operations.add_bookmark:ES:Añadir a favoritos el directorio actual
-shortcuts_dialog.file_operations.add_bookmark:RU:Добавить текущий каталог в закладки
-shortcuts_dialog.file_operations.add_bookmark:zh_TW:加入目前資料夾為書籤
-shortcuts_dialog.file_operations.add_bookmark:PL:Dodaj do zakładek aktualny katalog
-shortcuts_dialog.file_operations.add_bookmark:ZH_CN:收藏当前文件夹
-shortcuts_dialog.file_operations.add_bookmark:SI:Dodaj trenutno mapo med priljubljene
-
-
-
-
-
-
-
 
 shortcuts_dialog.quick_search:EN:Quick search
 shortcuts_dialog.quick_search:FR:Recherche rapide
@@ -3933,18 +3891,6 @@ shortcuts_dialog.windows:HU:ablak
 shortcuts_dialog.windows:RU:Окна
 shortcuts_dialog.windows:ZH_CN:窗口
 shortcuts_dialog.windows:SI:Okna
-
-shortcuts_dialog.windows.new_window:EN:Open a new window
-shortcuts_dialog.windows.new_window:FR:Ouvrir une nouvelle fenêtre
-shortcuts_dialog.windows.new_window:DE:Ein neues Fenster öffnen
-shortcuts_dialog.windows.new_window:ES:Abrir una nueva ventana
-shortcuts_dialog.windows.new_window:CS:Otevřít nové okno
-shortcuts_dialog.windows.new_window:zh_TW:開啟新視窗
-shortcuts_dialog.windows.new_window:PL:Otwórz nowe okno
-shortcuts_dialog.windows.new_window:HU:megnyitás új ablakban
-shortcuts_dialog.windows.new_window:RU:Открыть новое окно
-shortcuts_dialog.windows.new_window:ZH_CN:打开新窗口
-shortcuts_dialog.windows.new_window:SI:Odpri v novem oknu
 
 shortcuts_dialog.windows.recall:EN:Recall a window
 shortcuts_dialog.windows.recall:FR:Rappeler une fenêtre

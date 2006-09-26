@@ -26,8 +26,8 @@
     <button action="com.mucommander.ui.action.EmailAction"/>
     <separator/>
     <button action="com.mucommander.ui.action.RevealInDesktopAction"/>
-    <button action="com.mucommander.ui.action.PropertiesAction"/>
+    <button action="com.mucommander.ui.action.ShowFilePropertiesAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.PreferencesAction"/>
+    <button action="com.mucommander.ui.action.ShowPreferencesAction"/>
     <separator/>
 </toolbar>

@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class EditAction extends SelectedFileAction {
 
     public EditAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.edit", KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0), "command_bar.edit_tooltip");
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
 
         // Only enable this action if currently selected file is not a directory
         setFileFilter(new DirectoryFileFilter());

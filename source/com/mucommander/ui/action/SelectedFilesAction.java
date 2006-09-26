@@ -23,16 +23,8 @@ public abstract class SelectedFilesAction extends FileAction {
         super(mainFrame);
     }
 
-    public SelectedFilesAction(MainFrame mainFrame, String labelKey) {
-        super(mainFrame, labelKey);
-    }
-
-    public SelectedFilesAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator) {
-        super(mainFrame, labelKey, accelerator);
-    }
-
-    public SelectedFilesAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator, String toolTipKey) {
-        super(mainFrame, labelKey, accelerator, toolTipKey);
+    public SelectedFilesAction(MainFrame mainFrame, KeyStroke accelerator) {
+        super(mainFrame, accelerator);
     }
 
     protected boolean getFileTableCondition(FileTable fileTable, AbstractFile selectedFile) {

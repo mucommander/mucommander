@@ -1,7 +1,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.bookmark.AddBookmarkDialog;
 
 import javax.swing.*;
@@ -15,7 +14,7 @@ import java.awt.event.KeyEvent;
 public class AddBookmarkAction extends MucoAction {
 
     public AddBookmarkAction(MainFrame mainFrame) {
-        super(mainFrame, "bookmarks_menu.add_bookmark", KeyStroke.getKeyStroke(KeyEvent.VK_B, KeyEvent.CTRL_MASK));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_B, KeyEvent.CTRL_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

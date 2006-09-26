@@ -35,18 +35,8 @@ public abstract class FileAction extends MucoAction implements TableSelectionLis
         init(mainFrame);
     }
 
-    public FileAction(MainFrame mainFrame, String labelKey) {
-        super(mainFrame, labelKey);
-        init(mainFrame);
-    }
-
-    public FileAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator) {
-        super(mainFrame, labelKey, accelerator);
-        init(mainFrame);
-    }
-
-    public FileAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator, String toolTipKey) {
-        super(mainFrame, labelKey, accelerator, toolTipKey);
+    public FileAction(MainFrame mainFrame, KeyStroke accelerator) {
+        super(mainFrame, accelerator);
         init(mainFrame);
     }
 

@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class DeleteAction extends SelectedFilesAction {
 
     public DeleteAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.delete", KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0), "command_bar.delete_tooltip");
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
     }
 
     public void performAction(MainFrame mainFrame) {

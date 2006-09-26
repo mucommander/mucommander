@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class SortByDateAction extends MucoAction {
 
     public SortByDateAction(MainFrame mainFrame) {
-        super(mainFrame, "view_menu.sort_by_date", KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.CTRL_MASK));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.CTRL_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

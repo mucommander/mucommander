@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class CopyAction extends SelectedFilesAction {
 
     public CopyAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.copy", KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "command_bar.copy_tooltip");
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
     }
 
     public void performAction(MainFrame mainFrame) {

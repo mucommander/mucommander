@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 public class ChangeLocationAction extends MucoAction {
 
     public ChangeLocationAction(MainFrame mainFrame) {
-        super(mainFrame, "view_menu.change_current_location", KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

@@ -13,7 +13,7 @@ import com.mucommander.conf.ConfigurationManager;
 public class ToggleAutoSizeAction extends MucoAction {
 
     public ToggleAutoSizeAction(MainFrame mainFrame) {
-        super(mainFrame, "view_menu.auto_size_columns");
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

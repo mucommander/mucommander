@@ -539,7 +539,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         }
         else if(keyCode == KeyEvent.VK_ENTER && isAltDown) {
             // Show file properties dialog
-            ActionManager.performAction(com.mucommander.ui.action.PropertiesAction.class, this);
+            ActionManager.performAction(com.mucommander.ui.action.ShowFilePropertiesAction.class, this);
         }
         else if(keyCode == KeyEvent.VK_SHIFT) {
             // Set shift mode to on : display alternate actions in the command bar

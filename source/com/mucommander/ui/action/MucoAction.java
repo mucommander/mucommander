@@ -16,40 +16,69 @@ public abstract class MucoAction extends AbstractAction {
     protected MainFrame mainFrame;
 
 
+//    public MucoAction(MainFrame mainFrame) {
+//        this(mainFrame, null, null, null);
+//    }
+//
+//    public MucoAction(MainFrame mainFrame, String labelKey) {
+//        this(mainFrame, labelKey, null, null);
+//    }
+//
+//    public MucoAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator) {
+//        this(mainFrame, labelKey, accelerator, null);
+//    }
+//
+//    public MucoAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator, String toolTipKey) {
+//        this.mainFrame = mainFrame;
+//
+//        if(labelKey!=null)
+//            setLabel(Translator.get(labelKey));
+//
+//        if(toolTipKey!=null)
+//            setToolTipText(Translator.get(toolTipKey));
+//
+//        if(accelerator!=null)
+//            setAccelerator(accelerator);
+//
+//        Class classInstance = getClass();
+//        String className = classInstance.getName();
+//        String iconPath = "/action/"+className+".png";
+//
+//        if(classInstance.getResource(iconPath)!=null)
+//            putValue(Action.SMALL_ICON, IconManager.getIcon(iconPath));
+//
+//    }
+
+
     public MucoAction(MainFrame mainFrame) {
-        this(mainFrame, null, null, null);
+        this(mainFrame, null);
     }
 
-    public MucoAction(MainFrame mainFrame, String labelKey) {
-        this(mainFrame, labelKey, null, null);
-    }
-
-    public MucoAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator) {
-        this(mainFrame, labelKey, accelerator, null);
-    }
-
-    public MucoAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator, String toolTipKey) {
+    public MucoAction(MainFrame mainFrame, KeyStroke accelerator) {
         this.mainFrame = mainFrame;
 
-        if(labelKey!=null)
-            setLabel(Translator.get(labelKey));
+        // Look for a label dictionary entry in the '<classname>.label' format and use it if it exists
+        Class classInstance = getClass();
+        String className = classInstance.getName();
+        String key = className+".label";
+        if(Translator.entryExists(key))
+            setLabel(Translator.get(key));
 
-        if(toolTipKey!=null)
-            setToolTipText(Translator.get(toolTipKey));
+        // Look for a tooltip dictionary entry in the '<action_classname>.tooltip' format and use it if it exists
+        key = className+".tooltip";
+        if(Translator.entryExists(key))
+            setToolTipText(Translator.get(key));
 
+        // Set the accelerator (if any)
         if(accelerator!=null)
             setAccelerator(accelerator);
 
-        Class classInstance = getClass();
-        String className = classInstance.getName();
+        // Look for an icon file with the path /action/<classname>.png and use it if it exists
         String iconPath = "/action/"+className+".png";
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("iconPath = "+iconPath);
-
         if(classInstance.getResource(iconPath)!=null)
             putValue(Action.SMALL_ICON, IconManager.getIcon(iconPath));
-
-if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("icon = "+getIcon());
     }
+
 
     public MainFrame getMainFrame() {
         return this.mainFrame;

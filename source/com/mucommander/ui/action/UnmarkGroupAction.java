@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class UnmarkGroupAction extends MucoAction {
 
     public UnmarkGroupAction(MainFrame mainFrame) {
-        super(mainFrame, "mark_menu.unmark", KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0));
     }
 
     public void performAction(MainFrame mainFrame) {

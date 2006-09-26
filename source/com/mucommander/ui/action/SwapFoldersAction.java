@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class SwapFoldersAction extends MucoAction {
 
     public SwapFoldersAction(MainFrame mainFrame) {
-        super(mainFrame, "view_menu.swap_folders", KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_MASK));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

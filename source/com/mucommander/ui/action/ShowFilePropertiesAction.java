@@ -13,10 +13,10 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class PropertiesAction extends SelectedFilesAction {
+public class ShowFilePropertiesAction extends SelectedFilesAction {
 
-    public PropertiesAction(MainFrame mainFrame) {
-        super(mainFrame, "file_menu.properties", KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.ALT_MASK));
+    public ShowFilePropertiesAction(MainFrame mainFrame) {
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.ALT_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

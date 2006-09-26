@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class CompareFoldersAction extends MucoAction {
 
     public CompareFoldersAction(MainFrame mainFrame) {
-        super(mainFrame, "mark_menu.compare_folders", KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_MASK));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

@@ -123,8 +123,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.OpenAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.open_natively"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.SHIFT_MASK), this);
-        MenuToolkit.addMenuItem(fileMenu, Translator.get("file_menu.reveal_in_desktop", PlatformManager.getDefaultDesktopFMName()), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK), this);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.OpenNativelyAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.RevealInDesktopAction.class, mainFrame), menuItemMnemonicHelper);
 
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ConnectToServerAction.class, mainFrame), menuItemMnemonicHelper);
@@ -134,12 +134,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         emailFilesItem = MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.EmailAction.class, mainFrame), menuItemMnemonicHelper);
 
         fileMenu.add(new JSeparator());
-        propertiesItem = MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.PropertiesAction.class, mainFrame), menuItemMnemonicHelper);
+        propertiesItem = MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ShowFilePropertiesAction.class, mainFrame), menuItemMnemonicHelper);
 
         // Under Mac OS X, 'Preferences' already appears in the application (muCommander) menu, do not display it again
         if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X) {
             fileMenu.add(new JSeparator());
-            MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.PreferencesAction.class, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ShowPreferencesAction.class, mainFrame), menuItemMnemonicHelper);
         }
 
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CheckForUpdatesAction.class, mainFrame), menuItemMnemonicHelper);
@@ -166,8 +166,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CompareFoldersAction.class, mainFrame), menuItemMnemonicHelper);
 
         markMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CopyFilenamesAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CopyPathsAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CopyFileNamesAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CopyFilePathsAction.class, mainFrame), menuItemMnemonicHelper);
 
         add(markMenu);
 
@@ -332,126 +332,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         Object source = e.getSource();
 
-/*
-        // File menu
-        if (source == newWindowItem) {
-            WindowManager.createNewMainFrame();
-        }
-        else if (source == serverConnectItem) {
-            mainFrame.showServerConnectDialog();
-        }
-        else if (source == runItem) {
-            new RunDialog(mainFrame);
-        }
-        else if (source==packItem || source==unpackItem || source==emailFilesItem || source==propertiesItem) {
-            // This actions need to work on selected files
-            FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
-            int nbSelectedFiles = files.size();
-		
-            if(nbSelectedFiles>0) {
-                if (source == packItem) {
-                    new PackDialog(mainFrame, files, false);
-                }
-                else if (source == unpackItem) {
-                    new UnpackDialog(mainFrame, files, false);
-                }
-                else if (source == emailFilesItem) {
-                    new EmailFilesDialog(mainFrame, files);
-                }
-                else {      // propertiesItem
-                    mainFrame.showPropertiesDialog();
-                }
-            }
-        }
-        else if (source == preferencesItem) {
-            mainFrame.showPreferencesDialog();
-        }
-        else if (source == checkForUpdatesItem) {
-            new CheckVersionDialog(mainFrame, true);
-        }
-        else if (source == closeItem) {
-            mainFrame.dispose();
-        }
-        else if (source == quitItem) {
-            // Quit after asking user for confirmation
-            if(QuitDialog.confirmQuit())
-                WindowManager.quit();
-        }
-        // Mark menu
-        else if (source == markGroupItem) {
-            mainFrame.showSelectionDialog(true);	
-        }
-        else if (source == unmarkGroupItem) {
-            mainFrame.showSelectionDialog(false);	
-        }
-        else if (source == markAllItem) {
-            mainFrame.getLastActiveTable().markAll();	
-        }
-        else if (source == unmarkAllItem) {
-            mainFrame.getLastActiveTable().unmarkAll();	
-        }
-        else if (source == invertSelectionItem) {
-            mainFrame.getLastActiveTable().invertSelection();	
-        }
-        else if (source == compareFoldersItem) {
-            mainFrame.compareDirectories();	
-        }
-        // View menu
-        else if (source == changeFolderItem) {
-            mainFrame.getLastActiveTable().getFolderPanel().changeCurrentLocation();	
-        }
-        else if (source == goBackItem) {
-            mainFrame.getLastActiveTable().getFolderPanel().getFolderHistory().goBack();	
-        }
-        else if (source == goForwardItem) {
-            mainFrame.getLastActiveTable().getFolderPanel().getFolderHistory().goForward();	
-        }
-        else if (source == goToParentItem) {
-            mainFrame.getLastActiveTable().getFolderPanel().goToParent();
-        }
-        else if (source == sortByExtensionItem) {
-            mainFrame.getLastActiveTable().sortBy(FileTable.EXTENSION);	
-        }
-        else if (source == sortByNameItem) {
-            mainFrame.getLastActiveTable().sortBy(FileTable.NAME);	
-        }
-        else if (source == sortBySizeItem) {
-            mainFrame.getLastActiveTable().sortBy(FileTable.SIZE);	
-        }
-        else if (source == sortByDateItem) {
-            mainFrame.getLastActiveTable().sortBy(FileTable.DATE);	
-        }
-        else if (source == reverseOrderItem) {
-            mainFrame.getLastActiveTable().reverseSortOrder();	
-        }
-        else if (source == autoSizeColumnsItem) {
-            boolean selected = autoSizeColumnsItem.isSelected();
-            mainFrame.getLastActiveTable().setAutoSizeColumnsEnabled(selected);
-            ConfigurationManager.setVariableBoolean("prefs.file_table.auto_size_columns", selected);		
-        }
-        else if (source == swapFoldersItem) {
-            mainFrame.swapFolders();	
-        }
-        else if (source == setSameFolderItem) {
-            mainFrame.setSameFolder();	
-        }
-        else if (source == showToolbarItem) {
-            mainFrame.setToolbarVisible(!mainFrame.isToolbarVisible());
-        }
-        else if (source == showCommandBarItem) {
-            mainFrame.setCommandBarVisible(!mainFrame.isCommandBarVisible());
-        }
-        else if (source == showStatusBarItem) {
-            mainFrame.setStatusBarVisible(!mainFrame.isStatusBarVisible());
-        }
-        // Bookmark menu
-        else if (source == addBookmarkItem) {
-            new AddBookmarkDialog(mainFrame);
-        }
-        else if (source == editBookmarksItem) {
-            new EditBookmarksDialog(mainFrame);
-        }
-*/
         // Bookmark menu item
         if (bookmarkMenuItems!=null && bookmarkMenuItems.contains(source)) {
             int index = bookmarkMenuItems.indexOf(source);
@@ -510,13 +390,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                     sortByExtensionItem.setState(true);
                     break;
             }
-
-/*
-            showToolbarItem.setText(mainFrame.isToolbarVisible()?Translator.get("view_menu.hide_toolbar"):Translator.get("view_menu.show_toolbar"));
-            showCommandBarItem.setText(mainFrame.isCommandBarVisible()?Translator.get("view_menu.hide_command_bar"):Translator.get("view_menu.show_command_bar"));
-            showStatusBarItem.setText(mainFrame.isStatusBarVisible()?Translator.get("view_menu.hide_status_bar"):Translator.get("view_menu.show_status_bar"));
-            autoSizeColumnsItem.setSelected(activeTable.getAutoSizeColumns());
-*/
         }
         else if(source==bookmarksMenu) {
             if(this.bookmarkMenuItems != null) {

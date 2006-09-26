@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class MoveAction extends SelectedFilesAction {
 
     public MoveAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.move", KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0), "command_bar.move_tooltip");
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
     }
 
     public void performAction(MainFrame mainFrame) {

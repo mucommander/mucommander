@@ -11,7 +11,7 @@ import com.mucommander.ui.MainFrame;
 public class ReverseSortOrderAction extends MucoAction {
 
     public ReverseSortOrderAction(MainFrame mainFrame) {
-        super(mainFrame, "view_menu.reverse_order");
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

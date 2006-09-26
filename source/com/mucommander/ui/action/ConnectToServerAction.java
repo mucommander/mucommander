@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class ConnectToServerAction extends MucoAction {
 
     public ConnectToServerAction(MainFrame mainFrame) {
-        super(mainFrame, "file_menu.server_connect", KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.CTRL_MASK));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.CTRL_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

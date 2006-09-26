@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 public class MkdirAction extends MucoAction {
 
     public MkdirAction(MainFrame mainFrame) {
-        super(mainFrame, "command_bar.mkdir", KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0), "command_bar.mkdir_tooltip");
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
     }
 
     public void performAction(MainFrame mainFrame) {

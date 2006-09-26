@@ -2,7 +2,6 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.EmailFilesDialog;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.file.FileSet;
 
 import javax.swing.*;
@@ -16,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class EmailAction extends SelectedFilesAction {
 
     public EmailAction(MainFrame mainFrame) {
-        super(mainFrame, "file_menu.email", KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {

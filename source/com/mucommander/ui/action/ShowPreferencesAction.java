@@ -9,10 +9,10 @@ import com.mucommander.ui.pref.PreferencesDialog;
  *
  * @author Maxence Bernard
  */
-public class PreferencesAction extends MucoAction {
+public class ShowPreferencesAction extends MucoAction {
 
-    public PreferencesAction(MainFrame mainFrame) {
-        super(mainFrame, "file_menu.preferences");
+    public ShowPreferencesAction(MainFrame mainFrame) {
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

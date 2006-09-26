@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class MarkAllAction extends MucoAction {
 
     public MarkAllAction(MainFrame mainFrame) {
-        super(mainFrame, "mark_menu.mark_all", KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
+        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
     }
 
     public void performAction(MainFrame mainFrame) {
