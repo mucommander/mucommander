@@ -479,7 +479,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         if(noEventsMode)
             return;
 
-        Object source = e.getSource();
         int keyCode = e.getKeyCode();
         boolean isControlDown = e.isControlDown();
         boolean isAltDown = e.isAltDown();
@@ -523,22 +522,19 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
             commandBar.getButton(CommandBar.CLOSE_INDEX).doClick();
         }
         else if(keyCode == KeyEvent.VK_F1 && isAltDown) {
-            folderPanel1.popDriveButton();
+            ActionManager.performAction(com.mucommander.ui.action.PopupLeftDriveButtonAction.class, this);
         }
         else if(keyCode == KeyEvent.VK_F2 && isAltDown) {
-            folderPanel2.popDriveButton();
+            ActionManager.performAction(com.mucommander.ui.action.PopupRightDriveButtonAction.class, this);
         }
         else if(isControlDown && keyCode==KeyEvent.VK_LEFT) {
-            WindowManager.switchToPreviousWindow();
+            ActionManager.performAction(com.mucommander.ui.action.RecallPreviousWindowAction.class, this);
         }
         else if(isControlDown && keyCode==KeyEvent.VK_RIGHT) {
-            WindowManager.switchToNextWindow();	
+            ActionManager.performAction(com.mucommander.ui.action.RecallNextWindowAction.class, this);
         }
         else if(keyCode == KeyEvent.VK_TAB) {
-            if(source == table1)
-                table2.requestFocus();
-            else if(source == table2)
-                table1.requestFocus();
+            ActionManager.performAction(com.mucommander.ui.action.SwitchActiveTableAction.class, this);
         }
         else if(keyCode == KeyEvent.VK_ENTER && isAltDown) {
             // Show file properties dialog

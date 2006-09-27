@@ -5,6 +5,7 @@
     <action class="com.mucommander.ui.action.CloseWindowAction" keystroke="F10"/>
     <action class="com.mucommander.ui.action.CompareFoldersAction" keystroke="control M"/>
     <action class="com.mucommander.ui.action.ConnectToServerAction" keystroke="control K"/>
+    <action class="com.mucommander.ui.action.CopyAction" keystroke="F5"/>
     <action class="com.mucommander.ui.action.CopyFileNamesAction" keystroke="control C" alt_keystroke="meta C"/>
     <action class="com.mucommander.ui.action.CopyFilePathsAction"  keystroke="shift control C" alt_keystroke="shift meta C"/>
     <action class="com.mucommander.ui.action.DeleteAction" keystroke="F8"/>
@@ -14,6 +15,7 @@
     <action class="com.mucommander.ui.action.GoForwardAction" keystroke="alt RIGHT"/>
     <action class="com.mucommander.ui.action.GoToParentAction" keystroke="BACK_SPACE"/>
     <action class="com.mucommander.ui.action.InvertSelectionAction" keystroke="MULTIPLY"/>
+    <action class="com.mucommander.ui.action.LocalCopyAction" keystroke="shift F5"/>
     <action class="com.mucommander.ui.action.MarkAllAction" keystroke="control A"/>
     <action class="com.mucommander.ui.action.MarkGroupAction" keystroke="ADD"/>
     <action class="com.mucommander.ui.action.MkdirAction" keystroke="F7"/>
@@ -22,8 +24,12 @@
     <action class="com.mucommander.ui.action.OpenAction" keystroke="ENTER"/>
     <action class="com.mucommander.ui.action.OpenNativelyAction" keystroke="shift ENTER"/>
     <action class="com.mucommander.ui.action.PackAction" keystroke="control I"/>
+    <action class="com.mucommander.ui.action.PopupLeftDriveButtonAction" keystroke="alt F1"/>
+    <action class="com.mucommander.ui.action.PopupRightDriveButtonAction" keystroke="alt F2"/>
     <action class="com.mucommander.ui.action.QuitAction" keystroke="control Q"/>
     <action class="com.mucommander.ui.action.RefreshAction" keystroke="F9"/>
+    <action class="com.mucommander.ui.action.RecallNextWindowAction" keystroke="control RIGHT"/>
+    <action class="com.mucommander.ui.action.RecallPreviousWindowAction" keystroke="control LEFT"/>
     <action class="com.mucommander.ui.action.RenameAction" keystroke="shift F6"/>
     <action class="com.mucommander.ui.action.RevealInDesktopAction" keystroke="control L"/>
     <action class="com.mucommander.ui.action.RunCommandAction" keystroke="control R"/>
@@ -35,6 +41,7 @@
     <action class="com.mucommander.ui.action.SortBySizeAction" keystroke="control F5"/>
     <action class="com.mucommander.ui.action.StopAction" keystroke="ESCAPE"/>
     <action class="com.mucommander.ui.action.SwapFoldersAction" keystroke="control U"/>
+    <action class="com.mucommander.ui.action.SwitchActiveTableAction" keystroke="TAB"/>
     <action class="com.mucommander.ui.action.UnmarkAllAction" keystroke="control D"/>
     <action class="com.mucommander.ui.action.UnmarkGroupAction" keystroke="SUBTRACT"/>
     <action class="com.mucommander.ui.action.UnpackAction" keystroke="control P"/>

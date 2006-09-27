@@ -1,4 +1,4 @@
-# This file contains localized text strings, each entry goes like this:
+on# This file contains localized text strings, each entry goes like this:
 # <key>:<lang>:<value>
 #
 # where:
@@ -455,6 +455,16 @@ com.mucommander.ui.action.EditBookmarksAction.label:EN:$[edit_bookmarks_dialog.t
 com.mucommander.ui.action.ChangeLocationAction.label:EN:Change current location
 com.mucommander.ui.action.ChangeLocationAction.label:FR:Changer le chemin courant
 # Translation missing
+
+
+
+
+
+
+
+
+
+
 
 com.mucommander.ui.action.CheckForUpdatesAction.label:EN:Check for updates
 com.mucommander.ui.action.CheckForUpdatesAction.label:FR:Mises à jour...
@@ -1092,6 +1102,18 @@ com.mucommander.ui.action.OpenAction.label:SI:Odpri
 
 
 
+com.mucommander.ui.action.OpenAction.tooltip:EN:Enter folder / Enter archive / Execute
+com.mucommander.ui.action.OpenAction.tooltip:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
+com.mucommander.ui.action.OpenAction.tooltip:DE:Ordner öffnen / Archiv öffnen / Ausführen
+com.mucommander.ui.action.OpenAction.tooltip:ES:Entrar en el directorio / Entrar en el fichero / Ejecutar
+com.mucommander.ui.action.OpenAction.tooltip:CS:Otevřít složku / Otevřít archív / Spustit
+com.mucommander.ui.action.OpenAction.tooltip:zh_TW:進入資料夾 / 進入壓縮檔 / 執行
+com.mucommander.ui.action.OpenAction.tooltip:PL:Otwórz katalog / Otwórz archiwum / Wykonaj
+com.mucommander.ui.action.OpenAction.tooltip:HU:belép a könyvtárba / belép az archív fájlba / futtat
+com.mucommander.ui.action.OpenAction.tooltip:RU:Войти в каталог / Войти в архив / Выполнить
+com.mucommander.ui.action.OpenAction.tooltip:ZH_CN:进入文件夹 / 进入压缩包 / 执行
+com.mucommander.ui.action.OpenAction.tooltip:SI:Odpri mapo / Odpri arhiv / Zaženi
+
 com.mucommander.ui.action.OpenNativelyAction.label:EN:Open natively
 com.mucommander.ui.action.OpenNativelyAction.label:FR:Ouvrir nativement
 # Translation missing
@@ -1105,6 +1127,17 @@ com.mucommander.ui.action.OpenNativelyAction.label:FR:Ouvrir nativement
 
 
 
+com.mucommander.ui.action.OpenNativelyAction.tooltip:EN:Execute selected file with system's file associations
+com.mucommander.ui.action.OpenNativelyAction.tooltip:FR:Exécuter le fichier sélectionné avec les associations de fichiers du système
+com.mucommander.ui.action.OpenNativelyAction.tooltip:DE:Markierte Datei mit assoziiertem Programm öffnen
+com.mucommander.ui.action.OpenNativelyAction.tooltip:ES:Ejecutar el fichero seleccionado con la asosiación del sistema
+com.mucommander.ui.action.OpenNativelyAction.tooltip:CS:Spustit vybraný soubor asociovaným programem
+com.mucommander.ui.action.OpenNativelyAction.tooltip:zh_TW:利用系統的檔案關聯來執行已選取檔案
+com.mucommander.ui.action.OpenNativelyAction.tooltip:PL:Uruchom wybrany plik za pomocą skojarzonego programu
+com.mucommander.ui.action.OpenNativelyAction.tooltip:HU:A kijelölt fájl futtatása a rendszer által hozzárendelt programmal
+com.mucommander.ui.action.OpenNativelyAction.tooltip:RU:Выполнить выделенный файл с помощью программы, связанной с ним в настройках системы
+com.mucommander.ui.action.OpenNativelyAction.tooltip:ZH_CN:用系统的文件关联执行选定文件
+com.mucommander.ui.action.OpenNativelyAction.tooltip:SI:Zaženi izbrano datoteko
 
 #file_menu.reveal_in_finder:EN:Reveal in Finder
 #file_menu.reveal_in_finder:FR:Afficher dans le Finder
@@ -1361,6 +1394,66 @@ com.mucommander.ui.action.ToggleStatusBarAction.hide:HU:az állapotsor rejtése
 com.mucommander.ui.action.ToggleStatusBarAction.hide:RU:Скрыть панель статуса
 com.mucommander.ui.action.ToggleStatusBarAction.hide:ZH_CN:隐藏状态行
 com.mucommander.ui.action.ToggleStatusBarAction.hide:SI:Skrij statusno vrstico
+
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:EN:Change left folder
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:FR:Changer le dossier de gauche
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:DE:Linken Ordner ändern
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:ES:Cambiar el directorio izquierdo
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:CS:Změnit složku vlevo
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:zh_TW:變更左方資料夾
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:PL:Zmień lewy katalog
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:HU:A bal panel megváltoztatása
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:RU:Изменить левый каталог
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:ZH_CN:改变左边文件夹
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:SI:Zamenjaj mapo na levi strani
+
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:EN:Change right folder
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:FR:Changer le dossier de droite
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:DE:Rechten Ordner ändern
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:ES:Cambiar el directorio derecho
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:CS:Změnit složku vpravo
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:zh_TW:變更右方資料夾
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:PL:Zmień prawy katalog
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:HU:A jobb panel megváltoztatása
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:RU:Изменить правый каталог
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:ZH_CN:改变右边文件夹
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:SI:Zamenjaj mapo na desni strani
+
+com.mucommander.ui.action.RecallPreviousWindowAction.label:EN:Switch to previous window
+com.mucommander.ui.action.RecallPreviousWindowAction.label:FR:Aller à la fenêtre précédente
+com.mucommander.ui.action.RecallPreviousWindowAction.label:DE:Zum vorherigen Fenster wechseln
+com.mucommander.ui.action.RecallPreviousWindowAction.label:ES:Cambiar a la ventana anterior
+com.mucommander.ui.action.RecallPreviousWindowAction.label:CS:Přepnout na předchodzí okno
+com.mucommander.ui.action.RecallPreviousWindowAction.label:zh_TW:切換至前一個視窗
+com.mucommander.ui.action.RecallPreviousWindowAction.label:PL:Przełącz do poprzedniego okna
+com.mucommander.ui.action.RecallPreviousWindowAction.label:HU:Válts az előző ablakra
+com.mucommander.ui.action.RecallPreviousWindowAction.label:RU:Переключиться в предыдущее окно
+com.mucommander.ui.action.RecallPreviousWindowAction.label:ZH_CN:切换到前一个窗口
+com.mucommander.ui.action.RecallPreviousWindowAction.label:SI:Preklopi na prejšnje okno
+
+com.mucommander.ui.action.RecallNextWindowAction.label:EN:Switch to next window
+com.mucommander.ui.action.RecallNextWindowAction.label:FR:Aller à la fenêtre suivante
+com.mucommander.ui.action.RecallNextWindowAction.label:DE:Zum nächsten Fenster wechseln
+com.mucommander.ui.action.RecallNextWindowAction.label:ES:Cambiar a la siguiente ventana
+com.mucommander.ui.action.RecallNextWindowAction.label:CS:Přepnout na další okno
+com.mucommander.ui.action.RecallNextWindowAction.label:zh_TW:切換至後一個視窗
+com.mucommander.ui.action.RecallNextWindowAction.label:PL:Przełącz do następnego okna
+com.mucommander.ui.action.RecallNextWindowAction.label:HU:Válts a következő ablakra
+com.mucommander.ui.action.RecallNextWindowAction.label:RU:Переключиться в следующее окно
+com.mucommander.ui.action.RecallNextWindowAction.label:ZH_CN:切换到后一个窗口
+com.mucommander.ui.action.RecallNextWindowAction.label:SI:Preklopi na naslednje okno
+
+com.mucommander.ui.action.SwitchActiveTableAction.label:EN:Switch between left and right panels
+com.mucommander.ui.action.SwitchActiveTableAction.label:FR:Basculer entre les dossiers de droite et de gauche
+com.mucommander.ui.action.SwitchActiveTableAction.label:DE:Zwischen linkem und rechtem Fenster wechseln
+com.mucommander.ui.action.SwitchActiveTableAction.label:ES:Cambiar entre los paneles izquierdo y derecho
+com.mucommander.ui.action.SwitchActiveTableAction.label:CS:Změnit aktuální panel
+com.mucommander.ui.action.SwitchActiveTableAction.label:zh_TW:在左右面板間交互切換
+com.mucommander.ui.action.SwitchActiveTableAction.label:PL:Zamień aktualne panel
+com.mucommander.ui.action.SwitchActiveTableAction.label:HU:A bal és jobb panel megcserélése
+com.mucommander.ui.action.SwitchActiveTableAction.label:RU:Переключение между левой и правой панелью
+com.mucommander.ui.action.SwitchActiveTableAction.label:ZH_CN:在左右面板间切换
+com.mucommander.ui.action.SwitchActiveTableAction.label:SI:Preklopi med levo in desno stranjo
 
 
 #############
@@ -3652,80 +3745,6 @@ shortcuts_dialog.navigation:RU:Перемещение
 shortcuts_dialog.navigation:ZH_CN:导航
 shortcuts_dialog.navigation:SI:Navigacija
 
-shortcuts_dialog.navigation.change_left:EN:Change left folder
-shortcuts_dialog.navigation.change_left:FR:Changer le dossier de gauche
-shortcuts_dialog.navigation.change_left:DE:Linken Ordner ändern
-shortcuts_dialog.navigation.change_left:ES:Cambiar el directorio izquierdo
-shortcuts_dialog.navigation.change_left:CS:Změnit složku vlevo
-shortcuts_dialog.navigation.change_left:zh_TW:變更左方資料夾
-shortcuts_dialog.navigation.change_left:PL:Zmień lewy katalog
-shortcuts_dialog.navigation.change_left:HU:A bal panel megváltoztatása
-shortcuts_dialog.navigation.change_left:RU:Изменить левый каталог
-shortcuts_dialog.navigation.change_left:ZH_CN:改变左边文件夹
-shortcuts_dialog.navigation.change_left:SI:Zamenjaj mapo na levi strani
-
-shortcuts_dialog.navigation.change_right:EN:Change right folder
-shortcuts_dialog.navigation.change_right:FR:Changer le dossier de droite
-shortcuts_dialog.navigation.change_right:DE:Rechten Ordner ändern
-shortcuts_dialog.navigation.change_right:ES:Cambiar el directorio derecho
-shortcuts_dialog.navigation.change_right:CS:Změnit složku vpravo
-shortcuts_dialog.navigation.change_right:zh_TW:變更右方資料夾
-shortcuts_dialog.navigation.change_right:PL:Zmień prawy katalog
-shortcuts_dialog.navigation.change_right:HU:A jobb panel megváltoztatása
-shortcuts_dialog.navigation.change_right:RU:Изменить правый каталог
-shortcuts_dialog.navigation.change_right:ZH_CN:改变右边文件夹
-shortcuts_dialog.navigation.change_right:SI:Zamenjaj mapo na desni strani
-
-shortcuts_dialog.navigation.switch_folder:EN:Switch between left and right panels
-shortcuts_dialog.navigation.switch_folder:FR:Basculer entre les dossiers de droite et de gauche
-shortcuts_dialog.navigation.switch_folder:DE:Zwischen linkem und rechtem Fenster wechseln
-shortcuts_dialog.navigation.switch_folder:ES:Cambiar entre los paneles izquierdo y derecho
-shortcuts_dialog.navigation.switch_folder:CS:Změnit aktuální panel
-shortcuts_dialog.navigation.switch_folder:zh_TW:在左右面板間交互切換
-shortcuts_dialog.navigation.switch_folder:PL:Zamień aktualne panel
-shortcuts_dialog.navigation.switch_folder:HU:A bal és jobb panel megcserélése
-shortcuts_dialog.navigation.switch_folder:RU:Переключение между левой и правой панелью
-shortcuts_dialog.navigation.switch_folder:ZH_CN:在左右面板间切换
-shortcuts_dialog.navigation.switch_folder:SI:Preklopi med levo in desno stranjo
-
-shortcuts_dialog.navigation.change_current_location:EN:Change current folder's location
-shortcuts_dialog.navigation.change_current_location:FR:Changer le chemin du répertoire courant
-
-
-
-
-
-
-
-
-
-
-
-
-shortcuts_dialog.navigation.enter_folder:EN:Enter folder / Enter archive / Execute
-shortcuts_dialog.navigation.enter_folder:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
-shortcuts_dialog.navigation.enter_folder:DE:Ordner öffnen / Archiv öffnen / Ausführen
-shortcuts_dialog.navigation.enter_folder:ES:Entrar en el directorio / Entrar en el fichero / Ejecutar
-shortcuts_dialog.navigation.enter_folder:CS:Otevřít složku / Otevřít archív / Spustit
-shortcuts_dialog.navigation.enter_folder:zh_TW:進入資料夾 / 進入壓縮檔 / 執行
-shortcuts_dialog.navigation.enter_folder:PL:Otwórz katalog / Otwórz archiwum / Wykonaj
-shortcuts_dialog.navigation.enter_folder:HU:belép a könyvtárba / belép az archív fájlba / futtat
-shortcuts_dialog.navigation.enter_folder:RU:Войти в каталог / Войти в архив / Выполнить
-shortcuts_dialog.navigation.enter_folder:ZH_CN:进入文件夹 / 进入压缩包 / 执行
-shortcuts_dialog.navigation.enter_folder:SI:Odpri mapo / Odpri arhiv / Zaženi
-
-shortcuts_dialog.navigation.execute:EN:Execute selected file with system's file associations
-shortcuts_dialog.navigation.execute:FR:Exécuter le fichier sélectionné avec les associations de fichiers du système  
-shortcuts_dialog.navigation.execute:DE:Markierte Datei mit assoziiertem Programm öffnen
-shortcuts_dialog.navigation.execute:ES:Ejecutar el fichero seleccionado con la asosiación del sistema
-shortcuts_dialog.navigation.execute:CS:Spustit vybraný soubor asociovaným programem
-shortcuts_dialog.navigation.execute:zh_TW:利用系統的檔案關聯來執行已選取檔案
-shortcuts_dialog.navigation.execute:PL:Uruchom wybrany plik za pomocą skojarzonego programu
-shortcuts_dialog.navigation.execute:HU:A kijelölt fájl futtatása a rendszer által hozzárendelt programmal
-shortcuts_dialog.navigation.execute:RU:Выполнить выделенный файл с помощью программы, связанной с ним в настройках системы 
-shortcuts_dialog.navigation.execute:ZH_CN:用系统的文件关联执行选定文件
-shortcuts_dialog.navigation.execute:SI:Zaženi izbrano datoteko
-
 shortcuts_dialog.navigation.go_to_first:EN:Select first file in current folder
 shortcuts_dialog.navigation.go_to_first:FR:Selectionner le premier fichier du dossier
 shortcuts_dialog.navigation.go_to_first:DE:Erste Datei im aktuellen Ordner markieren
@@ -3903,30 +3922,6 @@ shortcuts_dialog.windows.recall:HU:ablak visszavonása
 shortcuts_dialog.windows.recall:RU:Восстановить окно
 shortcuts_dialog.windows.recall:ZH_CN:切回一个窗口
 shortcuts_dialog.windows.recall:SI:Prikliči okno
-
-shortcuts_dialog.windows.switch_previous:EN:Switch to previous window
-shortcuts_dialog.windows.switch_previous:FR:Aller à la fenêtre précédente
-shortcuts_dialog.windows.switch_previous:DE:Zum vorherigen Fenster wechseln
-shortcuts_dialog.windows.switch_previous:ES:Cambiar a la ventana anterior
-shortcuts_dialog.windows.switch_previous:CS:Přepnout na předchodzí okno
-shortcuts_dialog.windows.switch_previous:zh_TW:切換至前一個視窗
-shortcuts_dialog.windows.switch_previous:PL:Przełącz do poprzedniego okna
-shortcuts_dialog.windows.switch_previous:HU:Válts az előző ablakra
-shortcuts_dialog.windows.switch_previous:RU:Переключиться в предыдущее окно
-shortcuts_dialog.windows.switch_previous:ZH_CN:切换到前一个窗口
-shortcuts_dialog.windows.switch_previous:SI:Preklopi na prejšnje okno
-
-shortcuts_dialog.windows.switch_next:EN:Switch to next window
-shortcuts_dialog.windows.switch_next:FR:Aller à la fenêtre suivante
-shortcuts_dialog.windows.switch_next:DE:Zum nächsten Fenster wechseln
-shortcuts_dialog.windows.switch_next:ES:Cambiar a la siguiente ventana
-shortcuts_dialog.windows.switch_next:CS:Přepnout na další okno
-shortcuts_dialog.windows.switch_next:zh_TW:切換至後一個視窗
-shortcuts_dialog.windows.switch_next:PL:Przełącz do następnego okna
-shortcuts_dialog.windows.switch_next:HU:Válts a következő ablakra
-shortcuts_dialog.windows.switch_next:RU:Переключиться в следующее окно
-shortcuts_dialog.windows.switch_next:ZH_CN:切换到后一个窗口
-shortcuts_dialog.windows.switch_next:SI:Preklopi na naslednje okno
 
 
 ######################
