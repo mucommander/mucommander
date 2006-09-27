@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class RenameAction extends SelectedFileAction {
 
     public RenameAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.SHIFT_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

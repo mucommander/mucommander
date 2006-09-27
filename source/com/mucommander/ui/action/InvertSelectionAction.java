@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class InvertSelectionAction extends MucoAction {
 
     public InvertSelectionAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_MULTIPLY, 0));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

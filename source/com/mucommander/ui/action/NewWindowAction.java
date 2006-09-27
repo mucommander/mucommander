@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class NewWindowAction extends MucoAction {
 
     public NewWindowAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

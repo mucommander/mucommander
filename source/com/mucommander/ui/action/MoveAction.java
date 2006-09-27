@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class MoveAction extends SelectedFilesAction {
 
     public MoveAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

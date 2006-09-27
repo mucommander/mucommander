@@ -17,7 +17,7 @@ import java.awt.event.KeyEvent;
 public class StopAction extends MucoAction implements LocationListener {
 
     public StopAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
+        super(mainFrame);
 
         // This action is initially disabled and enabled only during a folder change
         setEnabled(false);

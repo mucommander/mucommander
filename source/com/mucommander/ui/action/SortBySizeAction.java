@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class SortBySizeAction extends MucoAction {
 
     public SortBySizeAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.CTRL_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

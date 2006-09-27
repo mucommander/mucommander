@@ -17,7 +17,7 @@ import java.awt.*;
 public class CopyFileNamesAction extends SelectedFilesAction {
 
     public CopyFileNamesAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

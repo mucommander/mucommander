@@ -18,7 +18,7 @@ import java.awt.event.KeyEvent;
 public class GoToParentAction extends MucoAction implements TableChangeListener, LocationListener {
 
     public GoToParentAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0));
+        super(mainFrame);
 
         // Listen to active table change events
         mainFrame.addTableChangeListener(this);

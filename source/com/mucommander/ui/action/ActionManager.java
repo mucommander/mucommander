@@ -66,7 +66,10 @@ public class ActionManager {
                 if(Debug.ON) Debug.trace("nb instances = "+mainFrameActions.size());
             }
             catch(Exception e) {   // Catches ClassNotFoundException, NoSuchMethodException, InstanciationException, IllegalAccessException, InvocateTargetException
-                if(Debug.ON) Debug.trace("WARNING: returning null !");
+                if(Debug.ON) {
+                    Debug.trace("ERROR: caught exception "+e+" for class "+actionClass);
+                    e.printStackTrace();
+                }
 
                 // Class / constructor could not be instanciated, return null
                 return null;

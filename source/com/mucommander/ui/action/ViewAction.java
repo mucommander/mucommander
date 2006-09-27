@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class ViewAction extends SelectedFileAction {
 
     public ViewAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+        super(mainFrame);
 
         // Only enable this action if currently selected file is not a directory
         setFileFilter(new DirectoryFileFilter());

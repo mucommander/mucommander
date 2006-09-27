@@ -15,46 +15,10 @@ public abstract class MucoAction extends AbstractAction {
 
     protected MainFrame mainFrame;
 
-
-//    public MucoAction(MainFrame mainFrame) {
-//        this(mainFrame, null, null, null);
-//    }
-//
-//    public MucoAction(MainFrame mainFrame, String labelKey) {
-//        this(mainFrame, labelKey, null, null);
-//    }
-//
-//    public MucoAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator) {
-//        this(mainFrame, labelKey, accelerator, null);
-//    }
-//
-//    public MucoAction(MainFrame mainFrame, String labelKey, KeyStroke accelerator, String toolTipKey) {
-//        this.mainFrame = mainFrame;
-//
-//        if(labelKey!=null)
-//            setLabel(Translator.get(labelKey));
-//
-//        if(toolTipKey!=null)
-//            setToolTipText(Translator.get(toolTipKey));
-//
-//        if(accelerator!=null)
-//            setAccelerator(accelerator);
-//
-//        Class classInstance = getClass();
-//        String className = classInstance.getName();
-//        String iconPath = "/action/"+className+".png";
-//
-//        if(classInstance.getResource(iconPath)!=null)
-//            putValue(Action.SMALL_ICON, IconManager.getIcon(iconPath));
-//
-//    }
+    protected KeyStroke alternateAccelerator;
 
 
     public MucoAction(MainFrame mainFrame) {
-        this(mainFrame, null);
-    }
-
-    public MucoAction(MainFrame mainFrame, KeyStroke accelerator) {
         this.mainFrame = mainFrame;
 
         // Look for a label dictionary entry in the '<classname>.label' format and use it if it exists
@@ -69,9 +33,17 @@ public abstract class MucoAction extends AbstractAction {
         if(Translator.entryExists(key))
             setToolTipText(Translator.get(key));
 
-        // Set the accelerator (if any)
-        if(accelerator!=null)
+        // Look for an accelerator registered in ActionKeymap for this action class
+        KeyStroke accelerator = ActionKeymap.getAccelerator(classInstance);
+        if(accelerator!=null) {
             setAccelerator(accelerator);
+
+            // Look for an alternate accelerator registered in ActionKeymap for this action class
+            accelerator = ActionKeymap.getAlternateAccelerator(classInstance);
+            if(accelerator!=null) {
+                setAlternateAccelerator(accelerator);
+            }
+        }
 
         // Look for an icon file with the path /action/<classname>.png and use it if it exists
         String iconPath = "/action/"+className+".png";
@@ -109,6 +81,15 @@ public abstract class MucoAction extends AbstractAction {
 
     public void setAccelerator(KeyStroke keyStroke) {
         putValue(Action.ACCELERATOR_KEY, keyStroke);
+    }
+
+
+    public KeyStroke getAlternateAccelerator() {
+        return alternateAccelerator;
+    }
+
+    public void setAlternateAccelerator(KeyStroke keyStroke) {
+        this.alternateAccelerator = keyStroke;
     }
 
 

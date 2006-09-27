@@ -23,10 +23,6 @@ public abstract class SelectedFilesAction extends FileAction {
         super(mainFrame);
     }
 
-    public SelectedFilesAction(MainFrame mainFrame, KeyStroke accelerator) {
-        super(mainFrame, accelerator);
-    }
-
     protected boolean getFileTableCondition(FileTable fileTable, AbstractFile selectedFile) {
         return selectedFile!=null || ((FileTableModel)fileTable.getModel()).getNbMarkedFiles()>0;
     }

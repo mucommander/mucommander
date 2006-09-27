@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class SortByNameAction extends MucoAction {
 
     public SortByNameAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.CTRL_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

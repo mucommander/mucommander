@@ -18,7 +18,7 @@ import java.awt.event.KeyEvent;
 public class GoForwardAction extends MucoAction implements TableChangeListener, LocationListener {
 
     public GoForwardAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_MASK));
+        super(mainFrame);
 
         // Listen to active table change events
         mainFrame.addTableChangeListener(this);

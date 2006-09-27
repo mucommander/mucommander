@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 public class CopyFilePathsAction extends SelectedFilesAction {
 
     public CopyFilePathsAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.SHIFT_MASK|KeyEvent.CTRL_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

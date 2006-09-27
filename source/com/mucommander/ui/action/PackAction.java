@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class PackAction extends SelectedFilesAction {
 
     public PackAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_I, KeyEvent.CTRL_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

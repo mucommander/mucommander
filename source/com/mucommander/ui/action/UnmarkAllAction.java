@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class UnmarkAllAction extends MucoAction {
 
     public UnmarkAllAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

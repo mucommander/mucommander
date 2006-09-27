@@ -21,7 +21,6 @@ public class RevealInDesktopAction extends MucoAction {
     public RevealInDesktopAction(MainFrame mainFrame) {
         super(mainFrame);
         setLabel(Translator.get(getClass().getName()+".label", PlatformManager.getDefaultDesktopFMName()));
-        setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_MASK));
 
         // Disable this action if the platform is not capable of opening files in the default file manager
         if(!PlatformManager.canOpenInDesktop())

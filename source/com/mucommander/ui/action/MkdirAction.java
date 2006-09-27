@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 public class MkdirAction extends MucoAction {
 
     public MkdirAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

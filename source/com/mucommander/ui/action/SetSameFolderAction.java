@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class SetSameFolderAction extends MucoAction {
 
     public SetSameFolderAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

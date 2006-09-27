@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class MarkGroupAction extends MucoAction {
 
     public MarkGroupAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

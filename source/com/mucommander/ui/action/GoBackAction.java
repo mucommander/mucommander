@@ -18,7 +18,7 @@ import java.awt.event.KeyEvent;
 public class GoBackAction extends MucoAction implements TableChangeListener, LocationListener {
 
     public GoBackAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_MASK));
+        super(mainFrame);
 
         // Listen to active table change events
         mainFrame.addTableChangeListener(this);

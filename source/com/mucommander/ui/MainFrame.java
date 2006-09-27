@@ -154,7 +154,10 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
         table1.addKeyListener(this);
         table2.addKeyListener(this);
-    
+
+//        this.table1.registerActions();
+//        this.table2.registerActions();
+
 //        // Do nothing on close (default is to hide window),
 //        // WindowManager takes of catching close events and do the rest
 //        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

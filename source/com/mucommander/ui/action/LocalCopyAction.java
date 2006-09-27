@@ -19,7 +19,7 @@ import java.awt.event.KeyEvent;
 public class LocalCopyAction extends SelectedFileAction {
 
     public LocalCopyAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.SHIFT_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

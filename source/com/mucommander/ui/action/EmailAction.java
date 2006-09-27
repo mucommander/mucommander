@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class EmailAction extends SelectedFilesAction {
 
     public EmailAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

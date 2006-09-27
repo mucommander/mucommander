@@ -23,11 +23,6 @@ public abstract class SelectedFileAction extends FileAction implements TableSele
         super(mainFrame);
     }
 
-    public SelectedFileAction(MainFrame mainFrame, KeyStroke accelerator) {
-        super(mainFrame, accelerator);
-    }
-
-
     protected boolean getFileTableCondition(FileTable fileTable, AbstractFile selectedFile) {
         return selectedFile!=null;
     }

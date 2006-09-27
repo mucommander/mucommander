@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class RunCommandAction extends MucoAction {
 
     public RunCommandAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

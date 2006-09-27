@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class OpenNativelyAction extends MucoAction {
 
     public OpenNativelyAction(MainFrame mainFrame) {
-        super(mainFrame, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.SHIFT_MASK));
+        super(mainFrame);
     }
 
     public void performAction(MainFrame mainFrame) {

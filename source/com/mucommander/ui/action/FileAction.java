@@ -35,12 +35,7 @@ public abstract class FileAction extends MucoAction implements TableSelectionLis
         init(mainFrame);
     }
 
-    public FileAction(MainFrame mainFrame, KeyStroke accelerator) {
-        super(mainFrame, accelerator);
-        init(mainFrame);
-    }
-
-
+    
     private void init(MainFrame mainFrame) {
         mainFrame.addTableChangeListener(this);
         mainFrame.getFolderPanel1().getFileTable().addTableSelectionListener(this);
