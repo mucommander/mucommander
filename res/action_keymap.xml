@@ -8,12 +8,12 @@
     <action class="com.mucommander.ui.action.CopyAction" keystroke="F5"/>
     <action class="com.mucommander.ui.action.CopyFileNamesAction" keystroke="control C" alt_keystroke="meta C"/>
     <action class="com.mucommander.ui.action.CopyFilePathsAction"  keystroke="shift control C" alt_keystroke="shift meta C"/>
-    <action class="com.mucommander.ui.action.DeleteAction" keystroke="F8"/>
+    <action class="com.mucommander.ui.action.DeleteAction" keystroke="F8" alt_keystroke="DELETE"/>
     <action class="com.mucommander.ui.action.EditAction" keystroke="F4"/>
     <action class="com.mucommander.ui.action.EmailAction" keystroke="control S"/>
     <action class="com.mucommander.ui.action.GoBackAction" keystroke="alt LEFT"/>
     <action class="com.mucommander.ui.action.GoForwardAction" keystroke="alt RIGHT"/>
-    <action class="com.mucommander.ui.action.GoToParentAction" keystroke="BACK_SPACE"/>
+    <action class="com.mucommander.ui.action.GoToParentAction" keystroke="BACK_SPACE" alt_keystroke="LEFT"/>
     <action class="com.mucommander.ui.action.InvertSelectionAction" keystroke="MULTIPLY"/>
     <action class="com.mucommander.ui.action.LocalCopyAction" keystroke="shift F5"/>
     <action class="com.mucommander.ui.action.MarkAllAction" keystroke="control A"/>
@@ -21,7 +21,7 @@
     <action class="com.mucommander.ui.action.MkdirAction" keystroke="F7"/>
     <action class="com.mucommander.ui.action.MoveAction" keystroke="F6"/>
     <action class="com.mucommander.ui.action.NewWindowAction" keystroke="control N"/>
-    <action class="com.mucommander.ui.action.OpenAction" keystroke="ENTER"/>
+    <action class="com.mucommander.ui.action.OpenAction" keystroke="ENTER" alt_keystroke="RIGHT"/>
     <action class="com.mucommander.ui.action.OpenNativelyAction" keystroke="shift ENTER"/>
     <action class="com.mucommander.ui.action.PackAction" keystroke="control I"/>
     <action class="com.mucommander.ui.action.PopupLeftDriveButtonAction" keystroke="alt F1"/>
@@ -33,6 +33,8 @@
     <action class="com.mucommander.ui.action.RenameAction" keystroke="shift F6"/>
     <action class="com.mucommander.ui.action.RevealInDesktopAction" keystroke="control L"/>
     <action class="com.mucommander.ui.action.RunCommandAction" keystroke="control R"/>
+    <action class="com.mucommander.ui.action.SelectFirstRowAction" keystroke="HOME"/>
+    <action class="com.mucommander.ui.action.SelectLastRowAction" keystroke="END"/>
     <action class="com.mucommander.ui.action.SetSameFolderAction" keystroke="control E"/>
     <action class="com.mucommander.ui.action.ShowFilePropertiesAction" keystroke="alt ENTER"/>
     <action class="com.mucommander.ui.action.SortByDateAction" keystroke="control F6"/>

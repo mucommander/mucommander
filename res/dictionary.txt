@@ -1455,6 +1455,30 @@ com.mucommander.ui.action.SwitchActiveTableAction.label:RU:Переключен�
 com.mucommander.ui.action.SwitchActiveTableAction.label:ZH_CN:在左右面板间切换
 com.mucommander.ui.action.SwitchActiveTableAction.label:SI:Preklopi med levo in desno stranjo
 
+com.mucommander.ui.action.SelectFirstRowAction.label:EN:Select first file in current folder
+com.mucommander.ui.action.SelectFirstRowAction.label:FR:Selectionner le premier fichier du dossier
+com.mucommander.ui.action.SelectFirstRowAction.label:DE:Erste Datei im aktuellen Ordner markieren
+com.mucommander.ui.action.SelectFirstRowAction.label:ES:Seleccionar el primer fichero en el directorio actual
+com.mucommander.ui.action.SelectFirstRowAction.label:CS:Vybrat první soubor v aktuální složce
+com.mucommander.ui.action.SelectFirstRowAction.label:zh_TW:選取此資料夾的第一個檔案
+com.mucommander.ui.action.SelectFirstRowAction.label:PL:Zaznacz pierwszy plik w aktualnym katalogu
+com.mucommander.ui.action.SelectFirstRowAction.label:HU:Az első fájl kiválasztása az aktuális könyvtárban
+com.mucommander.ui.action.SelectFirstRowAction.label:RU:Перейти к первому файлу в текущем каталоге
+com.mucommander.ui.action.SelectFirstRowAction.label:ZH_CN:选取当前文件夹的第一个文件
+com.mucommander.ui.action.SelectFirstRowAction.label:SI:Izberi prvo datoteko v trenutni mapi
+
+com.mucommander.ui.action.SelectLastRowAction.label:EN:Select last file in current folder
+com.mucommander.ui.action.SelectLastRowAction.label:FR:Selectionner le dernier fichier du dossier
+com.mucommander.ui.action.SelectLastRowAction.label:DE:Letzte Datei im aktuellen Ordner markieren
+com.mucommander.ui.action.SelectLastRowAction.label:ES:Seleccionar el último fichero en el directorio actual
+com.mucommander.ui.action.SelectLastRowAction.label:CS:Vybrat poslední soubor v aktuální složce
+com.mucommander.ui.action.SelectLastRowAction.label:zh_TW:選取此資料夾的最後一個檔案
+com.mucommander.ui.action.SelectLastRowAction.label:PL:Zaznacz ostatnij plik w aktualnym katalogu
+com.mucommander.ui.action.SelectLastRowAction.label:HU:Az utolsó fájl kiválasztása az aktuális könyvtárban
+com.mucommander.ui.action.SelectLastRowAction.label:RU:Перейти к последнему файлу в текущем каталоге
+com.mucommander.ui.action.SelectLastRowAction.label:ZH_CN:选取当前文件夹的最后一个文件
+com.mucommander.ui.action.SelectLastRowAction.label:SI:Izberi zadnjo datoteko v trenutni mapi
+
 
 #############
 # File menu #
@@ -3744,30 +3768,6 @@ shortcuts_dialog.navigation:HU:navigáció
 shortcuts_dialog.navigation:RU:Перемещение
 shortcuts_dialog.navigation:ZH_CN:导航
 shortcuts_dialog.navigation:SI:Navigacija
-
-shortcuts_dialog.navigation.go_to_first:EN:Select first file in current folder
-shortcuts_dialog.navigation.go_to_first:FR:Selectionner le premier fichier du dossier
-shortcuts_dialog.navigation.go_to_first:DE:Erste Datei im aktuellen Ordner markieren
-shortcuts_dialog.navigation.go_to_first:ES:Seleccionar el primer fichero en el directorio actual
-shortcuts_dialog.navigation.go_to_first:CS:Vybrat první soubor v aktuální složce
-shortcuts_dialog.navigation.go_to_first:zh_TW:選取此資料夾的第一個檔案
-shortcuts_dialog.navigation.go_to_first:PL:Zaznacz pierwszy plik w aktualnym katalogu
-shortcuts_dialog.navigation.go_to_first:HU:Az első fájl kiválasztása az aktuális könyvtárban
-shortcuts_dialog.navigation.go_to_first:RU:Перейти к первому файлу в текущем каталоге
-shortcuts_dialog.navigation.go_to_first:ZH_CN:选取当前文件夹的第一个文件
-shortcuts_dialog.navigation.go_to_first:SI:Izberi prvo datoteko v trenutni mapi
-
-shortcuts_dialog.navigation.go_to_last:EN:Select last file in current folder
-shortcuts_dialog.navigation.go_to_last:FR:Selectionner le dernier fichier du dossier
-shortcuts_dialog.navigation.go_to_last:DE:Letzte Datei im aktuellen Ordner markieren
-shortcuts_dialog.navigation.go_to_last:ES:Seleccionar el último fichero en el directorio actual
-shortcuts_dialog.navigation.go_to_last:CS:Vybrat poslední soubor v aktuální složce
-shortcuts_dialog.navigation.go_to_last:zh_TW:選取此資料夾的最後一個檔案
-shortcuts_dialog.navigation.go_to_last:PL:Zaznacz ostatnij plik w aktualnym katalogu
-shortcuts_dialog.navigation.go_to_last:HU:Az utolsó fájl kiválasztása az aktuális könyvtárban
-shortcuts_dialog.navigation.go_to_last:RU:Перейти к последнему файлу в текущем каталоге
-shortcuts_dialog.navigation.go_to_last:ZH_CN:选取当前文件夹的最后一个文件
-shortcuts_dialog.navigation.go_to_last:SI:Izberi zadnjo datoteko v trenutni mapi
 
 shortcuts_dialog.view:EN:View
 shortcuts_dialog.view:FR:Vue

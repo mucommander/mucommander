@@ -3,6 +3,7 @@ package com.mucommander.ui.action;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
 import com.mucommander.Debug;
+import com.mucommander.ui.MainFrame;
 
 import javax.swing.*;
 import java.util.Hashtable;
@@ -34,13 +35,35 @@ public class ActionKeymap implements ContentHandler {
         (primaryAccelerator?primaryActionKeymap:alternateActionKeymap).put(mucoActionClass, ks);
     }
 
-
     public static KeyStroke getAccelerator(Class mucoActionClass) {
         return (KeyStroke)primaryActionKeymap.get(mucoActionClass);
     }
 
     public static KeyStroke getAlternateAccelerator(Class mucoActionClass) {
         return (KeyStroke)alternateActionKeymap.get(mucoActionClass);
+    }
+
+
+    private static void registerAccelerator(MucoAction action, KeyStroke keyStroke, JComponent comp, int condition) {
+        if(keyStroke==null)
+            return;
+        InputMap inputMap = comp.getInputMap(condition);
+        ActionMap actionMap = comp.getActionMap();
+        Class mucoActionClass = action.getClass();
+        inputMap.put(keyStroke, mucoActionClass);
+        actionMap.put(mucoActionClass, action);
+    }
+
+    public static void registerActionAccelerators(MucoAction action, JComponent comp, MainFrame mainFrame, int condition) {
+        KeyStroke ks = action.getAccelerator();
+        if(ks==null)
+            return;
+
+        registerAccelerator(action, ks, comp, condition);
+
+        ks = action.getAlternateAccelerator();
+        if(ks!=null)
+            registerAccelerator(action, ks, comp, condition);
     }
 
 

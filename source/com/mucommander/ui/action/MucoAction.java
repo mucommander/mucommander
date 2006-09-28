@@ -93,6 +93,25 @@ public abstract class MucoAction extends AbstractAction {
     }
 
 
+    /**
+     * Returns true if the given KeyStroke is one of this action's accelerators.
+     * Always returns false if this method has no accelerator.
+     *
+     * @param keyStroke the KeyStroke to test against this action's acccelerators
+     * @return true if the given KeyStroke is one of this action's accelerators
+     */
+    public boolean isAccelerator(KeyStroke keyStroke) {
+        KeyStroke accelerator = getAccelerator();
+        if(accelerator==null)
+            return false;
+
+        if(accelerator.equals(keyStroke))
+            return true;
+
+        return alternateAccelerator!=null && alternateAccelerator.equals(keyStroke);
+    }
+
+
     public ImageIcon getIcon() {
         return (ImageIcon)getValue(Action.SMALL_ICON);
     }
@@ -132,6 +151,8 @@ public abstract class MucoAction extends AbstractAction {
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+
         // Discard this event while in 'no events mode'
         if(!(mainFrame.getNoEventsMode() && ignoreEventsWhileInNoEventsMode()))
             performAction(mainFrame);

@@ -81,13 +81,10 @@ public class ActionManager {
 
 
     public static void performAction(Class actionClass, MainFrame mainFrame) {
-        MucoAction action = getActionInstance(actionClass, mainFrame);
+        performAction(getActionInstance(actionClass, mainFrame));
+    }
 
-        if(action==null) {
-            if(Debug.ON) Debug.trace("WARNING: action "+actionClass+" could not be retrieved, action not performed");
-            return;
-        }
-
-        action.performAction(mainFrame);
+    public static void performAction(MucoAction action) {
+        action.performAction(action.getMainFrame());
     }
 }
