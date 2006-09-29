@@ -472,14 +472,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(!(source instanceof MainFrame))
             return;
 
-        this.currentMainFrame = (MainFrame)e.getSource();
+        currentMainFrame = (MainFrame)e.getSource();
         // Let MainFrame know that is active in the foreground
         currentMainFrame.setForegroundActive(true);
 
         // Resets shift mode to false, since keyReleased events may have been lost during window switching
         CommandBar commandBar = currentMainFrame.getCommandBar();
         if(commandBar!=null)
-            commandBar.setShiftMode(false);
+            commandBar.setAlternateActionsMode(false);
 
         // Requests focus if last active table doesn't already have focus
         // Delay check is to avoid that 2 main frames fight over focus.

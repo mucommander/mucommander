@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Hashtable;
+import java.util.Vector;
 
 
 /**
@@ -27,7 +28,8 @@ public class ToolBar extends JToolBar implements ConfigurationListener, ContentH
 
     private MainFrame mainFrame;
 
-    /** Path to the XML file specifying the toolbar buttons */
+
+    /** Path to the XML file specifying the toolbar */
     private final static String TOOLBAR_XML_FILE_PATH = "/toolbar.xml";
 
     /** Dimension of button separators */
@@ -36,28 +38,15 @@ public class ToolBar extends JToolBar implements ConfigurationListener, ContentH
     /** Name of the configuration variable that holds the toolbar's icon scale */
     public final static String TOOLBAR_ICON_SCALE_CONF_VAR = "prefs.toolbar.icon_scale";
 
+
     /** Current icon scale value */
     private static float scaleFactor = ConfigurationManager.getVariableFloat(TOOLBAR_ICON_SCALE_CONF_VAR, 1.0f);
 
+    /** Command bar actions: Class instances or null to signify a separator */
+    private static Class actions[];
 
-    /**
-     * Preloads icons if toolbar is to become visible after launch. 
-     * Icons will then be in IconManager's cache, ready for use when the first ToolBar is created.
-     */
-/*
-    public static void init() {
-        if(com.mucommander.conf.ConfigurationManager.getVariableBoolean("prefs.toolbar.visible", true)) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Preloading toolbar icons");
-			
-            // For each icon
-            int nbIcons = BUTTONS_DESC.length;
-            for(int i=0; i<nbIcons; i++) {
-                // Preload 'enabled' icon
-                IconManager.getIcon(IconManager.TOOLBAR_ICON_SET, (String)BUTTONS_DESC[i][1]);
-            }
-        }
-    }
-*/
+    /** Temporarily used for XML parsing */
+    private static Vector actionsV;
 
 
     /**
@@ -77,19 +66,41 @@ public class ToolBar extends JToolBar implements ConfigurationListener, ContentH
         // Listen to configuration changes to reload toolbar buttons when icon size has changed
         ConfigurationManager.addConfigurationListener(this);
 
+        // Parse the XML file describing the toolbar buttons and associated actions.
+        // This file is parsed only once the first time ToolBar is instancied.
+        if(actions==null)
+            parseXMLDescriptor();
+
+        // Create buttons and add them to this toolbar
+        int nbActions = actions.length;
+        for(int i=0; i<nbActions; i++) {
+            Class actionClass = actions[i];
+            if(actionClass==null)
+                addSeparator(SEPARATOR_DIMENSION);
+            else
+                addButton(ActionManager.getActionInstance(actionClass, mainFrame));
+        }
+    }
+
+
+    /**
+     * Parses the XML file describing the toolbar's buttons and associated actions.
+     */
+    private void parseXMLDescriptor() {
         try {
             // Use UTF-8 encoding
             new Parser().parse(getClass().getResourceAsStream(TOOLBAR_XML_FILE_PATH), this, "UTF-8");
         }
         catch(Exception e) {
-            if(com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Exception thrown while parsing Toolbar XML file "+TOOLBAR_XML_FILE_PATH+" :"+e);
-                e.printStackTrace();
-            }
+            // Report error to the standard output
+            System.out.println("Exception thrown while parsing Toolbar XML file "+TOOLBAR_XML_FILE_PATH+": "+e);
         }
     }
 
 
+    /**
+     * Adds a button to this toolbar using the given action.
+     */
     private void addButton(MucoAction action) {
         JButton button = new RolloverButton(action);
 
@@ -116,17 +127,32 @@ public class ToolBar extends JToolBar implements ConfigurationListener, ContentH
     ////////////////////////////
 
     public void startDocument() throws Exception {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_XML_FILE_PATH+" parsing started");
+
+        actionsV = new Vector();
     }
 
     public void endDocument() throws Exception {
+        int nbActions = actionsV.size();
+        actions = new Class[nbActions];
+        actionsV.toArray(actions);
+        actionsV = null;
+
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_XML_FILE_PATH+" parsing finished");
     }
 
     public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
         if(name.equals("button")) {
-            addButton(ActionManager.getActionInstance((String)attValues.get("action"), mainFrame));
+            String actionClassName = (String)attValues.get("action");
+            try {
+                actionsV.add(Class.forName(actionClassName));
+            }
+            catch(Exception e) {
+                System.out.println("Error in "+TOOLBAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
+            }
         }
         else if(name.equals("separator")) {
-            addSeparator(SEPARATOR_DIMENSION);
+            actionsV.add(null);
         }
     }
 
@@ -170,10 +196,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, ContentH
     ///////////////////////////
 
     public void mouseClicked(MouseEvent e) {
-        // Discard mouse events while in 'no events mode'
-        if(mainFrame.getNoEventsMode())
-            return;
-
         Object source = e.getSource();
 
         // Right clicking on the toolbar brings up a popup menu

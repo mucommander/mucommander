@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command_bar>
+    <button action="com.mucommander.ui.action.ViewAction"/>
+    <button action="com.mucommander.ui.action.EditAction"/>
+    <button action="com.mucommander.ui.action.CopyAction" alt_action="com.mucommander.ui.action.LocalCopyAction"/>
+    <button action="com.mucommander.ui.action.MoveAction" alt_action="com.mucommander.ui.action.RenameAction"/>
+    <button action="com.mucommander.ui.action.MkdirAction"/>
+    <button action="com.mucommander.ui.action.DeleteAction"/>
+    <button action="com.mucommander.ui.action.RefreshAction"/>
+    <button action="com.mucommander.ui.action.CloseWindowAction"/>
+</command_bar>

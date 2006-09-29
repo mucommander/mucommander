@@ -9,11 +9,17 @@ import com.mucommander.ui.comp.button.NonFocusableButton;
 import com.mucommander.ui.action.MucoAction;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.xml.parser.ContentHandler;
+import com.mucommander.xml.parser.Parser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Hashtable;
+import java.util.Vector;
 
 
 /**
@@ -22,73 +28,37 @@ import java.awt.event.MouseListener;
  *
  * @author Maxence Bernard
  */
-public class CommandBar extends JPanel implements ConfigurationListener, MouseListener {
+public class CommandBar extends JPanel implements ConfigurationListener, MouseListener, ContentHandler {
 
     /** Parent MainFrame instance */
     private MainFrame mainFrame;
 
-    /** True when Shift key is pressed */ 
+    /** True when Shift key is pressed */
     private boolean shiftDown;
-	
-    /** Buttons */
+
+    /** Command bar buttons */
     private JButton buttons[];
 
-    ////////////////////
-    // Button indexes //
-    ////////////////////
-    public final static int VIEW_INDEX = 0;
-    public final static int EDIT_INDEX = 1;
-    public final static int COPY_INDEX = 2;
-    public final static int MOVE_INDEX = 3;
-    public final static int MKDIR_INDEX = 4;
-    public final static int DELETE_INDEX = 5;
-    public final static int REFRESH_INDEX = 6;
-    public final static int CLOSE_INDEX = 7;
 
-    private final static int NB_BUTTONS = 8;
+    /** Path to the XML file specifying the command bar */
+    private final static String COMMAND_BAR_XML_FILE_PATH = "/command_bar.xml";
 
-    ////////////////////////////////////
-    // Buttons actions/images mapping //
-    ////////////////////////////////////
-
-    private final static Class COPY_ACTION = com.mucommander.ui.action.CopyAction.class;
-    private final static Class LOCAL_COPY_ACTION = com.mucommander.ui.action.LocalCopyAction.class;
-
-    private final static Class MOVE_ACTION = com.mucommander.ui.action.MoveAction.class;
-    private final static Class RENAME_ACTION = com.mucommander.ui.action.RenameAction.class;
-
-    private final static Class BUTTON_ACTIONS[] =  {
-        com.mucommander.ui.action.ViewAction.class,
-        com.mucommander.ui.action.EditAction.class,
-        COPY_ACTION,
-        MOVE_ACTION,
-        com.mucommander.ui.action.MkdirAction.class,
-        com.mucommander.ui.action.DeleteAction.class,
-        com.mucommander.ui.action.RefreshAction.class,
-        com.mucommander.ui.action.CloseWindowAction.class
-    };
-
-
+    /** Configuration variable that holds the command bar's icon scale factor */
     public final static String COMMAND_BAR_ICON_SCALE_CONF_VAR = "prefs.command_bar.icon_scale";
 
+    /** Current icon scale factor */
     private static float scaleFactor = ConfigurationManager.getVariableFloat(COMMAND_BAR_ICON_SCALE_CONF_VAR, 1.0f);
 
 
-    /**
-     * Preloads icons if command bar is to become visible after launch. 
-     * Icons will then be in IconManager's cache, ready for use when the first command bar is created.
-     */
-/*
-    public static void init() {
-        if(com.mucommander.conf.ConfigurationManager.getVariableBoolean("prefs.command_bar.visible", true)) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Preloading command bar icons");
+    /** Command bar actions */
+    private static Class actions[];
+    /** Command bar alternate actions */
+    private static Class alternateActions[];
 
-            // For each button
-            for(int i=0; i<NB_BUTTONS; i++)
-                IconManager.getIcon(IconManager.COMMAND_BAR_ICON_SET, (String)BUTTON_ACTIONS[i][1]);
-        }
-    }
-*/
+    /** Temporarily used for XML parsing */
+    private static Vector actionsV;
+    /** Temporarily used for XML parsing */
+    private static Vector alternateActionsV;
 
 
     /**
@@ -98,35 +68,59 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
         super(new GridLayout(0,8));
         this.mainFrame = mainFrame;
 
-        this.buttons = new JButton[NB_BUTTONS];
-        for(int i=0; i<NB_BUTTONS; i++)
-            buttons[i] = addButton(BUTTON_ACTIONS[i]);
-
+        // Listen to mouse events to popup a menu when command bar is right clicked
         addMouseListener(this);
 
         // Listen to configuration changes to reload command bar buttons when icon size has changed
         ConfigurationManager.addConfigurationListener(this);
+
+        // Parse the XML file describing the toolbar buttons and associated actions.
+        // This file is parsed only once the first time ToolBar is instancied.
+        if(actions==null)
+            parseXMLDescriptor();
+
+        // Create buttons and add them to this command bar
+        int nbButtons = actions.length;
+        buttons = new JButton[nbButtons];
+        for(int i=0; i<nbButtons; i++) {
+            MucoAction action = ActionManager.getActionInstance(actions[i], mainFrame);
+            JButton button = new NonFocusableButton();
+
+            setButtonAction(button, action);
+
+            button.setMargin(new Insets(3,4,3,4));
+            // For Mac OS X whose default minimum width for buttons is enormous
+            button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getHeight()));
+            button.addMouseListener(this);
+            add(button);
+
+            buttons[i] = button;
+        }
     }
 
 
     /**
-     * Returns the button correponding to the given index, to be used in conjunction
-     * with final static fields.  
+     * Parses the XML file describing the toolbar's buttons and associated actions.
      */
-    public JButton getButton(int buttonIndex) {
-        return buttons[buttonIndex];
+    private void parseXMLDescriptor() {
+        // Parse the XML file describing the command bar buttons and associated actions
+        try {
+            new Parser().parse(getClass().getResourceAsStream(COMMAND_BAR_XML_FILE_PATH), this, "UTF-8");
+        }
+        catch(Exception e) {
+            if(com.mucommander.Debug.ON) {
+                com.mucommander.Debug.trace("Exception thrown while parsing CommandBar XML file "+COMMAND_BAR_XML_FILE_PATH+": "+e);
+                e.printStackTrace();
+            }
+        }
     }
-	
-	
-    /**
-     * Creates and adds a button to the command bar using the provided MucoAction's class.
-     *
-     * @param actionClass A MucoAction class
-     */
-    private JButton addButton(Class actionClass) {
-        MucoAction action = ActionManager.getActionInstance(actionClass, mainFrame);
 
-        JButton button = new NonFocusableButton(action);
+
+    /**
+     * Sets the given button's action, custom label showing the accelerator, and icon taking into account the scale factor.
+     */
+    private void setButtonAction(JButton button, MucoAction action) {
+        button.setAction(action);
 
         // Append the action's shortcut to the button's label
         button.setText(action.getLabel()+" ["+action.getAcceleratorText()+"]");
@@ -134,21 +128,13 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
         // Scale icon if scale factor is different from 1.0
         if(scaleFactor!=1.0f)
             button.setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
-
-        button.setMargin(new Insets(3,4,3,4));
-        // For Mac OS X whose default minimum width for buttons is enormous
-        button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getHeight()));
-        button.addMouseListener(this);
-        add(button);
-        return button;
     }
 
 
     /**
-     * Sets shift mode on or off : some buttons such as 'F6 Move' indicate
-     * that action is different when shift is pressed.
+     * Sets the alternate actions mode on/off : some buttons have a different action when in alternate actions mode.
      */
-    public void setShiftMode(boolean on) {
+    public void setAlternateActionsMode(boolean on) {
         // Do nothing if command bar is not currently visible
         if(!isVisible())
             return;
@@ -156,41 +142,87 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
         if(this.shiftDown!=on) {
             this.shiftDown = on;
 
-            // Change Copy/Local copy button's text and tooltip
-            MucoAction action = ActionManager.getActionInstance(on?LOCAL_COPY_ACTION:COPY_ACTION, mainFrame);
-            buttons[COPY_INDEX].setAction(action);
-            buttons[COPY_INDEX].setText(action.getLabel()+" ["+action.getAcceleratorText()+"]");
-
-            // Change Move/Rename button's text and tooltip
-            action = ActionManager.getActionInstance(on?RENAME_ACTION:MOVE_ACTION, mainFrame);
-            buttons[MOVE_INDEX].setAction(action);
-            buttons[MOVE_INDEX].setText(action.getLabel()+" ["+action.getAcceleratorText()+"]");
+            int nbButtons = buttons.length;
+            for(int i=0; i<nbButtons; i++)
+                setButtonAction(buttons[i], ActionManager.getActionInstance(on && alternateActions[i]!=null?alternateActions[i]:actions[i], mainFrame));
         }
     }
 
+    ////////////////////////////
+    // ContentHandler methods //
+    ////////////////////////////
+
+    public void startDocument() throws Exception {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_XML_FILE_PATH+" parsing started");
+
+        actionsV = new Vector();
+        /** Temporarily used for alternate actions parsing */
+        alternateActionsV = new Vector();
+    }
+
+    public void endDocument() throws Exception {
+        int nbActions = actionsV.size();
+
+        actions = new Class[nbActions];
+        actionsV.toArray(actions);
+        actionsV = null;
+
+        alternateActions = new Class[nbActions];
+        alternateActionsV.toArray(alternateActions);
+        alternateActionsV = null;
+
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_XML_FILE_PATH+" parsing finished");
+    }
+
+    public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
+        if(name.equals("button")) {
+            String actionClassName = (String)attValues.get("action");
+            try {
+                actionsV.add(Class.forName(actionClassName));
+            }
+            catch(Exception e) {
+                System.out.println("Error in "+COMMAND_BAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
+            }
+
+
+            actionClassName = (String)attValues.get("alt_action");
+            if(actionClassName==null)
+                alternateActionsV.add(null);
+            else
+                try {
+                    alternateActionsV.add(Class.forName(actionClassName));
+                }
+                catch(Exception e) {
+                    System.out.println("Error in "+COMMAND_BAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
+                }
+        }
+    }
+
+    public void endElement(String uri, String name) throws Exception {
+    }
+
+    public void characters(String s) throws Exception {
+    }
 
     ///////////////////////////////////
     // ConfigurationListener methods //
     ///////////////////////////////////
-	
+
     /**
      * Listens to certain configuration variables.
      */
     public boolean configurationChanged(ConfigurationEvent event) {
-    	String var = event.getVariable();
+        String var = event.getVariable();
 
-        // Reload toolbar icons if their size has changed and command bar is visible
+        // Reload butons icon if the icon scale factor has changed
         if (var.equals(COMMAND_BAR_ICON_SCALE_CONF_VAR)) {
             scaleFactor = event.getFloatValue();
-            Component components[] = getComponents();
-            int nbComponents = components.length;
 
-            for(int i=0; i<nbComponents; i++) {
-                if(components[i] instanceof JButton) {
-                    JButton button = (JButton)components[i];
-                    // Change the button's icon but NOT the action's icon which has to remain in its original non-scaled size
-                    button.setIcon(IconManager.getScaledIcon(((MucoAction)button.getAction()).getIcon(), scaleFactor));
-                }
+            int nbButtons = buttons.length;
+            for(int i=0; i<nbButtons; i++) {
+                JButton button = buttons[i];
+                // Change the button's icon but NOT the action's icon which has to remain in its original non-scaled size
+                button.setIcon(IconManager.getScaledIcon(((MucoAction)button.getAction()).getIcon(), scaleFactor));
             }
         }
 
@@ -201,12 +233,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
     ///////////////////////////
     // MouseListener methods //
     ///////////////////////////
-	
-    public void mouseClicked(MouseEvent e) {
-        // Discard mouse events while in 'no events mode'
-        if(mainFrame.getNoEventsMode())
-            return;
 
+    public void mouseClicked(MouseEvent e) {
         // Right clicking on the toolbar brings up a popup menu
         int modifiers = e.getModifiers();
         if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {
@@ -223,10 +251,10 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
 
     public void mousePressed(MouseEvent e) {
     }
-	
+
     public void mouseEntered(MouseEvent e) {
     }
 
     public void mouseExited(MouseEvent e) {
-    }	
+    }
 }

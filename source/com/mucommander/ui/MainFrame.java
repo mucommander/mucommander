@@ -1,6 +1,5 @@
 package com.mucommander.ui;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -166,7 +165,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         // Dispose window on close
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        // Register 'Stop folder change' action (Escape key by default) on the whole window 
+        // Register 'Stop folder change' action (Escape key by default) on the whole window
         ActionKeymap.registerActionAccelerators(ActionManager.getActionInstance(com.mucommander.ui.action.StopAction.class, this), getRootPane(), this, JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         // Piece of code used in 0.8 beta1 and removed after because it's way too slow, kept here for the record 
@@ -546,7 +545,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 //        }
         else if(keyCode == KeyEvent.VK_SHIFT) {
             // Set shift mode to on : display alternate actions in the command bar
-            commandBar.setShiftMode(true);
+            commandBar.setAlternateActionsMode(true);
         }
     }
 
@@ -555,7 +554,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
         if(keyCode == KeyEvent.VK_SHIFT) {
             // Set shift mode back to off : display regular (non-shifted) actions in the command bar
-            commandBar.setShiftMode(false);
+            commandBar.setAlternateActionsMode(false);
         }
     }
 

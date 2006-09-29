@@ -1,4 +1,4 @@
-on# This file contains localized text strings, each entry goes like this:
+# This file contains localized text strings, each entry goes like this:
 # <key>:<lang>:<value>
 #
 # where:
@@ -766,8 +766,6 @@ com.mucommander.ui.action.CloseWindowAction.tooltip:HU:ablakbezárás
 com.mucommander.ui.action.CloseWindowAction.tooltip:RU:Закрытие окна
 com.mucommander.ui.action.CloseWindowAction.tooltip:ZH_CN:关闭此窗口
 com.mucommander.ui.action.CloseWindowAction.tooltip:SI:Zapri okno
-
-com.mucommander.ui.action.ToggleCommandBarAction.label:EN:$[view_menu.hide_command_bar]
 
 com.mucommander.ui.action.CopyFileNamesAction.label:EN:Copy name(s)
 com.mucommander.ui.action.CopyFileNamesAction.label:FR:Copier nom(s)
@@ -1713,10 +1711,6 @@ status_bar.volume_capacity:SI:Kapaciteta: %1
 
 
 
-#status_bar.quick_search:EN:Looking up: %1
-#status_bar.quick_search:FR:Recherche de: %1
-
-status_bar.hide_status_bar:EN:$[view_menu.hide_status_bar]
 
 
 #########
