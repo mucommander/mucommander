@@ -43,7 +43,7 @@
     <action class="com.mucommander.ui.action.SortBySizeAction" keystroke="control F5"/>
     <action class="com.mucommander.ui.action.StopAction" keystroke="ESCAPE"/>
     <action class="com.mucommander.ui.action.SwapFoldersAction" keystroke="control U"/>
-    <action class="com.mucommander.ui.action.SwitchActiveTableAction" keystroke="TAB"/>
+    <action class="com.mucommander.ui.action.SwitchActiveTableAction" keystroke="TAB" alt_keystroke="shift TAB"/>
     <action class="com.mucommander.ui.action.UnmarkAllAction" keystroke="control D"/>
     <action class="com.mucommander.ui.action.UnmarkGroupAction" keystroke="SUBTRACT"/>
     <action class="com.mucommander.ui.action.UnpackAction" keystroke="control P"/>
