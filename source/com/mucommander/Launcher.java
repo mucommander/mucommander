@@ -50,6 +50,8 @@ public class Launcher {
             System.out.println(" -n, --no-debug                  Disable debug output to stdout");
             System.out.println(" -d, --debug                     Enable debug output to stdout (default)");
         }
+        // Allows users to tweak how shell history is loaded / saved.
+        System.out.println(" -s FILE, --shell-history FILE   Load shell history from FILE");
 
         // Text commands.
         System.out.println(" -h, --help                      Print the help text and exit");
@@ -118,6 +120,13 @@ public class Launcher {
                 ConfigurationManager.setConfigurationFile(args[++i]);
             }
 
+            // Shell history.
+            else if(args[i].equals("-s") || args[i].equals("--shell-history")) {
+                if(i >= args.length - 1)
+                    printError("Missing FILE parameter to " + args[i]);
+                ShellHistoryManager.setHistoryFile(args[++i]);
+            }
+
             // Debug options.
             else if(Debug.ON && (args[i].equals("-n") || args[i].equals("--no-debug")))
                 Debug.setEnabled(false);
@@ -167,6 +176,10 @@ public class Launcher {
         // Loads bookmarks
         splashScreen.setLoadingMessage("Loading bookmarks...");
         com.mucommander.bookmark.BookmarkManager.loadBookmarks();
+
+        // Loads shell history
+        splashScreen.setLoadingMessage("Loading shell history...");
+        ShellHistoryManager.loadHistory();
 
         // Loads dictionary
         splashScreen.setLoadingMessage("Loading dictionary...");

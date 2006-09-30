@@ -2,6 +2,7 @@ package com.mucommander;
 
 import com.mucommander.conf.ConfigurationManager;
 
+
 /**
  * The run method of this thread is called when the program shuts down, either because
  * the user chose to quit the program or because the program was interrupted by a logoff.
@@ -55,6 +56,7 @@ public class ShutdownHook extends Thread {
         
         // Saves preferences
         ConfigurationManager.writeConfiguration();
+        ShellHistoryManager.writeHistory();
     
         // Shutdown tasks should only be performed once
         shutdownTasksPerformed = true;

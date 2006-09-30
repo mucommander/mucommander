@@ -1,32 +1,30 @@
 package com.mucommander.ui;
 
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.PlatformManager;
+import com.mucommander.ShellHistoryManager;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 import java.awt.*;
 import java.awt.event.*;
-
+import java.io.*;
+import java.util.Iterator;
 
 public class ShellComboBox extends JComboBox implements ActionListener, KeyListener {
     private JTextField input;
     private RunDialog  parent;
 
-    // - History fields -------------------------------------------------------------
-    // ------------------------------------------------------------------------------
-    private String[]   history;
-    private int        historyStart;
-    private int        historyEnd;
-
     /** When true, any action or key events received will be ignored */
     private boolean ignoreEvents = true;    // Events are ignored until location is changed for the first time
 
+
+    static {
+
+    }
+
     public ShellComboBox(RunDialog parent) {
         this.parent = parent;
-
-        // Initialises history;
-        history      = new String[10];
-        historyStart = 0;
-        historyEnd   = 0;
-
 
         // Use a custom text field that can display loading progress when changing folders
         this.input = new JTextField();
@@ -49,41 +47,29 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
         putClientProperty("JComboBox.lightweightKeyboardNavigation","Lightweight");
         // Java 1.4 and up
         putClientProperty("JComboBox.isTableCellEditor", Boolean.TRUE);
+
+        populateHistory();
     }
 
     private void runCommand(String command) {
-        addToHistory(command);
+        ShellHistoryManager.add(command);
+        populateHistory();
         input.setText(command);
         parent.runCommand(command);
     }
 
     // - History handling -----------------------------------------------------------
     // ------------------------------------------------------------------------------
-    private void addToHistory(String command) {
-        history[historyEnd] = command;
-        historyEnd++;
 
-        // Wraps around the history buffer.
-        if(historyEnd == history.length)
-            historyEnd = 0;
-
-        // Clears items from the begining of the buffer if necessary.
-        if(historyEnd == historyStart) {
-            if(++historyStart == history.length)
-                historyStart = 0;
-        }
+    private void populateHistory() {
+        Iterator iterator;
 
         // Updates the content of the combo box.
         removeAllItems();
-        int i = historyEnd;
-        while(true) {
-            if(--i == -1)
-                i = history.length - 1;
-            addItem(history[i]);
-            if(i == historyStart)
-                break;
-        }
-        
+
+        iterator = ShellHistoryManager.getHistoryIterator();
+        while(iterator.hasNext())
+            insertItemAt(iterator.next(), 0);
     }
 
 
@@ -152,8 +138,10 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
         String command;
 
         command = input.getText();
-        if(add)
-            addToHistory(command);
+        if(add) {
+            ShellHistoryManager.add(command);
+            populateHistory();
+        }
 
         return command;
     }
