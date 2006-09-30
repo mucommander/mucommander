@@ -11,16 +11,13 @@ import com.mucommander.ui.comp.dialog.YBoxPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 
 
 /**
  * Dialog used to execute a user-defined command.
-
+ *
  * Creates and displays a new dialog allowing the user to input a command which will be executed once the action is confirmed.
  * The command output of the user command is displayed in a text area
  *
@@ -29,7 +26,7 @@ import java.awt.event.WindowEvent;
 public class RunDialog extends FocusDialog implements ActionListener, ProcessListener {
     private MainFrame mainFrame;
 	
-    private JTextField commandField;
+    private ShellComboBox inputField;
 	
     private JButton runStopButton;
     private JButton cancelButton;
@@ -43,8 +40,6 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480, 400);	
     //    // Dialog width should not exceed 360
     //   private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
-
-    private static String lastCommand = "";
 
     private int caretPos;
 	
@@ -63,13 +58,9 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         JLabel label = new JLabel(Translator.get("run_dialog.run_command_description")+":");
         mainPanel.add(label);
 
-        commandField = new JTextField(lastCommand);
-        // Text is selected so that user can directly type and replace path
-        commandField.setSelectionStart(0);
-        commandField.setSelectionEnd(lastCommand.length());
-        commandField.addActionListener(this);
+        inputField = new ShellComboBox(this);
 
-        mainPanel.add(commandField);
+        mainPanel.add(inputField);
         mainPanel.addSpace(10);
 
         contentPane.add(mainPanel, BorderLayout.NORTH);
@@ -84,7 +75,6 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         // The logical "Monospaced" font name is always available in Java.
         // The font size is the one of the default JTextArea, style is plain.
         Font monospacedFont = new Font("Monospaced", Font.PLAIN, outputTextArea.getFont().getSize());
-        commandField.setFont(monospacedFont);
         outputTextArea.setFont(monospacedFont);
 
         JScrollPane scrollPane = new JScrollPane(outputTextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -96,11 +86,8 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(runStopButton, cancelButton, this), BorderLayout.SOUTH);
 
-        // Selects OK when enter is pressed
-        getRootPane().setDefaultButton(runStopButton);
-        
         // Path field will receive initial focus
-        setInitialFocusComponent(commandField);		
+        setInitialFocusComponent(inputField);		
 			
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         //		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
@@ -114,7 +101,8 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
                     }
                 }
             });
-		
+
+        inputField.setEnabled(true);
         showDialog();
     }
 
@@ -151,10 +139,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         this.runStopButton.setText(Translator.get("run_dialog.stop"));
         // Clear text area
         this.outputTextArea.setText("");
-        //				// Make text area active
-        //				this.outputTextArea.setEnabled(true);
-        // Make command field disabled
-        this.commandField.setEnabled(false);
+
         // Repaint the dialog
         repaint();
     }
@@ -165,10 +150,8 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         //		// Make text area not active anymore
         //		this.outputTextArea.setEnabled(false);
         // Make command field active again
-        this.commandField.setEnabled(true);
-        commandField.requestFocus();
-        commandField.setSelectionStart(0);
-        commandField.setSelectionEnd(lastCommand.length());
+        this.inputField.setEnabled(true);
+        inputField.requestFocus();
         // Repaint this dialog
         repaint();
     }	
@@ -177,26 +160,29 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     ////////////////////////////
     // ActionListener methods //
     ////////////////////////////
+    public void runCommand(String command) {
+        try {
+            currentProcess = PlatformManager.execute(command, mainFrame.getLastActiveTable().getCurrentFolder());
+            // If command could be executed
+            // Reset caret position
+            caretPos = 0;
+            switchToStopState();
+            // And start monitoring the process and outputting to the text area
+            processMonitor = new ProcessMonitor(this.currentProcess, this);
+        }
+        catch(Exception e1) {
+            // Probably should notify the user if the command could not be executed
+        }
+    }
+
 	
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-		
+
         // Run button starts a new command
-        if(this.currentProcess==null && (source == runStopButton || source == commandField)) {
-            String command = commandField.getText();
-            this.lastCommand = command;
-            try {
-                currentProcess = PlatformManager.execute(command, mainFrame.getLastActiveTable().getCurrentFolder());
-                // If command could be executed
-                // Reset caret position
-                caretPos = 0;
-                switchToStopState();
-                // And start monitoring the process and outputting to the text area
-                processMonitor = new ProcessMonitor(this.currentProcess, this);
-            }
-            catch(Exception e1) {
-                // Probably should notify the user if the command could not be executed
-            }
+        if(this.currentProcess==null && (source == runStopButton)) {
+            inputField.setEnabled(false);
+            runCommand(inputField.getCommand(true));
         }
         // Stop button stops current process
         else if(this.currentProcess!=null && source==runStopButton) {
@@ -209,5 +195,5 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         else if(source == cancelButton) {
             dispose();			
         }
-    }	
+    }
 }
