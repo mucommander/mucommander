@@ -7,6 +7,8 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.PlatformManager;
 
+import java.io.File;
+
 /**
  * @author Maxence Bernard
  */
@@ -21,6 +23,9 @@ public class TempExecJob extends CopyJob {
 
     protected void jobCompleted() {
         super.jobCompleted();
+
+        new File(tempFile.getAbsolutePath()).setReadOnly();
+
         // Tries to execute file
         PlatformManager.open(tempFile);
     }

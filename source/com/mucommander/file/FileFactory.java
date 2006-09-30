@@ -210,7 +210,7 @@ public abstract class FileFactory {
             int len = desiredName.length();
             String nameSuffix = "_"+System.currentTimeMillis()+(new Random().nextInt(10000));
 
-            if(len==-1)
+            if(lastDotPos==-1)
                 desiredName += nameSuffix;
             else
                 desiredName = desiredName.substring(0, lastDotPos) + nameSuffix + desiredName.substring(lastDotPos, len);
