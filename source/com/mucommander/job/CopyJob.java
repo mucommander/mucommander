@@ -91,10 +91,6 @@ public class CopyJob extends ExtendedFileJob {
 
         // If in unpack mode, copy files contained by the archive file
         if(mode==UNPACK_MODE && isFileInBaseFolder) {
-//            // If unpack mode and file is not a ZipArchiveFile (happens when extension is not .zip)
-//            if(!(file instanceof ZipArchiveFile))
-//                file = new ZipArchiveFile(file);
-
             // Recursively unpack files
             do {		// Loop for retries
                 try {
@@ -255,9 +251,9 @@ public class CopyJob extends ExtendedFileJob {
             // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
             // file is renamed to <filename>.1
             // TODO: fix this in the commons-net library
-            if(overwrite=true && destFile.getURL().getProtocol().equals("ftp")) {
+            if(overwrite && destFile.getURL().getProtocol().equals("ftp")) {
                 try { destFile.delete(); }
-                catch(IOException e) {};
+                catch(IOException e) {}
             }
 
             // Copy the file

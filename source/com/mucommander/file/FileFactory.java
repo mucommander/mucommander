@@ -3,6 +3,8 @@ package com.mucommander.file;
 import com.mucommander.cache.LRUCache;
 
 import java.io.IOException;
+import java.io.File;
+import java.util.Random;
 
 /**
  * FileFactory is an abstract class that provides static methods to create {link AbstractFile AbstractFile} instances.
@@ -16,6 +18,8 @@ public abstract class FileFactory {
     private static LRUCache fileCache = LRUCache.createInstance(1000);
     /** Static LRUCache instance that caches frequently accessed FileURL instances */
     private static LRUCache urlCache = LRUCache.createInstance(1000);
+
+    private final static File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
 
 
     /**
@@ -184,6 +188,42 @@ public abstract class FileFactory {
 
         return wrapArchive(file);
     }
+
+
+    /**
+     * Creates and returns a temporary local file using the desired name.
+     *
+     * @param desiredName the desired filename for the temporary file. If a file already exists with this name in the
+     * temporary directory, the name will be appended of a prefix, but the filename extension will always be preserved.
+     * @param deleteOnExit if <code>true</code>, the file will be deleted on normal terminal of the JVM
+     * @return the temporary FSFile instance
+     */
+    public static AbstractFile getTemporaryFile(String desiredName, boolean deleteOnExit) {
+        // Attempt to use the desired name
+        File tempFile = new File(TEMP_DIRECTORY, desiredName);
+
+        if(tempFile.exists()) {
+            // If a file already exists with the same name, append the current time in millisecond and a 5-digit random number
+            // to the name part of the filename which pretty much (but not completly) guarantees that a file
+            // doesn't already exist with that name. Filename extension is preserved.
+            int lastDotPos = desiredName.lastIndexOf('.');
+            int len = desiredName.length();
+            String nameSuffix = "_"+System.currentTimeMillis()+(new Random().nextInt(10000));
+
+            if(len==-1)
+                desiredName += nameSuffix;
+            else
+                desiredName = desiredName.substring(0, lastDotPos) + nameSuffix + desiredName.substring(lastDotPos, len);
+
+            tempFile = new File(TEMP_DIRECTORY, desiredName);
+        }
+
+        if(deleteOnExit)
+            tempFile.deleteOnExit();
+
+        return getFile(tempFile.getAbsolutePath());
+    }
+
 
     /**
      * Tests if based on its extension, the given file corresponds to a supported archive format. If it is, it creates

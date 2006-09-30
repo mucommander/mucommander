@@ -274,7 +274,7 @@ public class MoveJob extends ExtendedFileJob {
             // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
             // file is renamed to <filename>.1
             // TODO: fix this in the commons-net library
-            if(overwrite=true && destFile.getURL().getProtocol().equals("ftp")) {
+            if(overwrite && destFile.getURL().getProtocol().equals("ftp")) {
                 try { destFile.delete(); }
                 catch(IOException e) {};
             }

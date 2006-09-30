@@ -119,7 +119,7 @@ public abstract class AbstractFile {
         name     = getName();
         position = name.lastIndexOf('.');
 
-        // If the extension 'dot' eiter:
+        // If the extension 'dot' either:
         // - does not exist
         // - is the first character of the file's name
         // - is the last character of the file's name
