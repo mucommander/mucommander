@@ -15,8 +15,6 @@ public abstract class MucoAction extends AbstractAction {
 
     protected MainFrame mainFrame;
 
-//    protected KeyStroke alternateAccelerator;
-
     public final static String ALTERNATE_ACCELERATOR_KEY = "alternate_accelerator";
 
 
@@ -82,34 +80,15 @@ public abstract class MucoAction extends AbstractAction {
     }
 
     public void setAccelerator(KeyStroke keyStroke) {
-//        // Remove a previously set accelerator
-//        KeyStroke currentAccelerator = getAccelerator();
-//        if(currentAccelerator!=null)
-//            mainFrame.unregisterActionAccelerator(this, currentAccelerator);
-//
-//        // Register the new accelerator
-//        mainFrame.registerActionAccelerator(this, keyStroke);
-//
         putValue(Action.ACCELERATOR_KEY, keyStroke);
     }
 
 
     public KeyStroke getAlternateAccelerator() {
-//        return alternateAccelerator;
         return (KeyStroke)getValue(ALTERNATE_ACCELERATOR_KEY);
     }
 
     public void setAlternateAccelerator(KeyStroke keyStroke) {
-//        // Remove a previously set accelerator
-//        KeyStroke currentAccelerator = getAlternateAccelerator();
-//        if(currentAccelerator!=null)
-//            mainFrame.unregisterActionAccelerator(this, currentAccelerator);
-//
-//        // Register the new accelerator
-//        mainFrame.registerActionAccelerator(this, keyStroke);
-//
-//        this.alternateAccelerator = keyStroke;
-
         putValue(ALTERNATE_ACCELERATOR_KEY, keyStroke);
     }
 
@@ -170,7 +149,7 @@ public abstract class MucoAction extends AbstractAction {
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, action="+getClass().getName()+" actionEvent="+e);
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, action="+getClass().getName()+" actionEvent="+e);
 
         // Discard this event while in 'no events mode'
         if(!(mainFrame.getNoEventsMode() && ignoreEventsWhileInNoEventsMode()))

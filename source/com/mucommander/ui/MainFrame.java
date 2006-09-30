@@ -165,8 +165,8 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         // Dispose window on close
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        // Register 'Stop folder change' action (Escape key by default) on the whole window
-        ActionKeymap.registerActionAccelerators(ActionManager.getActionInstance(com.mucommander.ui.action.StopAction.class, this), getRootPane(), JComponent.WHEN_IN_FOCUSED_WINDOW);
+//        // Register 'Stop folder change' action (Escape key by default) on the whole window
+//        ActionKeymap.registerActionAccelerators(ActionManager.getActionInstance(com.mucommander.ui.action.StopAction.class, this), getRootPane(), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         ActionKeymap.registerActions(this);
 
