@@ -10,6 +10,9 @@ import com.mucommander.PlatformManager;
 import java.io.File;
 
 /**
+ * This job copies a file to a temporary local file, makes the temporary file read-only and executes it
+ * with native file associations.
+ *
  * @author Maxence Bernard
  */
 public class TempExecJob extends CopyJob {
@@ -24,9 +27,10 @@ public class TempExecJob extends CopyJob {
     protected void jobCompleted() {
         super.jobCompleted();
 
+        // Make the temporary
         new File(tempFile.getAbsolutePath()).setReadOnly();
 
-        // Tries to execute file
+        // Tries to execute file with native file associations
         PlatformManager.open(tempFile);
     }
 }
