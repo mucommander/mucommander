@@ -1,13 +1,13 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
 import com.mucommander.Debug;
 import com.mucommander.ui.MainFrame;
+import com.mucommander.xml.parser.ContentHandler;
+import com.mucommander.xml.parser.Parser;
 
 import javax.swing.*;
-import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 
 

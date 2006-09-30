@@ -4,9 +4,6 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-
 /**
  * This action unmarks all files in the current file table.
  *
@@ -18,7 +15,7 @@ public class UnmarkAllAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         FileTable fileTable = mainFrame.getLastActiveTable();
         FileTableModel tableModel = (FileTableModel)fileTable.getModel();
 

@@ -1,16 +1,16 @@
 package com.mucommander.ui;
 
 import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.action.ActionKeymap;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.comp.FocusRequester;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.event.TableChangeListener;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.comp.FocusRequester;
-import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.ActionKeymap;
 
 import javax.swing.*;
 import java.awt.*;

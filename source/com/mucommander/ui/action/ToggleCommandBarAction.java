@@ -1,9 +1,9 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.CommandBar;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.CommandBar;
+import com.mucommander.ui.MainFrame;
 
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.CommandBar} depending on its
@@ -24,7 +24,7 @@ public class ToggleCommandBarAction extends MucoAction {
     }
 
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         CommandBar commandBar = mainFrame.getCommandBar();
         boolean visible = !commandBar.isVisible();
         // Save the last command bar visible state in the configuration, this will become the default for new MainFrame windows.

@@ -1,12 +1,8 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.file.FileSet;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.UnpackDialog;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.file.FileSet;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 /**
  * This action pops up the 'Unpack files' dialog that allows to unpack the currently marked files.
@@ -19,7 +15,7 @@ public class UnpackAction extends SelectedFilesAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
         if(files.size()>0)
             new UnpackDialog(mainFrame, files, false);

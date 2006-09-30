@@ -1,11 +1,8 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.EmailFilesDialog;
 import com.mucommander.file.FileSet;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
+import com.mucommander.ui.EmailFilesDialog;
+import com.mucommander.ui.MainFrame;
 
 /**
  * This action pops up the 'Email files' dialog that allows to email the currently marked files as attachment.
@@ -18,7 +15,7 @@ public class EmailAction extends SelectedFilesAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
         if(files.size()>0)
             new EmailFilesDialog(mainFrame, files);

@@ -26,7 +26,7 @@ public class ClickButtonAction extends MucoAction {
             setAccelerator(((MucoAction)action).getAccelerator());
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         button.doClick();
     }
 }

@@ -1,7 +1,7 @@
 package com.mucommander.io;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * An InputStream that has a set limit to the number of bytes that can be read from it before the EOF is reached.

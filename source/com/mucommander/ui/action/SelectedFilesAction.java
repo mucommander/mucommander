@@ -1,11 +1,9 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.file.AbstractFile;
-
-import javax.swing.*;
 
 /**
  * SelectedFilesAction is an abstract action that operates on the currently active FileTable, when at least one file is

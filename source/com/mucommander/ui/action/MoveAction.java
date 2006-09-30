@@ -1,11 +1,8 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.file.FileSet;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.MoveDialog;
-import com.mucommander.file.FileSet;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 /**
  * This action invokes the 'Move dialog' which allows to move the currently selected/marked files
@@ -19,7 +16,7 @@ public class MoveAction extends SelectedFilesAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
 
         // Display move dialog only if at least one file is selected/marked

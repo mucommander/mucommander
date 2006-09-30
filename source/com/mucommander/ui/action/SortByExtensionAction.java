@@ -3,9 +3,6 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-
 /**
  * This action sorts the currently active FileTable by extension.
  * If the table is already sorted by extension, the sort order will be reversed.
@@ -18,7 +15,7 @@ public class SortByExtensionAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         mainFrame.getLastActiveTable().sortBy(FileTable.EXTENSION);
     }
 }

@@ -1,11 +1,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.QuitDialog;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
+import com.mucommander.ui.WindowManager;
 
 /**
  * This action pops up the Quit confirmation dialog (if it hasn't been disabled) and if quit has been confirmed,
@@ -19,7 +16,7 @@ public class QuitAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         if(QuitDialog.confirmQuit())
             WindowManager.quit();
     }

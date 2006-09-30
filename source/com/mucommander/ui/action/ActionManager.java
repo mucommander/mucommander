@@ -1,10 +1,13 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
 import com.mucommander.Debug;
+import com.mucommander.ui.MainFrame;
 
-import java.util.*;
 import java.lang.reflect.Constructor;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.WeakHashMap;
 
 /**
  * @author Maxence Bernard
@@ -104,6 +107,6 @@ public class ActionManager {
 
 
     public static void performAction(Class actionClass, MainFrame mainFrame) {
-        getActionInstance(actionClass, mainFrame).performAction(mainFrame);
+        getActionInstance(actionClass, mainFrame).performAction();
     }
 }

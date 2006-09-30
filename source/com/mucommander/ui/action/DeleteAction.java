@@ -1,11 +1,8 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.DeleteDialog;
 import com.mucommander.file.FileSet;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
+import com.mucommander.ui.DeleteDialog;
+import com.mucommander.ui.MainFrame;
 
 /**
  * This action invokes a Delete confirmation dialog to delete currently the selected / marked files
@@ -19,7 +16,7 @@ public class DeleteAction extends SelectedFilesAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
         // Invoke confirmation dialog only if at least one file is selected/marked
         if(files.size()>0)

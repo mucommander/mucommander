@@ -1,8 +1,8 @@
 
 package com.mucommander.file;
 
-import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.FileTransferException;
+import com.mucommander.io.RandomAccessInputStream;
 import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.authentication.AuthenticationProtocolState;
 import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;

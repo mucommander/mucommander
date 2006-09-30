@@ -1,11 +1,8 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.file.AbstractFile;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.ui.action.MucoAction;
+import com.mucommander.file.AbstractFile;
 
 import javax.swing.*;
 import java.awt.*;

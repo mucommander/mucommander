@@ -1,12 +1,9 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.editor.EditorRegistrar;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.DirectoryFileFilter;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.editor.EditorRegistrar;
 
 /**
  * This action opens the currently selected file in an integrated editor.
@@ -22,7 +19,7 @@ public class EditAction extends SelectedFileAction {
         setFileFilter(new DirectoryFileFilter());
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         AbstractFile file = mainFrame.getLastActiveTable().getSelectedFile();
         if(file!=null && !(file.isDirectory() || file.isSymlink()))
             EditorRegistrar.createEditorFrame(mainFrame, file);

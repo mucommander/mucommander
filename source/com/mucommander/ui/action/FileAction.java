@@ -1,14 +1,12 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.FolderPanel;
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.event.TableSelectionListener;
-import com.mucommander.ui.event.TableChangeListener;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.FileFilter;
-
-import javax.swing.*;
+import com.mucommander.ui.FolderPanel;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.event.TableChangeListener;
+import com.mucommander.ui.event.TableSelectionListener;
+import com.mucommander.ui.table.FileTable;
 
 /**
  * FileAction is an abstract action that operates on the currently active FileTable. It is enabled only when

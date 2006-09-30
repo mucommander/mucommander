@@ -1,12 +1,9 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.ui.table.FileTable;
 import com.mucommander.file.AbstractFile;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
 
 /**
  * This action compares the content of the 2 MainFrame's file tables and marks the files that are different.
@@ -19,7 +16,7 @@ public class CompareFoldersAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
         FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
 

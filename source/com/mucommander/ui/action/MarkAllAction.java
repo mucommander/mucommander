@@ -4,10 +4,6 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 
-import javax.swing.*;
-import javax.swing.table.TableModel;
-import java.awt.event.KeyEvent;
-
 /**
  * This action marks all files in the current file table.
  *
@@ -19,7 +15,7 @@ public class MarkAllAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         FileTable fileTable = mainFrame.getLastActiveTable();
         FileTableModel tableModel = (FileTableModel)fileTable.getModel();
 

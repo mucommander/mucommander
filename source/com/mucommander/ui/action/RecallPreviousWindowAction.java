@@ -14,7 +14,7 @@ public class RecallPreviousWindowAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         WindowManager.switchToPreviousWindow();
     }
 }

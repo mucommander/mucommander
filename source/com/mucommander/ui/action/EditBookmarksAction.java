@@ -1,7 +1,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.bookmark.EditBookmarksDialog;
 
 
@@ -16,7 +15,7 @@ public class EditBookmarksAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         new EditBookmarksDialog(mainFrame);
     }
 }

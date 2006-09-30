@@ -2,9 +2,6 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-
 /**
  * This action transfers focus to the location field of the currently active FolderPanel to type in a new folder location.
  *
@@ -16,7 +13,7 @@ public class ChangeLocationAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         mainFrame.getLastActiveTable().getFolderPanel().changeCurrentLocation();
     }
 }

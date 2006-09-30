@@ -2,8 +2,8 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileSet;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileSet;
 import com.mucommander.job.MoveJob;
 import com.mucommander.text.Translator;
 

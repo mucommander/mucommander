@@ -1,14 +1,10 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.FolderPanel;
-import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.TableChangeListener;
 import com.mucommander.ui.event.LocationListener;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
+import com.mucommander.ui.event.TableChangeListener;
 
 /**
  * This action recalls the next folder in the current FolderPanel's history.
@@ -31,7 +27,7 @@ public class GoForwardAction extends MucoAction implements TableChangeListener, 
     }
 
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         mainFrame.getLastActiveTable().getFolderPanel().getFolderHistory().goForward();
     }
 

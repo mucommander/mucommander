@@ -1,11 +1,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.connect.ServerConnectDialog;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 /**
  * This action pops up the 'Connect to Server' dialog that is used to connect to a remote server.
@@ -18,7 +14,7 @@ public class ConnectToServerAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         new ServerConnectDialog(mainFrame).showDialog();
     }
 }

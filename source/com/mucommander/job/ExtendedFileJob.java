@@ -1,19 +1,16 @@
 
 package com.mucommander.job;
 
-import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.MainFrame;
-
-import com.mucommander.io.CounterInputStream;
-import com.mucommander.io.ByteCounter;
-import com.mucommander.io.FileTransferException;
-
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
-
+import com.mucommander.io.ByteCounter;
+import com.mucommander.io.CounterInputStream;
+import com.mucommander.io.FileTransferException;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.ProgressDialog;
 
-import java.io.*;
+import java.io.IOException;
 
 
 /**

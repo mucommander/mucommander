@@ -6,15 +6,12 @@ import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.about.AboutDialog;
+import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.ui.editor.EditorFrame;
 import com.mucommander.ui.help.ShortcutsDialog;
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.viewer.ViewerFrame;
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.MucoAction;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;

@@ -1,8 +1,8 @@
 
 package com.mucommander.file;
 
-import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.FileTransferException;
+import com.mucommander.io.RandomAccessInputStream;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 

@@ -1,12 +1,9 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.file.AbstractFile;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 /**
  * This action .
@@ -19,7 +16,7 @@ public class InvertSelectionAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         FileTable fileTable = mainFrame.getLastActiveTable();
         FileTableModel tableModel = (FileTableModel)fileTable.getModel();
 

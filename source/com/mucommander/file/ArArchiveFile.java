@@ -2,9 +2,9 @@ package com.mucommander.file;
 
 import com.mucommander.io.ByteLimitInputStream;
 
-import java.util.Vector;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Vector;
 
 /**
  * ArArchiveFile represents an archive in the unix AR format.

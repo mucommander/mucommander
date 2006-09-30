@@ -1,13 +1,9 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.PlatformManager;
 import com.mucommander.text.Translator;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
+import com.mucommander.ui.MainFrame;
 
 
 /**
@@ -27,7 +23,7 @@ public class RevealInDesktopAction extends MucoAction {
             setEnabled(false);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         PlatformManager.openInDesktop(mainFrame.getLastActiveTable().getFolderPanel().getCurrentFolder());
     }
 }

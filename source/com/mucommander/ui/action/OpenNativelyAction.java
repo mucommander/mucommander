@@ -1,11 +1,8 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
+import com.mucommander.ui.MainFrame;
 
 /**
  * This action 'opens natively' (using native associations) the currently selected file or folder.
@@ -18,7 +15,7 @@ public class OpenNativelyAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         AbstractFile selectedFile = mainFrame.getLastActiveTable().getSelectedFile(true);
 
         if(selectedFile==null)

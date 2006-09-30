@@ -14,7 +14,7 @@ public class PopupLeftDriveButtonAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         mainFrame.getFolderPanel1().popDriveButton();
     }
 }

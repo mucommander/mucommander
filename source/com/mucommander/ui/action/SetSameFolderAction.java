@@ -1,10 +1,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.icon.IconManager;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 /**
  * This action equalizes both FileTable's current folders: the 'inactive' FileTable's current folder becomes
@@ -18,7 +14,7 @@ public class SetSameFolderAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         mainFrame.setSameFolder();
     }
 }

@@ -2,9 +2,6 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-
 /**
  * This action copies the path(s) of the currently selected / marked files(s) to the system clipboard.
  *
@@ -16,7 +13,7 @@ public class CopyFilePathsAction extends SelectedFilesAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         CopyFileNamesAction.copyFilenamesToClipboard(mainFrame, true);
     }
 }

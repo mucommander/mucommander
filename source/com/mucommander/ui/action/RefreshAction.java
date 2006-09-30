@@ -2,9 +2,6 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-
 /**
  * This action refreshes the currently active FolderPanel (refreshes the content of the folder).
  *
@@ -16,7 +13,7 @@ public class RefreshAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         // Refresh current folder in a separate thread
         mainFrame.getLastActiveTable().getFolderPanel().tryRefreshCurrentFolder();
     }

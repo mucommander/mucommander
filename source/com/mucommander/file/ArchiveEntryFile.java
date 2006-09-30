@@ -2,8 +2,8 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.FileTransferException;
+import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;

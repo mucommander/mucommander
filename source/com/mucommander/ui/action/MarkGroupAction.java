@@ -1,11 +1,7 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.FileSelectionDialog;
-import com.mucommander.ui.icon.IconManager;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
+import com.mucommander.ui.MainFrame;
 
 /**
  * This action brings up the 'File selection' dialog which allows to mark a group of files that match a specified expression.
@@ -18,7 +14,7 @@ public class MarkGroupAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         new FileSelectionDialog(mainFrame, true).showDialog();
     }
 }

@@ -3,9 +3,6 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.MkdirDialog;
 
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-
 /**
  * This action brings up the 'Make directory' dialog which allows to create a new directory in the currently active folder.
  *
@@ -17,7 +14,7 @@ public class MkdirAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         new MkdirDialog(mainFrame);
     }
 }

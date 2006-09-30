@@ -1,13 +1,9 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.FolderPanel;
-import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 /**
  * This action is invoked to stop a running location change.
@@ -27,7 +23,7 @@ public class StopAction extends MucoAction implements LocationListener {
         mainFrame.getFolderPanel2().getLocationManager().addLocationListener(this);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
         FolderPanel.ChangeFolderThread changeFolderThread = folderPanel.getChangeFolderThread();
 

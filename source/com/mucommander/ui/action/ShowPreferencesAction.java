@@ -1,7 +1,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.pref.PreferencesDialog;
 
 /**
@@ -15,7 +14,7 @@ public class ShowPreferencesAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         new PreferencesDialog(mainFrame).showDialog();
     }
 }

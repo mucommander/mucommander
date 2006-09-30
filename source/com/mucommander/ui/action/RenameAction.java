@@ -1,11 +1,8 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.file.AbstractFile;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 /**
  * This action triggers in-table renaming of the currently selected file, if no file is marked.
@@ -19,7 +16,7 @@ public class RenameAction extends SelectedFileAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         FileTable activeTable = mainFrame.getLastActiveTable();
         AbstractFile selectedFile = activeTable.getSelectedFile(false);
 

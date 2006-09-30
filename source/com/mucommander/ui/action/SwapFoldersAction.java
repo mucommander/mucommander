@@ -1,10 +1,6 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.icon.IconManager;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 /**
  * This action swaps both FileTable's current folders: the left table's current folder becomes the right table's one
@@ -18,7 +14,7 @@ public class SwapFoldersAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         mainFrame.swapFolders();
     }
 }

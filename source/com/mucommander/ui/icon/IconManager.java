@@ -1,12 +1,10 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.conf.ConfigurationManager;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.Hashtable;
 import java.net.URL;
+import java.util.Hashtable;
 
 /**
  * IconManager takes care of loading, caching, rescaling the icons contained inside the application's JAR file.

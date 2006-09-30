@@ -1,13 +1,11 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.file.FileSet;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
+import com.mucommander.ui.MainFrame;
 
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.datatransfer.StringSelection;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 
 /**
  * This action copies the filename(s) of the currently selected / marked files(s) to the system clipboard.
@@ -20,7 +18,7 @@ public class CopyFileNamesAction extends SelectedFilesAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         copyFilenamesToClipboard(mainFrame, false);
     }
 

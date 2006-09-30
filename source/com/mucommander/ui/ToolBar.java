@@ -1,15 +1,15 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MucoAction;
+import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.xml.parser.ContentHandler;
+import com.mucommander.xml.parser.Parser;
 
 import javax.swing.*;
 import java.awt.*;

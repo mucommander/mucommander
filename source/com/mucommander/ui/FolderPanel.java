@@ -4,14 +4,14 @@ package com.mucommander.ui;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.ui.event.LocationManager;
 import com.mucommander.file.*;
-import com.mucommander.file.filter.HiddenFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
+import com.mucommander.file.filter.HiddenFileFilter;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.progress.ProgressTextField;
+import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.table.TablePopupMenu;
@@ -19,7 +19,10 @@ import com.mucommander.ui.table.TablePopupMenu;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 /**

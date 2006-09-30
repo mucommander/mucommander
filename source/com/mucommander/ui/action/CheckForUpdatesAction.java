@@ -1,7 +1,7 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.CheckVersionDialog;
+import com.mucommander.ui.MainFrame;
 
 /**
  * This action checks for a new version of muCommander.
@@ -14,7 +14,7 @@ public class CheckForUpdatesAction extends MucoAction {
         super(mainFrame);
     }
 
-    public void performAction(MainFrame mainFrame) {
+    public void performAction() {
         new CheckVersionDialog(mainFrame, true);
     }
 }

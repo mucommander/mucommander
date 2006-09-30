@@ -2,21 +2,24 @@ package com.mucommander.ui;
 
 import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.event.TableChangeListener;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 import com.mucommander.text.SizeFormatter;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
+import com.mucommander.ui.event.TableChangeListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.ui.action.ActionManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 
 /**

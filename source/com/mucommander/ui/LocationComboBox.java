@@ -1,13 +1,13 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
+import com.mucommander.bookmark.Bookmark;
+import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.RootFolders;
 import com.mucommander.ui.comp.progress.ProgressTextField;
-import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.bookmark.Bookmark;
+import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
