@@ -7,6 +7,8 @@ import com.mucommander.ui.MainFrame;
 
 import javax.swing.*;
 import java.util.Hashtable;
+import java.util.Enumeration;
+import java.util.Vector;
 
 
 /**
@@ -14,8 +16,8 @@ import java.util.Hashtable;
  */
 public class ActionKeymap implements ContentHandler {
 
-    private static Hashtable primaryActionKeymap = new Hashtable();
-    private static Hashtable alternateActionKeymap = new Hashtable();
+    private static Hashtable primaryActionKeymap;
+    private static Hashtable alternateActionKeymap;
 
     private final static String ACTION_KEYMAP_FILE_PATH = "/action_keymap.xml";
 
@@ -29,12 +31,6 @@ public class ActionKeymap implements ContentHandler {
     }
 
 
-    public static void registerAccelerator(Class mucoActionClass, KeyStroke ks, boolean primaryAccelerator) {
-        if(Debug.ON) Debug.trace("associating "+ks+" accelerator with "+mucoActionClass);
-
-        (primaryAccelerator?primaryActionKeymap:alternateActionKeymap).put(mucoActionClass, ks);
-    }
-
     public static KeyStroke getAccelerator(Class mucoActionClass) {
         return (KeyStroke)primaryActionKeymap.get(mucoActionClass);
     }
@@ -44,26 +40,100 @@ public class ActionKeymap implements ContentHandler {
     }
 
 
-    private static void registerAccelerator(MucoAction action, KeyStroke keyStroke, JComponent comp, int condition) {
-        if(keyStroke==null)
+    public static void registerActions(MainFrame mainFrame) {
+        JComponent table1 = mainFrame.getFolderPanel1().getFileTable();
+        JComponent table2 = mainFrame.getFolderPanel2().getFileTable();
+
+        Enumeration actionClasses = primaryActionKeymap.keys();
+        while(actionClasses.hasMoreElements()) {
+            MucoAction action = ActionManager.getActionInstance((Class)actionClasses.nextElement(), mainFrame);
+            ActionKeymap.registerActionAccelerators(action, table1, JComponent.WHEN_FOCUSED);
+            ActionKeymap.registerActionAccelerators(action, table2, JComponent.WHEN_FOCUSED);
+        }
+
+        actionClasses = alternateActionKeymap.keys();
+        while(actionClasses.hasMoreElements()) {
+            MucoAction action = ActionManager.getActionInstance((Class)actionClasses.nextElement(), mainFrame);
+            ActionKeymap.registerActionAccelerators(action, table1, JComponent.WHEN_FOCUSED);
+            ActionKeymap.registerActionAccelerators(action, table2, JComponent.WHEN_FOCUSED);
+        }
+    }
+
+
+    public static void registerAction(MainFrame mainFrame, MucoAction action) {
+        registerActionAccelerators(action, mainFrame.getFolderPanel1().getFileTable(), JComponent.WHEN_FOCUSED);
+        registerActionAccelerators(action, mainFrame.getFolderPanel2().getFileTable(), JComponent.WHEN_FOCUSED);
+    }
+
+    public static void unregisterAction(MainFrame mainFrame, MucoAction action) {
+        unregisterActionAccelerators(action, mainFrame.getFolderPanel1().getFileTable(), JComponent.WHEN_FOCUSED);
+        unregisterActionAccelerators(action, mainFrame.getFolderPanel2().getFileTable(), JComponent.WHEN_FOCUSED);
+    }
+
+
+    public static void registerActionAccelerator(MucoAction action, KeyStroke accelerator, JComponent comp, int condition) {
+        if(accelerator==null)
             return;
         InputMap inputMap = comp.getInputMap(condition);
         ActionMap actionMap = comp.getActionMap();
         Class mucoActionClass = action.getClass();
-        inputMap.put(keyStroke, mucoActionClass);
+        inputMap.put(accelerator, mucoActionClass);
         actionMap.put(mucoActionClass, action);
     }
 
-    public static void registerActionAccelerators(MucoAction action, JComponent comp, MainFrame mainFrame, int condition) {
-        KeyStroke ks = action.getAccelerator();
-        if(ks==null)
+    public static void unregisterActionAccelerator(MucoAction action, KeyStroke accelerator, JComponent comp, int condition) {
+        if(accelerator==null)
+            return;
+        InputMap inputMap = comp.getInputMap(condition);
+        ActionMap actionMap = comp.getActionMap();
+        Class mucoActionClass = action.getClass();
+        inputMap.remove(accelerator);
+        actionMap.remove(mucoActionClass);
+    }
+
+
+    public static void registerActionAccelerators(MucoAction action, JComponent comp, int condition) {
+        KeyStroke accelerator = action.getAccelerator();
+        if(accelerator==null)
             return;
 
-        registerAccelerator(action, ks, comp, condition);
+        registerActionAccelerator(action, accelerator, comp, condition);
 
-        ks = action.getAlternateAccelerator();
-        if(ks!=null)
-            registerAccelerator(action, ks, comp, condition);
+        accelerator = action.getAlternateAccelerator();
+        if(accelerator!=null)
+            registerActionAccelerator(action, accelerator, comp, condition);
+    }
+
+    public static void unregisterActionAccelerators(MucoAction action, JComponent comp, int condition) {
+        KeyStroke accelerator = action.getAccelerator();
+        if(accelerator==null)
+            return;
+
+        unregisterActionAccelerator(action, accelerator, comp, condition);
+
+        accelerator = action.getAlternateAccelerator();
+        if(accelerator!=null)
+            unregisterActionAccelerator(action, accelerator, comp, condition);
+    }
+
+
+    public static void changeActionAccelerators(Class mucoActionClass, KeyStroke accelerator, KeyStroke alternateAccelerator) {
+        primaryActionKeymap.put(mucoActionClass, accelerator);
+        alternateActionKeymap.put(mucoActionClass, accelerator);
+
+        Vector actionInstances = ActionManager.getActionInstances(mucoActionClass);
+        int nbActionInstances = actionInstances.size();
+        for(int i=0; i<nbActionInstances; i++) {
+            MucoAction action = (MucoAction)actionInstances.elementAt(i);
+            MainFrame mainFrame = action.getMainFrame();
+
+            unregisterAction(mainFrame, action);
+
+            action.setAccelerator(accelerator);
+            action.setAlternateAccelerator(alternateAccelerator);
+
+            registerAction(mainFrame, action);
+        }
     }
 
 
@@ -83,6 +153,8 @@ public class ActionKeymap implements ContentHandler {
     ///////////////////////////////////
 
     public void startDocument() throws Exception {
+        primaryActionKeymap = new Hashtable();
+        alternateActionKeymap = new Hashtable();
     }
 
     public void endDocument() throws Exception {
@@ -92,7 +164,7 @@ public class ActionKeymap implements ContentHandler {
         if(name.equals("action")) {
             String actionClassName = (String)attValues.get("class");
             if(actionClassName==null) {
-                if(Debug.ON) Debug.trace("WARNING: no 'class' attribute specified in 'action' element");
+                if(Debug.ON) Debug.trace("Error: no 'class' attribute specified in 'action' element");
                 return;
             }
 
@@ -101,35 +173,39 @@ public class ActionKeymap implements ContentHandler {
                 actionClass = Class.forName(actionClassName);
             }
             catch(ClassNotFoundException e) {
-                if(Debug.ON) Debug.trace("WARNING: could not resolve class "+actionClassName);
+                if(Debug.ON) Debug.trace("Error: could not resolve class "+actionClassName);
                 return;
             }
 
             // Primary keystroke
             String keyStrokeString = (String)attValues.get("keystroke");
             if(keyStrokeString==null) {
-                if(Debug.ON) Debug.trace("WARNING: no 'keystroke' attribute specified in 'action' element");
+                if(Debug.ON) Debug.trace("Error: no 'keystroke' attribute specified in 'action' element");
                 return;
             }
 
             KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeString);
             if(keyStroke==null) {
-                if(Debug.ON) Debug.trace("WARNING: specified keystroke could not be resolved: "+keyStrokeString);
+                if(Debug.ON) Debug.trace("Error: specified keystroke could not be resolved: "+keyStrokeString);
                 return;
             }
 
-            registerAccelerator(actionClass, keyStroke, true);
+            if(Debug.ON) Debug.trace("associating "+keyStroke+" accelerator with "+actionClass);
+
+            primaryActionKeymap.put(actionClass, keyStroke);
 
             // Alternate keystroke (if any)
             keyStrokeString = (String)attValues.get("alt_keystroke");
             if(keyStrokeString!=null) {
                 keyStroke = KeyStroke.getKeyStroke(keyStrokeString);
                 if(keyStroke==null) {
-                    if(Debug.ON) Debug.trace("WARNING: specified alternate keystroke could not be resolved: "+keyStrokeString);
+                    if(Debug.ON) Debug.trace("Error: specified alternate keystroke could not be resolved: "+keyStrokeString);
                     return;
                 }
 
-                registerAccelerator(actionClass, keyStroke, false);
+                if(Debug.ON) Debug.trace("associating "+keyStroke+" alternate accelerator with "+actionClass);
+
+                alternateActionKeymap.put(actionClass, keyStroke);
             }
         }
     }

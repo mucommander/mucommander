@@ -8,6 +8,7 @@ import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.ui.comp.button.NonFocusableButton;
 import com.mucommander.ui.action.MucoAction;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.ClickButtonAction;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
@@ -87,6 +88,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
             JButton button = new NonFocusableButton();
 
             setButtonAction(button, action);
+
+// new ClickButtonAction(mainFrame, button);
 
             button.setMargin(new Insets(3,4,3,4));
             // For Mac OS X whose default minimum width for buttons is enormous

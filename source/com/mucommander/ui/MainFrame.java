@@ -155,8 +155,8 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         table1.addKeyListener(this);
         table2.addKeyListener(this);
 
-        this.table1.registerActions();
-        this.table2.registerActions();
+//        this.table1.registerActions();
+//        this.table2.registerActions();
 
 //        // Do nothing on close (default is to hide window),
 //        // WindowManager takes of catching close events and do the rest
@@ -166,7 +166,9 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         // Register 'Stop folder change' action (Escape key by default) on the whole window
-        ActionKeymap.registerActionAccelerators(ActionManager.getActionInstance(com.mucommander.ui.action.StopAction.class, this), getRootPane(), this, JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionKeymap.registerActionAccelerators(ActionManager.getActionInstance(com.mucommander.ui.action.StopAction.class, this), getRootPane(), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        ActionKeymap.registerActions(this);
 
         // Piece of code used in 0.8 beta1 and removed after because it's way too slow, kept here for the record 
         //		// Used by setNoEventsMode()
@@ -178,6 +180,34 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         //setUndecorated(true);
         //java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
     }
+
+
+//    /**
+//     * Registers the given action so that the specified accelerator (keyboard shortcut) triggers the action from both
+//     * FileTable instances.
+//     *
+//     * @param action the action to register
+//     * @param ks the KeyStroke that will trigger the action from both FileTable instances
+//     */
+//    public void registerActionAccelerator(MucoAction action, KeyStroke ks) {
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("registering keystroke "+ks+" for action "+action.getClass().getName());
+//
+//        ActionKeymap.registerActionAccelerator(action, ks, table1, JComponent.WHEN_FOCUSED);
+//        ActionKeymap.registerActionAccelerator(action, ks, table2, JComponent.WHEN_FOCUSED);
+//    }
+//
+//    /**
+//     * Unregisters the given action so that the specified accelerators (keyboard shortcuts) no longer
+//     * triggers the action FileTable instances.
+//     *
+//     * @param action the action to register
+//     */
+//    public void unregisterActionAccelerator(MucoAction action, KeyStroke ks) {
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("unregistering keystroke "+ks+" for action "+action.getClass().getName());
+//
+//        ActionKeymap.unregisterActionAccelerator(action, ks, table1, JComponent.WHEN_FOCUSED);
+//        ActionKeymap.unregisterActionAccelerator(action, ks, table2, JComponent.WHEN_FOCUSED);
+//    }
 
 
     /**
@@ -495,54 +525,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
             if(frameIndex<mainFrames.size())
                 ((MainFrame)mainFrames.elementAt(frameIndex)).toFront();
         }
-//        else if(keyCode == KeyEvent.VK_F3 && !isControlDown) {
-//            commandBar.getButton(CommandBar.VIEW_INDEX).doClick();
-//        }
-//        else if(keyCode == KeyEvent.VK_F4 && isAltDown) {
-//            commandBar.getButton(CommandBar.CLOSE_INDEX).doClick();
-//        }
-//        else if(keyCode == KeyEvent.VK_F4 && !isControlDown) {
-//            commandBar.getButton(CommandBar.EDIT_INDEX).doClick();
-//        }
-//        else if(keyCode == KeyEvent.VK_F5 && !isControlDown) {
-//            commandBar.getButton(CommandBar.COPY_INDEX).doClick();
-//        }
-//        else if(keyCode == KeyEvent.VK_F6 && !isControlDown) {
-//            commandBar.getButton(CommandBar.MOVE_INDEX).doClick();
-//        }
-//        else if(keyCode == KeyEvent.VK_F7 && !isControlDown) {
-//            commandBar.getButton(CommandBar.MKDIR_INDEX).doClick();
-//        }
-//        else if((keyCode == KeyEvent.VK_F8 || keyCode == KeyEvent.VK_DELETE)
-//                && !isControlDown) {
-//            commandBar.getButton(CommandBar.DELETE_INDEX).doClick();
-//        }
-//        else if(keyCode == KeyEvent.VK_F9 && !isControlDown) {
-//            commandBar.getButton(CommandBar.REFRESH_INDEX).doClick();
-//        }
-//        else if(keyCode == KeyEvent.VK_F10 && !isControlDown
-//                || (PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && keyCode==KeyEvent.VK_W && e.isMetaDown())) {
-//            commandBar.getButton(CommandBar.CLOSE_INDEX).doClick();
-//        }
-//        else if(keyCode == KeyEvent.VK_F1 && isAltDown) {
-//            ActionManager.performAction(com.mucommander.ui.action.PopupLeftDriveButtonAction.class, this);
-//        }
-//        else if(keyCode == KeyEvent.VK_F2 && isAltDown) {
-//            ActionManager.performAction(com.mucommander.ui.action.PopupRightDriveButtonAction.class, this);
-//        }
-//        else if(isControlDown && keyCode==KeyEvent.VK_LEFT) {
-//            ActionManager.performAction(com.mucommander.ui.action.RecallPreviousWindowAction.class, this);
-//        }
-//        else if(isControlDown && keyCode==KeyEvent.VK_RIGHT) {
-//            ActionManager.performAction(com.mucommander.ui.action.RecallNextWindowAction.class, this);
-//        }
-//        else if(keyCode == KeyEvent.VK_TAB) {
-//            ActionManager.performAction(com.mucommander.ui.action.SwitchActiveTableAction.class, this);
-//        }
-//        else if(keyCode == KeyEvent.VK_ENTER && isAltDown) {
-//            // Show file properties dialog
-//            ActionManager.performAction(com.mucommander.ui.action.ShowFilePropertiesAction.class, this);
-//        }
         else if(keyCode == KeyEvent.VK_SHIFT) {
             // Set shift mode to on : display alternate actions in the command bar
             commandBar.setAlternateActionsMode(true);

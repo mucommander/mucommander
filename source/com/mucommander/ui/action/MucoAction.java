@@ -15,7 +15,9 @@ public abstract class MucoAction extends AbstractAction {
 
     protected MainFrame mainFrame;
 
-    protected KeyStroke alternateAccelerator;
+//    protected KeyStroke alternateAccelerator;
+
+    public final static String ALTERNATE_ACCELERATOR_KEY = "alternate_accelerator";
 
 
     public MucoAction(MainFrame mainFrame) {
@@ -80,16 +82,35 @@ public abstract class MucoAction extends AbstractAction {
     }
 
     public void setAccelerator(KeyStroke keyStroke) {
+//        // Remove a previously set accelerator
+//        KeyStroke currentAccelerator = getAccelerator();
+//        if(currentAccelerator!=null)
+//            mainFrame.unregisterActionAccelerator(this, currentAccelerator);
+//
+//        // Register the new accelerator
+//        mainFrame.registerActionAccelerator(this, keyStroke);
+//
         putValue(Action.ACCELERATOR_KEY, keyStroke);
     }
 
 
     public KeyStroke getAlternateAccelerator() {
-        return alternateAccelerator;
+//        return alternateAccelerator;
+        return (KeyStroke)getValue(ALTERNATE_ACCELERATOR_KEY);
     }
 
     public void setAlternateAccelerator(KeyStroke keyStroke) {
-        this.alternateAccelerator = keyStroke;
+//        // Remove a previously set accelerator
+//        KeyStroke currentAccelerator = getAlternateAccelerator();
+//        if(currentAccelerator!=null)
+//            mainFrame.unregisterActionAccelerator(this, currentAccelerator);
+//
+//        // Register the new accelerator
+//        mainFrame.registerActionAccelerator(this, keyStroke);
+//
+//        this.alternateAccelerator = keyStroke;
+
+        putValue(ALTERNATE_ACCELERATOR_KEY, keyStroke);
     }
 
 
@@ -102,13 +123,11 @@ public abstract class MucoAction extends AbstractAction {
      */
     public boolean isAccelerator(KeyStroke keyStroke) {
         KeyStroke accelerator = getAccelerator();
-        if(accelerator==null)
-            return false;
-
-        if(accelerator.equals(keyStroke))
+        if(accelerator!=null && accelerator.equals(keyStroke))
             return true;
 
-        return alternateAccelerator!=null && alternateAccelerator.equals(keyStroke);
+        accelerator = getAlternateAccelerator();
+        return accelerator!=null && accelerator.equals(keyStroke);
     }
 
 
@@ -151,7 +170,7 @@ public abstract class MucoAction extends AbstractAction {
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, action="+getClass().getName());
 
         // Discard this event while in 'no events mode'
         if(!(mainFrame.getNoEventsMode() && ignoreEventsWhileInNoEventsMode()))

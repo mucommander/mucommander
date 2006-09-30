@@ -3,8 +3,7 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.Debug;
 
-import java.util.Hashtable;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.lang.reflect.Constructor;
 
 /**
@@ -80,11 +79,31 @@ public class ActionManager {
     }
 
 
-    public static void performAction(Class actionClass, MainFrame mainFrame) {
-        performAction(getActionInstance(actionClass, mainFrame));
+    public static Vector getActionInstances(Class mucoActionClass) {
+        Vector actionInstances = new Vector();
+
+        // Iterate on all MainFrame instances
+        Iterator mainFrameActions = mainFrameActionsMap.values().iterator();
+        while(mainFrameActions.hasNext()) {
+            Iterator actions = ((Hashtable)mainFrameActions.next()).values().iterator();
+            // Iterate on all the MainFrame's actions
+            while(actions.hasNext()) {
+                MucoAction action = (MucoAction)actions.next();
+                if(action.getClass().equals(mucoActionClass)) {
+                    // Found an action matching the specified class
+                    actionInstances.add(action);
+                    // Jump to the next MainFrame
+                    break;
+                }
+            }
+        }
+
+ if(Debug.ON) Debug.trace("returning "+actionInstances);
+        return actionInstances;
     }
 
-    public static void performAction(MucoAction action) {
-        action.performAction(action.getMainFrame());
+
+    public static void performAction(Class actionClass, MainFrame mainFrame) {
+        getActionInstance(actionClass, mainFrame).performAction(mainFrame);
     }
 }
