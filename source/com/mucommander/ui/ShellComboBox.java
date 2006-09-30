@@ -75,11 +75,15 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
 
         // Updates the content of the combo box.
         removeAllItems();
-        for(int i = historyStart; i != historyEnd;) {
+        int i = historyEnd;
+        while(true) {
+            if(--i == -1)
+                i = history.length - 1;
             addItem(history[i]);
-            if(++i == history.length)
-                i = 0;
+            if(i == historyStart)
+                break;
         }
+        
     }
 
 
