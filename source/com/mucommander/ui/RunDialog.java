@@ -21,7 +21,7 @@ import java.awt.event.*;
  * Creates and displays a new dialog allowing the user to input a command which will be executed once the action is confirmed.
  * The command output of the user command is displayed in a text area
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class RunDialog extends FocusDialog implements ActionListener, ProcessListener {
     private MainFrame mainFrame;

@@ -7,6 +7,11 @@ import java.io.*;
 import java.util.*;
 
 /**
+ * Used to manage shell history.
+ * <p>
+ * Using this class is fairly basic: you can add elements to the shell history through
+ * {@link #add(String)} and browse it through {@link #getHistoryIterator()}.
+ * </p>
  * @author Nicolas Rinaudo
  */
 public class ShellHistoryManager {
@@ -169,13 +174,29 @@ public class ShellHistoryManager {
         loadHistory();
     }
 
+    /**
+     * Iterator used to browse history.
+     * @author Nicolas Rinaudo
+     */
     static class HistoryIterator implements Iterator {
+        /** Index in the history. */
         private int index;
 
+        /**
+         * Creates a new history iterator.
+         */
         public HistoryIterator() {index = ShellHistoryManager.historyStart;}
 
+        /**
+         * Returns <code>true</code> if there are more elements to iterate through.
+         * @return <code>true</code> if there are more elements to iterate through, <code>false</code> otherwise.
+         */
         public boolean hasNext() {return index != ShellHistoryManager.historyEnd;}
 
+        /**
+         * Returns the next element in the history.
+         * @return the next element in the history.
+         */
         public Object next() throws NoSuchElementException {
             String value;
 
@@ -188,6 +209,9 @@ public class ShellHistoryManager {
             return value;
         }
 
+        /**
+         * Operation not supported.
+         */
         public void remove() throws UnsupportedOperationException {throw new UnsupportedOperationException();}
     }
 

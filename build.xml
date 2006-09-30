@@ -18,21 +18,21 @@
   <!-- problems between different versions of muCommander.     -->
 
   <!-- Homepage of the application.                            -->
-  <property name="homepage-url"        value="http://www.mucommander.com"/>
+  <property name="url.homepage"        value="http://www.mucommander.com"/>
   <!-- URL at which to download the latest version data.       -->
-  <property name="app.version-url"     value="${homepage-url}/version/version.xml"/>
+  <property name="url.app-version"     value="${url.homepage}/version/version.xml"/>
   <!-- URL at which to download the latest nightly version     -->
   <!-- data.                                                   -->
-  <property name="nightly-version-url" value="${homepage-url}/version/nightly.xml"/>
+  <property name="url.nightly-version" value="${url.homepage}/version/nightly.xml"/>
   <!-- URL to which users should be directed in order to       -->
   <!-- download the latest version of muCommander.             -->
-  <property name="app.download-url"    value="${homepage-url}/#download"/>
+  <property name="url.app-download"    value="${url.homepage}/#download"/>
   <!-- URL to which users should be directed in order to       -->
   <!-- browse the muCommander forums.                          -->
-  <property name="forums-url"          value="${homepage-url}/forums/"/>
+  <property name="url.forums"          value="${url.homepage}/forums/"/>
   <!-- URL to which users should be directed in the unlikely   -->
   <!-- event that they'd want to donate money to the project.  -->
-  <property name="donation-url"        value="${homepage-url}/#donate"/>
+  <property name="url.donation"        value="${url.homepage}/#donate"/>
 
 
 
@@ -59,6 +59,8 @@
   <property name="dist"             location="dist"/>
   <!-- Where to store temporary files.                         -->
   <property name="tmp"              location="tmp"/>
+  <property name="readme"           location="readme.txt"/>
+  <property name="license"          location="license.txt"/>
 
   <!-- Where to store the muCommander version file.            -->
   <property name="version-file"   location="${dist}/version.xml"/>
@@ -66,6 +68,8 @@
   <property name="dist-tgz"       location="${dist}/mucommander.tar.gz"/>
   <!-- Where to store the muCommander app Mac OS X release.    -->
   <property name="app.name"       value="muCommander.app"/>
+  <!-- Folder in which to store the muCommander app Mac OS X   -->
+  <!-- release.                                                -->
   <property name="app.folder"     location="${dist}/${app.name}"/>
   <!-- Path to the file in which to store the unobfuscated     -->
   <!-- application JAR file.                                   -->
@@ -76,11 +80,11 @@
   <!-- Path to the file in which to store the obfuscated,      -->
   <!-- signed application JAR file.                            -->
   <property name="jar.signed"     location="${dist}/mucommander_signed.jar"/>
-  <!-- Path toe the file in which to store the application's   -->
+  <!-- Path to the file in which to store the application's    -->
   <!-- API documentation as a zip file.                        -->
-  <property name="api-zip"        location="${dist}/mucommander-api.zip"/>
+  <property name="api.zip"        location="${dist}/mucommander-api.zip"/>
 
-  <property name="app-tgz"        location="${dist}/mucommander.app.tar.gz"/>
+  <property name="app.tgz"        location="${dist}/mucommander.app.tar.gz"/>
 
   <!-- Directory containing the tools used to compile the      -->
   <!-- project.                                                -->
@@ -102,7 +106,10 @@
   <!-- Where to store the application's binaries.              -->
   <property name="classes"        location="${tmp}/classes"/>
 
-
+  <property name="nsis"           location="${res}/nsis"/>
+  <property name="nsis.script"    location="${nsis}/mucommander.nsis"/>
+  <property name="nsis.bat"       location="${nsis}/mucommander.bat"/>
+  <property name="nsis.icon"      location="${nsis}/mucommander.icon"/>
 
   <!-- Where to generate the muCommander API javadoc.          -->
   <property name="api-docs"       location="${docs}/api"/>
@@ -179,7 +186,7 @@
   <!-- version information.                                    -->
   <target name="set-nightly">
     <echo>Marking the build as 'nightly'...</echo>
-    <property name="version-url" value="${nightly-version-url}"/>
+    <property name="version-url" value="${url.nightly-version}"/>
   </target>
 
   <!-- Turns debug output on in the resulting binary.          -->
@@ -192,7 +199,7 @@
 
   <target name="check-libs" unless="libs.up-to-date">
     <uptodate property="libs.up-to-date" targetfile="${jar.normal}">
-      <srcfiles dir="${libs}" includes="**/*.jar"/>
+      <srcfiles dir="${lib}" includes="**/*.jar"/>
     </uptodate>
   </target>
 
@@ -227,7 +234,7 @@
     <echo>Creating ${tmp-source}/com.mucommander.RuntimeConstants...</echo>
     <mkdir dir="${tmp-source}"/>
     <property name="is-debug"    value="true"/>
-    <property name="version-url" value="${app.version-url}"/>
+    <property name="version-url" value="${url.app-version}"/>
     <taskdef name="date" classname="com.mucommander.ant.util.DateTask" classpath="${tools.jar}"/>
     <date name="release-date"/>
     <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tools.jar}"/>
@@ -238,9 +245,9 @@
       <field name="APP_STRING"   value="muCommander v${app.version}"/>
       <field name="VERSION_URL"  value="${version-url}"/>
       <field name="RELEASE_DATE" value="${release-date}" type="String"/>
-      <field name="HOMEPAGE_URL" value="${homepage-url}"/>
-      <field name="FORUMS_URL"   value="${forums-url}"/>
-      <field name="DONATION_URL" value="${donation-url}"/>
+      <field name="HOMEPAGE_URL" value="${url.homepage}"/>
+      <field name="FORUMS_URL"   value="${url.forums}"/>
+      <field name="DONATION_URL" value="${url.donation}"/>
     </javaw>
   </target>
 
@@ -466,16 +473,16 @@
   <!-- could think of. While this target can be fairly useful, -->
   <!-- it has the disadvantage of only being useable by        -->
   <!-- Maxence (see target 'sign' for more information).       -->
-  <target name="nightly" depends="set-nightly,tgz,app-tgz,version,docs-zip,sign">
+  <target name="nightly" depends="set-nightly,tgz,app.tgz,version,docs-zip,sign">
     <echo>All done.</echo>
   </target>
 
   <!-- Generates a zip file with muCommander's API docs.       -->
-  <!-- The output will be stored in ${api-zip}.                -->
+  <!-- The output will be stored in ${api.zip}.                -->
   <target name="docs-zip" depends="api-doc,tools-doc,archive-prefix">
-    <echo>Packaging API documentation in ${api-zip}...</echo>
+    <echo>Packaging API documentation in ${api.zip}...</echo>
     <mkdir dir="${dist}"/>
-    <zip destfile="${api-zip}">
+    <zip destfile="${api.zip}">
       <zipfileset dir="${api-docs}" prefix="${archive-prefix}"/>
     </zip>
 
@@ -493,8 +500,8 @@
     <!-- Generates the TGZ file, keeping execution flags.      -->
     <tar destfile="${dist-tgz}" compression="gzip">
       <tarfileset file="${res}/mucommander.sh" prefix="${archive-prefix}" mode="755"/>
-      <tarfileset file="license.txt"           prefix="${archive-prefix}"/>
-      <tarfileset file="readme.txt"            prefix="${archive-prefix}"/>
+      <tarfileset file="${license}"            prefix="${archive-prefix}"/>
+      <tarfileset file="${readme}"             prefix="${archive-prefix}"/>
       <tarfileset file="${jar.obf}"            prefix="${archive-prefix}"/>
     </tar>
   </target>
@@ -503,9 +510,9 @@
   <!-- Note that this is a temporary target which will         -->
   <!-- probably disapear when we get around to generating      -->
   <!-- our own .dmg files from Ant.                            -->
-  <target name="app-tgz" depends="app,archive-prefix">
-    <echo>Packaging Mac OS X distribution as ${app-tgz}...</echo>
-    <tar destfile="${app-tgz}" compression="gzip">
+  <target name="app.tgz" depends="app,archive-prefix">
+    <echo>Packaging Mac OS X distribution as ${app.tgz}...</echo>
+    <tar destfile="${app.tgz}" compression="gzip">
       <tarfileset dir="${app.folder}" prefix="${archive-prefix}/${app.name}">
         <include name="**"/>
         <exclude name="**/JavaApplicationStub"/>
@@ -513,8 +520,8 @@
       <tarfileset dir="${app.folder}" prefix="${archive-prefix}/${app.name}" mode="755">
         <include name="**/JavaApplicationStub"/>
       </tarfileset>
-      <tarfileset file="license.txt" prefix="${archive-prefix}"/>
-      <tarfileset file="readme.txt" prefix="${archive-prefix}"/>
+      <tarfileset file="${license}" prefix="${archive-prefix}"/>
+      <tarfileset file="${readme}"  prefix="${archive-prefix}"/>
     </tar>
   </target>
 
@@ -530,7 +537,7 @@
       <boolean name="CFBundleAllowMixedLocalizations" value="true"/>
       <string  name="CFBundleDevelopmentRegion"       value="English"/>
       <string  name="CFBundleShortVersionString"      value="${app.version}"/>
-      <string  name="CFBundleGetInfoString"           value="muCommander ${app.version}, (c) ${app.copyright} Maxence Bernard, ${homepage-url}"/>
+      <string  name="CFBundleGetInfoString"           value="muCommander ${app.version}, (c) ${app.copyright} Maxence Bernard, ${url.homepage}"/>
       <string name="CFBundleInfoDictionaryVersion"   value="6.0"/>
       <dict name="Java">
         <string name="MainClass"  value="${main-class}"/>
@@ -558,7 +565,7 @@
   <target name="version" depends="tools-jar">
     <echo>Generating version file in ${version-file}...</echo>
     <taskdef name="muversion" classname="com.mucommander.ant.version.VersionTask" classpath="${tools.jar}"/>
-    <muversion version="${app.version}" url="${app.download-url}" dest="${version-file}"/>
+    <muversion version="${app.version}" url="${url.app-download}" dest="${version-file}"/>
   </target>
 
   <!-- Signs the obfuscated jar file.                         -->
@@ -567,5 +574,20 @@
     <echo>Signing obfuscated JAR file in ${jar.signed}...</echo>
     <signjar jar="${jar.obf}" signedjar="${jar.signed}" alias="maxence" keystore="${res}/keystore"
              storepass="${store-pass}"/>
+  </target>
+
+  <target name="check-nsis" unless="nsis.available">
+  </target>
+
+  <target name="nsis" depends="check-nsis,archive-prefix" if="nsis-executable">
+    <echo>Generating NSIS installer...</echo>
+    <nsisscript in="${nsis.script}" out="${tmp-dir}/mucommander.nsis">
+      <var name="mu_out"     value="${archive-prefix}"/>
+      <var name="mu_version" value="${app.version}"/>
+      <var name="mu_bat"     value="${nsis.bat}"/>
+      <var name="mu_icon"    value="${nsis.icon}"/>
+      <var name="mu_readme"  value="${readme}"/>
+      <var name="mu_license" value="${license}"/>
+    </nsisscript>
   </target>
 </project>

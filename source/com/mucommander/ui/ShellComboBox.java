@@ -1,16 +1,16 @@
 package com.mucommander.ui;
 
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.PlatformManager;
 import com.mucommander.ShellHistoryManager;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.util.Iterator;
 
+/**
+ * @author Maxence Bernard, Nicolas Rinaudo
+ */
 public class ShellComboBox extends JComboBox implements ActionListener, KeyListener {
     private JTextField input;
     private RunDialog  parent;
