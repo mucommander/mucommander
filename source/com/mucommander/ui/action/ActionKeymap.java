@@ -25,19 +25,47 @@ public class ActionKeymap implements ContentHandler {
     private static Hashtable primaryActionKeymap;
     private static Hashtable alternateActionKeymap;
 
+    /** Default action keymap filename */
     private final static String DEFAULT_ACTION_KEYMAP_FILENAME = "action_keymap.xml";
+    /** Path to the action keymap resource file within the application JAR file */
     private final static String ACTION_KEYMAP_RESOURCE_PATH = "/"+DEFAULT_ACTION_KEYMAP_FILENAME;
 
+    /** Action keymap file used when calling {@link #loadActionKeyMap()} */
     private static AbstractFile actionKeyMapFile = FileFactory.getFile(PlatformManager.getPreferencesFolder().getAbsolutePath()+"/"+DEFAULT_ACTION_KEYMAP_FILENAME);
 
 
+    /**
+     * Sets the path to the action keymap file to be loaded when calling {@link #loadActionKeyMap()}.
+     * By default, this file is {@link DEFAULT_ACTION_KEYMAP_FILENAME} within the preferences folder.
+     *
+     * @param filePath path to the action keymap file
+     */
     public static void setActionKeyMapFile(String filePath) {
         AbstractFile file = FileFactory.getFile(filePath);
         if(file!=null)
             actionKeyMapFile = file;
     }
 
+
+    /**
+     * Loads the action keymap file. If the file doesn't exist yet, it is copied from the default resource file within the JAR.
+     *
+     * <p>This method must be called before requesting and registering any action.
+     */
     public static void loadActionKeyMap() {
+        // If the given file doesn't exist, copy the default one in the JAR file
+        if(!actionKeyMapFile.exists()) {
+            try {
+                if(Debug.ON) Debug.trace("copying "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile);
+
+                FileToolkit.copyResource(ACTION_KEYMAP_RESOURCE_PATH, actionKeyMapFile);
+            }
+            catch(IOException e) {
+                System.out.println("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);
+                return;
+            }
+        }
+
         new ActionKeymap();
     }
 
@@ -149,22 +177,9 @@ public class ActionKeymap implements ContentHandler {
 
 
     /**
-     * Parses the action keymap file. If the file doesn't exist yet, it is copied from the default
-     * action_keymap.xml resource file.
+     * Parses the action keymap file.
      */
     private ActionKeymap() {
-        // If the given file doesn't exist, copy the default one in the JAR file
-        if(!actionKeyMapFile.exists()) {
-            try {
-                if(Debug.ON) Debug.trace("copying "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile);
-
-                FileToolkit.copyResource(ACTION_KEYMAP_RESOURCE_PATH, actionKeyMapFile);
-            }
-            catch(IOException e) {
-                System.out.println("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);
-            }
-        }
-
         // Parse action keymap file
         InputStream in = null;
         try {

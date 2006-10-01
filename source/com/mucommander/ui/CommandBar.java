@@ -11,6 +11,11 @@ import com.mucommander.ui.comp.button.NonFocusableButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileToolkit;
+import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +23,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
@@ -38,8 +45,14 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
     private JButton buttons[];
 
 
-    /** Path to the XML file specifying the command bar */
-    private final static String COMMAND_BAR_XML_FILE_PATH = "/command_bar.xml";
+    /** Default command bar descriptor filename */
+    private final static String DEFAULT_COMMAND_BAR_FILENAME = "command_bar.xml";
+    /** Path to the command bar descriptor resource file within the application JAR file */
+    private final static String COMMAND_BAR_RESOURCE_PATH = "/"+DEFAULT_COMMAND_BAR_FILENAME;
+
+    /** Command bar descriptor file used when calling {@link #loadDescriptionFile()} */
+    private static AbstractFile commandBarDescriptorFile = FileFactory.getFile(PlatformManager.getPreferencesFolder().getAbsolutePath()+"/"+DEFAULT_COMMAND_BAR_FILENAME);
+
 
     /** Configuration variable that holds the command bar's icon scale factor */
     public final static String COMMAND_BAR_ICON_SCALE_CONF_VAR = "prefs.command_bar.icon_scale";
@@ -55,10 +68,37 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
 
 
     /**
-     * Parses the XML file describing the command bar's buttons and associated actions.
-     * This method should be called before instanciating CommandBar for the first time.
+     * Sets the path to the command bar description file to be loaded when calling {@link #loadDescriptionFile()}.
+     * By default, this file is {@link DEFAULT_COMMAND_BAR_FILENAME} within the preferences folder.
+     *
+     * @param filePath path to the command bar descriptor file
      */
-    public static void loadDescription() {
+    public static void setDescriptionFile(String filePath) {
+        AbstractFile file = FileFactory.getFile(filePath);
+        if(file!=null)
+            commandBarDescriptorFile = file;
+    }
+
+    /**
+     * Parses the XML file describing the command bar's buttons and associated actions.
+     * If the file doesn't exist yet, it is copied from the default resource file within the JAR.
+     *
+     * This method must be called before instanciating CommandBar for the first time.
+     */
+    public static void loadDescriptionFile() {
+        // If the given file doesn't exist, copy the default one in the JAR file
+        if(!commandBarDescriptorFile.exists()) {
+            try {
+                if(Debug.ON) Debug.trace("copying "+COMMAND_BAR_RESOURCE_PATH+" resource to "+commandBarDescriptorFile);
+
+                FileToolkit.copyResource(COMMAND_BAR_RESOURCE_PATH, commandBarDescriptorFile);
+            }
+            catch(IOException e) {
+                System.out.println("Error: unable to copy "+COMMAND_BAR_RESOURCE_PATH+" resource to "+commandBarDescriptorFile+": "+e);
+                return;
+            }
+        }
+
         new CommandBarReader();
     }
 
@@ -67,7 +107,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
      * Creates a new CommandBar instance associated with the given MainFrame.
      */
     public CommandBar(MainFrame mainFrame) {
-        super(new GridLayout(0,8));
+        super(new GridLayout(0,actions.length));
         this.mainFrame = mainFrame;
 
         // Listen to mouse events to popup a menu when command bar is right clicked
@@ -75,10 +115,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
 
         // Listen to configuration changes to reload command bar buttons when icon size has changed
         ConfigurationManager.addConfigurationListener(this);
-
-        // Load command bar description if it hasn't been already
-        if(actions==null)
-            loadDescription();
 
         // Create buttons and add them to this command bar
         int nbButtons = actions.length;
@@ -206,14 +242,20 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
          */
         private CommandBarReader() {
             // Parse the XML file describing the command bar buttons and associated actions
+            InputStream in = null;
             try {
-                new Parser().parse(getClass().getResourceAsStream(COMMAND_BAR_XML_FILE_PATH), this, "UTF-8");
+                in = commandBarDescriptorFile.getInputStream();
+                new Parser().parse(in, this, "UTF-8");
             }
             catch(Exception e) {
                 if(com.mucommander.Debug.ON) {
-                    com.mucommander.Debug.trace("Exception thrown while parsing CommandBar XML file "+COMMAND_BAR_XML_FILE_PATH+": "+e);
-                    e.printStackTrace();
+                    System.out.println("Exception thrown while parsing CommandBar XML file "+COMMAND_BAR_RESOURCE_PATH+": "+e);
                 }
+            }
+            finally {
+                if(in!=null)
+                    try { in.close(); }
+                    catch(IOException e) {}
             }
         }
 
@@ -222,7 +264,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
         ////////////////////////////
 
         public void startDocument() throws Exception {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_XML_FILE_PATH+" parsing started");
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_RESOURCE_PATH+" parsing started");
 
             actionsV = new Vector();
             /** Temporarily used for alternate actions parsing */
@@ -240,7 +282,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
             alternateActionsV.toArray(alternateActions);
             alternateActionsV = null;
 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_XML_FILE_PATH+" parsing finished");
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_RESOURCE_PATH+" parsing finished");
         }
 
         public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
@@ -250,7 +292,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
                     actionsV.add(Class.forName(actionClassName));
                 }
                 catch(Exception e) {
-                    System.out.println("Error in "+COMMAND_BAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
+                    System.out.println("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);
                 }
 
 
@@ -262,7 +304,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
                         alternateActionsV.add(Class.forName(actionClassName));
                     }
                     catch(Exception e) {
-                        System.out.println("Error in "+COMMAND_BAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
+                        System.out.println("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);
                     }
             }
         }

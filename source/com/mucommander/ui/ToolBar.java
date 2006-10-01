@@ -10,6 +10,11 @@ import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileToolkit;
+import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +22,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
@@ -28,9 +35,13 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
     private MainFrame mainFrame;
 
+    /** Default toolbar descriptor filename */
+    private final static String DEFAULT_TOOLBAR_FILENAME = "toolbar.xml";
+    /** Path to the toolbar descriptor resource file within the application JAR file */
+    private final static String TOOLBAR_RESOURCE_PATH = "/"+DEFAULT_TOOLBAR_FILENAME;
 
-    /** Path to the XML file specifying the toolbar */
-    private final static String TOOLBAR_XML_FILE_PATH = "/toolbar.xml";
+    /** Toolbar descriptor file used when calling {@link #loadDescriptionFile()} */
+    private static AbstractFile toolbarDescriptorFile = FileFactory.getFile(PlatformManager.getPreferencesFolder().getAbsolutePath()+"/"+DEFAULT_TOOLBAR_FILENAME);
 
     /** Dimension of button separators */
     private final static Dimension SEPARATOR_DIMENSION = new Dimension(10, 16);
@@ -47,10 +58,37 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
 
     /**
-     * Parses the XML file describing the toolbar's buttons and associated actions.
-     * This method should be called before instanciating ToolBar for the first time.
+     * Sets the path to the toolbar description file to be loaded when calling {@link #loadDescriptionFile()}.
+     * By default, this file is {@link DEFAULT_TOOLBAR_FILENAME} within the preferences folder.
+     *
+     * @param filePath path to the toolbar descriptor file
      */
-    public static void loadDescription() {
+    public static void setDescriptionFile(String filePath) {
+        AbstractFile file = FileFactory.getFile(filePath);
+        if(file!=null)
+            toolbarDescriptorFile = file;
+    }
+
+    /**
+     * Parses the XML file describing the toolbar's buttons and associated actions.
+     * If the file doesn't exist yet, it is copied from the default resource file within the JAR.
+     *
+     * <p>This method must be called before instanciating ToolBar for the first time.
+     */
+    public static void loadDescriptionFile() {
+        // If the given file doesn't exist, copy the default one in the JAR file
+        if(!toolbarDescriptorFile.exists()) {
+            try {
+                if(Debug.ON) Debug.trace("copying "+TOOLBAR_RESOURCE_PATH+" resource to "+toolbarDescriptorFile);
+
+                FileToolkit.copyResource(TOOLBAR_RESOURCE_PATH, toolbarDescriptorFile);
+            }
+            catch(IOException e) {
+                System.out.println("Error: unable to copy "+TOOLBAR_RESOURCE_PATH+" resource to "+toolbarDescriptorFile+": "+e);
+                return;
+            }
+        }
+
         new ToolBarReader();
     }
 
@@ -71,10 +109,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
         // Listen to configuration changes to reload toolbar buttons when icon size has changed
         ConfigurationManager.addConfigurationListener(this);
-
-        // Load toolbar description if it hasn't been already
-        if(actions==null)
-            loadDescription();
 
         // Create buttons and add them to this toolbar
         int nbActions = actions.length;
@@ -189,13 +223,19 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
          * Starts parsing the XML description file.
          */
         private ToolBarReader() {
+            InputStream in = null;
             try {
-                // Use UTF-8 encoding
-                new Parser().parse(getClass().getResourceAsStream(TOOLBAR_XML_FILE_PATH), this, "UTF-8");
+                in = toolbarDescriptorFile.getInputStream();
+                new Parser().parse(in, this, "UTF-8");
             }
             catch(Exception e) {
                 // Report error to the standard output
-                System.out.println("Exception thrown while parsing Toolbar XML file "+TOOLBAR_XML_FILE_PATH+": "+e);
+                System.out.println("Exception thrown while parsing Toolbar XML file "+TOOLBAR_RESOURCE_PATH+": "+e);
+            }
+            finally {
+                if(in!=null)
+                    try { in.close(); }
+                    catch(IOException e) {}
             }
         }
 
@@ -204,7 +244,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         ////////////////////////////
 
         public void startDocument() throws Exception {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_XML_FILE_PATH+" parsing started");
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_RESOURCE_PATH+" parsing started");
 
             actionsV = new Vector();
         }
@@ -215,7 +255,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             actionsV.toArray(actions);
             actionsV = null;
 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_XML_FILE_PATH+" parsing finished");
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_RESOURCE_PATH+" parsing finished");
         }
 
         public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
@@ -225,7 +265,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
                     actionsV.add(Class.forName(actionClassName));
                 }
                 catch(Exception e) {
-                    System.out.println("Error in "+TOOLBAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
+                    System.out.println("Error in "+TOOLBAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);
                 }
             }
             else if(name.equals("separator")) {

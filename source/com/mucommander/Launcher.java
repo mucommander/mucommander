@@ -200,11 +200,11 @@ public class Launcher {
 
         // Loads the ToolBar's description file
         splashScreen.setLoadingMessage("Loading toolbar description...");
-        com.mucommander.ui.ToolBar.loadDescription();
+        com.mucommander.ui.ToolBar.loadDescriptionFile();
 
         // Loads the CommandBar's description file
         splashScreen.setLoadingMessage("Loading command bar description...");
-        com.mucommander.ui.CommandBar.loadDescription();
+        com.mucommander.ui.CommandBar.loadDescriptionFile();
 
         // Creates the initial main frame using any initial path specified by the command line.
         splashScreen.setLoadingMessage("Initializing window...");
