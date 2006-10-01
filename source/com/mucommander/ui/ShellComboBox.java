@@ -1,6 +1,6 @@
 package com.mucommander.ui;
 
-import com.mucommander.ShellHistoryManager;
+import com.mucommander.history.ShellHistoryManager;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
@@ -59,22 +59,31 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
         putClientProperty("JComboBox.isTableCellEditor", Boolean.TRUE);
 
         // Fills the combo box with the current history.
-        populateHistory();
+        populateHistory(true);
     }
 
     /**
      * Fills the combo box with the current shell history.
+     * @param init if set to true, the last command in the history will be set in the input field.
      */
-    private void populateHistory() {
+    private void populateHistory(boolean init) {
         Iterator iterator;
+        String   command;
 
         // Empties the content of the combo box
         removeAllItems();
 
         // Iteratores through all shell history elements.
         iterator = ShellHistoryManager.getHistoryIterator();
+        command  = null;
         while(iterator.hasNext())
-            insertItemAt(iterator.next(), 0);
+            insertItemAt((command = iterator.next().toString()), 0);
+
+        if(init && (command != null)) {
+            input.setText(command);
+            input.setSelectionStart(0);
+            input.setSelectionEnd(command.length());
+        }
     }
 
 
@@ -155,7 +164,7 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
         command = input.getText();
         if(add) {
             ShellHistoryManager.add(command);
-            populateHistory();
+            populateHistory(false);
         }
 
         return command;
@@ -167,7 +176,7 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
      */
     private void runCommand(String command) {
         ShellHistoryManager.add(command);
-        populateHistory();
+        populateHistory(false);
         input.setText(command);
         parent.runCommand(command);
     }
