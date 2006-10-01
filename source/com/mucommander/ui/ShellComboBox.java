@@ -59,14 +59,13 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
         putClientProperty("JComboBox.isTableCellEditor", Boolean.TRUE);
 
         // Fills the combo box with the current history.
-        populateHistory(true);
+        populateHistory();
     }
 
     /**
      * Fills the combo box with the current shell history.
-     * @param init if set to true, the last command in the history will be set in the input field.
      */
-    private void populateHistory(boolean init) {
+    private void populateHistory() {
         Iterator iterator;
         String   command;
 
@@ -79,7 +78,8 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
         while(iterator.hasNext())
             insertItemAt((command = iterator.next().toString()), 0);
 
-        if(init && (command != null)) {
+        // If the list is not empty, initialises the input field on the last command.
+        if(command != null) {
             input.setText(command);
             input.setSelectionStart(0);
             input.setSelectionEnd(command.length());
@@ -164,7 +164,8 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
         command = input.getText();
         if(add) {
             ShellHistoryManager.add(command);
-            populateHistory(false);
+            insertItemAt(command, 0);
+            //            populateHistory(false);
         }
 
         return command;
@@ -176,7 +177,8 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
      */
     private void runCommand(String command) {
         ShellHistoryManager.add(command);
-        populateHistory(false);
+        insertItemAt(command, 0);
+        //        populateHistory(false);
         input.setText(command);
         parent.runCommand(command);
     }
