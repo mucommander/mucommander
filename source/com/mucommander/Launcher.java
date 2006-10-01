@@ -45,6 +45,13 @@ public class Launcher {
         // Allows users to tweak how configuration is loaded / saved.
         System.out.println(" -c FILE, --configuration FILE   Load configuration from FILE");
 
+        // Allows users to tweak how command bar configuration is loaded / saved.
+        System.out.println(" -C FILE, --commandbar FILE      Load command bar from FILE");
+
+
+        // Allows users to tweak how keymaps are loaded.
+        System.out.println(" -k FILE, --keymap FILE          Load keymap from FILE");
+
         // If debug is turned on, -n and -d are used to control whether debug
         // text is printed out or not.
         if(Debug.ON) {
@@ -53,6 +60,9 @@ public class Launcher {
         }
         // Allows users to tweak how shell history is loaded / saved.
         System.out.println(" -s FILE, --shell-history FILE   Load shell history from FILE");
+
+        // Allows users to tweak how toolbar configuration are loaded.
+        System.out.println(" -t FILE, --toolbar FILE         Load toolbar from FILE");
 
         // Text commands.
         System.out.println(" -h, --help                      Print the help text and exit");
@@ -126,6 +136,27 @@ public class Launcher {
                 if(i >= args.length - 1)
                     printError("Missing FILE parameter to " + args[i]);
                 ShellHistoryManager.setHistoryFile(args[++i]);
+            }
+
+            // Keymap file.
+            else if(args[i].equals("-k") || args[i].equals("--keymap")) {
+                if(i >= args.length - 1)
+                    printError("Missing FILE parameter to " + args[i]);
+                com.mucommander.ui.action.ActionKeymap.setActionKeyMapFile(args[++i]);
+            }
+
+            // Toolbar file.
+            else if(args[i].equals("-t") || args[i].equals("--toolbar")) {
+                if(i >= args.length - 1)
+                    printError("Missing FILE parameter to " + args[i]);
+                com.mucommander.ui.ToolBar.setDescriptionFile(args[++i]);
+            }
+
+            // Commandbar file.
+            else if(args[i].equals("-C") || args[i].equals("--commandbar")) {
+                if(i >= args.length - 1)
+                    printError("Missing FILE parameter to " + args[i]);
+                com.mucommander.ui.CommandBar.setDescriptionFile(args[++i]);
             }
 
             // Debug options.
