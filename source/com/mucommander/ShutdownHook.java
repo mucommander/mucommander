@@ -1,7 +1,7 @@
 package com.mucommander;
 
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.history.ShellHistoryManager;
+import com.mucommander.shell.ShellHistoryManager;
 
 
 /**

@@ -37,7 +37,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     private ProcessMonitor processMonitor;
 	
     // Dialog size constraints
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480, 400);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(600, 400);	
     //    // Dialog width should not exceed 360
     //   private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
 

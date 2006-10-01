@@ -1,6 +1,6 @@
 package com.mucommander.ui;
 
-import com.mucommander.history.ShellHistoryManager;
+import com.mucommander.shell.ShellHistoryManager;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
