@@ -174,6 +174,10 @@ public class Launcher {
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 		
+        // Loads dictionary
+        splashScreen.setLoadingMessage("Loading dictionary...");
+        com.mucommander.text.Translator.loadDictionaryFile();
+
         // Loads bookmarks
         splashScreen.setLoadingMessage("Loading bookmarks...");
         com.mucommander.bookmark.BookmarkManager.loadBookmarks();
@@ -182,10 +186,6 @@ public class Launcher {
         splashScreen.setLoadingMessage("Loading shell history...");
         ShellHistoryManager.loadHistory();
 
-        // Loads dictionary
-        splashScreen.setLoadingMessage("Loading dictionary...");
-        com.mucommander.text.Translator.loadDictionaryFile();
-
         // Inits CustomDateFormat to make sure that its ConfigurationListener is added
         // before FileTable, so CustomDateFormat gets notified of date format changes first
         com.mucommander.text.CustomDateFormat.init();
@@ -193,8 +193,18 @@ public class Launcher {
         // Preload icons
         splashScreen.setLoadingMessage("Loading icons...");
         com.mucommander.ui.icon.FileIcons.init();
-//        com.mucommander.ui.ToolBar.init();
-//        com.mucommander.ui.CommandBar.init();
+
+        // Loads the ActionKeymap file
+        splashScreen.setLoadingMessage("Loading action keymap...");
+        com.mucommander.ui.action.ActionKeymap.loadActionKeymap();
+
+        // Loads the ToolBar's description file
+        splashScreen.setLoadingMessage("Loading toolbar description...");
+        com.mucommander.ui.ToolBar.loadDescription();
+
+        // Loads the CommandBar's description file
+        splashScreen.setLoadingMessage("Loading command bar description...");
+        com.mucommander.ui.CommandBar.loadDescription();
 
         // Creates the initial main frame using any initial path specified by the command line.
         splashScreen.setLoadingMessage("Initializing window...");

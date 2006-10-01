@@ -26,7 +26,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class CommandBar extends JPanel implements ConfigurationListener, MouseListener, ContentHandler {
+public class CommandBar extends JPanel implements ConfigurationListener, MouseListener {
 
     /** Parent MainFrame instance */
     private MainFrame mainFrame;
@@ -53,10 +53,14 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
     /** Command bar alternate actions */
     private static Class alternateActions[];
 
-    /** Temporarily used for XML parsing */
-    private static Vector actionsV;
-    /** Temporarily used for XML parsing */
-    private static Vector alternateActionsV;
+
+    /**
+     * Parses the XML file describing the command bar's buttons and associated actions.
+     * This method should be called before instanciating CommandBar for the first time.
+     */
+    public static void loadDescription() {
+        new CommandBarReader();
+    }
 
 
     /**
@@ -72,10 +76,9 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
         // Listen to configuration changes to reload command bar buttons when icon size has changed
         ConfigurationManager.addConfigurationListener(this);
 
-        // Parse the XML file describing the toolbar buttons and associated actions.
-        // This file is parsed only once the first time ToolBar is instancied.
+        // Load command bar description if it hasn't been already
         if(actions==null)
-            parseXMLDescriptor();
+            loadDescription();
 
         // Create buttons and add them to this command bar
         int nbButtons = actions.length;
@@ -86,8 +89,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
 
             setButtonAction(button, action);
 
-// new ClickButtonAction(mainFrame, button);
-
             button.setMargin(new Insets(3,4,3,4));
             // For Mac OS X whose default minimum width for buttons is enormous
             button.setMinimumSize(new Dimension(40, (int)button.getPreferredSize().getHeight()));
@@ -95,23 +96,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
             add(button);
 
             buttons[i] = button;
-        }
-    }
-
-
-    /**
-     * Parses the XML file describing the toolbar's buttons and associated actions.
-     */
-    private void parseXMLDescriptor() {
-        // Parse the XML file describing the command bar buttons and associated actions
-        try {
-            new Parser().parse(getClass().getResourceAsStream(COMMAND_BAR_XML_FILE_PATH), this, "UTF-8");
-        }
-        catch(Exception e) {
-            if(com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Exception thrown while parsing CommandBar XML file "+COMMAND_BAR_XML_FILE_PATH+": "+e);
-                e.printStackTrace();
-            }
         }
     }
 
@@ -148,61 +132,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
         }
     }
 
-    ////////////////////////////
-    // ContentHandler methods //
-    ////////////////////////////
-
-    public void startDocument() throws Exception {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_XML_FILE_PATH+" parsing started");
-
-        actionsV = new Vector();
-        /** Temporarily used for alternate actions parsing */
-        alternateActionsV = new Vector();
-    }
-
-    public void endDocument() throws Exception {
-        int nbActions = actionsV.size();
-
-        actions = new Class[nbActions];
-        actionsV.toArray(actions);
-        actionsV = null;
-
-        alternateActions = new Class[nbActions];
-        alternateActionsV.toArray(alternateActions);
-        alternateActionsV = null;
-
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_XML_FILE_PATH+" parsing finished");
-    }
-
-    public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
-        if(name.equals("button")) {
-            String actionClassName = (String)attValues.get("action");
-            try {
-                actionsV.add(Class.forName(actionClassName));
-            }
-            catch(Exception e) {
-                System.out.println("Error in "+COMMAND_BAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
-            }
-
-
-            actionClassName = (String)attValues.get("alt_action");
-            if(actionClassName==null)
-                alternateActionsV.add(null);
-            else
-                try {
-                    alternateActionsV.add(Class.forName(actionClassName));
-                }
-                catch(Exception e) {
-                    System.out.println("Error in "+COMMAND_BAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
-                }
-        }
-    }
-
-    public void endElement(String uri, String name) throws Exception {
-    }
-
-    public void characters(String s) throws Exception {
-    }
 
     ///////////////////////////////////
     // ConfigurationListener methods //
@@ -256,5 +185,92 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
     }
 
     public void mouseExited(MouseEvent e) {
+    }
+
+
+    /**
+     * This class parses the XML file describing the command bar's buttons and associated actions.
+     *
+     * @author Maxence Bernard
+     */
+    private static class CommandBarReader implements ContentHandler {
+
+        /** Temporarily used for XML parsing */
+        private Vector actionsV;
+        /** Temporarily used for XML parsing */
+        private Vector alternateActionsV;
+
+
+        /**
+         * Starts parsing the XML description file.
+         */
+        private CommandBarReader() {
+            // Parse the XML file describing the command bar buttons and associated actions
+            try {
+                new Parser().parse(getClass().getResourceAsStream(COMMAND_BAR_XML_FILE_PATH), this, "UTF-8");
+            }
+            catch(Exception e) {
+                if(com.mucommander.Debug.ON) {
+                    com.mucommander.Debug.trace("Exception thrown while parsing CommandBar XML file "+COMMAND_BAR_XML_FILE_PATH+": "+e);
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        ////////////////////////////
+        // ContentHandler methods //
+        ////////////////////////////
+
+        public void startDocument() throws Exception {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_XML_FILE_PATH+" parsing started");
+
+            actionsV = new Vector();
+            /** Temporarily used for alternate actions parsing */
+            alternateActionsV = new Vector();
+        }
+
+        public void endDocument() throws Exception {
+            int nbActions = actionsV.size();
+
+            actions = new Class[nbActions];
+            actionsV.toArray(actions);
+            actionsV = null;
+
+            alternateActions = new Class[nbActions];
+            alternateActionsV.toArray(alternateActions);
+            alternateActionsV = null;
+
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_XML_FILE_PATH+" parsing finished");
+        }
+
+        public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
+            if(name.equals("button")) {
+                String actionClassName = (String)attValues.get("action");
+                try {
+                    actionsV.add(Class.forName(actionClassName));
+                }
+                catch(Exception e) {
+                    System.out.println("Error in "+COMMAND_BAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
+                }
+
+
+                actionClassName = (String)attValues.get("alt_action");
+                if(actionClassName==null)
+                    alternateActionsV.add(null);
+                else
+                    try {
+                        alternateActionsV.add(Class.forName(actionClassName));
+                    }
+                    catch(Exception e) {
+                        System.out.println("Error in "+COMMAND_BAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
+                    }
+            }
+        }
+
+        public void endElement(String uri, String name) throws Exception {
+        }
+
+        public void characters(String s) throws Exception {
+        }
     }
 }

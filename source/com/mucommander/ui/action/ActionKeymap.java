@@ -21,12 +21,8 @@ public class ActionKeymap implements ContentHandler {
 
     private final static String ACTION_KEYMAP_FILE_PATH = "/action_keymap.xml";
 
-    static {
-        // Todo: move this call to Launcher
-        parseActionKeymap();
-    }
 
-    public static void parseActionKeymap() {
+    public static void loadActionKeymap() {
         new ActionKeymap();
     }
 
@@ -153,11 +149,14 @@ public class ActionKeymap implements ContentHandler {
     ///////////////////////////////////
 
     public void startDocument() throws Exception {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(ACTION_KEYMAP_FILE_PATH+" parsing started");
+
         primaryActionKeymap = new Hashtable();
         alternateActionKeymap = new Hashtable();
     }
 
     public void endDocument() throws Exception {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(ACTION_KEYMAP_FILE_PATH+" parsing finished");
     }
 
     public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
@@ -190,7 +189,7 @@ public class ActionKeymap implements ContentHandler {
                 return;
             }
 
-            if(Debug.ON) Debug.trace("associating "+keyStroke+" accelerator with "+actionClass);
+//            if(Debug.ON) Debug.trace("associating "+keyStroke+" accelerator with "+actionClass);
 
             primaryActionKeymap.put(actionClass, keyStroke);
 
@@ -203,7 +202,7 @@ public class ActionKeymap implements ContentHandler {
                     return;
                 }
 
-                if(Debug.ON) Debug.trace("associating "+keyStroke+" alternate accelerator with "+actionClass);
+//                if(Debug.ON) Debug.trace("associating "+keyStroke+" alternate accelerator with "+actionClass);
 
                 alternateActionKeymap.put(actionClass, keyStroke);
             }

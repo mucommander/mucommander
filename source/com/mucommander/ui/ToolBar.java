@@ -24,7 +24,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class ToolBar extends JToolBar implements ConfigurationListener, ContentHandler, MouseListener {
+public class ToolBar extends JToolBar implements ConfigurationListener, MouseListener {
 
     private MainFrame mainFrame;
 
@@ -45,8 +45,14 @@ public class ToolBar extends JToolBar implements ConfigurationListener, ContentH
     /** Command bar actions: Class instances or null to signify a separator */
     private static Class actions[];
 
-    /** Temporarily used for XML parsing */
-    private static Vector actionsV;
+
+    /**
+     * Parses the XML file describing the toolbar's buttons and associated actions.
+     * This method should be called before instanciating ToolBar for the first time.
+     */
+    public static void loadDescription() {
+        new ToolBarReader();
+    }
 
 
     /**
@@ -66,10 +72,9 @@ public class ToolBar extends JToolBar implements ConfigurationListener, ContentH
         // Listen to configuration changes to reload toolbar buttons when icon size has changed
         ConfigurationManager.addConfigurationListener(this);
 
-        // Parse the XML file describing the toolbar buttons and associated actions.
-        // This file is parsed only once the first time ToolBar is instancied.
+        // Load toolbar description if it hasn't been already
         if(actions==null)
-            parseXMLDescriptor();
+            loadDescription();
 
         // Create buttons and add them to this toolbar
         int nbActions = actions.length;
@@ -79,21 +84,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, ContentH
                 addSeparator(SEPARATOR_DIMENSION);
             else
                 addButton(ActionManager.getActionInstance(actionClass, mainFrame));
-        }
-    }
-
-
-    /**
-     * Parses the XML file describing the toolbar's buttons and associated actions.
-     */
-    private void parseXMLDescriptor() {
-        try {
-            // Use UTF-8 encoding
-            new Parser().parse(getClass().getResourceAsStream(TOOLBAR_XML_FILE_PATH), this, "UTF-8");
-        }
-        catch(Exception e) {
-            // Report error to the standard output
-            System.out.println("Exception thrown while parsing Toolbar XML file "+TOOLBAR_XML_FILE_PATH+": "+e);
         }
     }
 
@@ -121,46 +111,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, ContentH
         add(button);
     }
 
-
-    ////////////////////////////
-    // ContentHandler methods //
-    ////////////////////////////
-
-    public void startDocument() throws Exception {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_XML_FILE_PATH+" parsing started");
-
-        actionsV = new Vector();
-    }
-
-    public void endDocument() throws Exception {
-        int nbActions = actionsV.size();
-        actions = new Class[nbActions];
-        actionsV.toArray(actions);
-        actionsV = null;
-
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_XML_FILE_PATH+" parsing finished");
-    }
-
-    public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
-        if(name.equals("button")) {
-            String actionClassName = (String)attValues.get("action");
-            try {
-                actionsV.add(Class.forName(actionClassName));
-            }
-            catch(Exception e) {
-                System.out.println("Error in "+TOOLBAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
-            }
-        }
-        else if(name.equals("separator")) {
-            actionsV.add(null);
-        }
-    }
-
-    public void endElement(String uri, String name) throws Exception {
-    }
-
-    public void characters(String s) throws Exception {
-    }
 
     ///////////////////////////////////
     // ConfigurationListener methods //
@@ -221,5 +171,72 @@ public class ToolBar extends JToolBar implements ConfigurationListener, ContentH
     }
 
     public void mouseExited(MouseEvent e) {
+    }
+
+
+    /**
+     * This class parses the XML file describing the toolbar's buttons and associated actions.
+     *
+     * @author Maxence Bernard
+     */
+    private static class ToolBarReader implements ContentHandler {
+
+        /** Temporarily used for XML parsing */
+        private Vector actionsV;
+
+
+        /**
+         * Starts parsing the XML description file.
+         */
+        private ToolBarReader() {
+            try {
+                // Use UTF-8 encoding
+                new Parser().parse(getClass().getResourceAsStream(TOOLBAR_XML_FILE_PATH), this, "UTF-8");
+            }
+            catch(Exception e) {
+                // Report error to the standard output
+                System.out.println("Exception thrown while parsing Toolbar XML file "+TOOLBAR_XML_FILE_PATH+": "+e);
+            }
+        }
+
+        ////////////////////////////
+        // ContentHandler methods //
+        ////////////////////////////
+
+        public void startDocument() throws Exception {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_XML_FILE_PATH+" parsing started");
+
+            actionsV = new Vector();
+        }
+
+        public void endDocument() throws Exception {
+            int nbActions = actionsV.size();
+            actions = new Class[nbActions];
+            actionsV.toArray(actions);
+            actionsV = null;
+
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_XML_FILE_PATH+" parsing finished");
+        }
+
+        public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
+            if(name.equals("button")) {
+                String actionClassName = (String)attValues.get("action");
+                try {
+                    actionsV.add(Class.forName(actionClassName));
+                }
+                catch(Exception e) {
+                    System.out.println("Error in "+TOOLBAR_XML_FILE_PATH+": action class "+actionClassName+" not found: "+e);
+                }
+            }
+            else if(name.equals("separator")) {
+                actionsV.add(null);
+            }
+        }
+
+        public void endElement(String uri, String name) throws Exception {
+        }
+
+        public void characters(String s) throws Exception {
+        }
     }
 }
