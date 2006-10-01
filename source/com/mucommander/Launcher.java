@@ -1,6 +1,7 @@
 package com.mucommander;
 
 import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.history.ShellHistoryManager;
 import com.mucommander.ui.CheckVersionDialog;
 import com.mucommander.ui.SplashScreen;
 import com.mucommander.ui.WindowManager;
