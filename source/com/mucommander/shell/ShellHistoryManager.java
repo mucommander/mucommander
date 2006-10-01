@@ -28,14 +28,16 @@ public class ShellHistoryManager {
 
     // - Class fields ---------------------------------------------------------------
     // ------------------------------------------------------------------------------
+    /** List of shell history registered listeners. */
+    private static WeakHashMap listeners;
     /** Stores the shell history. */
-    private static String[] history;
+    private static String[]    history;
     /** Index of the first element of the history. */
-    private static int      historyStart;
+    private static int         historyStart;
     /** Index of the last element of the history. */
-    private static int      historyEnd;
+    private static int         historyEnd;
     /** Path to the history file. */
-    private static String   historyFile;
+    private static String      historyFile;
 
 
 
@@ -47,9 +49,34 @@ public class ShellHistoryManager {
     private ShellHistoryManager() {}
 
     /**
-     * Initialises and history.
+     * Initialises history.
      */
-    static {history = new String[ConfigurationManager.getVariableInt(HISTORY_SIZE_VAR, DEFAULT_HISTORY_SIZE)];}
+    static {
+        history   = new String[ConfigurationManager.getVariableInt(HISTORY_SIZE_VAR, DEFAULT_HISTORY_SIZE)];
+        listeners = new WeakHashMap();
+    }
+
+
+
+    // - Listener code --------------------------------------------------------------
+    // ------------------------------------------------------------------------------
+    /**
+     * Registers a listener to changes in the shell history.
+     * @param listener listener to register.
+     */
+    public static void addListener(ShellHistoryListener listener) {listeners.put(listener, null);}
+
+    /**
+     * Propagates shell history events to all registered listeners.
+     * @param command command that was added to the shell history.
+     */
+    private static void triggerEvent(String command) {
+        Iterator iterator;
+
+        iterator = listeners.keySet().iterator();
+        while(iterator.hasNext())
+            ((ShellHistoryListener)iterator.next()).historyChanged(command);
+    }
 
 
 
@@ -83,6 +110,9 @@ public class ShellHistoryManager {
             if(++historyStart == history.length)
                 historyStart = 0;
         }
+
+        // Propagates the event.
+        triggerEvent(command);
     }
 
 

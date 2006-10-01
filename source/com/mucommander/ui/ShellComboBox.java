@@ -1,6 +1,6 @@
 package com.mucommander.ui;
 
-import com.mucommander.shell.ShellHistoryManager;
+import com.mucommander.shell.*;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
@@ -17,7 +17,7 @@ import java.util.Iterator;
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class ShellComboBox extends JComboBox implements ActionListener, KeyListener {
+public class ShellComboBox extends JComboBox implements ActionListener, KeyListener, ShellHistoryListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Input field used to type in commands. */
@@ -60,6 +60,7 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
 
         // Fills the combo box with the current history.
         populateHistory();
+        ShellHistoryManager.addListener(this);
     }
 
     /**
@@ -151,34 +152,25 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
 
 
 
+    // - Shell listener code --------------------------------------------------------
+    // ------------------------------------------------------------------------------
+    public void historyChanged(String command) {insertItemAt(command, 0);}
+
+
+
     // - Command handling -----------------------------------------------------------
     // ------------------------------------------------------------------------------
     /**
      * Returns the current shell command.
-     * @param add whether or not that command should be added to the history.
      * @return the current shell command.
      */
-    public String getCommand(boolean add) {
-        String command;
-
-        command = input.getText();
-        if(add) {
-            ShellHistoryManager.add(command);
-            insertItemAt(command, 0);
-            //            populateHistory(false);
-        }
-
-        return command;
-    }
+    public String getCommand() {return input.getText();}
 
     /**
      * Runs the specified command and adds it to history.
      * @param command command to run.
      */
     private void runCommand(String command) {
-        ShellHistoryManager.add(command);
-        insertItemAt(command, 0);
-        //        populateHistory(false);
         input.setText(command);
         parent.runCommand(command);
     }

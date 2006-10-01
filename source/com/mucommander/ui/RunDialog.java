@@ -2,6 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.shell.*;
 import com.mucommander.ProcessListener;
 import com.mucommander.ProcessMonitor;
 import com.mucommander.text.Translator;
@@ -162,7 +163,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     ////////////////////////////
     public void runCommand(String command) {
         try {
-            currentProcess = PlatformManager.execute(command, mainFrame.getLastActiveTable().getCurrentFolder());
+            currentProcess = Shell.execute(command, mainFrame.getLastActiveTable().getCurrentFolder());
             // If command could be executed
             // Reset caret position
             caretPos = 0;
@@ -182,7 +183,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         // Run button starts a new command
         if(this.currentProcess==null && (source == runStopButton)) {
             inputField.setEnabled(false);
-            runCommand(inputField.getCommand(true));
+            runCommand(inputField.getCommand());
         }
         // Stop button stops current process
         else if(this.currentProcess!=null && source==runStopButton) {
