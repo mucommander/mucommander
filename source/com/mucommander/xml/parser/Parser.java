@@ -89,7 +89,7 @@ public class Parser {
 	/**
 	 * Parses an XML Document.
 	 *
-	 * The given InputStream will not be closed after the parser has finished parsing this file.
+	 * The given InputStream will *not* be closed after the parser has finished parsing this file.
 	 * This means additional data can be read from this InputStream after a call to this method.
 	 *
 	 * @param in the <code>InputStream</code> from which the XML document will be read.

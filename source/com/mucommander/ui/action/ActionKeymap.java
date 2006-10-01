@@ -1,6 +1,10 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileToolkit;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
@@ -9,6 +13,8 @@ import javax.swing.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.io.InputStream;
+import java.io.IOException;
 
 
 /**
@@ -19,10 +25,19 @@ public class ActionKeymap implements ContentHandler {
     private static Hashtable primaryActionKeymap;
     private static Hashtable alternateActionKeymap;
 
-    private final static String ACTION_KEYMAP_FILE_PATH = "/action_keymap.xml";
+    private final static String DEFAULT_ACTION_KEYMAP_FILENAME = "action_keymap.xml";
+    private final static String ACTION_KEYMAP_RESOURCE_PATH = "/"+DEFAULT_ACTION_KEYMAP_FILENAME;
+
+    private static AbstractFile actionKeyMapFile = FileFactory.getFile(PlatformManager.getPreferencesFolder().getAbsolutePath()+"/"+DEFAULT_ACTION_KEYMAP_FILENAME);
 
 
-    public static void loadActionKeymap() {
+    public static void setActionKeyMapFile(String filePath) {
+        AbstractFile file = FileFactory.getFile(filePath);
+        if(file!=null)
+            actionKeyMapFile = file;
+    }
+
+    public static void loadActionKeyMap() {
         new ActionKeymap();
     }
 
@@ -133,13 +148,36 @@ public class ActionKeymap implements ContentHandler {
     }
 
 
+    /**
+     * Parses the action keymap file. If the file doesn't exist yet, it is copied from the default
+     * action_keymap.xml resource file.
+     */
     private ActionKeymap() {
+        // If the given file doesn't exist, copy the default one in the JAR file
+        if(!actionKeyMapFile.exists()) {
+            try {
+                if(Debug.ON) Debug.trace("copying "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile);
+
+                FileToolkit.copyResource(ACTION_KEYMAP_RESOURCE_PATH, actionKeyMapFile);
+            }
+            catch(IOException e) {
+                System.out.println("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);
+            }
+        }
+
         // Parse action keymap file
+        InputStream in = null;
         try {
-            new Parser().parse(getClass().getResourceAsStream(ACTION_KEYMAP_FILE_PATH), this, "UTF-8");
+            in = actionKeyMapFile.getInputStream();
+            new Parser().parse(in, this, "UTF-8");
         }
         catch(Exception e) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Error: unable to load action_keymap.xml file "+e);
+        }
+        finally {
+            if(in!=null)
+                try { in.close(); }
+                catch(IOException e) {}
         }
     }
 
@@ -149,14 +187,14 @@ public class ActionKeymap implements ContentHandler {
     ///////////////////////////////////
 
     public void startDocument() throws Exception {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(ACTION_KEYMAP_FILE_PATH+" parsing started");
+        if(Debug.ON) Debug.trace(actionKeyMapFile+" parsing started");
 
         primaryActionKeymap = new Hashtable();
         alternateActionKeymap = new Hashtable();
     }
 
     public void endDocument() throws Exception {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(ACTION_KEYMAP_FILE_PATH+" parsing finished");
+        if(Debug.ON) Debug.trace(actionKeyMapFile+" parsing finished");
     }
 
     public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {

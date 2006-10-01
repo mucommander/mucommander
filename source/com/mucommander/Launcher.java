@@ -196,7 +196,7 @@ public class Launcher {
 
         // Loads the ActionKeymap file
         splashScreen.setLoadingMessage("Loading action keymap...");
-        com.mucommander.ui.action.ActionKeymap.loadActionKeymap();
+        com.mucommander.ui.action.ActionKeymap.loadActionKeyMap();
 
         // Loads the ToolBar's description file
         splashScreen.setLoadingMessage("Loading toolbar description...");

@@ -48,8 +48,19 @@ class ShellHistoryReader implements ShellHistoryConstants, ContentHandler {
      * @param file where to read the history from.
      */
     public static void read(File file) {
-        try {new Parser().parse(new FileInputStream(file), new ShellHistoryReader(), "UTF-8");}
-        catch(Exception e) {if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Failed to load shell history: " + e);}
+        FileInputStream fin = null;
+        try {
+            fin = new FileInputStream(file);
+            new Parser().parse(fin, new ShellHistoryReader(), "UTF-8");
+        }
+        catch(Exception e) {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Failed to load shell history: " + e);
+        }
+        finally {
+            if(fin!=null)
+                try { fin.close(); }
+                catch(IOException e) {}
+        }
     }
 
     /**

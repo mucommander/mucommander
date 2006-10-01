@@ -32,8 +32,9 @@ class BookmarkParser implements ContentHandler {
      * Parses the given XML bookmarks file. Should only be called by BookmarkManager.
      */
     void parse(File file) throws Exception {
-        // Use UTF-8 encoding
-        new Parser().parse(new FileInputStream(file), this, "UTF-8");
+        FileInputStream fin = new FileInputStream(file);
+        new Parser().parse(fin, this, "UTF-8");
+        fin.close();
     }
 
 

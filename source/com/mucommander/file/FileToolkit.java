@@ -2,6 +2,7 @@
 package com.mucommander.file;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * This class contains static methods which perform common file operations.
@@ -33,7 +34,7 @@ public class FileToolkit {
         String newName = null;
 
         // Level 0, folder exists, newName is null
-		
+
         // destPath points to an absolute and existing folder
         if ((destFolder=FileFactory.getFile(destPath))!=null
             && destFolder.exists()
@@ -43,8 +44,8 @@ public class FileToolkit {
 
         // destPath points to an existing folder relative to current folder
         else if ((destFolder=FileFactory.getFile(currentPath+destPath))!=null
-		 && destFolder.exists()
-		 && destFolder.isDirectory()) {
+         && destFolder.exists()
+         && destFolder.isDirectory()) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+currentPath+destPath);
         }
 
@@ -55,7 +56,7 @@ public class FileToolkit {
             // Separator characters can be mixed
             if(c=='/' || c=='\\')
                 destPath = destPath.substring(0,destPath.length()-1);
-			
+
             // Extracts the new destination filename
             int pos = Math.max(destPath.lastIndexOf('/'), destPath.lastIndexOf('\\'));
             if (pos!=-1) {
@@ -65,14 +66,14 @@ public class FileToolkit {
             else  {
                 newName = destPath;
                 destPath = "";
-            }			
+            }
 
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("level1, destPath="+destPath+" newname="+newName);
             // destPath points to an absolute and existing folder
             if (!destPath.equals("") && (destFolder=FileFactory.getFile(destPath))!=null && destFolder.exists()) {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+destPath+" newname="+newName);
             }
-			
+
             // destPath points to an existing folder relative to current folder
             else if ((destFolder=FileFactory.getFile(currentPath+destPath))!=null && destFolder.exists()) {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+currentPath+destPath+" newname="+newName);
@@ -90,9 +91,30 @@ public class FileToolkit {
 
 
     /**
+     * Copies the resource designated by the given path within the application JAR file to the specified destination file.
+     *
+     * @param resourceFilePath path within the application JAR file of the file to copy
+     * @param destFile the destination file the resource file will be copied to
+     * @throws IOException if an error occurred while either reading the resource file or writing the destination file
+     */
+    public static void copyResource(String resourceFilePath, AbstractFile destFile) throws IOException {
+        InputStream in = null;
+        try {
+            in = resourceFilePath.getClass().getResourceAsStream(resourceFilePath);
+            destFile.copyStream(in, false);
+        }
+        finally {
+            if(in!=null)
+                try { in.close(); }
+                catch(IOException e) {}
+        }
+    }
+
+
+    /**
      * Recursively calculates the total size for the given files and folders.
      */
-    private static long getFileSize(AbstractFile files[]) {
+    public static long getFileSize(AbstractFile files[]) {
         AbstractFile file;
         long total = 0;
         long fileSize;
@@ -117,7 +139,7 @@ public class FileToolkit {
     /**
      * Recursively calculates the total number of files.
      */
-    private static int getFileCount(AbstractFile files[]) {
+    public static int getFileCount(AbstractFile files[]) {
         AbstractFile file;
         int total = 0;
         for(int i=0; i<files.length; i++) {
@@ -132,6 +154,6 @@ public class FileToolkit {
             else
                 total++;
         }
-        return total;        
+        return total;
     }
 }
