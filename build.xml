@@ -287,7 +287,7 @@
     <echo>Creating obfuscated JAR file in ${jar.obf}...</echo>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
     <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="true"
-              printusage="${tmp}/obf-usage.txt">
+              printmapping="${tmp}/obf-mapping.txt" printusage="${tmp}/obf-usage.txt">
       <injar name="${jar.normal}"/> 
       <outjar name="${jar.obf}"/>
       <libraryjar name="${java-lib}"/>

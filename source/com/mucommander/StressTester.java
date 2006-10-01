@@ -30,12 +30,13 @@ public class StressTester implements Runnable, ActionListener {
     public void run() {
         Random random = new Random();
         MainFrame mainFrame = WindowManager.getCurrentMainFrame();
-        FolderPanel folderPanel1 = mainFrame.getFolderPanel1();
-        FolderPanel folderPanel2 = mainFrame.getFolderPanel2();
-		
+
         while(stressThread!=null) {
-            FolderPanel folderPanel = random.nextInt(2)==0?folderPanel1:folderPanel2;
-            AbstractFile currentFolder = folderPanel.getCurrentFolder();
+            if(random.nextInt(2)==0)
+                ActionManager.performAction(com.mucommander.ui.action.SwitchActiveTableAction.class, mainFrame);    
+
+            FileTable fileTable = mainFrame.getLastActiveTable();
+            AbstractFile currentFolder = fileTable.getCurrentFolder();
             AbstractFile parentFolder = currentFolder.getParent();
 
             mainFrame.toBack();
@@ -43,7 +44,6 @@ public class StressTester implements Runnable, ActionListener {
 			
             try {
                 AbstractFile children[] = currentFolder.ls();
-                FileTable fileTable = folderPanel.getFileTable();
                 // 1 in 3 chance to go up if folder has children
                 if(children.length==0 || (random.nextInt(3)==0 && parentFolder!=null)) {
                     fileTable.selectRow(0);
@@ -66,7 +66,7 @@ public class StressTester implements Runnable, ActionListener {
             }
 
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Sleeping for a bit...");
-            try { stressThread.sleep(100+random.nextInt(3000)); }
+            try { stressThread.sleep(100+random.nextInt(200)); }
             catch(InterruptedException e) { if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught InterruptedException "+e);}
         }
     }

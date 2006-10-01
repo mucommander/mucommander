@@ -12,7 +12,7 @@ import java.util.Iterator;
  * Widget used for shell command input.
  * <p>
  * In addition to providing basic shell command input features, this widget interfaces with
- * the {@link com.mucommander.ShellHistoryManager} to offer a history of shell commands
+ * the {@link com.mucommander.shell.ShellHistoryManager} to offer a history of shell commands
  * for the user to browse through.
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
@@ -120,7 +120,7 @@ public class ShellComboBox extends JComboBox implements ActionListener, KeyListe
 
             // Runs the requested command.
             setEnabled(false);
-            runCommand((String)selectedItem);            
+            runCommand((String)selectedItem);
         }
     }
 

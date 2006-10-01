@@ -46,7 +46,7 @@ muCommander uses the great following 3rd party works :
 - Java TAR released under the Public Domain to provide TAR support.
  Java TAR can be found at http://www.trustice.com/java/tar/ .
 
-- Icons by Mark James under the Creative Commons Attribution License (http://famfamfam.com)
+- Toolbar, command bar and preferences icons by Mark James under the Creative Commons Attribution License (http://famfamfam.com)
 
 
 What's new in v0.8 beta 2 ?

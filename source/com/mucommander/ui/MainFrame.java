@@ -213,21 +213,21 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /**
      * Registers the given TableChangeListener to receive events when current table changes.
      */
-    public synchronized void addTableChangeListener(TableChangeListener tableChangeListener) {
+    public void addTableChangeListener(TableChangeListener tableChangeListener) {
         tableChangeListeners.put(tableChangeListener, null);
     }
 
     /**
      * Unregisters the given TableChangeListener so that it will no longer receive events when current table changes.
      */
-    public synchronized void removeTableChangeListener(TableChangeListener tableChangeListener) {
+    public void removeTableChangeListener(TableChangeListener tableChangeListener) {
         tableChangeListeners.remove(tableChangeListener);
     }
 
     /**
      * Fires table change events on registered TableChangeListener instances.
      */
-    private synchronized void fireTableChanged(FolderPanel folderPanel) {
+    private void fireTableChanged(FolderPanel folderPanel) {
         Iterator iterator = tableChangeListeners.keySet().iterator();
         while(iterator.hasNext())
             ((TableChangeListener)iterator.next()).tableChanged(folderPanel);

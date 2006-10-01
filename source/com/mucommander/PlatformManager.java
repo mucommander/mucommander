@@ -1,12 +1,8 @@
 package com.mucommander;
 
-import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FSFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Vector;
 
 
 /**
@@ -20,7 +16,7 @@ public class PlatformManager {
     // --------------------------------------------------------------------------
     /** Custom user agent for HTTP requests */
     public static final String USER_AGENT = RuntimeConstants.APP_STRING  + " (Java "+System.getProperty("java.vm.version")
-                                            + "; " + System.getProperty("os.name") + " " + 
+                                            + "; " + System.getProperty("os.name") + " " +
                                             System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
 
 
@@ -102,7 +98,7 @@ public class PlatformManager {
         // Java version detection //
         String javaVersion = System.getProperty("java.version");
 
-        // Java version property should never be null or empty, but better be safe than sorry ... 
+        // Java version property should never be null or empty, but better be safe than sorry ...
         if(javaVersion==null || (javaVersion=javaVersion.trim()).equals(""))
             // Assume java 1.3 (first supported Java version)
             JAVA_VERSION = JAVA_1_3;
@@ -127,7 +123,7 @@ public class PlatformManager {
         // Newer version we don't know of yet, assume latest supported Java version
         else
             JAVA_VERSION = JAVA_1_5;
-		
+
         if(Debug.ON) Debug.trace("detected Java version value = "+JAVA_VERSION);
 
 
@@ -136,7 +132,7 @@ public class PlatformManager {
 
         String osName    = System.getProperty("os.name");
         String osVersion = System.getProperty("os.version");
-		
+
         // Windows family
         if(osName.startsWith("Windows")) {
             // Windows 95, 98, Me
@@ -154,7 +150,7 @@ public class PlatformManager {
                || osVersion.startsWith("9."))
                 OS_FAMILY = MAC_OS;
             // Mac OS X or up
-            else		 
+            else
                 OS_FAMILY = MAC_OS_X;
         }
         // Linux family
@@ -212,7 +208,7 @@ public class PlatformManager {
                 // Either those variables could not be retrieved (muCommander is running on Java 1.4 or 1.3
                 //  and was not started from the mucommander.sh script with the proper java -D parameters)
                 // or it is simply not running on KDE or GNOME, let's give it one more try:
-                // -> check if 'kfmclient' (KDE's equivalent of OS X's open command) 
+                // -> check if 'kfmclient' (KDE's equivalent of OS X's open command)
                 //  or 'gnome-open' (GNOME's equivalent of OS X's open command) is available
 
                 // Since this test has a cost and GNOME seems to be more widespread than KDE, GNOME test comes first
@@ -246,7 +242,7 @@ public class PlatformManager {
 
 
     // - Shell management -------------------------------------------------------
-    // --------------------------------------------------------------------------	
+    // --------------------------------------------------------------------------
     /**
      * Returns the default shell command of the current platform.
      * <p>
