@@ -78,6 +78,69 @@ Translators:
 And all of you who suggested new features, reported bugs, sent warm emails or generously donated to the project !
 
 
+Command Line Interface
+----------------------
+
+v0.8 beta 3 (nightly build) comes with a few command line switches.
+The following options are available:
+ -b FILE, --bookmarks FILE       muCommander bookmarks will be read from and written to FILE.
+ -c FILE, --configuration FILE   muCommander configuration will be read from and written to FILE.
+ -C FILE, --commandbar FILE      muCommander command bar description will be read from and written to FILE.
+ -k FILE, --keymap FILE          muCommander shortcuts will be read from and written to FILE.
+ -s FILE, --shell-history FILE   muCommander shell history will be read from and written to FILE.
+ -t FILE, --toolbar FILE         muCommander toolbar configuration will be read from and written to FILE.
+ -h, --help                      Print the help text and exit
+ -v, --version                   Print the version and exit
+
+In addition to these, muCommander will interpret anything that comes after the last switch as a URI and load it
+in its windows.
+So for example:
+mucommander -b ~/.bookmarks.xml ftp://user@myftp.com ~/dev http://slashdot.org
+This will:
+- read bookmarks from ~/bookmarks.xml
+- load a connection to myftp.com in the left panel of the main window
+- load ~/dev in the right panel of the main window
+- open a second window and load http://slashdot.org in its left panel
+- load the default directory in the second window's fourth panel
+
+Advanced configuration
+----------------------
+
+v0.8 beta 3 (nightly build) has some advanced configuration options which cannot (yet) be accessed through the GUI.
+After having booted the application for the first time, the following files will be created in muCommander's preference
+folder:
+- action_keymap.xml (keyboard shortcuts description file).
+- command_bar.xml   (commandbar description file).
+- toolbar.xml       (toolbar description file).
+
+Brave users can edit these XML files and tune muCommander to their own needs.
+Here are a few hints on how to edit these files.
+
+- action_keymap.xml
+All customisable actions are listed in that file, using the following format:
+<action class="com.mucommander.ui.action.CopyFileNamesAction" keystroke="control C" alt_keystroke="meta C"/>
+It's probably safer not to mess around with the class argument, as this could actually remove features from muCommander.
+keystroke and alt_keystroke should be fairly safe explanatory. It's important to note, however, that due to Java's capricious
+nature, the case is important. CONTROL C will not be understood, and neither will be control c.
+
+- command_bar.xml
+This file describes the content of your command bar (the bit will all the buttons on the lower part of the window).
+Each item in the file corresponds to a button in the bar. You can edit them, add some or remove some.
+
+The syntax is as follows:
+<button action="com.mucommander.ui.action.CopyAction" alt_action="com.mucommander.ui.action.LocalCopyAction"/>
+Where:
+- action is the main action executed by the button
+- alt_action is the action executed by the button when the shift key is held down
+
+For a list of legal actions, please refer to action_keymap.xml
+
+- toolbar.xml
+This file controls the content of your toolbar.
+It works in the same way as command_bar.xml, with two notable differences:
+- you can use a <separator/> element to add a separator in the toolbar
+- alt_actions are not available
+
 What's new in v0.8 beta 3 (nightly build) ?
 -------------------------------------------
 
