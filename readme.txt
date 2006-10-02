@@ -54,6 +54,29 @@ muCommander uses the following great 3rd party works :
 - Toolbar, command bar and preferences icons by Mark James (http://famfamfam.com) under the Creative Commons Attribution License
 
 
+Credits
+-------
+
+Countless thanks to the many people who participated in this project and made it what it is today:
+
+Code contributors:
+- Nicolas Rinaudo  (shell improvements, configuration parser, XML writer, Ant build file)
+- Xavier Martin (ISO and NRG support)
+- Ewan Harrow (Webstart JNLP)
+
+Translators: 
+- Tony Klüver and Frank Berger (German translation)
+- Marcos Cobeña (Spanish translation)
+- Peter Vasko (Czech translation)
+- Kent Hsu (Traditional Chinese translation)
+- Andrzej Kosiński (Polish translation)
+- Tamás Balogh-Walder (Hungarian translation)
+- XXXX Pro (Russian translation)
+- Woodie (Simplified Chinese translation)
+- Joze Kovacic (Slovenian translation)
+
+And all of you who suggested new features, reported bugs, sent warm emails or donated to the project !
+
 What's new in v0.8 beta 3 (nightly build) ?
 -------------------------------------------
 
