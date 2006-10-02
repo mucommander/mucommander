@@ -62,8 +62,8 @@ public class ZipArchiveFile extends AbstractArchiveFile {
 //            return new ZipFile(getAbsolutePath()).getInputStream((java.util.zip.ZipEntry)entry.getEntry());
             final ZipFile zf = new ZipFile(getAbsolutePath());
 
-            // ZipFile needs to be explicitly closed when the entry InputStream is closed, otherwise it will keep the
-            // Zip file open until it is garbage collected / finalized 
+            // ZipFile needs to be explicitly closed when the entry InputStream is closed, otherwise ZipFile
+            // will keep an InputStream open until it is garbage collected / finalized 
             return new FilterInputStream(zf.getInputStream((java.util.zip.ZipEntry)entry.getEntry())) {
                 public void close() throws IOException {
                     super.close();
