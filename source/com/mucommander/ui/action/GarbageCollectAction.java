@@ -14,6 +14,8 @@ public class GarbageCollectAction extends MucoAction {
     }
 
     public void performAction() {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling System.gc()");
+
         System.gc();
     }
 }
