@@ -20,6 +20,7 @@ public class ZipArchiveFile extends AbstractArchiveFile {
      */
     public ZipArchiveFile(AbstractFile file) {
         super(file);
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
     }
 
 
@@ -28,6 +29,8 @@ public class ZipArchiveFile extends AbstractArchiveFile {
     ////////////////////////////////////////
 	
     protected Vector getEntries() throws IOException {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+
         // Load all zip entries
         Vector entries = new Vector();
 		
@@ -54,7 +57,9 @@ public class ZipArchiveFile extends AbstractArchiveFile {
 
 
     InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
-        // If the underlying file is a local file, use the ZipFile.getInputStream() method as it 
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+
+        // If the underlying file is a local file, use the ZipFile.getInputStream() method as it
         // is *way* faster than using ZipInputStream and looking for the entry
         if (file instanceof FSFile) {
             return new ZipFile(getAbsolutePath()).getInputStream((java.util.zip.ZipEntry)entry.getEntry());
