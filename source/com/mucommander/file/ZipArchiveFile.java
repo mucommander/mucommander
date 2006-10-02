@@ -37,9 +37,13 @@ public class ZipArchiveFile extends AbstractArchiveFile {
         // is *way* faster than using ZipInputStream to iterate over the entries.
         // Note: under Mac OS X at least, ZipFile.getEntries() method is native
         if(file instanceof FSFile) {
-            Enumeration entriesEnum = new ZipFile(getAbsolutePath()).entries();
+            ZipFile zf = new ZipFile(getAbsolutePath());
+            Enumeration entriesEnum = zf.entries();
             while(entriesEnum.hasMoreElements())
                 entries.add(new ZipEntry((java.util.zip.ZipEntry)entriesEnum.nextElement()));
+
+            // Should not be necessary as we don't retrieve any entry InputStream, but just in case
+            zf.close();
         }
         else {
             // works but it is *way* slower
@@ -63,7 +67,7 @@ public class ZipArchiveFile extends AbstractArchiveFile {
             final ZipFile zf = new ZipFile(getAbsolutePath());
 
             // ZipFile needs to be explicitly closed when the entry InputStream is closed, otherwise ZipFile
-            // will keep an InputStream open until it is garbage collected / finalized 
+            // will keep an InputStream open until it is garbage collected / finalized
             return new FilterInputStream(zf.getInputStream((java.util.zip.ZipEntry)entry.getEntry())) {
                 public void close() throws IOException {
                     super.close();
