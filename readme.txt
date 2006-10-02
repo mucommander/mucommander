@@ -93,15 +93,17 @@ The following options are available:
  -v, --version                   Print the version and exit
 
 In addition to these, muCommander will interpret anything that comes after the last switch as a URI and load it
-in its windows.
-So for example:
-mucommander -b ~/.bookmarks.xml ftp://user@myftp.com ~/dev http://slashdot.org
-This will:
-- read bookmarks from ~/bookmarks.xml
-- load a connection to myftp.com in the left panel of the main window
-- load ~/dev in the right panel of the main window
-- open a second window and load http://slashdot.org in its left panel
-- load the default directory in the second window's fourth panel
+in its windows. So for example:
+
+ mucommander -b ~/.bookmarks.xml ftp://user@myftp.com ~/dev http://slashdot.org
+
+Will:
+ - read bookmarks from ~/bookmarks.xml
+ - load a connection to myftp.com in the left panel of the main window
+ - load ~/dev in the right panel of the main window
+ - open a second window and load http://slashdot.org in its left panel
+ - load the default directory in the second window's fourth panel
+
 
 Advanced configuration
 ----------------------
@@ -109,37 +111,37 @@ Advanced configuration
 v0.8 beta 3 (nightly build) has some advanced configuration options which cannot (yet) be accessed through the GUI.
 After having booted the application for the first time, the following files will be created in muCommander's preference
 folder:
-- action_keymap.xml (keyboard shortcuts description file).
-- command_bar.xml   (commandbar description file).
-- toolbar.xml       (toolbar description file).
+ - action_keymap.xml (keyboard shortcuts description file).
+ - command_bar.xml   (commandbar description file).
+ - toolbar.xml       (toolbar description file).
 
-Brave users can edit these XML files and tune muCommander to their own needs.
-Here are a few hints on how to edit these files.
+Brave users can edit these XML files and tune muCommander to their own needs. Here are a few hints on how to edit these files.
 
-- action_keymap.xml
+ - action_keymap.xml
 All customisable actions are listed in that file, using the following format:
 <action class="com.mucommander.ui.action.CopyFileNamesAction" keystroke="control C" alt_keystroke="meta C"/>
+
 It's probably safer not to mess around with the class argument, as this could actually remove features from muCommander.
 keystroke and alt_keystroke should be fairly safe explanatory. It's important to note, however, that due to Java's capricious
-nature, the case is important. CONTROL C will not be understood, and neither will be control c.
+nature, the case is important. CONTROL C will not be understood, and neither will control c.
 
-- command_bar.xml
+ - command_bar.xml
 This file describes the content of your command bar (the bit will all the buttons on the lower part of the window).
 Each item in the file corresponds to a button in the bar. You can edit them, add some or remove some.
 
 The syntax is as follows:
 <button action="com.mucommander.ui.action.CopyAction" alt_action="com.mucommander.ui.action.LocalCopyAction"/>
 Where:
-- action is the main action executed by the button
-- alt_action is the action executed by the button when the shift key is held down
+ - action is the main action executed by the button
+ - alt_action is the action executed by the button when the shift key is held down
 
 For a list of legal actions, please refer to action_keymap.xml
 
-- toolbar.xml
-This file controls the content of your toolbar.
-It works in the same way as command_bar.xml, with two notable differences:
-- you can use a <separator/> element to add a separator in the toolbar
-- alt_actions are not available
+ - toolbar.xml
+This file controls the content of your toolbar. It works in the same way as command_bar.xml, with two notable differences:
+  - you can use a <separator/> element to add a separator in the toolbar
+  - alt_actions are not available
+
 
 What's new in v0.8 beta 3 (nightly build) ?
 -------------------------------------------
@@ -229,77 +231,3 @@ Known issues:
  - Some Mac OS X-specific files are not copied properly
  - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System Preferences' for them to work properly
  - Mac OS X : text fields don't work correctly when using a fractionally-scaled font (Known Java bug, http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)
-
-
-What's new in v0.8 beta 2 ?
----------------------------
-
-New features:
- - New icon set for toolbar and command bar
- - New column that shows file type icons and allows to sort by extension
- - New toolbar shortcuts: 'Add bookmark', 'Edit bookmarks', 'Stop'
- - Drives system icons now displayed in the drive selection menu under Windows
- - Simplified Chinese translation by Woodie
- - Slovenian translation by Joze Kovacic
-
-Improvements:
- - Major performance improvements
- - Improved behavior of right-click folder popup menus over beta1
- - Choice buttons for 'Delete', 'Quit' and 'New version available' can now be selected with arrow keys
- - Command bar and status bar now have a right-click popup menu to hide them
- - Bookmarks are now located before server shortcuts in drive selection menu
- - Added a checkbox in new version dialog to disable check on startup
- - Moved 'Check for new versions on startup' option to the 'Misc' preferences panel
- - Commons Net FTP library upgraded to version 1.4.1
-
-Bug fixes:
- - Restored compatibility for Java 1.3 broken in beta1 (Note: SFTP not available under Java 1.3)
- - Fixed 'Drive not ready' Windows problem when last drive before app shutdown was a CD/floppy drive
- - Fixed character encoding issues in bookmarks and preferences files
- - Fixed 'Reveal in Finder' not working for regular files in beta1
- - Fixed some unwanted blinkings when changing current folder in beta1
- - Fixed unhandled error in beta1 when an empty folder was entered in location field
- - Fixed status bar not being refreshed under some rare circumstances
-
-
-What's new in v0.8 beta 1 ?
----------------------------
-
-New features:
- - SFTP support added
- - Bookmarks: can be added/edited to remember locations
- - Columns' width auto-adjust to maximize filename column's size
- - Changing a folder no longer locks the application and can be cancelled by pressing 'Escape'
- - Status bar shows free and total volume space (on certain filesystems/platforms only)
- - Right-click contextual menu on files and folders
- - Location field shows progress when connecting to a folder
- - Files can now renamed directly in the table by clicking on the filename 
- - Traditional Chinese translation by Kent Hsu
- - Polish translation by Andrzej Kosiński
- - Hungarian translation by Tamás Balogh-Walder
- - Russian translation by XXXX Pro
-
-Improvements:
- - New file table spacing
- - 'Size' and 'Date' columns are now right-justified for clarity
- - Location field shows progress when changing current folder
- - Dates are preserved when copying/moving a file (except when writing to an SMB or FTP folder)
- - Date separator can now be customized in preferences
- - Marked color is also used for selected and marked files (selected color only was formerly used)
- - Improved hidden files detection for some filesystems: files starting with '.' are considered as hidden
- - 'Connect to server' dialog now uses tabs instead of a combo box
- - Improved location field behavior : no longer loses entered path when focus is lost
- - Custom date format is now used in 'File already exists' dialog
- - jCIFS library (SMB) upgraded to version 1.2.7
- - Commons Net library (FTP) upgraded to version 1.4.0
-
-Bug fixes :
- - Fixed 'Enter' key not working properly in drive selection menu under Windows (http://mucommander.com/forums/viewtopic.php?p=172)
- - Fixed 'Refresh' button keeping focus after being clicked
- - Fixed file renaming not working properly with archive files over FTP and SMB
- - Archive files are now resumed correctly when downloaded
- - Fixed wrong sort order icon for reordered columns
- - FTP: improved FTP reconnection
- - FTP: fixed duplicate '.' and '..' files which happened with some FTP servers
- - Email files: fixed folders not being handled properly since v0.7
-
