@@ -2,6 +2,7 @@ package com.mucommander.file;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FilterInputStream;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.zip.ZipFile;
@@ -58,7 +59,17 @@ public class ZipArchiveFile extends AbstractArchiveFile {
         // If the underlying file is a local file, use the ZipFile.getInputStream() method as it
         // is *way* faster than using ZipInputStream and looking for the entry
         if (file instanceof FSFile) {
-            return new ZipFile(getAbsolutePath()).getInputStream((java.util.zip.ZipEntry)entry.getEntry());
+//            return new ZipFile(getAbsolutePath()).getInputStream((java.util.zip.ZipEntry)entry.getEntry());
+            final ZipFile zf = new ZipFile(getAbsolutePath());
+
+            // ZipFile needs to be explicitly closed when the entry InputStream is closed, otherwise it will keep the
+            // Zip file open until it is garbage collected / finalized 
+            return new FilterInputStream(zf.getInputStream((java.util.zip.ZipEntry)entry.getEntry())) {
+                public void close() throws IOException {
+                    super.close();
+                    zf.close();
+                }
+            };
         }
         // works but it is *way* slower
         else {
