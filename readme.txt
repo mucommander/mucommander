@@ -60,20 +60,19 @@ Credits
 Countless thanks to the many people who participated in this project and made it what it is today:
 
 Code contributors:
-- Nicolas Rinaudo  (shell improvements, configuration parser, XML writer, Ant build file)
+- Nicolas Rinaudo  (shell improvements, configuration parser, XML writer, Ant build file and much more)
 - Xavier Martin (ISO and NRG support)
-- Ewan Harrow (Webstart JNLP)
 
 Translators: 
-- Tony Klüver and Frank Berger (German translation)
-- Marcos Cobeña (Spanish translation)
-- Peter Vasko (Czech translation)
-- Kent Hsu (Traditional Chinese translation)
-- Andrzej Kosiński (Polish translation)
-- Tamás Balogh-Walder (Hungarian translation)
-- XXXX Pro (Russian translation)
-- Woodie (Simplified Chinese translation)
-- Joze Kovacic (Slovenian translation)
+- Tony Klüver and Frank Berger (German)
+- Marcos Cobeña (Spanish)
+- Peter Vasko (Czech)
+- Kent Hsu (Traditional Chinese)
+- Andrzej Kosiński (Polish)
+- Tamás Balogh-Walder (Hungarian)
+- XXXX Pro (Russian)
+- Woodie (Simplified Chinese)
+- Joze Kovacic (Slovenian)
 
 And all of you who suggested new features, reported bugs, sent warm emails or generously donated to the project !
 
@@ -198,7 +197,7 @@ Improvements:
  - New ascending / descending icons in sort tabs
  - SMB library (jCIFS) upgraded to version 1.2.8
 
-// Bug fixes //
+Bug fixes:
  - Fixed drive popup which doesn't immediately reflect bookmark changes
  - Fixed .GZ files not opened when extension is upper-cased
  - GZ files inside Tar archives can now be properly opened
