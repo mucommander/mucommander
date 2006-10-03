@@ -15,4 +15,7 @@
   <!-- Password for the JAR keystore. If you're not Maxence,   -->
   <!-- then don't bother with this.                            -->
   <property name="store-pass" value=""/>
+
+  <!-- Path to the makensis executable.                        -->
+  <property name="store-pass" value="nsis-executable"/>
 </project>

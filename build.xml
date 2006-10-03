@@ -107,9 +107,10 @@
   <property name="classes"        location="${tmp}/classes"/>
 
   <property name="nsis"           location="${res}/nsis"/>
-  <property name="nsis.script"    location="${nsis}/mucommander.nsis"/>
-  <property name="nsis.bat"       location="${nsis}/mucommander.bat"/>
-  <property name="nsis.icon"      location="${nsis}/mucommander.icon"/>
+  <property name="nsis-script"    location="${nsis}/mucommander.nsi"/>
+  <property name="nsis-bat"       location="${nsis}/mucommander.bat"/>
+  <property name="nsis-icon"      location="${nsis}/mucommander.ico"/>
+  <property name="tmp-nsis"       location="${tmp}/nsis"/>
 
   <!-- Where to generate the muCommander API javadoc.          -->
   <property name="api-docs"       location="${docs}/api"/>
@@ -338,7 +339,7 @@
   <!-- ======================================================= -->
   <!-- Launches muCommander in stress test mode, changing      -->
   <!-- current folder every second or so.                      -->
-  <target name="stresstest">
+  <target name="stresstest" depends="compile,resources">
     <java classname="com.mucommander.StressTester" fork="true">
       <classpath>
         <pathelement location="${classes}"/>
@@ -350,7 +351,7 @@
   </target>
 
   <!-- Makes sure all of the required icons are present.       -->
-  <target name="testicons">
+  <target name="testicons" depends="compile,resources">
     <java classname="com.mucommander.ui.icon.FileIcons" fork="true">
       <classpath>
         <pathelement location="${classes}"/>
@@ -473,7 +474,7 @@
   <!-- could think of. While this target can be fairly useful, -->
   <!-- it has the disadvantage of only being useable by        -->
   <!-- Maxence (see target 'sign' for more information).       -->
-  <target name="nightly" depends="set-nightly,tgz,app.tgz,version,docs-zip,sign">
+  <target name="nightly" depends="set-nightly,tgz,app.tgz,version,docs-zip,nsis,sign">
     <echo>All done.</echo>
   </target>
 
@@ -576,18 +577,35 @@
              storepass="${store-pass}"/>
   </target>
 
-  <target name="check-nsis" unless="nsis.available">
-  </target>
-
-  <target name="nsis" depends="check-nsis,archive-prefix" if="nsis-executable">
+  <target name="nsis" depends="obfuscate">
     <echo>Generating NSIS installer...</echo>
-    <nsisscript in="${nsis.script}" out="${tmp-dir}/mucommander.nsis">
-      <var name="mu_out"     value="${archive-prefix}"/>
-      <var name="mu_version" value="${app.version}"/>
-      <var name="mu_bat"     value="${nsis.bat}"/>
-      <var name="mu_icon"    value="${nsis.icon}"/>
-      <var name="mu_readme"  value="${readme}"/>
-      <var name="mu_license" value="${license}"/>
+
+    <!-- Prepares the NSIS directory.                         -->
+    <mkdir dir="${tmp-nsis}"/>
+    <copy file="${nsis-bat}"             tofile="${tmp-nsis}/mucommander.bat"/>
+    <copy file="${nsis-icon}"            tofile="${tmp-nsis}/mucommander.ico"/>
+    <copy file="${readme}"               tofile="${tmp-nsis}/readme.txt"/>
+    <copy file="${license}"              tofile="${tmp-nsis}/license.txt"/>
+    <copy file="${jar.obf}"              tofile="${tmp-nsis}/mucommander.jar"/>
+
+    <!-- Generates the NSIS script.                           -->
+    <taskdef name="nsisscript" classname="com.mucommander.ant.nsis.NsisTask" classpath="${tools.jar}"/>
+    <nsisscript in="${nsis-script}" out="${tmp-nsis}/mucommander.nsi">
+      <var name="MU_VERSION" value="${app.version}"/>
+      <var name="MU_JAR"     value="mucommander.jar"/>
+      <var name="MU_BAT"     value="mucommander.bat"/>
+      <var name="MU_ICON"    value="mucommander.ico"/>
+      <var name="MU_OUT"     value="mucommander.exe"/>
+      <var name="MU_README"  value="readme.txt"/>
+      <var name="MU_LICENSE" value="license.txt"/>
     </nsisscript>
+
+    <!-- Generates the muCommander windows installer.         -->
+    <exec executable="${nsis-executable}">
+      <arg value="${tmp-nsis}/mucommander.nsi"/>
+    </exec>
+
+    <!-- Copies the installer in the dist folder.             -->
+    <copy file="${tmp-nsis}/mucommander.exe" tofile="${dist}/mucommander.exe"/>
   </target>
 </project>
