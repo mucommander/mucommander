@@ -211,7 +211,7 @@ Bug fixes:
  - Fixed a bug in menu bar which could prevent some shortcuts from working properly
  - Added missing keyboard shortcut to 'Go to parent' menu item
  - Fixed annoyance with drive popup under Mac OS X which redirected startup partition to /Volumes/PartitionName instead of /
- - Fixed muCommander cancelling OS X shutdown/restart/logoff
+ - Fixed muCommander cancelling Mac OS X shutdown / restart / logout
  - Fixed file editor not asking for save when quitting muCommander under OS X
  - Files/folders with extended characters can now properly be executed/revealed under Mac OS X (was caused by a bug in the Java 1.5 runtime http://lists.apple.com/archives/java-dev/2004/Apr/msg00798.html)
  - Fixed marked files not properly kept when changing sort order (since 0.8 beta1)

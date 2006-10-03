@@ -5,7 +5,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.MainFrame;
 
 /**
- * This action 'opens natively' (using native associations) the currently selected file or folder.
+ * This action opens the currently selected file or folder with native file associations.
  *
  * @author Maxence Bernard
  */
