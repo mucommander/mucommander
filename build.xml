@@ -171,14 +171,14 @@
   <target name="nightly-prefix" if="is-nightly">
     <echo>Generating package name prefix...</echo>
 
-    <property name="package-prefix" value="muCommander"/>
+    <property name="package-prefix" value="mucommander"/>
   </target>
 
   <target name="release-prefix" unless="is-nightly">
     <echo>Generating package name prefix...</echo>
 
     <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar}"/>
-    <strreplace from="muCommander-${app.version}" to="package-prefix" what="[ .]" with="_"/>
+    <strreplace from="mucommander-${app.version}" to="package-prefix" what="[ .]" with="_"/>
   </target>
 
   <target name="package-prefix" depends="nightly-prefix,release-prefix"/>
