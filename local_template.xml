@@ -17,5 +17,5 @@
   <property name="store-pass" value=""/>
 
   <!-- Path to the makensis executable.                        -->
-  <property name="store-pass" value="nsis-executable"/>
+  <property name="nsis-executable" value=""/>
 </project>
