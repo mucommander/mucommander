@@ -3,13 +3,13 @@
 ;
 
 ; The name of the installer
-Name "muCommander 0.8 beta3"
+Name "muCommander $MU_VERSION"
 
 ; The file to write
-OutFile "mucommander-0_8_beta3.exe"
+OutFile $MU_OUT
 
 ; Installer icon
-Icon "mucommander.ico"
+Icon $MU_ICON
 
 ; Discard NSIS' window when install is complete
 AutoCloseWindow true
@@ -27,15 +27,15 @@ ComponentText "This will install muCommander on your computer."
 DirText "Choose a directory to install muCommander in :"
 
 ; The stuff to install
-Section "muCommander 0.8 beta3 (required)"
+Section "muCommander $MU_VERSION (required)"
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   ; Copy muCommander files
-  File "..\dist\mucommander.jar"
-  File "mucommander.bat"
-  File "mucommander.ico"
-  File "..\readme.txt"
-  File "..\license.txt"
+  File /oname=mucommander.jar $MU_JAR
+  File /oname=mucommander.bat $MU_BAT
+  File /oname=mucommander.ico $MU_ICON
+  File /oname=readme.txt $MU_README
+  File /oname=license.txt $MU_LICENSE
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\muCommander "Install_Dir" "$INSTDIR"
   ; Write the uninstall keys for Windows
