@@ -64,8 +64,6 @@
 
   <!-- Where to store the muCommander version file.            -->
   <property name="version-file"   location="${dist}/version.xml"/>
-  <!-- Where to store the muCommander tar.gz unix release.     -->
-  <property name="dist-tgz"       location="${dist}/mucommander.tar.gz"/>
   <!-- Where to store the muCommander app Mac OS X release.    -->
   <property name="app.name"       value="muCommander.app"/>
   <!-- Folder in which to store the muCommander app Mac OS X   -->
@@ -83,8 +81,6 @@
   <!-- Path to the file in which to store the application's    -->
   <!-- API documentation as a zip file.                        -->
   <property name="api.zip"        location="${dist}/mucommander-api.zip"/>
-
-  <property name="app.tgz"        location="${dist}/mucommander.app.tar.gz"/>
 
   <!-- Directory containing the tools used to compile the      -->
   <!-- project.                                                -->
@@ -172,6 +168,21 @@
     <property name="is-debug" value="false"/>
   </target>
 
+  <target name="nightly-prefix" if="is-nightly">
+    <echo>Generating package name prefix...</echo>
+
+    <property name="package-prefix" value="muCommander"/>
+  </target>
+
+  <target name="release-prefix" unless="is-nightly">
+    <echo>Generating package name prefix...</echo>
+
+    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar}"/>
+    <strreplace from="muCommander-${app.version}" to="package-prefix" what="[ .]" with="_"/>
+  </target>
+
+  <target name="package-prefix" depends="nightly-prefix,release-prefix"/>
+
   <!-- Generates the prefix folder for all archives.           -->
   <!-- Output will be stored in property ${archive-prefix}.    -->
   <target name="archive-prefix" depends="tools-jar">
@@ -188,6 +199,7 @@
   <target name="set-nightly">
     <echo>Marking the build as 'nightly'...</echo>
     <property name="version-url" value="${url.nightly-version}"/>
+    <property name="is-nightly"  value="true"/>
   </target>
 
   <!-- Turns debug output on in the resulting binary.          -->
@@ -474,7 +486,7 @@
   <!-- could think of. While this target can be fairly useful, -->
   <!-- it has the disadvantage of only being useable by        -->
   <!-- Maxence (see target 'sign' for more information).       -->
-  <target name="nightly" depends="set-nightly,tgz,app.tgz,version,docs-zip,nsis,sign">
+  <target name="nightly" depends="set-nightly,tgz,app.tgz,nsis,version,docs-zip,sign">
     <echo>All done.</echo>
   </target>
 
@@ -495,11 +507,11 @@
 
   <!-- Generates a UNIX tar.gz distribution of muCommander.    -->
   <!-- Output will be stored in ${dist-tgz}.                   -->
-  <target name="tgz" depends="obfuscate,archive-prefix">
-    <echo>Packaging Unix distribution as ${dist-tgz}...</echo>
+  <target name="tgz" depends="obfuscate,archive-prefix,package-prefix">
+    <echo>Packaging Unix distribution as ${dist}/${package-prefix}.tar.gz...</echo>
 
     <!-- Generates the TGZ file, keeping execution flags.      -->
-    <tar destfile="${dist-tgz}" compression="gzip">
+    <tar destfile="${dist}/${package-prefix}.tar.gz" compression="gzip">
       <tarfileset file="${res}/mucommander.sh" prefix="${archive-prefix}" mode="755"/>
       <tarfileset file="${license}"            prefix="${archive-prefix}"/>
       <tarfileset file="${readme}"             prefix="${archive-prefix}"/>
@@ -511,9 +523,9 @@
   <!-- Note that this is a temporary target which will         -->
   <!-- probably disapear when we get around to generating      -->
   <!-- our own .dmg files from Ant.                            -->
-  <target name="app.tgz" depends="app,archive-prefix">
-    <echo>Packaging Mac OS X distribution as ${app.tgz}...</echo>
-    <tar destfile="${app.tgz}" compression="gzip">
+  <target name="app.tgz" depends="app,archive-prefix,package-prefix">
+    <echo>Packaging Mac OS X distribution as ${dist}/${package-prefix}.app.tar.gz...</echo>
+    <tar destfile="${dist}/${package-prefix}.app.tar.gz" compression="gzip">
       <tarfileset dir="${app.folder}" prefix="${archive-prefix}/${app.name}">
         <include name="**"/>
         <exclude name="**/JavaApplicationStub"/>
@@ -577,8 +589,10 @@
              storepass="${store-pass}"/>
   </target>
 
-  <target name="nsis" depends="obfuscate">
-    <echo>Generating NSIS installer...</echo>
+  <!-- Generates the muCommander windows installer.           -->
+  <!-- Output will be stored in ${dist}/mucommander.exe.      -->
+  <target name="nsis" depends="obfuscate,package-prefix">
+    <echo>Generating NSIS installer in ${dist}/${package-prefix}.exe</echo>
 
     <!-- Prepares the NSIS directory.                         -->
     <mkdir dir="${tmp-nsis}"/>
@@ -606,6 +620,6 @@
     </exec>
 
     <!-- Copies the installer in the dist folder.             -->
-    <copy file="${tmp-nsis}/mucommander.exe" tofile="${dist}/mucommander.exe"/>
+    <copy file="${tmp-nsis}/mucommander.exe" tofile="${dist}/${package-prefix}.exe"/>
   </target>
 </project>
