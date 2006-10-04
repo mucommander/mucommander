@@ -39,7 +39,7 @@ public class FileDropTargetListener implements DropTargetListener {
     private FolderPanel folderPanel;
 
     /** Icon used as a cursor when a file is dragged to the component */
-    private final static String CHANGE_FOLDER_DRAG_ICON = "folder_drop.png";
+    private final static String CHANGE_FOLDER_DRAG_ICON = "drop_change_folder.png";
 
     /**
      * Creates a new FileDropTargetListener using the provided FolderPanel to change the current folder
@@ -59,6 +59,9 @@ public class FileDropTargetListener implements DropTargetListener {
             event.rejectDrag();
             return;
         }
+
+        // Accept drag event
+        event.acceptDrag(DnDConstants.ACTION_LINK);
 
         // Set a custom icon that represents the drop action
         ImageIcon icon = IconManager.getIcon(IconManager.TABLE_ICON_SET, CHANGE_FOLDER_DRAG_ICON);
