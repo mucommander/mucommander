@@ -598,9 +598,11 @@
     <mkdir dir="${tmp-nsis}"/>
     <copy file="${nsis-bat}"             tofile="${tmp-nsis}/mucommander.bat"/>
     <copy file="${nsis-icon}"            tofile="${tmp-nsis}/mucommander.ico"/>
-    <copy file="${readme}"               tofile="${tmp-nsis}/readme.txt"/>
-    <copy file="${license}"              tofile="${tmp-nsis}/license.txt"/>
     <copy file="${jar.obf}"              tofile="${tmp-nsis}/mucommander.jar"/>
+
+    <taskdef name="crlf" classname="com.mucommander.ant.util.CRLFTask" classpath="${tools.jar}"/>
+    <crlf in="${readme}"  out="${tmp-nsis}/readme.txt"/>
+    <crlf in="${license}" out="${tmp-nsis}/license.txt"/>
 
     <!-- Generates the NSIS script.                           -->
     <taskdef name="nsisscript" classname="com.mucommander.ant.nsis.NsisTask" classpath="${tools.jar}"/>
