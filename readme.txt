@@ -166,6 +166,7 @@ New features:
  - New 'reveal in desktop' keyboard shortcut (Ctrl+L by default)
  - New file type icons for Mac OS X and Windows executables, libraries, Java, Powerpoint and Visual studio files
  - New toolbar icon for 'Reveal in desktop'
+ - Files, folders and paths from an external application can be 'dropped' (as in Drag and Drop) to the folder panes to change the current folder
 
 Improvements:
  - Major code cleanup before source code release

@@ -39,6 +39,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
 
         // Use a custom text field that can display loading progress when changing folders
         this.locationField = new ProgressTextField(0, PROGRESS_COLOR);
+
         setEditor(new BasicComboBoxEditor() {
                 public Component getEditorComponent() {
                     return LocationComboBox.this.locationField;

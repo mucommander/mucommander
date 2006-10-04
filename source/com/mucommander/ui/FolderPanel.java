@@ -19,6 +19,7 @@ import com.mucommander.ui.table.TablePopupMenu;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -541,7 +542,15 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                 }
             });
 
+
         add(scrollPane, BorderLayout.CENTER);
+
+        // Create and set custom DropTarget instances in order to change current folder when a file is dropped on one
+        // of this panel's child components
+        FileDropTargetListener dropTargetListener = new FileDropTargetListener(this);
+        fileTable.setDropTarget(new DropTarget(fileTable, dropTargetListener));
+        scrollPane.setDropTarget(new DropTarget(scrollPane, dropTargetListener));
+        locationField.setDropTarget(new DropTarget(locationField, dropTargetListener));
 
         // Listens to some configuration variables
         ConfigurationManager.addConfigurationListener(this);
