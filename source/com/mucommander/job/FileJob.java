@@ -128,7 +128,7 @@ public abstract class FileJob implements Runnable {
      * The file will only be selected if it exists in the active table's folder and if this job hasn't
      * been cancelled. The selection will occur after the tables have been refreshed (if they are refreshed).
      */
-    public void selectFileAfter(AbstractFile file) {
+    public void selectFileWhenFinished(AbstractFile file) {
         this.fileToSelect = file;
     }
 	
@@ -310,7 +310,7 @@ public abstract class FileJob implements Runnable {
         // Refresh tables's current folders, based on the job's refresh policy.
         refreshTables();
 		
-        // Select file specified by selectFileAfter (if any) only if job hasn't been interrupted
+        // Select file specified by selectFileWhenFinished (if any) only if job hasn't been interrupted
         // and file exists in the active table's folder
         if(fileToSelect!=null && !jobInterrupted && activeTable.getCurrentFolder().equals(fileToSelect.getParent()) && fileToSelect.exists())
             activeTable.selectFile(fileToSelect);

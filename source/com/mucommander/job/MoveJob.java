@@ -53,7 +53,7 @@ public class MoveJob extends ExtendedFileJob {
         // If this job correponds to a file renaming in the same directory, select the renamed file
         // in the active table after this job has finished (and hasn't been cancelled)
         if(files.size()==1 && newName!=null && destFolder.equals(files.fileAt(0).getParent()))
-            selectFileAfter(FileFactory.getFile(destFolder.getAbsolutePath(true)+newName));
+            selectFileWhenFinished(FileFactory.getFile(destFolder.getAbsolutePath(true)+newName));
     }
 
 	
@@ -322,7 +322,7 @@ public class MoveJob extends ExtendedFileJob {
     // This job modifies baseDestFolder and its subfolders
 	
     protected boolean hasFolderChanged(AbstractFile folder) {
-        return baseSourceFolder.isParentOf(folder) || baseDestFolder.isParentOf(folder);
+        return (baseSourceFolder!=null && baseSourceFolder.isParentOf(folder)) || baseDestFolder.isParentOf(folder);
     }
 
 }

@@ -554,7 +554,7 @@
       <string name="CFBundleInfoDictionaryVersion"   value="6.0"/>
       <dict name="Java">
         <string name="MainClass"  value="${main-class}"/>
-        <string name="JVMVersion" value="1.4*"/>
+        <string name="JVMVersion" value="1.3+"/>
         <dict name="Properties">
           <string name="com.apple.smallTabs"        value="true"/>
           <string name="com.apple.hwaccel"          value="true"/>

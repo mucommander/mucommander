@@ -21,9 +21,6 @@ import java.io.InputStream;
  */
 public class ArchiveJob extends ExtendedFileJob {
 
-    /** Files to be archived */
-    private FileSet files;
-	
     /** Destination archive file */
     private AbstractFile destFile;
 
@@ -46,7 +43,6 @@ public class ArchiveJob extends ExtendedFileJob {
     public ArchiveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFile, int archiveFormat, String archiveComment) {
         super(progressDialog, mainFrame, files);
 		
-        this.files = files;
         this.destFile = destFile;
         this.archiveFormat = archiveFormat;
         this.archiveComment = archiveComment;

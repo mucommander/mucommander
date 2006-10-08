@@ -15,6 +15,8 @@ import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.table.TablePopupMenu;
+import com.mucommander.ui.dnd.FileDropTargetListener;
+import com.mucommander.ui.dnd.FileDragSourceListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -55,6 +57,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     
     private Object lastFocusedComponent;
 
+    private FileDragSourceListener fileDragSourceListener;
+
     /** Filters out hidden files, null when 'show hidden files' option is enabled */
     private static HiddenFileFilter hiddenFileFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_hidden_files", true)?null:new HiddenFileFilter();
 
@@ -70,384 +74,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private final static String DOWNLOAD_TEXT = Translator.get("download");
 
 
-    /**
-     * This thread takes care of changing current folder without locking the main
-     * thread. The folder change can be cancelled.
-     * 
-     * <p>A little note out of nowhere: never ever call JComponent.paintImmediately() from a thread
-     * other than the Event Dispatcher Thread, as will create nasty repaint glitches that
-     * then become very hard to track. Sun's Javadoc doesn't make it clear enough... just don't!
-     * 
-     * @author Maxence Bernard
-     */
-    public class ChangeFolderThread extends Thread {
-	
-        private AbstractFile folder;
-        private String folderPath;
-        private FileURL folderURL;
-        private AbstractFile fileToSelect;
-		
-        private boolean isKilled;
-        private boolean doNotKill;
-		
-        //		private boolean noWaitDialog;
-        //		private QuestionDialog waitDialog;
-	
-        private final Object lock = new Object();
-
-        //		private boolean hadFocus;
-	
-		
-        public ChangeFolderThread(AbstractFile folder) {
-            this.folder = folder;
-            setPriority(Thread.MAX_PRIORITY);
-        }
-
-        public ChangeFolderThread(String folderPath) {
-            this.folderPath = folderPath;
-            setPriority(Thread.MAX_PRIORITY);
-        }
-
-        public ChangeFolderThread(FileURL folderURL) {
-            this.folderURL = folderURL;
-            setPriority(Thread.MAX_PRIORITY);
-        }
-	
-        public void selectThisFileAfter(AbstractFile fileToSelect) {
-            this.fileToSelect = fileToSelect;
-        }	
-	
-        public void tryKill() {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
-            synchronized(lock) {
-                if(isKilled)
-                    return;
-
-                isKilled = true;
-                if(!doNotKill) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
-                    super.stop();
-
-                    /*
-                      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("waitdialog = "+waitDialog);
-                      if(waitDialog!=null) {
-                      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on waitdialog");
-                      waitDialog.dispose();
-                      waitDialog = null;
-                      }
-                    */
-                    // post processing as it would normally have been done by run()
-                    finish(false);
-                }
-            }
-        }
-	
-	
-        private void enableNoEventsMode() {
-            // Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
-            mainFrame.setNoEventsMode(true);
-//
-//            // Register a cutom action for the ESCAPE key which stops current folder change
-//            JRootPane rootPane = mainFrame.getRootPane();
-//            InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-//            ActionMap actionMap = rootPane.getActionMap();
-//            AbstractAction killAction = new AbstractAction() {
-//                    public void actionPerformed(ActionEvent e){
-//                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("escape pressed");
-//                        tryKill();
-//                    }
-//                };
-//            inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "customEscapeAction");
-//            actionMap.put("customEscapeAction", killAction);
-        }
-
-        private void disableNoEventsMode() {
-            // Restore mouse/keybaord events and default cursor
-            mainFrame.setNoEventsMode(false);
-//            // Remove 'escape' action
-//            JRootPane rootPane = mainFrame.getRootPane();
-//            rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
-//            rootPane.getActionMap().remove("customEscapeAction");
-        }
-		
-		
-        public void run() {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
-            boolean folderChangedSuccessfully = false;
-
-            // Notify listeners that location is changing
-            locationManager.fireLocationChanging();
-
-            // Set new folder's path in location field
-            locationField.setText(folder==null?folderPath==null?folderURL.getStringRep(false):folderPath:folder.getAbsolutePath());
-
-            // Show some progress in the progress bar to give hope
-            locationField.setProgressValue(10);
-
-            /*
-            // Start a new thread which will popup a dialog after a number of seconds
-            new Thread() {
-            public void run() {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting and waiting");
-
-            try { sleep(3000); }
-            catch(InterruptedException e) {}
-
-            while(noWaitDialog) {
-            try { sleep(200); }
-            catch(InterruptedException e) {}
-            }
-
-            synchronized(lock) {
-            if(changeFolderThread==null || changeFolderThread!=ChangeFolderThread.this || isKilled || !ChangeFolderThread.this.isAlive())
-            return;
-
-            YBoxPanel panel = new YBoxPanel();
-            panel.add(new JLabel(Translator.get("table.connecting_to_folder")));
-            panel.addSpace(5);
-            JProgressBar fullProgressBar = new JProgressBar();
-            fullProgressBar.setValue(50);
-            panel.add(fullProgressBar);
-
-            // Download or browse file ?
-            waitDialog = new QuestionDialog(mainFrame, 
-            null,
-            panel,
-            mainFrame,
-            new String[] {CANCEL_TEXT},
-            new int[] {CANCEL_ACTION},
-            0);
-            }
-
-            int ret = waitDialog.getActionValue();
-            if(ret==-1 || ret==CANCEL_ACTION)
-            tryKill();
-            }
-            }.start();
-            */			
-
-            // Disable automatic refresh
-            fileTable.setAutoRefreshActive(false);
-
-            //			// Save focus state
-            //			this.hadFocus = fileTable.hasFocus();
-            do {
-                //				noWaitDialog = false;
-
-                // Set cursor to hourglass/wait
-                mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-
-                // Prevents mouse and keybaord events from reaching the main frame and menus
-                enableNoEventsMode();
-
-                try {
-                    // 2 cases here :
-                    // - Thread was created using an AbstractFile instance
-                    // - Thread was created using a FileURL or FolderPath, corresponding AbstractFile needs to be resolved
-
-                    // Thread was created using a FileURL or FolderPath
-                    if(folder==null) {
-                        AbstractFile file;
-                        if(folderURL!=null)
-                            file = FileFactory.getFile(folderURL, true);
-                        else
-                            file = FileFactory.getFile(folderPath, true);
-
-                        synchronized(lock) {
-                            if(isKilled) {
-                                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
-                                break;
-                            }
-                        }
-
-                        // File resolved -> 25% complete
-                        locationField.setProgressValue(25);
-
-                        if(file==null || !file.exists()) {
-                            //							noWaitDialog = true;
-
-                            // Restore default cursor
-                            mainFrame.setCursor(Cursor.getDefaultCursor());
-
-                            JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
-                            break;
-                        }
-
-                        // File is a regualar directory, all good
-                        if(file.isDirectory()) {
-                            // Just continue
-                        }
-                        // File is a browsable file (Zip archive for instance) but not a directory : Browse or Download ? => ask the user
-                        else if(file.isBrowsable()) {
-                            //							noWaitDialog = true;
-
-                            // Restore default cursor
-                            mainFrame.setCursor(Cursor.getDefaultCursor());
-
-                            // Download or browse file ?
-                            QuestionDialog dialog = new QuestionDialog(mainFrame, 
-                                                                       null,
-                                                                       Translator.get("table.download_or_browse"),
-                                                                       mainFrame,
-                                                                       new String[] {BROWSE_TEXT, DOWNLOAD_TEXT, CANCEL_TEXT},
-                                                                       new int[] {BROWSE_ACTION, DOWNLOAD_ACTION, CANCEL_ACTION},
-                                                                       0);
-							
-                            int ret = dialog.getActionValue();
-                            if(ret==-1 || ret==CANCEL_ACTION)
-                                break;
-							
-                            // Download file
-                            if(ret==DOWNLOAD_ACTION) {
-                                //								noWaitDialog = true;
-								
-                                showDownloadDialog(file);
-                                break;
-
-                                /*
-                                  FileSet fileSet = new FileSet(currentFolder);
-                                  fileSet.add(file);
-								
-                                  // Show confirmation/path modification dialog
-                                  new DownloadDialog(mainFrame, fileSet);
-
-                                  break;
-                                */
-                            }
-                            // Continue if BROWSE_ACTION
-                            // Set cursor to hourglass/wait
-                            mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                            //							noWaitDialog = false;
-                        }
-                        // File is a regular file: show download dialog
-                        else {
-                            showDownloadDialog(file);
-                            break;
-                        }
-					
-                        this.folder = file;
-                    }
-                    // Thread was created using an AbstractFile instance, check for existence
-                    else if(!folder.exists()) {
-                        JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
-                        break;
-                    }
-
-                    synchronized(lock) {
-                        if(isKilled) {
-                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
-                            break;
-                        }
-                    }
-
-                    // File tested -> 50% complete
-                    locationField.setProgressValue(50);
-
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
-                    AbstractFile children[] = applyFilters(folder.ls());
-
-                    // Filter out Mac OS X .DS_Store files if the option is enabled
-                    if(dsStoreFilenameFilter!=null)
-                        children = dsStoreFilenameFilter.filter(children);
-
-                    synchronized(lock) {
-                        if(isKilled) {
-                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
-                            break;
-                        }
-                        // From now on, thread cannot be killed (would comprise table integrity)
-                        doNotKill = true;
-                    }
-
-                    // files listed -> 75% complete
-                    locationField.setProgressValue(75);
-					
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFolder");
-                    setCurrentFolder(folder, children, fileToSelect);
-
-                    // folder set -> 95% complete
-                    locationField.setProgressValue(95);
-					
-                    // All good !
-                    folderChangedSuccessfully = true;
-
-                    break;
-                }
-                catch(IOException e) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
-                    //					noWaitDialog = true;
-					
-                    // Restore default cursor
-                    mainFrame.setCursor(Cursor.getDefaultCursor());
-
-                    if(e instanceof AuthException) {
-                        AuthException authException = (AuthException)e;
-                        // Retry (loop) if user authentified
-                        if(showAuthDialog(authException)) {
-                            folder = FileFactory.getFile(authException.getFileURL().getStringRep(false));
-                            continue;
-                        }
-                    }
-                    else {
-                        showAccessErrorDialog(e);				
-                    }
-					
-                    // Break!
-                    break;
-                }
-            }
-            while(true);
-
-            //			noWaitDialog = true;
-
-            synchronized(lock) {
-                /*
-                  if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("waitdialog = "+waitDialog);
-                  if(waitDialog!=null) {
-                  if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on waitdialog");
-                  waitDialog.dispose();
-                  waitDialog = null;
-                  }
-                */				
-                // Clean things up
-                finish(folderChangedSuccessfully);
-            }
-        }
-	
-	
-        public void finish(boolean folderChangedSuccessfully) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restoring focus...");
-            // Reset location field's progress bar
-            locationField.setProgressValue(0);
-
-            // Restore normal mouse cursor
-            mainFrame.setCursor(Cursor.getDefaultCursor());
-
-            // Re-enable automatic refresh
-            fileTable.setAutoRefreshActive(true);
-
-            changeFolderThread = null;
-
-            // Restore mouse/keybaord events and default cursor
-            disableNoEventsMode();
-
-            if(!folderChangedSuccessfully) {
-                // Restore current folder's path
-                locationField.setText(currentFolder.getAbsolutePath());
-
-                // Notifies listeners that location change has been cancelled
-                locationManager.fireLocationCancelled();
-            }
-
-            // /!\ Focus should be restored after disableNoEventsMode has been called
-            // Use FocusRequester to request focus after all other UI events have been processed,
-            // calling requestFocus() on table directly could get ignored 
-            FocusRequester.requestFocus(mainFrame.getLastActiveTable());
-        }
-    }
-
-
-	
     static {
         // Set background color
         backgroundColor = ConfigurationManager.getVariableColor("prefs.colors.background", "000084");
@@ -545,15 +171,29 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         add(scrollPane, BorderLayout.CENTER);
 
-        // Create and set custom DropTarget instances in order to change current folder when a file is dropped on one
-        // of this panel's child components
-        FileDropTargetListener dropTargetListener = new FileDropTargetListener(this);
-        fileTable.setDropTarget(new DropTarget(fileTable, dropTargetListener));
-        scrollPane.setDropTarget(new DropTarget(scrollPane, dropTargetListener));
-        locationField.setDropTarget(new DropTarget(locationField, dropTargetListener));
-
         // Listens to some configuration variables
         ConfigurationManager.addConfigurationListener(this);
+
+        // Drag and Drop support
+
+        // Enable drag support on the FileTable
+        this.fileDragSourceListener = new FileDragSourceListener(this);
+        fileDragSourceListener.enableDrag(fileTable);
+
+        // Enable drop support to copy/move/change current folder when files are dropped on the FileTable
+        FileDropTargetListener dropTargetListener = new FileDropTargetListener(this, false);
+        fileTable.setDropTarget(new DropTarget(fileTable, dropTargetListener));
+        scrollPane.setDropTarget(new DropTarget(scrollPane, dropTargetListener));
+
+        // Allow the location field to change the current directory when a file/folder is dropped on it
+        dropTargetListener = new FileDropTargetListener(this, true);
+        locationField.setDropTarget(new DropTarget(locationField, dropTargetListener));
+        driveButton.setDropTarget(new DropTarget(driveButton, dropTargetListener));
+    }
+
+
+    public FileDragSourceListener getFileDragSourceListener() {
+        return this.fileDragSourceListener;
     }
 
 
@@ -868,5 +508,382 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
         return true;
+    }
+
+
+    /**
+     * This thread takes care of changing current folder without locking the main
+     * thread. The folder change can be cancelled.
+     *
+     * <p>A little note out of nowhere: never ever call JComponent.paintImmediately() from a thread
+     * other than the Event Dispatcher Thread, as will create nasty repaint glitches that
+     * then become very hard to track. Sun's Javadoc doesn't make it clear enough... just don't!
+     *
+     * @author Maxence Bernard
+     */
+    public class ChangeFolderThread extends Thread {
+
+        private AbstractFile folder;
+        private String folderPath;
+        private FileURL folderURL;
+        private AbstractFile fileToSelect;
+
+        private boolean isKilled;
+        private boolean doNotKill;
+
+        //		private boolean noWaitDialog;
+        //		private QuestionDialog waitDialog;
+
+        private final Object lock = new Object();
+
+        //		private boolean hadFocus;
+
+
+        public ChangeFolderThread(AbstractFile folder) {
+            this.folder = folder;
+            setPriority(Thread.MAX_PRIORITY);
+        }
+
+        public ChangeFolderThread(String folderPath) {
+            this.folderPath = folderPath;
+            setPriority(Thread.MAX_PRIORITY);
+        }
+
+        public ChangeFolderThread(FileURL folderURL) {
+            this.folderURL = folderURL;
+            setPriority(Thread.MAX_PRIORITY);
+        }
+
+        public void selectThisFileAfter(AbstractFile fileToSelect) {
+            this.fileToSelect = fileToSelect;
+        }
+
+        public void tryKill() {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+            synchronized(lock) {
+                if(isKilled)
+                    return;
+
+                isKilled = true;
+                if(!doNotKill) {
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
+                    super.stop();
+
+                    /*
+                      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("waitdialog = "+waitDialog);
+                      if(waitDialog!=null) {
+                      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on waitdialog");
+                      waitDialog.dispose();
+                      waitDialog = null;
+                      }
+                    */
+                    // post processing as it would normally have been done by run()
+                    finish(false);
+                }
+            }
+        }
+
+
+        private void enableNoEventsMode() {
+            // Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
+            mainFrame.setNoEventsMode(true);
+//
+//            // Register a cutom action for the ESCAPE key which stops current folder change
+//            JRootPane rootPane = mainFrame.getRootPane();
+//            InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+//            ActionMap actionMap = rootPane.getActionMap();
+//            AbstractAction killAction = new AbstractAction() {
+//                    public void actionPerformed(ActionEvent e){
+//                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("escape pressed");
+//                        tryKill();
+//                    }
+//                };
+//            inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "customEscapeAction");
+//            actionMap.put("customEscapeAction", killAction);
+        }
+
+        private void disableNoEventsMode() {
+            // Restore mouse/keybaord events and default cursor
+            mainFrame.setNoEventsMode(false);
+//            // Remove 'escape' action
+//            JRootPane rootPane = mainFrame.getRootPane();
+//            rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
+//            rootPane.getActionMap().remove("customEscapeAction");
+        }
+
+
+        public void run() {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
+            boolean folderChangedSuccessfully = false;
+
+            // Notify listeners that location is changing
+            locationManager.fireLocationChanging();
+
+            // Set new folder's path in location field
+            locationField.setText(folder==null?folderPath==null?folderURL.getStringRep(false):folderPath:folder.getAbsolutePath());
+
+            // Show some progress in the progress bar to give hope
+            locationField.setProgressValue(10);
+
+            /*
+            // Start a new thread which will popup a dialog after a number of seconds
+            new Thread() {
+            public void run() {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting and waiting");
+
+            try { sleep(3000); }
+            catch(InterruptedException e) {}
+
+            while(noWaitDialog) {
+            try { sleep(200); }
+            catch(InterruptedException e) {}
+            }
+
+            synchronized(lock) {
+            if(changeFolderThread==null || changeFolderThread!=ChangeFolderThread.this || isKilled || !ChangeFolderThread.this.isAlive())
+            return;
+
+            YBoxPanel panel = new YBoxPanel();
+            panel.add(new JLabel(Translator.get("table.connecting_to_folder")));
+            panel.addSpace(5);
+            JProgressBar fullProgressBar = new JProgressBar();
+            fullProgressBar.setValue(50);
+            panel.add(fullProgressBar);
+
+            // Download or browse file ?
+            waitDialog = new QuestionDialog(mainFrame,
+            null,
+            panel,
+            mainFrame,
+            new String[] {CANCEL_TEXT},
+            new int[] {CANCEL_ACTION},
+            0);
+            }
+
+            int ret = waitDialog.getActionValue();
+            if(ret==-1 || ret==CANCEL_ACTION)
+            tryKill();
+            }
+            }.start();
+            */
+
+            // Disable automatic refresh
+            fileTable.setAutoRefreshActive(false);
+
+            //			// Save focus state
+            //			this.hadFocus = fileTable.hasFocus();
+            do {
+                //				noWaitDialog = false;
+
+                // Set cursor to hourglass/wait
+                mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
+                // Prevents mouse and keybaord events from reaching the main frame and menus
+                enableNoEventsMode();
+
+                try {
+                    // 2 cases here :
+                    // - Thread was created using an AbstractFile instance
+                    // - Thread was created using a FileURL or FolderPath, corresponding AbstractFile needs to be resolved
+
+                    // Thread was created using a FileURL or FolderPath
+                    if(folder==null) {
+                        AbstractFile file;
+                        if(folderURL!=null)
+                            file = FileFactory.getFile(folderURL, true);
+                        else
+                            file = FileFactory.getFile(folderPath, true);
+
+                        synchronized(lock) {
+                            if(isKilled) {
+                                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
+                                break;
+                            }
+                        }
+
+                        // File resolved -> 25% complete
+                        locationField.setProgressValue(25);
+
+                        if(file==null || !file.exists()) {
+                            //							noWaitDialog = true;
+
+                            // Restore default cursor
+                            mainFrame.setCursor(Cursor.getDefaultCursor());
+
+                            JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+                            break;
+                        }
+
+                        // File is a regualar directory, all good
+                        if(file.isDirectory()) {
+                            // Just continue
+                        }
+                        // File is a browsable file (Zip archive for instance) but not a directory : Browse or Download ? => ask the user
+                        else if(file.isBrowsable()) {
+                            //							noWaitDialog = true;
+
+                            // Restore default cursor
+                            mainFrame.setCursor(Cursor.getDefaultCursor());
+
+                            // Download or browse file ?
+                            QuestionDialog dialog = new QuestionDialog(mainFrame,
+                                                                       null,
+                                                                       Translator.get("table.download_or_browse"),
+                                                                       mainFrame,
+                                                                       new String[] {BROWSE_TEXT, DOWNLOAD_TEXT, CANCEL_TEXT},
+                                                                       new int[] {BROWSE_ACTION, DOWNLOAD_ACTION, CANCEL_ACTION},
+                                                                       0);
+
+                            int ret = dialog.getActionValue();
+                            if(ret==-1 || ret==CANCEL_ACTION)
+                                break;
+
+                            // Download file
+                            if(ret==DOWNLOAD_ACTION) {
+                                //								noWaitDialog = true;
+
+                                showDownloadDialog(file);
+                                break;
+
+                                /*
+                                  FileSet fileSet = new FileSet(currentFolder);
+                                  fileSet.add(file);
+
+                                  // Show confirmation/path modification dialog
+                                  new DownloadDialog(mainFrame, fileSet);
+
+                                  break;
+                                */
+                            }
+                            // Continue if BROWSE_ACTION
+                            // Set cursor to hourglass/wait
+                            mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                            //							noWaitDialog = false;
+                        }
+                        // File is a regular file: show download dialog
+                        else {
+                            showDownloadDialog(file);
+                            break;
+                        }
+
+                        this.folder = file;
+                    }
+                    // Thread was created using an AbstractFile instance, check for existence
+                    else if(!folder.exists()) {
+                        JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+
+                    synchronized(lock) {
+                        if(isKilled) {
+                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
+                            break;
+                        }
+                    }
+
+                    // File tested -> 50% complete
+                    locationField.setProgressValue(50);
+
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
+                    AbstractFile children[] = applyFilters(folder.ls());
+
+                    // Filter out Mac OS X .DS_Store files if the option is enabled
+                    if(dsStoreFilenameFilter!=null)
+                        children = dsStoreFilenameFilter.filter(children);
+
+                    synchronized(lock) {
+                        if(isKilled) {
+                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
+                            break;
+                        }
+                        // From now on, thread cannot be killed (would comprise table integrity)
+                        doNotKill = true;
+                    }
+
+                    // files listed -> 75% complete
+                    locationField.setProgressValue(75);
+
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFolder");
+                    setCurrentFolder(folder, children, fileToSelect);
+
+                    // folder set -> 95% complete
+                    locationField.setProgressValue(95);
+
+                    // All good !
+                    folderChangedSuccessfully = true;
+
+                    break;
+                }
+                catch(IOException e) {
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+                    //					noWaitDialog = true;
+
+                    // Restore default cursor
+                    mainFrame.setCursor(Cursor.getDefaultCursor());
+
+                    if(e instanceof AuthException) {
+                        AuthException authException = (AuthException)e;
+                        // Retry (loop) if user authentified
+                        if(showAuthDialog(authException)) {
+                            folder = FileFactory.getFile(authException.getFileURL().getStringRep(false));
+                            continue;
+                        }
+                    }
+                    else {
+                        showAccessErrorDialog(e);
+                    }
+
+                    // Break!
+                    break;
+                }
+            }
+            while(true);
+
+            //			noWaitDialog = true;
+
+            synchronized(lock) {
+                /*
+                  if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("waitdialog = "+waitDialog);
+                  if(waitDialog!=null) {
+                  if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on waitdialog");
+                  waitDialog.dispose();
+                  waitDialog = null;
+                  }
+                */
+                // Clean things up
+                finish(folderChangedSuccessfully);
+            }
+        }
+
+
+        public void finish(boolean folderChangedSuccessfully) {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restoring focus...");
+            // Reset location field's progress bar
+            locationField.setProgressValue(0);
+
+            // Restore normal mouse cursor
+            mainFrame.setCursor(Cursor.getDefaultCursor());
+
+            // Re-enable automatic refresh
+            fileTable.setAutoRefreshActive(true);
+
+            changeFolderThread = null;
+
+            // Restore mouse/keybaord events and default cursor
+            disableNoEventsMode();
+
+            if(!folderChangedSuccessfully) {
+                // Restore current folder's path
+                locationField.setText(currentFolder.getAbsolutePath());
+
+                // Notifies listeners that location change has been cancelled
+                locationManager.fireLocationCancelled();
+            }
+
+            // /!\ Focus should be restored after disableNoEventsMode has been called
+            // Use FocusRequester to request focus after all other UI events have been processed,
+            // calling requestFocus() on table directly could get ignored
+            FocusRequester.requestFocus(mainFrame.getLastActiveTable());
+        }
     }
 }
