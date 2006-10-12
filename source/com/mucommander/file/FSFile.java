@@ -1,6 +1,7 @@
 package com.mucommander.file;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -95,10 +96,11 @@ public class FSFile extends AbstractFile {
         if(path.indexOf(":\\")!=-1 && path.charAt(0)=='/')
             path = path.substring(1, path.length());
 
-        // If hostname is not 'localhost', translate path back into a Windows-style UNC path ( \\hostname\path )
+        // If OS is Windows and hostname is not 'localhost', translate path back
+        // into a Windows-style UNC network path ( \\hostname\path )
         String hostname = fileURL.getHost();
-        if(!"localhost".equals(hostname))
-            path = "\\\\"+hostname+fileURL.getPath();
+        if(IS_WINDOWS && !"localhost".equals(hostname))
+            path = "\\\\"+hostname+fileURL.getPath().replace('/', '\\');    // Replace leading / char by \
 
         init(new File(path));
     }

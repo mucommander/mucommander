@@ -211,11 +211,17 @@ public class FileURL implements Cloneable {
             }
         }
         catch(MalformedURLException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception in FileURL(), malformed FileURL "+url+" : "+e);
+            if(com.mucommander.Debug.ON) {
+                com.mucommander.Debug.trace("Exception in FileURL(), malformed FileURL "+url+" : "+e);
+                e.printStackTrace();
+            }
             throw e;
         }
         catch(Exception e2) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Unexpected exception in FileURL() with "+url+" : "+e2);
+            if(com.mucommander.Debug.ON) {
+                com.mucommander.Debug.trace("Unexpected exception in FileURL() with "+url+" : "+e2);
+                e2.printStackTrace();
+            }
             throw new MalformedURLException();
         }
     }
@@ -242,14 +248,15 @@ public class FileURL implements Cloneable {
             // Path starts with a reference to the user home folder, or is a Windows-style path
             else if(firstChar=='~' || absPath.indexOf(":\\")!=-1)
                 return new FileURL("file://localhost/"+absPath, parentURL);
-            // Windows-style UNC network path ( \\hostname\path ), transform it into:
-            // file://hostname/\path
+            // Windows-style UNC network path ( \\hostname\path ), transform it into a URL in the following form:
+            // file://hostname/path
+            // FSFile constructor will translate it back into an UNC network path
             else if(absPath.startsWith("\\\\") && (len=absPath.length())>2) {
                 int pos = absPath.indexOf('\\', 2);
                 if(pos==-1)
                     return new FileURL("file://"+absPath.substring(2, len));
                 else
-                    return new FileURL("file://"+absPath.substring(2, pos)+"/"+absPath.substring(pos, len));
+                    return new FileURL("file://"+absPath.substring(2, pos)+"/"+(pos==len-1?"":absPath.substring(pos+1, len)));
             }
         }
 
@@ -580,14 +587,21 @@ public class FileURL implements Cloneable {
             "file://localhost/C:\\Documents and Settings",
             "file://localhost/~/../..",
             "file://localhost/~/Projects/mucommander/../mucommander/./source/..",
-            "file://localhost/Users/maxence/Desktop/en@boldquot.header"
+            "file://localhost/Users/maxence/Desktop/en@boldquot.header",
+            "\\\\somehost\\somepath",
+            "\\\\somehost\\somepath\\",
+            "\\\\somehost\\",
+            "\\\\somehost"
         };
 		
         FileURL f;
         for(int i=0; i<urls.length; i++) {
             try {
                 System.out.println("Creating "+urls[i]);
-                f = new FileURL(urls[i]); 
+                if(urls[i].indexOf("://")==-1)
+                    f = getLocalFileURL(urls[i], null);
+                else
+                    f = new FileURL(urls[i]);
                 System.out.println("FileURL.toString()= "+f.toString());
                 System.out.println(" - path= "+f.getPath());
                 System.out.println(" - host= "+f.getHost());
@@ -596,12 +610,12 @@ public class FileURL implements Cloneable {
                 System.out.println(" - filename= "+f.getFilename());
                 System.out.println(" - parent= "+f.getParent());
                 if(f.getParent()!=null)
-                    System.out.println(" - parent path= "+f.getParent().getPath()+"\n");
-                else
-                    System.out.println();
-				
+                    System.out.println(" - parent path= "+f.getParent().getPath());
+
                 if(f.getProtocol().equals("file"))
-                    System.out.println(" FSFile's path="+FileFactory.getFile(f.getPath(), true).getAbsolutePath());
+                    System.out.println(" FSFile's path="+FileFactory.getFile(f, true).getAbsolutePath());
+
+                System.out.println();
             }
             catch(java.io.IOException e) {
                 if(com.mucommander.Debug.ON) {
