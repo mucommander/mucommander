@@ -235,15 +235,20 @@ public class FileURL implements Cloneable {
     public static FileURL getLocalFileURL(String absPath, FileURL parentURL) throws MalformedURLException {
         if(!absPath.equals("")) {
             char firstChar = absPath.charAt(0);
+            int len;
             // Unix-style path
             if(firstChar=='/')
                 return new FileURL("file://localhost"+absPath, parentURL);
             // Path starts with a reference to the user home folder, or is a Windows-style path
             else if(firstChar=='~' || absPath.indexOf(":\\")!=-1)
                 return new FileURL("file://localhost/"+absPath, parentURL);
-            // Windows-style UNC network path ( \\hostname\path )
-            else if(absPath.startsWith("\\\\") && absPath.length()>2)
-                return new FileURL("file://"+absPath.substring(2, absPath.length()));
+            // Windows-style UNC network path ( \\hostname\path ), transform it into:
+            // file://hostname/\path
+            else if(absPath.startsWith("\\\\") && (len=absPath.length())>2) {
+                int pos = absPath.indexOf('\\', 2);
+                if(pos!=-1)
+                    return new FileURL("file://"+absPath.substring(2, pos)+"/"+(pos!=len-1?absPath.substring(pos+1, len):""));
+            }
         }
 
         // Todo: localize that message as it can be displayed to the user

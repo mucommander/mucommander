@@ -144,11 +144,12 @@ public class FSFile extends AbstractFile {
             // OS is Windows
             if(IS_WINDOWS) {
                 // Parses the output of 'dir "filePath"' command to retrieve free space information
-                // Note : total space information not available under Windows
+                // Note : total space information is not available under Windows
 
                 // 'dir' command returns free space on the last line
                 //Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
-                Process process = Runtime.getRuntime().exec(new String[] {"dir", absPath}, null, new File(getAbsolutePath()));
+//                Process process = Runtime.getRuntime().exec(new String[] {"dir", absPath}, null, new File(getAbsolutePath()));
+                Process process = Runtime.getRuntime().exec(new String[] {"dir", absPath}, null);
 
                 // Check that the process was correctly started
                 if(process!=null) {
@@ -210,7 +211,10 @@ public class FSFile extends AbstractFile {
             }
         }
         catch(Exception e) {	// Could be IOException, NoSuchElementException or NumberFormatException, but better be safe and catch Exception
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("An error occured while executing 'df -k "+absPath+"' command: "+e);
+            if(com.mucommander.Debug.ON) {
+                com.mucommander.Debug.trace("An error occured while retrieving volume info: "+e);
+                e.printStackTrace();
+            }
         }
         finally {
             if(br!=null)
