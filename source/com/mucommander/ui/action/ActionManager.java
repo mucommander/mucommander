@@ -20,7 +20,7 @@ public class ActionManager {
 
 
     public static MucoAction getActionInstance(String actionClassName, MainFrame mainFrame) {
-        if(Debug.ON) Debug.trace("called, actionClassName="+actionClassName);
+//        if(Debug.ON) Debug.trace("called, actionClassName="+actionClassName);
 
         try {
             return getActionInstance(Class.forName(actionClassName), mainFrame);
@@ -33,11 +33,11 @@ public class ActionManager {
 
 
     public static MucoAction getActionInstance(Class actionClass, MainFrame mainFrame) {
-        if(Debug.ON) Debug.trace("called, MucoAction class="+actionClass);
+//        if(Debug.ON) Debug.trace("called, MucoAction class="+actionClass);
 
         Hashtable mainFrameActions = (Hashtable)mainFrameActionsMap.get(mainFrame);
         if(mainFrameActions==null) {
-            if(Debug.ON) Debug.trace("creating MainFrame action map");
+//            if(Debug.ON) Debug.trace("creating MainFrame action map");
 
             mainFrameActions = new Hashtable();
             mainFrameActionsMap.put(mainFrame, mainFrameActions);
@@ -50,22 +50,22 @@ public class ActionManager {
                 // Looks for an existing cached Constructor instance
                 Constructor actionConstructor = (Constructor)actionConstructors.get(actionClass);
                 if(actionConstructor==null) {
-                    if(Debug.ON) Debug.trace("creating constructor");
+//                    if(Debug.ON) Debug.trace("creating constructor");
 
                     // Not found, retrieve a Constructor instance and caches it
                     actionConstructor = actionClass.getConstructor(new Class[]{MainFrame.class});
                     actionConstructors.put(actionClass, actionConstructor);
 
-                    if(Debug.ON) Debug.trace("nb constructors = "+actionConstructors.size());
+//                    if(Debug.ON) Debug.trace("nb constructors = "+actionConstructors.size());
                 }
 
-                // Instanciate the MucoAction class
-                if(Debug.ON) Debug.trace("creating instance");
+//                if(Debug.ON) Debug.trace("creating instance");
 
+                // Instanciate the MucoAction class
                 action = (MucoAction)actionConstructor.newInstance(new Object[]{mainFrame});
                 mainFrameActions.put(actionClass, action);
 
-                if(Debug.ON) Debug.trace("nb instances = "+mainFrameActions.size());
+//                if(Debug.ON) Debug.trace("nb instances = "+mainFrameActions.size());
             }
             catch(Exception e) {   // Catches ClassNotFoundException, NoSuchMethodException, InstanciationException, IllegalAccessException, InvocateTargetException
                 if(Debug.ON) {
@@ -101,7 +101,7 @@ public class ActionManager {
             }
         }
 
- if(Debug.ON) Debug.trace("returning "+actionInstances);
+// if(Debug.ON) Debug.trace("returning "+actionInstances);
         return actionInstances;
     }
 

@@ -142,8 +142,8 @@ This file controls the content of your toolbar. It works in the same way as comm
   - alt_actions are not available
 
 
-What's new in v0.8 beta 3 (nightly build) ?
--------------------------------------------
+What's new since v0.8 beta 2 ?
+------------------------------
 
 New features:
  - Keyboard shortcuts, toolbar and command bar buttons can now be customized (no GUI yet, see .xml files in preferences folder)
@@ -198,6 +198,7 @@ Improvements:
  - New font preview field to 'Appearance' preferences tab
  - New ascending / descending icons in sort tabs
  - SMB library (jCIFS) upgraded to version 1.2.8
+ - Mac OS X: new 'Universal Binary' application stub, muCommander no longer uses Rosetta to start up
 
 Bug fixes:
  - Fixed drive popup which doesn't immediately reflect bookmark changes
@@ -222,13 +223,13 @@ Bug fixes:
  - Fixed issue with filenames containing a '?' character (since 0.8 beta1)
  - Fixed 'Edit bookmarks' changes not taken into account under certain conditions (since beta1)
  - Fixed in-table renaming which could stop working under certain conditions (since 0.8 beta1)
- - Fixed repaint bug which could cause the folder display to corrupted (since 0.8 beta2)
+ - Fixed repaint bug which could cause the folder pane display to be corrupted (since 0.8 beta2)
  - Fixed user-defined font not properly taken into account (since 0.8 beta2)
 
 Known issues:
  - Translations not up-to-date (some of the new 0.8 features are untranslated) 
+ - Write/execute modes are not preserved when a file is copied, this will be solved with Java 1.6
  - SFTP folders limited to 98 files
  - SFTP unavailable under Java 1.3
- - Some Mac OS X-specific files are not copied properly
  - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System Preferences' for them to work properly
  - Mac OS X : text fields don't work correctly when using a fractionally-scaled font (Known Java bug, http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)

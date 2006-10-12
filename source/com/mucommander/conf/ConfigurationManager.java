@@ -459,7 +459,6 @@ public class ConfigurationManager {
             return;
 		
         listeners.put(listener, null);
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(listeners.size()+" listeners");
     }
 
     /**
@@ -469,8 +468,6 @@ public class ConfigurationManager {
      */
     public static synchronized void removeConfigurationListener(ConfigurationListener listener) {
         listeners.remove(listener);
-			
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(listeners.size()+" listeners");
     }
 
     /**

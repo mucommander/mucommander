@@ -1,7 +1,6 @@
 package com.mucommander.ui.dnd;
 
 import com.mucommander.ui.FolderPanel;
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.file.FileSet;
@@ -64,8 +63,6 @@ public class FileDragSourceListener implements DragSourceListener, DragGestureLi
     /////////////////////////////////
 
     public void dragGestureRecognized(DragGestureEvent event) {
-        if(Debug.ON) Debug.trace("called");
-
         if(folderPanel.getMainFrame().getNoEventsMode())
             return;
 

@@ -366,7 +366,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
      * Returns <code>true</code> if this MainFrame is active in the foreground.
      */
     public boolean isForegroundActive() {
-        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("foregroundActive="+foregroundActive);
         return foregroundActive;
     }
 
@@ -374,7 +373,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
      * Sets whether this MainFrame is active in the foreground. Method to be called solely by WindowManager.
      */
     void setForegroundActive(boolean foregroundActive) {
-        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("foregroundActive="+foregroundActive);
         this.foregroundActive = foregroundActive;
     }
 
@@ -445,7 +443,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
      * Overrides JComponent's requestFocus() method to request focus on the last active FolderPanel.
      */
     public void requestFocus() {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("focus requested, isVisible="+isVisible());
         // If visible, call requestFocus() directly on the component
         if(isVisible())
             lastActiveTable.getFolderPanel().requestFocus();

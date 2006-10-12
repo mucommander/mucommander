@@ -95,6 +95,11 @@ public class FSFile extends AbstractFile {
         if(path.indexOf(":\\")!=-1 && path.charAt(0)=='/')
             path = path.substring(1, path.length());
 
+        // If hostname is not 'localhost', translate path back into a Windows-style UNC path ( \\hostname\path )
+        String hostname = fileURL.getHost();
+        if(!"localhost".equals(hostname))
+            path = "\\\\"+hostname+fileURL.getPath();
+
         init(new File(path));
     }
 

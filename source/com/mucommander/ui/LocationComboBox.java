@@ -95,7 +95,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     //////////////////////////////
 
     public void locationChanged(LocationEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
         // Remove all choices corresponding to previous current folder
         removeAllItems();
@@ -115,7 +115,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     }
 
     public void locationChanging(LocationEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
         // Disable component and ignore events until folder has been changed (or cancelled)
         // Note: setEnabled(false) will have already been called if folder was changed by this component 
@@ -136,7 +136,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     ////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, "+"selectedIndex="+getSelectedIndex()+", selectedItem="+getSelectedItem()+" ignoreEvents="+ignoreEvents);
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, "+"selectedIndex="+getSelectedIndex()+", selectedItem="+getSelectedItem()+" ignoreEvents="+ignoreEvents);
 
         // Return if events should be ignored
         if(ignoreEvents)
@@ -160,7 +160,7 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
     /////////////////////////
 
     public void keyPressed(KeyEvent e) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, keyCode="+e.getKeyCode()+" ignoreEvents="+ignoreEvents);
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, keyCode="+e.getKeyCode()+" ignoreEvents="+ignoreEvents);
 
         // Return if events should be ignored or if popup is visible (events would pertain to combo popup, not text field)
         if(ignoreEvents || isPopupVisible())

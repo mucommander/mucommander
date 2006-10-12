@@ -503,7 +503,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 		
         // Do not request focus if focus was requested on another MainFrame less than FOCUS_REQUEST_DELAY milliseconds ago
         if (lastFocusedMainFrame==currentMainFrame || (now-lastFocusRequest>FOCUS_REQUEST_DELAY)) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("requesting focus");
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("requesting focus on current MainFrame");
             currentMainFrame.requestFocus();
             lastFocusRequest = now;
             lastFocusedMainFrame = currentMainFrame;

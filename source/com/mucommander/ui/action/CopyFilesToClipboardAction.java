@@ -1,0 +1,24 @@
+package com.mucommander.ui.action;
+
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.dnd.ClipboardSupport;
+import com.mucommander.file.FileSet;
+
+/**
+ * This action copies the selected / marked files to the clipboard.
+ *
+ * @author Maxence Bernard
+ */
+public class CopyFilesToClipboardAction extends SelectedFilesAction {
+
+    public CopyFilesToClipboardAction(MainFrame mainFrame) {
+        super(mainFrame);
+    }
+
+    public void performAction() {
+        FileSet selectedFiles = mainFrame.getLastActiveTable().getSelectedFiles();
+
+        if(selectedFiles.size()>0)
+            ClipboardSupport.setClipboardFiles(selectedFiles);
+    }
+}

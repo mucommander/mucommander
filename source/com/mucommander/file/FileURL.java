@@ -224,7 +224,9 @@ public class FileURL implements Cloneable {
     /**
      * Returns a FileURL constructed from the specified absolute path that must point to a local file. 
      * If the path is not absolute, a <code>MalformedURLException</code> will be thrown.<b>
-     * The returned URL will start with <code>file://localhost</code>.
+     *
+     * <p>The returned URL will start with <code>file://localhost</code> by default, unless a Windows-style UNC path
+     * (i.e. \\hostname\path) containing a hostname is given.
      *
      * @param absPath an absolute path to a local file, the path may start with user home '~'.
      * @param parentURL optional parent's URL, may be <code>null</code>
@@ -233,13 +235,19 @@ public class FileURL implements Cloneable {
     public static FileURL getLocalFileURL(String absPath, FileURL parentURL) throws MalformedURLException {
         if(!absPath.equals("")) {
             char firstChar = absPath.charAt(0);
+            // Unix-style path
             if(firstChar=='/')
                 return new FileURL("file://localhost"+absPath, parentURL);
+            // Path starts with a reference to the user home folder, or is a Windows-style path
             else if(firstChar=='~' || absPath.indexOf(":\\")!=-1)
                 return new FileURL("file://localhost/"+absPath, parentURL);
+            // Windows-style UNC network path ( \\hostname\path )
+            else if(absPath.startsWith("\\\\") && absPath.length()>2)
+                return new FileURL("file://"+absPath.substring(2, absPath.length()));
         }
 
-        throw new MalformedURLException("Path not absolute: "+absPath);
+        // Todo: localize that message as it can be displayed to the user
+        throw new MalformedURLException("Path not absolute or malformed: "+absPath);
     }
 
 	

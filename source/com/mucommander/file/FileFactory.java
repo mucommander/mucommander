@@ -58,7 +58,10 @@ public abstract class FileFactory {
             return getFile(absPath, null);
         }
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught exception: "+e);
+            if(com.mucommander.Debug.ON) {
+                com.mucommander.Debug.trace("Caught exception: "+e);
+                e.printStackTrace();
+            }
             if(throwException)
                 throw e;
             return null;

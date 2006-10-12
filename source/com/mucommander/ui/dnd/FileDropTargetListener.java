@@ -46,15 +46,6 @@ import java.io.BufferedReader;
  * <p>Drop events originating from the same FolderPanel are on purpose not accepted as spring-loaded folders are not
  * (yet) supported which would make the drop operation ambiguous and confusing.
  *
- * <p>3 types of dropped data flavors are supported and used in this order of priority:
- * <ul>
- * <li>FileSet: the local DataFlavor used when files are dragged from muCommander
- * <li>File list: used when files are dragged from an external application
- * <li>File paths: alternate flavor used when some text representing one or several file paths is dragged
- * from an external application
- * </ul>
- *
- *
  * @author Maxence Bernard
  */
 public class FileDropTargetListener implements DropTargetListener {
@@ -153,6 +144,7 @@ public class FileDropTargetListener implements DropTargetListener {
     }
 
 
+/*
     public void drop(DropTargetDropEvent event) {
         // Restore default cursor, no matter what
         folderPanel.setCursor(Cursor.getDefaultCursor());
@@ -284,6 +276,7 @@ public class FileDropTargetListener implements DropTargetListener {
 
                 // Report that the drop event has been successfully handled
                 event.dropComplete(true);
+
             }
         }
         catch(Exception e) {
@@ -292,5 +285,72 @@ public class FileDropTargetListener implements DropTargetListener {
             // Report drop failure
             event.dropComplete(false);
         }
+    }
+*/
+
+    public void drop(DropTargetDropEvent event) {
+        // Restore default cursor, no matter what
+        folderPanel.setCursor(Cursor.getDefaultCursor());
+
+        // The drop() method is called even if a DropTargetDropEvent was rejected before,
+        // so this test is really necessary
+        if(!dragAccepted) {
+            event.rejectDrop();
+            return;
+        }
+
+        // Accept drop event
+        event.acceptDrop(currentDropAction);
+
+        // Retrieve the files contained by the transferable as a FileSet (takes care of handling the different DataFlavors)
+        FileSet droppedFiles = TransferableFileSet.getTransferFiles(event.getTransferable());
+
+        // Stop and report failure if no file could not be retrieved
+        if(droppedFiles==null || droppedFiles.size()==0) {
+            // Report drop failure
+            event.dropComplete(false);
+
+            return;
+        }
+
+        // If in 'change folder mode' or if the drop action is 'ACTION_LINK' in normal mode:
+        // change the FolderPanel's current folder to the dropped file/folder :
+        // - If the file is a directory, the current folder is changed to that directory
+        // - For any other file kind (archive, regular file...), current folder is changed to the file's parent folder and the file is selected
+        // If more than one file is dropped, only the first one is used
+        if(changeFolderOnlyMode || currentDropAction==DnDConstants.ACTION_LINK) {
+            AbstractFile file = droppedFiles.fileAt(0);
+
+            // If file is a directory, change current folder to that directory
+            if(file.isDirectory())
+                folderPanel.trySetCurrentFolder(file);
+            // For any other file kind (archive, regular file...), change directory to the file's parent folder
+            // and select the file
+            else
+                folderPanel.trySetCurrentFolder(file.getParent(), file);
+
+            // Request focus on the FolderPanel
+            folderPanel.requestFocus();
+        }
+        // Normal mode: copy or move dropped files to the FolderPanel's current folder
+        else {
+            MainFrame mainFrame = folderPanel.getMainFrame();
+            AbstractFile destFolder = folderPanel.getCurrentFolder();
+            if(currentDropAction==DnDConstants.ACTION_MOVE) {
+                // Start moving files
+                ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
+                MoveJob moveJob = new MoveJob(progressDialog, mainFrame, droppedFiles, destFolder, null, FileExistsDialog.ASK_ACTION);
+                progressDialog.start(moveJob);
+            }
+            else {
+                // Start copying files
+                ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
+                CopyJob job = new CopyJob(progressDialog, mainFrame, droppedFiles, destFolder, null, CopyJob.COPY_MODE, FileExistsDialog.ASK_ACTION);
+                progressDialog.start(job);
+            }
+        }
+
+        // Report that the drop event has been successfully handled
+        event.dropComplete(true);
     }
 }

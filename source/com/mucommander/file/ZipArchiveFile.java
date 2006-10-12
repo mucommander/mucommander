@@ -21,7 +21,6 @@ public class ZipArchiveFile extends AbstractArchiveFile {
      */
     public ZipArchiveFile(AbstractFile file) {
         super(file);
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
     }
 
 
