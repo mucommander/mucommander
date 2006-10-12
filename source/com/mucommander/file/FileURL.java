@@ -246,7 +246,10 @@ public class FileURL implements Cloneable {
             // file://hostname/\path
             else if(absPath.startsWith("\\\\") && (len=absPath.length())>2) {
                 int pos = absPath.indexOf('\\', 2);
-                return new FileURL("file://"+absPath.substring(2, pos)+(pos!=-1?"/"+absPath.substring(pos, len):""));
+                if(pos==-1)
+                    return new FileURL("file://"+absPath.substring(2, len));
+                else
+                    return new FileURL("file://"+absPath.substring(2, pos)+"/"+absPath.substring(pos, len));
             }
         }
 
