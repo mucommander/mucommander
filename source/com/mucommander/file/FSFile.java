@@ -160,9 +160,11 @@ public class FSFile extends AbstractFile {
                     String lastLine = null;
                     // Retrieves last line of dir
                     while((line=br.readLine())!=null) {
+if(Debug.ON) Debug.trace("line="+line);
                         if(!line.trim().equals(""))
                             lastLine = line;
                     }
+if(Debug.ON) Debug.trace("lastLine="+lastLine);
 
                     // Last dir line may look like something this (might vary depending on system's language, below in French):
                     // 6 Rep(s)  14 767 521 792 octets libres		
