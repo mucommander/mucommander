@@ -140,20 +140,27 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
             }
             // Local file, use volume's name 
             else {
-                String currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
-                int bestLength = -1;
-                int bestIndex = 0;
-                String temp;
-                int len;
-                for(int i=0; i<rootFolders.length; i++) {
-                    temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
-                    len = temp.length();
-                    if (currentPath.startsWith(temp) && len>bestLength) {
-                        bestIndex = i;
-                        bestLength = len;
-                    }
+                // Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
+                // display 'SMB' which is the underlying protocol
+                if(PlatformManager.isWindowsFamily() && !"localhost".equals(currentURL.getHost())) {
+                    newLabel = "SMB";
                 }
-                newLabel = rootFolders[bestIndex].getName();
+                else {
+                    String currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
+                    int bestLength = -1;
+                    int bestIndex = 0;
+                    String temp;
+                    int len;
+                    for(int i=0; i<rootFolders.length; i++) {
+                        temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
+                        len = temp.length();
+                        if (currentPath.startsWith(temp) && len>bestLength) {
+                            bestIndex = i;
+                            bestLength = len;
+                        }
+                    }
+                    newLabel = rootFolders[bestIndex].getName();
+                }
             }
         }
 		
@@ -176,8 +183,8 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
         // Add root 'drives'
         int nbRoots = rootFolders.length;
         // Retreive and use system drives icons under Windows only, icons looks like crap under Mac OS X,
-        // and most likely look like crap under Linux as well (untested though)
-        if(PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_9X || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT) {
+        // and most likely also look like crap under Linux (untested though)
+        if(PlatformManager.isWindowsFamily()) {
             FileSystemView fileSystemView = FileSystemView.getFileSystemView();
             for(int i=0; i<nbRoots; i++) {
                 Icon driveIcon = null;

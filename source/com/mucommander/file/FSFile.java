@@ -39,7 +39,7 @@ public class FSFile extends AbstractFile {
     private final static FileSystemView fileSystemView;
 		
     static {
-        IS_WINDOWS = PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_9X || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT;
+        IS_WINDOWS = PlatformManager.isWindowsFamily();
         fileSystemView = FileSystemView.getFileSystemView();
     }
 

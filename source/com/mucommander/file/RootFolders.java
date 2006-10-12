@@ -37,7 +37,7 @@ public class RootFolders {
 	
             // Add /etc/fstab folders
             // If we're running Windows, we can just skip that
-            if(!(PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_9X || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT)) {
+            if(!PlatformManager.isWindowsFamily()) {
                 addFstabEntries(rootFoldersV);
                 if(Debug.ON) Debug.trace("/etc/fstab mount points added: "+rootFoldersV);
             }
