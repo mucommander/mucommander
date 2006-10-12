@@ -201,6 +201,7 @@ Improvements:
  - Mac OS X: new 'Universal Binary' application stub, muCommander no longer uses Rosetta to start up
 
 Bug fixes:
+ - Windows UNC network paths (those starting with \\) are now properly handled, fixing startup problems if the user home is located on a network share
  - Fixed drive popup which doesn't immediately reflect bookmark changes
  - Fixed .GZ files not opened when extension is upper-cased
  - GZ files inside Tar archives can now be properly opened

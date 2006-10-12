@@ -1,6 +1,8 @@
 
 package com.mucommander.file;
 
+import com.mucommander.PlatformManager;
+
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.util.Hashtable;
@@ -248,15 +250,22 @@ public class FileURL implements Cloneable {
             // Path starts with a reference to the user home folder, or is a Windows-style path
             else if(firstChar=='~' || absPath.indexOf(":\\")!=-1)
                 return new FileURL("file://localhost/"+absPath, parentURL);
-            // Windows-style UNC network path ( \\hostname\path ), transform it into a URL in the following form:
-            // file://hostname/path
-            // FSFile constructor will translate it back into an UNC network path
+            // Handle Windows-style UNC network paths ( \\hostname\path ):
+            // - under Windows, transform it into a URL in the file://hostname/path form,
+            //   FSFile constructor will translate it back into an UNC network path
+            // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
+            //   who've spent too much time using Windows
             else if(absPath.startsWith("\\\\") && (len=absPath.length())>2) {
-                int pos = absPath.indexOf('\\', 2);
-                if(pos==-1)
-                    return new FileURL("file://"+absPath.substring(2, len));
-                else
-                    return new FileURL("file://"+absPath.substring(2, pos)+"/"+(pos==len-1?"":absPath.substring(pos+1, len)));
+                if(PlatformManager.isWindowsFamily()) {
+                    int pos = absPath.indexOf('\\', 2);
+                    if(pos==-1)
+                        return new FileURL("file://"+absPath.substring(2, len));
+                    else
+                        return new FileURL("file://"+absPath.substring(2, pos)+"/"+(pos==len-1?"":absPath.substring(pos+1, len)));
+                }
+                else {
+                    return new FileURL("smb://"+absPath.substring(2, len).replace('\\', '/'));
+                }
             }
         }
 
