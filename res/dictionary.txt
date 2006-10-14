@@ -4168,7 +4168,7 @@ prefs_dialog.custom_folder:RU:Заданный каталог
 prefs_dialog.custom_folder:ZH_CN:定制文件夹
 prefs_dialog.custom_folder:SI:Mapa po meri
 
-prefs_dialog.show_hidden_files:EN:Show Hidden files
+prefs_dialog.show_hidden_files:EN:Show hidden files
 prefs_dialog.show_hidden_files:FR:Afficher les fichiers cachés
 prefs_dialog.show_hidden_files:DE:Versteckte Dateien anzeigen
 prefs_dialog.show_hidden_files:ES:Mostrar ficheros ocultos
@@ -4194,7 +4194,8 @@ prefs_dialog.show_ds_store_files:FR:Afficher les fichiers .DS_Store
 
 
 
-
+prefs_dialog.show_system_folders:EN:Show system folders
+prefs_dialog.show_system_folders:FR:Afficher les dossiers système
 
 prefs_dialog.compact_file_size:EN:Round displayed file sizes
 prefs_dialog.compact_file_size:FR:Arrondir les tailles de fichiers affichées

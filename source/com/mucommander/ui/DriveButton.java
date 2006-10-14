@@ -142,7 +142,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
             else {
                 // Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
                 // display 'SMB' which is the underlying protocol
-                if(PlatformManager.isWindowsFamily() && !"localhost".equals(currentURL.getHost())) {
+                if(PlatformManager.isWindowsFamily() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
                     newLabel = "SMB";
                 }
                 else {

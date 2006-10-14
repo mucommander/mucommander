@@ -99,7 +99,7 @@ public class FSFile extends AbstractFile {
         // If OS is Windows and hostname is not 'localhost', translate path back
         // into a Windows-style UNC network path ( \\hostname\path )
         String hostname = fileURL.getHost();
-        if(IS_WINDOWS && !"localhost".equals(hostname))
+        if(IS_WINDOWS && !FileURL.LOCALHOST.equals(hostname))
             path = "\\\\"+hostname+fileURL.getPath().replace('/', '\\');    // Replace leading / char by \
 
         init(new File(path));

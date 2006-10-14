@@ -7,6 +7,7 @@ import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.HiddenFileFilter;
+import com.mucommander.file.filter.SystemFoldersFilter;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
@@ -60,10 +61,13 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private FileDragSourceListener fileDragSourceListener;
 
     /** Filters out hidden files, null when 'show hidden files' option is enabled */
-    private static HiddenFileFilter hiddenFileFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_hidden_files", true)?null:new HiddenFileFilter();
+    private HiddenFileFilter hiddenFileFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_hidden_files", true)?null:new HiddenFileFilter();
 
     /** Filters out Mac OS X .DS_Store files, null when 'show DS_Store files' option is enabled */
-    private static DSStoreFileFilter dsStoreFilenameFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_ds_store_files", true)?null:new DSStoreFileFilter();
+    private DSStoreFileFilter dsStoreFilenameFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_ds_store_files", true)?null:new DSStoreFileFilter();
+
+    /** Filters out Mac OS X system folders, null when 'show system folders' option is enabled */
+    private SystemFoldersFilter systemFoldersFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_system_folders", true)?null:new SystemFoldersFilter();
 
     private final static int CANCEL_ACTION = 0;
     private final static int BROWSE_ACTION = 1;
@@ -197,14 +201,25 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
 
+    /**
+     * Applies the file filters that are enabled to the specified file array and returns the files
+     * that were retained by the files.
+     *
+     * @param files the file array to apply the filters to
+     * @return the files retained by the filters
+     */
     private AbstractFile[] applyFilters(AbstractFile[] files) {
         // Filter out hidden files (if enabled)
         if(hiddenFileFilter!=null)
             files = hiddenFileFilter.filter(files);
-
         // Filter out Mac OS X .DS_Store files (if enabled)
-        if(dsStoreFilenameFilter!=null)
+        // No need to apply this filter if hidden files filter is enabled, as .DS_Store files are hidden
+        else if(dsStoreFilenameFilter!=null)
             files = dsStoreFilenameFilter.filter(files);
+
+        // Filter out Mac OS X system files (if enabled)
+        if(systemFoldersFilter!=null)
+            files = systemFoldersFilter.filter(files);
 
         return files;
     }
@@ -499,17 +514,26 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             // Refresh current folder in a separate thread
             tryRefreshCurrentFolder();
         }
-        // Show or hide .DS_Store files
+        // Show or hide .DS_Store files (Mac OS X option)
         else if (var.equals("prefs.file_table.show_ds_store_files")) {
             dsStoreFilenameFilter = event.getBooleanValue()?null:new DSStoreFileFilter();
             // Refresh current folder in a separate thread
             tryRefreshCurrentFolder();
         }
-
+        // Show or hide system folders (Mac OS X option)
+        else if (var.equals("prefs.file_table.show_system_folders")) {
+            systemFoldersFilter = event.getBooleanValue()?null:new SystemFoldersFilter(); 
+            // Refresh current folder in a separate thread
+            tryRefreshCurrentFolder();
+        }
 
         return true;
     }
 
+
+    ////////////////////////////////////
+    // ChangeFolderThread inner class //
+    ////////////////////////////////////
 
     /**
      * This thread takes care of changing current folder without locking the main

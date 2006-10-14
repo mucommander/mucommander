@@ -29,6 +29,10 @@ public class FileURL implements Cloneable {
 	
     private Hashtable properties;
 
+    /** String designating localhost */
+    public final static String LOCALHOST = "localhost";
+
+    
 
     /**
      * Creates a new FileURL from the given URL string.
@@ -246,10 +250,10 @@ public class FileURL implements Cloneable {
             int len;
             // Unix-style path
             if(firstChar=='/')
-                return new FileURL("file://localhost"+absPath, parentURL);
+                return new FileURL("file://"+LOCALHOST+absPath, parentURL);
             // Path starts with a reference to the user home folder, or is a Windows-style path
             else if(firstChar=='~' || absPath.indexOf(":\\")!=-1)
-                return new FileURL("file://localhost/"+absPath, parentURL);
+                return new FileURL("file://"+LOCALHOST+"/"+absPath, parentURL);
             // Handle Windows-style UNC network paths ( \\hostname\path ):
             // - under Windows, transform it into a URL in the file://hostname/path form,
             //   FSFile constructor will translate it back into an UNC network path

@@ -15,7 +15,8 @@
 
   <!-- Action  : Close the current window.                                       -->
   <!-- Default : F10                                                             -->
-  <action class="com.mucommander.ui.action.CloseWindowAction"           keystroke="F10"/>
+  <action class="com.mucommander.ui.action.CloseWindowAction"           keystroke="F10"
+                                                                        alt_keystroke="meta W"/>
 
   <!-- Action  : Compare the content of both panels.                             -->
   <!-- Default : control M                                                       -->

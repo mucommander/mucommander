@@ -162,12 +162,12 @@ New features:
  - 'Reveal in desktop' for Windows, KDE, GNOME (on top of Mac OS X)
  - Ability to open files with native file associations under KDE and GNOME
  - Ability to open URLs under KDE and GNOME
- - 'Show/Hide .DS_Store' option under Mac OS X
- - New 'change current location' keyboard shortcut (Ctrl+G by default)
- - New 'reveal in desktop' keyboard shortcut (Ctrl+L by default)
- - New file type icons for Mac OS X and Windows executables, libraries, Java, Powerpoint and Visual studio files
+ - 'Show .DS_Store files' option under Mac OS X
+ - 'Show system folders' option under Mac OS X
+ - 'Change current location' keyboard shortcut (Ctrl+G by default)
+ - 'Reveal in desktop' keyboard shortcut (Ctrl+L by default)
+ - New file icons for Mac OS X and Windows executables, libraries, Java, Powerpoint and Visual studio files
  - New toolbar icon for 'Reveal in desktop'
- - Files, folders and paths from an external application can be 'dropped' (as in Drag and Drop) to the folder panes to change the current folder
 
 Improvements:
  - Major code cleanup before source code release
@@ -201,13 +201,13 @@ Improvements:
  - Mac OS X: new 'Universal Binary' application stub, muCommander no longer uses Rosetta to start up
 
 Bug fixes:
- - Windows UNC network paths (those starting with \\) are now properly handled, fixing startup problems if the user home is located on a network share
+ - Windows UNC network paths (those starting with \\) are now properly handled, fixing startup problems under Windows if the user home is located on a network share
  - Fixed drive popup which doesn't immediately reflect bookmark changes
  - Fixed .GZ files not opened when extension is upper-cased
  - GZ files inside Tar archives can now be properly opened
  - Fixed 'Sort by date'/'Sort by size' not properly sorting files that have the same date or size, these are now sorted by name
  - Preferences XML file now properly indented
- - Removed Preferences from 'File' menu under Mac OS X 
+ - Removed Preferences from 'File' menu under Mac OS X (already present in the Apple menu) 
  - Fixed same directory which could be added several times in a row to history
  - Fixed HTTP errors and redirections not handled properly when browsing a website
  - Fixed drive button shrinking when browsing a folder with a long path
