@@ -28,11 +28,9 @@ public class TarArchiveFile extends AbstractArchiveFile {
      * Returns a TarInputStream which can be used to read TAR entries.
      */
     private TarInputStream createTarStream() throws IOException {
-        String ext = getExtension();
         InputStream inputStream = file.getInputStream();
 
-        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(this+" inputStream="+inputStream+" fileClass="+file.getClass());
-	
+        String ext = getExtension();
         if(ext!=null) {
             ext = ext.toLowerCase();
             // Gzip-compressed file

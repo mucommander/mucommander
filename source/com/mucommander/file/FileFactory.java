@@ -1,10 +1,18 @@
 package com.mucommander.file;
 
 import com.mucommander.cache.LRUCache;
+import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
+import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.filter.ExtensionFilenameFilter;
 
 import java.io.IOException;
 import java.io.File;
 import java.util.Random;
+import java.util.Hashtable;
+import java.util.Vector;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * FileFactory is an abstract class that provides static methods to create {link AbstractFile AbstractFile} instances.
@@ -14,12 +22,97 @@ import java.util.Random;
  */
 public abstract class FileFactory {
 
+    private static Hashtable registeredProtocolConstructors = new Hashtable();
+
+    private static Vector registeredArchiveFiltersV = new Vector();
+    private static Vector registeredArchiveConstructorsV = new Vector();
+
+    private static FileFilter registeredArchiveFilters[];
+    private static Constructor registeredArchiveConstructors[];
+
+
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
     private static LRUCache fileCache = LRUCache.createInstance(1000);
     /** Static LRUCache instance that caches frequently accessed FileURL instances */
     private static LRUCache urlCache = LRUCache.createInstance(1000);
 
+    /** System temp directory */
     private final static File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
+
+
+    static {
+        // Register built-in file protocols
+        // Local file protocol is hard-wired for performance reasons, no need to add it
+        // registerFileProtocol(FSFile.class, "file");
+        registerFileProtocol(SMBFile.class, "smb");
+        registerFileProtocol(HTTPFile.class, "http");
+        registerFileProtocol(HTTPFile.class, "https");
+        registerFileProtocol(FTPFile.class, "ftp");
+        registerFileProtocol(SFTPFile.class, "sftp");
+//        registerFileProtocol(WebDAVFile.class, "webdav");
+//        registerFileProtocol(WebDAVFile.class, "webdavs");
+        
+        // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
+        // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
+        registerArchiveFileFormat(ZipArchiveFile.class, new ExtensionFilenameFilter(new String[]{"zip", "jar"}));
+        registerArchiveFileFormat(TarArchiveFile.class, new ExtensionFilenameFilter(new String[]{"tar", "tar.gz", "tgz", "tar.bz2", "tbz2"}));
+        registerArchiveFileFormat(GzipArchiveFile.class, new ExtensionFilenameFilter("gz"));
+        registerArchiveFileFormat(Bzip2ArchiveFile.class, new ExtensionFilenameFilter("bz2"));
+        registerArchiveFileFormat(IsoArchiveFile.class, new ExtensionFilenameFilter(new String[]{"iso", "nrg"}));
+        registerArchiveFileFormat(ArArchiveFile.class, new ExtensionFilenameFilter(new String[]{"ar", "a", "deb"}));
+    }
+
+
+    /**
+     * Registers an {@link AbstractFile} Class to be used by <code>getFile()</code> methods to create files for the given file protocol.
+     *
+     * @param abstractFileClass a Class denoting an AbstractFile class
+     * @param protocol the protocol to register the AbstractFile Class for (e.g. "smb")
+     * @return <code>true</code> if the protocol was registered without any error, <code>false</code> otherwise
+     */
+    public static boolean registerFileProtocol(Class abstractFileClass, String protocol) {
+        try {
+            registeredProtocolConstructors.put(protocol.toLowerCase(), abstractFileClass.getConstructor(new Class[]{FileURL.class}));
+            return true;
+        }
+        catch(NoSuchMethodException e) {
+            System.out.println("Error: unable to register protocol "+protocol+" with class "+abstractFileClass);
+            return false;
+        }
+    }
+
+
+    /**
+     * Registers an {@link AbstractArchiveFile} Class to be used by the {@link #wrapArchive(AbstractFile)} method
+     * (and <code>getFile()</code> methods) to create archive files for files that match the specified file filter.
+     *
+     * @param abstractArchiveFileClass a Class denoting an AbstractArchiveFile class
+     * @param filter a FileFilter that will be used to determine if the file is an archive of the registered format
+     * @return <code>true</code> if the protocol was registered without any error, <code>false</code> otherwise
+     */
+    public static boolean registerArchiveFileFormat(Class abstractArchiveFileClass, FileFilter filter) {
+        try {
+            Constructor constructor = abstractArchiveFileClass.getConstructor(new Class[]{AbstractFile.class});
+
+            registeredArchiveConstructorsV.add(constructor);
+            registeredArchiveFiltersV.add(filter);
+
+            int nbArchiveFormats = registeredArchiveConstructorsV.size();
+
+            registeredArchiveConstructors = new Constructor[nbArchiveFormats];
+            registeredArchiveConstructorsV.toArray(registeredArchiveConstructors);
+            
+            registeredArchiveFilters = new FileFilter[nbArchiveFormats];
+            registeredArchiveFiltersV.toArray(registeredArchiveFilters);
+
+            return true;
+        }
+        catch(NoSuchMethodException e) {
+            System.out.println("Error: unable to register archive file format with class "+abstractArchiveFileClass);
+            return false;
+        }
+
+    }
 
 
     /**
@@ -52,6 +145,7 @@ public abstract class FileFactory {
      *
      * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file)
      * @throws java.io.IOException  and throwException param was set to <code>true</code>.
+     * @throws AuthException if additionnal authentication information is required to create the file
      */
     public static AbstractFile getFile(String absPath, boolean throwException) throws AuthException, IOException {
         try {
@@ -76,6 +170,7 @@ public abstract class FileFactory {
      * @param parent the returned file's parent
      *
      * @throws java.io.IOException if something went wrong during file or file url creation.
+     * @throws AuthException if additionnal authentication information is required to create the file
      */
     protected static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
         // Create a FileURL instance using the given path
@@ -144,52 +239,93 @@ public abstract class FileFactory {
     }
 
     /**
-     * Returns an instance of AbstractFile for the given FileURL instance and sets the giving parent.
+     * Creates and returns an instance of AbstractFile for the given FileURL and uses the specified parent file (if any)
+     * as the created file's parent.
      *
-     * @param fileURL the file URL
-     * @param parent the returned file's parent
+     * <p>Specifying the file parent if an instance already exists allows to recycle the AbstractFile instance
+     * instead of creating a new one when the parent file is requested.
+     *
+     * @param fileURL the file URL representing the file to be created
+     * @param parent the parent AbstractFile to use as the created file's parent, can be <code>null</code>
      *
      * @throws java.io.IOException if something went wrong during file creation.
      */
     public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
-        String protocol = fileURL.getProtocol().toLowerCase();
+        try {
+            String protocol = fileURL.getProtocol().toLowerCase();
 
-        AbstractFile file;
+            AbstractFile file;
 
-        // FS file (local filesystem) : an LRU file cache is used to recycle frequently used file instances
-        if (protocol.equals("file")) {
-            String urlRep = fileURL.getStringRep(true);
-            file = (AbstractFile)fileCache.get(urlRep);
-            //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((file==null?"Adding to file cache:":"File cache hit: ")+urlRep);
-            //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
+            // Special case for local files, do not use protocol registration mechanism to speed things up a bit
+            if(protocol.equals("file")) {
+                // Use an LRU file cache to recycle frequently used local file instances.
+                String urlRep = fileURL.getStringRep(true);
+                file = (AbstractFile)fileCache.get(urlRep);
 
-            if(file==null) {
+//                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
+
+                if(file!=null) {
+//                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("File cache hit for "+file);
+
+                    return file;
+                }
+
+                // Create local file instance
                 file = new FSFile(fileURL);
+
+                // Reuse existing parent file instance if one was specified
+                if(parent!=null)
+                    file.setParent(parent);
+
+                // Create archive files on top of this file (if the file matches one of the archive filters)
+                file = wrapArchive(file);
+
                 fileCache.add(urlRep, file);
+//                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Added to file cache: "+file);
+
+                return file;
+            }
+            // For any other file protocol, use registered protocols map
+            else {
+                // Get a registered Constructor instance for the file protocol
+                Constructor constructor = (Constructor)registeredProtocolConstructors.get(protocol);
+
+                // If constructor is null, it means the protocol hasn't been registered properly
+                if(constructor==null) {
+                    // Todo: localize this string as it can be displayed to the end user
+                    throw new IOException("Unknown protocol: "+protocol);
+                }
+
+                // May throw InstantiationException, IllegalAccessException, IllegalAccessException, ExceptionInInitializerError, InvocationTargetException
+                file = (AbstractFile)constructor.newInstance(new Object[]{fileURL});
+
+                // Reuse existing parent file instance if one was specified
+                if(parent!=null)
+                    file.setParent(parent);
+
+                // Create archive files on top of this file (if the file matches one of the archive filters)
+                return wrapArchive(file);
             }
         }
-        // SMB file
-        else if (protocol.equals("smb"))
-            file = new SMBFile(fileURL);
-        // HTTP/HTTPS file
-        else if (protocol.equals("http") || protocol.equals("https"))
-            file = new HTTPFile(fileURL);
-        // FTP file
-        else if (protocol.equals("ftp"))
-            file = new FTPFile(fileURL);
-        // SFTP file
-        else if (protocol.equals("sftp"))
-            file = new SFTPFile(fileURL);
-        // WebDAV file
-//        else if (protocol.equals("webdav") || protocol.equals("webdavs"))
-//            file = new WebDAVFile(fileURL);
-        else
-            throw new IOException("Unknown protocol "+protocol);
+        catch(InvocationTargetException e) {
+            // This exception is thrown by Constructor.newInstance() when the target constructor throws an Exception.
+            // If the exception was an IOException, throw it instead of a new IOException, as it may contain
+            // additional information about the error cause
+            if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
+                Throwable cause = e.getTargetException();   // Method only available under Java 1.4 and up
+                if(cause instanceof IOException)
+                    throw (IOException)cause;
+            }
 
-        if(parent!=null)
-            file.setParent(parent);
-
-        return wrapArchive(file);
+            throw new IOException();
+        }
+        catch(IOException e2) {
+            throw e2;
+        }
+        catch(Exception e3) {
+            // InstantiationException, IllegalAccessException, IllegalAccessException
+            throw new IOException();
+        }
     }
 
 
@@ -229,32 +365,29 @@ public abstract class FileFactory {
 
 
     /**
-     * Tests if based on its extension, the given file corresponds to a supported archive format. If it is, it creates
-     * the appropriate {@link com.mucommander.file.AbstractArchiveFile} on top of the provided file and returns it.
+     * Tests based on the given file's extension, if the file corresponds to a registered archive format.
+     * If it does, creates the appropriate {@link com.mucommander.file.AbstractArchiveFile} instance on top of the
+     * provided file and returns it.
      */
     protected static AbstractFile wrapArchive(AbstractFile file) {
+        // Look for an archive format filter that matches the file
         if(!file.isDirectory()) {
-            String ext = file.getExtension();
-            if(ext==null)
-                return file;
-
-            ext = ext.toLowerCase();
-            String nameLC = file.getName().toLowerCase();
-
-            if(ext.equals("zip") || ext.equals("jar"))
-                return new ZipArchiveFile(file);
-            else if(ext.equals("tar") || ext.equals("tgz") || nameLC.endsWith(".tar.gz") || ext.equals("tbz2") || nameLC.endsWith(".tar.bz2"))
-                return new TarArchiveFile(file);
-            else if(ext.equals("gz"))
-                return new GzipArchiveFile(file);
-            else if(ext.equals("bz2"))
-                return new Bzip2ArchiveFile(file);
-            else if(ext.equals("iso") || ext.equals("nrg"))
-                return new IsoArchiveFile(file);
-            else if(ext.equals("ar") || ext.equals("ar") || ext.equals("deb"))
-                return new ArArchiveFile(file);
+            int nbArchiveFormats = registeredArchiveFilters.length;
+            for(int i=0; i<nbArchiveFormats; i++) {
+                if(registeredArchiveFilters[i].accept(file)) {
+                    try {
+                        // Found one, create the AbstractArchiveFile instance and return it
+                        file = (AbstractFile)registeredArchiveConstructors[i].newInstance(new Object[]{file});
+                        break;
+                    }
+                    catch(Exception e) {
+                        if(Debug.ON) Debug.trace("Caught exception while trying to instanciate registered AbstractArchiveFile constructor: "+registeredArchiveConstructors[i]);
+                    }
+                }
+            }
         }
 
+//if(Debug.ON) Debug.trace("file="+file+" class="+file.getClass());
         return file;
     }
 }

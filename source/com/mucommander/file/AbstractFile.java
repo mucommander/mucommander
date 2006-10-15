@@ -133,18 +133,28 @@ public abstract class AbstractFile {
 
 
     /**
-     * Returns the file's extension, <code>null</code> if the file doesn't have an extension.
+     * Returns the given file's extension, <code>null</code> if the file doesn't have an extension.
      */
     public String getExtension() {
-        String name = getName();
-        int lastDotPos = name.lastIndexOf('.');
+        return getExtension(getName());
+    }
+
+    
+    /**
+     * Returns the given filename's extension, <code>null</code> if the name doesn't have an extension.
+     *
+     * @param filename a filename, not a full path
+     */
+    public static String getExtension(String filename) {
+        int lastDotPos = filename.lastIndexOf('.');
 
         int len;
-        if(lastDotPos==-1 || lastDotPos==(len=name.length())-1)
+        if(lastDotPos==-1 || lastDotPos==(len=filename.length())-1)
             return null;
-	
-        return name.substring(lastDotPos+1, len);
+
+        return filename.substring(lastDotPos+1, len);
     }
+
 
 
     /**

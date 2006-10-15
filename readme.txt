@@ -173,7 +173,7 @@ Improvements:
  - Major code cleanup before source code release
  - Optimized table rendering for better display performance
  - Optimized file handling for better file access performance
- - Optimized Zip and Tar archive handling files for much quicker access
+ - Optimized Zip and Tar archive handling files, access is now much faster
  - SMB performance improved when changing folders
  - Roots of SMB hosts now have a parent (smb://) to more easily browse workgroups/shares 
  - Free/total volume space now automatically refreshes (every 60 seconds)
@@ -205,6 +205,7 @@ Bug fixes:
  - Fixed drive popup which doesn't immediately reflect bookmark changes
  - Fixed .GZ files not opened when extension is upper-cased
  - GZ files inside Tar archives can now be properly opened
+ - Archive entries properly refreshed when an archive is being browsed and the archive file has changed
  - Fixed 'Sort by date'/'Sort by size' not properly sorting files that have the same date or size, these are now sorted by name
  - Preferences XML file now properly indented
  - Removed Preferences from 'File' menu under Mac OS X (already present in the Apple menu) 
@@ -232,5 +233,6 @@ Known issues:
  - Write/execute modes are not preserved when a file is copied, this will be solved with Java 1.6
  - SFTP folders limited to 98 files
  - SFTP unavailable under Java 1.3
+ - Some BZ2 archives can not be properly opened
  - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System Preferences' for them to work properly
  - Mac OS X : text fields don't work correctly when using a fractionally-scaled font (Known Java bug, http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)

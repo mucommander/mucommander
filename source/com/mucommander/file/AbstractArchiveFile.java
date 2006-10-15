@@ -17,16 +17,28 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
     /** Archive entries tree */
     private DefaultMutableTreeNode entriesTree;
-	
+
+    /** Date this file had when the entries tree was created. Used to detect if the archive file has changed and entries
+     * need to be reloaded */
+    private long entriesTreeDate;
+
 
     /**
      * Creates an AbstractArchiveFile on top of the given file.
+     *
+     * @param file the file on top of which to create the archive
      */
     protected AbstractArchiveFile(AbstractFile file) {
         super(file);
     }
 
 
+    /**
+     * Creates the entries tree, used by {@link #ls(ArchiveEntryFile, com.mucommander.file.filter.FilenameFilter, com.mucommander.file.filter.FileFilter)}
+     * to quickly list the contents of an archive's subfolder.
+     *
+     * @throws IOException if an error occured while retrieving this archive's entries
+     */
     private void createEntriesTree() throws IOException {
         DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode();
 
@@ -95,12 +107,29 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries tree created in "+(System.currentTimeMillis()-start)+" ms");
 		
         this.entriesTree = treeRoot;
+        this.entriesTreeDate = getDate();
     }
 
-	
-    AbstractFile[] ls(ArchiveEntryFile entryFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException {
-        if(this.entriesTree == null)
+
+    /**
+     * Checks that the entries tree exists and that this file hasn't changed since it was created. If any of those
+     * 2 conditions isn't met, the entries tree is (re)created. 
+     *
+     * @throws IOException if an error occurred while creating the tree
+     */
+    private void checkEntriesTree() throws IOException {
+        if(this.entriesTree==null || getDate()!=this.entriesTreeDate)
             createEntriesTree();
+        
+    }
+
+
+    /**
+     * Returns the contents of the specified folder entry.
+     */
+    AbstractFile[] ls(ArchiveEntryFile entryFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException {
+        // Make sure the entries tree is created and up-to-date
+        checkEntriesTree();        
 
         // Find the node that corresponds to the specified entry
         ArchiveEntry entry = entryFile.getEntry();
@@ -134,6 +163,9 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     }
 
 
+    /**
+     * Returns the contents (direct children) of the specified tree node.
+     */
     private AbstractFile[] ls(DefaultMutableTreeNode treeNode, AbstractFile parentFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException {
         AbstractFile files[];
         int nbChildren = treeNode.getChildCount();
@@ -165,6 +197,10 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     }
 
 
+    /**
+     * Creates and returns an AbstractFile using the provided entry and parent file. This method takes care of
+     * creating the proper AbstractArchiveFile instance if the entry is itself an archive.
+     */
     private AbstractFile createArchiveEntryFile(ArchiveEntry entry, AbstractFile parentFile) throws java.net.MalformedURLException {
         String separator = getSeparator();
         FileURL archiveURL = getURL();
@@ -192,8 +228,9 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     //////////////////////
 	
     /**
-     * Returns a Vector with all the entries this archive file contains. This method will be called once at most
-     * during the lifetime of an archive file.
+     * Returns a Vector with all the entries this archive file contains. This method will be called the first time
+     * one of the <code>ls()</code> is called. If will not be further called, unless the file's date has changed since
+     *
      */
     abstract Vector getEntries() throws IOException;
 
@@ -208,22 +245,22 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     ////////////////////////
 
     public AbstractFile[] ls() throws IOException {
-        if(this.entriesTree == null)
-            createEntriesTree();
+        // Make sure the entries tree is created and up-to-date
+        checkEntriesTree();
 
         return ls(entriesTree, this, null, null);
     }
 
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
-        if(this.entriesTree == null)
-            createEntriesTree();
+        // Make sure the entries tree is created and up-to-date
+        checkEntriesTree();
 
         return ls(entriesTree, this, filter, null);
     }
 
     public AbstractFile[] ls(FileFilter filter) throws IOException {
-        if(this.entriesTree == null)
-            createEntriesTree();
+        // Make sure the entries tree is created and up-to-date
+        checkEntriesTree();
 
         return ls(entriesTree, this, null, filter);
     }
