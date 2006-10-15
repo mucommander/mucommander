@@ -59,6 +59,9 @@ public class BookmarkWriter {
 
             // End root element
             out.endElement(ELEMENT_ROOT);
+
+            // Close XMLWriter
+            out.close();
         }
         finally {
             // Close stream, IOException is thrown under Java 1.3 but no longer under 1.4 and up,

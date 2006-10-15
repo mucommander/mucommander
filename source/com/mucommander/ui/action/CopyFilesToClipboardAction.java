@@ -5,7 +5,8 @@ import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.file.FileSet;
 
 /**
- * This action copies the selected / marked files to the clipboard.
+ * This action copies the selected / marked files to the system clipboard, allowing to paste
+ * them to muCommander or another application.
  *
  * @author Maxence Bernard
  */

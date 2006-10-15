@@ -248,6 +248,15 @@ public abstract class AbstractFile {
 
 
     /**
+     * Returns <code>true</code> if this file is an archive entry. 
+     */
+    public boolean isArchiveEntry() {
+        return this instanceof ArchiveEntryFile
+           || (this instanceof AbstractArchiveFile && !(((AbstractArchiveFile)this).getProxiedFile() instanceof FSFile));
+    }
+
+
+    /**
      * Returns the root folder that contains this AbstractFile. If this file is already
      * a root folder (no parent), it will simply be returned.
      */

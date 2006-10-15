@@ -787,6 +787,27 @@ com.mucommander.ui.action.CopyFilePathsAction.label:FR:Copier chemin(s)
 
 
 
+
+com.mucommander.ui.action.CopyFilesToClipboardAction.label:EN:Copy file(s)
+com.mucommander.ui.action.CopyFilesToClipboardAction.label:FR:Copier fichier(s)
+# Translation missing
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.PasteClipboardFilesAction.label:EN:Paste file(s)
+com.mucommander.ui.action.PasteClipboardFilesAction.label:FR:Coller fichier(s)
+# Translation missing
+
+
+
+
+
+
 com.mucommander.ui.action.EmailAction.label:EN:Email files...
 com.mucommander.ui.action.EmailAction.label:FR:Envoyer par email...
 com.mucommander.ui.action.EmailAction.label:DE:Dateien mailen...

@@ -6,7 +6,7 @@ import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.about.AboutDialog;
-import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.ui.editor.EditorFrame;
@@ -39,59 +39,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
     private MainFrame mainFrame;	
 	
-    // File menu
-    private JMenu fileMenu;
-//    private JMenuItem newWindowItem;
-//    private JMenuItem copyNamesItem;
-//    private JMenuItem copyPathsItem;
-//    private JMenuItem serverConnectItem;
-//    private JMenuItem runItem;
-//    private JMenuItem packItem;
-//    private JMenuItem unpackItem;
-//    private JMenuItem emailFilesItem;
-//    private JMenuItem propertiesItem;
-//    private JMenuItem preferencesItem;
-//    private JMenuItem checkForUpdatesItem;
-//    private JMenuItem closeItem;
-//    private JMenuItem quitItem;
-
-    // Mark menu
-    private JMenu markMenu;
-//    private JMenuItem markGroupItem;
-//    private JMenuItem unmarkGroupItem;
-//    private JMenuItem markAllItem;
-//    private JMenuItem unmarkAllItem;
-//    private JMenuItem invertSelectionItem;
-//    private JMenuItem compareFoldersItem;
-	
-    // View menu
-    private JMenu viewMenu;
-//    private JMenuItem changeFolderItem;
-//    private JMenuItem goBackItem;
-//    private JMenuItem goForwardItem;
-//    private JMenuItem goToParentItem;
-//    private JMenuItem swapFoldersItem;
-//    private JMenuItem setSameFolderItem;
-//    private JCheckBoxMenuItem sortByNameItem;
-//    private JCheckBoxMenuItem sortBySizeItem;
-//    private JCheckBoxMenuItem sortByDateItem;
-//    private JCheckBoxMenuItem sortByExtensionItem;
-//    private JMenuItem reverseOrderItem;
-//    private JCheckBoxMenuItem autoSizeColumnsItem;
-
     // Bookmark menu
     private JMenu bookmarksMenu;
-//    private JMenuItem addBookmarkItem;
-//    private JMenuItem editBookmarksItem;
     private int bookmarksOffset;  // Index of first bookmark in menu
     private Vector bookmarks;
     private Vector bookmarkMenuItems;
 
     // Window menu
     private JMenu windowMenu;
-//    private JMenuItem showToolbarItem;
-//    private JMenuItem showCommandBarItem;
-//    private JMenuItem showStatusBarItem;
 
     /** Maps window menu items onto weakly-referenced frames */
     private WeakHashMap windowMenuFrames;
@@ -115,94 +70,96 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 		
         // File menu
-        fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.NewWindowAction.class, mainFrame), menuItemMnemonicHelper);
+        JMenu fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(NewWindowAction.class, mainFrame), menuItemMnemonicHelper);
 
         fileMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.OpenAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.OpenNativelyAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.RevealInDesktopAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenNativelyAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(RevealInDesktopAction.class, mainFrame), menuItemMnemonicHelper);
 
         fileMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ConnectToServerAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.RunCommandAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.PackAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.UnpackAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.EmailAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ConnectToServerAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(RunCommandAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(PackAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(UnpackAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(EmailAction.class, mainFrame), menuItemMnemonicHelper);
 
         fileMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ShowFilePropertiesAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ShowFilePropertiesAction.class, mainFrame), menuItemMnemonicHelper);
 
         // Under Mac OS X, 'Preferences' already appears in the application (muCommander) menu, do not display it again
         if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X) {
             fileMenu.add(new JSeparator());
-            MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ShowPreferencesAction.class, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ShowPreferencesAction.class, mainFrame), menuItemMnemonicHelper);
         }
 
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CheckForUpdatesAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CheckForUpdatesAction.class, mainFrame), menuItemMnemonicHelper);
 		
         fileMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CloseWindowAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CloseWindowAction.class, mainFrame), menuItemMnemonicHelper);
         // Under Mac OS X, 'Quit' already appears in the application (muCommander) menu, do not display it again
 		if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X)
-            MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(com.mucommander.ui.action.QuitAction.class, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(QuitAction.class, mainFrame), menuItemMnemonicHelper);
         
         add(fileMenu);
 
         // Mark menu
         menuItemMnemonicHelper.clear();
-        markMenu = MenuToolkit.addMenu(Translator.get("mark_menu"), menuMnemonicHelper, this);
+        JMenu markMenu = MenuToolkit.addMenu(Translator.get("mark_menu"), menuMnemonicHelper, this);
         // Accelerators (keyboard shortcuts) for the following menu items will be set/unset when the menu is selected/deselected
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.MarkGroupAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.UnmarkGroupAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.MarkAllAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.UnmarkAllAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.InvertSelectionAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(MarkGroupAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(UnmarkGroupAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(MarkAllAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(UnmarkAllAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(InvertSelectionAction.class, mainFrame), menuItemMnemonicHelper);
 
         markMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CompareFoldersAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFilesToClipboardAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFileNamesAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFilePathsAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(PasteClipboardFilesAction.class, mainFrame), menuItemMnemonicHelper);
 
         markMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CopyFileNamesAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(com.mucommander.ui.action.CopyFilePathsAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CompareFoldersAction.class, mainFrame), menuItemMnemonicHelper);
 
         add(markMenu);
 
         // View menu
         menuItemMnemonicHelper.clear();
-        viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.GoBackAction.class, mainFrame), menuItemMnemonicHelper);
+        JMenu viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(GoBackAction.class, mainFrame), menuItemMnemonicHelper);
         // Accelerators (keyboard shortcuts) for the following menu items will be set/unset when the menu is selected/deselected
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.GoForwardAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.GoToParentAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ChangeLocationAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(GoForwardAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(GoToParentAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ChangeLocationAction.class, mainFrame), menuItemMnemonicHelper);
         viewMenu.add(new JSeparator());
         ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.SortByExtensionAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.SortByNameAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.SortBySizeAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.SortByDateAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByExtensionAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByNameAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortBySizeAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByDateAction.class, mainFrame), menuItemMnemonicHelper));
 
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ReverseSortOrderAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ReverseSortOrderAction.class, mainFrame), menuItemMnemonicHelper);
         viewMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.SwapFoldersAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.SetSameFolderAction.class, mainFrame), menuItemMnemonicHelper);
-
-        viewMenu.add(new JSeparator());
-        MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper).setSelected(mainFrame.getLastActiveTable().isAutoSizeColumnsEnabled());
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(SwapFoldersAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(SetSameFolderAction.class, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ToggleToolBarAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ToggleStatusBarAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(com.mucommander.ui.action.ToggleCommandBarAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper).setSelected(mainFrame.getLastActiveTable().isAutoSizeColumnsEnabled());
+
+        viewMenu.add(new JSeparator());
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ToggleToolBarAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ToggleStatusBarAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ToggleCommandBarAction.class, mainFrame), menuItemMnemonicHelper);
 		
         add(viewMenu);
 
         // Bookmark menu, menu items will be added when the menu gets selected
         menuItemMnemonicHelper.clear();
         bookmarksMenu = MenuToolkit.addMenu(Translator.get("bookmarks_menu"), menuItemMnemonicHelper, this);
-        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(com.mucommander.ui.action.AddBookmarkAction.class, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(com.mucommander.ui.action.EditBookmarksAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(AddBookmarkAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(EditBookmarksAction.class, mainFrame), menuItemMnemonicHelper);
         bookmarksMenu.add(new JSeparator());
         // Remember bookmarks offset (index of first bookmark in menu) for later
         this.bookmarksOffset = bookmarksMenu.getItemCount();
@@ -240,55 +197,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 	
 
     /**
-     * Enables/disables contextual menu items of the given menu, based on the current context. 
-     * This method is called when a menu is pulled down, and called again when menu is deselected or cancelled, 
-     * to enable all menu items (unconditional) so that their shortcuts are properly caught.
+     * This method is called when a menu is pulled down, and called again when menu is deselected or cancelled,
+     * for contextual menu items that need to refresh their state.
      *
      * @param menu menu that just got selected/deselected/cancelled
-     * @param enableUnconditional if true, all conditional menu items in the given menu have to be enabled for
-     * the shortcuts to be active
      */
-    private void toggleContextualMenuItems(JMenu menu, boolean enableUnconditional) {
-//        if(menu == fileMenu) {
-//            FileTable fileTable = mainFrame.getLastActiveTable();
-//            boolean filesSelected = enableUnconditional || fileTable.getSelectedFiles().size()>0;
-//
-//            // enable/disable those menu items if no file is selected
-//            propertiesItem.setEnabled(filesSelected);
-//            packItem.setEnabled(filesSelected);
-//            unpackItem.setEnabled(filesSelected);
-//            emailFilesItem.setEnabled(filesSelected);
-//        }
-//        else if(menu == markMenu) {
-//            // Display accelerators when menu is selected and remove them when it get deselected (keyboard shortcut is caught in FileTable)
-//            if(menu.isSelected()) {
-//                restoreAccelerator(markGroupItem);
-//                restoreAccelerator(unmarkGroupItem);
-//                restoreAccelerator(markAllItem);
-//                restoreAccelerator(unmarkAllItem);
-//                restoreAccelerator(invertSelectionItem);
-//            }
-//            else {
-//                markGroupItem.setAccelerator(null);
-//                unmarkGroupItem.setAccelerator(null);
-//                markAllItem.setAccelerator(null);
-//                unmarkAllItem.setAccelerator(null);
-//                invertSelectionItem.setAccelerator(null);
-//            }
-//        }
-//        else if(menu == viewMenu) {
-//            // Display accelerators when menu is selected and remove them when it get deselected (keyboard shortcut is caught in FileTable)
-//            if(menu.isSelected()) {
-//                restoreAccelerator(goBackItem);
-//                restoreAccelerator(goForwardItem);
-//                restoreAccelerator(goToParentItem);
-//            }
-//            else {
-//                goBackItem.setAccelerator(null);
-//                goForwardItem.setAccelerator(null);
-//                goToParentItem.setAccelerator(null);
-//            }
-//        }
+    private void toggleContextualMenuItems(JMenu menu) {
         if(menu == windowMenu && !menu.isSelected()) {
             // Remove accelerators from all menu items but do not remove or disable menu items,
             // this would cause the actionPerformed() method not be called when item is clicked.            
@@ -303,11 +217,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     }
 
 
-//    private void restoreAccelerator(JMenuItem menuItem) {
-//        menuItem.setAccelerator(((MucoAction)menuItem.getAction()).getAccelerator());
-//    }
-
-
     ///////////////////////////
     // ActionListener method //
     ///////////////////////////
@@ -316,10 +225,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Discard action events while in 'no events mode'
         if(mainFrame.getNoEventsMode())
             return;
-
-//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("mainFrame.getFocusOwner()="+mainFrame.getFocusOwner()+" isSelected()="+isSelected());
-//        if(!(mainFrame.getFocusOwner() instanceof FileTable))
-//            return;
 
         Object source = e.getSource();
 
@@ -360,7 +265,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         Object source = e.getSource();
 
         // Enable/disable contextual menu items depending on the current context
-        toggleContextualMenuItems((JMenu)source, false); 
+        toggleContextualMenuItems((JMenu)source);
 
         if(source==bookmarksMenu) {
             if(this.bookmarkMenuItems != null) {
@@ -443,12 +348,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     }
 	
     public void menuDeselected(MenuEvent e) {
-        // Enable all contextual menu items
-        toggleContextualMenuItems((JMenu)e.getSource(), true); 
+        // Enable/disable contextual menu items depending on the current context
+        toggleContextualMenuItems((JMenu)e.getSource());
     }
 	 
     public void menuCanceled(MenuEvent e) {
-        // Enable all contextual menu items
-        toggleContextualMenuItems((JMenu)e.getSource(), true); 
+        // Enable/disable contextual menu items depending on the current context
+        toggleContextualMenuItems((JMenu)e.getSource());
     }
 }

@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.Random;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.Set;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -22,14 +23,18 @@ import java.lang.reflect.InvocationTargetException;
  */
 public abstract class FileFactory {
 
+    /** Protocol/Constructor map of registered protocols */
     private static Hashtable registeredProtocolConstructors = new Hashtable();
 
+    /** List of registered archive filters */
     private static Vector registeredArchiveFiltersV = new Vector();
+    /** List of registered archive constructors */
     private static Vector registeredArchiveConstructorsV = new Vector();
 
+    /** Array of registered archive filters, for quicker access */
     private static FileFilter registeredArchiveFilters[];
+    /** Array of registered archive constructors, for quicker access */
     private static Constructor registeredArchiveConstructors[];
-
 
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
     private static LRUCache fileCache = LRUCache.createInstance(1000);
@@ -48,7 +53,10 @@ public abstract class FileFactory {
         registerFileProtocol(HTTPFile.class, "http");
         registerFileProtocol(HTTPFile.class, "https");
         registerFileProtocol(FTPFile.class, "ftp");
-        registerFileProtocol(SFTPFile.class, "sftp");
+        // SFTP (J2SSH) library only works with Java 1.4 and up, do not register it if running Java 1.3 or lower
+        // Technically, J2SSH could run under Java 1.3 with BouncyCastle's crypto library but it is unfortunately too fat
+        if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_4)
+            registerFileProtocol(SFTPFile.class, "sftp");
 //        registerFileProtocol(WebDAVFile.class, "webdav");
 //        registerFileProtocol(WebDAVFile.class, "webdavs");
         
@@ -94,11 +102,13 @@ public abstract class FileFactory {
         try {
             Constructor constructor = abstractArchiveFileClass.getConstructor(new Class[]{AbstractFile.class});
 
+            // Constructor could be created, it means the class looks ok so far, register the filter and associated constructor
             registeredArchiveConstructorsV.add(constructor);
             registeredArchiveFiltersV.add(filter);
 
             int nbArchiveFormats = registeredArchiveConstructorsV.size();
 
+            // Convert vectors to arrays to speed up access a bit as these are very frequently accessed 
             registeredArchiveConstructors = new Constructor[nbArchiveFormats];
             registeredArchiveConstructorsV.toArray(registeredArchiveConstructors);
             
@@ -112,6 +122,11 @@ public abstract class FileFactory {
             return false;
         }
 
+    }
+
+
+    public static Set getRegisteredProtocols() {
+        return registeredProtocolConstructors.keySet();
     }
 
 

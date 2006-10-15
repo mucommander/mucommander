@@ -3,6 +3,7 @@ package com.mucommander.conf;
 import com.mucommander.xml.writer.XmlWriter;
 
 import java.io.OutputStream;
+import java.io.IOException;
 
 /**
  * Writes the configuration tree to an output stream.
@@ -22,6 +23,7 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
     public void writeXML(OutputStream stream) {
         out = new XmlWriter(stream);
         ConfigurationManager.buildConfigurationTree(this);
+        try { out.close(); } catch(IOException e) {};
     }
 
     /**

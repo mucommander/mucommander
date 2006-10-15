@@ -21,13 +21,19 @@ public abstract class MucoAction extends AbstractAction {
     public MucoAction(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
 
-        // Look for a label dictionary entry in the '<classname>.label' format and use it if it exists
+//        // Look for a label dictionary entry in the '<classname>.label' format and use it if it exists
+//        Class classInstance = getClass();
+//        String className = classInstance.getName();
+//        String key = className+".label";
+//        if(Translator.entryExists(key))
+//            setLabel(Translator.get(key));
+
+        // Sets this action's label to a localized dictionary entry in the '<classname>.label' format
         Class classInstance = getClass();
         String className = classInstance.getName();
         String key = className+".label";
-        if(Translator.entryExists(key))
-            setLabel(Translator.get(key));
-
+        setLabel(Translator.get(key));
+        
         // Look for a tooltip dictionary entry in the '<action_classname>.tooltip' format and use it if it exists
         key = className+".tooltip";
         if(Translator.entryExists(key))

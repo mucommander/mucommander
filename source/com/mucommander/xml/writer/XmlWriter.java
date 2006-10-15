@@ -45,7 +45,7 @@ public class XmlWriter {
     // - Instance fields -------------------------------------------------
     // -------------------------------------------------------------------
     /** Where to write the XML content to. */
-    private PrintStream out;
+    private PrintWriter out;
     /** Current indentation offset. */
     private int         offset;
     /** Whether the next element opening or closing operation should be indented. */
@@ -85,9 +85,11 @@ public class XmlWriter {
      * @param stream where the XmlWriter should write its content to.
      */
     public XmlWriter(OutputStream stream) {
-        try {out = new PrintStream(stream, true, DEFAULT_ENCODING);}
+//        try {out = new PrintStream(stream, true, DEFAULT_ENCODING);}  // Not available under Java 1.3
+        try {out = new PrintWriter(new OutputStreamWriter(stream, DEFAULT_ENCODING), true);}
         // We can safely assume that any JVM knows how to encode text in UTF-8.
         catch(Exception e) {}
+
         writeHeader(DEFAULT_ENCODING);
     }
 
@@ -95,11 +97,11 @@ public class XmlWriter {
      * Creates an XmlWriter that will write to the specified stream.
      * @param     stream                       where the XmlWriter should write its content to.
      * @param     encoding                     encoding to use when writing the XML content.
-     * @exception FileNotFoundException        thrown if <code>file</code> could not be found.
      * @exception UnsupportedEncodingException thrown if <code>encoding</code> is not supported.
      */
     public XmlWriter(OutputStream stream, String encoding) throws UnsupportedEncodingException {
-        out = new PrintStream(stream, true, encoding);
+//        out = new PrintStream(stream, true, encoding);    // Not available under Java 1.3
+        out = new PrintWriter(new OutputStreamWriter(stream, encoding), true);
 
         writeHeader(encoding);
     }

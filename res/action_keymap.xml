@@ -14,7 +14,7 @@
   <action class="com.mucommander.ui.action.ChangeLocationAction"        keystroke="control G"/>
 
   <!-- Action  : Close the current window.                                       -->
-  <!-- Default : F10                                                             -->
+  <!-- Default : F10, meta W                                                     -->
   <action class="com.mucommander.ui.action.CloseWindowAction"           keystroke="F10"
                                                                         alt_keystroke="meta W"/>
 
@@ -30,15 +30,18 @@
   <!-- Default : F5                                                              -->
   <action class="com.mucommander.ui.action.CopyAction"                  keystroke="F5"/>
 
-  <!-- Action  : Save selected file(s) name(s) to clipboard.                     -->
-  <!-- Default : meta C, control C                                               -->
-  <action class="com.mucommander.ui.action.CopyFileNamesAction"         keystroke="control C"
-                                                                        alt_keystroke="meta C"/>
+  <!-- Action  : Copy selected file(s) name(s) to clipboard.                     -->
+  <!-- Default : alt C                                                           -->
+  <action class="com.mucommander.ui.action.CopyFileNamesAction"         keystroke="alt C"/>
 
-  <!-- Action  : Save selected file(s) full path(s) to clipboard.                -->
-  <!-- Default : shift meta C, shift control C                                   -->
-  <action class="com.mucommander.ui.action.CopyFilePathsAction"         keystroke="shift control C"
-                                                                        alt_keystroke="shift meta C"/>
+  <!-- Action  : Copy selected file(s) full path(s) to clipboard.                -->
+  <!-- Default : shift alt C                                                     -->
+  <action class="com.mucommander.ui.action.CopyFilePathsAction"         keystroke="shift alt C"/>
+
+  <!-- Action  : Copy selected file(s) name(s) to clipboard.                     -->
+  <!-- Default : meta C, control C                                               -->
+  <action class="com.mucommander.ui.action.CopyFilesToClipboardAction"  keystroke="control C"
+                                                                        alt_keystroke="meta C"/>
 
   <!-- Action  : Delete selected file(s).                                        -->
   <!-- Default : F8, DELETE                                                      -->
@@ -108,6 +111,11 @@
   <!-- Default : control I                                                       -->
   <action class="com.mucommander.ui.action.PackAction"                  keystroke="control I"/>
 
+  <!-- Action  : Paste clipboard file(s) to the current folder.                  -->
+  <!-- Default : meta V, control V                                               -->
+  <action class="com.mucommander.ui.action.PasteClipboardFilesAction"   keystroke="control V"
+                                                                        alt_keystroke="meta V"/>
+    
   <!-- Action  : Set keyboard focus on the left drive list.                      -->
   <!-- Default : alt F1                                                          -->
   <action class="com.mucommander.ui.action.PopupLeftDriveButtonAction"  keystroke="alt F1"/>
