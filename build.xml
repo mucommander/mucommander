@@ -326,6 +326,10 @@
       <keepclasseswithmembers extends="com.mucommander.ui.action.MucoAction">
         <constructor access="public" name="*"/>
       </keepclasseswithmembers>
+      <!-- File API uses reflection -->
+      <keepclasseswithmembers extends="com.mucommander.file.AbstractFile">
+        <constructor access="public" name="*"/>
+      </keepclasseswithmembers>
       <!-- Main class -->
       <keep name="${main-class}">
 	    <method access="public static" type="void" name="main" parameters="java.lang.String[]"/>

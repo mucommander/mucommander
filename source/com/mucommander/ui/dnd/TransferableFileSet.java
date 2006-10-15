@@ -239,7 +239,7 @@ public class TransferableFileSet implements Transferable {
 
 
     public Object getTransferData(DataFlavor dataFlavor) throws UnsupportedFlavorException, IOException {
-if(Debug.ON) Debug.trace("called, dataFlavor="+dataFlavor);
+//if(Debug.ON) Debug.trace("called, dataFlavor="+dataFlavor);
         int nbFiles = fileSet.size();
 
         // Return files stored in a FileSet instance (the one that was passed to the constructor)
@@ -252,9 +252,9 @@ if(Debug.ON) Debug.trace("called, dataFlavor="+dataFlavor);
 
             for(int i=0; i<nbFiles; i++) {
                 AbstractFile file = fileSet.fileAt(i);
-                // Add the file only if it is a local file that is not an archive's entry
-                if(file.getURL().getProtocol().equals("file") && ((file instanceof FSFile) || (file instanceof AbstractArchiveFile && ((AbstractArchiveFile)file).getProxiedFile() instanceof FSFile)))
-                    fileList.add(new File(file.getAbsolutePath()));
+//                // Add the file only if it is a local file that is not an archive's entry
+//                if(file.getURL().getProtocol().equals("file") && ((file instanceof FSFile) || (file instanceof AbstractArchiveFile && ((AbstractArchiveFile)file).getProxiedFile() instanceof FSFile)))
+                fileList.add(new File(file.getAbsolutePath()));
             }
             return fileList;
         }

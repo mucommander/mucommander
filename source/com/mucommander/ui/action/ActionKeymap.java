@@ -36,7 +36,7 @@ public class ActionKeymap implements ContentHandler {
 
     /**
      * Sets the path to the action keymap file to be loaded when calling {@link #loadActionKeyMap()}.
-     * By default, this file is {@link DEFAULT_ACTION_KEYMAP_FILENAME} within the preferences folder.
+     * By default, this file is {@link #DEFAULT_ACTION_KEYMAP_FILENAME} within the preferences folder.
      *
      * @param filePath path to the action keymap file
      */

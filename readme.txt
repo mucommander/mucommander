@@ -155,7 +155,7 @@ New features:
  - New quick search with visual feedback, editable search string, jump to next/previous matches and ability to cancel it
  - 'Run command' allows shell customization, quick recall of previous commands and uses the system's default shell to parse commands under UNIX platforms (contributed by Nicolas Rinaudo)
  - Command line options (contributed by Nicolas Rinaudo)
- - Ability to execute non local files
+ - Ability to execute remote or archive entries files: these are copied to a temporary local directory and executed
  - Location combo box now allows to quickly recall parent folders
  - Icons magnification option for toolbar, command bar and files
  - New 'Copy name(s)' and 'Copy path(s)' actions to copy marked files names / paths (Ctrl+C / Shift+Ctrl+C by default) 

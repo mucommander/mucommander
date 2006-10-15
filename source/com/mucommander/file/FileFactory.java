@@ -76,7 +76,7 @@ public abstract class FileFactory {
             return true;
         }
         catch(NoSuchMethodException e) {
-            System.out.println("Error: unable to register protocol "+protocol+" with class "+abstractFileClass);
+            System.out.println("Error: unable to register protocol "+protocol+" with "+abstractFileClass);
             return false;
         }
     }
