@@ -36,7 +36,6 @@ public class SMBFile extends AbstractFile {
         // To quote jCIFS's documentation : "0 - No log messages are printed -- not even crticial exceptions."
         if(!Debug.ON)
             System.setProperty("jcifs.util.loglevel", "0");
-
     }
 
 
