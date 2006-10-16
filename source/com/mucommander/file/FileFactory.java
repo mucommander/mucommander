@@ -292,13 +292,14 @@ public abstract class FileFactory {
                 if(parent!=null)
                     file.setParent(parent);
 
-                // Create archive files on top of this file (if the file matches one of the archive filters)
-                file = wrapArchive(file);
-
                 fileCache.add(urlRep, file);
 //                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Added to file cache: "+file);
 
-                return file;
+                // Create an archive file on top of this file if the file matches one of the archive filters
+                // This must be done after adding the file to the LRU cache, this could otherwise lead to weird
+                // behaviors, for example if a directory with the same filename of a former archive was created,
+                // the directory would be considered as an archive
+                return wrapArchive(file);
             }
             // For any other file protocol, use registered protocols map
             else {
@@ -318,7 +319,7 @@ public abstract class FileFactory {
                 if(parent!=null)
                     file.setParent(parent);
 
-                // Create archive files on top of this file (if the file matches one of the archive filters)
+                // Create an archive file on top of this file if the file matches one of the archive filters
                 return wrapArchive(file);
             }
         }
