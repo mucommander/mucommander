@@ -2,6 +2,7 @@ package com.mucommander.file;
 
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.Debug;
 import jcifs.smb.*;
 
 import java.io.IOException;
@@ -30,45 +31,12 @@ public class SMBFile extends AbstractFile {
     private final static String SEPARATOR = DEFAULT_SEPARATOR;
 
 
-    /**
-     * SMBRandomAccessInputStream extends RandomAccessInputStream to provide random access to an <code>SMBFile</code>'s
-     * content.
-     */
-    public class SMBRandomAccessInputStream extends RandomAccessInputStream {
+    static {
+        // Silence jCIFS's output if not in debug mode
+        // To quote jCIFS's documentation : "0 - No log messages are printed -- not even crticial exceptions."
+        if(!Debug.ON)
+            System.setProperty("jcifs.util.loglevel", "0");
 
-        private SmbRandomAccessFile raf;
-
-        public SMBRandomAccessInputStream(SmbRandomAccessFile raf) {
-            this.raf = raf;
-        }
-
-        public int read() throws IOException {
-            return raf.read();
-        }
-
-        public int read(byte b[]) throws IOException {
-            return raf.read(b);
-        }
-
-        public int read(byte b[], int off, int len) throws IOException {
-            return raf.read(b, off, len);
-        }
-
-        public void close() throws IOException {
-            raf.close();
-        }
-
-        public long getOffset() throws IOException {
-            return raf.getFilePointer();
-        }
-
-        public long getLength() throws IOException {
-            return raf.length();
-        }
-
-        public void seek(long pos) throws IOException {
-            raf.seek(pos);
-        }
     }
 
 
@@ -259,14 +227,31 @@ public class SMBFile extends AbstractFile {
             if(smbFiles==null)
                 throw new IOException();
 
-            // Create SMBFile by recycling SmbFile instance and sharing parent instance
-            // among children
-            AbstractFile children[] = new AbstractFile[smbFiles.length];
+            // Count the number of files to exclude: excluded files are those that are not file share/ not browsable
+            // (Printers, named pipes, comm ports)
+            int nbSmbFiles = smbFiles.length;
+            int nbSmbFilesToExclude = 0;
+            int smbFileType;
+            for(int i=0; i<nbSmbFiles; i++) {
+                smbFileType = smbFiles[i].getType();
+                if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
+                    nbSmbFilesToExclude++;
+            }
+
+            // Create SMBFile by using SmbFile instance and sharing parent instance among children
+            AbstractFile children[] = new AbstractFile[nbSmbFiles-nbSmbFilesToExclude];
             AbstractFile child;
-            for(int i=0; i<smbFiles.length; i++) {
-                child = FileFactory.wrapArchive(new SMBFile(new FileURL(smbFiles[i].getCanonicalPath(), fileURL), smbFiles[i], false));
+            SmbFile smbFile;
+            int currentIndex = 0;
+            for(int i=0; i<nbSmbFiles; i++) {
+                smbFile = smbFiles[i];
+                smbFileType = smbFile.getType();
+                if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
+                    continue;
+                
+                child = FileFactory.wrapArchive(new SMBFile(new FileURL(smbFile.getCanonicalPath(), fileURL), smbFile, false));
                 child.setParent(this);
-                children[i] = child;
+                children[currentIndex++] = child;
             }
 
             return children;
@@ -394,5 +379,47 @@ public class SMBFile extends AbstractFile {
         // SmbFile's equals method is just perfect: compares canonical paths
         // and IP addresses
         return file.equals(((SMBFile)f).file);
+    }
+
+
+    /**
+     * SMBRandomAccessInputStream extends RandomAccessInputStream to provide random access to an <code>SMBFile</code>'s
+     * content.
+     */
+    public class SMBRandomAccessInputStream extends RandomAccessInputStream {
+
+        private SmbRandomAccessFile raf;
+
+        public SMBRandomAccessInputStream(SmbRandomAccessFile raf) {
+            this.raf = raf;
+        }
+
+        public int read() throws IOException {
+            return raf.read();
+        }
+
+        public int read(byte b[]) throws IOException {
+            return raf.read(b);
+        }
+
+        public int read(byte b[], int off, int len) throws IOException {
+            return raf.read(b, off, len);
+        }
+
+        public void close() throws IOException {
+            raf.close();
+        }
+
+        public long getOffset() throws IOException {
+            return raf.getFilePointer();
+        }
+
+        public long getLength() throws IOException {
+            return raf.length();
+        }
+
+        public void seek(long pos) throws IOException {
+            raf.seek(pos);
+        }
     }
 }

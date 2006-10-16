@@ -253,12 +253,6 @@ public class Launcher {
         if(ConfigurationManager.getVariableBoolean("prefs.check_for_updates_on_startup", true))
             new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
 
-
-        // Silence jCIFS's output if not in debug mode
-        // To quote jCIFS's documentation : "0 - No log messages are printed -- not even crticial exceptions."
-        if(!Debug.ON)
-            System.setProperty("jcifs.util.loglevel", "0");
-		
         // Dispose splash screen
         splashScreen.dispose();
     }

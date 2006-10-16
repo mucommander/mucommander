@@ -224,9 +224,9 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
         // Add 'connect to server' shortcuts
 
         this.serverShortcutsOffset = menuItems.size();
+        addMenuItem("SMB...");
         addMenuItem("FTP...");
         addMenuItem("SFTP...");
-        addMenuItem("SMB...");
         addMenuItem("HTTP...");
 
         popupMenu.show(folderPanel, 0, getHeight());		

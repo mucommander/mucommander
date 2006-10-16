@@ -198,6 +198,7 @@ Improvements:
  - Preference tabs now have icons, layout improved a bit
  - New font preview field to 'Appearance' preferences tab
  - New ascending / descending icons in sort tabs
+ - SMB resources that are not browsable (printers, IPC...) are not displayed
  - SMB library (jCIFS) upgraded to version 1.2.8
  - Mac OS X: new 'Universal Binary' application stub, muCommander no longer uses Rosetta to start up
 
@@ -235,5 +236,6 @@ Known issues:
  - SFTP folders limited to 98 files
  - SFTP unavailable under Java 1.3
  - Some BZ2 archives can not be properly opened
+ - Mac OS X : 'Copy files' not working with other applications (files are not pasted)
  - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System Preferences' for them to work properly
  - Mac OS X : text fields don't work correctly when using a fractionally-scaled font (Known Java bug, http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)
