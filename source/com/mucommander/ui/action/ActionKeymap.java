@@ -35,7 +35,7 @@ public class ActionKeymap implements ContentHandler {
 
 
     /**
-     * Sets the path to the action keymap file to be loaded when calling {@link #loadActionKeyMap()}.
+     * Sets the path to the user action keymap file to be loaded when calling {@link #loadActionKeyMap()}.
      * By default, this file is {@link #DEFAULT_ACTION_KEYMAP_FILENAME} within the preferences folder.
      *
      * @param filePath path to the action keymap file
@@ -48,25 +48,14 @@ public class ActionKeymap implements ContentHandler {
 
 
     /**
-     * Loads the action keymap file. If the file doesn't exist yet, it is copied from the default resource file within the JAR.
+     * Loads the action keymap files: loads the one contained in the JAR file first, and then the user's one.
+     * This means any new action in the JAR action keymap (when a new version is released) will have the default
+     * keyboard mapping, but the keyboard mappings customized by the user in the user's action keymap will override
+     * the ones from the JAR action keymap.
      *
      * <p>This method must be called before requesting and registering any action.
      */
     public static void loadActionKeyMap() {
-/*
-        // If the given file doesn't exist, copy the default one in the JAR file
-        if(!actionKeyMapFile.exists()) {
-            try {
-                if(Debug.ON) Debug.trace("copying "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile);
-
-                FileToolkit.copyResource(ACTION_KEYMAP_RESOURCE_PATH, actionKeyMapFile);
-            }
-            catch(IOException e) {
-                System.out.println("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);
-                return;
-            }
-        }
-*/
         new ActionKeymap();
     }
 
@@ -178,7 +167,10 @@ public class ActionKeymap implements ContentHandler {
 
 
     /**
-     * Parses the action keymap file.
+     * Loads the action keymap files: loads the one contained in the JAR file first, and then the user's one. 
+     * This means any new action in the JAR action keymap (when a new version is released) will have the default
+     * keyboard mapping, but the keyboard mappings customized by the user in the user's action keymap will override
+     * the ones from the JAR action keymap.
      */
     private ActionKeymap() {
 
