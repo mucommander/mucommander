@@ -69,7 +69,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
 
     /**
      * Sets the path to the command bar description file to be loaded when calling {@link #loadDescriptionFile()}.
-     * By default, this file is {@link DEFAULT_COMMAND_BAR_FILENAME} within the preferences folder.
+     * By default, this file is {@link #DEFAULT_COMMAND_BAR_FILENAME} within the preferences folder.
      *
      * @param filePath path to the command bar descriptor file
      */

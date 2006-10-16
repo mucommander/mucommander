@@ -148,6 +148,7 @@ What's new since v0.8 beta 2 ?
 New features:
  - Keyboard shortcuts, toolbar and command bar buttons can now be customized (no GUI yet, see .xml files in preferences folder)
  - Drag and Drop support: files can be copied or moved to and from muCommander windows and other applications, current folder can be changed by dropping a file or folder on the location field
+ - Clipboard support: files can be copied and pasted to/from the clipboard, works with other applications
  - Zip, Tar, Gzip, Bzip2 archives can now be created
  - Support for ISO and NRG images over local and SMB filesystems (contributed by Xavier Martin)
  - Support for Bzip2 archives (.bz2, .tbz2, .tar.bz2 extensions)
