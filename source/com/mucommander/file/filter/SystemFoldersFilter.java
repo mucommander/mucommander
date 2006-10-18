@@ -13,7 +13,8 @@ import com.mucommander.file.AbstractFile;
 public class SystemFoldersFilter extends FileFilter {
 
     /**
-     * Top-level Mac OS X system folders hidden by Finder.
+     * Top-level Mac OS X system folders hidden by Finder. For more info about those files:
+     * http://www.westwind.com/reference/OS-X/invisibles.html
      */
     private final static String SYSTEM_FOLDERS[]= {
         // Mac OS X system folders

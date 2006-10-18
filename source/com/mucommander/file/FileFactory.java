@@ -282,7 +282,8 @@ public abstract class FileFactory {
                 if(file!=null) {
 //                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("File cache hit for "+file);
 
-                    return file;
+                    // Create an archive file on top of this file if the file matches one of the archive filters
+                    return wrapArchive(file);
                 }
 
                 // Create local file instance
