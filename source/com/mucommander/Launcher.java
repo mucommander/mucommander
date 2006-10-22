@@ -40,33 +40,35 @@ public class Launcher {
         System.out.println("Options:");
 
         // Allows users to tweak how bookmarks are loaded / saved.
-        System.out.println(" -b FILE, --bookmarks FILE       Load bookmarks from FILE.");
+        System.out.println(" -b FILE, --bookmarks FILE         Load bookmarks from FILE.");
 
         // Allows users to tweak how configuration is loaded / saved.
-        System.out.println(" -c FILE, --configuration FILE   Load configuration from FILE");
+        System.out.println(" -c FILE, --configuration FILE     Load configuration from FILE");
 
         // Allows users to tweak how command bar configuration is loaded / saved.
-        System.out.println(" -C FILE, --commandbar FILE      Load command bar from FILE");
+        System.out.println(" -C FILE, --commandbar FILE        Load command bar from FILE");
 
+        // Allows users to change the preferences folder.
+        System.out.println(" -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER.");
 
         // Allows users to tweak how keymaps are loaded.
-        System.out.println(" -k FILE, --keymap FILE          Load keymap from FILE");
+        System.out.println(" -k FILE, --keymap FILE            Load keymap from FILE");
 
         // If debug is turned on, -n and -d are used to control whether debug
         // text is printed out or not.
         if(Debug.ON) {
-            System.out.println(" -n, --no-debug                  Disable debug output to stdout");
-            System.out.println(" -d, --debug                     Enable debug output to stdout (default)");
+            System.out.println(" -n, --no-debug                    Disable debug output to stdout");
+            System.out.println(" -d, --debug                       Enable debug output to stdout (default)");
         }
         // Allows users to tweak how shell history is loaded / saved.
-        System.out.println(" -s FILE, --shell-history FILE   Load shell history from FILE");
+        System.out.println(" -s FILE, --shell-history FILE     Load shell history from FILE");
 
         // Allows users to tweak how toolbar configuration are loaded.
-        System.out.println(" -t FILE, --toolbar FILE         Load toolbar from FILE");
+        System.out.println(" -t FILE, --toolbar FILE           Load toolbar from FILE");
 
         // Text commands.
-        System.out.println(" -h, --help                      Print the help text and exit");
-        System.out.println(" -v, --version                   Print the version and exit");
+        System.out.println(" -h, --help                        Print the help text and exit");
+        System.out.println(" -v, --version                     Print the version and exit");
         System.exit(0);
     }
 
@@ -164,6 +166,13 @@ public class Launcher {
                 Debug.setEnabled(false);
             else if(Debug.ON && (args[i].equals("-d") || args[i].equals("--debug")))
                 Debug.setEnabled(true);
+
+            // Preference folder.
+            else if(Debug.ON && (args[i].equals("-p") || args[i].equals("--preferences"))) {
+                if(i >= args.length - 1)
+                    printError("Missing FOLDER parameter to " + args[i]);
+                PlatformManager.setPreferencesFolder(new java.io.File(args[++i]));
+            }
 
             // Illegal argument.
             else

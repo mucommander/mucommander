@@ -87,6 +87,13 @@ public class PlatformManager {
 
 
 
+    // - Misc. fields -----------------------------------------------------------
+    // --------------------------------------------------------------------------
+    /** Folder in which to store the preferences. */
+    private static File prefFolder;
+
+
+
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
@@ -492,14 +499,10 @@ public class PlatformManager {
     // - Misc. ------------------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
-     * Returns the path to the folder that contains all the user specific data (configuration,
-     * bookmarks, ...).
-     * <p>
-     * If the folder does not exist, this method will try to create it.
-     * </p>
-     * @return the path to the user's preference folder.
+     * Returns the path to the default muCommander preferences folder.
+     * @return the path to the default muCommander preferences folder.
      */
-    public static File getPreferencesFolder() {
+    public static File getDefaultPreferencesFolder() {
         File folder;
 
         // Mac OS X specific folder (~/Library/Preferences/muCommander)
@@ -516,6 +519,38 @@ public class PlatformManager {
                     Debug.trace("Could not create preference folder: " + folder.getAbsolutePath());
 
         return folder;
+    }
+
+    /**
+     * Returns the path to the folder that contains all the user specific data (configuration,
+     * bookmarks, ...).
+     * <p>
+     * If the folder does not exist, this method will try to create it.
+     * </p>
+     * @return the path to the user's preference folder.
+     */
+    public static File getPreferencesFolder() {
+        // If the preferences folder has been set, use 
+        if(prefFolder != null)
+            return prefFolder;
+
+        return getDefaultPreferencesFolder();
+    }
+
+    /**
+     * Sets the path to the folder in which muCommander will look for its preferences.
+     * @param     folder                   path to the folder in which muCommander will look for its preferences.
+     * @exception IllegalArgumentException thrown if <code>folder</code> is not a valid folder path.
+     */
+    public static void setPreferencesFolder(File folder) {
+        // Makes sure the specified folder exists and is valid.
+        if(!folder.isDirectory()) {
+            if(folder.exists())
+                throw new IllegalArgumentException(folder + " is not a valid directory path");
+            else if(!folder.mkdirs())
+                throw new IllegalArgumentException("Could not create folder " + folder);
+        }
+        prefFolder = folder;
     }
 
     ///////////////////
