@@ -102,11 +102,17 @@
   <!-- Where to store the application's binaries.              -->
   <property name="classes"        location="${tmp}/classes"/>
 
+  <!-- NSIS values.                                            -->
   <property name="nsis"           location="${res}/nsis"/>
   <property name="nsis-script"    location="${nsis}/mucommander.nsi"/>
   <property name="nsis-bat"       location="${nsis}/mucommander.bat"/>
   <property name="nsis-icon"      location="${nsis}/mucommander.ico"/>
   <property name="tmp-nsis"       location="${tmp}/nsis"/>
+
+  <!-- Portable release scripts.                               -->
+  <property name="portable.dir"   location="${res}/portable"/>
+  <property name="portable.sh"    location="${portable.dir}/mucommander.sh"/>
+  <property name="portable.bat"   location="${portable.dir}/mucommander.bat"/>
 
   <!-- Where to generate the muCommander API javadoc.          -->
   <property name="api-docs"       location="${docs}/api"/>
@@ -490,7 +496,7 @@
   <!-- could think of. While this target can be fairly useful, -->
   <!-- it has the disadvantage of only being useable by        -->
   <!-- Maxence (see target 'sign' for more information).       -->
-  <target name="nightly" depends="set-nightly,tgz,app.tgz,nsis,version,docs-zip,sign">
+  <target name="nightly" depends="set-nightly,tgz,app.tgz,nsis,portable,version,docs-zip,sign">
     <echo>All done.</echo>
   </target>
 
@@ -575,6 +581,21 @@
   <!-- the selfless endehavour of untangling the Mac OS X .dmg -->
   <!-- format. Until then however, this will stay empty.       -->
   <target name="dmg" depends="obfuscate">
+  </target>
+
+  <!-- Generates a 'portable' distribution version of          -->
+  <!-- muCommander.                                            -->
+  <target name="portable" depends="obfuscate,archive-prefix,package-prefix">
+    <echo>Packaging portable distribution as ${dist}/${package-prefix}-portable.zip...</echo>
+
+    <!-- Generates the TGZ file, keeping execution flags.      -->
+    <zip destfile="${dist}/${package-prefix}-portable.zip">
+      <zipfileset file="${portable.sh}"  prefix="${archive-prefix}"/>
+      <zipfileset file="${portable.bat}" prefix="${archive-prefix}"/>
+      <zipfileset file="${license}"      prefix="${archive-prefix}"/>
+      <zipfileset file="${readme}"       prefix="${archive-prefix}"/>
+      <zipfileset file="${jar.obf}"      prefix="${archive-prefix}"/>
+    </zip>
   </target>
 
   <!-- Generates the muCommander's version.xml file.           -->
