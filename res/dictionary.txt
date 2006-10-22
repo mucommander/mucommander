@@ -1024,6 +1024,18 @@ com.mucommander.ui.action.UnmarkAllAction.label:RU:Снять выделение
 com.mucommander.ui.action.UnmarkAllAction.label:ZH_CN:取消全部标记
 com.mucommander.ui.action.UnmarkAllAction.label:SI:Odznači vse
 
+com.mucommander.ui.action.MarkSelectedFileAction.label:EN:Mark/Unmark selected file
+com.mucommander.ui.action.MarkSelectedFileAction.label:FR:Marquer/Dé-marquer le fichier sélectionné
+com.mucommander.ui.action.MarkSelectedFileAction.label:DE:Datei markieren/demarkieren
+com.mucommander.ui.action.MarkSelectedFileAction.label:ES:Marcar/Desmarcar los ficheros seleccionados
+com.mucommander.ui.action.MarkSelectedFileAction.label:CS:Označit/Odznačit vybraný soubor
+com.mucommander.ui.action.MarkSelectedFileAction.label:zh_TW:標記/取消標記 已選取檔案
+com.mucommander.ui.action.MarkSelectedFileAction.label:PL:Zaznacz/Odznacz wybrany plik
+com.mucommander.ui.action.MarkSelectedFileAction.label:HU:kijelöli/visszavonja a kiválasztott fájlt
+com.mucommander.ui.action.MarkSelectedFileAction.label:RU:Выделить/снять выделение выбранного файла
+com.mucommander.ui.action.MarkSelectedFileAction.label:ZH_CN:标记/取消标记 选定文件
+com.mucommander.ui.action.MarkSelectedFileAction.label:SI:Označi/Odznači izbrano datoteko
+
 com.mucommander.ui.action.InvertSelectionAction.label:EN:Invert selection
 com.mucommander.ui.action.InvertSelectionAction.label:FR:Inverser sélection
 com.mucommander.ui.action.InvertSelectionAction.label:DE:Auswahl umkehren
@@ -1438,8 +1450,8 @@ com.mucommander.ui.action.PopupRightDriveButtonAction.label:RU:Изменить 
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:ZH_CN:改变右边文件夹
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:SI:Zamenjaj mapo na desni strani
 
-com.mucommander.ui.action.RecallPreviousWindowAction.label:EN:Switch to previous window
-com.mucommander.ui.action.RecallPreviousWindowAction.label:FR:Aller à la fenêtre précédente
+com.mucommander.ui.action.RecallPreviousWindowAction.label:EN:Recall previous window
+com.mucommander.ui.action.RecallPreviousWindowAction.label:FR:Rappeler la fenêtre précédente
 com.mucommander.ui.action.RecallPreviousWindowAction.label:DE:Zum vorherigen Fenster wechseln
 com.mucommander.ui.action.RecallPreviousWindowAction.label:ES:Cambiar a la ventana anterior
 com.mucommander.ui.action.RecallPreviousWindowAction.label:CS:Přepnout na předchodzí okno
@@ -1450,8 +1462,8 @@ com.mucommander.ui.action.RecallPreviousWindowAction.label:RU:Переключи
 com.mucommander.ui.action.RecallPreviousWindowAction.label:ZH_CN:切换到前一个窗口
 com.mucommander.ui.action.RecallPreviousWindowAction.label:SI:Preklopi na prejšnje okno
 
-com.mucommander.ui.action.RecallNextWindowAction.label:EN:Switch to next window
-com.mucommander.ui.action.RecallNextWindowAction.label:FR:Aller à la fenêtre suivante
+com.mucommander.ui.action.RecallNextWindowAction.label:EN:Recall next window
+com.mucommander.ui.action.RecallNextWindowAction.label:FR:Rappeler la fenêtre suivante
 com.mucommander.ui.action.RecallNextWindowAction.label:DE:Zum nächsten Fenster wechseln
 com.mucommander.ui.action.RecallNextWindowAction.label:ES:Cambiar a la siguiente ventana
 com.mucommander.ui.action.RecallNextWindowAction.label:CS:Přepnout na další okno
@@ -1461,6 +1473,36 @@ com.mucommander.ui.action.RecallNextWindowAction.label:HU:Válts a következő a
 com.mucommander.ui.action.RecallNextWindowAction.label:RU:Переключиться в следующее окно
 com.mucommander.ui.action.RecallNextWindowAction.label:ZH_CN:切换到后一个窗口
 com.mucommander.ui.action.RecallNextWindowAction.label:SI:Preklopi na naslednje okno
+
+# Entry changed: used to be 'Recall a window' and now is 'Recall window #N'
+com.mucommander.ui.action.RecallWindowAction.label:EN:Recall window #%1
+com.mucommander.ui.action.RecallWindowAction.label:FR:Rappeler la fenêtre #%1
+
+com.mucommander.ui.action.RecallWindowAction.label:DE:Ein Fenster aufrufen
+com.mucommander.ui.action.RecallWindowAction.label:ES:Rellamar a una ventana
+com.mucommander.ui.action.RecallWindowAction.label:CS:Vyvolat okno
+com.mucommander.ui.action.RecallWindowAction.label:zh_TW:還原視窗
+com.mucommander.ui.action.RecallWindowAction.label:PL:Wywołaj okno
+com.mucommander.ui.action.RecallWindowAction.label:HU:ablak visszavonása
+com.mucommander.ui.action.RecallWindowAction.label:RU:Восстановить окно
+com.mucommander.ui.action.RecallWindowAction.label:ZH_CN:切回一个窗口
+com.mucommander.ui.action.RecallWindowAction.label:SI:Prikliči okno
+
+
+
+
+
+# Aliases for specific window numbers
+com.mucommander.ui.action.RecallWindow1Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
+com.mucommander.ui.action.RecallWindow2Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
+com.mucommander.ui.action.RecallWindow3Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
+com.mucommander.ui.action.RecallWindow4Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
+com.mucommander.ui.action.RecallWindow5Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
+com.mucommander.ui.action.RecallWindow6Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
+com.mucommander.ui.action.RecallWindow7Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
+com.mucommander.ui.action.RecallWindow8Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
+com.mucommander.ui.action.RecallWindow9Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
+com.mucommander.ui.action.RecallWindow10Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
 
 com.mucommander.ui.action.SwitchActiveTableAction.label:EN:Switch between left and right panels
 com.mucommander.ui.action.SwitchActiveTableAction.label:FR:Basculer entre les dossiers de droite et de gauche
@@ -3808,18 +3850,6 @@ shortcuts_dialog.selection:RU:Выбор
 shortcuts_dialog.selection:ZH_CN:选择
 shortcuts_dialog.selection:SI:Izbira
 
-shortcuts_dialog.selection.mark_unmark:EN:Mark/Unmark selected file
-shortcuts_dialog.selection.mark_unmark:FR:Marquer/Dé-marquer le fichier sélectionné
-shortcuts_dialog.selection.mark_unmark:DE:Datei markieren/demarkieren
-shortcuts_dialog.selection.mark_unmark:ES:Marcar/Desmarcar los ficheros seleccionados
-shortcuts_dialog.selection.mark_unmark:CS:Označit/Odznačit vybraný soubor
-shortcuts_dialog.selection.mark_unmark:zh_TW:標記/取消標記 已選取檔案
-shortcuts_dialog.selection.mark_unmark:PL:Zaznacz/Odznacz wybrany plik
-shortcuts_dialog.selection.mark_unmark:HU:kijelöli/visszavonja a kiválasztott fájlt
-shortcuts_dialog.selection.mark_unmark:RU:Выделить/снять выделение выбранного файла
-shortcuts_dialog.selection.mark_unmark:ZH_CN:标记/取消标记 选定文件
-shortcuts_dialog.selection.mark_unmark:SI:Označi/Odznači izbrano datoteko
-
 shortcuts_dialog.file_operations:EN:File operations
 shortcuts_dialog.file_operations:FR:Opérations sur fichiers
 shortcuts_dialog.file_operations:DE:Dateioperationen
@@ -3925,18 +3955,6 @@ shortcuts_dialog.windows:HU:ablak
 shortcuts_dialog.windows:RU:Окна
 shortcuts_dialog.windows:ZH_CN:窗口
 shortcuts_dialog.windows:SI:Okna
-
-shortcuts_dialog.windows.recall:EN:Recall a window
-shortcuts_dialog.windows.recall:FR:Rappeler une fenêtre
-shortcuts_dialog.windows.recall:DE:Ein Fenster aufrufen
-shortcuts_dialog.windows.recall:ES:Rellamar a una ventana
-shortcuts_dialog.windows.recall:CS:Vyvolat okno
-shortcuts_dialog.windows.recall:zh_TW:還原視窗
-shortcuts_dialog.windows.recall:PL:Wywołaj okno
-shortcuts_dialog.windows.recall:HU:ablak visszavonása
-shortcuts_dialog.windows.recall:RU:Восстановить окно
-shortcuts_dialog.windows.recall:ZH_CN:切回一个窗口
-shortcuts_dialog.windows.recall:SI:Prikliči okno
 
 
 ######################

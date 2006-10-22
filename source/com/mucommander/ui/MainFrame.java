@@ -3,12 +3,11 @@ package com.mucommander.ui;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
-import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.event.TableChangeListener;
+import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
 
@@ -28,7 +27,7 @@ import java.util.WeakHashMap;
  * 
  * @author Maxence Bernard
  */
-public class MainFrame extends JFrame implements LocationListener, ComponentListener, KeyListener {
+public class MainFrame extends JFrame implements LocationListener, ComponentListener {
 	
     // Variables related to split pane	
     private JSplitPane splitPane;
@@ -59,8 +58,8 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     /** Is this MainFrame active in the foreground ? */
     private boolean foregroundActive;
 
-    /** Contains all registered TableChangeListener instances, stored as weak references */
-    private WeakHashMap tableChangeListeners = new WeakHashMap();
+    /** Contains all registered ActivePanelListener instances, stored as weak references */
+    private WeakHashMap activePanelListeners = new WeakHashMap();
 
 
     /**
@@ -152,11 +151,8 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         folderPanel1.addComponentListener(this);
         splitPane.addComponentListener(this);
 
-        table1.addKeyListener(this);
-        table2.addKeyListener(this);
-
-//        this.table1.registerActions();
-//        this.table2.registerActions();
+//        table1.addKeyListener(this);
+//        table2.addKeyListener(this);
 
 //        // Do nothing on close (default is to hide window),
 //        // WindowManager takes of catching close events and do the rest
@@ -164,9 +160,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
         // Dispose window on close
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-//        // Register 'Stop folder change' action (Escape key by default) on the whole window
-//        ActionKeymap.registerActionAccelerators(ActionManager.getActionInstance(com.mucommander.ui.action.StopAction.class, this), getRootPane(), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         ActionKeymap.registerActions(this);
 
@@ -211,26 +204,26 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
 
     /**
-     * Registers the given TableChangeListener to receive events when current table changes.
+     * Registers the given ActivePanelListener to receive events when current table changes.
      */
-    public void addTableChangeListener(TableChangeListener tableChangeListener) {
-        tableChangeListeners.put(tableChangeListener, null);
+    public void addActivePanelListener(ActivePanelListener activePanelListener) {
+        activePanelListeners.put(activePanelListener, null);
     }
 
     /**
-     * Unregisters the given TableChangeListener so that it will no longer receive events when current table changes.
+     * Unregisters the given ActivePanelListener so that it will no longer receive events when current table changes.
      */
-    public void removeTableChangeListener(TableChangeListener tableChangeListener) {
-        tableChangeListeners.remove(tableChangeListener);
+    public void removeActivePanelListener(ActivePanelListener activePanelListener) {
+        activePanelListeners.remove(activePanelListener);
     }
 
     /**
-     * Fires table change events on registered TableChangeListener instances.
+     * Fires table change events on registered ActivePanelListener instances.
      */
-    private void fireTableChanged(FolderPanel folderPanel) {
-        Iterator iterator = tableChangeListeners.keySet().iterator();
+    private void fireActivePanelChanged(FolderPanel folderPanel) {
+        Iterator iterator = activePanelListeners.keySet().iterator();
         while(iterator.hasNext())
-            ((TableChangeListener)iterator.next()).tableChanged(folderPanel);
+            ((ActivePanelListener)iterator.next()).activePanelChanged(folderPanel);
     }
 
 
@@ -302,8 +295,8 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
             // Update window title to reflect new active table
             updateWindowTitle();
 
-            // Fire table change events on registered TableChangeListener instances.
-            fireTableChanged(table.getFolderPanel());
+            // Fire table change events on registered ActivePanelListener instances.
+            fireActivePanelChanged(table.getFolderPanel());
         }
     }
 
@@ -500,43 +493,32 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         // never called, weird ...
     }     
 
-    /////////////////////////
-    // KeyListener methods //
-    /////////////////////////
-    
-    public void keyPressed(KeyEvent e) {
-        // Discard key events while in 'no events mode'
-        if(noEventsMode)
-            return;
-
-        int keyCode = e.getKeyCode();
-        boolean isControlDown = e.isControlDown();
-        boolean isAltDown = e.isAltDown();
-        
-        // CTRL+1 ... CTRL+0 brings MainFrame #1 ... #10 to front
-        if(isControlDown && (keyCode>=KeyEvent.VK_0 && keyCode<=KeyEvent.VK_9)) {
-            // Compute the MainFrame's index corresponding to the key pressed
-            int frameIndex = keyCode==KeyEvent.VK_0?9:keyCode - KeyEvent.VK_1;
-            java.util.Vector mainFrames = WindowManager.getMainFrames();
-            // Is there a MainFrame at the index ?
-            if(frameIndex<mainFrames.size())
-                ((MainFrame)mainFrames.elementAt(frameIndex)).toFront();
-        }
-        else if(keyCode == KeyEvent.VK_SHIFT) {
-            // Set shift mode to on : display alternate actions in the command bar
-            commandBar.setAlternateActionsMode(true);
-        }
-    }
-
-    public void keyReleased(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-
-        if(keyCode == KeyEvent.VK_SHIFT) {
-            // Set shift mode back to off : display regular (non-shifted) actions in the command bar
-            commandBar.setAlternateActionsMode(false);
-        }
-    }
-
-    public void keyTyped(KeyEvent e) {
-    }
+//    /////////////////////////
+//    // KeyListener methods //
+//    /////////////////////////
+//
+//    public void keyPressed(KeyEvent e) {
+//        // Discard key events while in 'no events mode'
+//        if(noEventsMode)
+//            return;
+//
+//        int keyCode = e.getKeyCode();
+//
+//        if(keyCode == KeyEvent.VK_SHIFT) {
+//            // Set shift mode to on : display alternate actions in the command bar
+//            commandBar.setAlternateActionsMode(true);
+//        }
+//    }
+//
+//    public void keyReleased(KeyEvent e) {
+//        int keyCode = e.getKeyCode();
+//
+//        if(keyCode == KeyEvent.VK_SHIFT) {
+//            // Set shift mode back to off : display regular (non-shifted) actions in the command bar
+//            commandBar.setAlternateActionsMode(false);
+//        }
+//    }
+//
+//    public void keyTyped(KeyEvent e) {
+//    }
 }

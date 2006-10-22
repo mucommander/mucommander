@@ -99,6 +99,18 @@ public abstract class MucoAction extends AbstractAction {
     }
 
 
+    public static String getKeyStrokeRepresentation(KeyStroke ks) {
+        int modifiers = ks.getModifiers();
+        String keyText = KeyEvent.getKeyText(ks.getKeyCode());
+
+        if(modifiers!=0) {
+            return KeyEvent.getKeyModifiersText(modifiers)+"+"+keyText;
+        }
+
+        return keyText;
+    }
+
+
     /**
      * Returns true if the given KeyStroke is one of this action's accelerators.
      * Always returns false if this method has no accelerator.

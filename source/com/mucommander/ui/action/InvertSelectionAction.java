@@ -18,7 +18,7 @@ public class InvertSelectionAction extends MucoAction {
 
     public void performAction() {
         FileTable fileTable = mainFrame.getLastActiveTable();
-        FileTableModel tableModel = (FileTableModel)fileTable.getModel();
+        FileTableModel tableModel = fileTable.getFileTableModel();
 
         // Starts at 1 if current folder is not root so that '..' is not marked
         AbstractFile file;
@@ -30,7 +30,7 @@ public class InvertSelectionAction extends MucoAction {
         }
         fileTable.repaint();
 
-        // Update status bar info
-        mainFrame.getStatusBar().updateSelectedFilesInfo();
+        // Notify registered listeners that currently marked files have changed on the FileTable
+        fileTable.fireMarkedFilesChangedEvent();
     }
 }

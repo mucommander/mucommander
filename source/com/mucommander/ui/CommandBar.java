@@ -21,6 +21,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.io.IOException;
@@ -33,7 +35,7 @@ import java.io.InputStream;
  *
  * @author Maxence Bernard
  */
-public class CommandBar extends JPanel implements ConfigurationListener, MouseListener {
+public class CommandBar extends JPanel implements ConfigurationListener, KeyListener, MouseListener {
 
     /** Parent MainFrame instance */
     private MainFrame mainFrame;
@@ -110,6 +112,10 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
         super(new GridLayout(0,actions.length));
         this.mainFrame = mainFrame;
 
+        // Listen to modifier key events to display alternate actions
+        mainFrame.getFolderPanel1().getFileTable().addKeyListener(this);
+        mainFrame.getFolderPanel2().getFileTable().addKeyListener(this);
+
         // Listen to mouse events to popup a menu when command bar is right clicked
         addMouseListener(this);
 
@@ -167,6 +173,45 @@ public class CommandBar extends JPanel implements ConfigurationListener, MouseLi
                 setButtonAction(buttons[i], ActionManager.getActionInstance(on && alternateActions[i]!=null?alternateActions[i]:actions[i], mainFrame));
         }
     }
+
+
+    /////////////////////////
+    // KeyListener methods //
+    /////////////////////////
+
+    public void keyPressed(KeyEvent e) {
+        // Discard key events while in 'no events mode'
+        if(mainFrame.getNoEventsMode())
+            return;
+
+//        if(Debug.ON) Debug.trace("called, keyEvent="+e);
+
+        int keyCode = e.getKeyCode();
+
+        if(keyCode == KeyEvent.VK_SHIFT) {
+            // Set shift mode to on : display alternate actions in the command bar
+            setAlternateActionsMode(true);
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {
+
+//        if(Debug.ON) Debug.trace("called, keyEvent="+e);
+
+        int keyCode = e.getKeyCode();
+
+//        if(e.getModifiers()==0 && (keyCode==KeyEvent.VK_SHIFT || keyCode==KeyEvent.VK_CONTROL || keyCode==KeyEvent.VK_ALT || keyCode==KeyEvent.VK_META))
+//            updateDisplayedActions(true);
+
+        if(keyCode == KeyEvent.VK_SHIFT) {
+            // Set shift mode back to off : display regular (non-shifted) actions in the command bar
+            setAlternateActionsMode(false);
+        }
+    }
+
+    public void keyTyped(KeyEvent e) {
+    }
+
 
 
     ///////////////////////////////////

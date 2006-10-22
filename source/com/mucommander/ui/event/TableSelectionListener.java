@@ -14,7 +14,17 @@ import com.mucommander.ui.table.FileTable;
 public interface TableSelectionListener {
 
     /**
-     * This method is invoked when the currently selected file on the given FileTable has changed.
+     * This method is invoked when the selected file has changed on the specified FileTable .
+     *
+     * @param source the {@link com.mucommander.ui.table.FileTable} instance on which the file selection has changed
      */
-    public void selectionChanged(FileTable source, AbstractFile selectedFile);
+    public void selectedFileChanged(FileTable source);
+
+
+    /**
+     * This method is invoked when the files marked have changed on the specified FileTable.
+     *
+     * @param source the {@link com.mucommander.ui.table.FileTable} instance on which the files marked have changed
+     */
+    public void markedFilesChanged(FileTable source);
 }

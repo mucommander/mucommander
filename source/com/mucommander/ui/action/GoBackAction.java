@@ -4,20 +4,20 @@ import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.event.TableChangeListener;
+import com.mucommander.ui.event.ActivePanelListener;
 
 /**
  * This action recalls the previous folder in the current FolderPanel's history.
  *
  * @author Maxence Bernard
  */
-public class GoBackAction extends MucoAction implements TableChangeListener, LocationListener {
+public class GoBackAction extends MucoAction implements ActivePanelListener, LocationListener {
 
     public GoBackAction(MainFrame mainFrame) {
         super(mainFrame);
 
         // Listen to active table change events
-        mainFrame.addTableChangeListener(this);
+        mainFrame.addActivePanelListener(this);
 
         // Listen to location change events
         mainFrame.getFolderPanel1().getLocationManager().addLocationListener(this);
@@ -42,10 +42,10 @@ public class GoBackAction extends MucoAction implements TableChangeListener, Loc
 
 
     /////////////////////////////////
-    // TableChangeListener methods //
+    // ActivePanelListener methods //
     /////////////////////////////////
 
-    public void tableChanged(FolderPanel folderPanel) {
+    public void activePanelChanged(FolderPanel folderPanel) {
         toggleEnabledState();
     }
 

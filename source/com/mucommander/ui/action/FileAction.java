@@ -4,27 +4,28 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.event.TableChangeListener;
+import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FileTableModel;
 
 /**
  * FileAction is an abstract action that operates on the currently active FileTable. It is enabled only when
- * the table condition as tested by {@link #getFileTableCondition(FileTable, AbstractFile) getFileTableCondition()}
+ * the table condition as tested by {@link #getFileTableCondition(FileTable) getFileTableCondition()}
  * method is satisfied.
  *
- * <p>Optionally, a FileFilter can be specified using {@link #setFileFilter(com.mucommander.file.filter.FileFilter) setFileFilter}
- * to further restrict the enable condition to files that match the filter.
- *
- * <p>Those tests are performed each time the selected file on the currently active FileTable changes, and
- * each time the currently active FileTable changes. Thus, this action's enabled status always reflects the current
- * state of the active FileTable. 
+ * <p>Those tests are performed when:
+ * <ul>
+ * <li>the selected file on the currently active FileTable has changed
+ * <li>the marked files on the currently active FileTable has changed
+ * <li>the currently active FileTable has changed
+ * </ul>
  *
  * @author Maxence Bernard
  */
-public abstract class FileAction extends MucoAction implements TableSelectionListener, TableChangeListener {
+public abstract class FileAction extends MucoAction implements TableSelectionListener, ActivePanelListener {
 
-    /** Filter that restricts the enable condition to files that match it (can be null) */
+    /** Filter that restricts the enabled condition to files that match it (can be null) */
     protected FileFilter filter;
 
 
@@ -35,58 +36,43 @@ public abstract class FileAction extends MucoAction implements TableSelectionLis
 
     
     private void init(MainFrame mainFrame) {
-        mainFrame.addTableChangeListener(this);
+        mainFrame.addActivePanelListener(this);
         mainFrame.getFolderPanel1().getFileTable().addTableSelectionListener(this);
         mainFrame.getFolderPanel2().getFileTable().addTableSelectionListener(this);
 
         // Set initial enabled state
-        FileTable fileTable = mainFrame.getLastActiveTable();
-        updateEnabledState(fileTable, fileTable.getSelectedFile(false));
+        updateEnabledState(mainFrame.getLastActiveTable());
     }
 
 
     /**
-     * Restricts the enable condition to files that match the specified filter.
+     * Enables/disables this action if both of the {@link #getFileTableCondition(FileTable)} and file filter
+     * (if there is one) tests are satisfied.
      *
-     * @param filter FileFilter instance
+     * <p>This method is called each time:
+     * <ul>
+     * <li>the selected file on the currently active FileTable has changed
+     * <li>the marked files on the currently active FileTable has changed
+     * <li>the currently active FileTable has changed
+     * </ul>
+     *
+     * @param fileTable the currently active FileTable
      */
-    public void setFileFilter(FileFilter filter) {
-        this.filter = filter;
-    }
-
-
-    /**
-     * Enables/disables this action if both of the {@link #getFileTableCondition(FileTable, AbstractFile) getFileTableCondition()}
-     * and filter (if there is one) tests are satisfied.
-     *
-     * <p>This method is called each time the selected file on the currently active FileTable changes, and
-     * each time the currently active FileTable changes.
-     *
-     * @param fileTable currently active FileTable
-     * @param selectedFile new currently selected file in current FileTable
-     */
-    protected void updateEnabledState(FileTable fileTable, AbstractFile selectedFile) {
-        boolean enabled = getFileTableCondition(fileTable, selectedFile);
-
-        // Test the selected file (if any) against the filter (if any)
-        if(enabled && filter!=null)
-            enabled = filter.accept(selectedFile);
-
+    protected void updateEnabledState(FileTable fileTable) {
         // Note: AbstractAction checks if enabled value has changed before firing an event
-        setEnabled(enabled);
+        setEnabled(getFileTableCondition(fileTable));
     }
 
 
     /**
-     *
-     *
-     * <p>This method is called each time the selected file on the currently active FileTable changes, and
-     * each time the currently active FileTable changes.
+     * This method is called to determine if the current FileTable state allows this action to be enabled.
+     * If <code>false</code> is returned, the action will be disabled.
+     * If <code>true</code> is returned, the action will be enabled if the file filter (if there is one) matches the
+     * selected file.
      *
      * @param fileTable currently active FileTable
-     * @param selectedFile new currently selected file in current FileTable
      */
-    protected abstract boolean getFileTableCondition(FileTable fileTable, AbstractFile selectedFile);
+    protected abstract boolean getFileTableCondition(FileTable fileTable);
 
 
     ///////////////////////////////////////////
@@ -94,20 +80,28 @@ public abstract class FileAction extends MucoAction implements TableSelectionLis
     ///////////////////////////////////////////
 
     /**
-     * Enables/disables this action based on the given new selected file: if it is <code>null</code>
-     * (parent folder '..' selected), the action will be disabled, if not it will be disabled.
+     * Updates this action's enabled status based on the new currently selected file.
      */
-    public void selectionChanged(FileTable source, AbstractFile selectedFile) {
-        updateEnabledState(source, selectedFile);
+    public void selectedFileChanged(FileTable source) {
+        // No need to update state if the originating FileTable is not the currently active one 
+        if(source==mainFrame.getLastActiveTable())
+            updateEnabledState(source);
     }
 
+    /**
+     * Updates this action's enabled status based on the new currently marked files.
+     */
+    public void markedFilesChanged(FileTable source) {
+        // No need to update state if the originating FileTable is not the currently active one
+        if(source==mainFrame.getLastActiveTable())
+            updateEnabledState(source);
+    }
 
     ////////////////////////////////////////
-    // TableChangeListener implementation //
+    // ActivePanelListener implementation //
     ////////////////////////////////////////
 
-    public void tableChanged(FolderPanel folderPanel) {
-        FileTable fileTable = folderPanel.getFileTable();
-        updateEnabledState(fileTable, fileTable.getSelectedFile(false));
+    public void activePanelChanged(FolderPanel folderPanel) {
+        updateEnabledState(folderPanel.getFileTable());
     }
 }

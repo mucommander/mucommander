@@ -25,7 +25,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-//public class WindowManager implements ActionListener, WindowListener, TableChangeListener, LocationListener, ConfigurationListener {
+//public class WindowManager implements ActionListener, WindowListener, ActivePanelListener, LocationListener, ConfigurationListener {
 public class WindowManager implements WindowListener, ConfigurationListener {
     // - Folder frame identifiers -----------------------------------------------
     // --------------------------------------------------------------------------

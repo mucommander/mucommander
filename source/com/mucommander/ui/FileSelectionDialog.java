@@ -169,7 +169,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
             // Marks or unmarks matching *files* (not folders)
             AbstractFile file;
             String fileName;
-            FileTableModel tableModel = (FileTableModel)activeTable.getModel();
+            FileTableModel tableModel = activeTable.getFileTableModel();
             int nbFiles = tableModel.getRowCount();
             for(int i=activeTable.getCurrentFolder().getParent()==null?0:1; i<nbFiles; i++) {
                 file = tableModel.getFileAtRow(i);
@@ -198,6 +198,10 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
                         tableModel.setRowMarked(i, addToSelection);
                 }
             }
+
+            // Notify registered listeners that currently marked files have changed on this FileTable
+            activeTable.fireMarkedFilesChangedEvent();
+
             activeTable.repaint();
         }
 		

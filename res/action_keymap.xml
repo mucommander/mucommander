@@ -85,6 +85,11 @@
   <!-- Default : ADD                                                             -->
   <action class="com.mucommander.ui.action.MarkGroupAction"             keystroke="ADD"/>
 
+  <!-- Action  : Marks or unmarks the current selected file.                     -->
+  <!-- Default : SPACE, INSERT                                                   -->
+  <action class="com.mucommander.ui.action.MarkSelectedFileAction"      keystroke="SPACE"
+                                                                        alt_keystroke="INSERT"/>
+
   <!-- Action  : Create a new folder.                                            -->
   <!-- Default : F7                                                              -->
   <action class="com.mucommander.ui.action.MkdirAction"                 keystroke="F7"/>
@@ -139,6 +144,46 @@
   <!-- Action  : Switch focus to previous window.                                -->
   <!-- Default : control LEFT                                                    -->
   <action class="com.mucommander.ui.action.RecallPreviousWindowAction"  keystroke="control LEFT"/>
+
+  <!-- Action  : Recalls window number 1.                                        -->
+  <!-- Default : control 1                                                       -->
+  <action class="com.mucommander.ui.action.RecallWindow1Action"         keystroke="control 1"/>
+
+  <!-- Action  : Recalls window number 2.                                        -->
+  <!-- Default : control 2                                                       -->
+  <action class="com.mucommander.ui.action.RecallWindow2Action"         keystroke="control 2"/>
+
+  <!-- Action  : Recalls window number 3.                                        -->
+  <!-- Default : control 3                                                       -->
+  <action class="com.mucommander.ui.action.RecallWindow3Action"         keystroke="control 3"/>
+
+  <!-- Action  : Recalls window number 4.                                        -->
+  <!-- Default : control 4                                                       -->
+  <action class="com.mucommander.ui.action.RecallWindow4Action"         keystroke="control 4"/>
+
+  <!-- Action  : Recalls window number 5.                                        -->
+  <!-- Default : control 5                                                       -->
+  <action class="com.mucommander.ui.action.RecallWindow5Action"         keystroke="control 5"/>
+
+  <!-- Action  : Recalls window number 6.                                        -->
+  <!-- Default : control 6                                                       -->
+  <action class="com.mucommander.ui.action.RecallWindow6Action"         keystroke="control 6"/>
+
+  <!-- Action  : Recalls window number 7.                                        -->
+  <!-- Default : control 7                                                       -->
+  <action class="com.mucommander.ui.action.RecallWindow7Action"         keystroke="control 7"/>
+
+  <!-- Action  : Recalls window number 8.                                        -->
+  <!-- Default : control 8                                                       -->
+  <action class="com.mucommander.ui.action.RecallWindow8Action"         keystroke="control 8"/>
+
+  <!-- Action  : Recalls window number 9.                                        -->
+  <!-- Default : control 9                                                       -->
+  <action class="com.mucommander.ui.action.RecallWindow9Action"         keystroke="control 9"/>
+
+  <!-- Action  : Recalls window number 10.                                        -->
+  <!-- Default : control 10                                                       -->
+  <action class="com.mucommander.ui.action.RecallWindow10Action"         keystroke="control 0"/>
 
   <!-- Action  : Rename the current file (ignores multiple selections).          -->
   <!-- Default : shift F6                                                        -->

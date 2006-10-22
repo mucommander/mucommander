@@ -80,7 +80,7 @@ public class FileDragSourceListener implements DragSourceListener, DragGestureLi
         // If there are some files marked, drag marked files only if the selected file is one of the marked files.
         // In any other case, only drag the selected file.
         FileSet markedFiles;
-        if(((FileTableModel)fileTable.getModel()).getNbMarkedFiles()>0 && (markedFiles=fileTable.getSelectedFiles()).contains(selectedFile)) {
+        if(fileTable.getFileTableModel().getNbMarkedFiles()>0 && (markedFiles=fileTable.getSelectedFiles()).contains(selectedFile)) {
             draggedFiles = markedFiles;
         }
         else {

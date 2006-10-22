@@ -2,6 +2,7 @@
 package com.mucommander.file.filter;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 
 import java.util.Vector;
 
@@ -25,7 +26,23 @@ public abstract class FileFilter {
         filteredFilesV.toArray(filteredFiles);
         return filteredFiles;
     }
-    
+
+
+    /**
+     * Convenience method: returns <code>true</code> if all the files containted in the specified {@link com.mucommander.file.FileSet}
+     * were accepted by {@link #accept(AbstractFile)}, <code>false</code> if one of the files was not accepted.
+     *
+     * @param fileSet the files to test against this filter
+     */
+    public boolean accept(FileSet fileSet) {
+        int nbFiles = fileSet.size();
+        for(int i=0; i<nbFiles; i++)
+            if(!accept(fileSet.fileAt(i)))
+                return false;
+
+        return true;
+    }
+
     //////////////////////
     // Abstract methods //
     //////////////////////

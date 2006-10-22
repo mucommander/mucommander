@@ -105,7 +105,7 @@ public abstract class FileViewer extends JPanel {
       return null;
       }
 		
-      FileTableModel model = (FileTableModel)table.getModel();
+      FileTableModel model = table.getFileTableModel();
       int rowCount = model.getRowCount();
       int fileRow = table.getFileRow(file);
 		

@@ -16,7 +16,7 @@ public class EditAction extends SelectedFileAction {
         super(mainFrame);
 
         // Only enable this action if currently selected file is not a directory
-        setFileFilter(new DirectoryFileFilter());
+        setSelectedFileFilter(new DirectoryFileFilter());
     }
 
     public void performAction() {

@@ -9,7 +9,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.event.TableChangeListener;
+import com.mucommander.ui.event.ActivePanelListener;
+import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
@@ -40,7 +41,7 @@ import java.awt.event.MouseListener;
  *
  * @author Maxence Bernard
  */
-public class StatusBar extends JPanel implements Runnable, MouseListener, TableChangeListener, LocationListener, ComponentListener {
+public class StatusBar extends JPanel implements Runnable, MouseListener, ActivePanelListener, TableSelectionListener, LocationListener, ComponentListener {
 
     private MainFrame mainFrame;
 
@@ -96,11 +97,19 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, TableC
         setVisible(ConfigurationManager.getVariableBoolean("prefs.status_bar.visible", true));
         
         // Catch location events to update status bar info when folder is changed
-        mainFrame.getFolderPanel1().getLocationManager().addLocationListener(this);
-        mainFrame.getFolderPanel2().getLocationManager().addLocationListener(this);
-		
-        // Catch table change events to update status bar info when current table has changed
-        mainFrame.addTableChangeListener(this);
+        FolderPanel folderPanel1 = mainFrame.getFolderPanel1();
+        folderPanel1.getLocationManager().addLocationListener(this);
+
+        FolderPanel folderPanel2 = mainFrame.getFolderPanel2();
+        folderPanel2.getLocationManager().addLocationListener(this);
+
+        // Catch table selection change events to update the selected files info when the selected files have changed on
+        // one of the file tables
+        folderPanel1.getFileTable().addTableSelectionListener(this);
+        folderPanel2.getFileTable().addTableSelectionListener(this);
+
+        // Catch active panel change events to update status bar info when current table has changed
+        mainFrame.addActivePanelListener(this);
 		
         // Catch mouse events to pop up a menu on right-click
         statusBarFilesLabel.addMouseListener(this);
@@ -117,6 +126,10 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, TableC
      * Updates info displayed on the status bar: currently selected files and volume info.
      */
     private void updateStatusInfo() {
+        // No need to waste precious cycles if status bar is not visible
+        if(!isVisible())
+            return;
+
         updateSelectedFilesInfo();
         updateVolumeInfo();
     }
@@ -128,6 +141,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, TableC
 // Making this method synchronized creates a deadlock with FileTable
 //    public synchronized void updateSelectedFilesInfo() {
     public void updateSelectedFilesInfo() {
+        // No need to waste precious cycles if status bar is not visible
         if(!isVisible())
             return;
 
@@ -135,7 +149,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, TableC
 
         // Currently select file, can be null
         AbstractFile selectedFile = currentFileTable.getSelectedFile();
-        FileTableModel tableModel = (FileTableModel)currentFileTable.getModel();
+        FileTableModel tableModel = currentFileTable.getFileTableModel();
         // Number of marked files, can be 0
         int nbMarkedFiles = tableModel.getNbMarkedFiles();
         // Combined size of marked files, 0 if no file has been marked
@@ -177,6 +191,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, TableC
      * Updates info about current volume (free space, total space), displayed on the right-side of this status bar.
      */
     private synchronized void updateVolumeInfo() {
+        // No need to waste precious cycles if status bar is not visible
         if(!isVisible())
             return;
 
@@ -284,11 +299,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, TableC
      */
     public void setVisible(boolean visible) {
         if(visible) {
-            // Update status bar info
-            updateStatusInfo();
             // Start auto-update thread
             startAutoUpdate();
             super.setVisible(true);
+            // Update status bar info
+            updateStatusInfo();
         }
         else {
             // Stop auto-update thread
@@ -323,40 +338,53 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, TableC
     }
     
 
-    /////////////////////////////////
-    // TableChangeListener methods //
-    /////////////////////////////////
+    ////////////////////////////////////////
+    // ActivePanelListener implementation //
+    ////////////////////////////////////////
 	
-    public void tableChanged(FolderPanel folderPanel) {
-        if(isVisible())
-            updateStatusInfo();
+    public void activePanelChanged(FolderPanel folderPanel) {
+        updateStatusInfo();
     }
 
-    //////////////////////////////
-    // LocationListener methods //
-    //////////////////////////////
+
+    ///////////////////////////////////////////
+    // TableSelectionListener implementation //
+    ///////////////////////////////////////////
+
+    public void selectedFileChanged(FileTable source) {
+        // No need to update if the originating FileTable is not the currently active one
+        if(source==mainFrame.getLastActiveTable())
+            updateSelectedFilesInfo();
+    }
+
+    public void markedFilesChanged(FileTable source) {
+        // No need to update if the originating FileTable is not the currently active one
+        if(source==mainFrame.getLastActiveTable())
+            updateSelectedFilesInfo();
+    }
+
+
+    /////////////////////////////////////
+    // LocationListener implementation //
+    /////////////////////////////////////
 	
     public void locationChanged(LocationEvent e) {
-        if(isVisible())
-            updateStatusInfo();
+        updateStatusInfo();
     }
 
     public void locationChanging(LocationEvent e) {
         // Show a message in the status bar saying that folder is being changed
-        // No need to waste precious cycles if status bar is not visible
-        if(isVisible())
-            setStatusInfo(Translator.get("status_bar.connecting_to_folder"), IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, WAITING_ICON), true);
+        setStatusInfo(Translator.get("status_bar.connecting_to_folder"), IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, WAITING_ICON), true);
     }
 	
     public void locationCancelled(LocationEvent e) {
-        if(isVisible())
-            updateStatusInfo();
+        updateStatusInfo();
     }
 	
 	
-    ///////////////////////////
-    // MouseListener methods //
-    ///////////////////////////
+    //////////////////////////////////
+    // MouseListener implementation //
+    //////////////////////////////////
 	
     public void mouseClicked(MouseEvent e) {
         // Discard mouse events while in 'no events mode'
@@ -387,9 +415,9 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, TableC
     }	
 	
 	
-    ///////////////////////////////
-    // ComponentListener methods //
-    ///////////////////////////////
+    //////////////////////////////////////
+    // ComponentListener implementation //
+    //////////////////////////////////////
 	
     public void componentShown(ComponentEvent e) {
         // Invoked when the component has been made visible (apparently not called when just created)

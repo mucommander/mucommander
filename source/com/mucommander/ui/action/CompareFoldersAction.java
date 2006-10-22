@@ -20,8 +20,8 @@ public class CompareFoldersAction extends MucoAction {
         FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
         FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
 
-        FileTableModel tableModel1 = (FileTableModel)table1.getModel();
-        FileTableModel tableModel2 = (FileTableModel)table2.getModel();
+        FileTableModel tableModel1 = table1.getFileTableModel();
+        FileTableModel tableModel2 = table2.getFileTableModel();
 
         int nbFiles1 = tableModel1.getFileCount();
         int nbFiles2 = tableModel2.getFileCount();
@@ -64,5 +64,8 @@ public class CompareFoldersAction extends MucoAction {
             }
         }
 
+        // Notify registered listeners that currently marked files have changed on the file tables
+        table1.fireMarkedFilesChangedEvent();
+        table2.fireMarkedFilesChangedEvent();
     }
 }
