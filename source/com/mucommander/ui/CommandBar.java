@@ -40,8 +40,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
     /** Parent MainFrame instance */
     private MainFrame mainFrame;
 
-    /** True when Shift key is pressed */
-    private boolean shiftDown;
+    /** True when modifier key is pressed */
+    private boolean modifierDown;
 
     /** Command bar buttons */
     private JButton buttons[];
@@ -67,6 +67,9 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
     private static Class actions[];
     /** Command bar alternate actions */
     private static Class alternateActions[];
+
+    /** Modifier key that triggers the display of alternate actions when pressed */
+    private static KeyStroke modifier;
 
 
     /**
@@ -158,15 +161,16 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
 
     /**
-     * Sets the alternate actions mode on/off : some buttons have a different action when in alternate actions mode.
+     * Displays/hides alternate actions: buttons that have an alternate action show it when the command bar's
+     * modifier is pressed (Shift by default).
      */
     public void setAlternateActionsMode(boolean on) {
         // Do nothing if command bar is not currently visible
         if(!isVisible())
             return;
 
-        if(this.shiftDown!=on) {
-            this.shiftDown = on;
+        if(this.modifierDown !=on) {
+            this.modifierDown = on;
 
             int nbButtons = buttons.length;
             for(int i=0; i<nbButtons; i++)
@@ -180,33 +184,15 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
     /////////////////////////
 
     public void keyPressed(KeyEvent e) {
-        // Discard key events while in 'no events mode'
-        if(mainFrame.getNoEventsMode())
-            return;
-
-//        if(Debug.ON) Debug.trace("called, keyEvent="+e);
-
-        int keyCode = e.getKeyCode();
-
-        if(keyCode == KeyEvent.VK_SHIFT) {
-            // Set shift mode to on : display alternate actions in the command bar
+        // Display alternate actions when the modifier key is pressed
+        if(e.getKeyCode() == modifier.getKeyCode())
             setAlternateActionsMode(true);
-        }
     }
 
     public void keyReleased(KeyEvent e) {
-
-//        if(Debug.ON) Debug.trace("called, keyEvent="+e);
-
-        int keyCode = e.getKeyCode();
-
-//        if(e.getModifiers()==0 && (keyCode==KeyEvent.VK_SHIFT || keyCode==KeyEvent.VK_CONTROL || keyCode==KeyEvent.VK_ALT || keyCode==KeyEvent.VK_META))
-//            updateDisplayedActions(true);
-
-        if(keyCode == KeyEvent.VK_SHIFT) {
-            // Set shift mode back to off : display regular (non-shifted) actions in the command bar
+        // Display regular actions when the modifier key is released
+        if(e.getKeyCode() == modifier.getKeyCode())
             setAlternateActionsMode(false);
-        }
     }
 
     public void keyTyped(KeyEvent e) {
@@ -332,6 +318,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
         public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
             if(name.equals("button")) {
+                // Resolve action class
                 String actionClassName = (String)attValues.get("action");
                 try {
                     actionsV.add(Class.forName(actionClassName));
@@ -340,7 +327,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
                     System.out.println("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);
                 }
 
-
+                // Resolve alternate action class (if any)
                 actionClassName = (String)attValues.get("alt_action");
                 if(actionClassName==null)
                     alternateActionsV.add(null);
@@ -351,6 +338,14 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
                     catch(Exception e) {
                         System.out.println("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);
                     }
+            }
+            else if(name.equals("command_bar")) {
+                // Retrieve modifier key (shift by default)
+                // Note: early 0.8 beta3 nightly builds did not have this attribute, so the attribute may be null
+                String modifierString = (String)attValues.get("modifier");
+
+                if(modifierString==null || (modifier=KeyStroke.getKeyStroke(modifierString))==null)
+                    modifier = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
             }
         }
 

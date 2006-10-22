@@ -195,6 +195,7 @@ Improvements:
  - 'Local copy' dialog now selects filename without extension just like 'Rename'
  - Added 'Open', 'Open natively' and 'Reveal in Desktop' items to 'File' menu
  - Added 'Copy name(s)' / 'Copy path(s)' items to 'Mark' menu
+ - Added 'Recall previous/next window' menu items to 'Window' menu
  - Preference tabs now have icons, layout improved a bit
  - New font preview field to 'Appearance' preferences tab
  - New ascending / descending icons in sort tabs
