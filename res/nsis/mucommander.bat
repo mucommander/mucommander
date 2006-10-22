@@ -12,7 +12,7 @@ goto exit
 
 :nojavahome
 echo JAVA_HOME environment variable not set, trying default javaw.exe
-start javaw -jar mucommander.jar
+start javaw -jar mucommander.jar %1% %2% %3% %4% %5% %6% %7% %8% %9%
 goto exit
 
 :exit
