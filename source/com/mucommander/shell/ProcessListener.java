@@ -1,5 +1,4 @@
-
-package com.mucommander;
+package com.mucommander.shell;
 
 
 /**

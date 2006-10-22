@@ -3,8 +3,6 @@ package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.shell.*;
-import com.mucommander.ProcessListener;
-import com.mucommander.ProcessMonitor;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
