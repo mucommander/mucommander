@@ -168,7 +168,7 @@ public class Launcher {
                 Debug.setEnabled(true);
 
             // Preference folder.
-            else if(Debug.ON && (args[i].equals("-p") || args[i].equals("--preferences"))) {
+            else if((args[i].equals("-p") || args[i].equals("--preferences"))) {
                 if(i >= args.length - 1)
                     printError("Missing FOLDER parameter to " + args[i]);
                 PlatformManager.setPreferencesFolder(new java.io.File(args[++i]));

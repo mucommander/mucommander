@@ -586,16 +586,16 @@
   <!-- Generates a 'portable' distribution version of          -->
   <!-- muCommander.                                            -->
   <target name="portable" depends="obfuscate,archive-prefix,package-prefix">
-    <echo>Packaging portable distribution as ${dist}/${package-prefix}-portable.zip...</echo>
+    <echo>Packaging portable distribution as ${dist}/${package-prefix}-portable.tar.gz...</echo>
 
     <!-- Generates the TGZ file, keeping execution flags.      -->
-    <zip destfile="${dist}/${package-prefix}-portable.zip">
-      <zipfileset file="${portable.sh}"  prefix="${archive-prefix}"/>
-      <zipfileset file="${portable.bat}" prefix="${archive-prefix}"/>
-      <zipfileset file="${license}"      prefix="${archive-prefix}"/>
-      <zipfileset file="${readme}"       prefix="${archive-prefix}"/>
-      <zipfileset file="${jar.obf}"      prefix="${archive-prefix}"/>
-    </zip>
+    <tar destfile="${dist}/${package-prefix}-portable.tar.gz" compression="gzip">
+      <tarfileset file="${portable.sh}"  prefix="${archive-prefix}" mode="755"/>
+      <tarfileset file="${portable.bat}" prefix="${archive-prefix}"/>
+      <tarfileset file="${license}"      prefix="${archive-prefix}"/>
+      <tarfileset file="${readme}"       prefix="${archive-prefix}"/>
+      <tarfileset file="${jar.obf}"      prefix="${archive-prefix}"/>
+    </tar>
   </target>
 
   <!-- Generates the muCommander's version.xml file.           -->
