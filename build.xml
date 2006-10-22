@@ -195,7 +195,7 @@
     <echo>Generating archive prefix...</echo>
     <!-- Escapes the version number for the TGZ prefix.        -->
     <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar}"/>
-    <strreplace from="mucommander-${app.version}" to="archive-prefix" what="[ .]" with="_"/>
+    <strreplace from="muCommander-${app.version}" to="archive-prefix" what="[ .]" with="_"/>
   </target>
 
   <!-- Sets this build as 'nightly'.                           -->
