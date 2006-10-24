@@ -125,7 +125,7 @@ public class FileDragSourceListener implements DragSourceListener, DragGestureLi
     }
 
     public void dragExit(DragSourceEvent event) {
-        this.isDragging = false;
+//        this.isDragging = false;
     }
 
     public void dragDropEnd(DragSourceDropEvent event) {
