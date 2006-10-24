@@ -8,6 +8,7 @@ import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 
+import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -22,7 +23,7 @@ import java.awt.event.*;
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class RunDialog extends FocusDialog implements ActionListener, ProcessListener {
+public class RunDialog extends FocusDialog implements ActionListener, ProcessListener, KeyListener {
     private MainFrame mainFrame;
 	
     private ShellComboBox inputField;
@@ -31,8 +32,9 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     private JButton cancelButton;
 
     private JTextArea outputTextArea;
-	
-    private Process currentProcess;
+
+    private PrintStream    processInput;
+    private Process        currentProcess;
     private ProcessMonitor processMonitor;
 	
     // Dialog size constraints
@@ -69,6 +71,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         outputTextArea.setLineWrap(true);
         outputTextArea.setRows(10);
         outputTextArea.setEditable(false);
+        outputTextArea.addKeyListener(this);
 
         // Use a monospaced font in the command field and process output text area, as most terminals do.
         // The logical "Monospaced" font name is always available in Java.
@@ -95,6 +98,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         addWindowListener(new WindowAdapter() {
                 public void windowClosed(WindowEvent e) {
                     if(currentProcess!=null) {
+                        processInput.close();
                         currentProcess.destroy();
                         processMonitor.stopMonitoring();
                     }
@@ -108,36 +112,39 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 	
     public void processDied(Process process, int retValue) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process "+process+" exit, return value= "+retValue);
-        this.currentProcess = null;
+        currentProcess = null;
+        processInput.close();
+        processInput = null;
         switchToRunState();
     }	
 
 	
     public void processOutput(Process process, byte buffer[], int offset, int length) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("processOutput "+process+" output= "+new String(buffer, 0, length));
-        addToTextArea(buffer, offset, length);
+        addToTextArea(new String(buffer, offset, length));
     }
 
 	
     public void processError(Process process, byte buffer[], int offset, int length) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("processError "+process+" output= "+new String(buffer, 0, length));
-        addToTextArea(buffer, offset, length);
+        addToTextArea(new String(buffer, offset, length));
     }
 
 
-    private void addToTextArea(byte buffer[], int offset, int length) {
-        outputTextArea.append(new String(buffer, 0, length));
-        caretPos += length;
+    private void addToTextArea(String s) {
+        outputTextArea.append(s);
+        caretPos += s.length();
         outputTextArea.setCaretPosition(caretPos);
         outputTextArea.repaint();
     }
-	
+
 	
     private void switchToStopState() {
         // Change 'Run' button to 'Stop'
         this.runStopButton.setText(Translator.get("run_dialog.stop"));
         // Clear text area
         this.outputTextArea.setText("");
+        outputTextArea.requestFocus();
 
         // Repaint the dialog
         repaint();
@@ -155,6 +162,20 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         repaint();
     }	
 
+    // - KeyListener code ----------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    public void keyPressed(KeyEvent event) {}
+    public void keyReleased(KeyEvent event) {}
+    public void keyTyped(KeyEvent event) {
+        if(currentProcess != null) {
+            char character;
+            if((character = event.getKeyChar()) != KeyEvent.CHAR_UNDEFINED) {
+                addToTextArea(Character.toString(character));
+                processInput.print(character);
+            }
+        }
+    }
+
 
     ////////////////////////////
     // ActionListener methods //
@@ -162,6 +183,8 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     public void runCommand(String command) {
         try {
             currentProcess = Shell.execute(command, mainFrame.getLastActiveTable().getCurrentFolder());
+            processInput   = new PrintStream(currentProcess.getOutputStream(), true);
+
             // If command could be executed
             // Reset caret position
             caretPos = 0;
@@ -186,6 +209,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         // Stop button stops current process
         else if(this.currentProcess!=null && source==runStopButton) {
             processMonitor.stopMonitoring();
+            processInput.close();
             currentProcess.destroy();
             this.currentProcess = null;
             switchToRunState();
