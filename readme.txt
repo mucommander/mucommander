@@ -118,7 +118,7 @@ Brave users can edit these XML files and tune muCommander to their own needs. He
 
  - action_keymap.xml
 All customisable actions are listed in that file, using the following format:
-<action class="com.mucommander.ui.action.CopyFileNamesAction" keystroke="control C" alt_keystroke="meta C"/>
+<action class="com.mucommander.ui.action.CopyFileNamesAction" keystroke="alt C" alt_keystroke="meta C"/>
 
 It's probably safer not to mess around with the class argument, as this could actually remove features from muCommander.
 keystroke and alt_keystroke should be fairly safe explanatory. It's important to note, however, that due to Java's capricious
@@ -139,7 +139,7 @@ For a list of legal actions, please refer to action_keymap.xml
  - toolbar.xml
 This file controls the content of your toolbar. It works in the same way as command_bar.xml, with two notable differences:
   - you can use a <separator/> element to add a separator in the toolbar
-  - alt_actions are not available
+  - alt_action is not available
 
 
 What's new since v0.8 beta 2 ?
@@ -154,13 +154,14 @@ New features:
  - Support for Bzip2 archives (.bz2, .tbz2, .tar.bz2 extensions)
  - Support for AR and Debian archives, GNU and BSD variants supported (.ar, .deb extensions)
  - New quick search with visual feedback, editable search string, jump to next/previous matches and ability to cancel it
- - 'Run command' allows shell customization, quick recall of previous commands and uses the system's default shell to parse commands under UNIX platforms (contributed by Nicolas Rinaudo)
+ - 'Run command' is now interactive, allows shell customization, quick recall of previous commands and uses the system's default shell to parse commands under UNIX platforms (contributed by Nicolas Rinaudo)
  - Command line options (contributed by Nicolas Rinaudo)
  - Ability to execute remote or archive entries files: these are copied to a temporary local directory and executed
  - Location combo box now allows to quickly recall parent folders
  - Icons magnification option for toolbar, command bar and files
- - New 'Copy name(s)' and 'Copy path(s)' actions to copy marked files names / paths (Ctrl+C / Shift+Ctrl+C by default) 
- - 'Reveal in desktop' for Windows, KDE, GNOME (on top of Mac OS X)
+ - New 'Copy name(s)' and 'Copy path(s)' actions to copy marked files names / paths (Alt+C / Shift+Alt+C by default) 
+ - New 'Mkfile' action (Shift+F7 by default)
+ - 'Reveal in desktop' now available for Windows, KDE, GNOME (on top of Mac OS X)
  - Ability to open files with native file associations under KDE and GNOME
  - Ability to open URLs under KDE and GNOME
  - 'Show .DS_Store files' option under Mac OS X
