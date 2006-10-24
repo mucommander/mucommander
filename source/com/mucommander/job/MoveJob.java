@@ -117,7 +117,7 @@ public class MoveJob extends ExtendedFileJob {
 
             // Loop for retry
             do {
-                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_destination", destFileName));
+                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", destFileName));
                 // Retry loops
                 if(ret==RETRY_ACTION)
                     continue;
@@ -192,7 +192,7 @@ public class MoveJob extends ExtendedFileJob {
                 catch(IOException e) {
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
 
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_source", file.getAbsolutePath()));
+                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", file.getAbsolutePath()));
                     // Retry loops
                     if(ret==RETRY_ACTION)
                         continue;

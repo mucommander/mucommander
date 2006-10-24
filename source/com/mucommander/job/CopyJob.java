@@ -109,7 +109,7 @@ public class CopyJob extends ExtendedFileJob {
                 catch(IOException e) {
                     // File could not be uncompressed properly
 //                    int ret = showErrorDialog(errorDialogTitle, Translator.get("unpack.unable_to_open_zip", currentFile.getName()));
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_source", currentFile.getName()));
+                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", currentFile.getName()));
                     // Retry loops
                     if(ret==RETRY_ACTION)
                         continue;
@@ -135,7 +135,7 @@ public class CopyJob extends ExtendedFileJob {
 
             // Loop for retry
             do {
-                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_destination", destFileName));
+                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", destFileName));
                 // Retry loops
                 if(ret==RETRY_ACTION)
                     continue;

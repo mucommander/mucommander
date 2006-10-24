@@ -94,7 +94,7 @@ public class DeleteJob extends FileJob {
                     catch(IOException e) {
                         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
 
-                        ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_source", filePath));
+                        ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", filePath));
                         // Retry loops
                         if(ret==RETRY_ACTION)
                             continue;

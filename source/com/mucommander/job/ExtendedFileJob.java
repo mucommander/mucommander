@@ -122,11 +122,11 @@ public abstract class ExtendedFileJob extends FileJob {
                     // Could not open source file for read
                 case FileTransferException.OPENING_SOURCE:
                     // Ask the user what to do
-                    choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_source", sourceFile.getName()));
+                    choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", sourceFile.getName()));
                     break;
                     // Could not open destination file for write
                 case FileTransferException.OPENING_DESTINATION:
-                    choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_destination", sourceFile.getName()));
+                    choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", sourceFile.getName()));
                     break;
                     // An error occurred during file transfer
 //                case FileTransferException.ERROR_WHILE_TRANSFERRING:

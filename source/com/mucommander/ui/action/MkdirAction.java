@@ -15,6 +15,6 @@ public class MkdirAction extends MucoAction {
     }
 
     public void performAction() {
-        new MkdirDialog(mainFrame);
+        new MkdirDialog(mainFrame, false);
     }
 }

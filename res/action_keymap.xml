@@ -94,6 +94,10 @@
   <!-- Default : F7                                                              -->
   <action class="com.mucommander.ui.action.MkdirAction"                 keystroke="F7"/>
 
+  <!-- Action  : Create a new file.                                              -->
+  <!-- Default : shift F7                                                        -->
+  <action class="com.mucommander.ui.action.MkfileAction"                keystroke="shift F7"/>
+
   <!-- Action  : Move selected file(s).                                          -->
   <!-- Default : F6                                                              -->
   <action class="com.mucommander.ui.action.MoveAction"                  keystroke="F6"/>

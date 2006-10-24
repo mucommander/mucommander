@@ -57,7 +57,7 @@ public class ArchiveJob extends ExtendedFileJob {
     protected void jobStarted() {
         if (destFile.exists()) {
             // File already exists in destination: ask the user what to do (cancel, overwrite,...) but
-            // don't show the 'resume' option nor the multiple files mode options such as 'skip'.
+            // do not offer the 'resume' option nor the multiple files mode options such as 'skip'.
             FileExistsDialog dialog = getFileExistsDialog(null, destFile, false);
             int choice = waitForUserResponse(dialog);
 
@@ -82,7 +82,7 @@ public class ArchiveJob extends ExtendedFileJob {
             }
             catch(Exception e) {
                 int choice = showErrorDialog(Translator.get("warning"),
-                                             Translator.get("cannot_write_destination", destFile.getName()),
+                                             Translator.get("cannot_write_file", destFile.getName()),
                                              new String[] {CANCEL_TEXT, RETRY_TEXT},
                                              new int[]  {CANCEL_ACTION, RETRY_ACTION}
                                              );

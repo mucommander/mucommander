@@ -115,30 +115,6 @@ apply:RU:Применить
 apply:ZH_CN:应用
 apply:SI:Potrdi
 
-folder_does_not_exist:EN:This folder doesn't exist or is not available.
-folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
-folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar.
-folder_does_not_exist:ES:El directoio no existe o no está disponible.
-folder_does_not_exist:CS:Tato složka neexistuje.
-folder_does_not_exist:zh_TW:資料夾不存在或無法使用.
-folder_does_not_exist:PL:Ten katalog nie istnieje lub jest nieosiągalny.
-folder_does_not_exist:HU:A könyvtár nem létezik vagy nem található.
-folder_does_not_exist:RU:Каталог с таким именем не существует или недоступен
-folder_does_not_exist:ZH_CN:文件夹不存在或无法使用.
-folder_does_not_exist:SI:Ta mapa ne obstaja oz. ni dostopna.
-
-this_folder_does_not_exist:EN:This folder doesn't exist or is not available: %1
-this_folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible: %1
-this_folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar: %1
-this_folder_does_not_exist:ES:El directoio no existe o no está disponible: %1
-this_folder_does_not_exist:CS:Tato složka neexistuje: %1
-this_folder_does_not_exist:zh_TW:資料夾不存在或無法使用: %1
-this_folder_does_not_exist:PL:Ten katalog nie istnieje lub jest nieosiągalny: %1
-this_folder_does_not_exist:HU:A könyvtár nem létezik vagy nem található. %1
-this_folder_does_not_exist:RU:Каталог %1 не существует или недоступен
-this_folder_does_not_exist:ZH_CN:文件夹不存在或无法使用: %1
-this_folder_does_not_exist:SI:Ta mapa ne obstaja oz. ni dostopna: %1
-
 save:EN:Save
 save:FR:Enregistrer
 save:DE:Speichern
@@ -186,18 +162,6 @@ dont_replace:HU:nem helyez áz
 dont_replace:RU:Не заменять
 dont_replace:ZH_CN:不替换
 dont_replace:SI:Ne zamenjaj
-
-warning:EN:Warning
-warning:FR:Avertissement
-warning:DE:Warnung
-warning:ES:Aviso
-warning:CS:Varování
-warning:zh_TW:警告
-warning:PL:Uwaga
-warning:HU:figyelmeztetés
-warning:RU:Предупреждение
-warning:ZH_CN:警告
-warning:SI:Opozorilo
 
 skip:EN:Skip
 skip:FR:Suivant
@@ -319,29 +283,144 @@ ask:RU:Задать вопрос
 ask:ZH_CN:询问
 ask:SI:Vprašaj
 
-cannot_read_source:EN:Cannot read file %1
-cannot_read_source:FR:Erreur lors de la lecture de %1
-cannot_read_source:DE:Kann Datei %1 nicht lesen
-cannot_read_source:ES:No se puede leer el archivo %1
-cannot_read_source:CS:Nemůžu přečíst soubor %1
-cannot_read_source:zh_TW:無法讀取檔案 %1
-cannot_read_source:PL:Nie mogę czytać pliku %1
-cannot_read_source:HU:Nem írható fájl %1
-cannot_read_source:RU:Не удается прочитать файл %1
-cannot_read_source:ZH_CN:无法读取文件 %1
-cannot_read_source:SI:Ne morem prebrati datoteke %1
+stop:EN:Stop
+stop:FR:Arrêter
+stop:DE:Stopp
+stop:ES:Parar
+stop:CS:Zastavit
+stop:zh_TW:停止
+stop:PL:Zatrzymaj
+stop:HU:megállít
+stop:RU:Прервать
+stop:zh_CN:停止
+stop:Si:Ustavi
 
-cannot_write_destination:EN:Cannot write file %1
-cannot_write_destination:FR:Erreur lors de l'écriture de %1
-cannot_write_destination:DE:Kann Datei %1 nicht schreiben
-cannot_write_destination:ES:No se puede escribir el archivo %1
-cannot_write_destination:CS:Nemůžu zapisovat do souboru %1
-cannot_write_destination:zh_TW:無法寫入檔案 %1
-cannot_write_destination:PL:Nie mogę zapisać pliku %1
-cannot_write_destination:HU:Nem olvasható fájl %1
-cannot_write_destination:RU:Не удается записать файл %1
-cannot_write_destination:ZH_CN:无法写入文件 %1
-cannot_write_destination:SI:Ne morem zapisati datoteke %1
+# Used as a button label, in the mkdir/mkfile dialog for instance
+create:EN:Create
+create:FR:Créer
+create:DE:Erstelle
+create:ES:Crear
+create:CS:Vytvoř
+create:zh_TW:新增
+create:PL:Utwórz
+create:HU:létrehoz
+create:RU:Создать
+create:ZH_CN:创建
+create:SI:Ustvari
+
+##########################
+# Generic error messages #
+##########################
+
+warning:EN:Warning
+warning:FR:Avertissement
+warning:DE:Warnung
+warning:ES:Aviso
+warning:CS:Varování
+warning:zh_TW:警告
+warning:PL:Uwaga
+warning:HU:figyelmeztetés
+warning:RU:Предупреждение
+warning:ZH_CN:警告
+warning:SI:Opozorilo
+
+# Generic error message, usually used as a title in error dialogs
+error:EN:Error
+error:FR:Erreur
+
+
+
+
+
+
+
+
+
+
+folder_does_not_exist:EN:This folder doesn't exist or is not available.
+folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
+folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar.
+folder_does_not_exist:ES:El directoio no existe o no está disponible.
+folder_does_not_exist:CS:Tato složka neexistuje.
+folder_does_not_exist:zh_TW:資料夾不存在或無法使用.
+folder_does_not_exist:PL:Ten katalog nie istnieje lub jest nieosiągalny.
+folder_does_not_exist:HU:A könyvtár nem létezik vagy nem található.
+folder_does_not_exist:RU:Каталог с таким именем не существует или недоступен
+folder_does_not_exist:ZH_CN:文件夹不存在或无法使用.
+folder_does_not_exist:SI:Ta mapa ne obstaja oz. ni dostopna.
+
+this_folder_does_not_exist:EN:This folder doesn't exist or is not available: %1
+this_folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible: %1
+this_folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar: %1
+this_folder_does_not_exist:ES:El directoio no existe o no está disponible: %1
+this_folder_does_not_exist:CS:Tato složka neexistuje: %1
+this_folder_does_not_exist:zh_TW:資料夾不存在或無法使用: %1
+this_folder_does_not_exist:PL:Ten katalog nie istnieje lub jest nieosiągalny: %1
+this_folder_does_not_exist:HU:A könyvtár nem létezik vagy nem található. %1
+this_folder_does_not_exist:RU:Каталог %1 не существует или недоступен
+this_folder_does_not_exist:ZH_CN:文件夹不存在或无法使用: %1
+this_folder_does_not_exist:SI:Ta mapa ne obstaja oz. ni dostopna: %1
+
+invalid_path:EN:Invalid path: %1
+invalid_path:FR:Chemin invalide: %1
+invalid_path:DE:Ungültiger Pfad: %1
+invalid_path:ES:Dirección inválida: %1
+invalid_path:CS:Neexistujíci cesta: %1
+invalid_path:zh_TW:不合法的路徑: %1
+invalid_path:PL:Błędna ścieżka: %1
+invalid_path:HU:érvénytelen út: %1
+invalid_path:RU:Неправильный путь: %1
+invalid_path:ZH_CN:无效路径: %1
+invalid_path:SI:Napačna pot: %1
+
+directory_already_exists:EN:Directory %1 already exists.
+directory_already_exists:FR:Le répertoire %1 existe déjà.
+directory_already_exists:DE:Ordner %1 existiert bereits.
+directory_already_exists:ES:El directorio %1 ya existe.
+directory_already_exists:CS:Složka %1 již existuje.
+directory_already_exists:zh_TW:資料夾 %1 已存在.
+directory_already_exists:PL:Katalog %1 już istnieje.
+directory_already_exists:HU:%1 könyvtár már létezik.
+directory_already_exists:RU:Каталог %1 уже существует.
+directory_already_exists:zh_TW:文件夹 %1 已存在.
+directory_already_exists:SI:Mapa %1 že obstaja.
+
+file_already_exists:EN:File %1 already exists
+file_already_exists:FR:Le fichier %1 existe déjà
+
+
+
+
+
+
+
+
+
+
+
+cannot_read_file:EN:Cannot read file %1
+cannot_read_file:FR:Erreur lors de la lecture de %1
+cannot_read_file:DE:Kann Datei %1 nicht lesen
+cannot_read_file:ES:No se puede leer el archivo %1
+cannot_read_file:CS:Nemůžu přečíst soubor %1
+cannot_read_file:zh_TW:無法讀取檔案 %1
+cannot_read_file:PL:Nie mogę czytać pliku %1
+cannot_read_file:HU:Nem írható fájl %1
+cannot_read_file:RU:Не удается прочитать файл %1
+cannot_read_file:ZH_CN:无法读取文件 %1
+cannot_read_file:SI:Ne morem prebrati datoteke %1
+
+cannot_write_file:EN:Cannot write file %1
+cannot_write_file:FR:Erreur lors de l'écriture de %1
+cannot_write_file:DE:Kann Datei %1 nicht schreiben
+cannot_write_file:ES:No se puede escribir el archivo %1
+cannot_write_file:CS:Nemůžu zapisovat do souboru %1
+cannot_write_file:zh_TW:無法寫入檔案 %1
+cannot_write_file:PL:Nie mogę zapisać pliku %1
+cannot_write_file:HU:Nem olvasható fájl %1
+cannot_write_file:RU:Не удается записать файл %1
+cannot_write_file:ZH_CN:无法写入文件 %1
+cannot_write_file:SI:Ne morem zapisati datoteke %1
 
 cannot_create_folder:EN:Unable to create directory %1
 cannot_create_folder:FR:Erreur lors de la création du répertoire %1
@@ -355,7 +434,7 @@ cannot_create_folder:RU:Не удается создать каталог %1.
 cannot_create_folder:ZH_CN:无法创建文件夹 %1
 cannot_create_folder:SI:Ne morem ustvariti mape %1
 
-cannot_read_folder:EN:Unable to read content of folder %1
+cannot_read_folder:EN:Unable to read contents of folder %1
 cannot_read_folder:FR:Erreur lors de la lecture du dossier %1
 cannot_read_folder:DE:Kann Inhalt des Ordners %1 nicht lesen
 cannot_read_folder:ES:No se puede leer el directorio %1
@@ -415,17 +494,6 @@ same_source_destination:RU:Исходный и конечный каталог -
 same_source_destination:ZH_CN:源/目的文件夹相同
 same_source_destination:SI:Izvorna in ciljna mapa sta identični.
 
-stop:EN:Stop
-stop:FR:Arrêter
-stop:DE:Stopp
-stop:ES:Parar
-stop:CS:Zastavit
-stop:zh_TW:停止
-stop:PL:Zatrzymaj
-stop:HU:megállít
-stop:RU:Прервать
-stop:zh_CN:停止
-stop:Si:Ustavi
 
 ###########
 # Actions #
@@ -681,6 +749,35 @@ com.mucommander.ui.action.MkdirAction.tooltip:HU:Új könyvtár létrehozása az
 com.mucommander.ui.action.MkdirAction.tooltip:RU:Создание подкаталог в текущем каталоге
 com.mucommander.ui.action.MkdirAction.tooltip:ZH_CN:在此新建文件夹
 com.mucommander.ui.action.MkdirAction.tooltip:SI:Ustvari mapo v trenutni mapi
+
+com.mucommander.ui.action.MkfileAction.label:EN:Make file
+com.mucommander.ui.action.MkfileAction.label:FR:Créer fichier
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.MkfileAction.tooltip:EN:Create a file in current folder
+com.mucommander.ui.action.MkfileAction.tooltip:FR:Créer un fichier dans le dossier courant
+
+
+
+
+
+
+
+
+
+
+
+
 
 com.mucommander.ui.action.DeleteAction.label:EN:Delete
 com.mucommander.ui.action.DeleteAction.label:FR:Supprimer
@@ -2883,18 +2980,6 @@ file_selection_dialog.include_folders:SI:Vključi mape
 # Mkdir dialog #
 ################
 
-mkdir_dialog.title:EN:Make directory
-mkdir_dialog.title:FR:Créer répertoire
-mkdir_dialog.title:DE:Ordner erstellen
-mkdir_dialog.title:ES:Crear directorio
-mkdir_dialog.title:CS:Vytvořit složku
-mkdir_dialog.title:zh_TW:新增資料夾
-mkdir_dialog.title:PL:Utwórz katalog
-mkdir_dialog.title:HU:új könyvtár
-mkdir_dialog.title:RU:Создание каталога
-mkdir_dialog.title:ZH_CN:新建文件夹
-mkdir_dialog.title:SI:Nova mapa
-
 mkdir_dialog.description:EN:Create directory
 mkdir_dialog.description:FR:Créer le répertoire
 mkdir_dialog.description:DE:Ordner erstellen
@@ -2907,57 +2992,20 @@ mkdir_dialog.description:RU:Создать каталог
 mkdir_dialog.description:ZH_CN:创建文件夹
 mkdir_dialog.description:SI:Ustvari novo mapo
 
-mkdir_dialog.error_title:EN:Make dir error
-mkdir_dialog.error_title:FR:Erreur de création
-mkdir_dialog.error_title:DE:Fehler beim Erstellen des Ordners
-mkdir_dialog.error_title:ES:Error al crear el directorio
-mkdir_dialog.error_title:CS:Chyba při vytváření složky
-mkdir_dialog.error_title:zh_TW:新增資料夾錯誤
-mkdir_dialog.error_title:PL:Błąd tworzenia katalogu
-mkdir_dialog.error_title:HU:könyvtár létrehozási hiba
-mkdir_dialog.error_title:RU:Ошибка при создании каталога
-mkdir_dialog.error_title:zh_CN:新建文件夹错误
-mkdir_dialog.error_title:SI:Napaka pri ustvarjanju mape
-
-mkdir_dialog.create:EN:Create
-mkdir_dialog.create:FR:Créer
-mkdir_dialog.create:DE:Erstelle
-mkdir_dialog.create:ES:Crear
-mkdir_dialog.create:CS:Vytvoř
-mkdir_dialog.create:zh_TW:新增
-mkdir_dialog.create:PL:Utwórz
-mkdir_dialog.create:HU:létrehoz
-mkdir_dialog.create:RU:Создать
-mkdir_dialog.create:ZH_CN:创建
-mkdir_dialog.create:SI:Ustvari
-
-mkdir_dialog.invalid_path:EN:Invalid path: %1
-mkdir_dialog.invalid_path:FR:Chemin invalide: %1
-mkdir_dialog.invalid_path:DE:Ungültiger Pfad: %1
-mkdir_dialog.invalid_path:ES:Dirección inválida: %1
-mkdir_dialog.invalid_path:CS:Neexistujíci cesta: %1
-mkdir_dialog.invalid_path:zh_TW:不合法的路徑: %1
-mkdir_dialog.invalid_path:PL:Błędna ścieżka: %1
-mkdir_dialog.invalid_path:HU:érvénytelen út: %1
-mkdir_dialog.invalid_path:RU:Неправильный путь: %1
-mkdir_dialog.invalid_path:ZH_CN:无效路径: %1
-mkdir_dialog.invalid_path:SI:Napačna pot: %1
-
-mkdir_dialog.dir_already_exists:EN:Directory %1 already exists.
-mkdir_dialog.dir_already_exists:FR:Le répertoire %1 existe déjà.
-mkdir_dialog.dir_already_exists:DE:Ordner %1 existiert bereits.
-mkdir_dialog.dir_already_exists:ES:El directorio %1 ya existe.
-mkdir_dialog.dir_already_exists:CS:Složka %1 již existuje.
-mkdir_dialog.dir_already_exists:zh_TW:資料夾 %1 已存在.
-mkdir_dialog.dir_already_exists:PL:Katalog %1 już istnieje.
-mkdir_dialog.dir_already_exists:HU:%1 könyvtár már létezik.
-mkdir_dialog.dir_already_exists:RU:Каталог %1 уже существует.
-mkdir_dialog.dir_already_exists:zh_TW:文件夹 %1 已存在.
-mkdir_dialog.dir_already_exists:SI:Mapa %1 že obstaja.
 
 #################
 # Mkfile dialog #
 #################
+
+mkfile_dialog.description:EN:Create new empty file
+mkfile_dialog.description:FR:Créer le fichier vide
+
+
+
+
+
+
+
 
 
 
@@ -4825,4 +4873,28 @@ unit.tb:SI:TB
 #image_viewer.next_image:ES:Siguiente
 #image_viewer.next_image:CS:Další obrázek
 #image_viewer.next_image:zh_TW:後一個圖片
+
+#mkdir_dialog.title:EN:Make directory
+#mkdir_dialog.title:FR:Créer répertoire
+#mkdir_dialog.title:DE:Ordner erstellen
+#mkdir_dialog.title:ES:Crear directorio
+#mkdir_dialog.title:CS:Vytvořit složku
+#mkdir_dialog.title:zh_TW:新增資料夾
+#mkdir_dialog.title:PL:Utwórz katalog
+#mkdir_dialog.title:HU:új könyvtár
+#mkdir_dialog.title:RU:Создание каталога
+#mkdir_dialog.title:ZH_CN:新建文件夹
+#mkdir_dialog.title:SI:Nova mapa
+
+#mkdir_dialog.error_title:EN:Creation error
+#mkdir_dialog.error_title:FR:Erreur de création
+#mkdir_dialog.error_title:DE:Fehler beim Erstellen des Ordners
+#mkdir_dialog.error_title:ES:Error al crear el directorio
+#mkdir_dialog.error_title:CS:Chyba při vytváření složky
+#mkdir_dialog.error_title:zh_TW:新增資料夾錯誤
+#mkdir_dialog.error_title:PL:Błąd tworzenia katalogu
+#mkdir_dialog.error_title:HU:könyvtár létrehozási hiba
+#mkdir_dialog.error_title:RU:Ошибка при создании каталога
+#mkdir_dialog.error_title:zh_CN:新建文件夹错误
+#mkdir_dialog.error_title:SI:Napaka pri ustvarjanju mape
 

@@ -38,6 +38,7 @@ public class SystemFoldersFilter extends FileFilter {
         "/mach",
         "/Desktop DB",
         "/Desktop DF",
+        "/File Transfer Folder",
         "/.hotfiles.btree",
         "/.Spotlight-V100",
         "/.hidden",     // Used by Mac OS X up to 10.3, not in 10.4
