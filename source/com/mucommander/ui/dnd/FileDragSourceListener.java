@@ -9,6 +9,8 @@ import com.mucommander.Debug;
 
 import java.awt.dnd.*;
 import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * This class adds 'drag' support to components that are registered using the {@link #enableDrag(java.awt.Component)}
@@ -69,18 +71,34 @@ public class FileDragSourceListener implements DragSourceListener, DragGestureLi
         this.isDragging = true;
 
         FileTable fileTable = folderPanel.getFileTable();
-        FileSet draggedFiles;
+        FileTableModel tableModel = fileTable.getFileTableModel();
 
-        AbstractFile selectedFile = fileTable.getSelectedFile(false);
-        // Return if selected file is null (could happen if '..' is selected)
-        if(selectedFile==null)
+        // Return (do not initiate drag) if mouse button2 or button3 was used
+        if((event.getTriggerEvent().getModifiers() & (InputEvent.BUTTON2_MASK|InputEvent.BUTTON3_MASK))!=0)
             return;
+
+// Do not use that to retrieve the current selected file as it is inaccurate: the selection could have changed since the
+// the mouse was clicked.         
+//        AbstractFile selectedFile = fileTable.getSelectedFile(false);
+//        // Return if selected file is null (could happen if '..' is selected)
+//        if(selectedFile==null)
+//            return;
+
+        // Find out which row was clicked
+        int clickedRow = fileTable.rowAtPoint(event.getDragOrigin());
+        // Return (do not initiate drag) if the selected file is the parent folder '..'
+        if (clickedRow==-1 || fileTable.isParentFolder(clickedRow))
+            return;
+
+        // Retrieve the file corresponding to the clicked row
+        AbstractFile selectedFile = tableModel.getFileAtRow(clickedRow);
 
         // Find out which files are to be dragged, based on the selected file and currenlty marked files.
         // If there are some files marked, drag marked files only if the selected file is one of the marked files.
         // In any other case, only drag the selected file.
         FileSet markedFiles;
-        if(fileTable.getFileTableModel().getNbMarkedFiles()>0 && (markedFiles=fileTable.getSelectedFiles()).contains(selectedFile)) {
+        FileSet draggedFiles;
+        if(tableModel.getNbMarkedFiles()>0 && (markedFiles=fileTable.getSelectedFiles()).contains(selectedFile)) {
             draggedFiles = markedFiles;
         }
         else {
