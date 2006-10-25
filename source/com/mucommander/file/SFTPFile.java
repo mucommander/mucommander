@@ -3,6 +3,7 @@ package com.mucommander.file;
 
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.Debug;
 import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.authentication.AuthenticationProtocolState;
 import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
@@ -280,9 +281,9 @@ public class SFTPFile extends AbstractFile {
         // Check connection and reconnect if connection timed out
         checkConnection();
 
-        List files = new Vector();
+        Vector files = new Vector();
 
-        // Modified J2SSH method
+        // Modified J2SSH method to remove the 100 files limitation
         sftpChannel.listChildren(file, files);
 
         // File doesn't exists
@@ -303,8 +304,8 @@ public class SFTPFile extends AbstractFile {
         String filename;
         int fileCount = 0;
         // Fill AbstractFile array and discard '.' and '..' files
-        while(iterator.hasNext()) {
-            sftpFile = (SftpFile)iterator.next();
+        for(int i=0; i<nbFiles; i++) {
+            sftpFile = (SftpFile)files.elementAt(i);
             filename = sftpFile.getFilename();
             // Discard '.' and '..' files
             if(filename.equals(".") || filename.equals(".."))
