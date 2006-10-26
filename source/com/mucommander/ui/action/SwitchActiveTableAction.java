@@ -16,7 +16,7 @@ public class SwitchActiveTableAction extends MucoAction {
     }
 
     public void performAction() {
-        FileTable activeTable = mainFrame.getLastActiveTable();
+        FileTable activeTable = mainFrame.getActiveTable();
         FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
         FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
         if(activeTable == table1)

@@ -145,7 +145,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         if(!isVisible())
             return;
 
-        FileTable currentFileTable = mainFrame.getLastActiveTable();
+        FileTable currentFileTable = mainFrame.getActiveTable();
 
         // Currently select file, can be null
         AbstractFile selectedFile = currentFileTable.getSelectedFile();
@@ -195,7 +195,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         if(!isVisible())
             return;
 
-        final AbstractFile currentFolder = mainFrame.getLastActiveTable().getCurrentFolder();
+        final AbstractFile currentFolder = mainFrame.getActiveTable().getCurrentFolder();
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, currentFolder="+currentFolder);
 
@@ -353,13 +353,13 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     public void selectedFileChanged(FileTable source) {
         // No need to update if the originating FileTable is not the currently active one
-        if(source==mainFrame.getLastActiveTable())
+        if(source==mainFrame.getActiveTable())
             updateSelectedFilesInfo();
     }
 
     public void markedFilesChanged(FileTable source) {
         // No need to update if the originating FileTable is not the currently active one
-        if(source==mainFrame.getLastActiveTable())
+        if(source==mainFrame.getActiveTable())
             updateSelectedFilesInfo();
     }
 

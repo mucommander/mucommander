@@ -17,7 +17,7 @@ public class CopyFilesToClipboardAction extends SelectedFilesAction {
     }
 
     public void performAction() {
-        FileSet selectedFiles = mainFrame.getLastActiveTable().getSelectedFiles();
+        FileSet selectedFiles = mainFrame.getActiveTable().getSelectedFiles();
 
         if(selectedFiles.size()>0)
             ClipboardSupport.setClipboardFiles(selectedFiles);

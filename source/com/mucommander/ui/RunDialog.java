@@ -1,7 +1,6 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.shell.*;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
@@ -182,7 +181,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     ////////////////////////////
     public void runCommand(String command) {
         try {
-            currentProcess = Shell.execute(command, mainFrame.getLastActiveTable().getCurrentFolder());
+            currentProcess = Shell.execute(command, mainFrame.getActiveTable().getCurrentFolder());
             processInput   = new PrintStream(currentProcess.getOutputStream(), true);
 
             // If command could be executed

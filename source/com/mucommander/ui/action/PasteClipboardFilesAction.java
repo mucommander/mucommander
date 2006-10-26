@@ -39,7 +39,7 @@ public class PasteClipboardFilesAction extends MucoAction {
 
         // Start copying files
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-        AbstractFile destFolder = mainFrame.getLastActiveTable().getCurrentFolder();
+        AbstractFile destFolder = mainFrame.getActiveTable().getCurrentFolder();
         CopyJob job = new CopyJob(progressDialog, mainFrame, clipboardFiles, destFolder, null, CopyJob.COPY_MODE, FileExistsDialog.ASK_ACTION);
         progressDialog.start(job);
     }

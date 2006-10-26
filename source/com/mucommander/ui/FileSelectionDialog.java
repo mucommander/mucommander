@@ -142,7 +142,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        FileTable activeTable = mainFrame.getLastActiveTable();
+        FileTable activeTable = mainFrame.getActiveTable();
 
         // Action coming from the selection dialog
         if ((source==okButton || source==selectionField)) {

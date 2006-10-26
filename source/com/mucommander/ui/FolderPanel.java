@@ -14,7 +14,6 @@ import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.progress.ProgressTextField;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableModel;
 import com.mucommander.ui.table.TablePopupMenu;
 import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.dnd.FileDragSourceListener;
@@ -486,7 +485,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         this.lastFocusedComponent = e.getSource();
 		
         // Notify MainFrame that we are in control now! (our table/location field is active)
-        mainFrame.setLastActiveTable(fileTable);
+        mainFrame.setActiveTable(fileTable);
     }
 	
     public void focusLost(FocusEvent e) {
@@ -907,7 +906,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             // /!\ Focus should be restored after disableNoEventsMode has been called
             // Use FocusRequester to request focus after all other UI events have been processed,
             // calling requestFocus() on table directly could get ignored
-            FocusRequester.requestFocus(mainFrame.getLastActiveTable());
+            FocusRequester.requestFocus(mainFrame.getActiveTable());
         }
     }
 }

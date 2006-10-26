@@ -237,6 +237,7 @@ Known issues:
  - Write/execute modes are not preserved when a file is copied, this will be solved with Java 1.6
  - SMB support may not work properly on non multi-language JRE
  - SFTP unavailable under Java 1.3
+ - SFTP connection sometimes drops unexpectedly when transferring lots of files
  - Some BZ2 archives can not be properly opened
  - Mac OS X : 'Copy files' not working with other applications (files are not pasted)
  - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System Preferences' for them to work properly

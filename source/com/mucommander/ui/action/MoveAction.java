@@ -17,7 +17,7 @@ public class MoveAction extends SelectedFilesAction {
     }
 
     public void performAction() {
-        FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
+        FileSet files = mainFrame.getActiveTable().getSelectedFiles();
 
         // Display move dialog only if at least one file is selected/marked
         if(files.size()>0)

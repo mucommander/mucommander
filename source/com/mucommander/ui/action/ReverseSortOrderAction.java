@@ -15,6 +15,6 @@ public class ReverseSortOrderAction extends MucoAction {
     }
 
     public void performAction() {
-        mainFrame.getLastActiveTable().reverseSortOrder();
+        mainFrame.getActiveTable().reverseSortOrder();
     }
 }

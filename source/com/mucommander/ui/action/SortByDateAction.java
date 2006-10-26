@@ -16,6 +16,6 @@ public class SortByDateAction extends MucoAction {
     }
 
     public void performAction() {
-        mainFrame.getLastActiveTable().sortBy(FileTable.DATE);
+        mainFrame.getActiveTable().sortBy(FileTable.DATE);
     }
 }

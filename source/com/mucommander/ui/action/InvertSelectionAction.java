@@ -17,7 +17,7 @@ public class InvertSelectionAction extends MucoAction {
     }
 
     public void performAction() {
-        FileTable fileTable = mainFrame.getLastActiveTable();
+        FileTable fileTable = mainFrame.getActiveTable();
         FileTableModel tableModel = fileTable.getFileTableModel();
 
         // Starts at 1 if current folder is not root so that '..' is not marked

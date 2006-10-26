@@ -14,6 +14,6 @@ public class ChangeLocationAction extends MucoAction {
     }
 
     public void performAction() {
-        mainFrame.getLastActiveTable().getFolderPanel().changeCurrentLocation();
+        mainFrame.getActiveTable().getFolderPanel().changeCurrentLocation();
     }
 }

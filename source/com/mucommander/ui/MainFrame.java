@@ -15,8 +15,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
@@ -40,8 +38,8 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     private FileTable table1;
     private FileTable table2;
     
-    /** Table that that has/had focus last */
-    private FileTable lastActiveTable;
+    /** Active table in the MainFrame */
+    private FileTable activeTable;
 
     /** Tool bar instance */
     private ToolBar toolbar;
@@ -91,7 +89,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         this.table2 = folderPanel2.getFileTable();
 
         // Left table is the first to be active
-        this.lastActiveTable = table1;
+        this.activeTable = table1;
 
         // Create toolbar and show it only if it hasn't been disabled in the preferences
         this.toolbar = new ToolBar(this);
@@ -162,6 +160,9 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         ActionKeymap.registerActions(this);
+
+        // Fire table change events on registered ActivePanelListener instances, to notify of the intial active table.
+        fireActivePanelChanged(activeTable.getFolderPanel());
 
         // Piece of code used in 0.8 beta1 and removed after because it's way too slow, kept here for the record 
         //		// Used by setNoEventsMode()
@@ -277,20 +278,27 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
 
     /**
-     * Returns last active FileTable, that is the last FileTable that received focus.
+     * Returns the active FileTable in this MainFrame.
+     *
+     * The returned active table doesn't necessarily have focus, the focus can be in some other component
+     * of the active {@link FolderPanel}, or nowhere in the MainFrame if the window is not in the foreground.
+     *
+     * <p>Use {@link FileTable#hasFocus()} to test if the table currently has focus.
+     *
+     * @see FileTable#isActiveTable()
      */
-    public FileTable getLastActiveTable() {
-        return lastActiveTable;
+    public FileTable getActiveTable() {
+        return activeTable;
     }
 
     /**
      * Sets currently active FileTable (called by FolderPanel).
      */
-    void setLastActiveTable(FileTable table) {
-        boolean activeTableChanged = lastActiveTable!=table;
+    void setActiveTable(FileTable table) {
+        boolean activeTableChanged = activeTable !=table;
 
         if(activeTableChanged) {
-            this.lastActiveTable = table;
+            this.activeTable = table;
 
             // Update window title to reflect new active table
             updateWindowTitle();
@@ -302,10 +310,10 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
 	
     /**
-     * Returns the complement to getLastActiveTable().
+     * Returns the complement to getActiveTable().
      */
     public FileTable getInactiveTable() {
-        return lastActiveTable==table1?table2:table1;
+        return activeTable ==table1?table2:table1;
     }
     
     /**
@@ -351,7 +359,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
      * Makes both folders the same, choosing the one which is currently active. 
      */
     public void setSameFolder() {
-        (lastActiveTable==table1?table2:table1).getFolderPanel().trySetCurrentFolder(lastActiveTable.getCurrentFolder());
+        (activeTable ==table1?table2:table1).getFolderPanel().trySetCurrentFolder(activeTable.getCurrentFolder());
     }
 
 
@@ -376,7 +384,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
      */
     public void updateWindowTitle() {
         // Update window title
-        String title = lastActiveTable.getCurrentFolder().getAbsolutePath()+" - muCommander";
+        String title = activeTable.getCurrentFolder().getAbsolutePath()+" - muCommander";
         Vector mainFrames = WindowManager.getMainFrames();
         if(mainFrames.size()>1)
             title += " ["+(mainFrames.indexOf(this)+1)+"]";
@@ -438,10 +446,10 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     public void requestFocus() {
         // If visible, call requestFocus() directly on the component
         if(isVisible())
-            lastActiveTable.getFolderPanel().requestFocus();
+            activeTable.getFolderPanel().requestFocus();
         // If not, call requestFocus() later when the component is visible
         else
-            FocusRequester.requestFocus(lastActiveTable.getFolderPanel());
+            FocusRequester.requestFocus(activeTable.getFolderPanel());
     }
 
 	

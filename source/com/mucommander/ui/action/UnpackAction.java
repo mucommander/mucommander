@@ -19,7 +19,7 @@ public class UnpackAction extends SelectedFilesAction {
     }
 
     public void performAction() {
-        FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
+        FileSet files = mainFrame.getActiveTable().getSelectedFiles();
         if(files.size()>0)
             new UnpackDialog(mainFrame, files, false);
     }

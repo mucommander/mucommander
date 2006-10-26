@@ -24,7 +24,7 @@ public class StopAction extends MucoAction implements LocationListener {
     }
 
     public void performAction() {
-        FolderPanel folderPanel = mainFrame.getLastActiveTable().getFolderPanel();
+        FolderPanel folderPanel = mainFrame.getActiveTable().getFolderPanel();
         FolderPanel.ChangeFolderThread changeFolderThread = folderPanel.getChangeFolderThread();
 
         if(changeFolderThread!=null)

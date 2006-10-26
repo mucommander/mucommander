@@ -16,7 +16,7 @@ public class MarkAllAction extends MucoAction {
     }
 
     public void performAction() {
-        FileTable fileTable = mainFrame.getLastActiveTable();
+        FileTable fileTable = mainFrame.getActiveTable();
         FileTableModel tableModel = fileTable.getFileTableModel();
 
         int nbRows = tableModel.getRowCount();

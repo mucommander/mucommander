@@ -18,7 +18,7 @@ public class CopyFileNamesAction extends SelectedFilesAction {
     }
 
     public void performAction() {
-        FileSet selectedFiles = mainFrame.getLastActiveTable().getSelectedFiles();
+        FileSet selectedFiles = mainFrame.getActiveTable().getSelectedFiles();
 
         if(selectedFiles.size()>0) {
             // Create a TransferableFileSet and make DataFlavour.stringFlavor (text) the only DataFlavour supported
@@ -42,7 +42,7 @@ public class CopyFileNamesAction extends SelectedFilesAction {
 
 /*
         // Get selected file OR marked files (if any), returned FileSet should never be empty
-        FileSet selectedFiles = mainFrame.getLastActiveTable().getSelectedFiles();
+        FileSet selectedFiles = mainFrame.getActiveTable().getSelectedFiles();
         int nbFiles = selectedFiles.size();
         if(nbFiles==0)
             return;

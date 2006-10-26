@@ -4482,6 +4482,21 @@ prefs_dialog.selection_color:RU:Фон выделения
 prefs_dialog.selection_color:ZH_CN:选定项目背景
 prefs_dialog.selection_color:SI:Označeno ozadje
 
+prefs_dialog.not_in_focus_selection_color:EN:Selection background when not in focus
+prefs_dialog.not_in_focus_selection_color:FR:Fond de la sélection sans focus
+
+
+
+
+
+
+
+
+
+
+
+
+
 prefs_dialog.font_colors:EN:Font colors
 prefs_dialog.font_colors:FR:Couleurs de la fonte
 prefs_dialog.font_colors:DE:Schriftfarben

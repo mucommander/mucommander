@@ -15,7 +15,7 @@ public class SelectLastRowAction extends MucoAction {
     }
 
     public void performAction() {
-        FileTable fileTable = mainFrame.getLastActiveTable();
+        FileTable fileTable = mainFrame.getActiveTable();
         fileTable.selectRow(fileTable.getFileTableModel().getRowCount()-1);
     }
 }

@@ -169,7 +169,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
             // Check that destination file can be resolved 
             String filePath = filePathField.getText();
             // TODO: this should be done in the job's thread because AbstractFile creation can lock the main thread if the file is on a remote filesystem
-            Object dest[] = FileToolkit.resolvePath(filePath, mainFrame.getLastActiveTable().getCurrentFolder());
+            Object dest[] = FileToolkit.resolvePath(filePath, mainFrame.getActiveTable().getCurrentFolder());
             if (dest==null || dest[1]==null) {
                 // Incorrect destination
                 QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("pack_dialog.error_title"), Translator.get("this_folder_does_not_exist", filePath), mainFrame,

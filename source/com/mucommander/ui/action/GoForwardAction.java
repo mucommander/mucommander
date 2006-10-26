@@ -28,7 +28,7 @@ public class GoForwardAction extends MucoAction implements ActivePanelListener, 
 
 
     public void performAction() {
-        mainFrame.getLastActiveTable().getFolderPanel().getFolderHistory().goForward();
+        mainFrame.getActiveTable().getFolderPanel().getFolderHistory().goForward();
     }
 
 
@@ -37,7 +37,7 @@ public class GoForwardAction extends MucoAction implements ActivePanelListener, 
      * folder in the history, this action will be enabled, if not it will be disabled.
      */
     private void toggleEnabledState() {
-        setEnabled(mainFrame.getLastActiveTable().getFolderPanel().getFolderHistory().hasForwardFolder());
+        setEnabled(mainFrame.getActiveTable().getFolderPanel().getFolderHistory().hasForwardFolder());
     }
 
 

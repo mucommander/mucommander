@@ -24,6 +24,6 @@ public class RevealInDesktopAction extends MucoAction {
     }
 
     public void performAction() {
-        PlatformManager.openInDesktop(mainFrame.getLastActiveTable().getFolderPanel().getCurrentFolder());
+        PlatformManager.openInDesktop(mainFrame.getActiveTable().getFolderPanel().getCurrentFolder());
     }
 }

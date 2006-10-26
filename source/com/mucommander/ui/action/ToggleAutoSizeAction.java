@@ -17,7 +17,7 @@ public class ToggleAutoSizeAction extends MucoAction {
     }
 
     public void performAction() {
-        FileTable activeTable = mainFrame.getLastActiveTable();
+        FileTable activeTable = mainFrame.getActiveTable();
         boolean autoSizeEnabled = !activeTable.isAutoSizeColumnsEnabled();
         activeTable.setAutoSizeColumnsEnabled(autoSizeEnabled);
         ConfigurationManager.setVariableBoolean("prefs.file_table.auto_size_columns", autoSizeEnabled);

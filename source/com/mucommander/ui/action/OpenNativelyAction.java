@@ -19,7 +19,7 @@ public class OpenNativelyAction extends MucoAction {
     }
 
     public void performAction() {
-        AbstractFile selectedFile = mainFrame.getLastActiveTable().getSelectedFile(true);
+        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile(true);
 
         if(selectedFile==null)
             return;

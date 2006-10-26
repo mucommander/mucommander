@@ -97,7 +97,7 @@ public abstract class FileViewer extends JPanel {
       private AbstractFile getNextFile(AbstractFile file, boolean forward, boolean loop) {
       AbstractFile folder = file.getParent();
       MainFrame mainFrame = frame.getMainFrame();
-      FileTable table = mainFrame.getLastActiveTable();
+      FileTable table = mainFrame.getActiveTable();
 
       if(!table.getCurrentFolder().equals(folder)) {
       table = mainFrame.getInactiveTable();

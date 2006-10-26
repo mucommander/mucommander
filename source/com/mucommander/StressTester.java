@@ -2,7 +2,6 @@
 package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.action.ActionManager;
@@ -35,7 +34,7 @@ public class StressTester implements Runnable, ActionListener {
             if(random.nextInt(2)==0)
                 ActionManager.performAction(com.mucommander.ui.action.SwitchActiveTableAction.class, mainFrame);    
 
-            FileTable fileTable = mainFrame.getLastActiveTable();
+            FileTable fileTable = mainFrame.getActiveTable();
             AbstractFile currentFolder = fileTable.getCurrentFolder();
             AbstractFile parentFolder = currentFolder.getParent();
 

@@ -66,7 +66,10 @@ public abstract class ExtendedFileJob extends FileJob {
                 }
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e+", throwing FileTransferException");
+                if(com.mucommander.Debug.ON) {
+                    com.mucommander.Debug.trace("IOException caught: "+e+", throwing FileTransferException");
+                    e.printStackTrace();
+                }
                 throw new FileTransferException(FileTransferException.OPENING_SOURCE);
             }
     

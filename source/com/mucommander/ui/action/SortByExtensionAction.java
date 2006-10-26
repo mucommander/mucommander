@@ -16,6 +16,6 @@ public class SortByExtensionAction extends MucoAction {
     }
 
     public void performAction() {
-        mainFrame.getLastActiveTable().sortBy(FileTable.EXTENSION);
+        mainFrame.getActiveTable().sortBy(FileTable.EXTENSION);
     }
 }

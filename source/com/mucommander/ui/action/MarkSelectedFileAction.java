@@ -22,6 +22,6 @@ public class MarkSelectedFileAction extends MucoAction {
 
 
     public void performAction() {
-        mainFrame.getLastActiveTable().markSelectedFile();
+        mainFrame.getActiveTable().markSelectedFile();
     }
 }

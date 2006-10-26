@@ -5,7 +5,6 @@ import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
-import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
@@ -29,7 +28,7 @@ public class OpenAction extends MucoAction {
     }
 
     public void performAction() {
-        FileTable fileTable = mainFrame.getLastActiveTable();
+        FileTable fileTable = mainFrame.getActiveTable();
         AbstractFile selectedFile = fileTable.getSelectedFile(true);
 
         if(selectedFile==null)

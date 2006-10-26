@@ -28,7 +28,7 @@ public class GoToParentAction extends MucoAction implements ActivePanelListener,
 
 
     public void performAction() {
-        mainFrame.getLastActiveTable().getFolderPanel().goToParent();
+        mainFrame.getActiveTable().getFolderPanel().goToParent();
     }
 
 
@@ -37,7 +37,7 @@ public class GoToParentAction extends MucoAction implements ActivePanelListener,
      * has a parent, this action will be enabled, if not it will be disabled.
      */
     private void toggleEnabledState() {
-        setEnabled(mainFrame.getLastActiveTable().getFolderPanel().getCurrentFolder().getParent()!=null);
+        setEnabled(mainFrame.getActiveTable().getFolderPanel().getCurrentFolder().getParent()!=null);
     }
 
 

@@ -4,7 +4,6 @@ package com.mucommander.ui;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.file.FileToolkit;
-import com.mucommander.file.FileFactory;
 import com.mucommander.job.MkdirJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
@@ -86,7 +85,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
         String enteredPath = mkdirPathField.getText();
 
         // Resolves destination folder
-        Object ret[] = FileToolkit.resolvePath(enteredPath, mainFrame.getLastActiveTable().getCurrentFolder());
+        Object ret[] = FileToolkit.resolvePath(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
         if (ret==null) {
             showErrorDialog(Translator.get("invalid_path", enteredPath));

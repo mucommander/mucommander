@@ -17,7 +17,7 @@ public class CopyFilePathsAction extends SelectedFilesAction {
     }
 
     public void performAction() {
-        FileSet selectedFiles = mainFrame.getLastActiveTable().getSelectedFiles();
+        FileSet selectedFiles = mainFrame.getActiveTable().getSelectedFiles();
 
         if(selectedFiles.size()>0) {
             // Create a TransferableFileSet and make DataFlavour.stringFlavor (text) the only DataFlavour supported

@@ -98,7 +98,7 @@ public class MkdirJob extends FileJob {
                 // Refresh and selects newly created folder in active table
                 FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
                 FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
-                FileTable lastActiveTable = mainFrame.getLastActiveTable();
+                FileTable lastActiveTable = mainFrame.getActiveTable();
                 for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Determining if folders need to be refreshed, tableFolder="+table.getCurrentFolder().getAbsolutePath()+" destFolder="+destFolder.getAbsolutePath());
                     if(destFolder.equals(table.getCurrentFolder())) {

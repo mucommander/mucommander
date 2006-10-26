@@ -266,7 +266,7 @@ public abstract class FileJob implements Runnable {
      * Actual job is performed in a separate thread.
      */
     public void run() {
-        FileTable activeTable = mainFrame.getLastActiveTable();
+        FileTable activeTable = mainFrame.getActiveTable();
         AbstractFile currentFile;
 
         // Notifies that this job starts

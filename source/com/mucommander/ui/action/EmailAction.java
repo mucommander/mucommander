@@ -16,7 +16,7 @@ public class EmailAction extends SelectedFilesAction {
     }
 
     public void performAction() {
-        FileSet files = mainFrame.getLastActiveTable().getSelectedFiles();
+        FileSet files = mainFrame.getActiveTable().getSelectedFiles();
         if(files.size()>0)
             new EmailFilesDialog(mainFrame, files);
     }

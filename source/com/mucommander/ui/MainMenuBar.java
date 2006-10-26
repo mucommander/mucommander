@@ -19,7 +19,6 @@ import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -162,7 +161,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(SetSameFolderAction.class, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
-        MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper).setSelected(mainFrame.getLastActiveTable().isAutoSizeColumnsEnabled());
+        MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleAutoSizeAction.class, mainFrame), menuItemMnemonicHelper).setSelected(mainFrame.getActiveTable().isAutoSizeColumnsEnabled());
 
         viewMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ToggleToolBarAction.class, mainFrame), menuItemMnemonicHelper);
@@ -255,7 +254,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Bookmark menu item
         if (bookmarkMenuItems!=null && bookmarkMenuItems.contains(source)) {
             int index = bookmarkMenuItems.indexOf(source);
-            mainFrame.getLastActiveTable().getFolderPanel().trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getURL());
+            mainFrame.getActiveTable().getFolderPanel().trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getURL());
         }
         // Help menu
         else if (source == keysItem) {
@@ -347,7 +346,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 }
 
                 // Display the MainFrame's current folder path
-                checkBoxMenuItem.setText((i+1)+" "+mainFrame.getLastActiveTable().getCurrentFolder().getAbsolutePath());
+                checkBoxMenuItem.setText((i+1)+" "+mainFrame.getActiveTable().getCurrentFolder().getAbsolutePath());
 
                 // Check current MainFrame (the one this menu bar belongs to)
                 checkBoxMenuItem.setSelected(mainFrame==this.mainFrame);

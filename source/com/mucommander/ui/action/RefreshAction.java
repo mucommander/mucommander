@@ -15,6 +15,6 @@ public class RefreshAction extends MucoAction {
 
     public void performAction() {
         // Refresh current folder in a separate thread
-        mainFrame.getLastActiveTable().getFolderPanel().tryRefreshCurrentFolder();
+        mainFrame.getActiveTable().getFolderPanel().tryRefreshCurrentFolder();
     }
 }

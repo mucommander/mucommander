@@ -16,6 +16,6 @@ public class SortByNameAction extends MucoAction {
     }
 
     public void performAction() {
-        mainFrame.getLastActiveTable().sortBy(FileTable.NAME);
+        mainFrame.getActiveTable().sortBy(FileTable.NAME);
     }
 }

@@ -150,7 +150,6 @@ public class SFTPFile extends AbstractFile {
 
 
     private void checkConnection() throws IOException {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("checking if connected...");
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isConnected= "+sshClient.isConnected());
         // Reconnect if disconnected
         if(sshClient==null || !sshClient.isConnected()) {

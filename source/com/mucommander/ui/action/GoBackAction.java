@@ -28,7 +28,7 @@ public class GoBackAction extends MucoAction implements ActivePanelListener, Loc
 
 
     public void performAction() {
-        mainFrame.getLastActiveTable().getFolderPanel().getFolderHistory().goBack();
+        mainFrame.getActiveTable().getFolderPanel().getFolderHistory().goBack();
     }
 
 
@@ -37,7 +37,7 @@ public class GoBackAction extends MucoAction implements ActivePanelListener, Loc
      * folder in the history, this action will be enabled, if not it will be disabled.
      */
     private void toggleEnabledState() {
-        setEnabled(mainFrame.getLastActiveTable().getFolderPanel().getFolderHistory().hasBackFolder());
+        setEnabled(mainFrame.getActiveTable().getFolderPanel().getFolderHistory().hasBackFolder());
     }
 
 

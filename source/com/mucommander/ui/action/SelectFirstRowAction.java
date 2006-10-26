@@ -14,6 +14,6 @@ public class SelectFirstRowAction extends MucoAction {
     }
 
     public void performAction() {
-        mainFrame.getLastActiveTable().selectRow(0);
+        mainFrame.getActiveTable().selectRow(0);
     }
 }

@@ -1,13 +1,11 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableModel;
 
 /**
  * FileAction is an abstract action that operates on the currently active FileTable. It is enabled only when
@@ -41,7 +39,7 @@ public abstract class FileAction extends MucoAction implements TableSelectionLis
         mainFrame.getFolderPanel2().getFileTable().addTableSelectionListener(this);
 
         // Set initial enabled state
-        updateEnabledState(mainFrame.getLastActiveTable());
+        updateEnabledState(mainFrame.getActiveTable());
     }
 
 
@@ -84,7 +82,7 @@ public abstract class FileAction extends MucoAction implements TableSelectionLis
      */
     public void selectedFileChanged(FileTable source) {
         // No need to update state if the originating FileTable is not the currently active one 
-        if(source==mainFrame.getLastActiveTable())
+        if(source==mainFrame.getActiveTable())
             updateEnabledState(source);
     }
 
@@ -93,7 +91,7 @@ public abstract class FileAction extends MucoAction implements TableSelectionLis
      */
     public void markedFilesChanged(FileTable source) {
         // No need to update state if the originating FileTable is not the currently active one
-        if(source==mainFrame.getLastActiveTable())
+        if(source==mainFrame.getActiveTable())
             updateEnabledState(source);
     }
 

@@ -20,7 +20,7 @@ public class LocalCopyAction extends SelectedFileAction {
     }
 
     public void performAction() {
-        AbstractFile selectedFile = mainFrame.getLastActiveTable().getSelectedFile(false);
+        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile(false);
 
         // Display local copy dialog only if a file other than '..' is currently selected
         if(selectedFile!=null) {

@@ -16,6 +16,6 @@ public class SortBySizeAction extends MucoAction {
     }
 
     public void performAction() {
-        mainFrame.getLastActiveTable().sortBy(FileTable.SIZE);
+        mainFrame.getActiveTable().sortBy(FileTable.SIZE);
     }
 }
