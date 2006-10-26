@@ -148,12 +148,12 @@ What's new since v0.8 beta 2 ?
 New features:
  - Keyboard shortcuts, toolbar and command bar buttons can now be customized (no GUI yet, see .xml files in preferences folder)
  - Drag and Drop support: files can be copied or moved to and from muCommander windows and other applications, current folder can be changed by dropping a file or folder on the location field
- - Clipboard support: files can be copied and pasted to/from the clipboard, works with other applications
+ - Clipboard support: files can be copied and pasted to/from the clipboard (Ctrl+C / Ctrl+V by default), works with other applications
+ - New quick search with visual feedback, editable search string, jump to next/previous matches and ability to cancel it
  - Zip, Tar, Gzip, Bzip2 archives can now be created
  - Support for ISO and NRG images over local and SMB filesystems (contributed by Xavier Martin)
  - Support for Bzip2 archives (.bz2, .tbz2, .tar.bz2 extensions)
  - Support for AR and Debian archives, GNU and BSD variants supported (.ar, .deb extensions)
- - New quick search with visual feedback, editable search string, jump to next/previous matches and ability to cancel it
  - 'Run command' is now interactive, allows shell customization, quick recall of previous commands and uses the system's default shell to parse commands under UNIX platforms (contributed by Nicolas Rinaudo)
  - Command line options (contributed by Nicolas Rinaudo)
  - Ability to execute remote or archive entries files: these are copied to a temporary local directory and executed
@@ -181,12 +181,14 @@ Improvements:
  - Free/total volume space now automatically refreshes (every 60 seconds)
  - Toolbar and command bar now contextually show whether the action can be triggered or not
  - KB/MB/GB/TB are now calculated accurately by multiples of 1024 instead of 1000
+ - Environment variables are now retained when using 'Run command'
  - In-table file renaming now used everywhere instead of 'Rename' dialog
  - In-table file renaming must now to be validated by ENTER for safety reasons
  - 'Quit' action with confirmation dialog added for platforms other than OS X (Ctrl+Q by default)
  - Right-click menu reworked with 'Copy name(s)' / 'Copy path(s)' actions
  - Improved Windows launcher
  - Splash screen shows loading progress
+ - Currently selected file is displayed in a different color (configurable) when focus is out of the file table or application
  - Left/Right keyboard shortcuts added for 'Go to parent' and 'Open' (customizable)
  - Window number displayed in title if more than one window is opened
  - Marking/unmarking stops when mark key is kept pressed and last file is reached
@@ -219,6 +221,7 @@ Bug fixes:
  - Fixed FTP overwrite problem which would cause the destination file to be renamed to filename.1
  - Fixed a bug in menu bar which could prevent some shortcuts from working properly
  - Added missing keyboard shortcut to 'Go to parent' menu item
+ - Fixed a display bug which could lead to both panes showing a selected file
  - Fixed annoyance with drive popup under Mac OS X which redirected startup partition to /Volumes/PartitionName instead of /
  - Fixed muCommander cancelling Mac OS X shutdown / restart / logout
  - Fixed file editor not asking for save when quitting muCommander under OS X
