@@ -539,18 +539,27 @@ public class PlatformManager {
 
     /**
      * Sets the path to the folder in which muCommander will look for its preferences.
+     * <p>
+     * If <code>folder</code> is a file, its parent folder will be used instead.
+     * </p>
      * @param     folder                   path to the folder in which muCommander will look for its preferences.
      * @exception IllegalArgumentException thrown if <code>folder</code> is not a valid folder path.
      */
     public static void setPreferencesFolder(File folder) {
+        // Makes sure we get the canonical path
+        // (for 'dirty hacks' such as ./mucommander.sh/../.mucommander)
+        try {folder = folder.getCanonicalFile();}
+        catch(Exception e) {throw new IllegalArgumentException(e);}
+
         // Makes sure the specified folder exists and is valid.
         if(!folder.isDirectory()) {
             if(folder.exists())
-                throw new IllegalArgumentException(folder + " is not a valid directory path");
+                folder = folder.getParentFile();
             else if(!folder.mkdirs())
                 throw new IllegalArgumentException("Could not create folder " + folder);
         }
-        prefFolder = folder;
+        else
+            prefFolder = folder;
     }
 
     ///////////////////
