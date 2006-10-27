@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.Collection;
 import java.io.InputStream;
 import java.io.IOException;
 
@@ -24,6 +25,8 @@ public class ActionKeymap implements ContentHandler {
 
     private static Hashtable primaryActionKeymap = new Hashtable();
     private static Hashtable alternateActionKeymap = new Hashtable();
+
+    private static Hashtable acceleratorMap = new Hashtable();
 
     /** Default action keymap filename */
     private final static String DEFAULT_ACTION_KEYMAP_FILENAME = "action_keymap.xml";
@@ -66,6 +69,26 @@ public class ActionKeymap implements ContentHandler {
 
     public static KeyStroke getAlternateAccelerator(Class mucoActionClass) {
         return (KeyStroke)alternateActionKeymap.get(mucoActionClass);
+    }
+
+
+    public static boolean isKeyStrokeRegistered(KeyStroke ks) {
+//        Collection keys = primaryActionKeymap.values();
+//        if(keys.contains(ks))
+//            return true;
+//
+//        keys = alternateActionKeymap.values();
+//        if(keys.contains(ks))
+//            return true;
+//
+//        return false;
+
+        return getRegisteredActionClassForKeystroke(ks)!=null;
+    }
+
+
+    public static Class getRegisteredActionClassForKeystroke(KeyStroke ks) {
+        return (Class)acceleratorMap.get(ks);
     }
 
 
@@ -147,20 +170,41 @@ public class ActionKeymap implements ContentHandler {
 
 
     public static void changeActionAccelerators(Class mucoActionClass, KeyStroke accelerator, KeyStroke alternateAccelerator) {
-        primaryActionKeymap.put(mucoActionClass, accelerator);
-        alternateActionKeymap.put(mucoActionClass, accelerator);
+        // Remove old accelerators (primary and alternate) from accelerators map
+        KeyStroke oldAccelator = (KeyStroke)primaryActionKeymap.get(mucoActionClass);
+        if(oldAccelator!=null)
+            acceleratorMap.remove(oldAccelator);
 
+        oldAccelator = (KeyStroke)alternateActionKeymap.get(mucoActionClass);
+        if(oldAccelator!=null)
+            acceleratorMap.remove(oldAccelator);
+
+        // Register new accelerators
+        if(accelerator!=null) {
+            primaryActionKeymap.put(mucoActionClass, accelerator);
+            acceleratorMap.put(accelerator, mucoActionClass);
+        }
+
+        if(alternateAccelerator!=null) {
+            alternateActionKeymap.put(mucoActionClass, alternateAccelerator);
+            acceleratorMap.put(alternateAccelerator, mucoActionClass);
+        }
+        
+        // Update each MainFrame's action instance and input map
         Vector actionInstances = ActionManager.getActionInstances(mucoActionClass);
         int nbActionInstances = actionInstances.size();
         for(int i=0; i<nbActionInstances; i++) {
             MucoAction action = (MucoAction)actionInstances.elementAt(i);
             MainFrame mainFrame = action.getMainFrame();
 
+            // Remove action from MainFrame's action and input maps
             unregisterAction(mainFrame, action);
 
+            // Change action's accelerators
             action.setAccelerator(accelerator);
             action.setAlternateAccelerator(alternateAccelerator);
 
+            // Add updated action to MainFrame's action and input maps
             registerAction(mainFrame, action);
         }
     }
@@ -278,6 +322,7 @@ public class ActionKeymap implements ContentHandler {
             }
 
             primaryActionKeymap.put(actionClass, keyStroke);
+            acceleratorMap.put(keyStroke, actionClass);
 
             // Alternate keystroke (if any)
             keyStrokeString = (String)attValues.get("alt_keystroke");
@@ -296,6 +341,7 @@ public class ActionKeymap implements ContentHandler {
                 }
 
                 alternateActionKeymap.put(actionClass, keyStroke);
+                acceleratorMap.put(keyStroke, actionClass);
             }
         }
     }
