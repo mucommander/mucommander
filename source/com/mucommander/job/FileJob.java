@@ -226,7 +226,7 @@ public abstract class FileJob implements Runnable {
 	
 	
     /**
-     * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object) processFile()} is made.
+     * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object)} is made.
      * The method implementation here does nothing but it can be overriden by subclasses to perform some first-time initializations.
      */
     protected void jobStarted() {
@@ -235,13 +235,13 @@ public abstract class FileJob implements Runnable {
 	
 
     /**
-     * This method is called when this job has completed normal execution : all files have been processed without any interuption
-     * (without any call to {@link #stop() stop()}).
+     * This method is called when this job has completed normal execution : all files have been processed without any interruption
+     * (without any call to {@link #stop()}).
      *
-     * <p>The call happens after the last call to {@link #processFile(AbstractFile,Object) processFile()} is made.
+     * <p>The call happens after the last call to {@link #processFile(AbstractFile,Object)} is made.
      * The method implementation here does nothing but it can be overriden by subclasses to properly complete the job.</p>
 	 
-     * <p>Note that this method will NOT be called if a call to {@link #stop() stop()} was made before all files were processed.</p>
+     * <p>Note that this method will NOT be called if a call to {@link #stop()} was made before all files were processed.</p>
      */
     protected void jobCompleted() {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
@@ -249,8 +249,8 @@ public abstract class FileJob implements Runnable {
 	
 	
     /**
-     * This method is called when this job has been stopped. The call after any call to {@link #processFile(AbstractFile,Object) processFile()} and
-     * {@link #jobCompleted()} is made.
+     * This method is called when this job has been stopped. The call happens after all calls to {@link #processFile(AbstractFile,Object)} and
+     * {@link #jobCompleted()}.
      * The method implementation here does nothing but it can be overriden by subclasses to properly terminate the job. This is where you want to close
      * any opened connections.
      *
@@ -273,7 +273,7 @@ public abstract class FileJob implements Runnable {
         jobStarted();
 
         // Loop on all source files, checking that job has not been interrupted
-        for(int i=0; i<nbFiles && !isInterrupted(); i++) {
+        for(int i=0; i<nbFiles; i++) {
             currentFile = files.fileAt(i);
 	
             // Change current file and advance file index
@@ -282,14 +282,20 @@ public abstract class FileJob implements Runnable {
 			
             // Process current file
             boolean success = processFile(currentFile, null);
-			
-            // Unmark file in active table
-            if(autoUnmark && success && !isInterrupted()) {
+
+            // Stop if job was interrupted by the user
+            if(isInterrupted())
+                break;
+
+            // Unmark file in active table if 'auto unmark' is enabled
+            // and file was processed successfully
+            if(autoUnmark && success) {
                 activeTable.setFileMarked(currentFile, false);
             }
 
+            // If last file was reached without any user interruption, notify that
+            // that the job has been completed (all files have been processed with or without errors).
             if(i==nbFiles-1) {
-                // Notifies that job has been completed (all files have been processed).
                 jobCompleted();
             }
         }
@@ -297,7 +303,7 @@ public abstract class FileJob implements Runnable {
 
         boolean jobInterrupted = isInterrupted();
 
-        // If this job hasn't already been stopped, call stop()
+        // If this job hasn't been stopped already, call stop()
         if(!jobInterrupted) {
             // Stop job
             stop();
@@ -458,7 +464,7 @@ public abstract class FileJob implements Runnable {
 
 
     /**
-     * Returns the index of the file currently being processed (has to be < {@link #getNbFiles() getNbFiles}).
+     * Returns the index of the file currently being processed (has to be < {@link #getNbFiles()}).
      */
     public int getCurrentFileIndex() {
         return currentFileIndex==-1?0:currentFileIndex;
@@ -485,10 +491,10 @@ public abstract class FileJob implements Runnable {
 	
 	
     /**
-     * Automatically called by {@link #run() run()} for each file that needs to be processed.
+     * Automatically called by {@link #run()} for each file that needs to be processed.
      *
      * @param file the file or folder to process
-     * @param recurseParams array of parameters which can be used when calling this method recursively, contains <code>null</code> when called by {@link #run() run()}
+     * @param recurseParams array of parameters which can be used when calling this method recursively, contains <code>null</code> when called by {@link #run()}
      *
      * @return <code>true</code> if the operation was sucessful
      */
