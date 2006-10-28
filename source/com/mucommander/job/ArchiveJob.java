@@ -165,9 +165,7 @@ public class ArchiveJob extends ExtendedFileJob {
     /**
      * Overriden method to close the archiver.
      */
-    public void stop() {
-        super.stop();
-
+    public void jobStopped() {
         // First, close any open InputStream being archived.
         // Not doing so before closing the archive would cause a deadlock in ZipOutputStream
         if(in!=null) {
