@@ -6,6 +6,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.file.MimeTypes;
 import com.mucommander.io.Base64OutputStream;
+import com.mucommander.io.CounterInputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
@@ -189,7 +190,7 @@ public class SendMailJob extends ExtendedFileJob {
             writeLine("Content-Type:"+mimeType+"; name="+file.getName());
             writeLine("Content-Disposition: attachment;filename=\""+file.getName()+"\"");
             writeLine("Content-transfer-encoding: base64\r\n");
-            fileIn = file.getInputStream();
+            fileIn = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
 
             // Write file to socket
             AbstractFile.copyStream(fileIn, out64);

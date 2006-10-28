@@ -26,11 +26,12 @@ public class ByteCounter {
     public ByteCounter() {
     }
 
-
     /**
-     * Creates a new ByteCounter with an initial byte count equal to zero.
-     * The value returned by {@link #getByteCount()} will be the sum of the internal byte count and the one from
-     * the specified ByteCounter, as returned by its {@link #getByteCount()} method.
+     * Creates a new ByteCounter with an initial byte count equal to zero and using the given ByteCounter.
+     *
+     * <p>The value returned by {@link #getByteCount()} will be the sum of the internal byte count and the one from
+     * the specified ByteCounter, as returned by its {@link #getByteCount()} method. Resetting this ByteCounter's value
+     * will only affect the internal byte count and not the one from the specified ByteCounter.
      */
     public ByteCounter(ByteCounter counter) {
         this.addedCounter = counter;
@@ -41,6 +42,9 @@ public class ByteCounter {
      * Return the number of bytes which have been accounted for.
      */
     public long getByteCount() {
+        if(addedCounter!=null)
+            return count + addedCounter.getByteCount();
+
         return this.count;
     }
 
@@ -49,7 +53,7 @@ public class ByteCounter {
      * Increases the byte counter to the provided number of bytes. If the specified number is negative,
      * the byte counter will be left unchanged (won't be decreased).
      *
-     * @param l number of bytes to add to the byte counter, will simply be ignored if negative
+     * @param nbBytes number of bytes to add to the byte counter, will be ignored if negative
      */
     public void add(long nbBytes) {
         if(nbBytes>0)

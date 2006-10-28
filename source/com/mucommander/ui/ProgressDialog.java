@@ -160,7 +160,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                 }
 
                 // Update stats if necessary
-                nbBytesTotal = job.getTotalBytesProcessed();
+                nbBytesTotal = job.getTotalByteCounter().getByteCount();
                 pausedTime = job.getPausedTime();
                 startTime = job.getStartTime();
                 if(lastBytesTotal!=nbBytesTotal) {

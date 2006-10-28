@@ -8,6 +8,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.io.CounterInputStream;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -124,7 +125,7 @@ public class ArchiveJob extends ExtendedFileJob {
                     return folderComplete;
                 }
                 else {
-                    InputStream in = file.getInputStream();
+                    InputStream in = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
 
                     // Create a new file entry in archive and copy the current file
                     AbstractFile.copyStream(in, archiver.createEntry(entryRelativePath, file));
@@ -139,8 +140,12 @@ public class ArchiveJob extends ExtendedFileJob {
 
                 int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops
-                if(ret==RETRY_ACTION)
+                if(ret==RETRY_ACTION) {
+                    // Reset processed bytes currentFileByteCounter
+                    currentFileByteCounter.reset();
+
                     continue;
+                }
                 // Cancel, skip or close dialog return false
                 return false;
             }

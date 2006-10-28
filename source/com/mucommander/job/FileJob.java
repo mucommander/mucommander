@@ -59,10 +59,6 @@ public abstract class FileJob implements Runnable {
 
     /** Number of files that this job contains */
     protected int nbFiles;
-    
-	
-/** Number of bytes processed so far, see {@link #getTotalBytesProcessed()} */
-protected long nbBytesProcessed;
 
     /** Contains the number of bytes processed so far, see {@link #getTotalByteCounter()} */
     protected ByteCounter totalByteCounter;
