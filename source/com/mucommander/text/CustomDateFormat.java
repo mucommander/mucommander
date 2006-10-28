@@ -10,8 +10,7 @@ import java.util.Date;
 
 
 /**
- * This class allows custom date formatting, according to the date format stored
- * in preferences file.
+ * CustomDateFormat allows custom date formatting, according to the date format stored in the preferences.
  *
  * @author Maxence Bernard
  */

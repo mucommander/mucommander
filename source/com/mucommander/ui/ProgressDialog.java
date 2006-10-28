@@ -3,12 +3,14 @@ package com.mucommander.ui;
 
 import com.mucommander.job.ExtendedFileJob;
 import com.mucommander.job.FileJob;
-import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
+import com.mucommander.text.DurationFormat;
 import com.mucommander.ui.comp.button.ButtonChoicePanel;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.comp.progress.OverlayProgressBar;
+import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 /**
- * This dialog informs the user of the progress made by a Job.
+ * This dialog informs the user of the progress made by a FileJob.
  *
  * @author Maxence Bernard
  */
@@ -27,6 +29,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     private JLabel statsLabel;
     private OverlayProgressBar totalProgressBar;
     private OverlayProgressBar fileProgressBar;
+    private JLabel elapsedTimeLabel;
     private JButton cancelButton;
     private JButton hideButton;
 
@@ -88,6 +91,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         }
 
         tempPanel.addSpace(10);
+        elapsedTimeLabel = new JLabel(Translator.get("progress_bar.elapsed_time")+": ");
+        tempPanel.add(elapsedTimeLabel);
+
         tempPanel.add(Box.createVerticalGlue());
         contentPane.add(tempPanel, BorderLayout.CENTER);
         
@@ -120,82 +126,92 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     //////////////////////
 
     public void run() {
-        // Used for dual bars
-        int filePercent;
-    	int lastFilePercent;
-
-        int totalPercent;
-        int lastTotalPercent;
-
-        String currentInfo;
-        String lastInfo;
-
-        long nbBytesTotal;
-        long lastBytesTotal = 0;
-        
-        totalPercent = lastTotalPercent = -1;
-        filePercent = lastFilePercent = -1;
-        currentInfo = lastInfo = "";
-
+        // Used for dual progress bars only
         ExtendedFileJob extendedJob = null;
         if(dualBar)
             extendedJob = (ExtendedFileJob)job;
 
-        long speed;
-        // Start time will only be available after this dialog has been activated
-        long startTime;
-        long now;
-        long pausedTime;
+        String progressText;
         while(repaintThread!=null && !job.hasFinished()) {
-            if (dualBar) {
-                // Updates fileProgressBar if necessary
-                filePercent = extendedJob.getFilePercentDone(); 
-                if(lastFilePercent!=filePercent) {
-                    // Updates file progress bar
-                    fileProgressBar.setValue(filePercent);
-                    fileProgressBar.setTextOverlay(filePercent+"%");
-//                    fileProgressBar.repaint(REFRESH_RATE);
+            // Do not refresh progress information is job is paused, simply sleep
+            if(!job.isPaused()) {
+                long currentFileRemainingTime = 0;
+                long totalRemainingTime;
 
-                    lastFilePercent = filePercent;
-                }
+                long effectiveJobTime = job.getEffectiveJobTime();
+                if(effectiveJobTime==0)
+                    effectiveJobTime = 1;   // To avoid potential zero divisions
 
-                // Update stats if necessary
-                nbBytesTotal = job.getTotalByteCounter().getByteCount();
-                pausedTime = job.getPausedTime();
-                startTime = job.getStartTime();
-                if(lastBytesTotal!=nbBytesTotal) {
-                    now = System.currentTimeMillis();
-                    speed = (long)(nbBytesTotal/((now-startTime-pausedTime)/1000d));
+                if (dualBar) {
+                    long bytesTotal = extendedJob.getTotalByteCounter().getByteCount();
+                    long bytesPerSec = (long)(bytesTotal/(((float)effectiveJobTime)/1000));
+
+                    // Update current file progress bar
+                    float filePercentFloat = extendedJob.getFilePercentDone();
+                    int filePercentInt = (int)(100*filePercentFloat);
+                    fileProgressBar.setValue(filePercentInt);
+
+                    progressText = filePercentInt+"% - ";
+
+                    // Add estimated remaining time (ETA) for current file
+                    long currentFileSize = extendedJob.getCurrentFileSize();
+                    // If current file size is not available, ETA cannot be calculated
+                    if(currentFileSize==-1)
+                        progressText += "?";
+                    // Avoid potential divisions by zero
+                    else if(bytesPerSec==0) {
+                        currentFileRemainingTime = -1;
+                        progressText += DurationFormat.getInfiniteSymbol();
+                    }
+                    else {
+                        currentFileRemainingTime = (long)((1000*(currentFileSize-extendedJob.getCurrentFileByteCounter().getByteCount()))/(float)bytesPerSec);
+                        progressText += DurationFormat.format(currentFileRemainingTime);
+                    }
+
+                    fileProgressBar.setTextOverlay(progressText);
+
+                    // Update stats label
                     statsLabel.setText(
-                                       Translator.get("progress_bar.transferred",
-                                                      SizeFormatter.format(nbBytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB),
-                                                      SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)));
-
-                    lastBytesTotal = nbBytesTotal;
+                       Translator.get("progress_bar.transferred",
+                                      SizeFormat.format(bytesTotal, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_LONG| SizeFormat.ROUND_TO_KB),
+                                      SizeFormat.format(bytesPerSec, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB))
+                    );
                 }
-            }
-        	
-		
-            // Updates totalProgressBar if necessary
-            if(totalProgressBar!=null) {
-                totalPercent = job.getTotalPercentDone();
-                if(lastTotalPercent!=totalPercent) {
-                    // Updates total progress bar 
-                    totalProgressBar.setValue(totalPercent);
-                    totalProgressBar.setTextOverlay(totalPercent+"% ");
-//                    totalProgressBar.repaint(REFRESH_RATE);
-									
-                    lastTotalPercent = totalPercent;
+
+                // Update total progress bar
+                // Total job percent is based on the *number* of files remaining, not their actual size.
+                // So this is very approximate.
+                float totalPercentFloat = job.getTotalPercentDone();
+                int totalPercentInt = (int)(100*totalPercentFloat);
+
+                totalProgressBar.setValue(totalPercentInt);
+
+                progressText = totalPercentInt+"% - ";
+
+                // Add a rough estimate of the total remaining time (ETA):
+                // total remaining time is based on the total job percent completed which itself is based on the *number*
+                // of files remaining, not their actual size. So this is very approximate.
+
+                // Avoid potential divisions by zero
+                if(totalPercentFloat==0)
+                    progressText += "?";
+                else {
+                    // Make sure that total ETA is never smaller than current file ETA
+                    totalRemainingTime = (long)((1-totalPercentFloat)*(effectiveJobTime/totalPercentFloat));
+                    totalRemainingTime = Math.max(totalRemainingTime, currentFileRemainingTime);
+                    progressText += DurationFormat.format(totalRemainingTime);
                 }
-            }
-            
-            // Updates infoLabel if necessary 
-            currentInfo = job.getStatusString();
-            if(!lastInfo.equals(currentInfo)) {
-                infoLabel.setText(currentInfo);
-                lastInfo = currentInfo;
+
+                totalProgressBar.setTextOverlay(progressText);
+
+                // Update info label
+                infoLabel.setText(job.getStatusString());
+
+                // Update elapsed time label
+                elapsedTimeLabel.setText(Translator.get("progress_bar.elapsed_time")+": "+DurationFormat.format(effectiveJobTime));
             }
 
+            // Sleep for a while
             try { Thread.sleep(REFRESH_RATE); }
             catch(InterruptedException e) {}
         }

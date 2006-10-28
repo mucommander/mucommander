@@ -4,7 +4,7 @@ import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
-import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.event.LocationEvent;
@@ -68,8 +68,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      * Each cache item maps a path to a volume info string */
     private static LRUCache volumeInfoCache = LRUCache.createInstance(VOLUME_INFO_CACHE_CAPACITY);
 	
-    /** SizeFormatter's format used to display volume info in status bar */
-    private final static int VOLUME_INFO_SIZE_FORMAT = SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB;
+    /** SizeFormat's format used to display volume info in status bar */
+    private final static int VOLUME_INFO_SIZE_FORMAT = SizeFormat.DIGITS_SHORT| SizeFormat.UNIT_SHORT| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB;
 
     /** Icon that is displayed when folder is changing */
     private final static String WAITING_ICON = "waiting.png";
@@ -176,7 +176,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             filesInfo = Translator.get("status_bar.selected_files", ""+nbSelectedFiles, ""+fileCount);
 			
             if(nbMarkedFiles>0)
-                filesInfo += " - "+SizeFormatter.format(markedTotalSize, (compactFileSize?SizeFormatter.DIGITS_SHORT:SizeFormatter.DIGITS_FULL)|(compactFileSize?SizeFormatter.UNIT_SHORT:SizeFormatter.UNIT_LONG)|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB);
+                filesInfo += " - "+ SizeFormat.format(markedTotalSize, (compactFileSize? SizeFormat.DIGITS_SHORT: SizeFormat.DIGITS_FULL)|(compactFileSize? SizeFormat.UNIT_SHORT: SizeFormat.UNIT_LONG)| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB);
 	
             if(selectedFile!=null)
                 filesInfo += " - "+selectedFile.getName();
@@ -230,13 +230,13 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
                     String volumeInfo;
                     if(volumeFree!=-1) {
-                        volumeInfo = SizeFormatter.format(volumeFree, VOLUME_INFO_SIZE_FORMAT);
+                        volumeInfo = SizeFormat.format(volumeFree, VOLUME_INFO_SIZE_FORMAT);
                         if(volumeTotal!=-1)
-                            volumeInfo += " / "+ SizeFormatter.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
+                            volumeInfo += " / "+ SizeFormat.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
                         volumeInfo = Translator.get("status_bar.volume_free", volumeInfo);
                     }
                     else if(volumeTotal!=-1) {
-                        volumeInfo = SizeFormatter.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
+                        volumeInfo = SizeFormat.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
                         volumeInfo = Translator.get("status_bar.volume_capacity", volumeInfo);
                     }
                     else {

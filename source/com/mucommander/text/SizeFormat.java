@@ -3,11 +3,11 @@ package com.mucommander.text;
 
 
 /**
- * This class provides a way to format an integer/long size into a string reprensentation.
+ * SizeFormat formats byte sizes into localized string reprensentations.
  *
  * @author Maxence Bernard.
  */
-public class SizeFormatter {
+public class SizeFormat {
 
     /** Bit mask for short digits string, e.g. "15" */
     public final static int DIGITS_SHORT = 0;	

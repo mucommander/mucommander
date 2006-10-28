@@ -27,7 +27,10 @@ public abstract class ExtendedFileJob extends FileJob {
     private CounterInputStream cin;
 
     /** Contains the number of bytes processed in the current file so far, see {@link #getCurrentFileByteCounter()} ()} */
-    protected ByteCounter currentFileByteCounter = new ByteCounter();
+    protected ByteCounter currentFileByteCounter;
+
+    /** Contains the number of bytes processed so far, see {@link #getTotalByteCounter()} */
+    protected ByteCounter totalByteCounter;
 
 
     /**
@@ -36,8 +39,10 @@ public abstract class ExtendedFileJob extends FileJob {
     public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files) {
         super(progressDialog, mainFrame, files);
 
+        this.currentFileByteCounter = new ByteCounter();
+
         // Account the current file's byte counter in the total byte counter
-        totalByteCounter = new ByteCounter(currentFileByteCounter);
+        this.totalByteCounter = new ByteCounter(currentFileByteCounter);
     }
 
 	
@@ -172,13 +177,13 @@ public abstract class ExtendedFileJob extends FileJob {
      * Returns the percentage of the current file which has been processed, or 0 if current file's size is not available
      * (in this case getNbCurrentFileBytesProcessed() returns -1).
      */
-    public int getFilePercentDone() {
+    public float getFilePercentDone() {
         long currentFileSize = getCurrentFileSize();
         if(currentFileSize<=0)
             return 0;
         else
-            return (int)(100*getCurrentFileByteCounter().getByteCount()/(float)currentFileSize);
-
+//            return (int)(100*getCurrentFileByteCounter().getByteCount()/(float)currentFileSize);
+            return getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
     }
 
 
@@ -195,6 +200,14 @@ public abstract class ExtendedFileJob extends FileJob {
      */
     public long getCurrentFileSize() {
         return currentFile==null?-1:currentFile.getSize();
+    }
+
+
+    /**
+     * Returns a {@link ByteCounter} that holds the total number of bytes that have been processed by this job so far.
+     */
+    public ByteCounter getTotalByteCounter() {
+        return totalByteCounter;
     }
 
 
@@ -224,6 +237,7 @@ public abstract class ExtendedFileJob extends FileJob {
      * starts processing a new file.
      */
     protected void nextFile(AbstractFile file) {
+        totalByteCounter.add(currentFileByteCounter.getByteCount());
         currentFileByteCounter.reset();
 
         super.nextFile(file);
@@ -234,7 +248,7 @@ public abstract class ExtendedFileJob extends FileJob {
      * Method overridden to return a more accurate percentage of job processed so far by taking
      * into account the current file's processed percentage.
      */
-    public int getTotalPercentDone() {
+    public float getTotalPercentDone() {
         float nbFilesProcessed = getCurrentFileIndex();
 		
         // If file is in base folder and is not a directory
@@ -245,7 +259,8 @@ public abstract class ExtendedFileJob extends FileJob {
                 nbFilesProcessed += getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
         }
 			
-        return (int)(100*(nbFilesProcessed/(float)getNbFiles()));
+//        return (int)(100*(nbFilesProcessed/(float)getNbFiles()));
+        return nbFilesProcessed/(float)getNbFiles();
     }
     
 }

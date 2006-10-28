@@ -3,7 +3,7 @@ package com.mucommander.ui;
 
 import com.mucommander.file.FileSet;
 import com.mucommander.job.PropertiesJob;
-import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
@@ -109,7 +109,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
                              +(nbFolders>0?Translator.get("properties_dialog.nb_folders", ""+nbFolders):"")
                              );
 
-        sizeLabel.setText(SizeFormatter.format(job.getTotalBytes(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE));
+        sizeLabel.setText(SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE));
 		
         counterLabel.repaint(REFRESH_RATE);
         sizeLabel.repaint(REFRESH_RATE);

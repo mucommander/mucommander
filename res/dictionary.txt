@@ -3041,17 +3041,30 @@ progress_bar.hide:ZH_CN:隐藏
 progress_bar.hide:SI:Skrij
 
 # %1 is the amount of data transferred (already formatted+localized) and %2 the transfer speed.
-progress_bar.transferred:EN:Transferred %1 at %2/s.
-progress_bar.transferred:FR:%1 transférés à %2/s.
-progress_bar.transferred:DE:Transferiert %1 von %2/s.
-progress_bar.transferred:ES:%1 transferidos a %2/s.
-progress_bar.transferred:CS:Přeneseno %1 při %2/s.
-progress_bar.transferred:zh_TW:已傳送 %1 速度 %2/s.
-progress_bar.transferred:PL:Przesłano %1 z %2/s.
-progress_bar.transferred:HU:%1 átvitel %2/s alatt megtörtént.
-progress_bar.transferred:RU:Передано %1, средняя скорость %2/сек.
-progress_bar.transferred:ZH_CN:已传送 %1 速度 %s.
-progress_bar.transferred:SI:Prenešeno %1 od %2/s.
+progress_bar.transferred:EN:Transferred %1 at %2/s
+progress_bar.transferred:FR:%1 transférés à %2/s
+progress_bar.transferred:DE:Transferiert %1 von %2/s
+progress_bar.transferred:ES:%1 transferidos a %2/s
+progress_bar.transferred:CS:Přeneseno %1 při %2/s
+progress_bar.transferred:zh_TW:已傳送 %1 速度 %2/s
+progress_bar.transferred:PL:Przesłano %1 z %2/s
+progress_bar.transferred:HU:%1 átvitel %2/s alatt megtörtént
+progress_bar.transferred:RU:Передано %1, средняя скорость %2/сек
+progress_bar.transferred:ZH_CN:已传送 %1 速度 %s
+progress_bar.transferred:SI:Prenešeno %1 od %2/s
+
+progress_bar.elapsed_time:EN:Elapsed time
+progress_bar.elapsed_time:FR:Temps écoulé
+
+
+
+
+
+
+
+
+
+
 
 
 #####################
@@ -4844,6 +4857,24 @@ unit.tb:HU:TB
 unit.tb:RU:ТБ
 unit.tb:zh_CN:TB
 unit.tb:SI:TB
+
+############
+# Duration #
+############
+
+duration.seconds:EN:%1s
+
+duration.minutes:EN:%1m
+
+duration.hours:EN:%1h
+
+duration.days:EN:%1d
+
+duration.months:EN:%1m
+
+duration.years:EN:%1y
+
+duration.infinite:EN:∞
 
 
 ######################

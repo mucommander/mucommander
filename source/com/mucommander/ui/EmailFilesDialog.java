@@ -5,7 +5,7 @@ import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.job.SendMailJob;
-import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
@@ -122,7 +122,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
                 for(int i=0; i<nbFiles; i++) {
                     file = (AbstractFile)flattenedFiles.elementAt(i);
                     fileCheckboxes[i] = new JCheckBox(file.getName()
-                                                      +" ("+SizeFormatter.format(file.getSize(), SizeFormatter.DIGITS_SHORT|SizeFormatter.UNIT_SHORT|SizeFormatter.INCLUDE_SPACE|SizeFormatter.ROUND_TO_KB)+")", true);
+                                                      +" ("+ SizeFormat.format(file.getSize(), SizeFormat.DIGITS_SHORT| SizeFormat.UNIT_SHORT| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB)+")", true);
                     fileCheckboxes[i].addItemListener(this);
                     tempPanel2.add(fileCheckboxes[i]);
                 }
@@ -172,7 +172,7 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
         }
         String text = 
             Translator.get("email_dialog.nb_files", ""+nbSelected)
-            +(nbSelected==0?"":" ("+SizeFormatter.format(bytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB)+")");
+            +(nbSelected==0?"":" ("+ SizeFormat.format(bytesTotal, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_LONG| SizeFormat.ROUND_TO_KB)+")");
         infoLabel.setText(text);
         infoLabel.repaint(100);
     }

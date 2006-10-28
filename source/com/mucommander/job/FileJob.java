@@ -3,14 +3,13 @@ package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
-import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.io.ByteCounter;
 
 
 /**
@@ -34,7 +33,7 @@ public abstract class FileJob implements Runnable {
     private boolean isPaused;
 
     /** Timestamp in milliseconds when job started */
-    private long startTime;
+    private long startDate;
 
     /** Number of milliseconds this job has been paused (been waiting for some user response).
      * Used to compute stats like average speed.
@@ -59,9 +58,6 @@ public abstract class FileJob implements Runnable {
 
     /** Number of files that this job contains */
     protected int nbFiles;
-
-    /** Contains the number of bytes processed so far, see {@link #getTotalByteCounter()} */
-    protected ByteCounter totalByteCounter;
 
     /** Index of file currently being processed, see {@link #getCurrentFileIndex()} */
     protected int currentFileIndex = -1;
@@ -144,28 +140,38 @@ public abstract class FileJob implements Runnable {
 		
         // Serves to differenciate between the 'stopped' and 'not started yet' states
         hasStarted = true;
-        startTime = System.currentTimeMillis();
-        jobThread = new Thread(this, "com.mucommander.job.FileJob's Thread");
+        startDate = System.currentTimeMillis();
+        jobThread = new Thread(this, getClass().getName());
         jobThread.start();
     }
 
 
     /**
-     * Returns the timestamp in milliseconds when the job started.
+     * Returns the timestamp in milliseconds when the job was started.
      */
-    public long getStartTime() {
-        return startTime;
+    public long getStartDate() {
+        return startDate;
     }
 	
     /**
-     * Returns the number of milliseconds this job has been paused
-     * (been waiting for user response).
+     * Returns the number of milliseconds this job was paused, waiting for user's response.
      */
     public long getPausedTime() {
         return pausedTime;
     }
 
+    /**
+     * Returns the number of milliseconds this job effectively spent processing files, exclusing any paused time.
+     */
+    public long getEffectiveJobTime() {
+        // If job hasn't start yet, return 0
+        if(startDate==0)
+            return 0;
+        
+        return System.currentTimeMillis()- startDate -pausedTime;
+    }
 
+    
     /**
      * Stops this job.
      */	
@@ -204,6 +210,14 @@ public abstract class FileJob implements Runnable {
 
 
     /**
+     * Returns true if this job is currently paused, waiting for user response.
+     */
+    public boolean isPaused() {
+        return isPaused;        
+    }
+
+
+    /**
      * Changes current file. This method should be called by subclasses whenever the job
      * starts processing a new file other than a top-level file, i.e. one that was passed
      * as an argument to {@link #processFile(AbstractFile, Object) processFile()}.
@@ -221,7 +235,7 @@ public abstract class FileJob implements Runnable {
         // Update current file information used by status string
         if(currentFile==null)
             return "";
-        return "\""+currentFile.getName()+"\" ("+SizeFormatter.format(currentFile.getSize(), SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)+")";
+        return "\""+currentFile.getName()+"\" ("+ SizeFormat.format(currentFile.getSize(), SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB)+")";
     }
 	
 	
@@ -440,26 +454,11 @@ public abstract class FileJob implements Runnable {
     }
 	
     /**
-     * Returns the percent of job processed so far.
+     * Returns the percentage of job completion, as a float comprised between 0 and 1.
      */
-    public int getTotalPercentDone() {
-        return (int)(100*(getCurrentFileIndex()/(float)getNbFiles()));
-    }
-
-	
-//    /**
-//     * Returns the number of bytes that have been processed by this job so far.
-//     */
-//    public long getTotalBytesProcessed() {
-//        return nbBytesProcessed;
-//    }
-
-
-    /**
-     * Returns a {@link ByteCounter} that holds the total number of bytes that have been processed by this job so far.
-     */
-    public ByteCounter getTotalByteCounter() {
-        return totalByteCounter;
+    public float getTotalPercentDone() {
+//        return (int)(100*(getCurrentFileIndex()/(float)getNbFiles()));
+        return getCurrentFileIndex()/(float)getNbFiles();
     }
 
 

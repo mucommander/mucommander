@@ -3,7 +3,7 @@ package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.CustomDateFormat;
-import com.mucommander.text.SizeFormatter;
+import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
@@ -124,14 +124,14 @@ public class FileExistsDialog extends QuestionDialog {
 
         if(sourceFile!=null) {
             panel.add(new JLabel("Source: "+sourceFile.getAbsolutePath()));
-            panel.add(new JLabel("  "+SizeFormatter.format(sourceFile.getSize(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE)
+            panel.add(new JLabel("  "+ SizeFormat.format(sourceFile.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)
                                  +", "+CustomDateFormat.format(new Date(sourceFile.getDate()))));
             panel.addSpace(10);
         }
 		
         // Use canonical path for destination, to get rid of '..', '.' and '~'
     	panel.add(new JLabel("Destination: "+destFile.getCanonicalPath()));
-    	panel.add(new JLabel("  "+SizeFormatter.format(destFile.getSize(), SizeFormatter.DIGITS_FULL|SizeFormatter.UNIT_LONG|SizeFormatter.INCLUDE_SPACE)
+    	panel.add(new JLabel("  "+ SizeFormat.format(destFile.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)
                              +", "+CustomDateFormat.format(new Date(destFile.getDate()))));
 
     	init(parent, panel,
