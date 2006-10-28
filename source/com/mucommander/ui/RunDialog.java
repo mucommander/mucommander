@@ -85,6 +85,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         // Set custom text, selected text, background and selection background colors
         Color textColor = ConfigurationManager.getVariableColor(TEXT_COLOR_VAR, DEFAULT_TEXT_COLOR);
         outputTextArea.setForeground(textColor);
+        // Selected text color and text color are the same
         outputTextArea.setSelectedTextColor(textColor);
         outputTextArea.setBackground(ConfigurationManager.getVariableColor(BACKGROUND_COLOR_VAR, DEFAULT_BACKGROUND_COLOR));
         outputTextArea.setSelectionColor(ConfigurationManager.getVariableColor(SELECTION_BACKGROUND_COLOR_VAR, DEFAULT_SELECTION_BACKGROUND_COLOR));
