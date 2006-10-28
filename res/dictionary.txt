@@ -4605,6 +4605,33 @@ prefs_dialog.pick_a_color:RU:Выбор цвета
 prefs_dialog.pick_a_color:ZH_CN:挑选一个颜色
 prefs_dialog.pick_a_color:SI:Izberi barvo
 
+prefs_dialog.shell_colors:EN:Shell colors
+prefs_dialog.shell_colors:FR:Couleurs du shell
+
+
+
+
+
+
+
+
+
+
+
+prefs_dialog.shell_colors.text_color:EN:Text
+prefs_dialog.shell_colors.text_color:FR:Texte
+
+
+
+
+
+
+
+
+
+
+prefs_dialog.shell_colors.background_color:EN:$[prefs_dialog.background_color]
+prefs_dialog.shell_colors.selection_color:EN:$[prefs_dialog.selection_color]
 
 # Mail tab
 

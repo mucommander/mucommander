@@ -25,7 +25,7 @@ public abstract class ExtendedFileJob extends FileJob {
 
     private CounterInputStream cin;
 
-    private ByteCounter currentFileCounter = new ByteCounter();
+    private ByteCounter currentFileByteCounter = new ByteCounter();
 
 
     /**
@@ -58,11 +58,11 @@ public abstract class ExtendedFileJob extends FileJob {
                 long destFileSize = destFile.getSize();
         
                 if(append && destFileSize!=-1) {
-                    this.cin = new CounterInputStream(sourceFile.getInputStream(destFileSize), currentFileCounter);
-                    currentFileCounter.add(destFileSize);
+                    this.cin = new CounterInputStream(sourceFile.getInputStream(destFileSize), currentFileByteCounter);
+                    currentFileByteCounter.add(destFileSize);
                 }
                 else {
-                    this.cin = new CounterInputStream(sourceFile.getInputStream(), currentFileCounter);
+                    this.cin = new CounterInputStream(sourceFile.getInputStream(), currentFileByteCounter);
                 }
             }
             catch(IOException e) {
@@ -81,7 +81,7 @@ public abstract class ExtendedFileJob extends FileJob {
             // was thrown in the catch block
 
             // Update total number of bytes processed
-            this.nbBytesProcessed += currentFileCounter.getByteCount();
+            this.nbBytesProcessed += currentFileByteCounter.getByteCount();
 
             // Tries to close the streams no matter what happened before
             if(cin!=null) {
@@ -153,8 +153,8 @@ public abstract class ExtendedFileJob extends FileJob {
                 // Retry action (append or retry)
                 else {
 //                    if(reason==FileTransferException.ERROR_WHILE_TRANSFERRING) {
-                        // Reset processed bytes currentFileCounter
-                        currentFileCounter.reset();
+                        // Reset processed bytes currentFileByteCounter
+                        currentFileByteCounter.reset();
                         // Append resumes transfer
                         append = choice==APPEND_ACTION;
 //                    }
@@ -183,7 +183,7 @@ public abstract class ExtendedFileJob extends FileJob {
      * Returns the number of bytes that have been processed in the current file .
      */
     public long getCurrentFileBytesProcessed() {
-        return currentFileCounter.getByteCount();
+        return currentFileByteCounter.getByteCount();
     }
 
 
@@ -217,12 +217,12 @@ public abstract class ExtendedFileJob extends FileJob {
 
 
     /**
-     * Advances file index and resets file bytes currentFileCounter. This method should be called by subclasses whenever the job
+     * Advances file index and resets file bytes currentFileByteCounter. This method should be called by subclasses whenever the job
      * starts processing a new file.
      */
     protected void nextFile(AbstractFile file) {
         super.nextFile(file);
-        currentFileCounter.reset();
+        currentFileByteCounter.reset();
     }
 
 

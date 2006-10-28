@@ -10,6 +10,7 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.table.FileTable;
+import com.mucommander.io.ByteCounter;
 
 
 /**
@@ -60,10 +61,13 @@ public abstract class FileJob implements Runnable {
     protected int nbFiles;
     
 	
-    /** Number of bytes processed so far, see {@link #getTotalBytesProcessed() getTotalBytesProcessed} */
-    protected long nbBytesProcessed;
+/** Number of bytes processed so far, see {@link #getTotalBytesProcessed()} */
+protected long nbBytesProcessed;
 
-    /** Index of file currently being processed, see {@link #getCurrentFileIndex() getCurrentFileIndex} */
+    /** Contains the number of bytes processed so far, see {@link #getTotalByteCounter()} */
+    protected ByteCounter totalByteCounter;
+
+    /** Index of file currently being processed, see {@link #getCurrentFileIndex()} */
     protected int currentFileIndex = -1;
 
     /** File currently being processed */
@@ -441,11 +445,19 @@ public abstract class FileJob implements Runnable {
     }
 
 	
+//    /**
+//     * Returns the number of bytes that have been processed by this job so far.
+//     */
+//    public long getTotalBytesProcessed() {
+//        return nbBytesProcessed;
+//    }
+
+
     /**
-     * Returns the number of bytes that have been processed by this job so far.
+     * Returns a {@link ByteCounter} that holds the total number of bytes that have been processed by this job so far.
      */
-    public long getTotalBytesProcessed() {
-        return nbBytesProcessed;
+    public ByteCounter getTotalByteCounter() {
+        return totalByteCounter;
     }
 
 

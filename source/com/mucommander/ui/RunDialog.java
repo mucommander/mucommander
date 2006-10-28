@@ -6,6 +6,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.conf.ConfigurationManager;
 
 import java.io.*;
 import javax.swing.*;
@@ -35,14 +36,23 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     private PrintStream    processInput;
     private Process        currentProcess;
     private ProcessMonitor processMonitor;
-	
-    // Dialog size constraints
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(600, 400);	
-    //    // Dialog width should not exceed 360
-    //   private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);	
 
     private int caretPos;
-	
+
+    // Dialog size constraints
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(600, 400);	
+
+    // Configuration variables for custom text area colors
+    public final static String BACKGROUND_COLOR_VAR = "prefs.colors.shell.background";
+    public final static String SELECTION_BACKGROUND_COLOR_VAR = "prefs.colors.shell.selectionBackground";
+    public final static String TEXT_COLOR_VAR = "prefs.colors.shell.text";
+
+    // Default custom text area colors 
+    public final static String DEFAULT_BACKGROUND_COLOR = "FFFFFF";
+    public final static String DEFAULT_SELECTION_BACKGROUND_COLOR = "BBBBBB";
+    public final static String DEFAULT_TEXT_COLOR = "000000";
+
+
     /**
      * Creates and displays a new RunDialog.
      * 
@@ -71,6 +81,13 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         outputTextArea.setRows(10);
         outputTextArea.setEditable(false);
         outputTextArea.addKeyListener(this);
+
+        // Set custom text, selected text, background and selection background colors
+        Color textColor = ConfigurationManager.getVariableColor(TEXT_COLOR_VAR, DEFAULT_TEXT_COLOR);
+        outputTextArea.setForeground(textColor);
+        outputTextArea.setSelectedTextColor(textColor);
+        outputTextArea.setBackground(ConfigurationManager.getVariableColor(BACKGROUND_COLOR_VAR, DEFAULT_BACKGROUND_COLOR));
+        outputTextArea.setSelectionColor(ConfigurationManager.getVariableColor(SELECTION_BACKGROUND_COLOR_VAR, DEFAULT_SELECTION_BACKGROUND_COLOR));
 
         // Use a monospaced font in the command field and process output text area, as most terminals do.
         // The logical "Monospaced" font name is always available in Java.

@@ -16,11 +16,24 @@ public class ByteCounter {
     /** Byte count */
     private long count;
 
+    /** Byte counter to add to the value returned by {@link #getByteCount()} */
+    private ByteCounter addedCounter;
+
     
     /**
-     * Create a new ByteCounter with an initial count of bytes equal to zero.
+     * Creates a new ByteCounter with an initial byte count equal to zero.
      */
     public ByteCounter() {
+    }
+
+
+    /**
+     * Creates a new ByteCounter with an initial byte count equal to zero.
+     * The value returned by {@link #getByteCount()} will be the sum of the internal byte count and the one from
+     * the specified ByteCounter, as returned by its {@link #getByteCount()} method.
+     */
+    public ByteCounter(ByteCounter counter) {
+        this.addedCounter = counter;
     }
 
 
