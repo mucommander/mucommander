@@ -154,7 +154,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     // Updates file progress bar
                     fileProgressBar.setValue(filePercent);
                     fileProgressBar.setTextOverlay(filePercent+"%");
-                    fileProgressBar.repaint(REFRESH_RATE);
+//                    fileProgressBar.repaint(REFRESH_RATE);
 
                     lastFilePercent = filePercent;
                 }
@@ -170,8 +170,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                                        Translator.get("progress_bar.transferred",
                                                       SizeFormatter.format(nbBytesTotal, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_LONG|SizeFormatter.ROUND_TO_KB),
                                                       SizeFormatter.format(speed, SizeFormatter.DIGITS_MEDIUM|SizeFormatter.UNIT_SHORT|SizeFormatter.ROUND_TO_KB)));
-                    statsLabel.repaint(REFRESH_RATE);
-	
+
                     lastBytesTotal = nbBytesTotal;
                 }
             }
@@ -184,7 +183,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     // Updates total progress bar 
                     totalProgressBar.setValue(totalPercent);
                     totalProgressBar.setTextOverlay(totalPercent+"% ");
-                    totalProgressBar.repaint(REFRESH_RATE);
+//                    totalProgressBar.repaint(REFRESH_RATE);
 									
                     lastTotalPercent = totalPercent;
                 }
@@ -194,7 +193,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             currentInfo = job.getStatusString();
             if(!lastInfo.equals(currentInfo)) {
                 infoLabel.setText(currentInfo);
-                infoLabel.repaint(REFRESH_RATE);
                 lastInfo = currentInfo;
             }
 

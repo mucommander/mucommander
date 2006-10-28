@@ -62,10 +62,6 @@ class ZipArchiver extends Archiver {
 
 
     public void close() throws IOException {
-        // Close current entry
-        if(!firstEntry)
-            zos.closeEntry();
-		
         zos.close();
     }
 }

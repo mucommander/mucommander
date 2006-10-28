@@ -40,6 +40,9 @@ public class ArchiveJob extends ExtendedFileJob {
     /** Size of the buffer used to write archived data */
     private final static int WRITE_BUFFER_SIZE = 8192;
     
+    /** InputStream of the file currently being read */
+    private InputStream in;
+
 
     public ArchiveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFile, int archiveFormat, String archiveComment) {
         super(progressDialog, mainFrame, files);
@@ -125,7 +128,7 @@ public class ArchiveJob extends ExtendedFileJob {
                     return folderComplete;
                 }
                 else {
-                    InputStream in = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
+                    this.in = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
 
                     // Create a new file entry in archive and copy the current file
                     AbstractFile.copyStream(in, archiver.createEntry(entryRelativePath, file));
@@ -137,6 +140,12 @@ public class ArchiveJob extends ExtendedFileJob {
             }
             catch(IOException e) {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+
+                // If job was interrupted by the user at the time when the exception occurred,
+                // it most likely means that the exception by user cancellation.
+                // In this case, the exception should not be interpreted as an error.
+                if(isInterrupted())
+                    return false;
 
                 int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops
@@ -156,8 +165,17 @@ public class ArchiveJob extends ExtendedFileJob {
     /**
      * Overriden method to close the archiver.
      */
-    protected void jobStopped() {
-        // Try to close archiver
+    public void stop() {
+        super.stop();
+
+        // First, close any open InputStream being archived.
+        // Not doing so before closing the archive would cause a deadlock in ZipOutputStream
+        if(in!=null) {
+            try { in.close(); }
+            catch(IOException e) {}
+        }
+        
+        // Try to close the archiver
         if(archiver!=null) {
             try { archiver.close(); }
             catch(IOException e) {}

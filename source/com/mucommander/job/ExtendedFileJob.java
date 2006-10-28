@@ -9,6 +9,7 @@ import com.mucommander.io.FileTransferException;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.Debug;
 
 import java.io.IOException;
 
@@ -109,8 +110,9 @@ public abstract class ExtendedFileJob extends FileJob {
                 return true;
             }
             catch(FileTransferException e) {
-                // If job was interrupted by the user when the exception occurred, it most likely means that the exception
-                // was caused by the job cancellation. In this case, the exception should not be interpreted as an error.
+                // If job was interrupted by the user at the time when the exception occurred,
+                // it most likely means that the exception by user cancellation.
+                // In this case, the exception should not be interpreted as an error.
                 if(isInterrupted())
                     return false;
 
