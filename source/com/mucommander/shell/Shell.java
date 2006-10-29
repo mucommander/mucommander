@@ -61,7 +61,28 @@ public class Shell {
      * @return                  the resulting process.
      * @exception IOException   thrown if any error occurs while trying to run the command.
      */
-    public static Process execute(String command, AbstractFile currentFolder) throws IOException {
+    public static Process execute(String command, AbstractFile currentFolder) throws IOException {return execute(command, currentFolder, null);}
+
+    /**
+     * Executes the specified command in the specified folder.
+     * <p>
+     * The command will be executed within a shell as returned by {@link com.mucommander.PlatformManager#getShellCommand()}.
+     * </p>
+     * <p>
+     * The <code>currentFolder</code> folder parameter will only be used if it's neither a
+     * remote directory nor an archive. Otherwise, the command will run from the user's
+     * home directory.
+     * </p>
+     * <p>
+     * Information about the resulting process will be sent to the specified <code>listener</code>.
+     * </p>
+     * @param     command       command to run.
+     * @param     currentFolder where to run the command from.
+     * @param     listener      where to send information about the resulting process.
+     * @return                  the resulting process.
+     * @exception IOException   thrown if any error occurs while trying to run the command.
+     */
+    public static Process execute(String command, AbstractFile currentFolder, ProcessListener listener) throws IOException {
         if(Debug.ON) Debug.trace("Executing " + command);
 
         // Stores the command as a vector.
@@ -79,6 +100,7 @@ public class Shell {
         // Under Java 1.5 and up, use ProcessBuilder to merge the created process's output and error streams.
         // The benefit of doing so is that error messages will be displayed in the context of the normal process' output
         // (mixed), whereas otherwise error messages are displayed after all normal output has been read and displayed.
+        Process process;
         if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_5) {
             ProcessBuilder pb = new ProcessBuilder(commandTokens);
             // Set the process' working directory
@@ -86,7 +108,9 @@ public class Shell {
             // Merge the process' stdout and stderr 
             pb.redirectErrorStream(true);
 
-            return pb.start();
+            process = pb.start();
+            if(listener != null)
+                new Thread(new ProcessOutputMonitor(process.getInputStream(), listener, process), "Shell merged stream monitor's thread").start();
         }
         // Java 1.4 or below, use Runtime.exec() which separates stdout and stderr (harder to manipulate) 
         else {
@@ -94,8 +118,13 @@ public class Shell {
             String tokens[] = new String[commandTokens.size()];
             commandTokens.toArray(tokens);
 
-            return Runtime.getRuntime().exec(tokens, null, workingDirectory);
+            process = Runtime.getRuntime().exec(tokens, null, workingDirectory);
+            if(listener != null) {
+                new Thread(new ProcessOutputMonitor(process.getInputStream(), listener, process), "Shell STDOUT monitor's thread").start();
+                new Thread(new ProcessOutputMonitor(process.getErrorStream(), listener), "Shell STDERR monitor's Thread");
+            }
         }
+        return process;
     }
 
 

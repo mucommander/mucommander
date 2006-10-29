@@ -17,20 +17,12 @@ public interface ProcessListener {
      * @param process the process monitored by this listener.
      * @param returnValue the value returned by the process (return code).
      */
-    public void processDied(Process process, int returnValue);
+    public void processDied(int returnValue);
 
     /**
      *  This method is called whenever the process has written something to the standard output (stdout).
      *
      * @param process the process monitored by this listener.
      */
-    public void processOutput(Process process, byte buffer[], int offset, int length);
-
-    /**
-     * This method is called whenever the process has written something to the error output (stderr).
-     *
-     * @param process the process monitored by this listener.
-     */
-    public void processError(Process process, byte buffer[], int offset, int length);
-
+    public void processOutput(byte buffer[], int offset, int length);
 }
