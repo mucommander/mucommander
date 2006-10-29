@@ -180,6 +180,7 @@ Improvements:
  - Roots of SMB hosts now have a parent (smb://) to more easily browse workgroups/shares 
  - Free/total volume space now automatically refreshes (every 60 seconds)
  - Toolbar and command bar now contextually show whether the action can be triggered or not
+ - Improved file transfer progress dialog with 'Pause'/'Resume' option, current/total remaining time, elapsed time
  - KB/MB/GB/TB are now calculated accurately by multiples of 1024 instead of 1000
  - Environment variables are now retained when using 'Run command'
  - In-table file renaming now used everywhere instead of 'Rename' dialog
@@ -204,6 +205,7 @@ Improvements:
  - New ascending / descending icons in sort tabs
  - SMB resources that are not browsable (printers, IPC...) are not displayed
  - SMB library (jCIFS) upgraded to version 1.2.8
+ - Mac OS X: disabled progress bar animation in file transfer progress dialog which hogged CPU unnecessarily
  - Mac OS X: new 'Universal Binary' application stub, muCommander no longer uses Rosetta to start up
 
 Bug fixes:

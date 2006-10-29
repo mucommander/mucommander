@@ -187,17 +187,17 @@ retry:RU:Повторить
 retry:ZH_CN:重试
 retry:SI:Poskusi ponovno
 
-append:EN:Resume
-append:FR:Reprendre
-append:DE:Weiter
-append:ES:Continuar
-append:CS:Pokračovat
-append:zh_TW:繼續
-append:PL:Wznów
-append:HU:folytat
-append:RU:Продолжить
-append:ZH_CN:继续
-append:SI:Nadaljuj
+resume:EN:Resume
+resume:FR:Reprendre
+resume:DE:Weiter
+resume:ES:Continuar
+resume:CS:Pokračovat
+resume:zh_TW:繼續
+resume:PL:Wznów
+resume:HU:folytat
+resume:RU:Продолжить
+resume:ZH_CN:继续
+resume:SI:Nadaljuj
 
 overwrite:EN:Overwrite
 overwrite:FR:Remplacer
@@ -295,6 +295,21 @@ stop:RU:Прервать
 stop:zh_CN:停止
 stop:Si:Ustavi
 
+pause:EN:Pause
+pause:FR:Pause
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Used as a button label, in the mkdir/mkfile dialog for instance
 create:EN:Create
 create:FR:Créer
@@ -307,6 +322,7 @@ create:HU:létrehoz
 create:RU:Создать
 create:ZH_CN:创建
 create:SI:Ustvari
+
 
 ##########################
 # Generic error messages #

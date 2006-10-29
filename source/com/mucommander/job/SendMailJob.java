@@ -6,7 +6,6 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.file.MimeTypes;
 import com.mucommander.io.Base64OutputStream;
-import com.mucommander.io.CounterInputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
@@ -27,9 +26,6 @@ import java.util.Vector;
  */
 public class SendMailJob extends ExtendedFileJob {
 
-    /** Files that are going to be sent */
-    private FileSet filesToSend;
-    
     /** True after connection to mail server has been established */
     private boolean connectedToMailServer;
 
@@ -74,8 +70,6 @@ public class SendMailJob extends ExtendedFileJob {
 	
     public SendMailJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToSend, String recipientString, String mailSubject, String mailBody) {
         super(progressDialog, mainFrame, filesToSend);
-
-        this.filesToSend = filesToSend;
 
         this.boundary = "mucommander"+System.currentTimeMillis();
         this.recipientString = recipientString;
@@ -190,8 +184,9 @@ public class SendMailJob extends ExtendedFileJob {
             writeLine("Content-Type:"+mimeType+"; name="+file.getName());
             writeLine("Content-Disposition: attachment;filename=\""+file.getName()+"\"");
             writeLine("Content-transfer-encoding: base64\r\n");
-            fileIn = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
-
+//            fileIn = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
+            fileIn = setCurrentInputStream(file.getInputStream());
+            
             // Write file to socket
             AbstractFile.copyStream(fileIn, out64);
 	
@@ -262,6 +257,8 @@ public class SendMailJob extends ExtendedFileJob {
      * This method here does nothing but it can be overriden by subclasses to perform some first-time initializations.
      */
     protected void jobStarted() {
+        super.jobStarted();
+
         // Open socket connection to the mail server, and say hello
         try {
             openConnection();
@@ -287,6 +284,8 @@ public class SendMailJob extends ExtendedFileJob {
      * Overriden method to say 'goodbye' to the mail server.
      */
     protected void jobCompleted() {
+        super.jobCompleted();
+
         // Notifies the mail server that the mail is over
         try {
             // Say goodbye to the server
@@ -302,6 +301,8 @@ public class SendMailJob extends ExtendedFileJob {
      * Overrident method to close connection to the mail server.
      */
     protected void jobStopped() {
+        super.jobStopped();
+
         // Close the connection
         closeConnection();
     }

@@ -34,7 +34,7 @@ public class FileExistsDialog extends QuestionDialog {
     public final static String SKIP_TEXT = Translator.get("skip");
     public final static String OVERWRITE_TEXT = Translator.get("overwrite");
     public final static String OVERWRITE_IF_OLDER_TEXT = Translator.get("overwrite_if_older");
-    public final static String RESUME_TEXT = Translator.get("append");
+    public final static String RESUME_TEXT = Translator.get("resume");
 
     private String choicesText[];
     private int choicesActions[];

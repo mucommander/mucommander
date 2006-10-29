@@ -8,7 +8,6 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
-import com.mucommander.io.CounterInputStream;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -59,6 +58,8 @@ public class ArchiveJob extends ExtendedFileJob {
      * Overriden method to initialize the archiver and handle the case where the destination file already exists.
      */
     protected void jobStarted() {
+        super.jobStarted();
+
         if (destFile.exists()) {
             // File already exists in destination: ask the user what to do (cancel, overwrite,...) but
             // do not offer the 'resume' option nor the multiple files mode options such as 'skip'.
@@ -128,7 +129,8 @@ public class ArchiveJob extends ExtendedFileJob {
                     return folderComplete;
                 }
                 else {
-                    this.in = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
+//                    this.in = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
+                    this.in = setCurrentInputStream(file.getInputStream());
 
                     // Create a new file entry in archive and copy the current file
                     AbstractFile.copyStream(in, archiver.createEntry(entryRelativePath, file));
@@ -139,19 +141,20 @@ public class ArchiveJob extends ExtendedFileJob {
                 }
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
-
                 // If job was interrupted by the user at the time when the exception occurred,
                 // it most likely means that the exception by user cancellation.
                 // In this case, the exception should not be interpreted as an error.
                 if(isInterrupted())
                     return false;
 
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+                
                 int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops
                 if(ret==RETRY_ACTION) {
                     // Reset processed bytes currentFileByteCounter
-                    currentFileByteCounter.reset();
+//                    currentFileByteCounter.reset();
+                    getCurrentFileByteCounter().reset();
 
                     continue;
                 }
@@ -166,12 +169,14 @@ public class ArchiveJob extends ExtendedFileJob {
      * Overriden method to close the archiver.
      */
     public void jobStopped() {
-        // First, close any open InputStream being archived.
-        // Not doing so before closing the archive would cause a deadlock in ZipOutputStream
-        if(in!=null) {
-            try { in.close(); }
-            catch(IOException e) {}
-        }
+        super.jobStopped();
+    
+//        // First, close any open InputStream being archived.
+//        // Not doing so before closing the archive would cause a deadlock in ZipOutputStream
+//        if(in!=null) {
+//            try { in.close(); }
+//            catch(IOException e) {}
+//        }
         
         // Try to close the archiver
         if(archiver!=null) {

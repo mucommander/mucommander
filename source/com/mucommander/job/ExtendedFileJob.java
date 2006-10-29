@@ -6,12 +6,14 @@ import com.mucommander.file.FileSet;
 import com.mucommander.io.ByteCounter;
 import com.mucommander.io.CounterInputStream;
 import com.mucommander.io.FileTransferException;
+import com.mucommander.io.ThroughputLimitInputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.Debug;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
@@ -24,13 +26,14 @@ import java.io.IOException;
  */
 public abstract class ExtendedFileJob extends FileJob {
 
-    private CounterInputStream cin;
+//    private CounterInputStream cin;
+    private ThroughputLimitInputStream in;
 
     /** Contains the number of bytes processed in the current file so far, see {@link #getCurrentFileByteCounter()} ()} */
-    protected ByteCounter currentFileByteCounter;
+    private ByteCounter currentFileByteCounter;
 
     /** Contains the number of bytes processed so far, see {@link #getTotalByteCounter()} */
-    protected ByteCounter totalByteCounter;
+    private ByteCounter totalByteCounter;
 
 
     /**
@@ -68,11 +71,13 @@ public abstract class ExtendedFileJob extends FileJob {
                 long destFileSize = destFile.getSize();
         
                 if(append && destFileSize!=-1) {
-                    this.cin = new CounterInputStream(sourceFile.getInputStream(destFileSize), currentFileByteCounter);
+//                    this.in = new CounterInputStream(sourceFile.getInputStream(destFileSize), currentFileByteCounter);
+                    setCurrentInputStream(sourceFile.getInputStream(destFileSize));
                     currentFileByteCounter.add(destFileSize);
                 }
                 else {
-                    this.cin = new CounterInputStream(sourceFile.getInputStream(), currentFileByteCounter);
+                    setCurrentInputStream(sourceFile.getInputStream());
+//                    this.in = new CounterInputStream(sourceFile.getInputStream(), currentFileByteCounter);
                 }
             }
             catch(IOException e) {
@@ -84,15 +89,15 @@ public abstract class ExtendedFileJob extends FileJob {
             }
     
             // Copy source stream to destination file
-            destFile.copyStream(cin, append);
+            destFile.copyStream(in, append);
         }
         finally {
             // This block will always be executed, even if an exception
             // was thrown in the catch block
 
             // Tries to close the streams no matter what happened before
-            if(cin!=null) {
-                try { cin.close(); }
+            if(in!=null) {
+                try { in.close(); }
                 catch(IOException e1) {}
             }
         }
@@ -211,25 +216,82 @@ public abstract class ExtendedFileJob extends FileJob {
     }
 
 
+    /**
+     * Registers the given InputStream as currently used, to allow:
+     * <ul>
+     * <li>counting bytes that have been read from it (@see {@link #getCurrentFileByteCounter()}
+     * <li>blocking read methods calls when the job is paused
+     * <li>closing the InputStream when job is stopped
+     * </ul>
+     *
+     * <p>This method should be called by subclasses when creating a new InputStream, before the InputStream is used.
+     *  
+     * @param in the InputStream to be used
+     * @return the 'augmented' InputStream using the given stream as the underlying InputStream
+     */
+    public InputStream setCurrentInputStream(InputStream in) {
+        this.in = new ThroughputLimitInputStream(new CounterInputStream(in, currentFileByteCounter));
+
+        return this.in;
+    }
+
+
     ////////////////////////
     // Overridden methods //
     ////////////////////////
 
-    /**
-     * Overrides FileJob.stop() to stop any file copy (closes the source file's InputStream).
-     */
-    public void stop() {
-        // Stop job BEFORE closing the stream so that the IOException thrown by copyStream
-        // is not interpreted as a failure
-        super.stop();
 
-        if(cin!=null) {
-            try {
-                cin.close();
-            }
+    /**
+     * Overrides {@link FileJob#jobStopped()} to stop any file processing by closing the source InputStream.
+     */
+    protected void jobStopped() {
+        super.jobStopped();
+
+        if(in!=null) {
+            if(Debug.ON) Debug.trace("closing current InputStream "+in);
+
+            try { in.close(); }
             catch(IOException e) {}
         }
     }
+
+    /**
+     * Overrides {@link FileJob#jobPaused()} to pause any file processing
+     * by having the source InputStream's read methods lock.
+     */
+    protected void jobPaused() {
+        super.jobPaused();
+
+        if(in!=null)
+            in.setThroughputLimit(0);
+    }
+
+    /**
+     * Overrides {@link FileJob#jobResumed()} to resume any file processing by releasing
+     * the lock on the source InputStream's read methods.
+     */
+    protected void jobResumed() {
+        super.jobResumed();
+
+        if(in!=null)
+            in.setThroughputLimit(-1);
+    }
+
+//    /**
+//     * Overrides FileJob.stop() to stop any file copy (closes the source file's InputStream).
+//     */
+//    public void stop() {
+//        // Stop job BEFORE closing the stream so that the IOException thrown by copyStream
+//        // is not interpreted as a failure
+//        super.stop();
+//
+//        if(in!=null) {
+//            try {
+//                in.close();
+//            }
+//            catch(IOException e) {}
+//        }
+//    }
 
 
     /**

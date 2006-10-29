@@ -80,7 +80,7 @@ public abstract class FileJob implements Runnable {
     protected final static String SKIP_TEXT = Translator.get("skip");
     protected final static String RETRY_TEXT = Translator.get("retry");
     protected final static String CANCEL_TEXT = Translator.get("cancel");
-    protected final static String APPEND_TEXT = Translator.get("append");
+    protected final static String APPEND_TEXT = Translator.get("resume");
 	
 	
     /**
@@ -188,7 +188,7 @@ public abstract class FileJob implements Runnable {
 	
 	
     /**
-     * Returns <code>true</code> if file job has been interrupted.
+     * Returns <code>true</code> if this file job has been interrupted.
      */
     public boolean isInterrupted() {
         return jobThread == null;
@@ -196,15 +196,24 @@ public abstract class FileJob implements Runnable {
 
 	
     /**
-     * Sets or unsets this job in pause mode (waiting for user response).
+     * Sets or unsets this job in paused mode.
      */
-    private void setPaused(boolean paused) {
+    public void setPaused(boolean paused) {
+        // Resume job if it was paused
         if(!paused && this.isPaused) {
+            // Calculate pause time
             this.pausedTime += System.currentTimeMillis() - this.pauseStartTime;
+            // Call the jobResumed method to notify of the new job's state
+            jobResumed();
         }
-        else if(paused) {
+        // Pause job if it not paused already
+        else if(paused && !this.isPaused) {
+            // Memorize pause time in order to calculate pause time when the job is resumed
             this.pauseStartTime = System.currentTimeMillis();
+            // Call the jobPaused method to notify of the new job's state
+            jobPaused();
         }
+
         this.isPaused = paused;
     }
 
@@ -241,7 +250,7 @@ public abstract class FileJob implements Runnable {
 	
     /**
      * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object)} is made.
-     * The method implementation here does nothing but it can be overriden by subclasses to perform some first-time initializations.
+     * This method implementation does nothing but it can be overriden by subclasses to perform some first-time initializations.
      */
     protected void jobStarted() {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
@@ -253,20 +262,42 @@ public abstract class FileJob implements Runnable {
      * (without any call to {@link #stop()}).
      *
      * <p>The call happens after the last call to {@link #processFile(AbstractFile,Object)} is made.
-     * The method implementation here does nothing but it can be overriden by subclasses to properly complete the job.</p>
+     * This method implementation does nothing but it can be overriden by subclasses to properly complete the job.</p>
 	 
      * <p>Note that this method will NOT be called if a call to {@link #stop()} was made before all files were processed.</p>
      */
     protected void jobCompleted() {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
     }
-	
-	
+
+
+    /**
+     * This method is called when this job has been paused, either by the user, or by the job when asking for user input.
+     * 
+     * <p>This method implementation does nothing but it can be overriden by subclasses to do whatever is needed
+     * when the job has been paused.
+     */
+    protected void jobPaused() {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+    }
+
+
+    /**
+     * This method is called when this job has been resumed after being paused.
+     *
+     * <p>This method implementation does nothing but it can be overriden by subclasses to do whatever is needed
+     * when the job has returned from pause.
+     */
+    protected void jobResumed() {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
+    }
+
+
     /**
      * This method is called when this job has been stopped. The call happens after all calls to {@link #processFile(AbstractFile,Object)} and
      * {@link #jobCompleted()}.
-     * The method implementation here does nothing but it can be overriden by subclasses to properly terminate the job. This is where you want to close
-     * any opened connections.
+     * This method implementation does nothing but it can be overriden by subclasses to properly terminate the job.
+     * This is where you want to close any opened connections.
      *
      * <p>Note that unlike {@link #jobCompleted()} this method is always called, whether the job has been completed (all
      * files were processed) or has been interrupted in the middle.</p>

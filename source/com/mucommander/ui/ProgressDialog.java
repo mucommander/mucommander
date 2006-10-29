@@ -9,8 +9,8 @@ import com.mucommander.text.DurationFormat;
 import com.mucommander.ui.comp.button.ButtonChoicePanel;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
-import com.mucommander.ui.comp.progress.OverlayProgressBar;
-import com.mucommander.Debug;
+import com.mucommander.ui.comp.MnemonicHelper;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,28 +27,45 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     private JLabel infoLabel;
     private JLabel statsLabel;
-    private OverlayProgressBar totalProgressBar;
-    private OverlayProgressBar fileProgressBar;
+//    private OverlayProgressBar totalProgressBar;
+//    private OverlayProgressBar fileProgressBar;
+    private JProgressBar totalProgressBar;
+    private JProgressBar fileProgressBar;
     private JLabel elapsedTimeLabel;
-    private JButton cancelButton;
-    private JButton hideButton;
+
+    private ButtonChoicePanel buttonsChoicePanel;
+    private JButton pauseResumeButton;
+    private JButton stopButton;
+//    private JButton hideButton;
 
     private FileJob job;    
     private Thread repaintThread;
     /* True if the current job is a MulitipleFileJob */
     private boolean dualBar;
 
+    private MainFrame mainFrame;
+
+    private boolean firstTimeActivated = true;
+
+    private final static String RESUME_ICON = "resume.png";
+    private final static String PAUSE_ICON = "pause.png";
+    private final static String STOP_ICON = "stop.png";
+
     // Dialog width is constrained to 320, height is not an issue (always the same)
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);	
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
 
     /** How often should progress information be refreshed (in ms) */
     private final static int REFRESH_RATE = 500;
 
-    private MainFrame mainFrame;
 
-    private boolean firstTimeActivated = true;
-	
+
+    static {
+        // Disable JProgressBar animation which is a real CPU hog under Mac OS X
+        UIManager.put("ProgressBar.repaintInterval", new Integer(Integer.MAX_VALUE));
+    }
+
+
     public ProgressDialog(MainFrame mainFrame, String title) {
         super(mainFrame, title, mainFrame);
 
@@ -63,7 +80,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     private void initUI() {
         Container contentPane = getContentPane();
 
-        totalProgressBar = new OverlayProgressBar();
+        totalProgressBar = new JProgressBar();
+        totalProgressBar.setStringPainted(true);
         totalProgressBar.setAlignmentX(LEFT_ALIGNMENT);
         infoLabel = new JLabel(job.getStatusString());
         infoLabel.setAlignmentX(LEFT_ALIGNMENT);
@@ -72,7 +90,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         // 2 progress bars
         if (dualBar) {
             tempPanel.add(infoLabel);
-            fileProgressBar = new OverlayProgressBar();
+            fileProgressBar = new JProgressBar();
+            fileProgressBar.setStringPainted(true);
             tempPanel.add(fileProgressBar);
             tempPanel.addSpace(10);
 		
@@ -96,16 +115,25 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
         tempPanel.add(Box.createVerticalGlue());
         contentPane.add(tempPanel, BorderLayout.CENTER);
-        
-        cancelButton = new JButton(Translator.get("cancel"));
-        cancelButton.addActionListener(this);
-        hideButton = new JButton(Translator.get("progress_bar.hide"));
-        hideButton.addActionListener(this);
+
+        pauseResumeButton = new JButton(Translator.get("pause"), IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
+        pauseResumeButton.addActionListener(this);
+
+        stopButton = new JButton(Translator.get("stop"), IconManager.getIcon(IconManager.PROGRESS_ICON_SET, STOP_ICON));
+        stopButton.addActionListener(this);
+
+//        hideButton = new JButton(Translator.get("progress_bar.hide"));
+//        hideButton.addActionListener(this);
+
+//        this.buttonsChoicePanel = new ButtonChoicePanel(new JButton[] {pauseResumeButton, stopButton, hideButton}, 0, getRootPane());
+        this.buttonsChoicePanel = new ButtonChoicePanel(new JButton[] {pauseResumeButton, stopButton}, 0, getRootPane());
+        contentPane.add(buttonsChoicePanel, BorderLayout.SOUTH);
+
         // Cancel button receives initial focus
-        setInitialFocusComponent(cancelButton);
+        setInitialFocusComponent(stopButton);
+
         // Enter triggers cancel button
-        getRootPane().setDefaultButton(cancelButton);
-        contentPane.add(new ButtonChoicePanel(new JButton[] {cancelButton, hideButton}, 0, getRootPane()), BorderLayout.SOUTH);
+        getRootPane().setDefaultButton(stopButton);
     }
 
 
@@ -168,7 +196,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                         progressText += DurationFormat.format(currentFileRemainingTime);
                     }
 
-                    fileProgressBar.setTextOverlay(progressText);
+//                    fileProgressBar.setTextOverlay(progressText);
+                    fileProgressBar.setString(progressText);
 
                     // Update stats label
                     statsLabel.setText(
@@ -202,7 +231,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     progressText += DurationFormat.format(totalRemainingTime);
                 }
 
-                totalProgressBar.setTextOverlay(progressText);
+//                totalProgressBar.setTextOverlay(progressText);
+                totalProgressBar.setString(progressText);
 
                 // Update info label
                 infoLabel.setText(job.getStatusString());
@@ -226,15 +256,34 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
     	
-        if (source==cancelButton) {
+        if (source== stopButton) {
             // Cancel button pressed, dispose dialog and stop job immediately
             // (job will be stopped a second time in windowClosed() but that will just be a no-op)
             dispose();
             job.stop();
         }
-        else if(source==hideButton) {
-            mainFrame.setState(Frame.ICONIFIED);
+        else if(source== pauseResumeButton) {
+            boolean isPaused = job.isPaused();
+
+            // Resume the job and change the button's label and icon to 'pause'
+            if(isPaused) {
+                pauseResumeButton.setText(Translator.get("pause"));
+                pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
+            }
+            // Pause the job and change the button's label and icon to 'resume'
+            else {
+                pauseResumeButton.setText(Translator.get("resume"));
+                pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
+            }
+
+            // Update buttons mnemonics
+            buttonsChoicePanel.updateMnemonics();
+            // Pause/resume job
+            job.setPaused(!isPaused);
         }
+//        else if(source==hideButton) {
+//            mainFrame.setState(Frame.ICONIFIED);
+//        }
     }
 
 

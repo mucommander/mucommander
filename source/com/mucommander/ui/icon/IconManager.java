@@ -35,6 +35,8 @@ public class IconManager {
     public final static int TABLE_ICON_SET = 3;
     /** Designates the preferences icon set */
     public final static int PREFERENCES_ICON_SET = 4;
+    /** Designates the progress icon set */
+    public final static int PROGRESS_ICON_SET = 5;
 
     /** Icon sets folders within the application's JAR file */
     private final static String ICON_SET_FOLDERS[] = {
@@ -42,11 +44,12 @@ public class IconManager {
         "/action/",
         "/status_bar/",
         "/table/",
-        "/preferences/"
+        "/preferences/",
+        "/progress/"
     };
 
     /** Number of icon sets */
-    private final static int NB_ICON_SETS = 5;
+    private final static int NB_ICON_SETS = 6;
 
 //    /** Configuration variable key for table icons scale */
 //    public final static String FILE_ICON_SCALE_CONF_VAR = "prefs.file_table.icon_scale";
@@ -74,6 +77,7 @@ public class IconManager {
         caches[ACTION_ICON_SET] = new Hashtable();
         caches[STATUS_BAR_ICON_SET] = new Hashtable();
         caches[TABLE_ICON_SET] = new Hashtable();
+        caches[PROGRESS_ICON_SET] = new Hashtable();
     }
 
 
