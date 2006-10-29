@@ -3066,12 +3066,25 @@ progress_bar.transferred:zh_TW:已傳送 %1 速度 %2/s
 progress_bar.transferred:PL:Przesłano %1 z %2/s
 progress_bar.transferred:HU:%1 átvitel %2/s alatt megtörtént
 progress_bar.transferred:RU:Передано %1, средняя скорость %2/сек
-progress_bar.transferred:ZH_CN:已传送 %1 速度 %s
+progress_bar.transferred:ZH_CN:已传送 %1 速度 %2/s
 progress_bar.transferred:SI:Prenešeno %1 od %2/s
 
 progress_bar.elapsed_time:EN:Elapsed time
 progress_bar.elapsed_time:FR:Temps écoulé
 
+
+
+
+
+
+
+
+
+
+
+
+progress_bar.current_speed:EN:Current speed
+progress_bar.current_speed:FR:Vitesse actuelle
 
 
 

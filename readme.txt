@@ -150,6 +150,7 @@ New features:
  - Drag and Drop support: files can be copied or moved to and from muCommander windows and other applications, current folder can be changed by dropping a file or folder on the location field
  - Clipboard support: files can be copied and pasted to/from the clipboard (Ctrl+C / Ctrl+V by default), works with other applications
  - New quick search with visual feedback, editable search string, jump to next/previous matches and ability to cancel it
+ - New file transfer progress window with 'Pause'/'Resume' option, current/total remaining time, elapsed time, current speed and speed graph
  - Zip, Tar, Gzip, Bzip2 archives can now be created
  - Support for ISO and NRG images over local and SMB filesystems (contributed by Xavier Martin)
  - Support for Bzip2 archives (.bz2, .tbz2, .tar.bz2 extensions)
@@ -177,11 +178,11 @@ Improvements:
  - Optimized file handling for better file access performance
  - Optimized Zip and Tar archive handling files, access is now much faster
  - SMB performance improved when changing folders
- - Roots of SMB hosts now have a parent (smb://) to more easily browse workgroups/shares 
  - Free/total volume space now automatically refreshes (every 60 seconds)
  - Toolbar and command bar now contextually show whether the action can be triggered or not
- - Improved file transfer progress dialog with 'Pause'/'Resume' option, current/total remaining time, elapsed time
  - KB/MB/GB/TB are now calculated accurately by multiples of 1024 instead of 1000
+ - Decimal and thousands separators are now localized
+ - Roots of SMB hosts now have a parent (smb://) to more easily browse workgroups/shares 
  - Environment variables are now retained when using 'Run command'
  - In-table file renaming now used everywhere instead of 'Rename' dialog
  - In-table file renaming must now to be validated by ENTER for safety reasons

@@ -35,14 +35,12 @@ public abstract class FileJob implements Runnable {
     /** Timestamp in milliseconds when job started */
     private long startDate;
 
-    /** Number of milliseconds this job has been paused (been waiting for some user response).
-     * Used to compute stats like average speed.
-     */
+    /** Number of milliseconds during which this job has been paused (been waiting for some user response).
+     * Used to compute stats like average speed. */
     private long pausedTime;
 
     /** Contains the timestamp when this job has been put in pause (if in pause) */
-    private long pauseStartTime;
-
+    private long pauseStartDate;
 
     /** Associated dialog showing job progression */
     protected ProgressDialog progressDialog;
@@ -147,18 +145,31 @@ public abstract class FileJob implements Runnable {
 
 
     /**
-     * Returns the timestamp in milliseconds when the job was started.
+     * Returns the timestamp in milliseconds when this job was started.
      */
     public long getStartDate() {
         return startDate;
     }
-	
+
+
     /**
-     * Returns the number of milliseconds this job was paused, waiting for user's response.
+     * Returns the timestamp in milliseconds when this job was last paused.
+     * If this job has not been paused yet, 0 is returned.
+     */
+    public long getPauseStartDate() {
+        return pauseStartDate;
+    }
+
+    
+    /**
+     * Number of milliseconds during which this job has been paused (been waiting for some user response).
+     * If this job has been paused multiple times, the total is returned.
+     * If this job has not been paused yet, 0 is returned.
      */
     public long getPausedTime() {
         return pausedTime;
     }
+
 
     /**
      * Returns the number of milliseconds this job effectively spent processing files, exclusing any paused time.
@@ -168,7 +179,7 @@ public abstract class FileJob implements Runnable {
         if(startDate==0)
             return 0;
         
-        return System.currentTimeMillis()- startDate -pausedTime;
+        return System.currentTimeMillis()-startDate-pausedTime;
     }
 
     
@@ -202,14 +213,14 @@ public abstract class FileJob implements Runnable {
         // Resume job if it was paused
         if(!paused && this.isPaused) {
             // Calculate pause time
-            this.pausedTime += System.currentTimeMillis() - this.pauseStartTime;
+            this.pausedTime += System.currentTimeMillis() - this.pauseStartDate;
             // Call the jobResumed method to notify of the new job's state
             jobResumed();
         }
         // Pause job if it not paused already
         else if(paused && !this.isPaused) {
             // Memorize pause time in order to calculate pause time when the job is resumed
-            this.pauseStartTime = System.currentTimeMillis();
+            this.pauseStartDate = System.currentTimeMillis();
             // Call the jobPaused method to notify of the new job's state
             jobPaused();
         }

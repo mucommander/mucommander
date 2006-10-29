@@ -1,6 +1,9 @@
 
 package com.mucommander.text;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 
 /**
  * SizeFormat formats byte sizes into localized string reprensentations.
@@ -37,7 +40,13 @@ public class SizeFormat {
     private final static long GB_10 = 10737418240l;
     private final static long TB_1 = 1099511627776l;
     private final static long TB_10 = 10995116277760l;
-    
+
+    /** DecimalFormat instance to localize thousands separators */
+    private final static DecimalFormat DECIMAL_FORMAT = (DecimalFormat)NumberFormat.getInstance();
+
+    /** Localized decimal separator */
+    private final static String DECIMAL_SEPARATOR = ""+DECIMAL_FORMAT.getDecimalFormatSymbols().getDecimalSeparator();
+
 
     //////////////////////////
     // Locatlized text keys //
@@ -71,12 +80,8 @@ public class SizeFormat {
         boolean roundToKb = (format&ROUND_TO_KB)!=0;
 		
         if((format&DIGITS_FULL)!=0) {
-            String s = ""+size;
-            int len = s.length();
-            digitsString = "";
-            for(int i=len; i>0; i-=3)
-                digitsString = s.substring(Math.max(i-3, 0), i)+(i==len?"":","+digitsString);
-
+            // DecimalFormat localizes thousands separators
+            digitsString = DECIMAL_FORMAT.format(size);
             unitString = unitLong?BYTES:unitShort?B:"";
         }
         else {
@@ -91,10 +96,10 @@ public class SizeFormat {
                     unitString = unitLong?(size<=1?BYTE:BYTES):unitShort?B:"";
                 }
             }
-            // size < 10KB	-> "9,6 KB"
+            // size < 10KB	-> "9.6 KB"
             else if(size<KB_10 && !digitsShort) {
                 int nKB = (int)size/KB_1;
-                digitsString = nKB+","+((""+(size-nKB*KB_1)/(float)KB_1).charAt(2));
+                digitsString = nKB+DECIMAL_SEPARATOR+((""+(size-nKB*KB_1)/(float)KB_1).charAt(2));
                 unitString = noUnit?"":KB;
             }
             // size < 1MB -> "436 KB"
@@ -102,10 +107,10 @@ public class SizeFormat {
                 digitsString = ""+size/KB_1;
                 unitString = noUnit?"":KB;
             }
-            // size < 10MB -> "4,3 MB"
+            // size < 10MB -> "4.3 MB"
             else if(size<MB_10 && !digitsShort) {
                 int nMB = (int)size/MB_1;
-                digitsString = nMB+","+((""+(size-nMB*MB_1)/(float)MB_1).charAt(2));
+                digitsString = nMB+DECIMAL_SEPARATOR+((""+(size-nMB*MB_1)/(float)MB_1).charAt(2));
                 unitString = noUnit?"":MB;
             }
             // size < 1GB -> "548 MB"
@@ -113,10 +118,10 @@ public class SizeFormat {
                 digitsString = ""+size/MB_1;
                 unitString = noUnit?"":MB;
             }	
-            // size < 10GB -> "4,8 GB"
+            // size < 10GB -> "4.8 GB"
             else if(size<GB_10 && !digitsShort) {
                 long nGB = size/GB_1;
-                digitsString = nGB+","+((""+(size-nGB*GB_1)/(float)GB_1).charAt(2));
+                digitsString = nGB+DECIMAL_SEPARATOR+((""+(size-nGB*GB_1)/(float)GB_1).charAt(2));
                 unitString = noUnit?"":GB;
             }
             // size < 1TB -> "216 GB"
@@ -124,10 +129,10 @@ public class SizeFormat {
                 digitsString = ""+size/GB_1;
                 unitString = noUnit?"":GB;
             }
-            // size < 10TB -> "4,8 TB"
+            // size < 10TB -> "4.8 TB"
             else if(size<TB_10 && !digitsShort) {
                 long nTB = size/TB_1;
-                digitsString = nTB+","+((""+(size-nTB*TB_1)/(float)TB_1).charAt(2));
+                digitsString = nTB+DECIMAL_SEPARATOR+((""+(size-nTB*TB_1)/(float)TB_1).charAt(2));
                 unitString = noUnit?"":TB;
             }
             else {
