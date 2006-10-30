@@ -121,7 +121,7 @@ public class Shell {
             process = Runtime.getRuntime().exec(tokens, null, workingDirectory);
             if(listener != null) {
                 new Thread(new ProcessOutputMonitor(process.getInputStream(), listener, process), "Shell STDOUT monitor's thread").start();
-                new Thread(new ProcessOutputMonitor(process.getErrorStream(), listener), "Shell STDERR monitor's Thread");
+                new Thread(new ProcessOutputMonitor(process.getErrorStream(), listener), "Shell STDERR monitor's Thread").start();
             }
         }
         return process;
