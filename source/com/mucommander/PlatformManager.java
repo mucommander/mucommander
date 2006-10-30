@@ -530,7 +530,7 @@ public class PlatformManager {
      * @return the path to the user's preference folder.
      */
     public static File getPreferencesFolder() {
-        // If the preferences folder has been set, use 
+        // If the preferences folder has been set, use it.
         if(prefFolder != null)
             return prefFolder;
 
@@ -558,8 +558,7 @@ public class PlatformManager {
             else if(!folder.mkdirs())
                 throw new IllegalArgumentException("Could not create folder " + folder);
         }
-        else
-            prefFolder = folder;
+        prefFolder = folder;
     }
 
     ///////////////////
