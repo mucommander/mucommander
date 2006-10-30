@@ -265,7 +265,7 @@ public class PlatformManager {
      * At the time of writing, this means:<br/>
      * - <code>cmd /c</code> for the Windows NT family of operating systems.<br/>
      * - <code>command.com /c</code> for the Windows 9X family of operating systems.<br/>
-     * - <code>/bin/sh -c</code> for any other OS.<br/>
+     * - <code>/bin/sh -l -c</code> for any other OS.<br/>
      * </p>
      * <p>
      * Please note that this method is not returning the shell <b>binary</b>, but the shell
@@ -287,7 +287,7 @@ public class PlatformManager {
             // Any other OS is assumed to be POSIX compliant,
             // and thus have a valid /bin/sh shell.
         default:
-            return "/bin/sh -c";
+            return "/bin/sh -l -c";
         }
     }
 
