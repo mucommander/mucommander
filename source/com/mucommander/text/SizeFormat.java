@@ -188,4 +188,31 @@ public class SizeFormat {
 
         return speedUnit?Translator.get(SPEED_KEY, unitString):unitString;
     }
+
+
+    public static long getUnitBytes(int unit) {
+        long bytes;
+
+        switch(unit) {
+            case BYTE_UNIT:
+                bytes = 1;
+                break;
+            case KILO_BYTE_UNIT:
+                bytes = KB_1;
+                break;
+            case MEGA_BYTE_UNIT:
+                bytes = MB_1;
+                break;
+            case GIGA_BYTE_UNIT:
+                bytes = GB_1;
+                break;
+            case TERA_BYTE_UNIT:
+                bytes = TB_1;
+                break;
+            default:
+                return 0;
+        }
+
+        return bytes;
+    }
 }

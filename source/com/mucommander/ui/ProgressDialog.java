@@ -220,7 +220,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
 
     private void updateThroughputLimit() {
-        extendedFileJob.setThroughputLimit(limitSpeedCheckBox.isSelected()?((long)Math.pow(10, 3*speedUnitComboBox.getSelectedIndex()))*(((Integer)limitSpeedSpinner.getValue())).intValue():-1);
+        extendedFileJob.setThroughputLimit(limitSpeedCheckBox.isSelected()?SizeFormat.getUnitBytes(speedUnitComboBox.getSelectedIndex())*(((Integer)limitSpeedSpinner.getValue())).intValue():-1);
     }
 
 
@@ -234,6 +234,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         long lastTime = System.currentTimeMillis();
 
         while(repaintThread!=null && !job.hasFinished()) {
+            long now = System.currentTimeMillis();
+
             // Do not refresh progress information is job is paused, simply sleep
             if(!job.isPaused()) {
                 long currentFileRemainingTime = 0;
@@ -245,7 +247,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
                 if (extendedFileJob!=null) {
                     long bytesTotal = extendedFileJob.getTotalByteCounter().getByteCount();
-                    long bytesPerSec = (long)(bytesTotal/(((float)effectiveJobTime)/1000));
+                    long totalBps = (long)(bytesTotal*1000d/effectiveJobTime);
+                    long currentBps = (long)((bytesTotal-lastBytesTotal)*1000d/(now-lastTime));
+if(Debug.ON) Debug.trace("currentBps="+currentBps+" timeDiff="+(now-lastTime));
+
 
                     // Update current file progress bar
                     float filePercentFloat = extendedFileJob.getFilePercentDone();
@@ -260,12 +265,12 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     if(currentFileSize==-1)
                         progressText += "?";
                     // Avoid potential divisions by zero
-                    else if(bytesPerSec==0) {
+                    else if(totalBps==0) {
                         currentFileRemainingTime = -1;
                         progressText += DurationFormat.getInfiniteSymbol();
                     }
                     else {
-                        currentFileRemainingTime = (long)((1000*(currentFileSize-extendedFileJob.getCurrentFileByteCounter().getByteCount()))/(float)bytesPerSec);
+                        currentFileRemainingTime = (long)((1000*(currentFileSize-extendedFileJob.getCurrentFileByteCounter().getByteCount()))/(float)totalBps);
                         progressText += DurationFormat.format(currentFileRemainingTime);
                     }
 
@@ -276,13 +281,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     statsLabel.setText(
                        Translator.get("progress_dialog.transferred",
                                       SizeFormat.format(bytesTotal, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_LONG| SizeFormat.ROUND_TO_KB),
-                                      SizeFormat.format(bytesPerSec, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB))
+                                      SizeFormat.format(totalBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB))
                     );
 
                     // Add new immediate bytes per second speed sample to speed graph and label and repaint it
-                    long now = System.currentTimeMillis();
-                    long currentBps = (long)((bytesTotal-lastBytesTotal)*1000f/(now-lastTime));
-
                     // Skip this sample if job was paused and resumed, speed would not be accurate
                     if(lastTime>job.getPauseStartDate()) {
                         speedGraph.addSample(currentBps);
@@ -328,7 +330,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             }
 
             // Sleep for a while
-            try { Thread.sleep(REFRESH_RATE); }
+            try {
+//                if(Debug.ON) Debug.trace("sleeping "+(REFRESH_RATE-(System.currentTimeMillis()-now)));
+                Thread.sleep(REFRESH_RATE-(System.currentTimeMillis()-now));
+            }
             catch(InterruptedException e) {}
         }
 	

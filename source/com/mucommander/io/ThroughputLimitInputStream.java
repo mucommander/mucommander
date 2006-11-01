@@ -63,40 +63,48 @@ public class ThroughputLimitInputStream extends InputStream {
     }
 
 
+    public void setUnderlyingInputStream(InputStream in) {
+        this.in = in;
+    }
+
+
+
     private int getNbAllowedBytes() {
-//if(Debug.ON) Debug.trace("called by thread "+Thread.currentThread()+" activeCount="+Thread.activeCount());
 
         updateLimitCounter();
 
         long allowedBytes;
 
-//if(Debug.ON) Debug.trace("obtaining lock");
+        if(Debug.ON) Debug.trace("bpsLimit="+bpsLimit);
 
         synchronized(this) {
             while((allowedBytes=bpsLimit-bytesReadThisSecond)<=0) {
-//if(Debug.ON) Debug.trace("looping");
+if(Debug.ON) Debug.trace("currentSecond="+currentSecond);
+if(Debug.ON) Debug.trace("bytesReadThisSecond="+bytesReadThisSecond);
 
                 // Throughput limit was removed, return max int value
                 if(bpsLimit<0)
                     return Integer.MAX_VALUE;
 
-//if(Debug.ON) Debug.trace("waiting");
-
                 try {
                     if(bpsLimit==0)
                         wait();
-                    else
-                        wait(System.currentTimeMillis()-currentSecond*1000);
+                    else {
+if(Debug.ON) Debug.trace("waiting "+(1000-System.currentTimeMillis()%1000));
+long now = System.currentTimeMillis();
+//                        wait(1+System.currentTimeMillis()-currentSecond*1000);
+                        wait((1000-System.currentTimeMillis()%1000));
+if(Debug.ON) Debug.trace("waited "+(System.currentTimeMillis()-now));
+                    }
                 }
                 catch(InterruptedException e) {
-//if(Debug.ON) Debug.trace("interrupted!");
                 }
 
                 updateLimitCounter();
             }
         }
 
-//if(Debug.ON) Debug.trace("getting out");
+if(Debug.ON) Debug.trace("returning "+allowedBytes);
         return (int)allowedBytes;
     }
 

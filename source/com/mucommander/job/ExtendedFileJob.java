@@ -34,11 +34,11 @@ public abstract class ExtendedFileJob extends FileJob {
 
 
     /** InputStream currently being processed, may be null */
-    private ThroughputLimitInputStream in;
+    private ThroughputLimitInputStream tlin;
 
     /** ThroughputLimit in bytes per second, -1 initially (no limit) */
-    private long throughputLimit = -1;
-
+//    private long throughputLimit = -1;
+private long throughputLimit = 1048576;
 
 
     /**
@@ -94,15 +94,15 @@ public abstract class ExtendedFileJob extends FileJob {
             }
     
             // Copy source stream to destination file
-            destFile.copyStream(in, append);
+            destFile.copyStream(tlin, append);
         }
         finally {
             // This block will always be executed, even if an exception
             // was thrown in the catch block
 
             // Tries to close the streams no matter what happened before
-            if(in!=null) {
-                try { in.close(); }
+            if(tlin !=null) {
+                try { tlin.close(); }
                 catch(IOException e1) {}
             }
         }
@@ -200,7 +200,7 @@ public abstract class ExtendedFileJob extends FileJob {
     /**
      * Returns the number of bytes that have been processed in the current file.
      */
-    public ByteCounter getCurrentFileByteCounter() {
+    public synchronized ByteCounter getCurrentFileByteCounter() {
         return currentFileByteCounter;
     }
 
@@ -216,7 +216,7 @@ public abstract class ExtendedFileJob extends FileJob {
     /**
      * Returns a {@link ByteCounter} that holds the total number of bytes that have been processed by this job so far.
      */
-    public ByteCounter getTotalByteCounter() {
+    public synchronized ByteCounter getTotalByteCounter() {
         return totalByteCounter;
     }
 
@@ -235,17 +235,22 @@ public abstract class ExtendedFileJob extends FileJob {
      * @return the 'augmented' InputStream using the given stream as the underlying InputStream
      */
     public InputStream setCurrentInputStream(InputStream in) {
-        this.in = new ThroughputLimitInputStream(new CounterInputStream(in, currentFileByteCounter), throughputLimit);
+        if(tlin==null) {
+            tlin = new ThroughputLimitInputStream(new CounterInputStream(in, currentFileByteCounter), throughputLimit);
+        }
+        else {
+            tlin.setUnderlyingInputStream(new CounterInputStream(in, currentFileByteCounter));
+        }
 
-        return this.in;
+        return tlin;
     }
 
 
     public void setThroughputLimit(long bytesPerSecond) {
         this.throughputLimit = bytesPerSecond;
 
-        if(in!=null)
-            in.setThroughputLimit(throughputLimit);
+        if(!isPaused() && tlin !=null)
+            tlin.setThroughputLimit(throughputLimit);
     }
 
     public long getThroughputLimit() {
@@ -264,10 +269,10 @@ public abstract class ExtendedFileJob extends FileJob {
     protected void jobStopped() {
         super.jobStopped();
 
-        if(in!=null) {
-            if(Debug.ON) Debug.trace("closing current InputStream "+in);
+        if(tlin !=null) {
+            if(Debug.ON) Debug.trace("closing current InputStream "+ tlin);
 
-            try { in.close(); }
+            try { tlin.close(); }
             catch(IOException e) {}
         }
     }
@@ -279,8 +284,8 @@ public abstract class ExtendedFileJob extends FileJob {
     protected void jobPaused() {
         super.jobPaused();
 
-        if(in!=null)
-            in.setThroughputLimit(0);
+        if(tlin !=null)
+            tlin.setThroughputLimit(0);
     }
 
     /**
@@ -290,8 +295,8 @@ public abstract class ExtendedFileJob extends FileJob {
     protected void jobResumed() {
         super.jobResumed();
 
-        if(in!=null)
-            in.setThroughputLimit(-1);
+        if(tlin !=null)
+            tlin.setThroughputLimit(-1);
     }
 
 //    /**
@@ -315,7 +320,7 @@ public abstract class ExtendedFileJob extends FileJob {
      * Advances file index and resets file bytes currentFileByteCounter. This method should be called by subclasses whenever the job
      * starts processing a new file.
      */
-    protected void nextFile(AbstractFile file) {
+    protected synchronized void nextFile(AbstractFile file) {
         totalByteCounter.add(currentFileByteCounter.getByteCount());
         currentFileByteCounter.reset();
 
