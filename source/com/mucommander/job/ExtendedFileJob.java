@@ -37,8 +37,7 @@ public abstract class ExtendedFileJob extends FileJob {
     private ThroughputLimitInputStream tlin;
 
     /** ThroughputLimit in bytes per second, -1 initially (no limit) */
-//    private long throughputLimit = -1;
-private long throughputLimit = 1048576;
+    private long throughputLimit = -1;
 
 
     /**
@@ -76,13 +75,11 @@ private long throughputLimit = 1048576;
                 long destFileSize = destFile.getSize();
         
                 if(append && destFileSize!=-1) {
-//                    this.in = new CounterInputStream(sourceFile.getInputStream(destFileSize), currentFileByteCounter);
                     setCurrentInputStream(sourceFile.getInputStream(destFileSize));
                     currentFileByteCounter.add(destFileSize);
                 }
                 else {
                     setCurrentInputStream(sourceFile.getInputStream());
-//                    this.in = new CounterInputStream(sourceFile.getInputStream(), currentFileByteCounter);
                 }
             }
             catch(IOException e) {
@@ -343,7 +340,6 @@ private long throughputLimit = 1048576;
                 nbFilesProcessed += getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
         }
 			
-//        return (int)(100*(nbFilesProcessed/(float)getNbFiles()));
         return nbFilesProcessed/(float)getNbFiles();
     }
     
