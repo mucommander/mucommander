@@ -140,14 +140,15 @@ public class ArchiveJob extends ExtendedFileJob {
                     return true;
                 }
             }
-            catch(IOException e) {
+            // Catch Exception rather than IOException as ZipOutputStream has been seen throwing NullPointerException
+            catch(Exception e) {
                 // If job was interrupted by the user at the time when the exception occurred,
                 // it most likely means that the exception by user cancellation.
                 // In this case, the exception should not be interpreted as an error.
                 if(isInterrupted())
                     return false;
 
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);
                 
                 int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops

@@ -459,24 +459,11 @@ public abstract class FileJob implements Runnable {
         FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
         FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
 
-        for(FileTable table=table1; ; table=table2) {
-            if(hasFolderChanged(table.getCurrentFolder())) {
-/*
-                try {
-                    // Refresh folder in the same thread
-                    table.getFolderPanel().refreshCurrentFolder();
-                }
-                catch(IOException e) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Folder couldn't be refreshed: "+e);
-                }
-*/
-                table.getFolderPanel().tryRefreshCurrentFolder();
+        if(hasFolderChanged(table1.getCurrentFolder()))
+            table1.getFolderPanel().tryRefreshCurrentFolder();
 
-            }
-		
-            if(table==table2)
-                break;
-        }
+        if(hasFolderChanged(table2.getCurrentFolder()))
+            table2.getFolderPanel().tryRefreshCurrentFolder();
 
         // Resume auto-refresh if auto-refresh has been paused
         table1.setAutoRefreshActive(true);
@@ -499,7 +486,6 @@ public abstract class FileJob implements Runnable {
      * Returns the percentage of job completion, as a float comprised between 0 and 1.
      */
     public float getTotalPercentDone() {
-//        return (int)(100*(getCurrentFileIndex()/(float)getNbFiles()));
         return getCurrentFileIndex()/(float)getNbFiles();
     }
 

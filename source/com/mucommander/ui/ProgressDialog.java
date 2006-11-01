@@ -9,11 +9,17 @@ import com.mucommander.text.DurationFormat;
 import com.mucommander.ui.comp.button.ButtonChoicePanel;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.comp.dialog.CollapseExpandButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.conf.ConfigurationManager;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicArrowButton;
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.CubicCurve2D;
+import java.awt.geom.QuadCurve2D;
+import java.awt.geom.GeneralPath;
 import java.awt.event.*;
 import java.util.Vector;
 
@@ -31,6 +37,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     private JProgressBar fileProgressBar;
 
     private JLabel currentBpsLabel;
+    private JSpinner speedLimitSpinner;
     private JLabel elapsedTimeLabel;
 
     private SpeedGraph speedGraph;
@@ -56,11 +63,11 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     private final static String STOP_ICON = "stop.png";
 
     // Dialog width is constrained to 320, height is not an issue (always the same)
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(360,10000);
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
 
     /** Height allocated to the 'speed graph' */
-    private final static int SPEED_GRAPH_HEIGHT = 80;
+    private final static int SPEED_GRAPH_HEIGHT = 100;
 
     /** How often should progress information be refreshed (in ms) */
     private final static int REFRESH_RATE = 1000;
@@ -104,10 +111,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             statsLabel = new JLabel(Translator.get("progress_bar.starting"));
             yPanel.add(statsLabel);
 			
-            // Do not show total progress bar if there is only one file
-            // (would show the exact same information as file progress bar)
-            if(job.getNbFiles()>1)
-                yPanel.add(totalProgressBar);
+//            // Do not show total progress bar if there is only one file
+//            // (would show the exact same information as file progress bar)
+//            if(job.getNbFiles()>1)
+            yPanel.add(totalProgressBar);
         }
         // Single progress bar
         else {
@@ -120,14 +127,34 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         yPanel.add(elapsedTimeLabel);
 
         if(dualBar) {
-            yPanel.addSpace(10);
-            currentBpsLabel = new JLabel(Translator.get("progress_bar.current_speed")+": ");
-            yPanel.add(currentBpsLabel);
+//            yPanel.addSpace(10);
+            JPanel tempPanel = new JPanel(new BorderLayout());
 
-            yPanel.addSpace(5);
+            this.currentBpsLabel = new JLabel(Translator.get("progress_bar.current_speed")+": ");
+            tempPanel.add(currentBpsLabel, BorderLayout.WEST);
+
+//            yPanel.add(tempPanel);
+
+            YBoxPanel detailsPanel = new YBoxPanel();
+//            detailsPanel.addSpace(5);
+
+//            JPanel tempPanel2 = new JPanel(new BorderLayout());
+//            tempPanel2.add(currentBpsLabel, BorderLayout.WEST);
+//            this.speedLimitSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 1000, 100));
+//            tempPanel2.add(speedLimitSpinner, BorderLayout.EAST);
+//            detailsPanel.add(currentBpsLabel);
+//            detailsPanel.add(tempPanel2);
+
             this.speedGraph = new SpeedGraph();
             speedGraph.setPreferredSize(new Dimension(0, SPEED_GRAPH_HEIGHT));
-            yPanel.add(this.speedGraph);
+            detailsPanel.add(speedGraph);
+
+            tempPanel.add(new CollapseExpandButton(Translator.get("progress_bar.details"), detailsPanel, this, true), BorderLayout.EAST);
+
+            yPanel.add(tempPanel);
+            yPanel.addSpace(5);
+
+            yPanel.add(detailsPanel);
         }
 
         yPanel.add(Box.createVerticalGlue());
@@ -355,7 +382,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
         private final int LINE_SPACING = 6;
 
-        private final int NB_SAMPLES_MAX = 1000;
+        private final int NB_SAMPLES_MAX = 320;
 
         private Vector samples = new Vector(NB_SAMPLES_MAX);
 
@@ -408,11 +435,28 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             }
 
             float yRatio = maxBps/((float)height-2*STROKE_WIDTH);
-
             int x = STROKE_WIDTH;
             for(int l=0; l<nbLines-1; l++) {
                 g.drawLine(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleIndex)).longValue()/yRatio), (x+=LINE_SPACING), height-STROKE_WIDTH-(int)(((Long)samples.elementAt(++sampleIndex)).longValue()/yRatio));
             }
+
+
+//            GeneralPath gp = new GeneralPath();
+//            int x = STROKE_WIDTH;
+//            gp.moveTo(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleIndex++)).longValue()/yRatio));
+//            x += LINE_SPACING;
+//            for(int l=1; l<nbLines-2; l+=2) {
+//                gp.quadTo(
+//                    x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleIndex)).longValue()/yRatio),
+//                    x+LINE_SPACING, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleIndex+1)).longValue()/yRatio)
+//                );
+//
+//                sampleIndex += 2;
+//                x += 2*LINE_SPACING;
+//
+//                g2d.draw(gp);
+//            }
+
 
 //            g.setColor(TEXT_COLOR);
 //            g.drawString(SizeFormat.format(maxBps, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB), 10, 10);

@@ -3081,6 +3081,18 @@ progress_bar.elapsed_time:FR:Temps écoulé
 
 
 
+progress_bar.details:EN:Details
+progress_bar.details:FR:Détails
+
+
+
+
+
+
+
+
+
+
 
 
 progress_bar.current_speed:EN:Current speed
