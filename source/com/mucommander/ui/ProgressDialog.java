@@ -249,8 +249,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     long bytesTotal = extendedFileJob.getTotalByteCounter().getByteCount();
                     long totalBps = (long)(bytesTotal*1000d/effectiveJobTime);
                     long currentBps = (long)((bytesTotal-lastBytesTotal)*1000d/(now-lastTime));
-if(Debug.ON) Debug.trace("currentBps="+currentBps+" timeDiff="+(now-lastTime));
-
 
                     // Update current file progress bar
                     float filePercentFloat = extendedFileJob.getFilePercentDone();
