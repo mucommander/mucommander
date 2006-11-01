@@ -189,7 +189,6 @@ public abstract class ExtendedFileJob extends FileJob {
         if(currentFileSize<=0)
             return 0;
         else
-//            return (int)(100*getCurrentFileByteCounter().getByteCount()/(float)currentFileSize);
             return getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
     }
 
@@ -197,7 +196,7 @@ public abstract class ExtendedFileJob extends FileJob {
     /**
      * Returns the number of bytes that have been processed in the current file.
      */
-    public synchronized ByteCounter getCurrentFileByteCounter() {
+    public ByteCounter getCurrentFileByteCounter() {
         return currentFileByteCounter;
     }
 
@@ -219,11 +218,12 @@ public abstract class ExtendedFileJob extends FileJob {
 
 
     /**
-     * Registers the given InputStream as currently used, to allow:
+     * Registers the given InputStream as currently in use, in order to:
      * <ul>
-     * <li>counting bytes that have been read from it (@see {@link #getCurrentFileByteCounter()}
-     * <li>blocking read methods calls when the job is paused
-     * <li>closing the InputStream when job is stopped
+     * <li>count the number of bytes that have been read from it (see {@link #getCurrentFileByteCounter()})
+     * <li>block read methods calls when the job is paused
+     * <li>limit the throughput if a limit has been specified (see {@link #setThroughputLimit(long)})
+     * <li>close the InputStream when the job is stopped
      * </ul>
      *
      * <p>This method should be called by subclasses when creating a new InputStream, before the InputStream is used.
@@ -243,13 +243,31 @@ public abstract class ExtendedFileJob extends FileJob {
     }
 
 
+    /**
+     * Sets a transfer throughput limit in bytes per seconds, replacing any previous limit.
+     * This limit corresponds to the number of bytes that can be read from a registered InputStream.
+     *
+     * <p>Specifying 0 or -1 disables any throughput limit, the transfer will be carried out at full speed.
+     *
+     * <p>If this job is paused, the new limit will be effective after the job has been resumed.
+     * If not, it will be effective immediately.
+     *
+     * @param bytesPerSecond new throughput limit in bytes per second, 0 or -1 to disable the limit
+     */
     public void setThroughputLimit(long bytesPerSecond) {
-        this.throughputLimit = bytesPerSecond;
+        // Note: ThroughputInputStream interprets 0 as a complete pause (blocks reads) which is different
+        // from what a user would expect when specifying 0 as a limit
+        this.throughputLimit = bytesPerSecond<=0?-1:bytesPerSecond;
 
         if(!isPaused() && tlin !=null)
             tlin.setThroughputLimit(throughputLimit);
     }
 
+
+    /**
+     * Returns the current transfer throughput limit, in bytes per second.
+     * 0 or -1 means that no there currently is no limit to the attainable transfer speed (full speed).
+     */
     public long getThroughputLimit() {
         return throughputLimit;
     }
@@ -258,7 +276,6 @@ public abstract class ExtendedFileJob extends FileJob {
     ////////////////////////
     // Overridden methods //
     ////////////////////////
-
 
     /**
      * Overrides {@link FileJob#jobStopped()} to stop any file processing by closing the source InputStream.
@@ -274,6 +291,7 @@ public abstract class ExtendedFileJob extends FileJob {
         }
     }
 
+
     /**
      * Overrides {@link FileJob#jobPaused()} to pause any file processing
      * by having the source InputStream's read methods lock.
@@ -284,6 +302,7 @@ public abstract class ExtendedFileJob extends FileJob {
         if(tlin !=null)
             tlin.setThroughputLimit(0);
     }
+
 
     /**
      * Overrides {@link FileJob#jobResumed()} to resume any file processing by releasing
@@ -296,30 +315,13 @@ public abstract class ExtendedFileJob extends FileJob {
             tlin.setThroughputLimit(-1);
     }
 
-//    /**
-//     * Overrides FileJob.stop() to stop any file copy (closes the source file's InputStream).
-//     */
-//    public void stop() {
-//        // Stop job BEFORE closing the stream so that the IOException thrown by copyStream
-//        // is not interpreted as a failure
-//        super.stop();
-//
-//        if(in!=null) {
-//            try {
-//                in.close();
-//            }
-//            catch(IOException e) {}
-//        }
-//    }
-
 
     /**
      * Advances file index and resets file bytes currentFileByteCounter. This method should be called by subclasses whenever the job
      * starts processing a new file.
      */
-    protected synchronized void nextFile(AbstractFile file) {
-        totalByteCounter.add(currentFileByteCounter.getByteCount());
-        currentFileByteCounter.reset();
+    protected void nextFile(AbstractFile file) {
+        totalByteCounter.add(currentFileByteCounter, true);
 
         super.nextFile(file);
     }

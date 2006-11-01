@@ -7,8 +7,10 @@ package com.mucommander.io;
  *
  * <p>Provided methods allow to read the the byte count, add a number bytes to it or reset it (make it zero).
  *
- * @see CounterInputStream
- * @see CounterOutputStream
+ * <p>This class is thread safe, ensuring that the counter is always in a consistent state.</p>
+ *
+ * @see com.mucommander.io.CounterInputStream
+ * @see com.mucommander.io.CounterOutputStream
  * @author Maxence Bernard
  */
 public class ByteCounter {
@@ -41,7 +43,7 @@ public class ByteCounter {
     /**
      * Return the number of bytes which have been accounted for.
      */
-    public long getByteCount() {
+    public synchronized long getByteCount() {
         if(addedCounter!=null)
             return count + addedCounter.getByteCount();
 
@@ -50,21 +52,39 @@ public class ByteCounter {
 
 
     /**
-     * Increases the byte counter to the provided number of bytes. If the specified number is negative,
+     * Increases the byte counter by the provided number of bytes. If the specified number is negative,
      * the byte counter will be left unchanged (won't be decreased).
      *
      * @param nbBytes number of bytes to add to the byte counter, will be ignored if negative
      */
-    public void add(long nbBytes) {
+    public synchronized void add(long nbBytes) {
         if(nbBytes>0)
             this.count += nbBytes;
     }
 
 
     /**
+     * Increases the byte counter by the number of bytes contained in the specified counter (as returned by its
+     * {@link #getByteCount()} method) and resets its byte counter after (if specified).
+     *
+     * @param counter the Bytecounter to add to this one, and reset after (if specified).
+     * @param resetAfter if true, the specified counter will be reset after its byte count has been added to this ByteCounter
+     */
+    public synchronized void add(ByteCounter counter, boolean resetAfter) {
+        // Hold a lock on the provided counter to make sure that it is not modified or accessed
+        // while this operation is carried out
+        synchronized(counter) {
+            add(counter.getByteCount());
+            if(resetAfter)
+                counter.reset();
+        }
+    }
+
+
+    /**
      * Resets the byte counter (make it zero).
      */
-    public void reset() {
+    public synchronized void reset() {
         this.count = 0;
     }
 }
