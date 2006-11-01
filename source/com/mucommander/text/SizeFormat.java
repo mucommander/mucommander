@@ -26,11 +26,14 @@ public class SizeFormat {
     /** Bit mask for short unit string, e.g. "bytes" */
     public final static int UNIT_LONG = 8;
 
+    /** Bit mask to add '/s' (per second) to the returned String */
+    public final static int UNIT_SPEED = 16;
+    
     /** Bit mask to include a space character between digits and unit parts */
-    public final static int INCLUDE_SPACE = 16;
+    public final static int INCLUDE_SPACE = 32;
 
     /** Bit mask to round any size < 1KB to 1KB (except 0 which will be 0 KB) */
-    public final static int ROUND_TO_KB = 32;
+    public final static int ROUND_TO_KB = 64;
 
     private final static int KB_1 = 1024;
     private final static int KB_10 = 10240;
@@ -41,6 +44,13 @@ public class SizeFormat {
     private final static long TB_1 = 1099511627776l;
     private final static long TB_10 = 10995116277760l;
 
+    public final static int BYTE_UNIT = 0;
+    public final static int KILO_BYTE_UNIT = 1;
+    public final static int MEGA_BYTE_UNIT = 2;
+    public final static int GIGA_BYTE_UNIT = 3;
+    public final static int TERA_BYTE_UNIT = 4;
+
+    
     /** DecimalFormat instance to localize thousands separators */
     private final static DecimalFormat DECIMAL_FORMAT = (DecimalFormat)NumberFormat.getInstance();
 
@@ -49,7 +59,7 @@ public class SizeFormat {
 
 
     //////////////////////////
-    // Locatlized text keys //
+    // Localized text keys //
     //////////////////////////
 
     private final static String BYTE = Translator.get("unit.byte");
@@ -59,7 +69,9 @@ public class SizeFormat {
     private final static String MB = Translator.get("unit.mb");
     private final static String GB = Translator.get("unit.gb");
     private final static String TB = Translator.get("unit.tb");
-	
+
+    private final static String SPEED_KEY = "unit.speed";
+
 	
     public static String format(long size, int format) {
         if(size<0)
@@ -142,9 +154,38 @@ public class SizeFormat {
             }
         }
 
+        // Add localized '/s' to unit string if unit is speed
+        if((format&UNIT_SPEED)!=0)
+            unitString = Translator.get(SPEED_KEY, unitString);
+
         return digitsString+((format&INCLUDE_SPACE)!=0?" ":"")+unitString;
     }
     
-    
-    
+
+
+    public static String getUnitString(int unit, boolean speedUnit) {
+        String unitString;
+
+        switch(unit) {
+            case BYTE_UNIT:
+                unitString = B;
+                break;
+            case KILO_BYTE_UNIT:
+                unitString = KB;
+                break;
+            case MEGA_BYTE_UNIT:
+                unitString = MB;
+                break;
+            case GIGA_BYTE_UNIT:
+                unitString = GB;
+                break;
+            case TERA_BYTE_UNIT:
+                unitString = TB;
+                break;
+            default:
+                return "";
+        }
+
+        return speedUnit?Translator.get(SPEED_KEY, unitString):unitString;
+    }
 }

@@ -86,7 +86,7 @@ public class ThroughputLimitInputStream extends InputStream {
                     if(bpsLimit==0)
                         wait();
                     else
-                        wait(1000); 
+                        wait(System.currentTimeMillis()-currentSecond*1000);
                 }
                 catch(InterruptedException e) {
 //if(Debug.ON) Debug.trace("interrupted!");

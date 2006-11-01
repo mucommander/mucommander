@@ -3028,61 +3028,49 @@ mkfile_dialog.description:FR:Créer le fichier vide
 
 
 
-################
-# Progress bar #
-################
+###################
+# Progress dialog #
+###################
 
-progress_bar.starting:EN:Transfer starting...
-progress_bar.starting:FR:Démarrage du transfert...
-progress_bar.starting:DE:Transfer startet...
-progress_bar.starting:ES:Comenzando transferencia...
-progress_bar.starting:CS:Přenos zahájen...
-progress_bar.starting:zh_TW:傳送開始...
-progress_bar.starting:PL:Transfer rozpoczęty...
-progress_bar.starting:HU:Átvitel kezdődik...
-progress_bar.starting:RU:Передача файлов начата...
-progress_bar.starting:ZH_CN:传送开始...
-progress_bar.starting:SI:Prenos se izvaja...
+progress_dialog.starting:EN:Transfer starting...
+progress_dialog.starting:FR:Démarrage du transfert...
+progress_dialog.starting:DE:Transfer startet...
+progress_dialog.starting:ES:Comenzando transferencia...
+progress_dialog.starting:CS:Přenos zahájen...
+progress_dialog.starting:zh_TW:傳送開始...
+progress_dialog.starting:PL:Transfer rozpoczęty...
+progress_dialog.starting:HU:Átvitel kezdődik...
+progress_dialog.starting:RU:Передача файлов начата...
+progress_dialog.starting:ZH_CN:传送开始...
+progress_dialog.starting:SI:Prenos se izvaja...
 
-progress_bar.hide:EN:Hide
-progress_bar.hide:FR:Cacher
-progress_bar.hide:DE:Verstecken
-progress_bar.hide:ES:Ocultar
-progress_bar.hide:CS:Skrýt
-progress_bar.hide:zh_TW:隱藏
-progress_bar.hide:PL:Ukryj
-progress_bar.hide:HU:rejt
-progress_bar.hide:RU:Скрыть
-progress_bar.hide:ZH_CN:隐藏
-progress_bar.hide:SI:Skrij
+progress_dialog.hide:EN:Hide
+progress_dialog.hide:FR:Cacher
+progress_dialog.hide:DE:Verstecken
+progress_dialog.hide:ES:Ocultar
+progress_dialog.hide:CS:Skrýt
+progress_dialog.hide:zh_TW:隱藏
+progress_dialog.hide:PL:Ukryj
+progress_dialog.hide:HU:rejt
+progress_dialog.hide:RU:Скрыть
+progress_dialog.hide:ZH_CN:隐藏
+progress_dialog.hide:SI:Skrij
 
 # %1 is the amount of data transferred (already formatted+localized) and %2 the transfer speed.
-progress_bar.transferred:EN:Transferred %1 at %2/s
-progress_bar.transferred:FR:%1 transférés à %2/s
-progress_bar.transferred:DE:Transferiert %1 von %2/s
-progress_bar.transferred:ES:%1 transferidos a %2/s
-progress_bar.transferred:CS:Přeneseno %1 při %2/s
-progress_bar.transferred:zh_TW:已傳送 %1 速度 %2/s
-progress_bar.transferred:PL:Przesłano %1 z %2/s
-progress_bar.transferred:HU:%1 átvitel %2/s alatt megtörtént
-progress_bar.transferred:RU:Передано %1, средняя скорость %2/сек
-progress_bar.transferred:ZH_CN:已传送 %1 速度 %2/s
-progress_bar.transferred:SI:Prenešeno %1 od %2/s
+progress_dialog.transferred:EN:Transferred %1 at %2
+progress_dialog.transferred:FR:%1 transférés à %2
+progress_dialog.transferred:DE:Transferiert %1 von %2
+progress_dialog.transferred:ES:%1 transferidos a %2
+progress_dialog.transferred:CS:Přeneseno %1 při %2
+progress_dialog.transferred:zh_TW:已傳送 %1 速度 %2
+progress_dialog.transferred:PL:Przesłano %1 z %2
+progress_dialog.transferred:HU:%1 átvitel %2 alatt megtörtént
+progress_dialog.transferred:RU:Передано %1, средняя скорость %2
+progress_dialog.transferred:ZH_CN:已传送 %1 速度 %2
+progress_dialog.transferred:SI:Prenešeno %1 od %2
 
-progress_bar.elapsed_time:EN:Elapsed time
-progress_bar.elapsed_time:FR:Temps écoulé
-
-
-
-
-
-
-
-
-
-
-progress_bar.details:EN:Details
-progress_bar.details:FR:Détails
+progress_dialog.elapsed_time:EN:Elapsed time
+progress_dialog.elapsed_time:FR:Temps écoulé
 
 
 
@@ -3093,11 +3081,34 @@ progress_bar.details:FR:Détails
 
 
 
+progress_dialog.advanced:EN:Advanced
+progress_dialog.advanced:FR:Avancé
 
 
-progress_bar.current_speed:EN:Current speed
-progress_bar.current_speed:FR:Vitesse actuelle
 
+
+
+
+
+
+
+
+
+
+progress_dialog.current_speed:EN:Current speed
+progress_dialog.current_speed:FR:Vitesse actuelle
+
+
+
+
+
+
+
+
+
+
+progress_dialog.limit_speed:EN:Limit speed
+progress_dialog.limit_speed:FR:Limiter la vitesse
 
 
 
@@ -4898,6 +4909,19 @@ unit.tb:HU:TB
 unit.tb:RU:ТБ
 unit.tb:zh_CN:TB
 unit.tb:SI:TB
+
+unit.speed:EN:%1/s
+unit.speed:FR:%1/s
+unit.speed:DE:%1/s
+unit.speed:ES:%1/s
+unit.speed:CS:%1/s
+unit.speed:zh_TW:%1/s
+unit.speed:PL:%1/s
+unit.speed:HU:%1/s
+unit.speed:RU:%1/сек
+unit.speed:zh_CN:%1/s
+unit.speed:SI:%1/s
+
 
 ############
 # Duration #

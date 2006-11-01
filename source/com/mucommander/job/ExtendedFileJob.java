@@ -26,14 +26,19 @@ import java.io.InputStream;
  */
 public abstract class ExtendedFileJob extends FileJob {
 
-//    private CounterInputStream cin;
-    private ThroughputLimitInputStream in;
-
     /** Contains the number of bytes processed in the current file so far, see {@link #getCurrentFileByteCounter()} ()} */
     private ByteCounter currentFileByteCounter;
 
     /** Contains the number of bytes processed so far, see {@link #getTotalByteCounter()} */
     private ByteCounter totalByteCounter;
+
+
+    /** InputStream currently being processed, may be null */
+    private ThroughputLimitInputStream in;
+
+    /** ThroughputLimit in bytes per second, -1 initially (no limit) */
+    private long throughputLimit = -1;
+
 
 
     /**
@@ -230,11 +235,23 @@ public abstract class ExtendedFileJob extends FileJob {
      * @return the 'augmented' InputStream using the given stream as the underlying InputStream
      */
     public InputStream setCurrentInputStream(InputStream in) {
-        this.in = new ThroughputLimitInputStream(new CounterInputStream(in, currentFileByteCounter));
+        this.in = new ThroughputLimitInputStream(new CounterInputStream(in, currentFileByteCounter), throughputLimit);
 
         return this.in;
     }
 
+
+    public void setThroughputLimit(long bytesPerSecond) {
+        this.throughputLimit = bytesPerSecond;
+
+        if(in!=null)
+            in.setThroughputLimit(throughputLimit);
+    }
+
+    public long getThroughputLimit() {
+        return throughputLimit;
+    }
+    
 
     ////////////////////////
     // Overridden methods //
