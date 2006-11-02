@@ -220,8 +220,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         repaintThread = new Thread(this, "com.mucommander.ui.ProgressDialog's Thread");
         repaintThread.start();
 
-job.setPaused(true);
-
         showDialog();
     }
 
