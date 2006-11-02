@@ -97,6 +97,21 @@ public class ShellHistoryManager {
         if(command.trim().equals(""))
             return;
 
+        // Ignores the command if it's the same as the last one.
+        // There is no last command if history is empty.
+        if(historyEnd != historyStart) {
+            int lastIndex;
+
+            // Computes the index of the previous command.
+            if(historyEnd == 0)
+                lastIndex = history.length;
+            else
+                lastIndex = historyEnd - 1;
+
+            if(command.equals(history[lastIndex]))
+                return;
+        }
+
         // Updates the history buffer.
         history[historyEnd] = command;
         historyEnd++;
