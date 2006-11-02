@@ -21,27 +21,29 @@ public class CopyDialog extends DestinationDialog {
      * @param mainFrame the main frame this dialog is attached to.
      * @param isShiftDown true if shift key was pressed when invoking this dialog.
      */
-    public CopyDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
+    public CopyDialog(MainFrame mainFrame, FileSet files, boolean localCopy) {
         super(mainFrame, files,
               Translator.get("copy_dialog.copy"),
               Translator.get("copy_dialog.destination"),
               Translator.get("copy_dialog.copy"),
               Translator.get("copy_dialog.error_title"));
-	    
-        int nbFiles = files.size();
-        
+
+        String fieldText;     // Text to display in the destination field.
+        int    startPosition; // Index of the first selected character in the destination field.
+        int    endPosition;   // Index of the last selected character in the destination field.
+        int    nbFiles = files.size();
+
         AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
-        String fieldText;
 
         // Local copy: fill text field with the sole file's name
-        if(isShiftDown && nbFiles==1) {
-            fieldText = ((AbstractFile)files.elementAt(0)).getName();
+        if(localCopy) {
+            fieldText     = ((AbstractFile)files.elementAt(0)).getName();
+            startPosition = 0;
+            endPosition   = fieldText.indexOf('.');
 
-            // Select the filename without extension, only if filename part is not empty (unlike '.DS_Store' for example)
-            int extPos = fieldText.indexOf('.');
-            int len = fieldText.length();
-			
-            setTextField(fieldText, 0, extPos>0?extPos:len);
+            // If the file doesn't have an extension, selection extends to the end of its name.
+            if(endPosition <= 0)
+                endPosition = fieldText.length();
         }
         // Fill text field with absolute path, and if there is only one file, 
         // append file's name
@@ -53,14 +55,29 @@ public class CopyDialog extends DestinationDialog {
             if(nbFiles==1) {
                 AbstractFile file = ((AbstractFile)files.elementAt(0));
                 AbstractFile testFile;
+
+                startPosition  = fieldText.length();
                 // TODO: find a way to remove this AbstractFile.getFile() which can lock the main thread if the file is on a remote filesystem
-                if(!(file.isDirectory() && (testFile= FileFactory.getFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory()))
+                if(!(file.isDirectory() && (testFile= FileFactory.getFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory())) {
+                    endPosition = file.getName().indexOf('.');
+                    if(endPosition > 0)
+                        endPosition += startPosition;
+                    else
+                        endPosition = startPosition + file.getName().length();
                     fieldText += file.getName();
+                }
+                else {
+                    endPosition = fieldText.length();
+                }
+            }
+            else {
+                startPosition = fieldText.length();
+                endPosition   = startPosition;
             }
 
-            setTextField(fieldText);
         }
-		
+        setTextField(fieldText, startPosition, endPosition);
+
         showDialog();
     }
 
