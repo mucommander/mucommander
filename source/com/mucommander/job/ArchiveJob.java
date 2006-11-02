@@ -19,7 +19,7 @@ import java.io.InputStream;
  *
  * @author Maxence Bernard
  */
-public class ArchiveJob extends ExtendedFileJob {
+public class ArchiveJob extends TransferFileJob {
 
     /** Destination archive file */
     private AbstractFile destFile;

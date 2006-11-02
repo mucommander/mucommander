@@ -129,10 +129,11 @@ public class ThroughputLimitInputStream extends InputStream {
                     return Integer.MAX_VALUE;
 
                 try {
-                    // If limit is 0, wait indefinitely, setThroughputLimit will wake up this thread
+                    // If limit is 0, wait indefinitely for a call to notify() from setThroughputLimit()
                     if(bpsLimit==0)
                         wait();
-                    // Wait until the current second is over for more bytes to be available
+                    // Wait until the current second is over for more bytes to be available,
+                    // or until a call to notify() is made from setThroughputLimit()
                     else {
                         wait(msUntilNextSecond);
                     }

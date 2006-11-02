@@ -17,14 +17,14 @@ import java.io.InputStream;
 
 
 /**
- * ExtendedFileJob is a container for a file task : basically an operation that involves files and bytes.<br>
+ * TransferFileJob is a container for a file task : basically an operation that involves files and bytes.<br>
  *
- * <p>What makes ExtendedFileJob different from FileJob (and explains its very inspired name) is that a class
- * implementing ExtendedFileJob has to be able to give progress information about the file currently being processed.
+ * <p>What makes TransferFileJob different from FileJob (and explains its very inspired name) is that a class
+ * implementing TransferFileJob has to be able to give progress information about the file currently being processed.
  * 
  * @author Maxence Bernard
  */
-public abstract class ExtendedFileJob extends FileJob {
+public abstract class TransferFileJob extends FileJob {
 
     /** Contains the number of bytes processed in the current file so far, see {@link #getCurrentFileByteCounter()} ()} */
     private ByteCounter currentFileByteCounter;
@@ -41,9 +41,9 @@ public abstract class ExtendedFileJob extends FileJob {
 
 
     /**
-     * Creates a new ExtendedFileJob.
+     * Creates a new TransferFileJob.
      */
-    public ExtendedFileJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files) {
+    public TransferFileJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files) {
         super(progressDialog, mainFrame, files);
 
         this.currentFileByteCounter = new ByteCounter();
@@ -327,13 +327,34 @@ public abstract class ExtendedFileJob extends FileJob {
     }
 
 
+
+//    /**
+//     * Method overridden to return a more accurate percentage of job processed so far by taking
+//     * into account the current file's processed percentage.
+//     */
+//    public float getTotalPercentDone() {
+//        float nbFilesProcessed = getNbFilesProcessed();
+//
+//        // If file is in base folder and is not a directory
+//        if(currentFile!=null && files.indexOf(currentFile)!=-1 && !currentFile.isDirectory()) {
+//            // Take into account current file's progress
+//            long currentFileSize = currentFile.getSize();
+//            if(currentFileSize>0)
+//                nbFilesProcessed += getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
+//        }
+//
+////if(Debug.ON) Debug.trace("nbFilesProcessed="+(int)nbFilesProcessed+" nbFilesDiscovered="+getNbFilesDiscovered()+" %="+((int)100*nbFilesProcessed/getNbFilesDiscovered()));
+//
+//        return nbFilesProcessed/getNbFilesDiscovered();
+//    }
+
     /**
      * Method overridden to return a more accurate percentage of job processed so far by taking
      * into account the current file's processed percentage.
      */
     public float getTotalPercentDone() {
         float nbFilesProcessed = getCurrentFileIndex();
-		
+
         // If file is in base folder and is not a directory
         if(currentFile!=null && files.indexOf(currentFile)!=-1 && !currentFile.isDirectory()) {
             // Take into account current file's progress
@@ -341,7 +362,7 @@ public abstract class ExtendedFileJob extends FileJob {
             if(currentFileSize>0)
                 nbFilesProcessed += getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
         }
-			
+
         return nbFilesProcessed/(float)getNbFiles();
     }
     

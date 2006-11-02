@@ -1,7 +1,7 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.job.ExtendedFileJob;
+import com.mucommander.job.TransferFileJob;
 import com.mucommander.job.FileJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -12,7 +12,6 @@ import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.comp.dialog.CollapseExpandButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.Debug;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -49,7 +48,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 //    private JButton hideButton;
 
     private FileJob job;
-    private ExtendedFileJob extendedFileJob;
+    private TransferFileJob transferFileJob;
 
     private Thread repaintThread;
 
@@ -106,7 +105,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 		
         YBoxPanel yPanel = new YBoxPanel();
         // 2 progress bars
-        if (extendedFileJob!=null) {
+        if (transferFileJob !=null) {
             yPanel.add(currentFileLabel);
             currentFileProgressBar = new JProgressBar();
             currentFileProgressBar.setStringPainted(true);
@@ -116,9 +115,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             totalTransferredLabel = new JLabel(Translator.get("progress_dialog.starting"));
             yPanel.add(totalTransferredLabel);
 			
-//            // Do not show total progress bar if there is only one file
-//            // (would show the exact same information as file progress bar)
-//            if(job.getNbFiles()>1)
             yPanel.add(totalProgressBar);
         }
         // Single progress bar
@@ -132,7 +128,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         elapsedTimeLabel.setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, StatusBar.WAITING_ICON));
         yPanel.add(elapsedTimeLabel);
 
-        if(extendedFileJob!=null) {
+        if(transferFileJob !=null) {
             JPanel tempPanel = new JPanel(new BorderLayout());
 
             this.currentSpeedLabel = new JLabel();
@@ -216,20 +212,22 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     public void start(FileJob job) {
         this.job = job;
-        if(job instanceof ExtendedFileJob)
-            this.extendedFileJob = (ExtendedFileJob)job;
+        if(job instanceof TransferFileJob)
+            this.transferFileJob = (TransferFileJob)job;
 
         initUI();
         
         repaintThread = new Thread(this, "com.mucommander.ui.ProgressDialog's Thread");
         repaintThread.start();
 
-    	showDialog();
+job.setPaused(true);
+
+        showDialog();
     }
 
 
     private void updateThroughputLimit() {
-        extendedFileJob.setThroughputLimit(limitSpeedCheckBox.isSelected()?SizeFormat.getUnitBytes(speedUnitComboBox.getSelectedIndex())*(((Integer)limitSpeedSpinner.getValue())).intValue():-1);
+        transferFileJob.setThroughputLimit(limitSpeedCheckBox.isSelected()?SizeFormat.getUnitBytes(speedUnitComboBox.getSelectedIndex())*(((Integer)limitSpeedSpinner.getValue())).intValue():-1);
     }
 
     private void updateCurrentSpeedLabel(String value) {
@@ -258,20 +256,20 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                 if(effectiveJobTime==0)
                     effectiveJobTime = 1;   // To avoid potential zero divisions
 
-                if (extendedFileJob!=null) {
-                    long bytesTotal = extendedFileJob.getTotalByteCounter().getByteCount();
+                if (transferFileJob !=null) {
+                    long bytesTotal = transferFileJob.getTotalByteCounter().getByteCount();
                     long totalBps = (long)(bytesTotal*1000d/effectiveJobTime);
                     long currentBps = (long)((bytesTotal-lastBytesTotal)*1000d/(now-lastTime));
 
                     // Update current file progress bar
-                    float filePercentFloat = extendedFileJob.getFilePercentDone();
+                    float filePercentFloat = transferFileJob.getFilePercentDone();
                     int filePercentInt = (int)(100*filePercentFloat);
                     currentFileProgressBar.setValue(filePercentInt);
 
                     progressText = filePercentInt+"% - ";
 
                     // Add estimated remaining time (ETA) for current file
-                    long currentFileSize = extendedFileJob.getCurrentFileSize();
+                    long currentFileSize = transferFileJob.getCurrentFileSize();
                     // If current file size is not available, ETA cannot be calculated
                     if(currentFileSize==-1)
                         progressText += "?";
@@ -281,7 +279,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                         progressText += DurationFormat.getInfiniteSymbol();
                     }
                     else {
-                        currentFileRemainingTime = (long)((1000*(currentFileSize-extendedFileJob.getCurrentFileByteCounter().getByteCount()))/(float)totalBps);
+                        currentFileRemainingTime = (long)((1000*(currentFileSize- transferFileJob.getCurrentFileByteCounter().getByteCount()))/(float)totalBps);
                         progressText += DurationFormat.format(currentFileRemainingTime);
                     }
 
@@ -376,7 +374,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             else {
                 pauseResumeButton.setText(Translator.get("resume"));
                 pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
-                updateCurrentSpeedLabel("N/A");
+
+                if(transferFileJob!=null)
+                    updateCurrentSpeedLabel("N/A");
             }
 
             // Update buttons mnemonics
@@ -516,7 +516,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             float yRatio = maxBps/((float)height-2*STROKE_WIDTH);
 
             // Draw throughput limit as an horizontal line, only if there is a limit
-            long bpsLimit = extendedFileJob.getThroughputLimit();
+            long bpsLimit = transferFileJob.getThroughputLimit();
             g.setColor(BPS_LIMIT_COLOR);
             if(bpsLimit>0) {
                 int y = height-STROKE_WIDTH-(int)(bpsLimit/yRatio);

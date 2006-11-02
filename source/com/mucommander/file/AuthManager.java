@@ -31,7 +31,7 @@ public class AuthManager {
         if((path.endsWith("/") && !path.equals("/")) || (path.endsWith("\\") && !path.equals("\\")))
             path = path.substring(0, path.length());
         entries.put(path, authInfo);
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("path="+path+" "+"authInfo="+authInfo+", entries = "+entries);
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("path="+path+" "+"authInfo="+authInfo+", entries = "+entries);
     }
 
 	
@@ -43,9 +43,9 @@ public class AuthManager {
      */
     public static AuthInfo get(String path) {
         AuthInfo info = (AuthInfo)entries.get(path);
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("path="+path+" authInfo="+info+" entries="+entries);
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("path="+path+" authInfo="+info+" entries="+entries);
         if(info!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning= "+info);
+//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("returning= "+info);
             return info;
         }
 	
@@ -109,7 +109,7 @@ public class AuthManager {
         // Retrieve login/password from URL (if any)
         AuthInfo urlAuthInfo = AuthInfo.getAuthInfo(fileURL);
 		
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" fileURL="+fileURL+" urlAuthInfo="+urlAuthInfo+" addAuthInfo="+addAuthInfo);
+//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(" fileURL="+fileURL+" urlAuthInfo="+urlAuthInfo+" addAuthInfo="+addAuthInfo);
 		
         // if the URL specifies a login and password (typed in by the user)
         // add it to AuthManager and use it

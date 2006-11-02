@@ -24,7 +24,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class SendMailJob extends ExtendedFileJob {
+public class SendMailJob extends TransferFileJob {
 
     /** True after connection to mail server has been established */
     private boolean connectedToMailServer;
@@ -241,7 +241,7 @@ public class SendMailJob extends ExtendedFileJob {
 
 
     /**********************************************
-     *** ExtendedFileJob methods implementation ***
+     *** TransferFileJob methods implementation ***
      **********************************************/
 
     public String getStatusString() {

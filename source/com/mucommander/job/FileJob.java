@@ -32,6 +32,9 @@ public abstract class FileJob implements Runnable {
     /** Is this job paused ? */
     private boolean isPaused;
 
+    /** Lock used when job is being paused */
+    private Object pauseLock = new Object();
+
     /** Timestamp in milliseconds when job started */
     private long startDate;
 
@@ -68,8 +71,11 @@ public abstract class FileJob implements Runnable {
 	
     /** File to be selected after job has finished (can be null if not set) */
     private AbstractFile fileToSelect;
-	
-	
+
+
+//    private int nbFilesProcessed;
+//    private int nbFilesDiscovered;
+
     protected final static int SKIP_ACTION = 0;
     protected final static int RETRY_ACTION = 1;
     protected final static int CANCEL_ACTION = 2;
@@ -205,27 +211,33 @@ public abstract class FileJob implements Runnable {
         return jobThread == null;
     }
 
-	
+
     /**
      * Sets or unsets this job in paused mode.
      */
     public void setPaused(boolean paused) {
-        // Resume job if it was paused
-        if(!paused && this.isPaused) {
-            // Calculate pause time
-            this.pausedTime += System.currentTimeMillis() - this.pauseStartDate;
-            // Call the jobResumed method to notify of the new job's state
-            jobResumed();
-        }
-        // Pause job if it not paused already
-        else if(paused && !this.isPaused) {
-            // Memorize pause time in order to calculate pause time when the job is resumed
-            this.pauseStartDate = System.currentTimeMillis();
-            // Call the jobPaused method to notify of the new job's state
-            jobPaused();
-        }
+        // Lock the pause lock while updating paused status
+        synchronized(pauseLock) {
+            // Resume job if it was paused
+            if(!paused && this.isPaused) {
+                // Calculate pause time
+                this.pausedTime += System.currentTimeMillis() - this.pauseStartDate;
+                // Call the jobResumed method to notify of the new job's state
+                jobResumed();
 
-        this.isPaused = paused;
+                // Wake up the job's thread that is potentially waiting for pause to be over 
+                pauseLock.notify();
+            }
+            // Pause job if it not paused already
+            else if(paused && !this.isPaused) {
+                // Memorize pause time in order to calculate pause time when the job is resumed
+                this.pauseStartDate = System.currentTimeMillis();
+                // Call the jobPaused method to notify of the new job's state
+                jobPaused();
+            }
+
+            this.isPaused = paused;
+        }
     }
 
 
@@ -245,9 +257,41 @@ public abstract class FileJob implements Runnable {
      */
     protected void nextFile(AbstractFile file) {
         this.currentFile = file;
+
+        // Lock the pause lock
+        synchronized(pauseLock) {
+            // Loop while job is paused, there shouldn't normally be more than one loop
+            while(isPaused) {
+                try {
+                    // Wait for a call to notify()
+                    pauseLock.wait();
+                } catch(InterruptedException e) {
+                    // No more problem, loop one more time
+                }
+            }
+        }
+//        if(this.currentFile!=null)
+//            this.nbFilesProcessed++;
     }
 
-	
+
+//    protected void fileDiscovered(AbstractFile file) {
+//        this.nbFilesDiscovered++;
+//    }
+//
+//    protected void filesDiscovered(AbstractFile files[]) {
+//        this.nbFilesDiscovered += files.length;
+//    }
+//
+//    protected int getNbFilesDiscovered() {
+//        return this.nbFilesDiscovered;
+//    }
+//
+//    protected int getNbFilesProcessed() {
+//        return this.nbFilesProcessed;
+//    }
+//
+
     /**
      * Returns some info about the file currently being processed, for example : "test.zip" (14KB)
      */
@@ -327,6 +371,8 @@ public abstract class FileJob implements Runnable {
 
         // Notifies that this job starts
         jobStarted();
+
+//this.nbFilesDiscovered += nbFiles;
 
         // Loop on all source files, checking that job has not been interrupted
         for(int i=0; i<nbFiles; i++) {

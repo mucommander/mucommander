@@ -17,7 +17,7 @@ import java.io.IOException;
  *
  * @author Maxence Bernard
  */
-public class MoveJob extends ExtendedFileJob {
+public class MoveJob extends TransferFileJob {
 
     /** Base destination folder */
     protected AbstractFile baseDestFolder;

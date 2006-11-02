@@ -17,7 +17,7 @@ import java.io.IOException;
  *
  * @author Maxence Bernard
  */
-public class CopyJob extends ExtendedFileJob {
+public class CopyJob extends TransferFileJob {
 
     /** Base destination folder */
     protected AbstractFile baseDestFolder;
@@ -176,6 +176,7 @@ public class CopyJob extends ExtendedFileJob {
                 try {
                     // for each file in folder...
                     AbstractFile subFiles[] = file.ls();
+//filesDiscovered(subFiles);
                     for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(subFiles[i]);
