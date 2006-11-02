@@ -3044,17 +3044,17 @@ progress_dialog.starting:RU:Передача файлов начата...
 progress_dialog.starting:ZH_CN:传送开始...
 progress_dialog.starting:SI:Prenos se izvaja...
 
-progress_dialog.hide:EN:Hide
-progress_dialog.hide:FR:Cacher
-progress_dialog.hide:DE:Verstecken
-progress_dialog.hide:ES:Ocultar
-progress_dialog.hide:CS:Skrýt
-progress_dialog.hide:zh_TW:隱藏
-progress_dialog.hide:PL:Ukryj
-progress_dialog.hide:HU:rejt
-progress_dialog.hide:RU:Скрыть
-progress_dialog.hide:ZH_CN:隐藏
-progress_dialog.hide:SI:Skrij
+#progress_dialog.hide:EN:Hide
+#progress_dialog.hide:FR:Cacher
+#progress_dialog.hide:DE:Verstecken
+#progress_dialog.hide:ES:Ocultar
+#progress_dialog.hide:CS:Skrýt
+#progress_dialog.hide:zh_TW:隱藏
+#progress_dialog.hide:PL:Ukryj
+#progress_dialog.hide:HU:rejt
+#progress_dialog.hide:RU:Скрыть
+#progress_dialog.hide:ZH_CN:隐藏
+#progress_dialog.hide:SI:Skrij
 
 # %1 is the amount of data transferred (already formatted+localized) and %2 the transfer speed.
 progress_dialog.transferred:EN:Transferred %1 at %2

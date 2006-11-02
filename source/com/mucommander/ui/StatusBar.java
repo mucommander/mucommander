@@ -72,7 +72,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     private final static int VOLUME_INFO_SIZE_FORMAT = SizeFormat.DIGITS_SHORT| SizeFormat.UNIT_SHORT| SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB;
 
     /** Icon that is displayed when folder is changing */
-    private final static String WAITING_ICON = "waiting.png";
+    public final static String WAITING_ICON = "waiting.png";
 
 
     /**

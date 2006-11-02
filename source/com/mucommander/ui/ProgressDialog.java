@@ -28,13 +28,13 @@ import java.util.Vector;
  */
 public class ProgressDialog extends FocusDialog implements Runnable, ActionListener, ItemListener, ChangeListener {
 
-    private JLabel infoLabel;
-    private JLabel statsLabel;
+    private JLabel currentFileLabel;
+    private JLabel totalTransferredLabel;
 
     private JProgressBar totalProgressBar;
-    private JProgressBar fileProgressBar;
+    private JProgressBar currentFileProgressBar;
 
-    private JLabel currentBpsLabel;
+    private JLabel currentSpeedLabel;
     private JCheckBox limitSpeedCheckBox;
     private JSpinner limitSpeedSpinner;
     private JComboBox speedUnitComboBox;
@@ -42,6 +42,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     private SpeedGraph speedGraph;
 
+    private CollapseExpandButton collapseExpandButton;
     private ButtonChoicePanel buttonsChoicePanel;
     private JButton pauseResumeButton;
     private JButton stopButton;
@@ -52,9 +53,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     private Thread repaintThread;
 
-//    /* True if the current job is an ExtendedFileJob */
-//    private boolean dualBar;
-
     private MainFrame mainFrame;
 
     private boolean firstTimeActivated = true;
@@ -63,6 +61,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     private final static String RESUME_ICON = "resume.png";
     private final static String PAUSE_ICON = "pause.png";
     private final static String STOP_ICON = "stop.png";
+    private final static String CURRENT_SPEED_ICON = "speed.png";
 
     // Dialog width is constrained to 320, height is not an issue (always the same)
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);
@@ -73,6 +72,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     /** How often should progress information be refreshed (in ms) */
     private final static int REFRESH_RATE = 1000;
+
+    private final static String EXPANDED_CONF_VAR = "prefs.progress_dialog.expanded";
 
 
     static {
@@ -89,6 +90,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         // Sets maximum and minimum dimensions for this dialog
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
+
+        setResizable(false);
     }
     
     
@@ -98,20 +101,20 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         totalProgressBar = new JProgressBar();
         totalProgressBar.setStringPainted(true);
         totalProgressBar.setAlignmentX(LEFT_ALIGNMENT);
-        infoLabel = new JLabel(job.getStatusString());
-        infoLabel.setAlignmentX(LEFT_ALIGNMENT);
+        currentFileLabel = new JLabel(job.getStatusString());
+        currentFileLabel.setAlignmentX(LEFT_ALIGNMENT);
 		
         YBoxPanel yPanel = new YBoxPanel();
         // 2 progress bars
         if (extendedFileJob!=null) {
-            yPanel.add(infoLabel);
-            fileProgressBar = new JProgressBar();
-            fileProgressBar.setStringPainted(true);
-            yPanel.add(fileProgressBar);
+            yPanel.add(currentFileLabel);
+            currentFileProgressBar = new JProgressBar();
+            currentFileProgressBar.setStringPainted(true);
+            yPanel.add(currentFileProgressBar);
             yPanel.addSpace(10);
 		
-            statsLabel = new JLabel(Translator.get("progress_dialog.starting"));
-            yPanel.add(statsLabel);
+            totalTransferredLabel = new JLabel(Translator.get("progress_dialog.starting"));
+            yPanel.add(totalTransferredLabel);
 			
 //            // Do not show total progress bar if there is only one file
 //            // (would show the exact same information as file progress bar)
@@ -120,20 +123,22 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         }
         // Single progress bar
         else {
-            yPanel.add(infoLabel);
+            yPanel.add(currentFileLabel);
             yPanel.add(totalProgressBar);
         }
 
         yPanel.addSpace(10);
         elapsedTimeLabel = new JLabel(Translator.get("progress_dialog.elapsed_time")+": ");
+        elapsedTimeLabel.setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, StatusBar.WAITING_ICON));
         yPanel.add(elapsedTimeLabel);
 
         if(extendedFileJob!=null) {
-//            yPanel.addSpace(10);
             JPanel tempPanel = new JPanel(new BorderLayout());
 
-            this.currentBpsLabel = new JLabel(Translator.get("progress_dialog.current_speed")+": ");
-            tempPanel.add(currentBpsLabel, BorderLayout.WEST);
+            this.currentSpeedLabel = new JLabel();
+            updateCurrentSpeedLabel("");
+            currentSpeedLabel.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, CURRENT_SPEED_ICON));
+            tempPanel.add(currentSpeedLabel, BorderLayout.WEST);
 
             YBoxPanel advancedPanel = new YBoxPanel();
 
@@ -146,15 +151,17 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             this.limitSpeedSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 100));
             limitSpeedSpinner.setEnabled(false);
             limitSpeedSpinner.addChangeListener(this);
-            limitSpeedSpinner.getEditor().addKeyListener(
-                new KeyAdapter() {
-                    public void keyPressed(KeyEvent e) {
-                        if(e.getKeyCode()==KeyEvent.VK_ENTER) {
-                            e.consume();
-                        }
-                    }
-                }
-            );
+//            limitSpeedSpinner.addKeyListener(
+//                new KeyAdapter() {
+//                    public void keyPressed(KeyEvent e) {
+//if(Debug.ON) Debug.trace("called, e="+e);
+//                        if(e.getKeyCode()==KeyEvent.VK_ENTER) {
+//                            e.consume();
+//                        }
+//                    }
+//                }
+//            );
+
             JPanel tempPanel3 = new JPanel(new FlowLayout(FlowLayout.LEADING));
             tempPanel3.add(limitSpeedSpinner);
             speedUnitComboBox = new JComboBox();
@@ -173,7 +180,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             speedGraph.setPreferredSize(new Dimension(0, SPEED_GRAPH_HEIGHT));
             advancedPanel.add(speedGraph);
 
-            tempPanel.add(new CollapseExpandButton(Translator.get("progress_dialog.advanced"), advancedPanel, this, true), BorderLayout.EAST);
+            this.collapseExpandButton = new CollapseExpandButton(Translator.get("progress_dialog.advanced"), advancedPanel, this, true);
+            collapseExpandButton.setExpandedState(ConfigurationManager.getVariableBoolean(EXPANDED_CONF_VAR, true));
+            tempPanel.add(collapseExpandButton, BorderLayout.EAST);
 
             yPanel.add(tempPanel);
             yPanel.addSpace(5);
@@ -223,6 +232,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         extendedFileJob.setThroughputLimit(limitSpeedCheckBox.isSelected()?SizeFormat.getUnitBytes(speedUnitComboBox.getSelectedIndex())*(((Integer)limitSpeedSpinner.getValue())).intValue():-1);
     }
 
+    private void updateCurrentSpeedLabel(String value) {
+        currentSpeedLabel.setText(Translator.get("progress_dialog.current_speed")+": "+value);
+    }
+
 
     //////////////////////
     // Runnable methods //
@@ -253,7 +266,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     // Update current file progress bar
                     float filePercentFloat = extendedFileJob.getFilePercentDone();
                     int filePercentInt = (int)(100*filePercentFloat);
-                    fileProgressBar.setValue(filePercentInt);
+                    currentFileProgressBar.setValue(filePercentInt);
 
                     progressText = filePercentInt+"% - ";
 
@@ -273,10 +286,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     }
 
 //                    fileProgressBar.setTextOverlay(progressText);
-                    fileProgressBar.setString(progressText);
+                    currentFileProgressBar.setString(progressText);
 
-                    // Update stats label
-                    statsLabel.setText(
+                    // Update total transferred label
+                    totalTransferredLabel.setText(
                        Translator.get("progress_dialog.transferred",
                                       SizeFormat.format(bytesTotal, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_LONG| SizeFormat.ROUND_TO_KB),
                                       SizeFormat.format(totalBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB))
@@ -286,7 +299,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     // Skip this sample if job was paused and resumed, speed would not be accurate
                     if(lastTime>job.getPauseStartDate()) {
                         speedGraph.addSample(currentBps);
-                        currentBpsLabel.setText(Translator.get("progress_dialog.current_speed")+": "+SizeFormat.format(currentBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT));
+                        updateCurrentSpeedLabel(SizeFormat.format(currentBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT));
                     }
 
                     lastBytesTotal = bytesTotal;
@@ -320,8 +333,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 //                totalProgressBar.setTextOverlay(progressText);
                 totalProgressBar.setString(progressText);
 
-                // Update info label
-                infoLabel.setText(job.getStatusString());
+                // Update current file label
+                currentFileLabel.setText(job.getStatusString());
 
                 // Update elapsed time label
                 elapsedTimeLabel.setText(Translator.get("progress_dialog.elapsed_time")+": "+DurationFormat.format(effectiveJobTime));
@@ -363,6 +376,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             else {
                 pauseResumeButton.setText(Translator.get("resume"));
                 pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
+                updateCurrentSpeedLabel("N/A");
             }
 
             // Update buttons mnemonics
@@ -414,7 +428,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         // This method is called each time the dialog is activated
         super.windowActivated(e);
         if(firstTimeActivated) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("first time activated, starting job!");
             firstTimeActivated = false;
             this.job.start();
         }
@@ -427,6 +440,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         repaintThread = null;
         // Job may have already been stopped if cancel button was pressed
         job.stop();
+        // Remember 'advanced panel' expanded state
+        ConfigurationManager.setVariableBoolean(EXPANDED_CONF_VAR, collapseExpandButton.getExpandedState());
     }
 
 
@@ -443,13 +458,11 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
         private final int NB_SAMPLES_MAX = 320;
 
-        private Vector samples = new Vector(NB_SAMPLES_MAX);
-
         private final int STROKE_WIDTH = 2;
 
-        private Stroke lineStroke = new BasicStroke(STROKE_WIDTH);
+        private Vector samples = new Vector(NB_SAMPLES_MAX);
 
-        private Stroke ONE_PIXEL_STROKE = new BasicStroke(1);
+        private Stroke lineStroke = new BasicStroke(STROKE_WIDTH);
 
 
         private SpeedGraph() {
@@ -457,12 +470,11 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
 
         private void addSample(long bytesPerSecond) {
-//            if(Debug.ON) Debug.trace("bps="+bytesPerSecond);
-
             // Capacity reached, remove first sample
             if(samples.size()==NB_SAMPLES_MAX)
                 samples.removeElementAt(0);
 
+            // Add sample to the vector
             samples.add(new Long(bytesPerSecond));
 
             repaint();
@@ -472,62 +484,71 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         public void paint(Graphics g) {
             Graphics2D g2d = (Graphics2D)g;
 
-            int width = getWidth();
-            int height = getHeight();
-
-            g.setColor(BACKGROUND_COLOR);
-            g.fillRect(0, 0, width, height);
-
-            g.setColor(GRAPH_COLOR);
-            g2d.setStroke(lineStroke);
             // Enable antialiasing, looks way better
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            int nbSamples = samples.size();
-            int nbDisplayableLines = (width-2*STROKE_WIDTH)/LINE_SPACING;
-            int sampleIndex = nbSamples>nbDisplayableLines?nbSamples-nbDisplayableLines:0;
-            int nbLines = Math.min(nbSamples, nbDisplayableLines);
+            int width = getWidth();
+            int height = getHeight();
 
+            // Fill background
+            g.setColor(BACKGROUND_COLOR);
+            g.fillRect(0, 0, width, height);
+
+            // Number of collected sample
+            int nbSamples = samples.size();
+            // Number of displayable samples based on their spacing
+            int nbDisplayableSamples = (width-2*STROKE_WIDTH)/LINE_SPACING;
+            // Index of the first sample
+            int sampleOffset = nbSamples>nbDisplayableSamples?nbSamples-nbDisplayableSamples:0;
+            // Number of lines to be drawn
+            int nbLines = Math.min(nbSamples, nbDisplayableSamples);
+
+            // Calculate the maximum bytes per second of all the samples to be displayed
             long maxBps = 0;
-            for(int i=sampleIndex; i<sampleIndex+nbLines; i++) {
+            for(int i= sampleOffset; i<sampleOffset+nbLines; i++) {
                 long sample = ((Long)samples.elementAt(i)).longValue();
                 if(sample>maxBps)
                     maxBps = sample;
             }
 
+            // Y-scale projection ratio, leave some space on both sides of the graph
             float yRatio = maxBps/((float)height-2*STROKE_WIDTH);
-            int x = STROKE_WIDTH;
-            for(int l=0; l<nbLines-1; l++) {
-                g.drawLine(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleIndex)).longValue()/yRatio), (x+=LINE_SPACING), height-STROKE_WIDTH-(int)(((Long)samples.elementAt(++sampleIndex)).longValue()/yRatio));
-            }
 
+            // Draw throughput limit as an horizontal line, only if there is a limit
             long bpsLimit = extendedFileJob.getThroughputLimit();
-            g2d.setStroke(ONE_PIXEL_STROKE);
             g.setColor(BPS_LIMIT_COLOR);
             if(bpsLimit>0) {
                 int y = height-STROKE_WIDTH-(int)(bpsLimit/yRatio);
                 g.drawLine(0, y, width, y);
             }
 
+            // Set custom line stroke and color
+            g.setColor(GRAPH_COLOR);
+            g2d.setStroke(lineStroke);
+
+            // Draw the graph based on the collected samples
+            int x = STROKE_WIDTH;
+            for(int l=0; l<nbLines-1; l++) {
+                g.drawLine(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset)).longValue()/yRatio),
+                          (x+=LINE_SPACING), height-STROKE_WIDTH-(int)(((Long)samples.elementAt(++sampleOffset)).longValue()/yRatio));
+            }
+
+            // Unsuccessful rendering test using curves
 //            GeneralPath gp = new GeneralPath();
 //            int x = STROKE_WIDTH;
-//            gp.moveTo(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleIndex++)).longValue()/yRatio));
+//            gp.moveTo(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset++)).longValue()/yRatio));
 //            x += LINE_SPACING;
 //            for(int l=1; l<nbLines-2; l+=2) {
 //                gp.quadTo(
-//                    x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleIndex)).longValue()/yRatio),
-//                    x+LINE_SPACING, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleIndex+1)).longValue()/yRatio)
+//                    x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset)).longValue()/yRatio),
+//                    x+LINE_SPACING, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset+1)).longValue()/yRatio)
 //                );
 //
-//                sampleIndex += 2;
+//                sampleOffset += 2;
 //                x += 2*LINE_SPACING;
 //
 //                g2d.draw(gp);
 //            }
-
-
-//            g.setColor(TEXT_COLOR);
-//            g.drawString(SizeFormat.format(maxBps, SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB), 10, 10);
         }
     }
 }
