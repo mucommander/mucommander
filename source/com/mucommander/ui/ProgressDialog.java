@@ -441,7 +441,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         // Job may have already been stopped if cancel button was pressed
         job.stop();
         // Remember 'advanced panel' expanded state
-        ConfigurationManager.setVariableBoolean(EXPANDED_CONF_VAR, collapseExpandButton.getExpandedState());
+        if(collapseExpandButton!=null)
+            ConfigurationManager.setVariableBoolean(EXPANDED_CONF_VAR, collapseExpandButton.getExpandedState());
     }
 
 
