@@ -56,8 +56,8 @@ public class CopyDialog extends DestinationDialog {
                 AbstractFile file = ((AbstractFile)files.elementAt(0));
                 AbstractFile testFile;
 
-                startPosition  = fieldText.length();
                 // TODO: find a way to remove this AbstractFile.getFile() which can lock the main thread if the file is on a remote filesystem
+                startPosition  = fieldText.length();
                 if(!(file.isDirectory() && (testFile= FileFactory.getFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory())) {
                     endPosition = file.getName().indexOf('.');
                     if(endPosition > 0)
@@ -66,13 +66,12 @@ public class CopyDialog extends DestinationDialog {
                         endPosition = startPosition + file.getName().length();
                     fieldText += file.getName();
                 }
-                else {
+                else
                     endPosition = fieldText.length();
-                }
             }
             else {
-                startPosition = fieldText.length();
-                endPosition   = startPosition;
+                endPosition   = fieldText.length();
+                startPosition = 0;
             }
 
         }

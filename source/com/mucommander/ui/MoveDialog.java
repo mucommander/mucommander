@@ -24,7 +24,9 @@ public class MoveDialog extends DestinationDialog {
              Translator.get("move_dialog.move"),
              Translator.get("move_dialog.error_title"));
         
-        String fieldText;
+        String       fieldText;
+        int          startPosition;
+        int          endPosition;
         AbstractFile destFolder = mainFrame.getInactiveTable().getCurrentFolder();
         fieldText = destFolder.getAbsolutePath(true);
         // Append filename to destination path if there is only one file to move
@@ -35,11 +37,24 @@ public class MoveDialog extends DestinationDialog {
             AbstractFile file = ((AbstractFile)files.elementAt(0));
             AbstractFile testFile;
             // TODO: find a way to remove this AbstractFile.getFile() which can lock the main thread if the file is on a remote filesystem
-            if(!(file.isDirectory() && (testFile=FileFactory.getFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory()))
+            startPosition = fieldText.length();
+            if(!(file.isDirectory() && (testFile=FileFactory.getFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory())) {
+                endPosition = file.getName().indexOf('.');
+                if(endPosition > 0)
+                    endPosition += startPosition;
+                else
+                    endPosition  = startPosition + file.getName().length();
                 fieldText += file.getName();
+            }
+            else
+                endPosition = fieldText.length();
+        }
+        else {
+            startPosition = 0;
+            endPosition   = fieldText.length();
         }
 
-        setTextField(fieldText);
+        setTextField(fieldText, startPosition, endPosition);
 
         showDialog();
     }
