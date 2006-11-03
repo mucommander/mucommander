@@ -8,7 +8,7 @@ import java.io.OutputStream;
 /**
  * This OuputStream encodes data in MIME Base64. It is used to by SendMailJob to send email attachments.
  *
- * @author originally found on the net and then heavily modified by Maxence Bernard
+ * @author originally found on the net and then modified by Maxence Bernard
  */
 public class Base64OutputStream extends OutputStream {
     /*
