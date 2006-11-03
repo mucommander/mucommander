@@ -1,6 +1,7 @@
 package com.mucommander.shell;
 
 import com.mucommander.xml.parser.*;
+import com.mucommander.io.*;
 import java.util.*;
 import java.io.*;
 
@@ -48,9 +49,9 @@ class ShellHistoryReader implements ShellHistoryConstants, ContentHandler {
      * @param file where to read the history from.
      */
     public static void read(File file) {
-        FileInputStream fin = null;
+        InputStream fin = null;
         try {
-            fin = new FileInputStream(file);
+            fin = new BackupInputStream(file);
             new Parser().parse(fin, new ShellHistoryReader(), "UTF-8");
         }
         catch(Exception e) {

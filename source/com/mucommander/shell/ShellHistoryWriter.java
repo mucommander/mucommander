@@ -1,8 +1,9 @@
 package com.mucommander.shell;
 
+import com.mucommander.xml.writer.*;
+import com.mucommander.io.*;
 import java.io.*;
 import java.util.*;
-import com.mucommander.xml.writer.*;
 
 /**
  * Used to save the content of the {@link com.mucommander.shell.ShellHistoryManager} to a file.
@@ -23,7 +24,7 @@ class ShellHistoryWriter implements ShellHistoryConstants {
 
         try {
             // Opens the file for writing.
-            out = new XmlWriter(file);
+            out = new XmlWriter(new BackupOutputStream(file));
 
             // Writes the content of the shell history.
             out.startElement(ROOT_ELEMENT);

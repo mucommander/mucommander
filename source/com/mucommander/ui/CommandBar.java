@@ -16,6 +16,7 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileToolkit;
 import com.mucommander.PlatformManager;
 import com.mucommander.Debug;
+import com.mucommander.io.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -275,7 +276,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
             // Parse the XML file describing the command bar buttons and associated actions
             InputStream in = null;
             try {
-                in = commandBarDescriptorFile.getInputStream();
+                in = new BackupInputStream(commandBarDescriptorFile);
                 new Parser().parse(in, this, "UTF-8");
             }
             catch(Exception e) {

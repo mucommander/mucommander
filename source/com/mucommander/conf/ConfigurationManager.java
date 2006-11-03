@@ -2,6 +2,7 @@ package com.mucommander.conf;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
+import com.mucommander.io.*;
 
 import java.awt.*;
 import java.io.File;
@@ -148,7 +149,7 @@ public class ConfigurationManager {
             ConfigurationWriter writer = new ConfigurationWriter();
             String filePath = getConfigurationFilePath();
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: "+filePath);
-            writer.writeXML(out = new FileOutputStream(filePath));
+            writer.writeXML(out = new BackupOutputStream(filePath));
         }
         catch(IOException e) {
             // Notify user that preferences file could not be written

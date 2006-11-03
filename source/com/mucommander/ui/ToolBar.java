@@ -15,6 +15,7 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileToolkit;
 import com.mucommander.PlatformManager;
 import com.mucommander.Debug;
+import com.mucommander.io.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -225,7 +226,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         private ToolBarReader() {
             InputStream in = null;
             try {
-                in = toolbarDescriptorFile.getInputStream();
+                in = new BackupInputStream(toolbarDescriptorFile);
                 new Parser().parse(in, this, "UTF-8");
             }
             catch(Exception e) {

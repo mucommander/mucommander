@@ -2,9 +2,10 @@ package com.mucommander.bookmark;
 
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
+import com.mucommander.io.BackupInputStream;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Hashtable;
 
 
@@ -32,7 +33,7 @@ class BookmarkParser implements ContentHandler {
      * Parses the given XML bookmarks file. Should only be called by BookmarkManager.
      */
     void parse(File file) throws Exception {
-        FileInputStream fin = new FileInputStream(file);
+        InputStream fin = new BackupInputStream(file);
         new Parser().parse(fin, this, "UTF-8");
         fin.close();
     }

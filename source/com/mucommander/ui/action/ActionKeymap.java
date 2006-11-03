@@ -8,6 +8,7 @@ import com.mucommander.file.FileToolkit;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
+import com.mucommander.io.*;
 
 import javax.swing.*;
 import java.util.Enumeration;
@@ -236,7 +237,7 @@ public class ActionKeymap implements ContentHandler {
             try {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading user action keymap file at "+actionKeyMapFile.getAbsolutePath());
 
-                parseActionKeymapFile(actionKeyMapFile.getInputStream());
+                parseActionKeymapFile(new BackupInputStream(actionKeyMapFile));
             } catch(Exception e) {
                 // Report the error to the user
                 System.out.println("Error: unable to load user action keymap file at "+actionKeyMapFile.getAbsolutePath()+" : "+e);

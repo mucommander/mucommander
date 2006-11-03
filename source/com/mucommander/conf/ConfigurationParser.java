@@ -2,8 +2,9 @@ package com.mucommander.conf;
 
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
+import com.mucommander.io.BackupInputStream;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Hashtable;
 
 
@@ -79,7 +80,7 @@ public class ConfigurationParser implements ContentHandler {
         if(builder == null)
             throw new IllegalStateException("Cannot parse a file without a tree builder.");
 
-        FileInputStream fin = new FileInputStream(file);
+        InputStream fin = new BackupInputStream(file);
         new Parser().parse(fin, this, "UTF-8");
         fin.close();
     }

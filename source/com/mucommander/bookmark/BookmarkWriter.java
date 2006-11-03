@@ -1,6 +1,7 @@
 package com.mucommander.bookmark;
 
 import com.mucommander.xml.writer.XmlWriter;
+import com.mucommander.io.BackupOutputStream;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class BookmarkWriter {
         out = null;
 
         try {
-            out = new XmlWriter(file);
+            out = new XmlWriter(new BackupOutputStream(file));
 
             // Root element.
             out.startElement(ELEMENT_ROOT);
