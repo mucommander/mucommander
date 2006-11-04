@@ -13,13 +13,7 @@ import java.util.Iterator;
  *
  * @author Maxence Bernard
  */
-public class BookmarkWriter {
-    private static final String ELEMENT_ROOT     = "bookmarks";
-    private static final String ELEMENT_VERSION  = "version";
-    private static final String ELEMENT_BOOKMARK = "bookmark";
-    private static final String ELEMENT_NAME     = "name";
-    private static final String ELEMENT_URL      = "url";
-
+public class BookmarkWriter implements BookmarkConstants {
 
     /**
      * Writes the bookmarks XML file in the user's preferences folder.

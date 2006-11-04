@@ -14,7 +14,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-class BookmarkParser implements ContentHandler {
+class BookmarkParser implements ContentHandler, BookmarkConstants {
 	
     /** Variable used for XML parsing */
     private String bookmarkName;
@@ -56,7 +56,7 @@ class BookmarkParser implements ContentHandler {
     public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) {
         this.characters = null;
 
-        if(name.equals("bookmark")) {
+        if(name.equals(ELEMENT_BOOKMARK)) {
             bookmarkName = null;
             bookmarkURL = null;
         }
@@ -66,7 +66,7 @@ class BookmarkParser implements ContentHandler {
      * Notifies the parser that an XML node has been closed.
      */
     public void endElement(String uri, String name) {
-        if(name.equals("bookmark")) {
+        if(name.equals(ELEMENT_BOOKMARK)) {
             if(bookmarkName==null || bookmarkName.equals("") || bookmarkURL==null || bookmarkURL.equals("")) {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Missing value, bookmark ignored: name="+bookmarkName+" url="+bookmarkURL);
             }
@@ -78,10 +78,10 @@ class BookmarkParser implements ContentHandler {
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Invalid bookmark URL: "+bookmarkURL+", "+e);
                 }
         }	
-        else if(name.equals("name")) {
+        else if(name.equals(ELEMENT_NAME)) {
             bookmarkName = characters;
         }
-        else if(name.equals("url")) {
+        else if(name.equals(ELEMENT_URL)) {
             bookmarkURL = characters;
         }
     }
