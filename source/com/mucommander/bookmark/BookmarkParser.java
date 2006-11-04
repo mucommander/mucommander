@@ -2,9 +2,11 @@ package com.mucommander.bookmark;
 
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
+import com.mucommander.file.FileURL;
 import com.mucommander.io.BackupInputStream;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 
@@ -21,7 +23,12 @@ class BookmarkParser implements ContentHandler, BookmarkConstants {
     /** Variable used for XML parsing */
     private String bookmarkURL;
     /** Variable used for XML parsing */
+    private String bookmarkPassword;
+    /** Variable used for XML parsing */
     private String characters;
+
+    private String encryptionMethod;
+
 
     /**
      * Creates a new BookmarkParser instance.
@@ -60,6 +67,10 @@ class BookmarkParser implements ContentHandler, BookmarkConstants {
             bookmarkName = null;
             bookmarkURL = null;
         }
+        // Root element, specifies which encoding is used for passwords
+        else if(name.equals(ELEMENT_ROOT)) {
+            encryptionMethod = (String)attValues.get("encryption");
+        }
     }
 
     /**
@@ -72,7 +83,11 @@ class BookmarkParser implements ContentHandler, BookmarkConstants {
             }
             else
                 try {
-                    BookmarkManager.addBookmark(new Bookmark(bookmarkName, new com.mucommander.file.FileURL(bookmarkURL)));
+                    FileURL url = new com.mucommander.file.FileURL(bookmarkURL);
+                    if(bookmarkPassword!=null)
+                        url.setPassword(bookmarkPassword);
+
+                    BookmarkManager.addBookmark(new Bookmark(bookmarkName, url));
                 }
                 catch(java.net.MalformedURLException e) {
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Invalid bookmark URL: "+bookmarkURL+", "+e);
@@ -84,24 +99,34 @@ class BookmarkParser implements ContentHandler, BookmarkConstants {
         else if(name.equals(ELEMENT_URL)) {
             bookmarkURL = characters;
         }
+        else if(name.equals(ELEMENT_PASSWORD)) {
+            bookmarkPassword = characters;
+            if(BookmarkWriter.WEAK_ENCRYPTION_METHOD.equals(encryptionMethod)) {
+                try {
+                    bookmarkPassword = XORCipher.decodeXORBase64(bookmarkPassword);
+                }
+                catch(IOException e) {
+                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Error while decoding password: "+bookmarkPassword+", "+e);
+                }
+            }
+        }
     }
 
     public void endDocument() {}
     public void startDocument() {}
 
 
-    /**
-     * Test method
-     */
-    public static void main(String args[]) throws Exception {
-        new BookmarkParser().parse(new File("~/Projects/mucommander/bookmarks.xml"));
-
-        System.out.println("1- "+BookmarkManager.getBookmarks());
-		
-        BookmarkWriter.write(new File("~/Projects/mucommander/bookmarks2.xml"));
-        new BookmarkParser().parse(new File("~/Projects/mucommander/bookmarks2.xml"));
-
-        System.out.println("2- "+BookmarkManager.getBookmarks());
-    }
-
+//    /**
+//     * Test method
+//     */
+//    public static void main(String args[]) throws Exception {
+//        new BookmarkParser().parse(new File("~/Projects/mucommander/bookmarks.xml"));
+//
+//        System.out.println("1- "+BookmarkManager.getBookmarks());
+//
+//        BookmarkWriter.write(new File("~/Projects/mucommander/bookmarks2.xml"));
+//        new BookmarkParser().parse(new File("~/Projects/mucommander/bookmarks2.xml"));
+//
+//        System.out.println("2- "+BookmarkManager.getBookmarks());
+//    }
 }

@@ -350,7 +350,6 @@ public class FileURL implements Cloneable {
         if(password==null)
             this.password = null;
         else {
-//            password = password.trim();
             if(password.equals(""))
                 this.password = null;
             else

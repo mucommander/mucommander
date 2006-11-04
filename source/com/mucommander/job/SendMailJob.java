@@ -111,7 +111,7 @@ public class SendMailJob extends TransferFileJob {
         //        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         this.in = new DataInputStream(socket.getInputStream());
         this.out = socket.getOutputStream();
-        this.out64 = new Base64OutputStream(out);
+        this.out64 = new Base64OutputStream(out, true);
 		
         this.connectedToMailServer = true;
     }

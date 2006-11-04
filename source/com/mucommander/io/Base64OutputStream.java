@@ -3,12 +3,13 @@ package com.mucommander.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
 
 
 /**
- * This OuputStream encodes data in MIME Base64. It is used to by SendMailJob to send email attachments.
+ * This OuputStream allows to encode data in Base64.
  *
- * @author originally found on the net and then modified by Maxence Bernard
+ * @author Maxence Bernard, Base64 comment description found on the net.
  */
 public class Base64OutputStream extends OutputStream {
     /*
@@ -77,7 +78,7 @@ public class Base64OutputStream extends OutputStream {
     */
 
     /** Base 64 translation table */
-    private final static char BASE_TABLE[] = {
+    final static char BASE64_ENCODING_TABLE[] = {
         'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
         'Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f',
         'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
@@ -94,27 +95,68 @@ public class Base64OutputStream extends OutputStream {
     /** Number of bytes accumulated to form a 3-byte group */
     private int nbBytesWaiting;
 
+    /** Specifies whether line breaks should be inserted after 80 chars */
+    private boolean insertLineBreaks;
+
     /** Current line length (to insert line return character after 80 chars)*/
     private int lineLength;
-	
-	
-    public Base64OutputStream(OutputStream out) {
+
+
+    /**
+     * Creates a new Base64OutputStream using the underlying OutputStream to write the base64-encoded data to.
+     *
+     * @param out the underlying OutputStream to write the base64-encoded data to
+     * @param insertLineBreaks if <code>true</code>, line breaks will be inserted after every 80 characters written
+     */
+    public Base64OutputStream(OutputStream out, boolean insertLineBreaks) {
         this.out = out;
+        this.insertLineBreaks = insertLineBreaks;
     }
-    
+
+
+    /**
+     * Convenience method that encodes and returns the given String as a base64-encoded String.
+     * Returns <code>null</code> if there was an error encoding the String.
+     *
+     * @param s the String to encode as base64  
+     * @return the base64-encoded String, <code>null</code> if there was an error encoding the String
+     */
+    public static String encode(String s) {
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        Base64OutputStream out64 = new Base64OutputStream(bout, false);
+
+        try {
+            int len = s.length();
+            for(int i=0; i<len; i++)
+                out64.write(s.charAt(i));
+
+            out64.writePadding();
+
+            return new String(bout.toByteArray());
+        }
+        catch(IOException e) {
+            return null;
+        }
+        finally {
+            try { out64.close(); }
+            catch(IOException e) {}
+        }
+    }
+
 	
     public void write(int i) throws IOException {
         // We have a 3-byte group
         if(nbBytesWaiting==2) {
             // Write 3 bytes as 4 base64 characters
-            out.write(BASE_TABLE[(byte)((byteAcc[0] & 0xFC) >> 2)]);
-            out.write(BASE_TABLE[(byte)(((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
-            out.write(BASE_TABLE[(byte)(((byteAcc[1] & 0x0F) << 2) | ((i & 0xC0) >> 6))]);
-            out.write(BASE_TABLE[(byte)(i & 0x3F)]);
+            out.write(BASE64_ENCODING_TABLE[(byte)((byteAcc[0] & 0xFC) >> 2)]);
+            out.write(BASE64_ENCODING_TABLE[(byte)(((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
+            out.write(BASE64_ENCODING_TABLE[(byte)(((byteAcc[1] & 0x0F) << 2) | ((i & 0xC0) >> 6))]);
+            out.write(BASE64_ENCODING_TABLE[(byte)(i & 0x3F)]);
 
             nbBytesWaiting = 0;
 
-            if ((lineLength += 4) >= 76) {
+            // Insert a line break after every 80 characters written
+            if (insertLineBreaks && (lineLength += 4) >= 76) {
                 out.write('\r');
                 out.write('\n');
                 lineLength = 0;
@@ -135,22 +177,24 @@ public class Base64OutputStream extends OutputStream {
         if(nbBytesWaiting==0)
             return;
 
-        // deals with with the padding ...
+        // 1 padding '=' character
         if (nbBytesWaiting==2) {
             // 2 bytes left
-            out.write(BASE_TABLE[(byte)((byteAcc[0] & 0xFC) >> 2)]);
-            out.write(BASE_TABLE[(byte)(((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
-            out.write(BASE_TABLE[(byte)((byteAcc[1] & 0x0F) << 2)]);
+            out.write(BASE64_ENCODING_TABLE[(byte)((byteAcc[0] & 0xFC) >> 2)]);
+            out.write(BASE64_ENCODING_TABLE[(byte)(((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
+            out.write(BASE64_ENCODING_TABLE[(byte)((byteAcc[1] & 0x0F) << 2)]);
             out.write('=');
         }
+        // 2 padding '=' characters
         else if (nbBytesWaiting==1) {
             // 1 byte left
-            out.write(BASE_TABLE[(byte)((byteAcc[0] & 0xFC) >> 2)]);
-            out.write(BASE_TABLE[(byte)((byteAcc[0] & 0x03) << 4)]);
+            out.write(BASE64_ENCODING_TABLE[(byte)((byteAcc[0] & 0xFC) >> 2)]);
+            out.write(BASE64_ENCODING_TABLE[(byte)((byteAcc[0] & 0x03) << 4)]);
             out.write('=');
             out.write('=');
         }
-		
+
+        // Just in case this method is called again
         nbBytesWaiting = 0;
     }	
 	

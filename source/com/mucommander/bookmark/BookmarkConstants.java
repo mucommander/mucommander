@@ -15,4 +15,12 @@ interface BookmarkConstants {
     static final String ELEMENT_NAME     = "name";
     /** Bookmark URL. */
     static final String ELEMENT_URL      = "url";
+    /** Bookmark password */
+    static final String ELEMENT_PASSWORD = "password";
+
+    /** Root element's attribute containing the encryption method used for passwords */
+    static final String ATTRIBUTE_ENCRYPTION = "encryption";
+
+    /** Weak password encryption method */
+    public static final String WEAK_ENCRYPTION_METHOD = "weak";
 }
