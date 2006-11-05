@@ -525,9 +525,13 @@ public class FileURL implements Cloneable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-	
+
+
+    /**
+     * Returns a String representation of this FileURL, without authentication info. 
+     */
     public String toString() {
-        return getStringRep(true);
+        return getStringRep(false);
     }
 	
 	

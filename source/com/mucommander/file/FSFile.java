@@ -35,12 +35,9 @@ public class FSFile extends AbstractFile {
     /** Are we running Windows ? */
     private final static boolean IS_WINDOWS;
 
-    /** Used under Windows to determine if a root folder is a floppy drive */
-    private final static FileSystemView fileSystemView;
 		
     static {
         IS_WINDOWS = PlatformManager.isWindowsFamily();
-        fileSystemView = FileSystemView.getFileSystemView();
     }
 
 
@@ -238,7 +235,7 @@ public class FSFile extends AbstractFile {
         // Use FileSystemView.isFloppyDrive(File) to determine if this file
         // is a floppy drive. This method being available only in Java 1.4 and up.
         if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_4)
-            return fileSystemView.isFloppyDrive(file);
+            return FileSystemView.getFileSystemView().isFloppyDrive(file);
 
         // We're running Java 1.3 or below, try to guess if file is floppy drive under Windows
         if(IS_WINDOWS && absPath.equals("A:") || absPath.equals("B:"))
