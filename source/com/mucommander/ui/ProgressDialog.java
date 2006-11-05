@@ -7,11 +7,12 @@ import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.text.DurationFormat;
 import com.mucommander.ui.comp.button.ButtonChoicePanel;
+import com.mucommander.ui.comp.button.CollapseExpandButton;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
-import com.mucommander.ui.comp.dialog.CollapseExpandButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.PlatformManager;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -140,7 +141,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
             JPanel tempPanel2 = new JPanel(new BorderLayout());
             this.limitSpeedCheckBox = new JCheckBox(Translator.get("progress_dialog.limit_speed")+":", false);
-            limitSpeedCheckBox.setFocusable(false);
+            // setFocusable() is not available under Java 1.3
+            if(PlatformManager.JAVA_VERSION>PlatformManager.JAVA_1_3)
+                limitSpeedCheckBox.setFocusable(false);
             limitSpeedCheckBox.addItemListener(this);
 
             tempPanel2.add(limitSpeedCheckBox, BorderLayout.WEST);
