@@ -11,20 +11,19 @@ import java.util.*;
  */
 class ShellHistoryWriter implements ShellHistoryConstants {
     /**
-     * Writes the content of the {@link com.mucommander.shell.ShellHistoryManager} to the specified file.
-     * @param file where to save the shell history.
+     * Writes the content of the {@link com.mucommander.shell.ShellHistoryManager} to the specified output stream.
+     * @param stream where to save the shell history.
      */
-    public static void write(File file) {
+    public static void write(OutputStream stream) {
         Iterator  history;
         XmlWriter out;
 
         // Initialises writing.
-        out     = null;
         history = ShellHistoryManager.getHistoryIterator();
 
         try {
             // Opens the file for writing.
-            out = new XmlWriter(new BackupOutputStream(file));
+            out = new XmlWriter(stream);
 
             // Writes the content of the shell history.
             out.startElement(ROOT_ELEMENT);
@@ -37,13 +36,5 @@ class ShellHistoryWriter implements ShellHistoryConstants {
             out.endElement(ROOT_ELEMENT);
         }
         catch(Exception e) {if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Failed to write shell history: " + e);}
-
-        // Cleans up.
-        finally {
-            if(out != null) {
-                try {out.close();}
-                catch(Exception e) {}
-            }
-        }
     }
 }

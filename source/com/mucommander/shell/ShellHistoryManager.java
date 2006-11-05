@@ -2,6 +2,7 @@ package com.mucommander.shell;
 
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.PlatformManager;
+import com.mucommander.io.*;
 
 import java.io.*;
 import java.util.*;
@@ -156,12 +157,38 @@ public class ShellHistoryManager {
     /**
      * Writes the shell history to hard drive.
      */
-    public static void writeHistory() {ShellHistoryWriter.write(getHistoryFile());}
+    public static void writeHistory() {
+        BackupOutputStream out;
+
+        out = null;
+        try {
+            ShellHistoryWriter.write(out = new BackupOutputStream(getHistoryFile()));
+            out.close();
+        }
+        catch(Exception e) {
+            if(out != null) {
+                try {out.close(false);}
+                catch(Exception e2) {}
+            }
+        }
+    }
 
     /**
      * Loads the shell history.
      */
-    public static void loadHistory() {ShellHistoryReader.read(getHistoryFile());}
+    public static void loadHistory() {
+        BackupInputStream in;
+
+        in = null;
+        try {ShellHistoryReader.read(in = new BackupInputStream(getHistoryFile()));}
+        catch(Exception e) {}
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e2) {}
+            }
+        }
+    }
 
     /**
      * Loads the shell history from the specified path.

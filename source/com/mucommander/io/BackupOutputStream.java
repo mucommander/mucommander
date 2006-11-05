@@ -82,17 +82,14 @@ public class BackupOutputStream extends FilterOutputStream implements BackupCons
     // - Backup -----------------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
-     * Finishes the backup operation.
+     * Overwrites the target file with the backup one>
      * @exception IOException thrown if any IO related error occurs.
      */
-    public void close() throws IOException {
-        InputStream in;     // Input stream on the backup file.
+    private void backup() throws IOException {
+        InputStream  in;     // Input stream on the backup file.
         OutputStream out;   // Output stream on the target file.
-        byte[]      buffer; // Stores chunks of the backup file.
-        int         count;  // Number of bytes read in the last read operation.
-
-        // Closes the underlying output stream.
-        super.close();
+        byte[]       buffer; // Stores chunks of the backup file.
+        int          count;  // Number of bytes read in the last read operation.
 
         in  = null;
         out = null;
@@ -119,5 +116,30 @@ public class BackupOutputStream extends FilterOutputStream implements BackupCons
                 catch(Exception e) {}
             }
         }
+    }
+
+    /**
+     * Finishes the backup operation.
+     * @exception IOException thrown if any IO related error occurs.
+     */
+    public void close() throws IOException {close(true);}
+
+    /**
+     * Closes the output stream.
+     * <p>
+     * The <code>backup</code> parameter is meant for those cases when an error happened
+     * while writing to the stream: if it did, we don't want to propagate to the target
+     * file, and thus should prevent the backup operation from being performed.
+     * </p>
+     * @param     backup      whether or not to overwrite the target file by the backup one.
+     * @exception IOException thrown if any IO related error occurs.
+     */
+    public void close(boolean backup) throws IOException {
+        // Closes the underlying output stream.
+        super.flush();
+        super.close();
+
+        if(backup)
+            backup();
     }
 }

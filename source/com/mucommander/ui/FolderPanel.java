@@ -48,7 +48,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     */
     private DriveButton driveButton;
     private ProgressTextField locationField;
-	private FileTable fileTable;
+    private FileTable fileTable;
     private JScrollPane scrollPane;
 	
     private FolderHistory folderHistory = new FolderHistory(this);

@@ -23,7 +23,6 @@ public class ConfigurationWriter implements ConfigurationTreeBuilder {
     public void writeXML(OutputStream stream) {
         out = new XmlWriter(stream);
         ConfigurationManager.buildConfigurationTree(this);
-        try { out.close(); } catch(IOException e) {};
     }
 
     /**

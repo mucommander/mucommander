@@ -45,22 +45,13 @@ class ShellHistoryReader implements ShellHistoryConstants, ContentHandler {
     // - XML interaction -----------------------------------------------------
     // -----------------------------------------------------------------------
     /**
-     * Reads shell history from the specified file.
-     * @param file where to read the history from.
+     * Reads shell history from the specified input stream.
+     * @param in where to read the history from.
      */
-    public static void read(File file) {
-        InputStream fin = null;
-        try {
-            fin = new BackupInputStream(file);
-            new Parser().parse(fin, new ShellHistoryReader(), "UTF-8");
-        }
+    public static void read(InputStream in) {
+        try {new Parser().parse(in, new ShellHistoryReader(), "UTF-8");}
         catch(Exception e) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Failed to load shell history: " + e);
-        }
-        finally {
-            if(fin!=null)
-                try { fin.close(); }
-                catch(IOException e) {}
         }
     }
 

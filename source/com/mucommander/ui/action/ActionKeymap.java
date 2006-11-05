@@ -265,9 +265,10 @@ public class ActionKeymap implements ContentHandler {
             new Parser().parse(in, this, "UTF-8");
         }
         finally {
-            if(in!=null)
+            if(in!=null) {
                 try { in.close(); }
                 catch(IOException e) {}
+            }
         }
     }
 

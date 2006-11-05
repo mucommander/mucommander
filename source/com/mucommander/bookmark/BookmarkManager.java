@@ -2,6 +2,7 @@
 package com.mucommander.bookmark;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.io.BackupOutputStream;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,12 +69,22 @@ public class BookmarkManager {
      * Tries to write the bookmarks file.
      */
     public static void writeBookmarks() {
-        File bookmarksFile = getBookmarksFile();
+        File               bookmareksFile;
+        BackupOutputStream out;
+
+        out = null;
         try {
-            BookmarkWriter.write(bookmarksFile);
+            bookmarksFile = getBookmarksFile();
+            BookmarkWriter.write(out = new BackupOutputStream(bookmarksFile));
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Bookmarks file saved successfully.");
+            out.close();
         }
         catch(IOException e) {
+            if(out != null) {
+                try {out.close(false);}
+                catch(Exception e2) {}
+            }
+
             // Notify user that something went wrong while writing the bookmarks file
             System.out.println("An error occurred while writing bookmarks file "+bookmarksFile.getAbsolutePath()+": "+e);			
         }

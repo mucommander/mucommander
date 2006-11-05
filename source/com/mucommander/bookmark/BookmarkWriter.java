@@ -3,10 +3,8 @@ package com.mucommander.bookmark;
 import com.mucommander.xml.writer.XmlWriter;
 import com.mucommander.xml.writer.XmlAttributes;
 import com.mucommander.file.FileURL;
-import com.mucommander.io.BackupOutputStream;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Iterator;
 
 
@@ -20,83 +18,69 @@ public class BookmarkWriter implements BookmarkConstants {
     /**
      * Writes the bookmarks XML file in the user's preferences folder.
      */
-    public static void write(File file) throws IOException {
+    public static void write(OutputStream stream) throws IOException {
         XmlWriter out;
         Iterator  bookmarks;
         Bookmark  bookmark;
 
         out = null;
 
-        try {
-            out = new XmlWriter(new BackupOutputStream(file));
+        out = new XmlWriter(stream);
 
-            // Root element, add the encryption method used
-            XmlAttributes attributes = new XmlAttributes();
-            attributes.add(ATTRIBUTE_ENCRYPTION, WEAK_ENCRYPTION_METHOD);
-            out.startElement(ELEMENT_ROOT, attributes);
+        // Root element, add the encryption method used
+        XmlAttributes attributes = new XmlAttributes();
+        attributes.add(ATTRIBUTE_ENCRYPTION, WEAK_ENCRYPTION_METHOD);
+        out.startElement(ELEMENT_ROOT, attributes);
+        out.println();
+
+        // Add muCommander version
+        out.startElement(ELEMENT_VERSION);
+        out.writeCData(com.mucommander.RuntimeConstants.VERSION);
+        out.endElement(ELEMENT_VERSION);
+
+        bookmarks = BookmarkManager.getBookmarks().iterator();
+        while(bookmarks.hasNext()) {
+            bookmark = (Bookmark)bookmarks.next();
+
+            // Start bookmark element
+            out.startElement(ELEMENT_BOOKMARK);
             out.println();
 
-            // Add muCommander version
-            out.startElement(ELEMENT_VERSION);
-            out.writeCData(com.mucommander.RuntimeConstants.VERSION);
-            out.endElement(ELEMENT_VERSION);
+            // Write bookmark's name
+            out.startElement(ELEMENT_NAME);
+            out.writeCData(bookmark.getName());
+            out.endElement(ELEMENT_NAME);
 
-            bookmarks = BookmarkManager.getBookmarks().iterator();
-            while(bookmarks.hasNext()) {
-                bookmark = (Bookmark)bookmarks.next();
+            // Write bookmark's URL
+            out.startElement(ELEMENT_URL);
+            FileURL url = bookmark.getURL();
+            String password = url.getPassword();
 
-                // Start bookmark element
-                out.startElement(ELEMENT_BOOKMARK);
-                out.println();
+            // If URL contains a password, encrypt it in a separate element
+            if(password!=null) {
+                // Exclude password from URL
+                url.setPassword(null);
+                // Note: URL may contain a login stored as clear text
+                out.writeCData(url.getStringRep(true));
+                url.setPassword(password);
+                out.endElement(ELEMENT_URL);
 
-                // Write bookmark's name
-                out.startElement(ELEMENT_NAME);
-                out.writeCData(bookmark.getName());
-                out.endElement(ELEMENT_NAME);
-
-                // Write bookmark's URL
-                out.startElement(ELEMENT_URL);
-                FileURL url = bookmark.getURL();
-                String password = url.getPassword();
-
-                // If URL contains a password, encrypt it in a separate element
-                if(password!=null) {
-                    // Exclude password from URL
-                    url.setPassword(null);
-                    // Note: URL may contain a login stored as clear text
-                    out.writeCData(url.getStringRep(true));
-                    url.setPassword(password);
-                    out.endElement(ELEMENT_URL);
-
-                    // Write encrypted password
-                    out.startElement(ELEMENT_PASSWORD);
-                    out.writeCData(XORCipher.encodeXORBase64(password));
-                    out.endElement(ELEMENT_PASSWORD);
-                }
-                else {
-                    // Note: URL may contain a login stored as clear text
-                    out.writeCData(url.getStringRep(true));
-                    out.endElement(ELEMENT_URL);
-                }
-
-                // End bookmark element
-                out.endElement(ELEMENT_BOOKMARK);
+                // Write encrypted password
+                out.startElement(ELEMENT_PASSWORD);
+                out.writeCData(XORCipher.encodeXORBase64(password));
+                out.endElement(ELEMENT_PASSWORD);
+            }
+            else {
+                // Note: URL may contain a login stored as clear text
+                out.writeCData(url.getStringRep(true));
+                out.endElement(ELEMENT_URL);
             }
 
-            // End root element
-            out.endElement(ELEMENT_ROOT);
+            // End bookmark element
+            out.endElement(ELEMENT_BOOKMARK);
+        }
 
-            // Close XMLWriter
-            out.close();
-        }
-        finally {
-            // Close stream, IOException is thrown under Java 1.3 but no longer under 1.4 and up,
-            // so we catch Exception instead of IOException to let javac compile without bitching
-            // about the exception never being thrown
-            if(out != null) {
-                try {out.close();}
-                catch(Exception e) {}
-            }
-        }
+        // End root element
+        out.endElement(ELEMENT_ROOT);
     }
 }

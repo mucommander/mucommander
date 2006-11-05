@@ -71,18 +71,15 @@ public class ConfigurationParser implements ContentHandler {
     /* ------------------------ */
     /**
      * Parses the specified file.
-     * @param file name of the file to parse.
+     * @param     in                    where to read the configuration from. 
      * @exception IllegalStateException thrown if no builder was associated with this parser.
      */
-    public void parse(String file) throws Exception {
+    public void parse(InputStream in) throws Exception {
         Parser parser;
 
         if(builder == null)
             throw new IllegalStateException("Cannot parse a file without a tree builder.");
-
-        InputStream fin = new BackupInputStream(file);
-        new Parser().parse(fin, this, "UTF-8");
-        fin.close();
+        new Parser().parse(in, this, "UTF-8");
     }
 
     /**

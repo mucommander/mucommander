@@ -180,6 +180,7 @@ public class Launcher {
                 break;
         }
 
+
         // - MAC OS init ----------------------------------------------
         // ------------------------------------------------------------
 
@@ -198,9 +199,7 @@ public class Launcher {
                 Constructor constructor = osxIntegrationClass.getConstructor(new Class[]{});
                 constructor.newInstance(new Object[]{});
             }
-            catch(Exception e) {
-                if(Debug.ON) Debug.trace("Exception thrown while initializing Mac OS X integration");
-            }
+            catch(Exception e) {if(Debug.ON) Debug.trace("Exception thrown while initializing Mac OS X integration");}
         }
 
         // - muCommander boot -----------------------------------------
@@ -255,6 +254,7 @@ public class Launcher {
             else
                 WindowManager.createNewMainFrame(args[i], null);
         }
+
         // If no initial path was specified, start a default main window.
         if(WindowManager.getCurrentMainFrame() == null)
             WindowManager.createNewMainFrame();

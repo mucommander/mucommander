@@ -5,10 +5,7 @@ import com.mucommander.RuntimeConstants;
 import com.mucommander.io.*;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.WeakHashMap;
@@ -76,8 +73,20 @@ public class ConfigurationManager {
      * @param path path to the configuration file to load in memory.
      */
     private static synchronized void parseConfiguration(String path) throws Exception {
-        ConfigurationParser parser = new ConfigurationParser(new ConfigurationLoader());
-        parser.parse(path);
+        ConfigurationParser parser;
+        InputStream         in;
+
+        in = null;
+        try {
+            parser = new ConfigurationParser(new ConfigurationLoader());
+            parser.parse(in = new BackupInputStream(path));
+        }
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
+            }
+        }
     }
 
     /**
@@ -96,7 +105,7 @@ public class ConfigurationManager {
                 setConfigurationFile(path);
                 parseConfiguration(path);
             }
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFilePath(), -1);						
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFilePath(), -1);
 			
             // If version in configuration differs from current version, 
             // import and move variables which have moved in the configuration tree
@@ -144,22 +153,25 @@ public class ConfigurationManager {
      * Writes the configuration to the configuration file.
      */
     public static synchronized void writeConfiguration() {
-        OutputStream out = null;
+        BackupOutputStream out;
+
+        out = null;
         try {
             ConfigurationWriter writer = new ConfigurationWriter();
             String filePath = getConfigurationFilePath();
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: "+filePath);
             writer.writeXML(out = new BackupOutputStream(filePath));
+            out.close();
         }
         catch(IOException e) {
+            // Cancels the backup operation if an error occured.
+            if(out != null) {
+                try {out.close(false);}
+                catch(Exception e2) {}
+            }
+
             // Notify user that preferences file could not be written
             System.out.println("muCommander was unable to write preferences file: "+e);
-        }
-        finally {
-            if(out!=null) {
-                try {out.close();}
-                catch(Exception e) {}
-            }
         }
     }
 
