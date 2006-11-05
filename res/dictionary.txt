@@ -323,6 +323,30 @@ create:RU:Создать
 create:ZH_CN:创建
 create:SI:Ustvari
 
+login:EN:Login
+login:FR:Identifiant
+login:DE:Login
+login:ES:Identificación
+login:CS:Login
+login:zh_TW:登入
+login:PL:Login
+login:HU:login
+login:RU:Логин
+login:ZH_CN:登入
+login:SI:Uporabniško ime
+
+password:EN:Password
+password:FR:Mot de passe
+password:DE:Paßwort
+password:ES:Contraseña
+password:CS:Heslo
+password:zh_TW:密碼
+password:PL:Hasło
+password:HU:jelszó
+password:RU:Пароль
+password:ZH_CN:密码
+password:SI:Geslo
+
 
 ##########################
 # Generic error messages #
@@ -3307,18 +3331,6 @@ server_connect_dialog.username:RU:Имя пользователя
 server_connect_dialog.username:ZH_CN:用户名
 server_connect_dialog.username:SI:Uporabniško ime
 
-server_connect_dialog.password:EN:Password
-server_connect_dialog.password:FR:Mot de passe
-server_connect_dialog.password:DE:Paßwort
-server_connect_dialog.password:ES:Contraseña
-server_connect_dialog.password:CS:Heslo
-server_connect_dialog.password:zh_TW:密碼
-server_connect_dialog.password:PL:Hasło
-server_connect_dialog.password:HU:jelszó
-server_connect_dialog.password:RU:Пароль
-server_connect_dialog.password:ZH_CN:密码
-server_connect_dialog.password:SI:Geslo
-
 server_connect_dialog.initial_dir:EN:Initial directory
 server_connect_dialog.initial_dir:FR:Répertoire initial
 server_connect_dialog.initial_dir:DE:Startordner
@@ -3447,20 +3459,6 @@ auth_dialog.server:HU:szerver
 auth_dialog.server:RU:Сервер
 auth_dialog.server:ZH_CN:服务器
 auth_dialog.server:SI:Strežnik
-
-auth_dialog.login:EN:Login
-auth_dialog.login:FR:Identifiant
-auth_dialog.login:DE:Login
-auth_dialog.login:ES:Identificación
-auth_dialog.login:CS:Login
-auth_dialog.login:zh_TW:登入
-auth_dialog.login:PL:Login
-auth_dialog.login:HU:login
-auth_dialog.login:RU:Логин
-auth_dialog.login:ZH_CN:登入
-auth_dialog.login:SI:Uporabniško ime
-
-auth_dialog.password:EN:$[server_connect_dialog.password]
 
 auth_dialog.error_was:EN:Error was: %1
 auth_dialog.error_was:FR:L'erreur était: %1

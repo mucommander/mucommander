@@ -34,6 +34,21 @@ public class Bookmark {
         return name;
     }
 
+
+//    /**
+//     * Returns this bookmark's name, appended with the protocol if this bookmark's URL doesn't refer to a local file.
+//     */
+//    public String getNameWithProtocol() {
+//        String displayableName = getName();
+//
+//        String protocol = fileURL.getProtocol();
+//        if(!protocol.equals("file"))
+//            displayableName += " ["+protocol.toUpperCase()+"]";
+//
+//        return displayableName;
+//    }
+
+
     /**
      * Changes this bookmark's name to the given one.
      */
@@ -61,9 +76,12 @@ public class Bookmark {
         // Notify registered listeners of the change
         BookmarkManager.fireBookmarkChanged(this);
     }
-	
 
+
+    /**
+     * Returns the bookmark's name.
+     */
     public String toString() {
-        return name+" -> "+fileURL;
+        return name;
     }
 }

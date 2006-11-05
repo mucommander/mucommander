@@ -64,11 +64,11 @@ public class AuthDialog extends FocusDialog implements ActionListener {
         // Login field
         String login = fileURL.getLogin();
         this.loginField = new JTextField(login);
-        textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.login"), loginField, 10);
+        textFieldsPanel.addTextFieldRow(Translator.get("login"), loginField, 10);
 		
         // Password field
         this.passwordField = new JPasswordField();
-        textFieldsPanel.addTextFieldRow(Translator.get("auth_dialog.password"), passwordField, 10);
+        textFieldsPanel.addTextFieldRow(Translator.get("password"), passwordField, 10);
 	
         //		contentPane.add(textFieldsPanel, BorderLayout.CENTER);
         yPanel.add(textFieldsPanel);

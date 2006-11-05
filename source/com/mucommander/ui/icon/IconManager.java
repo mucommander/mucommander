@@ -32,7 +32,7 @@ public class IconManager {
     /** Designates the toolbar icon set */
     public final static int STATUS_BAR_ICON_SET = 2;
     /** Designates the table icon set */
-    public final static int TABLE_ICON_SET = 3;
+    public final static int COMMON_ICON_SET = 3;
     /** Designates the preferences icon set */
     public final static int PREFERENCES_ICON_SET = 4;
     /** Designates the progress icon set */
@@ -43,7 +43,7 @@ public class IconManager {
         "/file/",
         "/action/",
         "/status_bar/",
-        "/table/",
+        "/common/",
         "/preferences/",
         "/progress/"
     };
@@ -76,7 +76,7 @@ public class IconManager {
         caches[FILE_ICON_SET] = new Hashtable();
         caches[ACTION_ICON_SET] = new Hashtable();
         caches[STATUS_BAR_ICON_SET] = new Hashtable();
-        caches[TABLE_ICON_SET] = new Hashtable();
+        caches[COMMON_ICON_SET] = new Hashtable();
         caches[PROGRESS_ICON_SET] = new Hashtable();
     }
 
