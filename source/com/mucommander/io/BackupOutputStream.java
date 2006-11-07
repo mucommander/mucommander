@@ -103,6 +103,13 @@ public class BackupOutputStream extends FilterOutputStream implements BackupCons
             // Transfers the content of in into out.
             while((count = in.read(buffer)) != -1)
                 out.write(buffer, 0, count);
+
+            // Frees the input stream in order to delete the backup file.
+            in.close();
+            in = null;
+
+            // Deletes the backup file.
+            backup.delete();
         }
         // Cleanup.
         finally {
