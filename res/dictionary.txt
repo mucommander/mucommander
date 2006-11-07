@@ -3560,7 +3560,48 @@ edit_bookmarks_dialog.name:EN:$[add_bookmark_dialog.name]
 
 edit_bookmarks_dialog.location:EN:$[add_bookmark_dialog.location]
 
-# Remove button in the Edit bookmarks dialog
+# New bookmark button in the Edit bookmarks dialog
+edit_bookmarks_dialog.new:EN:New
+edit_bookmarks_dialog.new:FR:Nouveau
+
+
+
+
+
+
+
+
+
+
+
+# 'New location' text that appears as a temporary name when creating a new bookmark
+edit_bookmarks_dialog.new_location:EN:New location
+edit_bookmarks_dialog.new_location:FR:Nouvelle emplacement
+
+
+
+
+
+
+
+
+
+
+# Duplicate bookmark button in the Edit bookmarks dialog
+edit_bookmarks_dialog.duplicate:EN:Duplicate
+edit_bookmarks_dialog.duplicate:FR:Dupliquer
+
+
+
+
+
+
+
+
+
+
+
+# Remove bookmark button in the Edit bookmarks dialog
 edit_bookmarks_dialog.remove:EN:Remove
 edit_bookmarks_dialog.remove:FR:Supprimer
 edit_bookmarks_dialog.remove:ES:Eliminar
