@@ -2,8 +2,9 @@ package com.mucommander.ui.dnd;
 
 import com.mucommander.file.FileSet;
 
-import java.awt.datatransfer.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.Transferable;
 
 /**
  * This class provides methods to more easily interact with the system clipboard.

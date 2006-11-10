@@ -1,8 +1,8 @@
 package com.mucommander.file;
 
+import com.mucommander.Debug;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.Debug;
 import jcifs.smb.*;
 
 import java.io.IOException;

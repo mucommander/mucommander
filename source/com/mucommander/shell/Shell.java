@@ -1,11 +1,14 @@
 package com.mucommander.shell;
 
+import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.file.*;
-import com.mucommander.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FSFile;
 
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Vector;
 
 /**
  * @author Maxence Bernard, Nicolas Rinaudo

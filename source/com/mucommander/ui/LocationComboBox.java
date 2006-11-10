@@ -183,7 +183,8 @@ public class LocationComboBox extends JComboBox implements LocationListener, Act
             Bookmark b = BookmarkManager.getBookmark(locationText);
             if(b!=null) {
                 // Change the current folder to the bookmark's location
-                folderPanel.trySetCurrentFolder(b.getURL());
+//                folderPanel.trySetCurrentFolder(b.getURL());
+                folderPanel.trySetCurrentFolder(b.getLocation());
                 return;
             }
 

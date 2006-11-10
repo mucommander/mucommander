@@ -1,24 +1,18 @@
 package com.mucommander.ui.dnd;
 
-import com.mucommander.Debug;
-import com.mucommander.job.MoveJob;
-import com.mucommander.job.CopyJob;
-import com.mucommander.text.Translator;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileSet;
-import com.mucommander.ui.FolderPanel;
-import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.MainFrame;
+import com.mucommander.job.CopyJob;
+import com.mucommander.job.MoveJob;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.FileExistsDialog;
+import com.mucommander.ui.FolderPanel;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.ProgressDialog;
 
-import java.awt.dnd.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
 import java.awt.*;
-import java.util.List;
-import java.io.File;
-import java.io.BufferedReader;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.*;
 
 /**
  * Provides file(s) 'drop' support to components that add a <code>DropTarget</code> using this <code>DropTargetListener</code>.

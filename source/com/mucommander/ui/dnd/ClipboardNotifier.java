@@ -1,9 +1,9 @@
 package com.mucommander.ui.dnd;
 
 import javax.swing.*;
-import java.awt.datatransfer.FlavorListener;
-import java.awt.datatransfer.FlavorEvent;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.FlavorEvent;
+import java.awt.datatransfer.FlavorListener;
 
 /**
  * ClipboardNotifier allows an action to be dynamically enabled when the clipboard contains files, and disabled otherwise.

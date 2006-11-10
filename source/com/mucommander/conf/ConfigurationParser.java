@@ -2,7 +2,6 @@ package com.mucommander.conf;
 
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
-import com.mucommander.io.BackupInputStream;
 
 import java.io.InputStream;
 import java.util.Hashtable;

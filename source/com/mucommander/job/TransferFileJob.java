@@ -1,6 +1,7 @@
 
 package com.mucommander.job;
 
+import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.io.ByteCounter;
@@ -10,7 +11,6 @@ import com.mucommander.io.ThroughputLimitInputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
-import com.mucommander.Debug;
 
 import java.io.IOException;
 import java.io.InputStream;

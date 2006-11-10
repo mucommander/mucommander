@@ -217,10 +217,10 @@ public class FileURL implements Cloneable {
             }
         }
         catch(MalformedURLException e) {
-            if(com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("Exception in FileURL(), malformed FileURL "+url+" : "+e);
-                e.printStackTrace();
-            }
+//            if(com.mucommander.Debug.ON) {
+//                com.mucommander.Debug.trace("Exception in FileURL(), malformed FileURL "+url+" : "+e);
+//                e.printStackTrace();
+//            }
             throw e;
         }
         catch(Exception e2) {

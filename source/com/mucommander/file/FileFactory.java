@@ -1,19 +1,19 @@
 package com.mucommander.file;
 
-import com.mucommander.cache.LRUCache;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.file.filter.FileFilter;
+import com.mucommander.cache.LRUCache;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
+import com.mucommander.file.filter.FileFilter;
 
-import java.io.IOException;
 import java.io.File;
-import java.util.Random;
-import java.util.Hashtable;
-import java.util.Vector;
-import java.util.Set;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Hashtable;
+import java.util.Random;
+import java.util.Set;
+import java.util.Vector;
 
 /**
  * FileFactory is an abstract class that provides static methods to create {link AbstractFile AbstractFile} instances.

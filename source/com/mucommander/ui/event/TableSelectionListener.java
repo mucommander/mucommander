@@ -1,6 +1,5 @@
 package com.mucommander.ui.event;
 
-import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.table.FileTable;
 
 /**

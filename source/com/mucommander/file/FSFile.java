@@ -1,7 +1,6 @@
 package com.mucommander.file;
 
 import com.mucommander.PlatformManager;
-import com.mucommander.Debug;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;

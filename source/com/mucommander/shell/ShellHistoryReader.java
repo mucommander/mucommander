@@ -1,9 +1,10 @@
 package com.mucommander.shell;
 
-import com.mucommander.xml.parser.*;
-import com.mucommander.io.*;
-import java.util.*;
-import java.io.*;
+import com.mucommander.xml.parser.ContentHandler;
+import com.mucommander.xml.parser.Parser;
+
+import java.io.InputStream;
+import java.util.Hashtable;
 
 /**
  * Parses XML shell history files and populates the {@link com.mucommander.shell.ShellHistoryManager}.

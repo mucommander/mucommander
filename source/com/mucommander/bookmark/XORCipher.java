@@ -1,7 +1,7 @@
 package com.mucommander.bookmark;
 
-import com.mucommander.io.Base64OutputStream;
 import com.mucommander.io.Base64InputStream;
+import com.mucommander.io.Base64OutputStream;
 
 import java.io.IOException;
 

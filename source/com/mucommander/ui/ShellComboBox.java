@@ -1,11 +1,15 @@
 package com.mucommander.ui;
 
-import com.mucommander.shell.*;
+import com.mucommander.shell.ShellHistoryListener;
+import com.mucommander.shell.ShellHistoryManager;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Iterator;
 
 /**

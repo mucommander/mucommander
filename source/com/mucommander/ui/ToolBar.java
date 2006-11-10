@@ -1,30 +1,30 @@
 
 package com.mucommander.ui;
 
+import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileToolkit;
+import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MucoAction;
 import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileToolkit;
-import com.mucommander.PlatformManager;
-import com.mucommander.Debug;
-import com.mucommander.io.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Hashtable;
-import java.util.Vector;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Hashtable;
+import java.util.Vector;
 
 
 /**

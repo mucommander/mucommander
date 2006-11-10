@@ -1,15 +1,15 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.PlatformManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
+import com.mucommander.job.CopyJob;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.FileExistsDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.FileExistsDialog;
-import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.dnd.ClipboardNotifier;
-import com.mucommander.text.Translator;
-import com.mucommander.job.CopyJob;
-import com.mucommander.file.FileSet;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.PlatformManager;
+import com.mucommander.ui.dnd.ClipboardSupport;
 
 /**
  * This action pastes the files contained by the system clipboard to the currently active folder.

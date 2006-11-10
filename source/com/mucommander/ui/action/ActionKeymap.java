@@ -5,18 +5,17 @@ import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileToolkit;
+import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
-import com.mucommander.io.*;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-import java.util.Collection;
-import java.io.InputStream;
-import java.io.IOException;
 
 
 /**

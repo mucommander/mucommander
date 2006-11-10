@@ -1,11 +1,11 @@
 package com.mucommander.job;
 
+import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
-import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.FileExistsDialog;
-import com.mucommander.PlatformManager;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.ProgressDialog;
 
 import java.io.File;
 

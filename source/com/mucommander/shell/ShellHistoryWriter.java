@@ -1,9 +1,9 @@
 package com.mucommander.shell;
 
-import com.mucommander.xml.writer.*;
-import com.mucommander.io.*;
-import java.io.*;
-import java.util.*;
+import com.mucommander.xml.writer.XmlWriter;
+
+import java.io.OutputStream;
+import java.util.Iterator;
 
 /**
  * Used to save the content of the {@link com.mucommander.shell.ShellHistoryManager} to a file.

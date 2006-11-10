@@ -2,10 +2,13 @@ package com.mucommander.conf;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
-import com.mucommander.io.*;
+import com.mucommander.io.BackupInputStream;
+import com.mucommander.io.BackupOutputStream;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.WeakHashMap;

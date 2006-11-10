@@ -1,17 +1,17 @@
 package com.mucommander.ui;
 
-import com.mucommander.shell.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.shell.ProcessListener;
+import com.mucommander.shell.Shell;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
-import com.mucommander.conf.ConfigurationManager;
 
-import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
+import java.io.PrintStream;
 
 
 /**

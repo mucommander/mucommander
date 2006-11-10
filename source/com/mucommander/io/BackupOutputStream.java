@@ -1,6 +1,8 @@
 package com.mucommander.io;
 
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+
 import java.io.*;
 
 /**

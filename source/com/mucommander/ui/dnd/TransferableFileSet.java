@@ -1,16 +1,18 @@
 package com.mucommander.ui.dnd;
 
-import com.mucommander.file.*;
 import com.mucommander.Debug;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileSet;
 
-import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
-import java.io.File;
 import java.io.BufferedReader;
-import java.util.Vector;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * This class represents a Transferable file set and is used for Drag and Drop transfers initiated by muCommander

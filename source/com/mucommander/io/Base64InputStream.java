@@ -1,8 +1,8 @@
 package com.mucommander.io;
 
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Base64InputStream allows to read and decode Base64-encoded data.

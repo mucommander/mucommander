@@ -1,7 +1,7 @@
 package com.mucommander.io;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * ThroughputLimitInputStream extends InputStream to provide control over the transfer speed and limit it to a specified

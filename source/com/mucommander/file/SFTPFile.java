@@ -3,7 +3,6 @@ package com.mucommander.file;
 
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.Debug;
 import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.authentication.AuthenticationProtocolState;
 import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Vector;
 
 

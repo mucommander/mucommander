@@ -114,6 +114,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
      */
     private void updateLabel() {
         AbstractFile currentFolder = folderPanel.getCurrentFolder();
+        String currentPath = currentFolder.getAbsolutePath();
         FileURL currentURL = currentFolder.getURL();
 
         String newLabel = null;
@@ -124,7 +125,8 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
         Bookmark b;
         for(int i=0; i<nbBookmarks; i++) {
             b = (Bookmark)bookmarks.elementAt(i);
-            if(b.getURL().equals(currentURL)) {
+//            if(b.getURL().equals(currentURL)) {
+            if(currentPath.equals(b.getLocation())) {
                 // Note: if several bookmarks match current folder, the first one will be used
                 newLabel = b.getName();
                 break;
@@ -146,7 +148,7 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
                     newLabel = "SMB";
                 }
                 else {
-                    String currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
+                    currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
                     int bestLength = -1;
                     int bestIndex = 0;
                     String temp;
@@ -288,15 +290,16 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
     // BookmarkListener methods //
     //////////////////////////////
 	
-    public void bookmarkChanged(Bookmark b) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("bookmark="+b+" currentURL="+folderPanel.getCurrentFolder().getURL()+" equal="+folderPanel.getCurrentFolder().getURL().equals(b.getURL()));
+    public void bookmarksChanged() {
+////         If a bookmark has been added/edited/removed, check if the bookmark's location corresponds
+////         to the current folder's. If it so, update the button's label to reflect the new current folder
+////        if(folderPanel.getCurrentFolder().getURL().equals(b.getURL())) {
+//        if(folderPanel.getCurrentFolder().getAbsolutePath().equals(b.getLocation())) {
+//            updateLabel();
+//        }
 
-        // If a bookmark has been added/edited/removed, check if the bookmark's URL corresponds 
-        // to the current folder's. If it so, update the button's label to reflect the new current folder
-        if(folderPanel.getCurrentFolder().getURL().equals(b.getURL())) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling updateLabel()");
-            updateLabel();
-        }
+        // Refresh label in case a bookmark with the current location was changed
+        updateLabel();
     }
 
 	
@@ -342,7 +345,8 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
             }
             // Menu item that corresponds to a bookmark
             else if(index<serverShortcutsOffset) {
-                folderPanel.trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index-bookmarksOffset)).getURL());
+//                folderPanel.trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index-bookmarksOffset)).getURL());
+                folderPanel.trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index-bookmarksOffset)).getLocation());
             }
             // Menu item that corresponds to a server shortcut
             else {

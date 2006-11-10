@@ -1,16 +1,14 @@
 package com.mucommander.ui.dnd;
 
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileSet;
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.file.FileSet;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.Debug;
 
-import java.awt.dnd.*;
 import java.awt.*;
+import java.awt.dnd.*;
 import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
 
 /**
  * This class adds 'drag' support to components that are registered using the {@link #enableDrag(java.awt.Component)}

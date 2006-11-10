@@ -6,12 +6,12 @@ import com.mucommander.file.FileSet;
 import com.mucommander.file.FileToolkit;
 import com.mucommander.job.MkdirJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.comp.dialog.DialogToolkit;
-import com.mucommander.ui.comp.dialog.FocusDialog;
-import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MkdirAction;
 import com.mucommander.ui.action.MkfileAction;
+import com.mucommander.ui.comp.dialog.DialogToolkit;
+import com.mucommander.ui.comp.dialog.FocusDialog;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
 
 import javax.swing.*;
 import java.awt.*;

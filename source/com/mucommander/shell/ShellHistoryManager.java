@@ -1,11 +1,14 @@
 package com.mucommander.shell;
 
-import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.PlatformManager;
-import com.mucommander.io.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.io.BackupInputStream;
+import com.mucommander.io.BackupOutputStream;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.WeakHashMap;
 
 /**
  * Used to manage shell history.

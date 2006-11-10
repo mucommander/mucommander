@@ -1,8 +1,8 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.file.FileSet;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.dnd.ClipboardSupport;
-import com.mucommander.file.FileSet;
 
 /**
  * This action copies the selected / marked files to the system clipboard, allowing to paste

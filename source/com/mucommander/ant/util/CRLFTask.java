@@ -1,6 +1,8 @@
 package com.mucommander.ant.util;
 
-import org.apache.tools.ant.*;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
+
 import java.io.*;
 
 /**

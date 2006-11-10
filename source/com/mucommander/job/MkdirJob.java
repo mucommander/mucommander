@@ -5,8 +5,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileSet;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.FileExistsDialog;
+import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 
 import javax.swing.*;

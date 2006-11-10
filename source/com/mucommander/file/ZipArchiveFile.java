@@ -1,8 +1,8 @@
 package com.mucommander.file;
 
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FilterInputStream;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.zip.ZipFile;

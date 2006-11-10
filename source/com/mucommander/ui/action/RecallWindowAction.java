@@ -1,8 +1,8 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.WindowManager;
-import com.mucommander.text.Translator;
 
 import java.util.Vector;
 

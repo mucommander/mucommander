@@ -1,7 +1,7 @@
 package com.mucommander.file.filter;
 
-import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractArchiveFile;
+import com.mucommander.file.AbstractFile;
 
 /**
  * FileFilter that accepts only archive files.

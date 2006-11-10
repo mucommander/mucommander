@@ -1,6 +1,7 @@
 package com.mucommander.shell;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Used to empty a process' stdout and stderr streams.

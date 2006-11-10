@@ -1,9 +1,10 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
-import com.mucommander.file.*;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 

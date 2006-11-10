@@ -1,22 +1,22 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.job.TransferFileJob;
+import com.mucommander.PlatformManager;
+import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.job.FileJob;
+import com.mucommander.job.TransferFileJob;
+import com.mucommander.text.DurationFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
-import com.mucommander.text.DurationFormat;
 import com.mucommander.ui.comp.button.ButtonChoicePanel;
 import com.mucommander.ui.comp.button.CollapseExpandButton;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.PlatformManager;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;

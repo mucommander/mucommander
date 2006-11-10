@@ -3,7 +3,6 @@ package com.mucommander.conf;
 import com.mucommander.xml.writer.XmlWriter;
 
 import java.io.OutputStream;
-import java.io.IOException;
 
 /**
  * Writes the configuration tree to an output stream.

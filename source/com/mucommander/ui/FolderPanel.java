@@ -12,11 +12,11 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.progress.ProgressTextField;
+import com.mucommander.ui.dnd.FileDragSourceListener;
+import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.TablePopupMenu;
-import com.mucommander.ui.dnd.FileDropTargetListener;
-import com.mucommander.ui.dnd.FileDragSourceListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;

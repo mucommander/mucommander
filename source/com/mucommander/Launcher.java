@@ -6,7 +6,6 @@ import com.mucommander.ui.CheckVersionDialog;
 import com.mucommander.ui.SplashScreen;
 import com.mucommander.ui.WindowManager;
 
-import javax.swing.*;
 import java.lang.reflect.Constructor;
 
 /**

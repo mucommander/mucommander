@@ -1,7 +1,12 @@
 package com.mucommander.io;
 
-import com.mucommander.file.*;
-import java.io.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+
+import java.io.File;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Opens an input stream on a file that has been saved by {@link com.mucommander.io.BackupOutputStream}.

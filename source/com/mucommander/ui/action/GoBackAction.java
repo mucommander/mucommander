@@ -2,9 +2,9 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.event.ActivePanelListener;
 
 /**
  * This action recalls the previous folder in the current FolderPanel's history.
