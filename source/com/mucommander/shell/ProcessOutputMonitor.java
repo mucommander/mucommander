@@ -1,7 +1,8 @@
 package com.mucommander.shell;
 
-import java.io.IOException;
-import java.io.InputStream;
+import com.mucommander.Debug;
+
+import java.io.*;
 
 /**
  * Used to empty a process' stdout and stderr streams.
@@ -16,6 +17,7 @@ class ProcessOutputMonitor implements Runnable {
     private ProcessListener listener;
     /** Process to wait on once the stream is closed. */
     private Process         process;
+    private boolean         monitor;
 
 
 
@@ -29,6 +31,7 @@ class ProcessOutputMonitor implements Runnable {
     public ProcessOutputMonitor(InputStream in, ProcessListener listener) {
         this.listener = listener;
         this.in       = in;
+        monitor       = true;
     }
 
     /**
@@ -61,22 +64,42 @@ class ProcessOutputMonitor implements Runnable {
 
         // Reads the content of the stream.
         try {
-            while((read = in.read(buffer)) != -1)
-                listener.processOutput(buffer, 0, read);
+            while(monitor && ((read = in.read(buffer)) != -1)) {
+                if(listener != null)
+                    listener.processOutput(buffer, 0, read);
+            }
         }
         // Ignore this exception: either there's nothing we can do about it anyway,
         // or it's 'normal' (the process has been killed).
-        catch(IOException e) {}
+        catch(IOException e) {
+            if(Debug.ON) {
+                Debug.trace("IO error while monitoring process: " + e);
+                e.printStackTrace(System.err);
+            }
+        }
 
         // Closes the stream.
         try {in.close();}
-        catch(IOException e) {if(com.mucommander.Debug.ON) e.printStackTrace(System.err);}
+        catch(IOException e) {
+            if(Debug.ON) {
+                Debug.trace("IO error while closing process stream: " + e);
+                e.printStackTrace(System.err);
+            }
+        }
 
         // If a process was set, wait for it to die and notify the listener.
         if(process != null) {
             try {process.waitFor();}
-            catch(Exception e) {if(com.mucommander.Debug.ON) e.printStackTrace(System.err);}
-            listener.processDied(process.exitValue());
+            catch(Exception e) {
+                if(Debug.ON) {
+                    Debug.trace("Error while waiting on process: " + e);
+                    e.printStackTrace(System.err);
+                }
+            }
+            if(monitor && (listener != null))
+                listener.processDied(process.exitValue());
         }
     }
+
+    public void stopMonitoring() {monitor = false;}
 }

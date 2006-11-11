@@ -111,9 +111,7 @@ public class Shell {
             // Merge the process' stdout and stderr 
             pb.redirectErrorStream(true);
 
-            process = pb.start();
-            if(listener != null)
-                new Thread(new ProcessOutputMonitor(process.getInputStream(), listener, process), "Shell merged stream monitor's thread").start();
+            process = new MonitoredProcess(pb.start(), listener);
         }
         // Java 1.4 or below, use Runtime.exec() which separates stdout and stderr (harder to manipulate) 
         else {
@@ -121,11 +119,7 @@ public class Shell {
             String tokens[] = new String[commandTokens.size()];
             commandTokens.toArray(tokens);
 
-            process = Runtime.getRuntime().exec(tokens, null, workingDirectory);
-            if(listener != null) {
-                new Thread(new ProcessOutputMonitor(process.getInputStream(), listener, process), "Shell STDOUT monitor's thread").start();
-                new Thread(new ProcessOutputMonitor(process.getErrorStream(), listener), "Shell STDERR monitor's Thread").start();
-            }
+            process = new MonitoredProcess(Runtime.getRuntime().exec(tokens, null, workingDirectory), listener);
         }
         return process;
     }
