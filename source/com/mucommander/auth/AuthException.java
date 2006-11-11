@@ -1,5 +1,7 @@
 
-package com.mucommander.file;
+package com.mucommander.auth;
+
+import com.mucommander.file.FileURL;
 
 import java.io.IOException;
 

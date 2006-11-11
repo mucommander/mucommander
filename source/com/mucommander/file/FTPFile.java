@@ -3,6 +3,9 @@ package com.mucommander.file;
 
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.auth.AuthException;
+import com.mucommander.auth.AuthInfo;
+import com.mucommander.auth.AuthManager;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 

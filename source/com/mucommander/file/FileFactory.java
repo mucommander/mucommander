@@ -2,6 +2,7 @@ package com.mucommander.file;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
+import com.mucommander.auth.AuthException;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.FileFilter;

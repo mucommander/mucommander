@@ -1,15 +1,18 @@
 
-package com.mucommander.file;
+package com.mucommander.auth;
+
+import com.mucommander.auth.AuthInfo;
+import com.mucommander.file.FileURL;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 
 /**
- * This class centralizes login/password combinations ({@link com.mucommander.file.AuthInfo AuthInfo} instances) used
+ * This class centralizes login/password combinations ({@link com.mucommander.auth.AuthInfo AuthInfo} instances) used
  * to connect to remote file systems. It is used to manipulate file paths and show them to the end user
  * without the login and password information. Each supplied login/password is mapped to a path (or file URL) and
- * stored in a table and can later be retrieved.
+ * stored in a hashtable and can later be retrieved.
  *
  * @author Maxence Bernard
  */

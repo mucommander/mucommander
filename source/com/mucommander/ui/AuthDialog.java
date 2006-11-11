@@ -2,9 +2,9 @@
 package com.mucommander.ui;
 
 
-import com.mucommander.file.AuthException;
-import com.mucommander.file.AuthInfo;
-import com.mucommander.file.AuthManager;
+import com.mucommander.auth.AuthException;
+import com.mucommander.auth.AuthInfo;
+import com.mucommander.auth.AuthManager;
 import com.mucommander.file.FileURL;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;

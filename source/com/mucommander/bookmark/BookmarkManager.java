@@ -275,12 +275,10 @@ public class BookmarkManager implements VectorChangeListener {
     }
 
     public void elementsRemoved(int startIndex, int nbRemoved) {
-        if(Debug.ON) Debug.trace("called");
         fireBookmarksChanged();
     }
 
     public void elementChanged(int index) {
-        if(Debug.ON) Debug.trace("called");
         fireBookmarksChanged();
     }
 }

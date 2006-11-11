@@ -4,11 +4,11 @@ package com.mucommander.ui;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.ShutdownHook;
+import com.mucommander.auth.AuthException;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AuthException;
 import com.mucommander.file.FileFactory;
 
 import javax.swing.*;

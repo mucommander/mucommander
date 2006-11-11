@@ -1,6 +1,8 @@
 package com.mucommander.file;
 
 import com.mucommander.Debug;
+import com.mucommander.auth.AuthException;
+import com.mucommander.auth.AuthManager;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import jcifs.smb.*;

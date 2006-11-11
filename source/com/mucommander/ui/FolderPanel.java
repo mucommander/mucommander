@@ -17,6 +17,7 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.TablePopupMenu;
+import com.mucommander.auth.AuthException;
 
 import javax.swing.*;
 import javax.swing.border.Border;
