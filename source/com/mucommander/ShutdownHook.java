@@ -55,8 +55,9 @@ public class ShutdownHook extends Thread {
         if(shutdownTasksPerformed)
             return;
         
-        // Saves preferences
+        // Save preferences
         ConfigurationManager.writeConfiguration();
+        // Save shell history
         ShellHistoryManager.writeHistory();
     
         // Shutdown tasks should only be performed once
