@@ -93,6 +93,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // No decoration for this panel
         setBorder(null);
 
+//        setBorder(BorderFactory.createEtchedBorder());
+
         JPanel locationPanel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -145,15 +147,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         //		// Change location field's text to reflect new current folder's path
         //		locationField.setText(currentFolder.getAbsolutePath());
 				
-        scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER) {
-                public Insets getInsets() {
-                    return new Insets(0, 0, 0, 0);
-                }
-		
-                public Border getBorder() {
-                    return null;
-                }
-            };
+        scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        // Set a 1-line gray border
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(64, 64, 64), 1));
+
         //		// Enable double buffering on scroll pane
         //		scrollPane.setDoubleBuffered(true);
         // Set scroll pane's background color to match the one of this panel and FileTable
