@@ -5,7 +5,15 @@ import com.mucommander.Debug;
 import java.io.*;
 
 /**
- * Used to empty a process' stdout and stderr streams.
+ * Used to monitor a process' stdout and stderr streams.
+ * <p>
+ * This class is used by {@link com.mucommander.shell.MonitoredProcess} to make sure that
+ * processes do not stall because their stdout and stderr streams are not emptied.
+ * </p>
+ * <p>
+ * This implementation is rather hackish, and should not be used directly: it works, but is not
+ * meant to support anything but the very specific needs of {@link com.mucommander.shell.MonitoredProcess}.
+ * </p>
  * @author Nicolas Rinaudo
  */
 class ProcessOutputMonitor implements Runnable {
@@ -17,6 +25,7 @@ class ProcessOutputMonitor implements Runnable {
     private ProcessListener listener;
     /** Process to wait on once the stream is closed. */
     private Process         process;
+    /** Whether the process is still being monitored. */
     private boolean         monitor;
 
 
@@ -87,8 +96,9 @@ class ProcessOutputMonitor implements Runnable {
             }
         }
 
-        // If a process was set, wait for it to die and notify the listener.
+        // If a process was set, perform 'cleanup' tasks.
         if(process != null) {
+            // Waits for the process to die.
             try {process.waitFor();}
             catch(Exception e) {
                 if(Debug.ON) {
@@ -96,10 +106,19 @@ class ProcessOutputMonitor implements Runnable {
                     e.printStackTrace(System.err);
                 }
             }
+            // If this process is still being monitored, notifies an eventual
+            // listener that it has exited.
             if(monitor && (listener != null))
                 listener.processDied(process.exitValue());
         }
     }
 
+    /**
+     * Notifies the monitor that it should stop reading from the stream it's been affected to.
+     * <p>
+     * Calling this method will cause the process' stream to stop being read. For this reason,
+     * it should only be called right before the process is killed, as it will otherwise stall.
+     * </p>
+     */
     public void stopMonitoring() {monitor = false;}
 }

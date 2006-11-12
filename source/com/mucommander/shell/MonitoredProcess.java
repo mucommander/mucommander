@@ -74,13 +74,47 @@ class MonitoredProcess extends Process {
         process.destroy();
     }
 
-    public int exitValue() {return process.exitValue();}
+    /**
+     * Returns the process' exit value.
+     * @return the process' exit value.
+     */
+    public int exitValue() {
+        // If debug is on, prints the exit value.
+        if(Debug.ON) {
+            int exitValue;
+
+            exitValue = process.exitValue();
+            Debug.trace("Process terminated with exit value " + exitValue);
+            return exitValue;
+        }
+        return process.exitValue();
+    }
+
+    /**
+     * Waits for the process to die.
+     * @return the process' exit value.
+     * @exception InterruptedException thrown if the current thread is interrupted while waiting for the process to die.
+     */
     public int waitFor() throws InterruptedException {
         if(Debug.ON) Debug.trace("Waiting for process to terminate...");
         return process.waitFor();
     }
 
+    /**
+     * Returns the process' input stream.
+     * @return the process' input stream.
+     */
     public InputStream getInputStream() {return process.getInputStream();}
+
+    /**
+     * Returns the process' error stream.
+     * @return the process' error stream.
+     */
     public InputStream getErrorStream() {return process.getErrorStream();}
+
+    /**
+     * Returns the process' output stream.
+     * @return the process' output stream.
+     */
     public OutputStream getOutputStream() {return process.getOutputStream();}
 }
