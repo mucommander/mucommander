@@ -175,24 +175,8 @@ public class BookmarkManager implements VectorChangeListener {
      */
     public static void addBookmark(Bookmark b) {
         bookmarks.add(b);
-
-//        // Notify registered listeners of the change
-//        fireBookmarkChanged(b);
     }
-//
-//
-//    /**
-//     * Removes a bookmark.
-//     *
-//     * @param b the Bookmark instance to remove.
-//     */
-//    public static void removeBookmark(Bookmark b) {
-//        bookmarks.remove(b);
-//
-//        // Notify registered listeners of the change
-//        fireBookmarkChanged(b);
-//    }
-	
+
 	
     /**
      * Adds the specified BookmarkListener to the list of registered listeners.
