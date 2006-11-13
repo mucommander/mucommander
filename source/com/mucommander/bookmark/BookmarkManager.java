@@ -21,10 +21,12 @@ import java.util.WeakHashMap;
  * @author Maxence Bernard
  */
 public class BookmarkManager implements VectorChangeListener {
+
+    /** Bookmarks file location */
     private static File bookmarksFile;
 
-    /** Bookmark file name */
-    private static final String BOOKMARKS_FILENAME = "bookmarks.xml";
+    /** Default bookmarks file name */
+    private static final String DEFAULT_BOOKMARKS_FILENAME = "bookmarks.xml";
 
     /** Bookmark instances */
     private static AlteredVector bookmarks = new AlteredVector();
@@ -64,7 +66,7 @@ public class BookmarkManager implements VectorChangeListener {
      */
     private static File getBookmarksFile() {
         if(bookmarksFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), BOOKMARKS_FILENAME);
+            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_BOOKMARKS_FILENAME);
         else
             return bookmarksFile;
     }

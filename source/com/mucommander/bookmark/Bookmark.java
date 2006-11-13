@@ -19,20 +19,8 @@ import java.net.MalformedURLException;
 public class Bookmark implements Cloneable {
 
     private String name;
-//    private FileURL fileURL;
 	private String location;
 
-
-//    /**
-//     * Creates a new Bookmark.
-//     *
-//     * @param name Name given to this bookmark
-//     * @param fileURL URL of the file this bookmark points to.
-//     */
-//    public Bookmark(String name, FileURL fileURL) {
-//        this.name = name;
-//        this.fileURL = fileURL;
-//    }
 
     /**
      * Creates a new Bookmark using the given name and location.
@@ -41,8 +29,9 @@ public class Bookmark implements Cloneable {
      * @param location location (path or URL) this bookmark points to
      */
     public Bookmark(String name, String location) {
-        this.name = name;
-        this.location = location;
+        // Use setters to checks for null values
+        setName(name);
+        setLocation(location);
     }
 
 
@@ -54,29 +43,21 @@ public class Bookmark implements Cloneable {
     }
 
 
-//    /**
-//     * Returns this bookmark's name, appended with the protocol if this bookmark's URL doesn't refer to a local file.
-//     */
-//    public String getNameWithProtocol() {
-//        String displayableName = getName();
-//
-//        String protocol = fileURL.getProtocol();
-//        if(!protocol.equals("file"))
-//            displayableName += " ["+protocol.toUpperCase()+"]";
-//
-//        return displayableName;
-//    }
-
-
     /**
      * Changes this bookmark's name to the given one and fires an event to registered {@link BookmarkListener}
      * instances.
      */
     public void setName(String newName) {
-        this.name = newName;
+        // Replace null values by empty strings
+        if(newName==null)
+            newName = "";
 
-        // Notify registered listeners of the change
-        BookmarkManager.fireBookmarksChanged();
+        if(!newName.equals(this.name)) {
+            this.name = newName;
+
+            // Notify registered listeners of the change
+            BookmarkManager.fireBookmarksChanged();
+        }
     }
 
 
@@ -111,29 +92,19 @@ public class Bookmark implements Cloneable {
      * Changes this bookmark's location to the given one and fires an event to registered {@link BookmarkListener}
      * instances.
      */
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocation(String newLocation) {
+        // Replace null values by empty strings
+        if(newLocation==null)
+            newLocation = "";
 
-        // Notify registered listeners of the change
-        BookmarkManager.fireBookmarksChanged();
+        if(!newLocation.equals(this.location)) {
+            this.location = newLocation;
+
+            // Notify registered listeners of the change
+            BookmarkManager.fireBookmarksChanged();
+        }
     }
 
-//    /**
-//     * Returns this bookmark's file URL.
-//     */
-//    public FileURL getURL() {
-//        return fileURL;
-//    }
-//
-//    /**
-//     * Changes this bookmark's URL to the given one.
-//     */
-//    public void setURL(FileURL newFileURL) {
-//        this.fileURL = newFileURL;
-//
-//        // Notify registered listeners of the change
-//        BookmarkManager.fireBookmarkChanged(this);
-//    }
 
     /**
      * Returns a clone of this bookmark.
@@ -142,12 +113,6 @@ public class Bookmark implements Cloneable {
         return new Bookmark(new String(name), new String(location));
     }
 
-//    /**
-//     * Returns a clone of this bookmark.
-//     */
-//    public Object clone() throws CloneNotSupportedException {
-//        return new Bookmark(new String(name), (FileURL)fileURL.clone());
-//    }
 
     /**
      * Returns the bookmark's name.
