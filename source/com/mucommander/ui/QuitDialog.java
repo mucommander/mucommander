@@ -48,7 +48,7 @@ public class QuitDialog extends QuestionDialog {
               Translator.get("quit_dialog.title"),
               Translator.get("quit_dialog.desc"),
               mainFrame,
-              new String[] {Translator.get("quit_dialog.quit"), Translator.get("cancel")},
+              new String[] {Translator.get("com.mucommander.ui.action.QuitAction.label"), Translator.get("cancel")},
               new int[] {QUIT_ACTION, CANCEL_ACTION},
               0);
 		

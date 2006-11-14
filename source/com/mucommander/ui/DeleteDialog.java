@@ -27,10 +27,10 @@ public class DeleteDialog extends QuestionDialog {
 	
     public DeleteDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, 
-              Translator.get("delete_dialog.delete"),
+              Translator.get("delete"),
               Translator.get("delete_dialog.confirmation"),
               mainFrame,
-              new String[] {Translator.get("delete_dialog.delete"), Translator.get("cancel")},
+              new String[] {Translator.get("delete"), Translator.get("cancel")},
               new int[] {DELETE_ACTION, CANCEL_ACTION},
               0);
 

@@ -9,7 +9,7 @@ import com.mucommander.ui.MainFrame;
  *
  * @author Maxence Bernard
  */
-public class EmailAction extends SelectedFilesAction {
+public class EmailAction extends SelectedFilesAction implements InvokesDialog {
 
     public EmailAction(MainFrame mainFrame) {
         super(mainFrame);

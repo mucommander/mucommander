@@ -8,7 +8,7 @@ import com.mucommander.ui.MainFrame;
  *
  * @author Maxence Bernard
  */
-public class CheckForUpdatesAction extends MucoAction {
+public class CheckForUpdatesAction extends MucoAction implements InvokesDialog {
 
     public CheckForUpdatesAction(MainFrame mainFrame) {
         super(mainFrame);

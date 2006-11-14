@@ -10,7 +10,7 @@ import com.mucommander.ui.UnpackDialog;
  *
  * @author Maxence Bernard
  */
-public class UnpackAction extends SelectedFilesAction {
+public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
 
     public UnpackAction(MainFrame mainFrame) {
         super(mainFrame);

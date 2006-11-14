@@ -8,7 +8,7 @@ import com.mucommander.ui.MainFrame;
  *
  * @author Maxence Bernard
  */
-public class MarkGroupAction extends MucoAction {
+public class MarkGroupAction extends MucoAction implements InvokesDialog {
 
     public MarkGroupAction(MainFrame mainFrame) {
         super(mainFrame);

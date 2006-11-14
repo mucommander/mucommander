@@ -8,7 +8,7 @@ import com.mucommander.ui.bookmark.AddBookmarkDialog;
  *
  * @author Maxence Bernard
  */
-public class AddBookmarkAction extends MucoAction {
+public class AddBookmarkAction extends MucoAction implements InvokesDialog {
 
     public AddBookmarkAction(MainFrame mainFrame) {
         super(mainFrame);

@@ -24,7 +24,7 @@ public class UnpackDialog extends DestinationDialog {
      */
     public UnpackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
         super(mainFrame, files,
-              Translator.get("unpack_dialog.title"),
+              Translator.get("com.mucommander.ui.action.UnpackAction.label"),
               Translator.get("unpack_dialog.destination"),
               Translator.get("unpack_dialog.unpack"),
               Translator.get("unpack_dialog.error_title"));

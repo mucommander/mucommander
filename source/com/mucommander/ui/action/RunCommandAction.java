@@ -8,7 +8,7 @@ import com.mucommander.ui.RunDialog;
  *
  * @author Maxence Bernard
  */
-public class RunCommandAction extends MucoAction {
+public class RunCommandAction extends MucoAction implements InvokesDialog {
 
     public RunCommandAction(MainFrame mainFrame) {
         super(mainFrame);

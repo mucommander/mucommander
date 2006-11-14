@@ -8,7 +8,7 @@ import com.mucommander.ui.connect.ServerConnectDialog;
  *
  * @author Maxence Bernard
  */
-public class ConnectToServerAction extends MucoAction {
+public class ConnectToServerAction extends MucoAction implements InvokesDialog {
 
     public ConnectToServerAction(MainFrame mainFrame) {
         super(mainFrame);

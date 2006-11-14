@@ -41,7 +41,7 @@ language.si:EN:Slovenščina
 # General #
 ###########
 
-# Entries which are used by several other categories or are too generic to fit under any other categories
+# Entries which are used by several components or are too general to fit under any other categories
 
 ok:EN:OK
 ok:FR:OK
@@ -54,6 +54,22 @@ ok:PL:OK
 ok:HU:OK
 ok:RU:OK
 ok:SI:V redu
+
+# Used for buttons as an alternative to 'ok'
+done:EN:Done
+done:FR:Terminé
+done:ES:Terminado
+done:RU:Готово
+done:zh_TW:完成
+done:PL:Zrobione
+done:ZH_CN:完成
+done:SI:Narejeno
+
+
+
+
+
+
 
 yes:EN:Yes
 yes:FR:Oui
@@ -162,6 +178,18 @@ dont_replace:HU:nem helyez áz
 dont_replace:RU:Не заменять
 dont_replace:ZH_CN:不替换
 dont_replace:SI:Ne zamenjaj
+
+delete:EN:Delete
+delete:FR:Supprimer
+delete:DE:Löschen
+delete:ES:Eliminar
+delete:CS:Odstranit
+delete:zh_TW:刪除
+delete:PL:Usuń
+delete:HU:törlés
+delete:RU:Удаление
+delete:ZH_CN:刪除
+delete:SI:Izbriši
 
 skip:EN:Skip
 skip:FR:Suivant
@@ -310,7 +338,7 @@ pause:FR:Pause
 
 
 
-# Used as a button label, in the mkdir/mkfile dialog for instance
+# Used as a button label, in the 'Mkdir' dialog for instance
 create:EN:Create
 create:FR:Créer
 create:DE:Erstelle
@@ -346,6 +374,43 @@ password:HU:jelszó
 password:RU:Пароль
 password:ZH_CN:密码
 password:SI:Geslo
+
+name:EN:Name
+name:FR:Nom
+name:DE:Name
+name:ES:Nombre
+name:CS:Jméno
+name:zh_TW:名稱
+name:PL:Nazwa
+name:HU:név
+name:RU:Имя файла
+#name:RU:Название
+name:ZH_CN:名称
+name:SI:Ime
+
+size:EN:Size
+size:FR:Taille
+size:DE:Größe
+size:ES:Tamaño
+size:CS:Velikost
+size:zh_TW:大小
+size:PL:Rozmiar
+size:HU:méret
+size:RU:Размер
+size:ZH_CN:大小
+size:SI:Velikost
+
+date:EN:Date
+date:FR:Date
+date:DE:Datum
+date:ES:Fecha
+date:CS:Datum
+date:zh_TW:日期
+date:PL:Data
+date:HU:dátum
+date:RU:Дата
+date:ZH_CN:日期
+date:SI:Datum
 
 
 ##########################
@@ -539,9 +604,21 @@ same_source_destination:SI:Izvorna in ciljna mapa sta identični.
 # Actions #
 ###########
 
-com.mucommander.ui.action.AddBookmarkAction.label:EN:$[add_bookmark_dialog.title]...
+com.mucommander.ui.action.AddBookmarkAction.label:EN:Add bookmark
+com.mucommander.ui.action.AddBookmarkAction.label:FR:Ajouter aux favoris
+com.mucommander.ui.action.AddBookmarkAction.label:ES:Añadir favorito
+com.mucommander.ui.action.AddBookmarkAction.label:RU:Добавить закладку
+com.mucommander.ui.action.AddBookmarkAction.label:zh_TW:新增書籤
+com.mucommander.ui.action.AddBookmarkAction.label:PL:Dodaj zakładkę
+com.mucommander.ui.action.AddBookmarkAction.label:ZH_CN:添加书签
+com.mucommander.ui.action.AddBookmarkAction.label:SI:Dodaj med priljubljene
+# Translation missing
 
-# Displayed in the Shortcuts dialog
+
+
+
+
+
 com.mucommander.ui.action.AddBookmarkAction.tooltip:EN:Bookmark current folder
 com.mucommander.ui.action.AddBookmarkAction.tooltip:FR:Ajouter le dossier courant aux favoris
 com.mucommander.ui.action.AddBookmarkAction.tooltip:ES:Añadir a favoritos el directorio actual
@@ -558,7 +635,34 @@ com.mucommander.ui.action.AddBookmarkAction.tooltip:SI:Dodaj trenutno mapo med p
 
 
 
-com.mucommander.ui.action.EditBookmarksAction.label:EN:$[edit_bookmarks_dialog.title]...
+com.mucommander.ui.action.EditBookmarksAction.label:EN:Edit bookmarks
+com.mucommander.ui.action.EditBookmarksAction.label:FR:Éditer les favoris
+com.mucommander.ui.action.EditBookmarksAction.label:ES:Editar favoritos
+com.mucommander.ui.action.EditBookmarksAction.label:RU:Редактировать закладки
+com.mucommander.ui.action.EditBookmarksAction.label:zh_TW:編輯書籤
+com.mucommander.ui.action.EditBookmarksAction.label:PL:Edytuj Zakładki
+com.mucommander.ui.action.EditBookmarksAction.label:ZH_CN:编辑书签
+com.mucommander.ui.action.EditBookmarksAction.label:SI:Uredi priljubljene
+# Translation missing
+
+
+
+
+
+
+
+com.mucommander.ui.action.EditCredentialsAction.label:EN:Edit credentials
+com.mucommander.ui.action.EditCredentialsAction.label:FR:Éditer les indentifiants
+# Translation missing
+
+
+
+
+
+
+
+
+
 
 com.mucommander.ui.action.ChangeLocationAction.label:EN:Change current location
 com.mucommander.ui.action.ChangeLocationAction.label:FR:Changer le chemin courant
@@ -575,7 +679,7 @@ com.mucommander.ui.action.ChangeLocationAction.label:FR:Changer le chemin couran
 
 
 com.mucommander.ui.action.CheckForUpdatesAction.label:EN:Check for updates
-com.mucommander.ui.action.CheckForUpdatesAction.label:FR:Mises à jour...
+com.mucommander.ui.action.CheckForUpdatesAction.label:FR:Mises à jour
 com.mucommander.ui.action.CheckForUpdatesAction.label:DE:Nach Updates suchen
 com.mucommander.ui.action.CheckForUpdatesAction.label:ES:Comprobar actualizaciones
 com.mucommander.ui.action.CheckForUpdatesAction.label:CS:Aktualizace
@@ -598,17 +702,17 @@ com.mucommander.ui.action.CompareFoldersAction.label:RU:Сравнить кат�
 com.mucommander.ui.action.CompareFoldersAction.label:ZH_CN:比较文件夹
 com.mucommander.ui.action.CompareFoldersAction.label:SI:Primerjaj mapi
 
-com.mucommander.ui.action.ConnectToServerAction.label:EN:Connect to server...
-com.mucommander.ui.action.ConnectToServerAction.label:FR:Connexion à un serveur...
-com.mucommander.ui.action.ConnectToServerAction.label:DE:Verbinde mit Server...
-com.mucommander.ui.action.ConnectToServerAction.label:ES:Conectar a un servidor...
-com.mucommander.ui.action.ConnectToServerAction.label:CS:Připojit se k serveru...
-com.mucommander.ui.action.ConnectToServerAction.label:zh_TW:連接至伺服器...
-com.mucommander.ui.action.ConnectToServerAction.label:PL:Połączenie z serwerem...
-com.mucommander.ui.action.ConnectToServerAction.label:HU:Csatlakozás a szerverhez...
-com.mucommander.ui.action.ConnectToServerAction.label:RU:Соединение с сервером...
-com.mucommander.ui.action.ConnectToServerAction.label:ZH_CN:连接到服务器...
-com.mucommander.ui.action.ConnectToServerAction.label:SI:Povezava s strežnikom...
+com.mucommander.ui.action.ConnectToServerAction.label:EN:Connect to server
+com.mucommander.ui.action.ConnectToServerAction.label:FR:Connexion à un serveur
+com.mucommander.ui.action.ConnectToServerAction.label:DE:Verbinde mit Server
+com.mucommander.ui.action.ConnectToServerAction.label:ES:Conectar a un servidor
+com.mucommander.ui.action.ConnectToServerAction.label:CS:Připojit se k serveru
+com.mucommander.ui.action.ConnectToServerAction.label:zh_TW:連接至伺服器
+com.mucommander.ui.action.ConnectToServerAction.label:PL:Połączenie z serwerem
+com.mucommander.ui.action.ConnectToServerAction.label:HU:Csatlakozás a szerverhez
+com.mucommander.ui.action.ConnectToServerAction.label:RU:Соединение с сервером
+com.mucommander.ui.action.ConnectToServerAction.label:ZH_CN:连接到服务器
+com.mucommander.ui.action.ConnectToServerAction.label:SI:Povezava s strežnikom
 
 com.mucommander.ui.action.ConnectToServerAction.tooltip:EN:Connect to a remote server
 com.mucommander.ui.action.ConnectToServerAction.tooltip:FR:Se connecter à un serveur distant
@@ -945,17 +1049,17 @@ com.mucommander.ui.action.PasteClipboardFilesAction.label:FR:Coller fichier(s)
 
 
 
-com.mucommander.ui.action.EmailAction.label:EN:Email files...
-com.mucommander.ui.action.EmailAction.label:FR:Envoyer par email...
-com.mucommander.ui.action.EmailAction.label:DE:Dateien mailen...
-com.mucommander.ui.action.EmailAction.label:ES:Enviar por email...
-com.mucommander.ui.action.EmailAction.label:CS:Odeslat emailem...
-com.mucommander.ui.action.EmailAction.label:zh_TW:郵寄檔案...
-com.mucommander.ui.action.EmailAction.label:PL:Wyślij pliki pocztą...
-com.mucommander.ui.action.EmailAction.label:HU:Küldés e-mailben...
-com.mucommander.ui.action.EmailAction.label:RU:Отправить файлы по Email...
-com.mucommander.ui.action.EmailAction.label:ZH_CN:邮寄文件...
-com.mucommander.ui.action.EmailAction.label:SI:Pošiljanje prek e-pošte...
+com.mucommander.ui.action.EmailAction.label:EN:Email files
+com.mucommander.ui.action.EmailAction.label:FR:Envoyer par email
+com.mucommander.ui.action.EmailAction.label:DE:Dateien mailen
+com.mucommander.ui.action.EmailAction.label:ES:Enviar por email
+com.mucommander.ui.action.EmailAction.label:CS:Odeslat emailem
+com.mucommander.ui.action.EmailAction.label:zh_TW:郵寄檔案
+com.mucommander.ui.action.EmailAction.label:PL:Wyślij pliki pocztą
+com.mucommander.ui.action.EmailAction.label:HU:Küldés e-mailben
+com.mucommander.ui.action.EmailAction.label:RU:Отправить файлы по Email
+com.mucommander.ui.action.EmailAction.label:ZH_CN:邮寄文件
+com.mucommander.ui.action.EmailAction.label:SI:Pošiljanje prek e-pošte
 
 com.mucommander.ui.action.EmailAction.tooltip:EN:Send marked files as email attachments
 com.mucommander.ui.action.EmailAction.tooltip:FR:Envoyer les fichiers marqués en pièces jointes à un message
@@ -1089,17 +1193,17 @@ com.mucommander.ui.action.SortByExtensionAction.label:RU:Сортировать 
 com.mucommander.ui.action.SortByExtensionAction.label:ZH_CN:按类型排序
 com.mucommander.ui.action.SortByExtensionAction.label:SI:Razvrsti po podaljšku
 
-com.mucommander.ui.action.MarkGroupAction.label:EN:Mark files...
-com.mucommander.ui.action.MarkGroupAction.label:FR:Marquer fichiers...
-com.mucommander.ui.action.MarkGroupAction.label:DE:Dateien markieren...
-com.mucommander.ui.action.MarkGroupAction.label:ES:Marcar ficheros...
-com.mucommander.ui.action.MarkGroupAction.label:CS:Označit soubory...
+com.mucommander.ui.action.MarkGroupAction.label:EN:Mark files
+com.mucommander.ui.action.MarkGroupAction.label:FR:Marquer fichiers
+com.mucommander.ui.action.MarkGroupAction.label:DE:Dateien markieren
+com.mucommander.ui.action.MarkGroupAction.label:ES:Marcar ficheros
+com.mucommander.ui.action.MarkGroupAction.label:CS:Označit soubory
 com.mucommander.ui.action.MarkGroupAction.label:zh_TW:標記檔案
-com.mucommander.ui.action.MarkGroupAction.label:PL:Zaznacz pliki...
-com.mucommander.ui.action.MarkGroupAction.label:HU:fájl(ok) kijelölése...
-com.mucommander.ui.action.MarkGroupAction.label:RU:Выделить файлы...
+com.mucommander.ui.action.MarkGroupAction.label:PL:Zaznacz pliki
+com.mucommander.ui.action.MarkGroupAction.label:HU:fájl(ok) kijelölése
+com.mucommander.ui.action.MarkGroupAction.label:RU:Выделить файлы
 com.mucommander.ui.action.MarkGroupAction.label:ZH_CN:标记文件
-com.mucommander.ui.action.MarkGroupAction.label:SI:Označi datoteke...
+com.mucommander.ui.action.MarkGroupAction.label:SI:Označi datoteke
 
 com.mucommander.ui.action.MarkGroupAction.tooltip:EN:Mark a group of files
 com.mucommander.ui.action.MarkGroupAction.tooltip:FR:Marquer un groupe de fichiers
@@ -1113,17 +1217,17 @@ com.mucommander.ui.action.MarkGroupAction.tooltip:RU:Выделить групп
 com.mucommander.ui.action.MarkGroupAction.tooltip:ZH_CN:标记一组文件
 com.mucommander.ui.action.MarkGroupAction.tooltip:SI:Označi skupino datotek
 
-com.mucommander.ui.action.UnmarkGroupAction.label:EN:Unmark files...
-com.mucommander.ui.action.UnmarkGroupAction.label:FR:Dé-marquer fichiers...
-com.mucommander.ui.action.UnmarkGroupAction.label:DE:Dateien demarkieren...
-com.mucommander.ui.action.UnmarkGroupAction.label:ES:Desmarcar ficheros...
-com.mucommander.ui.action.UnmarkGroupAction.label:CS:Odznačit soubory...
+com.mucommander.ui.action.UnmarkGroupAction.label:EN:Unmark files
+com.mucommander.ui.action.UnmarkGroupAction.label:FR:Dé-marquer fichiers
+com.mucommander.ui.action.UnmarkGroupAction.label:DE:Dateien demarkieren
+com.mucommander.ui.action.UnmarkGroupAction.label:ES:Desmarcar ficheros
+com.mucommander.ui.action.UnmarkGroupAction.label:CS:Odznačit soubory
 com.mucommander.ui.action.UnmarkGroupAction.label:zh_TW:取消標記
-com.mucommander.ui.action.UnmarkGroupAction.label:PL:Odznacz pliki...
-com.mucommander.ui.action.UnmarkGroupAction.label:HU:kijelölés megszüntetése...
-com.mucommander.ui.action.UnmarkGroupAction.label:RU:Снять выделение с файлов...
+com.mucommander.ui.action.UnmarkGroupAction.label:PL:Odznacz pliki
+com.mucommander.ui.action.UnmarkGroupAction.label:HU:kijelölés megszüntetése
+com.mucommander.ui.action.UnmarkGroupAction.label:RU:Снять выделение с файлов
 com.mucommander.ui.action.UnmarkGroupAction.label:ZH_CN:取消标记
-com.mucommander.ui.action.UnmarkGroupAction.label:SI:Odznači datoteke...
+com.mucommander.ui.action.UnmarkGroupAction.label:SI:Odznači datoteke
 
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:EN:Unmark a group of files
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:FR:Dé-marquer un groupe de fichiers
@@ -1270,6 +1374,7 @@ com.mucommander.ui.action.OpenAction.label:SI:Odpri
 
 
 
+
 com.mucommander.ui.action.OpenAction.tooltip:EN:Enter folder / Enter archive / Execute
 com.mucommander.ui.action.OpenAction.tooltip:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
 com.mucommander.ui.action.OpenAction.tooltip:DE:Ordner öffnen / Archiv öffnen / Ausführen
@@ -1328,7 +1433,17 @@ com.mucommander.ui.action.RevealInDesktopAction.label:ES:Mostrar en %1
 
 
 
-com.mucommander.ui.action.RunCommandAction.label:EN:$[run_dialog.run_command]...
+com.mucommander.ui.action.RunCommandAction.label:EN:Run command
+com.mucommander.ui.action.RunCommandAction.label:FR:Exécuter une commande
+com.mucommander.ui.action.RunCommandAction.label:DE:Befehl ausführen
+com.mucommander.ui.action.RunCommandAction.label:ES:Ejecutar un comando
+com.mucommander.ui.action.RunCommandAction.label:CS:Spustit příkaz
+com.mucommander.ui.action.RunCommandAction.label:zh_TW:執行命令
+com.mucommander.ui.action.RunCommandAction.label:PL:Uruchom
+com.mucommander.ui.action.RunCommandAction.label:HU:parancsfuttatás
+com.mucommander.ui.action.RunCommandAction.label:RU:Выполнение команды
+com.mucommander.ui.action.RunCommandAction.label:ZH_CN:执行命令
+com.mucommander.ui.action.RunCommandAction.label:SI:Ukazna vrstica
 
 com.mucommander.ui.action.RunCommandAction.tooltip:EN:Run a command in current folder
 com.mucommander.ui.action.RunCommandAction.tooltip:FR:Exécuter une commande dans le dossier courant
@@ -1342,7 +1457,17 @@ com.mucommander.ui.action.RunCommandAction.tooltip:RU:Выполнить ком�
 com.mucommander.ui.action.RunCommandAction.tooltip:ZH_CN:在当前文件夹执行命令
 com.mucommander.ui.action.RunCommandAction.tooltip:SI:Zaženi ukaz s trenutne mape
 
-com.mucommander.ui.action.PackAction.label:EN:$[pack_dialog.title]...
+com.mucommander.ui.action.PackAction.label:EN:Pack files
+com.mucommander.ui.action.PackAction.label:FR:Compresser fichiers
+com.mucommander.ui.action.PackAction.label:DE:Dateien packen
+com.mucommander.ui.action.PackAction.label:ES:Comprimir ficheros
+com.mucommander.ui.action.PackAction.label:CS:Komprimovat soubory
+com.mucommander.ui.action.PackAction.label:zh_TW:壓縮檔案
+com.mucommander.ui.action.PackAction.label:PL:Spakuj pliki
+com.mucommander.ui.action.PackAction.label:HU:tömörítés
+com.mucommander.ui.action.PackAction.label:RU:Архивировать файлы
+com.mucommander.ui.action.PackAction.label:ZH_CN:压缩文件
+com.mucommander.ui.action.PackAction.label:SI:Stiskanje datotek
 
 #shortcuts_dialog.file_operations.zip:EN:Compress marked files in a ZIP file
 #shortcuts_dialog.file_operations.zip:FR:Compresser les fichiers marqués dans un fichier ZIP
@@ -1372,7 +1497,17 @@ com.mucommander.ui.action.PackAction.tooltip:FR:Compresser les fichiers marqués
 
 
 
-com.mucommander.ui.action.UnpackAction.label:EN:$[unpack_dialog.title]...
+com.mucommander.ui.action.UnpackAction.label:EN:Unpack files
+com.mucommander.ui.action.UnpackAction.label:FR:Décompresser fichiers
+com.mucommander.ui.action.UnpackAction.label:DE:Dateien entpacken
+com.mucommander.ui.action.UnpackAction.label:ES:Descomprimir ficheros
+com.mucommander.ui.action.UnpackAction.label:CS:Dekomprimovat soubory
+com.mucommander.ui.action.UnpackAction.label:zh_TW:解壓縮檔案
+com.mucommander.ui.action.UnpackAction.label:PL:Rozpakuj pliki
+com.mucommander.ui.action.UnpackAction.label:HU:kicsomagolás
+com.mucommander.ui.action.UnpackAction.label:RU:Разархивировать файлы
+com.mucommander.ui.action.UnpackAction.label:ZH_CN:解压缩文件
+com.mucommander.ui.action.UnpackAction.label:SI:Razširjanje datotek
 
 #shortcuts_dialog.file_operations.unzip:EN:Uncompress marked ZIP files
 #shortcuts_dialog.file_operations.unzip:FR:Décompresser les fichiers ZIP marqués
@@ -1425,17 +1560,17 @@ com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:RU:Показать �
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:ZH_CN:显示已标记文件的属性
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:SI:Prikaži podrobnosti označenih datotek
 
-com.mucommander.ui.action.ShowPreferencesAction.label:EN:Preferences...
-com.mucommander.ui.action.ShowPreferencesAction.label:FR:Préférences...
-com.mucommander.ui.action.ShowPreferencesAction.label:DE:Einstellungen...
-com.mucommander.ui.action.ShowPreferencesAction.label:ES:Preferencias...
-com.mucommander.ui.action.ShowPreferencesAction.label:CS:Možnosti...
+com.mucommander.ui.action.ShowPreferencesAction.label:EN:Preferences
+com.mucommander.ui.action.ShowPreferencesAction.label:FR:Préférences
+com.mucommander.ui.action.ShowPreferencesAction.label:DE:Einstellungen
+com.mucommander.ui.action.ShowPreferencesAction.label:ES:Preferencias
+com.mucommander.ui.action.ShowPreferencesAction.label:CS:Možnosti
 com.mucommander.ui.action.ShowPreferencesAction.label:zh_TW:設定
-com.mucommander.ui.action.ShowPreferencesAction.label:PL:Preferencje...
-com.mucommander.ui.action.ShowPreferencesAction.label:HU:beállítások...
-com.mucommander.ui.action.ShowPreferencesAction.label:RU:Настройки...
+com.mucommander.ui.action.ShowPreferencesAction.label:PL:Preferencje
+com.mucommander.ui.action.ShowPreferencesAction.label:HU:beállítások
+com.mucommander.ui.action.ShowPreferencesAction.label:RU:Настройки
 com.mucommander.ui.action.ShowPreferencesAction.label:ZH_CN:偏好
-com.mucommander.ui.action.ShowPreferencesAction.label:SI:Nastavitve...
+com.mucommander.ui.action.ShowPreferencesAction.label:SI:Nastavitve
 
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:EN:Configure muCommander
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:FR:Configurer muCommander
@@ -1449,7 +1584,17 @@ com.mucommander.ui.action.ShowPreferencesAction.tooltip:RU:Настройка mu
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:ZH_CN:首选项
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:SI:Konfiguriraj muCommander
 
-com.mucommander.ui.action.QuitAction.label:EN:$[quit_dialog.quit]
+com.mucommander.ui.action.QuitAction.label:EN:Quit
+com.mucommander.ui.action.QuitAction.label:FR:Quitter
+com.mucommander.ui.action.QuitAction.label:DE:Beenden
+com.mucommander.ui.action.QuitAction.label:ES:Salir
+com.mucommander.ui.action.QuitAction.label:CS:Ukončit
+com.mucommander.ui.action.QuitAction.label:zh_TW:離開
+com.mucommander.ui.action.QuitAction.label:PL:Koniec
+com.mucommander.ui.action.QuitAction.label:HU:kilépés
+com.mucommander.ui.action.QuitAction.label:RU:Выход
+com.mucommander.ui.action.QuitAction.label:ZH_CN:退出
+com.mucommander.ui.action.QuitAction.label:SI:Izhod
 
 com.mucommander.ui.action.ReverseSortOrderAction.label:EN:Invert order
 com.mucommander.ui.action.ReverseSortOrderAction.label:FR:Inverser l'ordre
@@ -1873,8 +2018,8 @@ status_bar.selected_files:SI:%1 od %2 datotek
 # Displayed in the status bar when connecting to a folder
 status_bar.connecting_to_folder:EN:Connecting to folder, press ESCAPE to cancel.
 status_bar.connecting_to_folder:FR:Connexion en cours, appuyer sur ESCAPE pour annuler 
-status_bar.connecting_to_folder:ES:Conectando al directorio, presiona ESCAPE para cancelar...
-status_bar.connecting_to_folder:RU:Подключаемся к каталогу...
+status_bar.connecting_to_folder:ES:Conectando al directorio, presiona ESCAPE para cancelar
+status_bar.connecting_to_folder:RU:Подключаемся к каталогу
 status_bar.connecting_to_folder:zh_TW:連接至資料夾, 按ESCAPE取消.
 status_bar.connecting_to_folder:PL:Podłączam do katalogu, naciśnij ESCAPE  aby anulować.
 status_bar.connecting_to_folder:ZH_CN:正在连接文件夹，按空格键取消.
@@ -1916,42 +2061,6 @@ status_bar.volume_capacity:SI:Kapaciteta: %1
 #########
 # Table #
 #########
-
-table.name:EN:Name
-table.name:FR:Nom
-table.name:DE:Name
-table.name:ES:Nombre
-table.name:CS:Jméno
-table.name:zh_TW:名稱
-table.name:PL:Nazwa
-table.name:HU:név
-table.name:RU:Имя файла
-table.name:ZH_CN:名称
-table.name:SI:Ime
-
-table.size:EN:Size
-table.size:FR:Taille
-table.size:DE:Größe
-table.size:ES:Tamaño
-table.size:CS:Velikost
-table.size:zh_TW:大小
-table.size:PL:Rozmiar
-table.size:HU:méret
-table.size:RU:Размер
-table.size:ZH_CN:大小
-table.size:SI:Velikost
-
-table.date:EN:Date
-table.date:FR:Date
-table.date:DE:Datum
-table.date:ES:Fecha
-table.date:CS:Datum
-table.date:zh_TW:日期
-table.date:PL:Data
-table.date:HU:dátum
-table.date:RU:Дата
-table.date:ZH_CN:日期
-table.date:SI:Datum
 
 table.folder_access_error_title:EN:Folder access error
 table.folder_access_error_title:FR:Folder access error
@@ -2090,8 +2199,6 @@ version_dialog.not_available:RU:Не удается получить инфор�
 version_dialog.not_available:ZH_CN:无法从服务器上获得版本信息
 version_dialog.not_available:SI:Ne morem dobiti informacij o različici s strežnika.
 
-version_dialog.download:EN:$[download]
-
 
 ###############
 # Quit dialog #
@@ -2132,18 +2239,6 @@ quit_dialog.show_next_time:HU:megtekintés legközelebb
 quit_dialog.show_next_time:RU:Показывать следующий раз
 quit_dialog.show_next_time:ZH_CN:下次还显示
 quit_dialog.show_next_time:SI:Prikaži naslednjič
-
-quit_dialog.quit:EN:Quit
-quit_dialog.quit:FR:Quitter
-quit_dialog.quit:DE:Beenden
-quit_dialog.quit:ES:Salir
-quit_dialog.quit:CS:Ukončit
-quit_dialog.quit:zh_TW:離開
-quit_dialog.quit:PL:Koniec
-quit_dialog.quit:HU:kilépés
-quit_dialog.quit:RU:Выход
-quit_dialog.quit:ZH_CN:退出
-quit_dialog.quit:SI:Izhod
 
 
 ######################
@@ -2247,18 +2342,6 @@ pack_dialog.pack:SI:Stiskanje
 
 
 
-pack_dialog.title:EN:Pack files
-pack_dialog.title:FR:Compresser fichiers
-pack_dialog.title:DE:Dateien packen
-pack_dialog.title:ES:Comprimir ficheros
-pack_dialog.title:CS:Komprimovat soubory
-pack_dialog.title:zh_TW:壓縮檔案
-pack_dialog.title:PL:Spakuj pliki
-pack_dialog.title:HU:tömörítés
-pack_dialog.title:RU:Архивировать файлы
-pack_dialog.title:ZH_CN:压缩文件
-pack_dialog.title:SI:Stiskanje datotek
-
 pack_dialog.packing:EN:Packing files
 pack_dialog.packing:FR:Compression en cours
 pack_dialog.packing:DE:Packe Dateien
@@ -2334,18 +2417,6 @@ pack_dialog.archive_format:FR:Format de l'archive
 ##########
 # Unpack #
 ##########
-
-unpack_dialog.title:EN:Unpack files
-unpack_dialog.title:FR:Décompresser fichiers
-unpack_dialog.title:DE:Dateien entpacken
-unpack_dialog.title:ES:Descomprimir ficheros
-unpack_dialog.title:CS:Dekomprimovat soubory
-unpack_dialog.title:zh_TW:解壓縮檔案
-unpack_dialog.title:PL:Rozpakuj pliki
-unpack_dialog.title:HU:kicsomagolás
-unpack_dialog.title:RU:Разархивировать файлы
-unpack_dialog.title:ZH_CN:解压缩文件
-unpack_dialog.title:SI:Razširjanje datotek
 
 unpack_dialog.unpack:EN:Unpack
 unpack_dialog.unpack:FR:Décompresser
@@ -2555,18 +2626,6 @@ download_dialog.downloading_file:SI:Prenašam %1
 ##########
 # Delete #
 ##########
-
-delete_dialog.delete:EN:Delete
-delete_dialog.delete:FR:Supprimer
-delete_dialog.delete:DE:Löschen
-delete_dialog.delete:ES:Eliminar
-delete_dialog.delete:CS:Odstranit
-delete_dialog.delete:zh_TW:刪除
-delete_dialog.delete:PL:Usuń
-delete_dialog.delete:HU:törlés
-delete_dialog.delete:RU:Удаление
-delete_dialog.delete:ZH_CN:刪除
-delete_dialog.delete:SI:Izbriši
 
 delete_dialog.confirmation:EN:Permanently delete selected file(s) ?
 delete_dialog.confirmation:FR:Définitivement supprimer les fichiers sélectionnés ?
@@ -3238,18 +3297,6 @@ properties_dialog.calculating:SI:izračunavam...
 # Run dialog #
 ##############
 
-run_dialog.run_command:EN:Run command
-run_dialog.run_command:FR:Exécuter une commande
-run_dialog.run_command:DE:Befehl ausführen
-run_dialog.run_command:ES:Ejecutar un comando
-run_dialog.run_command:CS:Spustit příkaz
-run_dialog.run_command:zh_TW:執行命令
-run_dialog.run_command:PL:Uruchom
-run_dialog.run_command:HU:parancsfuttatás
-run_dialog.run_command:RU:Выполнение команды
-run_dialog.run_command:ZH_CN:执行命令
-run_dialog.run_command:SI:Ukazna vrstica
-
 run_dialog.run_command_description:EN:Run in current folder
 run_dialog.run_command_description:FR:Exécuter dans le répertoire courant
 run_dialog.run_command_description:DE:Ausführen im aktuellen Ordner
@@ -3292,8 +3339,6 @@ run_dialog.stop:EN:$[stop]
 #########################
 # Server connect dialog #
 #########################
-
-server_connect_dialog.server_connect:EN:$[com.mucommander.ui.action.ConnectToServerAction.label]
 
 server_connect_dialog.server_type:EN:Connection type
 server_connect_dialog.server_type:FR:Type de connexion
@@ -3473,33 +3518,46 @@ auth_dialog.error_was:ZH_CN:错误: %1
 auth_dialog.error_was:SI:Napaka: %1
 
 
+#################
+# Sortable list #
+#################
+
+# Entries for the sortable list component used in the 'Edit bookmarks' and 'Edit credentials' dialogs
+
+# Tooltip for the 'Move up' button
+sortable_list.move_up:EN:Move up
+sortable_list.move_up:FR:Monter
+sortable_list.move_up:ES:Subir
+sortable_list.move_up:RU:Выше
+sortable_list.move_up:zh_TW:上移
+sortable_list.move_up:PL:Przenieś do góry
+sortable_list.move_up:ZH_CN:上移
+sortable_list.move_up:SI:Premakni gor
+
+
+
+
+
+# Tooltip for the 'Move down' button
+sortable_list.move_down:EN:Move down
+sortable_list.move_down:FR:Descendre
+sortable_list.move_down:ES:Bajar
+sortable_list.move_down:RU:Ниже
+sortable_list.move_down:zh_TW:下移
+sortable_list.move_down:PL:Przenieś na dół
+sortable_list.move_down:ZH_CN:下移
+sortable_list.move_down:SI:Premakni dol
+
+
+
+
+
+
+
+
 #######################
 # Add Bookmark dialog #
 #######################
-
-# Title of the Add bookmark dialog
-add_bookmark_dialog.title:EN:Add bookmark
-add_bookmark_dialog.title:FR:Ajouter aux favoris
-add_bookmark_dialog.title:ES:Añadir favorito
-add_bookmark_dialog.title:RU:Добавить закладку
-add_bookmark_dialog.title:zh_TW:新增書籤
-add_bookmark_dialog.title:PL:Dodaj zakładkę
-add_bookmark_dialog.title:ZH_CN:添加书签
-add_bookmark_dialog.title:SI:Dodaj med priljubljene
-
-
-
-# Displayed before the Name text field in the Add bookmark dialog
-add_bookmark_dialog.name:EN:Name
-add_bookmark_dialog.name:FR:Nom
-add_bookmark_dialog.name:ES:Nombre
-add_bookmark_dialog.name:RU:Название
-add_bookmark_dialog.name:zh_TW:名稱
-add_bookmark_dialog.name:PL:Nazwa
-add_bookmark_dialog.name:ZH_CN:名称
-add_bookmark_dialog.name:SI:Ime
-
-
 
 # Displayed before the Location text field in the Add bookmark dialog
 add_bookmark_dialog.location:EN:Location
@@ -3513,6 +3571,7 @@ add_bookmark_dialog.location:SI:Lokacija
 
 
 
+
 # Checkbox's title in the Add bookmark dialog, displayed only for locations that have an associated login and password (SMB/FTP/SFTP...) 
 add_bookmark_dialog.include_auth_info:EN:Include login and password (will be saved in the clear!)
 add_bookmark_dialog.include_auth_info:FR:Inclure les identifiants et mot de passe (seront sauvegardés en clair!)
@@ -3522,6 +3581,8 @@ add_bookmark_dialog.include_auth_info:zh_TW:包含登入帳號及密碼(將會�
 add_bookmark_dialog.include_auth_info:PL:Dołącz login i hasło (zostaną zapisane bez szyfrowania!)
 add_bookmark_dialog.include_auth_info:ZH_CN:包含用户名及密码 (会以明文保存!)
 add_bookmark_dialog.include_auth_info:SI:Vključi uporabniško ime in geslo (vse bo varno shranjeno!)
+
+
 
 
 
@@ -3539,24 +3600,10 @@ add_bookmark_dialog.add:SI:Dodaj
 
 
 
+
 #######################
 # Edit Bookmarks dialog #
 #######################
-
-# Title of the Edit bookmarks dialog
-edit_bookmarks_dialog.title:EN:Edit Bookmarks
-edit_bookmarks_dialog.title:FR:Éditer les favoris
-edit_bookmarks_dialog.title:ES:Editar favoritos
-edit_bookmarks_dialog.title:RU:Редактировать закладки
-edit_bookmarks_dialog.title:zh_TW:編輯書籤
-edit_bookmarks_dialog.title:PL:Edytuj Zakładki
-edit_bookmarks_dialog.title:ZH_CN:编辑书签
-edit_bookmarks_dialog.title:SI:Uredi priljubljene
-
-
-
-
-edit_bookmarks_dialog.name:EN:$[add_bookmark_dialog.name]
 
 edit_bookmarks_dialog.location:EN:$[add_bookmark_dialog.location]
 
@@ -3597,59 +3644,6 @@ edit_bookmarks_dialog.duplicate:FR:Dupliquer
 
 
 
-
-
-
-
-# Remove bookmark button in the Edit bookmarks dialog
-edit_bookmarks_dialog.remove:EN:Remove
-edit_bookmarks_dialog.remove:FR:Supprimer
-edit_bookmarks_dialog.remove:ES:Eliminar
-edit_bookmarks_dialog.remove:RU:Удалить
-edit_bookmarks_dialog.remove:zh_TW:移除
-edit_bookmarks_dialog.remove:PL:Usuń
-edit_bookmarks_dialog.remove:ZH_CN:删除
-edit_bookmarks_dialog.remove:SI:Odstrani
-
-
-
-
-# Move up button in the Edit bookmarks dialog
-edit_bookmarks_dialog.move_up:EN:Move up
-edit_bookmarks_dialog.move_up:FR:Monter
-edit_bookmarks_dialog.move_up:ES:Subir
-edit_bookmarks_dialog.move_up:RU:Выше
-edit_bookmarks_dialog.move_up:zh_TW:上移
-edit_bookmarks_dialog.move_up:PL:Przenieś do góry
-edit_bookmarks_dialog.move_up:ZH_CN:上移
-edit_bookmarks_dialog.move_up:SI:Premakni gor
-
-
-
-
-
-# Move down button in the Edit bookmarks dialog
-edit_bookmarks_dialog.move_down:EN:Move down
-edit_bookmarks_dialog.move_down:FR:Descendre
-edit_bookmarks_dialog.move_down:ES:Bajar
-edit_bookmarks_dialog.move_down:RU:Ниже
-edit_bookmarks_dialog.move_down:zh_TW:下移
-edit_bookmarks_dialog.move_down:PL:Przenieś na dół
-edit_bookmarks_dialog.move_down:ZH_CN:下移
-edit_bookmarks_dialog.move_down:SI:Premakni dol
-
-
-
-
-# Done button that closes the Edit bookmarks dialog
-edit_bookmarks_dialog.done:EN:Done
-edit_bookmarks_dialog.done:FR:Terminé
-edit_bookmarks_dialog.done:ES:Terminado
-edit_bookmarks_dialog.done:RU:Готово
-edit_bookmarks_dialog.done:zh_TW:完成
-edit_bookmarks_dialog.done:PL:Zrobione
-edit_bookmarks_dialog.done:ZH_CN:完成
-edit_bookmarks_dialog.done:SI:Narejeno
 
 
 
@@ -4839,7 +4833,7 @@ prefs_dialog.confirm_on_quit:RU:Запрашивать подтверждени�
 prefs_dialog.confirm_on_quit:ZH_CN:退出时显示确认对话框
 prefs_dialog.confirm_on_quit:SI:Pokaži pogovorno okno za potrditev izhoda
 
-prefs_dialog.shell:EN:$[run_dialog.run_command]
+prefs_dialog.shell:EN:$[com.mucommander.ui.action.RunCommandAction.label]
 
 prefs_dialog.default_shell:EN:Use default system shell
 prefs_dialog.default_shell:FR:Utiliser le shell par défaut du système
@@ -5075,3 +5069,12 @@ duration.infinite:EN:∞
 #mkdir_dialog.error_title:zh_CN:新建文件夹错误
 #mkdir_dialog.error_title:SI:Napaka pri ustvarjanju mape
 
+# Remove bookmark button in the Edit bookmarks dialog
+#edit_bookmarks_dialog.remove:EN:Remove
+#edit_bookmarks_dialog.remove:FR:Supprimer
+#edit_bookmarks_dialog.remove:ES:Eliminar
+#edit_bookmarks_dialog.remove:RU:Удалить
+#edit_bookmarks_dialog.remove:zh_TW:移除
+#edit_bookmarks_dialog.remove:PL:Usuń
+#edit_bookmarks_dialog.remove:ZH_CN:删除
+#edit_bookmarks_dialog.remove:SI:Odstrani

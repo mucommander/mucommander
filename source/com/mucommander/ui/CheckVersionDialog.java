@@ -119,7 +119,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         
         String okText = Translator.get("ok");
         init(mainFrame, new JLabel(text), 
-             downloadOption?new String[]{Translator.get("version_dialog.download"), okText}:new String[]{okText},
+             downloadOption?new String[]{Translator.get("download"), okText}:new String[]{okText},
              downloadOption?new int[]{DOWNLOAD_ACTION, OK_ACTION}:new int[]{OK_ACTION},
              0);
 			

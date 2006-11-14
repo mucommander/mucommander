@@ -8,7 +8,7 @@ import com.mucommander.ui.pref.PreferencesDialog;
  *
  * @author Maxence Bernard
  */
-public class ShowPreferencesAction extends MucoAction {
+public class ShowPreferencesAction extends MucoAction implements InvokesDialog {
 
     public ShowPreferencesAction(MainFrame mainFrame) {
         super(mainFrame);

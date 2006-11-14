@@ -9,7 +9,7 @@ import com.mucommander.ui.PackDialog;
  *
  * @author Maxence Bernard
  */
-public class PackAction extends SelectedFilesAction {
+public class PackAction extends SelectedFilesAction implements InvokesDialog {
 
     public PackAction(MainFrame mainFrame) {
         super(mainFrame);

@@ -9,7 +9,7 @@ import com.mucommander.ui.bookmark.EditBookmarksDialog;
  *
  * @author Maxence Bernard
  */
-public class EditBookmarksAction extends MucoAction {
+public class EditBookmarksAction extends MucoAction implements InvokesDialog {
 
     public EditBookmarksAction(MainFrame mainFrame) {
         super(mainFrame);
