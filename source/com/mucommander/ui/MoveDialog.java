@@ -1,4 +1,5 @@
 
+
 package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
@@ -65,7 +66,8 @@ public class MoveDialog extends DestinationDialog {
      * Starts a MoveJob. This method is trigged by the 'OK' button or return key.
      */
     protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-        if (newName==null && files.getBaseFolder().equals(destFolder) || files.contains(destFolder)) {
+        // Makes sure the source and destination files are not the same.
+        if (newName==null || files.getBaseFolder().equals(destFolder) || files.contains(destFolder)) {
             showErrorDialog(Translator.get("same_source_destination"));
             return;
         }

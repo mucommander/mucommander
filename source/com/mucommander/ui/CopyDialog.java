@@ -85,8 +85,8 @@ public class CopyDialog extends DestinationDialog {
      * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
      */
     protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-
-        if (newName==null && files.getBaseFolder().equals(destFolder)) {
+        // Makes sure the source file and destination files are not the same.
+        if (newName==null || files.getBaseFolder().equals(destFolder)) {
             showErrorDialog(Translator.get("same_source_destination"));
             return;
         }
