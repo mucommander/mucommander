@@ -402,11 +402,8 @@ public abstract class FileJob implements Runnable {
             }
         }
 
-
-        boolean jobInterrupted = isInterrupted();
-
         // If this job hasn't been stopped already, call stop()
-        if(!jobInterrupted) {
+        if(!isInterrupted()) {
             // Stop job
             stop();
         }
@@ -417,11 +414,6 @@ public abstract class FileJob implements Runnable {
 
         // Refresh tables's current folders, based on the job's refresh policy.
         refreshTables();
-		
-        // Select file specified by selectFileWhenFinished (if any) only if job hasn't been interrupted
-        // and file exists in the active table's folder
-        if(fileToSelect!=null && !jobInterrupted && activeTable.getCurrentFolder().equals(fileToSelect.getParent()) && fileToSelect.exists())
-            activeTable.selectFile(fileToSelect);
     }
 
 	
@@ -502,18 +494,23 @@ public abstract class FileJob implements Runnable {
      * Check and if needed, refreshes both file tables's current folders, based on the job's refresh policy.
      */
     protected void refreshTables() {
-        FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
-        FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
+        FileTable activeTable = mainFrame.getActiveTable();
+        FileTable inactiveTable = mainFrame.getInactiveTable();
 
-        if(hasFolderChanged(table1.getCurrentFolder()))
-            table1.getFolderPanel().tryRefreshCurrentFolder();
+        if(hasFolderChanged(inactiveTable.getCurrentFolder()))
+            inactiveTable.getFolderPanel().tryRefreshCurrentFolder();
 
-        if(hasFolderChanged(table2.getCurrentFolder()))
-            table2.getFolderPanel().tryRefreshCurrentFolder();
+        if(hasFolderChanged(activeTable.getCurrentFolder())) {
+            // Select file specified by selectFileWhenFinished (if any) only if the file exists in the active table's folder
+            if(fileToSelect!=null && activeTable.getCurrentFolder().equals(fileToSelect.getParent()) && fileToSelect.exists())
+                activeTable.getFolderPanel().tryRefreshCurrentFolder(fileToSelect);
+            else
+                activeTable.getFolderPanel().tryRefreshCurrentFolder();
+        }
 
         // Resume auto-refresh if auto-refresh has been paused
-        table1.setAutoRefreshActive(true);
-        table2.setAutoRefreshActive(true);
+        activeTable.setAutoRefreshActive(true);
+        inactiveTable.setAutoRefreshActive(true);
     }
 	
 
