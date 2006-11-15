@@ -110,8 +110,7 @@ public class ShellComboBox extends EditableComboBox implements ActionListener, K
             hidePopup();
 
             // Runs the requested command.
-            setEnabled(false);
-            runCommand((String)selectedItem);
+            input.setText((String)selectedItem);
         }
     }
 
@@ -123,9 +122,7 @@ public class ShellComboBox extends EditableComboBox implements ActionListener, K
         if(ignoreEvents || isPopupVisible())
             return;
 
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-        }
-        else if(e.getKeyCode()==KeyEvent.VK_ENTER) {
+        if(e.getKeyCode()==KeyEvent.VK_ENTER) {
             setEnabled(false);
             runCommand(input.getText());
         }
