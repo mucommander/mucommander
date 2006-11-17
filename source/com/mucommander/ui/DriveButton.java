@@ -231,7 +231,8 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
         addMenuItem("SFTP...");
         addMenuItem("HTTP...");
 
-        popupMenu.show(folderPanel, 0, getHeight());		
+        // Popup up the menu underneath under this button
+        popupMenu.show(this, 0, getHeight());
 
         // Focus MUST NOT be requested on the popup menu because
         // a/ it's not necessary, it grabs focus itself

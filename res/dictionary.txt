@@ -3517,6 +3517,29 @@ auth_dialog.error_was:RU:Ошибка: %1
 auth_dialog.error_was:ZH_CN:错误: %1
 auth_dialog.error_was:SI:Napaka: %1
 
+auth_dialog.save_credentials_to_disk:EN:Save credentials to disk (weak encryption)
+auth_dialog.save_credentials_to_disk:FR:Sauvegarder les identifiants (encryption faible)
+
+
+
+
+
+
+
+
+
+
+
+## Checkbox's title in the Add bookmark dialog, displayed only for locations that have an associated login and password (SMB/FTP/SFTP...)
+#add_bookmark_dialog.include_auth_info:EN:Include login and password (will be saved in the clear!)
+#add_bookmark_dialog.include_auth_info:FR:Inclure les identifiants et mot de passe (seront sauvegardés en clair!)
+#add_bookmark_dialog.include_auth_info:ES:Incluir nombre de usuario y contraseña (¡será salvada en blanco!)
+#add_bookmark_dialog.include_auth_info:RU:Включить логин и пароль (будут сохранены без шифрования)
+#add_bookmark_dialog.include_auth_info:zh_TW:包含登入帳號及密碼(將會以明文儲存!)
+#add_bookmark_dialog.include_auth_info:PL:Dołącz login i hasło (zostaną zapisane bez szyfrowania!)
+#add_bookmark_dialog.include_auth_info:ZH_CN:包含用户名及密码 (会以明文保存!)
+#add_bookmark_dialog.include_auth_info:SI:Vključi uporabniško ime in geslo (vse bo varno shranjeno!)
+
 
 #################
 # Sortable list #
@@ -3568,20 +3591,6 @@ add_bookmark_dialog.location:zh_TW:位置
 add_bookmark_dialog.location:PL:Położenie
 add_bookmark_dialog.location:ZH_CN:地址
 add_bookmark_dialog.location:SI:Lokacija
-
-
-
-
-# Checkbox's title in the Add bookmark dialog, displayed only for locations that have an associated login and password (SMB/FTP/SFTP...) 
-add_bookmark_dialog.include_auth_info:EN:Include login and password (will be saved in the clear!)
-add_bookmark_dialog.include_auth_info:FR:Inclure les identifiants et mot de passe (seront sauvegardés en clair!)
-add_bookmark_dialog.include_auth_info:ES:Incluir nombre de usuario y contraseña (¡será salvada en blanco!)
-add_bookmark_dialog.include_auth_info:RU:Включить логин и пароль (будут сохранены без шифрования)
-add_bookmark_dialog.include_auth_info:zh_TW:包含登入帳號及密碼(將會以明文儲存!)
-add_bookmark_dialog.include_auth_info:PL:Dołącz login i hasło (zostaną zapisane bez szyfrowania!)
-add_bookmark_dialog.include_auth_info:ZH_CN:包含用户名及密码 (会以明文保存!)
-add_bookmark_dialog.include_auth_info:SI:Vključi uporabniško ime in geslo (vse bo varno shranjeno!)
-
 
 
 

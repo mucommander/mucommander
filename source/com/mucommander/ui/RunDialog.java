@@ -25,7 +25,7 @@ import java.io.PrintStream;
 public class RunDialog extends FocusDialog implements ActionListener, ProcessListener, KeyListener {
     private MainFrame mainFrame;
 	
-    private ShellComboBox inputField;
+    private ShellComboBox inputCombo;
 	
     private JButton runStopButton;
     private JButton cancelButton;
@@ -66,9 +66,9 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         JLabel label = new JLabel(Translator.get("run_dialog.run_command_description")+":");
         mainPanel.add(label);
 
-        inputField = new ShellComboBox(this);
+        inputCombo = new ShellComboBox(this);
 
-        mainPanel.add(inputField);
+        mainPanel.add(inputCombo);
         mainPanel.addSpace(10);
 
         contentPane.add(mainPanel, BorderLayout.NORTH);
@@ -105,10 +105,14 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         contentPane.add(DialogToolkit.createOKCancelPanel(runStopButton, cancelButton, this), BorderLayout.SOUTH);
 
         // Path field will receive initial focus
-        setInitialFocusComponent(inputField);		
+        setInitialFocusComponent(inputCombo);
 			
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         //		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
+
+        // Disable dialog disposal when Escape is pressed as Escape is used by EditableComboBox to close
+        // the combo popup menu
+        setKeyboardDisposalEnabled(false);
 
         // Closing this dialog kills the process
         addWindowListener(new WindowAdapter() {
@@ -120,7 +124,10 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
                 }
             });
 
-        inputField.setEnabled(true);
+        // Make the 'Run/stop' button the default button
+        getRootPane().setDefaultButton(runStopButton);
+        
+        inputCombo.setEnabled(true);
         showDialog();
     }
 
@@ -167,8 +174,8 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         //		// Make text area not active anymore
         //		this.outputTextArea.setEnabled(false);
         // Make command field active again
-        this.inputField.setEnabled(true);
-        inputField.requestFocus();
+        this.inputCombo.setEnabled(true);
+        inputCombo.requestFocus();
         outputTextArea.getCaret().setVisible(false);
         // Repaint this dialog
         repaint();
@@ -213,8 +220,8 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
         // Run button starts a new command
         if(this.currentProcess==null && (source == runStopButton)) {
-            inputField.setEnabled(false);
-            runCommand(inputField.getCommand());
+            inputCombo.setEnabled(false);
+            runCommand(inputCombo.getCommand());
         }
         // Stop button stops current process
         else if(this.currentProcess!=null && source==runStopButton) {

@@ -60,7 +60,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
     /**
      * Sets the path to the toolbar description file to be loaded when calling {@link #loadDescriptionFile()}.
-     * By default, this file is {@link DEFAULT_TOOLBAR_FILENAME} within the preferences folder.
+     * By default, this file is {@link #DEFAULT_TOOLBAR_FILENAME} within the preferences folder.
      *
      * @param filePath path to the toolbar descriptor file
      */
@@ -111,14 +111,19 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         // Listen to configuration changes to reload toolbar buttons when icon size has changed
         ConfigurationManager.addConfigurationListener(this);
 
-        // Create buttons and add them to this toolbar
+        // Create buttons for each actions and add them to the toolbar
         int nbActions = actions.length;
         for(int i=0; i<nbActions; i++) {
             Class actionClass = actions[i];
             if(actionClass==null)
                 addSeparator(SEPARATOR_DIMENSION);
-            else
-                addButton(ActionManager.getActionInstance(actionClass, mainFrame));
+            else {
+                // Get a MucoAction instance
+                MucoAction action = ActionManager.getActionInstance(actionClass, mainFrame);
+                // Do not add buttons for actions that do not have an icon
+                if(action.getIcon()!=null)
+                    addButton(action);
+            }
         }
     }
 

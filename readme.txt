@@ -205,7 +205,7 @@ Improvements:
  - New font preview field to 'Appearance' preferences tab
  - New ascending / descending icons in sort tabs
  - SMB resources that are not browsable (printers, IPC...) are not displayed
- - SMB library (jCIFS) upgraded to version 1.2.8
+ - SMB library (jCIFS) upgraded to version 1.2.11 which includes many bug fixes
  - Mac OS X: disabled progress bar animation in file transfer progress dialog which hogged CPU unnecessarily
  - Mac OS X: new 'Universal Binary' application stub, muCommander no longer uses Rosetta to start up
 
