@@ -9,9 +9,6 @@
     <separator/>
     <button action="com.mucommander.ui.action.StopAction"/>
     <separator/>
-    <button action="com.mucommander.ui.action.AddBookmarkAction"/>
-    <button action="com.mucommander.ui.action.EditBookmarksAction"/>
-    <separator/>
     <button action="com.mucommander.ui.action.MarkGroupAction"/>
     <button action="com.mucommander.ui.action.UnmarkGroupAction"/>
     <separator/>
@@ -20,6 +17,10 @@
     <separator/>
     <button action="com.mucommander.ui.action.PackAction"/>
     <button action="com.mucommander.ui.action.UnpackAction"/>
+    <separator/>
+    <button action="com.mucommander.ui.action.AddBookmarkAction"/>
+    <button action="com.mucommander.ui.action.EditBookmarksAction"/>
+    <button action="com.mucommander.ui.action.EditCredentialsAction"/>
     <separator/>
     <button action="com.mucommander.ui.action.ConnectToServerAction"/>
     <button action="com.mucommander.ui.action.RunCommandAction"/>

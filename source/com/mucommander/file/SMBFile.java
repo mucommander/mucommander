@@ -2,7 +2,6 @@ package com.mucommander.file;
 
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
-import com.mucommander.auth.AuthManager;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import jcifs.smb.*;
@@ -20,7 +19,7 @@ import java.io.OutputStream;
 public class SMBFile extends AbstractFile {
 
     private SmbFile file;
-    private String privateURL;
+//    private String privateURL;
 
     private AbstractFile parent;
     private boolean parentValSet;
@@ -42,7 +41,8 @@ public class SMBFile extends AbstractFile {
 
 
     public SMBFile(FileURL fileURL) throws IOException {
-        this(fileURL, null, true);
+//        this(fileURL, null, true);
+        this(fileURL, null);
 
         // Forces SmbFile to trigger an SmbAuthException if access to the file requires authentication.
         // This test comes at a cost, so it's only performed in the public constructor used by AbstractFile.
@@ -50,17 +50,20 @@ public class SMBFile extends AbstractFile {
             this.file.exists();
         }
         catch(SmbAuthException e) {
+if(Debug.ON) Debug.trace("caught "+e);
+
             throw new AuthException(fileURL, e.getMessage());
         }
     }
 
 
-    private SMBFile(FileURL fileURL, SmbFile smbFile, boolean addAuthInfo) throws IOException {
+//    private SMBFile(FileURL fileURL, SmbFile smbFile, boolean addAuthInfo) throws IOException {
+    private SMBFile(FileURL fileURL, SmbFile smbFile) throws IOException {
         super(fileURL);
 
-        AuthManager.authenticate(fileURL, addAuthInfo);
+//        CredentialsManager.authenticate(fileURL, addAuthInfo);
 
-        this.privateURL = fileURL.getStringRep(true);
+//        this.privateURL = fileURL.getStringRep(true);
 
         // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateURL);
 
@@ -69,8 +72,12 @@ public class SMBFile extends AbstractFile {
         //		// All SMB workgroups, servers, shares, or directories URLs require a trailing slash '/'. 
         //		// Regular SMB files can have a trailing slash as well, so let's add a trailing slash.
         //		this.file = new SmbFile(privateURL.endsWith("/")?privateURL:privateURL+"/");
+
+if(Debug.ON) Debug.trace("fileURL="+fileURL.getStringRep(true));
+
         if(smbFile==null)
-            this.file = new SmbFile(privateURL);
+//            this.file = new SmbFile(privateURL);
+            this.file = new SmbFile(fileURL.getStringRep(true));
         else
             this.file = smbFile;
 
@@ -130,8 +137,11 @@ public class SMBFile extends AbstractFile {
                         return null;    // This file is smb://
                 }
 
-                this.parent = new SMBFile(parentURL, null, false);
-                return this.parent;
+//                this.parent = new SMBFile(parentURL, null, false);
+                parentURL.setCredentials(fileURL.getCredentials());
+                this.parent = new SMBFile(parentURL, null);
+
+                return parent;
             }
             catch(IOException e) {
                 // this.parent and returned parent will be null
@@ -205,7 +215,8 @@ public class SMBFile extends AbstractFile {
     }
 
     public InputStream getInputStream() throws IOException {
-        return new SmbFileInputStream(privateURL);
+//        return new SmbFileInputStream(privateURL);
+        return new SmbFileInputStream(getURL().getStringRep(true));
     }
 
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
@@ -213,7 +224,8 @@ public class SMBFile extends AbstractFile {
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
-        return new SmbFileOutputStream(privateURL, append);
+//        return new SmbFileOutputStream(privateURL, append);
+        return new SmbFileOutputStream(getURL().getStringRep(true), append);
     }
 
     public void delete() throws IOException {
@@ -242,6 +254,7 @@ public class SMBFile extends AbstractFile {
             // Create SMBFile by using SmbFile instance and sharing parent instance among children
             AbstractFile children[] = new AbstractFile[nbSmbFiles-nbSmbFilesToExclude];
             AbstractFile child;
+            FileURL childURL;
             SmbFile smbFile;
             int currentIndex = 0;
             for(int i=0; i<nbSmbFiles; i++) {
@@ -250,7 +263,11 @@ public class SMBFile extends AbstractFile {
                 if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
                     continue;
                 
-                child = FileFactory.wrapArchive(new SMBFile(new FileURL(smbFile.getCanonicalPath(), fileURL), smbFile, false));
+//                child = FileFactory.wrapArchive(new SMBFile(new FileURL(smbFile.getCanonicalPath(), fileURL), smbFile, false));
+if(Debug.ON) Debug.trace("child canonical path="+smbFile.getCanonicalPath());
+                childURL = new FileURL(smbFile.getCanonicalPath(), fileURL);
+
+                child = FileFactory.wrapArchive(new SMBFile(childURL, smbFile));
                 child.setParent(this);
                 children[currentIndex++] = child;
             }
@@ -258,6 +275,8 @@ public class SMBFile extends AbstractFile {
             return children;
         }
         catch(SmbAuthException e) {
+if(Debug.ON) Debug.trace("caught "+e);
+            
             throw new AuthException(fileURL, e.getMessage());
         }
     }
@@ -266,7 +285,8 @@ public class SMBFile extends AbstractFile {
     public void mkdir(String name) throws IOException {
         // Unlike java.io.File.mkdir(), SmbFile does not return a boolean value
         // to indicate if the folder could be created
-        new SmbFile(privateURL+SEPARATOR+name).mkdir();
+//        new SmbFile(privateURL+SEPARATOR+name).mkdir();
+        new SmbFile(getURL().getStringRep(true)+SEPARATOR+name).mkdir();
     }
 
 

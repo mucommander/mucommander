@@ -4,8 +4,7 @@ package com.mucommander.file;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.auth.AuthException;
-import com.mucommander.auth.AuthInfo;
-import com.mucommander.auth.AuthManager;
+import com.mucommander.auth.Credentials;
 import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.authentication.AuthenticationProtocolState;
 import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
@@ -16,7 +15,6 @@ import com.sshtools.j2ssh.transport.IgnoreHostKeyVerification;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.Vector;
 
 
@@ -64,9 +62,11 @@ public class SFTPFile extends AbstractFile {
 
         this.absPath = fileURL.getPath();
 		
-        if(sshClient==null)
+        if(sshClient==null) {
             // Initialize connection
-            initConnection(this.fileURL, addAuthInfo);
+//            initConnection(this.fileURL, addAuthInfo);
+            initConnection(this.fileURL);
+        }
         else {
             this.sshClient = sshClient;
             this.sftpChannel = sftpChannel;
@@ -95,7 +95,8 @@ public class SFTPFile extends AbstractFile {
     }
 	
 	
-    private void initConnection(FileURL fileURL, boolean addAuthInfo) throws IOException {
+//    private void initConnection(FileURL fileURL, boolean addAuthInfo) throws IOException {
+private void initConnection(FileURL fileURL) throws IOException {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("connecting to "+fileURL.getHost());
         try {
             // Init SSH client
@@ -110,18 +111,18 @@ public class SFTPFile extends AbstractFile {
             sshClient.connect(fileURL.getHost(), port, new IgnoreHostKeyVerification());
 
             // Find auth info for this URL
-            AuthManager.authenticate(fileURL, addAuthInfo);
-            AuthInfo authInfo = AuthInfo.getAuthInfo(fileURL);
+//            CredentialsManager.authenticate(fileURL, addAuthInfo);
+            Credentials credentials = fileURL.getCredentials();
 
             // Throw an AuthException if no auth information
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL.getStringRep(true)+" authInfo="+authInfo);
-            if(authInfo==null)
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL.getStringRep(true)+" credentials="+ credentials);
+            if(credentials ==null)
                 throw new AuthException(fileURL, "Login and password required");
 			
             // Authenticate
             PasswordAuthenticationClient pwd = new PasswordAuthenticationClient();
-            pwd.setUsername(authInfo.getLogin());
-            pwd.setPassword(authInfo.getPassword());
+            pwd.setUsername(credentials.getLogin());
+            pwd.setPassword(credentials.getPassword());
             int authResult = sshClient.authenticate(pwd);
 
             // Throw an AuthException if authentication failed
@@ -155,7 +156,8 @@ public class SFTPFile extends AbstractFile {
         // Reconnect if disconnected
         if(sshClient==null || !sshClient.isConnected()) {
             // Connect again
-            initConnection(this.fileURL, false);
+//            initConnection(this.fileURL, false);
+            initConnection(this.fileURL);
             return;
         }
     }
@@ -292,11 +294,11 @@ public class SFTPFile extends AbstractFile {
         if(nbFiles==0)
             return new AbstractFile[] {};
 	
-        String parentURL = fileURL.getStringRep(false);
+//        String parentURL = fileURL.getStringRep(false);
+        String parentURL = fileURL.getStringRep(true);
         if(!parentURL.endsWith(SEPARATOR))
             parentURL += SEPARATOR;
 
-        Iterator iterator = files.iterator();
         AbstractFile children[] = new AbstractFile[nbFiles];
         AbstractFile child;
         FileURL childURL;

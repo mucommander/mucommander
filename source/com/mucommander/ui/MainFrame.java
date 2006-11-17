@@ -10,6 +10,7 @@ import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
+import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
@@ -441,6 +442,8 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
      * Overrides JComponent's requestFocus() method to request focus on the last active FolderPanel.
      */
     public void requestFocus() {
+if(Debug.ON) Debug.trace("called isVisible="+isVisible());
+
         // If visible, call requestFocus() directly on the component
         if(isVisible())
             activeTable.getFolderPanel().requestFocus();
@@ -449,14 +452,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
             FocusRequester.requestFocus(activeTable.getFolderPanel());
     }
 
-	
-    // Adding custom insets to the Frame causes some weird sizing problems,
-    // so insets are added to the content pane instead
-    //	 public Insets getInsets() {
-    //		 return new Insets(3, 4, 3, 4);
-    //	 }
 
-	
     ///////////////////////////////
     // ComponentListener methods //
     ///////////////////////////////
@@ -497,33 +493,4 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     public void componentShown(ComponentEvent e) {
         // never called, weird ...
     }     
-
-//    /////////////////////////
-//    // KeyListener methods //
-//    /////////////////////////
-//
-//    public void keyPressed(KeyEvent e) {
-//        // Discard key events while in 'no events mode'
-//        if(noEventsMode)
-//            return;
-//
-//        int keyCode = e.getKeyCode();
-//
-//        if(keyCode == KeyEvent.VK_SHIFT) {
-//            // Set shift mode to on : display alternate actions in the command bar
-//            commandBar.setAlternateActionsMode(true);
-//        }
-//    }
-//
-//    public void keyReleased(KeyEvent e) {
-//        int keyCode = e.getKeyCode();
-//
-//        if(keyCode == KeyEvent.VK_SHIFT) {
-//            // Set shift mode back to off : display regular (non-shifted) actions in the command bar
-//            commandBar.setAlternateActionsMode(false);
-//        }
-//    }
-//
-//    public void keyTyped(KeyEvent e) {
-//    }
 }

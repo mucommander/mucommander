@@ -17,10 +17,13 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.TablePopupMenu;
+import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.auth.AuthException;
+import com.mucommander.auth.MappedCredentials;
+import com.mucommander.auth.CredentialsManager;
+import com.mucommander.Debug;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
@@ -108,7 +111,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         // Create location combo box and retrieve location field instance
         LocationComboBox locationComboBox = new LocationComboBox(this);
-        this.locationField = locationComboBox.getLocationField();
+        this.locationField = (ProgressTextField)locationComboBox.getTextField();
         locationField.addFocusListener(this);
         // Give location field all the remaining space
         c.weightx = 1;
@@ -277,14 +280,16 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
     /**
-     * Pops up an authentication dialog where the user can enter a new login and password.
+     * Pops up an authentication dialog where the user can enter credentials to grant him access to the folder or file
+     * which caused the specified AuthException.
      *
-     * @return true if the user entered a (potentially) new login and password and pressed OK.
+     * @param e the AuthException thrown when trying to access the restricted file or folder.
+     * @return the credentials the user entered/chose and validated, null if he cancelled the dialog.
      */
-    private boolean showAuthDialog(AuthException e) {
+    private MappedCredentials showAuthDialog(AuthException e) {
         AuthDialog authDialog = new AuthDialog(mainFrame, e);
         authDialog.showDialog();
-        return authDialog.okPressed();
+        return authDialog.getCredentials();
     }
 
 
@@ -467,11 +472,13 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     /**
      * Overrides JComponent's requestFocus() method to request focus
-     * on the last focused component inside this FolderPanel: on the file able or on the location field
+     * on the last focused component inside this FolderPanel: on the file table or on the location field
      */
     public void requestFocus() {
-        if(!mainFrame.getNoEventsMode())
+        if(!mainFrame.getNoEventsMode()) {
+if(Debug.ON) Debug.trace("requesting focus on "+lastFocusedComponent.getClass().getName());
             ((JComponent)lastFocusedComponent).requestFocus();
+        }
     }
 
 
@@ -694,6 +701,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
             //			// Save focus state
             //			this.hadFocus = fileTable.hasFocus();
+            MappedCredentials newCredentials = null;
             do {
                 //				noWaitDialog = false;
 
@@ -831,6 +839,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     // folder set -> 95% complete
                     locationField.setProgressValue(95);
 
+                    // If some new credentials were entered by the user, these can be considered valid
+                    // (folder was changed successfully) and added to the credentials list.
+                    if(newCredentials!=null)
+                        CredentialsManager.addCredentials(newCredentials);
+
                     // All good !
                     folderChangedSuccessfully = true;
 
@@ -845,9 +858,13 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
                     if(e instanceof AuthException) {
                         AuthException authException = (AuthException)e;
-                        // Retry (loop) if user authentified
-                        if(showAuthDialog(authException)) {
-                            folder = FileFactory.getFile(authException.getFileURL().getStringRep(false));
+                        // Retry (loop) if user provided new credentials
+                        newCredentials = showAuthDialog(authException);
+                        if(newCredentials!=null) {
+//                            folder = FileFactory.getFile(authException.getFileURL().getStringRep(true));
+                            folder = null;
+                            folderPath = null;
+                            folderURL = newCredentials.getURL();
                             continue;
                         }
                     }

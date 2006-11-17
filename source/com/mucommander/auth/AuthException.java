@@ -7,9 +7,10 @@ import java.io.IOException;
 
 
 /**
- * This IOException should be instanciated and thrown whenever access was denied to
- * some file system. AuthException is caught in different places of the application 
- * to provide a way for the user to authentify (a dialog pops up).
+ * AuthException should be thrown whenever access to a remote file system was denied due to false or missing credentials.
+ *
+ * <p>AuthException is caught in different places of the application 
+ * to provide a way for the user to authenticate (a dialog pops up).
  *
  * @author Maxence Bernard
  */

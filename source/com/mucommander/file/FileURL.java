@@ -2,6 +2,7 @@
 package com.mucommander.file;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.auth.Credentials;
 
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
@@ -45,7 +46,7 @@ public class FileURL implements Cloneable {
     /**
      * Creates a new FileURL object from the given string and using the given FileURL as the parent URL.
      * 
-     * <p>If the parent URL contains authentication information (login/password), it will used in the child URL.</p>
+     * <p>If the parent URL contains credentials (login/password), it will used in the child URL.</p>
      */
     public FileURL(String url, FileURL parentURL) throws MalformedURLException {
         try {
@@ -279,7 +280,7 @@ public class FileURL implements Cloneable {
 
 	
     /**
-     * Returns the protocol part of this URL (e.g. smb). The returned protocol may never be <code>null</code>.
+     * Returns the protocol part of this FileURL (e.g. smb). The returned protocol may never be <code>null</code>.
      */
     public String getProtocol() {
         return protocol;
@@ -287,7 +288,7 @@ public class FileURL implements Cloneable {
 	
 
     /**
-     * Returns the host part of this URL (e.g. google.com), <code>null</code> if this URL doesn't contain
+     * Returns the host part of this FileURL (e.g. google.com), <code>null</code> if this FileURL doesn't contain
      * any host.
      */
     public String getHost() {
@@ -296,7 +297,7 @@ public class FileURL implements Cloneable {
 	
 	
     /**
-     * Returns the port specified in this URL (e.g. 8080) if there is one, -1 otherwise.
+     * Returns the port specified in this FileURL (e.g. 8080) if there is one, -1 otherwise.
      * (-1 means the protocol default port should be considered).
      */
     public int getPort() {
@@ -312,7 +313,7 @@ public class FileURL implements Cloneable {
 	
 	
     /**
-     * Returns the login specified in this URL (e.g. maxence for ftp://maxence@mucommander.com),
+     * Returns the login specified in this FileURL (e.g. maxence for ftp://maxence@mucommander.com),
      * <code>null</code> otherwise.
      */
     public String getLogin() {
@@ -320,7 +321,8 @@ public class FileURL implements Cloneable {
     }
 
     /**
-     * Sets the login part with the given one.
+     * Sets the login contained by this FileURL. An empty String "" will be considered as null and returned
+     * as such next time {@link #getLogin()} is called.
      */
     public void setLogin(String login) {
         if(login==null)
@@ -336,7 +338,7 @@ public class FileURL implements Cloneable {
 
 
     /**
-     * Returns the password specified in this URL (e.g. blah for ftp://maxence:blah@mucommander.com),
+     * Returns the password specified in this FileURL (e.g. blah for ftp://maxence:blah@mucommander.com),
      * <code>null</code> otherwise.
      */
     public String getPassword() {
@@ -344,7 +346,8 @@ public class FileURL implements Cloneable {
     }
 
     /**
-     * Sets the password part with the given one.
+     * Sets the password contained by this FileURL. An empty String "" will be considered as null and returned
+     * as such next time {@link #getPassword()} is called.
      */
     public void setPassword(String password) {
         if(password==null)
@@ -356,10 +359,51 @@ public class FileURL implements Cloneable {
                 this.password = password;
         }
     }
-	
+
+
+    /**
+     * Convenience method that discards any credentials (login and password) contained by this FileURL.
+     * It has the same effect as calling {@link #setLogin(String)} and {@link #setPassword(String)} with a null value.
+     */
+    public void discardCredentials() {
+        this.login = null;
+        this.password = null;
+    }
+
+
+
+    /**
+     * Returns the credentials (login and password) contained in this FileURL, wrapped in an {@link Credentials} object.
+     * Returns null if this FileURL doesn't contain any login.
+     */
+    public Credentials getCredentials() {
+        if(login==null)
+            return null;
+
+        return new Credentials(login, password==null?"":password);
+    }
+
+
+    /**
+     * Sets the credentials (login and password) contained by this FileURL.
+     * If the provided {@link Credentials} object is null, the login and password will be set to null.
+     *
+     * @param credentials the new credentials to use, replacing the previous ones (if any)
+     */
+    public void setCredentials(Credentials credentials) {
+        if(credentials ==null) {
+            login = null;
+            password = null;
+        }
+        else {
+            setLogin(credentials.getLogin());
+            setPassword(credentials.getPassword());
+        }
+    }
+
 	
     /**
-     * Returns the path part of this URL (e.g. /webstart/mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp)
+     * Returns the path part of this FileURL (e.g. /webstart/mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp)
      */
     public String getPath() {
         return path;
@@ -405,8 +449,8 @@ public class FileURL implements Cloneable {
 	
 
     /**
-     * Returns the filename part of this URL (e.g. mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp)
-     * <code>null</code> if this URL doesn't contain any URL (e.g. http://google.com)
+     * Returns the filename part of this FileURL (e.g. mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp)
+     * <code>null</code> if this FileURL doesn't contain any URL (e.g. http://google.com)
      */
     public String getFilename() {
         return filename;
@@ -414,7 +458,7 @@ public class FileURL implements Cloneable {
 	
 
     /**
-     * Returns the filename part of this URL, and if specified, decodes URL-encoded characters (e.g. %5D%35)
+     * Returns the filename part of this FileURL, and if specified, decodes URL-encoded characters (e.g. %5D%35)
      */
     public String getFilename(boolean urlDecode) {
         if(urlDecode && filename!=null)
@@ -425,7 +469,7 @@ public class FileURL implements Cloneable {
 	
 
     /**
-     * Returns the query part of this URL if there is one (e.g. ?dummy=1&void=1 for http://mucommander.com/useless.php?dummy=1&void=1),
+     * Returns the query part of this FileURL if there is one (e.g. ?dummy=1&void=1 for http://mucommander.com/useless.php?dummy=1&void=1),
      * <code>null</code> otherwise.
      */
     public String getQuery() {
@@ -434,7 +478,7 @@ public class FileURL implements Cloneable {
 
 	
     /**
-     * Sets the given properties (name/value pair) to this URL.
+     * Sets the given properties (name/value pair) to this FileURL.
      * Properties can be used as a way to pass parameters to AbstractFile constructors.
      */
     public void setProperty(String name, String value) {
@@ -455,23 +499,23 @@ public class FileURL implements Cloneable {
     /**
      * Reconstructs the URL and returns its String representation.
      *
-     * @param includeAuthInfo if <code>true</code>, login and password (if any) will be included in the returned URL.
+     * @param includeCredentials if <code>true</code>, login and password (if any) will be included in the returned URL.
      * Login and password in URLs should never be visible to the end user.
-     * @param maskPassword if <code>true</code> (and includeAuthInfo param too), password will be replaced by '*' characters. This
+     * @param maskPassword if <code>true</code> (and includeCredentials param too), password will be replaced by '*' characters. This
      * can be used to display a full URL to the end user without displaying the actual password.
      */
-    public String getStringRep(boolean includeAuthInfo, boolean maskPassword) {
-        return reconstructURL(this.path, includeAuthInfo, maskPassword);
+    public String getStringRep(boolean includeCredentials, boolean maskPassword) {
+        return reconstructURL(this.path, includeCredentials, maskPassword);
     }
 
     /**
      * Reconstructs the URL and returns its String representation.
      *
-     * @param includeAuthInfo if <code>true</code>, login and password (if any) will be included in the returned URL and not masked.
+     * @param includeCredentials if <code>true</code>, login and password (if any) will be included in the returned URL and not masked.
      * Login and password in URLs should never be visible to the end user.
      */
-    public String getStringRep(boolean includeAuthInfo) {
-        return getStringRep(includeAuthInfo, false);
+    public String getStringRep(boolean includeCredentials) {
+        return getStringRep(includeCredentials, false);
     }
 
 
@@ -479,15 +523,15 @@ public class FileURL implements Cloneable {
      * Reconstructs the URL with the given path and returns its String representation.
      *
      * @param path the file's path
-     * @param includeAuthInfo if <code>true</code>, login and password (if any) will be included in the returned URL.
+     * @param includeCredentials if <code>true</code>, login and password (if any) will be included in the returned URL.
      * Login and password in URLs should never be visible to the end user.
-     * @param maskPassword if <code>true</code> (and includeAuthInfo param too), password will be replaced by '*' characters. This
+     * @param maskPassword if <code>true</code> (and includeCredentials param too), password will be replaced by '*' characters. This
      * can be used to display a full URL to the end user without displaying the actual password.
      */
-    private String reconstructURL(String path, boolean includeAuthInfo, boolean maskPassword) {
+    private String reconstructURL(String path, boolean includeCredentials, boolean maskPassword) {
         String s = protocol + "://";
 		
-        if(includeAuthInfo && login!=null) {
+        if(includeCredentials && login!=null) {
             s += login;
             if(password!=null) {
                 s += ":";
@@ -528,7 +572,7 @@ public class FileURL implements Cloneable {
 
 
     /**
-     * Returns a String representation of this FileURL, without authentication info. 
+     * Returns a String representation of this FileURL, without the credentials it may contain.
      */
     public String toString() {
         return getStringRep(false);
@@ -536,31 +580,33 @@ public class FileURL implements Cloneable {
 	
 	
     /**
-     * Tests FileURL instances for equality :<br>
-     *  - authentication info (login and password) are not taken into account when testing equality
-     *  - there can be a trailing slash or backslash difference between 2 identical URLs, true will be returned
+     * Tests FileURL instances for equality:
+     * <ul
+     * <li>credentials (login and password) are not taken into account when testing equality
+     * <li>case is ignored
+     * <li>there can be a trailing slash or backslash difference in the path of 2 otherwise identical URLs,
+     * true will still be returned
+     * </ul>
      *
-     * @return true if both FileURL are equal.
+     * @return true if both FileURL instances are equal.
      */
     public boolean equals(Object o) {
         if(!(o instanceof FileURL))
             return false;
 		
-        //		return ((FileURL)o).getStringRep(true).equals(getStringRep(true));
-
-        // Do not take into account authentication info (login and password) to test equality
-        String rep1 = getStringRep(false);
-        String rep2 = ((FileURL)o).getStringRep(false);
+        // Do not take into account credentials (login and password) to test equality
+        String urlLC1 = getStringRep(false).toLowerCase();
+        String urlLC2 = ((FileURL)o).getStringRep(false).toLowerCase();
 		
         // If strings are equal, return true
-        if(rep1.equals(rep2))
+        if(urlLC1.equals(urlLC2))
             return true;
 		
         // If difference between the 2 strings is just a trailing slash or backslash, then we consider them equal and return true  
-        int len1 = rep1.length();
-        int len2 = rep2.length();
-        if(Math.abs(len1-len2)==1 && (len1>len2 ? rep1.startsWith(rep2) : rep2.startsWith(rep1))) {
-            char cdiff = len1>len2 ? rep1.charAt(len1-1) : rep2.charAt(len2-1);
+        int len1 = urlLC1.length();
+        int len2 = urlLC2.length();
+        if(Math.abs(len1-len2)==1 && (len1>len2 ? urlLC1.startsWith(urlLC2) : urlLC2.startsWith(urlLC1))) {
+            char cdiff = len1>len2 ? urlLC1.charAt(len1-1) : urlLC2.charAt(len2-1);
             if(cdiff=='/' || cdiff=='\\')
                 return true;
         }

@@ -4,8 +4,7 @@ package com.mucommander.file;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.auth.AuthException;
-import com.mucommander.auth.AuthInfo;
-import com.mucommander.auth.AuthManager;
+import com.mucommander.auth.Credentials;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
@@ -81,21 +80,24 @@ public class FTPFile extends AbstractFile {
 
 
     public FTPFile(FileURL fileURL) throws IOException {
-        this(fileURL, true, null);
+//        this(fileURL, true, null);
+        this(fileURL, null);
     }
 
 
     /**
      * Creates a new instance of FTPFile and initializes the FTP connection to the server.
      */
-    private FTPFile(FileURL fileURL, boolean addAuthInfo, FTPClient ftpClient) throws IOException {
+//    private FTPFile(FileURL fileURL, boolean addAuthInfo, FTPClient ftpClient) throws IOException {
+    private FTPFile(FileURL fileURL, FTPClient ftpClient) throws IOException {
         super(fileURL);
 
         this.absPath = this.fileURL.getPath();
 
         if(ftpClient==null)
             // Initialize connection
-            initConnection(fileURL, addAuthInfo);
+//            initConnection(fileURL, addAuthInfo);
+            initConnection(fileURL);
         else
             this.ftpClient = ftpClient;
 
@@ -156,7 +158,8 @@ public class FTPFile extends AbstractFile {
     }
 
 
-    private void initConnection(FileURL fileURL, boolean addAuthInfo) throws IOException {
+//    private void initConnection(FileURL fileURL, boolean addAuthInfo) throws IOException {
+    private void initConnection(FileURL fileURL) throws IOException {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("connecting to "+fileURL.getHost());
 
         this.ftpClient = new FTPClient();
@@ -177,14 +180,14 @@ public class FTPFile extends AbstractFile {
             // Throw an IOException if server replied with an error
             checkServerReply();
 
-            AuthManager.authenticate(fileURL, addAuthInfo);
-            AuthInfo authInfo = AuthInfo.getAuthInfo(fileURL);
+//            CredentialsManager.authenticate(fileURL, addAuthInfo);
+            Credentials credentials = fileURL.getCredentials();
 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL.getStringRep(true)+" authInfo="+authInfo);
-            if(authInfo==null)
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL.getStringRep(true)+" credentials="+ credentials);
+            if(credentials ==null)
                 throw new AuthException(fileURL);
 
-            ftpClient.login(authInfo.getLogin(), authInfo.getPassword());
+            ftpClient.login(credentials.getLogin(), credentials.getPassword());
             // Throw an IOException (possibly AuthException) if server replied with an error
             checkServerReply();
 
@@ -244,7 +247,8 @@ public class FTPFile extends AbstractFile {
         // Reconnect if disconnected
         if(!ftpClient.isConnected()) {
             // Connect again
-            initConnection(this.fileURL, false);
+//            initConnection(this.fileURL, false);
+            initConnection(this.fileURL);
             return;
         }
 
@@ -268,7 +272,8 @@ public class FTPFile extends AbstractFile {
                 try { ftpClient.disconnect(); } catch(IOException e) {}
             }
             // Connect again
-            initConnection(this.fileURL, false);
+//            initConnection(this.fileURL, false);
+            initConnection(this.fileURL);
         }
     }
 
@@ -319,8 +324,13 @@ public class FTPFile extends AbstractFile {
             if(parentFileURL!=null) {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("parentURL="+parentFileURL.getStringRep(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
                 parentFileURL.setProperty("passiveMode", ""+passiveMode);
-                try { this.parent = new FTPFile(parentFileURL, false, this.ftpClient); }
-                catch(IOException e) {}
+parentFileURL.setCredentials(fileURL.getCredentials());
+                try {
+//                    this.parent = new FTPFile(parentFileURL, false, this.ftpClient); 
+                    this.parent = new FTPFile(parentFileURL, this.ftpClient);
+                }
+                catch(IOException e) {
+                }
             }
 
             this.parentValSet = true;
@@ -414,7 +424,8 @@ public class FTPFile extends AbstractFile {
         String childName;
         int nbFiles = files.length;
         int fileCount = 0;
-        String parentURL = fileURL.getStringRep(false);
+//        String parentURL = fileURL.getStringRep(false);
+        String parentURL = fileURL.getStringRep(true);
         if(!parentURL.endsWith(SEPARATOR))
             parentURL += SEPARATOR;
 

@@ -4,7 +4,10 @@ package com.mucommander.ui;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.ShutdownHook;
+import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.auth.AuthException;
+import com.mucommander.auth.MappedCredentials;
+import com.mucommander.auth.CredentialsManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
@@ -152,6 +155,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Tries the specified path as-is.
         AbstractFile file;
+        MappedCredentials newCredentials = null;
+
         while(true) {
             try {
                 file = FileFactory.getFile(path, true);
@@ -162,19 +167,17 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             // If an AuthException occured, gets login credential from the user.
             catch(Exception e) {
                 if(e instanceof AuthException) {
-                    AuthException exception;
-                    AuthDialog    authDialog;
-
-                    // Prompts the user for login and password.
-                    exception = (AuthException)e;
-                    authDialog = new AuthDialog(currentMainFrame, exception);
+                    // Prompts the user for a login and password.
+                    AuthDialog authDialog = new AuthDialog(currentMainFrame, (AuthException)e);
                     authDialog.showDialog();
-                    if(authDialog.okPressed())
-                        path = exception.getFileURL().getStringRep(false);
-
-                    // If the user cancels, we fall back on the default path.
-                    else
+                    newCredentials = authDialog.getCredentials();
+                    if(newCredentials!=null) {
+                        path = newCredentials.getURL().getStringRep(true);
+                    }
+                    // If the user cancels, we fall back to the default path.
+                    else {
                         return getInitialPath(frame);
+                    }
                 }
                 else {
                     file = null;
@@ -183,7 +186,13 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             }
         }
 
-        // If the specified path does not work out, 
+        if(newCredentials!=null) {
+            // If credentials were entered by the user, these are considered valid (file was retrieved successfully)
+            // and can be added to the credentials list.
+            CredentialsManager.addCredentials(newCredentials);
+        }
+
+        // If the specified path does not work out,
         if(file == null)
             // Tries the specified path as a relative path.
             if((file = FileFactory.getFile(new File(path).getAbsolutePath())) == null || !file.exists())

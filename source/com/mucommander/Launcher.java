@@ -221,6 +221,10 @@ public class Launcher {
         splashScreen.setLoadingMessage("Loading bookmarks...");
         com.mucommander.bookmark.BookmarkManager.loadBookmarks();
 
+        // Loads credentials
+        splashScreen.setLoadingMessage("Loading credentials...");
+        com.mucommander.auth.CredentialsManager.loadCredentials();
+        
         // Loads shell history
         splashScreen.setLoadingMessage("Loading shell history...");
         ShellHistoryManager.loadHistory();
