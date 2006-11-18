@@ -110,10 +110,6 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         //		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
 
-        // Disable dialog disposal when Escape is pressed as Escape is used by EditableComboBox to close
-        // the combo popup menu
-        setKeyboardDisposalEnabled(false);
-
         // Closing this dialog kills the process
         addWindowListener(new WindowAdapter() {
                 public void windowClosed(WindowEvent e) {
