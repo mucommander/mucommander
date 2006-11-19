@@ -600,6 +600,19 @@ same_source_destination:ZH_CN:源/目的文件夹相同
 same_source_destination:SI:Izvorna in ciljna mapa sta identični.
 
 
+# Used to indicate that an item (e.g. a bookmark) has no name
+untitled:EN:Untitled
+untitled:FR:Sans titre
+
+
+
+
+
+
+
+
+
+
 ###########
 # Actions #
 ###########
@@ -3620,19 +3633,6 @@ edit_bookmarks_dialog.location:EN:$[add_bookmark_dialog.location]
 edit_bookmarks_dialog.new:EN:New
 edit_bookmarks_dialog.new:FR:Nouveau
 
-
-
-
-
-
-
-
-
-
-
-# 'New location' text that appears as a temporary name when creating a new bookmark
-edit_bookmarks_dialog.new_location:EN:New location
-edit_bookmarks_dialog.new_location:FR:Nouvelle emplacement
 
 
 

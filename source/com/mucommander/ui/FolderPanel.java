@@ -613,34 +613,6 @@ if(Debug.ON) Debug.trace("requesting focus on "+lastFocusedComponent.getClass().
         }
 
 
-        private void enableNoEventsMode() {
-            // Prevents mouse/keybaord events from reaching the application and display hourglass/wait cursor
-            mainFrame.setNoEventsMode(true);
-//
-//            // Register a cutom action for the ESCAPE key which stops current folder change
-//            JRootPane rootPane = mainFrame.getRootPane();
-//            InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-//            ActionMap actionMap = rootPane.getActionMap();
-//            AbstractAction killAction = new AbstractAction() {
-//                    public void actionPerformed(ActionEvent e){
-//                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("escape pressed");
-//                        tryKill();
-//                    }
-//                };
-//            inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "customEscapeAction");
-//            actionMap.put("customEscapeAction", killAction);
-        }
-
-        private void disableNoEventsMode() {
-            // Restore mouse/keybaord events and default cursor
-            mainFrame.setNoEventsMode(false);
-//            // Remove 'escape' action
-//            JRootPane rootPane = mainFrame.getRootPane();
-//            rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
-//            rootPane.getActionMap().remove("customEscapeAction");
-        }
-
-
         public void run() {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("run starts");
             boolean folderChangedSuccessfully = false;
@@ -708,8 +680,8 @@ if(Debug.ON) Debug.trace("requesting focus on "+lastFocusedComponent.getClass().
                 // Set cursor to hourglass/wait
                 mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-                // Prevents mouse and keybaord events from reaching the main frame and menus
-                enableNoEventsMode();
+                // Render all actions inactive while changing folder
+                mainFrame.setNoEventsMode(true);
 
                 try {
                     // 2 cases here :
@@ -908,8 +880,8 @@ if(Debug.ON) Debug.trace("requesting focus on "+lastFocusedComponent.getClass().
 
             changeFolderThread = null;
 
-            // Restore mouse/keybaord events and default cursor
-            disableNoEventsMode();
+            // Make all actions active again
+            mainFrame.setNoEventsMode(false);
 
             if(!folderChangedSuccessfully) {
                 // Restore current folder's path
