@@ -60,8 +60,12 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 		
         Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel();
-		
-        JLabel label = new JLabel(Translator.get("run_dialog.run_command_description")+":");
+
+        JLabel label;
+        if(mainFrame.getActiveTable().getCurrentFolder() instanceof com.mucommander.file.FSFile)
+            label = new JLabel(Translator.get("run_dialog.run_command_description")+":");
+        else
+            label = new JLabel(Translator.get("run_dialog.run_in_home_description")+":");
         mainPanel.add(label);
 
         inputCombo = new ShellComboBox(this);

@@ -3322,6 +3322,18 @@ run_dialog.run_command_description:RU:Запустить из текущего �
 run_dialog.run_command_description:ZH_CN:在此文件夹执行
 run_dialog.run_command_description:SI:Zaženi v trenutni mapi
 
+run_dialog.run_in_home_description:EN:Run in home folder
+run_dialog.run_in_home_description:FR:Exécuter dans le répertoire utilisateur
+
+
+
+
+
+
+
+
+
+
 run_dialog.command_output:EN:Command output
 run_dialog.command_output:FR:Sortie de la commande
 run_dialog.command_output:DE:Befehlsausgabe
