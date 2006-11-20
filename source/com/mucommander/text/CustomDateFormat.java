@@ -1,9 +1,7 @@
 
 package com.mucommander.text;
 
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,8 +67,12 @@ public class CustomDateFormat implements ConfigurationListener {
      */
     private static SimpleDateFormat createDateFormat() {
         return new SimpleDateFormat(
-                                    replaceDateSeparator(ConfigurationManager.getVariable("prefs.date_format", "MM/dd/yy"), ConfigurationManager.getVariable("prefs.date_separator", "/"))
-                                    +" "+ConfigurationManager.getVariable("prefs.time_format", "hh:mm a"));
+                                    replaceDateSeparator(ConfigurationManager.getVariable(ConfigurationVariables.DATE_FORMAT,
+                                                                                          ConfigurationVariables.DEFAULT_DATE_FORMAT),
+                                                         ConfigurationManager.getVariable(ConfigurationVariables.DATE_SEPARATOR,
+                                                                                          ConfigurationVariables.DEFAULT_DATE_SEPARATOR))
+                                    + " " + ConfigurationManager.getVariable(ConfigurationVariables.TIME_FORMAT,
+                                                                             ConfigurationVariables.DEFAULT_DATE_FORMAT));
     }
 	
 	

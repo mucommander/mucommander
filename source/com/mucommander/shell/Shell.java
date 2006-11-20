@@ -2,7 +2,7 @@ package com.mucommander.shell;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 
@@ -14,16 +14,6 @@ import java.util.Vector;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class Shell {
-    // - Shell configuration -------------------------------------------------
-    // -----------------------------------------------------------------------
-    /** Configuration variable used to store the custom shell command */
-    private final static String CUSTOM_SHELL_CONF_VAR     = "prefs.shell.custom_command";
-
-    /** Configuration variable used to store the custom shell command */
-    private final static String USE_CUSTOM_SHELL_CONF_VAR = "prefs.shell.use_custom";
-
-
-
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
     /**
@@ -44,8 +34,8 @@ public class Shell {
      * @return the shell command muCommander uses.
      */
     private static String getShellCommand() {
-        if(ConfigurationManager.getVariableBoolean(USE_CUSTOM_SHELL_CONF_VAR, false))
-            return ConfigurationManager.getVariable(CUSTOM_SHELL_CONF_VAR, PlatformManager.getDefaultShellCommand());
+        if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_SHELL, ConfigurationVariables.DEFAULT_USE_CUSTOM_SHELL))
+            return ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_SHELL, PlatformManager.getDefaultShellCommand());
         return PlatformManager.getDefaultShellCommand();
     }
 

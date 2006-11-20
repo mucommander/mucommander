@@ -1,6 +1,6 @@
 package com.mucommander;
 
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.CheckVersionDialog;
 import com.mucommander.ui.SplashScreen;
@@ -263,7 +263,7 @@ public class Launcher {
             WindowManager.createNewMainFrame();
 
         // Check for newer version unless it was disabled
-        if(ConfigurationManager.getVariableBoolean("prefs.check_for_updates_on_startup", true))
+        if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.CHECK_FOR_UPDATE, ConfigurationVariables.DEFAULT_CHECK_FOR_UPDATE))
             new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
 
         // Dispose splash screen

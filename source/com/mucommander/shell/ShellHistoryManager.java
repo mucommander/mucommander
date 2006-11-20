@@ -1,7 +1,7 @@
 package com.mucommander.shell;
 
 import com.mucommander.*;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 
@@ -21,10 +21,6 @@ import java.util.WeakHashMap;
 public class ShellHistoryManager {
     // - History configuration -----------------------------------------------
     // -----------------------------------------------------------------------
-    /** Default history size. */
-    private static final int    DEFAULT_HISTORY_SIZE = 100;
-    /** Name of the configuration variable that stores the history size. */
-    private static final String HISTORY_SIZE_VAR  = "prefs.shell.history_size";
     /** File in which to store the shell history. */
     private static final String HISTORY_FILE      = "shell_history.xml";
 
@@ -56,7 +52,7 @@ public class ShellHistoryManager {
      * Initialises history.
      */
     static {
-        history   = new String[ConfigurationManager.getVariableInt(HISTORY_SIZE_VAR, DEFAULT_HISTORY_SIZE)];
+        history   = new String[ConfigurationManager.getVariableInt(ConfigurationVariables.SHELL_HISTORY_SIZE, ConfigurationVariables.DEFAULT_SHELL_HISTORY_SIZE)];
         listeners = new WeakHashMap();
     }
 
