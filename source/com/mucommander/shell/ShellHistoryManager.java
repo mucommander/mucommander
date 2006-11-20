@@ -87,6 +87,22 @@ public class ShellHistoryManager {
     // - History access -------------------------------------------------------------
     // ------------------------------------------------------------------------------
     /**
+     * Completely empties the shell history.
+     */
+    public static void clear() {
+        Iterator iterator; // Iterator on the history listeners.
+
+        // Empties history.
+        historyStart = 0;
+        historyEnd   = 0;
+
+        // Notifies listeners.
+        iterator = listeners.keySet().iterator();
+        while(iterator.hasNext())
+            ((ShellHistoryListener)iterator.next()).historyCleared();
+    }
+
+    /**
      * Returns a <b>non thread-safe</code> iterator on the history.
      * @return an iterator on the history.
      */

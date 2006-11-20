@@ -34,6 +34,7 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
      * @param parent where to execute commands.
      */
     public ShellComboBox(RunDialog parent) {
+        //        super(new JTextField() {public void setText(String s) {super.setText(s);System.out.println("HEEEEEEEEEEEEERE " + s);}});
         this.parent = parent;
 
         // Sets the combo box's editor.
@@ -89,37 +90,32 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
 
-        if(enabled) {                                              
+        if(enabled) {
             input.setSelectionStart(0);
             input.setSelectionEnd(input.getText().length());
         }
     }
 
 
+
     // - EditableComboBoxListener implementation ------------------------------------
     // ------------------------------------------------------------------------------
 
-    public void comboBoxSelectionChanged(EditableComboBox source) {
-    }
+    public void comboBoxSelectionChanged(EditableComboBox source) {}
 
-    public void textFieldValidated(EditableComboBox source) {
-        // Disable this combo box until the command process is terminated (managed by RunDialog)
-        setEnabled(false);
+    public void textFieldValidated(EditableComboBox source) {parent.runCommand(input.getText());}
 
-        // Runs the requested command.
-        runCommand(input.getText());
-    }
-
-    public void textFieldCancelled(EditableComboBox source) {
-        // Close the parent dialog
-        parent.dispose();
-    }
+    public void textFieldCancelled(EditableComboBox source) {parent.dispose();}
 
 
     // - Shell listener code --------------------------------------------------------
     // ------------------------------------------------------------------------------
 
     public void historyChanged(String command) {insertItemAt(command, 0);}
+    public void historyCleared() {
+        input.setText("");
+        removeAllItems();
+    }
 
 
     // - Command handling -----------------------------------------------------------
@@ -129,13 +125,4 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
      * @return the current shell command.
      */
     public String getCommand() {return input.getText();}
-
-    /**
-     * Runs the specified command and adds it to history.
-     * @param command command to run.
-     */
-    private void runCommand(String command) {
-        input.setText(command);
-        parent.runCommand(command);
-    }
 }

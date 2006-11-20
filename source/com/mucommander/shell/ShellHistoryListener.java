@@ -10,4 +10,9 @@ public interface ShellHistoryListener {
      * @param command command that was added to the history.
      */
     public void historyChanged(String command);
+
+    /**
+     * Notifies the listeners that the history has been cleared.
+     */
+    public void historyCleared();
 }

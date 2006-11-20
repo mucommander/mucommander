@@ -3348,6 +3348,9 @@ run_dialog.run:SI:Zaženi
 
 run_dialog.stop:EN:$[stop]
 
+run_dialog.clear_history:EN:Clear history
+run_dialog.clear_history:FR:Effacer l'historique
+
 
 #########################
 # Server connect dialog #
