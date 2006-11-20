@@ -5,7 +5,7 @@ package com.mucommander.ui.event;
 /**
  * Interface to be implemented by classes that wish to be notified of location changes on a particular
  * FolderPanel. Those classes need to be registered to receive those events, this can be done by calling
- * {@link com.mucommander.ui.FolderPanel#addLocationListener(LocationListener) FolderPanel.addLocationListener()}.
+ * {@link LocationManager#addLocationListener(LocationListener)}.
  *
  * @see com.mucommander.ui.FolderPanel
  * @author Maxence Bernard
@@ -14,20 +14,37 @@ public interface LocationListener {
 	
     /**
      * This method is invoked when the current folder on the given FolderPanel is being changed.
+     *
+     * <p>A call to either {@link #locationChanged(LocationEvent)}, {@link #locationCancelled(LocationEvent)} or
+     * {@link #locationFailed(LocationEvent)} will always follow to indicate the outcome of the folder change. 
+     *
+     * @param locationEvent describes the location change event
      */
-    public void locationChanging(LocationEvent e);
+    public void locationChanging(LocationEvent locationEvent);
 
 
     /**
      * This method is invoked when the current folder on the given FolderPanel has changed.
+     *
+     * @param locationEvent describes the location change event
      */
-    public void locationChanged(LocationEvent e);
+    public void locationChanged(LocationEvent locationEvent);
 
 
     /**
-     * This method is invoked when the current folder on the given FolderPanel has been cancelled,
-     * either because of an error, or as a result of a user action.
+     * This method is invoked when the current folder on the given FolderPanel has been cancelled by the user.
+     *
+     * @param locationEvent describes the location change event
      */
-    public void locationCancelled(LocationEvent e);
+    public void locationCancelled(LocationEvent locationEvent);
+
+
+    /**
+     * This method is invoked when the current folder on the given FolderPanel could not be changed, as a result
+     * of the folder not existing or failing to list its contents.
+     *
+     * @param locationEvent describes the location change event
+     */
+    public void locationFailed(LocationEvent locationEvent);
 
 }

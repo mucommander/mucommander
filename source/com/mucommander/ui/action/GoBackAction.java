@@ -63,4 +63,7 @@ public class GoBackAction extends MucoAction implements ActivePanelListener, Loc
 
     public void locationCancelled(LocationEvent e) {
     }
+
+    public void locationFailed(LocationEvent e) {
+    }
 }

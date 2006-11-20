@@ -8,8 +8,10 @@ import com.mucommander.file.RootFolders;
 import com.mucommander.ui.comp.combobox.EditableComboBox;
 import com.mucommander.ui.comp.combobox.EditableComboBoxListener;
 import com.mucommander.ui.comp.progress.ProgressTextField;
+import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
+import com.mucommander.Debug;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -20,16 +22,17 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
 
     /** FolderPanel this combo box is displayed in */
     private FolderPanel folderPanel;
+
     /** Text field used to type in a location */
     private ProgressTextField locationField;
-
-    /** When true, any action or key events received will be ignored */
-    private boolean ignoreEvents = true;    // Events are ignored until location is changed for the first time
 
     /** Semi-transparent color used to display progress in the location field */
     private final static Color PROGRESS_COLOR = new Color(0, 255, 255, 64);
 
+    /** True while a folder is being changed after a path was entered in the location field and validated by the user */
+    private boolean folderChangedInitiatedByLocationField;
 
+    
     /**
      * Creates a new LocationComboBox for use in the given FolderPanel.
      *
@@ -60,41 +63,80 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     }
 
 
-    //////////////////////////////
-    // LocationListener methods //
-    //////////////////////////////
-
-    public void locationChanged(LocationEvent e) {
+    private void populateParentFolders() {
         // Remove all choices corresponding to previous current folder
         removeAllItems();
 
         // Add choices corresponding to the new current folder
-        // /!\ Important note: combo box seems to fire action events when items
-        // are added so it's necessary to ignore events while items are being added
-        AbstractFile folder = e.getFolderPanel().getCurrentFolder();
+        AbstractFile folder = folderPanel.getCurrentFolder();
         // Start by adding current folder, and all parent folders up to root
         do {
             addItem(folder);
         }
         while((folder=folder.getParent())!=null);
-
-        // Re-enable component and stop ignoring events
-        setEnabled(true);
     }
 
+
+    /**
+     * Re-enable this combo box after a folder change was completed, cancelled by the user or has failed.
+     *
+     * <p>If the folder change was the result of the user manually entering a path in the location field and the folder
+     * change failed or was cancelled, keeps the path intact so the user can modify it.
+     */
+    private void folderChangeCompleted(boolean folderChangedSuccessfully) {
+        if(folderChangedSuccessfully || !folderChangedInitiatedByLocationField) {
+            // Set the location field's contents to the current folder path
+            locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
+        }
+
+        // Enable this combo box
+        setEnabled(true);
+
+        // Selects the text to grab user's attention and make it easier to modify
+        if(!folderChangedSuccessfully && folderChangedInitiatedByLocationField) {
+            locationField.selectAll();
+        }
+
+        // Reset field for next folder change
+        folderChangedInitiatedByLocationField = false;
+    }
+
+
+
+    //////////////////////////////
+    // LocationListener methods //
+    //////////////////////////////
+
     public void locationChanging(LocationEvent e) {
-        // Disable component and ignore events until folder has been changed (or cancelled)
-        // Note: setEnabled(false) will have already been called if folder was changed by this component 
-        if(isEnabled())
-            setEnabled(false);
+        // Change the location field's text to the folder being changed
+        locationField.setText(e.getFolderPath());
+
+        // Disable component until the folder has been changed, cancelled or failed
+        setEnabled(false);
+    }
+
+
+    public void locationChanged(LocationEvent e) {
+        // Add current folder's parents to combo box
+        populateParentFolders();
+
+        // Re-enable component and change the location field's text to the new current folder's path
+        folderChangeCompleted(true);
     }
 
     public void locationCancelled(LocationEvent e) {
-        // Re-enable component and stop ignoring events
-        setEnabled(true);
+        // Re-enable component and change the location field's text to the new current folder's path.
+        // If the path was entered in the location field, keep the path to give the user a chance to correct it.
+        folderChangeCompleted(false);
     }
 
+    public void locationFailed(LocationEvent e) {
+        // Re-enable component and change the location field's text to the new current folder's path.
+        // If the path was entered in the location field, keep the path to give the user a chance to correct it.
+        folderChangeCompleted(false);
+    }
 
+    
     /////////////////////////////////////
     // EditableComboBox implementation //
     /////////////////////////////////////
@@ -103,8 +145,8 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     }
 
     public void textFieldValidated(EditableComboBox source) {
-        // Disable component and ignore events until folder has been changed (or cancelled)
-        setEnabled(false);
+//        // Disable component and ignore events until folder has been changed (or cancelled)
+//        setEnabled(false);
 
         String locationText = locationField.getText();
 
@@ -125,6 +167,9 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
                 return;
             }
         }
+
+        // Remember that the folder change was initiated by the location field
+        folderChangedInitiatedByLocationField = true;
 
         // Change folder
         folderPanel.trySetCurrentFolder(locationText);

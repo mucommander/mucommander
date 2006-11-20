@@ -266,8 +266,11 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
 	
     public void locationCancelled(LocationEvent e) {
     }
-	
-		
+
+    public void locationFailed(LocationEvent e) {
+    }
+
+    
     ///////////////////////////////
     // PopupMenuListener methods //
     ///////////////////////////////

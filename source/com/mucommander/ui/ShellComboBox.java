@@ -24,8 +24,6 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
     private JTextField input;
     /** Where to run commands. */
     private RunDialog  parent;
-//    /** Whether to ignore UI events or not. */
-//    private boolean    ignoreEvents = true;
 
 
 

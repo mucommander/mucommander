@@ -63,4 +63,7 @@ public class GoToParentAction extends MucoAction implements ActivePanelListener,
 
     public void locationCancelled(LocationEvent e) {
     }
+
+    public void locationFailed(LocationEvent e) {
+    }
 }

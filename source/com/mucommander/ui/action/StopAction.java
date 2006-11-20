@@ -51,4 +51,8 @@ public class StopAction extends MucoAction implements LocationListener {
     public void locationCancelled(LocationEvent e) {
         setEnabled(false);
     }
+
+    public void locationFailed(LocationEvent e) {
+        setEnabled(false);
+    }
 }

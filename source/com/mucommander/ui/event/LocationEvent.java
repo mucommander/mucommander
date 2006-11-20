@@ -14,15 +14,20 @@ public class LocationEvent {
 
     /** FolderPanel where location has or is being changed */
     private FolderPanel folderPanel;
-	
+
+    /** Path to the folder that has or is being changed */
+    private String folderPath;
+
 
     /**
      * Creates a new LocationEvent.
      *
      * @param folderPanel FolderPanel where location has or is being changed.
+     * @param folderPath path to the folder that has or is being changed
      */
-    public LocationEvent(FolderPanel folderPanel) {
+    public LocationEvent(FolderPanel folderPanel, String folderPath) {
         this.folderPanel = folderPanel;
+        this.folderPath = folderPath;
     }
 
 
@@ -31,5 +36,13 @@ public class LocationEvent {
      */
     public FolderPanel getFolderPanel() {
         return folderPanel;
+    }
+
+
+    /**
+     * Returns the path to the folder that has or is being changed.
+     */
+    public String getFolderPath() {
+        return folderPath;
     }
 }

@@ -395,7 +395,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     //////////////////////////////
 	
     public void locationChanged(LocationEvent e) {
-        // Update window title to reflect new location
+        // Update window title to reflect the new current folder
         updateWindowTitle();
     }
 
@@ -405,7 +405,10 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     public void locationCancelled(LocationEvent e) {
     }
 
-    
+    public void locationFailed(LocationEvent e) {
+    }
+
+
     ///////////////////////
     // Overriden methods //
     ///////////////////////

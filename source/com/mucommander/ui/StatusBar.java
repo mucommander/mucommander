@@ -380,8 +380,12 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     public void locationCancelled(LocationEvent e) {
         updateStatusInfo();
     }
-	
-	
+
+    public void locationFailed(LocationEvent e) {
+        updateStatusInfo();
+    }
+
+
     //////////////////////////////////
     // MouseListener implementation //
     //////////////////////////////////
