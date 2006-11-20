@@ -92,6 +92,7 @@ public class Shell {
         Vector commandTokens = splitCommand(getShellCommand());
         commandTokens.add(command);
         
+
         // Determine if specified folder can be used as a working directory
         File workingDirectory = new java.io.File((currentFolder instanceof FSFile) ?
             currentFolder.getAbsolutePath() :
@@ -105,6 +106,7 @@ public class Shell {
         // (mixed), whereas otherwise error messages are displayed after all normal output has been read and displayed.
         Process process;
         if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_5) {
+            if(Debug.ON) Debug.trace("Using merged streams");
             ProcessBuilder pb = new ProcessBuilder(commandTokens);
             // Set the process' working directory
             pb.directory(workingDirectory);
@@ -115,6 +117,7 @@ public class Shell {
         }
         // Java 1.4 or below, use Runtime.exec() which separates stdout and stderr (harder to manipulate) 
         else {
+            if(Debug.ON) Debug.trace("Using separate streams");
             // Stores the tokens in an array for Runtime.exec(String[],String[],File).
             String tokens[] = new String[commandTokens.size()];
             commandTokens.toArray(tokens);

@@ -1,6 +1,6 @@
 package com.mucommander.shell;
 
-import com.mucommander.PlatformManager;
+import com.mucommander.*;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
@@ -100,7 +100,6 @@ public class ShellHistoryManager {
         // Ignores empty commands.
         if(command.trim().equals(""))
             return;
-
         // Ignores the command if it's the same as the last one.
         // There is no last command if history is empty.
         if(historyEnd != historyStart) {
@@ -108,13 +107,15 @@ public class ShellHistoryManager {
 
             // Computes the index of the previous command.
             if(historyEnd == 0)
-                lastIndex = history.length;
+                lastIndex = history.length - 1;
             else
                 lastIndex = historyEnd - 1;
 
             if(command.equals(history[lastIndex]))
                 return;
         }
+
+        if(Debug.ON) Debug.trace("Adding  " + command + " to shell history.");
 
         // Updates the history buffer.
         history[historyEnd] = command;
