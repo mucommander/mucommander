@@ -1,6 +1,6 @@
 package com.mucommander.text;
 
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 
 import java.io.*;
 import java.util.Hashtable;
@@ -30,14 +30,8 @@ public class Translator {
     /** Current language (UPPER CASED) */
     private static String language;
 
-    /** Path to the dictionary file inside the JAR file */
-    public final static String DICTIONARY_FILE_PATH = "/dictionary.txt";
-
     /** Default language (UPPER CASED) */
     private final static String DEFAULT_LANGUAGE = "EN";
-
-    /** Preferred language's configuration key */
-    private final static String LANGUAGE_CONFIGURATION_KEY = "prefs.language";
 
     /** Key for available languages */
     private final static String AVAILABLE_LANGUAGES_KEY = "available_languages";
@@ -55,7 +49,7 @@ public class Translator {
      * If the language set in preferences or the system's language is not available, use default language (English).
      */
     private static void determineCurrentLanguage(Vector availableLanguages) {
-        String lang = ConfigurationManager.getVariable(LANGUAGE_CONFIGURATION_KEY);
+        String lang = ConfigurationManager.getVariable(ConfigurationVariables.LANGUAGE);
 
         if(lang==null) {
             // language is not set in preferences, use system's language
@@ -83,7 +77,7 @@ public class Translator {
         }
 		
         // Set preferred language in configuration file
-        ConfigurationManager.setVariable(LANGUAGE_CONFIGURATION_KEY, Translator.language);
+        ConfigurationManager.setVariable(ConfigurationVariables.LANGUAGE, Translator.language);
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Current language has been set to "+Translator.language);
     }
@@ -91,7 +85,7 @@ public class Translator {
     /**
      * Loads the default dictionary file.
      */
-    public static void loadDictionaryFile() {loadDictionaryFile(com.mucommander.text.Translator.DICTIONARY_FILE_PATH);}
+    public static void loadDictionaryFile() {loadDictionaryFile(com.mucommander.RuntimeConstants.DICTIONARY_FILE);}
 
     /**
      * Reads the dictionary file which contains localized text entries.
