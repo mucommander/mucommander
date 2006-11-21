@@ -60,16 +60,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * or last frame to have been used if muCommander doesn't have focus */	
     private static MainFrame currentMainFrame;
 
-    /** Time at which the last focus request was made */	
-    private long lastFocusRequest;
-
-    /** Last main frame on which focus has been explicitely requested */
-    private static MainFrame lastFocusedMainFrame;
-
     private static WindowManager instance = new WindowManager();
-
-    /** Minimum delay between 2 focus requests, so that 2 windows do not fight over focus */
-    private final static int FOCUS_REQUEST_DELAY = 1000;
 
 
     // - Initialisation ---------------------------------------------------------
@@ -469,11 +460,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     // WindowListener methods //
     ////////////////////////////
 
-    /**
-     * Requests focus on the activated MainFrame if it doesn't already have focus, and
-     * if another child window (dialog) doesn't have focus and if focus was not recently 
-     * requested on another MainFrame (to avoid having 2 main frames fight over focus).
-     */
     public void windowActivated(WindowEvent e) {
         Object source = e.getSource();
         
@@ -482,41 +468,13 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             return;
 
         currentMainFrame = (MainFrame)e.getSource();
-        // Let MainFrame know that is active in the foreground
+        // Let MainFrame know that it is active in the foreground
         currentMainFrame.setForegroundActive(true);
 
         // Resets shift mode to false, since keyReleased events may have been lost during window switching
         CommandBar commandBar = currentMainFrame.getCommandBar();
         if(commandBar!=null)
             commandBar.setAlternateActionsMode(false);
-
-        // Requests focus if last active table doesn't already have focus
-        // Delay check is to avoid that 2 main frames fight over focus.
-        long now = System.currentTimeMillis();
-
-        // Do not request focus if this MainFrame already has focus
-        if(currentMainFrame.hasFocus())
-            return;
-	
-        // /!\ Some already disposed window may be returned by getOwnedWindows
-        // but that's apparently normal : some weak references to the window 
-        // remain for a while before they are garbage collected (found that out
-        // after first freaking out and then running the app through a profiler)
-        Window ownedWindows[] = currentMainFrame.getOwnedWindows();
-
-        // Do not request focus if another child window has focus
-        if(ownedWindows!=null)
-            for(int i=0; i<ownedWindows.length; i++)
-                if(ownedWindows[i].isShowing())
-                    return;
-		
-        // Do not request focus if focus was requested on another MainFrame less than FOCUS_REQUEST_DELAY milliseconds ago
-        if (lastFocusedMainFrame==currentMainFrame || (now-lastFocusRequest>FOCUS_REQUEST_DELAY)) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("requesting focus on current MainFrame");
-            currentMainFrame.requestFocus();
-            lastFocusRequest = now;
-            lastFocusedMainFrame = currentMainFrame;
-        }
     }
 
     public void windowDeactivated(WindowEvent e) {
@@ -531,8 +489,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
     public void windowClosing(WindowEvent e) {
   //      Object source = e.getSource();
-
-//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
 //        // Return if event doesn't originate from a MainFrame (e.g. ViewerFrame or EditorFrame)
 //        if(!(source instanceof MainFrame))

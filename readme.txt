@@ -197,6 +197,7 @@ Improvements:
  - Mark key on '..' now selects next file instead of doing nothing
  - Shortcuts dialog uses tabs to show shortcut topics
  - Bookmark and root folder names can be entered in the location field to change the current folder
+ - Location field now allows to correct paths that have failed or have been cancelled
  - 'Local copy' dialog now selects filename without extension just like 'Rename'
  - Added 'Open', 'Open natively' and 'Reveal in Desktop' items to 'File' menu
  - Added 'Copy name(s)' / 'Copy path(s)' items to 'Mark' menu

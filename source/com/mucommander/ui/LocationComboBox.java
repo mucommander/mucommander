@@ -32,7 +32,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     /** True while a folder is being changed after a path was entered in the location field and validated by the user */
     private boolean folderChangedInitiatedByLocationField;
 
-    
+
     /**
      * Creates a new LocationComboBox for use in the given FolderPanel.
      *
@@ -81,7 +81,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
      * Re-enable this combo box after a folder change was completed, cancelled by the user or has failed.
      *
      * <p>If the folder change was the result of the user manually entering a path in the location field and the folder
-     * change failed or was cancelled, keeps the path intact so the user can modify it.
+     * change failed or was cancelled, keeps the path intact and request focus on the text field so the user can modify it.
      */
     private void folderChangeCompleted(boolean folderChangedSuccessfully) {
         if(folderChangedSuccessfully || !folderChangedInitiatedByLocationField) {
@@ -89,18 +89,20 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
             locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
         }
 
-        // Enable this combo box
+        // Re-enable this combo box
         setEnabled(true);
 
-        // Selects the text to grab user's attention and make it easier to modify
+        // If the location was entered and validated in the location field and the folder change failed...
         if(!folderChangedSuccessfully && folderChangedInitiatedByLocationField) {
+            // Select the text to grab user's attention and make it easier to modify
             locationField.selectAll();
+            // Request focus (focus was on FileTable)
+            locationField.requestFocus();
         }
 
         // Reset field for next folder change
         folderChangedInitiatedByLocationField = false;
     }
-
 
 
     //////////////////////////////
@@ -111,7 +113,8 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         // Change the location field's text to the folder being changed
         locationField.setText(e.getFolderPath());
 
-        // Disable component until the folder has been changed, cancelled or failed
+        // Disable component until the folder has been changed, cancelled or failed.
+        // Note: the focus manager will release focus on the location field and give it to the next component (i.e. FileTable)
         setEnabled(false);
     }
 
@@ -145,9 +148,6 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     }
 
     public void textFieldValidated(EditableComboBox source) {
-//        // Disable component and ignore events until folder has been changed (or cancelled)
-//        setEnabled(false);
-
         String locationText = locationField.getText();
 
         // Look for a bookmark which name is the entered string (case insensitive)
@@ -177,7 +177,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
 
     public void textFieldCancelled(EditableComboBox source) {
         locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
-        folderPanel.getFileTable().requestFocus();
+        transferFocus();
     }
 
 

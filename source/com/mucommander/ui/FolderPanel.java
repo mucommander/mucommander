@@ -9,7 +9,6 @@ import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.HiddenFileFilter;
 import com.mucommander.file.filter.SystemFoldersFilter;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.progress.ProgressTextField;
 import com.mucommander.ui.dnd.FileDragSourceListener;
@@ -21,7 +20,6 @@ import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.MappedCredentials;
 import com.mucommander.auth.CredentialsManager;
-import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +36,7 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 public class FolderPanel extends JPanel implements FocusListener, ConfigurationListener {
-	
+
     private MainFrame mainFrame;
 
     private AbstractFile currentFolder;
@@ -51,6 +49,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         so there is no way to tell if it's the final selection (ENTER) or not.
     */
     private DriveButton driveButton;
+    private LocationComboBox locationComboBox;
     private ProgressTextField locationField;
     private FileTable fileTable;
     private JScrollPane scrollPane;
@@ -59,10 +58,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     
     private static Color backgroundColor;
     
-    private Object lastFocusedComponent;
-
-    private long lastFolderChangeTime;
-
     private FileDragSourceListener fileDragSourceListener;
 
     /** Filters out hidden files, null when 'show hidden files' option is enabled */
@@ -98,8 +93,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // No decoration for this panel
         setBorder(null);
 
-//        setBorder(BorderFactory.createEtchedBorder());
-
         JPanel locationPanel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -112,9 +105,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         locationPanel.add(driveButton, c);
 
         // Create location combo box and retrieve location field instance
-        LocationComboBox locationComboBox = new LocationComboBox(this);
+        this.locationComboBox = new LocationComboBox(this);
         this.locationField = (ProgressTextField)locationComboBox.getTextField();
-        locationField.addFocusListener(this);
+
         // Give location field all the remaining space
         c.weightx = 1;
         c.gridx = 1;
@@ -125,9 +118,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         add(locationPanel, BorderLayout.NORTH);
 		
         fileTable = new FileTable(mainFrame, this);
-        this.lastFocusedComponent = fileTable;
-        fileTable.addFocusListener(this);
-		
+
         try {
             // Set initial folder to current directory
             setCurrentFolder(initialFolder, applyFilters(initialFolder.ls()), null);
@@ -177,6 +168,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         // Listens to some configuration variables
         ConfigurationManager.addConfigurationListener(this);
+
+        // Listen to focus event in order to notify MainFrame of changes of the current active panel/table
+        fileTable.addFocusListener(this);
+        locationField.addFocusListener(this);
 
         // Drag and Drop support
 
@@ -232,6 +227,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         return this.mainFrame;
     }
 
+    public LocationComboBox getLocationComboBox() {
+        return locationComboBox;
+    }
+    
     public FolderHistory getFolderHistory() {
         return this.folderHistory;
     }
@@ -477,17 +476,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     ////////////////////////
 
     /**
-     * Overrides JComponent's requestFocus() method to request focus
-     * on the last focused component inside this FolderPanel: on the file table or on the location field
+     * Overridden for debugging purposes.
      */
-    public void requestFocus() {
-        if(!mainFrame.getNoEventsMode()) {
-            if(Debug.ON) Debug.trace("requesting focus on last focused component: "+lastFocusedComponent.getClass().getName());
-
-            ((JComponent)lastFocusedComponent).requestFocus();
-        }
+    public String toString() {
+        return getClass().getName()+"@"+hashCode() +" currentFolder="+currentFolder+" hasFocus="+hasFocus();
     }
-
 
 
     ///////////////////////////
@@ -495,26 +488,12 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     ///////////////////////////
 	
     public void focusGained(FocusEvent e) {
-        Object source = e.getSource();
-
-//        if(Debug.ON) Debug.trace("called, source="+source.getClass().getName()+", isFolderChanging="+isFolderChanging()+" folderChangeTimeDiff="+(System.currentTimeMillis()-lastFolderChangeTime));
-
-        // Ignore focus gained events while folder is being changed (or shortly after it has been changed)
-        // in order to remember if focus was on the location field before the folder was changed.
-        // Location field gives up focus when it gets disabled when the folder starts changing, hence this method
-        // is called to notify that FileTable gained focus.
-        if(source==fileTable && (isFolderChanging()|| System.currentTimeMillis()-lastFolderChangeTime<300))
-            return;
-
-        if(Debug.ON) Debug.trace("last focused component is now: "+lastFocusedComponent.getClass().getName());
-
-        this.lastFocusedComponent = source;
-
         // Notify MainFrame that we are in control now! (our table/location field is active)
         mainFrame.setActiveTable(fileTable);
     }
-	
+
     public void focusLost(FocusEvent e) {
+        // No need to do anything here, the other FolderPanel instance will call setActiveTable
     }
 	
 	 
@@ -580,12 +559,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         private boolean userInterrupted;
         private boolean doNotKill;
 
-        //		private boolean noWaitDialog;
-        //		private QuestionDialog waitDialog;
-
         private final Object lock = new Object();
-
-        //		private boolean hadFocus;
 
 
         public ChangeFolderThread(AbstractFile folder) {
@@ -637,9 +611,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting folder change...");
             boolean folderChangedSuccessfully = false;
 
-            // Update timestamp
-            lastFolderChangeTime = System.currentTimeMillis();
-            
             // Notify listeners that location is changing
             locationManager.fireLocationChanging(folder==null?folderPath==null?folderURL.getStringRep(false):folderPath:folder.getAbsolutePath());
 
@@ -853,7 +824,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         // Retry (loop) if user provided new credentials
                         newCredentials = showAuthDialog(authException);
                         if(newCredentials!=null) {
-//                            folder = FileFactory.getFile(authException.getFileURL().getStringRep(true));
                             folder = null;
                             folderPath = null;
                             folderURL = newCredentials.getURL();
@@ -888,7 +858,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
         public void finish(boolean folderChangedSuccessfully) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up and restoring focus, success="+folderChangedSuccessfully);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("cleaning up, success="+folderChangedSuccessfully);
             // Reset location field's progress bar
             locationField.setProgressValue(0);
 
@@ -903,28 +873,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             // Make all actions active again
             mainFrame.setNoEventsMode(false);
 
-            if(folderChangedSuccessfully) {
-                // Make sure FileTable will receive focus, in case the folder was entered by the user in the location field
-                FolderPanel.this.lastFocusedComponent = fileTable;
-            }
-            else {
+            if(!folderChangedSuccessfully) {
                 String failedPath = folder==null?folderPath==null?folderURL.getStringRep(false):folderPath:folder.getAbsolutePath();
                 // Notifies listeners that location change has been cancelled by the user or has failed
                 if(userInterrupted)
                     locationManager.fireLocationCancelled(failedPath);
                 else
                     locationManager.fireLocationFailed(failedPath);
-
-//                // Make sure FileTable will receive focus, in case the folder was entered by the user in the location field
-//                FolderPanel.this.lastFocusedComponent = locationFieldHadFocus?locationField:(Component)fileTable;
             }
-
-            // Update timestamp
-            lastFolderChangeTime = System.currentTimeMillis();
-
-            // Use FocusRequester to request focus after all other UI events have been processed,
-            // calling requestFocus() on table directly could get ignored
-            FocusRequester.requestFocus(FolderPanel.this);
         }
     }
 }

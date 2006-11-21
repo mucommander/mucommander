@@ -246,12 +246,17 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
     // Overriden JComponent methods //
     //////////////////////////////////
 	
+    // For JDK 1.3 (deprecated in 1.4)
     public boolean isFocusTraversable() {
         // Prevents this button from getting keyboard focus
         return false;
     }
 
-	
+    // For JDK 1.4 and up
+    public boolean isFocusable() {
+        return false;
+    }
+
     //////////////////////////////
     // LocationListener methods //
     //////////////////////////////

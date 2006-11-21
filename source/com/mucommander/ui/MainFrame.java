@@ -3,13 +3,13 @@ package com.mucommander.ui;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
-import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
+import com.mucommander.PlatformManager;
 import com.mucommander.Debug;
 
 import javax.swing.*;
@@ -99,9 +99,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 			
         contentPane.add(toolbar, BorderLayout.NORTH);
 
-//        folderPanel1.addLocationListener(toolbar);
-//        folderPanel2.addLocationListener(toolbar);
-
         folderPanel1.getLocationManager().addLocationListener(this);
         folderPanel2.getLocationManager().addLocationListener(this);
 
@@ -123,8 +120,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 			
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerLocation(0.5);
-        // Cool but way too slow
-        //		splitPane.setContinuousLayout(true);
 
         // Split pane will be given any extra space
         contentPane.add(splitPane, BorderLayout.CENTER);
@@ -171,35 +166,24 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         // For testing purposes, full screen option could be nice to add someday
         //setUndecorated(true);
         //java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
+
+        // Cool but way too slow
+        //		splitPane.setContinuousLayout(true);
+
+//        // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their subcomponents.
+//        // Reflection is used to instanciate CustomFocusTraversalPolicy in order to get around 'NoClassDefFound' under Java 1.3.
+//        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
+//            try {
+//                setFocusTraversalPolicy((FocusTraversalPolicy)Class.forName("com.mucommander.ui.MainFrame$CustomFocusTraversalPolicy").getDeclaredConstructor(new Class[]{getClass()}).newInstance(new Object[]{this}));
+//            }
+//            catch(Exception e) {
+//                if(Debug.ON) Debug.trace("Exception thrown: "+e);
+//            }
+//        }
+
+        // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their subcomponents.
+        setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
     }
-
-
-//    /**
-//     * Registers the given action so that the specified accelerator (keyboard shortcut) triggers the action from both
-//     * FileTable instances.
-//     *
-//     * @param action the action to register
-//     * @param ks the KeyStroke that will trigger the action from both FileTable instances
-//     */
-//    public void registerActionAccelerator(MucoAction action, KeyStroke ks) {
-//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("registering keystroke "+ks+" for action "+action.getClass().getName());
-//
-//        ActionKeymap.registerActionAccelerator(action, ks, table1, JComponent.WHEN_FOCUSED);
-//        ActionKeymap.registerActionAccelerator(action, ks, table2, JComponent.WHEN_FOCUSED);
-//    }
-//
-//    /**
-//     * Unregisters the given action so that the specified accelerators (keyboard shortcuts) no longer
-//     * triggers the action FileTable instances.
-//     *
-//     * @param action the action to register
-//     */
-//    public void unregisterActionAccelerator(MucoAction action, KeyStroke ks) {
-//        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("unregistering keystroke "+ks+" for action "+action.getClass().getName());
-//
-//        ActionKeymap.unregisterActionAccelerator(action, ks, table1, JComponent.WHEN_FOCUSED);
-//        ActionKeymap.unregisterActionAccelerator(action, ks, table2, JComponent.WHEN_FOCUSED);
-//    }
 
 
     /**
@@ -330,15 +314,15 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
 
     /**
-     * After a call to this method, folder1 will be folder2 and vice-versa.
+     * Swaps the two FolderPanel instances: after a call to this method, folderPanel1 will be folderPanels2 and vice-versa.
      */
     public void swapFolders() {
         splitPane.remove(folderPanel1);
         splitPane.remove(folderPanel2);
 
-        FolderPanel tempBrowser = folderPanel1;
+        FolderPanel tempPanel = folderPanel1;
         folderPanel1 = folderPanel2;
-        folderPanel2 = tempBrowser;
+        folderPanel2 = tempPanel;
 
         FileTable tempTable = table1;
         table1 = table2;
@@ -349,7 +333,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         splitPane.doLayout();
         splitPane.setDividerLocation(dividerLocation);
 
-        requestFocus();
+        activeTable.requestFocus();
     }
 
 
@@ -441,21 +425,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     }
 
 
-    /**
-     * Overrides JComponent's requestFocus() method to request focus on the last active FolderPanel.
-     */
-    public void requestFocus() {
-if(Debug.ON) Debug.trace("called isVisible="+isVisible());
-
-        // If visible, call requestFocus() directly on the component
-        if(isVisible())
-            activeTable.getFolderPanel().requestFocus();
-        // If not, call requestFocus() later when the component is visible
-        else
-            FocusRequester.requestFocus(activeTable.getFolderPanel());
-    }
-
-
     ///////////////////////////////
     // ComponentListener methods //
     ///////////////////////////////
@@ -495,5 +464,47 @@ if(Debug.ON) Debug.trace("called isVisible="+isVisible());
 	
     public void componentShown(ComponentEvent e) {
         // never called, weird ...
-    }     
+    }
+
+
+    /**
+     * Manages focus for both FolderPanel and their subcomponents.
+     *
+     * @author Maxence Bernard
+     */
+    protected class CustomFocusTraversalPolicy extends FocusTraversalPolicy {
+
+        public Component getComponentAfter(Container container, Component component) {
+    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
+            if(component==folderPanel1.getLocationComboBox().getTextField() || component==folderPanel1.getLocationComboBox())
+                return table1;
+            else if(component==table1)
+                return table2;
+            if(component==folderPanel2.getLocationComboBox().getTextField() || component==folderPanel2.getLocationComboBox())
+                return table2;
+            else    // component==table2
+                return table1;
+        }
+
+        public Component getComponentBefore(Container container, Component component) {
+    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
+            // Completly symetrical with getComponentAfter
+            return getComponentAfter(container, component);
+       }
+
+        public Component getFirstComponent(Container container) {
+    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
+            return table1;
+        }
+
+        public Component getLastComponent(Container container) {
+    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
+            return table2;
+        }
+
+        public Component getDefaultComponent(Container container) {
+    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
+            return getActiveTable();
+        }
+    }
 }
