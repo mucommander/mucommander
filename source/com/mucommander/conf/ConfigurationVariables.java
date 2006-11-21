@@ -25,6 +25,8 @@ public interface ConfigurationVariables {
     public static final String  TIME_FORMAT              = ROOT_SECTION + '.' + "time_format";
     /** Default value for the <i>time format</i> configuration variable. */
     public static final String  DEFAULT_TIME_FORMAT      = "hh:mm a";
+    /** <i>Language</i> configuration variable. */
+    public static final String  LANGUAGE                 = ROOT_SECTION + '.' + "language";
 
 
 
@@ -55,4 +57,15 @@ public interface ConfigurationVariables {
     public static final String MAIL_SENDER_NAME    = MAIL_SECTION + '.' + "sender_name";
     /** <i>Sender address</i> configuration variable. */
     public static final String MAIL_SENDER_ADDRESS = MAIL_SECTION + '.' + "sender_address";
+
+
+
+    // - Command bar variables -----------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing the command bar configuration. */
+    public static final String COMMAND_BAR_SECTION          = ROOT_SECTION + '.' + "command_bar";
+    /** <i>Command bar visible</i> configuration variable. */
+    public static final String COMMAND_BAR_VISIBLE          = COMMAND_BAR_SECTION + '.' + "visible";
+    /** Default value for the <i>command bar visible</i> configuration variable. */
+    public static final boolean DEFAULT_COMMAND_BAR_VISIBLE = true;
 }
