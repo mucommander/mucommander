@@ -61,6 +61,7 @@
   <property name="tmp"              location="tmp"/>
   <property name="readme"           location="readme.txt"/>
   <property name="license"          location="license.txt"/>
+  <property name="dictionary"       location="${res}/dictionary.txt"/>
 
   <!-- Where to store the muCommander version file.            -->
   <property name="version-file"   location="${dist}/version.xml"/>
@@ -139,10 +140,10 @@
         <include name="**/*"/>
       </fileset>
     </copy>
-    <copy file="${res}/dictionary.txt" todir="${classes}"/>
-    <copy file="${res}/mime.types" todir="${classes}"/>
-    <copy file="${res}/toolbar.xml" todir="${classes}"/>
-    <copy file="${res}/command_bar.xml" todir="${classes}"/>
+    <copy file="${dictionary}"            tofile="${classes}/dictionary.txt"/>
+    <copy file="${res}/mime.types"        todir="${classes}"/>
+    <copy file="${res}/toolbar.xml"       todir="${classes}"/>
+    <copy file="${res}/command_bar.xml"   todir="${classes}"/>
     <copy file="${res}/action_keymap.xml" todir="${classes}"/>
   </target>
 
@@ -258,15 +259,16 @@
     <date name="release-date"/>
     <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tools.jar}"/>
     <javaw name="${tmp-source}/com.mucommander.RuntimeConstants">
-      <field name="DEBUG"        value="${is-debug}"    type="boolean"/>
-      <field name="VERSION"      value="${app.version}"/>
-      <field name="COPYRIGHT"    value="${app.copyright}"/>
-      <field name="APP_STRING"   value="muCommander v${app.version}"/>
-      <field name="VERSION_URL"  value="${version-url}"/>
-      <field name="RELEASE_DATE" value="${release-date}" type="String"/>
-      <field name="HOMEPAGE_URL" value="${url.homepage}"/>
-      <field name="FORUMS_URL"   value="${url.forums}"/>
-      <field name="DONATION_URL" value="${url.donation}"/>
+      <field name="DEBUG"           value="${is-debug}"    type="boolean"/>
+      <field name="VERSION"         value="${app.version}"/>
+      <field name="COPYRIGHT"       value="${app.copyright}"/>
+      <field name="APP_STRING"      value="muCommander v${app.version}"/>
+      <field name="VERSION_URL"     value="${version-url}"/>
+      <field name="RELEASE_DATE"    value="${release-date}" type="String"/>
+      <field name="HOMEPAGE_URL"    value="${url.homepage}"/>
+      <field name="FORUMS_URL"      value="${url.forums}"/>
+      <field name="DONATION_URL"    value="${url.donation}"/>
+      <field name="DICTIONARY_FILE" value="/dictionary.txt"/>
     </javaw>
   </target>
 
