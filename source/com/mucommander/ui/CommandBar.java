@@ -4,9 +4,7 @@ package com.mucommander.ui;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileToolkit;
@@ -57,11 +55,9 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
     private static AbstractFile commandBarDescriptorFile = FileFactory.getFile(PlatformManager.getPreferencesFolder().getAbsolutePath()+"/"+DEFAULT_COMMAND_BAR_FILENAME);
 
 
-    /** Configuration variable that holds the command bar's icon scale factor */
-    public final static String COMMAND_BAR_ICON_SCALE_CONF_VAR = "prefs.command_bar.icon_scale";
-
     /** Current icon scale factor */
-    private static float scaleFactor = ConfigurationManager.getVariableFloat(COMMAND_BAR_ICON_SCALE_CONF_VAR, 1.0f);
+    private static float scaleFactor = ConfigurationManager.getVariableFloat(ConfigurationVariables.COMMAND_BAR_ICON_SCALE,
+                                                                             ConfigurationVariables.DEFAULT_COMMAND_BAR_ICON_SCALE);
 
 
     /** Command bar actions */
@@ -212,7 +208,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
         String var = event.getVariable();
 
         // Reload butons icon if the icon scale factor has changed
-        if (var.equals(COMMAND_BAR_ICON_SCALE_CONF_VAR)) {
+        if (var.equals(ConfigurationVariables.COMMAND_BAR_ICON_SCALE)) {
             scaleFactor = event.getFloatValue();
 
             int nbButtons = buttons.length;

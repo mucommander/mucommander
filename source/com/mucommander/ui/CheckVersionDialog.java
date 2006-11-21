@@ -4,7 +4,7 @@ package com.mucommander.ui;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.VersionChecker;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 
@@ -123,7 +123,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
              downloadOption?new int[]{DOWNLOAD_ACTION, OK_ACTION}:new int[]{OK_ACTION},
              0);
 			
-        JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"), ConfigurationManager.getVariableBoolean("prefs.check_for_updates_on_startup", true));
+        JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"), ConfigurationManager.getVariableBoolean(ConfigurationVariables.CHECK_FOR_UPDATE, ConfigurationVariables.DEFAULT_CHECK_FOR_UPDATE));
         addCheckBox(showNextTimeCheckBox);
 
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);

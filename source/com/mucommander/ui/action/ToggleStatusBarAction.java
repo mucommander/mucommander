@@ -1,6 +1,6 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.StatusBar;
@@ -20,14 +20,16 @@ public class ToggleStatusBarAction extends MucoAction {
 
     public ToggleStatusBarAction(MainFrame mainFrame) {
         super(mainFrame);
-        setLabel(Translator.get(ConfigurationManager.getVariableBoolean("prefs.status_bar.visible", true)?"com.mucommander.ui.action.ToggleStatusBarAction.hide":"com.mucommander.ui.action.ToggleStatusBarAction.show"));
+        setLabel(Translator.get(ConfigurationManager.getVariableBoolean(ConfigurationVariables.STATUS_BAR_VISIBLE,
+                                                                        ConfigurationVariables.DEFAULT_STATUS_BAR_VISIBLE) ? 
+                                "com.mucommander.ui.action.ToggleStatusBarAction.hide":"com.mucommander.ui.action.ToggleStatusBarAction.show"));
     }
 
     public void performAction() {
         StatusBar statusBar = mainFrame.getStatusBar();
         boolean visible = !statusBar.isVisible();
         // Save the last status bar visible state in the configuration, this will become the default for new MainFrame windows.
-        ConfigurationManager.setVariableBoolean("prefs.status_bar.visible", visible);
+        ConfigurationManager.setVariableBoolean(ConfigurationVariables.STATUS_BAR_VISIBLE, visible);
         // Change the label to reflect the new status bar state
         setLabel(Translator.get(visible?"com.mucommander.ui.action.ToggleStatusBarAction.hide":"com.mucommander.ui.action.ToggleStatusBarAction.show"));
         // Show/hide the status bar

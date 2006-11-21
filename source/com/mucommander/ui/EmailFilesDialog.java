@@ -1,7 +1,7 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.job.SendMailJob;
@@ -83,8 +83,8 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
             textFieldsPanel.setAlignmentX(LEFT_ALIGNMENT);
 
             // From (sender) field, non editable
-            JLabel fromLabel = new JLabel(ConfigurationManager.getVariable("prefs.mail.sender_name")
-                                          +" <"+ConfigurationManager.getVariable("prefs.mail.sender_address")+">");
+            JLabel fromLabel = new JLabel(ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_NAME)
+                                          +" <"+ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_ADDRESS)+">");
             //			fromField.setEditable(false);
             textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.from")+":", fromLabel, 10);
 			

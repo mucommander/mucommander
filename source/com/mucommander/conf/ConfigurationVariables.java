@@ -63,9 +63,35 @@ public interface ConfigurationVariables {
     // - Command bar variables -----------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the command bar configuration. */
-    public static final String COMMAND_BAR_SECTION          = ROOT_SECTION + '.' + "command_bar";
+    public static final String  COMMAND_BAR_SECTION            = ROOT_SECTION + '.' + "command_bar";
     /** <i>Command bar visible</i> configuration variable. */
-    public static final String COMMAND_BAR_VISIBLE          = COMMAND_BAR_SECTION + '.' + "visible";
+    public static final String  COMMAND_BAR_VISIBLE            = COMMAND_BAR_SECTION + '.' + "visible";
     /** Default value for the <i>command bar visible</i> configuration variable. */
-    public static final boolean DEFAULT_COMMAND_BAR_VISIBLE = true;
+    public static final boolean DEFAULT_COMMAND_BAR_VISIBLE    = true;
+    /** <i>Command bar icon scale</i> configuration variable. */
+    public static final String  COMMAND_BAR_ICON_SCALE         = COMMAND_BAR_SECTION + '.' + "icon_scale";
+    /** Default value for the <i>command bar icon scale</i> configuration variable. */
+    public static final float   DEFAULT_COMMAND_BAR_ICON_SCALE = 1.0f;
+
+
+
+    // - Status bar variables ------------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing the status bar configuration. */
+    public static final String STATUS_BAR_SECTION          = ROOT_SECTION + '.' + "status_bar";
+    /** <i>Status bar visible</i> configuration variable. */
+    public static final String STATUS_BAR_VISIBLE          = STATUS_BAR_SECTION + '.' + "visible";
+    /** Default value for the <i>status bar visible</i> configuration variable. */
+    public static final boolean DEFAULT_STATUS_BAR_VISIBLE = true;
+
+
+
+    // - Toolbar variables ---------------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing the toolbar configuration. */
+    public static final String TOOLBAR_SECTION          = ROOT_SECTION + '.' + "toolbar";
+    /** <i>Toolbar visible</i> configuration variable. */
+    public static final String TOOLBAR_VISIBLE          = TOOLBAR_SECTION + '.' + "visible";
+    /** Default value for the <i>toolbar visible</i> configuration variable. */
+    public static final boolean DEFAULT_TOOLBAR_VISIBLE = true;
 }
