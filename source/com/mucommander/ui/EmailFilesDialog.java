@@ -80,7 +80,6 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
 	
             // Text fields panel
             TextFieldsPanel textFieldsPanel = new TextFieldsPanel(5);
-            textFieldsPanel.setAlignmentX(LEFT_ALIGNMENT);
 
             // From (sender) field, non editable
             JLabel fromLabel = new JLabel(ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_NAME)

@@ -50,10 +50,11 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         this.mainFrame = mainFrame;
 
         // Set dialog's title
-        if(files.size()==1)
-            this.title = Translator.get("properties_dialog.file_properties", files.fileAt(0).getName());
+        if(files.size()>1)
+            this.title = Translator.get("com.mucommander.ui.action.ShowFilePropertiesAction.label");
         else
-            this.title = Translator.get("properties_dialog.properties");
+            this.title = Translator.get("properties_dialog.file_properties", files.fileAt(0).getName());
+
         setTitle(title+" ("+Translator.get("properties_dialog.calculating")+")");
 		
         // Display wait cursor while calculating size
@@ -73,11 +74,11 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         String location = files.getBaseFolder().getAbsolutePath();
         JLabel locationLabel = new JLabel(location);
         locationLabel.setToolTipText(location);
-        mainPanel.addTextFieldRow(Translator.get("properties_dialog.location")+":", locationLabel, 10);
+        mainPanel.addTextFieldRow(Translator.get("location")+":", locationLabel, 10);
 
-        // Size (set later)
+        // Combined size (set later)
         sizeLabel = new JLabel("");
-        mainPanel.addTextFieldRow(Translator.get("properties_dialog.size")+":", sizeLabel, 5);
+        mainPanel.addTextFieldRow(Translator.get("size")+":", sizeLabel, 5);
 
         updateLabels();
         YBoxPanel yPanel = new YBoxPanel(5);

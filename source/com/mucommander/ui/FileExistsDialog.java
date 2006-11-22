@@ -7,6 +7,8 @@ import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.comp.dialog.XBoxPanel;
+import com.mucommander.ui.comp.dialog.TextFieldsPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,7 +57,7 @@ public class FileExistsDialog extends QuestionDialog {
         super(parent, Translator.get("file_exists_dialog.title"), locationRelative);
 		
         setChoices(sourceFile, destFile, multipleFilesMode);
-        init(sourceFile, destFile, multipleFilesMode);
+        init(parent, sourceFile, destFile, multipleFilesMode);
     }
 
     /**
@@ -71,7 +73,7 @@ public class FileExistsDialog extends QuestionDialog {
         super(parent, Translator.get("file_exists_dialog.title"), locationRelative);
 
         setChoices(sourceFile, destFile, multipleFilesMode);
-        init(sourceFile, destFile, multipleFilesMode);
+        init(parent, sourceFile, destFile, multipleFilesMode);
     }
 
 
@@ -119,31 +121,76 @@ public class FileExistsDialog extends QuestionDialog {
     }
 
 	
-    private void init(AbstractFile sourceFile, AbstractFile destFile, boolean applyToAllOption) {
-        YBoxPanel panel = new YBoxPanel();
+    private void init(Container parent, AbstractFile sourceFile, AbstractFile destFile, boolean applyToAllOption) {
+//        YBoxPanel panel = new YBoxPanel();
+//
+//        if(sourceFile!=null) {
+//            panel.add(new JLabel("Source: "+sourceFile.getAbsolutePath()));
+//            panel.add(new JLabel("  "+ SizeFormat.format(sourceFile.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)
+//                                 +", "+CustomDateFormat.format(new Date(sourceFile.getDate()))));
+//            panel.addSpace(10);
+//        }
+//
+//        // Use canonical path for destination, to get rid of '..', '.' and '~'
+//    	panel.add(new JLabel("Destination: "+destFile.getCanonicalPath()));
+//    	panel.add(new JLabel("  "+ SizeFormat.format(destFile.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)
+//                             +", "+CustomDateFormat.format(new Date(destFile.getDate()))));
+//
 
-        if(sourceFile!=null) {
-            panel.add(new JLabel("Source: "+sourceFile.getAbsolutePath()));
-            panel.add(new JLabel("  "+ SizeFormat.format(sourceFile.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)
-                                 +", "+CustomDateFormat.format(new Date(sourceFile.getDate()))));
-            panel.addSpace(10);
-        }
-		
-        // Use canonical path for destination, to get rid of '..', '.' and '~'
-    	panel.add(new JLabel("Destination: "+destFile.getCanonicalPath()));
-    	panel.add(new JLabel("  "+ SizeFormat.format(destFile.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)
-                             +", "+CustomDateFormat.format(new Date(destFile.getDate()))));
 
-    	init(parent, panel,
+
+//        JPanel panel = new JPanel(new BorderLayout());
+//        JPanel gridPanel = new JPanel(new GridLayout(1, 0));
+
+//        YBoxPanel yPanel = new YBoxPanel();
+//        JPanel yPanel = new JPanel(new GridLayout(0, 1));
+//        yPanel.add(new JLabel());
+//        yPanel.add(new JLabel(Translator.get("name")+": "));
+//        yPanel.add(new JLabel(Translator.get("location")+": "));
+//        yPanel.add(new JLabel(Translator.get("size")+": "));
+//        yPanel.add(new JLabel(Translator.get("date")+": "));
+//        panel.add(yPanel, BorderLayout.WEST);
+
+//        if(sourceFile!=null)
+//            gridPanel.add(new FileDetailsPanel(sourceFile, Translator.get("source")));
+//
+//        gridPanel.add(new FileDetailsPanel(destFile, Translator.get("destination")));
+
+//        panel.add(gridPanel, BorderLayout.CENTER);
+
+        TextFieldsPanel panel = new TextFieldsPanel(10);
+
+        if(sourceFile!=null)
+            addFileDetails(panel, sourceFile, Translator.get("source"));
+
+        addFileDetails(panel, destFile, Translator.get("destination"));
+
+        init(parent, panel,
              choicesText,
              choicesActions,
              3);
-		
+
         if(applyToAllOption) {
             applyToAllCheckBox = new JCheckBox(Translator.get("apply_to_all"));
             addCheckBox(applyToAllCheckBox);
         }
     }
+
+
+
+    private void addFileDetails(TextFieldsPanel panel, AbstractFile file, String nameLabel) {
+        panel.addTextFieldRow(nameLabel+":", new FilenameLabel(file), 0);
+
+        String parentLocation = file.getParent().getCanonicalPath();
+        JLabel label = new JLabel(parentLocation);
+        label.setToolTipText(parentLocation);
+        panel.addTextFieldRow(Translator.get("location")+":", label, 0);
+
+        panel.addTextFieldRow(Translator.get("size")+":", new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)), 0);
+
+        panel.addTextFieldRow(Translator.get("date")+":", new JLabel(CustomDateFormat.format(new Date(file.getDate()))), 10);
+    }
+
 
 
     /**
@@ -153,4 +200,32 @@ public class FileExistsDialog extends QuestionDialog {
         return applyToAllCheckBox==null?false:applyToAllCheckBox.isSelected();
     }
 	
+
+    /*
+    private class FileDetailsPanel extends JPanel {
+
+        public FileDetailsPanel(AbstractFile file) {
+            this(file, null);
+        }
+
+        public FileDetailsPanel(AbstractFile file, String title) {
+            super(new GridLayout(0, 1));
+
+            if(title!=null)
+                add(new JLabel(title));
+
+            add(new FilenameLabel(file));
+
+            String parentLocation = file.getParent().getCanonicalPath();
+            JLabel label = new JLabel(parentLocation);
+            label.setToolTipText(parentLocation);
+            add(label);
+
+            add(new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)));
+
+            add(new JLabel(CustomDateFormat.format(new Date(file.getDate()))));
+        }
+
+    }
+    */
 }

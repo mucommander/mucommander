@@ -348,11 +348,6 @@
       <keepclasseswithmembers extends="com.mucommander.file.AbstractFile">
         <constructor access="public" name="*"/>
       </keepclasseswithmembers>
-      <!-- This inner class is invoked using reflection for Java 1.3 support -->
-<!--    <keep name="com.mucommander.ui.MainFrame$CustomFocusTraversalPolicy">
-          <constructor access="public" name="*"/>
-          <method access="public" name="*"/>
-        </keep>   -->
       <!-- Main class -->
       <keep name="${main-class}">
 	    <method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
@@ -428,7 +423,7 @@
   </target>
 
   <!-- Generates the clear tools JAR file.                    -->
-  <!-- Output will be stored in ${toola-jar}.                 -->
+  <!-- Output will be stored in ${tools-jar}.                 -->
   <target name="tools-jar" depends="tools-compile" unless="tools.up-to-date">
     <mkdir dir="${dist}"/>
     <echo>Creating tools JAR file in ${tools.jar}...</echo>

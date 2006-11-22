@@ -412,6 +412,57 @@ date:RU:Дата
 date:ZH_CN:日期
 date:SI:Datum
 
+location:EN:Location
+location:FR:Emplacement
+location:DE:Ort
+location:ES:Localización
+location:CS:Umístnění
+location:zh_TW:位置
+location:PL:Lokalizacja
+#location:PL:Położenie
+location:HU:hely
+location:RU:Размещение
+# location:RU:Расположение
+location:ZH_CN:位置
+#location:ZH_CN:地址
+location:SI:Lokacija
+
+# Used to indicate that an item (e.g. a bookmark) has no name
+untitled:EN:Untitled
+untitled:FR:Sans titre
+
+
+
+
+
+
+
+
+
+
+source:EN:Source
+source:FR:Source
+
+
+
+
+
+
+
+
+
+
+destination:EN:Destination
+destination:FR:Destination
+
+
+
+
+
+
+
+
+
 
 ##########################
 # Generic error messages #
@@ -598,19 +649,6 @@ same_source_destination:HU:A forrás és a célkönyvtár ugyanaz.
 same_source_destination:RU:Исходный и конечный каталог - один и тот же.
 same_source_destination:ZH_CN:源/目的文件夹相同
 same_source_destination:SI:Izvorna in ciljna mapa sta identični.
-
-
-# Used to indicate that an item (e.g. a bookmark) has no name
-untitled:EN:Untitled
-untitled:FR:Sans titre
-
-
-
-
-
-
-
-
 
 
 ###########
@@ -3219,8 +3257,7 @@ progress_dialog.limit_speed:FR:Limiter la vitesse
 # Properties dialog #
 #####################
 
-properties_dialog.properties:EN:$[file_menu.properties]
-
+# %1 is a filename, used only if the properties dialog has been invoked on a single file
 properties_dialog.file_properties:EN:%1 Properties
 properties_dialog.file_properties:FR:Propriétés de %1
 properties_dialog.file_properties:DE:Eigenschaften von %1
@@ -3233,7 +3270,7 @@ properties_dialog.file_properties:RU:Своства %1
 properties_dialog.file_properties:ZH_CN:%1 属性
 properties_dialog.file_properties:SI:%1 Lastnosti
 
-properties_dialog.contents:EN:Content
+properties_dialog.contents:EN:Contents
 properties_dialog.contents:FR:Contenu
 properties_dialog.contents:DE:Inhalt
 properties_dialog.contents:ES:Contenido
@@ -3244,30 +3281,6 @@ properties_dialog.contents:HU:tartalom (tartalmak)
 properties_dialog.contents:RU:Содержимое
 properties_dialog.contents:ZH_CN:內容
 properties_dialog.contents:SI:Vsebina
-
-properties_dialog.location:EN:Location
-properties_dialog.location:FR:Emplacement
-properties_dialog.location:DE:Ort
-properties_dialog.location:ES:Localización
-properties_dialog.location:CS:Umístnění
-properties_dialog.location:zh_TW:位置
-properties_dialog.location:PL:Lokalizacja
-properties_dialog.location:HU:hely
-properties_dialog.location:RU:Размещение
-properties_dialog.location:ZH_CN:位置
-properties_dialog.location:SI:Lokacija
-
-properties_dialog.size:EN:Size
-properties_dialog.size:FR:Taille
-properties_dialog.size:DE:Größe
-properties_dialog.size:ES:Tamaño
-properties_dialog.size:CS:Velikost
-properties_dialog.size:zh_TW:大小
-properties_dialog.size:PL:Rozmiar
-properties_dialog.size:HU:méret
-properties_dialog.size:RU:Размер
-properties_dialog.size:ZH_CN:大小
-properties_dialog.size:SI:Velikost
 
 properties_dialog.nb_files:EN:%1 file(s)
 properties_dialog.nb_files:FR:%1 fichier(s)
@@ -3609,19 +3622,6 @@ sortable_list.move_down:SI:Premakni dol
 #######################
 # Add Bookmark dialog #
 #######################
-
-# Displayed before the Location text field in the Add bookmark dialog
-add_bookmark_dialog.location:EN:Location
-add_bookmark_dialog.location:FR:Emplacement
-add_bookmark_dialog.location:ES:Localización
-add_bookmark_dialog.location:RU:Расположение
-add_bookmark_dialog.location:zh_TW:位置
-add_bookmark_dialog.location:PL:Położenie
-add_bookmark_dialog.location:ZH_CN:地址
-add_bookmark_dialog.location:SI:Lokacija
-
-
-
 
 # Add confirmation button in the Add bookmark dialog
 add_bookmark_dialog.add:EN:Add
