@@ -194,4 +194,19 @@ public interface ConfigurationVariables {
     public static final String SCREEN_WIDTH                       = LAST_WINDOW_SECTION + '.' + "screen_width";
     /** Last known screen height. */
     public static final String SCREEN_HEIGHT                      = LAST_WINDOW_SECTION + '.' + "screen_height";
+
+
+
+    // - Folder monitoring variables -----------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing the automatic folder refresh behavior. */
+    public static final String REFRESH_SECTION                    = ROOT_SECTION + '.' + "auto_refresh";
+    /** Frequency at which the current folder is checked for updates. */
+    public static final String REFRESH_CHECK_PERIOD               = REFRESH_SECTION + '.' + "check_period";
+    /** Default folder refresh frequency. */
+    public static final long   DEFAULT_REFRESH_CHECK_PERIOD       = 3000;
+    /** Minimum amount of time a folder should be checked for updates after it's been refreshed. */
+    public static final String WAIT_AFTER_REFRESH                 = REFRESH_SECTION + '.' + "wait_after_refresh";
+    /** Default minimum amount of time between two refreshes. */
+    public static final long   DEFAULT_WAIT_AFTER_REFRESH         = 10000;
 }

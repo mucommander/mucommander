@@ -286,6 +286,43 @@ public class ConfigurationManager {
         }
     }
 
+    /**
+     * Returns the value of the given configuration variable, <code>-1</code>
+     * if the variable has no value OR if the variable cannot be parsed as a long.
+     *
+     * @param  var name of the variable to retrieve.
+     * @return the value of the specified configuration variable.
+     */
+    public static synchronized long getVariableLong(String var) {
+        String val = getVariable(var);
+        if(val==null)
+            return -1;
+		
+        try {
+            return Long.parseLong(val);
+        }
+        catch(NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public static synchronized long getVariableLong(String var, long defaultValue) {
+    	String value = getVariable(var);
+		
+        if (value==null) {
+            setVariable(var, Long.toString(defaultValue));
+            return defaultValue;
+        }
+
+        try {
+            return Long.parseLong(value);
+        }
+        catch(NumberFormatException e) {
+            setVariable(var, Long.toString(defaultValue));
+            return defaultValue;
+        }
+    }
+
 
     /**
      * Returns the value of the given configuration variable and assigns it
@@ -302,7 +339,7 @@ public class ConfigurationManager {
     	String value = getVariable(var);
 		
         if (value==null) {
-            setVariable(var, ""+defaultValue);
+            setVariable(var, Integer.toString(defaultValue));
             return defaultValue;
         }
 
@@ -310,7 +347,7 @@ public class ConfigurationManager {
             return Integer.parseInt(value);
         }
         catch(NumberFormatException e) {
-            setVariable(var, ""+defaultValue);
+            setVariable(var, Integer.toString(defaultValue));
             return defaultValue;
         }
     }
@@ -331,7 +368,7 @@ public class ConfigurationManager {
     	String value = getVariable(var);
 		
         if (value==null) {
-            setVariable(var, ""+defaultValue);
+            setVariable(var, Float.toString(defaultValue));
             return defaultValue;
         }
 
@@ -339,7 +376,7 @@ public class ConfigurationManager {
             return Float.parseFloat(value);
         }
         catch(NumberFormatException e) {
-            setVariable(var, ""+defaultValue);
+            setVariable(var, Float.toString(defaultValue));
             return defaultValue;
         }
     }
@@ -360,7 +397,7 @@ public class ConfigurationManager {
     	String value = getVariable(var);
 		
         if (value==null) {
-            setVariable(var, ""+defaultValue);
+            setVariable(var, Boolean.toString(defaultValue));
             return defaultValue;
         }
 
@@ -424,7 +461,7 @@ public class ConfigurationManager {
      * @param value value for the specified variable.
      */
     public static synchronized void setVariableInt(String var, int value) {
-        setVariable(var, ""+value);
+        setVariable(var, Integer.toString(value));
     }
 
 
@@ -435,7 +472,7 @@ public class ConfigurationManager {
      * @param value value for the specified variable.
      */
     public static synchronized void setVariableFloat(String var, float value) {
-        setVariable(var, ""+value);
+        setVariable(var, Float.toString(value));
     }
 
 
@@ -446,7 +483,7 @@ public class ConfigurationManager {
      * @param value value for the specified variable.
      */
     public static synchronized void setVariableBoolean(String var, boolean value) {
-        setVariable(var, ""+value);
+        setVariable(var, Boolean.toString(value));
     }
 	
 	
