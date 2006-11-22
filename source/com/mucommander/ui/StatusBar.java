@@ -164,7 +164,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         else
             nbSelectedFiles = nbMarkedFiles;
 
-        boolean compactFileSize = ConfigurationManager.getVariableBoolean("prefs.display_compact_file_size", true);
+        boolean compactFileSize = ConfigurationManager.getVariableBoolean(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE,
+                                                                          ConfigurationVariables.DEFAUT_DISPLAY_COMPACT_FILE_SIZE);
         String filesInfo;
 		
         if(fileCount==0) {

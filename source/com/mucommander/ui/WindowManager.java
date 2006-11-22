@@ -8,9 +8,7 @@ import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.MappedCredentials;
 import com.mucommander.auth.CredentialsManager;
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 
@@ -275,14 +273,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(mainFrames.isEmpty()) {
             currentMainFrame = newMainFrame;
             // Retrieve last saved window bounds
-            x      = ConfigurationManager.getVariableInt("prefs.last_window.x");
-            y      = ConfigurationManager.getVariableInt("prefs.last_window.y");
-            width  = ConfigurationManager.getVariableInt("prefs.last_window.width");
-            height = ConfigurationManager.getVariableInt("prefs.last_window.height");
+            x      = ConfigurationManager.getVariableInt(ConfigurationVariables.LAST_X);
+            y      = ConfigurationManager.getVariableInt(ConfigurationVariables.LAST_Y);
+            width  = ConfigurationManager.getVariableInt(ConfigurationVariables.LAST_WIDTH);
+            height = ConfigurationManager.getVariableInt(ConfigurationVariables.LAST_HEIGHT);
 
             // Retrieves the last known size of the screen.
-            int lastScreenWidth  = ConfigurationManager.getVariableInt("prefs.last_window.screen_width");
-            int lastScreenHeight = ConfigurationManager.getVariableInt("prefs.last_window.screen_height");
+            int lastScreenWidth  = ConfigurationManager.getVariableInt(ConfigurationVariables.SCREEN_WIDTH);
+            int lastScreenHeight = ConfigurationManager.getVariableInt(ConfigurationVariables.SCREEN_HEIGHT);
 
             // If no previous location was saved, or if the resolution has changed,
             // reset the window's dimensions to their default values.

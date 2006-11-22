@@ -412,13 +412,13 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
         // Save window position, size and screen resolution
         Rectangle bounds = getBounds();
-        ConfigurationManager.setVariableInt("prefs.last_window.x", (int)bounds.getX());
-        ConfigurationManager.setVariableInt("prefs.last_window.y", (int)bounds.getY());
-        ConfigurationManager.setVariableInt("prefs.last_window.width", (int)bounds.getWidth());
-        ConfigurationManager.setVariableInt("prefs.last_window.height", (int)bounds.getHeight());
+        ConfigurationManager.setVariableInt(ConfigurationVariables.LAST_X, (int)bounds.getX());
+        ConfigurationManager.setVariableInt(ConfigurationVariables.LAST_Y, (int)bounds.getY());
+        ConfigurationManager.setVariableInt(ConfigurationVariables.LAST_WIDTH, (int)bounds.getWidth());
+        ConfigurationManager.setVariableInt(ConfigurationVariables.LAST_HEIGHT, (int)bounds.getHeight());
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        ConfigurationManager.setVariableInt("prefs.last_window.screen_width", screenSize.width);
-        ConfigurationManager.setVariableInt("prefs.last_window.screen_height", screenSize.height);
+        ConfigurationManager.setVariableInt(ConfigurationVariables.SCREEN_WIDTH, screenSize.width);
+        ConfigurationManager.setVariableInt(ConfigurationVariables.SCREEN_HEIGHT, screenSize.height);
     
         // Finally, dispose the frame
         super.dispose(); 
