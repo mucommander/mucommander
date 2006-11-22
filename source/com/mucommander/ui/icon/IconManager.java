@@ -51,14 +51,6 @@ public class IconManager {
     /** Number of icon sets */
     private final static int NB_ICON_SETS = 6;
 
-//    /** Configuration variable key for table icons scale */
-//    public final static String FILE_ICON_SCALE_CONF_VAR = "prefs.file_table.icon_scale";
-//    /** Configuration variable key for toolbar icons scale */
-//    public final static String TOOLBAR_ICON_SCALE_CONF_VAR = "prefs.toolbar.icon_scale";
-//    /** Configuration variable key for command bar icons scale */
-//    public final static String COMMAND_BAR_ICON_SCALE_CONF_VAR = "prefs.command_bar.icon_scale";
-
-
     static {
 //        // Initialize scale factors, defaut is 1.0f
 //        scaleFactors = new float[NB_ICON_SETS];

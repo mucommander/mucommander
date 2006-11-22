@@ -2,7 +2,7 @@
 package com.mucommander.ui.macosx;
 
 import com.mucommander.PlatformManager;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.QuitDialog;
 import com.mucommander.ui.WindowManager;
@@ -33,11 +33,13 @@ public class OSXIntegration {
         //  "Allows you to display your main windows with the 'textured' Aqua window appearance.
         //   This property should be applied only to the primary application window,
         //   and should not affect supporting windows like dialogs or preference windows."
-        System.setProperty("apple.awt.brushMetalLook", ""+ConfigurationManager.getVariableBoolean("prefs.macosx.brushed_metal_look", true));
+        System.setProperty("apple.awt.brushMetalLook", ""+ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_BRUSHED_METAL,
+                                                                                                  ConfigurationVariables.DEFAULT_USE_BRUSHED_METAL));
 
         // Enables/Disables screen menu bar (default is on) :
         //  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."
-        System.setProperty("apple.laf.useScreenMenuBar", ""+ConfigurationManager.getVariableBoolean("prefs.macosx.screen_menu_bar", true));
+        System.setProperty("apple.laf.useScreenMenuBar", ""+ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_SCREEN_MENU_BAR,
+                                                                                                    ConfigurationVariables.DEFAULT_USE_SCREEN_MENU_BAR));
 
         if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("registering EAWT hooks");

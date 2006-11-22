@@ -1,7 +1,7 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 
 import javax.swing.*;
@@ -22,11 +22,9 @@ public class FileIcons {
     /** Hashtable that associates file extensions with icon names */
     private static Hashtable iconExtensions;
 
-    /** Configuration variable that holds the file icons scale factor */
-    public final static String FILE_ICON_SCALE_CONF_VAR = "prefs.file_table.icon_scale";
-
     /** Current icon scale factor */
-    private static float scaleFactor = ConfigurationManager.getVariableFloat(FILE_ICON_SCALE_CONF_VAR, 1.0f);
+    private static float scaleFactor = ConfigurationManager.getVariableFloat(ConfigurationVariables.TABLE_ICON_SCALE,
+                                                                             ConfigurationVariables.DEFAULT_TABLE_ICON_SCALE);
 
     /** Icon for directories */
     private final static String FOLDER_ICON_NAME = "folder.png";

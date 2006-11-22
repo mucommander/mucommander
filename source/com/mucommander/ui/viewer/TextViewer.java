@@ -33,8 +33,6 @@ public class TextViewer extends FileViewer implements ActionListener {
     //	public TextViewer(ViewerFrame frame) {
     //		super(frame);
     public TextViewer() {
-        //		this.encoding = ConfigurationManager.getVariable("prefs.text_viewer.last_encoding", "utf-8");
-
         setLayout(new BorderLayout());
         textArea = new JTextArea();
         textArea.setEditable(false);

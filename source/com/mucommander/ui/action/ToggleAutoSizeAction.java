@@ -1,6 +1,6 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 
@@ -20,7 +20,6 @@ public class ToggleAutoSizeAction extends MucoAction {
         FileTable activeTable = mainFrame.getActiveTable();
         boolean autoSizeEnabled = !activeTable.isAutoSizeColumnsEnabled();
         activeTable.setAutoSizeColumnsEnabled(autoSizeEnabled);
-        ConfigurationManager.setVariableBoolean("prefs.file_table.auto_size_columns", autoSizeEnabled);
+        ConfigurationManager.setVariableBoolean(ConfigurationVariables.AUTO_SIZE_COLUMNS, autoSizeEnabled);
     }
 }
-

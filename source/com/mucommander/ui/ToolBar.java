@@ -3,9 +3,7 @@ package com.mucommander.ui;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileToolkit;
@@ -47,12 +45,10 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     /** Dimension of button separators */
     private final static Dimension SEPARATOR_DIMENSION = new Dimension(10, 16);
 
-    /** Name of the configuration variable that holds the toolbar's icon scale */
-    public final static String TOOLBAR_ICON_SCALE_CONF_VAR = "prefs.toolbar.icon_scale";
-
 
     /** Current icon scale value */
-    private static float scaleFactor = ConfigurationManager.getVariableFloat(TOOLBAR_ICON_SCALE_CONF_VAR, 1.0f);
+    private static float scaleFactor = ConfigurationManager.getVariableFloat(ConfigurationVariables.TOOLBAR_ICON_SCALE,
+                                                                             ConfigurationVariables.DEFAULT_TOOLBAR_ICON_SCALE);
 
     /** Command bar actions: Class instances or null to signify a separator */
     private static Class actions[];
@@ -163,7 +159,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         String var = event.getVariable();
 
         // Rescale buttons icon
-        if (var.equals(TOOLBAR_ICON_SCALE_CONF_VAR)) {
+        if (var.equals(ConfigurationVariables.TOOLBAR_ICON_SCALE)) {
             scaleFactor = event.getFloatValue();
             Component components[] = getComponents();
             int nbComponents = components.length;

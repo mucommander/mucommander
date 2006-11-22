@@ -96,7 +96,7 @@ public class CustomDateFormat implements ConfigurationListener {
     public boolean configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
-        if (var.equals("prefs.time_format") || var.equals("prefs.date_format") || var.equals("prefs.date_separator"))
+        if (var.equals(ConfigurationVariables.TIME_FORMAT) || var.equals(ConfigurationVariables.DATE_FORMAT) || var.equals(ConfigurationVariables.DATE_SEPARATOR))
             dateFormat = createDateFormat();
 
         return true;

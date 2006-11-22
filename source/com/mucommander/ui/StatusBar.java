@@ -1,7 +1,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.cache.LRUCache;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 import com.mucommander.text.SizeFormat;
@@ -94,7 +94,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         // Show/hide this status bar based on user preferences
         // Note: setVisible has to be called even with true for the auto-update thread to be initialized
-        setVisible(ConfigurationManager.getVariableBoolean("prefs.status_bar.visible", true));
+        setVisible(ConfigurationManager.getVariableBoolean(ConfigurationVariables.STATUS_BAR_VISIBLE, ConfigurationVariables.DEFAULT_STATUS_BAR_VISIBLE));
         
         // Catch location events to update status bar info when folder is changed
         FolderPanel folderPanel1 = mainFrame.getFolderPanel1();

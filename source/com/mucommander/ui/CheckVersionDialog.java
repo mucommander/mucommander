@@ -133,6 +133,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             PlatformManager.openURLInBrowser(downloadURL); // Open URL in a new browser windoow
 		
         // Remember user preference
-        ConfigurationManager.setVariableBoolean("prefs.check_for_updates_on_startup", showNextTimeCheckBox.isSelected());
+        ConfigurationManager.setVariableBoolean(ConfigurationVariables.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
     }
 }

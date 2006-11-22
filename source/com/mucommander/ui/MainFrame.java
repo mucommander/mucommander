@@ -1,6 +1,6 @@
 package com.mucommander.ui;
 
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
@@ -95,7 +95,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         // Create toolbar and show it only if it hasn't been disabled in the preferences
         this.toolbar = new ToolBar(this);
         // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be properly initialized
-        this.toolbar.setVisible(ConfigurationManager.getVariableBoolean("prefs.toolbar.visible", true));
+        this.toolbar.setVisible(ConfigurationManager.getVariableBoolean(ConfigurationVariables.TOOLBAR_VISIBLE, ConfigurationVariables.DEFAULT_TOOLBAR_VISIBLE));
 			
         contentPane.add(toolbar, BorderLayout.NORTH);
 
@@ -135,7 +135,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         // Show command bar only if it hasn't been disabled in the preferences
         this.commandBar = new CommandBar(this);
         // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
-        this.commandBar.setVisible(ConfigurationManager.getVariableBoolean("prefs.command_bar.visible", true));
+        this.commandBar.setVisible(ConfigurationManager.getVariableBoolean(ConfigurationVariables.COMMAND_BAR_VISIBLE, ConfigurationVariables.DEFAULT_COMMAND_BAR_VISIBLE));
 
         southPanel.add(commandBar);
 		

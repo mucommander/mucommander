@@ -1,9 +1,7 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.HiddenFileFilter;
@@ -61,13 +59,19 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private FileDragSourceListener fileDragSourceListener;
 
     /** Filters out hidden files, null when 'show hidden files' option is enabled */
-    private HiddenFileFilter hiddenFileFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_hidden_files", true)?null:new HiddenFileFilter();
+    private HiddenFileFilter hiddenFileFilter = ConfigurationManager.getVariableBoolean(ConfigurationVariables.SHOW_HIDDEN_FILES,
+                                                                                        ConfigurationVariables.DEFAULT_SHOW_HIDDEN_FILES) ?
+        null:new HiddenFileFilter();
 
     /** Filters out Mac OS X .DS_Store files, null when 'show DS_Store files' option is enabled */
-    private DSStoreFileFilter dsStoreFilenameFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_ds_store_files", true)?null:new DSStoreFileFilter();
+    private DSStoreFileFilter dsStoreFilenameFilter = ConfigurationManager.getVariableBoolean(ConfigurationVariables.SHOW_DS_STORE_FILES,
+                                                                                              ConfigurationVariables.DEFAULT_SHOW_DS_STORE_FILES) ?
+        null:new DSStoreFileFilter();
 
     /** Filters out Mac OS X system folders, null when 'show system folders' option is enabled */
-    private SystemFoldersFilter systemFoldersFilter = ConfigurationManager.getVariableBoolean("prefs.file_table.show_system_folders", true)?null:new SystemFoldersFilter();
+    private SystemFoldersFilter systemFoldersFilter = ConfigurationManager.getVariableBoolean(ConfigurationVariables.SHOW_SYSTEM_FOLDERS,
+                                                                                              ConfigurationVariables.DEFAULT_SHOW_SYSTEM_FOLDERS) ?
+        null:new SystemFoldersFilter();
 
     private final static int CANCEL_ACTION = 0;
     private final static int BROWSE_ACTION = 1;
@@ -80,7 +84,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     static {
         // Set background color
-        backgroundColor = ConfigurationManager.getVariableColor("prefs.colors.background", "000084");
+        backgroundColor = ConfigurationManager.getVariableColor(ConfigurationVariables.BACKGROUND_COLOR, ConfigurationVariables.DEFAULT_BACKGROUND_COLOR);
     }
 
 
@@ -508,24 +512,24 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     	String var = event.getVariable();
     
         // Set new background color and repaint panel
-        if (var.equals("prefs.colors.background"))  {
+        if (var.equals(ConfigurationVariables.BACKGROUND_COLOR))  {
             scrollPane.getViewport().setBackground(backgroundColor=event.getColorValue());
             repaint();    		
         }
         // Show or hide hidden files
-        else if (var.equals("prefs.file_table.show_hidden_files")) {
+        else if (var.equals(ConfigurationVariables.SHOW_HIDDEN_FILES)) {
             hiddenFileFilter = event.getBooleanValue()?null:new HiddenFileFilter();
             // Refresh current folder in a separate thread
             tryRefreshCurrentFolder();
         }
         // Show or hide .DS_Store files (Mac OS X option)
-        else if (var.equals("prefs.file_table.show_ds_store_files")) {
+        else if (var.equals(ConfigurationVariables.SHOW_DS_STORE_FILES)) {
             dsStoreFilenameFilter = event.getBooleanValue()?null:new DSStoreFileFilter();
             // Refresh current folder in a separate thread
             tryRefreshCurrentFolder();
         }
         // Show or hide system folders (Mac OS X option)
-        else if (var.equals("prefs.file_table.show_system_folders")) {
+        else if (var.equals(ConfigurationVariables.SHOW_SYSTEM_FOLDERS)) {
             systemFoldersFilter = event.getBooleanValue()?null:new SystemFoldersFilter(); 
             // Refresh current folder in a separate thread
             tryRefreshCurrentFolder();
