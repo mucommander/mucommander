@@ -239,6 +239,16 @@
     <!-- Makes sure that muCommander's JAR file does not        -->
     <!-- inherit license and copyright from libraries.          -->
     <delete dir="${classes}/META-INF"/>
+
+    <!-- Makes sure that library documentation doesn't get      -->
+    <!-- included in the final jar.                             -->
+    <delete>
+      <fileset dir="${classes}" includes="**/*.html"/>
+      <fileset dir="${classes}" includes="**/*.css"/>
+    </delete>
+
+    <!-- Deletes unused JCifs resouces.                         -->
+    <delete file="${classes}/jcifs/util/mime.map"/>
   </target> 
 
 
@@ -292,7 +302,7 @@
 
   <!-- Generates the application's unobfuscated jar file.      -->
   <!-- Output will be stored in {$jar.normal}.                  -->
-  <target name="jar" depends="compile,resources,includelibs">
+  <target name="jar" depends="compile,includelibs,resources">
     <echo>Creating unobfuscated JAR file in ${jar.normal}...</echo>
     <mkdir dir="${dist}"/>
     <jar jarfile="${jar.normal}" basedir="${classes}">
