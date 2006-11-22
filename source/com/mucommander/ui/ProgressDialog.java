@@ -452,9 +452,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
         private final Color BACKGROUND_COLOR = ConfigurationManager.getVariableColor(ConfigurationVariables.BACKGROUND_COLOR, null);
 
-        private final Color GRAPH_COLOR = ConfigurationManager.getVariableColor("prefs.colors.selectionBackground", null);
+        private final Color GRAPH_COLOR = ConfigurationManager.getVariableColor(ConfigurationVariables.SELECTION_BACKGROUND_COLOR, null);
 
-        private final Color BPS_LIMIT_COLOR = ConfigurationManager.getVariableColor("prefs.colors.marked", null);
+        private final Color BPS_LIMIT_COLOR = ConfigurationManager.getVariableColor(ConfigurationVariables.MARKED_FILE_COLOR, null);
 
         private final int LINE_SPACING = 6;
 
