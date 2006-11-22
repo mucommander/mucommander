@@ -34,7 +34,6 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
      * @param parent where to execute commands.
      */
     public ShellComboBox(RunDialog parent) {
-        //        super(new JTextField() {public void setText(String s) {super.setText(s);System.out.println("HEEEEEEEEEEEEERE " + s);}});
         this.parent = parent;
 
         // Sets the combo box's editor.

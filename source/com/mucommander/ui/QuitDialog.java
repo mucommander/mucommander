@@ -1,7 +1,7 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 
@@ -18,11 +18,7 @@ import java.awt.*;
  *
  * @author Maxence Bernard
  */
-public class QuitDialog extends QuestionDialog {
-
-    /** Configuration varialble that states whether or not this dialog should be displayed when quitting */
-    private final static String QUIT_CONFIRMATION_CONF_VAR = "prefs.quit_confirmation";
-    
+public class QuitDialog extends QuestionDialog {    
     /** True when quit confirmation button has been pressed by the user */
     private boolean quitConfirmed;
 	
@@ -60,7 +56,7 @@ public class QuitDialog extends QuestionDialog {
         this.quitConfirmed = getActionValue()==QUIT_ACTION;
         if(quitConfirmed) {
             // Remember user preference
-            ConfigurationManager.setVariableBoolean(QUIT_CONFIRMATION_CONF_VAR, showNextTimeCheckBox.isSelected());
+            ConfigurationManager.setVariableBoolean(ConfigurationVariables.CONFIRM_ON_QUIT, showNextTimeCheckBox.isSelected());
         }
     }
     
@@ -77,7 +73,7 @@ public class QuitDialog extends QuestionDialog {
      * Returns <code>true</code> if quit confirmation hasn't been disabled in the preferences. 
      */
     public static boolean confirmationRequired() {
-        return ConfigurationManager.getVariableBoolean(QUIT_CONFIRMATION_CONF_VAR, true);
+        return ConfigurationManager.getVariableBoolean(ConfigurationVariables.CONFIRM_ON_QUIT, ConfigurationVariables.DEFAULT_CONFIRM_ON_QUIT);
     }
     
     

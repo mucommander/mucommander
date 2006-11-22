@@ -33,6 +33,10 @@ public interface ConfigurationVariables {
     public static final String  DISPLAY_COMPACT_FILE_SIZE         = ROOT_SECTION + '.' + "display_compact_file_size";
     /** Default file size display behavior. */
     public static final boolean DEFAULT_DISPLAY_COMPACT_FILE_SIZE = true;
+    /** Whether or not to ask the user for confirmation before quitting muCommander. */
+    public static final String  CONFIRM_ON_QUIT                   = ROOT_SECTION + '.' + "quit_confirmation";
+    /** Default quitting behavior. */
+    public static final boolean DEFAULT_CONFIRM_ON_QUIT           = true;
 
 
 
