@@ -6,6 +6,7 @@ import com.mucommander.ui.comp.combobox.EditableComboBox;
 import com.mucommander.ui.comp.combobox.EditableComboBoxListener;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import java.util.Iterator;
 
 /**
@@ -17,7 +18,7 @@ import java.util.Iterator;
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class ShellComboBox extends EditableComboBox implements EditableComboBoxListener, ShellHistoryListener {
+public class ShellComboBox extends EditableComboBox implements EditableComboBoxListener, ShellHistoryListener, PopupMenuListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Input field used to type in commands. */
@@ -38,6 +39,8 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
 
         // Sets the combo box's editor.
         this.input = getTextField();
+
+        addPopupMenuListener(this);
 
         // Fills the combo box with the current history.
         populateHistory();
@@ -115,6 +118,29 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
         input.setText("");
         removeAllItems();
     }
+
+
+
+    // - Popup menu listening -------------------------------------------------------
+    // ------------------------------------------------------------------------------
+    /**
+     * Ignored.
+     */
+    public void popupMenuCanceled(PopupMenuEvent e) {}
+
+    /**
+     * Makes sure the selection is always the first element in the list.
+     */
+    public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+        setComboSelectionUpdatesTextField(false);
+        setSelectedIndex(0);
+        setComboSelectionUpdatesTextField(true);
+    }
+
+    /**
+     * Ignored.
+     */
+    public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
 
 
     // - Command handling -----------------------------------------------------------
