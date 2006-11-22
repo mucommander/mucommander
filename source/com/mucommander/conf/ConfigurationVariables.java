@@ -37,6 +37,8 @@ public interface ConfigurationVariables {
     public static final String  CONFIRM_ON_QUIT                   = ROOT_SECTION + '.' + "quit_confirmation";
     /** Default quitting behavior. */
     public static final boolean DEFAULT_CONFIRM_ON_QUIT           = true;
+    /** Look and feel used by muCommander. */
+    public static final String  LOOK_AND_FEEL                     = ROOT_SECTION + '.' + "lookAndFeel";
 
 
 
@@ -267,4 +269,17 @@ public interface ConfigurationVariables {
     public static final String WAIT_AFTER_REFRESH                 = REFRESH_SECTION + '.' + "wait_after_refresh";
     /** Default minimum amount of time between two refreshes. */
     public static final long   DEFAULT_WAIT_AFTER_REFRESH         = 10000;
+
+
+
+    // - Font variables ------------------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing the font used by muCommander. */
+    public static final String FONT_SECTION                       = ROOT_SECTION + '.' + "font";
+    /** Family of the font used by muCommander. */
+    public static final String FONT_FAMILY                        = FONT_SECTION + '.' + "family";
+    /** Size of the font used by muCommander. */
+    public static final String FONT_SIZE                          = FONT_SECTION + '.' + "size";
+    /** Style of the font used by muCommander. */
+    public static final String FONT_STYLE                         = FONT_SECTION + '.' + "style";
 }

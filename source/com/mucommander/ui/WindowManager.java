@@ -66,7 +66,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
     static {
         // Sets custom lookAndFeel if different from current lookAndFeel
-        String lnfName = ConfigurationManager.getVariable("prefs.lookAndFeel");
+        String lnfName = ConfigurationManager.getVariable(ConfigurationVariables.LOOK_AND_FEEL);
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
             setLookAndFeel(lnfName);
 
@@ -569,7 +569,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     
     	// /!\ font.size is set after font.family in AppearancePrefPanel
     	// that's why we only listen to this one in order not to change Font twice
-    	if (var.equals("prefs.lookAndFeel")) {
+    	if (var.equals(ConfigurationVariables.LOOK_AND_FEEL)) {
             if(Debug.ON) Debug.trace("LookAndFeel changed! "+event.getValue());
             String lnfName = event.getValue();
 			
