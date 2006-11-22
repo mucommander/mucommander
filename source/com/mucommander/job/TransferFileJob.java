@@ -66,7 +66,12 @@ public abstract class TransferFileJob extends FileJob {
         if(copyToHint==AbstractFile.SHOULD_HINT || copyToHint==AbstractFile.MUST_HINT) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling copyTo()");
             sourceFile.copyTo(destFile);
+            return;
         }
+
+        // Throw a specific FileTransferException if source and destination files are identical
+        if(sourceFile.equals(destFile))
+            throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
 
         // Copy source file stream to destination file
         try {
@@ -138,48 +143,61 @@ public abstract class TransferFileJob extends FileJob {
                 int choice;
                 switch(reason) {
                     // Could not open source file for read
-                case FileTransferException.OPENING_SOURCE:
-                    // Ask the user what to do
-                    choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", sourceFile.getName()));
-                    break;
+                    case FileTransferException.OPENING_SOURCE:
+                        choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", sourceFile.getName()));
+                        break;
                     // Could not open destination file for write
-                case FileTransferException.OPENING_DESTINATION:
-                    choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", sourceFile.getName()));
+                    case FileTransferException.OPENING_DESTINATION:
+                        choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", sourceFile.getName()));
+                        break;
+                    // Source and destination files are identical
+                    case FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL:
+                        choice = showErrorDialog(errorDialogTitle, Translator.get("same_source_destination"));
+                        break;
+    //                     An error occurred during file transfer
+    //                case FileTransferException.ERROR_WHILE_TRANSFERRING:
+                    default:
+                        choice = showErrorDialog(errorDialogTitle,
+                                                 Translator.get("error_while_transferring", sourceFile.getName()),
+                                                 new String[]{SKIP_TEXT, APPEND_TEXT, RETRY_TEXT, CANCEL_TEXT},
+                                                 new int[]{SKIP_ACTION, APPEND_ACTION, RETRY_ACTION, CANCEL_ACTION}
+                                                 );
                     break;
-                    // An error occurred during file transfer
-//                case FileTransferException.ERROR_WHILE_TRANSFERRING:
-                default:
-                    choice = showErrorDialog(errorDialogTitle, 
-                                             Translator.get("error_while_transferring", sourceFile.getName()),
-                                             new String[]{SKIP_TEXT, APPEND_TEXT, RETRY_TEXT, CANCEL_TEXT},
-                                             new int[]{SKIP_ACTION, APPEND_ACTION, RETRY_ACTION, CANCEL_ACTION}
-                                             );
-                    break;
                 }
-				
-                // cancel action or close dialog
-                if(choice==-1 || choice==CANCEL_ACTION) {
-                    stop();
-                    return false;
-                }
-                else if(choice==SKIP_ACTION) { 	// skip
-                    return false;
-                }
+
                 // Retry action (append or retry)
-                else {
-//                    if(reason==FileTransferException.ERROR_WHILE_TRANSFERRING) {
-                        // Reset processed bytes currentFileByteCounter
-                        currentFileByteCounter.reset();
-                        // Append resumes transfer
-                        append = choice==APPEND_ACTION;
-//                    }
+                if(choice==RETRY_ACTION || choice==APPEND_ACTION) {
+                    // Reset processed bytes currentFileByteCounter
+                    currentFileByteCounter.reset();
+                    // Append resumes transfer
+                    append = choice==APPEND_ACTION;
                     continue;
                 }
+
+                // Skip or Cancel action (stop() is already called by showErrorDialog)
+                return false;
+
+//                // cancel action or close dialog
+//                if(choice==-1 || choice==CANCEL_ACTION) {
+//                    stop();
+//                    return false;
+//                }
+//                else if(choice==SKIP_ACTION) { 	// skip
+//                    return false;
+//                }
+//                // Retry action (append or retry)
+//                else {
+//                    // Reset processed bytes currentFileByteCounter
+//                    currentFileByteCounter.reset();
+//                    // Append resumes transfer
+//                    append = choice==APPEND_ACTION;
+//                    continue;
+//                }
             }
         } while(true);
     }
-	
-    
+
+
     /**
      * Returns the percentage of the current file which has been processed, or 0 if current file's size is not available
      * (in this case getNbCurrentFileBytesProcessed() returns -1).

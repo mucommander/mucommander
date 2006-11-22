@@ -27,13 +27,13 @@ public abstract class AbstractFile {
     /** Default path separator */
     public final static String DEFAULT_SEPARATOR = "/";
 
-    /** Indicates copyTo()/moveTo() *should* be used to copy/move the file (e.g. more efficient) */
+    /** Indicates {@link #copyTo(AbstractFile)}/{@link #moveTo(AbstractFile)} *should* be used to copy/move the file (e.g. more efficient) */
     public final static int SHOULD_HINT = 0;
-    /** Indicates copyTo()/moveTo() *should not* be used to copy/move the file (default) */
+    /** Indicates {@link #copyTo(AbstractFile)}/{@link #moveTo(AbstractFile)} *should not* be used to copy/move the file (default) */
     public final static int SHOULD_NOT_HINT = 1;
-    /** Indicates copyTo()/moveTo() *must* be used to copy/move the file (e.g. no other way to do so) */
+    /** Indicates {@link #copyTo(AbstractFile)}/{@link #moveTo(AbstractFile)} *must* be used to copy/move the file (e.g. no other way to do so) */
     public final static int MUST_HINT = 2;
-    /** Indicates copyTo()/moveTo() *must not* be used to copy/move the file (e.g. not implemented) */
+    /** Indicates {@link #copyTo(AbstractFile)}/{@link #moveTo(AbstractFile)} *must not* be used to copy/move the file (e.g. not implemented) */
     public final static int MUST_NOT_HINT = 3;
 
     /** Size allocated to read buffer */
@@ -420,9 +420,13 @@ public abstract class AbstractFile {
      *
      * @param destFile the destination file this file should be copied to
      * @throws FileTransferException if this AbstractFile could be read, or the destination could be written, or if
-     * the operation failed for any other reason.
+     * the operation failed for any other reason (use {@link FileTransferException#getReason()} to get the reason of the failure).
      */
     public void copyTo(AbstractFile destFile) throws FileTransferException {
+        // Throw a specific FileTransferException if source and destination files are identical
+        if(this.equals(destFile))
+            throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
+        
         InputStream in;
 
         try {
@@ -481,9 +485,13 @@ public abstract class AbstractFile {
      *
      * @param destFile the destination file this file should be moved to
      * @throws FileTransferException if this AbstractFile or destination cannot be written or if the operation failed
-     *  for any other reason.
+     * for any other reason (use {@link FileTransferException#getReason()} to get the reason of the failure).
      */
     public void moveTo(AbstractFile destFile) throws FileTransferException {
+        // Throw a specific FileTransferException if source and destination files are identical
+        if(this.equals(destFile))
+            throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
+
         copyTo(destFile);
 
         // The file won't be deleted if copyTo() failed (threw an IOException)

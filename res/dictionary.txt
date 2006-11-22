@@ -638,17 +638,17 @@ error_while_transferring:RU:Ошибка при передаче файла %1
 error_while_transferring:ZH_CN:传送文件时出现错误 %1
 error_while_transferring:SI:Napaka pri prenosu datoteke %1
 
-same_source_destination:EN:Source and destination folders are the same.
-same_source_destination:FR:Les répertoires source et destination sont les mêmes.
-same_source_destination:DE:Quell-und Zielordner sind gleich.
-same_source_destination:ES:El directorio de origen y destino es el mismo.
-same_source_destination:CS:Zdojová a cílová složka se shodují.
+same_source_destination:EN:Source and destination folders are the same
+same_source_destination:FR:Les répertoires source et destination sont les mêmes
+same_source_destination:DE:Quell-und Zielordner sind gleich
+same_source_destination:ES:El directorio de origen y destino es el mismo
+same_source_destination:CS:Zdojová a cílová složka se shodují
 same_source_destination:zh_TW:來源及目的資料夾一樣
-same_source_destination:PL:Taki sam katalog źródłowy i docelowy.
-same_source_destination:HU:A forrás és a célkönyvtár ugyanaz.
-same_source_destination:RU:Исходный и конечный каталог - один и тот же.
+same_source_destination:PL:Taki sam katalog źródłowy i docelowy
+same_source_destination:HU:A forrás és a célkönyvtár ugyanaz
+same_source_destination:RU:Исходный и конечный каталог - один и тот же
 same_source_destination:ZH_CN:源/目的文件夹相同
-same_source_destination:SI:Izvorna in ciljna mapa sta identični.
+same_source_destination:SI:Izvorna in ciljna mapa sta identični
 
 
 ###########

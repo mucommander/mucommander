@@ -148,8 +148,9 @@ public class CopyJob extends TransferFileJob {
         // Do nothing if file is a symlink (skip file and return)
         if(file.isSymlink())
             return true;
+
         // Copy directory recursively
-        else if(file.isDirectory()) {
+        if(file.isDirectory()) {
             // Create the folder in the destination folder if it doesn't exist
             if(!(destFile.exists() && destFile.isDirectory())) {
                 // Loop for retry

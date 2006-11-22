@@ -14,6 +14,10 @@ import javax.swing.*;
 public class FilenameLabel extends JLabel {
 
     public FilenameLabel(AbstractFile file) {
-        super(file.getName(), FileIcons.getFileIcon(file), LEADING);
+        String filename = file.getName();
+        setText(filename);
+        setToolTipText(filename);
+
+        setIcon(FileIcons.getFileIcon(file));
     }
 }

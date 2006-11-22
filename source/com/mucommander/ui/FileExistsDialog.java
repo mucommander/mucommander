@@ -6,13 +6,13 @@ import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
-import com.mucommander.ui.comp.dialog.YBoxPanel;
-import com.mucommander.ui.comp.dialog.XBoxPanel;
 import com.mucommander.ui.comp.dialog.TextFieldsPanel;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Date;
+import java.util.Vector;
 
 
 /**
@@ -38,9 +38,6 @@ public class FileExistsDialog extends QuestionDialog {
     public final static String OVERWRITE_IF_OLDER_TEXT = Translator.get("overwrite_if_older");
     public final static String RESUME_TEXT = Translator.get("resume");
 
-    private String choicesText[];
-    private int choicesActions[];
-	
     private JCheckBox applyToAllCheckBox;
 
 	
@@ -54,9 +51,8 @@ public class FileExistsDialog extends QuestionDialog {
      * @param multipleFilesMode if true, options for multiple files processing will be enabled (skip, apply to all)
      */
     public FileExistsDialog(Dialog parent, Component locationRelative, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
-        super(parent, Translator.get("file_exists_dialog.title"), locationRelative);
+        super(parent, null, locationRelative);
 		
-        setChoices(sourceFile, destFile, multipleFilesMode);
         init(parent, sourceFile, destFile, multipleFilesMode);
     }
 
@@ -70,114 +66,123 @@ public class FileExistsDialog extends QuestionDialog {
      * @param multipleFilesMode if true, options for multiple files processing will be enabled (skip, apply to all)
      */
     public FileExistsDialog(Frame parent, Component locationRelative, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
-        super(parent, Translator.get("file_exists_dialog.title"), locationRelative);
+        super(parent, null, locationRelative);
 
-        setChoices(sourceFile, destFile, multipleFilesMode);
         init(parent, sourceFile, destFile, multipleFilesMode);
     }
 
 
-    private void setChoices(AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
-        boolean resumeOption = false;
-        if(sourceFile!=null) {
-            // Give resume option only if destination file is smaller than source file
-            long destSize = destFile.getSize();
-            long sourceSize = sourceFile.getSize();
-            resumeOption = destSize!=-1 && (sourceSize==-1 || destSize<sourceSize);
-        }
+    private void init(Container parent, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
+
+        // Init choices
+
+        Vector choicesTextV = new Vector();
+        Vector choicesActionsV = new Vector();
+
+        choicesTextV.add(CANCEL_TEXT);
+        choicesActionsV.add(new Integer(CANCEL_ACTION));
 
         if(multipleFilesMode) {
-            if(resumeOption) {
-                choicesText = new String[]{CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, RESUME_TEXT};
-                choicesActions = new int[]{CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, RESUME_ACTION};
-            }
-            else {
-                if(sourceFile!=null) {
-                    choicesText = new String[]{CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT};
-                    choicesActions = new int[]{CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION};
-                }
-                else {
-                    choicesText = new String[]{CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT};
-                    choicesActions = new int[]{CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION};
+            choicesTextV.add(SKIP_TEXT);
+            choicesActionsV.add(new Integer(SKIP_ACTION));
+        }
+
+        boolean sameSourceAndDestination = destFile.equals(sourceFile);
+        if(!sameSourceAndDestination) {
+            choicesTextV.add(OVERWRITE_TEXT);
+            choicesActionsV.add(new Integer(OVERWRITE_ACTION));
+
+            if(sourceFile!=null) {
+                choicesTextV.add(OVERWRITE_IF_OLDER_TEXT);
+                choicesActionsV.add(new Integer(OVERWRITE_IF_OLDER_ACTION));
+
+                // Give resume option only if destination file is smaller than source file
+                long destSize = destFile.getSize();
+                long sourceSize = sourceFile.getSize();
+                if(destSize!=-1 && (sourceSize==-1 || destSize<sourceSize)) {
+                    choicesTextV.add(RESUME_TEXT);
+                    choicesActionsV.add(new Integer(RESUME_ACTION));
                 }
             }
         }
-        else {
-            if(resumeOption) {
-                choicesText = new String[]{CANCEL_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, RESUME_TEXT};
-                choicesActions = new int[]{CANCEL_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, RESUME_ACTION};
-            }
-            else {
-                if(sourceFile!=null) {
-                    choicesText = new String[]{CANCEL_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT};
-                    choicesActions = new int[]{CANCEL_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION};
-                }
-                else {
-                    choicesText = new String[]{CANCEL_TEXT, OVERWRITE_TEXT};
-                    choicesActions = new int[]{CANCEL_ACTION, OVERWRITE_ACTION};
-                }
-            }
-        }
-    }
 
-	
-    private void init(Container parent, AbstractFile sourceFile, AbstractFile destFile, boolean applyToAllOption) {
-//        YBoxPanel panel = new YBoxPanel();
-//
-//        if(sourceFile!=null) {
-//            panel.add(new JLabel("Source: "+sourceFile.getAbsolutePath()));
-//            panel.add(new JLabel("  "+ SizeFormat.format(sourceFile.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)
-//                                 +", "+CustomDateFormat.format(new Date(sourceFile.getDate()))));
-//            panel.addSpace(10);
-//        }
-//
-//        // Use canonical path for destination, to get rid of '..', '.' and '~'
-//    	panel.add(new JLabel("Destination: "+destFile.getCanonicalPath()));
-//    	panel.add(new JLabel("  "+ SizeFormat.format(destFile.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)
-//                             +", "+CustomDateFormat.format(new Date(destFile.getDate()))));
-//
+        int nbChoices = choicesActionsV.size();
+
+        String choicesText[] = new String[nbChoices];
+        choicesTextV.toArray(choicesText);
+
+        int choicesActions[] = new int[nbChoices];
+        for(int i=0; i<nbChoices; i++)
+            choicesActions[i] = ((Integer)choicesActionsV.elementAt(i)).intValue();
 
 
+        // Init UI
 
-//        JPanel panel = new JPanel(new BorderLayout());
-//        JPanel gridPanel = new JPanel(new GridLayout(1, 0));
+        String title = sameSourceAndDestination?
+            Translator.get("same_source_destination")
+            :Translator.get("file_exists_dialog.title");
 
-//        YBoxPanel yPanel = new YBoxPanel();
-//        JPanel yPanel = new JPanel(new GridLayout(0, 1));
-//        yPanel.add(new JLabel());
-//        yPanel.add(new JLabel(Translator.get("name")+": "));
-//        yPanel.add(new JLabel(Translator.get("location")+": "));
-//        yPanel.add(new JLabel(Translator.get("size")+": "));
-//        yPanel.add(new JLabel(Translator.get("date")+": "));
-//        panel.add(yPanel, BorderLayout.WEST);
+        setTitle(title);
 
-//        if(sourceFile!=null)
-//            gridPanel.add(new FileDetailsPanel(sourceFile, Translator.get("source")));
-//
-//        gridPanel.add(new FileDetailsPanel(destFile, Translator.get("destination")));
+        YBoxPanel yPanel = new YBoxPanel();
+        yPanel.add(new JLabel(title+": "));
+        yPanel.addSpace(10);
 
-//        panel.add(gridPanel, BorderLayout.CENTER);
-
-        TextFieldsPanel panel = new TextFieldsPanel(10);
+        TextFieldsPanel tfPanel = new TextFieldsPanel(10);
 
         if(sourceFile!=null)
-            addFileDetails(panel, sourceFile, Translator.get("source"));
+            addFileDetails(tfPanel, sourceFile, Translator.get("source"));
 
-        addFileDetails(panel, destFile, Translator.get("destination"));
+        addFileDetails(tfPanel, destFile, Translator.get("destination"));
 
-        init(parent, panel,
+        yPanel.add(tfPanel);
+
+        init(parent, yPanel,
              choicesText,
              choicesActions,
              3);
 
-        if(applyToAllOption) {
+        if(multipleFilesMode && !sameSourceAndDestination) {
             applyToAllCheckBox = new JCheckBox(Translator.get("apply_to_all"));
             addCheckBox(applyToAllCheckBox);
         }
+
+
+//        if(multipleFilesMode) {
+//            if(resumeOption) {
+//                choicesText = new String[]{CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, RESUME_TEXT};
+//                choicesActions = new int[]{CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, RESUME_ACTION};
+//            }
+//            else {
+//                if(sourceFile!=null) {
+//                    choicesText = new String[]{CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT};
+//                    choicesActions = new int[]{CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION};
+//                }
+//                else {
+//                    choicesText = new String[]{CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT};
+//                    choicesActions = new int[]{CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION};
+//                }
+//            }
+//        }
+//        else {
+//            if(resumeOption) {
+//                choicesText = new String[]{CANCEL_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, RESUME_TEXT};
+//                choicesActions = new int[]{CANCEL_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, RESUME_ACTION};
+//            }
+//            else {
+//                if(sourceFile!=null) {
+//                    choicesText = new String[]{CANCEL_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT};
+//                    choicesActions = new int[]{CANCEL_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION};
+//                }
+//                else {
+//                    choicesText = new String[]{CANCEL_TEXT, OVERWRITE_TEXT};
+//                    choicesActions = new int[]{CANCEL_ACTION, OVERWRITE_ACTION};
+//                }
+//            }
+//        }
     }
 
-
-
+	
     private void addFileDetails(TextFieldsPanel panel, AbstractFile file, String nameLabel) {
         panel.addTextFieldRow(nameLabel+":", new FilenameLabel(file), 0);
 
@@ -200,32 +205,4 @@ public class FileExistsDialog extends QuestionDialog {
         return applyToAllCheckBox==null?false:applyToAllCheckBox.isSelected();
     }
 	
-
-    /*
-    private class FileDetailsPanel extends JPanel {
-
-        public FileDetailsPanel(AbstractFile file) {
-            this(file, null);
-        }
-
-        public FileDetailsPanel(AbstractFile file, String title) {
-            super(new GridLayout(0, 1));
-
-            if(title!=null)
-                add(new JLabel(title));
-
-            add(new FilenameLabel(file));
-
-            String parentLocation = file.getParent().getCanonicalPath();
-            JLabel label = new JLabel(parentLocation);
-            label.setToolTipText(parentLocation);
-            add(label);
-
-            add(new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)));
-
-            add(new JLabel(CustomDateFormat.format(new Date(file.getDate()))));
-        }
-
-    }
-    */
 }

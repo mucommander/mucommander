@@ -22,7 +22,7 @@ Official website: http://www.mucommander.com
 Requirements
 ------------
 
-Java Runtime Environment 1.3.0 (JRE) or later is required to run
+Java Runtime Environment 1.4.0 (JRE) or later is required to run
 muCommander. JRE 1.5 is recommended, you can download it at http://java.com.
 
 Mac OS X users: your favorite OS already comes with a Java runtime so you're good to go!
@@ -177,12 +177,11 @@ Improvements:
  - Optimized table rendering for better display performance
  - Optimized file handling for better file access performance
  - Optimized Zip and Tar archive handling files, access is now much faster
- - SMB performance improved when changing folders
  - Free/total volume space now automatically refreshes (every 60 seconds)
  - Toolbar and command bar now contextually show whether the action can be triggered or not
+ - 'File already exists in destination' dialog improved for readability
  - KB/MB/GB/TB are now calculated accurately by multiples of 1024 instead of 1000
  - Decimal and thousands separators are now localized
- - Roots of SMB hosts now have a parent (smb://) to more easily browse workgroups/shares 
  - Environment variables are now retained when using 'Run command'
  - In-table file renaming now used everywhere instead of 'Rename' dialog
  - In-table file renaming must now to be validated by ENTER for safety reasons
@@ -205,6 +204,8 @@ Improvements:
  - Preference tabs now have icons, layout improved a bit
  - New font preview field to 'Appearance' preferences tab
  - New ascending / descending icons in sort tabs
+ - SMB performance improved when changing folders
+ - Root folders of SMB shares now have a parent (smb://) to more easily browse workgroups/shares
  - SMB resources that are not browsable (printers, IPC...) are not displayed
  - SMB library (jCIFS) upgraded to version 1.2.11 which includes many bug fixes
  - Mac OS X: disabled progress bar animation in file transfer progress dialog which hogged CPU unnecessarily
@@ -212,6 +213,7 @@ Improvements:
 
 Bug fixes:
  - Windows UNC network paths (those starting with \\) are now properly handled, fixing startup problems under Windows if the user home is located on a network share
+ - Improved focus management, fixing some focus issues
  - Fixed drive popup which doesn't immediately reflect bookmark changes
  - Fixed .GZ files not opened when extension is upper-cased
  - GZ files inside Tar archives can now be properly opened
@@ -243,7 +245,6 @@ Known issues:
  - Translations not up-to-date (some of the new 0.8 features are untranslated) 
  - Write/execute modes are not preserved when a file is copied, this will be solved with Java 1.6
  - SMB support may not work properly on non multi-language JRE
- - SFTP unavailable under Java 1.3
  - SFTP connection sometimes drops unexpectedly when transferring lots of files
  - Some BZ2 archives can not be properly opened
  - Mac OS X : 'Copy files' not working with other applications (files are not pasted)
