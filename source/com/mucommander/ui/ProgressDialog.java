@@ -2,7 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.*;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.DurationFormat;
@@ -450,7 +450,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     private class SpeedGraph extends JPanel {
 
-        private final Color BACKGROUND_COLOR = ConfigurationManager.getVariableColor("prefs.colors.background", null);
+        private final Color BACKGROUND_COLOR = ConfigurationManager.getVariableColor(ConfigurationVariables.BACKGROUND_COLOR, null);
 
         private final Color GRAPH_COLOR = ConfigurationManager.getVariableColor("prefs.colors.selectionBackground", null);
 

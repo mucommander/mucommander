@@ -154,4 +154,21 @@ public interface ConfigurationVariables {
     public static final String  USE_SCREEN_MENU_BAR            = MAC_OSX_SECTION + '.' + "screen_menu_bar";
     /** Default menu bar type. */
     public static final boolean DEFAULT_USE_SCREEN_MENU_BAR    = true;
+
+
+
+    // - Startup folder variables --------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing muCommander's Mac OS X integration. */
+    public static final String  STARTUP_FOLDER_SECTION         = ROOT_SECTION + '.' + "startup_folder";
+    /** Section describing the right panel's startup folder. */
+    public static final String  RIGHT_STARTUP_FOLDER_SECTION   = STARTUP_FOLDER_SECTION + '.' + "right";
+    /** Section describing the left panel's startup folder. */
+    public static final String  LEFT_STARTUP_FOLDER_SECTION    = STARTUP_FOLDER_SECTION + '.' + "left";
+    /** Name for variables that describe the last visited folder of a panel. */
+    public static final String  LAST_FOLDER                    = "last_folder";
+    /** Last visited folder in the left panel. */
+    public static final String  LAST_LEFT_FOLDER               = LEFT_STARTUP_FOLDER_SECTION + '.' + LAST_FOLDER;
+    /** Last visited folder in the right panel. */
+    public static final String  LAST_RIGHT_FOLDER              = RIGHT_STARTUP_FOLDER_SECTION + '.' + LAST_FOLDER;
 }

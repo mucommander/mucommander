@@ -67,10 +67,12 @@ public class MoveDialog extends DestinationDialog {
      */
     protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
         // Makes sure the source and destination files are not the same.
+        /*
         if (newName==null || files.getBaseFolder().equals(destFolder) || files.contains(destFolder)) {
             showErrorDialog(Translator.get("same_source_destination"));
             return;
         }
+        */
 		
         // Starts moving files
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));

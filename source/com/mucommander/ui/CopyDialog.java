@@ -86,10 +86,12 @@ public class CopyDialog extends DestinationDialog {
      */
     protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
         // Makes sure the source file and destination files are not the same.
+        /*
         if (newName==null || files.getBaseFolder().equals(destFolder)) {
             showErrorDialog(Translator.get("same_source_destination"));
             return;
         }
+        */
 
         // Starts copying files
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));

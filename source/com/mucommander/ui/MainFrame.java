@@ -405,9 +405,9 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         // Save last MainFrame's attributes (last folders, window position) in the preferences.
 //        if(WindowManager.getMainFrames().size()==1) {
         // Save last folders
-        ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
+        ConfigurationManager.setVariable(ConfigurationVariables.LAST_RIGHT_FOLDER, 
                                          getFolderPanel1().getFolderHistory().getLastRecallableFolder());
-        ConfigurationManager.setVariable("prefs.startup_folder.right.last_folder", 
+        ConfigurationManager.setVariable(ConfigurationVariables.LAST_LEFT_FOLDER, 
                                          getFolderPanel2().getFolderHistory().getLastRecallableFolder());
 
         // Save window position, size and screen resolution
