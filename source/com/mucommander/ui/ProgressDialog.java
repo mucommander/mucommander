@@ -73,9 +73,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     /** How often should progress information be refreshed (in ms) */
     private final static int REFRESH_RATE = 1000;
 
-    private final static String EXPANDED_CONF_VAR = "prefs.progress_dialog.expanded";
-
-
     static {
         // Disable JProgressBar animation which is a real CPU hog under Mac OS X
         UIManager.put("ProgressBar.repaintInterval", new Integer(Integer.MAX_VALUE));
@@ -180,7 +177,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             advancedPanel.add(speedGraph);
 
             this.collapseExpandButton = new CollapseExpandButton(Translator.get("progress_dialog.advanced"), advancedPanel, this, true);
-            collapseExpandButton.setExpandedState(ConfigurationManager.getVariableBoolean(EXPANDED_CONF_VAR, true));
+            collapseExpandButton.setExpandedState(ConfigurationManager.getVariableBoolean(ConfigurationVariables.PROGRESS_DIALOG_EXPANDED,
+                                                                                          ConfigurationVariables.DEFAULT_PROGRESS_DIALOG_EXPANDED));
             tempPanel.add(collapseExpandButton, BorderLayout.EAST);
 
             yPanel.add(tempPanel);
@@ -443,7 +441,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         job.stop();
         // Remember 'advanced panel' expanded state
         if(collapseExpandButton!=null)
-            ConfigurationManager.setVariableBoolean(EXPANDED_CONF_VAR, collapseExpandButton.getExpandedState());
+            ConfigurationManager.setVariableBoolean(ConfigurationVariables.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
     }
 
 

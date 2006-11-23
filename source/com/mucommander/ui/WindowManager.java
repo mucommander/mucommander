@@ -34,9 +34,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     // in the configuration file.
 
     /** Configuration identifier for the left folder frame. */
-    private static final String LEFT_FRAME  = "left";
+    private static final int LEFT_FRAME  = 0;
     /** Configuration identifier for the right folder frame. */
-    private static final String RIGHT_FRAME = "right";
+    private static final int RIGHT_FRAME = 1;
 
 
 
@@ -95,22 +95,24 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      *               {@link #RIGHT_FRAME}).
      * @return       the user's initial path for the specified frame.
      */ 
-    private static AbstractFile getInitialPath(String frame) {
+    private static AbstractFile getInitialPath(int frame) {
         boolean      isCustom;   // Whether the initial path is a custom one or the last used folder.
         String       folderPath; // Path to the initial folder.
         AbstractFile folder;     // Initial folder.
 
         // Checks which kind of initial path we're dealing with.
-        isCustom = ConfigurationManager.getVariable("prefs.startup_folder." + frame + ".on_startup",
-                                                    "lastFolder").equals("customFolder");
+        isCustom = (frame == LEFT_FRAME ? ConfigurationManager.getVariable(ConfigurationVariables.LEFT_STARTUP_FOLDER, ConfigurationVariables.STARTUP_FOLDER_CUSTOM) :
+                    ConfigurationManager.getVariable(ConfigurationVariables.RIGHT_STARTUP_FOLDER, ConfigurationVariables.STARTUP_FOLDER_CUSTOM)).equals(ConfigurationVariables.STARTUP_FOLDER_CUSTOM);
 
         // Handles custom initial paths.
         if (isCustom)
-            folderPath = ConfigurationManager.getVariable("prefs.startup_folder." + frame + ".custom_folder");
+            folderPath = (frame == LEFT_FRAME ? ConfigurationManager.getVariable(ConfigurationVariables.LEFT_CUSTOM_FOLDER) :
+                          ConfigurationManager.getVariable(ConfigurationVariables.RIGHT_CUSTOM_FOLDER));
 
         // Handles "last folder" initial paths.
         else
-            folderPath = ConfigurationManager.getVariable("prefs.startup_folder." +frame + ".last_folder");
+            folderPath = (frame == LEFT_FRAME ? ConfigurationManager.getVariable(ConfigurationVariables.LAST_LEFT_FOLDER) :
+                          ConfigurationManager.getVariable(ConfigurationVariables.LAST_RIGHT_FOLDER));
 
         // If the initial path is not legal or does not exist, defaults to the user's home.
         if(folderPath == null || (folder = FileFactory.getFile(folderPath)) == null || !folder.exists())
@@ -137,7 +139,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      *               {@link #RIGHT_FRAME}).
      * @return       our best shot at what was actually requested.
      */
-    private static AbstractFile getInitialAbstractPath(String path, String frame) {
+    private static AbstractFile getInitialAbstractPath(String path, int frame) {
         // This is one of those cases where a null value actually has a proper meaning.
         if(path == null)
             return getInitialPath(frame);

@@ -235,6 +235,22 @@ public interface ConfigurationVariables {
     public static final String  LAST_LEFT_FOLDER                  = LEFT_STARTUP_FOLDER_SECTION + '.' + LAST_FOLDER;
     /** Last visited folder in the right panel. */
     public static final String  LAST_RIGHT_FOLDER                 = RIGHT_STARTUP_FOLDER_SECTION + '.' + LAST_FOLDER;
+    /** Path to a custom startup folder. */
+    public static final String  CUSTOM_FOLDER                     = "custom_folder";
+    /** Path to the left panel custom startup folder. */
+    public static final String  LEFT_CUSTOM_FOLDER                = LEFT_STARTUP_FOLDER_SECTION + '.' + CUSTOM_FOLDER;
+    /** Path to the right panel custom startup folder. */
+    public static final String  RIGHT_CUSTOM_FOLDER               = RIGHT_STARTUP_FOLDER_SECTION + '.' + CUSTOM_FOLDER;
+    /** Startup folder type. */
+    public static final String  STARTUP_FOLDER                    = "on_startup";
+    /** The custom folder should be used on startup. */
+    public static final String  STARTUP_FOLDER_CUSTOM             = "customFolder";
+    /** The last visited folder should be used on startup. */
+    public static final String  STARTUP_FOLDER_LAST               = "lastFolder";
+    /** Type of startup folder that should be used in the left panel. */
+    public static final String  LEFT_STARTUP_FOLDER               = LEFT_STARTUP_FOLDER_SECTION + '.' + STARTUP_FOLDER;
+    /** Type of startup folder that should be used in the right panel. */
+    public static final String  RIGHT_STARTUP_FOLDER              = RIGHT_STARTUP_FOLDER_SECTION + '.' + STARTUP_FOLDER;
 
 
 
@@ -282,4 +298,15 @@ public interface ConfigurationVariables {
     public static final String FONT_SIZE                          = FONT_SECTION + '.' + "size";
     /** Style of the font used by muCommander. */
     public static final String FONT_STYLE                         = FONT_SECTION + '.' + "style";
+
+
+
+    // - Progress dialog variables -------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing the behavior of the progress dialog. */
+    public static final String  PROGRESS_DIALOG_SECTION           = ROOT_SECTION + '.' + "progress_dialog";
+    /** Whether the progress dialog is expanded or not. */
+    public static final String  PROGRESS_DIALOG_EXPANDED          = PROGRESS_DIALOG_SECTION + '.' + "expanded";
+    /** Default progress dialog behavior. */
+    public static final boolean DEFAULT_PROGRESS_DIALOG_EXPANDED  = true;
 }
