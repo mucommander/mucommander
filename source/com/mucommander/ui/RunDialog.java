@@ -110,11 +110,6 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
         contentPane.add(buttonsPanel, BorderLayout.SOUTH);
 
-        /*
-        contentPane.add(DialogToolkit.createOKCancelPanel(runStopButton, cancelButton, this), BorderLayout.SOUTH);
-        contentPane.add(clearButton);
-        */
-
         // Path field will receive initial focus
         setInitialFocusComponent(inputCombo);
 			
@@ -176,7 +171,11 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
     // - KeyListener code ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    public void keyPressed(KeyEvent event) {}
+    public void keyPressed(KeyEvent event) {
+        if(currentProcess != null && event.getKeyCode() == KeyEvent.VK_ENTER)
+            event.consume();
+    }
+
     public void keyReleased(KeyEvent event) {}
     public void keyTyped(KeyEvent event) {
         if(currentProcess != null) {
@@ -225,15 +224,18 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         // Clears shell history.
         if(source == clearButton) {
             ShellHistoryManager.clear();
-            inputCombo.requestFocus();
+            if(currentProcess == null)
+                inputCombo.requestFocus();
+            else
+                outputTextArea.requestFocus();
         }
 
         // Run button starts a new command
-        else if(this.currentProcess==null && (source == runStopButton))
+        else if(currentProcess==null && (source == runStopButton))
             runCommand(inputCombo.getCommand());
 
         // Stop button stops current process
-        else if(this.currentProcess!=null && source==runStopButton) {
+        else if(currentProcess!=null && source==runStopButton) {
             processInput.close();
             currentProcess.destroy();
             this.currentProcess = null;

@@ -114,10 +114,7 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
     // ------------------------------------------------------------------------------
 
     public void historyChanged(String command) {insertItemAt(command, 0);}
-    public void historyCleared() {
-        input.setText("");
-        removeAllItems();
-    }
+    public void historyCleared() {removeAllItems();}
 
 
 
