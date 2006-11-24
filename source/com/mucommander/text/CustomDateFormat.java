@@ -67,12 +67,10 @@ public class CustomDateFormat implements ConfigurationListener {
      */
     private static SimpleDateFormat createDateFormat() {
         return new SimpleDateFormat(
-                                    replaceDateSeparator(ConfigurationManager.getVariable(ConfigurationVariables.DATE_FORMAT,
-                                                                                          ConfigurationVariables.DEFAULT_DATE_FORMAT),
-                                                         ConfigurationManager.getVariable(ConfigurationVariables.DATE_SEPARATOR,
-                                                                                          ConfigurationVariables.DEFAULT_DATE_SEPARATOR))
-                                    + " " + ConfigurationManager.getVariable(ConfigurationVariables.TIME_FORMAT,
-                                                                             ConfigurationVariables.DEFAULT_DATE_FORMAT));
+            replaceDateSeparator(
+                ConfigurationManager.getVariable(ConfigurationVariables.DATE_FORMAT, ConfigurationVariables.DEFAULT_DATE_FORMAT),
+                ConfigurationManager.getVariable(ConfigurationVariables.DATE_SEPARATOR, ConfigurationVariables.DEFAULT_DATE_SEPARATOR))
+            + " " + ConfigurationManager.getVariable(ConfigurationVariables.TIME_FORMAT, ConfigurationVariables.DEFAULT_TIME_FORMAT));
     }
 	
 	
