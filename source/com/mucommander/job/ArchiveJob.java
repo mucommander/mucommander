@@ -5,7 +5,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.file.archiver.Archiver;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.FileExistsDialog;
+import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 
@@ -60,20 +60,22 @@ public class ArchiveJob extends TransferFileJob {
     protected void jobStarted() {
         super.jobStarted();
 
-        if (destFile.exists()) {
-            // File already exists in destination: ask the user what to do (cancel, overwrite,...) but
-            // do not offer the 'resume' option nor the multiple files mode options such as 'skip'.
-            FileExistsDialog dialog = getFileExistsDialog(null, destFile, false);
-            int choice = waitForUserResponse(dialog);
+        // Check for file collisions, i.e. if the file already exists in the destination
+        int collision = FileCollisionChecker.checkForCollision(null, destFile);
+        if(collision!=FileCollisionChecker.NO_COLLOSION) {
+            // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
+            // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
+            int choice = waitForUserResponse(new FileCollisionDialog(progressDialog, mainFrame, collision, null, destFile, false));
 
+            // Overwrite file
+            if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
+                // Do nothing, simply continue and file will be overwritten
+            }
             // Cancel or dialog close (return)
-            if (choice==-1 || choice==FileExistsDialog.CANCEL_ACTION) {
+//            else if (choice==-1 || choice== FileCollisionDialog.CANCEL_ACTION) {
+            else {
                 stop();
                 return;
-            }
-            // Overwrite file
-            else if (choice==FileExistsDialog.OVERWRITE_ACTION) {
-                // Do nothing, simply continue
             }
         }
 

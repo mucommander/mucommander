@@ -541,8 +541,23 @@ directory_already_exists:RU:Каталог %1 уже существует.
 directory_already_exists:zh_TW:文件夹 %1 已存在.
 directory_already_exists:SI:Mapa %1 že obstaja.
 
-file_already_exists:EN:File %1 already exists
-file_already_exists:FR:Le fichier %1 existe déjà
+file_exists_in_destination:EN:File already exists in destination
+file_exists_in_destination:FR:Le fichier existe dans la destination
+file_exists_in_destination:DE:Datei existiert schon am Ziel
+file_exists_in_destination:ES:El fichero ya existe en el destino
+file_exists_in_destination:CS:Soubor již v cíli existuje
+file_exists_in_destination:zh_TW:檔案已經存在於目的地
+file_exists_in_destination:PL:Plik już istnieje w miejscu docelowym
+file_exists_in_destination:HU:A fájl már létezik a megadott helyen
+file_exists_in_destination:RU:Файл уже существует
+file_exists_in_destination:ZH_CN:文件已经在目的地
+file_exists_in_destination:SI:Datoteka s tem imenom že obstaja
+
+# Todo: find a better wording for this
+destination_subfolder_of_source:EN:Destination folder is a subfolder of source
+
+
+
 
 
 
@@ -2309,6 +2324,26 @@ destination_dialog.file_exists_action:ZH_CN:文件存在时的缺省动作
 destination_dialog.file_exists_action:SI:Privzeto dejanje, ko datoteka obstaja
 
 
+#########################
+# File collision dialog #
+#########################
+
+# This is the dialog that gets displayed when a file 'collision' has been detected in the midst of a transfer
+# e.g. when a destination file already exists, or when the source and destination are the same   
+
+file_collision_dialog.title:EN:File collision
+file_collision_dialog.title:FR:Collision de fichiers
+
+
+
+
+
+
+
+
+
+
+
 ########
 # Copy #
 ########
@@ -2982,23 +3017,6 @@ email.send_file_error:HU:A fájl küldése nem lehetséges %1, a levél nincs el
 email.send_file_error:RU:Невозможно отправить файл %1, почта не была отправлена.
 email.send_file_error:ZH_CN:无法发送文件 %1, 邮件未发出
 email.send_file_error:SI:Ne morem poslati datoteke %1, sporočilo ni poslano.
-
-
-#####################################
-# File exists in destination dialog #
-#####################################
-
-file_exists_dialog.title:EN:File already exists in destination
-file_exists_dialog.title:FR:Le fichier existe dans la destination
-file_exists_dialog.title:DE:Datei existiert schon am Ziel
-file_exists_dialog.title:ES:El fichero ya existe en el destino
-file_exists_dialog.title:CS:Soubor již v cíli existuje
-file_exists_dialog.title:zh_TW:檔案已經存在於目的地
-file_exists_dialog.title:PL:Plik już istnieje w miejscu docelowym
-file_exists_dialog.title:HU:A fájl már létezik a megadott helyen
-file_exists_dialog.title:RU:Файл уже существует
-file_exists_dialog.title:ZH_CN:文件已经在目的地
-file_exists_dialog.title:SI:Datoteka s tem imenom že obstaja
 
 
 #########################

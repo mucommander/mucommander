@@ -40,19 +40,19 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
 
 	
     private final static int DEFAULT_ACTIONS[] = {
-        FileExistsDialog.CANCEL_ACTION,
-        FileExistsDialog.SKIP_ACTION,
-        FileExistsDialog.OVERWRITE_ACTION,
-        FileExistsDialog.OVERWRITE_IF_OLDER_ACTION,
-        FileExistsDialog.RESUME_ACTION
+        FileCollisionDialog.CANCEL_ACTION,
+        FileCollisionDialog.SKIP_ACTION,
+        FileCollisionDialog.OVERWRITE_ACTION,
+        FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION,
+        FileCollisionDialog.RESUME_ACTION
     };
 
     private final static String DEFAULT_ACTIONS_TEXT[] = {
-        FileExistsDialog.CANCEL_TEXT,
-        FileExistsDialog.SKIP_TEXT,
-        FileExistsDialog.OVERWRITE_TEXT,
-        FileExistsDialog.OVERWRITE_IF_OLDER_TEXT,
-        FileExistsDialog.RESUME_TEXT
+        FileCollisionDialog.CANCEL_TEXT,
+        FileCollisionDialog.SKIP_TEXT,
+        FileCollisionDialog.OVERWRITE_TEXT,
+        FileCollisionDialog.OVERWRITE_IF_OLDER_TEXT,
+        FileCollisionDialog.RESUME_TEXT
     };
 	
 
@@ -183,7 +183,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
         // (if not specified by the user) is 'Ask'
         int defaultFileExistsAction = fileExistsActionComboBox.getSelectedIndex();
         if(defaultFileExistsAction==0)
-            defaultFileExistsAction = FileExistsDialog.ASK_ACTION;
+            defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
         else
             defaultFileExistsAction = DEFAULT_ACTIONS[defaultFileExistsAction-1];
         // We don't remember default action on purpose: we want the user to specify it each time,

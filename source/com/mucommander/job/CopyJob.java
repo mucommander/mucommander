@@ -5,9 +5,10 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileSet;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.FileExistsDialog;
+import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.Debug;
 
 import java.io.IOException;
 
@@ -26,7 +27,7 @@ public class CopyJob extends TransferFileJob {
     private String newName;
 
     /** Default choice when encountering an existing file */
-    private int defaultFileExistsAction = FileExistsDialog.ASK_ACTION;
+    private int defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
 
     /** Title used for error dialogs */
     private String errorDialogTitle;
@@ -149,6 +150,53 @@ public class CopyJob extends TransferFileJob {
         if(file.isSymlink())
             return true;
 
+        // Check for file collisions (file exists in the destination, destination subfolder of source, ...)
+        // if a default action hasn't been specified
+        int collision = FileCollisionChecker.checkForCollision(file, destFile);
+        boolean append = false;
+        boolean overwrite = false;
+
+        // Handle collision, asking the user what to do or using a default action to resolve the collision 
+        if(collision != FileCollisionChecker.NO_COLLOSION) {
+            int choice;
+            // Use default action if one has been set, if not show up a dialog
+            if(defaultFileExistsAction==FileCollisionDialog.ASK_ACTION) {
+                FileCollisionDialog dialog = new FileCollisionDialog(progressDialog, mainFrame, collision, file, destFile, true);
+                choice = waitForUserResponse(dialog);
+                // If 'apply to all' was selected, this choice will be used for any other files (user will not be asked again)
+                if(dialog.applyToAllSelected())
+                    defaultFileExistsAction = choice;
+            }
+            else
+                choice = defaultFileExistsAction;
+
+            // Cancel, skip or close dialog
+            if (choice==-1 || choice== FileCollisionDialog.CANCEL_ACTION) {
+                stop();
+                return false;
+            }
+            // Skip file
+            else if (choice== FileCollisionDialog.SKIP_ACTION) {
+                return false;
+            }
+            // Append to file (resume file copy)
+            else if (choice== FileCollisionDialog.RESUME_ACTION) {
+                append = true;
+            }
+            // Overwrite file
+            else if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
+                // Do nothing, simply continue
+                overwrite = true;
+            }
+            //  Overwrite file if destination is older
+            else if (choice== FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION) {
+                // Overwrite if file is newer (stricly)
+                if(file.getDate()<=destFile.getDate())
+                    return false;
+                overwrite = true;
+            }
+        }
+
         // Copy directory recursively
         if(file.isDirectory()) {
             // Create the folder in the destination folder if it doesn't exist
@@ -200,56 +248,8 @@ public class CopyJob extends TransferFileJob {
                 }
             } while(true);
         }
-        // Copy file
+        // File is a regular file, copy it
         else  {
-            boolean append = false;
-            boolean overwrite = false;
-            int choice;
-
-            // Tests if the file already exists in destination
-            // and if it does, ask the user what to do or
-            // use a previous user global answer.
-            if (destFile.exists())  {
-                // No default choice
-                if(defaultFileExistsAction==FileExistsDialog.ASK_ACTION) {
-                    FileExistsDialog dialog = getFileExistsDialog(file, destFile, true);
-                    choice = waitForUserResponse(dialog);
-                    // If 'apply to all' was selected, this choice will be used
-                    // for any files that already exist  (user will not be asked again)
-                    if(dialog.applyToAllSelected())
-                        defaultFileExistsAction = choice;
-                }
-                // Use previous choice
-                else
-                    choice = defaultFileExistsAction;
-				
-                // Cancel, skip or close dialog
-                if (choice==-1 || choice==FileExistsDialog.CANCEL_ACTION) {
-                    stop();
-                    return false;
-                }
-                // Skip file
-                else if (choice==FileExistsDialog.SKIP_ACTION) {
-                    return false;
-                }
-                // Append to file (resume file copy)
-                else if (choice==FileExistsDialog.RESUME_ACTION) {
-                    append = true;
-                }
-                // Overwrite file 
-                else if (choice==FileExistsDialog.OVERWRITE_ACTION) {
-                    // Do nothing, simply continue
-                    overwrite = true;
-                }
-                //  Overwrite file if destination is older
-                else if (choice==FileExistsDialog.OVERWRITE_IF_OLDER_ACTION) {
-                    // Overwrite if file is newer (stricly)
-                    if(file.getDate()<=destFile.getDate())
-                        return true;
-                    overwrite = true;
-                }
-            }
-
             // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
             // file is renamed to <filename>.1
             // TODO: fix this in the commons-net library

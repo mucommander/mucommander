@@ -190,7 +190,9 @@ public abstract class AbstractFile {
 	
     /**
      * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences.
-     * AbstractFile's implementation simply returns the absolute path, this method should be overridden if canonical path resolution is available.
+     *
+     * <p>This implementation simply returns the value of {@link #getAbsolutePath()}, and thus should be overridden
+     * if canonical path resolution is available.
      */
     public String getCanonicalPath() {
         return getAbsolutePath();
@@ -199,12 +201,13 @@ public abstract class AbstractFile {
 
     /**
      * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences,
-     * and with a separator character if <code>true</code> is passed or without one if <code>false</code> is passed.
-     * <p>AbstractFile's implementation simply returns the absolute path, this method should be overridden if canonical path resolution is available.</p>
+     * with an appended separator character if <code>true</code> is passed or without one if <code>false</code> is passed.
+     *
+     * <p>This implementation simply returns the value of {@link #getAbsolutePath(boolean)}, and thus should be
+     * overridden if canonical path resolution is available.
      */
     public String getCanonicalPath(boolean appendSeparator) {
-        String path = getCanonicalPath();
-        return appendSeparator?addTrailingSeparator(path):removeTrailingSlash(path);
+        return getAbsolutePath(appendSeparator);
     }
 	
 
@@ -219,11 +222,10 @@ public abstract class AbstractFile {
 
 
     /**
-     * Returns <code>true</code> if this file is a parent of the given file, or if the 2 files
-     * have the same path.
+     * Returns <code>true</code> if this file is a parent folder of the given file, or if the 2 files are equal.
      */
     public boolean isParentOf(AbstractFile file) {
-        return getCanonicalPath(false).startsWith(file.getCanonicalPath(false));
+        return isBrowsable() && file.getCanonicalPath(true).startsWith(getCanonicalPath(true));
     }
 
 	
@@ -564,17 +566,17 @@ public abstract class AbstractFile {
 
 		
     /**
-     * <p>Tests a file for equality: returns <code>true</code> if the given file denotes the same
-     * file or directory. Note that two files can be equal and not have the exact same absolute
-     * path.</p>
+     * Tests a file for equality: returns <code>true</code> if the given file has the same canonical path,
+     * as returned by {@link #getCanonicalPath()}.
      *
-     * <p>This method should be overriden as it only compares the absolute path.</p>
+     * <p>This method should be overriden for network-based filesystems for which a host can have multiple
+     * path representations (hostname and IP address).
      */
     public boolean equals(Object f) {
         if(f==null || !(f instanceof AbstractFile))
             return false;
 		
-        return getAbsolutePath().equals(((AbstractFile)f).getAbsolutePath());
+        return getCanonicalPath().equals(((AbstractFile)f).getCanonicalPath());
     }
 
 	

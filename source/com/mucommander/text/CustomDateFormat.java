@@ -2,6 +2,7 @@
 package com.mucommander.text;
 
 import com.mucommander.conf.*;
+import com.mucommander.Debug;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -80,7 +81,14 @@ public class CustomDateFormat implements ConfigurationListener {
      * @return a formatted string representing the given date.
      */
     public static String format(Date date) {
+try {
         return dateFormat.format(date);
+}
+catch(Exception e) {
+    e.printStackTrace();
+    if(Debug.ON) Debug.trace("date="+date+" dateFormat="+dateFormat);
+    return null;
+}
     }
 	
 

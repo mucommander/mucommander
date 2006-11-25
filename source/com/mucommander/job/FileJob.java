@@ -5,7 +5,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.FileExistsDialog;
+import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
@@ -478,16 +478,16 @@ public abstract class FileJob implements Runnable {
     }
 	
 	
-    /**
-     * Creates and returns a dialog which notifies the user that a file already exists in the destination folder
-     * under the same name and asks for what to do.
-     */
-    protected FileExistsDialog getFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
-        if(progressDialog==null)
-            return new FileExistsDialog(mainFrame, mainFrame, sourceFile, destFile, multipleFilesMode);
-        else
-            return new FileExistsDialog(progressDialog, mainFrame, sourceFile, destFile, multipleFilesMode);
-    }
+//    /**
+//     * Creates and returns a dialog which notifies the user that a file already exists in the destination folder
+//     * under the same name and asks for what to do.
+//     */
+//    protected FileCollisionDialog getFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
+//        if(progressDialog==null)
+//            return new FileCollisionDialog(mainFrame, mainFrame, sourceFile, destFile, multipleFilesMode);
+//        else
+//            return new FileCollisionDialog(progressDialog, mainFrame, sourceFile, destFile, multipleFilesMode);
+//    }
 
 
     /**

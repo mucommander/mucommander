@@ -19,7 +19,7 @@ public class CopyDialog extends DestinationDialog {
      * Creates and displays a new CopyDialog.
      *
      * @param mainFrame the main frame this dialog is attached to.
-     * @param isShiftDown true if shift key was pressed when invoking this dialog.
+     * @param localCopy true if shift key was pressed when invoking this dialog.
      */
     public CopyDialog(MainFrame mainFrame, FileSet files, boolean localCopy) {
         super(mainFrame, files,
@@ -85,8 +85,8 @@ public class CopyDialog extends DestinationDialog {
      * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
      */
     protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-        // Makes sure the source file and destination files are not the same.
         /*
+        // Makes sure the source file and destination files are not the same.
         if (newName==null || files.getBaseFolder().equals(destFolder)) {
             showErrorDialog(Translator.get("same_source_destination"));
             return;

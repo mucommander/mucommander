@@ -191,7 +191,7 @@ public class Launcher {
             // it right about now.
             ConfigurationManager.loadConfiguration();
 
-            // Use reflection to create an OSXIntegration instance so that ClassLoader
+            // Use reflection toc' create an OSXIntegration instance so that ClassLoader
             // doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
             try {
                 Class osxIntegrationClass = Class.forName("com.mucommander.ui.macosx.OSXIntegration");

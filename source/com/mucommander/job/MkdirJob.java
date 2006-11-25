@@ -5,7 +5,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileSet;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.FileExistsDialog;
+import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 
@@ -58,56 +58,40 @@ public class MkdirJob extends FileJob {
             try {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+" "+ filename);
 
-                AbstractFile newFile = FileFactory.getFile(destFolder.getAbsolutePath(true)+ filename);
+                AbstractFile newFile = FileFactory.getFile(destFolder.getAbsolutePath(true)+filename);
+
+                // Check for file collisions, i.e. if the file already exists in the destination
+                int collision = FileCollisionChecker.checkForCollision(null, newFile);
+                if(collision!=FileCollisionChecker.NO_COLLOSION) {
+                    // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
+                    // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
+                    int choice = waitForUserResponse(new FileCollisionDialog(mainFrame, mainFrame, collision, null, newFile, false));
+
+                    // Overwrite file
+                    if (choice==FileCollisionDialog.OVERWRITE_ACTION) {
+                        // Do nothing, simply continue and file will be overwritten
+                    }
+                    // Cancel or dialog close (return)
+//                    else if (choice==-1 || choice==FileCollisionDialog.CANCEL_ACTION) {
+                    else {
+                        stop();
+                        return false;
+                    }
+                }
 
                 // Create file
                 if(mkfileMode) {
-                    if(newFile.exists()) {
-                        // File already exists in destination (directory case already tested):
-                        // ask the user what to do (cancel, overwrite,...) but
-                        // do not offer the 'resume' option nor the multiple files mode options such as 'skip'.
-                        FileExistsDialog dialog = getFileExistsDialog(null, newFile, false);
-                        int choice = waitForUserResponse(dialog);
-
-                        // Cancel or dialog close (return)
-                        if (choice==-1 || choice==FileExistsDialog.CANCEL_ACTION) {
-                            stop();
-                            return false;
-                        }
-                        // Overwrite file
-                        else if (choice==FileExistsDialog.OVERWRITE_ACTION) {
-                            // Do nothing, simply continue
-                        }
-                    }
-
                     OutputStream out = newFile.getOutputStream(false);
                     out.close();
                 }
                 // Create directory
                 else {
-                    // If a regular file already exists (directory case already tested), report the error and stop
-                    if(newFile.exists()) {
-                        JOptionPane.showMessageDialog(mainFrame, Translator.get("file_already_exists", newFile.getAbsolutePath(false)), Translator.get("error"), JOptionPane.ERROR_MESSAGE);
-                        stop();
-                        return false;
-                    }
-
                     destFolder.mkdir(filename);
                 }
 
-                // Refresh and selects newly created folder in active table
-                FileTable table1 = mainFrame.getFolderPanel1().getFileTable();
-                FileTable table2 = mainFrame.getFolderPanel2().getFileTable();
-                FileTable lastActiveTable = mainFrame.getActiveTable();
-                for(FileTable table=table1; table!=null; table=table==table1?table2:null) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Determining if folders need to be refreshed, tableFolder="+table.getCurrentFolder().getAbsolutePath()+" destFolder="+destFolder.getAbsolutePath());
-                    if(destFolder.equals(table.getCurrentFolder())) {
-                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Refreshing tableFolder="+table.getCurrentFolder().getAbsolutePath());
-                        // Refresh folder panel in a separate thread
-                        table.getFolderPanel().tryRefreshCurrentFolder(lastActiveTable==table?newFile:null);
-                    }
-                }
-				
+                // Select newly created file when job is finished
+                selectFileWhenFinished(newFile);
+
                 return true;		// Return Success
             }
             catch(IOException e) {
@@ -137,8 +121,10 @@ public class MkdirJob extends FileJob {
         return null;
     }
 
+    /**
+     * Folders only needs to be refreshed if it is the destination folder
+     */
     protected boolean hasFolderChanged(AbstractFile folder) {
-        // Refresh is done manually
-        return false;
+        return destFolder.equals(folder);
     }
 }

@@ -8,6 +8,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.dialog.TextFieldsPanel;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.job.FileCollisionChecker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,12 +17,13 @@ import java.util.Vector;
 
 
 /**
- * Dialog invoked to ask the user what to do when a file is to be transferred in a folder
- * where a file with the same name already exists.
+ * Dialog used to inform the user that a file collision has been detected and ask him how to resolve the conflict.
+ * Prior to invoking this dialog, {@link com.mucommander.job.FileCollisionChecker} can be used to check for file collisions. 
  *
+ * @see com.mucommander.job.FileCollisionChecker
  * @author Maxence Bernard
  */
-public class FileExistsDialog extends QuestionDialog {
+public class FileCollisionDialog extends QuestionDialog {
 
     /** This value is used by some FileJob classes */
     public final static int ASK_ACTION = -1;
@@ -42,37 +44,39 @@ public class FileExistsDialog extends QuestionDialog {
 
 	
     /**
-     * Creates a new FileExistsDialog.
+     * Creates a new FileCollisionDialog.
      *
-     * @param parent parent dialog
+     * @param owner the Frame that owns this dialog
      * @param locationRelative component the location of this dialog will be based on
+     * @param collisionType the type of collision as returned by {@link com.mucommander.job.FileCollisionChecker}
      * @param sourceFile the source file that 'conflicts' with the destination file, can be null.
      * @param destFile the destination file which already exists
-     * @param multipleFilesMode if true, options for multiple files processing will be enabled (skip, apply to all)
+     * @param multipleFilesMode if true, options that apply to multiple files will be displayed (skip, apply to all)
      */
-    public FileExistsDialog(Dialog parent, Component locationRelative, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
-        super(parent, null, locationRelative);
+    public FileCollisionDialog(Dialog owner, Component locationRelative, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
+        super(owner, Translator.get("file_collision_dialog.title"), locationRelative);
 		
-        init(parent, sourceFile, destFile, multipleFilesMode);
+        init(owner, collisionType, sourceFile, destFile, multipleFilesMode);
     }
 
     /**
-     * Creates a new FileExistsDialog.
+     * Creates a new FileCollisionDialog.
      *
-     * @param parent parent
+     * @param owner the Frame that owns this dialog
      * @param locationRelative component the location of this dialog will be based on
+     * @param collisionType the type of collision as returned by {@link com.mucommander.job.FileCollisionChecker}
      * @param sourceFile the source file that 'conflicts' with the destination file, can be null.
      * @param destFile the destination file which already exists
-     * @param multipleFilesMode if true, options for multiple files processing will be enabled (skip, apply to all)
+     * @param multipleFilesMode if true, options that apply to multiple files will be displayed (skip, apply to all)
      */
-    public FileExistsDialog(Frame parent, Component locationRelative, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
-        super(parent, null, locationRelative);
+    public FileCollisionDialog(Frame owner, Component locationRelative, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
+        super(owner, Translator.get("file_collision_dialog.title"), locationRelative);
 
-        init(parent, sourceFile, destFile, multipleFilesMode);
+        init(owner, collisionType, sourceFile, destFile, multipleFilesMode);
     }
 
 
-    private void init(Container parent, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
+    private void init(Container owner, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
 
         // Init choices
 
@@ -87,8 +91,8 @@ public class FileExistsDialog extends QuestionDialog {
             choicesActionsV.add(new Integer(SKIP_ACTION));
         }
 
-        boolean sameSourceAndDestination = destFile.equals(sourceFile);
-        if(!sameSourceAndDestination) {
+        // Add 'overwrite' / 'overwrite if older' / 'resume' actions only for 'destination file already exists' collision type
+        if(collisionType==FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS && !destFile.isDirectory()) {
             choicesTextV.add(OVERWRITE_TEXT);
             choicesActionsV.add(new Integer(OVERWRITE_ACTION));
 
@@ -106,6 +110,7 @@ public class FileExistsDialog extends QuestionDialog {
             }
         }
 
+        // Convert choice vectors into arrays
         int nbChoices = choicesActionsV.size();
 
         String choicesText[] = new String[nbChoices];
@@ -118,71 +123,52 @@ public class FileExistsDialog extends QuestionDialog {
 
         // Init UI
 
-        String title = sameSourceAndDestination?
-            Translator.get("same_source_destination")
-            :Translator.get("file_exists_dialog.title");
+        String desc;
 
-        setTitle(title);
+        if(collisionType==FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS)
+            desc = Translator.get("file_exists_in_destination");
+        else if(collisionType==FileCollisionChecker.SAME_SOURCE_AND_DESTINATION)
+            desc = Translator.get("same_source_destination");
+        else if(collisionType==FileCollisionChecker.SOURCE_PARENT_OF_DESTINATION)
+            desc = Translator.get("destination_subfolder_of_source");
+        else
+            desc = null;
 
         YBoxPanel yPanel = new YBoxPanel();
-        yPanel.add(new JLabel(title+": "));
-        yPanel.addSpace(10);
+
+        if(desc!=null) {
+            yPanel.add(new JLabel(desc+": "));
+            yPanel.addSpace(10);
+        }
 
         TextFieldsPanel tfPanel = new TextFieldsPanel(10);
 
-        if(sourceFile!=null)
-            addFileDetails(tfPanel, sourceFile, Translator.get("source"));
+        // If collision type is 'same source and destination' no need to show both source and destination 
+        if(collisionType==FileCollisionChecker.SAME_SOURCE_AND_DESTINATION) {
+            addFileDetails(tfPanel, sourceFile, Translator.get("name"));
+        }
+        else {
+            if(sourceFile!=null)
+                addFileDetails(tfPanel, sourceFile, Translator.get("source"));
 
-        addFileDetails(tfPanel, destFile, Translator.get("destination"));
+            addFileDetails(tfPanel, destFile, Translator.get("destination"));
+        }
 
         yPanel.add(tfPanel);
 
-        init(parent, yPanel,
+        init(owner, yPanel,
              choicesText,
              choicesActions,
              3);
 
-        if(multipleFilesMode && !sameSourceAndDestination) {
+        // 'Apply to all' is available only for 'destination file already exists' collision type
+        if(multipleFilesMode && collisionType==FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS) {
             applyToAllCheckBox = new JCheckBox(Translator.get("apply_to_all"));
             addCheckBox(applyToAllCheckBox);
         }
-
-
-//        if(multipleFilesMode) {
-//            if(resumeOption) {
-//                choicesText = new String[]{CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, RESUME_TEXT};
-//                choicesActions = new int[]{CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, RESUME_ACTION};
-//            }
-//            else {
-//                if(sourceFile!=null) {
-//                    choicesText = new String[]{CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT};
-//                    choicesActions = new int[]{CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION};
-//                }
-//                else {
-//                    choicesText = new String[]{CANCEL_TEXT, SKIP_TEXT, OVERWRITE_TEXT};
-//                    choicesActions = new int[]{CANCEL_ACTION, SKIP_ACTION, OVERWRITE_ACTION};
-//                }
-//            }
-//        }
-//        else {
-//            if(resumeOption) {
-//                choicesText = new String[]{CANCEL_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT, RESUME_TEXT};
-//                choicesActions = new int[]{CANCEL_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION, RESUME_ACTION};
-//            }
-//            else {
-//                if(sourceFile!=null) {
-//                    choicesText = new String[]{CANCEL_TEXT, OVERWRITE_TEXT, OVERWRITE_IF_OLDER_TEXT};
-//                    choicesActions = new int[]{CANCEL_ACTION, OVERWRITE_ACTION, OVERWRITE_IF_OLDER_ACTION};
-//                }
-//                else {
-//                    choicesText = new String[]{CANCEL_TEXT, OVERWRITE_TEXT};
-//                    choicesActions = new int[]{CANCEL_ACTION, OVERWRITE_ACTION};
-//                }
-//            }
-//        }
     }
 
-	
+
     private void addFileDetails(TextFieldsPanel panel, AbstractFile file, String nameLabel) {
         panel.addTextFieldRow(nameLabel+":", new FilenameLabel(file), 0);
 
@@ -199,7 +185,7 @@ public class FileExistsDialog extends QuestionDialog {
 
 
     /**
-     * Returns <code>true</code> if the 'apply to all' checkbox has been selected.
+     * Returns true if the 'apply to all' checkbox has been selected.
      */
     public boolean applyToAllSelected() {
         return applyToAllCheckBox==null?false:applyToAllCheckBox.isSelected();

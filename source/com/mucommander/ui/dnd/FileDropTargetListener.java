@@ -5,7 +5,7 @@ import com.mucommander.file.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.job.MoveJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.FileExistsDialog;
+import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
@@ -189,13 +189,13 @@ public class FileDropTargetListener implements DropTargetListener {
             if(currentDropAction==DnDConstants.ACTION_MOVE) {
                 // Start moving files
                 ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
-                MoveJob moveJob = new MoveJob(progressDialog, mainFrame, droppedFiles, destFolder, null, FileExistsDialog.ASK_ACTION);
+                MoveJob moveJob = new MoveJob(progressDialog, mainFrame, droppedFiles, destFolder, null, FileCollisionDialog.ASK_ACTION);
                 progressDialog.start(moveJob);
             }
             else {
                 // Start copying files
                 ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-                CopyJob job = new CopyJob(progressDialog, mainFrame, droppedFiles, destFolder, null, CopyJob.COPY_MODE, FileExistsDialog.ASK_ACTION);
+                CopyJob job = new CopyJob(progressDialog, mainFrame, droppedFiles, destFolder, null, CopyJob.COPY_MODE, FileCollisionDialog.ASK_ACTION);
                 progressDialog.start(job);
             }
         }
