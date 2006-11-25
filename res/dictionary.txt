@@ -554,8 +554,8 @@ file_exists_in_destination:ZH_CN:文件已经在目的地
 file_exists_in_destination:SI:Datoteka s tem imenom že obstaja
 
 # Todo: find a better wording for this
-destination_subfolder_of_source:EN:Destination folder is a subfolder of source
-
+source_parent_of_destination:EN:Attempt to transfer a folder to one of its subfolders
+source_parent_of_destination:FR:Tentative de déplacement d'un répertoire vers un de ses sous-répertoires
 
 
 

@@ -130,7 +130,7 @@ public class FileCollisionDialog extends QuestionDialog {
         else if(collisionType==FileCollisionChecker.SAME_SOURCE_AND_DESTINATION)
             desc = Translator.get("same_source_destination");
         else if(collisionType==FileCollisionChecker.SOURCE_PARENT_OF_DESTINATION)
-            desc = Translator.get("destination_subfolder_of_source");
+            desc = Translator.get("source_parent_of_destination");
         else
             desc = null;
 
