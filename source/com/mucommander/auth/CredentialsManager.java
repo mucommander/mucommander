@@ -140,7 +140,7 @@ public class CredentialsManager implements VectorChangeListener {
         findMatches(fileURL, persistentCredentials, matchesV);
         int bestMatchIndex = getBestMatchIndex(fileURL, matchesV);
 
-        if(bestMatchIndex>0) {
+        if(bestMatchIndex!=-1) {
             matchesV.insertElementAt(matchesV.elementAt(bestMatchIndex), 0);
             matchesV.removeElementAt(bestMatchIndex+1);
         }
@@ -158,9 +158,10 @@ if(Debug.ON) Debug.trace("called, fileURL="+fileURL+" containsCredentials="+file
         findMatches(fileURL, persistentCredentials, matchesV);
         int bestMatchIndex = getBestMatchIndex(fileURL, matchesV);
 
+if(Debug.ON) Debug.trace("matchesV="+matchesV);
 if(Debug.ON) Debug.trace("bestMatch="+(bestMatchIndex>0?(MappedCredentials)matchesV.elementAt(bestMatchIndex):null));
 
-        if(bestMatchIndex>0)
+        if(bestMatchIndex>-1)
             fileURL.setCredentials((MappedCredentials)matchesV.elementAt(bestMatchIndex));
     }
 

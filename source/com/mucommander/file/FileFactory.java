@@ -308,8 +308,10 @@ public abstract class FileFactory {
             else {
                 // If the specified FileURL doesn't contain any credentials, use CredentialsManager to find
                 // any credentials matching the url and use them.
+if(Debug.ON) Debug.trace("fileURL.containsCredentials() "+fileURL.containsCredentials());
                 if(!fileURL.containsCredentials())
                     CredentialsManager.authenticate(fileURL);
+if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
 
                 // Get a registered Constructor instance for the file protocol
                 Constructor constructor = (Constructor)registeredProtocolConstructors.get(protocol);
