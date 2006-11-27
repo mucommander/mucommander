@@ -80,7 +80,7 @@ public class FolderHistory {
             return;
 		
         AbstractFile folder = (AbstractFile)history.elementAt(--historyIndex);
-        folderPanel.trySetCurrentFolder(folder);
+        folderPanel.tryChangeCurrentFolder(folder);
     }
 	
     /**
@@ -92,7 +92,7 @@ public class FolderHistory {
             return;
 		
         AbstractFile folder = (AbstractFile)history.elementAt(++historyIndex);
-        folderPanel.trySetCurrentFolder(folder);
+        folderPanel.tryChangeCurrentFolder(folder);
     }
 
 

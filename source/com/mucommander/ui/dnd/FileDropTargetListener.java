@@ -173,11 +173,11 @@ public class FileDropTargetListener implements DropTargetListener {
 
             // If file is a directory, change current folder to that directory
             if(file.isDirectory())
-                folderPanel.trySetCurrentFolder(file);
+                folderPanel.tryChangeCurrentFolder(file);
             // For any other file kind (archive, regular file...), change directory to the file's parent folder
             // and select the file
             else
-                folderPanel.trySetCurrentFolder(file.getParent(), file);
+                folderPanel.tryChangeCurrentFolder(file.getParent(), file);
 
             // Request focus on the FolderPanel
             folderPanel.requestFocus();

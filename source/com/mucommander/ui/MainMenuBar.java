@@ -256,8 +256,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Bookmark menu item
         if (bookmarkMenuItems!=null && bookmarkMenuItems.contains(source)) {
             int index = bookmarkMenuItems.indexOf(source);
-//            mainFrame.getActiveTable().getFolderPanel().trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getURL());
-            mainFrame.getActiveTable().getFolderPanel().trySetCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getLocation());
+//            mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getURL());
+            mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getLocation());
         }
         // Help menu
         else if (source == keysItem) {

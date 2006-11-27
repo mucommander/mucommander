@@ -53,11 +53,11 @@ public class StressTester implements Runnable, ActionListener {
                     if(!randomChild.isBrowsable())
                         continue;
                     // Try to ls() in RandomChild to trigger an IOException if folder is not readable
-                    // so that no error dialog pops up when calling trySetCurrentFolder()
+                    // so that no error dialog pops up when calling tryChangeCurrentFolder()
                     randomChild.ls();
                     fileTable.selectFile(randomChild);
                     ActionManager.performAction(com.mucommander.ui.action.OpenAction.class, mainFrame);
-                    //					folderPanel.trySetCurrentFolder(randomChild, true);
+                    //					folderPanel.tryChangeCurrentFolder(randomChild, true);
                 }
             }
             catch(Exception e) {

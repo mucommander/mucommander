@@ -36,7 +36,7 @@ public class OpenAction extends MucoAction {
 
         // Browsable file: show file contents
         if(selectedFile.isBrowsable()) {
-            fileTable.getFolderPanel().trySetCurrentFolder(selectedFile);
+            fileTable.getFolderPanel().tryChangeCurrentFolder(selectedFile);
         }
         // Local file that is not an archive or archive entry: execute file with native file associations
         else if(selectedFile.getURL().getProtocol().equals("file") && (selectedFile instanceof FSFile)) {

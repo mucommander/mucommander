@@ -8,10 +8,8 @@ import com.mucommander.file.RootFolders;
 import com.mucommander.ui.comp.combobox.EditableComboBox;
 import com.mucommander.ui.comp.combobox.EditableComboBoxListener;
 import com.mucommander.ui.comp.progress.ProgressTextField;
-import com.mucommander.ui.comp.FocusRequester;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.Debug;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -154,7 +152,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         Bookmark b = BookmarkManager.getBookmark(locationText);
         if(b!=null) {
             // Change the current folder to the bookmark's location
-            folderPanel.trySetCurrentFolder(b.getLocation());
+            folderPanel.tryChangeCurrentFolder(b.getLocation());
             return;
         }
 
@@ -163,7 +161,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         for(int i=0; i<rootFolders.length; i++) {
             if(rootFolders[i].getName().equalsIgnoreCase(locationText)) {
                 // Change the current folder to the root folder
-                folderPanel.trySetCurrentFolder(rootFolders[i]);
+                folderPanel.tryChangeCurrentFolder(rootFolders[i]);
                 return;
             }
         }
@@ -172,7 +170,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         folderChangedInitiatedByLocationField = true;
 
         // Change folder
-        folderPanel.trySetCurrentFolder(locationText);
+        folderPanel.tryChangeCurrentFolder(locationText);
     }
 
     public void textFieldCancelled(EditableComboBox source) {

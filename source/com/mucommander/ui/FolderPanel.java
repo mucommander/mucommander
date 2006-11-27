@@ -18,6 +18,7 @@ import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.MappedCredentials;
 import com.mucommander.auth.CredentialsManager;
+import com.mucommander.auth.Credentials;
 
 import javax.swing.*;
 import java.awt.*;
@@ -318,8 +319,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      *
      * @param folder folder to be made current folder. If folder is null or doesn't exist, a dialog will popup and inform the user
      */
-    public synchronized void trySetCurrentFolder(AbstractFile folder) {
-        trySetCurrentFolder(folder, null);
+    public synchronized void tryChangeCurrentFolder(AbstractFile folder) {
+        tryChangeCurrentFolder(folder, null);
     }
 
     /**
@@ -331,7 +332,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param folder folder to be made current folder. If folder is null or doesn't exist, a dialog will popup and inform the user
      * @param selectThisFileAfter file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
      */
-    public synchronized void trySetCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
+    public synchronized void tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
         // Make sure there is not an existing thread running,
         // this should not normally happen but if it does, report the error
         if(changeFolderThread!=null) {
@@ -360,7 +361,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      *
      * @param folderPath folder's path to be made current folder. If this path does not resolve into an existing file, an error message will be displayed
      */
-    public synchronized void trySetCurrentFolder(String folderPath) {
+    public synchronized void tryChangeCurrentFolder(String folderPath) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderPath="+folderPath);
 
         // Make sure there is not an existing thread running,
@@ -382,7 +383,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      *
      * @param folderURL folder's URL to be made current folder. If this URL does not resolve into an existing file, an error message will be displayed
      */
-    public synchronized void trySetCurrentFolder(FileURL folderURL) {
+    public synchronized void tryChangeCurrentFolder(FileURL folderURL) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderURL="+folderURL);
 
         // Make sure there is not an existing thread running,
@@ -402,7 +403,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * <p>This method creates a separate thread (which will take care of the actual folder change) and returns immediately.
      */
     public synchronized void tryRefreshCurrentFolder() {
-        trySetCurrentFolder(currentFolder, null);
+        tryChangeCurrentFolder(currentFolder, null);
     }
 
     /**
@@ -413,7 +414,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
      */
     public synchronized void tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
-        trySetCurrentFolder(currentFolder, selectThisFileAfter);
+        tryChangeCurrentFolder(currentFolder, selectThisFileAfter);
     }
 		
     /**
@@ -457,7 +458,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     public synchronized void goToParent() {
         AbstractFile parent;
         if((parent=getCurrentFolder().getParent())!=null)
-            trySetCurrentFolder(parent);
+            tryChangeCurrentFolder(parent);
     }
 
 
@@ -670,7 +671,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
             //			// Save focus state
             //			this.hadFocus = fileTable.hasFocus();
-            MappedCredentials newCredentials = null;
+//            MappedCredentials newCredentials = null;
             do {
                 //				noWaitDialog = false;
 
@@ -809,10 +810,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     // folder set -> 95% complete
                     locationField.setProgressValue(95);
 
-                    // If some new credentials were entered by the user, these can be considered valid
-                    // (folder was changed successfully) and added to the credentials list.
-                    if(newCredentials!=null)
-                        CredentialsManager.addCredentials(newCredentials);
+                    // If some new credentials were entered by the user, these can now be considered valid
+                    // (folder was changed successfully), add them to the credentials list.
+                    Credentials credentials = folder.getURL().getCredentials();
+                    if(credentials!=null && credentials instanceof MappedCredentials)
+                        CredentialsManager.addCredentials((MappedCredentials)credentials);
 
                     // All good !
                     folderChangedSuccessfully = true;
@@ -829,7 +831,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     if(e instanceof AuthException) {
                         AuthException authException = (AuthException)e;
                         // Retry (loop) if user provided new credentials
-                        newCredentials = getCredentialsFromUser(authException.getFileURL(), authException.getMessage());
+                        MappedCredentials newCredentials = getCredentialsFromUser(authException.getFileURL(), authException.getMessage());
                         if(newCredentials!=null) {
                             folder = null;
                             folderPath = null;

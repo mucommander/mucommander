@@ -9,7 +9,6 @@ import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.PlatformManager;
 import com.mucommander.Debug;
 
 import javax.swing.*;
@@ -341,7 +340,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
      * Makes both folders the same, choosing the one which is currently active. 
      */
     public void setSameFolder() {
-        (activeTable ==table1?table2:table1).getFolderPanel().trySetCurrentFolder(activeTable.getCurrentFolder());
+        (activeTable ==table1?table2:table1).getFolderPanel().tryChangeCurrentFolder(activeTable.getCurrentFolder());
     }
 
 
