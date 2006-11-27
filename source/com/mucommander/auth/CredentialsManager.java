@@ -149,39 +149,21 @@ public class CredentialsManager implements VectorChangeListener {
     }
 
 
-//    public static void addCredentials(MappedCredentials credentials) {
-//        Vector targetEntries;
-//        Vector otherEntries;
-//
-//        boolean isPersistent = credentials.isPersistent();
-//
-//        FileURL url = credentials.getURL();
-//
-//        if(!isPersistent && persistentCredentials.indexOf(url)!=-1)
-//            isPersistent = true;
-//
-//        if(isPersistent) {
-//            targetEntries = persistentCredentials;
-//            otherEntries = volatileCredentials;
-//        }
-//        else {
-//            targetEntries = volatileCredentials;
-//            otherEntries = persistentCredentials;
-//        }
-//
-//        if(!isPersistent) {
-//            int index = indexOf(otherEntries, url);
-//            if(index!=-1) {
-//                otherEntries.removeElementAt(index);
-//            }
-//        }
-//
-//        index = indexOf(targetEntries, url);
-//        if(index==-1)
-//            targetEntries.add(credentials);
-//        else
-//            targetEntries.setElementAt(credentials, index);
-//    }
+    public static void authenticate(FileURL fileURL) {
+        Vector matchesV = new Vector();
+
+if(Debug.ON) Debug.trace("called, fileURL="+fileURL+" containsCredentials="+fileURL.containsCredentials());
+
+        findMatches(fileURL, volatileCredentials, matchesV);
+        findMatches(fileURL, persistentCredentials, matchesV);
+        int bestMatchIndex = getBestMatchIndex(fileURL, matchesV);
+
+if(Debug.ON) Debug.trace("bestMatch="+(bestMatchIndex>0?(MappedCredentials)matchesV.elementAt(bestMatchIndex):null));
+
+        if(bestMatchIndex>0)
+            fileURL.setCredentials((MappedCredentials)matchesV.elementAt(bestMatchIndex));
+    }
+
 
 
     public static void addCredentials(MappedCredentials credentials) {
@@ -189,8 +171,8 @@ public class CredentialsManager implements VectorChangeListener {
 
         FileURL url = credentials.getURL();
 
-//if(Debug.ON) Debug.trace("persistentCredentials="+persistentCredentials);
-//if(Debug.ON) Debug.trace("volatileCredentials="+volatileCredentials);
+//if(Debug.ON) Debug.trace("before, persistentCredentials="+persistentCredentials);
+//if(Debug.ON) Debug.trace("before, volatileCredentials="+volatileCredentials);
 
         int index = indexOf(persistentCredentials, url);
         if(isPersistent || index!=-1) {
@@ -210,6 +192,9 @@ public class CredentialsManager implements VectorChangeListener {
             else
                 volatileCredentials.setElementAt(credentials, index);
         }
+
+//if(Debug.ON) Debug.trace("after, persistentCredentials="+persistentCredentials);
+//if(Debug.ON) Debug.trace("fater, volatileCredentials="+volatileCredentials);
     }
 
 

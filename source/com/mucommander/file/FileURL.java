@@ -328,7 +328,6 @@ public class FileURL implements Cloneable {
         if(login==null)
             this.login = null;
         else {
-//            login = login.trim();
             if(login.equals(""))
                 this.login = null;
             else
@@ -363,7 +362,9 @@ public class FileURL implements Cloneable {
 
     /**
      * Convenience method that discards any credentials (login and password) contained by this FileURL.
-     * It has the same effect as calling {@link #setLogin(String)} and {@link #setPassword(String)} with a null value.
+     * It has the same effect as calling {@link #setLogin(String)} and {@link #setPassword(String)}, or
+     * {@link #setCredentials(com.mucommander.auth.Credentials)} with a null value.
+     *
      */
     public void discardCredentials() {
         this.login = null;
@@ -371,29 +372,37 @@ public class FileURL implements Cloneable {
     }
 
 
+    /**
+     * Returns true if this FileURL contains credentials, i.e. contains a login and/or a password. If true is returned,
+     * {@link #getCredentials()} will return a non-null value.
+     */
+    public boolean containsCredentials() {
+        return login!=null || password!=null;
+    }
+
 
     /**
      * Returns the credentials (login and password) contained in this FileURL, wrapped in an {@link Credentials} object.
-     * Returns null if this FileURL doesn't contain any login.
+     * Returns null if this FileURL doesn't a login or password ({@link #containsCredentials()} returns false).
      */
     public Credentials getCredentials() {
-        if(login==null)
+        if(!containsCredentials())
             return null;
 
-        return new Credentials(login, password==null?"":password);
+        return new Credentials(login, password);
     }
 
 
     /**
      * Sets the credentials (login and password) contained by this FileURL.
-     * If the provided {@link Credentials} object is null, the login and password will be set to null.
+     * If the provided {@link Credentials} object is null, any credentials contained by this FileURL will be discarded.
      *
-     * @param credentials the new credentials to use, replacing the previous ones (if any)
+     * @param credentials the new credentials to use, replacing any existing credentials. If null is passed, existing
+     * credentials will be discarded. 
      */
     public void setCredentials(Credentials credentials) {
         if(credentials ==null) {
-            login = null;
-            password = null;
+            discardCredentials();
         }
         else {
             setLogin(credentials.getLogin());

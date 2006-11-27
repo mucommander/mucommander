@@ -281,14 +281,16 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
     /**
-     * Pops up an authentication dialog where the user can enter credentials to grant him access to the folder or file
-     * which caused the specified AuthException.
+     * Pops up an {@link AuthDialog} where the user can enter credentials to grant him access to the file or folder
+     * represented by the given {@link FileURL}, and returns the credentials entered or null if no credentials were
+     * entered (dialog was cancelled).
      *
-     * @param e the AuthException thrown when trying to access the restricted file or folder.
+     * @param fileURL the file or folder to ask credentials for
+     * @param errorMessage optional (can be null), an error message sent by the server to display to the user
      * @return the credentials the user entered/chose and validated, null if he cancelled the dialog.
      */
-    private MappedCredentials showAuthDialog(AuthException e) {
-        AuthDialog authDialog = new AuthDialog(mainFrame, e);
+    private MappedCredentials getCredentialsFromUser(FileURL fileURL, String errorMessage) {
+        AuthDialog authDialog = new AuthDialog(mainFrame, fileURL, errorMessage);
         authDialog.showDialog();
         return authDialog.getCredentials();
     }
@@ -685,6 +687,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
                     // Thread was created using a FileURL or FolderPath
                     if(folder==null) {
+
                         AbstractFile file;
                         if(folderURL!=null)
                             file = FileFactory.getFile(folderURL, true);
@@ -826,7 +829,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     if(e instanceof AuthException) {
                         AuthException authException = (AuthException)e;
                         // Retry (loop) if user provided new credentials
-                        newCredentials = showAuthDialog(authException);
+                        newCredentials = getCredentialsFromUser(authException.getFileURL(), authException.getMessage());
                         if(newCredentials!=null) {
                             folder = null;
                             folderPath = null;

@@ -2,6 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 import com.mucommander.conf.*;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.TransferFileJob;
@@ -147,16 +148,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             this.limitSpeedSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 100));
             limitSpeedSpinner.setEnabled(false);
             limitSpeedSpinner.addChangeListener(this);
-//            limitSpeedSpinner.addKeyListener(
-//                new KeyAdapter() {
-//                    public void keyPressed(KeyEvent e) {
-//if(Debug.ON) Debug.trace("called, e="+e);
-//                        if(e.getKeyCode()==KeyEvent.VK_ENTER) {
-//                            e.consume();
-//                        }
-//                    }
-//                }
-//            );
 
             JPanel tempPanel3 = new JPanel(new FlowLayout(FlowLayout.LEADING));
             tempPanel3.add(limitSpeedSpinner);
@@ -282,7 +273,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                         progressText += DurationFormat.format(currentFileRemainingTime);
                     }
 
-//                    fileProgressBar.setTextOverlay(progressText);
                     currentFileProgressBar.setString(progressText);
 
                     // Update total transferred label
@@ -327,7 +317,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     progressText += DurationFormat.format(totalRemainingTime);
                 }
 
-//                totalProgressBar.setTextOverlay(progressText);
                 totalProgressBar.setString(progressText);
 
                 // Update current file label
@@ -339,7 +328,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
             // Sleep for a while
             try {
-//                if(Debug.ON) Debug.trace("sleeping "+(REFRESH_RATE-(System.currentTimeMillis()-now)));
                 Thread.sleep(REFRESH_RATE-(System.currentTimeMillis()-now));
             }
             catch(InterruptedException e) {}
@@ -445,7 +433,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     }
 
 
-
+    /**
+     * Transfer speed graph.
+     */
     private class SpeedGraph extends JPanel {
 
         private final Color BACKGROUND_COLOR = ConfigurationManager.getVariableColor(ConfigurationVariables.BACKGROUND_COLOR, null);

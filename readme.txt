@@ -179,7 +179,7 @@ Improvements:
  - Optimized Zip and Tar archive handling files, access is now much faster
  - Free/total volume space now automatically refreshes (every 60 seconds)
  - Toolbar and command bar now contextually show whether the action can be triggered or not
- - 'File already exists in destination' dialog improved for readability
+ - 'File collision' dialog improved, attempts to transfer a folder to one of its subfolders are now detected
  - KB/MB/GB/TB are now calculated accurately by multiples of 1024 instead of 1000
  - Decimal and thousands separators are now localized
  - Environment variables are now retained when using 'Run command'
@@ -207,7 +207,7 @@ Improvements:
  - SMB performance improved when changing folders
  - Root folders of SMB shares now have a parent (smb://) to more easily browse workgroups/shares
  - SMB resources that are not browsable (printers, IPC...) are not displayed
- - SMB library (jCIFS) upgraded to version 1.2.11 which includes many bug fixes
+ - SMB library (jCIFS) upgraded to version 1.2.10 which includes many bug fixes
  - Mac OS X: disabled progress bar animation in file transfer progress dialog which hogged CPU unnecessarily
  - Mac OS X: new 'Universal Binary' application stub, muCommander no longer uses Rosetta to start up
 

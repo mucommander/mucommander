@@ -264,7 +264,6 @@ if(Debug.ON) Debug.trace("fileURL="+fileURL.getStringRep(true));
                     continue;
                 
 //                child = FileFactory.wrapArchive(new SMBFile(new FileURL(smbFile.getCanonicalPath(), fileURL), smbFile, false));
-if(Debug.ON) Debug.trace("child canonical path="+smbFile.getCanonicalPath());
                 childURL = new FileURL(smbFile.getCanonicalPath(), fileURL);
 
                 child = FileFactory.wrapArchive(new SMBFile(childURL, smbFile));

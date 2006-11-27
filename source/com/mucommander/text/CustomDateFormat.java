@@ -87,7 +87,7 @@ try {
 catch(Exception e) {
     e.printStackTrace();
     if(Debug.ON) Debug.trace("date="+date+" dateFormat="+dateFormat);
-    return null;
+    throw new RuntimeException();
 }
     }
 	
