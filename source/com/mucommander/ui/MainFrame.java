@@ -4,17 +4,15 @@ import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.comp.ProportionalSplitPane;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
@@ -25,12 +23,9 @@ import java.util.WeakHashMap;
  * 
  * @author Maxence Bernard
  */
-public class MainFrame extends JFrame implements LocationListener, ComponentListener {
+public class MainFrame extends JFrame implements LocationListener {
 	
-    // Variables related to split pane	
-    private JSplitPane splitPane;
-    private int splitPaneWidth = -1;
-    private int dividerLocation;
+    private ProportionalSplitPane splitPane;
 
     private FolderPanel folderPanel1;
     private FolderPanel folderPanel2;
@@ -106,7 +101,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         setJMenuBar(menuBar);
 
         // Enables folderPanel window resizing
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
+        splitPane = new ProportionalSplitPane(this, JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
                 public javax.swing.border.Border getBorder() {
                     return null;
                 }
@@ -116,9 +111,9 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
                     return new Insets(0, 0, 0, 0);
                 }
             };
-			
+
+        // Adds buttons that allow to collapse and expand the split pane in both directions
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(0.5);
 
         // Split pane will be given any extra space
         contentPane.add(splitPane, BorderLayout.CENTER);
@@ -140,10 +135,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 		
         contentPane.add(southPanel, BorderLayout.SOUTH);
 		
-        // To monitor resizing actions
-        folderPanel1.addComponentListener(this);
-        splitPane.addComponentListener(this);
-
 //        // Do nothing on close (default is to hide window),
 //        // WindowManager takes of catching close events and do the rest
 //        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -313,6 +304,36 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
 
 
     /**
+     * Returns the {@link ProportionalSplitPane} component that manages how the two {@link FolderPanel} are split.   
+     */
+    public ProportionalSplitPane getSplitPane() {
+        return splitPane;
+    }
+
+    /**
+     * Specifies how folder panels are split: if true is passed, the folder panels will be split vertically
+     * (default), horizontally otherwise.
+     *
+     * @param vertical if true, the folder panels will be split horizontally (default), vertically otherwise.
+     */
+    public void setSplitOrientation(boolean vertical) {
+        // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
+        // in JSplitPane which is anti-natural / confusing
+        splitPane.setOrientation(vertical ?JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT);
+    }
+
+    /**
+     * Returns how folder panels are currently split: if true is passed, the folder panels are split vertically (default),
+     * horizontally otherwise.
+     */
+    public boolean getSplitOrientation() {
+        // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
+        // in JSplitPane which is anti-natural / confusing
+        return splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT;
+    }
+
+
+    /**
      * Swaps the two FolderPanel instances: after a call to this method, folderPanel1 will be folderPanels2 and vice-versa.
      */
     public void swapFolders() {
@@ -330,7 +351,9 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         splitPane.setLeftComponent(folderPanel1);
         splitPane.setRightComponent(folderPanel2);
         splitPane.doLayout();
-        splitPane.setDividerLocation(dividerLocation);
+
+        // Update split pane divider's location
+        splitPane.updateDividerLocation();
 
         activeTable.requestFocus();
     }
@@ -424,48 +447,6 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     }
 
 
-    ///////////////////////////////
-    // ComponentListener methods //
-    ///////////////////////////////
-	 
-    /**
-     * Sets the divider location when the ContentPane has been resized so that it stays at the
-     * same proportional (not absolute) location.
-     */
-    public void componentResized(ComponentEvent e) {
-        Object source = e.getSource();
-		
-        if (source == splitPane) { // The window has been resized
-            // First time splitPane is made visible, this method is called
-            // so we can set the initial divider location
-            if (splitPaneWidth==-1) {
-                splitPaneWidth = splitPane.getWidth();
-                //				splitPane.setDividerLocation(((int)splitPane.getWidth()/2));
-                splitPane.setDividerLocation(0.5);
-            }
-            else {
-                float ratio = dividerLocation/(float)splitPaneWidth;
-                splitPaneWidth = splitPane.getWidth();
-                splitPane.setDividerLocation((int)(ratio*splitPaneWidth));
-            }
-            validate();
-        }
-        else if(source==folderPanel1) {		// Browser1 i.e. the divider has been moved OR the window has been resized
-            dividerLocation = splitPane.getDividerLocation();
-        }
-    }
-
-    public void componentHidden(ComponentEvent e) {
-    }
-	
-    public void componentMoved(ComponentEvent e) {
-    }
-	
-    public void componentShown(ComponentEvent e) {
-        // never called, weird ...
-    }
-
-
     /**
      * Manages focus for both FolderPanel and their subcomponents.
      *
@@ -474,7 +455,7 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
     protected class CustomFocusTraversalPolicy extends FocusTraversalPolicy {
 
         public Component getComponentAfter(Container container, Component component) {
-    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
+//    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
             if(component==folderPanel1.getLocationComboBox().getTextField() || component==folderPanel1.getLocationComboBox())
                 return table1;
             else if(component==table1)
@@ -486,23 +467,23 @@ public class MainFrame extends JFrame implements LocationListener, ComponentList
         }
 
         public Component getComponentBefore(Container container, Component component) {
-    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
+//    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
             // Completly symetrical with getComponentAfter
             return getComponentAfter(container, component);
        }
 
         public Component getFirstComponent(Container container) {
-    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
+//    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
             return table1;
         }
 
         public Component getLastComponent(Container container) {
-    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
+//    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
             return table2;
         }
 
         public Component getDefaultComponent(Container container) {
-    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
+//    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
             return getActiveTable();
         }
     }

@@ -1888,6 +1888,39 @@ com.mucommander.ui.action.SelectLastRowAction.label:RU:Перейти к пос�
 com.mucommander.ui.action.SelectLastRowAction.label:ZH_CN:选取当前文件夹的最后一个文件
 com.mucommander.ui.action.SelectLastRowAction.label:SI:Izberi zadnjo datoteko v trenutni mapi
 
+com.mucommander.ui.action.SplitEquallyAction.label:EN:Split equally
+com.mucommander.ui.action.SplitEquallyAction.label:FR:Scinder au milieu
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.SplitVerticallyAction.label:EN:Split vertically
+com.mucommander.ui.action.SplitVerticallyAction.label:FR:Scincer verticalement
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.SplitHorizontallyAction.label:EN:Split horizontally
+com.mucommander.ui.action.SplitHorizontallyAction.label:FR:Scincer horizontalement
+
+
+
+
+
+
+
+
+
 
 #############
 # File menu #

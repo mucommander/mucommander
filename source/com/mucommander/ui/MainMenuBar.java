@@ -12,6 +12,7 @@ import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.ui.editor.EditorFrame;
 import com.mucommander.ui.help.ShortcutsDialog;
 import com.mucommander.ui.viewer.ViewerFrame;
+import com.mucommander.ui.table.SortCriteria;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -27,7 +28,7 @@ import java.util.WeakHashMap;
  * This class is the main menu bar. It takes care of displaying menu and menu items and triggering
  * the proper actions.
  *
- * <p><b>Implementation note</b>: for performance reasons, dynamic menu items are created/enabled/disabled when corresponding menus
+ * <p><b>Implementation note</b>: for performance reasons, some menu items are created/enabled/disabled when corresponding menus
  * are selected, instead of monitoring the MainFrame's state and unnecessarily creating/enabling/disabling menu items
  * when they are not visible. However, this prevents keyboard shortcuts from being managed by the menu bar for those
  * dynamic items.
@@ -37,7 +38,14 @@ import java.util.WeakHashMap;
 public class MainMenuBar extends JMenuBar implements ActionListener, MenuListener {
 
     private MainFrame mainFrame;	
-	
+
+    // View menu
+    private JMenu viewMenu;
+    private JCheckBoxMenuItem sortByExtensionItem;
+    private JCheckBoxMenuItem sortByNameItem;
+    private JCheckBoxMenuItem sortBySizeItem;
+    private JCheckBoxMenuItem sortByDateItem;
+
     // Bookmark menu
     private JMenu bookmarksMenu;
     private int bookmarksOffset;  // Index of the first bookmark menu item
@@ -47,12 +55,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     // Window menu
     private JMenu windowMenu;
     private int windowOffset; // Index of the first window menu item
+    private JCheckBoxMenuItem splitHorizontallyItem;
+    private JCheckBoxMenuItem splitVerticallyItem;
 
     /** Maps window menu items onto weakly-referenced frames */
     private WeakHashMap windowMenuFrames;
 
     // Help menu
-//    private JMenu helpMenu;
     private JMenuItem keysItem;
     private JMenuItem homepageItem;
     private JMenuItem forumsItem;
@@ -72,7 +81,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         com.mucommander.ui.action.RecallWindow9Action.class,
         com.mucommander.ui.action.RecallWindow10Action.class
     };
-
 
 
     /**
@@ -142,7 +150,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         // View menu
         menuItemMnemonicHelper.clear();
-        JMenu viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
+        viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(GoBackAction.class, mainFrame), menuItemMnemonicHelper);
         // Accelerators (keyboard shortcuts) for the following menu items will be set/unset when the menu is selected/deselected
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(GoForwardAction.class, mainFrame), menuItemMnemonicHelper);
@@ -150,10 +158,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ChangeLocationAction.class, mainFrame), menuItemMnemonicHelper);
         viewMenu.add(new JSeparator());
         ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByExtensionAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByNameAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortBySizeAction.class, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByDateAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByExtensionItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByExtensionAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByNameItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByNameAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortBySizeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortBySizeAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByDateItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByDateAction.class, mainFrame), menuItemMnemonicHelper));
 
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ReverseSortOrderAction.class, mainFrame), menuItemMnemonicHelper);
         viewMenu.add(new JSeparator());
@@ -188,6 +196,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         windowMenu = MenuToolkit.addMenu(Translator.get("window_menu"), menuItemMnemonicHelper, this);
 
+        MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(SplitEquallyAction.class, mainFrame), menuItemMnemonicHelper);
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(splitVerticallyItem = MenuToolkit.addCheckBoxMenuItem(windowMenu, ActionManager.getActionInstance(SplitVerticallyAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(splitHorizontallyItem = MenuToolkit.addCheckBoxMenuItem(windowMenu, ActionManager.getActionInstance(SplitHorizontallyAction.class, mainFrame), menuItemMnemonicHelper));
+
+        windowMenu.add(new JSeparator());
+
         MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(RecallPreviousWindowAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(RecallNextWindowAction.class, mainFrame), menuItemMnemonicHelper);
         // All other window menu items will be added when the menu gets selected
@@ -221,27 +236,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     }
 	
 
-//    /**
-//     * This method is called when a menu is pulled down, and called again when menu is deselected or cancelled,
-//     * for contextual menu items that need to refresh their state.
-//     *
-//     * @param menu menu that just got selected/deselected/cancelled
-//     */
-//    private void toggleContextualMenuItems(JMenu menu) {
-//        if(menu == windowMenu && !menu.isSelected()) {
-//            // Remove accelerators from all menu items but do not remove or disable menu items,
-//            // this would cause the actionPerformed() method not be called when item is clicked.
-//            int nbWindowMenuItems = windowMenu.getItemCount();
-//            JMenuItem menuItem;
-//            for(int i=0; i<nbWindowMenuItems; i++) {
-//                menuItem = windowMenu.getItem(i);
-//                if(menuItem!=null)
-//                    menuItem.setAccelerator(null);
-//            }
-//        }
-//    }
-
-
     ///////////////////////////
     // ActionListener method //
     ///////////////////////////
@@ -256,7 +250,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Bookmark menu item
         if (bookmarkMenuItems!=null && bookmarkMenuItems.contains(source)) {
             int index = bookmarkMenuItems.indexOf(source);
-//            mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getURL());
             mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getLocation());
         }
         // Help menu
@@ -290,9 +283,23 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     public void menuSelected(MenuEvent e) {
         Object source = e.getSource();
 
-//        // Enable/disable contextual menu items depending on the current context
-//        toggleContextualMenuItems((JMenu)source);
-
+        if(source==viewMenu) {
+            // Select the 'sort by' criterion currently in use in the active table
+            switch(mainFrame.getActiveTable().getSortByCriteria()) {
+                case SortCriteria.EXTENSION:
+                    sortByExtensionItem.setSelected(true);
+                    break;
+                case SortCriteria.NAME:
+                    sortByNameItem.setSelected(true);
+                    break;
+                case SortCriteria.SIZE:
+                    sortBySizeItem.setSelected(true);
+                    break;
+                case SortCriteria.DATE:
+                    sortByDateItem.setSelected(true);
+                    break;
+            }
+        }
         if(source==bookmarksMenu) {
             if(this.bookmarkMenuItems != null) {
                 // Remove any previous bookmarks menu items from menu
@@ -318,7 +325,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             }
         }
         else if(source==windowMenu) {
-            // Start by removing any window menu item previously added
+            // Select the split orientation currently in use
+            if(mainFrame.getSplitOrientation())
+                splitVerticallyItem.setSelected(true);
+            else
+                splitHorizontallyItem.setSelected(true);
+
+            // Removing any window menu item previously added
             // Note: menu item cannot be removed by menuDeselected() as actionPerformed() will be called after
             // menu has been deselected.
             for(int i=windowMenu.getItemCount(); i>windowOffset; i--)
@@ -384,12 +397,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     }
 	
     public void menuDeselected(MenuEvent e) {
-//        // Enable/disable contextual menu items depending on the current context
-//        toggleContextualMenuItems((JMenu)e.getSource());
     }
 	 
     public void menuCanceled(MenuEvent e) {
-//        // Enable/disable contextual menu items depending on the current context
-//        toggleContextualMenuItems((JMenu)e.getSource());
     }
 }
