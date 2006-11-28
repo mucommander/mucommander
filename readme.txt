@@ -162,6 +162,8 @@ New features:
  - Icons magnification option for toolbar, command bar and files
  - New 'Copy name(s)' and 'Copy path(s)' actions to copy marked files names / paths (Alt+C / Shift+Alt+C by default) 
  - New 'Mkfile' action (Shift+F7 by default)
+ - New 'Mark page up/page down' action (Shift+Page Up/Shift+Page Down by default)
+ - New 'Mark up to first/last row' action (Shift+Home/Shift+End by default) 
  - 'Reveal in desktop' now available for Windows, KDE, GNOME (on top of Mac OS X)
  - Ability to open files with native file associations under KDE and GNOME
  - Ability to open URLs under KDE and GNOME

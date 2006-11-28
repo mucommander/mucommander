@@ -85,10 +85,29 @@
   <!-- Default : ADD                                                             -->
   <action class="com.mucommander.ui.action.MarkGroupAction"             keystroke="ADD"/>
 
+  <!-- Action  : Marks or unmarks files from the currently selected row to the   -->
+  <!--           next page's row                                                 -->
+  <!-- Default : shift PAGE_DOWN                                                 -->
+  <action class="com.mucommander.ui.action.MarkPageDownAction"          keystroke="shift PAGE_DOWN"/>
+
+  <!-- Action  : Marks or unmarks files from the currently selected row to the   -->
+  <!--           previous page's row                                             -->
+  <!-- Default : shift PAGE_UP                                                   -->
+  <action class="com.mucommander.ui.action.MarkPageUpAction"            keystroke="shift PAGE_UP"/>
+
   <!-- Action  : Marks or unmarks the current selected file.                     -->
   <!-- Default : SPACE, INSERT                                                   -->
   <action class="com.mucommander.ui.action.MarkSelectedFileAction"      keystroke="SPACE"
                                                                         alt_keystroke="INSERT"/>
+  <!-- Action  : Marks or unmarks files from the currently selected row          -->
+  <!--           to the first row.                                               -->
+  <!-- Default : shift HOME                                                      -->
+  <action class="com.mucommander.ui.action.MarkUpToFirstRowAction"      keystroke="shift HOME"/>
+
+  <!-- Action  : Marks or unmarks files from the currently selected row          -->
+  <!--           to the last row.                                                -->
+  <!-- Default : shift END                                                       -->
+  <action class="com.mucommander.ui.action.MarkUpToLastRowAction"       keystroke="shift END"/>
 
   <!-- Action  : Create a new folder.                                            -->
   <!-- Default : F7                                                              -->
