@@ -275,6 +275,8 @@ public interface ConfigurationVariables {
     public static final String VERTICAL_SPLIT_ORIENTATION         = "vertical";
     /** Horizontal split pane orientation. */
     public static final String HORIZONTAL_SPLIT_ORIENTATION       = "horizontal";
+    /** Default split pane orientation. */
+    public static final String DEFAULT_SPLIT_ORIENTATION          = VERTICAL_SPLIT_ORIENTATION;
 
 
 
