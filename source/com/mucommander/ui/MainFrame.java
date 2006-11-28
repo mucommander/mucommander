@@ -109,7 +109,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing.
         splitPane = new ProportionalSplitPane(this,
-            ConfigurationManager.getVariable(SPLIT_ORIENTATION, ConfigurationVariables.VERTICAL_SPLIT_ORIENTATION).equals(ConfigurationVariables.VERTICAL_SPLIT_ORIENTATION)?JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
+            ConfigurationManager.getVariable(SPLIT_ORIENTATION, ConfigurationVariables.DEFAULT_SPLIT_ORIENTATION).equals(ConfigurationVariables.VERTICAL_SPLIT_ORIENTATION)?JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
             false,
             folderPanel1,
             folderPanel2) {
