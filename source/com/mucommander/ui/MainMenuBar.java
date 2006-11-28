@@ -326,7 +326,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
         else if(source==windowMenu) {
             // Select the split orientation currently in use
-            if(mainFrame.getSplitOrientation())
+            if(mainFrame.getSplitPaneOrientation())
                 splitVerticallyItem.setSelected(true);
             else
                 splitHorizontallyItem.setSelected(true);

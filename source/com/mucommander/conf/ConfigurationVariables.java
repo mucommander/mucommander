@@ -41,7 +41,6 @@ public interface ConfigurationVariables {
     public static final String  LOOK_AND_FEEL                     = ROOT_SECTION + '.' + "lookAndFeel";
 
 
-
     // - Shell variables -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the shell configuration. */
@@ -270,6 +269,12 @@ public interface ConfigurationVariables {
     public static final String SCREEN_WIDTH                       = LAST_WINDOW_SECTION + '.' + "screen_width";
     /** Last known screen height. */
     public static final String SCREEN_HEIGHT                      = LAST_WINDOW_SECTION + '.' + "screen_height";
+    /** Last orientation used to split folder panels */
+    public static final String SPLIT_ORIENTATION                  = LAST_WINDOW_SECTION + '.' + "split_orientation";
+    /** Vertical split pane orientation. */
+    public static final String VERTICAL_SPLIT_ORIENTATION         = "vertical";
+    /** Horizontal split pane orientation. */
+    public static final String HORIZONTAL_SPLIT_ORIENTATION       = "horizontal";
 
 
 

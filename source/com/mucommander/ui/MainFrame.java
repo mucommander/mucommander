@@ -54,6 +54,9 @@ public class MainFrame extends JFrame implements LocationListener {
     /** Contains all registered ActivePanelListener instances, stored as weak references */
     private WeakHashMap activePanelListeners = new WeakHashMap();
 
+    /** Split pane orientation */
+    private final static String SPLIT_ORIENTATION = ConfigurationVariables.SPLIT_ORIENTATION;
+
 
     /**
      * Creates a new main frame, set to the given initial folders.
@@ -93,6 +96,7 @@ public class MainFrame extends JFrame implements LocationListener {
 			
         contentPane.add(toolbar, BorderLayout.NORTH);
 
+        // Lister to location change events to display the current folder in the window's title
         folderPanel1.getLocationManager().addLocationListener(this);
         folderPanel2.getLocationManager().addLocationListener(this);
 
@@ -100,17 +104,24 @@ public class MainFrame extends JFrame implements LocationListener {
         MainMenuBar menuBar = new MainMenuBar(this);
         setJMenuBar(menuBar);
 
-        // Enables folderPanel window resizing
-        splitPane = new ProportionalSplitPane(this, JSplitPane.HORIZONTAL_SPLIT, false, folderPanel1, folderPanel2) {
-                public javax.swing.border.Border getBorder() {
-                    return null;
-                }
+        // Create the split pane that separates folder panels and allows to resize how much space is allocated to the
+        // both of them. The split orientation is loaded from and saved to the preferences.
+        // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
+        // in JSplitPane which is anti-natural / confusing.
+        splitPane = new ProportionalSplitPane(this,
+            ConfigurationManager.getVariable(SPLIT_ORIENTATION, ConfigurationVariables.VERTICAL_SPLIT_ORIENTATION).equals(ConfigurationVariables.VERTICAL_SPLIT_ORIENTATION)?JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
+            false,
+            folderPanel1,
+            folderPanel2) {
 
                 // We don't want any extra space around split pane
                 public Insets getInsets() {
                     return new Insets(0, 0, 0, 0);
                 }
             };
+
+        // Remove any default border the split pane has
+        splitPane.setBorder(null);
 
         // Adds buttons that allow to collapse and expand the split pane in both directions
         splitPane.setOneTouchExpandable(true);
@@ -316,20 +327,32 @@ public class MainFrame extends JFrame implements LocationListener {
      *
      * @param vertical if true, the folder panels will be split horizontally (default), vertically otherwise.
      */
-    public void setSplitOrientation(boolean vertical) {
+    public void setSplitPaneOrientation(boolean vertical) {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing
-        splitPane.setOrientation(vertical ?JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT);
+        splitPane.setOrientation(vertical?JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT);
+        // Save current split pane orientation to preferences
+        saveSplitPaneOrientation();
     }
 
     /**
      * Returns how folder panels are currently split: if true is passed, the folder panels are split vertically (default),
      * horizontally otherwise.
      */
-    public boolean getSplitOrientation() {
+    public boolean getSplitPaneOrientation() {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing
         return splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT;
+    }
+
+
+    /**
+     * Save current split pane orientation to preferences.
+     */
+    private void saveSplitPaneOrientation() {
+        // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
+        // in JSplitPane which is anti-natural / confusing
+        ConfigurationManager.setVariable(SPLIT_ORIENTATION, splitPane.getOrientation()==JSplitPane.HORIZONTAL_SPLIT?ConfigurationVariables.VERTICAL_SPLIT_ORIENTATION:ConfigurationVariables.HORIZONTAL_SPLIT_ORIENTATION);
     }
 
 
@@ -441,7 +464,10 @@ public class MainFrame extends JFrame implements LocationListener {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         ConfigurationManager.setVariableInt(ConfigurationVariables.SCREEN_WIDTH, screenSize.width);
         ConfigurationManager.setVariableInt(ConfigurationVariables.SCREEN_HEIGHT, screenSize.height);
-    
+
+        // Save split pane orientation
+        saveSplitPaneOrientation();
+
         // Finally, dispose the frame
         super.dispose(); 
     }

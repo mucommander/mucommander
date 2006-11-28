@@ -15,6 +15,6 @@ public class SplitVerticallyAction extends MucoAction {
     }
 
     public void performAction() {
-        mainFrame.setSplitOrientation(true);
+        mainFrame.setSplitPaneOrientation(true);
     }
 }
