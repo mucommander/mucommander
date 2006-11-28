@@ -126,13 +126,6 @@ public class MainFrame extends JFrame implements LocationListener {
         // Adds buttons that allow to collapse and expand the split pane in both directions
         splitPane.setOneTouchExpandable(true);
 
-//JToolTip tooltip = splitPane.createToolTip();
-//tooltip.setComponent(splitPane);
-//tooltip.setToolTipText("Double-click to equalize");
-//tooltip.setLocation(100,100);
-//tooltip.setVisible(true);
-splitPane.setToolTipText("Double-click to equalize");
-
         // Split pane will be given any extra space
         contentPane.add(splitPane, BorderLayout.CENTER);
 
