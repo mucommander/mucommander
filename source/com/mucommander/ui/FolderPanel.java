@@ -156,7 +156,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         //		// Enable double buffering on scroll pane
         //		scrollPane.setDoubleBuffered(true);
         // Set scroll pane's background color to match the one of this panel and FileTable
-        scrollPane.getViewport().setBackground(backgroundColor);		
+        scrollPane.getViewport().setBackground(backgroundColor);
 
         // Catch mouse events to popup a contextual 'folder' menu
         scrollPane.addMouseListener(new MouseAdapter() {
@@ -170,7 +170,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     }
                 }
             });
-
 
         add(scrollPane, BorderLayout.CENTER);
 
