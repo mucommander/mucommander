@@ -1,12 +1,20 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.conf.*;
+import com.mucommander.auth.AuthException;
+import com.mucommander.auth.Credentials;
+import com.mucommander.auth.CredentialsManager;
+import com.mucommander.auth.MappedCredentials;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.HiddenFileFilter;
 import com.mucommander.file.filter.SystemFoldersFilter;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.progress.ProgressTextField;
 import com.mucommander.ui.dnd.FileDragSourceListener;
@@ -14,11 +22,6 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.TablePopupMenu;
-import com.mucommander.ui.auth.AuthDialog;
-import com.mucommander.auth.AuthException;
-import com.mucommander.auth.MappedCredentials;
-import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.Credentials;
 
 import javax.swing.*;
 import java.awt.*;

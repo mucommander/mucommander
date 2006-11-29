@@ -1,10 +1,11 @@
 package com.mucommander.ui;
 
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
-import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.comp.ProportionalSplitPane;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -126,13 +127,16 @@ public class MainFrame extends JFrame implements LocationListener {
         // Adds buttons that allow to collapse and expand the split pane in both directions
         splitPane.setOneTouchExpandable(true);
 
+        // Cool but way too slow
+        //		splitPane.setContinuousLayout(true);
+
         // Split pane will be given any extra space
         contentPane.add(splitPane, BorderLayout.CENTER);
-
+//
         YBoxPanel southPanel = new YBoxPanel();
         // Add a 3-pixel gap between table and status/command bar
         southPanel.setInsets(new Insets(3, 0, 0, 0));
-	
+
         // Add status bar
         this.statusBar = new StatusBar(this);
         southPanel.add(statusBar);
@@ -143,7 +147,7 @@ public class MainFrame extends JFrame implements LocationListener {
         this.commandBar.setVisible(ConfigurationManager.getVariableBoolean(ConfigurationVariables.COMMAND_BAR_VISIBLE, ConfigurationVariables.DEFAULT_COMMAND_BAR_VISIBLE));
 
         southPanel.add(commandBar);
-		
+
         contentPane.add(southPanel, BorderLayout.SOUTH);
 		
 //        // Do nothing on close (default is to hide window),
@@ -167,9 +171,6 @@ public class MainFrame extends JFrame implements LocationListener {
         // For testing purposes, full screen option could be nice to add someday
         //setUndecorated(true);
         //java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
-
-        // Cool but way too slow
-        //		splitPane.setContinuousLayout(true);
 
 //        // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their subcomponents.
 //        // Reflection is used to instanciate CustomFocusTraversalPolicy in order to get around 'NoClassDefFound' under Java 1.3.

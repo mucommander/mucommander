@@ -1,8 +1,11 @@
 
 package com.mucommander.text;
 
-import com.mucommander.conf.*;
 import com.mucommander.Debug;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
