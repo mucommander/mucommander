@@ -11,9 +11,11 @@ import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
+import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
@@ -126,6 +128,10 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Adds buttons that allow to collapse and expand the split pane in both directions
         splitPane.setOneTouchExpandable(true);
+
+        // Disable all the JSPlitPane accessibility shortcuts that are registered by default, as some of them
+        // conflict with default mucommander action shortcuts (e.g. F6 and F8) 
+        splitPane.disableAccessibilityShortcuts();
 
         // Cool but way too slow
         //		splitPane.setContinuousLayout(true);
@@ -482,7 +488,7 @@ public class MainFrame extends JFrame implements LocationListener {
     protected class CustomFocusTraversalPolicy extends FocusTraversalPolicy {
 
         public Component getComponentAfter(Container container, Component component) {
-//    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
+    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
             if(component==folderPanel1.getLocationComboBox().getTextField() || component==folderPanel1.getLocationComboBox())
                 return table1;
             else if(component==table1)
@@ -494,23 +500,23 @@ public class MainFrame extends JFrame implements LocationListener {
         }
 
         public Component getComponentBefore(Container container, Component component) {
-//    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
+    if(Debug.ON) Debug.trace("container="+container.getClass().getName()+" component="+component.getClass().getName());
             // Completly symetrical with getComponentAfter
             return getComponentAfter(container, component);
        }
 
         public Component getFirstComponent(Container container) {
-//    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
+    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
             return table1;
         }
 
         public Component getLastComponent(Container container) {
-//    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
+    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
             return table2;
         }
 
         public Component getDefaultComponent(Container container) {
-//    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
+    if(Debug.ON) Debug.trace("container="+container.getClass().getName());
             return getActiveTable();
         }
     }
