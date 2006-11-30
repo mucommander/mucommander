@@ -160,10 +160,11 @@ New features:
  - Ability to execute remote or archive entries files: these are copied to a temporary local directory and executed
  - Location combo box now allows to quickly recall parent folders
  - Icons magnification option for toolbar, command bar and files
- - New 'Copy name(s)' and 'Copy path(s)' actions to copy marked files names / paths (Alt+C / Shift+Alt+C by default) 
+ - New 'Copy name(s)' and 'Copy path(s)' actions to copy marked files names / paths (Alt+C / Shift+Alt+C by default)
  - New 'Mkfile' action (Shift+F7 by default)
  - New 'Mark page up/page down' action (Shift+Page Up/Shift+Page Down by default)
- - New 'Mark up to first/last row' action (Shift+Home/Shift+End by default) 
+ - New 'Mark up to first/last row' action (Shift+Home/Shift+End by default)
+ - New 'Split horizontally', 'Split vertically', 'Split equally' actions in 'Window' menu
  - 'Reveal in desktop' now available for Windows, KDE, GNOME (on top of Mac OS X)
  - Ability to open files with native file associations under KDE and GNOME
  - Ability to open URLs under KDE and GNOME
@@ -188,7 +189,7 @@ Improvements:
  - In-table file renaming now used everywhere instead of 'Rename' dialog
  - In-table file renaming must now to be validated by ENTER for safety reasons
  - 'Quit' action with confirmation dialog added for platforms other than OS X (Ctrl+Q by default)
- - Right-click menu reworked with 'Copy name(s)' / 'Copy path(s)' actions
+ - Right-click menu reworked, added 'Copy name(s)' / 'Copy path(s)' actions
  - Improved Windows launcher
  - Splash screen shows loading progress
  - Currently selected file is displayed in a different color (configurable) when focus is out of the file table or application
@@ -200,9 +201,10 @@ Improvements:
  - Bookmark and root folder names can be entered in the location field to change the current folder
  - Location field now allows to correct paths that have failed or have been cancelled
  - 'Local copy' dialog now selects filename without extension just like 'Rename'
- - Added 'Open', 'Open natively' and 'Reveal in Desktop' items to 'File' menu
- - Added 'Copy name(s)' / 'Copy path(s)' items to 'Mark' menu
- - Added 'Recall previous/next window' menu items to 'Window' menu
+ - Added 'Open', 'Open natively' and 'Reveal in Desktop' actions to 'File' menu
+ - Added 'Copy name(s)' / 'Copy path(s)' actions to 'Mark' menu
+ - Added 'Recall previous/next window' actions to 'Window' menu
+ - Folder pane divider can now be double-clicked to restore an equal split
  - Preference tabs now have icons, layout improved a bit
  - New font preview field to 'Appearance' preferences tab
  - New ascending / descending icons in sort tabs
