@@ -249,8 +249,9 @@ Known issues:
  - Translations not up-to-date (some of the new 0.8 features are untranslated) 
  - Write/execute modes are not preserved when a file is copied, this will be solved with Java 1.6
  - SMB support may not work properly on non multi-language JRE
+ - SFTP connections to some ssh servers cannot be established
  - SFTP connection sometimes drops unexpectedly when transferring lots of files
  - Some BZ2 archives can not be properly opened
- - Mac OS X : 'Copy files' not working with other applications (files are not pasted)
+ - 'Copy files' not working with some applications (files are not pasted)
  - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System Preferences' for them to work properly
  - Mac OS X : text fields don't work correctly when using a fractionally-scaled font (Known Java bug, http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)

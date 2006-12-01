@@ -193,25 +193,45 @@ public abstract class FileFactory {
         // Create a FileURL instance using the given path
         FileURL fileURL;
 
-        // If path contains no protocol, consider the file as a local file and add the 'file' protocol to the URL.
-        // Frequently used local FileURL instances are cached for performance
-        if(absPath.indexOf("://")==-1) {
-            // Try to find a cached FileURL instance
-            fileURL = (FileURL)urlCache.get(absPath);
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getHitCount()+"/"+urlCache.getMissCount());
+//        // If path contains no protocol, consider the file as a local file and add the 'file' protocol to the URL.
+//        // Frequently used local FileURL instances are cached for performance
+//        if(absPath.indexOf("://")==-1) {
+//            // Try to find a cached FileURL instance
+//            fileURL = (FileURL)urlCache.get(absPath);
+//            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
+//            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getHitCount()+"/"+urlCache.getMissCount());
+//
+//            // FileURL not in cache, let's create it and add it to the cache
+//            if(fileURL==null) {
+//                // A MalformedURLException will be thrown if the path is not absolute
+//                fileURL = FileURL.getLocalFileURL(absPath, parent==null?null:parent.getURL());	// Reuse parent file's FileURL (if any)
+//                urlCache.add(absPath, fileURL);
+//            }
+//        }
+//        else {
+//            // FileURL cache is not used for now as FileURL are mutable (setLogin, setPassword, setPort) and it
+//            // may cause some weird side effects
+//            fileURL = new FileURL(absPath, parent==null?null:parent.getURL());		// Reuse parent file's FileURL (if any)
+//        }
+//
+//        return getFile(fileURL, parent);
 
-            // FileURL not in cache, let's create it and add it to the cache
-            if(fileURL==null) {
-                // A MalformedURLException will be thrown if the path is not absolute
-                fileURL = FileURL.getLocalFileURL(absPath, parent==null?null:parent.getURL());	// Reuse parent file's FileURL (if any)
-                urlCache.add(absPath, fileURL);
-            }
-        }
-        else {
+        // Frequently used local FileURL instances are cached for performance
+
+        // First, try and find a cached FileURL instance
+        fileURL = (FileURL)urlCache.get(absPath);
+        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
+        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getHitCount()+"/"+urlCache.getMissCount());
+
+        // FileURL not in cache, let's create it and add it to the cache
+        if(fileURL==null) {
+            // A MalformedURLException if the provided URL/path is malformed
+            fileURL = new FileURL(absPath, parent==null?null:parent.getURL());		// Reuse parent file's FileURL (if any)
+
             // FileURL cache is not used for now as FileURL are mutable (setLogin, setPassword, setPort) and it
             // may cause some weird side effects
-            fileURL = new FileURL(absPath, parent==null?null:parent.getURL());		// Reuse parent file's FileURL (if any)
+            if(fileURL.getProtocol().equals("file"))
+                urlCache.add(absPath, fileURL);
         }
 
         return getFile(fileURL, parent);

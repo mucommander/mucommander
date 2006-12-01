@@ -50,6 +50,42 @@ public class FileURL implements Cloneable {
      */
     public FileURL(String url, FileURL parentURL) throws MalformedURLException {
         try {
+            // If path contains no protocol, consider the file as a local file and prepend the 'file' protocol to the URL.
+            if(url.indexOf("://")==-1) {
+                char firstChar = url.charAt(0);
+                int len;
+                // Unix-style path
+                if(firstChar=='/')
+                    url = "file://"+LOCALHOST+url;
+                // Path starts with a reference to the user home folder, or is a Windows-style path
+                else if(firstChar=='~' || url.indexOf(":\\")!=-1)
+                    url = "file://"+LOCALHOST+"/"+url;
+                // Handle Windows-style UNC network paths ( \\hostname\path ):
+                // - under Windows, transform it into a URL in the file://hostname/path form,
+                //   FSFile constructor will translate it back into an UNC network path
+                // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
+                //   who've spent too much time using Windows
+                else if(url.startsWith("\\\\") && (len=url.length())>2) {
+                    if(PlatformManager.isWindowsFamily()) {
+                        int pos = url.indexOf('\\', 2);
+                        if(pos==-1)
+                            url =  "file://"+url.substring(2, len);
+                        else
+                            url = "file://"+url.substring(2, pos)+"/"+(pos==len-1?"":url.substring(pos+1, len));
+                    }
+                    else {
+                        url = "smb://"+url.substring(2, len).replace('\\', '/');
+                    }
+                }
+                // This doesn't look like a valid path, throw an MalformedURLException
+                else {
+                    // Todo: localize that message as it can be displayed to the user
+                    throw new MalformedURLException("Path not absolute or malformed: "+url);
+                }
+            }
+
+            // Start URL parsing
+
             int pos;
             int urlLen = url.length();
 			
@@ -70,11 +106,9 @@ public class FileURL implements Cloneable {
             // Filenames may contain @ chars, so atPos must be lower than next separator's position (if any)
             if(atPos!=-1 && (separatorPos==-1 || atPos<separatorPos)) {
                 colonPos = url.indexOf(':', pos);
-//                login = url.substring(pos, colonPos==-1?atPos:colonPos).trim();
                 login = url.substring(pos, colonPos==-1?atPos:colonPos);
                 if(colonPos!=-1)
                     password = url.substring(colonPos+1, atPos);
-//                    password = url.substring(colonPos+1, atPos).trim();
                 // Advance string index
                 pos = atPos+1;
             }
@@ -97,13 +131,10 @@ public class FileURL implements Cloneable {
                 hostEndPos = urlLen;
 
             if(colonPos!=-1 && colonPos<hostEndPos) {
-//                host = url.substring(pos, colonPos).trim();
                 host = url.substring(pos, colonPos);
-//                port = Integer.parseInt(url.substring(colonPos+1, hostEndPos).trim());
                 port = Integer.parseInt(url.substring(colonPos+1, hostEndPos));
             }
             else {
-//                host = url.substring(pos, hostEndPos).trim();
                 host = url.substring(pos, hostEndPos);
             }
 			
@@ -112,7 +143,6 @@ public class FileURL implements Cloneable {
 				
             // Parse path part excluding query part
             pos = hostEndPos;
-//            path = url.substring(pos, questionMarkPos==-1?urlLen:questionMarkPos).trim();
             path = url.substring(pos, questionMarkPos ==-1?urlLen:questionMarkPos);
             // Empty path means '/'
             if(path.equals(""))
@@ -234,49 +264,49 @@ public class FileURL implements Cloneable {
     }
 
 
-    /**
-     * Returns a FileURL constructed from the specified absolute path that must point to a local file. 
-     * If the path is not absolute, a <code>MalformedURLException</code> will be thrown.<b>
-     *
-     * <p>The returned URL will start with <code>file://localhost</code> by default, unless a Windows-style UNC path
-     * (i.e. \\hostname\path) containing a hostname is given.
-     *
-     * @param absPath an absolute path to a local file, the path may start with user home '~'.
-     * @param parentURL optional parent's URL, may be <code>null</code>
-     * @throws java.net.MalformedURLException if the path is not absolute
-     */
-    public static FileURL getLocalFileURL(String absPath, FileURL parentURL) throws MalformedURLException {
-        if(!absPath.equals("")) {
-            char firstChar = absPath.charAt(0);
-            int len;
-            // Unix-style path
-            if(firstChar=='/')
-                return new FileURL("file://"+LOCALHOST+absPath, parentURL);
-            // Path starts with a reference to the user home folder, or is a Windows-style path
-            else if(firstChar=='~' || absPath.indexOf(":\\")!=-1)
-                return new FileURL("file://"+LOCALHOST+"/"+absPath, parentURL);
-            // Handle Windows-style UNC network paths ( \\hostname\path ):
-            // - under Windows, transform it into a URL in the file://hostname/path form,
-            //   FSFile constructor will translate it back into an UNC network path
-            // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
-            //   who've spent too much time using Windows
-            else if(absPath.startsWith("\\\\") && (len=absPath.length())>2) {
-                if(PlatformManager.isWindowsFamily()) {
-                    int pos = absPath.indexOf('\\', 2);
-                    if(pos==-1)
-                        return new FileURL("file://"+absPath.substring(2, len));
-                    else
-                        return new FileURL("file://"+absPath.substring(2, pos)+"/"+(pos==len-1?"":absPath.substring(pos+1, len)));
-                }
-                else {
-                    return new FileURL("smb://"+absPath.substring(2, len).replace('\\', '/'));
-                }
-            }
-        }
-
-        // Todo: localize that message as it can be displayed to the user
-        throw new MalformedURLException("Path not absolute or malformed: "+absPath);
-    }
+//    /**
+//     * Returns a FileURL constructed from the specified absolute path that must point to a local file.
+//     * If the path is not absolute, a <code>MalformedURLException</code> will be thrown.<b>
+//     *
+//     * <p>The returned URL will start with <code>file://localhost</code> by default, unless a Windows-style UNC path
+//     * (i.e. \\hostname\path) containing a hostname is given.
+//     *
+//     * @param absPath an absolute path to a local file, the path may start with user home '~'.
+//     * @param parentURL optional parent's URL, may be <code>null</code>
+//     * @throws java.net.MalformedURLException if the path is not absolute
+//     */
+//    public static FileURL getLocalFileURL(String absPath, FileURL parentURL) throws MalformedURLException {
+//        if(!absPath.equals("")) {
+//            char firstChar = absPath.charAt(0);
+//            int len;
+//            // Unix-style path
+//            if(firstChar=='/')
+//                return new FileURL("file://"+LOCALHOST+absPath, parentURL);
+//            // Path starts with a reference to the user home folder, or is a Windows-style path
+//            else if(firstChar=='~' || absPath.indexOf(":\\")!=-1)
+//                return new FileURL("file://"+LOCALHOST+"/"+absPath, parentURL);
+//            // Handle Windows-style UNC network paths ( \\hostname\path ):
+//            // - under Windows, transform it into a URL in the file://hostname/path form,
+//            //   FSFile constructor will translate it back into an UNC network path
+//            // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
+//            //   who've spent too much time using Windows
+//            else if(absPath.startsWith("\\\\") && (len=absPath.length())>2) {
+//                if(PlatformManager.isWindowsFamily()) {
+//                    int pos = absPath.indexOf('\\', 2);
+//                    if(pos==-1)
+//                        return new FileURL("file://"+absPath.substring(2, len));
+//                    else
+//                        return new FileURL("file://"+absPath.substring(2, pos)+"/"+(pos==len-1?"":absPath.substring(pos+1, len)));
+//                }
+//                else {
+//                    return new FileURL("smb://"+absPath.substring(2, len).replace('\\', '/'));
+//                }
+//            }
+//        }
+//
+//        // Todo: localize that message as it can be displayed to the user
+//        throw new MalformedURLException("Path not absolute or malformed: "+absPath);
+//    }
 
 	
     /**
@@ -669,9 +699,9 @@ public class FileURL implements Cloneable {
         for(int i=0; i<urls.length; i++) {
             try {
                 System.out.println("Creating "+urls[i]);
-                if(urls[i].indexOf("://")==-1)
-                    f = getLocalFileURL(urls[i], null);
-                else
+//                if(urls[i].indexOf("://")==-1)
+//                    f = getLocalFileURL(urls[i], null);
+//                else
                     f = new FileURL(urls[i]);
                 System.out.println("FileURL.toString()= "+f.toString());
                 System.out.println(" - path= "+f.getPath());
