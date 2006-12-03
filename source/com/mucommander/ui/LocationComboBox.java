@@ -5,6 +5,7 @@ import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.RootFolders;
+import com.mucommander.file.FileURL;
 import com.mucommander.ui.comp.combobox.EditableComboBox;
 import com.mucommander.ui.comp.combobox.EditableComboBoxListener;
 import com.mucommander.ui.comp.progress.ProgressTextField;
@@ -43,9 +44,6 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         this.folderPanel = folderPanel;
         this.locationField = (ProgressTextField)getTextField();
         locationField.setComboBox(this);
-
-        // Automatically update the text field's contents when an item is selected in this combo box
-        setComboSelectionUpdatesTextField(true);
 
         // Listener to actions fired by this EditableComboBox
         addEditableComboBoxListener(this);
@@ -109,7 +107,10 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
 
     public void locationChanging(LocationEvent e) {
         // Change the location field's text to the folder being changed
-        locationField.setText(e.getFolderURL().getStringRep(false));
+        FileURL folderURL = e.getFolderURL();
+
+        // Do not display the URL's protocol for local files
+        locationField.setText(folderURL.getProtocol().equals("file")?folderURL.getPath():folderURL.getStringRep(false));
 
         // Disable component until the folder has been changed, cancelled or failed.
         // Note: the focus manager will release focus on the location field and give it to the next component (i.e. FileTable)
@@ -143,6 +144,9 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     /////////////////////////////////////
 
     public void comboBoxSelectionChanged(EditableComboBox source) {
+        AbstractFile folder = (AbstractFile)getSelectedItem();
+        if(folder!=null)
+            folderPanel.tryChangeCurrentFolder(folder);    
     }
 
     public void textFieldValidated(EditableComboBox source) {
@@ -192,7 +196,4 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         // Enable menu bar when this component has lost focus
         folderPanel.getMainFrame().getJMenuBar().setEnabled(true);
     }
-
-
-
 }
