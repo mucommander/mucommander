@@ -2,6 +2,7 @@ package com.mucommander;
 
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.shell.ShellHistoryManager;
+import com.mucommander.auth.CredentialsManager;
 
 
 /**
@@ -59,7 +60,9 @@ public class ShutdownHook extends Thread {
         ConfigurationManager.writeConfiguration();
         // Save shell history
         ShellHistoryManager.writeHistory();
-    
+        // Write credentials file to disk, only if changes were made
+        CredentialsManager.writeCredentials(false);
+
         // Shutdown tasks should only be performed once
         shutdownTasksPerformed = true;
     }

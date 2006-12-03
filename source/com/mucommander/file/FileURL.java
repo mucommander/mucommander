@@ -20,8 +20,6 @@ public class FileURL implements Cloneable {
     private String protocol;
     private String host;
     private int port = -1;
-//    private String login;
-//    private String password;
     private Credentials credentials;
     private String path;
     private FileURL parentURL;
@@ -34,7 +32,6 @@ public class FileURL implements Cloneable {
     /** String designating localhost */
     public final static String LOCALHOST = "localhost";
 
-    
 
     /**
      * Creates a new FileURL from the given URL string.
@@ -247,11 +244,6 @@ public class FileURL implements Cloneable {
                 if(parentURL!=null) {
                     this.parentURL = parentURL;
                     this.parentURLSet = true;
-////                     Use parent's login and password if login and password not specified in the url
-//                    if((login==null||login.equals("")) && (password==null||password.equals(""))) {
-//                        this.login = parentURL.getLogin();
-//                        this.password = parentURL.getPassword();
-//                    }
 
                     // Use parent URL's credentials if none are provided in this URL
                     // Note: parent URL may not contain credentials, in this case null will be returned
