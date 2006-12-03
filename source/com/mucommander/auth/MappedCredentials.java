@@ -19,7 +19,8 @@ public class MappedCredentials extends Credentials {
 
 
     /**
-     * 
+     * Creates a new MappedCredentials instance.
+     *
      * @param login the login part as a string
      * @param password the password part as a string
      * @param location the location credentials are mapped onto.
@@ -28,6 +29,21 @@ public class MappedCredentials extends Credentials {
      */
     public MappedCredentials(String login, String password, FileURL location, boolean isPersistent) {
         super(login, password);
+        this.isPersistent = isPersistent;
+        this.location = location;
+    }
+
+
+    /**
+     * Creates a new MappedCredentials instance, using the specified Credentials to retrieve the login and password.
+     *
+     * @param credentials the login and password to use
+     * @param location the location credentials are mapped onto.
+     * @param isPersistent if true, indicates to CredentialsManager that the credentials should be saved when the
+     * application is terminated.
+     */
+    public MappedCredentials(Credentials credentials, FileURL location, boolean isPersistent) {
+        super(credentials.getLogin(), credentials.getPassword());
         this.isPersistent = isPersistent;
         this.location = location;
     }
