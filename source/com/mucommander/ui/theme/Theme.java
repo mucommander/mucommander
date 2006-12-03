@@ -4,6 +4,7 @@ import com.mucommander.Debug;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.*;
 
 /**
  * Describes a set of custom colors and fonts that can be applied to muCommander.
@@ -46,6 +47,17 @@ public class Theme {
     private static final int FONT_COUNT  = 4;
     /** Number of known colors. */
     private static final int COLOR_COUNT = 30;
+
+
+
+    // - Listeners -----------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /** Registered theme listeners. */
+    private static WeakHashMap listeners      = new WeakHashMap();
+    /** Whether theme events should be triggered. */
+    private        boolean     triggerEvents;
+
+
 
     // - Font definitions ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -187,20 +199,29 @@ public class Theme {
      * @throws IllegalStateException    if this is not the user theme.
      * @throws IllegalArgumentException if <code>id</code> is not a legal font id.
      */
-    public void setFont(int id, Font font) {
+    public synchronized void setFont(int id, Font font) {
+        Font buffer; // Buffer for the old font in case this theme needs to trigger events.
+
         // Makes sure this theme is modifiable.
         if(!isUserTheme) {
             if(Debug.ON) Debug.trace("Tried to modify a non user theme font.");
             throw new IllegalStateException();
         }
 
-        // Makes sure the font id is legal.
-        if(id < 0 || id >= FONT_COUNT) {
-            if(Debug.ON) Debug.trace("Illegal font id: " + id);
+        // Makes sure the font id is legal (only in Debug mode).
+        if(Debug.ON && (id < 0 || id >= FONT_COUNT)) {
+            Debug.trace("Illegal font id: " + id);
             throw new IllegalArgumentException();
         }
 
-        fonts[id] = font;
+        // Triggers theme events if necessary.
+        if(triggerEvents) {
+            buffer    = fonts[id];
+            fonts[id] = font;
+            triggerFontEvent(id, buffer, font);
+        }
+        else
+            fonts[id] = font;
     }
 
     /**
@@ -210,20 +231,29 @@ public class Theme {
      * @throws IllegalStateException    if this is not the user theme.
      * @throws IllegalArgumentException if <code>id</code> is not a legal color id.
      */
-    public void setColor(int id, Color color) {
+    public synchronized void setColor(int id, Color color) {
+        Color buffer; // Buffer for the old color in case this theme needs to trigger events.
+
         // Makes sure this theme is modifiable.
         if(!isUserTheme) {
             if(Debug.ON) Debug.trace("Tried to modify a non user theme color.");
             throw new IllegalStateException();
         }
 
-        // Makes sure the color id is legal.
-        if(id < 0 || id >= COLOR_COUNT) {
-            if(Debug.ON) Debug.trace("Illegal color id: " + id);
+        // Makes sure the color id is legal (only in Debug mode).
+        if(Debug.ON && (id < 0 || id >= COLOR_COUNT)) {
+            Debug.trace("Illegal color id: " + id);
             throw new IllegalArgumentException();
         }
 
-        colors[id] = color;
+        // Triggers theme events if necessary.
+        if(triggerEvents) {
+            buffer     = colors[id];
+            colors[id] = color;
+            triggerColorEvent(id, buffer, color);
+        }
+        else
+            colors[id] = color;
     }
 
 
@@ -288,5 +318,61 @@ public class Theme {
         }
 
         return colors[id];
+    }
+
+
+
+    // - Theme listening -----------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Returns <code>true</code> if the theme is the one triggering theme events.
+     * @return <code>true</code> if the theme is the one triggering theme events, <code>false</code> otherwise.
+     */
+    boolean isTriggeringEvents() {return triggerEvents;}
+
+    /**
+     * Changes the theme's event triggering status.
+     * @param flag whether or not the theme should trigger events.
+     */
+    void setTriggerEvents(boolean flag) {triggerEvents = flag;}
+
+    /**
+     * Registers the specified listener.
+     * @param listener object that will receive theme events from now on.
+     */
+    public static synchronized void addThemeListener(ThemeListener listener) {listeners.put(listener, null);}
+
+    /**
+     * Removes the specified listener from the list of registered theme listeners.
+     * @param listener theme listener to remove from the list.
+     */
+    public static synchronized void removeThemeListener(ThemeListener listener) {listeners.remove(listener);}
+
+    /**
+     * Notifies all listeners that a font has been modified.
+     * @param fontId  identifier of the font that has been changed.
+     * @param oldFont font value prior to the change.
+     * @param newFont font value after the change.
+     */
+    private static synchronized void triggerFontEvent(int fontId, Font oldFont, Font newFont) {
+        Iterator iterator;
+
+        iterator = listeners.keySet().iterator();
+        while(iterator.hasNext())
+            ((ThemeListener)iterator.next()).fontChanged(fontId, oldFont, newFont);
+    }
+
+    /**
+     * Notifies all listeners that a color has been modified.
+     * @param colorId  identifier of the color that has been changed.
+     * @param oldColor color value prior to the change.
+     * @param newColor color value after the change.
+     */
+    private static synchronized void triggerColorEvent(int colorId, Color oldColor, Color newColor) {
+        Iterator iterator;
+
+        iterator = listeners.keySet().iterator();
+        while(iterator.hasNext())
+            ((ThemeListener)iterator.next()).colorChanged(colorId, oldColor, newColor);
     }
 }
