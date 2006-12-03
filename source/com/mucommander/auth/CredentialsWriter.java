@@ -45,7 +45,7 @@ public class CredentialsWriter implements CredentialsConstants {
 
             // Write URL
             out.startElement(ELEMENT_URL);
-            out.writeCData(credentials.getURL().getStringRep(false));
+            out.writeCData(credentials.getMappedLocation().getStringRep(false));
             out.endElement(ELEMENT_URL);
 
             // Write login

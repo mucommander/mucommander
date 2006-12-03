@@ -164,7 +164,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                     authDialog.showDialog();
                     newCredentials = authDialog.getCredentials();
                     if(newCredentials!=null) {
-                        path = newCredentials.getURL().getStringRep(true);
+                        path = newCredentials.getMappedLocation().getStringRep(true);
                     }
                     // If the user cancels, we fall back to the default path.
                     else {

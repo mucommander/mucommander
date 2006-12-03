@@ -5,9 +5,10 @@ import com.mucommander.bookmark.XORCipher;
 
 
 /**
- * This class is a container for a login and password combo, used to authenticate
- * on a remote filesystem.
+ * This class is a container for a login and password pair, used in combination to a {@link com.mucommander.file.FileURL}
+ * to authenticate on a remote filesystem.
  *
+ * @see com.mucommander.file.FileURL
  * @author Maxence Bernard
  */
 public class Credentials {
@@ -18,6 +19,9 @@ public class Credentials {
     /**
      * Creates a new instance with the supplied login and password.
      * Any provided null values will be replaced by empty strings.
+     *
+     * @param login the login part as a string
+     * @param login the password part as a string
      */
     public Credentials(String login, String password) {
         // Replace null values by empty strings

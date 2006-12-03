@@ -22,7 +22,6 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.TablePopupMenu;
-import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +31,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 /**
  * 
@@ -646,7 +644,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     userCancelled = true;
                 // Use provided credentials
                 else
-                    folderURL = newCredentials.getURL();
+                    folderURL = newCredentials.getMappedLocation();
             }
 
             if(!userCancelled) {
@@ -793,7 +791,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                                 // Invalidate AbstractFile instance
                                 folder = null;
                                 // Use the URL containing the new credentials
-                                folderURL = newCredentials.getURL();
+                                folderURL = newCredentials.getMappedLocation();
                                 continue;
                             }
                         }
