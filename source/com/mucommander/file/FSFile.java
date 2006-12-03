@@ -1,6 +1,7 @@
 package com.mucommander.file;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -102,15 +103,6 @@ public class FSFile extends AbstractFile {
     }
 
 
-//    /**
-//     * Creates a new FSFile using the given java.io.File instance.
-//     */
-//    private FSFile(FileURL fileURL, File file) throws IOException {
-//        super(fileURL);
-//        init(file);
-//    }
-
-	
     private void init(File file) throws IOException {
         // Throw an exception is the file's path is not absolute.
         if(!file.isAbsolute())
@@ -350,23 +342,6 @@ public class FSFile extends AbstractFile {
             throw new IOException();
     }
 
-/*
-    public AbstractFile[] ls() throws IOException {
-        String names[] = file.list();
-		
-        if(names==null)
-            throw new IOException();
-        
-        AbstractFile children[] = new AbstractFile[names.length];
-        for(int i=0; i<names.length; i++) {
-            // Retrieves an AbstractFile (FSFile or archive) instance potentially fetched from the LRUCache
-            // and reuse this file as parent
-            children[i] = AbstractFile.getFile(absPath+SEPARATOR+names[i], this);
-        }
-
-        return children;
-    }
-*/
 
     public AbstractFile[] ls() throws IOException {
         return ls((FilenameFilter)null);

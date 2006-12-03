@@ -207,7 +207,8 @@ public abstract class AbstractFile {
      * overridden if canonical path resolution is available.
      */
     public String getCanonicalPath(boolean appendSeparator) {
-        return getAbsolutePath(appendSeparator);
+        String path = getCanonicalPath();
+        return appendSeparator?addTrailingSeparator(path):removeTrailingSlash(path);
     }
 	
 
