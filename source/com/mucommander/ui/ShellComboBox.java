@@ -4,6 +4,7 @@ import com.mucommander.shell.ShellHistoryListener;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.comp.combobox.EditableComboBox;
 import com.mucommander.ui.comp.combobox.EditableComboBoxListener;
+import com.mucommander.ui.comp.combobox.SaneComboBox;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -103,7 +104,7 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
     // - EditableComboBoxListener implementation ------------------------------------
     // ------------------------------------------------------------------------------
 
-    public void comboBoxSelectionChanged(EditableComboBox source) {}
+    public void comboBoxSelectionChanged(SaneComboBox source) {}
 
     public void textFieldValidated(EditableComboBox source) {parent.runCommand(input.getText());}
 

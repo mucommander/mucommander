@@ -8,6 +8,7 @@ import com.mucommander.file.RootFolders;
 import com.mucommander.file.FileURL;
 import com.mucommander.ui.comp.combobox.EditableComboBox;
 import com.mucommander.ui.comp.combobox.EditableComboBoxListener;
+import com.mucommander.ui.comp.combobox.SaneComboBox;
 import com.mucommander.ui.comp.progress.ProgressTextField;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -143,7 +144,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     // EditableComboBox implementation //
     /////////////////////////////////////
 
-    public void comboBoxSelectionChanged(EditableComboBox source) {
+    public void comboBoxSelectionChanged(SaneComboBox source) {
         AbstractFile folder = (AbstractFile)getSelectedItem();
         if(folder!=null)
             folderPanel.tryChangeCurrentFolder(folder);    
