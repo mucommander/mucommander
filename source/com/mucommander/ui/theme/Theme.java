@@ -6,6 +6,25 @@ import java.awt.Color;
 import java.awt.Font;
 
 /**
+ * Describes a set of custom colors and fonts that can be applied to muCommander.
+ * <p>
+ * There are two different types of themes in muCommander: predefined ones and
+ * user theme. A theme's type can be checked through the {@link #isUserTheme()} method.<break/>
+ * Predefined themes cannot be modified, and will throw an <code>IllegalStateException</code>
+ * if it is attempted.<br/>
+ * </p>
+ * <p>
+ * A theme does not need to have custom values for every single customisable item. If a value
+ * isn't set, the related component is expected to use the default look and feel and/or system
+ * value. This means that a typical custom value access will look something like:
+ * <pre>
+ * JTextField field;
+ *
+ * field = new JTextField();
+ * if(theme.hasCustomFont(Theme.LOCATION_BAR))
+ *     field.setFont(theme.getCustomFont(Theme.LOCATION_BAR));
+ * </pre>
+ * </p>
  * @author Nicolas Rinaudo
  */
 public class Theme {
