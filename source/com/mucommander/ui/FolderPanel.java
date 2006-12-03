@@ -347,7 +347,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Make sure there is not an existing thread running,
         // this should not normally happen but if it does, report the error
         if(changeFolderThread!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
             return;
         }
 		
@@ -373,7 +373,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Make sure there is not an existing thread running,
         // this should not normally happen but if it does, report the error
         if(changeFolderThread!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
             return;
         }
 
@@ -403,7 +403,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Make sure there is not an existing thread running,
         // this should not normally happen but if it does, report the error
         if(changeFolderThread!=null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(">>>>>>>>> THREAD NOT NULL = "+changeFolderThread, -1);
             return;
         }
 
@@ -839,6 +839,12 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                 else
                     locationManager.fireLocationFailed(failedURL);
             }
+        }
+
+
+        // For debugging purposes
+        public String toString() {
+            return "folderURL="+folderURL+" folder="+folder;
         }
     }
 }

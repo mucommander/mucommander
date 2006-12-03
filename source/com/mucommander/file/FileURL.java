@@ -91,7 +91,6 @@ public class FileURL implements Cloneable {
             pos = url.indexOf("://");
             if(pos==-1)
                 throw new MalformedURLException("Protocol not specified");
-//            protocol =  url.substring(0, pos).trim();
             protocol =  url.substring(0, pos);
             // Advance string index
             pos += 3;
@@ -220,8 +219,7 @@ public class FileURL implements Cloneable {
             // Parse query part (if any)
             if(questionMarkPos !=-1)
                 query = url.substring(questionMarkPos, urlLen);
-//                query = url.substring(questionMarkPos, urlLen).trim();
-		
+
             // Extract filename and parent from path
             if(path.equals("") || path.equals("/")) {
                 filename = null;
@@ -268,51 +266,6 @@ public class FileURL implements Cloneable {
         }
     }
 
-
-//    /**
-//     * Returns a FileURL constructed from the specified absolute path that must point to a local file.
-//     * If the path is not absolute, a <code>MalformedURLException</code> will be thrown.<b>
-//     *
-//     * <p>The returned URL will start with <code>file://localhost</code> by default, unless a Windows-style UNC path
-//     * (i.e. \\hostname\path) containing a hostname is given.
-//     *
-//     * @param absPath an absolute path to a local file, the path may start with user home '~'.
-//     * @param parentURL optional parent's URL, may be <code>null</code>
-//     * @throws java.net.MalformedURLException if the path is not absolute
-//     */
-//    public static FileURL getLocalFileURL(String absPath, FileURL parentURL) throws MalformedURLException {
-//        if(!absPath.equals("")) {
-//            char firstChar = absPath.charAt(0);
-//            int len;
-//            // Unix-style path
-//            if(firstChar=='/')
-//                return new FileURL("file://"+LOCALHOST+absPath, parentURL);
-//            // Path starts with a reference to the user home folder, or is a Windows-style path
-//            else if(firstChar=='~' || absPath.indexOf(":\\")!=-1)
-//                return new FileURL("file://"+LOCALHOST+"/"+absPath, parentURL);
-//            // Handle Windows-style UNC network paths ( \\hostname\path ):
-//            // - under Windows, transform it into a URL in the file://hostname/path form,
-//            //   FSFile constructor will translate it back into an UNC network path
-//            // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
-//            //   who've spent too much time using Windows
-//            else if(absPath.startsWith("\\\\") && (len=absPath.length())>2) {
-//                if(PlatformManager.isWindowsFamily()) {
-//                    int pos = absPath.indexOf('\\', 2);
-//                    if(pos==-1)
-//                        return new FileURL("file://"+absPath.substring(2, len));
-//                    else
-//                        return new FileURL("file://"+absPath.substring(2, pos)+"/"+(pos==len-1?"":absPath.substring(pos+1, len)));
-//                }
-//                else {
-//                    return new FileURL("smb://"+absPath.substring(2, len).replace('\\', '/'));
-//                }
-//            }
-//        }
-//
-//        // Todo: localize that message as it can be displayed to the user
-//        throw new MalformedURLException("Path not absolute or malformed: "+absPath);
-//    }
-
 	
     /**
      * Returns the protocol part of this FileURL (e.g. smb). The returned protocol may never be <code>null</code>.
@@ -352,24 +305,8 @@ public class FileURL implements Cloneable {
      * <code>null</code> otherwise.
      */
     public String getLogin() {
-//        return login;
-        return credentials==null?null:credentials.getLogin(); 
+        return credentials==null?null:credentials.getLogin();
     }
-
-//    /**
-//     * Sets the login contained by this FileURL. An empty String "" will be considered as null and returned
-//     * as such next time {@link #getLogin()} is called.
-//     */
-//    public void setLogin(String login) {
-//        if(login==null)
-//            this.login = null;
-//        else {
-//            if(login.equals(""))
-//                this.login = null;
-//            else
-//                this.login = login;
-//        }
-//    }
 
 
     /**
@@ -377,24 +314,8 @@ public class FileURL implements Cloneable {
      * <code>null</code> otherwise.
      */
     public String getPassword() {
-//        return password;
         return credentials==null?null:credentials.getPassword();
     }
-
-//    /**
-//     * Sets the password contained by this FileURL. An empty String "" will be considered as null and returned
-//     * as such next time {@link #getPassword()} is called.
-//     */
-//    public void setPassword(String password) {
-//        if(password==null)
-//            this.password = null;
-//        else {
-//            if(password.equals(""))
-//                this.password = null;
-//            else
-//                this.password = password;
-//        }
-//    }
 
 
     /**
@@ -421,11 +342,6 @@ public class FileURL implements Cloneable {
      * Returns null if this FileURL doesn't contain any login or password.
      */
     public Credentials getCredentials() {
-//        if(!containsCredentials())
-//            return null;
-//
-//        return new Credentials(login, password);
-
         return credentials;
     }
 
@@ -438,14 +354,6 @@ public class FileURL implements Cloneable {
      * credentials will be discarded. 
      */
     public void setCredentials(Credentials credentials) {
-//        if(credentials ==null) {
-//            discardCredentials();
-//        }
-//        else {
-//            setLogin(credentials.getLogin());
-//            setPassword(credentials.getPassword());
-//        }
-
         this.credentials = credentials;
     }
 
