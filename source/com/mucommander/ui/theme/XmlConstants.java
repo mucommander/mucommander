@@ -70,6 +70,10 @@ interface XmlConstants {
     public static final String ELEMENT_FILE                 = "file";
     /** Progress bar color element. */
     public static final String ELEMENT_PROGRESS             = "progress";
+    /** Border color element. */
+    public static final String ELEMENT_BORDER               = "border";
     /** Color description attribute. */
     public static final String ATTRIBUTE_COLOR              = "color";
+    /** Color transparency description attribute. */
+    public static final String ATTRIBUTE_ALPHA              = "alpha";
 }

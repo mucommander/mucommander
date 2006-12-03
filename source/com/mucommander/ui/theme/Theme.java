@@ -22,13 +22,11 @@ public class Theme {
     // For this reason, we've declared the number of font and colors as constants.
     // People are still going to forget to update these constants, but at least it'll be
     // a lot easier to fix.
-    //
-    // Note that you still need to define default colors.
 
     /** Number of known fonts. */
     private static final int FONT_COUNT  = 4;
     /** Number of known colors. */
-    private static final int COLOR_COUNT = 29;
+    private static final int COLOR_COUNT = 30;
 
     // - Font definitions ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -103,15 +101,8 @@ public class Theme {
     public static final int LOCATION_BAR_TEXT_SELECTED         = 27;
     /** Selected version of {#LOCATION_BAR_BACKGROUND}. */
     public static final int LOCATION_BAR_BACKGROUND_SELECTED   = 28;
-
-
-
-    // - Default values ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /** Colors to use in case a theme doesn't define a specific value. */
-    private static final Color[] DEFAULT_COLORS = new Color[COLOR_COUNT];
-    /** Font to use in case a theme doesn't define a specific font. */
-    private static final Font    DEFAULT_FONT;
+    /** Color for the borders of the file table panels. */
+    public static final int FILE_TABLE_BORDER                  = 29;
 
 
 
@@ -127,42 +118,6 @@ public class Theme {
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    static {
-        // Uses the JLabel font as default.
-        DEFAULT_FONT = new javax.swing.JLabel().getFont();
-
-        // Sets the default colors.
-        DEFAULT_COLORS[FILE_BACKGROUND]                    = new Color(0);
-        DEFAULT_COLORS[FILE_UNFOCUSED_BACKGROUND]          = new Color(0);
-        DEFAULT_COLORS[HIDDEN_FILE]                        = new Color(0);
-        DEFAULT_COLORS[FOLDER]                             = new Color(0);
-        DEFAULT_COLORS[ARCHIVE]                            = new Color(0);
-        DEFAULT_COLORS[SYMLINK]                            = new Color(0);
-        DEFAULT_COLORS[MARKED]                             = new Color(0);
-        DEFAULT_COLORS[FILE]                               = new Color(0);
-        DEFAULT_COLORS[SHELL_TEXT]                         = new Color(0);
-        DEFAULT_COLORS[SHELL_BACKGROUND]                   = new Color(0);
-        DEFAULT_COLORS[EDITOR_TEXT]                        = new Color(0);
-        DEFAULT_COLORS[EDITOR_BACKGROUND]                  = new Color(0);
-        DEFAULT_COLORS[LOCATION_BAR_TEXT]                  = new Color(0);
-        DEFAULT_COLORS[LOCATION_BAR_BACKGROUND]            = new Color(0);
-        DEFAULT_COLORS[LOCATION_BAR_PROGRESS]              = new Color(0);
-        DEFAULT_COLORS[FILE_BACKGROUND_SELECTED]           = new Color(0);
-        DEFAULT_COLORS[FILE_UNFOCUSED_BACKGROUND_SELECTED] = new Color(0);
-        DEFAULT_COLORS[HIDDEN_FILE_SELECTED]               = new Color(0);
-        DEFAULT_COLORS[FOLDER_SELECTED]                    = new Color(0);
-        DEFAULT_COLORS[ARCHIVE_SELECTED]                   = new Color(0);
-        DEFAULT_COLORS[SYMLINK_SELECTED]                   = new Color(0);
-        DEFAULT_COLORS[MARKED_SELECTED]                    = new Color(0);
-        DEFAULT_COLORS[FILE_SELECTED]                      = new Color(0);
-        DEFAULT_COLORS[SHELL_TEXT_SELECTED]                = new Color(0);
-        DEFAULT_COLORS[SHELL_BACKGROUND_SELECTED]          = new Color(0);
-        DEFAULT_COLORS[EDITOR_TEXT_SELECTED]               = new Color(0);
-        DEFAULT_COLORS[EDITOR_BACKGROUND_SELECTED]         = new Color(0);
-        DEFAULT_COLORS[LOCATION_BAR_TEXT_SELECTED]         = new Color(0);
-        DEFAULT_COLORS[LOCATION_BAR_BACKGROUND_SELECTED]   = new Color(0);
-    }
-
     /**
      * Only classes from the theme package are allowed to create a new theme.
      */
@@ -262,19 +217,14 @@ public class Theme {
      * @return                          the requested font.
      * @throws IllegalArgumentException if <code>id</code> is not a legal font id.
      */
-    public Font getFont(int id) {
-        Font buffer; // Buffer for the requested font.
-
+    public Font getCustomFont(int id) {
         // Makes sure the font id is legal.
         if(id < 0 || id >= FONT_COUNT) {
             if(Debug.ON) Debug.trace("Illegal font id: " + id);
             throw new IllegalArgumentException();
         }
 
-        // Checks whether a value was set for the requested font.
-        if((buffer = fonts[id]) == null)
-            fonts[id] = buffer = DEFAULT_FONT;
-        return buffer;
+        return fonts[id];
     }
 
     /**
@@ -283,18 +233,13 @@ public class Theme {
      * @return                          the requested color.
      * @throws IllegalArgumentException if <code>id</code> is not a legal color id.
      */
-    public Color getColor(int id) {
-        Color buffer; // Buffer for the requested color.
-
+    public Color getCustomColor(int id) {
         // Makes sure the color id is legal.
         if(id < 0 || id >= COLOR_COUNT) {
             if(Debug.ON) Debug.trace("Illegal color id: " + id);
             throw new IllegalArgumentException();
         }
 
-        // Checks whether a value was set for the requested color.
-        if((buffer = colors[id]) == null)
-            colors[id] = buffer = DEFAULT_COLORS[id];
-        return buffer;
+        return colors[id];
     }
 }

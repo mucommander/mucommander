@@ -195,6 +195,14 @@ class ThemeReader implements ContentHandler, XmlConstants {
                 throw createIllegalElementDeclaration(name);
         }
 
+        // File table border color.
+        else if(name.equals(ELEMENT_BORDER)) {
+            if(state == STATE_TABLE)
+                theme.setColor(Theme.FILE_TABLE_BORDER, createColor(attributes));
+            else
+                throw createIllegalElementDeclaration(name);
+        }
+
         // Background color.
         else if(name.equals(ELEMENT_BACKGROUND)) {
             if(state == STATE_TABLE_NORMAL)
@@ -444,12 +452,18 @@ class ThemeReader implements ContentHandler, XmlConstants {
      * @throws Exception  thrown if the {@link #ATTRIBUTE_COLOR} attribute is not set.
      */
     private static Color createColor(Hashtable attributes) throws Exception {
-        String color; // Buffer for the color attribute's value.
+        String buffer;
+        int    color;
 
         // Retrieves the color attribute's value.
-        if((color = (String)attributes.get(ATTRIBUTE_COLOR)) == null)
+        if((buffer = (String)attributes.get(ATTRIBUTE_COLOR)) == null)
             throw new Exception("Missing color attribute");
-        return new Color(Integer.parseInt(color, 16));
+        color = Integer.parseInt(buffer, 16);
+
+        // Retrieves the transparency attribute's value..
+        if((buffer = (String)attributes.get(ATTRIBUTE_ALPHA)) == null)
+            return new Color(color);
+        return new Color(color | (Integer.parseInt(buffer, 16) << 24), true);
     }
 
 
