@@ -1,6 +1,7 @@
 package com.mucommander.ui.event;
 
 import com.mucommander.ui.FolderPanel;
+import com.mucommander.file.FileURL;
 
 import java.util.Iterator;
 import java.util.WeakHashMap;
@@ -53,47 +54,47 @@ public class LocationManager {
     /**
      * Notifies all registered listeners that the current folder is being changed on the associated FolderPanel.
      *
-     * @param folderPath path to the folder that will become the new location if the folder change is succesfull
+     * @param folderURL url of the folder that will become the new location if the folder change is successful
      */
-    public synchronized void fireLocationChanging(String folderPath) {
+    public synchronized void fireLocationChanging(FileURL folderURL) {
         Iterator iterator = locationListeners.keySet().iterator();
         while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationChanging(new LocationEvent(folderPanel, folderPath));
+            ((LocationListener)iterator.next()).locationChanging(new LocationEvent(folderPanel, folderURL));
     }
 
     /**
      * Notifies all registered listeners that the current folder has changed on associated FolderPanel.
      *
-     * @param folderPath path to the new current folder in the associated FolderPanel
+     * @param folderURL url of the new current folder in the associated FolderPanel
      */
-    public synchronized void fireLocationChanged(String folderPath) {
+    public synchronized void fireLocationChanged(FileURL folderURL) {
         Iterator iterator = locationListeners.keySet().iterator();
         while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationChanged(new LocationEvent(folderPanel, folderPath));
+            ((LocationListener)iterator.next()).locationChanged(new LocationEvent(folderPanel, folderURL));
     }
 
     /**
-     * Notifies all registered listeners that the folder change as notified by {@link #fireLocationChanging(String)}
+     * Notifies all registered listeners that the folder change as notified by {@link #fireLocationChanging(FileURL)}
      * has been cancelled by the user.
      *
-     * @param folderPath path to the folder for which a failed attempt was made to make it the current folder
+     * @param folderURL url of the folder for which a failed attempt was made to make it the current folder
      */
-    public synchronized void fireLocationCancelled(String folderPath) {
+    public synchronized void fireLocationCancelled(FileURL folderURL) {
         Iterator iterator = locationListeners.keySet().iterator();
         while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationCancelled(new LocationEvent(folderPanel, folderPath));
+            ((LocationListener)iterator.next()).locationCancelled(new LocationEvent(folderPanel, folderURL));
     }
 
 
     /**
-     * Notifies all registered listeners that the folder change as notified by {@link #fireLocationChanging(String)}
+     * Notifies all registered listeners that the folder change as notified by {@link #fireLocationChanging(FileURL)}
      * could not be changed, as a result of the folder not existing or failing to list its contents.
      *
-     * @param folderPath path to the folder for which a failed attempt was made to make it the current folder
+     * @param folderURL url of the folder for which a failed attempt was made to make it the current folder
      */
-    public synchronized void fireLocationFailed(String folderPath) {
+    public synchronized void fireLocationFailed(FileURL folderURL) {
         Iterator iterator = locationListeners.keySet().iterator();
         while(iterator.hasNext())
-            ((LocationListener)iterator.next()).locationFailed(new LocationEvent(folderPanel, folderPath));
+            ((LocationListener)iterator.next()).locationFailed(new LocationEvent(folderPanel, folderURL));
     }
 }

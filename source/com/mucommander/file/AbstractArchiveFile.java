@@ -213,7 +213,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
           new ArchiveEntryFile(
             this,
             entry,
-            new FileURL(entryURLString, archiveURL)
+            URLFactory.getFileURL(entryURLString, archiveURL, true)
           )
         );
         entryFile.setParent(parentFile);

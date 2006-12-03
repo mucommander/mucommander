@@ -172,8 +172,8 @@ if(Debug.ON) Debug.trace("bestMatch="+(bestMatchIndex>0?(MappedCredentials)match
 
         FileURL url = credentials.getURL();
 
-//if(Debug.ON) Debug.trace("before, persistentCredentials="+persistentCredentials);
-//if(Debug.ON) Debug.trace("before, volatileCredentials="+volatileCredentials);
+if(Debug.ON) Debug.trace("before, persistentCredentials="+persistentCredentials);
+if(Debug.ON) Debug.trace("before, volatileCredentials="+volatileCredentials);
 
         int index = indexOf(persistentCredentials, url);
         if(isPersistent || index!=-1) {
@@ -194,8 +194,8 @@ if(Debug.ON) Debug.trace("bestMatch="+(bestMatchIndex>0?(MappedCredentials)match
                 volatileCredentials.setElementAt(credentials, index);
         }
 
-//if(Debug.ON) Debug.trace("after, persistentCredentials="+persistentCredentials);
-//if(Debug.ON) Debug.trace("fater, volatileCredentials="+volatileCredentials);
+if(Debug.ON) Debug.trace("after, persistentCredentials="+persistentCredentials);
+if(Debug.ON) Debug.trace("after, volatileCredentials="+volatileCredentials);
     }
 
 

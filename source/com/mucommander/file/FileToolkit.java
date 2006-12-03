@@ -1,6 +1,8 @@
 
 package com.mucommander.file;
 
+import com.mucommander.auth.CredentialsManager;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -37,8 +39,8 @@ public class FileToolkit {
 
         // destPath points to an absolute and existing folder
         if ((destFolder=FileFactory.getFile(destPath))!=null
-            && destFolder.exists()
-            && destFolder.isDirectory()) {
+         && destFolder.exists()
+         && destFolder.isDirectory()) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder for "+destPath+" destFolder="+destFolder.getAbsolutePath()+" destURL="+destFolder.getURL()+" URL filename="+destFolder.getURL().getFilename());
         }
 

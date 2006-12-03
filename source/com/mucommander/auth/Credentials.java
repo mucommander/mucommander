@@ -17,6 +17,7 @@ public class Credentials {
 	
     /**
      * Creates a new instance with the supplied login and password.
+     * Any provided null values will be replaced by empty strings.
      */
     public Credentials(String login, String password) {
         // Replace null values by empty strings
@@ -31,22 +32,33 @@ public class Credentials {
     }
 
     /**
-     * Returns the login information.
+     * Returns the login part. Returned login may be an empty string but never null.
      */
     public String getLogin() {
         return login;
     }
 	
     /**
-     * Returns the password information.
+     * Returns the password part. Returned password may be an empty string but never null.
      */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Returns the password as a masked string, each of the characters replaced by '*' characters. 
+     */
+    public String getMaskedPassword() {
+        int passwordLength = password.length();
+        StringBuffer maskedPasswordSb = new StringBuffer(passwordLength);
+        for(int i=0; i<passwordLength; i++)
+            maskedPasswordSb.append('*');
+
+        return maskedPasswordSb.toString();
+    }
 
     /**
-     * Returns the (weakly) encrypted password.
+     * Returns the password as a weakly encrypted string.
      */
     public String getEncryptedPassword() {
         return XORCipher.encryptXORBase64(password);

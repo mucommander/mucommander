@@ -109,7 +109,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
 
     public void locationChanging(LocationEvent e) {
         // Change the location field's text to the folder being changed
-        locationField.setText(e.getFolderPath());
+        locationField.setText(e.getFolderURL().getStringRep(false));
 
         // Disable component until the folder has been changed, cancelled or failed.
         // Note: the focus manager will release focus on the location field and give it to the next component (i.e. FileTable)

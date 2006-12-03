@@ -20,8 +20,9 @@ public class FileURL implements Cloneable {
     private String protocol;
     private String host;
     private int port = -1;
-    private String login;
-    private String password;
+//    private String login;
+//    private String password;
+    private Credentials credentials;
     private String path;
     private FileURL parentURL;
     private boolean parentURLSet;
@@ -106,9 +107,16 @@ public class FileURL implements Cloneable {
             // Filenames may contain @ chars, so atPos must be lower than next separator's position (if any)
             if(atPos!=-1 && (separatorPos==-1 || atPos<separatorPos)) {
                 colonPos = url.indexOf(':', pos);
-                login = url.substring(pos, colonPos==-1?atPos:colonPos);
+                String login = url.substring(pos, colonPos==-1?atPos:colonPos);
+                String password;
                 if(colonPos!=-1)
                     password = url.substring(colonPos+1, atPos);
+                else
+                    password = null;
+
+                if(!"".equals(login) || !(password==null || "".equals(password)))
+                    this.credentials = new Credentials(login, password);
+
                 // Advance string index
                 pos = atPos+1;
             }
@@ -239,11 +247,16 @@ public class FileURL implements Cloneable {
                 if(parentURL!=null) {
                     this.parentURL = parentURL;
                     this.parentURLSet = true;
-                    // Use parent's login and password if login and password not specified in the url
-                    if((login==null||login.equals("")) && (password==null||password.equals(""))) {
-                        this.login = parentURL.getLogin();
-                        this.password = parentURL.getPassword();
-                    }
+////                     Use parent's login and password if login and password not specified in the url
+//                    if((login==null||login.equals("")) && (password==null||password.equals(""))) {
+//                        this.login = parentURL.getLogin();
+//                        this.password = parentURL.getPassword();
+//                    }
+
+                    // Use parent URL's credentials if none are provided in this URL
+                    // Note: parent URL may not contain credentials, in this case null will be returned
+                    if(this.credentials==null)
+                        this.credentials = parentURL.getCredentials();
                 }
             }
         }
@@ -347,23 +360,24 @@ public class FileURL implements Cloneable {
      * <code>null</code> otherwise.
      */
     public String getLogin() {
-        return login;
+//        return login;
+        return credentials==null?null:credentials.getLogin(); 
     }
 
-    /**
-     * Sets the login contained by this FileURL. An empty String "" will be considered as null and returned
-     * as such next time {@link #getLogin()} is called.
-     */
-    public void setLogin(String login) {
-        if(login==null)
-            this.login = null;
-        else {
-            if(login.equals(""))
-                this.login = null;
-            else
-                this.login = login;
-        }
-    }
+//    /**
+//     * Sets the login contained by this FileURL. An empty String "" will be considered as null and returned
+//     * as such next time {@link #getLogin()} is called.
+//     */
+//    public void setLogin(String login) {
+//        if(login==null)
+//            this.login = null;
+//        else {
+//            if(login.equals(""))
+//                this.login = null;
+//            else
+//                this.login = login;
+//        }
+//    }
 
 
     /**
@@ -371,55 +385,56 @@ public class FileURL implements Cloneable {
      * <code>null</code> otherwise.
      */
     public String getPassword() {
-        return password;
+//        return password;
+        return credentials==null?null:credentials.getPassword();
     }
 
-    /**
-     * Sets the password contained by this FileURL. An empty String "" will be considered as null and returned
-     * as such next time {@link #getPassword()} is called.
-     */
-    public void setPassword(String password) {
-        if(password==null)
-            this.password = null;
-        else {
-            if(password.equals(""))
-                this.password = null;
-            else
-                this.password = password;
-        }
-    }
+//    /**
+//     * Sets the password contained by this FileURL. An empty String "" will be considered as null and returned
+//     * as such next time {@link #getPassword()} is called.
+//     */
+//    public void setPassword(String password) {
+//        if(password==null)
+//            this.password = null;
+//        else {
+//            if(password.equals(""))
+//                this.password = null;
+//            else
+//                this.password = password;
+//        }
+//    }
 
 
     /**
      * Convenience method that discards any credentials (login and password) contained by this FileURL.
-     * It has the same effect as calling {@link #setLogin(String)} and {@link #setPassword(String)}, or
-     * {@link #setCredentials(com.mucommander.auth.Credentials)} with a null value.
+     * It has the same effect as calling {@link #setCredentials(com.mucommander.auth.Credentials)} with a null value.
      *
      */
     public void discardCredentials() {
-        this.login = null;
-        this.password = null;
+        this.credentials = null;
     }
 
 
     /**
-     * Returns true if this FileURL contains credentials, i.e. contains a login and/or a password. If true is returned,
-     * {@link #getCredentials()} will return a non-null value.
+     * Returns true if this FileURL contains credentials. If true is returned, {@link #getCredentials()}
+     * will return a non-null value.
      */
     public boolean containsCredentials() {
-        return login!=null || password!=null;
+        return credentials!=null;
     }
 
 
     /**
      * Returns the credentials (login and password) contained in this FileURL, wrapped in an {@link Credentials} object.
-     * Returns null if this FileURL doesn't a login or password ({@link #containsCredentials()} returns false).
+     * Returns null if this FileURL doesn't contain any login or password.
      */
     public Credentials getCredentials() {
-        if(!containsCredentials())
-            return null;
+//        if(!containsCredentials())
+//            return null;
+//
+//        return new Credentials(login, password);
 
-        return new Credentials(login, password);
+        return credentials;
     }
 
 
@@ -431,13 +446,15 @@ public class FileURL implements Cloneable {
      * credentials will be discarded. 
      */
     public void setCredentials(Credentials credentials) {
-        if(credentials ==null) {
-            discardCredentials();
-        }
-        else {
-            setLogin(credentials.getLogin());
-            setPassword(credentials.getPassword());
-        }
+//        if(credentials ==null) {
+//            discardCredentials();
+//        }
+//        else {
+//            setLogin(credentials.getLogin());
+//            setPassword(credentials.getPassword());
+//        }
+
+        this.credentials = credentials;
     }
 
 	
@@ -570,18 +587,15 @@ public class FileURL implements Cloneable {
     private String reconstructURL(String path, boolean includeCredentials, boolean maskPassword) {
         String s = protocol + "://";
 		
-        if(includeCredentials && login!=null) {
-            s += login;
-            if(password!=null) {
+        if(includeCredentials && credentials!=null) {
+            s += credentials.getLogin();
+            String password = credentials.getPassword();
+            if(!"".equals(password)) {
                 s += ":";
-                if(maskPassword) {
-                    int passwordLength = password.length();
-                    for(int i=0; i<passwordLength; i++)
-                        s += "*";
-                }
-                else {
+                if(maskPassword)
+                    s += credentials.getMaskedPassword();
+                else
                     s += password;
-                }
             }
             s += "@";
         }

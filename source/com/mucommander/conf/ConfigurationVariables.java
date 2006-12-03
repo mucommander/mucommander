@@ -316,4 +316,18 @@ public interface ConfigurationVariables {
     public static final String  PROGRESS_DIALOG_EXPANDED          = PROGRESS_DIALOG_SECTION + '.' + "expanded";
     /** Default progress dialog behavior. */
     public static final boolean DEFAULT_PROGRESS_DIALOG_EXPANDED  = true;
+
+
+    // - Variables used for caches -------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section controlling the caching mechanisms used throughout the application */
+    public static final String  CACHE_SECTION                     = ROOT_SECTION + '.' + "cache";
+    /** Capacity of the AbstractFile instances cache */
+    public static final String  FILE_CACHE_CAPACITY               = CACHE_SECTION + '.' + "file_cache_capacity";
+    /** Default capacity of the AbstractFile instances cache */
+    public static final int     DEFAULT_FILE_CACHE_CAPACITY       = 1000;
+    /** Capacity of the FileURL instances cache */
+    public static final String  URL_CACHE_CAPACITY                = CACHE_SECTION + '.' + "url_cache_capacity";
+    /** Default capacity of the FileURL instances cache */
+    public static final int     DEFAULT_URL_CACHE_CAPACITY        = 1000;
 }

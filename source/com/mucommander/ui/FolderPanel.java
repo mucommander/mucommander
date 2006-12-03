@@ -22,6 +22,7 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.TablePopupMenu;
+import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +32,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 /**
  * 
@@ -271,22 +273,29 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         return currentFolder;
     }
 
-	
+
     /**
-     * Displays a popup message notifying the user that the request folder couldn't be opened.
+     * Displays a popup dialog informing the user that the requested folder doesn't exist or isn't available.
+     */
+    private void showFolderDoesNotExistDialog() {
+        JOptionPane.showMessageDialog(mainFrame, Translator.get("folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+    }
+
+
+    /**
+     * Displays a popup dialog informing the user that the requested folder couldn't be opened.
      */
     private void showAccessErrorDialog(IOException e) {
         String exceptionMsg = e==null?null:e.getMessage();
         String errorMsg = Translator.get("table.folder_access_error")+(exceptionMsg==null?"":": "+exceptionMsg);
 
-        JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(mainFrame, errorMsg, Translator.get("folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
     }
 
 
     /**
      * Pops up an {@link AuthDialog} where the user can enter credentials to grant him access to the file or folder
-     * represented by the given {@link FileURL}, and returns the credentials entered or null if no credentials were
-     * entered (dialog was cancelled).
+     * represented by the given {@link FileURL}, and returns the credentials entered or null if the dialog was cancelled.
      *
      * @param fileURL the file or folder to ask credentials for
      * @param errorMessage optional (can be null), an error message sent by the server to display to the user
@@ -342,11 +351,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             return;
         }
 		
-        //		if (folder==null || !folder.exists()) {
-        //			JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
-        //			return;
-        //		}
-
         this.changeFolderThread = new ChangeFolderThread(folder);
 
         if(selectThisFileAfter!=null)
@@ -373,8 +377,16 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             return;
         }
 
-        this.changeFolderThread = new ChangeFolderThread(folderPath);
-        changeFolderThread.start();
+        FileURL fileURL = URLFactory.getFileURL(folderPath);
+
+        if(fileURL==null) {
+            // FileURL could not be resolved, notify the user that the folder doesn't exist
+            showFolderDoesNotExistDialog();
+        }
+        else {
+            this.changeFolderThread = new ChangeFolderThread(fileURL);
+            changeFolderThread.start();
+        }
     }
 
     /**
@@ -449,7 +461,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         folderHistory.addToHistory(folder);
 
         // Notify listeners that location has changed
-        locationManager.fireLocationChanged(folder.getAbsolutePath());
+//        locationManager.fireLocationChanged(folder.getAbsolutePath());
+        locationManager.fireLocationChanged(folder.getURL());
     }
 
 
@@ -561,7 +574,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     public class ChangeFolderThread extends Thread {
 
         private AbstractFile folder;
-        private String folderPath;
         private FileURL folderURL;
         private AbstractFile fileToSelect;
 
@@ -576,20 +588,22 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             setPriority(Thread.MAX_PRIORITY);
         }
 
-        public ChangeFolderThread(String folderPath) {
-            this.folderPath = folderPath;
-            setPriority(Thread.MAX_PRIORITY);
-        }
-
         public ChangeFolderThread(FileURL folderURL) {
             this.folderURL = folderURL;
             setPriority(Thread.MAX_PRIORITY);
         }
 
+
+        /**
+         * Sets the file to be selected after the folder has been changed, can be null. 
+         */
         public void selectThisFileAfter(AbstractFile fileToSelect) {
             this.fileToSelect = fileToSelect;
         }
 
+        /**
+         * Kills the thread using the deprecated an not recommanded Thread#stop.
+         */
         public void tryKill() {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
             synchronized(lock) {
@@ -601,15 +615,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killing thread");
                     super.stop();
 
-                    /*
-                      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("waitdialog = "+waitDialog);
-                      if(waitDialog!=null) {
-                      if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on waitdialog");
-                      waitDialog.dispose();
-                      waitDialog = null;
-                      }
-                    */
-                    // post processing as it would normally have been done by run()
+                    // execute post processing as it would have been done by run()
                     finish(false);
                 }
             }
@@ -621,81 +627,109 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             boolean folderChangedSuccessfully = false;
 
             // Notify listeners that location is changing
-            locationManager.fireLocationChanging(folder==null?folderPath==null?folderURL.getStringRep(false):folderPath:folder.getAbsolutePath());
+            locationManager.fireLocationChanging(folder==null?folderURL:folder.getURL());
 
             // Show some progress in the progress bar to give hope
             locationField.setProgressValue(10);
 
-            /*
-            // Start a new thread which will popup a dialog after a number of seconds
-            new Thread() {
-            public void run() {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting and waiting");
-
-            try { sleep(3000); }
-            catch(InterruptedException e) {}
-
-            while(noWaitDialog) {
-            try { sleep(200); }
-            catch(InterruptedException e) {}
-            }
-
-            synchronized(lock) {
-            if(changeFolderThread==null || changeFolderThread!=ChangeFolderThread.this || userInterrupted || !ChangeFolderThread.this.isAlive())
-            return;
-
-            YBoxPanel panel = new YBoxPanel();
-            panel.add(new JLabel(Translator.get("table.connecting_to_folder")));
-            panel.addSpace(5);
-            JProgressBar fullProgressBar = new JProgressBar();
-            fullProgressBar.setValue(50);
-            panel.add(fullProgressBar);
-
-            // Download or browse file ?
-            waitDialog = new QuestionDialog(mainFrame,
-            null,
-            panel,
-            mainFrame,
-            new String[] {CANCEL_TEXT},
-            new int[] {CANCEL_ACTION},
-            0);
-            }
-
-            int ret = waitDialog.getActionValue();
-            if(ret==-1 || ret==CANCEL_ACTION)
-            tryKill();
-            }
-            }.start();
-            */
-
             // Disable automatic refresh
             fileTable.setAutoRefreshActive(false);
 
-            //			// Save focus state
-            //			this.hadFocus = fileTable.hasFocus();
-//            MappedCredentials newCredentials = null;
-            do {
-                //				noWaitDialog = false;
+            // If folder URL doesn't contain any credentials but CredentialsManager found some matching the URL,
+            // popup the authentication dialog to avoid having to wait for an AuthException to be thrown
+            boolean userCancelled = false;
+            if(folderURL!=null && !folderURL.containsCredentials() && CredentialsManager.getMatchingCredentials(folderURL).length>0) {
+                MappedCredentials newCredentials = getCredentialsFromUser(folderURL, null);
 
-                // Set cursor to hourglass/wait
-                mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                // User cancelled the authentication dialog, stop
+                if(newCredentials==null)
+                    userCancelled = true;
+                // Use provided credentials
+                else
+                    folderURL = newCredentials.getURL();
+            }
 
-                // Render all actions inactive while changing folder
-                mainFrame.setNoEventsMode(true);
+            if(!userCancelled) {
+                do {
+                    // Set cursor to hourglass/wait
+                    mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-                try {
-                    // 2 cases here :
-                    // - Thread was created using an AbstractFile instance
-                    // - Thread was created using a FileURL or FolderPath, corresponding AbstractFile needs to be resolved
+                    // Render all actions inactive while changing folder
+                    mainFrame.setNoEventsMode(true);
 
-                    // Thread was created using a FileURL or FolderPath
-                    if(folder==null) {
+                    try {
+                        // 2 cases here :
+                        // - Thread was created using an AbstractFile instance
+                        // - Thread was created using a FileURL, corresponding AbstractFile needs to be resolved
 
-                        AbstractFile file;
-                        if(folderURL!=null)
-                            file = FileFactory.getFile(folderURL, true);
-                        else
-                            file = FileFactory.getFile(folderPath, true);
+                        // Thread was created using a FileURL or FolderPath
+                        if(folder==null) {
+
+                            AbstractFile file = FileFactory.getFile(folderURL, true);
+
+                            synchronized(lock) {
+                                if(userInterrupted) {
+                                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
+                                    break;
+                                }
+                            }
+
+                            // File resolved -> 25% complete
+                            locationField.setProgressValue(25);
+
+                            if(file==null || !file.exists()) {
+                                // Restore default cursor
+                                mainFrame.setCursor(Cursor.getDefaultCursor());
+
+                                showFolderDoesNotExistDialog();
+                                break;
+                            }
+
+                            // File is a regualar directory, all good
+                            if(file.isDirectory()) {
+                                // Just continue
+                            }
+                            // File is a browsable file (Zip archive for instance) but not a directory : Browse or Download ? => ask the user
+                            else if(file.isBrowsable()) {
+                                // Restore default cursor
+                                mainFrame.setCursor(Cursor.getDefaultCursor());
+
+                                // Download or browse file ?
+                                QuestionDialog dialog = new QuestionDialog(mainFrame,
+                                                                           null,
+                                                                           Translator.get("table.download_or_browse"),
+                                                                           mainFrame,
+                                                                           new String[] {BROWSE_TEXT, DOWNLOAD_TEXT, CANCEL_TEXT},
+                                                                           new int[] {BROWSE_ACTION, DOWNLOAD_ACTION, CANCEL_ACTION},
+                                                                           0);
+
+                                int ret = dialog.getActionValue();
+                                if(ret==-1 || ret==CANCEL_ACTION)
+                                    break;
+
+                                // Download file
+                                if(ret==DOWNLOAD_ACTION) {
+                                    showDownloadDialog(file);
+                                    break;
+                                }
+                                // Continue if BROWSE_ACTION
+                                // Set cursor to hourglass/wait
+                                mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                                //							noWaitDialog = false;
+                            }
+                            // File is a regular file: show download dialog
+                            else {
+                                showDownloadDialog(file);
+                                break;
+                            }
+
+                            this.folder = file;
+                        }
+                        // Thread was created using an AbstractFile instance, check for existence
+                        else if(!folder.exists()) {
+                            showFolderDoesNotExistDialog();
+                            break;
+                        }
 
                         synchronized(lock) {
                             if(userInterrupted) {
@@ -704,164 +738,77 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                             }
                         }
 
-                        // File resolved -> 25% complete
-                        locationField.setProgressValue(25);
+                        // File tested -> 50% complete
+                        locationField.setProgressValue(50);
 
-                        if(file==null || !file.exists()) {
-                            //							noWaitDialog = true;
+                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
+                        AbstractFile children[] = applyFilters(folder.ls());
 
-                            // Restore default cursor
-                            mainFrame.setCursor(Cursor.getDefaultCursor());
+                        // Filter out Mac OS X .DS_Store files if the option is enabled
+                        if(dsStoreFilenameFilter!=null)
+                            children = dsStoreFilenameFilter.filter(children);
 
-                            JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
-                            break;
-                        }
-
-                        // File is a regualar directory, all good
-                        if(file.isDirectory()) {
-                            // Just continue
-                        }
-                        // File is a browsable file (Zip archive for instance) but not a directory : Browse or Download ? => ask the user
-                        else if(file.isBrowsable()) {
-                            //							noWaitDialog = true;
-
-                            // Restore default cursor
-                            mainFrame.setCursor(Cursor.getDefaultCursor());
-
-                            // Download or browse file ?
-                            QuestionDialog dialog = new QuestionDialog(mainFrame,
-                                                                       null,
-                                                                       Translator.get("table.download_or_browse"),
-                                                                       mainFrame,
-                                                                       new String[] {BROWSE_TEXT, DOWNLOAD_TEXT, CANCEL_TEXT},
-                                                                       new int[] {BROWSE_ACTION, DOWNLOAD_ACTION, CANCEL_ACTION},
-                                                                       0);
-
-                            int ret = dialog.getActionValue();
-                            if(ret==-1 || ret==CANCEL_ACTION)
+                        synchronized(lock) {
+                            if(userInterrupted) {
+                                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
                                 break;
-
-                            // Download file
-                            if(ret==DOWNLOAD_ACTION) {
-                                //								noWaitDialog = true;
-
-                                showDownloadDialog(file);
-                                break;
-
-                                /*
-                                  FileSet fileSet = new FileSet(currentFolder);
-                                  fileSet.add(file);
-
-                                  // Show confirmation/path modification dialog
-                                  new DownloadDialog(mainFrame, fileSet);
-
-                                  break;
-                                */
                             }
-                            // Continue if BROWSE_ACTION
-                            // Set cursor to hourglass/wait
-                            mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                            //							noWaitDialog = false;
-                        }
-                        // File is a regular file: show download dialog
-                        else {
-                            showDownloadDialog(file);
-                            break;
+                            // From now on, thread cannot be killed (would comprise table integrity)
+                            doNotKill = true;
                         }
 
-                        this.folder = file;
-                    }
-                    // Thread was created using an AbstractFile instance, check for existence
-                    else if(!folder.exists()) {
-                        JOptionPane.showMessageDialog(mainFrame, Translator.get("table.folder_does_not_exist"), Translator.get("table.folder_access_error_title"), JOptionPane.ERROR_MESSAGE);
+                        // files listed -> 75% complete
+                        locationField.setProgressValue(75);
+
+                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFolder");
+
+                        // Change the file table's current folder and select the specified file (if any)
+                        setCurrentFolder(folder, children, fileToSelect);
+
+                        // folder set -> 95% complete
+                        locationField.setProgressValue(95);
+
+                        // If some new credentials were entered by the user, these can now be considered valid
+                        // (folder was changed successfully) -> add them to the credentials list.
+                        Credentials credentials = folder.getURL().getCredentials();
+                        if(credentials!=null && credentials instanceof MappedCredentials)
+                            CredentialsManager.addCredentials((MappedCredentials)credentials);
+
+                        // All good !
+                        folderChangedSuccessfully = true;
+
                         break;
                     }
+                    catch(IOException e) {
+                        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
 
-                    synchronized(lock) {
-                        if(userInterrupted) {
-                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
-                            break;
+                        // Restore default cursor
+                        mainFrame.setCursor(Cursor.getDefaultCursor());
+
+                        if(e instanceof AuthException) {
+                            AuthException authException = (AuthException)e;
+                            // Retry (loop) if user provided new credentials, if not stop
+                            MappedCredentials newCredentials = getCredentialsFromUser(authException.getFileURL(), authException.getMessage());
+                            if(newCredentials!=null) {
+                                // Invalidate AbstractFile instance
+                                folder = null;
+                                // Use the URL containing the new credentials
+                                folderURL = newCredentials.getURL();
+                                continue;
+                            }
                         }
-                    }
-
-                    // File tested -> 50% complete
-                    locationField.setProgressValue(50);
-
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
-                    AbstractFile children[] = applyFilters(folder.ls());
-
-                    // Filter out Mac OS X .DS_Store files if the option is enabled
-                    if(dsStoreFilenameFilter!=null)
-                        children = dsStoreFilenameFilter.filter(children);
-
-                    synchronized(lock) {
-                        if(userInterrupted) {
-                            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
-                            break;
+                        else {
+                            showAccessErrorDialog(e);
                         }
-                        // From now on, thread cannot be killed (would comprise table integrity)
-                        doNotKill = true;
+
+                        // Stop looping!
+                        break;
                     }
-
-                    // files listed -> 75% complete
-                    locationField.setProgressValue(75);
-
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling setCurrentFolder");
-                    setCurrentFolder(folder, children, fileToSelect);
-
-                    // folder set -> 95% complete
-                    locationField.setProgressValue(95);
-
-                    // If some new credentials were entered by the user, these can now be considered valid
-                    // (folder was changed successfully), add them to the credentials list.
-                    Credentials credentials = folder.getURL().getCredentials();
-                    if(credentials!=null && credentials instanceof MappedCredentials)
-                        CredentialsManager.addCredentials((MappedCredentials)credentials);
-
-                    // All good !
-                    folderChangedSuccessfully = true;
-
-                    break;
                 }
-                catch(IOException e) {
-                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
-                    //					noWaitDialog = true;
-
-                    // Restore default cursor
-                    mainFrame.setCursor(Cursor.getDefaultCursor());
-
-                    if(e instanceof AuthException) {
-                        AuthException authException = (AuthException)e;
-                        // Retry (loop) if user provided new credentials
-                        MappedCredentials newCredentials = getCredentialsFromUser(authException.getFileURL(), authException.getMessage());
-                        if(newCredentials!=null) {
-                            folder = null;
-                            folderPath = null;
-                            folderURL = newCredentials.getURL();
-                            continue;
-                        }
-                    }
-                    else {
-                        showAccessErrorDialog(e);
-                    }
-
-                    // Break!
-                    break;
-                }
+                while(true);
             }
-            while(true);
-
-            //			noWaitDialog = true;
-
+            
             synchronized(lock) {
-                /*
-                  if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("waitdialog = "+waitDialog);
-                  if(waitDialog!=null) {
-                  if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling dispose() on waitdialog");
-                  waitDialog.dispose();
-                  waitDialog = null;
-                  }
-                */
                 // Clean things up
                 finish(folderChangedSuccessfully);
             }
@@ -885,12 +832,12 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             mainFrame.setNoEventsMode(false);
 
             if(!folderChangedSuccessfully) {
-                String failedPath = folder==null?folderPath==null?folderURL.getStringRep(false):folderPath:folder.getAbsolutePath();
+                FileURL failedURL = folder==null?folderURL:folder.getURL();
                 // Notifies listeners that location change has been cancelled by the user or has failed
                 if(userInterrupted)
-                    locationManager.fireLocationCancelled(failedPath);
+                    locationManager.fireLocationCancelled(failedURL);
                 else
-                    locationManager.fireLocationFailed(failedPath);
+                    locationManager.fireLocationFailed(failedURL);
             }
         }
     }

@@ -2,6 +2,8 @@ package com.mucommander.file;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.cache.LRUCache;
@@ -38,10 +40,13 @@ public abstract class FileFactory {
     /** Array of registered archive constructors, for quicker access */
     private static Constructor registeredArchiveConstructors[];
 
+//    /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
+//    private static LRUCache fileCache = LRUCache.createInstance(1000);
+//    /** Static LRUCache instance that caches frequently accessed FileURL instances */
+//    private static LRUCache urlCache = LRUCache.createInstance(1000);
+
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
-    private static LRUCache fileCache = LRUCache.createInstance(1000);
-    /** Static LRUCache instance that caches frequently accessed FileURL instances */
-    private static LRUCache urlCache = LRUCache.createInstance(1000);
+    private static LRUCache fileCache = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.FILE_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_FILE_CACHE_CAPACITY));
 
     /** System temp directory */
     private final static File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
@@ -190,9 +195,6 @@ public abstract class FileFactory {
      * @throws AuthException if additionnal authentication information is required to create the file
      */
     protected static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
-        // Create a FileURL instance using the given path
-        FileURL fileURL;
-
 //        // If path contains no protocol, consider the file as a local file and add the 'file' protocol to the URL.
 //        // Frequently used local FileURL instances are cached for performance
 //        if(absPath.indexOf("://")==-1) {
@@ -218,23 +220,23 @@ public abstract class FileFactory {
 
         // Frequently used local FileURL instances are cached for performance
 
-        // First, try and find a cached FileURL instance
-        fileURL = (FileURL)urlCache.get(absPath);
-        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
-        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getHitCount()+"/"+urlCache.getMissCount());
+//        // First, try and find a cached FileURL instance
+//        fileURL = (FileURL)urlCache.get(absPath);
+//        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
+//        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getHitCount()+"/"+urlCache.getMissCount());
+//
+//        // FileURL not in cache, let's create it and add it to the cache
+//        if(fileURL==null) {
+//            // A MalformedURLException if the provided URL/path is malformed
+//            fileURL = new FileURL(absPath, parent==null?null:parent.getURL());		// Reuse parent file's FileURL (if any)
+//
+//            // FileURL cache is not used for now as FileURL are mutable (setLogin, setPassword, setPort) and it
+//            // may cause some weird side effects
+//            if(fileURL.getProtocol().equals("file"))
+//                urlCache.add(absPath, fileURL);
+//        }
 
-        // FileURL not in cache, let's create it and add it to the cache
-        if(fileURL==null) {
-            // A MalformedURLException if the provided URL/path is malformed
-            fileURL = new FileURL(absPath, parent==null?null:parent.getURL());		// Reuse parent file's FileURL (if any)
-
-            // FileURL cache is not used for now as FileURL are mutable (setLogin, setPassword, setPort) and it
-            // may cause some weird side effects
-            if(fileURL.getProtocol().equals("file"))
-                urlCache.add(absPath, fileURL);
-        }
-
-        return getFile(fileURL, parent);
+        return getFile(URLFactory.getFileURL(absPath, parent==null?null:parent.getURL(), true), parent);
     }
 
     /**

@@ -71,24 +71,6 @@ public class Bookmark implements Cloneable {
 
 
     /**
-     * Tries to create a {@link FileURL} out of this bookmark's location and returns it.
-     *
-     * <b>Important: </b> The returned FileURL may very well be <code>null</code> if the location cannot be resolved
-     * as a FileURL. That is the case if the location does not designate a URL but a local path.
-     *
-     * @return this bookmark's location as a FileURL, <code>null</code> if the location is not a valid URL
-     */
-    public FileURL getLocationAsURL() {
-        try {
-            return new FileURL(location);
-        }
-        catch(MalformedURLException e) {
-            return null;
-        }
-    }
-
-
-    /**
      * Changes this bookmark's location to the given one and fires an event to registered {@link BookmarkListener}
      * instances.
      */

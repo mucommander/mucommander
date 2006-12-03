@@ -498,12 +498,18 @@ folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
 folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar.
 folder_does_not_exist:ES:El directoio no existe o no está disponible.
 folder_does_not_exist:CS:Tato složka neexistuje.
+#folder_does_not_exist:CS:Složka neexistuje nebo není přístupná
 folder_does_not_exist:zh_TW:資料夾不存在或無法使用.
 folder_does_not_exist:PL:Ten katalog nie istnieje lub jest nieosiągalny.
+#folder_does_not_exist:PL:Katalog nie istnieje lub nie jest dostępny
 folder_does_not_exist:HU:A könyvtár nem létezik vagy nem található.
+#folder_does_not_exist:HU:Ez a könyvtár nem létezik vagy nem elérhető
 folder_does_not_exist:RU:Каталог с таким именем не существует или недоступен
+#folder_does_not_exist:RU:Такой каталог не существует или недоступен
 folder_does_not_exist:ZH_CN:文件夹不存在或无法使用.
+#folder_does_not_exist:ZH_CN:文件夹不存在
 folder_does_not_exist:SI:Ta mapa ne obstaja oz. ni dostopna.
+#folder_does_not_exist:SI:Mapa ne obstaja oz. ni dosegljiva.
 
 this_folder_does_not_exist:EN:This folder doesn't exist or is not available: %1
 this_folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible: %1
@@ -2185,18 +2191,6 @@ table.folder_access_error:RU:Не удается прочесть содержи
 table.folder_access_error:ZH_CN:无法读取文件夹内容
 table.folder_access_error:SI:Ne morem prebrati vsebine mape
 
-table.folder_does_not_exist:EN:This folder doesn't exist or is not available.
-table.folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
-table.folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar.
-table.folder_does_not_exist:ES:El directorio no existe o no está disponible.
-table.folder_does_not_exist:CS:Složka neexistuje nebo není přístupná
-table.folder_does_not_exist:zh_TW:資料夾不存在或無法使用.
-table.folder_does_not_exist:PL:Katalog nie istnieje lub nie jest dostępny
-table.folder_does_not_exist:HU:Ez a könyvtár nem létezik vagy nem elérhető
-table.folder_does_not_exist:RU:Такой каталог не существует или недоступен
-table.folder_does_not_exist:ZH_CN:文件夹不存在
-table.folder_does_not_exist:SI:Mapa ne obstaja oz. ni dosegljiva.
-
 table.download_or_browse:EN:Would you like to browse or download this file ?
 table.download_or_browse:FR:Souhaitez-vous explorer ou télécharger ce fichier ?
 table.download_or_browse:DE:Wollen sie zur Datei browsen oder sie downloaden?
@@ -3398,6 +3392,7 @@ run_dialog.run_in_home_description:FR:Exécuter dans le répertoire utilisateur
 
 
 
+
 run_dialog.command_output:EN:Command output
 run_dialog.command_output:FR:Sortie de la commande
 run_dialog.command_output:DE:Befehlsausgabe
@@ -3609,8 +3604,8 @@ auth_dialog.error_was:RU:Ошибка: %1
 auth_dialog.error_was:ZH_CN:错误: %1
 auth_dialog.error_was:SI:Napaka: %1
 
-auth_dialog.save_credentials_to_disk:EN:Save credentials to disk (weak encryption)
-auth_dialog.save_credentials_to_disk:FR:Sauvegarder les identifiants (encryption faible)
+auth_dialog.store_credentials:EN:Store login and password (weak encryption)
+auth_dialog.store_credentials:FR:Sauver les identifiants (encryption faible)
 
 
 

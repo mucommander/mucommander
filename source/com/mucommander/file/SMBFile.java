@@ -73,7 +73,7 @@ if(Debug.ON) Debug.trace("caught "+e);
         //		// Regular SMB files can have a trailing slash as well, so let's add a trailing slash.
         //		this.file = new SmbFile(privateURL.endsWith("/")?privateURL:privateURL+"/");
 
-if(Debug.ON) Debug.trace("fileURL="+fileURL.getStringRep(true));
+//if(Debug.ON) Debug.trace("fileURL="+fileURL.getStringRep(true));
 
         if(smbFile==null)
 //            this.file = new SmbFile(privateURL);
@@ -274,7 +274,7 @@ if(Debug.ON) Debug.trace("fileURL="+fileURL.getStringRep(true));
             return children;
         }
         catch(SmbAuthException e) {
-if(Debug.ON) Debug.trace("caught "+e);
+//if(Debug.ON) Debug.trace("caught "+e);
             
             throw new AuthException(fileURL, e.getMessage());
         }
@@ -308,11 +308,6 @@ if(Debug.ON) Debug.trace("caught "+e);
     ////////////////////////
     // Overridden methods //
     ////////////////////////
-
-//    public String getName() {
-//        return name;
-//    }
-
 
     public boolean isHidden() {
         try {
