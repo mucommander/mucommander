@@ -212,10 +212,32 @@ public class Theme {
     // - Theme values retrieval ----------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
+     * Returns <code>true</code> if the requested font has a custom value with the current theme.
+     * @param  id                   identifier of the font to check for.
+     * @return                      <code>true</code> if the requested font has a custom value with the current theme, <code>false</code> otherwise.
+     * @see     #getCustomFont(int)
+     */
+    public boolean hasCustomFont(int id) {return fonts[id] != null;}
+
+    /**
+     * Returns <code>true</code> if the requested color has a custom value with the current theme.
+     * @param  id                   identifier of the color to check for.
+     * @return                      <code>true</code> if the requested color has a custom value with the current theme, <code>false</code> otherwise.
+     * @see     #getCustomColor(int)
+     */
+    public boolean hasCustomColor(int id) {return colors[id] != null;}
+
+    /**
      * Returns the requested font.
+     * <p>
+     * Note that this method might return <code>null</code> if the requested font hasn't
+     * been set by the current theme. In that case, UI components should be initialised
+     * with their default system font.
+     * </p>
      * @param  id                       identifier of the requested font.
      * @return                          the requested font.
      * @throws IllegalArgumentException if <code>id</code> is not a legal font id.
+     * @see    #hasCustomFont(int)
      */
     public Font getCustomFont(int id) {
         // Makes sure the font id is legal.
@@ -229,9 +251,15 @@ public class Theme {
 
     /**
      * Returns the requested color.
+     * <p>
+     * Note that this method might return <code>null</code> if the requested color hasn't
+     * been set by the current theme. In that case, UI components should be initialised
+     * with their default system color.
+     * </p>
      * @param  id                       identifier of the requested color.
      * @return                          the requested color.
      * @throws IllegalArgumentException if <code>id</code> is not a legal color id.
+     * @see    #hasCustomColor(int)
      */
     public Color getCustomColor(int id) {
         // Makes sure the color id is legal.
