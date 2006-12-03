@@ -14,6 +14,10 @@ public interface ThemeListener {
      * Note that the color parameters might be set to <code>null</code>.
      * This means that the corresponding color is the system default.
      * </p>
+     * <p>
+     * This method is guaranteed to only be called if <code>oldColor</code>
+     * and <code>newColor</code> actually differ.
+     * </p>
      * @param colorId  identifier of the color that has changed.
      * @param oldColor old value for the color.
      * @param newColor new value for the color.
@@ -25,6 +29,10 @@ public interface ThemeListener {
      * <p>
      * Note that the font parameters might be set to <code>null</code>.
      * This means that the corresponding font is the system default.
+     * </p>
+     * <p>
+     * This method is guaranteed to only be called if <code>oldFont</code>
+     * and <code>newFont</code> actually differ.
      * </p>
      * @param fontId  identifier of the font that has changed.
      * @param oldFont old value for the font.

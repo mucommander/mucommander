@@ -218,6 +218,15 @@ public class Theme {
         if(triggerEvents) {
             buffer    = fonts[id];
             fonts[id] = font;
+
+            // Compares the old and new fonts to make sure the event must be triggered.
+            if(font == null) {
+                if(buffer == null)
+                    return;
+            }
+            else if(font.equals(buffer))
+                return;
+
             triggerFontEvent(id, buffer, font);
         }
         else
@@ -250,6 +259,15 @@ public class Theme {
         if(triggerEvents) {
             buffer     = colors[id];
             colors[id] = color;
+
+            // Compares the old and new colors to make sure the event must be triggered.
+            if(color == null) {
+                if(buffer == null)
+                    return;
+            }
+            else if(color.equals(buffer))
+                return;
+
             triggerColorEvent(id, buffer, color);
         }
         else
