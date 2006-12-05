@@ -2,6 +2,7 @@
 package com.mucommander.file;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 import com.mucommander.auth.Credentials;
 
 import java.net.MalformedURLException;
@@ -367,38 +368,65 @@ public class FileURL implements Cloneable {
 
 	
     /**
-     * Returns the parent URL of this file based on the path, null if there is no parent file (path is '/').
+     * Returns this FileURL's parent, or null if this FileURL has no parent (path is "/").
+     * If this FileURL contains credentials, the returned parent FileURL will have the same credentials.
      */
     public FileURL getParent() {
         // ParentURL not set yet
-        if(!this.parentURLSet && parentURL==null) {
-            // Creates parent URL from reconstructed URL with canonized path
-            String url = reconstructURL(path, true, true);
-            int len = url.length();
-            String urlCopy = new String(url).replace('\\', '/');
-            int separatorPos = (urlCopy.endsWith("/")?urlCopy.substring(0, --len):urlCopy).lastIndexOf('/');
-            if(separatorPos>7) {
-                try { 
-                    // Leave trailing separator
-                    this.parentURL = new FileURL(url.substring(0, separatorPos+1)); 
-                }
-                catch(MalformedURLException e) {
-                    // No parent (parentURL will be null)
+        if(!parentURLSet && parentURL==null) {
+            // If path equals '/', url has no parent
+            if(!path.equals("/")) {
+                // Resolve parent folder and reconstruct parent URL
+                String parentPath = path.replace('\\', '/');
+
+                // Remove any trailing slash
+                if(parentPath.endsWith("/"))
+                    parentPath = parentPath.substring(0, parentPath.length()-1);
+
+                int separatorPos = parentPath.lastIndexOf('/');
+                if(separatorPos!=-1) {  // Should always be true
+                    try {
+                        // Reconstruct parent URL string
+                        String parent = protocol+"://";
+
+                        if(host!=null)
+                            parent += host;
+
+                        if(port!=-1)
+                            parent += ":"+port;
+
+                        if(host!=null || !parentPath.equals("/"))	// Test to avoid having URLs like 'smb:///'
+                            parent += parentPath.substring(0, separatorPos+1);  // Keep trailing slash
+
+                        parentURL = new FileURL(parent);
+
+                        // Set same credentials for parent (if any)
+                        if(credentials!=null)
+                            parentURL.setCredentials(credentials);
+
+                        // Copy properties to parent (if any)
+                        if(properties!=null)
+                            parentURL.properties = new Hashtable(properties);
+                    }
+                    catch(MalformedURLException e) {
+                        // No parent (parentURL will be null)
+                    }
                 }
             }
+
             this.parentURLSet = true;
         }
 		
-        if(parentURL!=null) {
-            // Return a cloned instance of parentURL since it is mutable and changes made in the returned
-            // FileURL instance should not impact this instance 
-            try {
-                return (FileURL)parentURL.clone();
-            }
-            catch(CloneNotSupportedException e) {
-                return null;
-            }
-        }
+//        if(parentURL!=null) {
+//            // Return a cloned instance of parentURL since it is mutable and changes made in the returned
+//            // FileURL instance should not impact this instance
+//            try {
+//                return (FileURL)parentURL.clone();
+//            }
+//            catch(CloneNotSupportedException e) {
+//                return null;
+//            }
+//        }
 	
         return parentURL;
     }
@@ -580,6 +608,8 @@ public class FileURL implements Cloneable {
             "http://mucommander.com/webstart/index.html",
             "http://mucommander.com/webstart/index.php?dummy=1&useless=true",
             "smb://",
+            "smb://a",
+            "smb://a/b",
             "smb://maxence@garfield",
             "smb://maxence:yep@garfield",
             "smb://maxence:yep@garfield/shared/music",
@@ -617,7 +647,7 @@ public class FileURL implements Cloneable {
 //                    f = getLocalFileURL(urls[i], null);
 //                else
                     f = new FileURL(urls[i]);
-                System.out.println("FileURL.toString()= "+f.toString());
+                System.out.println("FileURL.getStringRep(true)= "+f.getStringRep(true));
                 System.out.println(" - path= "+f.getPath());
                 System.out.println(" - host= "+f.getHost());
                 if(f.getLogin()!=null)
@@ -627,8 +657,8 @@ public class FileURL implements Cloneable {
                 if(f.getParent()!=null)
                     System.out.println(" - parent path= "+f.getParent().getPath());
 
-                if(f.getProtocol().equals("file"))
-                    System.out.println(" FSFile's path="+FileFactory.getFile(f, true).getAbsolutePath());
+//                if(f.getProtocol().equals("file"))
+//                    System.out.println(" FSFile's path="+FileFactory.getFile(f, true).getAbsolutePath());
 
                 System.out.println();
             }

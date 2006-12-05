@@ -134,11 +134,11 @@ if(Debug.ON) Debug.trace("caught "+e);
                     if(fileURL.getHost()!=null)
                         parentURL = new FileURL("smb://");
                     else
-                        return null;    // This file is smb://
+                        return null;    // This file is already smb://
                 }
 
 //                this.parent = new SMBFile(parentURL, null, false);
-                parentURL.setCredentials(fileURL.getCredentials());
+//                parentURL.setCredentials(fileURL.getCredentials());
                 this.parent = new SMBFile(parentURL, null);
 
                 return parent;

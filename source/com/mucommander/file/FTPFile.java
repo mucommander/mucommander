@@ -131,7 +131,7 @@ public class FTPFile extends AbstractFile {
             // Throw an IOException if server replied with an error
             checkServerReply();
 
-            // File doesn't exists
+            // File doesn't exist
             if(files==null || files.length==0)
                 return null;
 

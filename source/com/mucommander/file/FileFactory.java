@@ -20,7 +20,8 @@ import java.util.Set;
 import java.util.Vector;
 
 /**
- * FileFactory is an abstract class that provides static methods to create {link AbstractFile AbstractFile} instances.
+ * FileFactory is an abstract class that provides static methods to create {@link AbstractFile} instances
+ * and cache the most frequently accessed ones.
  *
  * @see AbstractFile
  * @author Maxence Bernard
@@ -39,11 +40,6 @@ public abstract class FileFactory {
     private static FileFilter registeredArchiveFilters[];
     /** Array of registered archive constructors, for quicker access */
     private static Constructor registeredArchiveConstructors[];
-
-//    /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
-//    private static LRUCache fileCache = LRUCache.createInstance(1000);
-//    /** Static LRUCache instance that caches frequently accessed FileURL instances */
-//    private static LRUCache urlCache = LRUCache.createInstance(1000);
 
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
     private static LRUCache fileCache = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.FILE_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_FILE_CACHE_CAPACITY));
@@ -79,7 +75,7 @@ public abstract class FileFactory {
 
 
     /**
-     * Registers an {@link AbstractFile} Class to be used by <code>getFile()</code> methods to create files for the given file protocol.
+     * Registers an {@link AbstractFile} Class to be used by getFile() methods to create files for the given file protocol.
      *
      * @param abstractFileClass a Class denoting an AbstractFile class
      * @param protocol the protocol to register the AbstractFile Class for (e.g. "smb")
@@ -186,7 +182,7 @@ public abstract class FileFactory {
 
     /**
      * Returns an instance of AbstractFile for the given absolute path and sets the giving parent if not null. AbstractFile subclasses should
-     * call this method rather than getFile(String) because it is more efficient.
+     * call this method rather than {@link #getFile(String)} because it is more efficient.
      *
      * @param absPath the absolute path to the file
      * @param parent the returned file's parent
@@ -195,47 +191,6 @@ public abstract class FileFactory {
      * @throws AuthException if additionnal authentication information is required to create the file
      */
     protected static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
-//        // If path contains no protocol, consider the file as a local file and add the 'file' protocol to the URL.
-//        // Frequently used local FileURL instances are cached for performance
-//        if(absPath.indexOf("://")==-1) {
-//            // Try to find a cached FileURL instance
-//            fileURL = (FileURL)urlCache.get(absPath);
-//            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
-//            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getHitCount()+"/"+urlCache.getMissCount());
-//
-//            // FileURL not in cache, let's create it and add it to the cache
-//            if(fileURL==null) {
-//                // A MalformedURLException will be thrown if the path is not absolute
-//                fileURL = FileURL.getLocalFileURL(absPath, parent==null?null:parent.getURL());	// Reuse parent file's FileURL (if any)
-//                urlCache.add(absPath, fileURL);
-//            }
-//        }
-//        else {
-//            // FileURL cache is not used for now as FileURL are mutable (setLogin, setPassword, setPort) and it
-//            // may cause some weird side effects
-//            fileURL = new FileURL(absPath, parent==null?null:parent.getURL());		// Reuse parent file's FileURL (if any)
-//        }
-//
-//        return getFile(fileURL, parent);
-
-        // Frequently used local FileURL instances are cached for performance
-
-//        // First, try and find a cached FileURL instance
-//        fileURL = (FileURL)urlCache.get(absPath);
-//        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace((fileURL==null?"Adding to FileURL cache:":"FileURL cache hit: ")+absPath);
-//        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("url cache hits/misses: "+urlCache.getHitCount()+"/"+urlCache.getMissCount());
-//
-//        // FileURL not in cache, let's create it and add it to the cache
-//        if(fileURL==null) {
-//            // A MalformedURLException if the provided URL/path is malformed
-//            fileURL = new FileURL(absPath, parent==null?null:parent.getURL());		// Reuse parent file's FileURL (if any)
-//
-//            // FileURL cache is not used for now as FileURL are mutable (setLogin, setPassword, setPort) and it
-//            // may cause some weird side effects
-//            if(fileURL.getProtocol().equals("file"))
-//                urlCache.add(absPath, fileURL);
-//        }
-
         return getFile(URLFactory.getFileURL(absPath, parent==null?null:parent.getURL(), true), parent);
     }
 

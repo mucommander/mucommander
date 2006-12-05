@@ -1,6 +1,9 @@
 package com.mucommander.file;
 
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.Base64OutputStream;
+import com.mucommander.auth.Credentials;
+import com.mucommander.auth.AuthException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -37,7 +40,7 @@ public class HTTPFile extends AbstractFile {
      * Creates a new instance of HTTPFile.
      */
     public HTTPFile(FileURL fileURL) throws IOException {
-        this(fileURL, new URL(fileURL.getStringRep(true)));
+        this(fileURL, new URL(fileURL.getStringRep(false)));
     }
 
 	
@@ -85,17 +88,14 @@ public class HTTPFile extends AbstractFile {
 	
             // Use HEAD instead of GET as we don't need the body
             conn.setRequestMethod("HEAD");
-			
-            // Open connection
+
+            // Establish connection
             conn.connect();
 
-            int responseCode = conn.getResponseCode();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("response code = "+responseCode);
+            // Check HTTP response code and throw appropriate IOException if request failed
+            checkHTTPResponse(conn);
 
-            if(responseCode<200 || responseCode>=400)
-                throw new IOException();
-			
-            // Resolve date: last-modified header, if not set date header, and if still not set System.currentTimeMillis
+            // Resolve date: use last-modified header, if not set use date header, and if still not set use System.currentTimeMillis
             date = conn.getLastModified();
             if(date==0) {
                 date = conn.getDate();
@@ -103,7 +103,7 @@ public class HTTPFile extends AbstractFile {
                     date = System.currentTimeMillis();
             }
 			
-            // Resolve size thru content-length header (-1 if not available)
+            // Resolve size with content-length header (-1 if not available)
             size = conn.getContentLength();
 			
             // Test if content is HTML
@@ -117,13 +117,34 @@ public class HTTPFile extends AbstractFile {
     private HttpURLConnection getHttpURLConnection(URL url) throws IOException {
         // Get URLConnection instance
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-		
+
+        // If credentials are contained in this HTTPFile's FileURL, use them for Basic HTTP Authentication
+        Credentials credentials = fileURL.getCredentials();
+        if(credentials!=null)
+            conn.setRequestProperty(
+                "Authorization",
+                "Basic "+ Base64OutputStream.encode(credentials.getLogin()+":"+credentials.getPassword())
+            );
+
         // Set user-agent header
         conn.setRequestProperty("user-agent", com.mucommander.PlatformManager.USER_AGENT);
-	
+
         return conn;
     }
-	
+
+
+    private void checkHTTPResponse(HttpURLConnection conn) throws IOException {
+        int responseCode = conn.getResponseCode();
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("response code = "+responseCode);
+
+        // If we got a 401 (Unauthorized) response, throw an AuthException to ask for credentials
+        if(responseCode==401)
+            throw new AuthException(fileURL, conn.getResponseMessage());
+
+        if(responseCode<200 || responseCode>=400)
+            throw new IOException(conn.getResponseMessage());
+    }
+
 	
     /////////////////////////////////////////
     // AbstractFile methods implementation //
@@ -192,7 +213,13 @@ public class HTTPFile extends AbstractFile {
 
     public InputStream getInputStream() throws IOException {
         HttpURLConnection conn = getHttpURLConnection(this.url);
+
+        // Establish connection
         conn.connect();
+
+        // Check HTTP response code and throw appropriate IOException if request failed
+        checkHTTPResponse(conn);
+
         return conn.getInputStream();
     }
 
@@ -253,18 +280,21 @@ public class HTTPFile extends AbstractFile {
             HttpURLConnection conn;
             do {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("contextURL="+contextURL+" hostname="+contextURL.getHost());
-                // Open connection
+                // Get a connection instance
                 conn = getHttpURLConnection(contextURL);
-				
+
                 // Disable automatic redirections to track URL change
                 conn.setInstanceFollowRedirects(false);
 
                 // Establish connection
                 conn.connect();
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("response code = "+conn.getResponseCode());
 
-                // Test if reponse code is in the 3xx range and if 'Location' field is set
+                // Check HTTP response code and throw appropriate IOException if request failed
+                checkHTTPResponse(conn);
+
                 int responseCode = conn.getResponseCode();
+
+                // Test if reponse code is in the 3xx range (redirection) and if 'Location' field is set
                 String locationHeader = conn.getHeaderField("Location");
                 if(responseCode>=300 && responseCode<400 && locationHeader!=null) {
                     // Redirect to Location field and remember context url
@@ -281,7 +311,7 @@ public class HTTPFile extends AbstractFile {
             // Extract encoding information (if any)
             String contentType = conn.getContentType();
             if(contentType==null || !contentType.trim().startsWith("text/html"))
-                throw new IOException();
+                throw new IOException("Content type is not text/html");  // Todo: localize this message
 			
             int pos;
             String enc = null;
@@ -335,7 +365,7 @@ public class HTTPFile extends AbstractFile {
                                 childFileURL = new FileURL(childURL.toExternalForm(), fileURL);
                                 child = new HTTPFile(childFileURL, childURL);
                                 // Recycle this file for parent whenever possible
-                                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("recycle_parent="+child.fileURL.equals(this.fileURL));
+                                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("recycle parent="+child.fileURL.equals(this.fileURL));
                                 if(childFileURL.equals(this.fileURL))
                                     child.setParent(this);
 
@@ -402,6 +432,10 @@ public class HTTPFile extends AbstractFile {
         }
         catch (Exception e) {
             if (com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught while parsing HTML:"+e+", throwing IOException");
+
+            if(e instanceof IOException)
+                throw (IOException)e;
+
             throw new IOException();
         }
         finally {
@@ -440,14 +474,21 @@ public class HTTPFile extends AbstractFile {
 
 
     /**
-     * Overrides AbstractFile's getInputStream(long) method to provide a more efficient implementation :
-     * use the HTTP 1.1 header that resumes file transfer and skips a number of bytes.
+     * Overrides AbstractFile's getInputStream(long) method to provide a more efficient implementation:
+     * use the HTTP 1.1 header to resume and skip the specified number of bytes.
      */
     public InputStream getInputStream(long skipBytes) throws IOException {
         HttpURLConnection conn = getHttpURLConnection(this.url);
+
         // Set header that allows to resume transfer
         conn.setRequestProperty("Range", "bytes="+skipBytes+"-");
+
+        // Establish connection
         conn.connect();
+
+        // Check HTTP response code and throw appropriate IOException if request failed
+        checkHTTPResponse(conn);
+
         return conn.getInputStream();
     }
 }
