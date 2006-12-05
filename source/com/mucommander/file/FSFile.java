@@ -1,7 +1,6 @@
 package com.mucommander.file;
 
 import com.mucommander.PlatformManager;
-import com.mucommander.Debug;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -19,7 +18,7 @@ import java.util.StringTokenizer;
 public class FSFile extends AbstractFile {
 
     private File file;
-    private String parentFile;
+    private String parentFilePath;
     private String absPath;
     private String canonicalPath;
     private boolean isSymlink;
@@ -109,7 +108,7 @@ public class FSFile extends AbstractFile {
             throw new IOException();
 
         this.file = file;
-        this.parentFile = file.getParent();
+        this.parentFilePath = file.getParent();
         this.absPath = file.getAbsolutePath();
 
         // removes trailing separator (if any)
@@ -285,7 +284,7 @@ public class FSFile extends AbstractFile {
     public AbstractFile getParent() {
         // Retrieves parent and caches it
         if (!parentValueSet) {
-            if(parentFile!=null) {
+            if(parentFilePath !=null) {
                 FileURL parentURL = getURL().getParent();
                 if(parentURL != null) {
                     parent = FileFactory.getFile(parentURL);
@@ -367,12 +366,12 @@ public class FSFile extends AbstractFile {
     ////////////////////////
 
     public String getName() {
-        return parentFile==null?absPath+SEPARATOR:file.getName();
+        return parentFilePath ==null?absPath+SEPARATOR:file.getName();
     }
 
     public String getAbsolutePath() {
         // Append separator for root folders (C:\ , /) and for directories
-        if(parentFile==null || (isDirectory() && !absPath.endsWith(SEPARATOR)))
+        if(parentFilePath ==null || (isDirectory() && !absPath.endsWith(SEPARATOR)))
             return absPath+SEPARATOR;
 
         return absPath;

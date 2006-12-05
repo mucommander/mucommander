@@ -75,7 +75,7 @@ public class HTTPFile extends AbstractFile {
         // If based on this test, the file is considered to be an HTML file, use default date (now) and size (-1),
         // and if not (URL points to file with a known mime type), connect to retrieve content-length, date headers, and verify that
         // content-type is indeed not HTML
-        if(fileURL.getPath().equals("")
+        if(fileURL.getPath().equals("/")
            || fileURL.getQuery()!=null
            || ((mimeType=MimeTypes.getMimeType(this))==null || mimeType.equals("text/html"))) {
             date = System.currentTimeMillis();
