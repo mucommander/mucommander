@@ -10,10 +10,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -54,8 +51,7 @@ public class SendMailJob extends TransferFileJob {
     private String boundary;
 
     /** Connection variable */
-    //    private BufferedReader in;
-    private DataInputStream in;
+    private BufferedReader in;
     /** OuputStream to the SMTP server */
     private OutputStream out;
     /** Base64OuputStream to the SMTP server */
@@ -108,8 +104,7 @@ public class SendMailJob extends TransferFileJob {
     
     private void openConnection() throws IOException {
         this.socket = new Socket(mailServer, 25);
-        //        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
-        this.in = new DataInputStream(socket.getInputStream());
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         this.out = socket.getOutputStream();
         this.out64 = new Base64OutputStream(out, true);
 		
@@ -184,7 +179,6 @@ public class SendMailJob extends TransferFileJob {
             writeLine("Content-Type:"+mimeType+"; name="+file.getName());
             writeLine("Content-Disposition: attachment;filename=\""+file.getName()+"\"");
             writeLine("Content-transfer-encoding: base64\r\n");
-//            fileIn = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
             fileIn = setCurrentInputStream(file.getInputStream());
             
             // Write file to socket
@@ -223,20 +217,12 @@ public class SendMailJob extends TransferFileJob {
     }
     
     private void readWriteLine(String s) throws IOException {
-        //        out.write((s + "\r\n").getBytes("8859_1"));
         out.write((s + "\r\n").getBytes("UTF-8"));
-        //        out.flush();
-        // We use DataInputStream's readLine method even though it's deprecated
-        // because we need the input stream to be an InputStream and not a Reader,
-        // and we cannot use both an InputStream and a BufferedReader since BufferedReader
-        // is, well, buffered.
-        s = in.readLine();
+        in.readLine();
     }
 
     private void writeLine(String s) throws IOException {
-        //        out.write((s + "\r\n").getBytes("8859_1"));
         out.write((s + "\r\n").getBytes("UTF-8"));
-        //        out.flush();
     }
 
 

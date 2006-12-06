@@ -16,24 +16,21 @@ public class ShutdownHook extends Thread {
     private static boolean shutdownTasksPerformed;
 
     public ShutdownHook() {
-        super("com.mucommander.ShutDownHook's thread");
+        super(ShutdownHook.class.getName());
     }
 
 
     public static void initiateShutdown() {
         if(Debug.ON) Debug.trace("shutting down");
 
-//        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
 //            // No need to call System.exit() under Java 1.4, application will naturally exit
 //            // when no there is no more window showing and no non-daemon thread still running.
 //            // However, natural application death will not trigger ShutdownHook so we need to explicitly
 //            // perform shutdown tasks.
 //            performShutdownTasks();
-//        }
-//        else {
-            // System.exit() will trigger ShutdownHook and perform shutdown tasks
-            System.exit(0);     
-//        }
+
+        // System.exit() will trigger ShutdownHook and perform shutdown tasks
+        System.exit(0);
     }
     
 
@@ -41,8 +38,6 @@ public class ShutdownHook extends Thread {
      * Called by the VM when the program shuts down, this method writes the configuration.
      */
     public void run() {
-        if(Debug.ON) Debug.trace("called");
-
         performShutdownTasks();
     }
 
@@ -55,6 +50,8 @@ public class ShutdownHook extends Thread {
         // Return if shutdown tasks have already been performed
         if(shutdownTasksPerformed)
             return;
+
+        if(Debug.ON) Debug.trace("called");
         
         // Save preferences
         ConfigurationManager.writeConfiguration();
