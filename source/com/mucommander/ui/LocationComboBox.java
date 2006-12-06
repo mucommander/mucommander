@@ -12,6 +12,7 @@ import com.mucommander.ui.comp.combobox.SaneComboBox;
 import com.mucommander.ui.comp.progress.ProgressTextField;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
+import com.mucommander.Debug;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -109,6 +110,8 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     public void locationChanging(LocationEvent e) {
         // Change the location field's text to the folder being changed
         FileURL folderURL = e.getFolderURL();
+
+if(Debug.ON) Debug.trace("folderURL.getStringRep()="+folderURL.getStringRep(false)+" folderURL.getPath()="+folderURL.getPath());        
 
         // Do not display the URL's protocol for local files
         locationField.setText(folderURL.getProtocol().equals("file")?folderURL.getPath():folderURL.getStringRep(false));
