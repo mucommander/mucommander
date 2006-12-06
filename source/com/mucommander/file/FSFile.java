@@ -87,10 +87,11 @@ public class FSFile extends AbstractFile {
     public FSFile(FileURL fileURL) throws IOException {
         super(fileURL);
 
-        // Remove leading '/' if path is 'a la windows', i.e. starts with a drive like C:\
         String path = fileURL.getPath();
-        if(path.indexOf(":\\")!=-1 && path.charAt(0)=='/')
-            path = path.substring(1, path.length());
+
+//        // Remove leading '/' if path is 'a la windows', i.e. starts with a drive like C:\
+//        if(path.indexOf(":\\")!=-1 && path.charAt(0)=='/')
+//            path = path.substring(1, path.length());
 
         // If OS is Windows and hostname is not 'localhost', translate path back
         // into a Windows-style UNC network path ( \\hostname\path )

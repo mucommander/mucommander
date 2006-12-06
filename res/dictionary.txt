@@ -3552,6 +3552,24 @@ ftp_connect.anonymous_user:ZH_CN:匿名用户
 ftp_connect.anonymous_user:SI:Anonimni uporabnik
 
 
+
+################
+# HTTP connect #
+################
+
+http_connect.basic_authentication:EN:HTTP Basic Authentication (optional)
+http_connect.basic_authentication:FR:HTTP Basic Authentication (optionnel)
+
+
+
+
+
+
+
+
+
+
+
 ###############
 # Auth dialog #
 ###############

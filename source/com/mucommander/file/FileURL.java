@@ -49,6 +49,8 @@ public class FileURL implements Cloneable {
      */
     public FileURL(String url, FileURL parentURL) throws MalformedURLException {
         try {
+            int pos;
+
             // If path contains no protocol, consider the file as a local file and prepend the 'file' protocol to the URL.
             if(url.indexOf("://")==-1) {
                 char firstChar = url.charAt(0);
@@ -56,8 +58,9 @@ public class FileURL implements Cloneable {
                 // Unix-style path
                 if(firstChar=='/')
                     url = "file://"+LOCALHOST+url;
-                // Path starts with a reference to the user home folder, or is a Windows-style path
-                else if(firstChar=='~' || url.indexOf(":\\")!=-1)
+                // Path starts with a reference to the user home folder,
+                // or is a Windows-style path starting with a drive like X:\ or XX:\
+                else if(firstChar=='~' || ((pos=url.indexOf(":\\"))==1 || pos==2))
                     url = "file://"+LOCALHOST+"/"+url;
                 // Handle Windows-style UNC network paths ( \\hostname\path ):
                 // - under Windows, transform it into a URL in the file://hostname/path form,
@@ -66,7 +69,7 @@ public class FileURL implements Cloneable {
                 //   who've spent too much time using Windows
                 else if(url.startsWith("\\\\") && (len=url.length())>2) {
                     if(PlatformManager.isWindowsFamily()) {
-                        int pos = url.indexOf('\\', 2);
+                        pos = url.indexOf('\\', 2);
                         if(pos==-1)
                             url =  "file://"+url.substring(2, len);
                         else
@@ -85,7 +88,6 @@ public class FileURL implements Cloneable {
 
             // Start URL parsing
 
-            int pos;
             int urlLen = url.length();
 			
             // Parse protocol
@@ -360,9 +362,17 @@ public class FileURL implements Cloneable {
 
 	
     /**
-     * Returns the path part of this FileURL (e.g. /webstart/mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp)
+     * Returns the path part of this FileURL (e.g. /webstart/mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp).
+     *
+     * <p>If the path is a Windows-style path, that is starts with a drive like like X:\ or XX:\, the leading '/' character
+     * in the path will be removed to make it easier to use.
      */
     public String getPath() {
+        // Strip out leading '/' if path is 'a la Windows', i.e. starts with a drive like X:\ or XX:\
+        int pos;
+        if(path.indexOf('/')==0 && ((pos=path.indexOf(":\\"))==2 || pos==3))
+            return path.substring(1, path.length());
+
         return path;
     }
 
@@ -619,14 +629,17 @@ public class FileURL implements Cloneable {
             "ftp://mucommander.com:21/pub/incoming",
             "ftp://mucommander.com:21/pub/incoming/",
             "ftp://mucommander.com:21/pub/incoming/0day-warez.zip",
+            // @ characters in login or password are not valid
             "ftp://anonymous:john.doe@somewhere.net@mucommander.com:21/pub/incoming/0day-warez.zip",
             "sftp://maxence:yep@192.168.1.2",
             "file://relative_path",
             "file:///absolute_path",
             "file://localhost/absolute_path",
             "file://localhost/~/Projects/",
+            // Not valid (not absolute)
             "file://localhost/C:",
             "file://localhost/C:\\",
+            "file://localhost/ZZ:\\",
             "file://localhost/C:\\Projects",
             "file://localhost/C:\\Projects\\",
             "file://localhost/C:\\Documents and Settings",

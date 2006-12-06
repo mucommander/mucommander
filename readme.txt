@@ -155,6 +155,7 @@ New features:
  - Support for ISO and NRG images over local and SMB filesystems (contributed by Xavier Martin)
  - Support for Bzip2 archives (.bz2, .tbz2, .tar.bz2 extensions)
  - Support for AR and Debian archives, GNU and BSD variants supported (.ar, .deb extensions)
+ - Support for HTTP Basic Authentication
  - 'Run command' is now interactive, allows shell customization, quick recall of previous commands, color customization, and uses the system's default shell to parse commands under UNIX platforms (contributed by Nicolas Rinaudo)
  - Command line options (contributed by Nicolas Rinaudo)
  - Ability to execute remote or archive entries files: these are copied to a temporary local directory and executed
@@ -180,8 +181,10 @@ Improvements:
  - Optimized table rendering for better display performance
  - Optimized file handling for better file access performance
  - Optimized Zip and Tar archive handling files, access is now much faster
- - Free/total volume space now automatically refreshes (every 60 seconds)
+ - New credentials management: authentication dialog allows to choose between credentials, persistent credentials can be edited using the 'Edit credentials' dialog, passwords are (weakly) encrypted when stored to disk
+ - New and improved 'Edit bookmarks' dialog
  - Toolbar and command bar now contextually show whether the action can be triggered or not
+ - Free/total volume space now automatically refreshes (every 60 seconds)
  - 'File collision' dialog improved, attempts to transfer a folder to one of its subfolders are now detected
  - KB/MB/GB/TB are now calculated accurately by multiples of 1024 instead of 1000
  - Decimal and thousands separators are now localized
