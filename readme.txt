@@ -178,10 +178,10 @@ New features:
 
 Improvements:
  - Major code cleanup before source code release
- - Optimized table rendering for better display performance
- - Optimized file handling for better file access performance
- - Optimized Zip and Tar archive handling files, access is now much faster
- - New credentials management: authentication dialog allows to choose between credentials, persistent credentials can be edited using the 'Edit credentials' dialog, passwords are (weakly) encrypted when stored to disk
+ - Improved file handling performance
+ - Optimized handling of Zip and Tar archives which can now be accessed much faster
+ - Faster table rendering
+ - New credentials management: authentication dialog allows to choose between credentials matching a location, persistent credentials can be edited using the 'Edit credentials' dialog, passwords are (weakly) encrypted when stored to disk
  - New and improved 'Edit bookmarks' dialog
  - Toolbar and command bar now contextually show whether the action can be triggered or not
  - Free/total volume space now automatically refreshes (every 60 seconds)
