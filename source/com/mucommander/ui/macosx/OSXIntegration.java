@@ -1,7 +1,6 @@
 
 package com.mucommander.ui.macosx;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.conf.*;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.QuitDialog;
@@ -18,12 +17,9 @@ import com.mucommander.ui.action.ActionManager;
  *  <li>Registers handlers for the 'About', 'Preferences' and 'Quit' application menu items
  * </ul>
  *
- * <p>The Apple API used to register the handlers depends on the Java runtime version:
- * <ul>
- *  <li>com.apple.eawt is used for Java 1.4 and up
- *  <li>com.apple.mrj is used for Java 1.3 (deprecated in Java 1.4)
- * </ul>
+ * <p>The com.apple.eawt API is used to handle 'About', 'Preferences' and 'Quit' events and report back to the OS.
  *
+ * @see EAWTHandler
  * @author Maxence Bernard
  */
 public class OSXIntegration {
@@ -41,14 +37,8 @@ public class OSXIntegration {
         System.setProperty("apple.laf.useScreenMenuBar", ""+ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_SCREEN_MENU_BAR,
                                                                                                     ConfigurationVariables.DEFAULT_USE_SCREEN_MENU_BAR));
 
-        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("registering EAWT hooks");
-            new EAWTHandler();
-        }
-        else {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("registering MRJ hooks");            
-            new MRJHandler();
-        }
+        // Catch 'About', 'Preferences' and 'Quit' events
+        new EAWTHandler();
     }
 
     /**

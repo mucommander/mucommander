@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.io.UnsupportedEncodingException;
 
 /**
  * This class parses a file URL without any knowledge of the underlying protocol. URL are expected to respect the following format :<br>
@@ -455,9 +456,13 @@ public class FileURL implements Cloneable {
      * Returns the filename part of this FileURL, and if specified, decodes URL-encoded characters (e.g. %5D%35)
      */
     public String getFilename(boolean urlDecode) {
-        if(urlDecode && filename!=null)
-            return URLDecoder.decode(filename);
-			
+        try {
+            if(urlDecode && filename!=null)
+                return URLDecoder.decode(filename, "UTF-8");
+        }
+        catch(UnsupportedEncodingException e) {
+        }
+
         return filename;
     }
 	

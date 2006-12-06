@@ -12,6 +12,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
+import com.mucommander.ui.comp.button.NonFocusableButton;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
@@ -28,7 +29,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class DriveButton extends JButton implements ActionListener, PopupMenuListener, LocationListener, BookmarkListener {
+public class DriveButton extends NonFocusableButton implements ActionListener, PopupMenuListener, LocationListener, BookmarkListener {
 
     private FolderPanel folderPanel;
 	
@@ -241,22 +242,6 @@ public class DriveButton extends JButton implements ActionListener, PopupMenuLis
         //		FocusRequester.requestFocus(popupMenu);
     }
 
-
-
-    //////////////////////////////////
-    // Overriden JComponent methods //
-    //////////////////////////////////
-	
-    // For JDK 1.3 (deprecated in 1.4)
-    public boolean isFocusTraversable() {
-        // Prevents this button from getting keyboard focus
-        return false;
-    }
-
-    // For JDK 1.4 and up
-    public boolean isFocusable() {
-        return false;
-    }
 
     //////////////////////////////
     // LocationListener methods //
