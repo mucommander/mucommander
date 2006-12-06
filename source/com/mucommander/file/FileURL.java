@@ -380,22 +380,23 @@ public class FileURL implements Cloneable {
 	
     /**
      * Returns this FileURL's parent, or null if this FileURL has no parent (path is "/").
-     * If this FileURL contains credentials, the returned parent FileURL will have the same credentials.
+     * The returned parent will have the same protocol, host, port, credentials and properties as this FileURL.
      */
     public FileURL getParent() {
         // ParentURL not set yet
         if(!parentURLSet && parentURL==null) {
             // If path equals '/', url has no parent
-            if(!path.equals("/")) {
-                // Resolve parent folder and reconstruct parent URL
-                String parentPath = path.replace('\\', '/');
+            if(!(path.equals("/") || path.equals(""))) {
+                String parentPath = path;
 
-                // Remove any trailing slash
-                if(parentPath.endsWith("/"))
-                    parentPath = parentPath.substring(0, parentPath.length()-1);
+                // Remove any trailing slash or back slash
+                int len = parentPath.length();
+                if(len-->0 && (parentPath.charAt(len)=='/' || parentPath.charAt(len)=='\\'))
+                    parentPath = parentPath.substring(0, len);
 
-                int separatorPos = parentPath.lastIndexOf('/');
-                if(separatorPos!=-1) {  // Should always be true
+                // Resolve parent folder's path and reconstruct parent URL
+                int lastSeparatorPos = Math.max(parentPath.lastIndexOf('/'), parentPath.lastIndexOf('\\'));
+                if(lastSeparatorPos!=-1) {
                     try {
                         // Reconstruct parent URL string
                         String parent = protocol+"://";
@@ -407,11 +408,12 @@ public class FileURL implements Cloneable {
                             parent += ":"+port;
 
                         if(host!=null || !parentPath.equals("/"))	// Test to avoid having URLs like 'smb:///'
-                            parent += parentPath.substring(0, separatorPos+1);  // Keep trailing slash
+                            parent += parentPath.substring(0, lastSeparatorPos+1);  // Keep trailing slash
 
                         parentURL = new FileURL(parent);
 
-                        // Set same credentials for parent (if any)
+                        // Set same credentials for parent, if any.
+                        // Note: Credentials are immutable.
                         if(credentials!=null)
                             parentURL.setCredentials(credentials);
 

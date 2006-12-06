@@ -33,6 +33,9 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     /** True while a folder is being changed after a path was entered in the location field and validated by the user */
     private boolean folderChangedInitiatedByLocationField;
 
+    /** Used to save the path that was entered by the user after validation of the location textfield */
+    private String locationFieldTextSave;
+
 
     /**
      * Creates a new LocationComboBox for use in the given FolderPanel.
@@ -83,15 +86,17 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
      */
     private void folderChangeCompleted(boolean folderChangedSuccessfully) {
         if(folderChangedSuccessfully || !folderChangedInitiatedByLocationField) {
-            // Set the location field's contents to the current folder path
+            // Set the location field's contents to the new current folder's path
             locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
         }
 
         // Re-enable this combo box
         setEnabled(true);
 
-        // If the location was entered and validated in the location field and the folder change failed...
+        // If the location was entered and validated in the location field and the folder change failed or was cancelled...
         if(!folderChangedSuccessfully && folderChangedInitiatedByLocationField) {
+            // Restore the text that was entered by the user
+            locationField.setText(locationFieldTextSave);
             // Select the text to grab user's attention and make it easier to modify
             locationField.selectAll();
             // Request focus (focus was on FileTable)
@@ -176,6 +181,8 @@ if(Debug.ON) Debug.trace("folderURL.getStringRep()="+folderURL.getStringRep(fals
 
         // Remember that the folder change was initiated by the location field
         folderChangedInitiatedByLocationField = true;
+        // Save the path that was entered in case the location change fails or is cancelled 
+        locationFieldTextSave = locationText;
 
         // Change folder
         folderPanel.tryChangeCurrentFolder(locationText);
