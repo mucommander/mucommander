@@ -118,8 +118,6 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         if(!folderChangedInitiatedByLocationField) {
             FileURL folderURL = e.getFolderURL();
 
-    if(Debug.ON) Debug.trace("folderURL.getStringRep()="+folderURL.getStringRep(false)+" folderURL.getPath()="+folderURL.getPath());
-
             // Do not display the URL's protocol for local files
             locationField.setText(folderURL.getProtocol().equals("file")?folderURL.getPath():folderURL.getStringRep(false));
         }
