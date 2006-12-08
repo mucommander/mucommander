@@ -328,7 +328,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
             // Sleep for a while
             try {
-                Thread.sleep(REFRESH_RATE-(System.currentTimeMillis()-now));
+                Thread.sleep(Math.max(REFRESH_RATE-(System.currentTimeMillis()-now), 0));
             }
             catch(InterruptedException e) {}
         }

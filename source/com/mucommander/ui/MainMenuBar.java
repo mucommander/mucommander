@@ -61,13 +61,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     /** Maps window menu items onto weakly-referenced frames */
     private WeakHashMap windowMenuFrames;
 
-    // Help menu
-    private JMenuItem keysItem;
-    private JMenuItem homepageItem;
-    private JMenuItem forumsItem;
-    private JMenuItem donateItem;
-    private JMenuItem aboutItem;
-
 
     private final static Class RECALL_WINDOW_ACTIONS[] = {
         com.mucommander.ui.action.RecallWindow1Action.class,
@@ -217,19 +210,21 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         menuItemMnemonicHelper.clear();
         JMenu helpMenu = MenuToolkit.addMenu(Translator.get("help_menu"), menuMnemonicHelper, null);
         // Keyboard shortuts
-        keysItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.shortcuts"), menuItemMnemonicHelper, null, this);
-        // Links to website, only shows for OSes that can launch the default browser to open URLs
+        MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowKeyboardShortcutsAction.class, mainFrame), menuItemMnemonicHelper);
+
+        // Links to website, only shows for OS/Window manager that can launch the default browser to open URLs
         if (PlatformManager.canOpenURLInBrowser()) {
             helpMenu.add(new JSeparator());
-            homepageItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.homepage"), menuItemMnemonicHelper, null, this);
-            forumsItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.forums"), menuItemMnemonicHelper, null, this);
-            donateItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.donate"), menuItemMnemonicHelper, null, this);
+            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(GoToWebsiteAction.class, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(GoToForumsAction.class, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ReportBugAction.class, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(DonateAction.class, mainFrame), menuItemMnemonicHelper);
         }
 		
         // Under Mac OS X, 'About' already appears in the application (muCommander) menu, do not display it again
         if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X) {
             helpMenu.add(new JSeparator());
-            aboutItem = MenuToolkit.addMenuItem(helpMenu, Translator.get("help_menu.about"), menuItemMnemonicHelper, null, this);		
+            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowAboutAction.class, mainFrame), menuItemMnemonicHelper);
         }
 		
         add(helpMenu);
@@ -251,22 +246,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         if (bookmarkMenuItems!=null && bookmarkMenuItems.contains(source)) {
             int index = bookmarkMenuItems.indexOf(source);
             mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getLocation());
-        }
-        // Help menu
-        else if (source == keysItem) {
-            new ShortcutsDialog(mainFrame).showDialog();
-        }
-        else if (source == homepageItem) {
-            PlatformManager.openURLInBrowser(com.mucommander.RuntimeConstants.HOMEPAGE_URL);
-        }
-        else if (source == forumsItem) {
-            PlatformManager.openURLInBrowser(com.mucommander.RuntimeConstants.FORUMS_URL);
-        }
-        else if (source == donateItem) {
-            PlatformManager.openURLInBrowser(com.mucommander.RuntimeConstants.DONATION_URL);
-        }
-        else if (source == aboutItem) {
-            new AboutDialog(mainFrame).showDialog();
         }
         // Window menu item
         else {

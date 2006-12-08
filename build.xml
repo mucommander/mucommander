@@ -32,6 +32,9 @@
   <!-- URL to which users should be directed in order to       -->
   <!-- browse the muCommander forums.                          -->
   <property name="url.forums"          value="${url.homepage}/forums/"/>
+  <!-- URL to which users should be directed in order to       -->
+  <!-- report a bug in the application.                        -->
+  <property name="url.bug-repository"  value="${url.homepage}/bugs/"/>
   <!-- URL to which users should be directed in the unlikely   -->
   <!-- event that they'd want to donate money to the project.  -->
   <property name="url.donation"        value="${url.homepage}/#donate"/>
@@ -271,16 +274,17 @@
     <date name="release-date"/>
     <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tools.jar}"/>
     <javaw name="${tmp-source}/com.mucommander.RuntimeConstants">
-      <field name="DEBUG"           value="${is-debug}"    type="boolean"/>
-      <field name="VERSION"         value="${app.version}"/>
-      <field name="COPYRIGHT"       value="${app.copyright}"/>
-      <field name="APP_STRING"      value="muCommander v${app.version}"/>
-      <field name="VERSION_URL"     value="${version-url}"/>
-      <field name="RELEASE_DATE"    value="${release-date}" type="String"/>
-      <field name="HOMEPAGE_URL"    value="${url.homepage}"/>
-      <field name="FORUMS_URL"      value="${url.forums}"/>
-      <field name="DONATION_URL"    value="${url.donation}"/>
-      <field name="DICTIONARY_FILE" value="/dictionary.txt"/>
+      <field name="DEBUG"               value="${is-debug}"    type="boolean"/>
+      <field name="VERSION"             value="${app.version}"/>
+      <field name="COPYRIGHT"           value="${app.copyright}"/>
+      <field name="APP_STRING"          value="muCommander v${app.version}"/>
+      <field name="VERSION_URL"         value="${version-url}"/>
+      <field name="RELEASE_DATE"        value="${release-date}" type="String"/>
+      <field name="HOMEPAGE_URL"        value="${url.homepage}"/>
+      <field name="FORUMS_URL"          value="${url.forums}"/>
+      <field name="DONATION_URL"        value="${url.donation}"/>
+      <field name="BUG_REPOSITORY_URL"  value="${url.bug-repository}"/>
+      <field name="DICTIONARY_FILE"     value="/dictionary.txt"/>
     </javaw>
   </target>
 

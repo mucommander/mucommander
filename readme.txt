@@ -218,6 +218,9 @@ Improvements:
  - Mac OS X: disabled progress bar animation in file transfer progress dialog which hogged CPU unnecessarily
  - Mac OS X: new 'Universal Binary' application stub, muCommander no longer uses Rosetta to start up
 
+Localization:
+ - Romanian translation (contributed by Catalin Hritcu)
+
 Bug fixes:
  - Windows UNC network paths (those starting with \\) are now properly handled, fixing startup problems under Windows if the user home is located on a network share
  - Improved focus management, fixing some focus issues
