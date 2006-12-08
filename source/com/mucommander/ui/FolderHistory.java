@@ -14,12 +14,17 @@ import java.util.Vector;
  * <p>FolderHistory also keeps track of the last visited folder that can be saved and recalled next time the
  * application is started.
  *
+ * <p>There is a limit to the number of folders the history can contain, defined by {@link #HISTORY_CAPACITY}. 
+ *
  * @author Maxence Bernard
  */
 public class FolderHistory {
 
+    /** Maximum number of elements the folder history can contain */
+    private final static int HISTORY_CAPACITY = 100;
+
     /** List of visited folders, ordered by recency */
-    private Vector history = new Vector();
+    private Vector history = new Vector(HISTORY_CAPACITY+1);
 
     /** Index of current folder in history */
     private int historyIndex = -1;
@@ -30,7 +35,7 @@ public class FolderHistory {
     /** Last folder which can be recalled on next startup */
     private String lastRecallableFolder;
 
-    
+
     /**
      * Creates a new FolderHistory instance which will keep track of visited folders in the given FolderPanel.
      */
@@ -54,6 +59,13 @@ public class FolderHistory {
             for(int i=historyIndex; i<historySize; i++) {
                 history.removeElementAt(historyIndex);
             }
+
+            // If capacity is reached, remove first folder
+            if(history.size()>=HISTORY_CAPACITY) {
+                history.removeElementAt(0);
+                historyIndex--;
+            }
+
             // Add previous folder to history
             history.add(folder);
         }
@@ -79,8 +91,7 @@ public class FolderHistory {
         if (historyIndex==0)
             return;
 		
-        AbstractFile folder = (AbstractFile)history.elementAt(--historyIndex);
-        folderPanel.tryChangeCurrentFolder(folder);
+        folderPanel.tryChangeCurrentFolder((AbstractFile)history.elementAt(--historyIndex));
     }
 	
     /**
@@ -91,8 +102,7 @@ public class FolderHistory {
         if (historyIndex==history.size()-1)
             return;
 		
-        AbstractFile folder = (AbstractFile)history.elementAt(++historyIndex);
-        folderPanel.tryChangeCurrentFolder(folder);
+        folderPanel.tryChangeCurrentFolder((AbstractFile)history.elementAt(++historyIndex));
     }
 
 

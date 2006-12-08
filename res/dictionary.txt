@@ -1118,31 +1118,18 @@ com.mucommander.ui.action.RefreshAction.tooltip:ZH_CN:刷新此文件夹
 com.mucommander.ui.action.RefreshAction.tooltip:SI:Osveži trenutno mapo
 com.mucommander.ui.action.RefreshAction.tooltip:RO:Actualizează directorul curent
 
-com.mucommander.ui.action.CloseWindowAction.label:EN:Close
-com.mucommander.ui.action.CloseWindowAction.label:FR:Fermer
-com.mucommander.ui.action.CloseWindowAction.label:DE:Schließen
-com.mucommander.ui.action.CloseWindowAction.label:ES:Cerrar
-com.mucommander.ui.action.CloseWindowAction.label:CS:Zavřít
-com.mucommander.ui.action.CloseWindowAction.label:zh_TW:關閉
-com.mucommander.ui.action.CloseWindowAction.label:PL:Zamknij
-com.mucommander.ui.action.CloseWindowAction.label:HU:bezár
-com.mucommander.ui.action.CloseWindowAction.label:RU:Закрыть
-com.mucommander.ui.action.CloseWindowAction.label:ZH_CN:关闭
-com.mucommander.ui.action.CloseWindowAction.label:SI:Zapri
-com.mucommander.ui.action.CloseWindowAction.label:RO:Închide
-
-# Dup!
-#com.mucommander.ui.action.CloseWindowAction.label:EN:Close window
-#com.mucommander.ui.action.CloseWindowAction.label:FR:Fermer fenêtre
-#com.mucommander.ui.action.CloseWindowAction.label:DE:Fenster schließen
-#com.mucommander.ui.action.CloseWindowAction.label:ES:Cerrar ventana
-#com.mucommander.ui.action.CloseWindowAction.label:CS:Zavřít okno
-#com.mucommander.ui.action.CloseWindowAction.label:zh_TW:關閉視窗
-#com.mucommander.ui.action.CloseWindowAction.label:PL:Zamknij okno
-#com.mucommander.ui.action.CloseWindowAction.label:HU:ablak bezárása
-#com.mucommander.ui.action.CloseWindowAction.label:RU:Закрыть окно
-#com.mucommander.ui.action.CloseWindowAction.label:ZH_CN:关闭窗口
-#com.mucommander.ui.action.CloseWindowAction.label:SI:Zapri okno
+com.mucommander.ui.action.CloseWindowAction.label:EN:Close window
+com.mucommander.ui.action.CloseWindowAction.label:FR:Fermer fenêtre
+com.mucommander.ui.action.CloseWindowAction.label:DE:Fenster schließen
+com.mucommander.ui.action.CloseWindowAction.label:ES:Cerrar ventana
+com.mucommander.ui.action.CloseWindowAction.label:CS:Zavřít okno
+com.mucommander.ui.action.CloseWindowAction.label:zh_TW:關閉視窗
+com.mucommander.ui.action.CloseWindowAction.label:PL:Zamknij okno
+com.mucommander.ui.action.CloseWindowAction.label:HU:ablak bezárása
+com.mucommander.ui.action.CloseWindowAction.label:RU:Закрыть окно
+com.mucommander.ui.action.CloseWindowAction.label:ZH_CN:关闭窗口
+com.mucommander.ui.action.CloseWindowAction.label:SI:Zapri okno
+com.mucommander.ui.action.CloseWindowAction.label:RO:Închide fereastră
 
 com.mucommander.ui.action.CloseWindowAction.tooltip:EN:Close this window
 com.mucommander.ui.action.CloseWindowAction.tooltip:FR:Fermer cette fenêtre
