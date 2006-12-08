@@ -161,6 +161,8 @@ New features:
  - Ability to execute remote or archive entries files: these are copied to a temporary local directory and executed
  - Location combo box now allows to quickly recall parent folders
  - Icons magnification option for toolbar, command bar and files
+ - New credentials management: authentication dialog allows to choose between credentials matching a location, persistent credentials can be edited using the 'Edit credentials' dialog, passwords are (weakly) encrypted when stored to disk
+ - New and improved 'Edit bookmarks' dialog
  - New 'Copy name(s)' and 'Copy path(s)' actions to copy marked files names / paths (Alt+C / Shift+Alt+C by default)
  - New 'Mkfile' action (Shift+F7 by default)
  - New 'Mark page up/page down' action (Shift+Page Up/Shift+Page Down by default)
@@ -175,14 +177,13 @@ New features:
  - 'Reveal in desktop' keyboard shortcut (Ctrl+L by default)
  - New file icons for Mac OS X and Windows executables, libraries, Java, Powerpoint and Visual studio files
  - New toolbar icon for 'Reveal in desktop'
+ - New 'Report a bug' item in 'Help' menu
 
 Improvements:
  - Major code cleanup before source code release
  - Improved file handling performance
  - Optimized handling of Zip and Tar archives which can now be accessed much faster
  - Faster table rendering
- - New credentials management: authentication dialog allows to choose between credentials matching a location, persistent credentials can be edited using the 'Edit credentials' dialog, passwords are (weakly) encrypted when stored to disk
- - New and improved 'Edit bookmarks' dialog
  - Toolbar and command bar now contextually show whether the action can be triggered or not
  - Free/total volume space now automatically refreshes (every 60 seconds)
  - 'File collision' dialog improved, attempts to transfer a folder to one of its subfolders are now detected
