@@ -4,6 +4,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
@@ -39,7 +40,7 @@ public class OpenAction extends MucoAction {
             fileTable.getFolderPanel().tryChangeCurrentFolder(selectedFile);
         }
         // Local file that is not an archive or archive entry: execute file with native file associations
-        else if(selectedFile.getURL().getProtocol().equals("file") && (selectedFile instanceof FSFile)) {
+        else if(selectedFile.getURL().getProtocol().equals(FileProtocols.FILE) && (selectedFile instanceof FSFile)) {
             PlatformManager.open(selectedFile);
         }
         // Any other file remote or local: copy file to a temporary local file and execute it with native file associations

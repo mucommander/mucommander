@@ -501,7 +501,7 @@ parentFileURL.setCredentials(fileURL.getCredentials());
 
         // Use the default moveTo() implementation if the destination file doesn't use FTP
         // or is not on the same host
-        if(!destFile.fileURL.getProtocol().equals("ftp") || !destFile.fileURL.getHost().equals(this.fileURL.getHost())) {
+        if(!destFile.fileURL.getProtocol().equals(FileProtocols.FTP) || !destFile.fileURL.getHost().equals(this.fileURL.getHost())) {
             super.moveTo(destFile);
             return;
         }

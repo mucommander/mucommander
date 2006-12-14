@@ -1,10 +1,7 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.auth.AuthException;
-import com.mucommander.auth.Credentials;
-import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.MappedCredentials;
+import com.mucommander.auth.*;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
@@ -22,6 +19,7 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.TablePopupMenu;
+import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
@@ -302,7 +300,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private MappedCredentials getCredentialsFromUser(FileURL fileURL, String errorMessage) {
         AuthDialog authDialog = new AuthDialog(mainFrame, fileURL, errorMessage);
         authDialog.showDialog();
-        return authDialog.getCredentials();
+        return authDialog.getUserCredentials();
     }
 
 
@@ -583,6 +581,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         public ChangeFolderThread(AbstractFile folder) {
             this.folder = folder;
+            this.folderURL = folder.getURL();
             setPriority(Thread.MAX_PRIORITY);
         }
 
@@ -636,15 +635,18 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             // If folder URL doesn't contain any credentials but CredentialsManager found some matching the URL,
             // popup the authentication dialog to avoid having to wait for an AuthException to be thrown
             boolean userCancelled = false;
-            if(folderURL!=null && !folderURL.containsCredentials() && CredentialsManager.getMatchingCredentials(folderURL).length>0) {
+if(Debug.ON) Debug.trace("folderURL="+folderURL.getStringRep(true));
+            if(!folderURL.containsCredentials() && CredentialsManager.getMatchingCredentials(folderURL).length>0) {
                 MappedCredentials newCredentials = getCredentialsFromUser(folderURL, null);
 
                 // User cancelled the authentication dialog, stop
                 if(newCredentials==null)
                     userCancelled = true;
-                // Use provided credentials
-                else
-                    folderURL = newCredentials.getMappedLocation();
+                // Use the provided credentials and invalidate folder instance (if any)
+                else {
+                    folderURL.setCredentials(newCredentials);
+                    folder = null;
+                }
             }
 
             if(!userCancelled) {
@@ -660,7 +662,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         // - Thread was created using an AbstractFile instance
                         // - Thread was created using a FileURL, corresponding AbstractFile needs to be resolved
 
-                        // Thread was created using a FileURL or FolderPath
+                        // Thread was created using a FileURL
                         if(folder==null) {
 
                             AbstractFile file = FileFactory.getFile(folderURL, true);
@@ -769,8 +771,15 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         // If some new credentials were entered by the user, these can now be considered valid
                         // (folder was changed successfully) -> add them to the credentials list.
                         Credentials credentials = folder.getURL().getCredentials();
-                        if(credentials!=null && credentials instanceof MappedCredentials)
-                            CredentialsManager.addCredentials((MappedCredentials)credentials);
+
+if(Debug.ON) Debug.trace("credentials="+credentials);
+                        if(credentials!=null) {
+                            if(credentials instanceof UserCredentials)
+                                CredentialsManager.addCredentials((UserCredentials)credentials);
+                            else
+                                CredentialsManager.addCredentials(new UserCredentials(credentials, folderURL, false));
+//                            CredentialsManager.addImplicitCredentials(credentials, folderURL);
+                        }
 
                         // All good !
                         folderChangedSuccessfully = true;
@@ -784,14 +793,16 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         mainFrame.setCursor(Cursor.getDefaultCursor());
 
                         if(e instanceof AuthException) {
+if(Debug.ON) Debug.trace("folderURL before="+folderURL.getStringRep(true));
                             AuthException authException = (AuthException)e;
                             // Retry (loop) if user provided new credentials, if not stop
                             MappedCredentials newCredentials = getCredentialsFromUser(authException.getFileURL(), authException.getMessage());
                             if(newCredentials!=null) {
                                 // Invalidate AbstractFile instance
                                 folder = null;
-                                // Use the URL containing the new credentials
-                                folderURL = newCredentials.getMappedLocation();
+                                // Use the provided credentials
+                                folderURL.setCredentials(newCredentials);
+if(Debug.ON) Debug.trace("folderURL after="+folderURL.getStringRep(true));
                                 continue;
                             }
                         }

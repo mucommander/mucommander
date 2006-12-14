@@ -8,6 +8,7 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.RootFolders;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.ui.event.LocationEvent;
@@ -138,7 +139,7 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
         if(newLabel == null) {
             String protocol = currentURL.getProtocol();
             // Remote file, use protocol's name
-            if(!protocol.equals("file")) {
+            if(!protocol.equals(FileProtocols.FILE)) {
                 newLabel = protocol.toUpperCase();
             }
             // Local file, use volume's name 

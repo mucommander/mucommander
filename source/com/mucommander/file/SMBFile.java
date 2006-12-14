@@ -132,7 +132,7 @@ if(Debug.ON) Debug.trace("caught "+e);
                 // create an 'smb://' parent to browse network workgroups
                 if(parentURL==null) {
                     if(fileURL.getHost()!=null)
-                        parentURL = new FileURL("smb://");
+                        parentURL = new FileURL(FileProtocols.SMB+"://");
                     else
                         return null;    // This file is already smb://
                 }
@@ -321,7 +321,7 @@ if(Debug.ON) Debug.trace("caught "+e);
 
     public void copyTo(AbstractFile destFile) throws FileTransferException {
         // File can only be copied by SMB if the destination is on an SMB share (but not necessarily on the same host)
-        if(!destFile.fileURL.getProtocol().equals("smb")) {
+        if(!destFile.fileURL.getProtocol().equals(FileProtocols.SMB)) {
             super.copyTo(destFile);
             return;
         }
@@ -360,7 +360,7 @@ if(Debug.ON) Debug.trace("caught "+e);
         // (but not necessarily on the same host).
         // Use the default moveTo() implementation if the destination file doesn't use the same protocol (webdav/webdavs)
         // or is not on the same host
-        if(!destFile.fileURL.getProtocol().equals("smb")) {
+        if(!destFile.fileURL.getProtocol().equals(FileProtocols.SMB)) {
             super.moveTo(destFile);
             return;
         }

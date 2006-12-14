@@ -12,6 +12,7 @@ import java.util.Vector;
 import java.util.StringTokenizer;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 
 /**
@@ -30,12 +31,15 @@ import java.io.IOException;
  */
 public class CredentialsManager implements VectorChangeListener {
 
-    /** Volatile credentials, lost when the application terminates */
+    /** Contains volatile user-entered MappedCredentials instances, lost when the application terminates */
     private static Vector volatileCredentials = new Vector();
 
-    /** Persistent credentials, stored to an XML file when the application terminates, and loaded the next
-      * time the application is started */
+    /** Contains persistent user-entered MappedCredentials instances, stored to an XML file when the application
+     * terminates, and loaded the next time the application is started */
     private static AlteredVector persistentCredentials = new AlteredVector();
+
+//    /** Contains MappedCredentials instances used for implicit authentication */
+//    private static Vector implicitCredentials = new Vector();
 
     /** Credentials file location */
     private static File credentialsFile;
@@ -145,12 +149,12 @@ public class CredentialsManager implements VectorChangeListener {
      * position ([0]), if there is at least one matching credentials instance. The returned array can be empty
      * (zero length) but never null.
      * 
-     * @param fileURL the location to be compared against known credentials instances, both volatile and persistent
+     * @param location the location to be compared against known user credentials instances, both volatile and persistent
      * @return an array of MappedCredentials matching the given URL's protocol and host, best match at the first position
      */
-    public static MappedCredentials[] getMatchingCredentials(FileURL fileURL) {
+    public static MappedCredentials[] getMatchingCredentials(FileURL location) {
         // Retrieve matches
-        Vector matchesV = getMatchingCredentialsV(fileURL);
+        Vector matchesV = getMatchingCredentialsV(location);
 
         // Transform vector into an array
         MappedCredentials matches[] = new MappedCredentials[matchesV.size()];
@@ -164,17 +168,17 @@ public class CredentialsManager implements VectorChangeListener {
      * Returns a Vector of MappedCredentials matching the given URL's protocol and host, best match at the first position.
      * The returned Vector may be empty but never null.
      *
-     * @param fileURL the location to be compared against known credentials instances, both volatile and persistent
+     * @param location the location to be compared against known user credentials instances, both volatile and persistent
      * @return a Vector of MappedCredentials matching the given URL's protocol and host, best match at the first position
      */
-    private static Vector getMatchingCredentialsV(FileURL fileURL) {
+    private static Vector getMatchingCredentialsV(FileURL location) {
         Vector matchesV = new Vector();
 
-        findMatches(fileURL, volatileCredentials, matchesV);
-        findMatches(fileURL, persistentCredentials, matchesV);
+        findMatches(location, volatileCredentials, matchesV);
+        findMatches(location, persistentCredentials, matchesV);
 
         // Find the best match and move it at the first position in the vector
-        int bestMatchIndex = getBestMatchIndex(fileURL, matchesV);
+        int bestMatchIndex = getBestMatchIndex(location, matchesV);
         if(bestMatchIndex!=-1) {
             matchesV.insertElementAt(matchesV.elementAt(bestMatchIndex), 0);
             matchesV.removeElementAt(bestMatchIndex+1);
@@ -185,65 +189,46 @@ public class CredentialsManager implements VectorChangeListener {
 
 
     /**
-     * Looks for the best credentials matching the given location (if any) and use it in the FileURL
-     * by calling {@link FileURL#setCredentials(Credentials)}. Any credentials contained by the the given FileURL
-     * will be lost and replaced by the new ones (if any).
+     * Adds the given credentials to the list of known user credentials.
      *
-     * @param fileURL the FileURL instance to authenticate
+     * <p>Depending on value returned by {@link UserCredentials#isPersistent()}, the credentials will either be stored
+     * in the volatile credentials list or the persistent one. Any existing credentials mapped to the same realm
+     * will be replaced by the provided ones.
+     *
+     * <p>This method should be called when new credentials have been entered by the user, after they have been validated
+     * by the application (i.e. access was granted to the location).
+     *
+     * @param userCredentials user credentials to be added to the list of known credentials
      */
-    public static void authenticate(FileURL fileURL) {
-        Vector matchesV = new Vector();
+    public static void addCredentials(UserCredentials userCredentials) {
 
-        if(Debug.ON) Debug.trace("called, fileURL="+fileURL+" containsCredentials="+fileURL.containsCredentials());
+        // Do not add credentials if their login and password are empty
+        if(userCredentials.isEmpty())
+            return;
 
-        findMatches(fileURL, volatileCredentials, matchesV);
-        findMatches(fileURL, persistentCredentials, matchesV);
-        int bestMatchIndex = getBestMatchIndex(fileURL, matchesV);
+        boolean persist = userCredentials.isPersistent();
 
-        if(Debug.ON) Debug.trace("matchesV="+matchesV);
-        if(Debug.ON) Debug.trace("bestMatch="+(bestMatchIndex>0?(MappedCredentials)matchesV.elementAt(bestMatchIndex):null));
-
-        if(bestMatchIndex>-1)
-            fileURL.setCredentials((MappedCredentials)matchesV.elementAt(bestMatchIndex));
-    }
-
-
-    /**
-     * Adds the given {@link MappedCredentials} to the list of known credentials. Depending on the value returned by
-     * {@link com.mucommander.auth.MappedCredentials#isPersistent()}, the credentials will either be stored in the
-     * volatile credentials list or the persistent one. Any existing MappedCredentials instance pointing to the same
-     * location will be replaced by the provided one.
-     *
-     * <p>This method should be called when new credentials have been entered by the user after they have been validated
-     * by the application (access was granted to the designated location).
-     *
-     * @param credentials new MappedCredentials to be added
-     */
-    public static void addCredentials(MappedCredentials credentials) {
-        boolean isPersistent = credentials.isPersistent();
-
-        FileURL url = credentials.getMappedLocation();
-
+        if(Debug.ON) Debug.trace("called, realm="+userCredentials.getRealm()+" isPersistent="+userCredentials.isPersistent());
         if(Debug.ON) Debug.trace("before, persistentCredentials="+persistentCredentials);
         if(Debug.ON) Debug.trace("before, volatileCredentials="+volatileCredentials);
 
-        int index = indexOf(persistentCredentials, url);
-        if(isPersistent || index!=-1) {
+        int index = persistentCredentials.indexOf(userCredentials);
+        if(persist || index!=-1) {
             if(index==-1)
-                persistentCredentials.add(credentials);
+                persistentCredentials.add(userCredentials);
             else
-                persistentCredentials.setElementAt(credentials, index);
+                persistentCredentials.setElementAt(userCredentials, index);
 
-            index = indexOf(volatileCredentials, url);
+            index = volatileCredentials.indexOf(userCredentials);
             if(index!=-1)
                 volatileCredentials.removeElementAt(index);
         }
         else {
-            index = indexOf(volatileCredentials, url);
+            index = volatileCredentials.indexOf(userCredentials);
             if(index==-1)
-                volatileCredentials.add(credentials);
+                volatileCredentials.add(userCredentials);
             else
-                volatileCredentials.setElementAt(credentials, index);
+                volatileCredentials.setElementAt(userCredentials, index);
         }
 
         if(Debug.ON) Debug.trace("after, persistentCredentials="+persistentCredentials);
@@ -251,40 +236,120 @@ public class CredentialsManager implements VectorChangeListener {
     }
 
 
-    private static int indexOf(Vector entries, FileURL fileURL) {
-        int nbEntries = entries.size();
-        for(int i=0; i<nbEntries; i++) {
-            if(((MappedCredentials)entries.elementAt(i)).getMappedLocation().equals(fileURL))
-                return i;
-        }
+    /**
+     * Looks for the best implicit credentials matching the given location (if any) and use them in the FileURL
+     * by calling {@link FileURL#setCredentials(Credentials)}. Any credentials contained by the the given FileURL
+     * will be lost and replaced with the new ones (if any).
+     *
+     * @param location the location to authenticate
+     */
+    public static void authenticateImplicit(FileURL location) {
+        if(Debug.ON) Debug.trace("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
 
-        return -1;
+        MappedCredentials creds[] = getMatchingCredentials(location);
+        if(creds.length>0)
+            location.setCredentials(creds[0]);
     }
 
+
+//    /**
+//     * Looks for the best implicit credentials matching the given location (if any) and use them in the FileURL
+//     * by calling {@link FileURL#setCredentials(Credentials)}. Any credentials contained by the the given FileURL
+//     * will be lost and replaced by the new ones (if any).
+//     *
+//     * @param location the location to authenticate
+//     */
+//    public static void authenticateImplicit(FileURL location) {
+//        if(Debug.ON) Debug.trace("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
+//
+//        try {
+//            int match = indexOfRealm(implicitCredentials, MappedCredentials.resolveRealm(location));
+//
+//            if(match!=-1)
+//                location.setCredentials((MappedCredentials)implicitCredentials.elementAt(match));
+//        }
+//        catch(MalformedURLException e) {
+//            // Should never happen, report the error if it does
+//            if(Debug.ON) Debug.trace("Error: realm could not be resolved for location: "+location);
+//        }
+//    }
+
+    
+//    public static void addImplicitCredentials(Credentials credentials, FileURL location) {
+//        MappedCredentials mappedCredentials = (new MappedCredentials(credentials, location));
+//
+//        FileURL realm = mappedCredentials.getRealm();
+//
+//        int index = indexOfRealm(implicitCredentials, realm);
+//        if(index==-1)
+//            implicitCredentials.add(mappedCredentials);
+//        else
+//            implicitCredentials.setElementAt(mappedCredentials, index);
+//
+//        if(Debug.ON) Debug.trace("called, realm="+realm+" implicitCredentials="+implicitCredentials);
+//    }
+//
+//
+//    private static int indexOfRealm(Vector entries, FileURL realm) {
+//        int nbEntries = entries.size();
+//        for(int i=0; i<nbEntries; i++) {
+//            if(((MappedCredentials)entries.elementAt(i)).getRealm().equals(realm))
+//                return i;
+//        }
+//
+//        return -1;
+//    }
+
+
+//    /**
+//     * Looks for credentials matching the specified realm in the given credentials Vector and adds them to the given
+//     * matches Vector.
+//     *
+//     * @param realm the realm to find matching credentials for
+//     * @param credentials the Vector containing the MappedCredentials instances to compare to the given realm
+//     * @param matches the Vector where matching MappedCredentials instances will be added
+//     */
+//    private static void findMatches(FileURL realm, Vector credentials, Vector matches) {
+//        int nbEntries = credentials.size();
+//        MappedCredentials tempCredentials;
+//        for(int i=0; i<nbEntries; i++) {
+//            tempCredentials = (MappedCredentials)credentials.elementAt(i);
+//            if(tempCredentials.getRealm().equals(realm))
+//                matches.add(tempCredentials);
+//        }
+//
+//        if(Debug.ON) Debug.trace("returning matches="+matches);
+//    }
 
     /**
      * Looks for credentials matching the specified location in the given credentials Vector and adds them to the given
      * matches Vector.
      *
-     * @param fileURL the location to find matching credentials for
+     * @param location the location to find matching credentials for
      * @param credentials the Vector containing the MappedCredentials instances to compare to the given location
      * @param matches the Vector where matching MappedCredentials instances will be added
      */
-    private static void findMatches(FileURL fileURL, Vector credentials, Vector matches) {
-        String protocol = fileURL.getProtocol();
-        String host = fileURL.getHost();
+    private static void findMatches(FileURL location, Vector credentials, Vector matches) {
+        String protocol = location.getProtocol();
+        String host = location.getHost();
         MappedCredentials tempCredentials;
         String tempHost;
-        FileURL tempURL;
+        FileURL tempRealm;
 
         int nbEntries = credentials.size();
         for(int i=0; i<nbEntries; i++) {
             tempCredentials = (MappedCredentials)credentials.elementAt(i);
-            tempURL = tempCredentials.getMappedLocation();
-            tempHost = tempURL.getHost();
+            tempRealm = tempCredentials.getRealm();
 
-            if(tempURL.getProtocol().equals(protocol) && ((host!=null && tempHost!=null && host.equalsIgnoreCase(tempHost)) || (host!=null && host.equalsIgnoreCase(tempHost)) || (tempHost!=null && tempHost.equalsIgnoreCase(host)))) {
+            if(tempRealm.equals(location)) {
                 matches.add(tempCredentials);
+            }
+            else {
+                tempHost = tempRealm.getHost();
+
+                if(tempRealm.getProtocol().equals(protocol) && ((host!=null && tempHost!=null && host.equalsIgnoreCase(tempHost)) || (host!=null && host.equalsIgnoreCase(tempHost)) || (tempHost!=null && tempHost.equalsIgnoreCase(host)))) {
+                    matches.add(tempCredentials);
+                }
             }
         }
 
@@ -298,16 +363,16 @@ public class CredentialsManager implements VectorChangeListener {
      * <p>The path of each matching MappedCredentials' location is compared to the provided location's path: the more
      * folder parts match, the better. If both paths are equal, then the MappedCredentials index is returned (perfect match).
      *
-     * @param fileURL the location to be compared against MappedCredentials matches
+     * @param location the location to be compared against MappedCredentials matches
      * @param matches MappedCredentials instances matching the given location
      * @return the MappedCredentials instance that best matches the given location, -1 if the given matches Vector is empty.
      */
-    private static int getBestMatchIndex(FileURL fileURL, Vector matches) {
+    private static int getBestMatchIndex(FileURL location, Vector matches) {
         if(matches.size()==0)
             return -1;
 
         // Splits the provided location's path into an array of folder tokens (e.g. "/home/maxence" -> ["home","maxence"])
-        String path = fileURL.getPath();
+        String path = location.getPath();
         Vector pathTokensV = new Vector();
         StringTokenizer st = new StringTokenizer(path, "/\\");
         while(st.hasMoreTokens()) {
@@ -328,7 +393,7 @@ public class CredentialsManager implements VectorChangeListener {
         int nbMatches = matches.size();
         for(int i=0; i<nbMatches; i++) {
             tempCredentials = (MappedCredentials)matches.elementAt(i);
-            tempURL = tempCredentials.getMappedLocation();
+            tempURL = tempCredentials.getRealm();
             tempPath = tempURL.getPath();
 
             // We found a perfect match (same path), it can't get any better than this, return the MappedCredentials' index
@@ -350,7 +415,7 @@ public class CredentialsManager implements VectorChangeListener {
             }
 
             if (nbMatchingToken>maxTokens) {
-                // We just found a better match 
+                // We just found a better match
                 maxTokens = nbMatchingToken;
                 bestMatchIndex = i;
             }
@@ -366,7 +431,7 @@ public class CredentialsManager implements VectorChangeListener {
      * Returns the list of known volatile MappedCredentials, stored in a Vector. The returned Vector instance is
      * the one actually used by CredentialsManager, so use it with care.
      */
-    public static Vector getVolatileCredentials() {
+    public static Vector getVolatileUserCredentials() {
         return volatileCredentials;
     }
 
@@ -376,7 +441,7 @@ public class CredentialsManager implements VectorChangeListener {
      * Any changes made to the Vector will be detected and will yield to writing the credentials file when
      * {@link #writeCredentials(boolean)} is called with false.
      */
-    public static AlteredVector getPersistentCredentials() {
+    public static AlteredVector getPersistentUserCredentials() {
         return persistentCredentials;
     }
 

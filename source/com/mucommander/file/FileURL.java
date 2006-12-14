@@ -58,11 +58,11 @@ public class FileURL implements Cloneable {
                 int len;
                 // Unix-style path
                 if(firstChar=='/')
-                    url = "file://"+LOCALHOST+url;
+                    url = FileProtocols.FILE+"://"+LOCALHOST+url;
                 // Path starts with a reference to the user home folder,
                 // or is a Windows-style path starting with a drive like X:\ or XX:\
                 else if(firstChar=='~' || ((pos=url.indexOf(":\\"))==1 || pos==2))
-                    url = "file://"+LOCALHOST+"/"+url;
+                    url = FileProtocols.FILE+"://"+LOCALHOST+"/"+url;
                 // Handle Windows-style UNC network paths ( \\hostname\path ):
                 // - under Windows, transform it into a URL in the file://hostname/path form,
                 //   FSFile constructor will translate it back into an UNC network path
@@ -72,12 +72,12 @@ public class FileURL implements Cloneable {
                     if(PlatformManager.isWindowsFamily()) {
                         pos = url.indexOf('\\', 2);
                         if(pos==-1)
-                            url =  "file://"+url.substring(2, len);
+                            url =  FileProtocols.FILE+"://"+url.substring(2, len);
                         else
-                            url = "file://"+url.substring(2, pos)+"/"+(pos==len-1?"":url.substring(pos+1, len));
+                            url = FileProtocols.FILE+"://"+url.substring(2, pos)+"/"+(pos==len-1?"":url.substring(pos+1, len));
                     }
                     else {
-                        url = "smb://"+url.substring(2, len).replace('\\', '/');
+                        url = FileProtocols.SMB+"://"+url.substring(2, len).replace('\\', '/');
                     }
                 }
                 // This doesn't look like a valid path, throw an MalformedURLException
@@ -127,7 +127,7 @@ public class FileURL implements Cloneable {
             // The question mark character (if any) marks the beginning of the query part, only for the http/https protocol.
             // No other supported protocols have a use for the query part, and some protocols such as 'file' allow the '?'
             // character in filenames which thus would be ambiguous.
-            int questionMarkPos = "http".equals(protocol)||"https".equals(protocol)?url.indexOf('?', pos):-1;
+            int questionMarkPos = FileProtocols.HTTP.equals(protocol)||FileProtocols.HTTPS.equals(protocol)?url.indexOf('?', pos):-1;
             separatorPos = url.indexOf('/', pos);
             int hostEndPos;
             // Separator is necessarily before question mark
@@ -198,7 +198,7 @@ public class FileURL implements Cloneable {
                         continue;
                     }
                     // Replace '~' by actual home directory if protocol is 'file' and '~' appears in the path
-                    else if(dirWS.equals("~") && protocol.equalsIgnoreCase("file")) {
+                    else if(dirWS.equals("~") && protocol.equalsIgnoreCase(FileProtocols.FILE)) {
                         //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found ~ dir");
                         path = path.substring(0, pos) + System.getProperty("user.home") + path.substring(pos+1, path.length());
                         // Will perform another pass at the same position
@@ -217,17 +217,19 @@ public class FileURL implements Cloneable {
                     path += pathV.elementAt(i);
                 // We now have a path free of '.' and '..'
 
-                //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Reconstructed path = "+path+" "+pathV);
+//                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Reconstructed path = "+path+" "+pathV);
             }
-			
+
+if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be empty, url="+url);
+
+
             // Parse query part (if any)
             if(questionMarkPos !=-1)
                 query = url.substring(questionMarkPos, urlLen);
 
-            // Extract filename and parent from path
+            // Extract filename from path
             if(path.equals("") || path.equals("/")) {
                 filename = null;
-                // No parent (parentURL will be null)
             }
             else {	
                 String pathCopy = new String(path).replace('\\', '/');
@@ -241,17 +243,17 @@ public class FileURL implements Cloneable {
                 filename = path.substring(separatorPos+1, len);
                 if(filename.equals(""))
                     filename = null;
-				
-                // If parent URL is not null, keep it for getParent()
-                if(parentURL!=null) {
-                    this.parentURL = parentURL;
-                    this.parentURLSet = true;
+            }
 
-                    // Use parent URL's credentials if none are provided in this URL
-                    // Note: parent URL may not contain credentials, in this case null will be returned
-                    if(this.credentials==null)
-                        this.credentials = parentURL.getCredentials();
-                }
+            // If parent URL is not null, keep it and return it for calls to getParent()
+            if(parentURL!=null) {
+                this.parentURL = parentURL;
+                this.parentURLSet = true;
+
+                // Use parent URL's credentials if none are provided in this URL
+                // Note: parent URL may not contain credentials, in this case null will be returned
+                if(this.credentials==null)
+                    this.credentials = parentURL.getCredentials();
             }
         }
         catch(MalformedURLException e) {
@@ -351,14 +353,17 @@ public class FileURL implements Cloneable {
 
 
     /**
-     * Sets the credentials (login and password) contained by this FileURL.
-     * If the provided {@link Credentials} object is null, any credentials contained by this FileURL will be discarded.
+     * Sets the credentials (login and password) contained by this FileURL. Any credentials contained by this FileURL
+     * will be discarded. Null can be passed to discard existing credentials.
      *
      * @param credentials the new credentials to use, replacing any existing credentials. If null is passed, existing
      * credentials will be discarded. 
      */
     public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
+        if(credentials==null || credentials.isEmpty())  // Empty credentials are equivalent to null credentials
+            this.credentials = null;
+        else
+            this.credentials = credentials;
     }
 
 	
@@ -677,7 +682,7 @@ public class FileURL implements Cloneable {
                 if(f.getParent()!=null)
                     System.out.println(" - parent path= "+f.getParent().getPath());
 
-//                if(f.getProtocol().equals("file"))
+//                if(f.getProtocol().equals(FileProtocols.FILE))
 //                    System.out.println(" FSFile's path="+FileFactory.getFile(f, true).getAbsolutePath());
 
                 System.out.println();

@@ -8,6 +8,7 @@ import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.MappedCredentials;
 import com.mucommander.auth.CredentialsManager;
+import com.mucommander.auth.UserCredentials;
 import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -146,7 +147,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Tries the specified path as-is.
         AbstractFile file;
-        MappedCredentials newCredentials = null;
+        UserCredentials newCredentials = null;
 
         while(true) {
             try {
@@ -162,9 +163,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                     AuthException authException = (AuthException)e;
                     AuthDialog authDialog = new AuthDialog(currentMainFrame, authException.getFileURL(), authException.getMessage());
                     authDialog.showDialog();
-                    newCredentials = authDialog.getCredentials();
+                    newCredentials = authDialog.getUserCredentials();
                     if(newCredentials!=null) {
-                        path = newCredentials.getMappedLocation().getStringRep(true);
+                        path = newCredentials.getRealm().getStringRep(true);
                     }
                     // If the user cancels, we fall back to the default path.
                     else {
@@ -176,12 +177,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                     break;
                 }
             }
-        }
-
-        if(newCredentials!=null) {
-            // If credentials were entered by the user, these are considered valid (file was retrieved successfully)
-            // and can be added to the credentials list.
-            CredentialsManager.addCredentials(newCredentials);
         }
 
         // If the specified path does not work out,

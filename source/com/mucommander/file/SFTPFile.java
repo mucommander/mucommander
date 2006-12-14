@@ -370,7 +370,7 @@ private void initConnection(FileURL fileURL) throws IOException {
 
         // Use the default moveTo() implementation if the destination file doesn't use FTP
         // or is not on the same host
-        if(!destFile.fileURL.getProtocol().equals("sftp") || !destFile.fileURL.getHost().equals(this.fileURL.getHost())) {
+        if(!destFile.fileURL.getProtocol().equals(FileProtocols.SFTP) || !destFile.fileURL.getHost().equals(this.fileURL.getHost())) {
             super.moveTo(destFile);
             return;
         }

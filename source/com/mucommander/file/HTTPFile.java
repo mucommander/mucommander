@@ -48,7 +48,7 @@ public class HTTPFile extends AbstractFile {
         super(fileURL);
 
         String protocol = fileURL.getProtocol().toLowerCase();
-        if((!protocol.equals("http") && !protocol.equals("https")) || fileURL.getHost()==null)
+        if((!protocol.equals(FileProtocols.HTTP) && !protocol.equals(FileProtocols.HTTPS)) || fileURL.getHost()==null)
             throw new IOException();
 		
         this.url = url;

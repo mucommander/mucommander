@@ -3,6 +3,7 @@ package com.mucommander.ui.action;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
@@ -29,7 +30,7 @@ public class OpenNativelyAction extends MucoAction {
         // - file is not a directory
         // - file is not on a local filesystem or file is an archive entry
         if(!selectedFile.isDirectory()
-                &&(!"file".equals(selectedFile.getURL().getProtocol()) || selectedFile.isArchiveEntry())) {
+                &&(!FileProtocols.FILE.equals(selectedFile.getURL().getProtocol()) || selectedFile.isArchiveEntry())) {
 
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
             TempExecJob job = new TempExecJob(progressDialog, mainFrame, selectedFile, FileFactory.getTemporaryFile(selectedFile.getName(), true));

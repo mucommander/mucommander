@@ -1,6 +1,7 @@
 package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
 
 import java.io.File;
 
@@ -351,7 +352,7 @@ public class PlatformManager {
     public static void open(AbstractFile file) {
         if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath());
 
-        AbstractFile currentFolder = file.getURL().getProtocol().equals("file") && (currentFolder=file.getParent())!=null?currentFolder:null;
+        AbstractFile currentFolder = file.getURL().getProtocol().equals(FileProtocols.FILE) && (currentFolder=file.getParent())!=null?currentFolder:null;
         String filePath = file.getAbsolutePath();
         Process p = execute(getOpenTokens(filePath), currentFolder);
 	
@@ -389,7 +390,7 @@ public class PlatformManager {
     public static void openInDesktop(AbstractFile file) {
         try {
             // Return if file is not a local file
-            if(!file.getURL().getProtocol().equals("file"))
+            if(!file.getURL().getProtocol().equals(FileProtocols.FILE))
                 return;
 
             if(!file.isDirectory())

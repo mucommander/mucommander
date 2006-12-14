@@ -170,7 +170,7 @@ public abstract class AbstractFile {
         FileURL fileURL = getURL();
 
         // For local files: return file's path 'sans' the protocol and host parts
-        if(fileURL.getProtocol().equals("file"))
+        if(fileURL.getProtocol().equals(FileProtocols.FILE))
             return fileURL.getPath();
 
         // For any other file protocols: return the full URL that includes the protocol and host parts

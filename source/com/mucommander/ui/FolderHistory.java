@@ -3,6 +3,7 @@ package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
+import com.mucommander.file.FileProtocols;
 
 import java.util.Vector;
 
@@ -76,7 +77,7 @@ public class FolderHistory {
         //  - it is a directory on a local filesytem
         //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
         // Java from triggering that dreaded 'Drive not ready' popup.
-        if(folder.getURL().getProtocol().equals("file") && folder.isDirectory() && !((FSFile)folder.getRoot()).guessRemovableDrive()) {
+        if(folder.getURL().getProtocol().equals(FileProtocols.FILE) && folder.isDirectory() && !((FSFile)folder.getRoot()).guessRemovableDrive()) {
             this.lastRecallableFolder = folder.getAbsolutePath();
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastRecallableFolder= "+lastRecallableFolder);
         }

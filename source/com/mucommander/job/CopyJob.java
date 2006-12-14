@@ -4,6 +4,7 @@ package com.mucommander.job;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileSet;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
@@ -253,7 +254,7 @@ public class CopyJob extends TransferFileJob {
             // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
             // file is renamed to <filename>.1
             // TODO: fix this in the commons-net library
-            if(overwrite && destFile.getURL().getProtocol().equals("ftp")) {
+            if(overwrite && destFile.getURL().getProtocol().equals(FileProtocols.FTP)) {
                 try { destFile.delete(); }
                 catch(IOException e) {}
             }

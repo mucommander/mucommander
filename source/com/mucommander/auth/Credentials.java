@@ -5,8 +5,7 @@ import com.mucommander.bookmark.XORCipher;
 
 
 /**
- * This class is a container for a login and password pair, used in combination to a {@link com.mucommander.file.FileURL}
- * to authenticate on a remote filesystem.
+ * This class is a container for a login and password pair, used to authenticate a location on a remote filesystem.
  *
  * @see com.mucommander.file.FileURL
  * @author Maxence Bernard
@@ -69,6 +68,18 @@ public class Credentials {
     }
 
 
+    /**
+     * Returns true if these credentials are empty, that is both the login and password are empty strings.
+     */
+    public boolean isEmpty() {
+        return "".equals(login) && "".equals(password);
+    }
+
+
+    /**
+     * Returns true if the provided Object is a Credentials instance which login and password are equal to the ones in
+     * this instance.
+     */
     public boolean equals(Object o) {
         if(!(o instanceof Credentials))
             return false;

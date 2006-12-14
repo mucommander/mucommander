@@ -81,7 +81,7 @@ public class URLFactory {
 
                 // FileURL cache is not used for protocols other than 'file' as FileURL are mutable
                 // (setLogin, setPassword, setPort) and it may cause some weird side effects
-                if(fileURL.getProtocol().equals("file"))
+                if(fileURL.getProtocol().equals(FileProtocols.FILE))
                     urlCache.add(url, fileURL);
 
             }

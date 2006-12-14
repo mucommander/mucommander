@@ -431,7 +431,7 @@ public class FSFile extends AbstractFile {
      * is also a local file.
      */
     public void moveTo(AbstractFile destFile) throws FileTransferException  {
-        if(!destFile.fileURL.getProtocol().equals("file")) {
+        if(!destFile.fileURL.getProtocol().equals(FileProtocols.FILE)) {
             super.moveTo(destFile);
             return;
         }

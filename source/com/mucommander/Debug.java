@@ -45,14 +45,6 @@ public class Debug {
             System.out.println(getCallerSignature(level)+" : "+message);
     }
 
-    public static void trace(Exception e) {trace(e, 0);}
-    public static void trace(Exception e, int level) {
-        if(enabled) {
-            System.out.print(getCallerSignature(level) + " : ");
-            e.printStackTrace(System.out);
-        }
-    }
-
 
     /**
      * Returns the names of the class and method and source code line number which

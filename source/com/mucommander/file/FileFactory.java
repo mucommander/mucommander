@@ -51,17 +51,17 @@ public abstract class FileFactory {
     static {
         // Register built-in file protocols
         // Local file protocol is hard-wired for performance reasons, no need to add it
-        // registerFileProtocol(FSFile.class, "file");
-        registerFileProtocol(SMBFile.class, "smb");
-        registerFileProtocol(HTTPFile.class, "http");
-        registerFileProtocol(HTTPFile.class, "https");
-        registerFileProtocol(FTPFile.class, "ftp");
+        // registerFileProtocol(FSFile.class, FileProtocols.FILE);
+        registerFileProtocol(SMBFile.class, FileProtocols.SMB);
+        registerFileProtocol(HTTPFile.class, FileProtocols.HTTP);
+        registerFileProtocol(HTTPFile.class, FileProtocols.HTTPS);
+        registerFileProtocol(FTPFile.class, FileProtocols.FTP);
         // SFTP (J2SSH) library only works with Java 1.4 and up, do not register it if running Java 1.3 or lower
         // Technically, J2SSH could run under Java 1.3 with BouncyCastle's crypto library but it is unfortunately too fat
         if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_4)
-            registerFileProtocol(SFTPFile.class, "sftp");
-//        registerFileProtocol(WebDAVFile.class, "webdav");
-//        registerFileProtocol(WebDAVFile.class, "webdavs");
+            registerFileProtocol(SFTPFile.class, FileProtocols.SFTP);
+//        registerFileProtocol(WebDAVFile.class, FileProtocols.WEBDAV);
+//        registerFileProtocol(WebDAVFile.class, FileProtocols.WEBDAVS);
         
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
@@ -251,7 +251,7 @@ public abstract class FileFactory {
             AbstractFile file;
 
             // Special case for local files, do not use protocol registration mechanism to speed things up a bit
-            if(protocol.equals("file")) {
+            if(protocol.equals(FileProtocols.FILE)) {
                 // Use an LRU file cache to recycle frequently used local file instances.
                 String urlRep = fileURL.getStringRep(true);
                 file = (AbstractFile)fileCache.get(urlRep);
@@ -287,7 +287,7 @@ public abstract class FileFactory {
                 // any credentials matching the url and use them.
 if(Debug.ON) Debug.trace("fileURL.containsCredentials() "+fileURL.containsCredentials());
                 if(!fileURL.containsCredentials())
-                    CredentialsManager.authenticate(fileURL);
+                    CredentialsManager.authenticateImplicit(fileURL);
 if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
 
                 // Get a registered Constructor instance for the file protocol

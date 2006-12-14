@@ -33,7 +33,7 @@ public class CredentialsWriter implements CredentialsConstants {
         out.writeCData(com.mucommander.RuntimeConstants.VERSION);
         out.endElement(ELEMENT_VERSION);
 
-        Iterator iterator = CredentialsManager.getPersistentCredentials().iterator();
+        Iterator iterator = CredentialsManager.getPersistentUserCredentials().iterator();
         MappedCredentials credentials;
 
         while(iterator.hasNext()) {
@@ -45,7 +45,7 @@ public class CredentialsWriter implements CredentialsConstants {
 
             // Write URL
             out.startElement(ELEMENT_URL);
-            out.writeCData(credentials.getMappedLocation().getStringRep(false));
+            out.writeCData(credentials.getRealm().getStringRep(false));
             out.endElement(ELEMENT_URL);
 
             // Write login
