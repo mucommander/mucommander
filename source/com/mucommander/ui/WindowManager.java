@@ -7,8 +7,6 @@ import com.mucommander.ShutdownHook;
 import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.MappedCredentials;
-import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.UserCredentials;
 import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
@@ -147,7 +145,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Tries the specified path as-is.
         AbstractFile file;
-        UserCredentials newCredentials = null;
+        MappedCredentials newCredentials = null;
 
         while(true) {
             try {
@@ -163,7 +161,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                     AuthException authException = (AuthException)e;
                     AuthDialog authDialog = new AuthDialog(currentMainFrame, authException.getFileURL(), authException.getMessage());
                     authDialog.showDialog();
-                    newCredentials = authDialog.getUserCredentials();
+                    newCredentials = authDialog.getCredentials();
                     if(newCredentials!=null) {
                         path = newCredentials.getRealm().getStringRep(true);
                     }

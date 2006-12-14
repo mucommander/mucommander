@@ -33,7 +33,7 @@ public class CredentialsWriter implements CredentialsConstants {
         out.writeCData(com.mucommander.RuntimeConstants.VERSION);
         out.endElement(ELEMENT_VERSION);
 
-        Iterator iterator = CredentialsManager.getPersistentUserCredentials().iterator();
+        Iterator iterator = CredentialsManager.getPersistentCredentials().iterator();
         MappedCredentials credentials;
 
         while(iterator.hasNext()) {

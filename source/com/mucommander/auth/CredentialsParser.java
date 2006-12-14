@@ -87,7 +87,7 @@ class CredentialsParser implements ContentHandler, CredentialsConstants {
             }
 
             // Add credentials to persistent credentials list
-            CredentialsManager.getPersistentUserCredentials().add(new UserCredentials(login, password, url, true));
+            CredentialsManager.getPersistentCredentials().add(new MappedCredentials(login, password, url, true));
         }
         else if(name.equals(ELEMENT_URL)) {
             try {

@@ -31,10 +31,10 @@ import java.net.MalformedURLException;
  */
 public class CredentialsManager implements VectorChangeListener {
 
-    /** Contains volatile user-entered MappedCredentials instances, lost when the application terminates */
+    /** Contains volatile MappedCredentials instances, lost when the application terminates */
     private static Vector volatileCredentials = new Vector();
 
-    /** Contains persistent user-entered MappedCredentials instances, stored to an XML file when the application
+    /** Contains persistent MappedCredentials instances, stored to an XML file when the application
      * terminates, and loaded the next time the application is started */
     private static AlteredVector persistentCredentials = new AlteredVector();
 
@@ -149,7 +149,7 @@ public class CredentialsManager implements VectorChangeListener {
      * position ([0]), if there is at least one matching credentials instance. The returned array can be empty
      * (zero length) but never null.
      * 
-     * @param location the location to be compared against known user credentials instances, both volatile and persistent
+     * @param location the location to be compared against known credentials instances, both volatile and persistent
      * @return an array of MappedCredentials matching the given URL's protocol and host, best match at the first position
      */
     public static MappedCredentials[] getMatchingCredentials(FileURL location) {
@@ -168,7 +168,7 @@ public class CredentialsManager implements VectorChangeListener {
      * Returns a Vector of MappedCredentials matching the given URL's protocol and host, best match at the first position.
      * The returned Vector may be empty but never null.
      *
-     * @param location the location to be compared against known user credentials instances, both volatile and persistent
+     * @param location the location to be compared against known credentials instances, both volatile and persistent
      * @return a Vector of MappedCredentials matching the given URL's protocol and host, best match at the first position
      */
     private static Vector getMatchingCredentialsV(FileURL location) {
@@ -189,46 +189,46 @@ public class CredentialsManager implements VectorChangeListener {
 
 
     /**
-     * Adds the given credentials to the list of known user credentials.
+     * Adds the given credentials to the list of known credentials.
      *
-     * <p>Depending on value returned by {@link UserCredentials#isPersistent()}, the credentials will either be stored
+     * <p>Depending on value returned by {@link MappedCredentials#isPersistent()}, the credentials will either be stored
      * in the volatile credentials list or the persistent one. Any existing credentials mapped to the same realm
      * will be replaced by the provided ones.
      *
      * <p>This method should be called when new credentials have been entered by the user, after they have been validated
      * by the application (i.e. access was granted to the location).
      *
-     * @param userCredentials user credentials to be added to the list of known credentials
+     * @param credentials credentials to be added to the list of known credentials
      */
-    public static void addCredentials(UserCredentials userCredentials) {
+    public static void addCredentials(MappedCredentials credentials) {
 
         // Do not add credentials if their login and password are empty
-        if(userCredentials.isEmpty())
+        if(credentials.isEmpty())
             return;
 
-        boolean persist = userCredentials.isPersistent();
+        boolean persist = credentials.isPersistent();
 
-        if(Debug.ON) Debug.trace("called, realm="+userCredentials.getRealm()+" isPersistent="+userCredentials.isPersistent());
+        if(Debug.ON) Debug.trace("called, realm="+credentials.getRealm()+" isPersistent="+credentials.isPersistent());
         if(Debug.ON) Debug.trace("before, persistentCredentials="+persistentCredentials);
         if(Debug.ON) Debug.trace("before, volatileCredentials="+volatileCredentials);
 
-        int index = persistentCredentials.indexOf(userCredentials);
+        int index = persistentCredentials.indexOf(credentials);
         if(persist || index!=-1) {
             if(index==-1)
-                persistentCredentials.add(userCredentials);
+                persistentCredentials.add(credentials);
             else
-                persistentCredentials.setElementAt(userCredentials, index);
+                persistentCredentials.setElementAt(credentials, index);
 
-            index = volatileCredentials.indexOf(userCredentials);
+            index = volatileCredentials.indexOf(credentials);
             if(index!=-1)
                 volatileCredentials.removeElementAt(index);
         }
         else {
-            index = volatileCredentials.indexOf(userCredentials);
+            index = volatileCredentials.indexOf(credentials);
             if(index==-1)
-                volatileCredentials.add(userCredentials);
+                volatileCredentials.add(credentials);
             else
-                volatileCredentials.setElementAt(userCredentials, index);
+                volatileCredentials.setElementAt(credentials, index);
         }
 
         if(Debug.ON) Debug.trace("after, persistentCredentials="+persistentCredentials);
@@ -431,7 +431,7 @@ public class CredentialsManager implements VectorChangeListener {
      * Returns the list of known volatile MappedCredentials, stored in a Vector. The returned Vector instance is
      * the one actually used by CredentialsManager, so use it with care.
      */
-    public static Vector getVolatileUserCredentials() {
+    public static Vector getVolatileCredentials() {
         return volatileCredentials;
     }
 
@@ -441,7 +441,7 @@ public class CredentialsManager implements VectorChangeListener {
      * Any changes made to the Vector will be detected and will yield to writing the credentials file when
      * {@link #writeCredentials(boolean)} is called with false.
      */
-    public static AlteredVector getPersistentUserCredentials() {
+    public static AlteredVector getPersistentCredentials() {
         return persistentCredentials;
     }
 

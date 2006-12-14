@@ -8,15 +8,19 @@ import java.net.MalformedURLException;
 
 /**
  * MappedCredentials extends Credentials to associate the login and password pair to a 'realm', that is the location to
- * a server and share for applicable protocols (like SMB).
+ * a server and share for applicable protocols (like SMB). It also adds the notion of persistency, allowing to specify
+ * whether the credentials should be saved to disk when the application quits and restored next time the application starts.
  *
  * @see CredentialsManager 
  * @author Maxence Bernard
  */
 public class MappedCredentials extends Credentials {
 
-    /** The location credentials are associate  */
+    /** The location credentials are associated with */
     private FileURL realm;
+
+    /** Should these credentials be saved to disk ? */
+    private boolean isPersistent;
 
     
     /**
@@ -25,20 +29,13 @@ public class MappedCredentials extends Credentials {
      * @param login the login part as a string
      * @param password the password part as a string
      * @param location the server location used to determine the realm these credentials are associated with
+     * @param isPersistent if true, indicates to CredentialsManager that the credentials should be saved when the
+     * application terminates.
      */
-    public MappedCredentials(String login, String password, FileURL location) {
+    public MappedCredentials(String login, String password, FileURL location, boolean isPersistent) {
         super(login, password);
 
-//        // Clone the provided URL to remove any credentials from it
-//        try {
-//            FileURL clonedURL = (FileURL) location.clone();
-//            clonedURL.setCredentials(null);
-//            this.realm = clonedURL;
-//        }
-//        catch(CloneNotSupportedException e) {
-//            // Should never happen, clone is supported by FileURL
-//            this.realm = location;
-//        }
+        this.isPersistent = isPersistent;
 
         try {
             this.realm = resolveRealm(location);
@@ -55,9 +52,11 @@ public class MappedCredentials extends Credentials {
      *
      * @param credentials the login and password to use
      * @param location the server location used to determine the realm these credentials are associated with
+     * @param isPersistent if true, indicates to CredentialsManager that the credentials should be saved when the
+     * application terminates.
      */
-    public MappedCredentials(Credentials credentials, FileURL location) {
-        this(credentials.getLogin(), credentials.getPassword(), location);
+    public MappedCredentials(Credentials credentials, FileURL location, boolean isPersistent) {
+        this(credentials.getLogin(), credentials.getPassword(), location, isPersistent);
     }
 
 
@@ -108,6 +107,14 @@ public class MappedCredentials extends Credentials {
     }
     
 
+    /**
+     * Returns true if these credentials should be saved when the application terminates.
+     */
+    public boolean isPersistent() {
+        return isPersistent;
+    }
+
+    
     /**
      * Returns true if the provided Object is a Credentials instance which login, password and realm are equal
      * to the ones in this instance.

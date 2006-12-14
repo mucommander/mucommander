@@ -6,7 +6,7 @@ import com.mucommander.xml.parser.Parser;
 import com.mucommander.file.FileURL;
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.UserCredentials;
+import com.mucommander.auth.MappedCredentials;
 
 import java.io.File;
 import java.io.InputStream;
@@ -100,7 +100,7 @@ class BookmarkParser implements ContentHandler, BookmarkConstants {
                 // If the URL contains credentials, import them into CredentialsManager and remove credentials
                 // from the bookmark's location
                 if(credentials!=null) {
-                    CredentialsManager.addCredentials(new UserCredentials(credentials, url, true));
+                    CredentialsManager.addCredentials(new MappedCredentials(credentials, url, true));
                     bookmarkLocation = url.getStringRep(false);
                 }
                 else {

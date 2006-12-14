@@ -300,7 +300,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private MappedCredentials getCredentialsFromUser(FileURL fileURL, String errorMessage) {
         AuthDialog authDialog = new AuthDialog(mainFrame, fileURL, errorMessage);
         authDialog.showDialog();
-        return authDialog.getUserCredentials();
+        return authDialog.getCredentials();
     }
 
 
@@ -635,7 +635,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             // If folder URL doesn't contain any credentials but CredentialsManager found some matching the URL,
             // popup the authentication dialog to avoid having to wait for an AuthException to be thrown
             boolean userCancelled = false;
-if(Debug.ON) Debug.trace("folderURL="+folderURL.getStringRep(true));
             if(!folderURL.containsCredentials() && CredentialsManager.getMatchingCredentials(folderURL).length>0) {
                 MappedCredentials newCredentials = getCredentialsFromUser(folderURL, null);
 
@@ -772,13 +771,11 @@ if(Debug.ON) Debug.trace("folderURL="+folderURL.getStringRep(true));
                         // (folder was changed successfully) -> add them to the credentials list.
                         Credentials credentials = folder.getURL().getCredentials();
 
-if(Debug.ON) Debug.trace("credentials="+credentials);
                         if(credentials!=null) {
-                            if(credentials instanceof UserCredentials)
-                                CredentialsManager.addCredentials((UserCredentials)credentials);
+                            if(credentials instanceof MappedCredentials)
+                                CredentialsManager.addCredentials((MappedCredentials)credentials);
                             else
-                                CredentialsManager.addCredentials(new UserCredentials(credentials, folderURL, false));
-//                            CredentialsManager.addImplicitCredentials(credentials, folderURL);
+                                CredentialsManager.addCredentials(new MappedCredentials(credentials, folderURL, false));
                         }
 
                         // All good !
@@ -793,7 +790,6 @@ if(Debug.ON) Debug.trace("credentials="+credentials);
                         mainFrame.setCursor(Cursor.getDefaultCursor());
 
                         if(e instanceof AuthException) {
-if(Debug.ON) Debug.trace("folderURL before="+folderURL.getStringRep(true));
                             AuthException authException = (AuthException)e;
                             // Retry (loop) if user provided new credentials, if not stop
                             MappedCredentials newCredentials = getCredentialsFromUser(authException.getFileURL(), authException.getMessage());
@@ -802,7 +798,6 @@ if(Debug.ON) Debug.trace("folderURL before="+folderURL.getStringRep(true));
                                 folder = null;
                                 // Use the provided credentials
                                 folderURL.setCredentials(newCredentials);
-if(Debug.ON) Debug.trace("folderURL after="+folderURL.getStringRep(true));
                                 continue;
                             }
                         }
