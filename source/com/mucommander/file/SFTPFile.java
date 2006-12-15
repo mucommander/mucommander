@@ -96,7 +96,7 @@ public class SFTPFile extends AbstractFile {
 	
 	
 //    private void initConnection(FileURL fileURL, boolean addAuthInfo) throws IOException {
-private void initConnection(FileURL fileURL) throws IOException {
+    private void initConnection(FileURL fileURL) throws IOException {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("connecting to "+fileURL.getHost());
         try {
             // Init SSH client

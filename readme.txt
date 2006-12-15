@@ -156,6 +156,7 @@ New features:
  - Support for Bzip2 archives (.bz2, .tbz2, .tar.bz2 extensions)
  - Support for AR and Debian archives, GNU and BSD variants supported (.ar, .deb extensions)
  - Support for HTTP Basic Authentication
+ - File user permissions are properly preserved under Java 1.6 (only)
  - 'Run command' is now interactive, allows shell customization, quick recall of previous commands, color customization, and uses the system's default shell to parse commands under UNIX platforms (contributed by Nicolas Rinaudo)
  - Command line options (contributed by Nicolas Rinaudo)
  - Ability to execute remote or archive entries files: these are copied to a temporary local directory and executed
@@ -184,7 +185,6 @@ Improvements:
  - Improved file handling performance
  - Optimized handling of Zip and Tar archives which can now be accessed much faster
  - Faster table rendering
- - File user permissions are properly preserved under Java 1.6 (only)
  - Toolbar and command bar now contextually show whether the action can be triggered or not
  - Free/total volume space now automatically refreshes (every 60 seconds)
  - 'File collision' dialog improved, attempts to transfer a folder to one of its subfolders are now detected
