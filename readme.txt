@@ -184,6 +184,7 @@ Improvements:
  - Improved file handling performance
  - Optimized handling of Zip and Tar archives which can now be accessed much faster
  - Faster table rendering
+ - File user permissions are properly preserved under Java 1.6 (only)
  - Toolbar and command bar now contextually show whether the action can be triggered or not
  - Free/total volume space now automatically refreshes (every 60 seconds)
  - 'File collision' dialog improved, attempts to transfer a folder to one of its subfolders are now detected
@@ -254,7 +255,6 @@ Bug fixes:
 
 Known issues:
  - Translations not up-to-date (some of the new 0.8 features are untranslated) 
- - Write/execute modes are not preserved when a file is copied, this will be solved with Java 1.6
  - Zip files encoded in a charset other than UTF-8 will not display non-ASCII filenames properly due to a limitation of java.util.zip (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4244499)
  - Some BZ2 archives can not be properly opened
  - SFTP connections to some ssh servers cannot be established
