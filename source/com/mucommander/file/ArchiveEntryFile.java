@@ -94,6 +94,22 @@ public class ArchiveEntryFile extends AbstractFile {
         return false;
     }
 
+    public boolean canExecute() {
+        return false;
+    }
+
+    public boolean setReadable(boolean readable) {
+        return false;
+    }
+
+    public boolean setWritable(boolean writable) {
+        return false;
+    }
+
+    public boolean setExecutable(boolean executable) {
+        return false;
+    }
+
     public boolean isSymlink() {
         return false;
     }
@@ -149,21 +165,4 @@ public class ArchiveEntryFile extends AbstractFile {
         return MUST_NOT_HINT;
     }
 
-/*
-    public String getName() {
-        return entry.getName();
-    }
-
-
-    public String getAbsolutePath() {
-        String path = getParent().getAbsolutePath(true)+getName();
-        String separator = getSeparator();
-
-        // Append a trailing separator character for directories
-        if(isDirectory() && !path.endsWith(getSeparator()))
-            return path+separator;
-
-        return path;
-    }
-*/
 }

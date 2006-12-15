@@ -359,6 +359,22 @@ parentFileURL.setCredentials(fileURL.getCredentials());
         return file.hasPermission(org.apache.commons.net.ftp.FTPFile.USER_ACCESS, org.apache.commons.net.ftp.FTPFile.WRITE_PERMISSION);
     }
 
+    public boolean canExecute() {
+        return file.hasPermission(org.apache.commons.net.ftp.FTPFile.USER_ACCESS, org.apache.commons.net.ftp.FTPFile.EXECUTE_PERMISSION);
+    }
+
+    public boolean setReadable(boolean readable) {
+        return false;
+    }
+
+    public boolean setWritable(boolean writable) {
+        return false;
+    }
+
+    public boolean setExecutable(boolean executable) {
+        return false;
+    }
+
     public boolean isDirectory() {
         return file.isDirectory();
     }

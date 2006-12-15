@@ -202,7 +202,23 @@ public class HTTPFile extends AbstractFile {
     public boolean canWrite() {
         return false;
     }
-	
+
+    public boolean canExecute() {
+        return false;
+    }
+
+    public boolean setReadable(boolean readable) {
+        return false;
+    }
+
+    public boolean setWritable(boolean writable) {
+        return false;
+    }
+
+    public boolean setExecutable(boolean executable) {
+        return false;
+    }
+
     public boolean isDirectory() {
         return false;
     }

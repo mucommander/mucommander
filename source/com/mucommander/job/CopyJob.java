@@ -233,7 +233,7 @@ public class CopyJob extends TransferFileJob {
                         processFile(subFiles[i], destFile);
                     }
 
-                    // Only when finished with folder, set folder's date to original folder's
+                    // Only when finished with folder, set destination folder's date to match the original folder one
                     destFile.changeDate(file.getDate());
 
                     return true;
@@ -261,9 +261,6 @@ public class CopyJob extends TransferFileJob {
 
             // Copy the file
             boolean success = tryCopyFile(file, destFile, append, errorDialogTitle);
-			
-            // Preserve original file's date
-            destFile.changeDate(file.getDate());
 			
             return success;
         }

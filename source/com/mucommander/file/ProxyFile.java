@@ -93,6 +93,22 @@ public abstract class ProxyFile extends AbstractFile {
         return file.canWrite();
     }
 
+    public boolean canExecute() {
+        return file.canExecute();
+    }
+
+    public boolean setReadable(boolean readable) {
+        return file.setReadable(readable);
+    }
+
+    public boolean setWritable(boolean writable) {
+        return file.setWritable(writable);
+    }
+
+    public boolean setExecutable(boolean executable) {
+        return file.setExecutable(executable);
+    }
+
     public boolean isDirectory() {
         return file.isDirectory();
     }

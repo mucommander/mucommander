@@ -3,7 +3,7 @@ package com.mucommander.file;
 
 
 /**
- * TarEntry encapsulates a JavaTar library's tar entry.
+ * TarEntry encapsulates am org.apache.tools.tar.TarEntry tar entry.
  *
  * @author Maxence Bernard
  */

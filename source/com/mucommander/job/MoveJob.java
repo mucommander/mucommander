@@ -235,6 +235,10 @@ public class MoveJob extends TransferFileJob {
                         if(!processFile(subFiles[i], destFile))
                             isFolderEmpty = false;
                     }
+
+                    // Only when finished with folder, set destination folder's date to match the original folder one
+                    destFile.changeDate(file.getDate());
+
                     // If one file could returned failure, return failure as well since this
                     // folder could not be moved totally
                     if(!isFolderEmpty)
@@ -290,9 +294,6 @@ public class MoveJob extends TransferFileJob {
             // if moveTo() returned false it wasn't possible to this method because of 'append',
             // try the hard way by copying the file first, and then deleting the source file
             if(tryCopyFile(file, destFile, append, errorDialogTitle) && !isInterrupted()) {
-                // Preserve original file's date
-                destFile.changeDate(file.getDate());
-
                 // Delete the source file
                 do {		// Loop for retry
                     try  {

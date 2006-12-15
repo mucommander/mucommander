@@ -192,6 +192,33 @@ if(Debug.ON) Debug.trace("caught "+e);
         }
     }
 
+    public boolean canExecute() {
+        // No such thing in SMB, return false
+        return false;
+    }
+
+
+    public boolean setReadable(boolean readable) {
+        return false;
+    }
+
+    public boolean setWritable(boolean writable) {
+        try {
+            if(writable)
+                file.setReadWrite();
+            else
+                file.setReadOnly();
+
+            return true;
+        }
+        catch(SmbException e) {
+            return false;
+        }
+    }
+
+    public boolean setExecutable(boolean executable) {
+        return false;
+    }
 
     public boolean isDirectory() {
         // Cache SmbFile.isDirectory()'s return value as this method triggers network calls

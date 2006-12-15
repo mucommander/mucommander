@@ -108,8 +108,11 @@ public class PlatformManager {
 
         // Java version property should never be null or empty, but better be safe than sorry ...
         if(javaVersion==null || (javaVersion=javaVersion.trim()).equals(""))
-            // Assume java 1.3 (first supported Java version)
-            JAVA_VERSION = JAVA_1_3;
+            // Assume java 1.4 (first supported Java version)
+            JAVA_VERSION = JAVA_1_4;
+        // Java 1.6
+        else if(javaVersion.startsWith("1.6"))
+            JAVA_VERSION = JAVA_1_6;
         // Java 1.5
         else if(javaVersion.startsWith("1.5"))
             JAVA_VERSION = JAVA_1_5;
@@ -130,7 +133,7 @@ public class PlatformManager {
             JAVA_VERSION = JAVA_1_0;
         // Newer version we don't know of yet, assume latest supported Java version
         else
-            JAVA_VERSION = JAVA_1_5;
+            JAVA_VERSION = JAVA_1_6;
 
         if(Debug.ON) Debug.trace("detected Java version value = "+JAVA_VERSION);
 

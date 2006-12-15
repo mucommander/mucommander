@@ -55,8 +55,14 @@ public abstract class TransferFileJob extends FileJob {
 	
     /**
      * Copies the given source file to the specified destination file, optionally resuming the operation.
+     * As much as the source and destination protocols allow, the source file's date and permissions will be preserved.
      */
     protected void copyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append) throws FileTransferException {
+        // Throw a specific FileTransferException if source and destination files are identical
+        if(sourceFile.equals(destFile))
+            throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
+
+
         // Determine whether AbstractFile.copyTo() should be used to copy file or streams should be copied manually.
         // Some file protocols do not provide a getOutputStream() method and require the use of copyTo(). Some other
         // may also offer server to server copy which is more efficient than stream copy.
@@ -66,48 +72,53 @@ public abstract class TransferFileJob extends FileJob {
         if(copyToHint==AbstractFile.SHOULD_HINT || copyToHint==AbstractFile.MUST_HINT) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling copyTo()");
             sourceFile.copyTo(destFile);
-            return;
         }
+        else {
+            // Copy source file stream to destination file
+            try {
+                // Try to open InputStream
+                try  {
+                    long destFileSize = destFile.getSize();
 
-        // Throw a specific FileTransferException if source and destination files are identical
-        if(sourceFile.equals(destFile))
-            throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
-
-        // Copy source file stream to destination file
-        try {
-            // Try to open InputStream
-            try  {
-                long destFileSize = destFile.getSize();
-        
-                if(append && destFileSize!=-1) {
-                    setCurrentInputStream(sourceFile.getInputStream(destFileSize));
-                    currentFileByteCounter.add(destFileSize);
+                    if(append && destFileSize!=-1) {
+                        setCurrentInputStream(sourceFile.getInputStream(destFileSize));
+                        currentFileByteCounter.add(destFileSize);
+                    }
+                    else {
+                        setCurrentInputStream(sourceFile.getInputStream());
+                    }
                 }
-                else {
-                    setCurrentInputStream(sourceFile.getInputStream());
+                catch(IOException e) {
+                    if(com.mucommander.Debug.ON) {
+                        com.mucommander.Debug.trace("IOException caught: "+e+", throwing FileTransferException");
+                        e.printStackTrace();
+                    }
+                    throw new FileTransferException(FileTransferException.OPENING_SOURCE);
+                }
+
+                // Copy source stream to destination file
+                destFile.copyStream(tlin, append);
+            }
+            finally {
+                // This block will always be executed, even if an exception
+                // was thrown in the catch block
+
+                // Tries to close the streams no matter what happened before
+                if(tlin !=null) {
+                    try { tlin.close(); }
+                    catch(IOException e1) {}
                 }
             }
-            catch(IOException e) {
-                if(com.mucommander.Debug.ON) {
-                    com.mucommander.Debug.trace("IOException caught: "+e+", throwing FileTransferException");
-                    e.printStackTrace();
-                }
-                throw new FileTransferException(FileTransferException.OPENING_SOURCE);
-            }
-    
-            // Copy source stream to destination file
-            destFile.copyStream(tlin, append);
         }
-        finally {
-            // This block will always be executed, even if an exception
-            // was thrown in the catch block
 
-            // Tries to close the streams no matter what happened before
-            if(tlin !=null) {
-                try { tlin.close(); }
-                catch(IOException e1) {}
-            }
-        }
+        // Preserve source file's date
+        destFile.changeDate(sourceFile.getDate());
+
+if(Debug.ON) Debug.trace("sourceFile="+sourceFile+" destFile="+destFile);
+if(Debug.ON) Debug.trace("sourceFile permissions="+sourceFile.getPermissions()+" destFile permissions="+destFile.getPermissions());
+        // Preserve source file's permissions
+        destFile.setPermissions(sourceFile.getPermissions());
+if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
     }
 
 

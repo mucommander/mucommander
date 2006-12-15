@@ -1,6 +1,7 @@
 package com.mucommander.file;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -308,11 +309,32 @@ public class FSFile extends AbstractFile {
     public boolean canRead() {
         return file.canRead();
     }
-	
+
     public boolean canWrite() {
         return file.canWrite();
     }
-	
+
+    public boolean canExecute() {
+        return (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) && file.canExecute();
+    }
+
+    public boolean setReadable(boolean readable) {
+        return (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) && file.setReadable(readable);
+    }
+
+    public boolean setWritable(boolean writable) {
+        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)
+            return file.setWritable(writable);
+        else if(!writable)
+            return file.setReadOnly();
+
+        return false;
+    }
+
+    public boolean setExecutable(boolean executable) {
+        return (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) && file.setExecutable(executable);
+    }
+
     public boolean isDirectory() {
         // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
         // triggered by java.io.File.getCanonicalPath() 
@@ -354,10 +376,16 @@ public class FSFile extends AbstractFile {
 	
 
     public long getFreeSpace() {
+        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)
+            return file.getFreeSpace();
+
         return getVolumeInfo()[1];
     }
 	
     public long getTotalSpace() {
+        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)
+            return file.getTotalSpace();
+
         return getVolumeInfo()[0];
     }	
 

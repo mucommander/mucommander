@@ -41,7 +41,15 @@ public abstract class AbstractFile {
 
     /** Default buffer size for BufferedOutputStream */
     public final static int WRITE_BUFFER_SIZE = 8192;
-	
+
+
+    /** Bit mask for 'execute' file permission */
+    public final static int EXECUTE_MASK = 64;
+    /** Bit mask for 'write' file permission */
+    public final static int WRITE_MASK = 128;
+    /** Bit mask for 'read' file permission */
+    public final static int READ_MASK = 256;
+
 
     /**
      * Creates a new file instance with the given URL.
@@ -565,7 +573,62 @@ public abstract class AbstractFile {
         return filter==null?ls():filter.filter(ls());
     }
 
-		
+
+    /**
+     * Returns read/write/execute permissions as an int, UNIX octal style.
+     * The value can be compared against {@link #READ_MASK}, {@link #WRITE_MASK} and {@link #EXECUTE_MASK}
+     * bit masks to determine if the file is readable/writable/executable.
+     *
+     * <p>Implementation note: the implementation of this method calls sequentially {@link #canRead()},
+     * {@link #canWrite()} and {@link #canExecute()}. This may affect performance on filesystems which need to perform
+     * a network request to retrieve each of these values. In that case, and if the fileystem allows to retrieve all
+     * permissions with a single request, this method should be overridden.
+     *
+     * @return
+     */
+    public int getPermissions() {
+        int perms = 0;
+
+        if(canRead())
+            perms |= READ_MASK; 
+
+        if(canWrite())
+            perms |= WRITE_MASK;
+
+        if(canExecute())
+            perms |= EXECUTE_MASK;    
+
+        return perms;
+    }
+
+
+    /**
+     * Changes the read/write/execute permissions of this file, using the specified permissions int and returns true if
+     * the operation was successful, false if at least one of the file permissions could not be changed.
+     * The permissions int should be created using {@link #READ_MASK}, {@link #WRITE_MASK} and {@link #EXECUTE_MASK}
+     * bit masks combined with logical OR.
+     *
+     * <p>Implementation note: the implementation of this method calls sequentially {@link #setReadable(boolean)},
+     * {@link #setWritable(boolean)} and {@link #setExecutable(boolean)}. This may affect performance on filesystems
+     * which need to perform a network request to retrieve each of these value. In that case, and if the fileystem allows
+     * to change all permissions with a single request, this method should be overridden.
+     *
+     * @param permissions the new permissions this file should have
+     * @return true if the operation was successful, false if at least one of the file permissions could not be changed 
+     */
+    public boolean setPermissions(int permissions) {
+        boolean success;
+
+        success = setReadable((permissions&READ_MASK)!=0);
+
+        success &= setWritable((permissions&WRITE_MASK)!=0);
+
+        success &= setExecutable((permissions&EXECUTE_MASK)!=0);
+
+        return success;
+    }
+
+
     /**
      * Tests a file for equality: returns <code>true</code> if the given file has the same canonical path,
      * as returned by {@link #getCanonicalPath()}.
@@ -636,7 +699,43 @@ public abstract class AbstractFile {
      * Returns true if this AbstractFile can be modified.
      */	
     public abstract boolean canWrite();
-	
+
+    /**
+     * Returns true if this AbstractFile can be executed. If the underlying filesystem does not have a notion of
+     * executable files, false must be returned. 
+     */
+    public abstract boolean canExecute();
+
+    /**
+     * Changes the 'execute' permission of this file and returns true if the operation succeeded, false if it failed or
+     * if the operation is not available in the underlying filesystem.
+     *
+     * @param readable true to make this file readable
+     * @return true if the operation succeeded, false if it failed or if the operation is not available
+     * in the underlying filesystem
+     */
+    public abstract boolean setReadable(boolean readable);
+
+    /**
+     * Changes the 'write' permission of this file and returns true if the operation succeeded, false if it failed or
+     * if the operation is not available in the underlying filesystem.
+     *
+     * @param writable true to make this file writable
+     * @return true if the operation succeeded, false if it failed or if the operation is not available
+     * in the underlying filesystem
+     */
+    public abstract boolean setWritable(boolean writable);
+
+    /**
+     * Changes the 'execute' permission of this file and returns true if the operation succeeded, false if it failed or
+     * if the operation is not available in the underlying filesystem.
+     *
+     * @param executable true to make this file executable
+     * @return true if the operation succeeded, false if it failed or if the operation is not available
+     * in the underlying filesystem
+     */
+    public abstract boolean setExecutable(boolean executable);
+
     /**
      * Returns true if this AbstractFile is a 'regular' directory, not only a 'browsable' file (like an archive file).
      */
