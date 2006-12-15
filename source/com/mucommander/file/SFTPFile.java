@@ -5,6 +5,7 @@ import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.Debug;
 import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.authentication.AuthenticationProtocolState;
 import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
@@ -235,41 +236,24 @@ public class SFTPFile extends AbstractFile {
     }
 
     public boolean setReadable(boolean readable) {
-        if(file==null)
-            return false;
-
-        int perms = getFilePermissions();
-        setPermissionBit(perms, FileAttributes.S_IRUSR, readable);
+        int perms = setPermissionBit(getFilePermissions(), FileAttributes.S_IRUSR, readable);
         return changeFilePermissions(perms);
     }
 
     public boolean setWritable(boolean writable) {
-        if(file==null)
-            return false;
-
-        int perms = getFilePermissions();
-        setPermissionBit(perms, FileAttributes.S_IWUSR, writable);
+        int perms = setPermissionBit(getFilePermissions(), FileAttributes.S_IWUSR, writable);
         return changeFilePermissions(perms);
     }
 
     public boolean setExecutable(boolean executable) {
-        if(file==null)
-            return false;
-
-        int perms = getFilePermissions();
-        setPermissionBit(perms, FileAttributes.S_IXUSR, executable);
+        int perms = setPermissionBit(getFilePermissions(), FileAttributes.S_IXUSR, executable);
         return changeFilePermissions(perms);
     }
 
     public boolean setPermissions(int permissions) {
-        if(file==null)
-            return false;
-
-        int perms = getFilePermissions();
-
-        setPermissionBit(perms, FileAttributes.S_IRUSR, (permissions&READ_MASK)!=0);
-        setPermissionBit(perms, FileAttributes.S_IWUSR, (permissions&WRITE_MASK)!=0);
-        setPermissionBit(perms, FileAttributes.S_IXUSR, (permissions&EXECUTE_MASK)!=0);
+        int perms = setPermissionBit(getFilePermissions(), FileAttributes.S_IRUSR, (permissions&READ_MASK)!=0);
+        perms = setPermissionBit(perms, FileAttributes.S_IWUSR, (permissions&WRITE_MASK)!=0);
+        perms = setPermissionBit(perms, FileAttributes.S_IXUSR, (permissions&EXECUTE_MASK)!=0);
 
         return changeFilePermissions(perms);
     }
@@ -278,6 +262,9 @@ public class SFTPFile extends AbstractFile {
      * Returns the SFTP file permissions.
      */
     private int getFilePermissions() {
+        if(file==null)
+            return 0;
+
         return file.getAttributes().getPermissions().intValue();
     }
 
@@ -286,10 +273,11 @@ public class SFTPFile extends AbstractFile {
      */
     private boolean changeFilePermissions(int permissions) {
         try {
-            sftpSubsystem.changePermissions(file, permissions);
+            sftpSubsystem.changePermissions(absPath, permissions);
             return true;
         }
         catch(IOException e) {
+if(Debug.ON) Debug.trace("Exception thrown: "+e);
             return false;
         }
     }
@@ -297,11 +285,13 @@ public class SFTPFile extends AbstractFile {
     /**
      * Enables/disables the given bit in the permissions int.
      */
-    private void setPermissionBit(int permissions, int bit, boolean enabled) {
+    private int setPermissionBit(int permissions, int bit, boolean enabled) {
         if(enabled)
-            permissions &= ~bit;
-        else
             permissions |= bit;
+        else
+            permissions &= ~bit;
+
+        return permissions;
     }
 
     public boolean isDirectory() {
@@ -324,19 +314,21 @@ public class SFTPFile extends AbstractFile {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file="+getAbsolutePath()+" append="+append+" exists="+exists());
 
         boolean fileExists = exists();
-        //		FileAttributes attributes = new FileAttributes();
-        //		attributes.setPermissions("rw-------");
-        //		SftpFile sftpFile = sftpChannel.openFile(absPath, fileExists?(append?SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_APPEND:SftpSubsystemClient.OPEN_WRITE):SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_CREATE, attributes);
-        SftpFile sftpFile = sftpSubsystem.openFile(absPath,
-                                                 fileExists?(append?SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_APPEND:SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_TRUNCATE)
-                                                 :SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_CREATE);
-		
-        // If file was just created, change permissions to 600: read+write for owner only (default is 0)
+//        SftpFile sftpFile = sftpSubsystem.openFile(absPath,
+//                                                 fileExists?(append?SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_APPEND:SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_TRUNCATE)
+//                                                 :SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_CREATE);
+
+        this.file = sftpSubsystem.openFile(absPath,
+             fileExists?(append?SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_APPEND:SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_TRUNCATE)
+             :SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_CREATE);
+
+        // If file was just created, change permissions to 644 octal (420 dec): "rw-r--r--"
+        // Note: by default, permissions for created files is 0 !
         if(!fileExists)
-            sftpSubsystem.changePermissions(sftpFile, "rw-------");
+            sftpSubsystem.changePermissions(file, 420);
 
         // Custom made constructor, not part of the official J2SSH API
-        return new SftpFileOutputStream(sftpFile, append?getSize():0);
+        return new SftpFileOutputStream(file, append?getSize():0);
     }
 	
 
@@ -408,9 +400,9 @@ public class SFTPFile extends AbstractFile {
     public void mkdir(String name) throws IOException {
         String dirPath = absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name;
         sftpSubsystem.makeDirectory(dirPath);
-        // Set new directory permissions to 700: read+write+execute for owner only
-        //		sftpChannel.changePermissions(dirPath, 700);
-        sftpSubsystem.changePermissions(dirPath, "rwx------");
+        // Set new directory permissions to 755 octal (493 dec): "rwxr-xr-x"
+        // Note: by default, permissions for created files is 0 !
+        sftpSubsystem.changePermissions(dirPath, 493);
     }
 
 

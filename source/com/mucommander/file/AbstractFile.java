@@ -603,6 +603,19 @@ public abstract class AbstractFile {
 
 
     /**
+     * Returns a string representation of this file's read/write/execute permissions. If the file is readable, writable
+     * and executable, "rwx" will be returned. Any permission flag not enabled will be replaced by a '-' character.
+     */
+    public String getPermissionsString() {
+        String perms = canRead()?"r":"-";
+        perms += canWrite()?"w":"-";
+        perms += canExecute()?"x":"-";
+
+        return perms;
+    }
+
+
+    /**
      * Changes the read/write/execute permissions of this file, using the specified permissions int and returns true if
      * the operation was successful, false if at least one of the file permissions could not be changed.
      * The permissions int should be created using {@link #READ_MASK}, {@link #WRITE_MASK} and {@link #EXECUTE_MASK}
