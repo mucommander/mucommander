@@ -5,6 +5,9 @@ import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.file.connection.ConnectionHandler;
+import com.mucommander.file.connection.ConnectionPool;
+import com.mucommander.file.connection.ConnectionFull;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
@@ -16,13 +19,11 @@ import java.io.*;
  *
  * @author Maxence Bernard
  */
-public class FTPFile extends AbstractFile {
+public class FTPFile extends AbstractFile implements ConnectionFull {
 
     private org.apache.commons.net.ftp.FTPFile file;
-    private FTPClient ftpClient;
 
-    /** Sets whether passive mode should be used for data transfers (default is true) */
-    private boolean passiveMode = true;
+    private FTPConnectionHandler connHandler;
 
     protected String absPath;
 
@@ -33,89 +34,31 @@ public class FTPFile extends AbstractFile {
 
     private final static String SEPARATOR = DEFAULT_SEPARATOR;
 
-
-    private class FTPInputStream extends FilterInputStream {
-
-        private FTPInputStream(InputStream in) {
-            super(in);
-        }
-
-        public void close() throws IOException {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("closing");
-            super.close();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("closed");
-
-            try {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("complete pending commands");
-                ftpClient.completePendingCommand();
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("commands completed");
-            }
-            catch(IOException e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in complete pending commands, disconnecting");
-                ftpClient.disconnect();
-            }
-        }
-    }
-
-    private class FTPOutputStream extends BufferedOutputStream {
-
-        private FTPOutputStream(OutputStream out) {
-            super(out);
-        }
-
-        public void close() throws IOException {
-            super.close();
-
-            try {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("complete pending commands");
-                ftpClient.completePendingCommand();
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("commands completed");
-            }
-            catch(IOException e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in complete pending commands, disconnecting");
-                ftpClient.disconnect();
-            }
-        }
-    }
+    public final static String PASSIVE_MODE_PROPERTY_NAME = "passiveMode";
 
 
     public FTPFile(FileURL fileURL) throws IOException {
-//        this(fileURL, true, null);
         this(fileURL, null);
     }
 
-
-    /**
-     * Creates a new instance of FTPFile and initializes the FTP connection to the server.
-     */
-//    private FTPFile(FileURL fileURL, boolean addAuthInfo, FTPClient ftpClient) throws IOException {
-    private FTPFile(FileURL fileURL, FTPClient ftpClient) throws IOException {
-        super(fileURL);
-
-        this.absPath = this.fileURL.getPath();
-
-        if(ftpClient==null)
-            // Initialize connection
-//            initConnection(fileURL, addAuthInfo);
-            initConnection(fileURL);
-        else
-            this.ftpClient = ftpClient;
-
-        initFile(fileURL);
-    }
-
-
-    private FTPFile(FileURL fileURL, org.apache.commons.net.ftp.FTPFile file, FTPClient ftpClient) {
+    public FTPFile(FileURL fileURL, org.apache.commons.net.ftp.FTPFile file) throws IOException {
         super(fileURL);
 
         this.absPath = fileURL.getPath();
-        this.file = file;
-        this.ftpClient = ftpClient;
-        this.fileExists = true;
+
+        this.connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL);
+        connHandler.checkConnection();
+
+        if(file==null)
+            initFile(fileURL);
+        else {
+            this.file = file;
+            this.fileExists = true;
+        }
     }
 
 
-    private org.apache.commons.net.ftp.FTPFile getFTPFile(FTPClient ftpClient, FileURL fileURL) throws IOException {
+    private org.apache.commons.net.ftp.FTPFile getFTPFile(FileURL fileURL) throws IOException {
         FileURL parentURL = fileURL.getParent();
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL+" parent="+parentURL);
 
@@ -125,11 +68,11 @@ public class FTPFile extends AbstractFile {
         }
         else {
             // Check connection and reconnect if connection timed out
-            checkConnection();
+            connHandler.checkConnection();
 
-            org.apache.commons.net.ftp.FTPFile files[] = ftpClient.listFiles(parentURL.getPath());
+            org.apache.commons.net.ftp.FTPFile files[] = connHandler.ftpClient.listFiles(parentURL.getPath());
             // Throw an IOException if server replied with an error
-            checkServerReply();
+            connHandler.checkServerReply();
 
             // File doesn't exist
             if(files==null || files.length==0)
@@ -158,64 +101,8 @@ public class FTPFile extends AbstractFile {
     }
 
 
-//    private void initConnection(FileURL fileURL, boolean addAuthInfo) throws IOException {
-    private void initConnection(FileURL fileURL) throws IOException {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("connecting to "+fileURL.getHost());
-
-        this.ftpClient = new FTPClient();
-
-        try {
-            // Override default port (21) if a custom port was specified in the URL
-            int port = fileURL.getPort();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("custom port="+port);
-            if(port!=-1)
-                ftpClient.setDefaultPort(port);
-
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("default timeout="+ftpClient.getDefaultTimeout());
-
-            // Connect
-            ftpClient.connect(fileURL.getHost());
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(ftpClient.getReplyString());
-
-            // Throw an IOException if server replied with an error
-            checkServerReply();
-
-//            CredentialsManager.authenticate(fileURL, addAuthInfo);
-            Credentials credentials = fileURL.getCredentials();
-
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL.getStringRep(true)+" credentials="+ credentials);
-            if(credentials ==null)
-                throw new AuthException(fileURL);
-
-            ftpClient.login(credentials.getLogin(), credentials.getPassword());
-            // Throw an IOException (possibly AuthException) if server replied with an error
-            checkServerReply();
-
-            // Enables/disables passive mode
-            String passiveModeProperty = fileURL.getProperty("passiveMode");
-            this.passiveMode = passiveModeProperty==null||!passiveModeProperty.equals("false");
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("passive mode ="+passiveMode);
-            if(passiveMode)
-                this.ftpClient.enterLocalPassiveMode();
-            else
-                this.ftpClient.enterLocalActiveMode();
-
-            // Set file type to 'binary'
-            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-        }
-        catch(IOException e) {
-            // Disconnect if something went wrong
-            if(ftpClient.isConnected())
-                try { ftpClient.disconnect(); } catch(IOException e2) {}
-
-            // Re-throw exception
-            throw e;
-        }
-    }
-
-
     private void initFile(FileURL fileURL) throws IOException {
-        this.file = getFTPFile(ftpClient, fileURL);
+        this.file = getFTPFile(fileURL);
         // If file doesn't exist (could not be resolved), create it
         if(this.file==null) {
             String name = fileURL.getFilename();    // Filename could potentially be null
@@ -228,73 +115,21 @@ public class FTPFile extends AbstractFile {
     }
 
 
-    private void checkServerReply() throws IOException {
-        // Check that connection went ok
-        int replyCode = ftpClient.getReplyCode();
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("reply="+ftpClient.getReplyString());
-        // If not, throw an exception using the reply string
-        if(!FTPReply.isPositiveCompletion(replyCode)) {
-            if(replyCode==FTPReply.CODE_503 || replyCode==FTPReply.NEED_PASSWORD || replyCode==FTPReply.NOT_LOGGED_IN)
-                throw new AuthException(fileURL, ftpClient.getReplyString());
-            else
-                throw new IOException(ftpClient.getReplyString());
-        }
+
+    ///////////////////////////////////
+    // ConnectionFull implementation //
+    ///////////////////////////////////
+
+    public ConnectionHandler createConnectionHandler(FileURL location) {
+        String passiveModeProperty = getURL().getProperty(PASSIVE_MODE_PROPERTY_NAME);
+        return new FTPConnectionHandler(location, passiveModeProperty==null||!passiveModeProperty.equals("false"));
     }
 
-
-    private void checkConnection() throws IOException {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isConnected= "+ftpClient.isConnected());
-        // Reconnect if disconnected
-        if(!ftpClient.isConnected()) {
-            // Connect again
-//            initConnection(this.fileURL, false);
-            initConnection(this.fileURL);
-            return;
-        }
-
-        // Send Noop to check connection
-        boolean noop = false;
-        try {
-            noop = ftpClient.sendNoOp();
-            checkServerReply();
-        }
-        catch(IOException e) {
-            // Something went wrong
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in Noop "+e);
-        }
-
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("noop returned "+noop);
-
-        if(!noop) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isConnected= "+ftpClient.isConnected());
-            if(ftpClient.isConnected()) {
-                // Let's be a good citizen and disconnect properly
-                try { ftpClient.disconnect(); } catch(IOException e) {}
-            }
-            // Connect again
-//            initConnection(this.fileURL, false);
-            initConnection(this.fileURL);
-        }
+    public ConnectionHandler getConnectionHandler() {
+        return connHandler;
     }
 
-
-    //	/**
-    //	 * Enables / disables passive mode mode.
-    //	 * <p>Default is enabled, so no need to call this method to enable passive mode, this would result in 
-    //	 * issuing an unecessary command.</p>
-    //	 */
-    //	public void setPassiveMode(boolean enabled) throws IOException {
-    //		this.passiveMode = enabled;
-    //		
-    //		if(ftpClient!=null) {
-    //			if(enabled)
-    //				this.ftpClient.enterLocalPassiveMode();
-    //			else
-    //				this.ftpClient.enterLocalActiveMode();
-    //		}
-    //	}
-
-
+    
     /////////////////////////////////////////
     // AbstractFile methods implementation //
     /////////////////////////////////////////
@@ -322,14 +157,13 @@ public class FTPFile extends AbstractFile {
         if(!parentValSet) {
             FileURL parentFileURL = this.fileURL.getParent();
             if(parentFileURL!=null) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("parentURL="+parentFileURL.getStringRep(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
-                parentFileURL.setProperty("passiveMode", ""+passiveMode);
-parentFileURL.setCredentials(fileURL.getCredentials());
+                parentFileURL.setProperty(PASSIVE_MODE_PROPERTY_NAME, ""+connHandler.passiveMode);
+                parentFileURL.setCredentials(fileURL.getCredentials());
                 try {
-//                    this.parent = new FTPFile(parentFileURL, false, this.ftpClient); 
-                    this.parent = new FTPFile(parentFileURL, this.ftpClient);
+                    this.parent = new FTPFile(parentFileURL);
                 }
                 catch(IOException e) {
+                    // Parent will be null
                 }
             }
 
@@ -389,39 +223,50 @@ parentFileURL.setCredentials(fileURL.getCredentials());
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
-        // Check connection and reconnect if connection timed out
-        checkConnection();
+//        connHandler.checkConnection();
+//
+//        OutputStream out;
+//        if(append)
+//            out = connHandler.ftpClient.appendFileStream(absPath);
+//        else
+//            out = connHandler.ftpClient.storeUniqueFileStream(absPath);
+//
+//        if(out==null)
+//            throw new IOException();
+//
+//        return new FTPOutputStream(out);
+
+        FTPConnectionHandler connHandler = (FTPConnectionHandler)createConnectionHandler(getURL());
+        connHandler.checkConnection();
 
         OutputStream out;
         if(append)
-            out = ftpClient.appendFileStream(absPath);
+            out = connHandler.ftpClient.appendFileStream(absPath);
         else
-            out = ftpClient.storeUniqueFileStream(absPath);
+            out = connHandler.ftpClient.storeUniqueFileStream(absPath);
 
         if(out==null)
             throw new IOException();
 
-        return new FTPOutputStream(out);
+        return new FTPOutputStream(out, connHandler);
     }
 
 
     public void delete() throws IOException {
-        // Check connection and reconnect if connection timed out
-        checkConnection();
+        connHandler.checkConnection();
 
-        ftpClient.deleteFile(absPath);
+        connHandler.ftpClient.deleteFile(absPath);
 
         // Throw an IOException if server replied with an error
-        checkServerReply();
+        connHandler.checkServerReply();
     }
 
 
     public AbstractFile[] ls() throws IOException {
-        // Check connection and reconnect if connection timed out
-        checkConnection();
+        connHandler.checkConnection();
 
         org.apache.commons.net.ftp.FTPFile files[];
-        try { files = ftpClient.listFiles(absPath); }
+        try { files = connHandler.ftpClient.listFiles(absPath); }
         // This exception is not an IOException and needs to be caught and rethrown
         catch(org.apache.commons.net.ftp.parser.ParserInitializationException e) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("ParserInitializationException caught");
@@ -429,7 +274,7 @@ parentFileURL.setCredentials(fileURL.getCredentials());
         }
 
         // Throw an IOException if server replied with an error
-        checkServerReply();
+        connHandler.checkServerReply();
 
         if(files==null)
             return new AbstractFile[] {};
@@ -440,7 +285,6 @@ parentFileURL.setCredentials(fileURL.getCredentials());
         String childName;
         int nbFiles = files.length;
         int fileCount = 0;
-//        String parentURL = fileURL.getStringRep(false);
         String parentURL = fileURL.getStringRep(true);
         if(!parentURL.endsWith(SEPARATOR))
             parentURL += SEPARATOR;
@@ -451,14 +295,13 @@ parentFileURL.setCredentials(fileURL.getCredentials());
                 continue;
 
             childURL = new FileURL(parentURL+childName, fileURL);
-            childURL.setProperty("passiveMode", ""+passiveMode);
+            childURL.setProperty(PASSIVE_MODE_PROPERTY_NAME, ""+connHandler.passiveMode);
 
             // Discard '.' and '..' files
             if(childName.equals(".") || childName.equals(".."))
                 continue;
 
-            //			children[nbFiles] = AbstractFile.getFile(absPath+SEPARATOR+names[i], this);
-            child = FileFactory.wrapArchive(new FTPFile(childURL, files[i], ftpClient));
+            child = FileFactory.wrapArchive(new FTPFile(childURL, files[i]));
             child.setParent(this);
             children[fileCount++] = child;
         }
@@ -476,11 +319,11 @@ parentFileURL.setCredentials(fileURL.getCredentials());
 
     public void mkdir(String name) throws IOException {
         // Check connection and reconnect if connection timed out
-        checkConnection();
+        connHandler.checkConnection();
 
-        ftpClient.makeDirectory(absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name);
+        connHandler.ftpClient.makeDirectory(absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name);
         // Throw an IOException if server replied with an error
-        checkServerReply();
+        connHandler.checkServerReply();
     }
 
 
@@ -498,15 +341,6 @@ parentFileURL.setCredentials(fileURL.getCredentials());
     ////////////////////////
     // Overridden methods //
     ////////////////////////
-
-//    public String getName() {
-//        String name = file.getName();
-//
-//        if(name.endsWith(SEPARATOR))
-//            return name.substring(0, name.length()-1);
-//        return name;
-//    }
-
 
     /**
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
@@ -536,9 +370,9 @@ parentFileURL.setCredentials(fileURL.getCredentials());
 
         try {
             // Check connection and reconnect if connection timed out
-            checkConnection();
+            connHandler.checkConnection();
 
-            if(!ftpClient.rename(absPath, destFile.getURL().getPath()))
+            if(!connHandler.ftpClient.rename(absPath, destFile.getURL().getPath()))
                 throw new IOException();
         }
         catch(IOException e) {
@@ -549,23 +383,23 @@ parentFileURL.setCredentials(fileURL.getCredentials());
 
     public InputStream getInputStream(long skipBytes) throws IOException {
         // Check connection and reconnect if connection timed out
-        checkConnection();
+        connHandler.checkConnection();
 
         if(skipBytes>0) {
             // Resume transfer at the given offset
-            this.ftpClient.setRestartOffset(skipBytes);
+            connHandler.ftpClient.setRestartOffset(skipBytes);
         }
 
-        InputStream in = ftpClient.retrieveFileStream(absPath);
+        InputStream in = connHandler.ftpClient.retrieveFileStream(absPath);
         if(in==null) {
             if(skipBytes>0) {
                 // Reset offset
-                this.ftpClient.setRestartOffset(0);
+                connHandler.ftpClient.setRestartOffset(0);
             }
             throw new IOException();
         }
 
-        return new FTPInputStream(in);
+        return new FTPInputStream(in, connHandler);
     }
 
 
@@ -575,4 +409,173 @@ parentFileURL.setCredentials(fileURL.getCredentials());
 
         return fileURL.equals(((FTPFile)f).fileURL);
     }
+
+
+    private static class FTPInputStream extends FilterInputStream {
+
+        private FTPConnectionHandler connHandler;
+
+        private FTPInputStream(InputStream in, FTPConnectionHandler connHandler) {
+            super(in);
+            this.connHandler = connHandler;
+        }
+
+        public void close() throws IOException {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("closing");
+            super.close();
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("closed");
+
+            try {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("complete pending commands");
+                connHandler.ftpClient.completePendingCommand();
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("commands completed");
+            }
+            catch(IOException e) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in complete pending commands, disconnecting");
+                connHandler.ftpClient.disconnect();
+            }
+        }
+    }
+
+    private static class FTPOutputStream extends BufferedOutputStream {
+
+        private FTPConnectionHandler connHandler;
+
+        private FTPOutputStream(OutputStream out, FTPConnectionHandler connHandler) {
+            super(out);
+            this.connHandler = connHandler;
+        }
+
+        public void close() throws IOException {
+            super.close();
+
+            try {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("complete pending commands");
+                connHandler.ftpClient.completePendingCommand();
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("commands completed");
+            }
+            catch(IOException e) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in complete pending commands, disconnecting");
+                connHandler.ftpClient.disconnect();
+            }
+        }
+    }
+
+
+    private static class FTPConnectionHandler extends ConnectionHandler {
+
+        private FTPClient ftpClient;
+
+        /** Sets whether passive mode should be used for data transfers (default is true) */
+        private boolean passiveMode;
+//        private boolean passiveMode = true;
+
+        private FTPConnectionHandler(FileURL location, boolean passiveMode) {
+            super(location);
+            this.passiveMode = passiveMode;
+        }
+
+
+        private void checkServerReply() throws IOException {
+            // Check that connection went ok
+            int replyCode = ftpClient.getReplyCode();
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("reply="+ftpClient.getReplyString());
+            // If not, throw an exception using the reply string
+            if(!FTPReply.isPositiveCompletion(replyCode)) {
+                if(replyCode==FTPReply.CODE_503 || replyCode==FTPReply.NEED_PASSWORD || replyCode==FTPReply.NOT_LOGGED_IN)
+                    throw new AuthException(realm, ftpClient.getReplyString());
+                else
+                    throw new IOException(ftpClient.getReplyString());
+            }
+        }
+
+
+        public void startConnection() throws IOException {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("connecting to "+getRealm().getHost());
+
+            this.ftpClient = new FTPClient();
+
+            try {
+                FileURL realm = getRealm();
+
+                // Override default port (21) if a custom port was specified in the URL
+                int port = realm.getPort();
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("custom port="+port);
+                if(port!=-1)
+                    ftpClient.setDefaultPort(port);
+
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("default timeout="+ftpClient.getDefaultTimeout());
+
+                // Connect
+                ftpClient.connect(realm.getHost());
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(ftpClient.getReplyString());
+
+                // Throw an IOException if server replied with an error
+                checkServerReply();
+
+                Credentials credentials = realm.getCredentials();
+
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+ realm.getStringRep(true)+" credentials="+ credentials);
+                if(credentials ==null)
+                    throw new AuthException(realm);
+
+                ftpClient.login(credentials.getLogin(), credentials.getPassword());
+                // Throw an IOException (possibly AuthException) if server replied with an error
+                checkServerReply();
+
+                // Enables/disables passive mode
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("passive mode ="+passiveMode);
+                if(passiveMode)
+                    this.ftpClient.enterLocalPassiveMode();
+                else
+                    this.ftpClient.enterLocalActiveMode();
+
+                // Set file type to 'binary'
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            }
+            catch(IOException e) {
+                // Disconnect if something went wrong
+                if(ftpClient.isConnected())
+                    try { ftpClient.disconnect(); } catch(IOException e2) {}
+
+                // Re-throw exception
+                throw e;
+            }
+        }
+
+
+        public boolean isConnected() {
+
+            return ftpClient!=null && ftpClient.isConnected(); 
+
+//            if(ftpClient==null || !ftpClient.isConnected())
+//                return false;
+//
+//            // Send NoOp to check connection
+//            boolean noopSuccess = false;
+//            try {
+//                noopSuccess = ftpClient.sendNoOp();
+//                checkServerReply();
+//            }
+//            catch(IOException e) {
+//                // Something went wrong
+//                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in Noop "+e);
+//            }
+//
+//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("noop returned "+ noopSuccess);
+//
+//            return noopSuccess;
+        }
+
+
+        public void closeConnection() {
+            if(ftpClient!=null) {
+                try {
+                    ftpClient.disconnect();
+                }
+                catch(IOException e) {}
+            }
+        }
+    }
+
 }

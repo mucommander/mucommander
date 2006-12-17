@@ -4,6 +4,7 @@ package com.mucommander.ui;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.file.FileURL;
 
 import java.util.Vector;
 
@@ -15,7 +16,7 @@ import java.util.Vector;
  * <p>FolderHistory also keeps track of the last visited folder that can be saved and recalled next time the
  * application is started.
  *
- * <p>There is a limit to the number of folders the history can contain, defined by {@link #HISTORY_CAPACITY}. 
+ * <p>There is a limit to the number of folders the history can contain, set by {@link #HISTORY_CAPACITY}. 
  *
  * @author Maxence Bernard
  */
@@ -46,14 +47,16 @@ public class FolderHistory {
     
 
     /**
-     * Adds the specified folder to history.The folder won't be added if the previous folder is the same.
+     * Adds the specified folder to history. The folder won't be added if the previous folder is the same.
      *
      * <p>This method is called by FolderPanel each time a folder is changed.
      */
     void addToHistory(AbstractFile folder) {
         int historySize = history.size();
+        FileURL folderURL = folder.getURL();
+
         // Do not add folder to history if new current folder is the same as previous folder
-        if (historyIndex<0 || !folder.equals(history.elementAt(historyIndex))) {
+        if (historyIndex<0 || !folderURL.equals(history.elementAt(historyIndex))) {
             historyIndex++;
 
             // Delete 'forward' history items if any
@@ -68,7 +71,7 @@ public class FolderHistory {
             }
 
             // Add previous folder to history
-            history.add(folder);
+            history.add(folderURL);
         }
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("history= "+history+" historyIndex="+historyIndex);
@@ -77,7 +80,7 @@ public class FolderHistory {
         //  - it is a directory on a local filesytem
         //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
         // Java from triggering that dreaded 'Drive not ready' popup.
-        if(folder.getURL().getProtocol().equals(FileProtocols.FILE) && folder.isDirectory() && !((FSFile)folder.getRoot()).guessRemovableDrive()) {
+        if(folderURL.getProtocol().equals(FileProtocols.FILE) && folder.isDirectory() && !((FSFile)folder.getRoot()).guessRemovableDrive()) {
             this.lastRecallableFolder = folder.getAbsolutePath();
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("lastRecallableFolder= "+lastRecallableFolder);
         }
@@ -92,7 +95,7 @@ public class FolderHistory {
         if (historyIndex==0)
             return;
 		
-        folderPanel.tryChangeCurrentFolder((AbstractFile)history.elementAt(--historyIndex));
+        folderPanel.tryChangeCurrentFolder((FileURL)history.elementAt(--historyIndex));
     }
 	
     /**
@@ -103,7 +106,7 @@ public class FolderHistory {
         if (historyIndex==history.size()-1)
             return;
 		
-        folderPanel.tryChangeCurrentFolder((AbstractFile)history.elementAt(++historyIndex));
+        folderPanel.tryChangeCurrentFolder((FileURL)history.elementAt(++historyIndex));
     }
 
 

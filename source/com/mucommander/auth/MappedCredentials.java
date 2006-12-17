@@ -36,14 +36,7 @@ public class MappedCredentials extends Credentials {
         super(login, password);
 
         this.isPersistent = isPersistent;
-
-        try {
-            this.realm = resolveRealm(location);
-        }
-        catch(MalformedURLException e) {
-            // Should never happen, report the error if it does
-            if(Debug.ON) Debug.trace("Error: realm could not be resolved for location: "+location);
-        }
+        this.realm = FileURL.resolveRealm(location);
     }
 
 
@@ -68,44 +61,6 @@ public class MappedCredentials extends Credentials {
         return realm;
     }
 
-
-    /**
-     * Returns the realm of a given location, that the URL to the server and share, if the location's protocol
-     * has a notion of share (e.g. SMB). If the realm FileURL could not be created (MalformedURLException was thrown),
-     * null is returned, this should not normally happen. 
-     *
-     * <p>A few examples:
-     * <ul>
-     * <li>smb://someserver/someshare/somefolder/somefile -> smb://someserver/someshare/
-     * <li>ftp://someserver/somefolder/somefile -> ftp://someserver/
-     * <li>smb://someserver/ -> smb://someserver/
-     * </ul>
-     *
-     * @param location the location to a resource on a remote server
-     * @return the location's realm, or null if it could not be resolved
-     * @throws MalformedURLException if the realm corresponding to the given location could not be resolved
-     */
-    public static FileURL resolveRealm(FileURL location) throws MalformedURLException {
-        String protocol = location.getProtocol();
-        String newPath = "/";
-
-        if(protocol.equals(FileProtocols.SMB)) {
-            String tokens[] = location.getPath().split("[/\\\\]");
-            for(int i=0; i<tokens.length; i++) {
-                if(!tokens[i].equals("")) {
-                    newPath += tokens[i]+'/';
-                    break;
-                }
-            }
-        }
-
-        String host = location.getHost();
-        if(host==null)
-            return new FileURL(protocol+"://"+newPath);
-        else
-            return new FileURL(protocol+"://"+host+newPath);
-    }
-    
 
     /**
      * Returns true if these credentials should be saved when the application terminates.

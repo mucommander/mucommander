@@ -1,7 +1,9 @@
 package com.mucommander.file;
 
+import java.net.MalformedURLException;
+
 /**
- * This interface contains a set of known protocol names, that can for example be found in {@link FileURL}. 
+ * This interface contains a set of known protocol names, that can be found in {@link FileURL}. 
  *
  * @author Maxence Bernard
  */

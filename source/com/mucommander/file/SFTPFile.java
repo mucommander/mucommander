@@ -6,6 +6,9 @@ import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.Debug;
+import com.mucommander.file.connection.ConnectionHandler;
+import com.mucommander.file.connection.ConnectionFull;
+import com.mucommander.file.connection.ConnectionPool;
 import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.authentication.AuthenticationProtocolState;
 import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
@@ -24,152 +27,72 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class SFTPFile extends AbstractFile {
+public class SFTPFile extends AbstractFile implements ConnectionFull {
 
     private SftpFile file;
-    private SshClient sshClient;
-    SftpSubsystemClient sftpSubsystem;
-
-    //	private FileURL fileURL;
 
     protected String absPath;
 
     private AbstractFile parent;
     private boolean parentValSet;
+
+    private SFTPConnectionHandler connHandler;
     
     private final static String SEPARATOR = DEFAULT_SEPARATOR;
 
-	
     static {
         // Disables J2SSH logging on standard output
         System.getProperties().setProperty(org.apache.commons.logging.Log.class.getName(), org.apache.commons.logging.impl.NoOpLog.class.getName());
     }
 		
 
-	
     /**
      * Creates a new instance of SFTPFile and initializes the SSH/SFTP connection to the server.
      */
     public SFTPFile(FileURL fileURL) throws IOException {
-        this(fileURL, true, null, null);
+        this(fileURL, null);
     }
 
-	
-    /**
-     * Creates a new instance of SFTPFile and reuses the given SSH/SFTP active connection.
-     */
-    private SFTPFile(FileURL fileURL, boolean addAuthInfo, SshClient sshClient, SftpSubsystemClient sftpChannel) throws IOException {
+    private SFTPFile(FileURL fileURL, SftpFile sftpFile) throws IOException {
         super(fileURL);
 
         this.absPath = fileURL.getPath();
-		
-        if(sshClient==null) {
-            // Initialize connection
-//            initConnection(this.fileURL, addAuthInfo);
-            initConnection(this.fileURL);
+        this.connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL);
+        connHandler.checkConnection();
+
+        if(sftpFile==null) {
+            try {
+                file = new SftpFile(fileURL.getPath(), connHandler.sftpClient.getAttributes(fileURL.getPath()));
+            }
+            catch(IOException e) {
+                // File doesn't exist on the remote server), SftpFile will be null that's OK
+            }
         }
         else {
-            this.sshClient = sshClient;
-            this.sftpSubsystem = sftpChannel;
-        }
-		
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL+" sftpChannel="+this.sftpSubsystem);
-
-        try {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Retrieving file "+fileURL.getPath());
-            this.file = new SftpFile(fileURL.getPath(), this.sftpSubsystem.getAttributes(fileURL.getPath()));
-        }
-        catch(IOException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Cannot retrieve file "+fileURL.getPath()+": "+e);
-            // File is null (doesn't exist on the remote server), it's OK
-        }
-    }
-
-	
-    private SFTPFile(FileURL fileURL, SftpFile file, SshClient sshClient, SftpSubsystemClient sftpChannel) throws IOException {
-        super(fileURL);
-        this.absPath = this.fileURL.getPath();
-        this.file = file;
-        this.sshClient = sshClient;
-        this.sftpSubsystem = sftpChannel;
-        //		this.fileExists = true;
-    }
-	
-	
-//    private void initConnection(FileURL fileURL, boolean addAuthInfo) throws IOException {
-    private void initConnection(FileURL fileURL) throws IOException {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("connecting to "+fileURL.getHost());
-        try {
-            // Init SSH client
-            this.sshClient = new SshClient();
-
-            // Override default port (22) if a custom port was specified in the URL
-            int port = fileURL.getPort();
-            if(port==-1)
-                port = 22;
-
-            // Connect
-            sshClient.connect(fileURL.getHost(), port, new IgnoreHostKeyVerification());
-
-            // Find auth info for this URL
-//            CredentialsManager.authenticate(fileURL, addAuthInfo);
-            Credentials credentials = fileURL.getCredentials();
-
-            // Throw an AuthException if no auth information
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL.getStringRep(true)+" credentials="+ credentials);
-            if(credentials ==null)
-                throw new AuthException(fileURL, "Login and password required");
-			
-            // Authenticate
-            PasswordAuthenticationClient pwd = new PasswordAuthenticationClient();
-            pwd.setUsername(credentials.getLogin());
-            pwd.setPassword(credentials.getPassword());
-            int authResult = sshClient.authenticate(pwd);
-
-            // Throw an AuthException if authentication failed
-            if(authResult!=AuthenticationProtocolState.COMPLETE)
-                throw new AuthException(fileURL, "Login or password rejected");
-			
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating sftpclient ");
-
-            // Init SFTP connection
-            this.sftpSubsystem = sshClient.openSftpChannel();
-
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("sftpclient = "+this.sftpSubsystem);
-        }
-        catch(IOException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("ioexception thrown = "+e);
-            // Disconnect if something went wrong
-            if(sshClient!=null && sshClient.isConnected())
-                sshClient.disconnect();
-
-            this.sshClient = null;
-            this.sftpSubsystem = null;
-
-            // Re-throw exception
-            throw e;
+            file = sftpFile;
         }
     }
 
 
-    private void checkConnection() throws IOException {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("isConnected= "+sshClient.isConnected());
-        // Reconnect if disconnected
-        if(sshClient==null || !sshClient.isConnected()) {
-            // Connect again
-//            initConnection(this.fileURL, false);
-            initConnection(this.fileURL);
-            return;
-        }
+    ///////////////////////////////////
+    // ConnectionFull implementation //
+    ///////////////////////////////////
+
+    public ConnectionHandler createConnectionHandler(FileURL location) {
+        return new SFTPConnectionHandler(location);
     }
 
-	
-    /////////////////////////////////////////
-    // AbstractFile methods implementation //
-    /////////////////////////////////////////
+    public ConnectionHandler getConnectionHandler() {
+        return connHandler;
+    }
+
+
+    /////////////////////////////////
+    // AbstractFile implementation //
+    /////////////////////////////////
 
     public boolean isSymlink() {
-        return file==null?false:file.isLink();
+        return file!=null && file.isLink();
     }
 
     public long getDate() {
@@ -178,15 +101,16 @@ public class SFTPFile extends AbstractFile {
 
     public boolean changeDate(long lastModified) {
         try {
-            SftpFile sftpFile = sftpSubsystem.openFile(absPath, SftpSubsystemClient.OPEN_WRITE);
+            connHandler.checkConnection();
+
+            SftpFile sftpFile = connHandler.sftpClient.openFile(absPath, SftpSubsystemClient.OPEN_WRITE);
             FileAttributes attributes = sftpFile.getAttributes();
             attributes.setTimes(attributes.getAccessedTime(), new UnsignedInteger32(lastModified/1000));
-            sftpSubsystem.setAttributes(sftpFile, attributes);
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("return true");
+            connHandler.sftpClient.setAttributes(sftpFile, attributes);
             return true;
         }
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("return false "+e);
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Failed to change date: "+e);
             return false;
         }
     }
@@ -200,9 +124,10 @@ public class SFTPFile extends AbstractFile {
         if(!parentValSet) {
             FileURL parentFileURL = this.fileURL.getParent();
             if(parentFileURL!=null) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("getParent, parentURL="+parentFileURL.getStringRep(true)+" sig="+com.mucommander.Debug.getCallerSignature(1));
-                try { this.parent = new SFTPFile(parentFileURL, false, this.sshClient, this.sftpSubsystem); }
-                catch(IOException e) {}
+                try { this.parent = new SFTPFile(parentFileURL); }
+                catch(IOException e) {
+                    // Parent will be null
+                }
             }
 
             this.parentValSet = true;
@@ -273,11 +198,13 @@ public class SFTPFile extends AbstractFile {
      */
     private boolean changeFilePermissions(int permissions) {
         try {
-            sftpSubsystem.changePermissions(absPath, permissions);
+            connHandler.checkConnection();
+
+            connHandler.sftpClient.changePermissions(absPath, permissions);
             return true;
         }
         catch(IOException e) {
-if(Debug.ON) Debug.trace("Exception thrown: "+e);
+            if(Debug.ON) Debug.trace("Exception thrown: "+e);
             return false;
         }
     }
@@ -295,7 +222,7 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
     }
 
     public boolean isDirectory() {
-        return file==null?false:file.isDirectory();
+        return file!=null && file.isDirectory();
     }
 	
     public InputStream getInputStream() throws IOException {
@@ -308,8 +235,7 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
-        // Check connection and reconnect if connection timed out
-        checkConnection();
+        connHandler.checkConnection();
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file="+getAbsolutePath()+" append="+append+" exists="+exists());
 
@@ -318,14 +244,14 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
 //                                                 fileExists?(append?SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_APPEND:SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_TRUNCATE)
 //                                                 :SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_CREATE);
 
-        this.file = sftpSubsystem.openFile(absPath,
+        this.file = connHandler.sftpClient.openFile(absPath,
              fileExists?(append?SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_APPEND:SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_TRUNCATE)
              :SftpSubsystemClient.OPEN_WRITE|SftpSubsystemClient.OPEN_CREATE);
 
         // If file was just created, change permissions to 644 octal (420 dec): "rw-r--r--"
         // Note: by default, permissions for created files is 0 !
         if(!fileExists)
-            sftpSubsystem.changePermissions(file, 420);
+            connHandler.sftpClient.changePermissions(file, 420);
 
         // Custom made constructor, not part of the official J2SSH API
         return new SftpFileOutputStream(file, append?getSize():0);
@@ -333,26 +259,24 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
 	
 
     public void delete() throws IOException {
-        // Check connection and reconnect if connection timed out
-        checkConnection();
+        connHandler.checkConnection();
 
         if(isDirectory())
-            sftpSubsystem.removeDirectory(absPath);
+            connHandler.sftpClient.removeDirectory(absPath);
         else
-            sftpSubsystem.removeFile(absPath);
+            connHandler.sftpClient.removeFile(absPath);
     }
 
 
     public AbstractFile[] ls() throws IOException {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starts");
 
-        // Check connection and reconnect if connection timed out
-        checkConnection();
+        connHandler.checkConnection();
 
         Vector files = new Vector();
 
         // Modified J2SSH method to remove the 100 files limitation
-        sftpSubsystem.listChildren(file, files);
+        connHandler.sftpClient.listChildren(file, files);
 
         // File doesn't exists
         int nbFiles = files.size();
@@ -360,7 +284,6 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
         if(nbFiles==0)
             return new AbstractFile[] {};
 	
-//        String parentURL = fileURL.getStringRep(false);
         String parentURL = fileURL.getStringRep(true);
         if(!parentURL.endsWith(SEPARATOR))
             parentURL += SEPARATOR;
@@ -379,8 +302,7 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
             if(filename.equals(".") || filename.equals(".."))
                 continue;
             childURL = new FileURL(parentURL+filename, fileURL);
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("sftpFile="+sftpFile);
-            child = FileFactory.wrapArchive(new SFTPFile(childURL, sftpFile, sshClient, sftpSubsystem));
+            child = FileFactory.wrapArchive(new SFTPFile(childURL, sftpFile));
             child.setParent(this);
 
             children[fileCount++] = child;
@@ -398,11 +320,13 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
 
 	
     public void mkdir(String name) throws IOException {
+        connHandler.checkConnection();
+
         String dirPath = absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name;
-        sftpSubsystem.makeDirectory(dirPath);
+        connHandler.sftpClient.makeDirectory(dirPath);
         // Set new directory permissions to 755 octal (493 dec): "rwxr-xr-x"
         // Note: by default, permissions for created files is 0 !
-        sftpSubsystem.changePermissions(dirPath, 493);
+        connHandler.sftpClient.changePermissions(dirPath, 493);
     }
 
 
@@ -420,12 +344,6 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
     ////////////////////////
     // Overridden methods //
     ////////////////////////
-
-
-//    public String getName() {
-//        return file==null?fileURL.getFilename():file.getFilename();
-//    }
-
 
     /**
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
@@ -454,10 +372,9 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
         }
 
         try {
-            // Check connection and reconnect if connection timed out
-            checkConnection();
+            connHandler.checkConnection();
 
-            sftpSubsystem.renameFile(absPath, destFile.getURL().getPath());
+            connHandler.sftpClient.renameFile(absPath, destFile.getURL().getPath());
         }
         catch(IOException e) {
             throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
@@ -466,12 +383,11 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
 
 
     public InputStream getInputStream(long skipBytes) throws IOException {
-        // Check connection and reconnect if connection timed out
-        checkConnection();
+        connHandler.checkConnection();
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("skipBytes="+skipBytes, -1);
 
-        SftpFile sftpFile = sftpSubsystem.openFile(absPath, SftpSubsystemClient.OPEN_READ);
+        SftpFile sftpFile = connHandler.sftpClient.openFile(absPath, SftpSubsystemClient.OPEN_READ);
         // Custom made constructor, not part of the official J2SSH API
         return new SftpFileInputStream(sftpFile, skipBytes);
     }
@@ -482,5 +398,82 @@ if(Debug.ON) Debug.trace("Exception thrown: "+e);
             return super.equals(f);		// could be equal to a ZipArchiveFile
 
         return fileURL.equals(((SFTPFile)f).fileURL);
+    }
+
+
+
+    private static class SFTPConnectionHandler extends ConnectionHandler {
+
+        private SshClient sshClient;
+        private SftpSubsystemClient sftpClient;
+
+        private SFTPConnectionHandler(FileURL location) {
+            super(location);
+        }
+
+
+        public void startConnection() throws IOException {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting connection to "+realm);
+            try {
+                FileURL realm = getRealm();
+
+                // Retrieve credentials for this URL
+                Credentials credentials = realm.getCredentials();
+
+                // Throw an AuthException if no auth information
+                if(credentials ==null)
+                    throw new AuthException(realm, "Login and password required");
+
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating SshClient");
+
+                // Init SSH client
+                sshClient = new SshClient();
+
+                // Override default port (22) if a custom port was specified in the URL
+                int port = realm.getPort();
+                if(port==-1)
+                    port = 22;
+
+                // Connect
+                sshClient.connect(realm.getHost(), port, new IgnoreHostKeyVerification());
+
+                // Authenticate
+                PasswordAuthenticationClient pwd = new PasswordAuthenticationClient();
+                pwd.setUsername(credentials.getLogin());
+                pwd.setPassword(credentials.getPassword());
+                int authResult = sshClient.authenticate(pwd);
+
+                // Throw an AuthException if authentication failed
+                if(authResult!=AuthenticationProtocolState.COMPLETE)
+                    throw new AuthException(realm, "Login or password rejected");
+
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating SftpSubsystemClient");
+
+                // Init SFTP connection
+                sftpClient = sshClient.openSftpChannel();
+            }
+            catch(IOException e) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException thrown: "+e);
+
+                // Disconnect if something went wrong
+                if(sshClient!=null && sshClient.isConnected())
+                    sshClient.disconnect();
+
+                sshClient = null;
+                sftpClient = null;
+
+                // Re-throw exception
+                throw e;
+            }
+        }
+
+        public boolean isConnected() {
+            return sshClient!=null && sshClient.isConnected();
+        }
+
+        public void closeConnection() {
+            if(sshClient!=null)
+                sshClient.disconnect();
+        }
     }
 }
