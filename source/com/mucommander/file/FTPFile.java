@@ -223,19 +223,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
-//        connHandler.checkConnection();
-//
-//        OutputStream out;
-//        if(append)
-//            out = connHandler.ftpClient.appendFileStream(absPath);
-//        else
-//            out = connHandler.ftpClient.storeUniqueFileStream(absPath);
-//
-//        if(out==null)
-//            throw new IOException();
-//
-//        return new FTPOutputStream(out);
-
+        // Spawn a new FTP connection
         FTPConnectionHandler connHandler = (FTPConnectionHandler)createConnectionHandler(getURL());
         connHandler.checkConnection();
 
@@ -382,9 +370,10 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
 
     public InputStream getInputStream(long skipBytes) throws IOException {
-        // Check connection and reconnect if connection timed out
+        // Spawn a new FTP connection
+        FTPConnectionHandler connHandler = (FTPConnectionHandler)createConnectionHandler(getURL());
         connHandler.checkConnection();
-
+        
         if(skipBytes>0) {
             // Resume transfer at the given offset
             connHandler.ftpClient.setRestartOffset(skipBytes);
@@ -414,6 +403,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
     private static class FTPInputStream extends FilterInputStream {
 
         private FTPConnectionHandler connHandler;
+        private boolean closed;
 
         private FTPInputStream(InputStream in, FTPConnectionHandler connHandler) {
             super(in);
@@ -421,7 +411,10 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
         }
 
         public void close() throws IOException {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("closing");
+            if(closed)
+                return;
+
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("closing", -1);
             super.close();
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("closed");
 
@@ -432,7 +425,10 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
             }
             catch(IOException e) {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in complete pending commands, disconnecting");
-                connHandler.ftpClient.disconnect();
+            }
+            finally {
+                connHandler.closeConnection();
+                closed = true;
             }
         }
     }
@@ -440,6 +436,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
     private static class FTPOutputStream extends BufferedOutputStream {
 
         private FTPConnectionHandler connHandler;
+        private boolean closed;
 
         private FTPOutputStream(OutputStream out, FTPConnectionHandler connHandler) {
             super(out);
@@ -447,6 +444,9 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
         }
 
         public void close() throws IOException {
+            if(closed)
+                return;
+
             super.close();
 
             try {
@@ -456,7 +456,10 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
             }
             catch(IOException e) {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in complete pending commands, disconnecting");
-                connHandler.ftpClient.disconnect();
+            }
+            finally {
+                connHandler.closeConnection();
+                closed = true;
             }
         }
     }
@@ -468,7 +471,6 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
         /** Sets whether passive mode should be used for data transfers (default is true) */
         private boolean passiveMode;
-//        private boolean passiveMode = true;
 
         private FTPConnectionHandler(FileURL location, boolean passiveMode) {
             super(location);
@@ -545,8 +547,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
 
         public boolean isConnected() {
-
-            return ftpClient!=null && ftpClient.isConnected(); 
+            return ftpClient!=null && ftpClient.isConnected();
 
 //            if(ftpClient==null || !ftpClient.isConnected())
 //                return false;
@@ -569,8 +570,9 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
 
         public void closeConnection() {
-            if(ftpClient!=null) {
+            if(isConnected()) {
                 try {
+                    ftpClient.logout();
                     ftpClient.disconnect();
                 }
                 catch(IOException e) {}

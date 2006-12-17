@@ -19,25 +19,6 @@ public class ConnectionPool {
     private final static ReferenceQueue refQueue = new ReferenceQueue();
 
     
-//    public static void addConnectionHandler(ConnectionHandler connHandler) {
-//        // Clean GCed references
-//        cleanDeadReferences();
-//
-//        FileURL realm = connHandler.getRealm();
-//        int i;
-//        while((i=indexOf(realm))!=-1) {
-//            if(Debug.ON) Debug.trace("Removing existing ConnectionHandler "+connectionHandlers.elementAt(i)+" for realm "+realm);
-//
-//            connectionHandlers.removeElementAt(i);
-//        }
-//
-//        if(Debug.ON) Debug.trace("Adding ConnectionHandler "+connHandler+" for realm "+realm);
-//
-//        // Insert new ConnectionHandler at position as if has more chances to be retrieved
-//        connectionHandlers.insertElementAt(new WeakReference(connHandler, refQueue), 0);
-//    }
-
-
     public static ConnectionHandler getConnectionHandler(ConnectionFull connectionFull, FileURL url) {
         // Clean GCed references
         cleanDeadReferences();
@@ -57,17 +38,6 @@ public class ConnectionPool {
 
         return connHandler;
     }
-
-
-//    public static void removeConnectionHandler(ConnectionHandler connHandler) {
-//        // Clean GCed references
-//        cleanDeadReferences();
-//
-//        int i = indexOf(connHandler.getRealm());
-//        if(i!=-1)
-//            connectionHandlers.removeElementAt(i);
-//
-//    }
 
 
     private static int indexOf(FileURL realm) {

@@ -340,6 +340,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param selectThisFileAfter file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
      */
     public synchronized void tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" selectThisFileAfter"+selectThisFileAfter, 3);
+
         // Make sure there is not an existing thread running,
         // this should not normally happen but if it does, report the error
         if(changeFolderThread!=null) {
@@ -364,7 +366,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param folderPath folder's path to be made current folder. If this path does not resolve into an existing file, an error message will be displayed
      */
     public synchronized void tryChangeCurrentFolder(String folderPath) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderPath="+folderPath);
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderPath="+folderPath, 3);
 
         // Make sure there is not an existing thread running,
         // this should not normally happen but if it does, report the error
@@ -394,7 +396,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param folderURL folder's URL to be made current folder. If this URL does not resolve into an existing file, an error message will be displayed
      */
     public synchronized void tryChangeCurrentFolder(FileURL folderURL) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderURL="+folderURL);
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folderURL="+folderURL, 3);
 
         // Make sure there is not an existing thread running,
         // this should not normally happen but if it does, report the error

@@ -273,6 +273,8 @@ public class CopyJob extends TransferFileJob {
     // This job modifies baseDestFolder and its subfolders
 	
     protected boolean hasFolderChanged(AbstractFile folder) {
+        if(Debug.ON) Debug.trace("folder="+folder+" returning "+baseDestFolder.isParentOf(folder));
+
         return baseDestFolder.isParentOf(folder);
     }
 

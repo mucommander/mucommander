@@ -12,9 +12,6 @@ public abstract class ConnectionHandler {
 
     protected FileURL realm;
 
-    protected boolean connectionStarted;
-
-
     public ConnectionHandler(FileURL location) {
         realm = FileURL.resolveRealm(location);
         realm.setCredentials(location.getCredentials());
@@ -30,11 +27,6 @@ public abstract class ConnectionHandler {
         if(!isConnected()) {
             if(Debug.ON) Debug.trace("not connected, this="+this);
 
-            if(connectionStarted) {
-                if(Debug.ON) Debug.trace("closing connection, this="+this);
-                closeConnection();
-            }
-
             if(Debug.ON) Debug.trace("starting connection, this="+this);
             startConnection();
         }
@@ -42,8 +34,10 @@ public abstract class ConnectionHandler {
 
 
     protected void finalize() throws Throwable {
-        if(Debug.ON) Debug.trace("closing connection, this="+this);
-        closeConnection();
+        if(isConnected()) {
+            if(Debug.ON) Debug.trace("closing connection, this="+this);
+            closeConnection();
+        }
 
         super.finalize();
     }
