@@ -156,6 +156,7 @@ New features:
  - Support for Bzip2 archives (.bz2, .tbz2, .tar.bz2 extensions)
  - Support for AR and Debian archives, GNU and BSD variants supported (.ar, .deb extensions)
  - Support for HTTP Basic Authentication
+ - Bonjour/Zeroconf services discovery
  - File user permissions are properly preserved under Java 1.6 (only)
  - 'Run command' is now interactive, allows shell customization, quick recall of previous commands, color customization, and uses the system's default shell to parse commands under UNIX platforms (contributed by Nicolas Rinaudo)
  - Command line options (contributed by Nicolas Rinaudo)

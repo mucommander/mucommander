@@ -19,9 +19,6 @@ public class IconManager {
     /** Class instance used to retrieve JAR resource files  */
     private final static Class classInstance = instance.getClass();
 
-//    /** Scale factors for the different icon sets */
-//    private final static float scaleFactors[];
-
     /** Caches for the different icon sets */
     private final static Hashtable caches[];
 
@@ -52,16 +49,6 @@ public class IconManager {
     private final static int NB_ICON_SETS = 6;
 
     static {
-//        // Initialize scale factors, defaut is 1.0f
-//        scaleFactors = new float[NB_ICON_SETS];
-//        for(int i=0; i<NB_ICON_SETS; i++)
-//            scaleFactors[i] = 1.0f;
-//
-//        // Retrieves scale factors from configuration file
-//        scaleFactors[FILE_ICON_SET] = ConfigurationManager.getVariableFloat(FILE_ICON_SCALE_CONF_VAR, 1.0f);
-//        scaleFactors[TOOLBAR_ICON_SET] = ConfigurationManager.getVariableFloat(TOOLBAR_ICON_SCALE_CONF_VAR, 1.0f);
-//        scaleFactors[COMMAND_BAR_ICON_SET] = ConfigurationManager.getVariableFloat(COMMAND_BAR_ICON_SCALE_CONF_VAR, 1.0f);
-
         // Initialize caches for icon sets that need it.
         // Icons which are displayed once in a while like preferences icons don't need to be cached
         caches = new Hashtable[NB_ICON_SETS];
@@ -122,34 +109,6 @@ public class IconManager {
 
 
     /**
-     * Sets a new scale factor for the specified icon set. If the scale factor has changed and the icon set
-     * has a cache, the cache will be reset so that it won't return icons of the previous scale. 
-     *
-     * @param iconSet     an icon set (see public constants)
-     * @param scaleFactor the icon scale factor, <code>1.0f</code> to use the original icon's size (no rescaling)
-     */
-/*
-    public static void setScaleFactor(int iconSet, float scaleFactor) {
-        // Empty icon set's cache if scale factor has changed for this icon set
-        if(scaleFactor!=scaleFactors[iconSet] && caches[iconSet]!=null)
-            caches[iconSet] = new Hashtable();
-
-        scaleFactors[iconSet] = scaleFactor;
-    }
-*/
-
-    /**
-     *
-     * @param iconSet an icon set (see public constants)
-     * @return the icon scale factor, <code>1.0f</code> means the original icon's size (no rescaling)
-     */
-/*
-    public static float getScaleFactor(int iconSet) {
-        return scaleFactors[iconSet];
-    }
-*/
-
-    /**
      * Returns an icon in the specified icon set and with the given name. If a scale factor other than 1.0f is passed,
      * the return icon will be scaled accordingly.
      *
@@ -196,40 +155,4 @@ public class IconManager {
     public static ImageIcon getIcon(int iconSet, String iconName) {
         return getIcon(iconSet, iconName, 1.0f);
     }
-
-
-    ///////////////////////////////////
-    // ConfigurationListener methods //
-    ///////////////////////////////////
-
-
-    /**
-     * Listens to certain configuration variables.
-     */
-    // ConfigurationListener cannot be used to empty caches as the order in which ConfigurationManager notifies
-    // its listeners is not predicable
-    /*
-      public boolean configurationChanged(ConfigurationEvent event) {
-      String var = event.getVariable();
-
-      // Clears caches for which the icon scale has changed, to force
-      // the creation of new ImageIcon instances with the new scale
-		
-      if (var.equals(FILE_TABLE_ICON_SCALE_CONF_VAR)) {
-      fileIconScaleFactor = event.getFloatValue();
-      fileIconsCache = new Hashtable();
-      }
-      else if (var.equals(TOOLBAR_ICON_SCALE_CONF_VAR)) {
-      toolBarIconScaleFactor = event.getFloatValue();
-      toolBarIconsCache = new Hashtable();
-      }
-      else if (var.equals(COMMAND_BAR_ICON_SCALE_CONF_VAR)) {
-      commandBarIconScaleFactor = event.getFloatValue();
-      commandBarIconsCache = new Hashtable();
-      }
-	
-      return true;
-      }
-    */
-
 }
