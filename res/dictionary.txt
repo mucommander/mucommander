@@ -3837,6 +3837,41 @@ http_connect.basic_authentication:FR:HTTP Basic Authentication (optionnel)
 
 
 
+############################
+# Bonjour/Zeroconf support #
+############################
+
+bonjour.bonjour_services:EN:Bonjour services
+bonjour.bonjour_services:FR:Services Bonjour
+
+
+
+
+
+
+
+
+bonjour.no_service_discovered:EN:No service discovered
+bonjour.no_service_discovered:FR:Aucun service découvert
+
+
+
+
+
+
+
+
+
+bonjour.bonjour_disabled:EN:Bonjour disabled
+bonjour.bonjour_disabled:FR:Bonjour disabled
+
+
+
+
+
+
+
+
 
 ###############
 # Auth dialog #
@@ -5304,6 +5339,15 @@ prefs_dialog.custom_shell:EN:Use custom shell
 prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
 prefs_dialog.custom_shell:RO:Folosește un shell anume
 
+
+
+
+
+
+
+
+prefs_dialog.enable_bonjour_discovery:EN:Enable Bonjour services discovery
+prefs_dialog.enable_bonjour_discovery:FR:Activer la découverte des services Bonjour
 
 
 

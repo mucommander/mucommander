@@ -3,7 +3,8 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.MainFrame;
 
 /**
- * This action transfers focus to the location field of the currently active FolderPanel to type in a new folder location.
+ * This action transfers focus to the location field of the currently active FolderPanel to edit or type in
+ * a new folder location.
  *
  * @author Maxence Bernard
  */

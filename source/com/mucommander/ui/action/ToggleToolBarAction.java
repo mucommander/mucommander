@@ -19,7 +19,7 @@ import com.mucommander.ui.ToolBar;
 public class ToggleToolBarAction extends MucoAction {
 
     public ToggleToolBarAction(MainFrame mainFrame) {
-        super(mainFrame);
+        super(mainFrame, false);
         setLabel(Translator.get(ConfigurationManager.getVariableBoolean(ConfigurationVariables.TOOLBAR_VISIBLE,
                                                                         ConfigurationVariables.DEFAULT_TOOLBAR_VISIBLE)
                                 ? "com.mucommander.ui.action.ToggleToolBarAction.hide":"com.mucommander.ui.action.ToggleToolBarAction.show"));

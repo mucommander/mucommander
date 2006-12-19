@@ -330,4 +330,14 @@ public interface ConfigurationVariables {
     public static final String  URL_CACHE_CAPACITY                = CACHE_SECTION + '.' + "url_cache_capacity";
     /** Default capacity of the FileURL instances cache */
     public static final int     DEFAULT_URL_CACHE_CAPACITY        = 1000;
+
+
+    // - Variables used by Bonjour/Zeroconf support --------------------------
+    // -----------------------------------------------------------------------
+    /** Section controlling parameters related to Bonjour/Zeroconf support */
+    public static final String  BONJOUR_SECTION                   = ROOT_SECTION + '.' + "bonjour";
+    /** Used do determine whether discovery of Bonjour services should be activated or not */
+    public static final String  ENABLE_BONJOUR_DISCOVERY          = ROOT_SECTION + '.' + "discovery_enabled";
+    /** Default Bonjour discovery activation used on startup */
+    public static final boolean DEFAULT_ENABLE_BONJOUR_DISCOVERY  = true;
 }

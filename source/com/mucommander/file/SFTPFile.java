@@ -19,6 +19,7 @@ import com.sshtools.j2ssh.transport.IgnoreHostKeyVerification;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.BufferedOutputStream;
 import java.util.Vector;
 
 
@@ -235,6 +236,7 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
+//SFTPConnectionHandler connHandler = (SFTPConnectionHandler)createConnectionHandler(getURL());
         connHandler.checkConnection();
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file="+getAbsolutePath()+" append="+append+" exists="+exists());
@@ -255,6 +257,7 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
 
         // Custom made constructor, not part of the official J2SSH API
         return new SftpFileOutputStream(file, append?getSize():0);
+//return new SFTPOutputStream(new SftpFileOutputStream(file, append?getSize():0), connHandler);
     }
 	
 
@@ -401,6 +404,23 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
     }
 
 
+//    private static class SFTPOutputStream extends BufferedOutputStream {
+//
+//        SFTPConnectionHandler connHandler;
+//
+//        private SFTPOutputStream(OutputStream out, SFTPConnectionHandler connHandler) {
+//            super(out);
+//            this.connHandler = connHandler;
+//        }
+//
+//
+//        public void close() throws IOException {
+//            super.close();
+//
+//            connHandler.closeConnection();
+//        }
+//    }
+
 
     private static class SFTPConnectionHandler extends ConnectionHandler {
 
@@ -468,6 +488,7 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
         }
 
         public boolean isConnected() {
+if(Debug.ON && sshClient!=null) Debug.trace("isClosed="+sftpClient.isClosed()+"isConnected="+sshClient.isConnected()+" hasError="+sshClient.getConnectionState().hasError()+" getLastError="+sshClient.getConnectionState().getLastError()+" isValidState()="+sshClient.getConnectionState().isValidState(sshClient.getConnectionState().getValue()));
             return sshClient!=null && sshClient.isConnected();
         }
 

@@ -2,15 +2,14 @@
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.bonjour.BonjourMenu;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.about.AboutDialog;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.ui.editor.EditorFrame;
-import com.mucommander.ui.help.ShortcutsDialog;
 import com.mucommander.ui.viewer.ViewerFrame;
 import com.mucommander.ui.table.SortCriteria;
 
@@ -49,8 +48,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     // Bookmark menu
     private JMenu bookmarksMenu;
     private int bookmarksOffset;  // Index of the first bookmark menu item
-    private Vector bookmarks;
-    private Vector bookmarkMenuItems;
 
     // Window menu
     private JMenu windowMenu;
@@ -179,7 +176,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         bookmarksMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(EditCredentialsAction.class, mainFrame), menuItemMnemonicHelper);
         bookmarksMenu.add(new JSeparator());
-        // Save the first bookmark menu item's offset for later
+
+        // Add Bonjour services menu
+        BonjourMenu bonjourMenu = new BonjourMenu(mainFrame);
+        char mnemonic = menuItemMnemonicHelper.getMnemonic(bonjourMenu.getName());
+        if(mnemonic!=0)
+            bonjourMenu.setMnemonic(mnemonic);
+        bookmarksMenu.add(bonjourMenu);
+        bookmarksMenu.add(new JSeparator());
+
+        // Save the first bookmark menu item's offset for later (bookmarks will be added when menu becomes visible)
         this.bookmarksOffset = bookmarksMenu.getItemCount();
 		
         add(bookmarksMenu);
@@ -242,13 +248,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         Object source = e.getSource();
 
-        // Bookmark menu item
-        if (bookmarkMenuItems!=null && bookmarkMenuItems.contains(source)) {
-            int index = bookmarkMenuItems.indexOf(source);
-            mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((Bookmark)bookmarks.elementAt(index)).getLocation());
-        }
-        // Window menu item
-        else {
+        if(source==windowMenu) {
             // Bring the frame corresponding to the clicked menu item to the front
             ((JFrame)windowMenuFrames.get(source)).toFront();
         }
@@ -280,27 +280,23 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             }
         }
         if(source==bookmarksMenu) {
-            if(this.bookmarkMenuItems != null) {
-                // Remove any previous bookmarks menu items from menu
-                // as bookmarks might have changed since menu was last selected
-                for(int i=bookmarksMenu.getItemCount(); i>bookmarksOffset; i--)
-                    bookmarksMenu.remove(bookmarksOffset);
-            }
+            // Remove any previous bookmarks menu items from menu
+            // as bookmarks might have changed since menu was last selected
+            for(int i=bookmarksMenu.getItemCount(); i>bookmarksOffset; i--)
+                bookmarksMenu.remove(bookmarksOffset);
 
             // Add bookmarks menu items
-            this.bookmarks = BookmarkManager.getBookmarks();
-            this.bookmarkMenuItems = new Vector();
+            Vector bookmarks = BookmarkManager.getBookmarks();
             int nbBookmarks = bookmarks.size();
-            MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
             if(nbBookmarks>0) {
+                Bookmark b;
                 for(int i=0; i<nbBookmarks; i++)
-                    bookmarkMenuItems.add(MenuToolkit.addMenuItem(bookmarksMenu, ((Bookmark)bookmarks.elementAt(i)).getName(), menuItemMnemonicHelper, null, this));
+                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, (Bookmark)bookmarks.elementAt(i)), null);
             }
             else {
                 // Show 'No bookmark' as a disabled menu item instead showing nothing
-                JMenuItem noBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.no_bookmark"), menuItemMnemonicHelper, null, null);
+                JMenuItem noBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.no_bookmark"), null, null, null);
                 noBookmarkItem.setEnabled(false);
-                bookmarkMenuItems.add(noBookmarkItem);
             }
         }
         else if(source==windowMenu) {

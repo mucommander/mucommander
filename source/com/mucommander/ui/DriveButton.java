@@ -2,6 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.bonjour.BonjourMenu;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
@@ -14,6 +15,7 @@ import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.comp.button.NonFocusableButton;
+import com.mucommander.ui.action.OpenLocationAction;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
@@ -35,7 +37,6 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
     private FolderPanel folderPanel;
 	
     private JPopupMenu popupMenu;
-    private Vector menuItems;
 
     /* Time when popup menu was last hidden */
     private long lastPopupTime;
@@ -43,15 +44,24 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
     /** Root folders array */
     private static AbstractFile rootFolders[] = RootFolders.getRootFolders();
 	
-    /** Bookmarks, loaded each time the menu pops up */
-    private Vector bookmarks;
-
-    /** Index of the first bookmark in the popup menu */
-    private int bookmarksOffset;
-    /** Index of the first server shorcut in the popup menu */
-    private int serverShortcutsOffset;
-
     private final static int POPUP_DELAY = 1000;
+
+
+    /**
+     * Action that triggers the 'server connection dialog' for a specified protocol.
+     */
+    private class ServerConnectAction extends AbstractAction {
+        private int serverPanelIndex;
+
+        private ServerConnectAction(String label, int serverPanelIndex) {
+            super(label);
+            this.serverPanelIndex = serverPanelIndex;
+        }
+
+        public void actionPerformed(ActionEvent actionEvent) {
+            new ServerConnectDialog(folderPanel.getMainFrame(), serverPanelIndex).showDialog();
+        }
+    }
 
 	
     /**
@@ -83,30 +93,6 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
 
 
     /**
-     * Creates and add a new menu item to the popup menu.
-     *
-     * @param label the menu item's label
-     */
-    private JMenuItem addMenuItem(String label) {
-        return addMenuItem(label, null);
-    }
-
-    /**
-     * Creates and add a new menu item to the popup menu.
-     *
-     * @param label the menu item's label
-     * @param icon the menu item's icon (can be null)
-     */
-    private JMenuItem addMenuItem(String label, javax.swing.Icon icon) {
-        JMenuItem menuItem = new JMenuItem(label, icon);
-        menuItem.addActionListener(this);
-        menuItems.add(menuItem);
-        popupMenu.add(menuItem);
-        return menuItem;
-    }
-	
-
-    /**
      * Updates this drive button's label to reflect current folder and match one of the drive button's shortcuts.
      * <<ul>
      *	<li>If the specified folder corresponds to a bookmark, the bookmark's name will be displayed
@@ -127,7 +113,6 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
         Bookmark b;
         for(int i=0; i<nbBookmarks; i++) {
             b = (Bookmark)bookmarks.elementAt(i);
-//            if(b.getURL().equals(currentURL)) {
             if(currentPath.equals(b.getLocation())) {
                 // Note: if several bookmarks match current folder, the first one will be used
                 newLabel = b.getName();
@@ -182,57 +167,51 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
         popupMenu = new JPopupMenu();
         popupMenu.addPopupMenuListener(this);
 
-        menuItems = new Vector();
-
         // Add root 'drives'
         int nbRoots = rootFolders.length;
         // Retreive and use system drives icons under Windows only, icons looks like crap under Mac OS X,
-        // and most likely also look like crap under Linux (untested though)
-        if(PlatformManager.isWindowsFamily()) {
+        // and most likely also look like crap under Linux (untested though).
+        // FileSystemView.getSystemIcon is available from Java 1.4 and up.
+        // However, Java 1.4 freaks out when it tries to get the a:\ system icon
+        MainFrame mainFrame = folderPanel.getMainFrame();
+        if(PlatformManager.isWindowsFamily() && PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_5) {
             FileSystemView fileSystemView = FileSystemView.getFileSystemView();
             for(int i=0; i<nbRoots; i++) {
-                Icon driveIcon = null;
-                // FileSystemView.getSystemIcon is available from Java 1.4 and up.
-                // However, Java 1.4 freaks out when it tries to get the a:\ system icon
-                if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_5)
-                    driveIcon = fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath()));
-
-                addMenuItem(rootFolders[i].getName(), driveIcon);
+                popupMenu.add(new OpenLocationAction(mainFrame, rootFolders[i])).setIcon(fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath())));
             }
         }
-        // For any OS other than Windows
+        // For any OS other than Windows or for Windows and Java 1.4
         else {
             for(int i=0; i<nbRoots; i++)
-                addMenuItem(rootFolders[i].getName());
+                popupMenu.add(new OpenLocationAction(mainFrame, rootFolders[i]));
         }
 
         popupMenu.add(new JSeparator());
 
         // Add boookmarks
-		
-        this.bookmarksOffset = menuItems.size();
-		
-        this.bookmarks = BookmarkManager.getBookmarks();
+        Vector bookmarks = BookmarkManager.getBookmarks();
         int nbBookmarks = bookmarks.size();
-		
+
         if(nbBookmarks>0) {
             for(int i=0; i<nbBookmarks; i++)
-                addMenuItem(((Bookmark)bookmarks.elementAt(i)).getName());
+                popupMenu.add(new OpenLocationAction(mainFrame, (Bookmark)bookmarks.elementAt(i)));
         }
         else {
             // No bookmark : add a disabled menu item saying there is no bookmark
-            addMenuItem(Translator.get("bookmarks_menu.no_bookmark")).setEnabled(false);
+            popupMenu.add(Translator.get("bookmarks_menu.no_bookmark")).setEnabled(false);
         }
 
         popupMenu.add(new JSeparator());
 
-        // Add 'connect to server' shortcuts
+        // Add Bonjour services menu
+        popupMenu.add(new BonjourMenu(folderPanel.getMainFrame()));
+        popupMenu.add(new JSeparator());
 
-        this.serverShortcutsOffset = menuItems.size();
-        addMenuItem("SMB...");
-        addMenuItem("FTP...");
-        addMenuItem("SFTP...");
-        addMenuItem("HTTP...");
+        // Add 'connect to server' shortcuts
+        popupMenu.add(new ServerConnectAction("SMB...", ServerConnectDialog.SMB_INDEX));
+        popupMenu.add(new ServerConnectAction("FTP...", ServerConnectDialog.FTP_INDEX));
+        popupMenu.add(new ServerConnectAction("SFTP...", ServerConnectDialog.SFTP_INDEX));
+        popupMenu.add(new ServerConnectAction("HTTP...", ServerConnectDialog.HTTP_INDEX));
 
         // Popup up the menu underneath under this button
         popupMenu.show(this, 0, getHeight());
@@ -268,7 +247,6 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
     ///////////////////////////////
 	 
     public void popupMenuCanceled(PopupMenuEvent e) {
-        this.menuItems = null;
     }
 
     public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
@@ -287,13 +265,6 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
     //////////////////////////////
 	
     public void bookmarksChanged() {
-////         If a bookmark has been added/edited/removed, check if the bookmark's location corresponds
-////         to the current folder's. If it so, update the button's label to reflect the new current folder
-////        if(folderPanel.getCurrentFolder().getURL().equals(b.getURL())) {
-//        if(folderPanel.getCurrentFolder().getAbsolutePath().equals(b.getLocation())) {
-//            updateLabel();
-//        }
-
         // Refresh label in case a bookmark with the current location was changed
         updateLabel();
     }
@@ -326,29 +297,6 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
             // Show popup menu
             else
                 popup();
-        }
-        // One of the popup menu items was clicked
-        else {
-            int index = menuItems.indexOf(source);
-			
-            // GC vector since it won't be needed anymore
-            this.menuItems = null;
-
-            // Menu item that corresponds to a root folder
-            if(index<bookmarksOffset) {
-                // Tries to change current folder
-                folderPanel.tryChangeCurrentFolder(rootFolders[index].getCanonicalPath());
-            }
-            // Menu item that corresponds to a bookmark
-            else if(index<serverShortcutsOffset) {
-//                folderPanel.tryChangeCurrentFolder(((Bookmark)bookmarks.elementAt(index-bookmarksOffset)).getURL());
-                folderPanel.tryChangeCurrentFolder(((Bookmark)bookmarks.elementAt(index-bookmarksOffset)).getLocation());
-            }
-            // Menu item that corresponds to a server shortcut
-            else {
-                // Show server connect dialog with corresponding panel
-                new ServerConnectDialog(folderPanel.getMainFrame(), index-serverShortcutsOffset).showDialog();
-            }
         }
     }
 }

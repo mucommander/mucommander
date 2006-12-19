@@ -12,10 +12,10 @@ import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.table.FileTable;
 
 /**
- * This action 'opens' the currently selected file or folder, which means different things depending on
- * the kind of file:
+ * This action 'opens' the currently selected file or folder in the active FileTable.
+ * This means different things depending on the kind of file that is currently selected:
  * <ul>
- * <li>For Browsable files (directory, archive...): shows file contents
+ * <li>For browsable files (directory, archive...): shows file contents
  * <li>For local file that are not an archive or archive entry: executes file with native file associations
  * <li>For any other file type, remote or local: copies file to a temporary local file and executes it with native file associations
  * </ul>

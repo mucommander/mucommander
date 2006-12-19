@@ -19,7 +19,7 @@ import com.mucommander.ui.StatusBar;
 public class ToggleStatusBarAction extends MucoAction {
 
     public ToggleStatusBarAction(MainFrame mainFrame) {
-        super(mainFrame);
+        super(mainFrame, false);
         setLabel(Translator.get(ConfigurationManager.getVariableBoolean(ConfigurationVariables.STATUS_BAR_VISIBLE,
                                                                         ConfigurationVariables.DEFAULT_STATUS_BAR_VISIBLE) ? 
                                 "com.mucommander.ui.action.ToggleStatusBarAction.hide":"com.mucommander.ui.action.ToggleStatusBarAction.show"));

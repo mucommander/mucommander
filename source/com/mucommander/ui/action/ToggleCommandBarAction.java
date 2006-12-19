@@ -19,7 +19,7 @@ import com.mucommander.ui.MainFrame;
 public class ToggleCommandBarAction extends MucoAction {
 
     public ToggleCommandBarAction(MainFrame mainFrame) {
-        super(mainFrame);
+        super(mainFrame, false);
         setLabel(Translator.get(ConfigurationManager.getVariableBoolean(ConfigurationVariables.COMMAND_BAR_VISIBLE,
                                                                         ConfigurationVariables.DEFAULT_COMMAND_BAR_VISIBLE) ?
                                 "com.mucommander.ui.action.ToggleCommandBarAction.hide":"com.mucommander.ui.action.ToggleCommandBarAction.show"));

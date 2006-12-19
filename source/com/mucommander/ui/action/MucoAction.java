@@ -19,21 +19,29 @@ public abstract class MucoAction extends AbstractAction {
 
 
     public MucoAction(MainFrame mainFrame) {
+        this(mainFrame, true);
+    }
+
+
+    public MucoAction(MainFrame mainFrame, boolean lookupDictionary) {
         this.mainFrame = mainFrame;
 
-        // Sets this action's label to a localized dictionary entry in the '<action_class>.label' format
         Class classInstance = getClass();
         String className = classInstance.getName();
-        String label = Translator.get(className+".label");
-        // Append '...' to the label if this action invokes a dialog when performed
-        if(this instanceof InvokesDialog)
-            label += "...";
-        setLabel(label);
-        
-        // Look for a tooltip dictionary entry in the '<action_class>.tooltip' format and use it if it exists
-        String key = className+".tooltip";
-        if(Translator.entryExists(key))
-            setToolTipText(Translator.get(key));
+
+        if(lookupDictionary) {
+            // Sets this action's label to a localized dictionary entry in the '<action_class>.label' format
+            String label = Translator.get(className+".label");
+            // Append '...' to the label if this action invokes a dialog when performed
+            if(this instanceof InvokesDialog)
+                label += "...";
+            setLabel(label);
+
+            // Look for a tooltip dictionary entry in the '<action_class>.tooltip' format and use it if it exists
+            String key = className+".tooltip";
+            if(Translator.entryExists(key))
+                setToolTipText(Translator.get(key));
+        }
 
         // Look for an accelerator registered in ActionKeymap for this action class
         KeyStroke accelerator = ActionKeymap.getAccelerator(classInstance);

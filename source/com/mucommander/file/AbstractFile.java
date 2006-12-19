@@ -4,6 +4,7 @@ import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.Debug;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -404,6 +405,8 @@ public abstract class AbstractFile {
             out = new BufferedOutputStream(getOutputStream(append), WRITE_BUFFER_SIZE);
         }
         catch(IOException e) {
+//if(Debug.ON) Debug.trace("Could not open OutputStream:"+e);
+//e.printStackTrace();
             throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
         }
 

@@ -77,8 +77,9 @@ public class Credentials {
 
 
     /**
-     * Returns true if the provided Object is a Credentials instance which login and password are equal to the ones in
-     * this instance.
+     * Returns true if the login of the provided credentials (as returned by {@link #getLogin()} equals to one in
+     * this Credentials instance, false otherwise. Two Credentials instances with the same login but a different
+     * password will thus be equal.
      */
     public boolean equals(Object o) {
         if(!(o instanceof Credentials))

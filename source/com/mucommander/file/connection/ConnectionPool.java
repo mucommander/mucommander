@@ -44,12 +44,12 @@ public class ConnectionPool {
         int nbElements = connectionHandlers.size();
         ConnectionHandler connHandler;
 
-        if(Debug.ON) Debug.trace("called, realm="+realm);
+//        if(Debug.ON) Debug.trace("called, realm="+realm);
 
         for(int i=0; i<nbElements; i++) {
             connHandler = getConnectionHandlerAt(i);
             if(connHandler!=null && (realm.equals(connHandler.getRealm()))) {
-                if(Debug.ON) Debug.trace("returning ConnectionHandler "+connHandler);
+//                if(Debug.ON) Debug.trace("returning ConnectionHandler "+connHandler);
                 return i;
             }
         }

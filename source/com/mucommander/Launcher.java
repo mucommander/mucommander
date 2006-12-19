@@ -249,6 +249,10 @@ public class Launcher {
         splashScreen.setLoadingMessage("Loading command bar description...");
         com.mucommander.ui.CommandBar.loadDescriptionFile();
 
+        // Starts Bonjour services discovery (only if enabled in prefs)
+        splashScreen.setLoadingMessage("Starting Bonjour services discovery...");
+        com.mucommander.bonjour.BonjourDirectory.setActive(ConfigurationManager.getVariableBoolean(ConfigurationVariables.ENABLE_BONJOUR_DISCOVERY, ConfigurationVariables.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
+
         // Creates the initial main frame using any initial path specified by the command line.
         splashScreen.setLoadingMessage("Initializing window...");
         for(; i < args.length; i += 2) {

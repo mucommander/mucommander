@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 /**
  * This class represents a bookmark, which is a simple name/location pair:
  * <ul>
- * <li>The name is just a String describing the bookmark
+ * <li>The name is a String describing the bookmark
  * <li>The location should designate a path or file URL. The designated location may not exist or may not even be
  * a valid path or URL, so it is up to classes that call {@link #getLocation()} to deal with it appropriately.
  * </ul>
