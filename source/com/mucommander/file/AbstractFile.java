@@ -606,13 +606,22 @@ public abstract class AbstractFile {
 
 
     /**
-     * Returns a string representation of this file's read/write/execute permissions. If the file is readable, writable
-     * and executable, "rwx" will be returned. Any permission flag not enabled will be replaced by a '-' character.
+     * Returns a string representation of this file's permissions, a concatenation of the following characters:
+     * <ul>
+     * <li>'l' if this file is a symbolic link,'d' if it is a directory, '-' otherwise
+     * <li>'r' if this file is readable, '-' otherwise
+     * <li>'w' if this file is writable, '-' otherwise
+     * <li>'x' if this file is executable, '-' otherwise
+     * </ul>
+     *
+     * For example, if the file is a directory that is readable, writable and executable, "drwx" will be returned.
      */
     public String getPermissionsString() {
-        String perms = canRead()?"r":"-";
-        perms += canWrite()?"w":"-";
-        perms += canExecute()?"x":"-";
+        String perms = "";
+        perms += isSymlink()?'l':isDirectory()?'d':'-';
+        perms += canRead()?'r':'-';
+        perms += canWrite()?'w':'-';
+        perms += canExecute()?'x':'-';
 
         return perms;
     }

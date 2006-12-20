@@ -23,7 +23,7 @@ Requirements
 ------------
 
 Java Runtime Environment 1.4.0 (JRE) or later is required to run
-muCommander. JRE 1.5 is recommended, you can download it at http://java.com.
+muCommander. JRE 1.6 is recommended, you can download it at http://java.com.
 
 Mac OS X users: your favorite OS already comes with a Java runtime so you're good to go!
 
@@ -51,7 +51,10 @@ muCommander uses the following great 3rd party works :
 - Java TAR released under the Public Domain to provide TAR support.
  Java TAR can be found at http://www.trustice.com/java/tar/ .
 
-- Toolbar, command bar and preferences icons by Mark James (http://famfamfam.com) under the Creative Commons Attribution License
+- JmDNS released under the LGPL license to provide Bonjour/Zeroconf support.
+JmDNS can be found at http://jmdns.sourceforge.net .
+
+- Toolbar, command bar and preferences icons by Mark James (http://famfamfam.com) under the Creative Commons Attribution License.
 
 
 Credits
@@ -61,7 +64,7 @@ Countless thanks to the many people who participated in this project and made it
 
 Code contributors:
 - Nicolas Rinaudo  (shell improvements, configuration parser, XML writer, Ant build file and much more)
-- Xavier Martin (ISO and NRG support)
+- Xavier Martin (ISO and NRG files support)
 
 Translators: 
 - Tony Klüver and Frank Berger (German)
@@ -73,6 +76,7 @@ Translators:
 - XXXX Pro (Russian)
 - Woodie (Simplified Chinese)
 - Joze Kovacic (Slovenian)
+- Catalin Hritcu (Romanian)
 
 And all of you who suggested new features, reported bugs, sent warm emails or generously donated to the project !
 
@@ -157,7 +161,8 @@ New features:
  - Support for AR and Debian archives, GNU and BSD variants supported (.ar, .deb extensions)
  - Support for HTTP Basic Authentication
  - Bonjour/Zeroconf services discovery
- - File user permissions are properly preserved under Java 1.6 (only)
+ - New permissions column in table, sort by permissions
+ - File user permissions are properly preserved during transfers (Java 1.6 required for proper executable permission handling on local files)
  - 'Run command' is now interactive, allows shell customization, quick recall of previous commands, color customization, and uses the system's default shell to parse commands under UNIX platforms (contributed by Nicolas Rinaudo)
  - Command line options (contributed by Nicolas Rinaudo)
  - Ability to execute remote or archive entries files: these are copied to a temporary local directory and executed
@@ -256,10 +261,11 @@ Bug fixes:
 
 Known issues:
  - Translations not up-to-date (some of the new 0.8 features are untranslated) 
+ - Executable permissions are not preserved properly for local files prior with Java <1.6
  - Zip files encoded in a charset other than UTF-8 will not display non-ASCII filenames properly due to a limitation of java.util.zip (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4244499)
  - Some BZ2 archives can not be properly opened
  - SFTP connections to some ssh servers cannot be established
- - SFTP connection sometimes drops unexpectedly when transferring lots of files
+ - SFTP connection drops unexpectedly when transferring lots of files
  - SMB support may not work properly on non multi-language JRE
  - 'Copy files' not working with some applications (files are not pasted)
  - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System Preferences' for them to work properly

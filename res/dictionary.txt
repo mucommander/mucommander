@@ -442,6 +442,30 @@ date:ZH_CN:日期
 date:SI:Datum
 date:RO:Dată
 
+extension:EN:Extension
+extension:FR:Extension
+
+
+
+
+
+
+
+
+
+permissions:EN:Permissions
+permissions:FR:Permissions
+
+
+
+
+
+
+
+
+
+
+
 location:EN:Location
 location:FR:Emplacement
 location:DE:Ort
@@ -1294,7 +1318,7 @@ com.mucommander.ui.action.GoToParentAction.tooltip:SI:Izvorna mapa
 com.mucommander.ui.action.GoToParentAction.tooltip:RO:Mergi în directorul părinte
 
 com.mucommander.ui.action.SortByNameAction.label:EN:Sort by Name
-com.mucommander.ui.action.SortByNameAction.label:FR:Classer par nom
+com.mucommander.ui.action.SortByNameAction.label:FR:Trier par Nom
 com.mucommander.ui.action.SortByNameAction.label:DE:Nach Namen sortieren
 com.mucommander.ui.action.SortByNameAction.label:ES:Ordenar por Nombre
 com.mucommander.ui.action.SortByNameAction.label:CS:Setřídit dle jména
@@ -1307,7 +1331,7 @@ com.mucommander.ui.action.SortByNameAction.label:SI:Razvrsti po imenu
 com.mucommander.ui.action.SortByNameAction.label:RO:Sortează după nume
 
 com.mucommander.ui.action.SortByDateAction.label:EN:Sort by Date
-com.mucommander.ui.action.SortByDateAction.label:FR:Classer par date
+com.mucommander.ui.action.SortByDateAction.label:FR:Trier par Date
 com.mucommander.ui.action.SortByDateAction.label:DE:Nach Datum sortieren
 com.mucommander.ui.action.SortByDateAction.label:ES:Ordenar por Fecha
 com.mucommander.ui.action.SortByDateAction.label:CS:Setřídit dle data
@@ -1320,7 +1344,7 @@ com.mucommander.ui.action.SortByDateAction.label:SI:Razvrsti po datumu
 com.mucommander.ui.action.SortByDateAction.label:RO:Sortează după dată
 
 com.mucommander.ui.action.SortBySizeAction.label:EN:Sort by Size
-com.mucommander.ui.action.SortBySizeAction.label:FR:Classer par taille
+com.mucommander.ui.action.SortBySizeAction.label:FR:Trier par Taille
 com.mucommander.ui.action.SortBySizeAction.label:DE:Nach Größe sortieren
 com.mucommander.ui.action.SortBySizeAction.label:ES:Ordenar por Tamaño
 com.mucommander.ui.action.SortBySizeAction.label:CS:Setřídit dle velikosti
@@ -1333,7 +1357,7 @@ com.mucommander.ui.action.SortBySizeAction.label:SI:Razvrsti po velikosti
 com.mucommander.ui.action.SortBySizeAction.label:RO:Sortează după dimensiune
 
 com.mucommander.ui.action.SortByExtensionAction.label:EN:Sort by Extension
-com.mucommander.ui.action.SortByExtensionAction.label:FR:Classer par extension
+com.mucommander.ui.action.SortByExtensionAction.label:FR:Trier par Extension
 com.mucommander.ui.action.SortByExtensionAction.label:DE:Nach Erweiterung sortieren
 com.mucommander.ui.action.SortByExtensionAction.label:ES:Ordenar por Extensión
 com.mucommander.ui.action.SortByExtensionAction.label:CS:Setřídit dle přípony
@@ -1344,6 +1368,20 @@ com.mucommander.ui.action.SortByExtensionAction.label:RU:Сортировать 
 com.mucommander.ui.action.SortByExtensionAction.label:ZH_CN:按类型排序
 com.mucommander.ui.action.SortByExtensionAction.label:SI:Razvrsti po podaljšku
 com.mucommander.ui.action.SortByExtensionAction.label:RO:Sortează după extensie
+
+com.mucommander.ui.action.SortByPermissionsAction.label:EN:Sort by Permissions
+com.mucommander.ui.action.SortByPermissionsAction.label:FR:Trier par Permissions
+
+
+
+
+
+
+
+
+
+
+
 
 com.mucommander.ui.action.MarkGroupAction.label:EN:Mark files
 com.mucommander.ui.action.MarkGroupAction.label:FR:Marquer fichiers

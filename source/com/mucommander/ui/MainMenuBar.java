@@ -44,6 +44,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JCheckBoxMenuItem sortByNameItem;
     private JCheckBoxMenuItem sortBySizeItem;
     private JCheckBoxMenuItem sortByDateItem;
+    private JCheckBoxMenuItem sortByPermissionsItem;
 
     // Bookmark menu
     private JMenu bookmarksMenu;
@@ -152,6 +153,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         buttonGroup.add(sortByNameItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByNameAction.class, mainFrame), menuItemMnemonicHelper));
         buttonGroup.add(sortBySizeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortBySizeAction.class, mainFrame), menuItemMnemonicHelper));
         buttonGroup.add(sortByDateItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByDateAction.class, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(sortByPermissionsItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByPermissionsAction.class, mainFrame), menuItemMnemonicHelper));
 
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ReverseSortOrderAction.class, mainFrame), menuItemMnemonicHelper);
         viewMenu.add(new JSeparator());
