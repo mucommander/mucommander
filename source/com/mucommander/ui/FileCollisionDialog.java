@@ -179,7 +179,9 @@ public class FileCollisionDialog extends QuestionDialog {
 
         panel.addTextFieldRow(Translator.get("size")+":", new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)), 0);
 
-        panel.addTextFieldRow(Translator.get("date")+":", new JLabel(CustomDateFormat.format(new Date(file.getDate()))), 10);
+        panel.addTextFieldRow(Translator.get("date")+":", new JLabel(CustomDateFormat.format(new Date(file.getDate()))), 0);
+
+        panel.addTextFieldRow(Translator.get("permissions")+":", new JLabel(file.getPermissionsString()), 10);
     }
 
 
