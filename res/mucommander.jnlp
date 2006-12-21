@@ -16,7 +16,7 @@
       <all-permissions/>
   </security>
   <resources>
-    <j2se version="1.3+ 1.4+"/>
+    <j2se version="1.4+"/>
     <jar href="http://www.mucommander.com/webstart/mucommander.jar"/>
   </resources>
   <application-desc main-class="com.mucommander.Launcher"/>
