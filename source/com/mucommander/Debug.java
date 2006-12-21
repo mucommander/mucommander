@@ -40,6 +40,8 @@ public class Debug {
 
     public static void trace(String message) {trace(message, 0);}
 
+    public static void trace(Exception e) {e.printStackTrace();}
+
     public static void trace(String message, int level) {
         if(enabled)
             System.out.println(getCallerSignature(level)+" : "+message);
