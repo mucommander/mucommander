@@ -531,7 +531,7 @@ public class AppTask extends Task {
      */
     private void writeIcon(File resources) throws BuildException {
         // Copies the icon.
-        try {transfer(icon.toURL(), new File(resources, icon.getName()));}
+        try {transfer(icon.toURI().toURL(), new File(resources, icon.getName()));}
         catch(Exception e) {throw new BuildException("Could not generate application icon", e);}
     }
 
@@ -546,7 +546,7 @@ public class AppTask extends Task {
      */
     private void writeJar(File java) throws BuildException {
         // Copies the jar.
-        try {transfer(jar.toURL(), new File(java, jar.getName()));}
+        try {transfer(jar.toURI().toURL(), new File(java, jar.getName()));}
         catch(Exception e) {throw new BuildException("Could not generate application jar", e);}
     }
 
