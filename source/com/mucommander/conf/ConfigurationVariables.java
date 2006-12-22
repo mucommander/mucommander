@@ -1,5 +1,7 @@
 package com.mucommander.conf;
 
+import com.mucommander.RuntimeConstants;
+
 /**
  * Aggregates all of muCommander's configuration variables in one place.
  * @author Nicolas Rinaudo
@@ -140,71 +142,6 @@ public interface ConfigurationVariables {
 
 
 
-    // - Color variables -----------------------------------------------------
-    // -----------------------------------------------------------------------
-    /** Section describing muCommander's various colors. */
-    public static final String COLORS_SECTION                     = ROOT_SECTION + '.' + "colors";
-    /** Color used for the background of the folder views. */
-    public static final String BACKGROUND_COLOR                   = COLORS_SECTION + '.' + "background";
-    /** Default folder views background colors. */
-    public static final String DEFAULT_BACKGROUND_COLOR           = "000084";
-    /** Color used to display plain files. */
-    public static final String PLAIN_FILE_COLOR                   = COLORS_SECTION + '.' + "plain";
-    /** Default plain files color. */
-    public static final String DEFAULT_PLAIN_FILE_COLOR           = "00F0F0";
-    /** Color used to display hidden files. */
-    public static final String HIDDEN_FILE_COLOR                  = COLORS_SECTION + '.' + "hidden";
-    /** Default hidden files color. */
-    public static final String DEFAULT_HIDDEN_FILE_COLOR          = "C0C0C0";
-    /** Color used to display folders. */
-    public static final String FOLDER_COLOR                       = COLORS_SECTION + '.' + "folder";
-    /** Default folders color. */
-    public static final String DEFAULT_FOLDER_COLOR               = "FFFFFF";
-    /** Color used to display archive files. */
-    public static final String ARCHIVE_FILE_COLOR                 = COLORS_SECTION + '.' + "archive";
-    /** Default archive files color. */
-    public static final String DEFAULT_ARCHIVE_FILE_COLOR         = "40FF40";
-    /** Color used to display symlinks. */
-    public static final String SYMLINK_COLOR                      = COLORS_SECTION + '.' + "symlink";
-    /** Default symlink color. */
-    public static final String DEFAULT_SYMLINK_COLOR              = "CC00CC";
-    /** Color used to display marked files. */
-    public static final String MARKED_FILE_COLOR                  = COLORS_SECTION + '.' + "marked";
-    /** Default marked files color. */
-    public static final String DEFAULT_MARKED_FILE_COLOR          = "FFFF00";
-    /** Color used to display selected files. */
-    public static final String SELECTED_FILE_COLOR                = COLORS_SECTION + '.' + "selected";
-    /** Default selected files color. */
-    public static final String DEFAULT_SELECTED_FILE_COLOR        = "000080";
-    /** Color used to display the background of selected files. */
-    public static final String SELECTION_BACKGROUND_COLOR         = COLORS_SECTION + '.' + "selectionBackground";
-    /** Default selected files background color. */
-    public static final String DEFAULT_SELECTION_BACKGROUND_COLOR = "00FFFF";
-    /** Color used to display selected items when muCommander doesn't have the focus. */
-    public static final String OUT_OF_FOCUS_COLOR                 = COLORS_SECTION + '.' + "notInFocusSelectionBackground";
-    /** Default out of focus color. */
-    public static final String DEFAULT_OUT_OF_FOCUS_COLOR         = "CCCCCC";
-
-
-
-    // - Shell color variables -----------------------------------------------
-    // -----------------------------------------------------------------------
-    /** Section describing the shell colors. */
-    public static final String SHELL_COLORS_SECTION               = COLORS_SECTION + '.' + "shell";
-    /** Color used to display the background of the shell. */
-    public static final String SHELL_BACKGROUND_COLOR             = SHELL_COLORS_SECTION + '.' + "background";
-    /** Default shell background color. */
-    public static final String DEFAULT_SHELL_BACKGROUND_COLOR     = "FFFFFF";
-    /** Color used to display the selection background in the shell. */
-    public static final String SHELL_SELECTION_COLOR              = SHELL_COLORS_SECTION + '.' + "selectionBackground";
-    /** Default shell selection color. */
-    public static final String DEFAULT_SHELL_SELECTION_COLOR      = "BBBBBB";
-    /** Color used to display the shell text. */
-    public static final String SHELL_TEXT_COLOR                   = SHELL_COLORS_SECTION + '.' + "text";
-    /** Default shell text color. */
-    public static final String DEFAULT_SHELL_TEXT_COLOR           = "000000";
-
-
     // - Mac OS X variables --------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing muCommander's Mac OS X integration. */
@@ -295,18 +232,6 @@ public interface ConfigurationVariables {
 
 
 
-    // - Font variables ------------------------------------------------------
-    // -----------------------------------------------------------------------
-    /** Section describing the font used by muCommander. */
-    public static final String FONT_SECTION                       = ROOT_SECTION + '.' + "font";
-    /** Family of the font used by muCommander. */
-    public static final String FONT_FAMILY                        = FONT_SECTION + '.' + "family";
-    /** Size of the font used by muCommander. */
-    public static final String FONT_SIZE                          = FONT_SECTION + '.' + "size";
-    /** Style of the font used by muCommander. */
-    public static final String FONT_STYLE                         = FONT_SECTION + '.' + "style";
-
-
 
     // - Progress dialog variables -------------------------------------------
     // -----------------------------------------------------------------------
@@ -330,6 +255,28 @@ public interface ConfigurationVariables {
     public static final String  URL_CACHE_CAPACITY                = CACHE_SECTION + '.' + "url_cache_capacity";
     /** Default capacity of the FileURL instances cache */
     public static final int     DEFAULT_URL_CACHE_CAPACITY        = 1000;
+
+
+
+    // - Variables used for themes -------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section controlling which theme should be applied to muCommander. */
+    public static final String THEME_SECTION                      = ROOT_SECTION + '.' + "theme";
+    /** Current theme type (custom, predefined or user defined). */
+    public static final String THEME_TYPE                         = THEME_SECTION + '.' + "type";
+    /** Describes predefined themes. */
+    public static final String THEME_PREDEFINED                   = "predefined";
+    /** Describes custom themes. */
+    public static final String THEME_CUSTOM                       = "custom";
+    /** Describes the user theme. */
+    public static final String THEME_USER                         = "user";
+    /** Default theme type. */
+    public static final String DEFAULT_THEME_TYPE                 = THEME_PREDEFINED;
+    /** Name of the current theme. */
+    public static final String THEME_NAME                         = THEME_SECTION + '.' + "path";
+    /** Default current theme name. */
+    public static final String DEFAULT_THEME_NAME                 = RuntimeConstants.DEFAULT_THEME;
+
 
 
     // - Variables used by Bonjour/Zeroconf support --------------------------

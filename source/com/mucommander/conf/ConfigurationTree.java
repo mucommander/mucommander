@@ -120,7 +120,7 @@ class ConfigurationTree {
         }
         else {
             if(value==null) {
-                //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("removing leaf");
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("removing leaf " + name);
                 leafs.remove(leaf);
                 return true;
             }
@@ -234,4 +234,7 @@ class ConfigurationTree {
      * should never be used in any other context.
      */
     void addNode(ConfigurationTree node) {nodes.add(node);}
+
+    public boolean hasNodes() {return !nodes.isEmpty();}
+    public boolean hasLeafs() {return !leafs.isEmpty();}
 }

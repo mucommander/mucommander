@@ -190,16 +190,21 @@ public class ConfigurationManager {
     private static void buildConfigurationTree(ConfigurationTreeBuilder builder, ConfigurationTree node) {
         Iterator          iterator;
         ConfigurationLeaf leaf;
+        ConfigurationTree buffer;
 
         builder.addNode(node.getName());
         iterator = node.getLeafs();
         while(iterator.hasNext()) {
             leaf = (ConfigurationLeaf)iterator.next();
-            builder.addLeaf(leaf.getName(), leaf.getValue());
+            if(leaf.getValue() != null)
+                builder.addLeaf(leaf.getName(), leaf.getValue());
         }
         iterator = node.getNodes();
-        while(iterator.hasNext())
-            buildConfigurationTree(builder, (ConfigurationTree)iterator.next());
+        while(iterator.hasNext()) {
+            buffer = (ConfigurationTree)iterator.next();
+            if(buffer.hasNodes() || buffer.hasLeafs())
+                buildConfigurationTree(builder, buffer);
+        }
         builder.closeNode(node.getName());
     }
 
@@ -434,8 +439,13 @@ public class ConfigurationManager {
         while(parser.hasMoreTokens()) {
             buffer = parser.nextToken();
             if(parser.hasMoreTokens()) {
-                if((temporaryNode = node.getNode(buffer)) == null)
+                if((temporaryNode = node.getNode(buffer)) == null) {
+                    // If the value is null, we're trying to delete a variable.
+                    // It would be silly to create its parent node. Abort.
+                    if(value == null)
+                        return;
                     node = node.createNode(buffer);
+                }
                 else
                     node = temporaryNode;
             }

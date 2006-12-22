@@ -26,7 +26,7 @@ public class ConfigurationParser implements ContentHandler {
     /** Name of the currently parsed node. */
     private String node;
 
-    /** Name of the currently parsed XML node(can be either a configuration node or leaf). */
+    /** Name of the currently parsed XML node (can be either a configuration node or leaf). */
     private String buffer;
 
     /** Class notified whenever a new configuration item is found. */
@@ -112,8 +112,10 @@ public class ConfigurationParser implements ContentHandler {
      * Notifies the parser that an XML node has been closed.
      */
     public void endElement(String uri, String name) {
-        if(inNode)
+        if(inNode) {
             builder.closeNode(name);
+            buffer = null;
+        }
         else {
             node = buffer;
             inNode = true;
