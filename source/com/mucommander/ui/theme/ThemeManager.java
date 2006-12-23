@@ -162,6 +162,11 @@ public class ThemeManager {
             userTheme            = new Theme(Translator.get("user_theme"), legacyData);
             wasUserThemeModified = true;
             saveUserTheme();
+
+            // Makes sure that muCommander boots with the user's previous preferences.
+            ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_USER);
+            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, null);
+            currentType = USER_THEME;
         }
 
         // Adds the user theme to the list of available themes.
