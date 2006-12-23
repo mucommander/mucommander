@@ -121,8 +121,6 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
                 }
             };
 		
-        JViewport viewport = scrollPane.getViewport();
-        viewport.setBackground(FileViewer.BG_COLOR);
         setContentPane(scrollPane);
 
         // Catch Apple+W keystrokes under Mac OS X to close the window

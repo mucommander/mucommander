@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme>
+  <!-- = File table appearance ========================= -->
+  <!-- ================================================= -->
+  <file_table>
+    <font   family="Lucida Grande" size ="12"/>
+    <border color="868686"/>
+
+    <!-- = Default appearance ========================== -->
+    <!-- =============================================== -->
+    <normal>
+      <background           color="ffffff"/>
+      <hidden               color="666666"/>
+      <folder               color="000000"/>
+      <archive              color="000000"/>
+      <symlink              color="cc00cc"/>
+      <marked               color="cc0000"/>
+      <file                 color="000000"/>
+      <unfocused_background color="ffffff"/>
+    </normal>
+
+    <!-- = Selected appearance ========================= -->
+    <!-- =============================================== -->
+    <selection>
+      <background           color="3875d7"/>
+      <hidden               color="ffffff"/>
+      <folder               color="ffffff"/>
+      <archive              color="ffffff"/>
+      <symlink              color="ffffff"/>
+      <marked               color="ffffff"/>
+      <file                 color="ffffff"/>
+      <unfocused_background color="d0d0d0"/>
+    </selection>
+  </file_table>
+
+
+
+  <!-- = Shell appearance ============================== -->
+  <!-- ================================================= -->
+  <shell>
+    <font family="Monospaced" size ="12" bold="true"/>
+
+    <!-- = Default appearance ========================== -->
+    <!-- =============================================== -->
+    <normal>
+      <text       color="000000"/>
+      <background color="ffffff"/>
+    </normal>
+
+    <!-- = Selected appearance ========================= -->
+    <!-- =============================================== -->
+    <selection>
+      <text       color="ffffff"/>
+      <background color="3875d7"/>
+    </selection>
+  </shell>
+
+
+
+  <!-- = Shell history appearance ====================== -->
+  <!-- ================================================= -->
+  <shell_history>
+    <font family="Lucida Grande" size ="12"/>
+
+    <!-- = Default appearance ========================== -->
+    <!-- =============================================== -->
+    <normal>
+      <text       color="000000"/>
+      <background color="ffffff"/>
+    </normal>
+
+    <!-- = Selected appearance ========================= -->
+    <!-- =============================================== -->
+    <selection>
+      <text       color="ffffff"/>
+      <background color="3875d7"/>
+    </selection>
+  </shell_history>
+
+
+
+  <!-- = Editor appearance ============================= -->
+  <!-- ================================================= -->
+  <editor>
+    <font family="Lucida Grande" size ="12"/>
+
+    <!-- = Default appearance ========================== -->
+    <!-- =============================================== -->
+    <normal>
+      <text       color="000000"/>
+      <background color="ffffff"/>
+    </normal>
+
+    <!-- = Selected appearance ========================= -->
+    <!-- =============================================== -->
+    <selection>
+      <text       color="ffffff"/>
+      <background color="3875d7"/>
+    </selection>
+  </editor>
+
+
+
+  <!-- = Location bar appearance ======================= -->
+  <!-- ================================================= -->
+  <location_bar>
+    <font family="Lucida Grande" size ="12"/>
+    <progress color="3875d7" alpha="40"/>
+
+    <!-- = Default appearance ========================== -->
+    <!-- =============================================== -->
+    <normal>
+      <text       color="000000"/>
+      <background color="ffffff"/>
+    </normal>
+
+    <!-- = Selected appearance ========================= -->
+    <!-- =============================================== -->
+    <selection>
+      <text       color="ffffff"/>
+      <background color="3875d7"/>
+    </selection>
+  </location_bar>
+</theme>

@@ -5,10 +5,13 @@ import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.comp.combobox.EditableComboBox;
 import com.mucommander.ui.comp.combobox.EditableComboBoxListener;
 import com.mucommander.ui.comp.combobox.SaneComboBox;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.Iterator;
+import java.awt.Font;
+import java.awt.Color;
 
 /**
  * Widget used for shell command input.
@@ -19,7 +22,7 @@ import java.util.Iterator;
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class ShellComboBox extends EditableComboBox implements EditableComboBoxListener, ShellHistoryListener, PopupMenuListener {
+public class ShellComboBox extends EditableComboBox implements EditableComboBoxListener, ShellHistoryListener, PopupMenuListener, ThemeListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Input field used to type in commands. */
@@ -42,6 +45,14 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
         this.input = getTextField();
 
         addPopupMenuListener(this);
+        ThemeManager.addThemeListener(this);
+
+        // Sets colors and font according to the current theme.
+        setForeground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_TEXT));
+        setBackground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_BACKGROUND));
+        setSelectionForeground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_TEXT_SELECTED));
+        setSelectionBackground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_BACKGROUND_SELECTED));
+        setFont(ThemeManager.getCurrentFont(Theme.SHELL_HISTORY));
 
         // Fills the combo box with the current history.
         populateHistory();
@@ -148,4 +159,40 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
      * @return the current shell command.
      */
     public String getCommand() {return input.getText();}
+
+
+
+    // - Theme listening -------------------------------------------------------------
+    // -------------------------------------------------------------------------------
+    /**
+     * Receives theme color changes notifications.
+     * @param colorId identifier of the color that has changed.
+     * @param color   new value for the color.
+     */
+    public void colorChanged(int colorId, Color color) {
+        switch(colorId) {
+        case Theme.SHELL_HISTORY_TEXT:
+            setForeground(color);
+            break;
+        case Theme.SHELL_HISTORY_TEXT_SELECTED:
+            setSelectionForeground(color);
+            break;
+        case Theme.SHELL_HISTORY_BACKGROUND:
+            setBackground(color);
+            break;
+        case Theme.SHELL_HISTORY_BACKGROUND_SELECTED:
+            setSelectionBackground(color);
+            break;
+        }
+    }
+
+    /**
+     * Receives theme font changes notifications.
+     * @param fontId identifier of the font that has changed.
+     * @param font   new value for the font.
+     */
+    public void fontChanged(int fontId, Font font) {
+        if(fontId == Theme.SHELL_HISTORY)
+            setFont(font);
+    }
 }

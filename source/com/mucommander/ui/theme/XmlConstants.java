@@ -17,6 +17,8 @@ interface XmlConstants {
     public static final String ELEMENT_EDITOR               = "editor";
     /** Location bar description element. */
     public static final String ELEMENT_LOCATION_BAR         = "location_bar";
+    /** Shell history description element. */
+    public static final String ELEMENT_SHELL_HISTORY        = "shell_history";
 
 
 

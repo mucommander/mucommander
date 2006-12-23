@@ -5,6 +5,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +21,7 @@ import java.io.InputStreamReader;
  * @author Maxence Bernard
  */
 //public class TextViewer extends FileViewer implements ActionListener, WindowListener {
-public class TextViewer extends FileViewer implements ActionListener {
+public class TextViewer extends FileViewer implements ActionListener, ThemeListener {
 
     //	private String encoding;
 
@@ -36,7 +37,17 @@ public class TextViewer extends FileViewer implements ActionListener {
         setLayout(new BorderLayout());
         textArea = new JTextArea();
         textArea.setEditable(false);
+        initTheme();
         add(textArea, BorderLayout.NORTH);
+        ThemeManager.addThemeListener(this);
+    }
+
+    private void initTheme() {
+        textArea.setForeground(ThemeManager.getCurrentColor(Theme.EDITOR_TEXT));
+        textArea.setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND));
+        textArea.setSelectedTextColor(ThemeManager.getCurrentColor(Theme.EDITOR_TEXT_SELECTED));
+        textArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_SELECTED));
+        textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR));
     }
 
 	
@@ -83,4 +94,42 @@ public class TextViewer extends FileViewer implements ActionListener {
             textArea.selectAll();
     }
 
+
+
+    // - Theme listening -------------------------------------------------------------
+    // -------------------------------------------------------------------------------
+    /**
+     * Receives theme color changes notifications.
+     * @param colorId identifier of the color that has changed.
+     * @param color   new value for the color.
+     */
+    public void colorChanged(int colorId, Color color) {
+        switch(colorId) {
+        case Theme.EDITOR_TEXT:
+            textArea.setForeground(color);
+            break;
+
+        case Theme.EDITOR_BACKGROUND:
+            textArea.setBackground(color);
+            break;
+
+        case Theme.EDITOR_TEXT_SELECTED:
+            textArea.setSelectedTextColor(color);
+            break;
+
+        case Theme.EDITOR_BACKGROUND_SELECTED:
+            textArea.setSelectionColor(color);
+            break;
+        }
+    }
+
+    /**
+     * Receives theme font changes notifications.
+     * @param fontId identifier of the font that has changed.
+     * @param font   new value for the font.
+     */
+    public void fontChanged(int fontId, Font font) {
+        if(fontId == Theme.EDITOR)
+            textArea.setFont(font);
+    }
 }

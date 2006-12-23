@@ -4,13 +4,14 @@ import com.mucommander.Debug;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.*;
+import java.lang.ref.*;
+import java.io.*;
 
 /**
  * Describes a set of custom colors and fonts that can be applied to muCommander.
  * <p>
  * There are two different types of themes in muCommander: predefined ones and
- * user theme. A theme's type can be checked through the {@link #isUserTheme()} method.<break/>
+ * current one. A theme's type can be checked through the {@link #isCurrentTheme()} method.<break/>
  * Predefined themes cannot be modified, and will throw an <code>IllegalStateException</code>
  * if it is attempted.<br/>
  * </p>
@@ -23,7 +24,7 @@ import java.util.*;
  *
  * field = new JTextField();
  * if(theme.hasCustomFont(Theme.LOCATION_BAR))
- *     field.setFont(theme.getCustomFont(Theme.LOCATION_BAR));
+ *     field.setFont(theme.getFont(Theme.LOCATION_BAR));
  * </pre>
  * </p>
  * @author Nicolas Rinaudo
@@ -44,18 +45,9 @@ public class Theme {
     // a lot easier to fix.
 
     /** Number of known fonts. */
-    private static final int FONT_COUNT  = 4;
+    static final int FONT_COUNT  = 5;
     /** Number of known colors. */
-    private static final int COLOR_COUNT = 30;
-
-
-
-    // - Listeners -----------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /** Registered theme listeners. */
-    private static WeakHashMap listeners      = new WeakHashMap();
-    /** Whether theme events should be triggered. */
-    private        boolean     triggerEvents;
+    static final int COLOR_COUNT = 34;
 
 
 
@@ -69,6 +61,8 @@ public class Theme {
     public static final int EDITOR                             = 2;
     /** Font used in the location bar. */
     public static final int LOCATION_BAR                       = 3;
+    /** Font used in the shell history. */
+    public static final int SHELL_HISTORY                      = 4;
 
 
 
@@ -134,263 +128,177 @@ public class Theme {
     public static final int LOCATION_BAR_BACKGROUND_SELECTED   = 28;
     /** Color for the borders of the file table panels. */
     public static final int FILE_TABLE_BORDER                  = 29;
+    /** Color used for the shell history text. */
+    public static final int SHELL_HISTORY_TEXT                  = 30;
+    /** Color used for the shell history background. */
+    public static final int SHELL_HISTORY_BACKGROUND           = 31;
+    /** Selected version of the color used for the shell history text. */
+    public static final int SHELL_HISTORY_TEXT_SELECTED        = 32;
+    /** Selected version of the color used for the shell history background. */
+    public static final int SHELL_HISTORY_BACKGROUND_SELECTED  = 33;
 
 
 
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /** Colors known to the theme. */
-    private Color[] colors;
-    /** Fonts known to the theme. */
-    private Font[]  fonts;
-    /** Whether or not this is the user theme. */
-    private boolean isUserTheme;
+    /** Theme name. */
+    private String        name;
+    /** Theme type. */
+    private int           type;
+    /** Path to the theme in the type. */
+    private String        path;
+    /** Soft reference to the theme data. */
+    private SoftReference data;
+
 
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Only classes from the theme package are allowed to create a new theme.
+     * Creates a new theme with the specified name, located in the specified type.
+     * @param  type location of the theme data file.
+     * @param  name   name of the theme.
+     * @param  path   path to the theme (type dependant).
+     * @throws Exception thrown if an error occurs while loading the theme.
      */
-    Theme() {
-        colors = new Color[COLOR_COUNT];
-        fonts  = new Font[FONT_COUNT];
+    Theme(int type, String name, String path) throws Exception {
+        this.name = name;
+        this.type = type;
+        this.path = path;
 
-        // The default value must be true, otherwise the ThemeReader won't be able
-        // to set the theme's values.
-        // Once loading is done however, the ThemeManager is expected to set
-        // isUserTheme to its proper value.
-        isUserTheme = true;
+        // If the data is not available and we're not dealing with a user theme, throw an exception.
+        // User themes are a bit different: they *must* be present, even if only with default values.
+        if(getThemeData() == null) {
+            if(type != ThemeManager.USER_THEME)
+                throw new Exception();
+        }
+    }
+
+    /**
+     * Creates a user theme without loading its data.
+     * <p>
+     * Developers should be very careful using this constructor: they might end up overwriting
+     * a perfectly legal user theme without any hope of recovery.
+     * </p>
+     */
+    Theme(String name, ThemeData data) {
+        this.name = name;
+        this.type = ThemeManager.USER_THEME;
+        this.data = new SoftReference(data);
+    }
+
+    void importData(ThemeData newData) {
+        int       i;
+        ThemeData oldData;
+
+        if((oldData = getThemeData()) == null)
+            oldData = new ThemeData();
+        for(i = 0; i < FONT_COUNT; i++)
+            oldData.setFont(i, newData.getFont(i));
+        for(i = 0; i < COLOR_COUNT; i++)
+            oldData.setColor(i, newData.getColor(i));
     }
 
 
-
-    // - Use theme access ----------------------------------------------------------------
+    // - Data retrieval ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Sets the <code>isUserTheme</code> flag.
-     * <p>
-     * This method is only accessible to classes from within the theme package, as we don't
-     * want other classes to play silly bugger with predefined themes.
-     * </p>
-     * @param b new value for the <code>isUserTheme</code> flag.
+     * Returns the theme's type.
+     * @return the theme's type.
      */
-    void setUserTheme(boolean b) {isUserTheme = b;}
+    public int getType() {return type;}
 
     /**
-     * Returns <code>true</code> if this is the user theme, <code>false</code> otherwise.
-     * <p>
-     * The user theme is the only one that can be modified - predefined themes are read only.
-     * Should a class need to modify a predefined theme, it must first copy all of that theme's
-     * attributes into the user one, then modify it.
-     * </p>
-     * @return <code>true</code> if this is the user theme, <code>false</code> otherwise.
+     * Returns the theme's name.
+     * @return the theme's name.
      */
-    public boolean isUserTheme() {return isUserTheme;}
+    public String getName() {return name;}
 
-
-
-    // - Theme values modification -------------------------------------------------------
-    // -----------------------------------------------------------------------------------
     /**
-     * Sets the specified font.
-     * @param  id                       identifier of the font to set.
-     * @param  font                     new font for the specified id.
-     * @throws IllegalStateException    if this is not the user theme.
-     * @throws IllegalArgumentException if <code>id</code> is not a legal font id.
+     * Returns the path to the theme.
+     * @return the path to the theme.
      */
-    public synchronized void setFont(int id, Font font) {
-        Font buffer; // Buffer for the old font in case this theme needs to trigger events.
+    public String getPath() {return path;}
 
-        // Makes sure this theme is modifiable.
-        if(!isUserTheme) {
-            if(Debug.ON) Debug.trace("Tried to modify a non user theme font.");
-            throw new IllegalStateException();
-        }
+    /**
+     * Returns this theme's data.
+     * <p>
+     * If the data has not yet been loaded, or has been garbage collected, this
+     * method will load it.
+     * </p>
+     * @return this theme's data.
+     */
+    ThemeData getThemeData() {
+        if(data == null || data.get() == null) {
+            InputStream in;
 
-        // Makes sure the font id is legal (only in Debug mode).
-        if(Debug.ON && (id < 0 || id >= FONT_COUNT)) {
-            Debug.trace("Illegal font id: " + id);
-            throw new IllegalArgumentException();
-        }
-
-        // Triggers theme events if necessary.
-        if(triggerEvents) {
-            buffer    = fonts[id];
-            fonts[id] = font;
-
-            // Compares the old and new fonts to make sure the event must be triggered.
-            if(font == null) {
-                if(buffer == null)
-                    return;
+            in = null;
+            try {data = new SoftReference(ThemeReader.read(in = ThemeManager.openInputStream(type, path)));}
+            catch(Exception e) {
+                // Logs errors in debug mode.
+                if(Debug.ON) {
+                    Debug.trace("Failed to load theme " + path);
+                    Debug.trace(e);
+                }
+                return null;
             }
-            else if(font.equals(buffer))
-                return;
-
-            triggerFontEvent(id, buffer, font);
+            finally {
+                try {in.close();}
+                catch(Exception e) {}
+            }
         }
-        else
-            fonts[id] = font;
+        return (ThemeData)data.get();
     }
 
     /**
-     * Sets the specified color.
-     * @param  id                       identifier of the color to set.
-     * @param  color                    new color for the specified id.
-     * @throws IllegalStateException    if this is not the user theme.
+     * Returns the theme's requested font.
+     * <p>
+     * If the theme doesn't use a custom value for the specified font, this method will return null.
+     * </p>
+     * @param  id                       identifier of the font to retrieve.
+     * @return                          the requested font if it exists, <code>null</code> otherwise.
      * @throws IllegalArgumentException if <code>id</code> is not a legal color id.
      */
-    public synchronized void setColor(int id, Color color) {
-        Color buffer; // Buffer for the old color in case this theme needs to trigger events.
+    public Font getFont(int id) {
+        ThemeData buffer;
+        Font      font;
 
-        // Makes sure this theme is modifiable.
-        if(!isUserTheme) {
-            if(Debug.ON) Debug.trace("Tried to modify a non user theme color.");
-            throw new IllegalStateException();
-        }
-
-        // Makes sure the color id is legal (only in Debug mode).
-        if(Debug.ON && (id < 0 || id >= COLOR_COUNT)) {
-            Debug.trace("Illegal color id: " + id);
-            throw new IllegalArgumentException();
-        }
-
-        // Triggers theme events if necessary.
-        if(triggerEvents) {
-            buffer     = colors[id];
-            colors[id] = color;
-
-            // Compares the old and new colors to make sure the event must be triggered.
-            if(color == null) {
-                if(buffer == null)
-                    return;
-            }
-            else if(color.equals(buffer))
-                return;
-
-            triggerColorEvent(id, buffer, color);
-        }
-        else
-            colors[id] = color;
-    }
-
-
-
-    // - Theme values retrieval ----------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * Returns <code>true</code> if the requested font has a custom value with the current theme.
-     * @param  id                   identifier of the font to check for.
-     * @return                      <code>true</code> if the requested font has a custom value with the current theme, <code>false</code> otherwise.
-     * @see     #getCustomFont(int)
-     */
-    public boolean hasCustomFont(int id) {return fonts[id] != null;}
-
-    /**
-     * Returns <code>true</code> if the requested color has a custom value with the current theme.
-     * @param  id                   identifier of the color to check for.
-     * @return                      <code>true</code> if the requested color has a custom value with the current theme, <code>false</code> otherwise.
-     * @see     #getCustomColor(int)
-     */
-    public boolean hasCustomColor(int id) {return colors[id] != null;}
-
-    /**
-     * Returns the requested font.
-     * <p>
-     * Note that this method might return <code>null</code> if the requested font hasn't
-     * been set by the current theme. In that case, UI components should be initialised
-     * with their default system font.
-     * </p>
-     * @param  id                       identifier of the requested font.
-     * @return                          the requested font.
-     * @throws IllegalArgumentException if <code>id</code> is not a legal font id.
-     * @see    #hasCustomFont(int)
-     */
-    public Font getCustomFont(int id) {
-        // Makes sure the font id is legal.
-        if(id < 0 || id >= FONT_COUNT) {
-            if(Debug.ON) Debug.trace("Illegal font id: " + id);
-            throw new IllegalArgumentException();
-        }
-
-        return fonts[id];
+        font = null;
+        if((buffer = getThemeData()) != null)
+            font = buffer.getFont(id);
+        if(font == null)
+            return ThemeManager.getDefaultFont(id);
+        return font;
     }
 
     /**
-     * Returns the requested color.
+     * Returns the theme's requested color.
      * <p>
-     * Note that this method might return <code>null</code> if the requested color hasn't
-     * been set by the current theme. In that case, UI components should be initialised
-     * with their default system color.
+     * If the theme doesn't use a custom value for the specified color, this method will return null.
      * </p>
-     * @param  id                       identifier of the requested color.
-     * @return                          the requested color.
+     * @param  id                       identifier of the color to retrieve.
+     * @return                          the requested color if it exists, <code>null</code> otherwise.
      * @throws IllegalArgumentException if <code>id</code> is not a legal color id.
-     * @see    #hasCustomColor(int)
      */
-    public Color getCustomColor(int id) {
-        // Makes sure the color id is legal.
-        if(id < 0 || id >= COLOR_COUNT) {
-            if(Debug.ON) Debug.trace("Illegal color id: " + id);
-            throw new IllegalArgumentException();
-        }
+    public Color getColor(int id) {
+        ThemeData buffer;
+        Color     color;
 
-        return colors[id];
+        color = null;
+        if((buffer = getThemeData()) != null)
+            color = buffer.getColor(id);
+        if(color == null)
+            return ThemeManager.getDefaultColor(id);
+        return color;
     }
 
 
 
-    // - Theme listening -----------------------------------------------------------------
+    // - Misc. ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Returns <code>true</code> if the theme is the one triggering theme events.
-     * @return <code>true</code> if the theme is the one triggering theme events, <code>false</code> otherwise.
+     * Returns the theme's name.
+     * @return the theme's name.
      */
-    boolean isTriggeringEvents() {return triggerEvents;}
-
-    /**
-     * Changes the theme's event triggering status.
-     * @param flag whether or not the theme should trigger events.
-     */
-    void setTriggerEvents(boolean flag) {triggerEvents = flag;}
-
-    /**
-     * Registers the specified listener.
-     * @param listener object that will receive theme events from now on.
-     */
-    public static synchronized void addThemeListener(ThemeListener listener) {listeners.put(listener, null);}
-
-    /**
-     * Removes the specified listener from the list of registered theme listeners.
-     * @param listener theme listener to remove from the list.
-     */
-    public static synchronized void removeThemeListener(ThemeListener listener) {listeners.remove(listener);}
-
-    /**
-     * Notifies all listeners that a font has been modified.
-     * @param fontId  identifier of the font that has been changed.
-     * @param oldFont font value prior to the change.
-     * @param newFont font value after the change.
-     */
-    private static synchronized void triggerFontEvent(int fontId, Font oldFont, Font newFont) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ThemeListener)iterator.next()).fontChanged(fontId, oldFont, newFont);
-    }
-
-    /**
-     * Notifies all listeners that a color has been modified.
-     * @param colorId  identifier of the color that has been changed.
-     * @param oldColor color value prior to the change.
-     * @param newColor color value after the change.
-     */
-    private static synchronized void triggerColorEvent(int colorId, Color oldColor, Color newColor) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ThemeListener)iterator.next()).colorChanged(colorId, oldColor, newColor);
-    }
+    public String toString() {return getName();}
 }

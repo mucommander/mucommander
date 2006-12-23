@@ -124,6 +124,13 @@
   <property name="api-docs"       location="${docs}/api"/>
 
 
+  <!-- Name of the theme description file.                     -->
+  <property name="themes.desc"    value="/themes.xml"/>
+  <!-- Where to read the themes from.                          -->
+  <property name="themes.in"      location="${res}/themes"/>
+  <!-- Where in ${classes} to copy the different themes.       -->
+  <property name="themes.out"     value="/themes"/>
+
   <!-- Application's main class.                               -->
   <property name="main-class"     value="com.mucommander.Launcher"/>
 
@@ -138,18 +145,26 @@
 
   <!-- Copies the project's resources.                         -->
   <!-- All resources will be copied in ${classes}.             -->
-  <target name="resources">
+  <target name="resources" depends="tools-jar">
     <echo>Copying resources...</echo>
     <copy todir="${classes}">
       <fileset dir="${images}">
         <include name="**/*"/>
       </fileset>
     </copy>
-    <copy file="${dictionary}"            tofile="${classes}/dictionary.txt"/>
-    <copy file="${res}/mime.types"        todir="${classes}"/>
-    <copy file="${res}/toolbar.xml"       todir="${classes}"/>
-    <copy file="${res}/command_bar.xml"   todir="${classes}"/>
-    <copy file="${res}/action_keymap.xml" todir="${classes}"/>
+
+    <copy  file="${dictionary}"                   tofile="${classes}/dictionary.txt"/>
+    <copy  file="${res}/mime.types"               todir="${classes}"/>
+    <copy  file="${res}/toolbar.xml"              todir="${classes}"/>
+    <copy  file="${res}/command_bar.xml"          todir="${classes}"/>
+    <copy  file="${res}/action_keymap.xml"        todir="${classes}"/>
+
+    <echo>Generating themes...</echo>
+    <taskdef name="resources" classname="com.mucommander.ant.res.ResourceTask" classpath="${tools.jar}"/>
+    <resources outfile="${classes}/${themes.desc}" outdir="${classes}">
+      <file out="${themes.out}/RetroCommander.xml" in="${themes.in}/RetroCommander.xml"/>
+      <file out="${themes.out}/ClassicCommander.xml" in="${themes.in}/ClassicCommander.xml"/>
+    </resources>
   </target>
 
   <!-- Deletes any dynamically generated file, effectively     -->
@@ -283,8 +298,10 @@
       <field name="HOMEPAGE_URL"        value="${url.homepage}"/>
       <field name="FORUMS_URL"          value="${url.forums}"/>
       <field name="DONATION_URL"        value="${url.donation}"/>
-      <field name="BUG_REPOSITORY_URL"  value="${url.bug-repository}"/>
       <field name="DICTIONARY_FILE"     value="/dictionary.txt"/>
+      <field name="THEMES_FILE"         value="${themes.desc}"/>
+      <field name="BUG_REPOSITORY_URL"  value="${url.bug-repository}"/>
+      <field name="DEFAULT_THEME"       value="ClassicCommander"/>
     </javaw>
   </target>
 
@@ -425,6 +442,7 @@
            encoding="utf-8" source="1.4" target="1.4">
       <src path="${source}/com/mucommander/ant"/>
       <src path="${source}/com/mucommander/xml"/>
+      <src path="${source}/com/mucommander/res"/>
     </javac>
   </target>
 

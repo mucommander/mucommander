@@ -2,6 +2,7 @@ package com.mucommander.ui.theme;
 
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
+import com.mucommander.Debug;
 
 import java.io.*;
 import java.util.*;
@@ -16,33 +17,39 @@ class ThemeReader implements ContentHandler, XmlConstants {
     // - XML parser states ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Parsing hasn't started yet. */
-    private static final int STATE_UNKNOWN               = 0;
+    private static final int STATE_UNKNOWN                = 0;
     /** Parsing the root element. */
-    private static final int STATE_ROOT                  = 1;
+    private static final int STATE_ROOT                   = 1;
     /** Parsing the table element.*/
-    private static final int STATE_TABLE                 = 2;
+    private static final int STATE_TABLE                  = 2;
     /** Parsing the shell element. */
-    private static final int STATE_SHELL                 = 3;
+    private static final int STATE_SHELL                  = 3;
     /** Parsing the editor element. */
-    private static final int STATE_EDITOR                = 4;
+    private static final int STATE_EDITOR                 = 4;
     /** Parsing the location bar element. */
-    private static final int STATE_LOCATION_BAR          = 5;
+    private static final int STATE_LOCATION_BAR           = 5;
     /** Parsing the table.normal element. */
-    private static final int STATE_TABLE_NORMAL          = 6;
+    private static final int STATE_TABLE_NORMAL           = 6;
     /** Parsing the shell.normal element. */
-    private static final int STATE_SHELL_NORMAL          = 7;
+    private static final int STATE_SHELL_NORMAL           = 7;
     /** Parsing the table.selected element. */
-    private static final int STATE_TABLE_SELECTED        = 8;
+    private static final int STATE_TABLE_SELECTED         = 8;
     /** Parsing the shell.selected element. */
-    private static final int STATE_SHELL_SELECTED        = 9;
+    private static final int STATE_SHELL_SELECTED         = 9;
     /** Parsing the editor.normal element. */
-    private static final int STATE_EDITOR_NORMAL         = 10;
+    private static final int STATE_EDITOR_NORMAL          = 10;
     /** Parsing the location bar.normal element. */
-    private static final int STATE_LOCATION_BAR_NORMAL   = 11;
+    private static final int STATE_LOCATION_BAR_NORMAL    = 11;
     /** Parsing the editor.selected element. */
-    private static final int STATE_EDITOR_SELECTED       = 12;
+    private static final int STATE_EDITOR_SELECTED        = 12;
     /** Parsing the location bar.selected element. */
-    private static final int STATE_LOCATION_BAR_SELECTED = 13;
+    private static final int STATE_LOCATION_BAR_SELECTED  = 13;
+    /** Parsing the shell_history element. */
+    private static final int STATE_SHELL_HISTORY          = 14;
+    /** Parsing the shell_history.normal element. */
+    private static final int STATE_SHELL_HISTORY_NORMAL   = 15;
+    /** Parsing the shell_history.selected element. */
+    private static final int STATE_SHELL_HISTORY_SELECTED = 16;
 
 
 
@@ -58,9 +65,9 @@ class ThemeReader implements ContentHandler, XmlConstants {
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Theme that is currently being built. */
-    private Theme theme;
+    private ThemeData theme;
     /** Current state of the XML parser. */
-    private int   state;
+    private int       state;
 
 
 
@@ -83,9 +90,9 @@ class ThemeReader implements ContentHandler, XmlConstants {
     /**
      * Creates a new theme reader.
      */
-    private ThemeReader(Theme t) {
-        theme     = t;
-        state     = STATE_UNKNOWN;
+    private ThemeReader(ThemeData t) {
+        theme = t;
+        state = STATE_UNKNOWN;
     }
 
     /**
@@ -94,10 +101,10 @@ class ThemeReader implements ContentHandler, XmlConstants {
      * @return              the parsed theme.
      * @exception Exception thrown if an error occured while reading the theme.
      */
-    public static Theme read(InputStream in) throws Exception {
-        Theme buffer;
+    public static ThemeData read(InputStream in) throws Exception {
+        ThemeData buffer;
 
-        new Parser().parse(in, new ThemeReader(buffer = new Theme()), "UTF-8");
+        new Parser().parse(in, new ThemeReader(buffer = new ThemeData()), "UTF-8");
         return buffer;
     }
 
@@ -143,6 +150,13 @@ class ThemeReader implements ContentHandler, XmlConstants {
             state = STATE_LOCATION_BAR;
         }
 
+        // Shell history declaration.
+        else if(name.equals(ELEMENT_SHELL_HISTORY)) {
+            if(state != STATE_ROOT)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_SHELL_HISTORY;
+        }
+
         // Normal element declaration.
         else if(name.equals(ELEMENT_NORMAL)) {
             if(state == STATE_SHELL)
@@ -153,6 +167,8 @@ class ThemeReader implements ContentHandler, XmlConstants {
                 state = STATE_EDITOR_NORMAL;
             else if(state == STATE_LOCATION_BAR)
                 state = STATE_LOCATION_BAR_NORMAL;
+            else if(state == STATE_SHELL_HISTORY)
+                state = STATE_SHELL_HISTORY_NORMAL;
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -167,6 +183,8 @@ class ThemeReader implements ContentHandler, XmlConstants {
                 state = STATE_EDITOR_SELECTED;
             else if(state == STATE_LOCATION_BAR)
                 state = STATE_LOCATION_BAR_SELECTED;
+            else if(state == STATE_SHELL_HISTORY)
+                state = STATE_SHELL_HISTORY_SELECTED;
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -181,6 +199,8 @@ class ThemeReader implements ContentHandler, XmlConstants {
                 theme.setFont(Theme.EDITOR, createFont(attributes));
             else if(state == STATE_LOCATION_BAR)
                 theme.setFont(Theme.LOCATION_BAR, createFont(attributes));
+            else if(state == STATE_SHELL_HISTORY)
+                theme.setFont(Theme.SHELL_HISTORY, createFont(attributes));
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -224,6 +244,12 @@ class ThemeReader implements ContentHandler, XmlConstants {
                 theme.setColor(Theme.LOCATION_BAR_BACKGROUND, createColor(attributes));
             else if(state == STATE_LOCATION_BAR_SELECTED)
                 theme.setColor(Theme.LOCATION_BAR_BACKGROUND_SELECTED, createColor(attributes));
+
+            else if(state == STATE_SHELL_HISTORY_NORMAL)
+                theme.setColor(Theme.SHELL_HISTORY_BACKGROUND, createColor(attributes));
+            else if(state == STATE_SHELL_HISTORY_SELECTED)
+                theme.setColor(Theme.SHELL_HISTORY_BACKGROUND_SELECTED, createColor(attributes));
+
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -296,12 +322,17 @@ class ThemeReader implements ContentHandler, XmlConstants {
                 throw createIllegalElementDeclaration(name);
         }
 
-        // Shell text color.
+        // Text color
         else if(name.equals(ELEMENT_TEXT)) {
             if(state == STATE_SHELL_NORMAL)
                 theme.setColor(Theme.SHELL_TEXT, createColor(attributes));
             else if(state == STATE_SHELL_SELECTED)
                 theme.setColor(Theme.SHELL_TEXT_SELECTED, createColor(attributes));
+
+            else if(state == STATE_SHELL_HISTORY_NORMAL)
+                theme.setColor(Theme.SHELL_HISTORY_TEXT, createColor(attributes));
+            else if(state == STATE_SHELL_HISTORY_SELECTED)
+                theme.setColor(Theme.SHELL_HISTORY_TEXT_SELECTED, createColor(attributes));
 
             else if(state == STATE_EDITOR_NORMAL)
                 theme.setColor(Theme.EDITOR_TEXT, createColor(attributes));
@@ -345,6 +376,13 @@ class ThemeReader implements ContentHandler, XmlConstants {
             state = STATE_ROOT;
         }
 
+        // Shell history declaration.
+        else if(name.equals(ELEMENT_SHELL_HISTORY)) {
+            if(state != STATE_SHELL_HISTORY)
+                throw createIllegalElementClosing(name);
+            state = STATE_ROOT;
+        }
+
         // Editor declaration.
         else if(name.equals(ELEMENT_EDITOR)) {
             if(state != STATE_EDITOR)
@@ -363,6 +401,8 @@ class ThemeReader implements ContentHandler, XmlConstants {
         else if(name.equals(ELEMENT_NORMAL)) {
             if(state == STATE_SHELL_NORMAL)
                 state = STATE_SHELL;
+            else if(state == STATE_SHELL_HISTORY_NORMAL)
+                state = STATE_SHELL_HISTORY;
             else if(state == STATE_TABLE_NORMAL)
                 state = STATE_TABLE;
             else if(state == STATE_EDITOR_NORMAL)
@@ -377,6 +417,8 @@ class ThemeReader implements ContentHandler, XmlConstants {
         else if(name.equals(ELEMENT_SELECTION)) {
             if(state == STATE_SHELL_SELECTED)
                 state = STATE_SHELL;
+            else if(state == STATE_SHELL_HISTORY_SELECTED)
+                state = STATE_SHELL_HISTORY;
             else if(state == STATE_TABLE_SELECTED)
                 state = STATE_TABLE;
             else if(state == STATE_EDITOR_SELECTED)
@@ -456,8 +498,10 @@ class ThemeReader implements ContentHandler, XmlConstants {
         int    color;
 
         // Retrieves the color attribute's value.
-        if((buffer = (String)attributes.get(ATTRIBUTE_COLOR)) == null)
-            throw new Exception("Missing color attribute");
+        if((buffer = (String)attributes.get(ATTRIBUTE_COLOR)) == null) {
+            if(Debug.ON) Debug.trace("Missing color attribute in theme.");
+            return null;
+        }
         color = Integer.parseInt(buffer, 16);
 
         // Retrieves the transparency attribute's value..

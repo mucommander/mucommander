@@ -19,16 +19,10 @@ public abstract class FileViewer extends JPanel {
     /** File currently being viewed */
     protected AbstractFile file;
 	
-    /** Default background color */
-    public final static Color BG_COLOR = new Color(0xFFFFFF);
-
-	
     /**
      * Creates a new FileViewer.
      */
-    public FileViewer() {
-        setBackground(BG_COLOR);
-    }
+    public FileViewer() {}
 	
 
     /**

@@ -68,6 +68,10 @@ done:ZH_CN:完成
 done:SI:Narejeno
 done:RO:Închide
 
+# Used for the label of the user theme
+user_theme:EN:User theme
+user_theme:FR:Thème utilisateur
+
 
 
 
@@ -5250,6 +5254,33 @@ prefs_dialog.shell_colors.text_color:RO:Text
 
 prefs_dialog.shell_colors.background_color:EN:$[prefs_dialog.background_color]
 prefs_dialog.shell_colors.selection_color:EN:$[prefs_dialog.selection_color]
+
+
+
+
+
+
+
+
+
+prefs_dialog.themes:EN:Themes
+prefs_dialog.themes:FR:Thèmes
+
+
+
+
+
+prefs_dialog.theme_warning:EN:This will overwrite the user defined theme. Do you wish to proceed?
+prefs_dialog.theme_warning:FR:Cette opération va modifier le thème utilisateur. Voulez-vous continuer?
+
+
+
+
+
+
+
+
+
 
 # Mail tab
 

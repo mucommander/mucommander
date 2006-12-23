@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme>
+  <!-- = File table appearance ========================= -->
+  <!-- ================================================= -->
+  <file_table>
+    <font   family="Rockwell Extra Bold" size  ="12" bold="false" italic="false"/>
+    <border color="ffffff"/>
+
+    <!-- = Default appearance ========================== -->
+    <!-- =============================================== -->
+    <normal>
+      <background           color="4fffff" alpha="fa"/>
+      <hidden               color="666666"/>
+      <folder               color="000000"/>
+      <archive              color="000000"/>
+      <symlink              color="cc00cc"/>
+      <marked               color="cc0000"/>
+      <file                 color="000000"/>
+      <unfocused_background color="ffffff"/>
+    </normal>
+
+    <!-- = Selected appearance ========================= -->
+    <!-- =============================================== -->
+    <selection>
+      <background           color="000099"/>
+      <hidden               color="666666"/>
+      <folder               color="000000"/>
+      <archive              color="000000"/>
+      <symlink              color="cc00cc"/>
+      <marked               color="cc0000"/>
+      <file                 color="ffffff"/>
+      <unfocused_background color="cccccc"/>
+    </selection>
+  </file_table>
+
+
+
+  <!-- = Shell appearance ============================== -->
+  <!-- ================================================= -->
+  <shell>
+    <font family="SansSerif" size  ="12" bold="false" italic="false"/>
+
+    <!-- = Default appearance ========================== -->
+    <!-- =============================================== -->
+    <normal>
+      <text       color="009900"/>
+      <background color="000000"/>
+    </normal>
+
+    <!-- = Selected appearance ========================= -->
+    <!-- =============================================== -->
+    <selection>
+      <text       color="009900"/>
+      <background color="bbbbbb"/>
+    </selection>
+  </shell>
+
+
+
+  <!-- = Shell history appearance ====================== -->
+  <!-- ================================================= -->
+  <shell_history>
+    <font family="Monospaced" size ="12" bold="true"/>
+
+    <!-- = Default appearance ========================== -->
+    <!-- =============================================== -->
+    <normal>
+      <text       color="000000"/>
+      <background color="ffffff"/>
+    </normal>
+
+    <!-- = Selected appearance ========================= -->
+    <!-- =============================================== -->
+    <selection>
+      <text       color="ffffff"/>
+      <background color="3875d7"/>
+    </selection>
+  </shell_history>
+
+
+
+
+  <!-- = Editor appearance ============================= -->
+  <!-- ================================================= -->
+  <editor>
+    <font family="SansSerif" size  ="12" bold="false" italic="false"/>
+
+    <!-- = Default appearance ========================== -->
+    <!-- =============================================== -->
+    <normal>
+      <text       color="009900"/>
+      <background color="000000"/>
+    </normal>
+
+    <!-- = Selected appearance ========================= -->
+    <!-- =============================================== -->
+    <selection>
+      <text       color="009900"/>
+      <background color="bbbbbb"/>
+    </selection>
+  </editor>
+
+
+
+  <!-- = Location bar appearance ======================= -->
+  <!-- ================================================= -->
+  <location_bar>
+    <font family="SansSerif" size  ="12" bold="false" italic="false"/>
+    <progress color="ffffff"/>
+
+    <!-- = Default appearance ========================== -->
+    <!-- =============================================== -->
+    <normal>
+      <text       color="009900"/>
+      <background color="000000"/>
+    </normal>
+
+    <!-- = Selected appearance ========================= -->
+    <!-- =============================================== -->
+    <selection>
+      <text       color="009900"/>
+      <background color="bbbbbb"/>
+    </selection>
+  </location_bar>
+</theme>

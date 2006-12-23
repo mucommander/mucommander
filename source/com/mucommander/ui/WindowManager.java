@@ -10,6 +10,7 @@ import com.mucommander.auth.MappedCredentials;
 import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -570,6 +571,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             String lnfName = event.getValue();
 			
             setLookAndFeel(lnfName);
+
+            // Forces the whole UI to refresh is colors using the current theme values.
+            ThemeManager.forceRefresh();
         }
     
     	return true;

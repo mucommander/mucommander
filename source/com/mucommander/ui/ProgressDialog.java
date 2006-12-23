@@ -14,6 +14,7 @@ import com.mucommander.ui.comp.button.CollapseExpandButton;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -438,11 +439,11 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
      */
     private class SpeedGraph extends JPanel {
 
-        private final Color BACKGROUND_COLOR = ConfigurationManager.getVariableColor(ConfigurationVariables.BACKGROUND_COLOR, null);
+        private final Color BACKGROUND_COLOR = ThemeManager.getCurrentColor(Theme.FILE_BACKGROUND);
 
-        private final Color GRAPH_COLOR = ConfigurationManager.getVariableColor(ConfigurationVariables.SELECTION_BACKGROUND_COLOR, null);
+        private final Color GRAPH_COLOR = ThemeManager.getCurrentColor(Theme.FILE_BACKGROUND_SELECTED);
 
-        private final Color BPS_LIMIT_COLOR = ConfigurationManager.getVariableColor(ConfigurationVariables.MARKED_FILE_COLOR, null);
+        private final Color BPS_LIMIT_COLOR = ThemeManager.getCurrentColor(Theme.MARKED);
 
         private final int LINE_SPACING = 6;
 

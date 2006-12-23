@@ -249,6 +249,10 @@ public class Launcher {
         splashScreen.setLoadingMessage("Loading command bar description...");
         com.mucommander.ui.CommandBar.loadDescriptionFile();
 
+        // Loads the themes.
+        splashScreen.setLoadingMessage("Loading theme...");
+        com.mucommander.ui.theme.ThemeManager.loadThemes();
+
         // Starts Bonjour services discovery (only if enabled in prefs)
         splashScreen.setLoadingMessage("Starting Bonjour services discovery...");
         com.mucommander.bonjour.BonjourDirectory.setActive(ConfigurationManager.getVariableBoolean(ConfigurationVariables.ENABLE_BONJOUR_DISCOVERY, ConfigurationVariables.DEFAULT_ENABLE_BONJOUR_DISCOVERY));

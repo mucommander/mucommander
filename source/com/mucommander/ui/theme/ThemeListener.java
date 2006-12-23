@@ -11,32 +11,22 @@ public interface ThemeListener {
     /**
      * Notifies the listener that a color has been changed.
      * <p>
-     * Note that the color parameters might be set to <code>null</code>.
+     * Note that the color parameter might be set to <code>null</code>.
      * This means that the corresponding color is the system default.
      * </p>
-     * <p>
-     * This method is guaranteed to only be called if <code>oldColor</code>
-     * and <code>newColor</code> actually differ.
-     * </p>
-     * @param colorId  identifier of the color that has changed.
-     * @param oldColor old value for the color.
-     * @param newColor new value for the color.
+     * @param colorId identifier of the color that has changed.
+     * @param color   new value for the color.
      */
-    public void colorChanged(int colorId, Color oldColor, Color newColor);
+    public void colorChanged(int colorId, Color color);
 
     /**
      * Notifies the listener that a font has been changed.
      * <p>
-     * Note that the font parameters might be set to <code>null</code>.
+     * Note that the font parameter might be set to <code>null</code>.
      * This means that the corresponding font is the system default.
      * </p>
-     * <p>
-     * This method is guaranteed to only be called if <code>oldFont</code>
-     * and <code>newFont</code> actually differ.
-     * </p>
-     * @param fontId  identifier of the font that has changed.
-     * @param oldFont old value for the font.
-     * @param newFont new value for the font.
+     * @param fontId identifier of the font that has changed.
+     * @param font   new value for the font.
      */
-    public void fontChanged(int fontId, Font oldFont, Font newFont);
+    public void fontChanged(int fontId, Font font);
 }

@@ -4,6 +4,7 @@ import com.mucommander.conf.*;
 import com.mucommander.shell.*;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.*;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,11 +20,10 @@ import java.io.PrintStream;
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class RunDialog extends FocusDialog implements ActionListener, ProcessListener, KeyListener {
+public class RunDialog extends FocusDialog implements ActionListener, ProcessListener, KeyListener, ThemeListener {
     private MainFrame mainFrame;
 	
     private ShellComboBox inputCombo;
-	
     private JButton runStopButton;
     private JButton cancelButton;
     private JButton clearButton;
@@ -72,23 +72,12 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         outputTextArea.setEditable(false);
         outputTextArea.addKeyListener(this);
 
-        // Set custom text, selected text, background and selection background colors
-        Color textColor = ConfigurationManager.getVariableColor(ConfigurationVariables.SHELL_TEXT_COLOR,
-                                                                ConfigurationVariables.DEFAULT_SHELL_TEXT_COLOR);
-        outputTextArea.setForeground(textColor);
-        // Selected text color and text color are the same
-        outputTextArea.setSelectedTextColor(textColor);
-        outputTextArea.setBackground(ConfigurationManager.getVariableColor(ConfigurationVariables.SHELL_BACKGROUND_COLOR,
-                                                                           ConfigurationVariables.DEFAULT_SHELL_BACKGROUND_COLOR));
-        outputTextArea.setSelectionColor(ConfigurationManager.getVariableColor(ConfigurationVariables.SHELL_SELECTION_COLOR,
-                                                                               ConfigurationVariables.DEFAULT_SHELL_SELECTION_COLOR));
-        outputTextArea.setCaretColor(textColor);
-
-        // Use a monospaced font in the command field and process output text area, as most terminals do.
-        // The logical "Monospaced" font name is always available in Java.
-        // The font size is the one of the default JTextArea, style is plain.
-        Font monospacedFont = new Font("Monospaced", Font.PLAIN, outputTextArea.getFont().getSize());
-        outputTextArea.setFont(monospacedFont);
+        outputTextArea.setForeground(ThemeManager.getCurrentColor(Theme.SHELL_TEXT));
+        outputTextArea.setCaretColor(ThemeManager.getCurrentColor(Theme.SHELL_TEXT));
+        outputTextArea.setBackground(ThemeManager.getCurrentColor(Theme.SHELL_BACKGROUND));
+        outputTextArea.setSelectedTextColor(ThemeManager.getCurrentColor(Theme.SHELL_TEXT_SELECTED));
+        outputTextArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.SHELL_BACKGROUND_SELECTED));
+        outputTextArea.setFont(ThemeManager.getCurrentFont(Theme.SHELL));
 
         JScrollPane scrollPane = new JScrollPane(outputTextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -128,6 +117,8 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
         // Make the 'Run/stop' button the default button
         getRootPane().setDefaultButton(runStopButton);
+
+        ThemeManager.addThemeListener(this);
         
         inputCombo.setEnabled(true);
         showDialog();
@@ -248,5 +239,44 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
                 currentProcess.destroy();
             dispose();			
         }
+    }
+
+
+
+    // - Theme listening -------------------------------------------------------------
+    // -------------------------------------------------------------------------------
+    /**
+     * Receives theme color changes notifications.
+     * @param colorId identifier of the color that has changed.
+     * @param color   new value for the color.
+     */
+    public void colorChanged(int colorId, Color color) {
+        switch(colorId) {
+        case Theme.SHELL_TEXT:
+            outputTextArea.setForeground(color);
+            break;
+
+        case Theme.SHELL_BACKGROUND:
+            outputTextArea.setBackground(color);
+            break;
+
+        case Theme.SHELL_TEXT_SELECTED:
+            outputTextArea.setSelectedTextColor(color);
+            break;
+
+        case Theme.SHELL_BACKGROUND_SELECTED:
+            outputTextArea.setSelectionColor(color);
+            break;
+        }
+    }
+
+    /**
+     * Receives theme font changes notifications.
+     * @param fontId identifier of the font that has changed.
+     * @param font   new value for the font.
+     */
+    public void fontChanged(int fontId, Font font) {
+        if(fontId == Theme.SHELL)
+            outputTextArea.setFont(font);
     }
 }

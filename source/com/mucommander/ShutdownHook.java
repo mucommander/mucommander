@@ -3,6 +3,7 @@ package com.mucommander;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.auth.CredentialsManager;
+import com.mucommander.ui.theme.ThemeManager;
 
 
 /**
@@ -59,6 +60,8 @@ public class ShutdownHook extends Thread {
         ShellHistoryManager.writeHistory();
         // Write credentials file to disk, only if changes were made
         CredentialsManager.writeCredentials(false);
+        // Saves the user theme.
+        ThemeManager.saveUserTheme();
 
         // Shutdown tasks should only be performed once
         shutdownTasksPerformed = true;

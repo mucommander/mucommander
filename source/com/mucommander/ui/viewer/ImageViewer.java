@@ -5,6 +5,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,11 +23,11 @@ import java.io.InputStream;
  * @author Maxence Bernard
  */
 //public class ImageViewer extends FileViewer implements ComponentListener {
-public class ImageViewer extends FileViewer implements ActionListener {
+public class ImageViewer extends FileViewer implements ActionListener, ThemeListener {
 	
     private Image image;
     private Image scaledImage;
-
+    private Color backgroundColor;
     private double zoomFactor;
 	
     //	private JMenuItem prevImageItem;
@@ -36,6 +37,7 @@ public class ImageViewer extends FileViewer implements ActionListener {
 	
 	
     public ImageViewer() {
+        backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND);
     }	
 
 
@@ -170,7 +172,7 @@ public class ImageViewer extends FileViewer implements ActionListener {
         int width = getWidth();
         int height = getHeight();
 		
-        g.setColor(BG_COLOR);
+        g.setColor(backgroundColor);
         g.fillRect(0, 0, width, height);
 		
         if(scaledImage!=null) {
@@ -215,4 +217,22 @@ public class ImageViewer extends FileViewer implements ActionListener {
         checkZoom();
         //		}
     }
+
+
+    // - Theme listening -------------------------------------------------------------
+    // -------------------------------------------------------------------------------
+    /**
+     * Receives theme color changes notifications.
+     * @param colorId identifier of the color that has changed.
+     * @param color   new value for the color.
+     */
+    public void colorChanged(int colorId, Color color) {
+        if(colorId == Theme.EDITOR_BACKGROUND)
+            backgroundColor = color;
+    }
+
+    /**
+     * Not used.
+     */
+    public void fontChanged(int fontId, Font font) {}
 }

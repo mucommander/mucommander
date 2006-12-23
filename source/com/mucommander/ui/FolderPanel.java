@@ -1,6 +1,7 @@
 
 package com.mucommander.ui;
 
+import com.mucommander.ui.theme.*;
 import com.mucommander.auth.*;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
@@ -34,9 +35,9 @@ import java.io.IOException;
  *
  * @author Maxence Bernard
  */
-public class FolderPanel extends JPanel implements FocusListener, ConfigurationListener {
+public class FolderPanel extends JPanel implements FocusListener, ConfigurationListener, ThemeListener {
 
-    private MainFrame mainFrame;
+    private MainFrame  mainFrame;
 
     private AbstractFile currentFolder;
     private ChangeFolderThread changeFolderThread;
@@ -54,8 +55,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private JScrollPane scrollPane;
 	
     private FolderHistory folderHistory = new FolderHistory(this);
-    
-    private static Color backgroundColor;
     
     private FileDragSourceListener fileDragSourceListener;
 
@@ -81,13 +80,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private final static String CANCEL_TEXT = Translator.get("cancel");
     private final static String BROWSE_TEXT = Translator.get("browse");
     private final static String DOWNLOAD_TEXT = Translator.get("download");
-
-
-    static {
-        // Set background color
-        backgroundColor = ConfigurationManager.getVariableColor(ConfigurationVariables.BACKGROUND_COLOR, ConfigurationVariables.DEFAULT_BACKGROUND_COLOR);
-    }
-
 
     public FolderPanel(MainFrame mainFrame, AbstractFile initialFolder) {
         super(new BorderLayout());
@@ -147,13 +139,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        // Set a 1-line gray border
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(64, 64, 64), 1));
+        // Sets the table border.
+        scrollPane.setBorder(BorderFactory.createLineBorder(ThemeManager.getCurrentColor(Theme.FILE_TABLE_BORDER), 1));
 
-        //		// Enable double buffering on scroll pane
-        //		scrollPane.setDoubleBuffered(true);
         // Set scroll pane's background color to match the one of this panel and FileTable
-        scrollPane.getViewport().setBackground(backgroundColor);
+        scrollPane.getViewport().setBackground(ThemeManager.getCurrentColor(Theme.FILE_BACKGROUND));
 
         // Catch mouse events to popup a contextual 'folder' menu
         scrollPane.addMouseListener(new MouseAdapter() {
@@ -172,6 +162,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         // Listens to some configuration variables
         ConfigurationManager.addConfigurationListener(this);
+        ThemeManager.addThemeListener(this);
 
         // Listen to focus event in order to notify MainFrame of changes of the current active panel/table
         fileTable.addFocusListener(this);
@@ -541,13 +532,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     public boolean configurationChanged(ConfigurationEvent event) {
     	String var = event.getVariable();
     
-        // Set new background color and repaint panel
-        if (var.equals(ConfigurationVariables.BACKGROUND_COLOR))  {
-            scrollPane.getViewport().setBackground(backgroundColor=event.getColorValue());
-            repaint();    		
-        }
         // Show or hide hidden files
-        else if (var.equals(ConfigurationVariables.SHOW_HIDDEN_FILES)) {
+        if (var.equals(ConfigurationVariables.SHOW_HIDDEN_FILES)) {
             hiddenFileFilter = event.getBooleanValue()?null:new HiddenFileFilter();
             // Refresh current folder in a separate thread
             tryRefreshCurrentFolder();
@@ -867,4 +853,23 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             return "folderURL="+folderURL+" folder="+folder;
         }
     }
+
+    // - Theme listening -------------------------------------------------------------
+    // -------------------------------------------------------------------------------
+    /**
+     * Receives theme color changes notifications.
+     * @param colorId identifier of the color that has changed.
+     * @param color   new value for the color.
+     */
+    public void colorChanged(int colorId, Color color) {
+        if(colorId == Theme.FILE_TABLE_BORDER)
+            scrollPane.setBorder(BorderFactory.createLineBorder(color, 1));
+        else if(colorId == Theme.FILE_BACKGROUND)
+            scrollPane.getViewport().setBackground(color);
+    }
+
+    /**
+     * Not used.
+     */
+    public void fontChanged(int fontId, Font font) {}
 }

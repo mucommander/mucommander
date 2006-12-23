@@ -14,29 +14,27 @@ import com.mucommander.ui.comp.progress.ProgressTextField;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.Debug;
+import com.mucommander.ui.theme.*;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import javax.swing.UIManager;
+import javax.swing.JTextField;
 
 
-public class LocationComboBox extends EditableComboBox implements LocationListener, EditableComboBoxListener, FocusListener {
-
+public class LocationComboBox extends EditableComboBox implements LocationListener, EditableComboBoxListener, FocusListener, ThemeListener {
     /** FolderPanel this combo box is displayed in */
     private FolderPanel folderPanel;
 
     /** Text field used to type in a location */
     private ProgressTextField locationField;
 
-    /** Semi-transparent color used to display progress in the location field */
-    private final static Color PROGRESS_COLOR = new Color(0, 255, 255, 64);
-
     /** True while a folder is being changed after a path was entered in the location field and validated by the user */
     private boolean folderChangedInitiatedByLocationField;
 
     /** Used to save the path that was entered by the user after validation of the location textfield */
     private String locationFieldTextSave;
-
 
     /**
      * Creates a new LocationComboBox for use in the given FolderPanel.
@@ -45,11 +43,18 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
      */
     public LocationComboBox(FolderPanel folderPanel) {
         // Use a custom text field that can display loading progress when changing folders
-        super(new ProgressTextField(0, PROGRESS_COLOR));
+        super(new ProgressTextField(0, ThemeManager.getCurrentColor(Theme.LOCATION_BAR_PROGRESS)));
 
         this.folderPanel = folderPanel;
         this.locationField = (ProgressTextField)getTextField();
         locationField.setComboBox(this);
+
+        setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR));
+
+        setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_TEXT));
+        setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND));
+        setSelectionForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_TEXT_SELECTED));
+        setSelectionBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND_SELECTED));
 
         // Listener to actions fired by this EditableComboBox
         addEditableComboBoxListener(this);
@@ -62,6 +67,8 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         // Not doing so would trigger unwanted menu bar actions when typing.
         locationField.addFocusListener(this);
         addFocusListener(this);
+
+        ThemeManager.addThemeListener(this);
     }
 
 
@@ -209,5 +216,48 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     public void focusLost(FocusEvent e) {
         // Enable menu bar when this component has lost focus
         folderPanel.getMainFrame().getJMenuBar().setEnabled(true);
+    }
+
+
+
+    // - Theme listening -------------------------------------------------------------
+    // -------------------------------------------------------------------------------
+    /**
+     * Receives theme color changes notifications.
+     * @param colorId identifier of the color that has changed.
+     * @param color   new value for the color.
+     */
+    public void colorChanged(int colorId, Color color) {
+        switch(colorId) {
+        case Theme.LOCATION_BAR_PROGRESS:
+            locationField.setProgressColor(color);
+            break;
+
+        case Theme.LOCATION_BAR_TEXT:
+            setForeground(color);
+            break;
+
+        case Theme.LOCATION_BAR_BACKGROUND:
+            setBackground(color);
+            break;
+
+        case Theme.LOCATION_BAR_TEXT_SELECTED:
+            setSelectionForeground(color);
+            break;
+
+        case Theme.LOCATION_BAR_BACKGROUND_SELECTED:
+            setSelectionBackground(color);
+            break;
+        }
+    }
+
+    /**
+     * Receives theme font changes notifications.
+     * @param fontId identifier of the font that has changed.
+     * @param font   new value for the font.
+     */
+    public void fontChanged(int fontId, Font font) {
+        if(fontId == Theme.LOCATION_BAR)
+            setFont(font);
     }
 }
