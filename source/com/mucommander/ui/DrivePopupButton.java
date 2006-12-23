@@ -14,27 +14,23 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.comp.button.NonFocusableButton;
-import com.mucommander.ui.comp.button.PopupMenuButton;
+import com.mucommander.ui.comp.button.PopupButton;
 import com.mucommander.ui.action.OpenLocationAction;
 
 import javax.swing.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Vector;
 
 
 /**
- * DriveButton is a button which when clicked pops up a menu with a list of drives and shortcuts which can be used
+ * DrivePopupButton is a button which when clicked pops up a menu with a list of drives and shortcuts which can be used
  * to change the current folder.
  *
  * @author Maxence Bernard
  */
-public class DriveButton extends PopupMenuButton implements LocationListener, BookmarkListener {
+public class DrivePopupButton extends PopupButton implements LocationListener, BookmarkListener {
 
     /** FolderPanel instance that contains this button */
     private FolderPanel folderPanel;
@@ -63,7 +59,7 @@ public class DriveButton extends PopupMenuButton implements LocationListener, Bo
     /**
      * Creates a new drive button which is to be added to the given FolderPanel.
      */
-    public DriveButton(FolderPanel folderPanel) {
+    public DrivePopupButton(FolderPanel folderPanel) {
         this.folderPanel = folderPanel;
 		
         // Listen to location events to update drive button when folder changes
@@ -151,7 +147,7 @@ public class DriveButton extends PopupMenuButton implements LocationListener, Bo
 
 
     ////////////////////////////////////
-    // PopupMenuButton implementation //
+    // PopupButton implementation //
     ////////////////////////////////////
 
     public JPopupMenu getPopupMenu() {
@@ -206,9 +202,9 @@ public class DriveButton extends PopupMenuButton implements LocationListener, Bo
         popupMenu.add(new ServerConnectAction("SFTP...", ServerConnectDialog.SFTP_INDEX));
         popupMenu.add(new ServerConnectAction("HTTP...", ServerConnectDialog.HTTP_INDEX));
 
-        // Temporarily make the FileTable which contains this DriveButton the currently active one so that menu actions
+        // Temporarily make the FileTable which contains this DrivePopupButton the currently active one so that menu actions
         // are triggered on it. The previously active table will be restored when the popup menu is closed (focus is lost).
-        // This needed because a DriveButton menu can be poped up from the opposite table.
+        // This needed because a DrivePopupButton menu can be poped up from the opposite table.
         // Not doing this would cause the action to be performed from the wrong FileTable.
         mainFrame.setActiveTable(folderPanel.getFileTable());
 

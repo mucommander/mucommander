@@ -19,7 +19,6 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.TablePopupMenu;
-import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,7 +47,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         it calls actionPerformed() each time an item is highlighted with the arrow (UP/DOWN) keys,
         so there is no way to tell if it's the final selection (ENTER) or not.
     */
-    private DriveButton driveButton;
+    private DrivePopupButton driveButton;
     private LocationComboBox locationComboBox;
     private ProgressTextField locationField;
     private FileTable fileTable;
@@ -105,7 +104,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         c.gridy = 0;
 
         // Create and add drive button
-        this.driveButton = new DriveButton(this);
+        this.driveButton = new DrivePopupButton(this);
         c.weightx = 0;
         c.gridx = 0;        
         locationPanel.add(driveButton, c);
@@ -247,9 +246,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
     /**
-     * Returns the DriveButton component this panel contains.
+     * Returns the DrivePopupButton component this panel contains.
      */
-    public DriveButton getDriveButton() {
+    public DrivePopupButton getDriveButton() {
         return driveButton; 
     }
 
