@@ -7,10 +7,11 @@ import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileToolkit;
+import com.mucommander.file.FileURL;
 import com.mucommander.io.BackupInputStream;
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.MucoAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.comp.button.PopupButton;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
 
@@ -127,7 +128,12 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
      * Adds a button to this toolbar using the given action.
      */
     private void addButton(MucoAction action) {
-        JButton button = new JButton(action);
+        JButton button;
+
+        if(action instanceof GoBackAction || action instanceof GoForwardAction)
+            button = new HistoryPopupButton(action);
+        else
+            button = new JButton(action);
 
         // Remove label
         button.setText(null);
@@ -221,9 +227,39 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     }
 
     public void mousePressed(MouseEvent e) {
-if(Debug.ON) Debug.trace("called");
     }
 
+
+    /**
+     * PopupButton used for 'Go back' and 'Go forward' actions which displays the list of back/forward folders in the
+     * popup menu and allows to recall them by clicking on them.
+     */
+    private class HistoryPopupButton extends PopupButton {
+
+        private MucoAction action;
+
+        private HistoryPopupButton(MucoAction action) {
+            super(action);
+            this.action = action;
+        }
+
+        public JPopupMenu getPopupMenu() {
+            FileURL history[] = action instanceof GoBackAction?
+                    mainFrame.getActiveTable().getFolderPanel().getFolderHistory().getBackFolders()
+                    :mainFrame.getActiveTable().getFolderPanel().getFolderHistory().getForwardFolders();
+            int historyLen = history.length;
+
+            // If no back/forward folder, do not display popup menu
+            if(history.length==0)
+                return null;
+
+            JPopupMenu popupMenu = new JPopupMenu();
+            for(int i=0; i<historyLen; i++)
+                popupMenu.add(new OpenLocationAction(mainFrame, history[i]));
+
+            return popupMenu;
+        }
+    }
 
 
     /**

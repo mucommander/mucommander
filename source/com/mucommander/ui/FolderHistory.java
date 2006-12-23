@@ -5,6 +5,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
+import com.mucommander.Debug;
 
 import java.util.Vector;
 
@@ -122,6 +123,44 @@ public class FolderHistory {
      */
     public boolean hasForwardFolder() {
         return historyIndex!=history.size()-1;
+    }
+
+
+    /**
+     * Returns a list of 'back' folders, most recently visited folder first. The returned array may be empty if there
+     * currently isn't any 'back' folder in history, but may never be null.
+     */
+    public FileURL[] getBackFolders() {
+        if(!hasBackFolder())
+            return new FileURL[0];
+
+        int backLen = historyIndex;
+        FileURL urls[] = new FileURL[backLen];
+
+        int cur = 0;
+        for(int i=historyIndex-1; i>=0; i--)
+            urls[cur++] = (FileURL)history.elementAt(i);
+
+        return urls;
+    }
+
+
+    /**
+     * Returns a list of 'forward' folders, most recently visited folder first. The returned array may be empty if there
+     * currently isn't any 'forward' folder in history, but may never be null.
+     */
+    public FileURL[] getForwardFolders() {
+        if(!hasForwardFolder())
+            return new FileURL[0];
+
+        int historySize = history.size();
+        FileURL urls[] = new FileURL[historySize-historyIndex-1];
+
+        int cur = 0;
+        for(int i=historyIndex+1; i<historySize; i++)
+            urls[cur++] = (FileURL)history.elementAt(i);
+
+        return urls;
     }
 
 

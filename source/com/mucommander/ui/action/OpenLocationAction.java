@@ -4,6 +4,7 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bonjour.BonjourService;
 
@@ -25,7 +26,7 @@ public class OpenLocationAction extends MucoAction {
      * (with credentials stripped out) as label.
      */
     public OpenLocationAction(MainFrame mainFrame, FileURL url) {
-        this(mainFrame, url, url.getStringRep(false));
+        this(mainFrame, url, url.getProtocol().equals(FileProtocols.FILE)?url.getPath():url.getStringRep(false));
     }
 
     /**
@@ -36,7 +37,7 @@ public class OpenLocationAction extends MucoAction {
 
         this.url = url;
         setLabel(label);
-        setToolTipText(url.getStringRep(false));
+        setToolTipText(url.getProtocol().equals(FileProtocols.FILE)?url.getPath():url.getStringRep(false));
     }
 
 

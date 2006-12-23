@@ -569,7 +569,6 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
         return getStringRep(includeCredentials, false);
     }
 
-
     /**
      * Reconstructs the URL with the given path and returns its String representation.
      *
