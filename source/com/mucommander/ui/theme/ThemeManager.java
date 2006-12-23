@@ -869,7 +869,7 @@ public class ThemeManager {
         // Shell selection background color.
         if(shellSelectionColor == null)
             shellSelectionColor = LegacyTheme.DEFAULT_SHELL_SELECTION_COLOR;
-        data.setColor(Theme.SHELL_BACKGROUND_SELECTED, new Color(Integer.parseInt(shellTextColor, 16)));
+        data.setColor(Theme.SHELL_BACKGROUND_SELECTED, new Color(Integer.parseInt(shellSelectionColor, 16)));
 
         // File table font.
         data.setFont(Theme.FILE_TABLE, getLegacyFont(fontFamily, fontStyle, fontSize));
