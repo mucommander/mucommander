@@ -10,7 +10,6 @@ import com.mucommander.file.FileToolkit;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MucoAction;
-import com.mucommander.ui.comp.button.RolloverButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
@@ -128,7 +127,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
      * Adds a button to this toolbar using the given action.
      */
     private void addButton(MucoAction action) {
-        JButton button = new RolloverButton(action);
+        JButton button = new JButton(action);
 
         // Remove label
         button.setText(null);
@@ -143,6 +142,15 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         // Scale icon if scale factor is different from 1.0
         if(scaleFactor!=1.0f)
             button.setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
+
+        // Set button decorations and rollover behavior
+        button.setRolloverEnabled(true);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        // Need to set that explicitely for Java 1.5 for which content area
+        // is filled if border is not painted
+        button.setContentAreaFilled(false);
+        button.addMouseListener(this);
 
         add(button);
     }
@@ -197,17 +205,25 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         }
     }
 
+    public void mouseEntered(MouseEvent e) {
+        Object source = e.getSource();
+        if(source instanceof JButton)
+            ((JButton)source).setBorderPainted(true);
+    }
+
+    public void mouseExited(MouseEvent e) {
+        Object source = e.getSource();
+        if(source instanceof JButton)
+            ((JButton)source).setBorderPainted(false);
+    }
+
     public void mouseReleased(MouseEvent e) {
     }
 
     public void mousePressed(MouseEvent e) {
+if(Debug.ON) Debug.trace("called");
     }
 
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    public void mouseExited(MouseEvent e) {
-    }
 
 
     /**

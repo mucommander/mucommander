@@ -224,34 +224,50 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         return files;
     }
 
-    public FileTable getFileTable() {
-        return this.fileTable;
-    }
 
+    /**
+     * Returns the MainFrame instance that contains this panel.
+     */
     public MainFrame getMainFrame() {
         return this.mainFrame;
     }
 
+    /**
+     * Returns the FileTable component this panel contains.
+     */
+    public FileTable getFileTable() {
+        return this.fileTable;
+    }
+
+    /**
+     * Returns the LocationComboBox component this panel contains.
+     */
     public LocationComboBox getLocationComboBox() {
         return locationComboBox;
     }
-    
+
+    /**
+     * Returns the DriveButton component this panel contains.
+     */
+    public DriveButton getDriveButton() {
+        return driveButton; 
+    }
+
+    /**
+     * Returns the visited folders history wrapped in a FolderHistory object.
+\    */
     public FolderHistory getFolderHistory() {
         return this.folderHistory;
     }
 
+    /**
+     * Returns the LocationManager instance that notifies registered listeners of location changes
+     * that occur in this FolderPanel. 
+     */
     public LocationManager getLocationManager() {
         return locationManager;
     }
 
-    /**
-     * Causes the DriveButton to popup and show root folder, bookmarks, server shortcuts...
-     */
-    public void popDriveButton() {
-        driveButton.popup();
-    }
-	
-	
     /**
      * Allows the user to easily change the current folder and type a new one: requests focus 
      * on the location field and selects the folder string.
@@ -459,7 +475,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         folderHistory.addToHistory(folder);
 
         // Notify listeners that location has changed
-//        locationManager.fireLocationChanged(folder.getAbsolutePath());
         locationManager.fireLocationChanged(folder.getURL());
     }
 

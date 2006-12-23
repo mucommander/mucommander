@@ -15,6 +15,7 @@ import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.comp.button.NonFocusableButton;
+import com.mucommander.ui.comp.button.PopupMenuButton;
 import com.mucommander.ui.action.OpenLocationAction;
 
 import javax.swing.*;
@@ -28,24 +29,19 @@ import java.util.Vector;
 
 
 /**
- * DriveButton is a button which when clicked pops up a list of drives and shortcuts which can be used to change the current folder.
+ * DriveButton is a button which when clicked pops up a menu with a list of drives and shortcuts which can be used
+ * to change the current folder.
  *
  * @author Maxence Bernard
  */
-public class DriveButton extends NonFocusableButton implements ActionListener, PopupMenuListener, LocationListener, BookmarkListener {
+public class DriveButton extends PopupMenuButton implements LocationListener, BookmarkListener {
 
+    /** FolderPanel instance that contains this button */
     private FolderPanel folderPanel;
-	
-    private JPopupMenu popupMenu;
-
-    /* Time when popup menu was last hidden */
-    private long lastPopupTime;
 	
     /** Root folders array */
     private static AbstractFile rootFolders[] = RootFolders.getRootFolders();
 	
-    private final static int POPUP_DELAY = 1000;
-
 
     /**
      * Action that triggers the 'server connection dialog' for a specified protocol.
@@ -76,9 +72,6 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
         // Listen to bookmark changes to update drive button if a bookmark corresponding
         // to the current folder has been added/edited/removed
         BookmarkManager.addBookmarkListener(this);
-		
-        // Listen to action events to popup a list of drives when button is pressed
-        addActionListener(this);
     }
 
     public Dimension getPreferredSize() {
@@ -155,17 +148,17 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
 		
         setText(newLabel);
     }
-	
-	
-    /**
-     * Pops up the menu and requests focus on the popup menu.
-     */
-    public void popup() {
+
+
+    ////////////////////////////////////
+    // PopupMenuButton implementation //
+    ////////////////////////////////////
+
+    public JPopupMenu getPopupMenu() {
+        JPopupMenu popupMenu = new JPopupMenu();
+
         // Update root folders in case new drives were mounted
         rootFolders = RootFolders.getRootFolders();
-
-        popupMenu = new JPopupMenu();
-        popupMenu.addPopupMenuListener(this);
 
         // Add root 'drives'
         int nbRoots = rootFolders.length;
@@ -213,13 +206,13 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
         popupMenu.add(new ServerConnectAction("SFTP...", ServerConnectDialog.SFTP_INDEX));
         popupMenu.add(new ServerConnectAction("HTTP...", ServerConnectDialog.HTTP_INDEX));
 
-        // Popup up the menu underneath under this button
-        popupMenu.show(this, 0, getHeight());
+        // Temporarily make the FileTable which contains this DriveButton the currently active one so that menu actions
+        // are triggered on it. The previously active table will be restored when the popup menu is closed (focus is lost).
+        // This needed because a DriveButton menu can be poped up from the opposite table.
+        // Not doing this would cause the action to be performed from the wrong FileTable.
+        mainFrame.setActiveTable(folderPanel.getFileTable());
 
-        // Focus MUST NOT be requested on the popup menu because
-        // a/ it's not necessary, it grabs focus itself
-        // b/ creates a weird bug under windows which prevents enter key from selecting any menu item
-        //		FocusRequester.requestFocus(popupMenu);
+        return popupMenu;
     }
 
 
@@ -242,24 +235,6 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
     }
 
     
-    ///////////////////////////////
-    // PopupMenuListener methods //
-    ///////////////////////////////
-	 
-    public void popupMenuCanceled(PopupMenuEvent e) {
-    }
-
-    public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-        this.popupMenu = null;
-        this.lastPopupTime = System.currentTimeMillis();
-		
-        folderPanel.getFileTable().requestFocus();
-    }
-
-    public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-    }
-	
-
     //////////////////////////////
     // BookmarkListener methods //
     //////////////////////////////
@@ -267,36 +242,5 @@ public class DriveButton extends NonFocusableButton implements ActionListener, P
     public void bookmarksChanged() {
         // Refresh label in case a bookmark with the current location was changed
         updateLabel();
-    }
-
-	
-    ////////////////////////////
-    // ActionListener methods //
-    ////////////////////////////
-	
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-		
-        // The button was clicked
-        if (source == this)	 {
-            // Return (do not popup menu) if popup menu was last showing less than POPUP_DELAY ms ago.
-            // We need this test because popupMenuWillBecomeInvisible() is called before actionPerformed(),
-            // so we interpret the button click as a way to close the popup menu
-            if((System.currentTimeMillis()-this.lastPopupTime)<POPUP_DELAY) {
-                // Reset time stamp
-                this.lastPopupTime = 0;
-                return;
-            }
-			
-            // Hide popup menu if it is currently showing
-            if(this.popupMenu!=null && this.popupMenu.isVisible()) {
-                this.popupMenu.setVisible(false);
-                // Reset time stamp
-                this.lastPopupTime = 0;
-            }
-            // Show popup menu
-            else
-                popup();
-        }
     }
 }
