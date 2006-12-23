@@ -1,125 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <theme>
-  <!-- = File table appearance ========================= -->
-  <!-- ================================================= -->
-  <file_table>
-    <font   family="Rockwell Extra Bold" size  ="12" bold="false" italic="false"/>
-    <border color="ffffff"/>
+    <!-- = File table appearance ========================= -->
+    <!-- ================================================= -->
+    <file_table>
+        <font size="13" family="Lucida Grande"/>
+        <border color="404040"/>
 
-    <!-- = Default appearance ========================== -->
-    <!-- =============================================== -->
-    <normal>
-      <background           color="4fffff" alpha="fa"/>
-      <hidden               color="666666"/>
-      <folder               color="000000"/>
-      <archive              color="000000"/>
-      <symlink              color="cc00cc"/>
-      <marked               color="cc0000"/>
-      <file                 color="000000"/>
-      <unfocused_background color="ffffff"/>
-    </normal>
+        <!-- = Default appearance ========================== -->
+        <!-- =============================================== -->
+        <normal>
+            <background color="000084"/>
+            <unfocused_background color="000084"/>
+            <hidden color="c0c0c0"/>
+            <folder color="ffffff"/>
+            <archive color="40ff40"/>
+            <symlink color="cc00cc"/>
+            <marked color="ffff00"/>
+            <file color="00f0f0"/>
+        </normal>
 
-    <!-- = Selected appearance ========================= -->
-    <!-- =============================================== -->
-    <selection>
-      <background           color="000099"/>
-      <hidden               color="666666"/>
-      <folder               color="000000"/>
-      <archive              color="000000"/>
-      <symlink              color="cc00cc"/>
-      <marked               color="cc0000"/>
-      <file                 color="ffffff"/>
-      <unfocused_background color="cccccc"/>
-    </selection>
-  </file_table>
-
-
-
-  <!-- = Shell appearance ============================== -->
-  <!-- ================================================= -->
-  <shell>
-    <font family="SansSerif" size  ="12" bold="false" italic="false"/>
-
-    <!-- = Default appearance ========================== -->
-    <!-- =============================================== -->
-    <normal>
-      <text       color="009900"/>
-      <background color="000000"/>
-    </normal>
-
-    <!-- = Selected appearance ========================= -->
-    <!-- =============================================== -->
-    <selection>
-      <text       color="009900"/>
-      <background color="bbbbbb"/>
-    </selection>
-  </shell>
+        <!-- = Selected appearance ========================= -->
+        <!-- =============================================== -->
+        <selection>
+            <background color="00ffff"/>
+            <unfocused_background color="cccccc"/>
+            <hidden color="000080"/>
+            <folder color="000080"/>
+            <archive color="000080"/>
+            <symlink color="000080"/>
+            <marked color="000080"/>
+            <file color="000080"/>
+        </selection>
+    </file_table>
 
 
 
-  <!-- = Shell history appearance ====================== -->
-  <!-- ================================================= -->
-  <shell_history>
-    <font family="Monospaced" size ="12" bold="true"/>
+    <!-- = Shell appearance ============================== -->
+    <!-- ================================================= -->
+    <shell>
 
-    <!-- = Default appearance ========================== -->
-    <!-- =============================================== -->
-    <normal>
-      <text       color="000000"/>
-      <background color="ffffff"/>
-    </normal>
+        <!-- = Default appearance ========================== -->
+        <!-- =============================================== -->
+        <normal>
+            <background color="ffffff"/>
+            <text color="009900"/>
+        </normal>
 
-    <!-- = Selected appearance ========================= -->
-    <!-- =============================================== -->
-    <selection>
-      <text       color="ffffff"/>
-      <background color="3875d7"/>
-    </selection>
-  </shell_history>
-
+        <!-- = Selected appearance ========================= -->
+        <!-- =============================================== -->
+        <selection>
+            <background color="009900"/>
+            <text color="009900"/>
+        </selection>
+    </shell>
 
 
 
-  <!-- = Editor appearance ============================= -->
-  <!-- ================================================= -->
-  <editor>
-    <font family="SansSerif" size  ="12" bold="false" italic="false"/>
+    <!-- = Shell history appearance ====================== -->
+    <!-- ================================================= -->
+    <shell_history>
+        <font size="13" family="Lucida Grande"/>
 
-    <!-- = Default appearance ========================== -->
-    <!-- =============================================== -->
-    <normal>
-      <text       color="009900"/>
-      <background color="000000"/>
-    </normal>
+        <!-- = Default appearance ========================== -->
+        <!-- =============================================== -->
+        <normal>
+            <background color="ffffff"/>
+            <text color="000000"/>
+        </normal>
 
-    <!-- = Selected appearance ========================= -->
-    <!-- =============================================== -->
-    <selection>
-      <text       color="009900"/>
-      <background color="bbbbbb"/>
-    </selection>
-  </editor>
+        <!-- = Selected appearance ========================= -->
+        <!-- =============================================== -->
+        <selection>
+            <background color="b4d5ff"/>
+            <text color="000000"/>
+        </selection>
+    </shell>
 
 
 
-  <!-- = Location bar appearance ======================= -->
-  <!-- ================================================= -->
-  <location_bar>
-    <font family="SansSerif" size  ="12" bold="false" italic="false"/>
-    <progress color="ffffff"/>
+    <!-- = Editor appearance ============================= -->
+    <!-- ================================================= -->
+    <editor>
+        <font size="13" family="Lucida Grande"/>
 
-    <!-- = Default appearance ========================== -->
-    <!-- =============================================== -->
-    <normal>
-      <text       color="009900"/>
-      <background color="000000"/>
-    </normal>
+        <!-- = Default appearance ========================== -->
+        <!-- =============================================== -->
+        <normal>
+            <background color="ffffff"/>
+            <text color="000000"/>
+        </normal>
 
-    <!-- = Selected appearance ========================= -->
-    <!-- =============================================== -->
-    <selection>
-      <text       color="009900"/>
-      <background color="bbbbbb"/>
-    </selection>
-  </location_bar>
+        <!-- = Selected appearance ========================= -->
+        <!-- =============================================== -->
+        <selection>
+            <background color="b4d5ff"/>
+            <text color="000000"/>
+        </selection>
+    </editor>
+
+
+
+    <!-- = Location bar appearance ======================= -->
+    <!-- ================================================= -->
+    <location_bar>
+        <font size="13" family="Lucida Grande"/>
+
+        <!-- = Default appearance ========================== -->
+        <!-- =============================================== -->
+        <normal>
+            <background color="ffffff"/>
+            <text color="000000"/>
+        </normal>
+
+        <!-- = Selected appearance ========================= -->
+        <!-- =============================================== -->
+        <selection>
+            <background color="b4d5ff"/>
+            <text color="000000"/>
+        </selection>
+    </editor>
 </theme>
