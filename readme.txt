@@ -204,6 +204,7 @@ Improvements:
  - Improved Windows launcher
  - Splash screen shows loading progress
  - Currently selected file is displayed in a different color (configurable) when focus is out of the file table or application
+ - 'Go back' and 'Go forward' toolbar buttons display a list of back/forward folders when the mouse button is held down
  - Left/Right keyboard shortcuts added for 'Go to parent' and 'Open' (customizable)
  - Window number displayed in title if more than one window is opened
  - Marking/unmarking stops when mark key is kept pressed and last file is reached

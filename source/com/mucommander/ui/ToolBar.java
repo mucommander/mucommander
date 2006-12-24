@@ -182,7 +182,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
                 if(components[i] instanceof JButton) {
                     JButton button = (JButton)components[i];
                     // Change the button's icon but NOT the action's icon which has to remain in its original non-scaled size
-                    button.setIcon(IconManager.getScaledIcon(((MucoAction)button.getAction()).getIcon(), scaleFactor));
+                    button.setIcon(IconManager.getScaledIcon((ImageIcon)button.getAction().getValue(Action.SMALL_ICON), scaleFactor));
                 }
             }
         }
