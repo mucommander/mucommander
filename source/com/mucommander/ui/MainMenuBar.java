@@ -12,6 +12,8 @@ import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.ui.editor.EditorFrame;
 import com.mucommander.ui.viewer.ViewerFrame;
 import com.mucommander.ui.table.SortCriteria;
+import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.Theme;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -21,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 import java.util.WeakHashMap;
+import java.util.Iterator;
 
 
 /**
@@ -40,6 +43,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
     // View menu
     private JMenu viewMenu;
+    private JMenu themesMenu;
     private JCheckBoxMenuItem sortByExtensionItem;
     private JCheckBoxMenuItem sortByNameItem;
     private JCheckBoxMenuItem sortBySizeItem;
@@ -121,7 +125,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Mark menu
         menuItemMnemonicHelper.clear();
         JMenu markMenu = MenuToolkit.addMenu(Translator.get("mark_menu"), menuMnemonicHelper, this);
-        // Accelerators (keyboard shortcuts) for the following menu items will be set/unset when the menu is selected/deselected
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(MarkGroupAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(UnmarkGroupAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(MarkAllAction.class, mainFrame), menuItemMnemonicHelper);
@@ -143,10 +146,15 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         menuItemMnemonicHelper.clear();
         viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(GoBackAction.class, mainFrame), menuItemMnemonicHelper);
-        // Accelerators (keyboard shortcuts) for the following menu items will be set/unset when the menu is selected/deselected
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(GoForwardAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(GoToParentAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ChangeLocationAction.class, mainFrame), menuItemMnemonicHelper);
+
+        viewMenu.add(new JSeparator());
+        themesMenu = MenuToolkit.addMenu(Translator.get("prefs_dialog.themes"), null, this);
+        // Theme menu items will be added when the themes menu is selected
+        viewMenu.add(themesMenu);
+
         viewMenu.add(new JSeparator());
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(sortByExtensionItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByExtensionAction.class, mainFrame), menuItemMnemonicHelper));
@@ -281,7 +289,24 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                     break;
             }
         }
-        if(source==bookmarksMenu) {
+        else if(source==themesMenu) {
+            // Remove all previous theme items, create new ones for each available theme and select the current theme
+            themesMenu.removeAll();
+            ButtonGroup buttonGroup = new ButtonGroup();
+            Iterator themes = ThemeManager.availableThemes();
+            Theme theme;
+            JCheckBoxMenuItem item;
+            while(themes.hasNext()) {
+                theme = (Theme)themes.next();
+                item = new JCheckBoxMenuItem(new ChangeCurrentThemeAction(theme));
+                buttonGroup.add(item);
+                if(ThemeManager.isCurrentTheme(theme))
+                    item.setSelected(true);
+
+                themesMenu.add(item);
+            }
+        }
+        else if(source==bookmarksMenu) {
             // Remove any previous bookmarks menu items from menu
             // as bookmarks might have changed since menu was last selected
             for(int i=bookmarksMenu.getItemCount(); i>bookmarksOffset; i--)
@@ -377,5 +402,23 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     }
 	 
     public void menuCanceled(MenuEvent e) {
+    }
+
+
+    /**
+     * Action that changes the current theme to the specified in the constructor.
+     */
+    private class ChangeCurrentThemeAction extends AbstractAction {
+
+        private Theme theme;
+
+        public ChangeCurrentThemeAction(Theme theme) {
+            super(theme.getName());
+            this.theme = theme;
+        }
+
+        public void actionPerformed(ActionEvent actionEvent) {
+            ThemeManager.setCurrentTheme(theme);
+        }
     }
 }
