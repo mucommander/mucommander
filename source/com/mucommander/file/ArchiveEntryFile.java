@@ -110,6 +110,10 @@ public class ArchiveEntryFile extends AbstractFile {
         return false;
     }
 
+    public boolean canSetPermissions() {
+        return false;
+    }
+
     public boolean isSymlink() {
         return false;
     }

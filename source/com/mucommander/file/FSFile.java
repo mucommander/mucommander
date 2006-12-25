@@ -323,16 +323,22 @@ public class FSFile extends AbstractFile {
     }
 
     public boolean setWritable(boolean writable) {
-        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)
-            return file.setWritable(writable);
-        else if(!writable)
-            return file.setReadOnly();
+//        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)
+//            return file.setWritable(writable);
+//        else if(!writable)
+//            return file.setReadOnly();
+//        return false;
 
-        return false;
+        return (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) && file.setWritable(writable);
     }
 
     public boolean setExecutable(boolean executable) {
         return (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) && file.setExecutable(executable);
+    }
+
+    public boolean canSetPermissions() {
+        // Only Java 1.6 and up have setReadable/setWritable/setExecutable methods in java.io.File
+        return PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6;
     }
 
     public boolean isDirectory() {

@@ -109,6 +109,10 @@ public abstract class ProxyFile extends AbstractFile {
         return file.setExecutable(executable);
     }
 
+    public boolean canSetPermissions() {
+        return file.canSetPermissions();
+    }
+
     public boolean isDirectory() {
         return file.isDirectory();
     }

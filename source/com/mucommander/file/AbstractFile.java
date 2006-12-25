@@ -757,6 +757,16 @@ public abstract class AbstractFile {
     public abstract boolean setExecutable(boolean executable);
 
     /**
+     * Returns true if the underlying filesystem is capable of changing file permissions. This method does not have
+     * read/write/execute granularity and will return true if at least of those permissions can be changed.
+     * Filesystems that are read-only or lack the ability to change permissions will return false.
+     *
+     * @return true if at least one of the read/write/execute permissions can be changed.
+     */
+    public abstract boolean canSetPermissions();
+
+
+    /**
      * Returns true if this AbstractFile is a 'regular' directory, not only a 'browsable' file (like an archive file).
      */
     public abstract boolean isDirectory();

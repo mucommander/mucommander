@@ -161,6 +161,10 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
         return file!=null && (file.getAttributes().getPermissions().intValue()&FileAttributes.S_IXUSR)!=0;
     }
 
+    public boolean canSetPermissions() {
+        return true;
+    }
+
     public boolean setReadable(boolean readable) {
         int perms = setPermissionBit(getFilePermissions(), FileAttributes.S_IRUSR, readable);
         return changeFilePermissions(perms);

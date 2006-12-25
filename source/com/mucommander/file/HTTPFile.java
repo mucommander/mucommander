@@ -219,6 +219,10 @@ public class HTTPFile extends AbstractFile {
         return false;
     }
 
+    public boolean canSetPermissions() {
+        return false;
+    }
+
     public boolean isDirectory() {
         return false;
     }

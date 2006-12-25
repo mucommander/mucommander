@@ -220,6 +220,10 @@ if(Debug.ON) Debug.trace("caught "+e);
         return false;
     }
 
+    public boolean canSetPermissions() {
+        return true;    // return true even though file permissions handling is not partial (writable permissions only)       
+    }
+
     public boolean isDirectory() {
         // Cache SmbFile.isDirectory()'s return value as this method triggers network calls
         // (calls exists() which checks file existence on the server) and will report

@@ -209,6 +209,11 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
         return false;
     }
 
+    public boolean canSetPermissions() {
+        // Unfortuntely there is no way to change file permissions in commons-net FTP library
+        return false;
+    }
+
     public boolean isDirectory() {
         return file.isDirectory();
     }
