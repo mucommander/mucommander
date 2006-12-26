@@ -12,6 +12,7 @@ import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.comp.button.PopupButton;
+import com.mucommander.ui.comp.button.NonFocusableButton;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
 
@@ -133,7 +134,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         if(action instanceof GoBackAction || action instanceof GoForwardAction)
             button = new HistoryPopupButton(action);
         else
-            button = new JButton(action);
+            button = new NonFocusableButton(action);
 
         // Remove label
         button.setText(null);
