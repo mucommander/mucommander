@@ -2229,6 +2229,16 @@ view_menu:ZH_CN:查看
 view_menu:SI:Pogled
 view_menu:RO:Vizualizare
 
+view_menu.show_hide_columns:EN:Show/Hide columns
+view_menu.show_hide_columns:FR:Afficher/Cacher colonnes
+
+
+
+
+
+
+
+
 
 #################
 # Bookmarks menu #

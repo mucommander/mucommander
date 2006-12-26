@@ -248,6 +248,10 @@
   <!-- Default : control F4                                                      -->
   <action class="com.mucommander.ui.action.SortByNameAction"            keystroke="control F4"/>
 
+  <!-- Action  : Sort current pane by permissions.                               -->
+  <!-- Default : control F7                                                      -->
+  <action class="com.mucommander.ui.action.SortByPermissionsAction"     keystroke="control F7"/>
+
   <!-- Action  : Sort current pane by size.                                      -->
   <!-- Default : control F5                                                      -->
   <action class="com.mucommander.ui.action.SortBySizeAction"            keystroke="control F5"/>
