@@ -8,6 +8,8 @@
 libraries and tools are installed.
 In order to do that, you must move the local_template.xml file at the root
 of the project to local.xml and edit it:
+- Even though muCommander runs on Java 1.4 and 1.5, it takes advantage of the Java 1.6 API.
+  Consequently, JDK 1.6 is required to compile the source.
 - java-lib must point to your java installation's classes jar file. Under
   most versions of the JRE, this is going to be in
   /path/to/jre/lib/rt.jar.
