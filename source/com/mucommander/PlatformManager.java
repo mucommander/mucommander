@@ -500,28 +500,48 @@ public class PlatformManager {
     }
 
 
-
-    // - Misc. ------------------------------------------------------------------
+    // - Mouse handling. ------------------------------------------------------------------
     // --------------------------------------------------------------------------
 
     /**
-     * Returns true if the given MouseEvent correspond to a right-click, taking into account the Mac OS X specificity
-     * where a left-click with the control key down is equivalent to a right-click (true is returned in that case).
+     * Returns true if the given MouseEvent corresponds to the left mouse button, taking into account the Mac OS X
+     * specificity where a left-click with the control key down is equivalent to a right-click (false is returned
+     * in that case).
+     *
+     * @param e the MouseEvent to test
+     * @return true if the given MouseEvent corresponds to the left mouse button, false otherwise
      */
-    public static boolean isRightClick(MouseEvent e) {
+    public static boolean isLeftMouseButton(MouseEvent e) {
+        int modifiers = e.getModifiers();
+        return (modifiers & MouseEvent.BUTTON1_MASK)!=0 && !(OS_FAMILY==MAC_OS_X && e.isControlDown());
+    }
+
+    /**
+     * Returns true if the given MouseEvent corresponds to the right mouse button, taking into account the Mac OS X
+     * specificity where a left-click with the control key down is equivalent to a right-click (true is returned
+     * in that case).
+     *
+     * @param e the MouseEvent to test
+     * @return true if the given MouseEvent corresponds to the right mouse button, false otherwise
+     */
+    public static boolean isRightMouseButton(MouseEvent e) {
         int modifiers = e.getModifiers();
         return (modifiers & MouseEvent.BUTTON3_MASK)!=0 || (OS_FAMILY==MAC_OS_X && (modifiers & MouseEvent.BUTTON1_MASK)!=0 && e.isControlDown());
     }
 
     /**
-     * Returns true if the given MouseEvent correspond to a left-click, taking into account the Mac OS X specificity
-     * where a left-click with the control key down is equivalent to a right-click (false is returned in that case).
+     * Returns true if the given MouseEvent corresponds to the middle mouse button.
+     *
+     * @param e the MouseEvent to test
+     * @return true if the given MouseEvent corresponds to the middle mouse button, false otherwise
      */
-    public static boolean isLeftClick(MouseEvent e) {
-        int modifiers = e.getModifiers();
-        return (modifiers & MouseEvent.BUTTON1_MASK)!=0 && !(OS_FAMILY==MAC_OS_X && e.isControlDown());
+    public static boolean isMiddleMouseButton(MouseEvent e) {
+        return (e.getModifiers() & MouseEvent.BUTTON2_MASK)!=0;
     }
 
+
+    // - Misc. ------------------------------------------------------------------
+    // --------------------------------------------------------------------------
 
     /**
      * Returns the path to the default muCommander preferences folder.

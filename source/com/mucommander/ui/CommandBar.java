@@ -229,7 +229,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
     public void mouseClicked(MouseEvent e) {
         // Right clicking on the toolbar brings up a popup menu
-        if (PlatformManager.isRightClick(e)) {
+        if (PlatformManager.isRightMouseButton(e)) {
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
             JPopupMenu popupMenu = new JPopupMenu();
             popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleCommandBarAction.class, mainFrame));

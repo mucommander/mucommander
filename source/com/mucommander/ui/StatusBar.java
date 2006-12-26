@@ -398,7 +398,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             return;
 
         // Right clicking on the toolbar brings up a popup menu that allows the user to hide this status bar
-        if (PlatformManager.isRightClick(e)) {
+        if (PlatformManager.isRightMouseButton(e)) {
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
             JPopupMenu popupMenu = new JPopupMenu();
             popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleStatusBarAction.class, mainFrame));
