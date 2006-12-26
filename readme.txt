@@ -175,6 +175,7 @@ New features:
  - New 'Mark page up/page down' action (Shift+Page Up/Shift+Page Down by default)
  - New 'Mark up to first/last row' action (Shift+Home/Shift+End by default)
  - New 'Split horizontally', 'Split vertically', 'Split equally' actions in 'Window' menu
+ - Added option to 'View' menu to hide certain columns
  - 'Reveal in desktop' now available for Windows, KDE, GNOME (on top of Mac OS X)
  - Ability to open files with native file associations under KDE and GNOME
  - Ability to open URLs under KDE and GNOME
