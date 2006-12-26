@@ -4,6 +4,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 
 import java.io.File;
+import java.awt.event.MouseEvent;
 
 
 /**
@@ -502,6 +503,26 @@ public class PlatformManager {
 
     // - Misc. ------------------------------------------------------------------
     // --------------------------------------------------------------------------
+
+    /**
+     * Returns true if the given MouseEvent correspond to a right-click, taking into account the Mac OS X specificity
+     * where a left-click with the control key down is equivalent to a right-click (true is returned in that case).
+     */
+    public static boolean isRightClick(MouseEvent e) {
+        int modifiers = e.getModifiers();
+        return (modifiers & MouseEvent.BUTTON3_MASK)!=0 || (OS_FAMILY==MAC_OS_X && (modifiers & MouseEvent.BUTTON1_MASK)!=0 && e.isControlDown());
+    }
+
+    /**
+     * Returns true if the given MouseEvent correspond to a left-click, taking into account the Mac OS X specificity
+     * where a left-click with the control key down is equivalent to a right-click (false is returned in that case).
+     */
+    public static boolean isLeftClick(MouseEvent e) {
+        int modifiers = e.getModifiers();
+        return (modifiers & MouseEvent.BUTTON1_MASK)!=0 && !(OS_FAMILY==MAC_OS_X && e.isControlDown());
+    }
+
+
     /**
      * Returns the path to the default muCommander preferences folder.
      * @return the path to the default muCommander preferences folder.

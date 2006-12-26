@@ -14,6 +14,7 @@ import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.PlatformManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -397,8 +398,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             return;
 
         // Right clicking on the toolbar brings up a popup menu that allows the user to hide this status bar
-        int modifiers = e.getModifiers();
-        if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {
+        if (PlatformManager.isRightClick(e)) {
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
             JPopupMenu popupMenu = new JPopupMenu();
             popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleStatusBarAction.class, mainFrame));

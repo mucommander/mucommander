@@ -20,6 +20,7 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.TablePopupMenu;
+import com.mucommander.PlatformManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -151,7 +152,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                     int modifiers = e.getModifiers();
 
                     // Right-click brings a contextual popup menu
-                    if ((modifiers & MouseEvent.BUTTON3_MASK)!=0 || (com.mucommander.PlatformManager.OS_FAMILY==com.mucommander.PlatformManager.MAC_OS_X && (modifiers & MouseEvent.BUTTON1_MASK)!=0 && e.isControlDown())) {
+                    if (PlatformManager.isRightClick(e)) {
                         AbstractFile currentFolder = getCurrentFolder();
                         new TablePopupMenu(FolderPanel.this.mainFrame, currentFolder, null, false, fileTable.getFileTableModel().getMarkedFiles()).show(scrollPane, e.getX(), e.getY());
                     }

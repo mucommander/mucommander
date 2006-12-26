@@ -2377,6 +2377,19 @@ status_bar.volume_capacity:RO:Capacitate: %1
 # Table #
 #########
 
+table.hide_column:EN:Hide column
+table.hide_column:FR:Cacher la colonne
+
+
+
+
+
+
+
+
+
+
+
 table.folder_access_error_title:EN:Folder access error
 table.folder_access_error_title:FR:Folder access error
 table.folder_access_error_title:DE:Fehler beim Ordnerzugriff

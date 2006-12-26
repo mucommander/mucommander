@@ -2,7 +2,6 @@
 package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
-import com.sshtools.j2ssh.sftp.FileAttributes;
 import org.apache.tools.tar.TarEntry;
 import org.apache.tools.tar.TarOutputStream;
 

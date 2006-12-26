@@ -200,8 +200,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
         // Right clicking on the toolbar brings up a popup menu
         if(source == this) {
-            int modifiers = e.getModifiers();
-            if ((modifiers & MouseEvent.BUTTON2_MASK)!=0 || (modifiers & MouseEvent.BUTTON3_MASK)!=0 || e.isControlDown()) {
+            if (PlatformManager.isRightClick(e)) {
                 //			if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
                 JPopupMenu popupMenu = new JPopupMenu();
                 popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.ToggleToolBarAction.class, mainFrame));
