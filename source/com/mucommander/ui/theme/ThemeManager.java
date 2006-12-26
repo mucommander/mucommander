@@ -653,7 +653,7 @@ public class ThemeManager {
         if(theme.getType() != currentType)
             return false;
         if(currentType == USER_THEME)
-            return false;
+            return true;
         return theme.getName().equals(currentName);
     }
 
