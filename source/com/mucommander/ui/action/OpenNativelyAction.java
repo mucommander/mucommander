@@ -26,12 +26,9 @@ public class OpenNativelyAction extends MucoAction {
         if(selectedFile==null)
             return;
 
-        // Copy file to a temporary local file and execute it with native file associations if:
-        // - file is not a directory
-        // - file is not on a local filesystem or file is an archive entry
-        if(!selectedFile.isDirectory()
-                &&(!FileProtocols.FILE.equals(selectedFile.getURL().getProtocol()) || selectedFile.isArchiveEntry())) {
-
+        // Copy file to a temporary local file and execute it with native file associations if
+        // file is not on a local filesystem or file is an archive entry
+        if(!FileProtocols.FILE.equals(selectedFile.getURL().getProtocol()) || selectedFile.isArchiveEntry()) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
             TempExecJob job = new TempExecJob(progressDialog, mainFrame, selectedFile, FileFactory.getTemporaryFile(selectedFile.getName(), true));
             progressDialog.start(job);

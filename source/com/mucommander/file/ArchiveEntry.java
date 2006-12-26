@@ -95,4 +95,11 @@ abstract class ArchiveEntry {
      * Returns <code>true</code> if the encapsulated entry is a directory.
      */
     abstract boolean isDirectory();
+
+    /**
+     * Returns read/write/execute permissions as an int, UNIX octal style.
+     * The value can be compared against {@link AbstractFile#READ_MASK}, {@link AbstractFile#WRITE_MASK} and
+     * {@link AbstractFile#EXECUTE_MASK} bit masks to determine if the entry is readable/writable/executable.
+     */
+    abstract int getPermissions();
 }

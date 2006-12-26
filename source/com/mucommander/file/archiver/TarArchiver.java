@@ -2,6 +2,7 @@
 package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
+import com.sshtools.j2ssh.sftp.FileAttributes;
 import org.apache.tools.tar.TarEntry;
 import org.apache.tools.tar.TarOutputStream;
 
@@ -44,6 +45,12 @@ class TarArchiver extends Archiver {
             entry.setSize(file.getSize());
         entry.setModTime(file.getDate());
 
+        int perms = entry.getMode();
+        perms = AbstractFile.setPermissionBit(perms, AbstractFile.READ_MASK, file.canRead());
+        perms = AbstractFile.setPermissionBit(perms, AbstractFile.WRITE_MASK, file.canWrite());
+        perms = AbstractFile.setPermissionBit(perms, AbstractFile.EXECUTE_MASK, file.canExecute());
+        entry.setMode(perms);
+        
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating entry, name="+entry.getName()+" isDirectory="+entry.isDirectory()+" size="+entry.getSize()+" modTime="+entry.getModTime());
 		
         // Add the entry

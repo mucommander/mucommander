@@ -289,5 +289,5 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     public long getTotalSpace() {
         // An archive is considered as a volume by itself, let's return the proxied file's size
         return file.getSize();
-    }	
+    }
 }

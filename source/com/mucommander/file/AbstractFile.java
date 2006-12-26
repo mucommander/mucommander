@@ -650,6 +650,19 @@ public abstract class AbstractFile {
 
 
     /**
+     * Convenience method that sets/unsets a bit in the given permissions int.
+     */
+    public static int setPermissionBit(int permissions, int bit, boolean enabled) {
+        if(enabled)
+            permissions |= bit;
+        else
+            permissions &= ~bit;
+
+        return permissions;
+    }
+
+
+    /**
      * Tests a file for equality: returns <code>true</code> if the given file has the same canonical path,
      * as returned by {@link #getCanonicalPath()}.
      *

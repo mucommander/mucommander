@@ -35,4 +35,8 @@ class ZipEntry extends ArchiveEntry {
     boolean isDirectory() {
         return zipEntry.isDirectory();
     }
+
+    int getPermissions() {
+        return AbstractFile.READ_MASK & AbstractFile.WRITE_MASK;
+    }
 }

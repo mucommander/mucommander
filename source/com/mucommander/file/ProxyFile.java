@@ -205,6 +205,10 @@ public abstract class ProxyFile extends AbstractFile {
         return file.isHidden();
     }
 
+    public int getPermissions() {
+        return file.getPermissions();
+    }
+
     public AbstractFile getRoot() {
         return file.getRoot();
     }

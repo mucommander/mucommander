@@ -40,4 +40,8 @@ class SimpleEntry extends ArchiveEntry {
     boolean isDirectory() {
         return isDirectory;
     }
+
+    int getPermissions() {
+        return AbstractFile.READ_MASK;
+    }
 }

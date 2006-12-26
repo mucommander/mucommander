@@ -86,16 +86,19 @@ public class ArchiveEntryFile extends AbstractFile {
     }
 	
     public boolean canRead() {
-        return true;
+        return (getPermissions()&READ_MASK)!=0;
     }
 	
     public boolean canWrite() {
-        // Archive entries are read-only
-        return false;
+        return (getPermissions()&WRITE_MASK)!=0;
     }
 
     public boolean canExecute() {
-        return false;
+        return (getPermissions()&EXECUTE_MASK)!=0;
+    }
+
+    public int getPermissions() {
+        return entry.getPermissions();
     }
 
     public boolean setReadable(boolean readable) {

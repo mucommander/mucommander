@@ -214,18 +214,6 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
         }
     }
 
-    /**
-     * Enables/disables the given bit in the permissions int.
-     */
-    private int setPermissionBit(int permissions, int bit, boolean enabled) {
-        if(enabled)
-            permissions |= bit;
-        else
-            permissions &= ~bit;
-
-        return permissions;
-    }
-
     public boolean isDirectory() {
         return file!=null && file.isDirectory();
     }

@@ -18,6 +18,10 @@ public class IsoEntry extends ArchiveEntry {
         this.extent = extent;
     }
 
+    public long getExtent() {
+        return this.extent;
+    }
+
     /////////////////////////////////////
     // Abstract methods implementation //
     /////////////////////////////////////
@@ -38,8 +42,7 @@ public class IsoEntry extends ArchiveEntry {
         return isDirectory;
     }
 
-    public long getExtent() {
-        return this.extent;
+    int getPermissions() {
+        return AbstractFile.READ_MASK & AbstractFile.WRITE_MASK;
     }
-
 }
