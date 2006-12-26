@@ -38,6 +38,7 @@ public class ImageViewer extends FileViewer implements ActionListener, ThemeList
 	
     public ImageViewer() {
         backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND);
+        ThemeManager.addThemeListener(this);
     }	
 
 
@@ -227,8 +228,10 @@ public class ImageViewer extends FileViewer implements ActionListener, ThemeList
      * @param color   new value for the color.
      */
     public void colorChanged(int colorId, Color color) {
-        if(colorId == Theme.EDITOR_BACKGROUND)
+        if(colorId == Theme.EDITOR_BACKGROUND) {
             backgroundColor = color;
+            repaint();
+        }
     }
 
     /**

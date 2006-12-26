@@ -1,6 +1,7 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.io.IOException;
  *
  * @author Maxence Bernard
  */
-public abstract class FileViewer extends JPanel {
+public abstract class FileViewer extends JPanel implements ThemeListener {
 	
     /** ViewerFrame instance that contains this viewer (may be null) */
     protected ViewerFrame frame;
@@ -22,7 +23,10 @@ public abstract class FileViewer extends JPanel {
     /**
      * Creates a new FileViewer.
      */
-    public FileViewer() {}
+    public FileViewer() {
+        setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND));
+        ThemeManager.addThemeListener(this);
+    }
 	
 
     /**
@@ -155,4 +159,23 @@ public abstract class FileViewer extends JPanel {
      */
     public abstract void view(AbstractFile file) throws IOException;
 
+
+    // - Theme listening -------------------------------------------------------------
+    // -------------------------------------------------------------------------------
+    /**
+     * Receives theme color changes notifications.
+     * @param colorId identifier of the color that has changed.
+     * @param color   new value for the color.
+     */
+    public void colorChanged(int colorId, Color color) {
+        if(colorId == Theme.EDITOR_BACKGROUND)
+            setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND));
+
+        repaint();
+    }
+
+    /**
+     * Not used.
+     */
+    public void fontChanged(int fontId, Font font) {}
 }
