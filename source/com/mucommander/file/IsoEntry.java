@@ -43,6 +43,6 @@ public class IsoEntry extends ArchiveEntry {
     }
 
     int getPermissions() {
-        return AbstractFile.READ_MASK & AbstractFile.WRITE_MASK;
+        return AbstractFile.READ_MASK | AbstractFile.WRITE_MASK;
     }
 }
