@@ -93,7 +93,14 @@ public class SizeFormat {
 		
         if((format&DIGITS_FULL)!=0) {
             // DecimalFormat localizes thousands separators
-            digitsString = DECIMAL_FORMAT.format(size);
+
+            // Calls to DecimalFormat must be synchronized.
+            // Quote from DecimalFormat's Javadoc: "Decimal formats are generally not synchronized. It is recommended 
+            // to create separate format instances for each thread. If multiple threads access a format concurrently,
+            // it must be synchronized externally."
+            synchronized(DECIMAL_FORMAT) {
+                digitsString = DECIMAL_FORMAT.format(size);
+            }
             unitString = unitLong?BYTES:unitShort?B:"";
         }
         else {
