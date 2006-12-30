@@ -10,11 +10,7 @@ import com.mucommander.ui.RunDialog;
  */
 public class RunCommandAction extends MucoAction implements InvokesDialog {
 
-    public RunCommandAction(MainFrame mainFrame) {
-        super(mainFrame);
-    }
+    public RunCommandAction(MainFrame mainFrame) {super(mainFrame);}
 
-    public void performAction() {
-        new RunDialog(mainFrame);
-    }
+    public void performAction() {new RunDialog(mainFrame).showDialog();}
 }

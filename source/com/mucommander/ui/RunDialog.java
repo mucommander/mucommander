@@ -14,64 +14,66 @@ import java.io.PrintStream;
 
 /**
  * Dialog used to execute a user-defined command.
- *
+ * <p>
  * Creates and displays a new dialog allowing the user to input a command which will be executed once the action is confirmed.
  * The command output of the user command is displayed in a text area
- *
+ * </p>
+ * <p>
+ * Note that even though this component is affected by themes, it's impossible to edit the current theme while it's being displayed.
+ * For this reason, the RunDialog doesn't listen to theme modifications.
+ * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class RunDialog extends FocusDialog implements ActionListener, ProcessListener, KeyListener, ThemeListener {
-    private MainFrame mainFrame;
-	
+public class RunDialog extends FocusDialog implements ActionListener, ProcessListener, KeyListener {
+    // - UI components -------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /** Main frame this dialog depends on. */
+    private MainFrame     mainFrame;
+    /** Editable combo box used for shell input and history. */
     private ShellComboBox inputCombo;
-    private JButton runStopButton;
-    private JButton cancelButton;
-    private JButton clearButton;
-
-    private JTextArea outputTextArea;
-
-    private PrintStream    processInput;
-    private Process        currentProcess;
-
-    private int caretPos;
-
-    // Dialog size constraints
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(600, 400);	
+    /** Run/stop button. */
+    private JButton       runStopButton;
+    /** Cancel button. */
+    private JButton       cancelButton;
+    /** Clear shell history button. */
+    private JButton       clearButton;
+    /** Text area used to display the shell output. */
+    private JTextArea     outputTextArea;
 
 
+
+    // - Process management --------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /** Stream used to send characters to the process' stdin process. */
+    private PrintStream processInput;
+    /** Process currently running, <code>null</code> if none. */
+    private Process     currentProcess;
+
+
+
+    // - Misc. class variables -----------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /** Minimum dimensions for the dialog. */
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(600, 400);
+
+
+
+    // - Initialisation ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
-     * Creates and displays a new RunDialog.
-     * 
-     * @param mainFrame the main frame this dialog is attached to.
+     * Creates the dialog's shell output area.
+     * @return a scroll pane containing the dialog's shell output area.
      */
-    public RunDialog(MainFrame mainFrame) {
-        super(mainFrame, Translator.get("com.mucommander.ui.action.RunCommandAction.label"), mainFrame);
-        this.mainFrame = mainFrame;
-		
-        Container contentPane = getContentPane();
-        YBoxPanel mainPanel = new YBoxPanel();
-
-        JLabel label;
-        if(mainFrame.getActiveTable().getCurrentFolder() instanceof com.mucommander.file.FSFile)
-            label = new JLabel(Translator.get("run_dialog.run_command_description")+":");
-        else
-            label = new JLabel(Translator.get("run_dialog.run_in_home_description")+":");
-        mainPanel.add(label);
-
-        inputCombo = new ShellComboBox(this);
-
-        mainPanel.add(inputCombo);
-        mainPanel.addSpace(10);
-
-        contentPane.add(mainPanel, BorderLayout.NORTH);
-
-        mainPanel.add(new JLabel(Translator.get("run_dialog.command_output")+":"));
+    private JScrollPane createOutputArea() {
+        // Creates and initialises the output area.
         outputTextArea = new JTextArea();
         outputTextArea.setLineWrap(true);
+        outputTextArea.setCaretPosition(0);
         outputTextArea.setRows(10);
         outputTextArea.setEditable(false);
         outputTextArea.addKeyListener(this);
 
+        // Applies the current theme to the shell output area.
         outputTextArea.setForeground(ThemeManager.getCurrentColor(Theme.SHELL_TEXT));
         outputTextArea.setCaretColor(ThemeManager.getCurrentColor(Theme.SHELL_TEXT));
         outputTextArea.setBackground(ThemeManager.getCurrentColor(Theme.SHELL_BACKGROUND));
@@ -79,33 +81,79 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         outputTextArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.SHELL_BACKGROUND_SELECTED));
         outputTextArea.setFont(ThemeManager.getCurrentFont(Theme.SHELL));
 
-        JScrollPane scrollPane = new JScrollPane(outputTextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        // Creates a scroll pane on the shell output area.
+        return new JScrollPane(outputTextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    }
 
-        contentPane.add(scrollPane, BorderLayout.CENTER);
-		
+    /**
+     * Creates the shell input part of the dialog.
+     * @return the shell input part of the dialog.
+     */
+    private YBoxPanel createInputArea() {
+        YBoxPanel mainPanel;
+
+        mainPanel = new YBoxPanel();
+
+        // Adds a textual description:
+        // - if we're working in a local directory, 'run in current folder'.
+        // - if we're working on a non-standard FS, 'run in home folder'.
+        mainPanel.add(new JLabel(mainFrame.getActiveTable().getCurrentFolder() instanceof com.mucommander.file.FSFile ?
+                                 Translator.get("run_dialog.run_command_description")+":" : Translator.get("run_dialog.run_in_home_description")+":"));
+
+        // Adds the shell input combo box.
+        mainPanel.add(inputCombo = new ShellComboBox(this));
+        inputCombo.setEnabled(true);
+
+        // Adds a textual description of the shell output area.
+        mainPanel.addSpace(10);
+        mainPanel.add(new JLabel(Translator.get("run_dialog.command_output")+":"));
+
+        return mainPanel;
+    }
+
+    /**
+     * Creates a panel containing the dialog's buttons.
+     * @return a panel containing the dialog's buttons.
+     */
+    private XBoxPanel createButtonsArea() {
         // Buttons panel
         XBoxPanel buttonsPanel;
 
-        buttonsPanel      = new XBoxPanel();
+        buttonsPanel = new XBoxPanel();
 
-        clearButton   = new JButton(Translator.get("run_dialog.clear_history"));
-        runStopButton = new JButton(Translator.get("run_dialog.run"));
-        cancelButton  = new JButton(Translator.get("cancel"));
-
+        // 'Clear history' button.
+        buttonsPanel.add(clearButton = new JButton(Translator.get("run_dialog.clear_history")));
         clearButton.addActionListener(this);
-        buttonsPanel.add(clearButton);
+
+        // Separator.
         buttonsPanel.add(Box.createHorizontalGlue());
-        buttonsPanel.add(DialogToolkit.createOKCancelPanel(runStopButton, cancelButton, this));
 
-        contentPane.add(buttonsPanel, BorderLayout.SOUTH);
+        // 'Run / stop' and 'Cancel' buttons.
+        buttonsPanel.add(DialogToolkit.createOKCancelPanel(runStopButton = new JButton(Translator.get("run_dialog.run")),
+                                                           cancelButton  = new JButton(Translator.get("cancel")), this));
 
-        // Path field will receive initial focus
+        return buttonsPanel;
+    }
+
+    /**
+     * Creates and displays a new RunDialog.
+     * @param mainFrame the main frame this dialog is attached to.
+     */
+    public RunDialog(MainFrame mainFrame) {
+        super(mainFrame, Translator.get("com.mucommander.ui.action.RunCommandAction.label"), mainFrame);
+        this.mainFrame = mainFrame;
+		
+        // Initialises the dialog's UI.
+        Container contentPane = getContentPane();
+        contentPane.add(createInputArea(), BorderLayout.NORTH);
+        contentPane.add(createOutputArea(), BorderLayout.CENTER);
+        contentPane.add(createButtonsArea(), BorderLayout.SOUTH);
+
+        // Sets default items.
         setInitialFocusComponent(inputCombo);
-			
-        setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-        //		setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
+        getRootPane().setDefaultButton(runStopButton);
 
-        // Closing this dialog kills the process
+        // Makes sure that any running process will be killed when the dialog is closed.
         addWindowListener(new WindowAdapter() {
                 public void windowClosed(WindowEvent e) {
                     if(currentProcess!=null) {
@@ -115,16 +163,18 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
                 }
             });
 
-        // Make the 'Run/stop' button the default button
-        getRootPane().setDefaultButton(runStopButton);
-
-        ThemeManager.addThemeListener(this);
-        
-        inputCombo.setEnabled(true);
-        showDialog();
+        // Sets the dialog's minimum size.
+        setMinimumSize(MINIMUM_DIALOG_DIMENSION);
     }
 
-	
+
+
+    // - ProcessListener code ------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Notifies the RunDialog that the current process has died.
+     * @param retValue process' return code (not used).
+     */	
     public void processDied(int retValue) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("process exit, return value= "+retValue);
         currentProcess = null;
@@ -133,74 +183,157 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         switchToRunState();
     }	
 
-	
+    /**
+     * Notifies the RunDialog that the process has output some text.
+     * @param buffer contains the process' output.
+     * @param offset index in <code>buffer</code> at which the new process output starts.
+     * @param length length of the new process' output.
+     */
     public void processOutput(byte buffer[], int offset, int length) {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("processOutput output= "+new String(buffer, 0, length));
         addToTextArea(new String(buffer, offset, length));
     }
 
-    private void addToTextArea(String s) {
-        outputTextArea.append(s);
-        caretPos += s.length();
-        outputTextArea.setCaretPosition(caretPos);
-        outputTextArea.getCaret().setVisible(true);
-        outputTextArea.repaint();
-    }
 
-    private void switchToRunState() {
-        // Change 'Stop' button to 'Run'
-        this.runStopButton.setText(Translator.get("run_dialog.run"));
-        //		// Make text area not active anymore
-        //		this.outputTextArea.setEnabled(false);
-        // Make command field active again
-        this.inputCombo.setEnabled(true);
-        inputCombo.requestFocus();
-        outputTextArea.getCaret().setVisible(false);
-        // Repaint this dialog
-        repaint();
-    }	
 
     // - KeyListener code ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    /**
+     * Notifies the RunDialog that a key has been pressed.
+     * <p>
+     * This method will ignore all events while a process is not running. If a process is running:
+     * <ul>
+     *  <li><code>VK_ESCAPE</code> events are skipped and left to the <i>Cancel</i> button to handle.</li>
+     *  <li>Printable characters are passed to the process and consumed.</li>
+     *  <li>All other events are consumed.</li>
+     * </ul>
+     * </p>
+     * <p>
+     * At the time of writing, <code>tab</code> characters do not seem to be caught.
+     * </p>
+     * @param event describes the key event.
+     */
     public void keyPressed(KeyEvent event) {
-        if(currentProcess != null && event.getKeyCode() == KeyEvent.VK_ENTER)
-            event.consume();
-    }
-
-    public void keyReleased(KeyEvent event) {}
-    public void keyTyped(KeyEvent event) {
+        // Only handle keyPressed events when a process is running.
         if(currentProcess != null) {
-            char character;
-            if((character = event.getKeyChar()) != KeyEvent.CHAR_UNDEFINED) {
-                processInput.print(character);
-                addToTextArea(String.valueOf(character));
+
+            // Ignores VK_ESCAPE events, as their behavior is a bit strange: they register
+            // as a printable character, and reacting to their being typed apparently consumes
+            // the event - preventing the dialog from being closed.
+            if(event.getKeyCode() != KeyEvent.VK_ESCAPE) {
+                char character;
+
+                // Only printable key typed are passed to the shell.
+                if((character = event.getKeyChar()) != KeyEvent.CHAR_UNDEFINED) {
+                    processInput.print(character);
+                    addToTextArea(String.valueOf(character));
+                }
+                event.consume();
             }
         }
     }
 
+    /**
+     * Not used.
+     */
+    public void keyTyped(KeyEvent event) {}
 
-    ////////////////////////////
-    // ActionListener methods //
-    ////////////////////////////
+    /**
+     * Not used.
+     */
+    public void keyReleased(KeyEvent event) {}
+
+
+
+    // - ActionListener code -------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Notifies the RunDialog that an action has been performed.
+     * @param e describes the action that occured.
+     */
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+
+        // 'Clear shell history' has been pressed, clear shell history.
+        if(source == clearButton) {
+            ShellHistoryManager.clear();
+
+            // Sets the new focus depending on whether a process is currently running or not.
+            if(currentProcess == null)
+                inputCombo.requestFocus();
+            else
+                outputTextArea.requestFocus();
+        }
+
+        // 'Run / stop' button has been pressed.
+        else if(source == runStopButton) {
+
+            // If we're not running a process, start a new one.
+            if(currentProcess == null)
+                runCommand(inputCombo.getCommand());
+
+            // If we're running a process, kill it.
+            else {
+                processInput.close();
+                currentProcess.destroy();
+                this.currentProcess = null;
+                switchToRunState();
+            }
+        }
+
+        // Cancel button disposes the dialog and kills the process
+        else if(source == cancelButton) {
+            if(currentProcess != null)
+                currentProcess.destroy();
+            dispose();
+        }
+    }
+
+
+
+    // - Misc. ---------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Switches the UI back to 'Run command' state.
+     */
+    private void switchToRunState() {
+        // Change 'Stop' button to 'Run'
+        this.runStopButton.setText(Translator.get("run_dialog.run"));
+
+        // Make command field active again
+        this.inputCombo.setEnabled(true);
+        inputCombo.requestFocus();
+
+        // Disables the caret in the process output area.
+        outputTextArea.getCaret().setVisible(false);
+
+        // Repaint this dialog
+        repaint();
+    }	
+
+    /**
+     * Runs the specified command.
+     * @param command command to run.
+     */
     public void runCommand(String command) {
-        inputCombo.setEnabled(false);
         try {
+            // Starts the new process.
             currentProcess = Shell.execute(command, mainFrame.getActiveTable().getCurrentFolder(), this);
             processInput   = new PrintStream(currentProcess.getOutputStream(), true);
 
-            // If command could be executed
-            // Reset caret position
-            caretPos = 0;
-
             // Change 'Run' button to 'Stop'
             this.runStopButton.setText(Translator.get("run_dialog.stop"));
-            // Clear text area
-            outputTextArea.setText("");
 
+            // Resets the process output area.
+            outputTextArea.setText("");
+            outputTextArea.setCaretPosition(0);
             outputTextArea.getCaret().setVisible(true);
             outputTextArea.requestFocus();
 
-            // Repaint the dialog
+            // No new command can be entered while a process is running.
+            inputCombo.setEnabled(false);
+
+            // Repaints the dialog.
             repaint();
         }
         catch(Exception e1) {
@@ -208,75 +341,14 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         }
     }
 
-	
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-
-        // Clears shell history.
-        if(source == clearButton) {
-            ShellHistoryManager.clear();
-            if(currentProcess == null)
-                inputCombo.requestFocus();
-            else
-                outputTextArea.requestFocus();
-        }
-
-        // Run button starts a new command
-        else if(currentProcess==null && (source == runStopButton))
-            runCommand(inputCombo.getCommand());
-
-        // Stop button stops current process
-        else if(currentProcess!=null && source==runStopButton) {
-            processInput.close();
-            currentProcess.destroy();
-            this.currentProcess = null;
-            switchToRunState();
-        }
-
-        // Cancel button disposes the dialog and kills the process
-        else if(source == cancelButton) {
-            if(currentProcess != null)
-                currentProcess.destroy();
-            dispose();			
-        }
-    }
-
-
-
-    // - Theme listening -------------------------------------------------------------
-    // -------------------------------------------------------------------------------
     /**
-     * Receives theme color changes notifications.
-     * @param colorId identifier of the color that has changed.
-     * @param color   new value for the color.
+     * Appends the specified string to the shell output area.
+     * @param s string to append to the shell output area.
      */
-    public void colorChanged(int colorId, Color color) {
-        switch(colorId) {
-        case Theme.SHELL_TEXT:
-            outputTextArea.setForeground(color);
-            break;
-
-        case Theme.SHELL_BACKGROUND:
-            outputTextArea.setBackground(color);
-            break;
-
-        case Theme.SHELL_TEXT_SELECTED:
-            outputTextArea.setSelectedTextColor(color);
-            break;
-
-        case Theme.SHELL_BACKGROUND_SELECTED:
-            outputTextArea.setSelectionColor(color);
-            break;
-        }
-    }
-
-    /**
-     * Receives theme font changes notifications.
-     * @param fontId identifier of the font that has changed.
-     * @param font   new value for the font.
-     */
-    public void fontChanged(int fontId, Font font) {
-        if(fontId == Theme.SHELL)
-            outputTextArea.setFont(font);
+    private void addToTextArea(String s) {
+        outputTextArea.append(s);
+        outputTextArea.setCaretPosition(outputTextArea.getText().length());
+        outputTextArea.getCaret().setVisible(true);
+        outputTextArea.repaint();
     }
 }
