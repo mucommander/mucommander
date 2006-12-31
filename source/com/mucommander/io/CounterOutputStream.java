@@ -6,11 +6,11 @@ import java.io.OutputStream;
 
 
 /**
- * An OutputStream that keeps track of the number of bytes that have been read and skipped from it.
+ * An OutputStream that keeps track of the number of bytes that have been written to it.
  *
- * <p>The actual {@link ByteCounter} contains the number of bytes.
+ * <p>The actual number of bytes can be retrieved from the {@link ByteCounter} instance returned by {@link #getCounter()}.
  * The {@link #CounterOutputStream(OutputStream, ByteCounter)} constructor can be used to specify an existing
- * <code>ByteCounter</code> instead of creating a new one. The ByteCounter will always remain accessible, even
+ * ByteCounter instance instead of creating a new one. The ByteCounter will always remain accessible, even
  * after this stream has been closed.
  *
  * @see ByteCounter
@@ -20,7 +20,8 @@ public class CounterOutputStream extends OutputStream {
 
     /** Underlying OutputStream */
     private OutputStream out;
-    /** Counter */
+
+    /** Byte counter */
     private ByteCounter counter;
 
     
@@ -45,6 +46,10 @@ public class CounterOutputStream extends OutputStream {
         this.counter = counter;
     }
 
+
+    /**
+     * Returns the ByteCounter that holds the number of bytes that have been written to this OutputStream.
+     */
     public ByteCounter getCounter() {
         return this.counter;
     }

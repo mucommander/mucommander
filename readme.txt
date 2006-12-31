@@ -154,7 +154,7 @@ New features:
  - Drag and Drop support: files can be copied or moved to and from muCommander windows and other applications, current folder can be changed by dropping a file or folder on the location field
  - Clipboard support: files can be copied and pasted to/from the clipboard (Ctrl+C / Ctrl+V by default), works with other applications
  - New quick search with visual feedback, editable search string, jump to next/previous matches and ability to cancel it
- - New file transfer progress window with 'Pause'/'Resume' and speed limit options, current/total remaining time, elapsed time, current speed and speed graph
+ - New file transfer progress window with 'Pause'/'Resume', 'Skip' current file and speed limit options, current/total remaining time, elapsed time, current speed and speed graph, and option to leave the window open when finished
  - Zip, Tar, Gzip, Bzip2 archives can now be created
  - Support for ISO and NRG images over local and SMB filesystems (contributed by Xavier Martin)
  - Support for Bzip2 archives (.bz2, .tbz2, .tar.bz2 extensions)
@@ -252,13 +252,13 @@ Bug fixes:
  - Fixed muCommander cancelling Mac OS X shutdown / restart / logout
  - Fixed file editor not asking for save when quitting muCommander under OS X
  - Files/folders with extended characters can now properly be executed/revealed under Mac OS X (was caused by a bug in the Java 1.5 runtime http://lists.apple.com/archives/java-dev/2004/Apr/msg00798.html)
+ - Fixed a repaint bug which could cause the folder pane display to be corrupted (since 0.8 beta2)
  - Fixed marked files not properly kept when changing sort order (since 0.8 beta1)
  - Fixed top-level directories which could not be created in sub-directories (since 0.8 beta1)
  - Fixed handling of files containing leading or trailing white space characters (since 0.8 beta1)
  - Fixed issue with filenames containing a '?' character (since 0.8 beta1)
  - Fixed 'Edit bookmarks' changes not taken into account under certain conditions (since beta1)
  - Fixed in-table renaming which could stop working under certain conditions (since 0.8 beta1)
- - Fixed repaint bug which could cause the folder pane display to be corrupted (since 0.8 beta2)
  - Fixed user-defined font not properly taken into account (since 0.8 beta2)
 
 Known issues:

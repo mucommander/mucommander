@@ -3606,6 +3606,31 @@ progress_dialog.limit_speed:RO:Limitare de viteză
 
 
 
+progress_dialog.close_when_finished:EN:Close window when finished
+progress_dialog.close_when_finished:FR:Fermer la fenêtre lorsque terminé
+
+
+
+
+
+
+
+
+
+
+progress_dialog.job_finished:EN:Job finished
+progress_dialog.job_finished:FR:Tâche terminée
+
+
+
+
+
+
+
+
+
+
+
 #####################
 # Properties dialog #
 #####################

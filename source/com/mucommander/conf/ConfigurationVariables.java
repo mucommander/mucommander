@@ -239,8 +239,12 @@ public interface ConfigurationVariables {
     public static final String  PROGRESS_DIALOG_SECTION           = ROOT_SECTION + '.' + "progress_dialog";
     /** Whether the progress dialog is expanded or not. */
     public static final String  PROGRESS_DIALOG_EXPANDED          = PROGRESS_DIALOG_SECTION + '.' + "expanded";
-    /** Default progress dialog behavior. */
+    /** Default progress dialog expanded state. */
     public static final boolean DEFAULT_PROGRESS_DIALOG_EXPANDED  = true;
+    /** Controls whether or not the progress dialog should be closed when the job is finished. */
+    public static final String PROGRESS_DIALOG_CLOSE_WHEN_FINISHED = PROGRESS_DIALOG_SECTION + '.' + "close_when_finished";
+    /** Default progress dialog behavior when the job is finished. */
+    public static final boolean DEFAULT_PROGRESS_DIALOG_CLOSE_WHEN_FINISHED  = true;
 
 
     // - Variables used for caches -------------------------------------------

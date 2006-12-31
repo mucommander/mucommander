@@ -3,6 +3,7 @@ package com.mucommander.ui;
 
 import com.mucommander.file.FileSet;
 import com.mucommander.job.PropertiesJob;
+import com.mucommander.job.FileJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
@@ -130,7 +131,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     //////////////////////
 
     public void run() {
-        while(repaintThread!=null && !job.hasFinished()) {
+        while(repaintThread!=null && job.getState()!= FileJob.FINISHED) {
             updateLabels();
 			
             try { Thread.sleep(REFRESH_RATE); }
@@ -163,7 +164,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         super.windowClosed(e);
 		
         // Stop threads
-        job.stop();
+        job.interrupt();
         repaintThread = null;
     }
 }

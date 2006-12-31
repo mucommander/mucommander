@@ -74,7 +74,7 @@ public class ArchiveJob extends TransferFileJob {
             // Cancel or dialog close (return)
 //            else if (choice==-1 || choice== FileCollisionDialog.CANCEL_ACTION) {
             else {
-                stop();
+                interrupt();
                 return;
             }
         }
@@ -105,7 +105,7 @@ public class ArchiveJob extends TransferFileJob {
 	
 	
     protected boolean processFile(AbstractFile file, Object recurseParams) {
-        if(isInterrupted())
+        if(getState()==INTERRUPTED)
             return false;
 
         String filePath = file.getAbsolutePath(false);
@@ -121,7 +121,7 @@ public class ArchiveJob extends TransferFileJob {
                     // Recurse on files
                     AbstractFile subFiles[] = file.ls();
                     boolean folderComplete = true;
-                    for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
+                    for(int i=0; i<subFiles.length && getState()!=INTERRUPTED; i++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(subFiles[i]);
                         if(!processFile(subFiles[i], null))
@@ -147,7 +147,7 @@ public class ArchiveJob extends TransferFileJob {
                 // If job was interrupted by the user at the time when the exception occurred,
                 // it most likely means that the exception by user cancellation.
                 // In this case, the exception should not be interpreted as an error.
-                if(isInterrupted())
+                if(getState()==INTERRUPTED)
                     return false;
 
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Exception caught: "+e);

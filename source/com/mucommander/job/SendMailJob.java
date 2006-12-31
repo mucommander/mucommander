@@ -94,7 +94,7 @@ public class SendMailJob extends TransferFileJob {
      */
     private void showErrorDialog(String message) {
         showErrorDialog(errorDialogTitle, message, new String[]{CLOSE_TEXT}, new int[]{CLOSE_ACTION});
-        stop();
+        interrupt();
     }
 	
 	
@@ -253,7 +253,7 @@ public class SendMailJob extends TransferFileJob {
             showErrorDialog(Translator.get("email.server_unavailable", mailServer));
         }
 
-        if(isInterrupted())
+        if(getState()==INTERRUPTED)
             return;
 		
         // Send mail body
@@ -295,7 +295,7 @@ public class SendMailJob extends TransferFileJob {
 	
 	
     protected boolean processFile(AbstractFile file, Object recurseParams) {
-        if(isInterrupted())
+        if(getState()==INTERRUPTED)
             return false;
 
         // Send file attachment

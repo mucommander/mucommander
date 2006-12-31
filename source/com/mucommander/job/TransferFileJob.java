@@ -29,15 +29,23 @@ public abstract class TransferFileJob extends FileJob {
     /** Contains the number of bytes processed in the current file so far, see {@link #getCurrentFileByteCounter()} ()} */
     private ByteCounter currentFileByteCounter;
 
+    /** Contains the number of bytes skipped in the current file so far, see {@link #getCurrentFileSkippedByteCounter()} ()} */
+    private ByteCounter currentFileSkippedByteCounter;
+
     /** Contains the number of bytes processed so far, see {@link #getTotalByteCounter()} */
     private ByteCounter totalByteCounter;
 
+    /** Contains the number of bytes skipped so far (resumed files), see {@link #getTotalSkippedByteCounter()} */
+    private ByteCounter totalSkippedByteCounter;
 
     /** InputStream currently being processed, may be null */
     private ThroughputLimitInputStream tlin;
 
     /** ThroughputLimit in bytes per second, -1 initially (no limit) */
     private long throughputLimit = -1;
+
+    /** Has the file currently being processed been skipped ? */
+    private boolean currentFileSkipped;
 
 
     /**
@@ -47,9 +55,11 @@ public abstract class TransferFileJob extends FileJob {
         super(progressDialog, mainFrame, files);
 
         this.currentFileByteCounter = new ByteCounter();
+        this.currentFileSkippedByteCounter = new ByteCounter();
 
         // Account the current file's byte counter in the total byte counter
         this.totalByteCounter = new ByteCounter(currentFileByteCounter);
+        this.totalSkippedByteCounter = new ByteCounter(currentFileSkippedByteCounter);
     }
 
 	
@@ -61,7 +71,6 @@ public abstract class TransferFileJob extends FileJob {
         // Throw a specific FileTransferException if source and destination files are identical
         if(sourceFile.equals(destFile))
             throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
-
 
         // Determine whether AbstractFile.copyTo() should be used to copy file or streams should be copied manually.
         // Some file protocols do not provide a getOutputStream() method and require the use of copyTo(). Some other
@@ -82,7 +91,10 @@ public abstract class TransferFileJob extends FileJob {
 
                     if(append && destFileSize!=-1) {
                         setCurrentInputStream(sourceFile.getInputStream(destFileSize));
+                        // Increase current file ByteCounter by the number of bytes skipped
                         currentFileByteCounter.add(destFileSize);
+                        // Increase skipped ByteCounter by the number of bytes skipped
+                        currentFileSkippedByteCounter.add(destFileSize);
                     }
                     else {
                         setCurrentInputStream(sourceFile.getInputStream());
@@ -104,21 +116,15 @@ public abstract class TransferFileJob extends FileJob {
                 // was thrown in the catch block
 
                 // Tries to close the streams no matter what happened before
-                if(tlin !=null) {
-                    try { tlin.close(); }
-                    catch(IOException e1) {}
-                }
+                closeCurrentInputStream();
             }
         }
 
         // Preserve source file's date
         destFile.changeDate(sourceFile.getDate());
 
-if(Debug.ON) Debug.trace("sourceFile="+sourceFile+" destFile="+destFile);
-if(Debug.ON) Debug.trace("sourceFile permissions="+sourceFile.getPermissions()+" destFile permissions="+destFile.getPermissions());
         // Preserve source file's permissions
         destFile.setPermissions(sourceFile.getPermissions());
-if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
     }
 
 
@@ -141,8 +147,14 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
                 // If job was interrupted by the user at the time when the exception occurred,
                 // it most likely means that the exception by user cancellation.
                 // In this case, the exception should not be interpreted as an error.
-                if(isInterrupted())
+                if(getState()==INTERRUPTED)
                     return false;
+
+                // Same goes if current file was skipped.
+                if(currentFileSkipped) {
+                    currentFileSkipped = false;
+                    return false;
+                }
 
                 // Copy failed
                 if(com.mucommander.Debug.ON) {
@@ -178,8 +190,9 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
 
                 // Retry action (append or retry)
                 if(choice==RETRY_ACTION || choice==APPEND_ACTION) {
-                    // Reset processed bytes currentFileByteCounter
+                    // Reset current file byte counters
                     currentFileByteCounter.reset();
+                    currentFileSkippedByteCounter.reset();
                     // Append resumes transfer
                     append = choice==APPEND_ACTION;
                     continue;
@@ -198,7 +211,7 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
 //                }
 //                // Retry action (append or retry)
 //                else {
-//                    // Reset processed bytes currentFileByteCounter
+//                    // Reset processed bytes counter
 //                    currentFileByteCounter.reset();
 //                    // Append resumes transfer
 //                    append = choice==APPEND_ACTION;
@@ -206,6 +219,63 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
 //                }
             }
         } while(true);
+    }
+
+
+    /**
+     * Registers the given InputStream as currently in use, in order to:
+     * <ul>
+     * <li>count the number of bytes that have been read from it (see {@link #getCurrentFileByteCounter()})
+     * <li>block read methods calls when the job is paused
+     * <li>limit the throughput if a limit has been specified (see {@link #setThroughputLimit(long)})
+     * <li>close the InputStream when the job is stopped
+     * </ul>
+     *
+     * <p>This method should be called by subclasses when creating a new InputStream, before the InputStream is used.
+     *
+     * @param in the InputStream to be used
+     * @return the 'augmented' InputStream using the given stream as the underlying InputStream
+     */
+    protected synchronized InputStream setCurrentInputStream(InputStream in) {
+        if(tlin==null) {
+            tlin = new ThroughputLimitInputStream(new CounterInputStream(in, currentFileByteCounter), throughputLimit);
+        }
+        else {
+            tlin.setUnderlyingInputStream(new CounterInputStream(in, currentFileByteCounter));
+        }
+
+        return tlin;
+    }
+
+
+    /**
+     * Closes the currently registered source InputStream.
+     */
+    protected synchronized void closeCurrentInputStream() {
+        if(tlin !=null) {
+            try { tlin.close(); }
+            catch(IOException e) {}
+        }
+    }
+
+
+    /**
+     * Interrupts the current file transfer and advance to the next one.
+     */
+    public synchronized void skipCurrentFile() {
+        if(tlin !=null) {
+            if(Debug.ON) Debug.trace("skipping current file, closing "+ tlin);
+
+            // Prevents an error from being reported when the current InputStream is closed
+            currentFileSkipped = true;
+
+            // Close the current input stream to interrupt the transfer
+            closeCurrentInputStream();
+        }
+
+        // Resume job if currently paused 
+        if(getState()==PAUSED)
+            setPaused(false);
     }
 
 
@@ -229,6 +299,13 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
         return currentFileByteCounter;
     }
 
+    /**
+     * Returns the number of bytes that have been skipped in the current file.
+     * Bytes are skipped when file transfers are resumed.
+     */
+    public ByteCounter getCurrentFileSkippedByteCounter() {
+        return currentFileSkippedByteCounter;
+    }
 
     /**
      * Returns the size of the file currently being processed, -1 if is not available.
@@ -241,34 +318,16 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
     /**
      * Returns a {@link ByteCounter} that holds the total number of bytes that have been processed by this job so far.
      */
-    public synchronized ByteCounter getTotalByteCounter() {
+    public ByteCounter getTotalByteCounter() {
         return totalByteCounter;
     }
 
-
     /**
-     * Registers the given InputStream as currently in use, in order to:
-     * <ul>
-     * <li>count the number of bytes that have been read from it (see {@link #getCurrentFileByteCounter()})
-     * <li>block read methods calls when the job is paused
-     * <li>limit the throughput if a limit has been specified (see {@link #setThroughputLimit(long)})
-     * <li>close the InputStream when the job is stopped
-     * </ul>
-     *
-     * <p>This method should be called by subclasses when creating a new InputStream, before the InputStream is used.
-     *  
-     * @param in the InputStream to be used
-     * @return the 'augmented' InputStream using the given stream as the underlying InputStream
+     * Returns a {@link ByteCounter} that holds the total number of bytes that have been skipped by this job so far.
+     * Bytes are skipped when file transfers are resumed.
      */
-    public InputStream setCurrentInputStream(InputStream in) {
-        if(tlin==null) {
-            tlin = new ThroughputLimitInputStream(new CounterInputStream(in, currentFileByteCounter), throughputLimit);
-        }
-        else {
-            tlin.setUnderlyingInputStream(new CounterInputStream(in, currentFileByteCounter));
-        }
-
-        return tlin;
+    public ByteCounter getTotalSkippedByteCounter() {
+        return totalSkippedByteCounter;
     }
 
 
@@ -288,8 +347,10 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
         // from what a user would expect when specifying 0 as a limit
         this.throughputLimit = bytesPerSecond<=0?-1:bytesPerSecond;
 
-        if(!isPaused() && tlin !=null)
-            tlin.setThroughputLimit(throughputLimit);
+        synchronized(this) {
+            if(getState()!=PAUSED && tlin !=null)
+                tlin.setThroughputLimit(throughputLimit);
+        }
     }
 
 
@@ -312,11 +373,12 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
     protected void jobStopped() {
         super.jobStopped();
 
-        if(tlin !=null) {
-            if(Debug.ON) Debug.trace("closing current InputStream "+ tlin);
+        synchronized(this) {
+            if(tlin !=null) {
+                if(Debug.ON) Debug.trace("closing current InputStream "+ tlin);
 
-            try { tlin.close(); }
-            catch(IOException e) {}
+                closeCurrentInputStream();
+            }
         }
     }
 
@@ -328,8 +390,10 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
     protected void jobPaused() {
         super.jobPaused();
 
-        if(tlin !=null)
-            tlin.setThroughputLimit(0);
+        synchronized(this) {
+            if(tlin !=null)
+                tlin.setThroughputLimit(0);
+        }
     }
 
 
@@ -340,17 +404,21 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
     protected void jobResumed() {
         super.jobResumed();
 
-        if(tlin !=null)
-            tlin.setThroughputLimit(-1);
+        synchronized(this) {
+            // Restore previous throughput limit (if any, -1 by default)
+            if(tlin !=null)
+                tlin.setThroughputLimit(throughputLimit);
+        }
     }
 
 
     /**
-     * Advances file index and resets file bytes currentFileByteCounter. This method should be called by subclasses whenever the job
-     * starts processing a new file.
+     * Advances file index and resets current file's byte counters. This method should be called by subclasses
+     * whenever the job starts processing a new file.
      */
     protected void nextFile(AbstractFile file) {
         totalByteCounter.add(currentFileByteCounter, true);
+        totalSkippedByteCounter.add(currentFileSkippedByteCounter, true);
 
         super.nextFile(file);
     }
@@ -383,16 +451,17 @@ if(Debug.ON) Debug.trace("new destFile permissions="+destFile.getPermissions());
      */
     public float getTotalPercentDone() {
         float nbFilesProcessed = getCurrentFileIndex();
+        int nbFiles = getNbFiles();
 
-        // If file is in base folder and is not a directory
-        if(currentFile!=null && files.indexOf(currentFile)!=-1 && !currentFile.isDirectory()) {
-            // Take into account current file's progress
+        // If file is in base folder and is not a directory...
+        if(currentFile!=null && nbFilesProcessed!=nbFiles && files.indexOf(currentFile)!=-1 && !currentFile.isDirectory()) {
+            // Add current file's progress
             long currentFileSize = currentFile.getSize();
             if(currentFileSize>0)
                 nbFilesProcessed += getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
         }
 
-        return nbFilesProcessed/(float)getNbFiles();
+        return nbFilesProcessed/(float)nbFiles;
     }
     
 }

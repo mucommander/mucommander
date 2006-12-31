@@ -5,11 +5,13 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileSet;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.table.FileTable;
+
+import java.util.WeakHashMap;
+import java.util.Iterator;
 
 
 /**
@@ -17,7 +19,18 @@ import com.mucommander.ui.table.FileTable;
  * The class extending FileJob is required to give some information about the status of the job that
  * will be used to display visual indications of the job's progress.
  *
- * <p>The actual file operations are performed in a separate thread.</p>
+ * <p>The actual processing is performed in a separate thread. A FileJob needs to be started explicitely using
+ * {@link #start()}. The lifecycle of a FileJob is as follows:
+ *
+ * <p>
+ * {@link #NOT_STARTED} -> {@link #RUNNING} -> {@link #FINISHED}      <br>
+ *                         ^                |                         <br>
+ *                         |                -> {@link #INTERRUPTED}   <br>
+ *                         |                |                         <br>
+ *                         |                -> {@link #PAUSED} -|     <br>
+ *                         |                                    |     <br>
+ *                         -------------------------------------|     <br>
+ *
  *
  * @author Maxence Bernard
  */
@@ -26,17 +39,14 @@ public abstract class FileJob implements Runnable {
     /** Thread in which the file job is performed */
     private Thread jobThread;
 
-    /** Serves to differenciate between the 'stopped' and 'not started yet' states */
-    private boolean hasStarted;
-	
-    /** Is this job paused ? */
-    private boolean isPaused;
-
     /** Lock used when job is being paused */
-    private Object pauseLock = new Object();
+    private final Object pauseLock = new Object();
 
     /** Timestamp in milliseconds when job started */
     private long startDate;
+
+    /** Timestamp in milliseconds when job has finished */
+    private long endDate;
 
     /** Number of milliseconds during which this job has been paused (been waiting for some user response).
      * Used to compute stats like average speed. */
@@ -66,12 +76,37 @@ public abstract class FileJob implements Runnable {
     /** File currently being processed */
     protected AbstractFile currentFile;
 
+    /** Info string about the file currently being processed */
+    protected String currentFileInfo = "";
+
     /** If set to true, processed files will be unmarked from current table */
     private boolean autoUnmark = true;
 	
     /** File to be selected after job has finished (can be null if not set) */
     private AbstractFile fileToSelect;
 
+
+    /** Indicates that this job has not started yet, this is a temporary state */
+    public final static int NOT_STARTED = 0;
+
+    /** Indicates that this job is currently processing files, this is a temporary state */
+    public final static int RUNNING = 1;
+
+    /** Indicates that this job is currently paused, waiting for user response, this is a temporary state */
+    public final static int PAUSED = 2;
+
+    /** Indicates that this job has been interrupted by the end user, this is a permanent state */
+    public final static int INTERRUPTED = 3;
+
+    /** Indicates that this job has naturally finished (i.e. without being interrupted), this is a permanent state */
+    public final static int FINISHED = 4;
+
+
+    /** Current state of this job */
+    private int jobState = NOT_STARTED;
+
+    /** List of registered FileJobListener stored as weak references */
+    private WeakHashMap listeners = new WeakHashMap();
 
 //    private int nbFilesProcessed;
 //    private int nbFilesDiscovered;
@@ -137,26 +172,81 @@ public abstract class FileJob implements Runnable {
      * Starts file job in a separate thread.
      */
     public void start() {
+        // Return if job has already been started
+        if(jobState!=NOT_STARTED)
+            return;
+
         // Pause auto-refresh during file job if this job potentially modifies folders contents
         // and would potentially cause table to auto-refresh
         mainFrame.getFolderPanel1().getFileTable().setAutoRefreshActive(false);
         mainFrame.getFolderPanel2().getFileTable().setAutoRefreshActive(false);
-		
-        // Serves to differenciate between the 'stopped' and 'not started yet' states
-        hasStarted = true;
+
+        setState(RUNNING);
         startDate = System.currentTimeMillis();
+
         jobThread = new Thread(this, getClass().getName());
         jobThread.start();
     }
 
 
     /**
-     * Returns the timestamp in milliseconds when this job was started.
+     * Returns the current state of this FileJob. See constant fields for possible return values.
+     */
+    public int getState() {
+        return jobState;
+    }
+
+    /**
+     * Sets a new state for this FileJob and notifies registered FileJobListener instances of the change.
+     *
+     * @param jobState the new state
+     */
+    protected void setState(int jobState) {
+        int oldState = this.jobState;
+        this.jobState = jobState;
+
+        Iterator iterator = listeners.keySet().iterator();
+        while(iterator.hasNext())
+            ((FileJobListener)iterator.next()).jobStateChanged(this, oldState, jobState);
+    }
+
+
+    /**
+     * Registers a FileJobListener to receive notifications whenever state of this FileJob changes.
+     *
+     * <p>Listeners are stored as weak references so {@link #removeFileJobListener(FileJobListener)}
+     * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
+     *
+     * @param listener the FileJobListener to register
+     */
+    public void addFileJobListener(FileJobListener listener) {
+        listeners.put(listener, null);
+    }
+
+    /**
+     * Removes the given FileJobListener from the list of listeners that receive notifications when the state of
+     * this FileJob has changed.
+     *
+     * @param listener the FileJobListener to remove
+     */
+    public void removeFileJobListener(FileJobListener listener) {
+        listeners.remove(listener);
+    }
+
+
+    /**
+     * Returns the timestamp in milliseconds when this job started.
      */
     public long getStartDate() {
         return startDate;
     }
 
+    /**
+     * Returns the timestamp in milliseconds when this job ended, 0 if this job hasn't finished yet.
+     */
+    public long getEndDate() {
+        return endDate;
+    }
 
     /**
      * Returns the timestamp in milliseconds when this job was last paused.
@@ -185,33 +275,41 @@ public abstract class FileJob implements Runnable {
         if(startDate==0)
             return 0;
         
-        return System.currentTimeMillis()-startDate-pausedTime;
+        return (endDate==0?System.currentTimeMillis():endDate)-startDate-pausedTime;
     }
 
     
     /**
-     * Stops this job.
+     * Interrupts this job, changes the job state to {@link #INTERRUPTED} and notifies listeners.
      */	
-    public void stop() {
+    public void interrupt() {
+        if(jobState==INTERRUPTED || jobState==FINISHED)
+            return;
+
+        if(jobState==PAUSED)
+            setPaused(false);
+
+        stop();
+        setState(INTERRUPTED);
+    }
+
+
+    /**
+     * Release reference to thread and store job's end date.
+     */
+    private void stop() {
         // Return if job has already been stopped
         if(jobThread==null)
             return;
 
         jobThread = null;
-	
+        endDate = System.currentTimeMillis();
+
         // Notify that the job has been stopped
         jobStopped();
     }
-	
-	
-    /**
-     * Returns <code>true</code> if this file job has been interrupted.
-     */
-    public boolean isInterrupted() {
-        return jobThread == null;
-    }
 
-
+	
     /**
      * Sets or unsets this job in paused mode.
      */
@@ -219,7 +317,7 @@ public abstract class FileJob implements Runnable {
         // Lock the pause lock while updating paused status
         synchronized(pauseLock) {
             // Resume job if it was paused
-            if(!paused && this.isPaused) {
+            if(!paused && jobState==PAUSED) {
                 // Calculate pause time
                 this.pausedTime += System.currentTimeMillis() - this.pauseStartDate;
                 // Call the jobResumed method to notify of the new job's state
@@ -227,25 +325,21 @@ public abstract class FileJob implements Runnable {
 
                 // Wake up the job's thread that is potentially waiting for pause to be over 
                 pauseLock.notify();
+
+                // Switch to RUNNING state and notify listeners
+                setState(RUNNING);
             }
             // Pause job if it not paused already
-            else if(paused && !this.isPaused) {
+            else if(paused && jobState!=PAUSED) {
                 // Memorize pause time in order to calculate pause time when the job is resumed
                 this.pauseStartDate = System.currentTimeMillis();
                 // Call the jobPaused method to notify of the new job's state
                 jobPaused();
+
+                // Switch to PAUSED state and notify listeners
+                setState(PAUSED);
             }
-
-            this.isPaused = paused;
         }
-    }
-
-
-    /**
-     * Returns true if this job is currently paused, waiting for user response.
-     */
-    public boolean isPaused() {
-        return isPaused;        
     }
 
 
@@ -258,10 +352,17 @@ public abstract class FileJob implements Runnable {
     protected void nextFile(AbstractFile file) {
         this.currentFile = file;
 
+        // Update current file information returned by getCurrentFileInfo(), in the format "test.zip" (14KB)
+        this.currentFileInfo = "\""+currentFile.getName()+"\" ("+ SizeFormat.format(currentFile.getSize(), SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB)+")";
+
+//        // Notify ProgressDialog (if any) that a new file is being processed
+//        if(progressDialog!=null)
+//            progressDialog.notifyCurrentFileChanged();
+        
         // Lock the pause lock
         synchronized(pauseLock) {
             // Loop while job is paused, there shouldn't normally be more than one loop
-            while(isPaused) {
+            while(jobState==PAUSED) {
                 try {
                     // Wait for a call to notify()
                     pauseLock.wait();
@@ -296,10 +397,7 @@ public abstract class FileJob implements Runnable {
      * Returns some info about the file currently being processed, for example : "test.zip" (14KB)
      */
     protected String getCurrentFileInfo() {
-        // Update current file information used by status string
-        if(currentFile==null)
-            return "";
-        return "\""+currentFile.getName()+"\" ("+ SizeFormat.format(currentFile.getSize(), SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT| SizeFormat.ROUND_TO_KB)+")";
+        return currentFileInfo;
     }
 	
 	
@@ -314,12 +412,12 @@ public abstract class FileJob implements Runnable {
 
     /**
      * This method is called when this job has completed normal execution : all files have been processed without any interruption
-     * (without any call to {@link #stop()}).
+     * (without any call to {@link #interrupt()}).
      *
      * <p>The call happens after the last call to {@link #processFile(AbstractFile,Object)} is made.
      * This method implementation does nothing but it can be overriden by subclasses to properly complete the job.</p>
 	 
-     * <p>Note that this method will NOT be called if a call to {@link #stop()} was made before all files were processed.</p>
+     * <p>Note that this method will NOT be called if a call to {@link # interrupt ()} was made before all files were processed.</p>
      */
     protected void jobCompleted() {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
@@ -369,7 +467,7 @@ public abstract class FileJob implements Runnable {
         FileTable activeTable = mainFrame.getActiveTable();
         AbstractFile currentFile;
 
-        // Notifies that this job starts
+        // Notify that this job has started
         jobStarted();
 
 //this.nbFilesDiscovered += nbFiles;
@@ -385,8 +483,8 @@ public abstract class FileJob implements Runnable {
             // Process current file
             boolean success = processFile(currentFile, null);
 
-            // Stop if job was interrupted by the user
-            if(isInterrupted())
+            // Stop if job was interrupted
+            if(getState()==INTERRUPTED)
                 break;
 
             // Unmark file in active table if 'auto unmark' is enabled
@@ -395,22 +493,15 @@ public abstract class FileJob implements Runnable {
                 activeTable.setFileMarked(currentFile, false);
             }
 
-            // If last file was reached without any user interruption, notify that
-            // that the job has been completed (all files have been processed with or without errors).
+            // If last file was reached without any user interruption, all files have been processed with or
+            // without errors, switch to FINISHED state and notify listeners
             if(i==nbFiles-1) {
+                currentFileIndex++;
+                stop();
+                setState(FINISHED);
                 jobCompleted();
             }
         }
-
-        // If this job hasn't been stopped already, call stop()
-        if(!isInterrupted()) {
-            // Stop job
-            stop();
-        }
-		
-        // Dispose progress dialog (if any) 
-        if(progressDialog!=null)
-            progressDialog.dispose();
 
         // Refresh tables's current folders, based on the job's refresh policy.
         refreshTables();
@@ -458,7 +549,7 @@ public abstract class FileJob implements Runnable {
         // Cancel or close dialog stops this job
         int userChoice = waitForUserResponse(dialog);
         if(userChoice==-1 || userChoice==CANCEL_ACTION)
-            stop();
+            interrupt();
 		
         return userChoice;
     }
@@ -478,18 +569,6 @@ public abstract class FileJob implements Runnable {
     }
 	
 	
-//    /**
-//     * Creates and returns a dialog which notifies the user that a file already exists in the destination folder
-//     * under the same name and asks for what to do.
-//     */
-//    protected FileCollisionDialog getFileExistsDialog(AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode) {
-//        if(progressDialog==null)
-//            return new FileCollisionDialog(mainFrame, mainFrame, sourceFile, destFile, multipleFilesMode);
-//        else
-//            return new FileCollisionDialog(progressDialog, mainFrame, sourceFile, destFile, multipleFilesMode);
-//    }
-
-
     /**
      * Check and if needed, refreshes both file tables's current folders, based on the job's refresh policy.
      */
@@ -514,17 +593,6 @@ public abstract class FileJob implements Runnable {
     }
 	
 
-    ////////////////////////////////////////////
-    // Control methods used by ProgressDialog //
-    ////////////////////////////////////////////
-	
-    /**
-     * Returns <code>true</code> if the file job is finished.
-     */
-    public boolean hasFinished() {
-        return hasStarted && jobThread == null;
-    }
-	
     /**
      * Returns the percentage of job completion, as a float comprised between 0 and 1.
      */
@@ -534,7 +602,7 @@ public abstract class FileJob implements Runnable {
 
 
     /**
-     * Returns the index of the file currently being processed (has to be < {@link #getNbFiles()}).
+     * Returns the index of the file currently being processed, {@link #getNbFiles()} if all files have been processed.
      */
     public int getCurrentFileIndex() {
         return currentFileIndex==-1?0:currentFileIndex;

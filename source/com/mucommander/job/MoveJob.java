@@ -94,7 +94,7 @@ public class MoveJob extends TransferFileJob {
      */
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted
-        if(isInterrupted())
+        if(getState()==INTERRUPTED)
             return false;
 		
         // Destination folder
@@ -171,7 +171,7 @@ public class MoveJob extends TransferFileJob {
 
             // Cancel, skip or close dialog
             if (choice==-1 || choice== FileCollisionDialog.CANCEL_ACTION) {
-                stop();
+                interrupt();
                 return false;
             }
             // Skip file
@@ -229,7 +229,7 @@ public class MoveJob extends TransferFileJob {
                 try {
                     AbstractFile subFiles[] = file.ls();
                     boolean isFolderEmpty = true;
-                    for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
+                    for(int i=0; i<subFiles.length && getState()!=INTERRUPTED; i++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(subFiles[i]);
                         if(!processFile(subFiles[i], destFile))
@@ -293,7 +293,7 @@ public class MoveJob extends TransferFileJob {
 
             // if moveTo() returned false it wasn't possible to this method because of 'append',
             // try the hard way by copying the file first, and then deleting the source file
-            if(tryCopyFile(file, destFile, append, errorDialogTitle) && !isInterrupted()) {
+            if(tryCopyFile(file, destFile, append, errorDialogTitle) && getState()!=INTERRUPTED) {
                 // Delete the source file
                 do {		// Loop for retry
                     try  {

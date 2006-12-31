@@ -6,6 +6,7 @@ import com.mucommander.Debug;
 import com.mucommander.conf.*;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.TransferFileJob;
+import com.mucommander.job.FileJobListener;
 import com.mucommander.text.DurationFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -24,11 +25,14 @@ import java.awt.event.*;
 import java.util.Vector;
 
 /**
- * This dialog informs the user of the progress made by a FileJob.
+ * This dialog informs the user of the progress made by a FileJob and allows to control it: pause/resume it, stop it,
+ * limit transfer rate...
  *
  * @author Maxence Bernard
  */
-public class ProgressDialog extends FocusDialog implements Runnable, ActionListener, ItemListener, ChangeListener {
+public class ProgressDialog extends FocusDialog implements Runnable, ActionListener, ItemListener, ChangeListener, FileJobListener {
+
+    private MainFrame mainFrame;
 
     private JLabel currentFileLabel;
     private JLabel totalTransferredLabel;
@@ -47,21 +51,21 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     private CollapseExpandButton collapseExpandButton;
     private ButtonChoicePanel buttonsChoicePanel;
     private JButton pauseResumeButton;
+    private JButton skipButton;
     private JButton stopButton;
+    private JCheckBox closeWhenFinishedCheckBox;
 //    private JButton hideButton;
 
     private FileJob job;
     private TransferFileJob transferFileJob;
 
     private Thread repaintThread;
-
-    private MainFrame mainFrame;
-
     private boolean firstTimeActivated = true;
 
     // Button icons
     private final static String RESUME_ICON = "resume.png";
     private final static String PAUSE_ICON = "pause.png";
+    private final static String SKIP_ICON = "skip.png";
     private final static String STOP_ICON = "stop.png";
     private final static String CURRENT_SPEED_ICON = "speed.png";
 
@@ -72,8 +76,11 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     /** Height allocated to the 'speed graph' */
     private final static int SPEED_GRAPH_HEIGHT = 100;
 
-    /** How often should progress information be refreshed (in ms) */
-    private final static int REFRESH_RATE = 1000;
+    /** Controls how often should progress information be refreshed (in ms) */
+    private final static int MAIN_REFRESH_RATE = 1000;
+
+    /** Controls how often should current file label be refreshed */
+    private final static int CURRENT_FILE_LABEL_REFRESH_RATE = 100;
 
     static {
         // Disable JProgressBar animation which is a real CPU hog under Mac OS X
@@ -128,7 +135,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         elapsedTimeLabel.setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, StatusBar.WAITING_ICON));
         yPanel.add(elapsedTimeLabel);
 
-        if(transferFileJob !=null) {
+        if(transferFileJob!=null) {
             JPanel tempPanel = new JPanel(new BorderLayout());
 
             this.currentSpeedLabel = new JLabel();
@@ -140,9 +147,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
             JPanel tempPanel2 = new JPanel(new BorderLayout());
             this.limitSpeedCheckBox = new JCheckBox(Translator.get("progress_dialog.limit_speed")+":", false);
-            // setFocusable() is not available under Java 1.3
-            if(PlatformManager.JAVA_VERSION>PlatformManager.JAVA_1_3)
-                limitSpeedCheckBox.setFocusable(false);
+            limitSpeedCheckBox.setFocusable(false);
             limitSpeedCheckBox.addItemListener(this);
 
             tempPanel2.add(limitSpeedCheckBox, BorderLayout.WEST);
@@ -179,11 +184,22 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             yPanel.add(advancedPanel);
         }
 
+        closeWhenFinishedCheckBox = new JCheckBox(Translator.get("progress_dialog.close_when_finished"));
+        closeWhenFinishedCheckBox.setSelected(ConfigurationManager.getVariableBoolean(ConfigurationVariables.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED,
+                                                                                      ConfigurationVariables.DEFAULT_PROGRESS_DIALOG_CLOSE_WHEN_FINISHED));
+        closeWhenFinishedCheckBox.setFocusable(false);
+        yPanel.add(closeWhenFinishedCheckBox);
+
         yPanel.add(Box.createVerticalGlue());
         contentPane.add(yPanel, BorderLayout.CENTER);
 
         pauseResumeButton = new JButton(Translator.get("pause"), IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
         pauseResumeButton.addActionListener(this);
+
+        if(transferFileJob!=null) {
+            skipButton = new JButton(Translator.get("skip"), IconManager.getIcon(IconManager.PROGRESS_ICON_SET, SKIP_ICON));
+            skipButton.addActionListener(this);
+        }
 
         stopButton = new JButton(Translator.get("stop"), IconManager.getIcon(IconManager.PROGRESS_ICON_SET, STOP_ICON));
         stopButton.addActionListener(this);
@@ -191,8 +207,9 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 //        hideButton = new JButton(Translator.get("progress_dialog.hide"));
 //        hideButton.addActionListener(this);
 
-//        this.buttonsChoicePanel = new ButtonChoicePanel(new JButton[] {pauseResumeButton, stopButton, hideButton}, 0, getRootPane());
-        this.buttonsChoicePanel = new ButtonChoicePanel(new JButton[] {pauseResumeButton, stopButton}, 0, getRootPane());
+        this.buttonsChoicePanel = new ButtonChoicePanel(
+                skipButton==null?new JButton[] {pauseResumeButton, stopButton}:new JButton[] {pauseResumeButton, skipButton, stopButton},
+                0, getRootPane());
         contentPane.add(buttonsChoicePanel, BorderLayout.SOUTH);
 
         // Cancel button receives initial focus
@@ -205,17 +222,37 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     public void start(FileJob job) {
         this.job = job;
+
+        // Listen to job state changes
+        job.addFileJobListener(this);
+
         if(job instanceof TransferFileJob)
             this.transferFileJob = (TransferFileJob)job;
 
         initUI();
         
-        repaintThread = new Thread(this, "com.mucommander.ui.ProgressDialog's Thread");
+        repaintThread = new Thread(this, getClass().getName());
         repaintThread.start();
 
         showDialog();
     }
 
+
+    /**
+     * Stops repaint thread.
+     */
+    public void stop() {
+        repaintThread = null;
+    }
+
+
+//    /**
+//     * This method is called by the registered FileJob starts each time a new file is being processed.
+//     */
+//    public void notifyCurrentFileChanged() {
+//        // Update current file label
+//        currentFileLabel.setText(job.getStatusString());
+//    }
 
     private void updateThroughputLimit() {
         transferFileJob.setThroughputLimit(limitSpeedCheckBox.isSelected()?SizeFormat.getUnitBytes(speedUnitComboBox.getSelectedIndex())*(((Integer)limitSpeedSpinner.getValue())).intValue():-1);
@@ -226,20 +263,109 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
     }
 
 
-    //////////////////////
-    // Runnable methods //
-    //////////////////////
+    ////////////////////////////////////
+    // FileJobListener implementation //
+    ////////////////////////////////////
+
+    public void jobStateChanged(FileJob source, int oldState, int newState) {
+        if(Debug.ON) Debug.trace("currentThread="+Thread.currentThread()+" oldState="+oldState+" newState="+newState);
+
+        if(newState==FileJob.INTERRUPTED) {
+            // Stop repaint thread and dispose dialog
+            stop();
+            dispose();
+        }
+        else if(newState==FileJob.FINISHED) {
+            //  Dispose dialog only if 'Close when finished option' is selected
+            if(closeWhenFinishedCheckBox.isSelected()) {
+                // Stop repaint thread and dispose dialog
+                stop();
+                dispose();
+            // If not, disable components to indicate that the job is finished and leave the dialog open
+            }
+            else {
+                // Repaint thread should not be stopped now, it will die naturally after updating labels and progress
+                // bars to indicate that the job is finished
+
+                // Change 'Stop' button's label to 'Close'
+                stopButton.setText(Translator.get("close"));
+
+                // Disable components
+                pauseResumeButton.setEnabled(false);
+
+                if(transferFileJob!=null) {
+                    skipButton.setEnabled(false);
+                    limitSpeedCheckBox.setEnabled(false);
+                    speedUnitComboBox.setEnabled(false);
+                    limitSpeedSpinner.setEnabled(false);
+                }
+            }
+        }
+        else if(newState==FileJob.PAUSED) {
+            pauseResumeButton.setText(Translator.get("resume"));
+            pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
+
+            // Update buttons mnemonics
+            buttonsChoicePanel.updateMnemonics();
+            
+            if(transferFileJob!=null)
+                updateCurrentSpeedLabel("N/A");
+        }
+        else if(newState==FileJob.RUNNING) {
+            pauseResumeButton.setText(Translator.get("pause"));
+            pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
+
+            // Update buttons mnemonics
+            buttonsChoicePanel.updateMnemonics();
+        }
+    }
+
+
+    /////////////////////////////
+    // Runnable implementation //
+    /////////////////////////////
 
     public void run() {
         String progressText;
         long lastBytesTotal = 0;
         long lastTime = System.currentTimeMillis();
+        boolean lastLoop = false;
 
-        while(repaintThread!=null && !job.hasFinished()) {
-            long now = System.currentTimeMillis();
+        // Refresh current file label in a separate thread, more frequently than other components to give a sense
+        // of speed when small files are being transferred.
+        // This 'pull' approach allows to throttle the number label updates which have a cost VS updating the label
+        // for each file being processed (job notifications) which can hog the CPU when lots of small files
+        // are being transferred.
+        new Thread() {
+            public void run() {
+                // This thread will naturally die when the main repaint thread is terminated
+                while(repaintThread!=null) {
+                    int jobState = job.getState();
+
+                    if(jobState==FileJob.FINISHED || jobState==FileJob.INTERRUPTED) {
+                        currentFileLabel.setText(Translator.get("progress_dialog.job_finished"));
+                        return;
+                    }
+
+                    currentFileLabel.setText(job.getStatusString());
+
+                    // Sleep for a while
+                    try {
+                        Thread.sleep(CURRENT_FILE_LABEL_REFRESH_RATE);
+                    }
+                    catch(InterruptedException e) {}
+                }
+            }
+        }.start();
+
+        while(repaintThread!=null) {
+            // Now is updated with current time, or job end date if job has finished already.
+            long now = job.getEndDate();
+            if(now==0)  // job hasn't finished yet
+                now = System.currentTimeMillis(); 
 
             // Do not refresh progress information is job is paused, simply sleep
-            if(!job.isPaused()) {
+            if(job.getState()!=FileJob.PAUSED) {
                 long currentFileRemainingTime = 0;
                 long totalRemainingTime;
 
@@ -248,30 +374,39 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
                     effectiveJobTime = 1;   // To avoid potential zero divisions
 
                 if (transferFileJob !=null) {
-                    long bytesTotal = transferFileJob.getTotalByteCounter().getByteCount();
+                    // Do not count bytes that are skipped when files are resumed
+                    long bytesTotal = transferFileJob.getTotalByteCounter().getByteCount() - transferFileJob.getTotalSkippedByteCounter().getByteCount();
                     long totalBps = (long)(bytesTotal*1000d/effectiveJobTime);
-                    long currentBps = (long)((bytesTotal-lastBytesTotal)*1000d/(now-lastTime));
+                    long currentBps;
+
+                    if(now-lastTime>0)  // To avoid divisions by zero
+                        currentBps = (long)((bytesTotal-lastBytesTotal)*1000d/(now-lastTime));
+                    else
+                        currentBps = 0;
 
                     // Update current file progress bar
                     float filePercentFloat = transferFileJob.getFilePercentDone();
                     int filePercentInt = (int)(100*filePercentFloat);
                     currentFileProgressBar.setValue(filePercentInt);
 
-                    progressText = filePercentInt+"% - ";
+                    progressText = filePercentInt+"%";
+                    // Append estimated remaining time (ETA) if current file transfer is not already finished (100%)
+                    if(filePercentFloat<1) {
+                        progressText += " - ";
 
-                    // Add estimated remaining time (ETA) for current file
-                    long currentFileSize = transferFileJob.getCurrentFileSize();
-                    // If current file size is not available, ETA cannot be calculated
-                    if(currentFileSize==-1)
-                        progressText += "?";
-                    // Avoid potential divisions by zero
-                    else if(totalBps==0) {
-                        currentFileRemainingTime = -1;
-                        progressText += DurationFormat.getInfiniteSymbol();
-                    }
-                    else {
-                        currentFileRemainingTime = (long)((1000*(currentFileSize- transferFileJob.getCurrentFileByteCounter().getByteCount()))/(float)totalBps);
-                        progressText += DurationFormat.format(currentFileRemainingTime);
+                        long currentFileSize = transferFileJob.getCurrentFileSize();
+                        // If current file size is not available, ETA cannot be calculated
+                        if(currentFileSize==-1)
+                            progressText += "?";
+                        // Avoid potential divisions by zero
+                        else if(totalBps==0) {
+                            currentFileRemainingTime = -1;
+                            progressText += DurationFormat.getInfiniteSymbol();
+                        }
+                        else {
+                            currentFileRemainingTime = (long)((1000*(currentFileSize - transferFileJob.getCurrentFileByteCounter().getByteCount()))/(float)totalBps);
+                            progressText += DurationFormat.format(currentFileRemainingTime);
+                        }
                     }
 
                     currentFileProgressBar.setString(progressText);
@@ -285,7 +420,7 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
                     // Add new immediate bytes per second speed sample to speed graph and label and repaint it
                     // Skip this sample if job was paused and resumed, speed would not be accurate
-                    if(lastTime>job.getPauseStartDate()) {
+                    if(lastTime>job.getPauseStartDate() && !lastLoop) {
                         speedGraph.addSample(currentBps);
                         updateCurrentSpeedLabel(SizeFormat.format(currentBps, SizeFormat.UNIT_SPEED| SizeFormat.DIGITS_MEDIUM| SizeFormat.UNIT_SHORT));
                     }
@@ -302,40 +437,51 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
                 totalProgressBar.setValue(totalPercentInt);
 
-                progressText = totalPercentInt+"% - ";
+                progressText = totalPercentInt+"%";
 
                 // Add a rough estimate of the total remaining time (ETA):
                 // total remaining time is based on the total job percent completed which itself is based on the *number*
                 // of files remaining, not their actual size. So this is very approximate.
+                // Do not add ETA if job is already finished (100%)
+                if(totalPercentFloat<1) {
+                    progressText += " - ";
 
-                // Avoid potential divisions by zero
-                if(totalPercentFloat==0)
-                    progressText += "?";
-                else {
-                    // Make sure that total ETA is never smaller than current file ETA
-                    totalRemainingTime = (long)((1-totalPercentFloat)*(effectiveJobTime/totalPercentFloat));
-                    totalRemainingTime = Math.max(totalRemainingTime, currentFileRemainingTime);
-                    progressText += DurationFormat.format(totalRemainingTime);
+                    // Avoid potential divisions by zero
+                    if(totalPercentFloat==0)
+                        progressText += "?";
+                    else {
+                        // Make sure that total ETA is never smaller than current file ETA
+                        totalRemainingTime = (long)((1-totalPercentFloat)*(effectiveJobTime/totalPercentFloat));
+                        totalRemainingTime = Math.max(totalRemainingTime, currentFileRemainingTime);
+                        progressText += DurationFormat.format(totalRemainingTime);
+                    }
                 }
-
                 totalProgressBar.setString(progressText);
 
-                // Update current file label
-                currentFileLabel.setText(job.getStatusString());
+//                // Update current file label
+//                currentFileLabel.setText(job.getStatusString());
 
                 // Update elapsed time label
                 elapsedTimeLabel.setText(Translator.get("progress_dialog.elapsed_time")+": "+DurationFormat.format(effectiveJobTime));
             }
 
+            if(lastLoop) {
+                break;
+            }
+            else if(job.getState()==FileJob.FINISHED) {
+                // Job just finished, let's loop one more time to ensure that components (progress bar in particular)
+                // reflect job completion
+                lastLoop = true;
+            }
+
             // Sleep for a while
             try {
-                Thread.sleep(Math.max(REFRESH_RATE-(System.currentTimeMillis()-now), 0));
+                Thread.sleep(Math.max(MAIN_REFRESH_RATE -(System.currentTimeMillis()-now), 0));
             }
             catch(InterruptedException e) {}
         }
-	
-        dispose();
     }
+
 
     ///////////////////////////////////
     // ActionListener implementation //
@@ -345,32 +491,37 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         Object source = e.getSource();
 
         if (source==stopButton) {
-            // Cancel button pressed, dispose dialog and stop job immediately
-            // (job will be stopped a second time in windowClosed() but that will just be a no-op)
-            dispose();
-            job.stop();
+            int jobState = job.getState();
+            // Case when 'Close when finished' isn't selected, stop button's action becomes 'Close'
+            if(jobState==FileJob.FINISHED || jobState==FileJob.INTERRUPTED)
+                dispose();
+            else
+                job.interrupt();
+        }
+        else if(source==skipButton) {
+            transferFileJob.skipCurrentFile();
         }
         else if(source==pauseResumeButton) {
-            boolean isPaused = job.isPaused();
-
-            // Resume the job and change the button's label and icon to 'pause'
-            if(isPaused) {
-                pauseResumeButton.setText(Translator.get("pause"));
-                pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
-            }
-            // Pause the job and change the button's label and icon to 'resume'
-            else {
-                pauseResumeButton.setText(Translator.get("resume"));
-                pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
-
-                if(transferFileJob!=null)
-                    updateCurrentSpeedLabel("N/A");
-            }
-
-            // Update buttons mnemonics
-            buttonsChoicePanel.updateMnemonics();
+//            boolean isPaused = job.getState()==FileJob.PAUSED;
+//
+//            // Resume the job and change the button's label and icon to 'pause'
+//            if(isPaused) {
+//                pauseResumeButton.setText(Translator.get("pause"));
+//                pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
+//            }
+//            // Pause the job and change the button's label and icon to 'resume'
+//            else {
+//                pauseResumeButton.setText(Translator.get("resume"));
+//                pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
+//
+//                if(transferFileJob!=null)
+//                    updateCurrentSpeedLabel("N/A");
+//            }
+//
+//            // Update buttons mnemonics
+//            buttonsChoicePanel.updateMnemonics();
             // Pause/resume job
-            job.setPaused(!isPaused);
+            job.setPaused(job.getState()!=FileJob.PAUSED);
         }
 //        else if(source==hideButton) {
 //            mainFrame.setState(Frame.ICONIFIED);
@@ -423,14 +574,21 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
     public void windowClosed(WindowEvent e) {
         super.windowClosed(e);
+        
+        // Stop repaint thread if it isn't already
+        stop();
 
-        // Stop threads
-        repaintThread = null;
-        // Job may have already been stopped if cancel button was pressed
-        job.stop();
+        // Stop job if it isn't already
+        int jobState = job.getState();
+        if(!(jobState==FileJob.FINISHED || jobState==FileJob.INTERRUPTED))
+            job.interrupt();
+
         // Remember 'advanced panel' expanded state
         if(collapseExpandButton!=null)
             ConfigurationManager.setVariableBoolean(ConfigurationVariables.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
+
+        // Remember 'close window when finished' option state
+        ConfigurationManager.setVariableBoolean(ConfigurationVariables.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED, closeWhenFinishedCheckBox.isSelected());        
     }
 
 

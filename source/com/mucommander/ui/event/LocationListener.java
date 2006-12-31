@@ -13,7 +13,7 @@ package com.mucommander.ui.event;
 public interface LocationListener {
 	
     /**
-     * This method is invoked when the current folder on the given FolderPanel is being changed.
+     * This method is invoked when the current folder is being changed.
      *
      * <p>A call to either {@link #locationChanged(LocationEvent)}, {@link #locationCancelled(LocationEvent)} or
      * {@link #locationFailed(LocationEvent)} will always follow to indicate the outcome of the folder change. 
@@ -24,7 +24,7 @@ public interface LocationListener {
 
 
     /**
-     * This method is invoked when the current folder on the given FolderPanel has changed.
+     * This method is invoked when the current folder has changed.
      *
      * @param locationEvent describes the location change event
      */
@@ -32,7 +32,7 @@ public interface LocationListener {
 
 
     /**
-     * This method is invoked when the current folder on the given FolderPanel has been cancelled by the user.
+     * This method is invoked when the current folder has been cancelled by the user.
      *
      * @param locationEvent describes the location change event
      */
@@ -40,7 +40,7 @@ public interface LocationListener {
 
 
     /**
-     * This method is invoked when the current folder on the given FolderPanel could not be changed, as a result
+     * This method is invoked when the current folder could not be changed, as a result
      * of the folder not existing or failing to list its contents.
      *
      * @param locationEvent describes the location change event

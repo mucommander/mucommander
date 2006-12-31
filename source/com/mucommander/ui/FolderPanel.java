@@ -1,8 +1,11 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.ui.theme.*;
-import com.mucommander.auth.*;
+import com.mucommander.PlatformManager;
+import com.mucommander.auth.AuthException;
+import com.mucommander.auth.Credentials;
+import com.mucommander.auth.CredentialsManager;
+import com.mucommander.auth.MappedCredentials;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
@@ -20,7 +23,9 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.TablePopupMenu;
-import com.mucommander.PlatformManager;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -228,6 +233,13 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      */
     public FileTable getFileTable() {
         return this.fileTable;
+    }
+
+    /**
+     * Returns the JScrollPane that contains the FileTable component.
+     */
+    public JScrollPane getScrollPane() {
+        return scrollPane;
     }
 
     /**

@@ -53,11 +53,11 @@ public class DeleteJob extends FileJob {
      * @return <code>true</code> if the file has been completely deleted.
      */
     protected boolean processFile(AbstractFile file, Object recurseParams) {
+        if(getState()==INTERRUPTED)
+            return false;
+
         String filePath = file.getAbsolutePath();
         filePath = filePath.substring(baseSourceFolder.getAbsolutePath(false).length()+1, filePath.length());
-
-        if(isInterrupted())
-            return false;
 
         int ret;
         boolean followSymlink = false;
@@ -67,7 +67,7 @@ public class DeleteJob extends FileJob {
             if(isSymlink) {
                 ret = showSymlinkDialog(filePath, file.getCanonicalPath());
                 if(ret==-1 || ret==CANCEL_ACTION) {
-                    stop();
+                    interrupt();
                     return false;
                 }
                 else if(ret==SKIP_ACTION) {
@@ -84,7 +84,7 @@ public class DeleteJob extends FileJob {
                     // Delete each file in this folder
                     try {
                         AbstractFile subFiles[] = file.ls();
-                        for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
+                        for(int i=0; i<subFiles.length && getState()!=INTERRUPTED; i++) {
                             // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                             nextFile(subFiles[i]);
                             processFile(subFiles[i], null);
@@ -105,7 +105,7 @@ public class DeleteJob extends FileJob {
             }
         }
         
-        if(isInterrupted())
+        if(getState()==INTERRUPTED)
             return false;
 
         do {		// Loop for retry

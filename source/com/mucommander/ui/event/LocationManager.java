@@ -1,7 +1,7 @@
 package com.mucommander.ui.event;
 
-import com.mucommander.ui.FolderPanel;
 import com.mucommander.file.FileURL;
+import com.mucommander.ui.FolderPanel;
 
 import java.util.Iterator;
 import java.util.WeakHashMap;
@@ -32,7 +32,7 @@ public class LocationManager {
      * Registers a LocationListener to receive notifications whenever the current folder of the associated FolderPanel
      * has or is being changed.
      *
-     * <p>Listeners are stored as weak references so {@link #removeLocationListener(LocationListener) removeLocationListener()}
+     * <p>Listeners are stored as weak references so {@link #removeLocationListener(LocationListener)}
      * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
      *
      * @param listener the LocationListener to register
@@ -42,7 +42,7 @@ public class LocationManager {
     }
 
     /**
-     * Removes the LocationListener from the list of listeners that notifications when the current folder of the
+     * Removes the LocationListener from the list of listeners that receive notifications when the current folder of the
      * associated FolderPanel has or is being changed.
      *
      * @param listener the LocationListener to remove

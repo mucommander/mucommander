@@ -1,7 +1,6 @@
 
 package com.mucommander.text;
 
-import com.mucommander.Debug;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
@@ -84,8 +83,8 @@ public class CustomDateFormat implements ConfigurationListener {
      * @return a formatted string representing the given date.
      */
     public static synchronized String format(Date date) {
-        // Note: calls to SimpleDateFormat MUST be synchronized otherwise if will start throwing exceptions, that is
-        // why this method is synchronized.
+        // Calls to SimpleDateFormat MUST be synchronized otherwise if will start throwing exceptions (verified that!),
+        // that is why this method is synchronized.
         // Quote from SimpleDateFormat's Javadoc: "Date formats are not synchronized. It is recommended to create
         // separate format instances for each thread. If multiple threads access a format concurrently, 
         // it must be synchronized externally."

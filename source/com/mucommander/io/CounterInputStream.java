@@ -6,11 +6,12 @@ import java.io.InputStream;
 
 
 /**
- * An InputStream that keeps track of the number of bytes that have been written to it.
+ * An InputStream that keeps track of the number of bytes that have been read from it. Bytes that are skipped (using
+ * {@link #skip(long)} are by default accounted for, {@link #setCountSkippedBytes(boolean)} can be used to change this.
  *
- * <p>The actual {@link ByteCounter} contains the number of bytes.
+ * <p>The actual number of bytes can be retrieved from the {@link ByteCounter} instance returned by {@link #getCounter()}.
  * The {@link #CounterInputStream(InputStream, ByteCounter)} constructor can be used to specify an existing
- * <code>ByteCounter</code> instead of creating a new one. The ByteCounter will always remain accessible, even
+ * ByteCounter instance instead of creating a new one. The ByteCounter will always remain accessible, even
  * after this stream has been closed.
  *
  * @see ByteCounter
@@ -20,8 +21,12 @@ public class CounterInputStream extends InputStream {
 
     /** Underlying InputStream */
     private InputStream in;
-    /** Counter */
+
+    /** Byte counter */
     private ByteCounter counter;
+
+    /** Should skipped bytes be accounted for ? (enabled by default) */
+    private boolean countSkippedBytes = true;
 
 
     /**
@@ -45,8 +50,33 @@ public class CounterInputStream extends InputStream {
         this.counter = counter;
     }
 
+
+    /**
+     * Returns the ByteCounter that holds the number of bytes that have been read (and optionally skipped) from this
+     * InputStream.
+     */
     public ByteCounter getCounter() {
         return this.counter;
+    }
+
+
+    /**
+     * Specifies whether or not skipped bytes (using {@link #skip(long)} should be accounted for.
+     * This is by default enabled, bytes that are skipped are added to the ByteCounter.
+     *
+     * @param countSkippedBytes if true, skipped bytes will be accounted for, the ByteCounter will be increased
+     * by the number of skipped bytes
+     */
+    public void setCountSkippedBytes(boolean countSkippedBytes) {
+        this.countSkippedBytes = countSkippedBytes;
+    }
+
+    /**
+     * Returns true if skipped bytes (using {@link #skip(long)} are accounted for. 
+     * This is by default enabled, bytes that are skipped are added to the ByteCounter.
+     */
+    public boolean getCountSkippedBytes() {
+        return countSkippedBytes;
     }
 
 
@@ -81,7 +111,9 @@ public class CounterInputStream extends InputStream {
 
     public long skip(long n) throws IOException {
         long nbSkipped = in.skip(n);
-        if(nbSkipped>0)
+
+        // Count skipped bytes only if this has been enabled
+        if(countSkippedBytes && nbSkipped>0)
             counter.add(nbSkipped);
 
         return nbSkipped;

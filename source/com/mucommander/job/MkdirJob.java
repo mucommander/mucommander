@@ -7,9 +7,7 @@ import com.mucommander.file.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.table.FileTable;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -51,7 +49,7 @@ public class MkdirJob extends FileJob {
      */
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted (although there is no way to stop the job at this time)
-        if(isInterrupted())
+        if(getState()==INTERRUPTED)
             return false;
 
         do {
@@ -74,7 +72,7 @@ public class MkdirJob extends FileJob {
                     // Cancel or dialog close (return)
 //                    else if (choice==-1 || choice==FileCollisionDialog.CANCEL_ACTION) {
                     else {
-                        stop();
+                        interrupt();
                         return false;
                     }
                 }

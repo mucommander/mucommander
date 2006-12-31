@@ -82,7 +82,7 @@ public class CopyJob extends TransferFileJob {
      */
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted
-        if(isInterrupted())
+        if(getState()==INTERRUPTED)
             return false;
 		
         // Destination folder
@@ -99,7 +99,7 @@ public class CopyJob extends TransferFileJob {
                     // List files inside archive file (can throw an IOException)
                     AbstractFile archiveFiles[] = currentFile.ls();
                     // Recurse on zip's contents
-                    for(int j=0; j<archiveFiles.length && !isInterrupted(); j++) {
+                    for(int j=0; j<archiveFiles.length && getState()!=INTERRUPTED; j++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(archiveFiles[j]);
                         // Recurse
@@ -173,7 +173,7 @@ public class CopyJob extends TransferFileJob {
 
             // Cancel, skip or close dialog
             if (choice==-1 || choice== FileCollisionDialog.CANCEL_ACTION) {
-                stop();
+                interrupt();
                 return false;
             }
             // Skip file
@@ -227,7 +227,7 @@ public class CopyJob extends TransferFileJob {
                     // for each file in folder...
                     AbstractFile subFiles[] = file.ls();
 //filesDiscovered(subFiles);
-                    for(int i=0; i<subFiles.length && !isInterrupted(); i++) {
+                    for(int i=0; i<subFiles.length && getState()!=INTERRUPTED; i++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(subFiles[i]);
                         processFile(subFiles[i], destFile);
