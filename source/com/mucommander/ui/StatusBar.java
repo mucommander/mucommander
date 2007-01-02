@@ -47,10 +47,10 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     private MainFrame mainFrame;
 
     /** Label that displays info about current selected file(s) */
-    private JLabel statusBarFilesLabel;
+    private JLabel selectedFilesLabel;
 	
     /** Label that displays info about current volume (free/total space) */
-    private JLabel statusBarVolumeLabel;
+    private VolumeSpaceLabel volumeSpaceLabel;
 
     /** Thread which auto updates volume info */
     private Thread autoUpdateThread;
@@ -85,13 +85,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 		
         this.mainFrame = mainFrame;
 		
-        this.statusBarFilesLabel = new JLabel("");
-//        // Display any icon after the text
-//        this.statusBarFilesLabel.setHorizontalTextPosition(JLabel.LEADING);
-        add(statusBarFilesLabel, BorderLayout.CENTER);
+        this.selectedFilesLabel = new JLabel("");
+        add(selectedFilesLabel, BorderLayout.CENTER);
 
-        this.statusBarVolumeLabel = new JLabel("");
-        add(statusBarVolumeLabel, BorderLayout.EAST);
+        this.volumeSpaceLabel = new VolumeSpaceLabel();
+        add(volumeSpaceLabel, BorderLayout.EAST);
 
         // Show/hide this status bar based on user preferences
         // Note: setVisible has to be called even with true for the auto-update thread to be initialized
@@ -113,8 +111,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         mainFrame.addActivePanelListener(this);
 		
         // Catch mouse events to pop up a menu on right-click
-        statusBarFilesLabel.addMouseListener(this);
-        statusBarVolumeLabel.addMouseListener(this);
+        selectedFilesLabel.addMouseListener(this);
+        volumeSpaceLabel.addMouseListener(this);
         addMouseListener(this);
 		
         // Catch component events to be notified when this component is made visible
@@ -201,10 +199,10 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, currentFolder="+currentFolder);
 
-        String cachedVolumeInfo = (String)volumeInfoCache.get(currentFolder.getAbsolutePath());
+        long cachedVolumeInfo[] = (long[])volumeInfoCache.get(currentFolder.getAbsolutePath());
         if(cachedVolumeInfo!=null) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Cache hit!");
-            statusBarVolumeLabel.setText(cachedVolumeInfo);
+            volumeSpaceLabel.setVolumeSpace(cachedVolumeInfo[0], cachedVolumeInfo[1]);
         }
         else {
             // Retrieves free and total volume space.
@@ -217,36 +215,23 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                     // Total space on current volume, -1 if this information is not available 
                     long volumeTotal;
 
-                    // Folder is a local file : call getVolumeInfo() instead of separate calls to getFreeSpace()
-                    // and getTotalSpace() as it is twice as fast
-                    if(currentFolder instanceof FSFile) {
+                    // Folder is a local file and Java version is 1.5 or lower: call getVolumeInfo() instead of 
+                    // separate calls to getFreeSpace() and getTotalSpace() as it is twice as fast.
+                    if(currentFolder instanceof FSFile && PlatformManager.JAVA_VERSION<=PlatformManager.JAVA_1_5) {
                         long volumeInfo[] = ((FSFile)currentFolder).getVolumeInfo();
                         volumeTotal = volumeInfo[0];
                         volumeFree = volumeInfo[1];
                     }
-                    // Any other file kind
+                    // Java 1.6 and up or any other file type
                     else {
                         volumeFree = currentFolder.getFreeSpace();
                         volumeTotal = currentFolder.getTotalSpace();
                     }
 
-                    String volumeInfo;
-                    if(volumeFree!=-1) {
-                        volumeInfo = SizeFormat.format(volumeFree, VOLUME_INFO_SIZE_FORMAT);
-                        if(volumeTotal!=-1)
-                            volumeInfo += " / "+ SizeFormat.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
-                        volumeInfo = Translator.get("status_bar.volume_free", volumeInfo);
-                    }
-                    else if(volumeTotal!=-1) {
-                        volumeInfo = SizeFormat.format(volumeTotal, VOLUME_INFO_SIZE_FORMAT);
-                        volumeInfo = Translator.get("status_bar.volume_capacity", volumeInfo);
-                    }
-                    else {
-                        volumeInfo = "";
-                    }
-                    statusBarVolumeLabel.setText(volumeInfo);
+                    volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
+
                     if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Adding to cache");
-                    volumeInfoCache.add(currentFolder.getAbsolutePath(), volumeInfo, VOLUME_INFO_TIME_TO_LIVE);
+                    volumeInfoCache.add(currentFolder.getAbsolutePath(), new long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
                 }
             }.start();
         }
@@ -262,12 +247,10 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      * @param iconBeforeText if true, icon will be placed on the left side of the text, if not on the right side
      */
     public void setStatusInfo(String text, Icon icon, boolean iconBeforeText) {
-        //if(com.mucommander.Debug.ON) text += " - freeMem="+Runtime.getRuntime().freeMemory()+" - totalMem="+Runtime.getRuntime().totalMemory();
-        statusBarFilesLabel.setText(text);
-        statusBarFilesLabel.setIcon(icon);
+        selectedFilesLabel.setText(text);
+        selectedFilesLabel.setIcon(icon);
         if(icon!=null)
-            statusBarFilesLabel.setHorizontalTextPosition(iconBeforeText?JLabel.TRAILING:JLabel.LEADING);
-        //		statusBarVolumeLabel.setText("");
+            selectedFilesLabel.setHorizontalTextPosition(iconBeforeText?JLabel.TRAILING:JLabel.LEADING);
     }
 
 	
@@ -437,5 +420,114 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     }
 
     public void componentResized(ComponentEvent e) {
+    }
+
+
+    /**
+     * This label displays the amount of free and/or total space on a volume.
+     */
+    private static class VolumeSpaceLabel extends JLabel {
+
+        private long freeSpace;
+        private long totalSpace;
+
+        private final static int BACKGROUND_COLOR = 0xD5D5D5;
+        private final static int BORDER_COLOR = 0x7A7A7A;
+
+//        private final static int SPACE_OK_COLOR = 0x00FF00;
+        private final static int SPACE_OK_COLOR = 0x70EC2B;
+        private final static int SPACE_WARNING_COLOR = 0xFF7F00;
+        private final static int SPACE_CRITICAL_COLOR = 0xFF0000;
+
+        private final static float SPACE_WARNING_THRESHOLD = 0.1f;
+        private final static float SPACE_CRITICAL_THRESHOLD = 0.01f;
+
+
+        private VolumeSpaceLabel() {
+            super("");
+            setHorizontalAlignment(CENTER);
+        }
+
+        /**
+         * Sets the new volume total and free space, and updates the label's text to show the new values and,
+         * only if both total and free space are available (different from -1), paint a graphical representation
+         * of the amount of free space available and set a tooltip showing the percentage of free space on the volume.
+         *
+         * @param totalSpace total volume space, -1 if not available
+         * @param freeSpace free volume space, -1 if not available
+         */
+        private void setVolumeSpace(long totalSpace, long freeSpace) {
+            this.freeSpace = freeSpace;
+            this.totalSpace = totalSpace;
+
+            // Set new label's text
+            String volumeInfo;
+            if(freeSpace!=-1) {
+                volumeInfo = SizeFormat.format(freeSpace, VOLUME_INFO_SIZE_FORMAT);
+                if(totalSpace!=-1)
+                    volumeInfo += " / "+ SizeFormat.format(totalSpace, VOLUME_INFO_SIZE_FORMAT);
+
+                volumeInfo = Translator.get("status_bar.volume_free", volumeInfo);
+            }
+            else if(totalSpace!=-1) {
+                volumeInfo = SizeFormat.format(totalSpace, VOLUME_INFO_SIZE_FORMAT);
+                volumeInfo = Translator.get("status_bar.volume_capacity", volumeInfo);
+            }
+            else {
+                volumeInfo = "";
+            }
+            setText(volumeInfo);
+
+            // Set tooltip
+            if(freeSpace==-1 || totalSpace==-1)
+                setToolTipText(null);       // Removes any previous tooltip
+            else
+                setToolTipText(""+(int)(100*freeSpace/(float)totalSpace)+"%");
+
+            repaint();
+        }
+
+
+        /**
+         * Adds some empty space around the label.
+         */
+        public Dimension getPreferredSize() {
+            Dimension d = super.getPreferredSize();
+            return new Dimension(d.width+4, d.height+2);
+        }
+
+//        public Insets getInsets() {
+//            return new Insets(2, 0, 2, 0);
+//        }
+//
+
+        public void paint(Graphics g) {
+
+            // If free or total space is not available, this label will just be painted as a normal JLabel
+            if(freeSpace!=-1 && totalSpace!=-1) {
+                int width = getWidth();
+                int height = getHeight();
+
+                // Fill background
+                g.setColor(new Color(BACKGROUND_COLOR));
+                g.fillRect(0, 0, width, height);
+
+                // Paint border
+                g.setColor(new Color(BORDER_COLOR));
+                g.drawRect(0, 0, width-1, height-1);
+
+                // Paint amount of free volume space if both free and total space are available
+                float freeSpacePercentage = freeSpace/(float)totalSpace;
+
+                g.setColor(new Color(freeSpacePercentage<=SPACE_CRITICAL_THRESHOLD?SPACE_CRITICAL_COLOR
+                                        :freeSpacePercentage<=SPACE_WARNING_THRESHOLD?SPACE_WARNING_COLOR
+                                        :SPACE_OK_COLOR));
+
+                int freeSpaceWidth = Math.max(Math.round(freeSpacePercentage*(float)(width-2)), 1);
+                g.fillRect(1, 1, freeSpaceWidth, height-2);
+            }
+
+            super.paint(g);
+        }
     }
 }

@@ -194,6 +194,7 @@ Improvements:
  - Faster table rendering
  - Toolbar and command bar now contextually show whether the action can be triggered or not
  - Free/total volume space now automatically refreshes (every 60 seconds)
+ - Status bar shows a graphical representation of the amount of free space on the current volume (where available) 
  - 'File collision' dialog improved, attempts to transfer a folder to one of its subfolders are now detected
  - KB/MB/GB/TB are now calculated accurately by multiples of 1024 instead of 1000
  - Decimal and thousands separators are now localized

@@ -119,7 +119,7 @@ public class FSFile extends AbstractFile {
 
 
     /**
-     * Uses platform dependant commands to extract free and total volume (where this file resides) space.
+     * Uses platform dependant commands to extract free and total space on the volume where this file resides.
      *
      * <p>This method has been made public as it is more efficient to retrieve both free space and volume space
      * info than calling getFreeSpace() and getTotalSpace() separately, since a single command process retrieves both.
