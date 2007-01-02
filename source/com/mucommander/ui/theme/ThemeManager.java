@@ -520,7 +520,7 @@ public class ThemeManager {
 
 	// Trying to set a non default over a default one.
 	if(oldFont == null)
-	    return true;
+	    return !getCurrentFont(fontId).equals(font);
 
 	// Checks whether both fonts are different.
 	return !oldFont.equals(font);
@@ -545,7 +545,7 @@ public class ThemeManager {
 
 	// Trying to set a non default color over a default one.
 	if(oldColor == null)
-	    return true;
+	    return !getCurrentColor(colorId).equals(color);
 
 	// Checks whether both colors are different.
 	return !oldColor.equals(color);

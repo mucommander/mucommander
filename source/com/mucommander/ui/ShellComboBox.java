@@ -20,9 +20,13 @@ import java.awt.Color;
  * the {@link com.mucommander.shell.ShellHistoryManager} to offer a history of shell commands
  * for the user to browse through.
  * </p>
+ * <p>
+ * Note that even though this component is affected by themes, it's impossible to edit the current theme while it's being displayed.
+ * For this reason, the RunDialog doesn't listen to theme modifications.
+ * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class ShellComboBox extends EditableComboBox implements EditableComboBoxListener, ShellHistoryListener, PopupMenuListener, ThemeListener {
+public class ShellComboBox extends EditableComboBox implements EditableComboBoxListener, ShellHistoryListener, PopupMenuListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Input field used to type in commands. */
@@ -45,7 +49,6 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
         this.input = getTextField();
 
         addPopupMenuListener(this);
-        ThemeManager.addThemeListener(this);
 
         // Sets colors and font according to the current theme.
         setForeground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_TEXT));
@@ -159,40 +162,4 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
      * @return the current shell command.
      */
     public String getCommand() {return input.getText();}
-
-
-
-    // - Theme listening -------------------------------------------------------------
-    // -------------------------------------------------------------------------------
-    /**
-     * Receives theme color changes notifications.
-     * @param colorId identifier of the color that has changed.
-     * @param color   new value for the color.
-     */
-    public void colorChanged(int colorId, Color color) {
-        switch(colorId) {
-        case Theme.SHELL_HISTORY_TEXT:
-            setForeground(color);
-            break;
-        case Theme.SHELL_HISTORY_TEXT_SELECTED:
-            setSelectionForeground(color);
-            break;
-        case Theme.SHELL_HISTORY_BACKGROUND:
-            setBackground(color);
-            break;
-        case Theme.SHELL_HISTORY_BACKGROUND_SELECTED:
-            setSelectionBackground(color);
-            break;
-        }
-    }
-
-    /**
-     * Receives theme font changes notifications.
-     * @param fontId identifier of the font that has changed.
-     * @param font   new value for the font.
-     */
-    public void fontChanged(int fontId, Font font) {
-        if(fontId == Theme.SHELL_HISTORY)
-            setFont(font);
-    }
 }
