@@ -187,6 +187,8 @@ public interface ConfigurationVariables {
     public static final String  LEFT_STARTUP_FOLDER               = LEFT_STARTUP_FOLDER_SECTION + '.' + STARTUP_FOLDER;
     /** Type of startup folder that should be used in the right panel. */
     public static final String  RIGHT_STARTUP_FOLDER              = RIGHT_STARTUP_FOLDER_SECTION + '.' + STARTUP_FOLDER;
+    /** Default startup folder type. */
+    public static final String DEFAULT_STARTUP_FOLDER             = STARTUP_FOLDER_LAST;
 
 
 
