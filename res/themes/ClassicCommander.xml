@@ -3,7 +3,7 @@
   <!-- = File table appearance ========================= -->
   <!-- ================================================= -->
   <file_table>
-    <font   family="Lucida Grande" size ="12"/>
+    <font   family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
     <border color="868686"/>
 
     <!-- = Default appearance ========================== -->
@@ -27,7 +27,7 @@
       <folder               color="ffffff"/>
       <archive              color="ffffff"/>
       <symlink              color="ffffff"/>
-      <marked               color="ffffff"/>
+      <marked               color="cc0000"/>
       <file                 color="ffffff"/>
       <unfocused_background color="d0d0d0"/>
     </selection>
@@ -38,7 +38,7 @@
   <!-- = Shell appearance ============================== -->
   <!-- ================================================= -->
   <shell>
-    <font family="Monospaced" size ="12" bold="true"/>
+    <font family="Monospaced,Lucida Sans Typewriter" size ="12" bold="true"/>
 
     <!-- = Default appearance ========================== -->
     <!-- =============================================== -->
@@ -60,7 +60,7 @@
   <!-- = Shell history appearance ====================== -->
   <!-- ================================================= -->
   <shell_history>
-    <font family="Lucida Grande" size ="12"/>
+    <font family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
 
     <!-- = Default appearance ========================== -->
     <!-- =============================================== -->
@@ -82,7 +82,7 @@
   <!-- = Editor appearance ============================= -->
   <!-- ================================================= -->
   <editor>
-    <font family="Lucida Grande" size ="12"/>
+    <font family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
 
     <!-- = Default appearance ========================== -->
     <!-- =============================================== -->
@@ -104,7 +104,7 @@
   <!-- = Location bar appearance ======================= -->
   <!-- ================================================= -->
   <location_bar>
-    <font family="Lucida Grande" size ="12"/>
+    <font family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
     <progress color="3875d7" alpha="40"/>
 
     <!-- = Default appearance ========================== -->

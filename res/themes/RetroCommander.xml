@@ -3,7 +3,7 @@
     <!-- = File table appearance ========================= -->
     <!-- ================================================= -->
     <file_table>
-        <font size="13" family="Lucida Grande"/>
+        <font size="13" family="Lucida Grande,Arial,Lucida Sans"/>
         <border color="404040"/>
 
         <!-- = Default appearance ========================== -->
@@ -28,7 +28,7 @@
             <folder color="000080"/>
             <archive color="000080"/>
             <symlink color="000080"/>
-            <marked color="000080"/>
+            <marked color="ffc532"/>
             <file color="000080"/>
         </selection>
     </file_table>
@@ -38,6 +38,7 @@
     <!-- = Shell appearance ============================== -->
     <!-- ================================================= -->
     <shell>
+        <font family="Monospaced,Lucida Sans Typewriter" size ="12" bold="true"/>
 
         <!-- = Default appearance ========================== -->
         <!-- =============================================== -->
@@ -59,7 +60,7 @@
     <!-- = Shell history appearance ====================== -->
     <!-- ================================================= -->
     <shell_history>
-        <font size="13" family="Lucida Grande"/>
+        <font size="13" family="Lucida Grande,Arial,Lucida Sans"/>
 
         <!-- = Default appearance ========================== -->
         <!-- =============================================== -->
@@ -81,7 +82,7 @@
     <!-- = Editor appearance ============================= -->
     <!-- ================================================= -->
     <editor>
-        <font size="13" family="Lucida Grande"/>
+        <font size="13" family="Lucida Grande,Arial,Lucida Sans"/>
 
         <!-- = Default appearance ========================== -->
         <!-- =============================================== -->
@@ -103,7 +104,7 @@
     <!-- = Location bar appearance ======================= -->
     <!-- ================================================= -->
     <location_bar>
-        <font size="13" family="Lucida Grande"/>
+        <font size="13" family="Lucida Grande,Arial,Lucida Sans"/>
 
         <!-- = Default appearance ========================== -->
         <!-- =============================================== -->
