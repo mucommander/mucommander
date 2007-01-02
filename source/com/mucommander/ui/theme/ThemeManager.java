@@ -447,7 +447,7 @@ public class ThemeManager {
         // returns its default value.
         if((font = currentData.getFont(id)) == null)
             return getDefaultFont(id);
-        return currentData.getFont(id);
+        return font;
     }
 
     /**
@@ -510,18 +510,20 @@ public class ThemeManager {
     private static boolean needsUpdate(int fontId, Font font) {
         Font oldFont;
 
-        // Checks whether the font actually needs to be updated. If so, sets it
-        // and triggers the corresponding event.
-        oldFont = getCurrentFont(fontId);
+	// Retrieves the old font to check whether its different
+	// from the new one.
+	oldFont = currentData.getFont(fontId);
 
-        // Makes sure the old font and the new one are different.
-        if(oldFont == null) {
-            if(font == null)
-                return false;
-        }
-        else if(font != null && oldFont.equals(font))
-            return false;
-        return true;
+	// Trying to set a default font over a non-default one.
+	if(font == null)
+	    return oldFont != null;
+
+	// Trying to set a non default over a default one.
+	if(oldFont == null)
+	    return true;
+
+	// Checks whether both fonts are different.
+	return !oldFont.equals(font);
     }
 
     /**
@@ -533,18 +535,20 @@ public class ThemeManager {
     private static boolean needsUpdate(int colorId, Color color) {
         Color oldColor;
 
-        // Checks whether the color actually needs to be updated. If so, sets it
-        // and triggers the corresponding event.
-        oldColor = getCurrentColor(colorId);
+	// Retrieves the old color to check whether its different
+	// from the new one.
+	oldColor = currentData.getColor(colorId);
 
-        // Makes sure the old color and the new one are different.
-        if(oldColor == null) {
-            if(color == null)
-                return false;
-        }
-        else if(color != null && oldColor.equals(color))
-            return false;
-        return true;
+	// Trying to set a default color over a non-default one.
+	if(color == null)
+	    return oldColor != null;
+
+	// Trying to set a non default color over a default one.
+	if(oldColor == null)
+	    return true;
+
+	// Checks whether both colors are different.
+	return !oldColor.equals(color);
     }
 
     /**
