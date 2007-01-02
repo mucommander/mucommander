@@ -233,8 +233,9 @@ Localization:
  - Romanian translation (contributed by Catalin Hritcu)
 
 Bug fixes:
+ - Fixed SFTP connections which could not be established to some servers not supporting the 'password' authentication method
  - Windows UNC network paths (those starting with \\) are now properly handled, fixing startup problems under Windows if the user home is located on a network share
- - Improved focus management, fixing some focus issues
+ - Improved focus management, fixing some previous focus issues
  - Fixed drive popup which doesn't immediately reflect bookmark changes
  - Fixed .GZ files not opened when extension is upper-cased
  - GZ files inside Tar archives can now be properly opened
@@ -267,7 +268,6 @@ Known issues:
  - Executable permissions are not preserved properly for local files prior with Java <1.6
  - Zip files encoded in a charset other than UTF-8 will not display non-ASCII filenames properly due to a limitation of java.util.zip (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4244499)
  - Some BZ2 archives can not be properly opened
- - SFTP connections to some ssh servers cannot be established
  - SFTP connection drops unexpectedly when transferring lots of files
  - SMB support may not work properly on non multi-language JRE
  - 'Copy files' not working with some applications (files are not pasted)

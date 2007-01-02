@@ -10,8 +10,7 @@ import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionFull;
 import com.mucommander.file.connection.ConnectionPool;
 import com.sshtools.j2ssh.SshClient;
-import com.sshtools.j2ssh.authentication.AuthenticationProtocolState;
-import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
+import com.sshtools.j2ssh.authentication.*;
 import com.sshtools.j2ssh.io.UnsignedInteger32;
 import com.sshtools.j2ssh.sftp.*;
 import com.sshtools.j2ssh.transport.IgnoreHostKeyVerification;
@@ -21,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.BufferedOutputStream;
 import java.util.Vector;
+import java.util.List;
 
 
 /**
@@ -40,6 +40,10 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
     private SFTPConnectionHandler connHandler;
     
     private final static String SEPARATOR = DEFAULT_SEPARATOR;
+
+    private final static String PASSWORD_AUTH_METHOD = "password";
+    private final static String KEYBOARD_INTERACTIVE_AUTH_METHOD = "keyboard-interactive";
+    private final static String PUBLIC_KEY_AUTH_METHOD = "publickey";
 
     static {
         // Disables J2SSH logging on standard output
@@ -430,11 +434,11 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
                 FileURL realm = getRealm();
 
                 // Retrieve credentials for this URL
-                Credentials credentials = realm.getCredentials();
+                final Credentials credentials = realm.getCredentials();
 
-                // Throw an AuthException if no auth information
+                // Throw an AuthException if no auth information, required for SSH
                 if(credentials ==null)
-                    throw new AuthException(realm, "Login and password required");
+                    throw new AuthException(realm, "Login and password required");  // Todo: localize this entry
 
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating SshClient");
 
@@ -446,18 +450,72 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
                 if(port==-1)
                     port = 22;
 
-                // Connect
+                // Connect to server, no host key verification
                 sshClient.connect(realm.getHost(), port, new IgnoreHostKeyVerification());
 
-                // Authenticate
-                PasswordAuthenticationClient pwd = new PasswordAuthenticationClient();
-                pwd.setUsername(credentials.getLogin());
-                pwd.setPassword(credentials.getPassword());
-                int authResult = sshClient.authenticate(pwd);
+                // Retrieve a list of available authentication methods on the server.
+                // Some SSH servers support the 'password' auth method (e.g. OpenSSH on Debian unstable), some don't
+                // and only support the 'keyboard-interactive' method. 
+                List authMethods = sshClient.getAvailableAuthMethods(credentials.getLogin());
+                if(Debug.ON) Debug.trace("getAvailableAuthMethods()="+sshClient.getAvailableAuthMethods(credentials.getLogin()));
 
-                // Throw an AuthException if authentication failed
-                if(authResult!=AuthenticationProtocolState.COMPLETE)
-                    throw new AuthException(realm, "Login or password rejected");
+                // Authenticate using the 'password' method if available, if not using 'keyboard-interactive'
+                SshAuthenticationClient authClient;
+                if(!authMethods.contains(PASSWORD_AUTH_METHOD) && authMethods.contains(KEYBOARD_INTERACTIVE_AUTH_METHOD)) {
+                    if(Debug.ON) Debug.trace("Using "+KEYBOARD_INTERACTIVE_AUTH_METHOD+" authentication method");
+
+                    KBIAuthenticationClient kbi = new KBIAuthenticationClient();
+                    kbi.setUsername(credentials.getLogin());
+
+                    // Fake keyboard password input
+                    kbi.setKBIRequestHandler(new KBIRequestHandler() {
+                        public void showPrompts(String name, String instruction, KBIPrompt[] prompts) {
+                            // Workaround for what seems to be a bug in J2SSH: this method is called twice, first time
+                            // with a valid KBIPrompt array, second time with null
+                            if(prompts==null) {
+                                if(Debug.ON) Debug.trace("prompts is null!");
+                                return;
+                            }
+
+                            for(int i=0; i<prompts.length; i++) {
+                                if(Debug.ON) Debug.trace("prompts["+i+"]="+prompts[i].getPrompt());
+                                prompts[i].setResponse(credentials.getPassword());
+                            }
+                        }
+                    });
+
+                    authClient = kbi;
+                }
+                else {
+                    if(Debug.ON) Debug.trace("Using "+PASSWORD_AUTH_METHOD+" authentication method");
+
+                    PasswordAuthenticationClient pwd = new PasswordAuthenticationClient();
+                    pwd.setUsername(credentials.getLogin());
+                    pwd.setPassword(credentials.getPassword());
+
+                    authClient = pwd;
+                }
+
+                try {
+                    if(Debug.ON) Debug.trace("authenticating sshClient, authClient="+authClient);
+                    int authResult = sshClient.authenticate(authClient);
+                    if(Debug.ON) Debug.trace("authentication complete, authResult="+authResult);
+
+                    // Throw an AuthException if authentication failed
+                    if(authResult!=AuthenticationProtocolState.COMPLETE)
+                        throw new AuthException(realm, "Login or password rejected");
+                }
+                catch(IOException e) {
+                    if(e instanceof AuthException)
+                        throw e;
+
+                    if(Debug.ON) {
+                        Debug.trace("Caught exception in SshClient.authenticate: "+e);
+                        e.printStackTrace();
+                        throw new AuthException(realm, e.getMessage());
+                    }
+                }
+                
 
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating SftpSubsystemClient");
 
