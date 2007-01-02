@@ -88,7 +88,10 @@ class ProcessOutputMonitor implements Runnable {
         }
 
         // Closes the stream.
-        try {in.close();}
+        try {
+	    if(in != null)
+		in.close();
+	}
         catch(IOException e) {
             if(Debug.ON) {
                 Debug.trace("IO error while closing process stream: " + e);
@@ -120,5 +123,13 @@ class ProcessOutputMonitor implements Runnable {
      * it should only be called right before the process is killed, as it will otherwise stall.
      * </p>
      */
-    public void stopMonitoring() {monitor = false;}
+    public void stopMonitoring() {
+	// Closes the input stream.
+	try {in.close();}
+	catch(Exception e) {}
+
+	// Notifies the main thread that it should stop monitoring the stream.
+	in      = null;
+	monitor = false;
+    }
 }

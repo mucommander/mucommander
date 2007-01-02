@@ -274,9 +274,9 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
             // If we're running a process, kill it.
             else {
-                processInput.close();
+		processInput.close();
                 currentProcess.destroy();
-                this.currentProcess = null;
+		this.currentProcess = null;
                 switchToRunState();
             }
         }

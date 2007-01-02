@@ -52,8 +52,7 @@ class MonitoredProcess extends Process {
             if(Debug.ON) Debug.trace("Starting shell stdout and stderr monitors...");
             new Thread(stdoutMonitor = new ProcessOutputMonitor(process.getInputStream(), listener, this), "Shell stdout monitor").start();
             new Thread(stderrMonitor = new ProcessOutputMonitor(process.getErrorStream(), listener), "Shell stderr monitor").start();
-        }
-
+	}
     }
 
 
@@ -67,11 +66,15 @@ class MonitoredProcess extends Process {
      * </p>
      */
     public void destroy() {
-        if(Debug.ON) Debug.trace("Destroying process...");
-        stdoutMonitor.stopMonitoring();
-        if(stderrMonitor != null)
-            stderrMonitor.stopMonitoring();
-        process.destroy();
+	new Thread() {
+	    public void run() {
+		if(Debug.ON) Debug.trace("Destroying process...");
+		stdoutMonitor.stopMonitoring();
+		if(stderrMonitor != null)
+		    stderrMonitor.stopMonitoring();
+		process.destroy();
+	    }
+	}.start();
     }
 
     /**
