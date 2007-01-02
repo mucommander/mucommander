@@ -101,8 +101,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         AbstractFile folder;     // Initial folder.
 
         // Checks which kind of initial path we're dealing with.
-        isCustom = (frame == LEFT_FRAME ? ConfigurationManager.getVariable(ConfigurationVariables.LEFT_STARTUP_FOLDER, ConfigurationVariables.STARTUP_FOLDER_CUSTOM) :
-                    ConfigurationManager.getVariable(ConfigurationVariables.RIGHT_STARTUP_FOLDER, ConfigurationVariables.STARTUP_FOLDER_CUSTOM)).equals(ConfigurationVariables.STARTUP_FOLDER_CUSTOM);
+        isCustom = (frame == LEFT_FRAME ? ConfigurationManager.getVariable(ConfigurationVariables.LEFT_STARTUP_FOLDER, ConfigurationVariables.DEFAULT_STARTUP_FOLDER) :
+                    ConfigurationManager.getVariable(ConfigurationVariables.RIGHT_STARTUP_FOLDER, ConfigurationVariables.DEFAULT_STARTUP_FOLDER)).equals(ConfigurationVariables.STARTUP_FOLDER_CUSTOM);
 
         // Handles custom initial paths.
         if (isCustom)
