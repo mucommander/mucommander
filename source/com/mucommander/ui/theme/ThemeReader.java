@@ -6,8 +6,7 @@ import com.mucommander.Debug;
 
 import java.io.*;
 import java.util.*;
-import java.awt.Font;
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Loads theme instances from properly formatted XML files.
@@ -53,15 +52,6 @@ class ThemeReader implements ContentHandler, XmlConstants {
 
 
 
-    // - Default values ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /** Default font size. */
-    private static final int    DEFAULT_FONT_SIZE;
-    /** Default font family. */
-    private static final String DEFAULT_FONT_FAMILY;
-
-
-
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Theme that is currently being built. */
@@ -73,20 +63,6 @@ class ThemeReader implements ContentHandler, XmlConstants {
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-
-    /**
-     * Computes the default font size and family of UI elements.
-     */
-    static {
-        Font defaultFont;
-
-        // Uses the JLabel font as default.
-        defaultFont = new javax.swing.JLabel().getFont();
-
-        DEFAULT_FONT_SIZE   = defaultFont.getSize();
-        DEFAULT_FONT_FAMILY = defaultFont.getFamily();
-    }
-
     /**
      * Creates a new theme reader.
      */
@@ -454,6 +430,24 @@ class ThemeReader implements ContentHandler, XmlConstants {
     // - Helper methods ------------------------------------------------------
     // -----------------------------------------------------------------------
     /**
+     * Checks whether the specified font is available on the system.
+     * @param  font name of the font to check for.
+     * @return <code>true</code> if the font is available, <code>false</code> otherwise.
+     */
+    private static boolean isFontAvailable(String font)  {
+	String[] availableFonts; // All available fonts.
+
+	// Looks for the specified font.
+	availableFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+	for(int i = 0; i < availableFonts.length; i++)
+	    if(availableFonts[i].equalsIgnoreCase(font))
+		return true;
+
+	// Font doesn't exist on the system.
+	return false;
+    }
+
+    /**
      * Creates a font from the specified XML attributes.
      * <p>
      * Ignored attributes will be set to their default values.
@@ -462,9 +456,11 @@ class ThemeReader implements ContentHandler, XmlConstants {
      * @return            the resulting Font instance.
      */
     private static Font createFont(Hashtable attributes) {
-        String buffer; // Buffer for attribute values.
-        int    size;   // Font size.
-        int    style;  // Font style.
+        String          buffer; // Buffer for attribute values.
+        int             size;   // Font size.
+        int             style;  // Font style.
+	StringTokenizer parser; // Used to parse the font family.
+	Font            font;   // Generated font.
 
         // Computes the font style.
         style = 0;
@@ -474,17 +470,31 @@ class ThemeReader implements ContentHandler, XmlConstants {
             style |= Font.ITALIC;
 
         // Computes the font size.
-        if((buffer = (String)attributes.get(ATTRIBUTE_SIZE)) == null)
-            size = DEFAULT_FONT_SIZE;
-        else
-            size = Integer.parseInt(buffer);
+        if((buffer = (String)attributes.get(ATTRIBUTE_SIZE)) == null) {
+            if(Debug.ON) Debug.trace("Missing font size attribute in theme.");
+            return null;
+	}
+	size = Integer.parseInt(buffer);
 
         // Computes the font family.
-        if((buffer = (String)attributes.get(ATTRIBUTE_FAMILY)) == null)
-            buffer = DEFAULT_FONT_FAMILY;
+        if((buffer = (String)attributes.get(ATTRIBUTE_FAMILY)) == null) {
+            if(Debug.ON) Debug.trace("Missing font family attribute in theme.");
+            return null;
+	}
 
-        // Generates the font.
-        return new Font(buffer, style, size);
+	// Looks through the list of declared fonts to find one that is installed on the system.
+	parser = new StringTokenizer(buffer, ",");
+	while(parser.hasMoreTokens()) {
+	    buffer = parser.nextToken().trim();
+
+	    // Font was found, use it.
+	    if(isFontAvailable(buffer))
+		return new Font(buffer, style, size);
+	}
+
+        // No font was found, instructs the ThemeManager to use the system default.
+	if(Debug.ON) Debug.trace("Requested font families are not installed on the system.");
+        return null;
     }
 
     /**
