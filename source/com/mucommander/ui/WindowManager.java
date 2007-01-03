@@ -569,11 +569,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     	if (var.equals(ConfigurationVariables.LOOK_AND_FEEL)) {
             if(Debug.ON) Debug.trace("LookAndFeel changed! "+event.getValue());
             String lnfName = event.getValue();
-			
-            setLookAndFeel(lnfName);
 
-            // Forces the whole UI to refresh is colors using the current theme values.
-            ThemeManager.forceRefresh();
+	    if(!UIManager.getLookAndFeel().getClass().getName().equals(lnfName)) {
+		setLookAndFeel(lnfName);
+		// Forces the whole UI to refresh is colors using the current theme values.
+		ThemeManager.forceRefresh();
+	    }
         }
     
     	return true;

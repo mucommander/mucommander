@@ -5650,6 +5650,39 @@ duration.years:FR:%1a
 duration.infinite:EN:∞
 
 
+
+
+#################
+# Setup entries #
+#################
+setup.title:EN:Welcome to muCommander
+setup.title:FR:Bienvenue dans muCommander
+
+
+
+
+
+
+setup.intro:EN:Please choose the way you want muCommander to behave.
+setup.intro:FR:Veuillez choisir le comportement souhaité de muCommander.
+
+
+
+
+setup.look_and_feel:EN:Select your Look & feel
+setup.look_and_feel:FR:Selectionnez votre Look & Feel
+
+
+
+
+
+setup.theme:EN:Select your theme
+setup.theme:FR:Selectionnez votre thème
+
+
+
+
+
 ######################
 # Deprecated entries #
 ######################

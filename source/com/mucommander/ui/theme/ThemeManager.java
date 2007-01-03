@@ -157,16 +157,14 @@ public class ThemeManager {
             // If there is no legacy data, creates an empty user theme.
             if(legacyData == null)
                 legacyData = new ThemeData();
+            // Makes sure that muCommander boots with the user's previous preferences.
+	    else
+		currentType = USER_THEME;
 
             // Creates and saves the user theme.
             userTheme            = new Theme(Translator.get("user_theme"), legacyData);
             wasUserThemeModified = true;
             saveUserTheme();
-
-            // Makes sure that muCommander boots with the user's previous preferences.
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_USER);
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, null);
-            currentType = USER_THEME;
         }
 
         // Adds the user theme to the list of available themes.
@@ -196,18 +194,25 @@ public class ThemeManager {
 
         // Loads the current theme type as defined in configuration.
         // If some error occurs here (unknown theme type), uses configuration defaults.
-        try {currentType = getThemeTypeFromLabel(ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE));}
+        try {
+	    String buffer;
+
+	    if((buffer = ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE)) == null)
+		buffer = ConfigurationVariables.DEFAULT_THEME_TYPE;
+	    currentType = getThemeTypeFromLabel(buffer);
+	}
         catch(Exception e) {
             currentType = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE);
             if(Debug.ON)
                 Debug.trace("Illegal theme type found in configuration: " +
                             ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE));
         }
 
         // Loads the current theme name as defined in configuration.
-        if(currentType != USER_THEME)
-            currentName = ConfigurationManager.getVariable(ConfigurationVariables.THEME_NAME, ConfigurationVariables.DEFAULT_THEME_NAME);
+        if(currentType != USER_THEME) {
+            if((currentName = ConfigurationManager.getVariable(ConfigurationVariables.THEME_NAME)) == null)
+		currentName = ConfigurationVariables.DEFAULT_THEME_NAME;
+	}
 
         // Loads user, predefined and custom themes.
         loadUserTheme();
@@ -365,24 +370,10 @@ public class ThemeManager {
     }
 
     /**
-     * Changes the current theme.
-     * <p>
-     * This method will change the current theme and trigger all the proper events.
-     * </p>
-     * @param theme theme to use as the current theme.
+     * Sets the specified theme as the current theme in configuration.
+     * @param theme theme to set as current.
      */
-    public synchronized static void setCurrentTheme(Theme theme) {
-        ThemeData oldData; // Buffer for the old current data.
-
-        // Makes sure we're not doing something useless.
-        if(isCurrentTheme(theme))
-            return;
-
-        // Sets the new data.
-        oldData = currentData;
-        if((currentData = theme.getThemeData()) == null)
-            throw new IllegalStateException("Couldn't load data for theme: " + theme.getName());
-
+    private static void setConfigurationTheme(Theme theme) {
         // Sets configuration depending on the new theme's type.
         switch(currentType = theme.getType()) {
             // User defined theme.
@@ -407,6 +398,30 @@ public class ThemeManager {
         default:
             throw new IllegalStateException("Illegal theme type: " + currentType);
         }
+    }
+
+    /**
+     * Changes the current theme.
+     * <p>
+     * This method will change the current theme and trigger all the proper events.
+     * </p>
+     * @param theme theme to use as the current theme.
+     */
+    public synchronized static void setCurrentTheme(Theme theme) {
+        ThemeData oldData; // Buffer for the old current data.
+
+        // Makes sure we're not doing something useless.
+        if(isCurrentTheme(theme)) {
+	    setConfigurationTheme(theme);
+            return;
+	}
+
+        // Sets the new data.
+        oldData = currentData;
+        if((currentData = theme.getThemeData()) == null)
+            throw new IllegalStateException("Couldn't load data for theme: " + theme.getName());
+
+	setConfigurationTheme(theme);
 
         // Triggers font events.
         for(int i = 0; i < Theme.FONT_COUNT; i++) {

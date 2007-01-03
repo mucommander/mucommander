@@ -2,9 +2,7 @@ package com.mucommander;
 
 import com.mucommander.conf.*;
 import com.mucommander.shell.ShellHistoryManager;
-import com.mucommander.ui.CheckVersionDialog;
-import com.mucommander.ui.SplashScreen;
-import com.mucommander.ui.WindowManager;
+import com.mucommander.ui.*;
 
 import java.lang.reflect.Constructor;
 
@@ -261,20 +259,24 @@ public class Launcher {
         splashScreen.setLoadingMessage("Initializing window...");
         for(; i < args.length; i += 2) {
             if(i < args.length - 1)
-                WindowManager.createNewMainFrame(args[i], args[i + 1]);
+		WindowManager.createNewMainFrame(args[i], args[i + 1]);
             else
-                WindowManager.createNewMainFrame(args[i], null);
+		WindowManager.createNewMainFrame(args[i], null);
         }
 
         // If no initial path was specified, start a default main window.
         if(WindowManager.getCurrentMainFrame() == null)
-            WindowManager.createNewMainFrame();
+	    WindowManager.createNewMainFrame();
+
+        // Dispose splash screen.
+        splashScreen.dispose();
 
         // Check for newer version unless it was disabled
         if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.CHECK_FOR_UPDATE, ConfigurationVariables.DEFAULT_CHECK_FOR_UPDATE))
             new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
 
-        // Dispose splash screen
-        splashScreen.dispose();
+	// If no theme is configured in the preferences, ask for an initial theme.
+	if(ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE) == null)
+	    new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
     }
 }
