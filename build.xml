@@ -162,8 +162,9 @@
     <echo>Generating themes...</echo>
     <taskdef name="resources" classname="com.mucommander.ant.res.ResourceTask" classpath="${tools.jar}"/>
     <resources outfile="${classes}/${themes.desc}" outdir="${classes}">
-      <file out="${themes.out}/RetroCommander.xml" in="${themes.in}/RetroCommander.xml"/>
       <file out="${themes.out}/ClassicCommander.xml" in="${themes.in}/ClassicCommander.xml"/>
+      <file out="${themes.out}/Native.xml"           in="${themes.in}/Native.xml"/>
+      <file out="${themes.out}/RetroCommander.xml"   in="${themes.in}/RetroCommander.xml"/>
     </resources>
   </target>
 
@@ -301,7 +302,7 @@
       <field name="DICTIONARY_FILE"     value="/dictionary.txt"/>
       <field name="THEMES_FILE"         value="${themes.desc}"/>
       <field name="BUG_REPOSITORY_URL"  value="${url.bug-repository}"/>
-      <field name="DEFAULT_THEME"       value="ClassicCommander"/>
+      <field name="DEFAULT_THEME"       value="Native"/>
     </javaw>
   </target>
 

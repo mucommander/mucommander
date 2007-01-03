@@ -68,9 +68,9 @@ done:ZH_CN:完成
 done:SI:Narejeno
 done:RO:Închide
 
-# Used for the label of the user theme
-user_theme:EN:User theme
-user_theme:FR:Thème utilisateur
+# Used for the label of the custom theme
+user_theme:EN:Custom theme
+user_theme:FR:Thème personnalisé
 
 
 
@@ -5318,8 +5318,8 @@ prefs_dialog.themes:FR:Thèmes
 
 
 
-prefs_dialog.theme_warning:EN:This will overwrite the user defined theme. Do you wish to proceed?
-prefs_dialog.theme_warning:FR:Cette opération va modifier le thème utilisateur. Voulez-vous continuer?
+prefs_dialog.theme_warning:EN:This will overwrite the custom theme. Do you wish to proceed?
+prefs_dialog.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
 
 
 

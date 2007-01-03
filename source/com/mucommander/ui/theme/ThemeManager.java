@@ -901,39 +901,27 @@ public class ThemeManager {
 
         // File editor / viewer colors.
         data.setColor(Theme.EDITOR_BACKGROUND, Color.WHITE);
-        if((color = UIManager.getDefaults().getColor("Textarea.foreground")) == null)
-            color = new JTextArea().getForeground();
-        data.setColor(Theme.EDITOR_TEXT, color);
-        if((color = UIManager.getDefaults().getColor("Textarea.selectionBackground")) == null)
-            color = new JTextArea().getSelectionColor();
-        data.setColor(Theme.EDITOR_BACKGROUND_SELECTED, color);
-        if((color = UIManager.getDefaults().getColor("Textarea.selectionForeground")) == null)
-            color = new JTextArea().getSelectedTextColor();
-        data.setColor(Theme.EDITOR_TEXT_SELECTED, color);
-        if((font  = UIManager.getDefaults().getFont("TextAield.font")) == null)
-            font = new JTextArea().getFont();
-        data.setFont(Theme.EDITOR, font);
+        data.setColor(Theme.EDITOR_TEXT, getTextAreaColor());
+        data.setColor(Theme.EDITOR_BACKGROUND_SELECTED, getTextAreaSelectionBackgroundColor());
+        data.setColor(Theme.EDITOR_TEXT_SELECTED, getTextAreaSelectionColor());
+        data.setFont(Theme.EDITOR, getTextAreaFont());
 
         // Location bar and shell history (both use text field defaults).
         data.setColor(Theme.LOCATION_BAR_PROGRESS, new Color(0, 255, 255, 64));
-        if((color = UIManager.getDefaults().getColor("TextField.background")) == null)
-            color = new JTextField().getBackground();
+	color = getTextFieldBackgroundColor();
         data.setColor(Theme.LOCATION_BAR_BACKGROUND, color);
         data.setColor(Theme.SHELL_HISTORY_BACKGROUND, color);
-        if((color = UIManager.getDefaults().getColor("TextField.foreground")) == null)
-            color = new JTextField().getForeground();
+	color = getTextFieldColor();
         data.setColor(Theme.LOCATION_BAR_TEXT, color);
         data.setColor(Theme.SHELL_HISTORY_TEXT, color);
-        if((color = UIManager.getDefaults().getColor("TextField.selectionBackground")) == null)
-            color = new JTextField().getSelectionColor();
+	color = getTextFieldSelectionBackgroundColor();
         data.setColor(Theme.LOCATION_BAR_BACKGROUND_SELECTED, color);
         data.setColor(Theme.SHELL_HISTORY_BACKGROUND_SELECTED, color);
-        if((color = UIManager.getDefaults().getColor("TextField.selectionForeground")) == null)
-            color = new JTextField().getSelectedTextColor();
+	color = getTextFieldSelectionColor();
         data.setColor(Theme.LOCATION_BAR_TEXT_SELECTED, color);
         data.setColor(Theme.SHELL_HISTORY_TEXT_SELECTED, color);
-        if((font  = UIManager.getDefaults().getFont("TextField.font")) == null)
-            font = new JTextField().getFont();
+
+	font = getTextFieldFont();
         data.setFont(Theme.LOCATION_BAR, font);
         data.setFont(Theme.SHELL_HISTORY, font);
 
@@ -1018,98 +1006,239 @@ public class ThemeManager {
      */
     private static final String getThemeName(String path) {return path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));}
 
+    /**
+     * Returns the current look and feel's text area font.
+     * @return the current look and feel's text area font.
+     */
+    private static Font getTextAreaFont() {
+	Font font;
+
+        if((font = UIManager.getDefaults().getFont("TextArea.font")) == null)
+            return new JTextArea().getFont();
+	return font;
+    }
+
+    /**
+     * Returns the current look and feel's text field font.
+     * @return the current look and feel's text field font.
+     */
+    private static Font getTextFieldFont() {
+	Font font;
+
+        if((font = UIManager.getDefaults().getFont("TextField.font")) == null)
+            return new JTextField().getFont();
+	return font;
+    }
+
+    /**
+     * Returns the current look and feel's label font.
+     * @return the current look and feel's label font.
+     */
+    private static Font getLabelFont() {
+	Font font;
+
+        if((font = UIManager.getDefaults().getFont("Label.font")) == null)
+            return new JLabel().getFont();
+	return font;
+    }
+
+    private static Color getTextAreaColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("TextArea.foreground")) == null)
+            return new JTextArea().getForeground();
+	return color;
+    }
+
+    private static Color getTextAreaBackgroundColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("TextArea.background")) == null)
+            return new JTextArea().getBackground();
+	return color;
+    }
+
+    private static Color getTextAreaSelectionColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("TextArea.selectionForeground")) == null)
+            return new JTextArea().getSelectionColor();
+	return color;
+    }
+
+    private static Color getTextAreaSelectionBackgroundColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("TextArea.selectionBackground")) == null)
+            return new JTextArea().getSelectedTextColor();
+	return color;
+    }
+
+    private static Color getTextFieldColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("TextField.foreground")) == null)
+            return new JTextField().getForeground();
+	return color;
+    }
+
+    private static Color getTextFieldBackgroundColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("TextField.background")) == null)
+            return new JTextField().getBackground();
+	return color;
+    }
+
+    private static Color getTextFieldSelectionColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("TextField.selectionForeground")) == null)
+            return new JTextField().getSelectionColor();
+	return color;
+    }
+
+    private static Color getTextFieldSelectionBackgroundColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("TextField.selectionBackground")) == null)
+            return new JTextField().getSelectedTextColor();
+	return color;
+    }
+
+    private static Color getTableColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("Table.foreground")) == null)
+            return new JTable().getForeground();
+	return color;
+    }
+
+    private static Color getTableBackgroundColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("Table.background")) == null)
+            return new JTable().getBackground();
+	return color;
+    }
+
+    private static Color getTableSelectionColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("Table.selectionForeground")) == null)
+            return new JTable().getSelectionForeground();
+	return color;
+    }
+
+    private static Color getTableSelectionBackgroundColor() {
+	Color color;
+
+        if((color = UIManager.getDefaults().getColor("Table.selectionBackground")) == null)
+            return new JTable().getSelectionBackground();
+	return color;
+    }
+
+    private static Font getTableFont() {
+	Font font;
+
+        if((font = UIManager.getDefaults().getFont("Table.font")) == null)
+            return new JTable().getFont();
+	return font;
+    }
+
     static final Color getDefaultColor(int id) {
         switch(id) {
         case Theme.FILE_BACKGROUND:
-            return Color.WHITE;
         case Theme.FILE_UNFOCUSED_BACKGROUND:
-            return Color.WHITE;
+	    return getTableBackgroundColor();
+
         case Theme.HIDDEN_FILE:
-            return Color.BLACK;
         case Theme.FOLDER:
-            return Color.BLACK;
         case Theme.ARCHIVE:
-            return Color.BLACK;
         case Theme.SYMLINK:
-            return Color.BLACK;
-        case Theme.MARKED:
-            return Color.RED;
         case Theme.FILE:
-            return Color.BLACK;
-        case Theme.SHELL_TEXT:
-            return Color.BLACK;
-        case Theme.SHELL_BACKGROUND:
-            return Color.WHITE;
-        case Theme.EDITOR_TEXT:
-            return Color.BLACK;
-        case Theme.EDITOR_BACKGROUND:
-            return Color.WHITE;
-        case Theme.LOCATION_BAR_TEXT:
-            return Color.BLACK;
-        case Theme.LOCATION_BAR_BACKGROUND:
-            return Color.WHITE;
-        case Theme.LOCATION_BAR_PROGRESS:
-            return new Color(0, 255, 255, 64);
-        case Theme.FILE_BACKGROUND_SELECTED:
-            return Color.BLUE;
-        case Theme.FILE_UNFOCUSED_BACKGROUND_SELECTED:
-            return Color.GRAY;
-        case Theme.HIDDEN_FILE_SELECTED:
-            return Color.WHITE;
-        case Theme.FOLDER_SELECTED:
-            return Color.WHITE;
-        case Theme.ARCHIVE_SELECTED:
-            return Color.WHITE;
-        case Theme.SYMLINK_SELECTED:
-            return Color.WHITE;
+	    return getTableColor();
+
+
+        case Theme.MARKED:
         case Theme.MARKED_SELECTED:
-            return Color.WHITE;
-        case Theme.FILE_SELECTED:
-            return Color.WHITE;
-        case Theme.SHELL_TEXT_SELECTED:
-            return Color.BLACK;
-        case Theme.SHELL_BACKGROUND_SELECTED:
-            return Color.BLUE;
-        case Theme.EDITOR_TEXT_SELECTED:
-            return Color.WHITE;
-        case Theme.EDITOR_BACKGROUND_SELECTED:
-            return Color.BLUE;
-        case Theme.LOCATION_BAR_TEXT_SELECTED:
-            return Color.WHITE;
-        case Theme.LOCATION_BAR_BACKGROUND_SELECTED:
-            return Color.BLUE;
+            return Color.RED;
+
+        case Theme.SHELL_TEXT:
+        case Theme.EDITOR_TEXT:
+            return getTextAreaColor();
+
+        case Theme.SHELL_BACKGROUND:
+        case Theme.EDITOR_BACKGROUND:
+            return getTextAreaBackgroundColor();
+
+        case Theme.SHELL_HISTORY_TEXT:
+        case Theme.LOCATION_BAR_TEXT:
+            return getTextFieldColor();
+
+        case Theme.LOCATION_BAR_BACKGROUND:
+        case Theme.SHELL_HISTORY_BACKGROUND:
+            return getTextFieldBackgroundColor();
+
+        case Theme.LOCATION_BAR_PROGRESS:
+	    Color color;
+
+	    color = getTextFieldSelectionBackgroundColor();
+            return new Color(color.getRed(), color.getGreen(), color.getBlue(), 64);
+
+        case Theme.FILE_BACKGROUND_SELECTED:
+	    return getTableSelectionBackgroundColor();
+
+        case Theme.FILE_UNFOCUSED_BACKGROUND_SELECTED:
         case Theme.FILE_TABLE_BORDER:
             return Color.GRAY;
-        case Theme.SHELL_HISTORY_TEXT:
-            return Color.BLACK;
-        case Theme.SHELL_HISTORY_BACKGROUND:
-            return Color.WHITE;
+
+        case Theme.HIDDEN_FILE_SELECTED:
+        case Theme.FOLDER_SELECTED:
+        case Theme.ARCHIVE_SELECTED:
+        case Theme.SYMLINK_SELECTED:
+        case Theme.FILE_SELECTED:
+	    return getTableSelectionColor();
+
+        case Theme.SHELL_TEXT_SELECTED:
+        case Theme.EDITOR_TEXT_SELECTED:
+            return getTextAreaSelectionColor();
+
+        case Theme.SHELL_BACKGROUND_SELECTED:
+        case Theme.EDITOR_BACKGROUND_SELECTED:
+            return getTextAreaSelectionBackgroundColor();
+
+        case Theme.LOCATION_BAR_TEXT_SELECTED:
         case Theme.SHELL_HISTORY_TEXT_SELECTED:
-            return Color.WHITE;
+            return getTextFieldSelectionColor();
+
         case Theme.SHELL_HISTORY_BACKGROUND_SELECTED:
-            return Color.BLUE;
+        case Theme.LOCATION_BAR_BACKGROUND_SELECTED:
+            return getTextFieldSelectionBackgroundColor();
         }
         throw new IllegalArgumentException("Illegal color identifier: " + id);
     }
 
+    /**
+     * Returns the default value for the specified font.
+     * @param  id identifier of the font whose default value should be retrieved.
+     * @return    the default value for the specified font.
+     */
     static final Font getDefaultFont(int id) {
-        Font font;
-
-        switch(id) {
-            // All 'custom' fonts default to the JLabel font.
+	switch(id) {
+            // Table font.
         case Theme.FILE_TABLE:
+	    return getTableFont();
+
+	    // Text Area font.
         case Theme.EDITOR:
+        case Theme.SHELL:
+	    return getTextAreaFont();
+
+	    // Text Field font.
         case Theme.LOCATION_BAR:
         case Theme.SHELL_HISTORY:
-            if((font = UIManager.getDefaults().getFont("Label.font")) == null)
-                font = new JLabel().getFont();
-            return font;
-
-            // The shell font is a special case, as its default is monospaced.
-        case Theme.SHELL:
-            if((font = UIManager.getDefaults().getFont("TextArea.font")) == null)
-                font = new JTextArea().getFont();
-            return new Font("Monospaced", Font.PLAIN, font.getSize());
+	    return getTextFieldFont();
         }
         throw new IllegalArgumentException("Illegal font identifier: " + id);
     }
