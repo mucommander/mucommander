@@ -2321,7 +2321,7 @@ status_bar.selected_files:ES:%1 de %2 seleccionados
 status_bar.selected_files:CS:%1 z %2 označeno
 status_bar.selected_files:zh_TW:%1 / %2 已選取
 status_bar.selected_files:PL:%1 z %2 zaznaczonych
-status_bar.selected_files:HU:%1 ból %2 kijelölt
+status_bar.selected_files:HU:%1 / %2 kijelölt
 status_bar.selected_files:RU:%1 из %2 файлов выбрано
 status_bar.selected_files:ZH_CN:%1 / %2 已选定
 status_bar.selected_files:SI:%1 od %2 datotek
