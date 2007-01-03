@@ -49,8 +49,8 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         this.locationField = (ProgressTextField)getTextField();
         locationField.setComboBox(this);
 
+	// Applies theme values.
         setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR));
-
         setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_TEXT));
         setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND));
         setSelectionForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_TEXT_SELECTED));
