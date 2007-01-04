@@ -561,9 +561,6 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
 
         private SFTPConnectionHandler(FileURL location) {
             super(location);
-
-setKeepAlivePeriod(5);
-setCloseOnInactivityPeriod(30);
         }
 
 
