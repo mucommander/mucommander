@@ -13,5 +13,5 @@ public interface ConnectionFull {
 
     public ConnectionHandler createConnectionHandler(FileURL location);
 
-    public ConnectionHandler getConnectionHandler();
+//    public ConnectionHandler getConnectionHandler();
 }

@@ -37,11 +37,13 @@ public abstract class AbstractFile {
     /** Indicates {@link #copyTo(AbstractFile)}/{@link #moveTo(AbstractFile)} *must not* be used to copy/move the file (e.g. not implemented) */
     public final static int MUST_NOT_HINT = 3;
 
+    // Note: raising buffers size from 8192 to 65536 makes a huge difference in SFTP transfer rates
+
     /** Size allocated to read buffer */
-    public final static int READ_BUFFER_SIZE = 8192;
+    public final static int READ_BUFFER_SIZE = 65536;
 
     /** Default buffer size for BufferedOutputStream */
-    public final static int WRITE_BUFFER_SIZE = 8192;
+    public final static int WRITE_BUFFER_SIZE = 65536;
 
 
     /** Bit mask for 'execute' file permission */
@@ -824,8 +826,7 @@ public abstract class AbstractFile {
     /**
      * Returns an OuputStream to write to this AbstractFile.
      * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any existing data will be overwritten.
-     * @throws IOException if this operation is not permitted or if this AbstractFile 
-     * is a folder.
+     * @throws IOException if this operation is not permitted or if this AbstractFile is a folder
      */
     public abstract OutputStream getOutputStream(boolean append) throws IOException;
 

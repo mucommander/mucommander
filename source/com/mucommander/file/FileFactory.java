@@ -56,10 +56,7 @@ public abstract class FileFactory {
         registerFileProtocol(HTTPFile.class, FileProtocols.HTTP);
         registerFileProtocol(HTTPFile.class, FileProtocols.HTTPS);
         registerFileProtocol(FTPFile.class, FileProtocols.FTP);
-        // SFTP (J2SSH) library only works with Java 1.4 and up, do not register it if running Java 1.3 or lower
-        // Technically, J2SSH could run under Java 1.3 with BouncyCastle's crypto library but it is unfortunately too fat
-        if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_4)
-            registerFileProtocol(SFTPFile.class, FileProtocols.SFTP);
+        registerFileProtocol(SFTPFile.class, FileProtocols.SFTP);
 //        registerFileProtocol(WebDAVFile.class, FileProtocols.WEBDAV);
 //        registerFileProtocol(WebDAVFile.class, FileProtocols.WEBDAVS);
         
@@ -314,11 +311,9 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
             // This exception is thrown by Constructor.newInstance() when the target constructor throws an Exception.
             // If the exception was an IOException, throw it instead of a new IOException, as it may contain
             // additional information about the error cause
-            if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
-                Throwable cause = e.getTargetException();   // Method only available under Java 1.4 and up
-                if(cause instanceof IOException)
-                    throw (IOException)cause;
-            }
+            Throwable cause = e.getTargetException();
+            if(cause instanceof IOException)
+                throw (IOException)cause;
 
             throw new IOException();
         }

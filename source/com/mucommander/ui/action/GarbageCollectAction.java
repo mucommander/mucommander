@@ -17,5 +17,7 @@ public class GarbageCollectAction extends MucoAction {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling System.gc()");
 
         System.gc();
+
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("freeMemory="+Runtime.getRuntime().freeMemory()+" totalMemory="+Runtime.getRuntime().totalMemory());
     }
 }

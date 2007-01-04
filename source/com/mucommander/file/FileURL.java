@@ -451,15 +451,18 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
 	
 
     /**
-     * Returns the realm of a given location, that the URL to the server and share, if the location's protocol
-     * has a notion of share (e.g. SMB). If the realm FileURL could not be created (MalformedURLException was thrown),
-     * null is returned, this should not normally happen.
+     * Returns the realm of a given location, that is the URL to the host (if this URL contains one), port
+     * (if this URL contains one) and share (if the location's protocol has a notion of share, e.g. SMB).
+     *
+     * <p>If the realm FileURL could not be created (MalformedURLException was thrown), null is returned,
+     * this should not normally happen.
      *
      * <p>A few examples:
      * <ul>
      * <li>smb://someserver/someshare/somefolder/somefile -> smb://someserver/someshare/
      * <li>ftp://someserver/somefolder/somefile -> ftp://someserver/
-     * <li>smb://someserver/ -> smb://someserver/
+     * <li>sftp://someserver:666/ -> sftp://someserver:666/
+     * <li>smb:// -> smb://
      * </ul>
      *
      * @param location the location to a resource on a remote server
@@ -480,11 +483,19 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
         }
 
         try {
+            String realm = protocol+"://";
+
             String host = location.getHost();
-            if(host==null)
-                return new FileURL(protocol+"://"+newPath);
-            else
-                return new FileURL(protocol+"://"+host+newPath);
+            if(host!=null)
+                realm += host;
+
+            int port = location.getPort();
+            if(port!=-1)
+                realm += ":"+port;
+
+            realm += newPath;
+
+            return new FileURL(realm);
         }
         catch(MalformedURLException e) {
             // Should never happen, report the error if it does

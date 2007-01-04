@@ -38,9 +38,6 @@ public class StressTester implements Runnable, ActionListener {
             AbstractFile currentFolder = fileTable.getCurrentFolder();
             AbstractFile parentFolder = currentFolder.getParent();
 
-            mainFrame.toBack();
-            mainFrame.toFront();
-			
             try {
                 AbstractFile children[] = currentFolder.ls();
                 // 1 in 3 chance to go up if folder has children

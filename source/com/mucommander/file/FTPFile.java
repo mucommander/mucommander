@@ -125,9 +125,9 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
         return new FTPConnectionHandler(location, passiveModeProperty==null||!passiveModeProperty.equals("false"));
     }
 
-    public ConnectionHandler getConnectionHandler() {
-        return connHandler;
-    }
+//    public ConnectionHandler getConnectionHandler() {
+//        return connHandler;
+//    }
 
     
     /////////////////////////////////////////
@@ -470,6 +470,9 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
     }
 
 
+    /**
+     * Handles connection to FTP servers.
+     */
     private static class FTPConnectionHandler extends ConnectionHandler {
 
         private FTPClient ftpClient;
@@ -553,34 +556,27 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
         public boolean isConnected() {
             return ftpClient!=null && ftpClient.isConnected();
-
-//            if(ftpClient==null || !ftpClient.isConnected())
-//                return false;
-//
-//            // Send NoOp to check connection
-//            boolean noopSuccess = false;
-//            try {
-//                noopSuccess = ftpClient.sendNoOp();
-//                checkServerReply();
-//            }
-//            catch(IOException e) {
-//                // Something went wrong
-//                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in Noop "+e);
-//            }
-//
-//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("noop returned "+ noopSuccess);
-//
-//            return noopSuccess;
         }
 
 
         public void closeConnection() {
-            if(isConnected()) {
+            if(ftpClient!=null) {
                 try {
                     ftpClient.logout();
                     ftpClient.disconnect();
                 }
                 catch(IOException e) {}
+            }
+        }
+
+
+        public void keepAlive() {
+            if(ftpClient!=null) {
+                try {
+                    ftpClient.sendNoOp();
+                }
+                catch(IOException e) {
+                }
             }
         }
     }

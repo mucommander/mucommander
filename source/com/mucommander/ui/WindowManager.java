@@ -595,22 +595,13 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @param frame frame for which screen insets should be computed.
      */
     private static Insets getScreenInsets(Frame frame) {
-        // Code for Java 1.4 and up
-        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4)
-            // Java 1.4 has a method which returns real screen insets
-            return Toolkit.getDefaultToolkit().getScreenInsets(frame.getGraphicsConfiguration());
-        // Java 1.3
-        return new Insets(PlatformManager.OS_FAMILY == PlatformManager.MAC_OS_X ? 22 : 0, 0, 0, 0);		
+        return Toolkit.getDefaultToolkit().getScreenInsets(frame.getGraphicsConfiguration());
     }
 	
 	
     /**
      * Checks whether the specified frame can be moved to the specified coordinates and still
      * be fully visible.
-     * <p>
-     * Note that while this method is fairly accurate if we're running under Java. 1.4 or greater,
-     * but any older version involves a lot of guesswork.
-     * </p>
      * <p>
      * If <code>x</code> (resp. <code>y</code>) is <code>null</code>, this method won't test
      * whether the frame is within horizontal (resp. vertical) bounds.
@@ -635,10 +626,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 	
     /**
      * Returns the maximum dimensions for a full-screen window.
-     * <p>
-     * Note that while this method is fairly accurate if we're running under Java. 1.4 or greater,
-     * but any older version involves a lot of guesswork.
-     * </p>
+     *
      * @param window window who's full screen size should be computed.
      */
     public static Rectangle getFullScreenBounds(Window window) {
@@ -648,33 +636,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         toolkit    = Toolkit.getDefaultToolkit();
         screenSize = toolkit.getScreenSize();
 
-        // Code for Java 1.4 and up
-        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
-            // Java 1.4 makes it easy to get full screen bounds
-            Insets screenInsets = toolkit.getScreenInsets(window.getGraphicsConfiguration());		
-            return new Rectangle(screenInsets.left, screenInsets.top, screenSize.width-screenInsets.left-screenInsets.right, screenSize.height-screenInsets.top-screenInsets.bottom);		
-        }
-        // Code for Java 1.3
-        else {
-            int x = 0;
-            int y = 0;
-            int width = screenSize.width;
-            int height = screenSize.height;
-			
-            // Mac OS X, assuming that dock is at the bottom of the screen
-            if(PlatformManager.OS_FAMILY == PlatformManager.MAC_OS_X) {
-                // Menu bar height
-                y += 22;
-                height -= 22;
-            }
-
-            // Try to give enough space for 'everyone' with a 4/3 pixel ratio:
-            // - for Window's task bar (ok)
-            // - for Mac OS X's dock (not so sure)  
-            width -= 60;
-            height -= 45;
-			
-            return new Rectangle(x, y, width, height);		
-        }
+        Insets screenInsets = toolkit.getScreenInsets(window.getGraphicsConfiguration());
+        return new Rectangle(screenInsets.left, screenInsets.top, screenSize.width-screenInsets.left-screenInsets.right, screenSize.height-screenInsets.top-screenInsets.bottom);
     }
 }
