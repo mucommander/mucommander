@@ -649,7 +649,7 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
      * @return true if both FileURL instances are equal.
      */
     public boolean equals(Object o) {
-        if(!(o instanceof FileURL))
+        if(o==null || !(o instanceof FileURL))
             return false;
 		
         // Do not take into account credentials (login and password) to test equality

@@ -8,10 +8,13 @@ import com.mucommander.auth.Credentials;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.file.connection.ConnectionFull;
+import com.mucommander.Debug;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -23,7 +26,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
     private org.apache.commons.net.ftp.FTPFile file;
 
-    private FTPConnectionHandler connHandler;
+//    private FTPConnectionHandler connHandler;
 
     protected String absPath;
 
@@ -36,6 +39,9 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
     public final static String PASSIVE_MODE_PROPERTY_NAME = "passiveMode";
 
+    /** Date format used by the SITE UTIME command */
+    private final static SimpleDateFormat SITE_UTIME_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmm");
+
 
     public FTPFile(FileURL fileURL) throws IOException {
         this(fileURL, null);
@@ -46,11 +52,18 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
         this.absPath = fileURL.getPath();
 
-        this.connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL);
-        connHandler.checkConnection();
-
-        if(file==null)
-            initFile(fileURL);
+        if(file==null) {
+            this.file = getFTPFile(fileURL);
+            // If file doesn't exist (could not be resolved), create it
+            if(this.file==null) {
+                String name = fileURL.getFilename();    // Filename could potentially be null
+                this.file = createFTPFile(name==null?"":name, false);
+                this.fileExists = false;
+            }
+            else {
+                this.fileExists = true;
+            }
+        }
         else {
             this.file = file;
             this.fileExists = true;
@@ -67,12 +80,26 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
             return createFTPFile("/", true);
         }
         else {
-            // Check connection and reconnect if connection timed out
-            connHandler.checkConnection();
+            FTPConnectionHandler connHandler = null;
+            org.apache.commons.net.ftp.FTPFile files[];
+            try {
+                // Retrieve a ConnectionHandler and lock it
+                connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+                // Makes sure the connection is started, if not starts it
+                connHandler.checkConnection();
 
-            org.apache.commons.net.ftp.FTPFile files[] = connHandler.ftpClient.listFiles(parentURL.getPath());
-            // Throw an IOException if server replied with an error
-            connHandler.checkServerReply();
+                // List files contained by this file's parent in order to retrieve the FTPFile instance corresponding
+                // to this file
+                files = connHandler.ftpClient.listFiles(parentURL.getPath());
+
+                // Throw an IOException if server replied with an error
+                connHandler.checkServerReply();
+            }
+            finally {
+                // Release the lock on the ConnectionHandler
+                if(connHandler!=null)
+                    connHandler.releaseLock();
+            }
 
             // File doesn't exist
             if(files==null || files.length==0)
@@ -85,6 +112,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
                 if(files[i].getName().equalsIgnoreCase(wantedName))
                     return files[i];
             }
+
             // File doesn't exists
             return null;
         }
@@ -101,19 +129,11 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
     }
 
 
-    private void initFile(FileURL fileURL) throws IOException {
-        this.file = getFTPFile(fileURL);
-        // If file doesn't exist (could not be resolved), create it
-        if(this.file==null) {
-            String name = fileURL.getFilename();    // Filename could potentially be null
-            this.file = createFTPFile(name==null?"":name, false);
-            this.fileExists = false;
-        }
-        else {
-            this.fileExists = true;
-        }
+    private boolean isPassiveModeEnabled() {
+        String passiveModeProperty = getURL().getProperty(PASSIVE_MODE_PROPERTY_NAME);
+        // Passive mode is enabled by default if property isn't specified
+        return passiveModeProperty==null || !passiveModeProperty.equals("false");
     }
-
 
 
     ///////////////////////////////////
@@ -121,15 +141,10 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
     ///////////////////////////////////
 
     public ConnectionHandler createConnectionHandler(FileURL location) {
-        String passiveModeProperty = getURL().getProperty(PASSIVE_MODE_PROPERTY_NAME);
-        return new FTPConnectionHandler(location, passiveModeProperty==null||!passiveModeProperty.equals("false"));
+        return new FTPConnectionHandler(location, isPassiveModeEnabled());
     }
 
-//    public ConnectionHandler getConnectionHandler() {
-//        return connHandler;
-//    }
 
-    
     /////////////////////////////////////////
     // AbstractFile methods implementation //
     /////////////////////////////////////////
@@ -143,9 +158,38 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
     }
 
     public boolean changeDate(long lastModified) {
-        // No way that I know of to date this with Commons-Net API, maybe there isn't even an FTP command to change a file's date 
-        // Note: FTPFile.setTimeStamp only changes the instance's date, but doesn't change it on the server-side.
-        return false;
+        // Changes the date using the SITE UTIME FTP command. This command seems to be supported by modern FTP servers
+        // such as ProFTPd or PureFTP Server, but may as well not be supported by the remote FTP server as it is not
+        // part of the basic command set.
+
+        // Implementation note: FTPFile.setTimeStamp only changes the instance's date, but doesn't change it on the server-side.
+        FTPConnectionHandler connHandler = null;
+        try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+            // Makes sure the connection is started, if not starts it
+            connHandler.checkConnection();
+
+            String sdate;
+            // SimpleDateFormat instance must be synchronized externally if it is accessed concurrently
+            synchronized(SITE_UTIME_DATE_FORMAT) {
+                sdate = SITE_UTIME_DATE_FORMAT.format(new Date(lastModified));
+            }
+
+if(Debug.ON) Debug.trace("sending UTIME "+sdate);
+            boolean ret = connHandler.ftpClient.sendSiteCommand("UTIME "+sdate+" "+absPath);
+if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString());
+
+            return ret;
+        }
+        catch(IOException e) {
+            return false;
+        }
+        finally {
+            // Release the lock on the ConnectionHandler
+            if(connHandler!=null)
+                connHandler.releaseLock();
+        }
     }
 
     public long getSize() {
@@ -157,7 +201,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
         if(!parentValSet) {
             FileURL parentFileURL = this.fileURL.getParent();
             if(parentFileURL!=null) {
-                parentFileURL.setProperty(PASSIVE_MODE_PROPERTY_NAME, ""+connHandler.passiveMode);
+                parentFileURL.setProperty(PASSIVE_MODE_PROPERTY_NAME, ""+isPassiveModeEnabled());
                 parentFileURL.setCredentials(fileURL.getCredentials());
                 try {
                     this.parent = new FTPFile(parentFileURL);
@@ -228,46 +272,80 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
-        // Spawn a new FTP connection
-        FTPConnectionHandler connHandler = (FTPConnectionHandler)createConnectionHandler(getURL());
-        connHandler.checkConnection();
+        FTPConnectionHandler connHandler = null;
+        try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+            // Makes sure the connection is started, if not starts it
+            connHandler.checkConnection();
 
-        OutputStream out;
-        if(append)
-            out = connHandler.ftpClient.appendFileStream(absPath);
-        else
-            out = connHandler.ftpClient.storeUniqueFileStream(absPath);
+            OutputStream out;
+            if(append)
+                out = connHandler.ftpClient.appendFileStream(absPath);
+            else
+                out = connHandler.ftpClient.storeUniqueFileStream(absPath);
 
-        if(out==null)
-            throw new IOException();
+            if(out==null)
+                throw new IOException();
 
-        return new FTPOutputStream(out, connHandler);
+            return new FTPOutputStream(out, connHandler);
+        }
+        catch(IOException e) {
+            // Release the lock on the ConnectionHandler if the OutputStream could not be created
+            if(connHandler!=null)
+                connHandler.releaseLock();
+
+            // Re-throw IOException
+            throw e;
+        }
     }
 
 
     public void delete() throws IOException {
-        connHandler.checkConnection();
+        FTPConnectionHandler connHandler = null;
+        try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+            // Makes sure the connection is started, if not starts it
+            connHandler.checkConnection();
 
-        connHandler.ftpClient.deleteFile(absPath);
+            connHandler.ftpClient.deleteFile(absPath);
 
-        // Throw an IOException if server replied with an error
-        connHandler.checkServerReply();
+            // Throw an IOException if server replied with an error
+            connHandler.checkServerReply();
+        }
+        finally {
+            // Release the lock on the ConnectionHandler
+            if(connHandler!=null)
+                connHandler.releaseLock();
+        }
     }
 
 
     public AbstractFile[] ls() throws IOException {
-        connHandler.checkConnection();
-
         org.apache.commons.net.ftp.FTPFile files[];
-        try { files = connHandler.ftpClient.listFiles(absPath); }
-        // This exception is not an IOException and needs to be caught and rethrown
-        catch(org.apache.commons.net.ftp.parser.ParserInitializationException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("ParserInitializationException caught");
-            throw new IOException();
-        }
+        FTPConnectionHandler connHandler = null;
+        try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+            // Makes sure the connection is started, if not starts it
+            connHandler.checkConnection();
 
-        // Throw an IOException if server replied with an error
-        connHandler.checkServerReply();
+            try { files = connHandler.ftpClient.listFiles(absPath); }
+            // This exception is not an IOException and needs to be caught and rethrown
+            catch(org.apache.commons.net.ftp.parser.ParserInitializationException e) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("ParserInitializationException caught");
+                throw new IOException();
+            }
+
+            // Throw an IOException if server replied with an error
+            connHandler.checkServerReply();
+        }
+        finally {
+            // Release the lock on the ConnectionHandler
+            if(connHandler!=null)
+                connHandler.releaseLock();
+        }
 
         if(files==null)
             return new AbstractFile[] {};
@@ -288,7 +366,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
                 continue;
 
             childURL = new FileURL(parentURL+childName, fileURL);
-            childURL.setProperty(PASSIVE_MODE_PROPERTY_NAME, ""+connHandler.passiveMode);
+            childURL.setProperty(PASSIVE_MODE_PROPERTY_NAME, ""+isPassiveModeEnabled());
 
             // Discard '.' and '..' files
             if(childName.equals(".") || childName.equals(".."))
@@ -311,12 +389,22 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
 
     public void mkdir(String name) throws IOException {
-        // Check connection and reconnect if connection timed out
-        connHandler.checkConnection();
+        FTPConnectionHandler connHandler = null;
+        try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+            // Makes sure the connection is started, if not starts it
+            connHandler.checkConnection();
 
-        connHandler.ftpClient.makeDirectory(absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name);
-        // Throw an IOException if server replied with an error
-        connHandler.checkServerReply();
+            connHandler.ftpClient.makeDirectory(absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name);
+            // Throw an IOException if server replied with an error
+            connHandler.checkServerReply();
+        }
+        finally {
+            // Release the lock on the ConnectionHandler
+            if(connHandler!=null)
+                connHandler.releaseLock();
+        }
     }
 
 
@@ -340,7 +428,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
      * uses FTP and is located on the same host.
      */
     public void moveTo(AbstractFile destFile) throws FileTransferException {
-        // If destination file is an FTP file located on the same server, tells the server to rename the file.
+        // If destination file is an FTP file located on the same server, tell the server to rename the file.
 
         // Use the default moveTo() implementation if the destination file doesn't use FTP
         // or is not on the same host
@@ -361,8 +449,11 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
             return;
         }
 
+        FTPConnectionHandler connHandler = null;
         try {
-            // Check connection and reconnect if connection timed out
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+            // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
             if(!connHandler.ftpClient.rename(absPath, destFile.getURL().getPath()))
@@ -371,29 +462,46 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
         catch(IOException e) {
             throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
         }
+        finally {
+            // Release the lock on the ConnectionHandler
+            if(connHandler!=null)
+                connHandler.releaseLock();
+        }
     }
 
 
     public InputStream getInputStream(long skipBytes) throws IOException {
-        // Spawn a new FTP connection
-        FTPConnectionHandler connHandler = (FTPConnectionHandler)createConnectionHandler(getURL());
-        connHandler.checkConnection();
-        
-        if(skipBytes>0) {
-            // Resume transfer at the given offset
-            connHandler.ftpClient.setRestartOffset(skipBytes);
-        }
+        FTPConnectionHandler connHandler = null;
+        try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+            // Makes sure the connection is started, if not starts it
+            connHandler.checkConnection();
 
-        InputStream in = connHandler.ftpClient.retrieveFileStream(absPath);
-        if(in==null) {
             if(skipBytes>0) {
-                // Reset offset
-                connHandler.ftpClient.setRestartOffset(0);
+                // Resume transfer at the given offset
+                connHandler.ftpClient.setRestartOffset(skipBytes);
             }
-            throw new IOException();
-        }
 
-        return new FTPInputStream(in, connHandler);
+            InputStream in = connHandler.ftpClient.retrieveFileStream(absPath);
+            if(in==null) {
+                if(skipBytes>0) {
+                    // Reset offset
+                    connHandler.ftpClient.setRestartOffset(0);
+                }
+                throw new IOException();
+            }
+
+            return new FTPInputStream(in, connHandler);
+        }
+        catch(IOException e) {
+            // Release the lock on the ConnectionHandler if the InputStream could not be created
+            if(connHandler!=null)
+                connHandler.releaseLock();
+
+            // Re-throw IOException
+            throw e;
+        }
     }
 
 
@@ -408,7 +516,6 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
     private static class FTPInputStream extends FilterInputStream {
 
         private FTPConnectionHandler connHandler;
-        private boolean closed;
 
         private FTPInputStream(InputStream in, FTPConnectionHandler connHandler) {
             super(in);
@@ -416,12 +523,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
         }
 
         public void close() throws IOException {
-            if(closed)
-                return;
-
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("closing", -1);
             super.close();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("closed");
 
             try {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("complete pending commands");
@@ -429,11 +531,11 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("commands completed");
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in complete pending commands, disconnecting");
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in completePendingCommands()");
             }
             finally {
-                connHandler.closeConnection();
-                closed = true;
+                // Release the lock on the ConnectionHandler
+                connHandler.releaseLock();
             }
         }
     }
@@ -441,7 +543,6 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
     private static class FTPOutputStream extends BufferedOutputStream {
 
         private FTPConnectionHandler connHandler;
-        private boolean closed;
 
         private FTPOutputStream(OutputStream out, FTPConnectionHandler connHandler) {
             super(out);
@@ -449,9 +550,6 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
         }
 
         public void close() throws IOException {
-            if(closed)
-                return;
-
             super.close();
 
             try {
@@ -460,11 +558,11 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("commands completed");
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in complete pending commands, disconnecting");
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in completePendingCommands()");
             }
             finally {
-                connHandler.closeConnection();
-                closed = true;
+                // Release the lock on the ConnectionHandler
+                connHandler.releaseLock();
             }
         }
     }
@@ -480,9 +578,14 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
         /** Sets whether passive mode should be used for data transfers (default is true) */
         private boolean passiveMode;
 
+        /** Controls how ofter should keepAlive() be called by ConnectionPool */
+        private final static long KEEP_ALIVE_PERIOD = 60;
+
         private FTPConnectionHandler(FileURL location, boolean passiveMode) {
             super(location);
             this.passiveMode = passiveMode;
+
+            setKeepAlivePeriod(KEEP_ALIVE_PERIOD);
         }
 
 
@@ -523,7 +626,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
                 // Throw an IOException if server replied with an error
                 checkServerReply();
 
-                Credentials credentials = realm.getCredentials();
+                Credentials credentials = getCredentials();
 
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+ realm.getStringRep(true)+" credentials="+ credentials);
                 if(credentials ==null)

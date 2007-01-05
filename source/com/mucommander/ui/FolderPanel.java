@@ -2,6 +2,7 @@
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
@@ -785,6 +786,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         // If some new credentials were entered by the user, these can now be considered valid
                         // (folder was changed successfully) -> add them to the credentials list.
                         Credentials credentials = folder.getURL().getCredentials();
+if(Debug.ON) Debug.trace("Final credentials="+credentials);
 
                         if(credentials!=null) {
                             if(credentials instanceof MappedCredentials)

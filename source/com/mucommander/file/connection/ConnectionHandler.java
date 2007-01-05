@@ -2,6 +2,7 @@ package com.mucommander.file.connection;
 
 import com.mucommander.file.FileURL;
 import com.mucommander.Debug;
+import com.mucommander.auth.Credentials;
 
 import java.io.IOException;
 
@@ -12,6 +13,9 @@ public abstract class ConnectionHandler {
 
     /** URL of the server this ConnectionHandler connects to */
     protected FileURL realm;
+
+    /** Credentials that are used to connect to the server */
+    protected Credentials credentials;
 
     /** True if this ConnectionHandler is currently locked */
     protected boolean isLocked;
@@ -36,11 +40,11 @@ public abstract class ConnectionHandler {
 
 
     /**
-     * Creates a new ConnectionHandler for the given server URL.
+     * Creates a new ConnectionHandler for the given server URL and using the Credentials included in the URL (if any).
      */
     public ConnectionHandler(FileURL serverURL) {
         realm = FileURL.resolveRealm(serverURL);
-        realm.setCredentials(serverURL.getCredentials());
+        this.credentials = serverURL.getCredentials();
     }
 
 
@@ -49,6 +53,14 @@ public abstract class ConnectionHandler {
      */
     public FileURL getRealm() {
         return realm;
+    }
+
+
+    /**
+     * Returns the Credentials that are used to connect to the server, may be null if no credentials are used.
+     */
+    public Credentials getCredentials() {
+        return credentials;
     }
 
 
@@ -183,6 +195,28 @@ public abstract class ConnectionHandler {
      */
     public void setKeepAlivePeriod(long nbSeconds) {
         keepAlivePeriod = nbSeconds;
+    }
+
+
+    /**
+     * Returns true if the given Object is a ConnectionHandler with a realm and credentials equal to those of
+     * this ConnectionHandler.
+     */
+    public boolean equals(Object o) {
+        if(o==null || !(o instanceof ConnectionHandler))
+            return false;
+
+        ConnectionHandler connHandler = (ConnectionHandler)o;
+
+        if(!realm.equals(connHandler.realm))
+            return false;
+
+        // Compare credentials. Credentials may be null in one or both ConnectionHandler instances.
+
+        // Note: Credentials.equals() considers null as equal to empty Credentials (see #isEmpty())
+        return (credentials==null && connHandler.credentials==null)
+            || (credentials!=null && credentials.equals(connHandler.credentials))
+            || (connHandler.credentials!=null && connHandler.credentials.equals(credentials));
     }
 
 

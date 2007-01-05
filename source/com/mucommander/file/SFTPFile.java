@@ -77,11 +77,12 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
                 connHandler.checkConnection();
 
                 try {
-                    // Retrieve an SftpFile instance, will throw an IOException if the file does not exist
+                    // Retrieve file attributes and create an SftpFile instance, will throw an IOException if the file
+                    // does not exist on the server
                     file = new SftpFile(absPath, connHandler.sftpChannel.getAttributes(absPath));
                 }
                 catch(IOException e) {
-                    // File doesn't exist on the remote server), SftpFile will be null that's OK
+                    // File doesn't exist on the server, SftpFile will be null, that's OK
                 }
             }
             finally {
@@ -306,12 +307,11 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
             return new SftpFileOutputStream(file, append?getSize():0) {
 
                 public void close() throws IOException {
-                    // SftpFileInputStream.close() closes the open SftpFile file handle
+                    // SftpFileOutputStream.close() closes the open SftpFile file handle
                     super.close();
 
                     // Release the lock on the ConnectionHandler
-                    if(connHandlerFinal!=null)
-                        connHandlerFinal.releaseLock();
+                    connHandlerFinal.releaseLock();
                 }
             };
         }
@@ -569,8 +569,8 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
             try {
                 FileURL realm = getRealm();
 
-                // Retrieve credentials for this URL
-                final Credentials credentials = realm.getCredentials();
+                // Retrieve credentials to be used to authenticate
+                final Credentials credentials = getCredentials();
 
                 // Throw an AuthException if no auth information, required for SSH
                 if(credentials ==null)

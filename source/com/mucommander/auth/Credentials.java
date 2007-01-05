@@ -79,9 +79,14 @@ public class Credentials {
     /**
      * Returns true if the login of the provided credentials (as returned by {@link #getLogin()} equals to one in
      * this Credentials instance, false otherwise. Two Credentials instances with the same login but a different
-     * password will thus be equal.
+     * password will thus be equal. If null is passed, true will be returned if these Credentials are empty, as returned
+     * by {@link #isEmpty()}.
      */
     public boolean equals(Object o) {
+        // Empty Credentials and null are equivalent
+        if(o==null)
+            return isEmpty();
+
         if(!(o instanceof Credentials))
             return false;
 

@@ -619,12 +619,14 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
 
         private void addSample(long bytesPerSecond) {
-            // Capacity reached, remove first sample
-            if(samples.size()==NB_SAMPLES_MAX)
-                samples.removeElementAt(0);
+            synchronized(samples) {     // Ensures that paint() is not currently accessing the Vector
+                // Capacity reached, remove first sample
+                if(samples.size()==NB_SAMPLES_MAX)
+                    samples.removeElementAt(0);
 
-            // Add sample to the vector
-            samples.add(new Long(bytesPerSecond));
+                // Add sample to the vector
+                samples.add(new Long(bytesPerSecond));
+            }
 
             repaint();
         }
@@ -643,61 +645,63 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             g.setColor(BACKGROUND_COLOR);
             g.fillRect(0, 0, width, height);
 
-            // Number of collected sample
-            int nbSamples = samples.size();
-            // Number of displayable samples based on their spacing
-            int nbDisplayableSamples = (width-2*STROKE_WIDTH)/LINE_SPACING;
-            // Index of the first sample
-            int sampleOffset = nbSamples>nbDisplayableSamples?nbSamples-nbDisplayableSamples:0;
-            // Number of lines to be drawn
-            int nbLines = Math.min(nbSamples, nbDisplayableSamples);
+            synchronized(samples) {     // Ensures that addSample() is not currently accessing the Vector
+                // Number of collected sample
+                int nbSamples = samples.size();
+                // Number of displayable samples based on their spacing
+                int nbDisplayableSamples = (width-2*STROKE_WIDTH)/LINE_SPACING;
+                // Index of the first sample
+                int sampleOffset = nbSamples>nbDisplayableSamples?nbSamples-nbDisplayableSamples:0;
+                // Number of lines to be drawn
+                int nbLines = Math.min(nbSamples, nbDisplayableSamples);
 
-            // Calculate the maximum bytes per second of all the samples to be displayed
-            long maxBps = 0;
-            for(int i= sampleOffset; i<sampleOffset+nbLines; i++) {
-                long sample = ((Long)samples.elementAt(i)).longValue();
-                if(sample>maxBps)
-                    maxBps = sample;
+                // Calculate the maximum bytes per second of all the samples to be displayed
+                long maxBps = 0;
+                for(int i= sampleOffset; i<sampleOffset+nbLines; i++) {
+                    long sample = ((Long)samples.elementAt(i)).longValue();
+                    if(sample>maxBps)
+                        maxBps = sample;
+                }
+
+                // Y-scale projection ratio, leave some space on both sides of the graph
+                float yRatio = maxBps/((float)height-2*STROKE_WIDTH);
+
+                // Draw throughput limit as an horizontal line, only if there is a limit
+                long bpsLimit = transferFileJob.getThroughputLimit();
+                g.setColor(BPS_LIMIT_COLOR);
+                if(bpsLimit>0) {
+                    int y = height-STROKE_WIDTH-(int)(bpsLimit/yRatio);
+                    g.drawLine(0, y, width, y);
+                }
+
+                // Set custom line stroke and color
+                g.setColor(GRAPH_COLOR);
+                g2d.setStroke(lineStroke);
+
+                // Draw the graph based on the collected samples
+                int x = STROKE_WIDTH;
+                for(int l=0; l<nbLines-1; l++) {
+                    g.drawLine(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset)).longValue()/yRatio),
+                              (x+=LINE_SPACING), height-STROKE_WIDTH-(int)(((Long)samples.elementAt(++sampleOffset)).longValue()/yRatio));
+                }
+
+                // Unsuccessful rendering test using curves
+    //            GeneralPath gp = new GeneralPath();
+    //            int x = STROKE_WIDTH;
+    //            gp.moveTo(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset++)).longValue()/yRatio));
+    //            x += LINE_SPACING;
+    //            for(int l=1; l<nbLines-2; l+=2) {
+    //                gp.quadTo(
+    //                    x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset)).longValue()/yRatio),
+    //                    x+LINE_SPACING, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset+1)).longValue()/yRatio)
+    //                );
+    //
+    //                sampleOffset += 2;
+    //                x += 2*LINE_SPACING;
+    //
+    //                g2d.draw(gp);
+    //            }
             }
-
-            // Y-scale projection ratio, leave some space on both sides of the graph
-            float yRatio = maxBps/((float)height-2*STROKE_WIDTH);
-
-            // Draw throughput limit as an horizontal line, only if there is a limit
-            long bpsLimit = transferFileJob.getThroughputLimit();
-            g.setColor(BPS_LIMIT_COLOR);
-            if(bpsLimit>0) {
-                int y = height-STROKE_WIDTH-(int)(bpsLimit/yRatio);
-                g.drawLine(0, y, width, y);
-            }
-
-            // Set custom line stroke and color
-            g.setColor(GRAPH_COLOR);
-            g2d.setStroke(lineStroke);
-
-            // Draw the graph based on the collected samples
-            int x = STROKE_WIDTH;
-            for(int l=0; l<nbLines-1; l++) {
-                g.drawLine(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset)).longValue()/yRatio),
-                          (x+=LINE_SPACING), height-STROKE_WIDTH-(int)(((Long)samples.elementAt(++sampleOffset)).longValue()/yRatio));
-            }
-
-            // Unsuccessful rendering test using curves
-//            GeneralPath gp = new GeneralPath();
-//            int x = STROKE_WIDTH;
-//            gp.moveTo(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset++)).longValue()/yRatio));
-//            x += LINE_SPACING;
-//            for(int l=1; l<nbLines-2; l+=2) {
-//                gp.quadTo(
-//                    x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset)).longValue()/yRatio),
-//                    x+LINE_SPACING, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset+1)).longValue()/yRatio)
-//                );
-//
-//                sampleOffset += 2;
-//                x += 2*LINE_SPACING;
-//
-//                g2d.draw(gp);
-//            }
         }
     }
 }

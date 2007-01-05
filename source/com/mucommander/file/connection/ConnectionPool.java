@@ -2,6 +2,7 @@ package com.mucommander.file.connection;
 
 import com.mucommander.file.FileURL;
 import com.mucommander.Debug;
+import com.mucommander.auth.Credentials;
 
 import java.util.Vector;
 
@@ -35,12 +36,19 @@ public class ConnectionPool implements Runnable {
         synchronized(connectionHandlers) {      // Ensures that monitor thread is not currently changing the list while we access it
             int nbConn = connectionHandlers.size();
             ConnectionHandler connHandler;
+            Credentials urlCredentials = url.getCredentials();
+            // Try and find an appropriate existing ConnectionHandler
             for(int i=0; i<nbConn; i++) {
                 connHandler = getConnectionHandlerAt(i);
                 synchronized(connHandler) {     // Ensures that lock remains unchanged while we access/update it
-                    if(connHandler!=null && realm.equals(connHandler.getRealm()) && !connHandler.isLocked()) {
+//                    if(connHandler!=null && realm.equals(connHandler.getRealm()) && !connHandler.isLocked()) {
+                    if(realm.equals(connHandler.getRealm()) && !connHandler.isLocked()
+                            && ((urlCredentials==null && connHandler.credentials==null)
+                            || (urlCredentials!=null && urlCredentials.equals(connHandler.credentials))
+                            || (connHandler.credentials!=null && connHandler.credentials.equals(urlCredentials)))) {
+
                         if(!acquireLock || connHandler.acquireLock()) {
-        //                    if(Debug.ON) Debug.trace("returning ConnectionHandler "+connHandler+", realm ="+realm);
+                            if(Debug.ON) Debug.trace("returning ConnectionHandler "+connHandler+", realm ="+realm);
 
                             // Update last activity timestamp to now
                             connHandler.updateLastActivityTimestamp();
@@ -186,7 +194,7 @@ public class ConnectionPool implements Runnable {
 
     /**
      * Keeps alive a specified ConnectionHandler's connection in a separate thread. If the connection is not currently
-     * active, keep alive will not be performed.
+     * active, {@link com.mucommander.file.connection.ConnectionHandler#keepAlive()} will not be called.
      */
     private class KeepAliveConnectionThread extends Thread {
 
