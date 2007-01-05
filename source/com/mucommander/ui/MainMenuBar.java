@@ -385,7 +385,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             for(int i=0; i<nbFrames; i++) {
                 frame = frames[i];
                 // Test if Frame is not hidden (disposed), Frame.getFrames() returns both active and disposed frames
-                if(frame.isShowing() && (frame instanceof ViewerFrame) || (frame instanceof EditorFrame)) {
+                if(frame.isShowing() && ((frame instanceof ViewerFrame) || (frame instanceof EditorFrame))) {
                     // Add a separator before the first non-MainFrame frame to mark a separation between MainFrames
                     // and other frames
                     if(firstFrame) {
