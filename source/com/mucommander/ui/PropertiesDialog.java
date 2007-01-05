@@ -109,7 +109,6 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
                              +(nbFiles>0&&nbFolders>0?", ":"")
                              +(nbFolders>0?Translator.get("properties_dialog.nb_folders", ""+nbFolders):"")
                              );
-	//        sizeLabel.setText(SizeFormat.format(job.getTotalBytes(), (displayCompactSize? SizeFormat.DIGITS_SHORT: SizeFormat.DIGITS_FULL) | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB));
         sizeLabel.setText(SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_SHORT | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB) + 
 			  " (" + SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_FULL | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB) + ")");
 		
