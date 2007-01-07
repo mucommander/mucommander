@@ -283,7 +283,10 @@ if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString()
             if(append)
                 out = connHandler.ftpClient.appendFileStream(absPath);
             else
-                out = connHandler.ftpClient.storeUniqueFileStream(absPath);
+                out = connHandler.ftpClient.storeFileStream(absPath);   // Note: do NOT use storeUniqueFileStream which appends .1 if the file already exists and fails with proftpd
+
+//            connHandler.checkServerReply();
+if(Debug.ON) Debug.trace("OutputStream="+out);
 
             if(out==null)
                 throw new IOException();
@@ -309,7 +312,10 @@ if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString()
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            connHandler.ftpClient.deleteFile(absPath);
+            if(isDirectory())
+                connHandler.ftpClient.removeDirectory(absPath);
+            else
+                connHandler.ftpClient.deleteFile(absPath);
 
             // Throw an IOException if server replied with an error
             connHandler.checkServerReply();
@@ -516,6 +522,7 @@ if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString()
     private static class FTPInputStream extends FilterInputStream {
 
         private FTPConnectionHandler connHandler;
+        private boolean isClosed;
 
         private FTPInputStream(InputStream in, FTPConnectionHandler connHandler) {
             super(in);
@@ -523,6 +530,12 @@ if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString()
         }
 
         public void close() throws IOException {
+            // Make sure this method is only executed once, otherwise FTPClient#completePendingCommand() would lock
+            if(isClosed)
+                return;
+
+            isClosed = true;
+
             super.close();
 
             try {
@@ -543,6 +556,7 @@ if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString()
     private static class FTPOutputStream extends BufferedOutputStream {
 
         private FTPConnectionHandler connHandler;
+        private boolean isClosed;
 
         private FTPOutputStream(OutputStream out, FTPConnectionHandler connHandler) {
             super(out);
@@ -550,6 +564,12 @@ if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString()
         }
 
         public void close() throws IOException {
+            // Make sure this method is only executed once, otherwise FTPClient#completePendingCommand() would lock
+            if(isClosed)
+                return;
+
+            isClosed = true;
+
             super.close();
 
             try {
