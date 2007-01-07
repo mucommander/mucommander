@@ -60,11 +60,6 @@ public class CopyJob extends TransferFileJob {
         this.mode = mode;
         this.defaultFileExistsAction = fileExistsAction;
         this.errorDialogTitle = Translator.get(mode==UNPACK_MODE?"unpack_dialog.error_title":mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
-
-        // If this job correponds to a 'local copy' of a single file and in the same directory, 
-        // select the copied file in the active table after this job has finished (and hasn't been cancelled)
-        if(files.size()==1 && newName!=null && destFolder.equals(files.fileAt(0).getParent()))
-            selectFileWhenFinished(FileFactory.getFile(destFolder.getAbsolutePath(true)+newName));
     }
 
 	
@@ -278,4 +273,20 @@ public class CopyJob extends TransferFileJob {
         return baseDestFolder.isParentOf(folder);
     }
 
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    protected void jobCompleted() {
+        super.jobCompleted();
+
+        // If this job correponds to a 'local copy' of a single file and in the same directory,
+        // select the copied file in the active table after this job has finished (and hasn't been cancelled)
+        if(files.size()==1 && newName!=null && baseDestFolder.equals(files.fileAt(0).getParent())) {
+            // Resolve new file instance now that it exists: remote files do not update file attributes after
+            // creation, we need to get an instance that reflects the newly created file attributes
+            selectFileWhenFinished(FileFactory.getFile(baseDestFolder.getAbsolutePath(true)+newName));
+        }
+    }
 }

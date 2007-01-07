@@ -331,6 +331,7 @@ public class CredentialsManager implements VectorChangeListener {
      */
     private static void findMatches(FileURL location, Vector credentials, Vector matches) {
         String protocol = location.getProtocol();
+        int port = location.getPort();
         String host = location.getHost();
         MappedCredentials tempCredentials;
         String tempHost;
@@ -347,7 +348,9 @@ public class CredentialsManager implements VectorChangeListener {
             else {
                 tempHost = tempRealm.getHost();
 
-                if(tempRealm.getProtocol().equals(protocol) && ((host!=null && tempHost!=null && host.equalsIgnoreCase(tempHost)) || (host!=null && host.equalsIgnoreCase(tempHost)) || (tempHost!=null && tempHost.equalsIgnoreCase(host)))) {
+                if(tempRealm.getProtocol().equals(protocol)
+                        && (tempRealm.getPort()==port)
+                        && ((host!=null && tempHost!=null && host.equalsIgnoreCase(tempHost)) || (host!=null && host.equalsIgnoreCase(tempHost)) || (tempHost!=null && tempHost.equalsIgnoreCase(host)))) {
                     matches.add(tempCredentials);
                 }
             }

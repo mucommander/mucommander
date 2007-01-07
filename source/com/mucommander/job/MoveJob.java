@@ -50,11 +50,6 @@ public class MoveJob extends TransferFileJob {
         this.newName = newName;
         this.defaultFileExistsAction = fileExistsAction;
         this.errorDialogTitle = Translator.get("move_dialog.error_title");
-	
-        // If this job correponds to a file renaming in the same directory, select the renamed file
-        // in the active table after this job has finished (and hasn't been cancelled)
-        if(files.size()==1 && newName!=null && destFolder.equals(files.fileAt(0).getParent()))
-            selectFileWhenFinished(FileFactory.getFile(destFolder.getAbsolutePath(true)+newName));
     }
 
 	
@@ -330,4 +325,20 @@ public class MoveJob extends TransferFileJob {
         return (baseSourceFolder!=null && baseSourceFolder.isParentOf(folder)) || baseDestFolder.isParentOf(folder);
     }
 
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    protected void jobCompleted() {
+        super.jobCompleted();
+
+    // If this job correponds to a file renaming in the same directory, select the renamed file
+    // in the active table after this job has finished (and hasn't been cancelled)
+        if(files.size()==1 && newName!=null && baseDestFolder.equals(files.fileAt(0).getParent())) {
+            // Resolve new file instance now that it exists: remote files do not update file attributes after
+            // creation, we need to get an instance that reflects the newly created file attributes
+            selectFileWhenFinished(FileFactory.getFile(baseDestFolder.getAbsolutePath(true)+newName));
+        }
+    }
 }

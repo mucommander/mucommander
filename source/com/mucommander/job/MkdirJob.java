@@ -87,6 +87,10 @@ public class MkdirJob extends FileJob {
                     destFolder.mkdir(filename);
                 }
 
+                // Resolve new file instance now that it exists: remote files do not update file attributes after
+                // creation, we need to get an instance that reflects the newly created file attributes
+                newFile = FileFactory.getFile(newFile.getURL());
+
                 // Select newly created file when job is finished
                 selectFileWhenFinished(newFile);
 
