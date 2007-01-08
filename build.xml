@@ -341,12 +341,11 @@
   <target name="obfuscate" depends="disable-debug,clean,jar">
     <echo>Creating obfuscated JAR file in ${jar.obf}...</echo>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
-    <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="true"
+    <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="true" shrink="true" obfuscate="true"
               printmapping="${tmp}/obf-mapping.txt" printusage="${tmp}/obf-usage.txt">
       <injar name="${jar.normal}"/> 
       <outjar name="${jar.obf}"/>
       <libraryjar name="${java-lib}"/>
-      <libraryjar name="${lib}"/>
       <libraryjar name="${ant-lib}"/>
       <!-- Mac OS X specifics -->
       <keep name="com.mucommander.ui.macosx.EAWTHandler">
