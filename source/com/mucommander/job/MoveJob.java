@@ -273,14 +273,12 @@ public class MoveJob extends TransferFileJob {
         }
         // File is a regular file, move it
         else  {
-
-            // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
-            // file is renamed to <filename>.1
-            // TODO: fix this in the commons-net library
-            if(overwrite && destFile.getURL().getProtocol().equals(FileProtocols.FTP)) {
-                try { destFile.delete(); }
-                catch(IOException e) {};
-            }
+//            // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
+//            // file is renamed to <filename>.1
+//            if(overwrite && destFile.getURL().getProtocol().equals(FileProtocols.FTP)) {
+//                try { destFile.delete(); }
+//                catch(IOException e) {};
+//            }
 
             // Let's try the easy way
             if(!append && fileMove(file, destFile))

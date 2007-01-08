@@ -3,6 +3,7 @@ package com.mucommander.file.connection;
 import com.mucommander.file.FileURL;
 import com.mucommander.Debug;
 import com.mucommander.auth.Credentials;
+import com.mucommander.auth.AuthException;
 
 import java.io.IOException;
 
@@ -227,22 +228,33 @@ public abstract class ConnectionHandler {
     /**
      * Starts the connection managed by this ConnectionHandler, and throws an IOException if the connection could not
      * be established. This method may be called several times during the life of this ConnectionHandler, if the
-     * connection dropped.
+     * connection dropped and must be re-established.
+     *
+     * @throws IOException if an error occurred while trying to establish the connection
+     * @throws AuthException if an authentication error occurred (incorrect login or password, insufficient privileges...)
      */
-    public abstract void startConnection() throws IOException;
+    public abstract void startConnection() throws IOException, AuthException;
 
     /**
-     * Returns true if the connection managed by this ConnectionHandler is currently active/established.
+     * Returns true if the connection managed by this ConnectionHandler is currently active/established, in an
+     * state where it can serve client requests.
+     *
+     * <p>Implementation note: This method must not perform any I/O which could block the calling thread.
      */
     public abstract boolean isConnected();
 
     /**
      * Closes the connection managed by this ConnectionHandler.
+     *
+     * <p>Implementation note: the implementation must guarantee that any calls to {@link #isConnected()} after this
+     * method has been called return false.
      */
     public abstract void closeConnection();
 
     /**
-     * Keeps this connection alive. Implementation note: if keep alive is not available in the underlying protocol or
+     * Keeps this connection alive.
+     *
+     * <p>Implementation note: if keep alive is not available in the underlying protocol or
      * simply unnecessary, this method should be implemented as a no-op (do nothing).
      */
     public abstract void keepAlive();

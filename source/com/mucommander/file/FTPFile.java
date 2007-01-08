@@ -11,22 +11,23 @@ import com.mucommander.file.connection.ConnectionFull;
 import com.mucommander.Debug;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.commons.net.ftp.FTPConnectionClosedException;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 
 /**
- * FTPFile represents a file on an FTP server.
+ * FTPFile represents a file located on an FTP server.
  *
  * @author Maxence Bernard
  */
 public class FTPFile extends AbstractFile implements ConnectionFull {
 
     private org.apache.commons.net.ftp.FTPFile file;
-
-//    private FTPConnectionHandler connHandler;
 
     protected String absPath;
 
@@ -37,6 +38,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
     private final static String SEPARATOR = DEFAULT_SEPARATOR;
 
+    /** Name of the FTP passive mode property */
     public final static String PASSIVE_MODE_PROPERTY_NAME = "passiveMode";
 
     /** Date format used by the SITE UTIME command */
@@ -73,7 +75,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
     private org.apache.commons.net.ftp.FTPFile getFTPFile(FileURL fileURL) throws IOException {
         FileURL parentURL = fileURL.getParent();
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+fileURL+" parent="+parentURL);
+        if(Debug.ON) Debug.trace("fileURL="+fileURL+" parent="+parentURL);
 
         // Parent is null, create '/' file
         if(parentURL==null) {
@@ -94,6 +96,13 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
                 // Throw an IOException if server replied with an error
                 connHandler.checkServerReply();
+            }
+            catch(IOException e) {
+                // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+                connHandler.checkSocketException(e);
+
+                // Re-throw IOException
+                throw e;
             }
             finally {
                 // Release the lock on the ConnectionHandler
@@ -167,6 +176,11 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
         try {
             // Retrieve a ConnectionHandler and lock it
             connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+
+            // Return if we know the UTIME command is not supported by the server
+            if(!connHandler.utimeCommandSupported)
+                return false;
+
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
@@ -176,13 +190,30 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
                 sdate = SITE_UTIME_DATE_FORMAT.format(new Date(lastModified));
             }
 
-if(Debug.ON) Debug.trace("sending UTIME "+sdate);
-            boolean ret = connHandler.ftpClient.sendSiteCommand("UTIME "+sdate+" "+absPath);
-if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString());
+            if(Debug.ON) Debug.trace("sending SITE UTIME "+sdate+" "+absPath);
+            boolean success = connHandler.ftpClient.sendSiteCommand("UTIME "+sdate+" "+absPath);
+            if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString());
 
-            return ret;
+            if(!success) {
+                int replyCode = connHandler.ftpClient.getReplyCode();
+
+                // If server reported that the command is not supported, mark it in the ConnectionHandler so that
+                // we don't try it anymore
+                if(replyCode==FTPReply.UNRECOGNIZED_COMMAND
+                        || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED 
+                        || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER) {
+
+                    if(Debug.ON) Debug.trace("marking UTIME command as unsupported");
+                    connHandler.utimeCommandSupported = false;
+                }
+            }
+
+            return success;
         }
         catch(IOException e) {
+            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+            connHandler.checkSocketException(e);
+
             return false;
         }
         finally {
@@ -285,18 +316,17 @@ if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString()
             else
                 out = connHandler.ftpClient.storeFileStream(absPath);   // Note: do NOT use storeUniqueFileStream which appends .1 if the file already exists and fails with proftpd
 
-//            connHandler.checkServerReply();
-if(Debug.ON) Debug.trace("OutputStream="+out);
-
             if(out==null)
                 throw new IOException();
 
             return new FTPOutputStream(out, connHandler);
         }
         catch(IOException e) {
+            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+            connHandler.checkSocketException(e);
+
             // Release the lock on the ConnectionHandler if the OutputStream could not be created
-            if(connHandler!=null)
-                connHandler.releaseLock();
+            connHandler.releaseLock();
 
             // Re-throw IOException
             throw e;
@@ -320,6 +350,13 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
             // Throw an IOException if server replied with an error
             connHandler.checkServerReply();
         }
+        catch(IOException e) {
+            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+            connHandler.checkSocketException(e);
+
+            // Re-throw IOException
+            throw e;
+        }
         finally {
             // Release the lock on the ConnectionHandler
             if(connHandler!=null)
@@ -340,12 +377,19 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
             try { files = connHandler.ftpClient.listFiles(absPath); }
             // This exception is not an IOException and needs to be caught and rethrown
             catch(org.apache.commons.net.ftp.parser.ParserInitializationException e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("ParserInitializationException caught");
+                if(Debug.ON) Debug.trace("ParserInitializationException caught");
                 throw new IOException();
             }
 
             // Throw an IOException if server replied with an error
             connHandler.checkServerReply();
+        }
+        catch(IOException e) {
+            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+            connHandler.checkSocketException(e);
+
+            // Re-throw IOException
+            throw e;
         }
         finally {
             // Release the lock on the ConnectionHandler
@@ -405,6 +449,13 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
             connHandler.ftpClient.makeDirectory(absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name);
             // Throw an IOException if server replied with an error
             connHandler.checkServerReply();
+        }
+        catch(IOException e) {
+            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+            connHandler.checkSocketException(e);
+
+            // Re-throw IOException
+            throw e;
         }
         finally {
             // Release the lock on the ConnectionHandler
@@ -466,6 +517,9 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
                 throw new IOException();
         }
         catch(IOException e) {
+            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+            connHandler.checkSocketException(e);
+
             throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
         }
         finally {
@@ -501,6 +555,9 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
             return new FTPInputStream(in, connHandler);
         }
         catch(IOException e) {
+            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+            connHandler.checkSocketException(e);
+
             // Release the lock on the ConnectionHandler if the InputStream could not be created
             if(connHandler!=null)
                 connHandler.releaseLock();
@@ -536,15 +593,21 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
 
             isClosed = true;
 
-            super.close();
-
             try {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("complete pending commands");
+                super.close();
+
+                if(Debug.ON) Debug.trace("complete pending commands");
                 connHandler.ftpClient.completePendingCommand();
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("commands completed");
+                if(Debug.ON) Debug.trace("commands completed");
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in completePendingCommands()");
+                if(Debug.ON) Debug.trace("exception in completePendingCommands(): "+e);
+
+                // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+                connHandler.checkSocketException(e);
+
+                // Re-throw IOException
+                throw e;
             }
             finally {
                 // Release the lock on the ConnectionHandler
@@ -570,15 +633,21 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
 
             isClosed = true;
 
-            super.close();
-
             try {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("complete pending commands");
+                super.close();
+
+                if(Debug.ON) Debug.trace("complete pending commands");
                 connHandler.ftpClient.completePendingCommand();
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("commands completed");
+                if(Debug.ON) Debug.trace("commands completed");
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("exception in completePendingCommands()");
+                if(Debug.ON) Debug.trace("exception in completePendingCommands(): "+e);
+
+                // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+                connHandler.checkSocketException(e);
+
+                // Re-throw IOException
+                throw e;
             }
             finally {
                 // Release the lock on the ConnectionHandler
@@ -594,12 +663,28 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
     private static class FTPConnectionHandler extends ConnectionHandler {
 
         private FTPClient ftpClient;
+//        private CustomFTPClient ftpClient;
 
         /** Sets whether passive mode should be used for data transfers (default is true) */
         private boolean passiveMode;
 
+        /** False if SITE UTIME command is not supported by the remote server (once tried and failed) */
+        private boolean utimeCommandSupported = true;
+        
         /** Controls how ofter should keepAlive() be called by ConnectionPool */
         private final static long KEEP_ALIVE_PERIOD = 60;
+
+        /** Socket timeout in seconds */
+        private final static int SO_TIMEOUT = 30;
+
+
+//        private class CustomFTPClient extends FTPClient {
+//
+//            private Socket getSocket() {
+//                return _socket_;
+//            }
+//        }
+
 
         private FTPConnectionHandler(FileURL location, boolean passiveMode) {
             super(location);
@@ -609,10 +694,28 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
         }
 
 
-        private void checkServerReply() throws IOException {
+        /**
+         * Checks the last server reply code and throws an IOException if the code doesn't correspond to a positive
+         * FTP reply:
+         *
+         * <ul>
+         * <li>If the reply is a credentials error (lack of permissions or not logged in), an {@link AuthException}
+         * is thrown. For all other error codes, an IOException is thrown with the server reply message.
+         * <li>If the reply code is FTPReply.SERVICE_NOT_AVAILABLE (connection dropped prematurely), the connection
+         * will be closed before an IOException with the server reply message is thrown.
+         * </ul>
+         *
+         * <p>If the reply is a positive one (not an error error), this method does nothing.
+         */
+        private void checkServerReply() throws IOException, AuthException {
             // Check that connection went ok
             int replyCode = ftpClient.getReplyCode();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("reply="+ftpClient.getReplyString());
+            if(Debug.ON) Debug.trace("server reply="+ftpClient.getReplyString());
+
+            // Close connection if the connection dropped prematurely so that isConnected() returns false
+            if(replyCode==FTPReply.SERVICE_NOT_AVAILABLE)
+                closeConnection();
+
             // If not, throw an exception using the reply string
             if(!FTPReply.isPositiveCompletion(replyCode)) {
                 if(replyCode==FTPReply.CODE_503 || replyCode==FTPReply.NEED_PASSWORD || replyCode==FTPReply.NOT_LOGGED_IN)
@@ -623,9 +726,27 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
         }
 
 
-        public void startConnection() throws IOException {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("connecting to "+getRealm().getHost());
+        /**
+         * Checks if the given IOException corresponds to a low-level socket exception, and if that is the case,
+         * closes the connection so that {@link #isConnected()} returns false.
+         * All IOException raised by FTPClient should be checked by this method so that socket errors are properly detected.
+         */
+        private void checkSocketException(IOException e) {
+            if(((e instanceof FTPConnectionClosedException) || (e instanceof SocketException) || (e instanceof SocketTimeoutException)) && isConnected()) {
+                if(Debug.ON) Debug.trace("socket exception detected, closing connection: "+e);
+                closeConnection();
+            }
+        }
 
+
+        //////////////////////////////////////
+        // ConnectionHandler implementation //
+        //////////////////////////////////////
+
+        public void startConnection() throws IOException {
+            if(Debug.ON) Debug.trace("connecting to "+getRealm().getHost());
+
+//            this.ftpClient = new CustomFTPClient();
             this.ftpClient = new FTPClient();
 
             try {
@@ -633,31 +754,33 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
 
                 // Override default port (21) if a custom port was specified in the URL
                 int port = realm.getPort();
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("custom port="+port);
+                if(Debug.ON) Debug.trace("custom port="+port);
                 if(port!=-1)
                     ftpClient.setDefaultPort(port);
 
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("default timeout="+ftpClient.getDefaultTimeout());
-
                 // Connect
                 ftpClient.connect(realm.getHost());
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(ftpClient.getReplyString());
+
+                // Set a socket timeout: default value is 0 (no timeout)
+                ftpClient.setSoTimeout(SO_TIMEOUT*1000);
+
+                if(Debug.ON) Debug.trace("soTimeout="+ftpClient.getSoTimeout());
 
                 // Throw an IOException if server replied with an error
                 checkServerReply();
 
                 Credentials credentials = getCredentials();
 
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("fileURL="+ realm.getStringRep(true)+" credentials="+ credentials);
+                if(Debug.ON) Debug.trace("fileURL="+ realm.getStringRep(true)+" credentials="+ credentials);
                 if(credentials ==null)
                     throw new AuthException(realm);
 
                 ftpClient.login(credentials.getLogin(), credentials.getPassword());
-                // Throw an IOException (possibly AuthException) if server replied with an error
+                // Throw an IOException (potentially an AuthException) if the server replied with an error
                 checkServerReply();
 
                 // Enables/disables passive mode
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("passive mode ="+passiveMode);
+                if(Debug.ON) Debug.trace("passive mode ="+passiveMode);
                 if(passiveMode)
                     this.ftpClient.enterLocalPassiveMode();
                 else
@@ -678,27 +801,50 @@ if(Debug.ON) Debug.trace("OutputStream="+out);
 
 
         public boolean isConnected() {
+            // FTPClient#isConnected() will always return true once it is connected and does not detect socket
+            // disconnections. Furthermore, retrieving the underlying Socket instance does not help any more:
+            // Socket#isConnected() and Socket#isClosed() do not reflect socket errors that happen after the socket is
+            // connected.
+            // Thus, the only way (AFAIK) to know if the socket is still connected is to intercept all IOException
+            // thrown by FTPClient and check if they correspond to a socket exception.
+
             return ftpClient!=null && ftpClient.isConnected();
+
+//            if(ftpClient==null || !ftpClient.isConnected())
+//                return false;
+//
+//            Socket socket = ftpClient.getSocket();
+//            if(Debug.ON) Debug.trace("socket="+socket+" socket.isConnected()"+socket.isConnected()+" socket.isClosed()="+socket.isClosed());
+//
+//            return socket!=null && socket.isConnected() && !socket.isClosed();
         }
 
 
         public void closeConnection() {
             if(ftpClient!=null) {
-                try {
-                    ftpClient.logout();
-                    ftpClient.disconnect();
-                }
+                // Try to logout, this may fail if the connection is broken
+                try { ftpClient.logout(); }
                 catch(IOException e) {}
+
+                // Close the socket connection
+                try { ftpClient.disconnect(); }
+                catch(IOException e) {}
+
+                ftpClient = null;
             }
         }
 
 
         public void keepAlive() {
+            // Send a NOOP command to the server to keep the connection alive.
+            // Note: not all FTP servers support the NOOP command.
             if(ftpClient!=null) {
                 try {
                     ftpClient.sendNoOp();
                 }
                 catch(IOException e) {
+                    // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+                    checkSocketException(e);
                 }
             }
         }

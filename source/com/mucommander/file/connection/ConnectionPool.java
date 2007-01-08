@@ -86,6 +86,20 @@ public class ConnectionPool implements Runnable {
 
 
     /**
+     * Returns a list of registered ConnectionHandler instances. As the name of this method implies, the returned
+     * list is only a snapshot and will not reflect the modifications that are made after this method has been called.
+     * The Vector is a cloned one and thus can be safely modified. 
+     *
+     * @return a list of registered ConnectionHandler instances
+     */
+    public static Vector getConnectionHandlersSnapshot() {
+        synchronized(connectionHandlers) {
+            return (Vector)connectionHandlers.clone();
+        }
+    }
+    
+
+    /**
      * Returns the ConnectionHandler instance located at the given position in the list.
      */
     private static ConnectionHandler getConnectionHandlerAt(int i) {
@@ -101,7 +115,7 @@ public class ConnectionPool implements Runnable {
 
         String rep = "";
         for(int i=0; i<nbElements; i++)
-            rep += getConnectionHandlerAt(i)+" ";
+            rep += getConnectionHandlerAt(i)+" isConnected()="+getConnectionHandlerAt(i).isConnected()+" ";
 
         return rep;
     }
@@ -124,21 +138,23 @@ public class ConnectionPool implements Runnable {
                     ConnectionHandler connHandler = getConnectionHandlerAt(i);
 
                     synchronized(connHandler) {     // Ensures that no one is trying to acquire a lock on the connection while we access it 
-                        if(!connHandler.isLocked()) {
-                            long lastUsed = connHandler.getLastActivityTimestamp();
+                        if(!connHandler.isLocked()) {   // Do not touch ConnectionHandler if it is currently locked
 
-                            // If time-to-live has been reached without any connection activity, close connection
-                            // and remove ConnectionHandler from registered ConnectionHandler list in a separate thread
-                            long closePeriod = connHandler.getCloseOnInactivityPeriod();
-                            if(closePeriod!=-1 && now-lastUsed>closePeriod*1000) {
-                                // Bye bye ConnectionHandler!
+                            // Remove ConnectionHandler instance from the list of registered ConnectionHandler
+                            // if it is not connected
+                            if(!connHandler.isConnected()) {
                                 connectionHandlers.removeElementAt(i);
 
-                                // Stop monitor thread if there are no more ConnectionHandler
-                                if(connectionHandlers.size()==0) {
-                                    if(Debug.ON) Debug.trace("No more ConnectionHandler, stopping monitor thread");
-                                    monitorThread = null;
-                                }
+                                continue;       // Skips close on inactivity and keep alive checks
+                            }
+
+                            long lastUsed = connHandler.getLastActivityTimestamp();
+
+                            // If time-to-live has been reached without any connection activity, remove ConnectionHandler
+                            // from the list of registered ConnectionHandler and close the connection in a separate thread
+                            long closePeriod = connHandler.getCloseOnInactivityPeriod();
+                            if(closePeriod!=-1 && now-lastUsed>closePeriod*1000) {
+                                connectionHandlers.removeElementAt(i);
 
                                 // Close connection in a separate thread as it could lock this thread
                                 new CloseConnectionThread(connHandler).start();
@@ -158,6 +174,12 @@ public class ConnectionPool implements Runnable {
                             }
                         }
                     }
+                }
+
+                // Stop monitor thread if there are no more ConnectionHandler
+                if(connectionHandlers.size()==0) {
+                    if(Debug.ON) Debug.trace("No more ConnectionHandler, stopping monitor thread");
+                    monitorThread = null;
                 }
             }
 
@@ -185,7 +207,7 @@ public class ConnectionPool implements Runnable {
         public void run() {
             if(Debug.ON) Debug.trace("closing connection: "+connHandler);
 
-            // Try to close connection, only if connected
+            // Try to close connection, only if it is connected
             if(connHandler.isConnected())
                 connHandler.closeConnection();
         }
@@ -198,7 +220,7 @@ public class ConnectionPool implements Runnable {
      */
     private class KeepAliveConnectionThread extends Thread {
 
-        private ConnectionHandler connHandler;
+        private final ConnectionHandler connHandler;
 
         private KeepAliveConnectionThread(ConnectionHandler connHandler) {
             this.connHandler = connHandler;
@@ -212,7 +234,7 @@ public class ConnectionPool implements Runnable {
                 if(connHandler.isLocked())
                     return;
 
-                // Keep alive connection only if it is active
+                // Keep alive connection, only if it is connected
                 if(connHandler.isConnected())
                     connHandler.keepAlive();
             }

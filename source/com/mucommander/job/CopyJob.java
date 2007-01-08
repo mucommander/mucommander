@@ -246,13 +246,13 @@ public class CopyJob extends TransferFileJob {
         }
         // File is a regular file, copy it
         else  {
-            // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
-            // file is renamed to <filename>.1
-            // TODO: fix this in the commons-net library
-            if(overwrite && destFile.getURL().getProtocol().equals(FileProtocols.FTP)) {
-                try { destFile.delete(); }
-                catch(IOException e) {}
-            }
+// The source of this issue was that FtpClient#storeUniqueFileStream() was used instead open FtpClient#storeFileStream()
+//            // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
+//            // file is renamed to <filename>.1
+//            if(overwrite && destFile.getURL().getProtocol().equals(FileProtocols.FTP)) {
+//                try { destFile.delete(); }
+//                catch(IOException e) {}
+//            }
 
             // Copy the file
             boolean success = tryCopyFile(file, destFile, append, errorDialogTitle);

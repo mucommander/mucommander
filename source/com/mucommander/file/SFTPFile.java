@@ -564,6 +564,10 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
         }
 
 
+        //////////////////////////////////////
+        // ConnectionHandler implementation //
+        //////////////////////////////////////
+        
         public synchronized void startConnection() throws IOException {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting connection to "+realm);
             try {
