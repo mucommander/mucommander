@@ -624,8 +624,14 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
     /**
      * Returns a clone of this FileURL, useful because FileURL is mutable.
      */
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public Object clone() {
+        try {
+            return super.clone();
+        }
+        catch(CloneNotSupportedException e) {
+            // Should never happen (famous last word!)
+            return null;
+        }
     }
 
 

@@ -95,6 +95,20 @@ public class Credentials {
         return credentials.login.equals(this.login) && credentials.password.equals(this.password);
     }
 
+
+    /**
+     * Returns a cloned instance of these Credentials.
+     */
+    public Object clone() {
+        try {
+            return super.clone();
+        }
+        catch(CloneNotSupportedException e) {
+            // Should never happen
+            return null;
+        }
+    }
+
 	
     public String toString() {
         return login;

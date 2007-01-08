@@ -6,6 +6,8 @@ import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.text.Translator;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.file.connection.ConnectionHandler;
+import com.mucommander.file.FileURL;
+import com.mucommander.auth.Credentials;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,7 +51,14 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
             public Object getElementAt(int i) {
                 ConnectionHandler connHandler = ((ConnectionHandler)connections.elementAt(i));
-                return connHandler.getRealm().getStringRep(false)
+
+                // Show login (but not password) in the URL
+                // Note: realm returned by ConnectionHandler does not contain credentials
+                FileURL clonedRealm = (FileURL)connHandler.getRealm().clone();
+                Credentials loginCredentials = new Credentials(connHandler.getCredentials().getLogin(), "");
+                clonedRealm.setCredentials(loginCredentials);
+
+                return clonedRealm.getStringRep(true)
                         +" ("+Translator.get(connHandler.isLocked()?"server_connections_dialog.connection_busy":"server_connections_dialog.connection_idle")+")";
             }
         });
