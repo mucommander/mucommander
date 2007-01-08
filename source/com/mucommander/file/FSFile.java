@@ -21,12 +21,10 @@ public class FSFile extends AbstractFile {
     private File file;
     private String parentFilePath;
     private String absPath;
-    private String canonicalPath;
-    private boolean isSymlink;
-    private boolean symlinkValueSet; 
-	
+
+    /** Caches the parent folder, initially null until getParent() gets called */
     private AbstractFile parent;
-    // Indicates if the parent folder's value has been retrieved
+    /** Indicates whether the parent folder instance has been retrieved and cached or not (parent can be null) */
     private boolean parentValueSet;
 	
     /** "/" for UNIX systems, "\" for Win32 */
@@ -255,20 +253,15 @@ public class FSFile extends AbstractFile {
     /////////////////////////////////////////
 
     public boolean isSymlink() {
-        if(!symlinkValueSet) {
-            FSFile parent = (FSFile)getParent();
-            String canonPath = getCanonicalPath(false);
-            if(parent==null || canonPath==null)
-                this.isSymlink = false;
-            else {
-                String parentCanonPath = parent.getCanonicalPath(true);
-                this.isSymlink = !canonPath.equals(parentCanonPath+getName());
-            }
-			
-            this.symlinkValueSet = true;
+        // Note: this value must not be cached as its value can change over time (canonical path can change)
+        FSFile parent = (FSFile)getParent();
+        String canonPath = getCanonicalPath(false);
+        if(parent==null || canonPath==null)
+            return false;
+        else {
+            String parentCanonPath = parent.getCanonicalPath(true);
+            return !canonPath.equals(parentCanonPath+getName());
         }
-		
-        return this.isSymlink;
     }
 
     public long getDate() {
@@ -284,7 +277,7 @@ public class FSFile extends AbstractFile {
     }
 	
     public AbstractFile getParent() {
-        // Retrieves parent and caches it
+        // Retrieve parent AbstractFile and cache it
         if (!parentValueSet) {
             if(parentFilePath !=null) {
                 FileURL parentURL = getURL().getParent();
@@ -419,19 +412,20 @@ public class FSFile extends AbstractFile {
         if(IS_WINDOWS && guessFloppyDrive())
             return absPath;
 
-        if(this.canonicalPath==null) {
-            try {
-                this.canonicalPath = file.getCanonicalPath();
-                // Append separator for directories
-                if(isDirectory() && !this.canonicalPath.endsWith(SEPARATOR))
-                    this.canonicalPath = this.canonicalPath + SEPARATOR;
-            }
-            catch(IOException e) {
-                this.canonicalPath = this.absPath;
-            }
-        }
+        // Note: canonical path must not be cached as its resolution can change over time, for instance
+        // if a file 'Test' is renamed to 'test' in the same folder, its canonical path would still be 'Test'
+        // if it was resolved prior to the renaming and thus be recognized as a symbolic link
+        try {
+            String canonicalPath = file.getCanonicalPath();
+            // Append separator for directories
+            if(isDirectory() && !canonicalPath.endsWith(SEPARATOR))
+                canonicalPath = canonicalPath + SEPARATOR;
 
-        return this.canonicalPath;
+            return canonicalPath;
+        }
+        catch(IOException e) {
+            return absPath;
+        }
     }
 
 
@@ -496,7 +490,7 @@ public class FSFile extends AbstractFile {
         if(!(f instanceof FSFile))
             return super.equals(f);		// could be equal to a ZipArchiveFile
 
-        // Compares canonical path (which File does not do by default in its equals() method)
+        // Compares canonical path (which File does not do in its equals() method)
         return getCanonicalPath().equals(((FSFile)f).getCanonicalPath());
     }
 }

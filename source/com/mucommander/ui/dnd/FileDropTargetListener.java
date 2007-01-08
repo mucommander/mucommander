@@ -189,7 +189,7 @@ public class FileDropTargetListener implements DropTargetListener {
             if(currentDropAction==DnDConstants.ACTION_MOVE) {
                 // Start moving files
                 ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
-                MoveJob moveJob = new MoveJob(progressDialog, mainFrame, droppedFiles, destFolder, null, FileCollisionDialog.ASK_ACTION);
+                MoveJob moveJob = new MoveJob(progressDialog, mainFrame, droppedFiles, destFolder, null, FileCollisionDialog.ASK_ACTION, false);
                 progressDialog.start(moveJob);
             }
             else {

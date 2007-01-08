@@ -150,7 +150,7 @@ public class CopyJob extends TransferFileJob {
         // if a default action hasn't been specified
         int collision = FileCollisionChecker.checkForCollision(file, destFile);
         boolean append = false;
-        boolean overwrite = false;
+//        boolean overwrite = false;
 
         // Handle collision, asking the user what to do or using a default action to resolve the collision 
         if(collision != FileCollisionChecker.NO_COLLOSION) {
@@ -182,14 +182,14 @@ public class CopyJob extends TransferFileJob {
             // Overwrite file
             else if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
                 // Do nothing, simply continue
-                overwrite = true;
+//                overwrite = true;
             }
             //  Overwrite file if destination is older
             else if (choice== FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION) {
                 // Overwrite if file is newer (stricly)
                 if(file.getDate()<=destFile.getDate())
                     return false;
-                overwrite = true;
+//                overwrite = true;
             }
         }
 

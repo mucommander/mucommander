@@ -76,7 +76,7 @@ public class MoveDialog extends DestinationDialog {
 		
         // Starts moving files
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
-        MoveJob moveJob = new MoveJob(progressDialog, mainFrame, files, destFolder, newName, defaultFileExistsAction);
+        MoveJob moveJob = new MoveJob(progressDialog, mainFrame, files, destFolder, newName, defaultFileExistsAction, false);
         progressDialog.start(moveJob);
     }
 	

@@ -634,7 +634,7 @@ public abstract class AbstractFile {
      * {@link #setWritable(boolean)} and {@link #setExecutable(boolean)}. This may affect performance on filesystems
      * which need to perform a network request to retrieve each of these value. In that case, and if the fileystem allows
      * to change all permissions with a single request, this method should be overridden.
-     *
+         *
      * @param permissions the new permissions this file should have
      * @return true if the operation was successful, false if at least one of the file permissions could not be changed 
      */

@@ -9,6 +9,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
+import com.mucommander.io.FileTransferException;
 
 import java.io.IOException;
 
@@ -31,7 +32,10 @@ public class MoveJob extends TransferFileJob {
 
     /** Title used for error dialogs */
     private String errorDialogTitle;
-	
+
+    /** True if this job corresponds to a single file renaming */
+    private boolean renameMode;
+
 	
     /**
      * Creates a new MoveJob without starting it.
@@ -42,36 +46,16 @@ public class MoveJob extends TransferFileJob {
      * @param destFolder destination folder where the files will be moved
      * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
      * @param fileExistsAction default action to be triggered if a file already exists in the destination (action can be to ask the user)
+     * @param renameMode true if this job corresponds to a single file renaming
      */
-    public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, int fileExistsAction) {
+    public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, int fileExistsAction, boolean renameMode) {
         super(progressDialog, mainFrame, files);
 
         this.baseDestFolder = destFolder;
         this.newName = newName;
         this.defaultFileExistsAction = fileExistsAction;
         this.errorDialogTitle = Translator.get("move_dialog.error_title");
-    }
-
-	
-    /**
-     * Moves the file with AbstractFile.moveTo() if it is more efficient than copying the streams,
-     * skipping the whole manual recursive process.
-     *
-     * @return <code>true</code> if the file has been moved using AbstractFile.moveTo()
-     */
-    private boolean fileMove(AbstractFile file, AbstractFile destFile) {
-        int moveToHint = file.getMoveToHint(destFile);
-        
-        if(!(moveToHint==AbstractFile.SHOULD_HINT || moveToHint==AbstractFile.MUST_HINT))
-            return false;
-        
-        try {
-            file.moveTo(destFile);
-            return true; 
-        } catch(IOException e) { 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
-            return false;
-        }
+        this.renameMode = renameMode;
     }
 
 	
@@ -148,10 +132,21 @@ public class MoveJob extends TransferFileJob {
         // if a default action hasn't been specified
         int collision = FileCollisionChecker.checkForCollision(file, destFile);
         boolean append = false;
-        boolean overwrite = false;
+//        boolean overwrite = false;
 
-        // Handle collision, asking the user what to do or using a default action to resolve the collision
-        if(collision != FileCollisionChecker.NO_COLLOSION) {
+        boolean caseRenaming = false;
+        // Tests if destination filename is a variation of the original filename with a different case.
+        // In this case, do not show warn about the source and destination being the same and try to rename the file.
+        // Note: renaming will only work if AbstractFile#moveTo() succeeds.
+        if(renameMode && collision==FileCollisionChecker.SAME_SOURCE_AND_DESTINATION) {
+            String sourceFileName = file.getName();
+            if(sourceFileName.equalsIgnoreCase(destFileName) && !sourceFileName.equals(destFileName))
+                caseRenaming = true;
+        }
+
+        // Handle collision, asking the user what to do or using a default action to resolve it
+        if(!caseRenaming && collision!=FileCollisionChecker.NO_COLLOSION) {
+
             int choice;
             // Use default action if one has been set, if not show up a dialog
             if(defaultFileExistsAction==FileCollisionDialog.ASK_ACTION) {
@@ -180,24 +175,46 @@ public class MoveJob extends TransferFileJob {
             // Overwrite file
             else if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
                 // Do nothing, simply continue
-                overwrite = true;
+//                overwrite = true;
             }
             //  Overwrite file if destination is older
             else if (choice== FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION) {
                 // Overwrite if file is newer (stricly)
                 if(file.getDate()<=destFile.getDate())
                     return false;
-                overwrite = true;
+//                overwrite = true;
             }
         }
 
+        // First, let's try to move/rename the file using AbstractFile#moveTo() if it is more efficient than moving
+        // the file manually. Do not attempt to rename the file if the destination must be appended.
+        if(!append) {
+            int moveToHint = file.getMoveToHint(destFile);
+            if(moveToHint==AbstractFile.SHOULD_HINT || moveToHint==AbstractFile.MUST_HINT) {
+                do {
+                    try {
+                        file.moveTo(destFile);
+                        return true;
+                    }
+                    catch(FileTransferException e) {
+                        int ret = showErrorDialog(errorDialogTitle, Translator.get("error_while_transferring", file.getAbsolutePath()));
+                        // Retry loops
+                        if(ret==RETRY_ACTION)
+                            continue;
+                        // Cancel, skip or close dialog returns false
+                        return false;
+                    }
+                }
+                while(true);
+            }
+        }
+        // That didn't work, let's copy the file to the destination and then delete the source file
 
         // Move directory recursively
         if(file.isDirectory()) {
-            // Let's try the easy way
-            if(fileMove(file, destFile))
-                return true;
-            // That didn't work, let's recurse
+//            if(fileMove(file, destFile))
+//                return true;
+//            // That didn't work, let's copy the directory to the destination and then delete the original directory
 
             // creates the folder in the destination folder if it doesn't exist
             if(!(destFile.exists() && destFile.isDirectory())) {
@@ -280,9 +297,9 @@ public class MoveJob extends TransferFileJob {
 //                catch(IOException e) {};
 //            }
 
-            // Let's try the easy way
-            if(!append && fileMove(file, destFile))
-                return true;
+//            // Let's try the easy way
+//            if(!append && fileMove(file, destFile))
+//                return true;
 
             // if moveTo() returned false it wasn't possible to this method because of 'append',
             // try the hard way by copying the file first, and then deleting the source file

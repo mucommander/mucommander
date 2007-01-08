@@ -659,18 +659,18 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
             return false;
 		
         // Do not take into account credentials (login and password) to test equality
-        String urlLC1 = getStringRep(false).toLowerCase();
-        String urlLC2 = ((FileURL)o).getStringRep(false).toLowerCase();
-		
+        String url1 = getStringRep(false).toLowerCase();
+        String url2 = ((FileURL)o).getStringRep(false).toLowerCase();
+
         // If strings are equal, return true
-        if(urlLC1.equals(urlLC2))
+        if(url1.equals(url2))
             return true;
 		
         // If difference between the 2 strings is just a trailing slash or backslash, then we consider them equal and return true  
-        int len1 = urlLC1.length();
-        int len2 = urlLC2.length();
-        if(Math.abs(len1-len2)==1 && (len1>len2 ? urlLC1.startsWith(urlLC2) : urlLC2.startsWith(urlLC1))) {
-            char cdiff = len1>len2 ? urlLC1.charAt(len1-1) : urlLC2.charAt(len2-1);
+        int len1 = url1.length();
+        int len2 = url2.length();
+        if(Math.abs(len1-len2)==1 && (len1>len2 ? url1.startsWith(url2) : url2.startsWith(url1))) {
+            char cdiff = len1>len2 ? url1.charAt(len1-1) : url2.charAt(len2-1);
             if(cdiff=='/' || cdiff=='\\')
                 return true;
         }
