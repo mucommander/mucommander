@@ -1807,6 +1807,21 @@ com.mucommander.ui.action.ShowPreferencesAction.tooltip:ZH_CN:首选项
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:SI:Konfiguriraj muCommander
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:RO:Configurează muCommander
 
+com.mucommander.ui.action.ShowServerConnectionsAction.label:EN:Show open connections
+com.mucommander.ui.action.ShowServerConnectionsAction.label:FR:Afficher les connexions ouvertes
+
+
+
+
+
+
+
+
+
+
+
+
+
 com.mucommander.ui.action.QuitAction.label:EN:Quit
 com.mucommander.ui.action.QuitAction.label:FR:Quitter
 com.mucommander.ui.action.QuitAction.label:DE:Beenden
@@ -3917,6 +3932,52 @@ ftp_connect.anonymous_user:RO:Utilizator anonim
 
 http_connect.basic_authentication:EN:HTTP Basic Authentication (optional)
 http_connect.basic_authentication:FR:HTTP Basic Authentication (optionnel)
+
+
+
+
+
+
+
+
+
+
+
+#############################
+# Server connections dialog #
+#############################
+
+# Label for the button that disconnects the selected connection 
+server_connections_dialog.disconnect:EN:Disconnect
+server_connections_dialog.disconnect:FR:Déconnecter
+
+
+
+
+
+
+
+
+
+
+
+# Appears in the connection list if the connection is currently busy
+server_connections_dialog.connection_busy:EN:Busy
+server_connections_dialog.connection_busy:FR:Occupée
+
+
+
+
+
+
+
+
+
+# Appears in the connection list if the connection is currently idle
+server_connections_dialog.connection_idle:EN:Idle
+server_connections_dialog.connection_idle:FR:Inactive
+
+
 
 
 

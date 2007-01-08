@@ -228,13 +228,17 @@
   <!-- Default : END                                                             -->
   <action class="com.mucommander.ui.action.SelectLastRowAction"         keystroke="END"/>
 
-  <!-- Action  : Sets both panes to the location of the current one.             -->
+  <!-- Action  : Set both panes to the location of the current one.              -->
   <!-- Default : control E                                                       -->
   <action class="com.mucommander.ui.action.SetSameFolderAction"         keystroke="control E"/>
 
   <!-- Action  : Show the properties of current selection.                       -->
   <!-- Default : alt ENTER                                                       -->
   <action class="com.mucommander.ui.action.ShowFilePropertiesAction"    keystroke="alt ENTER"/>
+
+  <!-- Action  : Show a list of active server connections.                       -->
+  <!-- Default : alt ENTER                                                       -->
+  <action class="com.mucommander.ui.action.ShowServerConnectionsAction" keystroke="shift control K"/>
 
   <!-- Action  : Sort current pane by date.                                      -->
   <!-- Default : control F6                                                      -->

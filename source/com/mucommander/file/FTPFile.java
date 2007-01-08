@@ -674,9 +674,8 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         /** Controls how ofter should keepAlive() be called by ConnectionPool */
         private final static long KEEP_ALIVE_PERIOD = 60;
 
-        /** Socket timeout in seconds */
-        private final static int SO_TIMEOUT = 30;
-
+//        /** Connection timeout to the FTP server in seconds */
+//        private final static int CONNECTION_TIMEOUT = 30;
 
 //        private class CustomFTPClient extends FTPClient {
 //
@@ -761,8 +760,8 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 // Connect
                 ftpClient.connect(realm.getHost());
 
-                // Set a socket timeout: default value is 0 (no timeout)
-                ftpClient.setSoTimeout(SO_TIMEOUT*1000);
+//                // Set a socket timeout: default value is 0 (no timeout)
+//                ftpClient.setSoTimeout(CONNECTION_TIMEOUT*1000);
 
                 if(Debug.ON) Debug.trace("soTimeout="+ftpClient.getSoTimeout());
 
