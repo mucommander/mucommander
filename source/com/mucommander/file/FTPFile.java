@@ -7,7 +7,7 @@ import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionPool;
-import com.mucommander.file.connection.ConnectionFull;
+import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.Debug;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -25,7 +25,7 @@ import java.net.SocketTimeoutException;
  *
  * @author Maxence Bernard
  */
-public class FTPFile extends AbstractFile implements ConnectionFull {
+public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
     private org.apache.commons.net.ftp.FTPFile file;
 
@@ -146,7 +146,7 @@ public class FTPFile extends AbstractFile implements ConnectionFull {
 
 
     ///////////////////////////////////
-    // ConnectionFull implementation //
+    // ConnectionHandlerFactory implementation //
     ///////////////////////////////////
 
     public ConnectionHandler createConnectionHandler(FileURL location) {

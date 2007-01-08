@@ -7,7 +7,7 @@ import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.Debug;
 import com.mucommander.file.connection.ConnectionHandler;
-import com.mucommander.file.connection.ConnectionFull;
+import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
 import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.SftpClient;
@@ -28,7 +28,7 @@ import java.util.Iterator;
  *
  * @author Maxence Bernard
  */
-public class SFTPFile extends AbstractFile implements ConnectionFull {
+public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
     private SftpFile file;
 
@@ -98,7 +98,7 @@ public class SFTPFile extends AbstractFile implements ConnectionFull {
 
 
     ///////////////////////////////////
-    // ConnectionFull implementation //
+    // ConnectionHandlerFactory implementation //
     ///////////////////////////////////
 
     public ConnectionHandler createConnectionHandler(FileURL location) {

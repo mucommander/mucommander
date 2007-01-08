@@ -25,12 +25,12 @@ public class ConnectionPool implements Runnable {
     private final static int MONITOR_SLEEP_PERIOD = 1000;
 
 
-    public static synchronized ConnectionHandler getConnectionHandler(ConnectionFull connectionFull, FileURL url) {
-        return getConnectionHandler(connectionFull, url, false);
+    public static synchronized ConnectionHandler getConnectionHandler(ConnectionHandlerFactory connectionHandlerFactory, FileURL url) {
+        return getConnectionHandler(connectionHandlerFactory, url, false);
     }
 
 
-    public static synchronized ConnectionHandler getConnectionHandler(ConnectionFull connectionFull, FileURL url, boolean acquireLock) {
+    public static synchronized ConnectionHandler getConnectionHandler(ConnectionHandlerFactory connectionHandlerFactory, FileURL url, boolean acquireLock) {
         FileURL realm = FileURL.resolveRealm(url);
 
         synchronized(connectionHandlers) {      // Ensures that monitor thread is not currently changing the list while we access it
@@ -60,7 +60,7 @@ public class ConnectionPool implements Runnable {
             }
 
             // No suitable ConnectionHandler found, create a new one
-            connHandler = connectionFull.createConnectionHandler(url);
+            connHandler = connectionHandlerFactory.createConnectionHandler(url);
 
             if(acquireLock)
                 connHandler.acquireLock();
