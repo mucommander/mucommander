@@ -90,6 +90,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     private final static String BROWSE_TEXT = Translator.get("browse");
     private final static String DOWNLOAD_TEXT = Translator.get("download");
 
+    
     public FolderPanel(MainFrame mainFrame, AbstractFile initialFolder) {
         super(new BorderLayout());
 
@@ -723,37 +724,43 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                                 break;
                             }
 
-                            // File is a regualar directory, all good
+                            // File is a regular directory, all good
                             if(file.isDirectory()) {
                                 // Just continue
                             }
                             // File is a browsable file (Zip archive for instance) but not a directory : Browse or Download ? => ask the user
                             else if(file.isBrowsable()) {
-                                // Restore default cursor
-                                mainFrame.setCursor(Cursor.getDefaultCursor());
+                                // If history already contains this file, do not ask the question again and assume
+                                // the user wants to 'browse' the file. In particular, this prevent the 'Download or browse'
+                                // dialog from popping up when going back or forward in history
+                                if(!folderHistory.historyContains(folderURL)) {
+                                    // Restore default cursor
+                                    mainFrame.setCursor(Cursor.getDefaultCursor());
 
-                                // Download or browse file ?
-                                QuestionDialog dialog = new QuestionDialog(mainFrame,
-                                                                           null,
-                                                                           Translator.get("table.download_or_browse"),
-                                                                           mainFrame,
-                                                                           new String[] {BROWSE_TEXT, DOWNLOAD_TEXT, CANCEL_TEXT},
-                                                                           new int[] {BROWSE_ACTION, DOWNLOAD_ACTION, CANCEL_ACTION},
-                                                                           0);
+                                    // Download or browse file ?
+                                    QuestionDialog dialog = new QuestionDialog(mainFrame,
+                                                                               null,
+                                                                               Translator.get("table.download_or_browse"),
+                                                                               mainFrame,
+                                                                               new String[] {BROWSE_TEXT, DOWNLOAD_TEXT, CANCEL_TEXT},
+                                                                               new int[] {BROWSE_ACTION, DOWNLOAD_ACTION, CANCEL_ACTION},
+                                                                               0);
 
-                                int ret = dialog.getActionValue();
-                                if(ret==-1 || ret==CANCEL_ACTION)
-                                    break;
+                                    int ret = dialog.getActionValue();
+                                    if(ret==-1 || ret==CANCEL_ACTION)
+                                        break;
 
-                                // Download file
-                                if(ret==DOWNLOAD_ACTION) {
-                                    showDownloadDialog(file);
-                                    break;
+                                    // Download file
+                                    if(ret==DOWNLOAD_ACTION) {
+                                        showDownloadDialog(file);
+                                        break;
+                                    }
+                                    // Continue if BROWSE_ACTION
+                                    // Set cursor to hourglass/wait
+                                    mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                                    //							noWaitDialog = false;
                                 }
-                                // Continue if BROWSE_ACTION
-                                // Set cursor to hourglass/wait
-                                mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                                //							noWaitDialog = false;
+                                // else just continue and browse file's contents
                             }
                             // File is a regular file: show download dialog
                             else {

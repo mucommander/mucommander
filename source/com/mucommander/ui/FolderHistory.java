@@ -164,6 +164,15 @@ public class FolderHistory {
 
 
     /**
+     * Returns true if the folder history contains the given FileURL, either as a back or forward folder, or as the
+     * current folder.
+     */
+    public boolean historyContains(FileURL folderURL) {
+        return history.contains(folderURL);
+    }
+
+
+    /**
      * Returns the last visited folder that can be saved when the application terminates, and recalled next time
      * the application is started.
      *
