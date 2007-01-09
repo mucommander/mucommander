@@ -26,16 +26,20 @@ public class HTTPFile extends AbstractFile {
     private long size;
 	
     private URL url;
-    //	private String urlString;
-    //	private FileURL fileURL;
 
     private boolean parentValSet;
     protected AbstractFile parent;
 	
     /** True if the URL looks like */
     private boolean isHTML;
-	
-	
+
+    /** True if file has been resolved on the remote HTTP server, either successfully or unsuccessfully */
+    private boolean fileResolved;
+
+    /** True if the file could be successfully resolved on the remote HTTP server */
+	private boolean exists;
+
+
     /**
      * Creates a new instance of HTTPFile.
      */
@@ -55,10 +59,6 @@ public class HTTPFile extends AbstractFile {
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(url.toExternalForm());
 		
-        //		// urlString is url-encoded
-        //		this.fileURL = new FileURL(urlString);
-        //		this.urlString = url.toExternalForm();
-
         // Determine file name (URL-decoded)
         this.name = fileURL.getFilename(true);
         // Name may contain '/' or '\' characters once decoded, let's remove them
@@ -78,6 +78,13 @@ public class HTTPFile extends AbstractFile {
             date = System.currentTimeMillis();
         }
         else {
+            resolveFile();
+        }
+    }
+
+
+    private void resolveFile() throws IOException {
+        try {
             // Default values.
             size = -1;
             date = System.currentTimeMillis();
@@ -109,8 +116,17 @@ public class HTTPFile extends AbstractFile {
             String contentType = conn.getContentType();
             if(contentType!=null && contentType.trim().startsWith("text/html"))
                 isHTML = true;
+
+            // File was successfully resolved on the remote HTTP server and thus exists
+            exists = true;
+        }
+        finally {
+            // Mark the file as resolved, even if the request failed
+            fileResolved = true;
         }
     }
+
+
 
     private HttpURLConnection getHttpURLConnection(URL url) throws IOException {
         // Get URLConnection instance
@@ -181,18 +197,17 @@ public class HTTPFile extends AbstractFile {
         this.parent = parent;
         this.parentValSet = true;
     }
-	
-	
+
     public boolean exists() {
-        //		try {
-        //			url.openStream().close();
-        return true;
-        //		}
-        //		catch(Exception e) {
-        //			return false;
-        //		}
+        if(!fileResolved) {
+            // Note: file will only be resolved once, even if the request failed
+            try { resolveFile(); }
+            catch(IOException e) {}
+        }
+
+        return exists;
     }
-	
+
     public boolean canRead() {
         return true;
     }

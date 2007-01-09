@@ -13,7 +13,7 @@ import java.io.OutputStream;
 
 
 /**
- * This FileJob creates a new directory in a given folder.
+ * This FileJob creates a new directory (or file) in a given folder.
  *
  * @author Maxence Bernard
  */
