@@ -82,6 +82,7 @@ public class ArchiveJob extends TransferFileJob {
         // Loop for retry
         do {
             try {
+
                 // Tries to open destination file and create Archiver
                 this.archiver = Archiver.getArchiver(new BufferedOutputStream(destFile.getOutputStream(false), WRITE_BUFFER_SIZE), archiveFormat);
                 this.archiver.setComment(archiveComment);
@@ -117,7 +118,7 @@ public class ArchiveJob extends TransferFileJob {
                 if (file.isDirectory() && !file.isSymlink()) {
                     // Create new directory entry in archive file
                     archiver.createEntry(entryRelativePath, file);
-					
+
                     // Recurse on files
                     AbstractFile subFiles[] = file.ls();
                     boolean folderComplete = true;
@@ -133,10 +134,8 @@ public class ArchiveJob extends TransferFileJob {
                 else {
 //                    this.in = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
                     this.in = setCurrentInputStream(file.getInputStream());
-
                     // Create a new file entry in archive and copy the current file
                     AbstractFile.copyStream(in, archiver.createEntry(entryRelativePath, file));
-
                     in.close();
                 
                     return true;

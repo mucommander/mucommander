@@ -47,7 +47,7 @@ class ZipArchiver extends Archiver {
         ZipEntry entry = new ZipEntry(normalizePath(entryPath, isDirectory));
         // Use provided file's size and date
         entry.setTime(file.getDate());
-        if(!isDirectory)		// Do not set size if file is directory!
+        if(!isDirectory && file.getSize() >= 0) 	// Do not set size if file is directory!
             entry.setSize(file.getSize());
 		
         // Add the entry
