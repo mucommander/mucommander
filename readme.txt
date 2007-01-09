@@ -254,14 +254,15 @@ Bug fixes:
  - Fixed muCommander cancelling Mac OS X shutdown / restart / logout
  - Fixed file editor not asking for save when quitting muCommander under OS X
  - Files/folders with extended characters can now properly be executed/revealed under Mac OS X (was caused by a bug in the Java 1.5 runtime http://lists.apple.com/archives/java-dev/2004/Apr/msg00798.html)
- - Fixed a repaint bug which could cause the folder pane display to be corrupted (since 0.8 beta2)
  - Fixed marked files not properly kept when changing sort order (since 0.8 beta1)
  - Fixed top-level directories which could not be created in sub-directories (since 0.8 beta1)
  - Fixed handling of files containing leading or trailing white space characters (since 0.8 beta1)
  - Fixed issue with filenames containing a '?' character (since 0.8 beta1)
  - Fixed 'Edit bookmarks' changes not taken into account under certain conditions (since beta1)
  - Fixed in-table renaming which could stop working under certain conditions (since 0.8 beta1)
+ - Fixed total/free space not displayed for some locally mounted volumes  (since 0.8 beta1)
  - Fixed user-defined font not properly taken into account (since 0.8 beta2)
+ - Fixed a repaint bug which could cause the folder pane display to be corrupted (since 0.8 beta2)
 
 Known issues:
  - Translations not up-to-date (some of the new 0.8 features are untranslated) 
