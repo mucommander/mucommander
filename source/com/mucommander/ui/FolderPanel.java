@@ -2,7 +2,6 @@
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
-import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
@@ -23,6 +22,7 @@ import com.mucommander.ui.dnd.FileDragSourceListener;
 import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.table.FolderChangeMonitor;
 import com.mucommander.ui.table.TablePopupMenu;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
@@ -48,6 +48,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     private AbstractFile currentFolder;
     private ChangeFolderThread changeFolderThread;
+
+    private FolderChangeMonitor folderChangeMonitor;
 
     private LocationManager locationManager = new LocationManager(this);
 
@@ -120,7 +122,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         locationPanel.add(locationComboBox, c);
 
         add(locationPanel, BorderLayout.NORTH);
-		
+
+        // Create the FileTable
         fileTable = new FileTable(mainFrame, this);
 
         try {
@@ -144,6 +147,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             }
         }
 
+        // Create the FolderChangeMonitor that monitors changes in the current folder and automatically refreshes it
+        folderChangeMonitor = new FolderChangeMonitor(this);
+
+        // Put the FileTable in a scroll pane with vertical scrolling when needed and no horizontal scrolling
         scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         // Sets the table border.
@@ -510,6 +517,14 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
 
+    /**
+     * Returns the FolderChangeMonitor which monitors changes in the current folder and automatically refreshes it.
+     */
+    public FolderChangeMonitor getFolderChangeMonitor() {
+        return folderChangeMonitor;
+    }
+
+
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -635,18 +650,26 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         }
 
 
+        public void start() {
+            // Notify listeners that location is changing
+            locationManager.fireLocationChanging(folder==null?folderURL:folder.getURL());
+
+            super.start();
+        }
+
+
         public void run() {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting folder change...");
             boolean folderChangedSuccessfully = false;
 
-            // Notify listeners that location is changing
-            locationManager.fireLocationChanging(folder==null?folderURL:folder.getURL());
+//            // Notify listeners that location is changing
+//            locationManager.fireLocationChanging(folder==null?folderURL:folder.getURL());
 
             // Show some progress in the progress bar to give hope
             locationField.setProgressValue(10);
 
-            // Disable automatic refresh
-            fileTable.setAutoRefreshActive(false);
+//            // Disable automatic refresh
+//            fileTable.setAutoRefreshActive(false);
 
             // If folder URL doesn't contain any credentials but CredentialsManager found some matching the URL,
             // popup the authentication dialog to avoid having to wait for an AuthException to be thrown
@@ -843,8 +866,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             // Restore normal mouse cursor
             mainFrame.setCursor(Cursor.getDefaultCursor());
 
-            // Re-enable automatic refresh
-            fileTable.setAutoRefreshActive(true);
+//            // Re-enable automatic refresh
+//            fileTable.setAutoRefreshActive(true);
 
             changeFolderThread = null;
 

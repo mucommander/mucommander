@@ -85,7 +85,7 @@ public abstract class FileJob implements Runnable {
     /** File to be selected after job has finished (can be null if not set) */
     private AbstractFile fileToSelect;
 
-
+    
     /** Indicates that this job has not started yet, this is a temporary state */
     public final static int NOT_STARTED = 0;
 
@@ -176,10 +176,12 @@ public abstract class FileJob implements Runnable {
         if(jobState!=NOT_STARTED)
             return;
 
-        // Pause auto-refresh during file job if this job potentially modifies folders contents
-        // and would potentially cause table to auto-refresh
-        mainFrame.getFolderPanel1().getFileTable().setAutoRefreshActive(false);
-        mainFrame.getFolderPanel2().getFileTable().setAutoRefreshActive(false);
+        // Pause auto-refresh during file job as it potentially modifies the current folders contents
+        // and would potentially cause folder panel to auto-refresh
+//        mainFrame.getFolderPanel1().getFileTable().setAutoRefreshActive(false);
+//        mainFrame.getFolderPanel2().getFileTable().setAutoRefreshActive(false);
+        mainFrame.getFolderPanel1().getFolderChangeMonitor().setPaused(true);
+        mainFrame.getFolderPanel2().getFolderChangeMonitor().setPaused(true);
 
         setState(RUNNING);
         startDate = System.currentTimeMillis();
@@ -590,9 +592,11 @@ public abstract class FileJob implements Runnable {
                 activeTable.getFolderPanel().tryRefreshCurrentFolder();
         }
 
-        // Resume auto-refresh if auto-refresh has been paused
-        activeTable.setAutoRefreshActive(true);
-        inactiveTable.setAutoRefreshActive(true);
+        // Resume current folders auto-refresh
+//        activeTable.setAutoRefreshActive(true);
+//        inactiveTable.setAutoRefreshActive(true);
+        mainFrame.getFolderPanel1().getFolderChangeMonitor().setPaused(false);
+        mainFrame.getFolderPanel2().getFolderChangeMonitor().setPaused(false);
     }
 	
 
