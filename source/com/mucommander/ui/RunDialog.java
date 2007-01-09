@@ -1,10 +1,15 @@
 package com.mucommander.ui;
 
-import com.mucommander.conf.*;
-import com.mucommander.shell.*;
+import com.mucommander.ProcessListener;
+import com.mucommander.shell.Shell;
+import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.theme.*;
+import com.mucommander.ui.comp.dialog.DialogToolkit;
+import com.mucommander.ui.comp.dialog.FocusDialog;
+import com.mucommander.ui.comp.dialog.XBoxPanel;
+import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
 import java.awt.*;

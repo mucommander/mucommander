@@ -1,4 +1,4 @@
-package com.mucommander.shell;
+package com.mucommander;
 
 
 /**

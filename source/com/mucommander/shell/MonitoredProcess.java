@@ -2,6 +2,7 @@ package com.mucommander.shell;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
+import com.mucommander.ProcessListener;
 
 import java.io.InputStream;
 import java.io.OutputStream;
