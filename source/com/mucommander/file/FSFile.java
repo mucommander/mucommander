@@ -1,5 +1,6 @@
 package com.mucommander.file;
 
+import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
@@ -8,6 +9,7 @@ import com.mucommander.io.RandomAccessInputStream;
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 /**
@@ -121,7 +123,7 @@ public class FSFile extends AbstractFile {
      * <p>This method has been made public as it is more efficient to retrieve both free space and volume space
      * info than calling getFreeSpace() and getTotalSpace() separately, since a single command process retrieves both.
      *
-     * @return [totalSpace, freeSpace], or <code>null</code> if information could not be retrieved from the current platform. 
+     * @return [totalSpace, freeSpace], both of which can be null if information could not be retrieved.
      */
     public long[] getVolumeInfo() {
         BufferedReader br = null;
@@ -184,23 +186,38 @@ public class FSFile extends AbstractFile {
                     // Discard the first line ("Filesystem   1K-blocks     Used    Avail Capacity  Mounted on");
                     br.readLine();
                     String line = br.readLine();
+
+                    // Sample lines:
+                    // /dev/disk0s2                      116538416 109846712  6179704    95%    /
+                    // automount -fstab [202]                    0         0        0   100%    /automount/Servers
+
+                    // Filesystem field can have several tokens (e.g. 'automount -fstab [202]') whereas other fields
+                    // don't, so all tokens are fetched first, and only the values of the '1K-blocks' and 'Avail'
+                    // fields are used.
+                    Vector tokenV = new Vector();
                     if(line!=null) {
                         StringTokenizer st = new StringTokenizer(line);
-                        // Discard 'Filesystem' field
-                        st.nextToken();
-                        // Parse 'volume total' field
-                        dfInfo[0] = Long.parseLong(st.nextToken()) * 1024;
-                        // Discard 'Used' field
-                        st.nextToken();
-                        // Parse 'volume free' field
-                        dfInfo[1] = Long.parseLong(st.nextToken()) * 1024;
+                        while(st.hasMoreTokens())
+                            tokenV.add(st.nextToken());
                     }
+
+                    int nbTokens = tokenV.size();
+                    if(nbTokens<6) {
+                        // This should normally not happen
+                        if(Debug.ON) Debug.trace("Failed to parse output of df -k "+absPath+" line="+line);
+                        return dfInfo;
+                    }
+
+                    // '1-blocks' field (total space)
+                    dfInfo[0] = Long.parseLong((String)tokenV.elementAt(nbTokens-5)) * 1024;
+                    // 'Avail' field (free space)
+                    dfInfo[1] = Long.parseLong((String)tokenV.elementAt(nbTokens-3)) * 1024;
                 }
             }
         }
         catch(Exception e) {	// Could be IOException, NoSuchElementException or NumberFormatException, but better be safe and catch Exception
             if(com.mucommander.Debug.ON) {
-                com.mucommander.Debug.trace("An error occured while retrieving volume info: "+e);
+                com.mucommander.Debug.trace("Exception thrown while retrieving volume info: "+e);
                 e.printStackTrace();
             }
         }
