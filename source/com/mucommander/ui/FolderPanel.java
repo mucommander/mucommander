@@ -466,7 +466,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param children current folder's files (value of folder.ls())
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      */
-    private void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
+    private synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
         fileTable.setCurrentFolder(folder, children);
 
         // Select given file if not null
