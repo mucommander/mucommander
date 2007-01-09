@@ -50,7 +50,7 @@ public class HTTPFile extends AbstractFile {
         String protocol = fileURL.getProtocol().toLowerCase();
         if((!protocol.equals(FileProtocols.HTTP) && !protocol.equals(FileProtocols.HTTPS)) || fileURL.getHost()==null)
             throw new IOException();
-		
+
         this.url = url;
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(url.toExternalForm());
@@ -72,41 +72,41 @@ public class HTTPFile extends AbstractFile {
         //  - URL contains no path after hostname (e.g. http://google.com)
         //  - URL points to dynamic content (e.g. http://lulu.superblog.com?param=hola&val=...), even though dynamic scripts do not always return HTML
         //  - No filename with a known mime type can be extracted from the last part of the URL (e.g. NOT http://mucommander.com/download/mucommander-0_7.tgz)
-        // If based on this test, the file is considered to be an HTML file, use default date (now) and size (-1),
-        // and if not (URL points to file with a known mime type), connect to retrieve content-length, date headers, and verify that
-        // content-type is indeed not HTML
-        if(fileURL.getPath().equals("/")
-           || fileURL.getQuery()!=null
-           || ((mimeType=MimeTypes.getMimeType(this))==null || mimeType.equals("text/html"))) {
-            date = System.currentTimeMillis();
-            size = -1;
+        if(fileURL.getPath().equals("/")  || fileURL.getQuery()!=null || ((mimeType=MimeTypes.getMimeType(this))==null || mimeType.equals("text/html")))
             isHTML = true;
+
+        size = -1;
+        date = System.currentTimeMillis();
+
+        // Default values.
+        size = -1;
+        date = System.currentTimeMillis();
+
+        // Get URLConnection instance
+        HttpURLConnection conn = getHttpURLConnection(url);
+
+        // Use HEAD instead of GET as we don't need the body
+        conn.setRequestMethod("HEAD");
+
+        // Establish connection
+        conn.connect();
+
+        // Check HTTP response code and throw appropriate IOException if request failed
+        checkHTTPResponse(conn);
+
+        // Resolve date: use last-modified header, if not set use date header, and if still not set use System.currentTimeMillis
+        date = conn.getLastModified();
+        if(date==0) {
+            date = conn.getDate();
+            if(date==0)
+                date = System.currentTimeMillis();
         }
-        else {
-            // Get URLConnection instance
-            HttpURLConnection conn = getHttpURLConnection(url);
-	
-            // Use HEAD instead of GET as we don't need the body
-            conn.setRequestMethod("HEAD");
 
-            // Establish connection
-            conn.connect();
+        // Resolve size with content-length header (-1 if not available)
+        size = conn.getContentLength();
 
-            // Check HTTP response code and throw appropriate IOException if request failed
-            checkHTTPResponse(conn);
-
-            // Resolve date: use last-modified header, if not set use date header, and if still not set use System.currentTimeMillis
-            date = conn.getLastModified();
-            if(date==0) {
-                date = conn.getDate();
-                if(date==0)
-                    date = System.currentTimeMillis();
-            }
-			
-            // Resolve size with content-length header (-1 if not available)
-            size = conn.getContentLength();
-			
-            // Test if content is HTML
+        // Test if content is HTML
+        if(!isHTML) {
             String contentType = conn.getContentType();
             if(contentType!=null && contentType.trim().startsWith("text/html"))
                 isHTML = true;
