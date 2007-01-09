@@ -8,6 +8,7 @@ import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.res.ResourceListReader;
 import com.mucommander.text.Translator;
+import com.mucommander.RuntimeConstants;
 
 import javax.swing.*;
 import java.awt.*;
