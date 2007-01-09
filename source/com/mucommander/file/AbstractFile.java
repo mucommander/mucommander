@@ -4,7 +4,6 @@ import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.Debug;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -675,7 +674,7 @@ public abstract class AbstractFile {
         if(f==null || !(f instanceof AbstractFile))
             return false;
 		
-        return getCanonicalPath().equals(((AbstractFile)f).getCanonicalPath());
+        return getCanonicalPath(false).equals(((AbstractFile)f).getCanonicalPath(false));
     }
 
 	

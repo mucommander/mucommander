@@ -1,18 +1,18 @@
 package com.mucommander.ui;
 
+import com.mucommander.auth.Credentials;
+import com.mucommander.file.FileURL;
+import com.mucommander.file.connection.ConnectionHandler;
+import com.mucommander.file.connection.ConnectionPool;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.XBoxPanel;
-import com.mucommander.ui.comp.MnemonicHelper;
-import com.mucommander.text.Translator;
-import com.mucommander.file.connection.ConnectionPool;
-import com.mucommander.file.connection.ConnectionHandler;
-import com.mucommander.file.FileURL;
-import com.mucommander.auth.Credentials;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 /**

@@ -10,8 +10,8 @@ import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.table.FileTable;
 
-import java.util.WeakHashMap;
 import java.util.Iterator;
+import java.util.WeakHashMap;
 
 
 /**
@@ -289,8 +289,11 @@ public abstract class FileJob implements Runnable {
         if(jobState==PAUSED)
             setPaused(false);
 
-        stop();
+        // Set state before calling stop() so that state is INTERRUPTED when jobStopped() is called
+        // (some FileJob rely on that)
         setState(INTERRUPTED);
+
+        stop();
     }
 
 

@@ -1,23 +1,23 @@
 
 package com.mucommander.file;
 
-import com.mucommander.io.FileTransferException;
-import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.file.connection.ConnectionHandler;
-import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
-import com.mucommander.Debug;
+import com.mucommander.file.connection.ConnectionPool;
+import com.mucommander.io.FileTransferException;
+import com.mucommander.io.RandomAccessInputStream;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
+import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -568,12 +568,12 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    public boolean equals(Object f) {
-        if(!(f instanceof FTPFile))
-            return super.equals(f);		// could be equal to a ZipArchiveFile
-
-        return fileURL.equals(((FTPFile)f).fileURL);
-    }
+//    public boolean equals(Object f) {
+//        if(!(f instanceof FTPFile))
+//            return super.equals(f);		// could be equal to a ZipArchiveFile
+//
+//        return fileURL.equals(((FTPFile)f).fileURL);
+//    }
 
 
     private static class FTPInputStream extends FilterInputStream {

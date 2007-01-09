@@ -1,12 +1,13 @@
 package com.mucommander.ui.theme;
 
+import com.mucommander.Debug;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
-import com.mucommander.Debug;
 
-import java.io.*;
-import java.util.*;
 import java.awt.*;
+import java.io.InputStream;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
 
 /**
  * Loads theme instances from properly formatted XML files.

@@ -12,6 +12,7 @@ import com.mucommander.ui.ProgressDialog;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 
 /**
@@ -38,11 +39,14 @@ public class ArchiveJob extends TransferFileJob {
 	
     /** Size of the buffer used to write archived data */
     private final static int WRITE_BUFFER_SIZE = 8192;
+
+    /** Lock to avoid Archiver.close() to be called while data is being written */
+    private final Object ioLock = new Object();
+
+    /** OutputStream of the file Current file  */
+    private OutputStream out;
+
     
-    /** InputStream of the file currently being read */
-    private InputStream in;
-
-
     public ArchiveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFile, int archiveFormat, String archiveComment) {
         super(progressDialog, mainFrame, files);
 		
@@ -72,7 +76,6 @@ public class ArchiveJob extends TransferFileJob {
                 // Do nothing, simply continue and file will be overwritten
             }
             // Cancel or dialog close (return)
-//            else if (choice==-1 || choice== FileCollisionDialog.CANCEL_ACTION) {
             else {
                 interrupt();
                 return;
@@ -82,9 +85,9 @@ public class ArchiveJob extends TransferFileJob {
         // Loop for retry
         do {
             try {
-
-                // Tries to open destination file and create Archiver
-                this.archiver = Archiver.getArchiver(new BufferedOutputStream(destFile.getOutputStream(false), WRITE_BUFFER_SIZE), archiveFormat);
+                // Tries to open destination file and create the Archiver
+                out = new BufferedOutputStream(destFile.getOutputStream(false), WRITE_BUFFER_SIZE);
+                this.archiver = Archiver.getArchiver(out, archiveFormat);
                 this.archiver.setComment(archiveComment);
                 break;
             }
@@ -132,12 +135,14 @@ public class ArchiveJob extends TransferFileJob {
                     return folderComplete;
                 }
                 else {
-//                    this.in = new CounterInputStream(file.getInputStream(), currentFileByteCounter);
-                    this.in = setCurrentInputStream(file.getInputStream());
-                    // Create a new file entry in archive and copy the current file
-                    AbstractFile.copyStream(in, archiver.createEntry(entryRelativePath, file));
-                    in.close();
-                
+                    InputStream in = setCurrentInputStream(file.getInputStream());
+                    // Synchronize this block to ensure that Archiver.close() is not closed while data is still being
+                    // written to the archive OutputStream, this would cause ZipOutputStream to deadlock.
+                    synchronized(ioLock) {
+                        // Create a new file entry in archive and copy the current file
+                        AbstractFile.copyStream(in, archiver.createEntry(entryRelativePath, file));
+                        in.close();
+                    }
                     return true;
                 }
             }
@@ -155,7 +160,6 @@ public class ArchiveJob extends TransferFileJob {
                 // Retry loops
                 if(ret==RETRY_ACTION) {
                     // Reset processed bytes currentFileByteCounter
-//                    currentFileByteCounter.reset();
                     getCurrentFileByteCounter().reset();
 
                     continue;
@@ -171,19 +175,27 @@ public class ArchiveJob extends TransferFileJob {
      * Overriden method to close the archiver.
      */
     public void jobStopped() {
+
+        // TransferFileJob.jobStopped() closes the current InputStream, this will cause copyStream() to return
         super.jobStopped();
-    
-//        // First, close any open InputStream being archived.
-//        // Not doing so before closing the archive would cause a deadlock in ZipOutputStream
-//        if(in!=null) {
-//            try { in.close(); }
-//            catch(IOException e) {}
-//        }
-        
-        // Try to close the archiver
-        if(archiver!=null) {
-            try { archiver.close(); }
-            catch(IOException e) {}
+
+        // Synchronize this block to ensure that Archiver.close() is not closed while data is still being
+        // written to the archive OutputStream, this would cause ZipOutputStream to deadlock.
+        synchronized(ioLock) {
+            // Try to close the archiver which in turns closes the archive OutputStream and underlying file OutputStream
+            if(archiver!=null) {
+                try { archiver.close(); }
+                catch(IOException e) {}
+            }
+
+            // Makes sure the file OutputStream has been properly closed. Archive.close() normally closes the archive
+            // OutputStream which in turn should close the underlying file OutputStream, but for some strange reason,
+            // if no entry has been added to a Zip archive and the job is interrupted (e.g. the first file could not be read),
+            // ZipOutputStream.close() does not close the underlying OutputStream.
+            if(out!=null) {
+                try { out.close(); }
+                catch(IOException e) {}
+            }
         }
     }
 

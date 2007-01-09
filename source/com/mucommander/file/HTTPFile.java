@@ -1,9 +1,9 @@
 package com.mucommander.file;
 
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.Base64OutputStream;
-import com.mucommander.auth.Credentials;
 import com.mucommander.auth.AuthException;
+import com.mucommander.auth.Credentials;
+import com.mucommander.io.Base64OutputStream;
+import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -483,12 +483,12 @@ public class HTTPFile extends AbstractFile {
     }
 
 
-    public boolean equals(Object f) {
-        if(!(f instanceof HTTPFile))
-            return super.equals(f);		// could be equal to a ZipArchiveFile
-
-        return ((HTTPFile)f).getAbsolutePath(false).equals(getAbsolutePath(false));
-    }
+//    public boolean equals(Object f) {
+//        if(!(f instanceof HTTPFile))
+//            return super.equals(f);		// could be equal to a ZipArchiveFile
+//
+//        return ((HTTPFile)f).getAbsolutePath(false).equals(getAbsolutePath(false));
+//    }
 
 
     /**

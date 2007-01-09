@@ -1,7 +1,6 @@
 package com.mucommander.file;
 
 import com.mucommander.PlatformManager;
-import com.mucommander.Debug;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -486,11 +485,11 @@ public class FSFile extends AbstractFile {
         return file.isHidden();
     }
 
-    public boolean equals(Object f) {
-        if(!(f instanceof FSFile))
-            return super.equals(f);		// could be equal to a ZipArchiveFile
-
-        // Compares canonical path (which File does not do in its equals() method)
-        return getCanonicalPath().equals(((FSFile)f).getCanonicalPath());
-    }
+//    public boolean equals(Object f) {
+//        if(!(f instanceof FSFile))
+//            return super.equals(f);		// could be equal to a ZipArchiveFile
+//
+//        // Compares canonical path (which File does not do in its equals() method)
+//        return getCanonicalPath().equals(((FSFile)f).getCanonicalPath());
+//    }
 }

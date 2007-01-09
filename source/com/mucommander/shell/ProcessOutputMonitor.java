@@ -2,7 +2,8 @@ package com.mucommander.shell;
 
 import com.mucommander.Debug;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Used to monitor a process' stdout and stderr streams.

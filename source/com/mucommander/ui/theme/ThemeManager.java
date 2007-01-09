@@ -1,15 +1,20 @@
 package com.mucommander.ui.theme;
 
-import com.mucommander.*;
-import com.mucommander.io.*;
-import com.mucommander.conf.*;
-import com.mucommander.text.*;
-import com.mucommander.res.*;
+import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.io.BackupInputStream;
+import com.mucommander.io.BackupOutputStream;
+import com.mucommander.res.ResourceListReader;
+import com.mucommander.text.Translator;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.io.*;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.WeakHashMap;
 
 
 /**

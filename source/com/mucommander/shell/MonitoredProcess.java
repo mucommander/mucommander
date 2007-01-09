@@ -1,8 +1,10 @@
 package com.mucommander.shell;
 
-import com.mucommander.*;
+import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Process implementation that takes care of emptying its own streams.

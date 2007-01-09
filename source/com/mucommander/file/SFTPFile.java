@@ -1,16 +1,16 @@
 
 package com.mucommander.file;
 
-import com.mucommander.io.FileTransferException;
-import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
-import com.mucommander.Debug;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
-import com.sshtools.j2ssh.SshClient;
+import com.mucommander.io.FileTransferException;
+import com.mucommander.io.RandomAccessInputStream;
 import com.sshtools.j2ssh.SftpClient;
+import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.authentication.*;
 import com.sshtools.j2ssh.io.UnsignedInteger32;
 import com.sshtools.j2ssh.sftp.*;
@@ -19,8 +19,8 @@ import com.sshtools.j2ssh.transport.IgnoreHostKeyVerification;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -542,12 +542,12 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
     }
 
-    public boolean equals(Object f) {
-        if(!(f instanceof SFTPFile))
-            return super.equals(f);		// could be equal to a ZipArchiveFile
-
-        return fileURL.equals(((SFTPFile)f).fileURL);
-    }
+//    public boolean equals(Object f) {
+//        if(!(f instanceof SFTPFile))
+//            return super.equals(f);		// could be equal to a ZipArchiveFile
+//
+//        return fileURL.equals(((SFTPFile)f).fileURL);
+//    }
 
 
     /**

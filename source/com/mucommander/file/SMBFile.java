@@ -420,7 +420,7 @@ if(Debug.ON) Debug.trace("caught "+e);
 
     public boolean equals(Object f) {
         if(!(f instanceof SMBFile))
-            return super.equals(f);		// could be equal to a ZipArchiveFile
+            return super.equals(f);		// could be equal to an AbstractArchiveFile
 
         // SmbFile's equals method is just perfect: compares canonical paths
         // and IP addresses
