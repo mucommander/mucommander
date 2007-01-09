@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Vector;
 
+import java.awt.Image;
 
 /**
  * ViewerRegistrar maintains a list of registered file viewers and provides methods to dynamically register file viewers
@@ -47,11 +48,12 @@ public class ViewerRegistrar {
      * so that if it is the last window on screen when it is closed by the user, it will trigger the shutdown sequence.
      *
      * @param mainFrame the parent MainFrame instance
-     * @param file the file that will be displayed by the returned ViewerFrame 
+     * @param file the file that will be displayed by the returned ViewerFrame
+     * @param icon window's icon.
      * @return the created ViewerFrame
      */
-    public static ViewerFrame createViewerFrame(MainFrame mainFrame, AbstractFile file) {
-        ViewerFrame frame = new ViewerFrame(mainFrame, file);
+    public static ViewerFrame createViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
+        ViewerFrame frame = new ViewerFrame(mainFrame, file, icon);
 
         // WindowManager will listen to window closed events to trigger shutdown sequence
         // if it is the last window visible

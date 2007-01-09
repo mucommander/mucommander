@@ -43,9 +43,10 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
      * <p>This constructor has package access only, ViewerFrame need to be created can
      * {@link ViewerRegistrar#getViewerFrame(AbstractFile) ViewerRegistrar.getViewerFrame(AbstractFile)}. 
      */
-    ViewerFrame(MainFrame mainFrame, AbstractFile file) {
+    ViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
         super();
-	
+
+        setIconImage(icon);
         this.mainFrame = mainFrame;
         this.file = file;
 		

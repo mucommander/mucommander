@@ -22,6 +22,6 @@ public class EditAction extends SelectedFileAction {
     public void performAction() {
         AbstractFile file = mainFrame.getActiveTable().getSelectedFile();
         if(file!=null && !(file.isDirectory() || file.isSymlink()))
-            EditorRegistrar.createEditorFrame(mainFrame, file);
+            EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());
     }
 }
