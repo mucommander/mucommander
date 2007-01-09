@@ -40,8 +40,10 @@ class TarArchiver extends Archiver {
         // Create the entry
         TarEntry entry = new TarEntry(normalizePath(entryPath, isDirectory));
         // Use provided file's size (required by TarOutputStream) and date
-        if(!isDirectory)		// Do not set size if file is directory!
-            entry.setSize(file.getSize());
+        long size = file.getSize();
+        if(!isDirectory && size>=0)		// Do not set size if file is directory or file size is unknown!
+            entry.setSize(size);
+
         entry.setModTime(file.getDate());
 
         int perms = entry.getMode();

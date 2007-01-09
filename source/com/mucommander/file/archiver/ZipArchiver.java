@@ -18,7 +18,9 @@ class ZipArchiver extends Archiver {
 
     private ZipOutputStream zos;
     private boolean firstEntry = true;
-	
+
+
+
     protected ZipArchiver(OutputStream outputStream) {
         this.zos = new ZipOutputStream(outputStream);
     }
@@ -46,10 +48,12 @@ class ZipArchiver extends Archiver {
         // Create the entry and use the provided file's date
         ZipEntry entry = new ZipEntry(normalizePath(entryPath, isDirectory));
         // Use provided file's size and date
+        long size = file.getSize();
+        if(!isDirectory && size>=0) 	// Do not set size if file is directory or file size is unknown!
+            entry.setSize(size);
+
         entry.setTime(file.getDate());
-        if(!isDirectory && file.getSize() >= 0) 	// Do not set size if file is directory!
-            entry.setSize(file.getSize());
-		
+
         // Add the entry
         zos.putNextEntry(entry);
 
