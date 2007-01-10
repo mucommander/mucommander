@@ -24,6 +24,7 @@ public class ConnectionPool implements Runnable {
     /** Controls how of often the thread monitor checks connections */
     private final static int MONITOR_SLEEP_PERIOD = 1000;
 
+
     
     public static synchronized ConnectionHandler getConnectionHandler(ConnectionHandlerFactory connectionHandlerFactory, FileURL url) {
         return getConnectionHandler(connectionHandlerFactory, url, false);
