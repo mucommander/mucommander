@@ -1,9 +1,9 @@
 package com.mucommander.file.connection;
 
-import com.mucommander.file.FileURL;
 import com.mucommander.Debug;
-import com.mucommander.auth.Credentials;
 import com.mucommander.auth.AuthException;
+import com.mucommander.auth.Credentials;
+import com.mucommander.file.FileURL;
 
 import java.io.IOException;
 
@@ -209,16 +209,26 @@ public abstract class ConnectionHandler {
 
         ConnectionHandler connHandler = (ConnectionHandler)o;
 
-        if(!realm.equals(connHandler.realm))
+        return equals(connHandler.realm, connHandler.credentials);
+    }
+
+
+    /**
+     * Returns true if both the given realm and credentials are equal to those of this ConnectionHandler.
+     */
+    public boolean equals(FileURL realm, Credentials credentials) {
+
+        if(!this.realm.equals(realm))
             return false;
 
-        // Compare credentials. Credentials may be null in one or both ConnectionHandler instances.
+        // Compare credentials. One or both Credentials instances may be null.
 
-        // Note: Credentials.equals() considers null as equal to empty Credentials (see #isEmpty())
-        return (credentials==null && connHandler.credentials==null)
-            || (credentials!=null && credentials.equals(connHandler.credentials))
-            || (connHandler.credentials!=null && connHandler.credentials.equals(credentials));
+        // Note: Credentials.equals() considers null as equal to empty Credentials (see Credentials#isEmpty())
+        return (this.credentials==null && credentials==null)
+            || (this.credentials!=null && this.credentials.equals(credentials))
+            || (credentials!=null && credentials.equals(this.credentials));
     }
+
 
 
     //////////////////////

@@ -1,8 +1,8 @@
 package com.mucommander.file.connection;
 
-import com.mucommander.file.FileURL;
 import com.mucommander.Debug;
 import com.mucommander.auth.Credentials;
+import com.mucommander.file.FileURL;
 
 import java.util.Vector;
 
@@ -41,12 +41,10 @@ public class ConnectionPool implements Runnable {
             for(int i=0; i<nbConn; i++) {
                 connHandler = getConnectionHandlerAt(i);
                 synchronized(connHandler) {     // Ensures that lock remains unchanged while we access/update it
-//                    if(connHandler!=null && realm.equals(connHandler.getRealm()) && !connHandler.isLocked()) {
-                    if(realm.equals(connHandler.getRealm()) && !connHandler.isLocked()
-                            && ((urlCredentials==null && connHandler.credentials==null)
-                            || (urlCredentials!=null && urlCredentials.equals(connHandler.credentials))
-                            || (connHandler.credentials!=null && connHandler.credentials.equals(urlCredentials)))) {
+                    // ConnectionHandler must match the realm and credentials and must not be locked
+                    if(connHandler.equals(realm, urlCredentials) && !connHandler.isLocked()) {
 
+                        // Try to acquire lock if a lock was requested
                         if(!acquireLock || connHandler.acquireLock()) {
                             if(Debug.ON) Debug.trace("returning ConnectionHandler "+connHandler+", realm ="+realm);
 
@@ -62,6 +60,7 @@ public class ConnectionPool implements Runnable {
             // No suitable ConnectionHandler found, create a new one
             connHandler = connectionHandlerFactory.createConnectionHandler(url);
 
+            // Acquire lock if a lock was requested
             if(acquireLock)
                 connHandler.acquireLock();
 
