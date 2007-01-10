@@ -92,7 +92,9 @@ public class Credentials {
 
         Credentials credentials = (Credentials)o;
 
-        return credentials.login.equals(this.login) && credentials.password.equals(this.password);
+        // Do not test password, only login so that if password changes Credentials are replaced by CredentialsManager
+        // and not duplicated
+        return credentials.login.equals(this.login);
     }
 
 
