@@ -207,7 +207,16 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         String entryURLString = archiveURL.getStringRep(false);
         if(!entryURLString.endsWith(separator))
             entryURLString += separator;
-        entryURLString += entry.getPath();
+
+        String entryPath = entry.getPath();
+
+        // If the parent file's separator is not '/' (the default entry separator), replace '/' occurrences by
+        // the parent file's separator. For local files Under Windows, this allows entries' path to have '\' separators.
+        String parentSeparator = parentFile.getSeparator();
+        if(!parentSeparator.equals("/"))
+            entryPath = entryPath.replace("/", parentSeparator);
+
+        entryURLString += entryPath;
 
         AbstractFile entryFile = FileFactory.wrapArchive(
           new ArchiveEntryFile(
