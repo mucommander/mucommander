@@ -112,8 +112,9 @@ class ProcessOutputMonitor implements Runnable {
             }
             // If this process is still being monitored, notifies an eventual
             // listener that it has exited.
-            if(monitor && (listener != null))
+            if(monitor && (listener != null)) {
                 listener.processDied(process.exitValue());
+            }
         }
     }
 

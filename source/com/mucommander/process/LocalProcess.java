@@ -31,10 +31,10 @@ public class LocalProcess extends AbstractProcess {
     public void destroyProcess() {process.destroy();}
     public int exitValue() {return process.exitValue();}
     public OutputStream getOutputStream() {return process.getOutputStream();}
-    public InputStream getErrorStream() {
+    public InputStream getErrorStream()  throws IOException{
         if(usesMergedStreams()) {
             if(Debug.ON) Debug.trace("Tried to access the error stream of a merged streams process.");
-            throw new IllegalStateException();
+            throw new IOException();
         }
         return process.getErrorStream();
     }

@@ -3,8 +3,7 @@ package com.mucommander.process;
 
 import com.mucommander.Debug;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * muCommander specific version of a process.
@@ -55,7 +54,8 @@ public abstract class AbstractProcess {
 		    stderrMonitor.stopMonitoring();
 
                 // Destroys the process.
-                destroyProcess();
+                try {destroyProcess();}
+                catch(IOException e) {if(Debug.ON) Debug.trace(e);}
             }
         }.start();
     }
@@ -64,7 +64,7 @@ public abstract class AbstractProcess {
      * Starts monitoring the process.
      * @param listener if non <code>null</code>, <code>listener</code> will receive updates about the process' event.
      */
-    void startMonitoring(ProcessListener listener) {
+    void startMonitoring(ProcessListener listener) throws IOException {
         // Only monitors stdout if the process uses merged streams.
         if(usesMergedStreams()) {
             if(Debug.ON) Debug.trace("Starting process merged output monitor...");
@@ -97,13 +97,15 @@ public abstract class AbstractProcess {
      * Makes the current thread wait for the process to die.
      * @return the process' exit code.
      * @throws InterruptedException thrown if the current thread is interrupted while wainting on the process to die.
+     * @throws IOException          thrown if an error occurs while waiting for the process to die.
      */
-    public abstract int waitFor() throws InterruptedException;
+    public abstract int waitFor() throws InterruptedException, IOException;
 
     /**
      * Destroys the process.
+     * @throws IOException thrown if an error occurs while destroying the process.
      */
-    protected abstract void destroyProcess();
+    protected abstract void destroyProcess() throws IOException;
 
     /**
      * Returns this process' exit value.
@@ -113,20 +115,23 @@ public abstract class AbstractProcess {
 
     /**
      * Returns the stream used to send data to the process.
-     * @return the stream used to send data to the process.
+     * @return             the stream used to send data to the process.
+     * @throws IOException thrown if an error occurs while retrieving the process' output stream.
      */
-    public abstract OutputStream getOutputStream();
+    public abstract OutputStream getOutputStream() throws IOException;
 
     /**
      * Returns the process' standard output stream.
-     * @return the process' standard output stream.
+     * @return             the process' standard output stream.
+     * @throws IOException thrown if an error occurs while retrieving the process' input stream.
      */
-    public abstract InputStream getInputStream();
+    public abstract InputStream getInputStream() throws IOException;
 
     /**
      * Returns the process' standard error stream.
-     * @return the process' standard error stream.
+     * @return             the process' standard error stream.
+     * @throws IOException thrown if an error occurs while retrieving the process' error stream.
      */
-    public abstract InputStream getErrorStream();
+    public abstract InputStream getErrorStream() throws IOException;
 
 }
