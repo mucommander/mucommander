@@ -520,6 +520,6 @@ public class FSFile extends AbstractFile {
             if(Debug.ON) Debug.trace("Tried to create a process using a file as a working directory.");
             throw new IllegalStateException();
         }
-        return new NativeProcess(tokens, file);
+        return new LocalProcess(tokens, file);
     }
 }

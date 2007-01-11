@@ -8,10 +8,10 @@ import java.io.*;
 /**
  * @author Nicolas Rinaudo
  */
-public class NativeProcess extends AbstractProcess {
+public class LocalProcess extends AbstractProcess {
     private Process process;
 
-    public NativeProcess(String[] tokens, File dir) throws IOException {
+    public LocalProcess(String[] tokens, File dir) throws IOException {
         if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_5) {
             ProcessBuilder pb = new ProcessBuilder(tokens);
             // Set the process' working directory
