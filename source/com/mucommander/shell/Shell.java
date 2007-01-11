@@ -2,11 +2,11 @@ package com.mucommander.shell;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.ProcessListener;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FSFile;
+import com.mucommander.process.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,45 +78,23 @@ public class Shell {
      * @exception IOException   thrown if any error occurs while trying to run the command.
      */
     public static Process execute(String command, AbstractFile currentFolder, ProcessListener listener) throws IOException {
+        Vector   commandTokens;
+        String[] tokens;
+
         if(Debug.ON) Debug.trace("Executing " + command);
 
         // Stores the command as a vector.
-        Vector commandTokens = splitCommand(getShellCommand());
+        commandTokens = splitCommand(getShellCommand());
         commandTokens.add(command);
+        tokens = new String[commandTokens.size()];
+        commandTokens.toArray(tokens);
         
-
-        // Determine if specified folder can be used as a working directory
-        File workingDirectory = new java.io.File((currentFolder instanceof FSFile) ?
-            currentFolder.getAbsolutePath() :
-            System.getProperty("user.home"));
-
         // Adds the command to history.
         ShellHistoryManager.add(command);
 
-        // Under Java 1.5 and up, use ProcessBuilder to merge the created process's output and error streams.
-        // The benefit of doing so is that error messages will be displayed in the context of the normal process' output
-        // (mixed), whereas otherwise error messages are displayed after all normal output has been read and displayed.
-        Process process;
-        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_5) {
-            if(Debug.ON) Debug.trace("Using merged streams");
-            ProcessBuilder pb = new ProcessBuilder(commandTokens);
-            // Set the process' working directory
-            pb.directory(workingDirectory);
-            // Merge the process' stdout and stderr 
-            pb.redirectErrorStream(true);
-
-            process = new MonitoredProcess(pb.start(), listener);
-        }
-        // Java 1.4 or below, use Runtime.exec() which separates stdout and stderr (harder to manipulate) 
-        else {
-            if(Debug.ON) Debug.trace("Using separate streams");
-            // Stores the tokens in an array for Runtime.exec(String[],String[],File).
-            String tokens[] = new String[commandTokens.size()];
-            commandTokens.toArray(tokens);
-
-            process = new MonitoredProcess(Runtime.getRuntime().exec(tokens, null, workingDirectory), listener);
-        }
-        return process;
+        if(listener == null)
+            return ProcessRunner.execute(tokens, currentFolder);
+        return ProcessRunner.execute(tokens, currentFolder, listener);
     }
 
 
