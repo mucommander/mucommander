@@ -175,5 +175,5 @@ public class ArchiveEntryFile extends AbstractFile {
 
     public boolean canRunProcess() {return false;}
 
-    public com.mucommander.process.AbstractProcess execute(String[] tokens) {throw new UnsupportedOperationException();}
+    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {throw new IOException();}
 }

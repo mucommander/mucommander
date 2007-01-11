@@ -429,7 +429,7 @@ if(Debug.ON) Debug.trace("caught "+e);
 
     public boolean canRunProcess() {return false;}
 
-    public com.mucommander.process.AbstractProcess execute(String[] tokens) {throw new UnsupportedOperationException();}
+    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {throw new IOException();}
 
     /**
      * SMBRandomAccessInputStream extends RandomAccessInputStream to provide random access to an <code>SMBFile</code>'s

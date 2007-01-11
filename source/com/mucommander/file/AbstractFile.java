@@ -861,11 +861,9 @@ public abstract class AbstractFile {
      * Creates a process executing the specified command tokens using this AbstractFile as a working directory.
      * @param  tokens                        command and its arguments for the process to create.
      * @return                               a process executing the specified command tokens using this AbstractFile as a working directory.
-     * @throws UnsupportedOperationException thrown if this AbstractFile does not support process creation.
-     * @throws IOException                   thrown if an error occured while creating the process.
-     * @throws IllegalStateException         thrown if the current file is not a directory.
+     * @throws IOException                   thrown if an error occured while creating the process, if the current file is not a directory or if the operation is not supported.
      */
-    public abstract AbstractProcess execute(String[] tokens) throws IOException;
+    public abstract AbstractProcess runProcess(String[] tokens) throws IOException;
 
 
 

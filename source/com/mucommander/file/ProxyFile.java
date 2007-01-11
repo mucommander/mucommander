@@ -263,5 +263,5 @@ public abstract class ProxyFile extends AbstractFile {
 
     public boolean canRunProcess() {return file.canRunProcess();}
 
-    public com.mucommander.process.AbstractProcess execute(String[] tokens) throws IOException {return file.execute(tokens);}
+    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {return file.runProcess(tokens);}
 }

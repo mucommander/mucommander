@@ -63,7 +63,7 @@ public class ProcessRunner {
             currentDirectory = currentDirectory.getParent();
 
         // Starts the process.
-        process = currentDirectory.execute(tokens);
+        process = currentDirectory.runProcess(tokens);
         process.startMonitoring(listener);
 
         return process;

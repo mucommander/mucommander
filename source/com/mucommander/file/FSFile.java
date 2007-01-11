@@ -515,10 +515,10 @@ public class FSFile extends AbstractFile {
      * @param  tokens      describes the command and its arguments.
      * @throws IOException if an error occured while creating the process.
      */
-    public AbstractProcess execute(String[] tokens) throws IOException {
+    public AbstractProcess runProcess(String[] tokens) throws IOException {
         if(!isDirectory()) {
             if(Debug.ON) Debug.trace("Tried to create a process using a file as a working directory.");
-            throw new IllegalStateException();
+            throw new IOException(file + " is not a directory");
         }
         return new LocalProcess(tokens, file);
     }
