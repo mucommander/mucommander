@@ -1,6 +1,6 @@
 package com.mucommander.ui;
 
-import com.mucommander.ProcessListener;
+import com.mucommander.process.ProcessListener;
 import com.mucommander.shell.Shell;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
