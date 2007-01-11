@@ -4,6 +4,7 @@ import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.process.AbstractProcess;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -845,6 +846,27 @@ public abstract class AbstractFile {
      * Returns the total space (in bytes) of the disk/volume where this file is, -1 if this information is not available. 
      */
     public abstract long getTotalSpace();
+
+
+
+    // - Process running -------------------------------------------------------
+    // -------------------------------------------------------------------------
+    /**
+     * Returns <code>true</code> if it's possible to run processes on the underlying file system.
+     * @return <code>true</code> if it's possible to run processes on the underlying file system, <code>false</code> otherwise.
+     */
+    public abstract boolean canRunProcess();
+
+    /**
+     * Creates a process executing the specified command tokens using this AbstractFile as a working directory.
+     * @param  tokens                        command and its arguments for the process to create.
+     * @return                               a process executing the specified command tokens using this AbstractFile as a working directory.
+     * @throws UnsupportedOperationException thrown if this AbstractFile does not support process creation.
+     * @throws IOException                   thrown if an error occured while creating the process.
+     * @throws IllegalStateException         thrown if the current file is not a directory.
+     */
+    public abstract AbstractProcess execute(String[] tokens) throws IOException;
+
 
 
     //////////////////

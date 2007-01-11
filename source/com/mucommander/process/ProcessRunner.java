@@ -9,12 +9,16 @@ import java.util.StringTokenizer;
 /**
  * Used to run process in as safe a manner as possible.
  * <p>
- * The Java process API, while very simple, contains a lot of pitfalls and requires somem work to use properly.
+ * The Java process API, while very simple, contains a lot of pitfalls and requires some work to use properly.
  * Typical errors are forgetting to monitor a process' output streams, which will make it deadlock more often than not.
  * </p>
  * <p>
  * Using the <code>ProcessRunner</code> will take care of all these tasks, while still allowing most of the flexibility
  * of the standard API.
+ * </p>
+ * <p>
+ * This API is strongly tied to {@link com.mucommander.file.AbstractFile}. While not optimal, this is necessary to allow
+ * 'file system' specific process to be ran, such as SSH commands.
  * </p>
  * @author Nicolas Rinaudo
  */
@@ -45,33 +49,24 @@ public class ProcessRunner {
      * @return                  the generated process.
      * @throws IOException      thrown if any error occurs while creating the process.
      */
-    public static Process execute(String[] tokens, AbstractFile currentDirectory, ProcessListener listener) throws IOException {
-        File workingDirectory; // Directory in which to execute the process.
+    public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory, ProcessListener listener) throws IOException {
+        AbstractProcess process;
 
-        // Computes the right 'working directory'.
+        // If currentDirectory is null, use the VM's current directory.
         if(currentDirectory == null)
-            workingDirectory = null;
-        else
-            workingDirectory = new java.io.File((currentDirectory instanceof FSFile) ?
-                                                currentDirectory.getAbsolutePath() :
-                                                System.getProperty("user.home"));
+            currentDirectory = FileFactory.getFile(new java.io.File(System.getProperty("user.dir")).getAbsolutePath());
+        // If currentDirectory cannot run processes, use the user's home.
+        else if(!currentDirectory.canRunProcess())
+            currentDirectory = FileFactory.getFile(new java.io.File(System.getProperty("user.home")).getAbsolutePath());
+        // If currentDirectory is not a directory, use its parent.
+        else if(!currentDirectory.isDirectory())
+            currentDirectory = currentDirectory.getParent();
 
-        // Java 1.5+ has a convenient method for merging stdout and stderr, use it if available.
-        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_5) {
-            ProcessBuilder pb = new ProcessBuilder(tokens);
-            // Set the process' working directory
-            if(workingDirectory != null)
-                pb.directory(workingDirectory);
-            // Merge the process' stdout and stderr 
-            pb.redirectErrorStream(true);
+        // Starts the process.
+        process = currentDirectory.execute(tokens);
+        process.startMonitoring(listener);
 
-            return new MonitoredProcess(pb.start(), listener);
-        }
-
-        // Java 1.4 or below, use Runtime.exec() which separates stdout and stderr (harder to manipulate) 
-        if(workingDirectory == null)
-            return new MonitoredProcess(Runtime.getRuntime().exec(tokens), listener);
-        return new MonitoredProcess(Runtime.getRuntime().exec(tokens, null, workingDirectory), listener);
+        return process;
     }
 
 
@@ -88,7 +83,7 @@ public class ProcessRunner {
      * @see                #execute(String,AbstractFile,ProcessListener)
      * @throws IOException thrown if an error happens while starting the process.
      */
-    public static Process execute(String command) throws IOException {return execute(command, null, null);}
+    public static AbstractProcess execute(String command) throws IOException {return execute(command, null, null);}
 
     /**
      * Executes the specified command in the VM's current directory.
@@ -101,7 +96,7 @@ public class ProcessRunner {
      * @see                #execute(String,AbstractFile,ProcessListener)
      * @throws IOException thrown if an error happens while starting the process.
      */
-    public static Process execute(String command, ProcessListener listener) throws IOException {return execute(command, null, listener);}
+    public static AbstractProcess execute(String command, ProcessListener listener) throws IOException {return execute(command, null, listener);}
 
     /**
      * Executes the specified command in the specified directory.
@@ -114,7 +109,7 @@ public class ProcessRunner {
      * @see                     #execute(String,AbstractFile,ProcessListener)
      * @throws IOException      thrown if an error happens while starting the process.
      */
-    public static Process execute(String command, AbstractFile currentDirectory) throws IOException {return execute(command, currentDirectory, null);}
+    public static AbstractProcess execute(String command, AbstractFile currentDirectory) throws IOException {return execute(command, currentDirectory, null);}
 
     /**
      * Executes the specified command in the specified directory.
@@ -133,7 +128,7 @@ public class ProcessRunner {
      * @see                     #execute(String,AbstractFile,ProcessListener)
      * @throws IOException      thrown if an error happens while starting the process.
      */
-    public static Process execute(String command, AbstractFile currentDirectory, ProcessListener listener) throws IOException {
+    public static AbstractProcess execute(String command, AbstractFile currentDirectory, ProcessListener listener) throws IOException {
         StringTokenizer parser; // Used to parse the command.
         String[]        tokens; // Tokens that make up the command.
 
@@ -159,7 +154,7 @@ public class ProcessRunner {
      * @see                #execute(String[],AbstractFile,ProcessListener)
      * @throws IOException thrown if an error happens while starting the process.
      */
-    public static Process execute(String[] tokens) throws IOException {return execute(tokens, null, null);}
+    public static AbstractProcess execute(String[] tokens) throws IOException {return execute(tokens, null, null);}
 
     /**
      * Executes the specified command in the VM's current directory.
@@ -172,7 +167,7 @@ public class ProcessRunner {
      * @see                #execute(String[],AbstractFile,ProcessListener)
      * @throws IOException thrown if an error happens while starting the process.
      */
-    public static Process execute(String[] tokens, ProcessListener listener) throws IOException {return execute(tokens, null, listener);}
+    public static AbstractProcess execute(String[] tokens, ProcessListener listener) throws IOException {return execute(tokens, null, listener);}
 
     /**
      * Executes the specified command in the specified directory.
@@ -185,5 +180,5 @@ public class ProcessRunner {
      * @see                     #execute(String[],AbstractFile,ProcessListener)
      * @throws IOException      thrown if an error happens while starting the process.
      */
-    public static Process execute(String[] tokens, AbstractFile currentDirectory) throws IOException {return execute(tokens, currentDirectory, null);}
+    public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory) throws IOException {return execute(tokens, currentDirectory, null);}
 }

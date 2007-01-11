@@ -427,6 +427,9 @@ if(Debug.ON) Debug.trace("caught "+e);
         return file.equals(((SMBFile)f).file);
     }
 
+    public boolean canRunProcess() {return false;}
+
+    public com.mucommander.process.AbstractProcess execute(String[] tokens) {throw new UnsupportedOperationException();}
 
     /**
      * SMBRandomAccessInputStream extends RandomAccessInputStream to provide random access to an <code>SMBFile</code>'s

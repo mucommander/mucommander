@@ -173,4 +173,7 @@ public class ArchiveEntryFile extends AbstractFile {
         return MUST_NOT_HINT;
     }
 
+    public boolean canRunProcess() {return false;}
+
+    public com.mucommander.process.AbstractProcess execute(String[] tokens) {throw new UnsupportedOperationException();}
 }

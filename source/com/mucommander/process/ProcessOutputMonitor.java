@@ -25,7 +25,7 @@ class ProcessOutputMonitor implements Runnable {
     /** Listener to notify of updates. */
     private ProcessListener listener;
     /** Process to wait on once the stream is closed. */
-    private Process         process;
+    private AbstractProcess process;
     /** Whether the process is still being monitored. */
     private boolean         monitor;
 
@@ -54,7 +54,7 @@ class ProcessOutputMonitor implements Runnable {
      * @param listener where to send the content of the stream.
      * @param process  process to wait on.
      */
-    public ProcessOutputMonitor(InputStream in, ProcessListener listener, Process process) {
+    public ProcessOutputMonitor(InputStream in, ProcessListener listener, AbstractProcess process) {
         this(in, listener);
         this.process = process;
     }

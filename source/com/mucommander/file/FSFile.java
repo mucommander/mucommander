@@ -1,5 +1,6 @@
 package com.mucommander.file;
 
+import com.mucommander.process.*;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.filter.FilenameFilter;
@@ -502,11 +503,23 @@ public class FSFile extends AbstractFile {
         return file.isHidden();
     }
 
-//    public boolean equals(Object f) {
-//        if(!(f instanceof FSFile))
-//            return super.equals(f);		// could be equal to a ZipArchiveFile
-//
-//        // Compares canonical path (which File does not do in its equals() method)
-//        return getCanonicalPath().equals(((FSFile)f).getCanonicalPath());
-//    }
+
+    /**
+     * Always returns <code>true</code>.
+     * @return <code>true</code>
+     */
+    public boolean canRunProcess() {return true;}
+
+    /**
+     * Returns a process executing the specied local command.
+     * @param  tokens      describes the command and its arguments.
+     * @throws IOException if an error occured while creating the process.
+     */
+    public AbstractProcess execute(String[] tokens) throws IOException {
+        if(!isDirectory()) {
+            if(Debug.ON) Debug.trace("Tried to create a process using a file as a working directory.");
+            throw new IllegalStateException();
+        }
+        return new NativeProcess(tokens, file);
+    }
 }

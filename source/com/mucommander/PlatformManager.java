@@ -2,7 +2,7 @@ package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
-import com.mucommander.process.ProcessRunner;
+import com.mucommander.process.*;
 
 import java.io.File;
 import java.awt.event.MouseEvent;
@@ -340,7 +340,7 @@ public class PlatformManager {
         AbstractFile currentFolder = file.getURL().getProtocol().equals(FileProtocols.FILE) && (currentFolder=file.getParent())!=null?currentFolder:null;
         String filePath = file.getAbsolutePath();
         try {
-            Process p = ProcessRunner.execute(getOpenTokens(filePath), currentFolder);
+            AbstractProcess p = ProcessRunner.execute(getOpenTokens(filePath), currentFolder);
 	
             // GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
             // so if 'gnome-open' returned an error, we try to execute the file
@@ -596,28 +596,5 @@ public class PlatformManager {
             sb.append(tokens[i]+" ");
 			
         return sb.toString();
-    }
-
-	
-    private static void showProcessOutput(Process p) {
-        try {
-            p.waitFor();
-            if(Debug.ON) Debug.trace("exitValue="+p.exitValue());
-	
-            if(Debug.ON) Debug.trace("reading process inputstream");
-            int i;
-            java.io.InputStream is = p.getInputStream();
-            while((i=is.read())!=-1)
-                System.out.print((char)i);
-            is.close();
-			
-            if(Debug.ON) Debug.trace("reading process errorstream");
-            is = p.getErrorStream();
-            while((i=is.read())!=-1)
-                System.out.print((char)i);
-            is.close();
-        }
-        catch(Exception e) {
-        }
     }
 }

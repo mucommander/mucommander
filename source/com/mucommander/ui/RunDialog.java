@@ -1,6 +1,6 @@
 package com.mucommander.ui;
 
-import com.mucommander.process.ProcessListener;
+import com.mucommander.process.*;
 import com.mucommander.shell.Shell;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
@@ -50,9 +50,9 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     // - Process management --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Stream used to send characters to the process' stdin process. */
-    private PrintStream processInput;
+    private PrintStream     processInput;
     /** Process currently running, <code>null</code> if none. */
-    private Process     currentProcess;
+    private AbstractProcess currentProcess;
 
 
 

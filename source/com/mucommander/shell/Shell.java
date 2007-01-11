@@ -56,7 +56,7 @@ public class Shell {
      * @return                  the resulting process.
      * @exception IOException   thrown if any error occurs while trying to run the command.
      */
-    public static Process execute(String command, AbstractFile currentFolder) throws IOException {return execute(command, currentFolder, null);}
+    public static AbstractProcess execute(String command, AbstractFile currentFolder) throws IOException {return execute(command, currentFolder, null);}
 
     /**
      * Executes the specified command in the specified folder.
@@ -77,7 +77,7 @@ public class Shell {
      * @return                  the resulting process.
      * @exception IOException   thrown if any error occurs while trying to run the command.
      */
-    public static Process execute(String command, AbstractFile currentFolder, ProcessListener listener) throws IOException {
+    public static AbstractProcess execute(String command, AbstractFile currentFolder, ProcessListener listener) throws IOException {
         Vector   commandTokens;
         String[] tokens;
 

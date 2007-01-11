@@ -713,4 +713,9 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
             // maintain connections open without limit.
         }
     }
+
+
+    public boolean canRunProcess() {return false;}
+
+    public com.mucommander.process.AbstractProcess execute(String[] tokens) {throw new UnsupportedOperationException();}
 }

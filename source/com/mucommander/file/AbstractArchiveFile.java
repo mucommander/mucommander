@@ -299,4 +299,8 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         // An archive is considered as a volume by itself, let's return the proxied file's size
         return file.getSize();
     }
+
+    public boolean canRunProcess() {return false;}
+
+    public com.mucommander.process.AbstractProcess execute(String[] tokens) {throw new UnsupportedOperationException();}
 }

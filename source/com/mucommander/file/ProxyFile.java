@@ -260,4 +260,8 @@ public abstract class ProxyFile extends AbstractFile {
     public String toString() {
         return file.toString();
     }
+
+    public boolean canRunProcess() {return file.canRunProcess();}
+
+    public com.mucommander.process.AbstractProcess execute(String[] tokens) throws IOException {return file.execute(tokens);}
 }
