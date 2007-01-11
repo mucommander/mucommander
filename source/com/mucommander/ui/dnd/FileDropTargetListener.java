@@ -1,7 +1,7 @@
 package com.mucommander.ui.dnd;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileSet;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.job.MoveJob;
 import com.mucommander.text.Translator;

@@ -2,8 +2,8 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileSet;
-import com.mucommander.file.FileToolkit;
+import com.mucommander.file.util.FileSet;
+import com.mucommander.file.util.FileToolkit;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;

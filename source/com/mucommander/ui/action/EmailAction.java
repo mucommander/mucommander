@@ -1,6 +1,6 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.file.FileSet;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.EmailFilesDialog;
 import com.mucommander.ui.MainFrame;
 

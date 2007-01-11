@@ -6,7 +6,7 @@ package com.mucommander.file;
  *
  * @author Maxence Bernard 
  */
-abstract class ArchiveEntry {
+public abstract class ArchiveEntry {
 	
     /** Underlying entry object */
     protected Object entry;
@@ -18,14 +18,14 @@ abstract class ArchiveEntry {
     /**
      * Creates a new ArchiveEntry that encapsulates the given 3rd party entry.
      */
-    ArchiveEntry(Object entry) {
+    public ArchiveEntry(Object entry) {
         this.entry = entry;
     }
 		
     /**
      * Returns the encapsulated entry.
      */
-    Object getEntry() {
+    public Object getEntry() {
         return entry;
     }
 
@@ -34,7 +34,7 @@ abstract class ArchiveEntry {
      * Returns the depth of this entry based on the number of slash character ('/') occurrences its path contains.
      * Minimum depth is 0.
      */
-    int getDepth() {
+    public int getDepth() {
         // Depth is only calculated once as it never changes (this class is immutable)
         if(depth == -1) {
             depth = 0;
@@ -79,27 +79,27 @@ abstract class ArchiveEntry {
     /**
      * Returns the encapsulated entry's path.
      */
-    abstract String getPath();
+    public abstract String getPath();
 	
     /**
      * Returns the encapsulated entry's date.
      */
-    abstract long getDate();
+    public abstract long getDate();
 
     /**
      * Returns the encapsulated entry's size.
      */
-    abstract long getSize();
+    public abstract long getSize();
 
     /**
      * Returns <code>true</code> if the encapsulated entry is a directory.
      */
-    abstract boolean isDirectory();
+    public abstract boolean isDirectory();
 
     /**
      * Returns read/write/execute permissions as an int, UNIX octal style.
      * The value can be compared against {@link AbstractFile#READ_MASK}, {@link AbstractFile#WRITE_MASK} and
      * {@link AbstractFile#EXECUTE_MASK} bit masks to determine if the entry is readable/writable/executable.
      */
-    abstract int getPermissions();
+    public abstract int getPermissions();
 }

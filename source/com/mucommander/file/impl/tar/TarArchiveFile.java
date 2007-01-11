@@ -1,5 +1,8 @@
-package com.mucommander.file;
+package com.mucommander.file.impl.tar;
 
+import com.mucommander.file.AbstractArchiveFile;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntry;
 import org.apache.tools.bzip2.CBZip2InputStream;
 import org.apache.tools.tar.TarInputStream;
 
@@ -61,7 +64,7 @@ public class TarArchiveFile extends AbstractArchiveFile {
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
 	
-    protected Vector getEntries() throws IOException {
+    public Vector getEntries() throws IOException {
         // Note: JavaTar's FastTarStream can unfortunately not be used
         // because it fails on many tar files that TarInputStream can read
         // without any problem.
@@ -79,7 +82,7 @@ public class TarArchiveFile extends AbstractArchiveFile {
     }
 
 
-    InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         TarInputStream tin = createTarStream();
         org.apache.tools.tar.TarEntry tempEntry;
         String entryPath = entry.getPath();

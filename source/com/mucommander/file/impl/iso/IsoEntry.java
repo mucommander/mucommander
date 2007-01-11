@@ -1,4 +1,7 @@
-package com.mucommander.file;
+package com.mucommander.file.impl.iso;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntry;
 
 public class IsoEntry extends ArchiveEntry {
 
@@ -9,7 +12,7 @@ public class IsoEntry extends ArchiveEntry {
 
     private long extent;
 
-    IsoEntry(String path, long date, int size, boolean isDirectory, long extent) {
+    public IsoEntry(String path, long date, int size, boolean isDirectory, long extent) {
         super(null);
         this.path = path;
         this.date = date;
@@ -26,11 +29,11 @@ public class IsoEntry extends ArchiveEntry {
     // Abstract methods implementation //
     /////////////////////////////////////
 
-    String getPath() {
+    public String getPath() {
         return path;
     }
 
-    long getDate() {
+    public long getDate() {
         return date;
     }
 
@@ -38,11 +41,11 @@ public class IsoEntry extends ArchiveEntry {
         return size;
     }
 
-    boolean isDirectory() {
+    public boolean isDirectory() {
         return isDirectory;
     }
 
-    int getPermissions() {
+    public int getPermissions() {
         return AbstractFile.READ_MASK | AbstractFile.WRITE_MASK;
     }
 }

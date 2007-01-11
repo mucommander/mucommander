@@ -1,10 +1,11 @@
 
 package com.mucommander.job;
 
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileSet;
 import com.mucommander.file.MimeTypes;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.io.Base64OutputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;

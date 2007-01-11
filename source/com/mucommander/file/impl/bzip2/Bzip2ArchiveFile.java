@@ -1,5 +1,9 @@
-package com.mucommander.file;
+package com.mucommander.file.impl.bzip2;
 
+import com.mucommander.file.AbstractArchiveFile;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntry;
+import com.mucommander.file.impl.SimpleEntry;
 import org.apache.tools.bzip2.CBZip2InputStream;
 
 import java.io.IOException;
@@ -25,7 +29,7 @@ public class Bzip2ArchiveFile extends AbstractArchiveFile {
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
 	
-    protected Vector getEntries() throws IOException {
+    public Vector getEntries() throws IOException {
         String extension = getExtension();
         String name = getName();
 		
@@ -45,7 +49,7 @@ public class Bzip2ArchiveFile extends AbstractArchiveFile {
     }
 
 
-    InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         try { return new CBZip2InputStream(getInputStream()); }
         catch(Exception e) {
             // CBZip2InputStream is known to throw NullPointerException if file is not properly Bzip2-encoded

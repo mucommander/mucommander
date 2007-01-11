@@ -1,5 +1,9 @@
-package com.mucommander.file;
+package com.mucommander.file.impl.ar;
 
+import com.mucommander.file.AbstractArchiveFile;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntry;
+import com.mucommander.file.impl.SimpleEntry;
 import com.mucommander.io.ByteLimitInputStream;
 
 import java.io.IOException;
@@ -167,7 +171,7 @@ public class ArArchiveFile extends AbstractArchiveFile {
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
 
-    Vector getEntries() throws IOException {
+    public Vector getEntries() throws IOException {
         Vector entries = new Vector();
         InputStream in = getInputStream();
         skipGlobalHeader(in);
@@ -190,7 +194,7 @@ public class ArArchiveFile extends AbstractArchiveFile {
     }
 
 
-    InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         InputStream in = getInputStream();
         skipGlobalHeader(in);
 

@@ -1,9 +1,12 @@
-package com.mucommander.file;
+package com.mucommander.process;
 
-import com.mucommander.*;
-import com.mucommander.process.*;
+import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * @author Nicolas Rinaudo

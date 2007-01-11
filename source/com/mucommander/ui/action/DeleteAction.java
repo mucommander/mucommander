@@ -1,9 +1,8 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.file.FileSet;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.DeleteDialog;
 import com.mucommander.ui.MainFrame;
-import com.mucommander.Debug;
 
 /**
  * This action invokes a Delete confirmation dialog to delete currently the selected / marked files

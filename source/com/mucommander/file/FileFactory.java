@@ -1,14 +1,24 @@
 package com.mucommander.file;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.cache.LRUCache;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.impl.ar.ArArchiveFile;
+import com.mucommander.file.impl.bzip2.Bzip2ArchiveFile;
+import com.mucommander.file.impl.ftp.FTPFile;
+import com.mucommander.file.impl.gzip.GzipArchiveFile;
+import com.mucommander.file.impl.http.HTTPFile;
+import com.mucommander.file.impl.iso.IsoArchiveFile;
+import com.mucommander.file.impl.local.FSFile;
+import com.mucommander.file.impl.sftp.SFTPFile;
+import com.mucommander.file.impl.smb.SMBFile;
+import com.mucommander.file.impl.tar.TarArchiveFile;
+import com.mucommander.file.impl.zip.ZipArchiveFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -187,7 +197,7 @@ public abstract class FileFactory {
      * @throws java.io.IOException if something went wrong during file or file url creation.
      * @throws AuthException if additionnal authentication information is required to create the file
      */
-    protected static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
+    public static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
         return getFile(URLFactory.getFileURL(absPath, parent==null?null:parent.getURL(), true), parent);
     }
 
@@ -367,7 +377,7 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
      * If it does, creates the appropriate {@link com.mucommander.file.AbstractArchiveFile} instance on top of the
      * provided file and returns it.
      */
-    protected static AbstractFile wrapArchive(AbstractFile file) {
+    public static AbstractFile wrapArchive(AbstractFile file) {
         // Look for an archive format filter that matches the file
         if(!file.isDirectory()) {
             int nbArchiveFormats = registeredArchiveFilters.length;

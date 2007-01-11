@@ -3,7 +3,7 @@ package com.mucommander.ui.dnd;
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileSet;
+import com.mucommander.file.util.FileSet;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -20,7 +20,7 @@ import java.util.Vector;
  *
  * <p>The actual file set data can be fetched using one of those 3 DataFlavors :
  * <ul>
- * <li>FileSetDataFlavor (as returned by {@link #getFileSetDataFlavor()}): data returned as a {@link com.mucommander.file.FileSet}.
+ * <li>FileSetDataFlavor (as returned by {@link #getFileSetDataFlavor()}): data returned as a {@link com.mucommander.file.util.FileSet}.
  * This flavor is used for local file transfers (within the application) only. In particular, this DataFlavor cannot
  * be used to transfer data to the clipboard because the data (FileSet) cannot be serialized.
  * In this case, the {@link #setFileSetDataFlavorSupported(boolean)} method should be used to disable FileSet DataFlavor.
@@ -131,7 +131,7 @@ public class TransferableFileSet implements Transferable {
 
 
     /**
-     * Returns the files contained by the specified Transferable as a {@link com.mucommander.file.FileSet},
+     * Returns the files contained by the specified Transferable as a {@link com.mucommander.file.util.FileSet},
      * or <code>null</code> if no file was present in the Transferable or if an error occurred.
      *
      * <p>3 types of dropped data flavors are supported and used in this order of priority:

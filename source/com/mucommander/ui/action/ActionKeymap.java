@@ -4,7 +4,7 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileToolkit;
+import com.mucommander.file.util.FileToolkit;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.xml.parser.ContentHandler;

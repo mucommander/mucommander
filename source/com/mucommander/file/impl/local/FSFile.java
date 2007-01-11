@@ -1,11 +1,13 @@
-package com.mucommander.file;
+package com.mucommander.file.impl.local;
 
-import com.mucommander.process.*;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
+import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.process.AbstractProcess;
+import com.mucommander.process.LocalProcess;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
@@ -476,7 +478,7 @@ public class FSFile extends AbstractFile {
      * is also a local file.
      */
     public void moveTo(AbstractFile destFile) throws FileTransferException  {
-        if(!destFile.fileURL.getProtocol().equals(FileProtocols.FILE)) {
+        if(!destFile.getURL().getProtocol().equals(FileProtocols.FILE)) {
             super.moveTo(destFile);
             return;
         }

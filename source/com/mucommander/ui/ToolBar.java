@@ -3,16 +3,19 @@ package com.mucommander.ui;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileToolkit;
 import com.mucommander.file.FileURL;
+import com.mucommander.file.util.FileToolkit;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.*;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.comp.button.PopupButton;
 import com.mucommander.ui.comp.button.NonFocusableButton;
+import com.mucommander.ui.comp.button.PopupButton;
+import com.mucommander.ui.icon.IconManager;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
 

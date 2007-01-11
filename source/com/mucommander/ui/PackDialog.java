@@ -3,9 +3,9 @@ package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileSet;
-import com.mucommander.file.FileToolkit;
 import com.mucommander.file.archiver.Archiver;
+import com.mucommander.file.util.FileSet;
+import com.mucommander.file.util.FileToolkit;
 import com.mucommander.job.ArchiveJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;

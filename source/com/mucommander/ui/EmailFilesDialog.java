@@ -1,9 +1,10 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileSet;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.job.SendMailJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;

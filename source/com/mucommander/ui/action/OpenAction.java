@@ -2,9 +2,9 @@ package com.mucommander.ui.action;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FSFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.file.impl.local.FSFile;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;

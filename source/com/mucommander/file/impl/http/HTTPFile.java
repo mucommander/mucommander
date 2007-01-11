@@ -1,7 +1,8 @@
-package com.mucommander.file;
+package com.mucommander.file.impl.http;
 
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.file.*;
 import com.mucommander.io.Base64OutputStream;
 import com.mucommander.io.RandomAccessInputStream;
 
@@ -72,7 +73,7 @@ public class HTTPFile extends AbstractFile {
         //  - URL contains no path after hostname (e.g. http://google.com)
         //  - URL points to dynamic content (e.g. http://lulu.superblog.com?param=hola&val=...), even though dynamic scripts do not always return HTML
         //  - No filename with a known mime type can be extracted from the last part of the URL (e.g. NOT http://mucommander.com/download/mucommander-0_7.tgz)
-        if(fileURL.getPath().equals("/")  || fileURL.getQuery()!=null || ((mimeType=MimeTypes.getMimeType(this))==null || mimeType.equals("text/html"))) {
+        if(fileURL.getPath().equals("/")  || fileURL.getQuery()!=null || ((mimeType= MimeTypes.getMimeType(this))==null || mimeType.equals("text/html"))) {
             isHTML = true;
             size = -1;
             date = System.currentTimeMillis();

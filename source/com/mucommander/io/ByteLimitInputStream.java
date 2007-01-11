@@ -10,7 +10,7 @@ import java.io.InputStream;
  * <p>This class is particularly useful for reading archive formats which contain concatenated files.
  *
  * @author Maxence Bernard
- * @see com.mucommander.file.ArArchiveFile
+ * @see com.mucommander.file.impl.ar.ArArchiveFile
  */
 public class ByteLimitInputStream extends InputStream {
 

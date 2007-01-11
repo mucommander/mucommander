@@ -1,4 +1,9 @@
-package com.mucommander.file;
+package com.mucommander.file.impl.zip;
+
+import com.mucommander.file.AbstractArchiveFile;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntry;
+import com.mucommander.file.impl.local.FSFile;
 
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -28,7 +33,7 @@ public class ZipArchiveFile extends AbstractArchiveFile {
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
 	
-    protected Vector getEntries() throws IOException {
+    public Vector getEntries() throws IOException {
         // Load all zip entries
         Vector entries = new Vector();
 		
@@ -58,7 +63,7 @@ public class ZipArchiveFile extends AbstractArchiveFile {
     }
 
 
-    InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         // If the underlying file is a local file, use the ZipFile.getInputStream() method as it
         // is *way* faster than using ZipInputStream and looking for the entry
         if (file instanceof FSFile) {

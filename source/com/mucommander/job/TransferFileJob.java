@@ -3,7 +3,7 @@ package com.mucommander.job;
 
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileSet;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.io.ByteCounter;
 import com.mucommander.io.CounterInputStream;
 import com.mucommander.io.FileTransferException;

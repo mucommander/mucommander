@@ -1,5 +1,7 @@
 
-package com.mucommander.file;
+package com.mucommander.file.util;
+
+import com.mucommander.file.AbstractFile;
 
 import java.util.Vector;
 

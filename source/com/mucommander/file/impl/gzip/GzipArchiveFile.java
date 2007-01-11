@@ -1,4 +1,9 @@
-package com.mucommander.file;
+package com.mucommander.file.impl.gzip;
+
+import com.mucommander.file.AbstractArchiveFile;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntry;
+import com.mucommander.file.impl.SimpleEntry;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +29,7 @@ public class GzipArchiveFile extends AbstractArchiveFile {
     // AbstractArchiveFile implementation //
     ////////////////////////////////////////
 	
-    protected Vector getEntries() throws IOException {
+    public Vector getEntries() throws IOException {
         String extension = getExtension();
         String name = getName();
 		
@@ -44,7 +49,7 @@ public class GzipArchiveFile extends AbstractArchiveFile {
     }
 
 
-    InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         return new GZIPInputStream(getInputStream());
     }
 }

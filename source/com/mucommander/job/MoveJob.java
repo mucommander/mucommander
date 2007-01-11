@@ -3,13 +3,12 @@ package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileSet;
-import com.mucommander.file.FileProtocols;
+import com.mucommander.file.util.FileSet;
+import com.mucommander.io.FileTransferException;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
-import com.mucommander.io.FileTransferException;
 
 import java.io.IOException;
 

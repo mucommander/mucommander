@@ -2,9 +2,9 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FSFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
+import com.mucommander.file.impl.local.FSFile;
 
 import java.util.Vector;
 

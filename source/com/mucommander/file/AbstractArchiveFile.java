@@ -2,6 +2,7 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.file.impl.SimpleEntry;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.IOException;
@@ -241,12 +242,12 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * one of the <code>ls()</code> is called. If will not be further called, unless the file's date has changed since
      *
      */
-    abstract Vector getEntries() throws IOException;
+    public abstract Vector getEntries() throws IOException;
 
     /**
      * Returns an InputStream to read from the given entry.
      */
-    abstract InputStream getEntryInputStream(ArchiveEntry entry) throws IOException;
+    public abstract InputStream getEntryInputStream(ArchiveEntry entry) throws IOException;
 
 
     ////////////////////////

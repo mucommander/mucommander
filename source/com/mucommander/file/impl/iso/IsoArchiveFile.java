@@ -1,5 +1,8 @@
-package com.mucommander.file;
+package com.mucommander.file.impl.iso;
 
+import com.mucommander.file.AbstractArchiveFile;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntry;
 import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.IOException;
@@ -32,7 +35,7 @@ public class IsoArchiveFile extends AbstractArchiveFile {
         }
     }
 
-    protected Vector getEntries() throws IOException {
+    public Vector getEntries() throws IOException {
         Vector entries = new Vector();
 
         try {
@@ -83,7 +86,7 @@ public class IsoArchiveFile extends AbstractArchiveFile {
     }
 
 
-    InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
+    public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         return new isoInputStream(rais, (IsoEntry) entry, cooked);
     }
 

@@ -1,15 +1,15 @@
 
 package com.mucommander.file;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 import com.mucommander.auth.Credentials;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.util.Hashtable;
 import java.util.Vector;
-import java.io.UnsupportedEncodingException;
 
 /**
  * This class parses a file URL without any knowledge of the underlying protocol. URL are expected to respect the following format :<br>
@@ -677,7 +677,7 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
 	
         return false;
     }
-	
+	            
 	
     /**
      * Test method.

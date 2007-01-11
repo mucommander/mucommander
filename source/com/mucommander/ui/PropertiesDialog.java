@@ -1,9 +1,9 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.file.FileSet;
-import com.mucommander.job.PropertiesJob;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.job.FileJob;
+import com.mucommander.job.PropertiesJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;

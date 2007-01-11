@@ -1,6 +1,8 @@
 package com.mucommander.ui;
 
-import com.mucommander.process.*;
+import com.mucommander.file.impl.local.FSFile;
+import com.mucommander.process.AbstractProcess;
+import com.mucommander.process.ProcessListener;
 import com.mucommander.shell.Shell;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
@@ -102,7 +104,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         // Adds a textual description:
         // - if we're working in a local directory, 'run in current folder'.
         // - if we're working on a non-standard FS, 'run in home folder'.
-        mainPanel.add(new JLabel(mainFrame.getActiveTable().getCurrentFolder() instanceof com.mucommander.file.FSFile ?
+        mainPanel.add(new JLabel(mainFrame.getActiveTable().getCurrentFolder() instanceof FSFile ?
                                  Translator.get("run_dialog.run_command_description")+":" : Translator.get("run_dialog.run_in_home_description")+":"));
 
         // Adds the shell input combo box.

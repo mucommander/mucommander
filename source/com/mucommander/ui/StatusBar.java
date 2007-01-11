@@ -1,9 +1,11 @@
 package com.mucommander.ui;
 
+import com.mucommander.PlatformManager;
 import com.mucommander.cache.LRUCache;
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FSFile;
+import com.mucommander.file.impl.local.FSFile;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
@@ -14,7 +16,6 @@ import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.PlatformManager;
 
 import javax.swing.*;
 import java.awt.*;

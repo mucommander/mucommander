@@ -2,7 +2,7 @@ package com.mucommander.job;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileSet;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;

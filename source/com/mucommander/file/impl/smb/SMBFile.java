@@ -1,7 +1,8 @@
-package com.mucommander.file;
+package com.mucommander.file.impl.smb;
 
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
+import com.mucommander.file.*;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import jcifs.smb.*;
@@ -352,7 +353,7 @@ if(Debug.ON) Debug.trace("caught "+e);
 
     public void copyTo(AbstractFile destFile) throws FileTransferException {
         // File can only be copied by SMB if the destination is on an SMB share (but not necessarily on the same host)
-        if(!destFile.fileURL.getProtocol().equals(FileProtocols.SMB)) {
+        if(!destFile.getURL().getProtocol().equals(FileProtocols.SMB)) {
             super.copyTo(destFile);
             return;
         }
@@ -391,7 +392,7 @@ if(Debug.ON) Debug.trace("caught "+e);
         // (but not necessarily on the same host).
         // Use the default moveTo() implementation if the destination file doesn't use the same protocol (webdav/webdavs)
         // or is not on the same host
-        if(!destFile.fileURL.getProtocol().equals(FileProtocols.SMB)) {
+        if(!destFile.getURL().getProtocol().equals(FileProtocols.SMB)) {
             super.moveTo(destFile);
             return;
         }

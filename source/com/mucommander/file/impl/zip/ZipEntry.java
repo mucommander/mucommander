@@ -1,5 +1,8 @@
 
-package com.mucommander.file;
+package com.mucommander.file.impl.zip;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntry;
 
 
 /**
@@ -7,11 +10,11 @@ package com.mucommander.file;
  *
  * @author Maxence Bernard
  */
-class ZipEntry extends ArchiveEntry {
+public class ZipEntry extends ArchiveEntry {
 	
     private java.util.zip.ZipEntry zipEntry;
 	
-    ZipEntry(java.util.zip.ZipEntry zipEntry) {
+    public ZipEntry(java.util.zip.ZipEntry zipEntry) {
         super(zipEntry);
         this.zipEntry = zipEntry;
     }
@@ -20,23 +23,23 @@ class ZipEntry extends ArchiveEntry {
     // Abstract methods implementation //
     /////////////////////////////////////
 		
-    String getPath() {
+    public String getPath() {
         return zipEntry.getName();
     }
 	
-    long getDate() {
+    public long getDate() {
         return zipEntry.getTime();
     }
 	
-    long getSize() {
+    public long getSize() {
         return zipEntry.getSize();
     }
 
-    boolean isDirectory() {
+    public boolean isDirectory() {
         return zipEntry.isDirectory();
     }
 
-    int getPermissions() {
+    public int getPermissions() {
         return AbstractFile.READ_MASK | AbstractFile.WRITE_MASK;
     }
 }

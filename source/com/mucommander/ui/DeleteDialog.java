@@ -1,7 +1,7 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.file.FileSet;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;

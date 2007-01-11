@@ -1,7 +1,7 @@
 
-package com.mucommander.file;
+package com.mucommander.file.impl.tar;
 
-import com.mucommander.Debug;
+import com.mucommander.file.ArchiveEntry;
 
 
 /**
@@ -9,11 +9,11 @@ import com.mucommander.Debug;
  *
  * @author Maxence Bernard
  */
-class TarEntry extends ArchiveEntry {
+public class TarEntry extends ArchiveEntry {
 	
     private org.apache.tools.tar.TarEntry tarEntry;
 	
-    TarEntry(org.apache.tools.tar.TarEntry tarEntry) {
+    public TarEntry(org.apache.tools.tar.TarEntry tarEntry) {
         super(tarEntry);
         this.tarEntry = tarEntry;
     }
@@ -22,23 +22,23 @@ class TarEntry extends ArchiveEntry {
     // Abstract methods implementation //
     /////////////////////////////////////
 		
-    String getPath() {
+    public String getPath() {
         return tarEntry.getName();
     }
 	
-    long getDate() {
+    public long getDate() {
         return tarEntry.getModTime().getTime();
     }
 	
-    long getSize() {
+    public long getSize() {
         return tarEntry.getSize();
     }
 
-    boolean isDirectory() {
+    public boolean isDirectory() {
         return tarEntry.isDirectory();
     }
 
-    int getPermissions() {
+    public int getPermissions() {
         return tarEntry.getMode();
     }
 }

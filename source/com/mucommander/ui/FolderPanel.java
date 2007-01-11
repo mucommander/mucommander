@@ -14,6 +14,7 @@ import com.mucommander.file.*;
 import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.HiddenFileFilter;
 import com.mucommander.file.filter.SystemFoldersFilter;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.ui.comp.dialog.QuestionDialog;

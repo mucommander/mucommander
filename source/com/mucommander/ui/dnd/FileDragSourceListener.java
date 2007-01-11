@@ -1,7 +1,7 @@
 package com.mucommander.ui.dnd;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileSet;
+import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;

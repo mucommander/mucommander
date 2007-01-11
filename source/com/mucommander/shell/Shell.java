@@ -5,10 +5,10 @@ import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FSFile;
-import com.mucommander.process.*;
+import com.mucommander.process.AbstractProcess;
+import com.mucommander.process.ProcessListener;
+import com.mucommander.process.ProcessRunner;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 

@@ -1,19 +1,22 @@
 
-package com.mucommander.file;
+package com.mucommander.file.impl;
+
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.ArchiveEntry;
 
 
 /**
  *
  * @author Maxence Bernard
  */
-class SimpleEntry extends ArchiveEntry {
+public class SimpleEntry extends ArchiveEntry {
 
     private String path;
     private long date;
     private long size;
     private boolean isDirectory;
 	
-    SimpleEntry(String path, long date, long size, boolean isDirectory) {
+    public SimpleEntry(String path, long date, long size, boolean isDirectory) {
         super(null);
         this.path = path;
         this.date = date;
@@ -25,23 +28,23 @@ class SimpleEntry extends ArchiveEntry {
     // Abstract methods implementation //
     /////////////////////////////////////
 		
-    String getPath() {
+    public String getPath() {
         return path;
     }
 	
-    long getDate() {
+    public long getDate() {
         return date;
     }
 	
-    long getSize() {
+    public long getSize() {
         return size;
     }
 
-    boolean isDirectory() {
+    public boolean isDirectory() {
         return isDirectory;
     }
 
-    int getPermissions() {
+    public int getPermissions() {
         return AbstractFile.READ_MASK;
     }
 }

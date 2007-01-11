@@ -1,9 +1,10 @@
 
-package com.mucommander.file;
+package com.mucommander.file.impl.sftp;
 
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.file.*;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
@@ -462,7 +463,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
         // Use the default moveTo() implementation if the destination file doesn't use the SFTP protocol
         // or is not on the same host
-        if(!destFile.fileURL.getProtocol().equals(FileProtocols.SFTP) || !destFile.fileURL.getHost().equals(this.fileURL.getHost())) {
+        if(!destFile.getURL().getProtocol().equals(FileProtocols.SFTP) || !destFile.getURL().getHost().equals(this.fileURL.getHost())) {
             super.moveTo(destFile);
             return;
         }
