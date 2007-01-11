@@ -2,7 +2,6 @@ package com.mucommander.process;
 
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -43,7 +42,7 @@ public abstract class AbstractProcess {
     public final void destroy() {
         // Process destruction occurs in a separate thread, as in some (rare)
         // cases, deadlocks will occur while trying to kill a native process.
-        // An example of that is executing <code>echo blah | ssh localhost ls -l</cope>
+        // An example of that is executing <code>echo blah | ssh localhost ls -l</code>
         // under MAC OS X.
         // Using a separate thread allows muCommander to continue working properly even
         // when that occurs.
