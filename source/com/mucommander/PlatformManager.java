@@ -2,6 +2,7 @@ package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.process.ProcessRunner;
 
 import java.io.File;
 import java.awt.event.MouseEvent;
@@ -325,28 +326,8 @@ public class PlatformManager {
         else
             tokens = getOpenTokens(url);
 	
-        execute(tokens, null);
-    }
-
-
-
-    /**
-     * Executes the given command tokens from the specifed current folder.
-     *
-     * @param tokens an array of command tokens to execute
-     * @param currentFolder the folder to execute the command from, can be <code>null</code>
-     */
-    private static Process execute(String tokens[], AbstractFile currentFolder) {
-        if(Debug.ON) Debug.trace("executing : "+tokensToString(tokens));
-        try {
-            Process p = Runtime.getRuntime().exec(tokens, null, currentFolder==null?null:new java.io.File(currentFolder.getAbsolutePath()));
-            if(Debug.ON) showProcessOutput(p);
-            return p;
-        }
-        catch(Exception e) {
-            if(Debug.ON) Debug.trace("Error while executing "+tokensToString(tokens)+": "+e);
-            return null;
-        }
+        try {ProcessRunner.execute(tokens);}
+        catch(Exception e) {if(Debug.ON) Debug.trace("Could not open " + url + ": " + e);}
     }
 
     /**
@@ -358,21 +339,19 @@ public class PlatformManager {
 
         AbstractFile currentFolder = file.getURL().getProtocol().equals(FileProtocols.FILE) && (currentFolder=file.getParent())!=null?currentFolder:null;
         String filePath = file.getAbsolutePath();
-        Process p = execute(getOpenTokens(filePath), currentFolder);
+        try {
+            Process p = ProcessRunner.execute(getOpenTokens(filePath), currentFolder);
 	
-        // GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
-        // so if 'gnome-open' returned an error, we try to execute the file
-        if(UNIX_DESKTOP==GNOME_DESKTOP && p!=null) {
-            try {
+            // GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
+            // so if 'gnome-open' returned an error, we try to execute the file
+            if(UNIX_DESKTOP==GNOME_DESKTOP && p!=null) {
                 int exitCode = p.waitFor();
-                if(exitCode!=0)
-                    execute(new String[]{escapeSpaceCharacters(filePath)}, currentFolder);
-            } catch(Exception e) {
-                if(Debug.ON) Debug.trace("Error while executing "+filePath+": "+e);
+                if(exitCode != 0)
+                    ProcessRunner.execute(new String[]{escapeSpaceCharacters(filePath)}, currentFolder);
             }
         }
+        catch(Exception e) {if(Debug.ON) Debug.trace("Error while executing "+filePath+": "+e);}
     }
-
 
     /**
      * Returns <code>true</code> if the current platform is capable of opening a file or folder in the desktop's
@@ -387,8 +366,8 @@ public class PlatformManager {
      * Opens the given file in the currently running OS/desktop's file manager : 
      * Explorer for Windows, Finder for Mac OS X, Nautilus for GNOME, Konqueror for KDE.
      * <ul>
-     *  <li>if the given file is a folder, the folder contents
-     *  <li>if the given file is a regular file, the enclosing folder's contents (Finder is unable to jump to the file unfortunately)
+     *  <li>if the given file is a folder, the folder contents</li>
+     *  <li>if the given file is a regular file, the enclosing folder's contents (Finder is unable to jump to the file unfortunately)</li>
      * </ul>
      */
     public static void openInDesktop(AbstractFile file) {
@@ -409,7 +388,7 @@ public class PlatformManager {
             else
                 tokens = getOpenTokens(filePath);
 				
-            execute(tokens, null);
+            ProcessRunner.execute(tokens);
         }
         catch(Exception e) {
             if(Debug.ON) Debug.trace("Error while opening "+file.getAbsolutePath()+" in desktop: "+e);
