@@ -7,7 +7,6 @@ import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.process.AbstractProcess;
-import com.mucommander.process.LocalProcess;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;

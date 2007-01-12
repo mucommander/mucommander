@@ -9,7 +9,7 @@ import java.io.*;
  * muCommander specific version of a process.
  * <p>
  * Implementations of this class are used to execute various types of processes.
- * It can be a {@link com.mucommander.process.LocalProcess}, but some types of
+ * It can be a {@link com.mucommander.file.impl.local.LocalProcess}, but some types of
  * {@link com.mucommander.file.AbstractFile abstract files}, such as SFTP files,
  * allow for commands to be executed.
  * </p>

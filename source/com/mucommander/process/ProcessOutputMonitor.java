@@ -8,12 +8,12 @@ import java.io.InputStream;
 /**
  * Used to monitor a process' stdout and stderr streams.
  * <p>
- * This class is used by {@link com.mucommander.process.MonitoredProcess} to make sure that
+ * This class is used by {@link com.mucommander.process.AbstractProcess} to make sure that
  * processes do not stall because their stdout and stderr streams are not emptied.
  * </p>
  * <p>
  * This implementation is rather hackish, and should not be used directly: it works, but is not
- * meant to support anything but the very specific needs of {@link com.mucommander.process.MonitoredProcess}.
+ * meant to support anything but the very specific needs of {@link com.mucommander.process.AbstractProcess}.
  * </p>
  * @author Nicolas Rinaudo
  */
@@ -112,9 +112,8 @@ class ProcessOutputMonitor implements Runnable {
             }
             // If this process is still being monitored, notifies an eventual
             // listener that it has exited.
-            if(monitor && (listener != null)) {
+            if(monitor && (listener != null))
                 listener.processDied(process.exitValue());
-            }
         }
     }
 
