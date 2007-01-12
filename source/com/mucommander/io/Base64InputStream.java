@@ -69,10 +69,9 @@ public class Base64InputStream extends InputStream {
      * Throws an IOException if the given String wasn't properly Base64-encoded, or if an IOException occurred while
      * reading the underlying InputStream.
      *
-     * @param s a Base64-encoded String
-     * @return the decoded String
-     * @throw IOException if the given String wasn't properly Base64-encoded, or if an IOException occurred
-     * while accessing the underlying InputStream.
+     * @param  s           a Base64-encoded String
+     * @return             the decoded String
+     * @throws IOException if the given String wasn't properly Base64-encoded, or if an IOException occurred while accessing the underlying InputStream.
      */
     public static String decode(String s) throws IOException {
         Base64InputStream in64 = new Base64InputStream(new ByteArrayInputStream(s.getBytes()));

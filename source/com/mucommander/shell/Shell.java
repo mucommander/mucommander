@@ -44,7 +44,7 @@ public class Shell {
     /**
      * Executes the specified command in the specified folder.
      * <p>
-     * The command will be executed within a shell as returned by {@link com.mucommander.PlatformManager#getShellCommand()}.
+     * The command will be executed within a shell as returned by {@link #getShellCommand()}.
      * </p>
      * <p>
      * The <code>currentFolder</code> folder parameter will only be used if it's neither a
@@ -61,7 +61,7 @@ public class Shell {
     /**
      * Executes the specified command in the specified folder.
      * <p>
-     * The command will be executed within a shell as returned by {@link com.mucommander.PlatformManager#getShellCommand()}.
+     * The command will be executed within a shell as returned by {@link #getShellCommand()}.
      * </p>
      * <p>
      * The <code>currentFolder</code> folder parameter will only be used if it's neither a

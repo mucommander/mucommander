@@ -420,7 +420,7 @@ public abstract class FileJob implements Runnable {
      * <p>The call happens after the last call to {@link #processFile(AbstractFile,Object)} is made.
      * This method implementation does nothing but it can be overriden by subclasses to properly complete the job.</p>
 	 
-     * <p>Note that this method will NOT be called if a call to {@link # interrupt ()} was made before all files were processed.</p>
+     * <p>Note that this method will NOT be called if a call to {@link #interrupt()} was made before all files were processed.</p>
      */
     protected void jobCompleted() {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");

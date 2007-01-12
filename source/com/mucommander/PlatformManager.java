@@ -242,7 +242,7 @@ public class PlatformManager {
 
     /**
      * Convenience method which returns true if the current OS is Windows-based,
-     * that is if the OS family is either {@link WINDOWS_9X} or {@link WINDOWS_NT}.
+     * that is if the OS family is either {@link #WINDOWS_9X} or {@link #WINDOWS_NT}.
      */
     public static boolean isWindowsFamily() {
         return OS_FAMILY==WINDOWS_9X || OS_FAMILY==WINDOWS_NT;

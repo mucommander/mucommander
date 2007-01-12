@@ -19,7 +19,7 @@ import java.io.*;
  * </p>
  * <p>
  * Note that abstract processes should not be created directly. They should be
- * instanciated through {@link com.mucommander.process.ProcessRuner#execute(String[],AbstractFile,ProcessListener}.
+ * instanciated through {@link com.mucommander.process.ProcessRunner#execute(String[],AbstractFile,ProcessListener)}.
  * </p>
  * @author Nicolas Rinaudo
  */

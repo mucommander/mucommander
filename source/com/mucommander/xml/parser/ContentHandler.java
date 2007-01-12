@@ -17,7 +17,7 @@ import java.util.Hashtable;
  * <p>Depending on the contents received by the parser, the application may wish to throw an exception.
  * The parser will then immediately stop parsing the document, call the endDocument method and throw 
  * the exception back to the caller of the 
- * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream, ContentHandler) Parser.parse} method.
+ * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream,ContentHandler,String) Parser.parse} method.
  * The application may also wish to filter the exceptions thrown by the ContentHandler from those
  * thrown directly by the parser. This can be done by creating a custom Exception class and throwing
  * it in the ContentHandler.
@@ -35,7 +35,7 @@ public interface ContentHandler  {
 	 * @throws Exception any exception. If an exception is thrown the parser will stop parsing
 	 * the current document, call the {@link #endDocument() endDocument} method and throw this
 	 * exception back to the caller of the
-	 * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream, ContentHandler) Parser.parse} method.
+	 * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream,ContentHandler,String) Parser.parse} method.
 	 */
 	public void startDocument() throws Exception;
 
@@ -48,7 +48,7 @@ public interface ContentHandler  {
 	 *
 	 * @throws Exception any exception. If an exception is thrown the parser will throw this
 	 * exception back to the caller of the
-	 * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream, ContentHandler) Parser.parse} method.
+	 * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream,ContentHandler,String) Parser.parse} method.
 	 */
 	public void endDocument() throws Exception;
 
@@ -83,7 +83,7 @@ public interface ContentHandler  {
 	 * @throws Exception any exception. If an exception is thrown the parser will stop parsing
 	 * the current document, call the {@link #endDocument() endDocument} method and throw this
 	 * exception back to the caller of the
-	 * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream, ContentHandler) Parser.parse} method.
+	 * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream,ContentHandler,String) Parser.parse} method.
 	 */
 	public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception;
 
@@ -104,7 +104,7 @@ public interface ContentHandler  {
 	 * @throws Exception any exception. If an exception is thrown the parser will stop parsing
 	 * the current document, call the {@link #endDocument() endDocument} method and throw this
 	 * exception back to the caller of the
-	 * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream, ContentHandler) Parser.parse} method.
+	 * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream,ContentHandler,String) Parser.parse} method.
 	 */
 	public void endElement(String uri, String name) throws Exception;
 	
@@ -122,7 +122,7 @@ public interface ContentHandler  {
 	 * @throws Exception any exception. If an exception is thrown the parser will stop parsing
 	 * the current document, call the {@link #endDocument() endDocument} method and throw this
 	 * exception back to the caller of the
-	 * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream, ContentHandler) Parser.parse} method.
+	 * {@link com.mucommander.xml.parser.Parser#parse(java.io.InputStream,ContentHandler,String) Parser.parse} method.
 	 */
 	public void characters(String s) throws Exception;
 }

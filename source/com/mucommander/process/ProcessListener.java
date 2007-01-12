@@ -3,7 +3,7 @@ package com.mucommander.process;
 
 /**
  * Implementations of this interface can listen to a process' state and streams.
- * @see com.mucommander.ProcessMonitor
+ * @see com.mucommander.process.AbstractProcess
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public interface ProcessListener {

@@ -60,7 +60,7 @@ public class URLFactory {
 
 
     /**
-     * Creates and returns a FileURL using the given url and parent. If the {@param throwException} parameter is set
+     * Creates and returns a FileURL using the given url and parent. If the <code>throwException</code> parameter is set
      * to true, a MalformedURLException is thrown if the given URL or path is malformed. If not, null is simply returned.
      *
      * <p>A lookup is first made to the LRU cache to look for an existing FileURL intance,

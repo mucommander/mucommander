@@ -18,7 +18,8 @@ import java.io.OutputStream;
  * <p>AbstractFile instances cannot and should not be created directly, use {@link FileFactory FileFactory}
  * for that purposes.
  *
- * @see FileFactory, ProxyFile
+ * @see com.mucommander.file.FileFactory
+ * @see com.mucommander.file.ProxyFile
  * @author Maxence Bernard
  */
 public abstract class AbstractFile {
@@ -585,7 +586,7 @@ public abstract class AbstractFile {
      * a network request to retrieve each of these values. In that case, and if the fileystem allows to retrieve all
      * permissions with a single request, this method should be overridden.
      *
-     * @return
+     * @return read/write/execute permissions as an int, UNIX octal style.
      */
     public int getPermissions() {
         int perms = 0;

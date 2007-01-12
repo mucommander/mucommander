@@ -14,7 +14,7 @@ import java.io.InputStream;
  * This class' role is to choose which of the original or backup file should be read in order to ensure
  * that the data is not corrupt.
  * </p>
- * @see com.mucommander.io.BackupOutputStream.
+ * @see com.mucommander.io.BackupOutputStream
  * @author Nicolas Rinaudo
  */
 public class BackupInputStream extends FilterInputStream implements BackupConstants {

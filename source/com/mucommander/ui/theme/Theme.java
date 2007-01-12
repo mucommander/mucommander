@@ -11,8 +11,8 @@ import java.io.*;
  * Describes a set of custom colors and fonts that can be applied to muCommander.
  * <p>
  * There are two different types of themes in muCommander: predefined ones and
- * current one. A theme's type can be checked through the {@link #isCurrentTheme()} method.<break/>
- * Predefined themes cannot be modified, and will throw an <code>IllegalStateException</code>
+ * current one. A theme's type can be checked through the {@link #getType()} method.<break/>
+ * Predefined themes cannot be modified, and will throw an <code>java.lang.IllegalStateException</code>
  * if it is attempted.<br/>
  * </p>
  * <p>
