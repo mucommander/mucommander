@@ -63,7 +63,7 @@ Credits
 Countless thanks to the many people who participated in this project and made it what it is today:
 
 Code contributors:
-- Nicolas Rinaudo  (shell improvements, configuration parser, XML writer, Ant build file and much more)
+- Nicolas Rinaudo  (themes, shell, configuration parser, Ant build file, testing, inspiration and much more)
 - Xavier Martin (ISO and NRG files support)
 
 Translators: 
