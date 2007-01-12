@@ -252,7 +252,6 @@
       <fileset dir="${lib}">
         <include name="**/*.jar"/>
         <!-- Exclude Apple API stubs, used only at compile time -->
-        <exclude name="osx-mrj-stubs.jar"/>
         <exclude name="osx-eawt-stubs.jar"/>
     </fileset>
     </unjar>
@@ -347,6 +346,7 @@
       <outjar name="${jar.obf}"/>
       <libraryjar name="${java-lib}"/>
       <libraryjar name="${ant-lib}"/>
+      <libraryjar name="${lib}/osx-eawt-stubs.jar"/>
       <!-- Mac OS X specifics -->
       <keep name="com.mucommander.ui.macosx.EAWTHandler">
         <method access="public"/>
