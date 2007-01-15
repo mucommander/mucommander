@@ -2,22 +2,38 @@ package com.mucommander.shell;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.process.ProcessRunner;
+import com.mucommander.command.CommandParser;
 
 import java.io.IOException;
-import java.util.Vector;
 
 /**
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class Shell {
+public class Shell implements ConfigurationListener {
+    // - Class variables -----------------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Tokens that compose the shell command. */
+    private static String[]              tokens;
+    /** Instance of configuration listener. */
+    private static ConfigurationListener confListener;
+
+
+
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
+    /**
+     * Initialises the shell.
+     */
+    static {
+        ConfigurationManager.addConfigurationListener(confListener = new Shell());
+        setShellCommand();
+    }
+
     /**
      * Prevents instances of Shell from being created.
      */
@@ -28,24 +44,7 @@ public class Shell {
     // - Shell interaction ---------------------------------------------------
     // -----------------------------------------------------------------------
     /**
-     * Returns the shell command muCommander uses.
-     * <p>
-     * This can be either the system's {@link com.mucommander.PlatformManager#getDefaultShellCommand() default} or what the
-     * user defined in his preferences.
-     * </p>
-     * @return the shell command muCommander uses.
-     */
-    private static String getShellCommand() {
-        if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_SHELL, ConfigurationVariables.DEFAULT_USE_CUSTOM_SHELL))
-            return ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_SHELL, PlatformManager.getDefaultShellCommand());
-        return PlatformManager.getDefaultShellCommand();
-    }
-
-    /**
      * Executes the specified command in the specified folder.
-     * <p>
-     * The command will be executed within a shell as returned by {@link #getShellCommand()}.
-     * </p>
      * <p>
      * The <code>currentFolder</code> folder parameter will only be used if it's neither a
      * remote directory nor an archive. Otherwise, the command will run from the user's
@@ -61,9 +60,6 @@ public class Shell {
     /**
      * Executes the specified command in the specified folder.
      * <p>
-     * The command will be executed within a shell as returned by {@link #getShellCommand()}.
-     * </p>
-     * <p>
      * The <code>currentFolder</code> folder parameter will only be used if it's neither a
      * remote directory nor an archive. Otherwise, the command will run from the user's
      * home directory.
@@ -77,21 +73,16 @@ public class Shell {
      * @return                  the resulting process.
      * @exception IOException   thrown if any error occurs while trying to run the command.
      */
-    public static AbstractProcess execute(String command, AbstractFile currentFolder, ProcessListener listener) throws IOException {
-        Vector   commandTokens;
-        String[] tokens;
-
+    public static synchronized AbstractProcess execute(String command, AbstractFile currentFolder, ProcessListener listener) throws IOException {
         if(Debug.ON) Debug.trace("Executing " + command);
 
-        // Stores the command as a vector.
-        commandTokens = splitCommand(getShellCommand());
-        commandTokens.add(command);
-        tokens = new String[commandTokens.size()];
-        commandTokens.toArray(tokens);
-        
+        // Builds the shell command.
+        tokens[tokens.length - 1] = command;
+
         // Adds the command to history.
         ShellHistoryManager.add(command);
 
+        // Starts the process.
         if(listener == null)
             return ProcessRunner.execute(tokens, currentFolder);
         return ProcessRunner.execute(tokens, currentFolder, listener);
@@ -99,81 +90,30 @@ public class Shell {
 
 
 
-    // - Misc. ---------------------------------------------------------------
+    // - Configuration management --------------------------------------------
     // -----------------------------------------------------------------------
     /**
-     * Splits the specified command into a vector of tokens.
-     * <p>
-     * This method tries to be about its parsing, meaning that it will
-     * escape what it thinks should be escaped.<br/>
-     * Any <code>\</code> character will be understood to mean that the following
-     * character will not be parsed, but added to the current token as is.<br/>
-     * Any <code>"</code> character will be understood to mean that all following
-     * characters until the next <code>"</code> should be added to the current token.<br/>
-     * Any un-escaped whitespace character will mark the end of the current token.
-     * </p>
-     * <p>
-     * Note that while this should be sufficient for most cases, this parsing has limitations.
-     * Since <code>"</code> has priority over <code>\</code>, it's impossible to encapsulate
-     * a <code>"</code> character within an escaped block.
-     * </p>
-     * @param  command the command to split.
-     * @return         the tokens that compose the specified command.
+     * Extracts the shell command from configuration.
      */
-    private static Vector splitCommand(String command) {
-        int          length;
-        char         c;
-        StringBuffer token;
-        Vector       tokens;
-        String       value;
+    private static synchronized void setShellCommand() {
+        String command; // Shell command.
 
+        // Retrieves the configuration defined shell command.
+        if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_SHELL, ConfigurationVariables.DEFAULT_USE_CUSTOM_SHELL))
+            command = ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_SHELL, PlatformManager.getDefaultShellCommand());
+        else
+            command = PlatformManager.getDefaultShellCommand();
 
-        length = command.length();
-        token  = new StringBuffer();
-        tokens = new Vector();
+        // Splits the command into tokens, leaving room for the argument.
+        tokens = CommandParser.getTokensWithParams(command, 1);
+    }
 
-        for(int i = 0; i < length; i++) {
-            c = command.charAt(i);
-            // Escape the next character.
-            if(c == '\\') {
-                // Ignores trailing \ characters.
-                if(++i >= length)
-                    break;
-                token.append(command.charAt(i));
-            }
-
-            // Ignores escaping until matching " is found.
-            else if(c == '\"') {
-                while(++i < length) {
-                    c = command.charAt(i);
-                    if(c == '"') {
-                        i++;
-                        break;
-                    }
-                    else
-                        token.append(c);
-                }
-                if(i >= length)
-                    break;
-            }
-
-            // End of token.
-            else if(Character.isWhitespace(c)) {
-                value = token.toString().trim();
-                if(value.length() != 0)
-                    tokens.add(token.toString().trim());
-                token.setLength(0);
-            }
-
-            // Regular character.
-            else
-                token.append(c);
-        }
-        // Makes sure that trailing tokens are not ignored.
-        value = token.toString().trim();
-        if(value.length() != 0)
-            tokens.add(value);
-
-        return tokens;
+    /**
+     * Reacts to configuration changes.
+     */
+    public boolean configurationChanged(ConfigurationEvent event) {
+        if(event.getVariable().startsWith(ConfigurationVariables.SHELL_SECTION))
+            setShellCommand();
+        return true;
     }
 }
