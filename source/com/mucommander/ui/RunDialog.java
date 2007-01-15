@@ -104,7 +104,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         // Adds a textual description:
         // - if we're working in a local directory, 'run in current folder'.
         // - if we're working on a non-standard FS, 'run in home folder'.
-        mainPanel.add(new JLabel(mainFrame.getActiveTable().getCurrentFolder() instanceof FSFile ?
+        mainPanel.add(new JLabel(mainFrame.getActiveTable().getCurrentFolder().canRunProcess() ?
                                  Translator.get("run_dialog.run_command_description")+":" : Translator.get("run_dialog.run_in_home_description")+":"));
 
         // Adds the shell input combo box.
