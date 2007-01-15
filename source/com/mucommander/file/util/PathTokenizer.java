@@ -12,7 +12,7 @@ import java.util.Vector;
  * This class allows to break a path into filename tokens. The default separator characters are '/' and '\', but any
  * other separator characters can be specified. The {@link #hasMoreFilenames} and {@link #nextFilename()} methods
  * can be used to iterate through all filename tokens. The {@link #getLastSeparator()} returns the last separator
- * string that appeared before the last filename token returned by {@link # nextFilename ()}. Initially, this method
+ * string that appeared before the last filename token returned by {@link #nextFilename()}. Initially, this method
  * returns any leading separators the path may contain.
  * The {@link #getCurrentPath()} returns the current part of the path that has been tokenized.
  *
@@ -184,7 +184,7 @@ public class PathTokenizer implements Enumeration {
      * character after the filename (path ends without a trailing separator).<br>
      * Note: the returned string can be made of several consecutive separator characters.
      *
-     * <p>Initially, before any calls to {@link # nextFilename()} have been made, this method will return any leading
+     * <p>Initially, before any calls to {@link #nextFilename()} have been made, this method will return any leading
      * separator string in the path string, or an empty string if the path doesn't start with a separator.
      */
     public String getLastSeparator() {
