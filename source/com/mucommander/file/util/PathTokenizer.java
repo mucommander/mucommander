@@ -21,8 +21,8 @@ import java.util.Vector;
  * <code>
  * PathTokenizer pt = new PathTokenizer(path);
  * String reconstructedPath = pt.getLastSeparator();
- * while(pt.hasMoreTokens()) {
- *   String nextToken = pt.nextToken();
+ * while(pt.hasMoreFilenames()) {
+ *   String nextToken = pt.nextFilename();
  *   String lastSeparator = pt.getLastSeparator();
  *   reconstructedPath += nextToken+lastSeparator;
  * }
@@ -33,7 +33,7 @@ import java.util.Vector;
  * <ul>
  * <li>A path can contain mixed separators, e.g. C:\temp/file
  * <li>Filename tokens can be separated by multiple separator characters, e.g. /usr//local, {@link #getLastSeparator()}
- * will return the complete separator string, in this case "//" for the 'usr' file token.
+ * will return the complete separator string, in this case "//" for the 'usr' filename token.
  * </ul>
  *
  * @author Maxence Bernard
