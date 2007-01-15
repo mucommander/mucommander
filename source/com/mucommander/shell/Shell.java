@@ -18,9 +18,9 @@ public class Shell implements ConfigurationListener {
     // - Class variables -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Tokens that compose the shell command. */
-    private static String[]              tokens;
+    private static String[] tokens;
     /** Instance of configuration listener. */
-    private static ConfigurationListener confListener;
+    private static Shell    confListener;
 
 
 
@@ -31,7 +31,14 @@ public class Shell implements ConfigurationListener {
      */
     static {
         ConfigurationManager.addConfigurationListener(confListener = new Shell());
-        setShellCommand();
+
+        // This could in theory also be written without the confListener reference.
+        // It turns out, however, that proGuard is a bit too keen when removing fields
+        // he thinks are not used. This code is written that way to make sure
+        // confListener is not taken out, and the ConfigurationListener instance removed
+        // instantly as there is only a WeakReference on it.
+        // The things we have to do...
+        confListener.setShellCommand();
     }
 
     /**
