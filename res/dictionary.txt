@@ -72,11 +72,6 @@ done:RO:Închide
 user_theme:EN:Custom theme
 user_theme:FR:Thème personnalisé
 
-
-
-
-
-
 yes:EN:Yes
 yes:FR:Oui
 yes:DE:Ja
@@ -5739,7 +5734,6 @@ setup.look_and_feel:FR:Selectionnez votre Look & Feel
 
 setup.theme:EN:Select your theme
 setup.theme:FR:Selectionnez votre thème
-
 
 
 

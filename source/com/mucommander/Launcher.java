@@ -37,6 +37,9 @@ public class Launcher {
         System.out.println("Usage: mucommander [options] [folders]");
         System.out.println("Options:");
 
+        // Allows users to tweak how file associations are loaded / saved.
+        System.out.println(" -a FILE, --assoc FILE             Load associations from FILE.");
+
         // Allows users to tweak how bookmarks are loaded / saved.
         System.out.println(" -b FILE, --bookmarks FILE         Load bookmarks from FILE.");
 
@@ -116,6 +119,13 @@ public class Launcher {
             // Print help.
             else if(args[i].equals("-h") || args[i].equals("--help"))
                 printUsage();
+
+            // Associations handling.
+            else if(args[i].equals("-a") || args[i].equals("--assoc")) {
+                if(i >= args.length - 1)
+                    printError("Missing FILE parameter to " + args[i]);
+                com.mucommander.command.CommandManager.setAssociationFile(args[++i]);
+            }
 
             // Bookmarks handling.
             else if(args[i].equals("-b") || args[i].equals("--bookmarks")) {
@@ -215,6 +225,10 @@ public class Launcher {
         // Loads dictionary
         splashScreen.setLoadingMessage("Loading dictionary...");
         com.mucommander.text.Translator.loadDictionaryFile();
+
+        // Loads the file associations
+        splashScreen.setLoadingMessage("Loading file associations...");
+        com.mucommander.command.CommandManager.loadAssociations();
 
         // Loads bookmarks
         splashScreen.setLoadingMessage("Loading bookmarks...");

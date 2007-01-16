@@ -10,7 +10,7 @@ import java.util.Vector;
 
 /**
  * This class allows to break a path into filename tokens. The default separator characters are '/' and '\', but any
- * other separator characters can be specified. The {@link #hasMoreFilenames} and {@link #nextFilename()} methods
+ * other separator characters can be specified. The {@link #hasMoreFilenames()} and {@link #nextFilename()} methods
  * can be used to iterate through all filename tokens. The {@link #getLastSeparator()} returns the last separator
  * string that appeared before the last filename token returned by {@link #nextFilename()}. Initially, this method
  * returns any leading separators the path may contain.

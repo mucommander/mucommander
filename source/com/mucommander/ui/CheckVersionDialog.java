@@ -3,6 +3,7 @@ package com.mucommander.ui;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
+import com.mucommander.file.FileFactory;
 import com.mucommander.VersionChecker;
 import com.mucommander.conf.*;
 import com.mucommander.text.Translator;
@@ -130,7 +131,8 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
 		
         // Show dialog and get user action
         if(getActionValue()==DOWNLOAD_ACTION)
-            PlatformManager.openURLInBrowser(downloadURL); // Open URL in a new browser windoow
+            //            PlatformManager.openURLInBrowser(downloadURL); // Open URL in a new browser windoow
+            PlatformManager.open(FileFactory.getFile(downloadURL));
 		
         // Remember user preference
         ConfigurationManager.setVariableBoolean(ConfigurationVariables.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());

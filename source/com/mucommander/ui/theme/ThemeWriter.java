@@ -199,7 +199,6 @@ class ThemeWriter implements XmlConstants {
         out.endElement(ELEMENT_SELECTION);
         out.endElement(ELEMENT_EDITOR);
 
-
         out.endElement(ELEMENT_ROOT);
     }
 

@@ -88,6 +88,8 @@ class ProcessOutputMonitor implements Runnable {
             }
         }
 
+        if(Debug.ON) Debug.trace("Process output stream emptied, closing");
+
         // Closes the stream.
         try {
 	    if(in != null)

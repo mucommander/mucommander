@@ -30,7 +30,7 @@ public class TempExecJob extends CopyJob {
         // Make the temporary
         new File(tempFile.getAbsolutePath()).setReadOnly();
 
-        // Tries to execute file with native file associations
+        // Tries to open the file.
         PlatformManager.open(tempFile);
     }
 }

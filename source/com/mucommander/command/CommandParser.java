@@ -1,43 +1,45 @@
 package com.mucommander.command;
 
+import com.mucommander.file.AbstractFile;
+
+import java.io.File;
+
 /**
- * Used to parse system commands.
+ * Class used to split commands into tokens.
  * <p>
- * muCommander needs to execute system commands in many different cases - shell,
- * file opening, default browser starting...<br/>
- * Such commands need to be split into tokens before being executed.
- * <code>CommandParser</code> offers a uniformised way of doing that.
+ * The basic command syntax is fairly simple:
+ * <ul>
+ *  <li>Any non-escaped <code>\</code> character will escape the following character and be removed from the tokens.</li>
+ *  <li>Any non-escaped <code>"</code> character will escape all characters until the next occurence of <code>"</code>, except for <code>\</code>.</li>
+ *  <li>Non-escaped space characters are used as token separators.</li>
+ * </ul>
+ * It is important to remember that <code>"</code> characters are <b>not</b> removed from the resulting tokens.
+ * </p>
+ * <p>
+ * It's also possible to include keywords in a command:
+ * <ul>
+ *  <li><code>$f</code> is replaced by a file's full path.</li>
+ *  <li><code>$n</code> is replaced by a file's name.</li>
+ *  <li><code>$p</code> is replaced by a file's parent's path.</li>
+ *  <li><code>$j</code> is replaced by the path of the folder in which the JVM was started.</li>
+ * </ul>
+ * Note that keywords are only meaningful for the {@link com.mucommander.command.Command#getTokens(com.mucommander.file.AbstractFile)} method.
  * </p>
  * @author Nicolas Rinaudo
  */
 public class CommandParser {
-    // - Token types -----------------------------------------------------------
-    // -------------------------------------------------------------------------
-    /** Nothing special about the token. */
-    static final int TYPE_NORMAL      = 0;
-    /** The token contains a reference to {@link #TOKEN_PATH}. */
-    static final int TYPE_PATH        = 1;
-    /** The token contains a reference to {@link #TOKEN_NAME}. */
-    static final int TYPE_NAME        = 2;
-    /** The token contains a reference to {@link #TOKEN_PARENT}. */
-    static final int TYPE_PARENT      = 4;
-    /** The token contains a reference to {@link #TOKEN_VM_PATH}. */
-    static final int TYPE_VM_PATH     = 8;
-
-
-
-    // - Special tokens --------------------------------------------------------
+    // - Keywords --------------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Header of replacement keywords. */
-    static final char KEYWORD_HEADER  = '$';
+    private static final char KEYWORD_HEADER  = '$';
     /** Instances of this keyword will be replaced by the file's full path. */
-    static final char KEYWORD_PATH    = 'f';
+    private static final char KEYWORD_PATH    = 'f';
     /** Instances of this keyword will be replaced by the file's name. */
-    static final char KEYWORD_NAME    = 'n';
+    private static final char KEYWORD_NAME    = 'n';
     /** Instances of this keyword will be replaced by the file's parent directory. */
-    static final char KEYWORD_PARENT  = 'p';
+    private static final char KEYWORD_PARENT  = 'p';
     /** Instances of this keyword will be replaced by the JVM's current directory. */
-    static final char KEYWORD_VM_PATH = 'j';
+    private static final char KEYWORD_VM_PATH = 'j';
 
 
 
@@ -54,6 +56,13 @@ public class CommandParser {
     // -------------------------------------------------------------------------
     /**
      * Returns the tokens that compose the specified command.
+     * <p>
+     * Note that this method doesn't do any keyword replacement. For that to happen,
+     * you need to use the following code:
+     * <pre>
+     * String[] tokens = CommandParser.getCommand("my_command", command).getTokens(file);
+     * </pre>
+     * </p>
      * @param  command command to tokenize.
      * @return         the tokens that compose the command.
      */
@@ -78,6 +87,13 @@ public class CommandParser {
      * method will allocate <code>paramLength</code> free slot at the end of the token
      * array to accomodate for such cases.
      * </p>
+     * <p>
+     * Note that this method doesn't do any keyword replacement. For that to happen,
+     * you need to use the following code:
+     * <pre>
+     * String[] tokens = CommandParser.getCommand("my_command", command).getTokens(file);
+     * </pre>
+     * </p>
      * @param  command     command to tokenize.
      * @param  paramLength number of free slot that should be made available in the token array.
      * @return             the tokens that compose the command.
@@ -101,15 +117,15 @@ public class CommandParser {
      * @param  command what to execute when the Command is being called.
      * @return an instance of Command.
      */
-    static Command getCommand(String alias, String command) {
-        String[] tokenBuffer; // Buffer for the tokens that compose command.
-        int[]    typeBuffer;  // Buffer for the type of tokens that compose command.
-        String[] tokens;      // Actual tokens.
-        int[]    tokenTypes;  // Actual types.
+    public static Command getCommand(String alias, String command) {
+        String[]  tokenBuffer; // Buffer for the tokens that compose command.
+        boolean[] typeBuffer;  // Buffer for the type of tokens that compose command.
+        String[]  tokens;      // Actual tokens.
+        boolean[] tokenTypes;  // Actual types.
 
         // Parses the command and grabs the proper buffer sizes.
-        tokens      = new String[parse(command, tokenBuffer = new String[command.length()], typeBuffer = new int[command.length()])];
-        tokenTypes  = new int[tokens.length];
+        tokens      = new String[parse(command, tokenBuffer = new String[command.length()], typeBuffer = new boolean[command.length()])];
+        tokenTypes  = new boolean[tokens.length];
 
         // Stores the tokens and token types.
         for(int i = 0; i < tokens.length; i++) {
@@ -118,7 +134,7 @@ public class CommandParser {
         }
 
         // Creates and returns a new command.
-        return new Command(alias, tokens, tokenTypes);
+        return new Command(alias, command, tokens, tokenTypes);
     }
 
 
@@ -151,7 +167,7 @@ public class CommandParser {
      * @param  tokenTypes optional array in which to store information about potential keywords.
      * @return            the number of tokens that were found.
      */
-    private static final int parse(String command, String[] tokens, int[] tokenTypes) {
+    private static final int parse(String command, String[] tokens, boolean[] tokenTypes) {
         char[]       buffer;        // All the characters that compose command.
         int          tokenIndex;    // Index of the current token in tokens[];
         StringBuffer currentToken;  // Buffer for the current token.
@@ -167,11 +183,14 @@ public class CommandParser {
         // Parses the command.
         for(int i = 0; i < command.length(); i++) {
             // Quote escaping: toggle isInQuotes.
-            if(buffer[i] == '\"')
+            if(buffer[i] == '\"') {
+                currentToken.append(buffer[i]);
                 isInQuotes = !isInQuotes;
+            }
 
             // Backslash escaping: the next character is not analyzed.
             else if(buffer[i] == '\\') {
+                currentToken.append(buffer[i]);
                 if(i + 1 != command.length())
                     currentToken.append(buffer[++i]);
             }
@@ -192,33 +211,22 @@ public class CommandParser {
 
             // Keyword, gather token type information if necessary.
             else if(buffer[i] == KEYWORD_HEADER) {
-                // String ends too soon. Let's pretend nothing happened.
-                // We *could* raise an exception here, but it would make using this class very awkward.
-                if(++i == command.length())
-                    break;
-
-                // We only analyse keywords if tokenTypes is not null - ie if keywords actually matter.
-                if(tokenTypes != null) {
-                    // Full path replacement.
-                    if(buffer[i] == KEYWORD_PATH)
-                        tokenTypes[tokenIndex] |= TYPE_PATH;
-
-                    // File name replacement.
-                    else if(buffer[i] == KEYWORD_NAME)
-                        tokenTypes[tokenIndex] |= TYPE_NAME;
-
-                    // Parent path replacement.
-                    else if(buffer[i] == KEYWORD_PARENT)
-                        tokenTypes[tokenIndex] |= TYPE_PARENT;
-
-                    // VM path replacement.
-                    else if(buffer[i] == KEYWORD_VM_PATH)
-                        tokenTypes[tokenIndex] |= TYPE_VM_PATH;
-                }
-
-                // Appends the keyword to the current token.
                 currentToken.append(KEYWORD_HEADER);
-                currentToken.append(buffer[i]);
+
+                // Makes sure $ is not the last character in the command.
+                // If it is, politely pretends nothing wrong happened and treat it
+                // as a normal character.
+                if(++i != command.length()) {
+
+                    // If we're interested in identifying keywords, check whether we're
+                    // actually dealing with one and mark it if necessary.
+                    if(tokenTypes != null)
+                        if(buffer[i] == KEYWORD_PATH || buffer[i] == KEYWORD_NAME ||
+                           buffer[i] == KEYWORD_PARENT || buffer[i] == KEYWORD_VM_PATH)
+                            tokenTypes[tokenIndex] = true;
+
+                    currentToken.append(buffer[i]);
+                }
             }
 
             // Nothing special about this character.
@@ -233,5 +241,61 @@ public class CommandParser {
         }
 
         return tokenIndex;
+    }
+
+    /**
+     * Replaces keywords in the specified token, using the specified file when it needs to compute a value.
+     * <p>
+     * Parsing here is quite lenient: when a syntax error is found, it is politely ignored and a best effort
+     * is made to analyze the rest of the token.
+     * </p>
+     * @param  token  token in which to replace keywords.
+     * @param  target where to take keyword replacement values from.
+     * @return        a string in which all instances of keywords have been replaced by values from <code>target</code>.
+     */
+    static String replaceKeywords(String token, AbstractFile target) {
+        StringBuffer buffer; // Buffer for the final token.
+        char[]       chars;  // Token as a char array.
+
+        buffer = new StringBuffer();
+        chars  = token.toCharArray();
+
+        // Goes through every character in the token.
+        for(int i = 0; i < chars.length; i++) {
+
+            // We've found a keyword header.
+            if(chars[i] == CommandParser.KEYWORD_HEADER) {
+                // Makes sure this is not the last character in the string,
+                // then replace the keyword if necessary.
+                if(i + 1 < chars.length) {
+                    if(chars[i + 1] == CommandParser.KEYWORD_PATH) {
+                        buffer.append(target.getAbsolutePath());
+                        i++;
+                    }
+                    else if(chars[i + 1] == CommandParser.KEYWORD_NAME) {
+                        buffer.append(target.getName());
+                        i++;
+                    }
+                    else if(chars[i + 1] == CommandParser.KEYWORD_PARENT) {
+                        buffer.append(target.getParent());
+                        i++;
+                    }
+                    else if(chars[i + 1] == CommandParser.KEYWORD_VM_PATH) {
+                        buffer.append(new File(System.getProperty("user.dir")).getAbsolutePath());
+                        i++;
+                    }
+                    // Not a legal keyword, append $ to the token.
+                    else
+                        buffer.append(chars[i]);
+                }
+                // Not a keyword (this is the last character in the token).
+                else
+                    buffer.append(chars[i]);
+            }
+            else
+                buffer.append(chars[i]);
+        }
+
+        return buffer.toString();
     }
 }

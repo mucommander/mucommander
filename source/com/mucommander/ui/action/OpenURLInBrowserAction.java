@@ -1,5 +1,6 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.file.FileFactory;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.PlatformManager;
 import com.mucommander.text.Translator;
@@ -22,6 +23,6 @@ public class OpenURLInBrowserAction extends MucoAction {
 
     public void performAction() {
         if(PlatformManager.canOpenURLInBrowser())
-            PlatformManager.openURLInBrowser(url);
+            PlatformManager.open(FileFactory.getFile(url));
     }
 }

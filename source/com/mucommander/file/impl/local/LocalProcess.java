@@ -46,6 +46,12 @@ class LocalProcess extends AbstractProcess {
         // Java 1.4 or below, use Runtime.exec() which separates stdout and stderr (harder to manipulate)
         else
             process = Runtime.getRuntime().exec(tokens, null, dir);
+
+        // Safeguard: makes sure that an exception is raised if the process could not be created.
+        // This might not be strictly necessary, but the Runtime.exec documentation is not very precise
+        // on what happens in case of an error.
+        if(process == null)
+            throw new IOException();
     }
 
 

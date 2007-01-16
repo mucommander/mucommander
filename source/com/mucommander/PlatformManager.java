@@ -3,6 +3,7 @@ package com.mucommander;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.process.*;
+import com.mucommander.command.*;
 
 import java.io.File;
 import java.awt.event.MouseEvent;
@@ -301,56 +302,27 @@ public class PlatformManager {
 
     // - System browser ---------------------------------------------------------
     // --------------------------------------------------------------------------
-
-
     /**
      * Returns <code>true</code> if the current platform is capable of opening a URL in a new (default) browser window.
      */
-    public static boolean canOpenURLInBrowser() {
-        return OS_FAMILY==MAC_OS_X || OS_FAMILY==WINDOWS_9X || OS_FAMILY==WINDOWS_NT || UNIX_DESKTOP==KDE_DESKTOP || UNIX_DESKTOP==GNOME_DESKTOP;
-    }
-
-	
-    /**
-     * Opens the given URL in a new (default) browser window.
-     *
-     * <p>Not all OS/desktops are capable of doing this, {@link #canOpenURLInBrowser() canOpenURLInBrowser} 
-     * should be called before to ensure the current platform can do it.
-     */
-    public static void openURLInBrowser(String url) {
-        if(Debug.ON) Debug.trace("Opening "+url+" in a new browser window");
-
-        String tokens[];
-        if(UNIX_DESKTOP == KDE_DESKTOP)
-            tokens = new String[] {"kfmclient", "openURL", url};
-        else
-            tokens = getOpenTokens(url);
-	
-        try {ProcessRunner.execute(tokens);}
-        catch(Exception e) {if(Debug.ON) Debug.trace("Could not open " + url + ": " + e);}
-    }
+    public static boolean canOpenURLInBrowser() {return CommandManager.getCommandForFile("http://", false) != null;}
 
     /**
-     * Opens/executes the given file, from the given folder and returns <code>true</code>
-     * if the operation succeeded.
+     * Opens 
      */
     public static void open(AbstractFile file) {
-        if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath());
+        AbstractProcess process;
+        Command         command;
 
-        AbstractFile currentFolder = file.getURL().getProtocol().equals(FileProtocols.FILE) && (currentFolder=file.getParent())!=null?currentFolder:null;
-        String filePath = file.getAbsolutePath();
+        if(Debug.ON) Debug.trace("Opening " + file.getAbsolutePath());
+
         try {
-            AbstractProcess p = ProcessRunner.execute(getOpenTokens(filePath), currentFolder);
-	
-            // GNOME's 'gnome-open' command won't execute files, and we have no way to know if the given file is an exectuable file,
-            // so if 'gnome-open' returned an error, we try to execute the file
-            if(UNIX_DESKTOP==GNOME_DESKTOP && p!=null) {
-                int exitCode = p.waitFor();
-                if(exitCode != 0)
-                    ProcessRunner.execute(new String[]{escapeSpaceCharacters(filePath)}, currentFolder);
-            }
+            process = ProcessRunner.execute((command = CommandManager.getCommandForFile(file)).getTokens(file), file);
+
+            if(command != CommandManager.SELF_OPEN_COMMAND && process.waitFor() != 0)
+                ProcessRunner.execute(CommandManager.SELF_OPEN_COMMAND.getTokens(file), file);
         }
-        catch(Exception e) {if(Debug.ON) Debug.trace("Error while executing "+filePath+": "+e);}
+        catch(Exception e) {if(Debug.ON) Debug.trace("Error while executing " + file + ": "+e);}
     }
 
     /**
@@ -360,7 +332,6 @@ public class PlatformManager {
     public static boolean canOpenInDesktop() {
         return OS_FAMILY==MAC_OS_X || OS_FAMILY==WINDOWS_9X || OS_FAMILY==WINDOWS_NT || UNIX_DESKTOP==KDE_DESKTOP || UNIX_DESKTOP==GNOME_DESKTOP;
     }	
-
 
     /**
      * Opens the given file in the currently running OS/desktop's file manager : 
@@ -378,23 +349,27 @@ public class PlatformManager {
 
             if(!file.isDirectory())
                 file = file.getParent();
-			
-            if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath()+" in desktop");
 
-            String filePath = file.getAbsolutePath();
-            String tokens[];
-            if (OS_FAMILY == MAC_OS_X)
-                tokens = new String[] {"open", "-a", "Finder", filePath};
-            else
-                tokens = getOpenTokens(filePath);
-				
-            ProcessRunner.execute(tokens);
+            Command command;
+            if((command = CommandManager.getCommandForAlias(getDefaultDesktopFMName())) != null) {
+                if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath()+" in desktop");
+                ProcessRunner.execute(command.getTokens(file), file);
+            }
         }
         catch(Exception e) {
             if(Debug.ON) Debug.trace("Error while opening "+file.getAbsolutePath()+" in desktop: "+e);
         }
     }
-	
+
+    /**
+     * Returns the system's default file manager command.
+     * @return the system's default file manager command.
+     */
+    public static String getDefaultDesktopFM() {
+        if(OS_FAMILY == MAC_OS_X)
+            return "open -a Finder $f";
+        return getDefaultFileOpener();
+    }
 	
     /**
      * Returns the name of the default file manager on the currently running OS/Desktop: 
@@ -402,20 +377,52 @@ public class PlatformManager {
      * String if unknown.
      */
     public static String getDefaultDesktopFMName() {
-        if (OS_FAMILY==WINDOWS_9X || OS_FAMILY == WINDOWS_NT) {
+        if(OS_FAMILY==WINDOWS_9X || OS_FAMILY == WINDOWS_NT)
             return "Explorer";
-        }
-        else if (OS_FAMILY == MAC_OS_X)  {
+        else if(OS_FAMILY == MAC_OS_X)
             return "Finder";
-        }
-        else if(UNIX_DESKTOP == KDE_DESKTOP) {
+        else if(UNIX_DESKTOP == KDE_DESKTOP)
             return "Konqueror";			
-        }
-        else if(UNIX_DESKTOP == GNOME_DESKTOP) {
+        else if(UNIX_DESKTOP == GNOME_DESKTOP)
             return "Nautilus";
-        }	
         else
             return "";
+    }
+
+    /**
+     * Returns the command that should be used to open normal files.
+     * <p>
+     * If muCommander doesn't know which default command to use for the current system,
+     * this method will return <code>null</code>.
+     * </p>
+     * @return the command that should be used to open normal files.
+     */
+    public static String getDefaultFileOpener() {
+        if(OS_FAMILY == WINDOWS_9X)
+            return "start \"$f\"";
+        if(OS_FAMILY == WINDOWS_NT)
+            return "cmd /c start \"\" \"$f\"";
+        if(OS_FAMILY == MAC_OS_X)
+            return "open $f";
+        if(UNIX_DESKTOP == KDE_DESKTOP)
+            return "kfmclient exec $f";
+        if(UNIX_DESKTOP == GNOME_DESKTOP)
+            return "gnome-open $f";
+        return null;
+    }
+
+    /**
+     * Returns the command that should be used to open URLs.
+     * <p>
+     * If muCommander doesn't know which default command to use for the current system,
+     * this method will return <code>null</code>.
+     * </p>
+     * @return the command that should be used to open URLs.
+     */
+    public static String getDefaultURLOpener() {
+        if(UNIX_DESKTOP == KDE_DESKTOP)
+            return "kfmclient openURL $f";
+        return null;
     }
 
     /**

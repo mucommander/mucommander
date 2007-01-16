@@ -2,6 +2,7 @@ package com.mucommander.process;
 
 import com.mucommander.*;
 import com.mucommander.file.*;
+import com.mucommander.command.*;
 
 import java.io.*;
 import java.util.StringTokenizer;

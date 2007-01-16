@@ -16,9 +16,6 @@ import java.util.WeakHashMap;
 /**
  * Handles configuration.
  * <p>
- * When it is first accessed, this class will try to load the configuration file.
- * </p>
- * <p>
  * Once the configuration file has been loaded in memory, variables can be set or
  * retrieved through the {@link #getVariable(String)} and {@link #setVariable(String,String)}
  * methods.<br>

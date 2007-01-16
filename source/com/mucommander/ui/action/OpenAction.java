@@ -36,13 +36,11 @@ public class OpenAction extends MucoAction {
             return;
 
         // Browsable file: show file contents
-        if(selectedFile.isBrowsable()) {
+        if(selectedFile.isBrowsable())
             fileTable.getFolderPanel().tryChangeCurrentFolder(selectedFile);
-        }
         // Local file that is not an archive or archive entry: execute file with native file associations
-        else if(selectedFile.getURL().getProtocol().equals(FileProtocols.FILE) && (selectedFile instanceof FSFile)) {
+        else if(selectedFile.getURL().getProtocol().equals(FileProtocols.FILE) && (selectedFile instanceof FSFile))
             PlatformManager.open(selectedFile);
-        }
         // Any other file remote or local: copy file to a temporary local file and execute it with native file associations
         else {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
