@@ -22,6 +22,10 @@ interface XmlConstants {
     public static final String ARGUMENT_COMMAND_ALIAS       = "alias";
     /** Custom command value. */
     public static final String ARGUMENT_COMMAND_VALUE       = "value";
+    /** Custom command 'is system' flag. */
+    public static final String ARGUMENT_COMMAND_SYSTEM      = "system";
+    /** Custom command 'is visible' flag. */
+    public static final String ARGUMENT_COMMAND_VISIBLE     = "visible";
 
 
 

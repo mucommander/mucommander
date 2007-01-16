@@ -415,12 +415,14 @@ public class CommandManager implements AssociationBuilder {
      * </p>
      */
     private static void createDefaultAssociations() {
-        String command; // Default command.
+        String  command; // Default command.
+        Command buffer;  // Buffer for new commands.
 
         // If it exists, creates a default URL opening command.
         if((command = PlatformManager.getDefaultURLOpener()) != null) {
             try {
-                registerCommand(CommandParser.getCommand(DEFAULT_URL_OPENER_ALIAS, command));
+                registerCommand(buffer = CommandParser.getCommand(DEFAULT_URL_OPENER_ALIAS, command));
+                buffer.setSystem(true);
                 registerAssociation("http://.*", DEFAULT_URL_OPENER_ALIAS);
                 registerAssociation("https://.*", DEFAULT_URL_OPENER_ALIAS);
             }
@@ -431,7 +433,8 @@ public class CommandManager implements AssociationBuilder {
         // If it exists, creates a default file opening command.
         if((command = PlatformManager.getDefaultFileOpener()) != null) {
             try {
-                registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, command));
+                registerCommand(buffer = CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, command));
+                buffer.setSystem(true);
                 registerAssociation(".*", DEFAULT_FILE_OPENER_ALIAS);
             }
             // This should never occur. If it does, something's really messed up in the system.
@@ -440,7 +443,10 @@ public class CommandManager implements AssociationBuilder {
 
         // If it exists, creates a default 'desktop' command.
         if((command = PlatformManager.getDefaultDesktopFM()) != null) {
-            try {registerCommand(CommandParser.getCommand(PlatformManager.getDefaultDesktopFMName(), command));}
+            try {
+                registerCommand(buffer = CommandParser.getCommand(PlatformManager.getDefaultDesktopFMName(), command));
+                buffer.setSystem(true);
+            }
             // This should never occur. If it does, something's really messed up in the system.
             catch(Exception e) {if(Debug.ON) Debug.trace("Couldn't create default file opener: " + e.getMessage());}
         }

@@ -66,8 +66,9 @@ public class AssociationReader implements ContentHandler, XmlConstants {
     public void startElement(String uri, String name, Hashtable attributes, Hashtable attURIs) throws Exception {
         // New custom command declaration.
         if(name.equals(ELEMENT_COMMAND)) {
-            String alias;
-            String command;
+            String  alias;
+            String  command;
+            Command buffer;
 
             // Makes sure the required attributes are there.
             if((alias = (String)attributes.get(ARGUMENT_COMMAND_ALIAS)) == null)
@@ -75,8 +76,22 @@ public class AssociationReader implements ContentHandler, XmlConstants {
             if((command = (String)attributes.get(ARGUMENT_COMMAND_VALUE)) == null)
                 throw new Exception("Unspecified command value.");
 
+
             // Creates the command and passes it to the builder.
-            builder.addCommand(CommandParser.getCommand(alias, command));
+            builder.addCommand(buffer = CommandParser.getCommand(alias, command));
+
+            // Sets the command's system flag.
+            if((command = (String)attributes.get(ARGUMENT_COMMAND_SYSTEM)) != null)
+                if(command.equals("true"))
+                    buffer.setSystem(true);
+
+            // Sets the command's visible flag if it's not a system command (system
+            // commands are always invisible).
+            if(!buffer.isSystem()) {
+                if((command = (String)attributes.get(ARGUMENT_COMMAND_VISIBLE)) != null)
+                    if(!command.equals("true"))
+                        buffer.setVisible(false);
+            }
         }
 
         // New custom association definition.

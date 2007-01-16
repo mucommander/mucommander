@@ -35,6 +35,10 @@ public class Command {
     private String    alias;
     /** Original command. */
     private String    command;
+    /** Whether the command is a system one or not. */
+    private boolean   isSystem;
+    /** Whether the command is visible or not. */
+    private boolean   isVisible;
 
 
 
@@ -57,7 +61,23 @@ public class Command {
         this.tokenTypes = tokenTypes;
         this.alias      = alias;
         this.command    = command;
+        isVisible       = true;
     }
+
+    public boolean isVisible() {return !isSystem && isVisible;}
+    public void setVisible(boolean b) {isVisible = b;}
+
+    /**
+     * Returns <code>true</code> if this is a system command.
+     * @return <code>true</code> if this is a system command, <code>false</code> otherwise.
+     */
+    public boolean isSystem() {return isSystem;}
+
+    /**
+     * Sets the command's system flag.
+     * @param b command's system flag.
+     */
+    void setSystem(boolean b) {isSystem = b;}
 
 
 

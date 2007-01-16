@@ -1628,6 +1628,15 @@ com.mucommander.ui.action.OpenNativelyAction.tooltip:RO:Deschide fișierul selec
 #file_menu.reveal_in_finder:ZH_CN:在查找器中展示
 #file_menu.reveal_in_finder:SI:Razkrij
 
+file_menu.open_with:EN:Open with...
+file_menu.open_with:FR:Ouvrir avec...
+
+
+
+
+
+
+
 com.mucommander.ui.action.RevealInDesktopAction.label:EN:Reveal in %1
 com.mucommander.ui.action.RevealInDesktopAction.label:FR:Afficher dans %1
 com.mucommander.ui.action.RevealInDesktopAction.label:ES:Mostrar en %1

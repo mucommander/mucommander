@@ -52,6 +52,10 @@ public class AssociationWriter implements XmlConstants, AssociationBuilder {
         attributes = new XmlAttributes();
         attributes.add(ARGUMENT_COMMAND_ALIAS, command.getAlias());
         attributes.add(ARGUMENT_COMMAND_VALUE, command.getCommand());
+        if(command.isSystem())
+            attributes.add(ARGUMENT_COMMAND_SYSTEM, "true");
+        else if(!command.isVisible())
+            attributes.add(ARGUMENT_COMMAND_VISIBLE, "false");
 
         // Writes the XML description.
         out.writeStandAloneElement(ELEMENT_COMMAND, attributes);
