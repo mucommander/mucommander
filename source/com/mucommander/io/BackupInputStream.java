@@ -55,7 +55,7 @@ public class BackupInputStream extends FilterInputStream implements BackupConsta
 
         // Checks whether the backup file is a better choice than the target one.
         backup = FileFactory.getFile(file.getAbsolutePath() + BACKUP_SUFFIX);
-        if(backup.exists() && (file.getSize() < backup.getSize()) && (file.getDate() <= backup.getDate()))
+        if(backup.exists() && (file.getSize() < backup.getSize()))
             return backup.getInputStream();
 
         // Opens a stream on the target file.
