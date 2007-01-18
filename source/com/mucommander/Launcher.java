@@ -1,8 +1,12 @@
 package com.mucommander;
 
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.shell.ShellHistoryManager;
-import com.mucommander.ui.*;
+import com.mucommander.ui.CheckVersionDialog;
+import com.mucommander.ui.InitialSetupDialog;
+import com.mucommander.ui.SplashScreen;
+import com.mucommander.ui.WindowManager;
 
 import java.lang.reflect.Constructor;
 
