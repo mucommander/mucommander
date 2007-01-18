@@ -444,6 +444,11 @@ public class ThemeManager {
         if((currentData = theme.getThemeData()) == null)
             throw new IllegalStateException("Couldn't load data for theme: " + theme.getName());
 
+        // The user theme data might be garbage collected before muCommander is shutdown.
+        // We need to make sure it's saved before that happen.
+        if(currentType == USER_THEME)
+            saveUserTheme();
+
 	setConfigurationTheme(theme);
 
         // Triggers font events.
