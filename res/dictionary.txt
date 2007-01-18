@@ -71,6 +71,7 @@ done:RO:Închide
 # Used for the label of the custom theme
 user_theme:EN:Custom theme
 user_theme:FR:Thème personnalisé
+user_theme:SI:Običajna tema
 
 yes:EN:Yes
 yes:FR:Oui
@@ -348,7 +349,7 @@ stop:RO:Stop
 pause:EN:Pause
 pause:FR:Pause
 pause:RO:Pauză
-
+pause:SI:Pavza
 
 
 
@@ -443,7 +444,7 @@ date:RO:Dată
 
 extension:EN:Extension
 extension:FR:Extension
-
+extension:SI:Končnica
 
 
 
@@ -454,7 +455,7 @@ extension:FR:Extension
 
 permissions:EN:Permissions
 permissions:FR:Permissions
-
+permissions:SI:Pravice
 
 
 
@@ -484,7 +485,7 @@ location:RO:Locație
 # Used to indicate that an item (e.g. a bookmark) has no name
 untitled:EN:Untitled
 untitled:FR:Sans titre
-
+untitled:SI:Brez naslova
 
 
 
@@ -496,7 +497,7 @@ untitled:FR:Sans titre
 
 source:EN:Source
 source:FR:Source
-
+source:SI:Izvor
 
 
 
@@ -508,7 +509,7 @@ source:FR:Source
 
 destination:EN:Destination
 destination:FR:Destination
-
+destination:SI:Cilj
 
 
 
@@ -539,7 +540,7 @@ warning:RO:Avertisment
 error:EN:Error
 error:FR:Erreur
 error:RO:Eroare
-
+error:SI:Napaka
 
 
 
@@ -566,7 +567,7 @@ folder_does_not_exist:RU:Каталог с таким именем не суще
 folder_does_not_exist:ZH_CN:文件夹不存在或无法使用.
 #folder_does_not_exist:ZH_CN:文件夹不存在
 folder_does_not_exist:SI:Ta mapa ne obstaja oz. ni dostopna.
-#folder_does_not_exist:SI:Mapa ne obstaja oz. ni dosegljiva.
+#folder_does_not_exist:SI:Mapa ne obstaja oz. ni dostopna.
 folder_does_not_exist:RO:Acest director nu există sau nu este disponibil.
 
 this_folder_does_not_exist:EN:This folder doesn't exist or is not available: %1
@@ -624,7 +625,7 @@ file_exists_in_destination:RO:Fișierul există deja la destinație
 # Todo: find a better wording for this
 source_parent_of_destination:EN:Attempt to transfer a folder to one of its subfolders
 source_parent_of_destination:FR:Tentative de déplacement d'un répertoire vers un de ses sous-répertoires
-
+source_parent_of_destination:SI:Poskus prenosa mape v eno od njenih podmap
 
 
 
@@ -798,8 +799,8 @@ com.mucommander.ui.action.EditBookmarksAction.label:RO:Modifică favoritele
 
 com.mucommander.ui.action.EditCredentialsAction.label:EN:Edit credentials
 com.mucommander.ui.action.EditCredentialsAction.label:FR:Éditer les indentifiants
+com.mucommander.ui.action.EditCredentialsAction.label:SI:Uredi akreditive
 # Translation missing
-
 
 
 
@@ -812,8 +813,8 @@ com.mucommander.ui.action.EditCredentialsAction.label:FR:Éditer les indentifian
 com.mucommander.ui.action.ChangeLocationAction.label:EN:Change current location
 com.mucommander.ui.action.ChangeLocationAction.label:FR:Changer le chemin courant
 com.mucommander.ui.action.ChangeLocationAction.label:RO:Schimbă calea actuala
+com.mucommander.ui.action.ChangeLocationAction.label:SI:Spremeni trenutno lokacijo
 # Translation missing
-
 
 
 
@@ -1061,7 +1062,7 @@ com.mucommander.ui.action.MkdirAction.tooltip:RO:Crează un director nou în dir
 com.mucommander.ui.action.MkfileAction.label:EN:Make file
 com.mucommander.ui.action.MkfileAction.label:FR:Créer fichier
 com.mucommander.ui.action.MkfileAction.label:RO:Fișier nou
-
+com.mucommander.ui.action.MkfileAction.label:SI:Ustvari datoteko
 
 
 
@@ -1076,7 +1077,7 @@ com.mucommander.ui.action.MkfileAction.label:RO:Fișier nou
 com.mucommander.ui.action.MkfileAction.tooltip:EN:Create a file in current folder
 com.mucommander.ui.action.MkfileAction.tooltip:FR:Créer un fichier dans le dossier courant
 com.mucommander.ui.action.MkfileAction.tooltip:RO:Crează un fișier nou în directorul curent
-
+com.mucommander.ui.action.MkfileAction.tooltip:SI:Ustvari datoteko v trenutni mapi
 
 
 
@@ -1170,8 +1171,8 @@ com.mucommander.ui.action.CloseWindowAction.tooltip:RO:Închide această fereast
 com.mucommander.ui.action.CopyFileNamesAction.label:EN:Copy name(s)
 com.mucommander.ui.action.CopyFileNamesAction.label:FR:Copier nom(s)
 com.mucommander.ui.action.CopyFileNamesAction.label:RO:Copiază nume
+com.mucommander.ui.action.CopyFileNamesAction.label:SI:Kopiraj ime/-na
 # Translation missing
-
 
 
 
@@ -1181,8 +1182,8 @@ com.mucommander.ui.action.CopyFileNamesAction.label:RO:Copiază nume
 com.mucommander.ui.action.CopyFilePathsAction.label:EN:Copy path(s)
 com.mucommander.ui.action.CopyFilePathsAction.label:FR:Copier chemin(s)
 com.mucommander.ui.action.CopyFilePathsAction.label:RO:Copiază cale/căi
+com.mucommander.ui.action.CopyFilePathsAction.label:SI:Kopiraj pot/-i
 # Translation missing
-
 
 
 
@@ -1193,8 +1194,8 @@ com.mucommander.ui.action.CopyFilePathsAction.label:RO:Copiază cale/căi
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:EN:Copy file(s)
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:FR:Copier fichier(s)
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:RO:Copiază fișier(e)
+com.mucommander.ui.action.CopyFilesToClipboardAction.label:SI:Kopiraj datoteko/-e
 # Translation missing
-
 
 
 
@@ -1205,8 +1206,8 @@ com.mucommander.ui.action.CopyFilesToClipboardAction.label:RO:Copiază fișier(e
 com.mucommander.ui.action.PasteClipboardFilesAction.label:EN:Paste file(s)
 com.mucommander.ui.action.PasteClipboardFilesAction.label:FR:Coller fichier(s)
 com.mucommander.ui.action.PasteClipboardFilesAction.label:RO:Lipește fișier(e)
+com.mucommander.ui.action.PasteClipboardFilesAction.label:SI:Prilepi datoteko/-e
 # Translation missing
-
 
 
 
@@ -1370,7 +1371,7 @@ com.mucommander.ui.action.SortByExtensionAction.label:RO:Sortează după extensi
 
 com.mucommander.ui.action.SortByPermissionsAction.label:EN:Sort by Permissions
 com.mucommander.ui.action.SortByPermissionsAction.label:FR:Trier par Permissions
-
+com.mucommander.ui.action.SortByPermissionsAction.label:SI:Razvrsti po pravicah
 
 
 
@@ -1535,7 +1536,7 @@ com.mucommander.ui.action.SetSameFolderAction.tooltip:PL:Ustawe te same katalogi
 com.mucommander.ui.action.SetSameFolderAction.tooltip:HU:A bal és jobb oldalon ugyanaz a panel legyen
 com.mucommander.ui.action.SetSameFolderAction.tooltip:RU:Одинаковые каталоги в обеих панелях
 com.mucommander.ui.action.SetSameFolderAction.tooltip:ZH_CN:设置左右文件夹为同一目录
-com.mucommander.ui.action.SetSameFolderAction.tooltip:SI:Nastavi enako mapo v levem in dsenem oknu
+com.mucommander.ui.action.SetSameFolderAction.tooltip:SI:Nastavi enako mapo v levem in desnem oknu
 com.mucommander.ui.action.SetSameFolderAction.tooltip:RO:Alege același director pentru fereastra stângă și dreaptă
 
 com.mucommander.ui.action.NewWindowAction.label:EN:New window
@@ -1595,8 +1596,8 @@ com.mucommander.ui.action.OpenAction.tooltip:RO:Deschide director / Deschide arh
 com.mucommander.ui.action.OpenNativelyAction.label:EN:Open natively
 com.mucommander.ui.action.OpenNativelyAction.label:FR:Ouvrir nativement
 com.mucommander.ui.action.OpenNativelyAction.label:RO:Deschide cu aplicația asociată
+com.mucommander.ui.action.OpenNativelyAction.label:SI:Odpri izvorno
 # Translation missing
-
 
 
 
@@ -1630,7 +1631,7 @@ com.mucommander.ui.action.OpenNativelyAction.tooltip:RO:Deschide fișierul selec
 
 file_menu.open_with:EN:Open with...
 file_menu.open_with:FR:Ouvrir avec...
-
+file_menu.open_with:SI:Odpri z...
 
 
 
@@ -1641,8 +1642,8 @@ com.mucommander.ui.action.RevealInDesktopAction.label:EN:Reveal in %1
 com.mucommander.ui.action.RevealInDesktopAction.label:FR:Afficher dans %1
 com.mucommander.ui.action.RevealInDesktopAction.label:ES:Mostrar en %1
 com.mucommander.ui.action.RevealInDesktopAction.label:RO:Arată în %1
+com.mucommander.ui.action.RevealInDesktopAction.label:SI:Razkrij v %1
 # Translation missing
-
 
 
 
@@ -1704,6 +1705,7 @@ com.mucommander.ui.action.PackAction.label:RO:Arhivează fișiere
 com.mucommander.ui.action.PackAction.tooltip:EN:Pack marked files into an archive
 com.mucommander.ui.action.PackAction.tooltip:FR:Compresser les fichiers marqués dans une archive
 com.mucommander.ui.action.PackAction.tooltip:RO:Arhivează fișierele selectate
+com.mucommander.ui.action.PackAction.tooltip:SI:Dodaj označene datoteke v arhiv
 # Translation missing
 
 
@@ -1746,7 +1748,7 @@ com.mucommander.ui.action.UnpackAction.label:RO:Dearhivează fișiere
 com.mucommander.ui.action.UnpackAction.tooltip:EN:Unpack marked archive files
 com.mucommander.ui.action.UnpackAction.tooltip:FR:Décompresser les archives marquées
 com.mucommander.ui.action.UnpackAction.tooltip:RO:Dearhivează fișierele arhivate selectate
-
+com.mucommander.ui.action.UnpackAction.tooltip:SI:Razširi označene arhivske datoteke
 
 
 
@@ -1813,7 +1815,7 @@ com.mucommander.ui.action.ShowPreferencesAction.tooltip:RO:Configurează muComma
 
 com.mucommander.ui.action.ShowServerConnectionsAction.label:EN:Show open connections
 com.mucommander.ui.action.ShowServerConnectionsAction.label:FR:Afficher les connexions ouvertes
-
+com.mucommander.ui.action.ShowServerConnectionsAction.label:SI:Prikaži aktivne povezave
 
 
 
@@ -1872,8 +1874,8 @@ com.mucommander.ui.action.ToggleAutoSizeAction.label:RO:Dimensiune automata la c
 com.mucommander.ui.action.StopAction.label:EN:Stop folder change
 com.mucommander.ui.action.StopAction.label:FR:Arrêter le changement de dossier
 com.mucommander.ui.action.StopAction.label:RO:Oprește schimbarea de director
+com.mucommander.ui.action.StopAction.label:SI:Prekini spreminjanje mape
 # Translation missing
-
 
 
 
@@ -2023,7 +2025,7 @@ com.mucommander.ui.action.RecallWindowAction.label:PL:Wywołaj okno
 com.mucommander.ui.action.RecallWindowAction.label:HU:ablak visszavonása
 com.mucommander.ui.action.RecallWindowAction.label:RU:Восстановить окно
 com.mucommander.ui.action.RecallWindowAction.label:ZH_CN:切回一个窗口
-com.mucommander.ui.action.RecallWindowAction.label:SI:Prikliči okno
+com.mucommander.ui.action.RecallWindowAction.label:SI:Prikliči okno #%1
 com.mucommander.ui.action.RecallWindowAction.label:RO:Schimbă la fereastra #%1
 
 
@@ -2082,7 +2084,7 @@ com.mucommander.ui.action.SelectLastRowAction.label:RO:Selectează ultimul fiși
 
 com.mucommander.ui.action.SplitEquallyAction.label:EN:Split equally
 com.mucommander.ui.action.SplitEquallyAction.label:FR:Scinder au milieu
-
+com.mucommander.ui.action.SplitEquallyAction.label:SI:Razdeli enako na obeh straneh
 
 
 
@@ -2094,7 +2096,7 @@ com.mucommander.ui.action.SplitEquallyAction.label:FR:Scinder au milieu
 
 com.mucommander.ui.action.SplitVerticallyAction.label:EN:Split vertically
 com.mucommander.ui.action.SplitVerticallyAction.label:FR:Scincer verticalement
-
+com.mucommander.ui.action.SplitVerticallyAction.label:SI:Razdeli navpično
 
 
 
@@ -2104,7 +2106,7 @@ com.mucommander.ui.action.SplitVerticallyAction.label:FR:Scincer verticalement
 
 com.mucommander.ui.action.SplitHorizontallyAction.label:EN:Split horizontally
 com.mucommander.ui.action.SplitHorizontallyAction.label:FR:Scincer horizontalement
-
+com.mucommander.ui.action.SplitHorizontallyAction.label:SI:Razdeli vodoravno
 
 
 
@@ -2155,7 +2157,7 @@ com.mucommander.ui.action.GoToForumsAction.label:RO:Vizitează forumul
 
 com.mucommander.ui.action.ReportBugAction.label:EN:Report a bug
 com.mucommander.ui.action.ReportBugAction.label:FR:Reporter a bug
-
+com.mucommander.ui.action.ReportBugAction.label:SI:Poročanje o napakah
 
 
 
@@ -2250,7 +2252,7 @@ view_menu:RO:Vizualizare
 
 view_menu.show_hide_columns:EN:Show/Hide columns
 view_menu.show_hide_columns:FR:Afficher/Cacher colonnes
-
+view_menu.show_hide_columns:SI:Prikaži/Skrij stolpce
 
 
 
@@ -2398,7 +2400,7 @@ status_bar.volume_capacity:RO:Capacitate: %1
 
 table.hide_column:EN:Hide column
 table.hide_column:FR:Cacher la colonne
-
+table.hide_column:SI:Skrij stolpec
 
 
 
@@ -2616,7 +2618,7 @@ destination_dialog.file_exists_action:RO:Acțiune implicită când fișierul exi
 
 file_collision_dialog.title:EN:File collision
 file_collision_dialog.title:FR:Collision de fichiers
-
+file_collision_dialog.title:SI:Datotečni spor
 
 
 
@@ -2785,7 +2787,7 @@ pack_dialog.comment:RO:Comentarii (opțional)
 pack_dialog.archive_format:EN:Archive format
 pack_dialog.archive_format:FR:Format de l'archive
 pack_dialog.archive_format:RO:Formatul arhivei
-
+pack_dialog.archive_format:SI:Način stiskanja
 
 
 
@@ -3034,7 +3036,7 @@ delete_dialog.confirmation:PL:Trwale usunąć zaznaczone pliki ?
 delete_dialog.confirmation:HU:Folyamatosan törli a kijelölt fájl(oka)t?
 delete_dialog.confirmation:RU:Удалить выбранные файлы без возможности восстановления?
 delete_dialog.confirmation:ZH_CN:永久刪除选定文件 ?
-delete_dialog.confirmation:SI:Trajno izbrišem datoteko(e)?
+delete_dialog.confirmation:SI:Trajno izbrišem datoteko(-e)?
 delete_dialog.confirmation:RO:Șterg definitiv fișierul(ele) selectat(e) ?
 
 delete_dialog.deleting:EN:Deleting
@@ -3169,7 +3171,7 @@ email_dialog.prefs_not_set:PL:Musisz ustwaić najpierw parametry poczty.
 email_dialog.prefs_not_set:HU:Önnek be kell állítania a levelező paramétereit.
 email_dialog.prefs_not_set:RU:Вам необходимо настроить параметры почты перед тем, как пытатсья что-то отправить.
 email_dialog.prefs_not_set:ZH_CN:你需要先设置邮件参数
-email_dialog.prefs_not_set:SI:Vnesi parametre za e-pošto.
+email_dialog.prefs_not_set:SI:Vnesite parametre za e-pošto.
 email_dialog.prefs_not_set:RO:Mai întâi trebuie să configurați email-ul 
 
 email_dialog.from:EN:From
@@ -3312,7 +3314,7 @@ email.server_unavailable:PL:Nie mogę się z kontaktować z serwerem poczyowym %
 email.server_unavailable:HU:Nem lehet kapcsolódni a levelezőszerverhez %1, kérjük, ellenőrizze a levelező beállításait és próbálja újra.
 email.server_unavailable:RU:Не удалось соединиться с почтовым сервером %1, проверьте настройки почты и попробуйте еще раз позже.
 email.server_unavailable:ZH_CN:无法接洽邮件服务器 %1, 检查你的邮件首选项或稍后重试
-email.server_unavailable:SI:Ne morem se povezati z e-poštnim strežnikom %1, preveri nastavitve ali poskusi kasneje.
+email.server_unavailable:SI:Ne morem se povezati z e-poštnim strežnikom %1, preverite nastavitve ali poskusite kasneje.
 email.server_unavailable:RO:Nu pot contacta serverul de mail %1, verificați configurația pentru email și încercați din nou mai târziu.
 
 email.connection_closed:EN:Connection closed by server, mail not sent.
@@ -3515,7 +3517,7 @@ mkdir_dialog.description:RO:Crează director
 mkfile_dialog.description:EN:Create new empty file
 mkfile_dialog.description:FR:Créer le fichier vide
 mkfile_dialog.description:RO:Crează un nou fișier gol
-
+mkfile_dialog.description:SI:Ustvari novo prazno datoteko
 
 
 
@@ -3574,7 +3576,7 @@ progress_dialog.transferred:RO:Am transferat %1 din %2
 progress_dialog.elapsed_time:EN:Elapsed time
 progress_dialog.elapsed_time:FR:Temps écoulé
 progress_dialog.elapsed_time:RO:Durata
-
+progress_dialog.elapsed_time:SI:Pretečen čas
 
 
 
@@ -3587,7 +3589,7 @@ progress_dialog.elapsed_time:RO:Durata
 progress_dialog.advanced:EN:Advanced
 progress_dialog.advanced:FR:Avancé
 progress_dialog.advanced:RO:Avansat
-
+progress_dialog.advanced:SI:Napredno
 
 
 
@@ -3602,7 +3604,7 @@ progress_dialog.advanced:RO:Avansat
 progress_dialog.current_speed:EN:Current speed
 progress_dialog.current_speed:FR:Vitesse actuelle
 progress_dialog.current_speed:RO:Viteza actuala
-
+progress_dialog.current_speed:SI:Trenutna hitrost
 
 
 
@@ -3615,7 +3617,7 @@ progress_dialog.current_speed:RO:Viteza actuala
 progress_dialog.limit_speed:EN:Limit speed
 progress_dialog.limit_speed:FR:Limiter la vitesse
 progress_dialog.limit_speed:RO:Limitare de viteză
-
+progress_dialog.limit_speed:SI:Omejitev hitrosti
 
 
 
@@ -3627,7 +3629,7 @@ progress_dialog.limit_speed:RO:Limitare de viteză
 
 progress_dialog.close_when_finished:EN:Close window when finished
 progress_dialog.close_when_finished:FR:Fermer la fenêtre lorsque terminé
-
+progress_dialog.close_when_finished:SI:Po prenosu zapri okno
 
 
 
@@ -3639,7 +3641,7 @@ progress_dialog.close_when_finished:FR:Fermer la fenêtre lorsque terminé
 
 progress_dialog.job_finished:EN:Job finished
 progress_dialog.job_finished:FR:Tâche terminée
-
+progress_dialog.job_finished:SI:Naloga zaključena
 
 
 
@@ -3740,7 +3742,7 @@ run_dialog.run_command_description:RO:Execută în directorul curent
 
 run_dialog.run_in_home_description:EN:Run in home folder
 run_dialog.run_in_home_description:FR:Exécuter dans le répertoire utilisateur
-
+run_dialog.run_in_home_description:SI:Zaženi v domači mapi
 
 
 
@@ -3781,7 +3783,7 @@ run_dialog.stop:EN:$[stop]
 
 run_dialog.clear_history:EN:Clear history
 run_dialog.clear_history:FR:Effacer l'historique
-
+run_dialog.clear_history:SI:Počisti zgodovino
 
 
 
@@ -3936,7 +3938,7 @@ ftp_connect.anonymous_user:RO:Utilizator anonim
 
 http_connect.basic_authentication:EN:HTTP Basic Authentication (optional)
 http_connect.basic_authentication:FR:HTTP Basic Authentication (optionnel)
-
+http_connect.basic_authentication:SI:HTTP osnovno overjanje (izbirno)
 
 
 
@@ -3954,7 +3956,7 @@ http_connect.basic_authentication:FR:HTTP Basic Authentication (optionnel)
 # Label for the button that disconnects the selected connection 
 server_connections_dialog.disconnect:EN:Disconnect
 server_connections_dialog.disconnect:FR:Déconnecter
-
+server_connections_dialog.disconnect:SI:Prekini povezavo
 
 
 
@@ -3968,7 +3970,7 @@ server_connections_dialog.disconnect:FR:Déconnecter
 # Appears in the connection list if the connection is currently busy
 server_connections_dialog.connection_busy:EN:Busy
 server_connections_dialog.connection_busy:FR:Occupée
-
+server_connections_dialog.connection_busy:SI:Zasedeno
 
 
 
@@ -3980,7 +3982,7 @@ server_connections_dialog.connection_busy:FR:Occupée
 # Appears in the connection list if the connection is currently idle
 server_connections_dialog.connection_idle:EN:Idle
 server_connections_dialog.connection_idle:FR:Inactive
-
+server_connections_dialog.connection_idle:SI:Neaktivno
 
 
 
@@ -3998,7 +4000,7 @@ server_connections_dialog.connection_idle:FR:Inactive
 
 bonjour.bonjour_services:EN:Bonjour services
 bonjour.bonjour_services:FR:Services Bonjour
-
+bonjour.bonjour_services:SI:"Bonjour" storitve
 
 
 
@@ -4008,7 +4010,7 @@ bonjour.bonjour_services:FR:Services Bonjour
 
 bonjour.no_service_discovered:EN:No service discovered
 bonjour.no_service_discovered:FR:Aucun service découvert
-
+bonjour.no_service_discovered:SI:Ni aktivne storitve
 
 
 
@@ -4019,7 +4021,7 @@ bonjour.no_service_discovered:FR:Aucun service découvert
 
 bonjour.bonjour_disabled:EN:Bonjour disabled
 bonjour.bonjour_disabled:FR:Bonjour disabled
-
+bonjour.bonjour_disabled:SI:"Bonjour" onemogočen
 
 
 
@@ -4055,7 +4057,7 @@ auth_dialog.desc:PL:Proszę wprowadzić nazwę użytkownika i hasło:
 auth_dialog.desc:HU:Kérjük, adja meg felhasználónevét vagy jelszavát:
 auth_dialog.desc:RU:Введите логин и пароль:
 auth_dialog.desc:ZH_CN:請輸入用户名及密码:
-auth_dialog.desc:SI:Vnesi uporabniško ime in geslo:
+auth_dialog.desc:SI:Vnesite uporabniško ime in geslo:
 auth_dialog.desc:RO:Vă rog să întroduceți parola:
 
 auth_dialog.server:EN:Server
@@ -4086,7 +4088,7 @@ auth_dialog.error_was:RO:Eroare: %1
 
 auth_dialog.store_credentials:EN:Store login and password (weak encryption)
 auth_dialog.store_credentials:FR:Sauver les identifiants (encryption faible)
-
+auth_dialog.store_credentials:SI:Shrani uporabniško ime in geslo (nizka enkripcija)
 
 
 
@@ -4174,7 +4176,7 @@ edit_bookmarks_dialog.location:EN:$[add_bookmark_dialog.location]
 # New bookmark button in the Edit bookmarks dialog
 edit_bookmarks_dialog.new:EN:New
 edit_bookmarks_dialog.new:FR:Nouveau
-
+edit_bookmarks_dialog.new:SI:Nova
 
 
 
@@ -4188,7 +4190,7 @@ edit_bookmarks_dialog.new:FR:Nouveau
 # Duplicate bookmark button in the Edit bookmarks dialog
 edit_bookmarks_dialog.duplicate:EN:Duplicate
 edit_bookmarks_dialog.duplicate:FR:Dupliquer
-
+edit_bookmarks_dialog.duplicate:SI:Podvoji
 
 
 
@@ -4588,7 +4590,7 @@ shortcuts_dialog.file_operations:RO:Operații cu fișiere
 shortcuts_dialog.quick_search:EN:Quick search
 shortcuts_dialog.quick_search:FR:Recherche rapide
 shortcuts_dialog.quick_search:RO:Căutare rapidă
-
+shortcuts_dialog.quick_search:SI:Hitro iskanje
 
 
 
@@ -4601,7 +4603,7 @@ shortcuts_dialog.quick_search:RO:Căutare rapidă
 shortcuts_dialog.quick_search.start_search:EN:Type in any character to start a quick search
 shortcuts_dialog.quick_search.start_search:FR:Entrez un caractère pour commencer une recherche rapide
 shortcuts_dialog.quick_search.start_search:RO:Introdu orice caracter pentru a începe o căutare rapidă
-
+shortcuts_dialog.quick_search.start_search:SI:Vnesi kateri koli znak za začetek hitrega iskanja
 
 
 
@@ -4613,7 +4615,7 @@ shortcuts_dialog.quick_search.start_search:RO:Introdu orice caracter pentru a î
 shortcuts_dialog.quick_search.cancel_search:EN:Cancel quick search
 shortcuts_dialog.quick_search.cancel_search:FR:Annuler la recherche rapide
 shortcuts_dialog.quick_search.cancel_search:RO:Anulează căutarea rapidă
-
+shortcuts_dialog.quick_search.cancel_search:SI:Prekliči hitro iskanje
 
 
 
@@ -4626,7 +4628,7 @@ shortcuts_dialog.quick_search.cancel_search:RO:Anulează căutarea rapidă
 shortcuts_dialog.quick_search.remove_last_char:EN:Remove last character from quick search string
 shortcuts_dialog.quick_search.remove_last_char:FR:Supprimer le dernier caractère de recherche
 shortcuts_dialog.quick_search.remove_last_char:RO:Șterge ultimul caracter introdus la o cautare rapidă
-
+shortcuts_dialog.quick_search.remove_last_char:SI:Odstrani zadnji znak iz vrstice hitrega iskanja
 
 
 
@@ -4639,7 +4641,7 @@ shortcuts_dialog.quick_search.remove_last_char:RO:Șterge ultimul caracter intro
 shortcuts_dialog.quick_search.jump_to_previous:EN:Jump to previous quick search result
 shortcuts_dialog.quick_search.jump_to_previous:FR:Aller au résultat précédent
 shortcuts_dialog.quick_search.jump_to_previous:RO:Mergi la rezultatul anterior al căutării rapide
-
+shortcuts_dialog.quick_search.jump_to_previous:SI:Preskoči na prejšnji rezultat hitrega iskanja
 
 
 
@@ -4652,7 +4654,7 @@ shortcuts_dialog.quick_search.jump_to_previous:RO:Mergi la rezultatul anterior a
 shortcuts_dialog.quick_search.jump_to_next:EN:Jump to next quick search result
 shortcuts_dialog.quick_search.jump_to_next:FR:Aller au résultat suivant
 shortcuts_dialog.quick_search.jump_to_next:RO:Mergi la rezultatul următor al căutării rapide
-
+shortcuts_dialog.quick_search.jump_to_next:SI:Preskoči na naslednji rezultat hitrega iskanja
 
 
 
@@ -4664,7 +4666,7 @@ shortcuts_dialog.quick_search.jump_to_next:RO:Mergi la rezultatul următor al c�
 shortcuts_dialog.quick_search.mark_jump_next:EN:Mark/Unmark current file and jump to next search result
 shortcuts_dialog.quick_search.mark_jump_next:FR:Marquer/Dé-marquer le fichier courant et aller au résultat suivant
 shortcuts_dialog.quick_search.mark_jump_next:RO:Selectează/Deselectează fișierul curent si mergi la următorul rezultat al căutării
-
+shortcuts_dialog.quick_search.mark_jump_next:SI:Označi/Odznači trenutno datoteko in preskoči na naslednji rezultat iskanja
 
 
 
@@ -4794,7 +4796,7 @@ prefs_dialog.time:PL:Czas
 prefs_dialog.time:HU:idő
 prefs_dialog.time:RU:Время
 prefs_dialog.time:ZH_CN:时间
-prefs_dialog.time:SI:čas
+prefs_dialog.time:SI:Čas
 prefs_dialog.time:RO:Ora
 
 prefs_dialog.date:EN:Date
@@ -4975,7 +4977,7 @@ prefs_dialog.show_hidden_files:SI:Prikaži skrite datoteke
 prefs_dialog.show_ds_store_files:EN:Show .DS_Store files
 prefs_dialog.show_ds_store_files:FR:Afficher les fichiers .DS_Store
 prefs_dialog.show_ds_store_files:RO:Afișează fișierele .DS_Store
-
+prefs_dialog.show_ds_store_files:SI:Prikaži .DS arhivske datoteke
 
 
 
@@ -4990,6 +4992,7 @@ prefs_dialog.show_ds_store_files:RO:Afișează fișierele .DS_Store
 prefs_dialog.show_system_folders:EN:Show system folders
 prefs_dialog.show_system_folders:FR:Afficher les dossiers système
 prefs_dialog.show_system_folders:RO:Afișează directoarele system
+prefs_dialog.show_system_folders:SI:Prikaži sistemske mape
 
 prefs_dialog.compact_file_size:EN:Round displayed file sizes
 prefs_dialog.compact_file_size:FR:Arrondir les tailles de fichiers affichées
@@ -5035,7 +5038,7 @@ prefs_dialog.look_and_feel:RO:Look & Feel
 prefs_dialog.icons_size:EN:Icon size
 prefs_dialog.icons_size:FR:Taille des icônes
 prefs_dialog.icons_size:RO:Dimensiunea iconițelor
-
+prefs_dialog.icons_size:SI:Velikost ikone
 
 
 
@@ -5046,7 +5049,7 @@ prefs_dialog.icons_size:RO:Dimensiunea iconițelor
 prefs_dialog.toolbar_icons:EN:Toolbar
 prefs_dialog.toolbar_icons:FR:Barre d'outils
 prefs_dialog.toolbar_icons:RO:Bara de unelte
-
+prefs_dialog.toolbar_icons:SI:Orodna vrstica
 
 
 
@@ -5057,7 +5060,7 @@ prefs_dialog.toolbar_icons:RO:Bara de unelte
 prefs_dialog.command_bar_icons:EN:Command bar
 prefs_dialog.command_bar_icons:FR:Barre de commande
 prefs_dialog.command_bar_icons:RO:Bara de comenzi
-
+prefs_dialog.command_bar_icons:SI:Ukazna vrstica
 
 
 
@@ -5067,7 +5070,7 @@ prefs_dialog.command_bar_icons:RO:Bara de comenzi
 
 prefs_dialog.file_icons:EN:File types
 prefs_dialog.file_icons:FR:Type de fichiers
-
+prefs_dialog.file_icons:SI:Vrste datotek
 
 
 
@@ -5208,7 +5211,7 @@ prefs_dialog.selection_color:RO:Fondul selecției
 prefs_dialog.not_in_focus_selection_color:EN:Selection background when not in focus
 prefs_dialog.not_in_focus_selection_color:FR:Fond de la sélection sans focus
 prefs_dialog.not_in_focus_selection_color:RO:Fondul selecției fără focus
-
+prefs_dialog.not_in_focus_selection_color:SI:Neaktivno označeno ozadje
 
 
 
@@ -5341,7 +5344,7 @@ prefs_dialog.pick_a_color:RO:Alegeți o culoare
 prefs_dialog.shell_colors:EN:Shell colors
 prefs_dialog.shell_colors:FR:Couleurs du shell
 prefs_dialog.shell_colors:RO:Culori pentru shell
-
+prefs_dialog.shell_colors:SI:Barve v ukazni vrstici
 
 
 
@@ -5355,7 +5358,7 @@ prefs_dialog.shell_colors:RO:Culori pentru shell
 prefs_dialog.shell_colors.text_color:EN:Text
 prefs_dialog.shell_colors.text_color:FR:Texte
 prefs_dialog.shell_colors.text_color:RO:Text
-
+prefs_dialog.shell_colors.text_color:SI:Besedilo
 
 
 
@@ -5378,14 +5381,14 @@ prefs_dialog.shell_colors.selection_color:EN:$[prefs_dialog.selection_color]
 
 prefs_dialog.themes:EN:Themes
 prefs_dialog.themes:FR:Thèmes
-
+prefs_dialog.themes:SI:Teme
 
 
 
 
 prefs_dialog.theme_warning:EN:This will overwrite the custom theme. Do you wish to proceed?
 prefs_dialog.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
-
+prefs_dialog.theme_warning:SI:To bo prepisalo običajno temo. Želite nadaljevati?
 
 
 
@@ -5510,7 +5513,7 @@ prefs_dialog.shell:EN:$[com.mucommander.ui.action.RunCommandAction.label]
 prefs_dialog.default_shell:EN:Use default system shell
 prefs_dialog.default_shell:FR:Utiliser le shell par défaut du système
 prefs_dialog.default_shell:RO:Folosește shell-ul implicit pe sistem
-
+prefs_dialog.default_shell:SI:Uporabi privzeto izvajanje ukazov
 
 
 
@@ -5520,8 +5523,7 @@ prefs_dialog.default_shell:RO:Folosește shell-ul implicit pe sistem
 prefs_dialog.custom_shell:EN:Use custom shell
 prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
 prefs_dialog.custom_shell:RO:Folosește un shell anume
-
-
+prefs_dialog.custom_shell:SI:Uporabi izvajanje ukazov po meri
 
 
 
@@ -5530,7 +5532,7 @@ prefs_dialog.custom_shell:RO:Folosește un shell anume
 
 prefs_dialog.enable_bonjour_discovery:EN:Enable Bonjour services discovery
 prefs_dialog.enable_bonjour_discovery:FR:Activer la découverte des services Bonjour
-
+prefs_dialog.enable_bonjour_discovery:SI:Omogoči odkrivanje "Bonjour" storitev
 
 
 
@@ -5653,7 +5655,7 @@ unit.speed:RO:%1/s
 
 duration.seconds:EN:%1s
 duration.seconds:FR:%1s
-
+duration.seconds:SI:%1s
 
 
 
@@ -5663,7 +5665,7 @@ duration.seconds:FR:%1s
 
 duration.minutes:EN:%1m
 duration.minutes:FR:%1m
-
+duration.minutes:SI:%1min
 
 
 
@@ -5673,7 +5675,7 @@ duration.minutes:FR:%1m
 
 duration.hours:EN:%1h
 duration.hours:FR:%1h
-
+duration.hours:SI:%1h
 
 
 
@@ -5684,7 +5686,7 @@ duration.hours:FR:%1h
 
 duration.days:EN:%1d
 duration.days:FR:%1j
-
+duration.days:SI:%1d
 
 
 
@@ -5694,7 +5696,7 @@ duration.days:FR:%1j
 
 duration.months:EN:%1mo
 duration.months:FR:%1mo
-
+duration.months:SI:%1m
 
 
 
@@ -5704,7 +5706,7 @@ duration.months:FR:%1mo
 
 duration.years:EN:%1y
 duration.years:FR:%1a
-
+duration.years:SI:%1l
 
 
 
@@ -5713,7 +5715,7 @@ duration.years:FR:%1a
 
 
 duration.infinite:EN:∞
-
+duration.infinite:SI:neskončno
 
 
 
@@ -5722,7 +5724,7 @@ duration.infinite:EN:∞
 #################
 setup.title:EN:Welcome to muCommander
 setup.title:FR:Bienvenue dans muCommander
-
+setup.title:SI:Dobrodošli v muCommanderju
 
 
 
@@ -5730,7 +5732,7 @@ setup.title:FR:Bienvenue dans muCommander
 
 setup.intro:EN:Please choose the way you want muCommander to behave.
 setup.intro:FR:Veuillez choisir le comportement souhaité de muCommander.
-
+setup.intro:SI:Izberite prosim lastnosti muCommanderja.
 
 
 
@@ -5743,7 +5745,7 @@ setup.look_and_feel:FR:Selectionnez votre Look & Feel
 
 setup.theme:EN:Select your theme
 setup.theme:FR:Selectionnez votre thème
-
+setup.theme:SI:Izberite temo
 
 
 
@@ -5759,6 +5761,7 @@ setup.theme:FR:Selectionnez votre thème
 #server_connect_dialog.auth_error:ES:Nombre o contraseña inválido
 #server_connect_dialog.auth_error:CS:Nesprávné uživatelské jméno nebo heslo.
 #server_connect_dialog.auth_error:zh_TW:不合法的帳號或密碼
+#server_connect_dialog.auth_error:SI:Napačno uporabniško ime ali geslo
 
 #move_dialog.cannot_move_to_itself:EN:Cannot move files to a subfolder.
 #move_dialog.cannot_move_to_itself:FR:Impossible de déplacer les fichiers vers un sous-répertoire.
@@ -5766,6 +5769,7 @@ setup.theme:FR:Selectionnez votre thème
 #move_dialog.cannot_move_to_itself:ES:Imposible mover los ficheros al subdirectorio.
 #move_dialog.cannot_move_to_itself:CS:Nemůžu přesunout soubory do podsložky.
 #move_dialog.cannot_move_to_itself:zh_TW:無法搬移檔案至子目錄
+#move_dialog.cannot_move_to_itself:SI:Ne morem premakniti datotek v podmapo
 
 #pack.error_on_file:EN:Error while compressing %1
 #pack.error_on_file:FR:Erreur lors de la compression de %1
@@ -5809,6 +5813,7 @@ setup.theme:FR:Selectionnez votre thème
 #image_viewer.previous_image:ES:Anterior
 #image_viewer.previous_image:CS:Předchozí obrázek
 #image_viewer.previous_image:zh_TW:前一個圖片
+#image_viewer.previous_image:SI:Prejšnja slika
 
 #image_viewer.next_image:EN:Next image
 #image_viewer.next_image:FR:Image suivante
@@ -5816,6 +5821,7 @@ setup.theme:FR:Selectionnez votre thème
 #image_viewer.next_image:ES:Siguiente
 #image_viewer.next_image:CS:Další obrázek
 #image_viewer.next_image:zh_TW:後一個圖片
+#image_viewer.next_image:SI:Naslednja slika
 
 #mkdir_dialog.title:EN:Make directory
 #mkdir_dialog.title:FR:Créer répertoire
