@@ -161,16 +161,33 @@ public class ThemeManager {
         // There is no user theme. Create one before carrying on.
         else {
             // If there is no legacy data, creates an empty user theme.
-            if(legacyData == null)
+            if(legacyData == null) {
                 legacyData = new ThemeData();
-            // Makes sure that muCommander boots with the user's previous preferences.
-	    else
-		currentType = USER_THEME;
+                userTheme  = new Theme(Translator.get("user_theme"), legacyData);
 
-            // Creates and saves the user theme.
-            userTheme            = new Theme(Translator.get("user_theme"), legacyData);
-            wasUserThemeModified = true;
-            saveUserTheme();
+                // If the user theme file wasn't found but the configuration describes
+                // the current theme as the user theme, resets to defaults.
+                if(currentType == USER_THEME) {
+                    if(Debug.ON) Debug.trace("User theme file not found, reseting to defaults.");
+
+                    // Resets the theme manager.
+                    currentType = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);
+                    currentName = ConfigurationVariables.DEFAULT_THEME_NAME;
+
+                    // Resets the configuration manager.
+                    ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE);
+                    ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, ConfigurationVariables.DEFAULT_THEME_NAME);
+                }
+            }
+
+            // Makes sure that muCommander boots with the user's previous preferences.
+	    else {
+		currentType = USER_THEME;
+                // Creates and saves the user theme.
+                userTheme            = new Theme(Translator.get("user_theme"), legacyData);
+                wasUserThemeModified = true;
+                saveUserTheme();
+            }
         }
 
         // Adds the user theme to the list of available themes.
