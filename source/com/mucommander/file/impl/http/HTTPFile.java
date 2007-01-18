@@ -45,7 +45,7 @@ public class HTTPFile extends AbstractFile {
      * Creates a new instance of HTTPFile.
      */
     public HTTPFile(FileURL fileURL) throws IOException {
-        this(fileURL, new URL(fileURL.getStringRep(false)));
+        this(fileURL, new URL(fileURL.toString(false)));
     }
 
 	
@@ -382,7 +382,8 @@ public class HTTPFile extends AbstractFile {
             HTTPFile child;
             URL childURL;
             FileURL childFileURL;
-			
+            Credentials credentials = fileURL.getCredentials();
+
             while((tokenType=st.nextToken())!=StreamTokenizer.TT_EOF) {
                 token = st.sval;
                 //					if(st.ttype!=StreamTokenizer.TT_WORD)
@@ -396,7 +397,8 @@ public class HTTPFile extends AbstractFile {
                             if(!childrenURL.contains(token)) {
                                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating child "+token+" context="+contextURL);
                                 childURL = new URL(contextURL, token);
-                                childFileURL = new FileURL(childURL.toExternalForm(), fileURL);
+                                childFileURL = new FileURL(childURL.toExternalForm());
+                                childFileURL.setCredentials(credentials);
                                 child = new HTTPFile(childFileURL, childURL);
                                 // Recycle this file for parent whenever possible
                                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("recycle parent="+child.fileURL.equals(this.fileURL));

@@ -159,4 +159,29 @@ public class FileToolkit {
         }
         return total;
     }
+
+
+    /**
+     * Removes any leading separator character (slash or backslash) from the givne path and returns the modified path.
+     */
+    public static String removeLeadingSeparator(String path) {
+        char firstChar;
+        if(path.length()>0 && ((firstChar=path.charAt(0))=='/' || firstChar=='\\'))
+            return path.substring(1, path.length());
+
+        return path;
+    }
+
+
+    /**
+     * Removes any trailing separator character (slash or backslash) from the givne path and returns the modified path. 
+     */
+    public static String removeTrailingSeparator(String path) {
+        char lastChar;
+        int len = path.length();
+        if(len>0 && ((lastChar=path.charAt(len-1))=='/' || lastChar=='\\'))
+            return path.substring(0, len-1);
+
+        return path;
+    }
 }

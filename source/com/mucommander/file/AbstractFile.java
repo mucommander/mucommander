@@ -2,7 +2,7 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.file.impl.local.FSFile;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.process.AbstractProcess;
@@ -187,7 +187,7 @@ public abstract class AbstractFile {
             return fileURL.getPath();
 
         // For any other file protocols: return the full URL that includes the protocol and host parts
-        return fileURL.getStringRep(false);
+        return fileURL.toString(false);
     }
 
 
@@ -268,7 +268,7 @@ public abstract class AbstractFile {
      */
     public boolean isArchiveEntry() {
         return this instanceof ArchiveEntryFile
-           || (this instanceof AbstractArchiveFile && !(((AbstractArchiveFile)this).getProxiedFile() instanceof FSFile));
+           || (this instanceof AbstractArchiveFile && !(((AbstractArchiveFile)this).getProxiedFile() instanceof LocalFile));
     }
 
 

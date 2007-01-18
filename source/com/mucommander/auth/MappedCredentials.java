@@ -1,10 +1,6 @@
 package com.mucommander.auth;
 
 import com.mucommander.file.FileURL;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.Debug;
-
-import java.net.MalformedURLException;
 
 /**
  * MappedCredentials extends Credentials to associate the login and password pair to a 'realm', that is the location to
@@ -83,6 +79,6 @@ public class MappedCredentials extends Credentials {
 
 
     public String toString() {
-        return realm.getStringRep(false);
+        return realm.toString(false);
     }
 }

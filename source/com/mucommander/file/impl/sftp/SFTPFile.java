@@ -379,7 +379,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
         if(nbFiles==0)
             return new AbstractFile[] {};
 
-        String parentURL = fileURL.getStringRep(true);
+        String parentURL = fileURL.toString(true);
         if(!parentURL.endsWith(SEPARATOR))
             parentURL += SEPARATOR;
 
@@ -398,7 +398,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
             // Discard '.' and '..' files, dunno why these are returned
             if(filename.equals(".") || filename.equals(".."))
                 continue;
-            childURL = new FileURL(parentURL+filename, fileURL);
+            childURL = new FileURL(parentURL+filename);
             child = FileFactory.wrapArchive(new SFTPFile(childURL, sftpFile));
             child.setParent(this);
 

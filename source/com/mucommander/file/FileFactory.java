@@ -8,17 +8,20 @@ import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.FileFilter;
+import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ar.ArArchiveFile;
 import com.mucommander.file.impl.bzip2.Bzip2ArchiveFile;
 import com.mucommander.file.impl.ftp.FTPFile;
 import com.mucommander.file.impl.gzip.GzipArchiveFile;
 import com.mucommander.file.impl.http.HTTPFile;
 import com.mucommander.file.impl.iso.IsoArchiveFile;
-import com.mucommander.file.impl.local.FSFile;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.impl.sftp.SFTPFile;
 import com.mucommander.file.impl.smb.SMBFile;
 import com.mucommander.file.impl.tar.TarArchiveFile;
 import com.mucommander.file.impl.zip.ZipArchiveFile;
+import com.mucommander.file.util.FileToolkit;
+import com.mucommander.file.util.PathTokenizer;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +50,7 @@ public abstract class FileFactory {
     private static Vector registeredArchiveConstructorsV = new Vector();
 
     /** Array of registered archive filters, for quicker access */
-    private static FileFilter registeredArchiveFilters[];
+    private static FilenameFilter registeredArchiveFilters[];
     /** Array of registered archive constructors, for quicker access */
     private static Constructor registeredArchiveConstructors[];
 
@@ -61,7 +64,7 @@ public abstract class FileFactory {
     static {
         // Register built-in file protocols
         // Local file protocol is hard-wired for performance reasons, no need to add it
-        // registerFileProtocol(FSFile.class, FileProtocols.FILE);
+        // registerFileProtocol(LocalFile.class, FileProtocols.FILE);
         registerFileProtocol(SMBFile.class, FileProtocols.SMB);
         registerFileProtocol(HTTPFile.class, FileProtocols.HTTP);
         registerFileProtocol(HTTPFile.class, FileProtocols.HTTPS);
@@ -122,7 +125,7 @@ public abstract class FileFactory {
             registeredArchiveConstructors = new Constructor[nbArchiveFormats];
             registeredArchiveConstructorsV.toArray(registeredArchiveConstructors);
             
-            registeredArchiveFilters = new FileFilter[nbArchiveFormats];
+            registeredArchiveFilters = new FilenameFilter[nbArchiveFormats];
             registeredArchiveFiltersV.toArray(registeredArchiveFilters);
 
             return true;
@@ -188,8 +191,9 @@ public abstract class FileFactory {
     }
 
     /**
-     * Returns an instance of AbstractFile for the given absolute path and sets the giving parent if not null. AbstractFile subclasses should
-     * call this method rather than {@link #getFile(String)} because it is more efficient.
+     * Returns an instance of AbstractFile for the given absolute path and use the given parent for the new file if
+     * not null. AbstractFile subclasses should as much as possible call this method rather than {@link #getFile(String)} 
+     * because it is more efficient.
      *
      * @param absPath the absolute path to the file
      * @param parent the returned file's parent
@@ -198,7 +202,8 @@ public abstract class FileFactory {
      * @throws AuthException if additionnal authentication information is required to create the file
      */
     public static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
-        return getFile(URLFactory.getFileURL(absPath, parent==null?null:parent.getURL(), true), parent);
+//        return getFile(URLFactory.getFileURL(absPath, parent==null?null:parent.getURL(), true), parent);
+        return getFile(URLFactory.getFileURL(absPath, true), parent);
     }
 
     /**
@@ -239,6 +244,104 @@ public abstract class FileFactory {
         }
     }
 
+//    /**
+//     * Creates and returns an instance of AbstractFile for the given FileURL and uses the specified parent file (if any)
+//     * as the created file's parent.
+//     *
+//     * <p>Specifying the file parent if an instance already exists allows to recycle the AbstractFile instance
+//     * instead of creating a new one when the parent file is requested.
+//     *
+//     * @param fileURL the file URL representing the file to be created
+//     * @param parent the parent AbstractFile to use as the created file's parent, can be <code>null</code>
+//     *
+//     * @throws java.io.IOException if something went wrong during file creation.
+//     */
+//    public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
+//        try {
+//            String protocol = fileURL.getProtocol().toLowerCase();
+//
+//            AbstractFile file;
+//
+//            // Special case for local files, do not use protocol registration mechanism to speed things up a bit
+//            if(protocol.equals(FileProtocols.FILE)) {
+//                // Use an LRU file cache to recycle frequently used local file instances.
+//                String urlRep = fileURL.toString(true);
+//                file = (AbstractFile)fileCache.get(urlRep);
+//
+////                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
+//
+//                if(file!=null) {
+////                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("File cache hit for "+file);
+//
+//                    // Create an archive file on top of this file if the file matches one of the archive filters
+//                    return wrapArchive(file);
+//                }
+//
+//                // Create local file instance
+//                file = new LocalFile(fileURL);
+//
+//                // Reuse existing parent file instance if one was specified
+//                if(parent!=null)
+//                    file.setParent(parent);
+//
+//                fileCache.add(urlRep, file);
+////                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Added to file cache: "+file);
+//
+//                // Create an archive file on top of this file if the file matches one of the archive filters
+//                // This must be done after adding the file to the LRU cache, this could otherwise lead to weird
+//                // behaviors, for example if a directory with the same filename of a former archive was created,
+//                // the directory would be considered as an archive
+//                return wrapArchive(file);
+//            }
+//            // For any other file protocol, use registered protocols map
+//            else {
+//                // If the specified FileURL doesn't contain any credentials, use CredentialsManager to find
+//                // any credentials matching the url and use them.
+//if(Debug.ON) Debug.trace("fileURL.containsCredentials() "+fileURL.containsCredentials());
+//                if(!fileURL.containsCredentials())
+//                    CredentialsManager.authenticateImplicit(fileURL);
+//if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
+//
+//                // Get a registered Constructor instance for the file protocol
+//                Constructor constructor = (Constructor)registeredProtocolConstructors.get(protocol);
+//
+//                // If constructor is null, it means the protocol hasn't been registered properly
+//                if(constructor==null) {
+//                    // Todo: localize this string as it can be displayed to the end user
+//                    throw new IOException("Unknown protocol: "+protocol);
+//                }
+//
+//                // May throw InstantiationException, IllegalAccessException, IllegalAccessException, ExceptionInInitializerError, InvocationTargetException
+//                file = (AbstractFile)constructor.newInstance(new Object[]{fileURL});
+//
+//                // Reuse existing parent file instance if one was specified
+//                if(parent!=null)
+//                    file.setParent(parent);
+//
+//                // Create an archive file on top of this file if the file matches one of the archive filters
+//                return wrapArchive(file);
+//            }
+//        }
+//        catch(InvocationTargetException e) {
+//            // This exception is thrown by Constructor.newInstance() when the target constructor throws an Exception.
+//            // If the exception was an IOException, throw it instead of a new IOException, as it may contain
+//            // additional information about the error cause
+//            Throwable cause = e.getTargetException();
+//            if(cause instanceof IOException)
+//                throw (IOException)cause;
+//
+//            throw new IOException();
+//        }
+//        catch(IOException e2) {
+//            throw e2;
+//        }
+//        catch(Exception e3) {
+//            // InstantiationException, IllegalAccessException, IllegalAccessException
+//            throw new IOException();
+//        }
+//    }
+
+
     /**
      * Creates and returns an instance of AbstractFile for the given FileURL and uses the specified parent file (if any)
      * as the created file's parent.
@@ -252,6 +355,67 @@ public abstract class FileFactory {
      * @throws java.io.IOException if something went wrong during file creation.
      */
     public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
+
+        PathTokenizer pt = new PathTokenizer(fileURL.getPath());
+
+        AbstractFile currentFile = null;
+        boolean lastFileResolved = false;
+
+        // Extract every filename from the path from left to right and for each of them, see if it looks like an archive.
+        // If it does, create the appropriate protocol file and wrap it into an archive file.
+        while(pt.hasMoreFilenames()) {
+
+            // Test if the filename's extension looks like a supported archive format...
+            // Note that the archive can also be a directory with an archive extension
+            if(isArchiveFilename(pt.nextFilename())) {
+                // Remove trailing separator of file, some file protocols such as SFTP don't like trailing separators.
+                // On the contrary, directories without a trailing slash are fine.
+                String currentPath = FileToolkit.removeTrailingSeparator(pt.getCurrentPath());
+
+                // Test if current file is an archive file and if it is, create an archive entry file instead of a raw
+                // protocol file
+                if(currentFile==null || !(currentFile instanceof AbstractArchiveFile)) {
+                    // Create a fresh FileURL with the current path
+                    FileURL clonedURL = (FileURL)fileURL.clone();
+                    clonedURL.setPath(currentPath);
+                    currentFile = wrapArchive(createRawFile(clonedURL));
+                }
+                else {          // currentFile is an AbstractArchiveFile
+                    // Note: wrapArchive() is already called by AbstractArchiveFile#createArchiveEntryFile()
+                    currentFile = ((AbstractArchiveFile)currentFile).getEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
+                }
+
+                lastFileResolved = true;
+            }
+            else {
+                lastFileResolved = false;
+            }
+        }
+
+        // Create last file if it hasn't been already (if the last filename was not an archive), same routine as above
+        // except that it doesn't wrap the file into an archive file
+        if(!lastFileResolved) {
+            String currentPath = pt.getCurrentPath();
+
+            if(currentFile==null || !(currentFile instanceof AbstractArchiveFile)) {
+                FileURL clonedURL = (FileURL)fileURL.clone();
+                clonedURL.setPath(currentPath);
+                currentFile = createRawFile(clonedURL);
+            }
+            else {          // currentFile is an AbstractArchiveFile
+                currentFile = ((AbstractArchiveFile)currentFile).getEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
+            }
+        }
+
+        // Reuse existing parent file instance if one was specified
+        if(parent!=null)
+            currentFile.setParent(parent);
+
+        return currentFile;
+    }
+
+
+    private static AbstractFile createRawFile(FileURL fileURL) throws IOException {
         try {
             String protocol = fileURL.getProtocol().toLowerCase();
 
@@ -260,33 +424,24 @@ public abstract class FileFactory {
             // Special case for local files, do not use protocol registration mechanism to speed things up a bit
             if(protocol.equals(FileProtocols.FILE)) {
                 // Use an LRU file cache to recycle frequently used local file instances.
-                String urlRep = fileURL.getStringRep(true);
+                String urlRep = fileURL.toString(true);
                 file = (AbstractFile)fileCache.get(urlRep);
 
 //                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
 
-                if(file!=null) {
-//                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("File cache hit for "+file);
-
-                    // Create an archive file on top of this file if the file matches one of the archive filters
-                    return wrapArchive(file);
-                }
+                if(file!=null)
+                    return file;
 
                 // Create local file instance
-                file = new FSFile(fileURL);
+                file = new LocalFile(fileURL);
 
-                // Reuse existing parent file instance if one was specified
-                if(parent!=null)
-                    file.setParent(parent);
-
+                // Note: Creating an archive file on top of the file must be done after adding the file to the LRU cache,
+                // this could otherwise lead to weird behaviors, for example if a directory with the same filename
+                // of a former archive was created, the directory would be considered as an archive
                 fileCache.add(urlRep, file);
 //                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Added to file cache: "+file);
 
-                // Create an archive file on top of this file if the file matches one of the archive filters
-                // This must be done after adding the file to the LRU cache, this could otherwise lead to weird
-                // behaviors, for example if a directory with the same filename of a former archive was created,
-                // the directory would be considered as an archive
-                return wrapArchive(file);
+                return file;
             }
             // For any other file protocol, use registered protocols map
             else {
@@ -307,14 +462,7 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
                 }
 
                 // May throw InstantiationException, IllegalAccessException, IllegalAccessException, ExceptionInInitializerError, InvocationTargetException
-                file = (AbstractFile)constructor.newInstance(new Object[]{fileURL});
-
-                // Reuse existing parent file instance if one was specified
-                if(parent!=null)
-                    file.setParent(parent);
-
-                // Create an archive file on top of this file if the file matches one of the archive filters
-                return wrapArchive(file);
+                return (AbstractFile)constructor.newInstance(new Object[]{fileURL});
             }
         }
         catch(InvocationTargetException e) {
@@ -337,13 +485,14 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
     }
 
 
+
     /**
      * Creates and returns a temporary local file using the desired name.
      *
      * @param desiredName the desired filename for the temporary file. If a file already exists with this name in the
      * temporary directory, the name will be appended of a prefix, but the filename extension will always be preserved.
      * @param deleteOnExit if <code>true</code>, the file will be deleted on normal terminal of the JVM
-     * @return the temporary FSFile instance
+     * @return the temporary LocalFile instance
      */
     public static AbstractFile getTemporaryFile(String desiredName, boolean deleteOnExit) {
         // Attempt to use the desired name
@@ -373,9 +522,26 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
 
 
     /**
+     * Returns true if the given filename's extension matches one of the registered archive formats.
+     *
+     * @param filename the filename to test
+     */
+    public static boolean isArchiveFilename(String filename) {
+        int nbArchiveFormats = registeredArchiveFilters.length;
+        for(int i=0; i<nbArchiveFormats; i++) {
+            if(registeredArchiveFilters[i].accept(filename))
+                return true;
+        }
+
+        return false;
+    }
+
+
+    /**
      * Tests based on the given file's extension, if the file corresponds to a registered archive format.
-     * If it does, creates the appropriate {@link com.mucommander.file.AbstractArchiveFile} instance on top of the
-     * provided file and returns it.
+     * If it does, an appropriate {@link com.mucommander.file.AbstractArchiveFile} instance is created on top of the
+     * provided file and returned. If it doesn't (the file's extension doesn't correspond to a registered archive
+     * format or is a directory), the same AbstractFile instance is returned.
      */
     public static AbstractFile wrapArchive(AbstractFile file) {
         // Look for an archive format filter that matches the file

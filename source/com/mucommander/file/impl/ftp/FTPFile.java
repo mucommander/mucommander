@@ -407,7 +407,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         String childName;
         int nbFiles = files.length;
         int fileCount = 0;
-        String parentURL = fileURL.getStringRep(true);
+        String parentURL = fileURL.toString(true);
         if(!parentURL.endsWith(SEPARATOR))
             parentURL += SEPARATOR;
 
@@ -416,7 +416,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             if(childName.equals(".") || childName.equals(".."))
                 continue;
 
-            childURL = new FileURL(parentURL+childName, fileURL);
+            childURL = new FileURL(parentURL+childName);
             childURL.setProperty(PASSIVE_MODE_PROPERTY_NAME, ""+isPassiveModeEnabled());
 
             // Discard '.' and '..' files
@@ -771,7 +771,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
                 Credentials credentials = getCredentials();
 
-                if(Debug.ON) Debug.trace("fileURL="+ realm.getStringRep(true)+" credentials="+ credentials);
+                if(Debug.ON) Debug.trace("fileURL="+ realm.toString(true)+" credentials="+ credentials);
                 if(credentials ==null)
                     throw new AuthException(realm);
 

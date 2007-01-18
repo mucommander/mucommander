@@ -15,11 +15,11 @@ import java.util.Vector;
 
 
 /**
- * FSFile represents a 'file system file', that is a regular native file.
+ * LocalFile represents a 'file system file', that is a regular native file.
  *
  * @author Maxence Bernard
  */
-public class FSFile extends AbstractFile {
+public class LocalFile extends AbstractFile {
 
     private File file;
     private String parentFilePath;
@@ -43,7 +43,7 @@ public class FSFile extends AbstractFile {
 
 
     /**
-     * FSRandomAccessInputStream extends RandomAccessInputStream to provide random access to an <code>FSFile</code>'s
+     * FSRandomAccessInputStream extends RandomAccessInputStream to provide random access to an <code>LocalFile</code>'s
      * content.
      */
     public class FSRandomAccessInputStream extends RandomAccessInputStream {
@@ -84,9 +84,9 @@ public class FSFile extends AbstractFile {
     }
 
     /**
-     * Creates a new instance of FSFile.
+     * Creates a new instance of LocalFile.
      */
-    public FSFile(FileURL fileURL) throws IOException {
+    public LocalFile(FileURL fileURL) throws IOException {
         super(fileURL);
 
         String path = fileURL.getPath();
@@ -272,7 +272,7 @@ public class FSFile extends AbstractFile {
 
     public boolean isSymlink() {
         // Note: this value must not be cached as its value can change over time (canonical path can change)
-        FSFile parent = (FSFile)getParent();
+        LocalFile parent = (LocalFile)getParent();
         String canonPath = getCanonicalPath(false);
         if(parent==null || canonPath==null)
             return false;
@@ -463,7 +463,7 @@ public class FSFile extends AbstractFile {
 
         AbstractFile children[] = new AbstractFile[names.length];
         for(int i=0; i<names.length; i++) {
-            // Retrieves an AbstractFile (FSFile or archive) instance potentially fetched from the LRUCache
+            // Retrieves an AbstractFile (LocalFile or archive) instance potentially fetched from the LRUCache
             // and reuse this file as parent
             children[i] = FileFactory.getFile(absPath+SEPARATOR+names[i], this);
         }
@@ -482,20 +482,20 @@ public class FSFile extends AbstractFile {
             return;
         }
 
-        // If file is an archive file, retrieve the enclosed file, which is likely to be an FSFile but not necessarily
+        // If file is an archive file, retrieve the enclosed file, which is likely to be a LocalFile but not necessarily
         // (may be an ArchiveEntryFile)
         if(destFile instanceof AbstractArchiveFile)
             destFile = ((AbstractArchiveFile)destFile).getProxiedFile();
 
-        // If destination file is not an FSFile (for instance an archive entry), renaming won't work
+        // If destination file is not a LocalFile (for instance an archive entry), renaming won't work
         // so use the default moveTo() implementation instead
-        if(!(destFile instanceof FSFile)) {
+        if(!(destFile instanceof LocalFile)) {
             super.moveTo(destFile);
             return;
         }
 
         // Move file
-        if(!file.renameTo(((FSFile)destFile).file))
+        if(!file.renameTo(((LocalFile)destFile).file))
             throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
     }
 

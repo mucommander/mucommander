@@ -58,7 +58,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
                 Credentials loginCredentials = new Credentials(connHandler.getCredentials().getLogin(), "");
                 clonedRealm.setCredentials(loginCredentials);
 
-                return clonedRealm.getStringRep(true)
+                return clonedRealm.toString(true)
                         +" ("+Translator.get(connHandler.isLocked()?"server_connections_dialog.connection_busy":"server_connections_dialog.connection_idle")+")";
             }
         });

@@ -2,6 +2,7 @@ package com.mucommander.file.impl.smb;
 
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
+import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -42,45 +43,42 @@ public class SMBFile extends AbstractFile {
 
 
     public SMBFile(FileURL fileURL) throws IOException {
-//        this(fileURL, null, true);
         this(fileURL, null);
-
-        // Forces SmbFile to trigger an SmbAuthException if access to the file requires authentication.
-        // This test comes at a cost, so it's only performed in the public constructor used by AbstractFile.
-        try {
-            this.file.exists();
-        }
-        catch(SmbAuthException e) {
-if(Debug.ON) Debug.trace("caught "+e);
-
-            throw new AuthException(fileURL, e.getMessage());
-        }
     }
 
 
-//    private SMBFile(FileURL fileURL, SmbFile smbFile, boolean addAuthInfo) throws IOException {
     private SMBFile(FileURL fileURL, SmbFile smbFile) throws IOException {
         super(fileURL);
 
-//        CredentialsManager.authenticate(fileURL, addAuthInfo);
+        if(smbFile==null) {         // Called by public constructor
+            while(true) {
+                file = new SmbFile(fileURL.toString(true));
 
-//        this.privateURL = fileURL.getStringRep(true);
+                // The following test comes at a cost, so it's only used by the public constructor, SmbFile instances
+                // created by this class are considered OK.
+                try {
+                    // SmbFile requires a trailing slash for directories otherwise listFiles() will throw an SmbException.
+                    // As we cannot guarantee that the path will contain a trailing slash for directories, test if the
+                    // SmbFile is a directory and if it doesn't contain a trailing slash, create a new SmbFile.
+                    // SmbFile.isDirectory() will throw an SmbAuthException if access to the file requires (new) credentials.
+                    if(file.isDirectory() && !getURL().getPath().endsWith("/")) {
+                        // Add trailing slash and loop to create a new SmbFile
+                        fileURL.setPath(fileURL.getPath()+'/');
+                        continue;
+                    }
 
-        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("privateURL= "+privateURL);
-
-        //		// Unlike java.io.File, SmbFile throws an SmbException
-        //		// when file doesn't exist.
-        //		// All SMB workgroups, servers, shares, or directories URLs require a trailing slash '/'. 
-        //		// Regular SMB files can have a trailing slash as well, so let's add a trailing slash.
-        //		this.file = new SmbFile(privateURL.endsWith("/")?privateURL:privateURL+"/");
-
-//if(Debug.ON) Debug.trace("fileURL="+fileURL.getStringRep(true));
-
-        if(smbFile==null)
-//            this.file = new SmbFile(privateURL);
-            this.file = new SmbFile(fileURL.getStringRep(true));
-        else
-            this.file = smbFile;
+                    break;
+                }
+                catch(SmbException e) {
+                    // Need credentials, throw AuthException
+                    if(e instanceof SmbAuthException)
+                        throw new AuthException(fileURL, e.getMessage());
+                }
+            }
+        }
+        else {                      // Instanciated by this class
+            file = smbFile;
+        }
 
 //        // Cache SmbFile.getName()'s return value which parses name each time it is called
 //        this.name = file.getName();
@@ -248,7 +246,7 @@ if(Debug.ON) Debug.trace("caught "+e);
 
     public InputStream getInputStream() throws IOException {
 //        return new SmbFileInputStream(privateURL);
-        return new SmbFileInputStream(getURL().getStringRep(true));
+        return new SmbFileInputStream(getURL().toString(true));
     }
 
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
@@ -257,7 +255,7 @@ if(Debug.ON) Debug.trace("caught "+e);
 
     public OutputStream getOutputStream(boolean append) throws IOException {
 //        return new SmbFileOutputStream(privateURL, append);
-        return new SmbFileOutputStream(getURL().getStringRep(true), append);
+        return new SmbFileOutputStream(getURL().toString(true), append);
     }
 
     public void delete() throws IOException {
@@ -289,14 +287,15 @@ if(Debug.ON) Debug.trace("caught "+e);
             FileURL childURL;
             SmbFile smbFile;
             int currentIndex = 0;
+            Credentials credentials = fileURL.getCredentials();
             for(int i=0; i<nbSmbFiles; i++) {
                 smbFile = smbFiles[i];
                 smbFileType = smbFile.getType();
                 if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
                     continue;
                 
-//                child = FileFactory.wrapArchive(new SMBFile(new FileURL(smbFile.getCanonicalPath(), fileURL), smbFile, false));
-                childURL = new FileURL(smbFile.getCanonicalPath(), fileURL);
+                childURL = new FileURL(smbFile.getCanonicalPath());
+                childURL.setCredentials(credentials);
 
                 child = FileFactory.wrapArchive(new SMBFile(childURL, smbFile));
                 child.setParent(this);
@@ -306,8 +305,6 @@ if(Debug.ON) Debug.trace("caught "+e);
             return children;
         }
         catch(SmbAuthException e) {
-//if(Debug.ON) Debug.trace("caught "+e);
-            
             throw new AuthException(fileURL, e.getMessage());
         }
     }
@@ -317,7 +314,7 @@ if(Debug.ON) Debug.trace("caught "+e);
         // Unlike java.io.File.mkdir(), SmbFile does not return a boolean value
         // to indicate if the folder could be created
 //        new SmbFile(privateURL+SEPARATOR+name).mkdir();
-        new SmbFile(getURL().getStringRep(true)+SEPARATOR+name).mkdir();
+        new SmbFile(getURL().toString(true)+SEPARATOR+name).mkdir();
     }
 
 

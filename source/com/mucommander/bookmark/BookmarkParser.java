@@ -1,17 +1,17 @@
 package com.mucommander.bookmark;
 
-import com.mucommander.io.BackupInputStream;
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
-import com.mucommander.file.FileURL;
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.MappedCredentials;
+import com.mucommander.file.FileURL;
+import com.mucommander.io.BackupInputStream;
+import com.mucommander.xml.parser.ContentHandler;
+import com.mucommander.xml.parser.Parser;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Hashtable;
 import java.net.MalformedURLException;
+import java.util.Hashtable;
 
 
 /**
@@ -101,7 +101,7 @@ class BookmarkParser implements ContentHandler, BookmarkConstants {
                 // from the bookmark's location
                 if(credentials!=null) {
                     CredentialsManager.addCredentials(new MappedCredentials(credentials, url, true));
-                    bookmarkLocation = url.getStringRep(false);
+                    bookmarkLocation = url.toString(false);
                 }
                 else {
                     bookmarkLocation = characters;

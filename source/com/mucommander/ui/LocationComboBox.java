@@ -4,23 +4,22 @@ package com.mucommander.ui;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.RootFolders;
-import com.mucommander.file.FileURL;
 import com.mucommander.file.FileProtocols;
+import com.mucommander.file.FileURL;
+import com.mucommander.file.RootFolders;
 import com.mucommander.ui.comp.combobox.EditableComboBox;
 import com.mucommander.ui.comp.combobox.EditableComboBoxListener;
 import com.mucommander.ui.comp.combobox.SaneComboBox;
 import com.mucommander.ui.comp.progress.ProgressTextField;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.Debug;
-import com.mucommander.ui.theme.*;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import javax.swing.UIManager;
-import javax.swing.JTextField;
 
 
 public class LocationComboBox extends EditableComboBox implements LocationListener, EditableComboBoxListener, FocusListener, ThemeListener {
@@ -127,7 +126,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
             FileURL folderURL = e.getFolderURL();
 
             // Do not display the URL's protocol for local files
-            locationField.setText(folderURL.getProtocol().equals(FileProtocols.FILE)?folderURL.getPath():folderURL.getStringRep(false));
+            locationField.setText(folderURL.getProtocol().equals(FileProtocols.FILE)?folderURL.getPath():folderURL.toString(false));
         }
 
         // Disable component until the folder has been changed, cancelled or failed.

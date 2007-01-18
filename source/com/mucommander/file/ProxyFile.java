@@ -34,9 +34,6 @@ public abstract class ProxyFile extends AbstractFile {
     /** Proxied file */
     protected AbstractFile file;
 
-    /** Custom URL for this ProxyFile, may be null */
-    protected FileURL customURL;
-
 
     /**
      * Creates a new ProxyFile using the given file to delegate AbstractFile method calls to.

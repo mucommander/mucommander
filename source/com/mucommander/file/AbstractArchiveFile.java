@@ -132,35 +132,58 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();        
 
-        // Find the node that corresponds to the specified entry
-        ArchiveEntry entry = entryFile.getEntry();
-        String entryPath = entry.getPath();
-        int entryDepth = entry.getDepth();
+        DefaultMutableTreeNode matchNode = findEntryNode(entryFile.getEntry().getPath());
+        if(matchNode==null) {
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Error: no match found for "+entryFile.getEntry().getPath()+" , this is not supposed to happen!");
+            throw new IOException();
+        }
+
+        return ls(matchNode, entryFile, filenameFilter, fileFilter);
+    }
+
+
+    /**
+     * Finds and returns the node that corresponds to the specified entry path, null if no entry matching the path
+     * could be found.
+     *
+     * <p>Important note: the given path's separator character must be '/' and the path must be relative to the
+     * archive's root, i.e. not start with a leading '/', otherwise the entry will not be found. Trailing separators
+     * are ignored when paths are compared, for example the path 'temp' will match the entry 'temp/'.
+     */
+    private DefaultMutableTreeNode findEntryNode(String entryPath) {
+        int entryDepth = ArchiveEntry.getDepth(entryPath);
         int slashPos = 0;
         DefaultMutableTreeNode currentNode = entriesTree;
         for(int d=0; d<=entryDepth; d++) {
             String subPath = d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
+            if(subPath.charAt(subPath.length()-1)=='/')     // Remove any trailing slash to compare paths without trailing slashs
+                subPath = subPath.substring(0, subPath.length()-1);
+
             // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("subPath="+subPath+" depth="+d+"("+entryDepth+")");
-			
+
             int nbChildren = currentNode.getChildCount();
             DefaultMutableTreeNode matchNode = null;
             for(int c=0; c<nbChildren; c++) {
                 DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)currentNode.getChildAt(c);
-                if(((ArchiveEntry)childNode.getUserObject()).getPath().equals(subPath)) {
+
+                String childNodePath = ((ArchiveEntry)childNode.getUserObject()).getPath();
+                if(childNodePath.charAt(childNodePath.length()-1)=='/')     // Remove any trailing slash to compare paths without trailing slashs
+                    childNodePath = childNodePath.substring(0, childNodePath.length()-1);
+
+                if(childNodePath.equals(subPath)) {
                     //					if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found match for "+subPath);
                     matchNode = childNode;
                     break;
                 }
             }
-			
-            if(matchNode==null) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Error: no match found for "+subPath+" , this is not supposed to happen!");
-                throw new IOException();
-            }
+
+            if(matchNode==null)
+                return null;    // No node maching the provided path, return null
+
             currentNode = matchNode;
         }
-		
-        return ls(currentNode, entryFile, filenameFilter, fileFilter);
+
+        return currentNode;
     }
 
 
@@ -201,29 +224,29 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     /**
      * Creates and returns an AbstractFile using the provided entry and parent file. This method takes care of
      * creating the proper AbstractArchiveFile instance if the entry is itself an archive.
+     * The entry file's path will use the separator of the underlying file, as returned by {@link #getSeparator()}.
+     * That means entries paths of archives located on Windows local filesystems will use '\' as a separator, and
+     * '/' for Unix local archives.
      */
     private AbstractFile createArchiveEntryFile(ArchiveEntry entry, AbstractFile parentFile) throws java.net.MalformedURLException {
-        String separator = getSeparator();
-        FileURL archiveURL = getURL();
-        String entryURLString = archiveURL.getStringRep(false);
-        if(!entryURLString.endsWith(separator))
-            entryURLString += separator;
 
         String entryPath = entry.getPath();
 
         // If the parent file's separator is not '/' (the default entry separator), replace '/' occurrences by
         // the parent file's separator. For local files Under Windows, this allows entries' path to have '\' separators.
-        String parentSeparator = parentFile.getSeparator();
-        if(!parentSeparator.equals("/"))
-            entryPath = entryPath.replace("/", parentSeparator);
+        String fileSeparator = getSeparator();
+        if(!fileSeparator.equals("/"))
+            entryPath = entryPath.replace("/", fileSeparator);
 
-        entryURLString += entryPath;
-
+        FileURL archiveURL = getURL();
+        FileURL entryURL = (FileURL)archiveURL.clone();
+        entryURL.setPath(addTrailingSeparator(archiveURL.getPath()) + entryPath);
+        
         AbstractFile entryFile = FileFactory.wrapArchive(
           new ArchiveEntryFile(
             this,
             entry,
-            URLFactory.getFileURL(entryURLString, archiveURL, true)
+            entryURL
           )
         );
         entryFile.setParent(parentFile);
@@ -231,6 +254,34 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         return entryFile;
     }
 
+
+    /**
+     * Creates and returns an AbstractFile that corresponds to the given entry path within the archive.
+     * Throws an IOException if the entry does not exist inside this archive.
+     *
+     * <p>Important note: the given path's separator character must be '/' and the path must be relative to the
+     * archive's root, i.e. not start with a leading '/', otherwise the entry will not be found.
+     *
+     * @param entryPath path to an entry inside this archive
+     * @return an AbstractFile that corresponds to the given entry path
+     * @throws IOException if the entry does not exist within the archive
+     */
+    public AbstractFile getEntryFile(String entryPath) throws IOException {
+        // Make sure the entries tree is created and up-to-date
+        checkEntriesTree();
+
+        entryPath = entryPath.replace('\\', '/');
+
+        // Find the entry node corresponding to the given path
+        DefaultMutableTreeNode entryNode = findEntryNode(entryPath);
+
+        if(entryNode==null)
+            throw new IOException();    // Entry does not exist
+
+        DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)entryNode.getParent();
+        // Todo: suboptimal recursion, findEntryNode() is called each time
+        return createArchiveEntryFile((ArchiveEntry)entryNode.getUserObject(), parentNode==entriesTree?this:getEntryFile(((ArchiveEntry)parentNode.getUserObject()).getPath()));
+    }
 
 
     //////////////////////

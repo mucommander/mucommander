@@ -2,14 +2,16 @@
 package com.mucommander.ui;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
 import com.mucommander.ShutdownHook;
-import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.MappedCredentials;
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
+import com.mucommander.ui.auth.AuthDialog;
 import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
@@ -164,7 +166,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                     authDialog.showDialog();
                     newCredentials = authDialog.getCredentials();
                     if(newCredentials!=null) {
-                        path = newCredentials.getRealm().getStringRep(true);
+                        path = newCredentials.getRealm().toString(true);
                     }
                     // If the user cancels, we fall back to the default path.
                     else {

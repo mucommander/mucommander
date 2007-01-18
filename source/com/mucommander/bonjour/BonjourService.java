@@ -64,6 +64,6 @@ public class BonjourService {
      * Returns a String representation of this BonjourService in the form name / url.
      */
     public String toString() {
-        return name+" / "+url.getStringRep(false);
+        return name+" / "+url.toString(false);
     }
 }

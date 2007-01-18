@@ -255,7 +255,7 @@ public class TransferableFileSet implements Transferable {
             for(int i=0; i<nbFiles; i++) {
                 AbstractFile file = fileSet.fileAt(i);
 //                // Add the file only if it is a local file that is not an archive's entry
-//                if(file.getURL().getProtocol().equals(FileProtocols.FILE) && ((file instanceof FSFile) || (file instanceof AbstractArchiveFile && ((AbstractArchiveFile)file).getProxiedFile() instanceof FSFile)))
+//                if(file.getURL().getProtocol().equals(FileProtocols.FILE) && ((file instanceof LocalFile) || (file instanceof AbstractArchiveFile && ((AbstractArchiveFile)file).getProxiedFile() instanceof LocalFile)))
                 fileList.add(new File(file.getAbsolutePath()));
             }
             return fileList;

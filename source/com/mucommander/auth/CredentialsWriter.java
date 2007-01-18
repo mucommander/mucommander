@@ -1,10 +1,10 @@
 package com.mucommander.auth;
 
-import com.mucommander.xml.writer.XmlWriter;
 import com.mucommander.xml.writer.XmlAttributes;
+import com.mucommander.xml.writer.XmlWriter;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Iterator;
 
 /**
@@ -45,7 +45,7 @@ public class CredentialsWriter implements CredentialsConstants {
 
             // Write URL
             out.startElement(ELEMENT_URL);
-            out.writeCData(credentials.getRealm().getStringRep(false));
+            out.writeCData(credentials.getRealm().toString(false));
             out.endElement(ELEMENT_URL);
 
             // Write login

@@ -22,33 +22,28 @@ public class FileURL implements Cloneable {
     private String protocol;
     private String host;
     private int port = -1;
-    private Credentials credentials;
     private String path;
-    private FileURL parentURL;
-    private boolean parentURLSet;
     private String filename;
     private String query;
-	
+
+    private Credentials credentials;
     private Hashtable properties;
 
-    /** String designating localhost */
+    /** String designating the localhost */
     public final static String LOCALHOST = "localhost";
+
+
+    /**
+     * Protected constructor.
+     */
+    protected FileURL() {
+    }
 
 
     /**
      * Creates a new FileURL from the given URL string.
      */
     public FileURL(String url) throws MalformedURLException {
-        this(url, null);
-    }
-
-
-    /**
-     * Creates a new FileURL object from the given string and using the given FileURL as the parent URL.
-     * 
-     * <p>If the parent URL contains credentials (login/password), it will used in the child URL.</p>
-     */
-    public FileURL(String url, FileURL parentURL) throws MalformedURLException {
         try {
             int pos;
 
@@ -65,7 +60,7 @@ public class FileURL implements Cloneable {
                     url = FileProtocols.FILE+"://"+LOCALHOST+"/"+url;
                 // Handle Windows-style UNC network paths ( \\hostname\path ):
                 // - under Windows, transform it into a URL in the file://hostname/path form,
-                //   FSFile constructor will translate it back into an UNC network path
+                //   LocalFile constructor will translate it back into an UNC network path
                 // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
                 //   who've spent too much time using Windows
                 else if(url.startsWith("\\\\") && (len=url.length())>2) {
@@ -228,33 +223,7 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
                 query = url.substring(questionMarkPos, urlLen);
 
             // Extract filename from path
-            if(path.equals("") || path.equals("/")) {
-                filename = null;
-            }
-            else {	
-                String pathCopy = new String(path).replace('\\', '/');
-                // Extract filename from path
-                int len = pathCopy.length();
-                while(pathCopy.charAt(len-1)=='/')
-                    --len;
-				 
-                filename = pathCopy.substring(0, len);
-                separatorPos = filename.lastIndexOf('/');
-                filename = path.substring(separatorPos+1, len);
-                if(filename.equals(""))
-                    filename = null;
-            }
-
-            // If parent URL is not null, keep it and return it for calls to getParent()
-            if(parentURL!=null) {
-                this.parentURL = parentURL;
-                this.parentURLSet = true;
-
-                // Use parent URL's credentials if none are provided in this URL
-                // Note: parent URL may not contain credentials, in this case null will be returned
-                if(this.credentials==null)
-                    this.credentials = parentURL.getCredentials();
-            }
+            filename = getFilenameFromPath(path);
         }
         catch(MalformedURLException e) {
 //            if(com.mucommander.Debug.ON) {
@@ -272,14 +241,44 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
         }
     }
 
-	
+
+    /**
+     * Extracts a filename from the given path and returns it, or null if the path does not contain a filename.
+     */
+    private static String getFilenameFromPath(String path) {
+        if(path.equals("") || path.equals("/"))
+            return null;
+
+        path = path.replace('\\', '/');
+        // Extract filename from path
+        int len = path.length();
+        while(path.charAt(len-1)=='/')
+            --len;
+
+        String filename = path.substring(0, len);
+        int separatorPos = filename.lastIndexOf('/');
+        filename = path.substring(separatorPos+1, len);
+        if(filename.equals(""))
+            filename = null;
+
+        return filename;
+    }
+
+
     /**
      * Returns the protocol part of this FileURL (e.g. smb). The returned protocol may never be <code>null</code>.
      */
     public String getProtocol() {
         return protocol;
     }
-	
+
+    /**
+     * Sets the protocol part of this FileURL. The specified must not be null.
+     */
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
 
     /**
      * Returns the host part of this FileURL (e.g. google.com), <code>null</code> if this FileURL doesn't contain
@@ -288,18 +287,25 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
     public String getHost() {
         return host;
     }
-	
+
+    /**
+     * Sets the host part of this FileURL, <code>null</code> for no host.
+     */
+    public void setHost(String host) {
+        this.host = host;
+    }
+    
 	
     /**
      * Returns the port specified in this FileURL (e.g. 8080) if there is one, -1 otherwise.
-     * (-1 means the protocol default port should be considered).
+     * (-1 means the protocol's default port).
      */
     public int getPort() {
         return port;
     }
 	
     /**
-     * Sets a custom port.
+     * Sets a custom port, -1 for no custom port (use the protocol's defaut port).
      */
     public void setPort(int port) {
         this.port = port;
@@ -382,80 +388,65 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
         return path;
     }
 
+    /**
+     * Sets the path part of this FileURL. The specified path must not be <code>null</code> and start with '/'.
+     */
+    public void setPath(String path) {
+        this.path = path;
+        // Extract new filename from path
+        this.filename = getFilenameFromPath(path);
+    }
+
 	
     /**
      * Returns this FileURL's parent, or null if this FileURL has no parent (path is "/").
      * The returned parent will have the same protocol, host, port, credentials and properties as this FileURL.
+     * The filename and query parts of this FileURL (if any) will not be set in the returned parent, both will be null.
+     *
+     * <p>Note: this method returns a new FileURL instance everytime it is called, and all mutable fields of this FileURL
+     * are cloned. Therefore the returned parent can be safely modified without risking to modify other FileURL instances.
      */
     public FileURL getParent() {
-        // ParentURL not set yet
-        if(!parentURLSet && parentURL==null) {
-            // If path equals '/', url has no parent
-            if(!(path.equals("/") || path.equals(""))) {
-                String parentPath = path;
+        // If path equals '/', url has no parent
+        if(!(path.equals("/") || path.equals(""))) {
+            String parentPath = path;
 
-                // Remove any trailing slash or back slash
-                int len = parentPath.length();
-                if(len-->0 && (parentPath.charAt(len)=='/' || parentPath.charAt(len)=='\\'))
-                    parentPath = parentPath.substring(0, len);
+            // Remove any trailing slash or back slash
+            int len = parentPath.length();
+            if(len-->0 && (parentPath.charAt(len)=='/' || parentPath.charAt(len)=='\\'))
+                parentPath = parentPath.substring(0, len);
 
-                // Resolve parent folder's path and reconstruct parent URL
-                int lastSeparatorPos = Math.max(parentPath.lastIndexOf('/'), parentPath.lastIndexOf('\\'));
-                if(lastSeparatorPos!=-1) {
-                    try {
-                        // Reconstruct parent URL string
-                        String parent = protocol+"://";
+            // Resolve parent folder's path and reconstruct parent URL
+            int lastSeparatorPos = Math.max(parentPath.lastIndexOf('/'), parentPath.lastIndexOf('\\'));
+            if(lastSeparatorPos!=-1) {
+                FileURL parentURL = new FileURL();
 
-                        if(host!=null)
-                            parent += host;
+                parentURL.protocol = protocol;
+                parentURL.host = host;
+                parentURL.port = port;
+                parentURL.path = parentPath.substring(0, lastSeparatorPos+1);  // Keep trailing slash
 
-                        if(port!=-1)
-                            parent += ":"+port;
+                // Set same credentials for parent, (if any)
+                // Note: Credentials are immutable.
+                parentURL.credentials = credentials;
 
-                        if(host!=null || !parentPath.equals("/"))	// Test to avoid having URLs like 'smb:///'
-                            parent += parentPath.substring(0, lastSeparatorPos+1);  // Keep trailing slash
+                // Copy properties to parent (if any)
+                if(properties!=null)
+                    parentURL.properties = new Hashtable(properties);
 
-                        parentURL = new FileURL(parent);
-
-                        // Set same credentials for parent, if any.
-                        // Note: Credentials are immutable.
-                        if(credentials!=null)
-                            parentURL.setCredentials(credentials);
-
-                        // Copy properties to parent (if any)
-                        if(properties!=null)
-                            parentURL.properties = new Hashtable(properties);
-                    }
-                    catch(MalformedURLException e) {
-                        // No parent (parentURL will be null)
-                    }
-                }
+                return parentURL;
             }
-
-            this.parentURLSet = true;
         }
-		
-//        if(parentURL!=null) {
-//            // Return a cloned instance of parentURL since it is mutable and changes made in the returned
-//            // FileURL instance should not impact this instance
-//            try {
-//                return (FileURL)parentURL.clone();
-//            }
-//            catch(CloneNotSupportedException e) {
-//                return null;
-//            }
-//        }
-	
-        return parentURL;
+
+        return null;    // URL has no parent
     }
-	
+
 
     /**
      * Returns the realm of a given location, that is the URL to the host (if this URL contains one), port
-     * (if this URL contains one) and share (if the location's protocol has a notion of share, e.g. SMB).
+     * (if this URL contains one) and share path (if the location's protocol has a notion of share, e.g. SMB).
+     * Credentials and properties of the given FileURL are not copied.
      *
-     * <p>If the realm FileURL could not be created (MalformedURLException was thrown), null is returned,
-     * this should not normally happen.
      *
      * <p>A few examples:
      * <ul>
@@ -465,8 +456,11 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
      * <li>smb:// -> smb://
      * </ul>
      *
+     * <p>Note: this method returns a new FileURL instance everytime it is called.
+     * Therefore the returned parent can be safely modified without risking to modify other FileURL instances.
+     *
      * @param location the location to a resource on a remote server
-     * @return the location's realm, or null if it could not be resolved
+     * @return the location's realm
      */
     public static FileURL resolveRealm(FileURL location) {
         String protocol = location.getProtocol();
@@ -482,27 +476,14 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
             }
         }
 
-        try {
-            String realm = protocol+"://";
+        FileURL realm = new FileURL();
+        realm.protocol = location.protocol;
+        realm.host = location.host;
+        realm.port = location.port;
 
-            String host = location.getHost();
-            if(host!=null)
-                realm += host;
+        realm.path = newPath;
 
-            int port = location.getPort();
-            if(port!=-1)
-                realm += ":"+port;
-
-            realm += newPath;
-
-            return new FileURL(realm);
-        }
-        catch(MalformedURLException e) {
-            // Should never happen, report the error if it does
-            if(Debug.ON) Debug.trace("Error: realm could not be resolved for location: "+location);
-
-            return null;
-        }
+        return realm;
     }
 
 
@@ -513,7 +494,6 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
     public String getFilename() {
         return filename;
     }
-	
 
     /**
      * Returns the filename part of this FileURL, and if specified, decodes URL-encoded characters (e.g. %5D%35)
@@ -528,7 +508,8 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
 
         return filename;
     }
-	
+
+    // Note: no setFilename method, setPath should be used for that purpose   
 
     /**
      * Returns the query part of this FileURL if there is one (e.g. ?dummy=1&void=1 for http://mucommander.com/useless.php?dummy=1&void=1),
@@ -538,17 +519,13 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
         return query;
     }
 
-	
     /**
-     * Sets the given properties (name/value pair) to this FileURL.
-     * Properties can be used as a way to pass parameters to AbstractFile constructors.
+     * Sets the query part of this FileURL, <code>null</code> for no query part.
      */
-    public void setProperty(String name, String value) {
-        if(properties==null)
-            properties = new Hashtable();
-		
-        properties.put(name, value);
+    public void setQuery(String query) {
+        this.query = query;
     }
+
 	
     /**
      * Returns the value corresponding to the given property's name, null if the property doesn't exist (has no value).
@@ -557,28 +534,48 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
         return properties==null?null:(String)properties.get(name);
     }
 	
-	
     /**
-     * Reconstructs the URL and returns its String representation.
+     * Sets the given properties (name/value pair) to this FileURL.
+     * Properties can be used as a way to pass parameters to AbstractFile constructors.
+     */
+    public void setProperty(String name, String value) {
+        if(properties==null)
+            properties = new Hashtable();
+
+        properties.put(name, value);
+    }
+
+
+    /**
+     * Returns a String representation of this FileURL.
      *
      * @param includeCredentials if <code>true</code>, login and password (if any) will be included in the returned URL.
      * Login and password in URLs should never be visible to the end user.
      * @param maskPassword if <code>true</code> (and includeCredentials param too), password will be replaced by '*' characters. This
      * can be used to display a full URL to the end user without displaying the actual password.
      */
-    public String getStringRep(boolean includeCredentials, boolean maskPassword) {
+    public String toString(boolean includeCredentials, boolean maskPassword) {
         return reconstructURL(this.path, includeCredentials, maskPassword);
     }
 
     /**
-     * Reconstructs the URL and returns its String representation.
+     * Returns a String representation of this FileURL.
      *
      * @param includeCredentials if <code>true</code>, login and password (if any) will be included in the returned URL and not masked.
      * Login and password in URLs should never be visible to the end user.
      */
-    public String getStringRep(boolean includeCredentials) {
-        return getStringRep(includeCredentials, false);
+    public String toString(boolean includeCredentials) {
+        return toString(includeCredentials, false);
     }
+
+
+    /**
+     * Returns a String representation of this FileURL, without the credentials it may contain.
+     */
+    public String toString() {
+        return toString(false);
+    }
+
 
     /**
      * Reconstructs the URL with the given path and returns its String representation.
@@ -622,27 +619,30 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
 
 
     /**
-     * Returns a clone of this FileURL, useful because FileURL is mutable.
+     * Returns a clone of this FileURL. The returned instance can safely be modified without impacting this FileURL.
      */
     public Object clone() {
-        try {
-            return super.clone();
-        }
-        catch(CloneNotSupportedException e) {
-            // Should never happen (famous last word!)
-            return null;
-        }
+        // Create a new FileURL return it, instead of using Object.clone() which is probably way slower;
+        // most FileURL fields are immutable and as such reused in cloned instance
+        FileURL clonedURL = new FileURL();
+
+        // Immutable fields
+        clonedURL.protocol = protocol;
+        clonedURL.host = host;
+        clonedURL.port = port;
+        clonedURL.path = path;
+        clonedURL.filename = filename;
+        clonedURL.query = query;
+        clonedURL.credentials = credentials;  // Note: Credentials are immutable.
+
+        // Mutable fields
+        if(properties!=null)    // Copy properties (if any)
+            clonedURL.properties = new Hashtable(properties);
+
+        return clonedURL;
     }
 
 
-    /**
-     * Returns a String representation of this FileURL, without the credentials it may contain.
-     */
-    public String toString() {
-        return getStringRep(false);
-    }
-	
-	
     /**
      * Tests FileURL instances for equality:
      * <ul
@@ -659,8 +659,8 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
             return false;
 		
         // Do not take into account credentials (login and password) to test equality
-        String url1 = getStringRep(false).toLowerCase();
-        String url2 = ((FileURL)o).getStringRep(false).toLowerCase();
+        String url1 = toString(false).toLowerCase();
+        String url2 = ((FileURL)o).toString(false).toLowerCase();
 
         // If strings are equal, return true
         if(url1.equals(url2))
@@ -733,7 +733,7 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
 //                    f = getLocalFileURL(urls[i], null);
 //                else
                     f = new FileURL(urls[i]);
-                System.out.println("FileURL.getStringRep(true)= "+f.getStringRep(true));
+                System.out.println("FileURL.toString(true)= "+f.toString(true));
                 System.out.println(" - path= "+f.getPath());
                 System.out.println(" - host= "+f.getHost());
                 if(f.getLogin()!=null)
@@ -744,7 +744,7 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
                     System.out.println(" - parent path= "+f.getParent().getPath());
 
 //                if(f.getProtocol().equals(FileProtocols.FILE))
-//                    System.out.println(" FSFile's path="+FileFactory.getFile(f, true).getAbsolutePath());
+//                    System.out.println(" LocalFile's path="+FileFactory.getFile(f, true).getAbsolutePath());
 
                 System.out.println();
             }

@@ -1,6 +1,5 @@
 package com.mucommander.ui;
 
-import com.mucommander.file.impl.local.FSFile;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.shell.Shell;

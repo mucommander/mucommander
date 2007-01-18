@@ -3,7 +3,7 @@ package com.mucommander.file.impl.zip;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.impl.local.FSFile;
+import com.mucommander.file.impl.local.LocalFile;
 
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -40,23 +40,34 @@ public class ZipArchiveFile extends AbstractArchiveFile {
         // If the underlying file is a local file, use the ZipFile.getEntries() method as it 
         // is *way* faster than using ZipInputStream to iterate over the entries.
         // Note: under Mac OS X at least, ZipFile.getEntries() method is native
-        if(file instanceof FSFile) {
-            ZipFile zf = new ZipFile(getAbsolutePath());
-            Enumeration entriesEnum = zf.entries();
-            while(entriesEnum.hasMoreElements())
-                entries.add(new ZipEntry((java.util.zip.ZipEntry)entriesEnum.nextElement()));
-
-            // Should not be necessary as we don't retrieve any entry InputStream, but just in case
-            zf.close();
+        if(file instanceof LocalFile) {
+            ZipFile zf = null;
+            try {
+                zf = new ZipFile(getAbsolutePath());
+                Enumeration entriesEnum = zf.entries();
+                while(entriesEnum.hasMoreElements())
+                    entries.add(new ZipEntry((java.util.zip.ZipEntry)entriesEnum.nextElement()));
+            }
+            finally {
+                // Should not be necessary as we don't retrieve any entry InputStream, but just in case
+                if(zf!=null)
+                    zf.close();
+            }
         }
         else {
-            // works but it is *way* slower
-            ZipInputStream zin = new ZipInputStream(file.getInputStream());
-            java.util.zip.ZipEntry entry;
-            while ((entry=zin.getNextEntry())!=null) {
-                entries.add(new ZipEntry(entry));
+            ZipInputStream zin = null;
+            try {
+                // works but it is *way* slower
+                zin = new ZipInputStream(file.getInputStream());
+                java.util.zip.ZipEntry entry;
+                while ((entry=zin.getNextEntry())!=null) {
+                    entries.add(new ZipEntry(entry));
+                }
             }
-            zin.close();
+            finally {
+                if(zin!=null)
+                    zin.close();
+            }
         }
 
         return entries;
@@ -66,7 +77,7 @@ public class ZipArchiveFile extends AbstractArchiveFile {
     public InputStream getEntryInputStream(ArchiveEntry entry) throws IOException {
         // If the underlying file is a local file, use the ZipFile.getInputStream() method as it
         // is *way* faster than using ZipInputStream and looking for the entry
-        if (file instanceof FSFile) {
+        if (file instanceof LocalFile) {
 //            return new ZipFile(getAbsolutePath()).getInputStream((java.util.zip.ZipEntry)entry.getEntry());
             final ZipFile zf = new ZipFile(getAbsolutePath());
 
