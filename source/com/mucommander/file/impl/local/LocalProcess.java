@@ -27,7 +27,6 @@ class LocalProcess extends AbstractProcess {
      * Creates a new local process running the specified command.
      * @param  tokens      command to run and its parameters.
      * @param  dir         directory in which to start the command.
-     * @return             the newly created process.
      * @throws IOException if the process could not be created.
      */
     public LocalProcess(String[] tokens, File dir) throws IOException {
