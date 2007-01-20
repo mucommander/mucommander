@@ -77,6 +77,7 @@ Translators:
 - Woodie (Simplified Chinese)
 - Joze Kovacic (Slovenian)
 - Catalin Hritcu (Romanian)
+- Roberto Angeletti (Italian)
 
 And all of you who suggested new features, reported bugs, sent warm emails or generously donated to the project !
 
@@ -231,6 +232,7 @@ Improvements:
 
 Localization:
  - Romanian translation (contributed by Catalin Hritcu)
+ - Italian translation (contributed by Roberto Angeletti)
 
 Bug fixes:
  - Fixed SFTP connections which could not be established to some servers not supporting the 'password' authentication method
