@@ -495,7 +495,7 @@
   <target name="api-doc" depends="constants">
     <echo>Generating API javadoc in ${api-docs}...</echo>
     <mkdir dir="${api-docs}"/>
-    <javadoc destdir="${api-docs}" author="true" windowtitle="muCommander API" encoding="UTF-8">
+    <javadoc destdir="${api-docs}" author="true" windowtitle="muCommander API" encoding="UTF-8" access="package">
       <classpath>
          <fileset dir="${lib}">
           <include name="**/*.jar"/>
