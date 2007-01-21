@@ -44,14 +44,14 @@
     <!-- =============================================== -->
     <normal>
       <background color="ffffff"/>
-      <text       color="009900"/>
+      <text       color="000000"/>
     </normal>
 
     <!-- = Selected appearance ========================= -->
     <!-- =============================================== -->
     <selection>
-      <background color="009900"/>
-      <text       color="009900"/>
+      <background color="3875d7"/>
+      <text       color="ffffff"/>
     </selection>
   </shell>
 
