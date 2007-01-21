@@ -2,20 +2,28 @@ package com.mucommander.command;
 
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
+import com.mucommander.file.filter.PermissionsFileFilter;
 
 import java.io.InputStream;
 import java.util.Hashtable;
 
 /**
- * Class used to parse command association XML files.
+ * Class used to parse custom associations XML files.
  * <p>
- * This class works with {@link com.mucommander.command.AssociationBuilder builders} in order to
- * parse the content of XML association description files. This is achieved with the
- * {@link #read(InputStream,AssociationBuilder)} method.
+ * This class knows how to read and analyse the content of a custom associations XML file
+ * (as defined in {@link AssociationsXmlConstants}), but not what to do with it. For this,
+ * it needs an {@link AssociationBuilder}.
  * </p>
+ * <p>
+ * Instances of <code>AssociationReader</code> are not retrievable. The only way to interact with
+ * it is through the {@link #read(InputStream,AssociationBuilder,String) read} methods.
+ * </p>
+ * @see AssociationsXmlConstants
+ * @see AssociationBuilder
+ * @see AssociationWriter
  * @author Nicolas Rinaudo
  */
-public class AssociationReader implements ContentHandler, XmlConstants {
+public class AssociationReader implements ContentHandler, AssociationsXmlConstants {
     // - Instance variables --------------------------------------------------
     // -----------------------------------------------------------------------
     /** Where to send building messages. */
@@ -38,7 +46,7 @@ public class AssociationReader implements ContentHandler, XmlConstants {
     /**
      * Parses the content of the specified input stream.
      * <p>
-     * This method assumed <code>in</code> to be <code>UTF-8</code> encoded. To read assocation
+     * This method assumes <code>in</code> to be <code>UTF-8</code> encoded. To read assocation
      * data from streams using a different encoding, use {@link #read(InputStream,AssociationBuilder,String)}.
      * </p>
      * @param  in        where to read association data from.
@@ -61,62 +69,44 @@ public class AssociationReader implements ContentHandler, XmlConstants {
     // - XML methods ---------------------------------------------------------
     // -----------------------------------------------------------------------
     /**
-     * Notifies the reader that a new XML element is starting.
+     * XML parsing method.
+     * <p>
+     * This method is public as an implementation side effect, but should not be called directly.
+     * </p>
      */
     public void startElement(String uri, String name, Hashtable attributes, Hashtable attURIs) throws Exception {
-        // New custom command declaration.
-        if(name.equals(ELEMENT_COMMAND)) {
-            String  alias;
-            String  command;
-            Command buffer;
-
-            // Makes sure the required attributes are there.
-            if((alias = (String)attributes.get(ARGUMENT_COMMAND_ALIAS)) == null)
-                throw new Exception("Unspecified command alias.");
-            if((command = (String)attributes.get(ARGUMENT_COMMAND_VALUE)) == null)
-                throw new Exception("Unspecified command value.");
-
-
-            // Creates the command and passes it to the builder.
-            builder.addCommand(buffer = CommandParser.getCommand(alias, command));
-
-            // Sets the command's system flag.
-            if((command = (String)attributes.get(ARGUMENT_COMMAND_SYSTEM)) != null)
-                if(command.equals("true"))
-                    buffer.setSystem(true);
-
-            // Sets the command's visible flag if it's not a system command (system
-            // commands are always invisible).
-            if(!buffer.isSystem()) {
-                if((command = (String)attributes.get(ARGUMENT_COMMAND_VISIBLE)) != null)
-                    if(!command.equals("true"))
-                        buffer.setVisible(false);
-            }
-        }
-
-        // New custom association definition.
-        else if(name.equals(ELEMENT_ASSOCIATION)) {
-            String mask;
-            String command;
-
-            // Makes sure the required attributes are there.
-            if((mask = (String)attributes.get(ARGUMENT_ASSOCIATION_MASK)) == null)
-                throw new Exception("Unspecified association mask.");
-            if((command = (String)attributes.get(ARGUMENT_ASSOCIATION_COMMAND)) == null)
+        // New custom association definition. Any other element is ignored, in an attempt to make
+        // parsing as error resistant as possible.
+        if(name.equals(ELEMENT_ASSOCIATION)) {
+            String mask;    // Association's mask.
+            String command; // Association's command.
+         
+            // Makes sure the required attributes are present.
+            if((command = (String)attributes.get(ARGUMENT_COMMAND)) == null)
                 throw new Exception("Unspecified association command.");
+            if((mask = (String)attributes.get(ARGUMENT_MASK)) == null)
+                throw new Exception("Unspecified association mask.");
 
-            // Passes the association to the builder.
-            builder.addAssociation(mask, command);
+            // Notifies the builder that a new association has been found.
+            builder.addAssociation(mask, getConstantForValue((String)attributes.get(ARGUMENT_READABLE)),
+                                   getConstantForValue((String)attributes.get(ARGUMENT_WRITABLE)),
+                                   getConstantForValue((String)attributes.get(ARGUMENT_EXECUTABLE)), command);
         }
     }
 
     /**
-     * Calls the underlying builder's {@link com.mucommander.command.AssociationBuilder#startBuilding()} method
+     * XML parsing method.
+     * <p>
+     * This method is public as an implementation side effect, but should not be called directly.
+     * </p>
      */
     public void startDocument() throws Exception {builder.startBuilding();}
 
     /**
-     * Calls the underlying builder's {@link com.mucommander.command.AssociationBuilder#endBuilding()} method
+     * XML parsing method.
+     * <p>
+     * This method is public as an implementation side effect, but should not be called directly.
+     * </p>
      */
     public void endDocument() throws Exception {builder.endBuilding();}
 
@@ -126,11 +116,41 @@ public class AssociationReader implements ContentHandler, XmlConstants {
     // -----------------------------------------------------------------------
     /**
      * Not used.
+     * <p>
+     * This method is public as an implementation side effect, but should not be called.
+     * </p>
      */
     public void characters(String s) {}
 
     /**
      * Not used.
+     * <p>
+     * This method is public as an implementation side effect, but should not be called.
+     * </p>
      */
     public void endElement(String uri, String name) throws Exception {}
+
+
+
+    // - Misc. methods -------------------------------------------------------
+    // -----------------------------------------------------------------------
+    /**
+     * Analyses the specified value and returns its integer constant equivalent.
+     * <p>
+     * Note that this method is error resilient: if <code>value</code> is <code>null</code>
+     * or not a known value, it will be taken to mean {@link CommandAssociation@UNFILTERED}.
+     * </p>
+     * @param value value to analyze.
+     * @return <code>value</code>'s integer equivalent.
+     */
+    private static int getConstantForValue(String value) {
+        if(value != null) {
+            if(value.equals(VALUE_YES))
+                return CommandAssociation.YES;
+            else if(value.equals(VALUE_NO))
+                return CommandAssociation.NO;
+        }
+        return CommandAssociation.UNFILTERED;
+    }
+
 }

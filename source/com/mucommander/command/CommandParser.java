@@ -111,13 +111,7 @@ public class CommandParser {
         return tokens;
     }
 
-    /**
-     * Builds an instance of {@link com.mucommander.command.Command} from the specified alias and command.
-     * @param  alias   alias for the new command.
-     * @param  command what to execute when the Command is being called.
-     * @return an instance of Command.
-     */
-    public static Command getCommand(String alias, String command) {
+    public static Command getCommand(String alias, String command, int type) {
         String[]  tokenBuffer; // Buffer for the tokens that compose command.
         boolean[] typeBuffer;  // Buffer for the type of tokens that compose command.
         String[]  tokens;      // Actual tokens.
@@ -134,8 +128,10 @@ public class CommandParser {
         }
 
         // Creates and returns a new command.
-        return new Command(alias, command, tokens, tokenTypes);
+        return new Command(alias, command, tokens, tokenTypes, type);
     }
+
+    public static Command getCommand(String alias, String command) {return getCommand(alias, command, Command.NORMAL_COMMAND);}
 
 
 

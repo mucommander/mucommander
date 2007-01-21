@@ -1,14 +1,19 @@
 package com.mucommander.command;
 
+import com.mucommander.file.filter.PermissionsFileFilter;
 import com.mucommander.xml.writer.*;
 
 import java.io.*;
 
 /**
- * Class used to write custom command associations to an XML stream.
+ * Class used to write custom associations XML files.
+ * <p>
+ * <code>AssociationWriter</code> is an {@link AssociationBuilder} that will send
+ * all build messages it receives into an XML stream (as defined in {@link AssociationsXmlConstants}).
+ * </p>
  * @author Nicolas Rinaudo
  */
-public class AssociationWriter implements XmlConstants, AssociationBuilder {
+public class AssociationWriter implements AssociationsXmlConstants, AssociationBuilder {
     // - Instance variables --------------------------------------------------
     // -----------------------------------------------------------------------
     /** Where to write the custom command associations to. */
@@ -42,39 +47,41 @@ public class AssociationWriter implements XmlConstants, AssociationBuilder {
     public void endBuilding() {out.endElement(ELEMENT_ROOT);}
 
     /**
-     * Writes the specified command's XML description.
-     * @param command command that should be written.
-     */
-    public void addCommand(Command command) {
-        XmlAttributes attributes;
-
-        // Builds the XML description of the command.
-        attributes = new XmlAttributes();
-        attributes.add(ARGUMENT_COMMAND_ALIAS, command.getAlias());
-        attributes.add(ARGUMENT_COMMAND_VALUE, command.getCommand());
-        if(command.isSystem())
-            attributes.add(ARGUMENT_COMMAND_SYSTEM, "true");
-        else if(!command.isVisible())
-            attributes.add(ARGUMENT_COMMAND_VISIBLE, "false");
-
-        // Writes the XML description.
-        out.writeStandAloneElement(ELEMENT_COMMAND, attributes);
-    }
-
-    /**
      * Writes the specified association's XML description.
      * @param mask    file name mask to use in the association.
      * @param command alias of the command to use in the associations.
      */
     public void addAssociation(String mask, String command) {
+        addAssociation(mask, CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, command);
+    }
+
+    public void addAssociation(String mask, int read, int write, int execute, String command) {
         XmlAttributes attributes;
 
         // Builds the XML description of the association.
         attributes = new XmlAttributes();
-        attributes.add(ARGUMENT_ASSOCIATION_MASK, mask);
-        attributes.add(ARGUMENT_ASSOCIATION_COMMAND, command);
+        if(mask != null)
+            attributes.add(ARGUMENT_MASK, mask);
+        if(read == CommandAssociation.YES)
+            attributes.add(ARGUMENT_READABLE, VALUE_YES);
+        else if(read == CommandAssociation.NO)
+            attributes.add(ARGUMENT_READABLE, VALUE_NO);
+
+        if(write == CommandAssociation.YES)
+            attributes.add(ARGUMENT_WRITABLE, VALUE_YES);
+        else if(write == CommandAssociation.NO)
+            attributes.add(ARGUMENT_WRITABLE, VALUE_NO);
+
+        if(execute == CommandAssociation.YES)
+            attributes.add(ARGUMENT_EXECUTABLE, VALUE_YES);
+        else if(execute == CommandAssociation.NO)
+            attributes.add(ARGUMENT_EXECUTABLE, VALUE_NO);
+
+        attributes.add(ARGUMENT_COMMAND, command);
 
         // Writes the XML description.
         out.writeStandAloneElement(ELEMENT_ASSOCIATION, attributes);
     }
+
+    public void addAssociation(int read, int write, int execute, String command) {addAssociation(null, read, write, execute, command);}
 }

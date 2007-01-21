@@ -6,25 +6,17 @@ import java.io.File;
 
 /**
  * Compiled file opening commands.
- * <p>
- * Instances of <code>Command</code> are used to generate tokens that can be
- * executed by the {@link com.mucommander.process.ProcessRunner}.
- * </p>
- * <p>
- * Commands are meant to be <i>file openers</i>: they can contain keywords which
- * will dynamically be replaced by specific values of a given file (see
- * {@link com.mucommander.command.CommandParser} for a list of keywords).
- * </p>
- * <p>
- * Retrieving an instance of command can be done in two ways:
- * <ul>
- *  <li>through {@link com.mucommander.command.CommandManager#getCommandForFile(String)}.</li>
- *  <li>through {@link com.mucommander.command.CommandParser#getCommand(String,String)}.</li>
- * </ul>
- * </p>
  * @author Nicolas Rinaudo
  */
 public class Command {
+    // - Type definitions ------------------------------------------------------
+    // -------------------------------------------------------------------------
+    public static final int NORMAL_COMMAND    = 0;
+    public static final int SYSTEM_COMMAND    = 1;
+    public static final int INVISIBLE_COMMAND = 2;
+
+
+
     // - Instance variables ----------------------------------------------------
     // -------------------------------------------------------------------------
     /** Different tokens that compose the command. */
@@ -35,10 +27,8 @@ public class Command {
     private String    alias;
     /** Original command. */
     private String    command;
-    /** Whether the command is a system one or not. */
-    private boolean   isSystem;
-    /** Whether the command is visible or not. */
-    private boolean   isVisible;
+    /** Command type. */
+    private int       type;
 
 
 
@@ -48,7 +38,7 @@ public class Command {
      * Creates a new command.
      * <p>
      * This is not the prefered way of creating instances of <code>Command</code>.
-     * Developers should use either {@link com.mucommander.command.CommandManager#getCommandForFile(String)}
+     * Developers should use either {@link com.mucommander.command.CommandManager#getCommandForFile(AbstractFile)}
      * or {@link com.mucommander.command.CommandParser#getCommand(String,String)} for that purpose.
      * </p>
      * @param alias      alias of the command.
@@ -56,29 +46,15 @@ public class Command {
      * @param tokens     tokens that compose the command.
      * @param tokenTypes description of each token in <code>tokens</code>
      */
-    Command(String alias, String command, String[] tokens, boolean[] tokenTypes) {
+    Command(String alias, String command, String[] tokens, boolean[] tokenTypes, int type) {
         this.tokens     = tokens;
         this.tokenTypes = tokenTypes;
         this.alias      = alias;
         this.command    = command;
-        isVisible       = true;
+        this.type       = type;
     }
 
-    public boolean isVisible() {return !isSystem && isVisible;}
-    public void setVisible(boolean b) {isVisible = b;}
-
-    /**
-     * Returns <code>true</code> if this is a system command.
-     * @return <code>true</code> if this is a system command, <code>false</code> otherwise.
-     */
-    public boolean isSystem() {return isSystem;}
-
-    /**
-     * Sets the command's system flag.
-     * @param b command's system flag.
-     */
-    void setSystem(boolean b) {isSystem = b;}
-
+    public int getType() {return type;}
 
 
     // - Token retrieval -------------------------------------------------------

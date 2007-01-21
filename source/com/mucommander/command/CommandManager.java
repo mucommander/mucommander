@@ -4,6 +4,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.RegexpFilenameFilter;
+import com.mucommander.file.filter.PermissionsFileFilter;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.text.Translator;
@@ -11,26 +12,15 @@ import com.mucommander.text.Translator;
 import java.util.*;
 import java.io.*;
 
-
 /**
  * @author Nicolas Rinaudo
  */
-public class CommandManager implements AssociationBuilder {
-    // - System command aliases ------------------------------------------------
-    // -------------------------------------------------------------------------
-    /** Alias for the default system file opener. */
-    public static final String DEFAULT_FILE_OPENER_ALIAS = "open";
-    /** Alias for the default system URL opener. */
-    public static final String DEFAULT_URL_OPENER_ALIAS  = "openURL";
-
-
-
+public class CommandManager implements AssociationBuilder, CommandBuilder {
     // - Self-open command -----------------------------------------------------
     // -------------------------------------------------------------------------
-    /** Alias for the 'self open' command. */
-    public static final String SELF_OPEN_COMMAND_ALIAS   = "execute";
+    public static final String  RUN_AS_EXECUTABLE_ALIAS   = "execute";
     /** Command used to try and run a file as an executable. */
-    public static final Command SELF_OPEN_COMMAND = CommandParser.getCommand(SELF_OPEN_COMMAND_ALIAS, "$f");
+    public static final Command RUN_AS_EXECUTABLE_COMMAND = CommandParser.getCommand(RUN_AS_EXECUTABLE_ALIAS, "$f", Command.SYSTEM_COMMAND);
 
 
 
@@ -48,9 +38,12 @@ public class CommandManager implements AssociationBuilder {
     /** Path to a potential custom association file. */
     private static       File    associationFile;
     /** Whether the associations were modified since the last time they were saved. */
-    private static       boolean wasModified;
+    private static       boolean wereAssociationsModified;
     /** Default name of the association XML file. */
     private static final String  ASSOCIATION_FILE_NAME = "associations.xml";
+    private static       File    commandsFile;
+    private static       boolean wereCommandsModified;
+    private static final String  COMMANDS_FILE_NAME    = "commands.xml";
 
 
 
@@ -73,18 +66,9 @@ public class CommandManager implements AssociationBuilder {
 
     // - Command handling ------------------------------------------------------
     // -------------------------------------------------------------------------
-    /**
-     * Returns the Command associated with the specified file name.
-     * <p>
-     * The <code>allowDefault</code> is used to prevent the default command from being returned.
-     * In some cases, the fact that no command is associated with a file name is important.
-     * <code>allowDefault</code> should be set to <code>false</code> for this cases.
-     * </p>
-     * @param  file         name of the file whose associated command should be retrieved.
-     * @param  allowDefault whether or not a default command can be returned.
-     * @return              the command associated with <code>file</code>, <code>null</code> if not found and <code>allowDefault</code> is set to <code>false</code>.
-     */
-    public static Command getCommandForFile(String file, boolean allowDefault) {
+    public static Command getCommandForFile(AbstractFile file) {return getCommandForFile(file, true);}
+
+    public static Command getCommandForFile(AbstractFile file, boolean allowDefault) {
         Iterator           iterator;
         CommandAssociation association;
 
@@ -97,40 +81,9 @@ public class CommandManager implements AssociationBuilder {
         // If we've reached that point, no command has been found. Returns the default command
         // if we're allowed.
         if(allowDefault)
-            return SELF_OPEN_COMMAND;
+            return RUN_AS_EXECUTABLE_COMMAND;
         return null;
     }
-
-    /**
-     * Returns the Command associated with the specified file name.
-     * <p>
-     * This is a convenience method, and is equivalent to calling <code>getCommandForFile(file, true);</code>.
-     * </p>
-     * @param  file name of the file whose associated command should be retrieved.
-     * @return      the command associated with <code>file</code>.
-     */
-    public static Command getCommandForFile(String file) {return getCommandForFile(file, true);}
-
-    /**
-     * Returns the Command associated with the specified file.
-     * <p>
-     * This is a convenience method, and is equivalent to calling <code>getCommandForFile(file.getAbsolutePath(), true);</code>.
-     * </p>
-     * @param  file file whose associated command should be retrieved.
-     * @return      the command associated with <code>file</code>.
-     */
-    public static Command getCommandForFile(AbstractFile file) {return getCommandForFile(file.getAbsolutePath(), true);}
-
-    /**
-     * Returns the Command associated with the specified file.
-     * <p>
-     * This is a convenience method, and is equivalent to calling <code>getCommandForFile(file.getAbsolutePath(), allowDefaultPath);</code>.
-     * </p>
-     * @param  file file whose associated command should be retrieved.
-     * @param  allowDefault whether or not a default command can be returned.
-     * @return              the command associated with <code>file</code>, <code>null</code> if not found and <code>allowDefault</code> is set to <code>false</code>.
-     */
-    public static Command getCommandForFile(AbstractFile file, boolean allowDefault) {return getCommandForFile(file.getAbsolutePath(), allowDefault);}
 
     /**
      * Returns an iterator on all registered commands.
@@ -169,7 +122,7 @@ public class CommandManager implements AssociationBuilder {
         // Registers the command and marks associations as having been modified.
         if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "' at the end of the list.");
         commands.add(command);
-        wasModified = true;
+        wereCommandsModified = true;
     }
 
     /**
@@ -186,7 +139,7 @@ public class CommandManager implements AssociationBuilder {
         // Registers the command and marks associations as having been modified.
         if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "' at index " + i);
         commands.add(i, command);
-        wasModified = true;
+        wereCommandsModified = true;
     }
 
     /**
@@ -224,7 +177,7 @@ public class CommandManager implements AssociationBuilder {
 
         // If the operation actually changed the list, mark it as modified.
         if(commands.remove(command))
-            wasModified = true;
+            wereCommandsModified = true;
         return true;
     }
 
@@ -249,7 +202,7 @@ public class CommandManager implements AssociationBuilder {
 
         // Removes the command and marks the list as modified.
         commands.remove(i);
-        wasModified = true;
+        wereCommandsModified = true;
         return true;
     }
 
@@ -262,50 +215,18 @@ public class CommandManager implements AssociationBuilder {
      */
     public static Iterator associations() {return associations.iterator();}
 
-    /**
-     * Registers the specified association at the end of the association list.
-     * <p>
-     * While this method could accept a {@link com.mucommander.command.CommandAssociation} parameter, it would be very
-     * unsafe for it to do so: it would be possible to register associations which use an unregistered command.
-     * </p>
-     * @param  mask             regular expression that a filename must match to be associated with <code>command</code>.
-     * @param  command          command to be used on files that match <code>mask</code>.
-     * @throws CommandException if <code>command</code> is not a registered command alias.
-     */
     public static void registerAssociation(String mask, String command) throws CommandException {
+        registerAssociation(mask, CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, command);
+    }
+
+    public static void registerAssociation(String mask, int read, int write, int execute, String command) throws CommandException {
         Command cmd;
 
         // The specified alias is known, registers the association and marks associations as modified.
         if((cmd = getCommandForAlias(command)) != null) {
             if(Debug.ON) Debug.trace("Registering '" + command + "' to files that match '" + mask + "' at the end of the list.");
-            associations.add(new CommandAssociation(cmd, mask));
-            wasModified = true;
-        }
-
-        // The specified alias is not known.
-        else
-            throw new CommandException(command + " not found");
-    }
-
-    /**
-     * Registers the specified association at the specified index of the list.
-     * <p>
-     * While this method could accept a {@link com.mucommander.command.CommandAssociation} parameter, it would be very
-     * unsafe for it to do so: it would be possible to register associations which use an unregistered command.
-     * </p>
-     * @param  i                index at which to register the association.
-     * @param  mask             regular expression that a filename must match to be associated with <code>command</code>.
-     * @param  command          command to be used on files that match <code>mask</code>.
-     * @throws CommandException if <code>command</code> is not a registered command alias.
-     */
-    public static void registerAssociation(int i, String mask, String command) throws CommandException {
-        Command cmd;
-
-        // The specified alias is known, registers the association and marks associations as modified.
-        if((cmd = getCommandForAlias(command)) != null) {
-            if(Debug.ON) Debug.trace("Registering '" + command + "' to files that match '" + mask + "' at index " + i);
-            associations.add(i, new CommandAssociation(cmd, mask));
-            wasModified = true;
+            associations.add(new CommandAssociation(cmd, mask, read, write, execute));
+            wereAssociationsModified = true;
         }
 
         // The specified alias is not known.
@@ -320,7 +241,7 @@ public class CommandManager implements AssociationBuilder {
     public static void removeAssociation(CommandAssociation association) {
         // If the association was found, mark the list as modified.
         if(associations.remove(association))
-            wasModified = true;
+            wereAssociationsModified = true;
     }
 
     /**
@@ -329,12 +250,12 @@ public class CommandManager implements AssociationBuilder {
      */
     public static void removeAssociationAt(int i) {
         associations.remove(i);
-        wasModified = true;
+        wereAssociationsModified = true;
     }
 
 
 
-    // - Builder code ----------------------------------------------------------
+    // - Command builder code --------------------------------------------------
     // -------------------------------------------------------------------------
     /**
      * Not used.
@@ -353,13 +274,28 @@ public class CommandManager implements AssociationBuilder {
      */
     public void addCommand(Command command) throws CommandException {registerCommand(command);}
 
-    /**
-     * Registers the specified association.
-     * @param  mask             regular-expression that file names should match to be executed by <code>command</code>.
-     * @param  command          alias of the command to which <code>mask</code> should be associated.
-     * @throws CommandException if no match is found for <code>command</code>.
-     */
-    public void addAssociation(String mask, String command) throws CommandException {registerAssociation(mask, command);}
+
+    public static void buildCommands(CommandBuilder builder) throws CommandException {
+        Iterator           iterator; // Used to iterate through commands and associations.
+        CommandAssociation current;  // Current command association.
+
+        builder.startBuilding();
+
+        // Goes through all the registered commands.
+        iterator = commands();
+        while(iterator.hasNext())
+            builder.addCommand((Command)iterator.next());
+
+        builder.endBuilding();
+    }
+
+
+
+    // - Associations building -------------------------------------------------
+    // -------------------------------------------------------------------------
+    public void addAssociation(String mask, int read, int write, int execute, String command) throws CommandException {
+        registerAssociation(mask, read, write, execute, command);
+    }
 
     /**
      * Notifies the specified <code>builder</code> of the current registered commands and associations.
@@ -372,20 +308,18 @@ public class CommandManager implements AssociationBuilder {
 
         builder.startBuilding();
 
-        // Goes through all the registered commands.
-        iterator = commands();
-        while(iterator.hasNext())
-            builder.addCommand((Command)iterator.next());
-
         // Goes through all the registered associations.
         iterator = associations();
         while(iterator.hasNext()) {
             current = (CommandAssociation)iterator.next();
-            builder.addAssociation(current.getRegularExpression(), current.getCommand().getAlias());
+            builder.addAssociation(current.getRegularExpression(),
+                                   current.getReadFilter(), current.getWriteFilter(), current.getExecuteFilter(),
+                                   current.getCommand().getAlias());
         }
 
         builder.endBuilding();
     }
+
 
 
     // - Associations reading/writing ------------------------------------------
@@ -407,64 +341,16 @@ public class CommandManager implements AssociationBuilder {
     public static void setAssociationFile(String file) {associationFile = new File(file);}
 
     /**
-     * Creates the default system associations.
-     * <p>
-     * This method is system dependant, and might, in some cases, not create anything.<br/>
-     * It relies on {@link com.mucommander.PlatformManager#getDefaultURLOpener()} and
-     * {@link com.mucommander.PlatformManager#getDefaultFileOpener()} to generate its associations.
-     * </p>
-     */
-    private static void createDefaultAssociations() {
-        String  command; // Default command.
-        Command buffer;  // Buffer for new commands.
-
-        // If it exists, creates a default URL opening command.
-        if((command = PlatformManager.getDefaultURLOpener()) != null) {
-            try {
-                registerCommand(buffer = CommandParser.getCommand(DEFAULT_URL_OPENER_ALIAS, command));
-                buffer.setSystem(true);
-                registerAssociation("http://.*", DEFAULT_URL_OPENER_ALIAS);
-                registerAssociation("https://.*", DEFAULT_URL_OPENER_ALIAS);
-            }
-            // This should never occur. If it does, something's really messed up in the system.
-            catch(Exception e) {if(Debug.ON) Debug.trace("Couldn't create default URL opener: " + e.getMessage());}
-        }
-
-        // If it exists, creates a default file opening command.
-        if((command = PlatformManager.getDefaultFileOpener()) != null) {
-            try {
-                registerCommand(buffer = CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, command));
-                buffer.setSystem(true);
-                registerAssociation(".*", DEFAULT_FILE_OPENER_ALIAS);
-            }
-            // This should never occur. If it does, something's really messed up in the system.
-            catch(Exception e) {if(Debug.ON) Debug.trace("Couldn't create default file opener: " + e.getMessage());}
-        }
-
-        // If it exists, creates a default 'desktop' command.
-        if((command = PlatformManager.getDefaultDesktopFM()) != null) {
-            try {
-                registerCommand(buffer = CommandParser.getCommand(PlatformManager.getDefaultDesktopFMName(), command));
-                buffer.setSystem(true);
-            }
-            // This should never occur. If it does, something's really messed up in the system.
-            catch(Exception e) {if(Debug.ON) Debug.trace("Couldn't create default file opener: " + e.getMessage());}
-        }
-    }
-
-    /**
      * Loads and registers commands and associations from the associations file.
      */
     public static void loadAssociations() {
         File file;
 
-        if(Debug.ON) Debug.trace("Loading custom file associations...");
-
         // Checks whether the associations file exists. If it doesn't, create default associations.
         file = getAssociationFile();
         if(!file.isFile()) {
             if(Debug.ON) Debug.trace("Associations file doesn't exist, using default associations");
-            createDefaultAssociations();
+            PlatformManager.registerDefaultAssociations();
         }
         else {
             InputStream in;
@@ -476,11 +362,10 @@ public class CommandManager implements AssociationBuilder {
                 if(Debug.ON) Debug.trace("Failed to load associations file: " + e.getMessage() + ". Using default associations");
 
                 // The associations file is corrupt, discard anything we might have loaded from it.
-                commands     = new Vector();
                 associations = new Vector();
 
                 // Creates the default associations.
-                createDefaultAssociations();
+                PlatformManager.registerDefaultAssociations();
             }
 
             // Makes sure the input stream is closed.
@@ -491,7 +376,7 @@ public class CommandManager implements AssociationBuilder {
                 }
             }
         }
-        wasModified = false;
+        wereAssociationsModified = false;
     }
 
     /**
@@ -499,7 +384,7 @@ public class CommandManager implements AssociationBuilder {
      */
     public static void writeAssociations() {
         // Do not save the associations if they were not modified.
-        if(wasModified) {
+        if(wereAssociationsModified) {
             BackupOutputStream out;    // Where to write the associations.
             AssociationWriter  writer; // What to write the associations with.
 
@@ -520,8 +405,80 @@ public class CommandManager implements AssociationBuilder {
                     catch(Exception e2) {}
                 }
             }
-            wasModified = false;
+            wereAssociationsModified = false;
         }
         else if(Debug.ON) Debug.trace("Custom file associations not modified, skip saving.");
+    }
+
+
+
+    // - Commands reading/writing ----------------------------------------------
+    // -------------------------------------------------------------------------
+    private static File getCommandFile() {
+        if(commandsFile == null)
+            return new File(PlatformManager.getPreferencesFolder(), COMMANDS_FILE_NAME);
+        return commandsFile;
+    }
+
+    public static void setCommandFile(String file) {commandsFile = new File(file);}
+
+    public static void writeCommands() {
+        if(wereCommandsModified) {
+            BackupOutputStream out;    // Where to write the associations.
+            CommandWriter      writer; // What to write the associations with.
+
+            if(Debug.ON) Debug.trace("Writing custom commands file...");
+
+            // Writes the associations.
+            out = null;
+            try {
+                writer = new CommandWriter(out = new BackupOutputStream(getCommandFile()));
+                buildCommands(writer);
+                out.close(true);
+            }
+            catch(Exception e) {
+                if(out != null) {
+                    try {out.close(false);}
+                    catch(Exception e2) {}
+                }
+            }
+            wereCommandsModified = false;
+        }
+        else if(Debug.ON) Debug.trace("Custom commands not modified, skip saving.");
+    }
+
+    public static void loadCommands() {
+        File file;
+
+        if(Debug.ON) Debug.trace("Loading custom commands...");
+
+        file = getCommandFile();
+        if(!file.isFile()) {
+            if(Debug.ON) Debug.trace("Commands file doesn't exist, using default commands.");
+            PlatformManager.registerDefaultCommands();
+        }
+        else {
+            InputStream in;
+
+            // Tries to load the associations file. If an error occurs, create default associations.
+            in = null;
+            try {CommandReader.read(in = new BackupInputStream(file), new CommandManager());}
+            catch(Exception e) {
+                if(Debug.ON) Debug.trace("Failed to load commands file: " + e.getMessage() + ". Using default commands.");
+
+                // Creates the default associations.
+                commands = new Vector();
+                PlatformManager.registerDefaultCommands();
+            }
+
+            // Makes sure the input stream is closed.
+            finally {
+                if(in != null) {
+                    try {in.close();}
+                    catch(Exception e) {}
+                }
+            }
+        }
+        wereCommandsModified = false;
     }
 }
