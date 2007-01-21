@@ -293,7 +293,7 @@ public class PlatformManager {
     private static final String ALL_FILES_REGEXP           = ".*";
     private static final String URL_REGEXP                 = "^https?:\\/\\/.+";
     private static final String POSIX_EXE_REGEXP           = "[^.]+";
-    private static final String WINDOWS_EXE_REGEXP         = "(.*\\.[eE][xX][eE]|.*\\.[bB][aA][tT])";
+    private static final String WINDOWS_EXE_REGEXP         = ".*\\.[eE][xX][eE]";
 
     public static void registerDefaultCommands() {
         try {
