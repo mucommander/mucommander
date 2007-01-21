@@ -37,9 +37,6 @@ public class ArchiveJob extends TransferFileJob {
     /** Optional archive comment */
     private String archiveComment;
 	
-    /** Size of the buffer used to write archived data */
-    private final static int WRITE_BUFFER_SIZE = 8192;
-
     /** Lock to avoid Archiver.close() to be called while data is being written */
     private final Object ioLock = new Object();
 
@@ -85,8 +82,9 @@ public class ArchiveJob extends TransferFileJob {
         // Loop for retry
         do {
             try {
-                // Tries to open destination file and create the Archiver
-                out = new BufferedOutputStream(destFile.getOutputStream(false), WRITE_BUFFER_SIZE);
+                // Tries to open destination file and create the Archiver.
+                // Use a BufferedOutputStream to buffer small files and improve performance.
+                out = new BufferedOutputStream(destFile.getOutputStream(false), AbstractFile.IO_BUFFER_SIZE);
                 this.archiver = Archiver.getArchiver(out, archiveFormat);
                 this.archiver.setComment(archiveComment);
                 break;

@@ -8,7 +8,6 @@ import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.process.AbstractProcess;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,14 +39,10 @@ public abstract class AbstractFile {
     /** Indicates {@link #copyTo(AbstractFile)}/{@link #moveTo(AbstractFile)} *must not* be used to copy/move the file (e.g. not implemented) */
     public final static int MUST_NOT_HINT = 3;
 
-    // Note: raising buffers size from 8192 to 65536 makes a huge difference in SFTP transfer rates
-
-    /** Size allocated to read buffer */
-    public final static int READ_BUFFER_SIZE = 65536;
-
-    /** Default buffer size for BufferedOutputStream */
-    public final static int WRITE_BUFFER_SIZE = 65536;
-
+    /** Size of the read/write buffer */
+    // Note: raising buffer size from 8192 to 65536 makes a huge difference in SFTP transfer rates but beyond 65536, no
+    // more gain (not sure why).
+    public final static int IO_BUFFER_SIZE = 65536;
 
     /** Bit mask for 'execute' file permission */
     public final static int EXECUTE_MASK = 64;
@@ -344,11 +339,11 @@ public abstract class AbstractFile {
      * Copies the contents of the given <code>InputStream</code> to the specified </code>OutputStream</code>
      * and throws an IOException if something went wrong. The streams will *NOT* be closed by this method.
      *
-     * <p>A read buffer of {@link #READ_BUFFER_SIZE} bytes is used to read from the InputStream. For performance
-     * reasons, this buffer is provided by {@link BufferPool}. 
-     *
-     * For optimal performance, a <code>BufferedOutputStream</code> should be provided. It is useless though to
-     * provide a BufferInputStream as read operations are already buffered.
+     * <p>Read and write operations are buffered, with a buffer of {@link #IO_BUFFER_SIZE} bytes. For performance
+     * reasons, this buffer is provided by {@link BufferPool}. There is no need to provide a BufferedInputStream.
+     * A BufferedOutputStream also isn't necessary, unless this method is called repeatedly with the same OutputStream
+     * and with potentially small InputStream (smaller than {@link #IO_BUFFER_SIZE}: in this case, providing a
+     * BufferedOutputStream will further improve performance by grouping calls to the underlying OutputStream write method.
      *
      * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}
      * and/or {@link com.mucommander.io.CounterOutputStream}.
@@ -359,7 +354,7 @@ public abstract class AbstractFile {
      */
     public static void copyStream(InputStream in, OutputStream out) throws FileTransferException {
         // Use BufferPool to reuse any available buffer of the same size
-        byte buffer[] = BufferPool.getBuffer(READ_BUFFER_SIZE);
+        byte buffer[] = BufferPool.getBuffer(IO_BUFFER_SIZE);
         try {
             // Copies the InputStream's content to the OutputStream chunks by chunks
             int nbRead;
@@ -394,11 +389,11 @@ public abstract class AbstractFile {
      * Copies the contents of the given <code>InputStream</code> to this file. The provided <code>InputStream</code>
      * will *NOT* be closed by this method.
      * 
-     * <p>Read and write operations are buffered, with a respective buffer of {@link #READ_BUFFER_SIZE} and
-     * {@link #WRITE_BUFFER_SIZE} bytes.
-     *
      * <p>This method should be overridden by file protocols that do not offer a {@link #getOutputStream(boolean)}
      * implementation, but that can take an <code>InputStream</code> and use it to write the file.
+     *
+     * <p>Read and write operations are buffered, with a buffer of {@link #IO_BUFFER_SIZE} bytes. For performance
+     * reasons, this buffer is provided by {@link BufferPool}. There is no need to provide a BufferedInputStream.
      *
      * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}.
      *
@@ -410,8 +405,7 @@ public abstract class AbstractFile {
         OutputStream out;
 
         try {
-            // Create a BufferedOutputStream to speed up the output
-            out = new BufferedOutputStream(getOutputStream(append), WRITE_BUFFER_SIZE);
+            out = getOutputStream(append);
         }
         catch(IOException e) {
             throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
