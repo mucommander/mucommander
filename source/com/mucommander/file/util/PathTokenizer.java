@@ -116,7 +116,7 @@ public class PathTokenizer implements Enumeration {
         lastSeparator = "";
 
         String token;
-        while(currentIndex<tokens.length && separators.contains(token=tokens[currentIndex])) {
+        while(currentIndex<tokens.length && separators.indexOf(token=tokens[currentIndex])!=-1) {
             // Update last separator
             lastSeparator += token;
 
