@@ -1,6 +1,7 @@
 package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.process.*;
 import com.mucommander.command.*;
@@ -65,7 +66,6 @@ public class PlatformManager {
     public final static int JAVA_1_5 = 5;
     /** Java 1.6.x */
     public final static int JAVA_1_6 = 6;
-
     /** Java version muCommander is running on (see constants) */
     public final static int JAVA_VERSION;
 
@@ -74,20 +74,30 @@ public class PlatformManager {
     // - Unix desktop -----------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Unknown desktop */
-    public final static int UNKNOWN_DESKTOP = 0;
+    public final static int UNKNOWN_DESKTOP   = 0;
     /** KDE desktop */
-    public final static int KDE_DESKTOP     = 1;
+    public final static int KDE_DESKTOP       = 1;
     /** GNOME desktop */
-    public final static int GNOME_DESKTOP   = 2;
+    public final static int GNOME_DESKTOP     = 2;
 
     /** Environment variable used to determine if GNOME is the desktop currently running */
     private final static String GNOME_ENV_VAR = "GNOME_DESKTOP_SESSION_ID";
     /** Environment variable used to determine if KDE is the desktop currently running */
-    private final static String KDE_ENV_VAR = "KDE_FULL_SESSION";
+    private final static String KDE_ENV_VAR   = "KDE_FULL_SESSION";
 
-    /** Unix desktop muCommander is running on (see constants), used only if OS family
-     * is LINUX, SOLARIS or OTHER */
+    /** Unix desktop muCommander is running on, used only if OS family is LINUX, SOLARIS or OTHER */
     public static final int UNIX_DESKTOP;
+
+
+
+    // - Default commands -------------------------------------------------------
+    // --------------------------------------------------------------------------
+    /** Alias for the default system file opener. */
+    private static final String DEFAULT_FILE_OPENER_ALIAS = "open";
+    /** Alias for the default system URL opener. */
+    private static final String DEFAULT_URL_OPENER_ALIAS  = "openURL";
+    /** Alias for the default system executable file opener. */
+    private static final String DEFAULT_EXE_OPENER_ALIAS  = "openEXE";
 
 
 
@@ -264,65 +274,174 @@ public class PlatformManager {
 
 
 
-    // - Shell management -------------------------------------------------------
+    // - Platform specific commands ---------------------------------------------
     // --------------------------------------------------------------------------
-    /**
-     * Returns the default shell command of the current platform.
-     * <p>
-     * At the time of writing, this means:<br/>
-     * - <code>cmd /c</code> for the Windows NT family of operating systems.<br/>
-     * - <code>command.com /c</code> for the Windows 9X family of operating systems.<br/>
-     * - <code>/bin/sh -l -c</code> for any other OS.<br/>
-     * </p>
-     * <p>
-     * Please note that this method is not returning the shell <b>binary</b>, but the shell
-     * <b>command</b>. Due to some persistant bugs on some platforms, it's not always possible
-     * to open a shell and write to its standard input. muCommander chooses to run commands
-     * as shell scripts to work around that problem, and thus needs the full <i>run command under</i>
-     * shell command.
-     * </p>
-     * @return the default shell command of the current platform.
-     */
+    private static final String WINDOWS_FILE_MANAGER_NAME  = "Explorer";
+    private static final String MAC_OS_X_FILE_MANAGER_NAME = "Finder";
+    private static final String KDE_FILE_MANAGER_NAME      = "Konqueror";
+    private static final String GNOME_FILE_MANAGER_NAME    = "Nautilus";
+    private static final String WINDOWS_9X_FILE_OPENER     = "start \"$f\"";
+    private static final String WINDOWS_NT_FILE_OPENER     = "cmd /c start \"\" \"$f\"";
+    private static final String MAC_OS_X_FILE_OPENER       = "open $f";
+    private static final String KDE_FILE_OPENER            = "kfmclient exec $f";
+    private static final String GNOME_FILE_OPENER          = "gnome-open $f";
+    private static final String MAC_OS_X_FILE_MANAGER      = "open -a Finder $f";
+    private static final String KDE_URL_OPENER             = "kmfclient openURL $f";
+    private static final String WINDOWS_9X_SHELL           = "command.com /c";
+    private static final String WINDOWS_NT_SHELL           = "cmd /c";
+    private static final String DEFAULT_SHELL              = "/bin/sh -l -c";
+    private static final String ALL_FILES_REGEXP           = ".*";
+    private static final String URL_REGEXP                 = "^https?:\\/\\/.+";
+    private static final String POSIX_EXE_REGEXP           = "[^.]+";
+    private static final String WINDOWS_EXE_REGEXP         = "(.*\\.[eE][xX][eE]|.*\\.[bB][aA][tT])";
+
+    public static void registerDefaultCommands() {
+        try {
+            // Registers windows 9x specific commands.
+            if(OS_FAMILY == WINDOWS_9X) {
+                CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, WINDOWS_9X_FILE_OPENER, Command.SYSTEM_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(WINDOWS_FILE_MANAGER_NAME, WINDOWS_9X_FILE_OPENER, Command.INVISIBLE_COMMAND));
+            }
+
+            // Registers windows NT specific commands.
+            else if(OS_FAMILY == WINDOWS_NT) {
+                CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_EXE_OPENER_ALIAS,  "cmd /c $f", Command.SYSTEM_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, WINDOWS_NT_FILE_OPENER, Command.SYSTEM_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(WINDOWS_FILE_MANAGER_NAME, WINDOWS_NT_FILE_OPENER, Command.INVISIBLE_COMMAND));
+            }
+
+            // Registers Mac OS X specific commands.
+            else if(OS_FAMILY == MAC_OS_X) {
+                CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS,  MAC_OS_X_FILE_OPENER, Command.SYSTEM_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(MAC_OS_X_FILE_MANAGER_NAME, MAC_OS_X_FILE_MANAGER, Command.INVISIBLE_COMMAND));
+            }
+
+            // Registers KDE specific commands.
+            else if(UNIX_DESKTOP == KDE_DESKTOP) {
+                CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, KDE_FILE_OPENER, Command.SYSTEM_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_URL_OPENER_ALIAS,  KDE_URL_OPENER, Command.SYSTEM_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(KDE_FILE_MANAGER_NAME,     KDE_FILE_OPENER, Command.INVISIBLE_COMMAND));
+            }
+
+            // Registers Gnome specific commands.
+            else if(UNIX_DESKTOP == GNOME_DESKTOP) {
+                CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, GNOME_FILE_OPENER, Command.SYSTEM_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(GNOME_FILE_MANAGER_NAME,   GNOME_FILE_OPENER, Command.INVISIBLE_COMMAND));
+                CommandManager.registerCommand(CommandManager.RUN_AS_EXECUTABLE_COMMAND);
+            }
+
+            // Unknown systems, the only command we know is 'run as executable'.
+            else
+                CommandManager.registerCommand(CommandManager.RUN_AS_EXECUTABLE_COMMAND);
+        }
+        catch(Exception e) {if(Debug.ON) Debug.trace("Couldn't register default commands: " + e);}
+    }
+
+    public static void registerDefaultAssociations() {
+        try {
+            // The only required association under Windows 9x is 'file opener'.
+            if(OS_FAMILY == WINDOWS_9X)
+                CommandManager.registerAssociation(ALL_FILES_REGEXP, DEFAULT_FILE_OPENER_ALIAS);
+
+            // Under Windows NT, the recommanded way of opening executable files is through cmd /c.
+            // All other files are opened with cmd /c start "" "$f"
+            else if(OS_FAMILY == WINDOWS_NT) {
+                CommandManager.registerAssociation(WINDOWS_EXE_REGEXP, DEFAULT_EXE_OPENER_ALIAS);
+                CommandManager.registerAssociation(ALL_FILES_REGEXP, DEFAULT_FILE_OPENER_ALIAS);
+            }
+
+            // Registers Mac OS X specific associations.
+            else if(OS_FAMILY == MAC_OS_X)
+                CommandManager.registerAssociation(ALL_FILES_REGEXP, DEFAULT_FILE_OPENER_ALIAS);
+
+            // Registers KDE specific associations.
+            else if(UNIX_DESKTOP == KDE_DESKTOP) {
+                // kmfclient doesn't know how to open URLs. We need to add a specific URL matching
+                // association for kmfclient openURL
+                CommandManager.registerAssociation(URL_REGEXP, DEFAULT_URL_OPENER_ALIAS);
+                CommandManager.registerAssociation(ALL_FILES_REGEXP, DEFAULT_FILE_OPENER_ALIAS);
+            }
+
+            // Registers Gnome specific associations.
+            else if(UNIX_DESKTOP == GNOME_DESKTOP) {
+                // If we're running under a version of Java that doesn't support the file system's
+                // 'executable' flag, we'll try to match files that look like they might just be executable.
+                if(JAVA_VERSION <= JAVA_1_5)
+                    CommandManager.registerAssociation(POSIX_EXE_REGEXP, CommandManager.RUN_AS_EXECUTABLE_ALIAS);
+
+                // Order is important here: 'all executable files' must be matched before 'all files'.
+                CommandManager.registerAssociation(ALL_FILES_REGEXP,
+                                                   CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED,
+                                                   CommandAssociation.YES, CommandManager.RUN_AS_EXECUTABLE_ALIAS);
+                CommandManager.registerAssociation(ALL_FILES_REGEXP, DEFAULT_FILE_OPENER_ALIAS);
+            }
+
+            // Unknown systems, the only association we can make is
+            // 'if it looks like an executable, try to open it as an executable'.
+            else {
+                // If we're running under a version of Java that doesn't support the file system's
+                // 'executable' flag, we'll try to match files that look like they might be executable.
+                if(JAVA_VERSION <= JAVA_1_5)
+                    CommandManager.registerAssociation(POSIX_EXE_REGEXP, CommandManager.RUN_AS_EXECUTABLE_ALIAS);
+                CommandManager.registerAssociation(ALL_FILES_REGEXP,
+                                                   CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED,
+                                                   CommandAssociation.YES, CommandManager.RUN_AS_EXECUTABLE_ALIAS);
+            }
+
+        }
+        catch(Exception e) {if(Debug.ON) Debug.trace("Couldn't register default associations: " + e);}
+    }
+
     public static String getDefaultShellCommand() {
         switch(OS_FAMILY) {
             // NT systems use cmd.exe
         case WINDOWS_NT:
-            return "cmd /c";
+            return WINDOWS_NT_SHELL;
             // Win9x systems use command.com
         case WINDOWS_9X:
-            return "command.com /c";
+            return WINDOWS_9X_SHELL;
             // Any other OS is assumed to be POSIX compliant,
             // and thus have a valid /bin/sh shell.
         default:
-            return "/bin/sh -l -c";
+            return DEFAULT_SHELL;
         }
+    }
+
+    public static String getDefaultDesktopFMName() {
+        if(OS_FAMILY==WINDOWS_9X || OS_FAMILY == WINDOWS_NT)
+            return WINDOWS_FILE_MANAGER_NAME;
+        else if(OS_FAMILY == MAC_OS_X)
+            return MAC_OS_X_FILE_MANAGER_NAME;
+        else if(UNIX_DESKTOP == KDE_DESKTOP)
+            return KDE_FILE_MANAGER_NAME;
+        else if(UNIX_DESKTOP == GNOME_DESKTOP)
+            return GNOME_FILE_MANAGER_NAME;
+        else
+            return null;
     }
 
 
 
-    // - System browser ---------------------------------------------------------
+    // - Platform specific operations -------------------------------------------
     // --------------------------------------------------------------------------
     /**
-     * Returns <code>true</code> if the current platform is capable of opening a URL in a new (default) browser window.
+     * Returns <code>true</code> if the current platform is capable of opening a URL in a new browser window.
+     * <p>
+     * This test is done by checking whether muCommander's homepage is associated to any command. If it's not, then we'll
+     * assume that no URL can be opened in the current configuration.
+     * </p>
+     * @return <code>true</code> if the current platform is capable of opening a URL in a new (default) browser window.
      */
-    public static boolean canOpenURLInBrowser() {return CommandManager.getCommandForFile("http://", false) != null;}
+    public static boolean canOpenURLInBrowser() {return CommandManager.getCommandForFile(FileFactory.getFile(RuntimeConstants.HOMEPAGE_URL), false) != null;}
 
-    /**
-     * Opens 
-     */
-    public static void open(AbstractFile file) {
-        AbstractProcess process;
-        Command         command;
-
+    public static AbstractProcess open(AbstractFile file) {
         if(Debug.ON) Debug.trace("Opening " + file.getAbsolutePath());
 
-        try {
-            process = ProcessRunner.execute((command = CommandManager.getCommandForFile(file)).getTokens(file), file);
-
-            if(command != CommandManager.SELF_OPEN_COMMAND && process.waitFor() != 0)
-                ProcessRunner.execute(CommandManager.SELF_OPEN_COMMAND.getTokens(file), file);
+        try {return ProcessRunner.execute(CommandManager.getCommandForFile(file).getTokens(file), file);}
+        catch(Exception e) {
+            if(Debug.ON) Debug.trace("Error while executing " + file + ": " + e);
+            return null;
         }
-        catch(Exception e) {if(Debug.ON) Debug.trace("Error while executing " + file + ": "+e);}
     }
 
     /**
@@ -333,14 +452,6 @@ public class PlatformManager {
         return OS_FAMILY==MAC_OS_X || OS_FAMILY==WINDOWS_9X || OS_FAMILY==WINDOWS_NT || UNIX_DESKTOP==KDE_DESKTOP || UNIX_DESKTOP==GNOME_DESKTOP;
     }	
 
-    /**
-     * Opens the given file in the currently running OS/desktop's file manager : 
-     * Explorer for Windows, Finder for Mac OS X, Nautilus for GNOME, Konqueror for KDE.
-     * <ul>
-     *  <li>if the given file is a folder, the folder contents</li>
-     *  <li>if the given file is a regular file, the enclosing folder's contents (Finder is unable to jump to the file unfortunately)</li>
-     * </ul>
-     */
     public static void openInDesktop(AbstractFile file) {
         try {
             // Return if file is not a local file
@@ -361,132 +472,9 @@ public class PlatformManager {
         }
     }
 
-    /**
-     * Returns the system's default file manager command.
-     * @return the system's default file manager command.
-     */
-    public static String getDefaultDesktopFM() {
-        if(OS_FAMILY == MAC_OS_X)
-            return "open -a Finder $f";
-        return getDefaultFileOpener();
-    }
-	
-    /**
-     * Returns the name of the default file manager on the currently running OS/Desktop: 
-     * "Explorer" for Windows, "Finder" for Mac OS X, "Nautilus" for GNOME, "Konqueror" for KDE, or an empty
-     * String if unknown.
-     */
-    public static String getDefaultDesktopFMName() {
-        if(OS_FAMILY==WINDOWS_9X || OS_FAMILY == WINDOWS_NT)
-            return "Explorer";
-        else if(OS_FAMILY == MAC_OS_X)
-            return "Finder";
-        else if(UNIX_DESKTOP == KDE_DESKTOP)
-            return "Konqueror";			
-        else if(UNIX_DESKTOP == GNOME_DESKTOP)
-            return "Nautilus";
-        else
-            return "";
-    }
-
-    /**
-     * Returns the command that should be used to open normal files.
-     * <p>
-     * If muCommander doesn't know which default command to use for the current system,
-     * this method will return <code>null</code>.
-     * </p>
-     * @return the command that should be used to open normal files.
-     */
-    public static String getDefaultFileOpener() {
-        if(OS_FAMILY == WINDOWS_9X)
-            return "start \"$f\"";
-        if(OS_FAMILY == WINDOWS_NT)
-            return "cmd /c start \"\" \"$f\"";
-        if(OS_FAMILY == MAC_OS_X)
-            return "open $f";
-        if(UNIX_DESKTOP == KDE_DESKTOP)
-            return "kfmclient exec $f";
-        if(UNIX_DESKTOP == GNOME_DESKTOP)
-            return "gnome-open $f";
-        return null;
-    }
-
-    /**
-     * Returns the command that should be used to open URLs.
-     * <p>
-     * If muCommander doesn't know which default command to use for the current system,
-     * this method will return <code>null</code>.
-     * </p>
-     * @return the command that should be used to open URLs.
-     */
-    public static String getDefaultURLOpener() {
-        if(UNIX_DESKTOP == KDE_DESKTOP)
-            return "kfmclient openURL $f";
-        return null;
-    }
-
-    /**
-     * Returns an array of command tokens that can be used to open the given file in the OS/Desktop's
-     * default file manager.
-     */
-    private static String[] getOpenTokens(String filePath) {
-        // Under Windows, the 'start' command opens a file with the program
-        // registered for the file's extension, or executes the file if the file is executable, or opens 
-        // up a new browser window if the given file is a web URL 
-        // Windows 95, 98, Me : syntax is start "myfile"
-        String tokens[];
-        if (OS_FAMILY == WINDOWS_9X) {
-            tokens = new String[] {"start", "\""+filePath+"\""};
-        }
-        // Windows NT, 2000, XP : syntax is cmd /c start "" "myfile"
-        else if (OS_FAMILY == WINDOWS_NT) {
-            tokens = new String[] {"cmd", "/c", "start", "\"\"", "\""+filePath+"\""};
-        }
-        // Mac OS X can do the same with the 'open' command 
-        else if (OS_FAMILY == MAC_OS_X)  {
-            tokens = new String[] {"open", filePath};
-        }
-        // KDE has 'kfmclient exec' which opens/executes a file, but it won't work with web URLs.
-        // For web URLs, 'kfmclient openURL' has to be called. 
-        else if(UNIX_DESKTOP == KDE_DESKTOP) {
-            tokens = new String[] {"kfmclient", "exec", filePath};			
-        }
-        // GNOME has 'gnome-open' which opens a file with a registered extension / opens a web URL in a new window,
-        // but it won't execute an executable file.
-        // For executable files, the file's path has to be executed as a command 
-        else if(UNIX_DESKTOP == GNOME_DESKTOP) {
-            tokens = new String[] {"gnome-open", filePath};
-        }
-        // No launcher command for this platform, let's just execute the file in
-        // case it's an executable
-        else {
-            tokens = new String[] {escapeSpaceCharacters(filePath)};
-        }
-	
-        return tokens;
-    }
 
 
-    /**
-     * Escapes space characters in the given string (replaces space characters ' ' instances by '\ ')
-     * and returns the escaped string.
-     */
-    private static String escapeSpaceCharacters(String filePath) {
-        StringBuffer sb = new StringBuffer();
-        char c;
-        int len = filePath.length();
-        for(int i=0; i<len; i++) {
-            c = filePath.charAt(i);
-            if(c==' ')
-                sb.append("\\ ");
-            else
-                sb.append(c);
-        }
-        return sb.toString();
-    }
-
-
-    // - Mouse handling. ------------------------------------------------------------------
+    // - Mouse handling. --------------------------------------------------------
     // --------------------------------------------------------------------------
 
     /**
@@ -526,9 +514,9 @@ public class PlatformManager {
     }
 
 
-    // - Misc. ------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
+    // - Preferences folder -----------------------------------------------------
+    // --------------------------------------------------------------------------
     /**
      * Returns the path to the default muCommander preferences folder.
      * @return the path to the default muCommander preferences folder.
@@ -590,18 +578,5 @@ public class PlatformManager {
                 throw new IllegalArgumentException("Could not create folder " + folder);
         }
         prefFolder = folder;
-    }
-
-    ///////////////////
-    // Debug methods //
-    ///////////////////
-
-    private static String tokensToString(String tokens[]) {
-        StringBuffer sb = new StringBuffer();
-        int nbTokens = tokens.length;
-        for(int i=0; i<nbTokens; i++)
-            sb.append(tokens[i]+" ");
-			
-        return sb.toString();
     }
 }
