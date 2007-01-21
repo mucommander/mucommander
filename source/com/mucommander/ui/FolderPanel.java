@@ -161,18 +161,20 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Set scroll pane's background color to match the one of this panel and FileTable
         scrollPane.getViewport().setBackground(ThemeManager.getCurrentColor(Theme.FILE_BACKGROUND));
 
-        // Catch mouse events to popup a contextual 'folder' menu
+        // Catch mouse events on the ScrollPane
         scrollPane.addMouseListener(new MouseAdapter() {
-                public void mousePressed(MouseEvent e) {
-                    int modifiers = e.getModifiers();
-
-                    // Right-click brings a contextual popup menu
-                    if (PlatformManager.isRightMouseButton(e)) {
-                        AbstractFile currentFolder = getCurrentFolder();
-                        new TablePopupMenu(FolderPanel.this.mainFrame, currentFolder, null, false, fileTable.getFileTableModel().getMarkedFiles()).show(scrollPane, e.getX(), e.getY());
-                    }
+            public void mousePressed(MouseEvent e) {
+                // Left-click requests focus on the FileTable
+                if (PlatformManager.isLeftMouseButton(e)) {
+                    fileTable.requestFocus();
                 }
-            });
+                // Right-click brings a contextual popup menu
+                else if (PlatformManager.isRightMouseButton(e)) {
+                    AbstractFile currentFolder = getCurrentFolder();
+                    new TablePopupMenu(FolderPanel.this.mainFrame, currentFolder, null, false, fileTable.getFileTableModel().getMarkedFiles()).show(scrollPane, e.getX(), e.getY());
+                }
+            }
+        });
 
         add(scrollPane, BorderLayout.CENTER);
 
