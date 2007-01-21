@@ -64,7 +64,7 @@ public class Theme {
     /** Font used in the shell history. */
     public static final int SHELL_HISTORY                      = 4;
     /** Font used in the volume label. */
-    public static final int VOLUME_LABEL                       = 5;
+    public static final int STATUS_BAR                       = 5;
 
 
 
@@ -139,17 +139,17 @@ public class Theme {
     /** Selected version of the color used for the shell history background. */
     public static final int SHELL_HISTORY_BACKGROUND_SELECTED  = 33;
     /** Background color for the volume label. */
-    public static final int VOLUME_LABEL_BACKGROUND            = 34;
+    public static final int STATUS_BAR_BACKGROUND              = 34;
     /** Border color for the volume label. */
-    public static final int VOLUME_LABEL_BORDER                = 35;
+    public static final int STATUS_BAR_BORDER                  = 35;
     /** 'OK' color for the volume label. */
-    public static final int VOLUME_LABEL_OK                    = 36;
+    public static final int STATUS_BAR_OK                      = 36;
     /** 'WARNING' color for the volume label. */
-    public static final int VOLUME_LABEL_WARNING               = 37;
+    public static final int STATUS_BAR_WARNING                 = 37;
     /** 'CRITICAL' color for the volume label. */
-    public static final int VOLUME_LABEL_CRITICAL              = 38;
+    public static final int STATUS_BAR_CRITICAL                = 38;
     /** Text color for the volume label. */
-    public static final int VOLUME_LABEL_TEXT                  = 39;
+    public static final int STATUS_BAR_TEXT                    = 39;
 
 
 
@@ -217,6 +217,16 @@ public class Theme {
     // - Data retrieval ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
+     * Returns <code>true</code> if the theme is available.
+     * <p>
+     * In the specific case of the user theme, it's possible that it's 'available' but corrupt.
+     * This method checks for that status.
+     * </p>
+     * @return <code>true</code> if the theme is available.
+     */
+    public boolean isAvailable() {return getThemeData() != null;}
+
+    /**
      * Returns the theme's type.
      * @return the theme's type.
      */
@@ -252,7 +262,7 @@ public class Theme {
                 // Logs errors in debug mode.
                 if(Debug.ON) {
                     Debug.trace("Failed to load theme " + path);
-                    //Debug.trace(e);
+                    Debug.trace(e);
                 }
                 return null;
             }

@@ -585,6 +585,14 @@ error:IT:Errore
 
 
 
+# Error message displayed when a theme cannot be loaded
+theme_could_not_be_loaded:EN:An error occured while loading this theme.
+theme_could_not_be_loaded:FR:Une erreur est survenue lors du chargement de ce thème.
+
+
+
+
+
 
 
 

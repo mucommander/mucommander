@@ -428,7 +428,8 @@ public class ThemeManager {
      * <p>
      * This method will change the current theme and trigger all the proper events.
      * </p>
-     * @param theme theme to use as the current theme.
+     * @param  theme                    theme to use as the current theme.
+     * @throws IllegalArgumentException thrown if the specified theme could not be loaded.
      */
     public synchronized static void setCurrentTheme(Theme theme) {
         ThemeData oldData; // Buffer for the old current data.
@@ -441,8 +442,10 @@ public class ThemeManager {
 
         // Sets the new data.
         oldData = currentData;
-        if((currentData = theme.getThemeData()) == null)
-            throw new IllegalStateException("Couldn't load data for theme: " + theme.getName());
+        if((currentData = theme.getThemeData()) == null) {
+            currentData = oldData;
+            throw new IllegalArgumentException("Couldn't load data for theme: " + theme.getName());
+        }
 
         // The user theme data might be garbage collected before muCommander is shutdown.
         // We need to make sure it's saved before that happen.
@@ -1202,7 +1205,7 @@ public class ThemeManager {
 
         case Theme.SHELL_HISTORY_TEXT:
         case Theme.LOCATION_BAR_TEXT:
-        case Theme.VOLUME_LABEL_TEXT:
+        case Theme.STATUS_BAR_TEXT:
             return getTextFieldColor();
 
         case Theme.LOCATION_BAR_BACKGROUND:
@@ -1245,19 +1248,19 @@ public class ThemeManager {
         case Theme.LOCATION_BAR_BACKGROUND_SELECTED:
             return getTextFieldSelectionBackgroundColor();
 
-        case Theme.VOLUME_LABEL_BACKGROUND:
+        case Theme.STATUS_BAR_BACKGROUND:
             return new Color(0xD5D5D5);
 
-        case Theme.VOLUME_LABEL_BORDER:
+        case Theme.STATUS_BAR_BORDER:
             return new Color(0x7A7A7A);
 
-        case Theme.VOLUME_LABEL_OK:
+        case Theme.STATUS_BAR_OK:
             return new Color(0x70EC2B);
 
-        case Theme.VOLUME_LABEL_WARNING:
+        case Theme.STATUS_BAR_WARNING:
             return new Color(0xFF7F00);
 
-        case Theme.VOLUME_LABEL_CRITICAL:
+        case Theme.STATUS_BAR_CRITICAL:
             return new Color(0xFF0000);
         }
         throw new IllegalArgumentException("Illegal color identifier: " + id);
@@ -1282,7 +1285,7 @@ public class ThemeManager {
 	    // Text Field font.
         case Theme.LOCATION_BAR:
         case Theme.SHELL_HISTORY:
-        case Theme.VOLUME_LABEL:
+        case Theme.STATUS_BAR:
 	    return getTextFieldFont();
 
         }

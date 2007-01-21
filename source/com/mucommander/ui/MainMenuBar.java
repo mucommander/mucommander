@@ -441,7 +441,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
 
         public void actionPerformed(ActionEvent actionEvent) {
-            ThemeManager.setCurrentTheme(theme);
+            try {ThemeManager.setCurrentTheme(theme);}
+            catch(IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(mainFrame, Translator.get("theme_could_not_be_loaded"), Translator.get("error"), JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }

@@ -46,7 +46,7 @@ import java.awt.event.MouseListener;
  *
  * @author Maxence Bernard
  */
-public class StatusBar extends JPanel implements Runnable, MouseListener, ActivePanelListener, TableSelectionListener, LocationListener, ComponentListener {
+public class StatusBar extends JPanel implements Runnable, MouseListener, ActivePanelListener, TableSelectionListener, LocationListener, ComponentListener, ThemeListener {
 
     private MainFrame mainFrame;
 
@@ -86,7 +86,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     public StatusBar(MainFrame mainFrame) {
         // Create and add status bar
         super(new BorderLayout());
-		
+
         this.mainFrame = mainFrame;
 		
         this.selectedFilesLabel = new JLabel("");
@@ -122,6 +122,13 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         // Catch component events to be notified when this component is made visible
         // and update status info
         addComponentListener(this);
+
+        // Initialises theme.
+        selectedFilesLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR));
+        selectedFilesLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_TEXT));
+        volumeSpaceLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR));
+        volumeSpaceLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_TEXT));
+        ThemeManager.addThemeListener(this);
     }
 
 
@@ -427,6 +434,22 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     }
 
 
+    public void fontChanged(int fontId, Font newFont) {
+        if(fontId == Theme.STATUS_BAR) {
+            selectedFilesLabel.setFont(newFont);
+            volumeSpaceLabel.setFont(newFont);
+            repaint();
+        }
+    }
+
+    public void colorChanged(int colorId, Color newColor) {
+        if(colorId == Theme.STATUS_BAR_TEXT) {
+            selectedFilesLabel.setForeground(newColor);
+            volumeSpaceLabel.setForeground(newColor);
+            repaint();
+        }
+    }
+
     /**
      * This label displays the amount of free and/or total space on a volume.
      */
@@ -448,13 +471,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         private VolumeSpaceLabel() {
             super("");
             setHorizontalAlignment(CENTER);
-            backgroundColor = ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_BACKGROUND);
-            borderColor     = ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_BORDER);
-            okColor         = ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_OK);
-            warningColor    = ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_WARNING);
-            criticalColor   = ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_CRITICAL);
-            setFont(ThemeManager.getCurrentFont(Theme.VOLUME_LABEL));
-            setForeground(ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_TEXT));
+            backgroundColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BACKGROUND);
+            borderColor     = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BORDER);
+            okColor         = ThemeManager.getCurrentColor(Theme.STATUS_BAR_OK);
+            warningColor    = ThemeManager.getCurrentColor(Theme.STATUS_BAR_WARNING);
+            criticalColor   = ThemeManager.getCurrentColor(Theme.STATUS_BAR_CRITICAL);
             ThemeManager.addThemeListener(this);
         }
 
@@ -540,25 +561,18 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             super.paint(g);
         }
 
-        public void fontChanged(int fontId, Font newFont) {
-            if(fontId == Theme.VOLUME_LABEL) {
-                setFont(newFont);
-                repaint();
-            }
-        }
+        public void fontChanged(int fontId, Font newFont) {}
 
         public void colorChanged(int colorId, Color newColor) {
-            if(colorId == Theme.VOLUME_LABEL_TEXT)
-                setForeground(newColor);
-            else if(colorId == Theme.VOLUME_LABEL_BACKGROUND)
+            if(colorId == Theme.STATUS_BAR_BACKGROUND)
                 backgroundColor = newColor;
-            else if(colorId == Theme.VOLUME_LABEL_BORDER)
+            else if(colorId == Theme.STATUS_BAR_BORDER)
                 borderColor = newColor;
-            else if(colorId == Theme.VOLUME_LABEL_OK)
+            else if(colorId == Theme.STATUS_BAR_OK)
                 okColor = newColor;
-            else if(colorId == Theme.VOLUME_LABEL_WARNING)
+            else if(colorId == Theme.STATUS_BAR_WARNING)
                 warningColor = newColor;
-            else if(colorId == Theme.VOLUME_LABEL_CRITICAL)
+            else if(colorId == Theme.STATUS_BAR_CRITICAL)
                 criticalColor = newColor;
             else
                 return;

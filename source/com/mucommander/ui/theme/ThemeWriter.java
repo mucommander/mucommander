@@ -203,26 +203,26 @@ class ThemeWriter implements ThemeXmlConstants {
 
         // - Volume label description ----------------------------------------------------
         // -------------------------------------------------------------------------------
-        out.startElement(ELEMENT_VOLUME_LABEL);
+        out.startElement(ELEMENT_STATUS_BAR);
         out.println();
         // Font.
-        if((font = theme.getFont(Theme.VOLUME_LABEL)) != null)
+        if((font = theme.getFont(Theme.STATUS_BAR)) != null)
             out.writeStandAloneElement(ELEMENT_FONT, getFontAttributes(font));
 
         // Colors.
-        if((color = theme.getColor(Theme.VOLUME_LABEL_BACKGROUND)) != null)
+        if((color = theme.getColor(Theme.STATUS_BAR_BACKGROUND)) != null)
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
-        if((color = theme.getColor(Theme.VOLUME_LABEL_TEXT)) != null)
+        if((color = theme.getColor(Theme.STATUS_BAR_TEXT)) != null)
             out.writeStandAloneElement(ELEMENT_TEXT, getColorAttributes(color));
-        if((color = theme.getColor(Theme.VOLUME_LABEL_BORDER)) != null)
+        if((color = theme.getColor(Theme.STATUS_BAR_BORDER)) != null)
             out.writeStandAloneElement(ELEMENT_BORDER, getColorAttributes(color));
-        if((color = theme.getColor(Theme.VOLUME_LABEL_OK)) != null)
+        if((color = theme.getColor(Theme.STATUS_BAR_OK)) != null)
             out.writeStandAloneElement(ELEMENT_OK, getColorAttributes(color));
-        if((color = theme.getColor(Theme.VOLUME_LABEL_WARNING)) != null)
+        if((color = theme.getColor(Theme.STATUS_BAR_WARNING)) != null)
             out.writeStandAloneElement(ELEMENT_WARNING, getColorAttributes(color));
-        if((color = theme.getColor(Theme.VOLUME_LABEL_CRITICAL)) != null)
+        if((color = theme.getColor(Theme.STATUS_BAR_CRITICAL)) != null)
             out.writeStandAloneElement(ELEMENT_CRITICAL, getColorAttributes(color));
-        out.endElement(ELEMENT_VOLUME_LABEL);
+        out.endElement(ELEMENT_STATUS_BAR);
 
         out.endElement(ELEMENT_ROOT);
     }

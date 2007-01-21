@@ -20,7 +20,7 @@ interface ThemeXmlConstants {
     /** Shell history description element. */
     public static final String ELEMENT_SHELL_HISTORY        = "shell_history";
     /** Volume label description element. */
-    public static final String ELEMENT_VOLUME_LABEL         = "volume_label";
+    public static final String ELEMENT_STATUS_BAR           = "volume_label";
 
 
 
