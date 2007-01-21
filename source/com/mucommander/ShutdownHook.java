@@ -64,6 +64,7 @@ public class ShutdownHook extends Thread {
         // Saves the user theme.
         ThemeManager.saveUserTheme();
         // Saves the file associations.
+        CommandManager.writeCommands();
         CommandManager.writeAssociations();
         
 

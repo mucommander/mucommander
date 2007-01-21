@@ -232,6 +232,7 @@ public class Launcher {
 
         // Loads the file associations
         splashScreen.setLoadingMessage("Loading file associations...");
+        com.mucommander.command.CommandManager.loadCommands();
         com.mucommander.command.CommandManager.loadAssociations();
 
         // Loads bookmarks
