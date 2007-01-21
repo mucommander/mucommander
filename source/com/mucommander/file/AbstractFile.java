@@ -3,6 +3,7 @@ package com.mucommander.file;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.io.BufferPool;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.process.AbstractProcess;
@@ -343,7 +344,9 @@ public abstract class AbstractFile {
      * Copies the contents of the given <code>InputStream</code> to the specified </code>OutputStream</code>
      * and throws an IOException if something went wrong. The streams will *NOT* be closed by this method.
      *
-     * <p>A read buffer is used of {@link #READ_BUFFER_SIZE} bytes is used to read from the InputStream.
+     * <p>A read buffer of {@link #READ_BUFFER_SIZE} bytes is used to read from the InputStream. For performance
+     * reasons, this buffer is provided by {@link BufferPool}. 
+     *
      * For optimal performance, a <code>BufferedOutputStream</code> should be provided. It is useless though to
      * provide a BufferInputStream as read operations are already buffered.
      *
@@ -355,29 +358,34 @@ public abstract class AbstractFile {
      * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
      */
     public static void copyStream(InputStream in, OutputStream out) throws FileTransferException {
-        // Init read buffer
-        byte buffer[] = new byte[READ_BUFFER_SIZE];
+        // Use BufferPool to reuse any available buffer of the same size
+        byte buffer[] = BufferPool.getBuffer(READ_BUFFER_SIZE);
+        try {
+            // Copies the InputStream's content to the OutputStream chunks by chunks
+            int nbRead;
 
-        // Copies the InputStream's content to the OutputStream chunks by chunks
-        int nbRead;
+            while(true) {
+                try {
+                    nbRead = in.read(buffer, 0, buffer.length);
+                }
+                catch(IOException e) {
+                    throw new FileTransferException(FileTransferException.READING_SOURCE);
+                }
 
-        while(true) {
-            try {
-                nbRead = in.read(buffer, 0, buffer.length);
-            }
-            catch(IOException e) {
-                throw new FileTransferException(FileTransferException.READING_SOURCE);
-            }
+                if(nbRead==-1)
+                    break;
 
-            if(nbRead==-1)
-                break;
-
-            try {
-                out.write(buffer, 0, nbRead);
+                try {
+                    out.write(buffer, 0, nbRead);
+                }
+                catch(IOException e) {
+                    throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+                }
             }
-            catch(IOException e) {
-                throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
-            }
+        }
+        finally {
+            // Make the buffer available for further use
+            BufferPool.releaseBuffer(buffer);
         }
     }
 

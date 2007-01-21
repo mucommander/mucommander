@@ -32,6 +32,9 @@ public class FileURL implements Cloneable {
     /** String designating the localhost */
     public final static String LOCALHOST = "localhost";
 
+    /** Charset used to encode and decode special characters in URL */
+    private final static String URL_CHARSET = "UTF-8";
+
 
     /**
      * Protected constructor.
@@ -501,7 +504,7 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
     public String getFilename(boolean urlDecode) {
         try {
             if(urlDecode && filename!=null)
-                return URLDecoder.decode(filename, "UTF-8");
+                return URLDecoder.decode(filename, URL_CHARSET);
         }
         catch(UnsupportedEncodingException e) {
         }
