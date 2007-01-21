@@ -63,6 +63,10 @@ public class ProcessRunner {
         else if(!currentDirectory.isDirectory())
             currentDirectory = currentDirectory.getParent();
 
+        // If we're in debug mode, register a debug process listener.
+        if(Debug.ON && listener == null)
+            listener = new DebugProcessListener(tokens);
+
         // Starts the process.
         process = currentDirectory.runProcess(tokens);
         process.startMonitoring(listener);

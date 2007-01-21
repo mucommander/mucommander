@@ -68,13 +68,13 @@ public abstract class AbstractProcess {
         // Only monitors stdout if the process uses merged streams.
         if(usesMergedStreams()) {
             if(Debug.ON) Debug.trace("Starting process merged output monitor...");
-            new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), listener, this), "Shell sdtout/stderr monitor").start();
+            new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), listener, this), "Process sdtout/stderr monitor").start();
         }
         // Monitors both stdout and stderr.
         else {
             if(Debug.ON) Debug.trace("Starting process stdout and stderr monitors...");
-            new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), listener, this), "Shell stdout monitor").start();
-            new Thread(stderrMonitor = new ProcessOutputMonitor(getErrorStream(), listener), "Shell stderr monitor").start();
+            new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), listener, this), "Process stdout monitor").start();
+            new Thread(stderrMonitor = new ProcessOutputMonitor(getErrorStream(), listener), "Process stderr monitor").start();
         }
     }
 
