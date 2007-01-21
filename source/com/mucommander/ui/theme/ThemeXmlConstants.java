@@ -4,7 +4,7 @@ package com.mucommander.ui.theme;
  * Defines the format of the XML theme files.
  * @author Nicolas Rinaudo
  */
-interface XmlConstants {
+interface ThemeXmlConstants {
     // - Main elements -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** XML theme file root element. */
@@ -19,6 +19,8 @@ interface XmlConstants {
     public static final String ELEMENT_LOCATION_BAR         = "location_bar";
     /** Shell history description element. */
     public static final String ELEMENT_SHELL_HISTORY        = "shell_history";
+    /** Volume label description element. */
+    public static final String ELEMENT_VOLUME_LABEL         = "volume_label";
 
 
 
@@ -74,6 +76,12 @@ interface XmlConstants {
     public static final String ELEMENT_PROGRESS             = "progress";
     /** Border color element. */
     public static final String ELEMENT_BORDER               = "border";
+    /** 'OK' color element. */
+    public static final String ELEMENT_OK                   = "ok";
+    /** 'WARNING' color element. */
+    public static final String ELEMENT_WARNING              = "warning";
+    /** 'CRITICAL' color element. */
+    public static final String ELEMENT_CRITICAL             = "critical";
     /** Color description attribute. */
     public static final String ATTRIBUTE_COLOR              = "color";
     /** Color transparency description attribute. */
