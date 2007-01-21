@@ -45,9 +45,9 @@ public class Theme {
     // a lot easier to fix.
 
     /** Number of known fonts. */
-    static final int FONT_COUNT  = 5;
+    static final int FONT_COUNT  = 6;
     /** Number of known colors. */
-    static final int COLOR_COUNT = 34;
+    static final int COLOR_COUNT = 40;
 
 
 
@@ -63,6 +63,8 @@ public class Theme {
     public static final int LOCATION_BAR                       = 3;
     /** Font used in the shell history. */
     public static final int SHELL_HISTORY                      = 4;
+    /** Font used in the volume label. */
+    public static final int VOLUME_LABEL                       = 5;
 
 
 
@@ -98,33 +100,33 @@ public class Theme {
     public static final int LOCATION_BAR_BACKGROUND            = 13;
     /** Background color for the location har when it's being used as a progress bar. */
     public static final int LOCATION_BAR_PROGRESS              = 14;
-    /** Selected version of {#FILE_BACKGROUND}. */
+    /** Selected version of {@link #FILE_BACKGROUND}. */
     public static final int FILE_BACKGROUND_SELECTED           = 15;
-    /** Selected version of {#FILE_UNFOCUSED_BACKGROUND}. */
+    /** Selected version of {@link #FILE_UNFOCUSED_BACKGROUND}. */
     public static final int FILE_UNFOCUSED_BACKGROUND_SELECTED = 16;
-    /** Selected version of {#HIDDEN_FILE}. */
+    /** Selected version of {@link #HIDDEN_FILE}. */
     public static final int HIDDEN_FILE_SELECTED               = 17;
-    /** Selected version of {#FOLDER}. */
+    /** Selected version of {@link #FOLDER}. */
     public static final int FOLDER_SELECTED                    = 18;
-    /** Selected version of {#ARCHIVE}. */
+    /** Selected version of {@link #ARCHIVE}. */
     public static final int ARCHIVE_SELECTED                   = 19;
-    /** Selected version of {#SYMLINK}. */
+    /** Selected version of {@link #SYMLINK}. */
     public static final int SYMLINK_SELECTED                   = 20;
-    /** Selected version of {#MARKED}. */
+    /** Selected version of {@link #MARKED}. */
     public static final int MARKED_SELECTED                    = 21;
-    /** Selected version of {#FILE}. */
+    /** Selected version of {@link #FILE}. */
     public static final int FILE_SELECTED                      = 22;
-    /** Selected version of {#SHELL_TEXT}. */
+    /** Selected version of {@link #SHELL_TEXT}. */
     public static final int SHELL_TEXT_SELECTED                = 23;
-    /** Selected version of {#SHELL_BACKGROUND}. */
+    /** Selected version of {@link #SHELL_BACKGROUND}. */
     public static final int SHELL_BACKGROUND_SELECTED          = 24;
-    /** Selected version of {#EDITOR_TEXT}. */
+    /** Selected version of {@link #EDITOR_TEXT}. */
     public static final int EDITOR_TEXT_SELECTED               = 25;
-    /** Selected version of {#EDITOR_BACKGROUND}. */
+    /** Selected version of {@link #EDITOR_BACKGROUND}. */
     public static final int EDITOR_BACKGROUND_SELECTED         = 26;
-    /** Selected version of {#LOCATION_BAR_TEXT}. */
+    /** Selected version of {@link #LOCATION_BAR_TEXT}. */
     public static final int LOCATION_BAR_TEXT_SELECTED         = 27;
-    /** Selected version of {#LOCATION_BAR_BACKGROUND}. */
+    /** Selected version of {@link #LOCATION_BAR_BACKGROUND}. */
     public static final int LOCATION_BAR_BACKGROUND_SELECTED   = 28;
     /** Color for the borders of the file table panels. */
     public static final int FILE_TABLE_BORDER                  = 29;
@@ -136,6 +138,18 @@ public class Theme {
     public static final int SHELL_HISTORY_TEXT_SELECTED        = 32;
     /** Selected version of the color used for the shell history background. */
     public static final int SHELL_HISTORY_BACKGROUND_SELECTED  = 33;
+    /** Background color for the volume label. */
+    public static final int VOLUME_LABEL_BACKGROUND            = 34;
+    /** Border color for the volume label. */
+    public static final int VOLUME_LABEL_BORDER                = 35;
+    /** 'OK' color for the volume label. */
+    public static final int VOLUME_LABEL_OK                    = 36;
+    /** 'WARNING' color for the volume label. */
+    public static final int VOLUME_LABEL_WARNING               = 37;
+    /** 'CRITICAL' color for the volume label. */
+    public static final int VOLUME_LABEL_CRITICAL              = 38;
+    /** Text color for the volume label. */
+    public static final int VOLUME_LABEL_TEXT                  = 39;
 
 
 
@@ -192,7 +206,7 @@ public class Theme {
         ThemeData oldData;
 
         if((oldData = getThemeData()) == null)
-            oldData = new ThemeData();
+            data = new SoftReference(oldData = new ThemeData());
         for(i = 0; i < FONT_COUNT; i++)
             oldData.setFont(i, newData.getFont(i));
         for(i = 0; i < COLOR_COUNT; i++)
@@ -238,13 +252,15 @@ public class Theme {
                 // Logs errors in debug mode.
                 if(Debug.ON) {
                     Debug.trace("Failed to load theme " + path);
-                    Debug.trace(e);
+                    //Debug.trace(e);
                 }
                 return null;
             }
             finally {
-                try {in.close();}
-                catch(Exception e) {}
+                if(in != null) {
+                    try {in.close();}
+                    catch(Exception e) {}
+                }
             }
         }
         return (ThemeData)data.get();

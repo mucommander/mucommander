@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
  * Loads theme instances from properly formatted XML files.
  * @author Nicolas Rinaudo
  */
-class ThemeReader implements ContentHandler, XmlConstants {
+class ThemeReader implements ContentHandler, ThemeXmlConstants {
     // - XML parser states ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Parsing hasn't started yet. */
@@ -50,6 +50,8 @@ class ThemeReader implements ContentHandler, XmlConstants {
     private static final int STATE_SHELL_HISTORY_NORMAL   = 15;
     /** Parsing the shell_history.selected element. */
     private static final int STATE_SHELL_HISTORY_SELECTED = 16;
+    /** Parsing the volume_label element. */
+    private static final int STATE_VOLUME_LABEL           = 17;
 
 
 
@@ -134,6 +136,13 @@ class ThemeReader implements ContentHandler, XmlConstants {
             state = STATE_SHELL_HISTORY;
         }
 
+        // Volume label declaration.
+        else if(name.equals(ELEMENT_VOLUME_LABEL)) {
+            if(state != STATE_ROOT)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_VOLUME_LABEL;
+        }
+
         // Normal element declaration.
         else if(name.equals(ELEMENT_NORMAL)) {
             if(state == STATE_SHELL)
@@ -178,6 +187,8 @@ class ThemeReader implements ContentHandler, XmlConstants {
                 theme.setFont(Theme.LOCATION_BAR, createFont(attributes));
             else if(state == STATE_SHELL_HISTORY)
                 theme.setFont(Theme.SHELL_HISTORY, createFont(attributes));
+            else if(state == STATE_VOLUME_LABEL)
+                theme.setFont(Theme.VOLUME_LABEL, createFont(attributes));
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -196,6 +207,10 @@ class ThemeReader implements ContentHandler, XmlConstants {
         else if(name.equals(ELEMENT_BORDER)) {
             if(state == STATE_TABLE)
                 theme.setColor(Theme.FILE_TABLE_BORDER, createColor(attributes));
+
+            else if(state == STATE_VOLUME_LABEL)
+                theme.setColor(Theme.VOLUME_LABEL_BORDER, createColor(attributes));
+
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -226,6 +241,9 @@ class ThemeReader implements ContentHandler, XmlConstants {
                 theme.setColor(Theme.SHELL_HISTORY_BACKGROUND, createColor(attributes));
             else if(state == STATE_SHELL_HISTORY_SELECTED)
                 theme.setColor(Theme.SHELL_HISTORY_BACKGROUND_SELECTED, createColor(attributes));
+
+            else if(state == STATE_VOLUME_LABEL)
+                theme.setColor(Theme.VOLUME_LABEL_BACKGROUND, createColor(attributes));
 
             else
                 throw createIllegalElementDeclaration(name);
@@ -299,7 +317,31 @@ class ThemeReader implements ContentHandler, XmlConstants {
                 throw createIllegalElementDeclaration(name);
         }
 
-        // Text color
+        // 'OK' color.
+        else if(name.equals(ELEMENT_OK)) {
+            if(state == STATE_VOLUME_LABEL)
+                theme.setColor(Theme.VOLUME_LABEL_OK, createColor(attributes));
+            else
+                throw createIllegalElementDeclaration(name);
+        }
+
+        // 'WARNING' color.
+        else if(name.equals(ELEMENT_WARNING)) {
+            if(state == STATE_VOLUME_LABEL)
+                theme.setColor(Theme.VOLUME_LABEL_WARNING, createColor(attributes));
+            else
+                throw createIllegalElementDeclaration(name);
+        }
+
+        // 'CRITICAL' color.
+        else if(name.equals(ELEMENT_CRITICAL)) {
+            if(state == STATE_VOLUME_LABEL)
+                theme.setColor(Theme.VOLUME_LABEL_CRITICAL, createColor(attributes));
+            else
+                throw createIllegalElementDeclaration(name);
+        }
+
+        // Text color.
         else if(name.equals(ELEMENT_TEXT)) {
             if(state == STATE_SHELL_NORMAL)
                 theme.setColor(Theme.SHELL_TEXT, createColor(attributes));
@@ -320,6 +362,10 @@ class ThemeReader implements ContentHandler, XmlConstants {
                 theme.setColor(Theme.LOCATION_BAR_TEXT, createColor(attributes));
             else if(state == STATE_LOCATION_BAR_SELECTED)
                 theme.setColor(Theme.LOCATION_BAR_TEXT_SELECTED, createColor(attributes));
+
+            else if(state == STATE_VOLUME_LABEL)
+                theme.setColor(Theme.VOLUME_LABEL_TEXT, createColor(attributes));
+
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -370,6 +416,13 @@ class ThemeReader implements ContentHandler, XmlConstants {
         // Location bar declaration.
         else if(name.equals(ELEMENT_LOCATION_BAR)) {
             if(state != STATE_LOCATION_BAR)
+                throw createIllegalElementClosing(name);
+            state = STATE_ROOT;
+        }
+
+        // Volume label declaration
+        else if(name.equals(ELEMENT_VOLUME_LABEL)) {
+            if(state != STATE_VOLUME_LABEL)
                 throw createIllegalElementClosing(name);
             state = STATE_ROOT;
         }

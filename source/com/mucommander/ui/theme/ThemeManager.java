@@ -1202,6 +1202,7 @@ public class ThemeManager {
 
         case Theme.SHELL_HISTORY_TEXT:
         case Theme.LOCATION_BAR_TEXT:
+        case Theme.VOLUME_LABEL_TEXT:
             return getTextFieldColor();
 
         case Theme.LOCATION_BAR_BACKGROUND:
@@ -1243,6 +1244,21 @@ public class ThemeManager {
         case Theme.SHELL_HISTORY_BACKGROUND_SELECTED:
         case Theme.LOCATION_BAR_BACKGROUND_SELECTED:
             return getTextFieldSelectionBackgroundColor();
+
+        case Theme.VOLUME_LABEL_BACKGROUND:
+            return new Color(0xD5D5D5);
+
+        case Theme.VOLUME_LABEL_BORDER:
+            return new Color(0x7A7A7A);
+
+        case Theme.VOLUME_LABEL_OK:
+            return new Color(0x70EC2B);
+
+        case Theme.VOLUME_LABEL_WARNING:
+            return new Color(0xFF7F00);
+
+        case Theme.VOLUME_LABEL_CRITICAL:
+            return new Color(0xFF0000);
         }
         throw new IllegalArgumentException("Illegal color identifier: " + id);
     }
@@ -1266,7 +1282,9 @@ public class ThemeManager {
 	    // Text Field font.
         case Theme.LOCATION_BAR:
         case Theme.SHELL_HISTORY:
+        case Theme.VOLUME_LABEL:
 	    return getTextFieldFont();
+
         }
         throw new IllegalArgumentException("Illegal font identifier: " + id);
     }

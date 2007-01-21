@@ -10,7 +10,7 @@ import java.io.*;
  * Class used to save themes in XML format.
  * @author Nicolas Rinaudo
  */
-class ThemeWriter implements XmlConstants {
+class ThemeWriter implements ThemeXmlConstants {
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
@@ -198,6 +198,31 @@ class ThemeWriter implements XmlConstants {
             out.writeStandAloneElement(ELEMENT_TEXT, getColorAttributes(color));
         out.endElement(ELEMENT_SELECTION);
         out.endElement(ELEMENT_EDITOR);
+
+
+
+        // - Volume label description ----------------------------------------------------
+        // -------------------------------------------------------------------------------
+        out.startElement(ELEMENT_VOLUME_LABEL);
+        out.println();
+        // Font.
+        if((font = theme.getFont(Theme.VOLUME_LABEL)) != null)
+            out.writeStandAloneElement(ELEMENT_FONT, getFontAttributes(font));
+
+        // Colors.
+        if((color = theme.getColor(Theme.VOLUME_LABEL_BACKGROUND)) != null)
+            out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.VOLUME_LABEL_TEXT)) != null)
+            out.writeStandAloneElement(ELEMENT_TEXT, getColorAttributes(color));
+        if((color = theme.getColor(Theme.VOLUME_LABEL_BORDER)) != null)
+            out.writeStandAloneElement(ELEMENT_BORDER, getColorAttributes(color));
+        if((color = theme.getColor(Theme.VOLUME_LABEL_OK)) != null)
+            out.writeStandAloneElement(ELEMENT_OK, getColorAttributes(color));
+        if((color = theme.getColor(Theme.VOLUME_LABEL_WARNING)) != null)
+            out.writeStandAloneElement(ELEMENT_WARNING, getColorAttributes(color));
+        if((color = theme.getColor(Theme.VOLUME_LABEL_CRITICAL)) != null)
+            out.writeStandAloneElement(ELEMENT_CRITICAL, getColorAttributes(color));
+        out.endElement(ELEMENT_VOLUME_LABEL);
 
         out.endElement(ELEMENT_ROOT);
     }
