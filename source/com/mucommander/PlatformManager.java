@@ -92,12 +92,53 @@ public class PlatformManager {
 
     // - Default commands -------------------------------------------------------
     // --------------------------------------------------------------------------
+    /** Windows file manager name. */
+    private static final String WINDOWS_FILE_MANAGER_NAME  = "Explorer";
+    /** MAC OS X file manager name. */
+    private static final String MAC_OS_X_FILE_MANAGER_NAME = "Finder";
+    /** KDE file manager name. */
+    private static final String KDE_FILE_MANAGER_NAME      = "Konqueror";
+    /** Gnome file manager name. */
+    private static final String GNOME_FILE_MANAGER_NAME    = "Nautilus";
+    /** File opener for Windows 9x OSes. */
+    private static final String WINDOWS_9X_FILE_OPENER     = "start \"$f\"";
+    /** File opener for Windows NT OSes. */
+    private static final String WINDOWS_NT_FILE_OPENER     = "cmd /c start \"\" \"$f\"";
+    /** File opener for MAC OS X OSes. */
+    private static final String MAC_OS_X_FILE_OPENER       = "open $f";
+    /** File opener for KDE. */
+    private static final String KDE_FILE_OPENER            = "kfmclient exec $f";
+    /** File opener for Gnome. */
+    private static final String GNOME_FILE_OPENER          = "gnome-open $f";
+    /** File manager command for MAC OS X OSes. */
+    private static final String MAC_OS_X_FILE_MANAGER      = "open -a Finder $f";
+    /** URL opener command for KDE. */
+    private static final String KDE_URL_OPENER             = "kmfclient openURL $f";
+    /** Default Windows 9x shell. */
+    private static final String WINDOWS_9X_SHELL           = "command.com /c";
+    /** Default Windows NT shell. */
+    private static final String WINDOWS_NT_SHELL           = "cmd /c";
+    /** Default shell for non-windows OSes. */
+    private static final String DEFAULT_SHELL              = "/bin/sh -l -c";
     /** Alias for the default system file opener. */
     private static final String DEFAULT_FILE_OPENER_ALIAS = "open";
     /** Alias for the default system URL opener. */
     private static final String DEFAULT_URL_OPENER_ALIAS  = "openURL";
     /** Alias for the default system executable file opener. */
     private static final String DEFAULT_EXE_OPENER_ALIAS  = "openEXE";
+
+
+
+    // - Default association regexps --------------------------------------------
+    // --------------------------------------------------------------------------
+    /** Regular expression matching everything. */
+    private static final String ALL_FILES_REGEXP           = ".*";
+    /** Regular expression matching URLs. */
+    private static final String URL_REGEXP                 = "^https?:\\/\\/.+";
+    /** Regular expression that tries to match POSIX executable files. */
+    private static final String POSIX_EXE_REGEXP           = "[^.]+";
+    /** Regular expression that tries to match Windows executable files. */
+    private static final String WINDOWS_EXE_REGEXP         = ".*\\.[eE][xX][eE]";
 
 
 
@@ -274,27 +315,14 @@ public class PlatformManager {
 
 
 
-    // - Platform specific commands ---------------------------------------------
+    // - Default commands and associations --------------------------------------
     // --------------------------------------------------------------------------
-    private static final String WINDOWS_FILE_MANAGER_NAME  = "Explorer";
-    private static final String MAC_OS_X_FILE_MANAGER_NAME = "Finder";
-    private static final String KDE_FILE_MANAGER_NAME      = "Konqueror";
-    private static final String GNOME_FILE_MANAGER_NAME    = "Nautilus";
-    private static final String WINDOWS_9X_FILE_OPENER     = "start \"$f\"";
-    private static final String WINDOWS_NT_FILE_OPENER     = "cmd /c start \"\" \"$f\"";
-    private static final String MAC_OS_X_FILE_OPENER       = "open $f";
-    private static final String KDE_FILE_OPENER            = "kfmclient exec $f";
-    private static final String GNOME_FILE_OPENER          = "gnome-open $f";
-    private static final String MAC_OS_X_FILE_MANAGER      = "open -a Finder $f";
-    private static final String KDE_URL_OPENER             = "kmfclient openURL $f";
-    private static final String WINDOWS_9X_SHELL           = "command.com /c";
-    private static final String WINDOWS_NT_SHELL           = "cmd /c";
-    private static final String DEFAULT_SHELL              = "/bin/sh -l -c";
-    private static final String ALL_FILES_REGEXP           = ".*";
-    private static final String URL_REGEXP                 = "^https?:\\/\\/.+";
-    private static final String POSIX_EXE_REGEXP           = "[^.]+";
-    private static final String WINDOWS_EXE_REGEXP         = ".*\\.[eE][xX][eE]";
-
+    /**
+     * Registers default system dependent commands.
+     * <p>
+     * There's no good reason to call this method, it's only meant for the {@link com.mucommander.command.CommandManager}.
+     * </p>
+     */
     public static void registerDefaultCommands() {
         try {
             // Registers windows 9x specific commands.
@@ -337,6 +365,12 @@ public class PlatformManager {
         catch(Exception e) {if(Debug.ON) Debug.trace("Couldn't register default commands: " + e);}
     }
 
+    /**
+     * Registers default system dependent associations.
+     * <p>
+     * There's no good reason to call this method, it's only meant for the {@link com.mucommander.command.CommandManager}.
+     * </p>
+     */
     public static void registerDefaultAssociations() {
         try {
             // The only required association under Windows 9x is 'file opener'.
@@ -392,6 +426,14 @@ public class PlatformManager {
         catch(Exception e) {if(Debug.ON) Debug.trace("Couldn't register default associations: " + e);}
     }
 
+
+
+    // - Platform specific commands ---------------------------------------------
+    /**
+     * Returns the current OS' default shell command.
+     * @return the current OS' default shell command.
+     */
+    // --------------------------------------------------------------------------
     public static String getDefaultShellCommand() {
         switch(OS_FAMILY) {
             // NT systems use cmd.exe
@@ -407,6 +449,14 @@ public class PlatformManager {
         }
     }
 
+    /**
+     * Returns the current OS' default file manager name.
+     * <p>
+     * This method will only work properly if we're under a known system. This can be checked
+     * through {@link #canOpenInDesktop()}.
+     * </p>
+     * @return the current OS' default file manager name, <code>null</code> if not found.
+     */
     public static String getDefaultDesktopFMName() {
         if(OS_FAMILY==WINDOWS_9X || OS_FAMILY == WINDOWS_NT)
             return WINDOWS_FILE_MANAGER_NAME;
@@ -420,20 +470,21 @@ public class PlatformManager {
             return null;
     }
 
-
-
-    // - Platform specific operations -------------------------------------------
-    // --------------------------------------------------------------------------
     /**
      * Returns <code>true</code> if the current platform is capable of opening a URL in a new browser window.
      * <p>
      * This test is done by checking whether muCommander's homepage is associated to any command. If it's not, then we'll
      * assume that no URL can be opened in the current configuration.
      * </p>
-     * @return <code>true</code> if the current platform is capable of opening a URL in a new (default) browser window.
+     * @return <code>true</code> if the current platform is capable of opening a URL in a new browser window.
      */
     public static boolean canOpenURLInBrowser() {return CommandManager.getCommandForFile(FileFactory.getFile(RuntimeConstants.HOMEPAGE_URL), false) != null;}
 
+    /**
+     * Attempts to open the specified file through registered command associations.
+     * @param  file file to open.
+     * @return      the process in which the file was opened, or <code>null</code> if an error occured.
+     */
     public static AbstractProcess open(AbstractFile file) {
         if(Debug.ON) Debug.trace("Opening " + file.getAbsolutePath());
 
@@ -452,6 +503,13 @@ public class PlatformManager {
         return OS_FAMILY==MAC_OS_X || OS_FAMILY==WINDOWS_9X || OS_FAMILY==WINDOWS_NT || UNIX_DESKTOP==KDE_DESKTOP || UNIX_DESKTOP==GNOME_DESKTOP;
     }	
 
+    /**
+     * Tries to open the specified file in the system's file manager.
+     * <p>
+     * Developers should make sure the operation is possible before calling this.
+     * This can be done through {@link #canOpenInDesktop()}.
+     * </p>
+     */
     public static void openInDesktop(AbstractFile file) {
         try {
             // Return if file is not a local file
