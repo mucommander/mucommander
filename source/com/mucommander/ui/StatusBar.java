@@ -16,6 +16,9 @@ import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -427,18 +430,16 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /**
      * This label displays the amount of free and/or total space on a volume.
      */
-    private static class VolumeSpaceLabel extends JLabel {
+    private static class VolumeSpaceLabel extends JLabel implements ThemeListener {
 
         private long freeSpace;
         private long totalSpace;
 
-        private final static int BACKGROUND_COLOR = 0xD5D5D5;
-        private final static int BORDER_COLOR = 0x7A7A7A;
-
-//        private final static int SPACE_OK_COLOR = 0x00FF00;
-        private final static int SPACE_OK_COLOR = 0x70EC2B;
-        private final static int SPACE_WARNING_COLOR = 0xFF7F00;
-        private final static int SPACE_CRITICAL_COLOR = 0xFF0000;
+        private Color backgroundColor;
+        private Color borderColor;
+        private Color okColor;
+        private Color warningColor;
+        private Color criticalColor;
 
         private final static float SPACE_WARNING_THRESHOLD = 0.1f;
         private final static float SPACE_CRITICAL_THRESHOLD = 0.01f;
@@ -447,6 +448,14 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         private VolumeSpaceLabel() {
             super("");
             setHorizontalAlignment(CENTER);
+            backgroundColor = ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_BACKGROUND);
+            borderColor     = ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_BORDER);
+            okColor         = ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_OK);
+            warningColor    = ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_WARNING);
+            criticalColor   = ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_CRITICAL);
+            setFont(ThemeManager.getCurrentFont(Theme.VOLUME_LABEL));
+            setForeground(ThemeManager.getCurrentColor(Theme.VOLUME_LABEL_TEXT));
+            ThemeManager.addThemeListener(this);
         }
 
         /**
@@ -510,25 +519,50 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                 int height = getHeight();
 
                 // Fill background
-                g.setColor(new Color(BACKGROUND_COLOR));
+                g.setColor(backgroundColor);
                 g.fillRect(0, 0, width, height);
 
                 // Paint border
-                g.setColor(new Color(BORDER_COLOR));
+                g.setColor(borderColor);
                 g.drawRect(0, 0, width-1, height-1);
 
                 // Paint amount of free volume space if both free and total space are available
                 float freeSpacePercentage = freeSpace/(float)totalSpace;
 
-                g.setColor(new Color(freeSpacePercentage<=SPACE_CRITICAL_THRESHOLD?SPACE_CRITICAL_COLOR
-                                        :freeSpacePercentage<=SPACE_WARNING_THRESHOLD?SPACE_WARNING_COLOR
-                                        :SPACE_OK_COLOR));
+                g.setColor(freeSpacePercentage<=SPACE_CRITICAL_THRESHOLD?criticalColor
+                           :freeSpacePercentage<=SPACE_WARNING_THRESHOLD?warningColor
+                           :okColor);
 
                 int freeSpaceWidth = Math.max(Math.round(freeSpacePercentage*(float)(width-2)), 1);
                 g.fillRect(1, 1, freeSpaceWidth, height-2);
             }
 
             super.paint(g);
+        }
+
+        public void fontChanged(int fontId, Font newFont) {
+            if(fontId == Theme.VOLUME_LABEL) {
+                setFont(newFont);
+                repaint();
+            }
+        }
+
+        public void colorChanged(int colorId, Color newColor) {
+            if(colorId == Theme.VOLUME_LABEL_TEXT)
+                setForeground(newColor);
+            else if(colorId == Theme.VOLUME_LABEL_BACKGROUND)
+                backgroundColor = newColor;
+            else if(colorId == Theme.VOLUME_LABEL_BORDER)
+                borderColor = newColor;
+            else if(colorId == Theme.VOLUME_LABEL_OK)
+                okColor = newColor;
+            else if(colorId == Theme.VOLUME_LABEL_WARNING)
+                warningColor = newColor;
+            else if(colorId == Theme.VOLUME_LABEL_CRITICAL)
+                criticalColor = newColor;
+            else
+                return;
+            repaint();
         }
     }
 }
