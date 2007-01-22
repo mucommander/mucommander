@@ -40,8 +40,8 @@ public abstract class AbstractFile {
     public final static int MUST_NOT_HINT = 3;
 
     /** Size of the read/write buffer */
-    // Note: raising buffer size from 8192 to 65536 makes a huge difference in SFTP transfer rates but beyond 65536, no
-    // more gain (not sure why).
+    // Note: raising buffer size from 8192 to 65536 makes a huge difference in SFTP read transfer rates but beyond
+    // 65536, no more gain (not sure why).
     public final static int IO_BUFFER_SIZE = 65536;
 
     /** Bit mask for 'execute' file permission */
