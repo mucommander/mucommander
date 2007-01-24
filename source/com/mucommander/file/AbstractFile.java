@@ -578,9 +578,12 @@ public abstract class AbstractFile {
 
 
     /**
-     *
+     * Returns the files contained by this AbstractFile, filtering out files that do not match the specified FileFilter.
+     * For this operation to be successful, this file must be 'browsable', i.e. {@link #isBrowsable()} must return
+     * <code>true</code>.
      *
      * @param filter FileFilter which will be used to filter out files, may be <code>null</code>
+     * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
      */
     public AbstractFile[] ls(FileFilter filter) throws IOException {
         return filter==null?ls():filter.filter(ls());
@@ -588,12 +591,14 @@ public abstract class AbstractFile {
 
 
     /**
-     *
+     * Returns the files contained by this AbstractFile, filtering out files that do not match the specified FilenameFilter.
+     * For this operation to be successful, this file must be 'browsable', i.e. {@link #isBrowsable()} must return 
+     * <code>true</code>.
      *
      * <p>This default implementation filters out files *after* they have been created. This method
      * should be overridden if a more efficient implementation can be provided.
      *
-     * @param filter FilenameFilter which will be used to filter out files, may be <code>null</code>
+     * @param filter FilenameFilter which will be used to filter out files based on their filename, may be <code>null</code>
      */
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
         return filter==null?ls():filter.filter(ls());
@@ -818,22 +823,22 @@ public abstract class AbstractFile {
     public abstract boolean isSymlink();
 	
     /**
-     * Returns the files containted by this AbstractFile. For this operation to be successful, {@link #isBrowsable()}
-     * must return <code>true</code>.
+     * Returns the files contained by this AbstractFile. For this operation to be successful, this file must be
+     * 'browsable', i.e. {@link #isBrowsable()} must return <code>true</code>.
      *
      * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
      */
     public abstract AbstractFile[] ls() throws IOException;
 
     /**
-     * Creates a new directory if this AbstractFile is a folder.
+     * Creates a new directory. This method will fail if this AbstractFile is not a folder.
      *
      * @throws IOException if this operation is not possible.
      */
     public abstract void mkdir(String name) throws IOException;
 
     /**
-     * Returns an <code>InputStream</code> to read from this AbstractFile.
+     * Returns an <code>InputStream</code> to read the contents of this AbstractFile.
      *
      * @throws IOException if this AbstractFile could not be read or if an <code>InputStream</code> could not be
      * provided for any other reason (e.g. file is a directory).
@@ -841,7 +846,7 @@ public abstract class AbstractFile {
     public abstract InputStream getInputStream() throws IOException;
 
     /**
-     * Returns an <code>InputStream</code> to read from this AbstractFile with random access.
+     * Returns an <code>InputStream</code> to read the contents of this AbstractFile with random access.
      *
      * @throws IOException if this AbstractFile could not be read or if a <code>RandomAccessInputStream</code> could not
      * be provided because the underlying file protocol doesn't have random access support or for any other reason
