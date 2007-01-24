@@ -233,14 +233,14 @@ public class LocalFile extends AbstractFile {
 
 	
     /**
-     * Guesses if this drive is a floppy drive. This method should only be called on a file corresponding
-     * to a drive's root folder.
+     * Guesses if this drive is a floppy drive. This method will only return true when tested against the floppy drive's
+     * root folder (e.g. A:\ under Windows).
      *
-     * <p>The result of this method should be accurate under Java 1.4 and up, just a guess under Java 1.3
-     * running under Windows, will return false for Java 1.3 running under a non-Windows platform.</p>
+//     * <p>The result of this method should be accurate under Java 1.4 and up, just a guess under Java 1.3
+//     * running under Windows, will return false for Java 1.3 running under a non-Windows platform.</p>
      */
     public boolean guessFloppyDrive() {
-        if(!isRoot())
+        if(PlatformManager.isWindowsFamily() && !isRoot())
             return false;
 
         // Use FileSystemView.isFloppyDrive(File) to determine if this file
@@ -257,15 +257,15 @@ public class LocalFile extends AbstractFile {
     }
 	
     /**
-     * Guesses if this drive is a removable media drive (Floppy/CD/DVD). This method should only be called on a file
-     * corresponding to a drive's root folder.
+     * Guesses if this drive is a removable media drive (Floppy/CD/DVD). This method will only return true when tested
+     * against the drive's root folder (e.g. D:\ under Windows).
      *
-     * <p>The result is just a guess that works well under Windows.</p>
+     * <p>The result is just a guess that works rather well under Windows.</p>
      */
     public boolean guessRemovableDrive() {
         // A weak way to characterize such a drive is to check if the corresponding root folder is a floppy drive or 
         // read-only. A better way would be to create a JNI interface as described here: http://forum.java.sun.com/thread.jspa?forumID=256&threadID=363074
-        return guessFloppyDrive() || (IS_WINDOWS && (!canWrite()));
+        return guessFloppyDrive() || (IS_WINDOWS && isRoot() && !canWrite());
     }
 	
 	
