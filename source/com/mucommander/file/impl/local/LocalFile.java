@@ -31,7 +31,7 @@ public class LocalFile extends AbstractFile {
     private boolean parentValueSet;
 	
     /** "/" for UNIX systems, "\" for Win32 */
-    protected final static String SEPARATOR = File.separator;
+    public final static String SEPARATOR = File.separator;
 
     /** Are we running Windows ? */
     private final static boolean IS_WINDOWS;
@@ -240,17 +240,20 @@ public class LocalFile extends AbstractFile {
      * running under Windows, will return false for Java 1.3 running under a non-Windows platform.</p>
      */
     public boolean guessFloppyDrive() {
+        if(!isRoot())
+            return false;
+
         // Use FileSystemView.isFloppyDrive(File) to determine if this file
         // is a floppy drive. This method being available only in Java 1.4 and up.
-        if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_4)
-            return FileSystemView.getFileSystemView().isFloppyDrive(file);
+//        if(PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_4)
+        return FileSystemView.getFileSystemView().isFloppyDrive(file);
 
-        // We're running Java 1.3 or below, try to guess if file is floppy drive under Windows
-        if(IS_WINDOWS && absPath.equals("A:") || absPath.equals("B:"))
-            return true;
-
-        // No clue, return false
-        return false;
+//        // We're running Java 1.3 or below, try to guess if file is floppy drive under Windows
+//        if(IS_WINDOWS && absPath.equals("A:") || absPath.equals("B:"))
+//            return true;
+//
+//        // No clue, return false
+//        return false;
     }
 	
     /**

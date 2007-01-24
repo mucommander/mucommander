@@ -1,5 +1,6 @@
 package com.mucommander.file;
 
+import com.mucommander.PlatformManager;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.local.LocalFile;
@@ -11,6 +12,7 @@ import com.mucommander.process.AbstractProcess;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.regex.Pattern;
 
 /**
  * The superclass of all files, all your files are belong to it.
@@ -50,6 +52,9 @@ public abstract class AbstractFile {
     public final static int WRITE_MASK = 128;
     /** Bit mask for 'read' file permission */
     public final static int READ_MASK = 256;
+
+    /** Pattern matching Windows drive root folders, e.g. A:\ or ZZ:\\ */
+    protected final static Pattern windowsDriveRootPattern = Pattern.compile("^[a-zA-Z]{1,2}[:]{1}[\\\\]{1}$");
 
 
     /**
@@ -281,7 +286,24 @@ public abstract class AbstractFile {
 		
         return child;
     }
-	
+
+
+    /**
+     * Returns true if this file is a root folder that is:
+     * <ul>
+     *  <li>for all protocols other than 'file', if the URL's path part is '/'
+     *  <li>for the 'file' protocol, '/' if the OS is not Windows, a drive root for Windows ('C:\' for instance)
+     * </ul>
+     */
+    public boolean isRoot() {
+        String path = fileURL.getPath();
+
+        if(fileURL.getProtocol().equals(FileProtocols.FILE))
+            return PlatformManager.isWindowsFamily()?windowsDriveRootPattern.matcher(path).matches():path.equals("/");
+        else
+            return path.equals("/");
+    }
+    
 
     /**
      * Tests if the given path contains a trailing separator character, and if not, adds one and returns the path.
