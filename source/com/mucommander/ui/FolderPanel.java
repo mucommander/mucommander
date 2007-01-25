@@ -10,7 +10,10 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileURL;
+import com.mucommander.file.RootFolders;
 import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.HiddenFileFilter;
 import com.mucommander.file.filter.SystemFoldersFilter;
@@ -37,6 +40,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 /**
  * 
@@ -406,15 +410,24 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             return;
         }
 
-        FileURL fileURL = URLFactory.getFileURL(folderPath);
+//        FileURL fileURL = URLFactory.getFileURL(folderPath);
+//
+//        if(fileURL==null) {
+//            // FileURL could not be resolved, notify the user that the folder doesn't exist
+//            showFolderDoesNotExistDialog();
+//        }
+//        else {
+//            this.changeFolderThread = new ChangeFolderThread(fileURL);
+//            changeFolderThread.start();
+//        }
 
-        if(fileURL==null) {
+        try {
+            this.changeFolderThread = new ChangeFolderThread(new FileURL(folderPath));
+            changeFolderThread.start();
+        }
+        catch(MalformedURLException e) {
             // FileURL could not be resolved, notify the user that the folder doesn't exist
             showFolderDoesNotExistDialog();
-        }
-        else {
-            this.changeFolderThread = new ChangeFolderThread(fileURL);
-            changeFolderThread.start();
         }
     }
 

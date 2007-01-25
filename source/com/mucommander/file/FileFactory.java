@@ -203,7 +203,8 @@ public abstract class FileFactory {
      */
     public static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
 //        return getFile(URLFactory.getFileURL(absPath, parent==null?null:parent.getURL(), true), parent);
-        return getFile(URLFactory.getFileURL(absPath, true), parent);
+//        return getFile(URLFactory.getFileURL(absPath, true), parent);
+        return getFile(new FileURL(absPath), parent);
     }
 
     /**
