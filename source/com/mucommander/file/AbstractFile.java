@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * for that purposes.
  *
  * @see com.mucommander.file.FileFactory
- * @see com.mucommander.file.ProxyFile
+ * @see com.mucommander.file.impl.ProxyFile
  * @author Maxence Bernard
  */
 public abstract class AbstractFile {
@@ -108,7 +108,7 @@ public abstract class AbstractFile {
 
 
     /**
-     * Computes the name of the file without its extension.
+     * Returns the name of the file without its extension.
      * <p>
      * Within the context of this method, a file will have an
      * extension if and only if:<br/>
@@ -122,7 +122,7 @@ public abstract class AbstractFile {
      * @see    #getName()
      * @see    #getExtension()
      */
-    public String getNameWithoutExtension() {
+    public final String getNameWithoutExtension() {
         String name;
         int    position;
 
@@ -196,7 +196,7 @@ public abstract class AbstractFile {
      * Returns the absolute path of this AbstractFile with a trailing separator character if <code>true</code> is passed,
      * or without one if <code>false</code> is passed.
      */
-    public String getAbsolutePath(boolean appendSeparator) {
+    public final String getAbsolutePath(boolean appendSeparator) {
         String path = getAbsolutePath();
         return appendSeparator?addTrailingSeparator(path):removeTrailingSlash(path);
     }
@@ -216,11 +216,8 @@ public abstract class AbstractFile {
     /**
      * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences,
      * with an appended separator character if <code>true</code> is passed or without one if <code>false</code> is passed.
-     *
-     * <p>This implementation simply returns the value of {@link #getAbsolutePath(boolean)}, and thus should be
-     * overridden if canonical path resolution is available.
      */
-    public String getCanonicalPath(boolean appendSeparator) {
+    public final String getCanonicalPath(boolean appendSeparator) {
         String path = getCanonicalPath();
         return appendSeparator?addTrailingSeparator(path):removeTrailingSlash(path);
     }
@@ -307,8 +304,9 @@ public abstract class AbstractFile {
 
     /**
      * Tests if the given path contains a trailing separator character, and if not, adds one and returns the path.
+     * The separator used is the one returned by {@link #getSeparator()}.
      */
-    protected String addTrailingSeparator(String path) {
+    protected final String addTrailingSeparator(String path) {
         // Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
         // are exceptions that's why we still have to test if path ends with a separator
         String separator = getSeparator();
@@ -320,8 +318,9 @@ public abstract class AbstractFile {
 	
     /**
      * Tests if the given path contains a trailing separator character, and if it does, removes it and returns the new path.
+     * The separator used is the one returned by {@link #getSeparator()}.
      */
-    protected String removeTrailingSlash(String path) {
+    protected final String removeTrailingSlash(String path) {
         // Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
         // (Reminder: C: is C's current folder, while C:\ is C's root)
         String separator = getSeparator();
@@ -596,7 +595,7 @@ public abstract class AbstractFile {
      * <code>true</code>.
      *
      * <p>This default implementation filters out files *after* they have been created. This method
-     * should be overridden if a more efficient implementation can be provided.
+     * should be overridden if a more efficient implementation can be provided by subclasses.
      *
      * @param filter FilenameFilter which will be used to filter out files based on their filename, may be <code>null</code>
      */

@@ -2,6 +2,7 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.file.impl.SimpleEntry;
 
 import javax.swing.tree.DefaultMutableTreeNode;

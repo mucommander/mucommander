@@ -59,7 +59,7 @@ public class FileURL implements Cloneable {
                     url = FileProtocols.FILE+"://"+LOCALHOST+url;
                 // Path starts with a reference to the user home folder,
                 // or is a Windows-style path starting with a drive like X:\ or XX:\
-                else if(firstChar=='~' || ((pos=url.indexOf(":\\"))==1 || pos==2))
+                else if(firstChar=='~' || (PlatformManager.isWindowsFamily() && ((pos=url.indexOf(":\\"))==1 || pos==2)))
                     url = FileProtocols.FILE+"://"+LOCALHOST+"/"+url;
                 // Handle Windows-style UNC network paths ( \\hostname\path ):
                 // - under Windows, transform it into a URL in the file://hostname/path form,

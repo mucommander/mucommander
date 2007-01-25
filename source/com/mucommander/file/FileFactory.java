@@ -75,7 +75,7 @@ public abstract class FileFactory {
         
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
-        registerArchiveFileFormat(ZipArchiveFile.class, new ExtensionFilenameFilter(new String[]{".zip", ".jar", ".pk3", ".pk4", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar"}));
+        registerArchiveFileFormat(ZipArchiveFile.class, new ExtensionFilenameFilter(new String[]{".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar"}));
         registerArchiveFileFormat(TarArchiveFile.class, new ExtensionFilenameFilter(new String[]{".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2"}));
         registerArchiveFileFormat(GzipArchiveFile.class, new ExtensionFilenameFilter(".gz"));
         registerArchiveFileFormat(Bzip2ArchiveFile.class, new ExtensionFilenameFilter(".bz2"));
@@ -356,7 +356,9 @@ public abstract class FileFactory {
      */
     public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
 
-        PathTokenizer pt = new PathTokenizer(fileURL.getPath());
+        PathTokenizer pt = new PathTokenizer(fileURL.getPath(),
+                fileURL.getProtocol().equals(FileProtocols.FILE)?LocalFile.SEPARATOR:AbstractFile.DEFAULT_SEPARATOR,
+                false);
 
         AbstractFile currentFile = null;
         boolean lastFileResolved = false;
@@ -527,6 +529,13 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
      * @param filename the filename to test
      */
     public static boolean isArchiveFilename(String filename) {
+        // Looks for an archive FilenameFilter that matches the given filename.
+        // Comparing the filename against each and every archive extension has a cost, so we only perform the test if
+        // the filename contains a dot '.' character, since most of the time this method is called with a filename that
+        // doesn't match any of the filters.
+        if(filename.indexOf('.')==-1)
+            return false;
+                
         int nbArchiveFormats = registeredArchiveFilters.length;
         for(int i=0; i<nbArchiveFormats; i++) {
             if(registeredArchiveFilters[i].accept(filename))
@@ -544,11 +553,16 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
      * format or is a directory), the same AbstractFile instance is returned.
      */
     public static AbstractFile wrapArchive(AbstractFile file) {
-        // Look for an archive format filter that matches the file
-        if(!file.isDirectory()) {
+        String filename = file.getName();
+
+        // Looks for an archive FilenameFilter that matches the given filename.
+        // Comparing the filename against each and every archive extension has a cost, so we only perform the test if
+        // the filename contains a dot '.' character, since most of the time this method is called with a filename that
+        // doesn't match any of the filters.
+        if(!file.isDirectory() && filename.indexOf('.')!=-1) {
             int nbArchiveFormats = registeredArchiveFilters.length;
             for(int i=0; i<nbArchiveFormats; i++) {
-                if(registeredArchiveFilters[i].accept(file)) {
+                if(registeredArchiveFilters[i].accept(filename)) {
                     try {
                         // Found one, create the AbstractArchiveFile instance and return it
                         file = (AbstractFile)registeredArchiveConstructors[i].newInstance(new Object[]{file});

@@ -2,6 +2,7 @@
 package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -144,9 +145,19 @@ public abstract class FileJob implements Runnable {
     public FileJob(MainFrame mainFrame, FileSet files) {
         this.mainFrame = mainFrame;
         this.files = files;
-		
         this.nbFiles = files.size();
         this.baseSourceFolder = files.getBaseFolder();
+
+        // Create CachedFile instances around the source files in order to cache the return value of frequently accessed
+        // methods. This eliminates some I/O, at the (small) cost of a bit more CPU and memory. Recursion is enabled
+        // so that children and parents of the files are also cached.
+        // Note: When cached methods are called, they no longer reflect changes in the underlying files. In particular,
+        // changes of size or date could potentially not be reflected when files are being processed but this should
+        // not really present a risk. 
+        for(int i=0; i<nbFiles; i++)
+            files.setElementAt(new CachedFile(files.fileAt(i), true), i);
+
+        baseSourceFolder = new CachedFile(baseSourceFolder, true);
     }
 	
 	
