@@ -52,13 +52,13 @@ public class PlatformManager {
 
     // - Java version -----------------------------------------------------------
     // --------------------------------------------------------------------------
-    /** Java 1.0.x */
+    /** Java 1.0.x (not supported). */
     public final static int JAVA_1_0 = 0;
-    /** Java 1.1.x */
+    /** Java 1.1.x (not supported). */
     public final static int JAVA_1_1 = 1;
-    /** Java 1.2.x */
+    /** Java 1.2.x (not supported). */
     public final static int JAVA_1_2 = 2;
-    /** Java 1.3.x */
+    /** Java 1.3.x (not supported). */
     public final static int JAVA_1_3 = 3;
     /** Java 1.4.x */
     public final static int JAVA_1_4 = 4;
@@ -577,6 +577,16 @@ public class PlatformManager {
     // --------------------------------------------------------------------------
     /**
      * Returns the path to the default muCommander preferences folder.
+     * <p>
+     * This folder is:
+     * <ul>
+     *  <li><code>~/Library/Preferences/muCommander/</code> under MAC OS X.</li>
+     *  <li><code>~/.mucommander/</code> under all other OSes.</li>
+     * </ul>
+     * </p>
+     * <p>
+     * If the default preferences folder doesn't exist, this method will create it.
+     * </p>
      * @return the path to the default muCommander preferences folder.
      */
     public static File getDefaultPreferencesFolder() {
@@ -599,10 +609,15 @@ public class PlatformManager {
     }
 
     /**
-     * Returns the path to the folder that contains all the user specific data (configuration,
-     * bookmarks, ...).
+     * Returns the path to the folder that contains all of the user's data.
      * <p>
-     * If the folder does not exist, this method will try to create it.
+     * All modules that save user data to a file should do so in a file located in
+     * the folder returned by this method.
+     * </p>
+     * <p>
+     * The value returned by this method can be set through {@link #setPreferencesFolder(File)}.
+     * Otherwise, the {@link #getDefaultPreferencesFolder() default preference folder} will be
+     * used.
      * </p>
      * @return the path to the user's preference folder.
      */
@@ -617,12 +632,13 @@ public class PlatformManager {
     /**
      * Sets the path to the folder in which muCommander will look for its preferences.
      * <p>
-     * If <code>folder</code> is a file, its parent folder will be used instead.
+     * If <code>folder</code> is a file, its parent folder will be used instead. If it doesn't exist,
+     * this method will create it.
      * </p>
      * @param     folder                   path to the folder in which muCommander will look for its preferences.
      * @exception IllegalArgumentException thrown if <code>folder</code> is not a valid folder path.
      */
-    public static void setPreferencesFolder(File folder) {
+    public static void setPreferencesFolder(File folder) throws IllegalArgumentException {
         // Makes sure we get the canonical path
         // (for 'dirty hacks' such as ./mucommander.sh/../.mucommander)
         try {folder = folder.getCanonicalFile();}
@@ -632,8 +648,10 @@ public class PlatformManager {
         if(!folder.isDirectory()) {
             if(folder.exists())
                 folder = folder.getParentFile();
-            else if(!folder.mkdirs())
+            else if(!folder.mkdirs()) {
+                if(Debug.ON) Debug.trace("Could not create preferences directory: " + folder);
                 throw new IllegalArgumentException("Could not create folder " + folder);
+            }
         }
         prefFolder = folder;
     }

@@ -44,6 +44,9 @@ public class Launcher {
         // Allows users to tweak how file associations are loaded / saved.
         System.out.println(" -a FILE, --assoc FILE             Load associations from FILE.");
 
+        // Allows users to tweak how custom commands are loaded / saved.
+        System.out.println(" -f FILE, --commands FILE          Load custom commands from FILE.");
+
         // Allows users to tweak how bookmarks are loaded / saved.
         System.out.println(" -b FILE, --bookmarks FILE         Load bookmarks from FILE.");
 
@@ -128,8 +131,18 @@ public class Launcher {
             else if(args[i].equals("-a") || args[i].equals("--assoc")) {
                 if(i >= args.length - 1)
                     printError("Missing FILE parameter to " + args[i]);
-                com.mucommander.command.CommandManager.setAssociationFile(args[++i]);
+                try {com.mucommander.command.CommandManager.setAssociationFile(args[++i]);}
+                catch(Exception e) {System.err.println("Could not use '" + args[i] + "' as custom associations file. Using default.");}
             }
+
+            // Custom commands handling.
+            else if(args[i].equals("-f") || args[i].equals("--commands")) {
+                if(i >= args.length - 1)
+                    printError("Missing FILE parameter to " + args[i]);
+                try {com.mucommander.command.CommandManager.setCommandFile(args[++i]);}
+                catch(Exception e) {System.err.println("Could not use '" + args[i] + "' as custom commands file. Using default.");}
+            }
+
 
             // Bookmarks handling.
             else if(args[i].equals("-b") || args[i].equals("--bookmarks")) {
@@ -183,7 +196,8 @@ public class Launcher {
             else if((args[i].equals("-p") || args[i].equals("--preferences"))) {
                 if(i >= args.length - 1)
                     printError("Missing FOLDER parameter to " + args[i]);
-                PlatformManager.setPreferencesFolder(new java.io.File(args[++i]));
+                try {PlatformManager.setPreferencesFolder(new java.io.File(args[++i]));}
+                catch(Exception e) {System.err.println("Could not use '" + args[i] + "' as preferences folder. Using default.");}
             }
 
             // Illegal argument.

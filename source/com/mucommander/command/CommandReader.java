@@ -48,7 +48,11 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
      * @param  encoding  encoding used by <code>in</code>.
      * @throws Exception thrown if any error occurs.
      */
-    public static void read(InputStream in, CommandBuilder b, String encoding) throws Exception {new Parser().parse(in, new CommandReader(b), encoding);}
+    public static void read(InputStream in, CommandBuilder b, String encoding) throws Exception {
+        b.startBuilding();
+        try {new Parser().parse(in, new CommandReader(b), encoding);}
+        finally {b.endBuilding();}
+    }
 
 
 
@@ -65,7 +69,7 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
     }
 
     /**
-     * Notifies the reader that a new XML element is starting.
+     * This method is public as an implementation side effect and should not be called directly.
      */
     public void startElement(String uri, String name, Hashtable attributes, Hashtable attURIs) throws Exception {
         // New custom command declaration.
@@ -88,27 +92,27 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
         }
     }
 
-    /**
-     * Calls the underlying builder's {@link com.mucommander.command.AssociationBuilder#startBuilding()} method
-     */
-    public void startDocument() throws Exception {builder.startBuilding();}
-
-    /**
-     * Calls the underlying builder's {@link com.mucommander.command.AssociationBuilder#endBuilding()} method
-     */
-    public void endDocument() throws Exception {builder.endBuilding();}
-
 
 
     // - Unused XML methods --------------------------------------------------
     // -----------------------------------------------------------------------
     /**
-     * Not used.
+     * This method is public as an implementation side effect and should not be called directly.
+     */
+    public void startDocument() throws Exception {}
+
+    /**
+     * This method is public as an implementation side effect and should not be called directly.
+     */
+    public void endDocument() throws Exception {}
+
+    /**
+     * This method is public as an implementation side effect and should not be called directly.
      */
     public void characters(String s) {}
 
     /**
-     * Not used.
+     * This method is public as an implementation side effect and should not be called directly.
      */
     public void endElement(String uri, String name) throws Exception {}
 }

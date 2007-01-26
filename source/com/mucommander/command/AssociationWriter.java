@@ -82,6 +82,4 @@ public class AssociationWriter implements AssociationsXmlConstants, AssociationB
         // Writes the XML description.
         out.writeStandAloneElement(ELEMENT_ASSOCIATION, attributes);
     }
-
-    public void addAssociation(int read, int write, int execute, String command) {addAssociation(null, read, write, execute, command);}
 }

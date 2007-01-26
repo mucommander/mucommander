@@ -77,7 +77,7 @@ public class CopyDialog extends DestinationDialog {
         }
         setTextField(fieldText, startPosition, endPosition);
 
-        showDialog();
+        //        showDialog();
     }
 
 

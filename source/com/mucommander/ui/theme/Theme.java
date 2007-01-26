@@ -219,8 +219,20 @@ public class Theme {
     /**
      * Returns <code>true</code> if the theme is available.
      * <p>
-     * In the specific case of the user theme, it's possible that it's 'available' but corrupt.
-     * This method checks for that status.
+     * Due to the somewhat peculiar way theme data is handled, a theme might need to be reloaded
+     * before being accessed. In most cases, if a theme instance exists, it means that its
+     * description file exists and is correct. There are, however, two cases where this doesn't
+     * hold true:
+     * <ul>
+     *   <li>The user theme is corrupt, in which case it'll be in memory but unaivalable.</i>
+     *   <li>The theme's data file has been modified, or made unaccessible.</li>
+     * </ul>
+     * </p>
+     * <p>
+     * This method lets developers check whether a theme's data is available. It might be quite
+     * CPU intensive though, as it might result in loading the whole theme again. It is advised
+     * to only call it when absolutely necessary, such as when displaying a theme's preview (no
+     * error will be raised, but the preview will not actually match the theme if it's corrupt).
      * </p>
      * @return <code>true</code> if the theme is available.
      */

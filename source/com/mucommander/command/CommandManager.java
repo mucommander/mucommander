@@ -18,8 +18,9 @@ import java.io.*;
 public class CommandManager implements AssociationBuilder, CommandBuilder {
     // - Self-open command -----------------------------------------------------
     // -------------------------------------------------------------------------
+    /** Alias of the 'run as executable' command. */
     public static final String  RUN_AS_EXECUTABLE_ALIAS   = "execute";
-    /** Command used to try and run a file as an executable. */
+    /** Command used to run a file as an executable. */
     public static final Command RUN_AS_EXECUTABLE_COMMAND = CommandParser.getCommand(RUN_AS_EXECUTABLE_ALIAS, "$f", Command.SYSTEM_COMMAND);
 
 
@@ -27,23 +28,26 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
     // - Association definitions -----------------------------------------------
     // -------------------------------------------------------------------------
     /** All known file associations. */
-    private static Vector associations;
-    /** All known commands. */
-    private static Vector commands;
-
-
-
-    // - Association file ------------------------------------------------------
-    // -------------------------------------------------------------------------
-    /** Path to a potential custom association file. */
+    private static       Vector  associations;
+    /** Path to the custom association file, <code>null</code> if the default one should be used. */
     private static       File    associationFile;
     /** Whether the associations were modified since the last time they were saved. */
     private static       boolean wereAssociationsModified;
     /** Default name of the association XML file. */
-    private static final String  ASSOCIATION_FILE_NAME = "associations.xml";
+    public  static final String  DEFAULT_ASSOCIATION_FILE_NAME = "associations.xml";
+
+
+
+    // - Commands definition ---------------------------------------------------
+    // -------------------------------------------------------------------------
+    /** All known commands. */
+    private static       Vector  commands;
+    /** Path to the custom commands XML file, <code>null</code> if the default one should be used. */
     private static       File    commandsFile;
+    /** Whether the custom commands have been modified since the last time they were saved. */
     private static       boolean wereCommandsModified;
-    private static final String  COMMANDS_FILE_NAME    = "commands.xml";
+    /** Default name of the custom commands file. */
+    public  static final String  DEFAULT_COMMANDS_FILE_NAME    = "commands.xml";
 
 
 
@@ -258,19 +262,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
     // - Command builder code --------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Not used.
-     */
-    public void startBuilding() {}
-
-    /**
-     * Not used.
-     */
-    public void endBuilding() {}
-
-    /**
-     * Registers the specified command.
-     * @param  command          command to register.
-     * @throws CommandException if a command with the same alias has already been registered.
+     * This method is public as an implementation side effect and must not be called directly.
      */
     public void addCommand(Command command) throws CommandException {registerCommand(command);}
 
@@ -283,24 +275,34 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
 
         // Goes through all the registered commands.
         iterator = commands();
-        while(iterator.hasNext())
-            builder.addCommand((Command)iterator.next());
-
-        builder.endBuilding();
+        try {
+            while(iterator.hasNext())
+                builder.addCommand((Command)iterator.next());
+        }
+        finally {builder.endBuilding();}
     }
 
 
 
     // - Associations building -------------------------------------------------
     // -------------------------------------------------------------------------
+    /**
+     * This method is public as an implementation side effect and should not be called.
+     */
     public void addAssociation(String mask, int read, int write, int execute, String command) throws CommandException {
         registerAssociation(mask, read, write, execute, command);
     }
 
     /**
-     * Notifies the specified <code>builder</code> of the current registered commands and associations.
-     * @param  builder          object to notify of the current registered commands and actions.
-     * @throws CommandException if something goes wrong.
+     * Passes all known file associations to the specified builder.
+     * <p>
+     * This method guarantees that the builder's {@link AssociationBuilder#startBuilding()} and
+     * {@link AssociationBuilder#endBuilding()} methods will both be called, even if an error occurs.
+     * If that happens however, it is entirely possible that not all associations will be passed to
+     * the builder.
+     * </p>
+     * @param  builder          object that will receive association list building messages.
+     * @throws CommandException if anything goes wrong.
      */
     public static void buildAssociations(AssociationBuilder builder) throws CommandException {
         Iterator           iterator; // Used to iterate through commands and associations.
@@ -310,14 +312,15 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
 
         // Goes through all the registered associations.
         iterator = associations();
-        while(iterator.hasNext()) {
-            current = (CommandAssociation)iterator.next();
-            builder.addAssociation(current.getRegularExpression(),
-                                   current.getReadFilter(), current.getWriteFilter(), current.getExecuteFilter(),
-                                   current.getCommand().getAlias());
+        try {
+            while(iterator.hasNext()) {
+                current = (CommandAssociation)iterator.next();
+                builder.addAssociation(current.getRegularExpression(),
+                                       current.getReadFilter(), current.getWriteFilter(), current.getExecuteFilter(),
+                                       current.getCommand().getAlias());
+            }
         }
-
-        builder.endBuilding();
+        finally {builder.endBuilding();}
     }
 
 
@@ -325,29 +328,69 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
     // - Associations reading/writing ------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Returns the path to the associations XML file.
-     * @return the path to the associations XML file.
+     * Returns the path to the custom associations XML file.
+     * <p>
+     * This method cannot guarantee the file's existence, and it's up to the caller
+     * to deal with the fact that the user might not actually have created custom
+     * associations.
+     * </p>
+     * <p>
+     * This method's return value can be modified through {@link #setAssociationFile(String)}.
+     * If this wasn't called, the default path will be used: {@link #DEFAULT_ASSOCIATION_FILE_NAME}
+     * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
+     * </p>
+     * @return the path to the custom associations XML file.
+     * @see    #getAssociationFile()
+     * @see    #loadAssociations()
+     * @see    #writeAssociations()
      */
-    private static File getAssociationFile() {
+    public static File getAssociationFile() {
         if(associationFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), ASSOCIATION_FILE_NAME);
+            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_ASSOCIATION_FILE_NAME);
         return associationFile;
     }
 
     /**
-     * Sets the path to the association XML file.
-     * @param file path to the association XML file.
+     * Sets the path to the custom associations file.
+     * @param  file                     path to the custom associations file.
+     * @throws IllegalArgumentException if <code>file</code> is not accessible.
+     * @see    #getAssociationFile()
+     * @see    #loadAssociations()
+     * @see    #writeAssociations()
      */
-    public static void setAssociationFile(String file) {associationFile = new File(file);}
+    public static void setAssociationFile(String file) {
+        File tempFile;
+
+        // If the file exists, it must accessible and readable.
+        tempFile = new File(file);
+        if(tempFile.exists() && !(tempFile.isFile() || tempFile.canRead()))
+            throw new IllegalArgumentException("Not a valid file: " + file);
+
+        associationFile = tempFile;
+    }
 
     /**
-     * Loads and registers commands and associations from the associations file.
+     * Loads the custom associations XML File.
+     * <p>
+     * Data will be loaded from the path returned by {@link #getAssociationFile()}. If the file doesn't exist,
+     * or an error occurs while loading it, {@link com.mucommander.PlatformManager#registerDefaultAssociations() default}
+     * associations will be used.
+     * </p>
+     * <p>
+     * The command files will be loaded as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupInputStream}).
+     * Its format is described {@link com.mucommander.command.AssociationsXmlConstants here}.
+     * </p>
+     * @see #writeAssociations()
+     * @see #getAssociationFile()
+     * @see #setAssociationFile(String)
      */
     public static void loadAssociations() {
         File file;
 
         // Checks whether the associations file exists. If it doesn't, create default associations.
         file = getAssociationFile();
+        if(Debug.ON)
+            Debug.trace("Loading associations from file: " + file.getAbsolutePath());
         if(!file.isFile()) {
             if(Debug.ON) Debug.trace("Associations file doesn't exist, using default associations");
             PlatformManager.registerDefaultAssociations();
@@ -380,15 +423,28 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
     }
 
     /**
-     * Saves the registered commands and associations.
+     * Writes all registered associations to the custom associations file.
+     * <p>
+     * Data will be written to the path returned by {@link #getAssociationFile()}. Note, however,
+     * that this method will not actually do anything if the association list hasn't been modified
+     * since the last time it was saved.
+     * </p>
+     * <p>
+     * The association files will be saved as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupOutputStream}).
+     * Its format is described {@link com.mucommander.command.AssociationsXmlConstants here}.
+     * </p>
+     * @return <code>true</code> if the operation was a succes, <code>false</code> otherwise.
+     * @see    #loadAssociations()
+     * @see    #getAssociationFile()
+     * @see    #setAssociationFile(String)
      */
-    public static void writeAssociations() {
+    public static boolean writeAssociations() {
         // Do not save the associations if they were not modified.
         if(wereAssociationsModified) {
             BackupOutputStream out;    // Where to write the associations.
             AssociationWriter  writer; // What to write the associations with.
 
-            if(Debug.ON) Debug.trace("Writing custom file associations...");
+            if(Debug.ON) Debug.trace("Writing associations to file: " + getAssociationFile());
 
             // Writes the associations.
             out = null;
@@ -396,6 +452,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
                 writer = new AssociationWriter(out = new BackupOutputStream(getAssociationFile()));
                 buildAssociations(writer);
                 out.close(true);
+                wereAssociationsModified = false;
             }
             // Prevents overwriting of the association file if there's reason to believe it wasn't
             // saved properly.
@@ -404,59 +461,136 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
                     try {out.close(false);}
                     catch(Exception e2) {}
                 }
+                return false;
             }
-            wereAssociationsModified = false;
         }
         else if(Debug.ON) Debug.trace("Custom file associations not modified, skip saving.");
+        return true;
     }
 
 
 
     // - Commands reading/writing ----------------------------------------------
     // -------------------------------------------------------------------------
-    private static File getCommandFile() {
+    /**
+     * Returns the path to the custom commands XML file.
+     * <p>
+     * This method cannot guarantee the file's existence, and it's up to the caller
+     * to deal with the fact that the user might not actually have created custom
+     * commands.
+     * </p>
+     * <p>
+     * This method's return value can be modified through {@link #setCommandFile(String)}.
+     * If this wasn't called, the default path will be used: {@link #DEFAULT_COMMANDS_FILE_NAME}
+     * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
+     * </p>
+     * @return the path to the custom commands XML file.
+     * @see    #setCommandFile(String)
+     * @see    #loadCommands()
+     * @see    #writeCommands()
+     */
+    public static File getCommandFile() {
         if(commandsFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), COMMANDS_FILE_NAME);
+            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_COMMANDS_FILE_NAME);
         return commandsFile;
     }
 
-    public static void setCommandFile(String file) {commandsFile = new File(file);}
+    /**
+     * Sets the path to the custom commands file.
+     * @param  file                     path to the custom commands file.
+     * @throws IllegalArgumentException if <code>file</code> is not accessible.
+     * @see    #getCommandFile()
+     * @see    #loadCommands()
+     * @see    #writeCommands()
+     */
+    public static void setCommandFile(String file) throws IllegalArgumentException {
+        File tempFile;
 
-    public static void writeCommands() {
+        // If the file exists, it must accessible and readable.
+        tempFile = new File(file);
+        if(tempFile.exists() && !(tempFile.isFile() || tempFile.canRead()))
+            throw new IllegalArgumentException("Not a valid file: " + file);
+
+        commandsFile = tempFile;
+    }
+
+    /**
+     * Writes all registered commands to the custom commands file.
+     * <p>
+     * Data will be written to the path returned by {@link #getCommandFile()}. Note, however,
+     * that this method will not actually do anything if the command list hasn't been modified
+     * since the last time it was saved.
+     * </p>
+     * <p>
+     * The command files will be saved as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupOutputStream}).
+     * Its format is described {@link com.mucommander.command.CommandsXmlConstants here}.
+     * </p>
+     * @return <code>true</code> if the operation was a succes, <code>false</code> otherwise.
+     * @see    #loadCommands()
+     * @see    #getCommandFile()
+     * @see    #setCommandFile(String)
+     */
+    public static boolean writeCommands() {
+        // Only saves the command if they were modified since the last time they were written.
         if(wereCommandsModified) {
             BackupOutputStream out;    // Where to write the associations.
             CommandWriter      writer; // What to write the associations with.
 
-            if(Debug.ON) Debug.trace("Writing custom commands file...");
+            if(Debug.ON) Debug.trace("Writing custom commands to file: " + getCommandFile());
 
-            // Writes the associations.
+            // Writes the commands.
             out = null;
             try {
                 writer = new CommandWriter(out = new BackupOutputStream(getCommandFile()));
                 buildCommands(writer);
                 out.close(true);
+                wereCommandsModified = false;
             }
+            // If an error occured, closes the stream but prevents the original file
+            // from being overwritten.
             catch(Exception e) {
                 if(out != null) {
                     try {out.close(false);}
                     catch(Exception e2) {}
                 }
+                return false;
             }
-            wereCommandsModified = false;
+
         }
-        else if(Debug.ON) Debug.trace("Custom commands not modified, skip saving.");
+        else if(Debug.ON)
+            Debug.trace("Custom commands not modified, skip saving.");
+        return true;
     }
 
+    /**
+     * Loads the custom commands XML File.
+     * <p>
+     * Data will be loaded from the path returned by {@link #getCommandFile()}. If the file doesn't exist,
+     * or an error occurs while loading it, {@link com.mucommander.PlatformManager#registerDefaultCommands() default}
+     * commands will be used.
+     * </p>
+     * <p>
+     * The command files will be loaded as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupInputStream}).
+     * Its format is described {@link com.mucommander.command.CommandsXmlConstants here}.
+     * </p>
+     * @see #writeCommands()
+     * @see #getCommandFile()
+     * @see #setCommandFile(String)
+     */
     public static void loadCommands() {
         File file;
 
-        if(Debug.ON) Debug.trace("Loading custom commands...");
-
         file = getCommandFile();
+        if(Debug.ON)
+            Debug.trace("Loading custom commands from: " + file.getAbsolutePath());
+
+        // If the file doesn't exist, registers default commands.
         if(!file.isFile()) {
             if(Debug.ON) Debug.trace("Commands file doesn't exist, using default commands.");
             PlatformManager.registerDefaultCommands();
         }
+
+        // Otherwise, loads custom commands.
         else {
             InputStream in;
 
@@ -481,4 +615,26 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
         }
         wereCommandsModified = false;
     }
+
+
+
+    // - Unused methods --------------------------------------------------------
+    // -------------------------------------------------------------------------
+    /**
+     * This method is visible as an implementation side effect.
+     * <p>
+     * It shouldn't actually be used, as it doesn't perform anything.
+     * </p>
+     */
+    public void startBuilding() {}
+
+    /**
+     * This method is visible as an implementation side effect.
+     * <p>
+     * It shouldn't actually be used, as it doesn't perform anything.
+     * </p>
+     */
+    public void endBuilding() {}
+
+
 }
