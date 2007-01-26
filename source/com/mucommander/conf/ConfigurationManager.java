@@ -421,8 +421,9 @@ public class ConfigurationManager {
      * Sets the value of the specified configuration variable.
      * @param var   name of the variable to set.
      * @param value value for the specified variable.
+     * @return true if the variable has been modified, false otherwise
      */
-    public static synchronized void setVariable(String var, String value) {
+    public static synchronized boolean setVariable(String var, String value) {
 
         StringTokenizer   parser;
         String            buffer;
@@ -440,7 +441,7 @@ public class ConfigurationManager {
                     // If the value is null, we're trying to delete a variable.
                     // It would be silly to create its parent node. Abort.
                     if(value == null)
-                        return;
+                        return false;
                     node = node.createNode(buffer);
                 }
                 else
@@ -451,13 +452,20 @@ public class ConfigurationManager {
 				
                 // Since 0.8 beta2: do nothing (return) if value hasn't changed
                 if((oldValue==null && value==null) || (oldValue!=null && oldValue.equals(value)))
-                    return;
+                    return false;
 					
-                if(node.setLeaf(buffer, value))
-                    if(!fireConfigurationEvent(new ConfigurationEvent(var, value)))
+                if(node.setLeaf(buffer, value)) {
+                    if(!fireConfigurationEvent(new ConfigurationEvent(var, value))) {
+                        // Value change vetoed by one of the ConfigurationListener
                         node.setLeaf(buffer, oldValue);
+                        return false;
+                    }
+                    return true;
+                }
             }
         }
+
+        return false;
     }
 
 	
@@ -466,9 +474,10 @@ public class ConfigurationManager {
      *
      * @param var name of the variable to set.
      * @param value value for the specified variable.
+     * @return true if the variable has been modified, false otherwise
      */
-    public static synchronized void setVariableInt(String var, int value) {
-        setVariable(var, Integer.toString(value));
+    public static synchronized boolean setVariableInt(String var, int value) {
+        return setVariable(var, Integer.toString(value));
     }
 
 
@@ -477,9 +486,10 @@ public class ConfigurationManager {
      *
      * @param var name of the variable to set.
      * @param value value for the specified variable.
+     * @return true if the variable has been modified, false otherwise
      */
-    public static synchronized void setVariableFloat(String var, float value) {
-        setVariable(var, Float.toString(value));
+    public static synchronized boolean setVariableFloat(String var, float value) {
+        return setVariable(var, Float.toString(value));
     }
 
 
@@ -488,9 +498,10 @@ public class ConfigurationManager {
      *
      * @param var name of the variable to set.
      * @param value value for the specified variable.
+     * @return true if the variable has been modified, false otherwise
      */
-    public static synchronized void setVariableBoolean(String var, boolean value) {
-        setVariable(var, Boolean.toString(value));
+    public static synchronized boolean setVariableBoolean(String var, boolean value) {
+        return setVariable(var, Boolean.toString(value));
     }
 	
 	
@@ -499,10 +510,11 @@ public class ConfigurationManager {
      *
      * @param var name of the variable to set.
      * @param value value for the specified variable.
+     * @return true if the variable has been modified, false otherwise
      */
-    public static synchronized void setVariableColor(String var, Color value) {
+    public static synchronized boolean setVariableColor(String var, Color value) {
         String colorString = Integer.toHexString(value.getRGB());
-        setVariable(var, colorString.substring(2, colorString.length()));
+        return setVariable(var, colorString.substring(2, colorString.length()));
     }
 
 		
