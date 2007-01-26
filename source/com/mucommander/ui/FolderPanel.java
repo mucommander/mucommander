@@ -75,6 +75,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     
     private FileDragSourceListener fileDragSourceListener;
 
+    /** Contains all the registered FileFilter instances (if any) used to filter out unwanted files when listing
+     * folder contents */
     private AndFileFilter chainedFileFilter;
 
     private final static int CANCEL_ACTION = 0;
