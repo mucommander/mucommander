@@ -21,7 +21,7 @@ public abstract class ChainedFileFilter extends FileFilter {
         filters.remove(filter);
     }
 
-    public synchronized Iterator getFileFiltersIterator() {
+    public synchronized Iterator getFileFilterIterator() {
         return filters.iterator();
     }
 }

@@ -6,12 +6,10 @@ import com.mucommander.file.AbstractFile;
 /**
  * Filter on a file's permissions.
  * <p>
- * This {@link com.mucommander.file.filter.FileFilter} is used to match file again
- * a given set of permissions.
+ * This {@link com.mucommander.file.filter.FileFilter} is used to match files against a given set of permissions.
  * </p>
  * <p>
- * Note that the <i>executable</i> flag of a file is not checked on
- * versions of Java older than 1.6.
+ * Note that the <i>executable</i> flag of a file is not checked on versions of Java older than 1.6.
  * </p>
  * @author Nicolas Rinaudo
  */

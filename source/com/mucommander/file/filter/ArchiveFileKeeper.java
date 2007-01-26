@@ -4,7 +4,7 @@ import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 
 /**
- * FileFilter that accepts only archive files.
+ * FileFilter that only accepts archive files.
  *
  * @author Maxence Bernard
  */

@@ -593,7 +593,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
     private void removeFileFilter(Class c) {
-        Iterator iterator = chainedFileFilter.getFileFiltersIterator();
+        Iterator iterator = chainedFileFilter.getFileFilterIterator();
         while(iterator.hasNext()) {
             Object o = iterator.next();
             if(o.getClass().equals(c))
