@@ -6,6 +6,8 @@ import com.mucommander.file.AbstractFile;
 
 /**
  * FileFilter that only accepts visible (non-hidden) files.
+ *
+ * @author Maxence Bernard
  */
 public class HiddenFileFilter extends FileFilter {
 

@@ -11,9 +11,11 @@ import com.mucommander.file.AbstractFile;
  * <p>
  * Note that the <i>executable</i> flag of a file is not checked on versions of Java older than 1.6.
  * </p>
+ * 
  * @author Nicolas Rinaudo
  */
 public class PermissionsFileFilter extends FileFilter {
+
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
     /** The associated property must be set to <i>false</i>. */
@@ -133,3 +135,4 @@ public class PermissionsFileFilter extends FileFilter {
         return true;
     }
 }
+

@@ -1,12 +1,15 @@
 package com.mucommander.file.filter;
 
-import java.util.regex.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
- * Regular expressions based file name filter.
+ * Regular expressions based filename filter.
+
  * @author Nicolas Rinaudo
  */
 public class RegexpFilenameFilter extends FilenameFilter {
+
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Pattern against which file names will be compared. */
