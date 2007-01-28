@@ -358,7 +358,7 @@ public abstract class FileFactory {
     public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
 
         PathTokenizer pt = new PathTokenizer(fileURL.getPath(),
-                fileURL.getProtocol().equals(FileProtocols.FILE)?LocalFile.SEPARATOR:AbstractFile.DEFAULT_SEPARATOR,
+                fileURL.getPathSeparator(),
                 false);
 
         AbstractFile currentFile = null;

@@ -4,6 +4,7 @@ package com.mucommander.file;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.auth.Credentials;
+import com.mucommander.file.impl.local.LocalFile;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -12,8 +13,9 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 /**
- * This class parses a file URL without any knowledge of the underlying protocol. URL are expected to respect the following format :<br>
- * 	<code>protocol://[login[:password]@]host[:port][path][query]</code>
+ * This class parses a file URL without any knowledge of the underlying protocol.
+ * URL are expected to respect the following format :<br>
+ * 	<code>protocol://[login[:password]@]host[:port][/path][?query]</code>
  *
  * @author Maxence Bernard
  */
@@ -47,68 +49,99 @@ public class FileURL implements Cloneable {
      * Creates a new FileURL from the given URL string.
      */
     public FileURL(String url) throws MalformedURLException {
+        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Parsing "+url);
+
         try {
             int pos;
+            int protocolDelimPos = url.indexOf("://");
+            int urlLen = url.length();
 
-            // If path contains no protocol, consider the file as a local file and prepend the 'file' protocol to the URL.
-            if(url.indexOf("://")==-1) {
-                char firstChar = url.charAt(0);
-                int len;
-                // Unix-style path
-                if(firstChar=='/')
-                    url = FileProtocols.FILE+"://"+LOCALHOST+url;
-                // Path starts with a reference to the user home folder,
-                // or is a Windows-style path starting with a drive like X:\ or XX:\
-                else if(firstChar=='~' || (PlatformManager.isWindowsFamily() && ((pos=url.indexOf(":\\"))==1 || pos==2)))
-                    url = FileProtocols.FILE+"://"+LOCALHOST+"/"+url;
+            // If path contains no protocol, consider the file as a local file
+            if(protocolDelimPos==-1) {
+                // Treat the URL as local file path if it starts with:
+                // - '/' and OS doesn't use root drives (Unix-style path)
+                // - a drive letter and OS uses root drives (Windows-style)
+                // - a ~ character (refers to the user home folder)
+                if((!LocalFile.USES_ROOT_DRIVES && url.startsWith("/")) || (LocalFile.USES_ROOT_DRIVES && url.indexOf(":\\")==1) || url.startsWith("~")) {
+                    protocol = FileProtocols.FILE;
+                    host = LOCALHOST;
+                    String pathSeparator = getPathSeparator(FileProtocols.FILE);
+                    path = canonizePath(url, pathSeparator, true);
+                    filename = getFilenameFromPath(path, pathSeparator);
+
+                    // All done, return
+                    return;
+                }
+
                 // Handle Windows-style UNC network paths ( \\hostname\path ):
                 // - under Windows, transform it into a URL in the file://hostname/path form,
                 //   LocalFile constructor will translate it back into an UNC network path
                 // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
                 //   who've spent too much time using Windows
-                else if(url.startsWith("\\\\") && (len=url.length())>2) {
+                else if(url.startsWith("\\\\") && urlLen>2) {
                     if(PlatformManager.isWindowsFamily()) {
                         pos = url.indexOf('\\', 2);
                         if(pos==-1)
-                            url =  FileProtocols.FILE+"://"+url.substring(2, len);
+                            url =  FileProtocols.FILE+"://"+url.substring(2);
                         else
-                            url = FileProtocols.FILE+"://"+url.substring(2, pos)+"/"+(pos==len-1?"":url.substring(pos+1, len));
+                            url = FileProtocols.FILE+"://"+url.substring(2, pos)+"/"+(pos==urlLen-1?"":url.substring(pos+1));
+
+                        // Update protocol delimiter position
+                        protocolDelimPos = FileProtocols.FILE.length();
                     }
                     else {
-                        url = FileProtocols.SMB+"://"+url.substring(2, len).replace('\\', '/');
+                        url = FileProtocols.SMB+"://"+url.substring(2).replace('\\', '/');
+
+                        // Update protocol delimiter position
+                        protocolDelimPos = FileProtocols.SMB.length();
                     }
+
+                    // Update URL's length
+                    urlLen = url.length();
                 }
                 // This doesn't look like a valid path, throw an MalformedURLException
                 else {
-                    // Todo: localize that message as it can be displayed to the user
+                    // Todo: localize that message as it can be displayed back to the user
                     throw new MalformedURLException("Path not absolute or malformed: "+url);
                 }
             }
 
             // Start URL parsing
 
-            int urlLen = url.length();
-			
-            // Parse protocol
-            pos = url.indexOf("://");
-            if(pos==-1)
-                throw new MalformedURLException("Protocol not specified");
-            protocol =  url.substring(0, pos);
+            protocol =  url.substring(0, protocolDelimPos);
             // Advance string index
-            pos += 3;
-			
-            // Parse login and password if they have been specified in the URL
-            int atPos = url.indexOf('@');		// passwords containing an @ character will not work, but they're not normally allowed in URLs
-            //com.mucommander.Debug.trace("url="+url+" pos="+pos+" atPos="+atPos);			
-            int colonPos;
+            pos = protocolDelimPos+3;
+
             int separatorPos = url.indexOf('/', pos);
+
+            // The question mark character (if any) marks the beginning of the query part, only for the http/https protocol.
+            // No other supported protocols have a use for the query part, and some protocols such as 'file' allow the '?'
+            // character in filenames which thus would be ambiguous.
+            int questionMarkPos = FileProtocols.HTTP.equals(protocol)||FileProtocols.HTTPS.equals(protocol)?url.indexOf('?', pos):-1;
+            int hostEndPos; // Contains the position of the beginning of the path/query part
+            if(separatorPos!=-1)    // Separator is necessarily before question mark
+                hostEndPos = separatorPos;
+            else if(questionMarkPos !=-1)
+                hostEndPos = questionMarkPos;
+            else
+                hostEndPos = urlLen;
+
+            // URL part before path/query part and without protocol://
+            String urlBP = url.substring(pos, hostEndPos);
+            pos = 0;
+
+            // Parse login and password if they have been specified in the URL
+            // Login/password may @ characters, so consider the last '@' occurrence (if any) as the host delimiter
+            // Note that filenames may contain @ characters, but that's OK here since path is not contained in the String
+            int atPos = urlBP.lastIndexOf('@');
+            int colonPos;
             // Filenames may contain @ chars, so atPos must be lower than next separator's position (if any)
             if(atPos!=-1 && (separatorPos==-1 || atPos<separatorPos)) {
-                colonPos = url.indexOf(':', pos);
-                String login = url.substring(pos, colonPos==-1?atPos:colonPos);
+                colonPos = urlBP.indexOf(':');
+                String login = urlBP.substring(0, colonPos==-1?atPos:colonPos);
                 String password;
                 if(colonPos!=-1)
-                    password = url.substring(colonPos+1, atPos);
+                    password = urlBP.substring(colonPos+1, atPos);
                 else
                     password = null;
 
@@ -120,28 +153,14 @@ public class FileURL implements Cloneable {
             }
 
             // Parse host and port (if specified)
-            colonPos = url.indexOf(':', pos);
-            //com.mucommander.Debug.trace("pos="+pos+" colonPos="+colonPos+" atPos="+atPos);			
-            // The question mark character (if any) marks the beginning of the query part, only for the http/https protocol.
-            // No other supported protocols have a use for the query part, and some protocols such as 'file' allow the '?'
-            // character in filenames which thus would be ambiguous.
-            int questionMarkPos = FileProtocols.HTTP.equals(protocol)||FileProtocols.HTTPS.equals(protocol)?url.indexOf('?', pos):-1;
-            separatorPos = url.indexOf('/', pos);
-            int hostEndPos;
-            // Separator is necessarily before question mark
-            if(separatorPos!=-1)
-                hostEndPos = separatorPos;
-            else if(questionMarkPos !=-1)
-                hostEndPos = questionMarkPos;
-            else
-                hostEndPos = urlLen;
+            colonPos = urlBP.indexOf(':', pos);
 
-            if(colonPos!=-1 && colonPos<hostEndPos) {
-                host = url.substring(pos, colonPos);
-                port = Integer.parseInt(url.substring(colonPos+1, hostEndPos));
+            if(colonPos!=-1) {
+                host = urlBP.substring(pos, colonPos);
+                port = Integer.parseInt(urlBP.substring(colonPos+1));
             }
             else {
-                host = url.substring(pos, hostEndPos);
+                host = urlBP.substring(pos);
             }
 			
             if(host.equals(""))
@@ -149,84 +168,25 @@ public class FileURL implements Cloneable {
 				
             // Parse path part excluding query part
             pos = hostEndPos;
-            path = url.substring(pos, questionMarkPos ==-1?urlLen:questionMarkPos);
+            path = url.substring(pos, questionMarkPos==-1?urlLen:questionMarkPos);
+
             // Empty path means '/'
             if(path.equals(""))
                 path = "/";
 
-            //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw path = "+path);
-			
+            String pathSeparator = getPathSeparator(protocol);
+
             // Canonize path: factor out '.' and '..' and replace '~' by home folder for 'file' protocol
-            if(!path.equals("/")) {
-                pos = 0;	// position of current '/' or '\' character
-                int pos2 = 0;	// position of next '/' or '\' character
-                int posb;		// temporary position of next '\\' character
-                String dir;		// Current directory
-                String dirWS;	// Current directory without trailing slash
-                Vector pathV = new Vector();	// Will contain directory hierachy
-                while((pos=pos2)!=-1) {
-                    // Find next '/' or '\' character, whichever comes first
-                    pos2 = path.indexOf('/', pos);
-                    posb = path.indexOf('\\', pos);
-                    if(posb!=-1 && posb<pos2)
-                        pos2 = posb;
+            path = canonizePath(path, pathSeparator, protocol.equals(FileProtocols.FILE));
 
-                    if(pos2==-1) {	// Last dir (or empty string)
-                        dir = path.substring(pos, path.length());
-                        dirWS = dir;
-                    }
-                    else {
-                        dir = path.substring(pos, ++pos2);		// Dir name includes trailing slash
-                        dirWS = dir.substring(0, dir.length()-1);
-                    }
-					
-                    //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw dir name = "+dir);
-					
-                    // Discard '.' and empty directories
-                    if((dirWS.equals("") && pathV.size()>0) || dirWS.equals(".")) {
-                        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found . or empty dir");
-                        continue;
-                    }
-                    // Remove last directory
-                    else if(dirWS.equals("..")) {
-                        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found .. dir");
-                        if(pathV.size()==0)
-                            throw new MalformedURLException();
-                        pathV.removeElementAt(pathV.size()-1);
-                        continue;
-                    }
-                    // Replace '~' by actual home directory if protocol is 'file' and '~' appears in the path
-                    else if(dirWS.equals("~") && protocol.equalsIgnoreCase(FileProtocols.FILE)) {
-                        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found ~ dir");
-                        path = path.substring(0, pos) + System.getProperty("user.home") + path.substring(pos+1, path.length());
-                        // Will perform another pass at the same position
-                        pos2 = pos;
-                        continue;
-                    }
-
-                    // Add directory to the end of the list
-                    pathV.add(dir);
-                }
-			
-                // Reconstruct path from directory list
-                path = "";
-                int nbDirs = pathV.size();
-                for(int i=0; i<nbDirs; i++)
-                    path += pathV.elementAt(i);
-                // We now have a path free of '.' and '..'
-
-//                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Reconstructed path = "+path+" "+pathV);
-            }
-
-if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be empty, url="+url);
-
+            if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be empty, url="+url);
 
             // Parse query part (if any)
             if(questionMarkPos !=-1)
-                query = url.substring(questionMarkPos, urlLen);
+                query = url.substring(questionMarkPos);
 
             // Extract filename from path
-            filename = getFilenameFromPath(path);
+            filename = getFilenameFromPath(path, pathSeparator);
         }
         catch(MalformedURLException e) {
 //            if(com.mucommander.Debug.ON) {
@@ -246,25 +206,87 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
 
 
     /**
+     * Canonize path: factor out '.' and '..' and replace '~' by home folder if the path corresponds to a local file.
+     *
+     * @param path the path to canonize
+     * @param separator the path separator to use
+     * @return the canonized path
+     * @throws MalformedURLException if the path is invalid
+     */
+    private static String canonizePath(String path, String separator, boolean localFile) throws MalformedURLException {
+        if(!path.equals("/")) {
+            int pos = 0;	// position of current path separator
+            int pos2 = 0;	// position of next path separator
+            String dir;		// Current directory
+            String dirWS;	// Current directory without trailing slash
+            Vector pathV = new Vector();	// Will contain directory hierachy
+            while((pos=pos2)!=-1) {
+                // Get the index of the next path separator occurrence
+                pos2 = path.indexOf(separator, pos);
+
+                if(pos2==-1) {	// Last dir (or empty string)
+                    dir = path.substring(pos);
+                    dirWS = dir;
+                }
+                else {
+                    dir = path.substring(pos, ++pos2);		// Dir name includes trailing slash
+                    dirWS = dir.substring(0, dir.length()-1);
+                }
+
+//                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Raw dir name = "+dir);
+
+                // Discard '.' and empty directories
+                if((dirWS.equals("") && pathV.size()>0) || dirWS.equals(".")) {
+//                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found . or empty dir");
+                    continue;
+                }
+                // Remove last directory
+                else if(dirWS.equals("..")) {
+//                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found .. dir");
+                    if(pathV.size()==0)
+                        throw new MalformedURLException();
+                    pathV.removeElementAt(pathV.size()-1);
+                    continue;
+                }
+                // Replace '~' by actual home directory if protocol is 'file' and '~' appears in the path
+                else if(dirWS.equals("~") && localFile) {
+//                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found ~ dir");
+                    path = path.substring(0, pos) + System.getProperty("user.home") + path.substring(pos+1);
+                    // Will perform another pass at the same position
+                    pos2 = pos;
+                    continue;
+                }
+
+                // Add directory to the end of the list
+                pathV.add(dir);
+            }
+
+            // Reconstruct path from directory list
+            path = "";
+            int nbDirs = pathV.size();
+            for(int i=0; i<nbDirs; i++)
+                path += pathV.elementAt(i);
+
+            // We now have a path free of '.' and '..'
+//            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Reconstructed path = "+path+" "+pathV);
+        }
+
+        return path;
+    }
+
+
+    /**
      * Extracts a filename from the given path and returns it, or null if the path does not contain a filename.
      */
-    private static String getFilenameFromPath(String path) {
+    private static String getFilenameFromPath(String path, String separator) {
         if(path.equals("") || path.equals("/"))
             return null;
 
-        path = path.replace('\\', '/');
-        // Extract filename from path
-        int len = path.length();
-        while(path.charAt(len-1)=='/')
-            --len;
+        // Remove any trailing separator
+        String filename = path.endsWith(separator)?path.substring(0, path.length()-separator.length()):path;
 
-        String filename = path.substring(0, len);
-        int separatorPos = filename.lastIndexOf('/');
-        filename = path.substring(separatorPos+1, len);
-        if(filename.equals(""))
-            filename = null;
-
-        return filename;
+        // Extract filename
+        return filename.substring(filename.lastIndexOf(separator)+1);
     }
 
 
@@ -276,10 +298,39 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
     }
 
     /**
-     * Sets the protocol part of this FileURL. The specified must not be null.
+     * Sets the protocol part of this FileURL. The specified protocol must not be null.
      */
     public void setProtocol(String protocol) {
         this.protocol = protocol;
+    }
+
+
+    /**
+     * Returns the path separator for the given protocol. If the {@link FileProtocols#FILE} protocol is specified,
+     * the underlying local filesystem's separator as returned by {@lnk LocalFile#SEPARATOR} will be returned.
+     *
+     * <p>By default, if the given protocol is not known (not one of the protocols listed in {@link FileProtocols}),
+     * "/" is returned.
+     * 
+     * @param protocol a protocol name
+     * @return the path separator for the given protocol
+     */
+    public static String getPathSeparator(String protocol) {
+        if(FileProtocols.FILE.equals(protocol))
+            return LocalFile.SEPARATOR;
+
+        return "/";
+    }
+
+
+    /**
+     * Returns the path separator used in this FileURL. Has the same effect as calling {@link #getPathSeparator(String)}
+     * with the value of {@link #getProtocol()}.
+     *
+     * @return the path separator used in this FileURL
+     */
+    public String getPathSeparator() {
+        return getPathSeparator(protocol);
     }
 
 
@@ -379,25 +430,22 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
     /**
      * Returns the path part of this FileURL (e.g. /webstart/mucommander.jnlp for http://mucommander.com/webstart/mucommander.jnlp).
      *
-     * <p>If the path is a Windows-style path, that is starts with a drive like like X:\ or XX:\, the leading '/' character
-     * in the path will be removed to make it easier to use.
      */
     public String getPath() {
-        // Strip out leading '/' if path is 'a la Windows', i.e. starts with a drive like X:\ or XX:\
-        int pos;
-        if(path.indexOf('/')==0 && ((pos=path.indexOf(":\\"))==2 || pos==3))
-            return path.substring(1, path.length());
-
+//        // Strip out leading '/' if path starts with a Windows-style drive, like C:\
+//        if(FileProtocols.FILE.equals(protocol) && LocalFile.USES_ROOT_DRIVES && path.indexOf('/')==0 && (path.indexOf(":\\"))==2)
+//            return path.substring(1, path.length());
+//
         return path;
     }
 
     /**
-     * Sets the path part of this FileURL. The specified path must not be <code>null</code> and start with '/'.
+     * Sets the path part of this FileURL. The specified path must not be <code>null</code>.
      */
     public void setPath(String path) {
         this.path = path;
         // Extract new filename from path
-        this.filename = getFilenameFromPath(path);
+        this.filename = getFilenameFromPath(path, getPathSeparator());
     }
 
 	
@@ -412,15 +460,13 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
     public FileURL getParent() {
         // If path equals '/', url has no parent
         if(!(path.equals("/") || path.equals(""))) {
-            String parentPath = path;
+            String separator = getPathSeparator();
 
-            // Remove any trailing slash or back slash
-            int len = parentPath.length();
-            if(len-->0 && (parentPath.charAt(len)=='/' || parentPath.charAt(len)=='\\'))
-                parentPath = parentPath.substring(0, len);
+            // Remove any trailing separator
+            String parentPath = path.endsWith(separator)?path.substring(0, path.length()-separator.length()):path;
 
             // Resolve parent folder's path and reconstruct parent URL
-            int lastSeparatorPos = Math.max(parentPath.lastIndexOf('/'), parentPath.lastIndexOf('\\'));
+            int lastSeparatorPos = parentPath.lastIndexOf(separator);
             if(lastSeparatorPos!=-1) {
                 FileURL parentURL = new FileURL();
 
@@ -453,9 +499,9 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
      *
      * <p>A few examples:
      * <ul>
-     * <li>smb://someserver/someshare/somefolder/somefile -> smb://someserver/someshare/
-     * <li>ftp://someserver/somefolder/somefile -> ftp://someserver/
-     * <li>sftp://someserver:666/ -> sftp://someserver:666/
+     * <li>smb://somehost/someshare/somefolder/somefile -> smb://someserver/someshare/
+     * <li>ftp://somehost/somefolder/somefile -> ftp://someserver/
+     * <li>sftp://somehost:666/ -> sftp://someserver:666/
      * <li>smb:// -> smb://
      * </ul>
      *
@@ -470,13 +516,10 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
         String newPath = "/";
 
         if(protocol.equals(FileProtocols.SMB)) {
-            String tokens[] = location.getPath().split("[/\\\\]");
-            for(int i=0; i<tokens.length; i++) {
-                if(!tokens[i].equals("")) {
-                    newPath += tokens[i]+'/';
-                    break;
-                }
-            }
+            newPath = location.getPath();
+            // Find first path token (share)
+            int pos = newPath.indexOf(1, '/');
+            newPath = newPath.substring(0, pos==-1?newPath.length():pos+1); 
         }
 
         FileURL realm = new FileURL();
@@ -612,8 +655,9 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
             s += ":"+port;
 
         if(host!=null || !path.equals("/"))	// Test to avoid URLs like 'smb:///'
-            s += path;
-		
+            s += path.startsWith("/")?path:"/"+path;    // Add a leading '/' if path doesn't already start with one, needed in particular for Windows paths
+//            s += path;
+
         if(query!=null)
             s += query;
 		
@@ -693,6 +737,7 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
             "http://mucommander.com/webstart/",
             "http://mucommander.com/webstart/index.html",
             "http://mucommander.com/webstart/index.php?dummy=1&useless=true",
+            "http://login:pass@mucommander.com:8080/webstart/index.php?dummy=1&useless=true",
             "smb://",
             "smb://a",
             "smb://a/b",
@@ -706,7 +751,7 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
             "ftp://mucommander.com:21/pub/incoming/",
             "ftp://mucommander.com:21/pub/incoming/0day-warez.zip",
             // @ characters in login or password are not valid
-            "ftp://anonymous:john.doe@somewhere.net@mucommander.com:21/pub/incoming/0day-warez.zip",
+            "ftp://anonymous:john.doe@somewhere.net@mucommander.com:21/pub/incoming/0d@y-warez.zip",
             "sftp://maxence:yep@192.168.1.2",
             "file://relative_path",
             "file:///absolute_path",
@@ -715,7 +760,6 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
             // Not valid (not absolute)
             "file://localhost/C:",
             "file://localhost/C:\\",
-            "file://localhost/ZZ:\\",
             "file://localhost/C:\\Projects",
             "file://localhost/C:\\Projects\\",
             "file://localhost/C:\\Documents and Settings",
@@ -732,16 +776,16 @@ if(Debug.ON && path.trim().equals("")) Debug.trace("Warning: path should not be 
         for(int i=0; i<urls.length; i++) {
             try {
                 System.out.println("Creating "+urls[i]);
-//                if(urls[i].indexOf("://")==-1)
-//                    f = getLocalFileURL(urls[i], null);
-//                else
-                    f = new FileURL(urls[i]);
-                System.out.println("FileURL.toString(true)= "+f.toString(true));
+                f = new FileURL(urls[i]);
                 System.out.println(" - path= "+f.getPath());
                 System.out.println(" - host= "+f.getHost());
+                System.out.println(" - port= "+f.getPort());
                 if(f.getLogin()!=null)
                     System.out.println(" - login/pass= "+f.getLogin()+"/"+f.getPassword());
                 System.out.println(" - filename= "+f.getFilename());
+                System.out.println(" - query= "+f.getQuery());
+                String stringRep = f.toString(true);
+                System.out.println("FileURL.toString(true)= "+stringRep+" "+(stringRep.equals(urls[i])?"EQUALS":"DIFFERS"));
                 System.out.println(" - parent= "+f.getParent());
                 if(f.getParent()!=null)
                     System.out.println(" - parent path= "+f.getParent().getPath());
