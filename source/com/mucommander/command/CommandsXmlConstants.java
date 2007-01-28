@@ -5,7 +5,7 @@ package com.mucommander.command;
  * <p>
  * This interface is only meant as a convenient way of sharing the XML
  * file format between the {@link com.mucommander.command.CommandWriter}
- * and {@link com.mucommander.command.CommandReader}. It will be removed
+ * and {@link CommandReader}. It will be removed
  * at bytecode optimisation time.
  * </p>
  * <p>
@@ -20,13 +20,13 @@ package com.mucommander.command;
  * </pre>
  * Where:
  * <ul>
- *  <li><i>value</i> is the command's value, in a format that can be understood by the {@link com.mucommander.command.CommandParser}.</li>
+ *  <li><i>value</i> is the command's value, in a format that can be understood by the {@link CommandParser}.</li>
  *  <li><i>alias</i> is the name under which the command will be known throughout muCommander.</li>
- *  <li><i>type</i> is the command's type (<i>system</i>, <i>invisible</i> or <i>normal</i>). See {@link com.mucommander.command.Command} for more information.</li>
+ *  <li><i>type</i> is the command's type (<i>system</i>, <i>invisible</i> or <i>normal</i>). See {@link Command} for more information.</li>
  * </ul>
  * </p>
- * @see com.mucommander.command.CommandReader
- * @see com.mucommander.command.CommandWriter
+ * @see CommandReader
+ * @see CommandWriter
  * @author Nicolas Rinaudo
  */
 interface CommandsXmlConstants {

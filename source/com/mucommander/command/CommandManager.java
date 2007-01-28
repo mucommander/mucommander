@@ -137,8 +137,10 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
      */
     public static void registerCommand(int i, Command command) throws CommandException {
         // Checks whether a font with the same alias has already been registered.
-        if(getCommandForAlias(command.getAlias()) != null)
+        if(getCommandForAlias(command.getAlias()) != null) {
+            if(Debug.ON) Debug.trace("Duplicated command alias: " + command.getAlias());
             throw new CommandException("Duplicated command alias: " + command.getAlias());
+        }
 
         // Registers the command and marks associations as having been modified.
         if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "' at index " + i);
@@ -234,8 +236,10 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
         }
 
         // The specified alias is not known.
-        else
+        else {
+            if(Debug.ON) Debug.trace("Failed to create association as '" + command + "' is not known.");
             throw new CommandException(command + " not found");
+        }
     }
 
     /**
@@ -266,7 +270,17 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
      */
     public void addCommand(Command command) throws CommandException {registerCommand(command);}
 
-
+    /**
+     * Passes all known custom commands to the specified builder.
+     * <p>
+     * This method guarantees that the builder's {@link CommandBuilder#startBuilding() startBuilding()} and
+     * {@link CommandBuilder#endBuilding() endBuilding()} methods will both be called even if an error occurs.
+     * If that happens however, it is entirely possible that not all commands will be passed to
+     * the builder.
+     * </p>
+     * @param  builder          object that will receive commands list building messages.
+     * @throws CommandException if anything goes wrong.
+     */
     public static void buildCommands(CommandBuilder builder) throws CommandException {
         Iterator           iterator; // Used to iterate through commands and associations.
         CommandAssociation current;  // Current command association.
@@ -289,15 +303,13 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
     /**
      * This method is public as an implementation side effect and should not be called.
      */
-    public void addAssociation(String mask, int read, int write, int execute, String command) throws CommandException {
-        registerAssociation(mask, read, write, execute, command);
-    }
+    public void addAssociation(String mask, int read, int write, int execute, String command) throws CommandException {registerAssociation(mask, read, write, execute, command);}
 
     /**
      * Passes all known file associations to the specified builder.
      * <p>
-     * This method guarantees that the builder's {@link AssociationBuilder#startBuilding()} and
-     * {@link AssociationBuilder#endBuilding()} methods will both be called, even if an error occurs.
+     * This method guarantees that the builder's {@link AssociationBuilder#startBuilding() startBuilding()} and
+     * {@link AssociationBuilder#endBuilding() endBuilding()} methods will both be called even if an error occurs.
      * If that happens however, it is entirely possible that not all associations will be passed to
      * the builder.
      * </p>
@@ -378,7 +390,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
      * </p>
      * <p>
      * The command files will be loaded as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupInputStream}).
-     * Its format is described {@link com.mucommander.command.AssociationsXmlConstants here}.
+     * Its format is described {@link AssociationsXmlConstants here}.
      * </p>
      * @see #writeAssociations()
      * @see #getAssociationFile()
@@ -431,7 +443,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
      * </p>
      * <p>
      * The association files will be saved as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupOutputStream}).
-     * Its format is described {@link com.mucommander.command.AssociationsXmlConstants here}.
+     * Its format is described {@link AssociationsXmlConstants here}.
      * </p>
      * @return <code>true</code> if the operation was a succes, <code>false</code> otherwise.
      * @see    #loadAssociations()
@@ -523,7 +535,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
      * </p>
      * <p>
      * The command files will be saved as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupOutputStream}).
-     * Its format is described {@link com.mucommander.command.CommandsXmlConstants here}.
+     * Its format is described {@link CommandsXmlConstants here}.
      * </p>
      * @return <code>true</code> if the operation was a succes, <code>false</code> otherwise.
      * @see    #loadCommands()
@@ -571,7 +583,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
      * </p>
      * <p>
      * The command files will be loaded as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupInputStream}).
-     * Its format is described {@link com.mucommander.command.CommandsXmlConstants here}.
+     * Its format is described {@link CommandsXmlConstants here}.
      * </p>
      * @see #writeCommands()
      * @see #getCommandFile()
@@ -621,18 +633,12 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
     // - Unused methods --------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * This method is visible as an implementation side effect.
-     * <p>
-     * It shouldn't actually be used, as it doesn't perform anything.
-     * </p>
+     * This method is public as an implementation side effect and must not be called directly.
      */
     public void startBuilding() {}
 
     /**
-     * This method is visible as an implementation side effect.
-     * <p>
-     * It shouldn't actually be used, as it doesn't perform anything.
-     * </p>
+     * This method is public as an implementation side effect and must not be called directly.
      */
     public void endBuilding() {}
 

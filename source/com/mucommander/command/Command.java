@@ -38,8 +38,8 @@ public class Command {
      * Creates a new command.
      * <p>
      * This is not the prefered way of creating instances of <code>Command</code>.
-     * Developers should use either {@link com.mucommander.command.CommandManager#getCommandForFile(AbstractFile)}
-     * or {@link com.mucommander.command.CommandParser#getCommand(String,String)} for that purpose.
+     * Developers should use either {@link CommandManager#getCommandForFile(AbstractFile)}
+     * or {@link CommandParser#getCommand(String,String)} for that purpose.
      * </p>
      * @param alias      alias of the command.
      * @param command    original command (before tokenisation).

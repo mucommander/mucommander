@@ -23,7 +23,7 @@ import java.io.File;
  *  <li><code>$p</code> is replaced by a file's parent's path.</li>
  *  <li><code>$j</code> is replaced by the path of the folder in which the JVM was started.</li>
  * </ul>
- * Note that keywords are only meaningful for the {@link com.mucommander.command.Command#getTokens(com.mucommander.file.AbstractFile)} method.
+ * Note that keywords are only meaningful for the {@link Command#getTokens(com.mucommander.file.AbstractFile)} method.
  * </p>
  * @author Nicolas Rinaudo
  */
@@ -111,6 +111,9 @@ public class CommandParser {
         return tokens;
     }
 
+    /**
+     * Re
+     */
     public static Command getCommand(String alias, String command, int type) {
         String[]  tokenBuffer; // Buffer for the tokens that compose command.
         boolean[] typeBuffer;  // Buffer for the type of tokens that compose command.
@@ -131,6 +134,15 @@ public class CommandParser {
         return new Command(alias, command, tokens, tokenTypes, type);
     }
 
+    /**
+     * Returns a command built from the specified arguments.
+     * <p>
+     * This is a convenience method and is equivalent to calling <code>getCommand(alias, command, Command.NORMAL_COMMAND)</code>.
+     * </p>
+     * @param  alias   alias of the command to create.
+     * @param  command command line to execute when this command is called.
+     * @return a command built from the specified arguments.
+     */
     public static Command getCommand(String alias, String command) {return getCommand(alias, command, Command.NORMAL_COMMAND);}
 
 
@@ -143,8 +155,7 @@ public class CommandParser {
      * The <code>tokenTypes</code> argument is optional, and can be set to <code>null</code>.
      * If not set to null, it will contain instructions about whether a keyword is declared in
      * the token of the same index.<br/>
-     * For example, if <code>tokenTypes[i] & TYPE_PATH == TYPE_PATH</code>, then
-     * <code>tokens[i]</code> contains the $p keyword.
+     * For example, if <code>tokenTypes[i] == true</code>, then <code>tokens[i]</code> contains a keyword.
      * </p>
      * <p>
      * This method is very lax about syntax. Errors are just ignored, and a best effort will be

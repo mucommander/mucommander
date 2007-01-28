@@ -26,7 +26,7 @@ package com.mucommander.command;
  *    }
  * }
  * </pre>
- * Passing an instance of <code>AssociationPrinter</code> to {@link com.mucommander.command.CommandManager#buildAssociations(AssociationBuilder)}
+ * Passing an instance of <code>AssociationPrinter</code> to {@link CommandManager#buildAssociations(AssociationBuilder)}
  * will result in something like:
  * <pre>
  * Begining association list building...
@@ -36,8 +36,8 @@ package com.mucommander.command;
  * </pre>
  * </p>
  * @author Nicolas Rinaudo
- * @see    com.mucommander.command.AssociationReader
- * @see    com.mucommander.command.CommandManager#buildAssociations(AssociationBuilder)
+ * @see    AssociationReader
+ * @see    CommandManager#buildAssociations(AssociationBuilder)
  */
 public interface AssociationBuilder {
     /**

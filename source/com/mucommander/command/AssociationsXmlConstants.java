@@ -4,8 +4,7 @@ package com.mucommander.command;
  * Defines the structure of a custom associations XML file.
  * <p>
  * This interface is only meant as a convenient way of sharing the XML
- * file format between the {@link com.mucommander.command.AssociationWriter}
- * and {@link com.mucommander.command.AssociationReader}. It will be removed
+ * file format between the {@link AssociationWriter} and {@link AssociationReader}. It will be removed
  * at bytecode optimisation time.
  * </p>
  * <p>
@@ -23,7 +22,7 @@ package com.mucommander.command;
  * Where:
  * <ul>
  *  <li>
- *    <i>command</i> must be the alias of a command defined in the {@link com.mucommander.command.CommandsXmlConstants commands file}.
+ *    <i>command</i> must be the alias of a command defined in the {@link CommandsXmlConstants commands file}.
  *    This command will be executed when a file matches the association.
  *  </li>
  *  <li>
@@ -44,8 +43,8 @@ package com.mucommander.command;
  *  </li>
  * </ul>
  * </p>
- * @see com.mucommander.command.AssociationReader
- * @see com.mucommander.command.AssociationWriter
+ * @see AssociationReader
+ * @see AssociationWriter
  * @author Nicolas Rinaudo
  */
 interface AssociationsXmlConstants {

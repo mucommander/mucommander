@@ -1,6 +1,5 @@
 package com.mucommander.command;
 
-import com.mucommander.file.filter.PermissionsFileFilter;
 import com.mucommander.xml.writer.*;
 
 import java.io.*;

@@ -5,6 +5,11 @@ import com.mucommander.xml.writer.*;
 import java.io.*;
 
 /**
+ * Class used to write custom commands XML files.
+ * <p>
+ * <code>CommandWriter</code> is a {@link CommandBuilder} that will send
+ * all build messages it receives into an XML stream (as defined in {@link CommandsXmlConstants}).
+ * </p>
  * @author Nicolas Rinaudo
  */
 public class CommandWriter implements CommandsXmlConstants, CommandBuilder {
