@@ -17,7 +17,7 @@ import com.mucommander.file.RootFolders;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.HiddenFileFilter;
-import com.mucommander.file.filter.SystemFoldersFilter;
+import com.mucommander.file.filter.SystemFileFilter;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.auth.AuthDialog;
@@ -138,7 +138,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         /** Filters out Mac OS X system folders, null when 'show system folders' option is enabled */
         if(!ConfigurationManager.getVariableBoolean(ConfigurationVariables.SHOW_SYSTEM_FOLDERS, ConfigurationVariables.DEFAULT_SHOW_SYSTEM_FOLDERS))
-            chainedFileFilter.addFileFilter(new SystemFoldersFilter());
+            chainedFileFilter.addFileFilter(new SystemFileFilter());
 
         try {
             // Set initial folder to current directory
@@ -579,9 +579,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Show or hide system folders (Mac OS X option)
         else if (var.equals(ConfigurationVariables.SHOW_SYSTEM_FOLDERS)) {
             if(event.getBooleanValue())
-                removeFileFilter(SystemFoldersFilter.class);
+                removeFileFilter(SystemFileFilter.class);
             else
-                chainedFileFilter.addFileFilter(new SystemFoldersFilter());
+                chainedFileFilter.addFileFilter(new SystemFileFilter());
         }
 
         // Do not try and refresh folder here as this method can be called several times in a row on the same folder
