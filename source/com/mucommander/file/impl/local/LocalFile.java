@@ -30,8 +30,12 @@ public class LocalFile extends AbstractFile {
     /** Indicates whether the parent folder instance has been retrieved and cached or not (parent can be null) */
     private boolean parentValueSet;
 	
-    /** "/" for UNIX systems, "\" for Win32 */
+    /** Underlying local filesystem's path separator: "/" under UNIX systems, "\" under Windows and OS/2 */
     public final static String SEPARATOR = File.separator;
+
+    /** true if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
+     * of having single a root folder '/' */
+    public final static boolean USES_ROOT_DRIVES = PlatformManager.isWindowsFamily() || PlatformManager.OS_FAMILY==PlatformManager.OS_2;
 
     /** Are we running Windows ? */
     private final static boolean IS_WINDOWS;
@@ -267,7 +271,17 @@ public class LocalFile extends AbstractFile {
         // read-only. A better way would be to create a JNI interface as described here: http://forum.java.sun.com/thread.jspa?forumID=256&threadID=363074
         return guessFloppyDrive() || (IS_WINDOWS && isRoot() && !canWrite());
     }
-	
+
+
+    /**
+     * Returns true if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
+     * of having single a root folder '/'. This method will return <code>true</code> for Windows and OS/2 systems,
+     * false for all other systems.
+     */
+    public static boolean usesRootDrives() {
+        return PlatformManager.isWindowsFamily() || PlatformManager.OS_FAMILY==PlatformManager.OS_2;
+    }
+
 	
     /////////////////////////////////////////
     // AbstractFile methods implementation //
