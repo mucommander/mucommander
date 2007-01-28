@@ -13,7 +13,8 @@ public class HiddenFileFilter extends FileFilter {
 
     public HiddenFileFilter() {
     }
-    
+
+
     ///////////////////////////////
     // FileFilter implementation //
     ///////////////////////////////

@@ -3,14 +3,14 @@ package com.mucommander.file.filter;
 import com.mucommander.file.AbstractFile;
 
 /**
- * Filter used to filter out System folders.
+ * Filter used to filter out system files and folders that should not be displayed to inexperienced users.
  *
  * <p>At the moment, this filter only supports Mac OS X top-level system folders (those hidden by Finder)
  * and thus this filter should only be used under Mac OS X.
  *
  * @author Maxence Bernard
  */
-public class SystemFoldersFilter extends FileFilter {
+public class SystemFileFilter extends FileFilter {
 
     /**
      * Top-level Mac OS X system folders hidden by Finder. For more info about those files:
@@ -56,6 +56,11 @@ public class SystemFoldersFilter extends FileFilter {
         "/Trash",
         "/VM Storage"
     };
+
+
+    ///////////////////////////////
+    // FileFilter implementation //
+    ///////////////////////////////
 
     public boolean accept(AbstractFile file) {
         String path = file.getAbsolutePath(false);
