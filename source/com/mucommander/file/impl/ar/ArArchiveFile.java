@@ -3,7 +3,7 @@ package com.mucommander.file.impl.ar;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.impl.SimpleEntry;
+import com.mucommander.file.SimpleArchiveEntry;
 import com.mucommander.io.ByteLimitInputStream;
 
 import java.io.IOException;
@@ -102,7 +102,7 @@ public class ArArchiveFile extends AbstractArchiveFile {
                     name += (char)b;
             }
 
-            return new SimpleEntry(name, date, size, false);
+            return new SimpleArchiveEntry(name, date, size, false);
         }
         // Re-throw IOException
         catch(IOException e) {

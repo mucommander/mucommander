@@ -16,6 +16,7 @@ import com.mucommander.file.impl.gzip.GzipArchiveFile;
 import com.mucommander.file.impl.http.HTTPFile;
 import com.mucommander.file.impl.iso.IsoArchiveFile;
 import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.file.impl.lst.LstArchiveFile;
 import com.mucommander.file.impl.sftp.SFTPFile;
 import com.mucommander.file.impl.smb.SMBFile;
 import com.mucommander.file.impl.tar.TarArchiveFile;
@@ -81,6 +82,7 @@ public abstract class FileFactory {
         registerArchiveFileFormat(Bzip2ArchiveFile.class, new ExtensionFilenameFilter(".bz2"));
         registerArchiveFileFormat(IsoArchiveFile.class, new ExtensionFilenameFilter(new String[]{".iso", ".nrg"}));
         registerArchiveFileFormat(ArArchiveFile.class, new ExtensionFilenameFilter(new String[]{".ar", ".a", ".deb"}));
+        registerArchiveFileFormat(LstArchiveFile.class, new ExtensionFilenameFilter(new String[]{".lst"}));
     }
 
 

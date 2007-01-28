@@ -1,22 +1,18 @@
 
-package com.mucommander.file.impl;
-
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.ArchiveEntry;
-
+package com.mucommander.file;
 
 /**
  *
  * @author Maxence Bernard
  */
-public class SimpleEntry extends ArchiveEntry {
+public class SimpleArchiveEntry extends ArchiveEntry {
 
     private String path;
     private long date;
     private long size;
     private boolean isDirectory;
 	
-    public SimpleEntry(String path, long date, long size, boolean isDirectory) {
+    public SimpleArchiveEntry(String path, long date, long size, boolean isDirectory) {
         super(null);
         this.path = path;
         this.date = date;

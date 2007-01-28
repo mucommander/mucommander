@@ -3,7 +3,6 @@ package com.mucommander.file;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
-import com.mucommander.file.impl.SimpleEntry;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.IOException;
@@ -98,7 +97,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
                     }
                     else {
                         // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating node for "+subPath);
-                        childNode = new DefaultMutableTreeNode(new SimpleEntry(subPath, entry.getDate(), 0, true), true);
+                        childNode = new DefaultMutableTreeNode(new SimpleArchiveEntry(subPath, entry.getDate(), 0, true), true);
                         node.add(childNode);
                         node = childNode;
                     }

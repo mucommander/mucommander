@@ -3,7 +3,7 @@ package com.mucommander.file.impl.bzip2;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.impl.SimpleEntry;
+import com.mucommander.file.SimpleArchiveEntry;
 import org.apache.tools.bzip2.CBZip2InputStream;
 
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class Bzip2ArchiveFile extends AbstractArchiveFile {
         }
 
         Vector entries = new Vector();
-        entries.add(new SimpleEntry("/"+name, getDate(), -1, false));
+        entries.add(new SimpleArchiveEntry("/"+name, getDate(), -1, false));
         return entries;
     }
 

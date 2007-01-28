@@ -3,7 +3,7 @@ package com.mucommander.file.impl.gzip;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.impl.SimpleEntry;
+import com.mucommander.file.SimpleArchiveEntry;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +44,7 @@ public class GzipArchiveFile extends AbstractArchiveFile {
         }
 
         Vector entries = new Vector();
-        entries.add(new SimpleEntry("/"+name, getDate(), -1, false));
+        entries.add(new SimpleArchiveEntry("/"+name, getDate(), -1, false));
         return entries;
     }
 
