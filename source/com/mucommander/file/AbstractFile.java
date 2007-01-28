@@ -53,8 +53,8 @@ public abstract class AbstractFile {
     /** Bit mask for 'read' file permission */
     public final static int READ_MASK = 256;
 
-    /** Pattern matching Windows drive root folders, e.g. A:\ or ZZ:\\ */
-    protected final static Pattern windowsDriveRootPattern = Pattern.compile("^[a-zA-Z]{1,2}[:]{1}[\\\\]{1}$");
+    /** Pattern matching Windows drive root folders, e.g. C:\ */
+    protected final static Pattern windowsDriveRootPattern = Pattern.compile("^[a-zA-Z]{1}[:]{1}[\\\\]{1}$");
 
 
     /**
