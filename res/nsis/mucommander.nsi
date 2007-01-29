@@ -10,6 +10,7 @@ OutFile $MU_OUT
 
 ; Installer icon
 Icon $MU_ICON
+UninstallIcon $MU_ICON
 
 ; Discard NSIS' window when install is complete
 AutoCloseWindow true
@@ -31,9 +32,7 @@ Section "muCommander $MU_VERSION (required)"
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   ; Copy muCommander files
-  File /oname=mucommander.jar $MU_JAR
-  File /oname=mucommander.bat $MU_BAT
-  File /oname=mucommander.ico $MU_ICON
+  File /oname=muCommander.exe $MU_EXE
   File /oname=readme.txt $MU_README
   File /oname=license.txt $MU_LICENSE
   ; Write the installation path into the registry
@@ -45,8 +44,7 @@ Section "muCommander $MU_VERSION (required)"
   
   ; Create Start Menu directory and shortcuts
   CreateDirectory "$SMPROGRAMS\muCommander"
-  CreateShortCut "$SMPROGRAMS\muCommander\muCommander.lnk" '$INSTDIR\mucommander.bat' "" "$INSTDIR\mucommander.ico" 0 SW_SHOWMINIMIZED
-;  CreateShortCut "$SMPROGRAMS\muCommander\muCommander.lnk" '%JAVA_HOME%\bin\javaw.exe' "-jar mucommander.jar" "$INSTDIR\mucommander.ico" 0
+  CreateShortCut "$SMPROGRAMS\muCommander\muCommander.lnk" '$INSTDIR\muCommander.exe' "" "" 0 SW_SHOWMINIMIZED
   CreateShortCut "$SMPROGRAMS\muCommander\muCommander.jar.lnk" '$INSTDIR\mucommander.jar' "" "" 0
   CreateShortCut "$SMPROGRAMS\muCommander\Read Me.lnk" "$INSTDIR\readme.txt" "" "" 0
   CreateShortCut "$SMPROGRAMS\muCommander\License.lnk" "$INSTDIR\license.txt" "" "" 0
@@ -58,12 +56,12 @@ SectionEnd
 
 ; Quick launch shortcut (optional section)
 Section "Quick Launch shortcut"
-  CreateShortCut "$QUICKLAUNCH\muCommander.lnk" '$INSTDIR\mucommander.bat' "" "$INSTDIR\mucommander.ico" 0 SW_SHOWMINIMIZED
+  CreateShortCut "$QUICKLAUNCH\muCommander.lnk" '$INSTDIR\muCommander.exe' "" "" 0 SW_SHOWMINIMIZED
 SectionEnd
 
 ; Desktop shortcut (optional section)
 Section "Desktop shortcut"
-  CreateShortCut "$DESKTOP\muCommander.lnk" '$INSTDIR\mucommander.bat' "" "$INSTDIR\mucommander.ico" 0 SW_SHOWMINIMIZED
+  CreateShortCut "$DESKTOP\muCommander.lnk" '$INSTDIR\muCommander.exe' "" "" 0 SW_SHOWMINIMIZED
 SectionEnd
 
 ; uninstall stuff
@@ -76,9 +74,7 @@ Section "Uninstall"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander"
   DeleteRegKey HKLM SOFTWARE\muCommander
   ; remove files
-  Delete $INSTDIR\mucommander.jar
-  Delete $INSTDIR\mucommander.bat
-  Delete $INSTDIR\mucommander.ico
+  Delete $INSTDIR\muCommander.exe
   Delete $INSTDIR\muCommander.lnk
   Delete $INSTDIR\readme.txt
   Delete $INSTDIR\license.txt
