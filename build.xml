@@ -197,7 +197,7 @@
   <!-- ======================================================= -->
   <!-- Checks whether NSIS is available or not.                -->
   <!-- If it is, sets ${is-nsis-available} to true.            -->
-  <target name="check-nsis">
+  <target name="check-nsis" depends="check-launch4j">
     <condition property="is-nsis-available" value="true">
       <and>
         <available file="${nsis-executable}" type="file"/>
