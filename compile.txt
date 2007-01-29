@@ -21,6 +21,15 @@ of the project to local.xml and edit it:
   that if you wish to try out other versions.
 - ant-lib must point to the Ant jar file. Ant libraries are necessary to compile
   the various custom tasks used by our compile process.
+- store-pass is the password of the keystore file used to generate a signed
+  muCommander JAR file. Odds are you don't know the password and must leave
+  this property empty.
+- nsis-executable is the path to the NSIS compiler, used to generate the muCommander
+  Windows setup. If you don't have a version of NSIS running on your computer,
+  you can leave this property empty.
+- launch4j-dir is the installation path of launch4j, used to generate the muCommander
+  Windows executable file. If you don't have a version of launch4j running on
+  your computer, you can leave this property blank.
 
 
 
