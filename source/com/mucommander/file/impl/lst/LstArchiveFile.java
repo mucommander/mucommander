@@ -64,7 +64,8 @@ public class LstArchiveFile extends AbstractArchiveFile {
 
             while((line=br.readLine())!=null) {
                 try {
-                    st = new StringTokenizer(line);
+//                    st = new StringTokenizer(line);
+                    st = new StringTokenizer(line, "\t");
                     name = st.nextToken().replace('\\', '/');
                     size = Long.parseLong(st.nextToken());
                     date = dateFormat.parse((st.nextToken()+" "+st.nextToken())).getTime();
