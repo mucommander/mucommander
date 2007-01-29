@@ -45,7 +45,6 @@ Section "muCommander $MU_VERSION (required)"
   ; Create Start Menu directory and shortcuts
   CreateDirectory "$SMPROGRAMS\muCommander"
   CreateShortCut "$SMPROGRAMS\muCommander\muCommander.lnk" '$INSTDIR\muCommander.exe' "" "" 0 SW_SHOWMINIMIZED
-  CreateShortCut "$SMPROGRAMS\muCommander\muCommander.jar.lnk" '$INSTDIR\mucommander.jar' "" "" 0
   CreateShortCut "$SMPROGRAMS\muCommander\Read Me.lnk" "$INSTDIR\readme.txt" "" "" 0
   CreateShortCut "$SMPROGRAMS\muCommander\License.lnk" "$INSTDIR\license.txt" "" "" 0
   CreateShortCut "$SMPROGRAMS\muCommander\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "" 0 
