@@ -26,6 +26,7 @@ import java.io.File;
  * Note that keywords are only meaningful for the {@link Command#getTokens(com.mucommander.file.AbstractFile)} method.
  * </p>
  * @author Nicolas Rinaudo
+ * @see    Command
  */
 public class CommandParser {
     // - Keywords --------------------------------------------------------------
@@ -112,7 +113,11 @@ public class CommandParser {
     }
 
     /**
-     * Re
+     * Returns a command build with the specified arguments.
+     * @param  alias   alias of the command to create.
+     * @param  command command line to run when the command is being executed.
+     * @param  type    type of the command (one of {@link Command#NORMAL_COMMAND}, {@link Command#SYSTEM_COMMAND} or {@link Command#INVISIBLE_COMMAND}.
+     * @return         a new command matching the specified description.
      */
     public static Command getCommand(String alias, String command, int type) {
         String[]  tokenBuffer; // Buffer for the tokens that compose command.

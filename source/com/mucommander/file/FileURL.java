@@ -307,7 +307,7 @@ public class FileURL implements Cloneable {
 
     /**
      * Returns the path separator for the given protocol. If the {@link FileProtocols#FILE} protocol is specified,
-     * the underlying local filesystem's separator as returned by {@lnk LocalFile#SEPARATOR} will be returned.
+     * the underlying local filesystem's separator as returned by {@link LocalFile#SEPARATOR} will be returned.
      *
      * <p>By default, if the given protocol is not known (not one of the protocols listed in {@link FileProtocols}),
      * "/" is returned.
