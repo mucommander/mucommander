@@ -10,16 +10,17 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Vector;
 
-/*
-    http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
-
-    todo:
-        * test with more images
-        * rewrite/sanitize InputStream for cooked
-        * add RockRidge, UDF and others extensions
-        * add DiscJuggler & other weirdos file format
-*/
-
+/**
+ *  http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
+ *
+ * todo:
+ *      * test with more images
+ *      * rewrite/sanitize InputStream for cooked
+ *      * add RockRidge, UDF and others extensions
+ *      * add DiscJuggler & other weirdos file format
+ *
+ * @author Xavier Martin 
+ */
 public class IsoArchiveFile extends AbstractArchiveFile {
     private long sector_offset = 0;
     private byte buffer[] = new byte[2048];
