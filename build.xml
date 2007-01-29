@@ -7,8 +7,10 @@
   <!-- Version number of the application.                      -->
   <property name="app.version"         value="0.8 beta3"/>
   <!-- Copyright line of the application.                      -->
-  <property name="app.copyright"       value="2002-2006"/>
+  <property name="app.copyright"       value="2002-2007"/>
   <!-- Targeted version of the JVM.                            -->
+  <!-- Note that this has got to match the following format:   -->
+  <!-- <MAJOR_VERSION>.<MINOR_VERSION>                         -->
   <property name="app.jvm"             value="1.4"/>
 
 
@@ -70,6 +72,11 @@
 
   <!-- Where to store the muCommander version file.            -->
   <property name="version-file"   location="${dist}/version.xml"/>
+  <!-- Where to store the muCommander win32 executable file.   -->
+  <property name="exe.name"       value="muCommander.exe"/>
+  <!-- Folder in which to store the muCommander Win32          -->
+  <!-- executable release.                                     -->
+  <property name="exe.file"       value="${dist}/${exe.name}"/>
   <!-- Where to store the muCommander app Mac OS X release.    -->
   <property name="app.name"       value="muCommander.app"/>
   <!-- Folder in which to store the muCommander app Mac OS X   -->
@@ -111,7 +118,6 @@
   <!-- NSIS values.                                            -->
   <property name="nsis"           location="${res}/nsis"/>
   <property name="nsis-script"    location="${nsis}/mucommander.nsi"/>
-  <property name="nsis-bat"       location="${nsis}/mucommander.bat"/>
   <property name="nsis-icon"      location="${nsis}/mucommander.ico"/>
   <property name="tmp-nsis"       location="${tmp}/nsis"/>
 
@@ -189,6 +195,45 @@
 
   <!-- = Helper targets ====================================== -->
   <!-- ======================================================= -->
+  <!-- Checks whether NSIS is available or not.                -->
+  <!-- If it is, sets ${is-nsis-available} to true.            -->
+  <target name="check-nsis">
+    <condition property="is-nsis-available" value="true">
+      <and>
+        <available file="${nsis-executable}" type="file"/>
+        <isset property="is-launch4j-available"/>
+      </and>
+    </condition>
+  </target>
+
+  <!-- Checks whether launch4j is available or not.            -->
+  <!-- If it is, sets ${is-launch4j-available} to true.        -->
+  <target name="check-launch4j">
+    <condition property="is-launch4j-available" value="true">
+      <and>
+        <available file="${launch4j-dir}" type="dir"/>
+        <!-- If the property is defined but empty, it will     -->
+        <!-- to #{user.dir}. We must make sure this doesn't    -->
+        <!-- happen.                                           -->
+        <not>
+          <equals arg1="${launch4j-dir}" arg2="${user.dir}" trim="true"/>
+        </not>
+      </and>
+    </condition>
+  </target>
+
+  <!-- Checks whether the keystore password is available.      -->
+  <!-- If it is, sets ${is-store-pass-available} to true.      -->
+  <target name="check-store-pass">
+    <condition property="is-store-pass-available" value="true">
+      <and>
+        <isset property="store-pass"/>
+        <not>
+          <equals arg1="${store-pass}" arg2="" trim="true"/>
+        </not>
+      </and>
+    </condition>
+  </target>
 
   <!-- Disables debug instructions in the generated binaries.  -->
   <target name="disable-debug">
@@ -613,11 +658,25 @@
     </app>
   </target>
 
+  <!-- Generates a Win32 executable file for muCommander.      -->
+  <!-- This target will only be executed if launch4j is        -->
+  <!-- found to be available.                                  -->
+  <target name="exe" depends="check-launch4j,obfuscate" if="is-launch4j-available">
+    <echo>Creating Win32 executable in ${exe.file}...</echo>
+    <property name="launch4j.dir" location="${launch4j-dir}" />
+    <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j-dir}/launch4j.jar:${launch4j-dir}/xstream.jar"/>
+    <launch4j>
+      <config outfile="${exe.file}" jarpath="${jar.obf}" icon="${nsis-icon}">
+        <jre minversion="${app.jvm}.0"/>
+      </config>
+    </launch4j>
+  </target>
+
   <!-- Generates a Mac OS X dmg distribution of muCommander.   -->
   <!-- This target currently does nothing. We're hopeful that, -->
   <!-- someday, some good soul will have the courage to embark -->
-  <!-- the selfless endehavour of untangling the Mac OS X .dmg -->
-  <!-- format. Until then however, this will stay empty.       -->
+  <!-- on the selfless endehavour of untangling the Mac OS X   -->
+  <!-- .dmg format. Until then however, this will stay empty.  -->
   <target name="dmg" depends="obfuscate">
   </target>
 
@@ -646,7 +705,7 @@
 
   <!-- Signs the obfuscated jar file.                         -->
   <!-- Output will be stored in ${jar.signed}.                -->
-  <target name="sign" depends="obfuscate">
+  <target name="sign" depends="check-store-pass,obfuscate" if="is-store-pass-available">
     <echo>Signing obfuscated JAR file in ${jar.signed}...</echo>
     <signjar jar="${jar.obf}" signedjar="${jar.signed}" alias="maxence" keystore="${res}/keystore"
              storepass="${store-pass}"/>
@@ -654,15 +713,18 @@
 
   <!-- Generates the muCommander windows installer.           -->
   <!-- Output will be stored in ${dist}/mucommander.exe.      -->
-  <target name="nsis" depends="obfuscate,package-prefix">
+  <!-- This target will only be executed if nsis is found to  -->
+  <!-- be available.                                          -->
+  <target name="nsis" depends="check-nsis,exe,package-prefix" if="is-nsis-available">
     <echo>Generating NSIS installer in ${dist}/${package-prefix}.exe</echo>
 
     <!-- Prepares the NSIS directory.                         -->
     <mkdir dir="${tmp-nsis}"/>
-    <copy file="${nsis-bat}"             tofile="${tmp-nsis}/mucommander.bat"/>
+    <copy file="${exe.file}"             tofile="${tmp-nsis}/muCommander.exe"/>
     <copy file="${nsis-icon}"            tofile="${tmp-nsis}/mucommander.ico"/>
-    <copy file="${jar.obf}"              tofile="${tmp-nsis}/mucommander.jar"/>
 
+    <!-- Makes sure readme.txt and license.txt contain        -->
+    <!-- proper windows linebreaks.                           -->
     <taskdef name="crlf" classname="com.mucommander.ant.util.CRLFTask" classpath="${tools.jar}"/>
     <crlf in="${readme}"  out="${tmp-nsis}/readme.txt"/>
     <crlf in="${license}" out="${tmp-nsis}/license.txt"/>
@@ -671,10 +733,9 @@
     <taskdef name="nsisscript" classname="com.mucommander.ant.nsis.NsisTask" classpath="${tools.jar}"/>
     <nsisscript in="${nsis-script}" out="${tmp-nsis}/mucommander.nsi">
       <var name="MU_VERSION" value="${app.version}"/>
-      <var name="MU_JAR"     value="mucommander.jar"/>
-      <var name="MU_BAT"     value="mucommander.bat"/>
+      <var name="MU_EXE"     value="muCommander.exe"/>
       <var name="MU_ICON"    value="mucommander.ico"/>
-      <var name="MU_OUT"     value="mucommander.exe"/>
+      <var name="MU_OUT"     value="mucommander-setup.exe"/>
       <var name="MU_README"  value="readme.txt"/>
       <var name="MU_LICENSE" value="license.txt"/>
     </nsisscript>
@@ -685,6 +746,6 @@
     </exec>
 
     <!-- Copies the installer in the dist folder.             -->
-    <copy file="${tmp-nsis}/mucommander.exe" tofile="${dist}/${package-prefix}.exe"/>
+    <copy file="${tmp-nsis}/mucommander-setup.exe" tofile="${dist}/${package-prefix}-setup.exe"/>
   </target>
 </project>
