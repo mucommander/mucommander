@@ -43,102 +43,155 @@
 
 
 
-  <!-- = Project architecture ================================ -->
+  <!-- = Misc values ========================================= -->
   <!-- ======================================================= -->
-  <!-- The following properties define the directory structure -->
-  <!-- of the muCommander project.                             -->
-
-  <!-- Directory containing the project's sources.             -->
-  <property name="source"           location="source"/>
   <!-- Directory containing all of the project's external      -->
   <!-- libraries.                                              -->
-  <!-- Any jar file contained in that directory will be added  -->
-  <!-- to the classpath at compile time, and bundled in the    -->
-  <!-- application's final JAR file.                           -->
-  <property name="lib"              location="lib"/>
-  <!-- Where to generate muCommander documentation.            -->
-  <property name="docs"             location="docs"/>
-  <!-- Directory containing the application's resources.       -->
-  <property name="res"	            location="res"/>
-  <!-- Directory containing the application's images.          -->
-  <property name="images"           location="${res}/images"/>
+  <property name="lib"                 location="lib"/>
   <!-- Where to store the application's release files.         -->
-  <property name="dist"             location="dist"/>
+  <property name="dist"                location="dist"/>
   <!-- Where to store temporary files.                         -->
-  <property name="tmp"              location="tmp"/>
-  <property name="readme"           location="readme.txt"/>
-  <property name="license"          location="license.txt"/>
-  <property name="dictionary"       location="${res}/dictionary.txt"/>
-
+  <property name="tmp"                 location="tmp"/>
   <!-- Where to store the muCommander version file.            -->
-  <property name="version-file"   location="${dist}/version.xml"/>
-  <!-- Where to store the muCommander win32 executable file.   -->
-  <property name="exe.name"       value="muCommander.exe"/>
-  <!-- Folder in which to store the muCommander Win32          -->
-  <!-- executable release.                                     -->
-  <property name="exe.file"       value="${dist}/${exe.name}"/>
-  <!-- Where to store the muCommander app Mac OS X release.    -->
-  <property name="app.name"       value="muCommander.app"/>
-  <!-- Folder in which to store the muCommander app Mac OS X   -->
-  <!-- release.                                                -->
-  <property name="app.folder"     location="${dist}/${app.name}"/>
-  <!-- Path to the file in which to store the unobfuscated     -->
-  <!-- application JAR file.                                   -->
-  <property name="jar.normal"      location="${dist}/mucommander_unobf.jar"/>
-  <!-- Path to the file in which to store the obfuscated       -->
-  <!-- application JAR file.                                   -->
-  <property name="jar.obf"        location="${dist}/mucommander.jar"/>
-  <!-- Path to the file in which to store the obfuscated,      -->
-  <!-- signed application JAR file.                            -->
-  <property name="jar.signed"     location="${dist}/mucommander_signed.jar"/>
-  <!-- Path to the file in which to store the application's    -->
-  <!-- API documentation as a zip file.                        -->
-  <property name="api.zip"        location="${dist}/mucommander-api.zip"/>
+  <property name="version-file"        location="${dist}/version.xml"/>
+  <!-- Application's main class.                               -->
+  <property name="main-class"          value="com.mucommander.Launcher"/>
 
-  <!-- Directory containing the tools used to compile the      -->
-  <!-- project.                                                -->
-  <property name="tools"          location="tools"/>
+
+  <!-- = Bytecode values ===================================== -->
+  <!-- ======================================================= -->
+  <!-- Where to store the application's binaries.              -->
+  <property name="classes.normal"      location="${tmp}/classes"/>
+  <!-- Where to store the obfuscated application's binaries.   -->
+  <property name="classes.obf"         location="${tmp}/classes-obf"/>
   <!-- Where to store the tools binaries.                      -->
-  <property name="tools.classes"  location="${tmp}/tools"/>
-  <!-- Where to store the JAR file containing the muCommander  -->
-  <!-- Ant tasks.                                              -->
-  <property name="tools.jar"      location="${dist}/mutasks.jar"/>
+  <property name="classes.tools"       location="${tmp}/tools"/>
+
+
+
+  <!-- = Source values ======================================= -->
+  <!-- ======================================================= -->
+  <!-- Directory containing the project's sources.             -->
+  <property name="source.src"          location="source"/>
+  <!-- Where to write temporary Java sources.                  -->
+  <property name="source.tmp"          location="${tmp}/source"/>
+
+
+
+  <!-- = Resources values ==================================== -->
+  <!-- ======================================================= -->
+  <!-- Directory containing the application's resources.       -->
+  <property name="res"	               location="res"/>
+  <!-- Path to muCommander's readme.txt file.                  -->
+  <property name="res.readme"          location="readme.txt"/>
+  <!-- Path to muCommander's license.txt file.                 -->
+  <property name="res.license"         location="license.txt"/>
+  <!-- Path to muCommander's dictionnary.                      -->
+  <property name="res.dictionary"      location="${res}/dictionary.txt"/>
+  <!-- Directory containing the application's images.          -->
+  <property name="res.images"          location="${res}/images"/>
+
+
+
+  <!-- = Documentation values ================================ -->
+  <!-- ======================================================= -->
+  <!-- Where to generate muCommander documentation.            -->
+  <property name="doc"                 location="docs"/>
+  <!-- Where to generate the muCommander API javadoc.          -->
+  <property name="doc.api"             location="${doc}/api"/>
+  <!-- Where to generate the muCommander tools API javadoc.    -->
+  <property name="doc.tools"           location="${doc}/tools"/>
   <!-- Path to the file in which to store the tools'           -->
   <!-- API documentation as a zip file.                        -->
-  <property name="tools.doc-zip"  location="${dist}/mucommander-tools-api.zip"/>
-  <!-- Where to generate the muCommander tools API javadoc.    -->
-  <property name="tools.doc"      location="${docs}/tools"/>
+  <property name="doc.tools-zip"       location="${dist}/mucommander-tools-api.zip"/>
+  <!-- Path to the file in which to store the application's    -->
+  <!-- API documentation as a zip file.                        -->
+  <property name="doc.api-zip"         location="${dist}/mucommander-api.zip"/>
 
 
-  <!-- Where to write temporary Java sources.                  -->
-  <property name="tmp-source"     location="${tmp}/source"/>
-  <!-- Where to store the application's binaries.              -->
-  <property name="classes"        location="${tmp}/classes"/>
 
-  <!-- NSIS values.                                            -->
-  <property name="nsis"           location="${res}/nsis"/>
-  <property name="nsis-script"    location="${nsis}/mucommander.nsi"/>
-  <property name="nsis-icon"      location="${nsis}/mucommander.ico"/>
-  <property name="tmp-nsis"       location="${tmp}/nsis"/>
+  <!-- = Tools values ======================================== -->
+  <!-- ======================================================= -->
+  <!-- Directory containing the tools used to compile the      -->
+  <!-- project.                                                -->
+  <property name="tools"               location="tools"/>
+  <!-- Where to store the JAR file containing the muCommander  -->
+  <!-- Ant tasks.                                              -->
+  <property name="tools.jar"           location="${dist}/mutasks.jar"/>
 
+
+
+  <!-- = Portable version values ============================= -->
+  <!-- ======================================================= -->
   <!-- Portable release scripts.                               -->
-  <property name="portable.dir"   location="${res}/portable"/>
-  <property name="portable.sh"    location="${portable.dir}/mucommander.sh"/>
-  <property name="portable.bat"   location="${portable.dir}/mucommander.bat"/>
+  <property name="portable.dir"        location="${res}/portable"/>
+  <!-- POSIX portable muCommander startup script.              -->
+  <property name="portable.sh"         location="${portable.dir}/mucommander.sh"/>
+  <!-- Win32 portable muCommander startup script.              -->
+  <property name="portable.bat"        location="${portable.dir}/mucommander.bat"/>
 
-  <!-- Where to generate the muCommander API javadoc.          -->
-  <property name="api-docs"       location="${docs}/api"/>
 
 
+  <!-- = Theme values ======================================== -->
+  <!-- ======================================================= -->
   <!-- Name of the theme description file.                     -->
-  <property name="themes.desc"    value="/themes.xml"/>
+  <property name="themes.desc"         value="/themes.xml"/>
   <!-- Where to read the themes from.                          -->
-  <property name="themes.in"      location="${res}/themes"/>
-  <!-- Where in ${classes} to copy the different themes.       -->
-  <property name="themes.out"     value="/themes"/>
+  <property name="themes.in"           location="${res}/themes"/>
+  <!-- Where in ${classes.normal} to copy the different themes.       -->
+  <property name="themes.out"          value="/themes"/>
 
-  <!-- Application's main class.                               -->
-  <property name="main-class"     value="com.mucommander.Launcher"/>
+
+
+  <!-- = Win32 executable values ============================= -->
+  <!-- ======================================================= -->
+  <!-- Where to store the muCommander win32 executable file.   -->
+  <property name="exe.name"            value="muCommander.exe"/>
+  <!-- Folder in which to store the muCommander Win32          -->
+  <!-- executable release.                                     -->
+  <property name="exe.file"            value="${dist}/${exe.name}"/>
+
+
+
+  <!-- = MAC OS X app values ================================= -->
+  <!-- ======================================================= -->
+  <!-- Where to store the muCommander app Mac OS X release.    -->
+  <property name="app.name"            value="muCommander.app"/>
+  <!-- Folder in which to store the muCommander app Mac OS X   -->
+  <!-- release.                                                -->
+  <property name="app.folder"          location="${dist}/${app.name}"/>
+
+
+
+  <!-- = NSIS values ========================================= -->
+  <!-- ======================================================= -->
+  <!-- Directory containing the various NSIS scripts and files -->
+  <property name="nsis.dir"            location="${res}/nsis"/>
+  <!-- Path to the NSIS script template.                       -->
+  <property name="nsis.script"         location="${nsis.dir}/mucommander.nsi"/>
+  <!-- Path to the Win32 icons.                                -->
+  <property name="nsis.icon"           location="${nsis.dir}/mucommander.ico"/>
+  <!-- Directory in which NSIS will store its temporary files. -->
+  <property name="nsis.tmp"            location="${tmp}/nsis"/>
+
+
+
+  <!-- = Different JAR files ================================= -->
+  <!-- ======================================================= -->
+  <!-- Path to the file in which to store the unobfuscated     -->
+  <!-- application JAR file.                                   -->
+  <property name="jar.normal"          location="${dist}/mucommander_unobf.jar"/>
+  <!-- Path to the file in which to store the obfuscated       -->
+  <!-- application JAR file.                                   -->
+  <property name="jar.obf"             location="${dist}/mucommander_obf.jar"/>
+  <!-- Path toe the file inw hich to store the compressed      -->
+  <!-- application JAR file.                                   -->
+  <property name="jar.cmp"             location="${dist}/mucommander.jar"/>
+  <!-- Path to the file in which to store the obfuscated,      -->
+  <!-- signed application JAR file.                            -->
+  <property name="jar.signed"          location="${dist}/mucommander_signed.jar"/>
+
+
 
   <!-- Imports the system dependant definitions.               -->
   <import file="local.xml"/>
@@ -150,24 +203,24 @@
   <!-- Tasks used for the maintenance of the project.          -->
 
   <!-- Copies the project's resources.                         -->
-  <!-- All resources will be copied in ${classes}.             -->
+  <!-- All resources will be copied in ${classes.normal}.      -->
   <target name="resources" depends="tools-jar">
     <echo>Copying resources...</echo>
-    <copy todir="${classes}">
-      <fileset dir="${images}">
+    <copy todir="${classes.normal}">
+      <fileset dir="${res.images}">
         <include name="**/*"/>
       </fileset>
     </copy>
 
-    <copy  file="${dictionary}"                   tofile="${classes}/dictionary.txt"/>
-    <copy  file="${res}/mime.types"               todir="${classes}"/>
-    <copy  file="${res}/toolbar.xml"              todir="${classes}"/>
-    <copy  file="${res}/command_bar.xml"          todir="${classes}"/>
-    <copy  file="${res}/action_keymap.xml"        todir="${classes}"/>
+    <copy  file="${res.dictionary}"        tofile="${classes.normal}/dictionary.txt"/>
+    <copy  file="${res}/mime.types"        todir="${classes.normal}"/>
+    <copy  file="${res}/toolbar.xml"       todir="${classes.normal}"/>
+    <copy  file="${res}/command_bar.xml"   todir="${classes.normal}"/>
+    <copy  file="${res}/action_keymap.xml" todir="${classes.normal}"/>
 
     <echo>Generating themes...</echo>
     <taskdef name="resources" classname="com.mucommander.ant.res.ResourceTask" classpath="${tools.jar}"/>
-    <resources outfile="${classes}/${themes.desc}" outdir="${classes}">
+    <resources outfile="${classes.normal}/${themes.desc}" outdir="${classes.normal}">
       <file out="${themes.out}/ClassicCommander.xml" in="${themes.in}/ClassicCommander.xml"/>
       <file out="${themes.out}/Native.xml"           in="${themes.in}/Native.xml"/>
       <file out="${themes.out}/RetroCommander.xml"   in="${themes.in}/RetroCommander.xml"/>
@@ -178,13 +231,13 @@
   <!-- re-initialising the whole project.                      -->
   <target name="clean">
     <echo>Deleting temporary files...</echo>
-    <delete dir="${tmp-source}"/>
-    <delete dir="${classes}"/>
-    <delete dir="${tools.classes}"/>
+    <delete dir="${source.tmp}"/>
+    <delete dir="${classes.normal}"/>
+    <delete dir="${classes.tools}"/>
     <delete dir="${tmp}"/>
     <delete dir="${dist}"/>
-    <delete dir="${api-docs}"/>
-    <delete dir="${docs}"/>
+    <delete dir="${doc.api}"/>
+    <delete dir="${doc}"/>
     <echo>Deleting emacs backup files...</echo>
     <delete includeEmptyDirs="true">
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
@@ -195,12 +248,20 @@
 
   <!-- = Helper targets ====================================== -->
   <!-- ======================================================= -->
+  <!-- Checks whether 7za is available or not.                 -->
+  <!-- If it is, sets ${is-7za-available} to true.             -->
+  <target name="check-7za">
+    <condition property="is-7za-available" value="true">
+      <available file="${7za.executable}" type="file"/>
+    </condition>
+  </target>
+
   <!-- Checks whether NSIS is available or not.                -->
   <!-- If it is, sets ${is-nsis-available} to true.            -->
   <target name="check-nsis" depends="check-launch4j">
     <condition property="is-nsis-available" value="true">
       <and>
-        <available file="${nsis-executable}" type="file"/>
+        <available file="${nsis.executable}" type="file"/>
         <isset property="is-launch4j-available"/>
       </and>
     </condition>
@@ -211,12 +272,12 @@
   <target name="check-launch4j">
     <condition property="is-launch4j-available" value="true">
       <and>
-        <available file="${launch4j-dir}" type="dir"/>
+        <available file="${launch4j.dir}" type="dir"/>
         <!-- If the property is defined but empty, it will     -->
         <!-- to #{user.dir}. We must make sure this doesn't    -->
         <!-- happen.                                           -->
         <not>
-          <equals arg1="${launch4j-dir}" arg2="${user.dir}" trim="true"/>
+          <equals arg1="${launch4j.dir}" arg2="${user.dir}" trim="true"/>
         </not>
       </and>
     </condition>
@@ -227,9 +288,9 @@
   <target name="check-store-pass">
     <condition property="is-store-pass-available" value="true">
       <and>
-        <isset property="store-pass"/>
+        <isset property="store.pass"/>
         <not>
-          <equals arg1="${store-pass}" arg2="" trim="true"/>
+          <equals arg1="${store.pass}" arg2="" trim="true"/>
         </not>
       </and>
     </condition>
@@ -290,10 +351,10 @@
   </target>
 
   <!-- Includes the application's libraries with its binaries. -->
-  <!-- All libraries will be unpacked in ${classes}.           -->
+  <!-- All libraries will be unpacked in ${classes.normal}.    -->
   <target name="includelibs" depends="check-libs" unless="libs.up-to-date">
-    <echo>Unpacking libraries in ${classes}...</echo>
-    <unjar dest="${classes}">
+    <echo>Unpacking libraries in ${classes.normal}...</echo>
+    <unjar dest="${classes.normal}">
       <fileset dir="${lib}">
         <include name="**/*.jar"/>
         <!-- Exclude API that are used only at compile time.   -->
@@ -304,17 +365,17 @@
 
     <!-- Makes sure that muCommander's JAR file does not        -->
     <!-- inherit license and copyright from libraries.          -->
-    <delete dir="${classes}/META-INF"/>
+    <delete dir="${classes.normal}/META-INF"/>
 
     <!-- Makes sure that library documentation doesn't get      -->
     <!-- included in the final jar.                             -->
     <delete>
-      <fileset dir="${classes}" includes="**/*.html"/>
-      <fileset dir="${classes}" includes="**/*.css"/>
+      <fileset dir="${classes.normal}" includes="**/*.html"/>
+      <fileset dir="${classes.normal}" includes="**/*.css"/>
     </delete>
 
     <!-- Deletes unused JCifs resouces.                         -->
-    <delete file="${classes}/jcifs/util/mime.map"/>
+    <delete file="${classes.normal}/jcifs/util/mime.map"/>
   </target> 
 
 
@@ -325,16 +386,16 @@
   <!-- muCommander JAR files.                                   -->
 
   <!-- Creates the runtime constant class.                      -->
-  <!-- Output will be stored in ${tmp-source}.                  -->
+  <!-- Output will be stored in ${source.tmp}.                  -->
   <target name="constants" depends="tools-jar">
-    <echo>Creating ${tmp-source}/com.mucommander.RuntimeConstants...</echo>
-    <mkdir dir="${tmp-source}"/>
+    <echo>Creating ${source.tmp}/com.mucommander.RuntimeConstants...</echo>
+    <mkdir dir="${source.tmp}"/>
     <property name="is-debug"    value="true"/>
     <property name="version-url" value="${url.app-version}"/>
     <taskdef name="date" classname="com.mucommander.ant.util.DateTask" classpath="${tools.jar}"/>
     <date name="release-date"/>
     <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tools.jar}"/>
-    <javaw name="${tmp-source}/com.mucommander.RuntimeConstants">
+    <javaw name="${source.tmp}/com.mucommander.RuntimeConstants">
       <field name="DEBUG"               value="${is-debug}"    type="boolean"/>
       <field name="VERSION"             value="${app.version}"/>
       <field name="COPYRIGHT"           value="${app.copyright}"/>
@@ -351,15 +412,15 @@
     </javaw>
   </target>
 
-  <!-- Compiles all java files found in ${source} and stores   -->
-  <!-- the resulting bytecode in {$classes}.                   -->
+  <!-- Compiles all java files found in ${source.src} and stores   -->
+  <!-- the resulting bytecode in {$classes.normal}.                   -->
   <target name="compile" depends="constants">
-    <echo>Compiling sources into ${classes}...</echo>
-    <mkdir dir="${classes}"/>
-    <javac destdir="${classes}" debug="on" deprecation="on"
+    <echo>Compiling sources into ${classes.normal}...</echo>
+    <mkdir dir="${classes.normal}"/>
+    <javac destdir="${classes.normal}" debug="on" deprecation="on"
            encoding="utf-8" source="${app.jvm}" target="${app.jvm}">
-      <src path="${source}"/>
-      <src path="${tmp-source}"/>
+      <src path="${source.src}"/>
+      <src path="${source.tmp}"/>
       <!-- Includes the application's libraries in the classpath. -->
       <classpath>
          <fileset dir="${lib}">
@@ -374,7 +435,7 @@
   <target name="jar" depends="compile,includelibs,resources">
     <echo>Creating unobfuscated JAR file in ${jar.normal}...</echo>
     <mkdir dir="${dist}"/>
-    <jar jarfile="${jar.normal}" basedir="${classes}">
+    <jar jarfile="${jar.normal}" basedir="${classes.normal}">
       <manifest>
         <attribute name="Main-Class" value="${main-class}"/>
       </manifest>
@@ -386,21 +447,15 @@
   <target name="obfuscate" depends="disable-debug,clean,jar">
     <echo>Creating obfuscated JAR file in ${jar.obf}...</echo>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
-    <proguard overloadaggressively="on" usemixedcaseclassnames="off" ignorewarnings="on" printseeds="on" optimize="true" shrink="true" obfuscate="true"
-              printmapping="${tmp}/obf-mapping.txt" printusage="${tmp}/obf-usage.txt">
+    <proguard overloadaggressively="true" usemixedcaseclassnames="false" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
+              printmapping="${tmp}/obfuscate.map" printusage="${tmp}/obf-usage.txt" printseeds="${tmp}/obf-seeds.txt"
+              allowaccessmodification="true" defaultpackage="">
       <injar name="${jar.normal}"/> 
       <outjar name="${jar.obf}"/>
-      <libraryjar name="${java-lib}"/>
-      <libraryjar name="${ant-lib}"/>
+      <libraryjar name="${java.lib}"/>
+      <libraryjar name="${ant.lib}"/>
       <libraryjar name="${lib}/osx-eawt-stubs.jar"/>
       <libraryjar name="${lib}/servlet-api.jar"/>
-      <!-- Mac OS X specifics -->
-      <keep name="com.mucommander.ui.macosx.EAWTHandler">
-        <method access="public"/>
-      </keep>
-      <keep name="com.mucommander.ui.macosx.MRJHandler">
-        <method access="public"/>
-      </keep>
       <!-- Viewer API uses reflection -->
       <keep name="com.mucommander.file.AbstractFile"/>
       <keepclasseswithmembers extends="com.mucommander.ui.viewer.FileViewer">
@@ -437,6 +492,30 @@
     </proguard>
   </target>
 
+  <target name="copyobf" unless="is-7za-available">
+    <echo>7za unavailable, copyting obfuscate JAR to ${jar.cmp}...</echo>
+    <copy file="${jar.obf}" tofile="${jar.cmp}"/>
+  </target>
+
+  <target name="compressobf" if="is-7za-available">
+    <echo>Generating compressed JAR file to ${jar.cmp}...</echo>
+    <unjar src="${jar.obf}" dest="${classes.obf}"/>
+    <exec executable="${7za.executable}" dir="${classes.obf}">
+      <arg value="a"/>
+      <arg value="-tzip"/>
+      <arg value="-mm=Deflate"/>
+      <arg value="-mx9"/>
+      <arg value="-mfb=258"/>
+      <arg value="-mpass=15"/>
+      <arg value="${jar.cmp}"/>
+      <arg value="*"/>
+    </exec>
+  </target>
+
+  <!-- Generates the final appliation JAR depending on the     -->
+  <!-- availability of 7za.                                    -->
+  <target name="compress" depends="obfuscate,check-7za,copyobf,compressobf"/>
+
 
 
   <!-- = Test targets ======================================== -->
@@ -446,7 +525,7 @@
   <target name="stresstest" depends="compile,resources">
     <java classname="com.mucommander.StressTester" fork="true">
       <classpath>
-        <pathelement location="${classes}"/>
+        <pathelement location="${classes.normal}"/>
          <fileset dir="lib">
           <include name="**/*.jar"/>
          </fileset>
@@ -458,7 +537,7 @@
   <target name="testicons" depends="compile,resources">
     <java classname="com.mucommander.ui.icon.FileIcons" fork="true">
       <classpath>
-        <pathelement location="${classes}"/>
+        <pathelement location="${classes.normal}"/>
          <fileset dir="${lib}">
           <include name="**/*.jar"/>
          </fileset>
@@ -474,22 +553,22 @@
   <!-- Output is stored in ${tools.up-to-date}.               -->
   <target name="check-tools" unless="tools.up-to-date">
     <uptodate property="tools.up-to-date" targetfile="${tools.jar}">
-      <srcfiles dir="${source}/com/mucommander/ant" includes="**/*.java"/>
+      <srcfiles dir="${source.src}/com/mucommander/ant" includes="**/*.java"/>
     </uptodate>
   </target>
 
   <!-- Compiles the tools soure code.                         -->
-  <!-- Output will be stored in ${tools.classes}.             -->
+  <!-- Output will be stored in ${classes.tools}.             -->
   <!-- This task will only be executed if the tools JAR file  -->
   <!-- is not up too date.                                    -->
   <target name="tools-compile" depends="check-tools" unless="tools.up-to-date">
-    <echo>Compiling tools in ${tools.classes}...</echo>
-    <mkdir dir="${tools.classes}"/>
-    <javac destdir="${tools.classes}" debug="on" deprecation="on"
+    <echo>Compiling tools in ${classes.tools}...</echo>
+    <mkdir dir="${classes.tools}"/>
+    <javac destdir="${classes.tools}" debug="on" deprecation="on"
            encoding="utf-8" source="1.4" target="1.4">
-      <src path="${source}/com/mucommander/ant"/>
-      <src path="${source}/com/mucommander/xml"/>
-      <src path="${source}/com/mucommander/res"/>
+      <src path="${source.src}/com/mucommander/ant"/>
+      <src path="${source.src}/com/mucommander/xml"/>
+      <src path="${source.src}/com/mucommander/res"/>
     </javac>
   </target>
 
@@ -498,8 +577,8 @@
   <target name="tools-jar" depends="tools-compile" unless="tools.up-to-date">
     <mkdir dir="${dist}"/>
     <echo>Creating tools JAR file in ${tools.jar}...</echo>
-    <copy file="${res}/JavaApplicationStub" todir="${tools.classes}"/>
-    <jar destfile="${tools.jar}" basedir="${tools.classes}"/>
+    <copy file="${res}/JavaApplicationStub" todir="${classes.tools}"/>
+    <jar destfile="${tools.jar}" basedir="${classes.tools}"/>
   </target>
 
 
@@ -518,7 +597,7 @@
   <target name="run" depends="resources">
     <java classname="${main-class}" fork="true">
       <classpath>
-        <pathelement location="${classes}"/>
+        <pathelement location="${classes.normal}"/>
         <fileset dir="${lib}">
           <include name="**/*.jar"/>
         </fileset>
@@ -536,33 +615,33 @@
   <!-- document anything else we can think of.                 -->
 
   <!-- Generates muCommander's API javadoc.                    -->
-  <!-- Output is stored in ${api-docs}.                        -->
+  <!-- Output is stored in ${doc.api}.                         -->
   <target name="api-doc" depends="constants">
-    <echo>Generating API javadoc in ${api-docs}...</echo>
-    <mkdir dir="${api-docs}"/>
-    <javadoc destdir="${api-docs}" author="true" windowtitle="muCommander API" encoding="UTF-8" access="package">
+    <echo>Generating API javadoc in ${doc.api}...</echo>
+    <mkdir dir="${doc.api}"/>
+    <javadoc destdir="${doc.api}" author="true" windowtitle="muCommander API" encoding="UTF-8" access="package">
       <classpath>
          <fileset dir="${lib}">
           <include name="**/*.jar"/>
          </fileset>
       </classpath>
-      <packageset dir="${source}">
+      <packageset dir="${source.src}">
         <include name="com/mucommander/**"/>
         <exclude name="com/mucommander/ant/**"/>
       </packageset>
-      <packageset dir="${tmp-source}">
+      <packageset dir="${source.tmp}">
         <include name="com/mucommander/**"/>
       </packageset>
     </javadoc>
   </target>
 
   <!-- Generates muCommander's tools API javadoc.              -->
-  <!-- Output is stored in ${tools.doc}.                       -->
+  <!-- Output is stored in ${doc.tools}.                       -->
   <target name="tools-doc">
-    <echo>Generating tools API javadoc in ${tools.doc}...</echo>
-    <mkdir dir="${tools.doc}"/>
-    <javadoc destdir="${tools.doc}" author="true" windowtitle="muTools API" encoding="UTF-8">
-      <packageset dir="${source}">
+    <echo>Generating tools API javadoc in ${doc.tools}...</echo>
+    <mkdir dir="${doc.tools}"/>
+    <javadoc destdir="${doc.tools}" author="true" windowtitle="muTools API" encoding="UTF-8">
+      <packageset dir="${source.src}">
         <include name="com/mucommander/ant/**"/>
       </packageset>
     </javadoc>
@@ -584,30 +663,30 @@
   </target>
 
   <!-- Generates a zip file with muCommander's API docs.       -->
-  <!-- The output will be stored in ${api.zip}.                -->
+  <!-- The output will be stored in ${doc.api-zip}.                -->
   <target name="docs-zip" depends="api-doc,tools-doc,archive-prefix">
-    <echo>Packaging API documentation in ${api.zip}...</echo>
+    <echo>Packaging API documentation in ${doc.api-zip}...</echo>
     <mkdir dir="${dist}"/>
-    <zip destfile="${api.zip}">
-      <zipfileset dir="${api-docs}" prefix="${archive-prefix}"/>
+    <zip destfile="${doc.api-zip}">
+      <zipfileset dir="${doc.api}" prefix="${archive-prefix}"/>
     </zip>
 
-    <echo>Packaging tools API documentation in ${tools.doc-zip}...</echo>
-    <zip destfile="${tools.doc-zip}">
-      <zipfileset dir="${tools.doc}" prefix="${archive-prefix}"/>
+    <echo>Packaging tools API documentation in ${doc.tools-zip}...</echo>
+    <zip destfile="${doc.tools-zip}">
+      <zipfileset dir="${doc.tools}" prefix="${archive-prefix}"/>
     </zip>
   </target>
 
   <!-- Generates a UNIX tar.gz distribution of muCommander.    -->
   <!-- Output will be stored in ${dist-tgz}.                   -->
-  <target name="tgz" depends="obfuscate,archive-prefix,package-prefix">
+  <target name="tgz" depends="compress,archive-prefix,package-prefix">
     <echo>Packaging Unix distribution as ${dist}/${package-prefix}.tar.gz...</echo>
 
     <!-- Generates the TGZ file, keeping execution flags.      -->
     <tar destfile="${dist}/${package-prefix}.tar.gz" compression="gzip">
       <tarfileset file="${res}/mucommander.sh" prefix="${archive-prefix}" mode="755"/>
-      <tarfileset file="${license}"            prefix="${archive-prefix}"/>
-      <tarfileset file="${readme}"             prefix="${archive-prefix}"/>
+      <tarfileset file="${res.license}"            prefix="${archive-prefix}"/>
+      <tarfileset file="${res.readme}"             prefix="${archive-prefix}"/>
       <tarfileset file="${jar.obf}"            prefix="${archive-prefix}"/>
     </tar>
   </target>
@@ -626,14 +705,14 @@
       <tarfileset dir="${app.folder}" prefix="${archive-prefix}/${app.name}" mode="755">
         <include name="**/JavaApplicationStub"/>
       </tarfileset>
-      <tarfileset file="${license}" prefix="${archive-prefix}"/>
-      <tarfileset file="${readme}"  prefix="${archive-prefix}"/>
+      <tarfileset file="${res.license}" prefix="${archive-prefix}"/>
+      <tarfileset file="${res.readme}"  prefix="${archive-prefix}"/>
     </tar>
   </target>
 
    <!-- Generates a Mac OS X .app distribution of muCommander. -->
    <!-- Output will be stored in ${app.folder}.                -->
-  <target name="app" depends="obfuscate,tools-jar">
+  <target name="app" depends="compress,tools-jar">
     <echo>Creating Mac OS X application in ${app.folder}...</echo>
     <taskdef name="app" classname="com.mucommander.ant.macosx.AppTask" classpath="${tools.jar}"/>
     <app jar="${jar.obf}" dest="${app.folder}" type="APPL" signature="MUCO" icon="${res}/icons/icon.icns"
@@ -661,12 +740,11 @@
   <!-- Generates a Win32 executable file for muCommander.      -->
   <!-- This target will only be executed if launch4j is        -->
   <!-- found to be available.                                  -->
-  <target name="exe" depends="check-launch4j,obfuscate" if="is-launch4j-available">
+  <target name="exe" depends="check-launch4j,compress" if="is-launch4j-available">
     <echo>Creating Win32 executable in ${exe.file}...</echo>
-    <property name="launch4j.dir" location="${launch4j-dir}" />
-    <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j-dir}/launch4j.jar:${launch4j-dir}/xstream.jar"/>
+    <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/xstream.jar"/>
     <launch4j>
-      <config outfile="${exe.file}" jarpath="${jar.obf}" icon="${nsis-icon}">
+      <config outfile="${exe.file}" jarpath="${jar.obf}" icon="${nsis.icon}">
         <jre minversion="${app.jvm}.0"/>
       </config>
     </launch4j>
@@ -677,20 +755,20 @@
   <!-- someday, some good soul will have the courage to embark -->
   <!-- on the selfless endehavour of untangling the Mac OS X   -->
   <!-- .dmg format. Until then however, this will stay empty.  -->
-  <target name="dmg" depends="obfuscate">
+  <target name="dmg" depends="compress">
   </target>
 
   <!-- Generates a 'portable' distribution version of          -->
   <!-- muCommander.                                            -->
-  <target name="portable" depends="obfuscate,archive-prefix,package-prefix">
+  <target name="portable" depends="compress,archive-prefix,package-prefix">
     <echo>Packaging portable distribution as ${dist}/${package-prefix}-portable.tar.gz...</echo>
 
     <!-- Generates the TGZ file, keeping execution flags.      -->
     <tar destfile="${dist}/${package-prefix}-portable.tar.gz" compression="gzip">
       <tarfileset file="${portable.sh}"  prefix="${archive-prefix}" mode="755"/>
       <tarfileset file="${portable.bat}" prefix="${archive-prefix}"/>
-      <tarfileset file="${license}"      prefix="${archive-prefix}"/>
-      <tarfileset file="${readme}"       prefix="${archive-prefix}"/>
+      <tarfileset file="${res.license}"      prefix="${archive-prefix}"/>
+      <tarfileset file="${res.readme}"       prefix="${archive-prefix}"/>
       <tarfileset file="${jar.obf}"      prefix="${archive-prefix}"/>
     </tar>
   </target>
@@ -705,10 +783,10 @@
 
   <!-- Signs the obfuscated jar file.                         -->
   <!-- Output will be stored in ${jar.signed}.                -->
-  <target name="sign" depends="check-store-pass,obfuscate" if="is-store-pass-available">
+  <target name="sign" depends="check-store-pass,compress" if="is-store-pass-available">
     <echo>Signing obfuscated JAR file in ${jar.signed}...</echo>
     <signjar jar="${jar.obf}" signedjar="${jar.signed}" alias="maxence" keystore="${res}/keystore"
-             storepass="${store-pass}"/>
+             storepass="${store.pass}"/>
   </target>
 
   <!-- Generates the muCommander windows installer.           -->
@@ -719,19 +797,19 @@
     <echo>Generating NSIS installer in ${dist}/${package-prefix}.exe</echo>
 
     <!-- Prepares the NSIS directory.                         -->
-    <mkdir dir="${tmp-nsis}"/>
-    <copy file="${exe.file}"             tofile="${tmp-nsis}/muCommander.exe"/>
-    <copy file="${nsis-icon}"            tofile="${tmp-nsis}/mucommander.ico"/>
+    <mkdir dir="${nsis.tmp}"/>
+    <copy file="${exe.file}"             tofile="${nsis.tmp}/muCommander.exe"/>
+    <copy file="${nsis.icon}"            tofile="${nsis.tmp}/mucommander.ico"/>
 
     <!-- Makes sure readme.txt and license.txt contain        -->
     <!-- proper windows linebreaks.                           -->
     <taskdef name="crlf" classname="com.mucommander.ant.util.CRLFTask" classpath="${tools.jar}"/>
-    <crlf in="${readme}"  out="${tmp-nsis}/readme.txt"/>
-    <crlf in="${license}" out="${tmp-nsis}/license.txt"/>
+    <crlf in="${res.readme}"  out="${nsis.tmp}/readme.txt"/>
+    <crlf in="${res.license}" out="${nsis.tmp}/license.txt"/>
 
     <!-- Generates the NSIS script.                           -->
     <taskdef name="nsisscript" classname="com.mucommander.ant.nsis.NsisTask" classpath="${tools.jar}"/>
-    <nsisscript in="${nsis-script}" out="${tmp-nsis}/mucommander.nsi">
+    <nsisscript in="${nsis.script}" out="${nsis.tmp}/mucommander.nsi">
       <var name="MU_VERSION" value="${app.version}"/>
       <var name="MU_EXE"     value="muCommander.exe"/>
       <var name="MU_ICON"    value="mucommander.ico"/>
@@ -741,11 +819,11 @@
     </nsisscript>
 
     <!-- Generates the muCommander windows installer.         -->
-    <exec executable="${nsis-executable}">
-      <arg value="${tmp-nsis}/mucommander.nsi"/>
+    <exec executable="${nsis.executable}">
+      <arg value="${nsis.tmp}/mucommander.nsi"/>
     </exec>
 
     <!-- Copies the installer in the dist folder.             -->
-    <copy file="${tmp-nsis}/mucommander-setup.exe" tofile="${dist}/${package-prefix}-setup.exe"/>
+    <copy file="${nsis.tmp}/mucommander-setup.exe" tofile="${dist}/${package-prefix}-setup.exe"/>
   </target>
 </project>

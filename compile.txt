@@ -10,7 +10,7 @@ In order to do that, you must move the local_template.xml file at the root
 of the project to local.xml and edit it:
 - Even though muCommander runs on Java 1.4 and 1.5, it takes advantage of the Java 1.6 API.
   Consequently, JDK 1.6 is required to compile the source.
-- java-lib must point to your java installation's classes jar file. Under
+- java.lib must point to your java installation's classes jar file. Under
   most versions of the JRE, this is going to be in
   /path/to/jre/lib/rt.jar.
   However, Apple decided to use non-standards paths for reasons of their own,
@@ -19,17 +19,21 @@ of the project to local.xml and edit it:
 - proguard must point to the ProGuard jar file. The one used by muCommander
   comes bundles with the sources in tools/proguard.jar, but you can modify
   that if you wish to try out other versions.
-- ant-lib must point to the Ant jar file. Ant libraries are necessary to compile
+- ant.lib must point to the Ant jar file. Ant libraries are necessary to compile
   the various custom tasks used by our compile process.
 - store-pass is the password of the keystore file used to generate a signed
   muCommander JAR file. Odds are you don't know the password and must leave
   this property empty.
-- nsis-executable is the path to the NSIS compiler, used to generate the muCommander
+- nsis.executable is the path to the NSIS compiler, used to generate the muCommander
   Windows setup. If you don't have a version of NSIS running on your computer,
   you can leave this property empty.
-- launch4j-dir is the installation path of launch4j, used to generate the muCommander
+- launch4j.dir is the installation path of launch4j, used to generate the muCommander
   Windows executable file. If you don't have a version of launch4j running on
   your computer, you can leave this property blank.
+- 7za.executable is the path to the 7za compression tool, used to compress muCommander
+  further than jar can do. If you don't have a version of 7za installed on your computer,
+  you can leave this property blank.
+
 
 
 

@@ -2,7 +2,7 @@
   <!-- = Project configuration =============================== -->
   <!-- ======================================================= -->
   <!-- Path to the Java core libraries.                        -->
-  <property name="java-lib"        location=""/>
+  <property name="java.lib"        location=""/>
 
   <!-- Path to the ProGuard binaries.                          -->
   <!-- Defaults to the one bundled with the project, but can   -->
@@ -10,15 +10,18 @@
   <property name="proguard"        location="${tools}/proguard.jar"/>
 
   <!-- Path to the Ant core libraries (used to compile tools). -->
-  <property name="ant-lib"         location=""/>
+  <property name="ant.lib"         location=""/>
 
   <!-- Password for the JAR keystore. If you're not Maxence,   -->
   <!-- then don't bother with this.                            -->
-  <property name="store-pass"      value=""/>
+  <property name="store.pass"      value=""/>
 
   <!-- Path to the makensis executable.                        -->
-  <property name="nsis-executable" value=""/>
+  <property name="nsis.executable" location=""/>
 
   <!-- Path to the launch4j installation dir.                  -->
-  <property name="launch4j-dir"    value=""/>
+  <property name="launch4j.dir"    location=""/>
+
+  <!-- Path to the 7z executable.                              -->
+  <property name="7za.executable"  location=""/>
 </project>
