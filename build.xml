@@ -451,7 +451,7 @@
   <target name="obfuscate" depends="disable-debug,clean,jar">
     <echo>Creating obfuscated JAR file in ${jar.obf}...</echo>
     <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard}"/>
-    <proguard overloadaggressively="true" usemixedcaseclassnames="false" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
+    <proguard overloadaggressively="true" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
               printmapping="${tmp}/obfuscate.map" printusage="${tmp}/obf-usage.txt" printseeds="${tmp}/obf-seeds.txt"
               allowaccessmodification="true" defaultpackage="">
       <injar name="${jar.normal}"/> 
