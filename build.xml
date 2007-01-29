@@ -302,12 +302,14 @@
     <property name="is-debug" value="false"/>
   </target>
 
+  <!-- Generates the package-prefix for nightly builds.        -->
   <target name="nightly-prefix" if="is-nightly">
     <echo>Generating package name prefix...</echo>
 
     <property name="package-prefix" value="mucommander"/>
   </target>
 
+  <!-- Generates the package-prefix for non-nightly builds.    -->
   <target name="release-prefix" unless="is-nightly">
     <echo>Generating package name prefix...</echo>
 
@@ -315,6 +317,7 @@
     <strreplace from="mucommander-${app.version}" to="package-prefix" what="[ .]" with="_"/>
   </target>
 
+  <!-- Generates the current build's package prefix.           -->
   <target name="package-prefix" depends="nightly-prefix,release-prefix"/>
 
   <!-- Generates the prefix folder for all archives.           -->
@@ -363,30 +366,30 @@
     </fileset>
     </unjar>
 
-    <!-- Makes sure that muCommander's JAR file does not        -->
-    <!-- inherit license and copyright from libraries.          -->
+    <!-- Makes sure that muCommander's JAR file does not       -->
+    <!-- inherit license and copyright from libraries.         -->
     <delete dir="${classes.normal}/META-INF"/>
 
-    <!-- Makes sure that library documentation doesn't get      -->
-    <!-- included in the final jar.                             -->
+    <!-- Makes sure that library documentation doesn't get     -->
+    <!-- included in the final jar.                            -->
     <delete>
       <fileset dir="${classes.normal}" includes="**/*.html"/>
       <fileset dir="${classes.normal}" includes="**/*.css"/>
     </delete>
 
-    <!-- Deletes unused JCifs resouces.                         -->
+    <!-- Deletes unused JCifs resouces.                        -->
     <delete file="${classes.normal}/jcifs/util/mime.map"/>
   </target> 
 
 
 
-  <!-- = Compilation targets ================================== -->
-  <!-- ======================================================== -->
-  <!-- The following targets are used to generate the various   -->
-  <!-- muCommander JAR files.                                   -->
+  <!-- = Compilation targets ================================= -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to generate the various  -->
+  <!-- muCommander JAR files.                                  -->
 
-  <!-- Creates the runtime constant class.                      -->
-  <!-- Output will be stored in ${source.tmp}.                  -->
+  <!-- Creates the runtime constant class.                     -->
+  <!-- Output will be stored in ${source.tmp}.                 -->
   <target name="constants" depends="tools-jar">
     <echo>Creating ${source.tmp}/com.mucommander.RuntimeConstants...</echo>
     <mkdir dir="${source.tmp}"/>
@@ -412,8 +415,8 @@
     </javaw>
   </target>
 
-  <!-- Compiles all java files found in ${source.src} and stores   -->
-  <!-- the resulting bytecode in {$classes.normal}.                   -->
+  <!-- Compiles all java files found in ${source.src} and      -->
+  <!-- store the resulting bytecode in {$classes.normal}.      -->
   <target name="compile" depends="constants">
     <echo>Compiling sources into ${classes.normal}...</echo>
     <mkdir dir="${classes.normal}"/>
@@ -421,7 +424,8 @@
            encoding="utf-8" source="${app.jvm}" target="${app.jvm}">
       <src path="${source.src}"/>
       <src path="${source.tmp}"/>
-      <!-- Includes the application's libraries in the classpath. -->
+      <!-- Includes the application's libraries in the         -->
+      <!-- classpath.                                          -->
       <classpath>
          <fileset dir="${lib}">
           <include name="**/*.jar"/>
@@ -431,7 +435,7 @@
   </target>
 
   <!-- Generates the application's unobfuscated jar file.      -->
-  <!-- Output will be stored in {$jar.normal}.                  -->
+  <!-- Output will be stored in {$jar.normal}.                 -->
   <target name="jar" depends="compile,includelibs,resources">
     <echo>Creating unobfuscated JAR file in ${jar.normal}...</echo>
     <mkdir dir="${dist}"/>
@@ -456,33 +460,33 @@
       <libraryjar name="${ant.lib}"/>
       <libraryjar name="${lib}/osx-eawt-stubs.jar"/>
       <libraryjar name="${lib}/servlet-api.jar"/>
-      <!-- Viewer API uses reflection -->
+      <!-- Viewer API uses reflection                          -->
       <keep name="com.mucommander.file.AbstractFile"/>
       <keepclasseswithmembers extends="com.mucommander.ui.viewer.FileViewer">
 	    <method access="public static" type="boolean" name="canViewFile" parameters="com.mucommander.file.AbstractFile"/>
       </keepclasseswithmembers>
-      <!-- Editor API uses reflection -->
+      <!-- Editor API uses reflection                          -->
       <keepclasseswithmembers extends="com.mucommander.ui.editor.FileEditor">
 	    <method access="public static" type="boolean" name="canEditFile" parameters="com.mucommander.file.AbstractFile"/>
       </keepclasseswithmembers>
-      <!-- Action API uses reflection -->
+      <!-- Action API uses reflection                          -->
       <keepclasseswithmembers extends="com.mucommander.ui.action.MucoAction">
         <constructor access="public" name="*"/>
       </keepclasseswithmembers>
-      <!-- File API uses reflection -->
+      <!-- File API uses reflection                            -->
       <keepclasseswithmembers extends="com.mucommander.file.AbstractFile">
         <constructor access="public" name="*"/>
       </keepclasseswithmembers>
-      <!-- Main class -->
+      <!-- Main class                                          -->
       <keep name="${main-class}">
 	    <method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
       </keep>
-      <!-- jCIFS uses forName -->
+      <!-- jCIFS uses forName                                  -->
       <keep name="jcifs.Config">
 	    <method access="public" name="*"/>
       </keep>
 
-      <!-- Required by j2ssh library -->
+      <!-- Required by j2ssh library                           -->
       <keep name="org.apache.commons.logging.*">
         <method access="public" name="*"/>
       </keep> 
@@ -492,11 +496,14 @@
     </proguard>
   </target>
 
+  <!-- Copies ${jar.obf} over ${jar.cmp}.                      -->
   <target name="copyobf" unless="is-7za-available">
     <echo>7za unavailable, copyting obfuscate JAR to ${jar.cmp}...</echo>
     <copy file="${jar.obf}" tofile="${jar.cmp}"/>
   </target>
 
+  <!-- Extracts the content of ${jar.obf} and compresses it    -->
+  <!-- using 7za.                                              -->
   <target name="compressobf" if="is-7za-available">
     <echo>Generating compressed JAR file to ${jar.cmp}...</echo>
     <unjar src="${jar.obf}" dest="${classes.obf}"/>
@@ -547,20 +554,20 @@
 
 
 
-  <!-- = Ant tools compilation ============================== -->
-  <!-- ====================================================== -->
-  <!-- Checks whether the tools jar file is up to date.       -->
-  <!-- Output is stored in ${tools.up-to-date}.               -->
+  <!-- = Ant tools compilation =============================== -->
+  <!-- ======================================================= -->
+  <!-- Checks whether the tools jar file is up to date.        -->
+  <!-- Output is stored in ${tools.up-to-date}.                -->
   <target name="check-tools" unless="tools.up-to-date">
     <uptodate property="tools.up-to-date" targetfile="${tools.jar}">
       <srcfiles dir="${source.src}/com/mucommander/ant" includes="**/*.java"/>
     </uptodate>
   </target>
 
-  <!-- Compiles the tools soure code.                         -->
-  <!-- Output will be stored in ${classes.tools}.             -->
-  <!-- This task will only be executed if the tools JAR file  -->
-  <!-- is not up too date.                                    -->
+  <!-- Compiles the tools soure code.                          -->
+  <!-- Output will be stored in ${classes.tools}.              -->
+  <!-- This task will only be executed if the tools JAR file   -->
+  <!-- is not up too date.                                     -->
   <target name="tools-compile" depends="check-tools" unless="tools.up-to-date">
     <echo>Compiling tools in ${classes.tools}...</echo>
     <mkdir dir="${classes.tools}"/>
@@ -572,8 +579,8 @@
     </javac>
   </target>
 
-  <!-- Generates the clear tools JAR file.                    -->
-  <!-- Output will be stored in ${tools-jar}.                 -->
+  <!-- Generates the clear tools JAR file.                     -->
+  <!-- Output will be stored in ${tools-jar}.                  -->
   <target name="tools-jar" depends="tools-compile" unless="tools.up-to-date">
     <mkdir dir="${dist}"/>
     <echo>Creating tools JAR file in ${tools.jar}...</echo>
@@ -583,17 +590,17 @@
 
 
 
-  <!-- = Application lauching tasks ========================= -->
-  <!-- ====================================================== -->
-   <!-- Launches mucommander from the distribution JAR file.  -->
+  <!-- = Application lauching tasks ========================== -->
+  <!-- ======================================================= -->
+   <!-- Launches mucommander from the distribution JAR file.   -->
   <target name="runjar">
     <java jar="${jar.normal}" fork="true"/>
   </target>
 
-   <!-- Compile and run project, default target.              -->
+   <!-- Compile and run project, default target.               -->
   <target name="compileandrun" depends="compile,run"/>
 
-  <!-- Runs the application from unpackaged binaries.         -->
+  <!-- Runs the application from unpackaged binaries.          -->
   <target name="run" depends="resources">
     <java classname="${main-class}" fork="true">
       <classpath>
@@ -658,12 +665,12 @@
   <!-- could think of. While this target can be fairly useful, -->
   <!-- it has the disadvantage of only being useable by        -->
   <!-- Maxence (see target 'sign' for more information).       -->
-  <target name="nightly" depends="set-nightly,tgz,app.tgz,nsis,portable,version,docs-zip,sign">
+  <target name="nightly" depends="set-nightly,tgz,app.tgz,nsis,portable,version,sign">
     <echo>All done.</echo>
   </target>
 
   <!-- Generates a zip file with muCommander's API docs.       -->
-  <!-- The output will be stored in ${doc.api-zip}.                -->
+  <!-- The output will be stored in ${doc.api-zip}.            -->
   <target name="docs-zip" depends="api-doc,tools-doc,archive-prefix">
     <echo>Packaging API documentation in ${doc.api-zip}...</echo>
     <mkdir dir="${dist}"/>
@@ -781,33 +788,33 @@
     <muversion version="${app.version}" url="${url.app-download}" dest="${version-file}"/>
   </target>
 
-  <!-- Signs the obfuscated jar file.                         -->
-  <!-- Output will be stored in ${jar.signed}.                -->
+  <!-- Signs the obfuscated jar file.                          -->
+  <!-- Output will be stored in ${jar.signed}.                 -->
   <target name="sign" depends="check-store-pass,compress" if="is-store-pass-available">
     <echo>Signing obfuscated JAR file in ${jar.signed}...</echo>
     <signjar jar="${jar.obf}" signedjar="${jar.signed}" alias="maxence" keystore="${res}/keystore"
              storepass="${store.pass}"/>
   </target>
 
-  <!-- Generates the muCommander windows installer.           -->
-  <!-- Output will be stored in ${dist}/mucommander.exe.      -->
-  <!-- This target will only be executed if nsis is found to  -->
-  <!-- be available.                                          -->
+  <!-- Generates the muCommander windows installer.            -->
+  <!-- Output will be stored in ${dist}/mucommander.exe.       -->
+  <!-- This target will only be executed if nsis is found to   -->
+  <!-- be available.                                           -->
   <target name="nsis" depends="check-nsis,exe,package-prefix" if="is-nsis-available">
     <echo>Generating NSIS installer in ${dist}/${package-prefix}.exe</echo>
 
-    <!-- Prepares the NSIS directory.                         -->
+    <!-- Prepares the NSIS directory.                          -->
     <mkdir dir="${nsis.tmp}"/>
     <copy file="${exe.file}"             tofile="${nsis.tmp}/muCommander.exe"/>
     <copy file="${nsis.icon}"            tofile="${nsis.tmp}/mucommander.ico"/>
 
-    <!-- Makes sure readme.txt and license.txt contain        -->
-    <!-- proper windows linebreaks.                           -->
+    <!-- Makes sure readme.txt and license.txt contain         -->
+    <!-- proper windows linebreaks.                            -->
     <taskdef name="crlf" classname="com.mucommander.ant.util.CRLFTask" classpath="${tools.jar}"/>
     <crlf in="${res.readme}"  out="${nsis.tmp}/readme.txt"/>
     <crlf in="${res.license}" out="${nsis.tmp}/license.txt"/>
 
-    <!-- Generates the NSIS script.                           -->
+    <!-- Generates the NSIS script.                            -->
     <taskdef name="nsisscript" classname="com.mucommander.ant.nsis.NsisTask" classpath="${tools.jar}"/>
     <nsisscript in="${nsis.script}" out="${nsis.tmp}/mucommander.nsi">
       <var name="MU_VERSION" value="${app.version}"/>
@@ -818,12 +825,12 @@
       <var name="MU_LICENSE" value="license.txt"/>
     </nsisscript>
 
-    <!-- Generates the muCommander windows installer.         -->
+    <!-- Generates the muCommander windows installer.          -->
     <exec executable="${nsis.executable}">
       <arg value="${nsis.tmp}/mucommander.nsi"/>
     </exec>
 
-    <!-- Copies the installer in the dist folder.             -->
+    <!-- Copies the installer in the dist folder.              -->
     <copy file="${nsis.tmp}/mucommander-setup.exe" tofile="${dist}/${package-prefix}-setup.exe"/>
   </target>
 </project>
