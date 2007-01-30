@@ -49,13 +49,6 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     /** 'Public key' SSH authentication method, not supported at the moment */
     private final static String PUBLIC_KEY_AUTH_METHOD = "publickey";
 
-
-    static {
-        // Disables J2SSH logging on standard output
-        System.getProperties().setProperty(org.apache.commons.logging.Log.class.getName(), org.apache.commons.logging.impl.NoOpLog.class.getName());
-    }
-		
-
     /**
      * Creates a new instance of SFTPFile and initializes the SSH/SFTP connection to the server.
      */
