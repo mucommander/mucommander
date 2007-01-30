@@ -683,7 +683,7 @@
       <tarfileset file="${res}/mucommander.sh" prefix="${archive-prefix}" mode="755"/>
       <tarfileset file="${res.license}"            prefix="${archive-prefix}"/>
       <tarfileset file="${res.readme}"             prefix="${archive-prefix}"/>
-      <tarfileset file="${jar.obf}"            prefix="${archive-prefix}"/>
+      <tarfileset file="${jar.cmp}"            prefix="${archive-prefix}"/>
     </tar>
   </target>
 
@@ -711,7 +711,7 @@
   <target name="app" depends="compress,tools-jar">
     <echo>Creating Mac OS X application in ${app.folder}...</echo>
     <taskdef name="app" classname="com.mucommander.ant.macosx.AppTask" classpath="${tools.jar}"/>
-    <app jar="${jar.obf}" dest="${app.folder}" type="APPL" signature="MUCO" icon="${res}/icons/icon.icns"
+    <app jar="${jar.cmp}" dest="${app.folder}" type="APPL" signature="MUCO" icon="${res}/icons/icon.icns"
          infoversion="0.9">
       <string  name="CFBundleName"                    value="muCommander"/>
       <string  name="CFBundleVersion"                 value="${app.version}"/>
@@ -740,7 +740,7 @@
     <echo>Creating Win32 executable in ${exe.file}...</echo>
     <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/xstream.jar"/>
     <launch4j>
-      <config outfile="${exe.file}" jarpath="${jar.obf}" icon="${nsis.icon}">
+      <config outfile="${exe.file}" jarpath="${jar.cmp}" icon="${nsis.icon}">
         <jre minversion="${app.jvm}.0"/>
       </config>
     </launch4j>
@@ -765,7 +765,7 @@
       <tarfileset file="${portable.bat}" prefix="${archive-prefix}"/>
       <tarfileset file="${res.license}"      prefix="${archive-prefix}"/>
       <tarfileset file="${res.readme}"       prefix="${archive-prefix}"/>
-      <tarfileset file="${jar.obf}"      prefix="${archive-prefix}"/>
+      <tarfileset file="${jar.cmp}"      prefix="${archive-prefix}"/>
     </tar>
   </target>
 
@@ -781,7 +781,7 @@
   <!-- Output will be stored in ${jar.signed}.                 -->
   <target name="sign" depends="check-store-pass,compress" if="is-store-pass-available">
     <echo>Signing obfuscated JAR file in ${jar.signed}...</echo>
-    <signjar jar="${jar.obf}" signedjar="${jar.signed}" alias="maxence" keystore="${res}/keystore"
+    <signjar jar="${jar.cmp}" signedjar="${jar.signed}" alias="maxence" keystore="${res}/keystore"
              storepass="${store.pass}"/>
   </target>
 
