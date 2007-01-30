@@ -2,6 +2,7 @@ package com.mucommander;
 
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
+import com.mucommander.ant.version.VersionConstants;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -49,7 +50,7 @@ import java.util.Hashtable;
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class VersionChecker implements ContentHandler {
+public class VersionChecker implements ContentHandler, VersionConstants {
     // - XML parsing states -----------------------------------------------------
     // --------------------------------------------------------------------------
     /** Currently parsing the version tag. */
@@ -191,11 +192,11 @@ public class VersionChecker implements ContentHandler {
      */
     public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) {
         // Checks whether we know the tag and updates the current state.
-        if(name.equals(com.mucommander.ant.version.VersionConstants.VERSION_TAG))
+        if(name.equals(VERSION_ELEMENT))
             state = STATE_VERSION;
-        else if(name.equals(com.mucommander.ant.version.VersionConstants.URL_TAG))
+        else if(name.equals(URL_ELEMENT))
             state = STATE_URL;
-        else if(name.equals(com.mucommander.ant.version.VersionConstants.DATE_TAG))
+        else if(name.equals(DATE_ELEMENT))
             state = STATE_DATE;
         else
             state = STATE_UNKNOWN;
