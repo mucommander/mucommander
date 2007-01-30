@@ -49,13 +49,19 @@
   <!-- libraries.                                              -->
   <property name="lib"                 location="lib"/>
   <!-- Where to store the application's release files.         -->
-  <property name="dist"                location="dist"/>
+  <property name="dist-dir"            value   ="dist"/>
   <!-- Where to store temporary files.                         -->
-  <property name="tmp"                 location="tmp"/>
+  <property name="tmp-dir"             value   ="tmp"/>
+ <!-- Application's main class.                               -->
+  <property name="main-class"          value   ="com.mucommander.Launcher"/>
+  <!-- Location in which temporary files will be stored.       -->
+  <property name="dist"                location="${dist-dir}"/>
+  <!-- Location in which the application's release files will  -->
+  <!-- stored.                                                 -->
+  <property name="tmp"                 location="${tmp-dir}"/>
   <!-- Where to store the muCommander version file.            -->
   <property name="version-file"        location="${dist}/version.xml"/>
-  <!-- Application's main class.                               -->
-  <property name="main-class"          value="com.mucommander.Launcher"/>
+
 
 
   <!-- = Bytecode values ===================================== -->
@@ -249,28 +255,28 @@
   <!-- = Helper targets ====================================== -->
   <!-- ======================================================= -->
   <!-- Checks whether 7za is available or not.                 -->
-  <!-- If it is, sets ${is-7za-available} to true.             -->
+  <!-- If it is, sets ${7za.available} to true.             -->
   <target name="check-7za">
-    <condition property="is-7za-available" value="true">
+    <condition property="7za.available" value="true">
       <available file="${7za.executable}" type="file"/>
     </condition>
   </target>
 
   <!-- Checks whether NSIS is available or not.                -->
-  <!-- If it is, sets ${is-nsis-available} to true.            -->
+  <!-- If it is, sets ${nsis.available} to true.            -->
   <target name="check-nsis" depends="check-launch4j">
-    <condition property="is-nsis-available" value="true">
+    <condition property="nsis.available" value="true">
       <and>
         <available file="${nsis.executable}" type="file"/>
-        <isset property="is-launch4j-available"/>
+        <isset property="launch4j.available"/>
       </and>
     </condition>
   </target>
 
   <!-- Checks whether launch4j is available or not.            -->
-  <!-- If it is, sets ${is-launch4j-available} to true.        -->
+  <!-- If it is, sets ${launch4j.available} to true.        -->
   <target name="check-launch4j">
-    <condition property="is-launch4j-available" value="true">
+    <condition property="launch4j.available" value="true">
       <and>
         <available file="${launch4j.dir}" type="dir"/>
         <!-- If the property is defined but empty, it will     -->
@@ -284,9 +290,9 @@
   </target>
 
   <!-- Checks whether the keystore password is available.      -->
-  <!-- If it is, sets ${is-store-pass-available} to true.      -->
-  <target name="check-store-pass">
-    <condition property="is-store-pass-available" value="true">
+  <!-- If it is, sets ${store.available} to true.      -->
+  <target name="check-store">
+    <condition property="store.available" value="true">
       <and>
         <isset property="store.pass"/>
         <not>
@@ -486,14 +492,14 @@
   </target>
 
   <!-- Copies ${jar.obf} over ${jar.cmp}.                      -->
-  <target name="copyobf" unless="is-7za-available">
+  <target name="copyobf" unless="7za.available">
     <echo>7za unavailable, copyting obfuscate JAR to ${jar.cmp}...</echo>
     <copy file="${jar.obf}" tofile="${jar.cmp}"/>
   </target>
 
   <!-- Extracts the content of ${jar.obf} and compresses it    -->
   <!-- using 7za.                                              -->
-  <target name="compressobf" if="is-7za-available">
+  <target name="compressobf" if="7za.available">
     <echo>Generating compressed JAR file to ${jar.cmp}...</echo>
     <unjar src="${jar.obf}" dest="${classes.obf}"/>
     <exec executable="${7za.executable}" dir="${classes.obf}">
@@ -650,10 +656,31 @@
   <!-- The following targets are used to generate the various  -->
   <!-- muCommander release files.                              -->
 
+  <!-- Generates a source release of muCommander.              -->
+  <!-- Output will be stored in:                               -->
+  <!-- ${dist}/${package-prefix}-src.tar.gz                    -->
+  <target name="source" depends="clean,archive-prefix,package-prefix">
+    <echo>Packaging source distribution as ${dist}/${package-prefix}-src.tar.gz...</echo>
+
+    <!-- Generates the TGZ file.                               -->
+    <tar destfile="${dist}/${package-prefix}-src.tar.gz" compression="gzip">
+      <tarfileset dir="." prefix="${archive-prefix}">
+        <exclude name="${dist-dir}/**"/>
+        <exclude name="${tmp-dir}/**"/>
+        <exclude name="local.xml"/>
+      </tarfileset>
+    </tar>
+  </target>
+
+
+  <!-- Generates builds of pretty much anything we could       -->
+  <!-- think of.                                               -->
+  <target name="release" depends="source,tgz,app.tgz,nsis,portable,version,sign,docs-zip">
+    <echo>All done.</echo>
+  </target>
+
   <!-- Generates a nightly build of pretty much anything we    -->
-  <!-- could think of. While this target can be fairly useful, -->
-  <!-- it has the disadvantage of only being useable by        -->
-  <!-- Maxence (see target 'sign' for more information).       -->
+  <!-- could think of.                                         -->
   <target name="nightly" depends="set-nightly,tgz,app.tgz,nsis,portable,version,sign">
     <echo>All done.</echo>
   </target>
@@ -681,8 +708,8 @@
     <!-- Generates the TGZ file, keeping execution flags.      -->
     <tar destfile="${dist}/${package-prefix}.tar.gz" compression="gzip">
       <tarfileset file="${res}/mucommander.sh" prefix="${archive-prefix}" mode="755"/>
-      <tarfileset file="${res.license}"            prefix="${archive-prefix}"/>
-      <tarfileset file="${res.readme}"             prefix="${archive-prefix}"/>
+      <tarfileset file="${res.license}"        prefix="${archive-prefix}"/>
+      <tarfileset file="${res.readme}"         prefix="${archive-prefix}"/>
       <tarfileset file="${jar.cmp}"            prefix="${archive-prefix}"/>
     </tar>
   </target>
@@ -736,7 +763,7 @@
   <!-- Generates a Win32 executable file for muCommander.      -->
   <!-- This target will only be executed if launch4j is        -->
   <!-- found to be available.                                  -->
-  <target name="exe" depends="check-launch4j,compress" if="is-launch4j-available">
+  <target name="exe" depends="check-launch4j,compress" if="launch4j.available">
     <echo>Creating Win32 executable in ${exe.file}...</echo>
     <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/xstream.jar"/>
     <launch4j>
@@ -779,7 +806,7 @@
 
   <!-- Signs the obfuscated jar file.                          -->
   <!-- Output will be stored in ${jar.signed}.                 -->
-  <target name="sign" depends="check-store-pass,compress" if="is-store-pass-available">
+  <target name="sign" depends="check-store,compress" if="store.available">
     <echo>Signing obfuscated JAR file in ${jar.signed}...</echo>
     <signjar jar="${jar.cmp}" signedjar="${jar.signed}" alias="maxence" keystore="${res}/keystore"
              storepass="${store.pass}"/>
@@ -789,7 +816,7 @@
   <!-- Output will be stored in ${dist}/mucommander.exe.       -->
   <!-- This target will only be executed if nsis is found to   -->
   <!-- be available.                                           -->
-  <target name="nsis" depends="check-nsis,exe,package-prefix" if="is-nsis-available">
+  <target name="nsis" depends="check-nsis,exe,package-prefix" if="nsis.available">
     <echo>Generating NSIS installer in ${dist}/${package-prefix}.exe</echo>
 
     <!-- Prepares the NSIS directory.                          -->
