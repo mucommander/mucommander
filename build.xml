@@ -482,20 +482,6 @@
       <keep name="${main-class}">
 	    <method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
       </keep>
-      <!-- jCIFS uses forName                                  -->
-      <keep name="jcifs.Config">
-	    <method access="public" name="*"/>
-      </keep>
-
-      <!-- Required by j2ssh library                           -->
-<!--
-      <keep type="class" name="org.apache.commons.logging.*">
-        <method access="public" name="*"/>
-      </keep> 
-      <keep name="org.apache.commons.logging.impl.LogFactoryImpl">
-        <method access="public" name="*"/>
-      </keep>
--->
     </proguard>
   </target>
 
