@@ -109,10 +109,10 @@
   <property name="doc.tools"           location="${doc}/tools"/>
   <!-- Path to the file in which to store the tools'           -->
   <!-- API documentation as a zip file.                        -->
-  <property name="doc.tools-zip"       location="${dist}/mucommander-tools-api.zip"/>
+  <property name="doc.tools-tgz"       location="${dist}/mucommander-tools-api.tar.gz"/>
   <!-- Path to the file in which to store the application's    -->
   <!-- API documentation as a zip file.                        -->
-  <property name="doc.api-zip"         location="${dist}/mucommander-api.zip"/>
+  <property name="doc.api-tgz"         location="${dist}/mucommander-api.tar.gz"/>
 
 
 
@@ -675,7 +675,7 @@
 
   <!-- Generates builds of pretty much anything we could       -->
   <!-- think of.                                               -->
-  <target name="release" depends="source,tgz,app.tgz,nsis,portable,version,sign,docs-zip">
+  <target name="release" depends="source,tgz,app.tgz,nsis,portable,version,sign,docs-tgz">
     <echo>All done.</echo>
   </target>
 
@@ -686,18 +686,18 @@
   </target>
 
   <!-- Generates a zip file with muCommander's API docs.       -->
-  <!-- The output will be stored in ${doc.api-zip}.            -->
-  <target name="docs-zip" depends="api-doc,tools-doc,archive-prefix">
-    <echo>Packaging API documentation in ${doc.api-zip}...</echo>
+  <!-- The output will be stored in ${doc.api-tgz}.            -->
+  <target name="docs-tgz" depends="api-doc,tools-doc,archive-prefix">
+    <echo>Packaging API documentation in ${doc.api-tgz}...</echo>
     <mkdir dir="${dist}"/>
-    <zip destfile="${doc.api-zip}">
-      <zipfileset dir="${doc.api}" prefix="${archive-prefix}"/>
-    </zip>
+    <tar destfile="${doc.api-tgz}" compression="gzip">
+      <tarfileset dir="${doc.api}" prefix="${archive-prefix}"/>
+    </tar>
 
-    <echo>Packaging tools API documentation in ${doc.tools-zip}...</echo>
-    <zip destfile="${doc.tools-zip}">
-      <zipfileset dir="${doc.tools}" prefix="${archive-prefix}"/>
-    </zip>
+    <echo>Packaging tools API documentation in ${doc.tools-tgz}...</echo>
+    <tar destfile="${doc.tools-tgz}" compression="gzip">
+      <tarfileset dir="${doc.tools}" prefix="${archive-prefix}"/>
+    </tar>
   </target>
 
   <!-- Generates a UNIX tar.gz distribution of muCommander.    -->
