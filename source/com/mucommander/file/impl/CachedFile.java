@@ -13,18 +13,25 @@ import java.io.IOException;
  * overridden only to allow recursion (see {@link #CachedFile(com.mucommander.file.AbstractFile, boolean)}).
  *
  * <p>The values are retrieved and cached only when the 'cached methods' are called for the first time; they are
- * not retrieved preemptively retrieved in the constructor, so using this class has no negative impact on performance,
- * except for the small extra cost induced by the proxying of the methods and the extra RAM used to store cached values.
+ * not preemptively retrieved in the constructor, so using this class has no negative impact on performance,
+ * except for the small extra CPU cost added by proxying the methods and the extra RAM used to store cached values.
  *
  * <p>Once the values are retrieved and cached, they never change: the same value will always be returned once a method
  * has been called for the first time. That means if the underlying file changes (e.g. its size or date has changed),
  * the changes will not be reflected by this CachedFile. Thus, this class should only be used when a 'real-time' view
- * of the file is not required, or when the file is used only for a small amount of time.
+ * of the file is not required, or when the file instance is used only for a small amount of time.
  *
  * @author Maxence Bernard
  */
 public class CachedFile extends ProxyFile {
 
+    /** If true, AbstractFile instances returned by this class will be wrapped into CachedFile instances */
+    private boolean recurseInstances;
+
+    ///////////////////
+    // Cached values //
+    ///////////////////
+    
     private long getSize;
     private boolean getSizeSet;
 
@@ -82,6 +89,9 @@ public class CachedFile extends ProxyFile {
     private int getPermissions;
     private boolean getPermissionsSet;
 
+    private String getPermissionsString;
+    private boolean getPermissionsStringSet;
+
     private boolean canSetPermissions;
     private boolean canSetPermissionsSet;
 
@@ -93,9 +103,6 @@ public class CachedFile extends ProxyFile {
 
     private AbstractFile getRoot;
     private boolean getRootSet;
-
-    /** If true, AbstractFile instances returned by this class will be wrapped into CachedFile instances */
-    private boolean recurseInstances;
 
 
     /**
@@ -298,6 +305,15 @@ public class CachedFile extends ProxyFile {
         }
 
         return getPermissions;
+    }
+
+    public String getPermissionsString() {
+        if(!getPermissionsStringSet) {
+            getPermissionsString = file.getPermissionsString();
+            getPermissionsStringSet = true;
+        }
+
+        return getPermissionsString;
     }
 
     public boolean canSetPermissions() {
