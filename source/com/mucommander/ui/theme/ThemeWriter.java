@@ -142,7 +142,7 @@ class ThemeWriter implements ThemeXmlConstants {
         if((color = theme.getColor(Theme.SHELL_HISTORY_TEXT_SELECTED)) != null)
             out.writeStandAloneElement(ELEMENT_TEXT, getColorAttributes(color));
         out.endElement(ELEMENT_SELECTION);
-        out.endElement(ELEMENT_SHELL);
+        out.endElement(ELEMENT_SHELL_HISTORY);
 
 
 
