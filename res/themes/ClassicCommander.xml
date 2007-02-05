@@ -126,7 +126,7 @@
 
   <!-- = Status bar appearance ========================= -->
   <!-- ================================================= -->
-  <volume_label>
+  <status_bar>
     <font      family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
     <text       color="000000"/>
     <border     color="868686"/>
@@ -134,5 +134,5 @@
     <ok         color="5dc23c"/>
     <warning    color="f6dc6c"/>
     <critical   color="e6594e"/>
-  </volume_label>
+  </status_bar>
 </theme>
