@@ -28,30 +28,44 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
     private static final int STATE_EDITOR                 = 4;
     /** Parsing the location bar element. */
     private static final int STATE_LOCATION_BAR           = 5;
-    /** Parsing the table.normal element. */
-    private static final int STATE_TABLE_NORMAL           = 6;
     /** Parsing the shell.normal element. */
-    private static final int STATE_SHELL_NORMAL           = 7;
-    /** Parsing the table.selected element. */
-    private static final int STATE_TABLE_SELECTED         = 8;
+    private static final int STATE_SHELL_NORMAL           = 6;
     /** Parsing the shell.selected element. */
-    private static final int STATE_SHELL_SELECTED         = 9;
+    private static final int STATE_SHELL_SELECTED         = 7;
     /** Parsing the editor.normal element. */
-    private static final int STATE_EDITOR_NORMAL          = 10;
+    private static final int STATE_EDITOR_NORMAL          = 8;
     /** Parsing the location bar.normal element. */
-    private static final int STATE_LOCATION_BAR_NORMAL    = 11;
+    private static final int STATE_LOCATION_BAR_NORMAL    = 9;
     /** Parsing the editor.selected element. */
-    private static final int STATE_EDITOR_SELECTED        = 12;
+    private static final int STATE_EDITOR_SELECTED        = 10;
     /** Parsing the location bar.selected element. */
-    private static final int STATE_LOCATION_BAR_SELECTED  = 13;
+    private static final int STATE_LOCATION_BAR_SELECTED  = 11;
     /** Parsing the shell_history element. */
-    private static final int STATE_SHELL_HISTORY          = 14;
+    private static final int STATE_SHELL_HISTORY          = 12;
     /** Parsing the shell_history.normal element. */
-    private static final int STATE_SHELL_HISTORY_NORMAL   = 15;
+    private static final int STATE_SHELL_HISTORY_NORMAL   = 13;
     /** Parsing the shell_history.selected element. */
-    private static final int STATE_SHELL_HISTORY_SELECTED = 16;
+    private static final int STATE_SHELL_HISTORY_SELECTED = 14;
     /** Parsing the volume_label element. */
-    private static final int STATE_STATUS_BAR           = 17;
+    private static final int STATE_STATUS_BAR             = 15;
+    private static final int STATE_HIDDEN                 = 16;
+    private static final int STATE_HIDDEN_NORMAL          = 17;
+    private static final int STATE_HIDDEN_SELECTED        = 18;
+    private static final int STATE_FOLDER                 = 19;
+    private static final int STATE_FOLDER_NORMAL          = 20;
+    private static final int STATE_FOLDER_SELECTED        = 21;
+    private static final int STATE_ARCHIVE                = 22;
+    private static final int STATE_ARCHIVE_NORMAL         = 23;
+    private static final int STATE_ARCHIVE_SELECTED       = 24;
+    private static final int STATE_SYMLINK                = 25;
+    private static final int STATE_SYMLINK_NORMAL         = 26;
+    private static final int STATE_SYMLINK_SELECTED       = 27;
+    private static final int STATE_MARKED                 = 28;
+    private static final int STATE_MARKED_NORMAL          = 29;
+    private static final int STATE_MARKED_SELECTED        = 30;
+    private static final int STATE_FILE                   = 31;
+    private static final int STATE_FILE_NORMAL            = 32;
+    private static final int STATE_FILE_SELECTED          = 33;
 
 
 
@@ -84,6 +98,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         ThemeData buffer;
 
         new Parser().parse(in, new ThemeReader(buffer = new ThemeData()), "UTF-8");
+
         return buffer;
     }
 
@@ -143,34 +158,90 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             state = STATE_STATUS_BAR;
         }
 
+        else if(name.equals(ELEMENT_HIDDEN)) {
+            if(state != STATE_TABLE)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_HIDDEN;
+        }
+
+        else if(name.equals(ELEMENT_FOLDER)) {
+            if(state != STATE_TABLE)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_FOLDER;
+        }
+
+        else if(name.equals(ELEMENT_ARCHIVE)) {
+            if(state != STATE_TABLE)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_ARCHIVE;
+        }
+
+        else if(name.equals(ELEMENT_SYMLINK)) {
+            if(state != STATE_TABLE)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_SYMLINK;
+        }
+
+        else if(name.equals(ELEMENT_MARKED)) {
+            if(state != STATE_TABLE)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_MARKED;
+        }
+
+        else if(name.equals(ELEMENT_FILE)) {
+            if(state != STATE_TABLE)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_FILE;
+        }
+
         // Normal element declaration.
         else if(name.equals(ELEMENT_NORMAL)) {
             if(state == STATE_SHELL)
                 state = STATE_SHELL_NORMAL;
-            else if(state == STATE_TABLE)
-                state = STATE_TABLE_NORMAL;
             else if(state == STATE_EDITOR)
                 state = STATE_EDITOR_NORMAL;
             else if(state == STATE_LOCATION_BAR)
                 state = STATE_LOCATION_BAR_NORMAL;
             else if(state == STATE_SHELL_HISTORY)
                 state = STATE_SHELL_HISTORY_NORMAL;
+            else if(state == STATE_HIDDEN)
+                state = STATE_HIDDEN_NORMAL;
+            else if(state == STATE_FOLDER)
+                state = STATE_FOLDER_NORMAL;
+            else if(state == STATE_ARCHIVE)
+                state = STATE_ARCHIVE_NORMAL;
+            else if(state == STATE_SYMLINK)
+                state = STATE_SYMLINK_NORMAL;
+            else if(state == STATE_MARKED)
+                state = STATE_MARKED_NORMAL;
+            else if(state == STATE_FILE)
+                state = STATE_FILE_NORMAL;
             else
                 throw createIllegalElementDeclaration(name);
         }
 
         // Selected element declaration.
-        else if(name.equals(ELEMENT_SELECTION)) {
+        else if(name.equals(ELEMENT_SELECTED)) {
             if(state == STATE_SHELL)
                 state = STATE_SHELL_SELECTED;
-            else if(state == STATE_TABLE)
-                state = STATE_TABLE_SELECTED;
             else if(state == STATE_EDITOR)
                 state = STATE_EDITOR_SELECTED;
             else if(state == STATE_LOCATION_BAR)
                 state = STATE_LOCATION_BAR_SELECTED;
             else if(state == STATE_SHELL_HISTORY)
                 state = STATE_SHELL_HISTORY_SELECTED;
+            else if(state == STATE_HIDDEN)
+                state = STATE_HIDDEN_SELECTED;
+            else if(state == STATE_FOLDER)
+                state = STATE_FOLDER_SELECTED;
+            else if(state == STATE_ARCHIVE)
+                state = STATE_ARCHIVE_SELECTED;
+            else if(state == STATE_SYMLINK)
+                state = STATE_SYMLINK_SELECTED;
+            else if(state == STATE_MARKED)
+                state = STATE_MARKED_SELECTED;
+            else if(state == STATE_FILE)
+                state = STATE_FILE_SELECTED;
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -178,27 +249,47 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         // Font creation.
         else if(name.equals(ELEMENT_FONT)) {
             if(state == STATE_SHELL)
-                theme.setFont(Theme.SHELL, createFont(attributes));
-            else if(state == STATE_TABLE)
-                theme.setFont(Theme.FILE_TABLE, createFont(attributes));
+                theme.setFont(Theme.SHELL_FONT, createFont(attributes));
             else if(state == STATE_EDITOR)
-                theme.setFont(Theme.EDITOR, createFont(attributes));
+                theme.setFont(Theme.EDITOR_FONT, createFont(attributes));
             else if(state == STATE_LOCATION_BAR)
-                theme.setFont(Theme.LOCATION_BAR, createFont(attributes));
+                theme.setFont(Theme.LOCATION_BAR_FONT, createFont(attributes));
             else if(state == STATE_SHELL_HISTORY)
-                theme.setFont(Theme.SHELL_HISTORY, createFont(attributes));
+                theme.setFont(Theme.SHELL_HISTORY_FONT, createFont(attributes));
             else if(state == STATE_STATUS_BAR)
-                theme.setFont(Theme.STATUS_BAR, createFont(attributes));
+                theme.setFont(Theme.STATUS_BAR_FONT, createFont(attributes));
+            else if(state == STATE_TABLE)
+                theme.setFont(Theme.FILE_TABLE_FONT, createFont(attributes));
             else
                 throw createIllegalElementDeclaration(name);
         }
 
         // Unfocused background color.
         else if(name.equals(ELEMENT_UNFOCUSED_BACKGROUND)) {
-            if(state == STATE_TABLE_SELECTED)
-                theme.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_SELECTED, createColor(attributes));
-            else if(state == STATE_TABLE_NORMAL)
-                theme.setColor(Theme.FILE_UNFOCUSED_BACKGROUND, createColor(attributes));
+            if(state == STATE_FILE_NORMAL)
+                theme.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_FOLDER_NORMAL)
+                theme.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_ARCHIVE_NORMAL)
+                theme.setColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_SYMLINK_NORMAL)
+                theme.setColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_HIDDEN_NORMAL)
+                theme.setColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_MARKED_NORMAL)
+                theme.setColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_FILE_SELECTED)
+                theme.setColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_FOLDER_SELECTED)
+                theme.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_ARCHIVE_SELECTED)
+                theme.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_SYMLINK_SELECTED)
+                theme.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_HIDDEN_SELECTED)
+                theme.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_MARKED_SELECTED)
+                theme.setColor(Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -206,10 +297,10 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         // File table border color.
         else if(name.equals(ELEMENT_BORDER)) {
             if(state == STATE_TABLE)
-                theme.setColor(Theme.FILE_TABLE_BORDER, createColor(attributes));
+                theme.setColor(Theme.FILE_TABLE_BORDER_COLOR, createColor(attributes));
 
             else if(state == STATE_STATUS_BAR)
-                theme.setColor(Theme.STATUS_BAR_BORDER, createColor(attributes));
+                theme.setColor(Theme.STATUS_BAR_BORDER_COLOR, createColor(attributes));
 
             else
                 throw createIllegalElementDeclaration(name);
@@ -217,94 +308,62 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
 
         // Background color.
         else if(name.equals(ELEMENT_BACKGROUND)) {
-            if(state == STATE_TABLE_NORMAL)
-                theme.setColor(Theme.FILE_BACKGROUND, createColor(attributes));
-            else if(state == STATE_TABLE_SELECTED)
-                theme.setColor(Theme.FILE_BACKGROUND_SELECTED, createColor(attributes));
+            if(state == STATE_HIDDEN_NORMAL)
+                theme.setColor(Theme.HIDDEN_FILE_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_HIDDEN_SELECTED)
+                theme.setColor(Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_FOLDER_NORMAL)
+                theme.setColor(Theme.FOLDER_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_FOLDER_SELECTED)
+                theme.setColor(Theme.FOLDER_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_ARCHIVE_NORMAL)
+                theme.setColor(Theme.ARCHIVE_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_ARCHIVE_SELECTED)
+                theme.setColor(Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_SYMLINK_NORMAL)
+                theme.setColor(Theme.SYMLINK_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_SYMLINK_SELECTED)
+                theme.setColor(Theme.SYMLINK_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_MARKED_NORMAL)
+                theme.setColor(Theme.MARKED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_MARKED_SELECTED)
+                theme.setColor(Theme.MARKED_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_FILE_NORMAL)
+                theme.setColor(Theme.FILE_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_FILE_SELECTED)
+                theme.setColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_TABLE)
+                theme.setColor(Theme.FILE_TABLE_BACKGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_SHELL_NORMAL)
-                theme.setColor(Theme.SHELL_BACKGROUND, createColor(attributes));
+                theme.setColor(Theme.SHELL_BACKGROUND_COLOR, createColor(attributes));
             else if(state == STATE_SHELL_SELECTED)
-                theme.setColor(Theme.SHELL_BACKGROUND_SELECTED, createColor(attributes));
+                theme.setColor(Theme.SHELL_SELECTED_BACKGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_EDITOR_NORMAL)
-                theme.setColor(Theme.EDITOR_BACKGROUND, createColor(attributes));
+                theme.setColor(Theme.EDITOR_BACKGROUND_COLOR, createColor(attributes));
             else if(state == STATE_EDITOR_SELECTED)
-                theme.setColor(Theme.EDITOR_BACKGROUND_SELECTED, createColor(attributes));
+                theme.setColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_LOCATION_BAR_NORMAL)
-                theme.setColor(Theme.LOCATION_BAR_BACKGROUND, createColor(attributes));
+                theme.setColor(Theme.LOCATION_BAR_BACKGROUND_COLOR, createColor(attributes));
             else if(state == STATE_LOCATION_BAR_SELECTED)
-                theme.setColor(Theme.LOCATION_BAR_BACKGROUND_SELECTED, createColor(attributes));
+                theme.setColor(Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_SHELL_HISTORY_NORMAL)
-                theme.setColor(Theme.SHELL_HISTORY_BACKGROUND, createColor(attributes));
+                theme.setColor(Theme.SHELL_HISTORY_BACKGROUND_COLOR, createColor(attributes));
             else if(state == STATE_SHELL_HISTORY_SELECTED)
-                theme.setColor(Theme.SHELL_HISTORY_BACKGROUND_SELECTED, createColor(attributes));
+                theme.setColor(Theme.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_STATUS_BAR)
-                theme.setColor(Theme.STATUS_BAR_BACKGROUND, createColor(attributes));
+                theme.setColor(Theme.STATUS_BAR_BACKGROUND_COLOR, createColor(attributes));
 
-            else
-                throw createIllegalElementDeclaration(name);
-        }
-
-        // Hidden files color.
-        else if(name.equals(ELEMENT_HIDDEN)) {
-            if(state == STATE_TABLE_NORMAL)
-                theme.setColor(Theme.HIDDEN_FILE, createColor(attributes));
-            else if(state == STATE_TABLE_SELECTED)
-                theme.setColor(Theme.HIDDEN_FILE_SELECTED, createColor(attributes));
-            else
-                throw createIllegalElementDeclaration(name);
-        }
-
-        // Folders color.
-        else if(name.equals(ELEMENT_FOLDER)) {
-            if(state == STATE_TABLE_NORMAL)
-                theme.setColor(Theme.FOLDER, createColor(attributes));
-            else if(state == STATE_TABLE_SELECTED)
-                theme.setColor(Theme.FOLDER_SELECTED, createColor(attributes));
-            else
-                throw createIllegalElementDeclaration(name);
-        }
-
-        // Archives color.
-        else if(name.equals(ELEMENT_ARCHIVE)) {
-            if(state == STATE_TABLE_NORMAL)
-                theme.setColor(Theme.ARCHIVE, createColor(attributes));
-            else if(state == STATE_TABLE_SELECTED)
-                theme.setColor(Theme.ARCHIVE_SELECTED, createColor(attributes));
-            else
-                throw createIllegalElementDeclaration(name);
-        }
-
-        // Symlinks color.
-        else if(name.equals(ELEMENT_SYMLINK)) {
-            if(state == STATE_TABLE_NORMAL)
-                theme.setColor(Theme.SYMLINK, createColor(attributes));
-            else if(state == STATE_TABLE_SELECTED)
-                theme.setColor(Theme.SYMLINK_SELECTED, createColor(attributes));
-            else
-                throw createIllegalElementDeclaration(name);
-        }
-
-        // Marked elements color.
-        else if(name.equals(ELEMENT_MARKED)) {
-            if(state == STATE_TABLE_NORMAL)
-                theme.setColor(Theme.MARKED, createColor(attributes));
-            else if(state == STATE_TABLE_SELECTED)
-                theme.setColor(Theme.MARKED_SELECTED, createColor(attributes));
-            else
-                throw createIllegalElementDeclaration(name);
-        }
-
-        // Normal files color.
-        else if(name.equals(ELEMENT_FILE)) {
-            if(state == STATE_TABLE_NORMAL)
-                theme.setColor(Theme.FILE, createColor(attributes));
-            else if(state == STATE_TABLE_SELECTED)
-                theme.setColor(Theme.FILE_SELECTED, createColor(attributes));
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -312,7 +371,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         // Progress bar color.
         else if(name.equals(ELEMENT_PROGRESS)) {
             if(state == STATE_LOCATION_BAR)
-                theme.setColor(Theme.LOCATION_BAR_PROGRESS, createColor(attributes));
+                theme.setColor(Theme.LOCATION_BAR_PROGRESS_COLOR, createColor(attributes));
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -320,7 +379,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         // 'OK' color.
         else if(name.equals(ELEMENT_OK)) {
             if(state == STATE_STATUS_BAR)
-                theme.setColor(Theme.STATUS_BAR_OK, createColor(attributes));
+                theme.setColor(Theme.STATUS_BAR_OK_COLOR, createColor(attributes));
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -328,7 +387,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         // 'WARNING' color.
         else if(name.equals(ELEMENT_WARNING)) {
             if(state == STATE_STATUS_BAR)
-                theme.setColor(Theme.STATUS_BAR_WARNING, createColor(attributes));
+                theme.setColor(Theme.STATUS_BAR_WARNING_COLOR, createColor(attributes));
             else
                 throw createIllegalElementDeclaration(name);
         }
@@ -336,35 +395,65 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         // 'CRITICAL' color.
         else if(name.equals(ELEMENT_CRITICAL)) {
             if(state == STATE_STATUS_BAR)
-                theme.setColor(Theme.STATUS_BAR_CRITICAL, createColor(attributes));
+                theme.setColor(Theme.STATUS_BAR_CRITICAL_COLOR, createColor(attributes));
             else
                 throw createIllegalElementDeclaration(name);
         }
 
         // Text color.
-        else if(name.equals(ELEMENT_TEXT)) {
-            if(state == STATE_SHELL_NORMAL)
-                theme.setColor(Theme.SHELL_TEXT, createColor(attributes));
+        else if(name.equals(ELEMENT_FOREGROUND)) {
+            if(state == STATE_HIDDEN_NORMAL)
+                theme.setColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_HIDDEN_SELECTED)
+                theme.setColor(Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_FOLDER_NORMAL)
+                theme.setColor(Theme.FOLDER_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_FOLDER_SELECTED)
+                theme.setColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_ARCHIVE_NORMAL)
+                theme.setColor(Theme.ARCHIVE_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_ARCHIVE_SELECTED)
+                theme.setColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_SYMLINK_NORMAL)
+                theme.setColor(Theme.SYMLINK_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_SYMLINK_SELECTED)
+                theme.setColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_MARKED_NORMAL)
+                theme.setColor(Theme.MARKED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_MARKED_SELECTED)
+                theme.setColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_FILE_NORMAL)
+                theme.setColor(Theme.FILE_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_FILE_SELECTED)
+                theme.setColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+
+            else if(state == STATE_SHELL_NORMAL)
+                theme.setColor(Theme.SHELL_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_SHELL_SELECTED)
-                theme.setColor(Theme.SHELL_TEXT_SELECTED, createColor(attributes));
+                theme.setColor(Theme.SHELL_SELECTED_FOREGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_SHELL_HISTORY_NORMAL)
-                theme.setColor(Theme.SHELL_HISTORY_TEXT, createColor(attributes));
+                theme.setColor(Theme.SHELL_HISTORY_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_SHELL_HISTORY_SELECTED)
-                theme.setColor(Theme.SHELL_HISTORY_TEXT_SELECTED, createColor(attributes));
+                theme.setColor(Theme.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_EDITOR_NORMAL)
-                theme.setColor(Theme.EDITOR_TEXT, createColor(attributes));
+                theme.setColor(Theme.EDITOR_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_EDITOR_SELECTED)
-                theme.setColor(Theme.EDITOR_TEXT_SELECTED, createColor(attributes));
+                theme.setColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_LOCATION_BAR_NORMAL)
-                theme.setColor(Theme.LOCATION_BAR_TEXT, createColor(attributes));
+                theme.setColor(Theme.LOCATION_BAR_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_LOCATION_BAR_SELECTED)
-                theme.setColor(Theme.LOCATION_BAR_TEXT_SELECTED, createColor(attributes));
+                theme.setColor(Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_STATUS_BAR)
-                theme.setColor(Theme.STATUS_BAR_TEXT, createColor(attributes));
+                theme.setColor(Theme.STATUS_BAR_FOREGROUND_COLOR, createColor(attributes));
 
             else
                 throw createIllegalElementDeclaration(name);
@@ -390,6 +479,42 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             if(state != STATE_TABLE)
                 throw createIllegalElementClosing(name);
             state = STATE_ROOT;
+        }
+
+        else if(name.equals(ELEMENT_HIDDEN)) {
+            if(state != STATE_HIDDEN)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_TABLE;
+        }
+
+        else if(name.equals(ELEMENT_FOLDER)) {
+            if(state != STATE_FOLDER)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_TABLE;
+        }
+
+        else if(name.equals(ELEMENT_ARCHIVE)) {
+            if(state != STATE_ARCHIVE)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_TABLE;
+        }
+
+        else if(name.equals(ELEMENT_SYMLINK)) {
+            if(state != STATE_SYMLINK)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_TABLE;
+        }
+
+        else if(name.equals(ELEMENT_MARKED)) {
+            if(state != STATE_MARKED)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_TABLE;
+        }
+
+        else if(name.equals(ELEMENT_FILE)) {
+            if(state != STATE_FILE)
+                throw createIllegalElementDeclaration(name);
+            state = STATE_TABLE;
         }
 
         // Shell declaration.
@@ -433,8 +558,18 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
                 state = STATE_SHELL;
             else if(state == STATE_SHELL_HISTORY_NORMAL)
                 state = STATE_SHELL_HISTORY;
-            else if(state == STATE_TABLE_NORMAL)
-                state = STATE_TABLE;
+            else if(state == STATE_HIDDEN_NORMAL)
+                state = STATE_HIDDEN;
+            else if(state == STATE_FOLDER_NORMAL)
+                state = STATE_FOLDER;
+            else if(state == STATE_ARCHIVE_NORMAL)
+                state = STATE_ARCHIVE;
+            else if(state == STATE_SYMLINK_NORMAL)
+                state = STATE_SYMLINK;
+            else if(state == STATE_MARKED_NORMAL)
+                state = STATE_MARKED;
+            else if(state == STATE_FILE_NORMAL)
+                state = STATE_FILE;
             else if(state == STATE_EDITOR_NORMAL)
                 state = STATE_EDITOR;
             else if(state == STATE_LOCATION_BAR_NORMAL)
@@ -444,13 +579,23 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         }
 
         // Selected element declaration.
-        else if(name.equals(ELEMENT_SELECTION)) {
+        else if(name.equals(ELEMENT_SELECTED)) {
             if(state == STATE_SHELL_SELECTED)
                 state = STATE_SHELL;
             else if(state == STATE_SHELL_HISTORY_SELECTED)
                 state = STATE_SHELL_HISTORY;
-            else if(state == STATE_TABLE_SELECTED)
-                state = STATE_TABLE;
+            else if(state == STATE_HIDDEN_SELECTED)
+                state = STATE_HIDDEN;
+            else if(state == STATE_FOLDER_SELECTED)
+                state = STATE_FOLDER;
+            else if(state == STATE_ARCHIVE_SELECTED)
+                state = STATE_ARCHIVE;
+            else if(state == STATE_SYMLINK_SELECTED)
+                state = STATE_SYMLINK;
+            else if(state == STATE_MARKED_SELECTED)
+                state = STATE_MARKED;
+            else if(state == STATE_FILE_SELECTED)
+                state = STATE_FILE;
             else if(state == STATE_EDITOR_SELECTED)
                 state = STATE_EDITOR;
             else if(state == STATE_LOCATION_BAR_SELECTED)

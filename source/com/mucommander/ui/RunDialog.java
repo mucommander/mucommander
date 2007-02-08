@@ -80,12 +80,12 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
         outputTextArea.addKeyListener(this);
 
         // Applies the current theme to the shell output area.
-        outputTextArea.setForeground(ThemeManager.getCurrentColor(Theme.SHELL_TEXT));
-        outputTextArea.setCaretColor(ThemeManager.getCurrentColor(Theme.SHELL_TEXT));
-        outputTextArea.setBackground(ThemeManager.getCurrentColor(Theme.SHELL_BACKGROUND));
-        outputTextArea.setSelectedTextColor(ThemeManager.getCurrentColor(Theme.SHELL_TEXT_SELECTED));
-        outputTextArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.SHELL_BACKGROUND_SELECTED));
-        outputTextArea.setFont(ThemeManager.getCurrentFont(Theme.SHELL));
+        outputTextArea.setForeground(ThemeManager.getCurrentColor(Theme.SHELL_FOREGROUND_COLOR));
+        outputTextArea.setCaretColor(ThemeManager.getCurrentColor(Theme.SHELL_FOREGROUND_COLOR));
+        outputTextArea.setBackground(ThemeManager.getCurrentColor(Theme.SHELL_BACKGROUND_COLOR));
+        outputTextArea.setSelectedTextColor(ThemeManager.getCurrentColor(Theme.SHELL_SELECTED_FOREGROUND_COLOR));
+        outputTextArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.SHELL_SELECTED_BACKGROUND_COLOR));
+        outputTextArea.setFont(ThemeManager.getCurrentFont(Theme.SHELL_FONT));
 
         // Creates a scroll pane on the shell output area.
         return new JScrollPane(outputTextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

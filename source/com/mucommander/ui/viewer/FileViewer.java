@@ -24,7 +24,7 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
      * Creates a new FileViewer.
      */
     public FileViewer() {
-        setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND));
+        setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR));
         ThemeManager.addThemeListener(this);
     }
 	
@@ -168,8 +168,8 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
      * @param color   new value for the color.
      */
     public void colorChanged(int colorId, Color color) {
-        if(colorId == Theme.EDITOR_BACKGROUND)
-            setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND));
+        if(colorId == Theme.EDITOR_BACKGROUND_COLOR)
+            setBackground(color);
 
         repaint();
     }

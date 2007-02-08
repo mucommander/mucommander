@@ -29,7 +29,7 @@ interface ThemeXmlConstants {
     /** Item normal state description element. */
     public static final String ELEMENT_NORMAL               = "normal";
     /** Item selected state description element. */
-    public static final String ELEMENT_SELECTION            = "selection";
+    public static final String ELEMENT_SELECTED             = "selected";
 
 
 
@@ -40,7 +40,7 @@ interface ThemeXmlConstants {
     /** Font family attribute. */
     public static final String ATTRIBUTE_FAMILY             = "family";
     /** Font size attribute. */
-    public static final String ATTRIBUTE_SIZE                = "size";
+    public static final String ATTRIBUTE_SIZE               = "size";
     /** Font bold attribute. */
     public static final String ATTRIBUTE_BOLD               = "bold";
     /** Font italic attribute. */
@@ -58,32 +58,18 @@ interface ThemeXmlConstants {
     public static final String ELEMENT_UNFOCUSED_BACKGROUND = "unfocused_background";
     /** Background color when an item has the focus. */
     public static final String ELEMENT_BACKGROUND           = "background";
-    /** Text color for hidden files. */
+    public static final String ELEMENT_FOREGROUND           = "foreground";
     public static final String ELEMENT_HIDDEN               = "hidden";
-    /** Text color for folders. */
     public static final String ELEMENT_FOLDER               = "folder";
-    /** Text color for archive files. */
     public static final String ELEMENT_ARCHIVE              = "archive";
-    /** Text color for symlinks. */
     public static final String ELEMENT_SYMLINK              = "symlink";
-    /** Text color for marked files. */
     public static final String ELEMENT_MARKED               = "marked";
-    /** Generic color. */
-    public static final String ELEMENT_TEXT                 = "text";
-    /** Text color for standard files. */
     public static final String ELEMENT_FILE                 = "file";
-    /** Progress bar color element. */
     public static final String ELEMENT_PROGRESS             = "progress";
-    /** Border color element. */
     public static final String ELEMENT_BORDER               = "border";
-    /** 'OK' color element. */
     public static final String ELEMENT_OK                   = "ok";
-    /** 'WARNING' color element. */
     public static final String ELEMENT_WARNING              = "warning";
-    /** 'CRITICAL' color element. */
     public static final String ELEMENT_CRITICAL             = "critical";
-    /** Color description attribute. */
     public static final String ATTRIBUTE_COLOR              = "color";
-    /** Color transparency description attribute. */
     public static final String ATTRIBUTE_ALPHA              = "alpha";
 }

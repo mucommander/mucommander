@@ -168,10 +168,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         // Sets the table border.
-        scrollPane.setBorder(BorderFactory.createLineBorder(ThemeManager.getCurrentColor(Theme.FILE_TABLE_BORDER), 1));
+        scrollPane.setBorder(BorderFactory.createLineBorder(ThemeManager.getCurrentColor(Theme.FILE_TABLE_BORDER_COLOR), 1));
 
         // Set scroll pane's background color to match the one of this panel and FileTable
-        scrollPane.getViewport().setBackground(ThemeManager.getCurrentColor(Theme.FILE_BACKGROUND));
+        scrollPane.getViewport().setBackground(ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR));
 
         // Catch mouse events on the ScrollPane
         scrollPane.addMouseListener(new MouseAdapter() {
@@ -919,9 +919,9 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param color   new value for the color.
      */
     public void colorChanged(int colorId, Color color) {
-        if(colorId == Theme.FILE_TABLE_BORDER)
+        if(colorId == Theme.FILE_TABLE_BORDER_COLOR)
             scrollPane.setBorder(BorderFactory.createLineBorder(color, 1));
-        else if(colorId == Theme.FILE_BACKGROUND)
+        else if(colorId == Theme.FILE_TABLE_BACKGROUND_COLOR)
             scrollPane.getViewport().setBackground(color);
     }
 

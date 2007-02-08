@@ -42,18 +42,18 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
      */
     public LocationComboBox(FolderPanel folderPanel) {
         // Use a custom text field that can display loading progress when changing folders
-        super(new ProgressTextField(0, ThemeManager.getCurrentColor(Theme.LOCATION_BAR_PROGRESS)));
+        super(new ProgressTextField(0, ThemeManager.getCurrentColor(Theme.LOCATION_BAR_PROGRESS_COLOR)));
 
         this.folderPanel = folderPanel;
         this.locationField = (ProgressTextField)getTextField();
         locationField.setComboBox(this);
 
 	// Applies theme values.
-        setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR));
-        setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_TEXT));
-        setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND));
-        setSelectionForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_TEXT_SELECTED));
-        setSelectionBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND_SELECTED));
+        setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR_FONT));
+        setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_FOREGROUND_COLOR));
+        setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND_COLOR));
+        setSelectionForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR));
+        setSelectionBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR));
 
         // Listener to actions fired by this EditableComboBox
         addEditableComboBoxListener(this);
@@ -228,23 +228,23 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
      */
     public void colorChanged(int colorId, Color color) {
         switch(colorId) {
-        case Theme.LOCATION_BAR_PROGRESS:
+        case Theme.LOCATION_BAR_PROGRESS_COLOR:
             locationField.setProgressColor(color);
             break;
 
-        case Theme.LOCATION_BAR_TEXT:
+        case Theme.LOCATION_BAR_FOREGROUND_COLOR:
             setForeground(color);
             break;
 
-        case Theme.LOCATION_BAR_BACKGROUND:
+        case Theme.LOCATION_BAR_BACKGROUND_COLOR:
             setBackground(color);
             break;
 
-        case Theme.LOCATION_BAR_TEXT_SELECTED:
+        case Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR:
             setSelectionForeground(color);
             break;
 
-        case Theme.LOCATION_BAR_BACKGROUND_SELECTED:
+        case Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR:
             setSelectionBackground(color);
             break;
         }
@@ -256,7 +256,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
      * @param font   new value for the font.
      */
     public void fontChanged(int fontId, Font font) {
-        if(fontId == Theme.LOCATION_BAR)
+        if(fontId == Theme.LOCATION_BAR_FONT)
             setFont(font);
     }
 }

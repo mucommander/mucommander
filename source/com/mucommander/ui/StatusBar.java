@@ -124,10 +124,10 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         addComponentListener(this);
 
         // Initialises theme.
-        selectedFilesLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR));
-        selectedFilesLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_TEXT));
-        volumeSpaceLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR));
-        volumeSpaceLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_TEXT));
+        selectedFilesLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR_FONT));
+        selectedFilesLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_FOREGROUND_COLOR));
+        volumeSpaceLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR_FONT));
+        volumeSpaceLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_FOREGROUND_COLOR));
         ThemeManager.addThemeListener(this);
     }
 
@@ -435,7 +435,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
 
     public void fontChanged(int fontId, Font newFont) {
-        if(fontId == Theme.STATUS_BAR) {
+        if(fontId == Theme.STATUS_BAR_FONT) {
             selectedFilesLabel.setFont(newFont);
             volumeSpaceLabel.setFont(newFont);
             repaint();
@@ -443,7 +443,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     }
 
     public void colorChanged(int colorId, Color newColor) {
-        if(colorId == Theme.STATUS_BAR_TEXT) {
+        if(colorId == Theme.STATUS_BAR_FOREGROUND_COLOR) {
             selectedFilesLabel.setForeground(newColor);
             volumeSpaceLabel.setForeground(newColor);
             repaint();
@@ -471,11 +471,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         private VolumeSpaceLabel() {
             super("");
             setHorizontalAlignment(CENTER);
-            backgroundColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BACKGROUND);
-            borderColor     = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BORDER);
-            okColor         = ThemeManager.getCurrentColor(Theme.STATUS_BAR_OK);
-            warningColor    = ThemeManager.getCurrentColor(Theme.STATUS_BAR_WARNING);
-            criticalColor   = ThemeManager.getCurrentColor(Theme.STATUS_BAR_CRITICAL);
+            backgroundColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BACKGROUND_COLOR);
+            borderColor     = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BORDER_COLOR);
+            okColor         = ThemeManager.getCurrentColor(Theme.STATUS_BAR_OK_COLOR);
+            warningColor    = ThemeManager.getCurrentColor(Theme.STATUS_BAR_WARNING_COLOR);
+            criticalColor   = ThemeManager.getCurrentColor(Theme.STATUS_BAR_CRITICAL_COLOR);
             ThemeManager.addThemeListener(this);
         }
 
@@ -564,15 +564,15 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         public void fontChanged(int fontId, Font newFont) {}
 
         public void colorChanged(int colorId, Color newColor) {
-            if(colorId == Theme.STATUS_BAR_BACKGROUND)
+            if(colorId == Theme.STATUS_BAR_BACKGROUND_COLOR)
                 backgroundColor = newColor;
-            else if(colorId == Theme.STATUS_BAR_BORDER)
+            else if(colorId == Theme.STATUS_BAR_BORDER_COLOR)
                 borderColor = newColor;
-            else if(colorId == Theme.STATUS_BAR_OK)
+            else if(colorId == Theme.STATUS_BAR_OK_COLOR)
                 okColor = newColor;
-            else if(colorId == Theme.STATUS_BAR_WARNING)
+            else if(colorId == Theme.STATUS_BAR_WARNING_COLOR)
                 warningColor = newColor;
-            else if(colorId == Theme.STATUS_BAR_CRITICAL)
+            else if(colorId == Theme.STATUS_BAR_CRITICAL_COLOR)
                 criticalColor = newColor;
             else
                 return;

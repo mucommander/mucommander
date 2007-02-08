@@ -128,7 +128,12 @@ public class ThemeManager {
                 if(currentType == CUSTOM_THEME && theme.getName().equals(currentName))
                     currentData = theme.getThemeData();
             }
-            catch(Exception e) {if(Debug.ON) Debug.trace("Custom theme " + customThemes[i] + " appears to be corrupt.");}
+            catch(Exception e) {
+                if(Debug.ON) {
+                    Debug.trace("Custom theme " + customThemes[i] + " appears to be corrupt.");
+                    Debug.trace(e);
+                }
+            }
         }
     }
 
@@ -852,109 +857,130 @@ public class ThemeManager {
         // File background color.
         if(backgroundColor == null)
             backgroundColor = LegacyTheme.DEFAULT_BACKGROUND_COLOR;
-        data.setColor(Theme.FILE_BACKGROUND, color = new Color(Integer.parseInt(backgroundColor, 16)));
-        data.setColor(Theme.FILE_UNFOCUSED_BACKGROUND, color);
+        data.setColor(Theme.FILE_BACKGROUND_COLOR, color = new Color(Integer.parseInt(backgroundColor, 16)));
+        data.setColor(Theme.HIDDEN_FILE_BACKGROUND_COLOR, color);
+        data.setColor(Theme.MARKED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.FOLDER_BACKGROUND_COLOR, color);
+        data.setColor(Theme.SYMLINK_BACKGROUND_COLOR, color);
+        data.setColor(Theme.ARCHIVE_BACKGROUND_COLOR, color);
+        data.setColor(Theme.FILE_TABLE_BACKGROUND_COLOR, color);
 
         // Selected file background color.
         if(selectionColor == null)
             selectionColor = LegacyTheme.DEFAULT_SELECTION_BACKGROUND_COLOR;
-        data.setColor(Theme.FILE_BACKGROUND_SELECTED, new Color(Integer.parseInt(selectionColor, 16)));
+        data.setColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(selectionColor, 16)));
+        data.setColor(Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.MARKED_SELECTED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.FOLDER_SELECTED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.SYMLINK_SELECTED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR, color);
 
         // Out of focus file background color.
         if(unfocusedColor == null)
             unfocusedColor = LegacyTheme.DEFAULT_OUT_OF_FOCUS_COLOR;
-        data.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_SELECTED, new Color(Integer.parseInt(unfocusedColor, 16)));
+        data.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(unfocusedColor, 16)));
+        data.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
 
         // Hidden files color.
         if(hiddenColor == null)
             hiddenColor = LegacyTheme.DEFAULT_HIDDEN_FILE_COLOR;
-        data.setColor(Theme.HIDDEN_FILE, new Color(Integer.parseInt(hiddenColor, 16)));
+        data.setColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR, new Color(Integer.parseInt(hiddenColor, 16)));
 
         // Folder color.
         if(folderColor == null)
             folderColor = LegacyTheme.DEFAULT_FOLDER_COLOR;
-        data.setColor(Theme.FOLDER, new Color(Integer.parseInt(folderColor, 16)));
+        data.setColor(Theme.FOLDER_FOREGROUND_COLOR, new Color(Integer.parseInt(folderColor, 16)));
 
         // Archives color.
         if(archiveColor == null)
             archiveColor = LegacyTheme.DEFAULT_ARCHIVE_FILE_COLOR;
-        data.setColor(Theme.ARCHIVE, new Color(Integer.parseInt(archiveColor, 16)));
+        data.setColor(Theme.ARCHIVE_FOREGROUND_COLOR, new Color(Integer.parseInt(archiveColor, 16)));
 
         // Symbolic links color.
         if(symlinkColor == null)
             symlinkColor = LegacyTheme.DEFAULT_SYMLINK_COLOR;
-        data.setColor(Theme.SYMLINK, new Color(Integer.parseInt(symlinkColor, 16)));
+        data.setColor(Theme.SYMLINK_FOREGROUND_COLOR, new Color(Integer.parseInt(symlinkColor, 16)));
 
         // Plain file color.
         if(fileColor == null)
             fileColor = LegacyTheme.DEFAULT_PLAIN_FILE_COLOR;
-        data.setColor(Theme.FILE, new Color(Integer.parseInt(fileColor, 16)));
+        data.setColor(Theme.FILE_FOREGROUND_COLOR, new Color(Integer.parseInt(fileColor, 16)));
 
         // Marked file color.
         if(markedColor == null)
             markedColor = LegacyTheme.DEFAULT_MARKED_FILE_COLOR;
-        data.setColor(Theme.MARKED, new Color(Integer.parseInt(markedColor, 16)));
+        data.setColor(Theme.MARKED_FOREGROUND_COLOR, new Color(Integer.parseInt(markedColor, 16)));
 
         // Selected file color.
         if(selectedColor == null)
             selectedColor = LegacyTheme.DEFAULT_SELECTED_FILE_COLOR;
-        data.setColor(Theme.FILE_SELECTED, color = new Color(Integer.parseInt(selectedColor, 16)));
-        data.setColor(Theme.HIDDEN_FILE_SELECTED, color);
-        data.setColor(Theme.FOLDER_SELECTED, color);
-        data.setColor(Theme.ARCHIVE_SELECTED, color);
-        data.setColor(Theme.SYMLINK_SELECTED, color);
-        data.setColor(Theme.MARKED_SELECTED, color);
+        data.setColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(selectedColor, 16)));
+        data.setColor(Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR, color);
 
         // Shell background color.
         if(shellBackgroundColor == null)
             shellBackgroundColor = LegacyTheme.DEFAULT_SHELL_BACKGROUND_COLOR;
-        data.setColor(Theme.SHELL_BACKGROUND, new Color(Integer.parseInt(shellBackgroundColor, 16)));
+        data.setColor(Theme.SHELL_BACKGROUND_COLOR, new Color(Integer.parseInt(shellBackgroundColor, 16)));
 
         // Shell text color.
         if(shellTextColor == null)
             shellTextColor = LegacyTheme.DEFAULT_SHELL_TEXT_COLOR;
-        data.setColor(Theme.SHELL_TEXT, color = new Color(Integer.parseInt(shellTextColor, 16)));
-        data.setColor(Theme.SHELL_TEXT_SELECTED, color);
+        data.setColor(Theme.SHELL_FOREGROUND_COLOR, color = new Color(Integer.parseInt(shellTextColor, 16)));
+        data.setColor(Theme.SHELL_SELECTED_FOREGROUND_COLOR, color);
 
         // Shell selection background color.
         if(shellSelectionColor == null)
             shellSelectionColor = LegacyTheme.DEFAULT_SHELL_SELECTION_COLOR;
-        data.setColor(Theme.SHELL_BACKGROUND_SELECTED, new Color(Integer.parseInt(shellSelectionColor, 16)));
+        data.setColor(Theme.SHELL_SELECTED_BACKGROUND_COLOR, new Color(Integer.parseInt(shellSelectionColor, 16)));
 
         // File table font.
-        data.setFont(Theme.FILE_TABLE, getLegacyFont(fontFamily, fontStyle, fontSize));
+        data.setFont(Theme.FILE_TABLE_FONT, font = getLegacyFont(fontFamily, fontStyle, fontSize));
 
         // Sets colors that were not customisable in older versions of muCommander, using
         // l&f default where necessary.
 
         // File table border.
-        data.setColor(Theme.FILE_TABLE_BORDER, new Color(64, 64, 64));
+        data.setColor(Theme.FILE_TABLE_BORDER_COLOR, new Color(64, 64, 64));
 
         // File editor / viewer colors.
-        data.setColor(Theme.EDITOR_BACKGROUND, Color.WHITE);
-        data.setColor(Theme.EDITOR_TEXT, getTextAreaColor());
-        data.setColor(Theme.EDITOR_BACKGROUND_SELECTED, getTextAreaSelectionBackgroundColor());
-        data.setColor(Theme.EDITOR_TEXT_SELECTED, getTextAreaSelectionColor());
-        data.setFont(Theme.EDITOR, getTextAreaFont());
+        data.setColor(Theme.EDITOR_BACKGROUND_COLOR, Color.WHITE);
+        data.setColor(Theme.EDITOR_FOREGROUND_COLOR, getTextAreaColor());
+        data.setColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR, getTextAreaSelectionBackgroundColor());
+        data.setColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR, getTextAreaSelectionColor());
+        data.setFont(Theme.EDITOR_FONT, getTextAreaFont());
 
         // Location bar and shell history (both use text field defaults).
-        data.setColor(Theme.LOCATION_BAR_PROGRESS, new Color(0, 255, 255, 64));
+        data.setColor(Theme.LOCATION_BAR_PROGRESS_COLOR, new Color(0, 255, 255, 64));
 	color = getTextFieldBackgroundColor();
-        data.setColor(Theme.LOCATION_BAR_BACKGROUND, color);
-        data.setColor(Theme.SHELL_HISTORY_BACKGROUND, color);
+        data.setColor(Theme.LOCATION_BAR_BACKGROUND_COLOR, color);
+        data.setColor(Theme.SHELL_HISTORY_BACKGROUND_COLOR, color);
 	color = getTextFieldColor();
-        data.setColor(Theme.LOCATION_BAR_TEXT, color);
-        data.setColor(Theme.SHELL_HISTORY_TEXT, color);
+        data.setColor(Theme.LOCATION_BAR_FOREGROUND_COLOR, color);
+        data.setColor(Theme.SHELL_HISTORY_FOREGROUND_COLOR, color);
 	color = getTextFieldSelectionBackgroundColor();
-        data.setColor(Theme.LOCATION_BAR_BACKGROUND_SELECTED, color);
-        data.setColor(Theme.SHELL_HISTORY_BACKGROUND_SELECTED, color);
+        data.setColor(Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, color);
 	color = getTextFieldSelectionColor();
-        data.setColor(Theme.LOCATION_BAR_TEXT_SELECTED, color);
-        data.setColor(Theme.SHELL_HISTORY_TEXT_SELECTED, color);
+        data.setColor(Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, color);
 
 	font = getTextFieldFont();
-        data.setFont(Theme.LOCATION_BAR, font);
-        data.setFont(Theme.SHELL_HISTORY, font);
+        data.setFont(Theme.LOCATION_BAR_FONT, font);
+        data.setFont(Theme.SHELL_HISTORY_FONT, font);
 
         return data;
     }
@@ -1179,88 +1205,127 @@ public class ThemeManager {
 
     static final Color getDefaultColor(int id) {
         switch(id) {
-        case Theme.FILE_BACKGROUND:
-        case Theme.FILE_UNFOCUSED_BACKGROUND:
+            // File table background colors.
+        case Theme.FILE_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.FILE_BACKGROUND_COLOR:
+        case Theme.HIDDEN_FILE_BACKGROUND_COLOR:
+        case Theme.FOLDER_BACKGROUND_COLOR:
+        case Theme.ARCHIVE_BACKGROUND_COLOR:
+        case Theme.SYMLINK_BACKGROUND_COLOR:
+        case Theme.MARKED_BACKGROUND_COLOR:
+        case Theme.FILE_TABLE_BACKGROUND_COLOR:
 	    return getTableBackgroundColor();
 
-        case Theme.HIDDEN_FILE:
-        case Theme.FOLDER:
-        case Theme.ARCHIVE:
-        case Theme.SYMLINK:
-        case Theme.FILE:
+            // File table foreground colors (everything except marked
+            // defaults to the l&f specific table foreground color).
+        case Theme.FILE_FOREGROUND_COLOR:
+        case Theme.HIDDEN_FILE_FOREGROUND_COLOR:
+        case Theme.FOLDER_FOREGROUND_COLOR:
+        case Theme.ARCHIVE_FOREGROUND_COLOR:
+        case Theme.SYMLINK_FOREGROUND_COLOR:
 	    return getTableColor();
 
-
-        case Theme.MARKED:
-        case Theme.MARKED_SELECTED:
+            // Marked files foreground colors (they have to be different
+            // of the standard file foreground colors).
+        case Theme.MARKED_FOREGROUND_COLOR:
+        case Theme.MARKED_SELECTED_FOREGROUND_COLOR:
             return Color.RED;
 
-        case Theme.SHELL_TEXT:
-        case Theme.EDITOR_TEXT:
+            // Text areas default foreground colors.
+        case Theme.SHELL_FOREGROUND_COLOR:
+        case Theme.EDITOR_FOREGROUND_COLOR:
             return getTextAreaColor();
 
-        case Theme.SHELL_BACKGROUND:
-        case Theme.EDITOR_BACKGROUND:
+            // Text areas default background colors.
+        case Theme.SHELL_BACKGROUND_COLOR:
+        case Theme.EDITOR_BACKGROUND_COLOR:
             return getTextAreaBackgroundColor();
 
-        case Theme.SHELL_HISTORY_TEXT:
-        case Theme.LOCATION_BAR_TEXT:
-        case Theme.STATUS_BAR_TEXT:
+            // Text fields default foreground colors.
+        case Theme.SHELL_HISTORY_FOREGROUND_COLOR:
+        case Theme.LOCATION_BAR_FOREGROUND_COLOR:
+        case Theme.STATUS_BAR_FOREGROUND_COLOR:
             return getTextFieldColor();
 
-        case Theme.LOCATION_BAR_BACKGROUND:
-        case Theme.SHELL_HISTORY_BACKGROUND:
+            // Text fields default background colors.
+        case Theme.LOCATION_BAR_BACKGROUND_COLOR:
+        case Theme.SHELL_HISTORY_BACKGROUND_COLOR:
             return getTextFieldBackgroundColor();
 
-        case Theme.LOCATION_BAR_PROGRESS:
+            // The location bar progress color is a bit of a special case,
+            // as it requires alpha transparency.
+        case Theme.LOCATION_BAR_PROGRESS_COLOR:
 	    Color color;
 
 	    color = getTextFieldSelectionBackgroundColor();
             return new Color(color.getRed(), color.getGreen(), color.getBlue(), 64);
 
-        case Theme.FILE_BACKGROUND_SELECTED:
+            // Selected table background colors.
+        case Theme.FILE_SELECTED_BACKGROUND_COLOR:
+        case Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR:
+        case Theme.FOLDER_SELECTED_BACKGROUND_COLOR:
+        case Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR:
+        case Theme.SYMLINK_SELECTED_BACKGROUND_COLOR:
+        case Theme.MARKED_SELECTED_BACKGROUND_COLOR:
 	    return getTableSelectionBackgroundColor();
 
-        case Theme.FILE_UNFOCUSED_BACKGROUND_SELECTED:
-        case Theme.FILE_TABLE_BORDER:
+            // Gray colors.
+        case Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.FILE_TABLE_BORDER_COLOR:
             return Color.GRAY;
 
-        case Theme.HIDDEN_FILE_SELECTED:
-        case Theme.FOLDER_SELECTED:
-        case Theme.ARCHIVE_SELECTED:
-        case Theme.SYMLINK_SELECTED:
-        case Theme.FILE_SELECTED:
+            // Foreground color for selected elements in the file table.
+        case Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR:
+        case Theme.FOLDER_SELECTED_FOREGROUND_COLOR:
+        case Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR:
+        case Theme.SYMLINK_SELECTED_FOREGROUND_COLOR:
+        case Theme.FILE_SELECTED_FOREGROUND_COLOR:
 	    return getTableSelectionColor();
 
-        case Theme.SHELL_TEXT_SELECTED:
-        case Theme.EDITOR_TEXT_SELECTED:
+            // Foreground color for selected text area elements.
+        case Theme.SHELL_SELECTED_FOREGROUND_COLOR:
+        case Theme.EDITOR_SELECTED_FOREGROUND_COLOR:
             return getTextAreaSelectionColor();
 
-        case Theme.SHELL_BACKGROUND_SELECTED:
-        case Theme.EDITOR_BACKGROUND_SELECTED:
+            // Background color for selected text area elements.
+        case Theme.SHELL_SELECTED_BACKGROUND_COLOR:
+        case Theme.EDITOR_SELECTED_BACKGROUND_COLOR:
             return getTextAreaSelectionBackgroundColor();
 
-        case Theme.LOCATION_BAR_TEXT_SELECTED:
-        case Theme.SHELL_HISTORY_TEXT_SELECTED:
+            // Foreground color for selected text fields elements.
+        case Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR:
+        case Theme.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR:
             return getTextFieldSelectionColor();
 
-        case Theme.SHELL_HISTORY_BACKGROUND_SELECTED:
-        case Theme.LOCATION_BAR_BACKGROUND_SELECTED:
+            // Background color for selected text fields elements.
+        case Theme.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR:
+        case Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR:
             return getTextFieldSelectionBackgroundColor();
 
-        case Theme.STATUS_BAR_BACKGROUND:
+            // Status bar defaults.
+        case Theme.STATUS_BAR_BACKGROUND_COLOR:
             return new Color(0xD5D5D5);
 
-        case Theme.STATUS_BAR_BORDER:
+        case Theme.STATUS_BAR_BORDER_COLOR:
             return new Color(0x7A7A7A);
 
-        case Theme.STATUS_BAR_OK:
+        case Theme.STATUS_BAR_OK_COLOR:
             return new Color(0x70EC2B);
 
-        case Theme.STATUS_BAR_WARNING:
+        case Theme.STATUS_BAR_WARNING_COLOR:
             return new Color(0xFF7F00);
 
-        case Theme.STATUS_BAR_CRITICAL:
+        case Theme.STATUS_BAR_CRITICAL_COLOR:
             return new Color(0xFF0000);
         }
         throw new IllegalArgumentException("Illegal color identifier: " + id);
@@ -1274,18 +1339,18 @@ public class ThemeManager {
     static final Font getDefaultFont(int id) {
 	switch(id) {
             // Table font.
-        case Theme.FILE_TABLE:
-	    return getTableFont();
+        case Theme.FILE_TABLE_FONT:
+            return getTableFont();
 
 	    // Text Area font.
-        case Theme.EDITOR:
-        case Theme.SHELL:
+        case Theme.EDITOR_FONT:
+        case Theme.SHELL_FONT:
 	    return getTextAreaFont();
 
 	    // Text Field font.
-        case Theme.LOCATION_BAR:
-        case Theme.SHELL_HISTORY:
-        case Theme.STATUS_BAR:
+        case Theme.LOCATION_BAR_FONT:
+        case Theme.SHELL_HISTORY_FONT:
+        case Theme.STATUS_BAR_FONT:
 	    return getTextFieldFont();
 
         }

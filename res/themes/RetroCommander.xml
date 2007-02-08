@@ -3,34 +3,130 @@
   <!-- = File table appearance ========================= -->
   <!-- ================================================= -->
   <file_table>
-    <font size="13" family="Lucida Grande,Arial,Lucida Sans"/>
-    <border color="404040"/>
+    <font       family="Lucida Grande,Arial,Lucida Sans" size="13"/>
+    <border     color="404040"/>
+    <background color="000084"/>
 
-    <!-- = Default appearance ========================== -->
-    <!-- =============================================== -->
+
+
+
+    <!-- 
     <normal>
-      <background           color="000084"/>
-      <unfocused_background color="000084"/>
-      <hidden               color="c0c0c0"/>
-      <folder               color="ffffff"/>
-      <archive              color="40ff40"/>
-      <symlink              color="cc00cc"/>
+
       <marked               color="ffff00"/>
       <file                 color="00f0f0"/>
     </normal>
 
-    <!-- = Selected appearance ========================= -->
-    <!-- =============================================== -->
-    <selection>
-      <background           color="00ffff"/>
-      <unfocused_background color="cccccc"/>
+    <selected>
       <hidden               color="000080"/>
       <folder               color="000080"/>
       <archive              color="000080"/>
       <symlink              color="000080"/>
       <marked               color="ffc532"/>
       <file                 color="000080"/>
-    </selection>
+    </selected>
+ -->
+
+
+
+    <!-- = Hidden files ================================ -->
+    <!-- =============================================== -->
+    <hidden>
+      <normal>
+        <unfocused_background color="000084"/>
+        <background           color="000084"/>
+        <foreground           color="c0c0c0"/>
+      </normal>
+      <selected>
+        <unfocused_background color="cccccc"/>
+        <background           color="00ffff"/>
+        <foreground           color="000080"/>
+      </selected>
+    </hidden>
+
+
+
+    <!-- = Folders ===================================== -->
+    <!-- =============================================== -->
+    <folder>
+      <normal>
+        <unfocused_background color="000084"/>
+        <background           color="000084"/>
+        <foreground           color="ffffff"/>
+      </normal>
+      <selected>
+        <unfocused_background color="cccccc"/>
+        <background           color="00ffff"/>
+        <foreground           color="000080"/>
+      </selected>
+    </folder>
+
+
+
+    <!-- = Archive ===================================== -->
+    <!-- =============================================== -->
+    <archive>
+      <normal>
+        <unfocused_background color="000084"/>
+        <background           color="000084"/>
+        <foreground           color="40ff40"/>
+      </normal>
+      <selected>
+        <unfocused_background color="cccccc"/>
+        <background           color="00ffff"/>
+        <foreground           color="000080"/>
+      </selected>
+    </archive>
+
+
+    <!-- = Symlink ===================================== -->
+    <!-- =============================================== -->
+    <symlink>
+      <normal>
+        <unfocused_background color="000084"/>
+        <background           color="000084"/>
+        <foreground           color="cc00cc"/>
+      </normal>
+      <selected>
+        <unfocused_background color="cccccc"/>
+        <background           color="00ffff"/>
+        <foreground           color="000080"/>
+      </selected>
+    </symlink>
+
+
+
+    <!-- = Marked ====================================== -->
+    <!-- =============================================== -->
+    <marked>
+      <normal>
+        <unfocused_background color="000084"/>
+        <background           color="000084"/>
+        <foreground           color="ffff00"/>
+      </normal>
+      <selected>
+        <unfocused_background color="cccccc"/>
+        <background           color="00ffff"/>
+        <foreground           color="ffc532"/>
+      </selected>
+    </marked>
+
+
+
+    <!-- = Plain file ================================== -->
+    <!-- =============================================== -->
+    <file>
+      <normal>
+        <unfocused_background color="000084"/>
+        <background           color="000084"/>
+        <foreground           color="00f0f0"/>
+      </normal>
+      <selected>
+        <unfocused_background color="cccccc"/>
+        <background           color="00ffff"/>
+        <foreground           color="000080"/>
+      </selected>
+    </file>
   </file_table>
 
 
@@ -44,15 +140,15 @@
     <!-- =============================================== -->
     <normal>
       <background color="ffffff"/>
-      <text       color="000000"/>
+      <foreground color="000000"/>
     </normal>
 
     <!-- = Selected appearance ========================= -->
     <!-- =============================================== -->
-    <selection>
+    <selected>
       <background color="3875d7"/>
-      <text       color="ffffff"/>
-    </selection>
+      <foreground color="ffffff"/>
+    </selected>
   </shell>
 
 
@@ -66,15 +162,15 @@
     <!-- =============================================== -->
     <normal>
       <background color="ffffff"/>
-      <text       color="000000"/>
+      <foreground color="000000"/>
     </normal>
 
     <!-- = Selected appearance ========================= -->
     <!-- =============================================== -->
-    <selection>
+    <selected>
       <background color="b4d5ff"/>
-      <text       color="000000"/>
-    </selection>
+      <foreground color="000000"/>
+    </selected>
   </shell>
 
 
@@ -88,15 +184,15 @@
     <!-- =============================================== -->
     <normal>
       <background color="ffffff"/>
-      <text       color="000000"/>
+      <foreground color="000000"/>
     </normal>
 
     <!-- = Selected appearance ========================= -->
     <!-- =============================================== -->
-    <selection>
+    <selected>
       <background color="b4d5ff"/>
-      <text       color="000000"/>
-    </selection>
+      <foreground color="000000"/>
+    </selected>
   </editor>
 
 
@@ -110,14 +206,14 @@
     <!-- =============================================== -->
     <normal>
       <background color="ffffff"/>
-      <text       color="000000"/>
+      <foreground color="000000"/>
     </normal>
 
     <!-- = Selected appearance ========================= -->
     <!-- =============================================== -->
-    <selection>
+    <selected>
       <background color="b4d5ff"/>
-      <text       color="000000"/>
-    </selection>
+      <foreground color="000000"/>
+    </selected>
   </editor>
 </theme>

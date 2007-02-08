@@ -51,11 +51,11 @@ public class ShellComboBox extends EditableComboBox implements EditableComboBoxL
         addPopupMenuListener(this);
 
         // Sets colors and font according to the current theme.
-        setForeground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_TEXT));
-        setBackground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_BACKGROUND));
-        setSelectionForeground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_TEXT_SELECTED));
-        setSelectionBackground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_BACKGROUND_SELECTED));
-        setFont(ThemeManager.getCurrentFont(Theme.SHELL_HISTORY));
+        setForeground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_FOREGROUND_COLOR));
+        setBackground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_BACKGROUND_COLOR));
+        setSelectionForeground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR));
+        setSelectionBackground(ThemeManager.getCurrentColor(Theme.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR));
+        setFont(ThemeManager.getCurrentFont(Theme.SHELL_HISTORY_FONT));
 
         // Fills the combo box with the current history.
         populateHistory();

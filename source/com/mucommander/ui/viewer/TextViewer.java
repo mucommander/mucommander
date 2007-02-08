@@ -43,11 +43,11 @@ public class TextViewer extends FileViewer implements ActionListener, ThemeListe
     }
 
     private void initTheme() {
-        textArea.setForeground(ThemeManager.getCurrentColor(Theme.EDITOR_TEXT));
-        textArea.setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND));
-        textArea.setSelectedTextColor(ThemeManager.getCurrentColor(Theme.EDITOR_TEXT_SELECTED));
-        textArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_SELECTED));
-        textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR));
+        textArea.setForeground(ThemeManager.getCurrentColor(Theme.EDITOR_FOREGROUND_COLOR));
+        textArea.setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR));
+        textArea.setSelectedTextColor(ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR));
+        textArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR));
+        textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR_FONT));
     }
 
 	
@@ -105,19 +105,19 @@ public class TextViewer extends FileViewer implements ActionListener, ThemeListe
      */
     public void colorChanged(int colorId, Color color) {
         switch(colorId) {
-        case Theme.EDITOR_TEXT:
+        case Theme.EDITOR_FOREGROUND_COLOR:
             textArea.setForeground(color);
             break;
 
-        case Theme.EDITOR_BACKGROUND:
+        case Theme.EDITOR_BACKGROUND_COLOR:
             textArea.setBackground(color);
             break;
 
-        case Theme.EDITOR_TEXT_SELECTED:
+        case Theme.EDITOR_SELECTED_FOREGROUND_COLOR:
             textArea.setSelectedTextColor(color);
             break;
 
-        case Theme.EDITOR_BACKGROUND_SELECTED:
+        case Theme.EDITOR_SELECTED_BACKGROUND_COLOR:
             textArea.setSelectionColor(color);
             break;
         }
@@ -129,7 +129,7 @@ public class TextViewer extends FileViewer implements ActionListener, ThemeListe
      * @param font   new value for the font.
      */
     public void fontChanged(int fontId, Font font) {
-        if(fontId == Theme.EDITOR)
+        if(fontId == Theme.EDITOR_FONT)
             textArea.setFont(font);
     }
 }

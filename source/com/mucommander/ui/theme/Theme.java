@@ -47,109 +47,86 @@ public class Theme {
     /** Number of known fonts. */
     static final int FONT_COUNT  = 6;
     /** Number of known colors. */
-    static final int COLOR_COUNT = 40;
+    static final int COLOR_COUNT = 63;
 
 
 
     // - Font definitions ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /** Font used to display files. */
-    public static final int FILE_TABLE                         = 0;
-    /** Font used in the shell. */
-    public static final int SHELL                              = 1;
-    /** Font used in the text editor. */
-    public static final int EDITOR                             = 2;
-    /** Font used in the location bar. */
-    public static final int LOCATION_BAR                       = 3;
-    /** Font used in the shell history. */
-    public static final int SHELL_HISTORY                      = 4;
-    /** Font used in the volume label. */
-    public static final int STATUS_BAR                       = 5;
+    public static final int FILE_TABLE_FONT                                 = 0;
+    public static final int SHELL_FONT                                      = 1;
+    public static final int EDITOR_FONT                                     = 2;
+    public static final int LOCATION_BAR_FONT                               = 3;
+    public static final int SHELL_HISTORY_FONT                              = 4;
+    public static final int STATUS_BAR_FONT                                 = 5;
 
 
 
     // - Color definitions ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /** Background color for files in the file table. */
-    public static final int FILE_BACKGROUND                    = 0;
-    /** Background color for files in the file table, when it doesn't have focus. */
-    public static final int FILE_UNFOCUSED_BACKGROUND          = 1;
-    /** Text color for hidden files in the file table. */
-    public static final int HIDDEN_FILE                        = 2;
-    /** Text color for folders in the file table. */
-    public static final int FOLDER                             = 3;
-    /** Text color for archives in the file table. */
-    public static final int ARCHIVE                            = 4;
-    /** Text color for symlinks in the file table. */
-    public static final int SYMLINK                            = 5;
-    /** Text color for marked files in the file table. */
-    public static final int MARKED                             = 6;
-    /** Text color for plain files in the file table. */
-    public static final int FILE                               = 7;
-    /** Text color for the shell. */
-    public static final int SHELL_TEXT                         = 8;
-    /** Background color for the shell. */
-    public static final int SHELL_BACKGROUND                   = 9;
-    /** Text color for the editor. */
-    public static final int EDITOR_TEXT                        = 10;
-    /** Background color for the editor. */
-    public static final int EDITOR_BACKGROUND                  = 11;
-    /** Text color for the location bar. */
-    public static final int LOCATION_BAR_TEXT                  = 12;
-    /** Background color for the location bar. */
-    public static final int LOCATION_BAR_BACKGROUND            = 13;
-    /** Background color for the location har when it's being used as a progress bar. */
-    public static final int LOCATION_BAR_PROGRESS              = 14;
-    /** Selected version of {@link #FILE_BACKGROUND}. */
-    public static final int FILE_BACKGROUND_SELECTED           = 15;
-    /** Selected version of {@link #FILE_UNFOCUSED_BACKGROUND}. */
-    public static final int FILE_UNFOCUSED_BACKGROUND_SELECTED = 16;
-    /** Selected version of {@link #HIDDEN_FILE}. */
-    public static final int HIDDEN_FILE_SELECTED               = 17;
-    /** Selected version of {@link #FOLDER}. */
-    public static final int FOLDER_SELECTED                    = 18;
-    /** Selected version of {@link #ARCHIVE}. */
-    public static final int ARCHIVE_SELECTED                   = 19;
-    /** Selected version of {@link #SYMLINK}. */
-    public static final int SYMLINK_SELECTED                   = 20;
-    /** Selected version of {@link #MARKED}. */
-    public static final int MARKED_SELECTED                    = 21;
-    /** Selected version of {@link #FILE}. */
-    public static final int FILE_SELECTED                      = 22;
-    /** Selected version of {@link #SHELL_TEXT}. */
-    public static final int SHELL_TEXT_SELECTED                = 23;
-    /** Selected version of {@link #SHELL_BACKGROUND}. */
-    public static final int SHELL_BACKGROUND_SELECTED          = 24;
-    /** Selected version of {@link #EDITOR_TEXT}. */
-    public static final int EDITOR_TEXT_SELECTED               = 25;
-    /** Selected version of {@link #EDITOR_BACKGROUND}. */
-    public static final int EDITOR_BACKGROUND_SELECTED         = 26;
-    /** Selected version of {@link #LOCATION_BAR_TEXT}. */
-    public static final int LOCATION_BAR_TEXT_SELECTED         = 27;
-    /** Selected version of {@link #LOCATION_BAR_BACKGROUND}. */
-    public static final int LOCATION_BAR_BACKGROUND_SELECTED   = 28;
-    /** Color for the borders of the file table panels. */
-    public static final int FILE_TABLE_BORDER                  = 29;
-    /** Color used for the shell history text. */
-    public static final int SHELL_HISTORY_TEXT                  = 30;
-    /** Color used for the shell history background. */
-    public static final int SHELL_HISTORY_BACKGROUND           = 31;
-    /** Selected version of the color used for the shell history text. */
-    public static final int SHELL_HISTORY_TEXT_SELECTED        = 32;
-    /** Selected version of the color used for the shell history background. */
-    public static final int SHELL_HISTORY_BACKGROUND_SELECTED  = 33;
-    /** Background color for the volume label. */
-    public static final int STATUS_BAR_BACKGROUND              = 34;
-    /** Border color for the volume label. */
-    public static final int STATUS_BAR_BORDER                  = 35;
-    /** 'OK' color for the volume label. */
-    public static final int STATUS_BAR_OK                      = 36;
-    /** 'WARNING' color for the volume label. */
-    public static final int STATUS_BAR_WARNING                 = 37;
-    /** 'CRITICAL' color for the volume label. */
-    public static final int STATUS_BAR_CRITICAL                = 38;
-    /** Text color for the volume label. */
-    public static final int STATUS_BAR_TEXT                    = 39;
+    public static final int FILE_TABLE_BORDER_COLOR                         = 0;
+    public static final int FILE_TABLE_BACKGROUND_COLOR                     = 1;
+    public static final int HIDDEN_FILE_FOREGROUND_COLOR                    = 2;
+    public static final int HIDDEN_FILE_BACKGROUND_COLOR                    = 3;
+    public static final int HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR          = 4;
+    public static final int HIDDEN_FILE_SELECTED_BACKGROUND_COLOR           = 5;
+    public static final int HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR = 6;
+    public static final int HIDDEN_FILE_SELECTED_FOREGROUND_COLOR           = 7;
+    public static final int FOLDER_FOREGROUND_COLOR                         = 8;
+    public static final int FOLDER_BACKGROUND_COLOR                         = 9;
+    public static final int FOLDER_UNFOCUSED_BACKGROUND_COLOR               = 10;
+    public static final int FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR      = 11;
+    public static final int FOLDER_SELECTED_BACKGROUND_COLOR                = 12;
+    public static final int FOLDER_SELECTED_FOREGROUND_COLOR                = 13;
+    public static final int ARCHIVE_FOREGROUND_COLOR                        = 14;
+    public static final int ARCHIVE_BACKGROUND_COLOR                        = 15;
+    public static final int ARCHIVE_UNFOCUSED_BACKGROUND_COLOR              = 16;
+    public static final int ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR     = 17;
+    public static final int ARCHIVE_SELECTED_BACKGROUND_COLOR               = 18;
+    public static final int ARCHIVE_SELECTED_FOREGROUND_COLOR               = 19;
+    public static final int SYMLINK_FOREGROUND_COLOR                        = 20;
+    public static final int SYMLINK_BACKGROUND_COLOR                        = 21;
+    public static final int SYMLINK_UNFOCUSED_BACKGROUND_COLOR              = 22;
+    public static final int SYMLINK_SELECTED_BACKGROUND_COLOR               = 23;
+    public static final int SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR     = 24;
+    public static final int SYMLINK_SELECTED_FOREGROUND_COLOR               = 25;
+    public static final int MARKED_FOREGROUND_COLOR                         = 26;
+    public static final int MARKED_BACKGROUND_COLOR                         = 27;
+    public static final int MARKED_UNFOCUSED_BACKGROUND_COLOR               = 28;
+    public static final int MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR      = 29;
+    public static final int MARKED_SELECTED_BACKGROUND_COLOR                = 30;
+    public static final int MARKED_SELECTED_FOREGROUND_COLOR                = 31;
+    public static final int FILE_FOREGROUND_COLOR                           = 32;
+    public static final int FILE_BACKGROUND_COLOR                           = 33;
+    public static final int FILE_UNFOCUSED_BACKGROUND_COLOR                 = 34;
+    public static final int FILE_SELECTED_BACKGROUND_COLOR                  = 35;
+    public static final int FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR        = 36;
+    public static final int FILE_SELECTED_FOREGROUND_COLOR                  = 37;
+    public static final int SHELL_FOREGROUND_COLOR                          = 38;
+    public static final int SHELL_BACKGROUND_COLOR                          = 39;
+    public static final int SHELL_SELECTED_FOREGROUND_COLOR                 = 40;
+    public static final int SHELL_SELECTED_BACKGROUND_COLOR                 = 41;
+    public static final int SHELL_HISTORY_FOREGROUND_COLOR                  = 42;
+    public static final int SHELL_HISTORY_BACKGROUND_COLOR                  = 43;
+    public static final int SHELL_HISTORY_SELECTED_FOREGROUND_COLOR         = 44;
+    public static final int SHELL_HISTORY_SELECTED_BACKGROUND_COLOR         = 45;
+    public static final int EDITOR_FOREGROUND_COLOR                         = 46;
+    public static final int EDITOR_BACKGROUND_COLOR                         = 47;
+    public static final int EDITOR_SELECTED_FOREGROUND_COLOR                = 48;
+    public static final int EDITOR_SELECTED_BACKGROUND_COLOR                = 49;
+    public static final int LOCATION_BAR_FOREGROUND_COLOR                   = 50;
+    public static final int LOCATION_BAR_BACKGROUND_COLOR                   = 51;
+    public static final int LOCATION_BAR_SELECTED_FOREGROUND_COLOR          = 52;
+    public static final int LOCATION_BAR_SELECTED_BACKGROUND_COLOR          = 53;
+    public static final int LOCATION_BAR_PROGRESS_COLOR                     = 54;
+    public static final int STATUS_BAR_FOREGROUND_COLOR                     = 55;
+    public static final int STATUS_BAR_BACKGROUND_COLOR                     = 56;
+    public static final int STATUS_BAR_SELECTED_FOREGROUND_COLOR            = 57;
+    public static final int STATUS_BAR_SELECTED_BACKGROUND_COLOR            = 58;
+    public static final int STATUS_BAR_BORDER_COLOR                         = 59;
+    public static final int STATUS_BAR_OK_COLOR                             = 60;
+    public static final int STATUS_BAR_WARNING_COLOR                        = 61;
+    public static final int STATUS_BAR_CRITICAL_COLOR                       = 62;
 
 
 
