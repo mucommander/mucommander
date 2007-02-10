@@ -54,9 +54,8 @@ interface ThemeXmlConstants {
 
     // - Color elements ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /** Background color when an item doesn't have focus. */
     public static final String ELEMENT_UNFOCUSED_BACKGROUND = "unfocused_background";
-    /** Background color when an item has the focus. */
+    public static final String ELEMENT_UNFOCUSED_FOREGROUND = "unfocused_foreground";
     public static final String ELEMENT_BACKGROUND           = "background";
     public static final String ELEMENT_FOREGROUND           = "foreground";
     public static final String ELEMENT_HIDDEN               = "hidden";

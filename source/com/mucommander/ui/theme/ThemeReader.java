@@ -112,85 +112,85 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         // XML root element.
         if(name.equals(ELEMENT_ROOT)) {
             if(state != STATE_UNKNOWN)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(ELEMENT_ROOT);
             state = STATE_ROOT;
         }
 
         // File table declaration.
         else if(name.equals(ELEMENT_TABLE)) {
             if(state != STATE_ROOT)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_TABLE;
         }
 
         // Shell declaration.
         else if(name.equals(ELEMENT_SHELL)) {
             if(state != STATE_ROOT)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_SHELL;
         }
 
         // Editor declaration.
         else if(name.equals(ELEMENT_EDITOR)) {
             if(state != STATE_ROOT)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_EDITOR;
         }
 
         // Location bar declaration.
         else if(name.equals(ELEMENT_LOCATION_BAR)) {
             if(state != STATE_ROOT)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_LOCATION_BAR;
         }
 
         // Shell history declaration.
         else if(name.equals(ELEMENT_SHELL_HISTORY)) {
             if(state != STATE_ROOT)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_SHELL_HISTORY;
         }
 
         // Volume label declaration.
         else if(name.equals(ELEMENT_STATUS_BAR)) {
             if(state != STATE_ROOT)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_STATUS_BAR;
         }
 
         else if(name.equals(ELEMENT_HIDDEN)) {
             if(state != STATE_TABLE)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_HIDDEN;
         }
 
         else if(name.equals(ELEMENT_FOLDER)) {
             if(state != STATE_TABLE)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_FOLDER;
         }
 
         else if(name.equals(ELEMENT_ARCHIVE)) {
             if(state != STATE_TABLE)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_ARCHIVE;
         }
 
         else if(name.equals(ELEMENT_SYMLINK)) {
             if(state != STATE_TABLE)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_SYMLINK;
         }
 
         else if(name.equals(ELEMENT_MARKED)) {
             if(state != STATE_TABLE)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_MARKED;
         }
 
         else if(name.equals(ELEMENT_FILE)) {
             if(state != STATE_TABLE)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_FILE;
         }
 
@@ -217,7 +217,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_FILE)
                 state = STATE_FILE_NORMAL;
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         // Selected element declaration.
@@ -243,7 +243,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_FILE)
                 state = STATE_FILE_SELECTED;
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         // Font creation.
@@ -261,13 +261,15 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_TABLE)
                 theme.setFont(Theme.FILE_TABLE_FONT, createFont(attributes));
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         // Unfocused background color.
         else if(name.equals(ELEMENT_UNFOCUSED_BACKGROUND)) {
             if(state == STATE_FILE_NORMAL)
                 theme.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_TABLE)
+                theme.setColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
             else if(state == STATE_FOLDER_NORMAL)
                 theme.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
             else if(state == STATE_ARCHIVE_NORMAL)
@@ -291,7 +293,37 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_MARKED_SELECTED)
                 theme.setColor(Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
+        }
+
+        // Unfocused foreground color.
+        else if(name.equals(ELEMENT_UNFOCUSED_FOREGROUND)) {
+            if(state == STATE_FILE_NORMAL)
+                theme.setColor(Theme.FILE_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_FOLDER_NORMAL)
+                theme.setColor(Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_ARCHIVE_NORMAL)
+                theme.setColor(Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_SYMLINK_NORMAL)
+                theme.setColor(Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_HIDDEN_NORMAL)
+                theme.setColor(Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_MARKED_NORMAL)
+                theme.setColor(Theme.MARKED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_FILE_SELECTED)
+                theme.setColor(Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_FOLDER_SELECTED)
+                theme.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_ARCHIVE_SELECTED)
+                theme.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_SYMLINK_SELECTED)
+                theme.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_HIDDEN_SELECTED)
+                theme.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_MARKED_SELECTED)
+                theme.setColor(Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
+            else
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         // File table border color.
@@ -303,7 +335,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
                 theme.setColor(Theme.STATUS_BAR_BORDER_COLOR, createColor(attributes));
 
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         // Background color.
@@ -365,7 +397,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
                 theme.setColor(Theme.STATUS_BAR_BACKGROUND_COLOR, createColor(attributes));
 
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         // Progress bar color.
@@ -373,7 +405,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             if(state == STATE_LOCATION_BAR)
                 theme.setColor(Theme.LOCATION_BAR_PROGRESS_COLOR, createColor(attributes));
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         // 'OK' color.
@@ -381,7 +413,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             if(state == STATE_STATUS_BAR)
                 theme.setColor(Theme.STATUS_BAR_OK_COLOR, createColor(attributes));
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         // 'WARNING' color.
@@ -389,7 +421,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             if(state == STATE_STATUS_BAR)
                 theme.setColor(Theme.STATUS_BAR_WARNING_COLOR, createColor(attributes));
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         // 'CRITICAL' color.
@@ -397,7 +429,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             if(state == STATE_STATUS_BAR)
                 theme.setColor(Theme.STATUS_BAR_CRITICAL_COLOR, createColor(attributes));
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         // Text color.
@@ -456,11 +488,11 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
                 theme.setColor(Theme.STATUS_BAR_FOREGROUND_COLOR, createColor(attributes));
 
             else
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
         }
 
         else
-            throw createIllegalElementDeclaration(name);
+            if(Debug.ON) traceIllegalDeclaration(name);
     }
 
     /**
@@ -470,85 +502,85 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         // XML root element.
         if(name.equals(ELEMENT_ROOT)) {
             if(state != STATE_ROOT)
-                throw createIllegalElementClosing(name);
+                if(Debug.ON) traceIllegalClosing(name);
             state = STATE_UNKNOWN;
         }
 
         // File table declaration.
         else if(name.equals(ELEMENT_TABLE)) {
             if(state != STATE_TABLE)
-                throw createIllegalElementClosing(name);
+                if(Debug.ON) traceIllegalClosing(name);
             state = STATE_ROOT;
         }
 
         else if(name.equals(ELEMENT_HIDDEN)) {
             if(state != STATE_HIDDEN)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_TABLE;
         }
 
         else if(name.equals(ELEMENT_FOLDER)) {
             if(state != STATE_FOLDER)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_TABLE;
         }
 
         else if(name.equals(ELEMENT_ARCHIVE)) {
             if(state != STATE_ARCHIVE)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_TABLE;
         }
 
         else if(name.equals(ELEMENT_SYMLINK)) {
             if(state != STATE_SYMLINK)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_TABLE;
         }
 
         else if(name.equals(ELEMENT_MARKED)) {
             if(state != STATE_MARKED)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_TABLE;
         }
 
         else if(name.equals(ELEMENT_FILE)) {
             if(state != STATE_FILE)
-                throw createIllegalElementDeclaration(name);
+                if(Debug.ON) traceIllegalDeclaration(name);
             state = STATE_TABLE;
         }
 
         // Shell declaration.
         else if(name.equals(ELEMENT_SHELL)) {
             if(state != STATE_SHELL)
-                throw createIllegalElementClosing(name);
+                if(Debug.ON) traceIllegalClosing(name);
             state = STATE_ROOT;
         }
 
         // Shell history declaration.
         else if(name.equals(ELEMENT_SHELL_HISTORY)) {
             if(state != STATE_SHELL_HISTORY)
-                throw createIllegalElementClosing(name);
+                if(Debug.ON) traceIllegalClosing(name);
             state = STATE_ROOT;
         }
 
         // Editor declaration.
         else if(name.equals(ELEMENT_EDITOR)) {
             if(state != STATE_EDITOR)
-                throw createIllegalElementClosing(name);
+                if(Debug.ON) traceIllegalClosing(name);
             state = STATE_ROOT;
         }
 
         // Location bar declaration.
         else if(name.equals(ELEMENT_LOCATION_BAR)) {
             if(state != STATE_LOCATION_BAR)
-                throw createIllegalElementClosing(name);
+                if(Debug.ON) traceIllegalClosing(name);
             state = STATE_ROOT;
         }
 
         // Volume label declaration
         else if(name.equals(ELEMENT_STATUS_BAR)) {
             if(state != STATE_STATUS_BAR)
-                throw createIllegalElementClosing(name);
+                if(Debug.ON) traceIllegalClosing(name);
             state = STATE_ROOT;
         }
 
@@ -575,7 +607,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_LOCATION_BAR_NORMAL)
                 state = STATE_LOCATION_BAR;
             else
-                throw createIllegalElementClosing(name);
+                if(Debug.ON) traceIllegalClosing(name);
         }
 
         // Selected element declaration.
@@ -601,7 +633,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_LOCATION_BAR_SELECTED)
                 state = STATE_LOCATION_BAR;
             else
-                throw createIllegalElementClosing(name);
+                if(Debug.ON) traceIllegalClosing(name);
         }
     }
 
@@ -722,6 +754,6 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
 
     // - Error generation methods --------------------------------------------
     // -----------------------------------------------------------------------
-    private static Exception createIllegalElementDeclaration(String element) {return new Exception("Illegal element declaration: " + element);}
-    private static Exception createIllegalElementClosing(String element) {return new Exception("Illegal element closure: " + element);}
+    private static final void traceIllegalDeclaration(String element) {Debug.trace("Illegal element declaration: " + element);}
+    private static final void traceIllegalClosing(String element) {Debug.trace("Illegal element closure: " + element);}
 }

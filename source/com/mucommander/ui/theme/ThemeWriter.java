@@ -47,6 +47,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BORDER, getColorAttributes(color));
         if((color = theme.getColor(Theme.FILE_TABLE_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
         if((font = theme.getFont(Theme.FILE_TABLE_FONT)) != null)
             out.writeStandAloneElement(ELEMENT_FONT, getFontAttributes(font));
 
@@ -61,6 +63,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_NORMAL);
         out.startElement(ELEMENT_SELECTED);
         out.println();
@@ -70,6 +74,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_SELECTED);
         out.endElement(ELEMENT_HIDDEN);
 
@@ -82,6 +88,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.FOLDER_FOREGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_NORMAL);
@@ -91,6 +99,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_SELECTED);
@@ -105,6 +115,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.ARCHIVE_FOREGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_NORMAL);
@@ -114,6 +126,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_SELECTED);
@@ -129,6 +143,8 @@ class ThemeWriter implements ThemeXmlConstants {
         if((color = theme.getColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.SYMLINK_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.SYMLINK_FOREGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_NORMAL);
         out.startElement(ELEMENT_SELECTED);
@@ -137,6 +153,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_SELECTED);
@@ -152,6 +170,8 @@ class ThemeWriter implements ThemeXmlConstants {
         if((color = theme.getColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.MARKED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.MARKED_FOREGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_NORMAL);
         out.startElement(ELEMENT_SELECTED);
@@ -160,6 +180,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_SELECTED);
@@ -174,6 +196,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.FILE_UNFOCUSED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.FILE_FOREGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_NORMAL);
@@ -183,6 +207,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(color));
+        if((color = theme.getColor(Theme.FILE_SELECTED_FOREGROUND_COLOR)) != null)
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(color));
         if((color = theme.getColor(Theme.FILE_SELECTED_FOREGROUND_COLOR)) != null)
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(color));
         out.endElement(ELEMENT_SELECTED);

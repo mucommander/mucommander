@@ -864,6 +864,13 @@ public class ThemeManager {
         data.setColor(Theme.SYMLINK_BACKGROUND_COLOR, color);
         data.setColor(Theme.ARCHIVE_BACKGROUND_COLOR, color);
         data.setColor(Theme.FILE_TABLE_BACKGROUND_COLOR, color);
+        data.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, color);
 
         // Selected file background color.
         if(selectionColor == null)
@@ -878,13 +885,7 @@ public class ThemeManager {
         // Out of focus file background color.
         if(unfocusedColor == null)
             unfocusedColor = LegacyTheme.DEFAULT_OUT_OF_FOCUS_COLOR;
-        data.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(unfocusedColor, 16)));
-        data.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        data.setColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(unfocusedColor, 16)));
         data.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
         data.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
         data.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
@@ -894,32 +895,38 @@ public class ThemeManager {
         // Hidden files color.
         if(hiddenColor == null)
             hiddenColor = LegacyTheme.DEFAULT_HIDDEN_FILE_COLOR;
-        data.setColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR, new Color(Integer.parseInt(hiddenColor, 16)));
+        data.setColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(hiddenColor, 16)));
+        data.setColor(Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Folder color.
         if(folderColor == null)
             folderColor = LegacyTheme.DEFAULT_FOLDER_COLOR;
-        data.setColor(Theme.FOLDER_FOREGROUND_COLOR, new Color(Integer.parseInt(folderColor, 16)));
+        data.setColor(Theme.FOLDER_FOREGROUND_COLOR, color = new Color(Integer.parseInt(folderColor, 16)));
+        data.setColor(Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Archives color.
         if(archiveColor == null)
             archiveColor = LegacyTheme.DEFAULT_ARCHIVE_FILE_COLOR;
-        data.setColor(Theme.ARCHIVE_FOREGROUND_COLOR, new Color(Integer.parseInt(archiveColor, 16)));
+        data.setColor(Theme.ARCHIVE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(archiveColor, 16)));
+        data.setColor(Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Symbolic links color.
         if(symlinkColor == null)
             symlinkColor = LegacyTheme.DEFAULT_SYMLINK_COLOR;
-        data.setColor(Theme.SYMLINK_FOREGROUND_COLOR, new Color(Integer.parseInt(symlinkColor, 16)));
+        data.setColor(Theme.SYMLINK_FOREGROUND_COLOR, color = new Color(Integer.parseInt(symlinkColor, 16)));
+        data.setColor(Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Plain file color.
         if(fileColor == null)
             fileColor = LegacyTheme.DEFAULT_PLAIN_FILE_COLOR;
-        data.setColor(Theme.FILE_FOREGROUND_COLOR, new Color(Integer.parseInt(fileColor, 16)));
+        data.setColor(Theme.FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(fileColor, 16)));
+        data.setColor(Theme.FILE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Marked file color.
         if(markedColor == null)
             markedColor = LegacyTheme.DEFAULT_MARKED_FILE_COLOR;
-        data.setColor(Theme.MARKED_FOREGROUND_COLOR, new Color(Integer.parseInt(markedColor, 16)));
+        data.setColor(Theme.MARKED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(markedColor, 16)));
+        data.setColor(Theme.MARKED_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Selected file color.
         if(selectedColor == null)
@@ -930,6 +937,12 @@ public class ThemeManager {
         data.setColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR, color);
         data.setColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR, color);
         data.setColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        data.setColor(Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Shell background color.
         if(shellBackgroundColor == null)
@@ -1207,6 +1220,7 @@ public class ThemeManager {
         switch(id) {
             // File table background colors.
         case Theme.FILE_UNFOCUSED_BACKGROUND_COLOR:
+        case Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR:
         case Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR:
         case Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR:
         case Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR:
@@ -1228,12 +1242,19 @@ public class ThemeManager {
         case Theme.FOLDER_FOREGROUND_COLOR:
         case Theme.ARCHIVE_FOREGROUND_COLOR:
         case Theme.SYMLINK_FOREGROUND_COLOR:
+        case Theme.FILE_UNFOCUSED_FOREGROUND_COLOR:
+        case Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR:
+        case Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR:
+        case Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR:
+        case Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR:
 	    return getTableColor();
 
             // Marked files foreground colors (they have to be different
             // of the standard file foreground colors).
         case Theme.MARKED_FOREGROUND_COLOR:
+        case Theme.MARKED_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.MARKED_SELECTED_FOREGROUND_COLOR:
+        case Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
             return Color.RED;
 
             // Text areas default foreground colors.
@@ -1290,6 +1311,11 @@ public class ThemeManager {
         case Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR:
         case Theme.SYMLINK_SELECTED_FOREGROUND_COLOR:
         case Theme.FILE_SELECTED_FOREGROUND_COLOR:
+        case Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
+        case Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
+        case Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
+        case Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
+        case Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
 	    return getTableSelectionColor();
 
             // Foreground color for selected text area elements.
