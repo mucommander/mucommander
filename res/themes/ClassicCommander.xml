@@ -3,20 +3,23 @@
   <!-- = File table appearance ========================= -->
   <!-- ================================================= -->
   <file_table>
-    <font       family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
-    <border     color="868686"/>
-    <background color="ffffff"/>
+    <font                 family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
+    <border               color="868686"/>
+    <background           color="ffffff"/>
+    <unfocused_background color="f0f0f0"/>
 
     <!-- = Hidden files ================================ -->
     <!-- =============================================== -->
     <hidden>
       <normal>
-        <unfocused_background color="ffffff"/>
+        <unfocused_background color="f0f0f0"/>
+        <unfocused_foreground color="666666"/>
         <background           color="ffffff"/>
         <foreground           color="666666"/>
       </normal>
       <selected>
         <unfocused_background color="d0d0d0"/>
+        <unfocused_foreground color="666666"/>
         <background           color="3875d7"/>
         <foreground           color="ffffff"/>
       </selected>
@@ -28,12 +31,14 @@
     <!-- =============================================== -->
     <folder>
       <normal>
-        <unfocused_background color="ffffff"/>
+        <unfocused_background color="f0f0f0"/>
+        <unfocused_foreground color="000000"/>
         <background           color="ffffff"/>
         <foreground           color="000000"/>
       </normal>
       <selected>
         <unfocused_background color="d0d0d0"/>
+        <unfocused_foreground color="000000"/>
         <background           color="3875d7"/>
         <foreground           color="ffffff"/>
       </selected>
@@ -45,12 +50,14 @@
     <!-- =============================================== -->
     <archive>
       <normal>
-        <unfocused_background color="ffffff"/>
+        <unfocused_background color="f0f0f0"/>
+        <unfocused_foreground color="000000"/>
         <background           color="ffffff"/>
         <foreground           color="000000"/>
       </normal>
       <selected>
         <unfocused_background color="d0d0d0"/>
+        <unfocused_foreground color="000000"/>
         <background           color="3875d7"/>
         <foreground           color="ffffff"/>
       </selected>
@@ -61,12 +68,14 @@
     <!-- =============================================== -->
     <symlink>
       <normal>
-        <unfocused_background color="ffffff"/>
+        <unfocused_background color="f0f0f0"/>
+        <unfocused_foreground color="0000ee"/>
         <background           color="ffffff"/>
         <foreground           color="0000ee"/>
       </normal>
       <selected>
         <unfocused_background color="d0d0d0"/>
+        <unfocused_foreground color="0000ee"/>
         <background           color="3875d7"/>
         <foreground           color="ffffff"/>
       </selected>
@@ -78,12 +87,14 @@
     <!-- =============================================== -->
     <marked>
       <normal>
-        <unfocused_background color="ffffff"/>
+        <unfocused_background color="f0f0f0"/>
+        <unfocused_foreground color="cc0000"/>
         <background           color="ffffff"/>
         <foreground           color="cc0000"/>
       </normal>
       <selected>
         <unfocused_background color="d0d0d0"/>
+        <unfocused_foreground color="cc0000"/>
         <background           color="3875d7"/>
         <foreground           color="cc0000"/>
       </selected>
@@ -95,12 +106,14 @@
     <!-- =============================================== -->
     <file>
       <normal>
-        <unfocused_background color="ffffff"/>
+        <unfocused_background color="f0f0f0"/>
+        <unfocused_foreground color="000000"/>
         <background           color="ffffff"/>
         <foreground           color="000000"/>
       </normal>
       <selected>
         <unfocused_background color="d0d0d0"/>
+        <unfocused_foreground color="000000"/>
         <background           color="3875d7"/>
         <foreground           color="ffffff"/>
       </selected>
