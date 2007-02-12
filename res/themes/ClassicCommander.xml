@@ -6,14 +6,14 @@
     <font                 family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
     <border               color="868686"/>
     <background           color="ffffff"/>
-    <unfocused_background color="f0f0f0"/>
+    <unfocused_background color="f5f5f5"/>
 
 
     <!-- = Hidden files ================================ -->
     <!-- =============================================== -->
     <hidden>
       <normal>
-        <unfocused_background color="f0f0f0"/>
+        <unfocused_background color="f5f5f5"/>
         <unfocused_foreground color="666666"/>
         <background           color="ffffff"/>
         <foreground           color="666666"/>
@@ -32,7 +32,7 @@
     <!-- =============================================== -->
     <folder>
       <normal>
-        <unfocused_background color="f0f0f0"/>
+        <unfocused_background color="f5f5f5"/>
         <unfocused_foreground color="000000"/>
         <background           color="ffffff"/>
         <foreground           color="000000"/>
@@ -51,7 +51,7 @@
     <!-- =============================================== -->
     <archive>
       <normal>
-        <unfocused_background color="f0f0f0"/>
+        <unfocused_background color="f5f5f5"/>
         <unfocused_foreground color="000000"/>
         <background           color="ffffff"/>
         <foreground           color="000000"/>
@@ -69,7 +69,7 @@
     <!-- =============================================== -->
     <symlink>
       <normal>
-        <unfocused_background color="f0f0f0"/>
+        <unfocused_background color="f5f5f5"/>
         <unfocused_foreground color="0000ee"/>
         <background           color="ffffff"/>
         <foreground           color="0000ee"/>
@@ -88,7 +88,7 @@
     <!-- =============================================== -->
     <marked>
       <normal>
-        <unfocused_background color="f0f0f0"/>
+        <unfocused_background color="f5f5f5"/>
         <unfocused_foreground color="cc0000"/>
         <background           color="ffffff"/>
         <foreground           color="cc0000"/>
@@ -107,7 +107,7 @@
     <!-- =============================================== -->
     <file>
       <normal>
-        <unfocused_background color="f0f0f0"/>
+        <unfocused_background color="f5f5f5"/>
         <unfocused_foreground color="000000"/>
         <background           color="ffffff"/>
         <foreground           color="000000"/>
