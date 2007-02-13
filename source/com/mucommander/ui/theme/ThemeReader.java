@@ -111,9 +111,11 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
      * Notifies the reader that a new XML element is starting.
      */
     public void startElement(String uri, String name, Hashtable attributes, Hashtable attURIs) throws Exception {
-        // Ignores the content of an unknown tag.
-        if(unknownElement != null)
+        // Ignores the content of unknown elements.
+        if(unknownElement != null) {
+            if(Debug.ON) Debug.trace("Ignoring element " + name);
             return;
+        }
 
         // XML root element.
         if(name.equals(ELEMENT_ROOT)) {

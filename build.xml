@@ -5,7 +5,8 @@
   <!-- constants, such as the current version number.          -->
 
   <!-- Version number of the application.                      -->
-  <property name="app.version"         value="0.8 beta3"/>
+  <property name="app.version"         value="0.8"/>
+  <property name="app.subversion"      value=" beta3"/>
   <!-- Copyright line of the application.                      -->
   <property name="app.copyright"       value="2002-2007"/>
   <!-- Targeted version of the JVM.                            -->
@@ -199,6 +200,19 @@
 
 
 
+  <!-- = JNLP values ========================================= -->
+  <!-- ======================================================= -->
+  <!-- Codebase for the 'normal' muCommander JNLP file.        -->
+  <property name="url.jnlp.normal"     value="http://www.mucommander.com/webstart/"/>
+  <!-- Codebase for the 'nightly' muCommander JNLP file.       -->
+  <property name="url.jnlp.nightly"    value="http://www.mucommander.com/nightly/webstart/"/>
+  <!-- Name of the icon used by the JNLP file.                 -->
+  <property name="jnlp.icon"           value="icon.gif"/>
+  <!-- Name of the muCommander JNLP file.                      -->
+  <property name="jnlp.file"           value="mucommander.jnlp"/>
+
+
+
   <!-- Imports the system dependant definitions.               -->
   <import file="local.xml"/>
 
@@ -224,7 +238,7 @@
     <copy  file="${res}/command_bar.xml"   todir="${classes.normal}"/>
     <copy  file="${res}/action_keymap.xml" todir="${classes.normal}"/>
 
-    <echo>Generating themes...</echo>
+    <echo>Creating themes...</echo>
     <taskdef name="resources" classname="com.mucommander.ant.res.ResourceTask" classpath="${tools.jar}"/>
     <resources outfile="${classes.normal}/${themes.desc}" outdir="${classes.normal}">
       <file out="${themes.out}/ClassicCommander.xml" in="${themes.in}/ClassicCommander.xml"/>
@@ -310,17 +324,17 @@
 
   <!-- Generates the package-prefix for nightly builds.        -->
   <target name="nightly-prefix" if="is-nightly">
-    <echo>Generating package name prefix...</echo>
+    <echo>Creating package name prefix...</echo>
 
     <property name="package-prefix" value="mucommander"/>
   </target>
 
   <!-- Generates the package-prefix for non-nightly builds.    -->
   <target name="release-prefix" unless="is-nightly">
-    <echo>Generating package name prefix...</echo>
+    <echo>Creating package name prefix...</echo>
 
     <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar}"/>
-    <strreplace from="mucommander-${app.version}" to="package-prefix" what="[ .]" with="_"/>
+    <strreplace from="mucommander-${app.version}${app.subversion}" to="package-prefix" what="[ .]" with="_"/>
   </target>
 
   <!-- Generates the current build's package prefix.           -->
@@ -329,10 +343,10 @@
   <!-- Generates the prefix folder for all archives.           -->
   <!-- Output will be stored in property ${archive-prefix}.    -->
   <target name="archive-prefix" depends="tools-jar">
-    <echo>Generating archive prefix...</echo>
+    <echo>Creating archive prefix...</echo>
     <!-- Escapes the version number for the TGZ prefix.        -->
     <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar}"/>
-    <strreplace from="muCommander-${app.version}" to="archive-prefix" what="[ .]" with="_"/>
+    <strreplace from="muCommander-${app.version}${app.subversion}" to="archive-prefix" what="[ .]" with="_"/>
   </target>
 
   <!-- Sets this build as 'nightly'.                           -->
@@ -343,6 +357,7 @@
     <echo>Marking the build as 'nightly'...</echo>
     <property name="version-url" value="${url.nightly-version}"/>
     <property name="is-nightly"  value="true"/>
+    <property name="url.jnlp"    value="${url.jnlp.nightly}"/>
   </target>
 
   <!-- Turns debug output on in the resulting binary.          -->
@@ -406,9 +421,9 @@
     <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tools.jar}"/>
     <javaw name="${source.tmp}/com.mucommander.RuntimeConstants">
       <field name="DEBUG"               value="${is-debug}"    type="boolean"/>
-      <field name="VERSION"             value="${app.version}"/>
+      <field name="VERSION"             value="${app.version}${app.subversion}"/>
       <field name="COPYRIGHT"           value="${app.copyright}"/>
-      <field name="APP_STRING"          value="muCommander v${app.version}"/>
+      <field name="APP_STRING"          value="muCommander v${app.version}${app.subversion}"/>
       <field name="VERSION_URL"         value="${version-url}"/>
       <field name="RELEASE_DATE"        value="${release-date}" type="String"/>
       <field name="HOMEPAGE_URL"        value="${url.homepage}"/>
@@ -447,7 +462,13 @@
     <mkdir dir="${dist}"/>
     <jar jarfile="${jar.normal}" basedir="${classes.normal}">
       <manifest>
-        <attribute name="Main-Class" value="${main-class}"/>
+        <attribute name="Main-Class"             value="${main-class}"/>
+        <attribute name="Specification-Title"    value="muCommander"/>
+        <attribute name="Specification-Vendor"   value="Maxence Bernard"/>
+        <attribute name="Specification-Version"  value="${app.version}"/>
+        <attribute name="Implementation-Title"   value="muCommander"/>
+        <attribute name="Implementation-Vendor"  value="Maxence Bernard"/>
+        <attribute name="Implementation-Version" value="${app.version}${app.subversion}"/>
       </manifest>
     </jar>
   </target>
@@ -500,7 +521,7 @@
   <!-- Extracts the content of ${jar.obf} and compresses it    -->
   <!-- using 7za.                                              -->
   <target name="compressobf" if="7za.available">
-    <echo>Generating compressed JAR file to ${jar.cmp}...</echo>
+    <echo>Creating compressed JAR file to ${jar.cmp}...</echo>
     <unjar src="${jar.obf}" dest="${classes.obf}"/>
     <exec executable="${7za.executable}" dir="${classes.obf}">
       <arg value="a"/>
@@ -619,7 +640,7 @@
   <!-- Generates muCommander's API javadoc.                    -->
   <!-- Output is stored in ${doc.api}.                         -->
   <target name="api-doc" depends="constants">
-    <echo>Generating API javadoc in ${doc.api}...</echo>
+    <echo>Creating API javadoc in ${doc.api}...</echo>
     <mkdir dir="${doc.api}"/>
     <javadoc destdir="${doc.api}" author="true" windowtitle="muCommander API" encoding="UTF-8" access="package">
       <classpath>
@@ -640,7 +661,7 @@
   <!-- Generates muCommander's tools API javadoc.              -->
   <!-- Output is stored in ${doc.tools}.                       -->
   <target name="tools-doc">
-    <echo>Generating tools API javadoc in ${doc.tools}...</echo>
+    <echo>Creating tools API javadoc in ${doc.tools}...</echo>
     <mkdir dir="${doc.tools}"/>
     <javadoc destdir="${doc.tools}" author="true" windowtitle="muTools API" encoding="UTF-8">
       <packageset dir="${source.src}">
@@ -675,13 +696,13 @@
 
   <!-- Generates builds of pretty much anything we could       -->
   <!-- think of.                                               -->
-  <target name="release" depends="source,tgz,app.tgz,nsis,portable,version,sign,docs-tgz">
+  <target name="release" depends="source,tgz,app.tgz,nsis,portable,version,sign,jnlp,docs-tgz">
     <echo>All done.</echo>
   </target>
 
   <!-- Generates a nightly build of pretty much anything we    -->
   <!-- could think of.                                         -->
-  <target name="nightly" depends="set-nightly,tgz,app.tgz,nsis,portable,version,sign">
+  <target name="nightly" depends="set-nightly,tgz,app.tgz,nsis,portable,version,sign,jnlp">
     <echo>All done.</echo>
   </target>
 
@@ -799,7 +820,7 @@
   <!-- Generates the muCommander's version.xml file.           -->
   <!-- Output will be stored in ${version-file}.               -->
   <target name="version" depends="tools-jar">
-    <echo>Generating version file in ${version-file}...</echo>
+    <echo>Creating version file in ${version-file}...</echo>
     <taskdef name="muversion" classname="com.mucommander.ant.version.VersionTask" classpath="${tools.jar}"/>
     <muversion version="${app.version}" url="${url.app-download}" dest="${version-file}"/>
   </target>
@@ -817,7 +838,7 @@
   <!-- This target will only be executed if nsis is found to   -->
   <!-- be available.                                           -->
   <target name="nsis" depends="check-nsis,exe,package-prefix" if="nsis.available">
-    <echo>Generating NSIS installer in ${dist}/${package-prefix}.exe</echo>
+    <echo>Creating NSIS installer in ${dist}/${package-prefix}.exe</echo>
 
     <!-- Prepares the NSIS directory.                          -->
     <mkdir dir="${nsis.tmp}"/>
@@ -848,5 +869,28 @@
 
     <!-- Copies the installer in the dist folder.              -->
     <copy file="${nsis.tmp}/mucommander-setup.exe" tofile="${dist}/${package-prefix}-setup.exe"/>
+  </target>
+
+  <!-- Generates the Java webstart descriptor.                 -->
+  <!-- Output will be stored in ${dist}/mucommander.jnlp.      -->
+  <target name="jnlp" depends="tools-jar">
+    <!-- Prepares the necessary tasks and properties.          -->
+    <echo>Creating JNLP file in ${dist}/${jnlp.file}...</echo>
+    <taskdef name="jnlp" classname="com.mucommander.ant.jnlp.JnlpTask" classpath="${tools.jar}"/>
+    <property name="url.jnlp" value="${url.jnlp.normal}"/>
+
+    <!-- Generates the JNLP file.                              -->
+    <jnlp out="${dist}/${jnlp.file}" spec="1.0+" version="${app.version}${app.subversion}" codebase="${url.jnlp}" href="${jnlp.file}" allpermissions="true">
+      <information homepage="${url.homepage}" title="muCommander" vendor="Maxence Bernard" offline="true">
+        <description>A cross-platform file manager.</description>
+        <description kind="short">A cross-platform file manager.</description>
+        <icon href="${jnlp.icon}" />
+      </information>
+      <resources>
+        <j2se version="${app.jvm}+"/>
+        <jar  href="mucommander.jar"/>
+      </resources>
+      <applicationdesc main="${main-class}"/>
+    </jnlp>
   </target>
 </project>

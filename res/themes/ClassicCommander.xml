@@ -3,7 +3,7 @@
   <!-- = File table appearance ========================= -->
   <!-- ================================================= -->
   <file_table>
-    <font                 family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
+    <font                 family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
     <border               color="868686"/>
     <background           color="ffffff"/>
     <unfocused_background color="f5f5f5"/>
@@ -148,7 +148,7 @@
   <!-- = Shell history appearance ====================== -->
   <!-- ================================================= -->
   <shell_history>
-    <font family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
+    <font family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
 
     <!-- = Default appearance ========================== -->
     <!-- =============================================== -->
@@ -170,7 +170,7 @@
   <!-- = Editor appearance ============================= -->
   <!-- ================================================= -->
   <editor>
-    <font family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
+    <font family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
 
     <!-- = Default appearance ========================== -->
     <!-- =============================================== -->
@@ -192,7 +192,7 @@
   <!-- = Location bar appearance ======================= -->
   <!-- ================================================= -->
   <location_bar>
-    <font family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
+    <font family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
     <progress color="3875d7" alpha="40"/>
 
     <!-- = Default appearance ========================== -->
@@ -215,7 +215,7 @@
   <!-- = Status bar appearance ========================= -->
   <!-- ================================================= -->
   <status_bar>
-    <font      family="Lucida Grande,Arial,Lucida Sans" size ="12"/>
+    <font      family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
     <foreground color="000000"/>
     <border     color="868686"/>
     <background color="d6d6d6"/>
