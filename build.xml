@@ -268,8 +268,14 @@
 
   <!-- = Helper targets ====================================== -->
   <!-- ======================================================= -->
+  <!-- Stores today's date in ${release-date.}                 -->
+  <target name="build-date">
+    <taskdef name="date" classname="com.mucommander.ant.util.DateTask" classpath="${tools.jar}"/>
+    <date name="release-date"/>
+  </target>
+
   <!-- Checks whether 7za is available or not.                 -->
-  <!-- If it is, sets ${7za.available} to true.             -->
+  <!-- If it is, sets ${7za.available} to true.                -->
   <target name="check-7za">
     <condition property="7za.available" value="true">
       <available file="${7za.executable}" type="file"/>
@@ -277,7 +283,7 @@
   </target>
 
   <!-- Checks whether NSIS is available or not.                -->
-  <!-- If it is, sets ${nsis.available} to true.            -->
+  <!-- If it is, sets ${nsis.available} to true.               -->
   <target name="check-nsis" depends="check-launch4j">
     <condition property="nsis.available" value="true">
       <and>
@@ -288,7 +294,7 @@
   </target>
 
   <!-- Checks whether launch4j is available or not.            -->
-  <!-- If it is, sets ${launch4j.available} to true.        -->
+  <!-- If it is, sets ${launch4j.available} to true.           -->
   <target name="check-launch4j">
     <condition property="launch4j.available" value="true">
       <and>
@@ -411,13 +417,11 @@
 
   <!-- Creates the runtime constant class.                     -->
   <!-- Output will be stored in ${source.tmp}.                 -->
-  <target name="constants" depends="tools-jar">
+  <target name="constants" depends="tools-jar,build-date">
     <echo>Creating ${source.tmp}/com.mucommander.RuntimeConstants...</echo>
     <mkdir dir="${source.tmp}"/>
     <property name="is-debug"    value="true"/>
     <property name="version-url" value="${url.app-version}"/>
-    <taskdef name="date" classname="com.mucommander.ant.util.DateTask" classpath="${tools.jar}"/>
-    <date name="release-date"/>
     <taskdef name="javaw" classname="com.mucommander.ant.java.JavaTask" classpath="${tools.jar}"/>
     <javaw name="${source.tmp}/com.mucommander.RuntimeConstants">
       <field name="DEBUG"               value="${is-debug}"    type="boolean"/>
@@ -457,7 +461,7 @@
 
   <!-- Generates the application's unobfuscated jar file.      -->
   <!-- Output will be stored in {$jar.normal}.                 -->
-  <target name="jar" depends="compile,includelibs,resources">
+  <target name="jar" depends="compile,includelibs,resources,build-date">
     <echo>Creating unobfuscated JAR file in ${jar.normal}...</echo>
     <mkdir dir="${dist}"/>
     <jar jarfile="${jar.normal}" basedir="${classes.normal}">
@@ -468,7 +472,7 @@
         <attribute name="Specification-Version"  value="${app.version}"/>
         <attribute name="Implementation-Title"   value="muCommander"/>
         <attribute name="Implementation-Vendor"  value="Maxence Bernard"/>
-        <attribute name="Implementation-Version" value="${app.version}${app.subversion}"/>
+        <attribute name="Implementation-Version" value="${app.version}${app.subversion} ${release-date}"/>
       </manifest>
     </jar>
   </target>
