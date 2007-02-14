@@ -1232,12 +1232,13 @@ public class ThemeManager {
         case Theme.ARCHIVE_BACKGROUND_COLOR:
         case Theme.SYMLINK_BACKGROUND_COLOR:
         case Theme.MARKED_BACKGROUND_COLOR:
+            return getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
+
         case Theme.FILE_TABLE_BACKGROUND_COLOR:
 	    return getTableBackgroundColor();
 
             // File table foreground colors (everything except marked
             // defaults to the l&f specific table foreground color).
-        case Theme.FILE_FOREGROUND_COLOR:
         case Theme.HIDDEN_FILE_FOREGROUND_COLOR:
         case Theme.FOLDER_FOREGROUND_COLOR:
         case Theme.ARCHIVE_FOREGROUND_COLOR:
@@ -1247,6 +1248,9 @@ public class ThemeManager {
         case Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR:
+            return getCurrentColor(Theme.FILE_FOREGROUND_COLOR);
+
+        case Theme.FILE_FOREGROUND_COLOR:
 	    return getTableColor();
 
             // Marked files foreground colors (they have to be different
@@ -1287,12 +1291,14 @@ public class ThemeManager {
             return new Color(color.getRed(), color.getGreen(), color.getBlue(), 64);
 
             // Selected table background colors.
-        case Theme.FILE_SELECTED_BACKGROUND_COLOR:
         case Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR:
         case Theme.FOLDER_SELECTED_BACKGROUND_COLOR:
         case Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR:
         case Theme.SYMLINK_SELECTED_BACKGROUND_COLOR:
         case Theme.MARKED_SELECTED_BACKGROUND_COLOR:
+            return getCurrentColor(Theme.FILE_SELECTED_BACKGROUND_COLOR);
+
+        case Theme.FILE_SELECTED_BACKGROUND_COLOR:
 	    return getTableSelectionBackgroundColor();
 
             // Gray colors.
@@ -1310,12 +1316,14 @@ public class ThemeManager {
         case Theme.FOLDER_SELECTED_FOREGROUND_COLOR:
         case Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR:
         case Theme.SYMLINK_SELECTED_FOREGROUND_COLOR:
-        case Theme.FILE_SELECTED_FOREGROUND_COLOR:
         case Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
+            return getCurrentColor(Theme.FILE_SELECTED_FOREGROUND_COLOR);
+
+        case Theme.FILE_SELECTED_FOREGROUND_COLOR:
 	    return getTableSelectionColor();
 
             // Foreground color for selected text area elements.
