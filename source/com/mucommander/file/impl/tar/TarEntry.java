@@ -41,4 +41,8 @@ public class TarEntry extends ArchiveEntry {
     public int getPermissions() {
         return tarEntry.getMode();
     }
+
+    public int getPermissionsMask() {
+        return 511;     // Full UNIX permissions (777 octal)
+    }
 }

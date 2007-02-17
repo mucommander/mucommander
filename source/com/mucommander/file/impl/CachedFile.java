@@ -38,15 +38,6 @@ public class CachedFile extends ProxyFile {
     private long getDate;
     private boolean getDateSet;
 
-    private boolean canRead;
-    private boolean canReadSet;
-
-    private boolean canWrite;
-    private boolean canWriteSet;
-
-    private boolean canExecute;
-    private boolean canExecuteSet;
-
     private boolean canRunProcess;
     private boolean canRunProcessSet;
 
@@ -89,11 +80,10 @@ public class CachedFile extends ProxyFile {
     private int getPermissions;
     private boolean getPermissionsSet;
 
+    private int getPermissionsInt[][];
+
     private String getPermissionsString;
     private boolean getPermissionsStringSet;
-
-    private boolean canSetPermissions;
-    private boolean canSetPermissionsSet;
 
     private boolean isRoot;
     private boolean isRootSet;
@@ -152,33 +142,6 @@ public class CachedFile extends ProxyFile {
         }
 
         return getDate;
-    }
-
-    public boolean canRead() {
-        if(!canReadSet) {
-            canRead = file.canRead();
-            canReadSet = true;
-        }
-
-        return canRead;
-    }
-
-    public boolean canWrite() {
-        if(!canWriteSet) {
-            canWrite = file.canWrite();
-            canWriteSet = true;
-        }
-
-        return canWrite;
-    }
-
-    public boolean canExecute() {
-        if(!canExecuteSet) {
-            canExecute = file.canExecute();
-            canExecuteSet = true;
-        }
-
-        return canExecute;
     }
 
     public boolean canRunProcess() {
@@ -307,6 +270,19 @@ public class CachedFile extends ProxyFile {
         return getPermissions;
     }
 
+    public boolean getPermission(int access, int permission) {
+        if(getPermissionsInt==null)
+            getPermissionsInt = new int[USER_ACCESS][READ_PERMISSION];
+
+        int val = getPermissionsInt[access][permission];
+        if(val==0) {
+            val = file.getPermission(access, permission)?1:-1;
+            getPermissionsInt[access][permission] = val;
+        }
+
+        return val==1;
+    }
+
     public String getPermissionsString() {
         if(!getPermissionsStringSet) {
             getPermissionsString = file.getPermissionsString();
@@ -314,15 +290,6 @@ public class CachedFile extends ProxyFile {
         }
 
         return getPermissionsString;
-    }
-
-    public boolean canSetPermissions() {
-        if(!canSetPermissionsSet) {
-            canSetPermissions = file.canSetPermissions();
-            canSetPermissionsSet = true;
-        }
-
-        return canSetPermissions;
     }
 
     public boolean isRoot() {

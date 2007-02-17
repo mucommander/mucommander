@@ -171,39 +171,31 @@ public class SMBFile extends AbstractFile {
 
     }
 
-    public boolean canRead() {
-        // Unlike java.io.File, SmbFile.canRead() can throw an SmbException
+
+    public boolean getPermission(int access, int permission) {
+        if(access!= USER_ACCESS)
+            return false;
+
         try {
-            return file.canRead();
+            if(permission==READ_PERMISSION)
+                return file.canRead();
+            else if(permission==WRITE_PERMISSION)
+                return file.canWrite();
+            else
+                return false;
         }
+        // Unlike java.io.File, SmbFile#canRead() and SmbFile#canWrite() can throw an SmbException
         catch(SmbException e) {
             return false;
         }
     }
 
-    public boolean canWrite() {
-        // Unlike java.io.File, SmbFile.canWrite() can throw an SmbException
-        try {
-            return file.canWrite();
-        }
-        catch(SmbException e) {
+    public boolean setPermission(int access, int permission, boolean enabled) {
+        if(access!= USER_ACCESS || permission!=WRITE_PERMISSION)
             return false;
-        }
-    }
 
-    public boolean canExecute() {
-        // No such thing in SMB, return false
-        return false;
-    }
-
-
-    public boolean setReadable(boolean readable) {
-        return false;
-    }
-
-    public boolean setWritable(boolean writable) {
         try {
-            if(writable)
+            if(enabled)
                 file.setReadWrite();
             else
                 file.setReadOnly();
@@ -215,13 +207,15 @@ public class SMBFile extends AbstractFile {
         }
     }
 
-    public boolean setExecutable(boolean executable) {
-        return false;
+    public boolean canGetPermission(int access, int permission) {
+        return access== USER_ACCESS;    // Get permission support is limited to the user access type.
     }
 
-    public boolean canSetPermissions() {
-        return true;    // return true even though file permissions handling is not partial (writable permissions only)       
+    public boolean canSetPermission(int access, int permission) {
+        // Set permission support is limited to the user access type, and only for the write permission flag.
+        return access== USER_ACCESS && permission==WRITE_PERMISSION;
     }
+
 
     public boolean isDirectory() {
         // Cache SmbFile.isDirectory()'s return value as this method triggers network calls
@@ -348,11 +342,10 @@ public class SMBFile extends AbstractFile {
     }
 
 
-    public void copyTo(AbstractFile destFile) throws FileTransferException {
+    public boolean copyTo(AbstractFile destFile) throws FileTransferException {
         // File can only be copied by SMB if the destination is on an SMB share (but not necessarily on the same host)
         if(!destFile.getURL().getProtocol().equals(FileProtocols.SMB)) {
-            super.copyTo(destFile);
-            return;
+            return super.copyTo(destFile);
         }
 
         // If file is an archive file, retrieve the enclosed file, which is likely to be an SMBFile but not necessarily
@@ -363,8 +356,7 @@ public class SMBFile extends AbstractFile {
         // If destination file is not an SMBFile (for instance an archive entry), SmbFile.copyTo() won't work
         // so use the default copyTo() implementation instead
         if(!(destFile instanceof SMBFile)) {
-            super.copyTo(destFile);
-            return;
+            return super.copyTo(destFile);
         }
 
         // Reuse the destination SmbFile instance
@@ -373,9 +365,10 @@ public class SMBFile extends AbstractFile {
         try {
             // Copy the SMB file
             file.copyTo(destSmbFile);
+            return true;
         }
         catch(SmbException e) {
-            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that the copy failed
+            return false;
         }
     }
 
@@ -384,14 +377,13 @@ public class SMBFile extends AbstractFile {
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
      * uses SMB.
      */
-    public void moveTo(AbstractFile destFile) throws FileTransferException  {
+    public boolean moveTo(AbstractFile destFile) throws FileTransferException  {
         // File can only be moved directly if the destination if it is on an SMB share
         // (but not necessarily on the same host).
         // Use the default moveTo() implementation if the destination file doesn't use the same protocol (webdav/webdavs)
         // or is not on the same host
         if(!destFile.getURL().getProtocol().equals(FileProtocols.SMB)) {
-            super.moveTo(destFile);
-            return;
+            return super.moveTo(destFile);
         }
 
         // If file is an archive file, retrieve enclosed file, which is likely to be an SMBFile but not necessarily
@@ -402,16 +394,16 @@ public class SMBFile extends AbstractFile {
         // If destination file is not an SMBFile (for instance an archive entry), SmbFile.renameTo() won't work,
         // so use the default moveTo() implementation instead
         if(!(destFile instanceof SMBFile)) {
-            super.moveTo(destFile);
-            return;
+            return super.moveTo(destFile);
         }
 
         // Move file
         try {
             file.renameTo(((SMBFile)destFile).file);
+            return true;
         }
         catch(SmbException e) {
-            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
+            return false;
         }
     }
 

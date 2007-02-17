@@ -168,9 +168,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
     public boolean changeDate(long lastModified) {
-        // Changes the date using the SITE UTIME FTP command. This command seems to be supported by modern FTP servers
-        // such as ProFTPd or PureFTP Server, but may as well not be supported by the remote FTP server as it is not
-        // part of the basic command set.
+        // Changes the date using the SITE UTIME FTP command.
+        // This command is optional but seems to be supported by modern FTP servers such as ProFTPd or PureFTP Server.
+        // But it may as well not be supported by the remote FTP server as it is not part of the basic FTP command set.
 
         // Implementation note: FTPFile.setTimeStamp only changes the instance's date, but doesn't change it on the server-side.
         FTPConnectionHandler connHandler = null;
@@ -236,7 +236,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 parentFileURL.setProperty(PASSIVE_MODE_PROPERTY_NAME, ""+isPassiveModeEnabled());
                 parentFileURL.setCredentials(fileURL.getCredentials());
                 try {
-                    this.parent = new FTPFile(parentFileURL);
+                    this.parent = new FTPFile(parentFileURL, createFTPFile(parentFileURL.getFilename(), true));
                 }
                 catch(IOException e) {
                     // Parent will be null
@@ -261,34 +261,47 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         return this.fileExists;
     }
 
-    public boolean canRead() {
-        return file.hasPermission(org.apache.commons.net.ftp.FTPFile.USER_ACCESS, org.apache.commons.net.ftp.FTPFile.READ_PERMISSION);
+
+    public boolean getPermission(int access, int permission) {
+        int fAccess;
+        int fPermission;
+
+        if(access== USER_ACCESS)
+            fAccess = org.apache.commons.net.ftp.FTPFile.USER_ACCESS;
+        else if(access==GROUP_ACCESS)
+            fAccess = org.apache.commons.net.ftp.FTPFile.GROUP_ACCESS;
+        else if(access==OTHER_ACCESS)
+            fAccess = org.apache.commons.net.ftp.FTPFile.WORLD_ACCESS;
+        else
+            return false;
+
+        if(permission==READ_PERMISSION)
+            fPermission = org.apache.commons.net.ftp.FTPFile.READ_PERMISSION;
+        else if(permission==WRITE_PERMISSION)
+            fPermission = org.apache.commons.net.ftp.FTPFile.WRITE_PERMISSION;
+        else if(permission==EXECUTE_PERMISSION)
+            fPermission = org.apache.commons.net.ftp.FTPFile.EXECUTE_PERMISSION;
+        else
+            return false;
+
+        return file.hasPermission(fAccess, fPermission);
     }
 
-    public boolean canWrite() {
-        return file.hasPermission(org.apache.commons.net.ftp.FTPFile.USER_ACCESS, org.apache.commons.net.ftp.FTPFile.WRITE_PERMISSION);
+
+    public boolean setPermission(int access, int permission, boolean enabled) {
+        return setPermissions(setPermissionBit(getPermissions(), (permission << (access*3)), enabled));
     }
 
-    public boolean canExecute() {
-        return file.hasPermission(org.apache.commons.net.ftp.FTPFile.USER_ACCESS, org.apache.commons.net.ftp.FTPFile.EXECUTE_PERMISSION);
+    public boolean canGetPermission(int access, int permission) {
+        return true;    // Full permission support
     }
 
-    public boolean setReadable(boolean readable) {
-        return false;
+    public boolean canSetPermission(int access, int permission) {
+        // Return true if the server supports the 'site chmod' command, not all servers do.
+        // Do not lock the connection handler, not needed.
+        return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).chmodCommandSupported;
     }
 
-    public boolean setWritable(boolean writable) {
-        return false;
-    }
-
-    public boolean setExecutable(boolean executable) {
-        return false;
-    }
-
-    public boolean canSetPermissions() {
-        // Unfortuntely there is no way to change file permissions in commons-net FTP library
-        return false;
-    }
 
     public boolean isDirectory() {
         return file.isDirectory();
@@ -481,18 +494,82 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     // Overridden methods //
     ////////////////////////
 
+    public boolean setPermissions(int permissions) {
+        // Changes permissions using the SITE CHMOD FTP command.
+
+        // This command is optional but seems to be supported by modern FTP servers such as ProFTPd or PureFTP Server.
+        // But it may as well not be supported by the remote FTP server as it is not part of the basic FTP command set.
+
+        // Implementation note: FTPFile.setPermission only changes the instance's permissions, but doesn't change it on the server-side.
+        FTPConnectionHandler connHandler = null;
+        try {
+            // Retrieve a ConnectionHandler and lock it
+            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+
+            // Return if we know the CHMOD command is not supported by the server
+            if(!connHandler.chmodCommandSupported)
+                return false;
+
+            // Makes sure the connection is started, if not starts it
+            connHandler.checkConnection();
+
+            if(Debug.ON) Debug.trace("sending SITE CHMOD "+Integer.toOctalString(permissions)+" "+absPath);
+            boolean success = connHandler.ftpClient.sendSiteCommand("CHMOD "+Integer.toOctalString(permissions)+" "+absPath);
+            if(Debug.ON) Debug.trace("server reply: "+connHandler.ftpClient.getReplyString());
+
+            if(!success) {
+                int replyCode = connHandler.ftpClient.getReplyCode();
+
+                // If server reported that the command is not supported, mark it in the ConnectionHandler so that
+                // we don't try it anymore
+                if(replyCode==FTPReply.UNRECOGNIZED_COMMAND
+                        || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED
+                        || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER) {
+
+                    if(Debug.ON) Debug.trace("marking CHMOD command as unsupported");
+                    connHandler.chmodCommandSupported = false;
+                }
+            }
+
+            return success;
+        }
+        catch(IOException e) {
+            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+            connHandler.checkSocketException(e);
+
+            return false;
+        }
+        finally {
+            // Release the lock on the ConnectionHandler
+            if(connHandler!=null)
+                connHandler.releaseLock();
+        }
+    }
+
+    public int getPermissionGetMask() {
+        return 511;     // Full get permission support (777 octal)
+    }
+
+    public int getPermissionSetMask() {
+        // Return true if the server supports the 'site chmod' command, not all servers do.
+        // Do not lock the connection handler, not needed.
+        return ((FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false)).chmodCommandSupported
+                ?511    // Full permission support (777 octal)
+                :0;     // No set permission support
+    }
+
+
     /**
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
      * uses FTP and is located on the same host.
      */
-    public void moveTo(AbstractFile destFile) throws FileTransferException {
+    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
         // If destination file is an FTP file located on the same server, tell the server to rename the file.
 
         // Use the default moveTo() implementation if the destination file doesn't use FTP
         // or is not on the same host
         if(!destFile.getURL().getProtocol().equals(FileProtocols.FTP) || !destFile.getURL().getHost().equals(this.fileURL.getHost())) {
-            super.moveTo(destFile);
-            return;
+            return super.moveTo(destFile);
         }
 
         // If file is an archive file, retrieve the enclosed file, which is likely to be an FTPFile but not necessarily
@@ -503,8 +580,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         // If destination file is not an FTPFile (for instance an archive entry), server renaming won't work
         // so use default moveTo() implementation instead
         if(!(destFile instanceof FTPFile)) {
-            super.moveTo(destFile);
-            return;
+            return super.moveTo(destFile);
         }
 
         FTPConnectionHandler connHandler = null;
@@ -514,8 +590,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            if(!connHandler.ftpClient.rename(absPath, destFile.getURL().getPath()))
-                throw new IOException();
+            return connHandler.ftpClient.rename(absPath, destFile.getURL().getPath());
         }
         catch(IOException e) {
             // Checks if the IOException corresponds to a socket error and in that case, closes the connection
@@ -560,21 +635,12 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             connHandler.checkSocketException(e);
 
             // Release the lock on the ConnectionHandler if the InputStream could not be created
-            if(connHandler!=null)
-                connHandler.releaseLock();
+            connHandler.releaseLock();
 
             // Re-throw IOException
             throw e;
         }
     }
-
-
-//    public boolean equals(Object f) {
-//        if(!(f instanceof FTPFile))
-//            return super.equals(f);		// could be equal to a ZipArchiveFile
-//
-//        return fileURL.equals(((FTPFile)f).fileURL);
-//    }
 
 
     private static class FTPInputStream extends FilterInputStream {
@@ -671,7 +737,10 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
         /** False if SITE UTIME command is not supported by the remote server (once tried and failed) */
         private boolean utimeCommandSupported = true;
-        
+
+        /** False if SITE CHMOD command is not supported by the remote server (once tried and failed) */
+        private boolean chmodCommandSupported = true;
+
         /** Controls how ofter should keepAlive() be called by ConnectionPool */
         private final static long KEEP_ALIVE_PERIOD = 60;
 

@@ -41,6 +41,10 @@ public class SimpleArchiveEntry extends ArchiveEntry {
     }
 
     public int getPermissions() {
-        return AbstractFile.READ_MASK;
+        return 292;     // r--r--r--
+    }
+
+    public int getPermissionsMask() {
+        return 0;       // permissions should not be taken into acount
     }
 }

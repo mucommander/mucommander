@@ -1,6 +1,5 @@
 package com.mucommander.file.impl.iso;
 
-import com.mucommander.file.AbstractFile;
 import com.mucommander.file.ArchiveEntry;
 
 public class IsoEntry extends ArchiveEntry {
@@ -46,6 +45,10 @@ public class IsoEntry extends ArchiveEntry {
     }
 
     public int getPermissions() {
-        return AbstractFile.READ_MASK | AbstractFile.WRITE_MASK;
+        return 292;     // r--r--r--
+    }
+
+    public int getPermissionsMask() {
+        return 0;       // permissions should not be taken into acount
     }
 }

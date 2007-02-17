@@ -269,7 +269,7 @@ public class LocalFile extends AbstractFile {
     public boolean guessRemovableDrive() {
         // A weak way to characterize such a drive is to check if the corresponding root folder is a floppy drive or 
         // read-only. A better way would be to create a JNI interface as described here: http://forum.java.sun.com/thread.jspa?forumID=256&threadID=363074
-        return guessFloppyDrive() || (IS_WINDOWS && isRoot() && !canWrite());
+        return guessFloppyDrive() || (IS_WINDOWS && isRoot() && !file.canWrite());
     }
 
 
@@ -334,40 +334,53 @@ public class LocalFile extends AbstractFile {
         return file.exists();
     }
 	
-    public boolean canRead() {
-        return file.canRead();
+
+    public boolean getPermission(int access, int permission) {
+        if(access!= USER_ACCESS)
+            return false;
+
+        if(permission==READ_PERMISSION)
+            return file.canRead();
+        else if(permission==WRITE_PERMISSION)
+            return file.canWrite();
+        else if(permission==EXECUTE_PERMISSION && PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)
+            return file.canExecute();
+
+        return false;
     }
 
-    public boolean canWrite() {
-        return file.canWrite();
+    public boolean setPermission(int access, int permission, boolean enabled) {
+        if(access!= USER_ACCESS || PlatformManager.JAVA_VERSION < PlatformManager.JAVA_1_6)
+            return false;
+
+        if(permission==READ_PERMISSION)
+            return file.setReadable(enabled);
+        else if(permission==WRITE_PERMISSION)
+            return file.setWritable(enabled);
+        else if(permission==EXECUTE_PERMISSION && PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)
+            return file.setExecutable(enabled);
+
+        return false;
     }
 
-    public boolean canExecute() {
-        return (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) && file.canExecute();
+    public boolean canGetPermission(int access, int permission) {
+        // Get permission support is limited to the user access type. Executable permission flag is only available under
+        // Java 1.6 and up.
+        if(access!= USER_ACCESS)
+            return false;
+
+        return permission!=EXECUTE_PERMISSION || PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6;
     }
 
-    public boolean setReadable(boolean readable) {
-        return (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) && file.setReadable(readable);
-    }
+    public boolean canSetPermission(int access, int permission) {
+        // Set permission support is only available under Java 1.6 and up and is limited to the user access type
+        if(access!= USER_ACCESS)
+            return false;
 
-    public boolean setWritable(boolean writable) {
-//        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)
-//            return file.setWritable(writable);
-//        else if(!writable)
-//            return file.setReadOnly();
-//        return false;
-
-        return (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) && file.setWritable(writable);
-    }
-
-    public boolean setExecutable(boolean executable) {
-        return (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) && file.setExecutable(executable);
-    }
-
-    public boolean canSetPermissions() {
-        // Only Java 1.6 and up have setReadable/setWritable/setExecutable methods in java.io.File
         return PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6;
     }
+
+
 
     public boolean isDirectory() {
         // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
@@ -493,10 +506,9 @@ public class LocalFile extends AbstractFile {
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to move/rename the file directly if the destination file
      * is also a local file.
      */
-    public void moveTo(AbstractFile destFile) throws FileTransferException  {
+    public boolean moveTo(AbstractFile destFile) throws FileTransferException  {
         if(!destFile.getURL().getProtocol().equals(FileProtocols.FILE)) {
-            super.moveTo(destFile);
-            return;
+            return super.moveTo(destFile);
         }
 
         // If file is an archive file, retrieve the enclosed file, which is likely to be a LocalFile but not necessarily
@@ -507,13 +519,11 @@ public class LocalFile extends AbstractFile {
         // If destination file is not a LocalFile (for instance an archive entry), renaming won't work
         // so use the default moveTo() implementation instead
         if(!(destFile instanceof LocalFile)) {
-            super.moveTo(destFile);
-            return;
+            return super.moveTo(destFile);
         }
 
         // Move file
-        if(!file.renameTo(((LocalFile)destFile).file))
-            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
+        return file.renameTo(((LocalFile)destFile).file);
     }
 
 
@@ -523,10 +533,34 @@ public class LocalFile extends AbstractFile {
 
 
     /**
+     * Overridden for performance reasons.
+     */
+    public int getPermissionGetMask() {
+        // Get permission support is limited to the user access type. Executable permission flag is only available under
+        // Java 1.6 and up.
+        return PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6?
+                448         // rwx------ (700 octal)
+                :384;       // rw------- (300 octal)
+    }
+
+    /**
+     * Overridden for performance reasons.
+     */
+    public int getPermissionSetMask() {
+        // Set permission support is only available under Java 1.6 and up and is limited to the user access type
+        return PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6?
+                448         // rwx------ (700 octal)
+                :0;         // --------- (0 octal)
+    }
+
+
+    /**
      * Always returns <code>true</code>.
      * @return <code>true</code>
      */
-    public boolean canRunProcess() {return true;}
+    public boolean canRunProcess() {
+        return true;
+    }
 
     /**
      * Returns a process executing the specied local command.

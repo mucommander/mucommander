@@ -113,23 +113,46 @@ public class PermissionsFileFilter extends FileFilter {
      * @return <code>true</code> if <code>file</code> matches this filter, <code>false</code> otherwise.
      */
     public boolean accept(AbstractFile file) {
+//        // Filters on the file's read permissions.
+//        if(read == NO && file.canRead())
+//            return false;
+//        if(read == YES && !file.canRead())
+//            return false;
+//
+//        // Filters on the file's write permissions.
+//        if(write == NO && file.canWrite())
+//            return false;
+//        if(write == YES && !file.canWrite())
+//            return false;
+//
+//        // Execute permissions are only relevant in Java 1.6 and over.
+//        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) {
+//            if(execute == NO && file.canExecute())
+//                return false;
+//            if(execute == YES && !file.canExecute())
+//                return false;
+//        }
+//        return true;
+
+        int perms = file.getPermissions();
+
         // Filters on the file's read permissions.
-        if(read == NO && file.canRead())
+        if(read == NO && (perms & AbstractFile.READ_PERMISSION)!=0)
             return false;
-        if(read == YES && !file.canRead())
+        if(read == YES && (perms & AbstractFile.READ_PERMISSION)==0)
             return false;
 
         // Filters on the file's write permissions.
-        if(write == NO && file.canWrite())
+        if(write == NO && (perms & AbstractFile.WRITE_PERMISSION)!=0)
             return false;
-        if(write == YES && !file.canWrite())
+        if(write == YES && (perms & AbstractFile.WRITE_PERMISSION)==0)
             return false;
 
         // Execute permissions are only relevant in Java 1.6 and over.
         if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6) {
-            if(execute == NO && file.canExecute())
+            if(execute == NO && (perms & AbstractFile.EXECUTE_PERMISSION)!=0)
                 return false;
-            if(execute == YES && !file.canExecute())
+            if(execute == YES && (perms & AbstractFile.EXECUTE_PERMISSION)==0)
                 return false;
         }
         return true;

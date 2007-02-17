@@ -209,6 +209,7 @@ public class HTTPFile extends AbstractFile {
         return exists;
     }
 
+/*
     public boolean canRead() {
         return true;
     }
@@ -236,6 +237,24 @@ public class HTTPFile extends AbstractFile {
     public boolean canSetPermissions() {
         return false;
     }
+*/
+
+    public boolean getPermission(int access, int permission) {
+        return permission==READ_PERMISSION;
+    }
+
+    public boolean setPermission(int access, int permission, boolean enabled) {
+        return false;
+    }
+
+    public boolean canGetPermission(int access, int permission) {
+        return false;   // permissions should not be taken into acount
+    }
+
+    public boolean canSetPermission(int access, int permission) {
+        return false;
+    }
+
 
     public boolean isDirectory() {
         return false;
@@ -529,7 +548,11 @@ public class HTTPFile extends AbstractFile {
     }
 
 
-    public boolean canRunProcess() {return false;}
+    public boolean canRunProcess() {
+        return false;
+    }
 
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {throw new IOException();}
+    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
+        throw new IOException();
+    }
 }

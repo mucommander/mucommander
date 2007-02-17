@@ -1,6 +1,5 @@
 package com.mucommander.file;
 
-import com.mucommander.Debug;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
@@ -86,37 +85,25 @@ public class ArchiveEntryFile extends AbstractFile {
         return true;
     }
 	
-    public boolean canRead() {
-        return (getPermissions()&READ_MASK)!=0;
-    }
-	
-    public boolean canWrite() {
-        return (getPermissions()&WRITE_MASK)!=0;
+    public boolean getPermission(int access, int permission) {
+        return (getPermissions() & (permission << (access*3))) != 0;
     }
 
-    public boolean canExecute() {
-        return (getPermissions()&EXECUTE_MASK)!=0;
-    }
-
-    public int getPermissions() {
-        return entry.getPermissions();
-    }
-
-    public boolean setReadable(boolean readable) {
+    public boolean setPermission(int access, int permission, boolean enabled) {
+        // Permissions cannot be changed
         return false;
     }
 
-    public boolean setWritable(boolean writable) {
+    public boolean canGetPermission(int access, int permission) {
+        // Use entry's permissions mask
+        return (entry.getPermissionsMask() & (permission << (access*3))) != 0;
+    }
+
+    public boolean canSetPermission(int access, int permission) {
+        // Permissions cannot be changed
         return false;
     }
 
-    public boolean setExecutable(boolean executable) {
-        return false;
-    }
-
-    public boolean canSetPermissions() {
-        return false;
-    }
 
     public boolean isSymlink() {
         return false;
@@ -160,11 +147,16 @@ public class ArchiveEntryFile extends AbstractFile {
     // Overridden methods //
     ////////////////////////
 
+    public int getPermissions() {
+        // Return entry's permissions mask
+        return entry.getPermissions();
+    }
+    
     public String getSeparator() {
         return archiveFile.getSeparator();
     }
 
-    public void moveTo(AbstractFile dest) throws FileTransferException {
+    public boolean moveTo(AbstractFile dest) throws FileTransferException {
         // Archive entries are read-only
         throw new FileTransferException(FileTransferException.UNKNOWN_REASON);
     }
@@ -173,7 +165,11 @@ public class ArchiveEntryFile extends AbstractFile {
         return MUST_NOT_HINT;
     }
 
-    public boolean canRunProcess() {return false;}
+    public boolean canRunProcess() {
+        return false;
+    }
 
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {throw new IOException();}
+    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
+        throw new IOException();
+    }
 }

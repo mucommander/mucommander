@@ -46,12 +46,14 @@ class TarArchiver extends Archiver {
 
         entry.setModTime(file.getDate());
 
-        int perms = entry.getMode();
-        perms = AbstractFile.setPermissionBit(perms, AbstractFile.READ_MASK, file.canRead());
-        perms = AbstractFile.setPermissionBit(perms, AbstractFile.WRITE_MASK, file.canWrite());
-        perms = AbstractFile.setPermissionBit(perms, AbstractFile.EXECUTE_MASK, file.canExecute());
-        entry.setMode(perms);
-        
+//        int perms = entry.getMode();
+//        perms = AbstractFile.setPermissionBit(perms, AbstractFile.READ_PERMISSION, file.canRead());
+//        perms = AbstractFile.setPermissionBit(perms, AbstractFile.WRITE_PERMISSION, file.canWrite());
+//        perms = AbstractFile.setPermissionBit(perms, AbstractFile.EXECUTE_PERMISSION, file.canExecute());
+//        entry.setMode(perms);
+
+        entry.setMode(file.getPermissions());
+
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating entry, name="+entry.getName()+" isDirectory="+entry.isDirectory()+" size="+entry.getSize()+" modTime="+entry.getModTime());
 		
         // Add the entry

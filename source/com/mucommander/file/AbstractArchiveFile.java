@@ -352,7 +352,11 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         return file.getSize();
     }
 
-    public boolean canRunProcess() {return false;}
+    public boolean canRunProcess() {
+        return false;
+    }
 
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {throw new IOException();}
+    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
+        throw new IOException();
+    }
 }

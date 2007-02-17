@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * @see com.mucommander.file.impl.ProxyFile
  * @author Maxence Bernard
  */
-public abstract class AbstractFile {
+public abstract class AbstractFile implements FilePermissions {
 
     /** URL representing this file */
     protected FileURL fileURL;
@@ -46,12 +46,6 @@ public abstract class AbstractFile {
     // 65536, no more gain (not sure why).
     public final static int IO_BUFFER_SIZE = 65536;
 
-    /** Bit mask for 'execute' file permission */
-    public final static int EXECUTE_MASK = 64;
-    /** Bit mask for 'write' file permission */
-    public final static int WRITE_MASK = 128;
-    /** Bit mask for 'read' file permission */
-    public final static int READ_MASK = 256;
 
     /** Pattern matching Windows drive root folders, e.g. C:\ */
     protected final static Pattern windowsDriveRootPattern = Pattern.compile("^[a-zA-Z]{1}[:]{1}[\\\\]{1}$");
@@ -65,15 +59,6 @@ public abstract class AbstractFile {
     }
 	
     
-    ////////////////////
-    // Static methods //
-    ////////////////////
-
-
-    //////////////////////////////////////
-    // Implemented AbstractFile methods //
-    //////////////////////////////////////
-
     /**
      * Returns the URL representing this file.
      */
@@ -448,17 +433,23 @@ public abstract class AbstractFile {
     
 
     /**
-     * Copies this AbstractFile to another specified one and throws an <code>IOException</code> if the operation
-     * failed. The contents of the destination file will be overwritten.
+     * Copies this AbstractFile to another specified one, overwriting the contents of the destination file (if any).
+     * Returns true if the operation could be successfully be completed, false if the operation could not be performed
+     * because of unsatisfied conditions (not an error), or throws an {@link FileTransferException} if the
+     * operation was attempted but failed.
      *
-     * <p>This generic implementation should be overridden by file protocols which are able to perform
-     * a server-to-server copy.
+     * <p>This generic implementation copies this file to the destination one, overwriting any data it contains.
+     * The operation will always be attempted, thus will either return true or throw an exception, but will never return false.
+     *
+     * <p>This method should be overridden by file protocols which are able to perform a server-to-server copy.
      *
      * @param destFile the destination file this file should be copied to
-     * @throws FileTransferException if this AbstractFile could be read, or the destination could be written, or if
-     * the operation failed for any other reason (use {@link FileTransferException#getReason()} to get the reason of the failure).
+     * @return true if the operation could be successfully be completed, false if the operation could not be performed
+     * because of unsatisfied conditions (not an error)
+     * @throws FileTransferException if this AbstractFile or destination cannot be written or if the operation failed
+     * for any other reason (use {@link FileTransferException#getReason()} to get the reason of the failure).
      */
-    public void copyTo(AbstractFile destFile) throws FileTransferException {
+    public boolean copyTo(AbstractFile destFile) throws FileTransferException {
         // Throw a specific FileTransferException if source and destination files are identical
         if(this.equals(destFile))
             throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
@@ -474,6 +465,7 @@ public abstract class AbstractFile {
 
         try {
             destFile.copyStream(in, false);
+            return true;
         }
         finally {
             // Close stream even if copyStream() threw an IOException
@@ -513,17 +505,23 @@ public abstract class AbstractFile {
 
 
     /**
-     * Moves this AbstractFile to another specified one and throws an <code>IOException</code> if the operation
-     * failed. This generic implementation copies this file to the destination one, overwriting any data it contains,
-     * and if (and only if) the copy was successful, deletes the original file (this file).
+     * Moves this AbstractFile to another specified one. Returns true if the operation could be successfully
+     * be completed, false if the operation could not be performed because of unsatisfied conditions (not an error),
+     * or throws an {@link FileTransferException} if the operation was attempted but failed.
      *
-     * <p>This method should be overridden by file protocols which are able to perform a server-to-server move.
+     * <p>This generic implementation copies this file to the destination one, overwriting any data it contains,
+     * and if (and only if) the copy was successful, deletes the original file (this file). The operation will always
+     * be attempted, thus will either return true or throw an exception, but will never return false.
+     *
+     * <p>This method should be overridden by file protocols which are able to rename files.
      *
      * @param destFile the destination file this file should be moved to
+     * @return true if the operation could be successfully be completed, false if the operation could not be performed
+     * because of unsatisfied conditions (not an error)
      * @throws FileTransferException if this AbstractFile or destination cannot be written or if the operation failed
      * for any other reason (use {@link FileTransferException#getReason()} to get the reason of the failure).
      */
-    public void moveTo(AbstractFile destFile) throws FileTransferException {
+    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
         // Throw a specific FileTransferException if source and destination files are identical
         if(this.equals(destFile))
             throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
@@ -533,6 +531,7 @@ public abstract class AbstractFile {
         // The file won't be deleted if copyTo() failed (threw an IOException)
         try {
             delete();
+            return true;
         }
         catch(IOException e) {
             throw new FileTransferException(FileTransferException.DELETING_SOURCE);
@@ -605,92 +604,190 @@ public abstract class AbstractFile {
 
 
     /**
-     * Returns read/write/execute permissions as an int, UNIX octal style.
-     * The value can be compared against {@link #READ_MASK}, {@link #WRITE_MASK} and {@link #EXECUTE_MASK}
-     * bit masks to determine if the file is readable/writable/executable.
-     *
-     * <p>Implementation note: the implementation of this method calls sequentially {@link #canRead()},
-     * {@link #canWrite()} and {@link #canExecute()}. This may affect performance on filesystems which need to perform
-     * a network request to retrieve each of these values. In that case, and if the fileystem allows to retrieve all
-     * permissions with a single request, this method should be overridden.
-     *
-     * @return read/write/execute permissions as an int, UNIX octal style.
-     */
-    public int getPermissions() {
-        int perms = 0;
-
-        if(canRead())
-            perms |= READ_MASK; 
-
-        if(canWrite())
-            perms |= WRITE_MASK;
-
-        if(canExecute())
-            perms |= EXECUTE_MASK;    
-
-        return perms;
-    }
-
-
-    /**
-     * Returns a string representation of this file's permissions, a concatenation of the following characters:
-     * <ul>
-     * <li>'l' if this file is a symbolic link,'d' if it is a directory, '-' otherwise
-     * <li>'r' if this file is readable, '-' otherwise
-     * <li>'w' if this file is writable, '-' otherwise
-     * <li>'x' if this file is executable, '-' otherwise
-     * </ul>
-     *
-     * For example, if the file is a directory that is readable, writable and executable, "drwx" will be returned.
-     */
-    public String getPermissionsString() {
-        String perms = "";
-        perms += isSymlink()?'l':isDirectory()?'d':'-';
-        perms += canRead()?'r':'-';
-        perms += canWrite()?'w':'-';
-        perms += canExecute()?'x':'-';
-
-        return perms;
-    }
-
-
-    /**
-     * Changes the read/write/execute permissions of this file, using the specified permissions int and returns true if
-     * the operation was successful, false if at least one of the file permissions could not be changed.
-     * The permissions int should be created using {@link #READ_MASK}, {@link #WRITE_MASK} and {@link #EXECUTE_MASK}
-     * bit masks combined with logical OR.
-     *
-     * <p>Implementation note: the implementation of this method calls sequentially {@link #setReadable(boolean)},
-     * {@link #setWritable(boolean)} and {@link #setExecutable(boolean)}. This may affect performance on filesystems
-     * which need to perform a network request to retrieve each of these value. In that case, and if the fileystem allows
-     * to change all permissions with a single request, this method should be overridden.
-         *
-     * @param permissions the new permissions this file should have
-     * @return true if the operation was successful, false if at least one of the file permissions could not be changed 
-     */
-    public boolean setPermissions(int permissions) {
-        boolean success;
-
-        success = setReadable((permissions&READ_MASK)!=0);
-
-        success &= setWritable((permissions&WRITE_MASK)!=0);
-
-        success &= setExecutable((permissions&EXECUTE_MASK)!=0);
-
-        return success;
-    }
-
-
-    /**
      * Convenience method that sets/unsets a bit in the given permissions int.
      */
-    public static int setPermissionBit(int permissions, int bit, boolean enabled) {
+    protected static int setPermissionBit(int permissions, int bit, boolean enabled) {
         if(enabled)
             permissions |= bit;
         else
             permissions &= ~bit;
 
         return permissions;
+    }
+
+
+    /**
+     * Returns this file's permissions as an int, UNIX octal style.
+     * The permissions can be compared against {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION}, {@link #EXECUTE_PERMISSION}
+     * and {@link #USER_ACCESS}, {@link #GROUP_ACCESS} and {@link #OTHER_ACCESS} masks.
+     *
+     * <p>Implementation note: the default implementation of this method calls sequentially {@link #getPermission(int, int)} for
+     * each permission and access (that's a total of 9 calls). This may affect performance on filesystems which need to perform
+     * an I/O request to retrieve each permission individually. In that case, and if the fileystem allows to retrieve all
+     * permissions at once, this method should be overridden.
+     *
+     * @return permissions as an int, UNIX octal style.
+     */
+    public int getPermissions() {
+        int bitShift = 0;
+        int perms = 0;
+
+        for(int a=OTHER_ACCESS; a<= USER_ACCESS; a++) {
+            for(int p=EXECUTE_PERMISSION; p<=READ_PERMISSION; p=p<<1) {
+                if(canGetPermission(a, p) && getPermission(a, p))
+                    perms |= (1<<bitShift);
+
+                bitShift++;
+            }
+        }
+
+        return perms;
+    }
+
+
+    /**
+     * Changes this file's permissions to the specified permissions int and returns true if
+     * the operation was successful, false if at least one of the file permissions could not be changed.
+     * The permissions int should be created using {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION}, {@link #EXECUTE_PERMISSION}
+     * and {@link #USER_ACCESS}, {@link #GROUP_ACCESS} and {@link #OTHER_ACCESS} masks combined with logical OR.
+     *
+     * <p>Implementation note: the default implementation of this method calls sequentially {@link #setPermission(int, int, boolean)},
+     * for each permission and access (that's a total 9 calls). This may affect performance on filesystems which need
+     * to perform an I/O request to change each permission individually. In that case, and if the fileystem allows
+     * to change all permissions at once, this method should be overridden.
+         *
+     * @param permissions the new permissions this file should have
+     * @return true if the operation was successful, false if at least one of the file permissions could not be changed
+     */
+    public boolean setPermissions(int permissions) {
+        int bitShift = 0;
+        boolean success = true;
+
+        for(int a=OTHER_ACCESS; a<= USER_ACCESS; a++) {
+            for(int p=EXECUTE_PERMISSION; p<=READ_PERMISSION; p=p<<1) {
+                if(canSetPermission(a, p))
+                    success = setPermission(a, p, (permissions & (1<<bitShift))!=0) && success;
+
+                bitShift++;
+            }
+        }
+
+        return success;
+    }
+
+
+    /**
+     * Returns a mask describing the permission bits that the filesystem can read and which can be returned by
+     * {@link #getPermission(int, int)} and {@link #getPermissions()}. This allows to determine which permissions are
+     * meaningful. 0 is returned if no permission can be read or if the filesystem doesn't have a notion of permissions,
+     * 777 if all permissions can be read.
+     *
+     * <p>Implementation note: the default implementation of this method calls sequentially {@link #canGetPermission(int, int)},
+     * for each permission and access (that's a total 9 calls). This method should be overridden if a more efficient
+     * implementation can be provided. Usually, file permissions support is the same for all files on a filesystem. If
+     * that is the case, this method should be overridden to return a static permission mask.
+     *
+     * @return a bit mask describing the permission bits that the filesystem can read
+     */
+    public int getPermissionGetMask() {
+        int bitShift = 0;
+        int permsMask = 0;
+
+        for(int a=OTHER_ACCESS; a<= USER_ACCESS; a++) {
+            for(int p=EXECUTE_PERMISSION; p<=READ_PERMISSION; p=p<<1) {
+                if(canGetPermission(a, p))
+                    permsMask |= (1<<bitShift);
+
+                bitShift++;
+            }
+        }
+
+        return permsMask;
+    }
+
+
+    /**
+     * Returns a mask describing the permission bits that can be changed by the filesystem when calling
+     * {@link #setPermission(int, int, boolean)} and {@link #setPermissions(int)}.
+     * 0 is returned if no permission can be set or if the filesystem doesn't have a notion of permissions,
+     * 777 if all permissions can be set.
+     *
+     * <p>Implementation note: the default implementation of this method calls sequentially {@link #canGetPermission(int, int)},
+     * for each permission and access (that's a total 9 calls). This method should be overridden if a more efficient
+     * implementation can be provided. Usually, file permissions support is the same for all files on a filesystem. If
+     * that is the case, this method should be overridden to return a static permission mask.
+     *
+     * @return a bit mask describing the permission bits that the filesystem can change
+     */
+    public int getPermissionSetMask() {
+        int bitShift = 0;
+        int permsMask = 0;
+
+        for(int a=OTHER_ACCESS; a<= USER_ACCESS; a++) {
+            for(int p=EXECUTE_PERMISSION; p<=READ_PERMISSION; p=p<<1) {
+                if(canSetPermission(a, p))
+                    permsMask |= (1<<bitShift);
+
+                bitShift++;
+            }
+        }
+
+        return permsMask;
+    }
+
+
+
+    /**
+     * Returns a string representation of this file's permissions.
+     *
+     * <p>The first character is 'l' if this file is a symbolic link,'d' if it is a directory, '-' otherwise. Then
+     * the string contains up to 3 character triplets, for each of the 'user', 'group' and 'other' access types, each
+     * containing the following characters:
+     * <ul>
+     *  <li>'r' if this file has read permission, '-' otherwise
+     *  <li>'w' if this file has write permission, '-' otherwise
+     *  <li>'x' if this file has executable permission, '-' otherwise
+     * </ul>
+     *
+     * <p>The first character triplet for 'user' access will always be added to the permissions. Then the 'group' and 'other'
+     * triplets will only be added if at least one of the user permission bits can be retrieved, as tested with
+     * {@link #getPermissionGetMask()}.
+     * Here are a couple examples to illustrate:
+     * <ul>
+     *  <li>a directory for which {@link #getPermissionGetMask()} returns 0 will return the string "d----", no matter
+     * what {@link #getPermissions()} returns.
+     *  <li>a regular file for which {@link #getPermissionGetMask()} returns 777 (full permissions support) and which
+     * has read/write/executable permissions for all three 'user', 'group' and 'other' access types will return "-rwxrwxrwx".
+     * </ul>
+     */
+    public String getPermissionsString() {
+        int availPerms = getPermissionGetMask();
+
+        String s = "";
+        s += isSymlink()?'l':isDirectory()?'d':'-';
+
+        int perms = getPermissions();
+
+        int bitShift = USER_ACCESS *3;
+
+        // Permissions go by triplets (rwx), there are 3 of them for respectively 'owner', 'group' and 'other' accesses.
+        // The first one ('owner') will always be displayed, regardless of the permission bit mask. 'Group' and 'other'
+        // will be displayed only if the permission mask contains information about them (at least one permission bit).
+        for(int a= USER_ACCESS; a>=OTHER_ACCESS; a--) {
+
+            if(a== USER_ACCESS || (availPerms & (7<<bitShift))!=0) {
+                for(int p=READ_PERMISSION; p>=EXECUTE_PERMISSION; p=p>>1) {
+                    if((perms & (p<<bitShift))==0)
+                        s += '-';
+                    else
+                        s += p==READ_PERMISSION?'r':p==WRITE_PERMISSION?'w':'x';
+                }
+            }
+
+            bitShift -= 3;
+        }
+
+        return s;
     }
 
 
@@ -754,62 +851,47 @@ public abstract class AbstractFile {
      * Returns <code>true</code> if this file exists.
      */
     public abstract boolean exists();
-	
-    /**
-     * Returns true if this AbstractFile can be read.
-     */	
-    public abstract boolean canRead();
-	
-    /**
-     * Returns true if this AbstractFile can be modified.
-     */	
-    public abstract boolean canWrite();
 
     /**
-     * Returns true if this AbstractFile can be executed. If the underlying filesystem does not have a notion of
-     * executable files, false must be returned. 
-     */
-    public abstract boolean canExecute();
-
-    /**
-     * Changes the 'execute' permission of this file and returns true if the operation succeeded, false if it failed or
-     * if the operation is not available in the underlying filesystem.
+     * Returns true if this file has the specified permission enabled for the given access type.
+     * If the permission flag for the access type is not supported (use {@link #getPermissionGetMask()} or
+     * {@link #canGetPermission(int, int)} to determine that), the return value will be meaningless and therefore
+     * should not be taken into account.
      *
-     * @param readable true to make this file readable
-     * @return true if the operation succeeded, false if it failed or if the operation is not available
-     * in the underlying filesystem
+     * @param access {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION} or {@link #EXECUTE_PERMISSION}
+     * @param permission {@link #USER_ACCESS}, {@link #GROUP_ACCESS} or {@link #OTHER_ACCESS}
+     * @return true if the file has the specified permission flag enabled for the access type
      */
-    public abstract boolean setReadable(boolean readable);
+    public abstract boolean getPermission(int access, int permission);
 
     /**
-     * Changes the 'write' permission of this file and returns true if the operation succeeded, false if it failed or
-     * if the operation is not available in the underlying filesystem.
+     * Changes the specified permission flag for the given access type. If the permission bit in the access type is not
+     * supported (use {@link #getPermissionSetMask()} or {@link #canSetPermission(int, int)} to determine that),
+     * calling this method will have no effect.
      *
-     * @param writable true to make this file writable
-     * @return true if the operation succeeded, false if it failed or if the operation is not available
-     * in the underlying filesystem
+     * @param access {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION} or {@link #EXECUTE_PERMISSION}
+     * @param permission {@link #USER_ACCESS}, {@link #GROUP_ACCESS} or {@link #OTHER_ACCESS}
+     * @return true if the permission flag was successfully set for the access type
      */
-    public abstract boolean setWritable(boolean writable);
+    public abstract boolean setPermission(int access, int permission, boolean enabled);
 
     /**
-     * Changes the 'execute' permission of this file and returns true if the operation succeeded, false if it failed or
-     * if the operation is not available in the underlying filesystem.
+     * Returns true if this file can retrieve the specified permission flag for the given access type.
      *
-     * @param executable true to make this file executable
-     * @return true if the operation succeeded, false if it failed or if the operation is not available
-     * in the underlying filesystem
+     * @param access {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION} or {@link #EXECUTE_PERMISSION}
+     * @param permission {@link #USER_ACCESS}, {@link #GROUP_ACCESS} or {@link #OTHER_ACCESS}
+     * @return true if this file can retrieve the specified permission flag for the given access type
      */
-    public abstract boolean setExecutable(boolean executable);
+    public abstract boolean canGetPermission(int access, int permission);
 
     /**
-     * Returns true if the underlying filesystem is capable of changing file permissions. This method does not have
-     * read/write/execute granularity and will return true if at least of those permissions can be changed.
-     * Filesystems that are read-only or lack the ability to change permissions will return false.
+     * Returns true if this file can change the specified permission flag for the given access type.
      *
-     * @return true if at least one of the read/write/execute permissions can be changed.
+     * @param access {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION} or {@link #EXECUTE_PERMISSION}
+     * @param permission {@link #USER_ACCESS}, {@link #GROUP_ACCESS} or {@link #OTHER_ACCESS}
+     * @return true if this file can change the specified permission flag for the given access type
      */
-    public abstract boolean canSetPermissions();
-
+    public abstract boolean canSetPermission(int access, int permission);
 
     /**
      * Returns true if this AbstractFile is a 'regular' directory, not only a 'browsable' file (like an archive file).
@@ -905,18 +987,41 @@ public abstract class AbstractFile {
      * Simple bench method.
      */
     public static void main(String args[]) throws IOException {
-        AbstractFile folder = FileFactory.getFile("/usr/bin/", null);
+        AbstractFile folder = FileFactory.getFile(args[0]);
         folder.ls();
+
+        int nbIter = 100;
 
         long totalTime = 0;
         long now;
-        int nbIter = 100;
         for(int i=0; i<nbIter; i++) {
             now = System.currentTimeMillis();
             folder.ls();
             totalTime += System.currentTimeMillis()-now;
         }
 	
-        System.out.println("Average ls() time = "+totalTime/nbIter);
-    }	
+        System.out.println("Average AbstractFile#ls() time = "+totalTime/nbIter);
+
+        totalTime = 0;
+        java.io.File ioFolder = new java.io.File(args[0]);
+        for(int i=0; i<nbIter; i++) {
+            now = System.currentTimeMillis();
+            ioFolder.listFiles();
+            totalTime += System.currentTimeMillis()-now;
+        }
+
+        System.out.println("Average java.io.File#listFiles() time = "+totalTime/nbIter);
+
+        totalTime = 0;
+        ioFolder = new java.io.File(args[0]);
+        for(int i=0; i<nbIter; i++) {
+            now = System.currentTimeMillis();
+            String names[] = ioFolder.list();
+            for(int j=0; j<names.length; j++)
+                new java.io.File(names[j]);
+            totalTime += System.currentTimeMillis()-now;
+        }
+
+        System.out.println("Average java.io.File#list() time = "+totalTime/nbIter);
+    }
 }

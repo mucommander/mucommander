@@ -85,32 +85,20 @@ public abstract class ProxyFile extends AbstractFile {
         return file.exists();
     }
 
-    public boolean canRead() {
-        return file.canRead();
+    public boolean getPermission(int access, int permission) {
+        return file.getPermission(access, permission);
     }
 
-    public boolean canWrite() {
-        return file.canWrite();
+    public boolean setPermission(int access, int permission, boolean enabled) {
+        return file.setPermission(access, permission, enabled);
     }
 
-    public boolean canExecute() {
-        return file.canExecute();
+    public boolean canGetPermission(int access, int permission) {
+        return file.canGetPermission(access, permission);
     }
 
-    public boolean setReadable(boolean readable) {
-        return file.setReadable(readable);
-    }
-
-    public boolean setWritable(boolean writable) {
-        return file.setWritable(writable);
-    }
-
-    public boolean setExecutable(boolean executable) {
-        return file.setExecutable(executable);
-    }
-
-    public boolean canSetPermissions() {
-        return file.canSetPermissions();
+    public boolean canSetPermission(int access, int permission) {
+        return file.canSetPermission(access, permission);
     }
 
     public boolean isDirectory() {
@@ -205,6 +193,14 @@ public abstract class ProxyFile extends AbstractFile {
         return file.setPermissions(permissions);
     }
 
+    public int getPermissionGetMask() {
+        return file.getPermissionGetMask();
+    }
+
+    public int getPermissionSetMask() {
+        return file.getPermissionSetMask();
+    }
+
     public String getPermissionsString() {
         return file.getPermissionsString();
     }
@@ -225,16 +221,16 @@ public abstract class ProxyFile extends AbstractFile {
         file.copyStream(in, append);
     }
 
-    public void copyTo(AbstractFile destFile) throws FileTransferException {
-        file.copyTo(destFile);
+    public boolean copyTo(AbstractFile destFile) throws FileTransferException {
+        return file.copyTo(destFile);
     }
 
     public int getCopyToHint(AbstractFile destFile) {
         return file.getCopyToHint(destFile);
     }
 
-    public void moveTo(AbstractFile destFile) throws FileTransferException {
-        file.moveTo(destFile);
+    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
+        return file.moveTo(destFile);
     }
 
     public int getMoveToHint(AbstractFile destFile) {

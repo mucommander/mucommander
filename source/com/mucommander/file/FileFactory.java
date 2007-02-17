@@ -83,6 +83,7 @@ public abstract class FileFactory {
         registerArchiveFileFormat(IsoArchiveFile.class, new ExtensionFilenameFilter(new String[]{".iso", ".nrg"}));
         registerArchiveFileFormat(ArArchiveFile.class, new ExtensionFilenameFilter(new String[]{".ar", ".a", ".deb"}));
         registerArchiveFileFormat(LstArchiveFile.class, new ExtensionFilenameFilter(new String[]{".lst"}));
+//        registerArchiveFileFormat(SevenZArchiveFile.class, new ExtensionFilenameFilter(new String[]{".7z"}));
     }
 
 
@@ -184,7 +185,6 @@ public abstract class FileFactory {
         catch(IOException e) {
             if(com.mucommander.Debug.ON) {
                 com.mucommander.Debug.trace("Caught exception: "+e);
-                e.printStackTrace();
             }
             if(throwException)
                 throw e;
@@ -240,7 +240,10 @@ public abstract class FileFactory {
             return getFile(fileURL, null);
         }
         catch(IOException e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Caught exception: "+e);
+            if(com.mucommander.Debug.ON) {
+                com.mucommander.Debug.trace("Caught exception: "+e);
+                e.printStackTrace();
+            }
             if(throwException)
                 throw e;
             return null;
@@ -471,6 +474,8 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
             }
         }
         catch(InvocationTargetException e) {
+if(Debug.ON) e.printStackTrace();
+
             // This exception is thrown by Constructor.newInstance() when the target constructor throws an Exception.
             // If the exception was an IOException, throw it instead of a new IOException, as it may contain
             // additional information about the error cause

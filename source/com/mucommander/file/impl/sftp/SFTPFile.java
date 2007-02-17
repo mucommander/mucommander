@@ -180,45 +180,24 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     public boolean exists() {
         return file!=null;
     }
-	
-    public boolean canRead() {
-        return file!=null && file.canRead();
-    }
-	
-    public boolean canWrite() {
-        return file!=null && file.canWrite();
+
+
+    public boolean getPermission(int access, int permission) {
+        return (getPermissions() & (permission << (access*3))) != 0;
     }
 
-    public boolean canExecute() {
-        return file!=null && (file.getAttributes().getPermissions().intValue()&FileAttributes.S_IXUSR)!=0;
+    public boolean setPermission(int access, int permission, boolean enabled) {
+        return setPermissions(setPermissionBit(getPermissions(), (permission << (access*3)), enabled));
     }
 
-    public boolean canSetPermissions() {
-        return true;
+    public boolean canGetPermission(int access, int permission) {
+        return true;    // Full permission support
     }
 
-    public boolean setReadable(boolean readable) {
-        int perms = setPermissionBit(getFilePermissions(), FileAttributes.S_IRUSR, readable);
-        return changeFilePermissions(perms);
+    public boolean canSetPermission(int access, int permission) {
+        return true;    // Full permission support
     }
 
-    public boolean setWritable(boolean writable) {
-        int perms = setPermissionBit(getFilePermissions(), FileAttributes.S_IWUSR, writable);
-        return changeFilePermissions(perms);
-    }
-
-    public boolean setExecutable(boolean executable) {
-        int perms = setPermissionBit(getFilePermissions(), FileAttributes.S_IXUSR, executable);
-        return changeFilePermissions(perms);
-    }
-
-    public boolean setPermissions(int permissions) {
-        int perms = setPermissionBit(getFilePermissions(), FileAttributes.S_IRUSR, (permissions&READ_MASK)!=0);
-        perms = setPermissionBit(perms, FileAttributes.S_IWUSR, (permissions&WRITE_MASK)!=0);
-        perms = setPermissionBit(perms, FileAttributes.S_IXUSR, (permissions&EXECUTE_MASK)!=0);
-
-        return changeFilePermissions(perms);
-    }
 
     /**
      * Returns the SFTP file permissions.
@@ -448,17 +427,34 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     // Overridden methods //
     ////////////////////////
 
+
+    public int getPermissions() {
+        return getFilePermissions() & 511;
+    }
+
+    public boolean setPermissions(int permissions) {
+//        return changeFilePermissions(permissions | (getFilePermissions() ^ (~511)));
+        return changeFilePermissions(permissions);
+    }
+
+    public int getPermissionGetMask() {
+        return 511;     // Full permission get support (777 octal)
+    }
+
+    public int getPermissionSetMask() {
+        return 511;     // Full permission set support (777 octal)
+    }
+
     /**
      * Overrides {@link AbstractFile#moveTo(AbstractFile)} to support server-to-server move if the destination file
      * uses SFTP and is located on the same host.
      */
-    public void moveTo(AbstractFile destFile) throws FileTransferException {
+    public boolean moveTo(AbstractFile destFile) throws FileTransferException {
 
         // Use the default moveTo() implementation if the destination file doesn't use the SFTP protocol
         // or is not on the same host
         if(!destFile.getURL().getProtocol().equals(FileProtocols.SFTP) || !destFile.getURL().getHost().equals(this.fileURL.getHost())) {
-            super.moveTo(destFile);
-            return;
+            return super.moveTo(destFile);
         }
 
         // If file is an archive file, retrieve the enclosed file, which is likely to be an SFTPFile but not necessarily
@@ -469,8 +465,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
         // If destination file is not an SFTPFile (for instance an archive entry), server renaming won't work
         // so use default moveTo() implementation instead
         if(!(destFile instanceof SFTPFile)) {
-            super.moveTo(destFile);
-            return;
+            return super.moveTo(destFile);
         }
 
         // If destination file is an SFTP file located on the same server, tell the server to rename the file.
@@ -483,6 +478,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
 //            connHandler.sftpChannel.renameFile(absPath, destFile.getURL().getPath());
             connHandler.sftpClient.rename(absPath, destFile.getURL().getPath());
+            return true;
         }
         catch(IOException e) {
             if(Debug.ON) {
@@ -490,7 +486,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 e.printStackTrace();
             }
 
-            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);    // Report that move failed
+            return false;
         }
         finally {
             // Release the lock on the ConnectionHandler

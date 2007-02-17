@@ -106,9 +106,12 @@ public abstract class ArchiveEntry {
     public abstract boolean isDirectory();
 
     /**
-     * Returns read/write/execute permissions as an int, UNIX octal style.
-     * The value can be compared against {@link AbstractFile#READ_MASK}, {@link AbstractFile#WRITE_MASK} and
-     * {@link AbstractFile#EXECUTE_MASK} bit masks to determine if the entry is readable/writable/executable.
+     * Returns read/write/execute permissions for owner/group/other access as an int, UNIX permissions style.
      */
     public abstract int getPermissions();
+
+    /**
+     * Returns a bit mask for the support permission bits.
+     */
+    public abstract int getPermissionsMask();
 }

@@ -47,6 +47,9 @@ public abstract class TransferFileJob extends FileJob {
     /** Has the file currently being processed been skipped ? */
     private boolean currentFileSkipped;
 
+    /** Default file permissions used in destination if permissions are not set in source file */
+    private final static int DEFAULT_PERMISSIONS = 420;
+
 
     /**
      * Creates a new TransferFileJob.
@@ -78,11 +81,14 @@ public abstract class TransferFileJob extends FileJob {
         int copyToHint = sourceFile.getCopyToHint(destFile);
 
         // copyTo() should or must be used
+        boolean copied = false;
         if(copyToHint==AbstractFile.SHOULD_HINT || copyToHint==AbstractFile.MUST_HINT) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling copyTo()");
-            sourceFile.copyTo(destFile);
+            copied = sourceFile.copyTo(destFile);
         }
-        else {
+
+        // If the file wasn't copied using copyTo(), or if copyTo() didn't work (return false)
+        if(!copied) {
             // Copy source file stream to destination file
             try {
                 // Try to open InputStream
@@ -123,8 +129,16 @@ public abstract class TransferFileJob extends FileJob {
         // Preserve source file's date
         destFile.changeDate(sourceFile.getDate());
 
-        // Preserve source file's permissions
-        destFile.setPermissions(sourceFile.getPermissions());
+//        // Preserve source file's permissions
+//        destFile.setPermissions(sourceFile.getPermissions());
+
+        // Preserve source file's permissions: preserve only the bits that are in use by the source file. Other bits
+        // will be set to default permissions (rw-r--r-- , 644 octal). That means:
+        //  - a file without any permission will have default permissions in the destination.
+        //  - a file with all permission bits set (mask = 777 octal) will ignore the default permissions
+        int permMask = sourceFile.getPermissionGetMask();
+if(Debug.ON) Debug.trace("source perms="+sourceFile.getPermissions()+" dest perms="+((sourceFile.getPermissions() & permMask) | (~permMask & DEFAULT_PERMISSIONS))+" mask="+permMask);
+        destFile.setPermissions((sourceFile.getPermissions() & permMask) | (~permMask & DEFAULT_PERMISSIONS));
     }
 
 
