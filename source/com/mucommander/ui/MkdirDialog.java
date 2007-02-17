@@ -53,7 +53,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
         Container contentPane = getContentPane();
 
         YBoxPanel mainPanel = new YBoxPanel();
-        mainPanel.add(new JLabel(Translator.get(mkfileMode?"mkfile_dialog.description":"mkdir_dialog.description")+":"));
+        mainPanel.add(new JLabel(Translator.get(mkfileMode?"com.mucommander.ui.action.MkfileAction.tooltip":"com.mucommander.ui.action.MkdirAction.tooltip")+" :"));
         mkdirPathField = new JTextField();
         mkdirPathField.addActionListener(this);
         mainPanel.add(mkdirPathField);

@@ -556,6 +556,18 @@ destination:IT:Destinazione
 
 
 
+recurse_directories:EN:Recurse directories
+recurse_directories:FR:Appliquer récursivement aux répertoires
+
+
+
+
+
+
+
+
+
+
 ##########################
 # Generic error messages #
 ##########################
@@ -804,6 +816,79 @@ same_source_destination:RO:Directoarele sursă și destinație coincid.
 same_source_destination:IT:Directory sorgente e destinazione uguali.
 
 
+####################
+# File permissions #
+####################
+
+permissions.read:EN:Read
+permissions.read:FR:Lecture
+
+
+
+
+
+
+
+
+
+permissions.write:EN:Write
+permissions.write:FR:Ecriture
+
+
+
+
+
+
+
+
+permissions.executable:EN:Executable
+permissions.executable:FR:Execution
+
+
+
+
+
+
+
+
+permissions.user:EN:User
+permissions.user:FR:User
+
+
+
+
+
+
+
+permissions.group:EN:Group
+permissions.group:FR:Groupe
+
+
+
+
+
+
+
+permissions.other:EN:Other
+permissions.other:FR:Autre
+
+
+
+
+
+
+
+permissions.octal_notation:EN:Octal notation
+permissions.octal_notation:FR:Notation octale
+
+
+
+
+
+
+
+
+
 ###########
 # Actions #
 ###########
@@ -881,6 +966,66 @@ com.mucommander.ui.action.ChangeLocationAction.label:RO:Schimbă calea actuala
 com.mucommander.ui.action.ChangeLocationAction.label:SI:Spremeni trenutno lokacijo
 com.mucommander.ui.action.ChangeLocationAction.label:IT:Cambia percorso corrente
 # Translation missing
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.ChangeDateAction.label:EN:Change date
+com.mucommander.ui.action.ChangeDateAction.label:FR:Changer la date
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.ChangeDateAction.tooltip:EN:Change date of selected file(s)
+com.mucommander.ui.action.ChangeDateAction.tooltip:FR:Change la date des fichiers selectionnés
+
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.ChangePermissionsAction.label:EN:Change permissions
+com.mucommander.ui.action.ChangePermissionsAction.label:FR:Changer les permissions
+
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.ChangePermissionsAction.tooltip:EN:Change permissions of selected file(s)
+com.mucommander.ui.action.ChangePermissionsAction.tooltip:FR:Change les permissions des fichiers selectionnés
+
+
+
+
 
 
 
@@ -3638,33 +3783,33 @@ file_selection_dialog.unmark:SI:Odznači
 file_selection_dialog.unmark:RO:Deselectează
 file_selection_dialog.unmark:IT:Deselezione
 
-file_selection_dialog.mark_description:EN:Mark files whose filename:
-file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom:
-file_selection_dialog.mark_description:DE:Markiere Dateien deren Name:
-file_selection_dialog.mark_description:ES:Marcar ficheros cuyo nombre:
-file_selection_dialog.mark_description:CS:Označit soubory s jménem:
-file_selection_dialog.mark_description:zh_TW:標記檔案, 若檔名為:
-file_selection_dialog.mark_description:PL:Zaznacz pliki nazywające się:
-file_selection_dialog.mark_description:HU:Kijelöli a fájlokat, amelyeknek a neve:
-file_selection_dialog.mark_description:RU:Выделить файлы по маске:
-file_selection_dialog.mark_description:ZH_CN:要标记文件名为:
-file_selection_dialog.mark_description:SI:Označi datoteke z imenom:
-file_selection_dialog.mark_description:RO:Selectează fișierele ale căror nume:
-file_selection_dialog.mark_description:IT:Selezione file il cui nome:
+file_selection_dialog.mark_description:EN:Mark files which filename
+file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom
+file_selection_dialog.mark_description:DE:Markiere Dateien deren Name
+file_selection_dialog.mark_description:ES:Marcar ficheros cuyo nombre
+file_selection_dialog.mark_description:CS:Označit soubory s jménem
+file_selection_dialog.mark_description:zh_TW:標記檔案, 若檔名為
+file_selection_dialog.mark_description:PL:Zaznacz pliki nazywające się
+file_selection_dialog.mark_description:HU:Kijelöli a fájlokat, amelyeknek a neve
+file_selection_dialog.mark_description:RU:Выделить файлы по маске
+file_selection_dialog.mark_description:ZH_CN:要标记文件名为
+file_selection_dialog.mark_description:SI:Označi datoteke z imenom
+file_selection_dialog.mark_description:RO:Selectează fișierele ale căror nume
+file_selection_dialog.mark_description:IT:Selezione file il cui nome
 
-file_selection_dialog.unmark_description:EN:Unmark files whose filename:
-file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom:
-file_selection_dialog.unmark_description:DE:Demarkiere Dateien deren Name:
-file_selection_dialog.unmark_description:ES:Desmarcar ficheros cuyo nombre:
-file_selection_dialog.unmark_description:CS:Odznačit soubory s jménem:
-file_selection_dialog.unmark_description:zh_TW:取消標記, 若檔名為:
-file_selection_dialog.unmark_description:PL:Odznacz pliki nazywające się:
-file_selection_dialog.unmark_description:HU:Kijelölés visszavonása azon fájloknál, amelyeknek a neve:
-file_selection_dialog.unmark_description:RU:Снять выделение с файлов по маске:
-file_selection_dialog.unmark_description:ZH_CN:要取消标记的文件名为:
-file_selection_dialog.unmark_description:SI:Odznači datoteke z imenom:
-file_selection_dialog.unmark_description:RO:Deselectează fișierele ale căror nume:
-file_selection_dialog.unmark_description:IT:Deseleziona i file il cui nome:
+file_selection_dialog.unmark_description:EN:Unmark files which filename
+file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom
+file_selection_dialog.unmark_description:DE:Demarkiere Dateien deren Name
+file_selection_dialog.unmark_description:ES:Desmarcar ficheros cuyo nombre
+file_selection_dialog.unmark_description:CS:Odznačit soubory s jménem
+file_selection_dialog.unmark_description:zh_TW:取消標記, 若檔名為
+file_selection_dialog.unmark_description:PL:Odznacz pliki nazywające się
+file_selection_dialog.unmark_description:HU:Kijelölés visszavonása azon fájloknál, amelyeknek a neve
+file_selection_dialog.unmark_description:RU:Снять выделение с файлов по маске
+file_selection_dialog.unmark_description:ZH_CN:要取消标记的文件名为
+file_selection_dialog.unmark_description:SI:Odznači datoteke z imenom
+file_selection_dialog.unmark_description:RO:Deselectează fișierele ale căror nume
+file_selection_dialog.unmark_description:IT:Deseleziona i file il cui nome
 
 file_selection_dialog.contains:EN:Contains
 file_selection_dialog.contains:FR:Contient
@@ -3705,8 +3850,8 @@ file_selection_dialog.ends_with:HU:Ezzel végez
 file_selection_dialog.ends_with:RU:Заканчивающиеся на
 file_selection_dialog.ends_with:ZH_CN:末尾是
 file_selection_dialog.ends_with:SI:Konča z
-file_selection_dialog.ends_with:RO:Se termină cu:
-file_selection_dialog.ends_with:IT:Termina con:
+file_selection_dialog.ends_with:RO:Se termină cu
+file_selection_dialog.ends_with:IT:Termina con
 
 file_selection_dialog.is:EN:Is
 file_selection_dialog.is:FR:Est
@@ -3749,46 +3894,6 @@ file_selection_dialog.include_folders:ZH_CN:包含文件夹
 file_selection_dialog.include_folders:SI:Vključi mape
 file_selection_dialog.include_folders:RO:Inclusiv directoare
 file_selection_dialog.include_folders:IT:Includi cartelle
-
-
-################
-# Mkdir dialog #
-################
-
-mkdir_dialog.description:EN:Create directory
-mkdir_dialog.description:FR:Créer le répertoire
-mkdir_dialog.description:DE:Ordner erstellen
-mkdir_dialog.description:ES:Crear directorio
-mkdir_dialog.description:CS:Vytvoř složku
-mkdir_dialog.description:zh_TW:新增資料夾
-mkdir_dialog.description:PL:Utwórz katalog
-mkdir_dialog.description:HU:új könyvtár létrehozása
-mkdir_dialog.description:RU:Создать каталог
-mkdir_dialog.description:ZH_CN:创建文件夹
-mkdir_dialog.description:SI:Ustvari novo mapo
-mkdir_dialog.description:RO:Crează director
-mkdir_dialog.description:IT:Crea directory
-
-
-#################
-# Mkfile dialog #
-#################
-
-mkfile_dialog.description:EN:Create new empty file
-mkfile_dialog.description:FR:Créer le fichier vide
-mkfile_dialog.description:RO:Crează un nou fișier gol
-mkfile_dialog.description:SI:Ustvari novo prazno datoteko
-mkfile_dialog.description:IT:Crea un nuovo file vuoto
-
-
-
-
-
-
-
-
-
-
 
 
 ###################
@@ -3995,6 +4100,33 @@ properties_dialog.calculating:ZH_CN:计算中...
 properties_dialog.calculating:SI:izračunavam...
 properties_dialog.calculating:RO:calculez...
 properties_dialog.calculating:IT:calcolando...
+
+
+######################
+# Change date dialog #
+######################
+
+change_date_dialog.now:EN:Now
+change_date_dialog.now:FR:Maintenant
+
+
+
+
+
+
+
+
+
+change_date_dialog.specific_date:EN:Specific date
+change_date_dialog.specific_date:FR:Date spécifique
+
+
+
+
+
+
+
+
 
 
 ##############
@@ -4345,19 +4477,19 @@ auth_dialog.title:SI:Avtentikacija
 auth_dialog.title:RO:Autentificare
 auth_dialog.title:IT:Autenticazione
 
-auth_dialog.desc:EN:Please enter a login and password:
-auth_dialog.desc:FR:Veuillez entrer un identifiant et un mot de passe:
-auth_dialog.desc:DE:Bitte Login und Passwort eingeben:
-auth_dialog.desc:ES:Por favor, introduzca un nombre y una contraseña:
-auth_dialog.desc:CS:Zadejte prosím uživatelské jméno a heslo:
-auth_dialog.desc:zh_TW:請輸入帳號及密碼:
-auth_dialog.desc:PL:Proszę wprowadzić nazwę użytkownika i hasło:
-auth_dialog.desc:HU:Kérjük, adja meg felhasználónevét vagy jelszavát:
-auth_dialog.desc:RU:Введите логин и пароль:
-auth_dialog.desc:ZH_CN:請輸入用户名及密码:
-auth_dialog.desc:SI:Vnesite uporabniško ime in geslo:
-auth_dialog.desc:RO:Vă rog să întroduceți parola:
-auth_dialog.desc:IT:Prego inserire login e password:
+auth_dialog.desc:EN:Please enter a login and password
+auth_dialog.desc:FR:Veuillez entrer un identifiant et un mot de passe
+auth_dialog.desc:DE:Bitte Login und Passwort eingeben
+auth_dialog.desc:ES:Por favor, introduzca un nombre y una contraseña
+auth_dialog.desc:CS:Zadejte prosím uživatelské jméno a heslo
+auth_dialog.desc:zh_TW:請輸入帳號及密碼
+auth_dialog.desc:PL:Proszę wprowadzić nazwę użytkownika i hasło
+auth_dialog.desc:HU:Kérjük, adja meg felhasználónevét vagy jelszavát
+auth_dialog.desc:RU:Введите логин и пароль
+auth_dialog.desc:ZH_CN:請輸入用户名及密码
+auth_dialog.desc:SI:Vnesite uporabniško ime in geslo
+auth_dialog.desc:RO:Vă rog să întroduceți parola
+auth_dialog.desc:IT:Prego inserire login e password
 
 auth_dialog.server:EN:Server
 auth_dialog.server:FR:Serveur
@@ -6280,3 +6412,23 @@ setup.theme:IT:Selezionate il Vostro tema
 #edit_bookmarks_dialog.remove:PL:Usuń
 #edit_bookmarks_dialog.remove:ZH_CN:删除
 #edit_bookmarks_dialog.remove:SI:Odstrani
+
+#mkdir_dialog.description:EN:Create directory
+#mkdir_dialog.description:FR:Créer le répertoire
+#mkdir_dialog.description:DE:Ordner erstellen
+#mkdir_dialog.description:ES:Crear directorio
+#mkdir_dialog.description:CS:Vytvoř složku
+#mkdir_dialog.description:zh_TW:新增資料夾
+#mkdir_dialog.description:PL:Utwórz katalog
+#mkdir_dialog.description:HU:új könyvtár létrehozása
+#mkdir_dialog.description:RU:Создать каталог
+#mkdir_dialog.description:ZH_CN:创建文件夹
+#mkdir_dialog.description:SI:Ustvari novo mapo
+#mkdir_dialog.description:RO:Crează director
+#mkdir_dialog.description:IT:Crea directory
+
+#mkfile_dialog.description:EN:Create new empty file
+#mkfile_dialog.description:FR:Créer le fichier vide
+#mkfile_dialog.description:RO:Crează un nou fișier gol
+#mkfile_dialog.description:SI:Ustvari novo prazno datoteko
+#mkfile_dialog.description:IT:Crea un nuovo file vuoto

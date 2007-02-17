@@ -86,7 +86,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
         contentPane.setLayout(new BorderLayout());
 
         YBoxPanel northPanel = new YBoxPanel(5);
-        JLabel label = new JLabel(Translator.get(addToSelection?"file_selection_dialog.mark_description":"file_selection_dialog.unmark_description"));
+        JLabel label = new JLabel(Translator.get(addToSelection?"file_selection_dialog.mark_description":"file_selection_dialog.unmark_description")+" :");
         northPanel.add(label);
 
         JPanel tempPanel = new JPanel();

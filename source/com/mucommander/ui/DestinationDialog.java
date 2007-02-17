@@ -88,7 +88,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
         Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel();
 		
-        JLabel label = new JLabel(labelText);
+        JLabel label = new JLabel(labelText+" :");
         mainPanel.add(label);
 
         // Create path textfield
