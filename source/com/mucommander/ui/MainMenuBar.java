@@ -10,11 +10,11 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
 import com.mucommander.ui.editor.EditorFrame;
-import com.mucommander.ui.viewer.ViewerFrame;
 import com.mucommander.ui.table.Columns;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.theme.ThemeManager;
 import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.viewer.ViewerFrame;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -22,9 +22,9 @@ import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
-import java.util.Iterator;
 
 
 /**
@@ -113,6 +113,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ShowFilePropertiesAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ChangePermissionsAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ChangeDateAction.class, mainFrame), menuItemMnemonicHelper);
 
         // Under Mac OS X, 'Preferences' already appears in the application (muCommander) menu, do not display it again
         if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X) {
@@ -120,6 +122,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ShowPreferencesAction.class, mainFrame), menuItemMnemonicHelper);
         }
 
+        fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CheckForUpdatesAction.class, mainFrame), menuItemMnemonicHelper);
 		
         fileMenu.add(new JSeparator());
