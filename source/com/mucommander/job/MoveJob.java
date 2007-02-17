@@ -192,8 +192,9 @@ public class MoveJob extends TransferFileJob {
             if(moveToHint==AbstractFile.SHOULD_HINT || moveToHint==AbstractFile.MUST_HINT) {
                 do {
                     try {
-                        file.moveTo(destFile);
-                        return true;
+                        if(file.moveTo(destFile))
+                            return true;
+                        break;
                     }
                     catch(FileTransferException e) {
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("error_while_transferring", file.getAbsolutePath()));
@@ -211,9 +212,6 @@ public class MoveJob extends TransferFileJob {
 
         // Move directory recursively
         if(file.isDirectory()) {
-//            if(fileMove(file, destFile))
-//                return true;
-//            // That didn't work, let's copy the directory to the destination and then delete the original directory
 
             // creates the folder in the destination folder if it doesn't exist
             if(!(destFile.exists() && destFile.isDirectory())) {
@@ -289,18 +287,8 @@ public class MoveJob extends TransferFileJob {
         }
         // File is a regular file, move it
         else  {
-//            // FTP overwrite bug workaround: if the destination file is not deleted, the existing destination
-//            // file is renamed to <filename>.1
-//            if(overwrite && destFile.getURL().getProtocol().equals(FileProtocols.FTP)) {
-//                try { destFile.delete(); }
-//                catch(IOException e) {};
-//            }
 
-//            // Let's try the easy way
-//            if(!append && fileMove(file, destFile))
-//                return true;
-
-            // if moveTo() returned false it wasn't possible to this method because of 'append',
+            // if moveTo() returned false or if it wasn't possible to this method because of 'append',
             // try the hard way by copying the file first, and then deleting the source file
             if(tryCopyFile(file, destFile, append, errorDialogTitle) && getState()!=INTERRUPTED) {
                 // Delete the source file
