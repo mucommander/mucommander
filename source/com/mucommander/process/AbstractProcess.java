@@ -3,7 +3,9 @@ package com.mucommander.process;
 
 import com.mucommander.Debug;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * muCommander specific version of a process.
@@ -19,7 +21,7 @@ import java.io.*;
  * </p>
  * <p>
  * Note that abstract processes should not be created directly. They should be
- * instanciated through {@link com.mucommander.process.ProcessRunner#execute(String[],AbstractFile,ProcessListener)}.
+ * instanciated through {@link com.mucommander.process.ProcessRunner#execute(String[],com.mucommander.file.AbstractFile,ProcessListener)}.
  * </p>
  * @author Nicolas Rinaudo
  */

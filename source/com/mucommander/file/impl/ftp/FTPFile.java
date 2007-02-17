@@ -10,6 +10,8 @@ import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.SinkOutputStream;
+import com.mucommander.process.AbstractProcess;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPReply;
@@ -643,6 +645,108 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
+    public boolean canRunProcess() {
+        return false;
+//        return true;
+    }
+
+    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
+//        throw new IOException();
+        return new FTPProcess(tokens);
+    }
+
+
+    ///////////////////
+    // Inner classes //
+    ///////////////////
+
+    private class FTPProcess extends AbstractProcess {
+
+        private String command;
+
+        private boolean success;
+
+        private ByteArrayInputStream bais;
+
+
+        public FTPProcess(String tokens[]) throws IOException {
+            command = "";
+
+            int nbTokens = tokens.length;
+            for(int i=0; i<nbTokens; i++) {
+                command += tokens[i];
+                if(i!=nbTokens-1)
+                    command += " ";
+            }
+
+            FTPConnectionHandler connHandler = null;
+            try {
+                // Retrieve a ConnectionHandler and lock it
+                connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(FTPFile.this, fileURL, true);
+                // Makes sure the connection is started, if not starts it
+                connHandler.checkConnection();
+
+                if(!connHandler.ftpClient.changeWorkingDirectory(fileURL.getPath()))
+                    throw new IOException();
+
+                success = FTPReply.isPositiveCompletion(connHandler.ftpClient.sendCommand(command));
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                PrintWriter pw = new PrintWriter(baos, true);
+                String replyStrings[] = connHandler.ftpClient.getReplyStrings();
+                for(int i=0; i<replyStrings.length; i++)
+                    pw.println(replyStrings[i]);
+                pw.close();
+
+                bais = new ByteArrayInputStream(baos.toByteArray());
+                // No need to close the ByteArrayOutputStream
+            }
+            catch(IOException e) {
+               // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+                connHandler.checkSocketException(e);
+
+                // Re-throw IOException
+                throw e;
+            }
+            finally {
+                // Release the lock on the ConnectionHandler
+                if(connHandler!=null)
+                    connHandler.releaseLock();
+            }
+        }
+
+        public boolean usesMergedStreams() {
+            return true;
+        }
+
+        public int waitFor() throws InterruptedException, IOException {
+            return 0;
+        }
+
+        protected void destroyProcess() throws IOException {
+        }
+
+        public int exitValue() {
+            return success?0:1;
+        }
+
+        public OutputStream getOutputStream() throws IOException {
+            return new SinkOutputStream();
+        }
+
+        public InputStream getInputStream() throws IOException {
+            if(bais==null)
+                throw new IOException();
+
+            return bais;
+        }
+
+        public InputStream getErrorStream() throws IOException {
+            return getInputStream();
+        }
+    }
+
+
     private static class FTPInputStream extends FilterInputStream {
 
         private FTPConnectionHandler connHandler;
@@ -682,6 +786,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             }
         }
     }
+
 
     private static class FTPOutputStream extends BufferedOutputStream {
 
@@ -918,9 +1023,4 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             }
         }
     }
-
-
-    public boolean canRunProcess() {return false;}
-
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {throw new IOException();}
 }
