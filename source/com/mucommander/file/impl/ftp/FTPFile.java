@@ -496,7 +496,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         return true;
     }
 
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
+    public AbstractProcess runProcess(String[] tokens) throws IOException {
         return new FTPProcess(tokens);
     }
 

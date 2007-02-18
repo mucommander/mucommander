@@ -10,10 +10,12 @@ import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.process.AbstractProcess;
 import com.sshtools.j2ssh.SftpClient;
 import com.sshtools.j2ssh.SshClient;
 import com.sshtools.j2ssh.authentication.*;
 import com.sshtools.j2ssh.io.UnsignedInteger32;
+import com.sshtools.j2ssh.session.SessionChannelClient;
 import com.sshtools.j2ssh.sftp.*;
 import com.sshtools.j2ssh.transport.IgnoreHostKeyVerification;
 
@@ -423,6 +425,15 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
+    public boolean canRunProcess() {
+        return true;
+    }
+
+    public AbstractProcess runProcess(String[] tokens) throws IOException {
+        return new SFTPProcess(tokens);
+    }
+
+
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -532,12 +543,79 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
     }
 
-//    public boolean equals(Object f) {
-//        if(!(f instanceof SFTPFile))
-//            return super.equals(f);		// could be equal to a ZipArchiveFile
-//
-//        return fileURL.equals(((SFTPFile)f).fileURL);
-//    }
+
+    ///////////////////
+    // Inner classes //
+    ///////////////////
+
+    private class SFTPProcess extends AbstractProcess {
+
+        private boolean success;
+        private SessionChannelClient sessionClient;
+        private SFTPConnectionHandler connHandler;
+
+        private SFTPProcess(String tokens[]) throws IOException {
+
+            SFTPConnectionHandler connHandler = null;
+            try {
+                // Retrieve a ConnectionHandler and lock it
+                connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(SFTPFile.this, fileURL, true);
+                // Makes sure the connection is started, if not starts it
+                connHandler.checkConnection();
+
+                sessionClient = connHandler.sshClient.openSessionChannel();
+//                sessionClient.startShell();
+
+                // Concatenates all tokens to create the command string
+                String command = "";
+                int nbTokens = tokens.length;
+                for(int i=0; i<nbTokens; i++) {
+                    command += tokens[i];
+                    if(i!=nbTokens-1)
+                        command += " ";
+                }
+                success = sessionClient.executeCommand(command);
+    if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
+            }
+            catch(IOException e) {
+                // Release the lock on the ConnectionHandler
+                connHandler.releaseLock();
+
+                sessionClient.close();
+            }
+        }
+
+        public boolean usesMergedStreams() {
+            return false;
+        }
+
+        public int waitFor() throws InterruptedException, IOException {
+            return success?0:1;
+        }
+
+        protected void destroyProcess() throws IOException {
+            // Release the lock on the ConnectionHandler
+            connHandler.releaseLock();
+
+            sessionClient.close();
+        }
+
+        public int exitValue() {
+            return success?0:1;
+        }
+
+        public OutputStream getOutputStream() throws IOException {
+            return sessionClient.getOutputStream();
+        }
+
+        public InputStream getInputStream() throws IOException {
+            return sessionClient.getInputStream();
+        }
+
+        public InputStream getErrorStream() throws IOException {
+            return sessionClient.getStderrInputStream();
+        }
+    }
 
 
     /**
@@ -705,7 +783,4 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    public boolean canRunProcess() {return false;}
-
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {throw new IOException();}
 }
