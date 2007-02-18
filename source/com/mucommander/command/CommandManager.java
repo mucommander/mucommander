@@ -70,6 +70,15 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
 
     // - Command handling ------------------------------------------------------
     // -------------------------------------------------------------------------
+    public static String[] getTokensForFile(AbstractFile file) {return getTokensForFile(file, true);}
+    public static String[] getTokensForFile(AbstractFile file, boolean allowDefault) {
+        Command command;
+
+        if((command = getCommandForFile(file, allowDefault)) == null)
+            return null;
+        return command.getTokens(file);
+    }
+
     public static Command getCommandForFile(AbstractFile file) {return getCommandForFile(file, true);}
 
     public static Command getCommandForFile(AbstractFile file, boolean allowDefault) {
