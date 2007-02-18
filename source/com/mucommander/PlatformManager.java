@@ -488,7 +488,7 @@ public class PlatformManager {
     public static AbstractProcess open(AbstractFile file) {
         if(Debug.ON) Debug.trace("Opening " + file.getAbsolutePath());
 
-        try {return ProcessRunner.execute(CommandManager.getCommandForFile(file).getTokens(file), file);}
+        try {return ProcessRunner.execute(CommandManager.getTokensForFile(file), file);}
         catch(Exception e) {
             if(Debug.ON) Debug.trace("Error while executing " + file + ": " + e);
             return null;
