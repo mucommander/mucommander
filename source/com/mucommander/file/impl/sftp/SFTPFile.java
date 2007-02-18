@@ -556,7 +556,6 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
         private SFTPProcess(String tokens[]) throws IOException {
 
-            SFTPConnectionHandler connHandler = null;
             try {
                 // Retrieve a ConnectionHandler and lock it
                 connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(SFTPFile.this, fileURL, true);
