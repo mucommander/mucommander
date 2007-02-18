@@ -265,10 +265,14 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
             ShellHistoryManager.clear();
 
             // Sets the new focus depending on whether a process is currently running or not.
-            if(currentProcess == null)
+            if(currentProcess == null) {
                 inputCombo.requestFocus();
-            else
+                outputTextArea.setText("");
+            }
+            else {
                 outputTextArea.requestFocus();
+                outputTextArea.getCaret().setVisible(true);
+            }
         }
 
         // 'Run / stop' button has been pressed.
@@ -280,9 +284,9 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
             // If we're running a process, kill it.
             else {
-		processInput.close();
+                processInput.close();
                 currentProcess.destroy();
-		this.currentProcess = null;
+                this.currentProcess = null;
                 switchToRunState();
             }
         }
