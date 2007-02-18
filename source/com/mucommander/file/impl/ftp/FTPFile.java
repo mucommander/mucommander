@@ -492,6 +492,15 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
+    public boolean canRunProcess() {
+        return true;
+    }
+
+    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
+        return new FTPProcess(tokens);
+    }
+
+
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -645,33 +654,23 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    public boolean canRunProcess() {
-        return false;
-//        return true;
-    }
-
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
-//        throw new IOException();
-        return new FTPProcess(tokens);
-    }
-
-
     ///////////////////
     // Inner classes //
     ///////////////////
 
     private class FTPProcess extends AbstractProcess {
 
-        private String command;
-
+        /** True if the command returned a positive FTP reply code */
         private boolean success;
 
+        /** Allows to read the command's output */
         private ByteArrayInputStream bais;
 
 
         public FTPProcess(String tokens[]) throws IOException {
-            command = "";
 
+            // Concatenates all tokens to create the command string
+            String command = "";
             int nbTokens = tokens.length;
             for(int i=0; i<nbTokens; i++) {
                 command += tokens[i];
@@ -686,11 +685,16 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 // Makes sure the connection is started, if not starts it
                 connHandler.checkConnection();
 
-                if(!connHandler.ftpClient.changeWorkingDirectory(fileURL.getPath()))
+                // Change the current directory on the remote server to :
+                //  - this file's path if this file is a directory
+                //  - to the parent folder's path otherwise
+                if(!connHandler.ftpClient.changeWorkingDirectory(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()))
                     throw new IOException();
 
+                // Has the command been successfully completed by the server ?
                 success = FTPReply.isPositiveCompletion(connHandler.ftpClient.sendCommand(command));
 
+                // Retrieves the command's output and create an InputStream for getInputStream()
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 PrintWriter pw = new PrintWriter(baos, true);
                 String replyStrings[] = connHandler.ftpClient.getReplyStrings();
@@ -716,14 +720,16 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
 
         public boolean usesMergedStreams() {
+            // No specific stream for errors
             return true;
         }
 
         public int waitFor() throws InterruptedException, IOException {
-            return 0;
+            return success?0:1;
         }
 
         protected void destroyProcess() throws IOException {
+            // No-op, command has already been executed
         }
 
         public int exitValue() {
@@ -731,6 +737,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
 
         public OutputStream getOutputStream() throws IOException {
+            // FTP commands are not interactive, the returned OutputStream simply ignores data that's fed to it
             return new SinkOutputStream();
         }
 

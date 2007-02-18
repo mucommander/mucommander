@@ -2,13 +2,16 @@ package com.mucommander.shell;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.conf.*;
+import com.mucommander.command.CommandParser;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.process.ProcessRunner;
-import com.mucommander.command.CommandParser;
 
 import java.io.IOException;
 

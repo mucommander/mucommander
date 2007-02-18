@@ -1,16 +1,15 @@
 package com.mucommander.command;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.RegexpFilenameFilter;
-import com.mucommander.file.filter.PermissionsFileFilter;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
-import com.mucommander.text.Translator;
 
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * @author Nicolas Rinaudo
