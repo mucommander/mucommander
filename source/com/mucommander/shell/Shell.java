@@ -96,7 +96,7 @@ public class Shell implements ConfigurationListener {
         // Builds the shell command.
         // Local files use the configuration defined shell. Remote files
         // will execute the command as-is.
-        if(currentFolder instanceof LocalFile) {
+        if(currentFolder instanceof LocalFile || !currentFolder.canRunProcess()) {
             tokens[tokens.length - 1] = command;
             commandTokens             = tokens;
         }
