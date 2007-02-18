@@ -323,10 +323,6 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
      */
     public void runCommand(String command) {
         try {
-            // Starts the new process.
-            currentProcess = Shell.execute(command, mainFrame.getActiveTable().getCurrentFolder(), this);
-            processInput   = new PrintStream(currentProcess.getOutputStream(), true);
-
             // Change 'Run' button to 'Stop'
             this.runStopButton.setText(Translator.get("run_dialog.stop"));
 
@@ -338,6 +334,10 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
 
             // No new command can be entered while a process is running.
             inputCombo.setEnabled(false);
+
+            // Starts the new process.
+            currentProcess = Shell.execute(command, mainFrame.getActiveTable().getCurrentFolder(), this);
+            processInput   = new PrintStream(currentProcess.getOutputStream(), true);
 
             // Repaints the dialog.
             repaint();
