@@ -4,6 +4,7 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.*;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.process.ProcessRunner;
@@ -19,6 +20,8 @@ public class Shell implements ConfigurationListener {
     // -----------------------------------------------------------------------
     /** Tokens that compose the shell command. */
     private static String[] tokens;
+    /** Tokens that compose remote shell commands. */
+    private static String[] remoteTokens;
     /** Instance of configuration listener. */
     private static Shell    confListener;
 
@@ -39,6 +42,8 @@ public class Shell implements ConfigurationListener {
         // instantly as there is only a WeakReference on it.
         // The things we have to do...
         confListener.setShellCommand();
+
+        remoteTokens = new String[1];
     }
 
     /**
@@ -81,18 +86,26 @@ public class Shell implements ConfigurationListener {
      * @exception IOException   thrown if any error occurs while trying to run the command.
      */
     public static synchronized AbstractProcess execute(String command, AbstractFile currentFolder, ProcessListener listener) throws IOException {
-        if(Debug.ON) Debug.trace("Executing " + command);
+        String[] commandTokens;
 
-        // Builds the shell command.
-        tokens[tokens.length - 1] = command;
+        if(Debug.ON) Debug.trace("Executing " + command);
 
         // Adds the command to history.
         ShellHistoryManager.add(command);
 
+        // Builds the shell command.
+        // Local files use the configuration defined shell. Remote files
+        // will execute the command as-is.
+        if(currentFolder instanceof LocalFile) {
+            tokens[tokens.length - 1] = command;
+            commandTokens             = tokens;
+        }
+        else {
+            remoteTokens[0] = command;
+            commandTokens   = remoteTokens;
+        }
         // Starts the process.
-        if(listener == null)
-            return ProcessRunner.execute(tokens, currentFolder);
-        return ProcessRunner.execute(tokens, currentFolder, listener);
+        return ProcessRunner.execute(commandTokens, currentFolder, listener);
     }
 
 
