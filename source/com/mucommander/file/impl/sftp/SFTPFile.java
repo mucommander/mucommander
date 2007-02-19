@@ -426,7 +426,8 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
 
     public boolean canRunProcess() {
-        return true;
+//        return true;
+        return false;
     }
 
     public AbstractProcess runProcess(String[] tokens) throws IOException {
@@ -565,6 +566,12 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 sessionClient = connHandler.sshClient.openSessionChannel();
 //                sessionClient.startShell();
 
+//                // Change the current directory on the remote server to :
+//                //  - this file's path if this file is a directory
+//                //  - to the parent folder's path otherwise
+//                success = sessionClient.executeCommand("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()));
+//if(Debug.ON) Debug.trace("commmand="+("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()))+" returned "+success);
+
                 // Concatenates all tokens to create the command string
                 String command = "";
                 int nbTokens = tokens.length;
@@ -574,13 +581,16 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
                         command += " ";
                 }
                 success = sessionClient.executeCommand(command);
-    if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
+if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
             }
             catch(IOException e) {
                 // Release the lock on the ConnectionHandler
                 connHandler.releaseLock();
 
                 sessionClient.close();
+
+                // Re-throw exception
+                throw e;
             }
         }
 
