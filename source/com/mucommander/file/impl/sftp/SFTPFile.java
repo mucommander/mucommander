@@ -566,11 +566,20 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 sessionClient = connHandler.sshClient.openSessionChannel();
 //                sessionClient.startShell();
 
-//                // Change the current directory on the remote server to :
-//                //  - this file's path if this file is a directory
-//                //  - to the parent folder's path otherwise
 //                success = sessionClient.executeCommand("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()));
 //if(Debug.ON) Debug.trace("commmand="+("cd "+(isDirectory()?fileURL.getPath():fileURL.getParent().getPath()))+" returned "+success);
+
+                // Environment variables are refused by most servers for security reasons  
+//                sessionClient.setEnvironmentVariable("cd", isDirectory()?fileURL.getPath():fileURL.getParent().getPath());
+
+                // No way to set the current working directory:
+                // 1/ when executing a single command:
+                //  + environment variables are ignored by most server, so can't use PWD for that.
+                //  + could send 'cd dir ; command' but it's not platform independant and prevents the command from being
+                //    executed under Windows
+                // 2/ when starting a shell, no problem to change the current working directory (cd dir\n is sent before
+                // the command), but there is no reliable way to detect the end of the command execution, as confirmed
+                // by one of the J2SSH developers : http://sourceforge.net/forum/message.php?msg_id=1826569
 
                 // Concatenates all tokens to create the command string
                 String command = "";
@@ -580,6 +589,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
                     if(i!=nbTokens-1)
                         command += " ";
                 }
+
                 success = sessionClient.executeCommand(command);
 if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
             }
@@ -599,7 +609,7 @@ if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
         }
 
         public int waitFor() throws InterruptedException, IOException {
-            return success?0:1;
+            return sessionClient.getExitCode().intValue();
         }
 
         protected void destroyProcess() throws IOException {
@@ -610,7 +620,7 @@ if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
         }
 
         public int exitValue() {
-            return success?0:1;
+            return sessionClient.getExitCode().intValue();
         }
 
         public OutputStream getOutputStream() throws IOException {
