@@ -169,7 +169,7 @@ public class SendMailJob extends TransferFileJob {
      * Send file as attachment encoded in Base64, and returns true if file was successfully
      * and completely transferred.
      */ 
-    private boolean sendAttachment(AbstractFile file) throws IOException {
+    private void sendAttachment(AbstractFile file) throws IOException {
         InputStream fileIn = null;
         try {
             // Send MIME type of attachment file
@@ -189,8 +189,6 @@ public class SendMailJob extends TransferFileJob {
             out64.writePadding();
 	
             writeLine("\r\n--" + boundary);
-		
-            return true;
         }
         catch(IOException e) {
             throw e;
@@ -206,6 +204,7 @@ public class SendMailJob extends TransferFileJob {
         readWriteLine(".");
         readWriteLine("QUIT");
     }
+
 
     private void closeConnection() {
         try {
@@ -227,9 +226,38 @@ public class SendMailJob extends TransferFileJob {
     }
 
 
-    /**********************************************
-     *** TransferFileJob methods implementation ***
-     **********************************************/
+    ////////////////////////////////////
+    // TransferFileJob implementation //
+    ////////////////////////////////////
+
+    protected boolean processFile(AbstractFile file, Object recurseParams) {
+        if(getState()==INTERRUPTED)
+            return false;
+
+        // Send file attachment
+        try {
+            sendAttachment(file);
+        }
+        catch(IOException e) {
+            showErrorDialog(Translator.get("email.send_file_error", file.getName()));
+            return false;
+        }
+
+        // If this was the last file, notify the mail server that the mail is over
+        if(getCurrentFileIndex()==getNbFiles()-1) {
+            try {
+                // Say goodbye to the server
+                sayGoodBye();
+            }
+            catch(IOException e) {
+                showErrorDialog(Translator.get("email.goodbye_failed"));
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     public String getStatusString() {
         if(connectedToMailServer)
@@ -238,6 +266,16 @@ public class SendMailJob extends TransferFileJob {
             return Translator.get("email.connecting_to_server", mailServer);
     }
 
+    
+    protected boolean hasFolderChanged(AbstractFile folder) {
+        // This job does not modify anything
+        return false;
+    }
+
+
+    ///////////////////////
+    // Overridden method //
+    ///////////////////////
 
     /**
      * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object) processFile()} is made.
@@ -256,7 +294,7 @@ public class SendMailJob extends TransferFileJob {
 
         if(getState()==INTERRUPTED)
             return;
-		
+
         // Send mail body
         try {
             sendBody();
@@ -265,53 +303,15 @@ public class SendMailJob extends TransferFileJob {
             showErrorDialog(Translator.get("email.connection_closed"));
         }
     }
-	
+
 
     /**
-     * Overriden method to say 'goodbye' to the mail server.
-     */
-    protected void jobCompleted() {
-        super.jobCompleted();
-
-        // Notifies the mail server that the mail is over
-        try {
-            // Say goodbye to the server
-            sayGoodBye();
-        }
-        catch(IOException e) {
-            showErrorDialog(Translator.get("email.goodbye_failed"));
-        }
-    }
-	
-	
-    /**
-     * Overrident method to close connection to the mail server.
+     * Method overridden to close connection to the mail server.
      */
     protected void jobStopped() {
         super.jobStopped();
 
         // Close the connection
         closeConnection();
-    }
-	
-	
-    protected boolean processFile(AbstractFile file, Object recurseParams) {
-        if(getState()==INTERRUPTED)
-            return false;
-
-        // Send file attachment
-        try {
-            return sendAttachment(file);
-        }
-        catch(IOException e) {
-            showErrorDialog(Translator.get("email.send_file_error", file.getName()));
-            return false;
-        }
-    }    
-
-
-    protected boolean hasFolderChanged(AbstractFile folder) {
-        // This job does not modify anything
-        return false;
     }
 }
