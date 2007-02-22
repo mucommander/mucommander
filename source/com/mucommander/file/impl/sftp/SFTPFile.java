@@ -591,7 +591,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 }
 
                 success = sessionClient.executeCommand(command);
-if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
+                if(Debug.ON) Debug.trace("commmand="+command+" returned "+success);
             }
             catch(IOException e) {
                 // Release the lock on the ConnectionHandler

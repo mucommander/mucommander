@@ -124,6 +124,8 @@ public class PlatformManager {
     private static final String DEFAULT_FILE_OPENER_ALIAS = "open";
     /** Alias for the default system URL opener. */
     private static final String DEFAULT_URL_OPENER_ALIAS  = "openURL";
+    /** Alias for the system file manager. */
+    private static final String FILE_MANAGER_ALIAS        = "file_manager";
     /** Alias for the default system executable file opener. */
     private static final String DEFAULT_EXE_OPENER_ALIAS  = "openEXE";
 
@@ -328,33 +330,33 @@ public class PlatformManager {
             // Registers windows 9x specific commands.
             if(OS_FAMILY == WINDOWS_9X) {
                 CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, WINDOWS_9X_FILE_OPENER, Command.SYSTEM_COMMAND));
-                CommandManager.registerCommand(CommandParser.getCommand(WINDOWS_FILE_MANAGER_NAME, WINDOWS_9X_FILE_OPENER, Command.INVISIBLE_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(FILE_MANAGER_ALIAS, WINDOWS_9X_FILE_OPENER, Command.INVISIBLE_COMMAND, WINDOWS_FILE_MANAGER_NAME));
             }
 
             // Registers windows NT specific commands.
             else if(OS_FAMILY == WINDOWS_NT) {
                 CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_EXE_OPENER_ALIAS,  "cmd /c $f", Command.SYSTEM_COMMAND));
                 CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, WINDOWS_NT_FILE_OPENER, Command.SYSTEM_COMMAND));
-                CommandManager.registerCommand(CommandParser.getCommand(WINDOWS_FILE_MANAGER_NAME, WINDOWS_NT_FILE_OPENER, Command.INVISIBLE_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(FILE_MANAGER_ALIAS, WINDOWS_NT_FILE_OPENER, Command.INVISIBLE_COMMAND, WINDOWS_FILE_MANAGER_NAME));
             }
 
             // Registers Mac OS X specific commands.
             else if(OS_FAMILY == MAC_OS_X) {
                 CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS,  MAC_OS_X_FILE_OPENER, Command.SYSTEM_COMMAND));
-                CommandManager.registerCommand(CommandParser.getCommand(MAC_OS_X_FILE_MANAGER_NAME, MAC_OS_X_FILE_MANAGER, Command.INVISIBLE_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(FILE_MANAGER_ALIAS, MAC_OS_X_FILE_MANAGER, Command.INVISIBLE_COMMAND, MAC_OS_X_FILE_MANAGER_NAME));
             }
 
             // Registers KDE specific commands.
             else if(UNIX_DESKTOP == KDE_DESKTOP) {
                 CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, KDE_FILE_OPENER, Command.SYSTEM_COMMAND));
                 CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_URL_OPENER_ALIAS,  KDE_URL_OPENER, Command.SYSTEM_COMMAND));
-                CommandManager.registerCommand(CommandParser.getCommand(KDE_FILE_MANAGER_NAME,     KDE_FILE_OPENER, Command.INVISIBLE_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(FILE_MANAGER_ALIAS,     KDE_FILE_OPENER, Command.INVISIBLE_COMMAND, KDE_FILE_MANAGER_NAME));
             }
 
             // Registers Gnome specific commands.
             else if(UNIX_DESKTOP == GNOME_DESKTOP) {
                 CommandManager.registerCommand(CommandParser.getCommand(DEFAULT_FILE_OPENER_ALIAS, GNOME_FILE_OPENER, Command.SYSTEM_COMMAND));
-                CommandManager.registerCommand(CommandParser.getCommand(GNOME_FILE_MANAGER_NAME,   GNOME_FILE_OPENER, Command.INVISIBLE_COMMAND));
+                CommandManager.registerCommand(CommandParser.getCommand(FILE_MANAGER_ALIAS,   GNOME_FILE_OPENER, Command.INVISIBLE_COMMAND, GNOME_FILE_MANAGER_NAME));
                 CommandManager.registerCommand(CommandManager.RUN_AS_EXECUTABLE_COMMAND);
             }
 
@@ -520,7 +522,7 @@ public class PlatformManager {
                 file = file.getParent();
 
             Command command;
-            if((command = CommandManager.getCommandForAlias(getDefaultDesktopFMName())) != null) {
+            if((command = CommandManager.getCommandForAlias(FILE_MANAGER_ALIAS)) != null) {
                 if(Debug.ON) Debug.trace("Opening "+file.getAbsolutePath()+" in desktop");
                 ProcessRunner.execute(command.getTokens(file), file);
             }

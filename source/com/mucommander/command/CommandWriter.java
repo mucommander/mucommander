@@ -60,6 +60,8 @@ public class CommandWriter implements CommandsXmlConstants, CommandBuilder {
             attributes.add(ARGUMENT_TYPE, VALUE_SYSTEM);
         else if(command.getType() == Command.INVISIBLE_COMMAND)
             attributes.add(ARGUMENT_TYPE, VALUE_INVISIBLE);
+        if(command.isDisplayNameSet())
+            attributes.add(ARGUMENT_DISPLAY, command.getDisplayName());
 
         // Writes the XML description.
         out.writeStandAloneElement(ELEMENT_COMMAND, attributes);

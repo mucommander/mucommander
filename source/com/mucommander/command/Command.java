@@ -83,6 +83,8 @@ public class Command {
     private String    alias;
     /** Original command. */
     private String    command;
+    /** Name used to display the command to users. */
+    private String    displayName;
     /** Command type. */
     private int       type;
 
@@ -102,12 +104,13 @@ public class Command {
      * @param tokens     tokens that compose the command.
      * @param tokenTypes description of each token in <code>tokens</code>
      */
-    Command(String alias, String command, String[] tokens, boolean[] tokenTypes, int type) {
-        this.tokens     = tokens;
-        this.tokenTypes = tokenTypes;
-        this.alias      = alias;
-        this.command    = command;
-        this.type       = type;
+    Command(String alias, String command, String[] tokens, boolean[] tokenTypes, int type, String displayName) {
+        this.tokens      = tokens;
+        this.tokenTypes  = tokenTypes;
+        this.alias       = alias;
+        this.command     = command;
+        this.type        = type;
+        this.displayName = displayName;
     }
 
 
@@ -167,4 +170,12 @@ public class Command {
      * @return the command's type.
      */
     public int getType() {return type;}
+
+    public String getDisplayName() {
+        if(displayName == null)
+            return alias;
+        return displayName;
+    }
+
+    boolean isDisplayNameSet() {return displayName != null;}
 }

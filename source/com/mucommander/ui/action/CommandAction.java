@@ -22,7 +22,7 @@ public class CommandAction extends MucoAction {
     public CommandAction(MainFrame mainFrame, Command command) {
         super(mainFrame, false);
         this.command = command;
-        setLabel(command.getAlias());
+        setLabel(command.getDisplayName());
     }
 
 

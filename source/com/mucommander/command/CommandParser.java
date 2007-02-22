@@ -119,7 +119,7 @@ public class CommandParser {
      * @param  type    type of the command (one of {@link Command#NORMAL_COMMAND}, {@link Command#SYSTEM_COMMAND} or {@link Command#INVISIBLE_COMMAND}.
      * @return         a new command matching the specified description.
      */
-    public static Command getCommand(String alias, String command, int type) {
+    public static Command getCommand(String alias, String command, int type, String displayName) {
         String[]  tokenBuffer; // Buffer for the tokens that compose command.
         boolean[] typeBuffer;  // Buffer for the type of tokens that compose command.
         String[]  tokens;      // Actual tokens.
@@ -136,8 +136,12 @@ public class CommandParser {
         }
 
         // Creates and returns a new command.
-        return new Command(alias, command, tokens, tokenTypes, type);
+        return new Command(alias, command, tokens, tokenTypes, type, displayName);
     }
+
+    public static Command getCommand(String alias, String command, int type) {return getCommand(alias, command, type, null);}
+
+    public static Command getCommand(String alias, String command, String displayName) {return getCommand(alias, command, Command.NORMAL_COMMAND, displayName);}
 
     /**
      * Returns a command built from the specified arguments.
@@ -148,7 +152,7 @@ public class CommandParser {
      * @param  command command line to execute when this command is called.
      * @return a command built from the specified arguments.
      */
-    public static Command getCommand(String alias, String command) {return getCommand(alias, command, Command.NORMAL_COMMAND);}
+    public static Command getCommand(String alias, String command) {return getCommand(alias, command, Command.NORMAL_COMMAND, null);}
 
 
 

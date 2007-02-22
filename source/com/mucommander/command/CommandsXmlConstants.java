@@ -17,6 +17,7 @@ package com.mucommander.command;
  * &lt;!ATTLIST command value   CDATA              #REQUIRED&gt;
  * &lt;!ATTLIST command alias   CDATA              #REQUIRED&gt;
  * &lt;!ATTLIST command type    (system|invisible) #IMPLIED&gt;
+ * &lt;!ATTLIST command display CDATA              #IMPLIED&gt;
  * </pre>
  * Where:
  * <ul>
@@ -41,6 +42,8 @@ interface CommandsXmlConstants {
 
     // - Custom command structure ----------------------------------------------
     // -------------------------------------------------------------------------
+    /** Name of the attribute containing a command's display name. */
+    public static final String ARGUMENT_DISPLAY = "display";
     /** Name of the attribute containing a command's alias. */
     public static final String ARGUMENT_ALIAS   = "alias";
     /** Name of the attribute containing a command's value. */

@@ -92,6 +92,7 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
             String  alias;
             String  command;
             int     type;
+            String  display;
             Command buffer;
 
             // Makes sure the required attributes are there.
@@ -99,11 +100,12 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
                 throw new Exception("Unspecified command alias.");
             if((command = (String)attributes.get(ARGUMENT_VALUE)) == null)
                 throw new Exception("Unspecified command value.");
-            type = parseCommandType((String)attributes.get(ARGUMENT_TYPE));
+            type    = parseCommandType((String)attributes.get(ARGUMENT_TYPE));
+            display = (String)attributes.get(ARGUMENT_DISPLAY);
 
 
             // Creates the command and passes it to the builder.
-            builder.addCommand(buffer = CommandParser.getCommand(alias, command, type));
+            builder.addCommand(buffer = CommandParser.getCommand(alias, command, type, display));
         }
     }
 

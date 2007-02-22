@@ -44,9 +44,6 @@ public class Launcher {
         // Allows users to tweak how file associations are loaded / saved.
         System.out.println(" -a FILE, --assoc FILE             Load associations from FILE.");
 
-        // Allows users to tweak how custom commands are loaded / saved.
-        System.out.println(" -f FILE, --commands FILE          Load custom commands from FILE.");
-
         // Allows users to tweak how bookmarks are loaded / saved.
         System.out.println(" -b FILE, --bookmarks FILE         Load bookmarks from FILE.");
 
@@ -56,8 +53,8 @@ public class Launcher {
         // Allows users to tweak how command bar configuration is loaded / saved.
         System.out.println(" -C FILE, --commandbar FILE        Load command bar from FILE");
 
-        // Allows users to change the preferences folder.
-        System.out.println(" -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER.");
+        // Allows users to tweak how custom commands are loaded / saved.
+        System.out.println(" -f FILE, --commands FILE          Load custom commands from FILE.");
 
         // Allows users to tweak how keymaps are loaded.
         System.out.println(" -k FILE, --keymap FILE            Load keymap from FILE");
@@ -68,6 +65,10 @@ public class Launcher {
             System.out.println(" -n, --no-debug                    Disable debug output to stdout");
             System.out.println(" -d, --debug                       Enable debug output to stdout (default)");
         }
+
+        // Allows users to change the preferences folder.
+        System.out.println(" -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER.");
+
         // Allows users to tweak how shell history is loaded / saved.
         System.out.println(" -s FILE, --shell-history FILE     Load shell history from FILE");
 
