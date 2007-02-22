@@ -16,14 +16,14 @@ public class RevealInDesktopAction extends MucoAction {
 
     public RevealInDesktopAction(MainFrame mainFrame) {
         super(mainFrame);
-        setLabel(Translator.get(getClass().getName()+".label", PlatformManager.getDefaultDesktopFMName()));
+        setLabel(Translator.get(getClass().getName()+".label", PlatformManager.getFileManagerName()));
 
         // Disable this action if the platform is not capable of opening files in the default file manager
-        if(!PlatformManager.canOpenInDesktop())
+        if(!PlatformManager.canOpenInFileManager())
             setEnabled(false);
     }
 
     public void performAction() {
-        PlatformManager.openInDesktop(mainFrame.getActiveTable().getFolderPanel().getCurrentFolder());
+        PlatformManager.openInFileManager(mainFrame.getActiveTable().getFolderPanel().getCurrentFolder());
     }
 }
