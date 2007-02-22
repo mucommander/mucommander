@@ -1,14 +1,13 @@
 package com.mucommander.job;
 
 import com.mucommander.Debug;
-import com.mucommander.PlatformManager;
+import com.mucommander.command.Command;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
+import com.mucommander.process.ProcessRunner;
 import com.mucommander.ui.FileCollisionDialog;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
-import com.mucommander.command.Command;
-import com.mucommander.process.ProcessRunner;
 
 import java.io.File;
 
@@ -28,10 +27,10 @@ public class TempCommandJob extends CopyJob {
     protected void jobCompleted() {
         super.jobCompleted();
 
-        // Make the temporary
+        // Make the temporary file read only
         new File(tempFile.getAbsolutePath()).setReadOnly();
 
-        // Tries to execute the command on the file.
+        // Try to execute the command on the file.
         try {ProcessRunner.execute(command.getTokens(tempFile), tempFile);}
         catch(Exception e) {
             if(Debug.ON) {

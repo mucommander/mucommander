@@ -27,10 +27,10 @@ public class TempExecJob extends CopyJob {
     protected void jobCompleted() {
         super.jobCompleted();
 
-        // Make the temporary
+        // Make the temporary file read only
         new File(tempFile.getAbsolutePath()).setReadOnly();
 
-        // Tries to open the file.
+        // Try to open the file.
         PlatformManager.open(tempFile);
     }
 }
