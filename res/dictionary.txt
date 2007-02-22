@@ -422,8 +422,8 @@ name:zh_TW:名稱
 name:PL:Nazwa
 name:HU:név
 name:RU:Имя файла
-name:IT:Nome
 #name:RU:Название
+name:IT:Nome
 name:ZH_CN:名称
 name:SI:Ime
 name:RO:Nume
@@ -661,7 +661,6 @@ file_exists_in_destination:SI:Datoteka s tem imenom že obstaja
 file_exists_in_destination:RO:Fișierul există deja la destinație
 file_exists_in_destination:IT:File gia' esistente nella destinazione
 
-# Todo: find a better wording for this
 source_parent_of_destination:EN:Attempt to transfer a folder to one of its subfolders
 source_parent_of_destination:FR:Tentative de déplacement d'un répertoire vers un de ses sous-répertoires
 source_parent_of_destination:SI:Poskus prenosa mape v eno od njenih podmap
@@ -4378,7 +4377,6 @@ ftp_connect.anonymous_user:RO:Utilizator anonim
 ftp_connect.anonymous_user:IT:Utente anonimo
 
 
-
 ################
 # HTTP connect #
 ################
@@ -4387,7 +4385,7 @@ http_connect.basic_authentication:EN:HTTP Basic Authentication (optional)
 http_connect.basic_authentication:FR:HTTP Basic Authentication (optionnel)
 http_connect.basic_authentication:SI:HTTP osnovno overjanje (izbirno)
 http_connect.basic_authentication:IT:HTTP Basic Authentication (opzionale)
-
+# Translation missing
 
 
 
@@ -5975,11 +5973,13 @@ prefs_dialog.shell_colors.selection_color:EN:$[prefs_dialog.selection_color]
 
 
 
+
 prefs_dialog.themes:EN:Themes
 prefs_dialog.themes:FR:Thèmes
 prefs_dialog.themes:SI:Teme
 prefs_dialog.themes:IT:Temi
 # Translation missing
+
 
 
 
