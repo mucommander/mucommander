@@ -59,23 +59,6 @@ ok:SI:V redu
 ok:RO:OK
 ok:IT:OK
 
-# Used for buttons as an alternative to 'ok'
-done:EN:Done
-done:FR:Terminé
-done:ES:Terminado
-done:RU:Готово
-done:zh_TW:完成
-done:PL:Zrobione
-done:ZH_CN:完成
-done:SI:Narejeno
-done:RO:Închide
-done:IT:Fatto
-
-# Used for the label of the custom theme
-user_theme:EN:Custom theme
-user_theme:FR:Thème personnalisé
-user_theme:SI:Običajna tema
-
 yes:EN:Yes
 yes:FR:Oui
 yes:DE:Ja
@@ -375,7 +358,7 @@ pause:FR:Pause
 pause:RO:Pauză
 pause:SI:Pavza
 pause:IT:Pausa
-
+# Translation missing
 
 
 
@@ -477,7 +460,7 @@ extension:EN:Extension
 extension:FR:Extension
 extension:SI:Končnica
 extension:IT:Estensione
-
+# Translation missing
 
 
 
@@ -489,7 +472,7 @@ permissions:EN:Permissions
 permissions:FR:Permissions
 permissions:SI:Pravice
 permissions:IT:Permessi
-
+# Translation missing
 
 
 
@@ -506,8 +489,8 @@ location:ES:Localización
 location:CS:Umístnění
 location:zh_TW:位置
 location:PL:Lokalizacja
-location:IT:Location
 #location:PL:Położenie
+location:IT:Location
 location:HU:hely
 location:RU:Размещение
 # location:RU:Расположение
@@ -521,7 +504,7 @@ untitled:EN:Untitled
 untitled:FR:Sans titre
 untitled:SI:Brez naslova
 untitled:IT:SenzaTitolo
-
+# Translation missing
 
 
 
@@ -534,7 +517,7 @@ source:EN:Source
 source:FR:Source
 source:SI:Izvor
 source:IT:Sorgente
-
+# Translation missing
 
 
 
@@ -547,7 +530,7 @@ destination:EN:Destination
 destination:FR:Destination
 destination:SI:Cilj
 destination:IT:Destinazione
-
+# Translation missing
 
 
 
@@ -558,7 +541,7 @@ destination:IT:Destinazione
 
 recurse_directories:EN:Recurse directories
 recurse_directories:FR:Appliquer récursivement aux répertoires
-
+# Translation missing
 
 
 
@@ -592,15 +575,7 @@ error:FR:Erreur
 error:RO:Eroare
 error:SI:Napaka
 error:IT:Errore
-
-
-
-
-
-# Error message displayed when a theme cannot be loaded
-theme_could_not_be_loaded:EN:An error occured while loading this theme.
-theme_could_not_be_loaded:FR:Une erreur est survenue lors du chargement de ce thème.
-
+# Translation missing
 
 
 
@@ -691,6 +666,7 @@ source_parent_of_destination:EN:Attempt to transfer a folder to one of its subfo
 source_parent_of_destination:FR:Tentative de déplacement d'un répertoire vers un de ses sous-répertoires
 source_parent_of_destination:SI:Poskus prenosa mape v eno od njenih podmap
 source_parent_of_destination:IT:Tentativo di trasferire una cartella in una sua sottocartella
+# Translation missing
 
 
 
@@ -822,6 +798,7 @@ same_source_destination:IT:Directory sorgente e destinazione uguali.
 
 permissions.read:EN:Read
 permissions.read:FR:Lecture
+# Translation missing
 
 
 
@@ -833,6 +810,7 @@ permissions.read:FR:Lecture
 
 permissions.write:EN:Write
 permissions.write:FR:Ecriture
+# Translation missing
 
 
 
@@ -843,6 +821,7 @@ permissions.write:FR:Ecriture
 
 permissions.executable:EN:Executable
 permissions.executable:FR:Execution
+# Translation missing
 
 
 
@@ -853,6 +832,7 @@ permissions.executable:FR:Execution
 
 permissions.user:EN:User
 permissions.user:FR:User
+# Translation missing
 
 
 
@@ -862,6 +842,7 @@ permissions.user:FR:User
 
 permissions.group:EN:Group
 permissions.group:FR:Groupe
+# Translation missing
 
 
 
@@ -871,6 +852,7 @@ permissions.group:FR:Groupe
 
 permissions.other:EN:Other
 permissions.other:FR:Autre
+# Translation missing
 
 
 
@@ -880,6 +862,7 @@ permissions.other:FR:Autre
 
 permissions.octal_notation:EN:Octal notation
 permissions.octal_notation:FR:Notation octale
+# Translation missing
 
 
 
@@ -904,6 +887,7 @@ com.mucommander.ui.action.AddBookmarkAction.label:SI:Dodaj med priljubljene
 com.mucommander.ui.action.AddBookmarkAction.label:RO:Adaugă la favorite
 com.mucommander.ui.action.AddBookmarkAction.label:IT:Aggiungi a favoriti
 # Translation missing
+
 
 
 
@@ -979,6 +963,7 @@ com.mucommander.ui.action.ChangeLocationAction.label:IT:Cambia percorso corrente
 
 com.mucommander.ui.action.ChangeDateAction.label:EN:Change date
 com.mucommander.ui.action.ChangeDateAction.label:FR:Changer la date
+# Translation missing
 
 
 
@@ -993,6 +978,7 @@ com.mucommander.ui.action.ChangeDateAction.label:FR:Changer la date
 
 com.mucommander.ui.action.ChangeDateAction.tooltip:EN:Change date of selected file(s)
 com.mucommander.ui.action.ChangeDateAction.tooltip:FR:Change la date des fichiers selectionnés
+# Translation missing
 
 
 
@@ -1008,6 +994,7 @@ com.mucommander.ui.action.ChangeDateAction.tooltip:FR:Change la date des fichier
 
 com.mucommander.ui.action.ChangePermissionsAction.label:EN:Change permissions
 com.mucommander.ui.action.ChangePermissionsAction.label:FR:Changer les permissions
+# Translation missing
 
 
 
@@ -1022,6 +1009,7 @@ com.mucommander.ui.action.ChangePermissionsAction.label:FR:Changer les permissio
 
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:EN:Change permissions of selected file(s)
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:FR:Change les permissions des fichiers selectionnés
+# Translation missing
 
 
 
@@ -1293,6 +1281,7 @@ com.mucommander.ui.action.MkfileAction.label:FR:Créer fichier
 com.mucommander.ui.action.MkfileAction.label:RO:Fișier nou
 com.mucommander.ui.action.MkfileAction.label:SI:Ustvari datoteko
 com.mucommander.ui.action.MkfileAction.label:IT:Crea nuovo file
+# Translation missing
 
 
 
@@ -1309,6 +1298,7 @@ com.mucommander.ui.action.MkfileAction.tooltip:FR:Créer un fichier dans le doss
 com.mucommander.ui.action.MkfileAction.tooltip:RO:Crează un fișier nou în directorul curent
 com.mucommander.ui.action.MkfileAction.tooltip:SI:Ustvari datoteko v trenutni mapi
 com.mucommander.ui.action.MkfileAction.tooltip:IT:Crea un file nella cartella corrente
+# Translation missing
 
 
 
@@ -1626,6 +1616,7 @@ com.mucommander.ui.action.SortByPermissionsAction.label:EN:Sort by Permissions
 com.mucommander.ui.action.SortByPermissionsAction.label:FR:Trier par Permissions
 com.mucommander.ui.action.SortByPermissionsAction.label:SI:Razvrsti po pravicah
 com.mucommander.ui.action.SortByPermissionsAction.label:IT:Ordina per Permessi
+# Translation missing
 
 
 
@@ -1892,31 +1883,28 @@ com.mucommander.ui.action.OpenNativelyAction.tooltip:SI:Zaženi izbrano datoteko
 com.mucommander.ui.action.OpenNativelyAction.tooltip:RO:Deschide fișierul selectat folosind aplicația asociată
 com.mucommander.ui.action.OpenNativelyAction.tooltip:IT:Esegui i file selezionati con le associazioni di sistema 
 
-#file_menu.reveal_in_finder:EN:Reveal in Finder
-#file_menu.reveal_in_finder:FR:Afficher dans le Finder
-#file_menu.reveal_in_finder:ES:Mostrar en Finder
-#file_menu.reveal_in_finder:RU:Отобразить в найденном
-#file_menu.reveal_in_finder:zh_TW:顯示在Finder
-#file_menu.reveal_in_finder:PL:Wyszukaj
-#file_menu.reveal_in_finder:ZH_CN:在查找器中展示
-#file_menu.reveal_in_finder:SI:Razkrij
-
 file_menu.open_with:EN:Open with...
 file_menu.open_with:FR:Ouvrir avec...
 file_menu.open_with:SI:Odpri z...
 file_menu.open_with:IT:Apri con...
+# Translation missing
 
 
 
 
 
 
+# This entry used to be 'Reveal in Finder', it's now Reveal in %1, where %1 is the name of the system's file opener (Finder, Explorer...)
 com.mucommander.ui.action.RevealInDesktopAction.label:EN:Reveal in %1
 com.mucommander.ui.action.RevealInDesktopAction.label:FR:Afficher dans %1
 com.mucommander.ui.action.RevealInDesktopAction.label:ES:Mostrar en %1
 com.mucommander.ui.action.RevealInDesktopAction.label:RO:Arată în %1
 com.mucommander.ui.action.RevealInDesktopAction.label:SI:Razkrij v %1
 com.mucommander.ui.action.RevealInDesktopAction.label:IT:Mostra in %1
+#file_menu.reveal_in_finder:RU:Отобразить в найденном
+#file_menu.reveal_in_finder:zh_TW:顯示在Finder
+#file_menu.reveal_in_finder:PL:Wyszukaj
+#file_menu.reveal_in_finder:ZH_CN:在查找器中展示
 # Translation missing
 
 
@@ -2029,6 +2017,7 @@ com.mucommander.ui.action.UnpackAction.tooltip:FR:Décompresser les archives mar
 com.mucommander.ui.action.UnpackAction.tooltip:RO:Dearhivează fișierele arhivate selectate
 com.mucommander.ui.action.UnpackAction.tooltip:SI:Razširi označene arhivske datoteke
 com.mucommander.ui.action.UnpackAction.tooltip:IT:Decomprimi gli archivi selezionati
+# Translation missing
 
 
 
@@ -2101,6 +2090,7 @@ com.mucommander.ui.action.ShowServerConnectionsAction.label:EN:Show open connect
 com.mucommander.ui.action.ShowServerConnectionsAction.label:FR:Afficher les connexions ouvertes
 com.mucommander.ui.action.ShowServerConnectionsAction.label:SI:Prikaži aktivne povezave
 com.mucommander.ui.action.ShowServerConnectionsAction.label:IT:Mostra le connessioni aperte
+# Translation missing
 
 
 
@@ -2313,9 +2303,13 @@ com.mucommander.ui.action.RecallNextWindowAction.label:SI:Preklopi na naslednje 
 com.mucommander.ui.action.RecallNextWindowAction.label:RO:Schimbă la fereastra următoare
 com.mucommander.ui.action.RecallNextWindowAction.label:IT:Richiama prossima finestra
 
-# Entry changed: used to be 'Recall a window' and now is 'Recall window #N'
+# This entry has changed: used to be 'Recall a window' and now is 'Recall window #N'
 com.mucommander.ui.action.RecallWindowAction.label:EN:Recall window #%1
 com.mucommander.ui.action.RecallWindowAction.label:FR:Rappeler la fenêtre #%1
+com.mucommander.ui.action.RecallWindowAction.label:SI:Prikliči okno #%1
+com.mucommander.ui.action.RecallWindowAction.label:RO:Schimbă la fereastra #%1
+com.mucommander.ui.action.RecallWindowAction.label:IT:Richiama finestra #%1
+# The following need to be updated
 com.mucommander.ui.action.RecallWindowAction.label:DE:Ein Fenster aufrufen
 com.mucommander.ui.action.RecallWindowAction.label:ES:Rellamar a una ventana
 com.mucommander.ui.action.RecallWindowAction.label:CS:Vyvolat okno
@@ -2324,9 +2318,13 @@ com.mucommander.ui.action.RecallWindowAction.label:PL:Wywołaj okno
 com.mucommander.ui.action.RecallWindowAction.label:HU:ablak visszavonása
 com.mucommander.ui.action.RecallWindowAction.label:RU:Восстановить окно
 com.mucommander.ui.action.RecallWindowAction.label:ZH_CN:切回一个窗口
-com.mucommander.ui.action.RecallWindowAction.label:SI:Prikliči okno #%1
-com.mucommander.ui.action.RecallWindowAction.label:RO:Schimbă la fereastra #%1
-com.mucommander.ui.action.RecallWindowAction.label:IT:Richiama finestra #%1
+# Translation missing
+
+
+
+
+
+
 
 
 
@@ -2342,7 +2340,6 @@ com.mucommander.ui.action.RecallWindow7Action.label:EN:$[com.mucommander.ui.acti
 com.mucommander.ui.action.RecallWindow8Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
 com.mucommander.ui.action.RecallWindow9Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
 com.mucommander.ui.action.RecallWindow10Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
-com.mucommander.ui.action.RecallWindow10Action.label:IT:$[com.mucommander.ui.action.RecallWindowAction.label]
 
 com.mucommander.ui.action.SwitchActiveTableAction.label:EN:Switch between left and right panels
 com.mucommander.ui.action.SwitchActiveTableAction.label:FR:Basculer entre les dossiers de droite et de gauche
@@ -2390,6 +2387,7 @@ com.mucommander.ui.action.SplitEquallyAction.label:EN:Split equally
 com.mucommander.ui.action.SplitEquallyAction.label:FR:Scinder au milieu
 com.mucommander.ui.action.SplitEquallyAction.label:SI:Razdeli enako na obeh straneh
 com.mucommander.ui.action.SplitEquallyAction.label:IT:Dividi egualmente
+# Translation missing
 
 
 
@@ -2403,6 +2401,7 @@ com.mucommander.ui.action.SplitVerticallyAction.label:EN:Split vertically
 com.mucommander.ui.action.SplitVerticallyAction.label:FR:Scincer verticalement
 com.mucommander.ui.action.SplitVerticallyAction.label:SI:Razdeli navpično
 com.mucommander.ui.action.SplitVerticallyAction.label:IT:Dividi verticalmente
+# Translation missing
 
 
 
@@ -2414,6 +2413,7 @@ com.mucommander.ui.action.SplitHorizontallyAction.label:EN:Split horizontally
 com.mucommander.ui.action.SplitHorizontallyAction.label:FR:Scincer horizontalement
 com.mucommander.ui.action.SplitHorizontallyAction.label:SI:Razdeli vodoravno
 com.mucommander.ui.action.SplitHorizontallyAction.label:IT:Dividi orizzontalmente
+# Translation missing
 
 
 
@@ -2469,6 +2469,7 @@ com.mucommander.ui.action.ReportBugAction.label:EN:Report a bug
 com.mucommander.ui.action.ReportBugAction.label:FR:Reporter a bug
 com.mucommander.ui.action.ReportBugAction.label:SI:Poročanje o napakah
 com.mucommander.ui.action.ReportBugAction.label:IT:Segnala un bug
+# Translation missing
 
 
 
@@ -2570,6 +2571,7 @@ view_menu.show_hide_columns:EN:Show/Hide columns
 view_menu.show_hide_columns:FR:Afficher/Cacher colonnes
 view_menu.show_hide_columns:SI:Prikaži/Skrij stolpce
 view_menu.show_hide_columns:IT:Mostra/Nascondi colonne
+# Translation missing
 
 
 
@@ -2593,6 +2595,8 @@ bookmarks_menu:ZH_CN:书签
 bookmarks_menu:SI:Priljubljene
 bookmarks_menu:RO:Favorite
 bookmarks_menu:IT:Favoriti
+# Translation missing
+
 
 
 
@@ -2610,6 +2614,8 @@ bookmarks_menu.no_bookmark:ZH_CN:没有书签
 bookmarks_menu.no_bookmark:SI:Ni priljubljenih
 bookmarks_menu.no_bookmark:RO:Nici un director favorit
 bookmarks_menu.no_bookmark:IT:Nessun favorito 
+# Translation missing
+
 
 
 
@@ -2681,6 +2687,9 @@ status_bar.connecting_to_folder:ZH_CN:正在连接文件夹，按空格键取消
 status_bar.connecting_to_folder:SI:Povezovanje z mapo, pritisni ESCAPE za preklic.
 status_bar.connecting_to_folder:RO:În curs de conectare la un director, apasă ESCAPE pentru a anula.
 status_bar.connecting_to_folder:IT:Connessione in corso, premere ESC per annullare
+# Translation missing
+
+
 
 
 
@@ -2697,6 +2706,9 @@ status_bar.volume_free:ZH_CN:空闲：%1
 status_bar.volume_free:SI:Nezasedeno: %1
 status_bar.volume_free:RO:Liber: %1
 status_bar.volume_free:IT:Libero: %1
+# Translation missing
+
+
 
 
 
@@ -2712,6 +2724,8 @@ status_bar.volume_capacity:ZH_CN:容量 %1
 status_bar.volume_capacity:SI:Kapaciteta: %1
 status_bar.volume_capacity:RO:Capacitate: %1
 status_bar.volume_capacity:IT:Capacita': %1
+# Translation missing
+
 
 
 
@@ -2727,6 +2741,7 @@ table.hide_column:EN:Hide column
 table.hide_column:FR:Cacher la colonne
 table.hide_column:SI:Skrij stolpec
 table.hide_column:IT:Nascondi colonna
+# Translation missing
 
 
 
@@ -2953,13 +2968,14 @@ destination_dialog.file_exists_action:IT:Azione di default quando il file esiste
 # File collision dialog #
 #########################
 
-# This is the dialog that gets displayed when a file 'collision' has been detected in the midst of a transfer
+# This dialog gets displayed when a file 'collision' has been detected in the midst of a transfer
 # e.g. when a destination file already exists, or when the source and destination are the same   
 
 file_collision_dialog.title:EN:File collision
 file_collision_dialog.title:FR:Collision de fichiers
 file_collision_dialog.title:SI:Datotečni spor
 file_collision_dialog.title:IT:Collisione di file
+# Translation missing
 
 
 
@@ -3055,16 +3071,13 @@ pack_dialog.pack:DE:Packen
 pack_dialog.pack:ES:Comprimir
 pack_dialog.pack:CS:Komprimovat
 pack_dialog.pack:zh_TW:壓縮
+pack_dialog.pack:HU:tömörítés
 pack_dialog.pack:RU:Архивация
 pack_dialog.pack:PL:Spakuj
 pack_dialog.pack:ZH_CN:压缩
 pack_dialog.pack:SI:Stiskanje
 pack_dialog.pack:RO:Arhivează
 pack_dialog.pack:IT:Compressione
-
-
-
-
 
 pack_dialog.packing:EN:Packing files
 pack_dialog.packing:FR:Compression en cours
@@ -3141,6 +3154,8 @@ pack_dialog.archive_format:FR:Format de l'archive
 pack_dialog.archive_format:RO:Formatul arhivei
 pack_dialog.archive_format:SI:Način stiskanja
 pack_dialog.archive_format:IT:Formato archivio
+# Translation missing
+
 
 
 
@@ -3914,18 +3929,6 @@ progress_dialog.starting:SI:Prenos se izvaja...
 progress_dialog.starting:RO:Încep să transfer...
 progress_dialog.starting:IT:Trasferimento iniziato...
 
-#progress_dialog.hide:EN:Hide
-#progress_dialog.hide:FR:Cacher
-#progress_dialog.hide:DE:Verstecken
-#progress_dialog.hide:ES:Ocultar
-#progress_dialog.hide:CS:Skrýt
-#progress_dialog.hide:zh_TW:隱藏
-#progress_dialog.hide:PL:Ukryj
-#progress_dialog.hide:HU:rejt
-#progress_dialog.hide:RU:Скрыть
-#progress_dialog.hide:ZH_CN:隐藏
-#progress_dialog.hide:SI:Skrij
-
 # %1 is the amount of data transferred (already formatted+localized) and %2 the transfer speed.
 progress_dialog.transferred:EN:Transferred %1 at %2
 progress_dialog.transferred:FR:%1 transférés à %2
@@ -3946,6 +3949,8 @@ progress_dialog.elapsed_time:FR:Temps écoulé
 progress_dialog.elapsed_time:RO:Durata
 progress_dialog.elapsed_time:SI:Pretečen čas
 progress_dialog.elapsed_time:IT:Durata
+# Translation missing
+
 
 
 
@@ -3960,6 +3965,7 @@ progress_dialog.advanced:FR:Avancé
 progress_dialog.advanced:RO:Avansat
 progress_dialog.advanced:SI:Napredno
 progress_dialog.advanced:IT:Avanzate
+# Translation missing
 
 
 
@@ -3976,6 +3982,7 @@ progress_dialog.current_speed:FR:Vitesse actuelle
 progress_dialog.current_speed:RO:Viteza actuala
 progress_dialog.current_speed:SI:Trenutna hitrost
 progress_dialog.current_speed:IT:Velocita' attuale
+# Translation missing
 
 
 
@@ -3990,6 +3997,7 @@ progress_dialog.limit_speed:FR:Limiter la vitesse
 progress_dialog.limit_speed:RO:Limitare de viteză
 progress_dialog.limit_speed:SI:Omejitev hitrosti
 progress_dialog.limit_speed:IT:Limite di velocita'
+# Translation missing
 
 
 
@@ -4003,6 +4011,7 @@ progress_dialog.close_when_finished:EN:Close window when finished
 progress_dialog.close_when_finished:FR:Fermer la fenêtre lorsque terminé
 progress_dialog.close_when_finished:SI:Po prenosu zapri okno
 progress_dialog.close_when_finished:IT:Chiudi finestra quando finito
+# Translation missing
 
 
 
@@ -4016,6 +4025,7 @@ progress_dialog.job_finished:EN:Job finished
 progress_dialog.job_finished:FR:Tâche terminée
 progress_dialog.job_finished:SI:Naloga zaključena
 progress_dialog.job_finished:IT:Lavoro terminato
+# Translation missing
 
 
 
@@ -4108,6 +4118,7 @@ properties_dialog.calculating:IT:calcolando...
 
 change_date_dialog.now:EN:Now
 change_date_dialog.now:FR:Maintenant
+# Translation missing
 
 
 
@@ -4119,6 +4130,7 @@ change_date_dialog.now:FR:Maintenant
 
 change_date_dialog.specific_date:EN:Specific date
 change_date_dialog.specific_date:FR:Date spécifique
+# Translation missing
 
 
 
@@ -4151,6 +4163,7 @@ run_dialog.run_in_home_description:EN:Run in home folder
 run_dialog.run_in_home_description:FR:Exécuter dans le répertoire utilisateur
 run_dialog.run_in_home_description:SI:Zaženi v domači mapi
 run_dialog.run_in_home_description:IT:Esegui nella cartella Home
+# Translation missing
 
 
 
@@ -4191,11 +4204,23 @@ run_dialog.run:IT:Esegui
 
 run_dialog.stop:EN:$[stop]
 run_dialog.stop:IT:$[ferma]
+# Translation missing
+
+
+
+
+
+
+
+
 
 run_dialog.clear_history:EN:Clear history
 run_dialog.clear_history:FR:Effacer l'historique
 run_dialog.clear_history:SI:Počisti zgodovino
 run_dialog.clear_history:IT:Ripulisci l'history
+# Translation missing
+
+
 
 
 
@@ -4381,6 +4406,7 @@ server_connections_dialog.disconnect:EN:Disconnect
 server_connections_dialog.disconnect:FR:Déconnecter
 server_connections_dialog.disconnect:SI:Prekini povezavo
 server_connections_dialog.disconnect:IT:Disconnetti
+# Translation missing
 
 
 
@@ -4396,6 +4422,8 @@ server_connections_dialog.connection_busy:EN:Busy
 server_connections_dialog.connection_busy:FR:Occupée
 server_connections_dialog.connection_busy:SI:Zasedeno
 server_connections_dialog.connection_busy:IT:Occupato
+# Translation missing
+
 
 
 
@@ -4409,6 +4437,7 @@ server_connections_dialog.connection_idle:EN:Idle
 server_connections_dialog.connection_idle:FR:Inactive
 server_connections_dialog.connection_idle:SI:Neaktivno
 server_connections_dialog.connection_idle:IT:Inattivo
+# Translation missing
 
 
 
@@ -4428,6 +4457,8 @@ bonjour.bonjour_services:EN:Bonjour services
 bonjour.bonjour_services:FR:Services Bonjour
 bonjour.bonjour_services:SI:"Bonjour" storitve
 bonjour.bonjour_services:IT:Servizi Bonjour
+# Translation missing
+
 
 
 
@@ -4439,6 +4470,9 @@ bonjour.no_service_discovered:EN:No service discovered
 bonjour.no_service_discovered:FR:Aucun service découvert
 bonjour.no_service_discovered:SI:Ni aktivne storitve
 bonjour.no_service_discovered:IT:Nessun servizio scoperto
+# Translation missing
+
+
 
 
 
@@ -4451,6 +4485,8 @@ bonjour.bonjour_disabled:EN:Bonjour disabled
 bonjour.bonjour_disabled:FR:Bonjour disabled
 bonjour.bonjour_disabled:SI:"Bonjour" onemogočen
 bonjour.bonjour_disabled:IT:Bonjour disabilitato
+# Translation missing
+
 
 
 
@@ -4519,10 +4555,20 @@ auth_dialog.error_was:SI:Napaka: %1
 auth_dialog.error_was:RO:Eroare: %1
 auth_dialog.error_was:IT:Errore: %1
 
+# Passwords used to be stored in the clear, now they are encrypted with a weak encryption method
 auth_dialog.store_credentials:EN:Store login and password (weak encryption)
 auth_dialog.store_credentials:FR:Sauver les identifiants (encryption faible)
 auth_dialog.store_credentials:SI:Shrani uporabniško ime in geslo (nizka enkripcija)
 auth_dialog.store_credentials:IT:Memorizza login e password (weak encryption)
+#auth_dialog.store_credentials:EN:Include login and password (will be saved in the clear!)
+#auth_dialog.store_credentials:FR:Inclure les identifiants et mot de passe (seront sauvegardés en clair!)
+#auth_dialog.store_credentials:ES:Incluir nombre de usuario y contraseña (¡será salvada en blanco!)
+#auth_dialog.store_credentials:RU:Включить логин и пароль (будут сохранены без шифрования)
+#auth_dialog.store_credentials:zh_TW:包含登入帳號及密碼(將會以明文儲存!)
+#auth_dialog.store_credentials:PL:Dołącz login i hasło (zostaną zapisane bez szyfrowania!)
+#auth_dialog.store_credentials:ZH_CN:包含用户名及密码 (会以明文保存!)
+#auth_dialog.store_credentials:SI:Vključi uporabniško ime in geslo (vse bo varno shranjeno!)
+# Translation missing
 
 
 
@@ -4530,18 +4576,6 @@ auth_dialog.store_credentials:IT:Memorizza login e password (weak encryption)
 
 
 
-
-
-
-## Checkbox's title in the Add bookmark dialog, displayed only for locations that have an associated login and password (SMB/FTP/SFTP...)
-#add_bookmark_dialog.include_auth_info:EN:Include login and password (will be saved in the clear!)
-#add_bookmark_dialog.include_auth_info:FR:Inclure les identifiants et mot de passe (seront sauvegardés en clair!)
-#add_bookmark_dialog.include_auth_info:ES:Incluir nombre de usuario y contraseña (¡será salvada en blanco!)
-#add_bookmark_dialog.include_auth_info:RU:Включить логин и пароль (будут сохранены без шифрования)
-#add_bookmark_dialog.include_auth_info:zh_TW:包含登入帳號及密碼(將會以明文儲存!)
-#add_bookmark_dialog.include_auth_info:PL:Dołącz login i hasło (zostaną zapisane bez szyfrowania!)
-#add_bookmark_dialog.include_auth_info:ZH_CN:包含用户名及密码 (会以明文保存!)
-#add_bookmark_dialog.include_auth_info:SI:Vključi uporabniško ime in geslo (vse bo varno shranjeno!)
 
 
 #################
@@ -4561,6 +4595,12 @@ sortable_list.move_up:ZH_CN:上移
 sortable_list.move_up:SI:Premakni gor
 sortable_list.move_up:RO:Mută în sus
 sortable_list.move_up:IT:Muovi sopra
+# Translation missing
+
+
+
+
+
 
 
 
@@ -4576,6 +4616,8 @@ sortable_list.move_down:ZH_CN:下移
 sortable_list.move_down:SI:Premakni dol
 sortable_list.move_down:RO:Mută în jos
 sortable_list.move_down:IT:Muovi sotto
+# Translation missing
+
 
 
 
@@ -4598,6 +4640,8 @@ add_bookmark_dialog.add:ZH_CN:添加
 add_bookmark_dialog.add:SI:Dodaj
 add_bookmark_dialog.add:RO:Adaugă
 add_bookmark_dialog.add:IT:Aggiungi
+# Translation missing
+
 
 
 
@@ -4615,7 +4659,7 @@ edit_bookmarks_dialog.new:EN:New
 edit_bookmarks_dialog.new:FR:Nouveau
 edit_bookmarks_dialog.new:SI:Nova
 edit_bookmarks_dialog.new:IT:Nuovo
-
+# Translation missing
 
 
 
@@ -4630,7 +4674,7 @@ edit_bookmarks_dialog.duplicate:EN:Duplicate
 edit_bookmarks_dialog.duplicate:FR:Dupliquer
 edit_bookmarks_dialog.duplicate:SI:Podvoji
 edit_bookmarks_dialog.duplicate:IT:Duplica
-
+# Translation missing
 
 
 
@@ -4823,7 +4867,6 @@ image_viewer.zoom_out:ZH_CN:缩小
 image_viewer.zoom_out:SI:Oddalji
 image_viewer.zoom_out:RO:Micșorează
 image_viewer.zoom_out:IT:Rimpiccolisci
-
 
 
 ###############
@@ -5057,6 +5100,7 @@ shortcuts_dialog.quick_search:FR:Recherche rapide
 shortcuts_dialog.quick_search:RO:Căutare rapidă
 shortcuts_dialog.quick_search:SI:Hitro iskanje
 shortcuts_dialog.quick_search:IT:Ricerca rapida
+# Translation missing
 
 
 
@@ -5071,6 +5115,7 @@ shortcuts_dialog.quick_search.start_search:FR:Entrez un caractère pour commence
 shortcuts_dialog.quick_search.start_search:RO:Introdu orice caracter pentru a începe o căutare rapidă
 shortcuts_dialog.quick_search.start_search:SI:Vnesi kateri koli znak za začetek hitrega iskanja
 shortcuts_dialog.quick_search.start_search:IT:Batti un tasto per iniziare una ricerca rapida
+# Translation missing
 
 
 
@@ -5084,6 +5129,7 @@ shortcuts_dialog.quick_search.cancel_search:FR:Annuler la recherche rapide
 shortcuts_dialog.quick_search.cancel_search:RO:Anulează căutarea rapidă
 shortcuts_dialog.quick_search.cancel_search:SI:Prekliči hitro iskanje
 shortcuts_dialog.quick_search.cancel_search:IT:Annullare ricerca rapida
+# Translation missing
 
 
 
@@ -5098,6 +5144,7 @@ shortcuts_dialog.quick_search.remove_last_char:FR:Supprimer le dernier caractèr
 shortcuts_dialog.quick_search.remove_last_char:RO:Șterge ultimul caracter introdus la o cautare rapidă
 shortcuts_dialog.quick_search.remove_last_char:SI:Odstrani zadnji znak iz vrstice hitrega iskanja
 shortcuts_dialog.quick_search.remove_last_char:IT:Togli ultimo carattere dalla stringa di ricerca
+# Translation missing
 
 
 
@@ -5112,7 +5159,7 @@ shortcuts_dialog.quick_search.jump_to_previous:FR:Aller au résultat précédent
 shortcuts_dialog.quick_search.jump_to_previous:RO:Mergi la rezultatul anterior al căutării rapide
 shortcuts_dialog.quick_search.jump_to_previous:SI:Preskoči na prejšnji rezultat hitrega iskanja
 shortcuts_dialog.quick_search.jump_to_previous:IT:Salta sulla ricerca rapida precedente
-
+# Translation missing
 
 
 
@@ -5126,7 +5173,7 @@ shortcuts_dialog.quick_search.jump_to_next:FR:Aller au résultat suivant
 shortcuts_dialog.quick_search.jump_to_next:RO:Mergi la rezultatul următor al căutării rapide
 shortcuts_dialog.quick_search.jump_to_next:SI:Preskoči na naslednji rezultat hitrega iskanja
 shortcuts_dialog.quick_search.jump_to_next:IT:Salta sulla ricerca rapida seguente
-
+# Translation missing
 
 
 
@@ -5139,7 +5186,7 @@ shortcuts_dialog.quick_search.mark_jump_next:FR:Marquer/Dé-marquer le fichier c
 shortcuts_dialog.quick_search.mark_jump_next:RO:Selectează/Deselectează fișierul curent si mergi la următorul rezultat al căutării
 shortcuts_dialog.quick_search.mark_jump_next:SI:Označi/Odznači trenutno datoteko in preskoči na naslednji rezultat iskanja
 shortcuts_dialog.quick_search.mark_jump_next:IT:Seleziona/deseleziona il file corrente e salta sulla ricerca rapida seguente
-
+# Translation missing
 
 
 
@@ -5305,6 +5352,8 @@ prefs_dialog.date_separator:ZH_CN:分隔符
 prefs_dialog.date_separator:SI:Ločilo
 prefs_dialog.date_separator:RO:Separator
 prefs_dialog.date_separator:IT:Separatore
+# Translation missing
+
 
 
 
@@ -5465,7 +5514,11 @@ prefs_dialog.show_hidden_files:RU:Показывать скрытые файлы
 prefs_dialog.show_hidden_files:ZH_CN:显示隐藏文件
 prefs_dialog.show_hidden_files:SI:Prikaži skrite datoteke
 prefs_dialog.show_hidden_files:IT:Mostra file nascosti
-# Missing RO
+# Translation missing (RO)
+
+
+
+
 
 
 prefs_dialog.show_ds_store_files:EN:Show .DS_Store files
@@ -5473,6 +5526,7 @@ prefs_dialog.show_ds_store_files:FR:Afficher les fichiers .DS_Store
 prefs_dialog.show_ds_store_files:RO:Afișează fișierele .DS_Store
 prefs_dialog.show_ds_store_files:SI:Prikaži .DS arhivske datoteke
 prefs_dialog.show_ds_store_files:IT:Mostra file .DS_Store
+# Translation missing
 
 
 
@@ -5489,6 +5543,17 @@ prefs_dialog.show_system_folders:FR:Afficher les dossiers système
 prefs_dialog.show_system_folders:RO:Afișează directoarele system
 prefs_dialog.show_system_folders:SI:Prikaži sistemske mape
 prefs_dialog.show_system_folders:IT:Mostra cartelle di sistema
+# Translation missing
+
+
+
+
+
+
+
+
+
+
 
 prefs_dialog.compact_file_size:EN:Round displayed file sizes
 prefs_dialog.compact_file_size:FR:Arrondir les tailles de fichiers affichées
@@ -5539,6 +5604,8 @@ prefs_dialog.icons_size:FR:Taille des icônes
 prefs_dialog.icons_size:RO:Dimensiunea iconițelor
 prefs_dialog.icons_size:SI:Velikost ikone
 prefs_dialog.icons_size:IT:Grandezza icone
+# Translation missing
+
 
 
 
@@ -5551,6 +5618,8 @@ prefs_dialog.toolbar_icons:FR:Barre d'outils
 prefs_dialog.toolbar_icons:RO:Bara de unelte
 prefs_dialog.toolbar_icons:SI:Orodna vrstica
 prefs_dialog.toolbar_icons:IT:Toolbar
+# Translation missing
+
 
 
 
@@ -5563,6 +5632,7 @@ prefs_dialog.command_bar_icons:FR:Barre de commande
 prefs_dialog.command_bar_icons:RO:Bara de comenzi
 prefs_dialog.command_bar_icons:SI:Ukazna vrstica
 prefs_dialog.command_bar_icons:IT:Barra comandi
+# Translation missing
 
 
 
@@ -5574,6 +5644,7 @@ prefs_dialog.file_icons:EN:File types
 prefs_dialog.file_icons:FR:Type de fichiers
 prefs_dialog.file_icons:SI:Vrste datotek
 prefs_dialog.file_icons:IT:Tipi file
+# Translation missing
 
 
 
@@ -5726,7 +5797,7 @@ prefs_dialog.not_in_focus_selection_color:FR:Fond de la sélection sans focus
 prefs_dialog.not_in_focus_selection_color:RO:Fondul selecției fără focus
 prefs_dialog.not_in_focus_selection_color:SI:Neaktivno označeno ozadje
 prefs_dialog.not_in_focus_selection_color:IT:Selezione sfondo quando non in focus
-
+# Translation missing
 
 
 
@@ -5869,7 +5940,7 @@ prefs_dialog.shell_colors:FR:Couleurs du shell
 prefs_dialog.shell_colors:RO:Culori pentru shell
 prefs_dialog.shell_colors:SI:Barve v ukazni vrstici
 prefs_dialog.shell_colors:IT:Colori del terminale
-
+# Translation missing
 
 
 
@@ -5884,7 +5955,7 @@ prefs_dialog.shell_colors.text_color:FR:Texte
 prefs_dialog.shell_colors.text_color:RO:Text
 prefs_dialog.shell_colors.text_color:SI:Besedilo
 prefs_dialog.shell_colors.text_color:IT:Testo
-
+# Translation missing
 
 
 
@@ -5895,7 +5966,7 @@ prefs_dialog.shell_colors.text_color:IT:Testo
 
 prefs_dialog.shell_colors.background_color:EN:$[prefs_dialog.background_color]
 prefs_dialog.shell_colors.selection_color:EN:$[prefs_dialog.selection_color]
-
+# Translation missing
 
 
 
@@ -5908,6 +5979,11 @@ prefs_dialog.themes:EN:Themes
 prefs_dialog.themes:FR:Thèmes
 prefs_dialog.themes:SI:Teme
 prefs_dialog.themes:IT:Temi
+# Translation missing
+
+
+
+
 
 
 
@@ -5916,7 +5992,7 @@ prefs_dialog.theme_warning:EN:This will overwrite the custom theme. Do you wish 
 prefs_dialog.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
 prefs_dialog.theme_warning:SI:To bo prepisalo običajno temo. Želite nadaljevati?
 prefs_dialog.theme_warning:IT:Questa operazione sovrascrive il tema utente. Procedere ?
-
+# Translation missing
 
 
 
@@ -6050,6 +6126,9 @@ prefs_dialog.default_shell:FR:Utiliser le shell par défaut du système
 prefs_dialog.default_shell:RO:Folosește shell-ul implicit pe sistem
 prefs_dialog.default_shell:SI:Uporabi privzeto izvajanje ukazov
 prefs_dialog.default_shell:IT:Usa il terminale di default del sistema
+# Translation missing
+
+
 
 
 
@@ -6061,6 +6140,9 @@ prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
 prefs_dialog.custom_shell:RO:Folosește un shell anume
 prefs_dialog.custom_shell:SI:Uporabi izvajanje ukazov po meri
 prefs_dialog.custom_shell:IT:Usa il terminale utente
+# Translation missing
+
+
 
 
 
@@ -6071,6 +6153,9 @@ prefs_dialog.enable_bonjour_discovery:EN:Enable Bonjour services discovery
 prefs_dialog.enable_bonjour_discovery:FR:Activer la découverte des services Bonjour
 prefs_dialog.enable_bonjour_discovery:SI:Omogoči odkrivanje "Bonjour" storitev
 prefs_dialog.enable_bonjour_discovery:IT:Abilita Bonjour services discovery
+# Translation missing
+
+
 
 
 
@@ -6203,7 +6288,7 @@ duration.seconds:EN:%1s
 duration.seconds:FR:%1s
 duration.seconds:SI:%1s
 duration.seconds:IT:%1s
-
+# Translation missing
 
 
 
@@ -6214,7 +6299,7 @@ duration.minutes:EN:%1m
 duration.minutes:FR:%1m
 duration.minutes:SI:%1min
 duration.minutes:IT:%1m
-
+# Translation missing
 
 
 
@@ -6225,7 +6310,7 @@ duration.hours:EN:%1h
 duration.hours:FR:%1h
 duration.hours:SI:%1h
 duration.hours:IT:%1h
-
+# Translation missing
 
 
 
@@ -6237,6 +6322,7 @@ duration.days:EN:%1d
 duration.days:FR:%1j
 duration.days:SI:%1d
 duration.days:IT:%1g
+# Translation missing
 
 
 
@@ -6248,6 +6334,7 @@ duration.months:EN:%1mo
 duration.months:FR:%1mo
 duration.months:SI:%1m
 duration.months:IT:%1me
+# Translation missing
 
 
 
@@ -6259,6 +6346,7 @@ duration.years:EN:%1y
 duration.years:FR:%1a
 duration.years:SI:%1l
 duration.years:IT:%1a
+# Translation missing
 
 
 
@@ -6268,16 +6356,57 @@ duration.years:IT:%1a
 
 duration.infinite:EN:∞
 duration.infinite:SI:neskončno
+# Translation missing
+
+
+
+
+
+
+
+#########################
+# Theme-related entries #
+#########################
+
+# Used as a label for the custom theme
+theme.custom_theme:EN:Custom theme
+theme.custom_theme:FR:Thème personnalisé
+theme.custom_theme:SI:Običajna tema
+# Translation missing
+
+
+
+
+
+
+
+
+
+# Error message displayed when a theme cannot be loaded
+theme_could_not_be_loaded:EN:An error occured while loading this theme.
+theme_could_not_be_loaded:FR:Une erreur est survenue lors du chargement de ce thème.
+# Translation missing
+
+
+
+
+
+
+
 
 
 
 #################
 # Setup entries #
 #################
+
+# This dialog appears at first launch
+
 setup.title:EN:Welcome to muCommander
 setup.title:FR:Bienvenue dans muCommander
 setup.title:SI:Dobrodošli v muCommanderju
 setup.title:IT:Benvenuti in muCommander
+# Translation missing
 
 
 
@@ -6287,12 +6416,20 @@ setup.intro:EN:Please choose the way you want muCommander to behave.
 setup.intro:FR:Veuillez choisir le comportement souhaité de muCommander.
 setup.intro:SI:Izberite prosim lastnosti muCommanderja.
 setup.intro:IT:Prego, scegliere il modo di comportarsi di muCommander.
+# Translation missing
+
+
+
+
 
 
 
 setup.look_and_feel:EN:Select your Look & feel
 setup.look_and_feel:FR:Selectionnez votre Look & Feel
 setup.look_and_feel:IT:Scegliete il Vostro Look & Feel
+# Translation missing
+
+
 
 
 
@@ -6302,6 +6439,11 @@ setup.theme:EN:Select your theme
 setup.theme:FR:Selectionnez votre thème
 setup.theme:SI:Izberite temo
 setup.theme:IT:Selezionate il Vostro tema
+# Translation missing
+
+
+
+
 
 
 
@@ -6432,3 +6574,27 @@ setup.theme:IT:Selezionate il Vostro tema
 #mkfile_dialog.description:RO:Crează un nou fișier gol
 #mkfile_dialog.description:SI:Ustvari novo prazno datoteko
 #mkfile_dialog.description:IT:Crea un nuovo file vuoto
+
+# Used for buttons as an alternative to 'ok'
+#done:EN:Done
+#done:FR:Terminé
+#done:ES:Terminado
+#done:RU:Готово
+#done:zh_TW:完成
+#done:PL:Zrobione
+#done:ZH_CN:完成
+#done:SI:Narejeno
+#done:RO:Închide
+#done:IT:Fatto
+
+#progress_dialog.hide:EN:Hide
+#progress_dialog.hide:FR:Cacher
+#progress_dialog.hide:DE:Verstecken
+#progress_dialog.hide:ES:Ocultar
+#progress_dialog.hide:CS:Skrýt
+#progress_dialog.hide:zh_TW:隱藏
+#progress_dialog.hide:PL:Ukryj
+#progress_dialog.hide:HU:rejt
+#progress_dialog.hide:RU:Скрыть
+#progress_dialog.hide:ZH_CN:隐藏
+#progress_dialog.hide:SI:Skrij
