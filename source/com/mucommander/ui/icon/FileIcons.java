@@ -1,7 +1,8 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 
 import javax.swing.*;
@@ -27,9 +28,9 @@ public class FileIcons {
                                                                              ConfigurationVariables.DEFAULT_TABLE_ICON_SCALE);
 
     /** Icon for directories */
-    private final static String FOLDER_ICON_NAME = "folder.png";
+    public final static String FOLDER_ICON_NAME = "folder.png";
     /** Default icon for files without a known extension */
-    private final static String FILE_ICON_NAME = "file.png";
+    public final static String FILE_ICON_NAME = "file.png";
     /** Icon for supported archives (browsable) */
     private final static String ARCHIVE_ICON_NAME = "archive_supported.png";
     /** Icon for parent folder (..) */
