@@ -274,9 +274,10 @@ New features:
  - Connection pooling (SFTP,FTP) and automatic disconnection after timeout, active connections can be listed and closed
  - New file transfer progress window with 'Pause'/'Resume', 'Skip' current file and speed limit options, current/total remaining time, elapsed time, current speed and speed graph, and option to leave the window open when finished
  - Zip, Tar, Gzip, Bzip2 archives can now be created
- - Support for ISO and NRG images over local and SMB filesystems (contributed by Xavier Martin)
- - Support for Bzip2 archives (.bz2, .tbz2, .tar.bz2 extensions)
- - Support for AR and Debian archives, GNU and BSD variants supported (.ar, .deb extensions)
+ - Read support for ISO and NRG images over local and SMB filesystems (contributed by Xavier Martin)
+ - Read/write support for Bzip2 archives (.bz2, .tbz2, .tar.bz2 extensions)
+ - Read support for AR and Debian archives, GNU and BSD variants supported (.ar, .deb extensions)
+ - Read support for LST catalog files
  - Support for HTTP Basic Authentication
  - Bonjour/Zeroconf services discovery
  - New permissions column in table, sort by permissions option
