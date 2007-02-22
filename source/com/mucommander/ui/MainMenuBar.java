@@ -247,7 +247,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowKeyboardShortcutsAction.class, mainFrame), menuItemMnemonicHelper);
 
         // Links to website, only shows for OS/Window manager that can launch the default browser to open URLs
-        if (PlatformManager.canOpenURLInBrowser()) {
+        if (PlatformManager.canOpenUrl()) {
             helpMenu.add(new JSeparator());
             MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(GoToWebsiteAction.class, mainFrame), menuItemMnemonicHelper);
             MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(GoToForumsAction.class, mainFrame), menuItemMnemonicHelper);

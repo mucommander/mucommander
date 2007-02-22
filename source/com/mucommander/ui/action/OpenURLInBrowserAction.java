@@ -22,7 +22,7 @@ public class OpenURLInBrowserAction extends MucoAction {
     }
 
     public void performAction() {
-        if(PlatformManager.canOpenURLInBrowser())
-            PlatformManager.open(FileFactory.getFile(url));
+        if(PlatformManager.canOpenUrl())
+            PlatformManager.openUrl(FileFactory.getFile(url));
     }
 }

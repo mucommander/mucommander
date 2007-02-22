@@ -145,7 +145,7 @@ public class LocalFile extends AbstractFile {
                 // 'dir' command returns free space on the last line
                 //Process process = PlatformManager.execute("dir \""+absPath+"\"", this);
                 //Process process = Runtime.getRuntime().exec(new String[] {"dir", absPath}, null, new File(getAbsolutePath()));
-                Process process = Runtime.getRuntime().exec(PlatformManager.getDefaultShellCommand()+" dir \""+absPath+"\"");
+                Process process = Runtime.getRuntime().exec(PlatformManager.DEFAULT_SHELL_COMMAND + " dir \""+absPath+"\"");
 
                 // Check that the process was correctly started
                 if(process!=null) {

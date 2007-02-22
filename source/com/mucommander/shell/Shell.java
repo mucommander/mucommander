@@ -123,9 +123,9 @@ public class Shell implements ConfigurationListener {
 
         // Retrieves the configuration defined shell command.
         if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_SHELL, ConfigurationVariables.DEFAULT_USE_CUSTOM_SHELL))
-            command = ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_SHELL, PlatformManager.getDefaultShellCommand());
+            command = ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_SHELL, PlatformManager.DEFAULT_SHELL_COMMAND);
         else
-            command = PlatformManager.getDefaultShellCommand();
+            command = PlatformManager.DEFAULT_SHELL_COMMAND;
 
         // Splits the command into tokens, leaving room for the argument.
         tokens = CommandParser.getTokensWithParams(command, 1);

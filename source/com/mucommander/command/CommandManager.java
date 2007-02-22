@@ -15,6 +15,19 @@ import java.util.Vector;
  * @author Nicolas Rinaudo
  */
 public class CommandManager implements AssociationBuilder, CommandBuilder {
+    // - Built-in commands -----------------------------------------------------
+    // -------------------------------------------------------------------------
+    /** Alias for the system file opener. */
+    public static final String FILE_OPENER_ALIAS           = "open";
+    /** Alias for the system URL opener. */
+    public static final String URL_OPENER_ALIAS            = "openURL";
+    /** Alias for the system file manager. */
+    public static final String FILE_MANAGER_ALIAS          = "openFM";
+    /** Alias for the system executable file opener. */
+    public static final String EXE_OPENER_ALIAS            = "openEXE";
+
+
+
     // - Self-open command -----------------------------------------------------
     // -------------------------------------------------------------------------
     /** Alias of the 'run as executable' command. */
@@ -168,6 +181,18 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
         iterator = associations.iterator();
         while(iterator.hasNext())
             if(((CommandAssociation)iterator.next()).getCommand() == command)
+                return true;
+
+        return false;
+    }
+
+    private static boolean isCommandAssociated(String alias) {
+        Iterator iterator;
+
+        // Goes through all the command associations looking for command.
+        iterator = associations.iterator();
+        while(iterator.hasNext())
+            if(((CommandAssociation)iterator.next()).getCommand().getAlias().equals(alias))
                 return true;
 
         return false;
@@ -392,11 +417,6 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
     /**
      * Loads the custom associations XML File.
      * <p>
-     * Data will be loaded from the path returned by {@link #getAssociationFile()}. If the file doesn't exist,
-     * or an error occurs while loading it, {@link com.mucommander.PlatformManager#registerDefaultAssociations() default}
-     * associations will be used.
-     * </p>
-     * <p>
      * The command files will be loaded as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupInputStream}).
      * Its format is described {@link AssociationsXmlConstants here}.
      * </p>
@@ -411,11 +431,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
         file = getAssociationFile();
         if(Debug.ON)
             Debug.trace("Loading associations from file: " + file.getAbsolutePath());
-        if(!file.isFile()) {
-            if(Debug.ON) Debug.trace("Associations file doesn't exist, using default associations");
-            PlatformManager.registerDefaultAssociations();
-        }
-        else {
+        if(file.isFile()) {
             InputStream in;
 
             // Tries to load the associations file. If an error occurs, create default associations.
@@ -426,9 +442,6 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
 
                 // The associations file is corrupt, discard anything we might have loaded from it.
                 associations = new Vector();
-
-                // Creates the default associations.
-                PlatformManager.registerDefaultAssociations();
             }
 
             // Makes sure the input stream is closed.
@@ -439,10 +452,32 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
                 }
             }
         }
+
+        if(PlatformManager.EXE_ASSOCIATION != null) {
+            if((getCommandForAlias(EXE_OPENER_ALIAS) != null) && !isCommandAssociated(EXE_OPENER_ALIAS)) {
+                try {
+                    registerAssociation(PlatformManager.EXE_ASSOCIATION, EXE_OPENER_ALIAS);
+
+                    if(PlatformManager.RUN_EXECUTABLES && (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)) {
+                        registerAssociation(".*", CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, CommandAssociation.YES,
+                                            EXE_OPENER_ALIAS);
+                    }
+                }
+                catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
+            }
+        }
+
+        if(PlatformManager.CATCH_ALL_ASSOCIATION != null) {
+            if((getCommandForAlias(FILE_OPENER_ALIAS) != null) && !isCommandAssociated(FILE_OPENER_ALIAS)) {
+                try {registerAssociation(PlatformManager.CATCH_ALL_ASSOCIATION, FILE_OPENER_ALIAS);}
+                catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default file opener association: " + e.getMessage());}
+            }
+        }
+
         wereAssociationsModified = false;
     }
 
-    /**
+    /**,
      * Writes all registered associations to the custom associations file.
      * <p>
      * Data will be written to the path returned by {@link #getAssociationFile()}. Note, however,
@@ -585,11 +620,6 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
     /**
      * Loads the custom commands XML File.
      * <p>
-     * Data will be loaded from the path returned by {@link #getCommandFile()}. If the file doesn't exist,
-     * or an error occurs while loading it, {@link com.mucommander.PlatformManager#registerDefaultCommands() default}
-     * commands will be used.
-     * </p>
-     * <p>
      * The command files will be loaded as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupInputStream}).
      * Its format is described {@link CommandsXmlConstants here}.
      * </p>
@@ -605,13 +635,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
             Debug.trace("Loading custom commands from: " + file.getAbsolutePath());
 
         // If the file doesn't exist, registers default commands.
-        if(!file.isFile()) {
-            if(Debug.ON) Debug.trace("Commands file doesn't exist, using default commands.");
-            PlatformManager.registerDefaultCommands();
-        }
-
-        // Otherwise, loads custom commands.
-        else {
+        if(file.isFile()) {
             InputStream in;
 
             // Tries to load the associations file. If an error occurs, create default associations.
@@ -622,7 +646,6 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
 
                 // Creates the default associations.
                 commands = new Vector();
-                PlatformManager.registerDefaultCommands();
             }
 
             // Makes sure the input stream is closed.
@@ -633,7 +656,24 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
                 }
             }
         }
+
+        // Registers default commands if necessary.
+        // Default file opener.
+        registerDefaultCommand(FILE_OPENER_ALIAS, PlatformManager.DEFAULT_FILE_OPENER_COMMAND, null);
+        registerDefaultCommand(URL_OPENER_ALIAS, PlatformManager.DEFAULT_URL_OPENER_COMMAND, null);
+        registerDefaultCommand(EXE_OPENER_ALIAS, PlatformManager.DEFAULT_EXE_OPENER_COMMAND, null);
+        registerDefaultCommand(FILE_MANAGER_ALIAS, PlatformManager.DEFAULT_FILE_MANAGER_COMMAND, PlatformManager.DEFAULT_FILE_MANAGER_NAME);
+
         wereCommandsModified = false;
+    }
+
+    private static void registerDefaultCommand(String alias, String command, String display) {
+        if(getCommandForAlias(alias) == null) {
+            if(command != null) {
+                try {registerCommand(CommandParser.getCommand(alias, command, Command.SYSTEM_COMMAND, display));}
+                catch(Exception e) {if(Debug.ON) Debug.trace("Failed to register " + command + ": " + e.getMessage());}
+            }
+        }
     }
 
 
