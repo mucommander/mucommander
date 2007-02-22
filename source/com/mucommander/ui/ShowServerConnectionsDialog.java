@@ -26,7 +26,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
     private Vector connections;
 
     private JButton disconnectButton;
-    private JButton doneButton;
+    private JButton closeButton;
 
     // Dialog's size has to be at least 400x300
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(400,300);
@@ -90,12 +90,12 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
         buttonsPanel.add(disconnectButton);
 
         // 'Done' button that closes the window
-        doneButton = new JButton(Translator.get("done"));
-        doneButton.setMnemonic(mnemonicHelper.getMnemonic(doneButton));
-        doneButton.addActionListener(this);
+        closeButton = new JButton(Translator.get("close"));
+        closeButton.setMnemonic(mnemonicHelper.getMnemonic(closeButton));
+        closeButton.addActionListener(this);
 
         buttonsPanel.add(Box.createHorizontalGlue());
-        buttonsPanel.add(doneButton);
+        buttonsPanel.add(closeButton);
 
         contentPane.add(buttonsPanel, BorderLayout.SOUTH);
 
@@ -103,7 +103,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
         setInitialFocusComponent(connectionList);
 
         // Selects 'Done' button when enter is pressed
-        getRootPane().setDefaultButton(doneButton);
+        getRootPane().setDefaultButton(closeButton);
 
         // Packs dialog
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
@@ -119,7 +119,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
         Object source = e.getSource();
 
         // Dispose the dialog
-        if (source==doneButton)  {
+        if (source== closeButton)  {
             dispose();
         }
         else if(source==disconnectButton) {
