@@ -2,13 +2,13 @@ package com.mucommander.ui.theme;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
+import com.mucommander.RuntimeConstants;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.res.ResourceListReader;
 import com.mucommander.text.Translator;
-import com.mucommander.RuntimeConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -155,7 +155,7 @@ public class ThemeManager {
         if(new File(getUserThemeFile()).exists()) {
 
             // Loads the user theme.
-            try {userTheme = new Theme(USER_THEME, Translator.get("user_theme"), null);}
+            try {userTheme = new Theme(USER_THEME, Translator.get("theme.custom_theme"), null);}
             catch(Exception e) {if(Debug.ON) Debug.trace("Impossible error: user theme loading threw an exception.");}
 
             // If we have some legacy data, save it as a backup custom theme.
@@ -168,7 +168,7 @@ public class ThemeManager {
             // If there is no legacy data, creates an empty user theme.
             if(legacyData == null) {
                 legacyData = new ThemeData();
-                userTheme  = new Theme(Translator.get("user_theme"), legacyData);
+                userTheme  = new Theme(Translator.get("theme.custom_theme"), legacyData);
 
                 // If the user theme file wasn't found but the configuration describes
                 // the current theme as the user theme, resets to defaults.
@@ -189,7 +189,7 @@ public class ThemeManager {
 	    else {
 		currentType = USER_THEME;
                 // Creates and saves the user theme.
-                userTheme            = new Theme(Translator.get("user_theme"), legacyData);
+                userTheme            = new Theme(Translator.get("theme.custom_theme"), legacyData);
                 wasUserThemeModified = true;
                 saveUserTheme();
             }
