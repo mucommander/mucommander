@@ -6,6 +6,7 @@
     <button action="com.mucommander.ui.action.GoForwardAction"/>
     <separator/>
     <button action="com.mucommander.ui.action.GoToParentAction"/>
+    <button action="com.mucommander.ui.action.GoToHomeAction"/>
     <separator/>
     <button action="com.mucommander.ui.action.StopAction"/>
     <separator/>
