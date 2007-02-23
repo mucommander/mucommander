@@ -271,7 +271,7 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns true if this file is a root folder that is:
+     * Returns true if this file is a root folder, that is:
      * <ul>
      *  <li>for all protocols other than 'file', if the URL's path part is '/'
      *  <li>for the 'file' protocol, '/' if the OS is not Windows, a drive root for Windows ('C:\' for instance)
