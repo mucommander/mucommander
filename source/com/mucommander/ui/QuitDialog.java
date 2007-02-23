@@ -1,7 +1,8 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 
@@ -44,7 +45,7 @@ public class QuitDialog extends QuestionDialog {
               Translator.get("quit_dialog.title"),
               Translator.get("quit_dialog.desc"),
               mainFrame,
-              new String[] {Translator.get("com.mucommander.ui.action.QuitAction.label"), Translator.get("cancel")},
+              new String[] {Translator.get(com.mucommander.ui.action.QuitAction.class.getName()+".label"), Translator.get("cancel")},
               new int[] {QUIT_ACTION, CANCEL_ACTION},
               0);
 		

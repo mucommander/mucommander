@@ -1,6 +1,7 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ToolBar;
@@ -22,7 +23,7 @@ public class ToggleToolBarAction extends MucoAction {
         super(mainFrame, false);
         setLabel(Translator.get(ConfigurationManager.getVariableBoolean(ConfigurationVariables.TOOLBAR_VISIBLE,
                                                                         ConfigurationVariables.DEFAULT_TOOLBAR_VISIBLE)
-                                ? "com.mucommander.ui.action.ToggleToolBarAction.hide":"com.mucommander.ui.action.ToggleToolBarAction.show"));
+                                ? com.mucommander.ui.action.ToggleToolBarAction.class.getName()+".hide":com.mucommander.ui.action.ToggleToolBarAction.class.getName()+".show"));
     }
 
     public void performAction() {
@@ -31,7 +32,7 @@ public class ToggleToolBarAction extends MucoAction {
         // Save the last toolbar visible state in the configuration, this will become the default for new MainFrame windows.
         ConfigurationManager.setVariableBoolean(ConfigurationVariables.TOOLBAR_VISIBLE, visible);
         // Change the label to reflect the new toolbar state
-        setLabel(Translator.get(visible?"com.mucommander.ui.action.ToggleToolBarAction.hide":"com.mucommander.ui.action.ToggleToolBarAction.show"));
+        setLabel(Translator.get(visible?com.mucommander.ui.action.ToggleToolBarAction.class.getName()+".hide":com.mucommander.ui.action.ToggleToolBarAction.class.getName()+".show"));
         // Show/hide the toolbar
         toolBar.setVisible(visible);
         mainFrame.validate();

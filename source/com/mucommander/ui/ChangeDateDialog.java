@@ -38,14 +38,14 @@ public class ChangeDateDialog extends FocusDialog implements ActionListener, Ite
 
 
     public ChangeDateDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, Translator.get("com.mucommander.ui.action.ChangeDateAction.label"), mainFrame);
+        super(mainFrame, Translator.get(com.mucommander.ui.action.ChangeDateAction.class.getName()+".label"), mainFrame);
 
         this.mainFrame = mainFrame;
         this.files = files;
 
         YBoxPanel yBoxPanel = new YBoxPanel();
 
-        yBoxPanel.add(new JLabel(Translator.get("com.mucommander.ui.action.ChangeDateAction.tooltip")+" :"));
+        yBoxPanel.add(new JLabel(Translator.get(com.mucommander.ui.action.ChangeDateAction.class.getName()+".tooltip")+" :"));
         yBoxPanel.addSpace(10);
 
         SpinnerDateModel sdm = new SpinnerDateModel();
@@ -105,7 +105,7 @@ public class ChangeDateDialog extends FocusDialog implements ActionListener, Ite
             dispose();
 
             // Starts copying files
-            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
+            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("progress_dialog.processing_files"));
             ChangeFileAttributesJob job = new ChangeFileAttributesJob(progressDialog, mainFrame, files,
                 nowRadioButton.isSelected()?System.currentTimeMillis():((SpinnerDateModel)dateSpinner.getModel()).getDate().getTime(),
                 recurseDirCheckBox.isSelected());

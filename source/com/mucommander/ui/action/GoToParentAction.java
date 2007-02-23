@@ -1,5 +1,6 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.event.ActivePanelListener;
@@ -8,6 +9,7 @@ import com.mucommander.ui.event.LocationListener;
 
 /**
  * This action changes the current folder of the currently active FolderPanel to the current folder's parent.
+ * This action only gets enabled when the current folder has a parent.
  *
  * @author Maxence Bernard
  */
@@ -23,12 +25,8 @@ public class GoToParentAction extends MucoAction implements ActivePanelListener,
         mainFrame.getFolderPanel1().getLocationManager().addLocationListener(this);
         mainFrame.getFolderPanel2().getLocationManager().addLocationListener(this);
 
+        // Set initial state
         toggleEnabledState();
-    }
-
-
-    public void performAction() {
-        mainFrame.getActiveTable().getFolderPanel().goToParent();
     }
 
 
@@ -41,6 +39,20 @@ public class GoToParentAction extends MucoAction implements ActivePanelListener,
     }
 
 
+    ///////////////////////////////
+    // MucoAction implementation //
+    ///////////////////////////////
+
+    public void performAction() {
+        // Changes the current folder to make it the current folder's parent.
+        // Does nothing if the current folder doesn't have a parent.
+        AbstractFile parent;
+        FolderPanel folderPanel = mainFrame.getActiveTable().getFolderPanel();
+        if((parent=folderPanel.getCurrentFolder().getParent())!=null)
+            folderPanel.tryChangeCurrentFolder(parent);
+    }
+
+    
     /////////////////////////////////
     // ActivePanelListener methods //
     /////////////////////////////////

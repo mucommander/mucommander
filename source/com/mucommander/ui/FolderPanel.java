@@ -496,15 +496,15 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
 
-    /**
-     * Changes current folder to be the current folder's parent.
-     * Does nothing if current folder doesn't have a parent. 
-     */
-    public synchronized void goToParent() {
-        AbstractFile parent;
-        if((parent=getCurrentFolder().getParent())!=null)
-            tryChangeCurrentFolder(parent);
-    }
+//    /**
+//     * Changes current folder to be the current folder's parent.
+//     * Does nothing if current folder doesn't have a parent. 
+//     */
+//    public synchronized void goToParent() {
+//        AbstractFile parent;
+//        if((parent=getCurrentFolder().getParent())!=null)
+//            tryChangeCurrentFolder(parent);
+//    }
 
 
     /**

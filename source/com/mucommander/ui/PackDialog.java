@@ -59,7 +59,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
 
 
     public PackDialog(MainFrame mainFrame, FileSet files, boolean isShiftDown) {
-        super(mainFrame, Translator.get("com.mucommander.ui.action.PackAction.label"), mainFrame);
+        super(mainFrame, Translator.get(com.mucommander.ui.action.PackAction.class.getName()+".label"), mainFrame);
 
         this.mainFrame = mainFrame;
         this.files = files;

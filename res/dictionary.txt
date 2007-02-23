@@ -1527,6 +1527,21 @@ com.mucommander.ui.action.GoForwardAction.tooltip:SI:Naslednja mapa
 com.mucommander.ui.action.GoForwardAction.tooltip:RO:Mergi în directorul următor
 com.mucommander.ui.action.GoForwardAction.tooltip:IT:Vai alla cartella seguente
 
+com.mucommander.ui.action.GoToHomeAction.label:EN:Go to home folder
+com.mucommander.ui.action.GoToHomeAction.label:FR:Aller au dossier utilisateur
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
 com.mucommander.ui.action.GoToParentAction.label:EN:Go to parent
 com.mucommander.ui.action.GoToParentAction.label:FR:Dossier parent
 com.mucommander.ui.action.GoToParentAction.label:DE:Gehe Ebene höher
@@ -1554,6 +1569,21 @@ com.mucommander.ui.action.GoToParentAction.tooltip:ZH_CN:到父文件夹
 com.mucommander.ui.action.GoToParentAction.tooltip:SI:Izvorna mapa
 com.mucommander.ui.action.GoToParentAction.tooltip:RO:Mergi în directorul părinte
 com.mucommander.ui.action.GoToParentAction.tooltip:IT:Vai alla cartella superiore 
+
+com.mucommander.ui.action.GoToRootAction.label:EN:Go to root
+com.mucommander.ui.action.GoToRootAction.label:FR:Aller à la racine
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
 
 com.mucommander.ui.action.SortByNameAction.label:EN:Sort by Name
 com.mucommander.ui.action.SortByNameAction.label:FR:Trier par Nom
@@ -1711,19 +1741,33 @@ com.mucommander.ui.action.UnmarkAllAction.label:SI:Odznači vse
 com.mucommander.ui.action.UnmarkAllAction.label:RO:Deselectează tot
 com.mucommander.ui.action.UnmarkAllAction.label:IT:Deseleziona tutto
 
-com.mucommander.ui.action.MarkSelectedFileAction.label:EN:Mark/Unmark selected file
-com.mucommander.ui.action.MarkSelectedFileAction.label:FR:Marquer/Dé-marquer le fichier sélectionné
-com.mucommander.ui.action.MarkSelectedFileAction.label:DE:Datei markieren/demarkieren
-com.mucommander.ui.action.MarkSelectedFileAction.label:ES:Marcar/Desmarcar los ficheros seleccionados
-com.mucommander.ui.action.MarkSelectedFileAction.label:CS:Označit/Odznačit vybraný soubor
-com.mucommander.ui.action.MarkSelectedFileAction.label:zh_TW:標記/取消標記 已選取檔案
-com.mucommander.ui.action.MarkSelectedFileAction.label:PL:Zaznacz/Odznacz wybrany plik
-com.mucommander.ui.action.MarkSelectedFileAction.label:HU:kijelöli/visszavonja a kiválasztott fájlt
-com.mucommander.ui.action.MarkSelectedFileAction.label:RU:Выделить/снять выделение выбранного файла
-com.mucommander.ui.action.MarkSelectedFileAction.label:ZH_CN:标记/取消标记 选定文件
-com.mucommander.ui.action.MarkSelectedFileAction.label:SI:Označi/Odznači izbrano datoteko
-com.mucommander.ui.action.MarkSelectedFileAction.label:RO:Selectează/Deselectează fișier
-com.mucommander.ui.action.MarkSelectedFileAction.label:IT:Seleziona/Deseleziona file
+com.mucommander.ui.action.MarkSelectedFileAction.label:EN:Mark/unmark
+com.mucommander.ui.action.MarkSelectedFileAction.label:FR:Marquer/dé-marquer
+com.mucommander.ui.action.MarkSelectedFileAction.label:DE:Markieren/demarkieren
+com.mucommander.ui.action.MarkSelectedFileAction.label:ES:Marcar/Desmarcar
+com.mucommander.ui.action.MarkSelectedFileAction.label:CS:Označit/Odznačit
+com.mucommander.ui.action.MarkSelectedFileAction.label:zh_TW:標記/取消標記
+com.mucommander.ui.action.MarkSelectedFileAction.label:PL:Zaznacz/Odznacz
+com.mucommander.ui.action.MarkSelectedFileAction.label:HU:kijelöli/visszavonja
+com.mucommander.ui.action.MarkSelectedFileAction.label:RU:Выделить/снять
+com.mucommander.ui.action.MarkSelectedFileAction.label:ZH_CN:标记/取消标记
+com.mucommander.ui.action.MarkSelectedFileAction.label:SI:Označi/Odznači
+com.mucommander.ui.action.MarkSelectedFileAction.label:RO:Selectează/Deselectează
+com.mucommander.ui.action.MarkSelectedFileAction.label:IT:Seleziona/Deseleziona
+
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:EN:Mark/Unmark selected file
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:FR:Marquer/Dé-marquer le fichier sélectionné
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:DE:Datei markieren/demarkieren
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:ES:Marcar/Desmarcar los ficheros seleccionados
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:CS:Označit/Odznačit vybraný soubor
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:zh_TW:標記/取消標記 已選取檔案
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:PL:Zaznacz/Odznacz wybrany plik
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:HU:kijelöli/visszavonja a kiválasztott fájlt
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:RU:Выделить/снять выделение выбранного файла
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:ZH_CN:标记/取消标记 选定文件
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:SI:Označi/Odznači izbrano datoteko
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:RO:Selectează/Deselectează fișier
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:IT:Seleziona/Deseleziona file
 
 com.mucommander.ui.action.InvertSelectionAction.label:EN:Invert selection
 com.mucommander.ui.action.InvertSelectionAction.label:FR:Inverser sélection
@@ -2579,9 +2623,26 @@ view_menu.show_hide_columns:IT:Mostra/Nascondi colonne
 
 
 
-#################
+
+###########
+# Go menu #
+###########
+
+go_menu:EN:Go
+go_menu:FR:Go
+# Translation missing
+
+
+
+
+
+
+
+
+
+##################
 # Bookmarks menu #
-#################
+##################
 
 # Title of the Bookmarks menu
 bookmarks_menu:EN:Bookmarks
@@ -4011,6 +4072,33 @@ progress_dialog.close_when_finished:FR:Fermer la fenêtre lorsque terminé
 progress_dialog.close_when_finished:SI:Po prenosu zapri okno
 progress_dialog.close_when_finished:IT:Chiudi finestra quando finito
 # Translation missing
+
+
+
+
+
+
+
+
+
+progress_dialog.processing_files:EN:Processing files
+progress_dialog.processing_files:FR:Traitement des fichiers en cours
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+progress_dialog.processing_file:EN:Processing %1
+progress_dialog.processing_file:FR:Traitement de %1 en cours
+# Translation missing
+
 
 
 

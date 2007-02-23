@@ -1,4 +1,3 @@
-
 package com.mucommander.ui;
 
 import com.mucommander.PlatformManager;
@@ -40,7 +39,7 @@ import java.util.WeakHashMap;
  */
 public class MainMenuBar extends JMenuBar implements ActionListener, MenuListener {
 
-    private MainFrame mainFrame;	
+    private MainFrame mainFrame;
 
     // View menu
     private JMenu viewMenu;
@@ -89,10 +88,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
      */
     public MainMenuBar(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-		
+
         MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
-		
+
         // File menu
         JMenu fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(NewWindowAction.class, mainFrame), menuItemMnemonicHelper);
@@ -124,13 +123,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CheckForUpdatesAction.class, mainFrame), menuItemMnemonicHelper);
-		
+
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CloseWindowAction.class, mainFrame), menuItemMnemonicHelper);
         // Under Mac OS X, 'Quit' already appears in the application (muCommander) menu, do not display it again
 		if(PlatformManager.OS_FAMILY!=PlatformManager.MAC_OS_X)
             MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(QuitAction.class, mainFrame), menuItemMnemonicHelper);
-        
+
         add(fileMenu);
 
         // Mark menu
@@ -206,9 +205,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         // Save the first bookmark menu item's offset for later (bookmarks will be added when menu becomes visible)
         this.bookmarksOffset = bookmarksMenu.getItemCount();
-		
+
         add(bookmarksMenu);
-		
+
         // Window menu
         menuItemMnemonicHelper.clear();
 
@@ -239,7 +238,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         this.windowOffset = windowMenu.getItemCount();
 
         add(windowMenu);
-		
+
         // Help menu
         menuItemMnemonicHelper.clear();
         JMenu helpMenu = MenuToolkit.addMenu(Translator.get("help_menu"), menuMnemonicHelper, null);

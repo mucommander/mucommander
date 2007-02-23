@@ -36,7 +36,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
     
     public ShowServerConnectionsDialog(MainFrame mainFrame) {
-        super(mainFrame, Translator.get("com.mucommander.ui.action.ShowServerConnectionsAction.label"), mainFrame);
+        super(mainFrame, Translator.get(com.mucommander.ui.action.ShowServerConnectionsAction.class.getName()+".label"), mainFrame);
 
         Container contentPane = getContentPane();
 

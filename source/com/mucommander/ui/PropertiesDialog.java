@@ -51,7 +51,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 
         // Set dialog's title
         if(files.size()>1)
-            this.title = Translator.get("com.mucommander.ui.action.ShowFilePropertiesAction.label");
+            this.title = Translator.get(com.mucommander.ui.action.ShowFilePropertiesAction.class.getName()+".label");
         else
             this.title = Translator.get("properties_dialog.file_properties", files.fileAt(0).getName());
 

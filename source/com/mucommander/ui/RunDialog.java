@@ -146,7 +146,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
      * @param mainFrame the main frame this dialog is attached to.
      */
     public RunDialog(MainFrame mainFrame) {
-        super(mainFrame, Translator.get("com.mucommander.ui.action.RunCommandAction.label"), mainFrame);
+        super(mainFrame, Translator.get(com.mucommander.ui.action.RunCommandAction.class.getName()+".label"), mainFrame);
         this.mainFrame = mainFrame;
 		
         // Initialises the dialog's UI.

@@ -1,6 +1,5 @@
 package com.mucommander.job;
 
-import com.mucommander.Debug;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
@@ -72,8 +71,6 @@ public class ChangeFileAttributesJob extends FileJob {
             while(true);
         }
 
-if(Debug.ON) Debug.trace("changing attributes on "+file.getAbsolutePath());
-
         if(permissions!=-1)
             return file.setPermissions(permissions);
 
@@ -82,7 +79,7 @@ if(Debug.ON) Debug.trace("changing attributes on "+file.getAbsolutePath());
     }
 
     public String getStatusString() {
-        return "";
+        return Translator.get("progress_dialog.processing_file", getCurrentFileInfo());
     }
 
     // This job modifies the FileSet's base folder and potentially its subfolders

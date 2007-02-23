@@ -51,14 +51,14 @@ public class ChangePermissionsDialog extends FocusDialog implements FilePermissi
 
 
     public ChangePermissionsDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, Translator.get("com.mucommander.ui.action.ChangePermissionsAction.label"), mainFrame);
+        super(mainFrame, Translator.get(com.mucommander.ui.action.ChangePermissionsAction.class.getName()+".label"), mainFrame);
 
         this.mainFrame = mainFrame;
         this.files = files;
 
         YBoxPanel yBoxPanel = new YBoxPanel();
 
-        yBoxPanel.add(new JLabel(Translator.get("com.mucommander.ui.action.ChangePermissionsAction.tooltip")+" :"));
+        yBoxPanel.add(new JLabel(Translator.get(com.mucommander.ui.action.ChangePermissionsAction.class.getName()+".tooltip")+" :"));
         yBoxPanel.addSpace(10);
 
         JPanel gridPanel = new JPanel(new GridLayout(4, 4));
@@ -212,7 +212,7 @@ public class ChangePermissionsDialog extends FocusDialog implements FilePermissi
             dispose();
 
             // Starts copying files
-            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
+            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("progress_dialog.processing_files"));
             ChangeFileAttributesJob job = new ChangeFileAttributesJob(progressDialog, mainFrame, files, getPermInt(), recurseDirCheckBox.isSelected());
             progressDialog.start(job);
         }
