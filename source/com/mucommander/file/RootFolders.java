@@ -44,7 +44,7 @@ public class RootFolders {
         }
 
         // Add home folder
-        AbstractFile homeFolder = FileFactory.getFile(System.getProperty("user.home"));
+        AbstractFile homeFolder = getUserHomeFolder();
         if(homeFolder!=null)
             rootFoldersV.add(homeFolder);
 			
@@ -52,6 +52,15 @@ public class RootFolders {
         rootFoldersV.toArray(rootFolders);
 	
         return rootFolders;
+    }
+
+
+    /**
+     * Returns the user home folder. Most if not all OSes have one, but in the unlikely event the OS doesn't have one
+     * or the folder can't be resolved, <code>null</code> will be returned.
+     */
+    public static AbstractFile getUserHomeFolder() {
+        return FileFactory.getFile(System.getProperty("user.home"));
     }
 
 	
