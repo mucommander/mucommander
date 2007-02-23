@@ -64,10 +64,14 @@
   <!-- Default : alt RIGHT                                                       -->
   <action class="com.mucommander.ui.action.GoForwardAction"             keystroke="alt RIGHT"/>
 
-  <!-- Action  : Go back (in directory structure).                               -->
+  <!-- Action  : Go to the current folder's parent folder                        -->
   <!-- Default : BACK_SPACE, LEFT                                                -->
   <action class="com.mucommander.ui.action.GoToParentAction"            keystroke="BACK_SPACE"
                                                                         alt_keystroke="LEFT"/>
+
+  <!-- Action  : Go to the current folder's root folder                          -->
+  <!-- Default : shift BACK_SPACE                                                -->
+  <action class="com.mucommander.ui.action.GoToRootAction"              keystroke="shift BACK_SPACE"/>
 
   <!-- Action  : Invert current selection (ignoring folders).                    -->
   <!-- Default : MULTIPLY                                                        -->
