@@ -1,6 +1,5 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.FolderPanel;
 import com.mucommander.ui.MainFrame;
 
@@ -20,10 +19,6 @@ public class GoToRootAction extends GoToParentAction {
         // Changes the current folder to make it the current folder's root folder.
         // Does nothing if the current folder already is the root.
         FolderPanel folderPanel = mainFrame.getActiveTable().getFolderPanel();
-        AbstractFile currentFolder = folderPanel.getCurrentFolder();
-        AbstractFile root = currentFolder.getRoot();
-
-        if(!currentFolder.equals(root))
-            folderPanel.tryChangeCurrentFolder(root);
+        folderPanel.tryChangeCurrentFolder(folderPanel.getCurrentFolder().getRoot());
     }
 }
