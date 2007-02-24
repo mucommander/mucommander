@@ -87,6 +87,180 @@ Many thanks to all of you who suggested new features, reported bugs, sent warm e
 
 
 
+Command Line Interface
+----------------------
+
+v0.8 beta 3 (nightly build) comes with a few command line switches.
+The following options are available:
+ -a FILE, --assoc FILE             Load associations from FILE.
+ -b FILE, --bookmarks FILE         muCommander bookmarks will be read from and written to FILE.
+ -c FILE, --configuration FILE     muCommander configuration will be read from and written to FILE.
+ -C FILE, --commandbar FILE        muCommander command bar description will be read from and written to FILE.
+ -f FILE, --commands FILE          Load custom commands from FILE.
+ -k FILE, --keymap FILE            muCommander shortcuts will be read from and written to FILE.
+ -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER.
+ -s FILE, --shell-history FILE     muCommander shell history will be read from and written to FILE.
+ -t FILE, --toolbar FILE           muCommander toolbar configuration will be read from and written to FILE.
+ -h, --help                        Print the help text and exit
+ -v, --version                     Print the version and exit
+
+In addition to these, muCommander will interpret anything that comes after the last switch as a URI and load it
+in its windows. So for example:
+
+ mucommander -b ~/.bookmarks.xml ftp://user@myftp.com ~/dev http://slashdot.org
+
+Will:
+ - read bookmarks from ~/bookmarks.xml
+ - load a connection to myftp.com in the left panel of the main window
+ - load ~/dev in the right panel of the main window
+ - open a second window and load http://slashdot.org in its left panel
+ - load the default directory in the second window's fourth panel
+
+
+
+Advanced configuration
+----------------------
+
+v0.8 beta 3 (nightly build) has some advanced configuration options which cannot (yet) be accessed through the GUI.
+After having booted the application for the first time, the following files will be created in muCommander's preference
+folder:
+ - action_keymap.xml (keyboard shortcuts description file).
+ - command_bar.xml   (commandbar description file).
+ - toolbar.xml       (toolbar description file).
+
+Brave users can edit these XML files and tune muCommander to their own needs. Here are a few hints on how to edit these files.
+
+
+ - action_keymap.xml
+All customisable actions are listed in that file, using the following format:
+<action class="com.mucommander.ui.action.CopyFileNamesAction" keystroke="alt C" alt_keystroke="meta C"/>
+
+It's probably safer not to mess around with the class argument, as this could actually remove features from muCommander.
+keystroke and alt_keystroke should be fairly safe explanatory. It's important to note, however, that due to Java's capricious
+nature, the case is important. CONTROL C will not be understood, and neither will control c.
+
+
+
+ - command_bar.xml
+This file describes the content of your command bar (the bit will all the buttons on the lower part of the window).
+Each item in the file corresponds to a button in the bar. You can edit them, add some or remove some.
+
+The syntax is as follows:
+<button action="com.mucommander.ui.action.CopyAction" alt_action="com.mucommander.ui.action.LocalCopyAction"/>
+Where:
+ - action is the main action executed by the button
+ - alt_action is the action executed by the button when the shift key is held down
+
+For a list of legal actions, please refer to action_keymap.xml
+
+
+
+ - toolbar.xml
+This file controls the content of your toolbar. It works in the same way as command_bar.xml, with two notable differences:
+  - you can use a <separator/> element to add a separator in the toolbar
+  - alt_action is not available
+
+
+
+- commands.xml
+This file controls the various system commands that muCommander can call. They will be initialised according to the system
+muCommander is running on, but you might not be happy with the default set of commands, or might want to create items that will
+appear in the 'Open with...' contextual menu.
+
+This file is not (yet) written by muCommander, so you have to create it manually for the time being.
+
+It looks something like this:
+<?xml version="1.0" encoding="UTF-8"?>
+<commands>
+    <command alias="Safari"                  value="open -a Safari $f"/>
+    <command alias="open"   type="system"    value="open $f"/>
+    <command alias="Finder" type="invisible" value="open -a Finder $f"/>
+</commands>
+
+Each command has the following attributes:
+- alias: name that muCommander will use to refer to / display the command. It must be unique.
+- type:  the commands, well, type. It can be either system, invisible, or not set. A system command
+         is invisible and, once muCommander will have a GUI to modify this file, read-only.
+         An invisible command is not visible to users (ie, will not appear in the 'Open with...' menu).
+- value: the command to execute. Write it as you would a shell command, with the following tokens:
+         $f will be replaced by the file's full path. $n will be replaced by the file's name. $p will
+         be replaced by the file's parent directory. $j will be replaced by the JVM's current directory.
+
+You must be extremely careful when editing this file, as it's quite easy to break muCommander by fiddling with
+it. Make sure that the system's default commands are always present, and that you do not change their attributes.
+- Windows 9x:
+<command alias="open"     type="system"    value="start &quot;$f&quot;"/>
+<command alias="Explorer" type="invisible" value="start &quot;$f&quot;"/>
+
+- Windows NT:
+<command alias="open"     type="system"    value="cmd /c start &quot;&quot; &quot;$f&quot;"/>
+<command alias="openEXE"  type="system"    value="cmd /c $f" execute="yes"/>
+<command alias="Explorer" type="invisible" value="cmd /c start &quot;&quot; &quot;$f&quot;"/>
+
+- Mac OS X:
+<command alias="open"   type="system"    value="open $f"/>
+<command alias="Finder" type="invisible" value="open -a Finder $f"/>
+
+- KDE:
+<command alias="open"      type="system"    value="kfmclient exec $f"/>
+<command alias="openURL"   type="system"    value="kfmclient openURL exec $f"/>
+<command alias="Konqueror" type="invisible" value="kfmclient exec $f"/>
+
+- Gnome:
+<command alias="open"     type="system"    value="gnome-open $f"/>
+<command alias="Nautilus" type="invisible" value="gnome-open $f"/>
+
+- Anything else:
+<command alias="openEXE" type="system" value="$f"/>
+
+
+
+- associations.xml
+This file controls muCommander's custom file associations. They will be initialised according to the system muCommander
+is running on and depend on commands.xml.
+
+This file is not (yet) written by muCommander, so you have to create it manually for the time being.
+
+It looks something like this:
+<?xml version="1.0" encoding="UTF-8"?>
+<associations>
+    <association mask=".*" command="open"/>
+</associations>
+
+Each association has the following attributes:
+- mask:    regular expression that the file name must match in order to be managed by the association.
+- read:    if set to 'yes', a file must be readable in order to be matched by the association.
+- write:   if set to 'yes', a file must be writable in order to be matched by the association.
+- execute: if set to 'yes', a file must be executable in order to be matched by the association.
+- command: the alias of the command to execute for this type of files.
+
+You must be extremely careful when editing this file, as it's quite easy to break muCommander by fiddling with
+it. Make sure that the system's default associations are always present, and that you do not change their attributes.
+- Windows 9x:
+<association mask=".*" command="open"/>
+
+- Windows NT:
+<association mask=".*\\.[eE][xX][eE]" command="openEXE"/>
+<association mask=".*" command="open"/>
+
+- Mac OS X:
+<association mask=".*" command="open"/>
+
+- Gnome:
+<association mask="[^.]+" command="execute"/> <!-- Only if running on Java prior to 1.6 -->
+<association mask=".*"    command="execute" execute="yes"/>
+<association mask=".*"    command="open"/>
+
+- KDE:
+<association mask="^https?:\\/\\/.+" command="openURL"/>
+<association mask=".*"               command="open"/>
+
+- Anything else:
+<association mask="[^.]+" command="execute"/> <!-- Only if running on Java prior to 1.6 -->
+<association mask=".*"    command="execute"/>
+
+
+
 What's new since v0.8 beta 2 ?
 ------------------------------
 
@@ -97,7 +271,7 @@ New features:
  - Drag and Drop support: files can be copied or moved to and from muCommander windows and other applications, current folder can be changed by dropping a file or folder on the location field
  - Clipboard support: files can be copied and pasted to/from the clipboard (Ctrl+C / Ctrl+V by default), works with other applications
  - New quick search with visual feedback, editable search string, jump to next/previous matches and ability to cancel it
- - Connection pooling (SFTP,FTP) and automatic disconnection after timeout, active connections can be listed and closed
+ - Connection pooling (SFTP,FTP) and automatic disconnection after timeout, active connections can be listed and closed (Shift+Ctrl+K by default)
  - New file transfer progress window with 'Pause'/'Resume', 'Skip' current file and speed limit options, current/total remaining time, elapsed time, current speed and speed graph, and option to leave the window open when finished
  - Zip, Tar, Gzip, Bzip2 archives can now be created
  - Read support for ISO and NRG images over local and SMB filesystems (contributed by Xavier Martin)
@@ -116,12 +290,13 @@ New features:
  - Icons magnification option for toolbar, command bar and files
  - New credentials management: authentication dialog allows to choose between credentials matching a location, persistent credentials can be edited using the 'Edit credentials' dialog, passwords are (weakly) encrypted when stored to disk
  - New and improved 'Edit bookmarks' dialog
+ - New 'Go' menu
  - New 'Copy name(s)' and 'Copy path(s)' actions to copy marked files names / paths (Alt+C / Shift+Alt+C by default)
  - New 'Mkfile' action (Shift+F7 by default)
  - New 'Mark page up/page down' action (Shift+Page Up/Shift+Page Down by default)
  - New 'Mark up to first/last row' action (Shift+Home/Shift+End by default)
  - New 'Split horizontally', 'Split vertically', 'Split equally' actions in 'Window' menu
- - Added option to 'View' menu to hide certain columns
+ - Added show/hide columns to 'View' menu
  - 'Reveal in desktop' now available for Windows, KDE, GNOME (on top of Mac OS X)
  - Ability to open files with native file associations under KDE and GNOME
  - Ability to open URLs under KDE and GNOME
