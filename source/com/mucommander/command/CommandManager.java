@@ -105,8 +105,15 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
 
         // If we've reached that point, no command has been found. Returns the default command
         // if we're allowed.
-        if(allowDefault)
-            return RUN_AS_EXECUTABLE_COMMAND;
+        if(allowDefault) {
+            Command command;
+
+            // If the 'open' command is defined, use that as default.
+            // Otherwise, try to run the file as an executable file.
+            if((command = getCommandForAlias(FILE_OPENER_ALIAS)) == null)
+                return RUN_AS_EXECUTABLE_COMMAND;
+            return command;
+        }
         return null;
     }
 
@@ -453,22 +460,26 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
             }
         }
 
-        if(PlatformManager.EXE_ASSOCIATION != null) {
-            if((getCommandForAlias(EXE_OPENER_ALIAS) != null) && !isCommandAssociated(EXE_OPENER_ALIAS)) {
-                try {
-                    registerAssociation(PlatformManager.EXE_ASSOCIATION, EXE_OPENER_ALIAS);
+        // If an 'openEXE' command was registered:
+        // - if the system has an association for that command, use it.
+        // - if the system should try to run executable files, creates the corresponding association.
+        if(getCommandForAlias(EXE_OPENER_ALIAS) != null) {
+            // Uses the 'executable' regexp if it exists.
+            if(PlatformManager.EXE_ASSOCIATION != null) {
+                try {registerAssociation(PlatformManager.EXE_ASSOCIATION, EXE_OPENER_ALIAS);}
+                catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
+            }
 
-                    if(PlatformManager.RUN_EXECUTABLES && (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)) {
-                        registerAssociation(".*", CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, CommandAssociation.YES,
-                                            EXE_OPENER_ALIAS);
-                    }
-                }
+            // Match executables if necessary and if running under java >= 1.6.
+            if(PlatformManager.RUN_EXECUTABLES && (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)) {
+                try {registerAssociation(".*", CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, CommandAssociation.YES, EXE_OPENER_ALIAS);}
                 catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
             }
         }
 
+        // If the system has a catch-all association and the 'open' command exists, registers it as the default file opener.
         if(PlatformManager.CATCH_ALL_ASSOCIATION != null) {
-            if((getCommandForAlias(FILE_OPENER_ALIAS) != null) && !isCommandAssociated(FILE_OPENER_ALIAS)) {
+            if(getCommandForAlias(FILE_OPENER_ALIAS) != null) {
                 try {registerAssociation(PlatformManager.CATCH_ALL_ASSOCIATION, FILE_OPENER_ALIAS);}
                 catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default file opener association: " + e.getMessage());}
             }

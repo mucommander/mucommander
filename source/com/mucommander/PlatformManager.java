@@ -286,8 +286,8 @@ public class PlatformManager {
             DEFAULT_URL_OPENER_COMMAND   = null;
             DEFAULT_EXE_OPENER_COMMAND   = POSIX_EXE_OPENER;
             CATCH_ALL_ASSOCIATION        = null;
-            EXE_ASSOCIATION              = POSIX_EXE_REGEXP;
             RUN_EXECUTABLES              = true;
+            EXE_ASSOCIATION              = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
         }
         // Unix, or assimilated.
         else {
@@ -334,8 +334,8 @@ public class PlatformManager {
                 DEFAULT_URL_OPENER_COMMAND   = GNOME_FILE_OPENER;
                 DEFAULT_EXE_OPENER_COMMAND   = POSIX_EXE_OPENER;
                 CATCH_ALL_ASSOCIATION        = ALL_FILES_REGEXP;
-                EXE_ASSOCIATION              = POSIX_EXE_REGEXP;
                 RUN_EXECUTABLES              = true;
+                EXE_ASSOCIATION              = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
             }
 
             // Tries to identify KDE.
@@ -360,8 +360,8 @@ public class PlatformManager {
                 DEFAULT_URL_OPENER_COMMAND   = null;
                 DEFAULT_EXE_OPENER_COMMAND   = POSIX_EXE_OPENER;
                 CATCH_ALL_ASSOCIATION        = null;
-                EXE_ASSOCIATION              = POSIX_EXE_REGEXP;
                 RUN_EXECUTABLES              = true;
+                EXE_ASSOCIATION              = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
             }
         }
 
