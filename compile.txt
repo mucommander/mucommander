@@ -47,6 +47,8 @@ of the project to local.xml and edit it:
   This jar file is meant for debug, and running it will output a fair amount
   of tracing information.
 - ant obfuscate. This will compile and obfuscate all the Java files and store
-  the binaries in /path/to/mucommander/dist/mucommander.jar. The resulting
-  jar file will not contain debug code anymore, and is the one we use for
-  release.
+  the binaries in /path/to/mucommander/dist/mucommander_obf.jar. The resulting
+  jar file will not contain debug code anymore.
+- and compress. This is identical to ant obfuscate, but will compress the jar file
+  even more and store it in /path/to/mucommander/dist/mucommander.jar. This is the
+  file we use for release.
