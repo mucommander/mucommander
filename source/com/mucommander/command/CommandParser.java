@@ -183,7 +183,7 @@ public class CommandParser {
      * @param  tokenTypes optional array in which to store information about potential keywords.
      * @return            the number of tokens that were found.
      */
-    private static final int parse(String command, String[] tokens, boolean[] tokenTypes) {
+    private static int parse(String command, String[] tokens, boolean[] tokenTypes) {
         char[]       buffer;        // All the characters that compose command.
         int          tokenIndex;    // Index of the current token in tokens[];
         StringBuffer currentToken;  // Buffer for the current token.

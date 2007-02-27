@@ -50,7 +50,7 @@ public class BackupInputStream extends FilterInputStream implements BackupConsta
      * @return                a stream on the right file.
      * @exception IOException thrown if any IO related error occurs.
      */
-    private static final InputStream getInputStream(AbstractFile file) throws IOException {
+    private static InputStream getInputStream(AbstractFile file) throws IOException {
         AbstractFile backup;
 
         // Checks whether the backup file is a better choice than the target one.

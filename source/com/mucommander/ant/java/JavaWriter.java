@@ -118,7 +118,7 @@ public class JavaWriter {
      * @return                             the label of the specified type.
      * @exception IllegalArgumentException thrown if <code>type</code> is not known.
      */
-    private final String getTypeLabel(int type) throws IllegalArgumentException {
+    private String getTypeLabel(int type) throws IllegalArgumentException {
         switch(type) {
         case TYPE_INT:
             return LABEL_INT;
@@ -147,7 +147,7 @@ public class JavaWriter {
      * Print the specified modifier's label.
      * @param modifier description of the modifiers to print.
      */
-    private final void printModifier(int modifier) {
+    private void printModifier(int modifier) {
         // Prints the public modifier if necessary
         if((modifier & MODIFIER_PUBLIC) != 0) {
             out.print(LABEL_PUBLIC);

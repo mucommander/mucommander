@@ -1074,7 +1074,7 @@ public class ThemeManager {
      * @param  path path of the theme whose name should be computed.
      * @return      the proper name of the theme.
      */
-    private static final String getThemeName(String path) {return path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));}
+    private static String getThemeName(String path) {return path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));}
 
     /**
      * Returns the current look and feel's text area font.

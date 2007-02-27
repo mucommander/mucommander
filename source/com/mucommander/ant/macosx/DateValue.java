@@ -193,7 +193,7 @@ public class DateValue implements InfoElement {
      * @param value  value to write to the XML output stream.
      * @param digits minimum number of digits the value must have.
      */
-    private static final void writeValue(XmlWriter out, Integer value, int digits) {
+    private static void writeValue(XmlWriter out, Integer value, int digits) {
         String buffer;
 
         buffer = value.toString();
@@ -215,7 +215,7 @@ public class DateValue implements InfoElement {
      * @param month identifier of the month as defined in {@link java.util.Calendar}.
      * @return      the number of the month in the year.
      */
-    private static final int getMonthNumber(int month) throws BuildException {
+    private static int getMonthNumber(int month) throws BuildException {
         switch(month) {
         case Calendar.JANUARY:
             return 1;
@@ -252,7 +252,7 @@ public class DateValue implements InfoElement {
      * @param  day   day whose validity must be checked.
      * @return       <code>true</code> if the day is valid, <code>false</code> otherwise.
      */
-    private static final boolean checkDay(int year, int month, int day) {
+    private static boolean checkDay(int year, int month, int day) {
         Calendar date;
 
         date = Calendar.getInstance();

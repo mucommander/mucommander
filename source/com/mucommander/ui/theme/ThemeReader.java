@@ -772,11 +772,11 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
 
     // - Error generation methods --------------------------------------------
     // -----------------------------------------------------------------------
-    private final void traceIllegalDeclaration(String element) {
+    private void traceIllegalDeclaration(String element) {
         unknownElement = element;
         if(Debug.ON)
             Debug.trace("Illegal element declaration: " + element);
     }
 
-    private static final void traceIllegalClosing(String element) {Debug.trace("Illegal element closure: " + element);}
+    private static void traceIllegalClosing(String element) {Debug.trace("Illegal element closure: " + element);}
 }

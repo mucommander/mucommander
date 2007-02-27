@@ -37,7 +37,7 @@ public class Launcher {
     /**
      * Prints muCommander's command line usage and exits.
      */
-    private static final void printUsage() {
+    private static void printUsage() {
         System.out.println("Usage: mucommander [options] [folders]");
         System.out.println("Options:");
 
@@ -84,7 +84,7 @@ public class Launcher {
     /**
      * Prints muCommander's version to stdout and exits.
      */
-    private static final void printVersion() {
+    private static void printVersion() {
         System.out.println(RuntimeConstants.APP_STRING);
         System.out.print("Copyright (c) ");
         System.out.print(RuntimeConstants.COPYRIGHT);
@@ -99,7 +99,7 @@ public class Launcher {
      * Prints the specified error message to stderr and exits with an error code.
      * @param msg error message to print to stder.
      */
-    private static final void printError(String msg) {
+    private static void printError(String msg) {
         System.err.println(msg);
         System.err.println("See mucommander --help for more information.");
         System.exit(1);

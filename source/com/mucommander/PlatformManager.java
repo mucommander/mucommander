@@ -1,15 +1,14 @@
 package com.mucommander;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.process.ProcessRunner;
-import com.mucommander.process.AbstractProcess;
-import com.mucommander.command.CommandManager;
 import com.mucommander.command.Command;
+import com.mucommander.command.CommandManager;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
+import com.mucommander.process.AbstractProcess;
+import com.mucommander.process.ProcessRunner;
 
-import java.io.File;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 
 /**
@@ -385,7 +384,7 @@ public class PlatformManager {
      * @param  cmd command to execute.
      * @return     <code>true</code> if executing the specified command didn't trigger an Exception.
      */
-    private static final boolean couldRun(String cmd) {
+    private static boolean couldRun(String cmd) {
         try {
             ProcessRunner.execute(cmd);
             return true;
