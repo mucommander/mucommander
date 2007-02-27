@@ -60,6 +60,8 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
     private static       boolean wereCommandsModified;
     /** Default name of the custom commands file. */
     public  static final String  DEFAULT_COMMANDS_FILE_NAME    = "commands.xml";
+    /** Default command used when no other command is found for a specific file type. */
+    private static       Command defaultCommand;
 
 
 
@@ -69,8 +71,9 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
      * Initialises the command manager.
      */
     static {
-        associations = new Vector();
-        commands     = new Vector();
+        associations   = new Vector();
+        commands       = new Vector();
+        defaultCommand = null;
     }
 
     /**
@@ -105,15 +108,8 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
 
         // If we've reached that point, no command has been found. Returns the default command
         // if we're allowed.
-        if(allowDefault) {
-            Command command;
-
-            // If the 'open' command is defined, use that as default.
-            // Otherwise, try to run the file as an executable file.
-            if((command = getCommandForAlias(FILE_OPENER_ALIAS)) == null)
-                return RUN_AS_EXECUTABLE_COMMAND;
-            return command;
-        }
+        if(allowDefault)
+            return (defaultCommand == null) ? RUN_AS_EXECUTABLE_COMMAND : defaultCommand;
         return null;
     }
 
@@ -141,6 +137,13 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
         return null;
     }
 
+    private static void setDefaultCommand(Command command) {
+        if(defaultCommand == null && command.getAlias().equals(FILE_OPENER_ALIAS)) {
+            if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as default command.");
+            defaultCommand = command;
+        }
+    }
+
     /**
      * Registers the specified command at the end of the command list.
      * @param  command          command to register.
@@ -152,6 +155,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
             throw new CommandException("Duplicated command alias: " + command.getAlias());
 
         // Registers the command and marks associations as having been modified.
+        setDefaultCommand(command);
         if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "' at the end of the list.");
         commands.add(command);
         wereCommandsModified = true;
@@ -171,6 +175,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
         }
 
         // Registers the command and marks associations as having been modified.
+        setDefaultCommand(command);
         if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "' at index " + i);
         commands.add(i, command);
         wereCommandsModified = true;
@@ -462,7 +467,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
 
         // If an 'openEXE' command was registered:
         // - if the system has an association for that command, use it.
-        // - if the system should try to run executable files, creates the corresponding association.
+        // - If we have a sure way of identifying executable files (Java >= 1.6), use it.
         if(getCommandForAlias(EXE_OPENER_ALIAS) != null) {
             // Uses the 'executable' regexp if it exists.
             if(PlatformManager.EXE_ASSOCIATION != null) {
@@ -474,14 +479,6 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
             if(PlatformManager.RUN_EXECUTABLES && (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)) {
                 try {registerAssociation(".*", CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, CommandAssociation.YES, EXE_OPENER_ALIAS);}
                 catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
-            }
-        }
-
-        // If the system has a catch-all association and the 'open' command exists, registers it as the default file opener.
-        if(PlatformManager.CATCH_ALL_ASSOCIATION != null) {
-            if(getCommandForAlias(FILE_OPENER_ALIAS) != null) {
-                try {registerAssociation(PlatformManager.CATCH_ALL_ASSOCIATION, FILE_OPENER_ALIAS);}
-                catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default file opener association: " + e.getMessage());}
             }
         }
 

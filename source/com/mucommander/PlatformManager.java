@@ -108,8 +108,6 @@ public class PlatformManager {
 
     // - Default file associations ----------------------------------------------
     // --------------------------------------------------------------------------
-    /** Matches all files (should always be registered last). */
-    public static final String  CATCH_ALL_ASSOCIATION;
     /** Regular expression used to match executable file names. */
     public static final String  EXE_ASSOCIATION;
     /** Whether or not the system can or needs to run executable files as themselves. */
@@ -221,7 +219,6 @@ public class PlatformManager {
         if(osName.startsWith("Windows")) {
             UNIX_DESKTOP              = UNKNOWN_DESKTOP;
             DEFAULT_FILE_MANAGER_NAME = WINDOWS_FILE_MANAGER_NAME;
-            CATCH_ALL_ASSOCIATION     = ALL_FILES_REGEXP;
 
             // Windows 95, 98, Me
             if (osName.startsWith("Windows 95") || osName.startsWith("Windows 98") || osName.startsWith("Windows Me")) {
@@ -258,7 +255,6 @@ public class PlatformManager {
                 DEFAULT_FILE_OPENER_COMMAND  = null;
                 DEFAULT_URL_OPENER_COMMAND   = null;
                 DEFAULT_EXE_OPENER_COMMAND   = null;
-                CATCH_ALL_ASSOCIATION        = null;
                 EXE_ASSOCIATION              = null;
                 RUN_EXECUTABLES              = false;
             }
@@ -270,7 +266,6 @@ public class PlatformManager {
                 DEFAULT_FILE_OPENER_COMMAND  = MAC_OS_X_FILE_OPENER;
                 DEFAULT_URL_OPENER_COMMAND   = MAC_OS_X_FILE_OPENER;
                 DEFAULT_EXE_OPENER_COMMAND   = null;
-                CATCH_ALL_ASSOCIATION        = ALL_FILES_REGEXP;
                 EXE_ASSOCIATION              = null;
                 RUN_EXECUTABLES              = false;
             }
@@ -284,7 +279,6 @@ public class PlatformManager {
             DEFAULT_FILE_OPENER_COMMAND  = null;
             DEFAULT_URL_OPENER_COMMAND   = null;
             DEFAULT_EXE_OPENER_COMMAND   = POSIX_EXE_OPENER;
-            CATCH_ALL_ASSOCIATION        = null;
             RUN_EXECUTABLES              = true;
             EXE_ASSOCIATION              = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
         }
@@ -332,7 +326,6 @@ public class PlatformManager {
                 DEFAULT_FILE_OPENER_COMMAND  = GNOME_FILE_OPENER;
                 DEFAULT_URL_OPENER_COMMAND   = GNOME_FILE_OPENER;
                 DEFAULT_EXE_OPENER_COMMAND   = POSIX_EXE_OPENER;
-                CATCH_ALL_ASSOCIATION        = ALL_FILES_REGEXP;
                 RUN_EXECUTABLES              = true;
                 EXE_ASSOCIATION              = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
             }
@@ -345,7 +338,6 @@ public class PlatformManager {
                 DEFAULT_FILE_OPENER_COMMAND  = KDE_FILE_OPENER;
                 DEFAULT_URL_OPENER_COMMAND   = KDE_URL_OPENER;
                 DEFAULT_EXE_OPENER_COMMAND   = null;
-                CATCH_ALL_ASSOCIATION        = ALL_FILES_REGEXP;
                 EXE_ASSOCIATION              = null;
                 RUN_EXECUTABLES              = false;
             }
@@ -358,7 +350,6 @@ public class PlatformManager {
                 DEFAULT_FILE_OPENER_COMMAND  = null;
                 DEFAULT_URL_OPENER_COMMAND   = null;
                 DEFAULT_EXE_OPENER_COMMAND   = POSIX_EXE_OPENER;
-                CATCH_ALL_ASSOCIATION        = null;
                 RUN_EXECUTABLES              = true;
                 EXE_ASSOCIATION              = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
             }
