@@ -1,27 +1,50 @@
-# This file contains localized text strings, each entry goes like this:
+###############################
+# muCommander dictionary file #
+###############################
+#
+# This file contains all text entries used by muCommander to provide the user interface in different languages.
+#
+# Each entry goes like this:
 # <key>:<lang>:<value>
 #
 # where:
-# - <key> is the key used by the application to designate this entry
-# - <lang> is a 2-letter country code (EN, FR, JP...)
-# - <value> is the localized text in the <lang> language
+#  - <key> is the key used by the application to refer to the entry
+#  - <lang> is a language code (EN, FR, JP...)
+#  - <value> is the text localized in the <lang> language
 #
-# IMPORTANT: This file should be saved in UTF-8 character encoding.
+# Entries values may contain 2 different types of variables, both can be mixed with regular text:
+#  - parameters: %1, %2,... Those parameters are replaced at runtime by dynamic values specified by the application
+#  - references to other entries: $[<key>] where <key> is the key to another entry
+# 
+# IMPORTANT: This file must be saved in the UTF-8 character encoding. This is the encoding muCommander expects when it loads the dictionary.
 #
-# Some things to keep in mind when localizing texts into a new language:
-# - you should never modify keys, only their localized values
-# - when translating an entry which has a variable (%1, %2...) placed at the end,
-#  it might be because its value at runtime can be very large and thus will be
-#  truncated where it appears. In this case, please try to use a sentence that
-#  puts the variable at the end as well.
-#  
+# Some things to keep in mind when translating muCommander into a new language:
+#  - the dictionary file of the latest nightly build should be used to ensure that it is up-to-date
+#  - the entries' keys should never be modified, only their localized values
+#  - when an entry is requested by the application in a language for which the dictionary has no defined value, the EN (English) value is used.
+#   In other words, English is the default language for untranslated entries.
+#  - when an entry requested by the application doesn't exist (has no value in the requested language and no EN value), the key is used instead, 
+#   allowing to spot missing values in the user interface
+#  - for entries containing parameters (%1, %2...): if the parameters are located at the end of the entry, you should as much as possible
+#   try and keep it that way, as the user interface sometimes relies on that. Parameters values can be of variable length and if the 
+#   parameter is in the middle of the entry, the text after might get truncated if one of the parameter's values is too long.
+#
+# Here are the steps to test a modified dictionary file:
+#  1/ Extract the mucommander.jar to a directory, you can use muCommander for that
+#  2/ Copy your 'dictionary.txt' file to the /res subfolder, replacing the existing dictionary file
+#  3/ Launch muCommander by typing on a command line: java com.mucommander.Launcher
+# 
+# You should then see your modifications reflected in the user interface. For new languages, you'll need to declare the new language code in the
+# 'available_language' entry and add a 'language.<lang>' entry containing your language's name written in your language. The new language should
+# then appear in the preferences, allowing you to select it and restart the application to see your translation.
 
-# Available languages, must be declared before any other entry
-available_languages:EN,FR,DE,ES,CS,ZH_CN,ZH_TW,PL,HU,RU,SI,RO,IT
 
 #############
 # Languages #
 #############
+
+# List of available languages, must be declared before any other entry
+available_languages:EN,FR,DE,ES,CS,ZH_CN,ZH_TW,PL,HU,RU,SI,RO,IT
 
 # Language names, in their respective language
 language.en:EN:English
@@ -589,9 +612,9 @@ folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
 folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar.
 folder_does_not_exist:ES:El directoio no existe o no está disponible.
 folder_does_not_exist:CS:Tato složka neexistuje.
-folder_does_not_exist:RO:Acest director nu exista sau nu este disponibil.
-folder_does_not_exist:IT:Directory inesistente o non disponibile.
 #folder_does_not_exist:CS:Složka neexistuje nebo není přístupná
+folder_does_not_exist:RO:Acest director nu există sau nu este disponibil.
+folder_does_not_exist:IT:Directory inesistente o non disponibile.
 folder_does_not_exist:zh_TW:資料夾不存在或無法使用.
 folder_does_not_exist:PL:Ten katalog nie istnieje lub jest nieosiągalny.
 #folder_does_not_exist:PL:Katalog nie istnieje lub nie jest dostępny
@@ -602,8 +625,6 @@ folder_does_not_exist:RU:Каталог с таким именем не суще
 folder_does_not_exist:ZH_CN:文件夹不存在或无法使用.
 #folder_does_not_exist:ZH_CN:文件夹不存在
 folder_does_not_exist:SI:Ta mapa ne obstaja oz. ni dostopna.
-#folder_does_not_exist:SI:Mapa ne obstaja oz. ni dostopna.
-folder_does_not_exist:RO:Acest director nu există sau nu este disponibil.
 
 this_folder_does_not_exist:EN:This folder doesn't exist or is not available: %1
 this_folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible: %1
@@ -875,6 +896,9 @@ permissions.octal_notation:FR:Notation octale
 # Actions #
 ###########
 
+# All actions have a label and an optional tooltip. Labels are usually displayed in buttons and menus and therefore should be kept reasonably
+# short. Tooltips are displayed when leaving the mouse over a component (button, menu...) or used in dialog titles and therefore can be longer.
+
 com.mucommander.ui.action.AddBookmarkAction.label:EN:Add bookmark
 com.mucommander.ui.action.AddBookmarkAction.label:FR:Ajouter aux favoris
 com.mucommander.ui.action.AddBookmarkAction.label:ES:Añadir favorito
@@ -893,8 +917,8 @@ com.mucommander.ui.action.AddBookmarkAction.label:IT:Aggiungi a favoriti
 
 
 
-com.mucommander.ui.action.AddBookmarkAction.tooltip:EN:Bookmark current folder
-com.mucommander.ui.action.AddBookmarkAction.tooltip:FR:Ajouter le dossier courant aux favoris
+com.mucommander.ui.action.AddBookmarkAction.tooltip:EN:Add the current folder to the list of bookmarks
+com.mucommander.ui.action.AddBookmarkAction.tooltip:FR:Ajouter le dossier courant à la liste de favoris
 com.mucommander.ui.action.AddBookmarkAction.tooltip:ES:Añadir a favoritos el directorio actual
 com.mucommander.ui.action.AddBookmarkAction.tooltip:RU:Добавить текущий каталог в закладки
 com.mucommander.ui.action.AddBookmarkAction.tooltip:zh_TW:加入目前資料夾為書籤
@@ -1741,6 +1765,7 @@ com.mucommander.ui.action.UnmarkAllAction.label:SI:Odznači vse
 com.mucommander.ui.action.UnmarkAllAction.label:RO:Deselectează tot
 com.mucommander.ui.action.UnmarkAllAction.label:IT:Deseleziona tutto
 
+# Translation missing: this entry has been guessed from com.mucommander.ui.action.MarkSelectedFileAction.tooltip and therefore may not be exact
 com.mucommander.ui.action.MarkSelectedFileAction.label:EN:Mark/unmark
 com.mucommander.ui.action.MarkSelectedFileAction.label:FR:Marquer/dé-marquer
 com.mucommander.ui.action.MarkSelectedFileAction.label:DE:Markieren/demarkieren
@@ -1768,6 +1793,63 @@ com.mucommander.ui.action.MarkSelectedFileAction.tooltip:ZH_CN:标记/取消标�
 com.mucommander.ui.action.MarkSelectedFileAction.tooltip:SI:Označi/Odznači izbrano datoteko
 com.mucommander.ui.action.MarkSelectedFileAction.tooltip:RO:Selectează/Deselectează fișier
 com.mucommander.ui.action.MarkSelectedFileAction.tooltip:IT:Seleziona/Deseleziona file
+
+com.mucommander.ui.action.MarkPageDownAction.label:EN:Mark files to next page
+com.mucommander.ui.action.MarkPageDownAction.label:FR:Marquer les fichiers jusqu'à la prochaine page
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.MarkPageUpAction.label:EN:Mark files to previous page
+com.mucommander.ui.action.MarkPageUpAction.label:FR:Marquer les fichiers jusqu'à la page précédente
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.MarkUpToFirstRowAction.label:EN:Mark files to the beginning
+com.mucommander.ui.action.MarkUpToFirstRowAction.label:FR:Marquer les fichiers jusqu'au début
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.MarkUpToLastRowAction.label:EN:Mark files to the end
+com.mucommander.ui.action.MarkUpToLastRowAction.label:FR:Marquer les fichiers jusqu'à la fin
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
 
 com.mucommander.ui.action.InvertSelectionAction.label:EN:Invert selection
 com.mucommander.ui.action.InvertSelectionAction.label:FR:Inverser sélection
@@ -2015,7 +2097,7 @@ com.mucommander.ui.action.PackAction.tooltip:FR:Compresser les fichiers marqués
 com.mucommander.ui.action.PackAction.tooltip:RO:Arhivează fișierele selectate
 com.mucommander.ui.action.PackAction.tooltip:SI:Dodaj označene datoteke v arhiv
 com.mucommander.ui.action.PackAction.tooltip:IT:Comprimi file selezionati
-# Translation missing
+# Translation missing (see above entry if you want to reuse part of it)
 
 
 
@@ -2060,7 +2142,7 @@ com.mucommander.ui.action.UnpackAction.tooltip:FR:Décompresser les archives mar
 com.mucommander.ui.action.UnpackAction.tooltip:RO:Dearhivează fișierele arhivate selectate
 com.mucommander.ui.action.UnpackAction.tooltip:SI:Razširi označene arhivske datoteke
 com.mucommander.ui.action.UnpackAction.tooltip:IT:Decomprimi gli archivi selezionati
-# Translation missing
+# Translation missing (see above entry if you want to reuse part of it)
 
 
 
