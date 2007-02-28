@@ -1861,7 +1861,7 @@ com.mucommander.ui.action.MarkSelectedFileAction.tooltip:SI:Označi/Odznači izb
 com.mucommander.ui.action.MarkSelectedFileAction.tooltip:RO:Selectează/Deselectează fișier
 com.mucommander.ui.action.MarkSelectedFileAction.tooltip:IT:Seleziona/Deseleziona file
 
-com.mucommander.ui.action.MarkPageDownAction.label:EN:Mark files to next page
+com.mucommander.ui.action.MarkPageDownAction.label:EN:Mark page down
 com.mucommander.ui.action.MarkPageDownAction.label:FR:Marquer les fichiers jusqu'à la prochaine page
 com.mucommander.ui.action.MarkPageDownAction.label:zh_TW:標記檔案至下一頁
 com.mucommander.ui.action.MarkPageDownAction.label:DE:Dateien bis zur nächsten Seite Markieren
@@ -1877,7 +1877,7 @@ com.mucommander.ui.action.MarkPageDownAction.label:DE:Dateien bis zur nächsten 
 
 
 
-com.mucommander.ui.action.MarkPageUpAction.label:EN:Mark files to previous page
+com.mucommander.ui.action.MarkPageUpAction.label:EN:Mark page up
 com.mucommander.ui.action.MarkPageUpAction.label:FR:Marquer les fichiers jusqu'à la page précédente
 com.mucommander.ui.action.MarkPageUpAction.label:zh_TW:標記檔案至上一頁
 com.mucommander.ui.action.MarkPageUpAction.label:DE:Dateien bis zur vorigen Seite Markieren
