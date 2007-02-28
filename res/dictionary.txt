@@ -4436,7 +4436,6 @@ run_dialog.run:RO:Execută
 run_dialog.run:IT:Esegui
 
 run_dialog.stop:EN:$[stop]
-run_dialog.stop:zh_TW:$[stop]
 
 run_dialog.clear_history:EN:Clear history
 run_dialog.clear_history:FR:Effacer l'historique
