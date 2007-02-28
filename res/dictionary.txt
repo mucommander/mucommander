@@ -447,6 +447,7 @@ name:zh_TW:名稱
 name:PL:Nazwa
 name:HU:név
 name:RU:Имя файла
+name:RO:Nume
 #name:RU:Название
 name:IT:Nome
 name:ZH_CN:名称
@@ -487,6 +488,7 @@ extension:SI:Končnica
 extension:IT:Estensione
 extension:zh_TW:延伸檔名
 extension:DE:Dateierweiterung
+extension:RO:Extensie
 # Translation missing
 
 
@@ -501,6 +503,7 @@ permissions:SI:Pravice
 permissions:IT:Permessi
 permissions:zh_TW:權限
 permissions:DE:Zugriffsrechte
+permissions:RO:Permisiuni
 # Translation missing
 
 
@@ -518,6 +521,7 @@ location:ES:Localización
 location:CS:Umístnění
 location:zh_TW:位置
 location:PL:Lokalizacja
+location:RO:Locație
 #location:PL:Położenie
 location:IT:Location
 location:HU:hely
@@ -535,6 +539,7 @@ untitled:SI:Brez naslova
 untitled:IT:SenzaTitolo
 untitled:zh_TW:未命名
 untitled:DE:Unbenannt
+untitled:RO:Fara nume
 # Translation missing
 
 
@@ -550,6 +555,7 @@ source:SI:Izvor
 source:IT:Sorgente
 source:zh_TW:來源
 source:DE:Quelle
+source:RO:Sursă
 # Translation missing
 
 
@@ -565,6 +571,7 @@ destination:SI:Cilj
 destination:IT:Destinazione
 destination:zh_TW:目的
 destination:DE:Ziel
+destination:RO:Destinație
 # Translation missing
 
 
@@ -579,6 +586,7 @@ recurse_directories:EN:Process selected directories recursively
 recurse_directories:FR:Appliquer récursivement aux répertoires sélectionnés
 recurse_directories:zh_TW:遞迴所有目錄
 recurse_directories:DE:Auf Unterverzeichnisse anwenden
+recurse_directories:RO:Prelucrează directoarele recursiv
 # Translation missing
 
 
@@ -630,6 +638,7 @@ folder_does_not_exist:DE:Dieser Ordner existiert nicht oder ist nicht verfügbar
 folder_does_not_exist:ES:El directoio no existe o no está disponible.
 folder_does_not_exist:CS:Tato složka neexistuje.
 folder_does_not_exist:zh_TW:資料夾不存在或無法使用.
+folder_does_not_exist:RO:Acest director nu există sau nu este disponibil.
 #folder_does_not_exist:CS:Složka neexistuje nebo není přístupná
 folder_does_not_exist:RO:Acest director nu există sau nu este disponibil.
 folder_does_not_exist:IT:Directory inesistente o non disponibile.
@@ -706,6 +715,7 @@ source_parent_of_destination:SI:Poskus prenosa mape v eno od njenih podmap
 source_parent_of_destination:IT:Tentativo di trasferire una cartella in una sua sottocartella
 source_parent_of_destination:zh_TW:嘗試移轉一個資料夾到其子目錄中
 source_parent_of_destination:DE:Versuch ein Verzeichnis in ein Unterverzeichnis zu übertragen
+source_parent_of_destination:RO:Încercare de a transfera un director într-un subdirector al său
 # Translation missing
 
 
@@ -840,6 +850,7 @@ permissions.read:EN:Read
 permissions.read:FR:Lecture
 permissions.read:zh_TW:讀取
 permissions.read:DE:Lesen
+permissions.read:RO:Citire
 # Translation missing
 
 
@@ -854,6 +865,7 @@ permissions.write:EN:Write
 permissions.write:FR:Ecriture
 permissions.write:zh_TW:寫入
 permissions.write:DE:Schreiben
+permissions.write:RO:Scriere
 # Translation missing
 
 
@@ -867,6 +879,7 @@ permissions.executable:EN:Executable
 permissions.executable:FR:Execution
 permissions.executable:zh_TW:執行
 permissions.executable:DE:Ausführen
+permissions.executable:RO:Executare
 # Translation missing
 
 
@@ -880,6 +893,7 @@ permissions.user:EN:User
 permissions.user:FR:User
 permissions.user:zh_TW:使用者
 permissions.user:DE:Benutzer
+permissions.user:RO:Utilizator
 # Translation missing
 
 
@@ -892,6 +906,7 @@ permissions.group:EN:Group
 permissions.group:FR:Groupe
 permissions.group:zh_TW:群組
 permissions.group:DE:Gruppe
+permissions.group:RO:Grup
 # Translation missing
 
 
@@ -904,6 +919,7 @@ permissions.other:EN:Other
 permissions.other:FR:Autre
 permissions.other:zh_TW:其它
 permissions.other:DE:Andere
+permissions.other:RO:Altele
 # Translation missing
 
 
@@ -916,6 +932,7 @@ permissions.octal_notation:EN:Octal notation
 permissions.octal_notation:FR:Notation octale
 permissions.octal_notation:zh_TW:八進位顯示
 permissions.octal_notation:DE:Oktale Schreibweise
+permissions.octal_notation:RO:Notație în baza opt
 # Translation missing
 
 
@@ -996,6 +1013,7 @@ com.mucommander.ui.action.EditCredentialsAction.label:SI:Uredi akreditive
 com.mucommander.ui.action.EditCredentialsAction.label:IT:Modifica credenziali
 com.mucommander.ui.action.EditCredentialsAction.label:zh_TW:編輯認證資料
 com.mucommander.ui.action.EditCredentialsAction.label:DE:Zugriffsrechte bearbeiten
+com.mucommander.ui.action.EditCredentialsAction.label:RO:Schimbă identitatea
 # Translation missing
 
 
@@ -1029,6 +1047,7 @@ com.mucommander.ui.action.ChangeDateAction.label:EN:Change date
 com.mucommander.ui.action.ChangeDateAction.label:FR:Changer la date
 com.mucommander.ui.action.ChangeDateAction.label:zh_TW:變更日期
 com.mucommander.ui.action.ChangeDateAction.label:DE:Datum bearbeiten
+com.mucommander.ui.action.ChangeDateAction.label:RO:Schimbă data
 # Translation missing
 
 
@@ -1046,6 +1065,7 @@ com.mucommander.ui.action.ChangeDateAction.tooltip:EN:Change date of selected fi
 com.mucommander.ui.action.ChangeDateAction.tooltip:FR:Change la date des fichiers selectionnés
 com.mucommander.ui.action.ChangeDateAction.tooltip:zh_TW:變更所選檔案的日期
 com.mucommander.ui.action.ChangeDateAction.tooltip:DE:Datum der ausgewählten Datei(en) bearbeiten
+com.mucommander.ui.action.ChangeDateAction.tooltip:RO:Schimbă data fișierelor selectate
 # Translation missing
 
 
@@ -1064,6 +1084,7 @@ com.mucommander.ui.action.ChangePermissionsAction.label:EN:Change permissions
 com.mucommander.ui.action.ChangePermissionsAction.label:FR:Changer les permissions
 com.mucommander.ui.action.ChangePermissionsAction.label:zh_TW:變更權限
 com.mucommander.ui.action.ChangePermissionsAction.label:DE:Zugriffsrechte bearbeiten
+com.mucommander.ui.action.ChangePermissionsAction.label:RO:Schimbă permisiuni
 # Translation missing
 
 
@@ -1081,6 +1102,7 @@ com.mucommander.ui.action.ChangePermissionsAction.tooltip:EN:Change permissions 
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:FR:Change les permissions des fichiers selectionnés
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:zh_TW:變更所選檔案的權限
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:DE:Zugriffsrechte der ausgewählten Datei(en) bearbeiten
+com.mucommander.ui.action.ChangePermissionsAction.tooltip:RO:Schimbă permisiunile fișierelor selectate
 # Translation missing
 
 
@@ -1616,6 +1638,7 @@ com.mucommander.ui.action.GoToHomeAction.label:EN:Go to home folder
 com.mucommander.ui.action.GoToHomeAction.label:FR:Aller au dossier utilisateur
 com.mucommander.ui.action.GoToHomeAction.label:zh_TW:跳至家目錄
 com.mucommander.ui.action.GoToHomeAction.label:DE:Gehe zum Heimat-Verzeichnis
+com.mucommander.ui.action.GoToHomeAction.label:RO:Mergi în directorul utilizatorului
 # Translation missing
 
 
@@ -1661,6 +1684,7 @@ com.mucommander.ui.action.GoToRootAction.label:EN:Go to root
 com.mucommander.ui.action.GoToRootAction.label:FR:Aller à la racine
 com.mucommander.ui.action.GoToRootAction.label:zh_TW:跳至根目錄
 com.mucommander.ui.action.GoToRootAction.label:DE:Gehe zum Wurzel-Verzeichnis
+com.mucommander.ui.action.GoToRootAction.label:RO:Mergi în directorul rădăcină
 # Translation missing
 
 
@@ -1736,6 +1760,7 @@ com.mucommander.ui.action.SortByPermissionsAction.label:SI:Razvrsti po pravicah
 com.mucommander.ui.action.SortByPermissionsAction.label:IT:Ordina per Permessi
 com.mucommander.ui.action.SortByPermissionsAction.label:zh_TW:依權限排序
 com.mucommander.ui.action.SortByPermissionsAction.label:DE:Nach Zugriffsrechten sortieren
+com.mucommander.ui.action.SortByPermissionsAction.label:RO:Sortează după permisiuni
 # Translation missing
 
 
@@ -1865,6 +1890,7 @@ com.mucommander.ui.action.MarkPageDownAction.label:EN:Mark page down
 com.mucommander.ui.action.MarkPageDownAction.label:FR:Marquer les fichiers jusqu'à la prochaine page
 com.mucommander.ui.action.MarkPageDownAction.label:zh_TW:標記檔案至下一頁
 com.mucommander.ui.action.MarkPageDownAction.label:DE:Dateien bis zur nächsten Seite Markieren
+com.mucommander.ui.action.MarkPageDownAction.label:RO:Selectează fișierele din pagina următoare
 # Translation missing
 
 
@@ -1881,6 +1907,7 @@ com.mucommander.ui.action.MarkPageUpAction.label:EN:Mark page up
 com.mucommander.ui.action.MarkPageUpAction.label:FR:Marquer les fichiers jusqu'à la page précédente
 com.mucommander.ui.action.MarkPageUpAction.label:zh_TW:標記檔案至上一頁
 com.mucommander.ui.action.MarkPageUpAction.label:DE:Dateien bis zur vorigen Seite Markieren
+com.mucommander.ui.action.MarkPageUpAction.label:RO:Selectează fișierele din pagina anterioară
 # Translation missing
 
 
@@ -1897,6 +1924,7 @@ com.mucommander.ui.action.MarkUpToFirstRowAction.label:EN:Mark files to the begi
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:FR:Marquer les fichiers jusqu'au début
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:zh_TW:標記檔案至開頭
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:DE:Dateien bis zum Anfang Markieren
+com.mucommander.ui.action.MarkUpToFirstRowAction.label:RO:Selectează fișierele până la început
 # Translation missing
 
 
@@ -1913,6 +1941,7 @@ com.mucommander.ui.action.MarkUpToLastRowAction.label:EN:Mark files to the end
 com.mucommander.ui.action.MarkUpToLastRowAction.label:FR:Marquer les fichiers jusqu'à la fin
 com.mucommander.ui.action.MarkUpToLastRowAction.label:zh_TW:標記檔案至結尾
 com.mucommander.ui.action.MarkUpToLastRowAction.label:DE:Dateien bis zum Ende Markieren
+com.mucommander.ui.action.MarkUpToLastRowAction.label:RO:Selectează fișierele până la sfârșit
 # Translation missing
 
 
@@ -2092,6 +2121,7 @@ file_menu.open_with:SI:Odpri z...
 file_menu.open_with:IT:Apri con...
 file_menu.open_with:zh_TW:用其它方式開啟...
 file_menu.open_with:DE:Öffne mit...
+file_menu.open_with:RO:Deschide cu...
 # Translation missing
 
 
@@ -2303,6 +2333,7 @@ com.mucommander.ui.action.ShowServerConnectionsAction.label:SI:Prikaži aktivne 
 com.mucommander.ui.action.ShowServerConnectionsAction.label:IT:Mostra le connessioni aperte
 com.mucommander.ui.action.ShowServerConnectionsAction.label:zh_TW:顯示開啟的連線
 com.mucommander.ui.action.ShowServerConnectionsAction.label:DE:Zeige offene Verbindungen
+com.mucommander.ui.action.ShowServerConnectionsAction.label:RO:Afișează conexiunile deschise
 # Translation missing
 
 
@@ -2352,7 +2383,7 @@ com.mucommander.ui.action.ToggleAutoSizeAction.label:zh_TW:自動調寬欄位
 com.mucommander.ui.action.ToggleAutoSizeAction.label:PL:Automatycznie rozszerz kolumny
 com.mucommander.ui.action.ToggleAutoSizeAction.label:ZH_CN:自动设置栏宽
 com.mucommander.ui.action.ToggleAutoSizeAction.label:SI:Samodejna širina stolpcev
-com.mucommander.ui.action.ToggleAutoSizeAction.label:RO:Dimensiune automata la coloane
+com.mucommander.ui.action.ToggleAutoSizeAction.label:RO:Dimensiune automată la coloane
 com.mucommander.ui.action.ToggleAutoSizeAction.label:IT:Auto-dimensiona colonne
 com.mucommander.ui.action.ToggleAutoSizeAction.label:DE:Spaltengröße automatisch bestimmen
 # Translation missing
@@ -2607,6 +2638,7 @@ com.mucommander.ui.action.SplitEquallyAction.label:SI:Razdeli enako na obeh stra
 com.mucommander.ui.action.SplitEquallyAction.label:IT:Dividi egualmente
 com.mucommander.ui.action.SplitEquallyAction.label:zh_TW:等距分割
 com.mucommander.ui.action.SplitEquallyAction.label:DE:Gleichmäßig aufteilen
+com.mucommander.ui.action.SplitEquallyAction.label:RO:Împarte în mod egal
 # Translation missing
 
 
@@ -2623,6 +2655,7 @@ com.mucommander.ui.action.SplitVerticallyAction.label:SI:Razdeli navpično
 com.mucommander.ui.action.SplitVerticallyAction.label:IT:Dividi verticalmente
 com.mucommander.ui.action.SplitVerticallyAction.label:zh_TW:垂直分割
 com.mucommander.ui.action.SplitVerticallyAction.label:DE:Vertikal aufteilen
+com.mucommander.ui.action.SplitVerticallyAction.label:RO:Împarte vertical
 # Translation missing
 
 
@@ -2637,6 +2670,7 @@ com.mucommander.ui.action.SplitHorizontallyAction.label:SI:Razdeli vodoravno
 com.mucommander.ui.action.SplitHorizontallyAction.label:IT:Dividi orizzontalmente
 com.mucommander.ui.action.SplitHorizontallyAction.label:zh_TW:水平分割
 com.mucommander.ui.action.SplitHorizontallyAction.label:DE:Horizontal aufteilen
+com.mucommander.ui.action.SplitHorizontallyAction.label:RO:Împarte orizontal
 # Translation missing
 
 
@@ -2695,6 +2729,7 @@ com.mucommander.ui.action.ReportBugAction.label:SI:Poročanje o napakah
 com.mucommander.ui.action.ReportBugAction.label:IT:Segnala un bug
 com.mucommander.ui.action.ReportBugAction.label:zh_TW:回報問題
 com.mucommander.ui.action.ReportBugAction.label:DE:Einen Fehler melden
+com.mucommander.ui.action.ReportBugAction.label:RO:Raportează un bug
 # Translation missing
 
 
@@ -2799,6 +2834,7 @@ view_menu.show_hide_columns:SI:Prikaži/Skrij stolpce
 view_menu.show_hide_columns:IT:Mostra/Nascondi colonne
 view_menu.show_hide_columns:zh_TW:顯示/隱藏欄位
 view_menu.show_hide_columns:DE:Spalten ein-/ausblenden
+view_menu.show_hide_columns:RO:Ascunde/Arată coloane
 # Translation missing
 
 
@@ -2817,6 +2853,7 @@ go_menu:EN:Go
 go_menu:FR:Go
 go_menu:zh_TW:跳至
 go_menu:DE:Gehe
+go_menu:RO:Mergi
 # Translation missing
 
 
@@ -2995,6 +3032,7 @@ table.hide_column:SI:Skrij stolpec
 table.hide_column:IT:Nascondi colonna
 table.hide_column:zh_TW:隱藏欄位
 table.hide_column:DE:Spalte ausblenden
+table.hide_column:RO:Ascunde coloană
 # Translation missing
 
 
@@ -3231,6 +3269,7 @@ file_collision_dialog.title:SI:Datotečni spor
 file_collision_dialog.title:IT:Collisione di file
 file_collision_dialog.title:zh_TW:檔案已存在
 file_collision_dialog.title:DE:Dateikonflikt
+file_collision_dialog.title:RO:Coliziune între fișiere
 # Translation missing
 
 
@@ -4241,7 +4280,7 @@ progress_dialog.advanced:DE:Fortgeschrittene
 
 progress_dialog.current_speed:EN:Current speed
 progress_dialog.current_speed:FR:Vitesse actuelle
-progress_dialog.current_speed:RO:Viteza actuala
+progress_dialog.current_speed:RO:Viteza actuală
 progress_dialog.current_speed:SI:Trenutna hitrost
 progress_dialog.current_speed:IT:Velocita' attuale
 progress_dialog.current_speed:zh_TW:目前速度
@@ -4258,7 +4297,7 @@ progress_dialog.current_speed:DE:Aktuelle Geschwindigkeit
 
 progress_dialog.limit_speed:EN:Limit speed
 progress_dialog.limit_speed:FR:Limiter la vitesse
-progress_dialog.limit_speed:RO:Limitare de viteză
+progress_dialog.limit_speed:RO:Limitează de viteză
 progress_dialog.limit_speed:SI:Omejitev hitrosti
 progress_dialog.limit_speed:IT:Limite di velocita'
 progress_dialog.limit_speed:zh_TW:限制速度
@@ -4279,6 +4318,7 @@ progress_dialog.close_when_finished:SI:Po prenosu zapri okno
 progress_dialog.close_when_finished:IT:Chiudi finestra quando finito
 progress_dialog.close_when_finished:zh_TW:完成時關閉視窗
 progress_dialog.close_when_finished:DE:Nach Ende Fenster schließen
+progress_dialog.close_when_finished:RO:Închide când e gata
 # Translation missing
 
 
@@ -4293,6 +4333,7 @@ progress_dialog.processing_files:EN:Processing files
 progress_dialog.processing_files:FR:Traitement des fichiers en cours
 progress_dialog.processing_files:zh_TW:正在處理檔案
 progress_dialog.processing_files:DE:Bearbeite Dateien
+progress_dialog.processing_files:RO:Fișierele sunt procesate
 # Translation missing
 
 
@@ -4309,6 +4350,7 @@ progress_dialog.processing_file:EN:Processing %1
 progress_dialog.processing_file:FR:Traitement de %1 en cours
 progress_dialog.processing_file:zh_TW:正在處理 %1
 progress_dialog.processing_file:DE:Bearbeite %1
+progress_dialog.processing_file:RO:Procesez %1
 # Translation missing
 
 
@@ -4326,6 +4368,7 @@ progress_dialog.job_finished:SI:Naloga zaključena
 progress_dialog.job_finished:IT:Lavoro terminato
 progress_dialog.job_finished:zh_TW:工作完成
 progress_dialog.job_finished:DE:Job beendet
+progress_dialog.job_finished:RO:Sarcină îndeplinită
 # Translation missing
 
 
@@ -4421,6 +4464,7 @@ change_date_dialog.now:EN:Now
 change_date_dialog.now:FR:Maintenant
 change_date_dialog.now:zh_TW:現在
 change_date_dialog.now:DE:Jetzt
+change_date_dialog.now:RO:Acum
 # Translation missing
 
 
@@ -4435,6 +4479,7 @@ change_date_dialog.specific_date:EN:Specific date
 change_date_dialog.specific_date:FR:Date spécifique
 change_date_dialog.specific_date:zh_TW:指定日期
 change_date_dialog.specific_date:DE:Spezielles Datum
+change_date_dialog.specific_date:RO:Dară specifică
 # Translation missing
 
 
@@ -4470,6 +4515,7 @@ run_dialog.run_in_home_description:SI:Zaženi v domači mapi
 run_dialog.run_in_home_description:IT:Esegui nella cartella Home
 run_dialog.run_in_home_description:zh_TW:在家目錄下執行
 run_dialog.run_in_home_description:DE:In Heimatverzeichnis ausführen
+run_dialog.run_in_home_description:RO:Execută în directorul utilizatorului
 # Translation missing
 
 
@@ -4517,6 +4563,7 @@ run_dialog.clear_history:SI:Počisti zgodovino
 run_dialog.clear_history:IT:Ripulisci l'history
 run_dialog.clear_history:zh_TW:清除歷史記錄
 run_dialog.clear_history:DE:Verlauf löschen
+run_dialog.clear_history:RO:Șterge istoria
 # Translation missing
 
 
@@ -4687,6 +4734,7 @@ http_connect.basic_authentication:SI:HTTP osnovno overjanje (izbirno)
 http_connect.basic_authentication:IT:HTTP Basic Authentication (opzionale)
 http_connect.basic_authentication:zh_TW:HTTP Basic Authentication (非必要)
 http_connect.basic_authentication:DE:HTTP Basic Authentication (optional)
+http_connect.basic_authentication:RO:HTTP Basic Authentication (optional)
 # Translation missing
 
 
@@ -4708,6 +4756,7 @@ server_connections_dialog.disconnect:SI:Prekini povezavo
 server_connections_dialog.disconnect:IT:Disconnetti
 server_connections_dialog.disconnect:zh_TW:停止連接
 server_connections_dialog.disconnect:DE:Verbindung Abbrechen
+server_connections_dialog.disconnect:RO:Deconectează
 # Translation missing
 
 
@@ -4726,6 +4775,7 @@ server_connections_dialog.connection_busy:SI:Zasedeno
 server_connections_dialog.connection_busy:IT:Occupato
 server_connections_dialog.connection_busy:zh_TW:忙碌
 server_connections_dialog.connection_busy:DE:Besetzt
+server_connections_dialog.connection_busy:RO:Ocupată
 # Translation missing
 
 
@@ -4743,6 +4793,7 @@ server_connections_dialog.connection_idle:SI:Neaktivno
 server_connections_dialog.connection_idle:IT:Inattivo
 server_connections_dialog.connection_idle:zh_TW:閒置
 server_connections_dialog.connection_idle:DE:Inaktiv
+server_connections_dialog.connection_idle:RO:Inactivă
 # Translation missing
 
 
@@ -4765,6 +4816,7 @@ bonjour.bonjour_services:SI:"Bonjour" storitve
 bonjour.bonjour_services:IT:Servizi Bonjour
 bonjour.bonjour_services:zh_TW:Bonjour 服務
 bonjour.bonjour_services:DE:Bonjour Dienste
+bonjour.bonjour_services:RO:Servicii Bonjour
 # Translation missing
 
 
@@ -4780,6 +4832,7 @@ bonjour.no_service_discovered:SI:Ni aktivne storitve
 bonjour.no_service_discovered:IT:Nessun servizio scoperto
 bonjour.no_service_discovered:zh_TW:未發現任何服務
 bonjour.no_service_discovered:DE:Keine Dienste gefunden
+bonjour.no_service_discovered:RO:Nici un serviciu descoperit
 # Translation missing
 
 
@@ -4797,6 +4850,7 @@ bonjour.bonjour_disabled:SI:"Bonjour" onemogočen
 bonjour.bonjour_disabled:IT:Bonjour disabilitato
 bonjour.bonjour_disabled:zh_TW:Bonjour 功能關閉
 bonjour.bonjour_disabled:DE:Bonjour nicht aktiv
+bonjour.bonjour_disabled:RO:Bonjour dezactivat
 # Translation missing
 
 
@@ -4874,6 +4928,7 @@ auth_dialog.store_credentials:SI:Shrani uporabniško ime in geslo (nizka enkripc
 auth_dialog.store_credentials:IT:Memorizza login e password (weak encryption)
 auth_dialog.store_credentials:zh_TW:儲存登入帳號及密碼(僅作簡易加密)
 auth_dialog.store_credentials:DE:Speichere Login und Passwort (schwach verschlüsselt)
+auth_dialog.store_credentials:RO:Salvează numele de utilizator și parola (protecție redusă)
 #auth_dialog.store_credentials:EN:Include login and password (will be saved in the clear!)
 #auth_dialog.store_credentials:FR:Inclure les identifiants et mot de passe (seront sauvegardés en clair!)
 #auth_dialog.store_credentials:ES:Incluir nombre de usuario y contraseña (¡será salvada en blanco!)
@@ -4978,6 +5033,7 @@ edit_bookmarks_dialog.new:SI:Nova
 edit_bookmarks_dialog.new:IT:Nuovo
 edit_bookmarks_dialog.new:zh_TW:新增
 edit_bookmarks_dialog.new:DE:Neu
+edit_bookmarks_dialog.new:RO:Nou
 # Translation missing
 
 
@@ -4995,6 +5051,7 @@ edit_bookmarks_dialog.duplicate:SI:Podvoji
 edit_bookmarks_dialog.duplicate:IT:Duplica
 edit_bookmarks_dialog.duplicate:zh_TW:複製
 edit_bookmarks_dialog.duplicate:DE:Duplizieren
+edit_bookmarks_dialog.duplicate:RO:Duplică
 # Translation missing
 
 
@@ -5435,7 +5492,7 @@ shortcuts_dialog.quick_search:DE:Schnellsuche
 
 shortcuts_dialog.quick_search.start_search:EN:Type in any character to start a quick search
 shortcuts_dialog.quick_search.start_search:FR:Entrez un caractère pour commencer une recherche rapide
-shortcuts_dialog.quick_search.start_search:RO:Introdu orice caracter pentru a începe o căutare rapidă
+shortcuts_dialog.quick_search.start_search:RO:Introduceți orice caracter pentru a începe o căutare rapidă
 shortcuts_dialog.quick_search.start_search:SI:Vnesi kateri koli znak za začetek hitrega iskanja
 shortcuts_dialog.quick_search.start_search:IT:Batti un tasto per iniziare una ricerca rapida
 shortcuts_dialog.quick_search.start_search:zh_TW:輸入任何字元來啟用快速搜尋
@@ -5850,6 +5907,7 @@ prefs_dialog.show_hidden_files:RU:Показывать скрытые файлы
 prefs_dialog.show_hidden_files:ZH_CN:显示隐藏文件
 prefs_dialog.show_hidden_files:SI:Prikaži skrite datoteke
 prefs_dialog.show_hidden_files:IT:Mostra file nascosti
+prefs_dialog.show_hidden_files:RO:Afișează fișierele ascunse
 # Translation missing (RO)
 
 
@@ -5992,6 +6050,7 @@ prefs_dialog.file_icons:SI:Vrste datotek
 prefs_dialog.file_icons:IT:Tipi file
 prefs_dialog.file_icons:zh_TW:檔案類型
 prefs_dialog.file_icons:DE:Dateiarten
+prefs_dialog.file_icons:RO:Tipuri de fișiere
 # Translation missing
 
 
@@ -6338,6 +6397,7 @@ prefs_dialog.themes:SI:Teme
 prefs_dialog.themes:IT:Temi
 prefs_dialog.themes:zh_TW:佈景主題
 prefs_dialog.themes:DE:Themen
+prefs_dialog.themes:RO:Teme
 # Translation missing
 
 
@@ -6354,6 +6414,7 @@ prefs_dialog.theme_warning:SI:To bo prepisalo običajno temo. Želite nadaljevat
 prefs_dialog.theme_warning:IT:Questa operazione sovrascrive il tema utente. Procedere ?
 prefs_dialog.theme_warning:zh_TW:這將會覆蓋自訂的佈景主題. 確定要繼續?
 prefs_dialog.theme_warning:DE:Dies überschreibt ein angepasstes Thema. Wollen Sie fortfahren?
+prefs_dialog.theme_warning:RO:Această operație va suprascrie o temă personalizată. Doriți să continuați?
 # Translation missing
 
 
@@ -6521,6 +6582,7 @@ prefs_dialog.enable_bonjour_discovery:SI:Omogoči odkrivanje "Bonjour" storitev
 prefs_dialog.enable_bonjour_discovery:IT:Abilita Bonjour services discovery
 prefs_dialog.enable_bonjour_discovery:zh_TW:開啟 Bonjour 服務尋找功能
 prefs_dialog.enable_bonjour_discovery:DE:Erlaube Bonjour Servicesuche
+prefs_dialog.enable_bonjour_discovery:RO:Activează descoperirea serviciilor Bonjour
 # Translation missing
 
 
@@ -6658,6 +6720,7 @@ duration.seconds:SI:%1s
 duration.seconds:IT:%1s
 duration.seconds:zh_TW:%1s
 duration.seconds:DE:%1Sek
+duration.seconds:RO:%1s
 # Translation missing
 
 
@@ -6671,6 +6734,7 @@ duration.minutes:SI:%1min
 duration.minutes:IT:%1m
 duration.minutes:zh_TW:%1m
 duration.minutes:DE:%1M
+duration.minutes:RO:%1m
 # Translation missing
 
 
@@ -6684,6 +6748,7 @@ duration.hours:SI:%1h
 duration.hours:IT:%1h
 duration.hours:zh_TW:%1h
 duration.hours:DE:%1S
+duration.hours:RO:%1h
 # Translation missing
 
 
@@ -6698,6 +6763,7 @@ duration.days:SI:%1d
 duration.days:IT:%1g
 duration.days:zh_TW:%1d
 duration.days:DE:%1T
+duration.days:RO:%1z
 # Translation missing
 
 
@@ -6712,6 +6778,7 @@ duration.months:SI:%1m
 duration.months:IT:%1me
 duration.months:zh_TW:%1mo
 duration.months:DE:%1M
+duration.months:RO:%1l
 # Translation missing
 
 
@@ -6726,6 +6793,7 @@ duration.years:SI:%1l
 duration.years:IT:%1a
 duration.years:zh_TW:%1y
 duration.years:DE:%1J
+duration.years:RO:%1a
 # Translation missing
 
 
@@ -6747,6 +6815,7 @@ theme.custom_theme:FR:Thème personnalisé
 theme.custom_theme:SI:Običajna tema
 theme.custom_theme:zh_TW:自訂佈景主題
 theme.custom_theme:DE:Angepasstes Thema
+theme.custom_theme:RO:Temă personalizată
 # Translation missing
 
 
@@ -6762,6 +6831,7 @@ theme_could_not_be_loaded:EN:An error occured while loading this theme.
 theme_could_not_be_loaded:FR:Une erreur est survenue lors du chargement de ce thème.
 theme_could_not_be_loaded:zh_TW:在載入此佈景主題時發生錯誤
 theme_could_not_be_loaded:DE:Beim Laden dieses Themas trat ein Fehler auf.
+theme_could_not_be_loaded:RO:O eroare a apărut la încărcarea acestei teme.
 # Translation missing
 
 
@@ -6785,6 +6855,7 @@ setup.title:SI:Dobrodošli v muCommanderju
 setup.title:IT:Benvenuti in muCommander
 setup.title:zh_TW:歡迎來到 muCommander
 setup.title:DE:Willkommen beim muCommander
+setup.title:RO:Bine ați venit în muCommander
 # Translation missing
 
 
@@ -6797,6 +6868,7 @@ setup.intro:SI:Izberite prosim lastnosti muCommanderja.
 setup.intro:IT:Prego, scegliere il modo di comportarsi di muCommander.
 setup.intro:zh_TW:請選擇你所希望的 muCommander 行為模式
 setup.intro:DE:Bitte wählen Sie, wie sich der muCommander verhalten soll.
+setup.intro:RO:Vă rugăm să alegeți modul în care muCommander se va comporta.
 # Translation missing
 
 
@@ -6810,6 +6882,7 @@ setup.look_and_feel:FR:Selectionnez votre Look & Feel
 setup.look_and_feel:IT:Scegliete il Vostro Look & Feel
 setup.look_and_feel:zh_TW:選擇你要的 Look & Feel
 setup.look_and_feel:DE:Wählen Sie Aussehen und Verhalten
+setup.look_and_feel:RO:Alegeți aspectul
 # Translation missing
 
 
@@ -6824,6 +6897,7 @@ setup.theme:SI:Izberite temo
 setup.theme:IT:Selezionate il Vostro tema
 setup.theme:zh_TW:選擇你的佈景主題
 setup.theme:DE:Wählen Sie Ihr Thema
+setup.theme:RO:Alegeți o temă.
 # Translation missing
 
 
