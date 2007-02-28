@@ -448,11 +448,10 @@ name:PL:Nazwa
 name:HU:név
 name:RU:Имя файла
 name:RO:Nume
-#name:RU:Название
 name:IT:Nome
 name:ZH_CN:名称
 name:SI:Ime
-name:RO:Nume
+#name:RU:Название
 
 size:EN:Size
 size:FR:Taille
@@ -522,15 +521,14 @@ location:CS:Umístnění
 location:zh_TW:位置
 location:PL:Lokalizacja
 location:RO:Locație
-#location:PL:Położenie
 location:IT:Location
 location:HU:hely
 location:RU:Размещение
-# location:RU:Расположение
 location:ZH_CN:位置
-#location:ZH_CN:地址
 location:SI:Lokacija
-location:RO:Locație
+#location:PL:Położenie
+#location:RU:Расположение
+#location:ZH_CN:地址
 
 # Used to indicate that an item (e.g. a bookmark) has no name
 untitled:EN:Untitled
@@ -639,19 +637,17 @@ folder_does_not_exist:ES:El directoio no existe o no está disponible.
 folder_does_not_exist:CS:Tato složka neexistuje.
 folder_does_not_exist:zh_TW:資料夾不存在或無法使用.
 folder_does_not_exist:RO:Acest director nu există sau nu este disponibil.
-#folder_does_not_exist:CS:Složka neexistuje nebo není přístupná
-folder_does_not_exist:RO:Acest director nu există sau nu este disponibil.
 folder_does_not_exist:IT:Directory inesistente o non disponibile.
-folder_does_not_exist:zh_TW:資料夾不存在或無法使用.
 folder_does_not_exist:PL:Ten katalog nie istnieje lub jest nieosiągalny.
-#folder_does_not_exist:PL:Katalog nie istnieje lub nie jest dostępny
 folder_does_not_exist:HU:A könyvtár nem létezik vagy nem található.
-#folder_does_not_exist:HU:Ez a könyvtár nem létezik vagy nem elérhető
 folder_does_not_exist:RU:Каталог с таким именем не существует или недоступен
-#folder_does_not_exist:RU:Такой каталог не существует или недоступен
 folder_does_not_exist:ZH_CN:文件夹不存在或无法使用.
-#folder_does_not_exist:ZH_CN:文件夹不存在
 folder_does_not_exist:SI:Ta mapa ne obstaja oz. ni dostopna.
+#folder_does_not_exist:CS:Složka neexistuje nebo není přístupná
+#folder_does_not_exist:PL:Katalog nie istnieje lub nie jest dostępny
+#folder_does_not_exist:HU:Ez a könyvtár nem létezik vagy nem elérhető
+#folder_does_not_exist:RU:Такой каталог не существует или недоступен
+#folder_does_not_exist:ZH_CN:文件夹不存在
 
 this_folder_does_not_exist:EN:This folder doesn't exist or is not available: %1
 this_folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible: %1
@@ -2559,10 +2555,8 @@ com.mucommander.ui.action.RecallWindowAction.label:IT:Richiama finestra #%1
 com.mucommander.ui.action.RecallWindowAction.label:zh_TW:還原視窗 #%1
 com.mucommander.ui.action.RecallWindowAction.label:DE:Fenster #%1 aufrufen
 # The following need to be updated
-com.mucommander.ui.action.RecallWindowAction.label:DE:Fenster #%1 aufrufen
 com.mucommander.ui.action.RecallWindowAction.label:ES:Rellamar a una ventana
 com.mucommander.ui.action.RecallWindowAction.label:CS:Vyvolat okno
-com.mucommander.ui.action.RecallWindowAction.label:zh_TW:還原視窗 #%1
 com.mucommander.ui.action.RecallWindowAction.label:PL:Wywołaj okno
 com.mucommander.ui.action.RecallWindowAction.label:HU:ablak visszavonása
 com.mucommander.ui.action.RecallWindowAction.label:RU:Восстановить окно
@@ -3600,7 +3594,7 @@ move_dialog.move_description:IT:Sposta verso
 move_dialog.error_title:EN:Move error
 move_dialog.error_title:FR:Erreur de déplacement
 move_dialog.error_title:DE:Fehler beim Verschieben
-move_dialog.error_title:ES:Error de movimiento # FIX
+move_dialog.error_title:ES:Error de movimiento
 move_dialog.error_title:CS:Chyba při přesunu
 move_dialog.error_title:zh_TW:搬移錯誤
 move_dialog.error_title:PL:Błąd przenoszenia
@@ -5908,7 +5902,7 @@ prefs_dialog.show_hidden_files:ZH_CN:显示隐藏文件
 prefs_dialog.show_hidden_files:SI:Prikaži skrite datoteke
 prefs_dialog.show_hidden_files:IT:Mostra file nascosti
 prefs_dialog.show_hidden_files:RO:Afișează fișierele ascunse
-# Translation missing (RO)
+# Translation missing
 
 
 
