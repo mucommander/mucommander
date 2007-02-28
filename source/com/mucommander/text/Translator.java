@@ -1,6 +1,7 @@
 package com.mucommander.text;
 
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 
 import java.io.*;
 import java.util.Hashtable;
@@ -434,8 +435,6 @@ public class Translator {
      * @param newLanguage new language
      */
     private static void addLanguageToDictionary(String originalFile, String newLanguageFile, String resultingFile, String newLanguage) throws IOException {
-        newLanguage = newLanguage.toUpperCase();
-		
         // Initialize streams
         BufferedReader originalFileReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(originalFile)), "UTF-8"));
         BufferedReader newLanguageFileReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(newLanguageFile)), "UTF-8"));
@@ -475,19 +474,20 @@ public class Translator {
         }
 
         // Insert new language entries in resulting file
-        boolean keyAlreadyHasNewLanguage = false;
+        boolean keyProcessedForNewLanguage = false;
         String currentKey = null;
         while ((line = originalFileReader.readLine())!=null) {
             boolean emptyLine = line.trim().startsWith("#") || line.trim().equals("");
-            if (!keyAlreadyHasNewLanguage && (emptyLine || (currentKey!=null && !line.startsWith(currentKey+":")))) {
-                keyAlreadyHasNewLanguage = false;
+            if (!keyProcessedForNewLanguage && (emptyLine || (currentKey!=null && !line.startsWith(currentKey+":")))) {
                 if(currentKey!=null) {
                     String newLanguageValue = (String)newLanguageEntries.get(currentKey);
                     if(newLanguageValue!=null) {
                         // Insert new language's entry in resulting file
+                        System.out.println("New language entry for key="+currentKey+" value="+newLanguageValue);
                         pw.println(currentKey+":"+newLanguage+":"+newLanguageValue);
-                        keyAlreadyHasNewLanguage = true;
                     }
+
+                    keyProcessedForNewLanguage = true;
                 }
             }
 
@@ -501,15 +501,33 @@ public class Translator {
 
                 if(!key.equals(currentKey)) {
                     currentKey = key;
-                    keyAlreadyHasNewLanguage = false;
+                    keyProcessedForNewLanguage = false;
                 }
-		
-                if(lang.equalsIgnoreCase(newLanguage))
-                    keyAlreadyHasNewLanguage = true;
+
+                if(lang.equalsIgnoreCase(newLanguage)) {
+                    String existingNewLanguageValue = st.nextToken();
+                    String newLanguageValue = (String)newLanguageEntries.get(currentKey);
+
+                    if(newLanguageValue!=null) {
+                        if(!existingNewLanguageValue.equals(newLanguageValue))
+                            System.out.println("Warning: found an updated value for key="+currentKey+", using new value="+newLanguageValue+" existing value="+existingNewLanguageValue);
+
+                        pw.println(currentKey+":"+newLanguage+":"+newLanguageValue);
+                    }
+                    else {
+                        System.out.println("Warning: existing dictionary has a value for key="+currentKey+" that is missing in the new dictionary file, using existing value= "+existingNewLanguageValue);
+                        pw.println(currentKey+":"+newLanguage+":"+existingNewLanguageValue);
+                    }
+
+                    keyProcessedForNewLanguage = true;
+                }
+                else {
+                    pw.println(line);
+                }
             }
-			
-            // Write current entry in resulting file
-            pw.println(line);
+            else {
+                pw.println(line);
+            }
         }
 
         newLanguageFileReader.close();

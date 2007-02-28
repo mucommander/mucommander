@@ -1046,7 +1046,7 @@ com.mucommander.ui.action.ChangeLocationAction.label:DE:Ändere aktuellen Ort
 com.mucommander.ui.action.ChangeDateAction.label:EN:Change date
 com.mucommander.ui.action.ChangeDateAction.label:FR:Changer la date
 com.mucommander.ui.action.ChangeDateAction.label:zh_TW:變更日期
-com.mucommander.ui.action.ChangeDateAction.label:DE:Datum bearbeiten
+com.mucommander.ui.action.ChangeDateAction.label:DE:Datum ändern
 com.mucommander.ui.action.ChangeDateAction.label:RO:Schimbă data
 # Translation missing
 
@@ -2400,7 +2400,7 @@ com.mucommander.ui.action.StopAction.label:RO:Oprește schimbarea de director
 com.mucommander.ui.action.StopAction.label:SI:Prekini spreminjanje mape
 com.mucommander.ui.action.StopAction.label:IT:Ferma cambio cartella
 com.mucommander.ui.action.StopAction.label:zh_TW:停止資料夾變更
-com.mucommander.ui.action.StopAction.label:DE:Ordnerwechsel verhindern
+com.mucommander.ui.action.StopAction.label:DE:Ordnerwechsel abbrechen
 # Translation missing
 
 
@@ -4265,7 +4265,7 @@ progress_dialog.advanced:RO:Avansat
 progress_dialog.advanced:SI:Napredno
 progress_dialog.advanced:IT:Avanzate
 progress_dialog.advanced:zh_TW:進階
-progress_dialog.advanced:DE:Fortgeschrittene
+progress_dialog.advanced:DE:Erweitert
 # Translation missing
 
 
@@ -6035,7 +6035,7 @@ prefs_dialog.command_bar_icons:RO:Bara de comenzi
 prefs_dialog.command_bar_icons:SI:Ukazna vrstica
 prefs_dialog.command_bar_icons:IT:Barra comandi
 prefs_dialog.command_bar_icons:zh_TW:指令列
-prefs_dialog.command_bar_icons:DE:Eingabezeile
+prefs_dialog.command_bar_icons:DE:Kommandozeile
 # Translation missing
 
 
