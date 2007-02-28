@@ -1168,7 +1168,7 @@ com.mucommander.ui.action.ConnectToServerAction.tooltip:RU:Соединитьс�
 com.mucommander.ui.action.ConnectToServerAction.tooltip:ZH_CN:连接到远程服务器
 com.mucommander.ui.action.ConnectToServerAction.tooltip:SI:Poveži z oddaljenim strežnikom
 com.mucommander.ui.action.ConnectToServerAction.tooltip:RO:Conectare la un server la distanță
-com.mucommander.ui.action.ConnectToServerAction.tooltip:IT:Conentti ad un server remoto
+com.mucommander.ui.action.ConnectToServerAction.tooltip:IT:Connetti ad un server remoto
 
 com.mucommander.ui.action.ViewAction.label:EN:View
 com.mucommander.ui.action.ViewAction.label:FR:Voir
@@ -6826,6 +6826,7 @@ theme_could_not_be_loaded:FR:Une erreur est survenue lors du chargement de ce th
 theme_could_not_be_loaded:zh_TW:在載入此佈景主題時發生錯誤
 theme_could_not_be_loaded:DE:Beim Laden dieses Themas trat ein Fehler auf.
 theme_could_not_be_loaded:RO:O eroare a apărut la încărcarea acestei teme.
+theme_could_not_be_loaded:IT:Errore durante il caricamento del tema.
 # Translation missing
 
 
