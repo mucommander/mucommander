@@ -3334,7 +3334,7 @@ pack_dialog.comment:FR:Commentaire (optionnel)
 pack_dialog.comment:DE:Kommentar (optional)
 pack_dialog.comment:ES:Commentaire (optionnel)
 pack_dialog.comment:CS:Komentář (volitelný)
-pack_dialog.comment:zh_TW:備註 (可有可無)
+pack_dialog.comment:zh_TW:備註 (非必要)
 pack_dialog.comment:PL:Komentarz (Opcjonalnie)
 pack_dialog.comment:HU:megjegyzés (opció)
 pack_dialog.comment:RU:Комментарий (не обязателен)
@@ -4610,7 +4610,7 @@ http_connect.basic_authentication:EN:HTTP Basic Authentication (optional)
 http_connect.basic_authentication:FR:HTTP Basic Authentication (optionnel)
 http_connect.basic_authentication:SI:HTTP osnovno overjanje (izbirno)
 http_connect.basic_authentication:IT:HTTP Basic Authentication (opzionale)
-http_connect.basic_authentication:zh_TW:HTTP Basic Authentication (optional)
+http_connect.basic_authentication:zh_TW:HTTP Basic Authentication (非必要)
 # Translation missing
 
 
@@ -6319,7 +6319,7 @@ prefs_dialog.mail_server:FR:Serveur SMTP
 prefs_dialog.mail_server:DE:SMTP Server
 prefs_dialog.mail_server:ES:Servidor SMTP
 prefs_dialog.mail_server:CS:Server odzchodzí pošty SMTP
-prefs_dialog.mail_server:zh_TW:SMTP伺服器
+prefs_dialog.mail_server:zh_TW:SMTP 伺服器
 prefs_dialog.mail_server:PL:Serwer poczty wychodzącej SMTP
 prefs_dialog.mail_server:HU:kimenő levélkiszolgáló (SMTP) szerver
 prefs_dialog.mail_server:RU:SMTP-сервер
