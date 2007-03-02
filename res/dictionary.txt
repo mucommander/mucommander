@@ -585,6 +585,7 @@ recurse_directories:FR:Appliquer récursivement aux répertoires sélectionnés
 recurse_directories:zh_TW:遞迴所有目錄
 recurse_directories:DE:Auf Unterverzeichnisse anwenden
 recurse_directories:RO:Prelucrează directoarele recursiv
+recurse_directories:IT:Elabora anche le sotto-directory
 # Translation missing
 
 
@@ -847,6 +848,7 @@ permissions.read:FR:Lecture
 permissions.read:zh_TW:讀取
 permissions.read:DE:Lesen
 permissions.read:RO:Citire
+permissions.read:IT:Lettura
 # Translation missing
 
 
@@ -862,6 +864,7 @@ permissions.write:FR:Ecriture
 permissions.write:zh_TW:寫入
 permissions.write:DE:Schreiben
 permissions.write:RO:Scriere
+permissions.write:IT:Scrittura
 # Translation missing
 
 
@@ -876,6 +879,7 @@ permissions.executable:FR:Execution
 permissions.executable:zh_TW:執行
 permissions.executable:DE:Ausführen
 permissions.executable:RO:Executare
+permissions.executable:IT:Esegui
 # Translation missing
 
 
@@ -890,6 +894,7 @@ permissions.user:FR:User
 permissions.user:zh_TW:使用者
 permissions.user:DE:Benutzer
 permissions.user:RO:Utilizator
+permissions.user:IT:Utente
 # Translation missing
 
 
@@ -903,6 +908,7 @@ permissions.group:FR:Groupe
 permissions.group:zh_TW:群組
 permissions.group:DE:Gruppe
 permissions.group:RO:Grup
+permissions.group:IT:Gruppo
 # Translation missing
 
 
@@ -916,6 +922,7 @@ permissions.other:FR:Autre
 permissions.other:zh_TW:其它
 permissions.other:DE:Andere
 permissions.other:RO:Altele
+permissions.other:IT:Altro
 # Translation missing
 
 
@@ -929,6 +936,7 @@ permissions.octal_notation:FR:Notation octale
 permissions.octal_notation:zh_TW:八進位顯示
 permissions.octal_notation:DE:Oktale Schreibweise
 permissions.octal_notation:RO:Notație în baza opt
+permissions.octal_notation:IT:Notazione ottale
 # Translation missing
 
 
@@ -1044,6 +1052,7 @@ com.mucommander.ui.action.ChangeDateAction.label:FR:Changer la date
 com.mucommander.ui.action.ChangeDateAction.label:zh_TW:變更日期
 com.mucommander.ui.action.ChangeDateAction.label:DE:Datum ändern
 com.mucommander.ui.action.ChangeDateAction.label:RO:Schimbă data
+com.mucommander.ui.action.ChangeDateAction.label:IT:Cambia data
 # Translation missing
 
 
@@ -1062,6 +1071,7 @@ com.mucommander.ui.action.ChangeDateAction.tooltip:FR:Change la date des fichier
 com.mucommander.ui.action.ChangeDateAction.tooltip:zh_TW:變更所選檔案的日期
 com.mucommander.ui.action.ChangeDateAction.tooltip:DE:Datum der ausgewählten Datei(en) bearbeiten
 com.mucommander.ui.action.ChangeDateAction.tooltip:RO:Schimbă data fișierelor selectate
+com.mucommander.ui.action.ChangeDateAction.tooltip:IT:Cambia data dei file selezionati
 # Translation missing
 
 
@@ -1081,6 +1091,7 @@ com.mucommander.ui.action.ChangePermissionsAction.label:FR:Changer les permissio
 com.mucommander.ui.action.ChangePermissionsAction.label:zh_TW:變更權限
 com.mucommander.ui.action.ChangePermissionsAction.label:DE:Zugriffsrechte bearbeiten
 com.mucommander.ui.action.ChangePermissionsAction.label:RO:Schimbă permisiuni
+com.mucommander.ui.action.ChangePermissionsAction.label:IT:Cambia permessi
 # Translation missing
 
 
@@ -1099,6 +1110,7 @@ com.mucommander.ui.action.ChangePermissionsAction.tooltip:FR:Change les permissi
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:zh_TW:變更所選檔案的權限
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:DE:Zugriffsrechte der ausgewählten Datei(en) bearbeiten
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:RO:Schimbă permisiunile fișierelor selectate
+com.mucommander.ui.action.ChangePermissionsAction.tooltip:IT:Cambia permessi dei file selezionati
 # Translation missing
 
 
@@ -1635,6 +1647,7 @@ com.mucommander.ui.action.GoToHomeAction.label:FR:Aller au dossier utilisateur
 com.mucommander.ui.action.GoToHomeAction.label:zh_TW:跳至家目錄
 com.mucommander.ui.action.GoToHomeAction.label:DE:Gehe zum Heimat-Verzeichnis
 com.mucommander.ui.action.GoToHomeAction.label:RO:Mergi în directorul utilizatorului
+com.mucommander.ui.action.GoToHomeAction.label:IT:Torna nella cartella Home
 # Translation missing
 
 
@@ -1681,6 +1694,7 @@ com.mucommander.ui.action.GoToRootAction.label:FR:Aller à la racine
 com.mucommander.ui.action.GoToRootAction.label:zh_TW:跳至根目錄
 com.mucommander.ui.action.GoToRootAction.label:DE:Gehe zum Wurzel-Verzeichnis
 com.mucommander.ui.action.GoToRootAction.label:RO:Mergi în directorul rădăcină
+com.mucommander.ui.action.GoToRootAction.label:IT:Vai sulla directory Root
 # Translation missing
 
 
@@ -1887,6 +1901,7 @@ com.mucommander.ui.action.MarkPageDownAction.label:FR:Marquer les fichiers jusqu
 com.mucommander.ui.action.MarkPageDownAction.label:zh_TW:標記檔案至下一頁
 com.mucommander.ui.action.MarkPageDownAction.label:DE:Dateien bis zur nächsten Seite Markieren
 com.mucommander.ui.action.MarkPageDownAction.label:RO:Selectează fișierele din pagina următoare
+com.mucommander.ui.action.MarkPageDownAction.label:IT:Seleziona pagina giu'
 # Translation missing
 
 
@@ -1921,6 +1936,7 @@ com.mucommander.ui.action.MarkUpToFirstRowAction.label:FR:Marquer les fichiers j
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:zh_TW:標記檔案至開頭
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:DE:Dateien bis zum Anfang Markieren
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:RO:Selectează fișierele până la început
+com.mucommander.ui.action.MarkUpToFirstRowAction.label:IT:Seleziona file dall'inizio
 # Translation missing
 
 
@@ -1938,6 +1954,7 @@ com.mucommander.ui.action.MarkUpToLastRowAction.label:FR:Marquer les fichiers ju
 com.mucommander.ui.action.MarkUpToLastRowAction.label:zh_TW:標記檔案至結尾
 com.mucommander.ui.action.MarkUpToLastRowAction.label:DE:Dateien bis zum Ende Markieren
 com.mucommander.ui.action.MarkUpToLastRowAction.label:RO:Selectează fișierele până la sfârșit
+com.mucommander.ui.action.MarkUpToLastRowAction.label:IT:Seleziona file fino alla fine
 # Translation missing
 
 
@@ -2848,6 +2865,7 @@ go_menu:FR:Go
 go_menu:zh_TW:跳至
 go_menu:DE:Gehe
 go_menu:RO:Mergi
+go_menu:IT:Vai
 # Translation missing
 
 
@@ -4328,6 +4346,7 @@ progress_dialog.processing_files:FR:Traitement des fichiers en cours
 progress_dialog.processing_files:zh_TW:正在處理檔案
 progress_dialog.processing_files:DE:Bearbeite Dateien
 progress_dialog.processing_files:RO:Fișierele sunt procesate
+progress_dialog.processing_files:IT:Elaborazione file
 # Translation missing
 
 
@@ -4345,6 +4364,7 @@ progress_dialog.processing_file:FR:Traitement de %1 en cours
 progress_dialog.processing_file:zh_TW:正在處理 %1
 progress_dialog.processing_file:DE:Bearbeite %1
 progress_dialog.processing_file:RO:Procesez %1
+progress_dialog.processing_file:IT:Elaborando %1
 # Translation missing
 
 
@@ -4459,6 +4479,7 @@ change_date_dialog.now:FR:Maintenant
 change_date_dialog.now:zh_TW:現在
 change_date_dialog.now:DE:Jetzt
 change_date_dialog.now:RO:Acum
+change_date_dialog.now:IT:Adesso
 # Translation missing
 
 
@@ -4474,6 +4495,7 @@ change_date_dialog.specific_date:FR:Date spécifique
 change_date_dialog.specific_date:zh_TW:指定日期
 change_date_dialog.specific_date:DE:Spezielles Datum
 change_date_dialog.specific_date:RO:Dară specifică
+change_date_dialog.specific_date:IT:Specifica data
 # Translation missing
 
 
@@ -6372,18 +6394,6 @@ prefs_dialog.shell_colors.text_color:DE:Text
 
 
 prefs_dialog.shell_colors.background_color:EN:$[prefs_dialog.background_color]
-prefs_dialog.shell_colors.background_color:zh_TW:$[prefs_dialog.background_color]
-prefs_dialog.shell_colors.selection_color:EN:$[prefs_dialog.selection_color]
-prefs_dialog.shell_colors.selection_color:zh_TW:$[prefs_dialog.selection_color]
-# Translation missing
-
-
-
-
-
-
-
-
 
 prefs_dialog.themes:EN:Themes
 prefs_dialog.themes:FR:Thèmes
@@ -6810,6 +6820,7 @@ theme.custom_theme:SI:Običajna tema
 theme.custom_theme:zh_TW:自訂佈景主題
 theme.custom_theme:DE:Angepasstes Thema
 theme.custom_theme:RO:Temă personalizată
+theme.custom_theme:IT:Tema utente
 # Translation missing
 
 
