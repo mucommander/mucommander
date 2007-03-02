@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * The superclass of all files, all your files are belong to it.
  *
  * <p>AbstractFile instances cannot and should not be created directly, use {@link FileFactory FileFactory}
- * for that purposes.
+ * for that purposes.</p>
  *
  * @see com.mucommander.file.FileFactory
  * @see com.mucommander.file.impl.ProxyFile

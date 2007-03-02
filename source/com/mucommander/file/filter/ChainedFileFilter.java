@@ -51,4 +51,6 @@ public abstract class ChainedFileFilter extends FileFilter {
     public synchronized Iterator getFileFilterIterator() {
         return filters.iterator();
     }
+
+    public synchronized boolean isEmpty() {return filters.isEmpty();}
 }

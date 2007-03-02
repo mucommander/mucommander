@@ -22,10 +22,15 @@ public class RegexpFilenameFilter extends FilenameFilter {
     /**
      * Creates a new regular expression based file name filter.
      * @param  regexp                 regular expression against which to match file names.
+     * @param  caseSensitive          whether the regular expression is case sensitive or not.
      * @throws PatternSyntaxException if the syntax of the regular expression is not correct.
      */
-    public RegexpFilenameFilter(String regexp) throws PatternSyntaxException {pattern = Pattern.compile(regexp);}
-
+    public RegexpFilenameFilter(String regexp, boolean caseSensitive) throws PatternSyntaxException {
+        if(caseSensitive)
+            pattern = Pattern.compile(regexp);
+        else
+            pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
+    }
 
 
     // - File name filter methods ----------------------------------------------
@@ -46,4 +51,5 @@ public class RegexpFilenameFilter extends FilenameFilter {
      * @return the regular expression used by this filter.
      */
     public String getRegularExpression() {return pattern.pattern();}
+    public boolean isCaseSensitive() {return (pattern.flags() & Pattern.CASE_INSENSITIVE) == 0;}
 }

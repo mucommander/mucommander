@@ -45,40 +45,70 @@ public class AssociationWriter implements AssociationsXmlConstants, AssociationB
      */
     public void endBuilding() {out.endElement(ELEMENT_ROOT);}
 
-    /**
-     * Writes the specified association's XML description.
-     * @param mask    file name mask to use in the association.
-     * @param command alias of the command to use in the associations.
-     */
-    public void addAssociation(String mask, String command) {
-        addAssociation(mask, CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, command);
+    public void startAssociation(String command) {
+        XmlAttributes attr;
+
+        attr = new XmlAttributes();
+        attr.add(ATTRIBUTE_COMMAND, command);
+        out.startElement(ELEMENT_ASSOCIATION, attr);
+        out.println();
     }
 
-    public void addAssociation(String mask, int read, int write, int execute, String command) {
-        XmlAttributes attributes;
+    public void endAssociation() {out.endElement(ELEMENT_ASSOCIATION);}
 
-        // Builds the XML description of the association.
-        attributes = new XmlAttributes();
-        if(mask != null)
-            attributes.add(ARGUMENT_MASK, mask);
-        if(read == CommandAssociation.YES)
-            attributes.add(ARGUMENT_READABLE, VALUE_YES);
-        else if(read == CommandAssociation.NO)
-            attributes.add(ARGUMENT_READABLE, VALUE_NO);
+    public void setMask(String mask, boolean isCaseSensitive) {
+        XmlAttributes attr;
 
-        if(write == CommandAssociation.YES)
-            attributes.add(ARGUMENT_WRITABLE, VALUE_YES);
-        else if(write == CommandAssociation.NO)
-            attributes.add(ARGUMENT_WRITABLE, VALUE_NO);
+        attr = new XmlAttributes();
+        attr.add(ATTRIBUTE_VALUE, mask);
+        if(!isCaseSensitive)
+            attr.add(ATTRIBUTE_CASE_SENSITIVE, VALUE_FALSE);
 
-        if(execute == CommandAssociation.YES)
-            attributes.add(ARGUMENT_EXECUTABLE, VALUE_YES);
-        else if(execute == CommandAssociation.NO)
-            attributes.add(ARGUMENT_EXECUTABLE, VALUE_NO);
+        out.writeStandAloneElement(ELEMENT_MASK, attr);
+    }
 
-        attributes.add(ARGUMENT_COMMAND, command);
+    public void setIsSymlink(boolean isSymlink) {
+        XmlAttributes attr;
 
-        // Writes the XML description.
-        out.writeStandAloneElement(ELEMENT_ASSOCIATION, attributes);
+        attr = new XmlAttributes();
+        attr.add(ATTRIBUTE_VALUE, isSymlink ? VALUE_TRUE : VALUE_FALSE);
+
+        out.writeStandAloneElement(ELEMENT_IS_SYMLINK, attr);
+    }
+
+    public void setIsHidden(boolean isHidden) {
+        XmlAttributes attr;
+
+        attr = new XmlAttributes();
+        attr.add(ATTRIBUTE_VALUE, isHidden ? VALUE_TRUE : VALUE_FALSE);
+
+        out.writeStandAloneElement(ELEMENT_IS_HIDDEN, attr);
+    }
+
+    public void setIsReadable(boolean isReadable) {
+        XmlAttributes attr;
+
+        attr = new XmlAttributes();
+        attr.add(ATTRIBUTE_VALUE, isReadable ? VALUE_TRUE : VALUE_FALSE);
+
+        out.writeStandAloneElement(ELEMENT_IS_READABLE, attr);
+    }
+
+    public void setIsWritable(boolean isWritable) {
+        XmlAttributes attr;
+
+        attr = new XmlAttributes();
+        attr.add(ATTRIBUTE_VALUE, isWritable ? VALUE_TRUE : VALUE_FALSE);
+
+        out.writeStandAloneElement(ELEMENT_IS_WRITABLE, attr);
+    }
+
+    public void setIsExecutable(boolean isExecutable) {
+        XmlAttributes attr;
+
+        attr = new XmlAttributes();
+        attr.add(ATTRIBUTE_VALUE, isExecutable ? VALUE_TRUE : VALUE_FALSE);
+
+        out.writeStandAloneElement(ELEMENT_IS_EXECUTABLE, attr);
     }
 }

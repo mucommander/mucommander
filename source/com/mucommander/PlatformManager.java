@@ -112,6 +112,8 @@ public class PlatformManager {
     public static final String  EXE_ASSOCIATION;
     /** Whether or not the system can or needs to run executable files as themselves. */
     public static final boolean RUN_EXECUTABLES;
+    /** Whether or not default regular expressions must be case sensitive. */
+    public static final boolean DEFAULT_REGEXP_CASE_SENSITIVITY;
 
     /** Windows file manager name. */
     private static final String WINDOWS_FILE_MANAGER_NAME   = "Explorer";
@@ -155,7 +157,7 @@ public class PlatformManager {
     /** Regular expression that tries to match POSIX executable files. */
     private static final String POSIX_EXE_REGEXP           = "[^.]+";
     /** Regular expression that tries to match Windows executable files. */
-    private static final String WINDOWS_EXE_REGEXP         = ".*\\.[eE][xX][eE]";
+    private static final String WINDOWS_EXE_REGEXP         = ".*\\.exe";
 
 
 
@@ -222,23 +224,25 @@ public class PlatformManager {
 
             // Windows 95, 98, Me
             if (osName.startsWith("Windows 95") || osName.startsWith("Windows 98") || osName.startsWith("Windows Me")) {
-                OS_FAMILY                    = WINDOWS_9X;
-                DEFAULT_FILE_MANAGER_COMMAND = WINDOWS_9X_FILE_OPENER;
-                DEFAULT_FILE_OPENER_COMMAND  = WINDOWS_9X_FILE_OPENER;
-                DEFAULT_URL_OPENER_COMMAND   = WINDOWS_9X_FILE_OPENER;
-                DEFAULT_EXE_OPENER_COMMAND   = null;
-                EXE_ASSOCIATION              = null;
-                RUN_EXECUTABLES              = false;
+                OS_FAMILY                       = WINDOWS_9X;
+                DEFAULT_FILE_MANAGER_COMMAND    = WINDOWS_9X_FILE_OPENER;
+                DEFAULT_FILE_OPENER_COMMAND     = WINDOWS_9X_FILE_OPENER;
+                DEFAULT_URL_OPENER_COMMAND      = WINDOWS_9X_FILE_OPENER;
+                DEFAULT_EXE_OPENER_COMMAND      = null;
+                EXE_ASSOCIATION                 = null;
+                RUN_EXECUTABLES                 = false;
+                DEFAULT_REGEXP_CASE_SENSITIVITY = false;
             }
             // Windows NT, 2000, XP and up
             else {
-                OS_FAMILY                    = WINDOWS_NT;
-                DEFAULT_FILE_MANAGER_COMMAND = WINDOWS_NT_FILE_OPENER;
-                DEFAULT_FILE_OPENER_COMMAND  = WINDOWS_NT_FILE_OPENER;
-                DEFAULT_URL_OPENER_COMMAND   = WINDOWS_NT_FILE_OPENER;
-                DEFAULT_EXE_OPENER_COMMAND   = WINDOWS_NT_EXE_OPENER;
-                EXE_ASSOCIATION              = WINDOWS_EXE_REGEXP;
-                RUN_EXECUTABLES              = false;
+                OS_FAMILY                       = WINDOWS_NT;
+                DEFAULT_FILE_MANAGER_COMMAND    = WINDOWS_NT_FILE_OPENER;
+                DEFAULT_FILE_OPENER_COMMAND     = WINDOWS_NT_FILE_OPENER;
+                DEFAULT_URL_OPENER_COMMAND      = WINDOWS_NT_FILE_OPENER;
+                DEFAULT_EXE_OPENER_COMMAND      = WINDOWS_NT_EXE_OPENER;
+                EXE_ASSOCIATION                 = WINDOWS_EXE_REGEXP;
+                RUN_EXECUTABLES                 = false;
+                DEFAULT_REGEXP_CASE_SENSITIVITY = false;
             }
         }
         // Mac OS family
@@ -250,37 +254,40 @@ public class PlatformManager {
                || osVersion.startsWith("8.")
                || osVersion.startsWith("9.")) {
                 OS_FAMILY = MAC_OS;
-                DEFAULT_FILE_MANAGER_NAME    = null;
-                DEFAULT_FILE_MANAGER_COMMAND = null;
-                DEFAULT_FILE_OPENER_COMMAND  = null;
-                DEFAULT_URL_OPENER_COMMAND   = null;
-                DEFAULT_EXE_OPENER_COMMAND   = null;
-                EXE_ASSOCIATION              = null;
-                RUN_EXECUTABLES              = false;
+                DEFAULT_FILE_MANAGER_NAME       = null;
+                DEFAULT_FILE_MANAGER_COMMAND    = null;
+                DEFAULT_FILE_OPENER_COMMAND     = null;
+                DEFAULT_URL_OPENER_COMMAND      = null;
+                DEFAULT_EXE_OPENER_COMMAND      = null;
+                EXE_ASSOCIATION                 = null;
+                RUN_EXECUTABLES                 = false;
+                DEFAULT_REGEXP_CASE_SENSITIVITY = true;
             }
             // Mac OS X or up
             else {
-                OS_FAMILY                    = MAC_OS_X;
-                DEFAULT_FILE_MANAGER_NAME    = MAC_OS_X_FILE_MANAGER_NAME;
-                DEFAULT_FILE_MANAGER_COMMAND = MAC_OS_X_FILE_MANAGER;
-                DEFAULT_FILE_OPENER_COMMAND  = MAC_OS_X_FILE_OPENER;
-                DEFAULT_URL_OPENER_COMMAND   = MAC_OS_X_FILE_OPENER;
-                DEFAULT_EXE_OPENER_COMMAND   = null;
-                EXE_ASSOCIATION              = null;
-                RUN_EXECUTABLES              = false;
+                OS_FAMILY                       = MAC_OS_X;
+                DEFAULT_FILE_MANAGER_NAME       = MAC_OS_X_FILE_MANAGER_NAME;
+                DEFAULT_FILE_MANAGER_COMMAND    = MAC_OS_X_FILE_MANAGER;
+                DEFAULT_FILE_OPENER_COMMAND     = MAC_OS_X_FILE_OPENER;
+                DEFAULT_URL_OPENER_COMMAND      = MAC_OS_X_FILE_OPENER;
+                DEFAULT_EXE_OPENER_COMMAND      = null;
+                EXE_ASSOCIATION                 = null;
+                RUN_EXECUTABLES                 = false;
+                DEFAULT_REGEXP_CASE_SENSITIVITY = true;
             }
         }
         // OS/2 family.
         else if(osName.startsWith("OS/2")) {
-            OS_FAMILY                    = OS_2;
-            UNIX_DESKTOP                 = UNKNOWN_DESKTOP;
-            DEFAULT_FILE_MANAGER_NAME    = null;
-            DEFAULT_FILE_MANAGER_COMMAND = null;
-            DEFAULT_FILE_OPENER_COMMAND  = null;
-            DEFAULT_URL_OPENER_COMMAND   = null;
-            DEFAULT_EXE_OPENER_COMMAND   = POSIX_EXE_OPENER;
-            RUN_EXECUTABLES              = true;
-            EXE_ASSOCIATION              = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
+            OS_FAMILY                       = OS_2;
+            UNIX_DESKTOP                    = UNKNOWN_DESKTOP;
+            DEFAULT_FILE_MANAGER_NAME       = null;
+            DEFAULT_FILE_MANAGER_COMMAND    = null;
+            DEFAULT_FILE_OPENER_COMMAND     = null;
+            DEFAULT_URL_OPENER_COMMAND      = null;
+            DEFAULT_EXE_OPENER_COMMAND      = POSIX_EXE_OPENER;
+            RUN_EXECUTABLES                 = true;
+            EXE_ASSOCIATION                 = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
+            DEFAULT_REGEXP_CASE_SENSITIVITY = true;
         }
         // Unix, or assimilated.
         else {
@@ -320,38 +327,41 @@ public class PlatformManager {
 
             // Tries to identify Gnome.
             if((gnomeEnvValue!=null && !gnomeEnvValue.trim().equals("")) || couldRun("gnome-open")) {
-                UNIX_DESKTOP                 = GNOME_DESKTOP;
-                DEFAULT_FILE_MANAGER_NAME    = GNOME_FILE_MANAGER_NAME;
-                DEFAULT_FILE_MANAGER_COMMAND = GNOME_FILE_OPENER;
-                DEFAULT_FILE_OPENER_COMMAND  = GNOME_FILE_OPENER;
-                DEFAULT_URL_OPENER_COMMAND   = GNOME_FILE_OPENER;
-                DEFAULT_EXE_OPENER_COMMAND   = POSIX_EXE_OPENER;
-                RUN_EXECUTABLES              = true;
-                EXE_ASSOCIATION              = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
+                UNIX_DESKTOP                    = GNOME_DESKTOP;
+                DEFAULT_FILE_MANAGER_NAME       = GNOME_FILE_MANAGER_NAME;
+                DEFAULT_FILE_MANAGER_COMMAND    = GNOME_FILE_OPENER;
+                DEFAULT_FILE_OPENER_COMMAND     = GNOME_FILE_OPENER;
+                DEFAULT_URL_OPENER_COMMAND      = GNOME_FILE_OPENER;
+                DEFAULT_EXE_OPENER_COMMAND      = POSIX_EXE_OPENER;
+                RUN_EXECUTABLES                 = true;
+                EXE_ASSOCIATION                 = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
+                DEFAULT_REGEXP_CASE_SENSITIVITY = true;
             }
 
             // Tries to identify KDE.
             else if(kdeEnvValue!=null && !kdeEnvValue.trim().equals("") || couldRun("kfmclient")) {
-                UNIX_DESKTOP                 = KDE_DESKTOP;
-                DEFAULT_FILE_MANAGER_NAME    = KDE_FILE_MANAGER_NAME;
-                DEFAULT_FILE_MANAGER_COMMAND = KDE_FILE_OPENER;
-                DEFAULT_FILE_OPENER_COMMAND  = KDE_FILE_OPENER;
-                DEFAULT_URL_OPENER_COMMAND   = KDE_URL_OPENER;
-                DEFAULT_EXE_OPENER_COMMAND   = null;
-                EXE_ASSOCIATION              = null;
-                RUN_EXECUTABLES              = false;
+                UNIX_DESKTOP                    = KDE_DESKTOP;
+                DEFAULT_FILE_MANAGER_NAME       = KDE_FILE_MANAGER_NAME;
+                DEFAULT_FILE_MANAGER_COMMAND    = KDE_FILE_OPENER;
+                DEFAULT_FILE_OPENER_COMMAND     = KDE_FILE_OPENER;
+                DEFAULT_URL_OPENER_COMMAND      = KDE_URL_OPENER;
+                DEFAULT_EXE_OPENER_COMMAND      = null;
+                EXE_ASSOCIATION                 = null;
+                RUN_EXECUTABLES                 = false;
+                DEFAULT_REGEXP_CASE_SENSITIVITY = true;
             }
 
             // Absolutely no clue what we're running.
             else {
-                UNIX_DESKTOP                 = UNKNOWN_DESKTOP;
-                DEFAULT_FILE_MANAGER_NAME    = null;
-                DEFAULT_FILE_MANAGER_COMMAND = null;
-                DEFAULT_FILE_OPENER_COMMAND  = null;
-                DEFAULT_URL_OPENER_COMMAND   = null;
-                DEFAULT_EXE_OPENER_COMMAND   = POSIX_EXE_OPENER;
-                RUN_EXECUTABLES              = true;
-                EXE_ASSOCIATION              = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
+                UNIX_DESKTOP                    = UNKNOWN_DESKTOP;
+                DEFAULT_FILE_MANAGER_NAME       = null;
+                DEFAULT_FILE_MANAGER_COMMAND    = null;
+                DEFAULT_FILE_OPENER_COMMAND     = null;
+                DEFAULT_URL_OPENER_COMMAND      = null;
+                DEFAULT_EXE_OPENER_COMMAND      = POSIX_EXE_OPENER;
+                RUN_EXECUTABLES                 = true;
+                EXE_ASSOCIATION                 = (JAVA_VERSION < JAVA_1_6) ? POSIX_EXE_REGEXP : null;
+                DEFAULT_REGEXP_CASE_SENSITIVITY = true;
             }
         }
 

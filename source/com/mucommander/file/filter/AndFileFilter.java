@@ -38,7 +38,6 @@ public class AndFileFilter extends ChainedFileFilter {
         for(int i=0; i<nbFilters; i++)
             if(!((FileFilter)filters.elementAt(i)).accept(file))
                 return false;
-
         return true;
     }
 }

@@ -28,6 +28,7 @@ public class AssociationReader implements ContentHandler, AssociationsXmlConstan
     // -----------------------------------------------------------------------
     /** Where to send building messages. */
     private AssociationBuilder builder;
+    private boolean            isInAssociation;
 
 
 
@@ -89,25 +90,60 @@ public class AssociationReader implements ContentHandler, AssociationsXmlConstan
      * This method is public as an implementation side effect and should not be called directly.
      */
     public void startElement(String uri, String name, Hashtable attributes, Hashtable attURIs) throws Exception {
-        // New custom association definition. Any other element is ignored, in an attempt to make
-        // parsing as error resistant as possible.
-        if(name.equals(ELEMENT_ASSOCIATION)) {
-            String mask;    // Association's mask.
-            String command; // Association's command.
-         
-            // Makes sure the required attributes are present.
-            if((command = (String)attributes.get(ARGUMENT_COMMAND)) == null)
-                throw new Exception("Unspecified association command.");
-            if((mask = (String)attributes.get(ARGUMENT_MASK)) == null)
-                throw new Exception("Unspecified association mask.");
+        String buffer;
 
-            // Notifies the builder that a new association has been found.
-            builder.addAssociation(mask, getConstantForValue((String)attributes.get(ARGUMENT_READABLE)),
-                                   getConstantForValue((String)attributes.get(ARGUMENT_WRITABLE)),
-                                   getConstantForValue((String)attributes.get(ARGUMENT_EXECUTABLE)), command);
+        if(!isInAssociation) {
+            if(name.equals(ELEMENT_ASSOCIATION)) {
+                // Makes sure the required attributes are present.
+                if((buffer = (String)attributes.get(ATTRIBUTE_COMMAND)) == null)
+                    throw new Exception("Unspecified association command.");
+
+                isInAssociation = true;
+                builder.startAssociation(buffer);
+            }
+            else if(!name.equals(ELEMENT_ROOT))
+                throw new Exception("Unknwon element opening: " + name);
+        }
+        else {
+            if(name.equals(ELEMENT_MASK)) {
+                String caseSensitive;
+
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
+                    throw new Exception("Unspecified mask value.");
+                if((caseSensitive = (String)attributes.get(ATTRIBUTE_CASE_SENSITIVE)) != null)
+                    builder.setMask(buffer, caseSensitive.equals(VALUE_TRUE));
+                else
+                    builder.setMask(buffer, true);
+            }
+            else if(name.equals(ELEMENT_IS_HIDDEN)) {
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
+                    throw new Exception("Unspecified hidden value.");
+                builder.setIsHidden(buffer.equals(VALUE_TRUE));
+            }
+            else if(name.equals(ELEMENT_IS_SYMLINK)) {
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
+                    throw new Exception("Unspecified symlink value.");
+                builder.setIsSymlink(buffer.equals(VALUE_TRUE));
+            }
+            else if(name.equals(ELEMENT_IS_READABLE)) {
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
+                    throw new Exception("Unspecified readable value.");
+                builder.setIsReadable(buffer.equals(VALUE_TRUE));
+            }
+            else if(name.equals(ELEMENT_IS_WRITABLE)) {
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
+                    throw new Exception("Unspecified writable value.");
+                builder.setIsWritable(buffer.equals(VALUE_TRUE));
+            }
+            else if(name.equals(ELEMENT_IS_EXECUTABLE)) {
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
+                    throw new Exception("Unspecified executable value.");
+                builder.setIsExecutable(buffer.equals(VALUE_TRUE));
+            }
+            else
+                throw new Exception("Unknwon element opening: " + name);
         }
     }
-
 
 
     // - Unused XML methods --------------------------------------------------
@@ -115,7 +151,19 @@ public class AssociationReader implements ContentHandler, AssociationsXmlConstan
     /**
      * This method is public as an implementation side effect, but should not be called directly.
      */
-    public void startDocument() throws Exception {}
+    public void endElement(String uri, String name) throws Exception {
+        if(name.equals(ELEMENT_ASSOCIATION)) {
+            if(!isInAssociation)
+                throw new Exception("Illegal element closing: " + name);
+            builder.endAssociation();
+            isInAssociation = false;
+        }
+    }
+
+    /**
+     * This method is public as an implementation side effect, but should not be called directly.
+     */
+    public void startDocument() throws Exception {isInAssociation = false;}
 
     /**
      * This method is public as an implementation side effect, but should not be called directly.
@@ -126,37 +174,4 @@ public class AssociationReader implements ContentHandler, AssociationsXmlConstan
      * This method is public as an implementation side effect, but should not be called.
      */
     public void characters(String s) {}
-
-    /**
-     * This method is public as an implementation side effect, but should not be called.
-     */
-    public void endElement(String uri, String name) throws Exception {}
-
-
-
-    // - Misc. methods -------------------------------------------------------
-    // -----------------------------------------------------------------------
-    /**
-     * Analyses the specified value and returns its integer constant equivalent.
-     * <p>
-     * Note that this method is not strict about its argument: if <code>value</code> is <code>null</code>
-     * or not a known value, it will be taken to mean {@link CommandAssociation@UNFILTERED}.
-     * </p>
-     * @param  value value to analyse.
-     * @return       <code>value</code>'s integer equivalent.
-     */
-    private static int getConstantForValue(String value) {
-        if(value != null) {
-            if(value.equals(VALUE_YES))
-                return CommandAssociation.YES;
-            else if(value.equals(VALUE_NO))
-                return CommandAssociation.NO;
-            // If value is neither null nor known, we're in a bit of a dodgy case
-            // and should at least notify the user.
-            else if(Debug.ON)
-                Debug.trace("Warning: unknown command type '" + value + "'.");
-        }
-        return CommandAssociation.UNFILTERED;
-    }
-
 }

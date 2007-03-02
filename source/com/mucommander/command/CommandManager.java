@@ -3,6 +3,7 @@ package com.mucommander.command;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.filter.*;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 
@@ -14,7 +15,7 @@ import java.util.Vector;
 /**
  * @author Nicolas Rinaudo
  */
-public class CommandManager implements AssociationBuilder, CommandBuilder {
+public class CommandManager implements CommandBuilder {
     // - Built-in commands -----------------------------------------------------
     // -------------------------------------------------------------------------
     /** Alias for the system file opener. */
@@ -266,17 +267,13 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
      */
     public static Iterator associations() {return associations.iterator();}
 
-    public static void registerAssociation(String mask, String command) throws CommandException {
-        registerAssociation(mask, CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, command);
-    }
-
-    public static void registerAssociation(String mask, int read, int write, int execute, String command) throws CommandException {
+    public static void registerAssociation(String command, ChainedFileFilter filter) throws CommandException {
         Command cmd;
 
         // The specified alias is known, registers the association and marks associations as modified.
         if((cmd = getCommandForAlias(command)) != null) {
-            if(Debug.ON) Debug.trace("Registering '" + command + "' to files that match '" + mask + "' at the end of the list.");
-            associations.add(new CommandAssociation(cmd, mask, read, write, execute));
+            if(Debug.ON) Debug.trace("Registering '" + command + "'.");
+            associations.add(new CommandAssociation(cmd, filter));
             wereAssociationsModified = true;
         }
 
@@ -346,11 +343,6 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
     // - Associations building -------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * This method is public as an implementation side effect and should not be called.
-     */
-    public void addAssociation(String mask, int read, int write, int execute, String command) throws CommandException {registerAssociation(mask, read, write, execute, command);}
-
-    /**
      * Passes all known file associations to the specified builder.
      * <p>
      * This method guarantees that the builder's {@link AssociationBuilder#startBuilding() startBuilding()} and
@@ -363,6 +355,8 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
      */
     public static void buildAssociations(AssociationBuilder builder) throws CommandException {
         Iterator           iterator; // Used to iterate through commands and associations.
+        Iterator           filters;  // Used to iterate through each association's filters.
+        FileFilter         filter;   // Buffer for the current file filter.
         CommandAssociation current;  // Current command association.
 
         builder.startBuilding();
@@ -372,9 +366,55 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
         try {
             while(iterator.hasNext()) {
                 current = (CommandAssociation)iterator.next();
-                builder.addAssociation(current.getRegularExpression(),
-                                       current.getReadFilter(), current.getWriteFilter(), current.getExecuteFilter(),
-                                       current.getCommand().getAlias());
+                builder.startAssociation(current.getCommand().getAlias());
+
+                filters = current.filters();
+                while(filters.hasNext()) {
+                    filter = (FileFilter)filters.next();
+
+                    // Filter on the file type.
+                    if(filter instanceof TypeFileFilter) {
+                        TypeFileFilter typeFilter;
+
+                        typeFilter = (TypeFileFilter)filter;
+                        switch(typeFilter.getType()) {
+                        case TypeFileFilter.HIDDEN:
+                            builder.setIsHidden(typeFilter.getFilter());
+                            break;
+
+                        case TypeFileFilter.SYMLINK:
+                            builder.setIsSymlink(typeFilter.getFilter());
+                            break;
+                        }
+                    }
+                    else if(filter instanceof PermissionsFileFilter) {
+                        PermissionsFileFilter permissionFilter;
+
+                        permissionFilter = (PermissionsFileFilter)filter;
+
+                        switch(permissionFilter.getPermission()) {
+                        case PermissionsFileFilter.READ_PERMISSION:
+                            builder.setIsReadable(permissionFilter.getFilter());
+                            break;
+
+                        case PermissionsFileFilter.WRITE_PERMISSION:
+                            builder.setIsWritable(permissionFilter.getFilter());
+                            break;
+
+                        case PermissionsFileFilter.EXECUTE_PERMISSION:
+                            builder.setIsExecutable(permissionFilter.getFilter());
+                            break;
+                        }
+                    }
+                    else if(filter instanceof RegexpFilenameFilter) {
+                        RegexpFilenameFilter regexpFilter;
+
+                        regexpFilter = (RegexpFilenameFilter)filter;
+                        builder.setMask(regexpFilter.getRegularExpression(), regexpFilter.isCaseSensitive());
+                    }
+                }
+
+                builder.endAssociation();
             }
         }
         finally {builder.endBuilding();}
@@ -448,7 +488,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
 
             // Tries to load the associations file. If an error occurs, create default associations.
             in = null;
-            try {AssociationReader.read(in = new BackupInputStream(file), new CommandManager());}
+            try {AssociationReader.read(in = new BackupInputStream(file), new AssociationFactory());}
             catch(Exception e) {
                 if(Debug.ON) Debug.trace("Failed to load associations file: " + e.getMessage() + ". Using default associations");
 
@@ -469,15 +509,25 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
         // - if the system has an association for that command, use it.
         // - If we have a sure way of identifying executable files (Java >= 1.6), use it.
         if(getCommandForAlias(EXE_OPENER_ALIAS) != null) {
+            AndFileFilter filter;
+
             // Uses the 'executable' regexp if it exists.
             if(PlatformManager.EXE_ASSOCIATION != null) {
-                try {registerAssociation(PlatformManager.EXE_ASSOCIATION, EXE_OPENER_ALIAS);}
+                try {
+                    filter = new AndFileFilter();
+                    filter.addFileFilter(new RegexpFilenameFilter(PlatformManager.EXE_ASSOCIATION, PlatformManager.DEFAULT_REGEXP_CASE_SENSITIVITY));
+                    registerAssociation(EXE_OPENER_ALIAS, filter);
+                }
                 catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
             }
 
             // Match executables if necessary and if running under java >= 1.6.
             if(PlatformManager.RUN_EXECUTABLES && (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)) {
-                try {registerAssociation(".*", CommandAssociation.UNFILTERED, CommandAssociation.UNFILTERED, CommandAssociation.YES, EXE_OPENER_ALIAS);}
+                try {
+                    filter = new AndFileFilter();
+                    filter.addFileFilter(new PermissionsFileFilter(PermissionsFileFilter.EXECUTE_PERMISSION, true));
+                    registerAssociation(EXE_OPENER_ALIAS, filter);
+                }
                 catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
             }
         }
@@ -502,6 +552,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
      * @see    #setAssociationFile(String)
      */
     public static boolean writeAssociations() {
+        wereAssociationsModified = true;
         // Do not save the associations if they were not modified.
         if(wereAssociationsModified) {
             BackupOutputStream out;    // Where to write the associations.
@@ -620,8 +671,7 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
             }
 
         }
-        else if(Debug.ON)
-            Debug.trace("Custom commands not modified, skip saving.");
+        else if(Debug.ON) Debug.trace("Custom commands not modified, skip saving.");
         return true;
     }
 
@@ -666,10 +716,9 @@ public class CommandManager implements AssociationBuilder, CommandBuilder {
         }
 
         // Registers default commands if necessary.
-        // Default file opener.
-        registerDefaultCommand(FILE_OPENER_ALIAS, PlatformManager.DEFAULT_FILE_OPENER_COMMAND, null);
-        registerDefaultCommand(URL_OPENER_ALIAS, PlatformManager.DEFAULT_URL_OPENER_COMMAND, null);
-        registerDefaultCommand(EXE_OPENER_ALIAS, PlatformManager.DEFAULT_EXE_OPENER_COMMAND, null);
+        registerDefaultCommand(FILE_OPENER_ALIAS,  PlatformManager.DEFAULT_FILE_OPENER_COMMAND, null);
+        registerDefaultCommand(URL_OPENER_ALIAS,   PlatformManager.DEFAULT_URL_OPENER_COMMAND, null);
+        registerDefaultCommand(EXE_OPENER_ALIAS,   PlatformManager.DEFAULT_EXE_OPENER_COMMAND, null);
         registerDefaultCommand(FILE_MANAGER_ALIAS, PlatformManager.DEFAULT_FILE_MANAGER_COMMAND, PlatformManager.DEFAULT_FILE_MANAGER_NAME);
 
         wereCommandsModified = false;
