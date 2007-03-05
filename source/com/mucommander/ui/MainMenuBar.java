@@ -23,6 +23,7 @@ import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
@@ -291,10 +292,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         Object source = e.getSource();
 
-        if(source==windowMenu) {
-            // Bring the frame corresponding to the clicked menu item to the front
-            ((JFrame)windowMenuFrames.get(source)).toFront();
-        }
+        // Bring the frame corresponding to the clicked menu item to the front
+        ((JFrame)windowMenuFrames.get(source)).toFront();
     }
 
 
@@ -340,7 +339,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             int nbFolders = rootFolders.length;
 
             for(int i=0; i<nbFolders; i++)
-                goMenu.add(new OpenLocationAction(mainFrame, rootFolders[i]));                
+                goMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
         }
         else if(source==bookmarksMenu) {
             // Remove any previous bookmarks menu items from menu
@@ -354,7 +353,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             if(nbBookmarks>0) {
                 Bookmark b;
                 for(int i=0; i<nbBookmarks; i++)
-                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, (Bookmark)bookmarks.elementAt(i)), null);
+                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable(), (Bookmark)bookmarks.elementAt(i)), null);
             }
             else {
                 // Show 'No bookmark' as a disabled menu item instead showing nothing
@@ -390,17 +389,26 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 mainFrame = (MainFrame)mainFrames.elementAt(i);
                 checkBoxMenuItem = new JCheckBoxMenuItem();
 
-                // If frame number is less than 10, use the corresponding action (accelerator will be displayed in the menu item)
-                if(i<10)
-                    checkBoxMenuItem.setAction(ActionManager.getActionInstance(RECALL_WINDOW_ACTIONS[i], this.mainFrame));
-                // Else catch the action event
+                // If frame number is less than 10, use the corresponding action class (accelerator will be displayed in the menu item)
+                MucoAction recallWindowAction;
+                if(i<10) {
+                    recallWindowAction = ActionManager.getActionInstance(RECALL_WINDOW_ACTIONS[i], this.mainFrame);
+                }
+                // Else use the generic RecallWindowAction
                 else {
-                    checkBoxMenuItem.addActionListener(this);
-                    windowMenuFrames.put(checkBoxMenuItem, mainFrame);
+                    Hashtable actionProps = new Hashtable();
+                    // Specify the window number using the dedicated property
+                    actionProps.put(RecallWindowAction.WINDOW_NUMBER_PROPERTY_KEY, ""+(i+1));
+                    recallWindowAction = ActionManager.getActionInstance(new ActionDescriptor(RecallWindowAction.class, actionProps), this.mainFrame);
                 }
 
-                // Display the MainFrame's current folder path
+                checkBoxMenuItem.setAction(recallWindowAction);
+
+                // Replace the action's label and use the MainFrame's current folder path instead
                 checkBoxMenuItem.setText((i+1)+" "+mainFrame.getActiveTable().getCurrentFolder().getAbsolutePath());
+
+                // Use the action's label as a tooltip 
+                checkBoxMenuItem.setToolTipText(recallWindowAction.getLabel());
 
                 // Check current MainFrame (the one this menu bar belongs to)
                 checkBoxMenuItem.setSelected(mainFrame==this.mainFrame);
