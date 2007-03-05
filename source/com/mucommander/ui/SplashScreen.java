@@ -32,12 +32,14 @@ public class SplashScreen extends JWindow {
     /** Name of the font used to display text on this splash screen */
     private final static String FONT_NAME = "Courier";
     /** Style of the font used to display text on this splash screen */
-    private final static int FONT_STYLE = Font.PLAIN;
+//    private final static int FONT_STYLE = Font.PLAIN;
+    private final static int FONT_STYLE = Font.BOLD;
     /** Size of the font used to display text on this splash screen */
     private final static int FONT_SIZE = 11;
 	
     /** Color of the text displayed on this splash screen */ 
     private final static Color TEXT_COLOR = new Color(192, 238, 241);
+    private final static Color SHADOW_TEXT_COLOR = new Color(0, 86, 117);
 
     /** Number of pixels between the loading message and the left side of the splash image */
     private final static int LOADING_MSG_MARGIN_X = 4;
@@ -84,9 +86,6 @@ public class SplashScreen extends JWindow {
         setSize(width, height);
         
         DialogToolkit.centerOnScreen(this);
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//        setLocation(screenSize.width/2 - width/2,
-//                    screenSize.height/2 - height/2);
 
         // Display the splash screen
         setVisible(true);
@@ -111,14 +110,29 @@ public class SplashScreen extends JWindow {
         super.paint(g);
 
         g.setFont(customFont);
+
+        // Display loading message in the lower left corner
+        int textX = LOADING_MSG_MARGIN_X;
+        int textY = getHeight()-LOADING_MSG_MARGIN_Y; 
+
+        g.setColor(SHADOW_TEXT_COLOR);
+        g.drawString(loadingMessage, textX-1, textY-1);
+
         g.setColor(TEXT_COLOR);
-		
+        g.drawString(loadingMessage, textX, textY);
+
+        // Display version in the top right corner
         // Get FontRenderContext instance to calculate text width and height
         java.awt.font.FontRenderContext fontRenderContext = ((Graphics2D)g).getFontRenderContext();
-        // Display loading message in the lower left corner
-        g.drawString(loadingMessage, LOADING_MSG_MARGIN_X, getHeight()-LOADING_MSG_MARGIN_Y);
-        // Display version in the top right corner
         java.awt.geom.Rectangle2D textBounds = new java.awt.font.TextLayout(version, customFont, fontRenderContext).getBounds();
-        g.drawString(version, getWidth()-(int)textBounds.getWidth()-VERSION_MARGIN_X, (int)textBounds.getHeight()+VERSION_MARGIN_Y);
-    }	
+
+        textX = getWidth()-(int)textBounds.getWidth()-VERSION_MARGIN_X;
+        textY = (int)textBounds.getHeight()+VERSION_MARGIN_Y;
+
+        g.setColor(SHADOW_TEXT_COLOR);
+        g.drawString(version, textX-1, textY-1);
+
+        g.setColor(TEXT_COLOR);
+        g.drawString(version, textX, textY);
+    }
 }
