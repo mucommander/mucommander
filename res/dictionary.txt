@@ -6485,6 +6485,7 @@ prefs_dialog.shell_colors.text_color:zh_CN:文本
 
 
 
+prefs_dialog.shell_colors.selection_color:EN:$[prefs_dialog.selection_color]
 
 prefs_dialog.shell_colors.background_color:EN:$[prefs_dialog.background_color]
 
