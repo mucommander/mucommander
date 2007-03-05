@@ -1,9 +1,11 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.Columns;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.text.Translator;
+
+import java.util.Hashtable;
 
 /**
  * Shows/hides the 'Size' column of the currently active FileTable. If the column is currently visible, this will
@@ -13,8 +15,8 @@ import com.mucommander.text.Translator;
  */
 public class ToggleSizeColumnAction extends MucoAction {
 
-    public ToggleSizeColumnAction(MainFrame mainFrame) {
-        super(mainFrame, false);
+    public ToggleSizeColumnAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties, false);
         setLabel(Translator.get("size"));
     }
 

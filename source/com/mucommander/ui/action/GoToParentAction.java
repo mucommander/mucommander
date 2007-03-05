@@ -7,6 +7,8 @@ import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 
+import java.util.Hashtable;
+
 /**
  * This action changes the current folder of the currently active FolderPanel to the current folder's parent.
  * This action only gets enabled when the current folder has a parent.
@@ -15,8 +17,8 @@ import com.mucommander.ui.event.LocationListener;
  */
 public class GoToParentAction extends MucoAction implements ActivePanelListener, LocationListener {
 
-    public GoToParentAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public GoToParentAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
 
         // Listen to active table change events
         mainFrame.addActivePanelListener(this);

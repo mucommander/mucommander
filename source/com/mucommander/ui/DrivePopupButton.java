@@ -7,20 +7,21 @@ import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.RootFolders;
-import com.mucommander.file.FileProtocols;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.OpenLocationAction;
+import com.mucommander.ui.comp.button.PopupButton;
 import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.comp.button.PopupButton;
-import com.mucommander.ui.action.OpenLocationAction;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Hashtable;
 import java.util.Vector;
 
 
@@ -166,13 +167,13 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         if(PlatformManager.isWindowsFamily() && PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_5) {
             FileSystemView fileSystemView = FileSystemView.getFileSystemView();
             for(int i=0; i<nbRoots; i++) {
-                popupMenu.add(new OpenLocationAction(mainFrame, rootFolders[i])).setIcon(fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath())));
+                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i])).setIcon(fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath())));
             }
         }
         // For any OS other than Windows or for Windows and Java 1.4
         else {
             for(int i=0; i<nbRoots; i++)
-                popupMenu.add(new OpenLocationAction(mainFrame, rootFolders[i]));
+                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
         }
 
         popupMenu.add(new JSeparator());
@@ -183,7 +184,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
         if(nbBookmarks>0) {
             for(int i=0; i<nbBookmarks; i++)
-                popupMenu.add(new OpenLocationAction(mainFrame, (Bookmark)bookmarks.elementAt(i)));
+                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), (Bookmark)bookmarks.elementAt(i)));
         }
         else {
             // No bookmark : add a disabled menu item saying there is no bookmark

@@ -11,6 +11,8 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.table.FileTable;
 
+import java.util.Hashtable;
+
 /**
  * This action 'opens' the currently selected file or folder in the active FileTable.
  * This means different things depending on the kind of file that is currently selected:
@@ -24,8 +26,8 @@ import com.mucommander.ui.table.FileTable;
  */
 public class OpenAction extends MucoAction {
 
-    public OpenAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public OpenAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

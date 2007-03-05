@@ -5,6 +5,8 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 
+import java.util.Hashtable;
+
 /**
  * This action .
  *
@@ -12,8 +14,8 @@ import com.mucommander.ui.table.FileTableModel;
  */
 public class InvertSelectionAction extends MucoAction {
 
-    public InvertSelectionAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public InvertSelectionAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

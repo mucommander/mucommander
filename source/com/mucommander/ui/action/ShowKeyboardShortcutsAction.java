@@ -3,6 +3,8 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.help.ShortcutsDialog;
 
+import java.util.Hashtable;
+
 /**
  * This action displays the 'Keyboard shortcuts' dialog that lists all available keyboard shortcuts sorted by topic.
  *
@@ -10,8 +12,8 @@ import com.mucommander.ui.help.ShortcutsDialog;
  */
 public class ShowKeyboardShortcutsAction extends MucoAction {
 
-    public ShowKeyboardShortcutsAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public ShowKeyboardShortcutsAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

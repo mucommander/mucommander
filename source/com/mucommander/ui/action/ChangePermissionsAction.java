@@ -4,6 +4,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.ChangePermissionsDialog;
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * Brings up a dialog that allows the user to change the file permissions the currently selected/marked files.
  * 
@@ -11,8 +13,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class ChangePermissionsAction extends SelectedFilesAction implements InvokesDialog {
 
-    public ChangePermissionsAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public ChangePermissionsAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
 

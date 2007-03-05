@@ -11,6 +11,8 @@ import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.dnd.ClipboardNotifier;
 import com.mucommander.ui.dnd.ClipboardSupport;
 
+import java.util.Hashtable;
+
 /**
  * This action pastes the files contained by the system clipboard to the currently active folder.
  * Does nothing if the clipboard doesn't contain any file.
@@ -22,8 +24,8 @@ import com.mucommander.ui.dnd.ClipboardSupport;
  */
 public class PasteClipboardFilesAction extends MucoAction {
 
-    public PasteClipboardFilesAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public PasteClipboardFilesAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
 
         // Allows this action to be dynamically enabled when the clipboard contains files, and disabled otherwise.
         // ClipboardNotifier requires Java 1.5 and does not work under Mac OS X (tested under Tiger with Java 1.5.0_06)

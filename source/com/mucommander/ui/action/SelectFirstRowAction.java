@@ -2,6 +2,8 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * This action selects the first row/file in the current FileTable.
  *
@@ -9,8 +11,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class SelectFirstRowAction extends MucoAction {
 
-    public SelectFirstRowAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public SelectFirstRowAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

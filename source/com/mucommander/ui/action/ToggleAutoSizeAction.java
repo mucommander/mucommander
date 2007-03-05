@@ -1,8 +1,11 @@
 package com.mucommander.ui.action;
 
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
+
+import java.util.Hashtable;
 
 /**
  * This action toggles the 'auto-size columns' option on the currently active FileTable, which automatically resizes
@@ -12,8 +15,8 @@ import com.mucommander.ui.table.FileTable;
  */
 public class ToggleAutoSizeAction extends MucoAction {
 
-    public ToggleAutoSizeAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public ToggleAutoSizeAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

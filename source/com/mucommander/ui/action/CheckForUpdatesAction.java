@@ -3,6 +3,8 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.CheckVersionDialog;
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * This action checks for a new version of muCommander.
  *
@@ -10,8 +12,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class CheckForUpdatesAction extends MucoAction implements InvokesDialog {
 
-    public CheckForUpdatesAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public CheckForUpdatesAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

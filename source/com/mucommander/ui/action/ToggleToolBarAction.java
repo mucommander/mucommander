@@ -6,6 +6,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ToolBar;
 
+import java.util.Hashtable;
+
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.ToolBar} depending on its
  * current visible state: if it is visible, hides it, if not shows it.
@@ -19,8 +21,8 @@ import com.mucommander.ui.ToolBar;
  */
 public class ToggleToolBarAction extends MucoAction {
 
-    public ToggleToolBarAction(MainFrame mainFrame) {
-        super(mainFrame, false);
+    public ToggleToolBarAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties, false);
         setLabel(Translator.get(ConfigurationManager.getVariableBoolean(ConfigurationVariables.TOOLBAR_VISIBLE,
                                                                         ConfigurationVariables.DEFAULT_TOOLBAR_VISIBLE)
                                 ? com.mucommander.ui.action.ToggleToolBarAction.class.getName()+".hide":com.mucommander.ui.action.ToggleToolBarAction.class.getName()+".show"));

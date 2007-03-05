@@ -5,6 +5,8 @@ import com.mucommander.file.filter.DirectoryFileFilter;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.editor.EditorRegistrar;
 
+import java.util.Hashtable;
+
 /**
  * This action opens the currently selected file in an integrated editor.
  *
@@ -12,8 +14,8 @@ import com.mucommander.ui.editor.EditorRegistrar;
  */
 public class EditAction extends SelectedFileAction {
 
-    public EditAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public EditAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
 
         // Only enable this action if currently selected file is not a directory
         setSelectedFileFilter(new DirectoryFileFilter());

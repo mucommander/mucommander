@@ -6,6 +6,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.CommandBar;
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.CommandBar} depending on its
  * current visible state: if it is visible, hides it, if not shows it.
@@ -19,8 +21,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class ToggleCommandBarAction extends MucoAction {
 
-    public ToggleCommandBarAction(MainFrame mainFrame) {
-        super(mainFrame, false);
+    public ToggleCommandBarAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties, false);
         setLabel(Translator.get(ConfigurationManager.getVariableBoolean(ConfigurationVariables.COMMAND_BAR_VISIBLE,
                                                                         ConfigurationVariables.DEFAULT_COMMAND_BAR_VISIBLE) ?
                                 com.mucommander.ui.action.ToggleCommandBarAction.class.getName()+".hide":com.mucommander.ui.action.ToggleCommandBarAction.class.getName()+".show"));

@@ -2,6 +2,8 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * Recalls window number 4 (brings it to the front).
  *
@@ -9,7 +11,9 @@ import com.mucommander.ui.MainFrame;
  */
 public class RecallWindow4Action extends RecallWindowAction {
 
-    public RecallWindow4Action(MainFrame mainFrame) {
-        super(mainFrame, 4);
+    public RecallWindow4Action(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
+
+        putValue(WINDOW_NUMBER_PROPERTY_KEY, "4");
     }
 }

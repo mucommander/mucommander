@@ -4,6 +4,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.ChangeDateDialog;
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * Brings up a dialog that allows the user to change the date of the currently selected/marked files.
  *
@@ -11,8 +13,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class ChangeDateAction extends SelectedFilesAction implements InvokesDialog {
 
-    public ChangeDateAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public ChangeDateAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
 

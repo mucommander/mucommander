@@ -4,6 +4,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.PackDialog;
 
+import java.util.Hashtable;
+
 /**
  * This action pops up the 'Pack files' dialog that allows to create an archive file with the currently marked files.
  *
@@ -11,8 +13,8 @@ import com.mucommander.ui.PackDialog;
  */
 public class PackAction extends SelectedFilesAction implements InvokesDialog {
 
-    public PackAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public PackAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

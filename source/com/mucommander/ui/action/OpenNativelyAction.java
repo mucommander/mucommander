@@ -9,6 +9,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 
+import java.util.Hashtable;
+
 /**
  * This action opens the currently selected file or folder with native file associations.
  *
@@ -16,8 +18,8 @@ import com.mucommander.ui.ProgressDialog;
  */
 public class OpenNativelyAction extends MucoAction {
 
-    public OpenNativelyAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public OpenNativelyAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

@@ -13,14 +13,16 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.table.FileTable;
 
+import java.util.Hashtable;
+
 /**
  * @author Nicolas Rinaudo
  */
 public class CommandAction extends MucoAction {
     private Command command;
 
-    public CommandAction(MainFrame mainFrame, Command command) {
-        super(mainFrame, false);
+    public CommandAction(MainFrame mainFrame, Hashtable properties, Command command) {
+        super(mainFrame, properties, false);
         this.command = command;
         setLabel(command.getDisplayName());
     }

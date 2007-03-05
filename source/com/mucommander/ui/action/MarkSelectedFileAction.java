@@ -2,6 +2,8 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * Marks or unmarks the current selected file (current row) and advance current row to the next one,
  * with the following exceptions:
@@ -16,8 +18,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class MarkSelectedFileAction extends MucoAction {
 
-    public MarkSelectedFileAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public MarkSelectedFileAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
 

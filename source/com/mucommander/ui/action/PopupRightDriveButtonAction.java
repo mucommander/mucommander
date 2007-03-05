@@ -2,6 +2,8 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * Pops up the DrivePopupButton (the drop down button that allows to quickly select a volume or bookmark)
  * of the left FolderPanel.
@@ -10,8 +12,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class PopupRightDriveButtonAction extends MucoAction {
 
-    public PopupRightDriveButtonAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public PopupRightDriveButtonAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

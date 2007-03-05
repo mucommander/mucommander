@@ -5,6 +5,8 @@ import com.mucommander.file.filter.FileFilter;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 
+import java.util.Hashtable;
+
 /**
  * SelectedFileAction is an abstract action that operates on the currently active FileTable,
  * and that is enabled only when a file other than the parent folder file '..' is selected.
@@ -16,8 +18,8 @@ import com.mucommander.ui.table.FileTable;
  */
 public abstract class SelectedFileAction extends FileAction {
 
-    public SelectedFileAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public SelectedFileAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     /**

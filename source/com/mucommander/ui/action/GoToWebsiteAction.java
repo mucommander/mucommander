@@ -2,6 +2,8 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * This action opens the mucommander.com URL in the system's default browser.
  *
@@ -9,7 +11,9 @@ import com.mucommander.ui.MainFrame;
  */
 public class GoToWebsiteAction extends OpenURLInBrowserAction {
 
-    public GoToWebsiteAction(MainFrame mainFrame) {
-        super(mainFrame, com.mucommander.RuntimeConstants.HOMEPAGE_URL);
+    public GoToWebsiteAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
+
+        putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.HOMEPAGE_URL);
     }
 }

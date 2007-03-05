@@ -5,6 +5,8 @@ import com.mucommander.file.filter.DirectoryFileFilter;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.viewer.ViewerRegistrar;
 
+import java.util.Hashtable;
+
 /**
  * This action opens the currently selected file in an integrated viewer.
  *
@@ -12,8 +14,8 @@ import com.mucommander.ui.viewer.ViewerRegistrar;
  */
 public class ViewAction extends SelectedFileAction {
 
-    public ViewAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public ViewAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
 
         // Only enable this action if currently selected file is not a directory
         setSelectedFileFilter(new DirectoryFileFilter());

@@ -4,6 +4,8 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.RootFolders;
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * This action changes the current folder of the currently active FolderPanel to the user home folder.
  *
@@ -11,8 +13,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class GoToHomeAction extends MucoAction {
 
-    public GoToHomeAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public GoToHomeAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

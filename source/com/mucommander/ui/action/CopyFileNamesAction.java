@@ -5,6 +5,8 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.dnd.TransferableFileSet;
 
+import java.util.Hashtable;
+
 
 /**
  * This action copies the filename(s) of the currently selected / marked files(s) to the system clipboard.
@@ -13,8 +15,8 @@ import com.mucommander.ui.dnd.TransferableFileSet;
  */
 public class CopyFileNamesAction extends SelectedFilesAction {
 
-    public CopyFileNamesAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public CopyFileNamesAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

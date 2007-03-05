@@ -5,6 +5,8 @@ import com.mucommander.PlatformManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 
 /**
  * This action reveals the currently selected file or folder in the native Desktop's file manager
@@ -14,8 +16,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class RevealInDesktopAction extends MucoAction {
 
-    public RevealInDesktopAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public RevealInDesktopAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
         setLabel(Translator.get(getClass().getName()+".label", PlatformManager.getFileManagerName()));
 
         // Disable this action if the platform is not capable of opening files in the default file manager

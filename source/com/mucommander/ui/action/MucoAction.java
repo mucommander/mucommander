@@ -1,5 +1,6 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.Debug;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.icon.IconManager;
@@ -7,6 +8,8 @@ import com.mucommander.ui.icon.IconManager;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 /**
  * @author Maxence Bernard
@@ -15,19 +18,31 @@ public abstract class MucoAction extends AbstractAction {
 
     protected MainFrame mainFrame;
 
-    public final static String ALTERNATE_ACCELERATOR_KEY = "alternate_accelerator";
+    public final static String ALTERNATE_ACCELERATOR_PROPERTY_KEY = "alternate_accelerator";
 
 
-    public MucoAction(MainFrame mainFrame) {
-        this(mainFrame, true);
+    public MucoAction(MainFrame mainFrame, Hashtable properties) {
+        this(mainFrame, properties, true);
     }
 
 
-    public MucoAction(MainFrame mainFrame, boolean lookupDictionary) {
+    public MucoAction(MainFrame mainFrame, Hashtable properties, boolean lookupDictionary) {
         this.mainFrame = mainFrame;
 
         Class classInstance = getClass();
         String className = classInstance.getName();
+
+        // Add properties to this Action.
+        // Property keys are expected to be String instances, those that are not will not be added.
+        Enumeration keys = properties.keys();
+        while(keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+
+            if(key instanceof String)
+                putValue((String)key, properties.get(key));
+            else
+                if(Debug.ON) Debug.trace("Key is not a String, property ignored for key="+key);
+        }
 
         if(lookupDictionary) {
             // Sets this action's label to a localized dictionary entry in the '<action_class>.label' format
@@ -95,11 +110,11 @@ public abstract class MucoAction extends AbstractAction {
 
 
     public KeyStroke getAlternateAccelerator() {
-        return (KeyStroke)getValue(ALTERNATE_ACCELERATOR_KEY);
+        return (KeyStroke)getValue(ALTERNATE_ACCELERATOR_PROPERTY_KEY);
     }
 
     public void setAlternateAccelerator(KeyStroke keyStroke) {
-        putValue(ALTERNATE_ACCELERATOR_KEY, keyStroke);
+        putValue(ALTERNATE_ACCELERATOR_PROPERTY_KEY, keyStroke);
     }
 
 

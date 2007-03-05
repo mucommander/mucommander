@@ -6,6 +6,8 @@ import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 
+import java.util.Hashtable;
+
 /**
  * This action recalls the previous folder in the current FolderPanel's history.
  *
@@ -13,8 +15,8 @@ import com.mucommander.ui.event.LocationListener;
  */
 public class GoBackAction extends MucoAction implements ActivePanelListener, LocationListener {
 
-    public GoBackAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public GoBackAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
 
         // Listen to active table change events
         mainFrame.addActivePanelListener(this);

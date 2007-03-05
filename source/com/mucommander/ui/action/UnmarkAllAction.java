@@ -4,6 +4,8 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 
+import java.util.Hashtable;
+
 /**
  * This action unmarks all files in the current file table.
  *
@@ -11,8 +13,8 @@ import com.mucommander.ui.table.FileTableModel;
  */
 public class UnmarkAllAction extends MucoAction {
 
-    public UnmarkAllAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public UnmarkAllAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

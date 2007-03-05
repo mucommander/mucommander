@@ -3,6 +3,8 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.pref.PreferencesDialog;
 
+import java.util.Hashtable;
+
 /**
  * This action shows up the preferences dialog.
  *
@@ -10,8 +12,8 @@ import com.mucommander.ui.pref.PreferencesDialog;
  */
 public class ShowPreferencesAction extends MucoAction implements InvokesDialog {
 
-    public ShowPreferencesAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public ShowPreferencesAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

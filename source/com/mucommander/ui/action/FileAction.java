@@ -7,6 +7,8 @@ import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.table.FileTable;
 
+import java.util.Hashtable;
+
 /**
  * FileAction is an abstract action that operates on the currently active FileTable. It is enabled only when
  * the table condition as tested by {@link #getFileTableCondition(FileTable) getFileTableCondition()}
@@ -27,8 +29,8 @@ public abstract class FileAction extends MucoAction implements TableSelectionLis
     protected FileFilter filter;
 
 
-    public FileAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public FileAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
         init(mainFrame);
     }
 

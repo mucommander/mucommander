@@ -4,6 +4,8 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 
+import java.util.Hashtable;
+
 /**
  * This action marks all files in the current file table.
  *
@@ -11,8 +13,8 @@ import com.mucommander.ui.table.FileTableModel;
  */
 public class MarkAllAction extends MucoAction {
 
-    public MarkAllAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public MarkAllAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

@@ -1,9 +1,11 @@
 package com.mucommander.ui.action;
 
+import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.Columns;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.text.Translator;
+
+import java.util.Hashtable;
 
 /**
  * Shows/hides the 'Extension' column of the currently active FileTable. If the column is currently visible, this will
@@ -13,8 +15,8 @@ import com.mucommander.text.Translator;
  */
 public class ToggleExtensionColumnAction extends MucoAction {
 
-    public ToggleExtensionColumnAction(MainFrame mainFrame) {
-        super(mainFrame, false);
+    public ToggleExtensionColumnAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties, false);
         setLabel(Translator.get("extension"));
     }
 

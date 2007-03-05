@@ -3,6 +3,8 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 
+import java.util.Hashtable;
+
 /**
  * Marks/unmarks files in the active FileTable, from the currently selected row to the last row (inclusive).
  * The last row will also become the currently selected row.
@@ -14,8 +16,8 @@ import com.mucommander.ui.table.FileTable;
  */
 public class MarkUpToLastRowAction extends MucoAction {
 
-    public MarkUpToLastRowAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public MarkUpToLastRowAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

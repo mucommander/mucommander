@@ -5,6 +5,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.CopyDialog;
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * This action invokes the 'Copy dialog' which allows to copy the currently selected/marked files to a specified destination.
  * The only difference with {@link com.mucommander.ui.action.CopyAction} is that if a single file is selected,
@@ -15,8 +17,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class LocalCopyAction extends SelectedFileAction {
 
-    public LocalCopyAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public LocalCopyAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

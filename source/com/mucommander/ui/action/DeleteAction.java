@@ -4,6 +4,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.DeleteDialog;
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * This action invokes a Delete confirmation dialog to delete currently the selected / marked files
  * in the currently active folder.
@@ -12,8 +14,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class DeleteAction extends SelectedFilesAction {
 
-    public DeleteAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public DeleteAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

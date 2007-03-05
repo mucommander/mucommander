@@ -5,6 +5,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.UnpackDialog;
 
+import java.util.Hashtable;
+
 /**
  * This action pops up the 'Unpack files' dialog that allows to unpack the currently marked files.
  *
@@ -12,8 +14,8 @@ import com.mucommander.ui.UnpackDialog;
  */
 public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
 
-    public UnpackAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public UnpackAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
 
         setSelectedFileFilter(new ArchiveFileKeeper());
     }

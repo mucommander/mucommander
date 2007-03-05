@@ -6,6 +6,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.StatusBar;
 
+import java.util.Hashtable;
+
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.StatusBar} depending on its
  * current visible state: if it is visible, hides it, if not shows it.
@@ -19,8 +21,8 @@ import com.mucommander.ui.StatusBar;
  */
 public class ToggleStatusBarAction extends MucoAction {
 
-    public ToggleStatusBarAction(MainFrame mainFrame) {
-        super(mainFrame, false);
+    public ToggleStatusBarAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties, false);
         setLabel(Translator.get(ConfigurationManager.getVariableBoolean(ConfigurationVariables.STATUS_BAR_VISIBLE,
                                                                         ConfigurationVariables.DEFAULT_STATUS_BAR_VISIBLE) ? 
                                 com.mucommander.ui.action.ToggleStatusBarAction.class.getName()+".hide":com.mucommander.ui.action.ToggleStatusBarAction.class.getName()+".show"));

@@ -4,6 +4,8 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.QuitDialog;
 import com.mucommander.ui.WindowManager;
 
+import java.util.Hashtable;
+
 /**
  * This action pops up the Quit confirmation dialog (if it hasn't been disabled) and if quit has been confirmed,
  * quits the application.
@@ -12,8 +14,8 @@ import com.mucommander.ui.WindowManager;
  */
 public class QuitAction extends MucoAction {
 
-    public QuitAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public QuitAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

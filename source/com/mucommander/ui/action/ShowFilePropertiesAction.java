@@ -4,6 +4,8 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.PropertiesDialog;
 
+import java.util.Hashtable;
+
 /**
  * This action pops up the file Properties dialog.
  *
@@ -11,8 +13,8 @@ import com.mucommander.ui.PropertiesDialog;
  */
 public class ShowFilePropertiesAction extends SelectedFilesAction {
 
-    public ShowFilePropertiesAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public ShowFilePropertiesAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

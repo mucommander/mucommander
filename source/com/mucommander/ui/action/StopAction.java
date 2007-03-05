@@ -5,6 +5,8 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 
+import java.util.Hashtable;
+
 /**
  * This action is invoked to stop a running location change.
  *
@@ -12,8 +14,8 @@ import com.mucommander.ui.event.LocationListener;
  */
 public class StopAction extends MucoAction implements LocationListener {
 
-    public StopAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public StopAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
 
         // This action is initially disabled and enabled only during a folder change
         setEnabled(false);

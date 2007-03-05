@@ -1,12 +1,13 @@
 package com.mucommander.bonjour;
 
+import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.action.OpenLocationAction;
-import com.mucommander.text.Translator;
 
 import javax.swing.*;
-import javax.swing.event.MenuListener;
 import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import java.util.Hashtable;
 
 /**
  * A JMenu that contains an item for each available Bonjour service (as returned {@link BonjourDirectory#getServices()}
@@ -48,7 +49,7 @@ public class BonjourMenu extends JMenu implements MenuListener {
                 // When clicked, the corresponding URL will opened in the active table.
                 JMenuItem menuItem;
                 for(int i=0; i<nbServices; i++) {
-                    menuItem = new JMenuItem(new OpenLocationAction(mainFrame, services[i]));
+                    menuItem = new JMenuItem(new OpenLocationAction(mainFrame, new Hashtable(), services[i]));
                     add(menuItem);
                 }
             }

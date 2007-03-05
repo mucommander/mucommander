@@ -19,53 +19,70 @@ public class ActionManager {
     private static WeakHashMap mainFrameActionsMap = new WeakHashMap();
 
 
-    public static MucoAction getActionInstance(String actionClassName, MainFrame mainFrame) {
-//        if(Debug.ON) Debug.trace("called, actionClassName="+actionClassName);
+//    public static MucoAction getActionInstance(String actionClassName, MainFrame mainFrame) {
+////        if(Debug.ON) Debug.trace("called, actionClassName="+actionClassName);
+//
+//        try {
+//            return getActionInstance(Class.forName(actionClassName), mainFrame);
+//        }
+//        catch(ClassNotFoundException e) {
+//            if(Debug.ON) Debug.trace("WARNING: could not resolve class "+actionClassName+"returning null !");
+//            return null;
+//        }
+//    }
 
-        try {
-            return getActionInstance(Class.forName(actionClassName), mainFrame);
-        }
-        catch(ClassNotFoundException e) {
-            if(Debug.ON) Debug.trace("WARNING: could not resolve class "+actionClassName+"returning null !");
-            return null;
-        }
+    public static MucoAction getActionInstance(Class actionClass, MainFrame mainFrame) {
+        return getActionInstance(new ActionDescriptor(actionClass), mainFrame);
     }
 
 
-    public static MucoAction getActionInstance(Class actionClass, MainFrame mainFrame) {
-//        if(Debug.ON) Debug.trace("called, MucoAction class="+actionClass);
+    public static MucoAction getActionInstance(ActionDescriptor actionDescriptor, MainFrame mainFrame) {
+        if(Debug.ON) Debug.trace("called, actionDescriptor = "+actionDescriptor, 5);
 
         Hashtable mainFrameActions = (Hashtable)mainFrameActionsMap.get(mainFrame);
         if(mainFrameActions==null) {
-//            if(Debug.ON) Debug.trace("creating MainFrame action map");
+            if(Debug.ON) Debug.trace("creating MainFrame action map");
 
             mainFrameActions = new Hashtable();
             mainFrameActionsMap.put(mainFrame, mainFrameActions);
         }
 
         // Looks for an existing MucoAction instance used by the specified MainFrame
-        MucoAction action = (MucoAction)mainFrameActions.get(actionClass);
+        MucoAction action = (MucoAction)mainFrameActions.get(actionDescriptor);
         if(action==null) {
+            Class actionClass = actionDescriptor.getActionClass();
+
             try {
                 // Looks for an existing cached Constructor instance
                 Constructor actionConstructor = (Constructor)actionConstructors.get(actionClass);
                 if(actionConstructor==null) {
-//                    if(Debug.ON) Debug.trace("creating constructor");
+                    if(Debug.ON) Debug.trace("creating constructor");
 
                     // Not found, retrieve a Constructor instance and caches it
-                    actionConstructor = actionClass.getConstructor(new Class[]{MainFrame.class});
+                    actionConstructor = actionClass.getConstructor(new Class[]{MainFrame.class, Hashtable.class});
                     actionConstructors.put(actionClass, actionConstructor);
 
-//                    if(Debug.ON) Debug.trace("nb constructors = "+actionConstructors.size());
+                    if(Debug.ON) Debug.trace("nb constructors = "+actionConstructors.size());
                 }
 
-//                if(Debug.ON) Debug.trace("creating instance");
+                if(Debug.ON) Debug.trace("creating instance");
+
+                Hashtable properties = actionDescriptor.getActionProperties();
+                // If no properties hashtable is specified in the action descriptor
+                if(properties==null) {
+                    properties = new Hashtable();
+                }
+                // else clone the hashtable to ensure that it doesn't get modified by action instances.
+                // Since cloning is an expensive operation, this is done only if the hashtable is not empty.
+                else if(!properties.isEmpty()) {
+                    properties = (Hashtable)properties.clone();
+                }
 
                 // Instanciate the MucoAction class
-                action = (MucoAction)actionConstructor.newInstance(new Object[]{mainFrame});
-                mainFrameActions.put(actionClass, action);
+                action = (MucoAction)actionConstructor.newInstance(new Object[]{mainFrame, properties});
+                mainFrameActions.put(actionDescriptor, action);
 
-//                if(Debug.ON) Debug.trace("nb instances = "+mainFrameActions.size());
+                if(Debug.ON) Debug.trace("nb action instances = "+mainFrameActions.size());
             }
             catch(Exception e) {   // Catches ClassNotFoundException, NoSuchMethodException, InstanciationException, IllegalAccessException, InvocateTargetException
                 if(Debug.ON) {
@@ -76,6 +93,9 @@ public class ActionManager {
                 // Class / constructor could not be instanciated, return null
                 return null;
             }
+        }
+        else {
+            if(Debug.ON) Debug.trace("found existing action instance: "+action);
         }
 
         return action;
@@ -106,7 +126,18 @@ public class ActionManager {
     }
 
 
-    public static void performAction(Class actionClass, MainFrame mainFrame) {
-        getActionInstance(actionClass, mainFrame).performAction();
+    public static boolean performAction(Class actionClass, MainFrame mainFrame) {
+        return performAction(new ActionDescriptor(actionClass), mainFrame);
+    }
+
+    public static boolean performAction(ActionDescriptor actionDescriptor, MainFrame mainFrame) {
+        MucoAction action = getActionInstance(actionDescriptor, mainFrame);
+
+        if(action==null)
+            return false;
+
+        action.performAction();
+
+        return true;
     }
 }

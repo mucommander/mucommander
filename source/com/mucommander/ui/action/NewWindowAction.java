@@ -3,6 +3,8 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.WindowManager;
 
+import java.util.Hashtable;
+
 /**
  * This action creates a new muCommander window.
  *
@@ -10,8 +12,8 @@ import com.mucommander.ui.WindowManager;
  */
 public class NewWindowAction extends MucoAction {
 
-    public NewWindowAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public NewWindowAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

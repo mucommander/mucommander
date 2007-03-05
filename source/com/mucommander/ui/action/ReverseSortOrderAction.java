@@ -2,6 +2,8 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 
 /**
  * This action reverses the sort order of the currently active FileTable.
@@ -10,8 +12,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class ReverseSortOrderAction extends MucoAction {
 
-    public ReverseSortOrderAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public ReverseSortOrderAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

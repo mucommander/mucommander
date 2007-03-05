@@ -258,7 +258,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
             JPopupMenu popupMenu = new JPopupMenu();
             for(int i=0; i<historyLen; i++)
-                popupMenu.add(new OpenLocationAction(mainFrame, history[i]));
+                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), history[i]));
 
             return popupMenu;
         }

@@ -2,6 +2,8 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * Splits the folder panels vertically (top/bottom) within the MainFrame.
  * This is the default split orientation.
@@ -10,8 +12,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class SplitVerticallyAction extends MucoAction {
 
-    public SplitVerticallyAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public SplitVerticallyAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

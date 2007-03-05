@@ -2,6 +2,8 @@ package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
 
+import java.util.Hashtable;
+
 /**
  * This action refreshes the currently active FolderPanel (refreshes the content of the folder).
  *
@@ -9,8 +11,8 @@ import com.mucommander.ui.MainFrame;
  */
 public class RefreshAction extends MucoAction {
 
-    public RefreshAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public RefreshAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {

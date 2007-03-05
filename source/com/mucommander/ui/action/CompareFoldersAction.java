@@ -5,6 +5,8 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
 
+import java.util.Hashtable;
+
 /**
  * This action compares the content of the 2 MainFrame's file tables and marks the files that are different.
  *
@@ -12,8 +14,8 @@ import com.mucommander.ui.table.FileTableModel;
  */
 public class CompareFoldersAction extends MucoAction {
 
-    public CompareFoldersAction(MainFrame mainFrame) {
-        super(mainFrame);
+    public CompareFoldersAction(MainFrame mainFrame, Hashtable properties) {
+        super(mainFrame, properties);
     }
 
     public void performAction() {
