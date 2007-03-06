@@ -2,11 +2,13 @@
 # muCommander dictionary file #
 ###############################
 #
-# This file is used by muCommander to localize the user interface into multiple languages. The format is relatively straightforward 
-# but requires nonetheless some explanations.
+# This file is used by muCommander to localize the user interface into multiple languages. Translating muCommander into a new language 
+# consists in adding a new entry for each existing key.
 #
-# This file contains a list of localized entries, expressed in the following format:
-# <key>:<lang>:<value>
+# The format of the dictionary file is relatively straightforward but requires nonetheless some explanations. It contains a list of localized
+# entries, expressed in the following format:
+# 
+#  <key>:<lang>:<value>
 #
 # where:
 #  - <key> is the key used by the application to refer to the entry
@@ -20,18 +22,16 @@
 #
 # those two entries define respectively English and French translations for the 'warning' key.
 #
-# In addition to plain text, entry values can contain 2 different types of variables. Both can be mixed with plain text:
+# In addition to plain text, entry values can contain variables. There are 2 types of variables, both can be mixed with plain text:
 #  - parameters: %1, %2,... Parameters are replaced at runtime by values specified by the application. For example, the following value:
 #  'Invalid path: %1' may be displayed in the application as 'Invalid path: /r00t/' should the invalid path be '/r00t'.
 #  - references to other entries: $[<key>] refers to the entry named <key> and will be replaced at runtime by the value of <key> in the
 #  current language. For example, 'run_dialog.stop:EN:$[stop]' will be replaced by the value of the 'stop' key, which is 'Stop' in English.
 #
-# Lines that start with a '#' character (such as this one) are used for comments and are simply ignored when the dictionary file is loaded.
+# Lines that start with a '#' character (such as this one) are comments and are simply ignored when the dictionary file is loaded.
 # 
-# Translating muCommander into a new language consists in adding a new entry for each key defined in the dictionary file. 
-#
-# Some things to keep in mind when translating muCommander into a new language:
-#  - the dictionary file of the latest nightly build should be used to ensure that the list of entries is up-to-date
+# Here are a few things you should be aware of when translation muCommander into a new language:
+#  - the dictionary file of the latest nightly build should be used to ensure that the list of entries is up-to-date.
 #  - the entry keys should never be modified, only their localized values. Similarly, variable names should not be changed.
 #  - when an entry is requested by the application in a language for which the dictionary has no defined value, the EN (English) value is used.
 #   In other words, English is the default language for untranslated entries.
@@ -41,14 +41,13 @@
 #   try and keep it that way, as the user interface sometimes relies on that. Parameters values can be of variable length and if the 
 #   parameter is in the middle of the entry, the text after might get truncated if one of the parameter's values is too long.
 #
-# When you're done modifying the dictionary file, you may want to test it to ensure that it is working propertly. 
-# Here are the steps to follow:
+# When you're done modifying the dictionary file, you may want to test it to ensure that it is working propertly. Here are the steps to follow:
 #  1/ Extract the mucommander.jar to a directory (you can use muCommander for that)
 #  2/ Copy your 'dictionary.txt' file to the /res subfolder, replacing the existing dictionary file
 #  3/ Launch muCommander by typing on a command line: java com.mucommander.Launcher
 # 
-# You should then see your modifications reflected in the user interface. For new languages, you'll need to add the new language code to the
-# 'available_language' entry and create a 'language.<lang>' entry containing the new language's name expressed in the language itself, 
+# You should then see the modifications you made reflected in the user interface. For new languages, you'll need to add the new language code
+# to the 'available_language' entry and create a 'language.<lang>' entry containing the new language's name expressed in the language itself, 
 # e.g. 'Français' for 'language.fr'. The new language should then appear in the preferences, allowing you to select it and then restart the
 # application to see your translation.
 # Note that muCommander needs to be restarted each time an entry is modified for the change to become visible.
