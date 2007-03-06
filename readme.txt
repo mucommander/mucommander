@@ -16,7 +16,7 @@ to post your questions, suggestions or bug reports.
 Your feedback is important and always welcome!
 
 Official website: http://www.mucommander.com
-(c) 2002-2006 Maxence Bernard. All rights reserved.
+(c) 2002-2007 Maxence Bernard. All rights reserved.
 
 
 
@@ -266,7 +266,7 @@ What's new since v0.8 beta 2 ?
 
 New features:
  - Keyboard shortcuts, toolbar and command bar buttons can now be customized (no GUI yet, see .xml files in preferences folder)
- - Pre-defined themes and new theme engine allowing more customization options (GUI no updated yet)
+ - New theme engine with predefined themes allowing more customization options (GUI not updated yet)
  - Custom file opener and file associations (no GUI yet)
  - Drag and Drop support: files can be copied or moved to and from muCommander windows and other applications, current folder can be changed by dropping a file or folder on the location field
  - Clipboard support: files can be copied and pasted to/from the clipboard (Ctrl+C / Ctrl+V by default), works with other applications
