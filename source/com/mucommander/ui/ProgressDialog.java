@@ -645,6 +645,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             g.setColor(BACKGROUND_COLOR);
             g.fillRect(0, 0, width, height);
 
+            g.setColor(ThemeManager.getCurrentColor(Theme.FILE_TABLE_BORDER_COLOR));
+            g.drawRect(0, 0, width - 1, height - 1);
+
+
             synchronized(samples) {     // Ensures that addSample() is not currently accessing the Vector
                 // Number of collected sample
                 int nbSamples = samples.size();
