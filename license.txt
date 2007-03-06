@@ -2,7 +2,7 @@
 muCommander license
 Version 1.0
 
-Copyright (c) 2002-2006 Maxence Bernard
+Copyright (c) 2002-2007 Maxence Bernard
 All rights reserved.
 
 Redistribution and use of the accompanying software are permitted provided
@@ -26,9 +26,9 @@ that the following conditions are met:
    THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-***************************************************************************
-The jCIFS and J2SSH libraries are used under the terms of the LGPL license:
-***************************************************************************
+**********************************************************************************
+The jCIFS, J2SSH and JmDNS libraries are used under the terms of the LGPL license:
+**********************************************************************************
 
 		  GNU LESSER GENERAL PUBLIC LICENSE
 		       Version 2.1, February 1999
