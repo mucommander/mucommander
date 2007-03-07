@@ -63,7 +63,8 @@
 # List of available languages, must be declared before any other entry
 available_languages:EN,FR,DE,ES,CS,ZH_CN,ZH_TW,PL,HU,RU,SI,RO,IT
 
-# Language names, in their respective language
+# Language names, in their respective language.
+# Confusingly enough, 'EN' language is used to declare those entries but that is normal.
 language.en:EN:English
 language.fr:EN:Français
 language.es:EN:Español
