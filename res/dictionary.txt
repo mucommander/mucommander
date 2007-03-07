@@ -42,9 +42,9 @@
 #   parameter is in the middle of the entry, the text after might get truncated if one of the parameter's values is too long.
 #
 # When you're done modifying the dictionary file, you may want to test it to ensure that it is working propertly. Here are the steps to follow:
-#  1/ Extract the mucommander.jar to a directory (you can use muCommander for that)
-#  2/ Copy your 'dictionary.txt' file to the /res subfolder, replacing the existing dictionary file
-#  3/ Launch muCommander by typing on a command line: java com.mucommander.Launcher
+#  1/ Extract the 'mucommander.jar' file to a directory of your choice, for example ~/mucommander/ (you can use muCommander for that)
+#  2/ Copy your 'dictionary.txt' file to the /res subfolder (~/mucommander/res), replacing the existing dictionary file
+#  3/ Launch muCommander by typing on a command line: java -classpath ~/mucommander/ com.mucommander.Launcher
 # 
 # You should then see the modifications you made reflected in the user interface. For new languages, you'll need to add the new language code
 # to the 'available_language' entry and create a 'language.<lang>' entry containing the new language's name expressed in the language itself, 
