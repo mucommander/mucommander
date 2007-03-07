@@ -390,7 +390,7 @@ stop:PL:Zatrzymaj
 stop:HU:megállít
 stop:RU:Прервать
 stop:zh_CN:停止
-stop:Si:Ustavi
+stop:SI:Ustavi
 stop:RO:Stop
 stop:IT:Ferma
 
@@ -618,6 +618,7 @@ recurse_directories:RO:Prelucrează directoarele recursiv
 recurse_directories:IT:Elabora anche le sotto-directory
 recurse_directories:zh_CN:递归所有目录
 recurse_directories:RU:Обрабатывать подкаталоги
+recurse_directories:SI:Recurse directories
 # Translation missing
 
 
@@ -888,6 +889,7 @@ permissions.read:RO:Citire
 permissions.read:IT:Lettura
 permissions.read:zh_CN:读取
 permissions.read:RU:Чтение
+permissions.read:SI:Branje
 # Translation missing
 
 
@@ -906,6 +908,7 @@ permissions.write:RO:Scriere
 permissions.write:IT:Scrittura
 permissions.write:zh_CN:写入
 permissions.write:RU:Запись
+permissions.write:SI:Pisanje
 # Translation missing
 
 
@@ -923,6 +926,7 @@ permissions.executable:RO:Executare
 permissions.executable:IT:Esegui
 permissions.executable:zh_CN:执行
 permissions.executable:RU:Выполнение
+permissions.executable:SI:Izvršitev
 # Translation missing
 
 
@@ -940,6 +944,7 @@ permissions.user:RO:Utilizator
 permissions.user:IT:Utente
 permissions.user:zh_CN:用户
 permissions.user:RU:Владелец
+permissions.user:SI:Uporabnik
 # Translation missing
 
 
@@ -956,6 +961,7 @@ permissions.group:RO:Grup
 permissions.group:IT:Gruppo
 permissions.group:zh_CN:组
 permissions.group:RU:Группа
+permissions.group:SI:Skupina
 # Translation missing
 
 
@@ -972,6 +978,7 @@ permissions.other:RO:Altele
 permissions.other:IT:Altro
 permissions.other:zh_CN:其它
 permissions.other:RU:Остальные
+permissions.other:SI:Ostalo
 # Translation missing
 
 
@@ -988,6 +995,7 @@ permissions.octal_notation:RO:Notație în baza opt
 permissions.octal_notation:IT:Notazione ottale
 permissions.octal_notation:zh_CN:八进制表示
 permissions.octal_notation:RU:Цифровое обозначение
+permissions.octal_notation:SI:Oktanski sistem
 # Translation missing
 
 
@@ -1110,6 +1118,7 @@ com.mucommander.ui.action.ChangeDateAction.label:RO:Schimbă data
 com.mucommander.ui.action.ChangeDateAction.label:IT:Cambia data
 com.mucommander.ui.action.ChangeDateAction.label:zh_CN:改变日期
 com.mucommander.ui.action.ChangeDateAction.label:RU:Изменение даты
+com.mucommander.ui.action.ChangeDateAction.label:SI:Spremeni datum
 # Translation missing
 
 
@@ -1131,6 +1140,7 @@ com.mucommander.ui.action.ChangeDateAction.tooltip:RO:Schimbă data fișierelor 
 com.mucommander.ui.action.ChangeDateAction.tooltip:IT:Cambia data dei file selezionati
 com.mucommander.ui.action.ChangeDateAction.tooltip:zh_CN:改变所选文件的日期
 com.mucommander.ui.action.ChangeDateAction.tooltip:RU:Изменить дату выбранных файлов
+com.mucommander.ui.action.ChangeDateAction.tooltip:SI:Spremeni datum izbranim datotekam
 # Translation missing
 
 
@@ -1153,6 +1163,7 @@ com.mucommander.ui.action.ChangePermissionsAction.label:RO:Schimbă permisiuni
 com.mucommander.ui.action.ChangePermissionsAction.label:IT:Cambia permessi
 com.mucommander.ui.action.ChangePermissionsAction.label:zh_CN:改变权限
 com.mucommander.ui.action.ChangePermissionsAction.label:RU:Изменение прав доступа
+com.mucommander.ui.action.ChangePermissionsAction.label:SI:Spremeni pravice
 # Translation missing
 
 
@@ -1174,6 +1185,7 @@ com.mucommander.ui.action.ChangePermissionsAction.tooltip:RO:Schimbă permisiuni
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:IT:Cambia permessi dei file selezionati
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:zh_CN:改变所选文件的权限
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:RU:Изменить права доступа выбранных файлов
+com.mucommander.ui.action.ChangePermissionsAction.tooltip:SI:Spremeni pravice izbranih datotek
 # Translation missing
 
 
@@ -1725,6 +1737,7 @@ com.mucommander.ui.action.GoToHomeAction.label:RO:Mergi în directorul utilizato
 com.mucommander.ui.action.GoToHomeAction.label:IT:Torna nella cartella Home
 com.mucommander.ui.action.GoToHomeAction.label:zh_CN:到主目录
 com.mucommander.ui.action.GoToHomeAction.label:RU:Перейти в домашний каталог
+com.mucommander.ui.action.GoToHomeAction.label:SI:Pojdi v domačo mapo
 # Translation missing
 
 
@@ -1774,6 +1787,7 @@ com.mucommander.ui.action.GoToRootAction.label:RO:Mergi în directorul rădăcin
 com.mucommander.ui.action.GoToRootAction.label:IT:Vai sulla directory Root
 com.mucommander.ui.action.GoToRootAction.label:zh_CN:到根目录
 com.mucommander.ui.action.GoToRootAction.label:RU:Перейти в корень
+com.mucommander.ui.action.GoToRootAction.label:SI:Pojdi v koren
 # Translation missing
 
 
@@ -1985,6 +1999,7 @@ com.mucommander.ui.action.MarkPageDownAction.label:RO:Selectează fișierele din
 com.mucommander.ui.action.MarkPageDownAction.label:IT:Seleziona pagina giu'
 com.mucommander.ui.action.MarkPageDownAction.label:zh_CN:标记文件到下一页
 com.mucommander.ui.action.MarkPageDownAction.label:RU:Выделить файлы на следующей странице
+com.mucommander.ui.action.MarkPageDownAction.label:SI:Označi datoteke do naslednje strani
 # Translation missing
 
 
@@ -2004,6 +2019,7 @@ com.mucommander.ui.action.MarkPageUpAction.label:DE:Dateien bis zur vorigen Seit
 com.mucommander.ui.action.MarkPageUpAction.label:RO:Selectează fișierele din pagina anterioară
 com.mucommander.ui.action.MarkPageUpAction.label:zh_CN:标记文件到上一页
 com.mucommander.ui.action.MarkPageUpAction.label:RU:Выделить файлы на предыдущей странице
+com.mucommander.ui.action.MarkPageUpAction.label:SI:Označi datoteke od prejšnje strani
 # Translation missing
 
 
@@ -2024,6 +2040,7 @@ com.mucommander.ui.action.MarkUpToFirstRowAction.label:RO:Selectează fișierele
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:IT:Seleziona file dall'inizio
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:zh_CN:标记文件到开头
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:RU:Отметить файлы до начала
+com.mucommander.ui.action.MarkUpToFirstRowAction.label:SI:Označi datoteke od začetka
 # Translation missing
 
 
@@ -2044,6 +2061,7 @@ com.mucommander.ui.action.MarkUpToLastRowAction.label:RO:Selectează fișierele 
 com.mucommander.ui.action.MarkUpToLastRowAction.label:IT:Seleziona file fino alla fine
 com.mucommander.ui.action.MarkUpToLastRowAction.label:zh_CN:标记文件到结尾
 com.mucommander.ui.action.MarkUpToLastRowAction.label:RU:Отметить файлы до конца
+com.mucommander.ui.action.MarkUpToLastRowAction.label:SI:Označi datoteke do konca
 # Translation missing
 
 
@@ -2984,6 +3002,7 @@ go_menu:RO:Mergi
 go_menu:IT:Vai
 go_menu:zh_CN:到
 go_menu:RU:Перейти
+go_menu:SI:Pojdi
 # Translation missing
 
 
@@ -4483,6 +4502,7 @@ progress_dialog.processing_files:RO:Fișierele sunt procesate
 progress_dialog.processing_files:IT:Elaborazione file
 progress_dialog.processing_files:zh_CN:正在处理文件
 progress_dialog.processing_files:RU:Обработка файлов
+progress_dialog.processing_files:SI:Obdelujem datoteke
 # Translation missing
 
 
@@ -4503,6 +4523,7 @@ progress_dialog.processing_file:RO:Procesez %1
 progress_dialog.processing_file:IT:Elaborando %1
 progress_dialog.processing_file:zh_CN:正在处理 %1
 progress_dialog.processing_file:RU:Обрабатывается %1
+progress_dialog.processing_file:SI:Obdelujem %1
 # Translation missing
 
 
@@ -4622,6 +4643,7 @@ change_date_dialog.now:RO:Acum
 change_date_dialog.now:IT:Adesso
 change_date_dialog.now:zh_CN:现在
 change_date_dialog.now:RU:Текущая дата
+change_date_dialog.now:SI:Trenutni
 # Translation missing
 
 
@@ -4640,6 +4662,7 @@ change_date_dialog.specific_date:RO:Dară specifică
 change_date_dialog.specific_date:IT:Specifica data
 change_date_dialog.specific_date:zh_CN:指定日期
 change_date_dialog.specific_date:RU:Указанная дата
+change_date_dialog.specific_date:SI:Določi datum
 # Translation missing
 
 
@@ -4718,7 +4741,6 @@ run_dialog.run:RO:Execută
 run_dialog.run:IT:Esegui
 
 run_dialog.stop:EN:$[stop]
-run_dialog.stop:RU:$[stop]
 
 run_dialog.clear_history:EN:Clear history
 run_dialog.clear_history:FR:Effacer l'historique
@@ -5653,7 +5675,7 @@ shortcuts_dialog.file_operations:PL:Operacje na plikach
 shortcuts_dialog.file_operations:HU:fájl műveletek
 shortcuts_dialog.file_operations:RU:Файловые операции
 shortcuts_dialog.file_operations:zh_CN:文件操作
-shortcuts_dialog.file_operations:SI:Akcije z datotekami
+shortcuts_dialog.file_operations:SI:Operacije z datotekami
 shortcuts_dialog.file_operations:RO:Operații cu fișiere
 shortcuts_dialog.file_operations:IT:Operazioni su file
 
@@ -7065,6 +7087,7 @@ theme_could_not_be_loaded:RO:O eroare a apărut la încărcarea acestei teme.
 theme_could_not_be_loaded:IT:Errore durante il caricamento del tema.
 theme_could_not_be_loaded:zh_CN:在装入此主题时发生错误
 theme_could_not_be_loaded:RU:В процессе загрузки темы произошла ошибка.
+theme_could_not_be_loaded:SI:Napaka med nalaganjem teme.
 # Translation missing
 
 
@@ -7122,6 +7145,7 @@ setup.look_and_feel:DE:Wählen Sie Aussehen und Verhalten
 setup.look_and_feel:RO:Alegeți aspectul
 setup.look_and_feel:zh_CN:选择你要的外观
 setup.look_and_feel:RU:Выберите пользовательский интерфейс
+setup.look_and_feel:SI:Izberite temo in videz
 # Translation missing
 
 
