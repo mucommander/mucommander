@@ -76,7 +76,7 @@ public abstract class FileFactory {
         
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
-        registerArchiveFileFormat(ZipArchiveFile.class, new ExtensionFilenameFilter(new String[]{".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar"}));
+        registerArchiveFileFormat(ZipArchiveFile.class, new ExtensionFilenameFilter(new String[]{".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar", ".odt", ".ods", ".odp", ".odg", ".odf"}));
         registerArchiveFileFormat(TarArchiveFile.class, new ExtensionFilenameFilter(new String[]{".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2"}));
         registerArchiveFileFormat(GzipArchiveFile.class, new ExtensionFilenameFilter(".gz"));
         registerArchiveFileFormat(Bzip2ArchiveFile.class, new ExtensionFilenameFilter(".bz2"));
