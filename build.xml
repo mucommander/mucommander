@@ -766,11 +766,11 @@
     <app jar="${jar.cmp}" dest="${app.folder}" type="APPL" signature="MUCO" icon="${res}/icons/icon.icns"
          infoversion="0.9">
       <string  name="CFBundleName"                    value="muCommander"/>
-      <string  name="CFBundleVersion"                 value="${app.version}"/>
+      <string  name="CFBundleVersion"                 value="${app.version}${app.subversion}"/>
       <boolean name="CFBundleAllowMixedLocalizations" value="true"/>
       <string  name="CFBundleDevelopmentRegion"       value="English"/>
-      <string  name="CFBundleShortVersionString"      value="${app.version}"/>
-      <string  name="CFBundleGetInfoString"           value="muCommander ${app.version}, (c) ${app.copyright} Maxence Bernard, ${url.homepage}"/>
+      <string  name="CFBundleShortVersionString"      value="${app.version}${app.subversion}"/>
+      <string  name="CFBundleGetInfoString"           value="muCommander ${app.version}${app.subversion}, (c) ${app.copyright} Maxence Bernard, ${url.homepage}"/>
       <string name="CFBundleInfoDictionaryVersion"   value="6.0"/>
       <dict name="Java">
         <string name="MainClass"  value="${main-class}"/>
@@ -826,7 +826,7 @@
   <target name="version" depends="tools-jar">
     <echo>Creating version file in ${version-file}...</echo>
     <taskdef name="muversion" classname="com.mucommander.ant.version.VersionTask" classpath="${tools.jar}"/>
-    <muversion version="${app.version}" url="${url.app-download}" dest="${version-file}"/>
+    <muversion version="${app.version}${app.subversion}" url="${url.app-download}" dest="${version-file}"/>
   </target>
 
   <!-- Signs the obfuscated jar file.                          -->
@@ -858,7 +858,7 @@
     <!-- Generates the NSIS script.                            -->
     <taskdef name="nsisscript" classname="com.mucommander.ant.nsis.NsisTask" classpath="${tools.jar}"/>
     <nsisscript in="${nsis.script}" out="${nsis.tmp}/mucommander.nsi">
-      <var name="MU_VERSION" value="${app.version}"/>
+      <var name="MU_VERSION" value="${app.version}${app.subversion}"/>
       <var name="MU_EXE"     value="muCommander.exe"/>
       <var name="MU_ICON"    value="mucommander.ico"/>
       <var name="MU_OUT"     value="mucommander-setup.exe"/>
