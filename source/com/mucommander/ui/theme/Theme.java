@@ -134,7 +134,7 @@ public class Theme {
     public static final int LOCATION_BAR_PROGRESS_COLOR                     = 67;
     public static final int STATUS_BAR_FOREGROUND_COLOR                     = 68;
     public static final int STATUS_BAR_BACKGROUND_COLOR                     = 69;
-    public static final int STATUS_BAR_SELECTED_FOREGROUND_COLOR            = 79;
+    public static final int STATUS_BAR_SELECTED_FOREGROUND_COLOR            = 70;
     public static final int STATUS_BAR_SELECTED_BACKGROUND_COLOR            = 71;
     public static final int STATUS_BAR_BORDER_COLOR                         = 72;
     public static final int STATUS_BAR_OK_COLOR                             = 73;
