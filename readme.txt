@@ -3,13 +3,13 @@
 |     | | |   --| . |     |     | .'|   | . | -_|  _|
 |_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
 
----------------------------------------
-muCommander v0.8 beta 3 (nightly build)
----------------------------------------
+-----------------------
+muCommander v0.8 beta 3 
+-----------------------
 
 muCommander is a cross-platform file manager featuring a Norton Commander
 style interface and running on any operating system with Java support
-(Mac OS X, Windows, Linux, *BSD, Solaris, OS/2...).
+(Mac OS X, Windows, Linux, *BSD, Solaris...).
 
 Please use the muCommander forums (http://www.mucommander.com/forums)
 to post your questions, suggestions or bug reports.
@@ -29,7 +29,7 @@ muCommander. JRE 1.6 is recommended, you can download it at http://java.com.
 Mac OS X users: your favorite OS already comes with a Java runtime so you're good to go!
 
 If you're having problems launching muCommander, make sure the $JAVA_HOME environment
-variable points to the directory where your JRE or JDK is installed.
+variable points to the directory where your Java runtime is installed.
 
 
 
@@ -48,7 +48,7 @@ muCommander uses the following great 3rd party works :
  Commons Net can be found at http://jakarta.apache.org .
 
 - the J2SSH library released under the LGPL license to provide SFTP support.
- J2SSH can be found at http://www.sshtools.com
+ J2SSH can be found at http://www.sshtools.com .
 
 - Java TAR released under the Public Domain to provide TAR support.
  Java TAR can be found at http://www.trustice.com/java/tar/ .
@@ -90,7 +90,7 @@ Many thanks to all of you who suggested new features, reported bugs, sent warm e
 Command Line Interface
 ----------------------
 
-v0.8 beta 3 (nightly build) comes with a few command line switches.
+muCommander comes with a few command line switches.
 The following options are available:
  -a FILE, --assoc FILE             Load associations from FILE.
  -b FILE, --bookmarks FILE         muCommander bookmarks will be read from and written to FILE.
@@ -121,8 +121,8 @@ Will:
 Advanced configuration
 ----------------------
 
-v0.8 beta 3 (nightly build) has some advanced configuration options which cannot (yet) be accessed through the GUI.
-After having booted the application for the first time, the following files will be created in muCommander's preference
+muCommander has some advanced configuration options which cannot (yet) be accessed through the GUI.
+After having booted the application for the first time, the following files will be created in muCommander's preferences
 folder:
  - action_keymap.xml (keyboard shortcuts description file).
  - command_bar.xml   (commandbar description file).
@@ -140,7 +140,6 @@ keystroke and alt_keystroke should be fairly safe explanatory. It's important to
 nature, the case is important. CONTROL C will not be understood, and neither will control c.
 
 
-
  - command_bar.xml
 This file describes the content of your command bar (the bit will all the buttons on the lower part of the window).
 Each item in the file corresponds to a button in the bar. You can edit them, add some or remove some.
@@ -154,65 +153,15 @@ Where:
 For a list of legal actions, please refer to action_keymap.xml
 
 
-
  - toolbar.xml
 This file controls the content of your toolbar. It works in the same way as command_bar.xml, with two notable differences:
   - you can use a <separator/> element to add a separator in the toolbar
   - alt_action is not available
 
 
-
 - commands.xml
-This file controls the various system commands that muCommander can call. They will be initialised according to the system
-muCommander is running on, but you might not be happy with the default set of commands, or might want to create items that will
-appear in the 'Open with...' contextual menu.
-
-This file is not (yet) written by muCommander, so you have to create it manually for the time being.
-
-It looks something like this:
-<?xml version="1.0" encoding="UTF-8"?>
-<commands>
-    <command alias="Safari"                  value="open -a Safari $f"/>
-    <command alias="open"   type="system"    value="open $f"/>
-    <command alias="Finder" type="invisible" value="open -a Finder $f"/>
-</commands>
-
-Each command has the following attributes:
-- alias: name that muCommander will use to refer to / display the command. It must be unique.
-- type:  the commands, well, type. It can be either system, invisible, or not set. A system command
-         is invisible and, once muCommander will have a GUI to modify this file, read-only.
-         An invisible command is not visible to users (ie, will not appear in the 'Open with...' menu).
-- value: the command to execute. Write it as you would a shell command, with the following tokens:
-         $f will be replaced by the file's full path. $n will be replaced by the file's name. $p will
-         be replaced by the file's parent directory. $j will be replaced by the JVM's current directory.
-
-You must be extremely careful when editing this file, as it's quite easy to break muCommander by fiddling with
-it. Make sure that the system's default commands are always present, and that you do not change their attributes.
-- Windows 9x:
-<command alias="open"     type="system"    value="start &quot;$f&quot;"/>
-<command alias="Explorer" type="invisible" value="start &quot;$f&quot;"/>
-
-- Windows NT:
-<command alias="open"     type="system"    value="cmd /c start &quot;&quot; &quot;$f&quot;"/>
-<command alias="openEXE"  type="system"    value="cmd /c $f" execute="yes"/>
-<command alias="Explorer" type="invisible" value="cmd /c start &quot;&quot; &quot;$f&quot;"/>
-
-- Mac OS X:
-<command alias="open"   type="system"    value="open $f"/>
-<command alias="Finder" type="invisible" value="open -a Finder $f"/>
-
-- KDE:
-<command alias="open"      type="system"    value="kfmclient exec $f"/>
-<command alias="openURL"   type="system"    value="kfmclient openURL exec $f"/>
-<command alias="Konqueror" type="invisible" value="kfmclient exec $f"/>
-
-- Gnome:
-<command alias="open"     type="system"    value="gnome-open $f"/>
-<command alias="Nautilus" type="invisible" value="gnome-open $f"/>
-
-- Anything else:
-<command alias="openEXE" type="system" value="$f"/>
-
+This file controls the various system commands that muCommander can call.
+Documentation on how to customize those commands can be found here: http://www.mucommander.com/forums/viewtopic.php?t=420
 
 
 - associations.xml
@@ -346,7 +295,7 @@ Improvements:
  - New font preview field to 'Appearance' preferences tab
  - New ascending / descending icons in sort tabs
  - New about screen
- - Registered new Zip extensions: .war, .wal, .wmz, .xpi, .ear, .sar
+ - New extensions associated with Zip archives: .war, .wal, .wmz, .xpi, .ear, .sar, .odt, .ods, .odp, .odf, .odg
  - SMB performance improved when changing folders
  - Root folders of SMB shares now have a parent (smb://) to more easily browse workgroups/shares
  - SMB resources that are not browsable (printers, IPC...) are not displayed
@@ -401,12 +350,12 @@ Bug fixes:
  - Fixed a repaint bug which could cause the folder pane display to be corrupted (since 0.8 beta2)
 
 Known issues:
- - Translations not up-to-date (some of the new 0.8 features are untranslated) 
+ - Some translations are not up-to-date
  - Executable permissions are not preserved properly for local files prior with Java <1.6
  - Zip files encoded in a charset other than UTF-8 will not display non-ASCII filenames properly due to a limitation of java.util.zip (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4244499)
  - Some BZ2 archives can not be properly opened
  - SMB support may not work properly on non multi-language JRE
- - 'Copy files' not working with some applications (files are not pasted)
+ - 'Copy files to clipboard' not working with some applications (files are not pasted)
  - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System Preferences' for them to work properly
  - Mac OS X : text fields don't work correctly when using a fractionally-scaled font (Known Java bug, http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)
  - Editable combo boxes have keyboard navigation issues under Java 1.6
