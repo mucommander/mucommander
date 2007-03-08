@@ -2,6 +2,7 @@ package com.mucommander.text;
 
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.file.util.ResourceLoader;
 
 import java.io.*;
 import java.util.Hashtable;
@@ -96,7 +97,7 @@ public class Translator {
             availableLanguages = new Vector();
             dictionary = new Hashtable();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(dictionary.getClass().getResourceAsStream(filePath), "UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsStream(filePath), "UTF-8"));
             String line;
             String key;
             String lang;

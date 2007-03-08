@@ -5,6 +5,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileToolkit;
+import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.xml.parser.ContentHandler;
@@ -222,7 +223,7 @@ public class ActionKeymap implements ContentHandler {
         try {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading JAR action keymap file at "+ACTION_KEYMAP_RESOURCE_PATH);
 
-            parseActionKeymapFile(getClass().getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH));
+            parseActionKeymapFile(ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH));
         }
         catch(Exception e) {
             // Report the error to the user

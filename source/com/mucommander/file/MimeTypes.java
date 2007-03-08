@@ -1,6 +1,8 @@
 
 package com.mucommander.file;
 
+import com.mucommander.file.util.ResourceLoader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,7 +21,7 @@ public class MimeTypes extends Hashtable {
 	
     private MimeTypes() {
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/mime.types")));
+            BufferedReader br = new BufferedReader(new InputStreamReader(ResourceLoader.getResourceAsStream("/mime.types")));
 
             String line;
             StringTokenizer st;

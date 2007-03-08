@@ -1,6 +1,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.Debug;
+import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.icon.IconManager;
@@ -72,7 +73,7 @@ public abstract class MucoAction extends AbstractAction {
 
         // Look for an icon file with the path /action/<classname>.png and use it if it exists
         String iconPath = "/action/"+className+".png";
-        if(classInstance.getResource(iconPath)!=null)
+        if(ResourceLoader.getResource(iconPath)!=null)
             putValue(Action.SMALL_ICON, IconManager.getIcon(iconPath));
     }
 

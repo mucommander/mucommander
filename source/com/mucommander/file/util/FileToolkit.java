@@ -103,7 +103,7 @@ public class FileToolkit {
     public static void copyResource(String resourceFilePath, AbstractFile destFile) throws IOException {
         InputStream in = null;
         try {
-            in = resourceFilePath.getClass().getResourceAsStream(resourceFilePath);
+            in = ResourceLoader.getResourceAsStream(resourceFilePath);
             destFile.copyStream(in, false);
         }
         finally {

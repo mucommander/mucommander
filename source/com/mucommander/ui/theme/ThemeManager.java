@@ -5,6 +5,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.res.ResourceListReader;
@@ -83,7 +84,7 @@ public class ThemeManager {
         Theme    theme;    // Buffer for the current theme.
 
         // Loads the predefined theme list.
-        try {iterator = new ResourceListReader().read(ThemeManager.class.getResourceAsStream(RuntimeConstants.THEMES_FILE)).iterator();}
+        try {iterator = new ResourceListReader().read(ResourceLoader.getResourceAsStream(RuntimeConstants.THEMES_FILE)).iterator();}
         catch(Exception e) {
             if(Debug.ON) {
                 Debug.trace("Failed to load predefined themes list.");
@@ -314,7 +315,7 @@ public class ThemeManager {
 
             // Predefined themes.
         case PREDEFINED_THEME:
-            return ThemeManager.class.getResourceAsStream(path);
+            return ResourceLoader.getResourceAsStream(path);
 
             // Custom themes.
         case CUSTOM_THEME:

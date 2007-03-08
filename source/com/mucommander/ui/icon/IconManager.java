@@ -1,6 +1,8 @@
 
 package com.mucommander.ui.icon;
 
+import com.mucommander.file.util.ResourceLoader;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -74,7 +76,7 @@ public class IconManager {
      * @param scaleFactor the icon scale factor, <code>1.0f</code> to have the icon in its original size (no rescaling)
      */
     public static ImageIcon getIcon(String iconPath, float scaleFactor) {
-        URL resourceURL = classInstance.getResource(iconPath);
+        URL resourceURL = ResourceLoader.getResource(iconPath);
         if(resourceURL==null) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Warning: attempt to load non-existing icon: "+iconPath+" , icon missing ?");
             return null;
