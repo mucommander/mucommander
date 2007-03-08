@@ -68,7 +68,7 @@ Lead developers:
 - Nicolas Rinaudo
 
 Code contributors:
-- Xavier Martin (ISO and NRG files support)
+- Xavier Martin (ISO and NRG archives support)
 
 Translators: 
 - Tony Klüver and Frank Berger (German)
@@ -357,5 +357,5 @@ Known issues:
  - SMB support may not work properly on non multi-language JRE
  - 'Copy files to clipboard' not working with some applications (files are not pasted)
  - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System Preferences' for them to work properly
- - Mac OS X : text fields don't work correctly when using a fractionally-scaled font (Known Java bug, http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)
+ - Mac OS X : text fields don't work correctly when using a fractionally-scaled font (known Java bug, http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)
  - Editable combo boxes have keyboard navigation issues under Java 1.6
