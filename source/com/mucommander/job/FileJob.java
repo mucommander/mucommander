@@ -157,7 +157,8 @@ public abstract class FileJob implements Runnable {
         for(int i=0; i<nbFiles; i++)
             files.setElementAt(new CachedFile(files.fileAt(i), true), i);
 
-        baseSourceFolder = new CachedFile(baseSourceFolder, true);
+        if(baseSourceFolder!=null)
+            baseSourceFolder = new CachedFile(baseSourceFolder, true);
     }
 	
 	
