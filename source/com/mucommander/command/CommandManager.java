@@ -552,7 +552,6 @@ public class CommandManager implements CommandBuilder {
      * @see    #setAssociationFile(String)
      */
     public static boolean writeAssociations() {
-        wereAssociationsModified = true;
         // Do not save the associations if they were not modified.
         if(wereAssociationsModified) {
             BackupOutputStream out;    // Where to write the associations.

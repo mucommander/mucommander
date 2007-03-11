@@ -17,11 +17,7 @@ class AssociationFactory implements AssociationBuilder {
         this.command = command;
     }
 
-    public void endAssociation() throws CommandException {
-        if(filter.isEmpty())
-            throw new CommandException("Empty association file filter.");
-        CommandManager.registerAssociation(command, filter);
-    }
+    public void endAssociation() throws CommandException {CommandManager.registerAssociation(command, filter);}
 
     public void setMask(String mask, boolean isCaseSensitive) {filter.addFileFilter(new RegexpFilenameFilter(mask, isCaseSensitive));}
     public void setIsDir(boolean isDir) {filter.addFileFilter(new TypeFileFilter(TypeFileFilter.DIRECTORY, isDir));}
