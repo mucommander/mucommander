@@ -66,14 +66,22 @@ public class CustomDateFormat implements ConfigurationListener {
 
 
     /**
-     * Creates and returns a SimpleDateFormat instance using date format stored in preferences.
+     * Returns the date format stored in the preferences and used by this class to format dates.
+     * The format of the returned string is the one used by the <code>java.text.SimpleDateFormat</code> class. 
+     */
+    public static String getDateFormatString() {
+        return replaceDateSeparator(
+            ConfigurationManager.getVariable(ConfigurationVariables.DATE_FORMAT, ConfigurationVariables.DEFAULT_DATE_FORMAT),
+            ConfigurationManager.getVariable(ConfigurationVariables.DATE_SEPARATOR, ConfigurationVariables.DEFAULT_DATE_SEPARATOR))
+        + " " + ConfigurationManager.getVariable(ConfigurationVariables.TIME_FORMAT, ConfigurationVariables.DEFAULT_TIME_FORMAT);
+    }
+
+
+    /**
+     * Creates and returns a SimpleDateFormat instance using the date format stored in the preferences.
      */
     private static SimpleDateFormat createDateFormat() {
-        return new SimpleDateFormat(
-            replaceDateSeparator(
-                ConfigurationManager.getVariable(ConfigurationVariables.DATE_FORMAT, ConfigurationVariables.DEFAULT_DATE_FORMAT),
-                ConfigurationManager.getVariable(ConfigurationVariables.DATE_SEPARATOR, ConfigurationVariables.DEFAULT_DATE_SEPARATOR))
-            + " " + ConfigurationManager.getVariable(ConfigurationVariables.TIME_FORMAT, ConfigurationVariables.DEFAULT_TIME_FORMAT));
+        return new SimpleDateFormat(getDateFormatString());
     }
 	
 	

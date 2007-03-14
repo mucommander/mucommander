@@ -2,6 +2,7 @@ package com.mucommander.ui;
 
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
+import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
@@ -48,10 +49,6 @@ public class ChangeDateDialog extends FocusDialog implements ActionListener, Ite
         yBoxPanel.add(new JLabel(Translator.get(com.mucommander.ui.action.ChangeDateAction.class.getName()+".tooltip")+" :"));
         yBoxPanel.addSpace(10);
 
-        SpinnerDateModel sdm = new SpinnerDateModel();
-        // Use the selected file's date if there is only one file, if not use base folder's date.
-        sdm.setValue(new Date((files.size()==1?files.fileAt(0):files.getBaseFolder()).getDate()));
-
         ButtonGroup buttonGroup = new ButtonGroup();
 
         JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -69,7 +66,11 @@ public class ChangeDateDialog extends FocusDialog implements ActionListener, Ite
         tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         tempPanel.add(radioButton);
 
-        this.dateSpinner = new JSpinner(sdm);
+        this.dateSpinner = new JSpinner(new SpinnerDateModel());
+        dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, CustomDateFormat.getDateFormatString()));
+        // Use the selected file's date if there is only one file, if not use base folder's date.
+        dateSpinner.setValue(new Date((files.size()==1?files.fileAt(0):files.getBaseFolder()).getDate()));
+        // Spinner is disabled until the 'Specific date' radio button is selected 
         dateSpinner.setEnabled(false);
         tempPanel.add(dateSpinner);
 
