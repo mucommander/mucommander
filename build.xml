@@ -890,6 +890,12 @@
         <description kind="short">A cross-platform file manager.</description>
         <icon href="${jnlp.icon}" />
       </information>
+      <resources os="Mac OS X">
+        <property name="com.apple.smallTabs" value="true"/>
+        <property name="com.apple.hwaccel" value="true"/>
+        <property name="apple.laf.useScreenMenuBar" value="true"/>
+        <property name="file.encoding" value="UTF-8"/>
+      </resources>
       <resources>
         <j2se version="${app.jvm}+"/>
         <jar  href="mucommander.jar"/>
