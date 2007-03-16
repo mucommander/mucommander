@@ -303,6 +303,7 @@ Improvements:
  - Mac OS X: disabled progress bar animation in file transfer progress dialog which hogged CPU unnecessarily
  - Mac OS X: new 'Universal Binary' application stub, muCommander no longer uses Rosetta to start up
  - New muCommander icon (thanks to Stefano Perelli) and splash logo
+ - Shell management: users can now choose the encoding used by their shell of choice.
 
 Localization:
  - Romanian translation (contributed by Catalin Hritcu)
