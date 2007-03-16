@@ -50,7 +50,7 @@ public class ProcessRunner {
      * @return                  the generated process.
      * @throws IOException      thrown if any error occurs while creating the process.
      */
-    public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory, ProcessListener listener) throws IOException {
+    public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory, ProcessListener listener, String encoding) throws IOException {
         AbstractProcess process;
 
         // If currentDirectory is null, use the VM's current directory.
@@ -69,7 +69,7 @@ public class ProcessRunner {
 
         // Starts the process.
         process = currentDirectory.runProcess(tokens);
-        process.startMonitoring(listener);
+        process.startMonitoring(listener, encoding);
 
         return process;
     }
@@ -78,48 +78,53 @@ public class ProcessRunner {
 
     // - Helper methods ------------------------------------------------------
     // -----------------------------------------------------------------------
-    /**
-     * Executes the specified command in the VM's current directory.
-     * <p>
-     * This is a convenience method and behaves exactly as a call to <code>execute(command, null, null)</code>.
-     * </p>
-     * @param  command     command to execute.
-     * @return             the generated process.
-     * @see                #execute(String,AbstractFile,ProcessListener)
-     * @throws IOException thrown if an error happens while starting the process.
-     */
-    public static AbstractProcess execute(String command) throws IOException {return execute(command, null, null);}
+    public static AbstractProcess execute(String command, AbstractFile currentDirectory, ProcessListener listener) throws IOException {return execute(command, currentDirectory, listener, null);}
 
     /**
      * Executes the specified command in the VM's current directory.
      * <p>
-     * This is a convenience method and behaves exactly as a call to <code>execute(command, null, listener)</code>.
+     * This is a convenience method and behaves exactly as a call to <code>execute(command, null, null, null)</code>.
+     * </p>
+     * @param  command     command to execute.
+     * @return             the generated process.
+     * @see                #execute(String,AbstractFile,ProcessListener,String)
+     * @throws IOException thrown if an error happens while starting the process.
+     */
+    public static AbstractProcess execute(String command) throws IOException {return execute(command, null, null, null);}
+    public static AbstractProcess execute(String command, String encoding) throws IOException {return execute(command, null, null, encoding);}
+
+    /**
+     * Executes the specified command in the VM's current directory.
+     * <p>
+     * This is a convenience method and behaves exactly as a call to <code>execute(command, null, listener, null)</code>.
      * </p>
      * @param  command     command to execute.
      * @param  listener    object that will be notified of any modification in the process' state.
      * @return             the generated process.
-     * @see                #execute(String,AbstractFile,ProcessListener)
+     * @see                #execute(String,AbstractFile,ProcessListener,String)
      * @throws IOException thrown if an error happens while starting the process.
      */
-    public static AbstractProcess execute(String command, ProcessListener listener) throws IOException {return execute(command, null, listener);}
+    public static AbstractProcess execute(String command, ProcessListener listener) throws IOException {return execute(command, null, listener, null);}
+    public static AbstractProcess execute(String command, ProcessListener listener, String encoding) throws IOException {return execute(command, null, listener, encoding);}
 
     /**
      * Executes the specified command in the specified directory.
      * <p>
-     * This is a convenience method and behaves exactly as a call to <code>execute(command, currentDirectory, null)</code>.
+     * This is a convenience method and behaves exactly as a call to <code>execute(command, currentDirectory, null, null)</code>.
      * </p>
      * @param  command          command to execute.
      * @param  currentDirectory directory in which to run the command.
      * @return                  the generated process.
-     * @see                     #execute(String,AbstractFile,ProcessListener)
+     * @see                     #execute(String,AbstractFile,ProcessListener,String)
      * @throws IOException      thrown if an error happens while starting the process.
      */
-    public static AbstractProcess execute(String command, AbstractFile currentDirectory) throws IOException {return execute(command, currentDirectory, null);}
+    public static AbstractProcess execute(String command, AbstractFile currentDirectory) throws IOException {return execute(command, currentDirectory, null, null);}
+    public static AbstractProcess execute(String command, AbstractFile currentDirectory, String encoding) throws IOException {return execute(command, currentDirectory, null, encoding);}
 
     /**
      * Executes the specified command in the specified directory.
      * <p>
-     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, currentDirectory, null)</code> where <code>tokens</code>
+     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, currentDirectory, null, encoding)</code> where <code>tokens</code>
      * is an array contains all the tokens found in <code>command</code>.
      * </p>
      * <p>
@@ -130,10 +135,10 @@ public class ProcessRunner {
      * @param  command          command to execute.
      * @param  currentDirectory directory in which to run the command.
      * @return                  the generated process.
-     * @see                     #execute(String,AbstractFile,ProcessListener)
+     * @see                     #execute(String,AbstractFile,ProcessListener,String)
      * @throws IOException      thrown if an error happens while starting the process.
      */
-    public static AbstractProcess execute(String command, AbstractFile currentDirectory, ProcessListener listener) throws IOException {
+    public static AbstractProcess execute(String command, AbstractFile currentDirectory, ProcessListener listener, String encoding) throws IOException {
         StringTokenizer parser; // Used to parse the command.
         String[]        tokens; // Tokens that make up the command.
 
@@ -146,44 +151,49 @@ public class ProcessRunner {
             tokens[i] = parser.nextToken();
 
         // Starts the process.
-        return execute(tokens, currentDirectory, listener);
+        return execute(tokens, currentDirectory, listener, encoding);
     }
+
+    public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory, ProcessListener listener) throws IOException {return execute(tokens, currentDirectory, listener, null);}
 
     /**
      * Executes the specified command in the VM's current directory.
      * <p>
-     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, null, null)</code>.
+     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, null, null, null)</code>.
      * </p>
      * @param  tokens      command to execute.
      * @return             the generated process.
-     * @see                #execute(String[],AbstractFile,ProcessListener)
+     * @see                #execute(String[],AbstractFile,ProcessListener,String)
      * @throws IOException thrown if an error happens while starting the process.
      */
-    public static AbstractProcess execute(String[] tokens) throws IOException {return execute(tokens, null, null);}
+    public static AbstractProcess execute(String[] tokens) throws IOException {return execute(tokens, null, null, null);}
+    public static AbstractProcess execute(String[] tokens, String encoding) throws IOException {return execute(tokens, null, null, encoding);}
 
     /**
      * Executes the specified command in the VM's current directory.
      * <p>
-     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, null, listener)</code>.
+     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, null, listener, null)</code>.
      * </p>
      * @param  tokens      command to execute.
      * @param  listener    object that will be notified of any modification in the process' state.
      * @return             the generated process.
-     * @see                #execute(String[],AbstractFile,ProcessListener)
+     * @see                #execute(String[],AbstractFile,ProcessListener,String)
      * @throws IOException thrown if an error happens while starting the process.
      */
-    public static AbstractProcess execute(String[] tokens, ProcessListener listener) throws IOException {return execute(tokens, null, listener);}
+    public static AbstractProcess execute(String[] tokens, ProcessListener listener) throws IOException {return execute(tokens, null, listener, null);}
+    public static AbstractProcess execute(String[] tokens, ProcessListener listener, String encoding) throws IOException {return execute(tokens, null, listener, encoding);}
 
     /**
      * Executes the specified command in the specified directory.
      * <p>
-     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, currentDirectory, null)</code>.
+     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, currentDirectory, null, null)</code>.
      * </p>
      * @param  tokens           command to execute.
      * @param  currentDirectory directory in which to run the command.
      * @return                  the generated process.
-     * @see                     #execute(String[],AbstractFile,ProcessListener)
+     * @see                     #execute(String[],AbstractFile,ProcessListener,String)
      * @throws IOException      thrown if an error happens while starting the process.
      */
-    public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory) throws IOException {return execute(tokens, currentDirectory, null);}
+    public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory) throws IOException {return execute(tokens, currentDirectory, null, null);}
+    public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory, String encoding) throws IOException {return execute(tokens, currentDirectory, null, encoding);}
 }

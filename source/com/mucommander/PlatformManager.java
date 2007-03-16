@@ -103,6 +103,8 @@ public class PlatformManager {
     public static final String  DEFAULT_EXE_OPENER_COMMAND;
     /** Command used to run the system's default shell. */
     public static final String  DEFAULT_SHELL_COMMAND;
+    /** Encoding used to read the shell output. */
+    public static final String  DEFAULT_SHELL_ENCODING;
 
 
 
@@ -142,11 +144,15 @@ public class PlatformManager {
     /** URL opener command for KDE. */
     private static final String KDE_URL_OPENER              = "kmfclient openURL $f";
     /** Default Windows 9x shell. */
-    private static final String DEFAULT_WINDOWS_9X_SHELL    = "command.com /c";
+    private static final String WINDOWS_9X_SHELL            = "command.com /c";
     /** Default Windows NT shell. */
-    private static final String DEFAULT_WINDOWS_NT_SHELL    = "cmd /c";
+    private static final String WINDOWS_NT_SHELL            = "cmd /U /c";
+    /** Default encoding used by the windows NT shell. */
+    private static final String WINDOWS_NT_SHELL_ENCODING   = "UTF-16LE";
     /** Default shell for non-windows OSes. */
-    private static final String DEFAULT_POSIX_SHELL         = "/bin/sh -l -c";
+    private static final String POSIX_SHELL                 = "/bin/sh -l -c";
+    /** Default encoding for Posix shells. */
+    private static final String POSIX_SHELL_ENCODING        = "UTF-8";
 
 
 
@@ -366,12 +372,18 @@ public class PlatformManager {
         }
 
         // Identifies the default shell command.
-        if(OS_FAMILY == WINDOWS_9X)
-            DEFAULT_SHELL_COMMAND = DEFAULT_WINDOWS_9X_SHELL;
-        else if(OS_FAMILY == WINDOWS_NT)
-            DEFAULT_SHELL_COMMAND = DEFAULT_WINDOWS_NT_SHELL;
-        else
-            DEFAULT_SHELL_COMMAND = DEFAULT_POSIX_SHELL;
+        if(OS_FAMILY == WINDOWS_9X) {
+            DEFAULT_SHELL_COMMAND  = WINDOWS_9X_SHELL;
+            DEFAULT_SHELL_ENCODING = POSIX_SHELL_ENCODING;
+        }
+        else if(OS_FAMILY == WINDOWS_NT) {
+            DEFAULT_SHELL_COMMAND  = WINDOWS_NT_SHELL;
+            DEFAULT_SHELL_ENCODING = WINDOWS_NT_SHELL_ENCODING;
+        }
+        else {
+            DEFAULT_SHELL_COMMAND  = POSIX_SHELL;
+            DEFAULT_SHELL_ENCODING = POSIX_SHELL_ENCODING;
+        }
     }
 
     /**

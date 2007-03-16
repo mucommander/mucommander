@@ -4,6 +4,8 @@ package com.mucommander.process;
 import com.mucommander.Debug;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -62,21 +64,30 @@ public abstract class AbstractProcess {
         }.start();
     }
 
+    private static Reader getStreamReader(InputStream in, String encoding) {
+        if(encoding != null) {
+            try {return new InputStreamReader(in, encoding);}
+            catch(Exception e) {}
+        }
+        return new InputStreamReader(in);
+    }
+
     /**
      * Starts monitoring the process.
      * @param listener if non <code>null</code>, <code>listener</code> will receive updates about the process' event.
+     * @param encoding encoding that should be used by the process' stdout and stderr streams.
      */
-    void startMonitoring(ProcessListener listener) throws IOException {
+    void startMonitoring(ProcessListener listener, String encoding) throws IOException {
         // Only monitors stdout if the process uses merged streams.
         if(usesMergedStreams()) {
             if(Debug.ON) Debug.trace("Starting process merged output monitor...");
-            new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), listener, this), "Process sdtout/stderr monitor").start();
+            new Thread(stdoutMonitor = new ProcessOutputMonitor(getStreamReader(getInputStream(), encoding), listener, this), "Process sdtout/stderr monitor").start();
         }
         // Monitors both stdout and stderr.
         else {
             if(Debug.ON) Debug.trace("Starting process stdout and stderr monitors...");
-            new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), listener, this), "Process stdout monitor").start();
-            new Thread(stderrMonitor = new ProcessOutputMonitor(getErrorStream(), listener), "Process stderr monitor").start();
+            new Thread(stdoutMonitor = new ProcessOutputMonitor(getStreamReader(getInputStream(), encoding), listener, this), "Process stdout monitor").start();
+            new Thread(stderrMonitor = new ProcessOutputMonitor(getStreamReader(getErrorStream(), encoding), listener), "Process stderr monitor").start();
         }
     }
 

@@ -21,5 +21,5 @@ public interface ProcessListener {
      * @param offset offset in buffer at which the process' output starts.
      * @param length length of the process' output in buffer.
      */
-    public void processOutput(byte buffer[], int offset, int length);
+    public void processOutput(char buffer[], int offset, int length);
 }

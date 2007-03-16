@@ -55,6 +55,8 @@ public interface ConfigurationVariables {
     public static final boolean DEFAULT_USE_CUSTOM_SHELL          = false;
     /** Maximum number of items that should be present in the shell history. */
     public static final String  SHELL_HISTORY_SIZE                = SHELL_SECTION + '.' + "history_size";
+    /** Endoding used to read the shell output. */
+    public static final String  SHELL_ENCODING                    = SHELL_SECTION + '.' + "encoding";
     /** Default maximum shell history size. */
     public static final int     DEFAULT_SHELL_HISTORY_SIZE        = 100;
 

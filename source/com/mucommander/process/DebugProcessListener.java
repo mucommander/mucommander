@@ -50,5 +50,5 @@ class DebugProcessListener implements ProcessListener {
     /**
      * Prints out the process output.
      */
-    public void processOutput(byte[] buffer, int offset, int length) {if(Debug.ON) Debug.trace(command + ": " + new String(buffer, offset, length));}
+    public void processOutput(char[] buffer, int offset, int length) {if(Debug.ON) Debug.trace(command + ": " + new String(buffer, offset, length));}
 }

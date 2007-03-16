@@ -21,6 +21,8 @@ import java.io.IOException;
 public class Shell implements ConfigurationListener {
     // - Class variables -----------------------------------------------------
     // -----------------------------------------------------------------------
+    /** Encoding used by the shell. */
+    private static String   encoding;
     /** Tokens that compose the shell command. */
     private static String[] tokens;
     /** Tokens that compose remote shell commands. */
@@ -108,7 +110,7 @@ public class Shell implements ConfigurationListener {
             commandTokens   = remoteTokens;
         }
         // Starts the process.
-        return ProcessRunner.execute(commandTokens, currentFolder, listener);
+        return ProcessRunner.execute(commandTokens, currentFolder, listener, encoding);
     }
 
 
@@ -119,16 +121,18 @@ public class Shell implements ConfigurationListener {
      * Extracts the shell command from configuration.
      */
     private static synchronized void setShellCommand() {
-        String command; // Shell command.
+        String buffer;
 
         // Retrieves the configuration defined shell command.
         if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_SHELL, ConfigurationVariables.DEFAULT_USE_CUSTOM_SHELL))
-            command = ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_SHELL, PlatformManager.DEFAULT_SHELL_COMMAND);
+            buffer = ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_SHELL, PlatformManager.DEFAULT_SHELL_COMMAND);
         else
-            command = PlatformManager.DEFAULT_SHELL_COMMAND;
+            buffer = PlatformManager.DEFAULT_SHELL_COMMAND;
 
         // Splits the command into tokens, leaving room for the argument.
-        tokens = CommandParser.getTokensWithParams(command, 1);
+        tokens = CommandParser.getTokensWithParams(buffer, 1);
+
+        encoding = ConfigurationManager.getVariable(ConfigurationVariables.SHELL_ENCODING, PlatformManager.DEFAULT_SHELL_ENCODING);
     }
 
     /**
