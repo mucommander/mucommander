@@ -278,9 +278,6 @@ public class Theme {
 
     /**
      * Returns the theme's requested font.
-     * <p>
-     * If the theme doesn't use a custom value for the specified font, this method will return null.
-     * </p>
      * @param  id                       identifier of the font to retrieve.
      * @return                          the requested font if it exists, <code>null</code> otherwise.
      * @throws IllegalArgumentException if <code>id</code> is not a legal color id.
@@ -293,15 +290,12 @@ public class Theme {
         if((buffer = getThemeData()) != null)
             font = buffer.getFont(id);
         if(font == null)
-            return ThemeManager.getDefaultFont(id);
+            return ThemeManager.getDefaultFont(id, buffer);
         return font;
     }
 
     /**
      * Returns the theme's requested color.
-     * <p>
-     * If the theme doesn't use a custom value for the specified color, this method will return null.
-     * </p>
      * @param  id                       identifier of the color to retrieve.
      * @return                          the requested color if it exists, <code>null</code> otherwise.
      * @throws IllegalArgumentException if <code>id</code> is not a legal color id.
@@ -314,7 +308,7 @@ public class Theme {
         if((buffer = getThemeData()) != null)
             color = buffer.getColor(id);
         if(color == null)
-            return ThemeManager.getDefaultColor(id);
+            return ThemeManager.getDefaultColor(id, buffer);
         return color;
     }
 

@@ -492,13 +492,15 @@ public class ThemeManager {
      * @param  id identifier of the requested font.
      * @return    the current theme's requested font.
      */
-    public synchronized static Font getCurrentFont(int id) {
+    public synchronized static Font getCurrentFont(int id) {return getFont(id, currentData);}
+
+    private static Font getFont(int id, ThemeData data) {
         Font font;
 
         // If the requested font is not defined in the current theme,
         // returns its default value.
-        if((font = currentData.getFont(id)) == null)
-            return getDefaultFont(id);
+        if((data == null) || (font = data.getFont(id)) == null)
+            return getDefaultFont(id, data);
         return font;
     }
 
@@ -507,13 +509,15 @@ public class ThemeManager {
      * @param  id identifier of the requested color.
      * @return    the current theme's requested color.
      */
-    public synchronized static Color getCurrentColor(int id) {
+    public synchronized static Color getCurrentColor(int id) {return getColor(id, currentData);}
+
+    private static Color getColor(int id, ThemeData data) {
         Color color;
 
         // If the requested color is not defined in the current theme,
         // returns its default value.
-        if((color = currentData.getColor(id)) == null)
-            return getDefaultColor(id);
+        if((data == null) || (color = data.getColor(id)) == null)
+            return getDefaultColor(id, data);
         return color;
     }
 
@@ -1217,7 +1221,7 @@ public class ThemeManager {
 	return font;
     }
 
-    static final Color getDefaultColor(int id) {
+    static final Color getDefaultColor(int id, ThemeData data) {
         switch(id) {
             // File table background colors.
         case Theme.FILE_UNFOCUSED_BACKGROUND_COLOR:
@@ -1233,7 +1237,7 @@ public class ThemeManager {
         case Theme.ARCHIVE_BACKGROUND_COLOR:
         case Theme.SYMLINK_BACKGROUND_COLOR:
         case Theme.MARKED_BACKGROUND_COLOR:
-            return getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
+            return getColor(Theme.FILE_TABLE_BACKGROUND_COLOR, data);
 
         case Theme.FILE_TABLE_BACKGROUND_COLOR:
 	    return getTableBackgroundColor();
@@ -1249,7 +1253,7 @@ public class ThemeManager {
         case Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR:
-            return getCurrentColor(Theme.FILE_FOREGROUND_COLOR);
+            return getColor(Theme.FILE_FOREGROUND_COLOR, data);
 
         case Theme.FILE_FOREGROUND_COLOR:
 	    return getTableColor();
@@ -1297,7 +1301,7 @@ public class ThemeManager {
         case Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR:
         case Theme.SYMLINK_SELECTED_BACKGROUND_COLOR:
         case Theme.MARKED_SELECTED_BACKGROUND_COLOR:
-            return getCurrentColor(Theme.FILE_SELECTED_BACKGROUND_COLOR);
+            return getColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, data);
 
         case Theme.FILE_SELECTED_BACKGROUND_COLOR:
 	    return getTableSelectionBackgroundColor();
@@ -1322,7 +1326,7 @@ public class ThemeManager {
         case Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-            return getCurrentColor(Theme.FILE_SELECTED_FOREGROUND_COLOR);
+            return getColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, data);
 
         case Theme.FILE_SELECTED_FOREGROUND_COLOR:
 	    return getTableSelectionColor();
@@ -1371,7 +1375,7 @@ public class ThemeManager {
      * @param  id identifier of the font whose default value should be retrieved.
      * @return    the default value for the specified font.
      */
-    static final Font getDefaultFont(int id) {
+    static final Font getDefaultFont(int id, ThemeData data) {
 	switch(id) {
             // Table font.
         case Theme.FILE_TABLE_FONT:
