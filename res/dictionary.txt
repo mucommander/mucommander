@@ -550,7 +550,7 @@ location:EN:Location
 location:FR:Emplacement
 location:DE:Ort
 location:ES:Localización
-location:CS:Umístnění
+location:CS:Umístění
 location:zh_TW:位置
 location:PL:Lokalizacja
 location:RO:Locație
@@ -634,7 +634,7 @@ recurse_directories:zh_TW:遞迴所有目錄
 recurse_directories:DE:Auf Unterverzeichnisse anwenden
 recurse_directories:RO:Prelucrează directoarele recursiv
 recurse_directories:IT:Elabora anche le sotto-directory
-recurse_directories:CS:Vybrané složky rekurzívně
+recurse_directories:CS:Použít i pro podřízené složky
 recurse_directories:zh_CN:递归所有目录
 recurse_directories:RU:Обрабатывать подкаталоги
 recurse_directories:SI:Recurse directories
@@ -1017,7 +1017,7 @@ permissions.other:zh_TW:其它
 permissions.other:DE:Andere
 permissions.other:RO:Altele
 permissions.other:IT:Altro
-permissions.other:CS:Jiné
+permissions.other:CS:Ostatní
 permissions.other:zh_CN:其它
 permissions.other:RU:Остальные
 permissions.other:SI:Ostalo
@@ -1427,7 +1427,7 @@ com.mucommander.ui.action.LocalCopyAction.tooltip:EN:Copy selected file into cur
 com.mucommander.ui.action.LocalCopyAction.tooltip:FR:Copier le fichier selectionné dans le dossier courant
 com.mucommander.ui.action.LocalCopyAction.tooltip:DE:Kopiert markierte Datei in den aktuellen Ordner
 com.mucommander.ui.action.LocalCopyAction.tooltip:ES:Copiar el fichero seleccionado en el directorio actual
-com.mucommander.ui.action.LocalCopyAction.tooltip:CS:Kopírovat označený soubor do stávající složky
+com.mucommander.ui.action.LocalCopyAction.tooltip:CS:Kopírovat vybraný soubor do stávající složky
 com.mucommander.ui.action.LocalCopyAction.tooltip:zh_TW:複製已選取檔案至此資料夾
 com.mucommander.ui.action.LocalCopyAction.tooltip:PL:Kopiuj zaznaczone pliki do aktywnego katalogu
 com.mucommander.ui.action.LocalCopyAction.tooltip:HU:A kijelölt fájlok másolása az aktuális könyvtárba
@@ -2139,7 +2139,7 @@ com.mucommander.ui.action.MarkUpToFirstRowAction.label:zh_TW:標記檔案至開�
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:DE:Dateien bis zum Anfang Markieren
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:RO:Selectează fișierele până la început
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:IT:Seleziona file dall'inizio
-com.mucommander.ui.action.MarkUpToFirstRowAction.label:CS:Označit soubory zpět k začátku
+com.mucommander.ui.action.MarkUpToFirstRowAction.label:CS:Označit soubory do začátku
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:zh_CN:标记文件到开头
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:RU:Отметить файлы до начала
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:SI:Označi datoteke od začetka
@@ -2375,7 +2375,7 @@ com.mucommander.ui.action.RevealInDesktopAction.label:ES:Mostrar en %1
 com.mucommander.ui.action.RevealInDesktopAction.label:RO:Arată în %1
 com.mucommander.ui.action.RevealInDesktopAction.label:SI:Razkrij v %1
 com.mucommander.ui.action.RevealInDesktopAction.label:IT:Mostra in %1
-com.mucommander.ui.action.RevealInDesktopAction.label:CS:Otevřít v %1
+com.mucommander.ui.action.RevealInDesktopAction.label:CS:Otevřít v aplikaci %1
 com.mucommander.ui.action.RevealInDesktopAction.label:zh_TW:顯示在 %1
 com.mucommander.ui.action.RevealInDesktopAction.label:DE:Öffne in %1
 com.mucommander.ui.action.RevealInDesktopAction.label:zh_CN:显示在 %1
@@ -2425,7 +2425,7 @@ com.mucommander.ui.action.PackAction.label:EN:Pack files
 com.mucommander.ui.action.PackAction.label:FR:Compresser fichiers
 com.mucommander.ui.action.PackAction.label:DE:Dateien packen
 com.mucommander.ui.action.PackAction.label:ES:Comprimir ficheros
-com.mucommander.ui.action.PackAction.label:CS:Komprimovat soubory
+com.mucommander.ui.action.PackAction.label:CS:Komprimovat
 com.mucommander.ui.action.PackAction.label:zh_TW:壓縮檔案
 com.mucommander.ui.action.PackAction.label:PL:Spakuj pliki
 com.mucommander.ui.action.PackAction.label:HU:tömörítés
@@ -2452,7 +2452,7 @@ com.mucommander.ui.action.PackAction.tooltip:FR:Compresser les fichiers marqués
 com.mucommander.ui.action.PackAction.tooltip:RO:Arhivează fișierele selectate
 com.mucommander.ui.action.PackAction.tooltip:SI:Dodaj označene datoteke v arhiv
 com.mucommander.ui.action.PackAction.tooltip:IT:Comprimi file selezionati
-com.mucommander.ui.action.PackAction.tooltip:CS:Komprimovat vybrané soubory do archívu
+com.mucommander.ui.action.PackAction.tooltip:CS:Komprimovat označené soubory do archívu
 com.mucommander.ui.action.PackAction.tooltip:zh_TW:將標記檔案加入壓縮檔
 com.mucommander.ui.action.PackAction.tooltip:DE:Markierte Dateien in ein Archiv packen
 com.mucommander.ui.action.PackAction.tooltip:zh_CN:压缩选定文件到压缩包
@@ -2477,7 +2477,7 @@ com.mucommander.ui.action.UnpackAction.label:EN:Unpack files
 com.mucommander.ui.action.UnpackAction.label:FR:Décompresser fichiers
 com.mucommander.ui.action.UnpackAction.label:DE:Dateien entpacken
 com.mucommander.ui.action.UnpackAction.label:ES:Descomprimir ficheros
-com.mucommander.ui.action.UnpackAction.label:CS:Dekomprimovat soubory
+com.mucommander.ui.action.UnpackAction.label:CS:Dekomprimovat
 com.mucommander.ui.action.UnpackAction.label:zh_TW:解壓縮檔案
 com.mucommander.ui.action.UnpackAction.label:PL:Rozpakuj pliki
 com.mucommander.ui.action.UnpackAction.label:HU:kicsomagolás
@@ -2658,7 +2658,7 @@ com.mucommander.ui.action.StopAction.label:FR:Arrêter le changement de dossier
 com.mucommander.ui.action.StopAction.label:RO:Oprește schimbarea de director
 com.mucommander.ui.action.StopAction.label:SI:Prekini spreminjanje mape
 com.mucommander.ui.action.StopAction.label:IT:Ferma cambio cartella
-com.mucommander.ui.action.StopAction.label:CS:Zabránit změně složky
+com.mucommander.ui.action.StopAction.label:CS:Zastavit změnu složky
 com.mucommander.ui.action.StopAction.label:zh_TW:停止資料夾變更
 com.mucommander.ui.action.StopAction.label:DE:Ordnerwechsel abbrechen
 com.mucommander.ui.action.StopAction.label:zh_CN:停止改变文件夹
@@ -2706,7 +2706,7 @@ com.mucommander.ui.action.ToggleToolBarAction.show:EN:Show toolbar
 com.mucommander.ui.action.ToggleToolBarAction.show:FR:Afficher la barre d'outils
 com.mucommander.ui.action.ToggleToolBarAction.show:DE:Toolbar anzeigen
 com.mucommander.ui.action.ToggleToolBarAction.show:ES:Mostrar la barra de herramientas
-com.mucommander.ui.action.ToggleToolBarAction.show:CS:Zobrazit nástrojovou lištu
+com.mucommander.ui.action.ToggleToolBarAction.show:CS:Zobrazit tlačítkovou lištu
 com.mucommander.ui.action.ToggleToolBarAction.show:zh_TW:顯示工具列
 com.mucommander.ui.action.ToggleToolBarAction.show:PL:Pokaż pasek narzędzi
 com.mucommander.ui.action.ToggleToolBarAction.show:HU:látszik az eszköztár
@@ -2720,7 +2720,7 @@ com.mucommander.ui.action.ToggleToolBarAction.hide:EN:Hide toolbar
 com.mucommander.ui.action.ToggleToolBarAction.hide:FR:Cacher la barre d'outils
 com.mucommander.ui.action.ToggleToolBarAction.hide:DE:Werkzeugleiste verstecken
 com.mucommander.ui.action.ToggleToolBarAction.hide:ES:Ocultar la barra de herramientas
-com.mucommander.ui.action.ToggleToolBarAction.hide:CS:Skrýt nástrojovou lištu
+com.mucommander.ui.action.ToggleToolBarAction.hide:CS:Skrýt tlačítkovou lištu
 com.mucommander.ui.action.ToggleToolBarAction.hide:zh_TW:隱藏工具列
 com.mucommander.ui.action.ToggleToolBarAction.hide:PL:Ukryj pasek narzędzi
 com.mucommander.ui.action.ToggleToolBarAction.hide:HU:az eszköztár rejtése
@@ -3252,7 +3252,7 @@ status_bar.selected_files:EN:%1 of %2 selected
 status_bar.selected_files:FR:%1 de %2 sélectionnés
 status_bar.selected_files:DE:%1 von %2 markiert
 status_bar.selected_files:ES:%1 de %2 seleccionados
-status_bar.selected_files:CS:%1 z %2 označeno
+status_bar.selected_files:CS:%1 z %2 vybráno
 status_bar.selected_files:zh_TW:%1 / %2 已選取
 status_bar.selected_files:PL:%1 z %2 zaznaczonych
 status_bar.selected_files:HU:%1 / %2 kijelölt
@@ -3294,7 +3294,7 @@ status_bar.volume_free:zh_CN:空闲：%1
 status_bar.volume_free:SI:Nezasedeno: %1
 status_bar.volume_free:RO:Liber: %1
 status_bar.volume_free:IT:Libero: %1
-status_bar.volume_free:CS:Volno: %1
+status_bar.volume_free:CS:Volné místo: %1
 status_bar.volume_free:DE:Frei: %1
 # Translation missing
 
@@ -3802,7 +3802,7 @@ unpack_dialog.destination:EN:Unpack selected file(s) to
 unpack_dialog.destination:FR:Décompresser les fichiers selectionnés dans
 unpack_dialog.destination:DE:Entpacke markierte Datei(en) nach
 unpack_dialog.destination:ES:Descomprimir fichero(s) seleccionado(s) en
-unpack_dialog.destination:CS:Dekomprimovat soubor(y) do
+unpack_dialog.destination:CS:Dekomprimovat do
 unpack_dialog.destination:zh_TW:解壓縮已選取檔案至
 unpack_dialog.destination:PL:Rozpakuj zaznaczone pliki do
 unpack_dialog.destination:HU:A kijelölt fájl(ok) kicsomagolása
@@ -4751,7 +4751,7 @@ properties_dialog.file_properties:EN:%1 Properties
 properties_dialog.file_properties:FR:Propriétés de %1
 properties_dialog.file_properties:DE:Eigenschaften von %1
 properties_dialog.file_properties:ES:%1 Propiedades
-properties_dialog.file_properties:CS:Vlastnosti %1 
+properties_dialog.file_properties:CS:Vlastnosti objektu %1 
 properties_dialog.file_properties:zh_TW:%1 屬性
 properties_dialog.file_properties:PL:%1 Właściwości
 properties_dialog.file_properties:HU:%1 tulajdonságok
@@ -5240,7 +5240,7 @@ bonjour.no_service_discovered:EN:No service discovered
 bonjour.no_service_discovered:FR:Aucun service découvert
 bonjour.no_service_discovered:SI:Ni aktivne storitve
 bonjour.no_service_discovered:IT:Nessun servizio scoperto
-bonjour.no_service_discovered:CS:Služba nebyla nalezena
+bonjour.no_service_discovered:CS:Služba nenalezena
 bonjour.no_service_discovered:zh_TW:未發現任何服務
 bonjour.no_service_discovered:DE:Keine Dienste gefunden
 bonjour.no_service_discovered:RO:Nici un serviciu descoperit
@@ -5346,7 +5346,7 @@ auth_dialog.store_credentials:EN:Store login and password (weak encryption)
 auth_dialog.store_credentials:FR:Sauver les identifiants (encryption faible)
 auth_dialog.store_credentials:SI:Shrani uporabniško ime in geslo (nizka enkripcija)
 auth_dialog.store_credentials:IT:Memorizza login e password (weak encryption)
-auth_dialog.store_credentials:CS:Uložit uživ.jméno a heslo (slabé šifrování)
+auth_dialog.store_credentials:CS:Uložit uživatelské jméno a heslo (slabé šifrování)
 auth_dialog.store_credentials:zh_TW:儲存登入帳號及密碼(僅作簡易加密)
 auth_dialog.store_credentials:DE:Speichere Login und Passwort (schwach verschlüsselt)
 auth_dialog.store_credentials:RO:Salvează numele de utilizator și parola (protecție redusă)
@@ -6507,7 +6507,7 @@ prefs_dialog.toolbar_icons:FR:Barre d'outils
 prefs_dialog.toolbar_icons:RO:Bara de unelte
 prefs_dialog.toolbar_icons:SI:Orodna vrstica
 prefs_dialog.toolbar_icons:IT:Toolbar
-prefs_dialog.toolbar_icons:CS:Nástrojová lišta
+prefs_dialog.toolbar_icons:CS:Tlačítková lišta
 prefs_dialog.toolbar_icons:zh_TW:工具列
 prefs_dialog.toolbar_icons:DE:Toolbar
 prefs_dialog.toolbar_icons:zh_CN:工具条
@@ -7004,7 +7004,7 @@ prefs_dialog.mail_server:EN:SMTP server
 prefs_dialog.mail_server:FR:Serveur SMTP
 prefs_dialog.mail_server:DE:SMTP Server
 prefs_dialog.mail_server:ES:Servidor SMTP
-prefs_dialog.mail_server:CS:Server odchozí pošty SMTP
+prefs_dialog.mail_server:CS:Server SMTP
 prefs_dialog.mail_server:zh_TW:SMTP 伺服器
 prefs_dialog.mail_server:PL:Serwer poczty wychodzącej SMTP
 prefs_dialog.mail_server:HU:kimenő levélkiszolgáló (SMTP) szerver
