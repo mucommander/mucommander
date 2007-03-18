@@ -209,36 +209,6 @@ public class HTTPFile extends AbstractFile {
         return exists;
     }
 
-/*
-    public boolean canRead() {
-        return true;
-    }
-	
-    public boolean canWrite() {
-        return false;
-    }
-
-    public boolean canExecute() {
-        return false;
-    }
-
-    public boolean setReadable(boolean readable) {
-        return false;
-    }
-
-    public boolean setWritable(boolean writable) {
-        return false;
-    }
-
-    public boolean setExecutable(boolean executable) {
-        return false;
-    }
-
-    public boolean canSetPermissions() {
-        return false;
-    }
-*/
-
     public boolean getPermission(int access, int permission) {
         return permission==READ_PERMISSION;
     }
@@ -320,13 +290,8 @@ public class HTTPFile extends AbstractFile {
 	
 
     public AbstractFile[] ls() throws IOException {
-        //			EditorKit kit = new HTMLEditorKit();
-        //			Document doc = kit.createDefaultDocument();
+        // Implementation note: javax.swing.text.html.HTMLEditorKit isn't quite powerful enough to be used
 
-        //			// The Document class does not yet handle charsets properly.
-        //			doc.putProperty("IgnoreCharsetDirective", Boolean.TRUE);
-		
-        //			Reader r = null;
         BufferedReader br = null;
         try {
             URL contextURL = this.url;
@@ -405,13 +370,11 @@ public class HTTPFile extends AbstractFile {
 
             while((tokenType=st.nextToken())!=StreamTokenizer.TT_EOF) {
                 token = st.sval;
-                //					if(st.ttype!=StreamTokenizer.TT_WORD)
                 if(token==null)
                     continue;
 				
                 if(tokenType=='\'' || tokenType=='"') {
                     try {
-                        //							if(token.toLowerCase().startsWith("http://") || (!token.equals("") && token.charAt(0)=='/')) {
                         if((prevToken.equalsIgnoreCase("href") || prevToken.equalsIgnoreCase("src")) && !(token.startsWith("mailto") || token.startsWith("MAILTO") || token.startsWith("#"))) {
                             if(!childrenURL.contains(token)) {
                                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("creating child "+token+" context="+contextURL);
@@ -437,51 +400,7 @@ public class HTTPFile extends AbstractFile {
                 }
                 prevToken = token==null?"":token.toLowerCase();
             }
-            /*
-            // Parse the HTML.
-            kit.read(br, doc, 0);
-			
-            // Iterate through the elements 
-            // of the HTML document.
-            ElementIterator it = new ElementIterator(doc);
-            javax.swing.text.Element elem;
-            HTTPFile child;
-            String att;
-            AttributeSet atts;
-            SimpleAttributeSet s;
-            while ((elem = it.next()) != null) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Parsing "+elem.getName());
-            att = null;
-            //					try {
-            atts = elem.getAttributes();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("atts "+atts);
-            if ((s=(SimpleAttributeSet)atts.getAttribute(HTML.Tag.A)) != null)
-            att = ""+s.getAttribute(HTML.Attribute.HREF);
-            else if ((s=(SimpleAttributeSet)atts.getAttribute(HTML.Tag.IMG)) != null)
-            att = ""+s.getAttribute(HTML.Attribute.SRC);
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("att="+att);
 
-            //					}
-            //					catch(IOException e) {
-            //						if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Error while parsing HTML element: "+e);
-            //					}
-
-            if (att!=null && att.toLowerCase().startsWith("http://")) {
-            try {
-            child = new HTTPFile(att, url);
-            child.parent = this;
-            if(children.indexOf(child)==-1)
-            children.add(child);
-            }
-            catch(IOException e) {
-            if (com.mucommander.Debug.ON) {
-            com.mucommander.Debug.trace("Unable to create child file : "+att+" "+e);
-            e.printStackTrace();
-            }
-            }
-            }
-            }
-            */
             Object childrenArray[] = new AbstractFile[children.size()];
             return (AbstractFile[])children.toArray(childrenArray);
         }
@@ -518,14 +437,6 @@ public class HTTPFile extends AbstractFile {
     public boolean isBrowsable() {
         return isHTML;
     }
-
-
-//    public boolean equals(Object f) {
-//        if(!(f instanceof HTTPFile))
-//            return super.equals(f);		// could be equal to a ZipArchiveFile
-//
-//        return ((HTTPFile)f).getAbsolutePath(false).equals(getAbsolutePath(false));
-//    }
 
 
     /**

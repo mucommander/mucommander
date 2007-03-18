@@ -276,8 +276,8 @@ public abstract class Archiver {
     //////////////////////
 
     /**
-     * Creates a new entry in the archive with the given path. The specified file will be used to determine
-     * whether the entry is a directory or a regular file, and set the entry's length and date.
+     * Creates a new entry in the archive with the given path. The specified file is used to determine
+     * whether the entry is a directory or a regular file, and to set the entry's length and date.
      * 
      * <p>If the entry is a regular file (not a directory), an OutputStream which can be used to write the contents
      * of the entry will be returned, <code>null</code> otherwise. The OutputStream <b>must not</b> be closed once
