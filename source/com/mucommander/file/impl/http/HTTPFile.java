@@ -19,7 +19,6 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-//public class HTTPFile extends AbstractFile implements RemoteFile {
 public class HTTPFile extends AbstractFile {
 
     private String name;
