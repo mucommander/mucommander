@@ -73,7 +73,7 @@ Code contributors:
 Translators: 
 - Tony Klüver and Frank Berger (German)
 - Marcos Cobeña (Spanish)
-- Peter Vasko (Czech)
+- Peter Vasko and Jaromír Mára (Czech)
 - Kent Hsu (Traditional Chinese)
 - Andrzej Kosiński (Polish)
 - Tamás Balogh-Walder (Hungarian)
