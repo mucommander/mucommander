@@ -969,6 +969,12 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
                 // Set file type to 'binary'
                 ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+
+                // Sets default control encoding to UTF-8 (ISO-8859-1 by default)
+                // Most modern FTP servers seem to default to UTF-8, but not all of them do
+                ftpClient.setControlEncoding("UTF-8");
+                // This command enables UTF8 on the remote server... but only a few FTP servers currently support this command
+                ftpClient.sendCommand("OPTS UTF8 ON");
             }
             catch(IOException e) {
                 // Disconnect if something went wrong
