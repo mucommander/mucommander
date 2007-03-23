@@ -282,6 +282,14 @@ public class LocalFile extends AbstractFile {
         return PlatformManager.isWindowsFamily() || PlatformManager.OS_FAMILY==PlatformManager.OS_2;
     }
 
+
+    /**
+     * Returns the underlying <code>java.io.File</code> instance corresponding to this AbstractFile.
+     */
+    public File getJavaIoFile() {
+        return file;
+    }
+    
 	
     /////////////////////////////////////////
     // AbstractFile methods implementation //
