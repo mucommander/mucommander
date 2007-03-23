@@ -495,33 +495,40 @@ if(Debug.ON) e.printStackTrace();
     }
 
 
+    /**
+     * Returns a variation of the given filename, appending a pseudo-unique ID to the filename's prefix while keeping
+     * the same filename extension.
+     */
+    private static String getFilenameVariation(String desiredName) {
+        int lastDotPos = desiredName.lastIndexOf('.');
+        int len = desiredName.length();
+        String nameSuffix = "_"+System.currentTimeMillis()+(new Random().nextInt(10000));
+
+        if(lastDotPos==-1)
+            desiredName += nameSuffix;
+        else
+            desiredName = desiredName.substring(0, lastDotPos) + nameSuffix + desiredName.substring(lastDotPos, len);
+
+        return desiredName;
+    }
+
+
 
     /**
      * Creates and returns a temporary local file using the desired name.
      *
-     * @param desiredName the desired filename for the temporary file. If a file already exists with this name in the
-     * temporary directory, the name will be appended of a prefix, but the filename extension will always be preserved.
-     * @param deleteOnExit if <code>true</code>, the file will be deleted on normal terminal of the JVM
-     * @return the temporary LocalFile instance
+     * @param desiredName the desired filename for the temporary file. If a file already exists with this name
+     * in the temp directory, the filename's prefix (name without extension) will be appended an ID,
+     * but the filename's extension will always be preserved.
+     * @param deleteOnExit if <code>true</code>, the temporary file will be deleted upon normal termination of the JVM
+     * @return the temporary AbstractFile
      */
     public static AbstractFile getTemporaryFile(String desiredName, boolean deleteOnExit) {
         // Attempt to use the desired name
         File tempFile = new File(TEMP_DIRECTORY, desiredName);
 
         if(tempFile.exists()) {
-            // If a file already exists with the same name, append the current time in millisecond and a 5-digit random number
-            // to the name part of the filename which pretty much (but not completly) guarantees that a file
-            // doesn't already exist with that name. Filename extension is preserved.
-            int lastDotPos = desiredName.lastIndexOf('.');
-            int len = desiredName.length();
-            String nameSuffix = "_"+System.currentTimeMillis()+(new Random().nextInt(10000));
-
-            if(lastDotPos==-1)
-                desiredName += nameSuffix;
-            else
-                desiredName = desiredName.substring(0, lastDotPos) + nameSuffix + desiredName.substring(lastDotPos, len);
-
-            tempFile = new File(TEMP_DIRECTORY, desiredName);
+            tempFile = new File(TEMP_DIRECTORY, getFilenameVariation(desiredName));
         }
 
         if(deleteOnExit)
