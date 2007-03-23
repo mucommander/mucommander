@@ -2984,7 +2984,7 @@ com.mucommander.ui.action.GoToWebsiteAction.label:CS:Webová stránka
 com.mucommander.ui.action.GoToWebsiteAction.label:zh_TW:連至網站
 com.mucommander.ui.action.GoToWebsiteAction.label:PL:Idź do strony internetowej
 com.mucommander.ui.action.GoToWebsiteAction.label:HU:muCommander website
-com.mucommander.ui.action.GoToWebsiteAction.label:RU:Перейти на домаl нюю страницу программы
+com.mucommander.ui.action.GoToWebsiteAction.label:RU:Перейти на домашнюю страницу программы
 com.mucommander.ui.action.GoToWebsiteAction.label:zh_CN:访问网站
 com.mucommander.ui.action.GoToWebsiteAction.label:SI:Domača stran muCommander
 com.mucommander.ui.action.GoToWebsiteAction.label:RO:Vizitează situl Web
@@ -3108,7 +3108,7 @@ view_menu:CS:Zobrazit
 view_menu:zh_TW:檢視
 view_menu:PL:Podgląd
 view_menu:HU:megtekint
-view_menu:RU:Просмтор
+view_menu:RU:Просмотр
 view_menu:zh_CN:查看
 view_menu:SI:Pogled
 view_menu:RO:Vizualizare
@@ -4360,7 +4360,7 @@ email.goodbye_failed:CS:Chyba při ukončování připojení, pošta nemusela b�
 email.goodbye_failed:zh_TW:當關閉連線時發生錯誤, 郵件可能尚未寄出.
 email.goodbye_failed:PL:Błąd podczas zamykania połączenia, poczta może zostać niewysłana.
 email.goodbye_failed:HU:Kapcsolatbontás közben hiba történt, így a levél nem biztos, hogy elment.
-email.goodbye_failed:RU:Ошибка при заверl ении соединения, возможно, почта не была отправлена.
+email.goodbye_failed:RU:Ошибка при завершении соединения, возможно, почта не была отправлена.
 email.goodbye_failed:zh_CN:关闭连接时出错, 邮件可能尚未发出
 email.goodbye_failed:SI:Napaka pri zaključevanju povezave, sporočilo morda ni poslano.
 email.goodbye_failed:RO:Eroare la închiderea conexiunii, se poate ca email-ul sa nu fi fost trimis.
@@ -5569,7 +5569,7 @@ file_viewer.large_file_warning:CS:Tento soubor může být příliš velký pro 
 file_viewer.large_file_warning:zh_TW:檔案可能太大而無法進行此操作
 file_viewer.large_file_warning:PL:Wybrany plik może być zbyt duży dla tej operacji.
 file_viewer.large_file_warning:HU:Ez a fájl túl nagy lehet ehhez a művelethez.
-file_viewer.large_file_warning:RU:Этот файл может оказаться слиl ком большим для просмотра.
+file_viewer.large_file_warning:RU:Этот файл может оказаться слишком большим для просмотра.
 file_viewer.large_file_warning:zh_CN:文件可能太大无法进行此项操作
 file_viewer.large_file_warning:SI:Datoteka je morda prevelika za to opreacijo.
 file_viewer.large_file_warning:RO:Acest fișier ar putea fi prea mare pentru această operațiune.
@@ -6461,7 +6461,7 @@ prefs_dialog.appearance_tab:CS:Vzhled
 prefs_dialog.appearance_tab:zh_TW:呈現
 prefs_dialog.appearance_tab:PL:Wygląd
 prefs_dialog.appearance_tab:HU:megjelenés
-prefs_dialog.appearance_tab:RU:Внеl ний вид
+prefs_dialog.appearance_tab:RU:Внешний вид
 prefs_dialog.appearance_tab:zh_CN:展现
 prefs_dialog.appearance_tab:SI:Videz
 prefs_dialog.appearance_tab:RO:Înfățișare
@@ -6735,7 +6735,7 @@ prefs_dialog.font_colors:CS:Barva písma
 prefs_dialog.font_colors:zh_TW:字型顏色
 prefs_dialog.font_colors:PL:Kolor czcionki 
 prefs_dialog.font_colors:HU:betű szín
-prefs_dialog.font_colors:RU:Цвета l рифтов
+prefs_dialog.font_colors:RU:Цвета шрифтов
 prefs_dialog.font_colors:zh_CN:字体颜色
 prefs_dialog.font_colors:SI:Barva pisave
 prefs_dialog.font_colors:RO:Culori pentru text
@@ -6980,7 +6980,7 @@ prefs_dialog.mail_name:CS:Vaše jméno
 prefs_dialog.mail_name:zh_TW:你的名稱
 prefs_dialog.mail_name:PL:Twoie imię
 prefs_dialog.mail_name:HU:az Ön neve
-prefs_dialog.mail_name:RU:Ваl е имя
+prefs_dialog.mail_name:RU:Ваше имя
 prefs_dialog.mail_name:zh_CN:你的姓名
 prefs_dialog.mail_name:SI:Ime
 prefs_dialog.mail_name:RO:Numele dumneavoastră
@@ -6994,7 +6994,7 @@ prefs_dialog.mail_address:CS:Váš e-mail
 prefs_dialog.mail_address:zh_TW:你的電郵地址
 prefs_dialog.mail_address:PL:Twój adres email
 prefs_dialog.mail_address:HU:az Ön e-mail címe
-prefs_dialog.mail_address:RU:Ваl  адрес Email
+prefs_dialog.mail_address:RU:Ваш адрес Email
 prefs_dialog.mail_address:zh_CN:你的邮件地址
 prefs_dialog.mail_address:SI:Naslov vaše e-pošte
 prefs_dialog.mail_address:RO:Adresa dumneavoastră de email
