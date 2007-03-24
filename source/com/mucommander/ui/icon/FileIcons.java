@@ -167,18 +167,21 @@ public class FileIcons {
 
         if(USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy)) {
             String extension = file.getExtension();
-            boolean systemIcon;
 
-            if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && "app".equalsIgnoreCase(extension))
-                systemIcon = true;
-            else if((PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_9X || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT)
-                    && "exe".equalsIgnoreCase(extension))
-                systemIcon = true;
-            else
-                systemIcon = false;
+            if(extension!=null) {
+                boolean systemIcon;
 
-            if(systemIcon)
-                return getSystemFileIcon(file);
+                if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && "app".equalsIgnoreCase(extension))
+                    systemIcon = true;
+                else if((PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_9X || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT)
+                        && "exe".equalsIgnoreCase(extension))
+                    systemIcon = true;
+                else
+                    systemIcon = false;
+
+                if(systemIcon)
+                    return getSystemFileIcon(file);
+            }
         }
 
         return getCustomFileIcon(file);
@@ -306,7 +309,7 @@ public class FileIcons {
     private static Icon getSystemFileIcon(File file) {
         // FileSystemView#getSystemIcon(File) returns bogus icons under Mac OS X
         if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
-            FILE_CHOOSER.getIcon(file);
+            return FILE_CHOOSER.getIcon(file);
 
         // JFileChooser#getSystemIcon(File) returns bogus icons under Windows
         return FILESYSTEM_VIEW.getSystemIcon(file);
