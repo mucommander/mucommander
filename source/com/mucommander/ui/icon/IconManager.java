@@ -5,6 +5,7 @@ import com.mucommander.file.util.ResourceLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Hashtable;
 
@@ -156,5 +157,23 @@ public class IconManager {
      */
     public static ImageIcon getIcon(int iconSet, String iconName) {
         return getIcon(iconSet, iconName, 1.0f);
+    }
+
+
+    /**
+     * Creates and returns an ImageIcon with the same content and dimensions. This method is useful when an ImageIcon
+     * is needed and only an Icon is available.
+     *
+     * <p>If the given Icon is already an ImageIcon, the same instance is returned. If it is not, a new ImageIcon is 
+     * created and returned.
+     */
+    public static ImageIcon getImageIcon(Icon icon) {
+        if(icon instanceof ImageIcon)
+            return (ImageIcon)icon;
+
+        BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        icon.paintIcon(null, bi.getGraphics(), 0, 0);
+
+        return new ImageIcon(bi);
     }
 }

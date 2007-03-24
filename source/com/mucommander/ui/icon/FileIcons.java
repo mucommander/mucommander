@@ -1,20 +1,35 @@
 
 package com.mucommander.ui.icon;
 
+import com.mucommander.PlatformManager;
+import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.impl.ProxyFile;
+import com.mucommander.file.impl.local.LocalFile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Hashtable;
 
 
 /**
- * Class that is responsible for providing icons for given files. Icons are chosen based on the files kind (archive, folder...) and extension.
+ * FileIcons provides methods to retrieve file icons:
+ * <ul>
+ *  <li>{@link #getSystemFileIcon(AbstractFile)} returns a system icon (provided by the OS/desktop manager) for a
+ * given AbstractFile. 
+ *  <li>{@link #getCustomFileIcon(AbstractFile)} returns a custom icon (from the muCommander icon set)
+ * for a given AbstractFile. Those icons are chosen based on the file's kind (archive, folder...) and extension.
+ *  <li}{@link #getFileIcon(AbstractFile)} returns either a system icon or a custom icon, depending on the current
+ * system icons policy.
+ * </ul>
+ *
+ * Those methods can be used with any kind of {@link AbstractFile}: local, remote, archives entries...
  * 
- * <p>For memory efficiency reasons, icon instances are created only when the first the icon is requested, and then
- * shared across the application.<p>
+ * <p>Some caching is used to share icon instances as much as possible and thus minimize I/O operations.<p>
  *
  * @author Maxence Bernard
  */
@@ -96,11 +111,26 @@ public class FileIcons {
     private final static int STANDARD_HEIGHT = 16;
 
 
+    private final static javax.swing.JFileChooser FILE_CHOOSER = new javax.swing.JFileChooser();
+
+    private final static LRUCache SYSTEM_ICON_CACHE = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
+
+    /** Never use system file icons */
+    public final static String USE_SYSTEM_ICONS_NEVER = "never";
+    /** Use system file icons only for applications */
+    public final static String USE_SYSTEM_ICONS_APPLICATIONS = "applications";
+    /** Always use system file icons */
+    public final static String USE_SYSTEM_ICONS_ALWAYS = "always";
+
+    /** Controls if and when system file icons should be used instead of custom icons */
+    private static String systemIconsPolicy = ConfigurationManager.getVariable(ConfigurationVariables.USE_SYSTEM_FILE_ICONS, ConfigurationVariables.DEFAULT_USE_SYSTEM_FILE_ICONS);
+
+    
     /**
      * Initializes extensions hashtables and preloads icons we're sure to use.
      */
     public static void init() {
-        // Maps known file extensions to icon names
+        // Map known file extensions to icon names
         iconExtensions = new Hashtable();
         int nbIcons = ICON_EXTENSIONS.length;
         for(int i=0; i<nbIcons; i++) {
@@ -110,19 +140,53 @@ public class FileIcons {
                 iconExtensions.put(ICON_EXTENSIONS[i][j], iconName);
         }
 
-        // Preloads icons so they're in IconManager's cache for when we need them
-        IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME, scaleFactor);
-        IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME, scaleFactor);
-        IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME, scaleFactor);
+        if(!USE_SYSTEM_ICONS_ALWAYS.equals(systemIconsPolicy)) {  // No need to preload icons if system icons are used
+            // Preload icons so they're in IconManager's cache for when we need them
+            IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME, scaleFactor);
+            IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME, scaleFactor);
+            IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME, scaleFactor);
+        }
     }
 
 	
     /**
-     * Returns an ImageIcon instance for the given file. The icon is chosen based on the file kind (archive, folder...) and extension.
+     * Returns an icon for the given file. Depending on the current system icons policy, the returned icon is either
+     * a system icon, or one from the custom icon set.
+     *
+     * @param file the AbstractFile instance for which an icon will be returned
+     * @see #getSystemIconsPolicy()
+     */
+    public static Icon getFileIcon(AbstractFile file) {
+        if(USE_SYSTEM_ICONS_ALWAYS.equals(systemIconsPolicy))
+            return getSystemFileIcon(file);
+
+        if(USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy)) {
+            String extension = file.getExtension();
+            boolean systemIcon;
+
+            if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && "app".equalsIgnoreCase(extension))
+                systemIcon = true;
+            else if((PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_9X || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT)
+                    && "exe".equalsIgnoreCase(extension))
+                systemIcon = true;
+            else
+                systemIcon = false;
+
+            if(systemIcon)
+                return getSystemFileIcon(file);
+        }
+
+        return getCustomFileIcon(file);
+    }
+
+
+    /**
+     * Returns an icon for the given file using the custom icon set (i.e. not system icons).
+     * The icon is chosen based on the file kind (archive, folder...) and extension.
      *
      * @param file the AbstractFile instance for which an icon will be returned
      */
-    public static ImageIcon getFileIcon(AbstractFile file) {
+    public static ImageIcon getCustomFileIcon(AbstractFile file) {
         // Retrieve file's extension, null if file has no extension
         String fileExtension = file.getExtension();
 
@@ -147,15 +211,89 @@ public class FileIcons {
             String iconName = (String)iconExtensions.get(fileExtension.toLowerCase());
             if(iconName==null)	// No icon associated to extension, return default file icon
                 return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME, scaleFactor);
-			
+
             // Retrieves the cached (or freshly loaded if not in cache already) ImageIcon instance corresponding to the icon's name
             ImageIcon icon = IconManager.getIcon(IconManager.FILE_ICON_SET, iconName, scaleFactor);
             // Returned IconImage should never be null, but if it is (icon file missing), return default file icon
             if(icon==null)
                 return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME, scaleFactor);
-				
+
             return icon;
         }
+    }
+
+
+    /**
+     * Returns a system icon (one provided by the underlying OS/desktop manager) for the given file.
+     *
+     * @param file the AbstractFile instance for which an icon will be returned
+     */
+    public static Icon getSystemFileIcon(AbstractFile file) {
+//    return javax.swing.filechooser.FileSystemView.getFileSystemView().getSystemIcon(new java.io.File(file.getAbsolutePath()));
+
+        java.io.File javaIoFile = null;
+        AbstractFile tempFile = null;
+        Icon icon = null;
+
+        // The javax.swing.JFileChooser#getIcon(java.io.File) method is used to retrieve system file icons.
+        // This method expects a java.io.File which is fine for local files, but some magic has to be used to grab the
+        // icon for remote files.
+
+        // Specified file is a LocalFile or a ProxyFile proxying a LocalFile (e.g. an archive file):
+        // get the system file icon using the underlying java.io.File instance
+        if(file instanceof LocalFile)
+            javaIoFile = ((LocalFile)file).getJavaIoFile();
+        else if((file instanceof ProxyFile && (((ProxyFile)file).getProxiedFile() instanceof LocalFile)))
+            javaIoFile = ((LocalFile)((ProxyFile)file).getProxiedFile()).getJavaIoFile();
+
+        // File is a remote file: create a temporary local file (or directory) with the same extension to grab the icon
+        // and then delete the file. This operation is I/O bound and thus expensive, so an LRU is used to cache
+        // frequently-accessed file extensions.
+        else {
+            // Look for an existing icon instance for the file's extension
+            String extension = file.getExtension();
+            icon = (Icon)SYSTEM_ICON_CACHE.get(extension);
+
+            // No existing icon, let's go ahead with creating a temporary file/directory with the same extension to
+            // get the icon, and add it to the cache
+            if(icon==null) {
+                tempFile = FileFactory.getTemporaryFile(file.getName(), false);
+
+                try {
+                    // Create a directory
+                    if(file.isDirectory())
+                        tempFile.getParent().mkdir(tempFile.getName());
+                    // Create a regular file
+                    else
+                        tempFile.getOutputStream(false).close();
+                }
+                catch(IOException e) {}
+
+                javaIoFile = tempFile instanceof LocalFile?((LocalFile)tempFile).getJavaIoFile()
+                        :((LocalFile)((ProxyFile)tempFile).getProxiedFile()).getJavaIoFile();
+
+                // Get the system file icon
+                icon = FILE_CHOOSER.getIcon(javaIoFile);
+
+                // Cache the icon
+                SYSTEM_ICON_CACHE.add(extension, icon);
+            }
+        }
+
+        // Get the system file icon if not done already
+        if(icon==null)
+            icon = FILE_CHOOSER.getIcon(javaIoFile);
+
+        // Scale the icon if needed
+        if(scaleFactor!=1.0f)
+            icon = IconManager.getScaledIcon(IconManager.getImageIcon(icon), scaleFactor);
+
+        // If a temporary file was created, delete it
+        if(tempFile!=null)
+            try { tempFile.delete(); }
+            catch(IOException e) {}
+
+        return icon;
     }
 
 	
@@ -170,17 +308,43 @@ public class FileIcons {
     /**
      * Returns the icon for the parent folder (..).
      */
-    public static ImageIcon getParentFolderIcon() {
+    public static Icon getParentFolderIcon() {
         return IconManager.getIcon(IconManager.FILE_ICON_SET, PARENT_FOLDER_ICON_NAME, scaleFactor);
     }
-	
 
+
+    /**
+     * Returns the current file icons scale factor.
+     */
     public static float getScaleFactor() {
         return scaleFactor;
     }
 
+    /**
+     * Sets the file icons scale factor.
+     */
     public static void setScaleFactor(float factor) {
         scaleFactor = factor;
+    }
+
+
+    /**
+     * Returns the current system icons policy, controlling when system file icons should be used instead
+     * of custom file icons.
+     *
+     * <p>See constants fields for possible values.
+     */
+    public static String getSystemIconsPolicy() {
+        return systemIconsPolicy;
+    }
+
+    /**
+     * Sets the system icons policy, controlling when system file icons should be used instead of custom file icons.
+     *
+     * <p>See constants fields for possible values.
+     */
+    public static void setSystemIconsPolicy(String policy) {
+        systemIconsPolicy = policy;
     }
 
 

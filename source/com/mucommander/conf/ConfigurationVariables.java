@@ -1,6 +1,7 @@
 package com.mucommander.conf;
 
 import com.mucommander.RuntimeConstants;
+import com.mucommander.ui.icon.FileIcons;
 
 /**
  * Aggregates all of muCommander's configuration variables in one place.
@@ -141,7 +142,10 @@ public interface ConfigurationVariables {
     public static final String  AUTO_SIZE_COLUMNS                 = FILE_TABLE_SECTION + '.' + "auto_size_columns";
     /** Default columns auto-resizing behavior. */
     public static final boolean DEFAULT_AUTO_SIZE_COLUMNS         = true;
-
+    /** Controls if and when system file icons should be used instead of custom file icons */
+    public static final String  USE_SYSTEM_FILE_ICONS             = FILE_TABLE_SECTION + '.' + "use_system_file_icons";
+    /** Default system file icons policy */
+    public static final String DEFAULT_USE_SYSTEM_FILE_ICONS      = FileIcons.USE_SYSTEM_ICONS_APPLICATIONS;
 
 
     // - Mac OS X variables --------------------------------------------------
@@ -260,6 +264,10 @@ public interface ConfigurationVariables {
     public static final String  FILE_CACHE_CAPACITY               = CACHE_SECTION + '.' + "file_cache_capacity";
     /** Default capacity of the AbstractFile instances cache */
     public static final int     DEFAULT_FILE_CACHE_CAPACITY       = 1000;
+    /** Capacity of the system file icon cache */
+    public static final String  SYSTEM_ICON_CACHE_CAPACITY       = CACHE_SECTION + '.' + "system_icon_cache_capacity";
+    /** Default capacity of the system file icon cache */
+    public static final int     DEFAULT_SYSTEM_ICON_CACHE_CAPACITY = 100;
 
 
 

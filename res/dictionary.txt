@@ -6562,6 +6562,54 @@ prefs_dialog.file_icons:PL:Typy plików
 
 
 
+prefs_dialog.use_system_file_icons:EN:Use system file icons
+prefs_dialog.use_system_file_icons:FR:Utiliser les icônes de fichier système
+
+
+
+
+
+
+
+
+
+
+prefs_dialog.use_system_file_icons.always:EN:Always
+prefs_dialog.use_system_file_icons.always:FR:Toujours
+
+
+
+
+
+
+
+
+
+
+prefs_dialog.use_system_file_icons.never:EN:Never
+prefs_dialog.use_system_file_icons.never:FR:Jamais
+
+
+
+
+
+
+
+
+
+
+prefs_dialog.use_system_file_icons.applications:EN:For applications only
+prefs_dialog.use_system_file_icons.applications:FR:Seulement pour les applications
+
+
+
+
+
+
+
+
+
+
 
 prefs_dialog.font:EN:Font
 prefs_dialog.font:FR:Fonte
