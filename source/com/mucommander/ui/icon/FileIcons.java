@@ -11,7 +11,9 @@ import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.file.impl.local.LocalFile;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
 
@@ -111,10 +113,6 @@ public class FileIcons {
     private final static int STANDARD_HEIGHT = 16;
 
 
-    private final static javax.swing.JFileChooser FILE_CHOOSER = new javax.swing.JFileChooser();
-
-    private final static LRUCache SYSTEM_ICON_CACHE = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
-
     /** Never use system file icons */
     public final static String USE_SYSTEM_ICONS_NEVER = "never";
     /** Use system file icons only for applications */
@@ -125,7 +123,14 @@ public class FileIcons {
     /** Controls if and when system file icons should be used instead of custom icons */
     private static String systemIconsPolicy = ConfigurationManager.getVariable(ConfigurationVariables.USE_SYSTEM_FILE_ICONS, ConfigurationVariables.DEFAULT_USE_SYSTEM_FILE_ICONS);
 
-    
+    // Swing objects used to retrieve system file icons
+    private final static JFileChooser FILE_CHOOSER = new JFileChooser();
+    private final static FileSystemView FILESYSTEM_VIEW = FileSystemView.getFileSystemView();
+
+    /** Caches system icons for files located on remote locations, or in archives */ 
+    private final static LRUCache SYSTEM_ICON_CACHE = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
+
+
     /**
      * Initializes extensions hashtables and preloads icons we're sure to use.
      */
@@ -229,8 +234,6 @@ public class FileIcons {
      * @param file the AbstractFile instance for which an icon will be returned
      */
     public static Icon getSystemFileIcon(AbstractFile file) {
-//    return javax.swing.filechooser.FileSystemView.getFileSystemView().getSystemIcon(new java.io.File(file.getAbsolutePath()));
-
         java.io.File javaIoFile = null;
         AbstractFile tempFile = null;
         Icon icon = null;
@@ -273,7 +276,7 @@ public class FileIcons {
                         :((LocalFile)((ProxyFile)tempFile).getProxiedFile()).getJavaIoFile();
 
                 // Get the system file icon
-                icon = FILE_CHOOSER.getIcon(javaIoFile);
+                icon = getSystemFileIcon(javaIoFile);
 
                 // Cache the icon
                 SYSTEM_ICON_CACHE.add(extension, icon);
@@ -282,7 +285,7 @@ public class FileIcons {
 
         // Get the system file icon if not done already
         if(icon==null)
-            icon = FILE_CHOOSER.getIcon(javaIoFile);
+            icon = getSystemFileIcon(javaIoFile);
 
         // Scale the icon if needed
         if(scaleFactor!=1.0f)
@@ -295,6 +298,20 @@ public class FileIcons {
 
         return icon;
     }
+
+
+    /**
+     * Returns a system file icon for the given File, by calling the proper Java API method for the current OS.
+     */
+    private static Icon getSystemFileIcon(File file) {
+        // FileSystemView#getSystemIcon(File) returns bogus icons under Mac OS X
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
+            FILE_CHOOSER.getIcon(file);
+
+        // JFileChooser#getSystemIcon(File) returns bogus icons under Windows
+        return FILESYSTEM_VIEW.getSystemIcon(file);
+    }
+
 
 	
     /**
