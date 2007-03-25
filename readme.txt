@@ -215,6 +215,7 @@ What's new since v0.8 beta 3 ?
 
 New features:
  - Added 'Use system file icons' option to 'Appearance' preferences, allowing to display file icons as they are displayed on the system's desktop
+ - Added 'Show folders first' option to 'View' menu, allowing to control whether folders are displayed first (default) or mixed with regular files
 
 Improvements:
  - 
