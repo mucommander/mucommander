@@ -52,7 +52,7 @@ public class CustomDateFormat implements ConfigurationListener {
     public static String replaceDateSeparator(String dateFormatString, String separator) {
         if(separator==null || separator.equals("/"))
             return dateFormatString;
-		
+
         StringBuffer dateFormatStringSB = new StringBuffer();
         int pos1 = 0;
         int pos2;
@@ -74,6 +74,14 @@ public class CustomDateFormat implements ConfigurationListener {
             ConfigurationManager.getVariable(ConfigurationVariables.DATE_FORMAT, ConfigurationVariables.DEFAULT_DATE_FORMAT),
             ConfigurationManager.getVariable(ConfigurationVariables.DATE_SEPARATOR, ConfigurationVariables.DEFAULT_DATE_SEPARATOR))
         + " " + ConfigurationManager.getVariable(ConfigurationVariables.TIME_FORMAT, ConfigurationVariables.DEFAULT_TIME_FORMAT);
+    }
+
+
+    /**
+     * Forces CustomDateFormat to update the date format by looking it up in the preferences.
+     */
+    public static void updateDateFormat() {
+        dateFormat = createDateFormat();
     }
 
 
@@ -103,7 +111,7 @@ public class CustomDateFormat implements ConfigurationListener {
     ///////////////////////////////////
     // ConfigurationListener methods //
     ///////////////////////////////////
-	
+
     /**
      * Listens to some configuration variables.
      */

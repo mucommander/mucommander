@@ -6282,6 +6282,32 @@ prefs_dialog.time_24_hour:SI:24-urni format
 prefs_dialog.time_24_hour:RO:Format 24 ore
 prefs_dialog.time_24_hour:IT:Formato 24 ore
 
+prefs_dialog.show_seconds:EN:Show seconds
+prefs_dialog.show_seconds:FR:Afficher les secondes
+
+
+
+
+
+
+
+
+
+
+
+prefs_dialog.show_century:EN:Show century
+prefs_dialog.show_century:FR:Afficher le siècle
+
+
+
+
+
+
+
+
+
+
+
 prefs_dialog.check_for_updates_on_startup:EN:Check for updates on startup
 prefs_dialog.check_for_updates_on_startup:FR:Chercher les mises à jour au démarrage
 prefs_dialog.check_for_updates_on_startup:DE:Beim Start nach Updates suchen
