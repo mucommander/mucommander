@@ -649,6 +649,20 @@ recurse_directories:PL:Przetwórz zaznaczone katalogi rekurencyjnie
 
 
 
+# Used in the 'Edit bookmarks' and 'Edit credentials' dialogs to go to the selected location
+go_to:EN:Go to
+go_to:FR:Aller à
+
+
+
+
+
+
+
+
+
+
+
 
 ##########################
 # Generic error messages #

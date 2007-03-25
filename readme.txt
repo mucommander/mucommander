@@ -218,7 +218,7 @@ New features:
  - Added 'Show folders first' option to 'View' menu, allowing to control whether folders are displayed first (default) or mixed with regular files
 
 Improvements:
- - 
+ - Added 'Go to' button to 'Edit bookmarks' and 'Edit credentials' dialogs to go to the selected location
 
 Localization:
  - Russian translation update
