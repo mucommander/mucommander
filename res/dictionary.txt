@@ -2758,6 +2758,19 @@ com.mucommander.ui.action.ToggleStatusBarAction.hide:SI:Skrij statusno vrstico
 com.mucommander.ui.action.ToggleStatusBarAction.hide:RO:Ascunde bara de stare
 com.mucommander.ui.action.ToggleStatusBarAction.hide:IT:Nascondi barra di stato
 
+com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:EN:Show folders first
+com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:FR:Afficher d'abord les répertoires
+
+
+
+
+
+
+
+
+
+
+
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:EN:Change left folder
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:FR:Changer le dossier de gauche
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:DE:Linken Ordner ändern

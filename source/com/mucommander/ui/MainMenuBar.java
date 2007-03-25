@@ -57,6 +57,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JCheckBoxMenuItem toggleSizeColumnItem;
     private JCheckBoxMenuItem toggleDateColumnItem;
     private JCheckBoxMenuItem togglePermissionsColumnItem;
+    private JCheckBoxMenuItem toggleShowFoldersFirstItem;
 
     // Go menu
     private JMenu goMenu;
@@ -171,6 +172,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         buttonGroup.add(sortByDateItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByDateAction.class, mainFrame), menuItemMnemonicHelper));
         buttonGroup.add(sortByPermissionsItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(SortByPermissionsAction.class, mainFrame), menuItemMnemonicHelper));
         MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ReverseSortOrderAction.class, mainFrame), menuItemMnemonicHelper);
+
+        viewMenu.add(new JSeparator());
+        toggleShowFoldersFirstItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleShowFoldersFirstAction.class, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
         columnsMenu = MenuToolkit.addMenu(Translator.get("view_menu.show_hide_columns"), null, this);
@@ -305,8 +309,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         Object source = e.getSource();
 
         if(source==viewMenu) {
+            FileTable activeTable = mainFrame.getActiveTable();
+
             // Select the 'sort by' criterion currently in use in the active table
-            switch(mainFrame.getActiveTable().getSortByCriteria()) {
+            switch(activeTable.getSortByCriteria()) {
                 case Columns.EXTENSION:
                     sortByExtensionItem.setSelected(true);
                     break;
@@ -320,6 +326,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                     sortByDateItem.setSelected(true);
                     break;
             }
+
+            toggleShowFoldersFirstItem.setSelected(activeTable.isShowFoldersFirstEnabled());
         }
         else if(source==columnsMenu) {
             // Update visible columns state: select menu item if column is currently visible in the active table
@@ -351,7 +359,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             Vector bookmarks = BookmarkManager.getBookmarks();
             int nbBookmarks = bookmarks.size();
             if(nbBookmarks>0) {
-                Bookmark b;
                 for(int i=0; i<nbBookmarks; i++)
                     MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable(), (Bookmark)bookmarks.elementAt(i)), null);
             }

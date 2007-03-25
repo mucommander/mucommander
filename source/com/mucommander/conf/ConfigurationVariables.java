@@ -145,7 +145,11 @@ public interface ConfigurationVariables {
     /** Controls if and when system file icons should be used instead of custom file icons */
     public static final String  USE_SYSTEM_FILE_ICONS             = FILE_TABLE_SECTION + '.' + "use_system_file_icons";
     /** Default system file icons policy */
-    public static final String DEFAULT_USE_SYSTEM_FILE_ICONS      = FileIcons.USE_SYSTEM_ICONS_APPLICATIONS;
+    public static final String  DEFAULT_USE_SYSTEM_FILE_ICONS     = FileIcons.USE_SYSTEM_ICONS_APPLICATIONS;
+    /** Controls whether folders are displayed first in the FileTable or mixed with regular files */
+    public static final String  SHOW_FOLDERS_FIRST                = FILE_TABLE_SECTION + '.' + "show_folders_first";
+    /** Default value for 'Show folders first' option */
+    public static final boolean DEFAULT_SHOW_FOLDERS_FIRST        = true;
 
 
     // - Mac OS X variables --------------------------------------------------
