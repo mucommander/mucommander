@@ -756,7 +756,6 @@ public class ThemeManager {
      * @param  name name of the theme to retrieve.
      * @return the requested theme if found, <code>null</code> otherwise.
      */
-    /*
     public static final Theme getTheme(int type, String name) {
         Iterator iterator; // Iterator on all the themes.
         Theme    theme;    // Buffer for each theme.
@@ -774,7 +773,6 @@ public class ThemeManager {
         // The requested theme doesn't exist.
         return null;
     }
-    */
 
     /**
      * Returns an iterator on all available themes.
