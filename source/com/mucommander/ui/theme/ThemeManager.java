@@ -5,11 +5,10 @@ import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
-import com.mucommander.file.util.ResourceLoader;
-import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
+import com.mucommander.io.BackupInputStream;
+import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.res.ResourceListReader;
-import com.mucommander.text.Translator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,17 +22,6 @@ import java.util.WeakHashMap;
  * @author Nicolas Rinaudo
  */
 public class ThemeManager {
-    // - Theme types ---------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /** Describes the user defined theme. */
-    public static final int USER_THEME                         = 0;
-    /** Describes predefined muCommander themes. */
-    public static final int PREDEFINED_THEME                   = 1;
-    /** Describes custom muCommander themes. */
-    public static final int CUSTOM_THEME                       = 2;
-
-
-
     // - Class variables -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Path to the user defined theme file. */
@@ -97,10 +85,10 @@ public class ThemeManager {
         while(iterator.hasNext()) {
             path = null;
             try {
-                themes.add(theme = new Theme(PREDEFINED_THEME, getThemeName(path = (String)iterator.next()), path));
+                themes.add(theme = new Theme(Theme.PREDEFINED_THEME, getThemeName(path = (String)iterator.next()), path));
 
                 // If we've just loaded the current theme, grab its data.
-                if(currentType == PREDEFINED_THEME && theme.getName().equals(currentName))
+                if(currentType == Theme.PREDEFINED_THEME && theme.getName().equals(currentName))
                     currentData = theme.getThemeData();
             }
             catch(Exception e) {if(Debug.ON) Debug.trace("Predefined theme " + path + " appears to be corrupt");}
@@ -123,10 +111,10 @@ public class ThemeManager {
         for(int i = 0; i < customThemes.length; i++) {
             // If an exception is thrown here, do not consider this theme available.
             try {
-                themes.add(theme = new Theme(CUSTOM_THEME, getThemeName(customThemes[i]), customThemes[i]));
+                themes.add(theme = new Theme(Theme.CUSTOM_THEME, getThemeName(customThemes[i]), customThemes[i]));
 
                 // If we've just loaded the current theme, grab its data.
-                if(currentType == CUSTOM_THEME && theme.getName().equals(currentName))
+                if(currentType == Theme.CUSTOM_THEME && theme.getName().equals(currentName))
                     currentData = theme.getThemeData();
             }
             catch(Exception e) {
@@ -156,7 +144,7 @@ public class ThemeManager {
         if(new File(getUserThemeFile()).exists()) {
 
             // Loads the user theme.
-            try {userTheme = new Theme(USER_THEME, Translator.get("theme.custom_theme"), null);}
+            try {userTheme = new Theme();}
             catch(Exception e) {if(Debug.ON) Debug.trace("Impossible error: user theme loading threw an exception.");}
 
             // If we have some legacy data, save it as a backup custom theme.
@@ -169,11 +157,11 @@ public class ThemeManager {
             // If there is no legacy data, creates an empty user theme.
             if(legacyData == null) {
                 legacyData = new ThemeData();
-                userTheme  = new Theme(Translator.get("theme.custom_theme"), legacyData);
+                userTheme  = new Theme(legacyData);
 
                 // If the user theme file wasn't found but the configuration describes
                 // the current theme as the user theme, resets to defaults.
-                if(currentType == USER_THEME) {
+                if(currentType == Theme.USER_THEME) {
                     if(Debug.ON) Debug.trace("User theme file not found, reseting to defaults.");
 
                     // Resets the theme manager.
@@ -188,9 +176,9 @@ public class ThemeManager {
 
             // Makes sure that muCommander boots with the user's previous preferences.
 	    else {
-		currentType = USER_THEME;
+		currentType = Theme.USER_THEME;
                 // Creates and saves the user theme.
-                userTheme            = new Theme(Translator.get("theme.custom_theme"), legacyData);
+                userTheme            = new Theme(legacyData);
                 wasUserThemeModified = true;
                 saveUserTheme();
             }
@@ -200,7 +188,7 @@ public class ThemeManager {
         themes.add(userTheme);
 
         // If the current theme is the user theme, stores its data.
-        if(currentType == USER_THEME) {
+        if(currentType == Theme.USER_THEME) {
             currentData = userTheme.getThemeData();
             currentName = null;
         }
@@ -238,7 +226,7 @@ public class ThemeManager {
         }
 
         // Loads the current theme name as defined in configuration.
-        if(currentType != USER_THEME) {
+        if(currentType != Theme.USER_THEME) {
             if((currentName = ConfigurationManager.getVariable(ConfigurationVariables.THEME_NAME)) == null)
 		currentName = ConfigurationVariables.DEFAULT_THEME_NAME;
 	}
@@ -260,7 +248,7 @@ public class ThemeManager {
             // but the default theme couldn't be found or loaded. In this case, we'll default to the
             // user theme, as it's the only one that can be relied on.
             if(buffer == null) {
-                currentType = USER_THEME;
+                currentType = Theme.USER_THEME;
                 currentName = null;
                 currentData = userTheme.getThemeData();
             }
@@ -288,7 +276,7 @@ public class ThemeManager {
      */
     public static void setUserThemeFile(String file) {userThemeFile = file;}
 
-    private static File getCustomThemesFolder() {
+    public static File getCustomThemesFolder() {
         File customFolder;
 
         customFolder = new File(PlatformManager.getPreferencesFolder(), CUSTOM_THEME_FOLDER);
@@ -310,16 +298,16 @@ public class ThemeManager {
         switch(type) {
 
             // User defined theme.
-        case USER_THEME:
-            return new BackupInputStream(getUserThemeFile());
+        case Theme.USER_THEME:
+            return new BackupInputStream(ThemeManager.getUserThemeFile());
 
             // Predefined themes.
-        case PREDEFINED_THEME:
+        case Theme.PREDEFINED_THEME:
             return ResourceLoader.getResourceAsStream(path);
 
             // Custom themes.
-        case CUSTOM_THEME:
-            return new FileInputStream(new File(getCustomThemesFolder(), path));
+        case Theme.CUSTOM_THEME:
+            return new FileInputStream(new File(ThemeManager.getCustomThemesFolder(), path));
 
             // Error.
         default:
@@ -406,19 +394,19 @@ public class ThemeManager {
         // Sets configuration depending on the new theme's type.
         switch(currentType = theme.getType()) {
             // User defined theme.
-        case USER_THEME:
+        case Theme.USER_THEME:
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_USER);
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, currentName = null);
             break;
 
             // Predefined themes.
-        case PREDEFINED_THEME:
+        case Theme.PREDEFINED_THEME:
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_PREDEFINED);
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, currentName = theme.getName());
             break;
 
             // Custom themes.
-        case CUSTOM_THEME:
+        case Theme.CUSTOM_THEME:
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_CUSTOM);
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, currentName = theme.getName());
             break;
@@ -455,7 +443,7 @@ public class ThemeManager {
 
         // The user theme data might be garbage collected before muCommander is shutdown.
         // We need to make sure it's saved before that happen.
-        if(currentType == USER_THEME)
+        if(currentType == Theme.USER_THEME)
             saveUserTheme();
 
 	setConfigurationTheme(theme);
@@ -550,7 +538,7 @@ public class ThemeManager {
         // Overwrites the user theme.
         userTheme.importData(currentData);
         currentData          = userTheme.getThemeData();
-        currentType          = USER_THEME;
+        currentType          = Theme.USER_THEME;
         currentName          = null;
         wasUserThemeModified = true;
         ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_USER);
@@ -616,7 +604,7 @@ public class ThemeManager {
      */
     public synchronized static boolean willOverwriteUserTheme(int fontId, Font font) {
         if(needsUpdate(fontId, font))
-           return currentType != USER_THEME;
+           return currentType != Theme.USER_THEME;
         return false;
     }
 
@@ -629,7 +617,7 @@ public class ThemeManager {
      */
     public synchronized static boolean willOverwriteUserTheme(int colorId, Color color) {
         if(needsUpdate(colorId, color))
-           return currentType != USER_THEME;
+           return currentType != Theme.USER_THEME;
         return false;
     }
 
@@ -655,7 +643,7 @@ public class ThemeManager {
 
         // If we need to change the user theme in order to perform the modification,
         // but we're not allowed, abort.
-        if((currentType != USER_THEME) && !overwriteUserTheme)
+        if((currentType != Theme.USER_THEME) && !overwriteUserTheme)
             return false;
 
         // Overwrites the user theme.
@@ -691,7 +679,7 @@ public class ThemeManager {
 
         // If we need to change the user theme in order to perform the modification,
         // but we're not allowed, abort.
-        if((currentType != USER_THEME) && !overwriteUserTheme)
+        if((currentType != Theme.USER_THEME) && !overwriteUserTheme)
             return false;
 
         // Overwrites the user theme.
@@ -712,7 +700,7 @@ public class ThemeManager {
     public static boolean isCurrentTheme(Theme theme) {
         if(theme.getType() != currentType)
             return false;
-        if(currentType == USER_THEME)
+        if(currentType == Theme.USER_THEME)
             return true;
         return theme.getName().equals(currentName);
     }
@@ -768,6 +756,7 @@ public class ThemeManager {
      * @param  name name of the theme to retrieve.
      * @return the requested theme if found, <code>null</code> otherwise.
      */
+    /*
     public static final Theme getTheme(int type, String name) {
         Iterator iterator; // Iterator on all the themes.
         Theme    theme;    // Buffer for each theme.
@@ -785,6 +774,7 @@ public class ThemeManager {
         // The requested theme doesn't exist.
         return null;
     }
+    */
 
     /**
      * Returns an iterator on all available themes.
@@ -1062,11 +1052,11 @@ public class ThemeManager {
      */
     private static int getThemeTypeFromLabel(String label) {
         if(label.equals(ConfigurationVariables.THEME_USER))
-            return USER_THEME;
+            return Theme.USER_THEME;
         else if(label.equals(ConfigurationVariables.THEME_PREDEFINED))
-            return PREDEFINED_THEME;
+            return Theme.PREDEFINED_THEME;
         else if(label.equals(ConfigurationVariables.THEME_CUSTOM))
-            return CUSTOM_THEME;
+            return Theme.CUSTOM_THEME;
         throw new IllegalStateException("Unknown theme type: " + label);
     }
 

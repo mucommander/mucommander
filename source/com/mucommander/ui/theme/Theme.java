@@ -1,6 +1,7 @@
 package com.mucommander.ui.theme;
 
 import com.mucommander.Debug;
+import com.mucommander.text.Translator;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -10,23 +11,14 @@ import java.io.*;
 /**
  * Describes a set of custom colors and fonts that can be applied to muCommander.
  * <p>
- * There are two different types of themes in muCommander: predefined ones and
- * current one. A theme's type can be checked through the {@link #getType()} method.<break/>
- * Predefined themes cannot be modified, and will throw an <code>java.lang.IllegalStateException</code>
- * if it is attempted.<br/>
+ * Instances of <code>Theme</code> cannot be created directly, and developers must go through
+ * {@link ThemeManager#availableThemes()}. Most classes do not really need to know informations
+ * about a specific theme but only the values of the current one, which should be done through
+ * {@link ThemeManager#getCurrentColor(int)} and {@link ThemeManager#getCurrentFont(int)}.
  * </p>
- * <p>
- * A theme does not need to have custom values for every single customisable item. If a value
- * isn't set, the related component is expected to use the default look and feel and/or system
- * value. This means that a typical custom value access will look something like:
- * <pre>
- * JTextField field;
- *
- * field = new JTextField();
- * if(theme.hasCustomFont(Theme.LOCATION_BAR))
- *     field.setFont(theme.getFont(Theme.LOCATION_BAR));
- * </pre>
- * </p>
+ * @see    ThemeManager
+ * @see    ThemeReader
+ * @see    ThemeWriter
  * @author Nicolas Rinaudo
  */
 public class Theme {
@@ -48,6 +40,17 @@ public class Theme {
     static final int FONT_COUNT  = 6;
     /** Number of known colors. */
     static final int COLOR_COUNT = 74;
+
+
+
+    // - Theme types ---------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /** Describes the user defined theme. */
+    public static final int USER_THEME                         = 0;
+    /** Describes predefined muCommander themes. */
+    public static final int PREDEFINED_THEME                   = 1;
+    /** Describes custom muCommander themes. */
+    public static final int CUSTOM_THEME                       = 2;
 
 
 
@@ -157,8 +160,8 @@ public class Theme {
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Creates a new theme with the specified name, located in the specified type.
-     * @param  type location of the theme data file.
+     * Creates a new theme with the specified parameters.
+     * @param  type   theme type (can be one of {@link #USER_THEME}, {@link #PREDEFINED_THEME} or {@link #CUSTOM_THEME}).
      * @param  name   name of the theme.
      * @param  path   path to the theme (type dependant).
      * @throws Exception thrown if an error occurs while loading the theme.
@@ -171,24 +174,47 @@ public class Theme {
         // If the data is not available and we're not dealing with a user theme, throw an exception.
         // User themes are a bit different: they *must* be present, even if only with default values.
         if(getThemeData() == null) {
-            if(type != ThemeManager.USER_THEME)
+            if(type != USER_THEME)
                 throw new Exception();
         }
     }
 
     /**
-     * Creates a user theme without loading its data.
+     * Creates the user theme.
      * <p>
-     * Developers should be very careful using this constructor: they might end up overwriting
-     * a perfectly legal user theme without any hope of recovery.
+     * This is a convenience method and behaves exactly as a call to <code>Theme(null)</code>.
      * </p>
+     * @see #Theme(ThemeData)
      */
-    Theme(String name, ThemeData data) {
-        this.name = name;
-        this.type = ThemeManager.USER_THEME;
-        this.data = new SoftReference(data);
+    Theme() {this(null);}
+
+    /**
+     * Creates a user theme with the specified data.
+     * <p>
+     * If the <code>data</code> parameter is <code>null</code>, this constructor will attempt
+     * to load the user theme data.
+     * </p>
+     * <p>
+     * If <code>data</code> is not <code>null</code>, any user defined theme will be ignored in favor
+     * of it - this is useful when importing data form older versions of muCommander, for example. Extra
+     * care should be taken when using this constructor in that fashion, as it will overwrite any existing
+     * user data without a chance of recovery.
+     * </p>
+     * @param data data to use for the user theme.
+     */
+    Theme(ThemeData data) {
+        this.name = Translator.get("theme.custom_theme");
+        this.type = USER_THEME;
+        if(data == null)
+            getThemeData();
+        else
+            this.data = new SoftReference(data);
     }
 
+    /**
+     * Copies the content of the specified data in this theme.
+     * @param newData data that must be imported in the theme.
+     */
     void importData(ThemeData newData) {
         int       i;
         ThemeData oldData;
@@ -202,6 +228,7 @@ public class Theme {
     }
 
 
+
     // - Data retrieval ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
@@ -213,7 +240,7 @@ public class Theme {
      * hold true:
      * <ul>
      *   <li>The user theme is corrupt, in which case it'll be in memory but unaivalable.</i>
-     *   <li>The theme's data file has been modified, or made unaccessible.</li>
+     *   <li>The theme's data file has been modified, or made unaccessible, since it was last checked.</li>
      * </ul>
      * </p>
      * <p>
@@ -286,12 +313,13 @@ public class Theme {
         ThemeData buffer;
         Font      font;
 
+        // Retrieves the requested font.
         font = null;
         if((buffer = getThemeData()) != null)
             font = buffer.getFont(id);
-        if(font == null)
-            return ThemeManager.getDefaultFont(id, buffer);
-        return font;
+
+        // If it couldn't be retrieved, uses the font's default value.
+        return (font == null) ? ThemeManager.getDefaultFont(id, buffer) : font;
     }
 
     /**
@@ -304,12 +332,13 @@ public class Theme {
         ThemeData buffer;
         Color     color;
 
+        // Retrieves the requested color.
         color = null;
         if((buffer = getThemeData()) != null)
             color = buffer.getColor(id);
-        if(color == null)
-            return ThemeManager.getDefaultColor(id, buffer);
-        return color;
+
+        // If it couldn't be retrieved, uses the color's default value.
+        return (color == null) ? ThemeManager.getDefaultColor(id, buffer) : color;
     }
 
 
