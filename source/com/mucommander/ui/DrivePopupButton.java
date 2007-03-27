@@ -18,7 +18,6 @@ import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Hashtable;
@@ -159,22 +158,25 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
         // Add root 'drives'
         int nbRoots = rootFolders.length;
-        // Retreive and use system drives icons under Windows only, icons looks like crap under Mac OS X,
-        // and most likely also look like crap under Linux (untested though).
-        // FileSystemView.getSystemIcon is available from Java 1.4 and up.
-        // However, Java 1.4 freaks out when it tries to get the a:\ system icon
         MainFrame mainFrame = folderPanel.getMainFrame();
-        if(PlatformManager.isWindowsFamily() && PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_5) {
-            FileSystemView fileSystemView = FileSystemView.getFileSystemView();
-            for(int i=0; i<nbRoots; i++) {
-                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i])).setIcon(fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath())));
-            }
-        }
-        // For any OS other than Windows or for Windows and Java 1.4
-        else {
+
+// Drive icons are disabled under Windows as well because they seem to trigger the dreaded 'No disk error' popup.
+
+//        // Retreive and use system drives icons under Windows only, icons looks like crap under Mac OS X,
+//        // and most likely also look like crap under Linux (untested though).
+//        // FileSystemView.getSystemIcon is available from Java 1.4 and up.
+//        // However, Java 1.4 freaks out when it tries to get the a:\ system icon
+//        if(PlatformManager.isWindowsFamily() && PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_5) {
+//            FileSystemView fileSystemView = FileSystemView.getFileSystemView();
+//            for(int i=0; i<nbRoots; i++) {
+//                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i])).setIcon(fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath())));
+//            }
+//        }
+//        // For any OS other than Windows or for Windows and Java 1.4
+//        else {
             for(int i=0; i<nbRoots; i++)
                 popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
-        }
+//        }
 
         popupMenu.add(new JSeparator());
 
