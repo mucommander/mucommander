@@ -652,7 +652,7 @@ recurse_directories:PL:Przetwórz zaznaczone katalogi rekurencyjnie
 # Used in the 'Edit bookmarks' and 'Edit credentials' dialogs to go to the selected location
 go_to:EN:Go to
 go_to:FR:Aller à
-
+# Translation missing
 
 
 
@@ -2774,7 +2774,7 @@ com.mucommander.ui.action.ToggleStatusBarAction.hide:IT:Nascondi barra di stato
 
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:EN:Show folders first
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:FR:Afficher d'abord les répertoires
-
+# Translation missing
 
 
 
@@ -6284,7 +6284,7 @@ prefs_dialog.time_24_hour:IT:Formato 24 ore
 
 prefs_dialog.show_seconds:EN:Show seconds
 prefs_dialog.show_seconds:FR:Afficher les secondes
-
+# Translation missing
 
 
 
@@ -6297,7 +6297,7 @@ prefs_dialog.show_seconds:FR:Afficher les secondes
 
 prefs_dialog.show_century:EN:Show century
 prefs_dialog.show_century:FR:Afficher le siècle
-
+# Translation missing
 
 
 
@@ -6617,7 +6617,7 @@ prefs_dialog.file_icons:PL:Typy plików
 
 prefs_dialog.use_system_file_icons:EN:Use system file icons
 prefs_dialog.use_system_file_icons:FR:Utiliser les icônes de fichier système
-
+# Translation missing
 
 
 
@@ -6629,7 +6629,7 @@ prefs_dialog.use_system_file_icons:FR:Utiliser les icônes de fichier système
 
 prefs_dialog.use_system_file_icons.always:EN:Always
 prefs_dialog.use_system_file_icons.always:FR:Toujours
-
+# Translation missing
 
 
 
@@ -6641,7 +6641,7 @@ prefs_dialog.use_system_file_icons.always:FR:Toujours
 
 prefs_dialog.use_system_file_icons.never:EN:Never
 prefs_dialog.use_system_file_icons.never:FR:Jamais
-
+# Translation missing
 
 
 
@@ -6653,7 +6653,7 @@ prefs_dialog.use_system_file_icons.never:FR:Jamais
 
 prefs_dialog.use_system_file_icons.applications:EN:For applications only
 prefs_dialog.use_system_file_icons.applications:FR:Seulement pour les applications
-
+# Translation missing
 
 
 
