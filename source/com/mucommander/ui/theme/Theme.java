@@ -147,112 +147,39 @@ public class Theme {
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Theme name. */
-    private String        name;
+    private String  name;
     /** Theme type. */
-    private int           type;
-    /** Path to the theme in the type. */
-    private String        path;
-    /** Soft reference to the theme data. */
-    private SoftReference data;
+    private int     type;
+    /** Colors known to the theme. */
+    private Color[] colors;
+    /** Fonts known to the theme. */
+    private Font[]  fonts;
 
 
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /**
-     * Creates a new theme with the specified parameters.
-     * @param  type   theme type (can be one of {@link #USER_THEME}, {@link #PREDEFINED_THEME} or {@link #CUSTOM_THEME}).
-     * @param  name   name of the theme.
-     * @param  path   path to the theme (type dependant).
-     * @throws Exception thrown if an error occurs while loading the theme.
-     */
-    Theme(int type, String name, String path) throws Exception {
-        this.name = name;
+    Theme() {
+        colors = new Color[Theme.COLOR_COUNT];
+        fonts  = new Font[Theme.FONT_COUNT];
+    }
+
+    Theme(int type, String name) {
+        this();
+        setName(name);
+        setType(type);
+    }
+
+    void setType(int type) {
         this.type = type;
-        this.path = path;
-
-        // If the data is not available and we're not dealing with a user theme, throw an exception.
-        // User themes are a bit different: they *must* be present, even if only with default values.
-        if(getThemeData() == null) {
-            if(type != USER_THEME)
-                throw new Exception();
-        }
+        if(type == USER_THEME)
+            setName(Translator.get("theme.custom_theme"));
     }
 
-    /**
-     * Creates the user theme.
-     * <p>
-     * This is a convenience method and behaves exactly as a call to <code>Theme(null)</code>.
-     * </p>
-     * @see #Theme(ThemeData)
-     */
-    Theme() {this(null);}
-
-    /**
-     * Creates a user theme with the specified data.
-     * <p>
-     * If the <code>data</code> parameter is <code>null</code>, this constructor will attempt
-     * to load the user theme data.
-     * </p>
-     * <p>
-     * If <code>data</code> is not <code>null</code>, any user defined theme will be ignored in favor
-     * of it - this is useful when importing data form older versions of muCommander, for example. Extra
-     * care should be taken when using this constructor in that fashion, as it will overwrite any existing
-     * user data without a chance of recovery.
-     * </p>
-     * @param data data to use for the user theme.
-     */
-    Theme(ThemeData data) {
-        this.name = Translator.get("theme.custom_theme");
-        this.type = USER_THEME;
-        if(data == null)
-            getThemeData();
-        else
-            this.data = new SoftReference(data);
-    }
-
-    /**
-     * Copies the content of the specified data in this theme.
-     * @param newData data that must be imported in the theme.
-     */
-    void importData(ThemeData newData) {
-        int       i;
-        ThemeData oldData;
-
-        if((oldData = getThemeData()) == null)
-            data = new SoftReference(oldData = new ThemeData());
-        for(i = 0; i < FONT_COUNT; i++)
-            oldData.setFont(i, newData.getFont(i));
-        for(i = 0; i < COLOR_COUNT; i++)
-            oldData.setColor(i, newData.getColor(i));
-    }
-
-
+    void setName(String name) {this.name = name;}
 
     // - Data retrieval ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /**
-     * Returns <code>true</code> if the theme is available.
-     * <p>
-     * Due to the somewhat peculiar way theme data is handled, a theme might need to be reloaded
-     * before being accessed. In most cases, if a theme instance exists, it means that its
-     * description file exists and is correct. There are, however, two cases where this doesn't
-     * hold true:
-     * <ul>
-     *   <li>The user theme is corrupt, in which case it'll be in memory but unaivalable.</i>
-     *   <li>The theme's data file has been modified, or made unaccessible, since it was last checked.</li>
-     * </ul>
-     * </p>
-     * <p>
-     * This method lets developers check whether a theme's data is available. It might be quite
-     * CPU intensive though, as it might result in loading the whole theme again. It is advised
-     * to only call it when absolutely necessary, such as when displaying a theme's preview (no
-     * error will be raised, but the preview will not actually match the theme if it's corrupt).
-     * </p>
-     * @return <code>true</code> if the theme is available.
-     */
-    public boolean isAvailable() {return getThemeData() != null;}
-
     /**
      * Returns the theme's type.
      * @return the theme's type.
@@ -265,81 +192,25 @@ public class Theme {
      */
     public String getName() {return name;}
 
-    /**
-     * Returns the path to the theme.
-     * @return the path to the theme.
-     */
-    public String getPath() {return path;}
+    void setFont(int id, Font font) {fonts[id] = font;}
 
-    /**
-     * Returns this theme's data.
-     * <p>
-     * If the data has not yet been loaded, or has been garbage collected, this
-     * method will load it.
-     * </p>
-     * @return this theme's data.
-     */
-    ThemeData getThemeData() {
-        if(data == null || data.get() == null) {
-            InputStream in;
+    void setColor(int id, Color color) {colors[id] = color;}
 
-            in = null;
-            try {data = new SoftReference(ThemeReader.read(in = ThemeManager.openInputStream(type, path)));}
-            catch(Exception e) {
-                // Logs errors in debug mode.
-                if(Debug.ON) {
-                    Debug.trace("Failed to load theme " + path);
-                    Debug.trace(e);
-                }
-                return null;
-            }
-            finally {
-                if(in != null) {
-                    try {in.close();}
-                    catch(Exception e) {}
-                }
-            }
-        }
-        return (ThemeData)data.get();
+    Font getFont(int id, boolean allowDefault) {
+        if(fonts[id] == null && allowDefault)
+            return ThemeManager.getDefaultFont(id, this);
+        return fonts[id];
     }
 
-    /**
-     * Returns the theme's requested font.
-     * @param  id                       identifier of the font to retrieve.
-     * @return                          the requested font if it exists, <code>null</code> otherwise.
-     * @throws IllegalArgumentException if <code>id</code> is not a legal color id.
-     */
-    public Font getFont(int id) {
-        ThemeData buffer;
-        Font      font;
+    public Font getFont(int id) {return getFont(id, true);}
 
-        // Retrieves the requested font.
-        font = null;
-        if((buffer = getThemeData()) != null)
-            font = buffer.getFont(id);
-
-        // If it couldn't be retrieved, uses the font's default value.
-        return (font == null) ? ThemeManager.getDefaultFont(id, buffer) : font;
+    Color getColor(int id, boolean allowDefault) {
+        if(colors[id] == null && allowDefault)
+            return ThemeManager.getDefaultColor(id, this);
+        return colors[id];
     }
 
-    /**
-     * Returns the theme's requested color.
-     * @param  id                       identifier of the color to retrieve.
-     * @return                          the requested color if it exists, <code>null</code> otherwise.
-     * @throws IllegalArgumentException if <code>id</code> is not a legal color id.
-     */
-    public Color getColor(int id) {
-        ThemeData buffer;
-        Color     color;
-
-        // Retrieves the requested color.
-        color = null;
-        if((buffer = getThemeData()) != null)
-            color = buffer.getColor(id);
-
-        // If it couldn't be retrieved, uses the color's default value.
-        return (color == null) ? ThemeManager.getDefaultColor(id, buffer) : color;
-    }
+    public Color getColor(int id) {return getColor(id, true);}
 
 
 

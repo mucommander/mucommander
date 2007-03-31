@@ -72,7 +72,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Theme that is currently being built. */
-    private ThemeData theme;
+    private Theme     theme;
     /** Current state of the XML parser. */
     private int       state;
     /** Used to ignore the content of an unknown tag. */
@@ -85,7 +85,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
     /**
      * Creates a new theme reader.
      */
-    private ThemeReader(ThemeData t) {
+    private ThemeReader(Theme t) {
         theme = t;
         state = STATE_UNKNOWN;
     }
@@ -96,13 +96,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
      * @return              the parsed theme.
      * @exception Exception thrown if an error occured while reading the theme.
      */
-    public static ThemeData read(InputStream in) throws Exception {
-        ThemeData buffer;
-
-        new Parser().parse(in, new ThemeReader(buffer = new ThemeData()), "UTF-8");
-
-        return buffer;
-    }
+    public static void read(InputStream in, Theme theme) throws Exception {new Parser().parse(in, new ThemeReader(theme), "UTF-8");}
 
 
     // - XML interaction -----------------------------------------------------

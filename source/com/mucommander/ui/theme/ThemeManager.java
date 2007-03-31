@@ -37,18 +37,10 @@ public class ThemeManager {
 
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /** Data of the current theme. */
-    private static ThemeData currentData;
-    /** Name of the current theme. */
-    private static String    currentName;
-    /** Type of the current theme. */
-    private static int       currentType;
     /** Whether or not the user theme was modified. */
-    private static boolean   wasUserThemeModified;
-    /** Contains a list of all the available themes. */
-    private static Vector    themes;
-    /** User defined theme. */
-    private static Theme     userTheme;
+    private static boolean wasUserThemeModified;
+    /** Theme that is currently applied to muCommander. */
+    private static Theme   currentTheme;
 
 
 
@@ -60,15 +52,81 @@ public class ThemeManager {
     private ThemeManager() {}
 
     /**
-     * Loads the predefined themes.
+     * Loads the current theme.
      * <p>
-     * This method will gather all the themes defined in the JAR file and try to load them.
-     * If any theme fails to be loaded, it will not be added to the list of available themes.
+     * This method goes through the following steps:
+     * <ul>
+     *  <li>Try to load the theme defined in the configuration.</li>
+     *  <li>If that failed, try to load the default theme.</li>
+     *  <li>If that failed, try to load the user theme if that hasn't been tried yet.</li>
+     *  <li>If that failed, use an empty theme.</li>
+     * </ul>
      * </p>
      */
-    private static void loadPredefinedThemes() {
+    public static void loadCurrentTheme() {
+        int     type;               // Current theme's type.
+        String  name;               // Current theme's name.
+        boolean wasUserThemeLoaded; // Whether we have tried loading the user theme or not.
+
+        // Import legacy theme information if necessary.
+        // This can happen, for example, if running muCommander 0.8 beta 3 or higher on muCommander 0.8 beta 2
+        // or lower configuration.
+        importLegacyTheme();
+
+        // Loads the current theme type as defined in configuration.
+        try {type = getThemeTypeFromLabel(ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE));}
+        // If some error occurs here (unknown theme type), use configuration defaults.
+        catch(Exception e) {
+            ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE);
+            type = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);
+        }
+
+        // Loads the current theme name as defined in configuration.
+        if(type != Theme.USER_THEME) {
+            wasUserThemeLoaded = false;
+            name               = ConfigurationManager.getVariable(ConfigurationVariables.THEME_NAME, ConfigurationVariables.DEFAULT_THEME_NAME);
+	}
+        else {
+            name               = null;
+            wasUserThemeLoaded = true;
+        }
+
+        // If the current theme couldn't be loaded, uses the default theme as defined in the configuration.
+        currentTheme = null;
+        try {currentTheme = getTheme(type, name);}
+        catch(Exception e1) {
+            type = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);
+            name = ConfigurationVariables.DEFAULT_THEME_NAME;
+
+            if(type == Theme.USER_THEME)
+                wasUserThemeLoaded = true;
+
+            // If the default theme can be loaded, tries to load the user theme if we haven't done so yet.
+            // If we have, or if it fails, defaults to an empty user theme.
+            try {currentTheme = getTheme(type, name);}
+            catch(Exception e2) {
+                if(!wasUserThemeLoaded) {
+                    try {currentTheme = getTheme(Theme.USER_THEME, null);}
+                    catch(Exception e3) {}
+                }
+                if(currentTheme == null) {
+                    currentTheme         = new Theme(Theme.USER_THEME, null);
+                    wasUserThemeModified = true;
+                }
+            }
+        }
+    }
+
+
+
+    // - Theme list retrieval ------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Loads all predefined themes and stores them in the specified vector.
+     * @param themes where to store the predefined themes.
+     */
+    private static void loadPredefinedThemes(Vector themes) {
         Iterator iterator; // Iterator on the predefined themes list.
-        String   path;     // Path of the current predefined theme.
         Theme    theme;    // Buffer for the current theme.
 
         // Loads the predefined theme list.
@@ -83,40 +141,23 @@ public class ThemeManager {
 
         // Iterates through the list and loads each theme.
         while(iterator.hasNext()) {
-            path = null;
-            try {
-                themes.add(theme = new Theme(Theme.PREDEFINED_THEME, getThemeName(path = (String)iterator.next()), path));
-
-                // If we've just loaded the current theme, grab its data.
-                if(currentType == Theme.PREDEFINED_THEME && theme.getName().equals(currentName))
-                    currentData = theme.getThemeData();
-            }
-            catch(Exception e) {if(Debug.ON) Debug.trace("Predefined theme " + path + " appears to be corrupt");}
+            try {themes.add(getTheme(Theme.PREDEFINED_THEME, getThemeName((String)iterator.next())));}
+            catch(Exception e) {if(Debug.ON) Debug.trace("Predefined theme appears to be corrupt");}
         }
     }
 
     /**
-     * Loads the custom themes.
-     * <p>
-     * This method will load all the theme files that can be found in the user's custom theme folder.
-     * If any fails to load, it won't be added to the list of available themes.
-     * </p>
+     * Loads all custom themes and stores them in the specified vector.
+     * @param themes where to store the custom themes.
      */
-    private static void loadCustomThemes() {
+    private static void loadCustomThemes(Vector themes) {
         String[] customThemes; // All custom themes.
-        Theme    theme;        // Buffer for the current theme.
 
         // Loads all the custom themes.
         customThemes = getCustomThemesFolder().list(new FilenameFilter() {public boolean accept(File dir, String name) {return name.endsWith(".xml");}});
         for(int i = 0; i < customThemes.length; i++) {
             // If an exception is thrown here, do not consider this theme available.
-            try {
-                themes.add(theme = new Theme(Theme.CUSTOM_THEME, getThemeName(customThemes[i]), customThemes[i]));
-
-                // If we've just loaded the current theme, grab its data.
-                if(currentType == Theme.CUSTOM_THEME && theme.getName().equals(currentName))
-                    currentData = theme.getThemeData();
-            }
+            try {themes.add(getTheme(Theme.CUSTOM_THEME, getThemeName(customThemes[i])));}
             catch(Exception e) {
                 if(Debug.ON) {
                     Debug.trace("Custom theme " + customThemes[i] + " appears to be corrupt.");
@@ -127,142 +168,46 @@ public class ThemeManager {
     }
 
     /**
-     * Loads the user theme.
+     * Returns an iterator on all available themes.
      * <p>
-     * If no user theme is defined, this method will create one. If any legacy theme data is found, it will be used.
-     * Otherwise, creates an empty used theme.
+     * Note that this method guarantees that any theme it returns is indeed available. If one theme's XML file
+     * has become unavailable or corrupt, it won't be listed.
      * </p>
+     * @return an iterator on all available themes.
      */
-    private static void loadUserTheme() {
-        ThemeData legacyData;
+    public static synchronized Iterator availableThemes() {
+        Vector themes;
 
-        // Retrieves eventual legacy theme data.
-        legacyData = getLegacyThemeData();
-
-        // Loads the user theme. If the file exists and legacy theme data was found,
-        // we need to back it up.
-        if(new File(getUserThemeFile()).exists()) {
-
-            // Loads the user theme.
-            try {userTheme = new Theme();}
-            catch(Exception e) {if(Debug.ON) Debug.trace("Impossible error: user theme loading threw an exception.");}
-
-            // If we have some legacy data, save it as a backup custom theme.
-            if(legacyData != null)
-                saveCustomTheme(legacyData, "BackupTheme.xml");
-        }
-
-        // There is no user theme. Create one before carrying on.
-        else {
-            // If there is no legacy data, creates an empty user theme.
-            if(legacyData == null) {
-                legacyData = new ThemeData();
-                userTheme  = new Theme(legacyData);
-
-                // If the user theme file wasn't found but the configuration describes
-                // the current theme as the user theme, resets to defaults.
-                if(currentType == Theme.USER_THEME) {
-                    if(Debug.ON) Debug.trace("User theme file not found, reseting to defaults.");
-
-                    // Resets the theme manager.
-                    currentType = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);
-                    currentName = ConfigurationVariables.DEFAULT_THEME_NAME;
-
-                    // Resets the configuration manager.
-                    ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE);
-                    ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, ConfigurationVariables.DEFAULT_THEME_NAME);
-                }
-            }
-
-            // Makes sure that muCommander boots with the user's previous preferences.
-	    else {
-		currentType = Theme.USER_THEME;
-                // Creates and saves the user theme.
-                userTheme            = new Theme(legacyData);
-                wasUserThemeModified = true;
-                saveUserTheme();
-            }
-        }
-
-        // Adds the user theme to the list of available themes.
-        themes.add(userTheme);
-
-        // If the current theme is the user theme, stores its data.
-        if(currentType == Theme.USER_THEME) {
-            currentData = userTheme.getThemeData();
-            currentName = null;
-        }
-    }
-
-    /**
-     * Loads all the available theme.
-     * <p>
-     * This method will try to load the user theme, predefined themes and custom themes. Since it will
-     * also try to set the current theme, it must never be called before the configuration has been loaded.
-     * </p>
-     * <p>
-     * Any theme that fails to load will not be added to the available theme list. If the theme specified in
-     * the configuration file fails to load, the current theme will be the one defined in {@link com.mucommander.conf.ConfigurationVariables}.
-     * If <i>that</i> theme fails to load, the user defined one will be used instead.
-     * </p>
-     */
-    public static synchronized void loadThemes() {
         themes = new Vector();
 
-        // Loads the current theme type as defined in configuration.
-        // If some error occurs here (unknown theme type), uses configuration defaults.
-        try {
-	    String buffer;
+        // Tries to load the user theme. If it's corrupt, uses an empty user theme.
+        try {themes.add(getTheme(Theme.USER_THEME, null));}
+        catch(Exception e) {themes.add(new Theme(Theme.USER_THEME, null));}
 
-	    if((buffer = ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE)) == null)
-		buffer = ConfigurationVariables.DEFAULT_THEME_TYPE;
-	    currentType = getThemeTypeFromLabel(buffer);
-	}
-        catch(Exception e) {
-            currentType = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);
-            if(Debug.ON)
-                Debug.trace("Illegal theme type found in configuration: " +
-                            ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE));
-        }
+        // Loads custom and predefined themes.
+        loadPredefinedThemes(themes);
+        loadCustomThemes(themes);
 
-        // Loads the current theme name as defined in configuration.
-        if(currentType != Theme.USER_THEME) {
-            if((currentName = ConfigurationManager.getVariable(ConfigurationVariables.THEME_NAME)) == null)
-		currentName = ConfigurationVariables.DEFAULT_THEME_NAME;
-	}
-
-        // Loads user, predefined and custom themes.
-        loadUserTheme();
-        loadPredefinedThemes();
-        loadCustomThemes();
-
-        // If the current theme couldn't be identified, use configuration defaults.
-        if(currentData == null) {
-            Theme buffer;
-
-            currentType = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);
-            currentName = ConfigurationVariables.DEFAULT_THEME_NAME;
-            buffer      = getTheme(currentType, currentName);
-
-            // If we get to this point, things are fairly bad: not only is the configuration wrong,
-            // but the default theme couldn't be found or loaded. In this case, we'll default to the
-            // user theme, as it's the only one that can be relied on.
-            if(buffer == null) {
-                currentType = Theme.USER_THEME;
-                currentName = null;
-                currentData = userTheme.getThemeData();
-            }
-            else
-                currentData = buffer.getThemeData();
-        }
+        return themes.iterator();
     }
 
 
-    // - User theme file access ----------------------------------------------------------
+    // - Theme paths access --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Returns the path to the user theme file.
-     * @return the path to the user theme file.
+     * Returns the path to the user's theme file.
+     * <p>
+     * This method cannot guarantee the file's existence, and it's up to the caller
+     * to deal with the fact that the user might not actually have created a user theme.
+     * </p>
+     * <p>
+     * This method's return value can be modified through {@link #setUserThemeFile(String)}.
+     * If this wasn't called, the default path will be used: {@link #USER_THEME_FILE_NAME}
+     * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
+     * </p>
+     * @return the path to the user's theme file.
+     * @see    #setUserThemeFile()
+     * @see    #saveUserTheme()
      */
     public static String getUserThemeFile() {
         if(userThemeFile == null)
@@ -272,9 +217,33 @@ public class ThemeManager {
 
     /**
      * Sets the path to the user theme file.
-     * @param file path to the user theme file.
+     * <p>
+     * The specified file does not have to exist. If it does, however, it must be accessible.
+     * </p>
+     * @param  file                     path to the user theme file.
+     * @throws IllegalArgumentException if <code>file</code> exists but is not accessible.
+     * @see    #getUserThemeFile()
+     * @see    #saveUserTheme()
      */
-    public static void setUserThemeFile(String file) {userThemeFile = file;}
+    public static void setUserThemeFile(String file) {
+        File tempFile;
+
+        // Makes sure the specified either doesn't exist or is accessible.
+        tempFile = new File(file);
+        if(tempFile.exists() && !(tempFile.isFile() || tempFile.canRead()))
+            throw new IllegalArgumentException("Not a valid file: " + file);
+
+        userThemeFile = file;
+    }
+
+    /**
+     * Saves the user theme if necessary.
+     */
+    public static boolean saveUserTheme() {
+        if(currentTheme.getType() == Theme.USER_THEME)
+            return saveTheme(currentTheme);
+        return true;
+    }
 
     public static File getCustomThemesFolder() {
         File customFolder;
@@ -289,85 +258,80 @@ public class ThemeManager {
     // - IO management -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Opens an input stream on the requested theme file.
-     * @param  type      where to find the theme file.
-     * @param  path        path of the theme to load.
-     * @throws IOException thrown if any IO related error occurs.
+     * Returns the requested theme.
+     * @param  type type of theme to retrieve.
+     * @param  name name of the theme to retrieve.
+     * @return the requested theme.
      */
-    static InputStream openInputStream(int type, String path) throws IOException {
-        switch(type) {
+    private static final Theme getTheme(int type, String name) throws Exception {
+        Theme theme;
 
+        switch(type) {
             // User defined theme.
         case Theme.USER_THEME:
-            return new BackupInputStream(ThemeManager.getUserThemeFile());
+            ThemeReader.read(new BackupInputStream(ThemeManager.getUserThemeFile()), theme = new Theme(Theme.USER_THEME, null));
+            break;
 
             // Predefined themes.
         case Theme.PREDEFINED_THEME:
-            return ResourceLoader.getResourceAsStream(path);
+            ThemeReader.read(ResourceLoader.getResourceAsStream(RuntimeConstants.THEMES_PATH + "/" + name + ".xml"),
+                             theme = new Theme(Theme.PREDEFINED_THEME, name));
+            break;
 
             // Custom themes.
         case Theme.CUSTOM_THEME:
-            return new FileInputStream(new File(ThemeManager.getCustomThemesFolder(), path));
+            ThemeReader.read(new FileInputStream(new File(ThemeManager.getCustomThemesFolder(), name + ".xml")),
+                             theme = new Theme(Theme.CUSTOM_THEME, name));
+            break;
 
             // Error.
         default:
             throw new IllegalArgumentException("Illegal theme type type: " + type);
         }
+
+        return theme;
     }
 
-    /**
-     * Saves the user theme file.
-     * <p>
-     * This method does its own error handling, which is why it doesn't throw any exception. However,
-     * it will return <code>false</code> if an error occured.<br/>
-     * The user theme file is saved using a {@link com.mucommander.io.BackupOutputStream} in an effort
-     * to minimize the possibilities of corruption were muCommander to crash.
-     * </p>
-     * @return <code>true</code> if the operation was a success, <code>false</code> otherwise.
-     */
-    public static synchronized boolean saveUserTheme() {
-        // Only saves the user theme if it was modified.
-        if(wasUserThemeModified) {
-            BackupOutputStream out;      // Where to write the user theme.
+    private static synchronized boolean saveTheme(Theme theme) {
+        OutputStream out;
 
-            out = null;
+        out = null;
+        switch(theme.getType()) {
+        case Theme.PREDEFINED_THEME:
+            if(Debug.ON) Debug.trace("Trying to save predefined theme: " + theme.getName());
+            return false;
+
+        case Theme.USER_THEME:
             try {
-                // Saves the theme.
-                ThemeWriter.write(userTheme.getThemeData(), out = new BackupOutputStream(getUserThemeFile()));
-                out.close(true);
-
-                // Marks the user theme as not modified.
-                wasUserThemeModified = false;
+                if(wasUserThemeModified) {
+                    ThemeWriter.write(theme, out = new BackupOutputStream(getUserThemeFile()));
+                    out.close();
+                    wasUserThemeModified = false;
+                }
                 return true;
             }
             catch(Exception e) {
-                // Closes the stream without deleting the backup file.
                 if(out != null) {
-                    try {out.close(false);}
+                    try {((BackupOutputStream)out).close(false);}
                     catch(Exception e2) {}
                 }
                 return false;
+            }
+
+        case Theme.CUSTOM_THEME:
+            try {ThemeWriter.write(theme, out = new FileOutputStream(new File(getCustomThemesFolder(), theme.getName() + ".xml")));}
+            catch(Exception e) {return false;}
+            finally {
+                if(out != null) {
+                    try {out.close();}
+                    catch(Exception e) {}
+                }
             }
         }
         return true;
     }
 
-    private static synchronized boolean saveCustomTheme(ThemeData data, String path) {
-        OutputStream out;
 
-        out = null;
-        try {
-            ThemeWriter.write(data, new FileOutputStream(new File(getCustomThemesFolder(), path)));
-            return true;
-        }
-        catch(Exception e) {
-            if(out != null) {
-                try {out.close();}
-                catch(Exception e2) {}
-            }
-        }
-        return false;
-    }
 
     // - Current theme access ------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -392,28 +356,28 @@ public class ThemeManager {
      */
     private static void setConfigurationTheme(Theme theme) {
         // Sets configuration depending on the new theme's type.
-        switch(currentType = theme.getType()) {
+        switch(theme.getType()) {
             // User defined theme.
         case Theme.USER_THEME:
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_USER);
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, currentName = null);
+            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, null);
             break;
 
             // Predefined themes.
         case Theme.PREDEFINED_THEME:
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_PREDEFINED);
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, currentName = theme.getName());
+            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, theme.getName());
             break;
 
             // Custom themes.
         case Theme.CUSTOM_THEME:
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_CUSTOM);
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, currentName = theme.getName());
+            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, theme.getName());
             break;
 
             // Error.
         default:
-            throw new IllegalStateException("Illegal theme type: " + currentType);
+            throw new IllegalStateException("Illegal theme type: " + theme.getType());
         }
     }
 
@@ -426,86 +390,53 @@ public class ThemeManager {
      * @throws IllegalArgumentException thrown if the specified theme could not be loaded.
      */
     public synchronized static void setCurrentTheme(Theme theme) {
-        ThemeData oldData; // Buffer for the old current data.
+        Theme oldTheme;
 
         // Makes sure we're not doing something useless.
-        if(isCurrentTheme(theme)) {
-	    setConfigurationTheme(theme);
+        if(isCurrentTheme(theme))
             return;
-	}
 
-        // Sets the new data.
-        oldData = currentData;
-        if((currentData = theme.getThemeData()) == null) {
-            currentData = oldData;
-            throw new IllegalArgumentException("Couldn't load data for theme: " + theme.getName());
-        }
+        // Saves the user theme if necessary.
+        saveUserTheme();
 
-        // The user theme data might be garbage collected before muCommander is shutdown.
-        // We need to make sure it's saved before that happen.
-        if(currentType == Theme.USER_THEME)
-            saveUserTheme();
-
-	setConfigurationTheme(theme);
+        // Updates muCommander's configuration.
+        oldTheme = currentTheme;
+	setConfigurationTheme(currentTheme = theme);
 
         // Triggers font events.
         for(int i = 0; i < Theme.FONT_COUNT; i++) {
-            if(oldData.getFont(i) == null) {
-                if(currentData.getFont(i) == null)
-                    continue;
-            }
-            else if(currentData.getFont(i) != null) {
-                if(oldData.getFont(i).equals(currentData.getFont(i)))
-                    continue;
-            }
-            triggerFontEvent(i, getCurrentFont(i));
+            if(!oldTheme.getFont(i).equals(currentTheme.getFont(i)))
+                triggerFontEvent(i, currentTheme.getFont(i));
         }
 
         // Triggers color events.
         for(int i = 0; i < Theme.COLOR_COUNT; i++) {
-            if(oldData.getColor(i) == null) {
-                if(currentData.getColor(i) == null)
-                    continue;
-            }
-            else if(currentData.getColor(i) != null) {
-                if(oldData.getColor(i).equals(currentData.getColor(i)))
-                    continue;
-            }
-            triggerColorEvent(i, getCurrentColor(i));
+            if(!oldTheme.getColor(i).equals(currentTheme.getColor(i)))
+               triggerColorEvent(i, currentTheme.getColor(i));
         }
     }
 
-    /**
-     * Returns the current theme's requested font.
-     * @param  id identifier of the requested font.
-     * @return    the current theme's requested font.
-     */
-    public synchronized static Font getCurrentFont(int id) {return getFont(id, currentData);}
+    public synchronized static Font getCurrentFont(int id) {return getFont(id, currentTheme);}
 
-    private static Font getFont(int id, ThemeData data) {
+    private static Font getFont(int id, Theme theme) {
         Font font;
 
         // If the requested font is not defined in the current theme,
         // returns its default value.
-        if((data == null) || (font = data.getFont(id)) == null)
-            return getDefaultFont(id, data);
+        if((theme == null) || (font = theme.getFont(id, false)) == null)
+            return getDefaultFont(id, theme);
         return font;
     }
 
-    /**
-     * Returns the current theme's requested color.
-     * @param  id identifier of the requested color.
-     * @return    the current theme's requested color.
-     */
-    public synchronized static Color getCurrentColor(int id) {return getColor(id, currentData);}
+    public synchronized static Color getCurrentColor(int id) {return getColor(id, currentTheme);}
 
-    private static Color getColor(int id, ThemeData data) {
+    private static Color getColor(int id, Theme theme) {
         Color color;
 
         // If the requested color is not defined in the current theme,
         // returns its default value.
-        if((data == null) || (color = data.getColor(id)) == null)
-            return getDefaultColor(id, data);
+        if((theme == null) || (color = theme.getColor(id, false)) == null)
+            return getDefaultColor(id, theme);
         return color;
     }
 
@@ -535,14 +466,9 @@ public class ThemeManager {
      * Copies the current theme over the user theme.
      */
     private static void overwriteUserTheme() {
-        // Overwrites the user theme.
-        userTheme.importData(currentData);
-        currentData          = userTheme.getThemeData();
-        currentType          = Theme.USER_THEME;
-        currentName          = null;
+        currentTheme.setType(Theme.USER_THEME);
+        setConfigurationTheme(currentTheme);
         wasUserThemeModified = true;
-        ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_USER);
-        ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, null);
     }
 
     /**
@@ -556,7 +482,7 @@ public class ThemeManager {
 
 	// Retrieves the old font to check whether its different
 	// from the new one.
-	oldFont = currentData.getFont(fontId);
+	oldFont = currentTheme.getFont(fontId, false);
 
 	// Trying to set a default font over a non-default one.
 	if(font == null)
@@ -581,7 +507,7 @@ public class ThemeManager {
 
 	// Retrieves the old color to check whether its different
 	// from the new one.
-	oldColor = currentData.getColor(colorId);
+	oldColor = currentTheme.getColor(colorId, false);
 
 	// Trying to set a default color over a non-default one.
 	if(color == null)
@@ -604,7 +530,7 @@ public class ThemeManager {
      */
     public synchronized static boolean willOverwriteUserTheme(int fontId, Font font) {
         if(needsUpdate(fontId, font))
-           return currentType != Theme.USER_THEME;
+            return currentTheme.getType() != Theme.USER_THEME;
         return false;
     }
 
@@ -617,7 +543,7 @@ public class ThemeManager {
      */
     public synchronized static boolean willOverwriteUserTheme(int colorId, Color color) {
         if(needsUpdate(colorId, color))
-           return currentType != Theme.USER_THEME;
+            return currentTheme.getType() != Theme.USER_THEME;
         return false;
     }
 
@@ -643,17 +569,16 @@ public class ThemeManager {
 
         // If we need to change the user theme in order to perform the modification,
         // but we're not allowed, abort.
-        if((currentType != Theme.USER_THEME) && !overwriteUserTheme)
+        if(currentTheme.getType() == Theme.USER_THEME)
+            wasUserThemeModified = true;
+        else if(overwriteUserTheme)
+            overwriteUserTheme();
+        else
             return false;
 
-        // Overwrites the user theme.
-        else
-            overwriteUserTheme();
-
-        // Sets the new font.
-        currentData.setFont(id, font);
+        currentTheme.setFont(id, font);
         triggerFontEvent(id, font);
-        wasUserThemeModified = true;
+
         return true;
     }
 
@@ -676,19 +601,16 @@ public class ThemeManager {
         // do nothing.
         if(!needsUpdate(id, color))
             return false;
-
-        // If we need to change the user theme in order to perform the modification,
-        // but we're not allowed, abort.
-        if((currentType != Theme.USER_THEME) && !overwriteUserTheme)
+        if(currentTheme.getType() == Theme.USER_THEME)
+            wasUserThemeModified = true;
+        else if(overwriteUserTheme)
+            overwriteUserTheme();
+        else
             return false;
 
-        // Overwrites the user theme.
-        else
-            overwriteUserTheme();
-
-        currentData.setColor(id, color);
+        currentTheme.setColor(id, color);
         triggerColorEvent(id, color);
-        wasUserThemeModified = true;
+
         return true;
     }
 
@@ -698,11 +620,11 @@ public class ThemeManager {
      * @return <code>true</code> if the specified theme is the current one, <code>false</code> otherwise.
      */
     public static boolean isCurrentTheme(Theme theme) {
-        if(theme.getType() != currentType)
+        if(theme.getType() != currentTheme.getType())
             return false;
-        if(currentType == Theme.USER_THEME)
+        if(currentTheme.getType() == Theme.USER_THEME)
             return true;
-        return theme.getName().equals(currentName);
+        return theme.getName().equals(currentTheme.getName());
     }
 
 
@@ -748,52 +670,14 @@ public class ThemeManager {
 
 
 
-    // - Themes access -------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * Returns the requested theme.
-     * @param  type type of theme to retrieve.
-     * @param  name name of the theme to retrieve.
-     * @return the requested theme if found, <code>null</code> otherwise.
-     */
-    public static final Theme getTheme(int type, String name) {
-        Iterator iterator; // Iterator on all the themes.
-        Theme    theme;    // Buffer for each theme.
-
-        // Goes through each theme in the list.
-        iterator = themes.iterator();
-        while(iterator.hasNext()) {
-            theme = (Theme)iterator.next();
-
-            // We've found the requested theme.
-            if(theme.getType() == type && theme.getName().equals(name))
-                return theme;
-        }
-
-        // The requested theme doesn't exist.
-        return null;
-    }
-
-    /**
-     * Returns an iterator on all available themes.
-     * @return an iterator on all available themes.
-     */
-    public static Iterator availableThemes() {return themes.iterator();}
-
-
-
     // - Legacy theme --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /**
-     * Returns any eventual legacy theme data.
-     * @return any eventual legacy theme data, <code>null</code> if none.
-     */
-    private static ThemeData getLegacyThemeData() {
+    private static void importLegacyTheme() {
         // Legacy theme information.
         String backgroundColor, fileColor, hiddenColor, folderColor, archiveColor, symlinkColor,
                markedColor, selectedColor, selectionColor, unfocusedColor, shellBackgroundColor,
                shellSelectionColor, shellTextColor, fontSize, fontFamily, fontStyle;
-        ThemeData data; // Data for the new user theme.
+        Theme legacyTheme; // Data for the new user theme.
 
         // Gathers legacy theme information.
         backgroundColor      = ConfigurationManager.getVariable(LegacyTheme.BACKGROUND_COLOR);
@@ -833,162 +717,173 @@ public class ThemeManager {
         ConfigurationManager.setVariable(LegacyTheme.FONT_SIZE,                  null);
         ConfigurationManager.setVariable(LegacyTheme.FONT_STYLE,                 null);
 
-        // If no legacy theme information could be found, use an empty user theme data.
+        // If no legacy theme information could be found, aborts import.
         if(backgroundColor == null && fileColor == null && hiddenColor == null && folderColor == null && archiveColor == null &&
            symlinkColor == null && markedColor == null && selectedColor == null && selectionColor == null && unfocusedColor == null &&
            shellBackgroundColor == null && shellSelectionColor == null && shellTextColor == null && shellTextColor == null &&
            shellTextColor == null && fontFamily == null && fontSize == null && fontStyle == null)
-            return null;
+            return;
     
         // Creates theme data using whatever values were found in the user configuration.
         // Empty values are set to their 'old fashioned' defaults.
         Color color;
         Font  font;
 
-        data = new ThemeData();
+        legacyTheme = new Theme();
 
         // File background color.
         if(backgroundColor == null)
             backgroundColor = LegacyTheme.DEFAULT_BACKGROUND_COLOR;
-        data.setColor(Theme.FILE_BACKGROUND_COLOR, color = new Color(Integer.parseInt(backgroundColor, 16)));
-        data.setColor(Theme.HIDDEN_FILE_BACKGROUND_COLOR, color);
-        data.setColor(Theme.MARKED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.FOLDER_BACKGROUND_COLOR, color);
-        data.setColor(Theme.SYMLINK_BACKGROUND_COLOR, color);
-        data.setColor(Theme.ARCHIVE_BACKGROUND_COLOR, color);
-        data.setColor(Theme.FILE_TABLE_BACKGROUND_COLOR, color);
-        data.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FILE_BACKGROUND_COLOR, color = new Color(Integer.parseInt(backgroundColor, 16)));
+        legacyTheme.setColor(Theme.HIDDEN_FILE_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.MARKED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FOLDER_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SYMLINK_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.ARCHIVE_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FILE_TABLE_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, color);
 
         // Selected file background color.
         if(selectionColor == null)
             selectionColor = LegacyTheme.DEFAULT_SELECTION_BACKGROUND_COLOR;
-        data.setColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(selectionColor, 16)));
-        data.setColor(Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.MARKED_SELECTED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.FOLDER_SELECTED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.SYMLINK_SELECTED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(selectionColor, 16)));
+        legacyTheme.setColor(Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.MARKED_SELECTED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FOLDER_SELECTED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SYMLINK_SELECTED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR, color);
 
         // Out of focus file background color.
         if(unfocusedColor == null)
             unfocusedColor = LegacyTheme.DEFAULT_OUT_OF_FOCUS_COLOR;
-        data.setColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(unfocusedColor, 16)));
-        data.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(unfocusedColor, 16)));
+        legacyTheme.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
 
         // Hidden files color.
         if(hiddenColor == null)
             hiddenColor = LegacyTheme.DEFAULT_HIDDEN_FILE_COLOR;
-        data.setColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(hiddenColor, 16)));
-        data.setColor(Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(hiddenColor, 16)));
+        legacyTheme.setColor(Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Folder color.
         if(folderColor == null)
             folderColor = LegacyTheme.DEFAULT_FOLDER_COLOR;
-        data.setColor(Theme.FOLDER_FOREGROUND_COLOR, color = new Color(Integer.parseInt(folderColor, 16)));
-        data.setColor(Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FOLDER_FOREGROUND_COLOR, color = new Color(Integer.parseInt(folderColor, 16)));
+        legacyTheme.setColor(Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Archives color.
         if(archiveColor == null)
             archiveColor = LegacyTheme.DEFAULT_ARCHIVE_FILE_COLOR;
-        data.setColor(Theme.ARCHIVE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(archiveColor, 16)));
-        data.setColor(Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.ARCHIVE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(archiveColor, 16)));
+        legacyTheme.setColor(Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Symbolic links color.
         if(symlinkColor == null)
             symlinkColor = LegacyTheme.DEFAULT_SYMLINK_COLOR;
-        data.setColor(Theme.SYMLINK_FOREGROUND_COLOR, color = new Color(Integer.parseInt(symlinkColor, 16)));
-        data.setColor(Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SYMLINK_FOREGROUND_COLOR, color = new Color(Integer.parseInt(symlinkColor, 16)));
+        legacyTheme.setColor(Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Plain file color.
         if(fileColor == null)
             fileColor = LegacyTheme.DEFAULT_PLAIN_FILE_COLOR;
-        data.setColor(Theme.FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(fileColor, 16)));
-        data.setColor(Theme.FILE_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(fileColor, 16)));
+        legacyTheme.setColor(Theme.FILE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Marked file color.
         if(markedColor == null)
             markedColor = LegacyTheme.DEFAULT_MARKED_FILE_COLOR;
-        data.setColor(Theme.MARKED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(markedColor, 16)));
-        data.setColor(Theme.MARKED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.MARKED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(markedColor, 16)));
+        legacyTheme.setColor(Theme.MARKED_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Selected file color.
         if(selectedColor == null)
             selectedColor = LegacyTheme.DEFAULT_SELECTED_FILE_COLOR;
-        data.setColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(selectedColor, 16)));
-        data.setColor(Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(selectedColor, 16)));
+        legacyTheme.setColor(Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Shell background color.
         if(shellBackgroundColor == null)
             shellBackgroundColor = LegacyTheme.DEFAULT_SHELL_BACKGROUND_COLOR;
-        data.setColor(Theme.SHELL_BACKGROUND_COLOR, new Color(Integer.parseInt(shellBackgroundColor, 16)));
+        legacyTheme.setColor(Theme.SHELL_BACKGROUND_COLOR, new Color(Integer.parseInt(shellBackgroundColor, 16)));
 
         // Shell text color.
         if(shellTextColor == null)
             shellTextColor = LegacyTheme.DEFAULT_SHELL_TEXT_COLOR;
-        data.setColor(Theme.SHELL_FOREGROUND_COLOR, color = new Color(Integer.parseInt(shellTextColor, 16)));
-        data.setColor(Theme.SHELL_SELECTED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SHELL_FOREGROUND_COLOR, color = new Color(Integer.parseInt(shellTextColor, 16)));
+        legacyTheme.setColor(Theme.SHELL_SELECTED_FOREGROUND_COLOR, color);
 
         // Shell selection background color.
         if(shellSelectionColor == null)
             shellSelectionColor = LegacyTheme.DEFAULT_SHELL_SELECTION_COLOR;
-        data.setColor(Theme.SHELL_SELECTED_BACKGROUND_COLOR, new Color(Integer.parseInt(shellSelectionColor, 16)));
+        legacyTheme.setColor(Theme.SHELL_SELECTED_BACKGROUND_COLOR, new Color(Integer.parseInt(shellSelectionColor, 16)));
 
         // File table font.
-        data.setFont(Theme.FILE_TABLE_FONT, font = getLegacyFont(fontFamily, fontStyle, fontSize));
+        legacyTheme.setFont(Theme.FILE_TABLE_FONT, font = getLegacyFont(fontFamily, fontStyle, fontSize));
 
         // Sets colors that were not customisable in older versions of muCommander, using
         // l&f default where necessary.
 
         // File table border.
-        data.setColor(Theme.FILE_TABLE_BORDER_COLOR, new Color(64, 64, 64));
+        legacyTheme.setColor(Theme.FILE_TABLE_BORDER_COLOR, new Color(64, 64, 64));
 
         // File editor / viewer colors.
-        data.setColor(Theme.EDITOR_BACKGROUND_COLOR, Color.WHITE);
-        data.setColor(Theme.EDITOR_FOREGROUND_COLOR, getTextAreaColor());
-        data.setColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR, getTextAreaSelectionBackgroundColor());
-        data.setColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR, getTextAreaSelectionColor());
-        data.setFont(Theme.EDITOR_FONT, getTextAreaFont());
+        legacyTheme.setColor(Theme.EDITOR_BACKGROUND_COLOR, Color.WHITE);
+        legacyTheme.setColor(Theme.EDITOR_FOREGROUND_COLOR, getTextAreaColor());
+        legacyTheme.setColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR, getTextAreaSelectionBackgroundColor());
+        legacyTheme.setColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR, getTextAreaSelectionColor());
+        legacyTheme.setFont(Theme.EDITOR_FONT, getTextAreaFont());
 
         // Location bar and shell history (both use text field defaults).
-        data.setColor(Theme.LOCATION_BAR_PROGRESS_COLOR, new Color(0, 255, 255, 64));
+        legacyTheme.setColor(Theme.LOCATION_BAR_PROGRESS_COLOR, new Color(0, 255, 255, 64));
 	color = getTextFieldBackgroundColor();
-        data.setColor(Theme.LOCATION_BAR_BACKGROUND_COLOR, color);
-        data.setColor(Theme.SHELL_HISTORY_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.LOCATION_BAR_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SHELL_HISTORY_BACKGROUND_COLOR, color);
 	color = getTextFieldColor();
-        data.setColor(Theme.LOCATION_BAR_FOREGROUND_COLOR, color);
-        data.setColor(Theme.SHELL_HISTORY_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.LOCATION_BAR_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SHELL_HISTORY_FOREGROUND_COLOR, color);
 	color = getTextFieldSelectionBackgroundColor();
-        data.setColor(Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR, color);
-        data.setColor(Theme.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, color);
 	color = getTextFieldSelectionColor();
-        data.setColor(Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR, color);
-        data.setColor(Theme.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR, color);
+        legacyTheme.setColor(Theme.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, color);
 
 	font = getTextFieldFont();
-        data.setFont(Theme.LOCATION_BAR_FONT, font);
-        data.setFont(Theme.SHELL_HISTORY_FONT, font);
+        legacyTheme.setFont(Theme.LOCATION_BAR_FONT, font);
+        legacyTheme.setFont(Theme.SHELL_HISTORY_FONT, font);
 
-        return data;
+        // If the user theme exists, saves the legacy theme as backup.
+        if(new File(getUserThemeFile()).exists()) {
+            legacyTheme.setType(Theme.CUSTOM_THEME);
+            legacyTheme.setName("BackupTheme");
+        }
+        // Otherwise, creates a new user theme using the legacy data.
+        else {
+            legacyTheme.setType(Theme.USER_THEME);
+            setConfigurationTheme(legacyTheme);
+        }
+
+        saveTheme(legacyTheme);
     }
 
     /**
@@ -1000,7 +895,7 @@ public class ThemeManager {
      * @param  size   font size.
      * @param  style  font style (can be any of <code>"bold"</code>, <code>"italic</code>,
      *                <code>"bold_italic"</code> or <code>"plain"</code>).
-     * @return         a font that fits the specified parameters.
+     * @return        a font that fits the specified parameters.
      */
     private static Font getLegacyFont(String family, String style, String size) {
         Font defaultFont;
@@ -1057,17 +952,6 @@ public class ThemeManager {
             return Theme.CUSTOM_THEME;
         throw new IllegalStateException("Unknown theme type: " + label);
     }
-
-    /**
-     * Extracts the name of a theme from its path.
-     * <p>
-     * The algorithm here is a fairly simple one: a theme's name is its file name
-     * without path or extension information.
-     * </p>
-     * @param  path path of the theme whose name should be computed.
-     * @return      the proper name of the theme.
-     */
-    private static String getThemeName(String path) {return path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));}
 
     /**
      * Returns the current look and feel's text area font.
@@ -1209,7 +1093,7 @@ public class ThemeManager {
 	return font;
     }
 
-    static final Color getDefaultColor(int id, ThemeData data) {
+    static final Color getDefaultColor(int id, Theme theme) {
         switch(id) {
             // File table background colors.
         case Theme.FILE_UNFOCUSED_BACKGROUND_COLOR:
@@ -1225,7 +1109,7 @@ public class ThemeManager {
         case Theme.ARCHIVE_BACKGROUND_COLOR:
         case Theme.SYMLINK_BACKGROUND_COLOR:
         case Theme.MARKED_BACKGROUND_COLOR:
-            return getColor(Theme.FILE_TABLE_BACKGROUND_COLOR, data);
+            return getColor(Theme.FILE_TABLE_BACKGROUND_COLOR, theme);
 
         case Theme.FILE_TABLE_BACKGROUND_COLOR:
 	    return getTableBackgroundColor();
@@ -1241,7 +1125,7 @@ public class ThemeManager {
         case Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR:
-            return getColor(Theme.FILE_FOREGROUND_COLOR, data);
+            return getColor(Theme.FILE_FOREGROUND_COLOR, theme);
 
         case Theme.FILE_FOREGROUND_COLOR:
 	    return getTableColor();
@@ -1289,7 +1173,7 @@ public class ThemeManager {
         case Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR:
         case Theme.SYMLINK_SELECTED_BACKGROUND_COLOR:
         case Theme.MARKED_SELECTED_BACKGROUND_COLOR:
-            return getColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, data);
+            return getColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, theme);
 
         case Theme.FILE_SELECTED_BACKGROUND_COLOR:
 	    return getTableSelectionBackgroundColor();
@@ -1314,7 +1198,7 @@ public class ThemeManager {
         case Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
         case Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-            return getColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, data);
+            return getColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, theme);
 
         case Theme.FILE_SELECTED_FOREGROUND_COLOR:
 	    return getTableSelectionColor();
@@ -1363,7 +1247,7 @@ public class ThemeManager {
      * @param  id identifier of the font whose default value should be retrieved.
      * @return    the default value for the specified font.
      */
-    static final Font getDefaultFont(int id, ThemeData data) {
+    static final Font getDefaultFont(int id, Theme theme) {
 	switch(id) {
             // Table font.
         case Theme.FILE_TABLE_FONT:
@@ -1383,4 +1267,6 @@ public class ThemeManager {
         }
         throw new IllegalArgumentException("Illegal font identifier: " + id);
     }
+
+    private static String getThemeName(String path) {return path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));}
 }

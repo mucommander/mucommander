@@ -435,6 +435,7 @@
       <field name="DONATION_URL"        value="${url.donation}"/>
       <field name="DICTIONARY_FILE"     value="/dictionary.txt"/>
       <field name="THEMES_FILE"         value="${themes.desc}"/>
+      <field name="THEMES_PATH"         value="${themes.out}"/>
       <field name="BUG_REPOSITORY_URL"  value="${url.bug-repository}"/>
       <field name="DEFAULT_THEME"       value="Native"/>
     </javaw>

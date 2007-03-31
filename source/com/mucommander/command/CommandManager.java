@@ -437,7 +437,7 @@ public class CommandManager implements CommandBuilder {
      * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
      * </p>
      * @return the path to the custom associations XML file.
-     * @see    #getAssociationFile()
+     * @see    #setAssociationFile(String)
      * @see    #loadAssociations()
      * @see    #writeAssociations()
      */

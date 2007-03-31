@@ -284,7 +284,7 @@ public class Launcher {
 
         // Loads the themes.
         splashScreen.setLoadingMessage("Loading theme...");
-        com.mucommander.ui.theme.ThemeManager.loadThemes();
+        com.mucommander.ui.theme.ThemeManager.loadCurrentTheme();
 
         // Starts Bonjour services discovery (only if enabled in prefs)
         splashScreen.setLoadingMessage("Starting Bonjour services discovery...");
