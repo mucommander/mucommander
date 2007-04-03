@@ -9,6 +9,8 @@ import com.mucommander.ui.MainFrame;
 import com.mucommander.conf.*;
 import com.mucommander.command.*;
 import com.mucommander.process.*;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.file.util.ResourceLoader;
 
 import java.util.Hashtable;
 
@@ -33,6 +35,12 @@ public class EditAction extends InternalEditAction implements ConfigurationListe
      */
     public EditAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
+
+        // Initialises the icon
+        String iconPath;
+        iconPath = getIconPath(InternalEditAction.class);
+        if(ResourceLoader.getResource(iconPath)!=null)
+            setIcon(IconManager.getIcon(iconPath));
 
         // Initialises configuration.
         useCustomEditor = ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_EDITOR, ConfigurationVariables.DEFAULT_USE_CUSTOM_EDITOR);

@@ -9,7 +9,6 @@ import java.util.Hashtable;
 
 /**
  * This action opens the currently selected file in an integrated viewer.
- *
  * @author Maxence Bernard
  */
 public class InternalViewAction extends SelectedFileAction {

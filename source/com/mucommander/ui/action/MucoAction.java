@@ -72,11 +72,12 @@ public abstract class MucoAction extends AbstractAction {
         }
 
         // Look for an icon file with the path /action/<classname>.png and use it if it exists
-        String iconPath = "/action/"+className+".png";
+        String iconPath = getIconPath(classInstance);
         if(ResourceLoader.getResource(iconPath)!=null)
-            putValue(Action.SMALL_ICON, IconManager.getIcon(iconPath));
+            setIcon(IconManager.getIcon(iconPath));
     }
 
+    public static String getIconPath(Class action) {return "/action/" + action.getName() + ".png";}
 
     public MainFrame getMainFrame() {
         return this.mainFrame;

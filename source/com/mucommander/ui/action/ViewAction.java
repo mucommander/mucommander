@@ -8,7 +8,9 @@ import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.conf.*;
 import com.mucommander.command.*;
+import com.mucommander.ui.icon.IconManager;
 import com.mucommander.process.*;
+import com.mucommander.file.util.ResourceLoader;
 
 import java.util.Hashtable;
 
@@ -33,6 +35,13 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
      */
     public ViewAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
+
+        // Initialises the icon
+        String iconPath;
+        iconPath = getIconPath(InternalViewAction.class);
+        if(ResourceLoader.getResource(iconPath)!=null)
+            setIcon(IconManager.getIcon(iconPath));
+
 
         // Initialises configuration.
         useCustomViewer = ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_VIEWER, ConfigurationVariables.DEFAULT_USE_CUSTOM_VIEWER);
