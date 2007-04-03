@@ -42,15 +42,19 @@
   <!-- Default : meta C, control C                                               -->
   <action class="com.mucommander.ui.action.CopyFilesToClipboardAction"  keystroke="control C"
                                                                         alt_keystroke="meta C"/>
-
   <!-- Action  : Delete selected file(s).                                        -->
   <!-- Default : F8, DELETE                                                      -->
   <action class="com.mucommander.ui.action.DeleteAction"                keystroke="F8"
                                                                         alt_keystroke="DELETE"/>
-
-  <!-- Action  : Edit selected file (ignores multiple selection).                -->
+  <!-- Action  : Edit selected file using custom editor.                         -->
+  <!-- Ignores multiple selection.                                               -->
   <!-- Default : F4                                                              -->
   <action class="com.mucommander.ui.action.EditAction"                  keystroke="F4"/>
+
+  <!-- Action  : Edit selected file with internal editor.                        -->
+  <!-- Ignores multiple selection.                                               -->
+  <!-- Default : shift F4                                                        -->
+  <action class="com.mucommander.ui.action.InternalEditAction"          keystroke="shift F4"/>
 
   <!-- Action  : Email selected file(s).                                         -->
   <!-- Default : control S                                                       -->
@@ -289,7 +293,11 @@
   <!-- Default : control P                                                       -->
   <action class="com.mucommander.ui.action.UnpackAction"                keystroke="control P"/>
 
-  <!-- Action  : Open the file viewer on selected file.                          -->
+  <!-- Action  : Open the custom file viewer on selected file.                   -->
   <!-- Default : F3                                                              -->
   <action class="com.mucommander.ui.action.ViewAction"                  keystroke="F3"/>
+
+  <!-- Action  : Open the internal file viewer on selected file.                 -->
+  <!-- Default : shift F3                                                              -->
+  <action class="com.mucommander.ui.action.InternalViewAction"          keystroke="shift F3"/>
 </keymap>
