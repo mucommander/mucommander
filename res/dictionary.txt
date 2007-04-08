@@ -461,6 +461,21 @@ password:SI:Geslo
 password:RO:Parolă
 password:IT:Password
 
+# Character encoding (e.g. UTF-8, ISO-8859-1, ...), displayed for instance in the FTP panel of the 'Connect to server' dialog
+encoding:EN:Encoding
+encoding:FR:Encodage
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
 name:EN:Name
 name:FR:Nom
 name:DE:Name
