@@ -44,6 +44,12 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     /** Name of the FTP passive mode property */
     public final static String PASSIVE_MODE_PROPERTY_NAME = "passiveMode";
 
+    /** Name of the FTP encoding property */
+    public final static String ENCODING_PROPERTY_NAME = "encoding";
+
+    /** Default FTP encoding */
+    public final static String DEFAULT_ENCODING = "UTF-8";
+
     /** Date format used by the SITE UTIME command */
     private final static SimpleDateFormat SITE_UTIME_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmm");
 
@@ -141,19 +147,12 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    private boolean isPassiveModeEnabled() {
-        String passiveModeProperty = getURL().getProperty(PASSIVE_MODE_PROPERTY_NAME);
-        // Passive mode is enabled by default if property isn't specified
-        return passiveModeProperty==null || !passiveModeProperty.equals("false");
-    }
-
-
-    ///////////////////////////////////
+    /////////////////////////////////////////////
     // ConnectionHandlerFactory implementation //
-    ///////////////////////////////////
+    /////////////////////////////////////////////
 
     public ConnectionHandler createConnectionHandler(FileURL location) {
-        return new FTPConnectionHandler(location, isPassiveModeEnabled());
+        return new FTPConnectionHandler(location);
     }
 
 
@@ -235,8 +234,6 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         if(!parentValSet) {
             FileURL parentFileURL = this.fileURL.getParent();
             if(parentFileURL!=null) {
-                parentFileURL.setProperty(PASSIVE_MODE_PROPERTY_NAME, ""+isPassiveModeEnabled());
-                parentFileURL.setCredentials(fileURL.getCredentials());
                 try {
                     this.parent = new FTPFile(parentFileURL, createFTPFile(parentFileURL.getFilename(), true));
                 }
@@ -422,17 +419,18 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         String childName;
         int nbFiles = files.length;
         int fileCount = 0;
-        String parentURL = fileURL.toString(true);
-        if(!parentURL.endsWith(SEPARATOR))
-            parentURL += SEPARATOR;
+        String parentPath = fileURL.getPath();
+        if(!parentPath.endsWith(SEPARATOR))
+            parentPath += SEPARATOR;
 
         for(int i=0; i<nbFiles; i++) {
             childName = files[i].getName();
             if(childName.equals(".") || childName.equals(".."))
                 continue;
 
-            childURL = new FileURL(parentURL+childName);
-            childURL.setProperty(PASSIVE_MODE_PROPERTY_NAME, ""+isPassiveModeEnabled());
+            // Note: properties and credentials are cloned for every children's url
+            childURL = (FileURL)fileURL.clone();
+            childURL.setPath(parentPath+childName);
 
             // Discard '.' and '..' files
             if(childName.equals(".") || childName.equals(".."))
@@ -844,8 +842,11 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         private FTPClient ftpClient;
 //        private CustomFTPClient ftpClient;
 
-        /** Sets whether passive mode should be used for data transfers (default is true) */
+        /** Controls whether passive mode should be used for data transfers (default is true) */
         private boolean passiveMode;
+
+        /** Encoding used by the FTP control connection */
+        private String encoding;
 
         /** False if SITE UTIME command is not supported by the remote server (once tried and failed) */
         private boolean utimeCommandSupported = true;
@@ -867,9 +868,18 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 //        }
 
 
-        private FTPConnectionHandler(FileURL location, boolean passiveMode) {
+        private FTPConnectionHandler(FileURL location) {
             super(location);
-            this.passiveMode = passiveMode;
+
+            // Determine if passive or active mode is to used
+            String passiveModeProperty = location.getProperty(PASSIVE_MODE_PROPERTY_NAME);
+            // Passive mode is enabled by default if property isn't specified
+            this.passiveMode = passiveModeProperty==null || !passiveModeProperty.equals("false");
+
+            // Determine encoding to use based on the encoding URL property, UTF-8 if property is not set
+            this.encoding = location.getProperty(ENCODING_PROPERTY_NAME);
+            if(encoding==null || encoding.equals(""))
+                encoding = DEFAULT_ENCODING;
 
             setKeepAlivePeriod(KEEP_ALIVE_PERIOD);
         }
@@ -961,7 +971,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 checkServerReply();
 
                 // Enables/disables passive mode
-                if(Debug.ON) Debug.trace("passive mode ="+passiveMode);
+                if(Debug.ON) Debug.trace("passiveMode="+passiveMode);
                 if(passiveMode)
                     this.ftpClient.enterLocalPassiveMode();
                 else
@@ -970,11 +980,16 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 // Set file type to 'binary'
                 ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
 
-                // Sets default control encoding to UTF-8 (ISO-8859-1 by default)
-                // Most modern FTP servers seem to default to UTF-8, but not all of them do
-                ftpClient.setControlEncoding("UTF-8");
-                // This command enables UTF8 on the remote server... but only a few FTP servers currently support this command
-                ftpClient.sendCommand("OPTS UTF8 ON");
+                // Sets the control encoding:
+                // - most modern FTP servers seem to default to UTF-8, but not all of them do.
+                // - commons-ftp defaults to ISO-8859-1 which is not good
+                if(Debug.ON) Debug.trace("encoding="+encoding);
+                ftpClient.setControlEncoding(encoding);
+
+                if(encoding.equalsIgnoreCase("UTF-8")) {
+                    // This command enables UTF8 on the remote server... but only a few FTP servers currently support this command
+                    ftpClient.sendCommand("OPTS UTF8 ON");
+                }
             }
             catch(IOException e) {
                 // Disconnect if something went wrong
