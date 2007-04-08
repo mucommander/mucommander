@@ -219,6 +219,8 @@ New features:
 
 Improvements:
  - Added 'Go to' button to 'Edit bookmarks' and 'Edit credentials' dialogs to go to the selected location
+ - Added 'Show seconds' and 'Show century' options to 'Date & time' preferences, to show seconds/century in file dates
+ - FTP encoding can be changed in the 'Connect to server' dialog ; connection properties are now saved with credentials
 
 Localization:
  - Russian translation update
