@@ -399,17 +399,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             return;
         }
 
-//        FileURL fileURL = URLFactory.getFileURL(folderPath);
-//
-//        if(fileURL==null) {
-//            // FileURL could not be resolved, notify the user that the folder doesn't exist
-//            showFolderDoesNotExistDialog();
-//        }
-//        else {
-//            this.changeFolderThread = new ChangeFolderThread(fileURL);
-//            changeFolderThread.start();
-//        }
-
         try {
             this.changeFolderThread = new ChangeFolderThread(new FileURL(folderPath));
             changeFolderThread.start();
@@ -494,17 +483,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Notify listeners that location has changed
         locationManager.fireLocationChanged(folder.getURL());
     }
-
-
-//    /**
-//     * Changes current folder to be the current folder's parent.
-//     * Does nothing if current folder doesn't have a parent. 
-//     */
-//    public synchronized void goToParent() {
-//        AbstractFile parent;
-//        if((parent=getCurrentFolder().getParent())!=null)
-//            tryChangeCurrentFolder(parent);
-//    }
 
 
     /**
@@ -706,9 +684,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                 // User cancelled the authentication dialog, stop
                 if(newCredentials==null)
                     userCancelled = true;
-                // Use the provided credentials and invalidate folder instance (if any)
+                // Use the provided credentials and invalidate the folder AbstractFile instance (if any) so that
+                // it gets recreated with the new credentials
                 else {
-                    folderURL.setCredentials(newCredentials);
+                    CredentialsManager.authenticate(folderURL, newCredentials);
                     folder = null;
                 }
             }
@@ -837,7 +816,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         // If some new credentials were entered by the user, these can now be considered valid
                         // (folder was changed successfully) -> add them to the credentials list.
                         Credentials credentials = folder.getURL().getCredentials();
-
                         if(credentials!=null) {
                             if(credentials instanceof MappedCredentials)
                                 CredentialsManager.addCredentials((MappedCredentials)credentials);
@@ -864,7 +842,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                                 // Invalidate AbstractFile instance
                                 folder = null;
                                 // Use the provided credentials
-                                folderURL.setCredentials(newCredentials);
+                                CredentialsManager.authenticate(folderURL, newCredentials);
                                 continue;
                             }
                         }

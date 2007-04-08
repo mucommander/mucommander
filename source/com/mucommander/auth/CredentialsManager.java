@@ -1,18 +1,18 @@
 
 package com.mucommander.auth;
 
-import com.mucommander.file.FileURL;
-import com.mucommander.util.AlteredVector;
-import com.mucommander.util.VectorChangeListener;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
+import com.mucommander.file.FileURL;
 import com.mucommander.io.BackupOutputStream;
+import com.mucommander.util.AlteredVector;
+import com.mucommander.util.VectorChangeListener;
 
-import java.util.Vector;
-import java.util.StringTokenizer;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.util.Enumeration;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 /**
@@ -237,89 +237,47 @@ public class CredentialsManager implements VectorChangeListener {
 
 
     /**
-     * Looks for the best implicit credentials matching the given location (if any) and use them in the FileURL
-     * by calling {@link FileURL#setCredentials(Credentials)}. Any credentials contained by the the given FileURL
-     * will be lost and replaced with the new ones (if any).
+     * Uses the given credentials in the specified FileURL, calling {@link FileURL#setCredentials(Credentials)} with
+     * the given credentials and setting the properties contained by the <code>MappedCredentials</code>'s realm (if any).
+
+     * <p>Any credentials contained by the the given FileURL will be lost and replaced with the new ones.
+     * If some properties are defined both in the realm and given FileURL, the ones from the FileURL will be preserved
+     * (will not be replaced).
      *
-     * @param location the location to authenticate
+     * @param location the FileURL to authenticate
+     * @param credentials the credentials to use to authenticate the given FileURL
+     */
+    public static void authenticate(FileURL location, MappedCredentials credentials) {
+        location.setCredentials(credentials);
+
+        FileURL realm = credentials.getRealm();
+        Enumeration propertyKeys = realm.getPropertyKeys();
+        if(propertyKeys!=null) {
+            String key;
+            while(propertyKeys.hasMoreElements()) {
+                key = (String)propertyKeys.nextElement();
+
+                if(location.getProperty(key)==null)
+                    location.setProperty(key, realm.getProperty(key));
+            }
+        }
+    }
+
+
+    /**
+     * Looks for the best implicit credentials matching the given location (if any) and use them to authenticate the
+     * location by calling {@link #authenticate(com.mucommander.file.FileURL, MappedCredentials)}.
+     *
+     * @param location the FileURL to authenticate
      */
     public static void authenticateImplicit(FileURL location) {
         if(Debug.ON) Debug.trace("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
 
         MappedCredentials creds[] = getMatchingCredentials(location);
         if(creds.length>0)
-            location.setCredentials(creds[0]);
+            authenticate(location, creds[0]);
     }
 
-
-//    /**
-//     * Looks for the best implicit credentials matching the given location (if any) and use them in the FileURL
-//     * by calling {@link FileURL#setCredentials(Credentials)}. Any credentials contained by the the given FileURL
-//     * will be lost and replaced by the new ones (if any).
-//     *
-//     * @param location the location to authenticate
-//     */
-//    public static void authenticateImplicit(FileURL location) {
-//        if(Debug.ON) Debug.trace("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
-//
-//        try {
-//            int match = indexOfRealm(implicitCredentials, MappedCredentials.resolveRealm(location));
-//
-//            if(match!=-1)
-//                location.setCredentials((MappedCredentials)implicitCredentials.elementAt(match));
-//        }
-//        catch(MalformedURLException e) {
-//            // Should never happen, report the error if it does
-//            if(Debug.ON) Debug.trace("Error: realm could not be resolved for location: "+location);
-//        }
-//    }
-
-    
-//    public static void addImplicitCredentials(Credentials credentials, FileURL location) {
-//        MappedCredentials mappedCredentials = (new MappedCredentials(credentials, location));
-//
-//        FileURL realm = mappedCredentials.getRealm();
-//
-//        int index = indexOfRealm(implicitCredentials, realm);
-//        if(index==-1)
-//            implicitCredentials.add(mappedCredentials);
-//        else
-//            implicitCredentials.setElementAt(mappedCredentials, index);
-//
-//        if(Debug.ON) Debug.trace("called, realm="+realm+" implicitCredentials="+implicitCredentials);
-//    }
-//
-//
-//    private static int indexOfRealm(Vector entries, FileURL realm) {
-//        int nbEntries = entries.size();
-//        for(int i=0; i<nbEntries; i++) {
-//            if(((MappedCredentials)entries.elementAt(i)).getRealm().equals(realm))
-//                return i;
-//        }
-//
-//        return -1;
-//    }
-
-
-//    /**
-//     * Looks for credentials matching the specified realm in the given credentials Vector and adds them to the given
-//     * matches Vector.
-//     *
-//     * @param realm the realm to find matching credentials for
-//     * @param credentials the Vector containing the MappedCredentials instances to compare to the given realm
-//     * @param matches the Vector where matching MappedCredentials instances will be added
-//     */
-//    private static void findMatches(FileURL realm, Vector credentials, Vector matches) {
-//        int nbEntries = credentials.size();
-//        MappedCredentials tempCredentials;
-//        for(int i=0; i<nbEntries; i++) {
-//            tempCredentials = (MappedCredentials)credentials.elementAt(i);
-//            if(tempCredentials.getRealm().equals(realm))
-//                matches.add(tempCredentials);
-//        }
-//
-//        if(Debug.ON) Debug.trace("returning matches="+matches);
-//    }
 
     /**
      * Looks for credentials matching the specified location in the given credentials Vector and adds them to the given

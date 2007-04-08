@@ -1,10 +1,12 @@
 package com.mucommander.auth;
 
+import com.mucommander.file.FileURL;
 import com.mucommander.xml.writer.XmlAttributes;
 import com.mucommander.xml.writer.XmlWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Enumeration;
 import java.util.Iterator;
 
 /**
@@ -35,9 +37,13 @@ public class CredentialsWriter implements CredentialsConstants {
 
         Iterator iterator = CredentialsManager.getPersistentCredentials().iterator();
         MappedCredentials credentials;
+        FileURL realm;
+        Enumeration propertyKeys;
+        String name;
 
         while(iterator.hasNext()) {
             credentials = (MappedCredentials)iterator.next();
+            realm = credentials.getRealm();
 
             // Start credentials element
             out.startElement(ELEMENT_CREDENTIALS);
@@ -45,7 +51,7 @@ public class CredentialsWriter implements CredentialsConstants {
 
             // Write URL
             out.startElement(ELEMENT_URL);
-            out.writeCData(credentials.getRealm().toString(false));
+            out.writeCData(realm.toString(false));
             out.endElement(ELEMENT_URL);
 
             // Write login
@@ -57,6 +63,19 @@ public class CredentialsWriter implements CredentialsConstants {
             out.startElement(ELEMENT_PASSWORD);
             out.writeCData(credentials.getEncryptedPassword());
             out.endElement(ELEMENT_PASSWORD);
+
+            // Write properties, each property is stored in a separate 'property' element
+            propertyKeys = realm.getPropertyKeys();
+            if(propertyKeys!=null) {
+                while(propertyKeys.hasMoreElements()) {
+                    name = (String)propertyKeys.nextElement();
+                    attributes = new XmlAttributes();
+                    attributes.add(ATTRIBUTE_NAME, name);
+                    attributes.add(ATTRIBUTE_VALUE, realm.getProperty(name));
+                    out.startElement(ELEMENT_PROPERTY, attributes);
+                    out.endElement(ELEMENT_PROPERTY);
+                }
+            }
 
             // End credentials element
             out.endElement(ELEMENT_CREDENTIALS);

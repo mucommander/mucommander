@@ -25,10 +25,19 @@ interface CredentialsConstants {
     /** Element containing the credentials' (encrypted) password*/
     static final String ELEMENT_PASSWORD = "password";
 
+    /** Element that defines a property (name/value pair) */
+    static final String ELEMENT_PROPERTY = "property";
+
+    /** Name attribute of the property element */
+    static final String ATTRIBUTE_NAME = "name";
+
+    /** Value attribute of the property element */
+    static final String ATTRIBUTE_VALUE = "value";
+
     /** Root element's attribute containing the encryption method used for passwords */
     static final String ATTRIBUTE_ENCRYPTION = "encryption";
 
     /** Weak password encryption method */
-    public static final String WEAK_ENCRYPTION_METHOD = "weak";
+    static final String WEAK_ENCRYPTION_METHOD = "weak";
 
 }
