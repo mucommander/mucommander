@@ -9,6 +9,7 @@ import com.mucommander.file.impl.local.LocalFile;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -494,8 +495,7 @@ public class FileURL implements Cloneable {
     /**
      * Returns the realm of a given location, that is the URL to the host (if this URL contains one), port
      * (if this URL contains one) and share path (if the location's protocol has a notion of share, e.g. SMB).
-     * Credentials and properties of the given FileURL are not copied.
-     *
+     * Properties contained by the give FileURL are copied, but Credentials aren't.
      *
      * <p>A few examples:
      * <ul>
@@ -526,8 +526,10 @@ public class FileURL implements Cloneable {
         realm.protocol = location.protocol;
         realm.host = location.host;
         realm.port = location.port;
-
         realm.path = newPath;
+
+        if(location.properties!=null)   // Clone properties if lcoation contains any
+            realm.properties = (Hashtable)location.properties.clone();
 
         return realm;
     }
@@ -589,6 +591,14 @@ public class FileURL implements Cloneable {
             properties = new Hashtable();
 
         properties.put(name, value);
+    }
+
+
+    /**
+     * Returns an Enumeration of property keys, or null if this FileURL contains no keys.
+     */
+    public Enumeration getPropertyKeys() {
+        return properties==null?null:properties.keys();
     }
 
 
