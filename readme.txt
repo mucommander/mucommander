@@ -216,6 +216,7 @@ What's new since v0.8 beta 3 ?
 New features:
  - Added 'Use system file icons' option to 'Appearance' preferences, allowing to display file icons as they are displayed on the system's desktop
  - Added 'Show folders first' option to 'View' menu, allowing to control whether folders are displayed first (default) or mixed with regular files
+ - Added support for Growl: notifications are sent when transfers are complete or an error has occurred
 
 Improvements:
  - Added 'Go to' button to 'Edit bookmarks' and 'Edit credentials' dialogs to go to the selected location
