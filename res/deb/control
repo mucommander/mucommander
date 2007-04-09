@@ -1,0 +1,12 @@
+Package: mucommander
+Version: @VERSION@
+Section: contrib/misc
+Priority: optional
+Recommends: kaffe | java-virtual-machine
+Architecture: all
+Installed-Size: @SIZE@
+Maintainer: Maxence Bernard <maxence@maxence.info>
+Description: Java based file commander
+ muCommander is a lightweight, cross-platform file manager featuring a Norton Commander style interface and running on any operating system with Java support.
+ .
+ For more information see http://www.mucommander.com
