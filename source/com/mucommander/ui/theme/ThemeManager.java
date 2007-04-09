@@ -75,11 +75,7 @@ public class ThemeManager {
 
         // Loads the current theme type as defined in configuration.
         try {type = getThemeTypeFromLabel(ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE));}
-        // If some error occurs here (unknown theme type), use configuration defaults.
-        catch(Exception e) {
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE);
-            type = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);
-        }
+        catch(Exception e) {type = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);}
 
         // Loads the current theme name as defined in configuration.
         if(type != Theme.USER_THEME) {
@@ -114,6 +110,7 @@ public class ThemeManager {
                     wasUserThemeModified = true;
                 }
             }
+            setConfigurationTheme(currentTheme);
         }
     }
 

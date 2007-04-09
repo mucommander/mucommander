@@ -114,8 +114,9 @@ public class Launcher {
      * Main method used to startup muCommander.
      */
     public static void main(String args[]) {
-        SplashScreen splashScreen; // Splashscreen instance.
-        int          i;            // Index in the command line arguments.
+        SplashScreen splashScreen;  // Splashscreen instance.
+        int          i;             // Index in the command line arguments.
+        boolean      showSetup;     // Whether or not to show the setup dialog.
 
         // - Command line parsing -------------------------------------
         // ------------------------------------------------------------
@@ -238,6 +239,8 @@ public class Launcher {
         if(PlatformManager.OS_FAMILY != PlatformManager.MAC_OS_X)
             ConfigurationManager.loadConfiguration();
 
+        showSetup = ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE) == null;
+
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 		
@@ -311,7 +314,7 @@ public class Launcher {
             new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
 
         // If no theme is configured in the preferences, ask for an initial theme.
-        if(ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE) == null)
+        if(showSetup)
             new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
     }
 }

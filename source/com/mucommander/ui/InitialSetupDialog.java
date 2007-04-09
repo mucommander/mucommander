@@ -173,7 +173,7 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
 	    ConfigurationManager.setVariable(ConfigurationVariables.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
 	else if(e.getSource() == okButton) {
 	    ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
-	    ConfigurationManager.getVariable(ConfigurationVariables.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
+	    ConfigurationManager.setVariable(ConfigurationVariables.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
 	    dispose();
 	}
     }
