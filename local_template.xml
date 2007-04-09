@@ -9,6 +9,11 @@
   <!-- be changed to another version by editing this value.    -->
   <property name="proguard"        location="${tools}/proguard.jar"/>
 
+  <!-- Path to the JDeb binaries.                              -->
+  <!-- Defaults to the one bundled with the project, but can   -->
+  <!-- be changed to another version by editing this value.    -->
+  <property name="jdeb"            location="${tools}/jdeb.jar"/>
+
   <!-- Path to the Ant core libraries (used to compile tools). -->
   <property name="ant.lib"         location=""/>
 

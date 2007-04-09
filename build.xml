@@ -132,10 +132,12 @@
   <!-- ======================================================= -->
   <!-- Portable release scripts.                               -->
   <property name="portable.dir"        location="${res}/portable"/>
+  <!-- Temporary directory for the portable scripts.           -->
+  <property name="portable.tmp"        location="${tmp}/portable"/>
   <!-- POSIX portable muCommander startup script.              -->
-  <property name="portable.sh"         location="${portable.dir}/mucommander.sh"/>
+  <property name="portable.sh"         location="${portable.tmp}/mucommander.sh"/>
   <!-- Win32 portable muCommander startup script.              -->
-  <property name="portable.bat"        location="${portable.dir}/mucommander.bat"/>
+  <property name="portable.exe"        location="${portable.tmp}/mucommander.exe"/>
 
 
 
@@ -181,6 +183,18 @@
   <!-- Directory in which NSIS will store its temporary files. -->
   <property name="nsis.tmp"            location="${tmp}/nsis"/>
 
+
+
+  <!-- = Debian values ======================================= -->
+  <!-- ======================================================= -->
+  <!-- Directory in which the deb scripts are stored.          -->
+  <property name="deb.dir"             location="${res}/deb"/>
+  <!-- Directory in which to store .deb temporary files.       -->
+  <property name="deb.tmp"             location="${tmp}/deb"/>
+  <!-- Data part of the debian package.                        -->
+  <property name="deb.data"            location="${deb.tmp}/data"/>
+  <!-- Control part of the debian package.                     -->
+  <property name="deb.control"         location="${deb.tmp}/control"/>
 
 
   <!-- = Different JAR files ================================= -->
@@ -258,6 +272,9 @@
     <delete dir="${dist}"/>
     <delete dir="${doc.api}"/>
     <delete dir="${doc}"/>
+    <delete dir="${deb.tmp}"/>
+    <delete dir="${deb.control}"/>
+    <delete dir="${deb.data}"/>
     <echo>Deleting emacs backup files...</echo>
     <delete includeEmptyDirs="true">
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
@@ -293,9 +310,7 @@
     </condition>
   </target>
 
-  <!-- Checks whether launch4j is available or not.            -->
-  <!-- If it is, sets ${launch4j.available} to true.           -->
-  <target name="check-launch4j">
+  <target name="launch4j-available">
     <condition property="launch4j.available" value="true">
       <and>
         <available file="${launch4j.dir}" type="dir"/>
@@ -307,6 +322,12 @@
         </not>
       </and>
     </condition>
+  </target>
+
+  <!-- Checks whether launch4j is available or not.            -->
+  <!-- If it is, sets ${launch4j.available} to true.           -->
+  <target name="check-launch4j" depends="launch4j-available" if="launch4j.available">
+    <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/xstream.jar"/>
   </target>
 
   <!-- Checks whether the keystore password is available.      -->
@@ -701,7 +722,7 @@
 
   <!-- Generates builds of pretty much anything we could       -->
   <!-- think of.                                               -->
-  <target name="release" depends="source,tgz,app.tgz,nsis,portable,version,sign,jnlp,docs-tgz">
+  <target name="release" depends="source,tgz,app.tgz,nsis,deb,portable,version,sign,jnlp,docs-tgz">
     <echo>All done.</echo>
   </target>
 
@@ -731,9 +752,18 @@
   <target name="tgz" depends="compress,archive-prefix,package-prefix">
     <echo>Packaging Unix distribution as ${dist}/${package-prefix}.tar.gz...</echo>
 
+    <!-- Makes sure the muCommander startup script uses the    -->
+    <!-- proper arguments.                                     -->
+    <copy todir="${tmp}">
+      <fileset file="${res}/mucommander.sh"/>
+      <filterset>
+        <filter token="ARGS" value=""/>
+      </filterset>
+    </copy>
+
     <!-- Generates the TGZ file, keeping execution flags.      -->
     <tar destfile="${dist}/${package-prefix}.tar.gz" compression="gzip">
-      <tarfileset file="${res}/mucommander.sh" prefix="${archive-prefix}" mode="755"/>
+      <tarfileset file="${tmp}/mucommander.sh" prefix="${archive-prefix}" mode="755"/>
       <tarfileset file="${res.license}"        prefix="${archive-prefix}"/>
       <tarfileset file="${res.readme}"         prefix="${archive-prefix}"/>
       <tarfileset file="${jar.cmp}"            prefix="${archive-prefix}"/>
@@ -791,7 +821,6 @@
   <!-- found to be available.                                  -->
   <target name="exe" depends="check-launch4j,compress" if="launch4j.available">
     <echo>Creating Win32 executable in ${exe.file}...</echo>
-    <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/xstream.jar"/>
     <launch4j>
       <config outfile="${exe.file}" jarpath="${jar.cmp}" icon="${nsis.icon}">
         <jre minversion="${app.jvm}.0"/>
@@ -807,17 +836,40 @@
   <target name="dmg" depends="compress">
   </target>
 
+  <!-- Generates a Win32 executable file for the portable      -->
+  <!-- version of muCommander.                                 -->
+  <!-- This target will only be executed if launch4j is        -->
+  <!-- found to be available.                                  -->
+  <target name="portable-exe" depends="check-launch4j" if="launch4j.available">
+    <echo>Creating Win32 portable executable in ${portable.exe}...</echo>
+    <mkdir dir="${portable.tmp}"/>
+    <launch4j>
+      <config outfile="${portable.exe}" jarpath="mucommander.jar" icon="${nsis.icon}" dontwrapjar="true" jarargs="-p .mucommander" chdir=".">
+        <jre minversion="${app.jvm}.0"/>
+      </config>
+    </launch4j>
+  </target>
+
   <!-- Generates a 'portable' distribution version of          -->
   <!-- muCommander.                                            -->
-  <target name="portable" depends="compress,archive-prefix,package-prefix">
+  <target name="portable" depends="compress,portable-exe,archive-prefix,package-prefix">
     <echo>Packaging portable distribution as ${dist}/${package-prefix}-portable.tar.gz...</echo>
+
+    <!-- Makes sure the muCommander startup scripts uses the   -->
+    <!-- proper arguments.                                     -->
+    <copy tofile="${portable.sh}">
+      <fileset file="${res}/mucommander.sh"/>
+      <filterset>
+        <filter token="ARGS" value="-p $0/../.mucommander"/>
+      </filterset>
+    </copy>
 
     <!-- Generates the TGZ file, keeping execution flags.      -->
     <tar destfile="${dist}/${package-prefix}-portable.tar.gz" compression="gzip">
       <tarfileset file="${portable.sh}"  prefix="${archive-prefix}" mode="755"/>
-      <tarfileset file="${portable.bat}" prefix="${archive-prefix}"/>
-      <tarfileset file="${res.license}"      prefix="${archive-prefix}"/>
-      <tarfileset file="${res.readme}"       prefix="${archive-prefix}"/>
+      <tarfileset file="${portable.exe}" prefix="${archive-prefix}"/>
+      <tarfileset file="${res.license}"  prefix="${archive-prefix}"/>
+      <tarfileset file="${res.readme}"   prefix="${archive-prefix}"/>
       <tarfileset file="${jar.cmp}"      prefix="${archive-prefix}"/>
     </tar>
   </target>
@@ -903,5 +955,60 @@
       </resources>
       <applicationdesc main="${main-class}"/>
     </jnlp>
+  </target>
+
+  <!-- Generates the muCommander debian package.               -->
+  <target name="deb" depends="compress">
+    <!-- Generates the debian package name.                    -->
+    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar}"/>
+    <strreplace from="${app.version}${app.subversion}" to="deb.version" what="[ ]" with="-"/>
+
+    <!-- Creates the required directories.                     -->
+    <echo>Creating debian package in ${dist}/mucommander_${deb.version}_all.deb</echo>
+    <mkdir dir="${deb.tmp}"/>
+    <mkdir dir="${deb.control}"/>
+    <mkdir dir="${deb.data}"/>
+    <mkdir dir="${deb.data}/usr/share/mucommander"/>
+
+    <!-- Copies the debian control files.                      -->
+    <copy todir="${deb.control}">
+      <fileset dir="${deb.dir}"/>
+      <filterset>
+        <filter token="VERSION" value="${deb.version}"/>
+        <filter token="SIZE" value="7848"/>
+      </filterset>
+    </copy>
+
+    <!-- Copies the debian data files.                         -->
+    <copy todir="${deb.data}/usr/share/mucommander">
+      <fileset file="${res}/mucommander.sh"/>
+      <filterset>
+        <filter token="ARGS" value=""/>
+      </filterset>
+    </copy>
+    <copy todir="${deb.data}/usr/share/mucommander">
+      <fileset file="${res}/mucommander.sh"/>
+      <fileset file="${res.license}"/>
+      <fileset file="${res.readme}"/>
+      <fileset file="${jar.cmp}"/>
+    </copy>
+
+
+    <!-- Generates the data.tar.gz file.                       -->
+    <tar destfile="${deb.tmp}/data.tar.gz" compression="gzip">
+      <tarfileset dir="${deb.data}">
+        <include name="**"/>
+        <exclude name="**/usr/share/mucommander/mucommander.sh"/>
+      </tarfileset>
+      <tarfileset dir="${deb.data}/" mode="755">
+        <include name="**/usr/share/mucommander/mucommander.sh"/>
+      </tarfileset>
+    </tar>
+
+    <!-- Generates the debian package.                         -->
+    <taskdef name="deb" classname="org.vafer.jdeb.DebAntTask" classpath="${jdeb}"/>
+    <deb destfile="${dist}/mucommander_${deb.version}_all.deb" control="${deb.control}">
+      <data src="${deb.tmp}/data.tar.gz"/>
+    </deb>
   </target>
 </project>
