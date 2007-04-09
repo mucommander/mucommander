@@ -1,9 +1,11 @@
 ant-bzip2.jar	       -> from Ant 1.6.5 (compiled for Java 1.3)
-ant-tar.jar	       -> from Ant 1.6.5 (compiled for Java 1.3)
+ant-tar.jar	           -> from Ant 1.6.5 (compiled for Java 1.3)
 commons-logging.jar    -> Commons-logging (home-made, empty stubs)
 commons-net.jar	       -> Commons-net 1.4.1
-j2ssh.jar	       -> J2SSH 0.2.7 (patched and compiled for Java 1.3)
+j2ssh.jar	           -> J2SSH 0.2.7 (patched and compiled for Java 1.3)
 jakarta-oro.jar	       -> Jakarta Oro 2.0.8
-jcifs.jar	       -> jCIFS 1.2.13 (compiled for Java 1.4 and patched to prevent NPE)
+jcifs.jar	           -> jCIFS 1.2.13 (compiled for Java 1.4 and patched to prevent NPE)
 osx-eawt-stubs.jar     -> Stubs for Mac OS X's EAWT API (for Java 1.4+)
+osx-cocoa.jar          -> Java-cocoa bridge provided by Apple under Mac OS X in the /System/Library/Java folder (deprecated).
+osx-growl.jar          -> Growl Java bindings, updated on 09/04/2007. Uses the Java-cocoa bridge. 
 jmdns.jar              -> jmdns 1.0 (with some sourceforge.net patches, compiled for Java 1.4)

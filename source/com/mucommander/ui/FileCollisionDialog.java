@@ -2,13 +2,14 @@
 package com.mucommander.ui;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.dialog.TextFieldsPanel;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
-import com.mucommander.job.FileCollisionChecker;
+import com.mucommander.ui.macosx.GrowlSupport;
 
 import javax.swing.*;
 import java.awt.*;
@@ -166,6 +167,10 @@ public class FileCollisionDialog extends QuestionDialog {
             applyToAllCheckBox = new JCheckBox(Translator.get("apply_to_all"));
             addCheckBox(applyToAllCheckBox);
         }
+
+        // Send a growl notification
+        if(GrowlSupport.isGrowlAvailable())
+            GrowlSupport.sendNotification(this, GrowlSupport.NOTIFICATION_TYPE_JOB_ERROR, getTitle(), desc);
     }
 
 

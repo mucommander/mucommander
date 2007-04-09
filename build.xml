@@ -410,6 +410,7 @@
         <include name="**/*.jar"/>
         <!-- Exclude API that are used only at compile time.   -->
         <exclude name="osx-eawt-stubs.jar"/>
+        <exclude name="osx-cocoa.jar"/>
         <exclude name="servlet-api.jar"/>
     </fileset>
     </unjar>
@@ -512,6 +513,8 @@
       <libraryjar name="${java.lib}"/>
       <libraryjar name="${ant.lib}"/>
       <libraryjar name="${lib}/osx-eawt-stubs.jar"/>
+      <libraryjar name="${lib}/osx-cocoa.jar"/>
+      <libraryjar name="${lib}/osx-growl.jar"/>
       <libraryjar name="${lib}/servlet-api.jar"/>
 
       <!-- Viewer API uses reflection                          -->

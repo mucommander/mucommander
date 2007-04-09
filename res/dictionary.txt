@@ -4784,6 +4784,20 @@ progress_dialog.job_finished:PL:Zakończono
 
 
 
+progress_dialog.job_error:EN:Job error
+progress_dialog.job_error:FR:Erreur pendant tâche
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
 #####################
 # Properties dialog #
 #####################
