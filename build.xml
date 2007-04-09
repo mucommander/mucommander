@@ -795,7 +795,7 @@
     <echo>Creating Mac OS X application in ${app.folder}...</echo>
     <taskdef name="app" classname="com.mucommander.ant.macosx.AppTask" classpath="${tools.jar}"/>
     <app jar="${jar.cmp}" dest="${app.folder}" type="APPL" signature="MUCO" icon="${res}/icons/icon.icns"
-         infoversion="0.9">
+         infoversion="0.9" classpath="/System/Library/Java">
       <string  name="CFBundleName"                    value="muCommander"/>
       <string  name="CFBundleVersion"                 value="${app.version}${app.subversion}"/>
       <boolean name="CFBundleAllowMixedLocalizations" value="true"/>

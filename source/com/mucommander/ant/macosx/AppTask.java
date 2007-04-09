@@ -137,7 +137,8 @@ import java.net.URL;
  *     {@link #KEY_ICON CfBundleIconFile}: set to the path to the application's {@link #setIcon(File) icon}.
  *   </li>
  *   <li>
- *     {@link #KEY_CLASSPATH Java/ClassPath}: set to the path to the application's {@link #setJar(File) jar}.
+ *     {@link #KEY_CLASSPATH Java/ClassPath}: set to the path to the application's {@link #setJar(File) jar}. Note that elements
+ *     can be added to that key using {@link #setClasspath(String)}.
  *   </li>
  * </ul>
  * </p>
@@ -217,6 +218,8 @@ public class AppTask extends Task {
     private File           jar;
     /** DTD version of the <code>Info.plist</code> file. */
     private String         infoVersion;
+    /** Additional classpath elements. */
+    private String         classpath;
 
 
 
@@ -237,6 +240,7 @@ public class AppTask extends Task {
         icon        = null;
         properties  = new DictValue();
         jar         = null;
+        classpath   = null;
     }
 
 
@@ -286,6 +290,8 @@ public class AppTask extends Task {
      * @param f path to the application's JAR file.
      */
     public void setJar(File f) {jar = f;}
+
+    public void setClasspath(String classpath) {this.classpath = classpath;}
 
     /**
      * Sets the DTD version of the <code>Info.plist</code> file.
@@ -397,7 +403,7 @@ public class AppTask extends Task {
         // Adds the DICT_JAVA/KEY_CLASSPATH key.
         buffer = java.createString();
         buffer.setName(KEY_CLASSPATH);
-        buffer.setValue("$JAVAROOT/" + jar.getName());
+        buffer.setValue("$JAVAROOT/" + jar.getName() + (classpath == null ? "" : ':' + classpath));
 
     }
 
