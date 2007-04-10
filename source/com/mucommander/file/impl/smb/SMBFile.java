@@ -289,7 +289,7 @@ public class SMBFile extends AbstractFile {
                 
                 // Note: properties and credentials are cloned for every children's url
                 childURL = (FileURL)fileURL.clone();
-                childURL.setPath(smbFile.getCanonicalPath());
+                childURL.setPath(smbFile.getURL().getPath());
 //                childURL = new FileURL(smbFile.getCanonicalPath());
 //                childURL.setCredentials(credentials);
 
