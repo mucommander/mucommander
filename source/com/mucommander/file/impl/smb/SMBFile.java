@@ -2,7 +2,6 @@ package com.mucommander.file.impl.smb;
 
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
-import com.mucommander.auth.Credentials;
 import com.mucommander.file.*;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -281,15 +280,18 @@ public class SMBFile extends AbstractFile {
             FileURL childURL;
             SmbFile smbFile;
             int currentIndex = 0;
-            Credentials credentials = fileURL.getCredentials();
+//            Credentials credentials = fileURL.getCredentials();
             for(int i=0; i<nbSmbFiles; i++) {
                 smbFile = smbFiles[i];
                 smbFileType = smbFile.getType();
                 if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
                     continue;
                 
-                childURL = new FileURL(smbFile.getCanonicalPath());
-                childURL.setCredentials(credentials);
+                // Note: properties and credentials are cloned for every children's url
+                childURL = (FileURL)fileURL.clone();
+                childURL.setPath(smbFile.getCanonicalPath());
+//                childURL = new FileURL(smbFile.getCanonicalPath());
+//                childURL.setCredentials(credentials);
 
                 child = FileFactory.wrapArchive(new SMBFile(childURL, smbFile));
                 child.setParent(this);
