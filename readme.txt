@@ -75,6 +75,7 @@ Translators:
 - Marcos Cobeña (Spanish)
 - Peter Vasko and Jaromír Mára (Czech)
 - Kent Hsu (Traditional Chinese)
+- Jioh L. Jung (Korean)
 - Andrzej Kosiński (Polish)
 - Tamás Balogh-Walder (Hungarian)
 - XXXX Pro (Russian)
@@ -224,6 +225,7 @@ Improvements:
  - FTP encoding can be changed in the 'Connect to server' dialog ; connection properties are now saved with credentials
 
 Localization:
+ - Korean translation contributed by Jioh L. Jung
  - Russian translation update
 
 Bug fixes:
