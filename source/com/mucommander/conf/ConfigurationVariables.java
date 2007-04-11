@@ -330,4 +330,15 @@ public interface ConfigurationVariables {
     public static final String  USE_CUSTOM_VIEWER                 = VIEWER_SECTION + '.' + "use_custom";
     /** Default value for {@link #USE_CUSTOM_VIEWER}. */
     public static final boolean DEFAULT_USE_CUSTOM_VIEWER         = false;
+
+
+    // - Variables used for FTP ----------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section containing all FTP variables. */
+    public static final String FTP_SECTION                        = ROOT_SECTION + '.' + "ftp";
+    /** Controls whether hidden files should be listed by the client (LIST -al instead of LIST -l) */
+    public static final String LIST_HIDDEN_FILES                  = FTP_SECTION + '.' + "list_hidden_files";
+    /** Default value for {@link #LIST_HIDDEN_FILES} */
+    public static final boolean DEFAULT_LIST_HIDDEN_FILES         = false;
+
 }

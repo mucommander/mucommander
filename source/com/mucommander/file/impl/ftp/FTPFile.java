@@ -4,6 +4,8 @@ package com.mucommander.file.impl.ftp;
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.*;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
@@ -979,6 +981,15 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
                 // Set file type to 'binary'
                 ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+
+                // Issue 'LIST -al' command to list hidden files (instead of LIST -l), only if the corresponding
+                // configuration variable has been manually enabled in the preferences.
+                // The reason for not doing so by default is that the commons-net library will fail to properly parse
+                // directory listings on some servers when 'LIST -al' is used (bug).
+                // Note that by default, if 'LIST -l' is used, the decision to list hidden files is left to the
+                // FTP server: some servers will choose to show them, some other will not. This behavior usually is a
+                // configuration setting of the FTP server.
+                ftpClient.setListHiddenFiles(ConfigurationManager.getVariableBoolean(ConfigurationVariables.LIST_HIDDEN_FILES, ConfigurationVariables.DEFAULT_LIST_HIDDEN_FILES));
 
                 // Sets the control encoding:
                 // - most modern FTP servers seem to default to UTF-8, but not all of them do.
