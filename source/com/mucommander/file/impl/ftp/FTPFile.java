@@ -951,23 +951,31 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 if(port!=-1)
                     ftpClient.setDefaultPort(port);
 
-                // Connect
+                // Sets the control encoding
+                // - most modern FTP servers seem to default to UTF-8, but not all of them do.
+                // - commons-ftp defaults to ISO-8859-1 which is not good
+                // Note: this has to be done before the connection is established otherwise it won't be taken into account
+                if(Debug.ON) Debug.trace("encoding="+encoding);
+                ftpClient.setControlEncoding(encoding);
+
+                // Connect to the FTP server
                 ftpClient.connect(realm.getHost());
 
 //                // Set a socket timeout: default value is 0 (no timeout)
 //                ftpClient.setSoTimeout(CONNECTION_TIMEOUT*1000);
-
-                if(Debug.ON) Debug.trace("soTimeout="+ftpClient.getSoTimeout());
+//                if(Debug.ON) Debug.trace("soTimeout="+ftpClient.getSoTimeout());
 
                 // Throw an IOException if server replied with an error
                 checkServerReply();
 
                 Credentials credentials = getCredentials();
 
+                // Throw an AuthException if there are no credentials
                 if(Debug.ON) Debug.trace("fileURL="+ realm.toString(true)+" credentials="+ credentials);
                 if(credentials ==null)
                     throw new AuthException(realm);
 
+                // Login
                 ftpClient.login(credentials.getLogin(), credentials.getPassword());
                 // Throw an IOException (potentially an AuthException) if the server replied with an error
                 checkServerReply();
@@ -990,12 +998,6 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 // FTP server: some servers will choose to show them, some other will not. This behavior usually is a
                 // configuration setting of the FTP server.
                 ftpClient.setListHiddenFiles(ConfigurationManager.getVariableBoolean(ConfigurationVariables.LIST_HIDDEN_FILES, ConfigurationVariables.DEFAULT_LIST_HIDDEN_FILES));
-
-                // Sets the control encoding:
-                // - most modern FTP servers seem to default to UTF-8, but not all of them do.
-                // - commons-ftp defaults to ISO-8859-1 which is not good
-                if(Debug.ON) Debug.trace("encoding="+encoding);
-                ftpClient.setControlEncoding(encoding);
 
                 if(encoding.equalsIgnoreCase("UTF-8")) {
                     // This command enables UTF8 on the remote server... but only a few FTP servers currently support this command
