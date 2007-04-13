@@ -1,5 +1,5 @@
-ant-bzip2.jar	       -> from Ant 1.6.5 (compiled for Java 1.3)
-ant-tar.jar	           -> from Ant 1.6.5 (compiled for Java 1.3)
+ant-bzip2.jar	       -> from Ant 1.7.0 (compiled for Java 1.4)
+ant-tar.jar	           -> from Ant 1.7.0 (compiled for Java 1.4)
 commons-logging.jar    -> Commons-logging (home-made, empty stubs)
 commons-net.jar	       -> Commons-net 1.4.1
 j2ssh.jar	           -> J2SSH 0.2.7 (patched and compiled for Java 1.3)
