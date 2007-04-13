@@ -22,10 +22,13 @@ import java.util.Vector;
  */
 public class ShowServerConnectionsDialog extends FocusDialog implements ActionListener {
 
+    private MainFrame mainFrame;
+
     private JList connectionList;
     private Vector connections;
 
     private JButton disconnectButton;
+    private JButton goToButton;
     private JButton closeButton;
 
     // Dialog's size has to be at least 400x300
@@ -37,6 +40,8 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
     
     public ShowServerConnectionsDialog(MainFrame mainFrame) {
         super(mainFrame, Translator.get(com.mucommander.ui.action.ShowServerConnectionsAction.class.getName()+".label"), mainFrame);
+
+        this.mainFrame = mainFrame;
 
         Container contentPane = getContentPane();
 
@@ -78,18 +83,29 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
         // Add buttons
 
         XBoxPanel buttonsPanel = new XBoxPanel();
+        JPanel buttonGroupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         MnemonicHelper mnemonicHelper = new MnemonicHelper();
 
-        // Remove button
+        // Disconnect button
         disconnectButton = new JButton(Translator.get("server_connections_dialog.disconnect"));
         disconnectButton.setMnemonic(mnemonicHelper.getMnemonic(disconnectButton));
         disconnectButton.setEnabled(hasConnections);
         if(hasConnections)
             disconnectButton.addActionListener(this);
 
-        buttonsPanel.add(disconnectButton);
+        buttonGroupPanel.add(disconnectButton);
 
-        // 'Done' button that closes the window
+        // Go to button
+        goToButton = new JButton(Translator.get("go_to"));
+        goToButton.setMnemonic(mnemonicHelper.getMnemonic(goToButton));
+        goToButton.setEnabled(hasConnections);
+        if(hasConnections)
+            goToButton.addActionListener(this);
+        buttonGroupPanel.add(goToButton);
+
+        buttonsPanel.add(buttonGroupPanel);
+
+        // Button that closes the window
         closeButton = new JButton(Translator.get("close"));
         closeButton.setMnemonic(mnemonicHelper.getMnemonic(closeButton));
         closeButton.addActionListener(this);
@@ -118,11 +134,8 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        // Dispose the dialog
-        if (source== closeButton)  {
-            dispose();
-        }
-        else if(source==disconnectButton) {
+        // Disconnects the selected connection
+        if(source==disconnectButton) {
             int selectedIndex = connectionList.getSelectedIndex();
 
             if(selectedIndex>=0 && selectedIndex<connections.size()) {
@@ -141,9 +154,25 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
                 connectionList.setSelectedIndex(Math.min(selectedIndex, connections.size()));
                 connectionList.repaint();
 
-                if(connections.size()==0)
+                // Disable contextual butons if there are no more connections
+                if(connections.size()==0) {
                     disconnectButton.setEnabled(false);
+                    goToButton.setEnabled(false);
+                }
             }
+        }
+        // Goes to the selected connection
+        else if (source==goToButton)  {
+            // Dispose the dialog first
+            dispose();
+
+            int selectedIndex = connectionList.getSelectedIndex();
+            if(selectedIndex>=0 && selectedIndex<connections.size())
+                mainFrame.getActiveTable().getFolderPanel().tryChangeCurrentFolder(((ConnectionHandler)connections.elementAt(selectedIndex)).getRealm());
+        }
+        // Dispose the dialog
+        else if (source==closeButton)  {
+            dispose();
         }
     }
 }
