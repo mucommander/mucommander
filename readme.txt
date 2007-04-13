@@ -220,9 +220,10 @@ New features:
  - Added support for Growl: notifications are sent when transfers are complete or an error has occurred
 
 Improvements:
- - Added 'Go to' button to 'Edit bookmarks' and 'Edit credentials' dialogs to go to the selected location
+ - Added 'Go to' button to 'Edit bookmarks', 'Edit credentials' and 'Show open connections' dialogs to go to the selected location
  - Added 'Show seconds' and 'Show century' options to 'Date & time' preferences, to show seconds/century in file dates
  - FTP encoding can be changed in the 'Connect to server' dialog ; connection properties are now saved with credentials
+ - Ant Tar and Bzip2 libraries updated to version 1.7.0
 
 Localization:
  - Korean translation contributed by Jioh L. Jung
