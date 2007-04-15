@@ -330,6 +330,15 @@ public class SMBFile extends AbstractFile {
     }
 
 
+    public boolean canRunProcess() {
+        return false;
+    }
+
+    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
+        throw new IOException();
+    }
+
+
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -419,9 +428,10 @@ public class SMBFile extends AbstractFile {
         return file.equals(((SMBFile)f).file);
     }
 
-    public boolean canRunProcess() {return false;}
 
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {throw new IOException();}
+    ///////////////////
+    // Inner classes //
+    ///////////////////
 
     /**
      * SMBRandomAccessInputStream extends RandomAccessInputStream to provide random access to an <code>SMBFile</code>'s

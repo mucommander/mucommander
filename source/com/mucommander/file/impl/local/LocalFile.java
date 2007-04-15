@@ -47,57 +47,12 @@ public class LocalFile extends AbstractFile {
 
 
     /**
-     * FSRandomAccessInputStream extends RandomAccessInputStream to provide random access to an <code>LocalFile</code>'s
-     * content.
-     */
-    public class FSRandomAccessInputStream extends RandomAccessInputStream {
-
-        private RandomAccessFile raf;
-
-        public FSRandomAccessInputStream(RandomAccessFile raf) {
-            this.raf = raf;
-        }
-
-        public int read() throws IOException {
-            return raf.read();
-        }
-
-        public int read(byte b[]) throws IOException {
-            return raf.read(b);
-        }
-
-        public int read(byte b[], int off, int len) throws IOException {
-            return raf.read(b, off, len);
-        }
-
-        public void close() throws IOException {
-            raf.close();
-        }
-
-        public long getOffset() throws IOException {
-            return raf.getFilePointer();
-        }
-
-        public long getLength() throws IOException {
-            return raf.length();
-        }
-
-        public void seek(long pos) throws IOException {
-            raf.seek(pos);
-        }
-    }
-
-    /**
      * Creates a new instance of LocalFile.
      */
     public LocalFile(FileURL fileURL) throws IOException {
         super(fileURL);
 
         String path = fileURL.getPath();
-
-//        // Remove leading '/' if path is 'a la windows', i.e. starts with a drive like C:\
-//        if(path.indexOf(":\\")!=-1 && path.charAt(0)=='/')
-//            path = path.substring(1, path.length());
 
         // If OS is Windows and hostname is not 'localhost', translate path back
         // into a Windows-style UNC network path ( \\hostname\path )
@@ -404,7 +359,7 @@ public class LocalFile extends AbstractFile {
     }
 
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        return new FSRandomAccessInputStream(new RandomAccessFile(file, "r"));
+        return new LocalRandomAccessInputStream(new RandomAccessFile(file, "r"));
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
@@ -445,6 +400,28 @@ public class LocalFile extends AbstractFile {
     }	
 
 
+    /**
+     * Always returns <code>true</code>.
+     * @return <code>true</code>
+     */
+    public boolean canRunProcess() {
+        return true;
+    }
+
+    /**
+     * Returns a process executing the specied local command.
+     * @param  tokens      describes the command and its arguments.
+     * @throws IOException if an error occured while creating the process.
+     */
+    public AbstractProcess runProcess(String[] tokens) throws IOException {
+        if(!isDirectory()) {
+            if(Debug.ON) Debug.trace("Tried to create a process using a file as a working directory.");
+            throw new IOException(file + " is not a directory");
+        }
+        return new LocalProcess(tokens, file);
+    }
+
+    
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -562,24 +539,48 @@ public class LocalFile extends AbstractFile {
     }
 
 
-    /**
-     * Always returns <code>true</code>.
-     * @return <code>true</code>
-     */
-    public boolean canRunProcess() {
-        return true;
-    }
+    ///////////////////
+    // Inner classes //
+    ///////////////////
 
     /**
-     * Returns a process executing the specied local command.
-     * @param  tokens      describes the command and its arguments.
-     * @throws IOException if an error occured while creating the process.
+     * LocalRandomAccessInputStream extends RandomAccessInputStream to provide random access to a
+     *  <code>LocalFile</code>'s content.
      */
-    public AbstractProcess runProcess(String[] tokens) throws IOException {
-        if(!isDirectory()) {
-            if(Debug.ON) Debug.trace("Tried to create a process using a file as a working directory.");
-            throw new IOException(file + " is not a directory");
+    public class LocalRandomAccessInputStream extends RandomAccessInputStream {
+
+        private RandomAccessFile raf;
+
+        public LocalRandomAccessInputStream(RandomAccessFile raf) {
+            this.raf = raf;
         }
-        return new LocalProcess(tokens, file);
+
+        public int read() throws IOException {
+            return raf.read();
+        }
+
+        public int read(byte b[]) throws IOException {
+            return raf.read(b);
+        }
+
+        public int read(byte b[], int off, int len) throws IOException {
+            return raf.read(b, off, len);
+        }
+
+        public void close() throws IOException {
+            raf.close();
+        }
+
+        public long getOffset() throws IOException {
+            return raf.getFilePointer();
+        }
+
+        public long getLength() throws IOException {
+            return raf.length();
+        }
+
+        public void seek(long pos) throws IOException {
+            raf.seek(pos);
+        }
     }
 }

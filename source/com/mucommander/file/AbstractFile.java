@@ -553,9 +553,9 @@ public abstract class AbstractFile implements FilePermissions {
      * </ul>
      *
      * <p>This default implementation returns {@link #SHOULD_HINT} if both this file and the specified destination file
-     * use the same and are located on the same host, {@link #SHOULD_NOT_HINT} otherwise. This method should be
-     * overridden to return {@link #SHOULD_NOT_HINT} if the underlying file protocol doesn't not allow 
-     * direct move/renaming without copying the contents of the source (this) file.
+     * use the same protocol and are located on the same host, {@link #SHOULD_NOT_HINT} otherwise.
+     * This method should be overridden to return {@link #SHOULD_NOT_HINT} if the underlying file protocol doesn't not
+     * allow direct move/renaming without copying the contents of the source (this) file.
      *
      * @param destFile the destination file that is considered being copied
      * @return the hint int indicating whether the {@link #moveTo(AbstractFile)} method should be used
