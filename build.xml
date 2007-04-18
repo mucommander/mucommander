@@ -285,6 +285,20 @@
 
   <!-- = Helper targets ====================================== -->
   <!-- ======================================================= -->
+  <!-- Generates the nightly debian names and version numbers. -->
+  <target name="nightly-deb" depends="build-date" if="is-nightly">
+    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar}"/>
+    <strreplace from="${app.version}${app.subversion} ${release-date}" to="deb.version" what="[ ]" with="-"/>
+    <property name="deb.name" value="mucommander_current_all.deb"/>
+  </target>
+
+  <!-- Generates the current debian names and version numbers. -->
+  <target name="release-deb" unless="is-nightly">
+    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar}"/>
+    <strreplace from="${app.version}${app.subversion}" to="deb.version" what="[ ]" with="-"/>
+    <property name="deb.name" value="mucommander_${deb.version}_all.deb"/>
+  </target>
+
   <!-- Stores today's date in ${release-date.}                 -->
   <target name="build-date">
     <taskdef name="date" classname="com.mucommander.ant.util.DateTask" classpath="${tools.jar}"/>
@@ -731,7 +745,7 @@
 
   <!-- Generates a nightly build of pretty much anything we    -->
   <!-- could think of.                                         -->
-  <target name="nightly" depends="set-nightly,tgz,app.tgz,nsis,portable,version,sign,jnlp">
+  <target name="nightly" depends="set-nightly,tgz,app.tgz,nsis,portable,deb,version,sign,jnlp">
     <echo>All done.</echo>
   </target>
 
@@ -961,13 +975,9 @@
   </target>
 
   <!-- Generates the muCommander debian package.               -->
-  <target name="deb" depends="compress">
-    <!-- Generates the debian package name.                    -->
-    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar}"/>
-    <strreplace from="${app.version}${app.subversion}" to="deb.version" what="[ ]" with="-"/>
-
+  <target name="deb" depends="compress,release-deb,nightly-deb">
     <!-- Creates the required directories.                     -->
-    <echo>Creating debian package in ${dist}/mucommander_${deb.version}_all.deb</echo>
+    <echo>Creating debian package in ${dist}/${deb.name}</echo>
     <mkdir dir="${deb.tmp}"/>
     <mkdir dir="${deb.control}"/>
     <mkdir dir="${deb.data}"/>
@@ -1010,7 +1020,7 @@
 
     <!-- Generates the debian package.                         -->
     <taskdef name="deb" classname="org.vafer.jdeb.DebAntTask" classpath="${jdeb}"/>
-    <deb destfile="${dist}/mucommander_${deb.version}_all.deb" control="${deb.control}">
+    <deb destfile="${dist}/${deb.name}" control="${deb.control}">
       <data src="${deb.tmp}/data.tar.gz"/>
     </deb>
   </target>
