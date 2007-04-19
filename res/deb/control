@@ -1,8 +1,8 @@
 Package: mucommander
 Version: @VERSION@
-Section: contrib/misc
+Section: contrib/utils
 Priority: optional
-Recommends: kaffe | java-virtual-machine
+Recommends: java-virtual-machine
 Architecture: all
 Installed-Size: @SIZE@
 Maintainer: Maxence Bernard <maxence@maxence.info>

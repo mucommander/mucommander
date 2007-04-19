@@ -261,9 +261,15 @@
     </resources>
   </target>
 
+  <target name="clean-deb">
+    <delete dir="${deb.tmp}"/>
+    <delete dir="${deb.control}"/>
+    <delete dir="${deb.data}"/>
+  </target>
+
   <!-- Deletes any dynamically generated file, effectively     -->
   <!-- re-initialising the whole project.                      -->
-  <target name="clean">
+  <target name="clean" depends="clean-deb">
     <echo>Deleting temporary files...</echo>
     <delete dir="${source.tmp}"/>
     <delete dir="${classes.normal}"/>
@@ -272,9 +278,6 @@
     <delete dir="${dist}"/>
     <delete dir="${doc.api}"/>
     <delete dir="${doc}"/>
-    <delete dir="${deb.tmp}"/>
-    <delete dir="${deb.control}"/>
-    <delete dir="${deb.data}"/>
     <echo>Deleting emacs backup files...</echo>
     <delete includeEmptyDirs="true">
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
@@ -975,22 +978,13 @@
   </target>
 
   <!-- Generates the muCommander debian package.               -->
-  <target name="deb" depends="compress,release-deb,nightly-deb">
+  <target name="deb" depends="compress,release-deb,nightly-deb,tools-jar,clean-deb">
     <!-- Creates the required directories.                     -->
     <echo>Creating debian package in ${dist}/${deb.name}</echo>
     <mkdir dir="${deb.tmp}"/>
     <mkdir dir="${deb.control}"/>
     <mkdir dir="${deb.data}"/>
     <mkdir dir="${deb.data}/usr/share/mucommander"/>
-
-    <!-- Copies the debian control files.                      -->
-    <copy todir="${deb.control}">
-      <fileset dir="${deb.dir}"/>
-      <filterset>
-        <filter token="VERSION" value="${deb.version}"/>
-        <filter token="SIZE" value="7848"/>
-      </filterset>
-    </copy>
 
     <!-- Copies the debian data files.                         -->
     <copy todir="${deb.data}/usr/share/mucommander">
@@ -1006,7 +1000,6 @@
       <fileset file="${jar.cmp}"/>
     </copy>
 
-
     <!-- Generates the data.tar.gz file.                       -->
     <tar destfile="${deb.tmp}/data.tar.gz" compression="gzip">
       <tarfileset dir="${deb.data}">
@@ -1017,6 +1010,21 @@
         <include name="**/usr/share/mucommander/mucommander.sh"/>
       </tarfileset>
     </tar>
+
+    <!-- Computes the install size.                            -->
+    <taskdef name="size" classname="com.mucommander.ant.util.SizeTask" classpath="${tools.jar}"/>
+    <size name="deb.size">
+      <fileset dir="${deb.data}"/>
+    </size>
+
+    <!-- Copies the debian control files.                      -->
+    <copy todir="${deb.control}">
+      <fileset dir="${deb.dir}"/>
+      <filterset>
+        <filter token="VERSION" value="${deb.version}"/>
+        <filter token="SIZE" value="${deb.size}"/>
+      </filterset>
+    </copy>
 
     <!-- Generates the debian package.                         -->
     <taskdef name="deb" classname="org.vafer.jdeb.DebAntTask" classpath="${jdeb}"/>
