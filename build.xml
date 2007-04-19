@@ -219,7 +219,7 @@
   <!-- Codebase for the 'normal' muCommander JNLP file.        -->
   <property name="url.jnlp.normal"     value="http://www.mucommander.com/webstart/"/>
   <!-- Codebase for the 'nightly' muCommander JNLP file.       -->
-  <property name="url.jnlp.nightly"    value="http://www.mucommander.com/nightly/webstart/"/>
+  <property name="url.jnlp.nightly"    value="http://www.mucommander.com/webstart/nightly/"/>
   <!-- Name of the icon used by the JNLP file.                 -->
   <property name="jnlp.icon"           value="icon.gif"/>
   <!-- Name of the muCommander JNLP file.                      -->
