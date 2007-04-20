@@ -6,7 +6,7 @@
 
   <!-- Version number of the application.                      -->
   <property name="app.version"         value="0.8"/>
-  <property name="app.subversion"      value=" beta3"/>
+  <property name="app.subversion"      value=""/>
   <!-- Copyright line of the application.                      -->
   <property name="app.copyright"       value="2002-2007"/>
   <!-- Targeted version of the JVM.                            -->
