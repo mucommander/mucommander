@@ -491,6 +491,7 @@ password:KR:비밀번호
 # Character encoding (e.g. UTF-8, ISO-8859-1, ...), displayed for instance in the FTP panel of the 'Connect to server' dialog
 encoding:EN:Encoding
 encoding:FR:Encodage
+encoding:CS:Kódování
 # Translation missing
 
 
@@ -705,6 +706,7 @@ recurse_directories:KR:선택된 하위 디렉토리까지 작업
 go_to:EN:Go to
 go_to:FR:Aller à
 go_to:KR:이동
+go_to:CS:Přejít na
 # Translation missing
 
 
@@ -1217,7 +1219,7 @@ com.mucommander.ui.action.EditCredentialsAction.label:EN:Edit credentials
 com.mucommander.ui.action.EditCredentialsAction.label:FR:Éditer les indentifiants
 com.mucommander.ui.action.EditCredentialsAction.label:SI:Uredi akreditive
 com.mucommander.ui.action.EditCredentialsAction.label:IT:Modifica credenziali
-com.mucommander.ui.action.EditCredentialsAction.label:CS:Editovat kredity
+com.mucommander.ui.action.EditCredentialsAction.label:CS:Editovat účty
 com.mucommander.ui.action.EditCredentialsAction.label:zh_TW:編輯認證資料
 com.mucommander.ui.action.EditCredentialsAction.label:DE:Zugriffsrechte bearbeiten
 com.mucommander.ui.action.EditCredentialsAction.label:RO:Schimbă identitatea
@@ -2036,7 +2038,7 @@ com.mucommander.ui.action.SortByNameAction.label:EN:Sort by Name
 com.mucommander.ui.action.SortByNameAction.label:FR:Trier par Nom
 com.mucommander.ui.action.SortByNameAction.label:DE:Nach Namen sortieren
 com.mucommander.ui.action.SortByNameAction.label:ES:Ordenar por Nombre
-com.mucommander.ui.action.SortByNameAction.label:CS:Třídit dle jména
+com.mucommander.ui.action.SortByNameAction.label:CS:Řadit dle jména
 com.mucommander.ui.action.SortByNameAction.label:zh_TW:依名稱排序
 com.mucommander.ui.action.SortByNameAction.label:PL:Sortuj po nazwie
 com.mucommander.ui.action.SortByNameAction.label:HU:név szerint rendez
@@ -2051,7 +2053,7 @@ com.mucommander.ui.action.SortByDateAction.label:EN:Sort by Date
 com.mucommander.ui.action.SortByDateAction.label:FR:Trier par Date
 com.mucommander.ui.action.SortByDateAction.label:DE:Nach Datum sortieren
 com.mucommander.ui.action.SortByDateAction.label:ES:Ordenar por Fecha
-com.mucommander.ui.action.SortByDateAction.label:CS:Třídit dle data
+com.mucommander.ui.action.SortByDateAction.label:CS:Řadit dle data
 com.mucommander.ui.action.SortByDateAction.label:zh_TW:依日期排序
 com.mucommander.ui.action.SortByDateAction.label:PL:Sortuj po dacie
 com.mucommander.ui.action.SortByDateAction.label:HU:dátum szerint rendez
@@ -2066,7 +2068,7 @@ com.mucommander.ui.action.SortBySizeAction.label:EN:Sort by Size
 com.mucommander.ui.action.SortBySizeAction.label:FR:Trier par Taille
 com.mucommander.ui.action.SortBySizeAction.label:DE:Nach Größe sortieren
 com.mucommander.ui.action.SortBySizeAction.label:ES:Ordenar por Tamaño
-com.mucommander.ui.action.SortBySizeAction.label:CS:Třídit dle velikosti
+com.mucommander.ui.action.SortBySizeAction.label:CS:Řadit dle velikosti
 com.mucommander.ui.action.SortBySizeAction.label:zh_TW:依大小排序
 com.mucommander.ui.action.SortBySizeAction.label:PL:Sortuj po rozmiarze
 com.mucommander.ui.action.SortBySizeAction.label:HU:méret szerint rendez
@@ -2081,7 +2083,7 @@ com.mucommander.ui.action.SortByExtensionAction.label:EN:Sort by Extension
 com.mucommander.ui.action.SortByExtensionAction.label:FR:Trier par Extension
 com.mucommander.ui.action.SortByExtensionAction.label:DE:Nach Erweiterung sortieren
 com.mucommander.ui.action.SortByExtensionAction.label:ES:Ordenar por Extensión
-com.mucommander.ui.action.SortByExtensionAction.label:CS:Třídit dle přípony
+com.mucommander.ui.action.SortByExtensionAction.label:CS:Řadit dle přípony
 com.mucommander.ui.action.SortByExtensionAction.label:zh_TW:依類型排序
 com.mucommander.ui.action.SortByExtensionAction.label:PL:Sortuj po rozszerzeniu
 com.mucommander.ui.action.SortByExtensionAction.label:HU:kiterjesztés szerint rendez
@@ -2096,7 +2098,7 @@ com.mucommander.ui.action.SortByPermissionsAction.label:EN:Sort by Permissions
 com.mucommander.ui.action.SortByPermissionsAction.label:FR:Trier par Permissions
 com.mucommander.ui.action.SortByPermissionsAction.label:SI:Razvrsti po pravicah
 com.mucommander.ui.action.SortByPermissionsAction.label:IT:Ordina per Permessi
-com.mucommander.ui.action.SortByPermissionsAction.label:CS:Třídit dle oprávnění
+com.mucommander.ui.action.SortByPermissionsAction.label:CS:Řadit dle oprávnění
 com.mucommander.ui.action.SortByPermissionsAction.label:zh_TW:依權限排序
 com.mucommander.ui.action.SortByPermissionsAction.label:DE:Nach Zugriffsrechten sortieren
 com.mucommander.ui.action.SortByPermissionsAction.label:RO:Sortează după permisiuni
@@ -2342,7 +2344,7 @@ com.mucommander.ui.action.InvertSelectionAction.label:EN:Invert selection
 com.mucommander.ui.action.InvertSelectionAction.label:FR:Inverser sélection
 com.mucommander.ui.action.InvertSelectionAction.label:DE:Auswahl umkehren
 com.mucommander.ui.action.InvertSelectionAction.label:ES:Invertir selección
-com.mucommander.ui.action.InvertSelectionAction.label:CS:Invertovat výběr
+com.mucommander.ui.action.InvertSelectionAction.label:CS:Obrátit výběr
 com.mucommander.ui.action.InvertSelectionAction.label:zh_TW:反向標記
 com.mucommander.ui.action.InvertSelectionAction.label:PL:Odwróć zaznaczenie
 com.mucommander.ui.action.InvertSelectionAction.label:HU:fordított kijelölés
@@ -2951,6 +2953,7 @@ com.mucommander.ui.action.ToggleStatusBarAction.hide:KR:상태바 숨기기
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:EN:Show folders first
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:FR:Afficher d'abord les répertoires
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:KR:폴더를 먼저 보이기
+com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:CS:Zobrazit nejdříve složky
 # Translation missing
 
 
@@ -4380,7 +4383,7 @@ delete.symlink_warning:EN:This file looks like a symbolic link:\n\n  File: %1\n 
 delete.symlink_warning:FR:Ce fichier a l'air d'être un lien symbolique:\n\n  Fichier: %1\n  Pointe vers: %2\n\nSupprimer le lien seulement ou\nSuivre le lien symbolique et supprimer le répertoire (ATTENTION) ?
 delete.symlink_warning:DE:Diese Datei scheint ein symbolischer Link zu sein:\n\n  Datei: %1\n  Verlinktt nach: %2\n\nLink löschen oder dem \nLink folgen und Ordner löschen (VORSICHT) ?
 delete.symlink_warning:ES:El fichero parece un enlace simbólico:\n\n Fichero: %1\n Enlace a: %2\n\n¿Eliminar enlace simbólico sólo o\nseguir el enlace y elimiar el directorio (PRECAUCIÓN)?
-delete.symlink_warning:CS:Tento soubor vypadá jako symbolický odkaz:\n\n Soubor: %1\n odkazujuje na: %2\n\nChcete smazat jen odkaz nebo\ni odkazovanou složku (UPOZORNĚNÍ) ?
+delete.symlink_warning:CS:Tento soubor vypadá jako symbolický odkaz:\n\n Soubor: %1\n odkazujuje na: %2\n\nChcete smazat jen odkaz nebo\ni cíl odkazu (UPOZORNĚNÍ) ?
 delete.symlink_warning:zh_TW:此檔案可能為符號連結:\n\n 檔案: %1\n 連結至: %2\n\n只刪除符號連結或\n根據連結來刪除資料夾 (小心使用) ?
 delete.symlink_warning:PL:Ten plik wygląda jak łącze symboliczne:\n\n Plik: %1\n wskazuje na: %2\n\nSkasuj łącze symboliczne tylko lub\npodąż za dowiązaniem i skasuj katalog (UWAGA) ?
 delete.symlink_warning:HU:Ez a fájl egy parancsikonnak néz ki:\n\n  Fájl: %1\n  Link: %2\n\nCsak a parancsikon törlése vagy\nkövesse a parancsikont és törölje a könyvtárat (VIGYÁZAT)?
@@ -4410,7 +4413,7 @@ delete.delete_linked_folder:EN:Delete folder
 delete.delete_linked_folder:FR:Supprimer le répertoire
 delete.delete_linked_folder:DE:Ordner löschen
 delete.delete_linked_folder:ES:Eliminar directorio
-delete.delete_linked_folder:CS:Smazat složku
+delete.delete_linked_folder:CS:Smazat cíl odkazu
 delete.delete_linked_folder:zh_TW:刪除資料夾
 delete.delete_linked_folder:PL:Usuń katalog
 delete.delete_linked_folder:HU:könyvtár törlése
@@ -4605,6 +4608,7 @@ email.sending_file:SI:Pošiljam %1
 email.sending_file:RO:În curs de trimitere %1
 email.sending_file:IT:Inviando %1
 email_dialog.sending:KR:파일 보내는중 %1
+email_dialog.sending:CS:Odesílám soubory
 
 email.connecting_to_server:EN:Connecting to %1
 email.connecting_to_server:FR:Connexion à %1
@@ -5066,6 +5070,7 @@ progress_dialog.job_finished:KR:작업 종료
 
 progress_dialog.job_error:EN:Job error
 progress_dialog.job_error:FR:Erreur pendant tâche
+progress_dialog.job_error:CS:Chyba
 # Translation missing
 
 
@@ -6679,6 +6684,7 @@ prefs_dialog.time_24_hour:KR:24시간제
 prefs_dialog.show_seconds:EN:Show seconds
 prefs_dialog.show_seconds:FR:Afficher les secondes
 prefs_dialog.show_seconds:KR:초 보임
+prefs_dialog.show_seconds:CS:Zobrazit sekundy
 # Translation missing
 
 
@@ -6693,6 +6699,7 @@ prefs_dialog.show_seconds:KR:초 보임
 prefs_dialog.show_century:EN:Show century
 prefs_dialog.show_century:FR:Afficher le siècle
 prefs_dialog.show_century:KR:세기(100년)보임
+prefs_dialog.show_century:CS:Zobrazit století
 # Translation missing
 
 
@@ -7032,6 +7039,7 @@ prefs_dialog.file_icons:KR:파일 타입
 prefs_dialog.use_system_file_icons:EN:Use system file icons
 prefs_dialog.use_system_file_icons:FR:Utiliser les icônes de fichier système
 prefs_dialog.use_system_file_icons:KR:시스템파일 아이콘 사용
+prefs_dialog.use_system_file_icons:CS:Použít systémové ikony
 # Translation missing
 
 
@@ -7045,6 +7053,7 @@ prefs_dialog.use_system_file_icons:KR:시스템파일 아이콘 사용
 prefs_dialog.use_system_file_icons.always:EN:Always
 prefs_dialog.use_system_file_icons.always:FR:Toujours
 prefs_dialog.use_system_file_icons.always:KR:항상사용
+prefs_dialog.use_system_file_icons.always:CS:Vždy
 # Translation missing
 
 
@@ -7058,6 +7067,7 @@ prefs_dialog.use_system_file_icons.always:KR:항상사용
 prefs_dialog.use_system_file_icons.never:EN:Never
 prefs_dialog.use_system_file_icons.never:FR:Jamais
 prefs_dialog.use_system_file_icons.never:KR:사용안함
+prefs_dialog.use_system_file_icons.never:CS:Nikdy
 # Translation missing
 
 
@@ -7071,6 +7081,7 @@ prefs_dialog.use_system_file_icons.never:KR:사용안함
 prefs_dialog.use_system_file_icons.applications:EN:For applications only
 prefs_dialog.use_system_file_icons.applications:FR:Seulement pour les applications
 prefs_dialog.use_system_file_icons.applications:KR:어플리케이션만
+prefs_dialog.use_system_file_icons.applications:CS:Jen u aplikací
 # Translation missing
 
 
@@ -8038,7 +8049,7 @@ setup.intro:KR:muCommander가 작동하는 방식을 선택하세요
 setup.look_and_feel:EN:Select your Look & feel
 setup.look_and_feel:FR:Selectionnez votre Look & Feel
 setup.look_and_feel:IT:Scegliete il Vostro Look & Feel
-setup.look_and_feel:CS:Vyberte Váš Vzhled & chování
+setup.look_and_feel:CS:Vyberte si Vzhled & chování
 setup.look_and_feel:zh_TW:選擇你要的 Look & Feel
 setup.look_and_feel:DE:Wählen Sie Aussehen und Verhalten
 setup.look_and_feel:RO:Alegeți aspectul
@@ -8060,7 +8071,7 @@ setup.theme:EN:Select your theme
 setup.theme:FR:Selectionnez votre thème
 setup.theme:SI:Izberite temo
 setup.theme:IT:Selezionate il Vostro tema
-setup.theme:CS:Vyberte Vaše téma
+setup.theme:CS:Vyberte si téma
 setup.theme:zh_TW:選擇你的佈景主題
 setup.theme:DE:Wählen Sie Ihr Thema
 setup.theme:RO:Alegeți o temă.
