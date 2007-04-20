@@ -118,6 +118,7 @@ public class Launcher {
         int          i;             // Index in the command line arguments.
         boolean      showSetup;     // Whether or not to show the setup dialog.
 
+
         // - Command line parsing -------------------------------------
         // ------------------------------------------------------------
         for(i = 0; i < args.length; i++) {

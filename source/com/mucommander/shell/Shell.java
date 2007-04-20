@@ -109,8 +109,9 @@ public class Shell implements ConfigurationListener {
             remoteTokens[0] = command;
             commandTokens   = remoteTokens;
         }
+
         // Starts the process.
-        return ProcessRunner.execute(commandTokens, currentFolder, listener, encoding);
+        return (encoding == null) ? ProcessRunner.execute(commandTokens, currentFolder, listener) : ProcessRunner.execute(commandTokens, currentFolder, listener, encoding);
     }
 
 
@@ -132,7 +133,7 @@ public class Shell implements ConfigurationListener {
         // Splits the command into tokens, leaving room for the argument.
         tokens = CommandParser.getTokensWithParams(buffer, 1);
 
-        encoding = ConfigurationManager.getVariable(ConfigurationVariables.SHELL_ENCODING, PlatformManager.DEFAULT_SHELL_ENCODING);
+        encoding = ConfigurationManager.getVariable(ConfigurationVariables.SHELL_ENCODING);
     }
 
     /**

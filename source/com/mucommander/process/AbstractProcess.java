@@ -67,7 +67,7 @@ public abstract class AbstractProcess {
     private static Reader getStreamReader(InputStream in, String encoding) {
         if(encoding != null) {
             try {return new InputStreamReader(in, encoding);}
-            catch(Exception e) {}
+            catch(Exception e) {e.printStackTrace();}
         }
         return new InputStreamReader(in);
     }
