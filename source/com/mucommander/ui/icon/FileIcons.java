@@ -248,9 +248,9 @@ public class FileIcons {
         // Specified file is a LocalFile or a ProxyFile proxying a LocalFile (e.g. an archive file):
         // get the system file icon using the underlying java.io.File instance
         if(file instanceof LocalFile)
-            javaIoFile = ((LocalFile)file).getJavaIoFile();
+            javaIoFile = (File)file.getUnderlyingFileObject();
         else if((file instanceof ProxyFile && (((ProxyFile)file).getProxiedFile() instanceof LocalFile)))
-            javaIoFile = ((LocalFile)((ProxyFile)file).getProxiedFile()).getJavaIoFile();
+            javaIoFile = (File)((ProxyFile)file).getProxiedFile().getUnderlyingFileObject();
 
         // File is a remote file: create a temporary local file (or directory) with the same extension to grab the icon
         // and then delete the file. This operation is I/O bound and thus expensive, so an LRU is used to cache
@@ -275,8 +275,8 @@ public class FileIcons {
                 }
                 catch(IOException e) {}
 
-                javaIoFile = tempFile instanceof LocalFile?((LocalFile)tempFile).getJavaIoFile()
-                        :((LocalFile)((ProxyFile)tempFile).getProxiedFile()).getJavaIoFile();
+                javaIoFile = tempFile instanceof LocalFile?(File)tempFile.getUnderlyingFileObject()
+                        :(File)((ProxyFile)tempFile).getProxiedFile().getUnderlyingFileObject();
 
                 // Get the system file icon
                 icon = getSystemFileIcon(javaIoFile);
