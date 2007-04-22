@@ -7,7 +7,6 @@ import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
-import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ar.ArArchiveFile;
 import com.mucommander.file.impl.bzip2.Bzip2ArchiveFile;
@@ -17,6 +16,7 @@ import com.mucommander.file.impl.http.HTTPFile;
 import com.mucommander.file.impl.iso.IsoArchiveFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.impl.lst.LstArchiveFile;
+import com.mucommander.file.impl.nfs.NFSFile;
 import com.mucommander.file.impl.sftp.SFTPFile;
 import com.mucommander.file.impl.smb.SMBFile;
 import com.mucommander.file.impl.tar.TarArchiveFile;
@@ -26,34 +26,35 @@ import com.mucommander.file.util.PathTokenizer;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Hashtable;
+import java.util.Enumeration;
 import java.util.Random;
-import java.util.Set;
 import java.util.Vector;
 
 /**
- * FileFactory is an abstract class that provides static methods to create {@link AbstractFile} instances
- * and cache the most frequently accessed ones.
+ * FileFactory is an abstract class that provides static methods to create resolve and create {@link AbstractFile}
+ * instances.
  *
+ * <p>The muCommander file API provides ready-to-use implementations for several file protocols and archive types.
+ * Additional AbstractFile implementations can be register in at runtime using the {@link #registerFileProtocol(FileProtocolMapping)}
+ * and {@link #registerArchiveFormat(ArchiveFormatMapping)} methods.
+ * Similarily, the {@link #getRegisteredFileProtocols()} and {@link #getRegisteredArchiveFileFormats()} allow to list
+ * all the registered file protocols and archive formats. 
+
  * @see AbstractFile
  * @author Maxence Bernard
  */
 public abstract class FileFactory {
 
-    /** Protocol/Constructor map of registered protocols */
-    private static Hashtable registeredProtocolConstructors = new Hashtable();
+    /** Vector of registered FileProtocolMapping instances */
+    private static Vector fileProtocolMappingsV = new Vector();
+    /** Array of registered FileProtocolMapping instances, for quicker access */
+    private static FileProtocolMapping fileProtocolMappings[];
 
-    /** List of registered archive filters */
-    private static Vector registeredArchiveFiltersV = new Vector();
-    /** List of registered archive constructors */
-    private static Vector registeredArchiveConstructorsV = new Vector();
-
-    /** Array of registered archive filters, for quicker access */
-    private static FilenameFilter registeredArchiveFilters[];
-    /** Array of registered archive constructors, for quicker access */
-    private static Constructor registeredArchiveConstructors[];
+    /** Vector of registered ArchiveFormatMapping instances */
+    private static Vector archiveFormatMappingsV = new Vector();
+    /** Array of registered FileProtocolMapping instances, for quicker access */
+    private static ArchiveFormatMapping archiveFormatMappings[];
 
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
     private static LRUCache fileCache = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.FILE_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_FILE_CACHE_CAPACITY));
@@ -65,84 +66,184 @@ public abstract class FileFactory {
     static {
         // Register built-in file protocols
         // Local file protocol is hard-wired for performance reasons, no need to add it
-        // registerFileProtocol(LocalFile.class, FileProtocols.FILE);
         registerFileProtocol(SMBFile.class, FileProtocols.SMB);
         registerFileProtocol(HTTPFile.class, FileProtocols.HTTP);
         registerFileProtocol(HTTPFile.class, FileProtocols.HTTPS);
         registerFileProtocol(FTPFile.class, FileProtocols.FTP);
         registerFileProtocol(SFTPFile.class, FileProtocols.SFTP);
+        registerFileProtocol(NFSFile.class, FileProtocols.NFS);
 //        registerFileProtocol(WebDAVFile.class, FileProtocols.WEBDAV);
 //        registerFileProtocol(WebDAVFile.class, FileProtocols.WEBDAVS);
         
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
-        registerArchiveFileFormat(ZipArchiveFile.class, new ExtensionFilenameFilter(new String[]{".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar", ".odt", ".ods", ".odp", ".odg", ".odf"}));
-        registerArchiveFileFormat(TarArchiveFile.class, new ExtensionFilenameFilter(new String[]{".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2"}));
-        registerArchiveFileFormat(GzipArchiveFile.class, new ExtensionFilenameFilter(".gz"));
-        registerArchiveFileFormat(Bzip2ArchiveFile.class, new ExtensionFilenameFilter(".bz2"));
-        registerArchiveFileFormat(IsoArchiveFile.class, new ExtensionFilenameFilter(new String[]{".iso", ".nrg"}));
-        registerArchiveFileFormat(ArArchiveFile.class, new ExtensionFilenameFilter(new String[]{".ar", ".a", ".deb"}));
-        registerArchiveFileFormat(LstArchiveFile.class, new ExtensionFilenameFilter(new String[]{".lst"}));
-//        registerArchiveFileFormat(SevenZArchiveFile.class, new ExtensionFilenameFilter(new String[]{".7z"}));
+        registerArchiveFormat(ZipArchiveFile.class, new ExtensionFilenameFilter(new String[]{".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar", ".odt", ".ods", ".odp", ".odg", ".odf"}));
+        registerArchiveFormat(TarArchiveFile.class, new ExtensionFilenameFilter(new String[]{".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2"}));
+        registerArchiveFormat(GzipArchiveFile.class, new ExtensionFilenameFilter(".gz"));
+        registerArchiveFormat(Bzip2ArchiveFile.class, new ExtensionFilenameFilter(".bz2"));
+        registerArchiveFormat(IsoArchiveFile.class, new ExtensionFilenameFilter(new String[]{".iso", ".nrg"}));
+        registerArchiveFormat(ArArchiveFile.class, new ExtensionFilenameFilter(new String[]{".ar", ".a", ".deb"}));
+        registerArchiveFormat(LstArchiveFile.class, new ExtensionFilenameFilter(new String[]{".lst"}));
+//        registerArchiveFormat(SevenZArchiveFile.class, new ExtensionFilenameFilter(new String[]{".7z"}));
     }
 
 
     /**
-     * Registers an {@link AbstractFile} Class to be used by getFile() methods to create files for the given file protocol.
+     * Registers a new file protocol and associated provider class, contained in the given {@link FileProtocolMapping}
+     * instance. Any previously registered FileProtocolMapping with the same protocol will be removed and replaced
+     * by the given one.
      *
-     * @param abstractFileClass a Class denoting an AbstractFile class
-     * @param protocol the protocol to register the AbstractFile Class for (e.g. "smb")
+     * <p>After this method has been called, <code>getFile()</code> methods of this class will be able resolve files
+     * with the newly registered protocol, provided of course that the provider class can be properly instanciated.
+     *
+     * @param fpm a FileProtocolMapping instance that contains the protocol and provider class to register
+     */
+    public static synchronized void registerFileProtocol(FileProtocolMapping fpm) {
+        // First remove any registered FileProtocolMapping with the same protocol
+        String protocol = fpm.getProtocol();
+        FileProtocolMapping fpmTemp;
+        int nbMappings = fileProtocolMappingsV.size();
+        for(int i=0; i<nbMappings; i++) {
+            fpmTemp = (FileProtocolMapping)fileProtocolMappingsV.elementAt(i);
+            if(fpmTemp.getProtocol().equals(protocol)) {
+                fileProtocolMappingsV.removeElementAt(i);
+                // No need to check any further, there can be only FileProtocolMapping for a given protocol
+                break;
+            }
+        }
+
+        // Add the new FileProtocolMapping to the Vector
+        fileProtocolMappingsV.add(fpm);
+
+        // Update FileProtocolMapping array
+        updateFileProtocolMappingsArray();
+
+        if(Debug.ON) Debug.trace("Registered "+fpm.getProtocol()+" protocol to provider class "+fpm.getProviderClass());
+    }
+
+    /**
+     * Convenience method to register a new file protocol and associated provider class. The specified class must
+     * extend {@link AbstractFile} and provide a constructor with the {@link AbstractFile#AbstractFile(FileURL)}
+     * signature.<br>
+     * This method returns <code>true</code> if the file protocol could be properly registered, <code>false</code>
+     * otherwise. If more information is needed as to why a file protocol could not be registered, the
+     * {@link #registerFileProtocol(FileProtocolMapping)} method should be used instead.
+     *
+     * <p>After this method has been called, <code>getFile()</code> methods of this class will be able resolve files
+     * with the newly registered protocol, provided of course that the provider class can be properly instanciated.
+     *
+     * @param abstractFileClass a Class instance denoting a class, which extends {@link AbstractFile} and has a constructor with the {@link AbstractFile#AbstractFile(FileURL)} signature
+     * @param protocol the protocol to associate with the specified AbstractFile class (e.g. "ftp")
      * @return <code>true</code> if the protocol was registered without any error, <code>false</code> otherwise
      */
-    public static boolean registerFileProtocol(Class abstractFileClass, String protocol) {
+    public static synchronized boolean registerFileProtocol(Class abstractFileClass, String protocol) {
         try {
-            registeredProtocolConstructors.put(protocol.toLowerCase(), abstractFileClass.getConstructor(new Class[]{FileURL.class}));
+            registerFileProtocol(new FileProtocolMapping(abstractFileClass, protocol));
             return true;
         }
-        catch(NoSuchMethodException e) {
-            System.out.println("Error: unable to register protocol "+protocol+" with "+abstractFileClass);
+        catch(Exception e) {    // Catches NoSuchMethodException, IntrospectionException, SecurityException
+            if(Debug.ON) Debug.trace("Error: unable to register protocol "+protocol+" with class "+abstractFileClass+": "+e);
             return false;
         }
+    }
+
+    /**
+     * Returns an <code>Enumeration</code> of all registered FileProtocolMapping instances.
+     */
+    public static synchronized Enumeration getRegisteredFileProtocols() {
+        return fileProtocolMappingsV.elements();
+    }
+
+    /**
+     * Removes the given <code>FileProtocolMapping</code> instance from the list of registered file protocols.
+     */
+    public static synchronized void unregisterFileProtocol(FileProtocolMapping fpm) {
+        int index = fileProtocolMappingsV.indexOf(fpm);
+
+        if(index!=-1) {
+            fileProtocolMappingsV.removeElementAt(index);
+            updateFileProtocolMappingsArray();
+        }
+    }
+
+    /**
+     * Updates the FileProtocolMapping array to reflect the contents of the FileProtocolMapping Vector.
+     */
+    private static void updateFileProtocolMappingsArray() {
+        fileProtocolMappings = new FileProtocolMapping[fileProtocolMappingsV.size()];
+        fileProtocolMappingsV.toArray(fileProtocolMappings);
     }
 
 
     /**
-     * Registers an {@link AbstractArchiveFile} Class to be used by the {@link #wrapArchive(AbstractFile)} method
-     * (and <code>getFile()</code> methods) to create archive files for files that match the specified file filter.
+     * Registers a new archive format and associated provider class, contained in the given {@link ArchiveFormatMapping}
+     * instance.
      *
-     * @param abstractArchiveFileClass a Class denoting an AbstractArchiveFile class
-     * @param filter a FileFilter that will be used to determine if the file is an archive of the registered format
-     * @return <code>true</code> if the protocol was registered without any error, <code>false</code> otherwise
+     * <p>After this method has been called, <code>getFile()</code> methods of this class will be able resolve archive
+     * files with the newly registered archive format, provided of course that the provider class can be properly
+     * instanciated.
+     *
+     * @param afm an ArchiveFormatMapping instance that contains the archive FilenameFilter and provider class to register
      */
-    public static boolean registerArchiveFileFormat(Class abstractArchiveFileClass, FileFilter filter) {
-        try {
-            Constructor constructor = abstractArchiveFileClass.getConstructor(new Class[]{AbstractFile.class});
+    public static synchronized void registerArchiveFormat(ArchiveFormatMapping afm) {
+        archiveFormatMappingsV.add(afm);
 
-            // Constructor could be created, it means the class looks ok so far, register the filter and associated constructor
-            registeredArchiveConstructorsV.add(constructor);
-            registeredArchiveFiltersV.add(filter);
-
-            int nbArchiveFormats = registeredArchiveConstructorsV.size();
-
-            // Convert vectors to arrays to speed up access a bit as these are very frequently accessed 
-            registeredArchiveConstructors = new Constructor[nbArchiveFormats];
-            registeredArchiveConstructorsV.toArray(registeredArchiveConstructors);
-            
-            registeredArchiveFilters = new FilenameFilter[nbArchiveFormats];
-            registeredArchiveFiltersV.toArray(registeredArchiveFilters);
-
-            return true;
-        }
-        catch(NoSuchMethodException e) {
-            System.out.println("Error: unable to register archive file format with class "+abstractArchiveFileClass);
-            return false;
-        }
-
+        updateArchiveFormatMappingsArray();
     }
 
+    /**
+     * Convenience method to register a new archive format and associated provider class. The specified class must
+     * extend {@link AbstractArchiveFile} and provide a constructor with the
+     * {@link AbstractArchiveFile#AbstractArchiveFile(AbstractFile)} signature.<br>
+     * This method returns <code>true</code> if the archive format could be properly registered, <code>false</code>
+     * otherwise. If more information is needed as to why an archive format could not be registered, the
+     * {@link #registerArchiveFormat(ArchiveFormatMapping)} method should be used instead.
+     *
+     * <p>After this method has been called, <code>getFile()</code> methods of this class will be able resolve files
+     * with the newly registered archive format, provided of course that the provider class can be properly instanciated.
+     *
+     * @param abstractArchiveFileClass a Class instance denoting a class which extends {@link AbstractArchiveFile} and
+     * which has a constructor with the {@link AbstractArchiveFile#AbstractArchiveFile(AbstractFile)} signature
+     * @param filenameFilter a FilenameFilter that characterizes the archive format to associate with the specified
+     * AbstractArchiveFile class
+     * @return <code>true</code> if the archive format was registered without any error, <code>false</code> otherwise
+     */
+    public static synchronized boolean registerArchiveFormat(Class abstractArchiveFileClass, FilenameFilter filenameFilter) {
+        try {
+            registerArchiveFormat(new ArchiveFormatMapping(abstractArchiveFileClass, filenameFilter));
+            return true;
+        }
+        catch(Exception e) {    // Catches NoSuchMethodException, IntrospectionException, SecurityException
+            if(Debug.ON) Debug.trace("Error: unable to register filenameFilter "+ filenameFilter +" with class "+abstractArchiveFileClass+": "+e);
+            return false;
+        }
+    }
 
-    public static Set getRegisteredProtocols() {
-        return registeredProtocolConstructors.keySet();
+    /**
+     * Returns an <code>Enumeration</code> of all registered FileProtocolMapping instances.
+     */
+    public static synchronized Enumeration getRegisteredArchiveFileFormats() {
+        return archiveFormatMappingsV.elements();
+    }
+
+    /**
+     * Removes the given <code>ArchiveFormatMapping</code> instance from the list of registered archive formats.
+     */
+    public static synchronized void unregisterArchiveFileFormat(ArchiveFormatMapping afm) {
+        int index = archiveFormatMappingsV.indexOf(afm);
+
+        if(index!=-1) {
+            archiveFormatMappingsV.removeElementAt(index);
+            updateArchiveFormatMappingsArray();
+        }
+    }
+
+    /**
+     * Updates the ArchiveFileFormat array to reflect the contents of the ArchiveFileFormat Vector.
+     */
+    private static void updateArchiveFormatMappingsArray() {
+        archiveFormatMappings = new ArchiveFormatMapping[archiveFormatMappingsV.size()];
+        archiveFormatMappingsV.toArray(archiveFormatMappings);
     }
 
 
@@ -204,8 +305,6 @@ public abstract class FileFactory {
      * @throws AuthException if additionnal authentication information is required to create the file
      */
     public static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
-//        return getFile(URLFactory.getFileURL(absPath, parent==null?null:parent.getURL(), true), parent);
-//        return getFile(URLFactory.getFileURL(absPath, true), parent);
         return getFile(new FileURL(absPath), parent);
     }
 
@@ -249,104 +348,6 @@ public abstract class FileFactory {
             return null;
         }
     }
-
-//    /**
-//     * Creates and returns an instance of AbstractFile for the given FileURL and uses the specified parent file (if any)
-//     * as the created file's parent.
-//     *
-//     * <p>Specifying the file parent if an instance already exists allows to recycle the AbstractFile instance
-//     * instead of creating a new one when the parent file is requested.
-//     *
-//     * @param fileURL the file URL representing the file to be created
-//     * @param parent the parent AbstractFile to use as the created file's parent, can be <code>null</code>
-//     *
-//     * @throws java.io.IOException if something went wrong during file creation.
-//     */
-//    public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
-//        try {
-//            String protocol = fileURL.getProtocol().toLowerCase();
-//
-//            AbstractFile file;
-//
-//            // Special case for local files, do not use protocol registration mechanism to speed things up a bit
-//            if(protocol.equals(FileProtocols.FILE)) {
-//                // Use an LRU file cache to recycle frequently used local file instances.
-//                String urlRep = fileURL.toString(true);
-//                file = (AbstractFile)fileCache.get(urlRep);
-//
-////                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("file cache hits/misses: "+fileCache.getHitCount()+"/"+fileCache.getMissCount());
-//
-//                if(file!=null) {
-////                    if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("File cache hit for "+file);
-//
-//                    // Create an archive file on top of this file if the file matches one of the archive filters
-//                    return wrapArchive(file);
-//                }
-//
-//                // Create local file instance
-//                file = new LocalFile(fileURL);
-//
-//                // Reuse existing parent file instance if one was specified
-//                if(parent!=null)
-//                    file.setParent(parent);
-//
-//                fileCache.add(urlRep, file);
-////                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Added to file cache: "+file);
-//
-//                // Create an archive file on top of this file if the file matches one of the archive filters
-//                // This must be done after adding the file to the LRU cache, this could otherwise lead to weird
-//                // behaviors, for example if a directory with the same filename of a former archive was created,
-//                // the directory would be considered as an archive
-//                return wrapArchive(file);
-//            }
-//            // For any other file protocol, use registered protocols map
-//            else {
-//                // If the specified FileURL doesn't contain any credentials, use CredentialsManager to find
-//                // any credentials matching the url and use them.
-//if(Debug.ON) Debug.trace("fileURL.containsCredentials() "+fileURL.containsCredentials());
-//                if(!fileURL.containsCredentials())
-//                    CredentialsManager.authenticateImplicit(fileURL);
-//if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
-//
-//                // Get a registered Constructor instance for the file protocol
-//                Constructor constructor = (Constructor)registeredProtocolConstructors.get(protocol);
-//
-//                // If constructor is null, it means the protocol hasn't been registered properly
-//                if(constructor==null) {
-//                    // Todo: localize this string as it can be displayed to the end user
-//                    throw new IOException("Unknown protocol: "+protocol);
-//                }
-//
-//                // May throw InstantiationException, IllegalAccessException, IllegalAccessException, ExceptionInInitializerError, InvocationTargetException
-//                file = (AbstractFile)constructor.newInstance(new Object[]{fileURL});
-//
-//                // Reuse existing parent file instance if one was specified
-//                if(parent!=null)
-//                    file.setParent(parent);
-//
-//                // Create an archive file on top of this file if the file matches one of the archive filters
-//                return wrapArchive(file);
-//            }
-//        }
-//        catch(InvocationTargetException e) {
-//            // This exception is thrown by Constructor.newInstance() when the target constructor throws an Exception.
-//            // If the exception was an IOException, throw it instead of a new IOException, as it may contain
-//            // additional information about the error cause
-//            Throwable cause = e.getTargetException();
-//            if(cause instanceof IOException)
-//                throw (IOException)cause;
-//
-//            throw new IOException();
-//        }
-//        catch(IOException e2) {
-//            throw e2;
-//        }
-//        catch(Exception e3) {
-//            // InstantiationException, IllegalAccessException, IllegalAccessException
-//            throw new IOException();
-//        }
-//    }
-
 
     /**
      * Creates and returns an instance of AbstractFile for the given FileURL and uses the specified parent file (if any)
@@ -460,22 +461,27 @@ if(Debug.ON) Debug.trace("fileURL.containsCredentials() "+fileURL.containsCreden
                     CredentialsManager.authenticateImplicit(fileURL);
 if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
 
-                // Get a registered Constructor instance for the file protocol
-                Constructor constructor = (Constructor)registeredProtocolConstructors.get(protocol);
+                // Find a register FileProtocolMapping instance matching the protocol
+                int nbMappings = fileProtocolMappings.length;
+                FileProtocolMapping fpm = null;
+                for(int i=0; i<nbMappings; i++) {
+                    if(fileProtocolMappings[i].protocol.equals(protocol)) {
+                        fpm = fileProtocolMappings[i];
+                        break;
+                    }
+                }
 
-                // If constructor is null, it means the protocol hasn't been registered properly
-                if(constructor==null) {
+                // Throw an IOException if no FileProtocolMapping instance could be found
+                if(fpm==null) {
                     // Todo: localize this string as it can be displayed to the end user
-                    throw new IOException("Unknown protocol: "+protocol);
+                    throw new IOException("Unknown file protocol: "+protocol);
                 }
 
                 // May throw InstantiationException, IllegalAccessException, IllegalAccessException, ExceptionInInitializerError, InvocationTargetException
-                return (AbstractFile)constructor.newInstance(new Object[]{fileURL});
+                return (AbstractFile)fpm.providerConstructor.newInstance(new Object[]{fileURL});
             }
         }
         catch(InvocationTargetException e) {
-if(Debug.ON) e.printStackTrace();
-
             // This exception is thrown by Constructor.newInstance() when the target constructor throws an Exception.
             // If the exception was an IOException, throw it instead of a new IOException, as it may contain
             // additional information about the error cause
@@ -494,7 +500,6 @@ if(Debug.ON) e.printStackTrace();
         }
     }
 
-
     /**
      * Returns a variation of the given filename, appending a pseudo-unique ID to the filename's prefix while keeping
      * the same filename extension.
@@ -511,8 +516,6 @@ if(Debug.ON) e.printStackTrace();
 
         return desiredName;
     }
-
-
 
     /**
      * Creates and returns a temporary local file using the desired name.
@@ -537,7 +540,6 @@ if(Debug.ON) e.printStackTrace();
         return getFile(tempFile.getAbsolutePath());
     }
 
-
     /**
      * Returns true if the given filename's extension matches one of the registered archive formats.
      *
@@ -551,21 +553,20 @@ if(Debug.ON) e.printStackTrace();
         if(filename.indexOf('.')==-1)
             return false;
                 
-        int nbArchiveFormats = registeredArchiveFilters.length;
-        for(int i=0; i<nbArchiveFormats; i++) {
-            if(registeredArchiveFilters[i].accept(filename))
+        int nbMappings = archiveFormatMappings.length;
+        for(int i=0; i<nbMappings; i++) {
+            if(archiveFormatMappings[i].filenameFilter.accept(filename))
                 return true;
         }
 
         return false;
     }
 
-
     /**
      * Tests based on the given file's extension, if the file corresponds to a registered archive format.
-     * If it does, an appropriate {@link com.mucommander.file.AbstractArchiveFile} instance is created on top of the
-     * provided file and returned. If it doesn't (the file's extension doesn't correspond to a registered archive
-     * format or is a directory), the same AbstractFile instance is returned.
+     * If it does, an appropriate {@link AbstractArchiveFile} instance is created on top of the provided file
+     * and returned. If it doesn't (the file's extension doesn't correspond to a registered archive format or is a
+     * directory), the provided AbstractFile instance is returned.
      */
     public static AbstractFile wrapArchive(AbstractFile file) {
         String filename = file.getName();
@@ -575,22 +576,21 @@ if(Debug.ON) e.printStackTrace();
         // the filename contains a dot '.' character, since most of the time this method is called with a filename that
         // doesn't match any of the filters.
         if(!file.isDirectory() && filename.indexOf('.')!=-1) {
-            int nbArchiveFormats = registeredArchiveFilters.length;
-            for(int i=0; i<nbArchiveFormats; i++) {
-                if(registeredArchiveFilters[i].accept(filename)) {
+            int nbMappings = archiveFormatMappings.length;
+            for(int i=0; i<nbMappings; i++) {
+                if(archiveFormatMappings[i].filenameFilter.accept(filename)) {
                     try {
                         // Found one, create the AbstractArchiveFile instance and return it
-                        file = (AbstractFile)registeredArchiveConstructors[i].newInstance(new Object[]{file});
+                        file = (AbstractFile)archiveFormatMappings[i].providerConstructor.newInstance(new Object[]{file});
                         break;
                     }
                     catch(Exception e) {
-                        if(Debug.ON) Debug.trace("Caught exception while trying to instanciate registered AbstractArchiveFile constructor: "+registeredArchiveConstructors[i]);
+                        if(Debug.ON) Debug.trace("Caught exception while trying to instanciate registered AbstractArchiveFile constructor: "+archiveFormatMappings[i]);
                     }
                 }
             }
         }
 
-//if(Debug.ON) Debug.trace("file="+file+" class="+file.getClass());
         return file;
     }
 }
