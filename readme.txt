@@ -56,6 +56,9 @@ muCommander uses the following great 3rd party works :
 - JmDNS released under the LGPL license to provide Bonjour/Zeroconf support.
 JmDNS can be found at http://jmdns.sourceforge.net .
 
+- Yanfs released under the BSD license to provide NFS support.
+Yanfs can be found at http://yanfs.dev.java.net .
+
 - Toolbar, command bar and preferences icons by Mark James (http://famfamfam.com) under the Creative Commons Attribution License.
 
 
