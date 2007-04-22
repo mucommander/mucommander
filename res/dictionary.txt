@@ -5348,6 +5348,22 @@ server_connect_dialog.server:RO:Server
 server_connect_dialog.server:IT:Server
 server_connect_dialog.server:KR:서버
 
+server_connect_dialog.share:EN:Share
+server_connect_dialog.share:FR:Partage
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
+
 server_connect_dialog.username:EN:Username
 server_connect_dialog.username:FR:Nom d'utilisateur
 server_connect_dialog.username:DE:Benutzername
@@ -6918,6 +6934,19 @@ prefs_dialog.compact_file_size:SI:Zaokroži prikazane velikosti datotek
 prefs_dialog.compact_file_size:RO:Rotunjește dimensiunile afișate ale fișierelor
 prefs_dialog.compact_file_size:IT:Arrotonda le grandezze dei file mostrate
 prefs_dialog.compact_file_size:KR:파일 크기(용량) 올림
+
+prefs_dialog.follow_symlinks_when_cd:EN:Follow symlinks when changing current directory
+prefs_dialog.follow_symlinks_when_cd:FR:Suivre les liens symboliques en changeant de répertoire courant
+# Translation missing
+
+
+
+
+
+
+
+
+
 
 # Appearance tab
 
