@@ -218,19 +218,24 @@ New features:
  - Added 'Use system file icons' option to 'Appearance' preferences, allowing to display file icons as they are displayed on the system's desktop
  - Added 'Show folders first' option to 'View' menu, allowing to control whether folders are displayed first (default) or mixed with regular files
  - Added support for Growl: notifications are sent when transfers are complete or an error has occurred
+ - Added experimental support for NFS protocol
+ - New 'Follow symlinks when changing current directory' option in preferences
 
 Improvements:
- - Added 'Go to' button to 'Edit bookmarks', 'Edit credentials' and 'Show open connections' dialogs to go to the selected location
+ - Added 'Go to' buttons to 'Edit bookmarks', 'Edit credentials' and 'Show open connections' dialogs to go to the selected location
  - Added 'Show seconds' and 'Show century' options to 'Date & time' preferences, to show seconds/century in file dates
- - FTP encoding can be changed in the 'Connect to server' dialog ; connection properties are now saved with credentials
- - Ant Tar and Bzip2 libraries updated to version 1.7.0
+ - FTP encoding can now be specified in the 'Connect to server' dialog ; connection properties are saved with credentials
+ - Updated Ant Tar and Bzip2 libraries to version 1.7.0
+ - Added 'share' field to 'Connect to server' SMB panel
 
 Localization:
  - Korean translation contributed by Jioh L. Jung
  - Russian translation update
+ - Czech translation update
 
 Bug fixes:
- - FTP connections now default to UTF-8 encoding (instead of ISO-8859-1) and send the 'OPTS UTF8 ON' command to the server to enable UTF-8
+ - FTP filenames containing extended characters are now properly handled if the proper encoding is specified when the connection is created
+ - HTTP files can now be properly archived
 
 Known issues:
  - Hungarian translation is not up-to-date
