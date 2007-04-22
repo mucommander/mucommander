@@ -204,6 +204,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         popupMenu.add(new ServerConnectAction("FTP...", ServerConnectDialog.FTP_INDEX));
         popupMenu.add(new ServerConnectAction("SFTP...", ServerConnectDialog.SFTP_INDEX));
         popupMenu.add(new ServerConnectAction("HTTP...", ServerConnectDialog.HTTP_INDEX));
+        popupMenu.add(new ServerConnectAction("NFS...", ServerConnectDialog.NFS_INDEX));
 
         // Temporarily make the FileTable which contains this DrivePopupButton the currently active one so that menu actions
         // are triggered on it. The previously active table will be restored when the popup menu is closed (focus is lost).
