@@ -150,6 +150,10 @@ public interface ConfigurationVariables {
     public static final String  SHOW_FOLDERS_FIRST                = FILE_TABLE_SECTION + '.' + "show_folders_first";
     /** Default value for 'Show folders first' option */
     public static final boolean DEFAULT_SHOW_FOLDERS_FIRST        = true;
+    /** Controls whether symlinks should be followed when changing directory */
+    public static final String  CD_FOLLOWS_SYMLINKS               = FILE_TABLE_SECTION + '.' + "cd_follows_symlinks";
+    /** Default value for 'Follow symlinks when changing directory' option */
+    public static final boolean DEFAULT_CD_FOLLOWS_SYMLINKS       = false;
 
 
     // - Mac OS X variables --------------------------------------------------
