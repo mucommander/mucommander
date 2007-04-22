@@ -30,7 +30,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     private ProgressTextField locationField;
 
     /** True while a folder is being changed after a path was entered in the location field and validated by the user */
-    private boolean folderChangedInitiatedByLocationField;
+    private boolean folderChangeInitiatedByLocationField;
 
     /** Used to save the path that was entered by the user after validation of the location textfield */
     private String locationFieldTextSave;
@@ -48,7 +48,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         this.locationField = (ProgressTextField)getTextField();
         locationField.setComboBox(this);
 
-	// Applies theme values.
+    	// Applies theme values.
         setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR_FONT));
         setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_FOREGROUND_COLOR));
         setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND_COLOR));
@@ -92,7 +92,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
      * change failed or was cancelled, keeps the path intact and request focus on the text field so the user can modify it.
      */
     private void folderChangeCompleted(boolean folderChangedSuccessfully) {
-        if(folderChangedSuccessfully || !folderChangedInitiatedByLocationField) {
+        if(folderChangedSuccessfully || !folderChangeInitiatedByLocationField) {
             // Set the location field's contents to the new current folder's path
             locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
         }
@@ -101,7 +101,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         setEnabled(true);
 
         // If the location was entered and validated in the location field and the folder change failed or was cancelled...
-        if(!folderChangedSuccessfully && folderChangedInitiatedByLocationField) {
+        if(!folderChangedSuccessfully && folderChangeInitiatedByLocationField) {
             // Restore the text that was entered by the user
             locationField.setText(locationFieldTextSave);
             // Select the text to grab user's attention and make it easier to modify
@@ -111,7 +111,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         }
 
         // Reset field for next folder change
-        folderChangedInitiatedByLocationField = false;
+        folderChangeInitiatedByLocationField = false;
     }
 
 
@@ -122,7 +122,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     public void locationChanging(LocationEvent e) {
         // Change the location field's text to the folder being changed, only if the folder change was not initiated
         // by the location field (to preserve the path entered by the user while the folder is being changed) 
-        if(!folderChangedInitiatedByLocationField) {
+        if(!folderChangeInitiatedByLocationField) {
             FileURL folderURL = e.getFolderURL();
 
             // Do not display the URL's protocol for local files
@@ -189,7 +189,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         }
 
         // Remember that the folder change was initiated by the location field
-        folderChangedInitiatedByLocationField = true;
+        folderChangeInitiatedByLocationField = true;
         // Save the path that was entered in case the location change fails or is cancelled 
         locationFieldTextSave = locationText;
 
