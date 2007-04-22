@@ -26,8 +26,39 @@ import java.util.Date;
 
 
 /**
- * FTPFile represents a file located on an FTP server.
+ * FTPFile provides access to files located on an FTP server.
  *
+ * <p>The associated {@link FileURL} protocol is {@link FileProtocols#FTP}. The host part of the URL designates the
+ * FTP server. Credentials must be specified in the login and password parts as FTP servers require a login and
+ * password. The path separator is '/'.
+ *
+ * <p>Here are a few examples of valid FTP URLs:
+ * <code>
+ * ftp://garfield/stuff/somefile<br>
+ * ftp://john:p4sswd@garfield/stuff/somefile<br>
+ * ftp://anonymous:john@somewhere.net@garfield/stuff/somefile<br>
+ * </code>
+ *
+ * <p>Internally, FTPFile uses {@link ConnectionPool} to create FTP connections as needed and allows them to be reused
+ * by FTPFile instances located on the same server, dealing with concurrency issues. Connections are thus managed
+ * transparently and need not be manually managed.
+ *
+ * <p>Some FileURL properties control certain FTP connection settings:
+ * <ul>
+ *  <li>{@link #PASSIVE_MODE_PROPERTY_NAME}: controls whether passive or active transfer mode, <code>"true"</code> for
+ *  passive mode, <code>"false"</code> for activemode. If the property is not specified when the connection is created,
+ *  passive mode is assumed.
+ *  <li>{@link #ENCODING_PROPERTY_NAME}: specifies the character encoding used by the server. If the property is not 
+ *  specified when the connection is created, {@link #DEFAULT_ENCODING} is assumed.
+ * </ul>
+ * These properties are only used when the FTP connection is created. Setting them after the connection is created
+ * will not have any immediate effect, their values will only be used if the connection needs to be re-established.
+ *
+ * <p>Access to FTP files is provided by the <code>Commons-net</code> library distributed under the Apache Software License.
+ * The {@link #getUnderlyingFileObject()} method allows to retrieve a <code>org.apache.commons.net.ftp.FTPFile</code>
+ * instance corresponding to this FTPFile.
+ *
+ * @see ConnectionPool
  * @author Maxence Bernard
  */
 public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
@@ -41,7 +72,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
     private boolean fileExists;
 
-    private final static String SEPARATOR = DEFAULT_SEPARATOR;
+    private final static String SEPARATOR = "/";
 
     /** Name of the FTP passive mode property */
     public final static String PASSIVE_MODE_PROPERTY_NAME = "passiveMode";
@@ -491,6 +522,12 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         return -1;
     }
 
+    /**
+     * Returns an <code>org.apache.commons.net.FTPFile</code> instance corresponding to this file.
+     */
+    public Object getUnderlyingFileObject() {
+        return file;
+    }
 
     public boolean canRunProcess() {
         return true;
@@ -837,7 +874,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
 
     /**
-     * Handles connection to FTP servers.
+     * Handles connection to an FTP server.
      */
     private static class FTPConnectionHandler extends ConnectionHandler {
 

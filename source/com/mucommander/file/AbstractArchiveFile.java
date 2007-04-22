@@ -10,18 +10,42 @@ import java.io.InputStream;
 import java.util.Vector;
 
 /**
+ * AbstractArchiveFile is the superclass of all archive files. It allows archive file to be browsed as if they were
+ * regular directories, independently of the protocol used to access the file.
  *
+ * <p>AbstractArchiveFile extends {@link ProxyFile} to delegate the AbstractFile implementation to the actual archive
+ * file and overrides some methods to provide the added functionality. AbstractArchiveFile implementations only have
+ * to implement two methods: one to list the entries contained by the archive in a flat, not hierarchical way, and
+ * the other to retrieve a particular entry's contents.
  *
+ * <p>The first time one of the <code>ls()</code> methods is called to list the archive's contents, the
+ * {@link #getEntries()} method is called to retrieve a list of *all* the entries contained by the archive, not only the
+ * ones at the top level but also the ones nested one of several levels below. Using this list of entries, it creates
+ * a tree to map the structure of the archive and list the content of any particular directory within the archive.
+ * This tree is recreated only if the archive file has changed, i.e. its date has changed since the tree was created.
+ *
+ * <p>Files returned by the <code>ls()</code> are {@link ArchiveEntryFile} instances which use an {@link ArchiveEntry}
+ * object to retrieve the entry's attributes. In turn, these <code>ArchiveEntryFile</code> instances query the
+ * mother <code>AbstractArchiveFile</code> to list their content.
+ * <br>From an implementation perspective, one only needs to deal with {@link ArchiveEntry} instances, all the nuts
+ * and bolts are taken care of by this class.
+ *
+ * <p>At this time, AbstractArchiveFile only supports read-only archives, which means archive entries can not be
+ * added, removed or modified. Read-write support is planned and will be added later.
+ * Note that the {@link com.mucommander.file.archiver.Archiver} class can be used to create archives, but entries
+ * need to be added linearly.
+ *
+ * @see FileFactory, ArchiveEntry, ArchiveEntryFile, com.mucommander.file.archiver.Archiver
  * @author Maxence Bernard
  */
 public abstract class AbstractArchiveFile extends ProxyFile {
 
     /** Archive entries tree */
-    private DefaultMutableTreeNode entriesTree;
+    private ArchiveEntryTree entryTreeRoot;
 
     /** Date this file had when the entries tree was created. Used to detect if the archive file has changed and entries
      * need to be reloaded */
-    private long entriesTreeDate;
+    private long entryTreeDate;
 
 
     /**
@@ -33,7 +57,6 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         super(file);
     }
 
-
     /**
      * Creates the entries tree, used by {@link #ls(ArchiveEntryFile, com.mucommander.file.filter.FilenameFilter, com.mucommander.file.filter.FileFilter)}
      * to quickly list the contents of an archive's subfolder.
@@ -41,98 +64,46 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @throws IOException if an error occured while retrieving this archive's entries
      */
     private void createEntriesTree() throws IOException {
-        DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode();
+        ArchiveEntryTree treeRoot = new ArchiveEntryTree();
 
         long start = System.currentTimeMillis();
 
         Vector entries = getEntries();
+
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries loaded in "+(System.currentTimeMillis()-start)+" ms, nbEntries="+entries.size());
         start = System.currentTimeMillis();
 
         int nbEntries = entries.size();
         for(int i=0; i<nbEntries; i++) {
-            ArchiveEntry entry = (ArchiveEntry)entries.elementAt(i);
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Processing entry "+entry.getPath());
-
-            String entryPath = entry.getPath();
-            int entryDepth = entry.getDepth();
-            int slashPos = 0;
-            DefaultMutableTreeNode node = treeRoot;
-            for(int d=0; d<=entryDepth; d++) {
-                if(d==entryDepth && !entry.isDirectory()) {
-                    // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating leaf for "+entryPath);
-                    node.add(new DefaultMutableTreeNode(entry, true));
-                    break;
-                }
-
-                String subPath = d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
-                // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("subPath="+subPath+" depth="+d+"("+entryDepth+")");
-				
-                int nbChildren = node.getChildCount();
-                DefaultMutableTreeNode childNode = null;
-                boolean matchFound = false;
-                for(int c=0; c<nbChildren; c++) {
-                    childNode = (DefaultMutableTreeNode)node.getChildAt(c);
-                    if(((ArchiveEntry)childNode.getUserObject()).getPath().equals(subPath)) {
-                        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found match for "+subPath);
-                        matchFound = true;
-                        break;
-                    }
-                }
-				
-                if(matchFound) {
-                    if(d==entryDepth) {
-                        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Replacing entry for node "+childNode);
-                        // Replace existing entry
-                        childNode.setUserObject(entry);
-                    }
-                    else {
-                        node = childNode;
-                    }
-                }
-                else {
-                    if(d==entryDepth) {		// Leaf
-                        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating node for "+entryPath);
-                        node.add(new DefaultMutableTreeNode(entry, true));
-                    }
-                    else {
-                        // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating node for "+subPath);
-                        childNode = new DefaultMutableTreeNode(new SimpleArchiveEntry(subPath, entry.getDate(), 0, true), true);
-                        node.add(childNode);
-                        node = childNode;
-                    }
-                }
-            }
+            treeRoot.addArchiveEntry((ArchiveEntry)entries.elementAt(i));
         }
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries tree created in "+(System.currentTimeMillis()-start)+" ms");
 		
-        this.entriesTree = treeRoot;
-        this.entriesTreeDate = getDate();
+        this.entryTreeRoot = treeRoot;
+        this.entryTreeDate = getDate();
     }
 
-
     /**
-     * Checks that the entries tree exists and that this file hasn't changed since it was created. If any of those
+     * Checks if the entries tree exists and if this file hasn't changed since it was created. If any of those
      * 2 conditions isn't met, the entries tree is (re)created. 
      *
      * @throws IOException if an error occurred while creating the tree
      */
     private void checkEntriesTree() throws IOException {
-        if(this.entriesTree==null || getDate()!=this.entriesTreeDate)
+        if(this.entryTreeRoot ==null || getDate()!=this.entryTreeDate)
             createEntriesTree();
         
     }
 
-
     /**
      * Returns the contents of the specified folder entry.
      */
-    AbstractFile[] ls(ArchiveEntryFile entryFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException {
+    protected AbstractFile[] ls(ArchiveEntryFile entryFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();        
 
-        DefaultMutableTreeNode matchNode = findEntryNode(entryFile.getEntry().getPath());
+        DefaultMutableTreeNode matchNode = entryTreeRoot.findEntryNode(entryFile.getEntry().getPath());
         if(matchNode==null) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Error: no match found for "+entryFile.getEntry().getPath()+" , this is not supposed to happen!");
             throw new IOException();
@@ -140,52 +111,6 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
         return ls(matchNode, entryFile, filenameFilter, fileFilter);
     }
-
-
-    /**
-     * Finds and returns the node that corresponds to the specified entry path, null if no entry matching the path
-     * could be found.
-     *
-     * <p>Important note: the given path's separator character must be '/' and the path must be relative to the
-     * archive's root, i.e. not start with a leading '/', otherwise the entry will not be found. Trailing separators
-     * are ignored when paths are compared, for example the path 'temp' will match the entry 'temp/'.
-     */
-    private DefaultMutableTreeNode findEntryNode(String entryPath) {
-        int entryDepth = ArchiveEntry.getDepth(entryPath);
-        int slashPos = 0;
-        DefaultMutableTreeNode currentNode = entriesTree;
-        for(int d=0; d<=entryDepth; d++) {
-            String subPath = d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
-            if(subPath.charAt(subPath.length()-1)=='/')     // Remove any trailing slash to compare paths without trailing slashs
-                subPath = subPath.substring(0, subPath.length()-1);
-
-            // if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("subPath="+subPath+" depth="+d+"("+entryDepth+")");
-
-            int nbChildren = currentNode.getChildCount();
-            DefaultMutableTreeNode matchNode = null;
-            for(int c=0; c<nbChildren; c++) {
-                DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)currentNode.getChildAt(c);
-
-                String childNodePath = ((ArchiveEntry)childNode.getUserObject()).getPath();
-                if(childNodePath.charAt(childNodePath.length()-1)=='/')     // Remove any trailing slash to compare paths without trailing slashs
-                    childNodePath = childNodePath.substring(0, childNodePath.length()-1);
-
-                if(childNodePath.equals(subPath)) {
-                    //					if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found match for "+subPath);
-                    matchNode = childNode;
-                    break;
-                }
-            }
-
-            if(matchNode==null)
-                return null;    // No node maching the provided path, return null
-
-            currentNode = matchNode;
-        }
-
-        return currentNode;
-    }
-
 
     /**
      * Returns the contents (direct children) of the specified tree node.
@@ -220,7 +145,6 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         return fileFilter==null?files:fileFilter.filter(files);
     }
 
-
     /**
      * Creates and returns an AbstractFile using the provided entry and parent file. This method takes care of
      * creating the proper AbstractArchiveFile instance if the entry is itself an archive.
@@ -254,7 +178,6 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         return entryFile;
     }
 
-
     /**
      * Creates and returns an AbstractFile that corresponds to the given entry path within the archive.
      * Throws an IOException if the entry does not exist inside this archive.
@@ -273,14 +196,14 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         entryPath = entryPath.replace('\\', '/');
 
         // Find the entry node corresponding to the given path
-        DefaultMutableTreeNode entryNode = findEntryNode(entryPath);
+        DefaultMutableTreeNode entryNode = entryTreeRoot.findEntryNode(entryPath);
 
         if(entryNode==null)
             throw new IOException();    // Entry does not exist
 
         DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)entryNode.getParent();
         // Todo: suboptimal recursion, findEntryNode() is called each time
-        return createArchiveEntryFile((ArchiveEntry)entryNode.getUserObject(), parentNode==entriesTree?this:getEntryFile(((ArchiveEntry)parentNode.getUserObject()).getPath()));
+        return createArchiveEntryFile((ArchiveEntry)entryNode.getUserObject(), parentNode== entryTreeRoot?this:getEntryFile(((ArchiveEntry)parentNode.getUserObject()).getPath()));
     }
 
 
@@ -289,14 +212,15 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     //////////////////////
 	
     /**
-     * Returns a Vector with all the entries this archive file contains. This method will be called the first time
-     * one of the <code>ls()</code> is called. If will not be further called, unless the file's date has changed since
-     *
+     * Returns a Vector of {@link ArchiveEntry}, representing all the entries this archive file contains.
+     * This method will be called the first time one of the <code>ls()</code> is called. If will not be further called,
+     * unless the file's date has changed since the last time one of the <code>ls()</code> methods was called.
      */
     public abstract Vector getEntries() throws IOException;
 
     /**
-     * Returns an InputStream to read from the given entry.
+     * Returns an InputStream to read from the given archive entry. The specified {@link ArchiveEntry} instance is
+     * necessarily one of the entries that were returned by {@link #getEntries()}. 
      */
     public abstract InputStream getEntryInputStream(ArchiveEntry entry) throws IOException;
 
@@ -305,57 +229,90 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     // Overridden methods //
     ////////////////////////
 
+    /**
+     * This method is overridden to list and return the topmost entries contained by this archive.
+     * The returned files are {@link ArchiveEntryFile} instances.
+     *
+     * @return the topmost entries contained by this archive
+     * @throws IOException if the archive entries could not be listed
+     */
     public AbstractFile[] ls() throws IOException {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
 
-        return ls(entriesTree, this, null, null);
+        return ls(entryTreeRoot, this, null, null);
     }
 
+    /**
+     * This method is overridden to list and return the topmost entries contained by this archive, filtering out
+     * the ones that do not match the specified {@link FilenameFilter}. The returned files are {@link ArchiveEntryFile}
+     * instances.
+     *
+     * @param filter the FilenameFilter to be used to filter files out from the list, may be <code>null</code>
+     * @return the topmost entries contained by this archive
+     * @throws IOException if the archive entries could not be listed
+     */
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
 
-        return ls(entriesTree, this, filter, null);
+        return ls(entryTreeRoot, this, filter, null);
     }
 
+    /**
+     * This method is overridden to list and return the topmost entries contained by this archive, filtering out
+     * the ones that do not match the specified {@link FileFilter}. The returned files are {@link ArchiveEntryFile} instances.
+     *
+     * @param filter the FilenameFilter to be used to filter files out from the list, may be <code>null</code>
+     * @return the topmost entries contained by this archive
+     * @throws IOException if the archive entries could not be listed
+     */
     public AbstractFile[] ls(FileFilter filter) throws IOException {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
 
-        return ls(entriesTree, this, null, filter);
+        return ls(entryTreeRoot, this, null, filter);
     }
 
-
+    /**
+     * Always returns <code>true</code>, archive files can be browsed even though they are not directories.
+     */
     public boolean isBrowsable() {
-        // Archive files are browsable but are not directories
         return true;
     }
 	
+    /**
+     * Always returns <code>false</code>, archive files can be browsed but they are not directiories.
+     */
     public boolean isDirectory() {
-        // Archive files are browsable but are not directories
         return false;
     }
 
+    /**
+     * Always throws an <code>IOException</code> as archive files are currently read-only.
+     */
     public void mkdir(String name) throws IOException {
-        // All archive files are read-only, let's throw an exception
+        // All archive files are read-only, throw an exception
         throw new IOException();
     }
 
+    /**
+     * Always returns <code>0</code> as archive files are currently read-only.
+     */
     public long getFreeSpace() {
-        // All archive files are read-only, return 0
         return 0;
     }
 
-    public long getTotalSpace() {
-        // An archive is considered as a volume by itself, let's return the proxied file's size
-        return file.getSize();
-    }
-
+    /**
+     * Always returns <code>false</code>.
+     */
     public boolean canRunProcess() {
         return false;
     }
 
+    /**
+     * Always throws an <code>IOException</code>.
+     */
     public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
         throw new IOException();
     }

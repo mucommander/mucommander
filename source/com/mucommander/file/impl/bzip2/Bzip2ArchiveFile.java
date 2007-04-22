@@ -11,7 +11,9 @@ import java.io.InputStream;
 import java.util.Vector;
 
 /**
- * 
+ * Bzip2ArchiveFile provides read-only access to archives in the Bzip2 format.
+ *
+ * <p>Bzip2 support is provided by the <code>Apache Ant</code> library distributed in the Apache Software License.
  *
  * @author Maxence Bernard
  */

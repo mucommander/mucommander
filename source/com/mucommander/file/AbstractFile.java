@@ -15,10 +15,10 @@ import java.io.OutputStream;
 import java.util.regex.Pattern;
 
 /**
- * The superclass of all files, all your files are belong to it.
+ * Abstract is the superclass of all files.
  *
- * <p>AbstractFile instances cannot and should not be created directly, use {@link FileFactory FileFactory}
- * for that purposes.</p>
+ * <p>AbstractFile classes should not be instanciated directly. Instead, the {@link FileFactory} <code>getFile</code>
+ * methods should be used for that purpose.</p>
  *
  * @see com.mucommander.file.FileFactory
  * @see com.mucommander.file.impl.ProxyFile
@@ -206,7 +206,7 @@ public abstract class AbstractFile implements FilePermissions {
         String path = getCanonicalPath();
         return appendSeparator?addTrailingSeparator(path):removeTrailingSlash(path);
     }
-	
+
 
     /**
      * Returns the path separator of this AbstractFile.
@@ -580,7 +580,7 @@ public abstract class AbstractFile implements FilePermissions {
      * For this operation to be successful, this file must be 'browsable', i.e. {@link #isBrowsable()} must return
      * <code>true</code>.
      *
-     * @param filter FileFilter which will be used to filter out files, may be <code>null</code>
+     * @param filter the FileFilter to be used to filter files out from the list, may be <code>null</code>
      * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
      */
     public AbstractFile[] ls(FileFilter filter) throws IOException {
@@ -596,7 +596,7 @@ public abstract class AbstractFile implements FilePermissions {
      * <p>This default implementation filters out files *after* they have been created. This method
      * should be overridden if a more efficient implementation can be provided by subclasses.
      *
-     * @param filter FilenameFilter which will be used to filter out files based on their filename, may be <code>null</code>
+     * @param filter the FilenameFilter to be used to filter out files from the list, may be <code>null</code>
      */
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
         return filter==null?ls():filter.filter(ls());
@@ -959,6 +959,15 @@ public abstract class AbstractFile implements FilePermissions {
      */
     public abstract long getTotalSpace();
 
+    /**
+     * Returns the file Object of the underlying API providing access to the filesystem. The returned Object may expose
+     * filesystem-specific functionalities that are not available in AbstractFile. Please note however that the
+     * returned Object type may change over time, if the underlying API used to provide access to the filesystem
+     * changes, so this method should be used only as a last resort.
+     *
+     * If the implemented filesystem has no such Object, <code>null</code> will be be returned.
+     */
+    public abstract Object getUnderlyingFileObject();
 
 
     // - Process running -------------------------------------------------------

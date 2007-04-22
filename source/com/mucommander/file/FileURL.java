@@ -601,6 +601,20 @@ public class FileURL implements Cloneable {
         return properties==null?null:properties.keys();
     }
 
+    /**
+     * Copies the properties of the given FileURL into this FileURL.
+     */
+    public void copyProperties(FileURL url) {
+        Enumeration propertyKeys = url.getPropertyKeys();
+        if(propertyKeys!=null) {
+            String key;
+            while(propertyKeys.hasMoreElements()) {
+                key = (String)propertyKeys.nextElement();
+                setProperty(key, url.getProperty(key));
+            }
+        }
+    }
+
 
     /**
      * Returns a String representation of this FileURL.

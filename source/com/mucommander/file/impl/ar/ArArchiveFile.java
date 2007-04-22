@@ -11,9 +11,8 @@ import java.io.InputStream;
 import java.util.Vector;
 
 /**
- * ArArchiveFile represents an archive in the unix AR format.
- * Both the BSD and GNU variants which add support for extended filenames to the original AR format
- * (each in a different way, but both ugly) are supported.
+ * ArArchiveFile provides read-only access to archives in the unix AR format.
+ * Both the BSD and GNU variants which add support for extended filenames are supported.
  *
  * @author Maxence Bernard
  */

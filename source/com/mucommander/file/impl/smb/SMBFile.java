@@ -13,14 +13,30 @@ import java.io.OutputStream;
 
 
 /**
- * SMBFile represents a file shared through the SMB protocol.
+ * SMBFile provides access to files located on an SMB/CIFS server.
+ *
+ * <p>The associated {@link FileURL} protocol is {@link FileProtocols#SMB}. The host part of the URL designates the
+ * SMB server. Credentials are specified in the login and password parts. The path separator is '/'.
+ *
+ * <p>Here are a few examples of valid SMB URLs:
+ * <code>
+ * smb://garfield/stuff/somefile<br>
+ * smb://john:p4sswd@garfield/stuff/somefile<br>
+ * smb://workgroup/<br>
+ * </code>
+ *
+ * <p>The special 'smb://' URL represents the SMB root and lists all workgroups that are available on the network,
+ * akin to Windows' network neighborhood.
+ *
+ * <p>Access to SMB files is provided by the <code>jCIFS</code> library distributed under the LGPL license.
+ * The {@link #getUnderlyingFileObject()} method allows to retrieve a <code>jcifs.smb.SmbFile</code> instance
+ * corresponding to this SMBFile.
  *
  * @author Maxence Bernard
  */
-public class SMBFile extends AbstractFile {
+ public class SMBFile extends AbstractFile {
 
     private SmbFile file;
-//    private String privateURL;
 
     private AbstractFile parent;
     private boolean parentValSet;
@@ -238,7 +254,6 @@ public class SMBFile extends AbstractFile {
     }
 
     public InputStream getInputStream() throws IOException {
-//        return new SmbFileInputStream(privateURL);
         return new SmbFileInputStream(getURL().toString(true));
     }
 
@@ -247,7 +262,6 @@ public class SMBFile extends AbstractFile {
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
-//        return new SmbFileOutputStream(privateURL, append);
         return new SmbFileOutputStream(getURL().toString(true), append);
     }
 
@@ -309,7 +323,6 @@ public class SMBFile extends AbstractFile {
     public void mkdir(String name) throws IOException {
         // Unlike java.io.File.mkdir(), SmbFile does not return a boolean value
         // to indicate if the folder could be created
-//        new SmbFile(privateURL+SEPARATOR+name).mkdir();
         new SmbFile(getURL().toString(true)+SEPARATOR+name).mkdir();
     }
 
@@ -327,6 +340,13 @@ public class SMBFile extends AbstractFile {
     public long getTotalSpace() {
         // No way to retrieve this information with jCIFS/SMB, return -1 (not available)
         return -1;
+    }
+
+    /**
+     * Returns a <code>jcifs.smb.SmbFile</code> instance corresponding to this file.
+     */
+    public Object getUnderlyingFileObject() {
+        return file;
     }
 
 

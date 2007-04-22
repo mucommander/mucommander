@@ -15,7 +15,33 @@ import java.util.Vector;
 
 
 /**
- * LocalFile represents a 'file system file', that is a regular native file.
+ * LocalFile provides access to files located on a locally-mounted filesystem. 
+ * Note that despite the class' name, LocalFile instances may indifferently be residing on a local hard drive,
+ * or on a remote server mounted locally by the operating system.
+ *
+ * <p>The associated {@link FileURL} protocol is {@link FileProtocols#FILE}. The host part should be {@link FileURL#LOCALHOST},
+ * except for Windows UNC URLs (see below). Native path separators ('/' or '\\' depending on the OS) can be used
+ * in the path part.
+ *
+ * <p>Here are a few examples of valid local file URLs:
+ * <code>
+ * file://localhost/C:\winnt\system32\<br>
+ * file://localhost/usr/bin/gcc<br>
+ * file://localhost/~<br>
+ * file://home/maxence/..<br>
+ * </code>
+ *
+ * <p>Windows UNC paths can be represented as FileURL instances, using the host part of the URL. The URL format for
+ * those is the following:<br>
+ * <code>file:\\server\share</code> .<br>
+ *
+ * <p>Under Windows, LocalFile will translate those URLs back into a UNC path. For example, a LocalFile created with the
+ * <code>file://garfield/stuff</code> FileURL will have the <code>getAbsolutePath()</code> method return
+ * <code>\\garfield\stuff</code>. Note that this UNC path translation doesn't happen on OSes other than Windows, which
+ * would not be able to handle the path.
+ *
+ * <p>Access to local files is provided by the <code>java.io</code> API, {@link #getUnderlyingFileObject()} allows
+ * to retrieve an <code>java.io.File</code> instance corresponding to this LocalFile.
  *
  * @author Maxence Bernard
  */
@@ -47,7 +73,8 @@ public class LocalFile extends AbstractFile {
 
 
     /**
-     * Creates a new instance of LocalFile.
+     * Creates a new instance of LocalFile. The given FileURL's protocol should be {@link FileProtocols#FILE}, and the
+     * host {@link FileURL#LOCALHOST}.  
      */
     public LocalFile(FileURL fileURL) throws IOException {
         super(fileURL);
@@ -60,16 +87,12 @@ public class LocalFile extends AbstractFile {
         if(IS_WINDOWS && !FileURL.LOCALHOST.equals(hostname))
             path = "\\\\"+hostname+fileURL.getPath().replace('/', '\\');    // Replace leading / char by \
 
-        init(new File(path));
-    }
+        this.file = new File(path);
 
-
-    private void init(File file) throws IOException {
         // Throw an exception is the file's path is not absolute.
         if(!file.isAbsolute())
             throw new IOException();
 
-        this.file = file;
         this.parentFilePath = file.getParent();
         this.absPath = file.getAbsolutePath();
 
@@ -239,9 +262,9 @@ public class LocalFile extends AbstractFile {
 
 
     /**
-     * Returns the underlying <code>java.io.File</code> instance corresponding to this AbstractFile.
+     * Returns a <code>java.io.File</code> instance corresponding to this file.
      */
-    public File getJavaIoFile() {
+    public Object getUnderlyingFileObject() {
         return file;
     }
     

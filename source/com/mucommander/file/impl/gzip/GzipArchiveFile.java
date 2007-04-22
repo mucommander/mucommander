@@ -11,7 +11,9 @@ import java.util.Vector;
 import java.util.zip.GZIPInputStream;
 
 /**
- * 
+ * GzipArchiveFile provides read-only access to archives in the Gzip format.
+ *
+ * <p>Gzip support is provided by the <code>java.util.zip.GZIPInputStream</code> class.
  *
  * @author Maxence Bernard
  */

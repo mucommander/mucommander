@@ -27,8 +27,28 @@ import java.util.List;
 
 
 /**
- * SFTPFile represents a file on an SSH/SFTP server.
+ * SFTPFile provides access to files located on an SFTP server.
  *
+ * <p>The associated {@link FileURL} protocol is {@link FileProtocols#SFTP}. The host part of the URL designates the
+ * SFTP server. Credentials must be specified in the login and password parts as SFTP servers require a login and
+ * password. The path separator is '/'.
+ *
+ * <p>Here are a few examples of valid SFTP URLs:
+ * <code>
+ * sftp://garfield/stuff/somefile<br>
+ * sftp://john:p4sswd@garfield/stuff/somefile<br>
+ * sftp://anonymous:john@somewhere.net@garfield/stuff/somefile<br>
+ * </code>
+ *
+ * <p>Internally, SFTPFile uses {@link ConnectionPool} to create SFTP connections as needed and allows them to be reused
+ * by SFTPFile instances located on the same server, dealing with concurrency issues. Connections are thus managed
+ * transparently and need not be manually managed.
+ *
+ * <p>Access to SFTP files is provided by the <code>J2SSH</code> library distributed under the LGPL license.
+ * The {@link #getUnderlyingFileObject()} method allows to retrieve a <code>com.sshtools.j2ssh.sftp.SftpFile</code>
+ * instance corresponding to this SFTPFile.
+ *
+ * @see ConnectionPool
  * @author Maxence Bernard
  */
 public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
@@ -93,9 +113,9 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    ///////////////////////////////////
+    /////////////////////////////////////////////
     // ConnectionHandlerFactory implementation //
-    ///////////////////////////////////
+    /////////////////////////////////////////////
 
     public ConnectionHandler createConnectionHandler(FileURL location) {
         return new SFTPConnectionHandler(location);
@@ -422,6 +442,13 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     public long getTotalSpace() {
         // No way to retrieve this information with J2SSH, return -1 (not available)
         return -1;
+    }
+
+    /**
+     * Returns a <code>com.sshtools.j2ssh.sftp.SftpFile</code> instance corresponding to this file.
+     */
+    public Object getUnderlyingFileObject() {
+        return file;
     }
 
 

@@ -12,8 +12,9 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 /**
- * LstArchiveFile provides read support for Total Commander LST files.
- * Entries are parsed from the .lst file and can be read (an InputStream can be opened) if the file exists locally.
+ * IsoArchiveFile provides read-only access to archives in the LST format made popular by Total Commander.
+ *
+ * <p>Entries are parsed from the .lst file and can be read (an InputStream can be opened) if the file exists locally.
  *
  * <p>For reference, here's a short LST file:
  * <pre>
@@ -60,15 +61,14 @@ public class LstArchiveFile extends AbstractArchiveFile {
             long size;
             long date;
             boolean isDirectory;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm.ss");
+            SimpleDateFormat lstDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm.ss");
 
             while((line=br.readLine())!=null) {
                 try {
-//                    st = new StringTokenizer(line);
                     st = new StringTokenizer(line, "\t");
                     name = st.nextToken().replace('\\', '/');
                     size = Long.parseLong(st.nextToken());
-                    date = dateFormat.parse((st.nextToken()+" "+st.nextToken())).getTime();
+                    date = lstDateFormat.parse((st.nextToken()+" "+st.nextToken())).getTime();
 
                     if(name.endsWith("/")) {
                         isDirectory = true;

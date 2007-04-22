@@ -143,6 +143,21 @@ public class ArchiveEntryFile extends AbstractFile {
         throw new IOException();
     }
 
+    /**
+     * Returns the same ArchiveEntry instance as {@link #getEntry()}.
+     */
+    public Object getUnderlyingFileObject() {
+        return entry;
+    }
+
+    public boolean canRunProcess() {
+        return false;
+    }
+
+    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
+        throw new IOException();
+    }
+    
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -163,13 +178,5 @@ public class ArchiveEntryFile extends AbstractFile {
 
     public int getMoveToHint(AbstractFile destFile) {
         return MUST_NOT_HINT;
-    }
-
-    public boolean canRunProcess() {
-        return false;
-    }
-
-    public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
-        throw new IOException();
     }
 }

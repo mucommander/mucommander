@@ -5,7 +5,7 @@ import com.mucommander.file.ArchiveEntry;
 
 
 /**
- * TarEntry encapsulates am org.apache.tools.tar.TarEntry tar entry.
+ * TarEntry encapsulates a <code>org.apache.tools.tar.TarEntry</code> Tar entry.
  *
  * @author Maxence Bernard
  */

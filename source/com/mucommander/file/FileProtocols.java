@@ -19,6 +19,9 @@ public interface FileProtocols {
     /** Protocol for files served by a web server using HTTPS */
     public final static String HTTPS = "https";
 
+    /** Protocol for files served by an NFS server */
+    public final static String NFS = "nfs";
+
     /** Protocol for files served by an SFTP server (not to be confused with FTPS or SCP) */
     public final static String SFTP = "sftp";
 

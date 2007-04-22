@@ -11,17 +11,20 @@ import java.util.Calendar;
 import java.util.Vector;
 
 /**
- *  http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
+ * IsoArchiveFile provides read-only access to archives in the ISO and NRG formats.
  *
- * todo:
+ * <p>Reference: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
+ *
+ * Todo:
  *      * test with more images
  *      * rewrite/sanitize InputStream for cooked
  *      * add RockRidge, UDF and others extensions
- *      * add DiscJuggler & other weirdos file format
+ *      * add DiscJuggler & other weirdo file formats
  *
  * @author Xavier Martin 
  */
 public class IsoArchiveFile extends AbstractArchiveFile {
+
     private long sector_offset = 0;
     private byte buffer[] = new byte[2048];
     private Calendar calendar = Calendar.getInstance();

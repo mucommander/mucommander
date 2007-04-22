@@ -5,7 +5,7 @@ import com.mucommander.file.ArchiveEntry;
 
 
 /**
- * ZipEntry encapsulates a java.util.zip zip entry.
+ * ZipEntry encapsulates a <code>java.util.zip</code> Zip entry.
  *
  * @author Maxence Bernard
  */

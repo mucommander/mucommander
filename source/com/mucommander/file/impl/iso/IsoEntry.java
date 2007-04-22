@@ -2,6 +2,11 @@ package com.mucommander.file.impl.iso;
 
 import com.mucommander.file.ArchiveEntry;
 
+/**
+ * IsoEntry encapsulates an ISO entry.
+ *
+ * @author Xavier Martin
+ */
 public class IsoEntry extends ArchiveEntry {
 
     private String path;

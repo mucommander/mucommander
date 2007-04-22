@@ -13,5 +13,8 @@ import com.mucommander.file.FileURL;
  */
 public interface ConnectionHandlerFactory {
 
+    /**
+     * Creates and returns a {@link ConnectionHandler} instance for the given location.
+     */
     public ConnectionHandler createConnectionHandler(FileURL location);
 }

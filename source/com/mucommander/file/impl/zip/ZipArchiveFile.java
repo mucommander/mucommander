@@ -12,10 +12,12 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
-// do not import java.util.zip.ZipEntry !
+// do not import java.util.zip.ZipEntry as it would create class name conflicts !
 
 /**
- * 
+ * ZipArchiveFile provides read-only access to archives in the Zip format.
+ *
+ * <p>Zip support is provided by the <code>java.util.zip</code> API.
  *
  * @author Maxence Bernard
  */

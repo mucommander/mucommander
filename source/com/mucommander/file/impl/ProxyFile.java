@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * ProxyFile is an {@link com.mucommander.file.AbstractFile} that acts as a proxy between the class that extends it
+ * ProxyFile is an {@link AbstractFile} that acts as a proxy between the class that extends it
  * and the proxied <code>AbstractFile</code> instance specified to the constructor.
  * All <code>AbstractFile</code> methods (abstract of not) are proxied and delegated to the proxied file.
  * The {@link #getProxiedFile()} method allows to retrieve the proxied file.
@@ -26,7 +26,7 @@ import java.io.OutputStream;
  *
  * <p><b>Implementation note:</b> the <code>java.lang.reflect.Proxy</code> class can unfortunately not be
  * used as it only works with interfaces (not abstract class). There doesn't seem to be any dynamic way to
- * proxy method invokations, so any modifications made to {@link com.mucommander.file.AbstractFile} must be also
+ * proxy method invocations, so any modifications made to {@link com.mucommander.file.AbstractFile} must be also
  * reflected in <code>ProxyFile</code>.
  *
  * @see com.mucommander.file.AbstractArchiveFile
@@ -141,6 +141,19 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getTotalSpace();
     }
 
+    public Object getUnderlyingFileObject() {
+        return file.getUnderlyingFileObject();
+    }
+
+    public boolean canRunProcess() {
+        return file.canRunProcess();
+    }
+
+    public AbstractProcess runProcess(String[] tokens) throws IOException {
+        return file.runProcess(tokens);
+    }
+
+    
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -251,13 +264,5 @@ public abstract class ProxyFile extends AbstractFile {
 
     public String toString() {
         return file.toString();
-    }
-
-    public boolean canRunProcess() {
-        return file.canRunProcess();
-    }
-
-    public AbstractProcess runProcess(String[] tokens) throws IOException {
-        return file.runProcess(tokens);
     }
 }
