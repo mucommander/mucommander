@@ -10,10 +10,7 @@ import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileURL;
-import com.mucommander.file.RootFolders;
+import com.mucommander.file.*;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
 import com.mucommander.file.filter.HiddenFileFilter;
@@ -617,14 +614,30 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         public ChangeFolderThread(AbstractFile folder) {
             this.folder = folder;
             this.folderURL = folder.getURL();
+
             setPriority(Thread.MAX_PRIORITY);
         }
 
         public ChangeFolderThread(FileURL folderURL) {
             this.folderURL = folderURL;
+
             setPriority(Thread.MAX_PRIORITY);
         }
 
+        /**
+         * Returns true if the given file should have its canonical path followed. In that case, the AbstractFile
+         * instance must be resolved again.
+         *
+         * <p>HTTP files MIST have their canonical path followed. For all other file protocols, this is an option in
+         * the preferences.
+         */
+        private boolean followCanonicalPath(AbstractFile file) {
+            if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.CD_FOLLOWS_SYMLINKS, ConfigurationVariables.DEFAULT_CD_FOLLOWS_SYMLINKS)
+                    || file.getURL().getProtocol().equals(FileProtocols.HTTP) && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false)))
+                return true;
+
+            return false;
+        }
 
         /**
          * Sets the file to be selected after the folder has been changed, can be null. 
@@ -666,9 +679,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("starting folder change...");
             boolean folderChangedSuccessfully = false;
 
-//            // Notify listeners that location is changing
-//            locationManager.fireLocationChanging(folder==null?folderURL:folder.getURL());
-
             // Show some progress in the progress bar to give hope
             locationField.setProgressValue(10);
 
@@ -693,6 +703,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             }
 
             if(!userCancelled) {
+                boolean canonicalPathFollowed = false;
+
                 do {
                     // Set cursor to hourglass/wait
                     mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -720,6 +732,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                             // File resolved -> 25% complete
                             locationField.setProgressValue(25);
 
+                            // Popup an error dialog and abort folder change if the file could not be resolved
+                            // or doesn't exist
                             if(file==null || !file.exists()) {
                                 // Restore default cursor
                                 mainFrame.setCursor(Cursor.getDefaultCursor());
@@ -736,8 +750,11 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                             else if(file.isBrowsable()) {
                                 // If history already contains this file, do not ask the question again and assume
                                 // the user wants to 'browse' the file. In particular, this prevent the 'Download or browse'
-                                // dialog from popping up when going back or forward in history
-                                if(!folderHistory.historyContains(folderURL)) {
+                                // dialog from popping up when going back or forward in history.
+                                // The dialog is also not displayed if the file corresponds to the currently selected file,
+                                // which is a weak (and not so accurate) way to know if the folder change is the result
+                                // of the OpenAction (enter pressed on the file). This works well enough in practice.
+                                if(!folderHistory.historyContains(folderURL) && !file.equals(fileTable.getSelectedFile())) {
                                     // Restore default cursor
                                     mainFrame.setCursor(Cursor.getDefaultCursor());
 
@@ -766,7 +783,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                                 }
                                 // else just continue and browse file's contents
                             }
-                            // File is a regular file: show download dialog
+                            // File is a regular file: show download dialog which allows to download (copy) the file
+                            // to a directory specified by the user
                             else {
                                 showDownloadDialog(file);
                                 break;
@@ -774,12 +792,38 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
                             this.folder = file;
                         }
-                        // Thread was created using an AbstractFile instance, check for existence
+                        // Thread was created using an AbstractFile instance, check file existence
                         else if(!folder.exists()) {
                             showFolderDoesNotExistDialog();
                             break;
                         }
 
+                        // Checks if canonical should be followed. If that is the case, the file is invalidated
+                        // and resolved again. This happens only once at most, to avoid a potential infinite loop
+                        // in the event that the absolute path still didn't match canonical one after the file is
+                        // resolved again.
+                        if(!canonicalPathFollowed && followCanonicalPath(folder)) {
+                            try {
+                                // Recreate the FileURL using the file's canonical path
+                                FileURL newURL = new FileURL(folder.getCanonicalPath());
+                                // Keep the credentials and properties (if any)
+                                newURL.setCredentials(folderURL.getCredentials());
+                                newURL.copyProperties(folderURL);
+                                this.folderURL = newURL;
+                                // Invalidate the AbstractFile instance
+                                this.folder = null;
+                                // There won't be any further attempts after this one
+                                canonicalPathFollowed = true;
+
+                                // Loop the resolve the file
+                                continue;
+                            }
+                            catch(MalformedURLException e) {
+                                // In the unlikely event of the canonical path being malformed, the AbstractFile
+                                // and FileURL instances are left untouched
+                            }
+                        }
+                        
                         synchronized(lock) {
                             if(userInterrupted) {
                                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("killed, get out");
@@ -791,6 +835,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
                         locationField.setProgressValue(50);
 
                         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("calling ls()");
+
                         AbstractFile children[] = folder.ls(chainedFileFilter);
 
                         synchronized(lock) {
