@@ -5454,6 +5454,35 @@ server_connect_dialog.connect:RO:Conectare
 server_connect_dialog.connect:IT:Connetti
 server_connect_dialog.connect:KR:연결
 
+server_connect_dialog.protocol:EN:Protocol
+server_connect_dialog.protocol:FR:Protocole
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+server_connect_dialog.nfs_version:EN:NFS version
+server_connect_dialog.nfs_version:FR:Version de NFS
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
 ###############
 # FTP connect #
 ###############
