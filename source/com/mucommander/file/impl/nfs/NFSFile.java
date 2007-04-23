@@ -1,5 +1,6 @@
 package com.mucommander.file.impl.nfs;
 
+import com.mucommander.Debug;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
@@ -10,7 +11,6 @@ import com.sun.xfile.XFileInputStream;
 import com.sun.xfile.XFileOutputStream;
 import com.sun.xfile.XRandomAccessFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -32,11 +32,6 @@ import java.io.OutputStream;
  * license. The {@link #getUnderlyingFileObject()} method allows to retrieve a <code>com.sun.xfile.XFile</code> instance
  * corresponding to this NFSFile.
  *
- * <p><b>Important:</b> this class has received only limited testing and is thus considered as EXPERIMENTAL.
- * In particular, it is not clear at this time whether the Yanfs library is able to access regular NFS servers, or only
- * the servers that declare a public filehandle. See RFC 2224 for more info about NFS URLs and the use of
- * public filehandles.
- *
  * @author Maxence Bernard
  */
 public class NFSFile extends AbstractFile {
@@ -54,18 +49,53 @@ public class NFSFile extends AbstractFile {
     public final static String SEPARATOR = "/";
 
 
+    public final static String NFS_VERSION_PROPERTY_NAME = "version";
+
+    public final static String NFS_VERSION_2 = "v2";
+
+    public final static String NFS_VERSION_3 = "v3";
+
+    public final static String DEFAULT_NFS_VERSION = NFS_VERSION_2;
+
+
+    public final static String NFS_PROTOCOL_PROPERTY_NAME = "protocol";
+
+    public final static String NFS_PROTOCOL_AUTO = "Auto";
+
+    public final static String NFS_PROTOCOL_TCP = "TCP";
+
+    public final static String NFS_PROTOCOL_UDP = "UDP";
+
+    public final static String DEFAULT_NFS_PROTOCOL = NFS_PROTOCOL_AUTO;
+
+
     /**
      * Creates a new instance of LocalFile.
      */
     public NFSFile(FileURL fileURL) {
         super(fileURL);
 
-        this.file = new XFile(fileURL.toString(false));
+        // NFS protocol version
+        String nfsVersion = fileURL.getProperty(NFS_VERSION_PROPERTY_NAME);
+        if(nfsVersion==null)
+            nfsVersion = DEFAULT_NFS_VERSION;
 
-        this.absPath = file.getAbsolutePath();
+        int port = fileURL.getPort();
+        String portString = port==-1?"":""+port;
+
+        String nfsProtocol = fileURL.getProperty(NFS_PROTOCOL_PROPERTY_NAME);
+
+        nfsProtocol = NFS_PROTOCOL_TCP.equals(nfsProtocol)?"t":NFS_PROTOCOL_UDP.equals(nfsProtocol)?"u":"";
+
+        String url = "nfs://"+fileURL.getHost()+":"+portString+nfsVersion+nfsProtocol+"m"+"/"+fileURL.getPath();
+
+if(Debug.ON) Debug.trace("XFile url="+url);
+
+        this.file = new XFile(url);
+
+        this.absPath = fileURL.toString();
         // removes trailing separator (if any)
         this.absPath = absPath.endsWith(SEPARATOR)?absPath.substring(0,absPath.length()-1):absPath;
-
     }
 
 
@@ -139,15 +169,8 @@ public class NFSFile extends AbstractFile {
     }
 
     public boolean isSymlink() {
-        // Note: this value must not be cached as its value can change over time (canonical path can change)
-        NFSFile parent = (NFSFile)getParent();
-        String canonPath = getCanonicalPath(false);
-        if(parent==null || canonPath==null)
-            return false;
-        else {
-            String parentCanonPath = parent.getCanonicalPath(true);
-            return !canonPath.equals(parentCanonPath+getName());
-        }
+        // Yanfs is unable to detect symlinks at this time
+        return false;
     }
 
     public AbstractFile[] ls() throws IOException {
@@ -155,7 +178,7 @@ public class NFSFile extends AbstractFile {
     }
 
     public void mkdir(String name) throws IOException {
-        if(!new File(absPath+SEPARATOR+name).mkdir())
+        if(!new XFile(absPath+SEPARATOR+name).mkdir())
             throw new IOException();
     }
 
@@ -209,16 +232,6 @@ public class NFSFile extends AbstractFile {
     // Overridden methods //
     ////////////////////////
 
-    public String getCanonicalPath() {
-        try {
-            return file.getCanonicalPath();
-        }
-        catch(IOException e) {
-            return absPath;
-        }
-    }
-
-
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
         String names[] = file.list();
 
@@ -229,9 +242,20 @@ public class NFSFile extends AbstractFile {
             names = filenameFilter.filter(names);
 
         AbstractFile children[] = new AbstractFile[names.length];
+        FileURL childURL;
+        NFSFile child;
+        String baseURLPath = fileURL.getPath();
+        if(!baseURLPath.endsWith("/"))
+            baseURLPath += SEPARATOR;
+
         for(int i=0; i<names.length; i++) {
-            // Retrieves an AbstractFile (NFSFile or archive) and reuse this file as parent
-            children[i] = FileFactory.getFile(absPath+SEPARATOR+names[i], this);
+            childURL = (FileURL)fileURL.clone();
+            childURL.setPath(baseURLPath+names[i]);
+
+            child = new NFSFile(childURL);
+            child.setParent(this);
+
+            children[i] = FileFactory.wrapArchive(child);
         }
 
         return children;
