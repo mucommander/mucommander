@@ -551,6 +551,9 @@
       <keepclasseswithmembers extends="com.mucommander.file.AbstractFile">
         <constructor access="public" name="*"/>
       </keepclasseswithmembers>
+      <!-- Yanfs uses reflection                               -->
+      <keep name="com.sun.nfs.XFileAccessor"/>
+      <keep name="com.sun.nfs.XFileExtensionAccessor"/>
       <!-- Main class                                          -->
       <keep name="${main-class}">
 	    <method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
