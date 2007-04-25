@@ -1,6 +1,5 @@
 package com.mucommander.file.impl.nfs;
 
-import com.mucommander.Debug;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
@@ -25,7 +24,7 @@ import java.io.OutputStream;
  * <p>Here are a few examples of valid NFS URLs:
  * <code>
  * nfs://garfield/stuff/<br>
- * nfs://192.168.1.1/stuff/somefile<br>
+ * nfs://192.168.1.1:2049/stuff/somefile<br>
  * </code>
  *
  * <p>Access to NFS files is provided by the <code>Yanfs</code> library (formerly WebNFS) distributed under the BSD
@@ -48,53 +47,82 @@ public class NFSFile extends AbstractFile {
 
     public final static String SEPARATOR = "/";
 
-
+    /** Name of the NFS version property */
     public final static String NFS_VERSION_PROPERTY_NAME = "version";
 
+    /** NFS version 2 */
     public final static String NFS_VERSION_2 = "v2";
 
+    /** NFS version 3 */
     public final static String NFS_VERSION_3 = "v3";
 
+    /** Default NFS version */
     public final static String DEFAULT_NFS_VERSION = NFS_VERSION_2;
 
-
+    /** Name of the NFS transport protocol property */
     public final static String NFS_PROTOCOL_PROPERTY_NAME = "protocol";
 
+    /** 'Auto' transport protocol: TCP is tried first and if the connection cannot be established, falls back to UDP */
     public final static String NFS_PROTOCOL_AUTO = "Auto";
 
+    /** TCP transport protocol */
     public final static String NFS_PROTOCOL_TCP = "TCP";
 
+    /** UDP transport protocol */
     public final static String NFS_PROTOCOL_UDP = "UDP";
 
+    /** Default transport protocol */
     public final static String DEFAULT_NFS_PROTOCOL = NFS_PROTOCOL_AUTO;
 
 
     /**
-     * Creates a new instance of LocalFile.
+     * Creates a new instance of NFSFile.
      */
     public NFSFile(FileURL fileURL) {
         super(fileURL);
 
-        // NFS protocol version
+        // Create the NFS URL used by XFile.
+
+        // The general syntax for NFS URLs is : nfs://<host>:<port><url-path>, as specified by RFC 2054
+        // Additionaly, XFile allows some special flags to be used in the port part of the URL to specify connection
+        // properties. Those flags must be placed after the port, and before the colon character delimiting the end of
+        // the port part.
+        // Here's the list of allowed flags (quoted from com.sun.nfs.NfsURL):
+        // vn	- NFS version, e.g. "v3"
+        // u	- Force UDP - normally TCP is preferred
+        // t	- Force TDP - don't fall back to UDP
+        // m    - Force Mount protocol.  Normally public filehandle is preferred
+        //
+        // Example: nfs://server:123v2um/path : use port 123 with NFS v2 over UDP and Mount protocol
+        //
+        // The 'm' flag must be specified, otherwise regular NFS shares (i.e. non WebNFS-enabled ones) that don't
+        // specify a public filehandle will fail. However, using this flag has two unfortunate consequences:
+        // - the NFS version fails to be properly negociated as it normally does (try v3 then fall back on v2): the
+        //  NFS version must be specified in the URL.
+        // - an extra slash character must be added before the path part, otherwise it is considered as relative to
+        //  the public filehandle and will thus fail to resolve.
+        //
+        // These issues might get fixed in Yanfs someday. When that happens, this code might be simplified.
+
+        // Determines the NFS version (v2 or v3) to be used, based on the version property
         String nfsVersion = fileURL.getProperty(NFS_VERSION_PROPERTY_NAME);
         if(nfsVersion==null)
             nfsVersion = DEFAULT_NFS_VERSION;
 
-        int port = fileURL.getPort();
-        String portString = port==-1?"":""+port;
-
+        // Determines the NFS transport protocol (Auto, TCP or UDP) to be used, based on the protocol property
         String nfsProtocol = fileURL.getProperty(NFS_PROTOCOL_PROPERTY_NAME);
-
         nfsProtocol = NFS_PROTOCOL_TCP.equals(nfsProtocol)?"t":NFS_PROTOCOL_UDP.equals(nfsProtocol)?"u":"";
 
-        String url = "nfs://"+fileURL.getHost()+":"+portString+nfsVersion+nfsProtocol+"m"+"/"+fileURL.getPath();
+        // Omit port part if none is contained in the FileURL or if it is 2049
+        int port = fileURL.getPort();
+        String portString = port==-1||port==2049?"":""+port;
 
-if(Debug.ON) Debug.trace("XFile url="+url);
+        // Create the XFile instance with the weird NFS url
+        this.file = new XFile("nfs://"+fileURL.getHost()+":"+portString+nfsVersion+nfsProtocol+"m"+"/"+fileURL.getPath());
 
-        this.file = new XFile(url);
-
+        // Retrieve the absolute path from the FileURL and NOT from the XFile instance which will return those weird flags
         this.absPath = fileURL.toString();
-        // removes trailing separator (if any)
+        // Remove trailing separator (if any)
         this.absPath = absPath.endsWith(SEPARATOR)?absPath.substring(0,absPath.length()-1):absPath;
     }
 
@@ -107,6 +135,9 @@ if(Debug.ON) Debug.trace("XFile url="+url);
         return file.lastModified();
     }
 
+    /**
+     * Always returns <code>false</code> (date cannot be changed)
+     */
     public boolean changeDate(long lastModified) {
         // XFile has no method for that purpose
         return false;
@@ -138,7 +169,7 @@ if(Debug.ON) Debug.trace("XFile url="+url);
     }
 
     public boolean getPermission(int access, int permission) {
-        if(access!= USER_ACCESS)
+        if(access!=USER_ACCESS)
             return false;
 
         if(permission==READ_PERMISSION)
@@ -168,6 +199,9 @@ if(Debug.ON) Debug.trace("XFile url="+url);
         return file.isDirectory();
     }
 
+    /**
+     * Always returns <code>false</code> (symlinks are not detected).
+     */
     public boolean isSymlink() {
         // Yanfs is unable to detect symlinks at this time
         return false;
@@ -201,11 +235,17 @@ if(Debug.ON) Debug.trace("XFile url="+url);
             throw new IOException();
     }
 
+    /**
+     * Always returns <code>-1</code> (not available)
+     */
     public long getFreeSpace() {
         // XFile has no method to provide that information
         return -1;
     }
 
+    /**
+     * Always returns <code>-1</code> (not available)
+     */
     public long getTotalSpace() {
         // XFile has no method to provide that information
         return -1;
@@ -218,11 +258,16 @@ if(Debug.ON) Debug.trace("XFile url="+url);
         return file;
     }
 
-
+    /**
+     * Always returns <code>false</code>.
+     */
     public boolean canRunProcess() {
         return false;
     }
 
+    /**
+     * Always throws an <code>IOException</code>.
+     */
     public AbstractProcess runProcess(String[] tokens) throws IOException {
         throw new IOException();
     }
@@ -249,12 +294,15 @@ if(Debug.ON) Debug.trace("XFile url="+url);
             baseURLPath += SEPARATOR;
 
         for(int i=0; i<names.length; i++) {
+            // Clone this file's URL with the connection properties and set the child file's path
             childURL = (FileURL)fileURL.clone();
             childURL.setPath(baseURLPath+names[i]);
 
+            // Create the child NFSFile using this file as a parent
             child = new NFSFile(childURL);
             child.setParent(this);
 
+            // Wrap archives
             children[i] = FileFactory.wrapArchive(child);
         }
 
@@ -276,7 +324,7 @@ if(Debug.ON) Debug.trace("XFile url="+url);
         if(destFile instanceof AbstractArchiveFile)
             destFile = ((AbstractArchiveFile)destFile).getProxiedFile();
 
-        // If destination file is not a LocalFile (for instance an archive entry), renaming won't work
+        // If destination file is not an NFSFile (for instance an archive entry), renaming won't work
         // so use the default moveTo() implementation instead
         if(!(destFile instanceof NFSFile)) {
             return super.moveTo(destFile);
