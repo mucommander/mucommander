@@ -37,7 +37,7 @@ public class ActionManager {
 
 
     public static MucoAction getActionInstance(ActionDescriptor actionDescriptor, MainFrame mainFrame) {
-        if(Debug.ON) Debug.trace("called, actionDescriptor = "+actionDescriptor, 5);
+//        if(Debug.ON) Debug.trace("called, actionDescriptor = "+actionDescriptor, 5);
 
         Hashtable mainFrameActions = (Hashtable)mainFrameActionsMap.get(mainFrame);
         if(mainFrameActions==null) {
@@ -94,9 +94,9 @@ public class ActionManager {
                 return null;
             }
         }
-        else {
-            if(Debug.ON) Debug.trace("found existing action instance: "+action);
-        }
+//        else {
+//            if(Debug.ON) Debug.trace("found existing action instance: "+action);
+//        }
 
         return action;
     }

@@ -119,7 +119,7 @@ public class IconManager {
      * create an instance and store it in the cache for future access. Note that the cached icon is unscaled, i.e.
      * the scaled icon is not cached.</p>
      *
-     * @param iconSet an icon set (see public constants)
+     * @param iconSet an icon set (see public constants for possible values)
      * @param iconName filename of the icon to retrieve
      * @param scaleFactor the icon scale factor, <code>1.0f</code> to have the icon in its original size (no rescaling)
      * @return an ImageIcon instance corresponding to the specified icon set, name and scale factor,
@@ -175,5 +175,16 @@ public class IconManager {
         icon.paintIcon(null, bi.getGraphics(), 0, 0);
 
         return new ImageIcon(bi);
+    }
+
+
+    /**
+     * Returns the path to the folder that contains the image resource files of the given icon set.
+     * The returned path is relative to the application JAR file's root and contains a trailing slash.
+     *
+     * @param iconSet an icon set (see public constants for possible values)
+     */
+    public static String getIconSetFolder(int iconSet) {
+        return ICON_SET_FOLDERS[iconSet];
     }
 }
