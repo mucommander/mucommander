@@ -64,6 +64,18 @@ public abstract class AbstractProcess {
         }.start();
     }
 
+    /**
+     * Tries to open a reader on the specified stream, using the specified encoding.
+     * <p>
+     * If the specified encoding cannot be found, or is set to <code>null</code>, this method
+     * will use the default system encoding. In theory, this should be the <code>file.encoding</code>
+     * system property, but this is not stated clearly on the documentation and might change depending
+     * on the VM implementation.
+     * </p>
+     * @param           in InputStream on which to open the reader.
+     * @param  encoding encoding to use on the stream.
+     * @return          a reader on the specified stream using the specified encoding.
+     */
     private static Reader getStreamReader(InputStream in, String encoding) {
         if(encoding != null) {
             try {return new InputStreamReader(in, encoding);}
@@ -77,7 +89,7 @@ public abstract class AbstractProcess {
      * @param listener if non <code>null</code>, <code>listener</code> will receive updates about the process' event.
      * @param encoding encoding that should be used by the process' stdout and stderr streams.
      */
-    void startMonitoring(ProcessListener listener, String encoding) throws IOException {
+    final void startMonitoring(ProcessListener listener, String encoding) throws IOException {
         // Only monitors stdout if the process uses merged streams.
         if(usesMergedStreams()) {
             if(Debug.ON) Debug.trace("Starting process merged output monitor...");
@@ -96,7 +108,7 @@ public abstract class AbstractProcess {
     // - Abstract methods ------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Returns <code>true</code> if this process merges his output streams.
+     * Returns <code>true</code> if this process only uses one output stream.
      * <p>
      * Some processes will use a single stream for their standard error and standard output streams. Such
      * processes should return <code>true</code> here to prevent both streams from being monitored.<br/>

@@ -17,10 +17,6 @@ import java.util.StringTokenizer;
  * Using the <code>ProcessRunner</code> will take care of all these tasks, while still allowing most of the flexibility
  * of the standard API.
  * </p>
- * <p>
- * This API is strongly tied to {@link com.mucommander.file.AbstractFile}. While not optimal, this is necessary to allow
- * 'file system' specific process to be ran, such as SSH commands.
- * </p>
  * @author Nicolas Rinaudo
  */
 public class ProcessRunner {
@@ -45,8 +41,9 @@ public class ProcessRunner {
      * will still be emptied to prevent deadlocks.
      * </p>
      * @param  tokens           tokens that compose the command to execute.
-     * @param  currentDirectory directory in which to execute the process.
-     * @param  listener         object that will be notified of modifications in the process' state.
+     * @param  currentDirectory directory in which to execute the process (user directory if <code>null</code>).
+     * @param  listener         object that will be notified of modifications in the process' state (ignored if <code>null</code>).
+     * @param  encoding         encoding used to read from the process' stream (system default is used if <code>null</code>).
      * @return                  the generated process.
      * @throws IOException      thrown if any error occurs while creating the process.
      */
@@ -78,6 +75,17 @@ public class ProcessRunner {
 
     // - Helper methods ------------------------------------------------------
     // -----------------------------------------------------------------------
+    /**
+     * Executes the specified command in the specified directory.
+     * <p>
+     * This is a convenience method and behaves exactly as a call to <code>execute(command, currentDirectory, listener, null)</code>.
+     * </p>
+     * @param  command          command to execute.
+     * @param  currentDirectory directory in which to execute the process (user directory if <code>null</code>).
+     * @param  listener         object that will be notified of modifications in the process' state (ignored if <code>null</code>).
+     * @return                  the generated process.
+     * @throws IOException      thrown if any error occurs while creating the process.
+     */
     public static AbstractProcess execute(String command, AbstractFile currentDirectory, ProcessListener listener) throws IOException {return execute(command, currentDirectory, listener, null);}
 
     /**
@@ -91,6 +99,18 @@ public class ProcessRunner {
      * @throws IOException thrown if an error happens while starting the process.
      */
     public static AbstractProcess execute(String command) throws IOException {return execute(command, null, null, null);}
+
+    /**
+     * Executes the specified command in the VM's current directory.
+     * <p>
+     * This is a convenience method and behaves exactly as a call to <code>execute(command, null, null, encoding)</code>.
+     * </p>
+     * @param  command     command to execute.
+     * @param  encoding    encoding used to read from the process' stream (system default is used if <code>null</code>).
+     * @return             the generated process.
+     * @see                #execute(String,AbstractFile,ProcessListener,String)
+     * @throws IOException thrown if an error happens while starting the process.
+     */
     public static AbstractProcess execute(String command, String encoding) throws IOException {return execute(command, null, null, encoding);}
 
     /**
@@ -99,12 +119,25 @@ public class ProcessRunner {
      * This is a convenience method and behaves exactly as a call to <code>execute(command, null, listener, null)</code>.
      * </p>
      * @param  command     command to execute.
-     * @param  listener    object that will be notified of any modification in the process' state.
+     * @param  listener    object that will be notified of any modification in the process' state (ignored if <code>null</code>).
      * @return             the generated process.
      * @see                #execute(String,AbstractFile,ProcessListener,String)
      * @throws IOException thrown if an error happens while starting the process.
      */
     public static AbstractProcess execute(String command, ProcessListener listener) throws IOException {return execute(command, null, listener, null);}
+
+    /**
+     * Executes the specified command in the VM's current directory.
+     * <p>
+     * This is a convenience method and behaves exactly as a call to <code>execute(command, null, listener, encoding)</code>.
+     * </p>
+     * @param  command     command to execute.
+     * @param  listener    object that will be notified of any modification in the process' state.
+     * @param  encoding    encoding used to read from the process' stream (system default is used if <code>null</code>).
+     * @return             the generated process.
+     * @see                #execute(String,AbstractFile,ProcessListener,String)
+     * @throws IOException thrown if an error happens while starting the process.
+     */
     public static AbstractProcess execute(String command, ProcessListener listener, String encoding) throws IOException {return execute(command, null, listener, encoding);}
 
     /**
@@ -119,6 +152,19 @@ public class ProcessRunner {
      * @throws IOException      thrown if an error happens while starting the process.
      */
     public static AbstractProcess execute(String command, AbstractFile currentDirectory) throws IOException {return execute(command, currentDirectory, null, null);}
+
+    /*
+     * Executes the specified command in the specified directory.
+     * <p>
+     * This is a convenience method and behaves exactly as a call to <code>execute(command, currentDirectory, null, encoding)</code>.
+     * </p>
+     * @param  command          command to execute.
+     * @param  currentDirectory directory in which to run the command (uses the VM's current directory if <code>null</code>).
+     * @param  encoding         encoding used to read from the process' stream (system default is used if <code>null</code>).
+     * @return                  the generated process.
+     * @see                     #execute(String,AbstractFile,ProcessListener,String)
+     * @throws IOException      thrown if an error happens while starting the process.
+     */
     public static AbstractProcess execute(String command, AbstractFile currentDirectory, String encoding) throws IOException {return execute(command, currentDirectory, null, encoding);}
 
     /**
@@ -133,9 +179,9 @@ public class ProcessRunner {
      *  tokenizer are then placed in the new string array <code>tokens</code>, in the same order.
      * </p>
      * @param  command          command to execute.
-     * @param  currentDirectory directory in which to run the command.
+     * @param  currentDirectory directory in which to run the command (uses the VM's current directory if <code>null</code>).
+     * @param  encoding         encoding used to read from the process' stream (system default is used if <code>null</code>).
      * @return                  the generated process.
-     * @see                     #execute(String,AbstractFile,ProcessListener,String)
      * @throws IOException      thrown if an error happens while starting the process.
      */
     public static AbstractProcess execute(String command, AbstractFile currentDirectory, ProcessListener listener, String encoding) throws IOException {
@@ -154,6 +200,17 @@ public class ProcessRunner {
         return execute(tokens, currentDirectory, listener, encoding);
     }
 
+    /**
+     * Executes the specified command in the specified directory.
+     * <p>
+     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, currentDirectory, listener, null)</code>.
+     * </p>
+     * @param  tokens           command to execute.
+     * @param  currentDirectory directory in which to run the command (uses the VM's current directory if <code>null</code>).
+     * @param  listener         object that will be notified of any modification in the process' state.
+     * @return                  the generated process.
+     * @throws IOException thrown if an error happens while starting the process.
+     */
     public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory, ProcessListener listener) throws IOException {return execute(tokens, currentDirectory, listener, null);}
 
     /**
@@ -163,10 +220,20 @@ public class ProcessRunner {
      * </p>
      * @param  tokens      command to execute.
      * @return             the generated process.
-     * @see                #execute(String[],AbstractFile,ProcessListener,String)
      * @throws IOException thrown if an error happens while starting the process.
      */
     public static AbstractProcess execute(String[] tokens) throws IOException {return execute(tokens, null, null, null);}
+
+    /**
+     * Executes the specified command in the VM's current directory.
+     * <p>
+     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, null, null, encoding)</code>.
+     * </p>
+     * @param  tokens      command to execute.
+     * @param  encoding    encoding used to read from the process' stream (system default is used if <code>null</code>).
+     * @return             the generated process.
+     * @throws IOException thrown if an error happens while starting the process.
+     */
     public static AbstractProcess execute(String[] tokens, String encoding) throws IOException {return execute(tokens, null, null, encoding);}
 
     /**
@@ -175,12 +242,25 @@ public class ProcessRunner {
      * This is a convenience method and behaves exactly as a call to <code>execute(tokens, null, listener, null)</code>.
      * </p>
      * @param  tokens      command to execute.
-     * @param  listener    object that will be notified of any modification in the process' state.
+     * @param  listener    object that will be notified of any modification in the process' state (ignored if <code>null</code>).
      * @return             the generated process.
      * @see                #execute(String[],AbstractFile,ProcessListener,String)
      * @throws IOException thrown if an error happens while starting the process.
      */
     public static AbstractProcess execute(String[] tokens, ProcessListener listener) throws IOException {return execute(tokens, null, listener, null);}
+
+    /**
+     * Executes the specified command in the VM's current directory.
+     * <p>
+     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, null, listener, encoding)</code>.
+     * </p>
+     * @param  tokens      command to execute.
+     * @param  listener    object that will be notified of any modification in the process' state (ignored if <code>null</code>).
+     * @param  encoding    encoding used to read from the process' stream (system default is used if <code>null</code>).
+     * @return             the generated process.
+     * @see                #execute(String[],AbstractFile,ProcessListener,String)
+     * @throws IOException thrown if an error happens while starting the process.
+     */
     public static AbstractProcess execute(String[] tokens, ProcessListener listener, String encoding) throws IOException {return execute(tokens, null, listener, encoding);}
 
     /**
@@ -195,5 +275,18 @@ public class ProcessRunner {
      * @throws IOException      thrown if an error happens while starting the process.
      */
     public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory) throws IOException {return execute(tokens, currentDirectory, null, null);}
+
+    /**
+     * Executes the specified command in the specified directory.
+     * <p>
+     * This is a convenience method and behaves exactly as a call to <code>execute(tokens, currentDirectory, null, null)</code>.
+     * </p>
+     * @param  tokens           command to execute.
+     * @param  currentDirectory directory in which to run the command.
+     * @param  encoding         encoding used to read from the process' stream (system default is used if <code>null</code>).
+     * @return                  the generated process.
+     * @see                     #execute(String[],AbstractFile,ProcessListener,String)
+     * @throws IOException      thrown if an error happens while starting the process.
+     */
     public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory, String encoding) throws IOException {return execute(tokens, currentDirectory, null, encoding);}
 }
