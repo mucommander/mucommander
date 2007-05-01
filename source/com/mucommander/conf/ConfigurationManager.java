@@ -1,12 +1,14 @@
 package com.mucommander.conf;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -34,13 +36,13 @@ import java.util.WeakHashMap;
  */
 public class ConfigurationManager {
     /** Path to the configuraation file. */
-    private static String configurationFile;
+    private static File configurationFile;
 
     /** Contains all registered configuration listeners, stored as weak references */
     private static WeakHashMap listeners = new WeakHashMap();
 
     /** Name of the configuration file */
-    private static final String CONFIGURATION_FILENAME = "preferences.xml";
+    private static final String DEFAULT_CONFIGURATION_FILE_NAME = "preferences.xml";
 
     /** Holds the content of the configuration file. */
     private static ConfigurationTree tree = new ConfigurationTree("root");
@@ -52,60 +54,21 @@ public class ConfigurationManager {
      */
     private ConfigurationManager() {}
 	
-	
-    /* ------------------------ */
-    /*       File handling      */
-    /* ------------------------ */
 
+    // - File handling ---------------------------------------------------------
+    // -------------------------------------------------------------------------
     /**
-     * Returns the path to the configuration file on the current platform.
+     * Reads configuration from the specified file.
      */
-    private static String getConfigurationFilePath() {
-        if(configurationFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), CONFIGURATION_FILENAME).getAbsolutePath();
-        else
-            return configurationFile;
-    }
-	
-	
-    /**
-     * Loads the specified configuration file in memory.
-     * @param path path to the configuration file to load in memory.
-     */
-    private static synchronized void parseConfiguration(String path) throws Exception {
+    public static synchronized void loadConfiguration() throws Exception {
         ConfigurationParser parser;
         InputStream         in;
 
         in = null;
         try {
             parser = new ConfigurationParser(new ConfigurationLoader());
-            parser.parse(in = new BackupInputStream(path));
-        }
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
-            }
-        }
-    }
-
-    /**
-     * Reads configuration from the specified file.
-     * <p>
-     * The <code>path</code> parameter can be set to <code>null</code>, in which case the default
-     * configuration file will used.
-     * </p>
-     * @param path path to the configuration file.
-     */
-    public static synchronized boolean loadConfiguration(String path) {
-        try {
-            if(path == null)
-                parseConfiguration(getConfigurationFilePath());
-            else {
-                setConfigurationFile(path);
-                parseConfiguration(path);
-            }
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFilePath(), -1);
+            parser.parse(in = new BackupInputStream(getConfigurationFile()));
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFile(), -1);
 			
             // If version in configuration differs from current version, 
             // import and move variables which have moved in the configuration tree
@@ -115,26 +78,20 @@ public class ConfigurationManager {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Version changed, looking for variables to migrate");
                 migrateVariable("prefs.show_hidden_files", ConfigurationVariables.SHOW_HIDDEN_FILES);
                 migrateVariable("prefs.auto_size_columns", ConfigurationVariables.AUTO_SIZE_COLUMNS);
-                migrateVariable("prefs.show_toolbar", ConfigurationVariables.TOOLBAR_VISIBLE);
-                migrateVariable("prefs.show_status_bar", ConfigurationVariables.STATUS_BAR_VISIBLE);
-                migrateVariable("prefs.show_command_bar", ConfigurationVariables.COMMAND_BAR_VISIBLE);
+                migrateVariable("prefs.show_toolbar",      ConfigurationVariables.TOOLBAR_VISIBLE);
+                migrateVariable("prefs.show_status_bar",   ConfigurationVariables.STATUS_BAR_VISIBLE);
+                migrateVariable("prefs.show_command_bar",  ConfigurationVariables.COMMAND_BAR_VISIBLE);
                 setVariable(ConfigurationVariables.VERSION, RuntimeConstants.VERSION);
             }
-						
-            return true;
         }
-        catch(Exception e) {
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No configuration file found at "+getConfigurationFilePath());			
+        //        catch(Exception e) {if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No configuration file found at "+getConfigurationFile());}
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
+            }
         }
-
-        return false;
     }
-
-    /**
-     * Opens and reads the configuration file.
-     */
-    public static synchronized boolean loadConfiguration() {return loadConfiguration(null);}
-
 
     /**
      * Moves the value of a variable to another.
@@ -158,9 +115,9 @@ public class ConfigurationManager {
         out = null;
         try {
             ConfigurationWriter writer = new ConfigurationWriter();
-            String filePath = getConfigurationFilePath();
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: "+filePath);
-            writer.writeXML(out = new BackupOutputStream(filePath));
+
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: " + getConfigurationFile());
+            writer.writeXML(out = new BackupOutputStream(getConfigurationFile()));
             out.close();
         }
         catch(IOException e) {
@@ -171,7 +128,7 @@ public class ConfigurationManager {
             }
 
             // Notify user that preferences file could not be written
-            System.out.println("muCommander was unable to write preferences file: "+e);
+            if(Debug.ON) Debug.trace("muCommander was unable to write preferences file: "+e);
         }
     }
 
@@ -558,18 +515,25 @@ public class ConfigurationManager {
 
     // - Custom configuration file handling -----------------------------------------
     // ------------------------------------------------------------------------------
+    public static File getConfigurationFile() {
+        if(configurationFile == null)
+            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_CONFIGURATION_FILE_NAME);
+        return configurationFile;
+    }
+
     /**
      * Sets the path to the configuration file.
-     * <p>
-     * Note that this will not trigger a reloading of the configuration. In order for this
-     * method to have any effect on the configuration file that is loaded, it must be called
-     * before any call to {@link #getVariable(String)}.
-     * </p>
-     * <p>
-     * The <code>file</code> can be <code>null</code>. If such is the case, the configuration
-     * file will revert to the default one.
-     * </p>
-     * @param file path to the configuration file that should be loaded.
+     * @param     file                  path to the configuration file that should be loaded.
+     * @exception FileNotFoundException if the file is not accessible.
      */
-    public static void setConfigurationFile(String file) {configurationFile = file;}
+    public static void setConfigurationFile(String file) throws FileNotFoundException {
+        File tempFile;
+
+        // If the file exists, it must accessible and readable.
+        tempFile = new File(file);
+        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
+            throw new FileNotFoundException("Not a valid file: " + file);
+
+        configurationFile = tempFile;
+    }
 }

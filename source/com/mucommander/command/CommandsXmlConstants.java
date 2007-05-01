@@ -43,15 +43,15 @@ interface CommandsXmlConstants {
     // - Custom command structure ----------------------------------------------
     // -------------------------------------------------------------------------
     /** Name of the attribute containing a command's display name. */
-    public static final String ARGUMENT_DISPLAY = "display";
+    public static final String ATTRIBUTE_DISPLAY = "display";
     /** Name of the attribute containing a command's alias. */
-    public static final String ARGUMENT_ALIAS   = "alias";
+    public static final String ATTRIBUTE_ALIAS   = "alias";
     /** Name of the attribute containing a command's value. */
-    public static final String ARGUMENT_VALUE   = "value";
+    public static final String ATTRIBUTE_VALUE   = "value";
     /** Name of the attribute containing a command's type. */
-    public static final String ARGUMENT_TYPE    = "type";
+    public static final String ATTRIBUTE_TYPE    = "type";
     /** Describes <i>system</i> commands. */
-    public static final String VALUE_SYSTEM     = "system";
+    public static final String VALUE_SYSTEM      = "system";
     /** Describes <i>invisible</i> commands. */
-    public static final String VALUE_INVISIBLE  = "invisible";
+    public static final String VALUE_INVISIBLE   = "invisible";
 }

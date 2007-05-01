@@ -77,9 +77,11 @@ public class AssociationReader implements ContentHandler, AssociationsXmlConstan
      * @see    #read(InputStream,AssociationBuilder)
      */
     public static void read(InputStream in, AssociationBuilder b, String encoding) throws Exception {
+        if(Debug.ON) Debug.trace("Starting to load command associations.");
         b.startBuilding();
         try {new Parser().parse(in, new AssociationReader(b), encoding);}
         finally {b.endBuilding();}
+        if(Debug.ON) Debug.trace("Command associations succesfully loaded.");
     }
 
 
@@ -95,71 +97,83 @@ public class AssociationReader implements ContentHandler, AssociationsXmlConstan
         if(!isInAssociation) {
             if(name.equals(ELEMENT_ASSOCIATION)) {
                 // Makes sure the required attributes are present.
-                if((buffer = (String)attributes.get(ATTRIBUTE_COMMAND)) == null)
-                    throw new Exception("Unspecified association command.");
+                if((buffer = (String)attributes.get(ATTRIBUTE_COMMAND)) == null) {
+                    if(Debug.ON) Debug.trace("Missing command attribute in association declaration. Ignoring association.");
+                    return;
+                }
 
                 isInAssociation = true;
                 builder.startAssociation(buffer);
             }
-            else if(!name.equals(ELEMENT_ROOT))
-                throw new Exception("Unknwon element opening: " + name);
+            else if(Debug.ON) Debug.trace("Unexpected start of element " + name + ", ignoring.");
         }
         else {
             if(name.equals(ELEMENT_MASK)) {
                 String caseSensitive;
 
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
-                    throw new Exception("Unspecified mask value.");
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
+                    if(Debug.ON) Debug.trace("Missing value in file mask declaration. Ignoring mask.");
+                    return;
+                }
                 if((caseSensitive = (String)attributes.get(ATTRIBUTE_CASE_SENSITIVE)) != null)
                     builder.setMask(buffer, caseSensitive.equals(VALUE_TRUE));
                 else
                     builder.setMask(buffer, true);
             }
             else if(name.equals(ELEMENT_IS_HIDDEN)) {
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
-                    throw new Exception("Unspecified hidden value.");
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
+                    if(Debug.ON) Debug.trace("Missing value in is_hidden declaration. Ignoring filter.");
+                    return;
+                }
                 builder.setIsHidden(buffer.equals(VALUE_TRUE));
             }
             else if(name.equals(ELEMENT_IS_SYMLINK)) {
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
-                    throw new Exception("Unspecified symlink value.");
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
+                    if(Debug.ON) Debug.trace("Missing value in is_symlink declaration. Ignoring filter.");
+                    return;
+                }
                 builder.setIsSymlink(buffer.equals(VALUE_TRUE));
             }
             else if(name.equals(ELEMENT_IS_READABLE)) {
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
-                    throw new Exception("Unspecified readable value.");
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
+                    if(Debug.ON) Debug.trace("Missing value in is_readable declaration. Ignoring filter.");
+                    return;
+                }
                 builder.setIsReadable(buffer.equals(VALUE_TRUE));
             }
             else if(name.equals(ELEMENT_IS_WRITABLE)) {
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
-                    throw new Exception("Unspecified writable value.");
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
+                    if(Debug.ON) Debug.trace("Missing value in is_writable declaration. Ignoring filter.");
+                    return;
+                }
                 builder.setIsWritable(buffer.equals(VALUE_TRUE));
             }
             else if(name.equals(ELEMENT_IS_EXECUTABLE)) {
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null)
-                    throw new Exception("Unspecified executable value.");
+                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
+                    if(Debug.ON) Debug.trace("Missing value in is_executable declaration. Ignoring filter.");
+                    return;
+                }
                 builder.setIsExecutable(buffer.equals(VALUE_TRUE));
             }
-            else
-                throw new Exception("Unknwon element opening: " + name);
+            else if(Debug.ON) Debug.trace("Unexpected start of element " + name + ", ignoring.");
         }
     }
 
-
-    // - Unused XML methods --------------------------------------------------
-    // -----------------------------------------------------------------------
     /**
      * This method is public as an implementation side effect, but should not be called directly.
      */
     public void endElement(String uri, String name) throws Exception {
-        if(name.equals(ELEMENT_ASSOCIATION)) {
-            if(!isInAssociation)
-                throw new Exception("Illegal element closing: " + name);
+        if(name.equals(ELEMENT_ASSOCIATION) && isInAssociation) {
             builder.endAssociation();
             isInAssociation = false;
         }
+        else if(Debug.ON) Debug.trace("Unexpected end of element " + name + ", ignoring.");
     }
 
+
+
+    // - Unused XML methods --------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * This method is public as an implementation side effect, but should not be called directly.
      */

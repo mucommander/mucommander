@@ -14,6 +14,10 @@ import com.mucommander.xml.parser.Parser;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -30,12 +34,12 @@ public class ActionKeymap implements ContentHandler {
     private static Hashtable acceleratorMap = new Hashtable();
 
     /** Default action keymap filename */
-    private final static String DEFAULT_ACTION_KEYMAP_FILENAME = "action_keymap.xml";
+    private final static String DEFAULT_ACTION_KEYMAP_FILE_NAME = "action_keymap.xml";
     /** Path to the action keymap resource file within the application JAR file */
-    private final static String ACTION_KEYMAP_RESOURCE_PATH = "/"+DEFAULT_ACTION_KEYMAP_FILENAME;
+    private final static String ACTION_KEYMAP_RESOURCE_PATH = "/" + DEFAULT_ACTION_KEYMAP_FILE_NAME;
 
     /** Action keymap file used when calling {@link #loadActionKeyMap()} */
-    private static AbstractFile actionKeyMapFile = FileFactory.getFile(PlatformManager.getPreferencesFolder().getAbsolutePath()+"/"+DEFAULT_ACTION_KEYMAP_FILENAME);
+    private static File actionKeyMapFile;
 
 
     /**
@@ -44,10 +48,19 @@ public class ActionKeymap implements ContentHandler {
      *
      * @param filePath path to the action keymap file
      */
-    public static void setActionKeyMapFile(String filePath) {
-        AbstractFile file = FileFactory.getFile(filePath);
-        if(file!=null)
-            actionKeyMapFile = file;
+    public static void setActionKeyMapFile(String filePath) throws FileNotFoundException {
+        File tempFile;
+
+        tempFile = new File(filePath);
+        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
+            throw new FileNotFoundException("Not a valid file: " + filePath);
+        actionKeyMapFile = tempFile;
+    }
+
+    public static File getActionKeyMapFile() {
+        if(actionKeyMapFile == null)
+            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_ACTION_KEYMAP_FILE_NAME);
+        return actionKeyMapFile;
     }
 
 
@@ -59,7 +72,7 @@ public class ActionKeymap implements ContentHandler {
      *
      * <p>This method must be called before requesting and registering any action.
      */
-    public static void loadActionKeyMap() {
+    public static void loadActionKeyMap() throws Exception {
         new ActionKeymap();
     }
 
@@ -217,53 +230,49 @@ public class ActionKeymap implements ContentHandler {
      * keyboard mapping, but the keyboard mappings customized by the user in the user's action keymap will override
      * the ones from the JAR action keymap.
      */
-    private ActionKeymap() {
+    private ActionKeymap() throws Exception {
+        File file;
 
-        // Load the default action_keymap.xml file contained in the application JAR
-        try {
+        // If the user hasn't yet defined an action keymap, copies the default one.
+        file = getActionKeyMapFile();
+        if(!file.exists()) {
+            OutputStream out;
+
+            out = null;
+            if(Debug.ON) Debug.trace("Copying "+ACTION_KEYMAP_RESOURCE_PATH+" JAR resource to "+file);
+
+            try {AbstractFile.copyStream(ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH), out = new FileOutputStream(file));}
+            catch(IOException e) {if(Debug.ON) Debug.trace("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);}
+            finally {
+                if(out != null) {
+                    try {out.close();}
+                    catch(Exception e) {}
+                }
+            }
+
+            // Loads the default action keymap.
+            // Error at this point are fatal, are there are no other keymap file to load.
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading JAR action keymap file at "+ACTION_KEYMAP_RESOURCE_PATH);
-
             parseActionKeymapFile(ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH));
         }
-        catch(Exception e) {
-            // Report the error to the user
-            System.out.println("Error: unable to load JAR action keymap file: "+e);
-        }
-
-        // Load the user's custom action keymap file if it exists.
-        // This will override the mappings customized by the user while retaining any new mapping that the user's
-        // action_keymap.xml doesn't yet have.
-        if(actionKeyMapFile.exists()) {
-            try {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading user action keymap file at "+actionKeyMapFile.getAbsolutePath());
-
-                parseActionKeymapFile(new BackupInputStream(actionKeyMapFile));
-            } catch(Exception e) {
-                // Report the error to the user
-                System.out.println("Error: unable to load user action keymap file at "+actionKeyMapFile.getAbsolutePath()+" : "+e);
-            }
-
-        }
-        // If the given file doesn't exist, copy the default one contained in the application JAR
         else {
-            try {
-                if(Debug.ON) Debug.trace("Copying "+ACTION_KEYMAP_RESOURCE_PATH+" JAR resource to "+actionKeyMapFile);
+            // Loads the default action keymap.
+            // Error at this point are non-fatal, are there still is the user defined keyamp to fall back to.
+            try {parseActionKeymapFile(ResourceLoader.getResourceAsStream(ACTION_KEYMAP_RESOURCE_PATH));}
+            catch(Exception e) {}
 
-                FileToolkit.copyResource(ACTION_KEYMAP_RESOURCE_PATH, actionKeyMapFile);
-            }
-            catch(IOException e) {
-                // Report the error to the user
-                System.out.println("Error: unable to copy "+ACTION_KEYMAP_RESOURCE_PATH+" resource to "+actionKeyMapFile+": "+e);
-            }
+            // Load the user's custom action keymap file.
+            // This will override the mappings customized by the user while retaining any new mapping that the user's
+            // action_keymap.xml doesn't yet have.
+            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Loading user action keymap file at " + file.getAbsolutePath());
+            parseActionKeymapFile(new BackupInputStream(file));
         }
     }
 
 
     private void parseActionKeymapFile(InputStream in) throws Exception {
         // Parse action keymap file
-        try {
-            new Parser().parse(in, this, "UTF-8");
-        }
+        try {new Parser().parse(in, this, "UTF-8");}
         finally {
             if(in!=null) {
                 try { in.close(); }
@@ -287,8 +296,7 @@ public class ActionKeymap implements ContentHandler {
         if(name.equals("action")) {
             String actionClassName = (String)attValues.get("class");
             if(actionClassName==null) {
-                // Report the error to the user
-                System.out.println("Error in action keymap file: no 'class' attribute specified in 'action' element");
+                if(Debug.ON) Debug.trace("Error in action keymap file: no 'class' attribute specified in 'action' element");
                 return;
             }
 
@@ -297,23 +305,20 @@ public class ActionKeymap implements ContentHandler {
                 actionClass = Class.forName(actionClassName);
             }
             catch(ClassNotFoundException e) {
-                // Report the error to the user
-                System.out.println("Error in action keymap file: could not resolve class "+actionClassName);
+                if(Debug.ON) Debug.trace("Error in action keymap file: could not resolve class "+actionClassName);
                 return;
             }
 
             // Primary keystroke
             String keyStrokeString = (String)attValues.get("keystroke");
             if(keyStrokeString==null) {
-                // Report the error to the user
-                System.out.println("Error in action keymap file: no 'keystroke' attribute specified in 'action' element");
+                if(Debug.ON) Debug.trace("Error in action keymap file: no 'keystroke' attribute specified in 'action' element");
                 return;
             }
 
             KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeString);
             if(keyStroke==null) {
-                // Report the error to the user
-                System.out.println("Error in action keymap file: specified keystroke could not be resolved: "+keyStrokeString);
+                if(Debug.ON) Debug.trace("Error in action keymap file: specified keystroke could not be resolved: "+keyStrokeString);
                 return;
             }
 
@@ -331,8 +336,7 @@ public class ActionKeymap implements ContentHandler {
             if(keyStrokeString!=null) {
                 keyStroke = KeyStroke.getKeyStroke(keyStrokeString);
                 if(keyStroke==null) {
-                    // Report the error to the user
-                    System.out.println("Error in action keymap file: specified alternate keystroke could not be resolved: "+keyStrokeString);
+                    if(Debug.ON) Debug.trace("Error in action keymap file: specified alternate keystroke could not be resolved: "+keyStrokeString);
                     return;
                 }
 

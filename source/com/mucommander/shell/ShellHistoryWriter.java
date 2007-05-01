@@ -15,8 +15,8 @@ class ShellHistoryWriter implements ShellHistoryConstants {
      * @param stream where to save the shell history.
      */
     public static void write(OutputStream stream) {
-        Iterator  history;
-        XmlWriter out;
+        Iterator  history; // Iterator on the shell history.
+        XmlWriter out;     // Where to write the shell history to.
 
         // Initialises writing.
         history = ShellHistoryManager.getHistoryIterator();

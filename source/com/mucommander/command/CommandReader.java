@@ -1,5 +1,6 @@
 package com.mucommander.command;
 
+import com.mucommander.Debug;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
 
@@ -74,9 +75,11 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
      * @see    #read(InputStream,CommandBuilder)
      */
     public static void read(InputStream in, CommandBuilder b, String encoding) throws Exception {
+        if(Debug.ON) Debug.trace("Starting to load custom commands.");
         b.startBuilding();
         try {new Parser().parse(in, new CommandReader(b), encoding);}
         finally {b.endBuilding();}
+        if(Debug.ON) Debug.trace("Custom commands succesfully loaded.");
     }
 
 
@@ -96,17 +99,18 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
             Command buffer;
 
             // Makes sure the required attributes are there.
-            if((alias = (String)attributes.get(ARGUMENT_ALIAS)) == null)
-                throw new Exception("Unspecified command alias.");
-            if((command = (String)attributes.get(ARGUMENT_VALUE)) == null)
-                throw new Exception("Unspecified command value.");
-            type    = parseCommandType((String)attributes.get(ARGUMENT_TYPE));
-            display = (String)attributes.get(ARGUMENT_DISPLAY);
+            if(((alias = (String)attributes.get(ATTRIBUTE_ALIAS)) == null) || ((command = (String)attributes.get(ATTRIBUTE_VALUE)) == null)) {
+                if(Debug.ON) Debug.trace("Missing attribute(s) to command declaration, ignoring.");
+                return;
+            }
+            type    = parseCommandType((String)attributes.get(ATTRIBUTE_TYPE));
+            display = (String)attributes.get(ATTRIBUTE_DISPLAY);
 
 
             // Creates the command and passes it to the builder.
             builder.addCommand(buffer = CommandParser.getCommand(alias, command, type, display));
         }
+        else if(Debug.ON) Debug.trace("Unexpected start of element " + name + ", ignoring.");
     }
 
 
@@ -116,12 +120,12 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
     /**
      * This method is public as an implementation side effect and should not be called directly.
      */
-    public void startDocument() throws Exception {}
+    public void startDocument() {}
 
     /**
      * This method is public as an implementation side effect and should not be called directly.
      */
-    public void endDocument() throws Exception {}
+    public void endDocument() {}
 
     /**
      * This method is public as an implementation side effect and should not be called directly.
@@ -131,7 +135,7 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
     /**
      * This method is public as an implementation side effect and should not be called directly.
      */
-    public void endElement(String uri, String name) throws Exception {}
+    public void endElement(String uri, String name) {}
 
 
 
@@ -159,5 +163,4 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
            return Command.INVISIBLE_COMMAND;
         return Command.NORMAL_COMMAND;
     }
-
 }

@@ -2,6 +2,7 @@
 package com.mucommander.cache;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.Debug;
 
 
 /**
@@ -228,7 +229,7 @@ public abstract class LRUCache {
                 cache.testCorruption();
             }
             catch(RuntimeException e) {
-                System.out.println("Cache corrupted after "+i+" iterations, cache state="+cache);
+                if(Debug.ON) Debug.trace("Cache corrupted after "+i+" iterations, cache state="+cache);
                 return;
             }
 
@@ -236,7 +237,7 @@ public abstract class LRUCache {
             //			System.out.println(cache.toString());
         }
 
-        System.out.println("Stress test took "+(System.currentTimeMillis()-timeStamp)+" ms.\n");
+        if(Debug.ON) Debug.trace("Stress test took "+(System.currentTimeMillis()-timeStamp)+" ms.\n");
 
         // Print the cache's state
         System.out.println(cache.toString());

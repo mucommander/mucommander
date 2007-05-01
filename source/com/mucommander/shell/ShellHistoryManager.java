@@ -6,6 +6,7 @@ import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.WeakHashMap;
@@ -22,7 +23,7 @@ public class ShellHistoryManager {
     // - History configuration -----------------------------------------------
     // -----------------------------------------------------------------------
     /** File in which to store the shell history. */
-    private static final String HISTORY_FILE      = "shell_history.xml";
+    private static final String DEFAULT_HISTORY_FILE_NAME = "shell_history.xml";
 
 
 
@@ -37,7 +38,7 @@ public class ShellHistoryManager {
     /** Index of the last element of the history. */
     private static int         historyEnd;
     /** Path to the history file. */
-    private static String      historyFile;
+    private static File        historyFile;
 
 
 
@@ -153,27 +154,42 @@ public class ShellHistoryManager {
     // ------------------------------------------------------------------------------
     /**
      * Sets the path of the shell history file.
-     * @param path where to load the shell history from.
+     * @param     path                  where to load the shell history from.
+     * @exception FileNotFoundException if <code>path</code> is not accessible.
      */
-    public static void setHistoryFile(String path) {historyFile = path;}
+    public static void setHistoryFile(String path) throws FileNotFoundException {
+        File tempFile;
+
+        tempFile = new File(path);
+        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
+            throw new FileNotFoundException("Not a valid file: " + path);
+
+        historyFile = tempFile;
+    }
 
     /**
-     * Returns the path to the history file.
-     * @return the path to the history file.
+     * Returns the path to the shell history file.
+     * <p>
+     * This method cannot guarantee the file's existence, and it's up to the caller
+     * to deal with the fact that the user might not actually have created a history file yet.
+     * </p>
+     * <p>
+     * This method's return value can be modified through {@link #setHistoryFile(String)}.
+     * If this wasn't called, the default path will be used: {@link #DEFAULT_HISTORY_FILE_NAME}
+     * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
+     * </p>
+     * @return the path to the shell history file.
      */
     public static File getHistoryFile() {
-        // If an history file was specified, use it.
-        if(historyFile != null)
-            return new File(historyFile);
-
-        // Otherwise use the default history file.
-        return new File(PlatformManager.getPreferencesFolder(), HISTORY_FILE);
+        if(historyFile == null)
+            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_HISTORY_FILE_NAME);
+        return historyFile;
     }
 
     /**
      * Writes the shell history to hard drive.
      */
-    public static void writeHistory() {
+    public static boolean writeHistory() {
         BackupOutputStream out;
 
         out = null;
@@ -186,33 +202,25 @@ public class ShellHistoryManager {
                 try {out.close(false);}
                 catch(Exception e2) {}
             }
+            return false;
         }
+        return true;
     }
 
     /**
      * Loads the shell history.
      */
-    public static void loadHistory() {
+    public static void loadHistory() throws Exception {
         BackupInputStream in;
 
         in = null;
         try {ShellHistoryReader.read(in = new BackupInputStream(getHistoryFile()));}
-        catch(Exception e) {}
         finally {
             if(in != null) {
                 try {in.close();}
                 catch(Exception e2) {}
             }
         }
-    }
-
-    /**
-     * Loads the shell history from the specified path.
-     * @param path where to load shell history from.
-     */
-    public static void loadHistory(String path) {
-        setHistoryFile(path);
-        loadHistory();
     }
 
     /**

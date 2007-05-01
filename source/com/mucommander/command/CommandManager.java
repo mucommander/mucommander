@@ -8,6 +8,8 @@ import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Vector;
@@ -449,19 +451,19 @@ public class CommandManager implements CommandBuilder {
 
     /**
      * Sets the path to the custom associations file.
-     * @param  file                     path to the custom associations file.
-     * @throws IllegalArgumentException if <code>file</code> is not accessible.
+     * @param  file                  path to the custom associations file.
+     * @throws FileNotFoundException if <code>file</code> is not accessible.
      * @see    #getAssociationFile()
      * @see    #loadAssociations()
      * @see    #writeAssociations()
      */
-    public static void setAssociationFile(String file) {
+    public static void setAssociationFile(String file) throws FileNotFoundException {
         File tempFile;
 
         // If the file exists, it must accessible and readable.
         tempFile = new File(file);
-        if(tempFile.exists() && !(tempFile.isFile() || tempFile.canRead()))
-            throw new IllegalArgumentException("Not a valid file: " + file);
+        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
+            throw new FileNotFoundException("Not a valid file: " + file);
 
         associationFile = tempFile;
     }
@@ -476,7 +478,7 @@ public class CommandManager implements CommandBuilder {
      * @see #getAssociationFile()
      * @see #setAssociationFile(String)
      */
-    public static void loadAssociations() {
+    public static void loadAssociations() throws IOException {
         File file;
 
         // Checks whether the associations file exists. If it doesn't, create default associations.
@@ -490,10 +492,11 @@ public class CommandManager implements CommandBuilder {
             in = null;
             try {AssociationReader.read(in = new BackupInputStream(file), new AssociationFactory());}
             catch(Exception e) {
-                if(Debug.ON) Debug.trace("Failed to load associations file: " + e.getMessage() + ". Using default associations");
-
                 // The associations file is corrupt, discard anything we might have loaded from it.
+                if(Debug.ON) Debug.trace("Failed to load associations file: " + e.getMessage() + ". Using default associations");
                 associations = new Vector();
+
+                throw new IOException(e.getMessage());
             }
 
             // Makes sure the input stream is closed.
@@ -610,19 +613,19 @@ public class CommandManager implements CommandBuilder {
 
     /**
      * Sets the path to the custom commands file.
-     * @param  file                     path to the custom commands file.
-     * @throws IllegalArgumentException if <code>file</code> is not accessible.
+     * @param  file                  path to the custom commands file.
+     * @throws FileNotFoundException if <code>file</code> is not accessible.
      * @see    #getCommandFile()
      * @see    #loadCommands()
      * @see    #writeCommands()
      */
-    public static void setCommandFile(String file) throws IllegalArgumentException {
+    public static void setCommandFile(String file) throws FileNotFoundException {
         File tempFile;
 
         // If the file exists, it must accessible and readable.
         tempFile = new File(file);
-        if(tempFile.exists() && !(tempFile.isFile() || tempFile.canRead()))
-            throw new IllegalArgumentException("Not a valid file: " + file);
+        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
+            throw new FileNotFoundException("Not a valid file: " + file);
 
         commandsFile = tempFile;
     }
@@ -684,7 +687,7 @@ public class CommandManager implements CommandBuilder {
      * @see #getCommandFile()
      * @see #setCommandFile(String)
      */
-    public static void loadCommands() {
+    public static void loadCommands() throws IOException {
         File file;
 
         file = getCommandFile();
@@ -699,10 +702,10 @@ public class CommandManager implements CommandBuilder {
             in = null;
             try {CommandReader.read(in = new BackupInputStream(file), new CommandManager());}
             catch(Exception e) {
-                if(Debug.ON) Debug.trace("Failed to load commands file: " + e.getMessage() + ". Using default commands.");
-
                 // Creates the default associations.
+                if(Debug.ON) Debug.trace("Failed to load commands file: " + e.getMessage() + ". Using default commands.");
                 commands = new Vector();
+                throw new IOException(e.getMessage());
             }
 
             // Makes sure the input stream is closed.

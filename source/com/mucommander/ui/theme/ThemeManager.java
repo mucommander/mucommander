@@ -237,6 +237,12 @@ public class ThemeManager {
      * Saves the user theme if necessary.
      */
     public static boolean saveUserTheme() {
+        // Makes sure no NullPointerException is raised if this method is called
+        // before themes have been initialised.
+        if(currentTheme == null)
+            return true;
+
+        // Saves the user theme if it's the current one.
         if(currentTheme.getType() == Theme.USER_THEME)
             return saveTheme(currentTheme);
         return true;

@@ -1,5 +1,3 @@
-
-
 package com.mucommander.ui;
 
 import com.mucommander.Debug;
@@ -10,7 +8,7 @@ import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.util.FileToolkit;
+import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MucoAction;
@@ -25,7 +23,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -50,12 +52,13 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
 
     /** Default command bar descriptor filename */
-    private final static String DEFAULT_COMMAND_BAR_FILENAME = "command_bar.xml";
+    private final static String DEFAULT_COMMAND_BAR_FILE_NAME = "command_bar.xml";
+
     /** Path to the command bar descriptor resource file within the application JAR file */
-    private final static String COMMAND_BAR_RESOURCE_PATH = "/"+DEFAULT_COMMAND_BAR_FILENAME;
+    private final static String COMMAND_BAR_RESOURCE_PATH = "/" + DEFAULT_COMMAND_BAR_FILE_NAME;
 
     /** Command bar descriptor file used when calling {@link #loadDescriptionFile()} */
-    private static AbstractFile commandBarDescriptorFile = FileFactory.getFile(PlatformManager.getPreferencesFolder().getAbsolutePath()+"/"+DEFAULT_COMMAND_BAR_FILENAME);
+    private static File commandBarFile;
 
 
     /** Current icon scale factor */
@@ -78,10 +81,37 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
      *
      * @param filePath path to the command bar descriptor file
      */
-    public static void setDescriptionFile(String filePath) {
-        AbstractFile file = FileFactory.getFile(filePath);
-        if(file!=null)
-            commandBarDescriptorFile = file;
+    public static void setDescriptionFile(String filePath) throws FileNotFoundException {
+        File tempFile;
+
+        tempFile = new File(filePath);
+        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
+            throw new FileNotFoundException("Not a valid file: " + filePath);
+        
+        commandBarFile = tempFile;
+    }
+
+    public static File getDescriptionFile() {
+        if(commandBarFile == null)
+            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_COMMAND_BAR_FILE_NAME);
+        return commandBarFile;
+    }
+
+    /**
+     * Copies the default commandbar description file.
+     * @param destination where to copy the default commandbar destination file.
+     */
+    private static void copyDefaultDescriptionFile(File destination) throws IOException {
+        OutputStream out;
+
+        out = null;
+        try {AbstractFile.copyStream(ResourceLoader.getResourceAsStream(COMMAND_BAR_RESOURCE_PATH), out = new FileOutputStream(destination));}
+        finally {
+            if(out != null) {
+                try {out.close();}
+                catch(Exception e) {}
+            }
+        }
     }
 
     /**
@@ -90,17 +120,26 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
      *
      * This method must be called before instanciating CommandBar for the first time.
      */
-    public static void loadDescriptionFile() {
-        // If the given file doesn't exist, copy the default one in the JAR file
-        if(!commandBarDescriptorFile.exists()) {
-            try {
-                if(Debug.ON) Debug.trace("copying "+COMMAND_BAR_RESOURCE_PATH+" resource to "+commandBarDescriptorFile);
+    public static void loadDescriptionFile() throws Exception {
+        File file;
 
-                FileToolkit.copyResource(COMMAND_BAR_RESOURCE_PATH, commandBarDescriptorFile);
+        file = getDescriptionFile();
+
+        // If the given file doesn't exist, copy the default one in the JAR file
+        if(!file.exists()) {
+            try {
+                if(Debug.ON) Debug.trace("copying "+COMMAND_BAR_RESOURCE_PATH+" resource to "+file);
+
+                copyDefaultDescriptionFile(file);
             }
             catch(IOException e) {
-                System.out.println("Error: unable to copy "+COMMAND_BAR_RESOURCE_PATH+" resource to "+commandBarDescriptorFile+": "+e);
-                return;
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Error: unable to copy "+COMMAND_BAR_RESOURCE_PATH+" resource to "+file+": "+e);
+                // If an error occured, the description file is most likely corrupt.
+                // Deletes it.
+                if(file.exists())
+                    file.delete();
+
+                throw e;
             }
         }
 
@@ -270,17 +309,12 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
         /**
          * Starts parsing the XML description file.
          */
-        private CommandBarReader() {
+        private CommandBarReader() throws Exception {
             // Parse the XML file describing the command bar buttons and associated actions
             InputStream in = null;
             try {
-                in = new BackupInputStream(commandBarDescriptorFile);
+                in = new BackupInputStream(getDescriptionFile());
                 new Parser().parse(in, this, "UTF-8");
-            }
-            catch(Exception e) {
-                if(com.mucommander.Debug.ON) {
-                    System.out.println("Exception thrown while parsing CommandBar XML file "+COMMAND_BAR_RESOURCE_PATH+": "+e);
-                }
             }
             finally {
                 if(in!=null)
@@ -322,9 +356,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
                 try {
                     actionsV.add(Class.forName(actionClassName));
                 }
-                catch(Exception e) {
-                    System.out.println("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);
-                }
+                catch(Exception e) {if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);}
 
                 // Resolve alternate action class (if any)
                 actionClassName = (String)attValues.get("alt_action");
@@ -334,9 +366,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
                     try {
                         alternateActionsV.add(Class.forName(actionClassName));
                     }
-                    catch(Exception e) {
-                        System.out.println("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);
-                    }
+                    catch(Exception e) {if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);}
             }
             else if(name.equals("command_bar")) {
                 // Retrieve modifier key (shift by default)

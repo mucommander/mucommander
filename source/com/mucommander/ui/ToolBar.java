@@ -10,7 +10,7 @@ import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileURL;
-import com.mucommander.file.util.FileToolkit;
+import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.comp.button.NonFocusableButton;
@@ -25,6 +25,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -39,12 +43,12 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     private MainFrame mainFrame;
 
     /** Default toolbar descriptor filename */
-    private final static String DEFAULT_TOOLBAR_FILENAME = "toolbar.xml";
+    private final static String DEFAULT_TOOLBAR_FILE_NAME = "toolbar.xml";
     /** Path to the toolbar descriptor resource file within the application JAR file */
-    private final static String TOOLBAR_RESOURCE_PATH = "/"+DEFAULT_TOOLBAR_FILENAME;
+    private final static String TOOLBAR_RESOURCE_PATH = "/"+DEFAULT_TOOLBAR_FILE_NAME;
 
     /** Toolbar descriptor file used when calling {@link #loadDescriptionFile()} */
-    private static AbstractFile toolbarDescriptorFile = FileFactory.getFile(PlatformManager.getPreferencesFolder().getAbsolutePath()+"/"+DEFAULT_TOOLBAR_FILENAME);
+    private static File descriptionFile;
 
     /** Dimension of button separators */
     private final static Dimension SEPARATOR_DIMENSION = new Dimension(10, 16);
@@ -64,10 +68,33 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
      *
      * @param filePath path to the toolbar descriptor file
      */
-    public static void setDescriptionFile(String filePath) {
-        AbstractFile file = FileFactory.getFile(filePath);
-        if(file!=null)
-            toolbarDescriptorFile = file;
+    public static void setDescriptionFile(String filePath) throws FileNotFoundException {
+        File tempFile;
+
+        tempFile = new File(filePath);
+        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
+            throw new FileNotFoundException("Not a valid file: " + filePath);
+
+        descriptionFile = tempFile;
+    }
+
+    public static File getDescriptionFile() {
+        if(descriptionFile == null)
+            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_TOOLBAR_FILE_NAME);
+        return descriptionFile;
+    }
+
+    private static void copyDefaultDescriptionFile(File destination) throws IOException {
+        OutputStream out;
+
+        out = null;
+        try {AbstractFile.copyStream(ResourceLoader.getResourceAsStream(TOOLBAR_RESOURCE_PATH), out = new FileOutputStream(destination));}
+        finally {
+            if(out != null) {
+                try {out.close();}
+                catch(Exception e) {}
+            }
+        }
     }
 
     /**
@@ -76,17 +103,24 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
      *
      * <p>This method must be called before instanciating ToolBar for the first time.
      */
-    public static void loadDescriptionFile() {
-        // If the given file doesn't exist, copy the default one in the JAR file
-        if(!toolbarDescriptorFile.exists()) {
-            try {
-                if(Debug.ON) Debug.trace("copying "+TOOLBAR_RESOURCE_PATH+" resource to "+toolbarDescriptorFile);
+    public static void loadDescriptionFile() throws Exception {
+        File file;
 
-                FileToolkit.copyResource(TOOLBAR_RESOURCE_PATH, toolbarDescriptorFile);
+        file = getDescriptionFile();
+        // If the given file doesn't exist, copy the default one in the JAR file
+        if(!file.exists()) {
+            try {
+                if(Debug.ON) Debug.trace("copying " + TOOLBAR_RESOURCE_PATH + " resource to " + file);
+                copyDefaultDescriptionFile(file);
             }
             catch(IOException e) {
-                System.out.println("Error: unable to copy "+TOOLBAR_RESOURCE_PATH+" resource to "+toolbarDescriptorFile+": "+e);
-                return;
+                if(Debug.ON) Debug.trace("Error: unable to copy " + TOOLBAR_RESOURCE_PATH + " resource to " + file + ": " + e);
+                // If an error occured, the description file is most likely corrupt.
+                // Deletes it.
+                if(file.exists())
+                    file.delete();
+
+                throw e;
             }
         }
 
@@ -279,20 +313,18 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         /**
          * Starts parsing the XML description file.
          */
-        private ToolBarReader() {
+        private ToolBarReader() throws Exception {
             InputStream in = null;
+
             try {
-                in = new BackupInputStream(toolbarDescriptorFile);
+                in = new BackupInputStream(getDescriptionFile());
                 new Parser().parse(in, this, "UTF-8");
             }
-            catch(Exception e) {
-                // Report error to the standard output
-                System.out.println("Exception thrown while parsing Toolbar XML file "+TOOLBAR_RESOURCE_PATH+": "+e);
-            }
             finally {
-                if(in!=null)
-                    try { in.close(); }
+                if(in != null) {
+                    try {in.close();}
                     catch(IOException e) {}
+                }
             }
         }
 
@@ -321,9 +353,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
                 try {
                     actionsV.add(Class.forName(actionClassName));
                 }
-                catch(Exception e) {
-                    System.out.println("Error in "+TOOLBAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);
-                }
+                catch(Exception e) {if(Debug.ON) Debug.trace("Error in "+TOOLBAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);}
             }
             else if(name.equals("separator")) {
                 actionsV.add(null);

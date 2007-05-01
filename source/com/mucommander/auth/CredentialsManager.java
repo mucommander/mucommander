@@ -10,6 +10,7 @@ import com.mucommander.util.VectorChangeListener;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -45,7 +46,7 @@ public class CredentialsManager implements VectorChangeListener {
     private static File credentialsFile;
 
     /** Default credentials file name */
-    private static final String DEFAULT_CREDENTIALS_FILENAME = "credentials.xml";
+    private static final String DEFAULT_CREDENTIALS_FILE_NAME = "credentials.xml";
 
     /** True when changes were made after the credentials file was last saved */
     private static boolean saveNeeded;
@@ -65,43 +66,39 @@ public class CredentialsManager implements VectorChangeListener {
      */
     private static File getCredentialsFile() {
         if(credentialsFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_CREDENTIALS_FILENAME);
-        else
-            return credentialsFile;
+            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_CREDENTIALS_FILE_NAME);
+        return credentialsFile;
     }
 
     /**
      * Sets the path to the credentials file.
-     *
      * @param path the path to the credentials file
+     * @throws FileNotFoundException if <code>path</code> is not available.
      */
-    public static void setCredentialsFile(String path) {
-        credentialsFile = new File(path);
+    public static void setCredentialsFile(String path) throws FileNotFoundException {
+        File tempFile;
+
+        tempFile = new File(path);
+        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
+            throw new FileNotFoundException("Not a valid file: " + path);
+
+        credentialsFile = tempFile;
     }
 
 
     /**
-     * Tries to load credentials from the credentials file if it exists, and reports any error that occur during parsing
-     * to the standard output. Does nothing if the credentials file doesn't exist.
+     * Tries to load credentials from the credentials file if it exists. Does nothing if it doesn't.
+     * @throws Exception if an error occurs while loading the credentials file.
      */
-    public static void loadCredentials() {
+    public static void loadCredentials() throws Exception {
         File credentialsFile = getCredentialsFile();
-        try {
-            if(credentialsFile.exists()) {
-                if(Debug.ON) Debug.trace("Found credentials file: "+credentialsFile.getAbsolutePath());
-                // Parse the credentials file
-                new CredentialsParser().parse(credentialsFile);
-                if(Debug.ON) Debug.trace("Credentials file loaded.");
-            }
-            else {
-                if(Debug.ON) Debug.trace("No credentials file found at "+credentialsFile.getAbsolutePath());
-            }
+        if(credentialsFile.exists()) {
+            if(Debug.ON) Debug.trace("Found credentials file: "+credentialsFile.getAbsolutePath());
+            // Parse the credentials file
+            new CredentialsParser().parse(credentialsFile);
+            if(Debug.ON) Debug.trace("Credentials file loaded.");
         }
-        catch(Exception e) {
-            // Report on the standard output that something went wrong while parsing the credentials file
-            // as this shouldn't normally happen
-            System.out.println("An error occurred while loading credentials file "+credentialsFile.getAbsolutePath()+": "+e);			
-        }
+        else if(Debug.ON) Debug.trace("No credentials file found at "+credentialsFile.getAbsolutePath());
     }
 
     /**
@@ -132,7 +129,7 @@ public class CredentialsManager implements VectorChangeListener {
             }
 
             // Notify user that something went wrong while writing the credentials file
-            System.out.println("An error occurred while writing credentials file "+ credentialsFile.getAbsolutePath()+": "+e);
+            if(Debug.ON) Debug.trace("An error occurred while writing credentials file "+ credentialsFile.getAbsolutePath()+": "+e);
         }
     }
 

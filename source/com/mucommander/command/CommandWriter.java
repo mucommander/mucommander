@@ -54,14 +54,14 @@ public class CommandWriter implements CommandsXmlConstants, CommandBuilder {
 
         // Builds the XML description of the command.
         attributes = new XmlAttributes();
-        attributes.add(ARGUMENT_ALIAS, command.getAlias());
-        attributes.add(ARGUMENT_VALUE, command.getCommand());
+        attributes.add(ATTRIBUTE_ALIAS, command.getAlias());
+        attributes.add(ATTRIBUTE_VALUE, command.getCommand());
         if(command.getType() == Command.SYSTEM_COMMAND)
-            attributes.add(ARGUMENT_TYPE, VALUE_SYSTEM);
+            attributes.add(ATTRIBUTE_TYPE, VALUE_SYSTEM);
         else if(command.getType() == Command.INVISIBLE_COMMAND)
-            attributes.add(ARGUMENT_TYPE, VALUE_INVISIBLE);
+            attributes.add(ATTRIBUTE_TYPE, VALUE_INVISIBLE);
         if(command.isDisplayNameSet())
-            attributes.add(ARGUMENT_DISPLAY, command.getDisplayName());
+            attributes.add(ATTRIBUTE_DISPLAY, command.getDisplayName());
 
         // Writes the XML description.
         out.writeStandAloneElement(ELEMENT_COMMAND, attributes);

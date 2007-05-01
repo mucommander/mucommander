@@ -74,8 +74,8 @@ class BookmarkParser implements ContentHandler, BookmarkConstants {
      */
     public void endElement(String uri, String name) {
         if(name.equals(ELEMENT_BOOKMARK)) {
-            if(bookmarkName==null || bookmarkLocation==null) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Missing value, bookmark ignored: name="+bookmarkName+" location="+ bookmarkLocation);
+            if(bookmarkName == null || bookmarkLocation == null) {
+                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Missing value, bookmark ignored: name=" + bookmarkName + " location=" + bookmarkLocation);
                 return;
             }
 

@@ -8,6 +8,7 @@ import com.mucommander.util.AlteredVector;
 import com.mucommander.util.VectorChangeListener;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.WeakHashMap;
@@ -26,7 +27,7 @@ public class BookmarkManager implements VectorChangeListener {
     private static File bookmarksFile;
 
     /** Default bookmarks file name */
-    private static final String DEFAULT_BOOKMARKS_FILENAME = "bookmarks.xml";
+    private static final String DEFAULT_BOOKMARKS_FILE_NAME = "bookmarks.xml";
 
     /** Bookmark instances */
     private static AlteredVector bookmarks = new AlteredVector();
@@ -57,8 +58,7 @@ public class BookmarkManager implements VectorChangeListener {
     }
 
 
-    private BookmarkManager() {
-    }
+    private BookmarkManager() {}
 
 
     /**
@@ -66,43 +66,47 @@ public class BookmarkManager implements VectorChangeListener {
      */
     private static File getBookmarksFile() {
         if(bookmarksFile == null)
-            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_BOOKMARKS_FILENAME);
-        else
-            return bookmarksFile;
+            return new File(PlatformManager.getPreferencesFolder(), DEFAULT_BOOKMARKS_FILE_NAME);
+        return bookmarksFile;
     }
 
     /**
      * Sets the path to the bookmarks file.
-     *
      * @param path the path to the bookmarks file
+     * @exception FileNotFoundException if <code>path</code> is not accessible.
      */
-    public static void setBookmarksFile(String path) {
-        bookmarksFile = new File(path);
+    public static void setBookmarksFile(String path) throws FileNotFoundException {
+        File tempFile;
+
+        tempFile = new File(path);
+        if(!(tempFile.exists() && tempFile.isFile() && tempFile.canRead()))
+            throw new FileNotFoundException("Not a valid file: " + path);
+
+        bookmarksFile = tempFile;
     }
 
-	
     /**
      * Tries to load bookmarks from the bookmarks file if it exists, and reports any error that occur during parsing
      * to the standard output. Does nothing if the bookmarks file doesn't exist.
+     * @exception IOException if an IO related error occurs.
      */
-    public static void loadBookmarks() {
+    public static void loadBookmarks() throws IOException {
         File bookmarksFile = getBookmarksFile();
-        try {
-            if(bookmarksFile.exists()) {
-                if(Debug.ON) Debug.trace("Found bookmarks file: "+bookmarksFile.getAbsolutePath());
-                // Parse the bookmarks file
-                new BookmarkParser().parse(bookmarksFile);
-                if(Debug.ON) Debug.trace("Bookmarks file loaded.");
+
+        if(bookmarksFile.exists()) {
+            if(Debug.ON) Debug.trace("Found bookmarks file: " + bookmarksFile.getAbsolutePath());
+
+            // Parse the bookmarks file
+            try {new BookmarkParser().parse(bookmarksFile);}
+            catch(Exception e) {
+                // The bookmarks file is corrupt, ignores anything it contains.
+                bookmarks = new AlteredVector();
+                throw new IOException(e.getMessage());
             }
-            else {
-                if(Debug.ON) Debug.trace("No bookmarks file found at "+bookmarksFile.getAbsolutePath());
-            }
+
+            if(Debug.ON) Debug.trace("Bookmarks file loaded.");
         }
-        catch(Exception e) {
-            // Report on the standard output that something went wrong while parsing the bookmarks file
-            // as this shouldn't normally happen
-            System.out.println("An error occurred while loading bookmarks file "+bookmarksFile.getAbsolutePath()+": "+e);			
-        }
+        else if(Debug.ON) Debug.trace("No bookmarks file found at " + bookmarksFile.getAbsolutePath());
     }
 	
     /**
@@ -133,7 +137,7 @@ public class BookmarkManager implements VectorChangeListener {
             }
 
             // Notify user that something went wrong while writing the bookmarks file
-            System.out.println("An error occurred while writing bookmarks file "+bookmarksFile.getAbsolutePath()+": "+e);			
+            if(Debug.ON) Debug.trace("An error occurred while writing bookmarks file "+bookmarksFile.getAbsolutePath()+": "+e);			
         }
     }
 

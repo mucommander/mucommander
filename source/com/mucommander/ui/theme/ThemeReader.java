@@ -714,14 +714,14 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
 
         // Computes the font size.
         if((buffer = (String)attributes.get(ATTRIBUTE_SIZE)) == null) {
-            if(Debug.ON) Debug.trace("Missing font size attribute in theme.");
+            if(Debug.ON) Debug.trace("Missing font size attribute in theme, ignoring.");
             return null;
 	}
 	size = Integer.parseInt(buffer);
 
         // Computes the font family.
         if((buffer = (String)attributes.get(ATTRIBUTE_FAMILY)) == null) {
-            if(Debug.ON) Debug.trace("Missing font family attribute in theme.");
+            if(Debug.ON) Debug.trace("Missing font family attribute in theme, ignoring.");
             return null;
 	}
 
@@ -736,7 +736,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
 	}
 
         // No font was found, instructs the ThemeManager to use the system default.
-	if(Debug.ON) Debug.trace("Requested font families are not installed on the system.");
+	if(Debug.ON) Debug.trace("Requested font families are not installed on the system, using default.");
         return null;
     }
 
@@ -752,7 +752,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
 
         // Retrieves the color attribute's value.
         if((buffer = (String)attributes.get(ATTRIBUTE_COLOR)) == null) {
-            if(Debug.ON) Debug.trace("Missing color attribute in theme.");
+            if(Debug.ON) Debug.trace("Missing color attribute in theme, ignoring.");
             return null;
         }
         color = Integer.parseInt(buffer, 16);
@@ -769,8 +769,8 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
     private void traceIllegalDeclaration(String element) {
         unknownElement = element;
         if(Debug.ON)
-            Debug.trace("Illegal element declaration: " + element);
+            Debug.trace("Unexpected start of element " + element + ", ignoring.");
     }
 
-    private static void traceIllegalClosing(String element) {Debug.trace("Illegal element closure: " + element);}
+    private static void traceIllegalClosing(String element) {if(Debug.ON) Debug.trace("Unexpected end of element " + element + ", ignoring.");}
 }
