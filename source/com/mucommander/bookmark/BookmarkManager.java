@@ -51,6 +51,7 @@ public class BookmarkManager implements VectorChangeListener {
      * stores VectorChangeListener as weak references) */
     private static BookmarkManager singleton = new BookmarkManager();
 
+    
 
     static {
         // Listen to changes made to the bookmarks vector
