@@ -147,7 +147,7 @@ public class BookmarkManager implements VectorChangeListener {
      * 
      * <p>Important: the returned Vector should not directly be used to
      * add or remove bookmarks, doing so won't trigger any event to registered bookmark listeners.
-     * However, it is safe to modify bookmarks individually, events will be properly fired.</p>
+     * However, it is safe to modify bookmarks individually, events will be properly fired.
      */
     public static AlteredVector getBookmarks() {
         return bookmarks;
@@ -187,8 +187,8 @@ public class BookmarkManager implements VectorChangeListener {
     /**
      * Adds the specified BookmarkListener to the list of registered listeners.
      *
-     * <p>Listeners are stored as weak references so {@link #removeBookmarkListener(BookmarkListener) removeBookmarkListener()}
-     * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
+     * <p>Listeners are stored as weak references so {@link #removeBookmarkListener(BookmarkListener)}
+     * doesn't need to be called for listeners to be garbage collected when they're not used anymore.
      *
      * @param listener the BookmarkListener to add to the list of registered listeners.
      */
