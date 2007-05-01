@@ -67,7 +67,7 @@ public class ActionManager {
 
                 if(Debug.ON) Debug.trace("creating instance");
 
-                Hashtable properties = actionDescriptor.getActionProperties();
+                Hashtable properties = actionDescriptor.getInitProperties();
                 // If no properties hashtable is specified in the action descriptor
                 if(properties==null) {
                     properties = new Hashtable();

@@ -10,7 +10,7 @@ import java.util.Hashtable;
  * <p>Two ActionDescriptor instances are equal only if:
  * <ul>
  *  <li>they refer to the same MucoAction class
-     *  <li>both sets of initialization properties are equal, i.e. they contain the same key/value pairs (deep equality)
+ *  <li>both sets of initialization properties are equal, i.e. they contain the same key/value pairs (deep equality)
  * </ul>
  * This means that two ActionDescriptor instances referring to the same MucoAction class but with a different set of
  * initialization properties will not be equal.
@@ -28,7 +28,7 @@ public class ActionDescriptor {
     /** MucoAction class descriptor */
     private Class actionClass;
 
-    /** */
+    /** Intialization properties, null if there are no initialization properties */
     private Hashtable properties;
 
 
@@ -51,12 +51,12 @@ public class ActionDescriptor {
      * (provide the proper constructor), otherwise {@link ActionManager} will fail to instanciate it. However,
      * ActionDescriptor does not check if the specified Class is valid or not.
      * 
-     * @param actionClass a MucoAction Class descriptor
-     * @param properties a Hashtable containing the properties that will be used to instanciate the specified MucoAction class
+     * @param mucoActionClass a MucoAction Class descriptor
+     * @param initProperties a Hashtable containing the properties that will be used to instanciate the specified MucoAction class
      */
-    public ActionDescriptor(Class actionClass, Hashtable properties) {
-        this.actionClass = actionClass;
-        this.properties = properties;
+    public ActionDescriptor(Class mucoActionClass, Hashtable initProperties) {
+        this.actionClass = mucoActionClass;
+        this.properties = initProperties;
     }
 
     /**
@@ -67,9 +67,10 @@ public class ActionDescriptor {
     }
 
     /**
-     * Returns the list of properties that are used to instanciate the MucoAction class.
+     * Returns the list of properties that are to be used to instanciate the MucoAction class, or <code>null</code> if
+     * there are none.
      */
-    public Hashtable getActionProperties() {
+    public Hashtable getInitProperties() {
         return properties;
     }
 
