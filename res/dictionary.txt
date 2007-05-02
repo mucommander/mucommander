@@ -5350,6 +5350,7 @@ server_connect_dialog.server:KR:서버
 
 server_connect_dialog.share:EN:Share
 server_connect_dialog.share:FR:Partage
+server_connect_dialog.share:CS:Sdílet
 # Translation missing
 
 
@@ -5456,6 +5457,7 @@ server_connect_dialog.connect:KR:연결
 
 server_connect_dialog.protocol:EN:Protocol
 server_connect_dialog.protocol:FR:Protocole
+server_connect_dialog.protocol:CS:Protokol
 # Translation missing
 
 
@@ -5470,6 +5472,7 @@ server_connect_dialog.protocol:FR:Protocole
 
 server_connect_dialog.nfs_version:EN:NFS version
 server_connect_dialog.nfs_version:FR:Version de NFS
+server_connect_dialog.nfs_version:CS:Verze NFS
 # Translation missing
 
 
@@ -6457,7 +6460,7 @@ shortcuts_dialog.quick_search.jump_to_previous:FR:Aller au résultat précédent
 shortcuts_dialog.quick_search.jump_to_previous:RO:Mergi la rezultatul anterior al căutării rapide
 shortcuts_dialog.quick_search.jump_to_previous:SI:Preskoči na prejšnji rezultat hitrega iskanja
 shortcuts_dialog.quick_search.jump_to_previous:IT:Salta sulla ricerca rapida precedente
-shortcuts_dialog.quick_search.jump_to_previous:CS:Přejít na výsledek předchozího hledání
+shortcuts_dialog.quick_search.jump_to_previous:CS:Přejít na předchozí výsledek hledání
 shortcuts_dialog.quick_search.jump_to_previous:zh_TW:跳至上一個快速搜尋的結果
 shortcuts_dialog.quick_search.jump_to_previous:DE:Springe zum vorigen Ergebnis der Schnellsuche
 shortcuts_dialog.quick_search.jump_to_previous:zh_CN:跳至上次快速搜索的结果
@@ -6479,7 +6482,7 @@ shortcuts_dialog.quick_search.jump_to_next:FR:Aller au résultat suivant
 shortcuts_dialog.quick_search.jump_to_next:RO:Mergi la rezultatul următor al căutării rapide
 shortcuts_dialog.quick_search.jump_to_next:SI:Preskoči na naslednji rezultat hitrega iskanja
 shortcuts_dialog.quick_search.jump_to_next:IT:Salta sulla ricerca rapida seguente
-shortcuts_dialog.quick_search.jump_to_next:CS:Přejít na výsledek následujícího hledání
+shortcuts_dialog.quick_search.jump_to_next:CS:Přejít na následující výsledek hledání
 shortcuts_dialog.quick_search.jump_to_next:zh_TW:跳至下一個快速搜尋的結果
 shortcuts_dialog.quick_search.jump_to_next:DE:Springe zum nächsten Ergebnis der Schnellsuche
 shortcuts_dialog.quick_search.jump_to_next:zh_CN:跳至下个快速搜索的结果
@@ -6500,7 +6503,7 @@ shortcuts_dialog.quick_search.mark_jump_next:FR:Marquer/Dé-marquer le fichier c
 shortcuts_dialog.quick_search.mark_jump_next:RO:Selectează/Deselectează fișierul curent si mergi la următorul rezultat al căutării
 shortcuts_dialog.quick_search.mark_jump_next:SI:Označi/Odznači trenutno datoteko in preskoči na naslednji rezultat iskanja
 shortcuts_dialog.quick_search.mark_jump_next:IT:Seleziona/deseleziona il file corrente e salta sulla ricerca rapida seguente
-shortcuts_dialog.quick_search.mark_jump_next:CS:Označit/odznačit stávající soubor a přejít na výsledek následujícího hledání
+shortcuts_dialog.quick_search.mark_jump_next:CS:Označit/odznačit stávající soubor a přejít na následující výsledek hledání
 shortcuts_dialog.quick_search.mark_jump_next:zh_TW:標記/取消標記目前檔案並跳至下一個搜尋結果
 shortcuts_dialog.quick_search.mark_jump_next:DE:Markiere/Demarkiere aktuelle Datei und springe zum nächsten Suchergebnis
 shortcuts_dialog.quick_search.mark_jump_next:zh_CN:标记/取消标记当前文件并跳至下各搜索结果
@@ -6966,6 +6969,7 @@ prefs_dialog.compact_file_size:KR:파일 크기(용량) 올림
 
 prefs_dialog.follow_symlinks_when_cd:EN:Follow symlinks when changing current directory
 prefs_dialog.follow_symlinks_when_cd:FR:Suivre les liens symboliques en changeant de répertoire courant
+prefs_dialog.follow_symlinks_when_cd:CS:Následovat symbolické odkazy při změnách složky
 # Translation missing
 
 
