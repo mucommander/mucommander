@@ -19,18 +19,6 @@ public class ActionManager {
     private static WeakHashMap mainFrameActionsMap = new WeakHashMap();
 
 
-//    public static MucoAction getActionInstance(String actionClassName, MainFrame mainFrame) {
-////        if(Debug.ON) Debug.trace("called, actionClassName="+actionClassName);
-//
-//        try {
-//            return getActionInstance(Class.forName(actionClassName), mainFrame);
-//        }
-//        catch(ClassNotFoundException e) {
-//            if(Debug.ON) Debug.trace("WARNING: could not resolve class "+actionClassName+"returning null !");
-//            return null;
-//        }
-//    }
-
     public static MucoAction getActionInstance(Class actionClass, MainFrame mainFrame) {
         return getActionInstance(new ActionDescriptor(actionClass), mainFrame);
     }
