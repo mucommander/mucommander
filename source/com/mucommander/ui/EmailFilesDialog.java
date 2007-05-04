@@ -10,7 +10,7 @@ import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
-import com.mucommander.ui.comp.dialog.TextFieldsPanel;
+import com.mucommander.ui.comp.dialog.XAlignedComponentPanel;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.pref.PreferencesDialog;
 
@@ -80,23 +80,23 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
             YBoxPanel mainPanel = new YBoxPanel(5);
 	
             // Text fields panel
-            TextFieldsPanel textFieldsPanel = new TextFieldsPanel(5);
+            XAlignedComponentPanel compPanel = new XAlignedComponentPanel();
 
             // From (sender) field, non editable
             JLabel fromLabel = new JLabel(ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_NAME)
                                           +" <"+ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_ADDRESS)+">");
             //			fromField.setEditable(false);
-            textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.from")+":", fromLabel, 10);
+            compPanel.addRow(Translator.get("email_dialog.from")+":", fromLabel, 10);
 			
             // To (recipients) field
             toField = new JTextField(lastTo);
-            textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.to")+":", toField, 10);
+            compPanel.addRow(Translator.get("email_dialog.to")+":", toField, 10);
 			
             // Subject field
             subjectField = new JTextField(lastSubject);
-            textFieldsPanel.addTextFieldRow(Translator.get("email_dialog.subject")+":", subjectField, 15);
+            compPanel.addRow(Translator.get("email_dialog.subject")+":", subjectField, 15);
 
-            mainPanel.add(textFieldsPanel);		
+            mainPanel.add(compPanel);		
 	
             // Body area
             bodyArea = new JTextArea(lastBody);

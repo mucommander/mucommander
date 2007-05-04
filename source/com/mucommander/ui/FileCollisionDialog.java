@@ -7,7 +7,7 @@ import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
-import com.mucommander.ui.comp.dialog.TextFieldsPanel;
+import com.mucommander.ui.comp.dialog.XAlignedComponentPanel;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.macosx.GrowlSupport;
 
@@ -142,7 +142,7 @@ public class FileCollisionDialog extends QuestionDialog {
             yPanel.addSpace(10);
         }
 
-        TextFieldsPanel tfPanel = new TextFieldsPanel(10);
+        XAlignedComponentPanel tfPanel = new XAlignedComponentPanel(10);
 
         // If collision type is 'same source and destination' no need to show both source and destination 
         if(collisionType==FileCollisionChecker.SAME_SOURCE_AND_DESTINATION) {
@@ -174,19 +174,19 @@ public class FileCollisionDialog extends QuestionDialog {
     }
 
 
-    private void addFileDetails(TextFieldsPanel panel, AbstractFile file, String nameLabel) {
-        panel.addTextFieldRow(nameLabel+":", new FilenameLabel(file), 0);
+    private void addFileDetails(XAlignedComponentPanel panel, AbstractFile file, String nameLabel) {
+        panel.addRow(nameLabel+":", new FilenameLabel(file), 0);
 
         String parentLocation = file.getParent().getCanonicalPath();
         JLabel label = new JLabel(parentLocation);
         label.setToolTipText(parentLocation);
-        panel.addTextFieldRow(Translator.get("location")+":", label, 0);
+        panel.addRow(Translator.get("location")+":", label, 0);
 
-        panel.addTextFieldRow(Translator.get("size")+":", new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)), 0);
+        panel.addRow(Translator.get("size")+":", new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)), 0);
 
-        panel.addTextFieldRow(Translator.get("date")+":", new JLabel(CustomDateFormat.format(new Date(file.getDate()))), 0);
+        panel.addRow(Translator.get("date")+":", new JLabel(CustomDateFormat.format(new Date(file.getDate()))), 0);
 
-        panel.addTextFieldRow(Translator.get("permissions")+":", new JLabel(file.getPermissionsString()), 10);
+        panel.addRow(Translator.get("permissions")+":", new JLabel(file.getPermissionsString()), 10);
     }
 
 

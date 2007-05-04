@@ -5,7 +5,9 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
-import com.mucommander.ui.theme.*;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
 import java.awt.*;

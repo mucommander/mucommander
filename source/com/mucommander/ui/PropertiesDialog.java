@@ -8,7 +8,7 @@ import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
-import com.mucommander.ui.comp.dialog.TextFieldsPanel;
+import com.mucommander.ui.comp.dialog.XAlignedComponentPanel;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 
 import javax.swing.*;
@@ -64,21 +64,21 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 		
         Container contentPane = getContentPane();
 	
-        TextFieldsPanel mainPanel = new TextFieldsPanel(10);
+        XAlignedComponentPanel mainPanel = new XAlignedComponentPanel(10);
 		
         // Contents (set later)
         counterLabel = new JLabel("");
-        mainPanel.addTextFieldRow(Translator.get("properties_dialog.contents")+":", counterLabel, 10);
+        mainPanel.addRow(Translator.get("properties_dialog.contents")+":", counterLabel, 10);
 
         // Location (set here)
         String location = files.getBaseFolder().getAbsolutePath();
         JLabel locationLabel = new JLabel(location);
         locationLabel.setToolTipText(location);
-        mainPanel.addTextFieldRow(Translator.get("location")+":", locationLabel, 10);
+        mainPanel.addRow(Translator.get("location")+":", locationLabel, 10);
 
         // Combined size (set later)
         sizeLabel = new JLabel("");
-        mainPanel.addTextFieldRow(Translator.get("size")+":", sizeLabel, 5);
+        mainPanel.addRow(Translator.get("size")+":", sizeLabel, 5);
 
         updateLabels();
         YBoxPanel yPanel = new YBoxPanel(5);
