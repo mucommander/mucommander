@@ -1,5 +1,7 @@
 package com.mucommander.ui.dnd;
 
+import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.CopyJob;
@@ -13,6 +15,7 @@ import com.mucommander.ui.ProgressDialog;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.*;
+import java.awt.event.InputEvent;
 
 /**
  * Provides file(s) 'drop' support to components that add a <code>DropTarget</code> using this <code>DropTargetListener</code>.
@@ -34,8 +37,8 @@ import java.awt.dnd.*;
  * <p>In the normal mode, files (or file paths) that are dropped can also be moved or copied to the associated FolderPanel's
  * current folder, on top of the change current folder action. The actual drop action performed (move, copy or change current folder)
  * depends on the keyboard modifiers typed by the user when dragging the files.
- *
- * <p>When the mouse cursor enters the drop-enabled component's area, it is changed to symbolize the action to be performed.
+ * When the mouse cursor enters the drop-enabled component's area, it is changed to symbolize the action to be performed.
+ * The default drop action (when no modifier is down) is copy. 
  *
  * <p>Drop events originating from the same FolderPanel are on purpose not accepted as spring-loaded folders are not
  * (yet) supported which would make the drop operation ambiguous and confusing.
@@ -53,8 +56,17 @@ public class FileDropTargetListener implements DropTargetListener {
     /** Drop action (copy or move) currenlty specified by the user */
     private int currentDropAction;
 
-    /** Has last drag event been accepted ? */
+    /** Has DropTargetDragEvent event been accepted ? */
     private boolean dragAccepted;
+
+    /**
+     * Extended modifiers which must be down while dragging for the drop action to be a MOVE and not a COPY (default):
+     * <code>InputEvent.META_DOWN_MASK</code> under Mac OS X, <code>InputEvent.ALT_DOWN_MASK</code> under any other
+     * platform.
+     */
+    private final static int MOVE_ACTION_MODIFIERS_EX = PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X?
+            InputEvent.META_DOWN_MASK
+            :InputEvent.ALT_DOWN_MASK;
 
 
     /**
@@ -72,40 +84,94 @@ public class FileDropTargetListener implements DropTargetListener {
 
 
     /**
-     * Accepts or rejects the specified event and changes the mouse cursor to match the current drop action.
-     * The event will be accepted if it does not originate from the associated FolderPanel instance and supports
-     * at least one of the supported DataFlavors.
+     * Returns a mouse <code>Cursor<code> that symbolizes the given drop action and 'accepted' status.
+     * The given action must one of the following:
+     * <ul>
+     *  <li>DnDConstants.ACTION_COPY
+     *  <li>DnDConstants.ACTION_MOVE
+     *  <li>DnDConstants.ACTION_LINK
+     * </ul>
+     * If the action has any other value, the default Cursor is returned. 
+     */
+    private Cursor getDragActionCursor(int dropAction, boolean dragAccepted) {
+        switch(dropAction) {
+            case DnDConstants.ACTION_COPY:
+                return dragAccepted?DragSource.DefaultCopyDrop:DragSource.DefaultCopyNoDrop;
+
+            case DnDConstants.ACTION_MOVE:
+                return dragAccepted?DragSource.DefaultMoveDrop:DragSource.DefaultMoveNoDrop;
+
+            case DnDConstants.ACTION_LINK:
+                return dragAccepted?DragSource.DefaultLinkDrop:DragSource.DefaultLinkNoDrop;
+
+            default:
+                return Cursor.getDefaultCursor();
+        }
+    }
+
+
+    /**
+     * Accepts or rejects the specified <code>DropTargetDragEvent</code> and changes the mouse cursor to match the
+     * current drop action.
+     * The drag event will be accepted it supports at least one of the supported DataFlavors and one of the two
+     * following conditions are true:
+     * <ul>
+     * <li>the event originates from one of muCommander's {@link FolderPanel} for which the current folder is not the
+     * same as the FolderPanel associated with this <code>FileDropTargetListener</code>
+     * <li>the event does not originate from muCommander
+     * </ul>
+     *
+     * <p>This method overrides the default drop action for drag-and-drop operations within muCommander to make it
+     * <code>DnDConstants.ACTION_COPY</code> instead of <code>DnDConstants.ACTION_MOVE</code>.
+     * For a move action to be performed when the mouse is released, the modifiers defined by
+     * {@link #MOVE_ACTION_MODIFIERS_EX} must be down.</p>
      *
      * @return <code>true</code> if the event was accepted, false otherwise
      */
     private boolean acceptOrRejectDragEvent(DropTargetDragEvent event) {
-        this.dragAccepted = !folderPanel.getFileDragSourceListener().isDragging()
-                && (event.isDataFlavorSupported(TransferableFileSet.getFileSetDataFlavor())
-                || event.isDataFlavorSupported(DataFlavor.javaFileListFlavor)
-                || event.isDataFlavorSupported(DataFlavor.getTextPlainUnicodeFlavor()));
-
         this.currentDropAction = event.getDropAction();
 
-        Cursor cursor;
-        if(dragAccepted) {
-            cursor = currentDropAction==DnDConstants.ACTION_COPY?DragSource.DefaultCopyDrop
-                    :currentDropAction==DnDConstants.ACTION_MOVE?DragSource.DefaultMoveDrop
-                    :DragSource.DefaultLinkDrop;
+        this.dragAccepted = event.isDataFlavorSupported(TransferableFileSet.getFileSetDataFlavor())
+                || event.isDataFlavorSupported(DataFlavor.javaFileListFlavor)
+                || event.isDataFlavorSupported(DataFlavor.getTextPlainUnicodeFlavor());
 
-            // Accept drag event
+        if(dragAccepted && DnDContext.isDragInitiatedByMucommander()) {
+            FolderPanel dragInitiator = DnDContext.getDragInitiator();
+
+            if(dragInitiator==folderPanel || dragInitiator.getCurrentFolder().equals(folderPanel.getCurrentFolder())) {
+                // Refuse drag if the drag was initiated by the same FolderPanel, or if its current folder is the same
+                // as this one
+                this.dragAccepted = false;
+            }
+            else {
+                // Change the default drop action to DnDConstants.ACTION_COPY instead of DnDConstants.ACTION_MOVE,
+                // if the move extended modifiers are not currently down.
+                int dragModifiers = DnDContext.getDragGestureModifiersEx();
+
+                if(currentDropAction==DnDConstants.ACTION_MOVE
+                        && (dragModifiers&MOVE_ACTION_MODIFIERS_EX)==0
+                        && (event.getSourceActions()&DnDConstants.ACTION_COPY)!=0) {
+                    if(Debug.ON) Debug.trace("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
+                    currentDropAction = DnDConstants.ACTION_COPY;
+                }
+            }
+        }
+
+if(Debug.ON) Debug.trace("dragAccepted="+dragAccepted+" dropAction="+currentDropAction);
+
+        if(dragAccepted) {
+            // Accept the drag event with our drop action
             event.acceptDrag(currentDropAction);
         }
         else {
-            cursor = currentDropAction==DnDConstants.ACTION_COPY?DragSource.DefaultCopyNoDrop
-                    :currentDropAction==DnDConstants.ACTION_MOVE?DragSource.DefaultMoveNoDrop
-                    :DragSource.DefaultLinkNoDrop;
-
-            // Reject drag event
+            // Reject the drag event
             event.rejectDrag();
         }
 
-        // Change the mouse cursor to symbolizes the drop action
-        folderPanel.setCursor(cursor);
+if(Debug.ON) Debug.trace("cursor="+getDragActionCursor(currentDropAction, dragAccepted));
+
+        // Change the mouse cursor on this FolderPanel and child components
+        folderPanel.setCursor(getDragActionCursor(currentDropAction, dragAccepted));
 
         return dragAccepted;
     }

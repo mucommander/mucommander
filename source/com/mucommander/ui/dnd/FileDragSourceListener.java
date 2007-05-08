@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.InputEvent;
 
+
 /**
  * This class adds 'drag' support to components that are registered using the {@link #enableDrag(java.awt.Component)}
  * method.
@@ -20,13 +21,10 @@ import java.awt.event.InputEvent;
  *
  * @author Maxence Bernard
  */
-public class FileDragSourceListener implements DragSourceListener, DragGestureListener {
+public class FileDragSourceListener implements DragGestureListener, DragSourceListener {
 
     /** the FolderPanel instance used to retrieve dragged files */
     private FolderPanel folderPanel;
-
-    /** Is a drag operation currently being performed ? */
-    private boolean isDragging;
 
 
     /**
@@ -47,16 +45,34 @@ public class FileDragSourceListener implements DragSourceListener, DragGestureLi
      * @param c the component for which to add 'drag' support
      */
     public void enableDrag(Component c) {
-        DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(c, DnDConstants.ACTION_COPY|DnDConstants.ACTION_MOVE|DnDConstants.ACTION_LINK, this);
+        DragSource dragSource = DragSource.getDefaultDragSource();
+        dragSource.createDefaultDragGestureRecognizer(c, DnDConstants.ACTION_COPY|DnDConstants.ACTION_MOVE|DnDConstants.ACTION_LINK, this);
     }
 
 
-    /**
-     * Returns <code>true</code> if one or several files are currently being dragged.
-     */
-    public boolean isDragging() {
-        return this.isDragging;
-    }
+//    /**
+//     * Creates a custom DragGestureEvent instance re-using the information contained in the given DragGestureEvent, but
+//     * overridding the actions with the specified actions bitwise mask.
+//     * When used with <code>DragSource.startDrag</code>, this allows to start a drag operation with a different source
+//     * action set from the one specified in the <code>DragGestureRecognizer</code>, based on the current state and
+//     * contents of the FolderPanel.
+//     */
+//    private DragGestureEvent createCustomDragGestureEvent(DragGestureEvent originalDGE, int actions) {
+//        Vector eventList = new Vector();
+//        Iterator eventIterator = originalDGE.iterator();
+//
+//        while(eventIterator.hasNext())
+//            eventList.add(eventIterator.next());
+//
+//        DragGestureRecognizer dragGestureRecognizer = originalDGE.getSourceAsDragGestureRecognizer();
+//        dragGestureRecognizer.setSourceActions(actions);
+//
+//        return new DragGestureEvent(dragGestureRecognizer,
+//                actions,
+//                originalDGE.getDragOrigin(),
+//                eventList);
+//    }
+
 
     /////////////////////////////////
     // DragGestureListener methods //
@@ -65,8 +81,6 @@ public class FileDragSourceListener implements DragSourceListener, DragGestureLi
     public void dragGestureRecognized(DragGestureEvent event) {
         if(folderPanel.getMainFrame().getNoEventsMode())
             return;
-
-        this.isDragging = true;
 
         FileTable fileTable = folderPanel.getFileTable();
         FileTableModel tableModel = fileTable.getFileTableModel();
@@ -103,30 +117,41 @@ public class FileDragSourceListener implements DragSourceListener, DragGestureLi
             draggedFiles = new FileSet(fileTable.getCurrentFolder(), selectedFile);
         }
 
+        // Set initial DnDContext information
+        DnDContext.setDragInitiatedByMucommander(true);
+        DnDContext.setDragInitiator(folderPanel);
+        DnDContext.setDragGestureModifiersEx(event.getTriggerEvent().getModifiersEx());
+
         // Start dragging
         DragSource.getDefaultDragSource().startDrag(event, null, new TransferableFileSet(draggedFiles), this);
+//        DragSource.getDefaultDragSource().startDrag(createCustomDragGestureEvent(event, DnDConstants.ACTION_MOVE), null, new TransferableFileSet(draggedFiles), this);
     }
 
 
-    ////////////////////////////////
-    // DragSourceListener methods //
-    ////////////////////////////////
+    ///////////////////////////////////////
+    // DragSourceListener implementation //
+    ///////////////////////////////////////
 
     public void dragEnter(DragSourceDragEvent event) {
-        this.isDragging = true;
+        // Update drag gesture modifiers
+        DnDContext.setDragGestureModifiersEx(event.getGestureModifiersEx());
     }
 
     public void dragOver(DragSourceDragEvent event) {
     }
 
     public void dropActionChanged(DragSourceDragEvent event) {
+        // Update drag gesture modifiers
+        DnDContext.setDragGestureModifiersEx(event.getGestureModifiersEx());
     }
 
     public void dragExit(DragSourceEvent event) {
-//        this.isDragging = false;
     }
 
     public void dragDropEnd(DragSourceDropEvent event) {
-        this.isDragging = false;
+        // Reset DnDContext information
+        DnDContext.setDragInitiatedByMucommander(false);
+        DnDContext.setDragInitiator(null);
+        DnDContext.setDragGestureModifiersEx(0);
     }
 }
