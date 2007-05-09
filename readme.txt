@@ -230,6 +230,9 @@ Improvements:
  - FTP encoding can now be specified in the 'Connect to server' dialog ; connection properties are saved with credentials
  - Updated Ant Tar and Bzip2 libraries to version 1.7.0
  - Added 'share' field to 'Connect to server' SMB panel
+ - Added 'Open with' item to 'File' menu
+ - 'Copy' is now the default action instead of 'Move' for drag-and-drop within muCommander
+ - Improved keyboard accessibility of 'File collision' and 'Transfer progress' dialogs
 
 Localization:
  - Korean translation contributed by Jioh L. Jung
