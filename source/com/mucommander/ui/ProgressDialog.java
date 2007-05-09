@@ -1,12 +1,12 @@
 
 package com.mucommander.ui;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.Debug;
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.job.FileJob;
-import com.mucommander.job.TransferFileJob;
 import com.mucommander.job.FileJobListener;
+import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.DurationFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -15,7 +15,8 @@ import com.mucommander.ui.comp.button.CollapseExpandButton;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.theme.*;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -147,7 +148,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
             JPanel tempPanel2 = new JPanel(new BorderLayout());
             this.limitSpeedCheckBox = new JCheckBox(Translator.get("progress_dialog.limit_speed")+":", false);
-            limitSpeedCheckBox.setFocusable(false);
             limitSpeedCheckBox.addItemListener(this);
 
             tempPanel2.add(limitSpeedCheckBox, BorderLayout.WEST);
@@ -187,7 +187,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         closeWhenFinishedCheckBox = new JCheckBox(Translator.get("progress_dialog.close_when_finished"));
         closeWhenFinishedCheckBox.setSelected(ConfigurationManager.getVariableBoolean(ConfigurationVariables.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED,
                                                                                       ConfigurationVariables.DEFAULT_PROGRESS_DIALOG_CLOSE_WHEN_FINISHED));
-        closeWhenFinishedCheckBox.setFocusable(false);
         yPanel.add(closeWhenFinishedCheckBox);
 
         yPanel.add(Box.createVerticalGlue());
@@ -502,24 +501,6 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             transferFileJob.skipCurrentFile();
         }
         else if(source==pauseResumeButton) {
-//            boolean isPaused = job.getState()==FileJob.PAUSED;
-//
-//            // Resume the job and change the button's label and icon to 'pause'
-//            if(isPaused) {
-//                pauseResumeButton.setText(Translator.get("pause"));
-//                pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
-//            }
-//            // Pause the job and change the button's label and icon to 'resume'
-//            else {
-//                pauseResumeButton.setText(Translator.get("resume"));
-//                pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
-//
-//                if(transferFileJob!=null)
-//                    updateCurrentSpeedLabel("N/A");
-//            }
-//
-//            // Update buttons mnemonics
-//            buttonsChoicePanel.updateMnemonics();
             // Pause/resume job
             job.setPaused(job.getState()!=FileJob.PAUSED);
         }
