@@ -64,7 +64,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
     /**
      * Sets the path to the toolbar description file to be loaded when calling {@link #loadDescriptionFile()}.
-     * By default, this file is {@link #DEFAULT_TOOLBAR_FILENAME} within the preferences folder.
+     * By default, this file is {@link #DEFAULT_TOOLBAR_FILE_NAME} within the preferences folder.
      *
      * @param filePath path to the toolbar descriptor file
      */

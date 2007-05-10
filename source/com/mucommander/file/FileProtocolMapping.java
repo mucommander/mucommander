@@ -7,7 +7,8 @@ import java.lang.reflect.Constructor;
  * FileProtocolMapping maps a file protocol onto an {@link AbstractFile} class. This class can be used with
  * {@link FileFactory} to register and unregister file protocols at runtime.
  *
- * @see FileFactory, AbstractFile
+ * @see FileFactory
+ * @see AbstractFile
  * @author Maxence Bernard
  */
 public class FileProtocolMapping {

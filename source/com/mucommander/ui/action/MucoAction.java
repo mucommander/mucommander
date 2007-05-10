@@ -31,7 +31,8 @@ import java.util.Hashtable;
  * {@link MainFrame} saves some memory and also CPU cycles as some actions listen to particular events to change
  * their state accordingly.
  *
- * @see ActionManager, ActionKeymap
+ * @see ActionManager
+ * @see ActionKeymap
  * @author Maxence Bernard
  */
 public abstract class MucoAction extends AbstractAction {

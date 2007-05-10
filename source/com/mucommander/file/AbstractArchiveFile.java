@@ -35,7 +35,10 @@ import java.util.Vector;
  * Note that the {@link com.mucommander.file.archiver.Archiver} class can be used to create archives, but entries
  * need to be added linearly.
  *
- * @see FileFactory, ArchiveEntry, ArchiveEntryFile, com.mucommander.file.archiver.Archiver
+ * @see FileFactory
+ * @see ArchiveEntry
+ * @see ArchiveEntryFile
+ * @see com.mucommander.file.archiver.Archiver
  * @author Maxence Bernard
  */
 public abstract class AbstractArchiveFile extends ProxyFile {

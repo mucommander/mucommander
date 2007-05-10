@@ -19,7 +19,8 @@ import java.util.Hashtable;
  * they have different initialization properties, which translated into action speak means a different appearance
  * and/or behavior.
  *
- * @see ActionManager, MucoAction
+ * @see ActionManager
+ * @see MucoAction
  *
  * @author Maxence Bernard
  */
