@@ -64,12 +64,12 @@ public class ConfigurationManager {
         ConfigurationParser parser;
         InputStream         in;
 
-        in = null;
+        in   = null;
         try {
             parser = new ConfigurationParser(new ConfigurationLoader());
             parser.parse(in = new BackupInputStream(getConfigurationFile()));
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFile(), -1);
-			
+
             // If version in configuration differs from current version, 
             // import and move variables which have moved in the configuration tree
             // and set new version string
