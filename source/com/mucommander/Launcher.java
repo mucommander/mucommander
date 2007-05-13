@@ -271,7 +271,7 @@ public class Launcher {
             // is performed - if we're to use the metal look, we need to know about
             // it right about now.
             try {ConfigurationManager.loadConfiguration();}
-            catch(Exception e) {printError("Could not load configuration", e, verbose, true);}
+            catch(Exception e) {printError("Could not load configuration", e, verbose, fatalWarnings);}
 
             // Use reflection to create an OSXIntegration instance so that ClassLoader
             // doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
@@ -293,7 +293,7 @@ public class Launcher {
         // If we're not running under OS_X, preferences haven't been loaded yet.
         if(PlatformManager.OS_FAMILY != PlatformManager.MAC_OS_X) {
             try {ConfigurationManager.loadConfiguration();}
-            catch(Exception e) {printError("Could not load configuration", e, verbose, true);}
+            catch(Exception e) {printError("Could not load configuration", e, verbose, fatalWarnings);}
         }
 
         showSetup = ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE) == null;
