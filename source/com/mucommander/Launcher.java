@@ -119,8 +119,10 @@ public class Launcher {
         if(quit)
             error.append("Warning: ");
         error.append(msg);
-        if(verbose && (exception != null))
+        if(verbose && (exception != null)) {
+            error.append(": ");
             error.append(exception.getMessage());
+        }
 
         return error;
     }
