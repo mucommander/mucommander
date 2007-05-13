@@ -479,32 +479,30 @@ public class CommandManager implements CommandBuilder {
      * @see #setAssociationFile(String)
      */
     public static void loadAssociations() throws IOException {
-        File file;
+        File        file;
+        InputStream in;
 
         // Checks whether the associations file exists. If it doesn't, create default associations.
         file = getAssociationFile();
         if(Debug.ON)
             Debug.trace("Loading associations from file: " + file.getAbsolutePath());
-        if(file.isFile()) {
-            InputStream in;
 
-            // Tries to load the associations file. If an error occurs, create default associations.
-            in = null;
-            try {AssociationReader.read(in = new BackupInputStream(file), new AssociationFactory());}
-            catch(Exception e) {
-                // The associations file is corrupt, discard anything we might have loaded from it.
-                if(Debug.ON) Debug.trace("Failed to load associations file: " + e.getMessage() + ". Using default associations");
-                associations = new Vector();
+        // Tries to load the associations file. If an error occurs, create default associations.
+        in = null;
+        try {AssociationReader.read(in = new BackupInputStream(file), new AssociationFactory());}
+        catch(Exception e) {
+            // The associations file is corrupt, discard anything we might have loaded from it.
+            if(Debug.ON) Debug.trace("Failed to load associations file: " + e.getMessage() + ". Using default associations");
+            associations = new Vector();
 
-                throw new IOException(e.getMessage());
-            }
+            throw new IOException(e.getMessage());
+        }
 
-            // Makes sure the input stream is closed.
-            finally {
-                if(in != null) {
-                    try {in.close();}
-                    catch(Exception e) {}
-                }
+        // Makes sure the input stream is closed.
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
             }
         }
 
@@ -688,32 +686,28 @@ public class CommandManager implements CommandBuilder {
      * @see #setCommandFile(String)
      */
     public static void loadCommands() throws IOException {
-        File file;
+        File        file;
+        InputStream in;
 
         file = getCommandFile();
         if(Debug.ON)
             Debug.trace("Loading custom commands from: " + file.getAbsolutePath());
 
-        // If the file doesn't exist, registers default commands.
-        if(file.isFile()) {
-            InputStream in;
+        // Tries to load the associations file. If an error occurs, create default associations.
+        in = null;
+        try {CommandReader.read(in = new BackupInputStream(file), new CommandManager());}
+        catch(Exception e) {
+            // Creates the default associations.
+            if(Debug.ON) Debug.trace("Failed to load commands file: " + e.getMessage() + ". Using default commands.");
+            commands = new Vector();
+            throw new IOException(e.getMessage());
+        }
 
-            // Tries to load the associations file. If an error occurs, create default associations.
-            in = null;
-            try {CommandReader.read(in = new BackupInputStream(file), new CommandManager());}
-            catch(Exception e) {
-                // Creates the default associations.
-                if(Debug.ON) Debug.trace("Failed to load commands file: " + e.getMessage() + ". Using default commands.");
-                commands = new Vector();
-                throw new IOException(e.getMessage());
-            }
-
-            // Makes sure the input stream is closed.
-            finally {
-                if(in != null) {
-                    try {in.close();}
-                    catch(Exception e) {}
-                }
+        // Makes sure the input stream is closed.
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
             }
         }
 
