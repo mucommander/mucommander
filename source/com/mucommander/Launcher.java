@@ -106,24 +106,48 @@ public class Launcher {
      * @param verbose   whether or not to display verbose error output.
      */
     private static void printError(String msg, Exception exception, boolean verbose, boolean quit) {
-        if(!quit)
-            System.err.print("Warning: ");
+        printError(createErrorMessage(msg, exception, verbose, quit).toString(), quit);
+    }
 
-        System.err.print(msg);
-        if(verbose && (exception != null)) {
-            System.err.println(": " + exception.getMessage());
-            if(Debug.ON)
-                exception.printStackTrace(System.err);
-        }
-        else
-            System.err.println();
+    /**
+     * Creates an error message.
+     */
+    private static StringBuffer createErrorMessage(String msg, Exception exception, boolean verbose, boolean quit) {
+        StringBuffer error;
 
+        error = new StringBuffer();
+        if(quit)
+            error.append("Warning: ");
+        error.append(msg);
+        if(verbose && (exception != null))
+            error.append(exception.getMessage());
+
+        return error;
+    }
+
+    /**
+     * Prints an error message.
+     */
+    private static void printError(String msg, boolean quit) {
+        System.err.println(msg);
         if(quit) {
             System.err.println("See mucommander --help for more information.");
             System.exit(1);
         }
     }
 
+    /**
+     * Prints a configuration file specific error message.
+     */
+    private static void printFileError(String msg, Exception exception, boolean verbose, boolean quit) {
+        StringBuffer error;
+
+        error = createErrorMessage(msg, exception, verbose, quit);
+        if(!quit)
+            error.append(". Using default values.");
+
+        printError(error.toString(), quit);
+    }
 
 
     // - Boot code --------------------------------------------------------------
@@ -271,7 +295,7 @@ public class Launcher {
             // is performed - if we're to use the metal look, we need to know about
             // it right about now.
             try {ConfigurationManager.loadConfiguration();}
-            catch(Exception e) {printError("Could not load configuration", e, verbose, fatalWarnings);}
+            catch(Exception e) {printFileError("Could not load configuration", e, verbose, fatalWarnings);}
 
             // Use reflection to create an OSXIntegration instance so that ClassLoader
             // doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
@@ -293,7 +317,7 @@ public class Launcher {
         // If we're not running under OS_X, preferences haven't been loaded yet.
         if(PlatformManager.OS_FAMILY != PlatformManager.MAC_OS_X) {
             try {ConfigurationManager.loadConfiguration();}
-            catch(Exception e) {printError("Could not load configuration", e, verbose, fatalWarnings);}
+            catch(Exception e) {printFileError("Could not load configuration", e, verbose, fatalWarnings);}
         }
 
         showSetup = ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE) == null;
@@ -309,24 +333,24 @@ public class Launcher {
         // Loads the file associations
         splashScreen.setLoadingMessage("Loading file associations...");
         try {com.mucommander.command.CommandManager.loadCommands();}
-        catch(Exception e) {printError("Could not load custom commands", e, verbose, fatalWarnings);}
+        catch(Exception e) {printFileError("Could not load custom commands", e, verbose, fatalWarnings);}
         try {com.mucommander.command.CommandManager.loadAssociations();}
-        catch(Exception e) {printError("Could not load custom associations", e, verbose, fatalWarnings);}
+        catch(Exception e) {printFileError("Could not load custom associations", e, verbose, fatalWarnings);}
 
         // Loads bookmarks
         splashScreen.setLoadingMessage("Loading bookmarks...");
         try {com.mucommander.bookmark.BookmarkManager.loadBookmarks();}
-        catch(Exception e) {printError("Could not load bookmarks", e, verbose, fatalWarnings);}
+        catch(Exception e) {printFileError("Could not load bookmarks", e, verbose, fatalWarnings);}
 
         // Loads credentials
         splashScreen.setLoadingMessage("Loading credentials...");
         try {com.mucommander.auth.CredentialsManager.loadCredentials();}
-        catch(Exception e) {printError("Could not load credentials", e, verbose, fatalWarnings);}
+        catch(Exception e) {printFileError("Could not load credentials", e, verbose, fatalWarnings);}
         
         // Loads shell history
         splashScreen.setLoadingMessage("Loading shell history...");
         try {ShellHistoryManager.loadHistory();}
-        catch(Exception e) {printError("Could not load shell history", e, verbose, fatalWarnings);}
+        catch(Exception e) {printFileError("Could not load shell history", e, verbose, fatalWarnings);}
 
         // Inits CustomDateFormat to make sure that its ConfigurationListener is added
         // before FileTable, so CustomDateFormat gets notified of date format changes first
@@ -339,17 +363,17 @@ public class Launcher {
         // Loads the ActionKeymap file
         splashScreen.setLoadingMessage("Loading action keymap...");
         try {com.mucommander.ui.action.ActionKeymap.loadActionKeyMap();}
-        catch(Exception e) {printError("Could not load action keyamp", e, verbose, fatalWarnings);}
+        catch(Exception e) {printFileError("Could not load action keyamp", e, verbose, fatalWarnings);}
 
         // Loads the ToolBar's description file
         splashScreen.setLoadingMessage("Loading toolbar description...");
         try {com.mucommander.ui.ToolBar.loadDescriptionFile();}
-        catch(Exception e) {printError("Could not load toolbar description", e, verbose, fatalWarnings);}
+        catch(Exception e) {printFileError("Could not load toolbar description", e, verbose, fatalWarnings);}
 
         // Loads the CommandBar's description file
         splashScreen.setLoadingMessage("Loading command bar description...");
         try {com.mucommander.ui.CommandBar.loadDescriptionFile();}
-        catch(Exception e) {printError("Could not load commandbar description", e, verbose, fatalWarnings);}
+        catch(Exception e) {printFileError("Could not load commandbar description", e, verbose, fatalWarnings);}
 
         // Loads the themes.
         splashScreen.setLoadingMessage("Loading theme...");
