@@ -94,20 +94,17 @@ public class BookmarkManager implements VectorChangeListener {
     public static void loadBookmarks() throws IOException {
         File bookmarksFile = getBookmarksFile();
 
-        if(bookmarksFile.exists()) {
-            if(Debug.ON) Debug.trace("Found bookmarks file: " + bookmarksFile.getAbsolutePath());
+        if(Debug.ON) Debug.trace("Found bookmarks file: " + bookmarksFile.getAbsolutePath());
 
-            // Parse the bookmarks file
-            try {new BookmarkParser().parse(bookmarksFile);}
-            catch(Exception e) {
-                // The bookmarks file is corrupt, ignores anything it contains.
-                bookmarks = new AlteredVector();
-                throw new IOException(e.getMessage());
-            }
-
-            if(Debug.ON) Debug.trace("Bookmarks file loaded.");
+        // Parse the bookmarks file
+        try {new BookmarkParser().parse(bookmarksFile);}
+        catch(Exception e) {
+            // The bookmarks file is corrupt, ignores anything it contains.
+            bookmarks = new AlteredVector();
+            throw new IOException(e.getMessage());
         }
-        else if(Debug.ON) Debug.trace("No bookmarks file found at " + bookmarksFile.getAbsolutePath());
+
+        if(Debug.ON) Debug.trace("Bookmarks file loaded.");
     }
 	
     /**
