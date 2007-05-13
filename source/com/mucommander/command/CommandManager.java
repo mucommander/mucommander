@@ -153,11 +153,11 @@ public class CommandManager implements CommandBuilder {
      * @throws CommandException if a command with same alias has already been registered.
      */
     public static void registerCommand(Command command) throws CommandException {
-        // Checks whether a font with the same alias has already been registered.
+        // Checks whether a command with the same alias has already been registered.
         if(getCommandForAlias(command.getAlias()) != null)
             throw new CommandException("Duplicated command alias: " + command.getAlias());
 
-        // Registers the command and marks associations as having been modified.
+        // Registers the command and marks command as having been modified.
         setDefaultCommand(command);
         if(Debug.ON) Debug.trace("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "' at the end of the list.");
         commands.add(command);
@@ -498,42 +498,41 @@ public class CommandManager implements CommandBuilder {
             throw new IOException(e.getMessage());
         }
 
-        // Makes sure the input stream is closed.
         finally {
+            // If an 'openEXE' command was registered:
+            // - if the system has an association for that command, use it.
+            // - If we have a sure way of identifying executable files (Java >= 1.6), use it.
+            if(getCommandForAlias(EXE_OPENER_ALIAS) != null) {
+                AndFileFilter filter;
+
+                // Uses the 'executable' regexp if it exists.
+                if(PlatformManager.EXE_ASSOCIATION != null) {
+                    try {
+                        filter = new AndFileFilter();
+                        filter.addFileFilter(new RegexpFilenameFilter(PlatformManager.EXE_ASSOCIATION, PlatformManager.DEFAULT_REGEXP_CASE_SENSITIVITY));
+                        registerAssociation(EXE_OPENER_ALIAS, filter);
+                    }
+                    catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
+                }
+
+                // Match executables if necessary and if running under java >= 1.6.
+                if(PlatformManager.RUN_EXECUTABLES && (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)) {
+                    try {
+                        filter = new AndFileFilter();
+                        filter.addFileFilter(new PermissionsFileFilter(PermissionsFileFilter.EXECUTE_PERMISSION, true));
+                        registerAssociation(EXE_OPENER_ALIAS, filter);
+                    }
+                    catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
+                }
+            }
+            wereAssociationsModified = false;
+
+            // Makes sure the input stream is closed.
             if(in != null) {
                 try {in.close();}
                 catch(Exception e) {}
             }
         }
-
-        // If an 'openEXE' command was registered:
-        // - if the system has an association for that command, use it.
-        // - If we have a sure way of identifying executable files (Java >= 1.6), use it.
-        if(getCommandForAlias(EXE_OPENER_ALIAS) != null) {
-            AndFileFilter filter;
-
-            // Uses the 'executable' regexp if it exists.
-            if(PlatformManager.EXE_ASSOCIATION != null) {
-                try {
-                    filter = new AndFileFilter();
-                    filter.addFileFilter(new RegexpFilenameFilter(PlatformManager.EXE_ASSOCIATION, PlatformManager.DEFAULT_REGEXP_CASE_SENSITIVITY));
-                    registerAssociation(EXE_OPENER_ALIAS, filter);
-                }
-                catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
-            }
-
-            // Match executables if necessary and if running under java >= 1.6.
-            if(PlatformManager.RUN_EXECUTABLES && (PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_6)) {
-                try {
-                    filter = new AndFileFilter();
-                    filter.addFileFilter(new PermissionsFileFilter(PermissionsFileFilter.EXECUTE_PERMISSION, true));
-                    registerAssociation(EXE_OPENER_ALIAS, filter);
-                }
-                catch(Exception e) {if(Debug.ON) Debug.trace("Failed to create default EXE opener association: " + e.getMessage());}
-            }
-        }
-
-        wereAssociationsModified = false;
     }
 
     /**,
@@ -703,21 +702,20 @@ public class CommandManager implements CommandBuilder {
             throw new IOException(e.getMessage());
         }
 
-        // Makes sure the input stream is closed.
         finally {
+            // Registers default commands if necessary.
+            registerDefaultCommand(FILE_OPENER_ALIAS,  PlatformManager.DEFAULT_FILE_OPENER_COMMAND, null);
+            registerDefaultCommand(URL_OPENER_ALIAS,   PlatformManager.DEFAULT_URL_OPENER_COMMAND, null);
+            registerDefaultCommand(EXE_OPENER_ALIAS,   PlatformManager.DEFAULT_EXE_OPENER_COMMAND, null);
+            registerDefaultCommand(FILE_MANAGER_ALIAS, PlatformManager.DEFAULT_FILE_MANAGER_COMMAND, PlatformManager.DEFAULT_FILE_MANAGER_NAME);
+            wereCommandsModified = false;
+
+            // Makes sure the input stream is closed.
             if(in != null) {
                 try {in.close();}
                 catch(Exception e) {}
             }
         }
-
-        // Registers default commands if necessary.
-        registerDefaultCommand(FILE_OPENER_ALIAS,  PlatformManager.DEFAULT_FILE_OPENER_COMMAND, null);
-        registerDefaultCommand(URL_OPENER_ALIAS,   PlatformManager.DEFAULT_URL_OPENER_COMMAND, null);
-        registerDefaultCommand(EXE_OPENER_ALIAS,   PlatformManager.DEFAULT_EXE_OPENER_COMMAND, null);
-        registerDefaultCommand(FILE_MANAGER_ALIAS, PlatformManager.DEFAULT_FILE_MANAGER_COMMAND, PlatformManager.DEFAULT_FILE_MANAGER_NAME);
-
-        wereCommandsModified = false;
     }
 
     private static void registerDefaultCommand(String alias, String command, String display) {
