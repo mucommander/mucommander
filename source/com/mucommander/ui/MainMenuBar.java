@@ -253,6 +253,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         windowMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(RecallPreviousWindowAction.class, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(RecallNextWindowAction.class, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(BringAllToFrontAction.class, mainFrame), menuItemMnemonicHelper);
         // All other window menu items will be added when the menu gets selected
         windowMenu.add(new JSeparator());
 
