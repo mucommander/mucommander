@@ -220,9 +220,9 @@ What's new since v0.8 beta 3 ?
 New features:
  - Added 'Use system file icons' option to 'Appearance' preferences, allowing to display file icons as they are displayed on the system's desktop
  - Added 'Show folders first' option to 'View' menu, allowing to control whether folders are displayed first (default) or mixed with regular files
- - Added support for Growl: notifications are sent when transfers are complete or an error has occurred
- - Added experimental support for NFS protocol
- - New 'Follow symlinks when changing current directory' option in preferences
+ - System notifications (Growl under Mac OS X, System tray under other platforms) are sent when transfers are complete or an error has occurred
+ - Added support for the NFS protocol
+ - New 'Follow symlinks when changing current directory' option in the preferences
 
 Improvements:
  - Added 'Go to' buttons to 'Edit bookmarks', 'Edit credentials' and 'Show open connections' dialogs to go to the selected location
@@ -233,6 +233,7 @@ Improvements:
  - Added 'Open with' item to 'File' menu
  - 'Copy' is now the default action instead of 'Move' for drag-and-drop within muCommander
  - Improved keyboard accessibility of 'File collision' and 'Transfer progress' dialogs
+ - Added 'Bring all to front' item to 'Window' menu
 
 Localization:
  - Korean translation contributed by Jioh L. Jung
@@ -242,6 +243,7 @@ Localization:
 Bug fixes:
  - FTP filenames containing extended characters are now properly handled if the proper encoding is specified when the connection is created
  - HTTP files can now be properly archived
+ - Windows can now be properly recalled when they are minimized
 
 Known issues:
  - Hungarian translation is not up-to-date
