@@ -2518,27 +2518,8 @@ com.mucommander.ui.action.OpenNativelyAction.tooltip:RO:Deschide fișierul selec
 com.mucommander.ui.action.OpenNativelyAction.tooltip:IT:Esegui i file selezionati con le associazioni di sistema 
 com.mucommander.ui.action.OpenNativelyAction.tooltip:KR:선택된 파일을 시스템에 연결된 프로그램으로 실행
 
-file_menu.open_with:EN:Open with...
-file_menu.open_with:FR:Ouvrir avec...
-file_menu.open_with:SI:Odpri z...
-file_menu.open_with:IT:Apri con...
-file_menu.open_with:CS:Otevřít pomocí...
-file_menu.open_with:zh_TW:用其它方式開啟...
-file_menu.open_with:DE:Öffne mit...
-file_menu.open_with:RO:Deschide cu...
-file_menu.open_with:zh_CN:用其它方式打开...
-file_menu.open_with:RU:Открыть с помощью...
-file_menu.open_with:ES:Abrir con...
-file_menu.open_with:PL:Otwórz za pomocą...
-file_menu.open_with:KR:연결프로그램...
-# Translation missing
-
-
-
-
-
-
-# This entry used to be 'Reveal in Finder', it's now Reveal in %1, where %1 is the name of the system's file opener (Finder, Explorer...)
+# This action is used to show a selected file in the system's default file manager, %1 is the name of the system's 
+# file manager (Finder, Explorer...)
 com.mucommander.ui.action.RevealInDesktopAction.label:EN:Reveal in %1
 com.mucommander.ui.action.RevealInDesktopAction.label:FR:Afficher dans %1
 com.mucommander.ui.action.RevealInDesktopAction.label:ES:Mostrar en %1
@@ -2552,10 +2533,6 @@ com.mucommander.ui.action.RevealInDesktopAction.label:zh_CN:显示在 %1
 com.mucommander.ui.action.RevealInDesktopAction.label:RU:Отобразить в %1
 com.mucommander.ui.action.RevealInDesktopAction.label:PL:Otwórz w %1
 com.mucommander.ui.action.RevealInDesktopAction.label:KR:%1에서 보기
-#file_menu.reveal_in_finder:RU:Отобразить в найденном
-#file_menu.reveal_in_finder:zh_TW:顯示在Finder
-#file_menu.reveal_in_finder:PL:Wyszukaj
-#file_menu.reveal_in_finder:ZH_CN:在查找器中展示
 # Translation missing
 
 
@@ -3037,11 +3014,10 @@ com.mucommander.ui.action.RecallWindowAction.label:zh_CN:还原窗口 #%1
 com.mucommander.ui.action.RecallWindowAction.label:RU:Восстановить окно #%1
 com.mucommander.ui.action.RecallWindowAction.label:ES:Rellamar a una ventana
 com.mucommander.ui.action.RecallWindowAction.label:CS:Přepnout do okna #%1
-com.mucommander.ui.action.RecallWindowAction.label:PL:Wywołaj okno
+com.mucommander.ui.action.RecallWindowAction.label:PL:Wywołaj okno #%1
 com.mucommander.ui.action.RecallWindowAction.label:KR:창 불러오기 #%1
 # The following need to be updated
 com.mucommander.ui.action.RecallWindowAction.label:ES:Rellamar a una ventana
-com.mucommander.ui.action.RecallWindowAction.label:PL:Wywołaj okno
 com.mucommander.ui.action.RecallWindowAction.label:HU:ablak visszavonása
 # Translation missing
 
@@ -3065,6 +3041,24 @@ com.mucommander.ui.action.RecallWindow7Action.label:EN:$[com.mucommander.ui.acti
 com.mucommander.ui.action.RecallWindow8Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
 com.mucommander.ui.action.RecallWindow9Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
 com.mucommander.ui.action.RecallWindow10Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
+
+# Brings all windows to the front
+com.mucommander.ui.action.BringAllToFrontAction.label:EN:Bring all to front
+com.mucommander.ui.action.BringAllToFrontAction.label:FR:Tout ramener au premier plan
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 com.mucommander.ui.action.SwitchActiveTableAction.label:EN:Switch between left and right panels
 com.mucommander.ui.action.SwitchActiveTableAction.label:FR:Basculer entre les dossiers de droite et de gauche
@@ -3298,6 +3292,24 @@ file_menu:SI:Datoteka
 file_menu:RO:Fișiere
 file_menu:IT:File
 file_menu:KR:파일
+
+file_menu.open_with:EN:Open with...
+file_menu.open_with:FR:Ouvrir avec...
+file_menu.open_with:SI:Odpri z...
+file_menu.open_with:IT:Apri con...
+file_menu.open_with:CS:Otevřít pomocí...
+file_menu.open_with:zh_TW:用其它方式開啟...
+file_menu.open_with:DE:Öffne mit...
+file_menu.open_with:RO:Deschide cu...
+file_menu.open_with:zh_CN:用其它方式打开...
+file_menu.open_with:RU:Открыть с помощью...
+file_menu.open_with:ES:Abrir con...
+file_menu.open_with:PL:Otwórz za pomocą...
+file_menu.open_with:KR:연결프로그램...
+# Translation missing
+
+
+
 
 
 #############
@@ -7729,7 +7741,7 @@ prefs_dialog.custom_shell:KR:사용자 정의 쉘을 사용합니다
 
 
 
-
+# Bonjour is a service discovery protocol : http://en.wikipedia.org/wiki/Bonjour_%28software%29
 prefs_dialog.enable_bonjour_discovery:EN:Enable Bonjour services discovery
 prefs_dialog.enable_bonjour_discovery:FR:Activer la découverte des services Bonjour
 prefs_dialog.enable_bonjour_discovery:SI:Omogoči odkrivanje "Bonjour" storitev
@@ -7744,6 +7756,20 @@ prefs_dialog.enable_bonjour_discovery:ES:Activar servicios de descubrimiento de 
 prefs_dialog.enable_bonjour_discovery:PL:Uaktywnij Powitanie
 prefs_dialog.enable_bonjour_discovery:KR:Bonjour서비스 탐색을 켭니다
 # Translation missing
+
+
+
+
+
+
+
+
+
+# System notifications are displayed in the System tray, or using Growl under Mac OS X
+prefs_dialog.enable_system_notifications:EN:Enable system notifications
+prefs_dialog.enable_system_notifications:FR:Activer les notifications système
+# Translation missing
+
 
 
 

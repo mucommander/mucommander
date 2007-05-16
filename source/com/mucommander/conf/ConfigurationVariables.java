@@ -1,5 +1,6 @@
 package com.mucommander.conf;
 
+import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.ui.icon.FileIcons;
 
@@ -42,6 +43,13 @@ public interface ConfigurationVariables {
     public static final boolean DEFAULT_CONFIRM_ON_QUIT           = true;
     /** Look and feel used by muCommander. */
     public static final String  LOOK_AND_FEEL                     = ROOT_SECTION + '.' + "lookAndFeel";
+    /** Controls whether system notifications are enabled. */
+    public static final String  ENABLE_SYSTEM_NOTIFICATIONS       = ROOT_SECTION + '.' + "enable_system_notifications";
+    /** Default for enable system notifications. */
+    public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS =
+            com.mucommander.ui.notifier.AbstractNotifier.isAvailable() &&
+            (PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X
+            || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT);
 
 
     // - Shell variables -----------------------------------------------------

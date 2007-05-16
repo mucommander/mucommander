@@ -385,12 +385,6 @@ public class Launcher {
         splashScreen.setLoadingMessage("Starting Bonjour services discovery...");
         com.mucommander.bonjour.BonjourDirectory.setActive(ConfigurationManager.getVariableBoolean(ConfigurationVariables.ENABLE_BONJOUR_DISCOVERY, ConfigurationVariables.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
 
-        // Try and enable Growl support, only if OS is Mac OS X
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
-            splashScreen.setLoadingMessage("Initializing Growl support...");
-            com.mucommander.ui.macosx.GrowlSupport.init();
-        }
-
         // Creates the initial main frame using any initial path specified by the command line.
         splashScreen.setLoadingMessage("Initializing window...");
         for(; i < args.length; i += 2) {
@@ -403,6 +397,13 @@ public class Launcher {
         // If no initial path was specified, start a default main window.
         if(WindowManager.getCurrentMainFrame() == null)
     	    WindowManager.createNewMainFrame();
+
+        // Enable system nofifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
+        // a MainFrame instance
+        if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.ENABLE_SYSTEM_NOTIFICATIONS, ConfigurationVariables.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
+            splashScreen.setLoadingMessage("Enabling system notifications...");
+            com.mucommander.ui.notifier.AbstractNotifier.getNotifier().setEnabled(true);
+        }
 
         // Dispose splash screen.
         splashScreen.dispose();

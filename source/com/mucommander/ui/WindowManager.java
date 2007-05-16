@@ -207,7 +207,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     
 	
     /**
-     * Returns the MainFrame instance that currently is active.
+     * Returns the last MainFrame instance that was active. Note that the returned MainFrame may or may not be
+     * currently active.
      */
     public static MainFrame getCurrentMainFrame() {
         return currentMainFrame;

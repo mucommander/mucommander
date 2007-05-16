@@ -1,5 +1,6 @@
 package com.mucommander.ui;
 
+import com.mucommander.Debug;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
@@ -11,11 +12,9 @@ import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
-import com.mucommander.Debug;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
@@ -413,6 +412,24 @@ public class MainFrame extends JFrame implements LocationListener {
 
 
     /**
+     * Returns <code>true</code> if this MainFrame is active, or is an ancestor of a Window that is currently active.
+     */
+    public boolean isAncestorOfActiveWindow() {
+        if(isActive())
+            return true;
+
+        Window ownedWindows[] = getOwnedWindows();
+
+        int nbWindows = ownedWindows.length;
+        for(int i=0; i<nbWindows; i++)
+            if(ownedWindows[i].isActive())
+                return true;
+
+        return false;
+    }
+
+
+    /**
      * Updates this window's title to show currently active folder and window number.
      * This method is called by this class and WindowManager.
      */
@@ -450,7 +467,7 @@ public class MainFrame extends JFrame implements LocationListener {
     ///////////////////////
 
     /**
-     * Overrides java.awt.Window's dispose method to save last MainFrame's attributes in the preferences
+     * Overrides <code>java.awt.Window#dispose</code> to save last MainFrame's attributes in the preferences
      * before disposing this MainFrame.
      */
     public void dispose() {
@@ -479,6 +496,21 @@ public class MainFrame extends JFrame implements LocationListener {
         super.dispose(); 
     }
 
+
+    /**
+     * Overrides <code>java.awt.Window#toFront</code> to have the window return to a normal state if it is minimized.
+     */
+    public void toFront() {
+        if((getExtendedState()&Frame.ICONIFIED)!=0)
+            setExtendedState(Frame.NORMAL);
+
+        super.toFront();
+    }
+
+
+    ///////////////////
+    // Inner classes //
+    ///////////////////
 
     /**
      * Manages focus for both FolderPanel and their subcomponents.

@@ -9,7 +9,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 import com.mucommander.ui.comp.dialog.XAlignedComponentPanel;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
-import com.mucommander.ui.macosx.GrowlSupport;
+import com.mucommander.ui.notifier.AbstractNotifier;
+import com.mucommander.ui.notifier.NotificationTypes;
 
 import javax.swing.*;
 import java.awt.*;
@@ -168,9 +169,9 @@ public class FileCollisionDialog extends QuestionDialog {
             addCheckBox(applyToAllCheckBox);
         }
 
-        // Send a growl notification
-        if(GrowlSupport.isGrowlAvailable())
-            GrowlSupport.sendNotification(this, GrowlSupport.NOTIFICATION_TYPE_JOB_ERROR, getTitle(), desc);
+        // Send a system notification if a notifier is available and enabled
+        if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
+            AbstractNotifier.getNotifier().displayNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_ERROR, getTitle(), desc);
     }
 
 
