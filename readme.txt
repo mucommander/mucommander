@@ -237,6 +237,7 @@ Improvements:
 
 Localization:
  - Korean translation contributed by Jioh L. Jung
+ - Brazilian Portuguese translation contributed by Cristiano Duarte
  - Russian translation update
  - Czech translation update
 
