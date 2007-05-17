@@ -9,10 +9,10 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
-import com.mucommander.ui.macosx.GrowlSupport;
+import com.mucommander.ui.notifier.AbstractNotifier;
+import com.mucommander.ui.notifier.NotificationTypes;
 import com.mucommander.ui.table.FileTable;
 
-import java.awt.*;
 import java.util.Iterator;
 import java.util.WeakHashMap;
 
@@ -439,9 +439,11 @@ public abstract class FileJob implements Runnable {
     protected void jobCompleted() {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called");
 
-        // Send a growl notification
-        if(GrowlSupport.isGrowlAvailable())
-            GrowlSupport.sendNotification(progressDialog==null?mainFrame:(Window)progressDialog, GrowlSupport.NOTIFICATION_TYPE_JOB_COMPLETED, progressDialog==null?"":progressDialog.getTitle(), Translator.get("progress_dialog.job_finished"));
+        // Send a system notification if a notifier is available and enabled
+        if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
+            AbstractNotifier.getNotifier().displayNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_COMPLETED,
+                    progressDialog==null?"":progressDialog.getTitle(),
+                    Translator.get("progress_dialog.job_finished"));
     }
 
 
@@ -539,9 +541,9 @@ public abstract class FileJob implements Runnable {
         String actionTexts[] = new String[]{SKIP_TEXT, RETRY_TEXT, CANCEL_TEXT};
         int actionValues[] = new int[]{SKIP_ACTION, RETRY_ACTION, CANCEL_ACTION};
 
-        // Send a growl notification
-        if(GrowlSupport.isGrowlAvailable())
-            GrowlSupport.sendNotification(progressDialog==null?mainFrame:(Window)progressDialog, GrowlSupport.NOTIFICATION_TYPE_JOB_ERROR, title, message);
+        // Send a system notification if a notifier is available and enabled
+        if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
+            AbstractNotifier.getNotifier().displayNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_ERROR, title, message);
         
         return showErrorDialog(title, message, actionTexts, actionValues);
     }
