@@ -3,8 +3,6 @@ package com.mucommander.ui.action;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.util.FileToolkit;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.MainFrame;
@@ -12,12 +10,7 @@ import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
 
 import javax.swing.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.FileOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -225,8 +218,8 @@ public class ActionKeymap implements ContentHandler {
 
 
     /**
-     * Loads the action keymap files: loads the one contained in the JAR file first, and then the user's one. 
-     * This means any new action in the JAR action keymap (when a new version is released) will have the default
+     * Loads the action keymap file: loads the one contained in the JAR file first, and then the user's one.
+     * This means any new action in the JAR action keymap (when a new version gets released) will have the default
      * keyboard mapping, but the keyboard mappings customized by the user in the user's action keymap will override
      * the ones from the JAR action keymap.
      */
@@ -270,6 +263,11 @@ public class ActionKeymap implements ContentHandler {
     }
 
 
+    /**
+     * Starts parsing the XML action keymap file.
+     * @param in the file's input stream
+     * @throws Exception if an error was caught while parsing the file
+     */
     private void parseActionKeymapFile(InputStream in) throws Exception {
         // Parse action keymap file
         try {new Parser().parse(in, this, "UTF-8");}

@@ -17,7 +17,7 @@ import java.util.Hashtable;
  * MucoAction extends <code>AbstractAction</code> to add more functionalities and make it easier to integrate within
  * muCommander. The biggest difference with <code>AbstractAction</code> is that MucoAction instances are bound to a
  * specific {@link MainFrame}.<br>
- * Being an Action, a MucoAction instance can be used in every Swing components that accept Action instances.
+ * Note that by being an Action, MucoAction can be used in every Swing components that accept Action instances.
  *
  * <p>The MucoAction class is abstract. MucoAction subclasses must implement the {@link #performAction()} method
  * to provide a response to the action trigger, and must provide a constructor with the
