@@ -16,9 +16,9 @@ import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.ui.theme.ThemeManager;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -158,7 +158,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         FileTable currentFileTable = mainFrame.getActiveTable();
 
         // Currently select file, can be null
-        AbstractFile selectedFile = currentFileTable.getSelectedFile();
+        AbstractFile selectedFile = currentFileTable.getSelectedFile(false, true);
         FileTableModel tableModel = currentFileTable.getFileTableModel();
         // Number of marked files, can be 0
         int nbMarkedFiles = tableModel.getNbMarkedFiles();

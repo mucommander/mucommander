@@ -33,7 +33,7 @@ public abstract class SelectedFileAction extends FileAction {
 
 
     protected boolean getFileTableCondition(FileTable fileTable) {
-        AbstractFile selectedFile = fileTable.getSelectedFile(false);
+        AbstractFile selectedFile = fileTable.getSelectedFile(false, true);
         boolean enable = selectedFile!=null;
 
         if(enable && filter!=null)
