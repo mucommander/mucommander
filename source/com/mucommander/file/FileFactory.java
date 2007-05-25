@@ -441,8 +441,10 @@ public abstract class FileFactory {
                 if(file!=null)
                     return file;
 
-                // Create local file instance
+                // Create a local file instance
                 file = new LocalFile(fileURL);
+                // Uncomment this line and comment the previous one to simulate a slow filesystem 
+                //file = new DebugFile(new LocalFile(fileURL), 0, 50);
 
                 // Note: Creating an archive file on top of the file must be done after adding the file to the LRU cache,
                 // this could otherwise lead to weird behaviors, for example if a directory with the same filename
