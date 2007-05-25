@@ -234,6 +234,7 @@ Improvements:
  - 'Copy' is now the default action instead of 'Move' for drag-and-drop within muCommander
  - Improved keyboard accessibility of 'File collision' and 'Transfer progress' dialogs
  - Added 'Bring all to front' item to 'Window' menu
+ - Improved UI responsiveness on slow filesystems
 
 Localization:
  - Korean translation contributed by Jioh L. Jung
