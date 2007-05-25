@@ -12,6 +12,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.regex.Matcher;
 
 
 /**
@@ -561,6 +562,44 @@ public class LocalFile extends AbstractFile {
                 :0;         // --------- (0 octal)
     }
 
+    /**
+     * Overridden for performance reasons. This method doesn't iterate like {@link AbstractFile#getRoot()} to resolve
+     * the root file.
+     */
+    public AbstractFile getRoot() {
+        if(PlatformManager.isWindowsFamily()) {
+            // Extract drive letter from the path
+            Matcher matcher = windowsDriveRootPattern.matcher(absPath);
+            if(matcher.matches())
+                return FileFactory.getFile(absPath.substring(matcher.start(), matcher.end()));
+        }
+        else if(SEPARATOR.equals("/")) {
+            return FileFactory.getFile("/");
+        }
+
+        return super.getRoot();
+    }
+
+    /**
+     * Overridden to return {@link #SHOULD_NOT_HINT} under Windows when the destination file is located on a different
+     * drive from this file (e.g. C:\ and E:\).
+     */
+    public int getMoveToHint(AbstractFile destFile) {
+        int moveHint = super.getMoveToHint(destFile);
+        if(moveHint!=SHOULD_HINT && moveHint!=MUST_HINT)
+            return moveHint;
+
+        // This check is necessary under Windows because java.io.File#renameTo(java.io.File) does not return false
+        // if the destination file is located on a different drive, contrary for example to Mac OS X where renameTo
+        // returns false in this case.
+        // Not doing this under Windows would mean files would get moved between drives with renameTo, which doesn't
+        // allow the transfer to be monitored.
+        // Note that Windows UNC paths are handled by the super method when comparing hosts for equality.  
+        if(PlatformManager.isWindowsFamily() && !getRoot().equals(destFile.getRoot()))
+            return SHOULD_NOT_HINT;
+
+        return SHOULD_HINT;
+    }
 
     ///////////////////
     // Inner classes //

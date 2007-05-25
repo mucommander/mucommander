@@ -246,6 +246,7 @@ Bug fixes:
  - FTP filenames containing extended characters are now properly handled if the proper encoding is specified when the connection is created
  - HTTP files can now be properly archived
  - Windows can now be properly recalled when they are minimized
+ - Fixed individual file progress and transfer speed not showing when moving files between different drives under Windows
 
 Known issues:
  - Hungarian translation is not up-to-date
