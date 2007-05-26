@@ -1,10 +1,17 @@
 package com.mucommander.file.impl;
 
+import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.file.impl.local.LocalFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * CachedFile is a ProxyFile that caches the return values of most {@link AbstractFile} getter methods. This allows
@@ -94,6 +101,55 @@ public class CachedFile extends ProxyFile {
     private AbstractFile getRoot;
     private boolean getRootSet;
 
+    // Used to access the java.io.FileSystem#getBooleanAttributes method
+    private static boolean getFileAttributesAvailable;
+    private static Method mGetBooleanAttributes;
+    private static int BA_DIRECTORY, BA_EXISTS, BA_HIDDEN;
+    private static Object fs;
+
+    static {
+        // Exposes the java.io.FileSystem class which by default has package access, in order to use its
+        // 'getBooleanAttributes' method to speed up access to file attributes under Windows.
+        // This method allows to retrieve the values of the 'exists', 'isDirectory' and 'isHidden' attributes in one
+        // pass, resolving the underlying file only once instead of 3 times. Since resolving a file is a particularly
+        // expensive operation under Windows due to improper use of the Win32 API, this helps speed things up a little.
+        // References:
+        //  - http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5036988
+        //  - http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6240028
+
+        if(PlatformManager.isWindowsFamily()) {
+            try {
+                // Resolve FileSystem class, 'getBooleanAttributes' method and fields
+                Class cFile = File.class;
+                Class cFileSystem = Class.forName("java.io.FileSystem");
+                mGetBooleanAttributes = cFileSystem.getDeclaredMethod("getBooleanAttributes", new Class [] {cFile});
+                Field fBA_EXISTS = cFileSystem.getDeclaredField("BA_EXISTS");
+                Field fBA_DIRECTORY = cFileSystem.getDeclaredField("BA_DIRECTORY");
+                Field fBA_HIDDEN = cFileSystem.getDeclaredField("BA_HIDDEN");
+                Field fFs = cFile.getDeclaredField("fs");
+
+                // Allow access to the 'getBooleanAttributes' method and to the fields we're interested in
+                mGetBooleanAttributes.setAccessible(true);
+                fFs.setAccessible(true);
+                fBA_EXISTS.setAccessible(true);
+                fBA_DIRECTORY.setAccessible(true);
+                fBA_HIDDEN.setAccessible(true);
+
+                // Retrieve constant field values once for all
+                BA_EXISTS = ((Integer)fBA_EXISTS.get(null)).intValue();
+                BA_DIRECTORY = ((Integer)fBA_DIRECTORY.get(null)).intValue();
+                BA_HIDDEN = ((Integer)fBA_HIDDEN.get(null)).intValue();
+                fs = fFs.get(null);
+
+                getFileAttributesAvailable = true;
+                if(Debug.ON) Debug.trace("Access to java.io.FileSystem granted");
+            }
+            catch(Exception e) {
+                if(Debug.ON) Debug.trace("Error while allowing access to java.io.FileSystem: "+e);
+            }
+        }
+    }
+
 
     /**
      * Creates a new CachedFile instance around the specified AbstractFile, caching returned values of cached methods
@@ -119,6 +175,35 @@ public class CachedFile extends ProxyFile {
             files[i] = new CachedFile(files[i], true);
 
         return files;
+    }
+
+
+    /**
+     * Pre-fetches values of {@link #isDirectory}, {@link #exists} and {@link #isHidden} for the given local file,
+     * using the <code>java.io.FileSystem#getBooleanAttributes(java.io.File)</code> method.
+     * The given {@link AbstractFile} must be a local file or a proxy to a local file ('file' protocol). This method
+     * must only be called if the {@link #getFileAttributesAvailable} field is <code>true</code>.
+     */
+    private void getFileAttributes(AbstractFile file) {
+        if(file instanceof LocalFile || (file instanceof ProxyFile && (file=((ProxyFile)file).getProxiedFile()) instanceof LocalFile)) {
+            try {
+                int ba = ((Integer)mGetBooleanAttributes.invoke(fs, new Object [] {file.getUnderlyingFileObject()})).intValue();
+
+                isDirectory = (ba & BA_DIRECTORY)!=0;
+                isDirectorySet = true;
+
+                exists = (ba & BA_EXISTS)!=0;
+                existsSet = true;
+
+                isHidden = (ba & BA_HIDDEN)!=0;
+                isHiddenSet = true;
+
+//                if(Debug.ON) Debug.trace("Retrieved file attributes for "+file);
+            }
+            catch(Exception e) {
+                if(Debug.ON) Debug.trace("Could not retrieve file attributes for "+file+": "+e);
+            }
+        }
     }
 
 
@@ -163,6 +248,9 @@ public class CachedFile extends ProxyFile {
     }
 
     public boolean isDirectory() {
+        if(!isDirectorySet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getProtocol()))
+            getFileAttributes(file);
+
         if(!isDirectorySet) {
             isDirectory = file.isDirectory();
             isDirectorySet = true;
@@ -190,6 +278,9 @@ public class CachedFile extends ProxyFile {
     }
 
     public boolean isHidden() {
+        if(!isHiddenSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getProtocol()))
+            getFileAttributes(file);
+
         if(!isHiddenSet) {
             isHidden = file.isHidden();
             isHiddenSet = true;
@@ -253,6 +344,9 @@ public class CachedFile extends ProxyFile {
     }
 
     public boolean exists() {
+        if(!existsSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getProtocol()))
+            getFileAttributes(file);
+
         if(!existsSet) {
             exists = file.exists();
             existsSet = true;
