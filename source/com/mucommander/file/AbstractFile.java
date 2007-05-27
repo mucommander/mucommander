@@ -3,6 +3,7 @@ package com.mucommander.file;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.io.BufferPool;
 import com.mucommander.io.FileTransferException;
@@ -791,6 +792,73 @@ public abstract class AbstractFile implements FilePermissions {
         return s;
     }
 
+
+    /**
+     * Returns the immediate ancestor of this <code>AbstractFile</code> if it has one, <code>this</code> otherwise:
+     * <ul>
+     *  <li>if this file is a {@link ProxyFile}, returns the return value of {@link ProxyFile#getProxiedFile()}
+     *  <li>if this file is not a <code>ProxyFile</code>, returns <code>this</code>
+     * </ul>
+     *
+     * @return the immediate ancestor of this <code>AbstractFile</code> if it has one, <code>this</code> otherwise
+     */
+    public final AbstractFile getAncestor() {
+        if(this instanceof ProxyFile)
+            return ((ProxyFile)this).getProxiedFile();
+
+        return this;
+    }
+
+    /**
+     * Returns <code>true</code> if this <code>AbstractFile</code> has an ancestor, i.e. if this file is a
+     * {@link ProxyFile}, <code>false</code> otherwise.
+     *
+     * @return <code>true</code> if this <code>AbstractFile</code> has an ancestor, <code>false</code> otherwise.
+     */
+    public final boolean hasAncestor() {
+        return this instanceof ProxyFile;
+    }
+
+    /**
+     * Iterates through the ancestors returned by {@link #getAncestor()} until the top-most ancestor is reached and
+     * returns it. If this file has no ancestor, <code>this</code> will be returned.
+     *
+     * @return returns the top-most ancestor of this file, <code>this</code> if this file has no ancestor
+     */
+    public final AbstractFile getTopAncestor() {
+        AbstractFile topAncestor = this;
+        while(topAncestor.hasAncestor())
+            topAncestor = topAncestor.getAncestor();
+
+        return topAncestor;
+    }
+
+    /**
+     * Returns <code>true</code> if this file is or has an ancestor (immediate or not) that is an instance of the given
+     * Class or of a subclass of the given Class. Note that the specified must correspond to an AbstractFile subclass.
+     * Specifying any other Class will always yield to this method returning <code>false</code>. Also note that this
+     * method will always return <code>true</code> if <code>AbstractFile.class</code> is specified.
+     *
+     * @param abstractFileClass a Class corresponding to an AbstractFile subclass
+     * @return <code>true</code> if this file has an ancestor (immediate or not) that is an instance of the given Class
+     * or of a subclass of the given Class.
+     */
+    public final boolean hasAncestor(Class abstractFileClass) {
+        AbstractFile ancestor = this;
+        while(ancestor.hasAncestor()) {
+            if(abstractFileClass.isAssignableFrom(ancestor.getClass()))
+                return true;
+
+            ancestor = ancestor.getAncestor();
+        }
+
+        return false;
+    }
+
+    
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
 
     /**
      * Tests a file for equality: returns <code>true</code> if the given file has the same canonical path,
