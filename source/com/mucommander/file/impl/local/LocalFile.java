@@ -6,6 +6,7 @@ import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
 
 import javax.swing.filechooser.FileSystemView;
@@ -382,14 +383,17 @@ public class LocalFile extends AbstractFile {
         return new FileInputStream(file);
     }
 
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        return new LocalRandomAccessInputStream(new RandomAccessFile(file, "r"));
-    }
-
     public OutputStream getOutputStream(boolean append) throws IOException {
         return new FileOutputStream(absPath, append);
     }
 
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        return new LocalRandomAccessInputStream(new RandomAccessFile(file, "r"));
+    }
+
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
+        return new LocalRandomAccessOutputStream(new RandomAccessFile(file, "rw"));
+    }
 
     public void delete() throws IOException {
         boolean ret = file.delete();
@@ -606,8 +610,7 @@ public class LocalFile extends AbstractFile {
     ///////////////////
 
     /**
-     * LocalRandomAccessInputStream extends RandomAccessInputStream to provide random access to a
-     *  <code>LocalFile</code>'s content.
+     * LocalRandomAccessInputStream extends RandomAccessInputStream to provide random read access to a LocalFile.
      */
     public class LocalRandomAccessInputStream extends RandomAccessInputStream {
 
@@ -641,8 +644,48 @@ public class LocalFile extends AbstractFile {
             return raf.length();
         }
 
-        public void seek(long pos) throws IOException {
-            raf.seek(pos);
+        public void seek(long offset) throws IOException {
+            raf.seek(offset);
+        }
+    }
+
+    /**
+     * LocalRandomAccessOutputStream extends RandomAccessOutputStream to provide random write access to a LocalFile.
+     */
+    public class LocalRandomAccessOutputStream extends RandomAccessOutputStream {
+
+        private RandomAccessFile raf;
+
+        public LocalRandomAccessOutputStream(RandomAccessFile raf) {
+            this.raf = raf;
+        }
+
+        public void write(int i) throws IOException {
+            raf.write(i);
+        }
+
+        public void write(byte b[]) throws IOException {
+            raf.write(b);
+        }
+
+        public void write(byte b[], int off, int len) throws IOException {
+            raf.write(b, off, len);
+        }
+
+        public void close() throws IOException {
+            raf.close();
+        }
+
+        public long getOffset() throws IOException {
+            return raf.getFilePointer();
+        }
+
+        public long getLength() throws IOException {
+            return raf.length();
+        }
+
+        public void seek(long offset) throws IOException {
+            raf.seek(offset);
         }
     }
 }

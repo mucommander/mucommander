@@ -12,6 +12,7 @@ import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.io.SinkOutputStream;
 import com.mucommander.process.AbstractProcess;
 import org.apache.commons.net.ftp.FTPClient;
@@ -343,11 +344,6 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         return getInputStream(0);
     }
 
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        // No random access for FTP files unfortunately
-        throw new IOException();
-    }
-
     public OutputStream getOutputStream(boolean append) throws IOException {
         FTPConnectionHandler connHandler = null;
         try {
@@ -379,6 +375,15 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
     }
 
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        // No random access for FTP files unfortunately
+        throw new IOException();
+    }
+
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
+        // No random access for FTP files unfortunately
+        throw new IOException();
+    }
 
     public void delete() throws IOException {
         FTPConnectionHandler connHandler = null;

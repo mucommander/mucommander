@@ -7,6 +7,7 @@ import com.mucommander.file.*;
 import com.mucommander.file.util.PathTokenizer;
 import com.mucommander.io.Base64OutputStream;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.RandomAccessOutputStream;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -294,11 +295,6 @@ public class HTTPFile extends AbstractFile {
         return conn.getInputStream();
     }
 
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        // No random access for HTTP files unfortunately
-        throw new IOException();
-    }
-
     /**
      * Not available, always throws an <code>IOException</code>.
      */
@@ -306,6 +302,16 @@ public class HTTPFile extends AbstractFile {
         throw new IOException();
     }
     
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        // No random access for HTTP files unfortunately
+        throw new IOException();
+    }
+
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
+        // No random access for HTTP files unfortunately
+        throw new IOException();
+    }
+
     /**
      * Not available, always throws an <code>IOException</code>.
      */

@@ -4,6 +4,7 @@ import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.RandomAccessOutputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -109,11 +110,6 @@ public class ArchiveEntryFile extends AbstractFile {
         return false;
     }
 
-    public OutputStream getOutputStream(boolean append) throws IOException {
-        // Archive entries are read-only
-        throw new IOException();
-    }
-	
     public void delete() throws IOException {
         // Archive entries are read-only
         throw new IOException();
@@ -138,7 +134,17 @@ public class ArchiveEntryFile extends AbstractFile {
         return archiveFile.getEntryInputStream(entry);
     }
 
+    public OutputStream getOutputStream(boolean append) throws IOException {
+        // Archive entries are read-only
+        throw new IOException();
+    }
+
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        // No random access for archive entries unfortunately
+        throw new IOException();
+    }
+
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         // No random access for archive entries unfortunately
         throw new IOException();
     }

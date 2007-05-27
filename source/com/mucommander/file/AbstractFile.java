@@ -7,6 +7,7 @@ import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.io.BufferPool;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
 
 import java.io.IOException;
@@ -927,9 +928,9 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract InputStream getInputStream() throws IOException;
 
     /**
-     * Returns an <code>InputStream</code> to read the contents of this AbstractFile with random access.
+     * Returns a {@link RandomAccessInputStream} to read the contents of this AbstractFile with random access.
      *
-     * @throws IOException if this AbstractFile could not be read or if a <code>RandomAccessInputStream</code> could not
+     * @throws IOException if this AbstractFile cannot be read or if a {@link RandomAccessInputStream} cannot
      * be provided because the underlying file protocol doesn't have random access support or for any other reason
      * (e.g. file is a directory).
      */
@@ -937,10 +938,20 @@ public abstract class AbstractFile implements FilePermissions {
 
     /**
      * Returns an OuputStream to write to this AbstractFile.
+     *
      * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any existing data will be overwritten.
      * @throws IOException if this operation is not permitted or if this AbstractFile is a folder
      */
     public abstract OutputStream getOutputStream(boolean append) throws IOException;
+
+    /**
+     * Returns a {@link RandomAccessOutputStream} to write to this AbstractFile with random access.
+     *
+     * @throws IOException if this AbstractFile cannot be written or if a {@link RandomAccessOutputStream} cannot
+     * be provided because the underlying file protocol doesn't have random access support or for any other reason
+     * (e.g. file is a directory).
+     */
+    public abstract RandomAccessOutputStream getRandomAccessOutputStream() throws IOException;
 
     /**
      * Deletes this AbstractFile and this one only (does not recurse), throws an IOException

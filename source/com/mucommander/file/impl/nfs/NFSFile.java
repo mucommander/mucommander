@@ -4,6 +4,7 @@ import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
 import com.sun.xfile.XFile;
 import com.sun.xfile.XFileInputStream;
@@ -220,12 +221,16 @@ public class NFSFile extends AbstractFile {
         return new XFileInputStream(file);
     }
 
+    public OutputStream getOutputStream(boolean append) throws IOException {
+        return new XFileOutputStream(absPath, append);
+    }
+
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return new NFSRandomAccessInputStream(new XRandomAccessFile(file, "r"));
     }
 
-    public OutputStream getOutputStream(boolean append) throws IOException {
-        return new XFileOutputStream(absPath, append);
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
+        return new NFSRandomAccessOutputStream(new XRandomAccessFile(file, "rw"));
     }
 
     public void delete() throws IOException {
@@ -355,8 +360,7 @@ public class NFSFile extends AbstractFile {
     ///////////////////
 
     /**
-     * NFSRandomAccessInputStream extends RandomAccessInputStream to provide random access to a
-     *  <code>NFSFile</code>'s content.
+     * NFSRandomAccessInputStream extends RandomAccessInputStream to provide random read access to an NFSFile.
      */
     public class NFSRandomAccessInputStream extends RandomAccessInputStream {
 
@@ -390,8 +394,48 @@ public class NFSFile extends AbstractFile {
             return raf.length();
         }
 
-        public void seek(long pos) throws IOException {
-            raf.seek(pos);
+        public void seek(long offset) throws IOException {
+            raf.seek(offset);
+        }
+    }
+
+    /**
+     * NFSRandomAccessOutputStream extends RandomAccessOutputStream to provide random write access to an NFSFile.
+     */
+    public class NFSRandomAccessOutputStream extends RandomAccessOutputStream {
+
+        private XRandomAccessFile raf;
+
+        public NFSRandomAccessOutputStream(XRandomAccessFile raf) {
+            this.raf = raf;
+        }
+
+        public void write(int i) throws IOException {
+            raf.write(i);
+        }
+
+        public void write(byte b[]) throws IOException {
+            raf.write(b);
+        }
+
+        public void write(byte b[], int off, int len) throws IOException {
+            raf.write(b, off, len);
+        }
+
+        public void close() throws IOException {
+            raf.close();
+        }
+
+        public long getOffset() throws IOException {
+            return raf.getFilePointer();
+        }
+
+        public long getLength() throws IOException {
+            return raf.length();
+        }
+
+        public void seek(long offset) throws IOException {
+            raf.seek(offset);
         }
     }
 }

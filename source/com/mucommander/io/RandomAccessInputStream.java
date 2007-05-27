@@ -12,8 +12,9 @@ import java.io.InputStream;
  *
  * @author Maxence Bernard
  */
-public abstract class RandomAccessInputStream extends InputStream {
+public abstract class RandomAccessInputStream extends InputStream implements RandomAccess {
 
+    /** The last offset set by {@link #mark(int)} */
     private int markOffset;
 
 
@@ -22,6 +23,7 @@ public abstract class RandomAccessInputStream extends InputStream {
      */
     public RandomAccessInputStream() {
     }
+
 
     ////////////////////////
     // Overridden methods //
@@ -50,7 +52,6 @@ public abstract class RandomAccessInputStream extends InputStream {
         return n;
     }
 
-
     /**
      * Return the number of bytes that are available for reading, that is: {@link #getLength()} - {@link #getOffset()} - 1.
      * Since <code>InputStream.available()</code> returns an int and this method overrides it, a maximum of
@@ -63,7 +64,6 @@ public abstract class RandomAccessInputStream extends InputStream {
         return (int)(getLength() - getOffset() - 1);
     }
 
-
     /**
      * Overrides <code>InputStream.mark()</code> to provide a working implementation of the method. The given readLimit
      * is simply ignored, the stream can be repositionned using {@link #reset()} with no limit on the number of bytes
@@ -75,7 +75,6 @@ public abstract class RandomAccessInputStream extends InputStream {
         this.markOffset = readLimit;
     }
 
-
     /**
      * Overrides <code>InputStream.mark()</code> to provide a working implementation of the method.
      *
@@ -85,7 +84,6 @@ public abstract class RandomAccessInputStream extends InputStream {
         seek(this.markOffset);
     }
 
-
     /**
      * Always returns <code>true</code>: {@link #mark(int)} and {@link #reset()} methods are supported.
      */
@@ -93,19 +91,32 @@ public abstract class RandomAccessInputStream extends InputStream {
         return true;
     }
 
+
     //////////////////////
     // Abstract methods //
     //////////////////////
 
+    /**
+     * Reads up to <code>b.length</code> bytes of data from this file into an array of bytes. This method blocks until
+     * at least one byte of input is available.
+     *
+     * @param b the buffer into which the data is read
+     * @return the total number of bytes read into the buffer, or -1 if there is no more data because the end of this
+     * file has been reached.
+     * @throws IOException if an I/O error occurs
+     */
     public abstract int read(byte b[]) throws IOException;
 
+    /**
+     * Reads up to <code>len</code> bytes of data from this file into an array of bytes. This method blocks until at
+     * least one byte of input is available.
+     *
+     * @param b the buffer into which the data is read
+     * @param off the start offset of the data
+     * @param len the maximum number of bytes read
+     * @return the total number of bytes read into the buffer, or -1 if there is no more data because the end of the
+     * file has been reached.
+     * @throws IOException if an I/O error occurs
+     */
     public abstract int read(byte b[], int off, int len) throws IOException;
-
-    public abstract void close() throws IOException;
-
-    public abstract long getOffset() throws IOException;
-
-    public abstract long getLength() throws IOException;
-
-    public abstract void seek(long pos) throws IOException;
 }

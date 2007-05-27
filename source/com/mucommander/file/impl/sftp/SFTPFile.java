@@ -10,6 +10,7 @@ import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
+import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.process.AbstractProcess;
 import com.sshtools.j2ssh.SftpClient;
 import com.sshtools.j2ssh.SshClient;
@@ -266,11 +267,6 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
         return getInputStream(0);
     }
 
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        // No random access for SFTP files unfortunately
-        throw new IOException();
-    }
-
     public OutputStream getOutputStream(boolean append) throws IOException {
         SFTPConnectionHandler connHandler = null;
         try {
@@ -320,6 +316,15 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
     }
 
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+        // No random access for SFTP files unfortunately
+        throw new IOException();
+    }
+
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
+        // No random access for SFTP files unfortunately
+        throw new IOException();
+    }
 
     public void delete() throws IOException {
         SFTPConnectionHandler connHandler = null;
