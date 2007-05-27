@@ -39,30 +39,5 @@ public class CopyFileNamesAction extends SelectedFilesAction {
 
             ClipboardSupport.setClipboardContents(tfs);
         }
-
-
-
-/*
-        // Get selected file OR marked files (if any), returned FileSet should never be empty
-        FileSet selectedFiles = mainFrame.getActiveTable().getSelectedFiles();
-        int nbFiles = selectedFiles.size();
-        if(nbFiles==0)
-            return;
-
-        // Iterate on all selected/marked files
-        StringBuffer clipboardText = new StringBuffer();
-        // If shift down, copy full paths instead of names
-        AbstractFile file;
-        for(int i=0; i<nbFiles; i++) {
-            file = selectedFiles.fileAt(i);
-            clipboardText.append(file.getName());
-            if(i!=nbFiles-1)
-                clipboardText.append('\n');
-        }
-
-        // Set clipboard's content
-        StringSelection stringSelection = new StringSelection(clipboardText.toString());
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, stringSelection);
-*/
     }
 }
