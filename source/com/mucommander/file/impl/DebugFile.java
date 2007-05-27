@@ -189,13 +189,6 @@ public class DebugFile extends ProxyFile {
         return super.isParentOf(f);
     }
 
-    public boolean isArchiveEntry() {
-        if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
-        lag();
-
-        return super.isArchiveEntry();
-    }
-
     public boolean isHidden() {
         if(Debug.ON) Debug.trace(getDebugString(), traceLevel);
         lag();

@@ -4,7 +4,6 @@ import com.mucommander.PlatformManager;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
-import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.io.BufferPool;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -245,15 +244,6 @@ public abstract class AbstractFile implements FilePermissions {
      */	
     public boolean isHidden() {
         return getName().startsWith(".");
-    }
-
-
-    /**
-     * Returns <code>true</code> if this file is an archive entry. 
-     */
-    public boolean isArchiveEntry() {
-        return this instanceof ArchiveEntryFile
-           || (this instanceof AbstractArchiveFile && !(((AbstractArchiveFile)this).getProxiedFile() instanceof LocalFile));
     }
 
 

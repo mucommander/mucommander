@@ -57,9 +57,6 @@ public class CachedFile extends ProxyFile {
     private boolean isBrowsable;
     private boolean isBrowsableSet;
 
-    private boolean isArchiveEntry;
-    private boolean isArchiveEntrySet;
-
     private boolean isHidden;
     private boolean isHiddenSet;
 
@@ -266,15 +263,6 @@ public class CachedFile extends ProxyFile {
         }
 
         return isBrowsable;
-    }
-
-    public boolean isArchiveEntry() {
-        if(!isArchiveEntrySet) {
-            isArchiveEntry = file.isArchiveEntry();
-            isArchiveEntrySet = true;
-        }
-
-        return isArchiveEntry;
     }
 
     public boolean isHidden() {

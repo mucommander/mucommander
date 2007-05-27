@@ -203,10 +203,6 @@ public abstract class ProxyFile extends AbstractFile {
         return file.isBrowsable();
     }
 
-    public boolean isArchiveEntry() {
-        return file.isArchiveEntry();
-    }
-
     public boolean isHidden() {
         return file.isHidden();
     }
