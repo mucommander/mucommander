@@ -182,7 +182,9 @@ public class CachedFile extends ProxyFile {
      * must only be called if the {@link #getFileAttributesAvailable} field is <code>true</code>.
      */
     private void getFileAttributes(AbstractFile file) {
-        if(file instanceof LocalFile || (file instanceof ProxyFile && (file=((ProxyFile)file).getProxiedFile()) instanceof LocalFile)) {
+        file = file.getTopAncestor();
+
+        if(file instanceof LocalFile) {
             try {
                 int ba = ((Integer)mGetBooleanAttributes.invoke(fs, new Object [] {file.getUnderlyingFileObject()})).intValue();
 

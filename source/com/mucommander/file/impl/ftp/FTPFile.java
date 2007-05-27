@@ -6,7 +6,10 @@ import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
+import com.mucommander.file.FileURL;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
@@ -633,14 +636,9 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             return super.moveTo(destFile);
         }
 
-        // If file is an archive file, retrieve the enclosed file, which is likely to be an FTPFile but not necessarily
-        // (may be an ArchiveEntryFile)
-        if(destFile instanceof AbstractArchiveFile)
-            destFile = ((AbstractArchiveFile)destFile).getProxiedFile();
-
-        // If destination file is not an FTPFile (for instance an archive entry), server renaming won't work
-        // so use default moveTo() implementation instead
-        if(!(destFile instanceof FTPFile)) {
+        // If destination file is not an FTPFile nor has a FTPFile ancestor (for instance an archive entry),
+        // server renaming won't work so use default moveTo() implementation instead
+        if(!(destFile.getTopAncestor() instanceof FTPFile)) {
             return super.moveTo(destFile);
         }
 

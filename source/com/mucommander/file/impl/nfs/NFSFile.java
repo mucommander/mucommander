@@ -1,6 +1,9 @@
 package com.mucommander.file.impl.nfs;
 
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
+import com.mucommander.file.FileURL;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -332,13 +335,9 @@ public class NFSFile extends AbstractFile {
             return super.moveTo(destFile);
         }
 
-        // If file is an archive file, retrieve the enclosed file, which is likely to be an NFSFile but not necessarily
-        // (may be an ArchiveEntryFile)
-        if(destFile instanceof AbstractArchiveFile)
-            destFile = ((AbstractArchiveFile)destFile).getProxiedFile();
-
-        // If destination file is not an NFSFile (for instance an archive entry), renaming won't work
-        // so use the default moveTo() implementation instead
+        // If destination file is not an NFSFile nor has an NFSFile ancestor (for instance an archive entry),
+        // server renaming won't work so use the default moveTo() implementation instead
+        destFile = destFile.getTopAncestor();
         if(!(destFile instanceof NFSFile)) {
             return super.moveTo(destFile);
         }

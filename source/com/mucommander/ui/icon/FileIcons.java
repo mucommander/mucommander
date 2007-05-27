@@ -7,7 +7,6 @@ import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.file.impl.ProxyFile;
 import com.mucommander.file.impl.local.LocalFile;
 
 import javax.swing.*;
@@ -247,11 +246,10 @@ public class FileIcons {
 
         // Specified file is a LocalFile or a ProxyFile proxying a LocalFile (e.g. an archive file):
         // get the system file icon using the underlying java.io.File instance
-        if(file instanceof LocalFile)
+        file = file.getTopAncestor();
+        if(file instanceof LocalFile) {
             javaIoFile = (File)file.getUnderlyingFileObject();
-        else if((file instanceof ProxyFile && (((ProxyFile)file).getProxiedFile() instanceof LocalFile)))
-            javaIoFile = (File)((ProxyFile)file).getProxiedFile().getUnderlyingFileObject();
-
+        }
         // File is a remote file: create a temporary local file (or directory) with the same extension to grab the icon
         // and then delete the file. This operation is I/O bound and thus expensive, so an LRU is used to cache
         // frequently-accessed file extensions.
@@ -275,8 +273,7 @@ public class FileIcons {
                 }
                 catch(IOException e) {}
 
-                javaIoFile = tempFile instanceof LocalFile?(File)tempFile.getUnderlyingFileObject()
-                        :(File)((ProxyFile)tempFile).getProxiedFile().getUnderlyingFileObject();
+                javaIoFile = (File)tempFile.getTopAncestor().getUnderlyingFileObject();
 
                 // Get the system file icon
                 icon = getSystemFileIcon(javaIoFile);
@@ -312,7 +309,15 @@ public class FileIcons {
             return FILE_CHOOSER.getIcon(file);
 
         // JFileChooser#getSystemIcon(File) returns bogus icons under Windows
+//try {
         return FILESYSTEM_VIEW.getSystemIcon(file);
+//}
+//catch(Exception e) {
+//    if(Debug.ON) Debug.trace("Caught exception with file "+file.getAbsolutePath());
+//    e.printStackTrace();
+//
+//    return null;
+//}
     }
 
 

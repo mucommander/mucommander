@@ -2,7 +2,10 @@ package com.mucommander.file.impl.local;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.file.*;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
+import com.mucommander.file.FileURL;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
@@ -532,13 +535,9 @@ public class LocalFile extends AbstractFile {
             return super.moveTo(destFile);
         }
 
-        // If file is an archive file, retrieve the enclosed file, which is likely to be a LocalFile but not necessarily
-        // (may be an ArchiveEntryFile)
-        if(destFile instanceof AbstractArchiveFile)
-            destFile = ((AbstractArchiveFile)destFile).getProxiedFile();
-
-        // If destination file is not a LocalFile (for instance an archive entry), renaming won't work
-        // so use the default moveTo() implementation instead
+        // If destination file is not a LocalFile nor has a LocalFile ancestor (for instance an archive entry),
+        // renaming won't work so use the default moveTo() implementation instead
+        destFile = destFile.getTopAncestor();
         if(!(destFile instanceof LocalFile)) {
             return super.moveTo(destFile);
         }

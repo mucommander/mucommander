@@ -18,7 +18,7 @@ public class ArchiveFileKeeper extends FileFilter {
     ///////////////////////////////
 
     public boolean accept(AbstractFile file) {
-        return file instanceof AbstractArchiveFile;
+        return file.hasAncestor(AbstractArchiveFile.class);
     }
 
 }
