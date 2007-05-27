@@ -34,7 +34,7 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
     public abstract void write(byte b[]) throws IOException;
 
     /**
-     * Writes <code>len bytes</code> from the specified byte array starting at offset <code>off</code> to this file.
+     * Writes <code>len</code> bytes from the specified byte array starting at offset <code>off</code> to this file.
      * 
      * @param b the data to write
      * @param off the start offset in the data array
@@ -42,4 +42,22 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
      * @throws IOException if an I/O error occurs
      */
     public abstract void write(byte b[], int off, int len) throws IOException;
+
+    /**
+     * Sets the length of the file.
+     *
+     * <p>If the present length of the file as returned by the {@link #getLength()} method is greater than the
+     * <code>newLength</code> argument then the file will be truncated. In this case, if the file offset as returned
+     * by the {@link #getOffset()} method is greater than <code>newLength</code> then after this method returns the
+     * offset will be equal to <code>newLength</code>.</p>
+     *
+     * <p>If the present length of the file as returned by the {@link #getLength()} method is smaller than the 
+     * <code>newLength</code> argument then the file will be extended. In this case, the contents of the extended
+     * portion of the file are not defined.</p>
+     *
+     * @return <code>true</code> if the file's length could be changed to the new length, <code>false</code> if the
+     * operation is not supported.
+     * @throw IOException If an I/O error occurred while trying to change the file's length
+     */
+    public abstract boolean setLength(long newLength) throws IOException;
 }

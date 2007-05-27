@@ -262,8 +262,16 @@ import java.io.OutputStream;
         return new SmbFileOutputStream(getURL().toString(true), append);
     }
 
+    public boolean hasRandomAccessInputStream() {
+        return true;
+    }
+
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return new SMBRandomAccessInputStream(new SmbRandomAccessFile(file, "r"));
+    }
+
+    public boolean hasRandomAccessOutputStream() {
+        return true;
     }
 
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
@@ -535,6 +543,11 @@ import java.io.OutputStream;
 
         public void seek(long offset) throws IOException {
             raf.seek(offset);
+        }
+
+        public boolean setLength(long newLength) throws IOException {
+            raf.setLength(newLength);
+            return true;
         }
     }
 }

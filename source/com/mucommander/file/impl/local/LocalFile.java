@@ -387,8 +387,16 @@ public class LocalFile extends AbstractFile {
         return new FileOutputStream(absPath, append);
     }
 
+    public boolean hasRandomAccessInputStream() {
+        return true;
+    }
+
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return new LocalRandomAccessInputStream(new RandomAccessFile(file, "r"));
+    }
+
+    public boolean hasRandomAccessOutputStream() {
+        return true;
     }
 
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
@@ -686,6 +694,11 @@ public class LocalFile extends AbstractFile {
 
         public void seek(long offset) throws IOException {
             raf.seek(offset);
+        }
+
+        public boolean setLength(long newLength) throws IOException {
+            raf.setLength(newLength);
+            return true;
         }
     }
 }

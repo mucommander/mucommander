@@ -225,8 +225,16 @@ public class NFSFile extends AbstractFile {
         return new XFileOutputStream(absPath, append);
     }
 
+    public boolean hasRandomAccessInputStream() {
+        return true;
+    }
+
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return new NFSRandomAccessInputStream(new XRandomAccessFile(file, "r"));
+    }
+
+    public boolean hasRandomAccessOutputStream() {
+        return true;
     }
 
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
@@ -436,6 +444,23 @@ public class NFSFile extends AbstractFile {
 
         public void seek(long offset) throws IOException {
             raf.seek(offset);
+        }
+
+        public boolean setLength(long newLength) throws IOException {
+            // This operation is supported only if the new length is greater (or equal) than the current length
+            long currentLength = getLength();
+            if(newLength<currentLength) {
+                return false;
+            }
+
+            if(newLength==currentLength)
+                return true;
+
+            // Extend the file's length by seeking to the end and writing a byte
+            seek(newLength-1);
+            write(0);
+
+            return true;
         }
     }
 }

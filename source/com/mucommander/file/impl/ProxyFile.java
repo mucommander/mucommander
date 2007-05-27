@@ -126,8 +126,16 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getOutputStream(append);
     }
 
+    public boolean hasRandomAccessInputStream() {
+        return file.hasRandomAccessInputStream();
+    }
+
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         return file.getRandomAccessInputStream();
+    }
+
+    public boolean hasRandomAccessOutputStream() {
+        return file.hasRandomAccessOutputStream();
     }
 
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {

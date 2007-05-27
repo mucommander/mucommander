@@ -301,14 +301,22 @@ public class HTTPFile extends AbstractFile {
     public OutputStream getOutputStream(boolean append) throws IOException {
         throw new IOException();
     }
-    
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+
+    public boolean hasRandomAccessInputStream() {
         // No random access for HTTP files unfortunately
+        return false;
+    }
+
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         throw new IOException();
     }
 
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
+    public boolean hasRandomAccessOutputStream() {
         // No random access for HTTP files unfortunately
+        return false;
+    }
+
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         throw new IOException();
     }
 

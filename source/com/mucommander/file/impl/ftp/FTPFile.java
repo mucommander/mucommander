@@ -375,13 +375,21 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
     }
 
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+    public boolean hasRandomAccessInputStream() {
         // No random access for FTP files unfortunately
+        return false;
+    }
+
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         throw new IOException();
     }
 
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
+    public boolean hasRandomAccessOutputStream() {
         // No random access for FTP files unfortunately
+        return false;
+    }
+
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         throw new IOException();
     }
 

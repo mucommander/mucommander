@@ -139,13 +139,21 @@ public class ArchiveEntryFile extends AbstractFile {
         throw new IOException();
     }
 
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+    public boolean hasRandomAccessInputStream() {
         // No random access for archive entries unfortunately
+        return false;
+    }
+
+    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         throw new IOException();
     }
 
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
+    public boolean hasRandomAccessOutputStream() {
         // No random access for archive entries unfortunately
+        return false;
+    }
+
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         throw new IOException();
     }
 

@@ -928,6 +928,24 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract InputStream getInputStream() throws IOException;
 
     /**
+     * Returns an OuputStream to write to this AbstractFile.
+     *
+     * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any existing data will be overwritten.
+     * @throws IOException if this operation is not permitted or if this AbstractFile is a folder
+     */
+    public abstract OutputStream getOutputStream(boolean append) throws IOException;
+
+    /**
+     * Returns <code>true</code> if the underlying filesystem has support for random access input streams.
+     * Note that of <code>true</code> is returned, this doesn't necessarily mean that
+     * {@link #getRandomAccessInputStream()} will return a {@link RandomAccessInputStream}, it might still throw
+     * an <code>IOException</code> if random access to the file cannot be provided.
+     *
+     * @return <code>true</code> if the underlying filesystem has support for random access input streams
+     */
+    public abstract boolean hasRandomAccessInputStream();
+
+    /**
      * Returns a {@link RandomAccessInputStream} to read the contents of this AbstractFile with random access.
      *
      * @throws IOException if this AbstractFile cannot be read or if a {@link RandomAccessInputStream} cannot
@@ -937,12 +955,14 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract RandomAccessInputStream getRandomAccessInputStream() throws IOException;
 
     /**
-     * Returns an OuputStream to write to this AbstractFile.
+     * Returns <code>true</code> if the underlying filesystem has support for random access output streams.
+     * Note that of <code>true</code> is returned, this doesn't necessarily mean that
+     * {@link #getRandomAccessOutputStream()} will return a {@link RandomAccessOutputStream}, it might still throw
+     * an <code>IOException</code> if random access to the file cannot be provided.
      *
-     * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any existing data will be overwritten.
-     * @throws IOException if this operation is not permitted or if this AbstractFile is a folder
+     * @return <code>true</code> if the underlying filesystem has support for random access output streams
      */
-    public abstract OutputStream getOutputStream(boolean append) throws IOException;
+    public abstract boolean hasRandomAccessOutputStream();
 
     /**
      * Returns a {@link RandomAccessOutputStream} to write to this AbstractFile with random access.
