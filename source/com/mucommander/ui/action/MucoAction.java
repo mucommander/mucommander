@@ -306,8 +306,8 @@ public abstract class MucoAction extends AbstractAction {
      *  <li>Under other platforms, the order is <code>Shift, Ctrl, Meta, Alt</code>
      * </ul>
      *
-     * @param modifiers
-     * @return
+     * @param modifiers a modifiers bitwise mask
+     * @return a String representations of the given modifiers bitwise mask
      */
     public static String getModifiersRepresentation(int modifiers) {
         String modifiersString = "";
