@@ -1,6 +1,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
@@ -43,6 +44,12 @@ public abstract class MucoAction extends AbstractAction {
     /** Name of the alternate accelerator KeyStroke property */
     public final static String ALTERNATE_ACCELERATOR_PROPERTY_KEY = "alternate_accelerator";
 
+
+    private final static String SHIFT_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.SHIFT_MASK);
+    private final static String CTRL_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.CTRL_MASK);
+    private final static String ALT_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.ALT_MASK);
+    private final static String META_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.META_MASK);
+    
 
     /**
      * Convenience constructor which has the same effect as calling {@link #MucoAction(MainFrame, Hashtable, boolean, boolean, boolean )}
@@ -267,13 +274,13 @@ public abstract class MucoAction extends AbstractAction {
 
 
     /**
-     * Returns a displayable String representation for the given KeyStroke, in the following format:<br>
-     * <code>[modifier]+[modifier]+...+key</code>
+     * Returns a String representation for the given KeyStroke, in the following format:<br>
+     * <code>modifier+modifier+...+key</code>
      *
      * <p>For example, <code>KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK|InputEvent.ALT_MASK)</code>
-     * will return <code>Ctrl+Alt+C</code> .
+     * will return <code>Ctrl+Alt+C</code>.</p>
      *
-     * @param ks the KeyStroke for which to return a displayable String representation
+     * @param ks the KeyStroke for which to return a String representation
      * @return a String representation of the given KeyStroke, in the <code>[modifier]+[modifier]+...+key</code> format
      */
     public static String getKeyStrokeRepresentation(KeyStroke ks) {
@@ -281,11 +288,54 @@ public abstract class MucoAction extends AbstractAction {
         String keyText = KeyEvent.getKeyText(ks.getKeyCode());
 
         if(modifiers!=0) {
-            return KeyEvent.getKeyModifiersText(modifiers)+"+"+keyText;
+            return getModifiersRepresentation(modifiers)+"+"+keyText;
         }
 
         return keyText;
     }
+
+
+    /**
+     * Returns a String representations of the given modifiers bitwise mask, in the following format:<br>
+     * <code>modifier+...+modifier
+     *
+     * <p>The modifiers' order in the returned String tries to mimick the keyboard layout of the current platform as
+     * much as possible:
+     * <ul>
+     *  <li>Under Mac OS X, the order is: <code>Shift, Ctrl, Alt, Meta</code>
+     *  <li>Under other platforms, the order is <code>Shift, Ctrl, Meta, Alt</code>
+     * </ul>
+     *
+     * @param modifiers
+     * @return
+     */
+    public static String getModifiersRepresentation(int modifiers) {
+        String modifiersString = "";
+
+        if((modifiers&KeyEvent.SHIFT_MASK)!=0)
+            modifiersString += SHIFT_MODIFIER_STRING;
+
+        if((modifiers&KeyEvent.CTRL_MASK)!=0)
+            modifiersString += (modifiersString.equals("")?"":"+")+CTRL_MODIFIER_STRING;
+
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
+            if((modifiers&KeyEvent.ALT_MASK)!=0)
+                modifiersString += (modifiersString.equals("")?"":"+")+ALT_MODIFIER_STRING;
+
+            if((modifiers&KeyEvent.META_MASK)!=0)
+                modifiersString += (modifiersString.equals("")?"":"+")+META_MODIFIER_STRING;
+        }
+        else {
+            if((modifiers&KeyEvent.META_MASK)!=0)
+                modifiersString += (modifiersString.equals("")?"":"+")+META_MODIFIER_STRING;
+
+            if((modifiers&KeyEvent.ALT_MASK)!=0)
+                modifiersString += (modifiersString.equals("")?"":"+")+ALT_MODIFIER_STRING;
+        }
+
+        return modifiersString;
+    }
+
 
 
     /**
