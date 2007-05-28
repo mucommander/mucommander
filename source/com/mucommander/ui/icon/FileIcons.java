@@ -302,22 +302,20 @@ public class FileIcons {
 
     /**
      * Returns a system file icon for the given File, by calling the proper Java API method for the current OS.
+     * <code>null</code> is returned if the given file doesn't exist.
      */
     private static Icon getSystemFileIcon(File file) {
-        // FileSystemView#getSystemIcon(File) returns bogus icons under Mac OS X
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
-            return FILE_CHOOSER.getIcon(file);
+        try {
+            // Note: FileSystemView#getSystemIcon(File) returns bogus icons under Mac OS X
+            if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
+                return FILE_CHOOSER.getIcon(file);
 
-        // JFileChooser#getSystemIcon(File) returns bogus icons under Windows
-//try {
-        return FILESYSTEM_VIEW.getSystemIcon(file);
-//}
-//catch(Exception e) {
-//    if(Debug.ON) Debug.trace("Caught exception with file "+file.getAbsolutePath());
-//    e.printStackTrace();
-//
-//    return null;
-//}
+            // Note: JFileChooser#getSystemIcon(File) returns bogus icons under Windows
+            return FILESYSTEM_VIEW.getSystemIcon(file);
+        }
+        catch(Exception e) {
+            return null;
+        }
     }
 
 
