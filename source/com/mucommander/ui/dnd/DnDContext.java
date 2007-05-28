@@ -7,7 +7,7 @@ import com.mucommander.ui.FolderPanel;
  * The getters are static since only one drag-and-drop operation can be performed at the same time. The information
  * returned by the getters is meaningful only when a drag-and-drop is being carried out.
  *
- * @see {@link FileDragSourceListener}
+ * @see FileDragSourceListener
  * @author Maxence Bernard
  */
 public class DnDContext {
