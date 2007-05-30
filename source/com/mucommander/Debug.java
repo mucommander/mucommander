@@ -2,6 +2,8 @@
 
 package com.mucommander;
 
+import com.mucommander.io.SilenceablePrintStream;
+
 import java.io.*;
 import java.util.Vector;
 
@@ -27,177 +29,10 @@ public class Debug {
     private static SilenceablePrintStream outPs;
     private static SilenceablePrintStream errPs;
 
-    private static class SilenceablePrintStream extends PrintStream {
-
-        private boolean enabled = true;
-
-        public SilenceablePrintStream(OutputStream out) {
-            super(out);
-        }
-
-        public void setEnabled(boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public void write(int i) {
-            if(!enabled)
-                return;
-
-            super.write(i);
-        }
-
-        public void write(byte[] bytes) throws IOException {
-            if(!enabled)
-                return;
-
-            super.write(bytes);
-        }
-
-        public void write(byte[] bytes, int i, int i1) {
-            if(!enabled)
-                return;
-
-            super.write(bytes, i, i1);
-        }
-
-        public void print(boolean b) {
-            if(!enabled)
-                return;
-
-            super.print(b);
-        }
-
-        public void print(char c) {
-            if(!enabled)
-                return;
-
-            super.print(c);
-        }
-
-        public void print(int i) {
-            if(!enabled)
-                return;
-
-            super.print(i);
-        }
-
-        public void print(long l) {
-            if(!enabled)
-                return;
-
-            super.print(l);
-        }
-
-        public void print(float v) {
-            if(!enabled)
-                return;
-
-            super.print(v);
-        }
-
-        public void print(double v) {
-            if(!enabled)
-                return;
-
-            super.print(v);
-        }
-
-        public void print(char[] chars) {
-            if(!enabled)
-                return;
-
-            super.print(chars);
-        }
-
-        public void print(String string) {
-            if(!enabled)
-                return;
-
-            super.print(string);
-        }
-
-        public void print(Object object) {
-            if(!enabled)
-                return;
-
-            super.print(object);
-        }
-
-        public void println() {
-            if(!enabled)
-                return;
-
-            super.println();
-        }
-
-        public void println(boolean b) {
-            if(!enabled)
-                return;
-
-            super.println(b);
-        }
-
-        public void println(char c) {
-            if(!enabled)
-                return;
-
-            super.println(c);
-        }
-
-        public void println(int i) {
-            if(!enabled)
-                return;
-
-            super.println(i);
-        }
-
-        public void println(long l) {
-            if(!enabled)
-                return;
-
-            super.println(l);
-        }
-
-        public void println(float v) {
-            if(!enabled)
-                return;
-
-            super.println(v);
-        }
-
-        public void println(double v) {
-            if(!enabled)
-                return;
-
-            super.println(v);
-        }
-
-        public void println(char[] chars) {
-            if(!enabled)
-                return;
-
-            super.println(chars);
-        }
-
-        public void println(String string) {
-            if(!enabled)
-                return;
-
-            super.println(string);
-        }
-
-        public void println(Object object) {
-            if(!enabled)
-                return;
-
-            super.println(object);
-        }
-    }
-
 
     static {
-        System.setOut(outPs = new SilenceablePrintStream(System.out));
-        System.setErr(errPs = new SilenceablePrintStream(System.err));
+        System.setOut(outPs = new SilenceablePrintStream(System.out, false));
+        System.setErr(errPs = new SilenceablePrintStream(System.err, false));
     }
 
 
@@ -309,7 +144,7 @@ public class Debug {
      * @param enabled <code>true</code> to enable <code>System.out</code> trace, <code>false</code> to disable it
      */
     public static synchronized void setSystemOutEnabled(boolean enabled) {
-        outPs.setEnabled(enabled);
+        outPs.setSilenced(!enabled);
     }
 
     /**
@@ -319,6 +154,6 @@ public class Debug {
      * @param enabled <code>true</code> to enable <code>System.err</code> trace, <code>false</code> to disable it
      */
     public static synchronized void setSystemErrEnabled(boolean enabled) {
-        errPs.setEnabled(enabled);
+        errPs.setSilenced(!enabled);
     }
 }
