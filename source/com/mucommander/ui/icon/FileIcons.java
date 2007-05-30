@@ -1,6 +1,7 @@
 
 package com.mucommander.ui.icon;
 
+import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationManager;
@@ -156,6 +157,8 @@ public class FileIcons {
     /**
      * Returns an icon for the given file. Depending on the current system icons policy, the returned icon is either
      * a system icon, or one from the custom icon set.
+     * Returns <code>mull</code> if the icon couldn't be retrieved, either because the file doesn't exists or for any
+     * other reason.
      *
      * @param file the AbstractFile instance for which an icon will be returned
      * @see #getSystemIconsPolicy()
@@ -232,6 +235,8 @@ public class FileIcons {
 
     /**
      * Returns a system icon (one provided by the underlying OS/desktop manager) for the given file.
+     * Returns <code>mull</code> if the icon couldn't be retrieved, either because the file doesn't exists or for any
+     * other reason.
      *
      * @param file the AbstractFile instance for which an icon will be returned
      */
@@ -302,19 +307,35 @@ public class FileIcons {
 
     /**
      * Returns a system file icon for the given File, by calling the proper Java API method for the current OS.
-     * <code>null</code> is returned if the given file doesn't exist.
+     * Returns <code>null</code> if the given file doesn't exist.
      */
     private static Icon getSystemFileIcon(File file) {
+        // Note: FileSystemView#getSystemIcon(File) returns bogus icons under Mac OS X
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
+            return FILE_CHOOSER.getIcon(file);
+
         try {
-            // Note: FileSystemView#getSystemIcon(File) returns bogus icons under Mac OS X
-            if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
-                return FILE_CHOOSER.getIcon(file);
+            // FileSystemView.getSystemIcon() will behave in the following way if the specified file doesn't exist when
+            // the icon is requested:
+            //  - throw a NullPointerException (caused by a java.io.FileNotFoundException)
+            //  - dump the stack trace to System.err (bad! bad! bad!)
+            //
+            // A way to workaround this would be to test if the file exists when it is requested, but a/ this is an
+            // expensive operation (especially under Windows) and b/ it wouldn't guarantee that the file effectively
+            // exists when the icon is requested.
+            // So the workaround here is to catch exceptions and disable System.err output during the call.
+
+            Debug.setSystemErrEnabled(false);
 
             // Note: JFileChooser#getSystemIcon(File) returns bogus icons under Windows
             return FILESYSTEM_VIEW.getSystemIcon(file);
         }
         catch(Exception e) {
+            if(Debug.ON) Debug.trace("Caught exception while retrieving system icon for file "+file.getAbsolutePath()+" :"+e);
             return null;
+        }
+        finally {
+            Debug.setSystemErrEnabled(true);
         }
     }
 

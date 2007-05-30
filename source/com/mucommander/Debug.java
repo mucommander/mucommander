@@ -24,6 +24,183 @@ public class Debug {
     /** Used to time blocks of code in the application. */
     private static      long    lastTime;
 
+    private static SilenceablePrintStream outPs;
+    private static SilenceablePrintStream errPs;
+
+    private static class SilenceablePrintStream extends PrintStream {
+
+        private boolean enabled = true;
+
+        public SilenceablePrintStream(OutputStream out) {
+            super(out);
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public void write(int i) {
+            if(!enabled)
+                return;
+
+            super.write(i);
+        }
+
+        public void write(byte[] bytes) throws IOException {
+            if(!enabled)
+                return;
+
+            super.write(bytes);
+        }
+
+        public void write(byte[] bytes, int i, int i1) {
+            if(!enabled)
+                return;
+
+            super.write(bytes, i, i1);
+        }
+
+        public void print(boolean b) {
+            if(!enabled)
+                return;
+
+            super.print(b);
+        }
+
+        public void print(char c) {
+            if(!enabled)
+                return;
+
+            super.print(c);
+        }
+
+        public void print(int i) {
+            if(!enabled)
+                return;
+
+            super.print(i);
+        }
+
+        public void print(long l) {
+            if(!enabled)
+                return;
+
+            super.print(l);
+        }
+
+        public void print(float v) {
+            if(!enabled)
+                return;
+
+            super.print(v);
+        }
+
+        public void print(double v) {
+            if(!enabled)
+                return;
+
+            super.print(v);
+        }
+
+        public void print(char[] chars) {
+            if(!enabled)
+                return;
+
+            super.print(chars);
+        }
+
+        public void print(String string) {
+            if(!enabled)
+                return;
+
+            super.print(string);
+        }
+
+        public void print(Object object) {
+            if(!enabled)
+                return;
+
+            super.print(object);
+        }
+
+        public void println() {
+            if(!enabled)
+                return;
+
+            super.println();
+        }
+
+        public void println(boolean b) {
+            if(!enabled)
+                return;
+
+            super.println(b);
+        }
+
+        public void println(char c) {
+            if(!enabled)
+                return;
+
+            super.println(c);
+        }
+
+        public void println(int i) {
+            if(!enabled)
+                return;
+
+            super.println(i);
+        }
+
+        public void println(long l) {
+            if(!enabled)
+                return;
+
+            super.println(l);
+        }
+
+        public void println(float v) {
+            if(!enabled)
+                return;
+
+            super.println(v);
+        }
+
+        public void println(double v) {
+            if(!enabled)
+                return;
+
+            super.println(v);
+        }
+
+        public void println(char[] chars) {
+            if(!enabled)
+                return;
+
+            super.println(chars);
+        }
+
+        public void println(String string) {
+            if(!enabled)
+                return;
+
+            super.println(string);
+        }
+
+        public void println(Object object) {
+            if(!enabled)
+                return;
+
+            super.println(object);
+        }
+    }
+
+
+    static {
+        System.setOut(outPs = new SilenceablePrintStream(System.out));
+        System.setErr(errPs = new SilenceablePrintStream(System.err));
+    }
+
+
     /**
      * Enables / disables debut output.
      * @param b whether or not debug messages should be enabled.
@@ -121,5 +298,27 @@ public class Debug {
         }
     }
 
-    public static void printStackTrace() {new Throwable().printStackTrace();}
+    public static void printStackTrace() {
+        new Throwable().printStackTrace();
+    }
+
+    /**
+     * Enables/disables the standard system output stream. If disabled, any message printed to <code>System.out</code>
+     * will be ignored (i.e. will not be printed) after this method has been called, and until has been enabled again.
+     *
+     * @param enabled <code>true</code> to enable <code>System.out</code> trace, <code>false</code> to disable it
+     */
+    public static synchronized void setSystemOutEnabled(boolean enabled) {
+        outPs.setEnabled(enabled);
+    }
+
+    /**
+     * Enables/disables the standard system err stream . If disabled, any message printed to <code>System.err</code>
+     * will be ignored (i.e. will not be printed) after this method has been called, and until has been enabled again.
+     *
+     * @param enabled <code>true</code> to enable <code>System.err</code> trace, <code>false</code> to disable it
+     */
+    public static synchronized void setSystemErrEnabled(boolean enabled) {
+        errPs.setEnabled(enabled);
+    }
 }
