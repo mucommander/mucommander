@@ -127,8 +127,11 @@ public class FileIcons {
     private final static JFileChooser FILE_CHOOSER = new JFileChooser();
     private final static FileSystemView FILESYSTEM_VIEW = FileSystemView.getFileSystemView();
 
-    /** Caches system icons for files located on remote locations, or in archives */ 
-    private final static LRUCache SYSTEM_ICON_CACHE = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
+    /** Caches system icons for directories located on remote locations, or in archives */
+    private final static LRUCache SYSTEM_ICON_DIR_CACHE = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
+
+    /** Caches system icons for files located on remote locations, or in archives */
+    private final static LRUCache SYSTEM_ICON_FILE_CACHE = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
 
 
     /**
@@ -241,9 +244,8 @@ public class FileIcons {
      * @param file the AbstractFile instance for which an icon will be returned
      */
     public static Icon getSystemFileIcon(AbstractFile file) {
-        java.io.File javaIoFile = null;
         AbstractFile tempFile = null;
-        Icon icon = null;
+        Icon icon;
 
         // The javax.swing.JFileChooser#getIcon(java.io.File) method is used to retrieve system file icons.
         // This method expects a java.io.File which is fine for local files, but some magic has to be used to grab the
@@ -253,7 +255,7 @@ public class FileIcons {
         // get the system file icon using the underlying java.io.File instance
         file = file.getTopAncestor();
         if(file instanceof LocalFile) {
-            javaIoFile = (File)file.getUnderlyingFileObject();
+            icon = getSystemFileIcon((File)file.getUnderlyingFileObject());
         }
         // File is a remote file: create a temporary local file (or directory) with the same extension to grab the icon
         // and then delete the file. This operation is I/O bound and thus expensive, so an LRU is used to cache
@@ -261,7 +263,11 @@ public class FileIcons {
         else {
             // Look for an existing icon instance for the file's extension
             String extension = file.getExtension();
-            icon = (Icon)SYSTEM_ICON_CACHE.get(extension);
+            boolean isDirectory = file.isDirectory();
+
+            icon = (Icon)(isDirectory?SYSTEM_ICON_DIR_CACHE:SYSTEM_ICON_FILE_CACHE).get(extension);
+
+//            if(Debug.ON) Debug.trace("Cache "+(icon==null?"miss":"hit")+" for extension="+extension+" isDirectory="+isDirectory);
 
             // No existing icon, let's go ahead with creating a temporary file/directory with the same extension to
             // get the icon, and add it to the cache
@@ -270,7 +276,7 @@ public class FileIcons {
 
                 try {
                     // Create a directory
-                    if(file.isDirectory())
+                    if(isDirectory)
                         tempFile.getParent().mkdir(tempFile.getName());
                     // Create a regular file
                     else
@@ -278,19 +284,13 @@ public class FileIcons {
                 }
                 catch(IOException e) {}
 
-                javaIoFile = (File)tempFile.getTopAncestor().getUnderlyingFileObject();
-
                 // Get the system file icon
-                icon = getSystemFileIcon(javaIoFile);
+                icon = getSystemFileIcon((File)tempFile.getTopAncestor().getUnderlyingFileObject());
 
                 // Cache the icon
-                SYSTEM_ICON_CACHE.add(extension, icon);
+                (isDirectory?SYSTEM_ICON_DIR_CACHE:SYSTEM_ICON_FILE_CACHE).add(extension, icon);
             }
         }
-
-        // Get the system file icon if not done already
-        if(icon==null)
-            icon = getSystemFileIcon(javaIoFile);
 
         // Scale the icon if needed
         if(scaleFactor!=1.0f)
