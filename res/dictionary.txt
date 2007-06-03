@@ -61,7 +61,7 @@
 #############
 
 # List of available languages, must be declared before any other entry
-available_languages:EN,FR,DE,ES,CS,ZH_CN,ZH_TW,PL,HU,RU,SI,RO,IT,KR,pt_BR
+available_languages:EN,FR,DE,ES,CS,ZH_CN,ZH_TW,PL,HU,RU,SI,RO,IT,KR,pt_BR,NL,SK
 
 # Language names, in their respective language.
 # Confusingly enough, 'EN' language is used to declare those entries but that is normal.
@@ -80,6 +80,8 @@ language.ro:EN:Română
 language.it:EN:Italiano
 language.kr:EN:한국어
 language.pt_BR:EN:Português_BR
+language.nl:EN:Nederlands
+language.sk:EN:Slovenčina
 
 
 ###########
@@ -103,6 +105,8 @@ ok:RO:OK
 ok:IT:OK
 ok:KR:승인
 ok:pt_BR:Aceitar
+ok:NL:OK
+ok:SK:OK
 
 yes:EN:Yes
 yes:FR:Oui
@@ -119,6 +123,8 @@ yes:RO:Da
 yes:IT:Si
 yes:KR:네
 yes:pt_BR:Sim
+yes:NL:Ja
+yes:SK:Áno
 
 no:EN:No
 no:FR:Non
@@ -135,6 +141,8 @@ no:RO:Nu
 no:IT:No
 no:KR:아니오
 no:pt_BR:Não
+no:NL:Nee
+no:SK:Nie
 
 cancel:EN:Cancel
 cancel:FR:Annuler
@@ -151,6 +159,8 @@ cancel:RO:Renunță
 cancel:IT:Annulla
 cancel:KR:취소
 cancel:pt_BR:Cancelar
+cancel:NL:Annuleren
+cancel:SK:Zrušiť
 
 close:EN:Close
 close:FR:Fermer
@@ -167,6 +177,8 @@ close:RO:Închide
 close:IT:Chiudi
 close:KR:닫기
 close:pt_BR:Fechar
+close:NL:Sluiten
+close:SK:Zatvoriť
 
 apply:EN:Apply
 apply:FR:Appliquer
@@ -183,6 +195,8 @@ apply:RO:Aplică
 apply:IT:Applica
 apply:KR:적용
 apply:pt_BR:Aplicar
+apply:NL:Toepassen
+apply:SK:Použiť
 
 save:EN:Save
 save:FR:Enregistrer
@@ -199,6 +213,8 @@ save:RO:Salvează
 save:IT:Salva
 save:KR:저장
 save:pt_BR:Salvar
+save:NL:Opslaan
+save:SK:Uložiť
 
 dont_save:EN:Don't save
 dont_save:FR:Ne pas enregistrer
@@ -215,6 +231,8 @@ dont_save:RO:Nu salva
 dont_save:IT:Non salvare
 dont_save:KR:저장하지 않음
 dont_save:pt_BR:Não salvar
+dont_save:NL:Verwerpen
+dont_save:SK:Neukladať
 
 replace:EN:Replace
 replace:FR:Remplacer
@@ -231,6 +249,8 @@ replace:RO:Înlocuiește
 replace:IT:Sostituisci
 replace:KR:바꾸기
 replace:pt_BR:Substituir
+replace:NL:Vervangen
+replace:SK:Nahradiť
 
 dont_replace:EN:Don't replace
 dont_replace:FR:Ne pas remplacer
@@ -247,6 +267,8 @@ dont_replace:RO:Nu înlocui
 dont_replace:IT:Non sostituire
 dont_replace:KR:바꾸지않음
 dont_replace:pt_BR:Não substituir
+dont_replace:NL:Niet vervangen
+dont_replace:SK:Nenahrádzať
 
 delete:EN:Delete
 delete:FR:Supprimer
@@ -263,6 +285,8 @@ delete:RO:Șterge
 delete:IT:Elimina
 delete:KR:삭제
 delete:pt_BR:Remover
+delete:NL:Verwijderen
+delete:SK:Zmazať
 
 skip:EN:Skip
 skip:FR:Suivant
@@ -279,6 +303,8 @@ skip:RO:Treci mai departe
 skip:IT:Salta
 skip:KR:지나가기
 skip:pt_BR:Saltar
+skip:NL:Overslaan
+skip:SK:Preskočiť
 
 retry:EN:Retry
 retry:FR:Réessayer
@@ -295,6 +321,8 @@ retry:RO:Încearca din nou
 retry:IT:Riprova
 retry:KR:재시도
 retry:pt_BR:Tentar novamente
+retry:NL:Opnieuw proberen
+retry:SK:Opakovať
 
 resume:EN:Resume
 resume:FR:Reprendre
@@ -311,6 +339,8 @@ resume:RO:Continuă
 resume:IT:Riprendi
 resume:KR:이어쓰기
 resume:pt_BR:Resumir
+resume:NL:Doorgaan
+resume:SK:Pokračovať
 
 overwrite:EN:Overwrite
 overwrite:FR:Remplacer
@@ -327,6 +357,8 @@ overwrite:RO:Suprascrie
 overwrite:IT:Sovrascrivi
 overwrite:KR:겹쳐쓰기
 overwrite:pt_BR:Sobrescrever
+overwrite:NL:Overschrijven
+overwrite:SK:Prepísať
 
 overwrite_if_older:EN:Overwrite if older
 overwrite_if_older:FR:Remplacer si ancien
@@ -343,6 +375,8 @@ overwrite_if_older:RO:Suprascrie dacă e mai vechi
 overwrite_if_older:IT:Sovrascrivi vecchio
 overwrite_if_older:KR:오래된 경우 겹쳐쓰기
 overwrite_if_older:pt_BR:Sobrescrever se mais antigo
+overwrite_if_older:NL:Oudere overschrijven
+overwrite_if_older:SK:Prepísať staršie
 
 apply_to_all:EN:Apply to all
 apply_to_all:FR:Appliquer à tous
@@ -359,6 +393,8 @@ apply_to_all:RO:Aplică la toate
 apply_to_all:IT:Applica a tutti
 apply_to_all:KR:모두적용
 apply_to_all:pt_BR:Aplicar a todos
+apply_to_all:NL:Toepassen op alle
+apply_to_all:SK:Použiť na všetky
 
 copy:EN:Copy
 copy:FR:Copier
@@ -375,6 +411,8 @@ copy:RO:Copiază
 copy:IT:Copia
 copy:KR:복사
 copy:pt_BR:Copiar
+copy:NL:Kopiëren
+copy:SK:Kopírovať
 
 download:EN:Download
 download:FR:Télécharger
@@ -391,6 +429,8 @@ download:RO:Descarcă
 download:IT:Scarica
 download:KR:다운로드
 download:pt_BR:Baixar
+download:NL:Downloaden
+download:SK:Stiahnuť
 
 browse:EN:Browse
 browse:FR:Explorer
@@ -407,6 +447,8 @@ browse:RO:Navighează
 browse:IT:Naviga
 browse:KR:탐색
 browse:pt_BR:Navegar
+browse:NL:Bladeren
+browse:SK:Prechádzať
 
 ask:EN:Ask
 ask:FR:Demander
@@ -423,6 +465,8 @@ ask:RO:Întreabă
 ask:IT:Chiedi
 ask:KR:질문
 ask:pt_BR:Perguntar
+ask:NL:Vragen
+ask:SK:Spýtať sa
 
 stop:EN:Stop
 stop:FR:Arrêter
@@ -439,6 +483,8 @@ stop:RO:Stop
 stop:IT:Ferma
 stop:KR:중지
 stop:pt_BR:Parar
+stop:NL:Afbreken
+stop:SK:Zastaviť
 
 pause:EN:Pause
 pause:FR:Pause
@@ -454,6 +500,8 @@ pause:ES:Pausa
 pause:PL:Pauza
 pause:KR:일시중지
 pause:pt_BR:Pausa
+pause:NL:Onderbreken
+pause:SK:Pauza
 # Translation missing
 
 
@@ -482,6 +530,8 @@ create:RO:Crează
 create:IT:Crea
 create:KR:작성
 create:pt_BR:Criar
+create:NL:Maken
+create:SK:Vytvoriť
 
 login:EN:Login
 login:FR:Identifiant
@@ -498,6 +548,8 @@ login:RO:Login
 login:IT:Login
 login:KR:로그인
 login:pt_BR:Usuário
+login:NL:Login
+login:SK:Prihlasovacie meno
 
 password:EN:Password
 password:FR:Mot de passe
@@ -514,12 +566,16 @@ password:RO:Parolă
 password:IT:Password
 password:KR:비밀번호
 password:pt_BR:Senha
+password:NL:Wachtwoord
+password:SK:Heslo
 
 # Character encoding (e.g. UTF-8, ISO-8859-1, ...), displayed for instance in the FTP panel of the 'Connect to server' dialog
 encoding:EN:Encoding
 encoding:FR:Encodage
 encoding:CS:Kódování
 encoding:pt_BR:Codificação
+encoding:NL:Tekenset
+encoding:SK:Kódovanie
 # Translation missing
 
 
@@ -547,6 +603,8 @@ name:zh_CN:名称
 name:SI:Ime
 name:KR:이름
 name:pt_BR:Nome
+name:NL:Naam
+name:SK:Meno
 
 size:EN:Size
 size:FR:Taille
@@ -563,6 +621,8 @@ size:RO:Dimensiune
 size:IT:Dimensione
 size:KR:크기
 size:pt_BR:Tamanho
+size:NL:Grootte
+size:SK:Veľkosť
 
 date:EN:Date
 date:FR:Date
@@ -579,6 +639,8 @@ date:RO:Dată
 date:IT:Data
 date:KR:날짜
 date:pt_BR:Data
+date:NL:Datum en tijd
+date:SK:Dátum
 
 extension:EN:Extension
 extension:FR:Extension
@@ -594,6 +656,8 @@ extension:ES:Extensión
 extension:PL:Rozszeżenie
 extension:KR:확장자
 extension:pt_BR:Extensão
+extension:NL:Extensie
+extension:SK:Prípona
 # Translation missing
 
 
@@ -616,6 +680,8 @@ permissions:ES:Permisos
 permissions:PL:Uprawnienia
 permissions:KR:권한
 permissions:pt_BR:Permissões
+permissions:NL:Rechten
+permissions:SK:Oprávnenia
 # Translation missing
 
 
@@ -641,6 +707,8 @@ location:zh_CN:位置
 location:SI:Lokacija
 location:KR:위치
 location:pt_BR:Localização
+location:NL:Plaats
+location:SK:Umiestnenie
 
 # Used to indicate that an item (e.g. a bookmark) has no name
 untitled:EN:Untitled
@@ -657,6 +725,8 @@ untitled:ES:Sin nombre
 untitled:PL:Bez nazwy
 untitled:KR:이름없음
 untitled:pt_BR:Sem título
+untitled:NL:Zonder naam
+untitled:SK:Bez mena
 # Translation missing
 
 
@@ -680,6 +750,8 @@ source:ES:Origen
 source:PL:Źródło
 source:KR:원본
 source:pt_BR:Fonte
+source:NL:Bron
+source:SK:Zdroj
 # Translation missing
 
 
@@ -703,6 +775,8 @@ destination:ES:Destino
 destination:PL:Miejsce docelowe
 destination:KR:목적지
 destination:pt_BR:Destino
+destination:NL:Doellocatie
+destination:SK:Cieľ
 # Translation missing
 
 
@@ -727,6 +801,8 @@ recurse_directories:ES:Procesar directorios seleccionados recursivamente
 recurse_directories:PL:Przetwórz zaznaczone katalogi rekurencyjnie
 recurse_directories:KR:선택된 하위 디렉토리까지 작업
 recurse_directories:pt_BR:Processar recursivamente aos diretórios selecionados
+recurse_directories:NL:Toepassen op onderliggende mappen
+recurse_directories:SK:Použiť aj pre vnorené zložky
 # Translation missing
 
 
@@ -742,6 +818,8 @@ go_to:FR:Aller à
 go_to:KR:이동
 go_to:CS:Přejít na
 go_to:pt_BR:Ir para
+go_to:NL:Ga naar
+go_to:SK:Ísť na
 # Translation missing
 
 
@@ -773,6 +851,8 @@ warning:RO:Avertisment
 warning:IT:Attenzione
 warning:KR:주의
 warning:pt_BR:Alerta
+warning:NL:Waarschuwing
+warning:SK:Upozornenie
 
 # Generic error message, usually used as a title in error dialogs
 error:EN:Error
@@ -789,6 +869,8 @@ error:ES:Error
 error:PL:Błąd
 error:KR:오류
 error:pt_BR:Erro
+error:NL:Fout
+error:SK:Chyba
 # Translation missing
 
 
@@ -813,6 +895,8 @@ folder_does_not_exist:zh_CN:文件夹不存在或无法使用.
 folder_does_not_exist:SI:Ta mapa ne obstaja oz. ni dostopna.
 folder_does_not_exist:KR:폴더가 존재하지 않거나 사용할수 없습니다
 folder_does_not_exist:pt_BR:Diretório inexistente ou não disponível
+folder_does_not_exist:NL:Map bestaat niet of is niet beschikbaar
+folder_does_not_exist:SK:Tento priečinok neexistuje, alebo nie je k dispozícii.
 #folder_does_not_exist:PL:Katalog nie istnieje lub nie jest dostępny
 #folder_does_not_exist:HU:Ez a könyvtár nem létezik vagy nem elérhető
 #folder_does_not_exist:RU:Такой каталог не существует или недоступен
@@ -833,6 +917,8 @@ this_folder_does_not_exist:RO:Acest director nu exista sau nu este disponibil: %
 this_folder_does_not_exist:IT:Directory inesistente o non disponibile: %1
 this_folder_does_not_exist:KR:폴더가 존재하지 않거나 사용할수 없습니다: %1
 this_folder_does_not_exist:pt_BR:Este diretório não existe ou não está disponível: %1
+this_folder_does_not_exist:NL:Deze map bestaat niet of is niet beschikbaar: %1
+this_folder_does_not_exist:SK:Tento priečinok neexistuje, alebo nie je k dispozícii: %1
 
 invalid_path:EN:Invalid path: %1
 invalid_path:FR:Chemin invalide: %1
@@ -849,6 +935,8 @@ invalid_path:RO:Cale greșită: %1
 invalid_path:IT:Percorso non valido: %1
 invalid_path:KR:알수없는 경로: %1
 invalid_path:pt_BR:Caminho inválido: %1
+invalid_path:NL:Ongeldige padaanduiding: %1
+invalid_path:SK:Neplatná cesta
 
 directory_already_exists:EN:Directory %1 already exists.
 directory_already_exists:FR:Le répertoire %1 existe déjà.
@@ -866,6 +954,8 @@ directory_already_exists:IT:Directory %1 gia' esistente.
 directory_already_exists:zh_CN:文件夹 %1 已存在.
 directory_already_exists:KR:디렉토리 %1은 이미 존재합니다.
 directory_already_exists:pt_BR:Este diretório já existe
+directory_already_exists:NL:Er is al een map %1
+directory_already_exists:SK:Priečinok %1 už existuje.
 
 file_exists_in_destination:EN:File already exists in destination
 file_exists_in_destination:FR:Le fichier existe dans la destination
@@ -882,6 +972,8 @@ file_exists_in_destination:RO:Fișierul există deja la destinație
 file_exists_in_destination:IT:File gia' esistente nella destinazione
 file_exists_in_destination:KR:이미 파일이 존재 합니다
 file_exists_in_destination:pt_BR:Existe um arquivo com mesmo nome neste caminho
+file_exists_in_destination:NL:Bestand bestaat al in het doel
+file_exists_in_destination:SK:Tento súbor už v cieli existuje
 
 source_parent_of_destination:EN:Attempt to transfer a folder to one of its subfolders
 source_parent_of_destination:FR:Tentative de déplacement d'un répertoire vers un de ses sous-répertoires
@@ -897,6 +989,8 @@ source_parent_of_destination:ES:Intentar transferir un directorio a uno de sus s
 source_parent_of_destination:PL:Próba przeniesienia katalogu do zawartego w nim podkatalogu 
 source_parent_of_destination:KR:자신의 하위 폴더로 이동하려고 합니다
 source_parent_of_destination:pt_BR:Tentativa de transferir um diretório para um de seus subdiretórios
+source_parent_of_destination:NL:Poging om een map in een onderliggende map te verplaatsen
+source_parent_of_destination:SK:Pokus o presun priečinku do jeho vlastného podpriečinku
 # Translation missing
 
 
@@ -925,6 +1019,8 @@ cannot_read_file:RO:Nu pot citi fișierul %1
 cannot_read_file:IT:Impossibile leggere il file %1
 cannot_read_file:KR:파일을 읽을수 없음 %1
 cannot_read_file:pt_BR:Não foi possível ler o arquivo %1
+cannot_read_file:NL:Kan bestand niet lezen %1
+cannot_read_file:SK:Súbor sa nedá čítať %1
 
 cannot_write_file:EN:Cannot write file %1
 cannot_write_file:FR:Erreur lors de l'écriture de %1
@@ -941,6 +1037,8 @@ cannot_write_file:RO:Nu pot scrie fișierul %1
 cannot_write_file:IT:Impossibile scrivere file %1
 cannot_write_file:KR:파일을 쓸수 없음 %1
 cannot_write_file:pt_BR:Não foi possível escrever o arquivo %1
+cannot_write_file:NL:Kan bestand niet schrijven %1
+cannot_write_file:SK:Súbor sa nedá zapísať %1
 
 cannot_create_folder:EN:Unable to create directory %1
 cannot_create_folder:FR:Erreur lors de la création du répertoire %1
@@ -957,6 +1055,8 @@ cannot_create_folder:RO:Nu pot crea directorul %1
 cannot_create_folder:IT:Impossibile creare directory %1
 cannot_create_folder:KR:디렉토리를 생성할수 없음 %1
 cannot_create_folder:pt_BR:Não foi possível criar o diretório %1
+cannot_create_folder:NL:Kan map niet maken %1
+cannot_create_folder:SK:Priečinok sa nedá vytvoriť %1
 
 cannot_read_folder:EN:Unable to read contents of folder %1
 cannot_read_folder:FR:Erreur lors de la lecture du dossier %1
@@ -973,6 +1073,8 @@ cannot_read_folder:RO:Nu pot citi conținutul directorului %1
 cannot_read_folder:IT:Impossibile leggere il contenuto della directory %1
 cannot_read_folder:KR:폴더의 내용을 읽을수 없음 %1
 cannot_read_folder:pt_BR:Não foi possível ler o diretório %1
+cannot_read_folder:NL:Kan inhoud van de map niet lezen %1
+cannot_read_folder:SK:Obsah priečinku sa nedá čítať %1
 
 cannot_delete_file:EN:Unable to delete file %1
 cannot_delete_file:FR:Erreur lors de la suppression du fichier %1
@@ -989,6 +1091,8 @@ cannot_delete_file:RO:Nu pot șterge fișierul %1
 cannot_delete_file:IT:Impossibile eliminare il file %1
 cannot_delete_file:KR:파일을 삭제할수 없음 %1
 cannot_delete_file:pt_BR:Não foi possível apagar o arquivo %1
+cannot_delete_file:NL:Kan bestand niet wissen %1
+cannot_delete_file:SK:Súbor sa nedá zmazať %1
 
 cannot_delete_folder:EN:Unable to delete folder %1
 cannot_delete_folder:FR:Erreur lors de la suppression du répertoire %1
@@ -1005,6 +1109,8 @@ cannot_delete_folder:RO:Nu pot șterge directorul %1
 cannot_delete_folder:IT:Impossibile eliminare directory %1
 cannot_delete_folder:KR:폴더를 삭제할수 없음 %1
 cannot_delete_folder:pt_BR:Não foi possível apagar o diretório %1
+cannot_delete_folder:NL:Kan map niet wissen %1
+cannot_delete_folder:SK:Priečinok sa nedá zmazať %1
 
 error_while_transferring:EN:Error while transferring file %1
 error_while_transferring:FR:Erreur lors du transfert de %1
@@ -1021,6 +1127,8 @@ error_while_transferring:RO:Eroare la transferul fișierului %1
 error_while_transferring:IT:Errore trasferimento file %1
 error_while_transferring:KR:파일이동중에 오류가 발생하였습니다 %1
 error_while_transferring:pt_BR:Erro ao transfer o arquivo %1
+error_while_transferring:NL:Fout bij het verplaatsen van bestand %1
+error_while_transferring:SK:Chyba pri prenose súboru %1
 
 same_source_destination:EN:Source and destination folders are the same
 same_source_destination:FR:Les répertoires source et destination sont les mêmes
@@ -1037,6 +1145,8 @@ same_source_destination:RO:Directoarele sursă și destinație coincid.
 same_source_destination:IT:Directory sorgente e destinazione uguali.
 same_source_destination:KR:원본과 복사하려는 위치가 같습니다
 same_source_destination:pt_BR:Diretório fonte e de destino são os mesmos
+same_source_destination:NL:Oorspronkelijk bestand is hetzelfde als doel
+same_source_destination:SK:Zdrojový a cieľový priečinok sa zhodujú
 
 
 ####################
@@ -1057,6 +1167,8 @@ permissions.read:ES:Lectura
 permissions.read:PL:Odczytu
 permissions.read:KR:읽기
 permissions.read:pt_BR:Leitura
+permissions.read:NL:Lezen
+permissions.read:SK:Čítanie
 # Translation missing
 
 
@@ -1081,6 +1193,8 @@ permissions.write:ES:Escritura
 permissions.write:PL:Zapis
 permissions.write:KR:쓰기
 permissions.write:pt_BR:Gravação
+permissions.write:NL:Schrijven
+permissions.write:SK:Zápis
 # Translation missing
 
 
@@ -1104,6 +1218,8 @@ permissions.executable:ES:Ejecución
 permissions.executable:PL:Wykonywanie
 permissions.executable:KR:실행가능
 permissions.executable:pt_BR:Execução
+permissions.executable:NL:Uitvoerbaar
+permissions.executable:SK:Spúšťanie
 # Translation missing
 
 
@@ -1127,6 +1243,8 @@ permissions.user:ES:Usuario
 permissions.user:PL:Właciciel
 permissions.user:KR:사용자
 permissions.user:pt_BR:Usuário
+permissions.user:NL:Gebruiker
+permissions.user:SK:Užívateľ
 # Translation missing
 
 
@@ -1149,6 +1267,8 @@ permissions.group:ES:Grupo
 permissions.group:PL:Grupa
 permissions.group:KR:그룹
 permissions.group:pt_BR:Grupo
+permissions.group:NL:Groep
+permissions.group:SK:Skupina
 # Translation missing
 
 
@@ -1171,6 +1291,8 @@ permissions.other:ES:Otro
 permissions.other:PL:Inni
 permissions.other:KR:기타
 permissions.other:pt_BR:Outros
+permissions.other:NL:Anderen
+permissions.other:SK:Ostatní
 # Translation missing
 
 
@@ -1193,6 +1315,8 @@ permissions.octal_notation:ES:Notación octal
 permissions.octal_notation:PL:Ósemkowo
 permissions.octal_notation:KR:8진법 표시
 permissions.octal_notation:pt_BR:Notação Octal
+permissions.octal_notation:NL:Octale schrijfwijze
+permissions.octal_notation:SK:Zápis v osmičkovej sústave
 # Translation missing
 
 
@@ -1224,6 +1348,8 @@ com.mucommander.ui.action.AddBookmarkAction.label:CS:Přidat záložku
 com.mucommander.ui.action.AddBookmarkAction.label:DE:Lesezeichen hinzufügen
 com.mucommander.ui.action.AddBookmarkAction.label:KR:북마크 추가
 com.mucommander.ui.action.AddBookmarkAction.label:pt_BR:Adicionar aos favoritos
+com.mucommander.ui.action.AddBookmarkAction.label:NL:Toevoegen aan bladwijzers
+com.mucommander.ui.action.AddBookmarkAction.label:SK:Pridať záložku
 # Translation missing
 
 
@@ -1246,6 +1372,8 @@ com.mucommander.ui.action.AddBookmarkAction.tooltip:CS:Přidat stávající slo�
 com.mucommander.ui.action.AddBookmarkAction.tooltip:DE:Füge den aktuellen Ordner zur Liste der Lesezeichen hinzu
 com.mucommander.ui.action.AddBookmarkAction.tooltip:KR:현재 폴더를 북마크 목록에 추가
 com.mucommander.ui.action.AddBookmarkAction.tooltip:pt_BR:Adicionar o diretório atual à lista de favoritos
+com.mucommander.ui.action.AddBookmarkAction.tooltip:NL:Voeg huidige map aan bladwijzers toe
+com.mucommander.ui.action.AddBookmarkAction.tooltip:SK:Pridať aktuálny priečinok do zoznamu záložiek
 # Translation missing
 
 
@@ -1268,6 +1396,8 @@ com.mucommander.ui.action.EditBookmarksAction.label:CS:Editovat záložky
 com.mucommander.ui.action.EditBookmarksAction.label:DE:Lesezeichen bearbeiten
 com.mucommander.ui.action.EditBookmarksAction.label:KR:북마크 편집
 com.mucommander.ui.action.EditBookmarksAction.label:pt_BR:Editar favoritos
+com.mucommander.ui.action.EditBookmarksAction.label:NL:Bladwijzers bewerken
+com.mucommander.ui.action.EditBookmarksAction.label:SK:Editovať záložky
 # Translation missing
 
 
@@ -1290,6 +1420,8 @@ com.mucommander.ui.action.EditCredentialsAction.label:ES:Editar credenciales
 com.mucommander.ui.action.EditCredentialsAction.label:PL:Zmień uprawnienia
 com.mucommander.ui.action.EditCredentialsAction.label:KR:암호목록 편집
 com.mucommander.ui.action.EditCredentialsAction.label:pt_BR:Editar credenciais
+com.mucommander.ui.action.EditCredentialsAction.label:NL:Toegangsgegevens bewerken
+com.mucommander.ui.action.EditCredentialsAction.label:SK:Editovať účty
 # Translation missing
 
 
@@ -1314,6 +1446,8 @@ com.mucommander.ui.action.ChangeLocationAction.label:ES:Cambiar localización ac
 com.mucommander.ui.action.ChangeLocationAction.label:PL:Zmień aktualne położenie
 com.mucommander.ui.action.ChangeLocationAction.label:KR:현재위치 변경
 com.mucommander.ui.action.ChangeLocationAction.label:pt_BR:Alterar localização corrente
+com.mucommander.ui.action.ChangeLocationAction.label:NL:Huidige locatie veranderen
+com.mucommander.ui.action.ChangeLocationAction.label:SK:Zmeniť aktuálne umiestnenie
 # Translation missing
 
 
@@ -1340,6 +1474,8 @@ com.mucommander.ui.action.ChangeDateAction.label:ES:Cambiar fecha
 com.mucommander.ui.action.ChangeDateAction.label:PL:Zmień datę
 com.mucommander.ui.action.ChangeDateAction.label:KR:날짜 변경
 com.mucommander.ui.action.ChangeDateAction.label:pt_BR:Alterar data
+com.mucommander.ui.action.ChangeDateAction.label:NL:Verander datum
+com.mucommander.ui.action.ChangeDateAction.label:SK:Zmeniť dátum
 # Translation missing
 
 
@@ -1367,6 +1503,8 @@ com.mucommander.ui.action.ChangeDateAction.tooltip:ES:Cambiar fecha de fichero(s
 com.mucommander.ui.action.ChangeDateAction.tooltip:PL:Zmień datę zaznaczonym plikom
 com.mucommander.ui.action.ChangeDateAction.tooltip:KR:선택된 파일의 날짜를 변경
 com.mucommander.ui.action.ChangeDateAction.tooltip:pt_BR:Alterar data do(s) arquivo(s) selecionado(s)
+com.mucommander.ui.action.ChangeDateAction.tooltip:NL:Verander datum van gemarkeerde bestanden
+com.mucommander.ui.action.ChangeDateAction.tooltip:SK:Zmeniť dátum vybraných súborov
 # Translation missing
 
 
@@ -1395,6 +1533,8 @@ com.mucommander.ui.action.ChangePermissionsAction.label:ES:Cambiar permisos
 com.mucommander.ui.action.ChangePermissionsAction.label:PL:Zmień uprawnienia
 com.mucommander.ui.action.ChangePermissionsAction.label:KR:권한 정보 변경
 com.mucommander.ui.action.ChangePermissionsAction.label:pt_BR:Alterar permissões
+com.mucommander.ui.action.ChangePermissionsAction.label:NL:Rechten veranderen
+com.mucommander.ui.action.ChangePermissionsAction.label:SK:Zmeniť oprávnenia
 # Translation missing
 
 
@@ -1422,6 +1562,8 @@ com.mucommander.ui.action.ChangePermissionsAction.tooltip:ES:Cambiar permisos de
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:PL:Zmień uprawnienia zaznaczonym plikom
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:KR:선택된 파일에 대한 권한 정보 변경
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:pt_BR:Alterar permissões do(s) seguinte(s) arquivo(s)
+com.mucommander.ui.action.ChangePermissionsAction.tooltip:NL:Rechten van gemarkeerde bestanden wijzigen
+com.mucommander.ui.action.ChangePermissionsAction.tooltip:SK:Zmeniť oprávnenia pre vybrané súbory
 # Translation missing
 
 
@@ -1452,6 +1594,8 @@ com.mucommander.ui.action.CheckForUpdatesAction.label:RO:Actualizează programul
 com.mucommander.ui.action.CheckForUpdatesAction.label:IT:Controlla aggiornamenti
 com.mucommander.ui.action.CheckForUpdatesAction.label:KR:최신버전 검사
 com.mucommander.ui.action.CheckForUpdatesAction.label:pt_BR:Checar atualizações
+com.mucommander.ui.action.CheckForUpdatesAction.label:NL:Zoeken naar updates
+com.mucommander.ui.action.CheckForUpdatesAction.label:SK:Kontrola aktualizácii
 
 com.mucommander.ui.action.CompareFoldersAction.label:EN:Compare folders
 com.mucommander.ui.action.CompareFoldersAction.label:FR:Comparer dossiers
@@ -1468,6 +1612,8 @@ com.mucommander.ui.action.CompareFoldersAction.label:RO:Compară directoarele
 com.mucommander.ui.action.CompareFoldersAction.label:IT:Confronta directory
 com.mucommander.ui.action.CompareFoldersAction.label:KR:폴더 비교
 com.mucommander.ui.action.CompareFoldersAction.label:pt_BR:Comparar diretórios
+com.mucommander.ui.action.CompareFoldersAction.label:NL:Vergelijk mappen
+com.mucommander.ui.action.CompareFoldersAction.label:SK:Porovnať priečinky
 
 com.mucommander.ui.action.ConnectToServerAction.label:EN:Connect to server
 com.mucommander.ui.action.ConnectToServerAction.label:FR:Connexion à un serveur
@@ -1484,6 +1630,8 @@ com.mucommander.ui.action.ConnectToServerAction.label:RO:Conectare la un server.
 com.mucommander.ui.action.ConnectToServerAction.label:IT:Connetti al server...
 com.mucommander.ui.action.ConnectToServerAction.label:KR:서버에 접속
 com.mucommander.ui.action.ConnectToServerAction.label:pt_BR:Conectar ao servidor
+com.mucommander.ui.action.ConnectToServerAction.label:NL:Met server verbinden
+com.mucommander.ui.action.ConnectToServerAction.label:SK:Pripojiť na server
 
 com.mucommander.ui.action.ConnectToServerAction.tooltip:EN:Connect to a remote server
 com.mucommander.ui.action.ConnectToServerAction.tooltip:FR:Se connecter à un serveur distant
@@ -1500,6 +1648,8 @@ com.mucommander.ui.action.ConnectToServerAction.tooltip:RO:Conectare la un serve
 com.mucommander.ui.action.ConnectToServerAction.tooltip:IT:Connetti ad un server remoto
 com.mucommander.ui.action.ConnectToServerAction.tooltip:KR:원격 서버에 접속
 com.mucommander.ui.action.ConnectToServerAction.tooltip:pt_BR:Conectar ao servidor remoto
+com.mucommander.ui.action.ConnectToServerAction.tooltip:NL:Met server op afstand verbinden
+com.mucommander.ui.action.ConnectToServerAction.tooltip:SK:Pripojiť na vzdialený server
 
 com.mucommander.ui.action.ViewAction.label:EN:View
 com.mucommander.ui.action.ViewAction.label:FR:Voir
@@ -1516,6 +1666,8 @@ com.mucommander.ui.action.ViewAction.label:RO:Vezi
 com.mucommander.ui.action.ViewAction.label:IT:Vedi
 com.mucommander.ui.action.ViewAction.label:KR:보기
 com.mucommander.ui.action.ViewAction.label:pt_BR:Ver
+com.mucommander.ui.action.ViewAction.label:NL:Bekijken
+com.mucommander.ui.action.ViewAction.label:SK:Zobraziť
 
 com.mucommander.ui.action.ViewAction.tooltip:EN:View selected file
 com.mucommander.ui.action.ViewAction.tooltip:FR:Voir le fichier sélectionné
@@ -1532,6 +1684,8 @@ com.mucommander.ui.action.ViewAction.tooltip:RO:Vezi fișierul selectat
 com.mucommander.ui.action.ViewAction.tooltip:IT:Visualizza file selezionati
 com.mucommander.ui.action.ViewAction.tooltip:KR:선택된 파일 보기
 com.mucommander.ui.action.ViewAction.tooltip:pt_BR:Ver arquivo selecionado
+com.mucommander.ui.action.ViewAction.tooltip:NL:Geselecteerd bestand bekijken
+com.mucommander.ui.action.ViewAction.tooltip:SK:Zobraziť označené súbory
 
 com.mucommander.ui.action.EditAction.label:EN:Edit
 com.mucommander.ui.action.EditAction.label:FR:Editer
@@ -1548,6 +1702,8 @@ com.mucommander.ui.action.EditAction.label:RO:Editează
 com.mucommander.ui.action.EditAction.label:IT:Modifica
 com.mucommander.ui.action.EditAction.label:KR:편집
 com.mucommander.ui.action.EditAction.label:pt_BR:Editar
+com.mucommander.ui.action.EditAction.label:NL:Bewerken
+com.mucommander.ui.action.EditAction.label:SK:Upraviť
 
 com.mucommander.ui.action.EditAction.tooltip:EN:Edit selected file
 com.mucommander.ui.action.EditAction.tooltip:FR:Editer le fichier selectionné
@@ -1564,6 +1720,8 @@ com.mucommander.ui.action.EditAction.tooltip:RO:Editează fișierul selectat
 com.mucommander.ui.action.EditAction.tooltip:IT:Modifica file selezionato
 com.mucommander.ui.action.EditAction.tooltip:KR:선택된 파일 편집
 com.mucommander.ui.action.EditAction.tooltip:pt_BR:Editar arquivo selecionado
+com.mucommander.ui.action.EditAction.tooltip:NL:Gemarkeerd bestand bewerken
+com.mucommander.ui.action.EditAction.tooltip:SK:Upraviť označené súbory
 
 com.mucommander.ui.action.CopyAction.label:EN:Copy
 com.mucommander.ui.action.CopyAction.label:FR:Copier
@@ -1580,6 +1738,8 @@ com.mucommander.ui.action.CopyAction.label:RO:Copiază
 com.mucommander.ui.action.CopyAction.label:IT:Copia
 com.mucommander.ui.action.CopyAction.label:KR:복사
 com.mucommander.ui.action.CopyAction.label:pt_BR:Copiar
+com.mucommander.ui.action.CopyAction.label:NL:Kopieer
+com.mucommander.ui.action.CopyAction.label:SK:Kopírovať
 
 com.mucommander.ui.action.CopyAction.tooltip:EN:Copy marked files
 com.mucommander.ui.action.CopyAction.tooltip:FR:Copier les fichiers marqués
@@ -1596,6 +1756,8 @@ com.mucommander.ui.action.CopyAction.tooltip:RO:Copiază fișierele selectate
 com.mucommander.ui.action.CopyAction.tooltip:IT:Copia file selezionati
 com.mucommander.ui.action.CopyAction.tooltip:KR:선택된 파일 복사
 com.mucommander.ui.action.CopyAction.tooltip:pt_BR:Copiar arquivos selecionados
+com.mucommander.ui.action.CopyAction.tooltip:NL:Kopieer gemarkeerde bestanden
+com.mucommander.ui.action.CopyAction.tooltip:SK:Kopírovať označené súbory
 
 com.mucommander.ui.action.LocalCopyAction.label:EN:Local Copy
 com.mucommander.ui.action.LocalCopyAction.label:FR:Copier local
@@ -1612,6 +1774,8 @@ com.mucommander.ui.action.LocalCopyAction.label:RO:Copiază local
 com.mucommander.ui.action.LocalCopyAction.label:IT:Copia locale
 com.mucommander.ui.action.LocalCopyAction.label:KR:로컬 복사
 com.mucommander.ui.action.LocalCopyAction.label:pt_BR:Cópia local
+com.mucommander.ui.action.LocalCopyAction.label:NL:Locale kopie
+com.mucommander.ui.action.LocalCopyAction.label:SK:Lokálna kópia
 
 com.mucommander.ui.action.LocalCopyAction.tooltip:EN:Copy selected file into current folder
 com.mucommander.ui.action.LocalCopyAction.tooltip:FR:Copier le fichier selectionné dans le dossier courant
@@ -1628,6 +1792,8 @@ com.mucommander.ui.action.LocalCopyAction.tooltip:RO:Copiază fișierele selecta
 com.mucommander.ui.action.LocalCopyAction.tooltip:IT:Copia i file selezionati nella corrente directory
 com.mucommander.ui.action.LocalCopyAction.tooltip:KR:선택된 파일을 현재 폴더로 복사
 com.mucommander.ui.action.LocalCopyAction.tooltip:pt_BR:Copiar arquivo selecionado para o diretório atual
+com.mucommander.ui.action.LocalCopyAction.tooltip:NL:Kopieer gemarkeerde bestanden naar huidige directory
+com.mucommander.ui.action.LocalCopyAction.tooltip:SK:Kopírovať vybraný súbor do aktuálneho priečinku
 
 com.mucommander.ui.action.MoveAction.label:EN:Move
 com.mucommander.ui.action.MoveAction.label:FR:Déplacer
@@ -1644,6 +1810,8 @@ com.mucommander.ui.action.MoveAction.label:RO:Mută
 com.mucommander.ui.action.MoveAction.label:IT:Sposta
 com.mucommander.ui.action.MoveAction.label:KR:이동
 com.mucommander.ui.action.MoveAction.label:pt_BR:Mover
+com.mucommander.ui.action.MoveAction.label:NL:Verplaatsen
+com.mucommander.ui.action.MoveAction.label:SK:Presunúť
 
 com.mucommander.ui.action.MoveAction.tooltip:EN:Move marked files
 com.mucommander.ui.action.MoveAction.tooltip:FR:Déplacer les fichiers marqués
@@ -1660,6 +1828,8 @@ com.mucommander.ui.action.MoveAction.tooltip:RO:Mută fișierele selectate
 com.mucommander.ui.action.MoveAction.tooltip:IT:Sposta i file selezionati
 com.mucommander.ui.action.MoveAction.tooltip:KR:선택된 파일을 이동
 com.mucommander.ui.action.MoveAction.tooltip:pt_BR:Mover arquivos selecionados
+com.mucommander.ui.action.MoveAction.tooltip:NL:Gemarkeerde bestanden verplaatsen
+com.mucommander.ui.action.MoveAction.tooltip:SK:Presunúť označené súbory
 
 com.mucommander.ui.action.RenameAction.label:EN:Rename
 com.mucommander.ui.action.RenameAction.label:FR:Renommer
@@ -1676,6 +1846,8 @@ com.mucommander.ui.action.RenameAction.label:RO:Redenumește
 com.mucommander.ui.action.RenameAction.label:IT:Rinomina
 com.mucommander.ui.action.RenameAction.label:KR:이름변경
 com.mucommander.ui.action.RenameAction.label:pt_BR:Renomear
+com.mucommander.ui.action.RenameAction.label:NL:Hernoemen
+com.mucommander.ui.action.RenameAction.label:SK:Premenovať
 
 com.mucommander.ui.action.RenameAction.tooltip:EN:Rename selected file
 com.mucommander.ui.action.RenameAction.tooltip:FR:Renommer le fichier selectionné
@@ -1692,6 +1864,8 @@ com.mucommander.ui.action.RenameAction.tooltip:RO:Redenumește fișierul selecta
 com.mucommander.ui.action.RenameAction.tooltip:IT:Rinomina i file selezionati
 com.mucommander.ui.action.RenameAction.tooltip:KR:선택된 파일을 이름변경
 com.mucommander.ui.action.RenameAction.tooltip:pt_BR:Renomear os arquivos selecionados
+com.mucommander.ui.action.RenameAction.tooltip:NL:Geselecteerd bestand hernoemen
+com.mucommander.ui.action.RenameAction.tooltip:SK:Premenovať vybrané súbory
 
 com.mucommander.ui.action.MkdirAction.label:EN:Make dir
 com.mucommander.ui.action.MkdirAction.label:FR:Créer rep
@@ -1708,6 +1882,8 @@ com.mucommander.ui.action.MkdirAction.label:RO:Director nou
 com.mucommander.ui.action.MkdirAction.label:IT:Crea
 com.mucommander.ui.action.MkdirAction.label:KR:디렉토리작성
 com.mucommander.ui.action.MkdirAction.label:pt_BR:Criar diretório
+com.mucommander.ui.action.MkdirAction.label:NL:Maak map
+com.mucommander.ui.action.MkdirAction.label:SK:Vytvoriť priečinok
 
 com.mucommander.ui.action.MkdirAction.tooltip:EN:Create a directory in current folder
 com.mucommander.ui.action.MkdirAction.tooltip:FR:Créer un répertoire dans le dossier courant
@@ -1724,6 +1900,8 @@ com.mucommander.ui.action.MkdirAction.tooltip:RO:Crează un director nou în dir
 com.mucommander.ui.action.MkdirAction.tooltip:IT:Crea una nuova directory nella cartella corrente
 com.mucommander.ui.action.MkdirAction.tooltip:KR:현재 폴더에 디렉토리 작성
 com.mucommander.ui.action.MkdirAction.tooltip:pt_BR:Criar um diretório no diretório atual
+com.mucommander.ui.action.MkdirAction.tooltip:NL:Maak map in huidige map
+com.mucommander.ui.action.MkdirAction.tooltip:SK:Vytvoriť priečinok v aktuálnom priečinku
 
 com.mucommander.ui.action.MkfileAction.label:EN:Make file
 com.mucommander.ui.action.MkfileAction.label:FR:Créer fichier
@@ -1739,6 +1917,8 @@ com.mucommander.ui.action.MkfileAction.label:ES:Crear fichero
 com.mucommander.ui.action.MkfileAction.label:PL:Utwórz plik
 com.mucommander.ui.action.MkfileAction.label:KR:파일작성
 com.mucommander.ui.action.MkfileAction.label:pt_BR:Criar arquivo
+com.mucommander.ui.action.MkfileAction.label:NL:Maak bestand
+com.mucommander.ui.action.MkfileAction.label:SK:Vytvoriť súbor
 # Translation missing
 
 
@@ -1765,6 +1945,8 @@ com.mucommander.ui.action.MkfileAction.tooltip:ES:Crear un fichero en el directo
 com.mucommander.ui.action.MkfileAction.tooltip:PL:Utwórz plik w aktualnym katalogu
 com.mucommander.ui.action.MkfileAction.tooltip:KR:현재 폴더에 파일 작성
 com.mucommander.ui.action.MkfileAction.tooltip:pt_BR:Criar um arquivo no diretório atual
+com.mucommander.ui.action.MkfileAction.tooltip:NL:Maak bestand in huidig directory
+com.mucommander.ui.action.MkfileAction.tooltip:SK:Vytvoriť súbor v aktuálnom priečinku
 # Translation missing
 
 
@@ -1793,6 +1975,8 @@ com.mucommander.ui.action.DeleteAction.label:RO:Șterge
 com.mucommander.ui.action.DeleteAction.label:IT:Elimina
 com.mucommander.ui.action.DeleteAction.label:KR:삭제
 com.mucommander.ui.action.DeleteAction.label:pt_BR:Apagar
+com.mucommander.ui.action.DeleteAction.label:NL:Verwijderen
+com.mucommander.ui.action.DeleteAction.label:SK:Odstrániť
 
 com.mucommander.ui.action.DeleteAction.tooltip:EN:Delete marked files
 com.mucommander.ui.action.DeleteAction.tooltip:FR:Supprimer les fichiers marqués
@@ -1809,6 +1993,8 @@ com.mucommander.ui.action.DeleteAction.tooltip:RO:Șterge fișierele selectate
 com.mucommander.ui.action.DeleteAction.tooltip:IT:Elimina i file selezionati
 com.mucommander.ui.action.DeleteAction.tooltip:KR:선택된 파일 삭제
 com.mucommander.ui.action.DeleteAction.tooltip:pt_BR:Apagar arquivos selecionados
+com.mucommander.ui.action.DeleteAction.tooltip:NL:Gemarkeerde bestanden verwijderen
+com.mucommander.ui.action.DeleteAction.tooltip:SK:Odstrániť označené súbory
 
 com.mucommander.ui.action.RefreshAction.label:EN:Refresh
 com.mucommander.ui.action.RefreshAction.label:FR:Actualiser
@@ -1825,6 +2011,8 @@ com.mucommander.ui.action.RefreshAction.label:RO:Actualizează
 com.mucommander.ui.action.RefreshAction.label:IT:Rileggi
 com.mucommander.ui.action.RefreshAction.label:KR:새로고침
 com.mucommander.ui.action.RefreshAction.label:pt_BR:Atualizar
+com.mucommander.ui.action.RefreshAction.label:NL:Vernieuwen
+com.mucommander.ui.action.RefreshAction.label:SK:Obnoviť
 
 com.mucommander.ui.action.RefreshAction.tooltip:EN:Refresh current folder
 com.mucommander.ui.action.RefreshAction.tooltip:FR:Actualiser le répertoire courant
@@ -1841,6 +2029,8 @@ com.mucommander.ui.action.RefreshAction.tooltip:RO:Actualizează directorul cure
 com.mucommander.ui.action.RefreshAction.tooltip:IT:Rigenera cartella corrente
 com.mucommander.ui.action.RefreshAction.tooltip:KR:현재 폴더를 새로고침
 com.mucommander.ui.action.RefreshAction.tooltip:pt_BR:Atualizar diretório atual
+com.mucommander.ui.action.RefreshAction.tooltip:NL:Vernieuw huidige map
+com.mucommander.ui.action.RefreshAction.tooltip:SK:Obnoviť aktuálny priečinok
 
 com.mucommander.ui.action.CloseWindowAction.label:EN:Close window
 com.mucommander.ui.action.CloseWindowAction.label:FR:Fermer fenêtre
@@ -1857,6 +2047,8 @@ com.mucommander.ui.action.CloseWindowAction.label:RO:Închide fereastră
 com.mucommander.ui.action.CloseWindowAction.label:IT:Chiudi
 com.mucommander.ui.action.CloseWindowAction.label:KR:창닫기
 com.mucommander.ui.action.CloseWindowAction.label:pt_BR:Fechar janela
+com.mucommander.ui.action.CloseWindowAction.label:NL:Sluit venster
+com.mucommander.ui.action.CloseWindowAction.label:SK:Zatvoriť okno
 
 com.mucommander.ui.action.CloseWindowAction.tooltip:EN:Close this window
 com.mucommander.ui.action.CloseWindowAction.tooltip:FR:Fermer cette fenêtre
@@ -1873,6 +2065,8 @@ com.mucommander.ui.action.CloseWindowAction.tooltip:RO:Închide această fereast
 com.mucommander.ui.action.CloseWindowAction.tooltip:IT:Chiudi questa finestra
 com.mucommander.ui.action.CloseWindowAction.tooltip:KR:현재 창을 닫기
 com.mucommander.ui.action.CloseWindowAction.tooltip:pt_BR:Fechar esta janela
+com.mucommander.ui.action.CloseWindowAction.tooltip:NL:Dit venster sluiten
+com.mucommander.ui.action.CloseWindowAction.tooltip:SK:Zatvoriť toto okno
 
 com.mucommander.ui.action.CopyFileNamesAction.label:EN:Copy name(s)
 com.mucommander.ui.action.CopyFileNamesAction.label:FR:Copier nom(s)
@@ -1888,6 +2082,8 @@ com.mucommander.ui.action.CopyFileNamesAction.label:ES:Copiar nombre(s)
 com.mucommander.ui.action.CopyFileNamesAction.label:PL:Kopjuj nazwę(y)
 com.mucommander.ui.action.CopyFileNamesAction.label:KR:파일 이름 복사
 com.mucommander.ui.action.CopyFileNamesAction.label:pt_BR:Copiar nome(s)
+com.mucommander.ui.action.CopyFileNamesAction.label:NL:Naam kopiëren
+com.mucommander.ui.action.CopyFileNamesAction.label:SK:Kopírovať názov(názvy)
 # Translation missing
 
 
@@ -1909,6 +2105,8 @@ com.mucommander.ui.action.CopyFilePathsAction.label:ES:Copiar ruta(s)
 com.mucommander.ui.action.CopyFilePathsAction.label:PL:Kopiuj ścieżkę(ki)
 com.mucommander.ui.action.CopyFilePathsAction.label:KR:경로 복사
 com.mucommander.ui.action.CopyFilePathsAction.label:pt_BR:Copiar caminho(s)
+com.mucommander.ui.action.CopyFilePathsAction.label:NL:Kopieer pad
+com.mucommander.ui.action.CopyFilePathsAction.label:SK:Kopírovať cestu(y)
 # Translation missing
 
 
@@ -1931,6 +2129,8 @@ com.mucommander.ui.action.CopyFilesToClipboardAction.label:ES:Copiar fichero(s)
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:PL:Kopiuj plik(i)
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:KR:파일 복사
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:pt_BR:Copiar arquivo(s)
+com.mucommander.ui.action.CopyFilesToClipboardAction.label:NL:Bestand(en) kopiëren
+com.mucommander.ui.action.CopyFilesToClipboardAction.label:SK:Kopírovať súbor(y)
 # Translation missing
 
 
@@ -1953,6 +2153,8 @@ com.mucommander.ui.action.PasteClipboardFilesAction.label:ES:Pegar fichero(s)
 com.mucommander.ui.action.PasteClipboardFilesAction.label:PL:Wklej plik(i)
 com.mucommander.ui.action.PasteClipboardFilesAction.label:KR:파일 붙이기
 com.mucommander.ui.action.PasteClipboardFilesAction.label:pt_BR:Colar arquivo(s)
+com.mucommander.ui.action.PasteClipboardFilesAction.label:NL:Bestand(en) plakken
+com.mucommander.ui.action.PasteClipboardFilesAction.label:SK:Prilepiť súbor(y)
 # Translation missing
 
 
@@ -1974,6 +2176,8 @@ com.mucommander.ui.action.EmailAction.label:RO:Trimite prin email...
 com.mucommander.ui.action.EmailAction.label:IT:Invia i file via eMail
 com.mucommander.ui.action.EmailAction.label:KR:메일로 보내기
 com.mucommander.ui.action.EmailAction.label:pt_BR:Enviar por email
+com.mucommander.ui.action.EmailAction.label:NL:Bestanden emailen
+com.mucommander.ui.action.EmailAction.label:SK:Poslať súbory e-mailom
 
 com.mucommander.ui.action.EmailAction.tooltip:EN:Send marked files as email attachments
 com.mucommander.ui.action.EmailAction.tooltip:FR:Envoyer les fichiers marqués en pièces jointes à un message
@@ -1990,6 +2194,8 @@ com.mucommander.ui.action.EmailAction.tooltip:RO:Trimite fișierele selectate pr
 com.mucommander.ui.action.EmailAction.tooltip:IT:Invia i file selezionati come allegati ad una eMail
 com.mucommander.ui.action.EmailAction.tooltip:KR:선택된 파일을 이메일 첨부로 보냄
 com.mucommander.ui.action.EmailAction.tooltip:pt_BR:Enviar arquivos selecionados como anexos de email
+com.mucommander.ui.action.EmailAction.tooltip:NL:Verstuur gemarkeerde bestanden als bijlagen in een email
+com.mucommander.ui.action.EmailAction.tooltip:SK:Poslať označené súbory ako prílohu e-mailu
 
 com.mucommander.ui.action.GoBackAction.label:EN:Go back
 com.mucommander.ui.action.GoBackAction.label:FR:Dossier précédent
@@ -2006,6 +2212,8 @@ com.mucommander.ui.action.GoBackAction.label:RO:Înapoi
 com.mucommander.ui.action.GoBackAction.label:IT:Indietro
 com.mucommander.ui.action.GoBackAction.label:KR:이전으로
 com.mucommander.ui.action.GoBackAction.label:pt_BR:Voltar
+com.mucommander.ui.action.GoBackAction.label:NL:Ga terug
+com.mucommander.ui.action.GoBackAction.label:SK:Späť
 
 com.mucommander.ui.action.GoBackAction.tooltip:EN:Go to previous folder
 com.mucommander.ui.action.GoBackAction.tooltip:FR:Aller au dossier précédent
@@ -2022,6 +2230,8 @@ com.mucommander.ui.action.GoBackAction.tooltip:RO:Mergi înapoi în directorul a
 com.mucommander.ui.action.GoBackAction.tooltip:IT:Torna alla cartella precedente
 com.mucommander.ui.action.GoBackAction.tooltip:KR:이전 폴더로 이동
 com.mucommander.ui.action.GoBackAction.tooltip:pt_BR:Ir para o diretório anterior
+com.mucommander.ui.action.GoBackAction.tooltip:NL:Teruggaan naar vorige map
+com.mucommander.ui.action.GoBackAction.tooltip:SK:Predchádzajúci priečinok
 
 com.mucommander.ui.action.GoForwardAction.label:EN:Go forward
 com.mucommander.ui.action.GoForwardAction.label:FR:Dossier suivant
@@ -2038,6 +2248,8 @@ com.mucommander.ui.action.GoForwardAction.label:RO:Înainte
 com.mucommander.ui.action.GoForwardAction.label:IT:Vai avanti
 com.mucommander.ui.action.GoForwardAction.label:KR:다음으로
 com.mucommander.ui.action.GoForwardAction.label:pt_BR:Seguir
+com.mucommander.ui.action.GoForwardAction.label:NL:Naar volgende
+com.mucommander.ui.action.GoForwardAction.label:SK:Dopredu
 
 com.mucommander.ui.action.GoForwardAction.tooltip:EN:Go to next folder
 com.mucommander.ui.action.GoForwardAction.tooltip:FR:Aller au dossier suivant
@@ -2054,6 +2266,8 @@ com.mucommander.ui.action.GoForwardAction.tooltip:RO:Mergi în directorul următ
 com.mucommander.ui.action.GoForwardAction.tooltip:IT:Vai alla cartella seguente
 com.mucommander.ui.action.GoForwardAction.tooltip:KR:다음 폴더로 이동
 com.mucommander.ui.action.GoForwardAction.tooltip:pt_BR:Ir para o próximo diretório
+com.mucommander.ui.action.GoForwardAction.tooltip:NL:Naar volgende map
+com.mucommander.ui.action.GoForwardAction.tooltip:SK:Nasledujúci priečinok
 
 com.mucommander.ui.action.GoToHomeAction.label:EN:Go to home folder
 com.mucommander.ui.action.GoToHomeAction.label:FR:Aller au dossier utilisateur
@@ -2069,6 +2283,8 @@ com.mucommander.ui.action.GoToHomeAction.label:ES:Ir al directorio de inicio
 com.mucommander.ui.action.GoToHomeAction.label:PL:Idź do katalogu domowego
 com.mucommander.ui.action.GoToHomeAction.label:KR:홈폴더로 이동
 com.mucommander.ui.action.GoToHomeAction.label:pt_BR:Ir para o diretório inicial
+com.mucommander.ui.action.GoToHomeAction.label:NL:Ga naar home-map
+com.mucommander.ui.action.GoToHomeAction.label:SK:Domovský priečinok
 # Translation missing
 
 
@@ -2097,6 +2313,8 @@ com.mucommander.ui.action.GoToParentAction.label:RO:Părinte
 com.mucommander.ui.action.GoToParentAction.label:IT:Vai alla cartella superiore
 com.mucommander.ui.action.GoToParentAction.label:KR:상위폴더로 이동
 com.mucommander.ui.action.GoToParentAction.label:pt_BR:Ir para o diretório superior
+com.mucommander.ui.action.GoToParentAction.label:NL:Naar bovenliggende
+com.mucommander.ui.action.GoToParentAction.label:SK:O úroveň vyššie
 
 com.mucommander.ui.action.GoToParentAction.tooltip:EN:Go to parent folder
 com.mucommander.ui.action.GoToParentAction.tooltip:FR:Remonter au dossier parent
@@ -2113,6 +2331,8 @@ com.mucommander.ui.action.GoToParentAction.tooltip:RO:Mergi în directorul pări
 com.mucommander.ui.action.GoToParentAction.tooltip:IT:Vai alla cartella superiore 
 com.mucommander.ui.action.GoToParentAction.tooltip:KR:상위폴더로 이동
 com.mucommander.ui.action.GoToParentAction.tooltip:pt_BR:Ir para o diretório superior
+com.mucommander.ui.action.GoToParentAction.tooltip:NL:Naar bovenliggende map
+com.mucommander.ui.action.GoToParentAction.tooltip:SK:Nadradený priečinok
 
 com.mucommander.ui.action.GoToRootAction.label:EN:Go to root
 com.mucommander.ui.action.GoToRootAction.label:FR:Aller à la racine
@@ -2128,6 +2348,8 @@ com.mucommander.ui.action.GoToRootAction.label:ES:Ir al raiz
 com.mucommander.ui.action.GoToRootAction.label:PL:Idź do katalogu głównego (Root)
 com.mucommander.ui.action.GoToRootAction.label:KR:최상위 폴더로
 com.mucommander.ui.action.GoToRootAction.label:pt_BR:Ir à raiz
+com.mucommander.ui.action.GoToRootAction.label:NL:Ga naar root
+com.mucommander.ui.action.GoToRootAction.label:SK:Koreňový priečinok
 # Translation missing
 
 
@@ -2156,6 +2378,8 @@ com.mucommander.ui.action.SortByNameAction.label:RO:Sortează după nume
 com.mucommander.ui.action.SortByNameAction.label:IT:Ordina per Nome
 com.mucommander.ui.action.SortByNameAction.label:KR:이름으로 정렬
 com.mucommander.ui.action.SortByNameAction.label:pt_BR:Order por nome
+com.mucommander.ui.action.SortByNameAction.label:NL:Sorteer op naam
+com.mucommander.ui.action.SortByNameAction.label:SK:Zoradiť podľa názvu
 
 com.mucommander.ui.action.SortByDateAction.label:EN:Sort by Date
 com.mucommander.ui.action.SortByDateAction.label:FR:Trier par Date
@@ -2172,6 +2396,8 @@ com.mucommander.ui.action.SortByDateAction.label:RO:Sortează după dată
 com.mucommander.ui.action.SortByDateAction.label:IT:Ordina per Data
 com.mucommander.ui.action.SortByDateAction.label:KR:날짜로 정렬
 com.mucommander.ui.action.SortByDateAction.label:pt_BR:Ordenar por data
+com.mucommander.ui.action.SortByDateAction.label:NL:Sorteer op datum
+com.mucommander.ui.action.SortByDateAction.label:SK:Zoradiť podľa dátumu
 
 com.mucommander.ui.action.SortBySizeAction.label:EN:Sort by Size
 com.mucommander.ui.action.SortBySizeAction.label:FR:Trier par Taille
@@ -2188,6 +2414,8 @@ com.mucommander.ui.action.SortBySizeAction.label:RO:Sortează după dimensiune
 com.mucommander.ui.action.SortBySizeAction.label:IT:Ordina per Dimensione
 com.mucommander.ui.action.SortBySizeAction.label:KR:크기로 정렬
 com.mucommander.ui.action.SortBySizeAction.label:pt_BR:Ordenar pelo tamanho
+com.mucommander.ui.action.SortBySizeAction.label:NL:Sorteer op grootte
+com.mucommander.ui.action.SortBySizeAction.label:SK:Zoradiť podľa veľkosti
 
 com.mucommander.ui.action.SortByExtensionAction.label:EN:Sort by Extension
 com.mucommander.ui.action.SortByExtensionAction.label:FR:Trier par Extension
@@ -2204,6 +2432,8 @@ com.mucommander.ui.action.SortByExtensionAction.label:RO:Sortează după extensi
 com.mucommander.ui.action.SortByExtensionAction.label:IT:Ordina per Estensione
 com.mucommander.ui.action.SortByExtensionAction.label:KR:확장자로 정렬
 com.mucommander.ui.action.SortByExtensionAction.label:pt_BR:Ordenar pelo extensão
+com.mucommander.ui.action.SortByExtensionAction.label:NL:Sorteer op extensie
+com.mucommander.ui.action.SortByExtensionAction.label:SK:Zoradiť podľa prípony
 
 com.mucommander.ui.action.SortByPermissionsAction.label:EN:Sort by Permissions
 com.mucommander.ui.action.SortByPermissionsAction.label:FR:Trier par Permissions
@@ -2219,6 +2449,8 @@ com.mucommander.ui.action.SortByPermissionsAction.label:ES:Ordenar por Permisos
 com.mucommander.ui.action.SortByPermissionsAction.label:PL:Sortuj po uprawnieniach
 com.mucommander.ui.action.SortByPermissionsAction.label:KR:권한별로 정렬
 com.mucommander.ui.action.SortByPermissionsAction.label:pt_BR:Ordenar pela permissão
+com.mucommander.ui.action.SortByPermissionsAction.label:NL:Sorteer op rechten
+com.mucommander.ui.action.SortByPermissionsAction.label:SK:Zoradiť podľa oprávnení
 # Translation missing
 
 
@@ -2246,6 +2478,8 @@ com.mucommander.ui.action.MarkGroupAction.label:RO:Selectează fișiere...
 com.mucommander.ui.action.MarkGroupAction.label:IT:Seleziona file
 com.mucommander.ui.action.MarkGroupAction.label:KR:파일 선택
 com.mucommander.ui.action.MarkGroupAction.label:pt_BR:Marcar arquivos
+com.mucommander.ui.action.MarkGroupAction.label:NL:Markeer bestanden
+com.mucommander.ui.action.MarkGroupAction.label:SK:Označiť súbory
 
 com.mucommander.ui.action.MarkGroupAction.tooltip:EN:Mark a group of files
 com.mucommander.ui.action.MarkGroupAction.tooltip:FR:Marquer un groupe de fichiers
@@ -2262,6 +2496,8 @@ com.mucommander.ui.action.MarkGroupAction.tooltip:RO:Selectează un grup de fiș
 com.mucommander.ui.action.MarkGroupAction.tooltip:IT:Seleziona un gruppo di file
 com.mucommander.ui.action.MarkGroupAction.tooltip:KR:여러 파일 선택
 com.mucommander.ui.action.MarkGroupAction.tooltip:pt_BR:Marcar um grupo de arquivos
+com.mucommander.ui.action.MarkGroupAction.tooltip:NL:Markeer een groep bestanden
+com.mucommander.ui.action.MarkGroupAction.tooltip:SK:Označiť skupinu súborov
 
 com.mucommander.ui.action.UnmarkGroupAction.label:EN:Unmark files
 com.mucommander.ui.action.UnmarkGroupAction.label:FR:Dé-marquer fichiers
@@ -2278,6 +2514,8 @@ com.mucommander.ui.action.UnmarkGroupAction.label:RO:Deselectează fișiere...
 com.mucommander.ui.action.UnmarkGroupAction.label:IT:Deseleziona file
 com.mucommander.ui.action.UnmarkGroupAction.label:KR:파일 선택 해제
 com.mucommander.ui.action.UnmarkGroupAction.label:pt_BR:Desmarcar arquivos
+com.mucommander.ui.action.UnmarkGroupAction.label:NL:Demarkeer bestanden
+com.mucommander.ui.action.UnmarkGroupAction.label:SK:Odznačiť súbory
 
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:EN:Unmark a group of files
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:FR:Dé-marquer un groupe de fichiers
@@ -2294,6 +2532,8 @@ com.mucommander.ui.action.UnmarkGroupAction.tooltip:RO:Deselectează un grup de 
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:IT:Deseleziona un gruppo di file
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:KR:여러 파일 선택 해제
 com.mucommander.ui.action.UnmarkGroupAction.tooltip:pt_BR:Desmarcar um grupo de arquivos
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:NL:Demarkeer groep bestanden
+com.mucommander.ui.action.UnmarkGroupAction.tooltip:SK:Odznačiť skupinu súborov
 
 com.mucommander.ui.action.MarkAllAction.label:EN:Mark all
 com.mucommander.ui.action.MarkAllAction.label:FR:Marquer tous
@@ -2310,6 +2550,8 @@ com.mucommander.ui.action.MarkAllAction.label:RO:Selecteză tot
 com.mucommander.ui.action.MarkAllAction.label:IT:Seleziona tutto
 com.mucommander.ui.action.MarkAllAction.label:KR:모두 선택
 com.mucommander.ui.action.MarkAllAction.label:pt_BR:Marcar tudo
+com.mucommander.ui.action.MarkAllAction.label:NL:Markeer alles
+com.mucommander.ui.action.MarkAllAction.label:SK:Označiť všetko
 
 com.mucommander.ui.action.UnmarkAllAction.label:EN:Unmark all
 com.mucommander.ui.action.UnmarkAllAction.label:FR:Dé-marquer tous
@@ -2326,6 +2568,8 @@ com.mucommander.ui.action.UnmarkAllAction.label:RO:Deselectează tot
 com.mucommander.ui.action.UnmarkAllAction.label:IT:Deseleziona tutto
 com.mucommander.ui.action.UnmarkAllAction.label:KR:모두 선택 해제
 com.mucommander.ui.action.UnmarkAllAction.label:pt_BR:Desmarcar tudo
+com.mucommander.ui.action.UnmarkAllAction.label:NL:Demarkeer alles
+com.mucommander.ui.action.UnmarkAllAction.label:SK:Odznačiť všetko
 
 # Translation missing: this entry has been guessed from com.mucommander.ui.action.MarkSelectedFileAction.tooltip and therefore may not be exact
 com.mucommander.ui.action.MarkSelectedFileAction.label:EN:Mark/unmark
@@ -2343,6 +2587,8 @@ com.mucommander.ui.action.MarkSelectedFileAction.label:RO:Selectează/Deselectea
 com.mucommander.ui.action.MarkSelectedFileAction.label:IT:Seleziona/Deseleziona
 com.mucommander.ui.action.MarkSelectedFileAction.label:KR:선택/해제
 com.mucommander.ui.action.MarkSelectedFileAction.label:pt_BR:Marcar/Desmarcar
+com.mucommander.ui.action.MarkSelectedFileAction.label:NL:Markeer/Demarkeer
+com.mucommander.ui.action.MarkSelectedFileAction.label:SK:Označiť/odznačiť
 
 com.mucommander.ui.action.MarkSelectedFileAction.tooltip:EN:Mark/Unmark selected file
 com.mucommander.ui.action.MarkSelectedFileAction.tooltip:FR:Marquer/Dé-marquer le fichier sélectionné
@@ -2359,6 +2605,8 @@ com.mucommander.ui.action.MarkSelectedFileAction.tooltip:RO:Selectează/Deselect
 com.mucommander.ui.action.MarkSelectedFileAction.tooltip:IT:Seleziona/Deseleziona file
 com.mucommander.ui.action.MarkSelectedFileAction.tooltip:KR:선택된 파일에 대해 선택/해제
 com.mucommander.ui.action.MarkSelectedFileAction.tooltip:pt_BR:Marcar/Desmarcar arquivos selecionados
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:NL:Markeer/demarkeer geselecteerd bestand
+com.mucommander.ui.action.MarkSelectedFileAction.tooltip:SK:Označiť/odznačiť vybraný súbor
 
 com.mucommander.ui.action.MarkPageDownAction.label:EN:Mark page down
 com.mucommander.ui.action.MarkPageDownAction.label:FR:Marquer les fichiers jusqu'à la prochaine page
@@ -2374,6 +2622,8 @@ com.mucommander.ui.action.MarkPageDownAction.label:ES:Marcar página abajo
 com.mucommander.ui.action.MarkPageDownAction.label:PL:Zaznacz strone niżej (page down)
 com.mucommander.ui.action.MarkPageDownAction.label:KR:페이지 아래로 선택
 com.mucommander.ui.action.MarkPageDownAction.label:pt_BR:Marcar página abaixo
+com.mucommander.ui.action.MarkPageDownAction.label:NL:Markeer bestanden tot volgende bladzijde
+com.mucommander.ui.action.MarkPageDownAction.label:SK:Označiť po nasledujúcu stránku
 # Translation missing
 
 
@@ -2399,6 +2649,8 @@ com.mucommander.ui.action.MarkPageUpAction.label:ES:Marcar página arriba
 com.mucommander.ui.action.MarkPageUpAction.label:PL:aznacz strone wyżej (page up)
 com.mucommander.ui.action.MarkPageUpAction.label:KR:페이지 위로 선택
 com.mucommander.ui.action.MarkPageUpAction.label:pt_BR:Marcar página acima
+com.mucommander.ui.action.MarkPageUpAction.label:NL:Markeer bestanden tot vorige pagina
+com.mucommander.ui.action.MarkPageUpAction.label:SK:Označiť po predchádzajúcu stránku
 # Translation missing
 
 
@@ -2425,6 +2677,8 @@ com.mucommander.ui.action.MarkUpToFirstRowAction.label:ES:Marcar ficheros hasta 
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:PL:Zaznacz pliki do początku
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:KR:시작부터 선택
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:pt_BR:Marcar arquivos até o início
+com.mucommander.ui.action.MarkUpToFirstRowAction.label:NL:Markeer bestanden tot begin
+com.mucommander.ui.action.MarkUpToFirstRowAction.label:SK:Označiť súbory po začiatok
 # Translation missing
 
 
@@ -2451,6 +2705,8 @@ com.mucommander.ui.action.MarkUpToLastRowAction.label:ES:Marcar ficheros hasta e
 com.mucommander.ui.action.MarkUpToLastRowAction.label:PL:Zaznacz pliki do końca
 com.mucommander.ui.action.MarkUpToLastRowAction.label:KR:끝까지 선택
 com.mucommander.ui.action.MarkUpToLastRowAction.label:pt_BR:Marcar arquivos até o final
+com.mucommander.ui.action.MarkUpToLastRowAction.label:NL:Markeer bestanden tot eind
+com.mucommander.ui.action.MarkUpToLastRowAction.label:SK:Označiť súbory do konca
 # Translation missing
 
 
@@ -2479,6 +2735,8 @@ com.mucommander.ui.action.InvertSelectionAction.label:RO:Inversează selectarea
 com.mucommander.ui.action.InvertSelectionAction.label:IT:Inverti selezione
 com.mucommander.ui.action.InvertSelectionAction.label:KR:선택 반전
 com.mucommander.ui.action.InvertSelectionAction.label:pt_BR:Inverter seleção
+com.mucommander.ui.action.InvertSelectionAction.label:NL:Keer selectie om
+com.mucommander.ui.action.InvertSelectionAction.label:SK:Obrátiť výber
 
 com.mucommander.ui.action.SwapFoldersAction.label:EN:Swap folders
 com.mucommander.ui.action.SwapFoldersAction.label:FR:Echanger les dossiers
@@ -2495,6 +2753,8 @@ com.mucommander.ui.action.SwapFoldersAction.label:RO:Interschimbă ferestrele
 com.mucommander.ui.action.SwapFoldersAction.label:IT:Scambia cartelle
 com.mucommander.ui.action.SwapFoldersAction.label:KR:폴더를 서로 바꾸기
 com.mucommander.ui.action.SwapFoldersAction.label:pt_BR:Trocar diretórios
+com.mucommander.ui.action.SwapFoldersAction.label:NL:Wissel vensters
+com.mucommander.ui.action.SwapFoldersAction.label:SK:Vymeniť priečinky
 
 com.mucommander.ui.action.SwapFoldersAction.tooltip:EN:Swap left and right folders
 com.mucommander.ui.action.SwapFoldersAction.tooltip:FR:Echanger les dossiers de gauche et de droite
@@ -2511,6 +2771,8 @@ com.mucommander.ui.action.SwapFoldersAction.tooltip:RO:Interschimbă fereastra s
 com.mucommander.ui.action.SwapFoldersAction.tooltip:IT:Scambia finestre
 com.mucommander.ui.action.SwapFoldersAction.tooltip:KR:좌우 폴더를 서로 바꾸기
 com.mucommander.ui.action.SwapFoldersAction.tooltip:pt_BR:Trocar diretórios
+com.mucommander.ui.action.SwapFoldersAction.tooltip:NL:Linker en rechter mappen wisselen
+com.mucommander.ui.action.SwapFoldersAction.tooltip:SK:Vymeniť ľavý a pravý priečinok
 
 com.mucommander.ui.action.SetSameFolderAction.label:EN:Set same folder
 com.mucommander.ui.action.SetSameFolderAction.label:FR:Affecter le même dossier
@@ -2527,6 +2789,8 @@ com.mucommander.ui.action.SetSameFolderAction.label:RO:Alege același director
 com.mucommander.ui.action.SetSameFolderAction.label:IT:Allinea destinazione e sorgente
 com.mucommander.ui.action.SetSameFolderAction.label:KR:같은 폴더로 설정
 com.mucommander.ui.action.SetSameFolderAction.label:pt_BR:Marcar mesmo diretório
+com.mucommander.ui.action.SetSameFolderAction.label:NL:Op zelfde map zetten
+com.mucommander.ui.action.SetSameFolderAction.label:SK:Nastaviť ten istý priečinok
 
 com.mucommander.ui.action.SetSameFolderAction.tooltip:EN:Set same directory to left and right folders
 com.mucommander.ui.action.SetSameFolderAction.tooltip:FR:Affecter le même repertoire aux dossiers de gauche et de droite
@@ -2543,6 +2807,8 @@ com.mucommander.ui.action.SetSameFolderAction.tooltip:RO:Alege același director
 com.mucommander.ui.action.SetSameFolderAction.tooltip:IT:Setta la stessa directory su cartella di destra e sinistra
 com.mucommander.ui.action.SetSameFolderAction.tooltip:KR:좌우를 같은 폴더로 설정
 com.mucommander.ui.action.SetSameFolderAction.tooltip:pt_BR:Abilitar mesmo diretório em ambos os lados
+com.mucommander.ui.action.SetSameFolderAction.tooltip:NL:Dezelfde map in linker en rechter venster
+com.mucommander.ui.action.SetSameFolderAction.tooltip:SK:Nastaviť ten istý priečinok vľavo aj vpravo
 
 com.mucommander.ui.action.NewWindowAction.label:EN:New window
 com.mucommander.ui.action.NewWindowAction.label:FR:Nouvelle fenêtre
@@ -2559,6 +2825,8 @@ com.mucommander.ui.action.NewWindowAction.label:RO:Fereastră nouă
 com.mucommander.ui.action.NewWindowAction.label:IT:Nuova finestra
 com.mucommander.ui.action.NewWindowAction.label:KR:새창
 com.mucommander.ui.action.NewWindowAction.label:pt_BR:Nova janela
+com.mucommander.ui.action.NewWindowAction.label:NL:Nieuw venster
+com.mucommander.ui.action.NewWindowAction.label:SK:Nové okno
 
 com.mucommander.ui.action.NewWindowAction.tooltip:EN:Open a new window
 com.mucommander.ui.action.NewWindowAction.tooltip:FR:Ouvrir une nouvelle fenêtre
@@ -2575,6 +2843,8 @@ com.mucommander.ui.action.NewWindowAction.tooltip:RO:Deschide o fereastră nouă
 com.mucommander.ui.action.NewWindowAction.tooltip:IT:Apri una nuova finestra
 com.mucommander.ui.action.NewWindowAction.tooltip:KR:새로운 창을 열기
 com.mucommander.ui.action.NewWindowAction.tooltip:pt_BR:Abrir uma nova janela
+com.mucommander.ui.action.NewWindowAction.tooltip:NL:Nieuw venster openen
+com.mucommander.ui.action.NewWindowAction.tooltip:SK:Otvoriť nové okno
 
 com.mucommander.ui.action.OpenAction.label:EN:Open
 com.mucommander.ui.action.OpenAction.label:FR:Ouvrir
@@ -2590,6 +2860,8 @@ com.mucommander.ui.action.OpenAction.label:CS:Otevřít
 com.mucommander.ui.action.OpenAction.label:DE:Öffnen
 com.mucommander.ui.action.OpenAction.label:KR:열기
 com.mucommander.ui.action.OpenAction.label:pt_BR:Abrir
+com.mucommander.ui.action.OpenAction.label:NL:Openen
+com.mucommander.ui.action.OpenAction.label:SK:Otvoriť
 # Translation missing
 
 
@@ -2611,6 +2883,8 @@ com.mucommander.ui.action.OpenAction.tooltip:RO:Deschide director / Deschide arh
 com.mucommander.ui.action.OpenAction.tooltip:IT:Inserisci directory / Inserisci archivio / Esegui
 com.mucommander.ui.action.OpenAction.tooltip:KR:폴더 열기 / 압축파일 열기 / 실행
 com.mucommander.ui.action.OpenAction.tooltip:pt_BR:Abrir diretório / Abrir arquivo / Executar
+com.mucommander.ui.action.OpenAction.tooltip:NL:Open map/ Open archief / Uitvoeren
+com.mucommander.ui.action.OpenAction.tooltip:SK:Otvoriť priečinok / Otvoriť archív / Vykonať
 
 # This action appears in the 'File' menu and opens the currently selected file using the native (OS) file associations
 com.mucommander.ui.action.OpenNativelyAction.label:EN:Open natively
@@ -2627,6 +2901,8 @@ com.mucommander.ui.action.OpenNativelyAction.label:ES:Abrir nativamente
 com.mucommander.ui.action.OpenNativelyAction.label:PL:Otwórz skojarzoną aplikacją
 com.mucommander.ui.action.OpenNativelyAction.label:KR:시스템에서 실행
 com.mucommander.ui.action.OpenNativelyAction.label:pt_BR:Abrir com programa padrão
+com.mucommander.ui.action.OpenNativelyAction.label:NL:Bestand met eigen toepassing openen
+com.mucommander.ui.action.OpenNativelyAction.label:SK:Otvoriť predvolenou aplikáciou
 # Translation missing
 
 
@@ -2652,6 +2928,8 @@ com.mucommander.ui.action.OpenNativelyAction.tooltip:RO:Deschide fișierul selec
 com.mucommander.ui.action.OpenNativelyAction.tooltip:IT:Esegui i file selezionati con le associazioni di sistema 
 com.mucommander.ui.action.OpenNativelyAction.tooltip:KR:선택된 파일을 시스템에 연결된 프로그램으로 실행
 com.mucommander.ui.action.OpenNativelyAction.tooltip:pt_BR:Executar o arquivo com o programa padrão
+com.mucommander.ui.action.OpenNativelyAction.tooltip:NL:Uitvoeren met systeem-geassocieerd programma
+com.mucommander.ui.action.OpenNativelyAction.tooltip:SK:Otvoriť vybraný súbor s asociovanou aplikáciou
 
 # This action is used to show a selected file in the system's default file manager, %1 is the name of the system's 
 # file manager (Finder, Explorer...)
@@ -2669,6 +2947,8 @@ com.mucommander.ui.action.RevealInDesktopAction.label:RU:Отобразить в
 com.mucommander.ui.action.RevealInDesktopAction.label:PL:Otwórz w %1
 com.mucommander.ui.action.RevealInDesktopAction.label:KR:%1에서 보기
 com.mucommander.ui.action.RevealInDesktopAction.label:pt_BR:Mostrar em %1
+com.mucommander.ui.action.RevealInDesktopAction.label:NL:Toon in %1
+com.mucommander.ui.action.RevealInDesktopAction.label:SK:Otvoriť v aplikácii %1
 # Translation missing
 
 
@@ -2692,6 +2972,8 @@ com.mucommander.ui.action.RunCommandAction.label:RO:Execută comandă
 com.mucommander.ui.action.RunCommandAction.label:IT:Esegui comando
 com.mucommander.ui.action.RunCommandAction.label:KR:명령어 실행
 com.mucommander.ui.action.RunCommandAction.label:pt_BR:Executar comando
+com.mucommander.ui.action.RunCommandAction.label:NL:Commando uitvoeren
+com.mucommander.ui.action.RunCommandAction.label:SK:Spustiť príkaz
 
 com.mucommander.ui.action.RunCommandAction.tooltip:EN:Run a command in current folder
 com.mucommander.ui.action.RunCommandAction.tooltip:FR:Exécuter une commande dans le dossier courant
@@ -2708,6 +2990,8 @@ com.mucommander.ui.action.RunCommandAction.tooltip:RO:Execută o comandă în di
 com.mucommander.ui.action.RunCommandAction.tooltip:IT:Esegui un comando nella cartella corrente
 com.mucommander.ui.action.RunCommandAction.tooltip:KR:현재 폴더에서 명령어 실행
 com.mucommander.ui.action.RunCommandAction.tooltip:pt_BR:Executar comando no diretório atual
+com.mucommander.ui.action.RunCommandAction.tooltip:NL:Commando uitvoeren in huidige map
+com.mucommander.ui.action.RunCommandAction.tooltip:SK:Spustiť príkaz v aktuálnom priečinku
 
 com.mucommander.ui.action.PackAction.label:EN:Pack files
 com.mucommander.ui.action.PackAction.label:FR:Compresser fichiers
@@ -2724,6 +3008,8 @@ com.mucommander.ui.action.PackAction.label:RO:Arhivează fișiere
 com.mucommander.ui.action.PackAction.label:IT:Comprimi file
 com.mucommander.ui.action.PackAction.label:KR:파일압축
 com.mucommander.ui.action.PackAction.label:pt_BR:Compactar arquivos
+com.mucommander.ui.action.PackAction.label:NL:Bestanden inpakken
+com.mucommander.ui.action.PackAction.label:SK:Skomprimovať súbory
 
 com.mucommander.ui.action.PackAction.tooltip:EN:Pack marked files into an archive
 com.mucommander.ui.action.PackAction.tooltip:FR:Compresser les fichiers marqués dans une archive
@@ -2739,6 +3025,8 @@ com.mucommander.ui.action.PackAction.tooltip:ES:Empaquetar ficheros marcados
 com.mucommander.ui.action.PackAction.tooltip:PL:Dodaj zaznaczone pliku do archiwu
 com.mucommander.ui.action.PackAction.tooltip:KR:선택된 파일을 압축
 com.mucommander.ui.action.PackAction.tooltip:pt_BR:Compactar arquivos selecionados
+com.mucommander.ui.action.PackAction.tooltip:NL:Gemarkeerde bestanden inpakken in een archief
+com.mucommander.ui.action.PackAction.tooltip:SK:Skomprimovať označené súbory do archívu
 # Translation missing (HU)
 
 
@@ -2761,6 +3049,8 @@ com.mucommander.ui.action.UnpackAction.label:RO:Dearhivează fișiere
 com.mucommander.ui.action.UnpackAction.label:IT:Decomprimi file
 com.mucommander.ui.action.UnpackAction.label:KR:파일 압축해제
 com.mucommander.ui.action.UnpackAction.label:pt_BR:Descompactar arquivos
+com.mucommander.ui.action.UnpackAction.label:NL:Bestanden uitpakken
+com.mucommander.ui.action.UnpackAction.label:SK:Dekomprimovať súbory
 
 com.mucommander.ui.action.UnpackAction.tooltip:EN:Unpack marked archive files
 com.mucommander.ui.action.UnpackAction.tooltip:FR:Décompresser les archives marquées
@@ -2776,6 +3066,8 @@ com.mucommander.ui.action.UnpackAction.tooltip:ES:Desempaquetar ficheros marcado
 com.mucommander.ui.action.UnpackAction.tooltip:PL:Rozpakuj zaznaczone archiwum(a)
 com.mucommander.ui.action.UnpackAction.tooltip:KR:선택된 압축파일 해제
 com.mucommander.ui.action.UnpackAction.tooltip:pt_BR:Descompactar arquivos selecionados
+com.mucommander.ui.action.UnpackAction.tooltip:NL:Gemarkeerde archefbestanden uitpakken
+com.mucommander.ui.action.UnpackAction.tooltip:SK:Dekomprimovať súbory z označených archívov
 # Translation missing (HU)
 
 
@@ -2801,6 +3093,8 @@ com.mucommander.ui.action.ShowFilePropertiesAction.label:RO:Proprietăți
 com.mucommander.ui.action.ShowFilePropertiesAction.label:IT:Proprieta'
 com.mucommander.ui.action.ShowFilePropertiesAction.label:KR:환경설정
 com.mucommander.ui.action.ShowFilePropertiesAction.label:pt_BR:Propriedades
+com.mucommander.ui.action.ShowFilePropertiesAction.label:NL:Eigenschappen
+com.mucommander.ui.action.ShowFilePropertiesAction.label:SK:Vlastnosti
 
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:EN:Show properties of marked files
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:FR:Afficher les propriétés des fichiers marqués
@@ -2817,6 +3111,8 @@ com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:RO:Afișează proprie
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:IT:Mostra proprieta' dei file selezionati
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:KR:선택된 파일의 환경설정 표시
 com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:pt_BR:Exibir propriedades dos arquivos selecionados
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:NL:Toon eigenschappen van gemarkeerde bestanden
+com.mucommander.ui.action.ShowFilePropertiesAction.tooltip:SK:Zobraziť vlastnosti označených súborov
 
 com.mucommander.ui.action.ShowPreferencesAction.label:EN:Preferences
 com.mucommander.ui.action.ShowPreferencesAction.label:FR:Préférences
@@ -2833,6 +3129,8 @@ com.mucommander.ui.action.ShowPreferencesAction.label:RO:Preferințe...
 com.mucommander.ui.action.ShowPreferencesAction.label:IT:Preferenze
 com.mucommander.ui.action.ShowPreferencesAction.label:KR:환경설정
 com.mucommander.ui.action.ShowPreferencesAction.label:pt_BR:Preferências
+com.mucommander.ui.action.ShowPreferencesAction.label:NL:Voorkeuren
+com.mucommander.ui.action.ShowPreferencesAction.label:SK:Nastavenia
 
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:EN:Configure muCommander
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:FR:Configurer muCommander
@@ -2849,6 +3147,8 @@ com.mucommander.ui.action.ShowPreferencesAction.tooltip:RO:Configurează muComma
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:IT:Configura muCommander
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:KR:muCommander 설정
 com.mucommander.ui.action.ShowPreferencesAction.tooltip:pt_BR:Configurar muCommander
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:NL:muCommander configureren
+com.mucommander.ui.action.ShowPreferencesAction.tooltip:SK:Konfigurovať muCommander
 
 com.mucommander.ui.action.ShowServerConnectionsAction.label:EN:Show open connections
 com.mucommander.ui.action.ShowServerConnectionsAction.label:FR:Afficher les connexions ouvertes
@@ -2864,6 +3164,8 @@ com.mucommander.ui.action.ShowServerConnectionsAction.label:ES:Mostrar conexione
 com.mucommander.ui.action.ShowServerConnectionsAction.label:PL:Pokaż otwarte połączenia
 com.mucommander.ui.action.ShowServerConnectionsAction.label:KR:열린 접속 보이기
 com.mucommander.ui.action.ShowServerConnectionsAction.label:pt_BR:Exibir conexões abertas
+com.mucommander.ui.action.ShowServerConnectionsAction.label:NL:Toon open verbindingen
+com.mucommander.ui.action.ShowServerConnectionsAction.label:SK:Zobratiť otvorené pripojenia
 # Translation missing
 
 
@@ -2892,6 +3194,8 @@ com.mucommander.ui.action.QuitAction.label:RO:Închide
 com.mucommander.ui.action.QuitAction.label:IT:Esci
 com.mucommander.ui.action.QuitAction.label:KR:종료
 com.mucommander.ui.action.QuitAction.label:pt_BR:Sair
+com.mucommander.ui.action.QuitAction.label:NL:Beëindigen
+com.mucommander.ui.action.QuitAction.label:SK:Koniec
 
 com.mucommander.ui.action.ReverseSortOrderAction.label:EN:Invert order
 com.mucommander.ui.action.ReverseSortOrderAction.label:FR:Inverser l'ordre
@@ -2908,6 +3212,8 @@ com.mucommander.ui.action.ReverseSortOrderAction.label:RO:Inversează ordinea
 com.mucommander.ui.action.ReverseSortOrderAction.label:IT:Inverti ordine
 com.mucommander.ui.action.ReverseSortOrderAction.label:KR:순서 변경
 com.mucommander.ui.action.ReverseSortOrderAction.label:pt_BR:Inverter ordem
+com.mucommander.ui.action.ReverseSortOrderAction.label:NL:Volgorde omkeren
+com.mucommander.ui.action.ReverseSortOrderAction.label:SK:Obrátiť poradie
 
 com.mucommander.ui.action.ToggleAutoSizeAction.label:EN:Auto-size columns
 com.mucommander.ui.action.ToggleAutoSizeAction.label:FR:Auto-dimensionner les colonnes
@@ -2923,6 +3229,8 @@ com.mucommander.ui.action.ToggleAutoSizeAction.label:CS:Automatická velikost sl
 com.mucommander.ui.action.ToggleAutoSizeAction.label:DE:Spaltengröße automatisch bestimmen
 com.mucommander.ui.action.ToggleAutoSizeAction.label:KR:컬럼 자동 크기 조정
 com.mucommander.ui.action.ToggleAutoSizeAction.label:pt_BR:Dimensionar colunas automaticamente
+com.mucommander.ui.action.ToggleAutoSizeAction.label:NL:Kolombreedte automatisch bepalen
+com.mucommander.ui.action.ToggleAutoSizeAction.label:SK:Automatická šírka stĺpcov
 # Translation missing
 
 
@@ -2945,6 +3253,8 @@ com.mucommander.ui.action.StopAction.label:ES:Detener cambio de directorio
 com.mucommander.ui.action.StopAction.label:PL:Zaniechaj zmiany katalogu
 com.mucommander.ui.action.StopAction.label:KR:폴더 변경 중단
 com.mucommander.ui.action.StopAction.label:pt_BR:Parar mudança de diretórios
+com.mucommander.ui.action.StopAction.label:NL:Verandering aan mappen afbreken
+com.mucommander.ui.action.StopAction.label:SK:Zastaviť zmenu priečinka
 # Translation missing
 
 
@@ -2969,6 +3279,8 @@ com.mucommander.ui.action.ToggleCommandBarAction.show:RO:Arată bara de comenzi
 com.mucommander.ui.action.ToggleCommandBarAction.show:IT:Mostra barra di comando
 com.mucommander.ui.action.ToggleCommandBarAction.show:KR:커맨드바 보이기
 com.mucommander.ui.action.ToggleCommandBarAction.show:pt_BR:Exibir barra de comandos
+com.mucommander.ui.action.ToggleCommandBarAction.show:NL:Commandoregel tonen
+com.mucommander.ui.action.ToggleCommandBarAction.show:SK:Zobraziť panel s príkazmi
 
 com.mucommander.ui.action.ToggleCommandBarAction.hide:EN:Hide command bar
 com.mucommander.ui.action.ToggleCommandBarAction.hide:FR:Cacher la barre de commande
@@ -2985,6 +3297,8 @@ com.mucommander.ui.action.ToggleCommandBarAction.hide:RO:Ascunde bara de comenzi
 com.mucommander.ui.action.ToggleCommandBarAction.hide:IT:Nascondi barra di comando
 com.mucommander.ui.action.ToggleCommandBarAction.hide:KR:커맨드바 숨기기
 com.mucommander.ui.action.ToggleCommandBarAction.hide:pt_BR:Esconder barra de comandos
+com.mucommander.ui.action.ToggleCommandBarAction.hide:NL:Commandoregel verbergen
+com.mucommander.ui.action.ToggleCommandBarAction.hide:SK:Skryť panel s príkazmi
 
 com.mucommander.ui.action.ToggleToolBarAction.show:EN:Show toolbar
 com.mucommander.ui.action.ToggleToolBarAction.show:FR:Afficher la barre d'outils
@@ -3001,6 +3315,8 @@ com.mucommander.ui.action.ToggleToolBarAction.show:RO:Arată bara de unelte
 com.mucommander.ui.action.ToggleToolBarAction.show:IT:Mostra toolbar
 com.mucommander.ui.action.ToggleToolBarAction.show:KR:툴바 보이기
 com.mucommander.ui.action.ToggleToolBarAction.show:pt_BR:Exibir barra de ferramentas
+com.mucommander.ui.action.ToggleToolBarAction.show:NL:Toon gereedschappenbalk
+com.mucommander.ui.action.ToggleToolBarAction.show:SK:Zobraziť panel s nástrojmi
 
 com.mucommander.ui.action.ToggleToolBarAction.hide:EN:Hide toolbar
 com.mucommander.ui.action.ToggleToolBarAction.hide:FR:Cacher la barre d'outils
@@ -3017,6 +3333,8 @@ com.mucommander.ui.action.ToggleToolBarAction.hide:RO:Ascunde bara de unelte
 com.mucommander.ui.action.ToggleToolBarAction.hide:IT:Nascondi toolbar
 com.mucommander.ui.action.ToggleToolBarAction.hide:KR:툴바 숨기기
 com.mucommander.ui.action.ToggleToolBarAction.hide:pt_BR:Esconder barra de ferramentas
+com.mucommander.ui.action.ToggleToolBarAction.hide:NL:Gereedschappenbalk verbergen
+com.mucommander.ui.action.ToggleToolBarAction.hide:SK:Skryť panel s nástrojmi
 
 com.mucommander.ui.action.ToggleStatusBarAction.show:EN:Show status bar
 com.mucommander.ui.action.ToggleStatusBarAction.show:FR:Afficher la barre de status
@@ -3033,6 +3351,8 @@ com.mucommander.ui.action.ToggleStatusBarAction.show:RO:Arată bara de stare
 com.mucommander.ui.action.ToggleStatusBarAction.show:IT:Mostra barra di stato
 com.mucommander.ui.action.ToggleStatusBarAction.show:KR:상태바 보이기
 com.mucommander.ui.action.ToggleStatusBarAction.show:pt_BR:Exibir barra de status
+com.mucommander.ui.action.ToggleStatusBarAction.show:NL:Toon statusbalk
+com.mucommander.ui.action.ToggleStatusBarAction.show:SK:Zobraziť stavový riadok
 
 com.mucommander.ui.action.ToggleStatusBarAction.hide:EN:Hide status bar
 com.mucommander.ui.action.ToggleStatusBarAction.hide:FR:Cacher la barre de status
@@ -3049,11 +3369,15 @@ com.mucommander.ui.action.ToggleStatusBarAction.hide:RO:Ascunde bara de stare
 com.mucommander.ui.action.ToggleStatusBarAction.hide:IT:Nascondi barra di stato
 com.mucommander.ui.action.ToggleStatusBarAction.hide:KR:상태바 숨기기
 com.mucommander.ui.action.ToggleStatusBarAction.hide:pt_BR:Esconder barra de status
+com.mucommander.ui.action.ToggleStatusBarAction.hide:NL:Statusbalk verbergen
+com.mucommander.ui.action.ToggleStatusBarAction.hide:SK:Skryť stavový riadok
 
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:EN:Show folders first
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:FR:Afficher d'abord les répertoires
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:KR:폴더를 먼저 보이기
 com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:CS:Zobrazit nejdříve složky
+com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:NL:Toon mappen eerst
+com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:SK:Zobraziť priečinky ako prvé
 # Translation missing
 
 
@@ -3080,6 +3404,8 @@ com.mucommander.ui.action.PopupLeftDriveButtonAction.label:RO:Schimbă directoru
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:IT:Cambia cartella sinistra
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:KR:왼쪽 폴더 변경
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:pt_BR:Mudar diretório esquerdo
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:NL:Linker map veranderen
+com.mucommander.ui.action.PopupLeftDriveButtonAction.label:SK:Zmeniť ľavý priečinok
 
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:EN:Change right folder
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:FR:Changer le dossier de droite
@@ -3096,6 +3422,8 @@ com.mucommander.ui.action.PopupRightDriveButtonAction.label:RO:Schimbă director
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:IT:Cambia cartella destra
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:KR:오른쪽 폴더 변경
 com.mucommander.ui.action.PopupRightDriveButtonAction.label:pt_BR:Mudar diretório direito
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:NL:Rechter map veranderen
+com.mucommander.ui.action.PopupRightDriveButtonAction.label:SK:Zmeniť pravý priečinok
 
 com.mucommander.ui.action.RecallPreviousWindowAction.label:EN:Recall previous window
 com.mucommander.ui.action.RecallPreviousWindowAction.label:FR:Rappeler la fenêtre précédente
@@ -3112,6 +3440,8 @@ com.mucommander.ui.action.RecallPreviousWindowAction.label:RO:Schimbă la fereas
 com.mucommander.ui.action.RecallPreviousWindowAction.label:IT:Richiama finestra precedente
 com.mucommander.ui.action.RecallPreviousWindowAction.label:KR:이전창 불러오기
 com.mucommander.ui.action.RecallPreviousWindowAction.label:pt_BR:Recarregar janela anterior
+com.mucommander.ui.action.RecallPreviousWindowAction.label:NL:Terug naar vorige venster
+com.mucommander.ui.action.RecallPreviousWindowAction.label:SK:Prepnúť do predchádzajúceho okna
 
 com.mucommander.ui.action.RecallNextWindowAction.label:EN:Recall next window
 com.mucommander.ui.action.RecallNextWindowAction.label:FR:Rappeler la fenêtre suivante
@@ -3128,6 +3458,8 @@ com.mucommander.ui.action.RecallNextWindowAction.label:RO:Schimbă la fereastra 
 com.mucommander.ui.action.RecallNextWindowAction.label:IT:Richiama prossima finestra
 com.mucommander.ui.action.RecallNextWindowAction.label:KR:다음창 불러오기
 com.mucommander.ui.action.RecallNextWindowAction.label:pt_BR:Recarregar próxima janela
+com.mucommander.ui.action.RecallNextWindowAction.label:NL:Terug naar volgende venster
+com.mucommander.ui.action.RecallNextWindowAction.label:SK:Prepnúť do nasledujúceho okna
 
 # This entry has changed: used to be 'Recall a window' and now is 'Recall window #N'
 com.mucommander.ui.action.RecallWindowAction.label:EN:Recall window #%1
@@ -3144,6 +3476,8 @@ com.mucommander.ui.action.RecallWindowAction.label:CS:Přepnout do okna #%1
 com.mucommander.ui.action.RecallWindowAction.label:PL:Wywołaj okno #%1
 com.mucommander.ui.action.RecallWindowAction.label:KR:창 불러오기 #%1
 com.mucommander.ui.action.RecallWindowAction.label:pt_BR:Recarregar a janela #%1
+com.mucommander.ui.action.RecallWindowAction.label:NL:Terug naar venster #%1
+com.mucommander.ui.action.RecallWindowAction.label:SK:Prepnúť do okna
 # The following need to be updated
 com.mucommander.ui.action.RecallWindowAction.label:ES:Rellamar a una ventana
 com.mucommander.ui.action.RecallWindowAction.label:HU:ablak visszavonása
@@ -3173,6 +3507,8 @@ com.mucommander.ui.action.RecallWindow10Action.label:EN:$[com.mucommander.ui.act
 # Brings all windows to the front
 com.mucommander.ui.action.BringAllToFrontAction.label:EN:Bring all to front
 com.mucommander.ui.action.BringAllToFrontAction.label:FR:Tout ramener au premier plan
+com.mucommander.ui.action.BringAllToFrontAction.label:NL:Alles naar voren halen
+com.mucommander.ui.action.BringAllToFrontAction.label:SK:Okná dopredu
 # Translation missing
 
 
@@ -3203,6 +3539,8 @@ com.mucommander.ui.action.SwitchActiveTableAction.label:RO:Interschimbă fereast
 com.mucommander.ui.action.SwitchActiveTableAction.label:IT:Scambia tra pannello sinistro e destro
 com.mucommander.ui.action.SwitchActiveTableAction.label:KR:좌우 판넬을 바꿈
 com.mucommander.ui.action.SwitchActiveTableAction.label:pt_BR:Alternar entre os paneis esquerdo e direito
+com.mucommander.ui.action.SwitchActiveTableAction.label:NL:Wissel tussen linker en rechter venster
+com.mucommander.ui.action.SwitchActiveTableAction.label:SK:Prepnúť medzi pravým a ľavým panelom
 
 com.mucommander.ui.action.SelectFirstRowAction.label:EN:Select first file in current folder
 com.mucommander.ui.action.SelectFirstRowAction.label:FR:Selectionner le premier fichier du dossier
@@ -3219,6 +3557,8 @@ com.mucommander.ui.action.SelectFirstRowAction.label:RO:Selectează primul fiși
 com.mucommander.ui.action.SelectFirstRowAction.label:IT:Seleziona primo file nella cartella corrente
 com.mucommander.ui.action.SelectFirstRowAction.label:KR:현재 폴더에 처음 파일 셀렉트
 com.mucommander.ui.action.SelectFirstRowAction.label:pt_BR:Selecionar primeiro arquivo do diretório corrente
+com.mucommander.ui.action.SelectFirstRowAction.label:NL:Selecteer eerste bestand in huidige map
+com.mucommander.ui.action.SelectFirstRowAction.label:SK:Vybrať prvý súbor v aktuálnom priečinku
 
 com.mucommander.ui.action.SelectLastRowAction.label:EN:Select last file in current folder
 com.mucommander.ui.action.SelectLastRowAction.label:FR:Selectionner le dernier fichier du dossier
@@ -3235,6 +3575,8 @@ com.mucommander.ui.action.SelectLastRowAction.label:RO:Selectează ultimul fiși
 com.mucommander.ui.action.SelectLastRowAction.label:IT:Seleziona ultimo file nella cartella corrente
 com.mucommander.ui.action.SelectLastRowAction.label:KR:현재 폴더에 마지막 파일 셀렉트
 com.mucommander.ui.action.SelectLastRowAction.label:pt_BR:Selecionar último arquivo do diretório corrente
+com.mucommander.ui.action.SelectLastRowAction.label:NL:Selecteer laatste bestand in huidig directory
+com.mucommander.ui.action.SelectLastRowAction.label:SK:Vybrať posledný súbor v označenom priečinku
 
 com.mucommander.ui.action.SplitEquallyAction.label:EN:Split equally
 com.mucommander.ui.action.SplitEquallyAction.label:FR:Scinder au milieu
@@ -3250,6 +3592,8 @@ com.mucommander.ui.action.SplitEquallyAction.label:ES:Dividir equitativamente
 com.mucommander.ui.action.SplitEquallyAction.label:PL:Podziel okno
 com.mucommander.ui.action.SplitEquallyAction.label:KR:똑같은 크기로 분할
 com.mucommander.ui.action.SplitEquallyAction.label:pt_BR:Dividir igualmente
+com.mucommander.ui.action.SplitEquallyAction.label:NL:Splits in gelijke delen
+com.mucommander.ui.action.SplitEquallyAction.label:SK:Rozdeliť rovnomerne
 # Translation missing
 
 
@@ -3274,6 +3618,8 @@ com.mucommander.ui.action.SplitVerticallyAction.label:ES:Dividir verticalmente
 com.mucommander.ui.action.SplitVerticallyAction.label:PL:Podziel pionowo
 com.mucommander.ui.action.SplitVerticallyAction.label:KR:수직으로 분할
 com.mucommander.ui.action.SplitVerticallyAction.label:pt_BR:Dividir verticalmente
+com.mucommander.ui.action.SplitVerticallyAction.label:NL:Splits verticaal
+com.mucommander.ui.action.SplitVerticallyAction.label:SK:Rozdeliť vertikálne
 # Translation missing
 
 
@@ -3296,6 +3642,8 @@ com.mucommander.ui.action.SplitHorizontallyAction.label:ES:Dividir horizontalmen
 com.mucommander.ui.action.SplitHorizontallyAction.label:PL:Podziel poziomo
 com.mucommander.ui.action.SplitHorizontallyAction.label:KR:수평으로 분할
 com.mucommander.ui.action.SplitHorizontallyAction.label:pt_BR:Dividir horizontalmente
+com.mucommander.ui.action.SplitHorizontallyAction.label:NL:Splits horizontaal
+com.mucommander.ui.action.SplitHorizontallyAction.label:SK:Rozdeliť horizontálne
 # Translation missing
 
 
@@ -3321,6 +3669,8 @@ com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:RO:Combinații de ta
 com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:IT:Scorciatoie da tastiera
 com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:KR:키보드 단축키
 com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:pt_BR:Atalhos de teclado
+com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:NL:Sneltoetsen
+com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:SK:Klávesové skratky
 
 com.mucommander.ui.action.GoToWebsiteAction.label:EN:Go to website
 com.mucommander.ui.action.GoToWebsiteAction.label:FR:Site web 
@@ -3337,6 +3687,8 @@ com.mucommander.ui.action.GoToWebsiteAction.label:RO:Vizitează situl Web
 com.mucommander.ui.action.GoToWebsiteAction.label:IT:Visualizza sito Web
 com.mucommander.ui.action.GoToWebsiteAction.label:KR:웹사이트 이동
 com.mucommander.ui.action.GoToWebsiteAction.label:pt_BR:Ir para website
+com.mucommander.ui.action.GoToWebsiteAction.label:NL:Naar website
+com.mucommander.ui.action.GoToWebsiteAction.label:SK:Webová stránka
 
 com.mucommander.ui.action.GoToForumsAction.label:EN:Go to forums
 com.mucommander.ui.action.GoToForumsAction.label:FR:Forums
@@ -3353,6 +3705,8 @@ com.mucommander.ui.action.GoToForumsAction.label:RO:Vizitează forumul
 com.mucommander.ui.action.GoToForumsAction.label:IT:Visualizza forum
 com.mucommander.ui.action.GoToForumsAction.label:KR:포럼으로 이동
 com.mucommander.ui.action.GoToForumsAction.label:pt_BR:Ir para fóruns
+com.mucommander.ui.action.GoToForumsAction.label:NL:Naar forum
+com.mucommander.ui.action.GoToForumsAction.label:SK:Diskusné fórum
 
 com.mucommander.ui.action.ReportBugAction.label:EN:Report a bug
 com.mucommander.ui.action.ReportBugAction.label:FR:Reporter a bug
@@ -3368,6 +3722,8 @@ com.mucommander.ui.action.ReportBugAction.label:ES:Comunicar fallo
 com.mucommander.ui.action.ReportBugAction.label:PL:Zgłoś błąd
 com.mucommander.ui.action.ReportBugAction.label:KR:버그 보고
 com.mucommander.ui.action.ReportBugAction.label:pt_BR:Reportar uma falha
+com.mucommander.ui.action.ReportBugAction.label:NL:Een bug melden
+com.mucommander.ui.action.ReportBugAction.label:SK:Ohlásiť chybu
 # Translation missing
 
 
@@ -3396,6 +3752,8 @@ com.mucommander.ui.action.DonateAction.label:RO:Fă o donație
 com.mucommander.ui.action.DonateAction.label:IT:Fai una donazione
 com.mucommander.ui.action.DonateAction.label:KR:기부 하기
 com.mucommander.ui.action.DonateAction.label:pt_BR:Fazer uma doação
+com.mucommander.ui.action.DonateAction.label:NL:Doe een donatie
+com.mucommander.ui.action.DonateAction.label:SK:Darovať príspevok
 
 com.mucommander.ui.action.ShowAboutAction.label:EN:About muCommander
 com.mucommander.ui.action.ShowAboutAction.label:FR:A propos de muCommander
@@ -3412,6 +3770,8 @@ com.mucommander.ui.action.ShowAboutAction.label:RO:Despre muCommander
 com.mucommander.ui.action.ShowAboutAction.label:IT:Info su muCommander
 com.mucommander.ui.action.ShowAboutAction.label:KR:muCommander에 대해서
 com.mucommander.ui.action.ShowAboutAction.label:pt_BR:Sobre muCommander
+com.mucommander.ui.action.ShowAboutAction.label:NL:Over muCommander
+com.mucommander.ui.action.ShowAboutAction.label:SK:O aplikácii muCommander
 
 
 #############
@@ -3433,6 +3793,8 @@ file_menu:RO:Fișiere
 file_menu:IT:File
 file_menu:KR:파일
 file_menu:pt_BR:Arquivo
+file_menu:NL:Bestand
+file_menu:SK:Súbor
 
 file_menu.open_with:EN:Open with...
 file_menu.open_with:FR:Ouvrir avec...
@@ -3448,6 +3810,8 @@ file_menu.open_with:ES:Abrir con...
 file_menu.open_with:PL:Otwórz za pomocą...
 file_menu.open_with:KR:연결프로그램...
 file_menu.open_with:pt_BR:Abrir com...
+file_menu.open_with:NL:Openen met...
+file_menu.open_with:SK:Otvoriť s...
 # Translation missing
 
 
@@ -3473,6 +3837,8 @@ mark_menu:RO:Selectează
 mark_menu:IT:Selezione
 mark_menu:KR:선택
 mark_menu:pt_BR:Marcar
+mark_menu:NL:Markeren
+mark_menu:SK:Označiť
 
 
 #############
@@ -3494,6 +3860,8 @@ view_menu:RO:Vizualizare
 view_menu:IT:Visualizza
 view_menu:KR:보기
 view_menu:pt_BR:Ver
+view_menu:NL:Beeld
+view_menu:SK:Zobraziť
 
 view_menu.show_hide_columns:EN:Show/Hide columns
 view_menu.show_hide_columns:FR:Afficher/Cacher colonnes
@@ -3509,6 +3877,8 @@ view_menu.show_hide_columns:ES:Mostrar/Ocultar columnas
 view_menu.show_hide_columns:PL:Pokaż/Ukryj kolumny
 view_menu.show_hide_columns:KR:컬럼 표시/숨김
 view_menu.show_hide_columns:pt_BR:Exibir/Ocultar colunas
+view_menu.show_hide_columns:NL:Kolommen tonen/verbergen
+view_menu.show_hide_columns:SK:Zobraziť/skryť stĺpce
 # Translation missing
 
 
@@ -3537,6 +3907,8 @@ go_menu:ES:Ir
 go_menu:PL:Idź
 go_menu:KR:이동
 go_menu:pt_BR:Ir
+go_menu:NL:Toepassen
+go_menu:SK:Prejsť
 # Translation missing
 
 
@@ -3566,6 +3938,8 @@ bookmarks_menu:CS:Záložky
 bookmarks_menu:DE:Lesezeichen
 bookmarks_menu:KR:북마크
 bookmarks_menu:pt_BR:Favoritos
+bookmarks_menu:NL:Bladwijzers
+bookmarks_menu:SK:Záložky
 # Translation missing
 
 
@@ -3589,6 +3963,8 @@ bookmarks_menu.no_bookmark:CS:Bez záložek
 bookmarks_menu.no_bookmark:DE:Keine Lesezeichen
 bookmarks_menu.no_bookmark:KR:북마크 없음
 bookmarks_menu.no_bookmark:pt_BR:Nenhum favorito definido
+bookmarks_menu.no_bookmark:NL:Geen bladwijzer
+bookmarks_menu.no_bookmark:SK:Bez záložiek
 # Translation missing
 
 
@@ -3615,6 +3991,8 @@ window_menu:RO:Fereastră
 window_menu:IT:Finestra
 window_menu:KR:윈도우
 window_menu:pt_BR:Janela
+window_menu:NL:Venster
+window_menu:SK:Okno
 
 #############
 # Help menu #
@@ -3635,6 +4013,8 @@ help_menu:RO:Ajutor
 help_menu:IT:Aiuto
 help_menu:KR:도움말
 help_menu:pt_BR:Ajuda
+help_menu:NL:Help
+help_menu:SK:Pomocník
 
 
 ##############
@@ -3656,6 +4036,8 @@ status_bar.selected_files:RO:%1 din %2 selectate
 status_bar.selected_files:IT:%1 di %2 selezionati
 status_bar.selected_files:KR:%1 / %2 선택됨
 status_bar.selected_files:pt_BR:%1 de %2 selecionados 
+status_bar.selected_files:NL:%1 van %2 geselecteerd
+status_bar.selected_files:SK:%1 z %2 vybraných
 
 # Displayed in the status bar when connecting to a folder
 status_bar.connecting_to_folder:EN:Connecting to folder, press ESCAPE to cancel.
@@ -3672,6 +4054,8 @@ status_bar.connecting_to_folder:CS:Připojuji se ke složce, stiskem ESCAPE akci
 status_bar.connecting_to_folder:DE:Verbindungsaufbau zu Ordner, drücke ESC um Abzubrechen.
 status_bar.connecting_to_folder:KR:폴더 접속중, 취소하려면 ESCAPE를 눌러주세요.
 status_bar.connecting_to_folder:pt_BR:Conectando ao diretório, tecle ESC para cancelar.
+status_bar.connecting_to_folder:NL:Verbinden met map, druk ESC om af te breken
+status_bar.connecting_to_folder:SK:Pripája sa na priečinok, stlač ESC pre zrušenie
 # Translation missing
 
 
@@ -3695,6 +4079,8 @@ status_bar.volume_free:CS:Volné místo: %1
 status_bar.volume_free:DE:Frei: %1
 status_bar.volume_free:KR:빈공간: %1
 status_bar.volume_free:pt_BR:Livre: %1
+status_bar.volume_free:NL:Vrij: %1
+status_bar.volume_free:SK:Voľné miesto: %1
 # Translation missing
 
 
@@ -3717,6 +4103,8 @@ status_bar.volume_capacity:CS:Kapacita: %1
 status_bar.volume_capacity:DE:Speicherkapazität: %1
 status_bar.volume_capacity:KR:용량: %1
 status_bar.volume_capacity:pt_BR:Capacidade: %1
+status_bar.volume_capacity:NL:Capaciteit: %1
+status_bar.volume_capacity:SK:Kapacita: %1
 # Translation missing
 
 
@@ -3744,6 +4132,8 @@ table.hide_column:ES:Ocultar columna
 table.hide_column:PL:Ukryj kolumny
 table.hide_column:KR:컬럼 숨김
 table.hide_column:pt_BR:Ocultar colunas
+table.hide_column:NL:Kolom verbergen
+table.hide_column:SK:Skryť stĺpec
 # Translation missing
 
 
@@ -3770,6 +4160,8 @@ table.folder_access_error_title:RO:Eroare la accesul la director
 table.folder_access_error_title:IT:Errore nell'accesso alla cartella
 table.folder_access_error_title:KR:폴더 접근 오류
 table.folder_access_error_title:pt_BR:Erro ao acessar diretório
+table.folder_access_error_title:NL:Fout bij toegang tot map
+table.folder_access_error_title:SK:Chyba pri prístupe k priečinku
 
 table.folder_access_error:EN:Unable to read folder content
 table.folder_access_error:FR:Unable to read folder content
@@ -3786,6 +4178,8 @@ table.folder_access_error:RO:Nu pot citi conținutul directorului
 table.folder_access_error:IT:Impossibile leggere il contenuto della cartella
 table.folder_access_error:KR:폴더의 내용을 읽을수 없음
 table.folder_access_error:pt_BR:Não foi possível ler conteúdo do diretório
+table.folder_access_error:NL:Kan mapinhoud niet lezen
+table.folder_access_error:SK:Obsah priečinka sa nedá čítať
 
 table.download_or_browse:EN:Would you like to browse or download this file ?
 table.download_or_browse:FR:Souhaitez-vous explorer ou télécharger ce fichier ?
@@ -3802,6 +4196,8 @@ table.download_or_browse:RO:Vreți să navigați sau să descărcați acest fiș
 table.download_or_browse:IT:Vuoi navigare o scaricare questo file ?
 table.download_or_browse:KR:탐색을 하거나 이 파일을 다운로드 받겠습니까?
 table.download_or_browse:pt_BR:Você gostaria de explorar ou baixar este arquivo ?
+table.download_or_browse:NL:Wilt u dit bestand verkennen of wilt u het downloaden?
+table.download_or_browse:SK:Chcete súbor prezerať, alebo stiahnuť?
 
 
 ##################
@@ -3823,6 +4219,8 @@ version_dialog.no_new_version_title:RO:Nici o versiune nouă
 version_dialog.no_new_version_title:IT:Nessuna nuova versione
 version_dialog.no_new_version_title:KR:새로운 버전이 없습니다
 version_dialog.no_new_version_title:pt_BR:Nenhuma nova versão disponível
+version_dialog.no_new_version_title:NL:Geen nieuwe versie
+version_dialog.no_new_version_title:SK:Žiadna nová verzia
 
 version_dialog.no_new_version:EN:Congratulations, you already have the latest version.
 version_dialog.no_new_version:FR:Félicitations, vous avez déjà la dernière version.
@@ -3839,6 +4237,8 @@ version_dialog.no_new_version:RO:Felicitări, aveți deja versiunea cea mai actu
 version_dialog.no_new_version:IT:Congratulazioni, hai gia' l'ultima versione.
 version_dialog.no_new_version:KR:축하합니다. 이미 최신버전 입니다
 version_dialog.no_new_version:pt_BR:Parabéns, você já possue a última versão.
+version_dialog.no_new_version:NL:Gefeliciteerd, u hebt al de nieuwste versie.
+version_dialog.no_new_version:SK:Blahoželáme, máte najnovšiu verziu.
 
 version_dialog.new_version_title:EN:New version available
 version_dialog.new_version_title:FR:Nouvelle version disponible
@@ -3855,6 +4255,8 @@ version_dialog.new_version_title:RO:O versiune nouă este disponibilă
 version_dialog.new_version_title:IT:Nessuna versione disponibile
 version_dialog.new_version_title:KR:최신버전 알림
 version_dialog.new_version_title:pt_BR:Nova versão disponível
+version_dialog.new_version_title:NL:Nieuwe versie beschikbaar
+version_dialog.new_version_title:SK:Nová verzia k dispozícii
 
 version_dialog.new_version:EN:A new version of muCommander is available.
 version_dialog.new_version:FR:Une nouvelle version de muCommander est disponible.
@@ -3871,6 +4273,8 @@ version_dialog.new_version:RO:O versiune nouă de muCommander este disponibilă.
 version_dialog.new_version:IT:E' disponibile una nuova versione di muCommander.
 version_dialog.new_version:KR:새로운 버전의 muCommander가 사용 가능합니다
 version_dialog.new_version:pt_BR:Uma nova versão do muCommander está disponível.
+version_dialog.new_version:NL:Een nieuwe versie van muCommander is beschikbaar.
+version_dialog.new_version:SK:Nová verzia muCommander-a je k dispozícii.
 
 version_dialog.new_version_url:EN:A new version of muCommander is available at %1.
 version_dialog.new_version_url:FR:Une nouvelle version de muCommander est disponible à %1.
@@ -3887,6 +4291,8 @@ version_dialog.new_version_url:RO:O versiune nouă de muCommander este disponibi
 version_dialog.new_version_url:IT:E' disponibile una nuova versione di muCommander: %1.
 version_dialog.new_version_url:KR:새로운 버전의 muCommander를 다음 주소에서 받아 주십시오 %1.
 version_dialog.new_version_url:pt_BR:Uma nova versão do muCommander está disponível em %1.
+version_dialog.new_version_url:NL:Een nieuwe versie van muCommander is beschikbaar op %1.
+version_dialog.new_version_url:SK:Nová verzia muCommander-a je k dispozícii na %1.
 
 version_dialog.not_available_title:EN:Server not reachable
 version_dialog.not_available_title:FR:Serveur indisponible
@@ -3903,6 +4309,8 @@ version_dialog.not_available_title:RO:Server indisponibil
 version_dialog.not_available_title:IT:Server non disponibile
 version_dialog.not_available_title:KR:서버 접근 오류
 version_dialog.not_available_title:pt_BR:Servidor não disponível
+version_dialog.not_available_title:NL:Server niet berijkbaar
+version_dialog.not_available_title:SK:Server je nedostupný
 
 version_dialog.not_available:EN:Unable to get version information from server.
 version_dialog.not_available:FR:L'information de version n'a pas pu être récupérée.
@@ -3919,6 +4327,8 @@ version_dialog.not_available:RO:Informația despre versiuni nu a putut fi accesa
 version_dialog.not_available:IT:Impossibile prendere le informazioni sulla versione dal server.
 version_dialog.not_available:KR:서버에서 버전정보를 얻을수 없습니다
 version_dialog.not_available:pt_BR:Não foi possível obter informação de versão no servidor.
+version_dialog.not_available:NL:Kan geen versie-informatie van server krijgen
+version_dialog.not_available:SK:Nie je možné získať informácie o verzii zo serveru.
 
 
 ###############
@@ -3940,6 +4350,8 @@ quit_dialog.title:RO:Închide muCommander
 quit_dialog.title:IT:Esci da muCommander
 quit_dialog.title:KR:muCommander 종료
 quit_dialog.title:pt_BR:Sair do muCommander
+quit_dialog.title:NL:muCommander afsluiten
+quit_dialog.title:SK:Ukončiť muCommander
 
 quit_dialog.desc:EN:Close all windows and quit muCommander ? 
 quit_dialog.desc:FR:Fermer toutes les fenêtres et quitter muCommander ?
@@ -3956,6 +4368,8 @@ quit_dialog.desc:RO:Închide toate ferestrele și părăsește muCommander ?
 quit_dialog.desc:IT:Chiudo tutte le finestre ed esco da muCommander ?
 quit_dialog.desc:KR:모든 창들과 muCommander를 종료 하시겠습니까? 
 quit_dialog.desc:pt_BR:Fechar todas as janelas e sair do muCommander ?
+quit_dialog.desc:NL:Alle vensters sluiten en muCommander afsluiten ?
+quit_dialog.desc:SK:Zatvoriť všetky okná a ukončiť muCommander?
 
 quit_dialog.show_next_time:EN:Show next time
 quit_dialog.show_next_time:FR:Afficher la prochaine fois
@@ -3972,6 +4386,8 @@ quit_dialog.show_next_time:RO:Arată și data viitoare
 quit_dialog.show_next_time:IT:Mostra la prossima volta
 quit_dialog.show_next_time:KR:다음에도 보입니다
 quit_dialog.show_next_time:pt_BR:Exibir na próxima vez
+quit_dialog.show_next_time:NL:Toon volgende keer
+quit_dialog.show_next_time:SK:Zobraziť nabudúce
 
 
 ######################
@@ -3993,6 +4409,8 @@ destination_dialog.file_exists_action:RO:Acțiune implicită când fișierul exi
 destination_dialog.file_exists_action:IT:Azione di default quando il file esiste
 destination_dialog.file_exists_action:KR:파일이 존재할때 기본설정으로
 destination_dialog.file_exists_action:pt_BR:Ação padrão quando o arquivo existir
+destination_dialog.file_exists_action:NL:Voorkeursactie wanneer bestand er is
+destination_dialog.file_exists_action:SK:Predvolená akcia pre existujúci súbor
 
 
 #########################
@@ -4016,6 +4434,8 @@ file_collision_dialog.title:ES:Colisión de fichero
 file_collision_dialog.title:PL:Kolizja plików
 file_collision_dialog.title:KR:파일 충돌
 file_collision_dialog.title:pt_BR:Colisão de arquivo
+file_collision_dialog.title:NL:Dataconflict
+file_collision_dialog.title:SK:Kolízia súboru
 # Translation missing
 
 
@@ -4046,6 +4466,8 @@ copy_dialog.copy:RO:Copiază
 copy_dialog.copy:IT:Copia
 copy_dialog.copy:KR:복사
 copy_dialog.copy:pt_BR:Copiar
+copy_dialog.copy:NL:Kopiëren
+copy_dialog.copy:SK:Kopírovať
 
 copy_dialog.destination:EN:Copy selected file(s) to
 copy_dialog.destination:FR:Copier les fichiers sélectionnés dans
@@ -4062,6 +4484,8 @@ copy_dialog.destination:RO:Copiază fisierul(ele) la
 copy_dialog.destination:IT:Copia file selezionato(i) su 
 copy_dialog.destination:KR:선택된 파일을 복사 
 copy_dialog.destination:pt_BR:Copiar arquivo(s) selecionado(s) para
+copy_dialog.destination:NL:Kopieer gemarkeerde bestand(en) naar
+copy_dialog.destination:SK:Kopírovať vybrané súbory do
 
 copy_dialog.error_title:EN:Copy error
 copy_dialog.error_title:FR:Erreur de copie
@@ -4078,6 +4502,8 @@ copy_dialog.error_title:RO:Eroare la copiere
 copy_dialog.error_title:IT:Errore durante la copia
 copy_dialog.error_title:KR:복사 오류
 copy_dialog.error_title:pt_BR:Erro ao copiar
+copy_dialog.error_title:NL:Kopieerfout
+copy_dialog.error_title:SK:Chyba pri kopírovaní
 
 copy_dialog.copying:EN:Copying files
 copy_dialog.copying:FR:Copie en cours
@@ -4094,6 +4520,8 @@ copy_dialog.copying:RO:În curs de copiere
 copy_dialog.copying:IT:Copiando file
 copy_dialog.copying:KR:파일 복사중
 copy_dialog.copying:pt_BR:Copiando arquivos
+copy_dialog.copying:NL:Kopieer bestanden
+copy_dialog.copying:SK:Kopírujem súbory
 
 copy_dialog.copying_file:EN:Copying %1
 copy_dialog.copying_file:FR:Copie de %1 en cours
@@ -4110,6 +4538,8 @@ copy_dialog.copying_file:RO:În curs de copiere %1
 copy_dialog.copying_file:IT:Copiando %1
 copy_dialog.copying_file:KR:복사중 %1
 copy_dialog.copying_file:pt_BR:Copiando %1
+copy_dialog.copying_file:NL:Kopiëren %1
+copy_dialog.copying_file:SK:Kopírujem %1
 
 
 ########
@@ -4131,6 +4561,8 @@ pack_dialog.pack:RO:Arhivează
 pack_dialog.pack:IT:Compressione
 pack_dialog.pack:KR:압축
 pack_dialog.pack:pt_BR:Compactar
+pack_dialog.pack:NL:Inpakken
+pack_dialog.pack:SK:Komprimovať
 
 pack_dialog.packing:EN:Packing files
 pack_dialog.packing:FR:Compression en cours
@@ -4147,6 +4579,8 @@ pack_dialog.packing:RO:În curs de arhivare
 pack_dialog.packing:IT:Comprimendo file
 pack_dialog.packing:KR:파일 압축
 pack_dialog.packing:pt_BR:Compactando arquivos
+pack_dialog.packing:NL:Bezig bestanden in te pakken
+pack_dialog.packing:SK:Komprimovať súbory
 
 pack_dialog.packing_file:EN:Compressing %1
 pack_dialog.packing_file:FR:Compression de %1 en cours
@@ -4163,6 +4597,8 @@ pack_dialog.packing_file:RO:În curs de arhivare %1
 pack_dialog.packing_file:IT:Comprimendo %1
 pack_dialog.packing_file:KR:압축중 %1
 pack_dialog.packing_file:pt_BR:Compactando %1
+pack_dialog.packing_file:NL:Inpakken %1
+pack_dialog.packing_file:SK:Komprimujem %1
 
 pack_dialog.error_title:EN:Pack error
 pack_dialog.error_title:FR:Erreur de compression
@@ -4179,6 +4615,8 @@ pack_dialog.error_title:RO:Eroare la arhivare
 pack_dialog.error_title:IT:Errore nella compressione
 pack_dialog.error_title:KR:압축오류
 pack_dialog.error_title:pt_BR:Erro na compactação
+pack_dialog.error_title:NL:Fout bij inpakken
+pack_dialog.error_title:SK:Chyba pri kompresii
 
 pack_dialog_description:EN:Add selected files to
 pack_dialog_description:FR:Ajouter les fichiers sélectionnés dans
@@ -4195,6 +4633,8 @@ pack_dialog_description:RO:Adaugă fișierele selectate la
 pack_dialog_description:IT:Aggiungi i file selezionati a
 pack_dialog_description:KR:선택된 파일을 추가
 pack_dialog_description:pt_BR:Adicionar arquivos selecionados ao
+pack_dialog_description:NL:Voeg gemarkeerde bestanden toe aan
+pack_dialog_description:SK:Pridať vybrané súbory do
 
 pack_dialog.comment:EN:Comment (optional)
 pack_dialog.comment:FR:Commentaire (optionnel)
@@ -4211,6 +4651,8 @@ pack_dialog.comment:RO:Comentarii (opțional)
 pack_dialog.comment:IT:Commento (opzionale)
 pack_dialog.comment:KR:설명추가 (선택사항)
 pack_dialog.comment:pt_BR:Comentário (opcional)
+pack_dialog.comment:NL:Commentaar (optioneel)
+pack_dialog.comment:SK:Komentár (voliteľný)
 
 pack_dialog.archive_format:EN:Archive format
 pack_dialog.archive_format:FR:Format de l'archive
@@ -4226,6 +4668,8 @@ pack_dialog.archive_format:ES:Formato de fichero
 pack_dialog.archive_format:PL:Typ archiwum
 pack_dialog.archive_format:KR:압축파일 형식
 pack_dialog.archive_format:pt_BR:Formato de arquivo
+pack_dialog.archive_format:NL:Archiefformaat
+pack_dialog.archive_format:SK:Formát archívu
 # Translation missing
 
 
@@ -4256,6 +4700,8 @@ unpack_dialog.unpack:RO:Dearhivează
 unpack_dialog.unpack:IT:Decomprimi
 unpack_dialog.unpack:KR:압축해제
 unpack_dialog.unpack:pt_BR:Descompactar
+unpack_dialog.unpack:NL:Uitpakken
+unpack_dialog.unpack:SK:Dekomprimovať
 
 unpack_dialog.destination:EN:Unpack selected file(s) to
 unpack_dialog.destination:FR:Décompresser les fichiers selectionnés dans
@@ -4272,6 +4718,8 @@ unpack_dialog.destination:RO:Dearhivează fisierul(ele) selectat(e) la
 unpack_dialog.destination:IT:Decomprimi i file selezionati in
 unpack_dialog.destination:KR:압축파일을 선택한 곳으로 해제합니다
 unpack_dialog.destination:pt_BR:Descompactar arquivo(s) selecionado(s) para
+unpack_dialog.destination:NL:Pak gemarkeerde bestand(en) uit naar
+unpack_dialog.destination:SK:Dekomprimovať vybrané súbory do
 
 unpack_dialog.error_title:EN:Unpack error
 unpack_dialog.error_title:FR:Erreur de décompression
@@ -4288,6 +4736,8 @@ unpack_dialog.error_title:RO:Eroare la dearhivare
 unpack_dialog.error_title:IT:Errore decompressione
 unpack_dialog.error_title:KR:압축해제 오류
 unpack_dialog.error_title:pt_BR:Erro ao descompactar
+unpack_dialog.error_title:NL:Fout bij uitpakken
+unpack_dialog.error_title:SK:Chyba pre dekompresii
 
 unpack_dialog.unpacking:EN:Unpacking files
 unpack_dialog.unpacking:FR:Décompression en cours
@@ -4304,6 +4754,8 @@ unpack_dialog.unpacking:RO:În curs de dearhivare
 unpack_dialog.unpacking:IT:Decomprimendo file
 unpack_dialog.unpacking:KR:압축해제중
 unpack_dialog.unpacking:pt_BR:Descompactando arquivos
+unpack_dialog.unpacking:NL:Bezig bestanden uit te pakken
+unpack_dialog.unpacking:SK:Dekomprimujem súbory
 
 unpack_dialog.unpacking_file:EN:Unpacking %1
 unpack_dialog.unpacking_file:FR:Décompression de %1 en cours
@@ -4320,6 +4772,8 @@ unpack_dialog.unpacking_file:RO:În curs de dearhivare %1
 unpack_dialog.unpacking_file:IT:Decomprimendo %1
 unpack_dialog.unpacking_file:KR:압축해제중 %1
 unpack_dialog.unpacking_file:pt_BR:Descompactando %1
+unpack_dialog.unpacking_file:NL:Uitpakken %1
+unpack_dialog.unpacking_file:SK:Dekomprimujem %1
 
 
 ########
@@ -4341,6 +4795,8 @@ move_dialog.rename:RO:Redenumește
 move_dialog.rename:IT:Rinomina
 move_dialog.rename:KR:이름변경
 move_dialog.rename:pt_BR:Renomear
+move_dialog.rename:NL:Hernoemen
+move_dialog.rename:SK:Premenovať
 
 move_dialog.move:EN:Move
 move_dialog.move:FR:Déplacer
@@ -4357,6 +4813,8 @@ move_dialog.move:RO:Mută
 move_dialog.move:IT:Sposta
 move_dialog.move:KR:이동
 move_dialog.move:pt_BR:Mover
+move_dialog.move:NL:Verplaats
+move_dialog.move:SK:Presunúť
 
 move_dialog.rename_description:EN:Rename file to
 move_dialog.rename_description:FR:Renommer en
@@ -4373,6 +4831,8 @@ move_dialog.rename_description:RO:Redenumește fișierul la
 move_dialog.rename_description:IT:Rinomina file in
 move_dialog.rename_description:KR:이름변경 위치
 move_dialog.rename_description:pt_BR:Renomear arquivo para
+move_dialog.rename_description:NL:Hernoem bestand naar
+move_dialog.rename_description:SK:Premenovať súbor na
 
 move_dialog.move_description:EN:Move to
 move_dialog.move_description:FR:Déplacer vers
@@ -4389,6 +4849,8 @@ move_dialog.move_description:RO:Mută în
 move_dialog.move_description:IT:Sposta verso
 move_dialog.move_description:KR:이동 위치
 move_dialog.move_description:pt_BR:Mover para
+move_dialog.move_description:NL:Verplaats naar
+move_dialog.move_description:SK:Presunúť do
 
 move_dialog.error_title:EN:Move error
 move_dialog.error_title:FR:Erreur de déplacement
@@ -4405,6 +4867,8 @@ move_dialog.error_title:RO:Eroare la mutare
 move_dialog.error_title:IT:Errore spostando
 move_dialog.error_title:KR:이동 오류
 move_dialog.error_title:pt_BR:Erro ao mover
+move_dialog.error_title:NL:Fout bij verplaatsen
+move_dialog.error_title:SK:Chyba pri presúvaní
 
 move_dialog.moving:EN:Moving files
 move_dialog.moving:FR:Déplacement en cours
@@ -4421,6 +4885,7 @@ move_dialog.moving:RO:În curs de mutare
 move_dialog.moving:IT:Spostando file
 move_dialog.moving:KR:파일 이동중
 move_dialog.moving:pt_BR:Movendo arquivos
+move_dialog.moving:SK:Presúvam súbory
 
 move_dialog.moving_file:EN:Moving %1
 move_dialog.moving_file:FR:Déplacement de %1 en cours
@@ -4437,6 +4902,8 @@ move_dialog.moving_file:RO:În curs de mutare %1
 move_dialog.moving_file:IT:Spostando %1
 move_dialog.moving_file:KR:이동중 %1
 move_dialog.moving_file:pt_BR:Movendo %1
+move_dialog.moving_file:NL:Verplaatsen %1
+move_dialog.moving_file:SK:Presúvam %1
 
 
 #################
@@ -4458,6 +4925,8 @@ download_dialog.description:RO:Descarcă fișierul în
 download_dialog.description:IT:Scaricando file in
 download_dialog.description:KR:다운로드 파일 위치
 download_dialog.description:pt_BR:Baixar arquivo para
+download_dialog.description:NL:Download bestand naar
+download_dialog.description:SK:Stiahnuť súbor do
 
 download_dialog.download:EN:$[download]
 
@@ -4476,6 +4945,8 @@ download_dialog.error_title:RO:Eroare la descărcare
 download_dialog.error_title:IT:Errore in download
 download_dialog.error_title:KR:다운로드 오류
 download_dialog.error_title:pt_BR:Erro ao baixar
+download_dialog.error_title:NL:Fout bij downloaden
+download_dialog.error_title:SK:Chyba pri sťahovaní
 
 download_dialog.downloading:EN:Downloading
 download_dialog.downloading:FR:Téléchargement en cours
@@ -4492,6 +4963,8 @@ download_dialog.downloading:RO:În curs de descărcare
 download_dialog.downloading:IT:In corso di scaricamento
 download_dialog.downloading:KR:다운로드중
 download_dialog.downloading:pt_BR:Baixando
+download_dialog.downloading:NL:Downloaden
+download_dialog.downloading:SK:Sťahuje sa
 
 download_dialog.downloading_file:EN:Downloading %1
 download_dialog.downloading_file:FR:Téléchargement de %1 en cours
@@ -4508,6 +4981,8 @@ download_dialog.downloading_file:RO:În curs de descărcare %1
 download_dialog.downloading_file:IT:Scaricando %1
 download_dialog.downloading_file:KR:다운로드중 %1
 download_dialog.downloading_file:pt_BR:Baixando %1
+download_dialog.downloading_file:NL:Downloaden %1
+download_dialog.downloading_file:SK:Sťahuje sa %1
 
 
 ##########
@@ -4529,6 +5004,8 @@ delete_dialog.confirmation:RO:Șterg definitiv fișierul(ele) selectat(e) ?
 delete_dialog.confirmation:IT:Elimino definitivamente i file selezionati ?
 delete_dialog.confirmation:KR:선택한 파일을 영구히 삭제 하겠습니까?
 delete_dialog.confirmation:pt_BR:Remover permanentemente os arquivo(s) selecionado(s) ?
+delete_dialog.confirmation:NL:Gemarkeerde bestand(en) voorgoed verwijderen ?
+delete_dialog.confirmation:SK:Natrvalo odstrániť vybraný súbor(y) ?
 
 delete_dialog.deleting:EN:Deleting
 delete_dialog.deleting:FR:Suppression en cours
@@ -4545,6 +5022,8 @@ delete_dialog.deleting:RO:În curs de ștergere
 delete_dialog.deleting:IT:Eliminazione in corso
 delete_dialog.deleting:KR:삭제중
 delete_dialog.deleting:pt_BR:Removendo
+delete_dialog.deleting:NL:Verwijderen
+delete_dialog.deleting:SK:Odstraňujem
 
 delete_dialog.error_title:EN:Delete error
 delete_dialog.error_title:FR:Erreur de suppression
@@ -4561,6 +5040,8 @@ delete_dialog.error_title:RO:Eroare la ștergere
 delete_dialog.error_title:IT:Errore durante la cancellazione
 delete_dialog.error_title:KR:삭제 오류
 delete_dialog.error_title:pt_BR:Erro ao remover
+delete_dialog.error_title:NL:Fout bij verwijderen
+delete_dialog.error_title:SK:Chyba pri odstraňovaní
 
 delete.deleting_file:EN:Deleting %1
 delete.deleting_file:FR:Suppression %1 en cours
@@ -4577,6 +5058,8 @@ delete.deleting_file:RO:În curs de ștergere %1
 delete.deleting_file:IT:In corso di cancellazione %1
 delete.deleting_file:KR:삭제중 %1
 delete.deleting_file:pt_BR:Removendo %1
+delete.deleting_file:NL:Verwijderen %1
+delete.deleting_file:SK:Odstraňujem %1
 
 delete.symlink_warning_title:EN:Symlink found
 delete.symlink_warning_title:FR:Lien symbolique
@@ -4593,6 +5076,8 @@ delete.symlink_warning_title:RO:Am găsit o legătură
 delete.symlink_warning_title:IT:Trovato link simbolico
 delete.symlink_warning_title:KR:심볼릭링크 발견됨
 delete.symlink_warning_title:pt_BR:Link simbólico encontrado
+delete.symlink_warning_title:NL:Symbolische koppeling
+delete.symlink_warning_title:SK:Nájdený symbolický odkaz
 
 delete.symlink_warning:EN:This file looks like a symbolic link:\n\n  File: %1\n  Links to: %2\n\nDelete symlink only or\nFollow symlink and delete folder (CAUTION) ?
 delete.symlink_warning:FR:Ce fichier a l'air d'être un lien symbolique:\n\n  Fichier: %1\n  Pointe vers: %2\n\nSupprimer le lien seulement ou\nSuivre le lien symbolique et supprimer le répertoire (ATTENTION) ?
@@ -4609,6 +5094,8 @@ delete.symlink_warning:RO:Acest fișier pare a fi o legătură simbolică (symbo
 delete.symlink_warning:IT:Questo file sembra un link simbolico:\n\n  File: %1\n  Link a: %2\n\nElimina solo link oppure\nSegio link e cancella la cartella (ATTENZIONE) ?
 delete.symlink_warning:KR:이 파일은 심볼릭 링크로 보입니다:\n\n  파일: %1\n  연결됨: %2\n\n심볼릭 링크만 삭제하겠습니까\n심볼릭 링크를 따라가서 폴더를 지우겠습니까 (주의) ?
 delete.symlink_warning:pt_BR:Este arquivo parece ser um link simbólico:\n\n Arquivo: %1\n Linkado ao: %2\n\nRemover somente o link simbólico or\nSeguir link simbólico e remover diretório (cuidado) ?
+delete.symlink_warning:NL:Dit bestand lijkt op een symbolische koppeling:\n\n Bestand: %1\n Verwijst naar: %2\n\nAlleen koppeling verwijderen of \nKoppeling volgen en map verwijderen (VOORZICHTIG)?
+delete.symlink_warning:SK:Tento súbor vyzerá ako symbolický odkaz:\n\n Súbor:%1\n Odkazuje na: %2\n\nOdstrániť iba symbolický odkaz, alebo\naj cieľ odkazu (UPOZORNENIE) ?
 
 delete.delete_link_only:EN:Delete link
 delete.delete_link_only:FR:Supprimer le lien
@@ -4625,6 +5112,8 @@ delete.delete_link_only:RO:Șterge legătura
 delete.delete_link_only:IT:Elimina link
 delete.delete_link_only:KR:링크삭제
 delete.delete_link_only:pt_BR:Remover link
+delete.delete_link_only:NL:Verwijder koppeling
+delete.delete_link_only:SK:Odstrániť odkaz
 
 delete.delete_linked_folder:EN:Delete folder
 delete.delete_linked_folder:FR:Supprimer le répertoire
@@ -4641,6 +5130,8 @@ delete.delete_linked_folder:RO:Șterge directorul
 delete.delete_linked_folder:IT:Elimina directory
 delete.delete_linked_folder:KR:폴더삭제
 delete.delete_linked_folder:pt_BR:Remover diretório
+delete.delete_linked_folder:NL:Map verwijderen
+delete.delete_linked_folder:SK:Odstrániť priečinok
 
 
 #########
@@ -4662,6 +5153,8 @@ email_dialog.title:RO:Trimite fișierele prin email
 email_dialog.title:IT:Spedisci file per eMail
 email_dialog.title:KR:이메일 보내기
 email_dialog.title:pt_BR:Enviar arquivos por email
+email_dialog.title:NL:Verstuur bestanden per email
+email_dialog.title:SK:Poslať súbory e-mailom
 
 email_dialog.prefs_not_set_title:EN:Mail not configured
 email_dialog.prefs_not_set_title:FR:Paramètres absents
@@ -4678,6 +5171,8 @@ email_dialog.prefs_not_set_title:RO:Email-ul nu e configurat
 email_dialog.prefs_not_set_title:IT:Mail non configurato
 email_dialog.prefs_not_set_title:KR:메일이 설정되지 않음
 email_dialog.prefs_not_set_title:pt_BR:Conta de email não configurada
+email_dialog.prefs_not_set_title:NL:Email niet geconfigureerd
+email_dialog.prefs_not_set_title:SK:Elektronická pošta nie je nastavená
 
 email_dialog.prefs_not_set:EN:You need to set your mail parameters first.
 email_dialog.prefs_not_set:FR:Vous devez d'abord configurer vos paramètres email.
@@ -4694,6 +5189,8 @@ email_dialog.prefs_not_set:RO:Mai întâi trebuie să configurați email-ul
 email_dialog.prefs_not_set:IT:Devi prima impostare i tuoi parametri di Mail.  
 email_dialog.prefs_not_set:KR:메일 파라미터 설정을 해야 합니다 
 email_dialog.prefs_not_set:pt_BR:Você deve primeiramente configurar sua conta de email.
+email_dialog.prefs_not_set:NL:U moet eerst uw emailvoorkeuren instellen
+email_dialog.prefs_not_set:SK:Najprv je potrebné nastaviť parametre elektronickej pošty
 
 email_dialog.from:EN:From
 email_dialog.from:FR:De
@@ -4710,6 +5207,8 @@ email_dialog.from:RO:De la
 email_dialog.from:IT:Da
 email_dialog.from:KR:보내는 사람
 email_dialog.from:pt_BR:De
+email_dialog.from:NL:Van
+email_dialog.from:SK:Od
 
 email_dialog.to:EN:To
 email_dialog.to:FR:A
@@ -4726,6 +5225,8 @@ email_dialog.to:RO:Pentru
 email_dialog.to:IT:A
 email_dialog.to:KR:받는사람
 email_dialog.to:pt_BR:Para
+email_dialog.to:NL:Aan
+email_dialog.to:SK:Komu
 
 email_dialog.subject:EN:Subject
 email_dialog.subject:FR:Sujet
@@ -4742,6 +5243,8 @@ email_dialog.subject:RO:Subiect
 email_dialog.subject:IT:Soggetto
 email_dialog.subject:KR:제목
 email_dialog.subject:pt_BR:Assunto
+email_dialog.subject:NL:Onderwerp
+email_dialog.subject:SK:Predmet
 
 email_dialog.send:EN:Send
 email_dialog.send:FR:Envoyer
@@ -4758,6 +5261,8 @@ email_dialog.send:RO:Trimite
 email_dialog.send:IT:Invia
 email_dialog.send:KR:보내기
 email_dialog.send:pt_BR:Enviar
+email_dialog.send:NL:Verzenden
+email_dialog.send:SK:Odoslať
 
 email_dialog.error_title:EN:Email files error
 email_dialog.error_title:FR:Erreur d'envoi
@@ -4774,6 +5279,8 @@ email_dialog.error_title:RO:Eroare la trimiterea fișierelor prin email
 email_dialog.error_title:IT:Errore Email file
 email_dialog.error_title:KR:이메일 보내기 오류
 email_dialog.error_title:pt_BR:Erro ao enviar arquivos
+email_dialog.error_title:NL:Fout bij versturen van email
+email_dialog.error_title:SK:Chyba pri odosielaní
 
 email_dialog.read_error:EN:Unable to read files in subfolders.
 email_dialog.read_error:FR:Les fichiers ne peuvent être lus.
@@ -4790,6 +5297,8 @@ email_dialog.read_error:RO:Nu pot citi fișierele din subdirectoare.
 email_dialog.read_error:IT:Impossibile leggere i file nelle sottodirectory.
 email_dialog.read_error:KR:하위 폴더에서 파일을 읽을수 없습니다
 email_dialog.read_error:pt_BR:Não foi possível ler os arquivos no subdiretório
+email_dialog.read_error:NL:Kan bestanen in onderliggende mappen niet lezen
+email_dialog.read_error:SK:Súbory vo vnorených priečinkoch sa nedajú čítať.
 
 email_dialog.nb_files:EN:%1 file(s)
 email_dialog.nb_files:FR:%1 fichier(s)
@@ -4806,6 +5315,8 @@ email_dialog.nb_files:RO:%1 fișier(e)
 email_dialog.nb_files:IT:%1 file
 email_dialog.nb_files:KR:%1 파일
 email_dialog.nb_files:pt_BR:%1 arquivo(s)
+email_dialog.nb_files:NL:%1 bestand(en)
+email_dialog.nb_files:SK:%1 súbor(y)
 
 email_dialog.sending:EN:Sending files
 email_dialog.sending:FR:Envoi en cours
@@ -4821,6 +5332,8 @@ email_dialog.sending:SI:Pošiljam datoteke
 email_dialog.sending:RO:Fișiere în curs de trimitere
 email_dialog.sending:IT:Inviando file
 email_dialog.sending:pt_BR:Enviando %1
+email_dialog.sending:NL:Verzenden bestanden
+email_dialog.sending:SK:Odosielam %1
 # KR Translation missing
 
 email.sending_file:EN:Sending %1
@@ -4836,9 +5349,12 @@ email.sending_file:zh_CN:正在发送 %1
 email.sending_file:SI:Pošiljam %1
 email.sending_file:RO:În curs de trimitere %1
 email.sending_file:IT:Inviando %1
+email.sending_file:NL:Versturen %1
 email_dialog.sending:KR:파일 보내는중 %1
 email_dialog.sending:CS:Odesílám soubory
 email_dialog.sending:pt_BR:Enviando %1
+email_dialog.sending:NL:Verzenden bestanden
+email_dialog.sending:SK:Odosielam %1
 
 email.connecting_to_server:EN:Connecting to %1
 email.connecting_to_server:FR:Connexion à %1
@@ -4855,6 +5371,8 @@ email.connecting_to_server:RO:În curs de conectare la %1
 email.connecting_to_server:IT:Contattando %1
 email.connecting_to_server:KR:연결중 %1
 email.connecting_to_server:pt_BR:Conectando à %1
+email.connecting_to_server:NL:Verbinden met %1
+email.connecting_to_server:SK:Pripájam sa k %1
 
 email.server_unavailable:EN:Unable to contact mail server %1, check your mail preferences or try again later.
 email.server_unavailable:FR:Echec de la connexion au serveur %1, vérifiez vos préférences de mail ou réessayez plus tard.
@@ -4871,6 +5389,8 @@ email.server_unavailable:RO:Nu pot contacta serverul de mail %1, verificați con
 email.server_unavailable:IT:Impossibile contattare mail server %1, verifica le tue preferenze di mail o prova piu' tardi.
 email.server_unavailable:KR:메일 서버에 연결할수 없습니다 %1, 메일 설정을 확인하거나 나중에 재시도 해주세요
 email.server_unavailable:pt_BR:Não foi possível contactar o servidor de email %1, verifique as configurações de email ou tente novamente mais tarde.
+email.server_unavailable:NL:Kan niet verbinden met server %1, kontroleer uw emailvoorkeuren of probeer het later nog eens
+email.server_unavailable:SK:Nedá sa pripojiť na poštový server %1, skontrolujte nastavenie pošty, alebo akciu opakujte neskôr.
 
 email.connection_closed:EN:Connection closed by server, mail not sent.
 email.connection_closed:FR:Connexion fermée par le serveur, le message n'a pas été envoyé.
@@ -4887,6 +5407,8 @@ email.connection_closed:RO:Conexiunea întreruptă de server, email-ul nu a fost
 email.connection_closed:IT:Connessione chiusa dal server, mail non inviata.
 email.connection_closed:KR:서버에서 접속이 종료되었습니다. 메일이 발송되지 않았습니다
 email.connection_closed:pt_BR:Conexão encerrada pelo servidor, email não enviado.
+email.connection_closed:NL:Verbinding door server onderbroken, email niet verzonden
+email.connection_closed:SK:Server zatvoril pripojenie, pošta nebola odoslaná.
 
 email.goodbye_failed:EN:Error while closing connection, mail may not have been sent.
 email.goodbye_failed:FR:Erreur lors de la fermeture de connexion, le message n'a peut-être pas été envoyé.
@@ -4903,6 +5425,8 @@ email.goodbye_failed:RO:Eroare la închiderea conexiunii, se poate ca email-ul s
 email.goodbye_failed:IT:Errore chiudendo la connessione, la meil puo' non essere stata inviata.
 email.goodbye_failed:KR:접속을 닫는중에 오류가 발생하였습니다. 메일이 발송되지 않을수 있습니다.
 email.goodbye_failed:pt_BR:Erro ao encerrar a conexão, o email talvez não tenha sido enviado.
+email.goodbye_failed:NL:Fout bij het beeinigen van de verbinding, email eventueel niet verzonden
+email.goodbye_failed:SK:Chyba pri zatváraní pripojenia, pošta nemusela byť odoslaná.
 
 email.send_file_error:EN:Unable to send file %1, mail not sent.
 email.send_file_error:FR:Erreur lors de l'envoi du fichier %1, le message n'a pas été envoyé.
@@ -4919,6 +5443,8 @@ email.send_file_error:RO:Nu pot trimite fișierul %1, email-ul nu a fost trimis.
 email.send_file_error:IT:Impossibile inviare il file %1, mail non inviata.
 email.send_file_error:KR:파일 %1을 보내지 못했습니다, 메일을 보낼수 없습니다.
 email.send_file_error:pt_BR:Não foi possível enviar o arquivo %1, email não enviado.
+email.send_file_error:NL:Kan bestand %1 niet verzenden, emial niet verstuurd.
+email.send_file_error:SK:Súbor %1 sa nedá odoslať, pošta nebola odoslaná.
 
 
 #########################
@@ -4940,6 +5466,8 @@ file_selection_dialog.mark:RO:Selectează
 file_selection_dialog.mark:IT:Selezione
 file_selection_dialog.mark:KR:선택
 file_selection_dialog.mark:pt_BR:Marcar
+file_selection_dialog.mark:NL:Markeer
+file_selection_dialog.mark:SK:Označiť
 
 file_selection_dialog.unmark:EN:Unmark
 file_selection_dialog.unmark:FR:Dé-marquer
@@ -4956,6 +5484,8 @@ file_selection_dialog.unmark:RO:Deselectează
 file_selection_dialog.unmark:IT:Deselezione
 file_selection_dialog.unmark:KR:선택 해제
 file_selection_dialog.unmark:pt_BR:Desmarcar
+file_selection_dialog.unmark:NL:Demarkeer
+file_selection_dialog.unmark:SK:Odznačiť
 
 file_selection_dialog.mark_description:EN:Mark files which filename
 file_selection_dialog.mark_description:FR:Marquer les fichiers dont le nom
@@ -4972,6 +5502,8 @@ file_selection_dialog.mark_description:RO:Selectează fișierele ale căror nume
 file_selection_dialog.mark_description:IT:Selezione file il cui nome
 file_selection_dialog.mark_description:KR:파일 이름으로 선택
 file_selection_dialog.mark_description:pt_BR:Marcar arquivos com o nome
+file_selection_dialog.mark_description:NL:Markeer bestanen met de naam
+file_selection_dialog.mark_description:SK:Označiť súbory s názvom
 
 file_selection_dialog.unmark_description:EN:Unmark files which filename
 file_selection_dialog.unmark_description:FR:Dé-marquer les fichiers dont le nom
@@ -4988,6 +5520,8 @@ file_selection_dialog.unmark_description:RO:Deselectează fișierele ale căror 
 file_selection_dialog.unmark_description:IT:Deseleziona i file il cui nome
 file_selection_dialog.unmark_description:KR:파일 이름으로 선택 해제
 file_selection_dialog.unmark_description:pt_BR:Desmarcar arquivos com o nome
+file_selection_dialog.unmark_description:NL:Demarkeer bestanden met de naam
+file_selection_dialog.unmark_description:SK:Odznačiť súbory s názvom
 
 file_selection_dialog.contains:EN:Contains
 file_selection_dialog.contains:FR:Contient
@@ -5004,6 +5538,8 @@ file_selection_dialog.contains:RO:Conține
 file_selection_dialog.contains:IT:Contiene
 file_selection_dialog.contains:KR:포함
 file_selection_dialog.contains:pt_BR:Contém
+file_selection_dialog.contains:NL:Bevat
+file_selection_dialog.contains:SK:Obsahuje
 
 file_selection_dialog.starts_with:EN:Starts with
 file_selection_dialog.starts_with:FR:Commence par
@@ -5020,6 +5556,8 @@ file_selection_dialog.starts_with:RO:Începe cu
 file_selection_dialog.starts_with:IT:Inizia per
 file_selection_dialog.starts_with:KR:으로 시작
 file_selection_dialog.starts_with:pt_BR:Iniciam com
+file_selection_dialog.starts_with:NL:Begint met
+file_selection_dialog.starts_with:SK:Začína na
 
 file_selection_dialog.ends_with:EN:Ends with
 file_selection_dialog.ends_with:FR:Termine par
@@ -5035,6 +5573,8 @@ file_selection_dialog.ends_with:SI:Konča z
 file_selection_dialog.ends_with:RO:Se termină cu
 file_selection_dialog.ends_with:IT:Termina con
 file_selection_dialog.ends_with:pt_BR:Terminam com
+file_selection_dialog.ends_with:NL:Einigt met
+file_selection_dialog.ends_with:SK:Končí na
 # KR Translation missing
 
 file_selection_dialog.is:EN:Is
@@ -5052,6 +5592,8 @@ file_selection_dialog.is:RO:Este
 file_selection_dialog.is:IT:E'
 file_selection_dialog.is:KR:is
 file_selection_dialog.is:pt_BR:É
+file_selection_dialog.is:NL:Is
+file_selection_dialog.is:SK:Je
 # KR Translation missing
 
 file_selection_dialog.case_sensitive:EN:Case sensitive
@@ -5069,6 +5611,8 @@ file_selection_dialog.case_sensitive:RO:Respectă capitalizarea
 file_selection_dialog.case_sensitive:IT:MAIUSCOLE/minuscole
 file_selection_dialog.case_sensitive:KR:대소문자 구분
 file_selection_dialog.case_sensitive:pt_BR:Diferenciar maiúsculas de minúsculas
+file_selection_dialog.case_sensitive:NL:Hoofdlettergevoelig
+file_selection_dialog.case_sensitive:SK:Rozlišovať veľké/malé písmená
 
 file_selection_dialog.include_folders:EN:Include folders
 file_selection_dialog.include_folders:FR:Inclure les dossiers
@@ -5085,6 +5629,8 @@ file_selection_dialog.include_folders:RO:Inclusiv directoare
 file_selection_dialog.include_folders:IT:Includi cartelle
 file_selection_dialog.include_folders:KR:폴더포함
 file_selection_dialog.include_folders:pt_BR:Incluir diretórios
+file_selection_dialog.include_folders:NL:Mappen erbij nemen
+file_selection_dialog.include_folders:SK:Zahrnúť priečinky
 
 
 ###################
@@ -5106,6 +5652,8 @@ progress_dialog.starting:RO:Încep să transfer...
 progress_dialog.starting:IT:Trasferimento iniziato...
 progress_dialog.starting:KR:이동시작...
 progress_dialog.starting:pt_BR:Iniciando transferência...
+progress_dialog.starting:NL:Start overdracht...
+progress_dialog.starting:SK:Prenos spustený...
 
 # %1 is the amount of data transferred (already formatted+localized) and %2 the transfer speed.
 progress_dialog.transferred:EN:Transferred %1 at %2
@@ -5123,6 +5671,8 @@ progress_dialog.transferred:RO:Am transferat %1 din %2
 progress_dialog.transferred:IT:Trasferendo %1 in %2
 progress_dialog.transferred:KR:이동됨 %1 속도 %2
 progress_dialog.transferred:pt_BR:Transferido %1 a %2
+progress_dialog.transferred:NL:Overgedragen %1 van %2
+progress_dialog.transferred:SK:Prenesených %1 pri %2
 
 progress_dialog.elapsed_time:EN:Elapsed time
 progress_dialog.elapsed_time:FR:Temps écoulé
@@ -5138,6 +5688,8 @@ progress_dialog.elapsed_time:ES:Tiempo transcurrido
 progress_dialog.elapsed_time:PL:Czas
 progress_dialog.elapsed_time:KR:경과시간
 progress_dialog.elapsed_time:pt_BR:Tempo decorrido
+progress_dialog.elapsed_time:NL:Tijdsduur
+progress_dialog.elapsed_time:SK:Uplynulý čas
 # Translation missing
 
 
@@ -5163,6 +5715,8 @@ progress_dialog.advanced:ES:Avanzadas
 progress_dialog.advanced:PL:Zaawansowane
 progress_dialog.advanced:KR:고급설정
 progress_dialog.advanced:pt_BR:Avançado
+progress_dialog.advanced:NL:Geavanceerd
+progress_dialog.advanced:SK:Rozšírené
 # Translation missing
 
 
@@ -5189,6 +5743,8 @@ progress_dialog.current_speed:ES:Velocidad actual
 progress_dialog.current_speed:PL:Aktualna prędkość
 progress_dialog.current_speed:KR:현재속도
 progress_dialog.current_speed:pt_BR:Velocidade atual
+progress_dialog.current_speed:NL:Huidige snelheid
+progress_dialog.current_speed:SK:Aktuálna rýchlosť
 # Translation missing
 
 
@@ -5213,6 +5769,8 @@ progress_dialog.limit_speed:ES:Limitar la velocidad
 progress_dialog.limit_speed:PL:Ograniczenie prędkości
 progress_dialog.limit_speed:KR:속도제한
 progress_dialog.limit_speed:pt_BR:Limitar a velocidade
+progress_dialog.limit_speed:NL:Maximale snelheid
+progress_dialog.limit_speed:SK:Rýchlostný limit
 # Translation missing
 
 
@@ -5237,6 +5795,8 @@ progress_dialog.close_when_finished:ES:Cerrar ventana al finalizar
 progress_dialog.close_when_finished:PL:Zamknij okno po zakończeniu
 progress_dialog.close_when_finished:KR:종료후 윈도우 닫기
 progress_dialog.close_when_finished:pt_BR:Fechar a janela quando finalizado
+progress_dialog.close_when_finished:NL:Na beëinigen venster sluiten
+progress_dialog.close_when_finished:SK:Zatvoriť okno po dokončení
 # Translation missing
 
 
@@ -5261,6 +5821,8 @@ progress_dialog.processing_files:ES:Procesando ficheros
 progress_dialog.processing_files:PL:Przetwarzam pliki
 progress_dialog.processing_files:KR:파일 처리중
 progress_dialog.processing_files:pt_BR:Processando arquivos
+progress_dialog.processing_files:NL:Bestanden bewerken
+progress_dialog.processing_files:SK:Spracovávajú sa súbory
 # Translation missing
 
 
@@ -5287,6 +5849,8 @@ progress_dialog.processing_file:ES:Procesando %1
 progress_dialog.processing_file:PL:Przetworzono %1
 progress_dialog.processing_file:KR:처리중 %1
 progress_dialog.processing_file:pt_BR:Processando %1
+progress_dialog.processing_file:NL:Bewerken %1
+progress_dialog.processing_file:SK:Spracováva sa %1
 # Translation missing
 
 
@@ -5312,6 +5876,8 @@ progress_dialog.job_finished:ES:Trabajo finalizado
 progress_dialog.job_finished:PL:Zakończono
 progress_dialog.job_finished:KR:작업 종료
 progress_dialog.job_finished:pt_BR:Trabalho finalizado
+progress_dialog.job_finished:NL:Taak beeindigd
+progress_dialog.job_finished:SK:Úloha dokončená
 # Translation missing
 
 
@@ -5327,6 +5893,8 @@ progress_dialog.job_error:EN:Job error
 progress_dialog.job_error:FR:Erreur pendant tâche
 progress_dialog.job_error:CS:Chyba
 progress_dialog.job_error:pt_BR:Erro
+progress_dialog.job_error:NL:Fout bij uitvoeren taak
+progress_dialog.job_error:SK:Chyba
 # Translation missing
 
 
@@ -5359,6 +5927,8 @@ properties_dialog.file_properties:RO:%1 Proprietăți
 properties_dialog.file_properties:IT:%1 Proprieta'
 properties_dialog.file_properties:KR:%1 속성
 properties_dialog.file_properties:pt_BR:Propriedades de %1
+properties_dialog.file_properties:NL:Eigenschappen van %1
+properties_dialog.file_properties:SK:Vlastnosti
 
 properties_dialog.contents:EN:Contents
 properties_dialog.contents:FR:Contenu
@@ -5375,6 +5945,8 @@ properties_dialog.contents:RO:Conținut
 properties_dialog.contents:IT:Contenuto
 properties_dialog.contents:KR:내용
 properties_dialog.contents:pt_BR:Conteúdo
+properties_dialog.contents:NL:Inhoud
+properties_dialog.contents:SK:Obsah
 
 properties_dialog.nb_files:EN:%1 file(s)
 properties_dialog.nb_files:FR:%1 fichier(s)
@@ -5391,6 +5963,8 @@ properties_dialog.nb_files:RO:%1 fișier(e)
 properties_dialog.nb_files:IT:%1 file
 properties_dialog.nb_files:KR:%1 파일
 properties_dialog.nb_files:pt_BR:%1 arquivo(s)
+properties_dialog.nb_files:NL:%1 Bestand(en)
+properties_dialog.nb_files:SK:%1 súbor(y)
 
 properties_dialog.nb_folders:EN:%1 folder(s)
 properties_dialog.nb_folders:FR:%1 dossier(s)
@@ -5407,6 +5981,8 @@ properties_dialog.nb_folders:RO:%1 directo(a)r(e)
 properties_dialog.nb_folders:IT:%1 directory
 properties_dialog.nb_folders:KR:%1 폴더
 properties_dialog.nb_folders:pt_BR:%1 diretório(s)
+properties_dialog.nb_folders:NL:%1 map(pen)
+properties_dialog.nb_folders:SK:%1 priečinok(priečinky)
 
 properties_dialog.calculating:EN:calculating...
 properties_dialog.calculating:FR:calcul en cours...
@@ -5423,6 +5999,8 @@ properties_dialog.calculating:RO:calculez...
 properties_dialog.calculating:IT:calcolando...
 properties_dialog.calculating:KR:계산중...
 properties_dialog.calculating:pt_BR:Calculando...
+properties_dialog.calculating:NL:Berekenen...
+properties_dialog.calculating:SK:počítam...
 
 
 ######################
@@ -5443,6 +6021,8 @@ change_date_dialog.now:ES:Ahora
 change_date_dialog.now:PL:Teraz
 change_date_dialog.now:KR:현재
 change_date_dialog.now:pt_BR:Agora
+change_date_dialog.now:NL:Nu
+change_date_dialog.now:SK:Aktuálny
 # Translation missing
 
 
@@ -5467,6 +6047,8 @@ change_date_dialog.specific_date:ES:Fecha específica
 change_date_dialog.specific_date:PL:Okrelona data
 change_date_dialog.specific_date:KR:지정날짜
 change_date_dialog.specific_date:pt_BR:Data específica
+change_date_dialog.specific_date:NL:Bepaalde datum
+change_date_dialog.specific_date:SK:Špecifický dátum
 # Translation missing
 
 
@@ -5497,6 +6079,8 @@ run_dialog.run_command_description:RO:Execută în directorul curent
 run_dialog.run_command_description:IT:Esegui nella cartella corrente
 run_dialog.run_command_description:KR:현재 폴더에서 실행
 run_dialog.run_command_description:pt_BR:Executar no diretório corrente
+run_dialog.run_command_description:NL:Voer uit in huidige map
+run_dialog.run_command_description:SK:Spustiť v aktuálnom priečinku
 
 run_dialog.run_in_home_description:EN:Run in home folder
 run_dialog.run_in_home_description:FR:Exécuter dans le répertoire utilisateur
@@ -5512,6 +6096,8 @@ run_dialog.run_in_home_description:ES:Ejecutar en el directorio de inicio
 run_dialog.run_in_home_description:PL:Uruchom w katalogu domowym
 run_dialog.run_in_home_description:KR:홈 폴더에서 실행
 run_dialog.run_in_home_description:pt_BR:Executar no diretório inicial
+run_dialog.run_in_home_description:NL:Voer uit in home-map
+run_dialog.run_in_home_description:SK:Spustiť v domovskom priečinku
 # Translation missing
 
 
@@ -5538,6 +6124,8 @@ run_dialog.command_output:RO:Rezultatul comenzii
 run_dialog.command_output:IT:Command output
 run_dialog.command_output:KR:커맨드 출력
 run_dialog.command_output:pt_BR:Saída do camando
+run_dialog.command_output:NL:Commando output
+run_dialog.command_output:SK:Výstup príkazu
 
 run_dialog.run:EN:Run
 run_dialog.run:FR:Exécuter
@@ -5554,6 +6142,8 @@ run_dialog.run:RO:Execută
 run_dialog.run:IT:Esegui
 run_dialog.run:KR:실행
 run_dialog.run:pt_BR:Executar
+run_dialog.run:NL:Uitvoeren
+run_dialog.run:SK:Spustiť
 
 run_dialog.stop:EN:$[stop]
 
@@ -5571,6 +6161,8 @@ run_dialog.clear_history:ES:Limpiar historial
 run_dialog.clear_history:PL:Wyczyć historię
 run_dialog.clear_history:KR:기록지우기
 run_dialog.clear_history:pt_BR:Limpar histórico
+run_dialog.clear_history:NL:Geschiedenis wissen
+run_dialog.clear_history:SK:Zmazať históriu
 # Translation missing
 
 
@@ -5601,6 +6193,8 @@ server_connect_dialog.server_type:RO:Tipul conexiunii
 server_connect_dialog.server_type:IT:Tipo connessione
 server_connect_dialog.server_type:KR:접속 방식
 server_connect_dialog.server_type:pt_BR:Tipo de conexão
+server_connect_dialog.server_type:NL:Verbindingstype
+server_connect_dialog.server_type:SK:Typ pripojenia
 
 server_connect_dialog.server:EN:Server
 server_connect_dialog.server:FR:Serveur
@@ -5617,10 +6211,14 @@ server_connect_dialog.server:RO:Server
 server_connect_dialog.server:IT:Server
 server_connect_dialog.server:KR:서버
 server_connect_dialog.server:pt_BR:Servidor
+server_connect_dialog.server:NL:Server
+server_connect_dialog.server:SK:Server
 
 server_connect_dialog.share:EN:Share
 server_connect_dialog.share:FR:Partage
 server_connect_dialog.share:CS:Sdílet
+server_connect_dialog.share:NL:Delen
+server_connect_dialog.share:SK:Zdieľať
 # Translation missing
 
 
@@ -5650,6 +6248,8 @@ server_connect_dialog.username:RO:Nume utilizator
 server_connect_dialog.username:IT:Username
 server_connect_dialog.username:KR:유저이름
 server_connect_dialog.username:pt_BR:Usuário
+server_connect_dialog.username:NL:Gebruikersnaam
+server_connect_dialog.username:SK:Užívateľské meno
 
 server_connect_dialog.initial_dir:EN:Initial directory
 server_connect_dialog.initial_dir:FR:Répertoire initial
@@ -5666,6 +6266,8 @@ server_connect_dialog.initial_dir:RO:Directorul inițial
 server_connect_dialog.initial_dir:IT:Directory iniziale
 server_connect_dialog.initial_dir:KR:시작 디렉토리
 server_connect_dialog.initial_dir:pt_BR:Diretório inicial
+server_connect_dialog.initial_dir:NL:Begindirectory
+server_connect_dialog.initial_dir:SK:Počiatočný priečinok
 
 server_connect_dialog.port:EN:Port
 server_connect_dialog.port:FR:Port
@@ -5682,6 +6284,8 @@ server_connect_dialog.port:RO:Port
 server_connect_dialog.port:IT:Porta
 server_connect_dialog.port:KR:포트
 server_connect_dialog.port:pt_BR:Porta
+server_connect_dialog.port:NL:Poort
+server_connect_dialog.port:SK:Port
 
 server_connect_dialog.server_url:EN:Server URL
 server_connect_dialog.server_url:FR:URL serveur
@@ -5698,6 +6302,8 @@ server_connect_dialog.server_url:RO:URL-ul serverului
 server_connect_dialog.server_url:IT:Server URL
 server_connect_dialog.server_url:KR:서버 URL
 server_connect_dialog.server_url:pt_BR:Endereço do servidor
+server_connect_dialog.server_url:NL:Server URL
+server_connect_dialog.server_url:SK:Adresa serveru
 
 server_connect_dialog.http_url:EN:Web site URL
 server_connect_dialog.http_url:FR:URL site web
@@ -5714,6 +6320,8 @@ server_connect_dialog.http_url:RO:URL-ul sitului Web
 server_connect_dialog.http_url:IT:Web site URL
 server_connect_dialog.http_url:KR:웹사이트 URL
 server_connect_dialog.http_url:pt_BR:Endereço do website
+server_connect_dialog.http_url:NL:Website URL
+server_connect_dialog.http_url:SK:Adresa web stránky
 
 server_connect_dialog.connect:EN:Connect
 server_connect_dialog.connect:FR:Se connecter
@@ -5730,10 +6338,14 @@ server_connect_dialog.connect:RO:Conectare
 server_connect_dialog.connect:IT:Connetti
 server_connect_dialog.connect:KR:연결
 server_connect_dialog.connect:pt_BR:Conectar
+server_connect_dialog.connect:NL:Verbinden
+server_connect_dialog.connect:SK:Pripojiť
 
 server_connect_dialog.protocol:EN:Protocol
 server_connect_dialog.protocol:FR:Protocole
 server_connect_dialog.protocol:CS:Protokol
+server_connect_dialog.protocol:NL:Protocol
+server_connect_dialog.protocol:SK:Protokol
 # Translation missing
 
 
@@ -5749,6 +6361,8 @@ server_connect_dialog.protocol:CS:Protokol
 server_connect_dialog.nfs_version:EN:NFS version
 server_connect_dialog.nfs_version:FR:Version de NFS
 server_connect_dialog.nfs_version:CS:Verze NFS
+server_connect_dialog.nfs_version:NL:NFS versie
+server_connect_dialog.nfs_version:SK:Verzia NFS
 # Translation missing
 
 
@@ -5781,6 +6395,8 @@ ftp_connect.passive_mode:RO:Folosește modul pasiv
 ftp_connect.passive_mode:IT:Abilita modalita' passiva
 ftp_connect.passive_mode:KR:passive 모드 설정
 ftp_connect.passive_mode:pt_BR:Abilitando modo passivo
+ftp_connect.passive_mode:NL:Passive modus inschakelen
+ftp_connect.passive_mode:SK:Povoliť pasívny mód
 
 ftp_connect.anonymous_user:EN:Anonymous user
 ftp_connect.anonymous_user:FR:Utilisateur anonyme
@@ -5797,6 +6413,8 @@ ftp_connect.anonymous_user:RO:Utilizator anonim
 ftp_connect.anonymous_user:IT:Utente anonimo
 ftp_connect.anonymous_user:KR:익명연결
 ftp_connect.anonymous_user:pt_BR:Usuário anônimo
+ftp_connect.anonymous_user:NL:Annonieme gebruiker
+ftp_connect.anonymous_user:SK:Anonymný užívateľ
 
 
 ################
@@ -5817,6 +6435,8 @@ http_connect.basic_authentication:ES:HTTP Basic Authentication (opcional)
 http_connect.basic_authentication:PL:HTTP Prosta Autoryzacja/Basic Authentication (opcja)
 http_connect.basic_authentication:KR:HTTP 기본 인증 (선택사항)
 http_connect.basic_authentication:pt_BR:HTTP Autenticação básica (opcional)
+http_connect.basic_authentication:NL:HTTP Basic Authentication (optioneel)
+http_connect.basic_authentication:SK:Základné overenie HTTP (voliteľné)
 # Translation missing
 
 
@@ -5846,6 +6466,8 @@ server_connections_dialog.disconnect:ES:Desconectar
 server_connections_dialog.disconnect:PL:Rozłącz
 server_connections_dialog.disconnect:KR:접속종료
 server_connections_dialog.disconnect:pt_BR:Desconectar
+server_connections_dialog.disconnect:NL:Verbreken
+server_connections_dialog.disconnect:SK:Odpojiť
 # Translation missing
 
 
@@ -5871,6 +6493,8 @@ server_connections_dialog.connection_busy:RU:Занято
 server_connections_dialog.connection_busy:PL:Zajęty
 server_connections_dialog.connection_busy:KR:바쁨
 server_connections_dialog.connection_busy:pt_BR:Ocupado
+server_connections_dialog.connection_busy:NL:Bezet
+server_connections_dialog.connection_busy:SK:Zaneprázdnený
 # Translation missing
 
 
@@ -5896,6 +6520,8 @@ server_connections_dialog.connection_idle:ES:Inactivo
 server_connections_dialog.connection_idle:PL:Nieaktywny
 server_connections_dialog.connection_idle:KR:쉬는중
 server_connections_dialog.connection_idle:pt_BR:Inativo
+server_connections_dialog.connection_idle:NL:Niet actief
+server_connections_dialog.connection_idle:SK:Neaktívny
 # Translation missing
 
 
@@ -5926,6 +6552,8 @@ bonjour.bonjour_services:ES:Servicios Bonjour
 bonjour.bonjour_services:PL:Powitanie
 bonjour.bonjour_services:KR:Bonjour 서비스
 bonjour.bonjour_services:pt_BR:Serviço Bonjour
+bonjour.bonjour_services:NL:Bonjour services
+bonjour.bonjour_services:SK:Služba Bonjour
 # Translation missing
 
 
@@ -5949,6 +6577,8 @@ bonjour.no_service_discovered:ES:No se han descubierto servicios
 bonjour.no_service_discovered:PL:Nie rozpoznano serwisu
 bonjour.no_service_discovered:KR:서비스가 발견되지 않음
 bonjour.no_service_discovered:pt_BR:Nenhum serviço encontrado
+bonjour.no_service_discovered:NL:Geen service gevonden
+bonjour.no_service_discovered:SK:Služba nenájdená
 # Translation missing
 
 
@@ -5974,6 +6604,8 @@ bonjour.bonjour_disabled:ES:Bonjour deshabilitado
 bonjour.bonjour_disabled:PL:Powitanie nieaaktywne
 bonjour.bonjour_disabled:KR:Bonjour 사용불가
 bonjour.bonjour_disabled:pt_BR:Bonjour desabilitado
+bonjour.bonjour_disabled:NL:Bonjout uitgeschakeld
+bonjour.bonjour_disabled:SK:Služba Bonjour nepovolená
 # Translation missing
 
 
@@ -6003,6 +6635,8 @@ auth_dialog.title:RO:Autentificare
 auth_dialog.title:IT:Autenticazione
 auth_dialog.title:KR:인증
 auth_dialog.title:pt_BR:Autenticação
+auth_dialog.title:NL:Autentificatie
+auth_dialog.title:SK:Overenie
 
 auth_dialog.desc:EN:Please enter a login and password
 auth_dialog.desc:FR:Veuillez entrer un identifiant et un mot de passe
@@ -6019,6 +6653,8 @@ auth_dialog.desc:RO:Vă rog să întroduceți parola
 auth_dialog.desc:IT:Prego inserire login e password
 auth_dialog.desc:KR:login, password를 입력해주세요
 auth_dialog.desc:pt_BR:Por favor, insira o usuário e a senha
+auth_dialog.desc:NL:Geef a.u.b. naam en wachtwoord
+auth_dialog.desc:SK:Zadajte prosím užívateľské meno a heslo
 
 auth_dialog.server:EN:Server
 auth_dialog.server:FR:Serveur
@@ -6035,6 +6671,8 @@ auth_dialog.server:RO:Server
 auth_dialog.server:IT:Server
 auth_dialog.server:KR:서버
 auth_dialog.server:pt_BR:Servidor
+auth_dialog.server:NL:Server
+auth_dialog.server:SK:Server
 
 auth_dialog.error_was:EN:Error was: %1
 auth_dialog.error_was:FR:L'erreur était: %1
@@ -6051,6 +6689,8 @@ auth_dialog.error_was:RO:Eroare: %1
 auth_dialog.error_was:IT:Errore: %1
 auth_dialog.error_was:KR:오류: %1
 auth_dialog.error_was:pt_BR:O erro foi: %1
+auth_dialog.error_was:NL:Fout was: %1
+auth_dialog.error_was:SK:Chyba: %1
 
 # Passwords used to be stored in the clear, now they are encrypted with a weak encryption method
 auth_dialog.store_credentials:EN:Store login and password (weak encryption)
@@ -6066,6 +6706,8 @@ auth_dialog.store_credentials:ES:Almacenar usuario y contraseña (encriptación 
 auth_dialog.store_credentials:PL:Zapisz login i hasło (słabe szyfrowanie)
 auth_dialog.store_credentials:KR:login, password 저장 (약한 보안)
 auth_dialog.store_credentials:pt_BR:Gravar usuário e senha (criptografia baixa)
+auth_dialog.store_credentials:NL:Sla naam en wachtwoord op (matige encryptie)
+auth_dialog.store_credentials:SK:Uložiť užívateľské meno a heslo (slabé šifrovanie)
 #auth_dialog.store_credentials:RU:Включить логин и пароль (будут сохранены без шифрования)
 # Translation missing (RU, HU)
 
@@ -6098,6 +6740,8 @@ sortable_list.move_up:CS:Posun výš
 sortable_list.move_up:DE:Nach oben
 sortable_list.move_up:KR:위로
 sortable_list.move_up:pt_BR:Subir
+sortable_list.move_up:NL:Ga omhoog
+sortable_list.move_up:SK:Presunúť vyššie
 # Translation missing
 
 
@@ -6123,6 +6767,8 @@ sortable_list.move_down:CS:Posun níže
 sortable_list.move_down:DE:Nach unten
 sortable_list.move_down:KR:아래로
 sortable_list.move_down:pt_BR:Descer
+sortable_list.move_down:NL:Ga omlaag
+sortable_list.move_down:SK:Presunúť nižšie
 # Translation missing
 
 
@@ -6151,6 +6797,8 @@ add_bookmark_dialog.add:CS:Přidat
 add_bookmark_dialog.add:DE:Hinzufügen
 add_bookmark_dialog.add:KR:추가
 add_bookmark_dialog.add:pt_BR:Adicionar
+add_bookmark_dialog.add:NL:Toevoegen
+add_bookmark_dialog.add:SK:Pridať
 # Translation missing
 
 
@@ -6181,6 +6829,8 @@ edit_bookmarks_dialog.new:ES:Nuevo
 edit_bookmarks_dialog.new:PL:Nowa
 edit_bookmarks_dialog.new:KR:신규
 edit_bookmarks_dialog.new:pt_BR:Novo
+edit_bookmarks_dialog.new:NL:Nieuw
+edit_bookmarks_dialog.new:SK:Nová
 # Translation missing
 
 
@@ -6206,6 +6856,8 @@ edit_bookmarks_dialog.duplicate:ES:Duplicar
 edit_bookmarks_dialog.duplicate:PL:Powiel
 edit_bookmarks_dialog.duplicate:KR:중복
 edit_bookmarks_dialog.duplicate:pt_BR:Duplicar
+edit_bookmarks_dialog.duplicate:NL:Dupliceer
+edit_bookmarks_dialog.duplicate:SK:Duplikovať
 # Translation missing
 
 
@@ -6237,6 +6889,8 @@ file_viewer.view_error_title:RO:Eroare la vizualizare
 file_viewer.view_error_title:IT:Errore vista
 file_viewer.view_error_title:KR:보기 오류
 file_viewer.view_error_title:pt_BR:Erro de visualização
+file_viewer.view_error_title:NL:Fout bij het bekijken
+file_viewer.view_error_title:SK:Chyba pri zobrazovaní
 
 file_viewer.view_error:EN:Unable to view file.
 file_viewer.view_error:FR:Impossible de voir le fichier.
@@ -6253,6 +6907,8 @@ file_viewer.view_error:RO:Nu pot vizualiza fișierul.
 file_viewer.view_error:IT:Impossibile visualizzare il file.
 file_viewer.view_error:KR:파일을 볼수 없음
 file_viewer.view_error:pt_BR:Não possível visualizar arquivo.
+file_viewer.view_error:NL:Kan bestand niet bekijken
+file_viewer.view_error:SK:Súbor sa nedá zobraziť.
 
 file_viewer.file_menu:EN:File
 file_viewer.file_menu:FR:Fichier
@@ -6269,6 +6925,8 @@ file_viewer.file_menu:RO:Fișier
 file_viewer.file_menu:IT:File
 file_viewer.file_menu:KR:파일
 file_viewer.file_menu:pt_BR:Arquivo
+file_viewer.file_menu:NL:Bestand
+file_viewer.file_menu:SK:Súbor
 
 file_viewer.close:EN:Close
 file_viewer.close:FR:Fermer
@@ -6285,6 +6943,8 @@ file_viewer.close:RO:Închide
 file_viewer.close:IT:Chiudi
 file_viewer.close:KR:닫기
 file_viewer.close:pt_BR:Fechar
+file_viewer.close:NL:Sluiten
+file_viewer.close:SK:Zatvoriť
 
 file_viewer.large_file_warning:EN:This file may be too large for this operation.
 file_viewer.large_file_warning:FR:Ce fichier est peut-être trop large pour cette operation.
@@ -6301,6 +6961,8 @@ file_viewer.large_file_warning:RO:Acest fișier ar putea fi prea mare pentru ace
 file_viewer.large_file_warning:IT:Questo file e' troppo grande per questa operazione.
 file_viewer.large_file_warning:KR:이 작업을 하기에 파일이 너무 큽니다.
 file_viewer.large_file_warning:pt_BR:Este arquivo parece ser muito grande para esta operação.
+file_viewer.large_file_warning:NL:Dit bestand is misschien te groot voor deze bewerking.
+file_viewer.large_file_warning:SK:Tento súbor je pre túto operáciu priveľký.
 
 file_viewer.open_anyway:EN:Open anyway
 file_viewer.open_anyway:FR:Ignorer et ouvrir
@@ -6317,6 +6979,8 @@ file_viewer.open_anyway:RO:Deschide oricum
 file_viewer.open_anyway:IT:Apri comunque
 file_viewer.open_anyway:KR:계속열기
 file_viewer.open_anyway:pt_BR:Ignorar e abrir
+file_viewer.open_anyway:NL:Toch openen
+file_viewer.open_anyway:SK:Otvoriť napriek tomu
 
 
 ###############
@@ -6338,6 +7002,8 @@ text_viewer.edit:RO:Editează
 text_viewer.edit:IT:Modifica
 text_viewer.edit:KR:편집
 text_viewer.edit:pt_BR:Editar
+text_viewer.edit:NL:Bewerken
+text_viewer.edit:SK:Upraviť
 
 text_viewer.copy:EN:Copy
 text_viewer.copy:FR:Copier
@@ -6354,6 +7020,8 @@ text_viewer.copy:RO:Copiază
 text_viewer.copy:IT:Copia
 text_viewer.copy:KR:복사
 text_viewer.copy:pt_BR:Copiar
+text_viewer.copy:NL:Kopiëren
+text_viewer.copy:SK:Kopírovať
 
 text_viewer.select_all:EN:Select All
 text_viewer.select_all:FR:Tout sélectionner
@@ -6370,6 +7038,8 @@ text_viewer.select_all:RO:Selectează tot
 text_viewer.select_all:IT:Seleziona tutto
 text_viewer.select_all:KR:모두선택
 text_viewer.select_all:pt_BR:Selecionar tudo
+text_viewer.select_all:NL:Selecteer alles
+text_viewer.select_all:SK:Označiť všetko
 
 
 ###############
@@ -6391,6 +7061,8 @@ image_viewer.controls_menu:RO:Control
 image_viewer.controls_menu:IT:Controlli
 image_viewer.controls_menu:KR:조정
 image_viewer.controls_menu:pt_BR:Controles
+image_viewer.controls_menu:NL:Bediening
+image_viewer.controls_menu:SK:Ovládanie
 
 image_viewer.zoom_in:EN:Zoom in
 image_viewer.zoom_in:FR:Zoomer
@@ -6407,6 +7079,8 @@ image_viewer.zoom_in:RO:Mărește
 image_viewer.zoom_in:IT:Ingrandisci
 image_viewer.zoom_in:KR:확대
 image_viewer.zoom_in:pt_BR:Mais zoom
+image_viewer.zoom_in:NL:Zoom in
+image_viewer.zoom_in:SK:Zväčšiť
 
 image_viewer.zoom_out:EN:Zoom out
 image_viewer.zoom_out:FR:Dézoomer
@@ -6423,6 +7097,8 @@ image_viewer.zoom_out:RO:Micșorează
 image_viewer.zoom_out:IT:Rimpiccolisci
 image_viewer.zoom_out:KR:축소
 image_viewer.zoom_out:pt_BR:Menos zoom
+image_viewer.zoom_out:NL:Zoom uit
+image_viewer.zoom_out:SK:Zmenšiť
 
 
 ###############
@@ -6444,6 +7120,8 @@ file_editor.edit_error_title:RO:Eroare la editare
 file_editor.edit_error_title:IT:Errore in modifica
 file_editor.edit_error_title:KR:편집 오류
 file_editor.edit_error_title:pt_BR:Erro ao editar
+file_editor.edit_error_title:NL:Fout bij het bewerken
+file_editor.edit_error_title:SK:Chyba pri úprave
 
 file_editor.edit_error:EN:Unable to edit file.
 file_editor.edit_error:FR:Impossible d'éditer le fichier.
@@ -6460,6 +7138,8 @@ file_editor.edit_error:RO:Nu pot edita fișierul.
 file_editor.edit_error:IT:Impossibile modificare il file.
 file_editor.edit_error:KR:파일을 편집할수 없음
 file_editor.edit_error:pt_BR:Não foi possível editar o arquivo.
+file_editor.edit_error:NL:Kan bestand niet bewerken
+file_editor.edit_error:SK:Súbor sa nedá upraviť.
 
 file_editor.save:EN:Save
 file_editor.save:FR:Enregistrer
@@ -6476,6 +7156,8 @@ file_editor.save:RO:Salvează
 file_editor.save:IT:Salva
 file_editor.save:KR:저장
 file_editor.save:pt_BR:Salvar
+file_editor.save:NL:Opslaan
+file_editor.save:SK:Uložiť
 
 file_editor.save_as:EN:Save as...
 file_editor.save_as:FR:Enregistrer sous...
@@ -6492,6 +7174,8 @@ file_editor.save_as:RO:Salvează ca ...
 file_editor.save_as:IT:Salva come...
 file_editor.save_as:KR:새이름으로 저장...
 file_editor.save_as:pt_BR:Salvar como...
+file_editor.save_as:NL:Opslaan als...
+file_editor.save_as:SK:Uložiť ako...
 
 file_editor.save_warning:EN:Save changes made to this file before closing ?
 file_editor.save_warning:FR:Enregistrer les modifications avant de fermer ce fichier ?
@@ -6508,6 +7192,8 @@ file_editor.save_warning:RO:Salvez modificările efectuate înainte de a închid
 file_editor.save_warning:IT:Salvare le modifiche a questo file prima di chiudere ?
 file_editor.save_warning:KR:파일을 닫기전 저장하시겠습니까?
 file_editor.save_warning:pt_BR:Salvar mudanças feitas ao arquivo antes de fechar ?
+file_editor.save_warning:NL:Voor het afsluiten veranderingen opslaan?
+file_editor.save_warning:SK:Uložiť zmeny v tomto súbore pred zatvorením ?
 
 file_editor.cannot_write:EN:Unable to write file.
 file_editor.cannot_write:FR:Impossible d'écrire le fichier. 
@@ -6524,6 +7210,8 @@ file_editor.cannot_write:RO:Nu pot scrie fișierul.
 file_editor.cannot_write:IT:Impossibile salvare il file.
 file_editor.cannot_write:KR:파일을 기록할수 없음
 file_editor.cannot_write:pt_BR:Não foi possível escrever o arquivo.
+file_editor.cannot_write:NL:Kan het bestand niet schrijven
+file_editor.cannot_write:SK:Do súboru sa nedá zapisovať.
 
 file_editor.write_error_title:EN:Write error
 file_editor.write_error_title:FR:Erreur d'écriture
@@ -6540,6 +7228,8 @@ file_editor.write_error_title:RO:Eroare la scriere
 file_editor.write_error_title:IT:Errore in scrittura
 file_editor.write_error_title:KR:쓰기 오류
 file_editor.write_error_title:pt_BR:Erro de escrita
+file_editor.write_error_title:NL:Fout bij het schrijven
+file_editor.write_error_title:SK:Chyba zápisu
 
 file_editor.file_already_exists:EN:%1 already exists, do you want to replace it ?
 file_editor.file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
@@ -6556,6 +7246,8 @@ file_editor.file_already_exists:RO:%1 există deja, vreți să îl înlocuiți?
 file_editor.file_already_exists:IT:%1 esiste gia', vuoi sostituirlo ?
 file_editor.file_already_exists:KR:%1가 이미 존재합니다. 덮어쓰시겠습니까?
 file_editor.file_already_exists:pt_BR:%1 já existe, deseja sobrescrevê-lo ?
+file_editor.file_already_exists:NL:%1 bestaat al, wilt u het vervangen ?
+file_editor.file_already_exists:SK:%1 už existuje, chcete ho prepísať ?
 
 file_editor.file_menu:EN:$[file_viewer.file_menu]
 
@@ -6587,6 +7279,8 @@ text_editor.cut:RO:Taie
 text_editor.cut:IT:Taglia
 text_editor.cut:KR:잘라내기
 text_editor.cut:pt_BR:Cortar
+text_editor.cut:NL:Knippen
+text_editor.cut:SK:Vystrihnúť
 
 text_editor.paste:EN:Paste
 text_editor.paste:FR:Coller
@@ -6603,6 +7297,8 @@ text_editor.paste:RO:Lipește
 text_editor.paste:IT:Incolla
 text_editor.paste:KR:붙여넣기
 text_editor.paste:pt_BR:Colar
+text_editor.paste:NL:Plakken
+text_editor.paste:SK:Vložiť
 
 text_editor.edit:EN:$[text_viewer.edit]
 
@@ -6630,6 +7326,8 @@ shortcuts_dialog.navigation:RO:Navigare
 shortcuts_dialog.navigation:IT:Navigare
 shortcuts_dialog.navigation:KR:탐색
 shortcuts_dialog.navigation:pt_BR:Navegação
+shortcuts_dialog.navigation:NL:Navigatie
+shortcuts_dialog.navigation:SK:Navigácia
 
 shortcuts_dialog.view:EN:View
 shortcuts_dialog.view:FR:Vue
@@ -6646,6 +7344,8 @@ shortcuts_dialog.view:RO:Vizualizare
 shortcuts_dialog.view:IT:Visualizzare
 shortcuts_dialog.view:KR:보기
 shortcuts_dialog.view:pt_BR:Visualizar
+shortcuts_dialog.view:NL:Beeld
+shortcuts_dialog.view:SK:Zobraziť
 
 shortcuts_dialog.selection:EN:Selection
 shortcuts_dialog.selection:FR:Selection
@@ -6662,6 +7362,8 @@ shortcuts_dialog.selection:RO:Selectare
 shortcuts_dialog.selection:IT:Selezionare
 shortcuts_dialog.selection:KR:셀렉션
 shortcuts_dialog.selection:pt_BR:Seleção
+shortcuts_dialog.selection:NL:Selectie
+shortcuts_dialog.selection:SK:Výber
 
 shortcuts_dialog.file_operations:EN:File operations
 shortcuts_dialog.file_operations:FR:Opérations sur fichiers
@@ -6678,6 +7380,8 @@ shortcuts_dialog.file_operations:RO:Operații cu fișiere
 shortcuts_dialog.file_operations:IT:Operazioni su file
 shortcuts_dialog.file_operations:KR:파일 작업
 shortcuts_dialog.file_operations:pt_BR:Operações com arquivos
+shortcuts_dialog.file_operations:NL:Bestandsbewerkingen
+shortcuts_dialog.file_operations:SK:Operácie so súbormi
 
 shortcuts_dialog.quick_search:EN:Quick search
 shortcuts_dialog.quick_search:FR:Recherche rapide
@@ -6692,6 +7396,8 @@ shortcuts_dialog.quick_search:RU:Быстрый поиск
 shortcuts_dialog.quick_search:ES:Búsqueda rápida
 shortcuts_dialog.quick_search:PL:Szybkie wyszukiwanie
 shortcuts_dialog.quick_search:pt_BR:Busca rápida
+shortcuts_dialog.quick_search:NL:Snelzoeken
+shortcuts_dialog.quick_search:SK:Rýchle hľadanie
 # Translation missing
 # KR Translation missing
 
@@ -6716,6 +7422,8 @@ shortcuts_dialog.quick_search.start_search:ES:Teclee cualquier carácter para co
 shortcuts_dialog.quick_search.start_search:PL:Wpisz dowolne znaki aby rozpocząć wyszukiwanie
 shortcuts_dialog.quick_search.start_search:KR:빠른 검색을 위하여, 적절한 단어를 입력해보세요.
 shortcuts_dialog.quick_search.start_search:pt_BR:Tecle qualquer caractere para iniciar uma busca rápida
+shortcuts_dialog.quick_search.start_search:NL:Voer een teken in om het snelzoeken te starten
+shortcuts_dialog.quick_search.start_search:SK:Vložením ľubovoľného znaku spustíte rýchle hľadanie
 # Translation missing
 
 
@@ -6739,6 +7447,8 @@ shortcuts_dialog.quick_search.cancel_search:ES:Cancelar búsqueda rápida
 shortcuts_dialog.quick_search.cancel_search:PL:Anuluj szybkie wyszukiwanie
 shortcuts_dialog.quick_search.cancel_search:KR:빠른 검색 취소
 shortcuts_dialog.quick_search.cancel_search:pt_BR:Cancelar busca rápida
+shortcuts_dialog.quick_search.cancel_search:NL:Snelzoeken afbreken
+shortcuts_dialog.quick_search.cancel_search:SK:Zrušiť rýchle hľadanie
 # Translation missing
 
 
@@ -6763,6 +7473,8 @@ shortcuts_dialog.quick_search.remove_last_char:ES:Eliminar último carácter de 
 shortcuts_dialog.quick_search.remove_last_char:PL:Usuń ostatni znak z szybkiego wyszukiwania
 shortcuts_dialog.quick_search.remove_last_char:KR:빠른 검색 단어에서 마지막 글자를 지웁니다
 shortcuts_dialog.quick_search.remove_last_char:pt_BR:Remover o último caractere da cadeia utilizada na busca rápida
+shortcuts_dialog.quick_search.remove_last_char:NL:Verwijder laatste teken uit snelzoek-opdracht
+shortcuts_dialog.quick_search.remove_last_char:SK:Odstrániť z hľadaného reťazca posledný znak
 # Translation missing
 
 
@@ -6787,6 +7499,8 @@ shortcuts_dialog.quick_search.jump_to_previous:ES:Ir al resultado previo de bús
 shortcuts_dialog.quick_search.jump_to_previous:PL:Przejdź do poprzednich wyników wyszukiwania
 shortcuts_dialog.quick_search.jump_to_previous:KR:이전 빠른 검색 결과로 이동
 shortcuts_dialog.quick_search.jump_to_previous:pt_BR:Pular para o resultado anterior da busca rápida
+shortcuts_dialog.quick_search.jump_to_previous:NL:Ga naar vorige snelzoekresultaat
+shortcuts_dialog.quick_search.jump_to_previous:SK:Prejsť na predchádzajúci výsledok rýchleho hľadania
 # Translation missing
 
 
@@ -6810,6 +7524,8 @@ shortcuts_dialog.quick_search.jump_to_next:ES:Ir al resultado siguiente de búsq
 shortcuts_dialog.quick_search.jump_to_next:PL:Przejdź do natępnych wyników wyszukiwania
 shortcuts_dialog.quick_search.jump_to_next:KR:다음 빠른 검색 결과로 이동
 shortcuts_dialog.quick_search.jump_to_next:pt_BR:Pular para o próximo resultado da busca rápida
+shortcuts_dialog.quick_search.jump_to_next:NL:Ga naar volgende snelzoekresultaat
+shortcuts_dialog.quick_search.jump_to_next:SK:Prejsť na nasledujúci výsledok rýchleho hľadania
 # Translation missing
 
 
@@ -6832,6 +7548,8 @@ shortcuts_dialog.quick_search.mark_jump_next:ES:Marcar/Desmarcar fichero actual 
 shortcuts_dialog.quick_search.mark_jump_next:PL:Zaznacz/Odznacz aktualny plik i skocz do następnych wyników wyszukiwania
 shortcuts_dialog.quick_search.mark_jump_next:KR:현재 파일을 선택/선택해제하고 다음 검색결과로 이동
 shortcuts_dialog.quick_search.mark_jump_next:pt_BR:Marcar/Desmarcar arquivo corrente e pular para o próximo resultado da busca
+shortcuts_dialog.quick_search.mark_jump_next:NL:Markeer/Demarkeer huidige bestand en ga naar volgend zoekresultaat
+shortcuts_dialog.quick_search.mark_jump_next:SK:Označiť/odznačiť aktuálny súbor a prejsť na nasledujúci výsledok hľadania
 # Translation missing
 
 
@@ -6856,6 +7574,8 @@ shortcuts_dialog.windows:RO:Ferestre
 shortcuts_dialog.windows:IT:Finestre
 shortcuts_dialog.windows:KR:창
 shortcuts_dialog.windows:pt_BR:Janelas
+shortcuts_dialog.windows:NL:Vensters
+shortcuts_dialog.windows:SK:Okná
 
 
 ######################
@@ -6877,6 +7597,8 @@ prefs_dialog.title:RO:Preferințe
 prefs_dialog.title:IT:Preferenze
 prefs_dialog.title:KR:환경설정
 prefs_dialog.title:pt_BR:Preferências
+prefs_dialog.title:NL:Voorkeuren
+prefs_dialog.title:SK:Nastavenia
 
 # General tab
 
@@ -6895,6 +7617,8 @@ prefs_dialog.general_tab:RO:Generale
 prefs_dialog.general_tab:IT:Generale
 prefs_dialog.general_tab:KR:일반
 prefs_dialog.general_tab:pt_BR:Geral
+prefs_dialog.general_tab:NL:Algemeen
+prefs_dialog.general_tab:SK:Všeobecné
 
 prefs_dialog.day:EN:Day
 prefs_dialog.day:FR:Jour
@@ -6911,6 +7635,8 @@ prefs_dialog.day:RO:Zi
 prefs_dialog.day:IT:Giorno
 prefs_dialog.day:KR:일
 prefs_dialog.day:pt_BR:Dia
+prefs_dialog.day:NL:Dag
+prefs_dialog.day:SK:Deň
 
 prefs_dialog.month:EN:Month
 prefs_dialog.month:FR:Mois
@@ -6927,6 +7653,8 @@ prefs_dialog.month:RO:Lună
 prefs_dialog.month:IT:Mese
 prefs_dialog.month:KR:월
 prefs_dialog.month:pt_BR:Mês
+prefs_dialog.month:NL:Maand
+prefs_dialog.month:SK:Mesiac
 
 prefs_dialog.year:EN:Year
 prefs_dialog.year:FR:Année
@@ -6943,6 +7671,8 @@ prefs_dialog.year:RO:An
 prefs_dialog.year:IT:Anno
 prefs_dialog.year:KR:년
 prefs_dialog.year:pt_BR:Ano
+prefs_dialog.year:NL:Jaar
+prefs_dialog.year:SK:Rok
 
 prefs_dialog.language:EN:Language (requires restart)
 prefs_dialog.language:FR:Langage (après redémarrage)
@@ -6959,6 +7689,8 @@ prefs_dialog.language:RO:Limbă (necesită repornirea programului)
 prefs_dialog.language:IT:Italiano (E' necessario il restart)
 prefs_dialog.language:KR:언어 (재시작 필요)
 prefs_dialog.language:pt_BR:Idioma (requer reiniciar programa)
+prefs_dialog.language:NL:Taal (vereist herstarten)
+prefs_dialog.language:SK:Jazyk (vyžaduje reštart)
 
 prefs_dialog.date_time:EN:Date & time format
 prefs_dialog.date_time:FR:Format de date et d'heure
@@ -6975,6 +7707,8 @@ prefs_dialog.date_time:IT:Formato data e ora
 prefs_dialog.date_time:zh_CN:日期及时间格式
 prefs_dialog.date_time:KR:날짜 시간 형식
 prefs_dialog.date_time:pt_BR:Formato da data e hora
+prefs_dialog.date_time:NL:Formaat van datum en tijd
+prefs_dialog.date_time:SK:Formát dátumu a času
 
 prefs_dialog.time:EN:Time
 prefs_dialog.time:FR:Heure
@@ -6991,6 +7725,8 @@ prefs_dialog.time:RO:Ora
 prefs_dialog.time:IT:Ora
 prefs_dialog.time:KR:시간
 prefs_dialog.time:pt_BR:Hora
+prefs_dialog.time:NL:Tijd
+prefs_dialog.time:SK:Čas
 
 prefs_dialog.date:EN:Date
 prefs_dialog.date:FR:Date
@@ -7007,6 +7743,8 @@ prefs_dialog.date:RO:Dată
 prefs_dialog.date:IT:Data
 prefs_dialog.date:KR:날짜
 prefs_dialog.date:pt_BR:Data
+prefs_dialog.date:NL:Datum
+prefs_dialog.date:SK:Dátum
 
 # Title of the Date separator field in the General preferences
 prefs_dialog.date_separator:EN:Separator
@@ -7023,6 +7761,8 @@ prefs_dialog.date_separator:CS:Oddělovač
 prefs_dialog.date_separator:DE:Trennzeichen
 prefs_dialog.date_separator:KR:분리기호
 prefs_dialog.date_separator:pt_BR:Separador
+prefs_dialog.date_separator:NL:Scheidingsteken
+prefs_dialog.date_separator:SK:Oddeľovač
 # Translation missing
 
 
@@ -7046,6 +7786,8 @@ prefs_dialog.time_12_hour:RO:Format 12 ore
 prefs_dialog.time_12_hour:IT:Formato 12 ore
 prefs_dialog.time_12_hour:KR:12시간제
 prefs_dialog.time_12_hour:pt_BR:Formato 12 horas
+prefs_dialog.time_12_hour:NL:12-uurs formaat
+prefs_dialog.time_12_hour:SK:12 hodinový formát
 
 prefs_dialog.time_24_hour:EN:24-hour format
 prefs_dialog.time_24_hour:FR:Format 24 heures
@@ -7062,12 +7804,16 @@ prefs_dialog.time_24_hour:RO:Format 24 ore
 prefs_dialog.time_24_hour:IT:Formato 24 ore
 prefs_dialog.time_24_hour:KR:24시간제
 prefs_dialog.time_24_hour:pt_BR:Formato 24 horas
+prefs_dialog.time_24_hour:NL:24-uurs formaat
+prefs_dialog.time_24_hour:SK:24 hodinový formát
 
 prefs_dialog.show_seconds:EN:Show seconds
 prefs_dialog.show_seconds:FR:Afficher les secondes
 prefs_dialog.show_seconds:KR:초 보임
 prefs_dialog.show_seconds:CS:Zobrazit sekundy
 prefs_dialog.show_seconds:pt_BR:Exibir segundos
+prefs_dialog.show_seconds:NL:Toon seconden
+prefs_dialog.show_seconds:SK:Zobraziť sekundy
 # Translation missing
 
 
@@ -7084,6 +7830,8 @@ prefs_dialog.show_century:FR:Afficher le siècle
 prefs_dialog.show_century:KR:세기(100년)보임
 prefs_dialog.show_century:CS:Zobrazit století
 prefs_dialog.show_century:pt_BR:Exibir centésimos
+prefs_dialog.show_century:NL:Toon eeuw
+prefs_dialog.show_century:SK:Zobraziť storočie
 # Translation missing
 
 
@@ -7110,6 +7858,8 @@ prefs_dialog.check_for_updates_on_startup:RO:Caută versiuni mai recente la porn
 prefs_dialog.check_for_updates_on_startup:IT:Controlla aggiornamenti alla partenza
 prefs_dialog.check_for_updates_on_startup:KR:시작시에 최신버전 확인
 prefs_dialog.check_for_updates_on_startup:pt_BR:Verificar por atualizações quando iniciar
+prefs_dialog.check_for_updates_on_startup:NL:Kontoleer op updates bij het opstarten
+prefs_dialog.check_for_updates_on_startup:SK:Hľadať aktualizácie pri spustení
 
 prefs_dialog.example:EN:Example
 prefs_dialog.example:FR:Exemple
@@ -7126,6 +7876,8 @@ prefs_dialog.example:RO:Exemplu
 prefs_dialog.example:IT:Esempio
 prefs_dialog.example:KR:예제
 prefs_dialog.example:pt_BR:Exemplo
+prefs_dialog.example:NL:Voorbeeld
+prefs_dialog.example:SK:Príklad
 
 # Folders tab
 
@@ -7144,6 +7896,8 @@ prefs_dialog.folders_tab:RO:Directoare
 prefs_dialog.folders_tab:IT:Cartelle
 prefs_dialog.folders_tab:KR:폴더
 prefs_dialog.folders_tab:pt_BR:Diretórios
+prefs_dialog.folders_tab:NL:Mappen
+prefs_dialog.folders_tab:SK:Priečinok
 
 prefs_dialog.startup_folders:EN:Startup folders
 prefs_dialog.startup_folders:FR:Dossiers de démarrage
@@ -7160,6 +7914,8 @@ prefs_dialog.startup_folders:RO:Director inițial
 prefs_dialog.startup_folders:IT:Cartelle iniziali
 prefs_dialog.startup_folders:KR:시작 폴더
 prefs_dialog.startup_folders:pt_BR:Diretórios de início
+prefs_dialog.startup_folders:NL:Opstartdirectories
+prefs_dialog.startup_folders:SK:Priečinky pri štarte
 
 prefs_dialog.left_folder:EN:Left folder
 prefs_dialog.left_folder:FR:Dossier de gauche
@@ -7176,6 +7932,8 @@ prefs_dialog.left_folder:RO:Directorul din stânga
 prefs_dialog.left_folder:IT:Cartella di sinistra
 prefs_dialog.left_folder:KR:왼쪽 폴더
 prefs_dialog.left_folder:pt_BR:Diretório esquerdo
+prefs_dialog.left_folder:NL:Linker map
+prefs_dialog.left_folder:SK:Ľavý priečinok
 
 prefs_dialog.right_folder:EN:Right folder
 prefs_dialog.right_folder:FR:Dossier de droite
@@ -7192,6 +7950,8 @@ prefs_dialog.right_folder:RO:Directorul din dreapta
 prefs_dialog.right_folder:IT:Cartella di destra
 prefs_dialog.right_folder:KR:오른쪽 폴더
 prefs_dialog.right_folder:pt_BR:Diretório direito
+prefs_dialog.right_folder:NL:Rechter map
+prefs_dialog.right_folder:SK:Pravý priečinok
 
 prefs_dialog.last_folder:EN:Last visited folder
 prefs_dialog.last_folder:FR:Dernier dossier visité
@@ -7208,6 +7968,8 @@ prefs_dialog.last_folder:RO:Ultimul director vizitat
 prefs_dialog.last_folder:IT:Ultima cartella visitata
 prefs_dialog.last_folder:KR:최종 방문 폴더
 prefs_dialog.last_folder:pt_BR:Último diretório visitado
+prefs_dialog.last_folder:NL:Laatst bezochte map
+prefs_dialog.last_folder:SK:Naposledy navštívený priečinok
 
 prefs_dialog.custom_folder:EN:Custom folder
 prefs_dialog.custom_folder:FR:Dossier spécifique
@@ -7224,6 +7986,8 @@ prefs_dialog.custom_folder:RO:Director definit de utilizator
 prefs_dialog.custom_folder:IT:Cartella definita dall'utilizzatore
 prefs_dialog.custom_folder:KR:사용자 정의 폴더
 prefs_dialog.custom_folder:pt_BR:Diretório personalizado
+prefs_dialog.custom_folder:NL:Zelfgekozen map
+prefs_dialog.custom_folder:SK:Vlastný priečinok
 
 prefs_dialog.show_hidden_files:EN:Show hidden files
 prefs_dialog.show_hidden_files:FR:Afficher les fichiers cachés
@@ -7240,6 +8004,8 @@ prefs_dialog.show_hidden_files:IT:Mostra file nascosti
 prefs_dialog.show_hidden_files:RO:Afișează fișierele ascunse
 prefs_dialog.show_hidden_files:KR:숨김 파일 표시
 prefs_dialog.show_hidden_files:pt_BR:Exibir arquivos ocultos
+prefs_dialog.show_hidden_files:NL:Toon verborgen bestanden
+prefs_dialog.show_hidden_files:SK:Zobraziť skryté súbory
 # Translation missing
 
 
@@ -7261,6 +8027,8 @@ prefs_dialog.show_ds_store_files:ES:Mostrar ficheros .DS_Store
 prefs_dialog.show_ds_store_files:PL:Pokaż pliki .DS_Store
 prefs_dialog.show_ds_store_files:KR:.DS_Store 파일 표시
 prefs_dialog.show_ds_store_files:pt_BR:Exibir arquivos .DS_Store
+prefs_dialog.show_ds_store_files:NL:Toon .DS_Store bestanden
+prefs_dialog.show_ds_store_files:SK:Zobraziť súbory .DS_Store
 # Translation missing
 
 
@@ -7287,6 +8055,8 @@ prefs_dialog.show_system_folders:ES:Mostrar directorios de sistema
 prefs_dialog.show_system_folders:PL:Pokaż katalogi systemowe
 prefs_dialog.show_system_folders:KR:시스템 폴더 표시
 prefs_dialog.show_system_folders:pt_BR:Exibir diretórios de sistema
+prefs_dialog.show_system_folders:NL:Toon systeem-mappen
+prefs_dialog.show_system_folders:SK:Zobraziť systémové priečinky
 # Translation missing
 
 
@@ -7314,10 +8084,14 @@ prefs_dialog.compact_file_size:RO:Rotunjește dimensiunile afișate ale fișiere
 prefs_dialog.compact_file_size:IT:Arrotonda le grandezze dei file mostrate
 prefs_dialog.compact_file_size:KR:파일 크기(용량) 올림
 prefs_dialog.compact_file_size:pt_BR:Arendondar o tamanho dos arquivos exibidos
+prefs_dialog.compact_file_size:NL:Getoonde bestandsgroottes afronden
+prefs_dialog.compact_file_size:SK:Zaokrúhliť zobrazenú veľkosť súborov
 
 prefs_dialog.follow_symlinks_when_cd:EN:Follow symlinks when changing current directory
 prefs_dialog.follow_symlinks_when_cd:FR:Suivre les liens symboliques en changeant de répertoire courant
 prefs_dialog.follow_symlinks_when_cd:CS:Následovat symbolické odkazy při změnách složky
+prefs_dialog.follow_symlinks_when_cd:NL:Volg symbolische koppelingen bij wijzigen huidige directory
+prefs_dialog.follow_symlinks_when_cd:SK:Nasladovať symbolické odkazy pri zmenách aktuálneho priečinku
 # Translation missing
 
 
@@ -7346,6 +8120,8 @@ prefs_dialog.appearance_tab:RO:Înfățișare
 prefs_dialog.appearance_tab:IT:Aspetto
 prefs_dialog.appearance_tab:KR:모양새
 prefs_dialog.appearance_tab:pt_BR:Aparência
+prefs_dialog.appearance_tab:NL:Weergave
+prefs_dialog.appearance_tab:SK:Vzhľad
 
 prefs_dialog.look_and_feel:EN:Look & Feel
 prefs_dialog.look_and_feel:FR:Look & Feel
@@ -7362,6 +8138,8 @@ prefs_dialog.look_and_feel:RO:Look & Feel
 prefs_dialog.look_and_feel:IT:Look & Feel
 prefs_dialog.look_and_feel:KR:룩엔필
 prefs_dialog.look_and_feel:pt_BR:Look & Feel
+prefs_dialog.look_and_feel:NL:Look & Feel
+prefs_dialog.look_and_feel:SK:Vzhľad & chovanie
 
 prefs_dialog.icons_size:EN:Icon size
 prefs_dialog.icons_size:FR:Taille des icônes
@@ -7377,6 +8155,8 @@ prefs_dialog.icons_size:ES:Tamaño de icono
 prefs_dialog.icons_size:PL:Rozmiar ikon
 prefs_dialog.icons_size:KR:아이콘 크기
 prefs_dialog.icons_size:pt_BR:Tamanho dos ícones
+prefs_dialog.icons_size:NL:Grootte van iconen
+prefs_dialog.icons_size:SK:Veľkosť ikon
 # Translation missing
 
 
@@ -7400,6 +8180,8 @@ prefs_dialog.toolbar_icons:ES:Barra de herramientas
 prefs_dialog.toolbar_icons:PL:Pasek narzędzi
 prefs_dialog.toolbar_icons:KR:도구 바
 prefs_dialog.toolbar_icons:pt_BR:Barra de ferramentas
+prefs_dialog.toolbar_icons:NL:Gereedschappenbalk
+prefs_dialog.toolbar_icons:SK:Panel s nástrojmi
 # Translation missing
 
 
@@ -7423,6 +8205,8 @@ prefs_dialog.command_bar_icons:ES:Barra de comandos
 prefs_dialog.command_bar_icons:PL:Linia komend
 prefs_dialog.command_bar_icons:KR:명령 바
 prefs_dialog.command_bar_icons:pt_BR:Barra de comandos
+prefs_dialog.command_bar_icons:NL:Commandoregel
+prefs_dialog.command_bar_icons:SK:Panel príkazov
 # Translation missing
 
 
@@ -7445,6 +8229,8 @@ prefs_dialog.file_icons:ES:Tipos de ficheros
 prefs_dialog.file_icons:PL:Typy plików
 prefs_dialog.file_icons:KR:파일 타입
 prefs_dialog.file_icons:pt_BR:Tipos de arquivos
+prefs_dialog.file_icons:NL:Bestandstypen
+prefs_dialog.file_icons:SK:Typy súborov
 # Translation missing
 
 
@@ -7457,6 +8243,8 @@ prefs_dialog.use_system_file_icons:FR:Utiliser les icônes de fichier système
 prefs_dialog.use_system_file_icons:KR:시스템파일 아이콘 사용
 prefs_dialog.use_system_file_icons:CS:Použít systémové ikony
 prefs_dialog.use_system_file_icons:pt_BR:Utilisar arquivos de ícones do sistema
+prefs_dialog.use_system_file_icons:NL:Gebruik systeemeigen bestandsiconen
+prefs_dialog.use_system_file_icons:SK:Použiť systémové ikony
 # Translation missing
 
 
@@ -7472,6 +8260,8 @@ prefs_dialog.use_system_file_icons.always:FR:Toujours
 prefs_dialog.use_system_file_icons.always:KR:항상사용
 prefs_dialog.use_system_file_icons.always:CS:Vždy
 prefs_dialog.use_system_file_icons.always:pt_BR:Sempre
+prefs_dialog.use_system_file_icons.always:NL:Altijd
+prefs_dialog.use_system_file_icons.always:SK:Vždy
 # Translation missing
 
 
@@ -7487,6 +8277,8 @@ prefs_dialog.use_system_file_icons.never:FR:Jamais
 prefs_dialog.use_system_file_icons.never:KR:사용안함
 prefs_dialog.use_system_file_icons.never:CS:Nikdy
 prefs_dialog.use_system_file_icons.never:pt_BR:Nunca
+prefs_dialog.use_system_file_icons.never:NL:Nooit
+prefs_dialog.use_system_file_icons.never:SK:Nikdy
 # Translation missing
 
 
@@ -7502,6 +8294,8 @@ prefs_dialog.use_system_file_icons.applications:FR:Seulement pour les applicatio
 prefs_dialog.use_system_file_icons.applications:KR:어플리케이션만
 prefs_dialog.use_system_file_icons.applications:CS:Jen u aplikací
 prefs_dialog.use_system_file_icons.applications:pt_BR:Somente para aplicações
+prefs_dialog.use_system_file_icons.applications:NL:Alleen voor toepassingen
+prefs_dialog.use_system_file_icons.applications:SK:Iba pre aplikácie
 # Translation missing
 
 
@@ -7528,6 +8322,8 @@ prefs_dialog.font:RO:Font
 prefs_dialog.font:IT:Font
 prefs_dialog.font:KR:글꼴
 prefs_dialog.font:pt_BR:Fonte
+prefs_dialog.font:NL:Font
+prefs_dialog.font:SK:Písmo
 
 prefs_dialog.font_size:EN:Size
 prefs_dialog.font_size:FR:Taille
@@ -7544,6 +8340,8 @@ prefs_dialog.font_size:RO:Dimensiune
 prefs_dialog.font_size:IT:Dimensione
 prefs_dialog.font_size:KR:크기
 prefs_dialog.font_size:pt_BR:Tamanho
+prefs_dialog.font_size:NL:Grootte
+prefs_dialog.font_size:SK:Veľkosť
 
 prefs_dialog.font_style:EN:Style
 prefs_dialog.font_style:FR:Style
@@ -7560,6 +8358,8 @@ prefs_dialog.font_style:RO:Stil
 prefs_dialog.font_style:IT:Stile
 prefs_dialog.font_style:KR:스타일
 prefs_dialog.font_style:pt_BR:Estilo
+prefs_dialog.font_style:NL:Stijl
+prefs_dialog.font_style:SK:Štýl
 
 prefs_dialog.font_plain:EN:Plain
 prefs_dialog.font_plain:FR:Normal
@@ -7576,6 +8376,8 @@ prefs_dialog.font_plain:RO:Normal
 prefs_dialog.font_plain:IT:Normale
 prefs_dialog.font_plain:KR:일반
 prefs_dialog.font_plain:pt_BR:Normal
+prefs_dialog.font_plain:NL:Normaal
+prefs_dialog.font_plain:SK:Normálny
 
 prefs_dialog.font_bold:EN:Bold
 prefs_dialog.font_bold:FR:Gras
@@ -7592,6 +8394,8 @@ prefs_dialog.font_bold:RO:Îngroșat
 prefs_dialog.font_bold:IT:Grassetto
 prefs_dialog.font_bold:KR:볼드
 prefs_dialog.font_bold:pt_BR:Negrito
+prefs_dialog.font_bold:NL:Vet
+prefs_dialog.font_bold:SK:Tučné
 
 prefs_dialog.font_italic:EN:Italic
 prefs_dialog.font_italic:FR:Italique
@@ -7608,6 +8412,8 @@ prefs_dialog.font_italic:RO:Cursiv
 prefs_dialog.font_italic:IT:Corsivo
 prefs_dialog.font_italic:KR:이탤릭
 prefs_dialog.font_italic:pt_BR:Itálico
+prefs_dialog.font_italic:NL:Schuin
+prefs_dialog.font_italic:SK:Kurzíva
 
 prefs_dialog.font_bold_italic:EN:Bold & italic
 prefs_dialog.font_bold_italic:FR:Gras et italique
@@ -7624,6 +8430,8 @@ prefs_dialog.font_bold_italic:RO:Îngroșat și cursiv
 prefs_dialog.font_bold_italic:IT:Grassetto & italico
 prefs_dialog.font_bold_italic:KR:볼드 & 이탤릭
 prefs_dialog.font_bold_italic:pt_BR:Negrito & itálico
+prefs_dialog.font_bold_italic:NL:Vet en schuin
+prefs_dialog.font_bold_italic:SK:Tučné a kurzíva
 
 prefs_dialog.background_colors:EN:Background colors
 prefs_dialog.background_colors:FR:Couleurs de fond
@@ -7640,6 +8448,8 @@ prefs_dialog.background_colors:RO:Culori de fundal
 prefs_dialog.background_colors:IT:Colori sfondo
 prefs_dialog.background_colors:KR:바탕 색상
 prefs_dialog.background_colors:pt_BR:Cor de fundo
+prefs_dialog.background_colors:NL:Achtergrondkleuren
+prefs_dialog.background_colors:SK:Farba pozadia
 
 prefs_dialog.background_color:EN:Background
 prefs_dialog.background_color:FR:Fond
@@ -7656,6 +8466,8 @@ prefs_dialog.background_color:RO:Fond
 prefs_dialog.background_color:IT:Sfondo
 prefs_dialog.background_color:KR:바탕
 prefs_dialog.background_color:pt_BR:Fundo
+prefs_dialog.background_color:NL:Achtergrond
+prefs_dialog.background_color:SK:Pozadie
 
 prefs_dialog.selection_color:EN:Selection background
 prefs_dialog.selection_color:FR:Fond de la sélection
@@ -7672,6 +8484,8 @@ prefs_dialog.selection_color:RO:Fondul selecției
 prefs_dialog.selection_color:IT:Selezione sfondo
 prefs_dialog.selection_color:KR:셀렉션 바탕 색상
 prefs_dialog.selection_color:pt_BR:Selecionar fundo
+prefs_dialog.selection_color:NL:Selectieachtergrond
+prefs_dialog.selection_color:SK:Pozadie výberu
 
 prefs_dialog.not_in_focus_selection_color:EN:Selection background when not in focus
 prefs_dialog.not_in_focus_selection_color:FR:Fond de la sélection sans focus
@@ -7687,6 +8501,8 @@ prefs_dialog.not_in_focus_selection_color:ES:Seleccionar fondo cuando no enfocad
 prefs_dialog.not_in_focus_selection_color:PL:Tło zaznaczenia kiedy nieaktywne
 prefs_dialog.not_in_focus_selection_color:KR:커서가 없을 경우 셀렉션 바탕 선택
 prefs_dialog.not_in_focus_selection_color:pt_BR:Selecionar fundo quando não estiver em foco
+prefs_dialog.not_in_focus_selection_color:NL:Selectieachtergrond indien niet in focus
+prefs_dialog.not_in_focus_selection_color:SK:Pozadie výberu bez fókusu
 # Translation missing
 
 
@@ -7714,6 +8530,8 @@ prefs_dialog.font_colors:RO:Culori pentru text
 prefs_dialog.font_colors:IT:Colori font
 prefs_dialog.font_colors:KR:글꼴 색상
 prefs_dialog.font_colors:pt_BR:Cor da fonte
+prefs_dialog.font_colors:NL:Letterkleuren
+prefs_dialog.font_colors:SK:Farba písma
 
 prefs_dialog.plain_file_color:EN:Plain file
 prefs_dialog.plain_file_color:FR:Fichier normal
@@ -7730,6 +8548,8 @@ prefs_dialog.plain_file_color:RO:Fișier normal
 prefs_dialog.plain_file_color:IT:File normale
 prefs_dialog.plain_file_color:KR:일반 파일
 prefs_dialog.plain_file_color:pt_BR:Arquivo normal
+prefs_dialog.plain_file_color:NL:Normaal bestand
+prefs_dialog.plain_file_color:SK:Bežný súbor
 
 prefs_dialog.marked_file_color:EN:Marked file
 prefs_dialog.marked_file_color:FR:Fichier marqué
@@ -7746,6 +8566,8 @@ prefs_dialog.marked_file_color:RO:Fișier selectat
 prefs_dialog.marked_file_color:IT:File selezionato
 prefs_dialog.marked_file_color:KR:선택된 파일
 prefs_dialog.marked_file_color:pt_BR:Arquivo marcado
+prefs_dialog.marked_file_color:NL:Gemarkeerd bestand
+prefs_dialog.marked_file_color:SK:Označený súbor
 
 prefs_dialog.selected_file_color:EN:Selected file
 prefs_dialog.selected_file_color:FR:Fichier sélectionné
@@ -7762,6 +8584,8 @@ prefs_dialog.selected_file_color:RO:Fișier activ
 prefs_dialog.selected_file_color:IT:File selezionato
 prefs_dialog.selected_file_color:KR:셀렉트 파일
 prefs_dialog.selected_file_color:pt_BR:Arquivo selecionado
+prefs_dialog.selected_file_color:NL:Geselecteerd bestand
+prefs_dialog.selected_file_color:SK:Vybraný súbor
 
 prefs_dialog.hidden_file_color:EN:Hidden file
 prefs_dialog.hidden_file_color:FR:Fichier caché
@@ -7778,6 +8602,8 @@ prefs_dialog.hidden_file_color:RO:Fișier ascuns
 prefs_dialog.hidden_file_color:IT:File nascosto
 prefs_dialog.hidden_file_color:KR:숨김파일
 prefs_dialog.hidden_file_color:pt_BR:Arquivo oculto
+prefs_dialog.hidden_file_color:NL:Verborgen bestand
+prefs_dialog.hidden_file_color:SK:Skrutý súbor
 
 prefs_dialog.folder_color:EN:Folder
 prefs_dialog.folder_color:FR:Dossier
@@ -7794,6 +8620,8 @@ prefs_dialog.folder_color:RO:Director
 prefs_dialog.folder_color:IT:Cartella
 prefs_dialog.folder_color:KR:폴더
 prefs_dialog.folder_color:pt_BR:Diretório
+prefs_dialog.folder_color:NL:Map
+prefs_dialog.folder_color:SK:Priečinok
 
 prefs_dialog.archive_file_color:EN:Archive file
 prefs_dialog.archive_file_color:FR:Archive
@@ -7810,6 +8638,8 @@ prefs_dialog.archive_file_color:RO:Arhivă
 prefs_dialog.archive_file_color:IT:Archivio
 prefs_dialog.archive_file_color:KR:아카이브 파일
 prefs_dialog.archive_file_color:pt_BR:Arquivar
+prefs_dialog.archive_file_color:NL:Ingepakt bestand
+prefs_dialog.archive_file_color:SK:Archív
 
 prefs_dialog.symbolic_link_color:EN:Symbolic link
 prefs_dialog.symbolic_link_color:FR:Lien symbolique
@@ -7826,6 +8656,8 @@ prefs_dialog.symbolic_link_color:RO:Legătură simbolică
 prefs_dialog.symbolic_link_color:IT:Link simbolico
 prefs_dialog.symbolic_link_color:KR:심볼릭 링크
 prefs_dialog.symbolic_link_color:pt_BR:Link simbólico
+prefs_dialog.symbolic_link_color:NL:Symbolische link
+prefs_dialog.symbolic_link_color:SK:Symbolický odkaz
 
 prefs_dialog.pick_a_color:EN:Pick a color
 prefs_dialog.pick_a_color:FR:Choisir une couleur
@@ -7842,6 +8674,8 @@ prefs_dialog.pick_a_color:RO:Alegeți o culoare
 prefs_dialog.pick_a_color:IT:Scegli un colore
 prefs_dialog.pick_a_color:KR:색상 선택
 prefs_dialog.pick_a_color:pt_BR:Selecionar uma cor
+prefs_dialog.pick_a_color:NL:Kies een kleur
+prefs_dialog.pick_a_color:SK:Vyberte farbu
 
 prefs_dialog.shell_colors:EN:Shell colors
 prefs_dialog.shell_colors:FR:Couleurs du shell
@@ -7857,6 +8691,8 @@ prefs_dialog.shell_colors:ES:Colores de shell
 prefs_dialog.shell_colors:PL:Kolor okna terminala (shell)
 prefs_dialog.shell_colors:KR:쉘 색상
 prefs_dialog.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
+prefs_dialog.shell_colors:NL:Kleuren van de shell
+prefs_dialog.shell_colors:SK:Farba terminálu (shell)
 # Translation missing
 
 
@@ -7881,6 +8717,8 @@ prefs_dialog.shell_colors.text_color:ES:Texto
 prefs_dialog.shell_colors.text_color:PL:Tekst
 prefs_dialog.shell_colors.text_color:KR:텍스트
 prefs_dialog.shell_colors.text_color:pt_BR:Texto
+prefs_dialog.shell_colors.text_color:NL:Tekst
+prefs_dialog.shell_colors.text_color:SK:Text
 # Translation missing
 
 
@@ -7907,6 +8745,8 @@ prefs_dialog.themes:ES:Temas
 prefs_dialog.themes:PL:Tematy wizualne (skórki)
 prefs_dialog.themes:KR:테마
 prefs_dialog.themes:pt_BR:Temas
+prefs_dialog.themes:NL:Thema's
+prefs_dialog.themes:SK:Témy
 # Translation missing
 
 
@@ -7931,6 +8771,8 @@ prefs_dialog.theme_warning:ES:Esto sobrescribirá el tema específico. ¿Desea p
 prefs_dialog.theme_warning:PL:Spowoduje to nadpisanie schematu użytkownika. Czy chcesz kontynuować?
 prefs_dialog.theme_warning:KR:사용자 설정 테마를 겹쳐쓸것입니다. 계속할까요?
 prefs_dialog.theme_warning:pt_BR:Esta ação irá sobrescrever o tema personalizado. Continuar?
+prefs_dialog.theme_warning:NL:Dit zal het huidige thema overschrijven. Wilt u doorgaan?
+prefs_dialog.theme_warning:SK:Užívateľská téma bude prepísaná. Naozaj chcete pokračovať?
 # Translation missing
 
 
@@ -7957,6 +8799,8 @@ prefs_dialog.mail_tab:RO:Email
 prefs_dialog.mail_tab:IT:Email
 prefs_dialog.mail_tab:KR:메일
 prefs_dialog.mail_tab:pt_BR:Email
+prefs_dialog.mail_tab:NL:Email
+prefs_dialog.mail_tab:SK:E-mail
 
 prefs_dialog.mail_settings:EN:Outgoing mail settings
 prefs_dialog.mail_settings:FR:Paramètres d'email sortant
@@ -7973,6 +8817,8 @@ prefs_dialog.mail_settings:RO:Parametrii email-urilor trimise
 prefs_dialog.mail_settings:IT:Parametri mail in uscita
 prefs_dialog.mail_settings:KR:보내는 메일 설정
 prefs_dialog.mail_settings:pt_BR:Parâmetros de saída de email
+prefs_dialog.mail_settings:NL:Instellingen voor uitgaande mail
+prefs_dialog.mail_settings:SK:Nastavenie odchádzajúcej pošty
 
 prefs_dialog.mail_name:EN:Your name
 prefs_dialog.mail_name:FR:Votre nom
@@ -7989,6 +8835,8 @@ prefs_dialog.mail_name:RO:Numele dumneavoastră
 prefs_dialog.mail_name:IT:Il Vostro Nome
 prefs_dialog.mail_name:KR:이름
 prefs_dialog.mail_name:pt_BR:Seu nome
+prefs_dialog.mail_name:NL:Naam
+prefs_dialog.mail_name:SK:Vaše meno
 
 prefs_dialog.mail_address:EN:Your email address
 prefs_dialog.mail_address:FR:Votre adresse email
@@ -8005,6 +8853,8 @@ prefs_dialog.mail_address:RO:Adresa dumneavoastră de email
 prefs_dialog.mail_address:IT:Il Vostro indirizzo email
 prefs_dialog.mail_address:KR:메일 주소
 prefs_dialog.mail_address:pt_BR:Seu endereço de email
+prefs_dialog.mail_address:NL:Uw email adres
+prefs_dialog.mail_address:SK:Váš e-mail
 
 prefs_dialog.mail_server:EN:SMTP server
 prefs_dialog.mail_server:FR:Serveur SMTP
@@ -8021,6 +8871,8 @@ prefs_dialog.mail_server:RO:Serverul SMTP
 prefs_dialog.mail_server:IT:SMTP server 
 prefs_dialog.mail_server:KR:SMTP 서버
 prefs_dialog.mail_server:pt_BR:Servidor SMTP
+prefs_dialog.mail_server:NL:SMTP server
+prefs_dialog.mail_server:SK:Server SMTP
 
 # Misc tab
 
@@ -8039,6 +8891,8 @@ prefs_dialog.misc_tab:RO:Altele
 prefs_dialog.misc_tab:IT:Altro
 prefs_dialog.misc_tab:KR:기타
 prefs_dialog.misc_tab:pt_BR:Miscelânia
+prefs_dialog.misc_tab:NL:Diversen
+prefs_dialog.misc_tab:SK:Rôzne
 
 # Mac OS X only
 prefs_dialog.use_brushed_metal:EN:Use 'brushed metal' look (requires restart)
@@ -8056,6 +8910,8 @@ prefs_dialog.use_brushed_metal:RO:Folosește "look"-ul "brushed metal" (necesit�
 prefs_dialog.use_brushed_metal:IT:Usa 'brushed metal' look (richiede restart)
 prefs_dialog.use_brushed_metal:KR:'브러쉬드 메탈' 룩을 사용합니다 (재시작 필요)
 prefs_dialog.use_brushed_metal:pt_BR:Usar aparência de 'brushed metal' (requer reiniciar)
+prefs_dialog.use_brushed_metal:NL:Gebruik 'brushet metal' uiterlijk (herstarten vereist)
+prefs_dialog.use_brushed_metal:SK:Použiť vzhľad 'brushed metal' (vyžaduje reštart)
 
 # Mac OS X only
 prefs_dialog.confirm_on_quit:EN:Show confirmation dialog on quit
@@ -8073,6 +8929,8 @@ prefs_dialog.confirm_on_quit:RO:Afișează dialogul de confirmare la ieșire
 prefs_dialog.confirm_on_quit:IT:Mostra pannello di conferma in uscita
 prefs_dialog.confirm_on_quit:KR:종료시에 확인창을 띄웁니다
 prefs_dialog.confirm_on_quit:pt_BR:Pedir confirmação ao sair
+prefs_dialog.confirm_on_quit:NL:Toon bevestigingsdialoog bij afsluiten
+prefs_dialog.confirm_on_quit:SK:Pri ukončovaní zobraziť potvrdzujúci dialóg
 
 prefs_dialog.shell:EN:$[com.mucommander.ui.action.RunCommandAction.label]
 
@@ -8090,6 +8948,8 @@ prefs_dialog.default_shell:ES:Utilizar shell predeterminada del sistema
 prefs_dialog.default_shell:PL:Użyj domylnego systemowego shella
 prefs_dialog.default_shell:KR:기본 시스템 쉘을 사용합니다
 prefs_dialog.default_shell:pt_BR:Usar prompt de comando padrão do sistema
+prefs_dialog.default_shell:NL:Gebruik voorkeursshell van het systeem
+prefs_dialog.default_shell:SK:Použiť preddefinovaný systémový shell
 # Translation missing
 
 
@@ -8113,6 +8973,8 @@ prefs_dialog.custom_shell:ES:Utilizar shell específica
 prefs_dialog.custom_shell:PL:Użyj shella użytkownika
 prefs_dialog.custom_shell:KR:사용자 정의 쉘을 사용합니다
 prefs_dialog.custom_shell:pt_BR:Usar prompt de comando personalizado
+prefs_dialog.custom_shell:NL:Gebruik zelfgekozen shell
+prefs_dialog.custom_shell:SK:Použiť vlastný shell
 # Translation missing
 
 
@@ -8136,6 +8998,8 @@ prefs_dialog.enable_bonjour_discovery:ES:Activar servicios de descubrimiento de 
 prefs_dialog.enable_bonjour_discovery:PL:Uaktywnij Powitanie
 prefs_dialog.enable_bonjour_discovery:KR:Bonjour서비스 탐색을 켭니다
 prefs_dialog.enable_bonjour_discovery:pt_BR:Abilitar Bonjour service discovery
+prefs_dialog.enable_bonjour_discovery:NL:Schakel bonjour services discovery in
+prefs_dialog.enable_bonjour_discovery:SK:Povoliť služby Bonjour discoveny
 # Translation missing
 
 
@@ -8149,6 +9013,8 @@ prefs_dialog.enable_bonjour_discovery:pt_BR:Abilitar Bonjour service discovery
 # System notifications are displayed in the System tray, or using Growl under Mac OS X
 prefs_dialog.enable_system_notifications:EN:Enable system notifications
 prefs_dialog.enable_system_notifications:FR:Activer les notifications système
+prefs_dialog.enable_system_notifications:NL:Schakel systeemnotificaties in
+prefs_dialog.enable_system_notifications:SK:Povoliť systémové oznámenia (v system tray)
 # Translation missing
 
 
@@ -8179,6 +9045,8 @@ unit.byte:RO:octet
 unit.byte:IT:byte
 unit.byte:KR:byte
 unit.byte:pt_BR:byte
+unit.byte:NL:byte
+unit.byte:SK:bajt
 
 unit.bytes:EN:bytes
 unit.bytes:FR:octets
@@ -8195,6 +9063,8 @@ unit.bytes:RO:octeți
 unit.bytes:IT:bytes
 unit.bytes:KR:bytes
 unit.bytes:pt_BR:bytes
+unit.bytes:NL:bytes
+unit.bytes:SK:bajty
 
 unit.bytes_short:EN:b
 unit.bytes_short:FR:o
@@ -8211,6 +9081,8 @@ unit.bytes_short:RO:o
 unit.bytes_short:IT:b
 unit.bytes_short:KR:b
 unit.bytes_short:pt_BR:b
+unit.bytes_short:NL:b
+unit.bytes_short:SK:b
 
 unit.kb:EN:KB
 unit.kb:FR:Ko
@@ -8227,6 +9099,8 @@ unit.kb:RO:Ko
 unit.kb:IT:KB
 unit.kb:KR:KB
 unit.kb:pt_BR:KB
+unit.kb:NL:KB
+unit.kb:SK:KB
 
 unit.mb:EN:MB
 unit.mb:FR:Mo
@@ -8243,6 +9117,8 @@ unit.mb:RO:Mo
 unit.mb:IT:MB
 unit.mb:KR:MB
 unit.mb:pt_BR:MB
+unit.mb:NL:MB
+unit.mb:SK:MB
 
 unit.gb:EN:GB
 unit.gb:FR:Go
@@ -8259,6 +9135,8 @@ unit.gb:RO:Go
 unit.gb:IT:GB
 unit.gb:KR:GB
 unit.gb:pt_BR:GB
+unit.gb:NL:GB
+unit.gb:SK:GB
 
 unit.tb:EN:TB
 unit.tb:FR:To
@@ -8275,6 +9153,8 @@ unit.tb:RO:To
 unit.tb:IT:TB
 unit.tb:KR:TB
 unit.tb:pt_BR:TB
+unit.tb:NL:TB
+unit.tb:SK:TB
 
 unit.speed:EN:%1/s
 unit.speed:FR:%1/s
@@ -8291,6 +9171,8 @@ unit.speed:RO:%1/s
 unit.speed:IT:%1/s
 unit.speed:KR:%1/s
 unit.speed:pt_BR:%1/s
+unit.speed:NL:%1/s
+unit.speed:SK:%1/s
 
 
 ############
@@ -8311,6 +9193,8 @@ duration.seconds:ES:%1s
 duration.seconds:PL:%1s
 duration.seconds:KR:%1s
 duration.seconds:pt_BR:%1s
+duration.seconds:NL:%1s
+duration.seconds:SK:%1s
 # Translation missing
 
 
@@ -8332,6 +9216,8 @@ duration.minutes:ES:%1m
 duration.minutes:PL:%1m
 duration.minutes:KR:%1m
 duration.minutes:pt_BR:%1m
+duration.minutes:NL:%1m
+duration.minutes:SK:%1m
 # Translation missing
 
 
@@ -8353,6 +9239,8 @@ duration.hours:ES:%1h
 duration.hours:PL:%1g
 duration.hours:KR:%1h
 duration.hours:pt_BR:%1h
+duration.hours:NL:%1h
+duration.hours:SK:%1h
 # Translation missing
 
 
@@ -8375,6 +9263,8 @@ duration.days:ES:%1d
 duration.days:PL:%1d
 duration.days:KR:%1d
 duration.days:pt_BR:%1d
+duration.days:NL:%1d
+duration.days:SK:%1d
 # Translation missing
 
 
@@ -8397,6 +9287,8 @@ duration.months:ES:%1me
 duration.months:PL:%1M
 duration.months:KR:%1mo
 duration.months:pt_BR:%1m
+duration.months:NL:%1mnd
+duration.months:SK:%1mesiacov
 # Translation missing
 
 
@@ -8419,6 +9311,8 @@ duration.years:ES:%1a
 duration.years:PL:%1r
 duration.years:KR:%1y
 duration.years:pt_BR:%1a
+duration.years:NL:%1jr
+duration.years:SK:%1rokov
 # Translation missing
 
 
@@ -8448,6 +9342,8 @@ theme.custom_theme:ES:Tema personalizado
 theme.custom_theme:PL:Temat użytkownika
 theme.custom_theme:KR:사용자 테마
 theme.custom_theme:pt_BR:Tema personalizado
+theme.custom_theme:NL:Zelfgemaakt thema
+theme.custom_theme:SK:Užívateľská téma
 # Translation missing
 
 
@@ -8473,6 +9369,8 @@ theme_could_not_be_loaded:ES:Ocurrió un error mientras se cargaba éste tema.
 theme_could_not_be_loaded:PL:Wystąpł błąd podczas ładowania tematu wizualnego
 theme_could_not_be_loaded:KR:테마를 읽는중에 오류가 발생하였습니다
 theme_could_not_be_loaded:pt_BR:Ocorreu um erro ao tentar carregar este tema.
+theme_could_not_be_loaded:NL:Er deed zich een fout voor bij het laden van dit thema.
+theme_could_not_be_loaded:SK:Chyba pri načítavaní témy.
 # Translation missing
 
 
@@ -8504,6 +9402,8 @@ setup.title:ES:Bienvenida/o a muCommander
 setup.title:PL:Witamy w programie muCommander
 setup.title:KR:muCommander에 환영합니다
 setup.title:pt_BR:Bem-vindo ao muCommander
+setup.title:NL:Welkom bij muCommander
+setup.title:SK:Víta Vás muCommander
 # Translation missing
 
 
@@ -8524,6 +9424,8 @@ setup.intro:ES:Por favor, seleccione la forma en la que desea que muCommander se
 setup.intro:PL:Proszę wybrać sposób otrzymania muCommander.
 setup.intro:KR:muCommander가 작동하는 방식을 선택하세요
 setup.intro:pt_BR:Por favor, selecione como o muCommander deve se comportar.
+setup.intro:NL:Kiest u a.u.b. de manier waarop muCommander zich moet gedragen.
+setup.intro:SK:Prosím, zvoľte vlastné nastavenie aplikácie muCommander.
 # Translation missing
 
 
@@ -8546,6 +9448,8 @@ setup.look_and_feel:ES:Seleccione su Look & feel
 setup.look_and_feel:PL:Wygląd i zachowanie
 setup.look_and_feel:KR:룩엔필을 선택하세요
 setup.look_and_feel:pt_BR:Selecione seu Look & feel
+setup.look_and_feel:NL:Kies uw Look & feel
+setup.look_and_feel:SK:Vyberte Vzhľad & chovanie
 # Translation missing
 
 
@@ -8568,6 +9472,8 @@ setup.theme:ES:Seleccione su tema
 setup.theme:PL:Wybierz temat wizualny
 setup.theme:KR:테마선택
 setup.theme:pt_BR:Selecione seu tema
+setup.theme:NL:Kies uw thema
+setup.theme:SK:Vyberte tému
 # Translation missing
 
 

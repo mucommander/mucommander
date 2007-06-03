@@ -86,6 +86,9 @@ Translators:
 - Joze Kovacic (Slovenian)
 - Catalin Hritcu (Romanian)
 - Roberto Angeletti (Italian)
+- Cristiano Duarte (Brazilian Portuguese)
+- Pieter Kristensen (Dutch)
+- Ján Ľudvík (Slovak)
 
 Many thanks to all of you who suggested new features, reported bugs, sent warm emails or generously donated to the project !
 
@@ -239,6 +242,8 @@ Improvements:
 Localization:
  - Korean translation contributed by Jioh L. Jung
  - Brazilian Portuguese translation contributed by Cristiano Duarte
+ - Dutch translation contributed by Pieter Kristensen
+ - Slovak translation contributed by Ján Ľudvík
  - Russian translation update
  - Czech translation update
 
