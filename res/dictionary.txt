@@ -79,7 +79,7 @@ language.si:EN:Slovenščina
 language.ro:EN:Română
 language.it:EN:Italiano
 language.kr:EN:한국어
-language.pt_BR:EN:Português_BR
+language.pt_BR:EN:Português brasileiro
 language.nl:EN:Nederlands
 language.sk:EN:Slovenčina
 
