@@ -10,23 +10,11 @@ import java.awt.Font;
 public interface ThemeListener {
     /**
      * Notifies the listener that a color has been changed.
-     * <p>
-     * Note that the color parameter might be set to <code>null</code>.
-     * This means that the corresponding color is the system default.
-     * </p>
-     * @param colorId identifier of the color that has changed.
-     * @param color   new value for the color.
      */
-    public void colorChanged(int colorId, Color color);
+    public void colorChanged(ColorChangedEvent event);
 
     /**
      * Notifies the listener that a font has been changed.
-     * <p>
-     * Note that the font parameter might be set to <code>null</code>.
-     * This means that the corresponding font is the system default.
-     * </p>
-     * @param fontId identifier of the font that has changed.
-     * @param font   new value for the font.
      */
-    public void fontChanged(int fontId, Font font);
+    public void fontChanged(FontChangedEvent event);
 }

@@ -38,14 +38,15 @@ public class ThemeManager {
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Whether or not the user theme was modified. */
-    private static boolean wasUserThemeModified;
+    private static boolean       wasUserThemeModified;
     /** Theme that is currently applied to muCommander. */
-    private static Theme   currentTheme;
-
+    private static Theme         currentTheme;
+    private static ThemeListener listener = new CurrentThemeListener();
 
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Prevents instanciations of the class.
      */
@@ -106,7 +107,7 @@ public class ThemeManager {
                     catch(Exception e3) {}
                 }
                 if(currentTheme == null) {
-                    currentTheme         = new Theme(Theme.USER_THEME, null);
+                    currentTheme         = new Theme(listener);
                     wasUserThemeModified = true;
                 }
             }
@@ -170,6 +171,14 @@ public class ThemeManager {
      * Note that this method guarantees that any theme it returns is indeed available. If one theme's XML file
      * has become unavailable or corrupt, it won't be listed.
      * </p>
+     * <p>
+     * An important pitfall of this method is that it returns the themes as they are know at a specific point of time.
+     * If instances of themes were kept from a previous call, they might very well be inconsistant with the new ones.
+     * This will typically happen when the user theme was modified but not saved: the 'old' user theme and the 'new' one
+     * will hold different values.<br/>
+     * While the current theme is guaranteed to stay up-to-date, the user theme can easily changed using the
+     * {@link #overwriteUserTheme(Theme)} method.
+     * </p>
      * @return an iterator on all available themes.
      */
     public static synchronized Iterator availableThemes() {
@@ -179,7 +188,7 @@ public class ThemeManager {
 
         // Tries to load the user theme. If it's corrupt, uses an empty user theme.
         try {themes.add(getTheme(Theme.USER_THEME, null));}
-        catch(Exception e) {themes.add(new Theme(Theme.USER_THEME, null));}
+        catch(Exception e) {themes.add(new Theme(listener));}
 
         // Loads custom and predefined themes.
         loadPredefinedThemes(themes);
@@ -203,7 +212,7 @@ public class ThemeManager {
      * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
      * </p>
      * @return the path to the user's theme file.
-     * @see    #setUserThemeFile()
+     * @see    #setUserThemeFile(String)
      * @see    #saveUserTheme()
      */
     public static String getUserThemeFile() {
@@ -266,25 +275,34 @@ public class ThemeManager {
      * @param  name name of the theme to retrieve.
      * @return the requested theme.
      */
-    private static final Theme getTheme(int type, String name) throws Exception {
+    public static final Theme getTheme(int type, String name) throws Exception {
         Theme theme;
+        ThemeData template;
+
+        // Do not reload the current theme, both for optimisation purposes and because
+        // it might cause user theme modifications to be lost.
+        if(currentTheme != null && isCurrentTheme(type, name))
+            return currentTheme;
 
         switch(type) {
             // User defined theme.
         case Theme.USER_THEME:
-            ThemeReader.read(new BackupInputStream(ThemeManager.getUserThemeFile()), theme = new Theme(Theme.USER_THEME, null));
+            ThemeReader.read(new BackupInputStream(ThemeManager.getUserThemeFile()), template = new ThemeData());
+            theme = new Theme(listener, template);
             break;
 
             // Predefined themes.
         case Theme.PREDEFINED_THEME:
             ThemeReader.read(ResourceLoader.getResourceAsStream(RuntimeConstants.THEMES_PATH + "/" + name + ".xml"),
-                             theme = new Theme(Theme.PREDEFINED_THEME, name));
+                             template = new ThemeData());
+            theme = new Theme(listener, template, Theme.PREDEFINED_THEME, name);
             break;
 
             // Custom themes.
         case Theme.CUSTOM_THEME:
             ThemeReader.read(new FileInputStream(new File(ThemeManager.getCustomThemesFolder(), name + ".xml")),
-                             theme = new Theme(Theme.CUSTOM_THEME, name));
+                             template = new ThemeData());
+            theme = new Theme(listener, template, Theme.CUSTOM_THEME, name);
             break;
 
             // Error.
@@ -295,7 +313,7 @@ public class ThemeManager {
         return theme;
     }
 
-    private static synchronized boolean saveTheme(Theme theme) {
+    public static synchronized boolean saveTheme(Theme theme) {
         OutputStream out;
 
         out = null;
@@ -338,20 +356,7 @@ public class ThemeManager {
 
     // - Current theme access ------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /**
-     * Sends events to all listeners with the current theme values.
-     * <p>
-     * This is meant to force a refresh of the whole UI, which can be usefull when
-     * the current look and feel has changed, for example.
-     * </p>
-     */
-    public static void forceRefresh() {
-        for(int i = 0; i < Theme.FONT_COUNT; i++)
-            triggerFontEvent(i, getCurrentFont(i));
-
-        for(int i = 0; i < Theme.COLOR_COUNT; i++)
-            triggerColorEvent(i, getCurrentColor(i));
-    }
+    public static Theme getCurrentTheme() {return currentTheme;}
 
     /**
      * Sets the specified theme as the current theme in configuration.
@@ -404,124 +409,52 @@ public class ThemeManager {
 
         // Updates muCommander's configuration.
         oldTheme = currentTheme;
-	setConfigurationTheme(currentTheme = theme);
+        setConfigurationTheme(currentTheme = theme);
 
+        // Triggers the events generated by the theme change.
+        triggerThemeChange(oldTheme, currentTheme);
+    }
+
+    private static void triggerThemeChange(Theme oldTheme, Theme newTheme) {
         // Triggers font events.
         for(int i = 0; i < Theme.FONT_COUNT; i++) {
-            if(!oldTheme.getFont(i).equals(currentTheme.getFont(i)))
-                triggerFontEvent(i, currentTheme.getFont(i));
+            if(!oldTheme.getFont(i).equals(newTheme.getFont(i)))
+                triggerFontEvent(new FontChangedEvent(currentTheme, i, newTheme.getFont(i)));
         }
 
         // Triggers color events.
         for(int i = 0; i < Theme.COLOR_COUNT; i++) {
-            if(!oldTheme.getColor(i).equals(currentTheme.getColor(i)))
-               triggerColorEvent(i, currentTheme.getColor(i));
+            if(!oldTheme.getColor(i).equals(newTheme.getColor(i)))
+                triggerColorEvent(new ColorChangedEvent(currentTheme, i, newTheme.getColor(i)));
         }
     }
 
-    public synchronized static Font getCurrentFont(int id) {return getFont(id, currentTheme);}
+    public synchronized static Font getCurrentFont(int id) {return currentTheme.getFont(id);}
 
-    private static Font getFont(int id, Theme theme) {
-        Font font;
-
-        // If the requested font is not defined in the current theme,
-        // returns its default value.
-        if((theme == null) || (font = theme.getFont(id, false)) == null)
-            return getDefaultFont(id, theme);
-        return font;
-    }
-
-    public synchronized static Color getCurrentColor(int id) {return getColor(id, currentTheme);}
-
-    private static Color getColor(int id, Theme theme) {
-        Color color;
-
-        // If the requested color is not defined in the current theme,
-        // returns its default value.
-        if((theme == null) || (color = theme.getColor(id, false)) == null)
-            return getDefaultColor(id, theme);
-        return color;
-    }
-
-    /**
-     * Sets the specified font for the current theme.
-     * <p>
-     * This is equivalent to calling <code>setCurrentFont(id, font, true)</code>.
-     * </p>
-     * @see        #setCurrentFont(int,Font,boolean)
-     * @param id   identifier of the font to set.
-     * @param font new font value.
-     */
-    public synchronized static boolean setCurrentFont(int id, Font font) {return setCurrentFont(id, font, true);}
-
-    /**
-     * Sets the specified color for the current theme.
-     * <p>
-     * This is equivalent to calling <code>setCurrentColor(id, color, true)</code>.
-     * </p>
-     * @see         #setCurrentColor(int,Color,boolean)
-     * @param id    identifier of the color to set.
-     * @param color new color value.
-     */
-    public synchronized static boolean setCurrentColor(int id, Color color) {return setCurrentColor(id, color, true);}
+    public synchronized static Color getCurrentColor(int id) {return currentTheme.getColor(id);}
 
     /**
      * Copies the current theme over the user theme.
      */
-    private static void overwriteUserTheme() {
-        currentTheme.setType(Theme.USER_THEME);
-        setConfigurationTheme(currentTheme);
+    public synchronized static void overwriteUserTheme(Theme theme) {
+        boolean updateCurrentTheme;
+
+        updateCurrentTheme = currentTheme.getType() == Theme.USER_THEME;
+
+        // Marks the current theme as the user one and saves it.
+        theme.setType(Theme.USER_THEME);
+        if(theme == currentTheme)
+            setConfigurationTheme(theme);
         wasUserThemeModified = true;
-    }
 
-    /**
-     * Checks whether the setting the specified font would actually change the current theme.
-     * @param  fontId identifier of the font to set.
-     * @param  font   value for the font to set.
-     * @return        <code>true</code> if applying the font would change the current theme, <code>false</code> otherwise.
-     */
-    private static boolean needsUpdate(int fontId, Font font) {
-        Font oldFont;
+        // If the user theme was the current one, notifies listeners of any change.
+        if(updateCurrentTheme) {
+            Theme oldTheme;
 
-	// Retrieves the old font to check whether its different
-	// from the new one.
-	oldFont = currentTheme.getFont(fontId, false);
-
-	// Trying to set a default font over a non-default one.
-	if(font == null)
-	    return oldFont != null;
-
-	// Trying to set a non default over a default one.
-	if(oldFont == null)
-	    return !getCurrentFont(fontId).equals(font);
-
-	// Checks whether both fonts are different.
-	return !oldFont.equals(font);
-    }
-
-    /**
-     * Checks whether the setting the specified color would actually change the current theme.
-     * @param  colorId identifier of the color to set.
-     * @param  color   value for the color to set.
-     * @return         <code>true</code> if applying the color would change the current theme, <code>false</code> otherwise.
-     */
-    private static boolean needsUpdate(int colorId, Color color) {
-        Color oldColor;
-
-	// Retrieves the old color to check whether its different
-	// from the new one.
-	oldColor = currentTheme.getColor(colorId, false);
-
-	// Trying to set a default color over a non-default one.
-	if(color == null)
-	    return oldColor != null;
-
-	// Trying to set a non default color over a default one.
-	if(oldColor == null)
-	    return !getCurrentColor(colorId).equals(color);
-
-	// Checks whether both colors are different.
-	return !oldColor.equals(color);
+            oldTheme     = currentTheme;
+            currentTheme = theme;
+            triggerThemeChange(oldTheme, currentTheme);
+        }
     }
 
     /**
@@ -532,7 +465,7 @@ public class ThemeManager {
      *                <code>false</code> otherwise.
      */
     public synchronized static boolean willOverwriteUserTheme(int fontId, Font font) {
-        if(needsUpdate(fontId, font))
+        if(currentTheme.isFontDifferent(fontId, font))
             return currentTheme.getType() != Theme.USER_THEME;
         return false;
     }
@@ -545,7 +478,7 @@ public class ThemeManager {
      *                 <code>false</code> otherwise.
      */
     public synchronized static boolean willOverwriteUserTheme(int colorId, Color color) {
-        if(needsUpdate(colorId, color))
+        if(currentTheme.isColorDifferent(colorId, color))
             return currentTheme.getType() != Theme.USER_THEME;
         return false;
     }
@@ -556,33 +489,24 @@ public class ThemeManager {
      * This method might require to overwrite the user theme: custom and predefined themes are
      * read only. In order to modify them, the ThemeManager must overwrite the user theme with
      * the current theme and then set the font.<br/>
-     * Such a behaviour might not be desirable. In this case, setting <code>overwriteUserTheme</code>
-     * to <code>false</code> will abort the modification before overwriting the user theme.
+     * If necessary, this can be checked beforehand by a call to {@link #willOverwriteUserTheme(int,Font)}.
      * </p>
-     * @param  id                 identifier of the font to set.
-     * @param  font               font to set.
-     * @param  overwriteUserTheme whether or not to overwrite the user theme if necessary.
-     * @return                    <code>true</code> if the current theme was modified, <code>false</code> otherwise.
+     * @param  id   identifier of the font to set.
+     * @param  font font to set.
      */
-    public synchronized static boolean setCurrentFont(int id, Font font, boolean overwriteUserTheme) {
-        // If this modification doesn't actually change the current theme,
-        // do nothing.
-        if(!needsUpdate(id, font))
-            return false;
+    public synchronized static boolean setCurrentFont(int id, Font font) {
+        // Only updates if necessary.
+        if(currentTheme.isFontDifferent(id, font)) {
+            // Checks whether we need to overwrite the user theme to perform this action.
+            if(currentTheme.getType() != Theme.USER_THEME) {
+                overwriteUserTheme(currentTheme);
+                setConfigurationTheme(currentTheme);
+            }
 
-        // If we need to change the user theme in order to perform the modification,
-        // but we're not allowed, abort.
-        if(currentTheme.getType() == Theme.USER_THEME)
-            wasUserThemeModified = true;
-        else if(overwriteUserTheme)
-            overwriteUserTheme();
-        else
-            return false;
-
-        currentTheme.setFont(id, font);
-        triggerFontEvent(id, font);
-
-        return true;
+            currentTheme.setFont(id, font);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -591,30 +515,25 @@ public class ThemeManager {
      * This method might require to overwrite the user theme: custom and predefined themes are
      * read only. In order to modify them, the ThemeManager must overwrite the user theme with
      * the current theme and then set the color.<br/>
-     * Such a behaviour might not be desirable. In this case, setting <code>overwriteUserTheme</code>
-     * to <code>false</code> will abort the modification before overwriting the user theme.
+     * If necessary, this can be checked beforehand by a call to {@link #willOverwriteUserTheme(int,Color)}.
      * </p>
-     * @param  id                 identifier of the color to set.
-     * @param  color              color to set.
-     * @param  overwriteUserTheme whether or not to overwrite the user theme if necessary.
-     * @return                    <code>true</code> if the current theme was modified, <code>false</code> otherwise.     
+     * @param  id   identifier of the color to set.
+     * @param  color color to set.
      */
-    public synchronized static boolean setCurrentColor(int id, Color color, boolean overwriteUserTheme) {
-        // If this modification doesn't actually change the current theme,
-        // do nothing.
-        if(!needsUpdate(id, color))
-            return false;
-        if(currentTheme.getType() == Theme.USER_THEME)
-            wasUserThemeModified = true;
-        else if(overwriteUserTheme)
-            overwriteUserTheme();
-        else
-            return false;
+    public synchronized static boolean setCurrentColor(int id, Color color) {
+        // Only updates if necessary.
+        if(currentTheme.isColorDifferent(id, color)) {
+            // Checks whether we need to overwrite the user theme to perform this action.
+            if(currentTheme.getType() != Theme.USER_THEME) {
+                overwriteUserTheme(currentTheme);
+                setConfigurationTheme(currentTheme);
+            }
 
-        currentTheme.setColor(id, color);
-        triggerColorEvent(id, color);
-
-        return true;
+            // Updates the color and notifies listeners.
+            currentTheme.setColor(id, color);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -622,13 +541,17 @@ public class ThemeManager {
      * @param theme theme to check.
      * @return <code>true</code> if the specified theme is the current one, <code>false</code> otherwise.
      */
-    public static boolean isCurrentTheme(Theme theme) {
-        if(theme.getType() != currentTheme.getType())
+    public static boolean isCurrentTheme(Theme theme) {return theme == currentTheme;}
+
+    private static boolean isCurrentTheme(int type, String name) {
+        if(type != currentTheme.getType())
             return false;
-        if(currentTheme.getType() == Theme.USER_THEME)
+        if(type == Theme.USER_THEME)
             return true;
-        return theme.getName().equals(currentTheme.getName());
+        return name.equals(currentTheme.getName());
     }
+
+
 
 
     // - Theme listening -----------------------------------------------------------------
@@ -647,28 +570,24 @@ public class ThemeManager {
 
     /**
      * Notifies all theme listeners of the specified font's new value.
-     * @param id   identifier of the font that has changed.
-     * @param font font's new value.
      */
-    private static void triggerFontEvent(int id, Font font) {
+    private static void triggerFontEvent(FontChangedEvent event) {
         Iterator iterator;
 
         iterator = listeners.keySet().iterator();
         while(iterator.hasNext())
-            ((ThemeListener)iterator.next()).fontChanged(id, font);
+            ((ThemeListener)iterator.next()).fontChanged(event);
     }
 
     /**
      * Notifies all theme listeners of the specified color's new value.
-     * @param id    identifier of the color that has changed.
-     * @param color color's new value.
      */
-    private static void triggerColorEvent(int id, Color color) {
+    private static void triggerColorEvent(ColorChangedEvent event) {
         Iterator iterator;
 
         iterator = listeners.keySet().iterator();
         while(iterator.hasNext())
-            ((ThemeListener)iterator.next()).colorChanged(id, color);
+            ((ThemeListener)iterator.next()).colorChanged(event);
     }
 
 
@@ -680,7 +599,7 @@ public class ThemeManager {
         String backgroundColor, fileColor, hiddenColor, folderColor, archiveColor, symlinkColor,
                markedColor, selectedColor, selectionColor, unfocusedColor, shellBackgroundColor,
                shellSelectionColor, shellTextColor, fontSize, fontFamily, fontStyle;
-        Theme legacyTheme; // Data for the new user theme.
+        ThemeData legacyTemplate; // Data for the new user theme.
 
         // Gathers legacy theme information.
         backgroundColor      = ConfigurationManager.getVariable(LegacyTheme.BACKGROUND_COLOR);
@@ -732,158 +651,135 @@ public class ThemeManager {
         Color color;
         Font  font;
 
-        legacyTheme = new Theme();
+        legacyTemplate = new ThemeData();
 
         // File background color.
         if(backgroundColor == null)
             backgroundColor = LegacyTheme.DEFAULT_BACKGROUND_COLOR;
-        legacyTheme.setColor(Theme.FILE_BACKGROUND_COLOR, color = new Color(Integer.parseInt(backgroundColor, 16)));
-        legacyTheme.setColor(Theme.HIDDEN_FILE_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.MARKED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.FOLDER_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.SYMLINK_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.ARCHIVE_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.FILE_TABLE_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FILE_BACKGROUND_COLOR, color = new Color(Integer.parseInt(backgroundColor, 16)));
+        legacyTemplate.setColor(Theme.HIDDEN_FILE_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.MARKED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FOLDER_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.SYMLINK_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.ARCHIVE_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FILE_TABLE_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, color);
 
         // Selected file background color.
         if(selectionColor == null)
             selectionColor = LegacyTheme.DEFAULT_SELECTION_BACKGROUND_COLOR;
-        legacyTheme.setColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(selectionColor, 16)));
-        legacyTheme.setColor(Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.MARKED_SELECTED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.FOLDER_SELECTED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.SYMLINK_SELECTED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(selectionColor, 16)));
+        legacyTemplate.setColor(Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.MARKED_SELECTED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FOLDER_SELECTED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.SYMLINK_SELECTED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR, color);
 
         // Out of focus file background color.
         if(unfocusedColor == null)
             unfocusedColor = LegacyTheme.DEFAULT_OUT_OF_FOCUS_COLOR;
-        legacyTheme.setColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(unfocusedColor, 16)));
-        legacyTheme.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(unfocusedColor, 16)));
+        legacyTemplate.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
 
         // Hidden files color.
         if(hiddenColor == null)
             hiddenColor = LegacyTheme.DEFAULT_HIDDEN_FILE_COLOR;
-        legacyTheme.setColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(hiddenColor, 16)));
-        legacyTheme.setColor(Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(hiddenColor, 16)));
+        legacyTemplate.setColor(Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Folder color.
         if(folderColor == null)
             folderColor = LegacyTheme.DEFAULT_FOLDER_COLOR;
-        legacyTheme.setColor(Theme.FOLDER_FOREGROUND_COLOR, color = new Color(Integer.parseInt(folderColor, 16)));
-        legacyTheme.setColor(Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FOLDER_FOREGROUND_COLOR, color = new Color(Integer.parseInt(folderColor, 16)));
+        legacyTemplate.setColor(Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Archives color.
         if(archiveColor == null)
             archiveColor = LegacyTheme.DEFAULT_ARCHIVE_FILE_COLOR;
-        legacyTheme.setColor(Theme.ARCHIVE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(archiveColor, 16)));
-        legacyTheme.setColor(Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.ARCHIVE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(archiveColor, 16)));
+        legacyTemplate.setColor(Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Symbolic links color.
         if(symlinkColor == null)
             symlinkColor = LegacyTheme.DEFAULT_SYMLINK_COLOR;
-        legacyTheme.setColor(Theme.SYMLINK_FOREGROUND_COLOR, color = new Color(Integer.parseInt(symlinkColor, 16)));
-        legacyTheme.setColor(Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.SYMLINK_FOREGROUND_COLOR, color = new Color(Integer.parseInt(symlinkColor, 16)));
+        legacyTemplate.setColor(Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Plain file color.
         if(fileColor == null)
             fileColor = LegacyTheme.DEFAULT_PLAIN_FILE_COLOR;
-        legacyTheme.setColor(Theme.FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(fileColor, 16)));
-        legacyTheme.setColor(Theme.FILE_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(fileColor, 16)));
+        legacyTemplate.setColor(Theme.FILE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Marked file color.
         if(markedColor == null)
             markedColor = LegacyTheme.DEFAULT_MARKED_FILE_COLOR;
-        legacyTheme.setColor(Theme.MARKED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(markedColor, 16)));
-        legacyTheme.setColor(Theme.MARKED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.MARKED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(markedColor, 16)));
+        legacyTemplate.setColor(Theme.MARKED_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Selected file color.
         if(selectedColor == null)
             selectedColor = LegacyTheme.DEFAULT_SELECTED_FILE_COLOR;
-        legacyTheme.setColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(selectedColor, 16)));
-        legacyTheme.setColor(Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(selectedColor, 16)));
+        legacyTemplate.setColor(Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Shell background color.
         if(shellBackgroundColor == null)
             shellBackgroundColor = LegacyTheme.DEFAULT_SHELL_BACKGROUND_COLOR;
-        legacyTheme.setColor(Theme.SHELL_BACKGROUND_COLOR, new Color(Integer.parseInt(shellBackgroundColor, 16)));
+        legacyTemplate.setColor(Theme.SHELL_BACKGROUND_COLOR, new Color(Integer.parseInt(shellBackgroundColor, 16)));
 
         // Shell text color.
         if(shellTextColor == null)
             shellTextColor = LegacyTheme.DEFAULT_SHELL_TEXT_COLOR;
-        legacyTheme.setColor(Theme.SHELL_FOREGROUND_COLOR, color = new Color(Integer.parseInt(shellTextColor, 16)));
-        legacyTheme.setColor(Theme.SHELL_SELECTED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.SHELL_FOREGROUND_COLOR, color = new Color(Integer.parseInt(shellTextColor, 16)));
+        legacyTemplate.setColor(Theme.SHELL_SELECTED_FOREGROUND_COLOR, color);
 
         // Shell selection background color.
         if(shellSelectionColor == null)
             shellSelectionColor = LegacyTheme.DEFAULT_SHELL_SELECTION_COLOR;
-        legacyTheme.setColor(Theme.SHELL_SELECTED_BACKGROUND_COLOR, new Color(Integer.parseInt(shellSelectionColor, 16)));
+        legacyTemplate.setColor(Theme.SHELL_SELECTED_BACKGROUND_COLOR, new Color(Integer.parseInt(shellSelectionColor, 16)));
 
         // File table font.
-        legacyTheme.setFont(Theme.FILE_TABLE_FONT, font = getLegacyFont(fontFamily, fontStyle, fontSize));
+        legacyTemplate.setFont(Theme.FILE_TABLE_FONT, font = getLegacyFont(fontFamily, fontStyle, fontSize));
 
         // Sets colors that were not customisable in older versions of muCommander, using
         // l&f default where necessary.
 
         // File table border.
-        legacyTheme.setColor(Theme.FILE_TABLE_BORDER_COLOR, new Color(64, 64, 64));
-
-        // File editor / viewer colors.
-        legacyTheme.setColor(Theme.EDITOR_BACKGROUND_COLOR, Color.WHITE);
-        legacyTheme.setColor(Theme.EDITOR_FOREGROUND_COLOR, getTextAreaColor());
-        legacyTheme.setColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR, getTextAreaSelectionBackgroundColor());
-        legacyTheme.setColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR, getTextAreaSelectionColor());
-        legacyTheme.setFont(Theme.EDITOR_FONT, getTextAreaFont());
+        legacyTemplate.setColor(Theme.FILE_TABLE_BORDER_COLOR, new Color(64, 64, 64));
 
         // Location bar and shell history (both use text field defaults).
-        legacyTheme.setColor(Theme.LOCATION_BAR_PROGRESS_COLOR, new Color(0, 255, 255, 64));
-	color = getTextFieldBackgroundColor();
-        legacyTheme.setColor(Theme.LOCATION_BAR_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.SHELL_HISTORY_BACKGROUND_COLOR, color);
-	color = getTextFieldColor();
-        legacyTheme.setColor(Theme.LOCATION_BAR_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.SHELL_HISTORY_FOREGROUND_COLOR, color);
-	color = getTextFieldSelectionBackgroundColor();
-        legacyTheme.setColor(Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, color);
-	color = getTextFieldSelectionColor();
-        legacyTheme.setColor(Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR, color);
-        legacyTheme.setColor(Theme.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, color);
+        legacyTemplate.setColor(Theme.LOCATION_BAR_PROGRESS_COLOR, new Color(0, 255, 255, 64));
 
-	font = getTextFieldFont();
-        legacyTheme.setFont(Theme.LOCATION_BAR_FONT, font);
-        legacyTheme.setFont(Theme.SHELL_HISTORY_FONT, font);
-
+        Theme legacyTheme;
         // If the user theme exists, saves the legacy theme as backup.
-        if(new File(getUserThemeFile()).exists()) {
-            legacyTheme.setType(Theme.CUSTOM_THEME);
-            legacyTheme.setName("BackupTheme");
-        }
+        if(new File(getUserThemeFile()).exists())
+            legacyTheme = new Theme(listener, legacyTemplate, Theme.CUSTOM_THEME, "BackupTheme");
         // Otherwise, creates a new user theme using the legacy data.
         else {
-            legacyTheme.setType(Theme.USER_THEME);
+            legacyTheme = new Theme(listener, legacyTemplate);
             setConfigurationTheme(legacyTheme);
+            wasUserThemeModified = true;
         }
 
         saveTheme(legacyTheme);
@@ -956,320 +852,27 @@ public class ThemeManager {
         throw new IllegalStateException("Unknown theme type: " + label);
     }
 
-    /**
-     * Returns the current look and feel's text area font.
-     * @return the current look and feel's text area font.
-     */
-    private static Font getTextAreaFont() {
-	Font font;
-
-        if((font = UIManager.getDefaults().getFont("TextArea.font")) == null)
-            return new JTextArea().getFont();
-	return font;
-    }
-
-    /**
-     * Returns the current look and feel's text field font.
-     * @return the current look and feel's text field font.
-     */
-    private static Font getTextFieldFont() {
-	Font font;
-
-        if((font = UIManager.getDefaults().getFont("TextField.font")) == null)
-            return new JTextField().getFont();
-	return font;
-    }
-
-    /**
-     * Returns the current look and feel's label font.
-     * @return the current look and feel's label font.
-     */
-    private static Font getLabelFont() {
-	Font font;
-
-        if((font = UIManager.getDefaults().getFont("Label.font")) == null)
-            return new JLabel().getFont();
-	return font;
-    }
-
-    private static Color getTextAreaColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("TextArea.foreground")) == null)
-            return new JTextArea().getForeground();
-	return color;
-    }
-
-    private static Color getTextAreaBackgroundColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("TextArea.background")) == null)
-            return new JTextArea().getBackground();
-	return color;
-    }
-
-    private static Color getTextAreaSelectionColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("TextArea.selectionForeground")) == null)
-            return new JTextArea().getSelectionColor();
-	return color;
-    }
-
-    private static Color getTextAreaSelectionBackgroundColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("TextArea.selectionBackground")) == null)
-            return new JTextArea().getSelectedTextColor();
-	return color;
-    }
-
-    private static Color getTextFieldColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("TextField.foreground")) == null)
-            return new JTextField().getForeground();
-	return color;
-    }
-
-    private static Color getTextFieldBackgroundColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("TextField.background")) == null)
-            return new JTextField().getBackground();
-	return color;
-    }
-
-    private static Color getTextFieldSelectionColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("TextField.selectionForeground")) == null)
-            return new JTextField().getSelectionColor();
-	return color;
-    }
-
-    private static Color getTextFieldSelectionBackgroundColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("TextField.selectionBackground")) == null)
-            return new JTextField().getSelectedTextColor();
-	return color;
-    }
-
-    private static Color getTableColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("Table.foreground")) == null)
-            return new JTable().getForeground();
-	return color;
-    }
-
-    private static Color getTableBackgroundColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("Table.background")) == null)
-            return new JTable().getBackground();
-	return color;
-    }
-
-    private static Color getTableSelectionColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("Table.selectionForeground")) == null)
-            return new JTable().getSelectionForeground();
-	return color;
-    }
-
-    private static Color getTableSelectionBackgroundColor() {
-	Color color;
-
-        if((color = UIManager.getDefaults().getColor("Table.selectionBackground")) == null)
-            return new JTable().getSelectionBackground();
-	return color;
-    }
-
-    private static Font getTableFont() {
-	Font font;
-
-        if((font = UIManager.getDefaults().getFont("Table.font")) == null)
-            return new JTable().getFont();
-	return font;
-    }
-
-    static final Color getDefaultColor(int id, Theme theme) {
-        switch(id) {
-            // File table background colors.
-        case Theme.FILE_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.FILE_BACKGROUND_COLOR:
-        case Theme.HIDDEN_FILE_BACKGROUND_COLOR:
-        case Theme.FOLDER_BACKGROUND_COLOR:
-        case Theme.ARCHIVE_BACKGROUND_COLOR:
-        case Theme.SYMLINK_BACKGROUND_COLOR:
-        case Theme.MARKED_BACKGROUND_COLOR:
-            return getColor(Theme.FILE_TABLE_BACKGROUND_COLOR, theme);
-
-        case Theme.FILE_TABLE_BACKGROUND_COLOR:
-	    return getTableBackgroundColor();
-
-            // File table foreground colors (everything except marked
-            // defaults to the l&f specific table foreground color).
-        case Theme.HIDDEN_FILE_FOREGROUND_COLOR:
-        case Theme.FOLDER_FOREGROUND_COLOR:
-        case Theme.ARCHIVE_FOREGROUND_COLOR:
-        case Theme.SYMLINK_FOREGROUND_COLOR:
-        case Theme.FILE_UNFOCUSED_FOREGROUND_COLOR:
-        case Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR:
-        case Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR:
-        case Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR:
-        case Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR:
-            return getColor(Theme.FILE_FOREGROUND_COLOR, theme);
-
-        case Theme.FILE_FOREGROUND_COLOR:
-	    return getTableColor();
-
-            // Marked files foreground colors (they have to be different
-            // of the standard file foreground colors).
-        case Theme.MARKED_FOREGROUND_COLOR:
-        case Theme.MARKED_UNFOCUSED_FOREGROUND_COLOR:
-        case Theme.MARKED_SELECTED_FOREGROUND_COLOR:
-        case Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-            return Color.RED;
-
-            // Text areas default foreground colors.
-        case Theme.SHELL_FOREGROUND_COLOR:
-        case Theme.EDITOR_FOREGROUND_COLOR:
-            return getTextAreaColor();
-
-            // Text areas default background colors.
-        case Theme.SHELL_BACKGROUND_COLOR:
-        case Theme.EDITOR_BACKGROUND_COLOR:
-            return getTextAreaBackgroundColor();
-
-            // Text fields default foreground colors.
-        case Theme.SHELL_HISTORY_FOREGROUND_COLOR:
-        case Theme.LOCATION_BAR_FOREGROUND_COLOR:
-        case Theme.STATUS_BAR_FOREGROUND_COLOR:
-            return getTextFieldColor();
-
-            // Text fields default background colors.
-        case Theme.LOCATION_BAR_BACKGROUND_COLOR:
-        case Theme.SHELL_HISTORY_BACKGROUND_COLOR:
-            return getTextFieldBackgroundColor();
-
-            // The location bar progress color is a bit of a special case,
-            // as it requires alpha transparency.
-        case Theme.LOCATION_BAR_PROGRESS_COLOR:
-	    Color color;
-
-	    color = getTextFieldSelectionBackgroundColor();
-            return new Color(color.getRed(), color.getGreen(), color.getBlue(), 64);
-
-            // Selected table background colors.
-        case Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR:
-        case Theme.FOLDER_SELECTED_BACKGROUND_COLOR:
-        case Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR:
-        case Theme.SYMLINK_SELECTED_BACKGROUND_COLOR:
-        case Theme.MARKED_SELECTED_BACKGROUND_COLOR:
-            return getColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, theme);
-
-        case Theme.FILE_SELECTED_BACKGROUND_COLOR:
-	    return getTableSelectionBackgroundColor();
-
-            // Gray colors.
-        case Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR:
-        case Theme.FILE_TABLE_BORDER_COLOR:
-            return Color.GRAY;
-
-            // Foreground color for selected elements in the file table.
-        case Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR:
-        case Theme.FOLDER_SELECTED_FOREGROUND_COLOR:
-        case Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR:
-        case Theme.SYMLINK_SELECTED_FOREGROUND_COLOR:
-        case Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-        case Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-        case Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-        case Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-        case Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR:
-            return getColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, theme);
-
-        case Theme.FILE_SELECTED_FOREGROUND_COLOR:
-	    return getTableSelectionColor();
-
-            // Foreground color for selected text area elements.
-        case Theme.SHELL_SELECTED_FOREGROUND_COLOR:
-        case Theme.EDITOR_SELECTED_FOREGROUND_COLOR:
-            return getTextAreaSelectionColor();
-
-            // Background color for selected text area elements.
-        case Theme.SHELL_SELECTED_BACKGROUND_COLOR:
-        case Theme.EDITOR_SELECTED_BACKGROUND_COLOR:
-            return getTextAreaSelectionBackgroundColor();
-
-            // Foreground color for selected text fields elements.
-        case Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR:
-        case Theme.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR:
-            return getTextFieldSelectionColor();
-
-            // Background color for selected text fields elements.
-        case Theme.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR:
-        case Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR:
-            return getTextFieldSelectionBackgroundColor();
-
-            // Status bar defaults.
-        case Theme.STATUS_BAR_BACKGROUND_COLOR:
-            return new Color(0xD5D5D5);
-
-        case Theme.STATUS_BAR_BORDER_COLOR:
-            return new Color(0x7A7A7A);
-
-        case Theme.STATUS_BAR_OK_COLOR:
-            return new Color(0x70EC2B);
-
-        case Theme.STATUS_BAR_WARNING_COLOR:
-            return new Color(0xFF7F00);
-
-        case Theme.STATUS_BAR_CRITICAL_COLOR:
-            return new Color(0xFF0000);
-        }
-        throw new IllegalArgumentException("Illegal color identifier: " + id);
-    }
-
-    /**
-     * Returns the default value for the specified font.
-     * @param  id identifier of the font whose default value should be retrieved.
-     * @return    the default value for the specified font.
-     */
-    static final Font getDefaultFont(int id, Theme theme) {
-	switch(id) {
-            // Table font.
-        case Theme.FILE_TABLE_FONT:
-            return getTableFont();
-
-	    // Text Area font.
-        case Theme.EDITOR_FONT:
-        case Theme.SHELL_FONT:
-	    return getTextAreaFont();
-
-	    // Text Field font.
-        case Theme.LOCATION_BAR_FONT:
-        case Theme.SHELL_HISTORY_FONT:
-        case Theme.STATUS_BAR_FONT:
-	    return getTextFieldFont();
-
-        }
-        throw new IllegalArgumentException("Illegal font identifier: " + id);
-    }
-
     private static String getThemeName(String path) {return path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));}
+
+
+
+    // - Listener methods ----------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    private static class CurrentThemeListener implements ThemeListener {
+        public void fontChanged(FontChangedEvent event) {
+            if(event.getSource().getType() == Theme.USER_THEME)
+                wasUserThemeModified = true;
+
+            if(event.getSource() == currentTheme)
+                triggerFontEvent(event);
+        }
+
+        public void colorChanged(ColorChangedEvent event) {
+            if(event.getSource().getType() == Theme.USER_THEME)
+                wasUserThemeModified = true;
+
+            if(event.getSource() == currentTheme)
+                triggerColorEvent(event);
+        }
+    }
 }
