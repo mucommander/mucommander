@@ -162,6 +162,26 @@ cancel:pt_BR:Cancelar
 cancel:NL:Annuleren
 cancel:SK:Zrušiť
 
+# Edit
+edit:EN:Edit
+edit:FR:Editer
+edit:DE:Bearbeiten
+edit:ES:Editar
+edit:CS:Editovat
+edit:zh_TW:編輯
+edit:PL:Edycja
+edit:HU:módosít
+edit:RU:Редактировать
+edit:zh_CN:编辑
+edit:SI:Uredi
+edit:RO:Editează
+edit:IT:Modifica
+edit:KR:편집
+edit:pt_BR:Editar
+edit:NL:Bewerken
+edit:SK:Upraviť
+
+
 close:EN:Close
 close:FR:Fermer
 close:DE:Schließen
@@ -179,6 +199,32 @@ close:KR:닫기
 close:pt_BR:Fechar
 close:NL:Sluiten
 close:SK:Zatvoriť
+
+reset:EN:Reset
+reset:FR:Réinitialiser
+#Translation missing
+
+
+
+
+example:EN:Example
+example:FR:Exemple
+example:DE:Beispiel
+example:ES:Ejemplo
+example:CS:Příklad
+example:zh_TW:範例
+example:PL:Przykład
+example:HU:példa
+example:RU:Пример
+example:zh_CN:示例
+example:SI:Primer
+example:RO:Exemplu
+example:IT:Esempio
+example:KR:예제
+example:pt_BR:Exemplo
+example:NL:Voorbeeld
+example:SK:Príklad
+
 
 apply:EN:Apply
 apply:FR:Appliquer
@@ -1687,23 +1733,23 @@ com.mucommander.ui.action.ViewAction.tooltip:pt_BR:Ver arquivo selecionado
 com.mucommander.ui.action.ViewAction.tooltip:NL:Geselecteerd bestand bekijken
 com.mucommander.ui.action.ViewAction.tooltip:SK:Zobraziť označené súbory
 
-com.mucommander.ui.action.EditAction.label:EN:Edit
-com.mucommander.ui.action.EditAction.label:FR:Editer
-com.mucommander.ui.action.EditAction.label:DE:Bearbeiten
-com.mucommander.ui.action.EditAction.label:ES:Editar
-com.mucommander.ui.action.EditAction.label:CS:Editovat
-com.mucommander.ui.action.EditAction.label:zh_TW:編輯
-com.mucommander.ui.action.EditAction.label:PL:Edycja
-com.mucommander.ui.action.EditAction.label:HU:módosít
-com.mucommander.ui.action.EditAction.label:RU:Редактировать
-com.mucommander.ui.action.EditAction.label:zh_CN:编辑
-com.mucommander.ui.action.EditAction.label:SI:Uredi
-com.mucommander.ui.action.EditAction.label:RO:Editează
-com.mucommander.ui.action.EditAction.label:IT:Modifica
-com.mucommander.ui.action.EditAction.label:KR:편집
-com.mucommander.ui.action.EditAction.label:pt_BR:Editar
-com.mucommander.ui.action.EditAction.label:NL:Bewerken
-com.mucommander.ui.action.EditAction.label:SK:Upraviť
+com.mucommander.ui.action.EditAction.label:EN:$[edit]
+com.mucommander.ui.action.EditAction.label:FR:$[edit]
+com.mucommander.ui.action.EditAction.label:DE:$[edit]
+com.mucommander.ui.action.EditAction.label:ES:$[edit]
+com.mucommander.ui.action.EditAction.label:CS:$[edit]
+com.mucommander.ui.action.EditAction.label:zh_TW:$[edit]
+com.mucommander.ui.action.EditAction.label:PL:$[edit]
+com.mucommander.ui.action.EditAction.label:HU:$[edit]
+com.mucommander.ui.action.EditAction.label:RU:$[edit]
+com.mucommander.ui.action.EditAction.label:zh_CN:$[edit]
+com.mucommander.ui.action.EditAction.label:SI:$[edit]
+com.mucommander.ui.action.EditAction.label:RO:$[edit]
+com.mucommander.ui.action.EditAction.label:IT:$[edit]
+com.mucommander.ui.action.EditAction.label:KR:$[edit]
+com.mucommander.ui.action.EditAction.label:pt_BR:$[edit]
+com.mucommander.ui.action.EditAction.label:NL:$[edit]
+com.mucommander.ui.action.EditAction.label:SK:$[edit]
 
 com.mucommander.ui.action.EditAction.tooltip:EN:Edit selected file
 com.mucommander.ui.action.EditAction.tooltip:FR:Editer le fichier selectionné
@@ -7579,6 +7625,419 @@ shortcuts_dialog.windows:SK:Okná
 
 
 ######################
+# Theme dialog       #
+######################
+
+theme_dialog.title:EN:Theme editor
+theme_dialog.title:FR:Editeur de thèmes
+# Translation missing
+
+
+
+
+
+theme_dialog.folder_tab:EN:Folder pane
+theme_dialog.folder_tab:FR:Panneau de dossier
+# Translation missing
+
+
+
+
+
+
+theme_dialog.shell_tab:EN:Shell
+theme_dialog.shell_tab:FR:Shell
+# Translation missing
+
+
+
+
+
+theme_dialog.statusbar_tab:EN:Status bar
+theme_dialog.statusbar_tab:FR:Barre de status
+# Translation missing
+
+
+
+
+
+theme_dialog.locationbar_tab:EN:Location bar
+theme_dialog.locationbar_tab:FR:Barre d'emplacement
+# Translation missing
+
+
+
+
+theme_dialog.editor_tab:EN:File editor
+#theme_dialog.editor_tab:FR:Editeur de fichiers
+# Translation missing
+
+
+
+
+
+theme_dialog.font:EN:Font
+theme_dialog.font:FR:Fonte
+theme_dialog.font:DE:Schriftart
+theme_dialog.font:ES:Fuente
+theme_dialog.font:CS:Písmo
+theme_dialog.font:zh_TW:字型
+theme_dialog.font:PL:Czcionka
+theme_dialog.font:HU:betű
+theme_dialog.font:RU:Шрифт
+theme_dialog.font:zh_CN:字体
+theme_dialog.font:SI:Pisava
+theme_dialog.font:RO:Font
+theme_dialog.font:IT:Font
+theme_dialog.font:KR:글꼴
+theme_dialog.font:pt_BR:Fonte
+theme_dialog.font:NL:Font
+theme_dialog.font:SK:Písmo
+
+theme_dialog.shell_font:EN:Shell font
+theme_dialog.shell_font:FR:Fonte du shell
+# Translation missing
+
+
+
+
+
+
+theme_dialog.history_font:EN:History font
+theme_dialog.history_font:FR:Fonte de l'historique
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+theme_dialog.theme_warning:EN:This will overwrite the custom theme. Do you wish to proceed?
+theme_dialog.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
+theme_dialog.theme_warning:SI:To bo prepisalo običajno temo. Želite nadaljevati?
+theme_dialog.theme_warning:IT:Questa operazione sovrascrive il tema utente. Procedere ?
+theme_dialog.theme_warning:CS:Operace přepíše uživatelské téma. Opravdu chcete pokračovat?
+theme_dialog.theme_warning:zh_TW:這將會覆蓋自訂的佈景主題. 確定要繼續?
+theme_dialog.theme_warning:DE:Dies überschreibt ein angepasstes Thema. Wollen Sie fortfahren?
+theme_dialog.theme_warning:RO:Această operație va suprascrie o temă personalizată. Doriți să continuați?
+theme_dialog.theme_warning:zh_CN:这样会覆盖定制的主题，继续吗？
+theme_dialog.theme_warning:RU:Это приведет к замене существующей темы. Вы уверены, что хотите продолжить?
+theme_dialog.theme_warning:ES:Esto sobrescribirá el tema específico. ¿Desea proceder?
+theme_dialog.theme_warning:PL:Spowoduje to nadpisanie schematu użytkownika. Czy chcesz kontynuować?
+theme_dialog.theme_warning:KR:사용자 설정 테마를 겹쳐쓸것입니다. 계속할까요?
+prefs_dialog.theme_warning:pt_BR:Esta ação irá sobrescrever o tema personalizado. Continuar?
+prefs_dialog.theme_warning:NL:Dit zal het huidige thema overschrijven. Wilt u doorgaan?
+prefs_dialog.theme_warning:SK:Užívateľská téma bude prepísaná. Naozaj chcete pokračovať?
+# Translation missing
+
+
+
+
+
+
+
+
+theme_dialog.border:EN:Border
+theme_dialog.border:FR:Bords
+# Translation missing
+
+
+
+
+
+
+
+
+
+theme_dialog.background:EN:Background
+theme_dialog.background:FR:Fond
+theme_dialog.background:DE:Hintergrund
+theme_dialog.background:ES:Fondo
+theme_dialog.background:CS:Pozadí
+theme_dialog.background:zh_TW:背景
+theme_dialog.background:PL:Tło
+theme_dialog.background:HU:háttér
+theme_dialog.background:RU:Фон
+theme_dialog.background:zh_CN:背景
+theme_dialog.background:SI:Ozadje
+theme_dialog.background:RO:Fond
+theme_dialog.background:IT:Sfondo
+theme_dialog.background:KR:바탕
+theme_dialog.background:pt_BR:Fundo
+theme_dialog.background:NL:Achtergrond
+theme_dialog.background:SK:Pozadie
+
+theme_dialog.unfocused_background:EN:Background (without focus)
+theme_dialog.unfocused_background:FR:Fond (sans focus)
+# Translation missing
+
+
+
+
+
+
+
+
+theme_dialog.text:EN:Text
+theme_dialog.text:FR:Texte
+# Translation missing
+
+
+
+
+
+
+
+
+theme_dialog.progress:EN:Progress
+theme_dialog.progress:FR:Progression
+# Translation missing
+
+
+
+
+
+
+
+
+
+theme_dialog.unfocused_text:EN:Text (without focus)
+theme_dialog.unfocused_text:FR:Texte (sans focus)
+# Translation missing
+
+
+
+
+
+
+
+
+theme_dialog.normal:EN:Normal
+theme_dialog.normal:FR:Normal
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+theme_dialog.selected:EN:Selected
+theme_dialog.selected:FR:Sélectionné
+# Translation missing
+
+
+
+
+
+
+
+
+theme_dialog.folder_pane:EN:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:FR:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:DE:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:ES:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:CS:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:zh_TW:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:PL:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:HU:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:RU:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:zh_CN:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:SI:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:RO:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:IT:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:KR:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:pt_BR:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:NL:$[theme_dialog.folder_tab]
+theme_dialog.folder_pane:SK:$[theme_dialog.folder_tab]
+
+
+
+
+
+
+
+theme_dialog.shell_colors:EN:Shell colors
+theme_dialog.shell_colors:FR:Couleurs du shell
+theme_dialog.shell_colors:RO:Culori pentru shell
+theme_dialog.shell_colors:SI:Barve v ukazni vrstici
+theme_dialog.shell_colors:IT:Colori del terminale
+theme_dialog.shell_colors:CS:Barvy shellu
+theme_dialog.shell_colors:zh_TW:Shell 顏色
+theme_dialog.shell_colors:DE:Farbe Eingabeauforderung 
+theme_dialog.shell_colors:zh_CN:Shell 颜色
+theme_dialog.shell_colors:RU:Системные цвета
+theme_dialog.shell_colors:ES:Colores de shell
+theme_dialog.shell_colors:PL:Kolor okna terminala (shell)
+theme_dialog.shell_colors:KR:쉘 색상
+theme_dialog.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
+prefs_dialog.shell_colors:NL:Kleuren van de shell
+prefs_dialog.shell_colors:SK:Farba terminálu (shell)
+
+theme_dialog.history_colors:EN:History colors
+theme_dialog.history_colors:FR:Couleurs de l'historique
+# Translation missing
+
+
+
+
+
+
+
+
+theme_dialog.plain_file:EN:Plain file
+theme_dialog.plain_file:FR:Fichier normal
+theme_dialog.plain_file:DE:Normale Datei
+theme_dialog.plain_file:ES:Fichero plano
+theme_dialog.plain_file:CS:Běžný soubor
+theme_dialog.plain_file:zh_TW:一般檔案
+theme_dialog.plain_file:PL:Zwykły plik
+theme_dialog.plain_file:HU:fájl
+theme_dialog.plain_file:RU:Обычный файл
+theme_dialog.plain_file:zh_CN:一般文件
+theme_dialog.plain_file:SI:Navadna datoteka
+theme_dialog.plain_file:RO:Fișier normal
+theme_dialog.plain_file:IT:File normale
+theme_dialog.plain_file:KR:일반 파일
+theme_dialog.plain_file:pt_BR:Arquivo normal
+theme_dialog.plain_file:NL:Normaal bestand
+theme_dialog.plain_file:SK:Bežný súbor
+
+theme_dialog.marked_file:EN:Marked file
+theme_dialog.marked_file:FR:Fichier marqué
+theme_dialog.marked_file:DE:Markierte Datei
+theme_dialog.marked_file:ES:Fichero marcado
+theme_dialog.marked_file:CS:Označený soubor
+theme_dialog.marked_file:zh_TW:已標記檔案
+theme_dialog.marked_file:PL:Zaznaczony plik
+theme_dialog.marked_file:HU:megjelölt fájl
+theme_dialog.marked_file:RU:Выделенный файл
+theme_dialog.marked_file:zh_CN:已标记文件
+theme_dialog.marked_file:SI:Označena datoteka
+theme_dialog.marked_file:RO:Fișier selectat
+theme_dialog.marked_file:IT:File selezionato
+theme_dialog.marked_file:KR:선택된 파일
+theme_dialog.marked_file:pt_BR:Arquivo marcado
+theme_dialog.marked_file:NL:Gemarkeerd bestand
+theme_dialog.marked_file:SK:Označený súbor
+
+theme_dialog.hidden_file:EN:Hidden file
+theme_dialog.hidden_file:FR:Fichier caché
+theme_dialog.hidden_file:DE:Versteckte Datei
+theme_dialog.hidden_file:ES:Fichero oculto
+theme_dialog.hidden_file:CS:Skrytý soubor
+theme_dialog.hidden_file:zh_TW:隱藏檔
+theme_dialog.hidden_file:PL:Ukryty plik
+theme_dialog.hidden_file:HU:rejtett fájl
+theme_dialog.hidden_file:RU:Скрытый файл
+theme_dialog.hidden_file:zh_CN:隐藏文件
+theme_dialog.hidden_file:SI:Skrita datoteka
+theme_dialog.hidden_file:RO:Fișier ascuns
+theme_dialog.hidden_file:IT:File nascosto
+theme_dialog.hidden_file:KR:숨김파일
+theme_dialog.hidden_file:pt_BR:Arquivo oculto
+theme_dialog.hidden_file:NL:Verborgen bestand
+theme_dialog.hidden_file:SK:Skrutý súbor
+
+theme_dialog.folder:EN:Folder
+theme_dialog.folder:FR:Dossier
+theme_dialog.folder:DE:Ordner
+theme_dialog.folder:ES:Directorio
+theme_dialog.folder:CS:Složka
+theme_dialog.folder:zh_TW:資料夾
+theme_dialog.folder:PL:Katalog
+theme_dialog.folder:HU:könyvtár
+theme_dialog.folder:RU:Каталог
+theme_dialog.folder:zh_CN:文件夹
+theme_dialog.folder:SI:Mapa
+theme_dialog.folder:RO:Director
+theme_dialog.folder:IT:Cartella
+theme_dialog.folder:KR:폴더
+theme_dialog.folder:pt_BR:Diretório
+theme_dialog.folder:NL:Map
+theme_dialog.folder:SK:Priečinok
+
+theme_dialog.archive_file:EN:Archive
+theme_dialog.archive_file:FR:Archive
+theme_dialog.archive_file:DE:Archivdatei
+theme_dialog.archive_file:ES:Archivar fichero
+theme_dialog.archive_file:CS:Archív
+theme_dialog.archive_file:zh_TW:壓縮檔
+theme_dialog.archive_file:PL:Plik archiwum
+theme_dialog.archive_file:HU:archív fájlok
+theme_dialog.archive_file:RU:Архив
+theme_dialog.archive_file:zh_CN:压缩文件
+theme_dialog.archive_file:SI:Arhivska datoteka
+theme_dialog.archive_file:RO:Arhivă
+theme_dialog.archive_file:IT:Archivio
+theme_dialog.archive_file:KR:아카이브 파일
+theme_dialog.archive_file:pt_BR:Arquivar
+theme_dialog.archive_file:NL:Ingepakt bestand
+theme_dialog.archive_file:SK:Archív
+
+theme_dialog.symbolic_link:EN:Symbolic link
+theme_dialog.symbolic_link:FR:Lien symbolique
+theme_dialog.symbolic_link:DE:Symbolic Link
+theme_dialog.symbolic_link:ES:Enlace simbólico
+theme_dialog.symbolic_link:CS:Symbolický odkaz
+theme_dialog.symbolic_link:zh_TW:符號連結
+theme_dialog.symbolic_link:PL:Dowiązanie symboliczne
+theme_dialog.symbolic_link:HU:parancsikon fájlok
+theme_dialog.symbolic_link:RU:Символьная ссылка
+theme_dialog.symbolic_link:zh_CN:符号连接
+theme_dialog.symbolic_link:SI:Simbolična povezava
+theme_dialog.symbolic_link:RO:Legătură simbolică
+theme_dialog.symbolic_link:IT:Link simbolico
+theme_dialog.symbolic_link:KR:심볼릭 링크
+theme_dialog.symbolic_link:pt_BR:Link simbólico
+theme_dialog.symbolic_link:NL:Symbolische link
+theme_dialog.symbolic_link:SK:Symbolický odkaz
+
+theme_dialog.colors:EN:Colors
+theme_dialog.colors:FR:Couleurs
+# Translation missing
+
+
+
+
+
+
+
+
+theme_dialog.ok_color:EN:OK
+theme_dialog.ok_color:FR:OK
+# Translation missing
+
+
+
+
+
+theme_dialog.warning_color:EN:Warning
+theme_dialog.warning_color:FR:Avertissement
+# Translation missing
+
+
+
+
+
+theme_dialog.critical_color:EN:Critical
+theme_dialog.critical_color:FR:Critique
+# Translation missing
+
+
+
+
+
+
+######################
 # Preferences dialog #
 ######################
 
@@ -7770,6 +8229,23 @@ prefs_dialog.date_separator:SK:Oddeľovač
 
 
 
+prefs_dialog.example:EN:$[example]
+prefs_dialog.example:FR:$[example]
+prefs_dialog.example:DE:$[example]
+prefs_dialog.example:ES:$[example]
+prefs_dialog.example:CS:$[example]
+prefs_dialog.example:zh_TW:$[example]
+prefs_dialog.example:PL:$[example]
+prefs_dialog.example:HU:$[example]
+prefs_dialog.example:RU:$[example]
+prefs_dialog.example:zh_CN:$[example]
+prefs_dialog.example:SI:$[example]
+prefs_dialog.example:RO:$[example]
+prefs_dialog.example:IT:$[example]
+prefs_dialog.example:KR:$[example]
+prefs_dialog.example:pt_BR:$[example]
+prefs_dialog.example:NL:$[example]
+prefs_dialog.example:SK:$[example]
 
 prefs_dialog.time_12_hour:EN:12-hour format
 prefs_dialog.time_12_hour:FR:Format 12 heures
@@ -7860,24 +8336,6 @@ prefs_dialog.check_for_updates_on_startup:KR:시작시에 최신버전 확인
 prefs_dialog.check_for_updates_on_startup:pt_BR:Verificar por atualizações quando iniciar
 prefs_dialog.check_for_updates_on_startup:NL:Kontoleer op updates bij het opstarten
 prefs_dialog.check_for_updates_on_startup:SK:Hľadať aktualizácie pri spustení
-
-prefs_dialog.example:EN:Example
-prefs_dialog.example:FR:Exemple
-prefs_dialog.example:DE:Beispiel
-prefs_dialog.example:ES:Ejemplo
-prefs_dialog.example:CS:Příklad
-prefs_dialog.example:zh_TW:範例
-prefs_dialog.example:PL:Przykład
-prefs_dialog.example:HU:példa
-prefs_dialog.example:RU:Пример
-prefs_dialog.example:zh_CN:示例
-prefs_dialog.example:SI:Primer
-prefs_dialog.example:RO:Exemplu
-prefs_dialog.example:IT:Esempio
-prefs_dialog.example:KR:예제
-prefs_dialog.example:pt_BR:Exemplo
-prefs_dialog.example:NL:Voorbeeld
-prefs_dialog.example:SK:Príklad
 
 # Folders tab
 
@@ -8306,431 +8764,6 @@ prefs_dialog.use_system_file_icons.applications:SK:Iba pre aplikácie
 
 
 
-
-prefs_dialog.font:EN:Font
-prefs_dialog.font:FR:Fonte
-prefs_dialog.font:DE:Schriftart
-prefs_dialog.font:ES:Fuente
-prefs_dialog.font:CS:Písmo
-prefs_dialog.font:zh_TW:字型
-prefs_dialog.font:PL:Czcionka
-prefs_dialog.font:HU:betű
-prefs_dialog.font:RU:Шрифт
-prefs_dialog.font:zh_CN:字体
-prefs_dialog.font:SI:Pisava
-prefs_dialog.font:RO:Font
-prefs_dialog.font:IT:Font
-prefs_dialog.font:KR:글꼴
-prefs_dialog.font:pt_BR:Fonte
-prefs_dialog.font:NL:Font
-prefs_dialog.font:SK:Písmo
-
-prefs_dialog.font_size:EN:Size
-prefs_dialog.font_size:FR:Taille
-prefs_dialog.font_size:DE:Größe
-prefs_dialog.font_size:ES:Tamaño
-prefs_dialog.font_size:CS:Velikost
-prefs_dialog.font_size:zh_TW:大小
-prefs_dialog.font_size:PL:Rozmiar
-prefs_dialog.font_size:HU:méret
-prefs_dialog.font_size:RU:Размер
-prefs_dialog.font_size:zh_CN:字号
-prefs_dialog.font_size:SI:Velikost
-prefs_dialog.font_size:RO:Dimensiune
-prefs_dialog.font_size:IT:Dimensione
-prefs_dialog.font_size:KR:크기
-prefs_dialog.font_size:pt_BR:Tamanho
-prefs_dialog.font_size:NL:Grootte
-prefs_dialog.font_size:SK:Veľkosť
-
-prefs_dialog.font_style:EN:Style
-prefs_dialog.font_style:FR:Style
-prefs_dialog.font_style:DE:Stil
-prefs_dialog.font_style:ES:Estilo
-prefs_dialog.font_style:CS:Styl
-prefs_dialog.font_style:zh_TW:格式
-prefs_dialog.font_style:PL:Styl
-prefs_dialog.font_style:HU:stílus
-prefs_dialog.font_style:RU:Стиль
-prefs_dialog.font_style:zh_CN:样式
-prefs_dialog.font_style:SI:Oblika
-prefs_dialog.font_style:RO:Stil
-prefs_dialog.font_style:IT:Stile
-prefs_dialog.font_style:KR:스타일
-prefs_dialog.font_style:pt_BR:Estilo
-prefs_dialog.font_style:NL:Stijl
-prefs_dialog.font_style:SK:Štýl
-
-prefs_dialog.font_plain:EN:Plain
-prefs_dialog.font_plain:FR:Normal
-prefs_dialog.font_plain:DE:Normal
-prefs_dialog.font_plain:ES:Normal
-prefs_dialog.font_plain:CS:Normální
-prefs_dialog.font_plain:zh_TW:一般
-prefs_dialog.font_plain:PL:Normaly
-prefs_dialog.font_plain:HU:egyszerű
-prefs_dialog.font_plain:RU:Обычный
-prefs_dialog.font_plain:zh_CN:普通
-prefs_dialog.font_plain:SI:Normalno
-prefs_dialog.font_plain:RO:Normal
-prefs_dialog.font_plain:IT:Normale
-prefs_dialog.font_plain:KR:일반
-prefs_dialog.font_plain:pt_BR:Normal
-prefs_dialog.font_plain:NL:Normaal
-prefs_dialog.font_plain:SK:Normálny
-
-prefs_dialog.font_bold:EN:Bold
-prefs_dialog.font_bold:FR:Gras
-prefs_dialog.font_bold:DE:Fett
-prefs_dialog.font_bold:ES:Negrita
-prefs_dialog.font_bold:CS:Tučné
-prefs_dialog.font_bold:zh_TW:粗體
-prefs_dialog.font_bold:PL:Pogrubiony
-prefs_dialog.font_bold:HU:vastag
-prefs_dialog.font_bold:RU:Полужирный
-prefs_dialog.font_bold:zh_CN:粗体
-prefs_dialog.font_bold:SI:Krepko
-prefs_dialog.font_bold:RO:Îngroșat
-prefs_dialog.font_bold:IT:Grassetto
-prefs_dialog.font_bold:KR:볼드
-prefs_dialog.font_bold:pt_BR:Negrito
-prefs_dialog.font_bold:NL:Vet
-prefs_dialog.font_bold:SK:Tučné
-
-prefs_dialog.font_italic:EN:Italic
-prefs_dialog.font_italic:FR:Italique
-prefs_dialog.font_italic:DE:Kursiv
-prefs_dialog.font_italic:ES:Itálica
-prefs_dialog.font_italic:CS:Proložené
-prefs_dialog.font_italic:zh_TW:斜體
-prefs_dialog.font_italic:PL:Kursywa
-prefs_dialog.font_italic:HU:dőlt
-prefs_dialog.font_italic:RU:Курсив
-prefs_dialog.font_italic:zh_CN:斜体
-prefs_dialog.font_italic:SI:Poševno
-prefs_dialog.font_italic:RO:Cursiv
-prefs_dialog.font_italic:IT:Corsivo
-prefs_dialog.font_italic:KR:이탤릭
-prefs_dialog.font_italic:pt_BR:Itálico
-prefs_dialog.font_italic:NL:Schuin
-prefs_dialog.font_italic:SK:Kurzíva
-
-prefs_dialog.font_bold_italic:EN:Bold & italic
-prefs_dialog.font_bold_italic:FR:Gras et italique
-prefs_dialog.font_bold_italic:DE:Fett & Kursiv
-prefs_dialog.font_bold_italic:ES:Negrita e itálica
-prefs_dialog.font_bold_italic:CS:Tučné a proložené
-prefs_dialog.font_bold_italic:zh_TW:粗斜體
-prefs_dialog.font_bold_italic:PL:Pogrubiona kursywa
-prefs_dialog.font_bold_italic:HU:vastag és dőlt
-prefs_dialog.font_bold_italic:RU:Полужирный курсив
-prefs_dialog.font_bold_italic:zh_CN:粗斜体
-prefs_dialog.font_bold_italic:SI:Krepko in poševno
-prefs_dialog.font_bold_italic:RO:Îngroșat și cursiv
-prefs_dialog.font_bold_italic:IT:Grassetto & italico
-prefs_dialog.font_bold_italic:KR:볼드 & 이탤릭
-prefs_dialog.font_bold_italic:pt_BR:Negrito & itálico
-prefs_dialog.font_bold_italic:NL:Vet en schuin
-prefs_dialog.font_bold_italic:SK:Tučné a kurzíva
-
-prefs_dialog.background_colors:EN:Background colors
-prefs_dialog.background_colors:FR:Couleurs de fond
-prefs_dialog.background_colors:DE:Hintergrundfarben
-prefs_dialog.background_colors:ES:Colores de fonfo
-prefs_dialog.background_colors:CS:Barvy pozadí
-prefs_dialog.background_colors:zh_TW:背景顏色
-prefs_dialog.background_colors:PL:Kolor tła
-prefs_dialog.background_colors:HU:háttérszínek
-prefs_dialog.background_colors:RU:Цвета фона
-prefs_dialog.background_colors:zh_CN:背景颜色
-prefs_dialog.background_colors:SI:Barve ozadja
-prefs_dialog.background_colors:RO:Culori de fundal
-prefs_dialog.background_colors:IT:Colori sfondo
-prefs_dialog.background_colors:KR:바탕 색상
-prefs_dialog.background_colors:pt_BR:Cor de fundo
-prefs_dialog.background_colors:NL:Achtergrondkleuren
-prefs_dialog.background_colors:SK:Farba pozadia
-
-prefs_dialog.background_color:EN:Background
-prefs_dialog.background_color:FR:Fond
-prefs_dialog.background_color:DE:Hintergrund
-prefs_dialog.background_color:ES:Fondo
-prefs_dialog.background_color:CS:Pozadí
-prefs_dialog.background_color:zh_TW:背景
-prefs_dialog.background_color:PL:Tło
-prefs_dialog.background_color:HU:háttér
-prefs_dialog.background_color:RU:Фон
-prefs_dialog.background_color:zh_CN:背景
-prefs_dialog.background_color:SI:Ozadje
-prefs_dialog.background_color:RO:Fond
-prefs_dialog.background_color:IT:Sfondo
-prefs_dialog.background_color:KR:바탕
-prefs_dialog.background_color:pt_BR:Fundo
-prefs_dialog.background_color:NL:Achtergrond
-prefs_dialog.background_color:SK:Pozadie
-
-prefs_dialog.selection_color:EN:Selection background
-prefs_dialog.selection_color:FR:Fond de la sélection
-prefs_dialog.selection_color:DE:Markierungshintergrund
-prefs_dialog.selection_color:ES:Seleccionar fondo
-prefs_dialog.selection_color:CS:Pozadí výběru
-prefs_dialog.selection_color:zh_TW:選取項目的背景
-prefs_dialog.selection_color:PL:Tło zaznaczenia
-prefs_dialog.selection_color:HU:kiválasztás háttere
-prefs_dialog.selection_color:RU:Фон выделения
-prefs_dialog.selection_color:zh_CN:选定项目背景
-prefs_dialog.selection_color:SI:Označeno ozadje
-prefs_dialog.selection_color:RO:Fondul selecției
-prefs_dialog.selection_color:IT:Selezione sfondo
-prefs_dialog.selection_color:KR:셀렉션 바탕 색상
-prefs_dialog.selection_color:pt_BR:Selecionar fundo
-prefs_dialog.selection_color:NL:Selectieachtergrond
-prefs_dialog.selection_color:SK:Pozadie výberu
-
-prefs_dialog.not_in_focus_selection_color:EN:Selection background when not in focus
-prefs_dialog.not_in_focus_selection_color:FR:Fond de la sélection sans focus
-prefs_dialog.not_in_focus_selection_color:RO:Fondul selecției fără focus
-prefs_dialog.not_in_focus_selection_color:SI:Neaktivno označeno ozadje
-prefs_dialog.not_in_focus_selection_color:IT:Selezione sfondo quando non in focus
-prefs_dialog.not_in_focus_selection_color:CS:Pozadí výběru bez fokusu
-prefs_dialog.not_in_focus_selection_color:zh_TW:當不具焦點時, 選取項目的背景顏色
-prefs_dialog.not_in_focus_selection_color:DE:Hintergrund der Auswahl wenn nicht im Fokus
-prefs_dialog.not_in_focus_selection_color:zh_CN:没有焦点时, 被选项目的背景色
-prefs_dialog.not_in_focus_selection_color:RU:Фон выделения при отсутствии фокуса
-prefs_dialog.not_in_focus_selection_color:ES:Seleccionar fondo cuando no enfocado
-prefs_dialog.not_in_focus_selection_color:PL:Tło zaznaczenia kiedy nieaktywne
-prefs_dialog.not_in_focus_selection_color:KR:커서가 없을 경우 셀렉션 바탕 선택
-prefs_dialog.not_in_focus_selection_color:pt_BR:Selecionar fundo quando não estiver em foco
-prefs_dialog.not_in_focus_selection_color:NL:Selectieachtergrond indien niet in focus
-prefs_dialog.not_in_focus_selection_color:SK:Pozadie výberu bez fókusu
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
-prefs_dialog.font_colors:EN:Font colors
-prefs_dialog.font_colors:FR:Couleurs de la fonte
-prefs_dialog.font_colors:DE:Schriftfarben
-prefs_dialog.font_colors:ES:Colores de la fuente
-prefs_dialog.font_colors:CS:Barva písma 
-prefs_dialog.font_colors:zh_TW:字型顏色
-prefs_dialog.font_colors:PL:Kolor czcionki 
-prefs_dialog.font_colors:HU:betű szín
-prefs_dialog.font_colors:RU:Цвета шрифтов
-prefs_dialog.font_colors:zh_CN:字体颜色
-prefs_dialog.font_colors:SI:Barva pisave
-prefs_dialog.font_colors:RO:Culori pentru text
-prefs_dialog.font_colors:IT:Colori font
-prefs_dialog.font_colors:KR:글꼴 색상
-prefs_dialog.font_colors:pt_BR:Cor da fonte
-prefs_dialog.font_colors:NL:Letterkleuren
-prefs_dialog.font_colors:SK:Farba písma
-
-prefs_dialog.plain_file_color:EN:Plain file
-prefs_dialog.plain_file_color:FR:Fichier normal
-prefs_dialog.plain_file_color:DE:Normale Datei
-prefs_dialog.plain_file_color:ES:Fichero plano
-prefs_dialog.plain_file_color:CS:Běžný soubor
-prefs_dialog.plain_file_color:zh_TW:一般檔案
-prefs_dialog.plain_file_color:PL:Zwykły plik
-prefs_dialog.plain_file_color:HU:fájl
-prefs_dialog.plain_file_color:RU:Обычный файл
-prefs_dialog.plain_file_color:zh_CN:一般文件
-prefs_dialog.plain_file_color:SI:Navadna datoteka
-prefs_dialog.plain_file_color:RO:Fișier normal
-prefs_dialog.plain_file_color:IT:File normale
-prefs_dialog.plain_file_color:KR:일반 파일
-prefs_dialog.plain_file_color:pt_BR:Arquivo normal
-prefs_dialog.plain_file_color:NL:Normaal bestand
-prefs_dialog.plain_file_color:SK:Bežný súbor
-
-prefs_dialog.marked_file_color:EN:Marked file
-prefs_dialog.marked_file_color:FR:Fichier marqué
-prefs_dialog.marked_file_color:DE:Markierte Datei
-prefs_dialog.marked_file_color:ES:Fichero marcado
-prefs_dialog.marked_file_color:CS:Označený soubor
-prefs_dialog.marked_file_color:zh_TW:已標記檔案
-prefs_dialog.marked_file_color:PL:Zaznaczony plik
-prefs_dialog.marked_file_color:HU:megjelölt fájl
-prefs_dialog.marked_file_color:RU:Выделенный файл
-prefs_dialog.marked_file_color:zh_CN:已标记文件
-prefs_dialog.marked_file_color:SI:Označena datoteka
-prefs_dialog.marked_file_color:RO:Fișier selectat
-prefs_dialog.marked_file_color:IT:File selezionato
-prefs_dialog.marked_file_color:KR:선택된 파일
-prefs_dialog.marked_file_color:pt_BR:Arquivo marcado
-prefs_dialog.marked_file_color:NL:Gemarkeerd bestand
-prefs_dialog.marked_file_color:SK:Označený súbor
-
-prefs_dialog.selected_file_color:EN:Selected file
-prefs_dialog.selected_file_color:FR:Fichier sélectionné
-prefs_dialog.selected_file_color:DE:Selektierte Datei
-prefs_dialog.selected_file_color:ES:Fichero seleccionado
-prefs_dialog.selected_file_color:CS:Vybraný soubor
-prefs_dialog.selected_file_color:zh_TW:已選取檔案
-prefs_dialog.selected_file_color:PL:Wybraný plik
-prefs_dialog.selected_file_color:HU:kiválasztott fájl
-prefs_dialog.selected_file_color:RU:Выбранный файл
-prefs_dialog.selected_file_color:zh_CN:已选定文件
-prefs_dialog.selected_file_color:SI:Izbrana datoteka
-prefs_dialog.selected_file_color:RO:Fișier activ
-prefs_dialog.selected_file_color:IT:File selezionato
-prefs_dialog.selected_file_color:KR:셀렉트 파일
-prefs_dialog.selected_file_color:pt_BR:Arquivo selecionado
-prefs_dialog.selected_file_color:NL:Geselecteerd bestand
-prefs_dialog.selected_file_color:SK:Vybraný súbor
-
-prefs_dialog.hidden_file_color:EN:Hidden file
-prefs_dialog.hidden_file_color:FR:Fichier caché
-prefs_dialog.hidden_file_color:DE:Versteckte Datei
-prefs_dialog.hidden_file_color:ES:Fichero oculto
-prefs_dialog.hidden_file_color:CS:Skrytý soubor
-prefs_dialog.hidden_file_color:zh_TW:隱藏檔
-prefs_dialog.hidden_file_color:PL:Ukryty plik
-prefs_dialog.hidden_file_color:HU:rejtett fájl
-prefs_dialog.hidden_file_color:RU:Скрытый файл
-prefs_dialog.hidden_file_color:zh_CN:隐藏文件
-prefs_dialog.hidden_file_color:SI:Skrita datoteka
-prefs_dialog.hidden_file_color:RO:Fișier ascuns
-prefs_dialog.hidden_file_color:IT:File nascosto
-prefs_dialog.hidden_file_color:KR:숨김파일
-prefs_dialog.hidden_file_color:pt_BR:Arquivo oculto
-prefs_dialog.hidden_file_color:NL:Verborgen bestand
-prefs_dialog.hidden_file_color:SK:Skrutý súbor
-
-prefs_dialog.folder_color:EN:Folder
-prefs_dialog.folder_color:FR:Dossier
-prefs_dialog.folder_color:DE:Ordner
-prefs_dialog.folder_color:ES:Directorio
-prefs_dialog.folder_color:CS:Složka
-prefs_dialog.folder_color:zh_TW:資料夾
-prefs_dialog.folder_color:PL:Katalog
-prefs_dialog.folder_color:HU:könyvtár
-prefs_dialog.folder_color:RU:Каталог
-prefs_dialog.folder_color:zh_CN:文件夹
-prefs_dialog.folder_color:SI:Mapa
-prefs_dialog.folder_color:RO:Director
-prefs_dialog.folder_color:IT:Cartella
-prefs_dialog.folder_color:KR:폴더
-prefs_dialog.folder_color:pt_BR:Diretório
-prefs_dialog.folder_color:NL:Map
-prefs_dialog.folder_color:SK:Priečinok
-
-prefs_dialog.archive_file_color:EN:Archive file
-prefs_dialog.archive_file_color:FR:Archive
-prefs_dialog.archive_file_color:DE:Archivdatei
-prefs_dialog.archive_file_color:ES:Archivar fichero
-prefs_dialog.archive_file_color:CS:Archív
-prefs_dialog.archive_file_color:zh_TW:壓縮檔
-prefs_dialog.archive_file_color:PL:Plik archiwum
-prefs_dialog.archive_file_color:HU:archív fájlok
-prefs_dialog.archive_file_color:RU:Архив
-prefs_dialog.archive_file_color:zh_CN:压缩文件
-prefs_dialog.archive_file_color:SI:Arhivska datoteka
-prefs_dialog.archive_file_color:RO:Arhivă
-prefs_dialog.archive_file_color:IT:Archivio
-prefs_dialog.archive_file_color:KR:아카이브 파일
-prefs_dialog.archive_file_color:pt_BR:Arquivar
-prefs_dialog.archive_file_color:NL:Ingepakt bestand
-prefs_dialog.archive_file_color:SK:Archív
-
-prefs_dialog.symbolic_link_color:EN:Symbolic link
-prefs_dialog.symbolic_link_color:FR:Lien symbolique
-prefs_dialog.symbolic_link_color:DE:Symbolic Link
-prefs_dialog.symbolic_link_color:ES:Enlace simbólico
-prefs_dialog.symbolic_link_color:CS:Symbolický odkaz
-prefs_dialog.symbolic_link_color:zh_TW:符號連結
-prefs_dialog.symbolic_link_color:PL:Dowiązanie symboliczne
-prefs_dialog.symbolic_link_color:HU:parancsikon fájlok
-prefs_dialog.symbolic_link_color:RU:Символьная ссылка
-prefs_dialog.symbolic_link_color:zh_CN:符号连接
-prefs_dialog.symbolic_link_color:SI:Simbolična povezava
-prefs_dialog.symbolic_link_color:RO:Legătură simbolică
-prefs_dialog.symbolic_link_color:IT:Link simbolico
-prefs_dialog.symbolic_link_color:KR:심볼릭 링크
-prefs_dialog.symbolic_link_color:pt_BR:Link simbólico
-prefs_dialog.symbolic_link_color:NL:Symbolische link
-prefs_dialog.symbolic_link_color:SK:Symbolický odkaz
-
-prefs_dialog.pick_a_color:EN:Pick a color
-prefs_dialog.pick_a_color:FR:Choisir une couleur
-prefs_dialog.pick_a_color:DE:Farbe wählen
-prefs_dialog.pick_a_color:ES:Seleccionar un color
-prefs_dialog.pick_a_color:CS:Vyberte barvu
-prefs_dialog.pick_a_color:zh_TW:挑選一個顏色
-prefs_dialog.pick_a_color:PL:Wybierz kolor
-prefs_dialog.pick_a_color:HU:Válasszon színt
-prefs_dialog.pick_a_color:RU:Выбор цвета
-prefs_dialog.pick_a_color:zh_CN:挑选一个颜色
-prefs_dialog.pick_a_color:SI:Izberi barvo
-prefs_dialog.pick_a_color:RO:Alegeți o culoare
-prefs_dialog.pick_a_color:IT:Scegli un colore
-prefs_dialog.pick_a_color:KR:색상 선택
-prefs_dialog.pick_a_color:pt_BR:Selecionar uma cor
-prefs_dialog.pick_a_color:NL:Kies een kleur
-prefs_dialog.pick_a_color:SK:Vyberte farbu
-
-prefs_dialog.shell_colors:EN:Shell colors
-prefs_dialog.shell_colors:FR:Couleurs du shell
-prefs_dialog.shell_colors:RO:Culori pentru shell
-prefs_dialog.shell_colors:SI:Barve v ukazni vrstici
-prefs_dialog.shell_colors:IT:Colori del terminale
-prefs_dialog.shell_colors:CS:Barvy shellu
-prefs_dialog.shell_colors:zh_TW:Shell 顏色
-prefs_dialog.shell_colors:DE:Farbe Eingabeauforderung 
-prefs_dialog.shell_colors:zh_CN:Shell 颜色
-prefs_dialog.shell_colors:RU:Системные цвета
-prefs_dialog.shell_colors:ES:Colores de shell
-prefs_dialog.shell_colors:PL:Kolor okna terminala (shell)
-prefs_dialog.shell_colors:KR:쉘 색상
-prefs_dialog.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
-prefs_dialog.shell_colors:NL:Kleuren van de shell
-prefs_dialog.shell_colors:SK:Farba terminálu (shell)
-# Translation missing
-
-
-
-
-
-
-
-
-
-prefs_dialog.shell_colors.text_color:EN:Text
-prefs_dialog.shell_colors.text_color:FR:Texte
-prefs_dialog.shell_colors.text_color:RO:Text
-prefs_dialog.shell_colors.text_color:SI:Besedilo
-prefs_dialog.shell_colors.text_color:IT:Testo
-prefs_dialog.shell_colors.text_color:CS:Text
-prefs_dialog.shell_colors.text_color:zh_TW:文字
-prefs_dialog.shell_colors.text_color:DE:Text
-prefs_dialog.shell_colors.text_color:zh_CN:文本
-prefs_dialog.shell_colors.text_color:RU:Текст
-prefs_dialog.shell_colors.text_color:ES:Texto
-prefs_dialog.shell_colors.text_color:PL:Tekst
-prefs_dialog.shell_colors.text_color:KR:텍스트
-prefs_dialog.shell_colors.text_color:pt_BR:Texto
-prefs_dialog.shell_colors.text_color:NL:Tekst
-prefs_dialog.shell_colors.text_color:SK:Text
-# Translation missing
-
-
-
-
-
-
-
-prefs_dialog.shell_colors.selection_color:EN:$[prefs_dialog.selection_color]
-
-prefs_dialog.shell_colors.background_color:EN:$[prefs_dialog.background_color]
-
 prefs_dialog.themes:EN:Themes
 prefs_dialog.themes:FR:Thèmes
 prefs_dialog.themes:SI:Teme
@@ -8748,33 +8781,6 @@ prefs_dialog.themes:pt_BR:Temas
 prefs_dialog.themes:NL:Thema's
 prefs_dialog.themes:SK:Témy
 # Translation missing
-
-
-
-
-
-
-
-
-
-prefs_dialog.theme_warning:EN:This will overwrite the custom theme. Do you wish to proceed?
-prefs_dialog.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
-prefs_dialog.theme_warning:SI:To bo prepisalo običajno temo. Želite nadaljevati?
-prefs_dialog.theme_warning:IT:Questa operazione sovrascrive il tema utente. Procedere ?
-prefs_dialog.theme_warning:CS:Operace přepíše uživatelské téma. Opravdu chcete pokračovat?
-prefs_dialog.theme_warning:zh_TW:這將會覆蓋自訂的佈景主題. 確定要繼續?
-prefs_dialog.theme_warning:DE:Dies überschreibt ein angepasstes Thema. Wollen Sie fortfahren?
-prefs_dialog.theme_warning:RO:Această operație va suprascrie o temă personalizată. Doriți să continuați?
-prefs_dialog.theme_warning:zh_CN:这样会覆盖定制的主题，继续吗？
-prefs_dialog.theme_warning:RU:Это приведет к замене существующей темы. Вы уверены, что хотите продолжить?
-prefs_dialog.theme_warning:ES:Esto sobrescribirá el tema específico. ¿Desea proceder?
-prefs_dialog.theme_warning:PL:Spowoduje to nadpisanie schematu użytkownika. Czy chcesz kontynuować?
-prefs_dialog.theme_warning:KR:사용자 설정 테마를 겹쳐쓸것입니다. 계속할까요?
-prefs_dialog.theme_warning:pt_BR:Esta ação irá sobrescrever o tema personalizado. Continuar?
-prefs_dialog.theme_warning:NL:Dit zal het huidige thema overschrijven. Wilt u doorgaan?
-prefs_dialog.theme_warning:SK:Užívateľská téma bude prepísaná. Naozaj chcete pokračovať?
-# Translation missing
-
 
 
 
@@ -9636,3 +9642,203 @@ setup.theme:SK:Vyberte tému
 #progress_dialog.hide:RU:Скрыть
 #progress_dialog.hide:ZH_CN:隐藏
 #progress_dialog.hide:SI:Skrij
+
+
+
+
+################
+# Font chooser #
+################
+fontchooser.font_size:EN:Size
+fontchooser.font_size:FR:Taille
+fontchooser.font_size:DE:Größe
+fontchooser.font_size:ES:Tamaño
+fontchooser.font_size:CS:Velikost
+fontchooser.font_size:zh_TW:大小
+fontchooser.font_size:PL:Rozmiar
+fontchooser.font_size:HU:méret
+fontchooser.font_size:RU:Размер
+fontchooser.font_size:zh_CN:字号
+fontchooser.font_size:SI:Velikost
+fontchooser.font_size:RO:Dimensiune
+fontchooser.font_size:IT:Dimensione
+fontchooser.font_size:KR:크기
+
+fontchooser.font_bold:EN:Bold
+fontchooser.font_bold:FR:Gras
+fontchooser.font_bold:DE:Fett
+fontchooser.font_bold:ES:Negrita
+fontchooser.font_bold:CS:Tučné
+fontchooser.font_bold:zh_TW:粗體
+fontchooser.font_bold:PL:Pogrubiony
+fontchooser.font_bold:HU:vastag
+fontchooser.font_bold:RU:Полужирный
+fontchooser.font_bold:zh_CN:粗体
+fontchooser.font_bold:SI:Krepko
+fontchooser.font_bold:RO:Îngroșat
+fontchooser.font_bold:IT:Grassetto
+fontchooser.font_bold:KR:볼드
+
+fontchooser.font_italic:EN:Italic
+fontchooser.font_italic:FR:Italique
+fontchooser.font_italic:DE:Kursiv
+fontchooser.font_italic:ES:Itálica
+fontchooser.font_italic:CS:Proložené
+fontchooser.font_italic:zh_TW:斜體
+fontchooser.font_italic:PL:Kursywa
+fontchooser.font_italic:HU:dőlt
+fontchooser.font_italic:RU:Курсив
+fontchooser.font_italic:zh_CN:斜体
+fontchooser.font_italic:SI:Poševno
+fontchooser.font_italic:RO:Cursiv
+fontchooser.font_italic:IT:Corsivo
+fontchooser.font_italic:KR:이탤릭
+
+fontchooser.example:EN:Example
+fontchooser.example:FR:Exemple
+fontchooser.example:DE:Beispiel
+fontchooser.example:ES:Ejemplo
+fontchooser.example:CS:Příklad
+fontchooser.example:zh_TW:範例
+fontchooser.example:PL:Przykład
+fontchooser.example:HU:példa
+fontchooser.example:RU:Пример
+fontchooser.example:zh_CN:示例
+fontchooser.example:SI:Primer
+fontchooser.example:RO:Exemplu
+fontchooser.example:IT:Esempio
+fontchooser.example:KR:예제
+fontchooser.example:pt_BR:Exemplo
+fontchooser.example:NL:Voorbeeld
+fontchooser.example:SK:Príklad
+
+
+
+#################
+# Color chooser #
+#################
+colorchooser.red:EN:Red
+colorchooser.red:FR:Rouge
+# Translation missing
+
+
+
+
+
+colorchooser.green:EN:Green
+colorchooser.Green:FR:Vert
+# Translation missing
+
+
+
+
+
+colorchooser.blue:EN:Blue
+colorchooser.blue:FR:Bleu
+# Translation missing
+
+
+
+
+colorchooser.hue:EN:Hue
+colorchooser.hue:FR:Tonalité
+# Translation missing
+
+
+
+
+
+colorchooser.brightness:EN:Brightness
+colorchooser.brightness:FR:Luminosité
+# Translation missing
+
+
+
+
+colorchooser.swatches:EN:Swatches
+colorchooser.swatches:FR:Echantillons
+# Translation missing
+
+
+
+
+colorchooser.saturation:EN:Saturation
+colorchooser.saturation:FR:Saturation
+# Translation missing
+
+
+
+
+
+colorchooser.rgb:EN:RGB
+colorchooser.rgb:FR:RVB
+# Translation missing
+
+
+
+
+
+
+colorchooser.hsb:EN:HSB
+colorchooser.hsb:FR:TSL
+# Translation missing
+
+
+
+
+
+colorchooser.recent:EN:Recent
+colorchooser.recent:FR:Récentes
+# Translation missing
+
+
+
+
+colorchooser.alpha:EN:Alpha transparency
+colorchooser.alpha:FR:Transparence alpha
+# Translation missing
+
+
+
+
+colorchooser.sample_label:EN:$[example]
+colorchooser.sample_label:FR:$[example]
+colorchooser.sample_label:DE:$[example]
+colorchooser.sample_label:ES:$[example]
+colorchooser.sample_label:CS:$[example]
+colorchooser.sample_label:zh_TW:$[example]
+colorchooser.sample_label:PL:$[example]
+colorchooser.sample_label:HU:$[example]
+colorchooser.sample_label:RU:$[example]
+colorchooser.sample_label:zh_CN:$[example]
+colorchooser.sample_label:SI:$[example]
+colorchooser.sample_label:RO:$[example]
+colorchooser.sample_label:IT:$[example]
+colorchooser.sample_label:KR:$[example]
+
+# Translation missing
+
+
+
+
+
+colorchooser.sample_text:EN:Sample text
+colorchooser.sample_text:FR:Texte d'exemple
+# Translation missing
+
+
+
+colorchooser.title:EN:Pick a color
+colorchooser.title:FR:Choisir une couleur
+colorchooser.title:DE:Farbe wählen
+colorchooser.title:ES:Seleccionar un color
+colorchooser.title:CS:Vyberte barvu
+colorchooser.title:zh_TW:挑選一個顏色
+colorchooser.title:PL:Wybierz kolor
+colorchooser.title:HU:Válasszon színt
+colorchooser.title:RU:Выбор цвета
+colorchooser.title:zh_CN:挑选一个颜色
+colorchooser.title:SI:Izberi barvo
+colorchooser.title:RO:Alegeți o culoare
+colorchooser.title:IT:Scegli un colore
+colorchooser.title:KR:색상 선택
