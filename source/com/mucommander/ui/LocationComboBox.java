@@ -13,9 +13,7 @@ import com.mucommander.ui.comp.combobox.SaneComboBox;
 import com.mucommander.ui.comp.progress.ProgressTextField;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -223,40 +221,36 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     // -------------------------------------------------------------------------------
     /**
      * Receives theme color changes notifications.
-     * @param colorId identifier of the color that has changed.
-     * @param color   new value for the color.
      */
-    public void colorChanged(int colorId, Color color) {
-        switch(colorId) {
+    public void colorChanged(ColorChangedEvent event) {
+        switch(event.getColorId()) {
         case Theme.LOCATION_BAR_PROGRESS_COLOR:
-            locationField.setProgressColor(color);
+            locationField.setProgressColor(event.getColor());
             break;
 
         case Theme.LOCATION_BAR_FOREGROUND_COLOR:
-            setForeground(color);
+            setForeground(event.getColor());
             break;
 
         case Theme.LOCATION_BAR_BACKGROUND_COLOR:
-            setBackground(color);
+            setBackground(event.getColor());
             break;
 
         case Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR:
-            setSelectionForeground(color);
+            setSelectionForeground(event.getColor());
             break;
 
         case Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR:
-            setSelectionBackground(color);
+            setSelectionBackground(event.getColor());
             break;
         }
     }
 
     /**
      * Receives theme font changes notifications.
-     * @param fontId identifier of the font that has changed.
-     * @param font   new value for the font.
      */
-    public void fontChanged(int fontId, Font font) {
-        if(fontId == Theme.LOCATION_BAR_FONT)
-            setFont(font);
+    public void fontChanged(FontChangedEvent event) {
+        if(event.getFontId() == Theme.LOCATION_BAR_FONT)
+            setFont(event.getFont());
     }
 }

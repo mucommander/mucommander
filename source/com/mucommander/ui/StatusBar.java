@@ -16,9 +16,7 @@ import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FileTableModel;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -434,18 +432,18 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     }
 
 
-    public void fontChanged(int fontId, Font newFont) {
-        if(fontId == Theme.STATUS_BAR_FONT) {
-            selectedFilesLabel.setFont(newFont);
-            volumeSpaceLabel.setFont(newFont);
+    public void fontChanged(FontChangedEvent event) {
+        if(event.getFontId() == Theme.STATUS_BAR_FONT) {
+            selectedFilesLabel.setFont(event.getFont());
+            volumeSpaceLabel.setFont(event.getFont());
             repaint();
         }
     }
 
-    public void colorChanged(int colorId, Color newColor) {
-        if(colorId == Theme.STATUS_BAR_FOREGROUND_COLOR) {
-            selectedFilesLabel.setForeground(newColor);
-            volumeSpaceLabel.setForeground(newColor);
+    public void colorChanged(ColorChangedEvent event) {
+        if(event.getColorId() == Theme.STATUS_BAR_FOREGROUND_COLOR) {
+            selectedFilesLabel.setForeground(event.getColor());
+            volumeSpaceLabel.setForeground(event.getColor());
             repaint();
         }
     }
@@ -561,21 +559,28 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             super.paint(g);
         }
 
-        public void fontChanged(int fontId, Font newFont) {}
+        public void fontChanged(FontChangedEvent event) {}
 
-        public void colorChanged(int colorId, Color newColor) {
-            if(colorId == Theme.STATUS_BAR_BACKGROUND_COLOR)
-                backgroundColor = newColor;
-            else if(colorId == Theme.STATUS_BAR_BORDER_COLOR)
-                borderColor = newColor;
-            else if(colorId == Theme.STATUS_BAR_OK_COLOR)
-                okColor = newColor;
-            else if(colorId == Theme.STATUS_BAR_WARNING_COLOR)
-                warningColor = newColor;
-            else if(colorId == Theme.STATUS_BAR_CRITICAL_COLOR)
-                criticalColor = newColor;
-            else
+        public void colorChanged(ColorChangedEvent event) {
+            switch(event.getColorId()) {
+            case Theme.STATUS_BAR_BACKGROUND_COLOR:
+                backgroundColor = event.getColor();
+                break;
+            case Theme.STATUS_BAR_BORDER_COLOR:
+                borderColor = event.getColor();
+                break;
+            case Theme.STATUS_BAR_OK_COLOR:
+                okColor = event.getColor();
+                break;
+            case Theme.STATUS_BAR_WARNING_COLOR:
+                warningColor = event.getColor();
+                break;
+            case Theme.STATUS_BAR_CRITICAL_COLOR:
+                criticalColor = event.getColor();
+                break;
+            default:
                 return;
+            }
             repaint();
         }
     }

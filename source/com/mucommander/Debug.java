@@ -1,5 +1,3 @@
-
-
 package com.mucommander;
 
 import com.mucommander.io.SilenceablePrintStream;

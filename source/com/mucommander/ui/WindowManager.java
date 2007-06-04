@@ -445,12 +445,10 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         try {
             UIManager.setLookAndFeel(lnfName);
 
-            for(int i=0; i<mainFrames.size(); i++) {
+            for(int i=0; i<mainFrames.size(); i++)
                 SwingUtilities.updateComponentTreeUI((MainFrame)(mainFrames.elementAt(i)));
-            }
         }
-        catch(Exception e) {
-        }
+        catch(Exception e) {}
     }
 
 
@@ -570,14 +568,11 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     	// /!\ font.size is set after font.family in AppearancePrefPanel
     	// that's why we only listen to this one in order not to change Font twice
     	if (var.equals(ConfigurationVariables.LOOK_AND_FEEL)) {
-            if(Debug.ON) Debug.trace("LookAndFeel changed! "+event.getValue());
+            if(Debug.ON) Debug.trace("LookAndFeel changed! " + event.getValue());
             String lnfName = event.getValue();
 
-	    if(!UIManager.getLookAndFeel().getClass().getName().equals(lnfName)) {
+	    if(!UIManager.getLookAndFeel().getClass().getName().equals(lnfName))
 		setLookAndFeel(lnfName);
-		// Forces the whole UI to refresh is colors using the current theme values.
-		ThemeManager.forceRefresh();
-	    }
         }
     
     	return true;

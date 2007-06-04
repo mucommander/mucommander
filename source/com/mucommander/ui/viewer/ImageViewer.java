@@ -5,9 +5,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.menu.MenuToolkit;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -226,12 +224,10 @@ public class ImageViewer extends FileViewer implements ActionListener, ThemeList
     // -------------------------------------------------------------------------------
     /**
      * Receives theme color changes notifications.
-     * @param colorId identifier of the color that has changed.
-     * @param color   new value for the color.
      */
-    public void colorChanged(int colorId, Color color) {
-        if(colorId == Theme.EDITOR_BACKGROUND_COLOR) {
-            backgroundColor = color;
+    public void colorChanged(ColorChangedEvent event) {
+        if(event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR) {
+            backgroundColor = event.getColor();
             repaint();
         }
     }
@@ -239,5 +235,5 @@ public class ImageViewer extends FileViewer implements ActionListener, ThemeList
     /**
      * Not used.
      */
-    public void fontChanged(int fontId, Font font) {}
+    public void fontChanged(FontChangedEvent event) {}
 }

@@ -100,36 +100,32 @@ public class TextViewer extends FileViewer implements ActionListener, ThemeListe
     // -------------------------------------------------------------------------------
     /**
      * Receives theme color changes notifications.
-     * @param colorId identifier of the color that has changed.
-     * @param color   new value for the color.
      */
-    public void colorChanged(int colorId, Color color) {
-        switch(colorId) {
+    public void colorChanged(ColorChangedEvent event) {
+        switch(event.getColorId()) {
         case Theme.EDITOR_FOREGROUND_COLOR:
-            textArea.setForeground(color);
+            textArea.setForeground(event.getColor());
             break;
 
         case Theme.EDITOR_BACKGROUND_COLOR:
-            textArea.setBackground(color);
+            textArea.setBackground(event.getColor());
             break;
 
         case Theme.EDITOR_SELECTED_FOREGROUND_COLOR:
-            textArea.setSelectedTextColor(color);
+            textArea.setSelectedTextColor(event.getColor());
             break;
 
         case Theme.EDITOR_SELECTED_BACKGROUND_COLOR:
-            textArea.setSelectionColor(color);
+            textArea.setSelectionColor(event.getColor());
             break;
         }
     }
 
     /**
      * Receives theme font changes notifications.
-     * @param fontId identifier of the font that has changed.
-     * @param font   new value for the font.
      */
-    public void fontChanged(int fontId, Font font) {
-        if(fontId == Theme.EDITOR_FONT)
-            textArea.setFont(font);
+    public void fontChanged(FontChangedEvent event) {
+        if(event.getFontId() == Theme.EDITOR_FONT)
+            textArea.setFont(event.getFont());
     }
 }

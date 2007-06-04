@@ -26,9 +26,7 @@ import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.table.FileTable;
 import com.mucommander.ui.table.FolderChangeMonitor;
 import com.mucommander.ui.table.TablePopupMenu;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -173,7 +171,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Set scroll pane's background color to match the one of this panel and FileTable
         scrollPane.getViewport().setBackground(unfocusedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR));
         backgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
-        //        scrollPane.getViewport().setBackground(ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR));
 
         // Catch mouse events on the ScrollPane
         scrollPane.addMouseListener(new MouseAdapter() {
@@ -946,26 +943,27 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     // -------------------------------------------------------------------------------
     /**
      * Receives theme color changes notifications.
-     * @param colorId identifier of the color that has changed.
-     * @param color   new value for the color.
      */
-    public void colorChanged(int colorId, Color color) {
-        if(colorId == Theme.FILE_TABLE_BORDER_COLOR)
-            scrollPane.setBorder(BorderFactory.createLineBorder(color, 1));
-        else if(colorId == Theme.FILE_TABLE_BACKGROUND_COLOR) {
-            backgroundColor = color;
+    public void colorChanged(ColorChangedEvent event) {
+        switch(event.getColorId()) {
+        case Theme.FILE_TABLE_BORDER_COLOR:
+            scrollPane.setBorder(BorderFactory.createLineBorder(event.getColor(), 1));
+            break;
+        case Theme.FILE_TABLE_BACKGROUND_COLOR:
+            backgroundColor = event.getColor();
             if(fileTable.hasFocus())
-                scrollPane.getViewport().setBackground(color);
-        }
-        else if(colorId == Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR) {
-            unfocusedBackgroundColor = color;
+                scrollPane.getViewport().setBackground(backgroundColor);
+            break;
+        case Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR:
+            unfocusedBackgroundColor = event.getColor();
             if(!fileTable.hasFocus())
-                scrollPane.getViewport().setBackground(color);
+                scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
+            break;
         }
     }
 
     /**
      * Not used.
      */
-    public void fontChanged(int fontId, Font font) {}
+    public void fontChanged(FontChangedEvent event) {}
 }

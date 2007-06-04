@@ -1,7 +1,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.pref.PreferencesDialog;
+import com.mucommander.ui.pref.general.GeneralPreferencesDialog;
 
 import java.util.Hashtable;
 
@@ -17,6 +17,6 @@ public class ShowPreferencesAction extends MucoAction implements InvokesDialog {
     }
 
     public void performAction() {
-        new PreferencesDialog(mainFrame).showDialog();
+        new GeneralPreferencesDialog(mainFrame).showDialog();
     }
 }

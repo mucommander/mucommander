@@ -12,7 +12,7 @@ import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
 import com.mucommander.ui.comp.dialog.XAlignedComponentPanel;
 import com.mucommander.ui.comp.dialog.YBoxPanel;
-import com.mucommander.ui.pref.PreferencesDialog;
+import com.mucommander.ui.pref.general.GeneralPreferencesDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,8 +63,8 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
         if(!SendMailJob.mailPreferencesSet()) {
             JOptionPane.showMessageDialog(mainFrame, Translator.get("email_dialog.prefs_not_set"), Translator.get("email_dialog.prefs_not_set_title"), JOptionPane.INFORMATION_MESSAGE);
 	
-            PreferencesDialog preferencesDialog = new PreferencesDialog(mainFrame);
-            preferencesDialog.setActiveTab(PreferencesDialog.MAIL_TAB);
+            GeneralPreferencesDialog preferencesDialog = new GeneralPreferencesDialog(mainFrame);
+            preferencesDialog.setActiveTab(GeneralPreferencesDialog.MAIL_TAB);
             preferencesDialog.showDialog();
 			
             return;
