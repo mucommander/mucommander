@@ -139,8 +139,9 @@ public class IconManager {
             if(icon==null) {
                 // Icon is not in the cache, let's create it
                 icon = getIcon(ICON_SET_FOLDERS[iconSet]+iconName);
-                // and add it to the cache
-                cache.put(iconName, icon);
+                // and add it to the cache if icon exists
+                if(icon!=null)
+                    cache.put(iconName, icon);
             }
         }
 
