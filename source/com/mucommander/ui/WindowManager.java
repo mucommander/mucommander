@@ -12,7 +12,6 @@ import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.ui.auth.AuthDialog;
-import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -590,10 +589,10 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * a window will be displayed on the same screen, let alone computer, as the one
      * the application is running on.
      * </p>
-     * @param frame frame for which screen insets should be computed.
+     * @param window the window for which screen insets should be computed.
      */
-    private static Insets getScreenInsets(Frame frame) {
-        return Toolkit.getDefaultToolkit().getScreenInsets(frame.getGraphicsConfiguration());
+    public static Insets getScreenInsets(Window window) {
+        return Toolkit.getDefaultToolkit().getScreenInsets(window.getGraphicsConfiguration());
     }
 	
 	
