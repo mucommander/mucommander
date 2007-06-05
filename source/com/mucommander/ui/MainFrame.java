@@ -137,7 +137,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Split pane will be given any extra space
         contentPane.add(splitPane, BorderLayout.CENTER);
-//
+
         YBoxPanel southPanel = new YBoxPanel();
         // Add a 3-pixel gap between table and status/command bar
         southPanel.setInsets(new Insets(3, 0, 0, 0));
@@ -174,19 +174,9 @@ public class MainFrame extends JFrame implements LocationListener {
         //		glassPane.addKeyListener(new KeyAdapter() {});
 
         // For testing purposes, full screen option could be nice to add someday
-        //setUndecorated(true);
-        //java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
-
-//        // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their subcomponents.
-//        // Reflection is used to instanciate CustomFocusTraversalPolicy in order to get around 'NoClassDefFound' under Java 1.3.
-//        if(PlatformManager.JAVA_VERSION >= PlatformManager.JAVA_1_4) {
-//            try {
-//                setFocusTraversalPolicy((FocusTraversalPolicy)Class.forName("com.mucommander.ui.MainFrame$CustomFocusTraversalPolicy").getDeclaredConstructor(new Class[]{getClass()}).newInstance(new Object[]{this}));
-//            }
-//            catch(Exception e) {
-//                if(Debug.ON) Debug.trace("Exception thrown: "+e);
-//            }
-//        }
+//        setUndecorated(true);
+//        com.apple.cocoa.application.NSMenu.setMenuBarVisible(false);
+////        java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
 
         // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their subcomponents.
         setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
