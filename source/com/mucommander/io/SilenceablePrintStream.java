@@ -55,8 +55,6 @@ public class SilenceablePrintStream extends PrintStream {
      * Returns <code>true</code> if this <code>SilenceablePrintStream</code> is currently ignoring calls to
      * <code>write</code> and <code>print</code> methods, <code>false</code> if it is forwarding written data to the
      * underlying <code>OutputStream</code>.
-     *
-     * @return
      */
     public boolean isSilenced() {
         return silenced;

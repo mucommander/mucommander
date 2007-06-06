@@ -57,7 +57,7 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
      *
      * @return <code>true</code> if the file's length could be changed to the new length, <code>false</code> if the
      * operation is not supported.
-     * @throw IOException If an I/O error occurred while trying to change the file's length
+     * @throws IOException If an I/O error occurred while trying to change the file's length
      */
     public abstract boolean setLength(long newLength) throws IOException;
 }
