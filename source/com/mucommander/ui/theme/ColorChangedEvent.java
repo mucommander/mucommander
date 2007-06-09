@@ -13,6 +13,7 @@ public class ColorChangedEvent {
         this.color   = color;
     }
 
+    public boolean isDefaultColor() {return source == null;}
     public Theme getSource() {return source;}
     public int getColorId() {return colorId;}
     public Color getColor() {return color;}

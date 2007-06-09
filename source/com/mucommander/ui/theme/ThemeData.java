@@ -18,7 +18,7 @@ import java.util.WeakHashMap;
  * </p>
  * <p>
  * In the current version, theme data is solely composed of assorted colors and fonts. <code>ThemeData</code>
- * offers methods to {@link #setColor(int,Color) set}, {@link #getColor(int) retrieve}, {@link #isColorDifferent(int,Color) compare}
+ * offers methods to {@link #setColor(int,Color) set}, {@link #getColor(int) retrieve}, {@link #isIdentical(ThemeData,boolean) compare}
  * and {@link #cloneData() clone} these values.
  * </p>
  * <p>
@@ -915,7 +915,7 @@ public class ThemeData {
      * of the current data without hope of retrieval. Moreoever, if something were to
      * go wrong during the operation and an exception was raised, the current data would
      * find itself in an invalid state, where some of its values would have been updated but
-     * not all of theme. It is up to callers to deal with these issues.
+     * not all of them. It is up to callers to deal with these issues.
      * </p>
      * <p>
      * Values overwritting is done through the use of the current instance's {@link #setColor(int,Color)}
@@ -948,7 +948,7 @@ public class ThemeData {
      * </p>
      * <p>
      * This method will return <code>false</code> if it didn't actually change the theme data.
-     * This is checked through the use of {@link #isColorDifferent(int,Color)}.
+     * This is checked through the use of <code>{@link #isColorDifferent(int,Color) isColorDifferent(}id,color)</code>.
      * </p>
      * <p>
      * Note that even if the color is found to be identical, the previous value will be overwritten -
@@ -975,7 +975,7 @@ public class ThemeData {
      * </p>
      * <p>
      * This method will return <code>false</code> if it didn't actually change the theme data.
-     * This is checked through the use of {@link #isFontDifferent(int,Font)}.
+     * This is checked through the use of <code>{@link #isFontDifferent(int,Font) isFontDifferent(}id, font)</code>.
      * </p>
      * <p>
      * Note that even if the font is found to be identical, the previous value will be overwritten -
@@ -1248,38 +1248,28 @@ public class ThemeData {
     /**
      * Returns <code>true</code> if the specified data and the current one are identical.
      * <p>
-     * This is checked by calling {@link #isColorDifferent(int,Color)} and {@link #isFontDifferent(int,Font)} on every
-     * single color and font. These methods will, however, use default values when an item is not set, which means that
-     * two sets of data might be considered equal even if it's not strictly true.<br/>
-     * This behaviour makes sense from a user point of view - it compares the values that are used by the rest of the application,
-     * ie the ones that are visible to the user. It might, however, might not be what the caller needs.
-     * </p>
-     * <p>
-     * Setting <code>ignoreDefaults</code> to <code>true</code> will perform a stricter comparison, one which considers two sets
-     * of data to be different if one has a value for a given item while the other doesn't, regardless of this item's default value.
+     * Comparisons is done by calling {@link #isFontDifferent(int,Font,boolean)} and {@link #isColorDifferent(int,Color,boolean)}
+     * on every font and color. Refer to the documentation of these methods for more information on using the <code>ignoreDefaults</code>
+     * parameter.
      * </p>
      * @param  data           data against which to compare.
      * @param  ignoreDefaults whether or not to compare default values.
-     * @return      <code>true</code> if the specified data and the current one are identical, <code>false</code> otherwise.
+     * @return                <code>true</code> if the specified data and the current one are identical, <code>false</code> otherwise.
+     * @see                   #isFontDifferent(int,Font,boolean)
+     * @see                   #isColorDifferent(int,Color,boolean)
      */
     public boolean isIdentical(ThemeData data, boolean ignoreDefaults) {
         int i;
 
         // Compares the colors.
-        for(i = 0; i < COLOR_COUNT; i++) {
-            if(ignoreDefaults && !(data.colors[i] == null ^ colors[i] == null))
+        for(i = 0; i < COLOR_COUNT; i++)
+            if(isColorDifferent(i, data.colors[i] , ignoreDefaults))
                 return false;
-            if(isColorDifferent(i, data.colors[i]))
-                return false;
-        }
 
         // Compares the fonts.
-        for(i = 0; i < FONT_COUNT; i++) {
-            if(ignoreDefaults && !(data.fonts[i] == null ^ fonts[i] == null))
+        for(i = 0; i < FONT_COUNT; i++)
+            if(isFontDifferent(i, data.fonts[i], ignoreDefaults))
                 return false;
-            if(isFontDifferent(i, data.fonts[i]))
-                return false;
-        }
 
         return true;
     }
@@ -1297,54 +1287,90 @@ public class ThemeData {
     /**
      * Checks whether the current font and the specified one are different from one another.
      * <p>
-     * Note that this method uses default values when items are not set. If the current data doesn't have a font set
-     * for <code>id</code>, and <code>font</code> is equal to the default font for <code>id</code>, this method will
-     * return <code>false</code>.
-     * </p>
-     * <p>
-     * To check whether the fonts are different from a factual point of view rather than a visual one, the following code
-     * should be used:<br/>
-     * <code>!((font == null) ^ data.{@link #isFontSet(int) isFontSet(id)}) || data.isFontDifferent(id, font)</code>
+     * This is a convenience method, and is stricly equivalent to calling
+     * <code>{@link #isFontDifferent(int,Font,boolean) isFontDifferent(}id, font, false)</code>.
      * </p>
      * @param  id   identifier of the font to check.
      * @param  font font to check.
      * @return      <code>true</code> if <code>font</code> is different from the one defined in the data.
+     * @see         #isFontDifferent(int,Font,boolean)
+     * @see         #isColorDifferent(int,Color)
      */
-    public synchronized boolean isFontDifferent(int id, Font font) {
-        // Makes sure we're working with a legal identifier.
+    public boolean isFontDifferent(int id, Font font) {return isFontDifferent(id, font, false);}
+
+    /**
+     * Checks whether the current font and the specified one are different from one another.
+     * <p>
+     * Setting <code>ignoreDefaults</code> to <code>false</code> will compare both fonts from a 'user' point of view: comparison
+     * will be done on the values that are used by the rest of the application. It might however be necessary to consider
+     * fonts to be different if one is set but not the other. This can be achieved by setting <code>ignoreDefaults</code> to <code>true</code>.
+     * </p>
+     * @param  id             identifier of the font to check.
+     * @param  font           font to check.
+     * @param  ignoreDefaults whether or not to ignore defaults if the requested item doesn't have a value.
+     * @return                <code>true</code> if <code>font</code> is different from the one defined in the data.
+     * @see                   #isFontDifferent(int,Font)
+     * @see                   #isColorDifferent(int,Color)
+     */
+    public synchronized boolean isFontDifferent(int id, Font font, boolean ignoreDefaults) {
         checkFontIdentifier(id);
 
+        // If the specified font is null, the only way for both fonts to be equal is for fonts[id]
+        // to be null as well.
         if(font == null)
             return fonts[id] != null;
-        else if(fonts[id] == null)
-            return !getDefaultFont(id).equals(font);
+
+        // If fonts[id] is null and we're set to ignore defaults, both fonts are different.
+        // If we're set to use defaults, we must compare font and the default value for id.
+        if(fonts[id] == null)
+            return ignoreDefaults ? true : !getDefaultFont(id).equals(font);
+
+        // 'Standard' case: both fonts are set, compare them normally.
         return !font.equals(fonts[id]);
     }
 
     /**
      * Checks whether the current color and the specified one are different from one another.
      * <p>
-     * Note that this method uses default values when items are not set. If the current data doesn't have a color set
-     * for <code>id</code>, and <code>color</code> is equal to the default color for <code>id</code>, this method will
-     * return <code>false</code>.
-     * </p>
-     * <p>
-     * To check whether the colors are different from a factual point of view rather than a visual one, the following code
-     * should be used:<br/>
-     * <code>!((color == null) ^ data.{@link #isColorSet(int) isColorSet(id)}) || data.isColorDifferent(id, color)</code>
+     * This is a convenience method, and is stricly equivalent to calling
+     * <code>{@link #isColorDifferent(int,Color,boolean) isColorDifferent(}id, color, false)</code>.
      * </p>
      * @param  id   identifier of the color to check.
      * @param  color color to check.
      * @return      <code>true</code> if <code>color</code> is different from the one defined in the data.
+     * @see         #isColorDifferent(int,Color,boolean)
+     * @see         #isFontDifferent(int,Font)
      */
-    public synchronized boolean isColorDifferent(int id, Color color) {
-        // Makes sure we're working with a legal identifier.
+    public boolean isColorDifferent(int id, Color color) {return isColorDifferent(id, color, false);}
+
+    /**
+     * Checks whether the current color and the specified one are different from one another.
+     * <p>
+     * Setting <code>ignoreDefaults</code> to <code>false</code> will compare both colors from a 'user' point of view: comparison
+     * will be done on the values that are used by the rest of the application. It might however be necessary to consider
+     * colors to be different if one is set but not the other. This can be achieved by setting <code>ignoreDefaults</code> to <code>true</code>.
+     * </p>
+     * @param  id             identifier of the color to check.
+     * @param  color           color to check.
+     * @param  ignoreDefaults whether or not to ignore defaults if the requested item doesn't have a value.
+     * @return                <code>true</code> if <code>color</code> is different from the one defined in the data.
+     * @see                   #isColorDifferent(int,Color)
+     * @see                   #isFontDifferent(int,Font)
+     */
+    public synchronized boolean isColorDifferent(int id, Color color, boolean ignoreDefaults) {
         checkColorIdentifier(id);
 
+        // If the specified color is null, the only way for both colors to be equal is for colors[id]
+        // to be null as well.
         if(color == null)
             return colors[id] != null;
-        else if(colors[id] == null)
-            return !getDefaultColor(id).equals(color);
+
+        // If colors[id] is null and we're set to ignore defaults, both colors are different.
+        // If we're set to use defaults, we must compare color and the default value for id.
+        if(colors[id] == null)
+            return ignoreDefaults ? true : !getDefaultColor(id).equals(color);
+
+        // 'Standard' case: both colors are set, compare them normally.
         return !color.equals(colors[id]);
     }
 
@@ -1407,7 +1433,7 @@ public class ThemeData {
      * @param id    identifier of the color that changed.
      * @param color new value for the color that changed.
      */
-    static void triggerColorEvent(int id, Color color) {
+    private static void triggerColorEvent(int id, Color color) {
         Iterator          iterator; // Used to iterate through the listeners.
         ColorChangedEvent event;    // Event that will be dispatched.
 

@@ -13,6 +13,7 @@ public class FontChangedEvent {
         this.font   = font;
     }
 
+    public boolean isDefaultFont() {return source == null;}
     public Theme getSource() {return source;}
     public int getFontId() {return fontId;}
     public Font getFont() {return font;}

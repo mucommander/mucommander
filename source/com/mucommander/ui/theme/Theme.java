@@ -136,7 +136,8 @@ public class Theme extends ThemeData {
             throw new IllegalStateException("Trying to modify a non user theme.");
 
         if(super.setFont(id, font)) {
-            triggerFontEvent(new FontChangedEvent(this, id, font));
+            // We're using getFont here to make sure that no event is propagated with a null value.
+            triggerFontEvent(new FontChangedEvent(this, id, getFont(id)));
             return true;
         }
         return false;
@@ -159,7 +160,8 @@ public class Theme extends ThemeData {
             throw new IllegalStateException("Trying to modify a non user theme.");
 
         if(super.setColor(id, color)) {
-            triggerColorEvent(new ColorChangedEvent(this, id, color));
+            // We're using getColor here to make sure that no event is propagated with a null value.
+            triggerColorEvent(new ColorChangedEvent(this, id, getColor(id)));
             return true;
         }
         return false;
