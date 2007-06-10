@@ -124,13 +124,27 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
                     newLabel = "SMB";
                 }
                 else {
-                    currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
+                    // getCanonicalPath() must be avoided under Windows for the following reasons:
+                    // a) it is not necessary, Windows doesn't have symlinks
+                    // b) it triggers the dreaded 'No disk in drive' error popup dialog.
+                    // c) when network drives are present but not mounted (e.g. X:\ mapped onto an SMB share),
+                    // getCanonicalPath which is I/O bound will take a looooong time to execute
+
+                    if(PlatformManager.isWindowsFamily())
+                        currentPath = currentFolder.getAbsolutePath(false).toLowerCase();
+                    else
+                        currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
+
                     int bestLength = -1;
                     int bestIndex = 0;
                     String temp;
                     int len;
                     for(int i=0; i<rootFolders.length; i++) {
-                        temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
+                        if(PlatformManager.isWindowsFamily())
+                            temp = rootFolders[i].getAbsolutePath(false).toLowerCase();
+                        else
+                            temp = rootFolders[i].getCanonicalPath(false).toLowerCase();
+
                         len = temp.length();
                         if (currentPath.startsWith(temp) && len>bestLength) {
                             bestIndex = i;
@@ -160,7 +174,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         int nbRoots = rootFolders.length;
         MainFrame mainFrame = folderPanel.getMainFrame();
 
-// Drive icons are disabled under Windows as well because they seem to trigger the dreaded 'No disk error' popup.
+// Drive icons are disabled under Windows as well because they seem to trigger the dreaded 'No disk in drive' error popup dialog.
 
 //        // Retreive and use system drives icons under Windows only, icons looks like crap under Mac OS X,
 //        // and most likely also look like crap under Linux (untested though).
