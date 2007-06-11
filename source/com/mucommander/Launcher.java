@@ -398,7 +398,9 @@ public class Launcher {
 
         // Preload icons
         printStartupMessage("Loading icons...");
-        com.mucommander.ui.icon.FileIcons.init();
+        com.mucommander.ui.icon.FileIcons.setScaleFactor(ConfigurationManager.getVariableFloat(ConfigurationVariables.TABLE_ICON_SCALE,
+                                                                             ConfigurationVariables.DEFAULT_TABLE_ICON_SCALE));
+        com.mucommander.ui.icon.FileIcons.setSystemIconsPolicy(ConfigurationManager.getVariable(ConfigurationVariables.USE_SYSTEM_FILE_ICONS, ConfigurationVariables.DEFAULT_USE_SYSTEM_FILE_ICONS));
 
         // Loads the ActionKeymap file
         printStartupMessage("Loading action keymap...");
