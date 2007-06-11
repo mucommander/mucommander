@@ -252,6 +252,7 @@ Bug fixes:
  - HTTP files can now be properly archived
  - Windows can now be properly recalled when they are minimized
  - Fixed individual file progress and transfer speed not showing when moving files between different drives under Windows
+ - Fixed slow startup and directory access times that could occur under Windows when network drives are present but unreachable
 
 Known issues:
  - Hungarian translation is not up-to-date
