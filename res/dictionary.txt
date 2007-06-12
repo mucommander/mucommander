@@ -7783,10 +7783,11 @@ theme_dialog.unfocused_background:FR:Fond (sans focus)
 
 
 
+
+
 theme_dialog.text:EN:Text
 theme_dialog.text:FR:Texte
 # Translation missing
-
 
 
 
@@ -7798,17 +7799,6 @@ theme_dialog.progress:EN:Progress
 theme_dialog.progress:FR:Progression
 # Translation missing
 
-
-
-
-
-
-
-
-
-theme_dialog.unfocused_text:EN:Text (without focus)
-theme_dialog.unfocused_text:FR:Texte (sans focus)
-# Translation missing
 
 
 
@@ -7829,9 +7819,31 @@ theme_dialog.normal:FR:Normal
 
 
 
+theme_dialog.normal_unfocused:EN:Normal (without focus)
+theme_dialog.normal_unfocused:FR:Normal (sans focus)
+# Translation missing
+
+
+
+
+
+
+
+
 
 theme_dialog.selected:EN:Selected
 theme_dialog.selected:FR:Sélectionné
+# Translation missing
+
+
+
+
+
+
+
+
+theme_dialog.selected_unfocused:EN:Selected (without focus)
+theme_dialog.selected_unfocused:FR:Sélectionné (without focus)
 # Translation missing
 
 
