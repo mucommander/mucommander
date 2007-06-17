@@ -27,13 +27,13 @@ public class Translator {
     /** Hashtable that maps text keys to values */
     private static Hashtable dictionary;
 
-    /** List of all available languages in the dictionary file (UPPER CASED) */
+    /** List of all available languages in the dictionary file */
     private static Vector availableLanguages;
 
-    /** Current language (UPPER CASED) */
+    /** Current language */
     private static String language;
 
-    /** Default language (UPPER CASED) */
+    /** Default language */
     private final static String DEFAULT_LANGUAGE = "EN";
 
     /** Key for available languages */
@@ -46,10 +46,11 @@ public class Translator {
 
 
     /**
-     * Determines and sets current language based on the given list of available languages
-     * and language in preferences if it has been set and if not, on system's language.
+     * Determines and sets the current language based on the given list of available languages
+     * and the current language set in the preferences if it has been set, else on the system's language.
      * <p>
-     * If the language set in preferences or the system's language is not available, use default language (English).
+     * If the language set in the preferences or the system's language is not available, the default language as
+     * defined by {@link #DEFAULT_LANGUAGE} will be used.
      */
     private static void determineCurrentLanguage(Vector availableLanguages) {
         String lang = ConfigurationManager.getVariable(ConfigurationVariables.LANGUAGE);
@@ -64,11 +65,20 @@ public class Translator {
         else {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language in prefs: "+lang);
         }
-		
-        lang = lang.toUpperCase();
-		
+
+        // Determines if the list of available languages contains the language (case-insensitive)
+        boolean containsLanguage = false;
+        int nbAvailableLanguages = availableLanguages.size();
+        for(int i=0; i<nbAvailableLanguages; i++) {
+            if(((String)availableLanguages.elementAt(i)).equalsIgnoreCase(lang)) {
+                containsLanguage = true;
+                lang = ((String)availableLanguages.elementAt(i));   // Use the proper case variation
+                break;
+            }
+        }
+
         // Determines if language is one of the languages declared as available
-        if(availableLanguages.contains(lang)) {
+        if(containsLanguage) {
             // Language is available
             Translator.language = lang;
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Language "+lang+" is available.");
@@ -105,7 +115,6 @@ public class Translator {
         String lang;
         String text;
         StringTokenizer st;
-        int nbEntries = 0;
 
         while((line = br.readLine())!=null) {
             if (!line.trim().startsWith("#") && !line.trim().equals("")) {
@@ -121,7 +130,7 @@ public class Translator {
                         // Parse comma separated languages
                         st = new StringTokenizer(st.nextToken(), ",\n");
                         while(st.hasMoreTokens())
-                            availableLanguages.add(st.nextToken().trim().toUpperCase());
+                            availableLanguages.add(st.nextToken().trim());
 
                         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Available languages= "+availableLanguages);
 
@@ -131,7 +140,7 @@ public class Translator {
                         continue;
                     }
 
-                    lang = st.nextToken().toUpperCase().trim();
+                    lang = st.nextToken().trim();
 
                     // Delimiter is now line break
                     text = st.nextToken("\n");
@@ -150,10 +159,8 @@ public class Translator {
                         text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
 
                     // Add entry for current language, or for default language if a value for current language wasn't already set
-                    if(lang.equals(language) || (lang.equals(DEFAULT_LANGUAGE) && dictionary.get(key)==null))
+                    if(lang.equalsIgnoreCase(language) || (lang.equalsIgnoreCase(DEFAULT_LANGUAGE) && dictionary.get(key)==null))
                         put(key, text);
-
-                    nbEntries++;
                 }
                 catch(Exception e) {
                     if(com.mucommander.Debug.ON) {
@@ -168,9 +175,9 @@ public class Translator {
     }
 
     /**
-     * Returns the current language.
+     * Returns the current language as a language code ("EN", "FR", "pt_BR", ...).
      *
-     * @return lang 2-letter language code
+     * @return lang a language code
      */
     public static String getLanguage() {
         return language;
@@ -178,10 +185,9 @@ public class Translator {
 	
 	
     /**
-     * Returns an array of available languages, each described by a 2-letter
-     * String ("en", "fr", "jp"...).
+     * Returns an array of available languages as language codes ("EN", "FR", "pt_BR"...).
      *
-     * @return a String array of 2-letter language codes.
+     * @return an array of language codes.
      */
     public static String[] getAvailableLanguages() {
         return (String[])availableLanguages.toArray(new String[]{});
@@ -192,7 +198,7 @@ public class Translator {
      * Returns true if the given key exists (has a corresponding value) in the current language.
      */
     public static boolean entryExists(String key) {
-        return (String)dictionary.get(key.toLowerCase())!=null;
+        return dictionary.get(key.toLowerCase())!=null;
     }
 
 
