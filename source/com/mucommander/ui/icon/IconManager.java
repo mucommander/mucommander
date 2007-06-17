@@ -37,6 +37,8 @@ public class IconManager {
     public final static int PREFERENCES_ICON_SET = 4;
     /** Designates the progress icon set */
     public final static int PROGRESS_ICON_SET = 5;
+    /** Designates the language icon set */
+    public final static int LANGUAGE_ICON_SET = 6;
 
     /** Icon sets folders within the application's JAR file */
     private final static String ICON_SET_FOLDERS[] = {
@@ -45,11 +47,12 @@ public class IconManager {
         "/status_bar/",
         "/common/",
         "/preferences/",
-        "/progress/"
+        "/progress/",
+        "/language/"
     };
 
     /** Number of icon sets */
-    private final static int NB_ICON_SETS = 6;
+    private final static int NB_ICON_SETS = 7;
 
     static {
         // Initialize caches for icon sets that need it.

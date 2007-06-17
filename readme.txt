@@ -238,6 +238,7 @@ Improvements:
  - Improved keyboard accessibility of 'File collision' and 'Transfer progress' dialogs
  - Added 'Bring all to front' item to 'Window' menu
  - Improved UI responsiveness on slow filesystems
+ - Added language icons in preferences
 
 Localization:
  - Korean translation contributed by Jioh L. Jung
