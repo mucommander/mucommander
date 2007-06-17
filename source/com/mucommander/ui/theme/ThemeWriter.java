@@ -28,7 +28,7 @@ class ThemeWriter implements ThemeXmlConstants {
      * @param  stream      where to write the theme to.
      * @throws IOException thrown if any IO related error occurs.
      */
-    public static void write(Theme theme, OutputStream stream) throws IOException {
+    public static void write(ThemeData theme, OutputStream stream) throws IOException {
         XmlWriter out;
 
         out = new XmlWriter(stream);

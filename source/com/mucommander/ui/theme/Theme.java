@@ -176,6 +176,8 @@ public class Theme extends ThemeData {
      * @param type theme's type.
      */
     void setType(int type) {
+        checkType(type);
+
         this.type = type;
         if(type == USER_THEME)
             setName(Translator.get("theme.custom_theme"));
@@ -191,6 +193,11 @@ public class Theme extends ThemeData {
 
     // - Misc. ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    static void checkType(int type) {
+        if(type != USER_THEME && type != PREDEFINED_THEME && type != CUSTOM_THEME)
+            throw new IllegalArgumentException("Illegal theme type: " + type);
+    }
+
     /**
      * Returns the theme's name.
      * @return the theme's name.

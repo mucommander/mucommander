@@ -9,6 +9,7 @@ import com.mucommander.io.BackupOutputStream;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.res.ResourceListReader;
+import com.mucommander.text.Translator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +17,8 @@ import java.io.*;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -41,14 +44,16 @@ public class ThemeManager {
     private static boolean       wasUserThemeModified;
     /** Theme that is currently applied to muCommander. */
     private static Theme         currentTheme;
+    /** Used to listen on the current theme's modifications. */
     private static ThemeListener listener = new CurrentThemeListener();
+
 
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
 
     /**
-     * Prevents instanciations of the class.
+     * Prevents instanciation of the class.
      */
     private ThemeManager() {}
 
@@ -72,7 +77,8 @@ public class ThemeManager {
         // Import legacy theme information if necessary.
         // This can happen, for example, if running muCommander 0.8 beta 3 or higher on muCommander 0.8 beta 2
         // or lower configuration.
-        importLegacyTheme();
+        try {importLegacyTheme();}
+        catch(IOException e) {if(Debug.ON) Debug.trace("Failed to import legacy theme: " + e);}
 
         // Loads the current theme type as defined in configuration.
         try {type = getThemeTypeFromLabel(ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE));}
@@ -90,7 +96,7 @@ public class ThemeManager {
 
         // If the current theme couldn't be loaded, uses the default theme as defined in the configuration.
         currentTheme = null;
-        try {currentTheme = getTheme(type, name);}
+        try {currentTheme = readTheme(type, name);}
         catch(Exception e1) {
             type = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);
             name = ConfigurationVariables.DEFAULT_THEME_NAME;
@@ -100,10 +106,10 @@ public class ThemeManager {
 
             // If the default theme can be loaded, tries to load the user theme if we haven't done so yet.
             // If we have, or if it fails, defaults to an empty user theme.
-            try {currentTheme = getTheme(type, name);}
+            try {currentTheme = readTheme(type, name);}
             catch(Exception e2) {
                 if(!wasUserThemeLoaded) {
-                    try {currentTheme = getTheme(Theme.USER_THEME, null);}
+                    try {currentTheme = readTheme(Theme.USER_THEME, null);}
                     catch(Exception e3) {}
                 }
                 if(currentTheme == null) {
@@ -117,85 +123,99 @@ public class ThemeManager {
 
 
 
-    // - Theme list retrieval ------------------------------------------------------------
+    // - Themes access -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /**
-     * Loads all predefined themes and stores them in the specified vector.
-     * @param themes where to store the predefined themes.
-     */
-    private static void loadPredefinedThemes(Vector themes) {
-        Iterator iterator; // Iterator on the predefined themes list.
-        Theme    theme;    // Buffer for the current theme.
+    private static Iterator themePathsToNames(Iterator paths) {
+        Vector names;
 
-        // Loads the predefined theme list.
-        try {iterator = new ResourceListReader().read(ResourceLoader.getResourceAsStream(RuntimeConstants.THEMES_FILE)).iterator();}
-        catch(Exception e) {
-            if(Debug.ON) {
-                Debug.trace("Failed to load predefined themes list.");
-                Debug.trace(e);
-            }
-            return;
-        }
+        names = new Vector();
+        while(paths.hasNext())
+            names.add(getThemeName((String)paths.next()));
+        return names.iterator();
+    }
 
-        // Iterates through the list and loads each theme.
-        while(iterator.hasNext()) {
-            try {themes.add(getTheme(Theme.PREDEFINED_THEME, getThemeName((String)iterator.next())));}
-            catch(Exception e) {if(Debug.ON) Debug.trace("Predefined theme appears to be corrupt");}
+    private static Iterator predefinedThemeNames() {
+        Vector   names;
+        Iterator paths;
+        try {return themePathsToNames(new ResourceListReader().read(ResourceLoader.getResourceAsStream(RuntimeConstants.THEMES_FILE)).iterator());}
+        catch(Exception e) {return new Iterator() {
+                public boolean hasNext() {return false;}
+                public Object next() {return null;}
+                public void remove() {throw new UnsupportedOperationException();}
+            };
         }
     }
 
-    /**
-     * Loads all custom themes and stores them in the specified vector.
-     * @param themes where to store the custom themes.
-     */
-    private static void loadCustomThemes(Vector themes) {
-        String[] customThemes; // All custom themes.
-
-        // Loads all the custom themes.
-        customThemes = getCustomThemesFolder().list(new FilenameFilter() {public boolean accept(File dir, String name) {return name.endsWith(".xml");}});
-        for(int i = 0; i < customThemes.length; i++) {
-            // If an exception is thrown here, do not consider this theme available.
-            try {themes.add(getTheme(Theme.CUSTOM_THEME, getThemeName(customThemes[i])));}
-            catch(Exception e) {
-                if(Debug.ON) {
-                    Debug.trace("Custom theme " + customThemes[i] + " appears to be corrupt.");
-                    Debug.trace(e);
-                }
-            }
-        }
+    private static Iterator customThemeNames() {
+        return themePathsToNames(java.util.Arrays.asList(getCustomThemesFolder().list(new FilenameFilter() {
+                public boolean accept(File dir, String name) {return name.toLowerCase().endsWith(".xml");}}
+                    )).iterator());
     }
 
-    /**
-     * Returns an iterator on all available themes.
-     * <p>
-     * Note that this method guarantees that any theme it returns is indeed available. If one theme's XML file
-     * has become unavailable or corrupt, it won't be listed.
-     * </p>
-     * <p>
-     * An important pitfall of this method is that it returns the themes as they are know at a specific point of time.
-     * If instances of themes were kept from a previous call, they might very well be inconsistant with the new ones.
-     * This will typically happen when the user theme was modified but not saved: the 'old' user theme and the 'new' one
-     * will hold different values.<br/>
-     * While the current theme is guaranteed to stay up-to-date, the user theme can easily changed using the
-     * {@link #overwriteUserTheme(Theme)} method.
-     * </p>
-     * @return an iterator on all available themes.
-     */
-    public static synchronized Iterator availableThemes() {
-        Vector themes;
+    public static Vector getAvailableThemes() {
+        Vector   themes;
+        Iterator iterator;
+        String   name;
 
         themes = new Vector();
 
         // Tries to load the user theme. If it's corrupt, uses an empty user theme.
-        try {themes.add(getTheme(Theme.USER_THEME, null));}
+        try {themes.add(readTheme(Theme.USER_THEME, null));}
         catch(Exception e) {themes.add(new Theme(listener));}
 
-        // Loads custom and predefined themes.
-        loadPredefinedThemes(themes);
-        loadCustomThemes(themes);
+        // Loads predefined themes.
+        iterator = predefinedThemeNames();
+        while(iterator.hasNext()) {
+            name = (String)iterator.next();
+            try {themes.add(readTheme(Theme.PREDEFINED_THEME, name));}
+            catch(Exception e) {if(Debug.ON) Debug.trace("Failed to load predefined theme " + name + ": " + e);}
+        }
 
-        return themes.iterator();
+        // Loads custom themes.
+        iterator = customThemeNames();
+        while(iterator.hasNext()) {
+            name = (String)iterator.next();
+            try {themes.add(readTheme(Theme.CUSTOM_THEME, name));}
+            catch(Exception e) {if(Debug.ON) Debug.trace("Failed to load custom theme " + name + ": " + e);}
+        }
+
+        // Sorts the themes by name.
+        Collections.sort(themes, new Comparator() {
+                public int compare(Object o1, Object o2) {return (((Theme)o1).getName()).compareTo(((Theme)o2).getName());}
+            });
+
+        return themes;
     }
+
+    public static Vector getAvailableThemeNames() {
+        Vector   themes;
+        Iterator iterator;
+
+        themes = new Vector();
+
+        // Adds the user theme name.
+        themes.add(Translator.get("theme.custom_theme"));
+
+        // Adds predefined theme names.
+        iterator = predefinedThemeNames();
+        while(iterator.hasNext())
+            themes.add(iterator.next());
+
+        // Adds custom theme names.
+        iterator = customThemeNames();
+        while(iterator.hasNext())
+            themes.add(iterator.next());
+
+        // Sorts the theme names.
+        Collections.sort(themes);
+
+        return themes;
+    }
+
+    public static Iterator availableThemeNames() {return getAvailableThemeNames().iterator();}
+
+    public static synchronized Iterator availableThemes() {return getAvailableThemes().iterator();}
+
 
 
     // - Theme paths access --------------------------------------------------------------
@@ -213,7 +233,6 @@ public class ThemeManager {
      * </p>
      * @return the path to the user's theme file.
      * @see    #setUserThemeFile(String)
-     * @see    #saveUserTheme()
      */
     public static String getUserThemeFile() {
         if(userThemeFile == null)
@@ -229,7 +248,6 @@ public class ThemeManager {
      * @param  file                     path to the user theme file.
      * @throws IllegalArgumentException if <code>file</code> exists but is not accessible.
      * @see    #getUserThemeFile()
-     * @see    #saveUserTheme()
      */
     public static void setUserThemeFile(String file) {
         File tempFile;
@@ -243,23 +261,16 @@ public class ThemeManager {
     }
 
     /**
-     * Saves the user theme if necessary.
+     * Returns the path to the custom themes' folder.
+     * <p>
+     * This method guarantees that the returned file actually exists.
+     * </p>
+     * @return the path to the custom themes' folder.
      */
-    public static boolean saveUserTheme() {
-        // Makes sure no NullPointerException is raised if this method is called
-        // before themes have been initialised.
-        if(currentTheme == null)
-            return true;
-
-        // Saves the user theme if it's the current one.
-        if(currentTheme.getType() == Theme.USER_THEME)
-            return saveTheme(currentTheme);
-        return true;
-    }
-
     public static File getCustomThemesFolder() {
         File customFolder;
 
+        // Retrieves the path to the custom themes folder and creates it if necessary.
         customFolder = new File(PlatformManager.getPreferencesFolder(), CUSTOM_THEME_FOLDER);
         customFolder.mkdirs();
 
@@ -267,104 +278,460 @@ public class ThemeManager {
     }
 
 
-    // - IO management -------------------------------------------------------------------
+
+    // - Theme writing -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    /**
+     * Returns an output stream on the specified custom theme.
+     * @param  name        name of the custom theme on which to open an output stream.
+     * @return             an output stream on the specified custom theme.
+     * @throws IOException if an I/O related error occurs.
+     */
+    private static BackupOutputStream getCustomThemeOutputStream(String name) throws IOException {
+        return new BackupOutputStream(new File(getCustomThemesFolder(), name + ".xml"));
+    }
+
+    /**
+     * Returns an output stream on the user theme.
+     * @return             an output stream on the user theme.
+     * @throws IOException if an I/O related error occurs.
+     */
+    private static BackupOutputStream getUserThemeOutputStream() throws IOException {
+        return new BackupOutputStream(getUserThemeFile());
+    }
+
+    /**
+     * Returns an output stream on the requested theme.
+     * <p>
+     * This method is just a convenience, and wraps calls to {@link #getUserThemeInputStream()},
+     * and {@link #getCustomThemeInputStream(String)}.
+     * </p>
+     * <p>
+     * If <code>type</code> is equal to {@link Theme#USER_THEME}, the <code>name</code> argument
+     * will be ignored: there is only one user theme.
+     * </p>
+     * <p>
+     * If <code>type</code> is equal to {@link Theme#PREDEFINED_THEME}, an <code>IllegalArgumentException</code>
+     * will be thrown: predefined themes are not editable.
+     * </p>
+     * @param  type        type of the theme on which to open an output stream.
+     * @param  name        name of the theme on which to open an output stream.
+     * @return             an output stream on the requested theme.
+     * @throws IOException if an I/O related error occurs.
+     */
+    private static BackupOutputStream getOutputStream(int type, String name) throws IOException {
+        switch(type) {
+            // Predefined themes.
+        case Theme.PREDEFINED_THEME:
+            throw new IllegalArgumentException("Can not open output streams on predefined themes.");
+
+            // Custom themes.
+        case Theme.CUSTOM_THEME:
+            return getCustomThemeOutputStream(name);
+
+            // User theme.
+        case Theme.USER_THEME:
+            return getUserThemeOutputStream();
+        }
+
+        // Unknown theme.
+        throw new IllegalArgumentException("Illegal theme type: " + type);
+    }
+
+    /**
+     * Copies the content of <code>in</code> into <code>out</code>.
+     * @param  in          where to read the data from.
+     * @param  out         where to write the data to.
+     * @throws IOException if an error occured.
+     */
+    private static final void copyStreams(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer; // Used to store the data before transfering it.
+        int    count;  // Number of bytes read during the last read operation.
+
+        // Transfers the content of in to out.
+        buffer = new byte[65536];
+        while((count = in.read(buffer, 0, buffer.length)) != -1)
+            out.write(buffer, 0, count);
+    }
+
+    /**
+     * Writes the content of the specified theme data to the specified output stream.
+     * <p>
+     * This method differs from {@link #exportTheme(Theme,OutputStream)} in that it will
+     * write the theme data only, skipping comments and other metadata.
+     * </p>
+     * @param  data        theme data to write.
+     * @param  out         where to write the theme data.
+     * @throws IOException if an I/O related error occurs.
+     * @see                #exportTheme(Theme,OutputStream)
+     * @see                #exportTheme(Theme,File)
+     * @see                #writeThemeData(ThemeData,File).
+     */
+    public static void writeThemeData(ThemeData data, OutputStream out) throws IOException {ThemeWriter.write(data, out);}
+
+    /**
+     * Writes the content of the specified theme data to the specified file.
+     * <p>
+     * This method differs from {@link #exportTheme(Theme,File)} in that it will
+     * write the theme data only, skipping comments and other metadata.
+     * </p>
+     * @param  data        theme data to write.
+     * @param  file        file in which to write the theme data.
+     * @throws IOException if an I/O related error occurs.
+     * @see                #exportTheme(Theme,OutputStream)
+     * @see                #exportTheme(Theme,File)
+     * @see                #writeThemeData(ThemeData,OutputStream).
+     */
+    public static void writeThemeData(ThemeData data, File file) throws IOException {
+        OutputStream out; // OutputStream on file.
+
+        out = null;
+
+        // Writes the theme data.
+        try {writeThemeData(data, out = new FileOutputStream(file));}
+
+        // Cleanup.
+        finally {
+            if(out != null) {
+                try {out.close();}
+                catch(Exception e) {}
+            }
+        }
+    }
+
+    /**
+     * Writes the content of the specified theme to its description file.
+     * @param  theme                    theme to write.
+     * @throws IOException              if any I/O related error occurs.
+     * @throws IllegalArgumentException if <code>theme</code> is a predefined theme.
+     * @see                             #writeTheme(ThemeData,int,String)
+     */
+    public static void writeTheme(Theme theme) throws IOException {writeTheme(theme, theme.getType(), theme.getName());}
+
+    /**
+     * Writes the specified theme data over the theme described by <code>type</code> and <code>name</code>.
+     * <p>
+     * Note that this method doesn't check whether this will overwrite an existing theme.
+     * </p>
+     * <p>
+     * If <code>type</code> equals {@link Theme#USER_THEME}, <code>name</code> will be ignored.
+     * </p>
+     * @param  data                     data to write.
+     * @param  type                     type of the theme that is being written.
+     * @param  name                     name of the theme that is being written.
+     * @throws IOException              if any I/O related error occurs.
+     * @throws IllegalArgumentException if <code>theme</code> is a predefined theme.
+     * @see                             #writeTheme(Theme)
+     */
+    public static void writeTheme(ThemeData data, int type, String name) throws IOException {
+        BackupOutputStream out;
+
+        out = null;
+        try {
+            writeThemeData(data, out = getOutputStream(type, name));
+            out.close(true);
+        }
+        catch(IOException e) {
+            out.close(false);
+            throw e;
+        }
+    }
+
+    /**
+     * Exports the specified theme to the specified output stream.
+     * <p>
+     * If <code>type</code> is equal to {@link Theme#USER_THEME}, the <code>name</code> argument will be ignored
+     * as there is only one user theme.
+     * </p>
+     * <p>
+     * This method differs from {@link #writeThemeData(ThemeData,OutputStream)} in that it doesn't only copy
+     * the theme's data, but the whole content of the theme file, including comments. It also requires the theme
+     * file to exist.
+     * </p>
+     * @param  type        type of the theme to export.
+     * @param  name        name of the theme to export.
+     * @param  out         where to write the theme.
+     * @throws IOException if any I/O related error occurs.
+     * @see                #exportTheme(int,String,File)
+     * @see                #writeThemeData(ThemeData,OutputStream)
+     */
+    public static void exportTheme(int type, String name, OutputStream out) throws IOException {
+        InputStream in; // Where to read the theme from.
+
+        in = null;
+        try {copyStreams(in = getInputStream(type, name), out);}
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
+            }
+        }
+    }
+
+    /**
+     * Exports the specified theme to the specified output stream.
+     * <p>
+     * If <code>type</code> is equal to {@link Theme#USER_THEME}, the <code>name</code> argument will be ignored
+     * as there is only one user theme.
+     * </p>
+     * <p>
+     * This method differs from {@link #writeThemeData(ThemeData,File)} in that it doesn't only copy
+     * the theme's data, but the whole content of the theme file, including comments.
+     * </p>
+     * @param  theme       theme to export.
+     * @param  out         where to write the theme.
+     * @throws IOException if any I/O related error occurs
+     * @see                #exportTheme(int,String,OutputStream)
+     * @see                #writeThemeData(ThemeData,File).
+     */
+    public static void exportTheme(int type, String name, File file) throws IOException {
+        OutputStream out; // Where to write the data to.
+
+        out = null;
+        try {exportTheme(type, name, out = new FileOutputStream(file));}
+        finally {
+            if(out != null) {
+                try {out.close();}
+                catch(Exception e) {}
+            }
+        }
+    }
+
+    /**
+     * Exports the specified theme to the specified output stream.
+     * <p>
+     * This is a convenience method only and is strictly equivalent to calling
+     * <code>{@link #exportTheme(int,String,OutputStream) exportTheme(}theme.getType(), theme.getName(), out);</code>
+     * </p>
+     * @param  theme       theme to export.
+     * @param  out         where to write the theme.
+     * @throws IOException if any I/O related error occurs.
+     */
+    public static void exportTheme(Theme theme, OutputStream out) throws IOException {exportTheme(theme.getType(), theme.getName(), out);}
+
+    /**
+     * Exports the specified theme to the specified output stream.
+     * <p>
+     * This is a convenience method only and is strictly equivalent to calling
+     * <code>{@link #exportTheme(int,String,File) exportTheme(}theme.getType(), theme.getName(), file);</code>
+     * </p>
+     * @param  theme       theme to export.
+     * @param  out         where to write the theme.
+     * @throws IOException if any I/O related error occurs.
+     */
+    public static void exportTheme(Theme theme, File file) throws IOException {exportTheme(theme.getType(), theme.getName(), file);}
+
+    private static String getAvailableCustomThemeName(File file) {
+        String   name;
+
+        // Retrieves the file's name, cutting the .xml extension off if
+        // necessary.
+        name = file.getName();
+        if(name.toLowerCase().endsWith(".xml"))
+            name = name.substring(0, name.length() - 4);
+
+        return getAvailableCustomThemeName(name);
+    }
+
+    private static boolean isNameAvailable(String name, Iterator names) {
+        while(names.hasNext())
+            if(names.next().equals(name))
+                return false;
+        return true;
+    }
+
+    private static String getAvailableCustomThemeName(String name) {
+        Vector names;
+        int    i;
+        String buffer;
+
+        names = getAvailableThemeNames();
+
+        // If the name is available, no need to suffix it with (xx).
+        if(isNameAvailable(name, names.iterator()))
+            return name;
+
+        // Removes any trailing (x) construct, and adds a trailing space if necessary.
+        name = name.replaceFirst("\\([0-9]+\\)$", "");
+        if(name.charAt(name.length() - 1) != ' ')
+            name = name + ' ';
+
+        i = 1;
+        do {buffer = name + '(' + (++i) + ')';}            
+        while(!isNameAvailable(buffer, names.iterator()));
+
+        return buffer;
+    }
+
+    public static void importTheme(ThemeData data, String name) throws IOException, Exception {writeTheme(data, Theme.CUSTOM_THEME, getAvailableCustomThemeName(name));}
+
+    public static void importTheme(File file) throws IOException, Exception {
+        String       name; // Name of the new theme.
+        OutputStream out;  // Where to write the theme data to.
+        InputStream  in;   // Where to read the theme data from.
+
+        // Makes sure the file contains a valid theme.
+        readThemeData(file);
+
+        // Initialisation.
+        name = getAvailableCustomThemeName(file);
+        out  = null;
+        in   = null;
+
+        // Imports the theme.
+        try {copyStreams(in = new FileInputStream(file), out = getCustomThemeOutputStream(name));}
+
+        // Cleanup.
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
+            }
+            if(out != null) {
+                try {out.close();}
+                catch(Exception e) {}
+            }
+        }
+    }
+
+
+
+    // - Theme reading -------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Returns an input stream on the user theme.
+     * @return             an input stream on the user theme.
+     * @throws IOException if an I/O related error occurs.
+     */
+    private static InputStream getUserThemeInputStream() throws IOException {
+        return new BackupInputStream(ThemeManager.getUserThemeFile());
+    }
+
+    /**
+     * Returns an input stream on the requested predefined theme.
+     * @param  name        name of the predefined theme on which to open an input stream.
+     * @return             an input stream on the requested predefined theme.
+     * @throws IOException if an I/O related error occurs.
+     */
+    private static InputStream getPredefinedThemeInputStream(String name) throws IOException {
+        return ResourceLoader.getResourceAsStream(RuntimeConstants.THEMES_PATH + "/" + name + ".xml");
+    }
+
+    /**
+     * Returns an input stream on the requested custom theme.
+     * @param  name        name of the custom theme on which to open an input stream.
+     * @return             an input stream on the requested custom theme.
+     * @throws IOException if an I/O related error occurs.
+     */
+    private static InputStream getCustomThemeInputStream(String name) throws IOException {
+        return new BackupInputStream(new File(ThemeManager.getCustomThemesFolder(), name + ".xml"));
+    }
+
+    /**
+     * Opens an input stream on the requested theme.
+     * <p>
+     * This method is just a convenience, and wraps calls to {@link #getUserThemeInputStream()},
+     * {@link #getPredefinedThemeInputStream(String)} and {@link #getCustomThemeInputStream(String)}.
+     * </p>
+     * @param  type                     type of the theme to open an input stream on.
+     * @param  name                     name of the theme to open an input stream on.
+     * @return                          an input stream opened on the requested theme.
+     * @throws IOException              thrown if an IO related error occurs.
+     * @throws IllegalArgumentException thrown if <code>type</code> is not a legal theme type.
+     */
+    private static InputStream getInputStream(int type, String name) throws IOException {
+        switch(type) {
+            // User theme.
+        case Theme.USER_THEME:
+            return getUserThemeInputStream();
+
+            // Predefined theme.
+        case Theme.PREDEFINED_THEME:
+            return getPredefinedThemeInputStream(name);
+
+            // Custom theme.
+        case Theme.CUSTOM_THEME:
+            return getCustomThemeInputStream(name);
+        }
+
+        // Error handling.
+        throw new IllegalArgumentException("Illegal theme type: " + type);
+    }
+
     /**
      * Returns the requested theme.
      * @param  type type of theme to retrieve.
      * @param  name name of the theme to retrieve.
      * @return the requested theme.
      */
-    public static final Theme getTheme(int type, String name) throws Exception {
-        Theme theme;
-        ThemeData template;
+    public static Theme readTheme(int type, String name) throws Exception {
+        ThemeData   data; // Buffer for the theme data.
+        InputStream in;   // Where to read the theme from.
 
         // Do not reload the current theme, both for optimisation purposes and because
         // it might cause user theme modifications to be lost.
         if(currentTheme != null && isCurrentTheme(type, name))
             return currentTheme;
 
-        switch(type) {
-            // User defined theme.
-        case Theme.USER_THEME:
-            ThemeReader.read(new BackupInputStream(ThemeManager.getUserThemeFile()), template = new ThemeData());
-            theme = new Theme(listener, template);
-            break;
-
-            // Predefined themes.
-        case Theme.PREDEFINED_THEME:
-            ThemeReader.read(ResourceLoader.getResourceAsStream(RuntimeConstants.THEMES_PATH + "/" + name + ".xml"),
-                             template = new ThemeData());
-            theme = new Theme(listener, template, Theme.PREDEFINED_THEME, name);
-            break;
-
-            // Custom themes.
-        case Theme.CUSTOM_THEME:
-            ThemeReader.read(new FileInputStream(new File(ThemeManager.getCustomThemesFolder(), name + ".xml")),
-                             template = new ThemeData());
-            theme = new Theme(listener, template, Theme.CUSTOM_THEME, name);
-            break;
-
-            // Error.
-        default:
-            throw new IllegalArgumentException("Illegal theme type type: " + type);
+        // Reads the theme data.
+        in = null;
+        try {data = readThemeData(in = getInputStream(type, name));}
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
+            }
         }
 
-        return theme;
+        // Creates the corresponding theme.
+        return new Theme(listener, data, type, name);
     }
 
-    public static synchronized boolean saveTheme(Theme theme) {
-        OutputStream out;
+    /**
+     * Reads theme data from the specified input stream.
+     * @param  in        where to read the theme data from.
+     * @return           the resulting theme data.
+     * @throws Exception if an I/O or syntax error occurs.
+     */
+    public static ThemeData readThemeData(InputStream in) throws Exception {
+        ThemeData data; // Buffer for the data.
 
-        out = null;
-        switch(theme.getType()) {
-        case Theme.PREDEFINED_THEME:
-            if(Debug.ON) Debug.trace("Trying to save predefined theme: " + theme.getName());
-            return false;
+        // Reads the theme data.
+        ThemeReader.read(in, data = new ThemeData());
 
-        case Theme.USER_THEME:
-            try {
-                if(wasUserThemeModified) {
-                    ThemeWriter.write(theme, out = new BackupOutputStream(getUserThemeFile()));
-                    out.close();
-                    wasUserThemeModified = false;
-                }
-                return true;
-            }
-            catch(Exception e) {
-                if(out != null) {
-                    try {((BackupOutputStream)out).close(false);}
-                    catch(Exception e2) {}
-                }
-                return false;
-            }
+        return data;
+    }
 
-        case Theme.CUSTOM_THEME:
-            try {ThemeWriter.write(theme, out = new FileOutputStream(new File(getCustomThemesFolder(), theme.getName() + ".xml")));}
-            catch(Exception e) {return false;}
-            finally {
-                if(out != null) {
-                    try {out.close();}
-                    catch(Exception e) {}
-                }
+    /**
+     * Reads theme data from the specified file.
+     * @param  file      where to read the theme data from.
+     * @return           the resulting theme data.
+     * @throws Exception if an I/O or syntax error occurs.
+     */
+    public static ThemeData readThemeData(File file) throws Exception {
+        InputStream in; // InputStream on file.
+
+        in = null;
+
+        // Loads the theme data.
+        try {return readThemeData(in = new FileInputStream(file));}
+
+        // Cleanup.
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
             }
         }
-        return true;
     }
 
 
 
     // - Current theme access ------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    public static Theme getCurrentTheme() {return currentTheme;}
-
-    /**
-     * Sets the specified theme as the current theme in configuration.
-     * @param theme theme to set as current.
-     */
-    private static void setConfigurationTheme(Theme theme) {
+    private static void setConfigurationTheme(int type, String name) {
         // Sets configuration depending on the new theme's type.
-        switch(theme.getType()) {
+        switch(type) {
             // User defined theme.
         case Theme.USER_THEME:
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_USER);
@@ -374,20 +741,45 @@ public class ThemeManager {
             // Predefined themes.
         case Theme.PREDEFINED_THEME:
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_PREDEFINED);
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, theme.getName());
+            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, name);
             break;
 
             // Custom themes.
         case Theme.CUSTOM_THEME:
             ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_CUSTOM);
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, theme.getName());
+            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, name);
             break;
 
             // Error.
         default:
-            throw new IllegalStateException("Illegal theme type: " + theme.getType());
+            throw new IllegalStateException("Illegal theme type: " + type);
         }
     }
+
+    /**
+     * Sets the specified theme as the current theme in configuration.
+     * @param theme theme to set as current.
+     */
+    private static void setConfigurationTheme(Theme theme) {setConfigurationTheme(theme.getType(), theme.getName());}
+
+
+    /**
+     * Saves the current theme if necessary.
+     */
+    public static void saveCurrentTheme() throws IOException {
+        // Makes sure no NullPointerException is raised if this method is called
+        // before themes have been initialised.
+        if(currentTheme == null)
+            return;
+
+        // Saves the user theme if it's the current one.
+        if(currentTheme.getType() == Theme.USER_THEME && wasUserThemeModified) {
+            writeTheme(currentTheme);
+            wasUserThemeModified = false;
+        }
+    }
+
+    public static Theme getCurrentTheme() {return currentTheme;}
 
     /**
      * Changes the current theme.
@@ -404,8 +796,9 @@ public class ThemeManager {
         if(isCurrentTheme(theme))
             return;
 
-        // Saves the user theme if necessary.
-        saveUserTheme();
+        // Saves the current theme if necessary.
+        try {saveCurrentTheme();}
+        catch(IOException e) {if(Debug.ON) Debug.trace("Couldn't save current theme: " + e);}
 
         // Updates muCommander's configuration.
         oldTheme = currentTheme;
@@ -415,45 +808,21 @@ public class ThemeManager {
         triggerThemeChange(oldTheme, currentTheme);
     }
 
-    private static void triggerThemeChange(Theme oldTheme, Theme newTheme) {
-        // Triggers font events.
-        for(int i = 0; i < Theme.FONT_COUNT; i++) {
-            if(!oldTheme.getFont(i).equals(newTheme.getFont(i)))
-                triggerFontEvent(new FontChangedEvent(currentTheme, i, newTheme.getFont(i)));
-        }
-
-        // Triggers color events.
-        for(int i = 0; i < Theme.COLOR_COUNT; i++) {
-            if(!oldTheme.getColor(i).equals(newTheme.getColor(i)))
-                triggerColorEvent(new ColorChangedEvent(currentTheme, i, newTheme.getColor(i)));
-        }
-    }
-
     public synchronized static Font getCurrentFont(int id) {return currentTheme.getFont(id);}
 
     public synchronized static Color getCurrentColor(int id) {return currentTheme.getColor(id);}
 
-    /**
-     * Copies the current theme over the user theme.
-     */
-    public synchronized static void overwriteUserTheme(Theme theme) {
-        boolean updateCurrentTheme;
+    public synchronized static Theme overwriteUserTheme(ThemeData themeData) throws IOException {
+        // If the current theme is the user one, we just need to import the new data.
+        if(currentTheme.getType() == Theme.USER_THEME) {
+            currentTheme.importData(themeData);
+            writeTheme(currentTheme);
+            return currentTheme;
+        }
 
-        updateCurrentTheme = currentTheme.getType() == Theme.USER_THEME;
-
-        // Marks the current theme as the user one and saves it.
-        theme.setType(Theme.USER_THEME);
-        if(theme == currentTheme)
-            setConfigurationTheme(theme);
-        wasUserThemeModified = true;
-
-        // If the user theme was the current one, notifies listeners of any change.
-        if(updateCurrentTheme) {
-            Theme oldTheme;
-
-            oldTheme     = currentTheme;
-            currentTheme = theme;
-            triggerThemeChange(oldTheme, currentTheme);
+        else {
+            writeTheme(themeData, Theme.USER_THEME, null);
+            return new Theme(listener, themeData);
         }
     }
 
@@ -499,7 +868,7 @@ public class ThemeManager {
         if(currentTheme.isFontDifferent(id, font)) {
             // Checks whether we need to overwrite the user theme to perform this action.
             if(currentTheme.getType() != Theme.USER_THEME) {
-                overwriteUserTheme(currentTheme);
+                currentTheme.setType(Theme.USER_THEME);
                 setConfigurationTheme(currentTheme);
             }
 
@@ -525,7 +894,7 @@ public class ThemeManager {
         if(currentTheme.isColorDifferent(id, color)) {
             // Checks whether we need to overwrite the user theme to perform this action.
             if(currentTheme.getType() != Theme.USER_THEME) {
-                overwriteUserTheme(currentTheme);
+                currentTheme.setType(Theme.USER_THEME);
                 setConfigurationTheme(currentTheme);
             }
 
@@ -554,52 +923,109 @@ public class ThemeManager {
 
 
 
-    // - Theme listening -----------------------------------------------------------------
+    // - Events management ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Adds the specified object to the list of registered theme listeners.
-     * @param listener new theme listener.
+     * Notifies all listeners that the current theme has changed.
+     * <p>
+     * This method is meant to be called when the current theme has been changed.
+     * It will compare all fonts and colors in <code>oldTheme</code> and <code>newTheme</code> and,
+     * if any is found to be different, trigger the corresponding event.
+     * </p>
+     * <p>
+     * At the end of this method, all registered listeners will have been made aware of the new values
+     * they should be using.
+     * </p>
+     * @param oldTheme previous current theme.
+     * @param newTheme new current theme.
+     * @see            #triggerFontEvent(FontChangedEvent)
+     * @see            #triggerColorEvent(ColorChangedEvent)
      */
-    public static void addThemeListener(ThemeListener listener) {listeners.put(listener, null);}
+    private static void triggerThemeChange(Theme oldTheme, Theme newTheme) {
+        // Triggers font events.
+        for(int i = 0; i < Theme.FONT_COUNT; i++) {
+            if(oldTheme.isFontDifferent(i, newTheme.getFont(i)))
+                triggerFontEvent(new FontChangedEvent(currentTheme, i, newTheme.getFont(i)));
+        }
+
+        // Triggers color events.
+        for(int i = 0; i < Theme.COLOR_COUNT; i++) {
+            if(oldTheme.isColorDifferent(i, newTheme.getColor(i)))
+                triggerColorEvent(new ColorChangedEvent(currentTheme, i, newTheme.getColor(i)));
+        }
+    }
+
+    /**
+     * Adds the specified object to the list of registered current theme listeners.
+     * <p>
+     * Any object registered through this method will received {@link ThemeListener#colorChanged(ColorChangedEvent) color}
+     * and {@link #ThemeListener#fontChanged(FontChangedEvent) font} events whenever the current theme changes.
+     * </p>
+     * <p>
+     * Note that these events will not necessarily be fired as a result of a direct theme change: if, for example,
+     * the current theme is using look&amp;feel dependant values and the current look&amp;feel changes, the corresponding
+     * events will be passed to registered listeners.
+     * </p>
+     * <p>
+     * Listeners are stored as weak references, to make sure that the API doesn't keep ghost copies of objects
+     * whose usefulness is long since past. This forces callers to make sure they keep a copy of the listener's instance: if
+     * they do not, the instance will be weakly linked and garbage collected out of existence.
+     * </p>
+     * @param listener new current theme listener.
+     */
+    public static void addCurrentThemeListener(ThemeListener listener) {synchronized (listeners) {listeners.put(listener, null);}}
 
     /**
      * Removes the specified object from the list of registered theme listeners.
-     * @param listener theme listener to remove.
+     * <p>
+     * Note that since listeners are stored as weak references, calling this method is not strictly necessary. As soon
+     * as a listener instance is not referenced anymore, it will automatically be caught and destroyed by the garbage
+     * collector.
+     * </p>
+     * @param listener current theme listener to remove.
      */
-    public static void removeThemeListener(ThemeListener listener) {listeners.remove(listener);}
+    public static void removeCurrentThemeListener(ThemeListener listener) {synchronized (listeners) {listeners.remove(listener);}}
 
     /**
-     * Notifies all theme listeners of the specified font's new value.
+     * Notifies all theme listeners of the specified font event.
+     * @param event event to pass down to registered listeners.
+     * @see         #triggerThemeChange(Theme,Theme)
      */
     private static void triggerFontEvent(FontChangedEvent event) {
         Iterator iterator;
 
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ThemeListener)iterator.next()).fontChanged(event);
+        synchronized (listeners) {
+            iterator = listeners.keySet().iterator();
+            while(iterator.hasNext())
+                ((ThemeListener)iterator.next()).fontChanged(event);
+        }
     }
 
     /**
-     * Notifies all theme listeners of the specified color's new value.
+     * Notifies all theme listeners of the specified color event.
+     * @param event event to pass down to registered listeners.
+     * @see         #triggerThemeChange(Theme,Theme)
      */
     private static void triggerColorEvent(ColorChangedEvent event) {
         Iterator iterator;
 
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ThemeListener)iterator.next()).colorChanged(event);
+        synchronized (listeners) {
+            iterator = listeners.keySet().iterator();
+            while(iterator.hasNext())
+                ((ThemeListener)iterator.next()).colorChanged(event);
+        }
     }
 
 
 
     // - Legacy theme --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    private static void importLegacyTheme() {
+    private static void importLegacyTheme() throws IOException {
         // Legacy theme information.
         String backgroundColor, fileColor, hiddenColor, folderColor, archiveColor, symlinkColor,
                markedColor, selectedColor, selectionColor, unfocusedColor, shellBackgroundColor,
                shellSelectionColor, shellTextColor, fontSize, fontFamily, fontStyle;
-        ThemeData legacyTemplate; // Data for the new user theme.
+        ThemeData legacyData; // Data for the new user theme.
 
         // Gathers legacy theme information.
         backgroundColor      = ConfigurationManager.getVariable(LegacyTheme.BACKGROUND_COLOR);
@@ -651,138 +1077,137 @@ public class ThemeManager {
         Color color;
         Font  font;
 
-        legacyTemplate = new ThemeData();
+        legacyData = new ThemeData();
 
         // File background color.
         if(backgroundColor == null)
             backgroundColor = LegacyTheme.DEFAULT_BACKGROUND_COLOR;
-        legacyTemplate.setColor(Theme.FILE_BACKGROUND_COLOR, color = new Color(Integer.parseInt(backgroundColor, 16)));
-        legacyTemplate.setColor(Theme.HIDDEN_FILE_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.MARKED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.FOLDER_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.SYMLINK_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.ARCHIVE_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.FILE_TABLE_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.FILE_BACKGROUND_COLOR, color = new Color(Integer.parseInt(backgroundColor, 16)));
+        legacyData.setColor(Theme.HIDDEN_FILE_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.MARKED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.FOLDER_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.SYMLINK_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.ARCHIVE_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.FILE_TABLE_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.FOLDER_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.ARCHIVE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.SYMLINK_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.HIDDEN_FILE_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.MARKED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.FILE_UNFOCUSED_BACKGROUND_COLOR, color);
 
         // Selected file background color.
         if(selectionColor == null)
             selectionColor = LegacyTheme.DEFAULT_SELECTION_BACKGROUND_COLOR;
-        legacyTemplate.setColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(selectionColor, 16)));
-        legacyTemplate.setColor(Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.MARKED_SELECTED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.FOLDER_SELECTED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.SYMLINK_SELECTED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.FILE_SELECTED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(selectionColor, 16)));
+        legacyData.setColor(Theme.HIDDEN_FILE_SELECTED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.MARKED_SELECTED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.FOLDER_SELECTED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.SYMLINK_SELECTED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR, color);
 
         // Out of focus file background color.
         if(unfocusedColor == null)
             unfocusedColor = LegacyTheme.DEFAULT_OUT_OF_FOCUS_COLOR;
-        legacyTemplate.setColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(unfocusedColor, 16)));
-        legacyTemplate.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color = new Color(Integer.parseInt(unfocusedColor, 16)));
+        legacyData.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
+        legacyData.setColor(Theme.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, color);
 
         // Hidden files color.
         if(hiddenColor == null)
             hiddenColor = LegacyTheme.DEFAULT_HIDDEN_FILE_COLOR;
-        legacyTemplate.setColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(hiddenColor, 16)));
-        legacyTemplate.setColor(Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(hiddenColor, 16)));
+        legacyData.setColor(Theme.HIDDEN_FILE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Folder color.
         if(folderColor == null)
             folderColor = LegacyTheme.DEFAULT_FOLDER_COLOR;
-        legacyTemplate.setColor(Theme.FOLDER_FOREGROUND_COLOR, color = new Color(Integer.parseInt(folderColor, 16)));
-        legacyTemplate.setColor(Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.FOLDER_FOREGROUND_COLOR, color = new Color(Integer.parseInt(folderColor, 16)));
+        legacyData.setColor(Theme.FOLDER_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Archives color.
         if(archiveColor == null)
             archiveColor = LegacyTheme.DEFAULT_ARCHIVE_FILE_COLOR;
-        legacyTemplate.setColor(Theme.ARCHIVE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(archiveColor, 16)));
-        legacyTemplate.setColor(Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.ARCHIVE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(archiveColor, 16)));
+        legacyData.setColor(Theme.ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Symbolic links color.
         if(symlinkColor == null)
             symlinkColor = LegacyTheme.DEFAULT_SYMLINK_COLOR;
-        legacyTemplate.setColor(Theme.SYMLINK_FOREGROUND_COLOR, color = new Color(Integer.parseInt(symlinkColor, 16)));
-        legacyTemplate.setColor(Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.SYMLINK_FOREGROUND_COLOR, color = new Color(Integer.parseInt(symlinkColor, 16)));
+        legacyData.setColor(Theme.SYMLINK_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Plain file color.
         if(fileColor == null)
             fileColor = LegacyTheme.DEFAULT_PLAIN_FILE_COLOR;
-        legacyTemplate.setColor(Theme.FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(fileColor, 16)));
-        legacyTemplate.setColor(Theme.FILE_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.FILE_FOREGROUND_COLOR, color = new Color(Integer.parseInt(fileColor, 16)));
+        legacyData.setColor(Theme.FILE_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Marked file color.
         if(markedColor == null)
             markedColor = LegacyTheme.DEFAULT_MARKED_FILE_COLOR;
-        legacyTemplate.setColor(Theme.MARKED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(markedColor, 16)));
-        legacyTemplate.setColor(Theme.MARKED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.MARKED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(markedColor, 16)));
+        legacyData.setColor(Theme.MARKED_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Selected file color.
         if(selectedColor == null)
             selectedColor = LegacyTheme.DEFAULT_SELECTED_FILE_COLOR;
-        legacyTemplate.setColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(selectedColor, 16)));
-        legacyTemplate.setColor(Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
-        legacyTemplate.setColor(Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.FILE_SELECTED_FOREGROUND_COLOR, color = new Color(Integer.parseInt(selectedColor, 16)));
+        legacyData.setColor(Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.MARKED_SELECTED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.HIDDEN_FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.FOLDER_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, color);
 
         // Shell background color.
         if(shellBackgroundColor == null)
             shellBackgroundColor = LegacyTheme.DEFAULT_SHELL_BACKGROUND_COLOR;
-        legacyTemplate.setColor(Theme.SHELL_BACKGROUND_COLOR, new Color(Integer.parseInt(shellBackgroundColor, 16)));
+        legacyData.setColor(Theme.SHELL_BACKGROUND_COLOR, new Color(Integer.parseInt(shellBackgroundColor, 16)));
 
         // Shell text color.
         if(shellTextColor == null)
             shellTextColor = LegacyTheme.DEFAULT_SHELL_TEXT_COLOR;
-        legacyTemplate.setColor(Theme.SHELL_FOREGROUND_COLOR, color = new Color(Integer.parseInt(shellTextColor, 16)));
-        legacyTemplate.setColor(Theme.SHELL_SELECTED_FOREGROUND_COLOR, color);
+        legacyData.setColor(Theme.SHELL_FOREGROUND_COLOR, color = new Color(Integer.parseInt(shellTextColor, 16)));
+        legacyData.setColor(Theme.SHELL_SELECTED_FOREGROUND_COLOR, color);
 
         // Shell selection background color.
         if(shellSelectionColor == null)
             shellSelectionColor = LegacyTheme.DEFAULT_SHELL_SELECTION_COLOR;
-        legacyTemplate.setColor(Theme.SHELL_SELECTED_BACKGROUND_COLOR, new Color(Integer.parseInt(shellSelectionColor, 16)));
+        legacyData.setColor(Theme.SHELL_SELECTED_BACKGROUND_COLOR, new Color(Integer.parseInt(shellSelectionColor, 16)));
 
         // File table font.
-        legacyTemplate.setFont(Theme.FILE_TABLE_FONT, font = getLegacyFont(fontFamily, fontStyle, fontSize));
+        legacyData.setFont(Theme.FILE_TABLE_FONT, font = getLegacyFont(fontFamily, fontStyle, fontSize));
 
         // Sets colors that were not customisable in older versions of muCommander, using
         // l&f default where necessary.
 
         // File table border.
-        legacyTemplate.setColor(Theme.FILE_TABLE_BORDER_COLOR, new Color(64, 64, 64));
+        legacyData.setColor(Theme.FILE_TABLE_BORDER_COLOR, new Color(64, 64, 64));
 
         // Location bar and shell history (both use text field defaults).
-        legacyTemplate.setColor(Theme.LOCATION_BAR_PROGRESS_COLOR, new Color(0, 255, 255, 64));
+        legacyData.setColor(Theme.LOCATION_BAR_PROGRESS_COLOR, new Color(0, 255, 255, 64));
 
-        Theme legacyTheme;
         // If the user theme exists, saves the legacy theme as backup.
-        if(new File(getUserThemeFile()).exists())
-            legacyTheme = new Theme(listener, legacyTemplate, Theme.CUSTOM_THEME, "BackupTheme");
-        // Otherwise, creates a new user theme using the legacy data.
-        else {
-            legacyTheme = new Theme(listener, legacyTemplate);
-            setConfigurationTheme(legacyTheme);
-            wasUserThemeModified = true;
+        if(new File(getUserThemeFile()).exists()) {
+            try {importTheme(legacyData, "BackupTheme");}
+            catch(Exception e) {if(Debug.ON) Debug.trace("Failed to import legacy theme: " + e);}
         }
 
-        saveTheme(legacyTheme);
+        // Otherwise, creates a new user theme using the legacy data.
+        else {
+            writeTheme(legacyData, Theme.USER_THEME, null);
+            setConfigurationTheme(Theme.USER_THEME, null);
+        }
     }
 
     /**
@@ -858,6 +1283,9 @@ public class ThemeManager {
 
     // - Listener methods ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    /**
+     * @author Nicolas Rinaudo
+     */
     private static class CurrentThemeListener implements ThemeListener {
         public void fontChanged(FontChangedEvent event) {
             if(event.getSource().getType() == Theme.USER_THEME)

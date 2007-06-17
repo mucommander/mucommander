@@ -1389,7 +1389,7 @@ public class ThemeData {
      * through {@link Theme} and {@link ThemeManager}.
      * </p>
      * <p>
-     * Note that listeners are stored as weak references, to make sure that the API doesn't keep ghost copies of listeners
+     * Note that listeners are stored as weak references, to make sure that the API doesn't keep ghost copies of objects
      * whose usefulness is long since past. This forces callers to make sure they keep a copy of the listener's instance: if
      * they do not, the instance will be weakly linked and garbage collected out of existence.
      * </p>
