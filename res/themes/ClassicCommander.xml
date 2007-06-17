@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================================== -->
+<!-- Author:           Nicolas Rinaudo                   -->
+<!-- Last modified on: 2007/06/12                        -->
+<!-- Description:                                        -->
+<!-- A simple, black on white theme meant to look like   -->
+<!-- a native application on most platforms.             -->
+<!-- =================================================== -->
+
 <theme>
   <!-- = File table appearance ========================= -->
   <!-- ================================================= -->
