@@ -65,7 +65,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         locationField.addFocusListener(this);
         addFocusListener(this);
 
-        ThemeManager.addThemeListener(this);
+        ThemeManager.addCurrentThemeListener(this);
     }
 
 

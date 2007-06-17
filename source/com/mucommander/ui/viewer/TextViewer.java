@@ -39,7 +39,7 @@ public class TextViewer extends FileViewer implements ActionListener, ThemeListe
         textArea.setEditable(false);
         initTheme();
         add(textArea, BorderLayout.NORTH);
-        ThemeManager.addThemeListener(this);
+        ThemeManager.addCurrentThemeListener(this);
     }
 
     private void initTheme() {

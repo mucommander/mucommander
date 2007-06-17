@@ -191,7 +191,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         // Listens to some configuration variables
         ConfigurationManager.addConfigurationListener(this);
-        ThemeManager.addThemeListener(this);
+        ThemeManager.addCurrentThemeListener(this);
 
         // Listen to focus event in order to notify MainFrame of changes of the current active panel/table
         fileTable.addFocusListener(this);

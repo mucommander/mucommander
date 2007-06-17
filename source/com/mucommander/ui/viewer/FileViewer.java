@@ -25,7 +25,7 @@ public abstract class FileViewer extends JPanel implements ThemeListener {
      */
     public FileViewer() {
         setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR));
-        ThemeManager.addThemeListener(this);
+        ThemeManager.addCurrentThemeListener(this);
     }
 	
 

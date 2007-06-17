@@ -26,7 +26,6 @@ public class ResourceLoader {
     /**
      * Finds a resource file with a given path, relative to the classpath.
      * Returns an InputStream to read the resource, or null if no resource file with this path is found.
-
      * @param path a path to a resource file, relative to the classpath
      * @return an InputStream to read the resource file, or null if no resource file with this path is found
      */

@@ -38,7 +38,7 @@ public class ImageViewer extends FileViewer implements ActionListener, ThemeList
 	
     public ImageViewer() {
         backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR);
-        ThemeManager.addThemeListener(this);
+        ThemeManager.addCurrentThemeListener(this);
     }	
 
 

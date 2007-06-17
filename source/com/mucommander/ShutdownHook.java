@@ -61,8 +61,11 @@ public class ShutdownHook extends Thread {
         ShellHistoryManager.writeHistory();
         // Write credentials file to disk, only if changes were made
         CredentialsManager.writeCredentials(false);
-        // Saves the user theme.
-        ThemeManager.saveUserTheme();
+
+        // Saves the current theme.
+        try {ThemeManager.saveCurrentTheme();}
+        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save user theme: " + e);}
+
         // Saves the file associations.
         CommandManager.writeCommands();
         CommandManager.writeAssociations();

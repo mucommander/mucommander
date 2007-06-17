@@ -126,7 +126,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         selectedFilesLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_FOREGROUND_COLOR));
         volumeSpaceLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR_FONT));
         volumeSpaceLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_FOREGROUND_COLOR));
-        ThemeManager.addThemeListener(this);
+        ThemeManager.addCurrentThemeListener(this);
     }
 
 
@@ -474,7 +474,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             okColor         = ThemeManager.getCurrentColor(Theme.STATUS_BAR_OK_COLOR);
             warningColor    = ThemeManager.getCurrentColor(Theme.STATUS_BAR_WARNING_COLOR);
             criticalColor   = ThemeManager.getCurrentColor(Theme.STATUS_BAR_CRITICAL_COLOR);
-            ThemeManager.addThemeListener(this);
+            ThemeManager.addCurrentThemeListener(this);
         }
 
         /**
