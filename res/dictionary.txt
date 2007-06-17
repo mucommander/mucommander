@@ -202,10 +202,31 @@ close:SK:Zatvoriť
 
 reset:EN:Reset
 reset:FR:Réinitialiser
-#Translation missing
+# Translation missing
 
 
 
+
+
+
+
+rename:EN:Rename
+rename:FR:Renommer
+rename:DE:Umbenennen
+rename:ES:Renombrar
+rename:CS:Přejmenovat
+rename:zh_TW:重新命名
+rename:PL:Zmień nazwę
+rename:HU:átnevez
+rename:RU:Переименование
+rename:zh_CN:重新命名
+rename:SI:Preimenuj
+rename:RO:Redenumește
+rename:IT:Rinomina
+rename:KR:이름변경
+rename:pt_BR:Renomear
+rename:NL:Hernoemen
+rename:SK:Premenovať
 
 example:EN:Example
 example:FR:Exemple
@@ -555,6 +576,49 @@ pause:SK:Pauza
 
 
 
+# Used in file overwrite confirmation dialogs.
+file_already_exists:EN:%1 already exists, do you want to replace it ?
+file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
+file_already_exists:DE:%1 existiert bereits, soll sie überschrieben werden ?
+file_already_exists:ES:%1 ya existe , ¿desea reemplazarlo?
+file_already_exists:CS:%1 již existuje, chcete jej přepsat ?
+file_already_exists:zh_TW:%1 已存在, 你是否要取代它 ?
+file_already_exists:PL:%1 już istnieje, chcesz zastąpić ?
+file_already_exists:HU:%1 már létezik, lecseréli?
+file_already_exists:RU:Файл %1 уже существует. Вы хотите его заменить?
+file_already_exists:zh_CN:%1 已存在, 你是否要取代它 ?
+file_already_exists:SI:%1 že obstaja, ali jo želi zamenjati?
+file_already_exists:RO:%1 există deja, vreți să îl înlocuiți?
+file_already_exists:IT:%1 esiste gia', vuoi sostituirlo ?
+file_already_exists:KR:%1가 이미 존재합니다. 덮어쓰시겠습니까?
+file_already_exists:pt_BR:%1 já existe, deseja sobrescrevê-lo ?
+file_already_exists:NL:%1 bestaat al, wilt u het vervangen ?
+file_already_exists:SK:%1 už existuje, chcete ho prepísať ?
+
+# Used as the title of error dialogs.
+write_error:EN:Write error
+write_error:FR:Erreur d'écriture
+write_error:DE:Schreibfehler
+write_error:ES:Error de escritura
+write_error:CS:Chyba zápisu
+write_error:zh_TW:寫入錯誤
+write_error:PL:Błąd zapisu
+write_error:HU:Írás hiba
+write_error:RU:Ошибка записи
+write_error:zh_CN:写入错误
+write_error:SI:Napaka pri zapisovanju
+write_error:RO:Eroare la scriere
+write_error:IT:Errore in scrittura
+write_error:KR:쓰기 오류
+write_error:pt_BR:Erro de escrita
+write_error:NL:Fout bij het schrijven
+write_error:SK:Chyba zápisu
+
+# Used as the title of error dialogs.
+read_error:EN:Read error
+read_error:FR:Erreur de lecture
+# Translation missing
+
 
 
 
@@ -874,10 +938,6 @@ go_to:SK:Ísť na
 
 
 
-
-
-
-
 ##########################
 # Generic error messages #
 ##########################
@@ -965,6 +1025,11 @@ this_folder_does_not_exist:KR:폴더가 존재하지 않거나 사용할수 없�
 this_folder_does_not_exist:pt_BR:Este diretório não existe ou não está disponível: %1
 this_folder_does_not_exist:NL:Deze map bestaat niet of is niet beschikbaar: %1
 this_folder_does_not_exist:SK:Tento priečinok neexistuje, alebo nie je k dispozícii: %1
+
+this_file_does_not_exist:EN:This file doesn't exist or is not available: %1
+this_file_does_not_exist:FR:Ce fichier n'existe pas ou n'est pas disponible: %1
+# Translation missing
+
 
 invalid_path:EN:Invalid path: %1
 invalid_path:FR:Chemin invalide: %1
@@ -1877,23 +1942,23 @@ com.mucommander.ui.action.MoveAction.tooltip:pt_BR:Mover arquivos selecionados
 com.mucommander.ui.action.MoveAction.tooltip:NL:Gemarkeerde bestanden verplaatsen
 com.mucommander.ui.action.MoveAction.tooltip:SK:Presunúť označené súbory
 
-com.mucommander.ui.action.RenameAction.label:EN:Rename
-com.mucommander.ui.action.RenameAction.label:FR:Renommer
-com.mucommander.ui.action.RenameAction.label:DE:Umbenennen
-com.mucommander.ui.action.RenameAction.label:ES:Renombrar
-com.mucommander.ui.action.RenameAction.label:CS:Přejmenovat
-com.mucommander.ui.action.RenameAction.label:zh_TW:重新命名
-com.mucommander.ui.action.RenameAction.label:PL:Przemianuj
-com.mucommander.ui.action.RenameAction.label:HU:átnevez
-com.mucommander.ui.action.RenameAction.label:RU:Переименовать
-com.mucommander.ui.action.RenameAction.label:zh_CN:重新命名
-com.mucommander.ui.action.RenameAction.label:SI:Preimenuj
-com.mucommander.ui.action.RenameAction.label:RO:Redenumește
-com.mucommander.ui.action.RenameAction.label:IT:Rinomina
-com.mucommander.ui.action.RenameAction.label:KR:이름변경
-com.mucommander.ui.action.RenameAction.label:pt_BR:Renomear
-com.mucommander.ui.action.RenameAction.label:NL:Hernoemen
-com.mucommander.ui.action.RenameAction.label:SK:Premenovať
+com.mucommander.ui.action.RenameAction.label:EN:$[rename]
+com.mucommander.ui.action.RenameAction.label:FR:$[rename]
+com.mucommander.ui.action.RenameAction.label:DE:$[rename]
+com.mucommander.ui.action.RenameAction.label:ES:$[rename]
+com.mucommander.ui.action.RenameAction.label:CS:$[rename]
+com.mucommander.ui.action.RenameAction.label:zh_TW:$[rename]
+com.mucommander.ui.action.RenameAction.label:PL:$[rename]
+com.mucommander.ui.action.RenameAction.label:HU:$[rename]
+com.mucommander.ui.action.RenameAction.label:RU:$[rename]
+com.mucommander.ui.action.RenameAction.label:zh_CN:$[rename]
+com.mucommander.ui.action.RenameAction.label:SI:$[rename]
+com.mucommander.ui.action.RenameAction.label:RO:$[rename]
+com.mucommander.ui.action.RenameAction.label:IT:$[rename]
+com.mucommander.ui.action.RenameAction.label:KR:$[rename]
+com.mucommander.ui.action.RenameAction.label:pt_BR:$[rename]
+com.mucommander.ui.action.RenameAction.label:NL:$[rename]
+com.mucommander.ui.action.RenameAction.label:SK:$[rename]
 
 com.mucommander.ui.action.RenameAction.tooltip:EN:Rename selected file
 com.mucommander.ui.action.RenameAction.tooltip:FR:Renommer le fichier selectionné
@@ -4826,24 +4891,6 @@ unpack_dialog.unpacking_file:SK:Dekomprimujem %1
 # Move #
 ########
 
-move_dialog.rename:EN:Rename
-move_dialog.rename:FR:Renommer
-move_dialog.rename:DE:Umbenennen
-move_dialog.rename:ES:Renombrar
-move_dialog.rename:CS:Přejmenovat
-move_dialog.rename:zh_TW:重新命名
-move_dialog.rename:PL:Zmień nazwę
-move_dialog.rename:HU:átnevez
-move_dialog.rename:RU:Переименование
-move_dialog.rename:zh_CN:重新命名
-move_dialog.rename:SI:Preimenuj
-move_dialog.rename:RO:Redenumește
-move_dialog.rename:IT:Rinomina
-move_dialog.rename:KR:이름변경
-move_dialog.rename:pt_BR:Renomear
-move_dialog.rename:NL:Hernoemen
-move_dialog.rename:SK:Premenovať
-
 move_dialog.move:EN:Move
 move_dialog.move:FR:Déplacer
 move_dialog.move:DE:Verschieben
@@ -4861,24 +4908,6 @@ move_dialog.move:KR:이동
 move_dialog.move:pt_BR:Mover
 move_dialog.move:NL:Verplaats
 move_dialog.move:SK:Presunúť
-
-move_dialog.rename_description:EN:Rename file to
-move_dialog.rename_description:FR:Renommer en
-move_dialog.rename_description:DE:Umbenennen nach
-move_dialog.rename_description:ES:Renombrar fichero a
-move_dialog.rename_description:CS:Přejmenovat soubor na
-move_dialog.rename_description:zh_TW:重新命名檔案為
-move_dialog.rename_description:PL:Zmień nazwę na
-move_dialog.rename_description:HU:átnevezés ide
-move_dialog.rename_description:RU:Переименовать файл в
-move_dialog.rename_description:zh_CN:文件重新命名为
-move_dialog.rename_description:SI:Preimenuj datoteko v
-move_dialog.rename_description:RO:Redenumește fișierul la
-move_dialog.rename_description:IT:Rinomina file in
-move_dialog.rename_description:KR:이름변경 위치
-move_dialog.rename_description:pt_BR:Renomear arquivo para
-move_dialog.rename_description:NL:Hernoem bestand naar
-move_dialog.rename_description:SK:Premenovať súbor na
 
 move_dialog.move_description:EN:Move to
 move_dialog.move_description:FR:Déplacer vers
@@ -7259,42 +7288,6 @@ file_editor.cannot_write:pt_BR:Não foi possível escrever o arquivo.
 file_editor.cannot_write:NL:Kan het bestand niet schrijven
 file_editor.cannot_write:SK:Do súboru sa nedá zapisovať.
 
-file_editor.write_error_title:EN:Write error
-file_editor.write_error_title:FR:Erreur d'écriture
-file_editor.write_error_title:DE:Schreibfehler
-file_editor.write_error_title:ES:Error de escritura
-file_editor.write_error_title:CS:Chyba zápisu
-file_editor.write_error_title:zh_TW:寫入錯誤
-file_editor.write_error_title:PL:Błąd zapisu
-file_editor.write_error_title:HU:Írás hiba
-file_editor.write_error_title:RU:Ошибка записи
-file_editor.write_error_title:zh_CN:写入错误
-file_editor.write_error_title:SI:Napaka pri zapisovanju
-file_editor.write_error_title:RO:Eroare la scriere
-file_editor.write_error_title:IT:Errore in scrittura
-file_editor.write_error_title:KR:쓰기 오류
-file_editor.write_error_title:pt_BR:Erro de escrita
-file_editor.write_error_title:NL:Fout bij het schrijven
-file_editor.write_error_title:SK:Chyba zápisu
-
-file_editor.file_already_exists:EN:%1 already exists, do you want to replace it ?
-file_editor.file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
-file_editor.file_already_exists:DE:%1 existiert bereits, soll sie überschrieben werden ?
-file_editor.file_already_exists:ES:%1 ya existe , ¿desea reemplazarlo?
-file_editor.file_already_exists:CS:%1 již existuje, chcete jej přepsat ?
-file_editor.file_already_exists:zh_TW:%1 已存在, 你是否要取代它 ?
-file_editor.file_already_exists:PL:%1 już istnieje, chcesz zastąpić ?
-file_editor.file_already_exists:HU:%1 már létezik, lecseréli?
-file_editor.file_already_exists:RU:Файл %1 уже существует. Вы хотите его заменить?
-file_editor.file_already_exists:zh_CN:%1 已存在, 你是否要取代它 ?
-file_editor.file_already_exists:SI:%1 že obstaja, ali jo želi zamenjati?
-file_editor.file_already_exists:RO:%1 există deja, vreți să îl înlocuiți?
-file_editor.file_already_exists:IT:%1 esiste gia', vuoi sostituirlo ?
-file_editor.file_already_exists:KR:%1가 이미 존재합니다. 덮어쓰시겠습니까?
-file_editor.file_already_exists:pt_BR:%1 já existe, deseja sobrescrevê-lo ?
-file_editor.file_already_exists:NL:%1 bestaat al, wilt u het vervangen ?
-file_editor.file_already_exists:SK:%1 už existuje, chcete ho prepísať ?
-
 file_editor.file_menu:EN:$[file_viewer.file_menu]
 
 file_editor.close:EN:$[file_viewer.close]
@@ -7730,12 +7723,19 @@ theme_dialog.theme_warning:RU:Это приведет к замене сущес
 theme_dialog.theme_warning:ES:Esto sobrescribirá el tema específico. ¿Desea proceder?
 theme_dialog.theme_warning:PL:Spowoduje to nadpisanie schematu użytkownika. Czy chcesz kontynuować?
 theme_dialog.theme_warning:KR:사용자 설정 테마를 겹쳐쓸것입니다. 계속할까요?
-prefs_dialog.theme_warning:pt_BR:Esta ação irá sobrescrever o tema personalizado. Continuar?
-prefs_dialog.theme_warning:NL:Dit zal het huidige thema overschrijven. Wilt u doorgaan?
-prefs_dialog.theme_warning:SK:Užívateľská téma bude prepísaná. Naozaj chcete pokračovať?
+theme_dialog.theme_warning:pt_BR:Esta ação irá sobrescrever o tema personalizado. Continuar?
+theme_dialog.theme_warning:NL:Dit zal het huidige thema overschrijven. Wilt u doorgaan?
+theme_dialog.theme_warning:SK:Užívateľská téma bude prepísaná. Naozaj chcete pokračovať?
 # Translation missing
 
 
+
+
+# Error message displayed when a theme's saving fails.
+# %1 will be replaced by the theme's name.
+theme_dialog.could_not_save_theme:EN:Unable to write theme %1
+theme_dialog.could_not_save_theme:FR:Erreur lors de l'écriture du thème %1
+# Translation missing
 
 
 
@@ -7891,8 +7891,8 @@ theme_dialog.shell_colors:ES:Colores de shell
 theme_dialog.shell_colors:PL:Kolor okna terminala (shell)
 theme_dialog.shell_colors:KR:쉘 색상
 theme_dialog.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
-prefs_dialog.shell_colors:NL:Kleuren van de shell
-prefs_dialog.shell_colors:SK:Farba terminálu (shell)
+theme_dialog.shell_colors:NL:Kleuren van de shell
+theme_dialog.shell_colors:SK:Farba terminálu (shell)
 
 theme_dialog.history_colors:EN:History colors
 theme_dialog.history_colors:FR:Couleurs de l'historique
@@ -8797,6 +8797,67 @@ prefs_dialog.themes:SK:Témy
 
 
 
+prefs_dialog.import_theme:EN:Import theme
+prefs_dialog.import_theme:FR:Import de thème
+# Translation missing
+
+
+
+# Error message displayed when a theme import fails because it couldn't be written.
+# %1 will be replaced by the theme's name.
+prefs_dialog.error_in_import:EN:Error while importing theme %1.
+prefs_dialog.error_in_import:FR:Une erreur est survenue lors de l'import du thème %1.
+# Translation missing
+
+
+
+
+
+# Error message displayed when a theme import fails because it couldn't be loaded.
+# %1 will be replaced by the path to the theme's file.
+prefs_dialog.cannot_read_theme:EN:Cannot load theme from file %1
+prefs_dialog.cannot_read_theme:FR:Erreur lors de la lecture du fichier %1
+# Translation missing
+
+
+
+
+
+
+
+# Title of the theme export dialog box. %1 will be replaced by the name of the theme
+# being exported.
+prefs_dialog.export_theme:EN:Export %1
+prefs_dialog.export_theme:FR:Export de %1
+# Translation missing
+
+
+
+
+
+prefs_dialog.import:EN:Import
+prefs_dialog.import:FR:Importer
+# Translation missing
+
+
+
+
+
+
+prefs_dialog.export:EN:Export
+prefs_dialog.export:FR:Exporter
+# Translation missing
+
+
+
+
+# Label of the 'XML file' filter used by the theme import / export dialog boxes.
+prefs_dialog.xml_file:EN:XML file
+prefs_dialog.xml_file:FR:Fichier XML
+# Translation missing
+
+
+
 
 
 
@@ -9499,165 +9560,6 @@ setup.theme:SK:Vyberte tému
 
 
 
-
-######################
-# Deprecated entries #
-######################
-
-# Entries that are not used anymore, kept here for the record in case they are reused later
-
-#server_connect_dialog.auth_error:EN:Invalid login or password.
-#server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
-#server_connect_dialog.auth_error:DE:Ungültiger Login oder Paßwort.
-#server_connect_dialog.auth_error:ES:Nombre o contraseña inválido
-#server_connect_dialog.auth_error:CS:Nesprávné uživatelské jméno nebo heslo.
-#server_connect_dialog.auth_error:zh_TW:不合法的帳號或密碼
-#server_connect_dialog.auth_error:SI:Napačno uporabniško ime ali geslo
-
-#move_dialog.cannot_move_to_itself:EN:Cannot move files to a subfolder.
-#move_dialog.cannot_move_to_itself:FR:Impossible de déplacer les fichiers vers un sous-répertoire.
-#move_dialog.cannot_move_to_itself:DE:Kann Dateien nicht in Unterordner verschieben.
-#move_dialog.cannot_move_to_itself:ES:Imposible mover los ficheros al subdirectorio.
-#move_dialog.cannot_move_to_itself:CS:Nemůžu přesunout soubory do podsložky.
-#move_dialog.cannot_move_to_itself:zh_TW:無法搬移檔案至子目錄
-#move_dialog.cannot_move_to_itself:SI:Ne morem premakniti datotek v podmapo
-
-#pack.error_on_file:EN:Error while compressing %1
-#pack.error_on_file:FR:Erreur lors de la compression de %1
-#pack.error_on_file:DE:Fehler beim Packen von %1
-#pack.error_on_file:ES:Error al comprimir %1
-#pack.error_on_file:CS:Chyba při kompresi %1
-#pack.error_on_file:zh_TW:當壓縮時發生錯誤 %1
-#pack.error_on_file:PL:Błąd podczas kompresji %1
-#pack.error_on_file:HU:Hiba a tömörítés közben %1
-#pack.error_on_file:RU:Ошибка при архивации файла %1
-#pack.error_on_file:ZH_CN:压缩时发生错误 %1
-#pack.error_on_file:SI:Napaka med stiskanjem %1
-
-#pack_dialog.cannot_write:EN:Unable to create file in destination folder.
-#pack_dialog.cannot_write:FR:Impossible de créer le fichier dans le dossier de destination.
-#pack_dialog.cannot_write:DE:Kann Datei nicht im Zielordner erstellen.
-#pack_dialog.cannot_write:ES:Imposible crear el fichero zip en el direcotorio de destino.
-#pack_dialog.cannot_write:CS:V cílové složce nelze vytvořit soubor.
-#pack_dialog.cannot_write:zh_TW:無法在目的資料夾產生壓縮檔
-#pack_dialog.cannot_write:PL:Nie mogę utworzyć archiwum w katalogu docelowym
-#pack_dialog.cannot_write:HU:A célkönyvtárba nem lehetséges tömörített fájlt készíteni.
-#pack_dialog.cannot_write:RU:Невозможно создать архив в каталоге-получателе
-#pack_dialog.cannot_write:ZH_CN:无法在目的文件夹创建压缩文件
-#pack_dialog.cannot_write:SI:Ne morem ustvariti stisnjene datoteke v ciljni mapi.
-
-#unpack.unable_to_open_zip:EN:Unable to open zip file %1.
-#unpack.unable_to_open_zip:FR:Erreur lors de l'ouverture du fichier zip %1.
-#unpack.unable_to_open_zip:DE:Kann ZIP Datei %1 nicht öffnen.
-#unpack.unable_to_open_zip:ES:Error al abrir el fichero zip %1.
-#unpack.unable_to_open_zip:CS:Chyba při otevírání souboru %1.
-#unpack.unable_to_open_zip:zh_TW:無法打開壓縮檔 %1
-#unpack.unable_to_open_zip:PL:Nie mogę otworzyć archiwum %1.
-#unpack.unable_to_open_zip:HU:A Zip fájl megnyitása nem lehetséges %1.
-#unpack.unable_to_open_zip:RU:Не удается открыть архив %1.
-#unpack.unable_to_open_zip:ZH_CN:无法打开压缩文件 %1
-#unpack.unable_to_open_zip:SI:Ne morem odpreti stisnjene datoteke %1.
-
-#image_viewer.previous_image:EN:Previous image
-#image_viewer.previous_image:FR:Image précédente
-#image_viewer.previous_image:DE:Vorheriges Bild
-#image_viewer.previous_image:ES:Anterior
-#image_viewer.previous_image:CS:Předchozí obrázek
-#image_viewer.previous_image:zh_TW:前一個圖片
-#image_viewer.previous_image:SI:Prejšnja slika
-
-#image_viewer.next_image:EN:Next image
-#image_viewer.next_image:FR:Image suivante
-#image_viewer.next_image:DE:Nächstes Bild
-#image_viewer.next_image:ES:Siguiente
-#image_viewer.next_image:CS:Následující obrázek
-#image_viewer.next_image:zh_TW:後一個圖片
-#image_viewer.next_image:SI:Naslednja slika
-
-#mkdir_dialog.title:EN:Make directory
-#mkdir_dialog.title:FR:Créer répertoire
-#mkdir_dialog.title:DE:Ordner erstellen
-#mkdir_dialog.title:ES:Crear directorio
-#mkdir_dialog.title:CS:Vytvořit složku
-#mkdir_dialog.title:zh_TW:新增資料夾
-#mkdir_dialog.title:PL:Utwórz katalog
-#mkdir_dialog.title:HU:új könyvtár
-#mkdir_dialog.title:RU:Создание каталога
-#mkdir_dialog.title:ZH_CN:新建文件夹
-#mkdir_dialog.title:SI:Nova mapa
-
-#mkdir_dialog.error_title:EN:Creation error
-#mkdir_dialog.error_title:FR:Erreur de création
-#mkdir_dialog.error_title:DE:Fehler beim Erstellen des Ordners
-#mkdir_dialog.error_title:ES:Error al crear el directorio
-#mkdir_dialog.error_title:CS:Chyba při vytváření složky
-#mkdir_dialog.error_title:zh_TW:新增資料夾錯誤
-#mkdir_dialog.error_title:PL:Błąd tworzenia katalogu
-#mkdir_dialog.error_title:HU:könyvtár létrehozási hiba
-#mkdir_dialog.error_title:RU:Ошибка при создании каталога
-#mkdir_dialog.error_title:zh_CN:新建文件夹错误
-#mkdir_dialog.error_title:SI:Napaka pri ustvarjanju mape
-
-# Remove bookmark button in the Edit bookmarks dialog
-#edit_bookmarks_dialog.remove:EN:Remove
-#edit_bookmarks_dialog.remove:CS:Odstranit
-#edit_bookmarks_dialog.remove:FR:Supprimer
-#edit_bookmarks_dialog.remove:ES:Eliminar
-#edit_bookmarks_dialog.remove:RU:Удалить
-#edit_bookmarks_dialog.remove:zh_TW:移除
-#edit_bookmarks_dialog.remove:PL:Usuń
-#edit_bookmarks_dialog.remove:ZH_CN:删除
-#edit_bookmarks_dialog.remove:SI:Odstrani
-
-#mkdir_dialog.description:EN:Create directory
-#mkdir_dialog.description:FR:Créer le répertoire
-#mkdir_dialog.description:DE:Ordner erstellen
-#mkdir_dialog.description:ES:Crear directorio
-#mkdir_dialog.description:CS:Vytvořit složku
-#mkdir_dialog.description:zh_TW:新增資料夾
-#mkdir_dialog.description:PL:Utwórz katalog
-#mkdir_dialog.description:HU:új könyvtár létrehozása
-#mkdir_dialog.description:RU:Создать каталог
-#mkdir_dialog.description:ZH_CN:创建文件夹
-#mkdir_dialog.description:SI:Ustvari novo mapo
-#mkdir_dialog.description:RO:Crează director
-#mkdir_dialog.description:IT:Crea directory
-
-#mkfile_dialog.description:EN:Create new empty file
-#mkfile_dialog.description:CS:Vytvořit nový prázdný soubor
-#mkfile_dialog.description:FR:Créer le fichier vide
-#mkfile_dialog.description:RO:Crează un nou fișier gol
-#mkfile_dialog.description:SI:Ustvari novo prazno datoteko
-#mkfile_dialog.description:IT:Crea un nuovo file vuoto
-
-# Used for buttons as an alternative to 'ok'
-#done:EN:Done
-#done:FR:Terminé
-#done:ES:Terminado
-#done:RU:Готово
-#done:zh_TW:完成
-#done:PL:Zrobione
-#done:ZH_CN:完成
-#done:SI:Narejeno
-#done:RO:Închide
-#done:IT:Fatto
-#done:CS:Hotovo
-
-#progress_dialog.hide:EN:Hide
-#progress_dialog.hide:FR:Cacher
-#progress_dialog.hide:DE:Verstecken
-#progress_dialog.hide:ES:Ocultar
-#progress_dialog.hide:CS:Skrýt
-#progress_dialog.hide:zh_TW:隱藏
-#progress_dialog.hide:PL:Ukryj
-#progress_dialog.hide:HU:rejt
-#progress_dialog.hide:RU:Скрыть
-#progress_dialog.hide:ZH_CN:隐藏
-#progress_dialog.hide:SI:Skrij
-
-
-
-
 ################
 # Font chooser #
 ################
@@ -9854,3 +9756,179 @@ colorchooser.title:SI:Izberi barvo
 colorchooser.title:RO:Alegeți o culoare
 colorchooser.title:IT:Scegli un colore
 colorchooser.title:KR:색상 선택
+# Translation missing
+
+
+
+######################
+# Deprecated entries #
+######################
+
+# Entries that are not used anymore, kept here for the record in case they are reused later
+
+#server_connect_dialog.auth_error:EN:Invalid login or password.
+#server_connect_dialog.auth_error:FR:Identifiant ou mot de passe incorrect.
+#server_connect_dialog.auth_error:DE:Ungültiger Login oder Paßwort.
+#server_connect_dialog.auth_error:ES:Nombre o contraseña inválido
+#server_connect_dialog.auth_error:CS:Nesprávné uživatelské jméno nebo heslo.
+#server_connect_dialog.auth_error:zh_TW:不合法的帳號或密碼
+#server_connect_dialog.auth_error:SI:Napačno uporabniško ime ali geslo
+
+#move_dialog.cannot_move_to_itself:EN:Cannot move files to a subfolder.
+#move_dialog.cannot_move_to_itself:FR:Impossible de déplacer les fichiers vers un sous-répertoire.
+#move_dialog.cannot_move_to_itself:DE:Kann Dateien nicht in Unterordner verschieben.
+#move_dialog.cannot_move_to_itself:ES:Imposible mover los ficheros al subdirectorio.
+#move_dialog.cannot_move_to_itself:CS:Nemůžu přesunout soubory do podsložky.
+#move_dialog.cannot_move_to_itself:zh_TW:無法搬移檔案至子目錄
+#move_dialog.cannot_move_to_itself:SI:Ne morem premakniti datotek v podmapo
+
+#pack.error_on_file:EN:Error while compressing %1
+#pack.error_on_file:FR:Erreur lors de la compression de %1
+#pack.error_on_file:DE:Fehler beim Packen von %1
+#pack.error_on_file:ES:Error al comprimir %1
+#pack.error_on_file:CS:Chyba při kompresi %1
+#pack.error_on_file:zh_TW:當壓縮時發生錯誤 %1
+#pack.error_on_file:PL:Błąd podczas kompresji %1
+#pack.error_on_file:HU:Hiba a tömörítés közben %1
+#pack.error_on_file:RU:Ошибка при архивации файла %1
+#pack.error_on_file:ZH_CN:压缩时发生错误 %1
+#pack.error_on_file:SI:Napaka med stiskanjem %1
+
+#pack_dialog.cannot_write:EN:Unable to create file in destination folder.
+#pack_dialog.cannot_write:FR:Impossible de créer le fichier dans le dossier de destination.
+#pack_dialog.cannot_write:DE:Kann Datei nicht im Zielordner erstellen.
+#pack_dialog.cannot_write:ES:Imposible crear el fichero zip en el direcotorio de destino.
+#pack_dialog.cannot_write:CS:V cílové složce nelze vytvořit soubor.
+#pack_dialog.cannot_write:zh_TW:無法在目的資料夾產生壓縮檔
+#pack_dialog.cannot_write:PL:Nie mogę utworzyć archiwum w katalogu docelowym
+#pack_dialog.cannot_write:HU:A célkönyvtárba nem lehetséges tömörített fájlt készíteni.
+#pack_dialog.cannot_write:RU:Невозможно создать архив в каталоге-получателе
+#pack_dialog.cannot_write:ZH_CN:无法在目的文件夹创建压缩文件
+#pack_dialog.cannot_write:SI:Ne morem ustvariti stisnjene datoteke v ciljni mapi.
+
+#unpack.unable_to_open_zip:EN:Unable to open zip file %1.
+#unpack.unable_to_open_zip:FR:Erreur lors de l'ouverture du fichier zip %1.
+#unpack.unable_to_open_zip:DE:Kann ZIP Datei %1 nicht öffnen.
+#unpack.unable_to_open_zip:ES:Error al abrir el fichero zip %1.
+#unpack.unable_to_open_zip:CS:Chyba při otevírání souboru %1.
+#unpack.unable_to_open_zip:zh_TW:無法打開壓縮檔 %1
+#unpack.unable_to_open_zip:PL:Nie mogę otworzyć archiwum %1.
+#unpack.unable_to_open_zip:HU:A Zip fájl megnyitása nem lehetséges %1.
+#unpack.unable_to_open_zip:RU:Не удается открыть архив %1.
+#unpack.unable_to_open_zip:ZH_CN:无法打开压缩文件 %1
+#unpack.unable_to_open_zip:SI:Ne morem odpreti stisnjene datoteke %1.
+
+#image_viewer.previous_image:EN:Previous image
+#image_viewer.previous_image:FR:Image précédente
+#image_viewer.previous_image:DE:Vorheriges Bild
+#image_viewer.previous_image:ES:Anterior
+#image_viewer.previous_image:CS:Předchozí obrázek
+#image_viewer.previous_image:zh_TW:前一個圖片
+#image_viewer.previous_image:SI:Prejšnja slika
+
+#image_viewer.next_image:EN:Next image
+#image_viewer.next_image:FR:Image suivante
+#image_viewer.next_image:DE:Nächstes Bild
+#image_viewer.next_image:ES:Siguiente
+#image_viewer.next_image:CS:Následující obrázek
+#image_viewer.next_image:zh_TW:後一個圖片
+#image_viewer.next_image:SI:Naslednja slika
+
+#mkdir_dialog.title:EN:Make directory
+#mkdir_dialog.title:FR:Créer répertoire
+#mkdir_dialog.title:DE:Ordner erstellen
+#mkdir_dialog.title:ES:Crear directorio
+#mkdir_dialog.title:CS:Vytvořit složku
+#mkdir_dialog.title:zh_TW:新增資料夾
+#mkdir_dialog.title:PL:Utwórz katalog
+#mkdir_dialog.title:HU:új könyvtár
+#mkdir_dialog.title:RU:Создание каталога
+#mkdir_dialog.title:ZH_CN:新建文件夹
+#mkdir_dialog.title:SI:Nova mapa
+
+#mkdir_dialog.error_title:EN:Creation error
+#mkdir_dialog.error_title:FR:Erreur de création
+#mkdir_dialog.error_title:DE:Fehler beim Erstellen des Ordners
+#mkdir_dialog.error_title:ES:Error al crear el directorio
+#mkdir_dialog.error_title:CS:Chyba při vytváření složky
+#mkdir_dialog.error_title:zh_TW:新增資料夾錯誤
+#mkdir_dialog.error_title:PL:Błąd tworzenia katalogu
+#mkdir_dialog.error_title:HU:könyvtár létrehozási hiba
+#mkdir_dialog.error_title:RU:Ошибка при создании каталога
+#mkdir_dialog.error_title:zh_CN:新建文件夹错误
+#mkdir_dialog.error_title:SI:Napaka pri ustvarjanju mape
+
+# Remove bookmark button in the Edit bookmarks dialog
+#edit_bookmarks_dialog.remove:EN:Remove
+#edit_bookmarks_dialog.remove:CS:Odstranit
+#edit_bookmarks_dialog.remove:FR:Supprimer
+#edit_bookmarks_dialog.remove:ES:Eliminar
+#edit_bookmarks_dialog.remove:RU:Удалить
+#edit_bookmarks_dialog.remove:zh_TW:移除
+#edit_bookmarks_dialog.remove:PL:Usuń
+#edit_bookmarks_dialog.remove:ZH_CN:删除
+#edit_bookmarks_dialog.remove:SI:Odstrani
+
+#mkdir_dialog.description:EN:Create directory
+#mkdir_dialog.description:FR:Créer le répertoire
+#mkdir_dialog.description:DE:Ordner erstellen
+#mkdir_dialog.description:ES:Crear directorio
+#mkdir_dialog.description:CS:Vytvořit složku
+#mkdir_dialog.description:zh_TW:新增資料夾
+#mkdir_dialog.description:PL:Utwórz katalog
+#mkdir_dialog.description:HU:új könyvtár létrehozása
+#mkdir_dialog.description:RU:Создать каталог
+#mkdir_dialog.description:ZH_CN:创建文件夹
+#mkdir_dialog.description:SI:Ustvari novo mapo
+#mkdir_dialog.description:RO:Crează director
+#mkdir_dialog.description:IT:Crea directory
+
+#mkfile_dialog.description:EN:Create new empty file
+#mkfile_dialog.description:CS:Vytvořit nový prázdný soubor
+#mkfile_dialog.description:FR:Créer le fichier vide
+#mkfile_dialog.description:RO:Crează un nou fișier gol
+#mkfile_dialog.description:SI:Ustvari novo prazno datoteko
+#mkfile_dialog.description:IT:Crea un nuovo file vuoto
+
+# Used for buttons as an alternative to 'ok'
+#done:EN:Done
+#done:FR:Terminé
+#done:ES:Terminado
+#done:RU:Готово
+#done:zh_TW:完成
+#done:PL:Zrobione
+#done:ZH_CN:完成
+#done:SI:Narejeno
+#done:RO:Închide
+#done:IT:Fatto
+#done:CS:Hotovo
+
+#progress_dialog.hide:EN:Hide
+#progress_dialog.hide:FR:Cacher
+#progress_dialog.hide:DE:Verstecken
+#progress_dialog.hide:ES:Ocultar
+#progress_dialog.hide:CS:Skrýt
+#progress_dialog.hide:zh_TW:隱藏
+#progress_dialog.hide:PL:Ukryj
+#progress_dialog.hide:HU:rejt
+#progress_dialog.hide:RU:Скрыть
+#progress_dialog.hide:ZH_CN:隐藏
+#progress_dialog.hide:SI:Skrij
+
+#move_dialog.rename_description:EN:Rename file to
+#move_dialog.rename_description:FR:Renommer en
+#move_dialog.rename_description:DE:Umbenennen nach
+#move_dialog.rename_description:ES:Renombrar fichero a
+#move_dialog.rename_description:CS:Přejmenovat soubor na
+#move_dialog.rename_description:zh_TW:重新命名檔案為
+#move_dialog.rename_description:PL:Zmień nazwę na
+#move_dialog.rename_description:HU:átnevezés ide
+#move_dialog.rename_description:RU:Переименовать файл в
+#move_dialog.rename_description:zh_CN:文件重新命名为
+#move_dialog.rename_description:SI:Preimenuj datoteko v
+#move_dialog.rename_description:RO:Redenumește fișierul la
+#move_dialog.rename_description:IT:Rinomina file in
+#move_dialog.rename_description:KR:이름변경 위치
+#move_dialog.rename_description:pt_BR:Renomear arquivo para
+#move_dialog.rename_description:NL:Hernoem bestand naar
+#move_dialog.rename_description:SK:Premenovať súbor na
