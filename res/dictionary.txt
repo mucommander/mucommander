@@ -445,6 +445,24 @@ overwrite_if_older:pt_BR:Sobrescrever se mais antigo
 overwrite_if_older:NL:Oudere overschrijven
 overwrite_if_older:SK:Prepísať staršie
 
+duplicate:EN:Duplicate
+duplicate:FR:Dupliquer
+duplicate:SI:Podvoji
+duplicate:IT:Duplica
+duplicate:CS:Duplikovat
+duplicate:zh_TW:複製
+duplicate:DE:Duplizieren
+duplicate:RO:Duplică
+duplicate:zh_CN:复制
+duplicate:RU:Скопировать
+duplicate:ES:Duplicar
+duplicate:PL:Powiel
+duplicate:KR:중복
+duplicate:pt_BR:Duplicar
+duplicate:NL:Dupliceer
+duplicate:SK:Duplikovať
+# Translation missing
+
 apply_to_all:EN:Apply to all
 apply_to_all:FR:Appliquer à tous
 apply_to_all:DE:Zuweisen an alle
@@ -6916,29 +6934,6 @@ edit_bookmarks_dialog.new:SK:Nová
 
 
 
-# Duplicate bookmark button in the Edit bookmarks dialog
-edit_bookmarks_dialog.duplicate:EN:Duplicate
-edit_bookmarks_dialog.duplicate:FR:Dupliquer
-edit_bookmarks_dialog.duplicate:SI:Podvoji
-edit_bookmarks_dialog.duplicate:IT:Duplica
-edit_bookmarks_dialog.duplicate:CS:Duplikovat
-edit_bookmarks_dialog.duplicate:zh_TW:複製
-edit_bookmarks_dialog.duplicate:DE:Duplizieren
-edit_bookmarks_dialog.duplicate:RO:Duplică
-edit_bookmarks_dialog.duplicate:zh_CN:复制
-edit_bookmarks_dialog.duplicate:RU:Скопировать
-edit_bookmarks_dialog.duplicate:ES:Duplicar
-edit_bookmarks_dialog.duplicate:PL:Powiel
-edit_bookmarks_dialog.duplicate:KR:중복
-edit_bookmarks_dialog.duplicate:pt_BR:Duplicar
-edit_bookmarks_dialog.duplicate:NL:Dupliceer
-edit_bookmarks_dialog.duplicate:SK:Duplikovať
-# Translation missing
-
-
-
-
-
 
 
 
@@ -8863,6 +8858,13 @@ prefs_dialog.theme_type:FR:Type de thème : %1
 # %1 will be replaced by the theme name.
 prefs_dialog.delete_theme:EN:Permanently delete theme %1?
 prefs_dialog.delete_theme:Fr:Définitivement supprimer le thème %1 ?
+# Translation missing
+
+
+
+
+prefs_dialog.rename_failed:EN:Failed to rename theme %1
+prefs_dialog.rename_failed:Fr:Impossible de renommer le thème %1 ?
 # Translation missing
 
 
