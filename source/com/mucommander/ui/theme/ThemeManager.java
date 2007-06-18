@@ -278,6 +278,25 @@ public class ThemeManager {
     }
 
 
+    // - Theme renaming / deleting -------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    public static boolean deleteCustomTheme(String name) {
+        File file;
+
+        // Makes sure the specified theme is not the current one.
+        if(isCurrentTheme(Theme.CUSTOM_THEME, name))
+            throw new IllegalArgumentException("Cannot delete current theme.");
+
+        // Deletes the theme.
+        file = new File(getCustomThemesFolder(), name + ".xml");
+        if(file.exists())
+            return file.delete();
+
+        return false;
+    }
+
+    public static Theme renameCustomTheme(Theme theme, String name) {return theme;}
+
 
     // - Theme writing -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -478,8 +497,9 @@ public class ThemeManager {
      * This method differs from {@link #writeThemeData(ThemeData,File)} in that it doesn't only copy
      * the theme's data, but the whole content of the theme file, including comments.
      * </p>
-     * @param  theme       theme to export.
-     * @param  out         where to write the theme.
+     * @param  type        type of the theme to export.
+     * @param  name        name of the theme to export.
+     * @param  file        where to write the theme.
      * @throws IOException if any I/O related error occurs
      * @see                #exportTheme(int,String,OutputStream)
      * @see                #writeThemeData(ThemeData,File).
@@ -516,7 +536,7 @@ public class ThemeManager {
      * <code>{@link #exportTheme(int,String,File) exportTheme(}theme.getType(), theme.getName(), file);</code>
      * </p>
      * @param  theme       theme to export.
-     * @param  out         where to write the theme.
+     * @param  file        where to write the theme.
      * @throws IOException if any I/O related error occurs.
      */
     public static void exportTheme(Theme theme, File file) throws IOException {exportTheme(theme.getType(), theme.getName(), file);}
@@ -563,15 +583,19 @@ public class ThemeManager {
         return buffer;
     }
 
-    public static void importTheme(ThemeData data, String name) throws IOException, Exception {writeTheme(data, Theme.CUSTOM_THEME, getAvailableCustomThemeName(name));}
+    public static Theme importTheme(ThemeData data, String name) throws IOException, Exception {
+        writeTheme(data, Theme.CUSTOM_THEME, name = getAvailableCustomThemeName(name));
+        return new Theme(listener, data, Theme.CUSTOM_THEME, name);
+    }
 
-    public static void importTheme(File file) throws IOException, Exception {
+    public static Theme importTheme(File file) throws IOException, Exception {
         String       name; // Name of the new theme.
         OutputStream out;  // Where to write the theme data to.
         InputStream  in;   // Where to read the theme data from.
+        ThemeData    data;
 
         // Makes sure the file contains a valid theme.
-        readThemeData(file);
+        data = readThemeData(file);
 
         // Initialisation.
         name = getAvailableCustomThemeName(file);
@@ -592,6 +616,8 @@ public class ThemeManager {
                 catch(Exception e) {}
             }
         }
+
+        return new Theme(listener, data, Theme.CUSTOM_THEME, name);
     }
 
 
@@ -604,7 +630,7 @@ public class ThemeManager {
      * @throws IOException if an I/O related error occurs.
      */
     private static InputStream getUserThemeInputStream() throws IOException {
-        return new BackupInputStream(ThemeManager.getUserThemeFile());
+        return new BackupInputStream(getUserThemeFile());
     }
 
     /**
@@ -624,7 +650,7 @@ public class ThemeManager {
      * @throws IOException if an I/O related error occurs.
      */
     private static InputStream getCustomThemeInputStream(String name) throws IOException {
-        return new BackupInputStream(new File(ThemeManager.getCustomThemesFolder(), name + ".xml"));
+        return new BackupInputStream(new File(getCustomThemesFolder(), name + ".xml"));
     }
 
     /**
@@ -959,7 +985,7 @@ public class ThemeManager {
      * Adds the specified object to the list of registered current theme listeners.
      * <p>
      * Any object registered through this method will received {@link ThemeListener#colorChanged(ColorChangedEvent) color}
-     * and {@link #ThemeListener#fontChanged(FontChangedEvent) font} events whenever the current theme changes.
+     * and {@link ThemeListener#fontChanged(FontChangedEvent) font} events whenever the current theme changes.
      * </p>
      * <p>
      * Note that these events will not necessarily be fired as a result of a direct theme change: if, for example,
