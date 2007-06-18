@@ -7662,7 +7662,7 @@ theme_dialog.locationbar_tab:FR:Barre d'emplacement
 
 
 theme_dialog.editor_tab:EN:File editor
-#theme_dialog.editor_tab:FR:Editeur de fichiers
+theme_dialog.editor_tab:FR:Editeur de fichiers
 # Translation missing
 
 
@@ -8851,6 +8851,26 @@ prefs_dialog.export:FR:Exporter
 
 
 
+
+# %1 will be replaced by the type of theme being described.
+prefs_dialog.theme_type:EN:Theme type: %1
+prefs_dialog.theme_type:FR:Type de thème : %1
+# Translation missing
+
+
+
+
+# %1 will be replaced by the theme name.
+prefs_dialog.delete_theme:EN:Permanently delete theme %1?
+prefs_dialog.delete_theme:Fr:Définitivement supprimer le thème %1 ?
+# Translation missing
+
+
+
+
+
+
+
 # Label of the 'XML file' filter used by the theme import / export dialog boxes.
 prefs_dialog.xml_file:EN:XML file
 prefs_dialog.xml_file:FR:Fichier XML
@@ -9428,6 +9448,26 @@ theme.custom_theme:SK:Užívateľská téma
 
 
 
+# Used as a description for custom themes
+theme.custom:EN:Customized
+theme.custom:FR:Personnalisé
+
+
+theme.built_in:EN:Built-in
+theme.build_in:FR:Pré-installé
+# Translation missing
+
+
+
+theme.add_on:EN:Add-on
+theme.add_on:FR:Ajouté
+# Translation missing
+
+
+
+theme.current_theme:EN:Current theme
+theme.current_theme:FR:Thème en cours
+# Translation missing
 
 
 
