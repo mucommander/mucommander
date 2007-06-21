@@ -598,6 +598,8 @@ public class ThemeManager {
         return buffer;
     }
 
+    public static Theme duplicateTheme(Theme theme) throws IOException, Exception {return importTheme(theme.cloneData(), theme.getName());}
+
     public static Theme importTheme(ThemeData data, String name) throws IOException, Exception {
         writeTheme(data, Theme.CUSTOM_THEME, name = getAvailableCustomThemeName(name));
         return new Theme(listener, data, Theme.CUSTOM_THEME, name);
