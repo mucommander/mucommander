@@ -80,7 +80,7 @@ public class Launcher {
         System.out.println(" -O, --splash                      Enable splashscreen on startup (default)");
 
         // muCommander will not print verbose error messages.
-        System.out.println(" -S, --silent                          Do not print verbose error messages");
+        System.out.println(" -S, --silent                      Do not print verbose error messages");
 
         // Allows users to tweak how shell history is loaded / saved.
         System.out.println(" -s FILE, --shell-history FILE     Load shell history from FILE");
