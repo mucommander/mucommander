@@ -15,30 +15,23 @@ import java.util.Hashtable;
  * @author Maxence Bernard
  */
 public class IconManager {
-
-    /** Singleton instance */
-    private final static IconManager instance = new IconManager();
-
-    /** Class instance used to retrieve JAR resource files  */
-    private final static Class classInstance = instance.getClass();
-
     /** Caches for the different icon sets */
     private final static Hashtable caches[];
 
     /** Designates the file icon set */
-    public final static int FILE_ICON_SET = 0;
+    public final static int FILE_ICON_SET        = 0;
     /** Designates the action icon set */
-    public final static int ACTION_ICON_SET = 1;
+    public final static int ACTION_ICON_SET      = 1;
     /** Designates the toolbar icon set */
-    public final static int STATUS_BAR_ICON_SET = 2;
+    public final static int STATUS_BAR_ICON_SET  = 2;
     /** Designates the table icon set */
-    public final static int COMMON_ICON_SET = 3;
+    public final static int COMMON_ICON_SET      = 3;
     /** Designates the preferences icon set */
     public final static int PREFERENCES_ICON_SET = 4;
     /** Designates the progress icon set */
-    public final static int PROGRESS_ICON_SET = 5;
+    public final static int PROGRESS_ICON_SET    = 5;
     /** Designates the language icon set */
-    public final static int LANGUAGE_ICON_SET = 6;
+    public final static int LANGUAGE_ICON_SET    = 6;
 
     /** Icon sets folders within the application's JAR file */
     private final static String ICON_SET_FOLDERS[] = {
@@ -58,19 +51,18 @@ public class IconManager {
         // Initialize caches for icon sets that need it.
         // Icons which are displayed once in a while like preferences icons don't need to be cached
         caches = new Hashtable[NB_ICON_SETS];
-        caches[FILE_ICON_SET] = new Hashtable();
-        caches[ACTION_ICON_SET] = new Hashtable();
+        caches[FILE_ICON_SET]       = new Hashtable();
+        caches[ACTION_ICON_SET]     = new Hashtable();
         caches[STATUS_BAR_ICON_SET] = new Hashtable();
-        caches[COMMON_ICON_SET] = new Hashtable();
-        caches[PROGRESS_ICON_SET] = new Hashtable();
+        caches[COMMON_ICON_SET]     = new Hashtable();
+        caches[PROGRESS_ICON_SET]   = new Hashtable();
     }
 
 
     /**
      * Creates a new instance of IconManager.
      */
-    private IconManager() {
-    }
+    private IconManager() {}
 
 
     /**
