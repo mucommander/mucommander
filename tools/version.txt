@@ -1,2 +1,2 @@
-proguard.jar -> 3.6
+proguard.jar -> 3.6 (we're not using higher versions since they appear to break jcifs).
 jdeb.jar     -> 0.1
