@@ -4,6 +4,7 @@ import com.apple.cocoa.foundation.NSAppleScript;
 import com.apple.cocoa.foundation.NSAutoreleasePool;
 import com.apple.cocoa.foundation.NSMutableDictionary;
 import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractTrash;
 import com.mucommander.file.FileURL;
@@ -40,6 +41,34 @@ public class OSXTrash extends AbstractTrash {
     /** AppleScript to empty the trash */
     private final static String EMPTY_TRASH_APPLESCRIPT = "tell application \"Finder\" to empty trash";
 
+    private static boolean isAvailable;
+
+    static {
+        // Test if the Cocoa-java library is available
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
+            try {
+                Class.forName("com.apple.cocoa.foundation.NSAppleScript");
+                // Seems OK
+                isAvailable = true;
+            }
+            catch(Exception e) {
+                // Not available
+            }
+        }
+
+        if(Debug.ON) Debug.trace("isAvailable="+isAvailable);
+    }
+
+    /**
+     * Returns <code>true</code> if this trash can be instanciated, <code>false</code> if the current OS is not
+     * Mac OS X or if the Cocoa-java library is not available.
+     *
+     * @return true if this trash can be instanciated, false if the current OS is not Mac OS X or if the Cocoa-java
+     * library is not available
+     */
+    public static boolean isAvailable() {
+        return isAvailable;
+    }
 
     /**
      * Executes the given AppleScript and returns <code>true</code> if it was successfully executed, <code>false</code>
@@ -49,18 +78,19 @@ public class OSXTrash extends AbstractTrash {
      * @return true if the AppleScript was succesfully executed 
      */
     private static boolean executeAppleScript(String appleScript) {
-        // Quote: from Apple Cocoa-Java doc:
-        // An autorelease pool is used to manage Foundation’s autorelease mechanism for Objective-C objects.
-        // NSAutoreleasePool provides Java applications access to autorelease pools. Typically it is not
-        // necessary for Java applications to use NSAutoreleasePools since Java manages garbage collection.
-        // However, some situations require an autorelease pool; for instance, if you start off a thread that
-        // calls Cocoa, there won’t be a top-level pool.
-
-        int pool = NSAutoreleasePool.push();
-
         if(Debug.ON) Debug.trace("Executing AppleScript "+appleScript);
 
+        int pool = -1;
+
         try {
+            // Quote from Apple Cocoa-Java doc:
+            // An autorelease pool is used to manage Foundation’s autorelease mechanism for Objective-C objects.
+            // NSAutoreleasePool provides Java applications access to autorelease pools. Typically it is not
+            // necessary for Java applications to use NSAutoreleasePools since Java manages garbage collection.
+            // However, some situations require an autorelease pool; for instance, if you start off a thread that
+            // calls Cocoa, there won’t be a top-level pool.
+            pool = NSAutoreleasePool.push();
+
             NSMutableDictionary errorInfo = new NSMutableDictionary();
             if(new NSAppleScript(appleScript).execute(errorInfo)==null) {
                 if(Debug.ON)
@@ -71,14 +101,21 @@ public class OSXTrash extends AbstractTrash {
 
             return true;
         }
+        catch(Error e) {
+            // Can happen if
+            if(Debug.ON) Debug.trace("Unexcepted error while executing AppleScript (cocoa-java not available?): "+e);
+
+            return false;
+        }
         catch(Exception e) {
             // Try block is not supposed to throw any exception, but this is low-level stuff so just to be safe
-            if(Debug.ON) Debug.trace("Unexcepted exception in AppleScript: "+e);
+            if(Debug.ON) Debug.trace("Unexcepted exception while executing AppleScript: "+e);
 
             return false;
         }
         finally {
-            NSAutoreleasePool.pop(pool);
+            if(pool!=-1)
+                NSAutoreleasePool.pop(pool);
         }
     }
 

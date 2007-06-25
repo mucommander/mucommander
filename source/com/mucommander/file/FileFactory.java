@@ -606,7 +606,7 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
      * none is available. 
      */
     public static AbstractTrash getTrash() {
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && OSXTrash.isAvailable())
             return new OSXTrash();
 
         return null;
