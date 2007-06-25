@@ -10,8 +10,10 @@ import com.mucommander.text.Translator;
 
 
 /**
- * Dialog invoked when the user wants to move or rename (F6) files.
+ * Dialog invoked when the user wants to move or rename currently selected files.
  *
+ * @see com.mucommander.ui.action.MoveAction
+ * @see com.mucommander.ui.action.RenameAction
  * @author Maxence Bernard
  */
 public class MoveDialog extends DestinationDialog {

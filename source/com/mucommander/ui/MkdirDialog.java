@@ -20,8 +20,10 @@ import java.awt.event.ActionListener;
 
 
 /**
- * Dialog invoked when the user wants to create a new folder (F7).
+ * Dialog invoked when the user wants to create a new folder or an empty file in the current folder.
  *
+ * @see MkdirAction
+ * @see MkfileAction
  * @author Maxence Bernard
  */
 public class MkdirDialog extends FocusDialog implements ActionListener {

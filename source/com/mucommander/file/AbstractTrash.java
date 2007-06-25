@@ -3,11 +3,15 @@ package com.mucommander.file;
 /**
  * AbstractTrash is an abstract representation of a file trash, i.e. a temporary place where deleted files are stored
  * before the trash is emptied. A trash implementation provides methods to access basic trash operations: move files
- * to the trash, empty the trash.
+ * to the trash, empty the trash, ...
  *
- * <p>Some <code>Abstract</code> subclasses may not be able to provide working implementations for all trash operations;
- * some methods are provided to find out which operations are available.</p> 
+ * <p>Since AbstractTrash implementations are system-dependent, they should not be instanciated directly.
+ * Use {@link com.mucommander.file.FileFactory#getTrash()} to retrieve an instance of a trash implementation that can
+ * be used on the current platform.<br>
+ * Also, some AbstractTrash subclasses may not be able to provide working implementations for all trash operations;
+ * some methods are provided to find out which operations are available.</p>
  *
+ * @see com.mucommander.file.FileFactory#getTrash()
  * @author Maxence Bernard
  */
 public abstract class AbstractTrash {

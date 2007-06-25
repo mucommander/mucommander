@@ -9,8 +9,9 @@ import com.mucommander.text.Translator;
 
 
 /**
- * Dialog invoked when the user wants to copy (F5) files.
+ * Dialog invoked when the user wants to copy currently selected files.
  *
+ * @see com.mucommander.ui.action.CopyAction
  * @author Maxence Bernard
  */
 public class CopyDialog extends DestinationDialog {
