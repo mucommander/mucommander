@@ -7914,30 +7914,6 @@ theme_dialog.selected_unfocused:FR:Sélectionné (without focus)
 
 
 
-theme_dialog.folder_pane:EN:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:FR:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:DE:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:ES:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:CS:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:zh_TW:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:PL:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:HU:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:RU:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:zh_CN:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:SI:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:RO:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:IT:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:KR:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:pt_BR:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:NL:$[theme_dialog.folder_tab]
-theme_dialog.folder_pane:SK:$[theme_dialog.folder_tab]
-
-
-
-
-
-
-
 theme_dialog.shell_colors:EN:Shell colors
 theme_dialog.shell_colors:FR:Couleurs du shell
 theme_dialog.shell_colors:RO:Culori pentru shell
@@ -8858,9 +8834,13 @@ prefs_dialog.themes:SK:Témy
 
 
 
+
 prefs_dialog.import_theme:EN:Import theme
-prefs_dialog.import_theme:FR:Import de thème
+prefs_dialog.import_theme:FR:Importer un thème
 # Translation missing
+
+
+
 
 
 
@@ -8869,6 +8849,7 @@ prefs_dialog.import_theme:FR:Import de thème
 prefs_dialog.error_in_import:EN:Error while importing theme %1.
 prefs_dialog.error_in_import:FR:Une erreur est survenue lors de l'import du thème %1.
 # Translation missing
+
 
 
 
@@ -8889,8 +8870,9 @@ prefs_dialog.cannot_read_theme:FR:Erreur lors de la lecture du fichier %1
 # Title of the theme export dialog box. %1 will be replaced by the name of the theme
 # being exported.
 prefs_dialog.export_theme:EN:Export %1
-prefs_dialog.export_theme:FR:Export de %1
+prefs_dialog.export_theme:FR:Exporter %1
 # Translation missing
+
 
 
 
@@ -8913,24 +8895,29 @@ prefs_dialog.export:FR:Exporter
 
 
 
+
 # %1 will be replaced by the type of theme being described.
-prefs_dialog.theme_type:EN:Theme type: %1
-prefs_dialog.theme_type:FR:Type de thème : %1
+prefs_dialog.theme_type:EN:Type: %1
+prefs_dialog.theme_type:FR:Type: %1
 # Translation missing
+
+
 
 
 
 
 # %1 will be replaced by the theme name.
-prefs_dialog.delete_theme:EN:Permanently delete theme %1?
-prefs_dialog.delete_theme:Fr:Définitivement supprimer le thème %1 ?
+prefs_dialog.delete_theme:EN:Permanently delete theme %1 ?
+prefs_dialog.delete_theme:Fr:Supprimer définitivement le thème %1 ?
 # Translation missing
 
 
 
 
+
+
 prefs_dialog.rename_failed:EN:Failed to rename theme %1
-prefs_dialog.rename_failed:Fr:Impossible de renommer le thème %1 ?
+prefs_dialog.rename_failed:Fr:Impossible de renommer le thème %1
 # Translation missing
 
 
@@ -9516,14 +9503,30 @@ theme.custom_theme:SK:Užívateľská téma
 
 
 
+
+
 # Used as a description for custom themes
 theme.custom:EN:Customized
 theme.custom:FR:Personnalisé
+# Translation missing
+
+
+
+
+
+
+
 
 
 theme.built_in:EN:Built-in
-theme.build_in:FR:Pré-installé
+theme.built_in:FR:Pré-installé
 # Translation missing
+
+
+
+
+
+
 
 
 
@@ -9533,9 +9536,19 @@ theme.add_on:FR:Ajouté
 
 
 
+
+
+
+
+
+
 theme.current_theme:EN:Current theme
-theme.current_theme:FR:Thème en cours
+theme.current_theme:FR:Thème courant
 # Translation missing
+
+
+
+
 
 
 
