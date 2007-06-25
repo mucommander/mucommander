@@ -1,6 +1,7 @@
 package com.mucommander.file;
 
 import com.mucommander.Debug;
+import com.mucommander.PlatformManager;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.cache.LRUCache;
@@ -20,6 +21,7 @@ import com.mucommander.file.impl.nfs.NFSFile;
 import com.mucommander.file.impl.sftp.SFTPFile;
 import com.mucommander.file.impl.smb.SMBFile;
 import com.mucommander.file.impl.tar.TarArchiveFile;
+import com.mucommander.file.impl.trash.OSXTrash;
 import com.mucommander.file.impl.zip.ZipArchiveFile;
 import com.mucommander.file.util.FileToolkit;
 import com.mucommander.file.util.PathTokenizer;
@@ -594,5 +596,19 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
         }
 
         return file;
+    }
+
+    /**
+     * Returns an instance of the {@link AbstractTrash} implementation that can be used on the current platform,
+     * or <code>null</code if none is available.
+     *
+     * @return an instance of the AbstractTrash implementation that can be used on the current platform, or null if
+     * none is available. 
+     */
+    public static AbstractTrash getTrash() {
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
+            return new OSXTrash();
+
+        return null;
     }
 }
