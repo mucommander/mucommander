@@ -2,6 +2,7 @@
 package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractTrash;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
@@ -14,7 +15,13 @@ import javax.swing.*;
 import java.io.IOException;
 
 /**
- * This class is responsible for deleting recursively a group of files.
+ * This class is responsible for deleting a set of files. This job can operate in two modes, depending on the boolean
+ * value specified in the construtor:
+ * <ul>
+ *  <li>moveToTrash enabled: files are moved to the trash returned by {@link FileFactory#getTrash()}.
+ *  <li>moveToTrash disabled: files are permanently deleted, i.e deleted files cannot be recovered. In this mode,
+ * folders are deleted recursively
+ * </ul>
  *
  * @author Maxence Bernard
  */
@@ -22,6 +29,12 @@ public class DeleteJob extends FileJob {
     
     /** Title used for error dialogs */
     private String errorDialogTitle;
+
+    /** If true, files will be moved to the trash instead of being deleted */
+    private boolean moveToTrash;
+
+    /** Trash instance, null if moveToTrash is false */
+    private AbstractTrash trash;
 
     private final static int DELETE_LINK_ACTION = 100;
     private final static int DELETE_FOLDER_ACTION = 101;
@@ -36,14 +49,54 @@ public class DeleteJob extends FileJob {
      * @param progressDialog dialog which shows this job's progress
      * @param mainFrame mainFrame this job has been triggered by
      * @param files files which are going to be deleted
+     * @param moveToTrash if true, files will be moved to the trash, if false they will be permanently deleted.
+     * Should be true only if a trash is available on the current platform.
      */
-    public DeleteJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files) {
+    public DeleteJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, boolean moveToTrash) {
         super(progressDialog, mainFrame, files);
 
         this.errorDialogTitle = Translator.get("delete_dialog.error_title");
+
+        this.moveToTrash = moveToTrash;
+        if(moveToTrash)
+            trash = FileFactory.getTrash();
     }
 
-	
+    /**
+     * Deletes the given file, either by moving it to the trash (if {@link #moveToTrash} is true) or by deleting the
+     * file directly.
+     *
+     * @param file the file to delete
+     * @throws IOException if an error occurred while deleting the file
+     */
+    private void deleteFile(AbstractFile file) throws IOException {
+        if(moveToTrash)
+            trash.moveToTrash(file);
+        else
+            file.delete();
+    }
+
+
+    private int showSymlinkDialog(String relativePath, String canonicalPath) {
+        YBoxPanel panel = new YBoxPanel();
+
+        JTextArea symlinkWarningArea = new JTextArea(Translator.get("delete.symlink_warning", relativePath, canonicalPath));
+        symlinkWarningArea.setEditable(false);
+        panel.add(symlinkWarningArea);
+
+        QuestionDialog dialog = new QuestionDialog(progressDialog, Translator.get("delete.symlink_warning_title"), panel, mainFrame,
+                                                   new String[] {DELETE_LINK_TEXT, DELETE_FOLDER_TEXT, SKIP_TEXT, CANCEL_TEXT},
+                                                   new int[]  {DELETE_LINK_ACTION, DELETE_FOLDER_ACTION, SKIP_ACTION, CANCEL_ACTION},
+                                                   2);
+
+        return waitForUserResponse(dialog);
+    }
+
+
+    ////////////////////////////
+    // FileJob implementation //
+    ////////////////////////////
+
     /**
      * Deletes recursively the given file or folder. 
      *
@@ -61,7 +114,8 @@ public class DeleteJob extends FileJob {
 
         int ret;
         boolean followSymlink = false;
-        if(file.isDirectory()) {
+        // Delete files recursively, only if trash is not used.
+        if(!moveToTrash && file.isDirectory()) {
             // If folder is a symlink, asks the user what to do
             boolean isSymlink = file.isSymlink();
             if(isSymlink) {
@@ -115,10 +169,11 @@ public class DeleteJob extends FileJob {
                 if(followSymlink) {
                     AbstractFile canonicalFile = FileFactory.getFile(file.getCanonicalPath());
                     if(canonicalFile!=null)
-                        canonicalFile.delete();
+                        deleteFile(canonicalFile);
                 }
 	
-                file.delete();
+                deleteFile(file);
+
                 return true;
             }
             catch(IOException e) {
@@ -136,22 +191,6 @@ public class DeleteJob extends FileJob {
         } while(true);
     }
 
-	
-    private int showSymlinkDialog(String relativePath, String canonicalPath) {
-        YBoxPanel panel = new YBoxPanel();
-
-        JTextArea symlinkWarningArea = new JTextArea(Translator.get("delete.symlink_warning", relativePath, canonicalPath));
-        symlinkWarningArea.setEditable(false);
-        panel.add(symlinkWarningArea);
-		
-        QuestionDialog dialog = new QuestionDialog(progressDialog, Translator.get("delete.symlink_warning_title"), panel, mainFrame,
-                                                   new String[] {DELETE_LINK_TEXT, DELETE_FOLDER_TEXT, SKIP_TEXT, CANCEL_TEXT},
-                                                   new int[]  {DELETE_LINK_ACTION, DELETE_FOLDER_ACTION, SKIP_ACTION, CANCEL_ACTION},
-                                                   2);
-	
-        return waitForUserResponse(dialog);
-    }
-	
 
     public String getStatusString() {
         return Translator.get("delete.deleting_file", getCurrentFileInfo());
@@ -161,4 +200,16 @@ public class DeleteJob extends FileJob {
     protected boolean hasFolderChanged(AbstractFile folder) {
         return baseSourceFolder.isParentOf(folder);
     }
-}	
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    protected void jobStopped() {
+        super.jobStopped();
+
+        if(moveToTrash)
+            trash.waitForPendingOperations();
+    }
+}

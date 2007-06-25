@@ -44,7 +44,7 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
     /** Informs the user about the consequences of deleting files, based on the current 'Move to trash' choice */
     private InformationPane informationPane;
 
-
+    
     public DeleteDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, Translator.get("delete"), null);
 
@@ -99,6 +99,7 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
         informationPane.getCaptionLabel().setText(Translator.get(moveToTrash?"delete_dialog.move_to_trash.confirmation_details":"delete_dialog.permanently_delete.confirmation_details"));
         informationPane.setIcon(moveToTrash?null:InformationPane.getPredefinedIcon(InformationPane.WARNING_ICON));
     }
+
 
     /////////////////////////////////
     // ItemListener implementation //

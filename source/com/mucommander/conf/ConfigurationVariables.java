@@ -46,10 +46,12 @@ public interface ConfigurationVariables {
     /** Controls whether system notifications are enabled. */
     public static final String  ENABLE_SYSTEM_NOTIFICATIONS       = ROOT_SECTION + '.' + "enable_system_notifications";
     /** Default for enable system notifications. */
-    public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS =
-            com.mucommander.ui.notifier.AbstractNotifier.isAvailable() &&
-            (PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X
-            || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT);
+    public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = com.mucommander.ui.notifier.AbstractNotifier.isAvailable()
+            && (PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X || PlatformManager.OS_FAMILY==PlatformManager.WINDOWS_NT);
+    /** Controls whether files should be moved to trash or permanently erased */
+    public static final String DELETE_TO_TRASH                    = ROOT_SECTION + '.' + "delete_to_trash";
+    /** Default 'delete to trash' behavior */
+    public static final boolean DEFAULT_DELETE_TO_TRASH           = true;
 
 
     // - Shell variables -----------------------------------------------------

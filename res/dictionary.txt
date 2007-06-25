@@ -5082,23 +5082,89 @@ download_dialog.downloading_file:SK:Sťahuje sa %1
 # Delete #
 ##########
 
-delete_dialog.confirmation:EN:Permanently delete selected file(s) ?
-delete_dialog.confirmation:FR:Définitivement supprimer les fichiers sélectionnés ?
-delete_dialog.confirmation:DE:Markierte Datei(en) permanent löschen ?
-delete_dialog.confirmation:ES:¿Eliminar permanentemene el/los archivo(s) seleccionado(s)?
-delete_dialog.confirmation:CS:Trvale smazat vybrané soubory ?
-delete_dialog.confirmation:zh_TW:永久刪除已選取檔案 ?
-delete_dialog.confirmation:PL:Trwale usunąć zaznaczone pliki ?
-delete_dialog.confirmation:HU:Folyamatosan törli a kijelölt fájl(oka)t?
-delete_dialog.confirmation:RU:Удалить выбранные файлы без возможности восстановления?
-delete_dialog.confirmation:zh_CN:永久刪除选定文件 ?
-delete_dialog.confirmation:SI:Trajno izbrišem datoteko(-e)?
-delete_dialog.confirmation:RO:Șterg definitiv fișierul(ele) selectat(e) ?
-delete_dialog.confirmation:IT:Elimino definitivamente i file selezionati ?
-delete_dialog.confirmation:KR:선택한 파일을 영구히 삭제 하겠습니까?
-delete_dialog.confirmation:pt_BR:Remover permanentemente os arquivo(s) selecionado(s) ?
-delete_dialog.confirmation:NL:Gemarkeerde bestand(en) voorgoed verwijderen ?
-delete_dialog.confirmation:SK:Natrvalo odstrániť vybraný súbor(y) ?
+delete_dialog.permanently_delete.confirmation:EN:Permanently delete selected file(s) ?
+delete_dialog.permanently_delete.confirmation:FR:Supprimer définitivement les fichiers sélectionnés ?
+delete_dialog.permanently_delete.confirmation:DE:Markierte Datei(en) permanent löschen ?
+delete_dialog.permanently_delete.confirmation:ES:¿Eliminar permanentemene el/los archivo(s) seleccionado(s)?
+delete_dialog.permanently_delete.confirmation:CS:Trvale smazat vybrané soubory ?
+delete_dialog.permanently_delete.confirmation:zh_TW:永久刪除已選取檔案 ?
+delete_dialog.permanently_delete.confirmation:PL:Trwale usunąć zaznaczone pliki ?
+delete_dialog.permanently_delete.confirmation:HU:Folyamatosan törli a kijelölt fájl(oka)t?
+delete_dialog.permanently_delete.confirmation:RU:Удалить выбранные файлы без возможности восстановления?
+delete_dialog.permanently_delete.confirmation:zh_CN:永久刪除选定文件 ?
+delete_dialog.permanently_delete.confirmation:SI:Trajno izbrišem datoteko(-e)?
+delete_dialog.permanently_delete.confirmation:RO:Șterg definitiv fișierul(ele) selectat(e) ?
+delete_dialog.permanently_delete.confirmation:IT:Elimino definitivamente i file selezionati ?
+delete_dialog.permanently_delete.confirmation:KR:선택한 파일을 영구히 삭제 하겠습니까?
+delete_dialog.permanently_delete.confirmation:pt_BR:Remover permanentemente os arquivo(s) selecionado(s) ?
+delete_dialog.permanently_delete.confirmation:NL:Gemarkeerde bestand(en) voorgoed verwijderen ?
+delete_dialog.permanently_delete.confirmation:SK:Natrvalo odstrániť vybraný súbor(y) ?
+
+delete_dialog.permanently_delete.confirmation_details:EN:This operation cannot be undone.
+delete_dialog.permanently_delete.confirmation_details:FR:Cette opération ne peut pas être annulée.
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+delete_dialog.move_to_trash.confirmation:EN:Delete selected file(s) ?
+delete_dialog.move_to_trash.confirmation:FR:Supprimer les fichiers sélectionnés ?
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+delete_dialog.move_to_trash.confirmation_details:EN:Files will be moved to the trash.
+delete_dialog.move_to_trash.confirmation_details:FR:Les fichiers seront déplacés dans la corbeille.
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
+
+delete_dialog.move_to_trash.option:EN:Move to trash
+delete_dialog.move_to_trash.option:FR:Déplacer dans la corbeille
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
 
 delete_dialog.deleting:EN:Deleting
 delete_dialog.deleting:FR:Suppression en cours
