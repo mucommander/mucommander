@@ -100,16 +100,26 @@ Command Line Interface
 muCommander comes with a few command line switches.
 The following options are available:
  -a FILE, --assoc FILE             Load associations from FILE.
- -b FILE, --bookmarks FILE         muCommander bookmarks will be read from and written to FILE.
- -c FILE, --configuration FILE     muCommander configuration will be read from and written to FILE.
- -C FILE, --commandbar FILE        muCommander command bar description will be read from and written to FILE.
+ -b FILE, --bookmarks FILE         Load bookmarks from FILE.
+ -c FILE, --configuration FILE     Load configuration from FILE
+ -C FILE, --commandbar FILE        Load command bar from FILE
  -f FILE, --commands FILE          Load custom commands from FILE.
- -k FILE, --keymap FILE            muCommander shortcuts will be read from and written to FILE.
- -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER.
- -s FILE, --shell-history FILE     muCommander shell history will be read from and written to FILE.
- -t FILE, --toolbar FILE           muCommander toolbar configuration will be read from and written to FILE.
+ -i, --ignore-warnings             Do not fail on warnings (default).
+ -k FILE, --keymap FILE            Load keymap from FILE
+ -n, --no-debug                    Disable debug output to stdout
+ -d, --debug                       Enable debug output to stdout (default)
+ -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER
+ -o, --no-splash                   Disable splashscreen on startup
+ -O, --splash                      Enable splashscreen on startup (default)
+ -S, --silent                      Do not print verbose error messages
+ -s FILE, --shell-history FILE     Load shell history from FILE
+ -t FILE, --toolbar FILE           Load toolbar from FILE
+ -u FILE, --credentials FILE       Load credentials from FILE
  -h, --help                        Print the help text and exit
  -v, --version                     Print the version and exit
+ -V, --verbose                     Print verbose error messages (default)
+ -w, --fail-on-warnings            Quits when a warning is encountered during
+                                   the boot process.
 
 In addition to these, muCommander will interpret anything that comes after the last switch as a URI and load it
 in its windows. So for example:
