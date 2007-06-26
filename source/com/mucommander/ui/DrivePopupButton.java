@@ -6,6 +6,10 @@ import com.mucommander.bonjour.BonjourMenu;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
@@ -16,6 +20,7 @@ import com.mucommander.ui.comp.button.PopupButton;
 import com.mucommander.ui.connect.ServerConnectDialog;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
+import com.mucommander.ui.icon.FileIcons;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +35,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class DrivePopupButton extends PopupButton implements LocationListener, BookmarkListener {
+public class DrivePopupButton extends PopupButton implements LocationListener, BookmarkListener, ConfigurationListener {
 
     /** FolderPanel instance that contains this button */
     private FolderPanel folderPanel;
@@ -58,6 +63,8 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 	
     /**
      * Creates a new drive button which is to be added to the given FolderPanel.
+     *
+     * @param folderPanel the FolderPanel instance this button will be added to
      */
     public DrivePopupButton(FolderPanel folderPanel) {
         this.folderPanel = folderPanel;
@@ -65,9 +72,12 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         // Listen to location events to update drive button when folder changes
         folderPanel.getLocationManager().addLocationListener(this);
 
-        // Listen to bookmark changes to update drive button if a bookmark corresponding
+        // Listen to bookmark changes to update the drive button if a bookmark corresponding
         // to the current folder has been added/edited/removed
         BookmarkManager.addBookmarkListener(this);
+
+        // Listen to configuration changes to update the drive if the system file icons policy has changed 
+        ConfigurationManager.addConfigurationListener(this);
     }
 
     public Dimension getPreferredSize() {
@@ -82,14 +92,16 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 
 
     /**
-     * Updates this drive button's label to reflect current folder and match one of the drive button's shortcuts.
+     * Updates this drive button's label and icon to reflect the current folder and match one of the drive button's
+     * shortcuts:
      * <<ul>
      *	<li>If the specified folder corresponds to a bookmark, the bookmark's name will be displayed
      *	<li>If the specified folder corresponds to a local file, the enclosing volume's name will be displayed
      *	<li>If the specified folder corresponds to a remote file, the protocol's name will be displayed
      * </ul>
+     * The button's icon will be the current folder's one.
      */
-    private void updateLabel() {
+    private void updateButton() {
         AbstractFile currentFolder = folderPanel.getCurrentFolder();
         String currentPath = currentFolder.getAbsolutePath();
         FileURL currentURL = currentFolder.getURL();
@@ -157,6 +169,8 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         }
 		
         setText(newLabel);
+        // Set the folder icon based on the current system icons policy
+        setIcon(FileIcons.getFileIcon(currentFolder));
     }
 
 
@@ -167,30 +181,18 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     public JPopupMenu getPopupMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
 
-        // Update root folders in case new drives were mounted
+        // Update root folders in case new volumes were mounted
         rootFolders = RootFolders.getRootFolders();
 
-        // Add root 'drives'
+        // Add root volumes
         int nbRoots = rootFolders.length;
         MainFrame mainFrame = folderPanel.getMainFrame();
 
-// Drive icons are disabled under Windows as well because they seem to trigger the dreaded 'No disk in drive' error popup dialog.
-
-//        // Retreive and use system drives icons under Windows only, icons looks like crap under Mac OS X,
-//        // and most likely also look like crap under Linux (untested though).
-//        // FileSystemView.getSystemIcon is available from Java 1.4 and up.
-//        // However, Java 1.4 freaks out when it tries to get the a:\ system icon
-//        if(PlatformManager.isWindowsFamily() && PlatformManager.JAVA_VERSION>=PlatformManager.JAVA_1_5) {
-//            FileSystemView fileSystemView = FileSystemView.getFileSystemView();
-//            for(int i=0; i<nbRoots; i++) {
-//                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i])).setIcon(fileSystemView.getSystemIcon(new java.io.File(rootFolders[i].getAbsolutePath())));
-//            }
-//        }
-//        // For any OS other than Windows or for Windows and Java 1.4
-//        else {
-            for(int i=0; i<nbRoots; i++)
-                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i]));
-//        }
+        // Set system icon for volumes, only if system icons are available on the current platform
+        for(int i=0; i<nbRoots; i++) {
+            popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable(), rootFolders[i])).setIcon(
+                    FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(rootFolders[i]):null);
+        }
 
         popupMenu.add(new JSeparator());
 
@@ -236,7 +238,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 	
     public void locationChanged(LocationEvent e) {
         // Update the button's label to reflect the new current folder
-        updateLabel();
+        updateButton();
     }
 	
     public void locationChanging(LocationEvent e) {
@@ -255,6 +257,25 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 	
     public void bookmarksChanged() {
         // Refresh label in case a bookmark with the current location was changed
-        updateLabel();
+        updateButton();
+    }
+
+
+    ///////////////////////////////////
+    // ConfigurationListener methods //
+    ///////////////////////////////////
+
+    /**
+     * Listens to certain configuration variables.
+     */
+    public boolean configurationChanged(ConfigurationEvent event) {
+        String var = event.getVariable();
+
+        // Update the button's icon if the system file icons policy has changed
+        if (var.equals(ConfigurationVariables.USE_SYSTEM_FILE_ICONS)) {
+            updateButton();
+        }
+
+        return true;
     }
 }
