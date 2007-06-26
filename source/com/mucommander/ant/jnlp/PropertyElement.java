@@ -2,6 +2,7 @@ package com.mucommander.ant.jnlp;
 
 /**
  * @author Nicolas Rinaudo
+ * @ant.type name="property" category="jnlp"
  */
 public class PropertyElement {
     private String name;

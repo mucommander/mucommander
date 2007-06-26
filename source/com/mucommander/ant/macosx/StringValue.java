@@ -6,7 +6,7 @@ import org.apache.tools.ant.BuildException;
 /**
  *
  */
-public class StringValue implements InfoElement {
+class StringValue implements InfoElement {
     private static final String ELEMENT_STRING    = "string";
     private String value;
 

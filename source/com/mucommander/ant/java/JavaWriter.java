@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
  * </p>
  * @author Nicolas Rinaudo (nicolas@nrinaudo.com)
  */
-public class JavaWriter {
+class JavaWriter {
     // - Modifier definitions --------------------------------------------
     // -------------------------------------------------------------------
     // Defines what kind of modifiers are known to the writer

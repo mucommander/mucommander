@@ -51,7 +51,7 @@ import org.apache.tools.ant.BuildException;
  * @author Nicolas Rinaudo
  * @see    com.mucommander.ant.macosx.RealKey
  */
-public class RealValue implements InfoElement {
+class RealValue implements InfoElement {
     // - Fields ----------------------------------------------------------
     // -------------------------------------------------------------------
     /** Label of the 'real' XML element. */

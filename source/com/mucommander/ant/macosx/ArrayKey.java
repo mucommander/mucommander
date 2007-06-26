@@ -1,7 +1,8 @@
 package com.mucommander.ant.macosx;
 
 /**
- *
+ * @author Nicolas Rinaudo
+ * @ant type name="array" category="macosx"
  */
 public class ArrayKey extends NamedInfoElement {
     public ArrayKey() {setValue(new ArrayValue());}

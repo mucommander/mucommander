@@ -12,6 +12,7 @@ import java.util.Vector;
 
 /**
  * @author Nicolas Rinaudo
+ * @ant.task name="jnlp" category="jnlp"
  */
 public class JnlpTask extends Task {
     // - Constants -------------------------------------------------------
@@ -139,6 +140,9 @@ public class JnlpTask extends Task {
 
     // - Ant interaction -------------------------------------------------
     // -------------------------------------------------------------------
+    /**
+     * @ant.required
+     */
     public void setOut(File f) {output = f;}
 
     public ResourcesElement createResources() {

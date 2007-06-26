@@ -2,14 +2,9 @@ package com.mucommander.ant.java;
 
 import org.apache.tools.ant.BuildException;
 
-/*
- * - Class documentation -
- *
- * TODO: automatic type detection is very basic, and should be improved on.
- */
-
 /**
  * @author Nicolas Rinaudo
+ * @ant.type name="field" category="util"
  */
 public class JavaField {
     // - Instance fields -------------------------------------------------
@@ -38,8 +33,7 @@ public class JavaField {
     // -------------------------------------------------------------------
     /**
      * Sets the java field's name.
-     * @param     str            name of the java field.
-     * @exception BuildException thrown if <code>str</code> is empty.
+     * @ant.required
      */
     public void setName(String str) throws BuildException {
         // Makes sure the name is not only composed of whitespaces.
@@ -52,8 +46,7 @@ public class JavaField {
 
     /**
      * Sets the java field's value.
-     * @param     str            value of the java field.
-     * @exception BuildException thrown if <code>str</code> is empty.
+     * @ant.required
      */
     public void setValue(String str) throws BuildException {
         // Makes sure the value is not only whitespaces.
@@ -65,8 +58,7 @@ public class JavaField {
 
     /**
      * Sets the java field's type.
-     * @param str java field's type, as defined in {@link com.mucommander.ant.java.JavaWriter}.
-     * @exception BuildException thrown if <code>str</code> is not a recognized type.
+     * @ant.not-required Default is value dependant.
      */
     public void setType(String str) throws BuildException {
         if((type = JavaWriter.getTypeForLabel(str)) == JavaWriter.TYPE_UNKNOWN)

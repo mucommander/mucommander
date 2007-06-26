@@ -4,6 +4,7 @@ import org.apache.tools.ant.BuildException;
 
 /**
  * @author Nicolas Rinaudo
+ * @ant.type name="description" category="jnlp"
  */
 public class DescriptionElement {
     public static final int KIND_UNSPECIFIED = 0;

@@ -51,7 +51,7 @@ import org.apache.tools.ant.BuildException;
  * @author Nicolas Rinaudo
  * @see    com.mucommander.ant.macosx.IntegerKey
  */
-public class IntegerValue implements InfoElement {
+class IntegerValue implements InfoElement {
     // - Fields ----------------------------------------------------------
     // -------------------------------------------------------------------
     /** Label of the 'integer' XML element. */

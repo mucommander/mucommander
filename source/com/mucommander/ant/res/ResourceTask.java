@@ -21,6 +21,7 @@ import java.util.*;
  * not have to rely on system dependent solutions: they can open the XML file, explore
  * its content and extract the path of all the resources it describes.
  * </p>
+ * @ant.task name="mkresources" type="util"
  * @author Nicolas Rinaudo
  */
 public class ResourceTask extends Task {

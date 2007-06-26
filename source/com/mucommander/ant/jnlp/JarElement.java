@@ -2,6 +2,7 @@ package com.mucommander.ant.jnlp;
 
 /**
  * @author Nicolas Rinaudo
+ * @ant.type name="jar" category="jnlp"
  */
 public class JarElement extends Downloadable {
     private String href;

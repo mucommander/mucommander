@@ -4,6 +4,7 @@ import java.util.*;
 
 /**
  * @author Nicolas Rinaudo
+ * @ant.type name="appletdesc" category="jnlp"
  */
 public class AppletDescElement {
     private String documentBase;

@@ -9,7 +9,7 @@ import java.util.Vector;
 /**
  *
  */
-public class DictValue implements InfoElement {
+class DictValue implements InfoElement {
     private static final String ELEMENT_DICT = "dict";
     private Vector keys;
 

@@ -2,6 +2,7 @@ package com.mucommander.ant.jnlp;
 
 /**
  * @author Nicolas Rinaudo
+ * @ant.type name="nativelib" category="jnlp"
  */
 public class NativeLibElement extends Downloadable {
     private String href;

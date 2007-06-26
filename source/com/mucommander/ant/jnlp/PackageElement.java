@@ -2,6 +2,7 @@ package com.mucommander.ant.jnlp;
 
 /**
  * @author Nicolas Rinaudo
+ * @ant.type name="package" category="jnlp"
  */
 public class PackageElement {
     private String name;

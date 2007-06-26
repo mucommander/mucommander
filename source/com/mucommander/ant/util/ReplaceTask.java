@@ -6,6 +6,7 @@ import org.apache.tools.ant.Task;
 /**
  * Ant task meant to modify strings and store the results in properties.
  * @author Nicolas Rinaudo
+ * @ant.task name="strreplace" category="util"
  */
 public class ReplaceTask extends Task {
     /** Describes the tokens that should be replaced. */

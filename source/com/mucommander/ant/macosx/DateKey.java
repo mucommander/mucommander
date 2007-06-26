@@ -3,6 +3,7 @@ package com.mucommander.ant.macosx;
 /**
  * Represents an date key in the property list.
  * @author Nicolas Rinaudo
+ * @ant.type name="date" category="macosx"
  */
 public class DateKey extends NamedInfoElement {
     public DateKey() {setValue(new DateValue());}

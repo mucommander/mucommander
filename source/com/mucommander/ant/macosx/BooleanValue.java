@@ -6,7 +6,7 @@ import org.apache.tools.ant.BuildException;
 /**
  *
  */
-public class BooleanValue implements InfoElement {
+class BooleanValue implements InfoElement {
     public static final String ELEMENT_TRUE      = "true";
     public static final String ELEMENT_FALSE     = "false";
     private boolean value;

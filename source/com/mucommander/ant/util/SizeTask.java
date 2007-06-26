@@ -9,6 +9,7 @@ import java.io.File;
 
 /**
  * Task used to compute the size of a fileset.
+ * @ant.task name="size" category="util"
  * @author Nicolas Rinaudo
  */
 public class SizeTask extends Task {

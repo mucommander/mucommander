@@ -4,6 +4,7 @@ import java.util.*;
 
 /**
  * @author Nicolas Rinaudo
+ * @ant.type name="applicationdesc" category="jnlp"
  */
 public class ApplicationDescElement {
     private String mainClass;

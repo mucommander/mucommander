@@ -5,6 +5,7 @@ import java.io.File;
 /**
  * Used by Ant to hold the description of resource files.
  * @author Nicolas Rinaudo
+ * @ant.type name="file" category="util"
  */
 public class ResourceFile {
     private File in;

@@ -10,10 +10,8 @@ import java.util.Vector;
 
 /**
  * Ant task used to write dynamic Java constants.
- * <p>
- * Checks tools documentation for more information on how to use this task.
- * </p>
- * @author Nicolas Rinaudo (nicolas@nrinaudo.com)
+ * @author Nicolas Rinaudo
+ * @ant.task name="javaw" category="util"
  */
 public class JavaTask extends Task {
     // - Instance fields -------------------------------------------------
@@ -63,14 +61,14 @@ public class JavaTask extends Task {
     // - Ant interaction -------------------------------------------------
     // -------------------------------------------------------------------
     /**
-     * Sets the name of the Java file in which to write.
-     * @param value name of the Java file in which to write.
+     * Comment test.
+     * @ant.required
      */
     public void setName(String value) {name = value;}
 
     /**
      * Adds a field to the Java file.
-     * @return an instance of JavaField for Ant to use.
+     * @ant.required
      */
     public JavaField createField() {
         JavaField field;

@@ -3,7 +3,7 @@ package com.mucommander.ant.macosx;
 import com.mucommander.xml.writer.XmlWriter;
 import org.apache.tools.ant.BuildException;
 
-public class DataValue implements InfoElement {
+class DataValue implements InfoElement {
     private static final String DATA_ELEMENT = "data";
 
     private StringBuffer data;

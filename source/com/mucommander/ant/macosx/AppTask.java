@@ -10,149 +10,8 @@ import java.net.URL;
 
 /**
  * Ant task used to generate Mac OS X application files.
- * <h3>Description</h3>
- * <p>
- * Creates a Mac OS X application file.<br/>
- * This Ant task has been written for Java applications, and is not usable
- * for anything else such as, for example, native ones.
- * </p>
- * <p>
- * Mac OS X Java applications are wrapped around some native code, which this
- * task will generate. It does, however, make it system dependant: the wrapper
- * application must be set to executable, which is only possible under Unix
- * system (or any system which supports the <code>chmod</code> command).
- * </p>
- * <p>
- * For the resulting application to behave properly, its JAR file must be made
- * executable. More information on how to do that can be found
- * <a href="http://java.sun.com/j2se/javadoc/">here</a>.
- * </p>
- * <h3>Parameters</h3>
- * <p>
- * <table border="1" cellpadding="2" cellspacing="0">
- *   <tr>
- *     <td valign="top"><b>Attribute</b></td>
- *     <td valign="top"><b>Description</b></td>
- *     <td valign="top"><b>Required</b></td>
- *   </tr>
- *   <tr>
- *     <td valign="top">{@link #setDest(File) dest}</td>
- *     <td valign="top">
- *       Where to store the application file. This path is expected to have the
- *       <code>.app</code> extension, although this will be added if not found.<br/>
- *       It is expected to be an non-existing or empty directory. The task will not
- *       fail if such is not the case, but results may be unpredictable.
- *     </td>
- *     <td valign="top">Yes</td>
- *   </tr>
- *   <tr>
- *     <td valign="top">{@link #setIcon(File) icon}</td>
- *     <td valign="top">Path to the aplication's icon file.</td>
- *     <td valign="top">Yes</td>
- *   </tr>
- *   <tr>
- *     <td valign="top">{@link #setJar(File) jar}</td>
- *     <td valign="top">
- *       Path to the application's executable JAR file.
- *     </td>
- *     <td valign="top">Yes</td>
- *   </tr>
- *   <tr>
- *     <td valign="top">{@link #setSignature(String) signature}</td>
- *     <td valign="top">Application's signature</td>
- *     <td valign="top">Yes</td>
- *   </tr>
- *   <tr>
- *     <td valign="top">{@link #setType(String) type}</td>
- *     <td valign="top">Application's type.</td>
- *     <td valign="top">No (defaults to {@link #TYPE_APPL APPL})</td>
- *   </tr>
- *   <tr>
- *     <td valign="top">{@link #setInfoVersion(String) infoversion}</td>
- *     <td valign="top">Version number of the <code>Info.plist</code> DTD.</td>
- *     <td valign="top">No (defaults to {@link #DEFAULT_VERSION 1.0})</td>
- *   </tr>
- * </table>
- * </p>
- * <h3>Nested elements</h3>
- * <p>
- * Nested elements are used to describe the <code>Info.plist</code>
- * Mac OS X file, in a format that we feel is slightly less dodgy
- * than Apple's own implementation.
- * </p>
- * <h4>array</h4>
- * <p>
- * Describes an unnamed property collection.<br/>
- * See the {@link com.mucommander.ant.macosx.ArrayKey documentation} for more information.
- * </p>
- * <h4>boolean</h4>
- * <p>
- * Describes a boolean property.<br/>
- * See the {@link com.mucommander.ant.macosx.BooleanKey documentation} for more information.
- * </p>
- * <h4>data</h4>
- * <p>
- * Describes a raw data property.<br/>
- * See the {@link com.mucommander.ant.macosx.DataKey documentation} for more information.
- * </p>
- * <h4>date</h4>
- * <p>
- * Describes a date property.<br/>
- * See the {@link com.mucommander.ant.macosx.DateKey documentation} for more information.
- * </p>
- * <h4>dict</h4>
- * <p>
- * Describes a named property collection.<br/>
- * See the {@link com.mucommander.ant.macosx.DictKey documentation} for more information.
- * </p>
- * <h4>integer</h4>
- * <p>
- * Describes an integer property.<br/>
- * See the {@link com.mucommander.ant.macosx.IntegerKey documentation} for more information.
- * </p>
- * <h4>real</h4>
- * <p>
- * Describes a floating point number property.<br/>
- * See the {@link com.mucommander.ant.macosx.RealKey documentation} for more information.
- * </p>
- * <h3><code>Info.plist</code> keys</h3>
- * <p>
- * Some <code>Info.plist</code> are generated dynamically by this task. They should not be overwritten,
- * as this will result in incoherent property lists.
- * </p>
- * <p>
- * The automatically generated keys are:
- * <ul>
- *   <li>
- *     {@link #KEY_EXECUTABLE CFBundleExecutable}: set to the path to the java application
- *     stub (<code>/Contents/MacOS/JavaApplicationStub</code>).
- *   </li>
- *   <li>
- *     {@link #KEY_PACKAGE_TYPE CfBundlePackageType}: set to the application's {@link #setType(String) type}.
- *   </li>
- *   <li>
- *     {@link #KEY_SIGNATURE CFBundleSignature}: set to the application's {@link #setSignature(String) signature}.
- *   </li>
- *   <li>
- *     {@link #KEY_ICON CfBundleIconFile}: set to the path to the application's {@link #setIcon(File) icon}.
- *   </li>
- *   <li>
- *     {@link #KEY_CLASSPATH Java/ClassPath}: set to the path to the application's {@link #setJar(File) jar}. Note that elements
- *     can be added to that key using {@link #setClasspath(String)}.
- *   </li>
- * </ul>
- * </p>
- * <h3>Examples</h3>
- * <blockquote>
- * <code>
- * &lt;app jar=&quot;bin/application.jar&quot; dest=&quot;dist/Application.app&quot; signature=&quot;TEST&quot; icon=&quot;res/Icons.icns&quot;/&gt;
- * </code>
- * </blockquote>
- * <p>
- * creates a MacOS X application in <code>dist/Application.app</code> which will run the <code>bin/application.jar</code>
- * executable JAR file, using <code>res/Icons.icns</code> as icons.
- * </p>
  * @author Nicolas Rinaudo
+ * @ant.task name="mkapp" category="macosx"
  */
 public class AppTask extends Task {
     // - Info.plist keys -------------------------------------------------
@@ -255,7 +114,7 @@ public class AppTask extends Task {
      * results are not predictable.<br/>
      * Note that the task <i>will</i> fail if <code>f</code> is an existing file.
      * </p>
-     * @param f path to which the application file should be generated.
+     * @ant.required
      */
     public void setDest(File f) {destination = f;}
 
@@ -264,19 +123,19 @@ public class AppTask extends Task {
      * <p>
      * This attribute is non compulsory, and will default to {@link #TYPE_APPL}.
      * </p>
-     * @param s bundle type.
+     * @ant.required
      */
     public void setType(String s) {type = s;}
 
     /**
      * Sets the application's signature.
-     * @param s application's signature.
+     * @ant.required
      */
     public void setSignature(String s) {signature = s;}
 
     /**
      * Sets the path to the application's icon.
-     * @param f path to the application's icon.
+     * @ant.required
      */
     public void setIcon(File f) {icon = f;}
 
@@ -287,7 +146,7 @@ public class AppTask extends Task {
      * executable. Click <a href="http://java.sun.com/j2se/javadoc/">here</a> to
      * learn more about making JAR files executable.
      * </p>
-     * @param f path to the application's JAR file.
+     * @ant.required
      */
     public void setJar(File f) {jar = f;}
 
@@ -298,7 +157,7 @@ public class AppTask extends Task {
      * <p>
      * This parameter is non-compulsory and defaults to <code>1.0</code>
      * </p>
-     * @param s DTD version of the <code>Info.plist</code> file.
+     * @ant.not-required Defaults to 1.0
      */
     public void setInfoVersion(String s) {infoVersion = s;}
 

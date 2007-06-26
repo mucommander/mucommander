@@ -12,6 +12,7 @@ import java.util.Calendar;
  * date as a value, using the YYYYMMDD format.
  * </p>
  * @author Nicolas Rinaudo
+ * @ant.task name="date" category="util"
  */
 public class DateTask extends Task {
     // - Instance fields -------------------------------------------------

@@ -1,7 +1,8 @@
 package com.mucommander.ant.macosx;
 
 /**
- *
+ * @author Nicolas Rinaudo
+ * @ant.type name="dict" category="macosx"
  */
 public class DictKey extends NamedInfoElement {
     public DictKey() {setValue(new DictValue());}

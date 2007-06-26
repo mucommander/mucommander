@@ -7,6 +7,7 @@ import java.io.*;
 
 /**
  * @author Nicolas Rinaudo
+ * @ant.task name="crlf" category="util"
  */
 public class CRLFTask extends Task {
     private File input;
