@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+  <title>$title</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+
+</head>
+<body>
+
+<h1>$title - Reference Documentation</h1>
+
+<p>This documentation was generated running
+<a href="http://antdoclet.neuroning.com">AntDoclet</a> over the source code
+of the core Apache Ant Tasks version 1.6.5.</p>
+
+<p>This is NOT the official Apache Ant documentation. It is exposed here just
+as an example of what AntDoclet can generate.</p>
+
+<h2>About this example</h2>
+
+<p>The source code of the core Ant Tasks was
+  written without any knowledge of AntDoclet.
+  Therefore, the quality of the generated documentation for this
+  example is far from perfect.</p>
+  
+<p>For instance, the source code of the
+  core Ant Tasks do not use all the tags that AntDoclet supports, and
+  some of the comments use invalid HTML or describe things that
+  AntDoclet already auto-generates.</p>
+
+<p>To get the most out of <a
+  href="http://antdoclet.neuroning.com">AntDoclet</a> the source code
+  of your Ant Tasks needs to follow a few simple guidelines described
+  in the AntDoclet documentation.</p>
+
+<div class="copyright">
+  <hr />
+  <br />
+  <em>Fernando Dobladez - <a href="http://neuroning.com">Neuroning</a></em>
+</div>
+
+	
+</body>
+
+</html> 

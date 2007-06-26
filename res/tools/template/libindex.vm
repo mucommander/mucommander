@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+##
+## This is an Velocity template for generating an HTML index
+## of the Ant "categories" (antlibs)
+##
+## Objects expected in context:
+##
+##     $title      - Project title (of type String)
+##     $antroot - (of type AntRoot)
+## 
+<html>
+<head>
+  <title>$title Ant Libraries</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+
+<div id="navigation">
+
+	<a href="overview.html" target="task">
+		<h2>$title Ant Libs</h2>
+	</a>
+	<p>
+## Iterate through the Categories
+#foreach( $category in $antroot.getCategories() )
+        <a href="index.${category}.html" target="taskindex">
+        	$category
+        </a><br />
+#end
+	</p>
+
+        <a href="index.all.html" target="taskindex">
+        	<i>all</i>
+        </a><br />
+</div>
+</body>
+</html>

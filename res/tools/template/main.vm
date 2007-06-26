@@ -1,0 +1,37 @@
+##
+## This template is the entry point for calling other templates.
+## The output of this template goes to stdout.
+##
+## Objects available in context:
+##
+## $velocity   - Helper object for processing other templates (of type VelocityFacade)
+## $antroot   - Contains all the Ant tasks/types (of type AntRoot)
+## $title         - Project title (of type String)
+##
+
+AntDoclet - Running project $title
+
+- Generating Task and Types documentation...
+##
+#foreach( $taskDoc in $antroot.getAll() ) ##
+  #if ( ! $taskDoc.isIgnored() )
+
+- Processing $taskDoc.antName ##
+      $velocity.eval( "task.vm", "${taskDoc.getFullClassName()}.html" ) ##
+  #else ##
+- Ignoring $taskDoc.fullClassName()##
+  #end ##
+#end ##
+
+
+- Generating Navigation indexes...
+## Now, generate an "index" file for the categories, and one for each category
+$velocity.eval( "libindex.vm", "libindex.html" )
+$velocity.eval( "overview.vm", "overview.html" )
+#foreach( $category in $antroot.getCategories() )
+	$velocity.eval( "taskindex.vm", "index.${category}.html" )
+#end
+#set($category = "all")
+$velocity.eval( "taskindex.vm", "index.${category}.html" )
+
+- Done

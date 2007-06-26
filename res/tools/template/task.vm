@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+##
+## This is a Velocity template for generating an HTML
+## document describing an Ant Task/Type 
+## 
+## Objects expected in context:
+##
+##     $taskDoc - Describes an Ant Task/Type (of type AntDoc)
+##
+## 
+<html>
+<head>
+  <title>&lt;$taskDoc.getAntName()&gt;</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+
+    <h2><strong>&lt;$!taskDoc.getAntCategory() : $taskDoc.getAntName()&gt;</strong></h2>
+
+    <h3><strong>Description</strong></h3>
+	<div class="description">
+        $taskDoc.getComment()
+	</div>
+
+    <h3><a name="attributes"><strong>Parameters</strong></a></h3>
+
+	    <table>
+			<tr>
+				<td valign="top" align="left"><b>Attribute</b></td>
+                <td valign="top" align="left"><b>Description</b></td>
+                <td valign="top" align="left"><b>Type</b></td>
+                <td valign="top" align="left"><b>Required?</b></td>
+			</tr>
+
+#foreach ($attr in $taskDoc.attributes )
+
+			<tr>
+    		    <td valign="top" align="left">$attr</td>
+
+                <td valign="top" align="left">
+                     $taskDoc.getAttributeComment($attr)
+                </td>
+
+                <td valign="top" align="left">
+                    $taskDoc.getAttributeType($attr)
+                </td>
+
+                <td valign="top" align="left">
+
+  #if( $taskDoc.getAttributeRequired($attr) )
+                       <b>Yes</b> $taskDoc.getAttributeRequired($attr)
+  #elseif ( $taskDoc.getAttributeNotRequired($attr) )
+                       <b>No</b> $taskDoc.getAttributeNotRequired($attr)
+  #else ?
+  #end
+                </td>
+			</tr>
+#end
+		</table>
+
+        <h3>Parameters accepted as nested elements</h3>
+
+		<div class="description">
+#if ($taskDoc.isTaskContainer())
+			<p>This Task is a Container (it accepts nested Tasks).</p>
+#end
+
+#if ($taskDoc.supportsCharacters())
+			<p>This Task accepts text in its element body.</p>
+#end
+
+#foreach ($element in $taskDoc.getNestedElements())
+            
+  #set($elementDoc = $taskDoc.getElementDoc($element))
+
+    	    <h4>
+                ####
+		#### Put a link for those types that are in this javadoc run
+		#### and have nested elements (since nested-nested elements
+		#### is the only info we are not showing for each nested element)
+		####
+  #if( $elementDoc.sourceIncluded() && ($elementDoc.getNestedElements().hasMoreElements() || $elementDoc.isTagged()))
+		    <a href="${elementDoc.getFullClassName()}.html">
+                    <strong>&lt;$element&gt; ...</strong>
+		    </a>
+  #else
+                    <strong>&lt;$element&gt;</strong>
+
+    #if ( ! $elementDoc.sourceIncluded() )
+                    (Of type ${elementDoc.getAntName()} )
+    #end
+  #end
+			</h4>
+
+  #if($elementDoc.getComment())
+		    $elementDoc.getComment()
+  #end
+
+			<table border="0" cellspacing="2" cellpadding="2" width="100%">
+				<tr>
+	            	<td valign="top" align="left"><b>Attribute</b></td>
+	                <td valign="top" align="left"><b>Description</b></td>
+	                <td valign="top" align="left"><b>Type</b></td>
+	                <td valign="top" align="left"><b>Required</b></td>
+				</tr>
+
+  #foreach ($elementAttr in $elementDoc.getAttributes())
+
+	            <tr>
+    	        	<td>$elementAttr</td>
+        	        <td>
+###                #if($elementDoc.getAttributeComment($elementAttr))
+	                    <span>$!elementDoc.getAttributeComment($elementAttr)</span>
+###                #end
+					</td>
+
+					<td>
+                      $elementDoc.getAttributeType($elementAttr)
+					</td>
+
+					<td>
+
+    #if($elementDoc.getAttributeRequired($elementAttr))
+                       <b>Yes</b> $elementDoc.getAttributeRequired($elementAttr)
+    #elseif ( $elementDoc.getAttributeNotRequired($elementAttr) )
+                       <b>No</b> $elementDoc.getAttributeNotRequired($elementAttr)
+    #else ?
+    #end
+                    
+	                </td>
+				</tr>
+  #end
+			</table>
+#end
+		</div>
+    <br />
+	<hr />
+
+	<div class="copyright"><em>Generated with <a href="http://antdoclet.neuroning.com">AntDoclet</a></em></div>
+
+</body>
+</html>
