@@ -26,14 +26,15 @@ import java.util.Hashtable;
  *  <li>{@link #getCustomFileIcon(AbstractFile)} returns a custom icon (from the muCommander icon set)
  * for a given AbstractFile. Those icons are chosen based on the file's kind (archive, folder...) and extension.
  *  <li}{@link #getFileIcon(AbstractFile)} returns either a system icon or a custom icon, depending on the current
- * system icons policy.
+ * system icons policy. The default policy is {@link #DEFAULT_SYSTEM_ICONS_POLICY} and can be changed using
+ * {@link #setSystemIconsPolicy(String)}.
  * </ul>
  *
  * <p>Those methods can be used with any kind of {@link AbstractFile}: local, remote, archives entries...
  * Some caching is used to share icon instances as much as possible and thus minimize I/O operations.</p>
  *
- * <p><b>Important</b>:{@link #setSystemIconsPolicy(String)} must be called once before any of the <code>get*FileIcons</code>
- * methods can be used.</p>
+ * <p>Note that not all platforms have proper support for system file icons. The {@link #hasProperSystemIcons()} method
+ * can be used to determine that.
  *
  * @author Maxence Bernard
  */
@@ -115,7 +116,13 @@ public class FileIcons {
     /** Always use system file icons */
     public final static String USE_SYSTEM_ICONS_ALWAYS = "always";
 
-    /** Default icon scale factor (no rescaling) */ 
+    /** Default policy for system icons */
+    public final static String DEFAULT_SYSTEM_ICONS_POLICY = USE_SYSTEM_ICONS_APPLICATIONS;
+
+    /** Controls if and when system file icons should be used instead of custom icons */
+    private static String systemIconsPolicy = DEFAULT_SYSTEM_ICONS_POLICY;
+
+    /** Default icon scale factor (no rescaling) */
     public final static float DEFAULT_SCALE_FACTOR = 1.0f;
 
     /** Current icon scale factor */
@@ -124,16 +131,19 @@ public class FileIcons {
 
     // Field used for custom file icons
 
+    /** Has support for custom icons been initialized ? */
+    private static boolean customIconsInitialized;
+
     /** Hashtable that associates file extensions with icon names */
-    private static Hashtable iconExtensions;
+    private static Hashtable customIconExtensions;
 
 
     // Fields used for system file icons
 
-    /** Controls if and when system file icons should be used instead of custom icons, initially null */
-    private static String systemIconsPolicy;
+    /** Has support for system icons been initialized ? */
+    private static boolean systemIconsInitialized;
 
-    // Swing objects used to retrieve system file icons 
+    // Swing objects used to retrieve system file icons
     private static JFileChooser fileChooser;
     private static FileSystemView fileSystemView;
 
@@ -143,7 +153,45 @@ public class FileIcons {
     /** Caches system icons for files located on remote locations, or in archives */
     private static LRUCache systemIconFileCache;
 
-	
+
+    /**
+     * Initializes fields used for custom icons.
+     */
+    private static void initCustomIcons() {
+        // Map known file extensions to icon names
+        customIconExtensions = new Hashtable();
+        int nbIcons = ICON_EXTENSIONS.length;
+        for(int i=0; i<nbIcons; i++) {
+            int nbExtensions = ICON_EXTENSIONS[i].length;
+            String iconName = ICON_EXTENSIONS[i][0];
+            for(int j=1; j<nbExtensions; j++)
+                 customIconExtensions.put(ICON_EXTENSIONS[i][j], iconName);
+        }
+
+        if(Debug.ON) Debug.trace("done");
+        customIconsInitialized = true;
+    }
+
+    /**
+     * Initializes fields used for system icons.
+     */
+    private static void initSystemIcons() {
+        // Initialize the Swing object used to retrieve system file icons
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
+            fileChooser = new JFileChooser();
+        else
+            fileSystemView = FileSystemView.getFileSystemView();
+
+        // Initialize system icon caches to limit the number of calls made to the getIcon method of the Swing object:
+        // - used for directories located on remote locations, or in archives
+        systemIconDirCache = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
+        // - used for files located on remote locations, or in archives
+        systemIconFileCache = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
+
+        if(Debug.ON) Debug.trace("done");
+        systemIconsInitialized = true;
+    }
+
     /**
      * Returns an icon for the given file. Depending on the current system icons policy, the returned icon is either
      * a system icon, or one from the custom icon set.
@@ -186,6 +234,10 @@ public class FileIcons {
      * @param file the AbstractFile instance for which an icon will be returned
      */
     public static ImageIcon getCustomFileIcon(AbstractFile file) {
+        // Initialize custom icons support, if not done already
+        if(!customIconsInitialized)
+            initCustomIcons();
+
         // Retrieve file's extension, null if file has no extension
         String fileExtension = file.getExtension();
 
@@ -207,7 +259,7 @@ public class FileIcons {
                 return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME, scaleFactor);
 
             // Compare extension against lower-cased extensions
-            String iconName = (String)iconExtensions.get(fileExtension.toLowerCase());
+            String iconName = (String) customIconExtensions.get(fileExtension.toLowerCase());
             if(iconName==null)	// No icon associated to extension, return default file icon
                 return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME, scaleFactor);
 
@@ -230,6 +282,10 @@ public class FileIcons {
      * @param file the AbstractFile instance for which an icon will be returned
      */
     public static Icon getSystemFileIcon(AbstractFile file) {
+        // Initialize system icons support, if not done already
+        if(!systemIconsInitialized)
+            initSystemIcons();
+
         AbstractFile tempFile = null;
         Icon icon;
 
@@ -359,65 +415,35 @@ public class FileIcons {
 
     /**
      * Returns the current system icons policy, controlling when system file icons should be used instead
-     * of custom file icons. This method will return <code>null</code> until {@link #setSystemIconsPolicy(String)}
-     * is called.
-     *
-     * <p>See constants fields for allowed values.
+     * of custom file icons, see constant fields for possible values. The system icons policy is by default initialized
+     * to {@link #DEFAULT_SYSTEM_ICONS_POLICY}.
      */
     public static String getSystemIconsPolicy() {
         return systemIconsPolicy;
     }
 
+
     /**
      * Sets the system icons policy, controlling when system file icons should be used instead of custom file icons.
-     * <b>Important:</b> this method must be called once before any of the <code>get*FileIcons</code> methods can be used.
-     *
-     * <p>See constants fields for allowed values.
+     * See constants fields for allowed values.
      */
     public static void setSystemIconsPolicy(String policy) {
-        if(policy.equals(systemIconsPolicy))
-            return;
-
-    if(USE_SYSTEM_ICONS_ALWAYS.equals(policy)) {        // Never use custom icons
-            // Allow variables used for custom file icons to be garbage-collected
-            iconExtensions = null;
-        }
-        else if(iconExtensions==null) {                 // Use custom file icons, at least partially
-            // Map known file extensions to icon names
-             iconExtensions = new Hashtable();
-             int nbIcons = ICON_EXTENSIONS.length;
-             for(int i=0; i<nbIcons; i++) {
-                 int nbExtensions = ICON_EXTENSIONS[i].length;
-                 String iconName = ICON_EXTENSIONS[i][0];
-                 for(int j=1; j<nbExtensions; j++)
-                     iconExtensions.put(ICON_EXTENSIONS[i][j], iconName);
-             }
-        }
-
-        if(USE_SYSTEM_ICONS_NEVER.equals(policy)) {     // Never use system icons
-            // Allow variables used for system file icons to be garbage-collected
-            fileChooser = null;
-            fileSystemView = null;
-            systemIconDirCache = null;
-            systemIconFileCache = null;
-        }
-        else {                                          // Use system file icons, at least partially
-            // Initialize the Swing object used to retrieve system file icons
-            if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
-                fileChooser = new JFileChooser();
-            else
-                fileSystemView = FileSystemView.getFileSystemView();
-
-            // Initialize system icon caches to limit the number of calls made to the getIcon method of the Swing object:
-            // - used for directories located on remote locations, or in archives
-            systemIconDirCache = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
-            // - used for files located on remote locations, or in archives
-            systemIconFileCache = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
-        }
-
         systemIconsPolicy = policy;
     }
 
+
+    /**
+     * Returns <code>true</code> if the current platform is able to retrieve system icons that match the ones used in
+     * the OS's default file manager. If <code>false</code> is returned and {@link #getSystemFileIcon(com.mucommander.file.AbstractFile)}
+     * is used or {@link #getFileIcon(com.mucommander.file.AbstractFile)} together with a system policy different from
+     * {@link #USE_SYSTEM_ICONS_NEVER}, the returned icon will probably look very bad. 
+     *
+     * @return true if the current platform is able to retrieve system icons that match the ones used in the OS's
+     * default file manager
+     */
+    public static boolean hasProperSystemIcons() {
+        return PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X || PlatformManager.isWindowsFamily();
+    }
 
     /////////////////
     // Test method //
