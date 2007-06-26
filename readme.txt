@@ -226,6 +226,8 @@ New features:
  - System notifications (Growl under Mac OS X, System tray under other platforms) are sent when transfers are complete or an error has occurred
  - Added support for the NFS protocol
  - New 'Follow symlinks when changing current directory' option in the preferences
+ - New and improved theme editor, now allows to edit all theme attributes and to manage themes
+ - Mac OS X: 'Delete' can now move files to the system trash (enabled by default)
 
 Improvements:
  - Added 'Go to' buttons to 'Edit bookmarks', 'Edit credentials' and 'Show open connections' dialogs to go to the selected location
@@ -239,6 +241,7 @@ Improvements:
  - Added 'Bring all to front' item to 'Window' menu
  - Improved UI responsiveness on slow filesystems
  - Added language icons in preferences
+ - Delete dialog warns more explicitly about the consequences of deleting files permanently
 
 Localization:
  - Korean translation contributed by Jioh L. Jung
