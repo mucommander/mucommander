@@ -9542,8 +9542,8 @@ theme.add_on:FR:Ajouté
 
 
 
-theme.current_theme:EN:Current theme
-theme.current_theme:FR:Thème courant
+theme.current:EN:current
+theme.current:FR:courant
 # Translation missing
 
 
