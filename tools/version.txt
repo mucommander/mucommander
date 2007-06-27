@@ -1,4 +1,4 @@
-proguard.jar  -> 3.6 (we're not using higher versions since they appear to break jcifs).
+proguard.jar  -> 3.9
 jdeb.jar      -> 0.1
 antdoclet.jar -> 1.1 (patched to disable Velocity logging).
 velocity.jar  -> 1.3.1
