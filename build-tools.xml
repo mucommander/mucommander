@@ -242,7 +242,7 @@
   <!-- ${tools.jar.obf}.                                       -->
   <target name="obfuscate-tools-bytecode" if="proguard.available" unless="tools.up-to-date">
     <echo>Creating Ant tools obfuscated JAR file...</echo>
-    <proguard overloadaggressively="true" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
+    <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
               allowaccessmodification="true" defaultpackage="" skipnonpubliclibraryclasses="false">
       <injar name="${tools.jar.normal}"/> 
       <outjar name="${tools.jar.obf}"/>

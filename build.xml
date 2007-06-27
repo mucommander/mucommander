@@ -264,9 +264,10 @@
 
     <!-- Makes sure that library documentation doesn't get     -->
     <!-- included in the final jar.                            -->
-    <delete>
+    <delete includeemptydirs="true">
       <fileset dir="${classes.normal}" includes="**/*.html"/>
       <fileset dir="${classes.normal}" includes="**/*.css"/>
+      <fileset dir="${classes.normal}" includes="**/*.gif"/>
     </delete>
 
     <!-- Deletes unused JCifs resouces.                        -->
@@ -412,7 +413,7 @@
   <!-- ${jar.obf}.                                             -->
   <target name="obfuscate-bytecode" if="proguard.available">
     <echo>Creating obfuscated JAR file...</echo>
-    <proguard overloadaggressively="true" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
+    <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
               printmapping="${compile.tmp}/obfuscate.map" printusage="${compile.tmp}/obf-usage.txt" printseeds="${compile.tmp}/obf-seeds.txt"
               allowaccessmodification="true" defaultpackage="" skipnonpubliclibraryclasses="false">
       <injar name="${jar.normal}"/> 
@@ -1139,9 +1140,7 @@
   <!-- Non-critical errors will be ignored by this target:     -->
   <!-- it will try to generate all the release files it can,   -->
   <!-- regardless of whether others failed.                    -->
-  <target name="release" depends="set-release,source,release-tools,tgz,setup-exe,deb,portable,version,sign,jnlp,api-doc-tgz,tools-doc-tgz">
-    <echo>All done.</echo>
-  </target>
+  <target name="release" depends="set-release,source,release-tools,tgz,setup-exe,deb,portable,version,sign,jnlp,api-doc-tgz,tools-doc-tgz"/>
 
   <!-- Generates all the available release files in nightly    -->
   <!-- mode.                                                   -->
@@ -1153,9 +1152,7 @@
   <!-- Non-critical errors will be ignored by this target:     -->
   <!-- it will try to generate all the release files it can,   -->
   <!-- regardless of whether others failed.                    -->
-  <target name="nightly" depends="set-nightly,source,release-tools,tgz,app.tgz,setup-exe,portable,deb,version,sign,jnlp">
-    <echo>All done.</echo>
-  </target>
+  <target name="nightly" depends="set-nightly,source,release-tools,tgz,app.tgz,setup-exe,portable,deb,version,sign,jnlp"/>
 
 
 
