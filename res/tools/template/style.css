@@ -11,8 +11,8 @@ h2 {
 }
 
 div#navigation h2 {
-	text-align: left;
-	background-color: #CCCCFF;
+    text-align: left;
+    background-color: #CCCCFF;
     font-variant: small-caps;
     margin-bottom: 0;
     padding-left: 5%;
@@ -59,9 +59,6 @@ code {
 table {
 	font-family: arial,helvetica,sanserif;
 	font-size: 80%;
-    margin: 5%;
-    padding: 0px;
-
 //	border: solid 1px black;
     border-spacing: 0px;
 	border-collapse: collapse;

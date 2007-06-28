@@ -1,65 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-##
-## This is an Velocity template for generating an HTML index
-## of the Ant Task/Types
-##
-## Objects expected in context:
-##
-##     $title      - Project title (of type String)
-##     $antroot - (of type AntRoot)
-## 
 <html>
 <head>
   <title>$title Ant Tasks</title>
   <link rel="stylesheet" type="text/css" href="style.css" />
-
 </head>
 <body>
 
-<div id="navigation">
-
-    ## Tasks
-<h2>$category Tasks</h2>
-
-	#foreach( $taskDoc in $antroot.getTasksByCategory($category) )
-		#if($taskDoc && !$taskDoc.isInnerClass())
-
-<p><a href="${taskDoc.getFullClassName()}.html" target="task">
-    Task &lt;${taskDoc.getAntName()}&gt;
-       </a>
-</p>
- <div class="description">
-                 #if($taskDoc.getShortComment())
-		    $taskDoc.getShortComment()
-		 #else
-		    <i>No comment available</i>
-		 #end
-</div>
-		#end
-	#end
-
-
-  ## Types
-<h2>$category Types</h2>
-
-  #foreach( $taskDoc in $antroot.getTypesByCategory($category) )
-    #if($taskDoc && !$taskDoc.isInnerClass() && $taskDoc.isTagged())
-<p><a href="${taskDoc.getFullClassName()}.html"  target="task">
-    Type &lt;${taskDoc.getAntName()}&gt;
-   </a>
-</p>
-
-<div class="description">
-                #if($taskDoc.getShortComment())
-		    $taskDoc.getShortComment()
-		 #else
-		    <i>No comment available</i>
-		 #end
-</div>
-
-    #end
+<h3><a name="attributes"><strong>$category Tasks</strong></a></h3>
+#foreach( $taskDoc in $antroot.getTasksByCategory($category) )
+  #if($taskDoc && !$taskDoc.isInnerClass())
+  <a href="${taskDoc.getFullClassName()}.html" target="task">${taskDoc.getAntName()}</a><br/>
   #end
-</div>
+#end
+
+<h3><a name="attributes"><strong>$category Types</strong></a></h3>
+#foreach( $taskDoc in $antroot.getTypesByCategory($category) )
+  #if($taskDoc && !$taskDoc.isInnerClass() && $taskDoc.isTagged())
+  <a href="${taskDoc.getFullClassName()}.html"  target="task">${taskDoc.getAntName()}</a><br/>
+  #end
+#end
 </body>
 </html>
