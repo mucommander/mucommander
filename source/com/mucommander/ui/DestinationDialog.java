@@ -7,7 +7,7 @@ import com.mucommander.file.util.FileToolkit;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
-import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.comp.layout.YBoxPanel;
 
 import javax.swing.*;
 import java.awt.*;

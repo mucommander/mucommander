@@ -7,8 +7,8 @@ import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
-import com.mucommander.ui.comp.dialog.XBoxPanel;
-import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.comp.layout.XBoxPanel;
+import com.mucommander.ui.comp.layout.YBoxPanel;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 

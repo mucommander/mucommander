@@ -1,14 +1,18 @@
 package com.mucommander.ui;
 
-import com.mucommander.ui.comp.dialog.*;
-import com.mucommander.ui.theme.*;
-import com.mucommander.conf.*;
-import com.mucommander.text.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.comp.dialog.FocusDialog;
+import com.mucommander.ui.comp.layout.YBoxPanel;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 /**
  * Dialog box allowing users to select misc. setup options for muCommander.

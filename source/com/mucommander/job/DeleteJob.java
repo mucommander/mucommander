@@ -9,7 +9,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.ProgressDialog;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
-import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.comp.layout.YBoxPanel;
 
 import javax.swing.*;
 import java.io.IOException;

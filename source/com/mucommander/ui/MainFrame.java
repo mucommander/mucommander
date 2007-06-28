@@ -6,7 +6,7 @@ import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.comp.ProportionalSplitPane;
-import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.comp.layout.YBoxPanel;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;

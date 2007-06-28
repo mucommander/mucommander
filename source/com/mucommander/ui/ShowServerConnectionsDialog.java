@@ -7,7 +7,7 @@ import com.mucommander.file.connection.ConnectionPool;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.MnemonicHelper;
 import com.mucommander.ui.comp.dialog.FocusDialog;
-import com.mucommander.ui.comp.dialog.XBoxPanel;
+import com.mucommander.ui.comp.layout.XBoxPanel;
 
 import javax.swing.*;
 import java.awt.*;

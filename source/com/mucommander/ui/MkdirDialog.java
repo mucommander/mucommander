@@ -11,7 +11,7 @@ import com.mucommander.ui.action.MkdirAction;
 import com.mucommander.ui.action.MkfileAction;
 import com.mucommander.ui.comp.dialog.DialogToolkit;
 import com.mucommander.ui.comp.dialog.FocusDialog;
-import com.mucommander.ui.comp.dialog.YBoxPanel;
+import com.mucommander.ui.comp.layout.YBoxPanel;
 
 import javax.swing.*;
 import java.awt.*;

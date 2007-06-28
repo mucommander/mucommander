@@ -9,8 +9,8 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.comp.dialog.InformationPane;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
+import com.mucommander.ui.comp.layout.InformationPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -97,7 +97,7 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
     private void updateInformationPane() {
         informationPane.getMainLabel().setText(Translator.get(moveToTrash?"delete_dialog.move_to_trash.confirmation":"delete_dialog.permanently_delete.confirmation"));
         informationPane.getCaptionLabel().setText(Translator.get(moveToTrash?"delete_dialog.move_to_trash.confirmation_details":"delete_dialog.permanently_delete.confirmation_details"));
-        informationPane.setIcon(moveToTrash?null:InformationPane.getPredefinedIcon(InformationPane.WARNING_ICON));
+        informationPane.setIcon(moveToTrash?null: InformationPane.getPredefinedIcon(InformationPane.WARNING_ICON));
     }
 
 
