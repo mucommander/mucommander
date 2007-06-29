@@ -84,7 +84,7 @@ public class BufferPool {
      * @param buffer the buffer instance to make available for further use
      */
     public static synchronized void releaseBuffer(byte buffer[]) {
-        if(Debug.ON) Debug.trace("Adding buffer "+buffer+", size="+buffer.length);
+//        if(Debug.ON) Debug.trace("Adding buffer "+buffer+", size="+buffer.length);
         buffers.add(buffer);
     }
 }

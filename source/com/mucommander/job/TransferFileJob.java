@@ -148,15 +148,12 @@ public abstract class TransferFileJob extends FileJob {
         // Preserve source file's date
         destFile.changeDate(sourceFile.getDate());
 
-//        // Preserve source file's permissions
-//        destFile.setPermissions(sourceFile.getPermissions());
-
         // Preserve source file's permissions: preserve only the bits that are in use by the source file. Other bits
         // will be set to default permissions (rw-r--r-- , 644 octal). That means:
         //  - a file without any permission will have default permissions in the destination.
         //  - a file with all permission bits set (mask = 777 octal) will ignore the default permissions
         int permMask = sourceFile.getPermissionGetMask();
-if(Debug.ON) Debug.trace("source perms="+sourceFile.getPermissions()+" dest perms="+((sourceFile.getPermissions() & permMask) | (~permMask & DEFAULT_PERMISSIONS))+" mask="+permMask);
+//if(Debug.ON) Debug.trace("source perms="+sourceFile.getPermissions()+" dest perms="+((sourceFile.getPermissions() & permMask) | (~permMask & DEFAULT_PERMISSIONS))+" mask="+permMask);
         destFile.setPermissions((sourceFile.getPermissions() & permMask) | (~permMask & DEFAULT_PERMISSIONS));
     }
 
