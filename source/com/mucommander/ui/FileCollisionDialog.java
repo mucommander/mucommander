@@ -190,7 +190,7 @@ public class FileCollisionDialog extends QuestionDialog {
 
         // Send a system notification if a notifier is available and enabled
         if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
-            AbstractNotifier.getNotifier().displayNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_ERROR, getTitle(), desc);
+            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_ERROR, getTitle(), desc);
     }
 
 

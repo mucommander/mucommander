@@ -153,8 +153,8 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     public boolean displayNotification(int notificationType, String title, String description) {
         if(Debug.ON) Debug.trace("notificationType="+notificationType+" title="+title+" description="+description);
 
-        if(!isEnabled() || WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
-            if(Debug.ON) Debug.trace("Ignoring notification");
+        if(!isEnabled()) {
+            if(Debug.ON) Debug.trace("Ignoring notification, this notifier is not enabled");
 
             return false;
         }

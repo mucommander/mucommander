@@ -23,7 +23,6 @@ import com.growl.Growl;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.WindowManager;
 
 /**
  * SystemTrayNotifier implements a notifier that uses the System Tray to display notifications. Growl is a 3rd party
@@ -115,8 +114,8 @@ public class GrowlNotifier extends AbstractNotifier {
     public boolean displayNotification(int notificationType, String title, String description) {
         if(Debug.ON) Debug.trace("notificationType="+notificationType+" title="+title+" description="+description);
 
-        if(!isEnabled() || WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
-            if(Debug.ON) Debug.trace("Ignoring notification");
+        if(!isEnabled()) {
+            if(Debug.ON) Debug.trace("Ignoring notification, this notifier is not enabled");
 
             return false;
         }

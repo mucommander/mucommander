@@ -460,7 +460,7 @@ public abstract class FileJob implements Runnable {
 
         // Send a system notification if a notifier is available and enabled
         if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
-            AbstractNotifier.getNotifier().displayNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_COMPLETED,
+            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_COMPLETED,
                     progressDialog==null?"":progressDialog.getTitle(),
                     Translator.get("progress_dialog.job_finished"));
     }
@@ -562,7 +562,7 @@ public abstract class FileJob implements Runnable {
 
         // Send a system notification if a notifier is available and enabled
         if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
-            AbstractNotifier.getNotifier().displayNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_ERROR, title, message);
+            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationTypes.NOTIFICATION_TYPE_JOB_ERROR, title, message);
         
         return showErrorDialog(title, message, actionTexts, actionValues);
     }
