@@ -250,8 +250,9 @@ Improvements:
  - Improved keyboard accessibility of 'File collision' and 'Transfer progress' dialogs
  - Added 'Bring all to front' item to 'Window' menu
  - Improved UI responsiveness on slow filesystems
- - Added language icons in preferences
+ - Added icons to language preferences
  - Delete dialog warns more explicitly about the consequences of deleting files permanently
+ - Added folder icons to drive button and its popup menu
 
 Localization:
  - Korean translation contributed by Jioh L. Jung
