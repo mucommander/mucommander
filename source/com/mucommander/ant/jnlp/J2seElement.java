@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author Nicolas Rinaudo
- * @ant.type name="j2se" category="jnlp"
+ * @ant.type name="j2se" category="webstart"
  */
 public class J2seElement {
     private String version;

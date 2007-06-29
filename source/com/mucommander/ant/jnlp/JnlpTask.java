@@ -11,8 +11,9 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
+ * 
  * @author Nicolas Rinaudo
- * @ant.task name="jnlp" category="jnlp"
+ * @ant.task name="jnlp" category="webstart"
  */
 public class JnlpTask extends Task {
     // - Constants -------------------------------------------------------

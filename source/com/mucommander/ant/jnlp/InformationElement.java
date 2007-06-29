@@ -5,7 +5,7 @@ import java.util.*;
 
 /**
  * @author Nicolas Rinaudo
- * @ant.type name="information" category="jnlp"
+ * @ant.type name="information" category="webstart"
  */
 public class InformationElement {
     private String locale;

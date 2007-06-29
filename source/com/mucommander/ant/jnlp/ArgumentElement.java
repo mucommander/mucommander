@@ -2,6 +2,7 @@ package com.mucommander.ant.jnlp;
 
 /**
  * @author Nicolas Rinaudo
+ * @ant.type name="argument" category="webstart"
  */
 public class ArgumentElement {
     private StringBuffer text;

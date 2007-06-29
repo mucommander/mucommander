@@ -2,7 +2,7 @@ package com.mucommander.ant.jnlp;
 
 /**
  * @author Nicolas Rinaudo
- * @ant.type name="installerdesc" category="jnlp"
+ * @ant.type name="installerdesc" category="webstart"
  */
 public class InstallerDescElement {
     private String mainClass;

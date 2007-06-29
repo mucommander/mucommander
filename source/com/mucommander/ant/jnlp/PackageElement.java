@@ -2,7 +2,7 @@ package com.mucommander.ant.jnlp;
 
 /**
  * @author Nicolas Rinaudo
- * @ant.type name="package" category="jnlp"
+ * @ant.type name="package" category="webstart"
  */
 public class PackageElement {
     private String name;

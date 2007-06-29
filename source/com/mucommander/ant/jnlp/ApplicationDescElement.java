@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author Nicolas Rinaudo
- * @ant.type name="applicationdesc" category="jnlp"
+ * @ant.type name="applicationdesc" category="webstart"
  */
 public class ApplicationDescElement {
     private String mainClass;

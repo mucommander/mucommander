@@ -4,7 +4,7 @@ import org.apache.tools.ant.BuildException;
 
 /**
  * @author Nicolas Rinaudo
- * @ant.type name="downloodable" category="jnlp"
+ * @ant.type name="downloadable" category="webstart"
  */
 public class Downloadable {
     public static final String EAGER_LABEL    = "eager";

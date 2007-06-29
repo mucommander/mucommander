@@ -28,9 +28,9 @@
       <td valign="top" align="left">$taskDoc.getAttributeComment($attr)</td>
       <td valign="top" align="left">
   #if( $taskDoc.getAttributeRequired($attr) )
-        <b>Yes</b> $taskDoc.getAttributeRequired($attr)
+        <b>Yes</b><br/> $taskDoc.getAttributeRequired($attr)
   #elseif ( $taskDoc.getAttributeNotRequired($attr) )
-        <b>No</b> $taskDoc.getAttributeNotRequired($attr)
+        <b>No</b><br/> $taskDoc.getAttributeNotRequired($attr)
   #else ?
   #end
       </td>
@@ -82,9 +82,9 @@ $elementDoc.getComment()
     <td><span>$!elementDoc.getAttributeComment($elementAttr)</span></td>
     <td>
     #if($elementDoc.getAttributeRequired($elementAttr))
-      <b>Yes</b> $elementDoc.getAttributeRequired($elementAttr)
+      <b>Yes</b><br/> $elementDoc.getAttributeRequired($elementAttr)
     #elseif ( $elementDoc.getAttributeNotRequired($elementAttr) )
-      <b>No</b> $elementDoc.getAttributeNotRequired($elementAttr)
+      <b>No</b><br/> $elementDoc.getAttributeNotRequired($elementAttr)
     #else ?
     #end
     </td>

@@ -9,7 +9,47 @@ import java.io.*;
 import java.net.URL;
 
 /**
- * Ant task used to generate Mac OS X application files.
+ * Ant task used to create Mac OS X app package for Java applications.
+ * <p>
+ * A Mac OS X bundle is composed of the following items:
+ * <ul>
+ *   <li>A native executable file used to start the Java VM.</li>
+ *   <li>A <code>Pkginfo</code> file used to identify the application.</li>
+ *   <li>A JAR file to run.</li>
+ *   <li>A non-compulsory icon file.</li>
+ *   <li>An <code>Info.plist</code> file used to describe the application's properties.</li>
+ * </ul>
+ * </p>
+ * <p>
+ * <h4>Native executable</h4>
+ * This file is generated automatically by the <code>mkapp</code> task. Note, however, that
+ * it must be executable for the application to start. Due to Java limitations, we must call
+ * the <code>chmod</code> unix command to achieve that goal, which effectively prevents the task
+ * from running on any OS where that command is not available.
+ * </p>
+ * <p>
+ * <h4>Pkginfo</h4>
+ * This file is generated automatically by the <code>mkapp</code> tasks. It contains 8 characters,
+ * the concatenation of the bundle's type and its creator code.
+ * </p>
+ * <p>
+ * <h4>JAR file</h4>
+ * The JAR file contains the actual code that will be executed when the application is started. Note
+ * that it must be executable for the application to run.
+ * </p>
+ * <p>
+ * <h4>Icon</h4>
+ * This will be used by Mac OS X to display the application in the Dock, Finder, Task switcher...<br/>
+ * While other formats might work, it's always best to use the native <code>.icns</code> format.
+ * To create a <code>.icns</code> file from your images, use the Icon Composer application that comes
+ * with the <a href="http://developer.apple.com/tools/">Apple Developers Tools</a>.
+ * </p>
+ * <p>
+ * <h4>Info.plist</h4>
+ * This file is generated using the content of this task's nested elements. It's composed of key/value
+ * pairs, and can be used for purposes as diverse as setting a classpath and forcing the value of Java
+ * properties.
+ * </p>
  * @author Nicolas Rinaudo
  * @ant.task name="mkapp" category="macosx"
  */
@@ -33,9 +73,13 @@ public class AppTask extends Task {
 
     // - Info.plist constants --------------------------------------------
     // -------------------------------------------------------------------
+    /** Name of the Info.plist root element. */
     private static final String ELEMENT_PLIST     = "plist";
+    /** Name of the version attribute of the plist element. */
     private static final String ATTRIBUTE_VERSION = "version";
+    /** Path to the plist DTD. */
     private static final String URL_PLIST_DTD     = "file://localhost/System/Library/DTDs/PropertyList.dtd";
+    /** Default plist version number. */
     private static final String DEFAULT_VERSION   = "1.0";
 
 
@@ -67,8 +111,8 @@ public class AppTask extends Task {
     private File           destination;
     /** Application bundle type. */
     private String         type;
-    /** Application bundle signature. */
-    private String         signature;
+    /** Application bundle creator code. */
+    private String         creator;
     /** Path to the application's icon. */
     private File           icon;
     /** Application's info description. */
@@ -95,7 +139,7 @@ public class AppTask extends Task {
     public void init() {
         destination = null;
         type        = null;
-        signature   = null;
+        creator     = null;
         icon        = null;
         properties  = new DictValue();
         jar         = null;
@@ -104,43 +148,57 @@ public class AppTask extends Task {
 
 
 
-    // - Ant interaction -------------------------------------------------
+    // - Parameters ------------------------------------------------------
     // -------------------------------------------------------------------
     /**
-     * Sets the path to which the application file should be generated.
+     * Where to create the application bundle.
      * <p>
-     * <code>f</code> is expected to be a valid path to an either non-existing
+     * It's value is expected to be a valid path to an either non-existing
      * or empty directory. While the task won't fail if such is not the case,
      * results are not predictable.<br/>
-     * Note that the task <i>will</i> fail if <code>f</code> is an existing file.
+     * Note that the task <i>will</i> fail if <code>dest</code>'s value is an existing file.
+     * </p>
+     * <p>
+     * It's not strictly necessary for the application bundle to end with <code>.app</code>, as
+     * this task will automatically append the extension if it's not there.
      * </p>
      * @ant.required
      */
     public void setDest(File f) {destination = f;}
 
     /**
-     * Sets the bundle type of the app file.
+     * Bundle type of the application.
      * <p>
-     * This attribute is non compulsory, and will default to {@link #TYPE_APPL}.
+     * If you're not sure what type your bundle is, you can probably leave this parameter out.
+     * The default <code>APPL</code> value is likely to be what you need.
      * </p>
-     * @ant.required
+     * @ant.not-required Defaults to <code>APPL</code>.
      */
     public void setType(String s) {type = s;}
 
     /**
-     * Sets the application's signature.
+     * Application's creator code.
+     * <p>
+     * The creator code is a unique four-character sequence that identifies your
+     * application. Click <a href="http://developer.apple.com/faq/datatype.html">here</a>
+     * to learn more about creator codes.
+     * </p>
      * @ant.required
      */
-    public void setSignature(String s) {signature = s;}
+    public void setCreator(String s) {creator = s;}
 
     /**
-     * Sets the path to the application's icon.
-     * @ant.required
+     * Path to the application's icon.
+     * <p>
+     * This parameter can be safely ignored, in which case the generated application will use
+     * the default icon set.
+     * </p>
+     * @ant.not-required
      */
     public void setIcon(File f) {icon = f;}
 
     /**
-     * Sets the path to the application's JAR file.
+     * Path to your application's JAR file.
      * <p>
      * In order for the application to start, the JAR file must be
      * executable. Click <a href="http://java.sun.com/j2se/javadoc/">here</a> to
@@ -150,17 +208,36 @@ public class AppTask extends Task {
      */
     public void setJar(File f) {jar = f;}
 
-    public void setClasspath(String classpath) {this.classpath = classpath;}
+    /**
+     * Adds entries to the default <code>ClassPath</code> key.
+     * <p>
+     * The <code>ClassPath</code> key will always contain an entry that points
+     * towards the application's JAR file. It might however be necessary to add other
+     * elements, such as <code>/System/Library/Java</code>.
+     * </p>
+     * <p>
+     * If more than one path must be added to the <code>ClassPath</code> key, they should
+     * all be separated by a <code>:</code> character.
+     * </p>
+     * @ant.not-required
+     */
+    public void setClasspath(String path) {classpath = path;}
 
     /**
-     * Sets the DTD version of the <code>Info.plist</code> file.
+     * Version number of the <code>Info.plist</code>'s DTD.
      * <p>
-     * This parameter is non-compulsory and defaults to <code>1.0</code>
+     * It's entirely safe to leave this parameter out, as the task will always
+     * generate <code>Info.plist</code> files compliant with the default <code>1.0</code>
+     * value.
      * </p>
      * @ant.not-required Defaults to 1.0
      */
     public void setInfoVersion(String s) {infoVersion = s;}
 
+
+
+    // - Nested elements -------------------------------------------------
+    // -------------------------------------------------------------------
     public ArrayKey createArray() {return properties.createArray();}
     public BooleanKey createBoolean() {return properties.createBoolean();}
     public StringKey createString() {return properties.createString();}
@@ -170,6 +247,41 @@ public class AppTask extends Task {
     public DateKey createDate() {return properties.createDate();}
     public DataKey createData() {return properties.createData();}
 
+
+
+    // - Execution -------------------------------------------------------
+    // -------------------------------------------------------------------
+    /**
+     * Makes sure all parameters have been properly initialised.
+     */
+    private void check() throws BuildException {
+        // Checks the bundle's destination.
+        if(destination == null)
+            throw new BuildException("No destination folder specified. Please fill in the dest argument.");
+        if(!destination.getName().endsWith(".app"))
+            destination = new File(destination.getParent(), destination.getName() + ".app");
+
+        // Makes sure the bundle's type is initialised.
+        if(type == null)
+            type = TYPE_APPL;
+
+        // Makes sure the creator code is properly initialised.
+        if(creator == null)
+            throw new BuildException("No creator code specified. Please fill in the creator argument.");
+        else if(creator.length() != 4)
+            throw new BuildException("Creator codes must be 4 characters long.");
+
+        // Makes sure that the icon, if specified, exists.
+        if(icon != null && !icon.exists())
+            throw new BuildException("File not found: " + icon);
+
+        // Makes sure that we have a JAR file.
+        if(jar == null)
+            throw new BuildException("No application jar specified. Please fill in the jar argument.");
+        else if(!jar.isFile())
+            throw new BuildException("File not found: " + jar);
+    }
+
     /**
      * Entry point of the task.
      * @exception BuildException thrown if any error occurs during application file generation.
@@ -177,34 +289,18 @@ public class AppTask extends Task {
     public void execute() throws BuildException {
         File current; // Used to create the various directories needed by the .app.
 
-        // Checks whether the proper parameters were passed to the application.
-        if(destination == null)
-            throw new BuildException("No destination folder specified. Please fill in the dest argument.");
-        if(type == null)
-            type = TYPE_APPL;
-        if(signature == null)
-            throw new BuildException("No application signature specified. Please fill in the signature argument.");
-        if(icon == null)
-            throw new BuildException("No application icon specified. Please fill in the icon argument.");
-        else if(!icon.exists())
-            throw new BuildException("File not found: " + icon);
-        if(jar == null)
-            throw new BuildException("No application jar specified. Please fill in the jar argument.");
-        else if(!jar.exists())
-            throw new BuildException("File not found: " + jar);
+        // Checks whether the task was properly initialised.
+        check();
 
-        // Makes sure we create the application in a proper .app directory.
-        if(!destination.getName().endsWith(".app"))
-            destination = new File(destination.getParent(), destination.getName() + ".app");
-
-        // Creates all the necessary directories and files.
+        // Creates the bundle.
         mkdir(destination);
         mkdir(current = new File(destination, CONTENTS_FOLDER));
         writePkgInfo(current);
         writeJavaStub(current);
         writeInfo(current);
         mkdir(current = new File(current, RESOURCES_FOLDER));
-        writeIcon(current);
+        if(icon != null)
+            writeIcon(current);
         mkdir(current = new File(current, JAVA_FOLDER));
         writeJar(current);
     }
@@ -219,7 +315,7 @@ public class AppTask extends Task {
      * Default keys are:<br/>
      * - {@link #KEY_EXECUTABLE}: this will always be {@link #APPLICATION_STUB}.<br/>
      * - {@link #KEY_PACKAGE_TYPE}: value specified by {@link #setType(String)}.<br/>
-     * - {@link #KEY_SIGNATURE}: value specified by {@link #setSignature(String)}.<br/>
+     * - {@link #KEY_SIGNATURE}: value specified by {@link #setCreator(String)}.<br/>
      * - {@link #KEY_ICON}: path to the copy of the file specified in {@link #setIcon(File)}.<br/>
      * - {@link #KEY_CLASSPATH}: path to the copy of the file specified in {@link #setJar(File)}.<br/>
      * </p>
@@ -245,12 +341,14 @@ public class AppTask extends Task {
         // Adds the KEY_SIGNATURE key.
         buffer = properties.createString();
         buffer.setName(KEY_SIGNATURE);
-        buffer.setValue(signature);
+        buffer.setValue(creator);
 
         // Adds the KEY_ICON key.
-        buffer = properties.createString();
-        buffer.setName(KEY_ICON);
-        buffer.setValue(icon.getName());
+        if(icon != null) {
+            buffer = properties.createString();
+            buffer.setName(KEY_ICON);
+            buffer.setValue(icon.getName());
+        }
 
         // If the DICT_JAVA dictionary hasn't been created yet,
         // creates it.
@@ -328,7 +426,7 @@ public class AppTask extends Task {
             // Writes the applications PkgInfo file.
             out = new PrintStream(new FileOutputStream(new File(contents, PACKAGE_INFO)));
             out.print(type);
-            out.print(signature);
+            out.print(creator);
             out.close();
         }
         catch(Exception e) {throw new BuildException("Could not write " + PACKAGE_INFO + " file", e);}

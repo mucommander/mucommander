@@ -756,7 +756,7 @@
    <!-- Output will be stored in ${app.folder}.                -->
   <target name="app" depends="load-mkapp,compress">
     <echo>Creating Mac OS X application...</echo>
-    <mkapp jar="${jar.cmp}" dest="${app.folder}" type="APPL" signature="MUCO" icon="${res}/icons/icon.icns"
+    <mkapp jar="${jar.cmp}" dest="${app.folder}" type="APPL" creator="MUCO" icon="${res}/icons/icon.icns"
            infoversion="0.9" classpath="/System/Library/Java">
       <string  name="CFBundleName"                    value="muCommander"/>
       <string  name="CFBundleVersion"                 value="${app.version}${app.subversion}"/>
@@ -764,8 +764,8 @@
       <string  name="CFBundleDevelopmentRegion"       value="English"/>
       <string  name="CFBundleShortVersionString"      value="${app.version}${app.subversion}"/>
       <string  name="CFBundleGetInfoString"           value="muCommander ${app.version}${app.subversion}, (c) ${app.copyright} Maxence Bernard, ${url.homepage}"/>
-      <string name="CFBundleInfoDictionaryVersion"   value="6.0"/>
-      <dict name="Java">
+      <string  name="CFBundleInfoDictionaryVersion"   value="6.0"/>
+      <dict    name="Java">
         <string name="MainClass"  value="${main-class}"/>
         <string name="JVMVersion" value="${app.jvm}+"/>
         <dict name="Properties">

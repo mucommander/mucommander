@@ -4,7 +4,7 @@ import org.apache.tools.ant.BuildException;
 
 /**
  * @author Nicolas Rinaudo
- * @ant.type name="icon" category="jnlp"
+ * @ant.type name="icon" category="webstart"
  */
 public class IconElement {
     public static final int KIND_DEFAULT = 0;

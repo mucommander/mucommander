@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author Nicolas Rinaudo
- * @ant.type name="appletdesc" category="jnlp"
+ * @ant.type name="appletdesc" category="webstart"
  */
 public class AppletDescElement {
     private String documentBase;

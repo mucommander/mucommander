@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author Nicolas Rinaudo
- * @ant.type name="resources" category="jnlp"
+ * @ant.type name="resources" category="webstart"
  */
 public class ResourcesElement {
     private String os;

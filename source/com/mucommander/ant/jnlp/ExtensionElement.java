@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author Nicolas Rinaudo
- * @ant.type name="extension" category="jnlp"
+ * @ant.type name="extension" category="webstart"
  */
 public class ExtensionElement {
     private String version;
