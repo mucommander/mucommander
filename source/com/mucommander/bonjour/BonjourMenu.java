@@ -22,6 +22,7 @@ package com.mucommander.bonjour;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.action.OpenLocationAction;
+import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -45,6 +46,8 @@ public class BonjourMenu extends JMenu implements MenuListener {
     public BonjourMenu(MainFrame mainFrame) {
         super(Translator.get("bonjour.bonjour_services"));
         this.mainFrame = mainFrame;
+
+        setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "bonjour.png"));
 
         // Menu items will be added when menu gets selected
         addMenuListener(this);

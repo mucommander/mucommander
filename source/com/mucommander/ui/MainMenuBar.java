@@ -232,6 +232,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         char mnemonic = menuItemMnemonicHelper.getMnemonic(bonjourMenu.getName());
         if(mnemonic!=0)
             bonjourMenu.setMnemonic(mnemonic);
+        bonjourMenu.setIcon(null);
         goMenu.add(bonjourMenu);
 
         // Root folders will be added when the menu is selected
