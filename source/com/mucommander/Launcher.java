@@ -127,12 +127,10 @@ public class Launcher {
      */
     private static void printVersion() {
         System.out.println(RuntimeConstants.APP_STRING);
-        System.out.print("Copyright (c) ");
+        System.out.print("Copyright (C) ");
         System.out.print(RuntimeConstants.COPYRIGHT);
         System.out.println(" Maxence Bernard");
-        System.out.println("All rights reserved.");
-        System.out.println("There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A");
-        System.out.println("PARTICULAR PURPOSE.");
+        System.out.println("This is free software, distributed under the terms of the GNU General Public License.");
         System.exit(0);
     }
 
