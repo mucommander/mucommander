@@ -72,6 +72,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <property name="tools.res"     location="${res}"/>
     <property name="tools.out"     location="${lib}"/>
     <property name="tools.license" location="license.txt"/>
+    <property name="tools.compile" location="compile.txt"/>
+    <property name="tools.readme"  location="readme.txt"/>
     <property name="tools.build"   location="build.xml"/>
   </target>
 
@@ -84,6 +86,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <property name="tools.res"     location="${res}/tools"/>
     <property name="tools.out"     location="${tools}"/>
     <property name="tools.license" location="${tools.res}/license.txt"/>
+    <property name="tools.compile" location="${tools.res}/compile.txt"/>
+    <property name="tools.readme"  location="${tools.res}/readme.txt"/>
+
     <property name="tools.build"   location="build-tools.xml"/>
   </target>
 
@@ -463,15 +468,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <mkdir dir="${tools.tmp}/release/tools"/>
     <mkdir dir="${tools.tmp}/release/res/"/>
 
-    <!-- Adds the license.                                     -->
+    <!-- Adds the license, readme and compile files.           -->
     <copy file="${tools.license}" todir="${tools.tmp}/release"/>
+    <copy file="${tools.readme}"  todir="${tools.tmp}/release"/>
+    <copy file="${tools.compile}" todir="${tools.tmp}/release"/>
 
     <!-- Adds the compressed JAR file.                         -->
     <copy file="${tools.jar.cmp}" todir="${tools.tmp}/release/lib"/>
 
     <!-- Adds the resources.                                   -->
     <copy todir="${tools.tmp}/release/res">
-      <fileset dir="${tools.res}"/>
+      <fileset dir="${tools.res}">
+        <exclude name="**/*.txt"/>
+      </fileset>
     </copy>
 
     <!-- Adds the build file.                                  -->
