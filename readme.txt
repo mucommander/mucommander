@@ -3,6 +3,7 @@
 |     | | |   --| . |     |     | .'|   | . | -_|  _|
 |_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
 
+
 -------------------------------
 muCommander v0.8 (nighly build) 
 -------------------------------
@@ -39,28 +40,28 @@ License
 muCommander is released under the terms of the GNU General Public License.
 Please refer to the 'license.txt' file bundled with muCommander.
 
-muCommander uses the following great 3rd party works :
+muCommander uses the following great third party works :
 
-- the jCIFS library released under the LGPL license to provide SMB support.
+- the jCIFS library released under the GNU LGPL.
  jCIFS can be found at http://jcifs.samba.org .
 
-- the Jakarta Commons Net library released under the Apache license to provide FTP support. 
- Commons Net can be found at http://jakarta.apache.org .
+- the Jakarta Commons Net library released under the Apache License.
+ Jarkata Commons Net can be found at http://jakarta.apache.org .
 
-- the J2SSH library released under the LGPL license to provide SFTP support.
+- the J2SSH library released under the GNU LGPL license.
  J2SSH can be found at http://www.sshtools.com .
 
-- Java TAR released under the Public Domain to provide TAR support.
- Java TAR can be found at http://www.trustice.com/java/tar/ .
+- the Ant Bzip2 and Tar libraries released under the Apache License.
+ Ant can be found at http://ant.apache.org .
 
-- JmDNS released under the LGPL license to provide Bonjour/Zeroconf support.
-JmDNS can be found at http://jmdns.sourceforge.net .
+- the JmDNS library released under the GNU LGPL.
+ JmDNS can be found at http://jmdns.sourceforge.net .
 
-- Yanfs released under the BSD license to provide NFS support.
-Yanfs can be found at http://yanfs.dev.java.net .
+- the Yanfs library released under the BSD license.
+ Yanfs can be found at http://yanfs.dev.java.net .
 
-- Toolbar, command bar and preferences icons by Mark James (http://famfamfam.com) under the Creative Commons Attribution License.
-
+- Icons by Mark James released under the Creative Commons Attribution License.
+ Mark James can be found at http://famfamfam.com .
 
 
 Credits
