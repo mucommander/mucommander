@@ -1,0 +1,36 @@
+               ------------------------------------------------------
+                   muCommander Ant Tools compilation instructions
+               ------------------------------------------------------
+
+1. Configuration
+
+  The first step in compiling the muCommander Ant Tools is making sure all
+the proper libraries and tools are installed.
+In order to do that, you must move the local_template.xml file at the root
+of the project to local.xml and edit it:
+- java.lib must point to your java installation's classes jar file. Under
+  most versions of the JRE, this is going to be in
+  /path/to/jre/lib/rt.jar.
+  However, Apple decided to use non-standards paths for reasons of their own,
+  and you'll find the proper jar in
+  /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Classes/classes.jar
+- proguard must point to the ProGuard jar file. The one used by muCommander
+  comes bundles with the sources in tools/proguard.jar, but you can modify
+  that if you wish to try out other versions.
+- ant.lib must point to the Ant jar file.
+- 7za.executable is the path to the 7za compression tool, used to compress muCommander
+  further than jar can do. If you don't have a version of 7za installed on your computer,
+  you can leave this property blank.
+
+
+
+2. Compiling muCommander Ant Tools
+
+  There are various ways of compiling the muCommander Ant Tools.
+The most common ways are:
+- ant. This will create a /path/to/ant-tools/lib/mutasks.jar file containing all the
+  compiled, obfuscated and compressed muCommander Ant Tools.
+- ant release-tools. This will create a packaged distribution file in
+  /path/to/ant-tools/dist/
+- ant tools-doc. This will generate the muCommander Ant Tools documentation in
+  /path/to/ant-tools/docs
