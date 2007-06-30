@@ -49,6 +49,6 @@ of the project to local.xml and edit it:
 - ant obfuscate. This will compile and obfuscate all the Java files and store
   the binaries in /path/to/mucommander/dist/mucommander_obf.jar. The resulting
   jar file will not contain debug code anymore.
-- and compress. This is identical to ant obfuscate, but will compress the jar file
+- ant compress. This is identical to ant obfuscate, but will compress the jar file
   even more and store it in /path/to/mucommander/dist/mucommander.jar. This is the
   file we use for release.
