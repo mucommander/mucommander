@@ -16,7 +16,7 @@ to post your questions, suggestions or bug reports.
 Your feedback is important and always welcome!
 
 Official website: http://www.mucommander.com
-(c) 2002-2007 Maxence Bernard. All rights reserved.
+Copyright (C) 2002-2007 Maxence Bernard
 
 
 
@@ -33,11 +33,11 @@ variable points to the directory where your Java runtime is installed.
 
 
 
-Legal stuff
------------
+License
+-------
 
-You must read and accept the license located in the 'license.txt' file
-in this package prior to using muCommander.
+muCommander is released under the terms of the GNU General Public License.
+Please refer to the 'license.txt' file bundled with muCommander.
 
 muCommander uses the following great 3rd party works :
 

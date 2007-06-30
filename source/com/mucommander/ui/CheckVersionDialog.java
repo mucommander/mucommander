@@ -1,10 +1,10 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (c) 2002-2007 Maxence Bernard
+ * Copyright (C) 2002-2007 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * muCommander is distributed in the hope that it will be useful,
@@ -13,8 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with muCommander; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
@@ -22,9 +21,10 @@ package com.mucommander.ui;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.file.FileFactory;
 import com.mucommander.VersionChecker;
-import com.mucommander.conf.*;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.comp.dialog.QuestionDialog;
 

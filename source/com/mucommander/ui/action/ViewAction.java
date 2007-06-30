@@ -1,10 +1,10 @@
 /*
  * This file is part of muCommander, http://www.mucommander.com
- * Copyright (c) 2002-2007 Maxence Bernard
+ * Copyright (C) 2002-2007 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * muCommander is distributed in the hope that it will be useful,
@@ -13,23 +13,28 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with muCommander; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.mucommander.ui.action;
 
-import com.mucommander.file.*;
+import com.mucommander.command.Command;
+import com.mucommander.command.CommandParser;
+import com.mucommander.conf.ConfigurationEvent;
+import com.mucommander.conf.ConfigurationListener;
+import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
+import com.mucommander.file.FileProtocols;
 import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.ui.ProgressDialog;
-import com.mucommander.text.Translator;
-import com.mucommander.job.TempOpenWithJob;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.conf.*;
-import com.mucommander.command.*;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.process.*;
 import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.job.TempOpenWithJob;
+import com.mucommander.process.ProcessRunner;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.icon.IconManager;
 
 import java.util.Hashtable;
 

@@ -2,7 +2,7 @@
 muCommander license
 Version 1.0
 
-Copyright (c) 2002-2007 Maxence Bernard
+Copyright (C) 2002-2007 Maxence Bernard
 All rights reserved.
 
 Redistribution and use of the accompanying software are permitted provided
