@@ -67,22 +67,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Initialises the tools directory structure for when the  -->
   <!-- buildfile is being used in stand-alone mode.            -->
   <target name="stand-alone-structure" unless="is-mucommander">
-    <property name="tools.doc"   location="${doc}"/>
-    <property name="tools.tmp"   location="${tmp}"/>
-    <property name="tools.res"   location="${res}"/>
-    <property name="tools.out"   location="${lib}"/>
-    <property name="tools.build" location="build.xml"/>
+    <property name="tools.doc"     location="${doc}"/>
+    <property name="tools.tmp"     location="${tmp}"/>
+    <property name="tools.res"     location="${res}"/>
+    <property name="tools.out"     location="${lib}"/>
+    <property name="tools.license" location="license.txt"/>
+    <property name="tools.build"   location="build.xml"/>
   </target>
 
   <!-- Initialises the tools directory structure for when the  -->
   <!-- buildfile is being used as part of the global           -->
   <!-- muCommander build system.                               -->
   <target name="mucommander-structure" if="is-mucommander">
-    <property name="tools.doc"   location="${doc}/tools"/>
-    <property name="tools.tmp"   location="${tmp}/tools/"/>
-    <property name="tools.res"   location="${res}/tools"/>
-    <property name="tools.out"   location="${tools}"/>
-    <property name="tools.build" location="build-tools.xml"/>
+    <property name="tools.doc"     location="${doc}/tools"/>
+    <property name="tools.tmp"     location="${tmp}/tools/"/>
+    <property name="tools.res"     location="${res}/tools"/>
+    <property name="tools.out"     location="${tools}"/>
+    <property name="tools.license" location="${tools.res}/license.txt"/>
+    <property name="tools.build"   location="build-tools.xml"/>
   </target>
 
   <!-- Initialises the tools specific directory structure.     -->
@@ -202,6 +204,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="jar-tools" depends="compile-tools" unless="tools.up-to-date">
     <echo>Creating Ant tools JAR file...</echo>
     <copy file="${tools.res}/JavaApplicationStub" todir="${tools.classes.normal}" overwrite="true"/>
+    <copy file="${tools.license}" todir="${tools.classes.normal}" overwrite="true"/>
     <jar destfile="${tools.jar.normal}" basedir="${tools.classes.normal}" compress="false">
       <manifest>
         <attribute name="Specification-Title"    value="muCommander Ant tasks"/>
@@ -459,6 +462,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <mkdir dir="${tools.tmp}/release/source"/>
     <mkdir dir="${tools.tmp}/release/tools"/>
     <mkdir dir="${tools.tmp}/release/res/"/>
+
+    <!-- Adds the license.                                     -->
+    <copy file="${tools.license}" todir="${tools.tmp}/release"/>
 
     <!-- Adds the compressed JAR file.                         -->
     <copy file="${tools.jar.cmp}" todir="${tools.tmp}/release/lib"/>
