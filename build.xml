@@ -657,6 +657,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </condition>
   </target>
 
+  <!-- Loads the crlf task.                                    -->
   <target name="load-crlf" depends="compress-tools">
     <taskdef name="crlf" classname="com.mucommander.ant.util.CRLFTask" classpath="${tools.jar.cmp}"/>
   </target>
@@ -752,7 +753,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- = MAC OS X packages =================================== -->
   <!-- ======================================================= -->
+  <!-- The following targets are used to generate the OS X     -->
+  <!-- release packages.                                       -->
 
+  <!-- Loads the mkapp task.                                   -->
   <target name="load-mkapp" depends="compress-tools">
     <taskdef name="mkapp" classname="com.mucommander.ant.macosx.AppTask" classpath="${tools.jar.cmp}"/>
   </target>
@@ -849,20 +853,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
              storepass="${store.pass}"/>
   </target>
 
-  <target name="load-jnlp" depends="compress-tools">
-    <taskdef name="jnlp" classname="com.mucommander.ant.jnlp.JnlpTask" classpath="${tools.jar.cmp}"/>
+  <!-- Loakds the mkjnlp task.                                 -->
+  <target name="load-mkjnlp" depends="compress-tools">
+    <taskdef name="mkjnlp" classname="com.mucommander.ant.jnlp.JnlpTask" classpath="${tools.jar.cmp}"/>
   </target>
 
 
   <!-- Generates the Java webstart descriptor.                 -->
   <!-- Output will be stored in ${dist}/mucommander.jnlp.      -->
-  <target name="jnlp" depends="load-jnlp">
+  <target name="jnlp" depends="load-mkjnlp">
     <!-- Prepares the necessary tasks and properties.          -->
     <echo>Creating JNLP file...</echo>
     <property name="url.jnlp" value="${url.jnlp.normal}"/>
 
     <!-- Generates the JNLP file.                              -->
-    <jnlp out="${dist}/${jnlp.file}" spec="1.0+" version="${app.version}${app.subversion}" codebase="${url.jnlp}" href="${jnlp.file}" allpermissions="true">
+    <mkjnlp out="${dist}/${jnlp.file}" spec="1.0+" version="${app.version}${app.subversion}" codebase="${url.jnlp}" href="${jnlp.file}" allpermissions="true">
       <information homepage="${url.homepage}" title="muCommander" vendor="Maxence Bernard" offline="true">
         <description>A cross-platform file manager.</description>
         <description kind="short">A cross-platform file manager.</description>
@@ -879,7 +884,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <jar  href="mucommander.jar"/>
       </resources>
       <applicationdesc main="${main-class}"/>
-    </jnlp>
+    </mkjnlp>
   </target>
 
 

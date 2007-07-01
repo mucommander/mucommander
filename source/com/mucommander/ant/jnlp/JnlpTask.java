@@ -31,7 +31,7 @@ import java.util.Vector;
 /**
  * 
  * @author Nicolas Rinaudo
- * @ant.task name="jnlp" category="webstart"
+ * @ant.task name="mkjnlp" category="webstart"
  */
 public class JnlpTask extends Task {
     // - Constants -------------------------------------------------------
