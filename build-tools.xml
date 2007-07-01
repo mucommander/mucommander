@@ -426,7 +426,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="tools-doc-tgz" depends="tools-doc,tools-prefixes" if="antdoclet.available">
     <echo>Packaging Ant tools API documentation...</echo>
     <mkdir dir="${dist}"/>
-    <tar destfile="${dist}/${tools.package-prefix}-doc.tgz" compression="gzip">
+    <tar destfile="${dist}/${tools.package-prefix}-docs.tgz" compression="gzip">
       <tarfileset dir="${tools.doc}" prefix="${tools.archive-prefix}"/>
     </tar>
   </target>
