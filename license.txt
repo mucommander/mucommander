@@ -4,9 +4,9 @@
 muCommander is released under the terms of the GNU General Public License
 found below.
 
-The muCommander file API and muCommander Ant tools are released separately
-under the terms of the Lesser General Public License which permits
-use of the libraries in proprietary programs under certain conditions.
+The muCommander Ant tools are released separately under the terms of 
+the Lesser General Public License which permits use of the libraries 
+in proprietary programs under certain conditions.
 
 Additionally, muCommander uses the following third party works:
 - the jCIFS library under the terms of the GNU Lesser General Public License
