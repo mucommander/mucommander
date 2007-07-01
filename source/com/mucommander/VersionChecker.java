@@ -156,7 +156,7 @@ public class VersionChecker implements ContentHandler, VersionConstants {
             // Checks whether the remote release date is later than the current release date.
             return releaseDate.compareTo(RuntimeConstants.RELEASE_DATE) > 0;
         }
-        return false;
+        return true;
     }
 
     /**
