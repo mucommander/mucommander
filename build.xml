@@ -920,7 +920,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="api-doc-tgz" depends="api-doc,tools-doc,archive-prefix,package-prefix">
     <echo>Packaging API documentation...</echo>
     <mkdir dir="${dist}"/>
-    <tar destfile="${dist}/${package-prefix}-api.tgz" compression="gzip">
+    <tar destfile="${dist}/${package-prefix}-docs.tgz" compression="gzip">
       <tarfileset dir="${doc.api}" prefix="${archive-prefix}"/>
     </tar>
   </target>

@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 
-<project name="mutasks" default="compress-tools" basedir=".">
+<project name="mucommander-ant-tools" default="compress-tools" basedir=".">
   <!-- = Version ============================================= -->
   <!-- ======================================================= -->
   <!-- The following properties describe the current version   -->
@@ -81,8 +81,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- buildfile is being used as part of the global           -->
   <!-- muCommander build system.                               -->
   <target name="mucommander-structure" if="is-mucommander">
-    <property name="tools.doc"     location="${doc}/tools"/>
-    <property name="tools.tmp"     location="${tmp}/tools/"/>
+    <property name="tools.doc"     location="${doc}/ant-tools"/>
+    <property name="tools.tmp"     location="${tmp}/ant-tools/"/>
     <property name="tools.res"     location="${res}/tools"/>
     <property name="tools.out"     location="${tools}"/>
     <property name="tools.license" location="${tools.res}/license.txt"/>
@@ -96,9 +96,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="init-structure" depends="stand-alone-structure,mucommander-structure">
     <property name="tools.template"       location="${tools.res}/template"/>
     <property name="tools.doc-template"   value="main.vm"/>
-    <property name="tools.jar.normal"     location="${tools.tmp}/mutasks_unobf.jar"/>
-    <property name="tools.jar.obf"        location="${tools.tmp}/mutasks_obf.jar"/>
-    <property name="tools.jar.cmp"        location="${tools.out}/mutasks.jar"/>
+    <property name="tools.jar.normal"     location="${tools.tmp}/mucommander-ant-tools_unobf.jar"/>
+    <property name="tools.jar.obf"        location="${tools.tmp}/mucommander-ant-tools_obf.jar"/>
+    <property name="tools.jar.cmp"        location="${tools.out}/mucommander-ant-tools.jar"/>
     <property name="tools.classes.normal" location="${tools.tmp}/classes"/>
     <property name="tools.classes.obf"    location="${tools.tmp}/obf"/>
   </target>
@@ -407,7 +407,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <javadoc access="public" sourcepath="${source}" packagenames="com.mucommander.ant.*"
              destdir="${tools.doc}" encoding="UTF-8" docletpath="${ant.lib}:${antdoclet.lib}:${velocity.lib}:${tools.jar.cmp}">
       <doclet name="com.neuroning.antdoclet.AntDoclet">
-	<param name="-doctitle" value="muTasks" />
+	<param name="-doctitle" value="muCommander Ant Tools" />
 	<param name="-templatesdir" value="${tools.template}"/>
 	<param name="-templates" value="${tools.doc-template}" />
       </doclet>
@@ -451,9 +451,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- the tar.gz release file.                                -->
   <target name="tools-prefixes" depends="load-strreplace">
     <echo>Creating Ant tools archive prefix...</echo>
-    <strreplace from="muTasks-${tools.version}${tools.subversion}" to="tools.archive-prefix" what="[ .]" with="_"/>
+    <strreplace from="muCommander-ant-tools-${tools.version}${tools.subversion}" to="tools.archive-prefix" what="[ .]" with="_"/>
     <echo>Creating Ant tools package name prefix...</echo>
-    <strreplace from="mutasks-${tools.version}${tools.subversion}" to="tools.package-prefix" what="[ .]" with="_"/>
+    <strreplace from="mucommander-ant-tools-${tools.version}${tools.subversion}" to="tools.package-prefix" what="[ .]" with="_"/>
   </target>
 
   <target name="make-release-tools" depends="compress-tools,tools-prefixes" if="antdoclet.available">
