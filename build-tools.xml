@@ -456,10 +456,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <strreplace from="mutasks-${tools.version}${tools.subversion}" to="tools.package-prefix" what="[ .]" with="_"/>
   </target>
 
-  <!-- Generates a release package for the muCommander tasks.  -->
-  <!-- The output will be stored in                            -->
-  <!-- ${dist}/${tools.package-prefix}.tar.gz                  -->
-  <target name="release-tools" depends="compress-tools,tools-prefixes,tools-doc">
+  <target name="make-release-tools" depends="compress-tools,tools-prefixes" if="antdoclet.available">
     <!-- Refreshes the release directory structure.            -->
     <delete dir="${tools.tmp}/release"/>
     <mkdir dir="${tools.tmp}/release/lib"/>
@@ -521,4 +518,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       </tarfileset>
     </tar>
   </target>
+
+  <target name="skip-release-tools" unless="antdoclet.available">
+    <echo>AntDoclet not available, skipping Ant tools release...</echo>
+  </target>
+
+  <!-- Generates a release package for the muCommander tasks.  -->
+  <!-- The output will be stored in                            -->
+  <!-- ${dist}/${tools.package-prefix}.tar.gz                  -->
+  <target name="release-tools" depends="tools-doc,make-release-tools,skip-release-tools" if="antdoclet.available"/>
 </project>
