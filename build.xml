@@ -891,6 +891,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- = Source package ====================================== -->
   <!-- ======================================================= -->
+  <!-- The following tasks are used to generate the            -->
+  <!-- muCommander source package.                             -->
 
   <!-- Generates a source release of muCommander.              -->
   <!-- Output will be stored in:                               -->
@@ -1163,13 +1165,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <property name="url.jnlp"    value="${url.jnlp.nightly}"/>
   </target>
 
+  <!-- Generates all available release files.                  -->
+  <target name="all" depends="source,release-tools,tgz,setup-exe,deb,portable,version,sign,jnlp,api-doc-tgz,tools-doc-tgz"/>
+
   <!-- Generates all the available release files.              -->
   <!-- This target is meant for official releases. Nightly     -->
   <!-- releases are done by 'nightly'.                         -->
   <!-- Non-critical errors will be ignored by this target:     -->
   <!-- it will try to generate all the release files it can,   -->
   <!-- regardless of whether others failed.                    -->
-  <target name="release" depends="set-release,source,release-tools,tgz,setup-exe,deb,portable,version,sign,jnlp,api-doc-tgz,tools-doc-tgz"/>
+  <target name="release" depends="set-release,all"/>
 
   <!-- Generates all the available release files in nightly    -->
   <!-- mode.                                                   -->
@@ -1181,7 +1186,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Non-critical errors will be ignored by this target:     -->
   <!-- it will try to generate all the release files it can,   -->
   <!-- regardless of whether others failed.                    -->
-  <target name="nightly" depends="set-nightly,source,release-tools,tgz,app.tgz,setup-exe,portable,deb,version,sign,jnlp"/>
+  <target name="nightly" depends="set-nightly,all"/>
 
 
 
