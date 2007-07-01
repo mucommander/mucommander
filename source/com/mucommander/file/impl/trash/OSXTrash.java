@@ -18,6 +18,7 @@
 
 package com.mucommander.file.impl.trash;
 
+import com.apple.cocoa.foundation.NSAppleEventDescriptor;
 import com.apple.cocoa.foundation.NSAppleScript;
 import com.apple.cocoa.foundation.NSAutoreleasePool;
 import com.apple.cocoa.foundation.NSMutableDictionary;
@@ -34,11 +35,13 @@ import java.util.Vector;
 /**
  * This class is a <code>AbstractTrash</code> implementation for the Mac OS X Finder's trash.
  *
- * <p>Implementation notes: this implementation uses AppleScript to interact with the Finder's trash. It is only able
- * to move local files (or locally mounted files) to the trash.
- * For some technical reasons, {@link #moveToTrash(com.mucommander.file.AbstractFile)} works asynchroneously: files are
+ * <p>Implementation notes: this implementation uses AppleScript to interact with the Finder's trash.
+ * Only local files (or locally mounted files) can be moved to the trash.
+ * For technical reasons, {@link #moveToTrash(com.mucommander.file.AbstractFile)} works asynchroneously: files are
  * not moved to the trash immediately. {@link #waitForPendingOperations()} can be used to know when the files have
- * effectively been moved.
+ * effectively been moved.<br>
+ * AppleScript scripts are executed using the Cocoa-java bridge which is deprecated but still working as of today.
+ * Another way would be to use the 'osascript' command.
  *
  * @author Maxence Bernard
  */
@@ -56,8 +59,15 @@ public class OSXTrash extends AbstractTrash {
     /** Amount of time in millisecondes to wait for additional files before moving them to the trash */
     private final static int REGROUP_PERIOD = 1000;
 
-    /** AppleScript to empty the trash */
+    /** AppleScript that empties the trash */
     private final static String EMPTY_TRASH_APPLESCRIPT = "tell application \"Finder\" to empty trash";
+
+    /** AppleScript that reveals the Trash in Finder */
+    private final static String REVEAL_TRASH_APPLESCRIPT = "tell application \"Finder\" to open trash";
+
+    /** AppleScript that counts and returns the number of items in Trash */
+    private final static String COUNT_TRASH_ITEMS_APPLESCRIPT = "tell application \"Finder\" to return count of items in trash";
+
 
     private static boolean isAvailable;
 
@@ -89,13 +99,14 @@ public class OSXTrash extends AbstractTrash {
     }
 
     /**
-     * Executes the given AppleScript and returns <code>true</code> if it was successfully executed, <code>false</code>
-     * if there was an error in the script, or an error while executing it.
+     * Executes the given AppleScript and returns the script's output if it was successfully executed, <code>null</code>
+     * if the script couldn't be compiled or if an error occurred while executing it.
+     * An empty string <code>""</code> is returned if the script doesn't output anything. 
      *
      * @param appleScript the AppleScript to compile and execute
-     * @return true if the AppleScript was succesfully executed 
+     * @return the script's output, null if an error occurred while compiling or executing the script  
      */
-    private static boolean executeAppleScript(String appleScript) {
+    private static String executeAppleScript(String appleScript) {
         if(Debug.ON) Debug.trace("Executing AppleScript "+appleScript);
 
         int pool = -1;
@@ -110,26 +121,30 @@ public class OSXTrash extends AbstractTrash {
             pool = NSAutoreleasePool.push();
 
             NSMutableDictionary errorInfo = new NSMutableDictionary();
-            if(new NSAppleScript(appleScript).execute(errorInfo)==null) {
+            NSAppleEventDescriptor eventDescriptor = new NSAppleScript(appleScript).execute(errorInfo);
+            if(eventDescriptor==null) {
                 if(Debug.ON)
                     Debug.trace("Caught AppleScript error: "+errorInfo.objectForKey(NSAppleScript.AppleScriptErrorMessage));
 
-                return false;
+                return null;
             }
 
-            return true;
+            String output = eventDescriptor.stringValue();  // Returns null if the script didn't output anything
+            if(Debug.ON) Debug.trace("AppleScript output="+output);
+
+            return output==null?"":output;
         }
         catch(Error e) {
-            // Can happen if
+            // Can happen if Cocoa-java is not in the classpath
             if(Debug.ON) Debug.trace("Unexcepted error while executing AppleScript (cocoa-java not available?): "+e);
 
-            return false;
+            return null;
         }
         catch(Exception e) {
             // Try block is not supposed to throw any exception, but this is low-level stuff so just to be safe
             if(Debug.ON) Debug.trace("Unexcepted exception while executing AppleScript: "+e);
 
-            return false;
+            return null;
         }
         finally {
             if(pool!=-1)
@@ -184,10 +199,10 @@ public class OSXTrash extends AbstractTrash {
     }
 
     public boolean emptyTrash() {
-        return executeAppleScript(EMPTY_TRASH_APPLESCRIPT);
+        return executeAppleScript(EMPTY_TRASH_APPLESCRIPT)!=null;
     }
 
-    public boolean containsFile(AbstractFile file) {
+    public boolean isTrashFile(AbstractFile file) {
         if(!(file.getTopAncestor() instanceof LocalFile))
             return false;
 
@@ -201,6 +216,31 @@ public class OSXTrash extends AbstractTrash {
         }
 
         return false;
+    }
+
+    public int getTrashItemCount() {
+        String count = executeAppleScript(COUNT_TRASH_ITEMS_APPLESCRIPT);
+        if(count==null)
+            return -1;
+
+        try {
+            return Integer.parseInt(count);
+        }
+        catch(NumberFormatException e) {
+            if(Debug.ON) Debug.trace("Caught an exception: "+e);
+            return -1;
+        }
+    }
+
+    public void revealTrash() {
+        executeAppleScript(REVEAL_TRASH_APPLESCRIPT);
+    }
+
+    /**
+     * Implementation notes: always returns <code>true</code>.
+     */
+    public boolean canRevealTrash() {
+        return true;
     }
 
     public void waitForPendingOperations() {
@@ -251,7 +291,6 @@ public class OSXTrash extends AbstractTrash {
                 catch(InterruptedException e) {}
             }
             while(queueSize!=queuedFiles.size());
-
 
             synchronized(moveToTrashLock) {
                 int nbFiles = queuedFiles.size();

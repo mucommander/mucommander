@@ -81,7 +81,27 @@ public abstract class AbstractTrash {
      * @param file the file to test
      * @return true if the given file is a trash folder, or one of its children.
      */
-    public abstract boolean containsFile(AbstractFile file);
+    public abstract boolean isTrashFile(AbstractFile file);
+
+    /**
+     * Returns the number of items that currently are in this trash, <code>-1</code> if this information is not available.
+     *
+     * @return the number of items that currently are in this trash, <code>-1</code> if this information is not available
+     */
+    public abstract int getTrashItemCount();
+
+    /**
+     * Reveals this trash in the default file manager of the current OS/Desktop manager.
+     */
+    public abstract void revealTrash();
+
+    /**
+     * Returns <code>true</code> if this trash can be revealed in the default file manager of the current OS/Desktop manager
+     * by calling {@link #revealTrash()}.
+     *
+     * @return true if this trash can be revealed in the default file manager of the current OS/Desktop manager.
+     */
+    public abstract boolean canRevealTrash();
 
     /**
      * Waits (locks the caller thread) until all pending trash operations are completed.

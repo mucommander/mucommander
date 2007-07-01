@@ -72,7 +72,7 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
         // - the base folder can be moved to the trash (the eligibility conditions should be the same as the files to-be-deleted)
         AbstractTrash trash = FileFactory.getTrash();
         AbstractFile baseFolder = files.getBaseFolder();
-        if(trash!=null && !trash.containsFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
+        if(trash!=null && !trash.isTrashFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
             moveToTrash = ConfigurationManager.getVariableBoolean(
                         ConfigurationVariables.DELETE_TO_TRASH,
                         ConfigurationVariables.DEFAULT_DELETE_TO_TRASH);
