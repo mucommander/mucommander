@@ -716,10 +716,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Checks whether the JDeb task is available.              -->
   <!-- Output is stored in ${jdeb.available}.                  -->
   <target name="check-jdeb">
+    <!-- If JDeb hasn't been properly configured, use default  -->
+    <!-- values.                                               -->
+    <property name="jdeb.lib"        location="${tools}/jdeb.jar"/>
+
+    <!-- Checks whether JDeb is available.                     -->
     <condition property="jdeb.available" value="true">
-      <and>
-        <available classname="org.vafer.jdeb.DebAntTask" classpath="${jdeb.lib}"/>
-      </and>
+      <available classname="org.vafer.jdeb.DebAntTask" classpath="${jdeb.lib}"/>
     </condition>
 
     <!-- If JDeb is not available and we're not in release     -->
@@ -920,7 +923,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="api-doc-tgz" depends="api-doc,tools-doc,archive-prefix,package-prefix">
     <echo>Packaging API documentation...</echo>
     <mkdir dir="${dist}"/>
-    <tar destfile="${dist}/${package-prefix}-docs.tgz" compression="gzip">
+    <tar destfile="${dist}/${package-prefix}-docs.tar.gz" compression="gzip">
       <tarfileset dir="${doc.api}" prefix="${archive-prefix}"/>
     </tar>
   </target>
@@ -1045,7 +1048,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- configured.                                             -->
   <target name="make-deb" depends="load-mksize,compress" if="jdeb.available">
     <!-- Creates the required directories.                     -->
-    <echo>Packaging debian release file...</echo>
+    <echo>Creating debian release file...</echo>
     <mkdir dir="${deb.tmp}"/>
     <mkdir dir="${deb.control}"/>
     <mkdir dir="${deb.data}"/>
@@ -1166,7 +1169,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   </target>
 
   <!-- Generates all available release files.                  -->
-  <target name="all" depends="source,release-tools,tgz,setup-exe,deb,portable,version,sign,jnlp,api-doc-tgz,tools-doc-tgz"/>
+  <target name="all" depends="source,release-tools,tgz,setup-exe,deb,portable,version,sign,jnlp,app.tgz,api-doc-tgz,tools-doc-tgz"/>
 
   <!-- Generates all the available release files.              -->
   <!-- This target is meant for official releases. Nightly     -->

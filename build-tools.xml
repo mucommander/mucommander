@@ -137,6 +137,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- This is a helper target and should not be referenced    -->
   <!-- directly.                                               -->
   <target name="check-proguard">
+    <!-- If the proGuard path is not set, uses default value.  -->
+    <property name="proguard.lib" value="${tools}/proguard.jar"/>
+
+    <!-- Checks for proGuard availability.                     -->
     <condition property="proguard.available" value="true">
       <available classname="proguard.ant.ProGuardTask" classpath="${proguard.lib}"/>
     </condition>
@@ -374,6 +378,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Otherwise, depending on the context, this target will   -->
   <!-- either not set ${antdoclet.available} or fail the build -->
   <target name="check-antdoclet">
+    <!-- If AntDoclet or Velocity haven't been configured      -->
+    <!-- properly, use default values.                         -->
+    <property name="antdoclet.lib" location="${tools}/antdoclet.jar"/>
+    <property name="velocity.lib"  location="${tools}/velocity.jar"/>
+
+    <!-- Checks whether AntDoclet is available.                -->
     <condition property="antdoclet.available" value="true">
       <available classname="com.neuroning.antdoclet.AntDoclet" classpath="${ant.lib}:${antdoclet.lib}:${velocity.lib}"/>
     </condition>
@@ -424,9 +434,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="tools-doc" depends="check-antdoclet,make-tools-doc,skip-tools-doc"/>
 
   <target name="tools-doc-tgz" depends="tools-doc,tools-prefixes" if="antdoclet.available">
-    <echo>Packaging Ant tools API documentation...</echo>
+    <echo>Packaging Ant tools documentation...</echo>
     <mkdir dir="${dist}"/>
-    <tar destfile="${dist}/${tools.package-prefix}-docs.tgz" compression="gzip">
+    <tar destfile="${dist}/${tools.package-prefix}-docs.tar.gz" compression="gzip">
       <tarfileset dir="${tools.doc}" prefix="${tools.archive-prefix}"/>
     </tar>
   </target>
