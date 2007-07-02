@@ -160,11 +160,11 @@ public class OSXTrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>true</code>.
      */
-    public boolean canEmptyTrash() {
+    public boolean canEmpty() {
         return true;
     }
 
-    public boolean emptyTrash() {
+    public boolean empty() {
         return executeAppleScript(EMPTY_TRASH_APPLESCRIPT)!=null;
     }
 
@@ -173,7 +173,7 @@ public class OSXTrash extends QueuedTrash {
             && file.getAbsolutePath(true).contains("/.Trash/");
     }
 
-    public int getTrashItemCount() {
+    public int getItemCount() {
         String count = executeAppleScript(COUNT_TRASH_ITEMS_APPLESCRIPT);
         if(count==null)
             return -1;
@@ -187,14 +187,14 @@ public class OSXTrash extends QueuedTrash {
         }
     }
 
-    public void revealTrash() {
+    public void open() {
         executeAppleScript(REVEAL_TRASH_APPLESCRIPT);
     }
 
     /**
      * Implementation notes: always returns <code>true</code>.
      */
-    public boolean canRevealTrash() {
+    public boolean canOpen() {
         return true;
     }
 

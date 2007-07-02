@@ -98,11 +98,11 @@ public class KDETrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>true</code>.
      */
-    public boolean canEmptyTrash() {
+    public boolean canEmpty() {
         return true;
     }
 
-    public boolean emptyTrash() {
+    public boolean empty() {
         return executeAndWait(EMPTY_TRASH_COMMAND);
     }
 
@@ -114,18 +114,18 @@ public class KDETrash extends QueuedTrash {
     /**
      * Implementation notes: always returns <code>-1</code> (information not available).
      */
-    public int getTrashItemCount() {
+    public int getItemCount() {
         return -1;
     }
 
-    public void revealTrash() {
+    public void open() {
         executeAndWait(REVEAL_TRASH_COMMAND);
     }
 
     /**
      * Implementation notes: always returns <code>true</code>.
      */
-    public boolean canRevealTrash() {
+    public boolean canOpen() {
         return true;
     }
 
