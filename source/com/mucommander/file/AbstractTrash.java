@@ -27,7 +27,7 @@ package com.mucommander.file;
  * Use {@link com.mucommander.file.FileFactory#getTrash()} to retrieve an instance of a trash implementation that can
  * be used on the current platform.<br>
  * Also, some AbstractTrash subclasses may not be able to provide working implementations for all trash operations;
- * some methods are provided to find out which operations are available.</p>
+ * probe methods are provided to find out if a particular operation is available.</p>
  *
  * @see com.mucommander.file.FileFactory#getTrash()
  * @author Maxence Bernard

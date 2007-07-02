@@ -39,6 +39,7 @@ import com.mucommander.file.impl.nfs.NFSFile;
 import com.mucommander.file.impl.sftp.SFTPFile;
 import com.mucommander.file.impl.smb.SMBFile;
 import com.mucommander.file.impl.tar.TarArchiveFile;
+import com.mucommander.file.impl.trash.KDETrash;
 import com.mucommander.file.impl.trash.OSXTrash;
 import com.mucommander.file.impl.zip.ZipArchiveFile;
 import com.mucommander.file.util.FileToolkit;
@@ -624,9 +625,12 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
      * none is available. 
      */
     public static AbstractTrash getTrash() {
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && OSXTrash.isAvailable())
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && OSXTrash.isAvailable()) {
             return new OSXTrash();
-
+        }
+        else if(PlatformManager.OS_FAMILY==PlatformManager.LINUX && PlatformManager.UNIX_DESKTOP==PlatformManager.KDE_DESKTOP) {
+            return new KDETrash();
+        }
         return null;
     }
 }

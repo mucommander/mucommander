@@ -25,49 +25,42 @@ import com.apple.cocoa.foundation.NSMutableDictionary;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractTrash;
-import com.mucommander.file.FileURL;
 import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.util.PathTokenizer;
 
 import java.util.Vector;
 
 /**
- * This class is a <code>AbstractTrash</code> implementation for the Mac OS X Finder's trash.
+ * OSXTrash provides access to the Mac OS X Finder's trash. Only local files (or locally mounted files) can be moved
+ * to the trash.
  *
- * <p>Implementation notes: this implementation uses AppleScript to interact with the Finder's trash.
- * Only local files (or locally mounted files) can be moved to the trash.
- * For technical reasons, {@link #moveToTrash(com.mucommander.file.AbstractFile)} works asynchroneously: files are
- * not moved to the trash immediately. {@link #waitForPendingOperations()} can be used to know when the files have
- * effectively been moved.<br>
- * AppleScript scripts are executed using the Cocoa-java bridge which is deprecated but still working as of today.
- * Another way would be to use the 'osascript' command.
+ * <p>
+ * <b>Implementation notes:</b><br>
+ * <br>
+ * AppleScript is used to interact with the Finder. Scripts are executed using the Cocoa-java bridge which is
+ * deprecated but still working as of today. Another way would be to use the 'osascript' command.<br>
+ * <br>
+ * This trash is implemented as a {@link QueuedTrash} for several reasons:
+ * <ul>
+ *  <li>the Finder plays a sound when it has been told to move a file to the trash and is done with it.
+ *   Moving files to the trash repeatedly would play the sound as many times as the Finder has been told to move a file,
+ *   which obviously is very ugly.
+ *  <li>executing an AppleScript has a cost as it has to be compiled first. When files are moved repeatedly, it is more
+ *   efficient to group files and execute only one AppleScript.
+ * </ul>
+ * </p>
  *
  * @author Maxence Bernard
  */
-public class OSXTrash extends AbstractTrash {
-
-    /** Contains the files that are waiting to be moved to the trash */
-    private final static Vector queuedFiles = new Vector();
-
-    /** Use to synchronize access to the trash */
-    private final static Object moveToTrashLock = new Object();
-
-    /** Thread that performs the actual job of moving files to the trash */
-    private static Thread moveToTrashThread;
-
-    /** Amount of time in millisecondes to wait for additional files before moving them to the trash */
-    private final static int REGROUP_PERIOD = 1000;
+public class OSXTrash extends QueuedTrash {
 
     /** AppleScript that empties the trash */
     private final static String EMPTY_TRASH_APPLESCRIPT = "tell application \"Finder\" to empty trash";
 
-    /** AppleScript that reveals the Trash in Finder */
+    /** AppleScript that reveals the trash in Finder */
     private final static String REVEAL_TRASH_APPLESCRIPT = "tell application \"Finder\" to open trash";
 
     /** AppleScript that counts and returns the number of items in Trash */
     private final static String COUNT_TRASH_ITEMS_APPLESCRIPT = "tell application \"Finder\" to return count of items in trash";
-
 
     private static boolean isAvailable;
 
@@ -165,33 +158,6 @@ public class OSXTrash extends AbstractTrash {
     }
 
     /**
-     * Implementation notes: this method moves the given file to the trash from a separate thread and returns
-     * immediately. For this reason:
-     * <ul>
-     *  <li>it may return <code>true</code> even if the file has not successfully been moved to the trash
-     *  <li>{@link #waitForPendingOperations()} should be used to know when the file has effectively been moved to the 
-     * trash
-     * </ul>
-     */
-    public boolean moveToTrash(AbstractFile file) {
-        if(!canMoveToTrash(file))
-            return false;
-
-        synchronized(moveToTrashLock) {
-            // Queue the given file
-            queuedFiles.add(file);
-
-            // Create a new thread and start it if one isn't already running
-            if(moveToTrashThread ==null) {
-                moveToTrashThread = new MoveToTrashThread();
-                moveToTrashThread.start();
-            }
-        }
-        
-        return true;
-    }
-
-    /**
      * Implementation notes: always returns <code>true</code>.
      */
     public boolean canEmptyTrash() {
@@ -203,19 +169,8 @@ public class OSXTrash extends AbstractTrash {
     }
 
     public boolean isTrashFile(AbstractFile file) {
-        if(!(file.getTopAncestor() instanceof LocalFile))
-            return false;
-
-        // Look for a '.Trash' filename in the specified file's path
-        FileURL fileURL = file.getURL();
-        PathTokenizer pt = new PathTokenizer(fileURL.getPath(), fileURL.getPathSeparator(), false);
-
-        while(pt.hasMoreFilenames()) {
-            if(pt.nextFilename().equals(".Trash"))
-                return true;
-        }
-
-        return false;
+        return (file.getTopAncestor() instanceof LocalFile)
+            && file.getAbsolutePath(true).contains("/.Trash/");
     }
 
     public int getTrashItemCount() {
@@ -243,30 +198,17 @@ public class OSXTrash extends AbstractTrash {
         return true;
     }
 
-    public void waitForPendingOperations() {
-        synchronized(moveToTrashLock) {
-            if(moveToTrashThread!=null) {
-                try {
-                    // Wait until moveToTrashThread wakes this thread up
-                    moveToTrashLock.wait();
-                }
-                catch(InterruptedException e) {
-                }
-            }
-        }
-    }
 
-
-    ///////////////////
-    // Inner classes //
-    ///////////////////
+    ////////////////////////////////
+    // QueuedTrash implementation //
+    ////////////////////////////////
 
     /**
      * Performs the actual job of moving files to the trash using AppleScript.
      *
-     * <p>The thread starts by waiting {@link OSXTrash#REGROUP_PERIOD} milliseconds before moving them to give additional
+     * <p>The thread starts by waiting {@link OSXTrash#QUEUE_PERIOD} milliseconds before moving them to give additional
      * files a chance to be queued and regrouped as a single AppleScript call. If some files were queued during
-     * that period, the thread will wait an additional {@link OSXTrash#REGROUP_PERIOD}, and so on.<p>
+     * that period, the thread will wait an additional {@link OSXTrash# QUEUE_PERIOD}, and so on.<p>
      *
      * <p>There are several reasons for doing that instead of executing an AppleScript synchroneously for each file
      * passed to {@link OSXTrash#moveToTrash(com.mucommander.file.AbstractFile)} :
@@ -275,40 +217,19 @@ public class OSXTrash extends AbstractTrash {
      * moveToTrash repeatedly would play the sound as many times as the method has been called (believe me it's ugly
      * and a show-stopper!)
      *  <li>executing an AppleScript has a cost as it has to be compiled first. If moveToTrash is called repeatedly, it
-     * is more efficient to regroup files to be moved and execute only one AppleScript. 
+     * is more efficient to regroup files to be moved and execute only one AppleScript.
      * </ul>
      */
-    private class MoveToTrashThread extends Thread {
-
-        public void run() {
-            int queueSize;
-            do {
-                queueSize = queuedFiles.size();
-
-                try {
-                    Thread.sleep(REGROUP_PERIOD);
-                }
-                catch(InterruptedException e) {}
-            }
-            while(queueSize!=queuedFiles.size());
-
-            synchronized(moveToTrashLock) {
-                int nbFiles = queuedFiles.size();
-                String appleScript = "tell application \"Finder\" to move {";
-                for(int i=0; i<nbFiles; i++) {
-                    appleScript += "posix file \""+((AbstractFile)queuedFiles.elementAt(i)).getAbsolutePath()+"\"";
-                    if(i<nbFiles-1)
-                        appleScript += ", ";
-                }
-                appleScript += "} to the trash";
-
-                executeAppleScript(appleScript);
-
-                queuedFiles.clear();
-                // Wake up any thread waiting for this thread to be finished
-                moveToTrashLock.notify();
-                moveToTrashThread = null;
-            }
+    protected boolean moveToTrash(Vector queuedFiles) {
+        int nbFiles = queuedFiles.size();
+        String appleScript = "tell application \"Finder\" to move {";
+        for(int i=0; i<nbFiles; i++) {
+            appleScript += "posix file \""+((AbstractFile)queuedFiles.elementAt(i)).getAbsolutePath()+"\"";
+            if(i<nbFiles-1)
+                appleScript += ", ";
         }
+        appleScript += "} to the trash";
+
+        return executeAppleScript(appleScript)!=null;
     }
 }
