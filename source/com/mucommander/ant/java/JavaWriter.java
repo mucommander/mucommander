@@ -28,7 +28,7 @@ import java.util.StringTokenizer;
  * It performs no syntax checking whatsoever, meaning that it's entirely possible to
  * create <code>public private protected synchronized final<code> classes.
  * </p>
- * @author Nicolas Rinaudo (nicolas@nrinaudo.com)
+ * @author Nicolas Rinaudo
  */
 class JavaWriter {
     // - Modifier definitions --------------------------------------------
@@ -355,8 +355,8 @@ class JavaWriter {
      * <p>
      * The value returned by this method is a path to the Java file that would
      * contain the definition of the specified class. For example, should the
-     * <code>className</code> parameter be <code>com.nrinaudo.tools.JavaWriter</code>,
-     * then the returned value would be <code>rootDirectory/com/nrinaudo/toos/JavaWriter.java</code>.
+     * <code>className</code> parameter be <code>com.mucommander.ant.java.JavaWriter</code>,
+     * then the returned value would be <code>rootDirectory/com/mucommander/ant/java/JavaWriter.java</code>.
      * </p>
      * @param rootDirectory directory from which the path should be built.
      * @param className     fully qualified name of the class.
@@ -378,8 +378,8 @@ class JavaWriter {
      * <p>
      * This method will return a path to the directory in which to store classes that belong
      * to the specified package. For example, should the <code>packageName</code> parameter be
-     * <code>com.nrinaudo.tools</code>, the returned value would be
-     * <code>rootDirectory/com/nrinaudo/tools</code>.
+     * <code>com.mucommander.ant.java</code>, the returned value would be
+     * <code>rootDirectory/com/mucommander.ant.java</code>.
      * </p>
      * @param  rootDirectory directory from which the path should be built.
      * @param  packageName   name of the package that will be analyzed.
