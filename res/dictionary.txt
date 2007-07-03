@@ -61,11 +61,12 @@
 #############
 
 # List of available languages, must be declared before any other entry
-available_languages:EN,FR,DE,ES,CS,zh_CN,zh_TW,PL,HU,RU,SI,RO,IT,KR,pt_BR,NL,SK
+available_languages:EN,en_GB,FR,DE,ES,CS,zh_CN,zh_TW,PL,HU,RU,SI,RO,IT,KR,pt_BR,NL,SK
 
 # Language names, in their respective language.
 # Confusingly enough, 'EN' language is used to declare those entries but that is normal.
 language.en:EN:English
+language.en_GB:EN:British English
 language.fr:EN:Français
 language.es:EN:Español
 language.de:EN:Deutsch
@@ -227,25 +228,6 @@ rename:KR:이름변경
 rename:pt_BR:Renomear
 rename:NL:Hernoemen
 rename:SK:Premenovať
-
-example:EN:Example
-example:FR:Exemple
-example:DE:Beispiel
-example:ES:Ejemplo
-example:CS:Příklad
-example:zh_TW:範例
-example:PL:Przykład
-example:HU:példa
-example:RU:Пример
-example:zh_CN:示例
-example:SI:Primer
-example:RO:Exemplu
-example:IT:Esempio
-example:KR:예제
-example:pt_BR:Exemplo
-example:NL:Voorbeeld
-example:SK:Príklad
-
 
 apply:EN:Apply
 apply:FR:Appliquer
@@ -949,6 +931,53 @@ go_to:pt_BR:Ir para
 go_to:NL:Ga naar
 go_to:SK:Ísť na
 # Translation missing
+
+
+
+
+
+
+
+example:EN:Example
+example:FR:Exemple
+example:DE:Beispiel
+example:ES:Ejemplo
+example:CS:Příklad
+example:zh_TW:範例
+example:PL:Przykład
+example:HU:példa
+example:RU:Пример
+example:zh_CN:示例
+example:SI:Primer
+example:RO:Exemplu
+example:IT:Esempio
+example:KR:예제
+example:pt_BR:Exemplo
+example:NL:Voorbeeld
+example:SK:Príklad
+
+preview:EN:Preview
+preview:FR:Apperçu
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+sample_text:EN:Sample text
+sample_text:FR:Texte d'exemple
+# Translation missing
+
+
+
+
+
 
 
 
@@ -1817,22 +1846,6 @@ com.mucommander.ui.action.ViewAction.tooltip:NL:Geselecteerd bestand bekijken
 com.mucommander.ui.action.ViewAction.tooltip:SK:Zobraziť označené súbory
 
 com.mucommander.ui.action.EditAction.label:EN:$[edit]
-com.mucommander.ui.action.EditAction.label:FR:$[edit]
-com.mucommander.ui.action.EditAction.label:DE:$[edit]
-com.mucommander.ui.action.EditAction.label:ES:$[edit]
-com.mucommander.ui.action.EditAction.label:CS:$[edit]
-com.mucommander.ui.action.EditAction.label:zh_TW:$[edit]
-com.mucommander.ui.action.EditAction.label:PL:$[edit]
-com.mucommander.ui.action.EditAction.label:HU:$[edit]
-com.mucommander.ui.action.EditAction.label:RU:$[edit]
-com.mucommander.ui.action.EditAction.label:zh_CN:$[edit]
-com.mucommander.ui.action.EditAction.label:SI:$[edit]
-com.mucommander.ui.action.EditAction.label:RO:$[edit]
-com.mucommander.ui.action.EditAction.label:IT:$[edit]
-com.mucommander.ui.action.EditAction.label:KR:$[edit]
-com.mucommander.ui.action.EditAction.label:pt_BR:$[edit]
-com.mucommander.ui.action.EditAction.label:NL:$[edit]
-com.mucommander.ui.action.EditAction.label:SK:$[edit]
 
 com.mucommander.ui.action.EditAction.tooltip:EN:Edit selected file
 com.mucommander.ui.action.EditAction.tooltip:FR:Editer le fichier selectionné
@@ -1961,22 +1974,6 @@ com.mucommander.ui.action.MoveAction.tooltip:NL:Gemarkeerde bestanden verplaatse
 com.mucommander.ui.action.MoveAction.tooltip:SK:Presunúť označené súbory
 
 com.mucommander.ui.action.RenameAction.label:EN:$[rename]
-com.mucommander.ui.action.RenameAction.label:FR:$[rename]
-com.mucommander.ui.action.RenameAction.label:DE:$[rename]
-com.mucommander.ui.action.RenameAction.label:ES:$[rename]
-com.mucommander.ui.action.RenameAction.label:CS:$[rename]
-com.mucommander.ui.action.RenameAction.label:zh_TW:$[rename]
-com.mucommander.ui.action.RenameAction.label:PL:$[rename]
-com.mucommander.ui.action.RenameAction.label:HU:$[rename]
-com.mucommander.ui.action.RenameAction.label:RU:$[rename]
-com.mucommander.ui.action.RenameAction.label:zh_CN:$[rename]
-com.mucommander.ui.action.RenameAction.label:SI:$[rename]
-com.mucommander.ui.action.RenameAction.label:RO:$[rename]
-com.mucommander.ui.action.RenameAction.label:IT:$[rename]
-com.mucommander.ui.action.RenameAction.label:KR:$[rename]
-com.mucommander.ui.action.RenameAction.label:pt_BR:$[rename]
-com.mucommander.ui.action.RenameAction.label:NL:$[rename]
-com.mucommander.ui.action.RenameAction.label:SK:$[rename]
 
 com.mucommander.ui.action.RenameAction.tooltip:EN:Rename selected file
 com.mucommander.ui.action.RenameAction.tooltip:FR:Renommer le fichier selectionné
@@ -2048,11 +2045,7 @@ com.mucommander.ui.action.MkfileAction.label:KR:파일작성
 com.mucommander.ui.action.MkfileAction.label:pt_BR:Criar arquivo
 com.mucommander.ui.action.MkfileAction.label:NL:Maak bestand
 com.mucommander.ui.action.MkfileAction.label:SK:Vytvoriť súbor
-# Translation missing
-
-
-
-
+# Translation missing (HU)
 
 
 
@@ -2076,12 +2069,7 @@ com.mucommander.ui.action.MkfileAction.tooltip:KR:현재 폴더에 파일 작성
 com.mucommander.ui.action.MkfileAction.tooltip:pt_BR:Criar um arquivo no diretório atual
 com.mucommander.ui.action.MkfileAction.tooltip:NL:Maak bestand in huidig directory
 com.mucommander.ui.action.MkfileAction.tooltip:SK:Vytvoriť súbor v aktuálnom priečinku
-# Translation missing
-
-
-
-
-
+# Translation missing (HU)
 
 
 
@@ -6995,7 +6983,6 @@ add_bookmark_dialog.add:SK:Pridať
 #######################
 
 edit_bookmarks_dialog.location:EN:$[add_bookmark_dialog.location]
-edit_bookmarks_dialog.location:KR:$[add_bookmark_dialog.location]
 
 # New bookmark button in the Edit bookmarks dialog
 edit_bookmarks_dialog.new:EN:New
@@ -7702,9 +7689,9 @@ shortcuts_dialog.windows:NL:Vensters
 shortcuts_dialog.windows:SK:Okná
 
 
-######################
-# Theme dialog       #
-######################
+################
+# Theme dialog #
+################
 
 theme_dialog.title:EN:Theme editor
 theme_dialog.title:FR:Editeur de thèmes
@@ -7939,6 +7926,7 @@ theme_dialog.selected_unfocused:FR:Sélectionné (without focus)
 
 
 theme_dialog.shell_colors:EN:Shell colors
+theme_dialog.shell_colors:en_GB:Shell colours
 theme_dialog.shell_colors:FR:Couleurs du shell
 theme_dialog.shell_colors:RO:Culori pentru shell
 theme_dialog.shell_colors:SI:Barve v ukazni vrstici
@@ -7956,6 +7944,7 @@ theme_dialog.shell_colors:NL:Kleuren van de shell
 theme_dialog.shell_colors:SK:Farba terminálu (shell)
 
 theme_dialog.history_colors:EN:History colors
+theme_dialog.history_colors:en_GB:History colours
 theme_dialog.history_colors:FR:Couleurs de l'historique
 # Translation missing
 
@@ -8075,6 +8064,7 @@ theme_dialog.symbolic_link:NL:Symbolische link
 theme_dialog.symbolic_link:SK:Symbolický odkaz
 
 theme_dialog.colors:EN:Colors
+theme_dialog.colors:en_GB:Colours
 theme_dialog.colors:FR:Couleurs
 # Translation missing
 
@@ -8295,30 +8285,10 @@ prefs_dialog.date_separator:KR:분리기호
 prefs_dialog.date_separator:pt_BR:Separador
 prefs_dialog.date_separator:NL:Scheidingsteken
 prefs_dialog.date_separator:SK:Oddeľovač
-# Translation missing
+# Translation missing (HU)
 
 
 
-
-
-
-prefs_dialog.example:EN:$[example]
-prefs_dialog.example:FR:$[example]
-prefs_dialog.example:DE:$[example]
-prefs_dialog.example:ES:$[example]
-prefs_dialog.example:CS:$[example]
-prefs_dialog.example:zh_TW:$[example]
-prefs_dialog.example:PL:$[example]
-prefs_dialog.example:HU:$[example]
-prefs_dialog.example:RU:$[example]
-prefs_dialog.example:zh_CN:$[example]
-prefs_dialog.example:SI:$[example]
-prefs_dialog.example:RO:$[example]
-prefs_dialog.example:IT:$[example]
-prefs_dialog.example:KR:$[example]
-prefs_dialog.example:pt_BR:$[example]
-prefs_dialog.example:NL:$[example]
-prefs_dialog.example:SK:$[example]
 
 prefs_dialog.time_12_hour:EN:12-hour format
 prefs_dialog.time_12_hour:FR:Format 12 heures
@@ -9093,6 +9063,7 @@ prefs_dialog.use_brushed_metal:SK:Použiť vzhľad 'brushed metal' (vyžaduje re
 
 # Mac OS X only
 prefs_dialog.confirm_on_quit:EN:Show confirmation dialog on quit
+prefs_dialog.confirm_on_quit:en_GB:Show confirmation dialogue on quit
 prefs_dialog.confirm_on_quit:FR:Afficher un dialogue de confirmation en quittant
 prefs_dialog.confirm_on_quit:DE:Bestätigung beim Beenden
 prefs_dialog.confirm_on_quit:ES:Mostrar diálogo de confirmación al salir
@@ -9531,6 +9502,7 @@ theme.custom_theme:SK:Užívateľská téma
 
 # Used as a description for custom themes
 theme.custom:EN:Customized
+theme.custom:en_GB:Customised
 theme.custom:FR:Personnalisé
 # Translation missing
 
@@ -9708,129 +9680,128 @@ setup.theme:SK:Vyberte tému
 ################
 # Font chooser #
 ################
-fontchooser.font_size:EN:Size
-fontchooser.font_size:FR:Taille
-fontchooser.font_size:DE:Größe
-fontchooser.font_size:ES:Tamaño
-fontchooser.font_size:CS:Velikost
-fontchooser.font_size:zh_TW:大小
-fontchooser.font_size:PL:Rozmiar
-fontchooser.font_size:HU:méret
-fontchooser.font_size:RU:Размер
-fontchooser.font_size:zh_CN:字号
-fontchooser.font_size:SI:Velikost
-fontchooser.font_size:RO:Dimensiune
-fontchooser.font_size:IT:Dimensione
-fontchooser.font_size:KR:크기
 
-fontchooser.font_bold:EN:Bold
-fontchooser.font_bold:FR:Gras
-fontchooser.font_bold:DE:Fett
-fontchooser.font_bold:ES:Negrita
-fontchooser.font_bold:CS:Tučné
-fontchooser.font_bold:zh_TW:粗體
-fontchooser.font_bold:PL:Pogrubiony
-fontchooser.font_bold:HU:vastag
-fontchooser.font_bold:RU:Полужирный
-fontchooser.font_bold:zh_CN:粗体
-fontchooser.font_bold:SI:Krepko
-fontchooser.font_bold:RO:Îngroșat
-fontchooser.font_bold:IT:Grassetto
-fontchooser.font_bold:KR:볼드
+font_chooser.font_size:EN:Size
+font_chooser.font_size:FR:Taille
+font_chooser.font_size:DE:Größe
+font_chooser.font_size:ES:Tamaño
+font_chooser.font_size:CS:Velikost
+font_chooser.font_size:zh_TW:大小
+font_chooser.font_size:PL:Rozmiar
+font_chooser.font_size:HU:méret
+font_chooser.font_size:RU:Размер
+font_chooser.font_size:zh_CN:字号
+font_chooser.font_size:SI:Velikost
+font_chooser.font_size:RO:Dimensiune
+font_chooser.font_size:IT:Dimensione
+font_chooser.font_size:KR:크기
+# Translation missing
 
-fontchooser.font_italic:EN:Italic
-fontchooser.font_italic:FR:Italique
-fontchooser.font_italic:DE:Kursiv
-fontchooser.font_italic:ES:Itálica
-fontchooser.font_italic:CS:Proložené
-fontchooser.font_italic:zh_TW:斜體
-fontchooser.font_italic:PL:Kursywa
-fontchooser.font_italic:HU:dőlt
-fontchooser.font_italic:RU:Курсив
-fontchooser.font_italic:zh_CN:斜体
-fontchooser.font_italic:SI:Poševno
-fontchooser.font_italic:RO:Cursiv
-fontchooser.font_italic:IT:Corsivo
-fontchooser.font_italic:KR:이탤릭
 
-fontchooser.example:EN:Example
-fontchooser.example:FR:Exemple
-fontchooser.example:DE:Beispiel
-fontchooser.example:ES:Ejemplo
-fontchooser.example:CS:Příklad
-fontchooser.example:zh_TW:範例
-fontchooser.example:PL:Przykład
-fontchooser.example:HU:példa
-fontchooser.example:RU:Пример
-fontchooser.example:zh_CN:示例
-fontchooser.example:SI:Primer
-fontchooser.example:RO:Exemplu
-fontchooser.example:IT:Esempio
-fontchooser.example:KR:예제
-fontchooser.example:pt_BR:Exemplo
-fontchooser.example:NL:Voorbeeld
-fontchooser.example:SK:Príklad
+
+
+
+
+font_chooser.font_bold:EN:Bold
+font_chooser.font_bold:FR:Gras
+font_chooser.font_bold:DE:Fett
+font_chooser.font_bold:ES:Negrita
+font_chooser.font_bold:CS:Tučné
+font_chooser.font_bold:zh_TW:粗體
+font_chooser.font_bold:PL:Pogrubiony
+font_chooser.font_bold:HU:vastag
+font_chooser.font_bold:RU:Полужирный
+font_chooser.font_bold:zh_CN:粗体
+font_chooser.font_bold:SI:Krepko
+font_chooser.font_bold:RO:Îngroșat
+font_chooser.font_bold:IT:Grassetto
+font_chooser.font_bold:KR:볼드
+# Translation missing
+
+
+
+
+
+
+font_chooser.font_italic:EN:Italic
+font_chooser.font_italic:FR:Italique
+font_chooser.font_italic:DE:Kursiv
+font_chooser.font_italic:ES:Itálica
+font_chooser.font_italic:CS:Proložené
+font_chooser.font_italic:zh_TW:斜體
+font_chooser.font_italic:PL:Kursywa
+font_chooser.font_italic:HU:dőlt
+font_chooser.font_italic:RU:Курсив
+font_chooser.font_italic:zh_CN:斜体
+font_chooser.font_italic:SI:Poševno
+font_chooser.font_italic:RO:Cursiv
+font_chooser.font_italic:IT:Corsivo
+font_chooser.font_italic:KR:이탤릭
+# Translation missing
+
+
 
 
 
 #################
 # Color chooser #
 #################
-colorchooser.red:EN:Red
-colorchooser.red:FR:Rouge
+
+color_chooser.red:EN:Red
+color_chooser.red:FR:Rouge
 # Translation missing
 
 
 
 
 
-colorchooser.green:EN:Green
-colorchooser.Green:FR:Vert
+color_chooser.green:EN:Green
+color_chooser.green:FR:Vert
 # Translation missing
 
 
 
 
 
-colorchooser.blue:EN:Blue
-colorchooser.blue:FR:Bleu
+color_chooser.blue:EN:Blue
+color_chooser.blue:FR:Bleu
 # Translation missing
 
 
 
 
-colorchooser.hue:EN:Hue
-colorchooser.hue:FR:Tonalité
-# Translation missing
-
-
-
-
-
-colorchooser.brightness:EN:Brightness
-colorchooser.brightness:FR:Luminosité
-# Translation missing
-
-
-
-
-colorchooser.swatches:EN:Swatches
-colorchooser.swatches:FR:Echantillons
-# Translation missing
-
-
-
-
-colorchooser.saturation:EN:Saturation
-colorchooser.saturation:FR:Saturation
+color_chooser.hue:EN:Hue
+color_chooser.hue:FR:Tonalité
 # Translation missing
 
 
 
 
 
-colorchooser.rgb:EN:RGB
-colorchooser.rgb:FR:RVB
+color_chooser.brightness:EN:Brightness
+color_chooser.brightness:FR:Luminosité
+# Translation missing
+
+
+
+
+color_chooser.swatches:EN:Swatches
+color_chooser.swatches:FR:Echantillons
+# Translation missing
+
+
+
+
+color_chooser.saturation:EN:Saturation
+color_chooser.saturation:FR:Saturation
+# Translation missing
+
+
+
+
+
+color_chooser.rgb:EN:RGB
+color_chooser.rgb:FR:RVB
 # Translation missing
 
 
@@ -9838,70 +9809,50 @@ colorchooser.rgb:FR:RVB
 
 
 
-colorchooser.hsb:EN:HSB
-colorchooser.hsb:FR:TSL
+color_chooser.hsb:EN:HSB
+color_chooser.hsb:FR:TSL
 # Translation missing
 
 
 
 
 
-colorchooser.recent:EN:Recent
-colorchooser.recent:FR:Récentes
-# Translation missing
-
-
-
-
-colorchooser.alpha:EN:Alpha transparency
-colorchooser.alpha:FR:Transparence alpha
-# Translation missing
-
-
-
-
-colorchooser.sample_label:EN:$[example]
-colorchooser.sample_label:FR:$[example]
-colorchooser.sample_label:DE:$[example]
-colorchooser.sample_label:ES:$[example]
-colorchooser.sample_label:CS:$[example]
-colorchooser.sample_label:zh_TW:$[example]
-colorchooser.sample_label:PL:$[example]
-colorchooser.sample_label:HU:$[example]
-colorchooser.sample_label:RU:$[example]
-colorchooser.sample_label:zh_CN:$[example]
-colorchooser.sample_label:SI:$[example]
-colorchooser.sample_label:RO:$[example]
-colorchooser.sample_label:IT:$[example]
-colorchooser.sample_label:KR:$[example]
-
+color_chooser.recent:EN:Recent
+color_chooser.recent:FR:Récentes
 # Translation missing
 
 
 
 
 
-colorchooser.sample_text:EN:Sample text
-colorchooser.sample_text:FR:Texte d'exemple
+
+color_chooser.alpha:EN:Alpha transparency
+color_chooser.alpha:FR:Transparence alpha
 # Translation missing
 
 
 
-colorchooser.title:EN:Pick a color
-colorchooser.title:FR:Choisir une couleur
-colorchooser.title:DE:Farbe wählen
-colorchooser.title:ES:Seleccionar un color
-colorchooser.title:CS:Vyberte barvu
-colorchooser.title:zh_TW:挑選一個顏色
-colorchooser.title:PL:Wybierz kolor
-colorchooser.title:HU:Válasszon színt
-colorchooser.title:RU:Выбор цвета
-colorchooser.title:zh_CN:挑选一个颜色
-colorchooser.title:SI:Izberi barvo
-colorchooser.title:RO:Alegeți o culoare
-colorchooser.title:IT:Scegli un colore
-colorchooser.title:KR:색상 선택
+
+
+
+color_chooser.title:EN:Pick a color
+color_chooser.title:en_GB:Pick a colour
+color_chooser.title:FR:Choisir une couleur
+color_chooser.title:DE:Farbe wählen
+color_chooser.title:ES:Seleccionar un color
+color_chooser.title:CS:Vyberte barvu
+color_chooser.title:zh_TW:挑選一個顏色
+color_chooser.title:PL:Wybierz kolor
+color_chooser.title:HU:Válasszon színt
+color_chooser.title:RU:Выбор цвета
+color_chooser.title:zh_CN:挑选一个颜色
+color_chooser.title:SI:Izberi barvo
+color_chooser.title:RO:Alegeți o culoare
+color_chooser.title:IT:Scegli un colore
+color_chooser.title:KR:색상 선택
 # Translation missing
+
+
 
 
 
