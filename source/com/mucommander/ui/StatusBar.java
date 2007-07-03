@@ -119,7 +119,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             trashButton.setPopupMenuLocation(SwingConstants.TOP);
 
             add(trashButton);
-            add(Box.createRigidArea(new Dimension(4, 0)));
+            add(Box.createRigidArea(new Dimension(2, 0)));
         }
 
         volumeSpaceLabel = new VolumeSpaceLabel();
