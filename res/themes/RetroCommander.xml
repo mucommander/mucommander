@@ -163,7 +163,7 @@
       <background color="b4d5ff"/>
       <foreground color="000000"/>
     </selected>
-  </shell>
+  </shell_history>
 
 
 
@@ -207,5 +207,5 @@
       <background color="b4d5ff"/>
       <foreground color="000000"/>
     </selected>
-  </editor>
+  </location_bar>
 </theme>
