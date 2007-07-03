@@ -22,7 +22,6 @@ import com.mucommander.file.AbstractTrash;
 import com.mucommander.file.FileFactory;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.EmptyTrashAction;
-import com.mucommander.ui.action.MucoAction;
 import com.mucommander.ui.action.OpenTrashAction;
 import com.mucommander.ui.comp.button.PopupButton;
 import com.mucommander.ui.comp.button.RolloverButtonAdapter;
@@ -67,13 +66,13 @@ public class TrashPopupButton extends PopupButton {
                 popupMenu.add(ActionManager.getActionInstance(OpenTrashAction.class, mainFrame));
 
             if(trash.canEmpty()) {
-                MucoAction emptyTrashAction = ActionManager.getActionInstance(EmptyTrashAction.class, mainFrame);
+                JMenuItem emptyTrashItem = new JMenuItem(ActionManager.getActionInstance(EmptyTrashAction.class, mainFrame));
 
                 // Disable the 'empty trash' action if the trash contains no item
                 if(trash.getItemCount()==0)
-                    emptyTrashAction.setEnabled(false);    
+                    emptyTrashItem.setEnabled(false);
 
-                popupMenu.add(emptyTrashAction);
+                popupMenu.add(emptyTrashItem);
             }
         }
 
