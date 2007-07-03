@@ -3902,6 +3902,30 @@ com.mucommander.ui.action.ShowAboutAction.label:pt_BR:Sobre muCommander
 com.mucommander.ui.action.ShowAboutAction.label:NL:Over muCommander
 com.mucommander.ui.action.ShowAboutAction.label:SK:O aplikácii muCommander
 
+com.mucommander.ui.action.OpenTrashAction.label:EN:Open Trash
+com.mucommander.ui.action.OpenTrashAction.label:FR:Ouvrir la Corbeille
+# Translation missing
+
+
+
+
+
+
+
+
+
+com.mucommander.ui.action.EmptyTrashAction.label:EN:Empty Trash
+com.mucommander.ui.action.EmptyTrashAction.label:FR:Vider la Corbeille
+# Translation missing
+
+
+
+
+
+
+
+
+
 
 #############
 # File menu #

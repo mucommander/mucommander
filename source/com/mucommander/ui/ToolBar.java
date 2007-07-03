@@ -32,6 +32,7 @@ import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.comp.button.NonFocusableButton;
 import com.mucommander.ui.comp.button.PopupButton;
+import com.mucommander.ui.comp.button.RolloverButtonAdapter;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
@@ -53,6 +54,9 @@ import java.util.Vector;
 public class ToolBar extends JToolBar implements ConfigurationListener, MouseListener {
 
     private MainFrame mainFrame;
+
+    /** Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected */
+    private RolloverButtonAdapter rolloverButtonAdapter;
 
     /** Default toolbar descriptor filename */
     private final static String DEFAULT_TOOLBAR_FILE_NAME = "toolbar.xml";
@@ -157,6 +161,10 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         // Listen to configuration changes to reload toolbar buttons when icon size has changed
         ConfigurationManager.addConfigurationListener(this);
 
+        // Rollover-enable the button and hold a reference to the RolloverButtonAdapter instance so that it doesn't
+        // get garbage-collected
+        rolloverButtonAdapter = new RolloverButtonAdapter();
+
         // Create buttons for each actions and add them to the toolbar
         int nbActions = actions.length;
         for(int i=0; i<nbActions; i++) {
@@ -199,14 +207,9 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         if(scaleFactor!=1.0f)
             button.setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
 
-        // Set button decorations and rollover behavior
-        button.setRolloverEnabled(true);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        // Need to set that explicitely for Java 1.5 for which content area
-        // is filled if border is not painted
-        button.setContentAreaFilled(false);
-        button.addMouseListener(this);
+        // Init rollover
+        RolloverButtonAdapter.setButtonDecoration(button);
+        button.addMouseListener(rolloverButtonAdapter);
 
         add(button);
     }

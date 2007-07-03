@@ -157,8 +157,8 @@ public class MainFrame extends JFrame implements LocationListener {
         contentPane.add(splitPane, BorderLayout.CENTER);
 
         YBoxPanel southPanel = new YBoxPanel();
-        // Add a 3-pixel gap between table and status/command bar
-        southPanel.setInsets(new Insets(3, 0, 0, 0));
+        // Add a 2-pixel gap between the file table and status bar
+        southPanel.addSpace(2);
 
         // Add status bar
         this.statusBar = new StatusBar(this);

@@ -23,6 +23,7 @@ import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -101,15 +102,28 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      */
     public StatusBar(MainFrame mainFrame) {
         // Create and add status bar
-        super(new BorderLayout());
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         this.mainFrame = mainFrame;
 		
-        this.selectedFilesLabel = new JLabel("");
-        add(selectedFilesLabel, BorderLayout.CENTER);
+        selectedFilesLabel = new JLabel("");
+        add(selectedFilesLabel);
 
-        this.volumeSpaceLabel = new VolumeSpaceLabel();
-        add(volumeSpaceLabel, BorderLayout.EAST);
+        add(Box.createHorizontalGlue());
+
+        // Add a button for interacting with the trash, only if the current platform has a trash implementation
+        if(FileFactory.getTrash()!=null) {
+            TrashPopupButton trashButton = new TrashPopupButton(mainFrame);
+            // Reduce the button's default margin which is too large, at least under Mac OS X 
+            trashButton.setMargin(new Insets(2, 2, 2, 2));
+            trashButton.setPopupMenuLocation(SwingConstants.TOP);
+
+            add(trashButton);
+            add(Box.createRigidArea(new Dimension(4, 0)));
+        }
+
+        volumeSpaceLabel = new VolumeSpaceLabel();
+        add(volumeSpaceLabel);
 
         // Show/hide this status bar based on user preferences
         // Note: setVisible has to be called even with true for the auto-update thread to be initialized

@@ -238,7 +238,7 @@ New features:
  - Added support for the NFS protocol
  - New 'Follow symlinks when changing current directory' option in the preferences
  - New and improved theme editor, now allows to edit all theme attributes and to manage themes
- - Mac OS X: 'Delete' can now move files to the system trash (enabled by default)
+ - Mac OS X and KDE: 'Delete' can now move files to the system's trash (enabled by default), and open or empty the trash
 
 Improvements:
  - Added 'Go to' buttons to 'Edit bookmarks', 'Edit credentials' and 'Show open connections' dialogs to go to the selected location
