@@ -19,6 +19,7 @@
 
 package com.mucommander.ui;
 
+import com.mucommander.PlatformManager;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.file.AbstractFile;
@@ -35,6 +36,8 @@ import com.mucommander.ui.theme.*;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class LocationComboBox extends EditableComboBox implements LocationListener, EditableComboBoxListener, FocusListener, ThemeListener {
@@ -49,6 +52,15 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
 
     /** Used to save the path that was entered by the user after validation of the location textfield */
     private String locationFieldTextSave;
+
+    /** For windows path, regex that finds trailing space characters at the end of a path */
+    private static Pattern windowsTrailingSpacePattern;
+
+    static {
+        if(PlatformManager.isWindowsFamily())
+            windowsTrailingSpacePattern = Pattern.compile("[ ]+[\\\\]*$");
+    }
+
 
     /**
      * Creates a new LocationComboBox for use in the given FolderPanel.
@@ -183,10 +195,26 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
     }
 
     public void textFieldValidated(EditableComboBox source) {
-        String locationText = locationField.getText();
+        String location = locationField.getText();
+
+        // Under Windows, trim the entered path for the following reason.
+        // If a file 'A' (e.g. "C:\temp") exists and 'A ' (e.g. "C:\temp ") is requested, the java.io.File will resolve
+        // (file.exists() will  return true), but this file will be a strange one, listing bogus children files with
+        // weird attributes (in the case of a directory).
+        // Windows (or java.io.File under Windows) is somehow space-tolerant but then unable to deal with
+        // those files properly. So if a path ends with space characters, we remove them to prevent those weirdnesses.
+        // Note that Win32 doesn't allow creating files with trailing spaces (in Explorer, command prompt...), but
+        // those files can still be manually crafted and thus exist on one's hard drive.
+        // Mucommander should in theory be able to access such files without any problem but this hasn't been tested.
+        if(PlatformManager.isWindowsFamily() && location.indexOf(":\\")==1) {
+            // Looks for trailing spaces and if some 
+            Matcher matcher = windowsTrailingSpacePattern.matcher(location);
+            if(matcher.find())
+                location = location.substring(0, matcher.start());
+        }
 
         // Look for a bookmark which name is the entered string (case insensitive)
-        Bookmark b = BookmarkManager.getBookmark(locationText);
+        Bookmark b = BookmarkManager.getBookmark(location);
         if(b!=null) {
             // Change the current folder to the bookmark's location
             folderPanel.tryChangeCurrentFolder(b.getLocation());
@@ -196,7 +224,7 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         // Look for a root folder which name is the entered string (case insensitive)
         AbstractFile rootFolders[] = RootFolders.getRootFolders();
         for(int i=0; i<rootFolders.length; i++) {
-            if(rootFolders[i].getName().equalsIgnoreCase(locationText)) {
+            if(rootFolders[i].getName().equalsIgnoreCase(location)) {
                 // Change the current folder to the root folder
                 folderPanel.tryChangeCurrentFolder(rootFolders[i]);
                 return;
@@ -206,10 +234,10 @@ public class LocationComboBox extends EditableComboBox implements LocationListen
         // Remember that the folder change was initiated by the location field
         folderChangeInitiatedByLocationField = true;
         // Save the path that was entered in case the location change fails or is cancelled 
-        locationFieldTextSave = locationText;
+        locationFieldTextSave = location;
 
         // Change folder
-        folderPanel.tryChangeCurrentFolder(locationText);
+        folderPanel.tryChangeCurrentFolder(location);
     }
 
     public void textFieldCancelled(EditableComboBox source) {
