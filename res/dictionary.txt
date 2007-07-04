@@ -7689,9 +7689,9 @@ shortcuts_dialog.windows:NL:Vensters
 shortcuts_dialog.windows:SK:Okná
 
 
-################
-# Theme dialog #
-################
+#######################
+# Theme editor dialog #
+#######################
 
 theme_dialog.title:EN:Theme editor
 theme_dialog.title:FR:Editeur de thèmes
@@ -7721,6 +7721,38 @@ theme_dialog.shell_tab:FR:Shell
 theme_dialog.statusbar_tab:EN:Status bar
 theme_dialog.statusbar_tab:FR:Barre de status
 # Translation missing
+
+
+
+# 'Free space' refers to the free space indicator displayed in the status bar, %1 is replaced by one of the entries below (OK, Warning, Critical)
+theme_dialog.free_space:EN:Free space (%1)
+theme_dialog.free_space:FR:Espace libre (%1)
+# Translation missing
+
+
+
+
+
+theme_dialog.free_space.ok:EN:OK
+theme_dialog.free_space.ok:FR:OK
+# Translation missing
+
+
+
+
+
+theme_dialog.free_space.warning:EN:Warning
+theme_dialog.free_space.warning:FR:Avertissement
+# Translation missing
+
+
+
+
+
+theme_dialog.free_space.critical:EN:Critical
+theme_dialog.free_space.critical:FR:Critique
+# Translation missing
+
 
 
 
@@ -7815,7 +7847,7 @@ theme_dialog.could_not_save_theme:FR:Erreur lors de l'écriture du thème %1
 
 
 theme_dialog.border:EN:Border
-theme_dialog.border:FR:Bords
+theme_dialog.border:FR:Bordure
 # Translation missing
 
 
@@ -8069,31 +8101,6 @@ theme_dialog.colors:FR:Couleurs
 # Translation missing
 
 
-
-
-
-
-
-
-theme_dialog.ok_color:EN:OK
-theme_dialog.ok_color:FR:OK
-# Translation missing
-
-
-
-
-
-theme_dialog.warning_color:EN:Warning
-theme_dialog.warning_color:FR:Avertissement
-# Translation missing
-
-
-
-
-
-theme_dialog.critical_color:EN:Critical
-theme_dialog.critical_color:FR:Critique
-# Translation missing
 
 
 
