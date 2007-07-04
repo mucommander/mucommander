@@ -7957,6 +7957,36 @@ theme_editor.selected_unfocused:FR:Sélectionné (without focus)
 
 
 
+theme_editor.color:EN:Color
+theme_editor.color:en_GB:Colour
+theme_editor.color:FR:Couleur
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+theme_editor.colors:EN:Colors
+theme_editor.colors:en_GB:Colours
+theme_editor.colors:FR:Couleurs
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
 theme_editor.shell_colors:EN:Shell colors
 theme_editor.shell_colors:en_GB:Shell colours
 theme_editor.shell_colors:FR:Couleurs du shell
@@ -8094,17 +8124,6 @@ theme_editor.symbolic_link:KR:심볼릭 링크
 theme_editor.symbolic_link:pt_BR:Link simbólico
 theme_editor.symbolic_link:NL:Symbolische link
 theme_editor.symbolic_link:SK:Symbolický odkaz
-
-theme_editor.colors:EN:Colors
-theme_editor.colors:en_GB:Colours
-theme_editor.colors:FR:Couleurs
-# Translation missing
-
-
-
-
-
-
 
 
 ######################
