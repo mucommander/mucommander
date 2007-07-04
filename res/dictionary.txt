@@ -7693,16 +7693,16 @@ shortcuts_dialog.windows:SK:Okná
 # Theme editor dialog #
 #######################
 
-theme_dialog.title:EN:Theme editor
-theme_dialog.title:FR:Editeur de thèmes
+theme_editor.title:EN:Theme editor
+theme_editor.title:FR:Editeur de thèmes
 # Translation missing
 
 
 
 
 
-theme_dialog.folder_tab:EN:Folder pane
-theme_dialog.folder_tab:FR:Panneau de dossier
+theme_editor.folder_tab:EN:Folder pane
+theme_editor.folder_tab:FR:Panneau de dossier
 # Translation missing
 
 
@@ -7710,89 +7710,47 @@ theme_dialog.folder_tab:FR:Panneau de dossier
 
 
 
-theme_dialog.shell_tab:EN:Shell
-theme_dialog.shell_tab:FR:Shell
+theme_editor.shell_tab:EN:Shell
+theme_editor.shell_tab:FR:Shell
 # Translation missing
 
 
 
 
 
-theme_dialog.statusbar_tab:EN:Status bar
-theme_dialog.statusbar_tab:FR:Barre de status
+theme_editor.statusbar_tab:EN:Status bar
+theme_editor.statusbar_tab:FR:Barre de status
 # Translation missing
 
 
 
 # 'Free space' refers to the free space indicator displayed in the status bar, %1 is replaced by one of the entries below (OK, Warning, Critical)
-theme_dialog.free_space:EN:Free space (%1)
-theme_dialog.free_space:FR:Espace libre (%1)
+theme_editor.free_space:EN:Free space (%1)
+theme_editor.free_space:FR:Espace libre (%1)
 # Translation missing
 
 
 
 
 
-theme_dialog.free_space.ok:EN:OK
-theme_dialog.free_space.ok:FR:OK
+theme_editor.free_space.ok:EN:OK
+theme_editor.free_space.ok:FR:OK
 # Translation missing
 
 
 
 
 
-theme_dialog.free_space.warning:EN:Warning
-theme_dialog.free_space.warning:FR:Avertissement
+theme_editor.free_space.warning:EN:Warning
+theme_editor.free_space.warning:FR:Avertissement
 # Translation missing
 
 
 
 
 
-theme_dialog.free_space.critical:EN:Critical
-theme_dialog.free_space.critical:FR:Critique
-# Translation missing
-
-
-
-
-
-
-theme_dialog.locationbar_tab:EN:Location bar
-theme_dialog.locationbar_tab:FR:Barre d'emplacement
-# Translation missing
-
-
-
-
-theme_dialog.editor_tab:EN:File editor
-theme_dialog.editor_tab:FR:Editeur de fichiers
-# Translation missing
-
-
-
-
-
-theme_dialog.font:EN:Font
-theme_dialog.font:FR:Fonte
-theme_dialog.font:DE:Schriftart
-theme_dialog.font:ES:Fuente
-theme_dialog.font:CS:Písmo
-theme_dialog.font:zh_TW:字型
-theme_dialog.font:PL:Czcionka
-theme_dialog.font:HU:betű
-theme_dialog.font:RU:Шрифт
-theme_dialog.font:zh_CN:字体
-theme_dialog.font:SI:Pisava
-theme_dialog.font:RO:Font
-theme_dialog.font:IT:Font
-theme_dialog.font:KR:글꼴
-theme_dialog.font:pt_BR:Fonte
-theme_dialog.font:NL:Font
-theme_dialog.font:SK:Písmo
-
-theme_dialog.shell_font:EN:Shell font
-theme_dialog.shell_font:FR:Fonte du shell
+theme_editor.free_space.critical:EN:Critical
+theme_editor.free_space.critical:FR:Critique
 # Translation missing
 
 
@@ -7800,8 +7758,50 @@ theme_dialog.shell_font:FR:Fonte du shell
 
 
 
-theme_dialog.history_font:EN:History font
-theme_dialog.history_font:FR:Fonte de l'historique
+theme_editor.locationbar_tab:EN:Location bar
+theme_editor.locationbar_tab:FR:Barre d'emplacement
+# Translation missing
+
+
+
+
+theme_editor.editor_tab:EN:File editor
+theme_editor.editor_tab:FR:Editeur de fichiers
+# Translation missing
+
+
+
+
+
+theme_editor.font:EN:Font
+theme_editor.font:FR:Fonte
+theme_editor.font:DE:Schriftart
+theme_editor.font:ES:Fuente
+theme_editor.font:CS:Písmo
+theme_editor.font:zh_TW:字型
+theme_editor.font:PL:Czcionka
+theme_editor.font:HU:betű
+theme_editor.font:RU:Шрифт
+theme_editor.font:zh_CN:字体
+theme_editor.font:SI:Pisava
+theme_editor.font:RO:Font
+theme_editor.font:IT:Font
+theme_editor.font:KR:글꼴
+theme_editor.font:pt_BR:Fonte
+theme_editor.font:NL:Font
+theme_editor.font:SK:Písmo
+
+theme_editor.shell_font:EN:Shell font
+theme_editor.shell_font:FR:Fonte du shell
+# Translation missing
+
+
+
+
+
+
+theme_editor.history_font:EN:History font
+theme_editor.history_font:FR:Fonte de l'historique
 # Translation missing
 
 
@@ -7814,22 +7814,22 @@ theme_dialog.history_font:FR:Fonte de l'historique
 
 
 
-theme_dialog.theme_warning:EN:This will overwrite the custom theme. Do you wish to proceed?
-theme_dialog.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
-theme_dialog.theme_warning:SI:To bo prepisalo običajno temo. Želite nadaljevati?
-theme_dialog.theme_warning:IT:Questa operazione sovrascrive il tema utente. Procedere ?
-theme_dialog.theme_warning:CS:Operace přepíše uživatelské téma. Opravdu chcete pokračovat?
-theme_dialog.theme_warning:zh_TW:這將會覆蓋自訂的佈景主題. 確定要繼續?
-theme_dialog.theme_warning:DE:Dies überschreibt ein angepasstes Thema. Wollen Sie fortfahren?
-theme_dialog.theme_warning:RO:Această operație va suprascrie o temă personalizată. Doriți să continuați?
-theme_dialog.theme_warning:zh_CN:这样会覆盖定制的主题，继续吗？
-theme_dialog.theme_warning:RU:Это приведет к замене существующей темы. Вы уверены, что хотите продолжить?
-theme_dialog.theme_warning:ES:Esto sobrescribirá el tema específico. ¿Desea proceder?
-theme_dialog.theme_warning:PL:Spowoduje to nadpisanie schematu użytkownika. Czy chcesz kontynuować?
-theme_dialog.theme_warning:KR:사용자 설정 테마를 겹쳐쓸것입니다. 계속할까요?
-theme_dialog.theme_warning:pt_BR:Esta ação irá sobrescrever o tema personalizado. Continuar?
-theme_dialog.theme_warning:NL:Dit zal het huidige thema overschrijven. Wilt u doorgaan?
-theme_dialog.theme_warning:SK:Užívateľská téma bude prepísaná. Naozaj chcete pokračovať?
+theme_editor.theme_warning:EN:This will overwrite the custom theme. Do you wish to proceed?
+theme_editor.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
+theme_editor.theme_warning:SI:To bo prepisalo običajno temo. Želite nadaljevati?
+theme_editor.theme_warning:IT:Questa operazione sovrascrive il tema utente. Procedere ?
+theme_editor.theme_warning:CS:Operace přepíše uživatelské téma. Opravdu chcete pokračovat?
+theme_editor.theme_warning:zh_TW:這將會覆蓋自訂的佈景主題. 確定要繼續?
+theme_editor.theme_warning:DE:Dies überschreibt ein angepasstes Thema. Wollen Sie fortfahren?
+theme_editor.theme_warning:RO:Această operație va suprascrie o temă personalizată. Doriți să continuați?
+theme_editor.theme_warning:zh_CN:这样会覆盖定制的主题，继续吗？
+theme_editor.theme_warning:RU:Это приведет к замене существующей темы. Вы уверены, что хотите продолжить?
+theme_editor.theme_warning:ES:Esto sobrescribirá el tema específico. ¿Desea proceder?
+theme_editor.theme_warning:PL:Spowoduje to nadpisanie schematu użytkownika. Czy chcesz kontynuować?
+theme_editor.theme_warning:KR:사용자 설정 테마를 겹쳐쓸것입니다. 계속할까요?
+theme_editor.theme_warning:pt_BR:Esta ação irá sobrescrever o tema personalizado. Continuar?
+theme_editor.theme_warning:NL:Dit zal het huidige thema overschrijven. Wilt u doorgaan?
+theme_editor.theme_warning:SK:Užívateľská téma bude prepísaná. Naozaj chcete pokračovať?
 # Translation missing
 
 
@@ -7837,8 +7837,8 @@ theme_dialog.theme_warning:SK:Užívateľská téma bude prepísaná. Naozaj chc
 
 # Error message displayed when a theme's saving fails.
 # %1 will be replaced by the theme's name.
-theme_dialog.could_not_save_theme:EN:Unable to write theme %1
-theme_dialog.could_not_save_theme:FR:Erreur lors de l'écriture du thème %1
+theme_editor.could_not_save_theme:EN:Unable to write theme %1
+theme_editor.could_not_save_theme:FR:Erreur lors de l'écriture du thème %1
 # Translation missing
 
 
@@ -7846,38 +7846,8 @@ theme_dialog.could_not_save_theme:FR:Erreur lors de l'écriture du thème %1
 
 
 
-theme_dialog.border:EN:Border
-theme_dialog.border:FR:Bordure
-# Translation missing
-
-
-
-
-
-
-
-
-
-theme_dialog.background:EN:Background
-theme_dialog.background:FR:Fond
-theme_dialog.background:DE:Hintergrund
-theme_dialog.background:ES:Fondo
-theme_dialog.background:CS:Pozadí
-theme_dialog.background:zh_TW:背景
-theme_dialog.background:PL:Tło
-theme_dialog.background:HU:háttér
-theme_dialog.background:RU:Фон
-theme_dialog.background:zh_CN:背景
-theme_dialog.background:SI:Ozadje
-theme_dialog.background:RO:Fond
-theme_dialog.background:IT:Sfondo
-theme_dialog.background:KR:바탕
-theme_dialog.background:pt_BR:Fundo
-theme_dialog.background:NL:Achtergrond
-theme_dialog.background:SK:Pozadie
-
-theme_dialog.unfocused_background:EN:Background (without focus)
-theme_dialog.unfocused_background:FR:Fond (sans focus)
+theme_editor.border:EN:Border
+theme_editor.border:FR:Bordure
 # Translation missing
 
 
@@ -7888,43 +7858,26 @@ theme_dialog.unfocused_background:FR:Fond (sans focus)
 
 
 
+theme_editor.background:EN:Background
+theme_editor.background:FR:Fond
+theme_editor.background:DE:Hintergrund
+theme_editor.background:ES:Fondo
+theme_editor.background:CS:Pozadí
+theme_editor.background:zh_TW:背景
+theme_editor.background:PL:Tło
+theme_editor.background:HU:háttér
+theme_editor.background:RU:Фон
+theme_editor.background:zh_CN:背景
+theme_editor.background:SI:Ozadje
+theme_editor.background:RO:Fond
+theme_editor.background:IT:Sfondo
+theme_editor.background:KR:바탕
+theme_editor.background:pt_BR:Fundo
+theme_editor.background:NL:Achtergrond
+theme_editor.background:SK:Pozadie
 
-theme_dialog.text:EN:Text
-theme_dialog.text:FR:Texte
-# Translation missing
-
-
-
-
-
-
-
-theme_dialog.progress:EN:Progress
-theme_dialog.progress:FR:Progression
-# Translation missing
-
-
-
-
-
-
-
-
-
-theme_dialog.normal:EN:Normal
-theme_dialog.normal:FR:Normal
-# Translation missing
-
-
-
-
-
-
-
-
-
-theme_dialog.normal_unfocused:EN:Normal (without focus)
-theme_dialog.normal_unfocused:FR:Normal (sans focus)
+theme_editor.unfocused_background:EN:Background (without focus)
+theme_editor.unfocused_background:FR:Fond (sans focus)
 # Translation missing
 
 
@@ -7935,8 +7888,19 @@ theme_dialog.normal_unfocused:FR:Normal (sans focus)
 
 
 
-theme_dialog.selected:EN:Selected
-theme_dialog.selected:FR:Sélectionné
+
+theme_editor.text:EN:Text
+theme_editor.text:FR:Texte
+# Translation missing
+
+
+
+
+
+
+
+theme_editor.progress:EN:Progress
+theme_editor.progress:FR:Progression
 # Translation missing
 
 
@@ -7946,8 +7910,9 @@ theme_dialog.selected:FR:Sélectionné
 
 
 
-theme_dialog.selected_unfocused:EN:Selected (without focus)
-theme_dialog.selected_unfocused:FR:Sélectionné (without focus)
+
+theme_editor.normal:EN:Normal
+theme_edit/r.normal:FR:Normal
 # Translation missing
 
 
@@ -7957,27 +7922,9 @@ theme_dialog.selected_unfocused:FR:Sélectionné (without focus)
 
 
 
-theme_dialog.shell_colors:EN:Shell colors
-theme_dialog.shell_colors:en_GB:Shell colours
-theme_dialog.shell_colors:FR:Couleurs du shell
-theme_dialog.shell_colors:RO:Culori pentru shell
-theme_dialog.shell_colors:SI:Barve v ukazni vrstici
-theme_dialog.shell_colors:IT:Colori del terminale
-theme_dialog.shell_colors:CS:Barvy shellu
-theme_dialog.shell_colors:zh_TW:Shell 顏色
-theme_dialog.shell_colors:DE:Farbe Eingabeauforderung 
-theme_dialog.shell_colors:zh_CN:Shell 颜色
-theme_dialog.shell_colors:RU:Системные цвета
-theme_dialog.shell_colors:ES:Colores de shell
-theme_dialog.shell_colors:PL:Kolor okna terminala (shell)
-theme_dialog.shell_colors:KR:쉘 색상
-theme_dialog.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
-theme_dialog.shell_colors:NL:Kleuren van de shell
-theme_dialog.shell_colors:SK:Farba terminálu (shell)
 
-theme_dialog.history_colors:EN:History colors
-theme_dialog.history_colors:en_GB:History colours
-theme_dialog.history_colors:FR:Couleurs de l'historique
+theme_editor.normal_unfocused:EN:Normal (without focus)
+theme_editor.normal_unfocused:FR:Normal (sans focus)
 # Translation missing
 
 
@@ -7987,117 +7934,170 @@ theme_dialog.history_colors:FR:Couleurs de l'historique
 
 
 
-theme_dialog.plain_file:EN:Plain file
-theme_dialog.plain_file:FR:Fichier normal
-theme_dialog.plain_file:DE:Normale Datei
-theme_dialog.plain_file:ES:Fichero plano
-theme_dialog.plain_file:CS:Běžný soubor
-theme_dialog.plain_file:zh_TW:一般檔案
-theme_dialog.plain_file:PL:Zwykły plik
-theme_dialog.plain_file:HU:fájl
-theme_dialog.plain_file:RU:Обычный файл
-theme_dialog.plain_file:zh_CN:一般文件
-theme_dialog.plain_file:SI:Navadna datoteka
-theme_dialog.plain_file:RO:Fișier normal
-theme_dialog.plain_file:IT:File normale
-theme_dialog.plain_file:KR:일반 파일
-theme_dialog.plain_file:pt_BR:Arquivo normal
-theme_dialog.plain_file:NL:Normaal bestand
-theme_dialog.plain_file:SK:Bežný súbor
 
-theme_dialog.marked_file:EN:Marked file
-theme_dialog.marked_file:FR:Fichier marqué
-theme_dialog.marked_file:DE:Markierte Datei
-theme_dialog.marked_file:ES:Fichero marcado
-theme_dialog.marked_file:CS:Označený soubor
-theme_dialog.marked_file:zh_TW:已標記檔案
-theme_dialog.marked_file:PL:Zaznaczony plik
-theme_dialog.marked_file:HU:megjelölt fájl
-theme_dialog.marked_file:RU:Выделенный файл
-theme_dialog.marked_file:zh_CN:已标记文件
-theme_dialog.marked_file:SI:Označena datoteka
-theme_dialog.marked_file:RO:Fișier selectat
-theme_dialog.marked_file:IT:File selezionato
-theme_dialog.marked_file:KR:선택된 파일
-theme_dialog.marked_file:pt_BR:Arquivo marcado
-theme_dialog.marked_file:NL:Gemarkeerd bestand
-theme_dialog.marked_file:SK:Označený súbor
+theme_editor.selected:EN:Selected
+theme_editor.selected:FR:Sélectionné
+# Translation missing
 
-theme_dialog.hidden_file:EN:Hidden file
-theme_dialog.hidden_file:FR:Fichier caché
-theme_dialog.hidden_file:DE:Versteckte Datei
-theme_dialog.hidden_file:ES:Fichero oculto
-theme_dialog.hidden_file:CS:Skrytý soubor
-theme_dialog.hidden_file:zh_TW:隱藏檔
-theme_dialog.hidden_file:PL:Ukryty plik
-theme_dialog.hidden_file:HU:rejtett fájl
-theme_dialog.hidden_file:RU:Скрытый файл
-theme_dialog.hidden_file:zh_CN:隐藏文件
-theme_dialog.hidden_file:SI:Skrita datoteka
-theme_dialog.hidden_file:RO:Fișier ascuns
-theme_dialog.hidden_file:IT:File nascosto
-theme_dialog.hidden_file:KR:숨김파일
-theme_dialog.hidden_file:pt_BR:Arquivo oculto
-theme_dialog.hidden_file:NL:Verborgen bestand
-theme_dialog.hidden_file:SK:Skrutý súbor
 
-theme_dialog.folder:EN:Folder
-theme_dialog.folder:FR:Dossier
-theme_dialog.folder:DE:Ordner
-theme_dialog.folder:ES:Directorio
-theme_dialog.folder:CS:Složka
-theme_dialog.folder:zh_TW:資料夾
-theme_dialog.folder:PL:Katalog
-theme_dialog.folder:HU:könyvtár
-theme_dialog.folder:RU:Каталог
-theme_dialog.folder:zh_CN:文件夹
-theme_dialog.folder:SI:Mapa
-theme_dialog.folder:RO:Director
-theme_dialog.folder:IT:Cartella
-theme_dialog.folder:KR:폴더
-theme_dialog.folder:pt_BR:Diretório
-theme_dialog.folder:NL:Map
-theme_dialog.folder:SK:Priečinok
 
-theme_dialog.archive_file:EN:Archive
-theme_dialog.archive_file:FR:Archive
-theme_dialog.archive_file:DE:Archivdatei
-theme_dialog.archive_file:ES:Archivar fichero
-theme_dialog.archive_file:CS:Archív
-theme_dialog.archive_file:zh_TW:壓縮檔
-theme_dialog.archive_file:PL:Plik archiwum
-theme_dialog.archive_file:HU:archív fájlok
-theme_dialog.archive_file:RU:Архив
-theme_dialog.archive_file:zh_CN:压缩文件
-theme_dialog.archive_file:SI:Arhivska datoteka
-theme_dialog.archive_file:RO:Arhivă
-theme_dialog.archive_file:IT:Archivio
-theme_dialog.archive_file:KR:아카이브 파일
-theme_dialog.archive_file:pt_BR:Arquivar
-theme_dialog.archive_file:NL:Ingepakt bestand
-theme_dialog.archive_file:SK:Archív
 
-theme_dialog.symbolic_link:EN:Symbolic link
-theme_dialog.symbolic_link:FR:Lien symbolique
-theme_dialog.symbolic_link:DE:Symbolic Link
-theme_dialog.symbolic_link:ES:Enlace simbólico
-theme_dialog.symbolic_link:CS:Symbolický odkaz
-theme_dialog.symbolic_link:zh_TW:符號連結
-theme_dialog.symbolic_link:PL:Dowiązanie symboliczne
-theme_dialog.symbolic_link:HU:parancsikon fájlok
-theme_dialog.symbolic_link:RU:Символьная ссылка
-theme_dialog.symbolic_link:zh_CN:符号连接
-theme_dialog.symbolic_link:SI:Simbolična povezava
-theme_dialog.symbolic_link:RO:Legătură simbolică
-theme_dialog.symbolic_link:IT:Link simbolico
-theme_dialog.symbolic_link:KR:심볼릭 링크
-theme_dialog.symbolic_link:pt_BR:Link simbólico
-theme_dialog.symbolic_link:NL:Symbolische link
-theme_dialog.symbolic_link:SK:Symbolický odkaz
 
-theme_dialog.colors:EN:Colors
-theme_dialog.colors:en_GB:Colours
-theme_dialog.colors:FR:Couleurs
+
+
+
+theme_editor.selected_unfocused:EN:Selected (without focus)
+theme_editor.selected_unfocused:FR:Sélectionné (without focus)
+# Translation missing
+
+
+
+
+
+
+
+
+theme_editor.shell_colors:EN:Shell colors
+theme_editor.shell_colors:en_GB:Shell colours
+theme_editor.shell_colors:FR:Couleurs du shell
+theme_editor.shell_colors:RO:Culori pentru shell
+theme_editor.shell_colors:SI:Barve v ukazni vrstici
+theme_editor.shell_colors:IT:Colori del terminale
+theme_editor.shell_colors:CS:Barvy shellu
+theme_editor.shell_colors:zh_TW:Shell 顏色
+theme_editor.shell_colors:DE:Farbe Eingabeauforderung
+theme_editor.shell_colors:zh_CN:Shell 颜色
+theme_editor.shell_colors:RU:Системные цвета
+theme_editor.shell_colors:ES:Colores de shell
+theme_editor.shell_colors:PL:Kolor okna terminala (shell)
+theme_editor.shell_colors:KR:쉘 색상
+theme_editor.shell_colors:pt_BR:Cor do prompt de comandos (terminal)
+theme_editor.shell_colors:NL:Kleuren van de shell
+theme_editor.shell_colors:SK:Farba terminálu (shell)
+
+theme_editor.history_colors:EN:History colors
+theme_editor.history_colors:en_GB:History colours
+theme_editor.history_colors:FR:Couleurs de l'historique
+# Translation missing
+
+
+
+
+
+
+
+
+theme_editor.plain_file:EN:Plain file
+theme_editor.plain_file:FR:Fichier normal
+theme_editor.plain_file:DE:Normale Datei
+theme_editor.plain_file:ES:Fichero plano
+theme_editor.plain_file:CS:Běžný soubor
+theme_editor.plain_file:zh_TW:一般檔案
+theme_editor.plain_file:PL:Zwykły plik
+theme_editor.plain_file:HU:fájl
+theme_editor.plain_file:RU:Обычный файл
+theme_editor.plain_file:zh_CN:一般文件
+theme_editor.plain_file:SI:Navadna datoteka
+theme_editor.plain_file:RO:Fișier normal
+theme_editor.plain_file:IT:File normale
+theme_editor.plain_file:KR:일반 파일
+theme_editor.plain_file:pt_BR:Arquivo normal
+theme_editor.plain_file:NL:Normaal bestand
+theme_editor.plain_file:SK:Bežný súbor
+
+theme_editor.marked_file:EN:Marked file
+theme_editor.marked_file:FR:Fichier marqué
+theme_editor.marked_file:DE:Markierte Datei
+theme_editor.marked_file:ES:Fichero marcado
+theme_editor.marked_file:CS:Označený soubor
+theme_editor.marked_file:zh_TW:已標記檔案
+theme_editor.marked_file:PL:Zaznaczony plik
+theme_editor.marked_file:HU:megjelölt fájl
+theme_editor.marked_file:RU:Выделенный файл
+theme_editor.marked_file:zh_CN:已标记文件
+theme_editor.marked_file:SI:Označena datoteka
+theme_editor.marked_file:RO:Fișier selectat
+theme_editor.marked_file:IT:File selezionato
+theme_editor.marked_file:KR:선택된 파일
+theme_editor.marked_file:pt_BR:Arquivo marcado
+theme_editor.marked_file:NL:Gemarkeerd bestand
+theme_editor.marked_file:SK:Označený súbor
+
+theme_editor.hidden_file:EN:Hidden file
+theme_editor.hidden_file:FR:Fichier caché
+theme_editor.hidden_file:DE:Versteckte Datei
+theme_editor.hidden_file:ES:Fichero oculto
+theme_editor.hidden_file:CS:Skrytý soubor
+theme_editor.hidden_file:zh_TW:隱藏檔
+theme_editor.hidden_file:PL:Ukryty plik
+theme_editor.hidden_file:HU:rejtett fájl
+theme_editor.hidden_file:RU:Скрытый файл
+theme_editor.hidden_file:zh_CN:隐藏文件
+theme_editor.hidden_file:SI:Skrita datoteka
+theme_editor.hidden_file:RO:Fișier ascuns
+theme_editor.hidden_file:IT:File nascosto
+theme_editor.hidden_file:KR:숨김파일
+theme_editor.hidden_file:pt_BR:Arquivo oculto
+theme_editor.hidden_file:NL:Verborgen bestand
+theme_editor.hidden_file:SK:Skrutý súbor
+
+theme_editor.folder:EN:Folder
+theme_editor.folder:FR:Dossier
+theme_editor.folder:DE:Ordner
+theme_editor.folder:ES:Directorio
+theme_editor.folder:CS:Složka
+theme_editor.folder:zh_TW:資料夾
+theme_editor.folder:PL:Katalog
+theme_editor.folder:HU:könyvtár
+theme_editor.folder:RU:Каталог
+theme_editor.folder:zh_CN:文件夹
+theme_editor.folder:SI:Mapa
+theme_editor.folder:RO:Director
+theme_editor.folder:IT:Cartella
+theme_editor.folder:KR:폴더
+theme_editor.folder:pt_BR:Diretório
+theme_editor.folder:NL:Map
+theme_editor.folder:SK:Priečinok
+
+theme_editor.archive_file:EN:Archive
+theme_editor.archive_file:FR:Archive
+theme_editor.archive_file:DE:Archivdatei
+theme_editor.archive_file:ES:Archivar fichero
+theme_editor.archive_file:CS:Archív
+theme_editor.archive_file:zh_TW:壓縮檔
+theme_editor.archive_file:PL:Plik archiwum
+theme_editor.archive_file:HU:archív fájlok
+theme_editor.archive_file:RU:Архив
+theme_editor.archive_file:zh_CN:压缩文件
+theme_editor.archive_file:SI:Arhivska datoteka
+theme_editor.archive_file:RO:Arhivă
+theme_editor.archive_file:IT:Archivio
+theme_editor.archive_file:KR:아카이브 파일
+theme_editor.archive_file:pt_BR:Arquivar
+theme_editor.archive_file:NL:Ingepakt bestand
+theme_editor.archive_file:SK:Archív
+
+theme_editor.symbolic_link:EN:Symbolic link
+theme_editor.symbolic_link:FR:Lien symbolique
+theme_editor.symbolic_link:DE:Symbolic Link
+theme_editor.symbolic_link:ES:Enlace simbólico
+theme_editor.symbolic_link:CS:Symbolický odkaz
+theme_editor.symbolic_link:zh_TW:符號連結
+theme_editor.symbolic_link:PL:Dowiązanie symboliczne
+theme_editor.symbolic_link:HU:parancsikon fájlok
+theme_editor.symbolic_link:RU:Символьная ссылка
+theme_editor.symbolic_link:zh_CN:符号连接
+theme_editor.symbolic_link:SI:Simbolična povezava
+theme_editor.symbolic_link:RO:Legătură simbolică
+theme_editor.symbolic_link:IT:Link simbolico
+theme_editor.symbolic_link:KR:심볼릭 링크
+theme_editor.symbolic_link:pt_BR:Link simbólico
+theme_editor.symbolic_link:NL:Symbolische link
+theme_editor.symbolic_link:SK:Symbolický odkaz
+
+theme_editor.colors:EN:Colors
+theme_editor.colors:en_GB:Colours
+theme_editor.colors:FR:Couleurs
 # Translation missing
 
 
