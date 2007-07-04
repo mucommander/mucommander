@@ -316,7 +316,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Generates the package-prefix for nightly builds.        -->
   <target name="nightly-prefix" if="is-nightly">
     <echo>Creating nightly package name prefix...</echo>
-    <property name="package-prefix" value="mucommander"/>
+    <property name="package-prefix" value="mucommander-current"/>
   </target>
 
   <!-- Generates the package-prefix for non-nightly builds.    -->
