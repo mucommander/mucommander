@@ -1785,7 +1785,7 @@ public class ThemeData {
             Color buffer;
 
             buffer = getTableColor().darker();
-            DEFAULT_TABLE_UNMATCHED_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue(), 64));
+            DEFAULT_TABLE_UNMATCHED_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue()));
         }
 	return DEFAULT_TABLE_UNMATCHED_COLOR;
     }
@@ -1803,7 +1803,7 @@ public class ThemeData {
             Color buffer;
 
             buffer = getTableBackgroundColor().darker();
-            DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue(), 64));
+            DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue()));
         }
 	return DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR;
     }
