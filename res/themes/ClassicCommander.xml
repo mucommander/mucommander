@@ -14,9 +14,9 @@
     <font                 family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
     <border               color="868686"/>
     <background           color="ffffff"/>
-    <unmatched_background color="d1d1d1"/>
+    <unfocused_background color="f5f5f5"/>
     <unmatched_foreground color="404040"/>
-    <unmatched_background color="e6e6e6"/>
+    <unmatched_background color="d1d1d1"/>
 
 
     <!-- = Hidden files ================================ -->
