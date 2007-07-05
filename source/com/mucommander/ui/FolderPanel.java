@@ -90,6 +90,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     private Color backgroundColor;
     private Color unfocusedBackgroundColor;
+    private Color unmatchedBackgroundColor;
 
     /** Contains all the registered FileFilter instances (if any) used to filter out unwanted files when listing
      * folder contents */
@@ -188,7 +189,8 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
         // Set scroll pane's background color to match the one of this panel and FileTable
         scrollPane.getViewport().setBackground(unfocusedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR));
-        backgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
+        backgroundColor          = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
+        unmatchedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
 
         // Catch mouse events on the ScrollPane
         scrollPane.addMouseListener(new MouseAdapter() {
@@ -536,7 +538,15 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     ///////////////////////////
     // FocusListener methods //
     ///////////////////////////
-	
+    public void dim() {scrollPane.getViewport().setBackground(unmatchedBackgroundColor);}
+    public void unDim() {
+        if(fileTable.hasFocus())
+            scrollPane.getViewport().setBackground(backgroundColor);
+        else
+            scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
+    }
+
+
     public void focusGained(FocusEvent e) {
         // Notify MainFrame that we are in control now! (our table/location field is active)
         mainFrame.setActiveTable(fileTable);
@@ -976,6 +986,10 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
             unfocusedBackgroundColor = event.getColor();
             if(!fileTable.hasFocus())
                 scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
+            break;
+
+        case Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR:
+            unmatchedBackgroundColor = event.getColor();
             break;
         }
     }

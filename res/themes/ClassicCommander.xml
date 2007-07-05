@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- =================================================== -->
 <!-- Author:           Nicolas Rinaudo                   -->
-<!-- Last modified on: 2007/06/12                        -->
+<!-- Last modified on: 2007/07/06                        -->
 <!-- Description:                                        -->
 <!-- A simple, black on white theme meant to look like   -->
 <!-- a native application on most platforms.             -->
@@ -14,7 +14,9 @@
     <font                 family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
     <border               color="868686"/>
     <background           color="ffffff"/>
-    <unfocused_background color="f5f5f5"/>
+    <unmatched_background color="d1d1d1"/>
+    <unmatched_foreground color="404040"/>
+    <unmatched_background color="e6e6e6"/>
 
 
     <!-- = Hidden files ================================ -->

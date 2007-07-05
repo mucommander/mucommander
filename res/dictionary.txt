@@ -576,6 +576,36 @@ pause:SK:Pauza
 
 
 
+
+
+
+
+
+
+
+quick_search:EN:Quick search
+quick_search:FR:Recherche rapide
+quick_search:RO:Căutare rapidă
+quick_search:SI:Hitro iskanje
+quick_search:IT:Ricerca rapida
+quick_search:CS:Rychlé hledání
+quick_search:zh_TW:快速搜尋
+quick_search:DE:Schnellsuche
+quick_search:zh_CN:快速搜索
+quick_search:RU:Быстрый поиск
+quick_search:ES:Búsqueda rápida
+quick_search:PL:Szybkie wyszukiwanie
+quick_search:pt_BR:Busca rápida
+quick_search:NL:Snelzoeken
+quick_search:SK:Rýchle hľadanie
+# Translation missing
+
+
+
+
+
+
+
 # Used in file overwrite confirmation dialogs.
 file_already_exists:EN:%1 already exists, do you want to replace it ?
 file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
@@ -7494,30 +7524,7 @@ shortcuts_dialog.file_operations:pt_BR:Operações com arquivos
 shortcuts_dialog.file_operations:NL:Bestandsbewerkingen
 shortcuts_dialog.file_operations:SK:Operácie so súbormi
 
-shortcuts_dialog.quick_search:EN:Quick search
-shortcuts_dialog.quick_search:FR:Recherche rapide
-shortcuts_dialog.quick_search:RO:Căutare rapidă
-shortcuts_dialog.quick_search:SI:Hitro iskanje
-shortcuts_dialog.quick_search:IT:Ricerca rapida
-shortcuts_dialog.quick_search:CS:Rychlé hledání
-shortcuts_dialog.quick_search:zh_TW:快速搜尋
-shortcuts_dialog.quick_search:DE:Schnellsuche
-shortcuts_dialog.quick_search:zh_CN:快速搜索
-shortcuts_dialog.quick_search:RU:Быстрый поиск
-shortcuts_dialog.quick_search:ES:Búsqueda rápida
-shortcuts_dialog.quick_search:PL:Szybkie wyszukiwanie
-shortcuts_dialog.quick_search:pt_BR:Busca rápida
-shortcuts_dialog.quick_search:NL:Snelzoeken
-shortcuts_dialog.quick_search:SK:Rýchle hľadanie
-# Translation missing
-# KR Translation missing
-
-
-
-
-
-
-
+shortcuts_dialog.quick_search:EN:$[quick_search]
 
 shortcuts_dialog.quick_search.start_search:EN:Type in any character to start a quick search
 shortcuts_dialog.quick_search.start_search:FR:Entrez un caractère pour commencer une recherche rapide
@@ -7888,6 +7895,33 @@ theme_editor.unfocused_background:FR:Fond (sans focus)
 
 
 
+theme_editor.unmatched_foreground:EN:Text (unmtached)
+theme_editor.unmatched_foreground:FR:Texte (non trouvé)
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
+theme_editor.unmatched_background:EN:Background (unmatched)
+theme_editor.unmatched_background:FR:Fond (non trouvé)
+# Translation missing
+
+
+
+
+
+
+
+
+
 
 theme_editor.text:EN:Text
 theme_editor.text:FR:Texte
@@ -8015,7 +8049,7 @@ theme_editor.history_colors:FR:Couleurs de l'historique
 
 
 
-
+theme_editor.quick_search:EN:$[quick_search]
 
 theme_editor.plain_file:EN:Plain file
 theme_editor.plain_file:FR:Fichier normal

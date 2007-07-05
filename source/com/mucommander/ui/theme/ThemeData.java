@@ -89,7 +89,7 @@ public class ThemeData {
      * by an instance of theme data by looping from 0 to {@link #COLOR_COUNT}.
      * </p>
      */
-    public static final int COLOR_COUNT = 74;
+    public static final int COLOR_COUNT = 76;
 
 
 
@@ -175,6 +175,16 @@ public class ThemeData {
      * </p>
      */
     public static final int FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR = 2;
+
+    /**
+     * Color used to paint the file table's background color when it's part of an unmatched file.
+     */
+    public static final int FILE_TABLE_UNMATCHED_BACKGROUND_COLOR = 74;
+
+    /**
+     * Color used to paint the file table's foreground color when it's part of an unmatched file.
+     */
+    public static final int FILE_TABLE_UNMATCHED_FOREGROUND_COLOR = 75;
 
     /**
      * Color used to paint hidden files text in the folder panels.
@@ -822,6 +832,10 @@ public class ThemeData {
     private static Color DEFAULT_TABLE_SELECTION_COLOR;
     /** Default selection background color for table components. */
     private static Color DEFAULT_TABLE_SELECTION_BACKGROUND_COLOR;
+    /** Default 'unmatched' color for table components. */
+    private static Color DEFAULT_TABLE_UNMATCHED_COLOR;
+    /** Default 'unmatched' background color for table components. */
+    private static Color DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR;
 
 
 
@@ -1141,10 +1155,7 @@ public class ThemeData {
             // The location bar progress color is a bit of a special case,
             // as it requires alpha transparency.
         case LOCATION_BAR_PROGRESS_COLOR:
-	    Color color;
-
-	    color = getTextFieldSelectionBackgroundColor();
-            return new Color(color.getRed(), color.getGreen(), color.getBlue(), 64);
+            return getTextFieldProgressColor();
 
             // Selected table background colors.
         case HIDDEN_FILE_SELECTED_BACKGROUND_COLOR:
@@ -1214,6 +1225,12 @@ public class ThemeData {
             // Status bar 'critical' color.
         case STATUS_BAR_CRITICAL_COLOR:
             return Color.RED;
+
+            // Unmatched colors.
+        case FILE_TABLE_UNMATCHED_BACKGROUND_COLOR:
+            return getTableUnmatchedBackgroundColor();
+        case FILE_TABLE_UNMATCHED_FOREGROUND_COLOR:
+            return getTableUnmatchedColor();
         }
 
         // This should never happen.
@@ -1581,7 +1598,8 @@ public class ThemeData {
             buffer = getTextFieldSelectionBackgroundColor();
             DEFAULT_TEXT_FIELD_PROGRESS_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue(), 64));
         }
-	return DEFAULT_TEXT_AREA_COLOR;
+
+	return DEFAULT_TEXT_FIELD_PROGRESS_COLOR;
     }
 
     /**
@@ -1752,6 +1770,42 @@ public class ThemeData {
             DEFAULT_TABLE_BACKGROUND_COLOR = escapeColor(DEFAULT_TABLE_BACKGROUND_COLOR);
         }
         return DEFAULT_TABLE_BACKGROUND_COLOR;
+    }
+
+    /**
+     * Returns the current look and feel's table unmatched color.
+     * <p>
+     * If {@link #DEFAULT_TABLE_UNMATCHED_COLOR} is not <code>null</code>, this method returns its value.
+     * Otherwise, it will be set to the current default color before being returned.
+     * </p>
+     * @return the current look and feel's table unmatched color.
+     */
+    private static synchronized Color getTableUnmatchedColor() {
+        if(DEFAULT_TABLE_UNMATCHED_COLOR == null) {
+            Color buffer;
+
+            buffer = getTableColor().darker();
+            DEFAULT_TABLE_UNMATCHED_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue(), 64));
+        }
+	return DEFAULT_TABLE_UNMATCHED_COLOR;
+    }
+
+    /**
+     * Returns the current look and feel's table unmatched background color.
+     * <p>
+     * If {@link #DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR} is not <code>null</code>, this method returns its value.
+     * Otherwise, it will be set to the current default color before being returned.
+     * </p>
+     * @return the current look and feel's table unmatched background color.
+     */
+    private static synchronized Color getTableUnmatchedBackgroundColor() {
+        if(DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR == null) {
+            Color buffer;
+
+            buffer = getTableBackgroundColor().darker();
+            DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue(), 64));
+        }
+	return DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR;
     }
 
     /**
@@ -1955,7 +2009,8 @@ public class ThemeData {
         Color buffer;
 
         buffer = DEFAULT_TABLE_COLOR;
-        DEFAULT_TABLE_COLOR = null;
+        DEFAULT_TABLE_COLOR           = null;
+        DEFAULT_TABLE_UNMATCHED_COLOR = null;
 
         if(!getTableColor().equals(buffer)) {
             triggerColorEvent(HIDDEN_FILE_FOREGROUND_COLOR, getTableColor());
@@ -1968,6 +2023,7 @@ public class ThemeData {
             triggerColorEvent(ARCHIVE_UNFOCUSED_FOREGROUND_COLOR, getTableColor());
             triggerColorEvent(SYMLINK_UNFOCUSED_FOREGROUND_COLOR, getTableColor());
             triggerColorEvent(FILE_FOREGROUND_COLOR, getTableColor());
+            triggerColorEvent(FILE_TABLE_UNMATCHED_FOREGROUND_COLOR, getTableUnmatchedColor());
         }
     }
 
@@ -1981,8 +2037,9 @@ public class ThemeData {
     private static synchronized void resetTableBackgroundColor() {
         Color buffer;
 
-        buffer = DEFAULT_TABLE_BACKGROUND_COLOR;
-        DEFAULT_TABLE_BACKGROUND_COLOR = null;
+        buffer                                   = DEFAULT_TABLE_BACKGROUND_COLOR;
+        DEFAULT_TABLE_BACKGROUND_COLOR           = null;
+        DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR = null;
 
         if(!getTableBackgroundColor().equals(buffer)) {
             triggerColorEvent(FILE_UNFOCUSED_BACKGROUND_COLOR, getTableBackgroundColor());
@@ -1999,6 +2056,7 @@ public class ThemeData {
             triggerColorEvent(SYMLINK_BACKGROUND_COLOR, getTableBackgroundColor());
             triggerColorEvent(MARKED_BACKGROUND_COLOR, getTableBackgroundColor());
             triggerColorEvent(FILE_TABLE_BACKGROUND_COLOR, getTableBackgroundColor());
+            triggerColorEvent(FILE_TABLE_UNMATCHED_BACKGROUND_COLOR, getTableUnmatchedBackgroundColor());
         }
     }
 

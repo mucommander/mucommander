@@ -284,6 +284,22 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
                 traceIllegalDeclaration(name);
         }
 
+        // Unmatched background color.
+        else if(name.equals(ELEMENT_UNMATCHED_BACKGROUND)) {
+            if(state == STATE_TABLE)
+                template.setColor(ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR, createColor(attributes));
+            else
+                traceIllegalDeclaration(name);
+        }
+
+        // Unmatched foreground color.
+        else if(name.equals(ELEMENT_UNMATCHED_FOREGROUND)) {
+            if(state == STATE_TABLE)
+                template.setColor(ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR, createColor(attributes));
+            else
+                traceIllegalDeclaration(name);
+        }
+
         // Unfocused background color.
         else if(name.equals(ELEMENT_UNFOCUSED_BACKGROUND)) {
             if(state == STATE_FILE_NORMAL)

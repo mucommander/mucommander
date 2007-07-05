@@ -66,6 +66,10 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.FILE_TABLE_BACKGROUND_COLOR)));
         if(theme.isColorSet(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(theme.getColor(Theme.FILE_TABLE_UNFOCUSED_BACKGROUND_COLOR)));
+        if(theme.isColorSet(Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_UNMATCHED_BACKGROUND, getColorAttributes(theme.getColor(Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR)));
+        if(theme.isColorSet(Theme.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_UNMATCHED_FOREGROUND, getColorAttributes(theme.getColor(Theme.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR)));
         if(theme.isFontSet(Theme.FILE_TABLE_FONT))
             out.writeStandAloneElement(ELEMENT_FONT, getFontAttributes(theme.getFont(Theme.FILE_TABLE_FONT)));
 

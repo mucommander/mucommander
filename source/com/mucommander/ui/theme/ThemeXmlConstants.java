@@ -74,6 +74,8 @@ interface ThemeXmlConstants {
     // -----------------------------------------------------------------------------------
     public static final String ELEMENT_UNFOCUSED_BACKGROUND = "unfocused_background";
     public static final String ELEMENT_UNFOCUSED_FOREGROUND = "unfocused_foreground";
+    public static final String ELEMENT_UNMATCHED_BACKGROUND = "unmatched_background";
+    public static final String ELEMENT_UNMATCHED_FOREGROUND = "unmatched_foreground";
     public static final String ELEMENT_BACKGROUND           = "background";
     public static final String ELEMENT_FOREGROUND           = "foreground";
     public static final String ELEMENT_HIDDEN               = "hidden";
