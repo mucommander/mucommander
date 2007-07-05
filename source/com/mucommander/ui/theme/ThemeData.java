@@ -1781,12 +1781,8 @@ public class ThemeData {
      * @return the current look and feel's table unmatched color.
      */
     private static synchronized Color getTableUnmatchedColor() {
-        if(DEFAULT_TABLE_UNMATCHED_COLOR == null) {
-            Color buffer;
-
-            buffer = getTableColor().darker();
-            DEFAULT_TABLE_UNMATCHED_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue()));
-        }
+        if(DEFAULT_TABLE_UNMATCHED_COLOR == null)
+            DEFAULT_TABLE_UNMATCHED_COLOR = escapeColor(getTableColor().darker());
 	return DEFAULT_TABLE_UNMATCHED_COLOR;
     }
 
@@ -1799,12 +1795,8 @@ public class ThemeData {
      * @return the current look and feel's table unmatched background color.
      */
     private static synchronized Color getTableUnmatchedBackgroundColor() {
-        if(DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR == null) {
-            Color buffer;
-
-            buffer = getTableBackgroundColor().darker();
-            DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR = escapeColor(new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue()));
-        }
+        if(DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR == null)
+            DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR = escapeColor(getTableBackgroundColor().darker());
 	return DEFAULT_TABLE_UNMATCHED_BACKGROUND_COLOR;
     }
 
