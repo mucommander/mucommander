@@ -550,8 +550,13 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     public void focusGained(FocusEvent e) {
         // Notify MainFrame that we are in control now! (our table/location field is active)
         mainFrame.setActiveTable(fileTable);
-        if(e.getSource() == fileTable)
-            scrollPane.getViewport().setBackground(backgroundColor);
+        if(e.getSource() == fileTable) {
+            if(fileTable.getQuickSearch().isActive())
+                scrollPane.getViewport().setBackground(unmatchedBackgroundColor);
+            else
+                scrollPane.getViewport().setBackground(backgroundColor);
+
+        }
     }
 
     public void focusLost(FocusEvent e) {
