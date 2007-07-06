@@ -7904,24 +7904,14 @@ theme_editor.unfocused_background:FR:Fond (sans focus)
 
 
 
-theme_editor.unmatched_foreground:EN:Text (unmtached)
-theme_editor.unmatched_foreground:FR:Texte (non trouvé)
+theme_editor.quick_search:EN:$[quick_search]
+
+# Refers to files that do not match the quick search string
+theme_editor.quick_search.unmatched_file:EN:Unmatched file
+theme_editor.quick_search.unmatched_file:FR:Fichier ne correspondant pas
 # Translation missing
 
 
-
-
-
-
-
-
-
-
-
-
-theme_editor.unmatched_background:EN:Background (unmatched)
-theme_editor.unmatched_background:FR:Fond (non trouvé)
-# Translation missing
 
 
 
@@ -8057,8 +8047,6 @@ theme_editor.history_colors:FR:Couleurs de l'historique
 
 
 
-
-theme_editor.quick_search:EN:$[quick_search]
 
 theme_editor.plain_file:EN:Plain file
 theme_editor.plain_file:FR:Fichier normal
