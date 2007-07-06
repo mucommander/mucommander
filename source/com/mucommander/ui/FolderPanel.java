@@ -523,6 +523,25 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     }
 
 
+    /**
+     * Dims the scrollpane's background, called by {@link FileTable.QuickSearch} when a quick search is started.
+     */
+    public void dimBackground() {
+        scrollPane.getViewport().setBackground(unmatchedBackgroundColor);
+    }
+
+    /**
+     * Stops dimming the scrollpane's background (returns to a normal background color), called by
+     * {@link FileTable.QuickSearch} when a quick search is over.
+     */
+    public void undimBackground() {
+        if(fileTable.hasFocus())
+            scrollPane.getViewport().setBackground(backgroundColor);
+        else
+            scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
+    }
+
+
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -538,14 +557,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     ///////////////////////////
     // FocusListener methods //
     ///////////////////////////
-    public void dim() {scrollPane.getViewport().setBackground(unmatchedBackgroundColor);}
-    public void unDim() {
-        if(fileTable.hasFocus())
-            scrollPane.getViewport().setBackground(backgroundColor);
-        else
-            scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
-    }
-
 
     public void focusGained(FocusEvent e) {
         // Notify MainFrame that we are in control now! (our table/location field is active)
