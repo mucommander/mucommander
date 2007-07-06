@@ -254,6 +254,7 @@ Improvements:
  - Added icons to language preferences
  - Delete dialog warns more explicitly about the consequences of deleting files permanently
  - Added folder icons to drive button and its popup menu
+ - Quick search now dims the non-matching files
 
 Localization:
  - Korean translation contributed by Jioh L. Jung
@@ -270,6 +271,7 @@ Bug fixes:
  - Fixed individual file progress and transfer speed not showing when moving files between different drives under Windows
  - Fixed slow startup and directory access times that could occur under Windows when network drives are present but unreachable
  - Fixed issues with local folders under Windows that would occur when a path was entered with a trailing space in the location field
+ - Fixed some flickered that would randomly occur while changing the current folder
 
 Known issues:
  - Hungarian translation is not up-to-date
