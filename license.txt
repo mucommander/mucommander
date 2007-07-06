@@ -1033,8 +1033,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
              http://creativecommons.org/licenses/by/2.5/
 
 You are free:
-- to Share — to copy, distribute and transmit the work
-- to Remix — to adapt the work
+- to Share - to copy, distribute and transmit the work
+- to Remix - to adapt the work
 
 Under the following conditions:
 - Attribution. You must attribute the work in the manner specified by
