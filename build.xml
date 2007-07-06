@@ -245,7 +245,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <copy file="${res}/toolbar.xml"       todir="${classes.normal}" overwrite="true"/>
     <copy file="${res}/command_bar.xml"   todir="${classes.normal}" overwrite="true"/>
     <copy file="${res}/action_keymap.xml" todir="${classes.normal}" overwrite="true"/>
-    <copy file="${res.license}"           todir="${classes.normal}" overwrite="true"/>
+    <copy file="${res.license}"           tofile="${classes.normal}/license.txt" overwrite="true"/>
 
     <!-- Generates the themes.                                 -->
     <echo>Creating themes...</echo>
@@ -364,6 +364,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <field name="DEBUG"               value="${is-debug}"    type="boolean"/>
       <field name="VERSION"             value="${app.version}${app.subversion}"/>
       <field name="COPYRIGHT"           value="${app.copyright}"/>
+      <field name="LICENSE"             value="/license.txt"/>
       <field name="APP_STRING"          value="muCommander v${app.version}${app.subversion}"/>
       <field name="VERSION_URL"         value="${version-url}"/>
       <field name="RELEASE_DATE"        value="${release-date}" type="String"/>
