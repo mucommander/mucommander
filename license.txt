@@ -9,20 +9,25 @@ the Lesser General Public License which permits use of the libraries
 in proprietary programs under certain conditions.
 
 Additionally, muCommander uses the following third party works:
-- the jCIFS library under the terms of the GNU Lesser General Public License
+- the jCIFS library under the terms of the GNU Lesser General Public
+  License
 - the Jakarta Commons Net library under the terms of the Apache License
-- the J2SSH library under the terms of the GNU Lesser General Public License
+- the J2SSH library under the terms of the GNU Lesser General Public
+  License
 - the Ant Bzip2 and Tar libraries under the terms of the Apache License
-- the JmDNS library under the terms of the GNU Lesser General Public License
-- the Yanfs library under the terms of the Berkeley Software Distribution License
-- Icons by Mark James under the terms of the Creative Commons Attribution License
+- the JmDNS library under the terms of the GNU Lesser General Public
+  License
+- the Yanfs library under the terms of the Berkeley Software
+  Distribution License
+- Icons by Mark James under the terms of the Creative Commons
+  Attribution License
 
 All the above mentioned licenses are included in this file.
 
 Copyright (C) 2002-2007 Maxence Bernard
 
 
------------------------------------------------------------------------
+-------------------------------------------------------------------------
 
 		        GNU GENERAL PUBLIC LICENSE
 		          Version 3, 29 June 2007
@@ -569,11 +574,12 @@ otherwise be available to you under applicable patent law.
 otherwise) that contradict the conditions of this License, they do not
 excuse you from the conditions of this License.  If you cannot convey a
 covered work so as to satisfy simultaneously your obligations under this
-License and any other pertinent obligations, then as a consequence you may
-not convey it at all.  For example, if you agree to terms that obligate you
-to collect a royalty for further conveying from those to whom you convey
-the Program, the only way you could satisfy both those terms and this
-License would be to refrain entirely from conveying the Program.
+License and any other pertinent obligations, then as a consequence you
+may not convey it at all.  For example, if you agree to terms that
+obligate you to collect a royalty for further conveying from those to
+whom you convey the Program, the only way you could satisfy both those
+terms and this License would be to refrain entirely from conveying the
+Program.
 
   13. Use with the GNU Affero General Public License.
 
@@ -619,21 +625,21 @@ APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
 HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
 OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
 THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
-IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
-ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
+PROGRAM IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE
+COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 
   16. Limitation of Liability.
 
   IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
 WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
-THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
-GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
-USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
-DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
-PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
-EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
-SUCH DAMAGES.
+THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING
+ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF
+THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO
+LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY
+YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY
+OTHER PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGES.
 
   17. Interpretation of Sections 15 and 16.
 
@@ -645,7 +651,7 @@ Program, unless a warranty or assumption of liability accompanies a
 copy of the Program in return for a fee.
 
 
------------------------------------------------------------------------
+-------------------------------------------------------------------------
 
              GNU LESSER GENERAL PUBLIC LICENSE
                   Version 3, 29 June 2007
@@ -722,8 +728,8 @@ layouts and accessors, or small macros, inline functions and templates
    Library is used in it and that the Library and its use are
    covered by this License.
 
-   b) Accompany the object code with a copy of the GNU GPL and this license
-   document.
+   b) Accompany the object code with a copy of the GNU GPL and this
+   license document.
 
   4. Combined Works.
 
@@ -737,8 +743,8 @@ the following:
    the Library is used in it and that the Library and its use are
    covered by this License.
 
-   b) Accompany the Combined Work with a copy of the GNU GPL and this license
-   document.
+   b) Accompany the Combined Work with a copy of the GNU GPL and this
+   license document.
 
    c) For a Combined Work that displays copyright notices during
    execution, include the copyright notice for the Library among
@@ -814,7 +820,7 @@ permanent authorization for you to choose that version for the
 Library.
 
 
------------------------------------------------------------------------
+-------------------------------------------------------------------------
 
                             Apache License
                       Version 2.0, January 2004
@@ -992,17 +998,18 @@ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
   of your accepting any such warranty or additional liability.
 
 
------------------------------------------------------------------------
+-------------------------------------------------------------------------
 
           Berkeley Software Distribution (BSD) License
 
 Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met:
+modification, are permitted provided that the following conditions are
+met:
 
 Redistributions of source code must retain the above copyright notice,
 this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, 
-this list of conditions and the following disclaimer in the documentation 
+Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
 and/or other materials provided with the distribution.
 Neither the name of the java.net nor the names of its contributors may be
 used to endorse or promote products derived from this software without 
@@ -1010,19 +1017,19 @@ specific prior written permission.
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
 PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
------------------------------------------------------------------------
+-------------------------------------------------------------------------
 
-           Creative Commons Attribution License 2.5
+              Creative Commons Attribution License 2.5
 
 You are free:
 - to copy, distribute, display, and perform the work
@@ -1030,14 +1037,19 @@ You are free:
 - to make commercial use of the work
 
 Under the following conditions:
-- Attribution. You must attribute the work in the manner specified by the author or licensor.
-For any reuse or distribution, you must make clear to others the license terms of this work.
-Any of these conditions can be waived if you get permission from the copyright holder.
+- Attribution. You must attribute the work in the manner specified by
+  the author or licensor.
+For any reuse or distribution, you must make clear to others the license
+terms of this work.
+Any of these conditions can be waived if you get permission from the
+copyright holder.
 
-For any reuse or distribution, you must make clear to others the license terms of this work.
+For any reuse or distribution, you must make clear to others the license
+terms of this work.
 The best way to do this is with a link to this web page.
 
-Any of the above conditions can be waived if you get permission from the copyright holder.
+Any of the above conditions can be waived if you get permission from the
+copyright holder.
 
 Nothing in this license impairs or restricts the author's moral rights.
 
