@@ -503,7 +503,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="copy-obfuscated" unless="7za.available">
     <echo>7za unavailable, using standard compression...</echo>
     <unjar src="${jar.obf}" dest="${classes.obf}"/>
-    <jar jarfile="${jar.cmp}" basedir="${classes.obf}"/>
+    <zip zipfile="${jar.cmp}" basedir="${classes.obf}" compress="true"/>
   </target>
 
   <!-- Compress the content of ${jar.obf} into ${jar.cmp}.     -->
