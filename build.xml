@@ -405,7 +405,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="jar" depends="compile,include-libs,resources,build-date">
     <echo>Creating JAR file...</echo>
     <mkdir dir="${dist}"/>
-    <jar jarfile="${jar.normal}" basedir="${classes.normal}" compress="false">
+    <jar jarfile="${jar.normal}" basedir="${classes.normal}">
       <manifest>
         <attribute name="Main-Class"             value="${main-class}"/>
         <attribute name="Specification-Title"    value="muCommander"/>
@@ -502,8 +502,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- to be available.                                        -->
   <target name="copy-obfuscated" unless="7za.available">
     <echo>7za unavailable, using standard compression...</echo>
-    <unjar src="${jar.obf}" dest="${classes.obf}"/>
-    <zip zipfile="${jar.cmp}" basedir="${classes.obf}" compress="true"/>
+    <copy file="${jar.obf}" tofile="${jar.cmp}"/>
   </target>
 
   <!-- Compress the content of ${jar.obf} into ${jar.cmp}.     -->

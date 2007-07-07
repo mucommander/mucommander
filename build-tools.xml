@@ -354,8 +354,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ${tools.jar.cmp}.                                       -->
   <target name="copy-obfuscated-tools" depends="check-copy-obfuscated-tools" if="copy-obfuscated-tools">
     <echo>7za unavailable, using standard compression for Ant tools...</echo>
-    <unjar src="${tools.jar.obf}" dest="${tools.classes.obf}"/>
-    <zip zipfile="${tools.jar.cmp}" basedir="${tools.classes.obf}" compress="true"/>
+    <copy file="${tools.jar.obf}" tofile="${tools.jar.cmp}"/>
   </target>
 
   <!-- Identifies the best available compression policy and    -->
