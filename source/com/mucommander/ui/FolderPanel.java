@@ -524,7 +524,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
 
     /**
-     * Dims the scrollpane's background, called by {@link FileTable.QuickSearch} when a quick search is started.
+     * Dims the scrollpane's background, called by {@link com.mucommander.ui.table.FileTable.QuickSearch} when a quick search is started.
      */
     public void dimBackground() {
         scrollPane.getViewport().setBackground(unmatchedBackgroundColor);
@@ -532,7 +532,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
 
     /**
      * Stops dimming the scrollpane's background (returns to a normal background color), called by
-     * {@link FileTable.QuickSearch} when a quick search is over.
+     * {@link com.mucommander.ui.table.FileTable.QuickSearch} when a quick search is over.
      */
     public void undimBackground() {
         if(fileTable.hasFocus())

@@ -208,7 +208,7 @@ public class OSXTrash extends QueuedTrash {
      *
      * <p>The thread starts by waiting {@link OSXTrash#QUEUE_PERIOD} milliseconds before moving them to give additional
      * files a chance to be queued and regrouped as a single AppleScript call. If some files were queued during
-     * that period, the thread will wait an additional {@link OSXTrash# QUEUE_PERIOD}, and so on.<p>
+     * that period, the thread will wait an additional {@link OSXTrash#QUEUE_PERIOD}, and so on.<p>
      *
      * <p>There are several reasons for doing that instead of executing an AppleScript synchroneously for each file
      * passed to {@link OSXTrash#moveToTrash(com.mucommander.file.AbstractFile)} :
