@@ -625,7 +625,8 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
      * none is available. 
      */
     public static AbstractTrash getTrash() {
-        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && OSXTrash.isAvailable()) {
+//        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X && OSXTrash.isAvailable()) {
+        if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
             return new OSXTrash();
         }
         else if(PlatformManager.OS_FAMILY==PlatformManager.LINUX && PlatformManager.UNIX_DESKTOP==PlatformManager.KDE_DESKTOP) {
