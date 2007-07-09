@@ -23,5 +23,12 @@ package com.mucommander.ant.macosx;
  * @ant.type name="real" category="macosx"
  */
 public class RealKey extends NamedInfoElement {
+    /**
+     * Key value.
+     * <p>
+     * The specified value must be a legal real.
+     * </p>
+     * @ant.required
+     */
     public void setValue(float f) {setValue(new RealValue(f));}
 }

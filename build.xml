@@ -302,16 +302,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-  <!-- = Name and date generation ============================ -->
+  <!-- = Name generation ===================================== -->
   <!-- ======================================================= -->
-  <target name="load-date" depends="compress-tools">
-    <taskdef name="date" classname="com.mucommander.ant.util.DateTask" classpath="${tools.jar.cmp}"/>
-  </target>
-
-  <!-- Stores today's date in ${release-date.}                 -->
-  <target name="build-date" depends="load-date">
-    <date name="release-date"/>
-  </target>
 
   <!-- Generates the package-prefix for nightly builds.        -->
   <target name="nightly-prefix" if="is-nightly">
@@ -355,7 +347,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Creates the runtime constant class.                     -->
   <!-- Output will be stored in ${tmp.source}.                 -->
-  <target name="constants" depends="build-date,load-javaw">
+  <target name="constants" depends="load-javaw">
+    <tstamp/>
     <echo>Creating runtime constants...</echo>
     <mkdir dir="${tmp.source}"/>
     <property name="is-debug"    value="true"/>
@@ -367,7 +360,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <field name="LICENSE"             value="/license.txt"/>
       <field name="APP_STRING"          value="muCommander v${app.version}${app.subversion}"/>
       <field name="VERSION_URL"         value="${version-url}"/>
-      <field name="RELEASE_DATE"        value="${release-date}" type="String"/>
+      <field name="RELEASE_DATE"        value="${DSTAMP}" type="String"/>
       <field name="HOMEPAGE_URL"        value="${url.homepage}"/>
       <field name="FORUMS_URL"          value="${url.forums}"/>
       <field name="DONATION_URL"        value="${url.donation}"/>
@@ -402,7 +395,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Generates the application's uncompressed, unobfuscated  -->
   <!-- JAR file.                                               -->
   <!-- Output will be stored in {$jar.normal}.                 -->
-  <target name="jar" depends="compile,include-libs,resources,build-date">
+  <target name="jar" depends="compile,include-libs,resources">
+    <tstamp/>
     <echo>Creating JAR file...</echo>
     <mkdir dir="${dist}"/>
     <jar jarfile="${jar.normal}" basedir="${classes.normal}">
@@ -413,7 +407,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <attribute name="Specification-Version"  value="${app.version}"/>
         <attribute name="Implementation-Title"   value="muCommander"/>
         <attribute name="Implementation-Vendor"  value="Maxence Bernard"/>
-        <attribute name="Implementation-Version" value="${app.version}${app.subversion} ${release-date}"/>
+        <attribute name="Implementation-Version" value="${app.version}${app.subversion} ${DSTAMP}"/>
       </manifest>
     </jar>
   </target>
@@ -657,14 +651,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </condition>
   </target>
 
-  <!-- Loads the crlf task.                                    -->
-  <target name="load-crlf" depends="compress-tools">
-    <taskdef name="crlf" classname="com.mucommander.ant.util.CRLFTask" classpath="${tools.jar.cmp}"/>
-  </target>
-
   <!-- Creates a windows setup file and stores the output in   -->
   <!-- ${dist}/${package-prefix}.exe.                          -->
-  <target name="make-setup" depends="load-crlf,package-prefix,exe" if="setup.available">
+  <target name="make-setup" depends="package-prefix,exe" if="setup.available">
     <echo>Creating Win32 installer...</echo>
 
     <!-- Prepares the NSIS directory.                          -->
@@ -674,8 +663,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Makes sure readme.txt and license.txt contain         -->
     <!-- proper windows linebreaks.                            -->
-    <crlf in="${res.readme}"  out="${nsis.tmp}/readme.txt"/>
-    <crlf in="${res.license}" out="${nsis.tmp}/license.txt"/>
+    <fixcrlf srcdir="." destdir="${nsis.tmp}" includes="readme.txt,license.txt" eol="crlf"/>
 
     <!-- Generates the NSIS script.                            -->
    <copy file="${nsis.script}" tofile="${nsis.tmp}/mucommander.nsi">
@@ -1030,8 +1018,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   <!-- Generates the debian version and file name for          -->
   <!-- nightly builds.                                         -->
-  <target name="nightly-debian-names" depends="load-strreplace,build-date" if="is-nightly">
-    <strreplace from="${app.version}${app.subversion} ${release-date}" to="deb.version" what="[ ]" with="-"/>
+  <target name="nightly-debian-names" depends="load-strreplace" if="is-nightly">
+    <tstamp/>
+    <strreplace from="${app.version}${app.subversion} ${DSTAMP}" to="deb.version" what="[ ]" with="-"/>
     <property name="deb.name" value="mucommander_current_all.deb"/>
   </target>
 
@@ -1122,16 +1111,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- The following targets are used to generate the version  -->
   <!-- XML file.                                               -->
 
-  <!-- Loads the 'muversion' task.                             -->
-  <target name="load-muversion" depends="compress-tools">
-    <taskdef name="muversion" classname="com.mucommander.ant.version.VersionTask" classpath="${tools.jar.cmp}"/>
-  </target>
-
   <!-- Generates the muCommander's version.xml file.           -->
   <!-- Output will be stored in ${version-file}.               -->
-  <target name="version" depends="load-muversion">
+  <target name="version">
     <echo>Creating version file...</echo>
-    <muversion version="${app.version}${app.subversion}" url="${url.app-download}" dest="${version-file}"/>
+    <tstamp/>
+    <echo file="${version-file}">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;mucommander&gt;
+  &lt;latest_version&gt;${app.version}${app.subversion}&lt;/latest_version&gt;
+  &lt;download_url&gt;${url.app-download}&lt;/download_url&gt;
+  &lt;release_date&gt;${DSTAMP}&lt;/release_date&gt;
+&lt;/mucommander&gt;
+    </echo>
   </target>
 
 

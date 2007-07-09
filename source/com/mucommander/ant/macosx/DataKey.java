@@ -23,7 +23,11 @@ package com.mucommander.ant.macosx;
  * @ant.type name="data" category="macosx"
  */
 public class DataKey extends NamedInfoElement {
+    /**
+     * Creates a new data key.
+     */
     public DataKey() {setValue(new DataValue());}
+
 
     public void addText(String str) {((DataValue)getValue()).addText(str);}
 }

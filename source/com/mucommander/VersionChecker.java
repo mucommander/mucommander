@@ -18,7 +18,6 @@
 
 package com.mucommander;
 
-import com.mucommander.ant.version.VersionConstants;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
 
@@ -68,7 +67,20 @@ import java.util.Hashtable;
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class VersionChecker implements ContentHandler, VersionConstants {
+public class VersionChecker implements ContentHandler {
+    // - XML structure ----------------------------------------------------------
+    // --------------------------------------------------------------------------
+    /** Root XML element. */
+    public static final String ROOT_ELEMENT    = "mucommander";
+    /** Version XML element. */
+    public static final String VERSION_ELEMENT = "latest_version";
+    /** URL XML element. */
+    public static final String URL_ELEMENT     = "download_url";
+    /** Date XML element. */
+    public static final String DATE_ELEMENT    = "release_date";
+
+
+
     // - XML parsing states -----------------------------------------------------
     // --------------------------------------------------------------------------
     /** Currently parsing the version tag. */

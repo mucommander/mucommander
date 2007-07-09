@@ -32,7 +32,7 @@ import java.net.URL;
  * A Mac OS X bundle is composed of the following items:
  * <ul>
  *   <li>A native executable file used to start the Java VM.</li>
- *   <li>A <code>Pkginfo</code> file used to identify the application.</li>
+ *   <li>A <code>PkgInfo</code> file used to identify the application.</li>
  *   <li>A JAR file to run.</li>
  *   <li>A non-compulsory icon file.</li>
  *   <li>An <code>Info.plist</code> file used to describe the application's properties.</li>

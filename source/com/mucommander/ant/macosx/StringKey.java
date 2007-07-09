@@ -23,5 +23,9 @@ package com.mucommander.ant.macosx;
  * @ant.type name="string" category="macosx"
  */
 public class StringKey extends NamedInfoElement {
+    /**
+     * Key value.
+     * @ant.required
+     */
     public void setValue(String b) {setValue(new StringValue(b));}
 }

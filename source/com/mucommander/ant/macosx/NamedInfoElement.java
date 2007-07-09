@@ -90,8 +90,8 @@ public class NamedInfoElement implements InfoElement {
     // - Ant interaction -------------------------------------------------
     // -------------------------------------------------------------------
     /**
-     * Sets this element's name.
-     * @param s element's name.
+     * Key name.
+     * @ant.required
      */
     public void setName(String s) {name = s;}
 

@@ -25,13 +25,11 @@ package com.mucommander.ant.macosx;
  */
 public class IntegerKey extends NamedInfoElement {
     /**
-     * Creates an integer key.
-     */
-    public IntegerKey() {}
-
-    /**
-     * Sets the value of the integer key.
-     * @param i value of the integer key.
+     * Key value.
+     * <p>
+     * The specified value must be a valid integer.
+     * </p>
+     * @ant.required
      */
     public void setValue(int i) {setValue(new IntegerValue(i));}
 }

@@ -23,5 +23,12 @@ package com.mucommander.ant.macosx;
  * @ant.type name="boolean" category="macosx"
  */
 public class BooleanKey extends NamedInfoElement {
+    /**
+     * Key value.
+     * <p>
+     * The specified value must be a valid boolean.
+     * </p>
+     * @ant.required
+     */
     public void setValue(boolean b) {setValue(new BooleanValue(b));}
 }
