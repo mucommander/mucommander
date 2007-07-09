@@ -107,6 +107,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ======================================================= -->
   <!-- Path to muCommander's readme.txt file.                  -->
   <property name="res.readme"          location="readme.txt"/>
+  <!-- Path to muCommander's version template file.            -->
+  <property name="res.version"         location="${res}/version.xml"/>
   <!-- Path to muCommander's license.txt file.                 -->
   <property name="res.license"         location="license.txt"/>
   <!-- Path to muCommander's dictionnary.                      -->
@@ -1116,13 +1118,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="version">
     <echo>Creating version file...</echo>
     <tstamp/>
-    <echo file="${version-file}">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;mucommander&gt;
-  &lt;latest_version&gt;${app.version}${app.subversion}&lt;/latest_version&gt;
-  &lt;download_url&gt;${url.app-download}&lt;/download_url&gt;
-  &lt;release_date&gt;${DSTAMP}&lt;/release_date&gt;
-&lt;/mucommander&gt;
-    </echo>
+    <copy file="${res.version}" tofile="${version-file}">
+      <filterset>
+        <filter token="VERSION" value="${app.version}${app.subversion}"/>
+        <filter token="URL"     value="${url.app-download}"/>
+        <filter token="DATE"    value="${DSTAMP}"/>
+      </filterset>
+    </copy>
   </target>
 
 
