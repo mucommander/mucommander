@@ -6,34 +6,78 @@
 
   The first step to compiling muCommander is making sure all the proper
 libraries and tools are installed.
-In order to do that, you must copy the local_template.xml file to the root
-of the project to local.xml and edit it:
-- Even though muCommander runs on Java 1.4 and 1.5, it takes advantage of the Java 1.6 API.
-  Consequently, JDK 1.6 is required to compile the source.
-- java.lib must point to your java installation's classes jar file. Under
-  most versions of the JRE, this is going to be in
-  /path/to/jre/lib/rt.jar.
-  However, Apple decided to use non-standards paths for reasons of their own,
-  and you'll find the proper jar in
-  /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Classes/classes.jar
-- proguard must point to the ProGuard jar file. The one used by muCommander
-  comes bundles with the sources in tools/proguard.jar, but you can modify
-  that if you wish to try out other versions.
-- ant.lib must point to the Ant jar file. Ant libraries are necessary to compile
-  the various custom tasks used by our compile process.
-- store-pass is the password of the keystore file used to generate a signed
-  muCommander JAR file. Odds are you don't know the password and must leave
-  this property empty.
-- nsis.executable is the path to the NSIS compiler, used to generate the muCommander
-  Windows setup. If you don't have a version of NSIS running on your computer,
-  you can leave this property empty.
-- launch4j.dir is the installation path of launch4j, used to generate the muCommander
-  Windows executable file. If you don't have a version of launch4j running on
-  your computer, you can leave this property blank.
-- 7za.executable is the path to the 7za compression tool, used to compress muCommander
-  further than jar can do. If you don't have a version of 7za installed on your computer,
-  you can leave this property blank.
 
+  Pre-requesites are:
+- JDK 1.6 or greater
+  Event though muCommander runs on Java 1.4 or later, it takes advantage of
+  the 1.6 API and needs it in order to compile.
+  This can be retrieved from http://java.sun.com/
+
+- Ant 1.6.5 or greater
+  This can be retrieved from http://ant.apache.org/
+
+
+  Once these tools have been installed, the muCommander build process needs to
+be configured. This is done by copying the local_template.xml file found at the
+root of the project to local.xml and editing it.
+
+  The values that need to be set are:
+- java.lib (required)
+  Path to the Java 1.6's classes JAR.
+  This is usually found in /path/to/jre/lib/rt.jar
+  Apple, however, decided to use non-standard paths for reasons of their own.
+  You'll find the classes JAR file in:
+  /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/classes.jar
+
+- ant.lib (required)
+  Path to the Ant JAR file.
+  This is necessary in order to compile the various Ant tasks used by
+  muCommander.
+
+- proguard.lib (defaults to ./tools/proguard.jar)
+  Path to the ProGuard JAR file.
+  The one used by muCommander can be found in ./tools/proguard.jar, but you can
+  modify that if you wish to try out other versions.
+
+- 7za.executable (non-required)
+  Path to the 7za executable.
+  This is used to compress muCommander's JAR file better than Java's ZIP
+  implementation.
+  If this property is not set, standard WIP compression will be used.
+
+- antdoclet.lib (defaults to ./tools/antdoclet.jar)
+  Path to the AntDoclet JAR file.
+  This is used to generate the Ant tools documentation.
+  The one used by muCommander can be found in ./tools/antdoclet.jar, but you can
+  modify that if you wish to try out other versions.
+
+- velocity.lib (defaults to ./tools/velocity.jar)
+  Path to the Velocity JAR file.
+  This is used to generate the Ant tools documentation.
+  The one used by muCommander can be found in ./tools/velocity.jar, but you can
+  modify that if you wish to try out other versions.
+
+- store.path (non-required)
+  Password of the keystore file used to generate a signed muCommander JAR file.
+  If this property is not set, you won't be able to generate signed JAR files.
+  If you're not Maxence, you can safely ignore this property.
+
+- jdeb.lib (defaults to ./tools/jdeb.jar)
+  Path to the JDeb JAR file.
+  This is used to generate the muCommander Debian package.
+  The one used by muCommander can be found in ./tools/jdeb.jar, but you can
+  modify that if you wish to try out other versions.
+
+- nsis.executable (non-required)
+  Path to the NSIS executable.
+  This is used to generate a muCommander Win32 native setup.
+  If this property is not set, you won't be able to generate Win32 setups.
+
+- launch4j.dir (non-required)
+  Path to the Launch4J installation directory.
+  This is used to generate a muCommander Win32 executable.
+  If this property is not set, you won't be able to generate Win32 or portable
+  releases.
 
 
 
