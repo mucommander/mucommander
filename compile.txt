@@ -16,7 +16,6 @@ libraries and tools are installed.
 - Ant 1.6.5 or greater
   This can be retrieved from http://ant.apache.org/
 
-
   Once these tools have been installed, the muCommander build process needs to
 be configured. This is done by copying the local_template.xml file found at the
 root of the project to local.xml and editing it.
@@ -26,7 +25,7 @@ root of the project to local.xml and editing it.
   Path to the Java 1.6's classes JAR.
   This is usually found in /path/to/jre/lib/rt.jar
   Apple, however, decided to use non-standard paths for reasons of their own.
-  You'll find the classes JAR file in:
+  Under Mac OS X, you'll find the classes JAR file in:
   /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/classes.jar
 
 - ant.lib (required)
@@ -83,16 +82,69 @@ root of the project to local.xml and editing it.
 
 2. Compiling muCommander
 
-  There are various ways of compiling muCommander. The most common ways are:
-- ant. This will compile all the modified Java files, store the binaries in
-  /path/to/mucommander/tmp/classes, and run the resulting application.
-- ant jar. This will compile all the modified Java files and store the binaries
-  in /path/to/mucommander/dist/mucommander_unobf.jar.
+  There are various ways of compiling muCommander. The most immediately
+useful are:
+
+- ant
+  This will compile all the modified Java files and run the resulting
+  application.
+
+- ant jar
+  This will compile all the modified Java files and store the binaries
+  in ./dist/mucommander_unobf.jar.
   This jar file is meant for debug, and running it will output a fair amount
   of tracing information.
-- ant obfuscate. This will compile and obfuscate all the Java files and store
-  the binaries in /path/to/mucommander/dist/mucommander_obf.jar. The resulting
-  jar file will not contain debug code anymore.
-- ant compress. This is identical to ant obfuscate, but will compress the jar file
-  even more and store it in /path/to/mucommander/dist/mucommander.jar. This is the
-  file we use for release.
+
+- ant obfuscate
+  This will compile and obfuscate all the Java files and store
+  the binaries in ./dist/mucommander_obf.jar.
+
+- ant compress
+  This is identical to ant obfuscate, but will use 7za if it's available to
+  produce an even slimmer version of the JAR file in ./dist/mucommander.jar.
+  This JAR file is the one we use for release.
+
+- ant app
+  Generates a Mac OS X application bundle in ./dist/muCommander.app.
+  Note that the application will only work if ran on an OS that has a chmod
+  command.
+
+- ant clean
+  Deletes all temporary files.
+
+- ant compile
+  Compiles all the modified Java files and stores the output in
+  ./tmp/compile/classes
+
+- ant deb
+  Generates a Debian package in ./dist/mucommander_0.8_all.deb
+
+- ant exe
+  Generates a Win32 executable version of muCommander in ./dist/muCommander.exe.
+
+- ant jnlp
+  Generates a Webstart description file in ./dist/mucommander.jnlp
+
+- ant nightly
+  Generates all know distribution files in 'nightly' mode.
+  Nightly builds will have slightly different names.
+
+- ant portable
+  Generates the portable version of muCommander in
+  ./dist/mucommander-portable.tar.gz.
+  The portable version is meant for 'roaming' usage, typically from a USB key.
+
+- ant release
+  Generates all known release files.
+
+- ant setup-exe
+  Generates a Win32 executable setup in ./dist/muCommander-setup.exe
+
+- ant sign
+  Generates a signed JAR file in ./dist/mucommander_signed.jar
+
+- ant source
+  Packages the sources and stores them in ./dist/mucommander-src.tar.gz
+
+- ant tgz
+  Generates a Unix release file and stores it in ./dist/mucommander.tar.gz
