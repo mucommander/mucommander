@@ -104,11 +104,6 @@ useful are:
   produce an even slimmer version of the JAR file in ./dist/mucommander.jar.
   This JAR file is the one we use for release.
 
-- ant app
-  Generates a Mac OS X application bundle in ./dist/muCommander.app.
-  Note that the application will only work if ran on an OS that has a chmod
-  command.
-
 - ant clean
   Deletes all temporary files.
 
@@ -116,35 +111,41 @@ useful are:
   Compiles all the modified Java files and stores the output in
   ./tmp/compile/classes
 
+- ant source
+  Packages the sources and stores them in
+  ./dist/mucommander-<version>-src.tar.gz
+
 - ant deb
-  Generates a Debian package in ./dist/mucommander_0.8_all.deb
+  Generates a Debian package in ./dist/mucommander_<version>_all.deb
 
 - ant exe
-  Generates a Win32 executable version of muCommander in ./dist/muCommander.exe.
+  Generates a Win32 executable version of muCommander in ./dist/mucommander.exe.
+
+- ant portable
+  Generates the portable version of muCommander in
+  ./dist/mucommander-<version>-portable.tar.gz.
+  The portable version is meant for 'roaming' usage, typically from a USB key.
+
+- ant setup-exe
+  Generates a Win32 executable setup in ./dist/mucommander-setup.exe
+
+- ant tgz
+  Generates a Unix release file and stores it in ./dist/mucommander.tar.gz
 
 - ant jnlp
   Generates a Webstart description file in ./dist/mucommander.jnlp
+
+- ant sign
+  Generates a signed JAR file in ./dist/mucommander_signed.jar
+
+- ant app
+  Generates a Mac OS X application bundle in ./dist/muCommander.app.
+  Note that the application will only work if ran on an OS that has a chmod
+  command.
 
 - ant nightly
   Generates all know distribution files in 'nightly' mode.
   Nightly builds will have slightly different names.
 
-- ant portable
-  Generates the portable version of muCommander in
-  ./dist/mucommander-portable.tar.gz.
-  The portable version is meant for 'roaming' usage, typically from a USB key.
-
 - ant release
   Generates all known release files.
-
-- ant setup-exe
-  Generates a Win32 executable setup in ./dist/muCommander-setup.exe
-
-- ant sign
-  Generates a signed JAR file in ./dist/mucommander_signed.jar
-
-- ant source
-  Packages the sources and stores them in ./dist/mucommander-src.tar.gz
-
-- ant tgz
-  Generates a Unix release file and stores it in ./dist/mucommander.tar.gz
