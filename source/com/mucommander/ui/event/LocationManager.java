@@ -19,7 +19,7 @@
 package com.mucommander.ui.event;
 
 import com.mucommander.file.FileURL;
-import com.mucommander.ui.FolderPanel;
+import com.mucommander.ui.main.FolderPanel;
 
 import java.util.Iterator;
 import java.util.WeakHashMap;

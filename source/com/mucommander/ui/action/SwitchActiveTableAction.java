@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 

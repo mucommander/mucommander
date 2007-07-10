@@ -20,7 +20,7 @@
 package com.mucommander.ui.event;
 
 import com.mucommander.file.FileURL;
-import com.mucommander.ui.FolderPanel;
+import com.mucommander.ui.main.FolderPanel;
 
 
 /**

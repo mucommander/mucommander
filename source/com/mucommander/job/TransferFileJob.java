@@ -27,8 +27,8 @@ import com.mucommander.io.CounterInputStream;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.io.ThroughputLimitInputStream;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.dialog.file.ProgressDialog;
+import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
 import java.io.InputStream;

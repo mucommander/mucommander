@@ -19,9 +19,9 @@
 package com.mucommander.bonjour;
 
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.action.OpenLocationAction;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;

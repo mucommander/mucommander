@@ -25,10 +25,10 @@ import com.mucommander.file.util.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.job.MoveJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.FileCollisionDialog;
-import com.mucommander.ui.FolderPanel;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.dialog.file.FileCollisionDialog;
+import com.mucommander.ui.dialog.file.ProgressDialog;
+import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.MainFrame;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -37,7 +37,7 @@ import java.awt.event.InputEvent;
 
 /**
  * Provides file(s) 'drop' support to components that add a <code>DropTarget</code> using this <code>DropTargetListener</code>.
- * A {@link com.mucommander.ui.FolderPanel} instance has to be specified at creation time, this instance will be
+ * A {@link com.mucommander.ui.main.FolderPanel} instance has to be specified at creation time, this instance will be
  * used to change the current folder, or copy/move files to the current folder.
  *
  * <p>There are 2 different modes this class can operate in. The mode to be used has to be specified when this class is

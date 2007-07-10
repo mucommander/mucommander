@@ -21,13 +21,13 @@ package com.mucommander.ui.action;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.ToolBar;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.ToolBar;
 
 import java.util.Hashtable;
 
 /**
- * This action shows/hides the current MainFrame's {@link com.mucommander.ui.ToolBar} depending on its
+ * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.ToolBar} depending on its
  * current visible state: if it is visible, hides it, if not shows it.
  *
  * <p>This action's label will be updated to reflect the current visible state.

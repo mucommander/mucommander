@@ -21,10 +21,12 @@ package com.mucommander;
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
 import com.mucommander.shell.ShellHistoryManager;
-import com.mucommander.ui.CheckVersionDialog;
-import com.mucommander.ui.InitialSetupDialog;
-import com.mucommander.ui.SplashScreen;
-import com.mucommander.ui.WindowManager;
+import com.mucommander.ui.dialog.startup.CheckVersionDialog;
+import com.mucommander.ui.dialog.startup.InitialSetupDialog;
+import com.mucommander.ui.main.CommandBar;
+import com.mucommander.ui.main.SplashScreen;
+import com.mucommander.ui.main.ToolBar;
+import com.mucommander.ui.main.WindowManager;
 
 import java.lang.reflect.Constructor;
 
@@ -283,7 +285,8 @@ public class Launcher {
             else if(args[i].equals("-t") || args[i].equals("--toolbar")) {
                 if(i >= args.length - 1)
                     printError("Missing FILE parameter to " + args[i], null, true);
-                try {com.mucommander.ui.ToolBar.setDescriptionFile(args[++i]);}
+                try {
+                    ToolBar.setDescriptionFile(args[++i]);}
                 catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
             }
 
@@ -291,7 +294,8 @@ public class Launcher {
             else if(args[i].equals("-C") || args[i].equals("--commandbar")) {
                 if(i >= args.length - 1)
                     printError("Missing FILE parameter to " + args[i], null, true);
-                try {com.mucommander.ui.CommandBar.setDescriptionFile(args[++i]);}
+                try {
+                    CommandBar.setDescriptionFile(args[++i]);}
                 catch(Exception e) {printError("Could not set commandbar description file", e, fatalWarnings);}
             }
 
@@ -425,12 +429,14 @@ public class Launcher {
 
         // Loads the ToolBar's description file
         printStartupMessage("Loading toolbar description...");
-        try {com.mucommander.ui.ToolBar.loadDescriptionFile();}
+        try {
+            ToolBar.loadDescriptionFile();}
         catch(Exception e) {printFileError("Could not load toolbar description", e, fatalWarnings);}
 
         // Loads the CommandBar's description file
         printStartupMessage("Loading command bar description...");
-        try {com.mucommander.ui.CommandBar.loadDescriptionFile();}
+        try {
+            CommandBar.loadDescriptionFile();}
         catch(Exception e) {printFileError("Could not load commandbar description", e, fatalWarnings);}
 
         // Loads the themes.

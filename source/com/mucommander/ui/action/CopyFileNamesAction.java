@@ -19,9 +19,9 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.dnd.TransferableFileSet;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 

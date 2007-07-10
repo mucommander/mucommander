@@ -24,10 +24,10 @@ import com.mucommander.file.AbstractTrash;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
-import com.mucommander.ui.comp.layout.YBoxPanel;
+import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.dialog.file.ProgressDialog;
+import com.mucommander.ui.layout.YBoxPanel;
+import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.io.IOException;

@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.WindowManager;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 import java.util.Hashtable;
 

@@ -23,8 +23,8 @@ import com.mucommander.bookmark.Bookmark;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
-import com.mucommander.ui.FolderPanel;
-import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 

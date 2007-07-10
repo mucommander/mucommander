@@ -21,7 +21,7 @@ package com.mucommander.job;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
 

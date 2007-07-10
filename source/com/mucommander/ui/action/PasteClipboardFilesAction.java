@@ -23,11 +23,11 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.FileCollisionDialog;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.dialog.file.FileCollisionDialog;
+import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.dnd.ClipboardNotifier;
 import com.mucommander.ui.dnd.ClipboardSupport;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 

@@ -19,7 +19,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.Debug;
-import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.main.MainFrame;
 
 import java.lang.reflect.Constructor;
 import java.util.Hashtable;
@@ -36,7 +36,7 @@ import java.util.WeakHashMap;
  * exists for a given {@link MainFrame}. This is particularly important because actions are stateful and can be used
  * in several components of a MainFrame at the same time; if an action's state changes, the change must be reflected
  * everywhere the action is used. It is also important for performance reasons: sharing one action throughout a
- * {@link MainFrame} saves some memory and also CPU cycles as some actions listen to particular events to change
+ * {@link com.mucommander.ui.main.MainFrame} saves some memory and also CPU cycles as some actions listen to particular events to change
  * their state accordingly.</p>
  *
  * @see MucoAction
@@ -194,7 +194,7 @@ public class ActionManager {
 
     /**
      * Convenience method that retrieves an instance of the MucoAction denoted by the given {@link ActionDescriptor}
-     * and associated with the given {@link MainFrame} and calls {@link MucoAction#performAction()} on it.
+     * and associated with the given {@link com.mucommander.ui.main.MainFrame} and calls {@link MucoAction#performAction()} on it.
      * Returns <code>true</code> if an instance of the action could be retrieved and performed, <code>false</code>
      * if the MucoAction could not be found or could not be instanciated.
      *

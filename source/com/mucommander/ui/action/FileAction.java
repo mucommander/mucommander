@@ -19,11 +19,11 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.filter.FileFilter;
-import com.mucommander.ui.FolderPanel;
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.TableSelectionListener;
-import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 

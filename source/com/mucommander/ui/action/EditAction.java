@@ -32,9 +32,9 @@ import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 

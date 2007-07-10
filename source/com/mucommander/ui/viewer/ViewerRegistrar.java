@@ -20,8 +20,8 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.WindowManager;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 import java.awt.*;
 import java.lang.reflect.Constructor;
@@ -40,10 +40,10 @@ public class ViewerRegistrar {
     private final static Vector viewersClassNames = new Vector();
 
     /** Default viewer's class name */
-    private final static String DEFAULT_VIEWER_CLASSNAME = "com.mucommander.ui.viewer.TextViewer";
+    private final static String DEFAULT_VIEWER_CLASSNAME = "com.mucommander.ui.viewer.text.TextViewer";
 	    
     /** Image viewer's class name */
-    private final static String IMAGE_VIEWER_CLASSNAME = "com.mucommander.ui.viewer.ImageViewer";
+    private final static String IMAGE_VIEWER_CLASSNAME = "com.mucommander.ui.viewer.image.ImageViewer";
 
         
     static {

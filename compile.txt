@@ -4,9 +4,9 @@
 
 1. Configuration
 
-  The first step in compiling muCommander is making sure all the proper
+  The first step to compiling muCommander is making sure all the proper
 libraries and tools are installed.
-In order to do that, you must move the local_template.xml file at the root
+In order to do that, you must copy the local_template.xml file to the root
 of the project to local.xml and edit it:
 - Even though muCommander runs on Java 1.4 and 1.5, it takes advantage of the Java 1.6 API.
   Consequently, JDK 1.6 is required to compile the source.

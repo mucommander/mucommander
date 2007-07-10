@@ -816,7 +816,7 @@ public class ThemeData {
     private static Color DEFAULT_TEXT_AREA_SELECTION_BACKGROUND_COLOR;
     /** Default foreground color for text field components. */
     private static Color DEFAULT_TEXT_FIELD_COLOR;
-    /** Default progress color for {@link com.mucommander.ui.comp.progress.ProgressTextField} components. */
+    /** Default progress color for {@link com.mucommander.ui.progress.ProgressTextField} components. */
     private static Color DEFAULT_TEXT_FIELD_PROGRESS_COLOR;
     /** Default background color for text field components. */
     private static Color DEFAULT_TEXT_FIELD_BACKGROUND_COLOR;

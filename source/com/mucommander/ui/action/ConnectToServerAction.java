@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.connect.ServerConnectDialog;
+import com.mucommander.ui.dialog.server.ServerConnectDialog;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 

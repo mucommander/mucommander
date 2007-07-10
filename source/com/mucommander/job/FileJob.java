@@ -24,12 +24,12 @@ import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
+import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.dialog.file.ProgressDialog;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.AbstractNotifier;
 import com.mucommander.ui.notifier.NotificationTypes;
-import com.mucommander.ui.table.FileTable;
 
 import java.util.Iterator;
 import java.util.WeakHashMap;

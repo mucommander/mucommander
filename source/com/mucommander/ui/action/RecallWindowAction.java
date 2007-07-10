@@ -20,8 +20,8 @@ package com.mucommander.ui.action;
 
 import com.mucommander.Debug;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.WindowManager;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -32,7 +32,7 @@ import java.util.Vector;
  * Brings a MainFrame window to the front. The window number must be specified in the
  * {@link #WINDOW_NUMBER_PROPERTY_KEY} property, and must exist (i.e. must refer to an existing window number).
  *
- * @see com.mucommander.ui.WindowManager
+ * @see com.mucommander.ui.main.WindowManager
  * @author Maxence Bernard
  */
 public class RecallWindowAction extends MucoAction implements PropertyChangeListener {

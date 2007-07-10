@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.ui.FolderPanel;
+import com.mucommander.ui.main.FolderPanel;
 
 /**
  * This class gives information about the context in which a drag-and-drop operation is being performed.

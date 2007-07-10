@@ -26,8 +26,8 @@ import com.mucommander.file.MimeTypes;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.Base64OutputStream;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.dialog.file.ProgressDialog;
+import com.mucommander.ui.main.MainFrame;
 
 import java.io.*;
 import java.net.Socket;

@@ -32,10 +32,10 @@ import com.mucommander.file.AbstractFile;
  * </ul>
  *
  * <p>The value returned by {@link #checkForCollision(com.mucommander.file.AbstractFile, com.mucommander.file.AbstractFile)}
- * can be used to create a {@link com.mucommander.ui.FileCollisionDialog} in order to inform the user of the collision
+ * can be used to create a {@link com.mucommander.ui.dialog.file.FileCollisionDialog} in order to inform the user of the collision
  * and ask him how to resolve it.
  *
- * @see com.mucommander.ui.FileCollisionDialog
+ * @see com.mucommander.ui.dialog.file.FileCollisionDialog
  * @author Maxence Bernard
  */
 public class FileCollisionChecker {

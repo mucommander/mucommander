@@ -20,9 +20,9 @@ package com.mucommander.ui.dnd;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.FolderPanel;
-import com.mucommander.ui.table.FileTable;
-import com.mucommander.ui.table.FileTableModel;
+import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.main.table.FileTableModel;
 
 import java.awt.*;
 import java.awt.dnd.*;
@@ -33,7 +33,7 @@ import java.awt.event.InputEvent;
  * This class adds 'drag' support to components that are registered using the {@link #enableDrag(java.awt.Component)}
  * method.
  *
- * <p>A {@link com.mucommander.ui.FolderPanel} instance has to be specified at creation time, this instance will be
+ * <p>A {@link com.mucommander.ui.main.FolderPanel} instance has to be specified at creation time, this instance will be
  * used to retrieve the list of selected/marked file(s) that are dragged, whenever a drag operation is initiated on
  * of the registered components.
  *

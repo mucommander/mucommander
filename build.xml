@@ -452,7 +452,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<method access="public static" type="boolean" name="canViewFile" parameters="com.mucommander.file.AbstractFile"/>
       </keepclasseswithmembers>
       <!-- Editor API uses reflection                          -->
-      <keepclasseswithmembers extends="com.mucommander.ui.editor.FileEditor">
+      <keepclasseswithmembers extends="com.mucommander.ui.viewer.FileEditor">
 	<method access="public static" type="boolean" name="canEditFile" parameters="com.mucommander.file.AbstractFile"/>
       </keepclasseswithmembers>
       <!-- Action API uses reflection                          -->

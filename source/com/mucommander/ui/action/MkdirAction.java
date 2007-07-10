@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.MkdirDialog;
+import com.mucommander.ui.dialog.file.MkdirDialog;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 

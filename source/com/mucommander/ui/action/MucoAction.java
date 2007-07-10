@@ -22,8 +22,8 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -44,7 +44,7 @@ import java.util.Hashtable;
  *
  * <p>MucoAction subclasses should not be instanciated directly, {@link ActionManager}'s <code>getActionInstance</code>
  * methods should be used instead. Using {@link ActionManager} to retrieve a MucoAction ensures that only one instance
- * exists for a given {@link MainFrame}. This is particularly important because actions are stateful and can be used
+ * exists for a given {@link com.mucommander.ui.main.MainFrame}. This is particularly important because actions are stateful and can be used
  * in several components of a MainFrame at the same time; if an action's state changes, the change must be reflected
  * everywhere the action is used. It is also important for performance reasons: sharing one action throughout a
  * {@link MainFrame} saves some memory and also CPU cycles as some actions listen to particular events to change

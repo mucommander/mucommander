@@ -21,7 +21,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 

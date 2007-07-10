@@ -19,15 +19,15 @@
 
 package com.mucommander.ui.event;
 
-import com.mucommander.ui.FolderPanel;
+import com.mucommander.ui.main.FolderPanel;
 
 
 /**
  * Interface to be implemented by classes that wish to be notified of active table changes on a particular MainFrame.
  * Those classes need to be registered to receive those events, this can be done by calling
- * {@link com.mucommander.ui.MainFrame#addActivePanelListener(ActivePanelListener)}.
+ * {@link com.mucommander.ui.main.MainFrame#addActivePanelListener(ActivePanelListener)}.
  *
- * @see com.mucommander.ui.MainFrame
+ * @see com.mucommander.ui.main.MainFrame
  * @author Maxence Bernard
  */
 public interface ActivePanelListener {

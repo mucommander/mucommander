@@ -27,9 +27,9 @@ import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempCommandJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.ProgressDialog;
-import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.dialog.file.ProgressDialog;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.FileTable;
 
 import java.util.Hashtable;
 

@@ -19,8 +19,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.file.util.FileSet;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.PropertiesDialog;
+import com.mucommander.ui.dialog.file.PropertiesDialog;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 

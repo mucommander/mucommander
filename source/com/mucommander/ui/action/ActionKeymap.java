@@ -23,7 +23,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
-import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.main.MainFrame;
 import com.mucommander.xml.parser.ContentHandler;
 import com.mucommander.xml.parser.Parser;
 

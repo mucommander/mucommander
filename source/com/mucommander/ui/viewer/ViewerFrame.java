@@ -21,12 +21,12 @@ package com.mucommander.ui.viewer;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.comp.FocusRequester;
-import com.mucommander.ui.comp.MnemonicHelper;
-import com.mucommander.ui.comp.dialog.DialogToolkit;
-import com.mucommander.ui.comp.dialog.QuestionDialog;
-import com.mucommander.ui.comp.menu.MenuToolkit;
+import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.helper.FocusRequester;
+import com.mucommander.ui.helper.MenuToolkit;
+import com.mucommander.ui.helper.MnemonicHelper;
+import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,7 +89,7 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
         new Thread(ViewerFrame.this, "com.mucommander.ui.viewer.ViewerFrame's Thread").start();
     }
 
-    protected JMenu addMenu(String menuTitle) {
+    public JMenu addMenu(String menuTitle) {
         JMenu menu = MenuToolkit.addMenu(menuTitle, menuMnemonicHelper, null);
         this.menuBar.add(menu);
         return menu;
@@ -103,7 +103,7 @@ public class ViewerFrame extends JFrame implements ActionListener, Runnable {
             // Test if file is too large to be viewed and warns user
             long max = viewer.getMaxRecommendedSize();
             if (max!=-1 && file.getSize()>max) {
-                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("file_viewer.large_file_warning"), mainFrame, 
+                QuestionDialog dialog = new QuestionDialog(mainFrame, Translator.get("warning"), Translator.get("file_viewer.large_file_warning"), mainFrame,
                                                            new String[] {Translator.get("file_viewer.open_anyway"), Translator.get("cancel")},
                                                            new int[]  {0, 1},
                                                            0);

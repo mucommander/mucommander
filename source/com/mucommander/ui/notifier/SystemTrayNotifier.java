@@ -20,9 +20,9 @@ package com.mucommander.ui.notifier;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.WindowManager;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -31,7 +31,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * SystemTrayNotifier implements a notifier that uses the System Tray to display notifications. When enabled, this
- * notifier displays an icon in the systrem tray that recalls the current {@link com.mucommander.ui.MainFrame}
+ * notifier displays an icon in the systrem tray that recalls the current {@link com.mucommander.ui.main.MainFrame}
  * when double-clicked, or shows a popup menu with additional actions ('Bring all to front', 'Quit') when right-clicked.
  *
  * <p>This notifier is available only with Java 1.6 and up.</p>

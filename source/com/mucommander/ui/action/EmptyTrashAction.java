@@ -20,7 +20,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.file.AbstractTrash;
 import com.mucommander.file.FileFactory;
-import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.main.MainFrame;
 
 import java.util.Hashtable;
 

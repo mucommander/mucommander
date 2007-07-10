@@ -20,7 +20,7 @@ package com.mucommander.ui.notifier;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
-import com.mucommander.ui.WindowManager;
+import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
 import java.awt.*;

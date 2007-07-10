@@ -20,7 +20,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.DirectoryFileFilter;
-import com.mucommander.ui.MainFrame;
+import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.ViewerRegistrar;
 
 import java.util.Hashtable;

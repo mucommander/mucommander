@@ -20,10 +20,10 @@
 package com.mucommander;
 
 import com.mucommander.file.AbstractFile;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.WindowManager;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.table.FileTable;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
+import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
 import java.awt.*;

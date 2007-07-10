@@ -21,11 +21,11 @@ package com.mucommander.ui.macosx;
 
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.QuitDialog;
-import com.mucommander.ui.WindowManager;
-import com.mucommander.ui.about.AboutDialog;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.dialog.about.AboutDialog;
+import com.mucommander.ui.dialog.shutdown.QuitDialog;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 
 /**

@@ -24,9 +24,9 @@ import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.FileTransferException;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.FileCollisionDialog;
-import com.mucommander.ui.MainFrame;
-import com.mucommander.ui.ProgressDialog;
+import com.mucommander.ui.dialog.file.FileCollisionDialog;
+import com.mucommander.ui.dialog.file.ProgressDialog;
+import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
 
