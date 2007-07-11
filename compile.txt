@@ -119,7 +119,7 @@ useful are:
   Generates a Debian package in ./dist/mucommander_<version>_all.deb
 
 - ant exe
-  Generates a Win32 executable version of muCommander in ./dist/mucommander.exe.
+  Generates a Win32 executable version of muCommander in ./dist/muCommander.exe.
 
 - ant portable
   Generates the portable version of muCommander in
