@@ -90,6 +90,7 @@ Translators:
 - Cristiano Duarte (Brazilian Portuguese)
 - Pieter Kristensen (Dutch)
 - Ján Ľudvík (Slovak)
+- Jonathan Murphy (British English)
 
 Many thanks to all of you who suggested new features, reported bugs, sent warm emails or generously donated to the project !
 
@@ -261,6 +262,7 @@ Localization:
  - Brazilian Portuguese translation contributed by Cristiano Duarte
  - Dutch translation contributed by Pieter Kristensen
  - Slovak translation contributed by Ján Ľudvík
+ - British English translation contributed by Jonathan Murphy
  - Russian translation update
  - Czech translation update
 
