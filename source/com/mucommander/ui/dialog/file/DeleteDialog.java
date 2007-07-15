@@ -21,6 +21,7 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractTrash;
 import com.mucommander.file.FileFactory;
@@ -69,11 +70,12 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
 
         // Allow 'Move to trash' option only if:
         // - the current platform has a trash
+        // - the base folder is not an archive
         // - the base folder of the to-be-deleted files is not a trash folder or one of its children
         // - the base folder can be moved to the trash (the eligibility conditions should be the same as the files to-be-deleted)
         AbstractTrash trash = FileFactory.getTrash();
         AbstractFile baseFolder = files.getBaseFolder();
-        if(trash!=null && !trash.isTrashFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
+        if(trash!=null && !(baseFolder instanceof AbstractArchiveFile) && !trash.isTrashFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
             moveToTrash = ConfigurationManager.getVariableBoolean(
                         ConfigurationVariables.DELETE_TO_TRASH,
                         ConfigurationVariables.DEFAULT_DELETE_TO_TRASH);
