@@ -18,6 +18,7 @@
 
 package com.mucommander.io;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -61,12 +62,13 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
     public long skip(long n) throws IOException {
         long offset = getOffset();
 
-        if(offset+n >= getLength()) {
-            seek(getLength()-1);
-            return getLength() - offset - 1;
+        long length = getLength();
+        if(offset+n >= length) {
+            seek(length-1);
+            return length - offset - 1;
         }
 
-        seek(n);
+        seek(offset+n);
         return n;
     }
 
@@ -109,7 +111,48 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
         return true;
     }
 
+    /**
+     * Reads <code>b.length</code> bytes from this file into the byte
+     * array, starting at the current file pointer. This method reads
+     * repeatedly from the file until the requested number of bytes are
+     * read. This method blocks until the requested number of bytes are
+     * read, the end of the stream is detected, or an exception is thrown.
+     *
+     * @param      b   the buffer into which the data is read.
+     * @exception java.io.EOFException  if this file reaches the end before reading
+     *               all the bytes.
+     * @exception  IOException   if an I/O error occurs.
+     */
+    public void readFully(byte b[]) throws IOException {
+        readFully(b, 0, b.length);
+    }
 
+    /**
+     * Reads exactly <code>len</code> bytes from this file into the byte
+     * array, starting at the current file pointer. This method reads
+     * repeatedly from the file until the requested number of bytes are
+     * read. This method blocks until the requested number of bytes are
+     * read, the end of the stream is detected, or an exception is thrown.
+     *
+     * @param      b     the buffer into which the data is read.
+     * @param      off   the start offset of the data.
+     * @param      len   the number of bytes to read.
+     * @exception java.io.EOFException  if this file reaches the end before reading
+     *               all the bytes.
+     * @exception  IOException   if an I/O error occurs.
+     */
+    public void readFully(byte b[], int off, int len) throws IOException {
+        int n = 0;
+        do {
+            int count = read(b, off + n, len - n);
+            if (count < 0)
+                throw new EOFException();
+            n += count;
+        }
+        while (n < len);
+    }
+
+    
     //////////////////////
     // Abstract methods //
     //////////////////////
