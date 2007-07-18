@@ -479,13 +479,13 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
                 public void run() {
                     selectRow(currentRow);
                     resizeAndRepaint();
+
+                    // Notify registered TableSelectionListener instances that the currently selected file has changed
+                    fireSelectedFileChangedEvent();
+
+                    //centerRow();
                 }
             });
-
-        // Notify registered TableSelectionListener instances that the currently selected file has changed
-        fireSelectedFileChangedEvent();
-
-        //centerRow();
 
         //if(com.mucommander.Debug.ON) com.mucommander.Debug.time();
 
