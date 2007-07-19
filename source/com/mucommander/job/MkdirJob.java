@@ -74,7 +74,7 @@ public class MkdirJob extends FileJob {
             try {
                 if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Creating "+destFolder+" "+ filename);
 
-                AbstractFile newFile = FileFactory.getFile(destFolder.getAbsolutePath(true)+filename);
+                AbstractFile newFile = FileFactory.getFile(destFolder.getAbsolutePath(true)+filename, true);
 
                 // Check for file collisions, i.e. if the file already exists in the destination
                 int collision = FileCollisionChecker.checkForCollision(null, newFile);
