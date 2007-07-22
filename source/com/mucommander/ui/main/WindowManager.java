@@ -77,13 +77,16 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * or last frame to have been used if muCommander doesn't have focus */	
     private static MainFrame currentMainFrame;
 
-    private static WindowManager instance = new WindowManager();
+    private static WindowManager instance;
 
 
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
 
     static {
+        mainFrames = new Vector();
+        instance   = new WindowManager();
+
         // Sets custom lookAndFeel if different from current lookAndFeel
         String lnfName = ConfigurationManager.getVariable(ConfigurationVariables.LOOK_AND_FEEL);
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
@@ -93,9 +96,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(Debug.ON)
             if(lnfName == null)
                 Debug.trace("Could load look'n feel from preferences");
-
-        mainFrames = new Vector();
-        instance   = new WindowManager();
     }
 
     /**
