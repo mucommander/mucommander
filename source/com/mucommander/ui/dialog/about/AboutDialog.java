@@ -91,6 +91,10 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             });
 
         pack();
+
+        // Makes OK the default action.
+        setInitialFocusComponent(okButton);
+        getRootPane().setDefaultButton(okButton);
     }
 
     /**
