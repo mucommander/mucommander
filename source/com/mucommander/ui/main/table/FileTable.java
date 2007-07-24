@@ -1354,7 +1354,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     /**
      * Listens to certain configuration variables.
      */
-    public boolean configurationChanged(ConfigurationEvent event) {
+    public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
         if (var.equals(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE) || var.equals(ConfigurationVariables.DATE_FORMAT) ||
@@ -1383,11 +1383,8 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
             setRowHeight();
         }
         // Repaint file icons if the system file icons policy has changed
-        else if (var.equals(ConfigurationVariables.USE_SYSTEM_FILE_ICONS)) {
+        else if (var.equals(ConfigurationVariables.USE_SYSTEM_FILE_ICONS))
             repaint();
-        }
-
-        return true;
     }
 
 

@@ -580,7 +580,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     /** 
      * Listens to certain configuration variables.
      */
-    public boolean configurationChanged(ConfigurationEvent event) {
+    public void configurationChanged(ConfigurationEvent event) {
     	String var = event.getVariable();
 
         // Show or hide hidden files
@@ -608,8 +608,6 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         // Do not try and refresh folder here as this method can be called several times in a row on the same folder
         // if several variables have changed. This would then try to refresh the folder potentially before the previous
         // refresh has finished and cause deadlocks.
-
-        return true;
     }
 
 

@@ -112,14 +112,13 @@ public class EditAction extends InternalEditAction implements ConfigurationListe
      * Reacts to configuration changed events.
      * @param event describes the configuration change.
      */
-    public synchronized boolean configurationChanged(ConfigurationEvent event) {
+    public synchronized void configurationChanged(ConfigurationEvent event) {
         // Updates useCustomEditor.
         if(event.getVariable().equals(ConfigurationVariables.USE_CUSTOM_EDITOR))
             useCustomEditor = event.getBooleanValue();
         // Updates customEditor.
         else if(event.getVariable().equals(ConfigurationVariables.CUSTOM_EDITOR))
             setCustomEditor(event.getValue());
-        return true;
     }
 
     /**

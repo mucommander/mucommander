@@ -609,12 +609,10 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
     /**
      * Listens to some configuration variables.
      */
-    public synchronized boolean configurationChanged(ConfigurationEvent event) {
+    public synchronized void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 		
         if (var.equals(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE))
             displayCompactSize = event.getBooleanValue();
-
-        return true;
     }
 }

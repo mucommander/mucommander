@@ -28,15 +28,17 @@ package com.mucommander.conf;
  * @author Nicolas Rinaudo
  */
 class ConfigurationLeaf {
-
+    // - Instance variables --------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /** Leaf's name. */
     private String name;
     /** Leaf's value. */
     private String value;
 
-    /* ----------------------- */
-    /*      Initilisation      */
-    /* ----------------------- */
+
+
+    // - Initialisation ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Builds a new configuration leaf with the specified name and value.
      * @param name  leaf's name.
@@ -47,9 +49,9 @@ class ConfigurationLeaf {
         setValue(value);
     }
 
-    /* ----------------------- */
-    /*       Name access       */
-    /* ----------------------- */
+
+    // - Name access ---------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Returns the leaf's name.
      * @return the leaf's name.
@@ -62,9 +64,10 @@ class ConfigurationLeaf {
      */
     public void setName(String name) {this.name = name;}
 
-    /* ----------------------- */
-    /*       Value access      */
-    /* ----------------------- */
+
+
+    // - Value access --------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Returns the leaf's value.
      * @return the leaf's value.

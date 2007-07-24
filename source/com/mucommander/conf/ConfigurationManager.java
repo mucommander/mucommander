@@ -266,12 +266,8 @@ public class ConfigurationManager {
         if(val==null)
             return -1;
 		
-        try {
-            return Long.parseLong(val);
-        }
-        catch(NumberFormatException e) {
-            return -1;
-        }
+        try {return Long.parseLong(val);}
+        catch(NumberFormatException e) {return -1;}
     }
 
     public static synchronized long getVariableLong(String var, long defaultValue) {
@@ -282,9 +278,7 @@ public class ConfigurationManager {
             return defaultValue;
         }
 
-        try {
-            return Long.parseLong(value);
-        }
+        try {return Long.parseLong(value);}
         catch(NumberFormatException e) {
             setVariable(var, Long.toString(defaultValue));
             return defaultValue;
@@ -311,9 +305,7 @@ public class ConfigurationManager {
             return defaultValue;
         }
 
-        try {
-            return Integer.parseInt(value);
-        }
+        try {return Integer.parseInt(value);}
         catch(NumberFormatException e) {
             setVariable(var, Integer.toString(defaultValue));
             return defaultValue;
@@ -340,9 +332,7 @@ public class ConfigurationManager {
             return defaultValue;
         }
 
-        try {
-            return Float.parseFloat(value);
-        }
+        try {return Float.parseFloat(value);}
         catch(NumberFormatException e) {
             setVariable(var, Float.toString(defaultValue));
             return defaultValue;
@@ -390,7 +380,6 @@ public class ConfigurationManager {
      * @return true if the variable has been modified, false otherwise
      */
     public static synchronized boolean setVariable(String var, String value) {
-
         StringTokenizer   parser;
         String            buffer;
         ConfigurationTree node;
@@ -420,14 +409,9 @@ public class ConfigurationManager {
                 if((oldValue==null && value==null) || (oldValue!=null && oldValue.equals(value)))
                     return false;
 					
-                if(node.setLeaf(buffer, value)) {
-                    if(!fireConfigurationEvent(new ConfigurationEvent(var, value))) {
-                        // Value change vetoed by one of the ConfigurationListener
-                        node.setLeaf(buffer, oldValue);
-                        return false;
-                    }
-                    return true;
-                }
+                if(node.setLeaf(buffer, value))
+                    fireConfigurationEvent(new ConfigurationEvent(var, value));
+                return true;
             }
         }
 
@@ -442,9 +426,7 @@ public class ConfigurationManager {
      * @param value value for the specified variable.
      * @return true if the variable has been modified, false otherwise
      */
-    public static synchronized boolean setVariableInt(String var, int value) {
-        return setVariable(var, Integer.toString(value));
-    }
+    public static synchronized boolean setVariableInt(String var, int value) {return setVariable(var, Integer.toString(value));}
 
 
     /**
@@ -454,9 +436,7 @@ public class ConfigurationManager {
      * @param value value for the specified variable.
      * @return true if the variable has been modified, false otherwise
      */
-    public static synchronized boolean setVariableFloat(String var, float value) {
-        return setVariable(var, Float.toString(value));
-    }
+    public static synchronized boolean setVariableFloat(String var, float value) {return setVariable(var, Float.toString(value));}
 
 
     /**
@@ -466,9 +446,7 @@ public class ConfigurationManager {
      * @param value value for the specified variable.
      * @return true if the variable has been modified, false otherwise
      */
-    public static synchronized boolean setVariableBoolean(String var, boolean value) {
-        return setVariable(var, Boolean.toString(value));
-    }
+    public static synchronized boolean setVariableBoolean(String var, boolean value) {return setVariable(var, Boolean.toString(value));}
 	
 	
     /**
@@ -504,9 +482,7 @@ public class ConfigurationManager {
      *
      * @param listener the listener to remove from the list of registered listeners.
      */
-    public static synchronized void removeConfigurationListener(ConfigurationListener listener) {
-        listeners.remove(listener);
-    }
+    public static synchronized void removeConfigurationListener(ConfigurationListener listener) {listeners.remove(listener);}
 
     /**
      * Notifies all the registered configuration listeners of a configuration change event.
@@ -514,12 +490,11 @@ public class ConfigurationManager {
      * @param  event describes the configuration change.
      * @return true if the change wasn't vetoed, false otherwise.
      */
-    static synchronized boolean fireConfigurationEvent(ConfigurationEvent event) {
+    static synchronized void fireConfigurationEvent(ConfigurationEvent event) {
         Iterator iterator = listeners.keySet().iterator();
+
         while(iterator.hasNext())
-            if(!((ConfigurationListener)iterator.next()).configurationChanged(event))
-                return false;
-        return true;
+            ((ConfigurationListener)iterator.next()).configurationChanged(event);
     }
 
     // - Custom configuration file handling -----------------------------------------

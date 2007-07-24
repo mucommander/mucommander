@@ -133,12 +133,10 @@ public class CustomDateFormat implements ConfigurationListener {
     /**
      * Listens to some configuration variables.
      */
-    public boolean configurationChanged(ConfigurationEvent event) {
+    public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
         if (var.equals(ConfigurationVariables.TIME_FORMAT) || var.equals(ConfigurationVariables.DATE_FORMAT) || var.equals(ConfigurationVariables.DATE_SEPARATOR))
             dateFormat = createDateFormat();
-
-        return true;
     }
 }

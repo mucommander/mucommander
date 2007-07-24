@@ -258,7 +258,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
     /**
      * Listens to certain configuration variables.
      */
-    public boolean configurationChanged(ConfigurationEvent event) {
+    public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
         // Reload butons icon if the icon scale factor has changed
@@ -272,8 +272,6 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
                 button.setIcon(IconManager.getScaledIcon(((MucoAction)button.getAction()).getIcon(), scaleFactor));
             }
         }
-
-        return true;
     }
 
 

@@ -222,7 +222,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     /**
      * Listens to certain configuration variables.
      */
-    public boolean configurationChanged(ConfigurationEvent event) {
+    public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
         // Rescale buttons icon
@@ -239,8 +239,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
                 }
             }
         }
-
-        return true;
     }
 
 

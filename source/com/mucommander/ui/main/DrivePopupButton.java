@@ -286,14 +286,11 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     /**
      * Listens to certain configuration variables.
      */
-    public boolean configurationChanged(ConfigurationEvent event) {
+    public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
         // Update the button's icon if the system file icons policy has changed
-        if (var.equals(ConfigurationVariables.USE_SYSTEM_FILE_ICONS)) {
+        if (var.equals(ConfigurationVariables.USE_SYSTEM_FILE_ICONS))
             updateButton();
-        }
-
-        return true;
     }
 }

@@ -157,9 +157,8 @@ public class Shell implements ConfigurationListener {
     /**
      * Reacts to configuration changes.
      */
-    public boolean configurationChanged(ConfigurationEvent event) {
+    public void configurationChanged(ConfigurationEvent event) {
         if(event.getVariable().startsWith(ConfigurationVariables.SHELL_SECTION))
             setShellCommand();
-        return true;
     }
 }

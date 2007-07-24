@@ -26,10 +26,15 @@ package com.mucommander.conf;
  * @author Nicolas Rinaudo
  */
 class ConfigurationLoader implements ConfigurationTreeBuilder {
-
+    // - Instance variables --------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /** Buffer for the configuration path. */
     private String variable = null;
 
+
+
+    // - Tree handling -------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Adds a new entry to the configuration path.
      * @param name name of the entry to add.
@@ -62,4 +67,3 @@ class ConfigurationLoader implements ConfigurationTreeBuilder {
         ConfigurationManager.setVariable(variable + '.' + name, value);
     }
 }
-

@@ -579,7 +579,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     /**
      * Listens to certain configuration variables.
      */
-    public boolean configurationChanged(ConfigurationEvent event) {
+    public void configurationChanged(ConfigurationEvent event) {
     	String var = event.getVariable();
     
     	// /!\ font.size is set after font.family in AppearancePrefPanel
@@ -591,8 +591,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 	    if(!UIManager.getLookAndFeel().getClass().getName().equals(lnfName))
 		setLookAndFeel(lnfName);
         }
-    
-    	return true;
     }
 
 

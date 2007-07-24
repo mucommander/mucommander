@@ -22,19 +22,20 @@ import java.awt.*;
 
 /**
  * Event used to notify registered listeners that a configuration variable has been modified.
- *
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class ConfigurationEvent {
-
+    // - Instance variables --------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /** Name of the variable that has been modified. */
     private String variable;
     /** New value of the variable that has been modified. */
     private String value;
 
-    /* ------------------------ */
-    /*      Initialisation      */
-    /* ------------------------ */
+
+
+    // - Initialisation ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Builds a new configuration event with the specified variable name and value.
      * @param variable name of the variable that has been modified.
@@ -45,35 +46,31 @@ public class ConfigurationEvent {
         setValue(value);
     }
 
-    /* ------------------------ */
-    /*        Name access       */
-    /* ------------------------ */
+
+
+    // - Name access ---------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Sets the name of the variable that has been modified.
      * @param variable name of the variable that has been modified.
      */
-    void setVariable(String variable) { 
-        this.variable = variable;
-    }
+    void setVariable(String variable) { this.variable = variable;}
 
     /**
      * Returns the name of the variable that has been modified.
      * @return the name of the variable that has been modified.
      */
-    public String getVariable() {
-        return variable;
-    }
+    public String getVariable() {return variable;}
 
-    /* ------------------------ */
-    /*       Value access       */
-    /* ------------------------ */
+
+
+    // - Value access --------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
     /**
      * Sets the new value of the variable that has been modified.
      * @param value new value of the variable that has been modified.
      */
-    void setValue(String value) {
-        this.value = value;
-    }
+    void setValue(String value) {this.value = value;}
 
     /**
      * Returns the new value of the variable that has been modified.
@@ -83,9 +80,7 @@ public class ConfigurationEvent {
      * </p>
      * @return the new value of the variable that has been modified.
      */
-    public String getValue() {
-        return value;
-    }
+    public String getValue() {return value;}
 
 
     /**
@@ -101,12 +96,8 @@ public class ConfigurationEvent {
         if(value==null)
             return -1;
 		
-        try {
-            return Integer.parseInt(value);
-        }
-        catch(NumberFormatException e) {
-            return -1;
-        }
+        try {return Integer.parseInt(value);}
+        catch(NumberFormatException e) {return -1;}
     }
 
 
@@ -123,12 +114,8 @@ public class ConfigurationEvent {
         if(value==null)
             return -1;
 		
-        try {
-            return Float.parseFloat(value);
-        }
-        catch(NumberFormatException e) {
-            return -1;
-        }
+        try {return Float.parseFloat(value);}
+        catch(NumberFormatException e) {return -1;}
     }
 
 
@@ -140,9 +127,7 @@ public class ConfigurationEvent {
      * </p>
      * @return the boolean value of the variable that has been modified.
      */
-    public boolean getBooleanValue() {
-        return value==null?false:value.equals("true");
-    }
+    public boolean getBooleanValue() {return value == null ? false : value.equals("true");}
 
 
     /**
@@ -150,7 +135,5 @@ public class ConfigurationEvent {
      * 
      * @return the Color value of the variable that has been modified, <code>null</code> if it has been destroyed.
      */
-    public Color getColorValue() {
-        return value==null?null:new Color(Integer.parseInt(value, 16));
-    }
+    public Color getColorValue() {return value == null ? null : new Color(Integer.parseInt(value, 16));}
 }

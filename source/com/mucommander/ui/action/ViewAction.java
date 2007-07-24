@@ -113,14 +113,13 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
      * Reacts to configuration changed events.
      * @param event describes the configuration change.
      */
-    public synchronized boolean configurationChanged(ConfigurationEvent event) {
+    public synchronized void configurationChanged(ConfigurationEvent event) {
         // Updates useCustomViewer.
         if(event.getVariable().equals(ConfigurationVariables.USE_CUSTOM_VIEWER))
             useCustomViewer = event.getBooleanValue();
         // Updates customViewer.
         else if(event.getVariable().equals(ConfigurationVariables.CUSTOM_VIEWER))
             setCustomViewer(event.getValue());
-        return true;
     }
 
     /**
