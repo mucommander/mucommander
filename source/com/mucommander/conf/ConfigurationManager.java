@@ -18,7 +18,6 @@
 
 package com.mucommander.conf;
 
-import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.io.BackupInputStream;
@@ -86,14 +85,12 @@ public class ConfigurationManager {
         try {
             parser = new ConfigurationParser(new ConfigurationLoader());
             parser.parse(in = new BackupInputStream(getConfigurationFile()));
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Found and loaded configuration file: "+getConfigurationFile(), -1);
 
             // If version in configuration differs from current version, 
             // import and move variables which have moved in the configuration tree
             // and set new version string
             String confVersion = getVariable(ConfigurationVariables.VERSION);
             if(confVersion!=null && !confVersion.equals(RuntimeConstants.VERSION)) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Version changed, looking for variables to migrate");
                 migrateVariable("prefs.show_hidden_files", ConfigurationVariables.SHOW_HIDDEN_FILES);
                 migrateVariable("prefs.auto_size_columns", ConfigurationVariables.AUTO_SIZE_COLUMNS);
                 migrateVariable("prefs.show_toolbar",      ConfigurationVariables.TOOLBAR_VISIBLE);
@@ -102,7 +99,6 @@ public class ConfigurationManager {
                 setVariable(ConfigurationVariables.VERSION, RuntimeConstants.VERSION);
             }
         }
-        //        catch(Exception e) {if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("No configuration file found at "+getConfigurationFile());}
         finally {
             if(in != null) {
                 try {in.close();}
@@ -119,7 +115,6 @@ public class ConfigurationManager {
         if(fromValue!=null) {
             setVariable(toVar, fromValue);
             setVariable(fromVar, null);
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Variable "+fromVar+" migrated to "+toVar);
         }
     }
 	
@@ -134,7 +129,6 @@ public class ConfigurationManager {
         try {
             ConfigurationWriter writer = new ConfigurationWriter();
 
-            if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Writing preferences file: " + getConfigurationFile());
             writer.writeXML(out = new BackupOutputStream(getConfigurationFile()));
             out.close();
         }
@@ -144,9 +138,6 @@ public class ConfigurationManager {
                 try {out.close(false);}
                 catch(Exception e2) {}
             }
-
-            // Notify user that preferences file could not be written
-            if(Debug.ON) Debug.trace("muCommander was unable to write preferences file: "+e);
         }
     }
 

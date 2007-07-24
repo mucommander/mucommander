@@ -126,10 +126,8 @@ class ConfigurationTree {
     public boolean setLeaf(String name, String value) {
         ConfigurationLeaf leaf;
 
-        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("called, name="+name+" value="+value);
 
         leaf = getLeafInstance(name);
-        //if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("leaf="+leaf);
         if(leaf == null) {
             if(value==null || value.trim().equals(""))
                 return false;
@@ -138,7 +136,6 @@ class ConfigurationTree {
         }
         else {
             if(value==null) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("removing leaf " + name);
                 leafs.remove(leaf);
                 return true;
             }
