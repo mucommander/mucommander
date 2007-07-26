@@ -82,7 +82,9 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
 
     public void commit() {
         super.commit();
-        ConfigurationManager.writeConfiguration();
+        try {ConfigurationManager.writeConfiguration();}
+        // We should probably pop an error dialog here.
+        catch(Exception e) {}
     }
 
     public void tabSelectionChanged(int newIndex) {

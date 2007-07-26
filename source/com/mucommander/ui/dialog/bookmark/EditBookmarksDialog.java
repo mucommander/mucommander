@@ -327,7 +327,9 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         BookmarkManager.setFireEvents(true);
 
         // Write bookmarks file to disk, only if changes were made to bookmarks
-        BookmarkManager.writeBookmarks(false);
+        try {BookmarkManager.writeBookmarks(false);}
+        // We should probably pop an error here.
+        catch(Exception e) {}
     }
 
 	

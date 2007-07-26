@@ -202,7 +202,9 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
         super.dispose();
 
         // Write credentials file to disk, only if changes were made
-        CredentialsManager.writeCredentials(false);
+        try {CredentialsManager.writeCredentials(false);}
+        // We should probably pop an error dialog here...
+        catch(Exception e) {}
     }
 
 

@@ -132,7 +132,9 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
 
             // Add bookmark and write bookmarks file to disk
             BookmarkManager.addBookmark(new Bookmark(nameField.getText(), locationField.getText()));
-            BookmarkManager.writeBookmarks(false);
+            try {BookmarkManager.writeBookmarks(false);}
+            // We should probably pop an error dialog here.
+            catch(Exception e2) {}
         }
         else if (source==cancelButton)  {
             dispose();			
