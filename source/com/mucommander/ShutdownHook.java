@@ -71,22 +71,28 @@ public class ShutdownHook extends Thread {
         if(shutdownTasksPerformed)
             return;
 
-        if(Debug.ON) Debug.trace("called");
-        
+       
         // Save preferences
-        ConfigurationManager.writeConfiguration();
+        try {ConfigurationManager.writeConfiguration();}
+        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save configugration: " + e);}
+
         // Save shell history
-        ShellHistoryManager.writeHistory();
+        try {ShellHistoryManager.writeHistory();}
+        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save shell history: " + e);}
+
         // Write credentials file to disk, only if changes were made
-        CredentialsManager.writeCredentials(false);
+        try {CredentialsManager.writeCredentials(false);}
+        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save credentials: " + e);}
 
         // Saves the current theme.
         try {ThemeManager.saveCurrentTheme();}
         catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save user theme: " + e);}
 
         // Saves the file associations.
-        CommandManager.writeCommands();
-        CommandManager.writeAssociations();
+        try {CommandManager.writeCommands();}
+        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save commands: " + e);}
+        try {CommandManager.writeAssociations();}
+        catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save associations: " + e);}
         
 
         // Shutdown tasks should only be performed once
