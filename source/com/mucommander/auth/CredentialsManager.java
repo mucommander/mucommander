@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.auth;
 
 import com.mucommander.Debug;
@@ -125,8 +124,9 @@ public class CredentialsManager implements VectorChangeListener {
      *
      * @param forceWrite if false, the credentials file will be written only if changes were made to persistent entries
      *  since last write, if true the file will always be written.
+     * @throws IOException if an I/O error occurs.
      */
-    public static void writeCredentials(boolean forceWrite) {
+    public static void writeCredentials(boolean forceWrite) throws IOException{
         // Write credentials file only if changes were made to persistent entries since last write, or if write is forced
         if(!(forceWrite || saveNeeded))
             return;
@@ -136,18 +136,13 @@ public class CredentialsManager implements VectorChangeListener {
             credentialsFile = getCredentialsFile();
             CredentialsWriter.write(out = new BackupOutputStream(credentialsFile));
             if(Debug.ON) Debug.trace("Credentials file saved successfully.");
-            out.close();
-
             saveNeeded = false;
         }
-        catch(IOException e) {
+        finally {
             if(out != null) {
-                try {out.close(false);}
-                catch(Exception e2) {}
+                try {out.close();}
+                catch(Exception e) {}
             }
-
-            // Notify user that something went wrong while writing the credentials file
-            if(Debug.ON) Debug.trace("An error occurred while writing credentials file "+ credentialsFile.getAbsolutePath()+": "+e);
         }
     }
 

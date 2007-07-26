@@ -482,16 +482,15 @@ public class ThemeManager {
      * @see                             #writeTheme(Theme)
      */
     public static void writeTheme(ThemeData data, int type, String name) throws IOException {
-        BackupOutputStream out;
+        OutputStream out;
 
         out = null;
-        try {
-            writeThemeData(data, out = getOutputStream(type, name));
-            out.close(true);
-        }
-        catch(IOException e) {
-            out.close(false);
-            throw e;
+        try {writeThemeData(data, out = getOutputStream(type, name));}
+        finally {
+            if(out != null) {
+                try {out.close();}
+                catch(Exception e) {}
+            }
         }
     }
 
