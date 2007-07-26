@@ -131,8 +131,9 @@ public class BookmarkManager implements VectorChangeListener {
      *
      * @param forceWrite if false, the bookmarks file will be written only if changes were made to bookmarks since
      * last write, if true the file will always be written
+     * @throws IOException if an I/O error occurs.
      */
-    public static void writeBookmarks(boolean forceWrite) {
+    public static void writeBookmarks(boolean forceWrite) throws IOException {
         // Write bookmarks file only if changes were made to the bookmarks since last write, or if write is forced 
         if(!(forceWrite || saveNeeded))
             return;
@@ -142,18 +143,13 @@ public class BookmarkManager implements VectorChangeListener {
             bookmarksFile = getBookmarksFile();
             BookmarkWriter.write(out = new BackupOutputStream(bookmarksFile));
             if(Debug.ON) Debug.trace("Bookmarks file saved successfully.");
-            out.close();
-
             saveNeeded = false;
         }
-        catch(IOException e) {
+        finally {
             if(out != null) {
-                try {out.close(false);}
-                catch(Exception e2) {}
+                try {out.close();}
+                catch(Exception e) {}
             }
-
-            // Notify user that something went wrong while writing the bookmarks file
-            if(Debug.ON) Debug.trace("An error occurred while writing bookmarks file "+bookmarksFile.getAbsolutePath()+": "+e);			
         }
     }
 

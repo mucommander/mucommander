@@ -27,6 +27,7 @@ import com.mucommander.io.BackupOutputStream;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.WeakHashMap;
@@ -208,23 +209,19 @@ public class ShellHistoryManager {
 
     /**
      * Writes the shell history to hard drive.
+     * @throws IOException if an I/O error occurs.
      */
-    public static boolean writeHistory() {
+    public static void writeHistory() throws IOException {
         BackupOutputStream out;
 
         out = null;
-        try {
-            ShellHistoryWriter.write(out = new BackupOutputStream(getHistoryFile()));
-            out.close();
-        }
-        catch(Exception e) {
+        try {ShellHistoryWriter.write(out = new BackupOutputStream(getHistoryFile()));}
+        finally {
             if(out != null) {
-                try {out.close(false);}
-                catch(Exception e2) {}
+                try {out.close();}
+                catch(Exception e) {}
             }
-            return false;
         }
-        return true;
     }
 
     /**
