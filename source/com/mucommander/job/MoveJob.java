@@ -19,7 +19,9 @@
 
 package com.mucommander.job;
 
+import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractRWArchiveFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.io.FileTransferException;
@@ -53,7 +55,13 @@ public class MoveJob extends TransferFileJob {
     /** True if this job corresponds to a single file renaming */
     private boolean renameMode;
 
-	
+    /** The archive that contains the destination files (may be null) */
+    private AbstractRWArchiveFile archiveToOptimize;
+
+    /** True when an archive is being optimized */
+    private boolean isOptimizingArchive;
+
+
     /**
      * Creates a new MoveJob without starting it.
      *
@@ -75,10 +83,32 @@ public class MoveJob extends TransferFileJob {
         this.renameMode = renameMode;
     }
 
+    private void optimizeArchive(AbstractRWArchiveFile rwArchiveFile) {
+        while(true) {
+            try {
+                archiveToOptimize = rwArchiveFile;
+                isOptimizingArchive = true;
+
+                archiveToOptimize.optimizeArchive();
+
+                break;
+            }
+            catch(IOException e) {
+    // Todo: localize this entry
+                if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", rwArchiveFile.getName()))==RETRY_ACTION)
+                    continue;
+
+                break;
+            }
+        }
+
+        isOptimizingArchive = false;
+    }
+
 	
-    /////////////////////////////////////
-    // Abstract methods Implementation //
-    /////////////////////////////////////
+    ////////////////////////////////////
+    // TransferFileJob implementation //
+    ////////////////////////////////////
 
     /**
      * Moves recursively the given file or folder. 
@@ -235,7 +265,7 @@ public class MoveJob extends TransferFileJob {
             if(!(destFile.exists() && destFile.isDirectory())) {
                 do {		// Loop for retry
                     try {
-                        destFolder.mkdir(destFileName);
+                        destFile.mkdir();
                     }
                     catch(IOException e) {
                         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
@@ -335,6 +365,9 @@ public class MoveJob extends TransferFileJob {
 
 	
     public String getStatusString() {
+        if(isOptimizingArchive)
+            return Translator.get("optimizing_archive", archiveToOptimize.getName());
+
         return Translator.get("move_dialog.moving_file", getCurrentFileInfo());
     }
 
@@ -353,8 +386,20 @@ public class MoveJob extends TransferFileJob {
     protected void jobCompleted() {
         super.jobCompleted();
 
-    // If this job correponds to a file renaming in the same directory, select the renamed file
-    // in the active table after this job has finished (and hasn't been cancelled)
+        // If the source files are located inside an archive, optimize the archive file
+        AbstractArchiveFile sourceArchiveFile = baseSourceFolder.getParentArchive();
+        if(sourceArchiveFile!=null && sourceArchiveFile.isWritableArchive())
+            optimizeArchive((AbstractRWArchiveFile)sourceArchiveFile);
+
+        // If the destination files are located inside an archive, optimize the archive file, only if the destination
+        // archive is different from the source one
+        AbstractArchiveFile destArchiveFile = baseDestFolder.getParentArchive();
+        if(destArchiveFile!=null && destArchiveFile.isWritableArchive()
+                && !(sourceArchiveFile!=null && destArchiveFile.equals(sourceArchiveFile)))
+            optimizeArchive((AbstractRWArchiveFile)destArchiveFile);
+
+        // If this job correponds to a file renaming in the same directory, select the renamed file
+        // in the active table after this job has finished (and hasn't been cancelled)
         if(files.size()==1 && newName!=null && baseDestFolder.equals(files.fileAt(0).getParent())) {
             // Resolve new file instance now that it exists: remote files do not update file attributes after
             // creation, we need to get an instance that reflects the newly created file attributes

@@ -20,7 +20,9 @@
 package com.mucommander.job;
 
 import com.mucommander.Debug;
+import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractRWArchiveFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
@@ -52,7 +54,13 @@ public class CopyJob extends TransferFileJob {
 	
     /** Operating mode : COPY_MODE, UNPACK_MODE or DOWNLOAD_MODE */
     private int mode;
-	
+
+    /** The archive that contains the destination files (may be null) */
+    private AbstractRWArchiveFile archiveToOptimize;
+
+    /** True when an archive is being optimized */
+    private boolean isOptimizingArchive;
+
     public final static int COPY_MODE = 0;
     public final static int UNPACK_MODE = 1;
     public final static int DOWNLOAD_MODE = 2;
@@ -80,9 +88,9 @@ public class CopyJob extends TransferFileJob {
     }
 
 	
-    /////////////////////////////////////
-    // Abstract methods Implementation //
-    /////////////////////////////////////
+    ////////////////////////////////////
+    // TransferFileJob implementation //
+    ////////////////////////////////////
 
     /**
      * Copies recursively the given file or folder. 
@@ -217,7 +225,7 @@ public class CopyJob extends TransferFileJob {
                 // Loop for retry
                 do {
                     try {
-                        destFolder.mkdir(destFileName);
+                        destFile.mkdir();
                     }
                     catch(IOException e) {
                         // Unable to create folder
@@ -279,11 +287,13 @@ public class CopyJob extends TransferFileJob {
     }
 
     public String getStatusString() {
+        if(isOptimizingArchive)
+            return Translator.get("optimizing_archive", archiveToOptimize.getName());
+
         return Translator.get(mode==UNPACK_MODE?"unpack_dialog.unpacking_file":mode==DOWNLOAD_MODE?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFileInfo());
     }
 	
     // This job modifies baseDestFolder and its subfolders
-	
     protected boolean hasFolderChanged(AbstractFile folder) {
         if(Debug.ON) Debug.trace("folder="+folder+" returning "+baseDestFolder.isParentOf(folder));
 
@@ -298,6 +308,29 @@ public class CopyJob extends TransferFileJob {
     protected void jobCompleted() {
         super.jobCompleted();
 
+        // If the destination files are located inside an archive, optimize the archive file
+        AbstractArchiveFile archiveFile = baseDestFolder.getParentArchive();
+        if(archiveFile!=null && archiveFile.isWritableArchive()) {
+            while(true) {
+                try {
+                    archiveToOptimize = ((AbstractRWArchiveFile)archiveFile);
+                    isOptimizingArchive = true;
+
+                    archiveToOptimize.optimizeArchive();
+
+                    break;
+                }
+                catch(IOException e) {
+                    if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", archiveFile.getName()))==RETRY_ACTION)
+                        continue;
+
+                    break;
+                }
+            }
+
+            isOptimizingArchive = true;
+        }
+            
         // If this job correponds to a 'local copy' of a single file and in the same directory,
         // select the copied file in the active table after this job has finished (and hasn't been cancelled)
         if(files.size()==1 && newName!=null && baseDestFolder.equals(files.fileAt(0).getParent())) {

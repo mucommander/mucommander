@@ -58,9 +58,9 @@ public class MkdirJob extends FileJob {
     }
 
 
-    /////////////////////////////////////
-    // Abstract methods Implementation //
-    /////////////////////////////////////
+    ////////////////////////////
+    // FileJob implementation //
+    ////////////////////////////
 
     /**
      * Creates the new directory in the destination folder.
@@ -102,12 +102,15 @@ public class MkdirJob extends FileJob {
                 }
                 // Create directory
                 else {
-                    destFolder.mkdir(filename);
+                    newFile.mkdir();
                 }
 
                 // Resolve new file instance now that it exists: remote files do not update file attributes after
                 // creation, we need to get an instance that reflects the newly created file attributes
                 newFile = FileFactory.getFile(newFile.getURL());
+
+//if(Debug.ON) Debug.trace("newFile.isDirectory()="+newFile.isDirectory());
+//if(Debug.ON) Debug.trace("newFile.exists()="+newFile.exists());
 
                 // Select newly created file when job is finished
                 selectFileWhenFinished(newFile);
