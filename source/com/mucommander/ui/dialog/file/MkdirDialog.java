@@ -49,7 +49,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 
     private MainFrame mainFrame;
 	
-    private JTextField mkdirPathField;
+    private JTextField pathField;
 	
     private JButton okButton;
 
@@ -75,9 +75,9 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
 
         YBoxPanel mainPanel = new YBoxPanel();
         mainPanel.add(new JLabel(Translator.get(mkfileMode?com.mucommander.ui.action.MkfileAction.class.getName()+".tooltip":com.mucommander.ui.action.MkdirAction.class.getName()+".tooltip")+" :"));
-        mkdirPathField = new JTextField();
-        mkdirPathField.addActionListener(this);
-        mainPanel.add(mkdirPathField);
+        pathField = new JTextField();
+        pathField.addActionListener(this);
+        mainPanel.add(pathField);
 		
         mainPanel.addSpace(10);
         contentPane.add(mainPanel, BorderLayout.NORTH);
@@ -87,7 +87,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, this), BorderLayout.SOUTH);
 
         // Path field will receive initial focus
-        setInitialFocusComponent(mkdirPathField);		
+        setInitialFocusComponent(pathField);
 
         // Selects OK when enter is pressed
         getRootPane().setDefaultButton(okButton);
@@ -103,7 +103,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
      * Creates a new directory. This method is trigged by the 'OK' button or return key.
      */
     public void doMkdir() {
-        String enteredPath = mkdirPathField.getText();
+        String enteredPath = pathField.getText();
 
         // Resolves destination folder
         Object ret[] = FileToolkit.resolvePath(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
@@ -143,7 +143,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener {
         dispose();
 		
         // OK Button
-        if(source == okButton || source == mkdirPathField) {
+        if(source == okButton || source == pathField) {
             doMkdir();
         }
     }

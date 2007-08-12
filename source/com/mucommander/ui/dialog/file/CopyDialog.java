@@ -71,14 +71,15 @@ public class CopyDialog extends DestinationDialog {
             fieldText = destFolder.getAbsolutePath(true);
             // Append filename to destination path if there is only one file to copy
             // and if the file is not a directory that already exists in destination
-            // (otherwise folder would be copied inside the destination folder)
+            // (otherwise folder would be copied into the destination folder)
             if(nbFiles==1) {
                 AbstractFile file = ((AbstractFile)files.elementAt(0));
-                AbstractFile testFile;
+                AbstractFile destFile;
 
-                // TODO: find a way to remove this AbstractFile.getFile() which can lock the main thread if the file is on a remote filesystem
+                // TODO: move those I/O bound calls to another thread as they can lock the main thread
                 startPosition  = fieldText.length();
-                if(!(file.isDirectory() && (testFile= FileFactory.getFile(fieldText+file.getName()))!=null && testFile.exists() && testFile.isDirectory())) {
+
+                if(!(file.isDirectory() && (destFile=FileFactory.getFile(fieldText+file.getName()))!=null && destFile.exists() && destFile.isDirectory())) {
                     endPosition = file.getName().indexOf('.');
                     if(endPosition > 0)
                         endPosition += startPosition;
@@ -95,9 +96,8 @@ public class CopyDialog extends DestinationDialog {
             }
 
         }
-        setTextField(fieldText, startPosition, endPosition);
 
-        //        showDialog();
+        setTextField(fieldText, startPosition, endPosition);
     }
 
 
@@ -105,14 +105,6 @@ public class CopyDialog extends DestinationDialog {
      * Starts a CopyJob. This method is trigged by the 'OK' button or return key.
      */
     protected void startJob(AbstractFile destFolder, String newName, int defaultFileExistsAction) {
-        /*
-        // Makes sure the source file and destination files are not the same.
-        if (newName==null || files.getBaseFolder().equals(destFolder)) {
-            showErrorDialog(Translator.get("same_source_destination"));
-            return;
-        }
-        */
-
         // Starts copying files
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
         CopyJob job = new CopyJob(progressDialog, mainFrame, files, destFolder, newName, CopyJob.COPY_MODE, defaultFileExistsAction);

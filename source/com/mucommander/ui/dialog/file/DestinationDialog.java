@@ -187,7 +187,7 @@ public abstract class DestinationDialog extends FocusDialog implements ActionLis
         String destPath = pathField.getText();
 
         // Resolves destination folder
-        // TODO: this should be done in the job's thread because AbstractFile creation can lock the main thread if the file is on a remote filesystem
+        // TODO: move those I/O bound calls to job as they can lock the main thread
         Object ret[] = FileToolkit.resolvePath(destPath, mainFrame.getActiveTable().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
         if (ret==null || (files.size()>1 && ret[1]!=null)) {
