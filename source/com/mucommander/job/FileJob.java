@@ -539,8 +539,8 @@ public abstract class FileJob implements Runnable {
             if(i==nbFiles-1) {
                 currentFileIndex++;
                 stop();
-                setState(FINISHED);
                 jobCompleted();
+                setState(FINISHED);
             }
         }
 
@@ -660,12 +660,11 @@ public abstract class FileJob implements Runnable {
         return nbFiles;
     }
 
-	
+
     //////////////////////
     // Abstract methods //
     //////////////////////
 
-	
     /**
      * This method should return <code>true</code> if the given folder has or may have been modified. This method is
      * used to determine if current table folders should be refreshed after this job.
