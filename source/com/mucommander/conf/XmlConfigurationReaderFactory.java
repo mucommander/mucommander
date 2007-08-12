@@ -19,17 +19,19 @@
 package com.mucommander.conf;
 
 /**
- * Listener interface for receiving configuration events.
+ * {@link ConfigurationReaderFactory} implementation used to create instances of {@link XmlConfigurationReader}.
  * <p>
- * Implementations of this interface can register themselves through
- * {@link ConfigurationManager#addConfigurationListener(ConfigurationListener)} to be notified of configuration changes.
+ * {@link ConfigurationReader Reader} instances created by this factory are meant to read the standard muCommander
+ * configuration file format described in the documentation of {@link XmlConfigurationReader}.
  * </p>
  * @author Nicolas Rinaudo
+ * @see    XmlConfigurationReader
+ * @see    XmlConfigurationWriter
  */
-public interface ConfigurationListener {
+public class XmlConfigurationReaderFactory implements ConfigurationReaderFactory {
     /**
-     * Invoked when the configuration changes.
-     * @param event describes the configuration modification.
+     * Returns an instance of {@link XmlConfigurationReader}.
+     * @return an instance of {@link XmlConfigurationReader}.
      */
-    public void configurationChanged(ConfigurationEvent event);
+    public ConfigurationReader getReaderInstance() {return new XmlConfigurationReader();}
 }

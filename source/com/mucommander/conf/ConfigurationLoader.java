@@ -3,67 +3,125 @@
  * Copyright (C) 2002-2007 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.mucommander.conf;
 
+import java.util.Stack;
+import java.util.EmptyStackException;
+
 /**
- * Class used to load configuration data.
+ * {@link com.mucommander.conf.ConfigurationBuilder} implementation used to load the configuration.
  * <p>
- * This class should in no case be used by anyone but the ConfigurationManager.
+ * The sole purpose of this class is to be used by the {@link com.mucommander.conf.ConfigurationManager}
+ * when loading configuration files.
  * </p>
  * @author Nicolas Rinaudo
  */
-class ConfigurationLoader implements ConfigurationTreeBuilder {
+class ConfigurationLoader implements ConfigurationBuilder {
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /** Buffer for the configuration path. */
-    private String variable = null;
+    /** Parents of {@link #currentSection}. */
+    private Stack                sections;
+    /** Fully qualified names of {@link #currentSection}. */
+    private Stack                sectionNames;
+    /** Section that we're currently building. */
+    private ConfigurationSection currentSection;
 
 
 
-    // - Tree handling -------------------------------------------------------------------
+    // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Adds a new entry to the configuration path.
-     * @param name name of the entry to add.
+     * Creates a new configuration loader.
+     * @param root where to create the configuration in.
      */
-    public void addNode(String name) {
-        if(variable == null)
-            variable = name;
+    public ConfigurationLoader(ConfigurationSection root) {currentSection = root;}
+
+
+
+    // - Building ------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Initialises the configuration bulding.
+     */
+    public void startConfiguration() {
+        sections     = new Stack();
+        sectionNames = new Stack();
+    }
+
+    /**
+     * Ends the configuration building.
+     * @throws ConfigurationException if not all opened sections have been closed.
+     */
+    public void endConfiguration() throws ConfigurationException {
+        // Makes sure currentSection is the root section.
+        if(!sections.empty())
+            throw new ConfigurationException("Not all sections have been closed.");
+        sections     = null;
+        sectionNames = null;
+    }
+
+    /**
+     * Creates a new sub-section to the current section.
+     * @param name name of the new section.
+     */
+    public void startSection(String name) throws ConfigurationException {
+        ConfigurationSection buffer;
+
+        buffer = currentSection.addSection(name);
+        sections.push(currentSection);
+        if(sectionNames.empty())
+            sectionNames.push(name + '.');
         else
-            variable += '.' + name;
+            sectionNames.push(((String)sectionNames.peek()) + name + '.');
+        currentSection = buffer;
     }
 
     /**
-     * Removes the last entry in the path.
-     * @param name name of the entry that was closed.
+     * Ends the current section.
+     * @param  name                   name of the section that's being closed.
+     * @throws ConfigurationException if we're not closing a legal section.
      */
-    public void closeNode(String name) {
-        int index;
-		
-        index = variable.lastIndexOf('.');
-        if(index > 0)
-            variable = variable.substring(0, index);
+    public void endSection(String name) throws ConfigurationException {
+        ConfigurationSection buffer;
+
+        // Makes sure there is a section to close.
+        try {
+            buffer = (ConfigurationSection)sections.pop();
+            sectionNames.pop();
+        }
+        catch(EmptyStackException e) {throw new ConfigurationException("Section " + name + " was already closed.");}
+
+        // Makes sure we're closing the right section.
+        if(buffer.getSection(name) != currentSection)
+            throw new ConfigurationException("Section " + name + " is not the currently opened section.");
+        currentSection = buffer;
     }
 
     /**
-     * Defines a new variable with the specified name and value.
-     * @param name  variable's name.
-     * @param value variable's value.
+     * Adds the specified variable to the current section.
+     * @param name  name of the variable.
+     * @param value value of the variable.
      */
-    public void addLeaf(String name, String value) {
-        ConfigurationManager.setVariable(variable + '.' + name, value);
+    public void addVariable(String name, String value) {
+        // If the variable's value was modified, trigger an event.
+        if(currentSection.setVariable(name, value)) {
+            if(sectionNames.empty())
+                ConfigurationEvent.triggerEvent(new ConfigurationEvent(name, value));
+            else
+                ConfigurationEvent.triggerEvent(new ConfigurationEvent(((String)sectionNames.peek()) + name, value));
+        }
     }
 }

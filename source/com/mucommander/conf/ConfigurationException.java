@@ -19,17 +19,31 @@
 package com.mucommander.conf;
 
 /**
- * Listener interface for receiving configuration events.
- * <p>
- * Implementations of this interface can register themselves through
- * {@link ConfigurationManager#addConfigurationListener(ConfigurationListener)} to be notified of configuration changes.
- * </p>
+ * Exception thrown when configuration related errors happen.
  * @author Nicolas Rinaudo
  */
-public interface ConfigurationListener {
+public class ConfigurationException extends Exception {
     /**
-     * Invoked when the configuration changes.
-     * @param event describes the configuration modification.
+     * Builds a new exception.
      */
-    public void configurationChanged(ConfigurationEvent event);
+    public ConfigurationException() {super();}
+
+    /**
+     * Builds a new exception with the specified message.
+     * @param message exception's message.
+     */
+    public ConfigurationException(String message) {super(message);}
+
+    /**
+     * Builds a new exception with the specified cause.
+     * @param cause exception's cause.
+     */
+    public ConfigurationException(Throwable cause) {super(cause);}
+
+    /**
+     * Builds a new exception with the specified message and cause.
+     * @param message exception's message.
+     * @param cause   exception's cause.
+     */
+    public ConfigurationException(String message, Throwable cause) {super(message, cause);}
 }

@@ -3,137 +3,158 @@
  * Copyright (C) 2002-2007 Maxence Bernard
  *
  * muCommander is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.mucommander.conf;
 
 import java.awt.*;
+import java.util.Iterator;
+import java.util.WeakHashMap;
 
 /**
- * Event used to notify registered listeners that a configuration variable has been modified.
- * @author Nicolas Rinaudo, Maxence Bernard
+ * Event triggered when the configuration has been modified.
+ * @author Nicolas Rinaudo
  */
 public class ConfigurationEvent {
+    // - Class variables -----------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /** Contains all registered configuration listeners, stored as weak references */
+    private static WeakHashMap                listeners = new WeakHashMap();
+
+
+
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Name of the variable that has been modified. */
-    private String variable;
-    /** New value of the variable that has been modified. */
-    private String value;
+    private final String name;
+    /** Variable's new value. */
+    private final String value;
 
 
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Builds a new configuration event with the specified variable name and value.
-     * @param variable name of the variable that has been modified.
-     * @param value    new value of the variable that has been modified.
+     * Builds a new configuration event initialised on the specified name and value.
+     * @param name  name of the variable that was modified.
+     * @param value value of the variable that was modified.
      */
-    ConfigurationEvent(String variable, String value) {
-        setVariable(variable);
-        setValue(value);
+    public ConfigurationEvent(String name, String value) {
+        this.name  = name;
+        this.value = value;
     }
 
 
 
-    // - Name access ---------------------------------------------------------------------
+    // - Variable access -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Sets the name of the variable that has been modified.
-     * @param variable name of the variable that has been modified.
-     */
-    void setVariable(String variable) { this.variable = variable;}
-
-    /**
-     * Returns the name of the variable that has been modified.
-     * @return the name of the variable that has been modified.
-     */
-    public String getVariable() {return variable;}
-
-
-
-    // - Value access --------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /**
-     * Sets the new value of the variable that has been modified.
-     * @param value new value of the variable that has been modified.
-     */
-    void setValue(String value) {this.value = value;}
-
-    /**
-     * Returns the new value of the variable that has been modified.
+     * Returns the name of the variable that was modified.
      * <p>
-     * If the returned value is <i>null</i>, it means that the configuration variable
-     * has been destroyed.
+     * The returned value will be the variable's fully qualified name. If, for example, the
+     * modified variable is <code>test.somevar</code>, this is what this method will return,
+     * not <code>somevar</code>.
      * </p>
-     * @return the new value of the variable that has been modified.
+     * @return the name of the variable that was modified.
+     */
+    public String getVariable() {return name;}
+
+    /**
+     * Returns the new value for the modified variable.
+     * <p>
+     * If the variable has been deleted, this method will return <code>null</code>.
+     * </p>
+     * @return the new value for the modified variable.
      */
     public String getValue() {return value;}
 
+    /**
+     * Returns the new value for the modified variable as an integer.
+     * <p>
+     * If the variable has been deleted, this method will return 0.
+     * </p>
+     * @return the new value for the modified variable.
+     */
+    public int getIntegerValue() {return ConfigurationSection.getIntegerValue(value);}
 
     /**
-     * Returns the new value of the variable that has been modified, parsed as an int.
+     * Returns the new value for the modified variable as a float.
      * <p>
-     * <b>Warning: </b>this method will return <code>-1</code> if the variable has been destroyed. 
-     * Use {@link #getValue getValue} and test the value against <code>null</code> to know if it has been destroyed.
+     * If the variable has been deleted, this method will return 0.
      * </p>
-     * @return the int value of the variable that has been modified, or -1 if the variable has been destroyed or
-     * the value could not be parsed as an int.
+     * @return the new value for the modified variable.
      */
-    public int getIntValue() {
-        if(value==null)
-            return -1;
-		
-        try {return Integer.parseInt(value);}
-        catch(NumberFormatException e) {return -1;}
+    public float getFloatValue() {return ConfigurationSection.getFloatValue(value);}
+
+    /**
+     * Returns the new value for the modified variable as a boolean.
+     * <p>
+     * If the variable has been deleted, this method will return <code>false</code>.
+     * </p>
+     * @return the new value for the modified variable.
+     */
+    public boolean getBooleanValue() {return ConfigurationSection.getBooleanValue(value);}
+
+    /**
+     * Returns the new value for the modified variable as a long.
+     * <p>
+     * If the variable has been deleted, this method will return 0.
+     * </p>
+     * @return the new value for the modified variable.
+     */
+    public long getLongValue() {return ConfigurationSection.getLongValue(value);}
+
+    /**
+     * Returns the new value for the modified variable as a double.
+     * <p>
+     * If the variable has been deleted, this method will return 0.
+     * </p>
+     * @return the new value for the modified variable.
+     */
+    public double getDoubleValue() {return ConfigurationSection.getDoubleValue(value);}
+
+
+
+    // - Listeners -----------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    // While having listeners being handled by the ConfigurationEvent rather than the
+    // ConfigurationManager might look like shody design, it's necessary for the
+    // ConfigurationExplorer to be able to trigger events when loading the configuration.
+    // Well, it's either that or have a cross-dependency between the manager and the
+    // explorer, which is even shodier design.
+
+    /**
+     * Adds the specified object to the list of registered configuration listeners.
+     * @param listener object to register as a configuration listener.
+     */
+    static void addConfigurationListener(ConfigurationListener listener) {listeners.put(listener, null);}
+
+    /**
+     * Removes the specified object from the list of registered configuration listeners.
+     * @param listener object to remove from the list of registered configuration listeners.
+     */
+    static void removeConfigurationListener(ConfigurationListener listener) {listeners.remove(listener);}
+
+    /**
+     * Passes the specified event to all registered configuration listeners.
+     * @param event event to propagate.
+     */
+    static void triggerEvent(ConfigurationEvent event) {
+        Iterator iterator;
+
+        iterator = listeners.keySet().iterator();
+        while(iterator.hasNext())
+            ((ConfigurationListener)iterator.next()).configurationChanged(event);
     }
-
-
-    /**
-     * Returns the new value of the variable that has been modified, parsed as a float.
-     * <p>
-     * <b>Warning: </b>this method will return <code>-1</code> if the variable has been destroyed. 
-     * Use {@link #getValue getValue} and test the value against <code>null</code> to know if it has been destroyed.
-     * </p>
-     * @return the float value of the variable that has been modified, or -1 if the variable has been destroyed or
-     * the value could not be parsed as a float.
-     */
-    public float getFloatValue() {
-        if(value==null)
-            return -1;
-		
-        try {return Float.parseFloat(value);}
-        catch(NumberFormatException e) {return -1;}
-    }
-
-
-    /**
-     * Returns the new value of the variable that has been modified, parsed as a boolean.
-     * <p>
-     * <b>Warning: </b>this method will return <code>false</code> if the value has been destroyed. 
-     * Use {@link #getValue getValue} and test the value against <code>null</code> to know if it has been destroyed.
-     * </p>
-     * @return the boolean value of the variable that has been modified.
-     */
-    public boolean getBooleanValue() {return value == null ? false : value.equals("true");}
-
-
-    /**
-     * Returns the new value of the variable that has been modified, parsed as a color represented in hexadecimal RGB format.
-     * 
-     * @return the Color value of the variable that has been modified, <code>null</code> if it has been destroyed.
-     */
-    public Color getColorValue() {return value == null ? null : new Color(Integer.parseInt(value, 16));}
 }
