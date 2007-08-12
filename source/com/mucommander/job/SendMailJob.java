@@ -52,6 +52,7 @@ public class SendMailJob extends TransferFileJob {
     /////////////////////
     // Mail parameters //
     /////////////////////
+
     /** Email recipient(s) */
     private String recipientString;
     /** Email subject */
@@ -117,10 +118,10 @@ public class SendMailJob extends TransferFileJob {
     }
 	
 	
-    /***********************************************
-     *** Methods taking care of sending the mail ***
-     ***********************************************/
-    
+    /////////////////////////////////////////////
+    // Methods taking care of sending the mail //
+    /////////////////////////////////////////////
+
     private void openConnection() throws IOException {
         this.socket = new Socket(mailServer, 25);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));

@@ -35,6 +35,7 @@ import java.io.File;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class TempOpenWithJob extends CopyJob {
+
     private AbstractFile tempFile;
     private Command      command;
 
@@ -43,6 +44,11 @@ public class TempOpenWithJob extends CopyJob {
         this.tempFile = tempFile;
         this.command  = command;
     }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
 
     protected void jobCompleted() {
         super.jobCompleted();

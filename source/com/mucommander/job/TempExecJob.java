@@ -42,6 +42,11 @@ public class TempExecJob extends CopyJob {
         this.tempFile = tempFile;
     }
 
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
     protected void jobCompleted() {
         super.jobCompleted();
 

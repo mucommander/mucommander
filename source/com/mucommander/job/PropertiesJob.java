@@ -71,9 +71,9 @@ public class PropertiesJob extends FileJob {
     }
  
 
-    /////////////////////////////////////
-    // Abstract methods Implementation //
-    /////////////////////////////////////
+    ////////////////////////////
+    // FileJob implementation //
+    ////////////////////////////
 
     /**
      * Adds the given file to the total of files or folders and the total size,
