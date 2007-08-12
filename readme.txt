@@ -272,6 +272,9 @@ New features:
   manage themes
 - Mac OS X and KDE: 'Delete' can now move files to the system's trash (enabled
   by default), and open or empty the trash
+- Zip files can now be modified 'on-the-fly' as if they were regular 
+  directories (on local and SMB filesystems)
+- Smart encoding detection used for Zip files, text viewer and editor
 
 Improvements:
 - Added 'Go to' buttons to 'Edit bookmarks', 'Edit credentials' and 'Show open
@@ -294,6 +297,7 @@ Improvements:
   permanently
 - Added folder icons to drive button and its popup menu
 - Quick search now dims the non-matching files
+- Improved Zip performance: up to 15x speed increase when extracting Zip files
 
 Localization:
 - Korean translation contributed by Jioh L. Jung
@@ -322,9 +326,6 @@ Known issues:
 - Hungarian translation is not up-to-date
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6
-- Zip files encoded in a charset other than UTF-8 will not display non-ASCII
-  filenames properly due to a limitation of java.util.zip
-  (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4244499)
 - Some BZ2 archives can not be properly opened
 - SMB support may not work properly on non multi-language JRE
 - 'Copy files to clipboard' not working with some applications (files are not
