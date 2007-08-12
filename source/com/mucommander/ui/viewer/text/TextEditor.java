@@ -19,6 +19,7 @@
 package com.mucommander.ui.viewer.text;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.io.EncodingDetector;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
@@ -33,6 +34,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
@@ -76,7 +78,16 @@ public class TextEditor extends FileEditor implements ActionListener, DocumentLi
     }
 			
     public void edit(AbstractFile file) throws IOException {
-        InputStreamReader isr = new InputStreamReader(file.getInputStream());
+        // Auto-detect encoding
+        InputStream in = file.getInputStream();
+        String encoding = EncodingDetector.detectEncoding(in);
+        in.close();
+
+        // If encoding could not be detected, default to UTF-8
+        if(encoding==null)
+            encoding = "UTF-8";
+
+        InputStreamReader isr = new InputStreamReader(file.getInputStream(), encoding);
         textArea.read(isr, null);
         isr.close();
 
