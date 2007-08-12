@@ -68,7 +68,7 @@ public class BufferPool {
             }
         }
 
-        if(Debug.ON) Debug.trace("Creating new buffer, size="+size);
+        if(Debug.ON) Debug.trace("Creating new buffer, size="+size, 3);
 
         // No existing buffer found with the same size, create a new one and return it
         return new byte[size];
@@ -81,9 +81,19 @@ public class BufferPool {
      * corrupted if other threads use it.
      *
      * @param buffer the buffer instance to make available for further use
+     * @throw IllegalArgumentException if specified buffer is null
      */
     public static synchronized void releaseBuffer(byte buffer[]) {
-//        if(Debug.ON) Debug.trace("Adding buffer "+buffer+", size="+buffer.length);
+        if(buffer==null)
+            throw new IllegalArgumentException("specified buffer is null");
+
+        if(buffers.contains(buffer)) {
+            if(Debug.ON) Debug.trace("Warning: specified buffer is already in the pool", -1);
+            return;
+        }
+
+//        if(Debug.ON) Debug.trace("Adding buffer "+buffer+", size="+buffer.length, -1);
+
         buffers.add(buffer);
     }
 }
