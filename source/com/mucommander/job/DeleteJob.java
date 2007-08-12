@@ -19,9 +19,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractTrash;
-import com.mucommander.file.FileFactory;
+import com.mucommander.file.*;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -53,6 +51,12 @@ public class DeleteJob extends FileJob {
 
     /** Trash instance, null if moveToTrash is false */
     private AbstractTrash trash;
+
+    /** The archive that contains the deleted files (may be null) */ 
+    private AbstractRWArchiveFile archiveToOptimize;
+
+    /** True when an archive is being optimized */
+    private boolean isOptimizingArchive;
 
     private final static int DELETE_LINK_ACTION = 100;
     private final static int DELETE_FOLDER_ACTION = 101;
@@ -195,8 +199,11 @@ public class DeleteJob extends FileJob {
                 return true;
             }
             catch(IOException e) {
-                if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("IOException caught: "+e);
-	
+                if(com.mucommander.Debug.ON) {
+                    com.mucommander.Debug.trace("IOException caught: "+e);
+                    e.printStackTrace();
+                }
+
                 ret = showErrorDialog(errorDialogTitle,
                                       Translator.get(file.isDirectory()?"cannot_delete_folder":"cannot_delete_file", file.getName())
                                       );
@@ -211,6 +218,9 @@ public class DeleteJob extends FileJob {
 
 
     public String getStatusString() {
+        if(isOptimizingArchive)
+            return Translator.get("optimizing_archive", archiveToOptimize.getName());
+
         return Translator.get("delete.deleting_file", getCurrentFileInfo());
     }
 
@@ -229,5 +239,34 @@ public class DeleteJob extends FileJob {
 
         if(moveToTrash)
             trash.waitForPendingOperations();
+    }
+
+    protected void jobCompleted() {
+        super.jobCompleted();
+
+        // If the source files are located inside an archive, optimize the archive file
+        AbstractArchiveFile archiveFile = baseSourceFolder.getParentArchive();
+
+        if(archiveFile!=null && archiveFile.isWritableArchive()) {
+            while(true) {
+                try {
+                    archiveToOptimize = ((AbstractRWArchiveFile)archiveFile);
+                    isOptimizingArchive = true;
+
+                    archiveToOptimize.optimizeArchive();
+
+                    break;
+                }
+                catch(IOException e) {
+        // Todo: localize this entry
+                    if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", archiveFile.getName()))==RETRY_ACTION)
+                        continue;
+
+                    break;
+                }
+            }
+
+            isOptimizingArchive = true;
+        }
     }
 }
