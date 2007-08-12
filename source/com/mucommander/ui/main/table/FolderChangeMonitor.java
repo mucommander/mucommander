@@ -16,12 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.main.table;
 
 import com.mucommander.Debug;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -101,10 +100,10 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         instances = new Vector();
 
         // Retrieve configuration values
-        checkPeriod = ConfigurationManager.getVariableLong(ConfigurationVariables.REFRESH_CHECK_PERIOD,
-                                                                     ConfigurationVariables.DEFAULT_REFRESH_CHECK_PERIOD);
-        waitAfterRefresh = ConfigurationManager.getVariableLong(ConfigurationVariables.WAIT_AFTER_REFRESH,
-                                                                          ConfigurationVariables.DEFAULT_WAIT_AFTER_REFRESH);
+        checkPeriod = ConfigurationManager.getVariable(ConfigurationVariables.REFRESH_CHECK_PERIOD,
+                                                       ConfigurationVariables.DEFAULT_REFRESH_CHECK_PERIOD);
+        waitAfterRefresh = ConfigurationManager.getVariable(ConfigurationVariables.WAIT_AFTER_REFRESH,
+                                                            ConfigurationVariables.DEFAULT_WAIT_AFTER_REFRESH);
     }
 
 		

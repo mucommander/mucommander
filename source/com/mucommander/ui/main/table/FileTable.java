@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.main.table;
 
 import com.mucommander.Debug;
@@ -24,7 +23,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.MoveJob;
@@ -129,8 +128,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     private boolean autoSizeColumnsEnabled;
 
     /** Should folders be displayed first, or mixed with regular files */
-    private boolean showFoldersFirst = ConfigurationManager.getVariableBoolean(
-            ConfigurationVariables.SHOW_FOLDERS_FIRST, ConfigurationVariables.DEFAULT_SHOW_FOLDERS_FIRST);
+    private boolean showFoldersFirst = ConfigurationManager.getVariable(ConfigurationVariables.SHOW_FOLDERS_FIRST, ConfigurationVariables.DEFAULT_SHOW_FOLDERS_FIRST);
 
     //	/** Editor component's height */
     //	private int editorRowHeight;
@@ -253,8 +251,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
         column.setMinWidth(0);
 
         // Turn on auto columns sizing if enabled
-        this.autoSizeColumnsEnabled = ConfigurationManager.getVariableBoolean(ConfigurationVariables.AUTO_SIZE_COLUMNS,
-                                                                              ConfigurationVariables.DEFAULT_AUTO_SIZE_COLUMNS);
+        this.autoSizeColumnsEnabled = ConfigurationManager.getVariable(ConfigurationVariables.AUTO_SIZE_COLUMNS, ConfigurationVariables.DEFAULT_AUTO_SIZE_COLUMNS);
         if(autoSizeColumnsEnabled)
             setAutoSizeColumnsEnabled(true);
 

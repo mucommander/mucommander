@@ -23,7 +23,7 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.local.LocalFile;
@@ -202,9 +202,11 @@ public class FileIcons {
 
         // Initialize system icon caches to limit the number of calls made to the getIcon method of the Swing object:
         // - used for directories located on remote locations, or in archives
-        systemIconDirCache = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
+        systemIconDirCache = LRUCache.createInstance(ConfigurationManager.getVariable(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY,
+                                                                                      ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
         // - used for files located on remote locations, or in archives
-        systemIconFileCache = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
+        systemIconFileCache = LRUCache.createInstance(ConfigurationManager.getVariable(ConfigurationVariables.SYSTEM_ICON_CACHE_CAPACITY,
+                                                                                       ConfigurationVariables.DEFAULT_SYSTEM_ICON_CACHE_CAPACITY));
 
         if(Debug.ON) Debug.trace("done");
         systemIconsInitialized = true;

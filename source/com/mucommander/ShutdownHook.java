@@ -28,7 +28,6 @@ import com.mucommander.ui.theme.ThemeManager;
 /**
  * The run method of this thread is called when the program shuts down, either because
  * the user chose to quit the program or because the program was interrupted by a logoff.
- *
  * @author Maxence Bernard
  */
 public class ShutdownHook extends Thread {
@@ -71,7 +70,6 @@ public class ShutdownHook extends Thread {
         if(shutdownTasksPerformed)
             return;
 
-       
         // Save preferences
         try {ConfigurationManager.writeConfiguration();}
         catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save configugration: " + e);}

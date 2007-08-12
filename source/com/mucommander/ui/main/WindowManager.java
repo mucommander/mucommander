@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.main;
 
 import com.mucommander.Debug;
@@ -26,7 +25,7 @@ import com.mucommander.auth.MappedCredentials;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.ui.dialog.auth.AuthDialog;
@@ -290,14 +289,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(mainFrames.isEmpty()) {
             currentMainFrame = newMainFrame;
             // Retrieve last saved window bounds
-            x      = ConfigurationManager.getVariableInt(ConfigurationVariables.LAST_X);
-            y      = ConfigurationManager.getVariableInt(ConfigurationVariables.LAST_Y);
-            width  = ConfigurationManager.getVariableInt(ConfigurationVariables.LAST_WIDTH);
-            height = ConfigurationManager.getVariableInt(ConfigurationVariables.LAST_HEIGHT);
+            x      = ConfigurationManager.getIntegerVariable(ConfigurationVariables.LAST_X);
+            y      = ConfigurationManager.getIntegerVariable(ConfigurationVariables.LAST_Y);
+            width  = ConfigurationManager.getIntegerVariable(ConfigurationVariables.LAST_WIDTH);
+            height = ConfigurationManager.getIntegerVariable(ConfigurationVariables.LAST_HEIGHT);
 
             // Retrieves the last known size of the screen.
-            int lastScreenWidth  = ConfigurationManager.getVariableInt(ConfigurationVariables.SCREEN_WIDTH);
-            int lastScreenHeight = ConfigurationManager.getVariableInt(ConfigurationVariables.SCREEN_HEIGHT);
+            int lastScreenWidth  = ConfigurationManager.getIntegerVariable(ConfigurationVariables.SCREEN_WIDTH);
+            int lastScreenHeight = ConfigurationManager.getIntegerVariable(ConfigurationVariables.SCREEN_HEIGHT);
 
             // If no previous location was saved, or if the resolution has changed,
             // reset the window's dimensions to their default values.

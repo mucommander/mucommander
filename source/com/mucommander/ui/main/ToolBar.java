@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.main;
 
 import com.mucommander.Debug;
@@ -24,7 +23,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.util.ResourceLoader;
@@ -71,8 +70,8 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
 
     /** Current icon scale value */
-    private static float scaleFactor = ConfigurationManager.getVariableFloat(ConfigurationVariables.TOOLBAR_ICON_SCALE,
-                                                                             ConfigurationVariables.DEFAULT_TOOLBAR_ICON_SCALE);
+    private static float scaleFactor = ConfigurationManager.getVariable(ConfigurationVariables.TOOLBAR_ICON_SCALE,
+                                                                        ConfigurationVariables.DEFAULT_TOOLBAR_ICON_SCALE);
 
     /** Command bar actions: Class instances or null to signify a separator */
     private static Class actions[];

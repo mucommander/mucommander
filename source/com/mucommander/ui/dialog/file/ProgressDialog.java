@@ -21,7 +21,7 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.Debug;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobListener;
 import com.mucommander.job.TransferFileJob;
@@ -194,8 +194,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
             advancedPanel.add(speedGraph);
 
             this.collapseExpandButton = new CollapseExpandButton(Translator.get("progress_dialog.advanced"), advancedPanel, this, true);
-            collapseExpandButton.setExpandedState(ConfigurationManager.getVariableBoolean(ConfigurationVariables.PROGRESS_DIALOG_EXPANDED,
-                                                                                          ConfigurationVariables.DEFAULT_PROGRESS_DIALOG_EXPANDED));
+            collapseExpandButton.setExpandedState(ConfigurationManager.getVariable(ConfigurationVariables.PROGRESS_DIALOG_EXPANDED,
+                                                                                   ConfigurationVariables.DEFAULT_PROGRESS_DIALOG_EXPANDED));
             tempPanel.add(collapseExpandButton, BorderLayout.EAST);
 
             yPanel.add(tempPanel);
@@ -205,8 +205,8 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
         }
 
         closeWhenFinishedCheckBox = new JCheckBox(Translator.get("progress_dialog.close_when_finished"));
-        closeWhenFinishedCheckBox.setSelected(ConfigurationManager.getVariableBoolean(ConfigurationVariables.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED,
-                                                                                      ConfigurationVariables.DEFAULT_PROGRESS_DIALOG_CLOSE_WHEN_FINISHED));
+        closeWhenFinishedCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED,
+                                                                               ConfigurationVariables.DEFAULT_PROGRESS_DIALOG_CLOSE_WHEN_FINISHED));
         yPanel.add(closeWhenFinishedCheckBox);
 
         yPanel.add(Box.createVerticalGlue());
@@ -586,10 +586,10 @@ public class ProgressDialog extends FocusDialog implements Runnable, ActionListe
 
         // Remember 'advanced panel' expanded state
         if(collapseExpandButton!=null)
-            ConfigurationManager.setVariableBoolean(ConfigurationVariables.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
+            ConfigurationManager.setVariable(ConfigurationVariables.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
 
         // Remember 'close window when finished' option state
-        ConfigurationManager.setVariableBoolean(ConfigurationVariables.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED, closeWhenFinishedCheckBox.isSelected());        
+        ConfigurationManager.setVariable(ConfigurationVariables.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED, closeWhenFinishedCheckBox.isSelected());        
     }
 
 

@@ -23,7 +23,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
@@ -74,8 +74,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
 
     /** Current icon scale factor */
-    private static float scaleFactor = ConfigurationManager.getVariableFloat(ConfigurationVariables.COMMAND_BAR_ICON_SCALE,
-                                                                             ConfigurationVariables.DEFAULT_COMMAND_BAR_ICON_SCALE);
+    private static float scaleFactor = ConfigurationManager.getVariable(ConfigurationVariables.COMMAND_BAR_ICON_SCALE,
+                                                                        ConfigurationVariables.DEFAULT_COMMAND_BAR_ICON_SCALE);
 
 
     /** Command bar actions */

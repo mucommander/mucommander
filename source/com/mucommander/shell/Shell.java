@@ -24,7 +24,7 @@ import com.mucommander.command.CommandParser;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.process.AbstractProcess;
@@ -143,7 +143,7 @@ public class Shell implements ConfigurationListener {
         String buffer;
 
         // Retrieves the configuration defined shell command.
-        if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_SHELL, ConfigurationVariables.DEFAULT_USE_CUSTOM_SHELL))
+        if(ConfigurationManager.getVariable(ConfigurationVariables.USE_CUSTOM_SHELL, ConfigurationVariables.DEFAULT_USE_CUSTOM_SHELL))
             buffer = ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_SHELL, PlatformManager.DEFAULT_SHELL_COMMAND);
         else
             buffer = PlatformManager.DEFAULT_SHELL_COMMAND;

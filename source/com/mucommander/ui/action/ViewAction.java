@@ -23,7 +23,7 @@ import com.mucommander.command.CommandParser;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
@@ -68,7 +68,7 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
 
 
         // Initialises configuration.
-        useCustomViewer = ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_VIEWER, ConfigurationVariables.DEFAULT_USE_CUSTOM_VIEWER);
+        useCustomViewer = ConfigurationManager.getVariable(ConfigurationVariables.USE_CUSTOM_VIEWER, ConfigurationVariables.DEFAULT_USE_CUSTOM_VIEWER);
         setCustomViewer(ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_VIEWER));
     }
 

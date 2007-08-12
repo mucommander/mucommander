@@ -21,7 +21,7 @@ package com.mucommander.ui.dialog.pref.general;
 import com.mucommander.PlatformManager;
 import com.mucommander.bonjour.BonjourDirectory;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
@@ -74,7 +74,7 @@ class MiscPanel extends PreferencesPanel {
         JRadioButton useDefaultShellRadioButton = new JRadioButton(Translator.get("prefs_dialog.default_shell")+": "+PlatformManager.DEFAULT_SHELL_COMMAND);
         useCustomShellRadioButton = new JRadioButton(Translator.get("prefs_dialog.custom_shell")+": ");
         // Use sytem default or custom shell ?
-        if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_SHELL, ConfigurationVariables.DEFAULT_USE_CUSTOM_SHELL))
+        if(ConfigurationManager.getVariable(ConfigurationVariables.USE_CUSTOM_SHELL, ConfigurationVariables.DEFAULT_USE_CUSTOM_SHELL))
             useCustomShellRadioButton.setSelected(true);
         else
             useDefaultShellRadioButton.setSelected(true);
@@ -82,7 +82,7 @@ class MiscPanel extends PreferencesPanel {
         shellPanel.add(useDefaultShellRadioButton);
         JPanel tempPanel = new JPanel(new BorderLayout());
         tempPanel.add(useCustomShellRadioButton, BorderLayout.WEST);
-        customShellField = new JTextField(getPref(ConfigurationVariables.CUSTOM_SHELL));
+        customShellField = new JTextField(ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_SHELL, ""));
         // Typing in the text field automatically selects the associated radio button (if not already)
         customShellField.addKeyListener(new KeyAdapter() {
                 public void keyTyped(KeyEvent e) {
@@ -103,27 +103,26 @@ class MiscPanel extends PreferencesPanel {
 
         // 'Check for updates on startup' option
         checkForUpdatesCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"));
-        checkForUpdatesCheckBox.setSelected(getPref(ConfigurationVariables.CHECK_FOR_UPDATE, Boolean.toString(ConfigurationVariables.DEFAULT_CHECK_FOR_UPDATE)).equals("true"));
+        checkForUpdatesCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.CHECK_FOR_UPDATE, ConfigurationVariables.DEFAULT_CHECK_FOR_UPDATE));
         northPanel.add(checkForUpdatesCheckBox);
 
         // 'Show confirmation dialog on quit' option
         quitConfirmationCheckBox = new JCheckBox(Translator.get("prefs_dialog.confirm_on_quit"));
-        quitConfirmationCheckBox.setSelected(getPref(ConfigurationVariables.CONFIRM_ON_QUIT,
-                                                    Boolean.toString(ConfigurationVariables.DEFAULT_CONFIRM_ON_QUIT)).equals("true"));
+        quitConfirmationCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.CONFIRM_ON_QUIT, ConfigurationVariables.DEFAULT_CONFIRM_ON_QUIT));
         northPanel.add(quitConfirmationCheckBox);
 
         // 'Enable system notifications' option, displayed only if current platform supports system notifications
         if(AbstractNotifier.isAvailable()) {
             systemNotificationsCheckBox = new JCheckBox(Translator.get("prefs_dialog.enable_system_notifications")+" ("+AbstractNotifier.getNotifier().getPrettyName()+")");
-            systemNotificationsCheckBox.setSelected(getPref(ConfigurationVariables.ENABLE_SYSTEM_NOTIFICATIONS,
-                                                        Boolean.toString(ConfigurationVariables.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)).equals("true"));
+            systemNotificationsCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.ENABLE_SYSTEM_NOTIFICATIONS,
+                                                                                     ConfigurationVariables.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS));
             northPanel.add(systemNotificationsCheckBox);
         }
 
         // 'Enable Bonjour services discovery' option
         bonjourDiscoveryCheckBox = new JCheckBox(Translator.get("prefs_dialog.enable_bonjour_discovery"));
-        bonjourDiscoveryCheckBox.setSelected(getPref(ConfigurationVariables.ENABLE_BONJOUR_DISCOVERY,
-                                            Boolean.toString(ConfigurationVariables.DEFAULT_ENABLE_BONJOUR_DISCOVERY)).equals("true"));
+        bonjourDiscoveryCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.ENABLE_BONJOUR_DISCOVERY,
+                                                                              ConfigurationVariables.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
         northPanel.add(bonjourDiscoveryCheckBox);
 
         add(northPanel, BorderLayout.NORTH);
@@ -134,22 +133,22 @@ class MiscPanel extends PreferencesPanel {
     // PrefPanel methods //
     ///////////////////////
     protected void commit() {
-        setPref(ConfigurationVariables.CHECK_FOR_UPDATE, Boolean.toString(checkForUpdatesCheckBox.isSelected()));
+        ConfigurationManager.setVariable(ConfigurationVariables.CHECK_FOR_UPDATE, checkForUpdatesCheckBox.isSelected());
 
-        setPref(ConfigurationVariables.USE_CUSTOM_SHELL, Boolean.toString(useCustomShellRadioButton.isSelected()));
-        setPref(ConfigurationVariables.CUSTOM_SHELL, customShellField.getText());
+        ConfigurationManager.setVariable(ConfigurationVariables.USE_CUSTOM_SHELL, useCustomShellRadioButton.isSelected());
+        ConfigurationManager.setVariable(ConfigurationVariables.CUSTOM_SHELL, customShellField.getText());
 
-        setPref(ConfigurationVariables.CONFIRM_ON_QUIT,  Boolean.toString(quitConfirmationCheckBox.isSelected()));
+        ConfigurationManager.setVariable(ConfigurationVariables.CONFIRM_ON_QUIT, quitConfirmationCheckBox.isSelected());
 
         boolean enabled;
         if(systemNotificationsCheckBox!=null) {
             enabled = systemNotificationsCheckBox.isSelected();
-            setPref(ConfigurationVariables.ENABLE_SYSTEM_NOTIFICATIONS, Boolean.toString(enabled));
+            ConfigurationManager.setVariable(ConfigurationVariables.ENABLE_SYSTEM_NOTIFICATIONS, enabled);
             AbstractNotifier.getNotifier().setEnabled(enabled);
         }
 
         enabled = bonjourDiscoveryCheckBox.isSelected();
-        setPref(ConfigurationVariables.ENABLE_BONJOUR_DISCOVERY,  Boolean.toString(enabled));
+        ConfigurationManager.setVariable(ConfigurationVariables.ENABLE_BONJOUR_DISCOVERY, enabled);
         BonjourDirectory.setActive(enabled);
     }
 }

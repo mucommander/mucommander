@@ -22,7 +22,7 @@ package com.mucommander.text;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

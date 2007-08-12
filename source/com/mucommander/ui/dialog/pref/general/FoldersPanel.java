@@ -19,7 +19,8 @@
 package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.PlatformManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
@@ -95,12 +96,12 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         tempPanel.setAlignmentX(LEFT_ALIGNMENT);
         tempPanel.add(leftCustomFolderRadioButton);
         tempPanel.addSpace(5);
-        leftCustomFolderTextField = new JTextField(getPref(ConfigurationVariables.LEFT_CUSTOM_FOLDER));
+        leftCustomFolderTextField = new JTextField(ConfigurationManager.getVariable(ConfigurationVariables.LEFT_CUSTOM_FOLDER, ""));
         leftCustomFolderTextField.addKeyListener(this);
         tempPanel.add(leftCustomFolderTextField);
         startupFolderPanel.add(tempPanel);
 
-        if(getPref(ConfigurationVariables.LEFT_STARTUP_FOLDER).equals(ConfigurationVariables.STARTUP_FOLDER_LAST))
+        if(ConfigurationManager.getVariable(ConfigurationVariables.LEFT_STARTUP_FOLDER, "").equals(ConfigurationVariables.STARTUP_FOLDER_LAST))
             leftLastFolderRadioButton.setSelected(true);
         else
             leftCustomFolderRadioButton.setSelected(true);
@@ -128,12 +129,12 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         tempPanel.setAlignmentX(LEFT_ALIGNMENT);
         tempPanel.add(rightCustomFolderRadioButton);
         tempPanel.addSpace(5);
-        rightCustomFolderTextField = new JTextField(getPref(ConfigurationVariables.RIGHT_CUSTOM_FOLDER));
+        rightCustomFolderTextField = new JTextField(ConfigurationManager.getVariable(ConfigurationVariables.RIGHT_CUSTOM_FOLDER, ""));
         rightCustomFolderTextField.addKeyListener(this);
         tempPanel.add(rightCustomFolderTextField);
         startupFolderPanel.add(tempPanel);
 
-        if(getPref(ConfigurationVariables.RIGHT_STARTUP_FOLDER).equals(ConfigurationVariables.STARTUP_FOLDER_LAST))
+        if(ConfigurationManager.getVariable(ConfigurationVariables.RIGHT_STARTUP_FOLDER, "").equals(ConfigurationVariables.STARTUP_FOLDER_LAST))
             rightLastFolderRadioButton.setSelected(true);
         else
             rightCustomFolderRadioButton.setSelected(true);
@@ -147,7 +148,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         northPanel.addSpace(5);
 		
         showHiddenFilesCheckBox = new JCheckBox(Translator.get("prefs_dialog.show_hidden_files"));
-        showHiddenFilesCheckBox.setSelected(getPref(ConfigurationVariables.SHOW_HIDDEN_FILES, Boolean.toString(ConfigurationVariables.DEFAULT_SHOW_HIDDEN_FILES)).equals("true"));
+        showHiddenFilesCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.SHOW_HIDDEN_FILES, ConfigurationVariables.DEFAULT_SHOW_HIDDEN_FILES));
         northPanel.add(showHiddenFilesCheckBox);
 
         // Mac OS X-only options
@@ -157,24 +158,26 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
             showHiddenFilesCheckBox.addItemListener(this);
 
             showDSStoreFilesCheckBox = new JCheckBox(Translator.get("prefs_dialog.show_ds_store_files"));
-            showDSStoreFilesCheckBox.setSelected(getPref(ConfigurationVariables.SHOW_DS_STORE_FILES, Boolean.toString(ConfigurationVariables.DEFAULT_SHOW_DS_STORE_FILES)).equals("true"));
+            showDSStoreFilesCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.SHOW_DS_STORE_FILES,
+                                                                                  ConfigurationVariables.DEFAULT_SHOW_DS_STORE_FILES));
             showDSStoreFilesCheckBox.setEnabled(showHiddenFilesCheckBox.isSelected());
             // Shift the check box to the right to indicate that it is a sub-option
             northPanel.add(showDSStoreFilesCheckBox, 20);
 
             showSystemFoldersCheckBox = new JCheckBox(Translator.get("prefs_dialog.show_system_folders"));
-            showSystemFoldersCheckBox.setSelected(getPref(ConfigurationVariables.SHOW_SYSTEM_FOLDERS, Boolean.toString(ConfigurationVariables.DEFAULT_SHOW_SYSTEM_FOLDERS)).equals("true"));
+            showSystemFoldersCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.SHOW_SYSTEM_FOLDERS,
+                                                                                   ConfigurationVariables.DEFAULT_SHOW_SYSTEM_FOLDERS));
             northPanel.add(showSystemFoldersCheckBox);
         }
 
         compactSizeCheckBox = new JCheckBox(Translator.get("prefs_dialog.compact_file_size"));
-        compactSizeCheckBox.setSelected(getPref(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE,
-                                                Boolean.toString(ConfigurationVariables.DEFAULT_DISPLAY_COMPACT_FILE_SIZE)).equals("true"));
+        compactSizeCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE,
+                                                                         ConfigurationVariables.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
         northPanel.add(compactSizeCheckBox);
 
         followSymlinksCheckBox = new JCheckBox(Translator.get("prefs_dialog.follow_symlinks_when_cd"));
-        followSymlinksCheckBox.setSelected(getPref(ConfigurationVariables.CD_FOLLOWS_SYMLINKS,
-                                                Boolean.toString(ConfigurationVariables.DEFAULT_CD_FOLLOWS_SYMLINKS)).equals("true"));
+        followSymlinksCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.CD_FOLLOWS_SYMLINKS,
+                                                                            ConfigurationVariables.DEFAULT_CD_FOLLOWS_SYMLINKS));
         northPanel.add(followSymlinksCheckBox);
 
         add(northPanel, BorderLayout.NORTH);
@@ -184,24 +187,24 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     // PrefPanel methods //
     ///////////////////////
     protected void commit() {
-        setPref(ConfigurationVariables.LEFT_STARTUP_FOLDER, leftLastFolderRadioButton.isSelected() ? ConfigurationVariables.STARTUP_FOLDER_LAST :
+        ConfigurationManager.setVariable(ConfigurationVariables.LEFT_STARTUP_FOLDER, leftLastFolderRadioButton.isSelected() ? ConfigurationVariables.STARTUP_FOLDER_LAST :
                 ConfigurationVariables.STARTUP_FOLDER_CUSTOM);
-        setPref(ConfigurationVariables.LEFT_CUSTOM_FOLDER, leftCustomFolderTextField.getText());
+        ConfigurationManager.setVariable(ConfigurationVariables.LEFT_CUSTOM_FOLDER, leftCustomFolderTextField.getText());
 		
-        setPref(ConfigurationVariables.RIGHT_STARTUP_FOLDER, rightLastFolderRadioButton.isSelected() ? ConfigurationVariables.STARTUP_FOLDER_LAST :
+        ConfigurationManager.setVariable(ConfigurationVariables.RIGHT_STARTUP_FOLDER, rightLastFolderRadioButton.isSelected() ? ConfigurationVariables.STARTUP_FOLDER_LAST :
                 ConfigurationVariables.STARTUP_FOLDER_CUSTOM);
-        setPref(ConfigurationVariables.RIGHT_CUSTOM_FOLDER, rightCustomFolderTextField.getText());
+        ConfigurationManager.setVariable(ConfigurationVariables.RIGHT_CUSTOM_FOLDER, rightCustomFolderTextField.getText());
 
-        setPref(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE, Boolean.toString(compactSizeCheckBox.isSelected()));
+        ConfigurationManager.setVariable(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE, compactSizeCheckBox.isSelected());
 
-        setPref(ConfigurationVariables.CD_FOLLOWS_SYMLINKS, Boolean.toString(followSymlinksCheckBox.isSelected()));
+        ConfigurationManager.setVariable(ConfigurationVariables.CD_FOLLOWS_SYMLINKS, followSymlinksCheckBox.isSelected());
 
         // If one of the show/hide file filters have changed, refresh current folders of current MainFrame
-        boolean refreshFolders = setPref(ConfigurationVariables.SHOW_HIDDEN_FILES, Boolean.toString(showHiddenFilesCheckBox.isSelected()));
+        boolean refreshFolders = ConfigurationManager.setVariable(ConfigurationVariables.SHOW_HIDDEN_FILES, showHiddenFilesCheckBox.isSelected());
         
         if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
-            refreshFolders |= setPref(ConfigurationVariables.SHOW_DS_STORE_FILES, Boolean.toString(showDSStoreFilesCheckBox.isSelected()));
-            refreshFolders |= setPref(ConfigurationVariables.SHOW_SYSTEM_FOLDERS, Boolean.toString(showSystemFoldersCheckBox.isSelected()));
+            refreshFolders |= ConfigurationManager.setVariable(ConfigurationVariables.SHOW_DS_STORE_FILES, showDSStoreFilesCheckBox.isSelected());
+            refreshFolders |= ConfigurationManager.setVariable(ConfigurationVariables.SHOW_SYSTEM_FOLDERS, showSystemFoldersCheckBox.isSelected());
         }
 
         if(refreshFolders) {

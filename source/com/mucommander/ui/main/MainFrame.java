@@ -20,7 +20,7 @@ package com.mucommander.ui.main;
 
 import com.mucommander.Debug;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.event.ActivePanelListener;
@@ -113,7 +113,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Create toolbar and show it only if it hasn't been disabled in the preferences
         this.toolbar = new ToolBar(this);
         // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be properly initialized
-        this.toolbar.setVisible(ConfigurationManager.getVariableBoolean(ConfigurationVariables.TOOLBAR_VISIBLE, ConfigurationVariables.DEFAULT_TOOLBAR_VISIBLE));
+        this.toolbar.setVisible(ConfigurationManager.getVariable(ConfigurationVariables.TOOLBAR_VISIBLE, ConfigurationVariables.DEFAULT_TOOLBAR_VISIBLE));
 			
         contentPane.add(toolbar, BorderLayout.NORTH);
 
@@ -168,7 +168,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Show command bar only if it hasn't been disabled in the preferences
         this.commandBar = new CommandBar(this);
         // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
-        this.commandBar.setVisible(ConfigurationManager.getVariableBoolean(ConfigurationVariables.COMMAND_BAR_VISIBLE, ConfigurationVariables.DEFAULT_COMMAND_BAR_VISIBLE));
+        this.commandBar.setVisible(ConfigurationManager.getVariable(ConfigurationVariables.COMMAND_BAR_VISIBLE, ConfigurationVariables.DEFAULT_COMMAND_BAR_VISIBLE));
 
         southPanel.add(commandBar);
 
@@ -490,13 +490,13 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Save window position, size and screen resolution
         Rectangle bounds = getBounds();
-        ConfigurationManager.setVariableInt(ConfigurationVariables.LAST_X, (int)bounds.getX());
-        ConfigurationManager.setVariableInt(ConfigurationVariables.LAST_Y, (int)bounds.getY());
-        ConfigurationManager.setVariableInt(ConfigurationVariables.LAST_WIDTH, (int)bounds.getWidth());
-        ConfigurationManager.setVariableInt(ConfigurationVariables.LAST_HEIGHT, (int)bounds.getHeight());
+        ConfigurationManager.setVariable(ConfigurationVariables.LAST_X, (int)bounds.getX());
+        ConfigurationManager.setVariable(ConfigurationVariables.LAST_Y, (int)bounds.getY());
+        ConfigurationManager.setVariable(ConfigurationVariables.LAST_WIDTH, (int)bounds.getWidth());
+        ConfigurationManager.setVariable(ConfigurationVariables.LAST_HEIGHT, (int)bounds.getHeight());
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        ConfigurationManager.setVariableInt(ConfigurationVariables.SCREEN_WIDTH, screenSize.width);
-        ConfigurationManager.setVariableInt(ConfigurationVariables.SCREEN_HEIGHT, screenSize.height);
+        ConfigurationManager.setVariable(ConfigurationVariables.SCREEN_WIDTH, screenSize.width);
+        ConfigurationManager.setVariable(ConfigurationVariables.SCREEN_HEIGHT, screenSize.height);
 
         // Save split pane orientation
         saveSplitPaneOrientation();

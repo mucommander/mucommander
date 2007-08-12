@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.theme;
 
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 
 /**
  * Defines older muCommander versions' way of managing themes.
@@ -31,7 +31,7 @@ interface LegacyTheme {
     // - Color variables -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing muCommander's various colors. */
-    public static final String COLORS_SECTION                     = ConfigurationVariables.ROOT_SECTION + '.' + "colors";
+    public static final String COLORS_SECTION                     = "colors";
     /** Color used for the background of the folder views. */
     public static final String BACKGROUND_COLOR                   = COLORS_SECTION + '.' + "background";
     /** Default folder views background colors. */
@@ -97,7 +97,7 @@ interface LegacyTheme {
     // - Font variables ------------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the font used by muCommander. */
-    public static final String FONT_SECTION                       = ConfigurationVariables.ROOT_SECTION + '.' + "font";
+    public static final String FONT_SECTION                       = "font";
     /** Family of the font used by muCommander. */
     public static final String FONT_FAMILY                        = FONT_SECTION + '.' + "family";
     /** Size of the font used by muCommander. */

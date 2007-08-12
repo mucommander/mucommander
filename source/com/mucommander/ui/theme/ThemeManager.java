@@ -22,7 +22,7 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;

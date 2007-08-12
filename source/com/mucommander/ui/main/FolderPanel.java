@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.main;
 
 import com.mucommander.PlatformManager;
@@ -27,7 +26,7 @@ import com.mucommander.auth.MappedCredentials;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
@@ -147,15 +146,15 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         chainedFileFilter = new AndFileFilter();
 
         // Filters out hidden files, null when 'show hidden files' option is enabled
-        if(!ConfigurationManager.getVariableBoolean(ConfigurationVariables.SHOW_HIDDEN_FILES, ConfigurationVariables.DEFAULT_SHOW_HIDDEN_FILES))
+        if(!ConfigurationManager.getVariable(ConfigurationVariables.SHOW_HIDDEN_FILES, ConfigurationVariables.DEFAULT_SHOW_HIDDEN_FILES))
             chainedFileFilter.addFileFilter(new HiddenFileFilter());
 
         // Filters out Mac OS X .DS_Store files, null when 'show DS_Store files' option is enabled
-        if(!ConfigurationManager.getVariableBoolean(ConfigurationVariables.SHOW_DS_STORE_FILES, ConfigurationVariables.DEFAULT_SHOW_DS_STORE_FILES))
+        if(!ConfigurationManager.getVariable(ConfigurationVariables.SHOW_DS_STORE_FILES, ConfigurationVariables.DEFAULT_SHOW_DS_STORE_FILES))
             chainedFileFilter.addFileFilter(new DSStoreFileFilter());
 
         /** Filters out Mac OS X system folders, null when 'show system folders' option is enabled */
-        if(!ConfigurationManager.getVariableBoolean(ConfigurationVariables.SHOW_SYSTEM_FOLDERS, ConfigurationVariables.DEFAULT_SHOW_SYSTEM_FOLDERS))
+        if(!ConfigurationManager.getVariable(ConfigurationVariables.SHOW_SYSTEM_FOLDERS, ConfigurationVariables.DEFAULT_SHOW_SYSTEM_FOLDERS))
             chainedFileFilter.addFileFilter(new SystemFileFilter());
 
         try {
@@ -668,7 +667,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
          * the preferences.
          */
         private boolean followCanonicalPath(AbstractFile file) {
-            if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.CD_FOLLOWS_SYMLINKS, ConfigurationVariables.DEFAULT_CD_FOLLOWS_SYMLINKS)
+            if(ConfigurationManager.getVariable(ConfigurationVariables.CD_FOLLOWS_SYMLINKS, ConfigurationVariables.DEFAULT_CD_FOLLOWS_SYMLINKS)
                     || file.getURL().getProtocol().equals(FileProtocols.HTTP) && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false)))
                 return true;
 

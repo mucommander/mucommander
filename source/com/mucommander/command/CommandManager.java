@@ -564,39 +564,32 @@ public class CommandManager implements CommandBuilder {
      * The association files will be saved as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupOutputStream}).
      * Its format is described {@link AssociationsXmlConstants here}.
      * </p>
-     * @return <code>true</code> if the operation was a succes, <code>false</code> otherwise.
      * @see    #loadAssociations()
      * @see    #getAssociationFile()
      * @see    #setAssociationFile(String)
+     * @throws IOException if an I/O error occurs.
      */
-    public static boolean writeAssociations() {
+    public static void writeAssociations() throws CommandException, IOException {
         // Do not save the associations if they were not modified.
         if(wereAssociationsModified) {
             BackupOutputStream out;    // Where to write the associations.
-            AssociationWriter  writer; // What to write the associations with.
 
             if(Debug.ON) Debug.trace("Writing associations to file: " + getAssociationFile());
 
             // Writes the associations.
             out = null;
             try {
-                writer = new AssociationWriter(out = new BackupOutputStream(getAssociationFile()));
-                buildAssociations(writer);
-                out.close(true);
+                buildAssociations(new AssociationWriter(out = new BackupOutputStream(getAssociationFile())));
                 wereAssociationsModified = false;
             }
-            // Prevents overwriting of the association file if there's reason to believe it wasn't
-            // saved properly.
-            catch(Exception e) {
+            finally {
                 if(out != null) {
-                    try {out.close(false);}
-                    catch(Exception e2) {}
+                    try {out.close();}
+                    catch(Exception e) {}
                 }
-                return false;
             }
         }
         else if(Debug.ON) Debug.trace("Custom file associations not modified, skip saving.");
-        return true;
     }
 
 
@@ -656,40 +649,32 @@ public class CommandManager implements CommandBuilder {
      * The command files will be saved as a <i>backed-up file</i> (see {@link com.mucommander.io.BackupOutputStream}).
      * Its format is described {@link CommandsXmlConstants here}.
      * </p>
-     * @return <code>true</code> if the operation was a succes, <code>false</code> otherwise.
      * @see    #loadCommands()
      * @see    #getCommandFile()
      * @see    #setCommandFile(String)
+     * @throws IOException if an I/O error occurs.
      */
-    public static boolean writeCommands() {
+    public static void writeCommands() throws IOException, CommandException {
         // Only saves the command if they were modified since the last time they were written.
         if(wereCommandsModified) {
             BackupOutputStream out;    // Where to write the associations.
-            CommandWriter      writer; // What to write the associations with.
 
             if(Debug.ON) Debug.trace("Writing custom commands to file: " + getCommandFile());
 
             // Writes the commands.
             out = null;
             try {
-                writer = new CommandWriter(out = new BackupOutputStream(getCommandFile()));
-                buildCommands(writer);
-                out.close(true);
+                buildCommands(new CommandWriter(out = new BackupOutputStream(getCommandFile())));
                 wereCommandsModified = false;
             }
-            // If an error occured, closes the stream but prevents the original file
-            // from being overwritten.
-            catch(Exception e) {
+            finally {
                 if(out != null) {
-                    try {out.close(false);}
-                    catch(Exception e2) {}
+                    try {out.close();}
+                    catch(Exception e) {}
                 }
-                return false;
             }
-
         }
         else if(Debug.ON) Debug.trace("Custom commands not modified, skip saving.");
-        return true;
     }
 
     /**

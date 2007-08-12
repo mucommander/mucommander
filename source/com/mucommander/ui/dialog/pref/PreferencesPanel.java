@@ -37,31 +37,6 @@ public abstract class PreferencesPanel extends JPanel {
 
     public String getTitle() {return title;}
 	
-	
-    /**
-     * Convenience method, returns a configuration variable's value.
-     */
-    protected static String getPref(String variable) {
-        String val = ConfigurationManager.getVariable(variable);
-		
-        // Replace null values by empty string to avoid having to check for null values 
-        if(val==null)
-            val = "";
-		
-        return val;	
-    }
-
-    /**
-     * Convenience method, returns a configuration variable's value using the provided default value
-     * if it didn't have any value.
-     */
-    protected static String getPref(String variable, String defaultValue) {return ConfigurationManager.getVariable(variable, defaultValue);}
-
-    /**
-     * Convenience method, sets a configuration variable's value and return true if the variable has been changed.
-     */
-    protected static boolean setPref(String variable, String value) {return ConfigurationManager.setVariable(variable, value);}
-
     /**
      * This method is called by PreferencesDialog after the user pressed 'OK'
      * to save new preferences.

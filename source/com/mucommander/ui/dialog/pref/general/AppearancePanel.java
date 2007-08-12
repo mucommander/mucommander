@@ -20,7 +20,7 @@ package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -206,7 +206,8 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
         if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
             // 'Use brushed metal look' option
             brushedMetalCheckBox = new JCheckBox(Translator.get("prefs_dialog.use_brushed_metal"));
-            brushedMetalCheckBox.setSelected(getPref(ConfigurationVariables.USE_BRUSHED_METAL, Boolean.toString(ConfigurationVariables.DEFAULT_USE_BRUSHED_METAL)).equals("true"));
+            brushedMetalCheckBox.setSelected(ConfigurationManager.getVariable(ConfigurationVariables.USE_BRUSHED_METAL,
+                                                                              ConfigurationVariables.DEFAULT_USE_BRUSHED_METAL));
             flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             flowPanel.add(brushedMetalCheckBox);
             lnfPanel.add(flowPanel);
@@ -352,7 +353,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
         for(int i=0; i<ICON_SIZES.length; i++)
             iconSizeCombo.addItem(ICON_SIZES[i]);
 
-        float scaleFactor = ConfigurationManager.getVariableFloat(confVar, 1.0f);
+        float scaleFactor = ConfigurationManager.getVariable(confVar, 1.0f);
         int index = 0;
         for(int i=0; i<ICON_SCALE_FACTORS.length; i++) {
             if(scaleFactor==ICON_SCALE_FACTORS[i]) {
@@ -379,25 +380,25 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
     ///////////////////////
     protected void commit() {
         // Look and Feel
-        setPref(ConfigurationVariables.LOOK_AND_FEEL, lnfInfo[lnfComboBox.getSelectedIndex()].getClassName());
-        SwingUtilities.updateComponentTreeUI(parent);
+        if(ConfigurationManager.setVariable(ConfigurationVariables.LOOK_AND_FEEL, lnfInfo[lnfComboBox.getSelectedIndex()].getClassName()))
+            SwingUtilities.updateComponentTreeUI(parent);
 
         if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X)
-            setPref(ConfigurationVariables.USE_BRUSHED_METAL,  Boolean.toString(brushedMetalCheckBox.isSelected()));
+            ConfigurationManager.setVariable(ConfigurationVariables.USE_BRUSHED_METAL,  brushedMetalCheckBox.isSelected());
 
         // Set ToolBar's icon size
         float scaleFactor = ICON_SCALE_FACTORS[toolbarIconsSizeComboBox.getSelectedIndex()];
-        setPref(ConfigurationVariables.TOOLBAR_ICON_SCALE, Float.toString(scaleFactor));
+        ConfigurationManager.setVariable(ConfigurationVariables.TOOLBAR_ICON_SCALE, scaleFactor);
 
         // Set CommandBar's icon size
         scaleFactor = ICON_SCALE_FACTORS[commandBarIconsSizeComboBox.getSelectedIndex()];
-        setPref(ConfigurationVariables.COMMAND_BAR_ICON_SCALE , Float.toString(scaleFactor));
+        ConfigurationManager.setVariable(ConfigurationVariables.COMMAND_BAR_ICON_SCALE , scaleFactor);
 
         // Set file icon size
         scaleFactor = ICON_SCALE_FACTORS[fileIconsSizeComboBox.getSelectedIndex()];
         // Set scale factor in FileIcons first so that it has the new value when ConfigurationListener instances call it
         FileIcons.setScaleFactor(scaleFactor);
-        setPref(ConfigurationVariables.TABLE_ICON_SCALE , Float.toString(scaleFactor));
+        ConfigurationManager.setVariable(ConfigurationVariables.TABLE_ICON_SCALE , scaleFactor);
 
         // Sets the current theme.
         ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
@@ -407,7 +408,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener {
         int comboIndex = useSystemFileIconsComboBox.getSelectedIndex();
         String systemIconsPolicy = comboIndex==0?FileIcons.USE_SYSTEM_ICONS_NEVER:comboIndex==1?FileIcons.USE_SYSTEM_ICONS_APPLICATIONS:FileIcons.USE_SYSTEM_ICONS_ALWAYS;
         FileIcons.setSystemIconsPolicy(systemIconsPolicy);
-        setPref(ConfigurationVariables.USE_SYSTEM_FILE_ICONS, systemIconsPolicy);
+        ConfigurationManager.setVariable(ConfigurationVariables.USE_SYSTEM_FILE_ICONS, systemIconsPolicy);
     }
 
 

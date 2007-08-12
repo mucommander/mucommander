@@ -20,7 +20,7 @@
 package com.mucommander.job;
 
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.MimeTypes;
 import com.mucommander.file.util.FileSet;

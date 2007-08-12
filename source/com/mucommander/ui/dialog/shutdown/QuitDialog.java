@@ -20,7 +20,7 @@
 package com.mucommander.ui.dialog.shutdown;
 
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -77,7 +77,7 @@ public class QuitDialog extends QuestionDialog {
         this.quitConfirmed = getActionValue()==QUIT_ACTION;
         if(quitConfirmed) {
             // Remember user preference
-            ConfigurationManager.setVariableBoolean(ConfigurationVariables.CONFIRM_ON_QUIT, showNextTimeCheckBox.isSelected());
+            ConfigurationManager.setVariable(ConfigurationVariables.CONFIRM_ON_QUIT, showNextTimeCheckBox.isSelected());
         }
     }
     
@@ -94,7 +94,7 @@ public class QuitDialog extends QuestionDialog {
      * Returns <code>true</code> if quit confirmation hasn't been disabled in the preferences. 
      */
     public static boolean confirmationRequired() {
-        return ConfigurationManager.getVariableBoolean(ConfigurationVariables.CONFIRM_ON_QUIT, ConfigurationVariables.DEFAULT_CONFIRM_ON_QUIT);
+        return ConfigurationManager.getVariable(ConfigurationVariables.CONFIRM_ON_QUIT, ConfigurationVariables.DEFAULT_CONFIRM_ON_QUIT);
     }
     
     

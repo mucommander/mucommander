@@ -19,7 +19,7 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.CommandBar;
 import com.mucommander.ui.main.MainFrame;
@@ -41,8 +41,8 @@ public class ToggleCommandBarAction extends MucoAction {
 
     public ToggleCommandBarAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, false);
-        setLabel(Translator.get(ConfigurationManager.getVariableBoolean(ConfigurationVariables.COMMAND_BAR_VISIBLE,
-                                                                        ConfigurationVariables.DEFAULT_COMMAND_BAR_VISIBLE) ?
+        setLabel(Translator.get(ConfigurationManager.getVariable(ConfigurationVariables.COMMAND_BAR_VISIBLE,
+                                                                 ConfigurationVariables.DEFAULT_COMMAND_BAR_VISIBLE) ?
                                 com.mucommander.ui.action.ToggleCommandBarAction.class.getName()+".hide":com.mucommander.ui.action.ToggleCommandBarAction.class.getName()+".show"));
     }
 
@@ -51,7 +51,7 @@ public class ToggleCommandBarAction extends MucoAction {
         CommandBar commandBar = mainFrame.getCommandBar();
         boolean visible = !commandBar.isVisible();
         // Save the last command bar visible state in the configuration, this will become the default for new MainFrame windows.
-        ConfigurationManager.setVariableBoolean(ConfigurationVariables.COMMAND_BAR_VISIBLE, visible);
+        ConfigurationManager.setVariable(ConfigurationVariables.COMMAND_BAR_VISIBLE, visible);
         // Change the label to reflect the new command bar state
         setLabel(Translator.get(visible?com.mucommander.ui.action.ToggleCommandBarAction.class.getName()+".hide":com.mucommander.ui.action.ToggleCommandBarAction.class.getName()+".show"));
         // Show/hide the command bar

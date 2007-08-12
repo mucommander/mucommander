@@ -23,7 +23,7 @@ import com.mucommander.command.CommandParser;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
@@ -67,7 +67,7 @@ public class EditAction extends InternalEditAction implements ConfigurationListe
             setIcon(IconManager.getIcon(iconPath));
 
         // Initialises configuration.
-        useCustomEditor = ConfigurationManager.getVariableBoolean(ConfigurationVariables.USE_CUSTOM_EDITOR, ConfigurationVariables.DEFAULT_USE_CUSTOM_EDITOR);
+        useCustomEditor = ConfigurationManager.getVariable(ConfigurationVariables.USE_CUSTOM_EDITOR, ConfigurationVariables.DEFAULT_USE_CUSTOM_EDITOR);
         setCustomEditor(ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_EDITOR));
     }
 

@@ -20,7 +20,7 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractTrash;
@@ -76,7 +76,7 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
         AbstractTrash trash = FileFactory.getTrash();
         AbstractFile baseFolder = files.getBaseFolder();
         if(trash!=null && !(baseFolder instanceof AbstractArchiveFile) && !trash.isTrashFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
-            moveToTrash = ConfigurationManager.getVariableBoolean(
+            moveToTrash = ConfigurationManager.getVariable(
                         ConfigurationVariables.DELETE_TO_TRASH,
                         ConfigurationVariables.DEFAULT_DELETE_TO_TRASH);
 
@@ -102,7 +102,7 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
         if(getActionValue()==DELETE_ACTION) {
             if(moveToTrashCheckBox!=null) {
                 // Save the 'Move to trash' option choice in the preferences, will be used next time this dialog is invoked.
-                ConfigurationManager.setVariableBoolean(ConfigurationVariables.DELETE_TO_TRASH, moveToTrash);
+                ConfigurationManager.setVariable(ConfigurationVariables.DELETE_TO_TRASH, moveToTrash);
             }
 
             // Starts deleting files

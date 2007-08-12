@@ -19,7 +19,8 @@
 package com.mucommander;
 
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MucoConfigurationSource;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.dialog.startup.InitialSetupDialog;
@@ -205,12 +206,19 @@ public class Launcher {
      * Main method used to startup muCommander.
      */
     public static void main(String args[]) {
-        int i;  // Index in the command line arguments.
+        int                     i;          // Index in the command line arguments.
+        MucoConfigurationSource confSource; // Used to tell the ConfigurationManager how to behave.
 
         // Initialises fields.
         fatalWarnings = false;
         verbose       = true;
         useSplash     = true;
+
+        // Initialises the configuration manager.
+        confSource    = new MucoConfigurationSource();
+        ConfigurationManager.setConfigurationSource(confSource);
+        ConfigurationManager.setConfigurationReaderFactory(confSource);
+        ConfigurationManager.setConfigurationWriterFactory(confSource);
 
 
 
@@ -261,7 +269,7 @@ public class Launcher {
             else if(args[i].equals("-c") || args[i].equals("--configuration")) {
                 if(i >= args.length - 1)
                     printError("Missing FILE parameter to " + args[i], null, true);
-                try {ConfigurationManager.setConfigurationFile(args[++i]);}
+                try {confSource.setConfigurationFile(args[++i]);}
                 catch(Exception e) {printError("Could not set configuration file", e, fatalWarnings);}
             }
 
@@ -346,14 +354,13 @@ public class Launcher {
 
         // - MAC OS init ----------------------------------------------
         // ------------------------------------------------------------
-
         // If muCommander is running under Mac OS X (how lucky!), add some
         // glue for the main menu bar and other OS X specifics.
         if(PlatformManager.OS_FAMILY==PlatformManager.MAC_OS_X) {
             // Configuration needs to be loaded before any sort of GUI creation
             // is performed - if we're to use the metal look, we need to know about
             // it right about now.
-            try {ConfigurationManager.loadConfiguration();}
+            try {ConfigurationManager.readConfiguration();}
             catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
 
             // Use reflection to create an OSXIntegration instance so that ClassLoader
@@ -376,9 +383,10 @@ public class Launcher {
 
         // If we're not running under OS_X, preferences haven't been loaded yet.
         if(PlatformManager.OS_FAMILY != PlatformManager.MAC_OS_X) {
-            try {ConfigurationManager.loadConfiguration();}
+            try {ConfigurationManager.readConfiguration();}
             catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
         }
+        confSource.processConfiguration();
 
         showSetup = ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE) == null;
 
@@ -418,8 +426,8 @@ public class Launcher {
 
         // Preload icons
         printStartupMessage("Loading icons...");
-        com.mucommander.ui.icon.FileIcons.setScaleFactor(ConfigurationManager.getVariableFloat(ConfigurationVariables.TABLE_ICON_SCALE,
-                                                                             ConfigurationVariables.DEFAULT_TABLE_ICON_SCALE));
+        com.mucommander.ui.icon.FileIcons.setScaleFactor(ConfigurationManager.getVariable(ConfigurationVariables.TABLE_ICON_SCALE,
+                                                                                          ConfigurationVariables.DEFAULT_TABLE_ICON_SCALE));
         com.mucommander.ui.icon.FileIcons.setSystemIconsPolicy(ConfigurationManager.getVariable(ConfigurationVariables.USE_SYSTEM_FILE_ICONS, ConfigurationVariables.DEFAULT_USE_SYSTEM_FILE_ICONS));
 
         // Loads the ActionKeymap file
@@ -445,7 +453,7 @@ public class Launcher {
 
         // Starts Bonjour services discovery (only if enabled in prefs)
         printStartupMessage("Starting Bonjour services discovery...");
-        com.mucommander.bonjour.BonjourDirectory.setActive(ConfigurationManager.getVariableBoolean(ConfigurationVariables.ENABLE_BONJOUR_DISCOVERY, ConfigurationVariables.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
+        com.mucommander.bonjour.BonjourDirectory.setActive(ConfigurationManager.getVariable(ConfigurationVariables.ENABLE_BONJOUR_DISCOVERY, ConfigurationVariables.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
 
         // Creates the initial main frame using any initial path specified by the command line.
         printStartupMessage("Initializing window...");
@@ -462,7 +470,7 @@ public class Launcher {
 
         // Enable system nofifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
         // a MainFrame instance
-        if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.ENABLE_SYSTEM_NOTIFICATIONS, ConfigurationVariables.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
+        if(ConfigurationManager.getVariable(ConfigurationVariables.ENABLE_SYSTEM_NOTIFICATIONS, ConfigurationVariables.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
             printStartupMessage("Enabling system notifications...");
             com.mucommander.ui.notifier.AbstractNotifier.getNotifier().setEnabled(true);
         }
@@ -472,7 +480,7 @@ public class Launcher {
             splashScreen.dispose();
 
         // Check for newer version unless it was disabled
-        if(ConfigurationManager.getVariableBoolean(ConfigurationVariables.CHECK_FOR_UPDATE, ConfigurationVariables.DEFAULT_CHECK_FOR_UPDATE))
+        if(ConfigurationManager.getVariable(ConfigurationVariables.CHECK_FOR_UPDATE, ConfigurationVariables.DEFAULT_CHECK_FOR_UPDATE))
             new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
 
         // If no theme is configured in the preferences, ask for an initial theme.

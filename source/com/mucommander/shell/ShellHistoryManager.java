@@ -21,7 +21,7 @@ package com.mucommander.shell;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 
@@ -74,7 +74,7 @@ public class ShellHistoryManager {
      * Initialises history.
      */
     static {
-        history   = new String[ConfigurationManager.getVariableInt(ConfigurationVariables.SHELL_HISTORY_SIZE, ConfigurationVariables.DEFAULT_SHELL_HISTORY_SIZE)];
+        history   = new String[ConfigurationManager.getVariable(ConfigurationVariables.SHELL_HISTORY_SIZE, ConfigurationVariables.DEFAULT_SHELL_HISTORY_SIZE)];
         listeners = new WeakHashMap();
     }
 

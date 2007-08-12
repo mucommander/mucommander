@@ -16,14 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.dialog.startup;
 
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.VersionChecker;
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -144,7 +143,9 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
              downloadOption?new int[]{DOWNLOAD_ACTION, OK_ACTION}:new int[]{OK_ACTION},
              0);
 			
-        JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"), ConfigurationManager.getVariableBoolean(ConfigurationVariables.CHECK_FOR_UPDATE, ConfigurationVariables.DEFAULT_CHECK_FOR_UPDATE));
+        JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"),
+                                                       ConfigurationManager.getVariable(ConfigurationVariables.CHECK_FOR_UPDATE,
+                                                                                        ConfigurationVariables.DEFAULT_CHECK_FOR_UPDATE));
         addCheckBox(showNextTimeCheckBox);
 
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
@@ -155,6 +156,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             PlatformManager.openUrl(FileFactory.getFile(downloadURL));
 		
         // Remember user preference
-        ConfigurationManager.setVariableBoolean(ConfigurationVariables.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
+        ConfigurationManager.setVariable(ConfigurationVariables.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
     }
 }

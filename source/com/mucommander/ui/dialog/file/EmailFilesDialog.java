@@ -20,7 +20,7 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.ConfigurationVariables;
+import com.mucommander.conf.impl.ConfigurationVariables;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.SendMailJob;
