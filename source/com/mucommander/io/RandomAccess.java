@@ -36,15 +36,17 @@ public interface RandomAccess {
     public abstract void close() throws IOException;
 
     /**
-     * Returns the offset from the beginning of the file, in bytes, at which the next read or write occurs.
+     * Returns the offset (in bytes) from the beginning of the file at which the next read or write occurs.
      *
+     * @return the offset (in bytes) from the beginning of the file at which the next read or write occurs
      * @throws IOException if an I/O error occurs.
      */
     public abstract long getOffset() throws IOException;
 
     /**
-     * Returns the length of the file, mesured in bytes.
+     * Returns the length of the file, in bytes.
      *
+     * @return the length of the file, in bytes
      * @throws IOException if an I/O error occurs
      */
     public abstract long getLength() throws IOException;
