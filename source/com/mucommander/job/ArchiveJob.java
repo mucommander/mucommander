@@ -27,7 +27,6 @@ import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -72,58 +71,11 @@ public class ArchiveJob extends TransferFileJob {
         this.baseFolderPath = baseSourceFolder.getAbsolutePath(false);
     }
 
-	
-    /**
-     * Overriden method to initialize the archiver and handle the case where the destination file already exists.
-     */
-    protected void jobStarted() {
-        super.jobStarted();
 
-        // Check for file collisions, i.e. if the file already exists in the destination
-        int collision = FileCollisionChecker.checkForCollision(null, destFile);
-        if(collision!=FileCollisionChecker.NO_COLLOSION) {
-            // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
-            // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
-            int choice = waitForUserResponse(new FileCollisionDialog(progressDialog, mainFrame, collision, null, destFile, false));
+    ////////////////////////////////////
+    // TransferFileJob implementation //
+    ////////////////////////////////////
 
-            // Overwrite file
-            if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
-                // Do nothing, simply continue and file will be overwritten
-            }
-            // Cancel or dialog close (return)
-            else {
-                interrupt();
-                return;
-            }
-        }
-
-        // Loop for retry
-        do {
-            try {
-                // Tries to open destination file and create the Archiver.
-                // Use a BufferedOutputStream to buffer small files and improve performance.
-                out = new BufferedOutputStream(destFile.getOutputStream(false), AbstractFile.IO_BUFFER_SIZE);
-                this.archiver = Archiver.getArchiver(out, archiveFormat);
-                this.archiver.setComment(archiveComment);
-                break;
-            }
-            catch(Exception e) {
-                int choice = showErrorDialog(Translator.get("warning"),
-                                             Translator.get("cannot_write_file", destFile.getName()),
-                                             new String[] {CANCEL_TEXT, RETRY_TEXT},
-                                             new int[]  {CANCEL_ACTION, RETRY_ACTION}
-                                             );
-			
-                // Retry loops
-                if(choice == RETRY_ACTION)
-                    continue;
-                // Cancel or close dialog returns false
-                return;
-            }
-        } while(true);
-    }
-	
-	
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         if(getState()==INTERRUPTED)
             return false;
@@ -186,7 +138,79 @@ public class ArchiveJob extends TransferFileJob {
         } while(true);
     }
 
-	
+    public String getStatusString() {
+        return Translator.get("pack_dialog.packing_file", getCurrentFileInfo());
+    }
+
+    protected boolean hasFolderChanged(AbstractFile folder) {
+        // This job modifies the folder where the archive is
+        return folder.equals(destFile.getParent());     // Note: parent may be null
+    }
+
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    /**
+     * Overriden method to initialize the archiver and handle the case where the destination file already exists.
+     */
+    protected void jobStarted() {
+        super.jobStarted();
+
+        // Check for file collisions, i.e. if the file already exists in the destination
+        int collision = FileCollisionChecker.checkForCollision(null, destFile);
+        if(collision!=FileCollisionChecker.NO_COLLOSION) {
+            // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
+            // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
+            int choice = waitForUserResponse(new FileCollisionDialog(progressDialog, mainFrame, collision, null, destFile, false));
+
+            // Overwrite file
+            if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
+                // Do nothing, simply continue and file will be overwritten
+            }
+            // Cancel or dialog close (return)
+            else {
+                interrupt();
+                return;
+            }
+        }
+
+        // Loop for retry
+        do {
+            try {
+//                // Tries to open destination file and create the Archiver.
+//                // Use a BufferedOutputStream to buffer small files and improve performance.
+//                out = new BufferedOutputStream(destFile.getOutputStream(false), AbstractFile.IO_BUFFER_SIZE);
+//                this.archiver = Archiver.getArchiver(out, archiveFormat);
+//                this.archiver.setComment(archiveComment);
+//                break;
+
+                // Tries to get an Archiver instance.
+                this.archiver = Archiver.getArchiver(destFile, archiveFormat);
+                this.archiver.setComment(archiveComment);
+                this.out = archiver.getOutputStream();
+
+                break;
+
+            }
+            catch(Exception e) {
+                int choice = showErrorDialog(Translator.get("warning"),
+                                             Translator.get("cannot_write_file", destFile.getName()),
+                                             new String[] {CANCEL_TEXT, RETRY_TEXT},
+                                             new int[]  {CANCEL_ACTION, RETRY_ACTION}
+                                             );
+
+                // Retry loops
+                if(choice == RETRY_ACTION)
+                    continue;
+                // Cancel or close dialog returns false
+                return;
+            }
+        } while(true);
+    }
+
+
     /**
      * Overriden method to close the archiver.
      */
@@ -204,6 +228,9 @@ public class ArchiveJob extends TransferFileJob {
                 catch(IOException e) {}
             }
 
+            // Todo: the check below was made when using java.util.zip. Since java.util.zip is not used anymore,
+            // check if this is still necessary
+
             // Makes sure the file OutputStream has been properly closed. Archive.close() normally closes the archive
             // OutputStream which in turn should close the underlying file OutputStream, but for some strange reason,
             // if no entry has been added to a Zip archive and the job is interrupted (e.g. the first file could not be read),
@@ -214,14 +241,4 @@ public class ArchiveJob extends TransferFileJob {
             }
         }
     }
-
-
-    public String getStatusString() {
-        return Translator.get("pack_dialog.packing_file", getCurrentFileInfo());
-    }
-
-    protected boolean hasFolderChanged(AbstractFile folder) {
-        // This job modifies the folder where the archive is
-        return folder.equals(destFile.getParent());     // Note: parent may be null
-    }
-}	
+}
