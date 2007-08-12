@@ -1,0 +1,57 @@
+<!--
+This file is part of muCommander, http://www.mucommander.com
+Copyright (C) 2002-2007 Maxence Bernard
+
+muCommander is free software; you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+muCommander is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- ========================================================= -->
+<!-- Defines the directory structure and other constants of    -->
+<!-- muCommander Ant tools project.                            -->
+<!-- ========================================================= -->
+<project>
+  <!-- Where to store the tools documentation.                 -->
+  <property name="tools.doc"            location="${doc}"/>
+  <!-- Where to store temporary files.                         -->
+  <property name="tools.tmp"            location="${tmp}"/>
+  <!-- Where to look for resources.                            -->
+  <property name="tools.res"            location="${res}"/>
+  <!-- Where to store the final Ant tools JAR file.            -->
+  <property name="tools.out"            location="${lib}"/>
+  <!-- Ant tools license file.                                 -->
+  <property name="tools.license"        location="license.txt"/>
+  <!-- Ant tools compilation instructions.                     -->
+  <property name="tools.compile"        location="compile.txt"/>
+  <!-- Ant tools readme file.                                  -->
+  <property name="tools.readme"         location="readme.txt"/>
+  <!-- Ant tools buildfile.                                    -->
+  <property name="tools.build"          location="build.xml"/>
+  <!-- Where to store the Ant tools uncompressed,              -->
+  <!-- non-obfuscated JAR file.                                -->
+  <property name="tools.jar.normal"     location="${tools.tmp}/mucommander-ant-tools_unobf.jar"/>
+  <!-- Where to store the Ant tools uncompresss, obfuscated    -->
+  <!-- JAR file.                                               -->
+  <property name="tools.jar.obf"        location="${tools.tmp}/mucommander-ant-tools_obf.jar"/>
+  <!-- Where to store the Ant tools compressed, obfuscated JAR -->
+  <!-- file.                                                   -->
+  <property name="tools.jar.cmp"        location="${tools.out}/mucommander-ant-tools.jar"/>
+  <!-- Where to store the Ant tools non-obfuscated bytecode.   -->
+  <property name="tools.classes.normal" location="${tools.tmp}/classes"/>
+  <!-- Where to store the Ant tools obfuscated bytecode.       -->
+  <property name="tools.classes.obf"    location="${tools.tmp}/obf"/>
+  <!-- Where the AntDoclet templates are stored.               -->
+  <property name="tools.template"       location="${tools.res}/template"/>
+  <!-- Main AntDoclet template.                                -->
+  <property name="tools.doc-template"   value="main.vm"/>
+</project>

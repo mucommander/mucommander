@@ -1,0 +1,101 @@
+<!--
+This file is part of muCommander, http://www.mucommander.com
+Copyright (C) 2002-2007 Maxence Bernard
+
+muCommander is free software; you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+muCommander is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- ========================================================= -->
+<!-- Properties and targets common to all muCommander          -->
+<!-- subprojects.                                              -->
+<!-- ========================================================= -->
+<project>
+  <!-- = Directory structure ================================= -->
+  <!-- ======================================================= -->
+  <!-- The following properties describe the global directory  -->
+  <!-- structure.                                              -->
+
+  <!-- Directory in which to store distribution files.         -->
+  <property name="dist"                value="dist"/>
+  <!-- Directory in which to store temporary files.            -->
+  <property name="tmp"                 value="tmp"/>
+  <!-- Directory in which to store the documentation.          -->
+  <property name="doc"                 location="docs"/>
+  <!-- Directory from which to load resources.                 -->
+  <property name="res"                 location="res"/>
+  <!-- Directory from which to load the various tools used to  -->
+  <!-- build the software.                                     -->
+  <property name="tools"               location="tools"/>
+  <!-- Directory containing the project's sources.             -->
+  <property name="source"              location="source"/>
+  <!-- Directory containing the project's libraries.           -->
+  <property name="lib"                 location="lib"/>
+
+
+
+  <!-- = proGuard management ================================= -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to deal with proGuard,   -->
+  <!-- its availability and succesful loading.                 -->
+
+  <!-- Checks whether proGuard is available or not.            -->
+  <!-- This is a helper target and should not be referenced    -->
+  <!-- directly.                                               -->
+  <target name="check-proguard">
+    <!-- If the proGuard path is not set, uses default value.  -->
+    <property name="proguard.lib" value="${tools}/proguard.jar"/>
+
+    <!-- Checks for proGuard availability.                     -->
+    <condition property="proguard.available" value="true">
+      <available classname="proguard.ant.ProGuardTask" classpath="${proguard.lib}"/>
+    </condition>
+  </target>  
+
+
+  <!-- Tries to load proGuard.                                 -->
+  <!-- If proGuard was succesfully loaded, property            -->
+  <!-- ${proguard.available} will be set to true.              -->
+  <target name="load-proguard" depends="check-proguard" if="proguard.available">
+    <taskdef name="proguard" classname="proguard.ant.ProGuardTask" classpath="${proguard.lib}"/>
+  </target>
+
+
+
+  <!-- = 7za management ====================================== -->
+  <!-- ======================================================= -->
+  <!-- Checks whether 7za is available.                        -->
+  <!-- The result will be stored in ${7za.available}.          -->
+  <target name="check-7za">
+    <condition property="7za.available" value="true">
+      <available file="${7za.executable}" type="file"/>
+    </condition>
+  </target>  
+
+
+
+  <!-- = Maintenance ========================================= -->
+  <!-- ======================================================= -->
+  <!-- Deletes any dynamically generated file, effectively     -->
+  <!-- re-initialising the whole project.                      -->
+  <target name="clean">
+    <echo>Deleting temporary files...</echo>
+    <delete dir="${tmp}"/>
+    <delete dir="${dist}"/>
+    <delete dir="${doc}"/>
+    <echo>Deleting emacs backup files...</echo>
+    <delete includeEmptyDirs="true">
+      <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+    </delete>
+  </target>
+</project>

@@ -3,12 +3,12 @@
 |     | | |   --| . |     |     | .'|   | . | -_|  _|
 |_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
 
----------------------------
-muCommander Ant Tool v1.0.0
----------------------------
+------------------------------------
+muCommander Configuration API v1.0.0
+------------------------------------
 
-The muCommander Ant Tools are a set of Ant tasks used to build and
-package muCommander.
+The muCommander Configuration API is the library used by muCommander to handle
+all of its configuration.
 
 Please use the muCommander forums (http://www.mucommander.com/forums)
 to post your questions, suggestions or bug reports.
@@ -22,8 +22,8 @@ Copyright (C) 2002-2007 Maxence Bernard
 License
 -------
 
-muCommander Ant Tools are released under the terms of the GNU Lesser General
-Public License.
+The muCommander Configuration API is released under the terms of the
+GNU Lesser General Public License.
 Please refer to the 'license.txt' file bundled with this package.
 
 

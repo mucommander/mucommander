@@ -1,0 +1,410 @@
+<!--
+This file is part of muCommander, http://www.mucommander.com
+Copyright (C) 2002-2007 Maxence Bernard
+
+muCommander is free software; you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+muCommander is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- ========================================================= -->
+<!-- Declares Ant tools specific properties and targets.       -->
+<!--                                                           -->
+<!-- ========================================================= -->
+<project>
+  <!-- = Application constants =============================== -->
+  <!-- ======================================================= -->
+  <!-- The following properties describe the current version   -->
+  <!-- of the muCommander Ant tools.                           -->
+
+  <!-- Major version of the muCommander Ant tools.             -->
+  <property name="tools.version"       value="1.0"/>
+  <!-- Minor version of the muCommander Ant tools.             -->
+  <property name="tools.subversion"    value=".0"/>
+
+
+  <!-- Loads the strreplace Ant task.                          -->
+  <target name="load-strreplace" depends="compress-tools">
+    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar.cmp}"/>
+  </target>
+
+
+
+  <!-- = Ant tools compilation =============================== -->
+  <!-- ======================================================= -->
+  <!-- The following tasks are used to compile the muCommander -->
+  <!-- Ant tools.                                              -->
+
+  <!-- Checks whether the tools jar file is up to date.        -->
+  <!-- Output is stored in ${tools.up-to-date}.                -->
+  <target name="check-tools">
+    <echo>Checking whether the Ant tools are up-to-date...</echo>
+    <uptodate property="tools.up-to-date" targetfile="${tools.jar.cmp}">
+      <srcfiles dir="${source}/com/mucommander/ant" includes="**/*.java"/>
+    </uptodate>
+  </target>
+
+  <!-- Compiles the tools source code.                         -->
+  <!-- Note that this target will be skipped if the current    -->
+  <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
+  <!-- Compiled sources will be stored in                      -->
+  <!-- ${tools.classes.normal}.                                -->
+  <target name="compile-tools" depends="check-tools" unless="tools.up-to-date">
+    <echo>Compiling Ant tools...</echo>
+    <delete dir="${tools.classes.normal}"/>
+    <mkdir dir="${tools.classes.normal}"/>
+    <javac destdir="${tools.classes.normal}" debug="on" deprecation="on"
+           encoding="utf-8" source="1.4" target="1.4">
+      <classpath>
+        <fileset dir="${tools}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <src path="${source}/com/mucommander/ant"/>
+      <src path="${source}/com/mucommander/xml"/>
+      <src path="${source}/com/mucommander/res"/>
+    </javac>
+  </target>
+
+  <!-- Creates a JAR file containing the uncompressed,         -->
+  <!-- unobfuscated tools bytecode.                            -->
+  <!-- Note that this target will be skipped if the current    -->
+  <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${tools.jar.normal}.                                    -->
+  <target name="jar-tools" depends="compile-tools" unless="tools.up-to-date">
+    <echo>Creating Ant tools JAR file...</echo>
+    <copy file="${tools.res}/JavaApplicationStub" todir="${tools.classes.normal}" overwrite="true"/>
+    <copy file="${tools.license}" todir="${tools.classes.normal}" overwrite="true"/>
+    <jar destfile="${tools.jar.normal}" basedir="${tools.classes.normal}" compress="false">
+      <manifest>
+        <attribute name="Specification-Title"    value="muCommander Ant tasks"/>
+        <attribute name="Specification-Vendor"   value="Maxence Bernard"/>
+        <attribute name="Specification-Version"  value="${tools.version}"/>
+        <attribute name="Implementation-Title"   value="muCommander Ant tasks"/>
+        <attribute name="Implementation-Vendor"  value="Maxence Bernard"/>
+        <attribute name="Implementation-Version" value="${tools.version}${tools.subversion}"/>
+      </manifest>
+    </jar>
+  </target>
+
+
+
+  <!-- = Ant tools obfuscation =============================== -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to obfuscate the         -->
+  <!-- muCommander Ant tools when possible.                    -->
+
+  <!-- Checks whether we need to copy the tools JAR file.      -->
+  <!-- Note that the sole reason for this target is that Ant's -->
+  <!-- 'if' and 'unless' statements can only take one variable -->
+  <!-- as a parameter. For this reason, we need to aggregate   -->
+  <!-- ${tools.up-to-date} and ${proguard.available} in one    -->
+  <!-- property.                                               -->
+  <target name="check-copy-tools-bytecode">
+    <condition property="copy-tools-bytecode" value="true">
+      <not>
+        <or>
+          <istrue value="${tools.up-to-date}"/>
+          <istrue value="${proguard.available}"/>
+        </or>
+      </not>
+    </condition>
+  </target>
+
+  <!-- Copies the uncompressed, unobfuscated tools JAR file    -->
+  <!-- over the obfuscated one.                                -->
+  <!-- This target is only meant to be used when proGuard is   -->
+  <!-- not available.                                          -->
+  <!-- Note that this target will be skipped if the current    -->
+  <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${tools.jar.obf}.                                       -->
+  <target name="copy-tools-bytecode" depends="check-copy-tools-bytecode" if="copy-tools-bytecode">
+    <echo>proGuard unavailable, skipping obfuscation of Ant tools...</echo>
+    <copy file="${tools.jar.normal}" tofile="${tools.jar.obf}" overwrite="true"/>
+  </target>
+
+  <!-- Obfuscated the uncompressed, unobfuscated tools JAR     -->
+  <!-- file.                                                   -->
+  <!-- This target is only meant to be used when proGuard is   -->
+  <!-- available.                                              -->
+  <!-- Note that this target will be skipped if the current    -->
+  <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${tools.jar.obf}.                                       -->
+  <target name="obfuscate-tools-bytecode" if="proguard.available" unless="tools.up-to-date">
+    <echo>Creating Ant tools obfuscated JAR file...</echo>
+    <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
+              allowaccessmodification="true" defaultpackage="" skipnonpubliclibraryclasses="false">
+      <injar name="${tools.jar.normal}"/> 
+      <outjar name="${tools.jar.obf}"/>
+      <libraryjar name="${java.lib}"/>
+      <libraryjar name="${ant.lib}"/>
+
+      <keep access="public" name="com.mucommander.ant.**" type="class">
+        <method access="public" name="set*"/>
+        <method access="public" name="create*"/>
+        <method access="public" name="add**"/>
+      </keep>
+    </proguard>
+  </target>
+
+  <!-- Identifies the best available obfuscation policy and    -->
+  <!-- obfuscates the tools JAR file.                          -->
+  <!-- Note that this target will be skipped if the current    -->
+  <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${tools.jar.obf}.                                       -->
+  <target name="obfuscate-tools" depends="jar-tools,load-proguard,copy-tools-bytecode,obfuscate-tools-bytecode"/>
+
+
+
+  <!-- = Ant tools compression =============================== -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to compress the          -->
+  <!-- muCommander Ant tools when possible.                    -->
+
+  <!-- Compress the obfuscated tools JAR file using 7za.       -->
+  <!-- This target is only meant to be called if 7za is        -->
+  <!-- available.                                              -->
+  <!-- Note that this target will be skipped if the current    -->
+  <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${tools.jar.cmp}.                                       -->
+  <target name="compress-obfuscated-tools" if="7za.available" unless="tools.up-to-date">
+    <echo>Compressing Ant tool...</echo>
+    <delete dir="${tools.classes.obf}"/>
+    <unjar src="${tools.jar.obf}" dest="${tools.classes.obf}"/>
+    <exec executable="${7za.executable}" dir="${tools.classes.obf}">
+      <arg value="a"/>
+      <arg value="-tzip"/>
+      <arg value="-mm=Deflate"/>
+      <arg value="-mx9"/>
+      <arg value="-mfb=258"/>
+      <arg value="-mpass=15"/>
+      <arg value="${tools.jar.cmp}"/>
+      <arg value="*"/>
+    </exec>
+  </target>
+
+  <!-- Checks whether we need to compress the tools JAR file.  -->
+  <!-- Note that the sole reason for this target is that Ant's -->
+  <!-- 'if' and 'unless' statements can only take one varialbe -->
+  <!-- as a parameter. For this reason, we need to aggregate   -->
+  <!-- ${tools.up-to-date} and ${7za.available} in one         -->
+  <!-- property.                                               -->
+  <target name="check-copy-obfuscated-tools">
+    <condition property="copy-obfuscated-tools" value="true">
+      <not>
+        <or>
+          <istrue value="${tools.up-to-date}"/>
+          <istrue value="${7za.available}"/>
+        </or>
+      </not>
+    </condition>
+  </target>
+
+
+  <!-- Compress the obfuscated tools JAR file using standard   -->
+  <!-- zip compression.                                        -->
+  <!-- This target is only meant to be called if 7za is not    -->
+  <!-- available.                                              -->
+  <!-- Note that this target will be skipped if the current    -->
+  <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${tools.jar.cmp}.                                       -->
+  <target name="copy-obfuscated-tools" depends="check-copy-obfuscated-tools" if="copy-obfuscated-tools">
+    <echo>7za unavailable, using standard compression for Ant tools...</echo>
+    <copy file="${tools.jar.obf}" tofile="${tools.jar.cmp}"/>
+  </target>
+
+  <!-- Identifies the best available compression policy and    -->
+  <!-- compresses the tools JAR obfuscated file.               -->
+  <!-- Note that this target will be skipped if the current    -->
+  <!-- JAR file is found to be up-to-date by 'check-tools'.    -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${tools.jar.cmp}.                                       -->
+  <target name="compress-tools" depends="check-7za,obfuscate-tools,compress-obfuscated-tools,copy-obfuscated-tools"/>
+
+
+
+  <!-- = Ant tools documentation ============================= -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to generate the          -->
+  <!-- muCommander Ant tools documentation.                    -->
+
+  <!-- Checks whether AntDoclet is available.                  -->
+  <!-- If it is, ${antdoclet.available} will be set to true.   -->
+  <!-- Otherwise, depending on the context, this target will   -->
+  <!-- either not set ${antdoclet.available} or fail the build -->
+  <target name="check-antdoclet">
+    <!-- If AntDoclet or Velocity haven't been configured      -->
+    <!-- properly, use default values.                         -->
+    <property name="antdoclet.lib" location="${tools}/antdoclet.jar"/>
+    <property name="velocity.lib"  location="${tools}/velocity.jar"/>
+
+    <!-- Checks whether AntDoclet is available.                -->
+    <condition property="antdoclet.available" value="true">
+      <available classname="com.neuroning.antdoclet.AntDoclet" classpath="${ant.lib}:${antdoclet.lib}:${velocity.lib}"/>
+    </condition>
+
+    <!-- If AntDoclet is not available and we're not in        -->
+    <!-- release mode, we must fail the build here.            -->
+    <fail message="AntDoclet not configured">
+      <condition>
+        <and>
+          <not>
+            <istrue value="${is-release}"/>
+          </not>
+          <not>
+            <istrue value="${antdoclet.available}"/>
+          </not>
+        </and>
+      </condition>
+    </fail>
+  </target>
+
+  <!-- Generates the Ant Tools documentation.                  -->
+  <!-- Output will be stored in ${tools.doc}.                  -->
+  <target name="make-tools-doc" depends="compress-tools" if="antdoclet.available">
+    <echo>Creating Ant tools documentation...</echo>
+    <mkdir dir="${tools.doc}"/>
+    <copy todir="${tools.doc}" overwrite="true">
+      <fileset dir="${tools.template}/">
+	<exclude name="*.vm"/>
+      </fileset>
+    </copy>
+    <javadoc access="public" sourcepath="${source}" packagenames="com.mucommander.ant.*"
+             destdir="${tools.doc}" encoding="UTF-8" docletpath="${ant.lib}:${antdoclet.lib}:${velocity.lib}:${tools.jar.cmp}">
+      <doclet name="com.neuroning.antdoclet.AntDoclet">
+	<param name="-doctitle" value="muCommander Ant Tools" />
+	<param name="-templatesdir" value="${tools.template}"/>
+	<param name="-templates" value="${tools.doc-template}" />
+      </doclet>
+    </javadoc>
+  </target>
+
+  <!-- Skips the documentation generation and notifies the     -->
+  <!-- user if AntDoclet is not available.                     -->
+  <target name="skip-tools-doc" unless="antdoclet.available">
+    <echo>AntDoclet not available, skipping Ant tools documentation...</echo>
+  </target>
+
+  <!-- Generates the tools documentation.                      -->
+  <target name="tools-doc" depends="check-antdoclet,make-tools-doc,skip-tools-doc"/>
+
+  <target name="tools-doc-tgz" depends="tools-doc,tools-prefixes" if="antdoclet.available">
+    <echo>Packaging Ant tools documentation...</echo>
+    <mkdir dir="${dist}"/>
+    <tar destfile="${dist}/${tools.package-prefix}-docs.tar.gz" compression="gzip">
+      <tarfileset dir="${tools.doc}" prefix="${tools.archive-prefix}"/>
+    </tar>
+  </target>
+
+
+
+  <!-- = Ant tools release =================================== -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to generate a release    -->
+  <!-- of the muCommander Ant tools.                           -->
+
+  <!-- Stores the tools package and archive prefixes in        -->
+  <!-- ${tools.package-prefix} and ${tools.archive-prefix}.    -->
+  <!-- The archive prefix is meant to be used as the name of   -->
+  <!-- the root directory in the tools tar.gz release file.    -->
+  <!-- The package prefix is meant to be used as the name of   -->
+  <!-- the tar.gz release file.                                -->
+  <target name="tools-prefixes" depends="load-strreplace">
+    <echo>Creating Ant tools archive prefix...</echo>
+    <strreplace from="muCommander-ant-tools-${tools.version}${tools.subversion}" to="tools.archive-prefix" what="[ .]" with="_"/>
+    <echo>Creating Ant tools package name prefix...</echo>
+    <strreplace from="mucommander-ant-tools-${tools.version}${tools.subversion}" to="tools.package-prefix" what="[ .]" with="_"/>
+  </target>
+
+  <target name="make-release-tools" depends="compress-tools,tools-prefixes" if="antdoclet.available">
+    <!-- Refreshes the release directory structure.            -->
+    <delete dir="${tools.tmp}/release"/>
+    <mkdir dir="${tools.tmp}/release/lib"/>
+    <mkdir dir="${tools.tmp}/release/docs"/>
+    <mkdir dir="${tools.tmp}/release/source"/>
+    <mkdir dir="${tools.tmp}/release/tools"/>
+    <mkdir dir="${tools.tmp}/release/res/"/>
+
+    <!-- Adds the license, readme and compile files.           -->
+    <copy file="${tools.license}" todir="${tools.tmp}/release"/>
+    <copy file="${tools.readme}"  todir="${tools.tmp}/release"/>
+    <copy file="${tools.compile}" todir="${tools.tmp}/release"/>
+
+    <!-- Adds the compressed JAR file.                         -->
+    <copy file="${tools.jar.cmp}" todir="${tools.tmp}/release/lib"/>
+
+    <!-- Adds the resources.                                   -->
+    <copy todir="${tools.tmp}/release/res">
+      <fileset dir="${tools.res}">
+        <exclude name="**/*.txt"/>
+      </fileset>
+    </copy>
+
+    <!-- Adds the build files.                                 -->
+    <copy file="${tools.build}" tofile="${tools.tmp}/release/build.xml"/>
+    <copy todir="${tools.tmp}/release/build">
+      <fileset dir="build">
+        <include name="common.xml"/>
+        <include name="local_template.xml"/>
+        <include name="tools/structure.xml"/>
+        <include name="tools/main.xml"/>
+      </fileset>
+    </copy>
+
+    <!-- Adds various necessary tools.                         -->
+    <copy todir="${tools.tmp}/release/tools">
+      <fileset dir="${tools}/">
+        <include name="antdoclet.jar"/>
+        <include name="velocity.jar"/>
+        <include name="proguard.jar"/>
+      </fileset>
+    </copy>
+
+    <!-- Adds the sources.                                     -->
+    <copy todir="${tools.tmp}/release/source">
+      <fileset dir="${source}/">
+        <include name="com/mucommander/ant/**/*"/>
+        <include name="com/mucommander/xml/**/*"/>
+        <include name="com/mucommander/res/**/*"/>
+      </fileset>
+    </copy>
+
+    <!-- Adds the documentation.                               -->
+    <copy todir="${tools.tmp}/release/docs">
+      <fileset dir="${tools.doc}/"/>
+    </copy>
+
+    <!-- Creates the the release file.                         -->
+    <echo>Packaging tools distribution file...</echo>
+    <mkdir dir="${dist}"/>
+    <tar destfile="${dist}/${tools.package-prefix}.tar.gz" compression="gzip">
+      <tarfileset dir="${tools.tmp}/release/" prefix="${tools.archive-prefix}">
+        <include name="**"/>
+      </tarfileset>
+    </tar>
+  </target>
+
+  <target name="skip-release-tools" unless="antdoclet.available">
+    <echo>AntDoclet not available, skipping Ant tools release...</echo>
+  </target>
+
+  <!-- Generates a release package for the muCommander tasks.  -->
+  <!-- The output will be stored in                            -->
+  <!-- ${dist}/${tools.package-prefix}.tar.gz                  -->
+  <target name="release-tools" depends="tools-doc-tgz,make-release-tools,skip-release-tools" if="antdoclet.available"/>
+</project>

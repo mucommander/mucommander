@@ -1,0 +1,55 @@
+<!--
+This file is part of muCommander, http://www.mucommander.com
+Copyright (C) 2002-2007 Maxence Bernard
+
+muCommander is free software; you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+muCommander is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- ========================================================= -->
+<!-- Defines the directory structure and other constants of    -->
+<!-- muCommander Configuration API project.                    -->
+<!-- ========================================================= -->
+<project>
+  <!-- Where to look for the Configuration API resources.      -->
+  <property name="conf.res"            location="${res}"/>
+  <!-- Configuration API readme file.                          -->
+  <property name="conf.readme"         location="readme.txt"/>
+  <!-- Configuration API license file.                         -->
+  <property name="conf.license"        location="license.txt"/>
+  <!-- Configuration API compilation instructions.             -->
+  <property name="conf.compile"        location="compile.txt"/>
+  <!-- Where to store the Configuration API documentation.     -->
+  <property name="conf.doc"            location="${doc}"/>
+  <!-- Where to store temporary files.                         -->
+  <property name="conf.tmp"            location="${tmp}"/>
+  <!-- Where to store the Configuration API uncompressed,      -->
+  <!-- non-obfuscated JAR file.                                -->
+  <property name="conf.jar.normal"     location="${conf.tmp}/mucommander-conf_unobf.jar"/>
+  <!-- Where to store the Configuration API uncompressed,      -->
+  <!-- obfuscated JAR file.                                    -->
+  <property name="conf.jar.obf"        location="${conf.tmp}/mucommander-conf_obf.jar"/>
+  <!-- Where to store the Configuration API compressed,        -->
+  <!-- obfuscated JAR file.                                    -->
+  <property name="conf.jar.cmp"        location="${lib}/mucommander-conf.jar"/>
+  <!-- Where to store the Configuration API non-obfuscated     -->
+  <!-- bytecode.                                               -->
+  <property name="conf.classes.normal" location="${conf.tmp}/classes"/>
+  <!-- Where to store the Configuration API obfuscated         -->
+  <!-- bytecode.                                               -->
+  <property name="conf.classes.obf"    location="${conf.tmp}/obf"/>
+  <!-- Configuration API buildfile.                            -->
+  <property name="conf.build"          location="build.xml"/>
+  <!-- Path to the tools JAR file.                             -->
+  <property name="tools.jar.cmp"       location="${tools}/mucommander-ant-tools.jar"/>
+</project>

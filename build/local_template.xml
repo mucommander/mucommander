@@ -1,0 +1,93 @@
+<!--
+This file is part of muCommander, http://www.mucommander.com
+Copyright (C) 2002-2007 Maxence Bernard
+
+muCommander is free software; you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+muCommander is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- ========================================================= -->
+<!-- Template for system dependant configuration values.       -->
+<!--                                                           -->
+<!-- ========================================================= -->
+<project>
+  <!-- This file is used to configure the way muCommander and  -->
+  <!-- its Ant tools are built.                                -->
+  <!-- Depending on how you downloaded this, some values may   -->
+  <!-- not need to be set:                                     -->
+  <!-- - Global configuration is always used.                  -->
+  <!--                                                         -->
+  <!-- - Ant tools configuration is used by muCommander and    -->
+  <!--   the Ant tools.                                        -->
+  <!--                                                         -->
+  <!-- - muCommander specific configuration is only used if    -->
+  <!--   you downloaded the whole muCommander source code,     -->
+  <!--   rather than just the Ant tools.                       -->
+
+
+
+  <!-- = Global configuration ================================ -->
+  <!-- ======================================================= -->
+  <!-- Path to the Java core libraries.                        -->
+  <!-- Note that Java 1.6 is necessary in order to compile     -->
+  <!-- muCommander.                                            -->
+  <property name="java.lib"        location=""/>
+
+  <!-- Path to the ProGuard binaries.                          -->
+  <!-- Defaults to the one bundled with the project, but can   -->
+  <!-- be changed to another version by editing this value.    -->
+  <!-- If not set, the obfuscation steps will be skipped.      -->
+  <property name="proguard.lib"    location="${tools}/proguard.jar"/>
+
+  <!-- Path to the Ant core libraries (used to compile tools). -->
+  <!-- muCommander was built with Ant 1.6.5.                   -->
+  <property name="ant.lib"         location=""/>
+
+  <!-- Path to the 7z executable.                              -->
+  <!-- If this is not set, compression will be done using      -->
+  <!-- standard ZIP algorithms.                                -->
+  <property name="7za.executable"  location=""/>
+
+
+
+  <!-- = Ant tools configuration ============================= -->
+  <!-- ======================================================= -->
+  <!-- Path to the AntDoclet binaries.                         -->
+  <!-- Defaults to the one bundled with the project, but can   -->
+  <!-- be changed to another version by editing this value.    -->
+  <property name="antdoclet.lib"   location="${tools}/antdoclet.jar"/>
+
+  <!-- Path to the Velocity binaries.                          -->
+  <!-- Defaults to the one bundled with the project, but can   -->
+  <!-- be changed to another version by editing this value.    -->
+  <property name="velocity.lib"    location="${tools}/velocity.jar"/>
+
+
+
+  <!-- = muCommander specific configuration ================== -->
+  <!-- ======================================================= -->
+  <!-- Path to the JDeb binaries.                              -->
+  <!-- Defaults to the one bundled with the project, but can   -->
+  <!-- be changed to another version by editing this value.    -->
+  <property name="jdeb.lib"        location="${tools}/jdeb.jar"/>
+
+  <!-- Password for the JAR keystore. If you're not Maxence,   -->
+  <!-- then don't bother with this.                            -->
+  <property name="store.pass"      value=""/>
+
+  <!-- Path to the makensis executable.                        -->
+  <property name="nsis.executable" location=""/>
+
+  <!-- Path to the launch4j installation dir.                  -->
+  <property name="launch4j.dir"    location=""/>
+</project>

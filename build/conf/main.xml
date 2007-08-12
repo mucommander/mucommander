@@ -1,0 +1,283 @@
+<!--
+This file is part of muCommander, http://www.mucommander.com
+Copyright (C) 2002-2007 Maxence Bernard
+
+muCommander is free software; you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+muCommander is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- ========================================================= -->
+<!-- Declares Configuration API specific properties and        -->
+<!-- targets.                                                  -->
+<!-- ========================================================= -->
+<project>
+  <!-- = Application constants =============================== -->
+  <!-- ======================================================= -->
+  <!-- The following properties describe the current version   -->
+  <!-- of the muCommander conf API.                            -->
+
+  <!-- Major version of the muCommander conf API.              -->
+  <property name="conf.version"        value="1.0"/>
+  <!-- Minor version of the muCommander conf API.              -->
+  <property name="conf.subversion"     value=".0"/>
+
+
+
+  <!-- = Conf API compilation ================================ -->
+  <!-- ======================================================= -->
+  <!-- The following tasks are used to compile the muCommander -->
+  <!-- conf API.                                               -->
+
+  <!-- Compiles the conf source code.                          -->
+  <!-- Compiled sources will be stored in                      -->
+  <!-- ${conf.classes.normal}.                                 -->
+  <target name="compile-conf">
+    <echo>Compiling the Configuration API...</echo>
+    <delete dir="${conf.classes.normal}"/>
+    <mkdir dir="${conf.classes.normal}"/>
+    <javac destdir="${conf.classes.normal}" debug="on" deprecation="on"
+           encoding="utf-8" source="1.4" target="1.4"
+           srcdir="${source}" includes="com/mucommander/conf/**,com/mucommander/xml/**"
+           excludes="com/mucommander/conf/impl/**"/>
+  </target>
+
+  <!-- Creates a JAR file containing the uncompressed,         -->
+  <!-- unobfuscated conf bytecode.                             -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${conf.jar.normal}.                                     -->
+  <target name="jar-conf" depends="compile-conf">
+    <echo>Creating the Configuration API JAR file...</echo>
+    <copy file="${conf.license}" todir="${conf.classes.normal}" overwrite="true"/>
+    <jar destfile="${conf.jar.normal}" basedir="${conf.classes.normal}" compress="false">
+      <manifest>
+        <attribute name="Specification-Title"    value="muCommander Configuration API"/>
+        <attribute name="Specification-Vendor"   value="Maxence Bernard"/>
+        <attribute name="Specification-Version"  value="${conf.version}"/>
+        <attribute name="Implementation-Title"   value="muCommander Configuration API"/>
+        <attribute name="Implementation-Vendor"  value="Maxence Bernard"/>
+        <attribute name="Implementation-Version" value="${conf.version}${conf.subversion}"/>
+      </manifest>
+    </jar>
+  </target>
+
+
+
+  <!-- = Configuration API obfuscation ======================= -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to obfuscate the         -->
+  <!-- muCommander conf API when possible.                     -->
+
+  <!-- Copies the uncompressed, unobfuscated conf JAR file     -->
+  <!-- over the obfuscated one.                                -->
+  <!-- This target is only meant to be used when proGuard is   -->
+  <!-- not available.                                          -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${conf.jar.obf}.                                        -->
+  <target name="copy-conf-bytecode" unless="proguard.available">
+    <echo>proGuard unavailable, skipping obfuscation of the Configuration API...</echo>
+    <copy file="${conf.jar.normal}" tofile="${conf.jar.obf}" overwrite="true"/>
+  </target>
+
+  <!-- Obfuscated the uncompressed, unobfuscated conf JAR      -->
+  <!-- file.                                                   -->
+  <!-- This target is only meant to be used when proGuard is   -->
+  <!-- available.                                              -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${conf.jar.obf}.                                        -->
+  <target name="obfuscate-conf-bytecode" if="proguard.available">
+    <echo>Creating the Configuration API obfuscated JAR file...</echo>
+    <proguard overloadaggressively="false" usemixedcaseclassnames="true" ignorewarnings="true" optimize="true" shrink="true" obfuscate="true"
+              allowaccessmodification="true" defaultpackage="" skipnonpubliclibraryclasses="false">
+      <injar name="${conf.jar.normal}"/> 
+      <outjar name="${conf.jar.obf}"/>
+      <libraryjar name="${java.lib}"/>
+      <libraryjar name="${ant.lib}"/>
+
+      <keep access="public" name="com.mucommander.conf.**">
+        <field access="public,protected"/>
+        <method access="public,protected"/>
+        <constructor access="public,protected"/>
+      </keep>
+    </proguard>
+  </target>
+
+  <!-- Identifies the best available obfuscation policy and    -->
+  <!-- obfuscates the conf JAR file.                           -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${conf.jar.obf}.                                        -->
+  <target name="obfuscate-conf" depends="jar-conf,load-proguard,copy-conf-bytecode,obfuscate-conf-bytecode"/>
+
+
+
+  <!-- = Conf API compression ================================ -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to compress the          -->
+  <!-- muCommander conf API when possible.                     -->
+
+  <!-- Compress the obfuscated conf JAR file using 7za.        -->
+  <!-- This target is only meant to be called if 7za is        -->
+  <!-- available.                                              -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${conf.jar.cmp}.                                        -->
+  <target name="compress-obfuscated-conf" if="7za.available">
+    <echo>Compressing the Configuration API...</echo>
+    <delete dir="${conf.classes.obf}"/>
+    <unjar src="${conf.jar.obf}" dest="${conf.classes.obf}"/>
+    <exec executable="${7za.executable}" dir="${conf.classes.obf}">
+      <arg value="a"/>
+      <arg value="-tzip"/>
+      <arg value="-mm=Deflate"/>
+      <arg value="-mx9"/>
+      <arg value="-mfb=258"/>
+      <arg value="-mpass=15"/>
+      <arg value="${conf.jar.cmp}"/>
+      <arg value="*"/>
+    </exec>
+  </target>
+
+  <!-- Compress the obfuscated conf JAR file using standard    -->
+  <!-- zip compression.                                        -->
+  <!-- This target is only meant to be called if 7za is not    -->
+  <!-- available.                                              -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${conf.jar.cmp}.                                        -->
+  <target name="copy-obfuscated-conf" unless="7za.available">
+    <echo>7za unavailable, using standard compression for the Configuration API...</echo>
+    <copy file="${conf.jar.obf}" tofile="${conf.jar.cmp}"/>
+  </target>
+
+  <!-- Identifies the best available compression policy and    -->
+  <!-- compresses the conf JAR obfuscated file.                -->
+  <!-- The resulting JAR file will be stored in                -->
+  <!-- ${conf.jar.cmp}.                                        -->
+  <target name="compress-conf" depends="check-7za,obfuscate-conf,compress-obfuscated-conf,copy-obfuscated-conf"/>
+
+
+
+  <!-- = Conf API documentation ============================== -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to generate the          -->
+  <!-- muCommander conf API documentation.                     -->
+
+  <!-- Generates the conf API documentation.                   -->
+  <!-- Output will be stored in ${conf.doc}.                   -->
+  <target name="conf-doc">
+    <echo>Creating the Configuration API documentation...</echo>
+    <mkdir dir="${conf.doc}"/>
+    <javadoc destdir="${conf.doc}" author="true" windowtitle="muCommander Configuration API" encoding="UTF-8" access="protected">
+      <packageset dir="${source}">
+        <include name="com/mucommander/conf/**"/>
+        <exclude name="com/mucommander/conf/impl/**"/>
+      </packageset>
+    </javadoc>
+  </target>
+
+  <target name="conf-doc-tgz" depends="conf-doc,conf-prefixes">
+    <echo>Packaging the Configuration API documentation...</echo>
+    <mkdir dir="${dist}"/>
+    <tar destfile="${dist}/${conf.package-prefix}-docs.tar.gz" compression="gzip">
+      <tarfileset dir="${conf.doc}" prefix="${conf.archive-prefix}"/>
+    </tar>
+  </target>
+
+
+
+  <!-- = Conf API release ==================================== -->
+  <!-- ======================================================= -->
+  <!-- The following targets are used to generate a release    -->
+  <!-- of the muCommander Configuration API.                   -->
+
+  <target name="conf-load-strreplace" unless="conf.standalone">
+    <antcall target="compress-tools"/>
+  </target>
+
+  <!-- Stores the conf package and archive prefixes in         -->
+  <!-- ${conf.package-prefix} and ${conf.archive-prefix}.      -->
+  <!-- The archive prefix is meant to be used as the name of   -->
+  <!-- the root directory in the conf tar.gz release file.     -->
+  <!-- The package prefix is meant to be used as the name of   -->
+  <!-- the tar.gz release file.                                -->
+  <target name="conf-prefixes" depends="conf-load-strreplace">
+    <echo>Creating the Configuration API archive prefix...</echo>
+    <taskdef name="strreplace" classname="com.mucommander.ant.util.ReplaceTask" classpath="${tools.jar.cmp}"/>
+    <strreplace from="muCommander-conf-${conf.version}${conf.subversion}" to="conf.archive-prefix" what="[ .]" with="_"/>
+    <echo>Creating the Configuration API package name prefix...</echo>
+    <strreplace from="mucommander-conf-${conf.version}${conf.subversion}" to="conf.package-prefix" what="[ .]" with="_"/>
+  </target>
+
+  <target name="release-conf" depends="compress-conf,conf-prefixes,conf-doc-tgz">
+    <!-- Refreshes the release directory structure.            -->
+    <delete dir="${conf.tmp}/release"/>
+    <mkdir dir="${conf.tmp}/release/lib"/>
+    <mkdir dir="${conf.tmp}/release/docs"/>
+    <mkdir dir="${conf.tmp}/release/source"/>
+    <mkdir dir="${conf.tmp}/release/tools"/>
+    <mkdir dir="${conf.tmp}/release/res/"/>
+
+    <!-- Adds the license, readme and compile files.           -->
+    <copy file="${conf.license}" todir="${conf.tmp}/release"/>
+    <copy file="${conf.readme}"  todir="${conf.tmp}/release"/>
+    <copy file="${conf.compile}" todir="${conf.tmp}/release"/>
+
+    <!-- Adds the compressed JAR file.                         -->
+    <copy file="${conf.jar.cmp}" todir="${conf.tmp}/release/lib"/>
+
+    <!-- Adds the resources.                                   -->
+    <copy todir="${conf.tmp}/release/res">
+      <fileset dir="${conf.res}">
+        <exclude name="**/*.txt"/>
+      </fileset>
+    </copy>
+
+    <!-- Adds the build files.                                 -->
+    <copy file="${conf.build}" tofile="${conf.tmp}/release/build.xml"/>
+    <copy todir="${conf.tmp}/release/build">
+      <fileset dir="build">
+        <include name="common.xml"/>
+        <include name="local_template.xml"/>
+        <include name="conf/structure.xml"/>
+        <include name="conf/main.xml"/>
+      </fileset>
+    </copy>
+
+    <!-- Adds various necessary tools.                         -->
+    <copy todir="${conf.tmp}/release/tools">
+      <fileset dir="${tools}/">
+        <include name="proguard.jar"/>
+        <include name="mucommander-ant-tools.jar"/>
+      </fileset>
+    </copy>
+
+    <!-- Adds the sources.                                     -->
+    <copy todir="${conf.tmp}/release/source">
+      <fileset dir="${source}/">
+        <include name="com/mucommander/conf/**/*"/>
+        <include name="com/mucommander/xml/**/*"/>
+      </fileset>
+    </copy>
+
+    <!-- Adds the documentation.                               -->
+    <copy todir="${conf.tmp}/release/docs">
+      <fileset dir="${conf.doc}/"/>
+    </copy>
+
+    <!-- Creates the the release file.                         -->
+    <echo>Packaging the Configuration API release file...</echo>
+    <mkdir dir="${dist}"/>
+    <tar destfile="${dist}/${conf.package-prefix}.tar.gz" compression="gzip">
+      <tarfileset dir="${conf.tmp}/release/" prefix="${conf.archive-prefix}">
+        <include name="**"/>
+      </tarfileset>
+    </tar>
+  </target>
+</project>

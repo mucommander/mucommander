@@ -1,11 +1,11 @@
-               ------------------------------------------------------
-                   muCommander Ant Tools compilation instructions
-               ------------------------------------------------------
+               --------------------------------------------------------------
+                   muCommander Configuration API compilation instructions
+               --------------------------------------------------------------
 
 1. Configuration
 
-  The first step to compiling the muCommander Ant Tools is making sure all
-the proper libraries and tools are installed.
+  The first step to compiling the muCommander Configuration API is making sure
+all the proper libraries and tools are installed.
 
   Pre-requesites are:
 - JDK 1.4 or greater
@@ -43,31 +43,20 @@ it.
   implementation.
   If this property is not set, standard WIP compression will be used.
 
-- antdoclet.lib (defaults to ./tools/antdoclet.jar)
-  Path to the AntDoclet JAR file.
-  This is used to generate the Ant tools documentation.
-  The one used by muCommander can be found in ./tools/antdoclet.jar, but you can
-  modify that if you wish to try out other versions.
-
-- velocity.lib (defaults to ./tools/velocity.jar)
-  Path to the Velocity JAR file.
-  This is used to generate the Ant tools documentation.
-  The one used by muCommander can be found in ./tools/velocity.jar, but you can
-  modify that if you wish to try out other versions.
 
 
+2. Compiling the muCommander Configuration APIb
 
-2. Compiling muCommander Ant Tools
+  There are various ways of compiling muCommander Configuration API.
+The most immediately useful are:
 
-  There are various ways of compiling the muCommander Ant Tools.
-The most common ways are:
 - ant
-  This will create a ./lib/mucommander-ant-tools.jar file containing all the
-  compiled, obfuscated and compressed muCommander Ant Tools.
+  This will create a ./lib/mucommander-conf.jar file containing the
+  compiled, obfuscated and compressed muCommander Configuration API.
 
-- ant tools-doc
-  This will generate the muCommander Ant Tools documentation in ./docs
+- ant conf-doc
+  This will generate the muCommander Configuration API documentation in ./docs
 
-- ant release-tools
+- ant release-conf
   This will package the binary and documentation files of the muCommander
-  Ant Tools in ./dist.
+  Configuration API in ./docs
