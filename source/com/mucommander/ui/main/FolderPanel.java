@@ -379,7 +379,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
      * @param selectThisFileAfter file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file 
      */
     public synchronized void tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter) {
-        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" selectThisFileAfter"+selectThisFileAfter, 3);
+        if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("folder="+folder+" selectThisFileAfter="+selectThisFileAfter, 3);
 
         // Make sure there is not an existing thread running,
         // this should not normally happen but if it does, report the error
