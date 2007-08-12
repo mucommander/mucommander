@@ -606,54 +606,6 @@ quick_search:SK:Rýchle hľadanie
 
 
 
-# Used in file overwrite confirmation dialogs.
-file_already_exists:EN:%1 already exists, do you want to replace it ?
-file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
-file_already_exists:DE:%1 existiert bereits, soll sie überschrieben werden ?
-file_already_exists:ES:%1 ya existe , ¿desea reemplazarlo?
-file_already_exists:CS:%1 již existuje, chcete jej přepsat ?
-file_already_exists:zh_TW:%1 已存在, 你是否要取代它 ?
-file_already_exists:PL:%1 już istnieje, chcesz zastąpić ?
-file_already_exists:HU:%1 már létezik, lecseréli?
-file_already_exists:RU:Файл %1 уже существует. Вы хотите его заменить?
-file_already_exists:zh_CN:%1 已存在, 你是否要取代它 ?
-file_already_exists:SI:%1 že obstaja, ali jo želi zamenjati?
-file_already_exists:RO:%1 există deja, vreți să îl înlocuiți?
-file_already_exists:IT:%1 esiste gia', vuoi sostituirlo ?
-file_already_exists:KR:%1가 이미 존재합니다. 덮어쓰시겠습니까?
-file_already_exists:pt_BR:%1 já existe, deseja sobrescrevê-lo ?
-file_already_exists:NL:%1 bestaat al, wilt u het vervangen ?
-file_already_exists:SK:%1 už existuje, chcete ho prepísať ?
-
-# Used as the title of error dialogs.
-write_error:EN:Write error
-write_error:FR:Erreur d'écriture
-write_error:DE:Schreibfehler
-write_error:ES:Error de escritura
-write_error:CS:Chyba zápisu
-write_error:zh_TW:寫入錯誤
-write_error:PL:Błąd zapisu
-write_error:HU:Írás hiba
-write_error:RU:Ошибка записи
-write_error:zh_CN:写入错误
-write_error:SI:Napaka pri zapisovanju
-write_error:RO:Eroare la scriere
-write_error:IT:Errore in scrittura
-write_error:KR:쓰기 오류
-write_error:pt_BR:Erro de escrita
-write_error:NL:Fout bij het schrijven
-write_error:SK:Chyba zápisu
-
-# Used as the title of error dialogs.
-read_error:EN:Read error
-read_error:FR:Erreur de lecture
-# Translation missing
-
-
-
-
-
-
 # Used as a button label, in the 'Mkdir' dialog for instance
 create:EN:Create
 create:FR:Créer
@@ -1344,6 +1296,61 @@ same_source_destination:KR:원본과 복사하려는 위치가 같습니다
 same_source_destination:pt_BR:Diretório fonte e de destino são os mesmos
 same_source_destination:NL:Oorspronkelijk bestand is hetzelfde als doel
 same_source_destination:SK:Zdrojový a cieľový priečinok sa zhodujú
+
+# Used in file overwrite confirmation dialogs.
+file_already_exists:EN:%1 already exists, do you want to replace it ?
+file_already_exists:FR:%1 existe déjà, voulez-vous le remplacer ?
+file_already_exists:DE:%1 existiert bereits, soll sie überschrieben werden ?
+file_already_exists:ES:%1 ya existe , ¿desea reemplazarlo?
+file_already_exists:CS:%1 již existuje, chcete jej přepsat ?
+file_already_exists:zh_TW:%1 已存在, 你是否要取代它 ?
+file_already_exists:PL:%1 już istnieje, chcesz zastąpić ?
+file_already_exists:HU:%1 már létezik, lecseréli?
+file_already_exists:RU:Файл %1 уже существует. Вы хотите его заменить?
+file_already_exists:zh_CN:%1 已存在, 你是否要取代它 ?
+file_already_exists:SI:%1 že obstaja, ali jo želi zamenjati?
+file_already_exists:RO:%1 există deja, vreți să îl înlocuiți?
+file_already_exists:IT:%1 esiste gia', vuoi sostituirlo ?
+file_already_exists:KR:%1가 이미 존재합니다. 덮어쓰시겠습니까?
+file_already_exists:pt_BR:%1 já existe, deseja sobrescrevê-lo ?
+file_already_exists:NL:%1 bestaat al, wilt u het vervangen ?
+file_already_exists:SK:%1 už existuje, chcete ho prepísať ?
+
+# Used as a title in error dialogs.
+write_error:EN:Write error
+write_error:FR:Erreur d'écriture
+write_error:DE:Schreibfehler
+write_error:ES:Error de escritura
+write_error:CS:Chyba zápisu
+write_error:zh_TW:寫入錯誤
+write_error:PL:Błąd zapisu
+write_error:HU:Írás hiba
+write_error:RU:Ошибка записи
+write_error:zh_CN:写入错误
+write_error:SI:Napaka pri zapisovanju
+write_error:RO:Eroare la scriere
+write_error:IT:Errore in scrittura
+write_error:KR:쓰기 오류
+write_error:pt_BR:Erro de escrita
+write_error:NL:Fout bij het schrijven
+write_error:SK:Chyba zápisu
+
+# Used as a title in error dialogs.
+read_error:EN:Read error
+read_error:FR:Erreur de lecture
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ####################
@@ -4956,6 +4963,43 @@ unpack_dialog.unpacking_file:NL:Uitpakken %1
 unpack_dialog.unpacking_file:SK:Dekomprimujem %1
 
 
+########################
+# Archive optimization #
+########################
+
+# This text is displayed in the progress dialog after modifying an archive, while the archive file is being optimized.
+# %1 is replaced by the archive's filename (e.g. 'myarchive.zip')
+optimizing_archive:EN:Optimizing archive %1
+optimizing_archive:en_GB:Optimising archive %1
+optimizing_archive:FR:Optimisation de l'archive %1
+# Translation missing
+
+
+
+
+
+
+
+
+
+
+
+
+# 
+error_while_optimizing_archive:EN:Error while optimizing archive %1
+error_while_optimizing_archive:en_GB:Error while optimising archive %1
+error_while_optimizing_archive:FR:Erreur pendant l'optimisation de %1
+
+
+
+
+
+
+
+
+
+
+
 ########
 # Move #
 ########
@@ -5254,7 +5298,7 @@ delete_dialog.error_title:NL:Fout bij verwijderen
 delete_dialog.error_title:SK:Chyba pri odstraňovaní
 
 delete.deleting_file:EN:Deleting %1
-delete.deleting_file:FR:Suppression %1 en cours
+delete.deleting_file:FR:Suppression de %1 en cours
 delete.deleting_file:DE:Lösche %1
 delete.deleting_file:ES:Eliminando %1
 delete.deleting_file:CS:Mažu %1
