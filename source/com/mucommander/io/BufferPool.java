@@ -81,7 +81,7 @@ public class BufferPool {
      * corrupted if other threads use it.
      *
      * @param buffer the buffer instance to make available for further use
-     * @throw IllegalArgumentException if specified buffer is null
+     * @throws IllegalArgumentException if specified buffer is null
      */
     public static synchronized void releaseBuffer(byte buffer[]) {
         if(buffer==null)
