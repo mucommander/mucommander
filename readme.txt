@@ -51,7 +51,7 @@ muCommander uses the following great third party works :
 - the J2SSH library released under the GNU LGPL license.
  J2SSH can be found at http://www.sshtools.com .
 
-- the Ant Bzip2 and Tar libraries released under the Apache License.
+- the Ant library released under the Apache License.
  Ant can be found at http://ant.apache.org .
 
 - the JmDNS library released under the GNU LGPL.
