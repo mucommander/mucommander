@@ -27,10 +27,12 @@ Requirements
 Java Runtime Environment 1.4.0 (JRE) or later is required to run
 muCommander. JRE 1.6 is recommended, you can download it at http://java.com.
 
-Mac OS X users: your favorite OS already comes with a Java runtime so you're good to go!
+Mac OS X users: your favorite OS already comes with a Java runtime so you're
+good to go!
 
-If you're having problems launching muCommander, make sure the $JAVA_HOME environment
-variable points to the directory where your Java runtime is installed.
+If you're having problems launching muCommander, make sure the $JAVA_HOME
+environment variable points to the directory where your Java runtime is
+installed.
 
 
 
@@ -92,7 +94,8 @@ Translators:
 - Ján Ľudvík (Slovak)
 - Jonathan Murphy (British English)
 
-Many thanks to all of you who suggested new features, reported bugs, sent warm emails or generously donated to the project !
+Many thanks to all of you who suggested new features, reported bugs, sent warm
+emails or generously donated to the project !
 
 
 
@@ -123,8 +126,9 @@ The following options are available:
  -w, --fail-on-warnings            Quits when a warning is encountered during
                                    the boot process.
 
-In addition to these, muCommander will interpret anything that comes after the last switch as a URI and load it
-in its windows. So for example:
+In addition to these, muCommander will interpret anything that comes after the
+last switch as a URI and load it in its windows.
+So for example:
 
  mucommander -b ~/.bookmarks.xml ftp://user@myftp.com ~/dev http://slashdot.org
 
@@ -140,54 +144,67 @@ Will:
 Advanced configuration
 ----------------------
 
-muCommander has some advanced configuration options which cannot (yet) be accessed through the GUI.
-After having booted the application for the first time, the following files will be created in muCommander's preferences
-folder:
+muCommander has some advanced configuration options which cannot (yet) be
+accessed through the GUI.
+After having booted the application for the first time, the following files will
+be created in muCommander's preferences folder:
  - action_keymap.xml (keyboard shortcuts description file).
  - command_bar.xml   (commandbar description file).
  - toolbar.xml       (toolbar description file).
 
-Brave users can edit these XML files and tune muCommander to their own needs. Here are a few hints on how to edit these files.
+Brave users can edit these XML files and tune muCommander to their own needs.
+Here are a few hints on how to edit these files.
 
 
  - action_keymap.xml
 All customisable actions are listed in that file, using the following format:
-<action class="com.mucommander.ui.action.CopyFileNamesAction" keystroke="alt C" alt_keystroke="meta C"/>
+<action class="com.mucommander.ui.action.CopyFileNamesAction"
+        keystroke="alt C" alt_keystroke="meta C"/>
 
-It's probably safer not to mess around with the class argument, as this could actually remove features from muCommander.
-keystroke and alt_keystroke should be fairly safe explanatory. It's important to note, however, that due to Java's capricious
-nature, the case is important. CONTROL C will not be understood, and neither will control c.
+It's probably safer not to mess around with the class argument, as this could
+actually remove features from muCommander.
+keystroke and alt_keystroke should be fairly safe explanatory. It's important to
+note, however, that due to Java's capricious nature, the case is important.
+CONTROL C will not be understood, and neither will control c.
 
 
  - command_bar.xml
-This file describes the content of your command bar (the bit will all the buttons on the lower part of the window).
-Each item in the file corresponds to a button in the bar. You can edit them, add some or remove some.
+This file describes the content of your command bar (the bit will all the
+buttons on the lower part of the window).
+Each item in the file corresponds to a button in the bar. You can edit them, add
+some or remove some.
 
 The syntax is as follows:
-<button action="com.mucommander.ui.action.CopyAction" alt_action="com.mucommander.ui.action.LocalCopyAction"/>
+<button action="com.mucommander.ui.action.CopyAction"
+        alt_action="com.mucommander.ui.action.LocalCopyAction"/>
 Where:
  - action is the main action executed by the button
- - alt_action is the action executed by the button when the shift key is held down
+ - alt_action is the action executed by the button when the shift key is held
+   down
 
 For a list of legal actions, please refer to action_keymap.xml
 
 
  - toolbar.xml
-This file controls the content of your toolbar. It works in the same way as command_bar.xml, with two notable differences:
+This file controls the content of your toolbar. It works in the same way as
+command_bar.xml, with two notable differences:
   - you can use a <separator/> element to add a separator in the toolbar
   - alt_action is not available
 
 
 - commands.xml
 This file controls the various system commands that muCommander can call.
-Documentation on how to customize those commands can be found here: http://www.mucommander.com/forums/viewtopic.php?t=420
+Documentation on how to customize those commands can be found here:
+http://www.mucommander.com/forums/viewtopic.php?t=420
 
 
 - associations.xml
-This file controls muCommander's custom file associations. They will be initialised according to the system muCommander
-is running on and depend on commands.xml.
+This file controls muCommander's custom file associations. They will be
+initialised according to the system muCommander is running on and depend on
+commands.xml.
 
-This file is not (yet) written by muCommander, so you have to create it manually for the time being.
+This file is not (yet) written by muCommander, so you have to create it
+manually for the time being.
 
 It looks something like this:
 <?xml version="1.0" encoding="UTF-8"?>
@@ -196,14 +213,19 @@ It looks something like this:
 </associations>
 
 Each association has the following attributes:
-- mask:    regular expression that the file name must match in order to be managed by the association.
-- read:    if set to 'yes', a file must be readable in order to be matched by the association.
-- write:   if set to 'yes', a file must be writable in order to be matched by the association.
-- execute: if set to 'yes', a file must be executable in order to be matched by the association.
+- mask:    regular expression that the file name must match in order to be
+           managed by the association.
+- read:    if set to 'yes', a file must be readable in order to be matched by
+           the association.
+- write:   if set to 'yes', a file must be writable in order to be matched by
+           the association.
+- execute: if set to 'yes', a file must be executable in order to be matched by
+           the association.
 - command: the alias of the command to execute for this type of files.
 
-You must be extremely careful when editing this file, as it's quite easy to break muCommander by fiddling with
-it. Make sure that the system's default associations are always present, and that you do not change their attributes.
+You must be extremely careful when editing this file, as it's quite easy to
+break muCommander by fiddling with it. Make sure that the system's default
+associations are always present, and that you do not change their attributes.
 - Windows 9x:
 <association mask=".*" command="open"/>
 
@@ -215,7 +237,9 @@ it. Make sure that the system's default associations are always present, and tha
 <association mask=".*" command="open"/>
 
 - Gnome:
-<association mask="[^.]+" command="execute"/> <!-- Only if running on Java prior to 1.6 -->
+<!-- Only if running on Java prior to 1.6 -->
+<association mask="[^.]+" command="execute"/>
+
 <association mask=".*"    command="execute" execute="yes"/>
 <association mask=".*"    command="open"/>
 
@@ -224,7 +248,9 @@ it. Make sure that the system's default associations are always present, and tha
 <association mask=".*"               command="open"/>
 
 - Anything else:
-<association mask="[^.]+" command="execute"/> <!-- Only if running on Java prior to 1.6 -->
+<!-- Only if running on Java prior to 1.6 -->
+<association mask="[^.]+" command="execute"/>
+
 <association mask=".*"    command="execute"/>
 
 
@@ -233,55 +259,80 @@ What's new since v0.8 beta 3 ?
 ------------------------------
 
 New features:
- - Added 'Use system file icons' option to 'Appearance' preferences, allowing to display file icons as they are displayed on the system's desktop
- - Added 'Show folders first' option to 'View' menu, allowing to control whether folders are displayed first (default) or mixed with regular files
- - System notifications (Growl under Mac OS X, System tray under other platforms) are sent when transfers are complete or an error has occurred
- - Added support for the NFS protocol
- - New 'Follow symlinks when changing current directory' option in the preferences
- - New and improved theme editor, now allows to edit all theme attributes and to manage themes
- - Mac OS X and KDE: 'Delete' can now move files to the system's trash (enabled by default), and open or empty the trash
+- Added 'Use system file icons' option to 'Appearance' preferences, allowing
+  to display file icons as they are displayed on the system's desktop
+- Added 'Show folders first' option to 'View' menu, allowing to control whether
+  folders are displayed first (default) or mixed with regular files
+- System notifications (Growl under Mac OS X, System tray under other platforms)
+  are sent when transfers are complete or an error has occurred
+- Added support for the NFS protocol
+- New 'Follow symlinks when changing current directory' option in the
+  preferences
+- New and improved theme editor, now allows to edit all theme attributes and to
+  manage themes
+- Mac OS X and KDE: 'Delete' can now move files to the system's trash (enabled
+  by default), and open or empty the trash
 
 Improvements:
- - Added 'Go to' buttons to 'Edit bookmarks', 'Edit credentials' and 'Show open connections' dialogs to go to the selected location
- - Added 'Show seconds' and 'Show century' options to 'Date & time' preferences, to show seconds/century in file dates
- - FTP encoding can now be specified in the 'Connect to server' dialog ; connection properties are saved with credentials
- - Updated Ant Tar and Bzip2 libraries to version 1.7.0
- - Added 'share' field to 'Connect to server' SMB panel
- - Added 'Open with' item to 'File' menu
- - 'Copy' is now the default action instead of 'Move' for drag-and-drop within muCommander
- - Improved keyboard accessibility of 'File collision' and 'Transfer progress' dialogs
- - Added 'Bring all to front' item to 'Window' menu
- - Improved UI responsiveness on slow filesystems
- - Added icons to language preferences
- - Delete dialog warns more explicitly about the consequences of deleting files permanently
- - Added folder icons to drive button and its popup menu
- - Quick search now dims the non-matching files
+- Added 'Go to' buttons to 'Edit bookmarks', 'Edit credentials' and 'Show open
+  connections' dialogs to go to the selected location
+- Added 'Show seconds' and 'Show century' options to 'Date & time' preferences,
+  to show seconds/century in file dates
+- FTP encoding can now be specified in the 'Connect to server' dialog ;
+  connection properties are saved with credentials
+- Updated Ant Tar and Bzip2 libraries to version 1.7.0
+- Added 'share' field to 'Connect to server' SMB panel
+- Added 'Open with' item to 'File' menu
+- 'Copy' is now the default action instead of 'Move' for drag-and-drop within
+  muCommander
+- Improved keyboard accessibility of 'File collision' and 'Transfer progress'
+  dialogs
+- Added 'Bring all to front' item to 'Window' menu
+- Improved UI responsiveness on slow filesystems
+- Added icons to language preferences
+- Delete dialog warns more explicitly about the consequences of deleting files
+  permanently
+- Added folder icons to drive button and its popup menu
+- Quick search now dims the non-matching files
 
 Localization:
- - Korean translation contributed by Jioh L. Jung
- - Brazilian Portuguese translation contributed by Cristiano Duarte
- - Dutch translation contributed by Pieter Kristensen
- - Slovak translation contributed by Ján Ľudvík
- - British English translation contributed by Jonathan Murphy
- - Russian translation update
- - Czech translation update
+- Korean translation contributed by Jioh L. Jung
+- Brazilian Portuguese translation contributed by Cristiano Duarte
+- Dutch translation contributed by Pieter Kristensen
+- Slovak translation contributed by Ján Ľudvík
+- British English translation contributed by Jonathan Murphy
+- Russian translation update
+- Czech translation update
 
 Bug fixes:
- - FTP filenames containing extended characters are now properly handled if the proper encoding is specified when the connection is created
- - HTTP files can now be properly archived
- - Windows can now be properly recalled when they are minimized
- - Fixed individual file progress and transfer speed not showing when moving files between different drives under Windows
- - Fixed slow startup and directory access times that could occur under Windows when network drives are present but unreachable
- - Fixed issues with local folders under Windows that would occur when a path was entered with a trailing space in the location field
- - Fixed some flickered that would randomly occur while changing the current folder
+- FTP filenames containing extended characters are now properly handled if the
+  proper encoding is specified when the connection is created
+- HTTP files can now be properly archived
+- Windows can now be properly recalled when they are minimized
+- Fixed individual file progress and transfer speed not showing when moving
+  files between different drives under Windows
+- Fixed slow startup and directory access times that could occur under Windows
+  when network drives are present but unreachable
+- Fixed issues with local folders under Windows that would occur when a path was
+  entered with a trailing space in the location field
+- Fixed some flickered that would randomly occur while changing the current
+  folder
 
 Known issues:
- - Hungarian translation is not up-to-date
- - Executable permissions are not preserved properly for local files prior with Java <1.6
- - Zip files encoded in a charset other than UTF-8 will not display non-ASCII filenames properly due to a limitation of java.util.zip (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4244499)
- - Some BZ2 archives can not be properly opened
- - SMB support may not work properly on non multi-language JRE
- - 'Copy files to clipboard' not working with some applications (files are not pasted)
- - Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System Preferences' for them to work properly
- - Mac OS X : text fields don't work correctly when using a fractionally-scaled font (known Java bug, http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)
- - Editable combo boxes have keyboard navigation issues under Java 1.6
+- Hungarian translation is not up-to-date
+- Executable permissions are not preserved properly for local files prior to
+  Java 1.6
+- Zip files encoded in a charset other than UTF-8 will not display non-ASCII
+  filenames properly due to a limitation of java.util.zip
+  (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4244499)
+- Some BZ2 archives can not be properly opened
+- SMB support may not work properly on non multi-language JRE
+- 'Copy files to clipboard' not working with some applications (files are not
+  pasted)
+- Mac OS X : 'Sort by' keyboard shortcuts in menu show Command modifier instead
+  of Ctrl, OS X's keyboard navigation shortcuts must be disabled in 'System
+  Preferences' for them to work properly
+- Mac OS X : text fields don't work correctly when using a fractionally-scaled
+  font (known Java bug,
+   http://lists.apple.com/archives/Java-dev/2005/May/msg00670.html)
+- Editable combo boxes have keyboard navigation issues under Java 1.6
