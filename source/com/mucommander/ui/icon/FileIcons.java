@@ -337,7 +337,7 @@ public class FileIcons {
                 try {
                     // Create a directory
                     if(isDirectory)
-                        tempFile.getParent().mkdir(tempFile.getName());
+                        tempFile.mkdir();
                     // Create a regular file
                     else
                         tempFile.getOutputStream(false).close();
