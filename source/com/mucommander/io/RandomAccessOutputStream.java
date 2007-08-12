@@ -24,9 +24,10 @@ import java.io.OutputStream;
 /**
  * <code>RandomAccessOutputStream</code> is an <code>OutputStream</code> with random access.
  *
- * <b>Important:</b> <code>BufferedOutputStream</code> or any wrapper <code>OutputStream</code> class that uses a write
- * buffer CANNOT be used with a <code>RandomAccessInputStream</code> if the {@link #seek(long)} method is to be used.
- * Doing so would corrupt the write buffer and yield to data inconsistencies.
+ * <b>Important:</b> <code>BufferedOutputStream</code> or any class wrapping a standard <code>OutputStream</code>
+ * and using an internal buffer CANNOT be used with a <code>RandomAccessInputStream</code> if the {@link #seek(long)}
+ * method is to be used. Doing so would corrupt the write buffer and yield to data inconsistencies.
+ * {@link BufferedRandomOutputStream} provides safe buffering to RandomAccessOutputStream.
  *
  * @author Maxence Bernard
  */
@@ -53,7 +54,7 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
 
     /**
      * Writes <code>len</code> bytes from the specified byte array starting at offset <code>off</code> to this file.
-     * 
+     *
      * @param b the data to write
      * @param off the start offset in the data array
      * @param len the number of bytes to write
@@ -73,9 +74,8 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
      * <code>newLength</code> argument then the file will be extended. In this case, the contents of the extended
      * portion of the file are not defined.</p>
      *
-     * @return <code>true</code> if the file's length could be changed to the new length, <code>false</code> if the
-     * operation is not supported.
+     * @param newLength the new file's length
      * @throws IOException If an I/O error occurred while trying to change the file's length
      */
-    public abstract boolean setLength(long newLength) throws IOException;
+    public abstract void setLength(long newLength) throws IOException;
 }

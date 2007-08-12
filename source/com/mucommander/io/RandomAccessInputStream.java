@@ -142,6 +142,9 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * @exception  IOException   if an I/O error occurs.
      */
     public void readFully(byte b[], int off, int len) throws IOException {
+        if(len==0)
+            return;
+
         int n = 0;
         do {
             int count = read(b, off + n, len - n);
@@ -156,17 +159,6 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
     //////////////////////
     // Abstract methods //
     //////////////////////
-
-    /**
-     * Reads up to <code>b.length</code> bytes of data from this file into an array of bytes. This method blocks until
-     * at least one byte of input is available.
-     *
-     * @param b the buffer into which the data is read
-     * @return the total number of bytes read into the buffer, or -1 if there is no more data because the end of this
-     * file has been reached.
-     * @throws IOException if an I/O error occurs
-     */
-    public abstract int read(byte b[]) throws IOException;
 
     /**
      * Reads up to <code>len</code> bytes of data from this file into an array of bytes. This method blocks until at
