@@ -56,17 +56,17 @@ public class FileToolkit {
 
         // Level 0, folder exists, newName is null
 
-        // destPath points to an absolute and existing folder
+        // destPath points to an absolute and existing folder, or to an archive ending a trailing separator
         if ((destFolder= FileFactory.getFile(destPath))!=null
          && destFolder.exists()
-         && destFolder.isDirectory()) {
+            && (destFolder.isDirectory() || (destFolder.isBrowsable() && destPath.endsWith(destFolder.getSeparator())))) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder for "+destPath+" destFolder="+destFolder.getAbsolutePath()+" destURL="+destFolder.getURL()+" URL filename="+destFolder.getURL().getFilename());
         }
 
-        // destPath points to an existing folder relative to current folder
+        // destPath points to an existing folder (or to an archive ending a trailing separator) relative to current folder
         else if ((destFolder=FileFactory.getFile(currentPath+destPath))!=null
          && destFolder.exists()
-         && destFolder.isDirectory()) {
+           && (destFolder.isDirectory() || (destFolder.isBrowsable() && destPath.endsWith(destFolder.getSeparator())))) {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("found existing folder "+currentPath+destPath);
         }
 

@@ -233,8 +233,8 @@ public class NFSFile extends AbstractFile {
         return ls((FilenameFilter)null);
     }
 
-    public void mkdir(String name) throws IOException {
-        if(!new XFile(absPath+SEPARATOR+name).mkdir())
+    public void mkdir() throws IOException {
+        if(!new XFile(absPath).mkdir())
             throw new IOException();
     }
 
@@ -246,6 +246,11 @@ public class NFSFile extends AbstractFile {
         return new XFileOutputStream(absPath, append);
     }
 
+    /**
+     * Returns <code>true</code>: {@link #getRandomAccessInputStream()} is implemented.
+     *
+     * @return true
+     */
     public boolean hasRandomAccessInputStream() {
         return true;
     }
@@ -254,10 +259,24 @@ public class NFSFile extends AbstractFile {
         return new NFSRandomAccessInputStream(new XRandomAccessFile(file, "r"));
     }
 
+    /**
+     * Returns <code>false</code>: {@link #getRandomAccessOutputStream()} is implemented but the returned
+     * <code>RandomAccessOutputStream</code> is not fully functional.
+     *
+     * @return true
+     */
     public boolean hasRandomAccessOutputStream() {
-        return true;
+        return false;
     }
 
+    /**
+     * <b>Warning:</b> the returned {@link com.mucommander.file.impl.nfs.NFSFile.NFSRandomAccessOutputStream} instance
+     * is not fully functional, its {@link com.mucommander.file.impl.nfs.NFSFile.NFSRandomAccessOutputStream#setLength(long)}
+     * method has a limitation.
+     *
+     * @return a RandomAccessOutputStream that is not fully functional
+     * @throws IOException if the file could not be opened for random write access
+     */
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         return new NFSRandomAccessOutputStream(new XRandomAccessFile(file, "rw"));
     }
@@ -399,10 +418,6 @@ public class NFSFile extends AbstractFile {
             return raf.read();
         }
 
-        public int read(byte b[]) throws IOException {
-            return raf.read(b);
-        }
-
         public int read(byte b[], int off, int len) throws IOException {
             return raf.read(b, off, len);
         }
@@ -426,6 +441,9 @@ public class NFSFile extends AbstractFile {
 
     /**
      * NFSRandomAccessOutputStream extends RandomAccessOutputStream to provide random write access to an NFSFile.
+     *
+     * <p><b>Warning:</b> this RandomAccessOutputStream is not fully functional, the {@link #setLength(long)} has a
+     * limitation.
      */
     public class NFSRandomAccessOutputStream extends RandomAccessOutputStream {
 
@@ -463,21 +481,26 @@ public class NFSFile extends AbstractFile {
             raf.seek(offset);
         }
 
-        public boolean setLength(long newLength) throws IOException {
+        /**
+         * <b>Warning:</b> this method is only capable of expanding the file, not truncating it.
+         * It will throw an <code>IOException</code> whenever the <code>newLength</code> parameter is greater than
+         * the current length reported by {@link #getLength()}.
+         *
+         * @param newLength the new file's length
+         * @throws IOException If an I/O error occurred while trying to change the file's length
+         */
+        public void setLength(long newLength) throws IOException {
             // This operation is supported only if the new length is greater (or equal) than the current length
             long currentLength = getLength();
-            if(newLength<currentLength) {
-                return false;
-            }
+            if(newLength<currentLength)
+                throw new IOException();
 
             if(newLength==currentLength)
-                return true;
+                return;
 
             // Extend the file's length by seeking to the end and writing a byte
             seek(newLength-1);
             write(0);
-
-            return true;
         }
     }
 }

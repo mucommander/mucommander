@@ -35,10 +35,11 @@ public class TarEntry extends ArchiveEntry {
         super(tarEntry);
         this.tarEntry = tarEntry;
     }
-	
-    /////////////////////////////////////
-    // Abstract methods implementation //
-    /////////////////////////////////////
+
+
+    /////////////////////////////////
+    // ArchiveEntry implementation //
+    /////////////////////////////////
 		
     public String getPath() {
         return tarEntry.getName();

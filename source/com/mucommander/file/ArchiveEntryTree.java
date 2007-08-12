@@ -21,14 +21,25 @@ package com.mucommander.file;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
+ * Stores archive entries and organizes them in a tree structure that maps entries in the way they are organized
+ * inside the archive. An instance of <code>ArchiveEntryTree</code> also acts as the root node: all archive entries are
+ * descendants of it.
+ *
  * @author Maxence Bernard
  */
 public class ArchiveEntryTree extends DefaultMutableTreeNode {
 
+    /**
+     * Creates a new empty tree.
+     */
     public ArchiveEntryTree() {
     }
 
-
+    /**
+     * Adds the given entry to the archive tree, creating parent nodes as necessary.
+     *
+     * @param entry the entry to add to the tree
+     */
     public void addArchiveEntry(ArchiveEntry entry) {
 
         String entryPath = entry.getPath();

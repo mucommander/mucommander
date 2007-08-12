@@ -20,7 +20,6 @@ package com.mucommander.file;
 
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.io.FileTransferException;
 import com.mucommander.io.RandomAccessInputStream;
 import com.mucommander.io.RandomAccessOutputStream;
 
@@ -30,31 +29,68 @@ import java.io.OutputStream;
 
 
 /**
+ * <code>ArchiveEntryFile</code> represents a file entry inside an archive. An ArchiveEntryFile is always associated with an
+ * {@link ArchiveEntry} object which contains information about the entry (name, size, date, ...) and with an
+ * {@link AbstractArchiveFile} which acts as an entry repository and provides operations such as listing a directory
+ * entry's files, adding or removing entries (if the archive is writable), etc...
  *
+ * <p>
+ * <code>ArchiveEntryFile</code> implements {@link com.mucommander.file.AbstractFile} by delegating methods to the
+ * <code>ArchiveEntry</code> and <code>AbstractArchiveFile</code> instances.
+ * <code>ArchiveEntryFile</code> is agnostic to the actual archive format. In other words, there is no need to extend
+ * this class for a particular archive format, <code>ArchiveEntry</code> and <code>AbstractArchiveFile</code> provide a
+ * general framework that isolates from the archive format's specifics.
+ * </p>
  *
  * @author Maxence Bernard
  */
 public class ArchiveEntryFile extends AbstractFile {
 
+    /** The archive file that contains this entry */
     protected AbstractArchiveFile archiveFile;
-	
+
+    /** This entry file's parent, can be the archive file itself if this entry is located at the top level */
     protected AbstractFile parent;
-	
+
+    /** The ArchiveEntry object that contains information about this entry */
     protected ArchiveEntry entry;
 
+    /** True if this entry exists in the archive */
+    protected boolean exists;
 
-    protected ArchiveEntryFile(AbstractArchiveFile archiveFile, ArchiveEntry entry, FileURL fileURL) {
-        super(fileURL);
+
+    /**
+     * Creates a new ArchiveEntryFile.
+     *
+     * @param url the FileURL instance that represents this file's location
+     * @param archiveFile the AbstractArchiveFile instance that contains this entry
+     * @param entry the ArchiveEntry object that contains information about this entry
+     * @param exists true if this entry exists in the archive
+     */
+    protected ArchiveEntryFile(FileURL url, AbstractArchiveFile archiveFile, ArchiveEntry entry, boolean exists) {
+        super(url);
         this.archiveFile = archiveFile;
         this.entry = entry;
+        this.exists = exists;
     }
 	
 	
     /**
-     * Returns the underlying ArchiveEntry instance.
+     * Returns the ArchiveEntry instance that contains information about the archive entry (name, size, date, ...).
+     *
+     * @return the ArchiveEntry instance that contains information about the archive entry (name, size, date, ...)
      */
     public ArchiveEntry getEntry() {
         return entry;
+    }
+
+    /**
+     * Returns the {@link AbstractArchiveFile} that contains the entry represented by this file.
+     *
+     * @return the AbstractArchiveFile that contains the entry represented by this file
+     */
+    public AbstractArchiveFile getArchiveFile() {
+        return archiveFile;
     }
 
 
@@ -65,9 +101,11 @@ public class ArchiveEntryFile extends AbstractFile {
     public long getDate() {
         return entry.getDate();
     }
-	
+
+    /**
+     * Always returns <code>false</code>: date of entries cannot be modified.
+     */
     public boolean changeDate(long lastModified) {
-        // Archive entries are read-only
         return false;
     }
 
@@ -98,18 +136,24 @@ public class ArchiveEntryFile extends AbstractFile {
     public void setParent(AbstractFile parent) {
         this.parent = parent;	
     }
-	
+
+    /**
+     * Returns <code>true</code> if this entry exists within the archive file.
+     *
+     * @return true if this entry exists within the archive file
+     */
     public boolean exists() {
-        // Entry file should always exist since entries can only be created by the enclosing archive file.
-        return true;
+        return exists;
     }
 	
     public boolean getPermission(int access, int permission) {
         return (getPermissions() & (permission << (access*3))) != 0;
     }
 
+    /**
+     * Always returns <code>false</code>: permissions of entries cannot be changed.
+     */
     public boolean setPermission(int access, int permission, boolean enabled) {
-        // Permissions cannot be changed
         return false;
     }
 
@@ -118,59 +162,141 @@ public class ArchiveEntryFile extends AbstractFile {
         return (entry.getPermissionsMask() & (permission << (access*3))) != 0;
     }
 
+    /**
+     * Always returns <code>false</code>: permissions of entries cannot be changed.
+     */
     public boolean canSetPermission(int access, int permission) {
-        // Permissions cannot be changed
         return false;
     }
 
-
+    /**
+     * Always returns <code>false</code>.
+     */
     public boolean isSymlink() {
         return false;
     }
 
+    /**
+     * Deletes this entry from the associated <code>AbstractArchiveFile</code> if it is writable (as reported by
+     * {@link com.mucommander.file.AbstractArchiveFile#isWritableArchive()}).
+     * Throws an <code>IOException</code> if it isn't, if this entry does not exist in the archive, or if an I/O error
+     * occurred.
+     *
+     * @throws IOException if the associated archive file is not writable, if this entry does not exist in the archive,
+     * or if an I/O error occurred
+     */
     public void delete() throws IOException {
-        // Archive entries are read-only
-        throw new IOException();
+        if(exists && archiveFile.isWritableArchive()) {
+            AbstractRWArchiveFile rwArchiveFile = (AbstractRWArchiveFile)archiveFile;
+
+            // Delete the entry in the archive file
+            rwArchiveFile.deleteEntry(entry);
+
+            // Create a new non-existing entry
+            entry = new SimpleArchiveEntry(entry.getPath(), false);
+            exists = false;
+        }
+        else
+            throw new IOException();
     }
 
-    public void mkdir(String name) throws IOException {
-        // Archive entries are read-only
-        throw new IOException();
+    /**
+     * Creates this entry as a directory in the associated <code>AbstractArchiveFile</code> if the archive is
+     * writable (as reported by {@link com.mucommander.file.AbstractArchiveFile#isWritableArchive()}).
+     * Throws an <code>IOException</code> if it isn't, if this entry already exists in the archive or if an I/O error
+     * occurred.
+     *
+     * @throws IOException if the associated archive file is not writable, if this entry already exists in the archive,
+     * or if an I/O error occurred
+     */
+    public void mkdir() throws IOException {
+        if(!exists && archiveFile.isWritableArchive()) {
+            AbstractRWArchiveFile rwArchivefile = (AbstractRWArchiveFile)archiveFile;
+            ArchiveEntry newEntry = new SimpleArchiveEntry(entry.getPath(), true);
+
+            // Add the new entry to the archive file
+            rwArchivefile.addEntry(newEntry);
+
+            // The new entry now exists
+            entry = newEntry;
+            exists = true;
+        }
+        else
+            throw new IOException();
     }
 
+    /**
+     * Delegates to the archive file's {@link AbstractArchiveFile#getFreeSpace()} method.
+     */
     public long getFreeSpace() {
-        // All archive formats are read-only (for now)
-        return 0;
+        return archiveFile.getFreeSpace();
     }
 
+    /**
+     * Delegates to the archive file's {@link AbstractArchiveFile#getTotalSpace()} method.
+     */
     public long getTotalSpace() {
-        // We consider archive files as volumes, thus return the archive file's size
-        return archiveFile.getSize();
+        return archiveFile.getTotalSpace();
     }
 
+    /**
+     * Delegates to the archive file's {@link AbstractArchiveFile#getEntryInputStream(ArchiveEntry)}} method.
+     */
     public InputStream getInputStream() throws IOException {
         return archiveFile.getEntryInputStream(entry);
     }
 
+    /**
+     * Returns an <code>OutputStream</code> that allows to write this entry's contents if the archive is
+     * writable (as reported by {@link com.mucommander.file.AbstractArchiveFile#isWritableArchive()}).
+     * Throws an <code>IOException</code> if it isn't or if an I/O error occurred.
+     *
+     * <p>
+     * This method will create this entry as a regular file in the archive if it doesn't already exist, or replace
+     * it if it already does.
+     * </p>
+     *
+     * @throws IOException if the associated archive file is not writable, if this entry already exists in the archive,
+     * or if an I/O error occurred
+     */
     public OutputStream getOutputStream(boolean append) throws IOException {
-        // Archive entries are read-only
-        throw new IOException();
+        if(archiveFile.isWritableArchive()) {
+            if(append)
+                throw new IOException("Can't append to an existing archive entry");
+
+            if(exists)
+                delete();
+
+            return ((AbstractRWArchiveFile)archiveFile).addEntry(entry);
+        }
+        else
+            throw new IOException();
     }
 
+    /**
+     * Always returns <code>false</code>: random read access is not available for archive entries.
+     */
     public boolean hasRandomAccessInputStream() {
-        // No random access for archive entries unfortunately
         return false;
     }
 
+    /**
+     * Always throws an <code>IOException</code>: random read access is not available for archive entries.
+     */
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         throw new IOException();
     }
 
+    /**
+     * Always returns <code>false</code>: random write access is not available for archive entries.
+     */
     public boolean hasRandomAccessOutputStream() {
-        // No random access for archive entries unfortunately
         return false;
     }
 
+    /**
+     * Always throws an <code>IOException</code>: random write access is not available for archive entries.
+     */
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
         throw new IOException();
     }
@@ -182,13 +308,20 @@ public class ArchiveEntryFile extends AbstractFile {
         return entry;
     }
 
+    /**
+     * Always returns <code>false</code>: archive entries cannot run processes.
+     */
     public boolean canRunProcess() {
         return false;
     }
 
+    /**
+     * Always throws an <code>IOException</code>: archive entries cannot run processes.
+     */
     public com.mucommander.process.AbstractProcess runProcess(String[] tokens) throws IOException {
         throw new IOException();
     }
+
     
     ////////////////////////
     // Overridden methods //
@@ -203,12 +336,10 @@ public class ArchiveEntryFile extends AbstractFile {
         return archiveFile.getSeparator();
     }
 
-    public boolean moveTo(AbstractFile dest) throws FileTransferException {
-        // Archive entries are read-only
-        throw new FileTransferException(FileTransferException.UNKNOWN_REASON);
-    }
-
     public int getMoveToHint(AbstractFile destFile) {
+        if(archiveFile.isWritableArchive())
+            return SHOULD_NOT_HINT;
+
         return MUST_NOT_HINT;
     }
 }

@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.iso;
 
-import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractROArchiveFile;
 import com.mucommander.file.ArchiveEntry;
 import com.mucommander.io.RandomAccessInputStream;
 
@@ -41,7 +41,7 @@ import java.util.Vector;
  *
  * @author Xavier Martin 
  */
-public class IsoArchiveFile extends AbstractArchiveFile {
+public class IsoArchiveFile extends AbstractROArchiveFile {
 
     private long sector_offset = 0;
     private byte buffer[] = new byte[2048];

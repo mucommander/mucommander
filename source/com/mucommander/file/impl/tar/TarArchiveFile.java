@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.tar;
 
-import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractROArchiveFile;
 import com.mucommander.file.ArchiveEntry;
 import org.apache.tools.bzip2.CBZip2InputStream;
 import org.apache.tools.tar.TarInputStream;
@@ -37,7 +37,7 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Maxence Bernard
  */
-public class TarArchiveFile extends AbstractArchiveFile {
+public class TarArchiveFile extends AbstractROArchiveFile {
 
     /**
      * Creates a TarArchiveFile around the given file.

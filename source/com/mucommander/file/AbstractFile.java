@@ -72,6 +72,8 @@ public abstract class AbstractFile implements FilePermissions {
 
     /**
      * Creates a new file instance with the given URL.
+     *
+     * @param url the FileURL instance that represents this file's location
      */
     protected AbstractFile(FileURL url) {
         this.fileURL = url;
@@ -79,7 +81,9 @@ public abstract class AbstractFile implements FilePermissions {
 	
     
     /**
-     * Returns the URL representing this file.
+     * Returns the {@link FileURL} instance that represents this file's location.
+     *
+     * @return the FileURL instance that represents this file's location
      */
     public FileURL getURL() {
         return fileURL;
@@ -89,13 +93,14 @@ public abstract class AbstractFile implements FilePermissions {
     /**
      * Returns the name of this AbstractFile.
      *
-     * <p>The returned name is the filename extracted from this file's {@link FileURL}
+     * <p>
+     * The returned name is the filename extracted from this file's <code>FileURL</code>
      * as returned by {@link FileURL#getFilename()}. If the filename is <code>null</code> (e.g. http://google.com), the
      * <code>FileURL</code>'s host will be returned instead. If the host is <code>null</code> (e.g. smb://), an empty
      * String will be returned. Thus, the returned name will never be <code>null</code>.
      *
-     * <p>This method should be overridden if a special treatment (e.g. URL-decoding)
-     * needs to be applied to the returned filename.
+     * <p>This method should be overridden if a special processing (e.g. URL-decoding) needs to be applied to the
+     * returned filename.
      */
     public String getName() {
         String name = fileURL.getFilename();
@@ -122,7 +127,7 @@ public abstract class AbstractFile implements FilePermissions {
      * - the last <code>.</code> is not the first character in the file's name.<br/>
      * If a file is found not to have an extension, its full name is returned.
      * </p>
-     * @return the file's name, without its extension.
+     * @return this file's name, without its extension.
      * @see    #getName()
      * @see    #getExtension()
      */
@@ -571,7 +576,7 @@ public abstract class AbstractFile implements FilePermissions {
      * @return the hint int indicating whether the {@link #moveTo(AbstractFile)} method should be used
      */
     public int getMoveToHint(AbstractFile destFile) {
-        // Return false if protocols differ
+        // Return SHOULD_NOT if protocols differ
         if(!fileURL.getProtocol().equals(destFile.fileURL.getProtocol()))
           return SHOULD_NOT_HINT;
 
@@ -581,7 +586,31 @@ public abstract class AbstractFile implements FilePermissions {
         String destHost = destFile.fileURL.getHost();
         boolean hostsEqual = host==null?(destHost==null?true:destHost.equals(host)):host.equals(destHost);
 
-        return hostsEqual ? SHOULD_HINT : SHOULD_NOT_HINT;
+        // Return SHOULD_NOT if hosts differ
+        if(!hostsEqual)
+            return SHOULD_NOT_HINT;
+
+        // Return SHOULD only if both files use the same AbstractFile class (not taking into account proxies).
+        return destFile.getTopAncestor().getClass().equals(getTopAncestor().getClass())?SHOULD_HINT:SHOULD_NOT_HINT;
+    }
+
+
+    /**
+     * Convenience method that creates a directory with the given name as a child of this directory.
+     * This method will fail if this file is not a directory.
+     *
+     * @param name the directory to create
+     * @throws IOException if this operation is not possible.
+     */
+    public final void mkdir(String name) throws IOException {
+        FileURL childURL = (FileURL)getURL().clone();
+        String path = childURL.getPath();
+        String pathSeparator = childURL.getPathSeparator();
+
+        path += (path.endsWith(pathSeparator)?"":pathSeparator)+name;
+        childURL.setPath(path);
+
+        FileFactory.getFile(childURL, true).mkdir();
     }
 
 
@@ -818,13 +847,32 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
     /**
-     * Returns <code>true</code> if this <code>AbstractFile</code> has an ancestor, i.e. if this file is a
-     * {@link ProxyFile}, <code>false</code> otherwise.
+     * Returns the first ancestor of this file that is an instance of the given Class or of a subclass of the given
+     * Class, or <code>this</code> if this instance's class matches those criteria. Returns <code>null</code> if this
+     * file has no such ancestor.
+     * Note that the specified must correspond to an AbstractFile subclass. Specifying any other Class will
+     * always yield to this method returning <code>null</code>. Also note that this method will always return
+     * <code>this</code> if <code>AbstractFile.class</code> is specified.
      *
-     * @return <code>true</code> if this <code>AbstractFile</code> has an ancestor, <code>false</code> otherwise.
+     * @param abstractFileClass a Class corresponding to an AbstractFile subclass
+     * @return the first ancestor of this file that is an instance of the given Class or of a subclass of the given
+     * Class, or <code>this</code> if this instance's class matches those criteria. Returns <code>null</code> if this
+     * file has no such ancestor.
      */
-    public final boolean hasAncestor() {
-        return this instanceof ProxyFile;
+    public final AbstractFile getAncestor(Class abstractFileClass) {
+        AbstractFile ancestor = this;
+        AbstractFile lastAncestor;
+
+        do {
+            if(abstractFileClass.isAssignableFrom(ancestor.getClass()))
+                return ancestor;
+
+            lastAncestor = ancestor;
+            ancestor = ancestor.getAncestor();
+        }
+        while(lastAncestor!=ancestor);
+
+        return null;
     }
 
     /**
@@ -842,6 +890,16 @@ public abstract class AbstractFile implements FilePermissions {
     }
 
     /**
+     * Returns <code>true</code> if this <code>AbstractFile</code> has an ancestor, i.e. if this file is a
+     * {@link ProxyFile}, <code>false</code> otherwise.
+     *
+     * @return <code>true</code> if this <code>AbstractFile</code> has an ancestor, <code>false</code> otherwise.
+     */
+    public final boolean hasAncestor() {
+        return this instanceof ProxyFile;
+    }
+
+    /**
      * Returns <code>true</code> if this file is or has an ancestor (immediate or not) that is an instance of the given
      * Class or of a subclass of the given Class. Note that the specified must correspond to an AbstractFile subclass.
      * Specifying any other Class will always yield to this method returning <code>false</code>. Also note that this
@@ -853,15 +911,37 @@ public abstract class AbstractFile implements FilePermissions {
      */
     public final boolean hasAncestor(Class abstractFileClass) {
         AbstractFile ancestor = this;
-        while(ancestor.hasAncestor()) {
+        AbstractFile lastAncestor;
+
+        do {
             if(abstractFileClass.isAssignableFrom(ancestor.getClass()))
                 return true;
 
+            lastAncestor = ancestor;
             ancestor = ancestor.getAncestor();
         }
+        while(lastAncestor!=ancestor);
 
         return false;
     }
+
+    /**
+     * Convenience method that returns the parent {@link AbstractArchiveFile} that contains this file. If this file
+     * is an AbstractArchiveFile or an ancestor of AbstractArchiveFile, <code>this</code> is returned. If this file
+     * is not contained by an archive, <code>null</code> is returned.
+     *
+     * @return the parent AbstractArchiveFile that contains this file
+     */
+    public final AbstractArchiveFile getParentArchive() {
+        AbstractArchiveFile archiveFile = null;
+        if(hasAncestor(AbstractArchiveFile.class))
+            return (AbstractArchiveFile)getAncestor(AbstractArchiveFile.class);
+        else if(hasAncestor(ArchiveEntryFile.class))
+            return ((ArchiveEntryFile)getAncestor(ArchiveEntryFile.class)).getArchiveFile();
+
+        return archiveFile;
+    }
+
 
     
     ////////////////////////
@@ -989,11 +1069,11 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract AbstractFile[] ls() throws IOException;
 
     /**
-     * Creates a new directory. This method will fail if this AbstractFile is not a folder.
+     * Creates this file as a directory. This method will fail if this file already exists.
      *
      * @throws IOException if this operation is not possible.
      */
-    public abstract void mkdir(String name) throws IOException;
+    public abstract void mkdir() throws IOException;
 
     /**
      * Returns an <code>InputStream</code> to read the contents of this AbstractFile.

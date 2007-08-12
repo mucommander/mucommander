@@ -436,8 +436,8 @@ public class LocalFile extends AbstractFile {
         return ls((FilenameFilter)null);
     }
 
-    public void mkdir(String name) throws IOException {
-        if(!new File(absPath+SEPARATOR+name).mkdir())
+    public void mkdir() throws IOException {
+        if(!new File(absPath).mkdir())
             throw new IOException();
     }
 	
@@ -534,10 +534,16 @@ public class LocalFile extends AbstractFile {
             names = filenameFilter.filter(names);
 
         AbstractFile children[] = new AbstractFile[names.length];
+        FileURL childURL;
         for(int i=0; i<names.length; i++) {
-            // Retrieves an AbstractFile (LocalFile or archive) instance potentially fetched from the LRUCache
-            // and reuse this file as parent
-            children[i] = FileFactory.getFile(absPath+SEPARATOR+names[i], this);
+            // Clone the FileURL of this file and set the child's path, this is more efficient than creating a new
+            // FileURL instance from scratch.
+            childURL = (FileURL)fileURL.clone();
+            childURL.setPath(absPath+SEPARATOR+names[i]);
+
+            // Retrieves an AbstractFile (LocalFile or AbstractArchiveFile) instance potentially fetched from the
+            // LRU cache and reuse this file as parent
+            children[i] = FileFactory.getFile(childURL, this);
         }
 
         return children;
@@ -627,7 +633,7 @@ public class LocalFile extends AbstractFile {
         if(PlatformManager.isWindowsFamily() && !getRoot().equals(destFile.getRoot()))
             return SHOULD_NOT_HINT;
 
-        return SHOULD_HINT;
+        return moveHint;
     }
 
     ///////////////////
@@ -647,10 +653,6 @@ public class LocalFile extends AbstractFile {
 
         public int read() throws IOException {
             return raf.read();
-        }
-
-        public int read(byte b[]) throws IOException {
-            return raf.read(b);
         }
 
         public int read(byte b[], int off, int len) throws IOException {
@@ -713,9 +715,8 @@ public class LocalFile extends AbstractFile {
             raf.seek(offset);
         }
 
-        public boolean setLength(long newLength) throws IOException {
+        public void setLength(long newLength) throws IOException {
             raf.setLength(newLength);
-            return true;
         }
     }
 }

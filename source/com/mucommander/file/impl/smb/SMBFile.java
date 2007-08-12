@@ -68,8 +68,6 @@ import java.io.OutputStream;
 
 //    private String name;
 
-    private final static String SEPARATOR = DEFAULT_SEPARATOR;
-
 
     static {
         // Silence jCIFS's output if not in debug mode
@@ -288,7 +286,10 @@ import java.io.OutputStream;
     }
 
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        return new SMBRandomAccessInputStream(new SmbRandomAccessFile(file, "r"));
+//        return new SMBRandomAccessInputStream(new SmbRandomAccessFile(file, "r"));
+
+        // Explicitely allow the file to be read/write/delete by another random access file while this one is open
+        return new SMBRandomAccessInputStream(new SmbRandomAccessFile(fileURL.toString(true), "r", SmbFile.FILE_SHARE_READ | SmbFile.FILE_SHARE_WRITE | SmbFile.FILE_SHARE_DELETE));
     }
 
     public boolean hasRandomAccessOutputStream() {
@@ -296,7 +297,10 @@ import java.io.OutputStream;
     }
 
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException {
-        return new SMBRandomAccessOutputStream(new SmbRandomAccessFile(file, "rw"));
+//        return new SMBRandomAccessOutputStream(new SmbRandomAccessFile(file, "rw"));
+
+        // Explicitely allow the file to be read/write/delete by another random access file while this one is open
+        return new SMBRandomAccessOutputStream(new SmbRandomAccessFile(fileURL.toString(true), "rw", SmbFile.FILE_SHARE_READ | SmbFile.FILE_SHARE_WRITE | SmbFile.FILE_SHARE_DELETE));
     }
 
     public void delete() throws IOException {
@@ -354,10 +358,13 @@ import java.io.OutputStream;
     }
 
 
-    public void mkdir(String name) throws IOException {
-        // Unlike java.io.File.mkdir(), SmbFile does not return a boolean value
+    public void mkdir() throws IOException {
+        // Note: unlike java.io.File.mkdir(), SmbFile does not return a boolean value
         // to indicate if the folder could be created
-        new SmbFile(getURL().toString(true)+SEPARATOR+name).mkdir();
+        file.mkdir();
+
+        isDirectory = true;
+        isDirectoryValSet = true;
     }
 
 
@@ -494,10 +501,6 @@ import java.io.OutputStream;
             return raf.read();
         }
 
-        public int read(byte b[]) throws IOException {
-            return raf.read(b);
-        }
-
         public int read(byte b[], int off, int len) throws IOException {
             return raf.read(b, off, len);
         }
@@ -558,9 +561,8 @@ import java.io.OutputStream;
             raf.seek(offset);
         }
 
-        public boolean setLength(long newLength) throws IOException {
+        public void setLength(long newLength) throws IOException {
             raf.setLength(newLength);
-            return true;
         }
     }
 }

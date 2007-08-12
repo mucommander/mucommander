@@ -321,12 +321,16 @@ public class HTTPFile extends AbstractFile {
     }
 
     public boolean hasRandomAccessInputStream() {
-        // No random access for HTTP files unfortunately
-        return false;
+//         No random access for HTTP files unfortunately
+//        return false;
+
+        return true;
     }
 
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        throw new IOException();
+//        throw new IOException();
+
+        return new HTTPRandomAccessInputStream();
     }
 
     public boolean hasRandomAccessOutputStream() {
@@ -348,7 +352,7 @@ public class HTTPFile extends AbstractFile {
     /**
      * Not available, always throws an <code>IOException</code>.
      */
-    public void mkdir(String name) throws IOException {
+    public void mkdir() throws IOException {
         throw new IOException();
     }
 
@@ -585,5 +589,164 @@ public class HTTPFile extends AbstractFile {
         checkHTTPResponse(conn);
 
         return conn.getInputStream();
+    }
+
+
+    ///////////////////
+    // Inner classes //
+    ///////////////////
+
+
+    /**
+     * HTTPRandomAccessInputStream extends RandomAccessInputStream to provide random read access to an HTTPFile.
+     * It uses the 'Range' request header to read the HTTP resource partially, chunk by chunk and reposition the offset
+     * when {@link #seek(long)} is called.
+     *
+     * <p>
+     * The {@link #CHUNK_SIZE} field controls the the amount of data that is fetched remotely when
+     * the current chunk has been read completely, or when {@link #seek(long)} is called. The larger this value,
+     * the faster to read the resource linearly, but also the slower to seek.
+     * </p>
+     */
+    private class HTTPRandomAccessInputStream extends RandomAccessInputStream {
+
+        /**
+         * Controls the the amount of data that is fetched remotely when the current chunk has been read completely,
+         * or when {@link #seek(long)} is called. The larger this value, the faster to read the resource linearly,
+         * but also the slower to seek.
+         */
+        private final static int CHUNK_SIZE = 1024;
+
+        /** Stores current chunk (partial HTTP resource's contents). Data may end before the array's end */
+        private byte chunk[] = new byte[CHUNK_SIZE];
+        /** Current offset within the chunk array */
+        private int chunkOff;
+        /** Length of the current chunk */
+        private int chunkLen;
+
+        /** Global offset in the HTTP resource */
+        private long offset;
+        /** Length of the HTTP resource */
+        private long length;
+
+
+        private HTTPRandomAccessInputStream() throws IOException {
+            // HEAD the HTTP resource to get its length
+            if(!fileResolved)
+                resolveFile();
+
+            length = getSize();
+            if(length == -1)        // Knowing the content length is required
+                throw new IOException();
+        }
+
+        /**
+         * Returns <code>true</code> if the end of file has been reached.
+         *
+         * @return true if the end of file has been reached.
+         */
+        private boolean eofReached() {
+            return offset>=length;
+        }
+
+        /**
+         * Checks if the current buffered chunk has been read completely (i.e. no more data is available) and if it has,
+         * calls {@link #fillBuffer()} to fetch the next chunk.
+         *
+         * @throws IOException if an I/O occurred
+         */
+        private void checkBuffer() throws IOException {
+            if(chunkOff >= chunkLen)      // True initially
+                fillBuffer();
+        }
+
+        /**
+         * Reads a chunk, that extends from the current_offset to current_offset+CHUNKSIZE, or less if the end of file
+         * is near.
+         *
+         * @throws IOException if an I/O occurred
+         */
+        private void fillBuffer() throws IOException {
+//if(Debug.ON) Debug.trace("requesting: Range "+ offset +"-"+ Math.min(offset+CHUNK_SIZE, length-1));
+            HttpURLConnection conn = getHttpURLConnection(url);
+
+            // Note: 'Range' may not be supported by the HTTP server, in that case an IOException will be thrown
+            conn.setRequestProperty("Range", "bytes="+offset +"-"+ Math.min(offset+CHUNK_SIZE, length-1));
+
+            conn.connect();
+            checkHTTPResponse(conn);
+
+            // Read the chunk fully
+            InputStream in = conn.getInputStream();
+            chunkLen = in.read(chunk, 0, (int)Math.min(CHUNK_SIZE, length-offset));
+            chunkOff = 0;
+            in.close();
+//if(Debug.ON) Debug.trace("fetched "+bufLen+" bytes");
+        }
+
+
+        ////////////////////////////////////////////
+        // RandomAccessInputStream implementation //
+        ////////////////////////////////////////////
+
+        public int read() throws IOException {
+            if(eofReached())
+                return -1;
+
+            checkBuffer();
+
+//if(Debug.ON) Debug.trace("bufOff="+bufOff+" bufLen="+bufLen);
+
+            int ret = chunk[chunkOff];
+
+            chunkOff++;
+            offset ++;
+
+//if(Debug.ON) Debug.trace("returning "+ret);
+
+            return ret;
+        }
+
+        public int read(byte b[], int off, int len) throws IOException {
+//if(Debug.ON) Debug.trace("bufOff="+bufOff+" bufLen="+bufLen+" off="+off+" len="+len);
+            if(len==0)
+                return 0;
+            
+            if(eofReached())
+                return -1;
+
+            checkBuffer();
+
+            int nbBytes = Math.min(len, chunkLen - chunkOff);
+            System.arraycopy(chunk, chunkOff, b, off, nbBytes);
+
+            chunkOff += nbBytes;
+            offset += nbBytes;
+
+            return nbBytes;
+        }
+
+        public long getOffset() throws IOException {
+            return offset;
+        }
+
+        public long getLength() throws IOException {
+            return length;
+        }
+
+        public void seek(long newOffset) throws IOException {
+//if(Debug.ON) Debug.trace("new offset="+ newOffset);
+
+            // If the new offset is within the current buffer's range, simply reposition the offsets
+            if(newOffset>=offset && newOffset<offset+ chunkLen) {
+                chunkOff += (int)(newOffset-offset);
+                offset = newOffset;
+            }
+            // If not, retrieve a chunk of data starting at the new offset and fill the buffer with it
+            else {
+                offset = newOffset;
+                fillBuffer();
+            }
+        }
     }
 }

@@ -366,34 +366,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
     public OutputStream getOutputStream(boolean append) throws IOException {
-        FTPConnectionHandler connHandler = null;
-        try {
-            // Retrieve a ConnectionHandler and lock it
-            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
-            // Makes sure the connection is started, if not starts it
-            connHandler.checkConnection();
-
-            OutputStream out;
-            if(append)
-                out = connHandler.ftpClient.appendFileStream(absPath);
-            else
-                out = connHandler.ftpClient.storeFileStream(absPath);   // Note: do NOT use storeUniqueFileStream which appends .1 if the file already exists and fails with proftpd
-
-            if(out==null)
-                throw new IOException();
-
-            return new FTPOutputStream(out, connHandler);
-        }
-        catch(IOException e) {
-            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
-            connHandler.checkSocketException(e);
-
-            // Release the lock on the ConnectionHandler if the OutputStream could not be created
-            connHandler.releaseLock();
-
-            // Re-throw IOException
-            throw e;
-        }
+        return new FTPOutputStream(append);
     }
 
     public boolean hasRandomAccessInputStream() {
@@ -404,6 +377,14 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         throw new IOException();
     }
+
+//    public boolean hasRandomAccessInputStream() {
+//        return true;
+//    }
+//
+//    public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
+//        return new FTPRandomAccessInputStream();
+//    }
 
     public boolean hasRandomAccessOutputStream() {
         // No random access for FTP files unfortunately
@@ -519,7 +500,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    public void mkdir(String name) throws IOException {
+    public void mkdir() throws IOException {
         FTPConnectionHandler connHandler = null;
         try {
             // Retrieve a ConnectionHandler and lock it
@@ -527,9 +508,12 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            connHandler.ftpClient.makeDirectory(absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name);
+            connHandler.ftpClient.makeDirectory(absPath);
             // Throw an IOException if server replied with an error
             connHandler.checkServerReply();
+
+            file.setType(org.apache.commons.net.ftp.FTPFile.DIRECTORY_TYPE);
+            fileExists = true;
         }
         catch(IOException e) {
             // Checks if the IOException corresponds to a socket error and in that case, closes the connection
@@ -684,39 +668,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
 
     public InputStream getInputStream(long skipBytes) throws IOException {
-        FTPConnectionHandler connHandler = null;
-        try {
-            // Retrieve a ConnectionHandler and lock it
-            connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
-            // Makes sure the connection is started, if not starts it
-            connHandler.checkConnection();
-
-            if(skipBytes>0) {
-                // Resume transfer at the given offset
-                connHandler.ftpClient.setRestartOffset(skipBytes);
-            }
-
-            InputStream in = connHandler.ftpClient.retrieveFileStream(absPath);
-            if(in==null) {
-                if(skipBytes>0) {
-                    // Reset offset
-                    connHandler.ftpClient.setRestartOffset(0);
-                }
-                throw new IOException();
-            }
-
-            return new FTPInputStream(in, connHandler);
-        }
-        catch(IOException e) {
-            // Checks if the IOException corresponds to a socket error and in that case, closes the connection
-            connHandler.checkSocketException(e);
-
-            // Release the lock on the ConnectionHandler if the InputStream could not be created
-            connHandler.releaseLock();
-
-            // Re-throw IOException
-            throw e;
-        }
+        return new FTPInputStream(skipBytes);
     }
 
 
@@ -820,14 +772,44 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    private static class FTPInputStream extends FilterInputStream {
+    private class FTPInputStream extends FilterInputStream {
 
         private FTPConnectionHandler connHandler;
         private boolean isClosed;
 
-        private FTPInputStream(InputStream in, FTPConnectionHandler connHandler) {
-            super(in);
-            this.connHandler = connHandler;
+        private FTPInputStream(long skipBytes) throws IOException {
+            super(null);
+
+            try {
+                // Retrieve a ConnectionHandler and lock it
+                connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(FTPFile.this, FTPFile.this.fileURL, true);
+                // Makes sure the connection is started, if not starts it
+                connHandler.checkConnection();
+
+                if(skipBytes>0) {
+                    // Resume transfer at the given offset
+                    connHandler.ftpClient.setRestartOffset(skipBytes);
+                }
+
+                in = connHandler.ftpClient.retrieveFileStream(absPath);
+                if(in==null) {
+                    if(skipBytes>0) {
+                        // Reset offset
+                        connHandler.ftpClient.setRestartOffset(0);
+                    }
+                    throw new IOException();
+                }
+            }
+            catch(IOException e) {
+                // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+                connHandler.checkSocketException(e);
+
+                // Release the lock on the ConnectionHandler if the InputStream could not be created
+                connHandler.releaseLock();
+
+                // Re-throw IOException
+                throw e;
+            }
         }
 
         public void close() throws IOException {
@@ -843,6 +825,11 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 if(Debug.ON) Debug.trace("complete pending commands");
                 connHandler.ftpClient.completePendingCommand();
                 if(Debug.ON) Debug.trace("commands completed");
+
+                // Todo: An IOException will be thrown by completePendingCommand if the transfer has not finished before calling close.
+                // An 'abort' command should be issued to the server before closing if the transfer is not finished yet.
+                // Currently in that case (transfer not finished) the whole connection has to be re-established (bad!).
+                // FTPClient#abort() is difficult to use to say the least. This post gives some insight: http://mail-archives.apache.org/mod_mbox/commons-user/200604.mbox/%3c78A73ABD8DB470439179DB682EA990B3025B87DF@mtlex02.NEXXLINK.INT%3e
             }
             catch(IOException e) {
                 if(Debug.ON) Debug.trace("exception in completePendingCommands(): "+e);
@@ -850,8 +837,10 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 // Checks if the IOException corresponds to a socket error and in that case, closes the connection
                 connHandler.checkSocketException(e);
 
-                // Re-throw IOException
-                throw e;
+                // Do not re-throw the exception because an IOException will be thrown if close is called before
+                // the transfer is finished (see above) which is pseudo-normal behavior (though sub-optimal).
+//                // Re-throw IOException
+//                throw e;
             }
             finally {
                 // Release the lock on the ConnectionHandler
@@ -861,14 +850,92 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    private static class FTPOutputStream extends BufferedOutputStream {
+    // This class works but because of the bug in FTPInputStream#close() which fails to interrupt an ongoing transfer
+    // gracefully, seek() will re-establish the FTP connection each time it is called, which is definitely not acceptable.
+    // Therefore, this class cannot be used at the moment.
+    private class FTPRandomAccessInputStream extends RandomAccessInputStream {
+
+        private FTPInputStream in;
+        private long offset;
+
+        private FTPRandomAccessInputStream() throws IOException {
+            this.in = new FTPInputStream(0);
+        }
+
+        public int read() throws IOException {
+            int read = in.read();
+
+            if(read!=-1)
+                offset += 1;
+
+            return read;
+        }
+
+        public int read(byte b[], int off, int len) throws IOException {
+            int nbRead = in.read(b, off, len);
+
+            if(nbRead!=-1)
+                offset += nbRead;
+
+            return nbRead;
+        }
+
+        public long getOffset() throws IOException {
+            return offset;
+        }
+
+        public long getLength() throws IOException {
+            return FTPFile.this.getSize();
+        }
+
+        public void seek(final long offset) throws IOException {
+            try {
+                in.close();
+            }
+            catch(IOException e) {}
+
+            in = new FTPInputStream(offset);
+            this.offset = offset;
+        }
+
+        public void close() throws IOException {
+            in.close();
+        }
+    }
+
+
+    private class FTPOutputStream extends FilterOutputStream {
 
         private FTPConnectionHandler connHandler;
         private boolean isClosed;
 
-        private FTPOutputStream(OutputStream out, FTPConnectionHandler connHandler) {
-            super(out);
-            this.connHandler = connHandler;
+        private FTPOutputStream(boolean append) throws IOException {
+            super(null);
+
+            try {
+                // Retrieve a ConnectionHandler and lock it
+                connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(FTPFile.this, fileURL, true);
+                // Makes sure the connection is started, if not starts it
+                connHandler.checkConnection();
+
+                if(append)
+                    out = connHandler.ftpClient.appendFileStream(absPath);
+                else
+                    out = connHandler.ftpClient.storeFileStream(absPath);   // Note: do NOT use storeUniqueFileStream which appends .1 if the file already exists and fails with proftpd
+
+                if(out==null)
+                    throw new IOException();
+            }
+            catch(IOException e) {
+                // Checks if the IOException corresponds to a socket error and in that case, closes the connection
+                connHandler.checkSocketException(e);
+
+                // Release the lock on the ConnectionHandler if the OutputStream could not be created
+                connHandler.releaseLock();
+
+                // Re-throw IOException
+                throw e;
+            }
         }
 
         public void close() throws IOException {

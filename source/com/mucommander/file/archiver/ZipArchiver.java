@@ -20,11 +20,13 @@
 package com.mucommander.file.archiver;
 
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.impl.zip.provider.ZipEntry;
+import com.mucommander.file.impl.zip.provider.ZipOutputStream;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+//import java.util.zip.ZipEntry;
+//import java.util.zip.ZipOutputStream;
 
 
 /**
@@ -40,6 +42,8 @@ class ZipArchiver extends Archiver {
 
 
     protected ZipArchiver(OutputStream outputStream) {
+        super(outputStream);
+
         this.zos = new ZipOutputStream(outputStream);
     }
 

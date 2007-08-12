@@ -36,10 +36,11 @@ public class ZipEntry extends ArchiveEntry {
         this.zipEntry = zipEntry;
     }
 	
-    /////////////////////////////////////
-    // Abstract methods implementation //
-    /////////////////////////////////////
-		
+
+    /////////////////////////////////
+    // ArchiveEntry implementation //
+    /////////////////////////////////
+
     public String getPath() {
         return zipEntry.getName();
     }

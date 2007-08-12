@@ -51,7 +51,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class LstArchiveFile extends AbstractArchiveFile {
+public class LstArchiveFile extends AbstractROArchiveFile {
 
     private String baseFolder;
 

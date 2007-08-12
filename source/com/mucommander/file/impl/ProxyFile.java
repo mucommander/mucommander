@@ -132,8 +132,8 @@ public abstract class ProxyFile extends AbstractFile {
         return file.ls();
     }
 
-    public void mkdir(String name) throws IOException {
-        file.mkdir(name);
+    public void mkdir() throws IOException {
+        file.mkdir();
     }
 
     public InputStream getInputStream() throws IOException {

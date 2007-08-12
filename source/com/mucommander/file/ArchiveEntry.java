@@ -20,37 +20,51 @@
 package com.mucommander.file;
 
 /**
- * This abstract class encapsulates 3rd-party archive entries.
+ * This abstract class represents a generic archive entry. It provides getters for common archive entry attributes
+ * (path, date, size, isDirectory, permissions) and allows to encapsulate the entry object of a 3rd party library.
  *
  * @author Maxence Bernard 
  */
 public abstract class ArchiveEntry {
 	
-    /** Underlying entry object */
-    protected Object entry;
+    /** Encapsulated entry object */
+    protected Object entryObject;
 
     /** Depth of this entry based on the number of '/' character occurrences */
     private int depth = -1;
 	
 	
     /**
-     * Creates a new ArchiveEntry that encapsulates the given 3rd party entry.
+     * Creates a new self-contained ArchiveEntry.
      */
-    public ArchiveEntry(Object entry) {
-        this.entry = entry;
+    protected ArchiveEntry() {
+    }
+
+    /**
+     * Creates a new ArchiveEntry that encapsulates the given object providing the actual entry information.
+     *
+     * @param entryObject the object providing the actual entry information, <code>null</code> if this entry is self-contained
+     */
+    protected ArchiveEntry(Object entryObject) {
+        this.entryObject = entryObject;
     }
 		
     /**
-     * Returns the encapsulated entry.
+     * Returns the encapsulated object providing the actual entry information (typically an object from a 3rd party
+     * library), <code>null</code> if this entry is self-contained.
+     *
+     * @return the encapsulated object providing the actual entry information, null if this entry is self-contained
      */
-    public Object getEntry() {
-        return entry;
+    public Object getEntryObject() {
+        return entryObject;
     }
 
 
     /**
-     * Returns the depth of this entry based on the number of slash character ('/') occurrences its path contains.
-     * Minimum depth is 0.
+     * Returns the depth of this entry based on the number of path delimiters ('/') its path contains.
+     * Top-level entries have a depth of 0 (minimum depth).
+     *
+     * @return the depth of this entry
      */
     public int getDepth() {
         // Depth is only calculated once as it never changes (this class is immutable)
@@ -62,8 +76,11 @@ public abstract class ArchiveEntry {
 
 
     /**
-     * Returns the depth of the specified entry path, based on the number of slash character ('/') occurrences
-     * the path contains. Minimum depth is 0.
+     * Returns the depth of the specified entry path, based on the number of path delimiters ('/') it contains.
+     * Top-level entries have a depth of 0 (minimum depth).
+     *
+     * @param entryPath the path for which to calculate the depth
+     * @return the depth of the given entry path
      */
     public static int getDepth(String entryPath) {
         int depth = 0;
@@ -104,32 +121,45 @@ public abstract class ArchiveEntry {
     //////////////////////
 		
     /**
-     * Returns the encapsulated entry's path.
+     * Returns the entry's path. The returned path uses the '/' character as the delimiter, and is relative to the
+     * archive's root, i.e. does not start with a leading '/'.
+     *
+     * @return the entry's path
      */
     public abstract String getPath();
 	
     /**
-     * Returns the encapsulated entry's date.
+     * Returns the entry's date.
+     *
+     * @return the entry's date
      */
     public abstract long getDate();
 
     /**
-     * Returns the encapsulated entry's size.
+     * Returns the entry's size.
+     *
+     * @return the entry's size
      */
     public abstract long getSize();
 
     /**
-     * Returns <code>true</code> if the encapsulated entry is a directory.
+     * Returns <code>true</code> if the entry is a directory.
+     *
+     * @return true if the entry is a directory
      */
     public abstract boolean isDirectory();
 
     /**
-     * Returns read/write/execute permissions for owner/group/other access as an int, UNIX permissions style.
+     * Returns read/write/execute permissions for owner/group/other access, in a UNIX permissions style int.
+     *
+     * @return read/write/execute permissions for owner/group/other access
      */
     public abstract int getPermissions();
 
     /**
-     * Returns a bit mask for the support permission bits.
+     * Returns a bit mask specifying which permission bits are supported.
+     *
+     * @return a bit mask specifying which permission bits are supported
      */
     public abstract int getPermissionsMask();
 }

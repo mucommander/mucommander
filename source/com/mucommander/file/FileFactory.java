@@ -51,6 +51,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.Random;
 import java.util.Vector;
+import java.util.WeakHashMap;
 
 /**
  * FileFactory is an abstract class that provides static methods to create resolve and create {@link AbstractFile}
@@ -79,6 +80,8 @@ public abstract class FileFactory {
 
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
     private static LRUCache fileCache = LRUCache.createInstance(ConfigurationManager.getVariableInt(ConfigurationVariables.FILE_CACHE_CAPACITY, ConfigurationVariables.DEFAULT_FILE_CACHE_CAPACITY));
+
+private static WeakHashMap archiveFileCache = new WeakHashMap();
 
     /** System temp directory */
     private final static File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
@@ -409,13 +412,21 @@ public abstract class FileFactory {
                     FileURL clonedURL = (FileURL)fileURL.clone();
                     clonedURL.setPath(currentPath);
                     currentFile = wrapArchive(createRawFile(clonedURL));
+
+                    lastFileResolved = true;
                 }
                 else {          // currentFile is an AbstractArchiveFile
                     // Note: wrapArchive() is already called by AbstractArchiveFile#createArchiveEntryFile()
-                    currentFile = ((AbstractArchiveFile)currentFile).getEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
+//                    currentFile = ((AbstractArchiveFile)currentFile).getEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
+                    AbstractFile tempEntryFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
+                    if(tempEntryFile instanceof AbstractArchiveFile) {
+                        currentFile = tempEntryFile;
+                        lastFileResolved = true;
+                    }
+                    else {
+                        lastFileResolved = false;
+                    }
                 }
-
-                lastFileResolved = true;
             }
             else {
                 lastFileResolved = false;
@@ -433,7 +444,7 @@ public abstract class FileFactory {
                 currentFile = createRawFile(clonedURL);
             }
             else {          // currentFile is an AbstractArchiveFile
-                currentFile = ((AbstractArchiveFile)currentFile).getEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
+                currentFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(FileToolkit.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length())));
             }
         }
 
@@ -599,13 +610,34 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
         // the filename contains a dot '.' character, since most of the time this method is called with a filename that
         // doesn't match any of the filters.
         if(!file.isDirectory() && filename.indexOf('.')!=-1) {
+            AbstractFile archiveFile;
+
+            // Do not use cache for archive entries
+            boolean useCache = !(file instanceof ArchiveEntryFile);
+
+            if(useCache) {
+                archiveFile = (AbstractFile)archiveFileCache.get(file.getAbsolutePath());
+                if(archiveFile!=null) {
+//                    if(Debug.ON) Debug.trace("Found cached archive file for: "+file.getAbsolutePath());
+                    return archiveFile;
+                }
+
+//                if(Debug.ON) Debug.trace("No cached archive file found for: "+file.getAbsolutePath());
+            }
+
             int nbMappings = archiveFormatMappings.length;
             for(int i=0; i<nbMappings; i++) {
                 if(archiveFormatMappings[i].filenameFilter.accept(filename)) {
                     try {
                         // Found one, create the AbstractArchiveFile instance and return it
-                        file = (AbstractFile)archiveFormatMappings[i].providerConstructor.newInstance(new Object[]{file});
-                        break;
+                        archiveFile = (AbstractFile)archiveFormatMappings[i].providerConstructor.newInstance(new Object[]{file});
+
+                        if(useCache) {
+                            if(Debug.ON) Debug.trace("Adding archive file to cache: "+file.getAbsolutePath());
+                            archiveFileCache.put(file.getAbsolutePath(), archiveFile);
+                        }
+
+                        return archiveFile;
                     }
                     catch(Exception e) {
                         if(Debug.ON) Debug.trace("Caught exception while trying to instanciate registered AbstractArchiveFile constructor: "+archiveFormatMappings[i]);
@@ -616,6 +648,32 @@ if(Debug.ON) Debug.trace("credentials="+fileURL.getCredentials());
 
         return file;
     }
+
+//    public static AbstractFile wrapArchive(AbstractFile file) {
+//        String filename = file.getName();
+//
+//        // Looks for an archive FilenameFilter that matches the given filename.
+//        // Comparing the filename against each and every archive extension has a cost, so we only perform the test if
+//        // the filename contains a dot '.' character, since most of the time this method is called with a filename that
+//        // doesn't match any of the filters.
+//        if(!file.isDirectory() && filename.indexOf('.')!=-1) {
+//            int nbMappings = archiveFormatMappings.length;
+//            for(int i=0; i<nbMappings; i++) {
+//                if(archiveFormatMappings[i].filenameFilter.accept(filename)) {
+//                    try {
+//                        // Found one, create the AbstractArchiveFile instance and return it
+//                        file = (AbstractFile)archiveFormatMappings[i].providerConstructor.newInstance(new Object[]{file});
+//                        break;
+//                    }
+//                    catch(Exception e) {
+//                        if(Debug.ON) Debug.trace("Caught exception while trying to instanciate registered AbstractArchiveFile constructor: "+archiveFormatMappings[i]);
+//                    }
+//                }
+//            }
+//        }
+//
+//        return file;
+//    }
 
     /**
      * Returns an instance of the {@link AbstractTrash} implementation that can be used on the current platform,

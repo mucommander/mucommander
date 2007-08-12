@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.gzip;
 
-import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractROArchiveFile;
 import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.SimpleArchiveEntry;
 
@@ -35,7 +35,7 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Maxence Bernard
  */
-public class GzipArchiveFile extends AbstractArchiveFile {
+public class GzipArchiveFile extends AbstractROArchiveFile {
 
     /**
      * Creates a GzipArchiveFile on top of the given file.

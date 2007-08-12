@@ -32,12 +32,11 @@ import java.io.OutputStream;
  */
 class SingleFileArchiver extends Archiver {
 
-    private OutputStream outputStream;
     private boolean firstEntry = true;
 
 
     protected SingleFileArchiver(OutputStream outputStream) {
-        this.outputStream = outputStream;
+        super(outputStream);
     }
 
 
@@ -55,11 +54,11 @@ class SingleFileArchiver extends Archiver {
         else
             throw new IOException();
 
-        return outputStream;
+        return out;
     }
 	
 	
     public void close() throws IOException {
-        outputStream.close();
+        out.close();
     }
 }

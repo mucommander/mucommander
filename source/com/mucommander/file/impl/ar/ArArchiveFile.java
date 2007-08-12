@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.ar;
 
-import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
+import com.mucommander.file.AbstractROArchiveFile;
 import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.SimpleArchiveEntry;
 import com.mucommander.io.ByteLimitInputStream;
@@ -34,7 +34,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class ArArchiveFile extends AbstractArchiveFile {
+public class ArArchiveFile extends AbstractROArchiveFile {
 
     /** GNU variant: extended filenames contained in the special // entry's data */
     private byte gnuExtendedNames[];
@@ -231,5 +231,10 @@ public class ArArchiveFile extends AbstractArchiveFile {
 
         // Entry not found, should not normally happen
         throw new IOException();
+    }
+
+
+    public ArchiveEntry getArchiveEntry(String entryPath, boolean isDirectory) {
+        return new SimpleArchiveEntry(entryPath, System.currentTimeMillis(), 0, isDirectory);
     }
 }

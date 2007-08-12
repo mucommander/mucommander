@@ -446,7 +446,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 	
-    public void mkdir(String name) throws IOException {
+    public void mkdir() throws IOException {
         SFTPConnectionHandler connHandler = null;
         try {
             // Retrieve a ConnectionHandler and lock it
@@ -454,11 +454,15 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            String dirPath = absPath+(absPath.endsWith(SEPARATOR)?"":SEPARATOR)+name;
-            connHandler.sftpChannel.makeDirectory(dirPath);
+            connHandler.sftpChannel.makeDirectory(absPath);
+
             // Set new directory permissions to 755 octal (493 dec): "rwxr-xr-x"
             // Note: by default, permissions for files freshly created is 0 (not readable/writable/executable by anyone)!
-            connHandler.sftpChannel.changePermissions(dirPath, 493);
+            connHandler.sftpChannel.changePermissions(absPath, 493);
+
+            // Create an SftpFile instance now that the file exists
+            file = new SftpFile(absPath, connHandler.sftpChannel.getAttributes(absPath));
+
         }
         finally {
             // Release the lock on the ConnectionHandler

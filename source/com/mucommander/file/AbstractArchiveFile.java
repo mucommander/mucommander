@@ -28,31 +28,37 @@ import java.io.InputStream;
 import java.util.Vector;
 
 /**
- * AbstractArchiveFile is the superclass of all archive files. It allows archive file to be browsed as if they were
- * regular directories, independently of the protocol used to access the file.
+ * <code>AbstractArchiveFile</code> is the superclass of all archive files. It allows archive file to be browsed as if
+ * they were regular directories, independently of the underlying protocol used to access the actual file.
  *
- * <p>AbstractArchiveFile extends {@link ProxyFile} to delegate the AbstractFile implementation to the actual archive
- * file and overrides some methods to provide the added functionality. AbstractArchiveFile implementations only have
- * to implement two methods: one to list the entries contained by the archive in a flat, not hierarchical way, and
- * the other to retrieve a particular entry's contents.
+ * <p><code>AbstractArchiveFile</code> extends {@link ProxyFile} to delegate the <code>AbstractFile</code>
+ * implementation to the actual archive file and overrides some methods to provide the added functionality.<br>
+ * There are two kinds of <code>AbstractArchiveFile</code>, both of which extend this class:
+ * <ul>
+ *  <li>{@link AbstractROArchiveFile}: read-only archives, these are only able to perform read operations such as
+ * listing the archive's contents or retrieving a particular entry's contents.
+ *  <li>{@link AbstractRWArchiveFile}: read-write archives, these are also able to modify the archive by adding or
+ * deleting an entry from the archive. These operations usually require random access to the underlying file,
+ * so write operations may not be available on all underlying file types. The {@link #isWritableArchive()} method allows
+ * to determine whether the archive file is able to carry out write operations or not.
+ * </ul>
+ * When implementing a new archive file/format, either <code>AbstractROArchiveFile</code> or <code>AbstractRWArchiveFile</code>
+ * should be subclassed, but not this class.
+ * </p>
  *
  * <p>The first time one of the <code>ls()</code> methods is called to list the archive's contents, the
  * {@link #getEntries()} method is called to retrieve a list of *all* the entries contained by the archive, not only the
  * ones at the top level but also the ones nested one of several levels below. Using this list of entries, it creates
  * a tree to map the structure of the archive and list the content of any particular directory within the archive.
- * This tree is recreated only if the archive file has changed, i.e. its date has changed since the tree was created.
+ * This tree is recreated (<code>getEntries()</code> is called again) only if the archive file has changed, i.e. its
+ * date has changed since the tree was created.</p>
  *
  * <p>Files returned by the <code>ls()</code> are {@link ArchiveEntryFile} instances which use an {@link ArchiveEntry}
  * object to retrieve the entry's attributes. In turn, these <code>ArchiveEntryFile</code> instances query the
- * mother <code>AbstractArchiveFile</code> to list their content.
+ * associated <code>AbstractArchiveFile</code> to list their content.
  * <br>From an implementation perspective, one only needs to deal with {@link ArchiveEntry} instances, all the nuts
- * and bolts are taken care of by this class.
- *
- * <p>At this time, AbstractArchiveFile only supports read-only archives, which means archive entries can not be
- * added, removed or modified. Read-write support is planned and will be added later.
- * Note that the {@link com.mucommander.file.archiver.Archiver} class can be used to create archives, but entries
- * need to be added linearly.
- *
+ * and bolts are taken care of by this class.</p>
+
  * @see FileFactory
  * @see ArchiveEntry
  * @see ArchiveEntryFile
@@ -62,11 +68,11 @@ import java.util.Vector;
 public abstract class AbstractArchiveFile extends ProxyFile {
 
     /** Archive entries tree */
-    private ArchiveEntryTree entryTreeRoot;
+    protected ArchiveEntryTree entryTreeRoot;
 
     /** Date this file had when the entries tree was created. Used to detect if the archive file has changed and entries
      * need to be reloaded */
-    private long entryTreeDate;
+    protected long entryTreeDate;
 
 
     /**
@@ -84,7 +90,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      *
      * @throws IOException if an error occured while retrieving this archive's entries
      */
-    private void createEntriesTree() throws IOException {
+    protected void createEntriesTree() throws IOException {
         ArchiveEntryTree treeRoot = new ArchiveEntryTree();
 
         long start = System.currentTimeMillis();
@@ -102,19 +108,59 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("entries tree created in "+(System.currentTimeMillis()-start)+" ms");
 		
         this.entryTreeRoot = treeRoot;
+        declareEntriesTreeUpToDate();
+    }
+
+    /**
+     * Checks if the entries tree exists and if this file hasn't been modified since the tree was last created.
+     * If any of those 2 conditions isn't met, the entries tree is (re)created.
+     *
+     * @throws IOException if an error occurred while creating the tree
+     */
+    protected void checkEntriesTree() throws IOException {
+        if(this.entryTreeRoot ==null || getDate()!=this.entryTreeDate)
+            createEntriesTree();
+    }
+
+    /**
+     * Declares the entries tree up-to-date by setting the current tree date to the archive file's.
+     * This method should be called by {@link AbstractRWArchiveFile} implementations when the archive file has been
+     * modified and the entries propagated in the tree, to avoid the tree from being automatically re-created when
+     * {@link #checkEntriesTree()} is called.
+     */
+    protected void declareEntriesTreeUpToDate() {
         this.entryTreeDate = getDate();
     }
 
     /**
-     * Checks if the entries tree exists and if this file hasn't changed since it was created. If any of those
-     * 2 conditions isn't met, the entries tree is (re)created. 
+     * Adds the given {@link ArchiveEntry} to the entries tree. This method will create the tree if it doesn't already
+     * exist, or re-create it if the archive file has changed since it was last created.
      *
-     * @throws IOException if an error occurred while creating the tree
+     * @param entry the ArchiveEntry to add to the tree
+     * @throws IOException if an error occurred while creating the entries tree
      */
-    private void checkEntriesTree() throws IOException {
-        if(this.entryTreeRoot ==null || getDate()!=this.entryTreeDate)
-            createEntriesTree();
-        
+    protected void addToEntriesTree(ArchiveEntry entry) throws IOException {
+        checkEntriesTree();
+        entryTreeRoot.addArchiveEntry(entry);
+    }
+
+    /**
+     * Removes the given {@link ArchiveEntry} from the entries tree. This method will create the tree if it doesn't
+     * already exist, or re-create it if the archive file has changed since it was last created.
+     *
+     * @param entry the ArchiveEntry to add to the tree
+     * @throws IOException if an error occurred while creating the entries tree
+     */
+    protected void removeFromEntriesTree(ArchiveEntry entry) throws IOException {
+        checkEntriesTree();
+        DefaultMutableTreeNode entryNode = entryTreeRoot.findEntryNode(entry.getPath());
+
+        if(entryNode!=null) {
+            DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)entryNode.getParent();
+            parentNode.remove(entryNode);
+
+//            if(Debug.ON) Debug.trace("Removed entry from tree: "+entry.getPath());
+        }
     }
 
     /**
@@ -136,7 +182,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     /**
      * Returns the contents (direct children) of the specified tree node.
      */
-    private AbstractFile[] ls(DefaultMutableTreeNode treeNode, AbstractFile parentFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException {
+    protected AbstractFile[] ls(DefaultMutableTreeNode treeNode, AbstractFile parentFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException {
         AbstractFile files[];
         int nbChildren = treeNode.getChildCount();
 
@@ -145,7 +191,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
             files = new AbstractFile[nbChildren];
 
             for(int c=0; c<nbChildren; c++) {
-                files[c] = createArchiveEntryFile((ArchiveEntry)(((DefaultMutableTreeNode)treeNode.getChildAt(c)).getUserObject()), parentFile);
+                files[c] = getArchiveEntryFile((ArchiveEntry)(((DefaultMutableTreeNode)treeNode.getChildAt(c)).getUserObject()), parentFile, true);
             }
         }
         // Use provided FilenameFilter and temporarily store created entry files that match the filter in a Vector
@@ -156,7 +202,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
                 if(!filenameFilter.accept(entry.getName()))
                     continue;
 
-                filesV.add(createArchiveEntryFile(entry, parentFile));
+                filesV.add(getArchiveEntryFile(entry, parentFile, true));
             }
 
             files = new AbstractFile[filesV.size()];
@@ -173,7 +219,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * That means entries paths of archives located on Windows local filesystems will use '\' as a separator, and
      * '/' for Unix local archives.
      */
-    private AbstractFile createArchiveEntryFile(ArchiveEntry entry, AbstractFile parentFile) throws java.net.MalformedURLException {
+    protected AbstractFile getArchiveEntryFile(ArchiveEntry entry, AbstractFile parentFile, boolean exists) throws java.net.MalformedURLException {
 
         String entryPath = entry.getPath();
 
@@ -189,9 +235,10 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         
         AbstractFile entryFile = FileFactory.wrapArchive(
           new ArchiveEntryFile(
+            entryURL,
             this,
             entry,
-            entryURL
+            exists            
           )
         );
         entryFile.setParent(parentFile);
@@ -201,16 +248,19 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
     /**
      * Creates and returns an AbstractFile that corresponds to the given entry path within the archive.
-     * Throws an IOException if the entry does not exist inside this archive.
+     * The requested entry may or may not exist in the archive, the {@link #exists()} method of the returned entry file
+     * can be used used to get this information. However, if the requested entry does not exist in the archive and is
+     * not located at the top level (i.e. is located in a subfolder), its parent folder must exist in the archive or
+     * else an <code>IOException</code> will be thrown.
      *
      * <p>Important note: the given path's separator character must be '/' and the path must be relative to the
-     * archive's root, i.e. not start with a leading '/', otherwise the entry will not be found.
+     * archive's root, i.e. not start with a leading '/', otherwise the entry will not be found.</p>
      *
-     * @param entryPath path to an entry inside this archive
+     * @param entryPath path to an entry within this archive
      * @return an AbstractFile that corresponds to the given entry path
-     * @throws IOException if the entry does not exist within the archive
+     * @throws IOException if neither the entry nor its parent exist within the archive
      */
-    public AbstractFile getEntryFile(String entryPath) throws IOException {
+    public AbstractFile getArchiveEntryFile(String entryPath) throws IOException {
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
 
@@ -219,12 +269,31 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         // Find the entry node corresponding to the given path
         DefaultMutableTreeNode entryNode = entryTreeRoot.findEntryNode(entryPath);
 
-        if(entryNode==null)
-            throw new IOException();    // Entry does not exist
+//        if(entryNode==null && isWritableArchive()) {
+        if(entryNode==null) {
+            int depth = ArchiveEntry.getDepth(entryPath);
+
+            AbstractFile parentFile;
+            if(depth==0)
+                parentFile = this;
+            else {
+                String parentPath = entryPath;
+                if(parentPath.endsWith("/"))
+                    parentPath = parentPath.substring(0, parentPath.length()-1);
+
+                parentPath = parentPath.substring(0, parentPath.lastIndexOf('/'));
+
+                parentFile = getArchiveEntryFile(parentPath);
+                if(parentFile==null)    // neither the entry nor the parent exist
+                    throw new IOException();
+            }
+
+            return getArchiveEntryFile(new SimpleArchiveEntry(entryPath, false), parentFile, false);
+        }
 
         DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)entryNode.getParent();
         // Todo: suboptimal recursion, findEntryNode() is called each time
-        return createArchiveEntryFile((ArchiveEntry)entryNode.getUserObject(), parentNode== entryTreeRoot?this:getEntryFile(((ArchiveEntry)parentNode.getUserObject()).getPath()));
+        return getArchiveEntryFile((ArchiveEntry)entryNode.getUserObject(), parentNode== entryTreeRoot?this: getArchiveEntryFile(((ArchiveEntry)parentNode.getUserObject()).getPath()), true);
     }
 
 
@@ -244,6 +313,25 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * necessarily one of the entries that were returned by {@link #getEntries()}. 
      */
     public abstract InputStream getEntryInputStream(ArchiveEntry entry) throws IOException;
+
+    /**
+     * Returns <code>true</code> if this archive file is writable, i.e. is capable of adding and deleting entries to
+     * the underlying archive file.
+     *
+     * <p>
+     * This method is implemented by {@link com.mucommander.file.AbstractROArchiveFile} and
+     * {@link com.mucommander.file.AbstractRWArchiveFile} to respectively return <code>false</code> and
+     * <code>true</code>. This method may be overridden by <code>AbstractRWArchiveFile</code> implementations if write
+     * access is only available under certain conditions, for example if it requires random write access to the
+     * proxied archive file (which may not always be available).
+     * Therefore, this method should be used to test if an <code>AbstractArchiveFile</code> is writable, rather than
+     * testing if it is an instance of <code>AbstractRWArchiveFile</code>.
+     * </p>
+     *
+     * @return true if this archive is writable, i.e. is capable of adding and deleting entries to
+     * the underlying archive file.
+     */
+    public abstract boolean isWritableArchive();
 
 
     ////////////////////////
@@ -310,18 +398,16 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     }
 
     /**
-     * Always throws an <code>IOException</code> as archive files are currently read-only.
-     */
-    public void mkdir(String name) throws IOException {
-        // All archive files are read-only, throw an exception
-        throw new IOException();
-    }
-
-    /**
-     * Always returns <code>0</code> as archive files are currently read-only.
+     * Returns the proxied file's free space if this archive is writable (as reported by {@link #isWritableArchive()},
+     * else returns <code>0</code>. 
+     *
+     * @return the proxied file's free space is this archive is writable, 0 otherwise.
      */
     public long getFreeSpace() {
-        return 0;
+        if(isWritableArchive())
+            return file.getFreeSpace();
+        else
+            return 0;
     }
 
     /**
