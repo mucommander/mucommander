@@ -315,7 +315,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
 
             final SFTPConnectionHandler connHandlerFinal = connHandler;
 
-            // Custom made constructor, not part of the official J2SSH API
+            // Custom constructor, not part of the official J2SSH API
             return new SftpFileOutputStream(file, append?getSize():0) {
 
                 public void close() throws IOException {
@@ -329,23 +329,32 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
         catch(IOException e) {
             // Release the lock on the ConnectionHandler if the OutputStream could not be created 
-            if(connHandler!=null)
-                connHandler.releaseLock();
+            connHandler.releaseLock();
 
             // Re-throw IOException
             throw e;
         }
     }
 
+    /**
+     * Returns <code>true</code>: {@link #getRandomAccessInputStream()} is implemented.
+     *
+     * @return true
+     */
     public boolean hasRandomAccessInputStream() {
-        // No random access for SFTP files unfortunately
-        return false;
+        return true;
     }
 
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
-        throw new IOException();
+        return new SFTPRandomAccessInputStream();
     }
 
+    /**
+     * Returns <code>false</code>: {@link #getRandomAccessOutputStream()} is not implemented and throws an
+     * <code>IOException</code>.
+     *
+     * @return false
+     */
     public boolean hasRandomAccessOutputStream() {
         // No random access for SFTP files unfortunately
         return false;
@@ -596,8 +605,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
         }
         catch(IOException e) {
             // Release the lock on the ConnectionHandler if the InputStream could not be created
-            if(connHandler!=null)
-                connHandler.releaseLock();
+            connHandler.releaseLock();
 
             // Re-throw IOException
             throw e;
@@ -608,6 +616,46 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     ///////////////////
     // Inner classes //
     ///////////////////
+
+
+    /**
+     * SFTPRandomAccessInputStream extends RandomAccessInputStream to provide random read access to an SFTPFile.
+     */
+    private class SFTPRandomAccessInputStream extends RandomAccessInputStream {
+
+        private SftpFileInputStream in;
+
+        private SFTPRandomAccessInputStream() throws IOException {
+            this.in = (SftpFileInputStream)getInputStream();
+        }
+
+        public int read(byte b[], int off, int len) throws IOException {
+            return in.read(b, off, len);
+        }
+
+        public int read() throws IOException {
+            return in.read();
+        }
+
+        public long getOffset() throws IOException {
+            // Custom method, not part of the official J2SSH API
+            return in.getPosition();
+        }
+
+        public long getLength() throws IOException {
+            return getSize();
+        }
+
+        public void seek(long offset) throws IOException {
+            // Custom method, not part of the official J2SSH API
+            in.setPosition(offset);
+        }
+
+        public void close() throws IOException {
+            in.close();
+        }
+    }
+
 
     private class SFTPProcess extends AbstractProcess {
 
