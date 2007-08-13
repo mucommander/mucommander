@@ -263,7 +263,7 @@ public class NFSFile extends AbstractFile {
      * Returns <code>false</code>: {@link #getRandomAccessOutputStream()} is implemented but the returned
      * <code>RandomAccessOutputStream</code> is not fully functional.
      *
-     * @return true
+     * @return false
      */
     public boolean hasRandomAccessOutputStream() {
         return false;
