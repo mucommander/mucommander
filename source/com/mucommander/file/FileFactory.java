@@ -54,8 +54,8 @@ import java.util.Vector;
 import java.util.WeakHashMap;
 
 /**
- * FileFactory is an abstract class that provides static methods to create resolve and create {@link AbstractFile}
- * instances.
+ * FileFactory is an abstract class that provides static methods to get a {@link AbstractFile} instance for
+ * a specified path or {@link FileURL} location.
  *
  * <p>The muCommander file API provides ready-to-use implementations for several file protocols and archive types.
  * Additional AbstractFile implementations can be register in at runtime using the {@link #registerFileProtocol(FileProtocolMapping)}

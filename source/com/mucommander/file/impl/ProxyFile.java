@@ -253,8 +253,8 @@ public abstract class ProxyFile extends AbstractFile {
         return file.isRoot();
     }
 
-    public InputStream getInputStream(long skipBytes) throws IOException {
-        return file.getInputStream(skipBytes);
+    public InputStream getInputStream(long offset) throws IOException {
+        return file.getInputStream(offset);
     }
 
     public void copyStream(InputStream in, boolean append) throws FileTransferException {

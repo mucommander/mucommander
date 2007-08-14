@@ -667,8 +667,8 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    public InputStream getInputStream(long skipBytes) throws IOException {
-        return new FTPInputStream(skipBytes);
+    public InputStream getInputStream(long offset) throws IOException {
+        return new FTPInputStream(offset);
     }
 
 

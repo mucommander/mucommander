@@ -577,7 +577,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
     }
 
 
-    public InputStream getInputStream(long skipBytes) throws IOException {
+    public InputStream getInputStream(long offset) throws IOException {
         SFTPConnectionHandler connHandler = null;
         try {
             // Retrieve a ConnectionHandler and lock it
@@ -592,7 +592,7 @@ public class SFTPFile extends AbstractFile implements ConnectionHandlerFactory {
             final SFTPConnectionHandler connHandlerFinal = connHandler;
 
             // Custom made constructor, not part of the official J2SSH API
-            return new SftpFileInputStream(sftpFile, skipBytes) {
+            return new SftpFileInputStream(sftpFile, offset) {
 
                     public void close() throws IOException {
                         // SftpFileInputStream.close() closes the open SftpFile file handle

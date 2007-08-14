@@ -574,13 +574,13 @@ public class HTTPFile extends AbstractFile {
 
     /**
      * Overrides AbstractFile's getInputStream(long) method to provide a more efficient implementation:
-     * use the HTTP 1.1 header to resume and skip the specified number of bytes.
+     * use the HTTP 1.1 header to start the transfer at the given offset.
      */
-    public InputStream getInputStream(long skipBytes) throws IOException {
+    public InputStream getInputStream(long offset) throws IOException {
         HttpURLConnection conn = getHttpURLConnection(this.url);
 
         // Set header that allows to resume transfer
-        conn.setRequestProperty("Range", "bytes="+skipBytes+"-");
+        conn.setRequestProperty("Range", "bytes="+offset+"-");
 
         // Establish connection
         conn.connect();
