@@ -75,6 +75,7 @@ public class MuConfiguration {
     public static final boolean DEFAULT_DELETE_TO_TRASH           = true;
 
 
+
     // - Shell variables -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the shell configuration. */
@@ -148,7 +149,6 @@ public class MuConfiguration {
 
 
 
-
     // - Folders variables ---------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the folders view configuration. */
@@ -185,6 +185,7 @@ public class MuConfiguration {
     public static final String  CD_FOLLOWS_SYMLINKS               = FILE_TABLE_SECTION + '.' + "cd_follows_symlinks";
     /** Default value for 'Follow symlinks when changing directory' option */
     public static final boolean DEFAULT_CD_FOLLOWS_SYMLINKS       = false;
+
 
 
     // - Mac OS X variables --------------------------------------------------
@@ -279,7 +280,6 @@ public class MuConfiguration {
 
 
 
-
     // - Progress dialog variables -------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the behavior of the progress dialog. */
@@ -367,6 +367,7 @@ public class MuConfiguration {
     public static final boolean DEFAULT_USE_CUSTOM_VIEWER         = false;
 
 
+
     // - Variables used for FTP ----------------------------------------------
     // -----------------------------------------------------------------------
     /** Section containing all FTP variables. */
@@ -376,13 +377,27 @@ public class MuConfiguration {
     /** Default value for {@link #LIST_HIDDEN_FILES} */
     public static final boolean DEFAULT_LIST_HIDDEN_FILES         = false;
 
-    private static Configuration configuration;
 
+
+    // - Instance fields -----------------------------------------------------
+    // -----------------------------------------------------------------------
+    public static Configuration configuration;
+
+
+
+    // - Initialisation ------------------------------------------------------
+    // -----------------------------------------------------------------------
     static {
         configuration = new Configuration();
         configuration.setSource(new MuConfigurationSource());
     }
 
+    private MuConfiguration() {}
+
+
+
+    // - Configuration reading / writing -------------------------------------
+    // -----------------------------------------------------------------------
     public static void read() throws IOException, ConfigurationException, ConfigurationFormatException {
         String configurationVersion;
 
