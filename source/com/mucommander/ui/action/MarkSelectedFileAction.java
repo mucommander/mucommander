@@ -34,7 +34,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MarkSelectedFileAction extends MucoAction {
+public class MarkSelectedFileAction extends MuAction {
 
     public MarkSelectedFileAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

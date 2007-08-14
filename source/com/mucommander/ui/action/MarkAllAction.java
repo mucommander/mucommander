@@ -29,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MarkAllAction extends MucoAction {
+public class MarkAllAction extends MuAction {
 
     public MarkAllAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

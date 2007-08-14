@@ -27,7 +27,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class SelectFirstRowAction extends MucoAction {
+public class SelectFirstRowAction extends MuAction {
 
     public SelectFirstRowAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

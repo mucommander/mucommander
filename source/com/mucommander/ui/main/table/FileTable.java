@@ -1796,8 +1796,8 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
             else {
                 // Test if the typed key combination corresponds to a registered actions.
                 // If that's the case, the quick search is cancelled and the action is performed.
-                Class mucoActionClass = ActionKeymap.getRegisteredActionClassForKeystroke(KeyStroke.getKeyStrokeForEvent(e));
-                if(mucoActionClass!=null) {
+                Class muActionClass = ActionKeymap.getRegisteredActionClassForKeystroke(KeyStroke.getKeyStrokeForEvent(e));
+                if(muActionClass!=null) {
                     // Consume the key event otherwise it would be fired again on the FileTable
                     // (or any other KeyListener on this FileTable)
                     e.consume();
@@ -1806,7 +1806,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
                     cancel();
 
                     // Perform the action
-                    ActionManager.getActionInstance(mucoActionClass, mainFrame).performAction();
+                    ActionManager.getActionInstance(muActionClass, mainFrame).performAction();
                 }
 
                 // Do not update last search string's change timestamp

@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class PopupLeftDriveButtonAction extends MucoAction {
+public class PopupLeftDriveButtonAction extends MuAction {
 
     public PopupLeftDriveButtonAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

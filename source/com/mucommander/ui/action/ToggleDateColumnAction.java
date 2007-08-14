@@ -31,7 +31,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ToggleDateColumnAction extends MucoAction {
+public class ToggleDateColumnAction extends MuAction {
 
     public ToggleDateColumnAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, false);

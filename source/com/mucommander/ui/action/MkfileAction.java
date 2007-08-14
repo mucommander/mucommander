@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MkfileAction extends MucoAction {
+public class MkfileAction extends MuAction {
 
     public MkfileAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

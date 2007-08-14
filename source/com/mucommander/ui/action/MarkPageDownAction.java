@@ -29,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MarkPageDownAction extends MucoAction {
+public class MarkPageDownAction extends MuAction {
 
     public MarkPageDownAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

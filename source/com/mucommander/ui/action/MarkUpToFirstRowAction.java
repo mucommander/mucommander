@@ -32,7 +32,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MarkUpToFirstRowAction extends MucoAction {
+public class MarkUpToFirstRowAction extends MuAction {
 
     public MarkUpToFirstRowAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

@@ -39,7 +39,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class BringAllToFrontAction extends MucoAction {
+public class BringAllToFrontAction extends MuAction {
 
     public BringAllToFrontAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

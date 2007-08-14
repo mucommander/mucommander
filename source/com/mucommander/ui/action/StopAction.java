@@ -30,7 +30,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class StopAction extends MucoAction implements LocationListener {
+public class StopAction extends MuAction implements LocationListener {
 
     public StopAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

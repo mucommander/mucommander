@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MkdirAction extends MucoAction {
+public class MkdirAction extends MuAction {
 
     public MkdirAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

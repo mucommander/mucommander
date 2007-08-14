@@ -27,7 +27,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class SplitEquallyAction extends MucoAction {
+public class SplitEquallyAction extends MuAction {
 
     public SplitEquallyAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ShowAboutAction extends MucoAction {
+public class ShowAboutAction extends MuAction {
 
     public ShowAboutAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

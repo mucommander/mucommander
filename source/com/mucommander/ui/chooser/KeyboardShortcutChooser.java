@@ -20,7 +20,7 @@ package com.mucommander.ui.chooser;
 
 import com.mucommander.Debug;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.MucoAction;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.combobox.ComboBoxListener;
 import com.mucommander.ui.combobox.SaneComboBox;
 
@@ -144,7 +144,7 @@ if(Debug.ON) Debug.trace("keyCode="+ (currentKeyStroke==null?"null":""+currentKe
         if(currentKeyStroke==null || currentKeyStroke.getKeyCode()==0)
             textField.setText(noneString);
         else
-            textField.setText(MucoAction.getKeyStrokeRepresentation(currentKeyStroke));
+            textField.setText(MuAction.getKeyStrokeRepresentation(currentKeyStroke));
 
         updatingTextField = false;
     }

@@ -33,7 +33,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class GoToParentAction extends MucoAction implements ActivePanelListener, LocationListener {
+public class GoToParentAction extends MuAction implements ActivePanelListener, LocationListener {
 
     public GoToParentAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
@@ -60,7 +60,7 @@ public class GoToParentAction extends MucoAction implements ActivePanelListener,
 
 
     ///////////////////////////////
-    // MucoAction implementation //
+    // MuAction implementation //
     ///////////////////////////////
 
     public void performAction() {

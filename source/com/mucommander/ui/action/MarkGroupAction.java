@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MarkGroupAction extends MucoAction implements InvokesDialog {
+public class MarkGroupAction extends MuAction implements InvokesDialog {
 
     public MarkGroupAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

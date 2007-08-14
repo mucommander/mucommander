@@ -420,7 +420,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 checkBoxMenuItem = new JCheckBoxMenuItem();
 
                 // If frame number is less than 10, use the corresponding action class (accelerator will be displayed in the menu item)
-                MucoAction recallWindowAction;
+                MuAction recallWindowAction;
                 if(i<10) {
                     recallWindowAction = ActionManager.getActionInstance(RECALL_WINDOW_ACTIONS[i], this.mainFrame);
                 }

@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class SetSameFolderAction extends MucoAction {
+public class SetSameFolderAction extends MuAction {
 
     public SetSameFolderAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

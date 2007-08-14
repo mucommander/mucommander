@@ -36,7 +36,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ToggleStatusBarAction extends MucoAction {
+public class ToggleStatusBarAction extends MuAction {
 
     public ToggleStatusBarAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, false);

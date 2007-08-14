@@ -33,17 +33,17 @@ import java.util.Hashtable;
 
 
 /**
- * MucoAction extends <code>AbstractAction</code> to add more functionalities and make it easier to integrate within
- * muCommander. The biggest difference with <code>AbstractAction</code> is that MucoAction instances are bound to a
+ * MuAction extends <code>AbstractAction</code> to add more functionalities and make it easier to integrate within
+ * muCommander. The biggest difference with <code>AbstractAction</code> is that MuAction instances are bound to a
  * specific {@link MainFrame}.<br>
- * Note that by being an Action, MucoAction can be used in every Swing components that accept Action instances.
+ * Note that by being an Action, MuAction can be used in every Swing components that accept Action instances.
  *
- * <p>The MucoAction class is abstract. MucoAction subclasses must implement the {@link #performAction()} method
+ * <p>The MuAction class is abstract. MuAction subclasses must implement the {@link #performAction()} method
  * to provide a response to the action trigger, and must provide a constructor with the
- * {@link #MucoAction(MainFrame, java.util.Hashtable)} signature.
+ * {@link #MuAction(MainFrame, java.util.Hashtable)} signature.
  *
- * <p>MucoAction subclasses should not be instanciated directly, {@link ActionManager}'s <code>getActionInstance</code>
- * methods should be used instead. Using {@link ActionManager} to retrieve a MucoAction ensures that only one instance
+ * <p>MuAction subclasses should not be instanciated directly, {@link ActionManager}'s <code>getActionInstance</code>
+ * methods should be used instead. Using {@link ActionManager} to retrieve a MuAction ensures that only one instance
  * exists for a given {@link com.mucommander.ui.main.MainFrame}. This is particularly important because actions are stateful and can be used
  * in several components of a MainFrame at the same time; if an action's state changes, the change must be reflected
  * everywhere the action is used. It is also important for performance reasons: sharing one action throughout a
@@ -54,9 +54,9 @@ import java.util.Hashtable;
  * @see ActionKeymap
  * @author Maxence Bernard
  */
-public abstract class MucoAction extends AbstractAction {
+public abstract class MuAction extends AbstractAction {
 
-    /** The MainFrame associated with this MucoAction */
+    /** The MainFrame associated with this MuAction */
     protected MainFrame mainFrame;
 
     /** Name of the alternate accelerator KeyStroke property */
@@ -70,31 +70,31 @@ public abstract class MucoAction extends AbstractAction {
     
 
     /**
-     * Convenience constructor which has the same effect as calling {@link #MucoAction(MainFrame, Hashtable, boolean, boolean, boolean )}
+     * Convenience constructor which has the same effect as calling {@link #MuAction(MainFrame, Hashtable, boolean, boolean, boolean )}
      * with these parameters and all lookups enabled.
      * 
-     * @param mainFrame the MainFrame to associate with this new MucoAction
+     * @param mainFrame the MainFrame to associate with this new MuAction
      * @param properties the initial properties to use in this action. The Hashtable may simply be empty if no initial
      * properties are specified.
      */
-    public MucoAction(MainFrame mainFrame, Hashtable properties) {
+    public MuAction(MainFrame mainFrame, Hashtable properties) {
         this(mainFrame, properties, true, true, true);
     }
 
     /**
-     * Convenience constructor which has the same effect as calling {@link #MucoAction(MainFrame, Hashtable, boolean, boolean, boolean)}
+     * Convenience constructor which has the same effect as calling {@link #MuAction(MainFrame, Hashtable, boolean, boolean, boolean)}
      * with these parameters and icon and accelerators lookups enabled.
      *
-     * @param mainFrame the MainFrame to associate with this new MucoAction
+     * @param mainFrame the MainFrame to associate with this new MuAction
      * @param properties the initial properties to use in this action. The Hashtable may simply be empty if no initial
      * properties are specified.
      */
-    public MucoAction(MainFrame mainFrame, Hashtable properties, boolean lookupTranslator) {
+    public MuAction(MainFrame mainFrame, Hashtable properties, boolean lookupTranslator) {
         this(mainFrame, properties, lookupTranslator, true, true);
     }
 
     /**
-     * Creates a new MucoAction associated with the specified {@link MainFrame}. The properties contained by the given
+     * Creates a new MuAction associated with the specified {@link MainFrame}. The properties contained by the given
      * <code>Hashtable</code> will be used to initialize this action's property map.
      *
      * <p>If the <code>lookupTranslator</code> parameter is <code>true</code>, {@link Translator} will be
@@ -114,7 +114,7 @@ public abstract class MucoAction extends AbstractAction {
      * be queried to look for an accelerator <code>KeyStroke</code> matching this class. If an accelerator was found,
      * the operation will be repeated for the alternate (secondary) accelerator KeyStroke.
      *
-     * @param mainFrame the MainFrame to associate with this new MucoAction
+     * @param mainFrame the MainFrame to associate with this new MuAction
      * @param properties the initial properties to use in this action. The Hashtable may simply be empty if no initial
      * properties are specified.
      * @param lookupTranslator if <code>true</code>, {@link Translator} will be looked up to find a label and tooltip
@@ -124,7 +124,7 @@ public abstract class MucoAction extends AbstractAction {
      * @param lookupActionKeymap if <code>true</code>, {@link ActionKeymap} will be looked up to find accelerator
      * KeyStrokes matching this action class
      */
-    public MucoAction(MainFrame mainFrame, Hashtable properties, boolean lookupTranslator, boolean lookupIconManager, boolean lookupActionKeymap) {
+    public MuAction(MainFrame mainFrame, Hashtable properties, boolean lookupTranslator, boolean lookupIconManager, boolean lookupActionKeymap) {
         this.mainFrame = mainFrame;
 
         Class classInstance = getClass();
@@ -181,7 +181,7 @@ public abstract class MucoAction extends AbstractAction {
 
     /**
      * Returns the path to the icon image within the application's JAR file corresponding to the specified
-     * {@link MucoAction} class descriptor.  
+     * {@link MuAction} class descriptor.
      */
     protected static String getIconPath(Class action) {
         return IconManager.getIconSetFolder(IconManager.ACTION_ICON_SET) + action.getName() + ".png";
@@ -189,7 +189,7 @@ public abstract class MucoAction extends AbstractAction {
 
 
     /**
-     * Return the {@link MainFrame} instance that is associated with this MucoAction.
+     * Return the {@link MainFrame} instance that is associated with this MuAction.
      */
     public MainFrame getMainFrame() {
         return this.mainFrame;

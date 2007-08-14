@@ -42,7 +42,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class OpenAction extends MucoAction {
+public class OpenAction extends MuAction {
 
     public OpenAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

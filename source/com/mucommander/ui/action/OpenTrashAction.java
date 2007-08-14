@@ -31,7 +31,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class OpenTrashAction extends MucoAction {
+public class OpenTrashAction extends MuAction {
 
     public OpenTrashAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

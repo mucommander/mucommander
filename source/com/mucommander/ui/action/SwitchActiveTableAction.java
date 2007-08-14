@@ -29,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class SwitchActiveTableAction extends MucoAction {
+public class SwitchActiveTableAction extends MuAction {
 
     public SwitchActiveTableAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

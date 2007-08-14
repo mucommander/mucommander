@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class AddBookmarkAction extends MucoAction implements InvokesDialog {
+public class AddBookmarkAction extends MuAction implements InvokesDialog {
 
     public AddBookmarkAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

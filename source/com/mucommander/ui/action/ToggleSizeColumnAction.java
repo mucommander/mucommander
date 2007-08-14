@@ -31,7 +31,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ToggleSizeColumnAction extends MucoAction {
+public class ToggleSizeColumnAction extends MuAction {
 
     public ToggleSizeColumnAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties, false);

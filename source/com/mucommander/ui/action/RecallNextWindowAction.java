@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class RecallNextWindowAction extends MucoAction {
+public class RecallNextWindowAction extends MuAction {
 
     public RecallNextWindowAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

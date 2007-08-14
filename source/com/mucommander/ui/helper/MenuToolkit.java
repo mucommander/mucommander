@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.helper;
 
-import com.mucommander.ui.action.MucoAction;
+import com.mucommander.ui.action.MuAction;
 
 import javax.swing.*;
 import javax.swing.event.MenuListener;
@@ -120,17 +120,17 @@ public class MenuToolkit {
     }
 	
 
-    public static JMenuItem addMenuItem(JMenu menu, MucoAction action, MnemonicHelper mnemonicHelper) {
+    public static JMenuItem addMenuItem(JMenu menu, MuAction action, MnemonicHelper mnemonicHelper) {
         return addMenuItem(menu, action, mnemonicHelper, false);
     }
 
 
-    public static JCheckBoxMenuItem addCheckBoxMenuItem(JMenu menu, MucoAction action, MnemonicHelper mnemonicHelper) {
+    public static JCheckBoxMenuItem addCheckBoxMenuItem(JMenu menu, MuAction action, MnemonicHelper mnemonicHelper) {
         return (JCheckBoxMenuItem)addMenuItem(menu, action, mnemonicHelper, true);
     }
     
 
-    private static JMenuItem addMenuItem(JMenu menu, MucoAction action, MnemonicHelper mnemonicHelper, boolean createCheckBoxMenuItem) {
+    private static JMenuItem addMenuItem(JMenu menu, MuAction action, MnemonicHelper mnemonicHelper, boolean createCheckBoxMenuItem) {
         JMenuItem menuItem = createCheckBoxMenuItem?new JCheckBoxMenuItem(action):new JMenuItem(action);
 
         if(mnemonicHelper!=null) {

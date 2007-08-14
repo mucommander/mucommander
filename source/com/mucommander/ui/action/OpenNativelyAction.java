@@ -35,7 +35,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class OpenNativelyAction extends MucoAction {
+public class OpenNativelyAction extends MuAction {
 
     public OpenNativelyAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

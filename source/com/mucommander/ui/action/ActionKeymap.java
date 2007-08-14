@@ -88,12 +88,12 @@ public class ActionKeymap implements ContentHandler {
     }
 
 
-    public static KeyStroke getAccelerator(Class mucoActionClass) {
-        return (KeyStroke)primaryActionKeymap.get(mucoActionClass);
+    public static KeyStroke getAccelerator(Class muActionClass) {
+        return (KeyStroke)primaryActionKeymap.get(muActionClass);
     }
 
-    public static KeyStroke getAlternateAccelerator(Class mucoActionClass) {
-        return (KeyStroke)alternateActionKeymap.get(mucoActionClass);
+    public static KeyStroke getAlternateAccelerator(Class muActionClass) {
+        return (KeyStroke)alternateActionKeymap.get(muActionClass);
     }
 
 
@@ -123,53 +123,53 @@ public class ActionKeymap implements ContentHandler {
 
         Enumeration actionClasses = primaryActionKeymap.keys();
         while(actionClasses.hasMoreElements()) {
-            MucoAction action = ActionManager.getActionInstance((Class)actionClasses.nextElement(), mainFrame);
+            MuAction action = ActionManager.getActionInstance((Class)actionClasses.nextElement(), mainFrame);
             ActionKeymap.registerActionAccelerators(action, table1, JComponent.WHEN_FOCUSED);
             ActionKeymap.registerActionAccelerators(action, table2, JComponent.WHEN_FOCUSED);
         }
 
         actionClasses = alternateActionKeymap.keys();
         while(actionClasses.hasMoreElements()) {
-            MucoAction action = ActionManager.getActionInstance((Class)actionClasses.nextElement(), mainFrame);
+            MuAction action = ActionManager.getActionInstance((Class)actionClasses.nextElement(), mainFrame);
             ActionKeymap.registerActionAccelerators(action, table1, JComponent.WHEN_FOCUSED);
             ActionKeymap.registerActionAccelerators(action, table2, JComponent.WHEN_FOCUSED);
         }
     }
 
 
-    public static void registerAction(MainFrame mainFrame, MucoAction action) {
+    public static void registerAction(MainFrame mainFrame, MuAction action) {
         registerActionAccelerators(action, mainFrame.getFolderPanel1().getFileTable(), JComponent.WHEN_FOCUSED);
         registerActionAccelerators(action, mainFrame.getFolderPanel2().getFileTable(), JComponent.WHEN_FOCUSED);
     }
 
-    public static void unregisterAction(MainFrame mainFrame, MucoAction action) {
+    public static void unregisterAction(MainFrame mainFrame, MuAction action) {
         unregisterActionAccelerators(action, mainFrame.getFolderPanel1().getFileTable(), JComponent.WHEN_FOCUSED);
         unregisterActionAccelerators(action, mainFrame.getFolderPanel2().getFileTable(), JComponent.WHEN_FOCUSED);
     }
 
 
-    public static void registerActionAccelerator(MucoAction action, KeyStroke accelerator, JComponent comp, int condition) {
+    public static void registerActionAccelerator(MuAction action, KeyStroke accelerator, JComponent comp, int condition) {
         if(accelerator==null)
             return;
         InputMap inputMap = comp.getInputMap(condition);
         ActionMap actionMap = comp.getActionMap();
-        Class mucoActionClass = action.getClass();
-        inputMap.put(accelerator, mucoActionClass);
-        actionMap.put(mucoActionClass, action);
+        Class muActionClass = action.getClass();
+        inputMap.put(accelerator, muActionClass);
+        actionMap.put(muActionClass, action);
     }
 
-    public static void unregisterActionAccelerator(MucoAction action, KeyStroke accelerator, JComponent comp, int condition) {
+    public static void unregisterActionAccelerator(MuAction action, KeyStroke accelerator, JComponent comp, int condition) {
         if(accelerator==null)
             return;
         InputMap inputMap = comp.getInputMap(condition);
         ActionMap actionMap = comp.getActionMap();
-        Class mucoActionClass = action.getClass();
+        Class muActionClass = action.getClass();
         inputMap.remove(accelerator);
-        actionMap.remove(mucoActionClass);
+        actionMap.remove(muActionClass);
     }
 
 
-    public static void registerActionAccelerators(MucoAction action, JComponent comp, int condition) {
+    public static void registerActionAccelerators(MuAction action, JComponent comp, int condition) {
         KeyStroke accelerator = action.getAccelerator();
         if(accelerator==null)
             return;
@@ -181,7 +181,7 @@ public class ActionKeymap implements ContentHandler {
             registerActionAccelerator(action, accelerator, comp, condition);
     }
 
-    public static void unregisterActionAccelerators(MucoAction action, JComponent comp, int condition) {
+    public static void unregisterActionAccelerators(MuAction action, JComponent comp, int condition) {
         KeyStroke accelerator = action.getAccelerator();
         if(accelerator==null)
             return;
@@ -194,32 +194,32 @@ public class ActionKeymap implements ContentHandler {
     }
 
 
-    public static void changeActionAccelerators(Class mucoActionClass, KeyStroke accelerator, KeyStroke alternateAccelerator) {
+    public static void changeActionAccelerators(Class muActionClass, KeyStroke accelerator, KeyStroke alternateAccelerator) {
         // Remove old accelerators (primary and alternate) from accelerators map
-        KeyStroke oldAccelator = (KeyStroke)primaryActionKeymap.get(mucoActionClass);
+        KeyStroke oldAccelator = (KeyStroke)primaryActionKeymap.get(muActionClass);
         if(oldAccelator!=null)
             acceleratorMap.remove(oldAccelator);
 
-        oldAccelator = (KeyStroke)alternateActionKeymap.get(mucoActionClass);
+        oldAccelator = (KeyStroke)alternateActionKeymap.get(muActionClass);
         if(oldAccelator!=null)
             acceleratorMap.remove(oldAccelator);
 
         // Register new accelerators
         if(accelerator!=null) {
-            primaryActionKeymap.put(mucoActionClass, accelerator);
-            acceleratorMap.put(accelerator, mucoActionClass);
+            primaryActionKeymap.put(muActionClass, accelerator);
+            acceleratorMap.put(accelerator, muActionClass);
         }
 
         if(alternateAccelerator!=null) {
-            alternateActionKeymap.put(mucoActionClass, alternateAccelerator);
-            acceleratorMap.put(alternateAccelerator, mucoActionClass);
+            alternateActionKeymap.put(muActionClass, alternateAccelerator);
+            acceleratorMap.put(alternateAccelerator, muActionClass);
         }
         
         // Update each MainFrame's action instance and input map
-        Vector actionInstances = ActionManager.getActionInstances(mucoActionClass);
+        Vector actionInstances = ActionManager.getActionInstances(muActionClass);
         int nbActionInstances = actionInstances.size();
         for(int i=0; i<nbActionInstances; i++) {
-            MucoAction action = (MucoAction)actionInstances.elementAt(i);
+            MuAction action = (MuAction)actionInstances.elementAt(i);
             MainFrame mainFrame = action.getMainFrame();
 
             // Remove action from MainFrame's action and input maps

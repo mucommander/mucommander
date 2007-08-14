@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class RunCommandAction extends MucoAction implements InvokesDialog {
+public class RunCommandAction extends MuAction implements InvokesDialog {
 
     public RunCommandAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

@@ -31,7 +31,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class GoForwardAction extends MucoAction implements ActivePanelListener, LocationListener {
+public class GoForwardAction extends MuAction implements ActivePanelListener, LocationListener {
 
     public GoForwardAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

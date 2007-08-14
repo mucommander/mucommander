@@ -30,7 +30,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class QuitAction extends MucoAction {
+public class QuitAction extends MuAction {
 
     public QuitAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

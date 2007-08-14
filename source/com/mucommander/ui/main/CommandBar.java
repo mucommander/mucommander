@@ -27,7 +27,7 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.MucoAction;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.xml.parser.ContentHandler;
@@ -178,7 +178,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
         int nbButtons = actions.length;
         buttons = new JButton[nbButtons];
         for(int i=0; i<nbButtons; i++) {
-            MucoAction action = ActionManager.getActionInstance(actions[i], mainFrame);
+            MuAction action = ActionManager.getActionInstance(actions[i], mainFrame);
             JButton button = new NonFocusableButton();
 
             setButtonAction(button, action);
@@ -197,7 +197,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
     /**
      * Sets the given button's action, custom label showing the accelerator, and icon taking into account the scale factor.
      */
-    private void setButtonAction(JButton button, MucoAction action) {
+    private void setButtonAction(JButton button, MuAction action) {
         button.setAction(action);
 
         // Append the action's shortcut to the button's label
@@ -267,7 +267,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
             for(int i=0; i<nbButtons; i++) {
                 JButton button = buttons[i];
                 // Change the button's icon but NOT the action's icon which has to remain in its original non-scaled size
-                button.setIcon(IconManager.getScaledIcon(((MucoAction)button.getAction()).getIcon(), scaleFactor));
+                button.setIcon(IconManager.getScaledIcon(((MuAction)button.getAction()).getIcon(), scaleFactor));
             }
         }
     }

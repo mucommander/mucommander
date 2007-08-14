@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class SwapFoldersAction extends MucoAction {
+public class SwapFoldersAction extends MuAction {
 
     public SwapFoldersAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

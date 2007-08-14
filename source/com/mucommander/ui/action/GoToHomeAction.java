@@ -29,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class GoToHomeAction extends MucoAction {
+public class GoToHomeAction extends MuAction {
 
     public GoToHomeAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

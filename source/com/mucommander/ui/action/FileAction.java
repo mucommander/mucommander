@@ -41,7 +41,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public abstract class FileAction extends MucoAction implements TableSelectionListener, ActivePanelListener {
+public abstract class FileAction extends MuAction implements TableSelectionListener, ActivePanelListener {
 
     /** Filter that restricts the enabled condition to files that match it (can be null) */
     protected FileFilter filter;

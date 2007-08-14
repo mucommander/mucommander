@@ -30,7 +30,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ToggleShowFoldersFirstAction extends MucoAction {
+public class ToggleShowFoldersFirstAction extends MuAction {
 
     public ToggleShowFoldersFirstAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

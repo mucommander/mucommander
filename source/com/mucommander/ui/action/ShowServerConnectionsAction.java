@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ShowServerConnectionsAction extends MucoAction implements InvokesDialog {
+public class ShowServerConnectionsAction extends MuAction implements InvokesDialog {
 
     public ShowServerConnectionsAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

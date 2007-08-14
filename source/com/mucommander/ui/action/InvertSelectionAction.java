@@ -30,7 +30,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class InvertSelectionAction extends MucoAction {
+public class InvertSelectionAction extends MuAction {
 
     public InvertSelectionAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

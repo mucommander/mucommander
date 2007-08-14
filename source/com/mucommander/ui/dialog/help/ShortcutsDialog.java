@@ -21,7 +21,7 @@ package com.mucommander.ui.dialog.help;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.MucoAction;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
@@ -218,25 +218,25 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     }
 
 
-    private void addShortcutList(XAlignedComponentPanel compPanel, Class mucoActionClasses[]) {
+    private void addShortcutList(XAlignedComponentPanel compPanel, Class muActionClasses[]) {
         // Add all actions shortcut and label (or tooltip if available)
-        int nbActions = mucoActionClasses.length;
-        MucoAction action;
+        int nbActions = muActionClasses.length;
+        MuAction action;
         KeyStroke shortcut;
         String shortcutsRep;
         String desc;
         for(int i=0; i<nbActions; i++) {
-            action = ActionManager.getActionInstance(mucoActionClasses[i], mainFrame);
+            action = ActionManager.getActionInstance(muActionClasses[i], mainFrame);
 
             shortcut = action.getAccelerator();
             if(shortcut==null)
                 continue;
 
-            shortcutsRep = MucoAction.getKeyStrokeRepresentation(shortcut);
+            shortcutsRep = MuAction.getKeyStrokeRepresentation(shortcut);
 
             shortcut = action.getAlternateAccelerator();
             if(shortcut!=null)
-                shortcutsRep += " / "+MucoAction.getKeyStrokeRepresentation(shortcut);
+                shortcutsRep += " / "+ MuAction.getKeyStrokeRepresentation(shortcut);
 
             desc = action.getToolTipText();
             if(desc==null)

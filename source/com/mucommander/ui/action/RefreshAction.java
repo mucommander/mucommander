@@ -27,7 +27,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class RefreshAction extends MucoAction {
+public class RefreshAction extends MuAction {
 
     public RefreshAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

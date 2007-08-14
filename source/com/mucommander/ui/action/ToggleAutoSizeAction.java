@@ -30,7 +30,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ToggleAutoSizeAction extends MucoAction {
+public class ToggleAutoSizeAction extends MuAction {
 
     public ToggleAutoSizeAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

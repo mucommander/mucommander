@@ -40,7 +40,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class PasteClipboardFilesAction extends MucoAction {
+public class PasteClipboardFilesAction extends MuAction {
 
     public PasteClipboardFilesAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

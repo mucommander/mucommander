@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class CheckForUpdatesAction extends MucoAction implements InvokesDialog {
+public class CheckForUpdatesAction extends MuAction implements InvokesDialog {
 
     public CheckForUpdatesAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

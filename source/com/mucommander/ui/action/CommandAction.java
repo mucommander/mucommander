@@ -36,7 +36,7 @@ import java.util.Hashtable;
 /**
  * @author Nicolas Rinaudo
  */
-public class CommandAction extends MucoAction {
+public class CommandAction extends MuAction {
     private Command command;
 
     public CommandAction(MainFrame mainFrame, Hashtable properties, Command command) {

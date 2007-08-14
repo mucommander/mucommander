@@ -108,7 +108,7 @@ public class TablePopupMenu extends JPopupMenu {
 
 
     /**
-     * Adds the specified MucoAction to this popup menu as a JMenuItem.
+     * Adds the specified MuAction to this popup menu as a JMenuItem.
      * <p>
      * No icon will be displayed, regardless of whether the action has one or not.
      * </p>
@@ -116,7 +116,7 @@ public class TablePopupMenu extends JPopupMenu {
      * If the action has a keyboard shortcut that conflicts with the menu's internal ones (enter, space and escape),
      * they will not be used.
      * </p>
-     * @param actionClass MucoAction Class instance
+     * @param actionClass MuAction Class instance
      */
     private void addAction(Class actionClass) {
         JMenuItem item;

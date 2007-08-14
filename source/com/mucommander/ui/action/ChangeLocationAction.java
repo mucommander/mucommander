@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ChangeLocationAction extends MucoAction {
+public class ChangeLocationAction extends MuAction {
 
     public ChangeLocationAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

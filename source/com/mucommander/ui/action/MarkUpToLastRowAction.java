@@ -32,7 +32,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class MarkUpToLastRowAction extends MucoAction {
+public class MarkUpToLastRowAction extends MuAction {
 
     public MarkUpToLastRowAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

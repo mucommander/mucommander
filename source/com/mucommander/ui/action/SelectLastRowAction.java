@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class SelectLastRowAction extends MucoAction {
+public class SelectLastRowAction extends MuAction {
 
     public SelectLastRowAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

@@ -35,7 +35,7 @@ import java.util.Vector;
  * @see com.mucommander.ui.main.WindowManager
  * @author Maxence Bernard
  */
-public class RecallWindowAction extends MucoAction implements PropertyChangeListener {
+public class RecallWindowAction extends MuAction implements PropertyChangeListener {
 
     public final static String WINDOW_NUMBER_PROPERTY_KEY = "window_number";
     

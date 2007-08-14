@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ShowPreferencesAction extends MucoAction implements InvokesDialog {
+public class ShowPreferencesAction extends MuAction implements InvokesDialog {
 
     public ShowPreferencesAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

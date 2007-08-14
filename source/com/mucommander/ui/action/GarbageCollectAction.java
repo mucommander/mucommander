@@ -27,7 +27,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class GarbageCollectAction extends MucoAction {
+public class GarbageCollectAction extends MuAction {
 
     public GarbageCollectAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

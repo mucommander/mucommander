@@ -32,7 +32,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class RevealInDesktopAction extends MucoAction {
+public class RevealInDesktopAction extends MuAction {
 
     public RevealInDesktopAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

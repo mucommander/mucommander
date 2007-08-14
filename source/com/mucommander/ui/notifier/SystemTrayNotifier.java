@@ -65,11 +65,11 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     }
 
     /**
-     * Creates and adds a menu item that triggers the MucoAction denoted by the given Class. The menu item's label
-     * is set to the value returned by {@link MucoAction#getLabel()}.
+     * Creates and adds a menu item that triggers the MuAction denoted by the given Class. The menu item's label
+     * is set to the value returned by {@link MuAction#getLabel()}.
      */
-    private void addMenuItem(Menu menu, Class mucoActionClass) {
-        MucoAction action = ActionManager.getActionInstance(mucoActionClass, WindowManager.getCurrentMainFrame());
+    private void addMenuItem(Menu menu, Class muActionClass) {
+        MuAction action = ActionManager.getActionInstance(muActionClass, WindowManager.getCurrentMainFrame());
         MenuItem menuItem = new MenuItem(action.getLabel());
         menuItem.addActionListener(new AWTActionProxy(action));
         menu.add(menuItem);

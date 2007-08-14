@@ -169,8 +169,8 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             if(actionClass==null)
                 addSeparator(SEPARATOR_DIMENSION);
             else {
-                // Get a MucoAction instance
-                MucoAction action = ActionManager.getActionInstance(actionClass, mainFrame);
+                // Get a MuAction instance
+                MuAction action = ActionManager.getActionInstance(actionClass, mainFrame);
                 // Do not add buttons for actions that do not have an icon
                 if(action.getIcon()!=null)
                     addButton(action);
@@ -182,7 +182,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     /**
      * Adds a button to this toolbar using the given action.
      */
-    private void addButton(MucoAction action) {
+    private void addButton(MuAction action) {
         JButton button;
 
         if(action instanceof GoBackAction || action instanceof GoForwardAction)
@@ -283,9 +283,9 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
      */
     private class HistoryPopupButton extends PopupButton {
 
-        private MucoAction action;
+        private MuAction action;
 
-        private HistoryPopupButton(MucoAction action) {
+        private HistoryPopupButton(MuAction action) {
             super(action);
             this.action = action;
         }

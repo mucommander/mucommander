@@ -29,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class EditBookmarksAction extends MucoAction implements InvokesDialog {
+public class EditBookmarksAction extends MuAction implements InvokesDialog {
 
     public EditBookmarksAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

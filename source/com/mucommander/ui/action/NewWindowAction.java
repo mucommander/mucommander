@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class NewWindowAction extends MucoAction {
+public class NewWindowAction extends MuAction {
 
     public NewWindowAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

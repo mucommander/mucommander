@@ -34,7 +34,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class OpenURLInBrowserAction extends MucoAction {
+public class OpenURLInBrowserAction extends MuAction {
 
     public final static String URL_PROPERTY_KEY = "url";
 

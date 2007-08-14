@@ -31,7 +31,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class EmptyTrashAction extends MucoAction {
+public class EmptyTrashAction extends MuAction {
 
     public EmptyTrashAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

@@ -27,7 +27,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class CloseWindowAction extends MucoAction {
+public class CloseWindowAction extends MuAction {
 
     public CloseWindowAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

@@ -34,7 +34,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class OpenLocationAction extends MucoAction {
+public class OpenLocationAction extends MuAction {
 
     private FileURL url;
     private AbstractFile file;

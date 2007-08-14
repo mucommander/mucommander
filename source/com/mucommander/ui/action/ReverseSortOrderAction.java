@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ReverseSortOrderAction extends MucoAction {
+public class ReverseSortOrderAction extends MuAction {
 
     public ReverseSortOrderAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

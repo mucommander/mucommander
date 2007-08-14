@@ -29,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class SortByPermissionsAction extends MucoAction {
+public class SortByPermissionsAction extends MuAction {
 
     public SortByPermissionsAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

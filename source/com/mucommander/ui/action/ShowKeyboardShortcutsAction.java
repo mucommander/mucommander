@@ -28,7 +28,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class ShowKeyboardShortcutsAction extends MucoAction {
+public class ShowKeyboardShortcutsAction extends MuAction {
 
     public ShowKeyboardShortcutsAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

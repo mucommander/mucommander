@@ -30,7 +30,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class CompareFoldersAction extends MucoAction {
+public class CompareFoldersAction extends MuAction {
 
     public CompareFoldersAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

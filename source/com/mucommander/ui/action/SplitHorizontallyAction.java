@@ -27,7 +27,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class SplitHorizontallyAction extends MucoAction {
+public class SplitHorizontallyAction extends MuAction {
 
     public SplitHorizontallyAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);

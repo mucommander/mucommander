@@ -29,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-public class SortByExtensionAction extends MucoAction {
+public class SortByExtensionAction extends MuAction {
 
     public SortByExtensionAction(MainFrame mainFrame, Hashtable properties) {
         super(mainFrame, properties);
