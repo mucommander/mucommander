@@ -22,8 +22,7 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileURL;
 import com.mucommander.file.util.ResourceLoader;
@@ -43,7 +42,6 @@ import java.awt.event.MouseListener;
 import java.io.*;
 import java.util.Hashtable;
 import java.util.Vector;
-
 
 /**
  * This class is the icon toolbar attached to a MainFrame, triggering events when buttons are clicked.
@@ -70,8 +68,8 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
 
     /** Current icon scale value */
-    private static float scaleFactor = ConfigurationManager.getVariable(ConfigurationVariables.TOOLBAR_ICON_SCALE,
-                                                                        ConfigurationVariables.DEFAULT_TOOLBAR_ICON_SCALE);
+    private static float scaleFactor = MuConfiguration.getVariable(MuConfiguration.TOOLBAR_ICON_SCALE,
+                                                                        MuConfiguration.DEFAULT_TOOLBAR_ICON_SCALE);
 
     /** Command bar actions: Class instances or null to signify a separator */
     private static Class actions[];
@@ -158,7 +156,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         addMouseListener(this);
 
         // Listen to configuration changes to reload toolbar buttons when icon size has changed
-        ConfigurationManager.addConfigurationListener(this);
+        MuConfiguration.addConfigurationListener(this);
 
         // Rollover-enable the button and hold a reference to the RolloverButtonAdapter instance so that it doesn't
         // get garbage-collected
@@ -225,7 +223,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         String var = event.getVariable();
 
         // Rescale buttons icon
-        if (var.equals(ConfigurationVariables.TOOLBAR_ICON_SCALE)) {
+        if (var.equals(MuConfiguration.TOOLBAR_ICON_SCALE)) {
             scaleFactor = event.getFloatValue();
             Component components[] = getComponents();
             int nbComponents = components.length;

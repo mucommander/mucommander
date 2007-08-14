@@ -20,8 +20,7 @@ package com.mucommander.ui.main.table;
 
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.CachedFile;
 import com.mucommander.file.util.FileComparator;
@@ -63,13 +62,13 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
 
     private int sortByCriterion = NAME;
     private boolean ascendingOrder = false;
-	private boolean foldersFirst = ConfigurationManager.getVariable(ConfigurationVariables.SHOW_FOLDERS_FIRST, ConfigurationVariables.DEFAULT_SHOW_FOLDERS_FIRST);
+	private boolean foldersFirst = MuConfiguration.getVariable(MuConfiguration.SHOW_FOLDERS_FIRST, MuConfiguration.DEFAULT_SHOW_FOLDERS_FIRST);
 
     /** True if name column temporarily editable */
     private boolean nameColumnEditable;
 
-    private static boolean displayCompactSize = ConfigurationManager.getVariable(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE,
-                                                                                 ConfigurationVariables.DEFAULT_DISPLAY_COMPACT_FILE_SIZE);
+    private static boolean displayCompactSize = MuConfiguration.getVariable(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE,
+                                                                                 MuConfiguration.DEFAULT_DISPLAY_COMPACT_FILE_SIZE);
     /** String used as size information for directories */
     public final static String DIRECTORY_SIZE_STRING = "<DIR>";
 
@@ -81,7 +80,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
 
 
     public FileTableModel() {
-        ConfigurationManager.addConfigurationListener(this);
+        MuConfiguration.addConfigurationListener(this);
 
         // Arrays init to avoid NullPointerExcepions until setCurrentFolder()
         // gets called for the first time
@@ -610,7 +609,7 @@ public class FileTableModel extends AbstractTableModel implements Columns, Confi
     public synchronized void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 		
-        if (var.equals(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE))
+        if (var.equals(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE))
             displayCompactSize = event.getBooleanValue();
     }
 }

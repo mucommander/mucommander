@@ -19,8 +19,7 @@
 package com.mucommander.text;
 
 import com.mucommander.Debug;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.util.ResourceLoader;
 
 import java.io.*;
@@ -71,7 +70,7 @@ public class Translator {
      * defined by {@link #DEFAULT_LANGUAGE} will be used.
      */
     private static void determineCurrentLanguage(Vector availableLanguages) {
-        String lang = ConfigurationManager.getVariable(ConfigurationVariables.LANGUAGE);
+        String lang = MuConfiguration.getVariable(MuConfiguration.LANGUAGE);
 
         if(lang==null) {
             // language is not set in preferences, use system's language
@@ -108,7 +107,7 @@ public class Translator {
         }
 		
         // Set preferred language in configuration file
-        ConfigurationManager.setVariable(ConfigurationVariables.LANGUAGE, Translator.language);
+        MuConfiguration.setVariable(MuConfiguration.LANGUAGE, Translator.language);
 
         if(com.mucommander.Debug.ON) com.mucommander.Debug.trace("Current language has been set to "+Translator.language);
     }

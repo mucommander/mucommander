@@ -16,11 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.job;
 
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.MimeTypes;
 import com.mucommander.file.util.FileSet;
@@ -92,9 +90,9 @@ public class SendMailJob extends TransferFileJob {
         this.mailSubject = mailSubject;
         this.mailBody = mailBody+"\n\n"+"Sent by muCommander - http://www.mucommander.com\n";
 
-        this.mailServer = ConfigurationManager.getVariable(ConfigurationVariables.SMTP_SERVER);
-        this.fromName = ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_NAME);
-        this.fromAddress = ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_ADDRESS);
+        this.mailServer = MuConfiguration.getVariable(MuConfiguration.SMTP_SERVER);
+        this.fromName = MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_NAME);
+        this.fromAddress = MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_ADDRESS);
     
         this.errorDialogTitle = Translator.get("email_dialog.error_title");
     }
@@ -103,9 +101,9 @@ public class SendMailJob extends TransferFileJob {
      * Returns true if mail preferences have been set.
      */
     public static boolean mailPreferencesSet() {
-        return ConfigurationManager.isVariableSet(ConfigurationVariables.SMTP_SERVER)
-            && ConfigurationManager.isVariableSet(ConfigurationVariables.MAIL_SENDER_NAME)
-            && ConfigurationManager.isVariableSet(ConfigurationVariables.MAIL_SENDER_ADDRESS);
+        return MuConfiguration.isVariableSet(MuConfiguration.SMTP_SERVER)
+            && MuConfiguration.isVariableSet(MuConfiguration.MAIL_SENDER_NAME)
+            && MuConfiguration.isVariableSet(MuConfiguration.MAIL_SENDER_ADDRESS);
     }
 
 

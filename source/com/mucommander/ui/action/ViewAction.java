@@ -22,8 +22,7 @@ import com.mucommander.command.Command;
 import com.mucommander.command.CommandParser;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
@@ -68,8 +67,8 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
 
 
         // Initialises configuration.
-        useCustomViewer = ConfigurationManager.getVariable(ConfigurationVariables.USE_CUSTOM_VIEWER, ConfigurationVariables.DEFAULT_USE_CUSTOM_VIEWER);
-        setCustomViewer(ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_VIEWER));
+        useCustomViewer = MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_VIEWER, MuConfiguration.DEFAULT_USE_CUSTOM_VIEWER);
+        setCustomViewer(MuConfiguration.getVariable(MuConfiguration.CUSTOM_VIEWER));
     }
 
 
@@ -115,10 +114,10 @@ public class ViewAction extends InternalViewAction implements ConfigurationListe
      */
     public synchronized void configurationChanged(ConfigurationEvent event) {
         // Updates useCustomViewer.
-        if(event.getVariable().equals(ConfigurationVariables.USE_CUSTOM_VIEWER))
+        if(event.getVariable().equals(MuConfiguration.USE_CUSTOM_VIEWER))
             useCustomViewer = event.getBooleanValue();
         // Updates customViewer.
-        else if(event.getVariable().equals(ConfigurationVariables.CUSTOM_VIEWER))
+        else if(event.getVariable().equals(MuConfiguration.CUSTOM_VIEWER))
             setCustomViewer(event.getValue());
     }
 

@@ -22,8 +22,7 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.MoveJob;
@@ -128,7 +127,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     private boolean autoSizeColumnsEnabled;
 
     /** Should folders be displayed first, or mixed with regular files */
-    private boolean showFoldersFirst = ConfigurationManager.getVariable(ConfigurationVariables.SHOW_FOLDERS_FIRST, ConfigurationVariables.DEFAULT_SHOW_FOLDERS_FIRST);
+    private boolean showFoldersFirst = MuConfiguration.getVariable(MuConfiguration.SHOW_FOLDERS_FIRST, MuConfiguration.DEFAULT_SHOW_FOLDERS_FIRST);
 
     //	/** Editor component's height */
     //	private int editorRowHeight;
@@ -251,7 +250,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
         column.setMinWidth(0);
 
         // Turn on auto columns sizing if enabled
-        this.autoSizeColumnsEnabled = ConfigurationManager.getVariable(ConfigurationVariables.AUTO_SIZE_COLUMNS, ConfigurationVariables.DEFAULT_AUTO_SIZE_COLUMNS);
+        this.autoSizeColumnsEnabled = MuConfiguration.getVariable(MuConfiguration.AUTO_SIZE_COLUMNS, MuConfiguration.DEFAULT_AUTO_SIZE_COLUMNS);
         if(autoSizeColumnsEnabled)
             setAutoSizeColumnsEnabled(true);
 
@@ -259,7 +258,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
         setRowHeight();
 
         // Monitor some configuration variables
-        ConfigurationManager.addConfigurationListener(this);
+        MuConfiguration.addConfigurationListener(this);
 
         // Listen to focus gain/lost events
         addFocusListener(this);
@@ -1354,11 +1353,11 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
     public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
-        if (var.equals(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE) || var.equals(ConfigurationVariables.DATE_FORMAT) ||
-                 var.equals(ConfigurationVariables.DATE_SEPARATOR) || var.equals(ConfigurationVariables.TIME_FORMAT)) {
+        if (var.equals(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE) || var.equals(MuConfiguration.DATE_FORMAT) ||
+                 var.equals(MuConfiguration.DATE_SEPARATOR) || var.equals(MuConfiguration.TIME_FORMAT)) {
             // Note: for the update to work properly, CustomDateFormat's configurationChanged() method has to be called
             // before FileTable's, so that CustomDateFormat gets notified of date format first.
-            // Since listeners are stored by ConfigurationManager in a hash map, order is pretty much random.
+            // Since listeners are stored by MuConfiguration in a hash map, order is pretty much random.
             // So CustomDateFormat#updateDateFormat() has to be called before to ensure that is uses the new date format.
             CustomDateFormat.updateDateFormat();
             tableModel.fillCellCache();
@@ -1371,7 +1370,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
                 repaint();
         }
         // Repaint file icons if their size has changed
-        else if (var.equals(ConfigurationVariables.TABLE_ICON_SCALE)) {
+        else if (var.equals(MuConfiguration.TABLE_ICON_SCALE)) {
             // Recalculate columns' width
             if(autoSizeColumnsEnabled)
                 setMaxColumnsWidth();
@@ -1380,7 +1379,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
             setRowHeight();
         }
         // Repaint file icons if the system file icons policy has changed
-        else if (var.equals(ConfigurationVariables.USE_SYSTEM_FILE_ICONS))
+        else if (var.equals(MuConfiguration.USE_SYSTEM_FILE_ICONS))
             repaint();
     }
 

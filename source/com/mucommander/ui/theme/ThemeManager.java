@@ -21,8 +21,7 @@ package com.mucommander.ui.theme;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
@@ -34,8 +33,8 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 
-
 /**
+ * Offers methods for accessing and modifying themes.
  * @author Nicolas Rinaudo
  */
 public class ThemeManager {
@@ -95,13 +94,13 @@ public class ThemeManager {
         catch(IOException e) {if(Debug.ON) Debug.trace("Failed to import legacy theme: " + e);}
 
         // Loads the current theme type as defined in configuration.
-        try {type = getThemeTypeFromLabel(ConfigurationManager.getVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.DEFAULT_THEME_TYPE));}
-        catch(Exception e) {type = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);}
+        try {type = getThemeTypeFromLabel(MuConfiguration.getVariable(MuConfiguration.THEME_TYPE, MuConfiguration.DEFAULT_THEME_TYPE));}
+        catch(Exception e) {type = getThemeTypeFromLabel(MuConfiguration.DEFAULT_THEME_TYPE);}
 
         // Loads the current theme name as defined in configuration.
         if(type != Theme.USER_THEME) {
             wasUserThemeLoaded = false;
-            name               = ConfigurationManager.getVariable(ConfigurationVariables.THEME_NAME, ConfigurationVariables.DEFAULT_THEME_NAME);
+            name               = MuConfiguration.getVariable(MuConfiguration.THEME_NAME, MuConfiguration.DEFAULT_THEME_NAME);
 	}
         else {
             name               = null;
@@ -112,8 +111,8 @@ public class ThemeManager {
         currentTheme = null;
         try {currentTheme = readTheme(type, name);}
         catch(Exception e1) {
-            type = getThemeTypeFromLabel(ConfigurationVariables.DEFAULT_THEME_TYPE);
-            name = ConfigurationVariables.DEFAULT_THEME_NAME;
+            type = getThemeTypeFromLabel(MuConfiguration.DEFAULT_THEME_TYPE);
+            name = MuConfiguration.DEFAULT_THEME_NAME;
 
             if(type == Theme.USER_THEME)
                 wasUserThemeLoaded = true;
@@ -800,20 +799,20 @@ public class ThemeManager {
         switch(type) {
             // User defined theme.
         case Theme.USER_THEME:
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_USER);
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, null);
+            MuConfiguration.setVariable(MuConfiguration.THEME_TYPE, MuConfiguration.THEME_USER);
+            MuConfiguration.setVariable(MuConfiguration.THEME_NAME, null);
             break;
 
             // Predefined themes.
         case Theme.PREDEFINED_THEME:
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_PREDEFINED);
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, name);
+            MuConfiguration.setVariable(MuConfiguration.THEME_TYPE, MuConfiguration.THEME_PREDEFINED);
+            MuConfiguration.setVariable(MuConfiguration.THEME_NAME, name);
             break;
 
             // Custom themes.
         case Theme.CUSTOM_THEME:
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_TYPE, ConfigurationVariables.THEME_CUSTOM);
-            ConfigurationManager.setVariable(ConfigurationVariables.THEME_NAME, name);
+            MuConfiguration.setVariable(MuConfiguration.THEME_TYPE, MuConfiguration.THEME_CUSTOM);
+            MuConfiguration.setVariable(MuConfiguration.THEME_NAME, name);
             break;
 
             // Error.
@@ -1094,42 +1093,42 @@ public class ThemeManager {
         ThemeData legacyData; // Data for the new user theme.
 
         // Gathers legacy theme information.
-        backgroundColor      = ConfigurationManager.getVariable(LegacyTheme.BACKGROUND_COLOR);
-        fileColor            = ConfigurationManager.getVariable(LegacyTheme.PLAIN_FILE_COLOR);
-        hiddenColor          = ConfigurationManager.getVariable(LegacyTheme.HIDDEN_FILE_COLOR);
-        folderColor          = ConfigurationManager.getVariable(LegacyTheme.FOLDER_COLOR);
-        archiveColor         = ConfigurationManager.getVariable(LegacyTheme.ARCHIVE_FILE_COLOR);
-        symlinkColor         = ConfigurationManager.getVariable(LegacyTheme.SYMLINK_COLOR);
-        markedColor          = ConfigurationManager.getVariable(LegacyTheme.MARKED_FILE_COLOR);
-        selectedColor        = ConfigurationManager.getVariable(LegacyTheme.SELECTED_FILE_COLOR);
-        selectionColor       = ConfigurationManager.getVariable(LegacyTheme.SELECTION_BACKGROUND_COLOR);
-        unfocusedColor       = ConfigurationManager.getVariable(LegacyTheme.OUT_OF_FOCUS_COLOR);
-        shellBackgroundColor = ConfigurationManager.getVariable(LegacyTheme.SHELL_BACKGROUND_COLOR);
-        shellSelectionColor  = ConfigurationManager.getVariable(LegacyTheme.SHELL_SELECTION_COLOR);
-        shellTextColor       = ConfigurationManager.getVariable(LegacyTheme.SHELL_TEXT_COLOR);
-        fontFamily           = ConfigurationManager.getVariable(LegacyTheme.FONT_FAMILY);
-        fontSize             = ConfigurationManager.getVariable(LegacyTheme.FONT_SIZE);
-        fontStyle            = ConfigurationManager.getVariable(LegacyTheme.FONT_STYLE);
+        backgroundColor      = MuConfiguration.getVariable(LegacyTheme.BACKGROUND_COLOR);
+        fileColor            = MuConfiguration.getVariable(LegacyTheme.PLAIN_FILE_COLOR);
+        hiddenColor          = MuConfiguration.getVariable(LegacyTheme.HIDDEN_FILE_COLOR);
+        folderColor          = MuConfiguration.getVariable(LegacyTheme.FOLDER_COLOR);
+        archiveColor         = MuConfiguration.getVariable(LegacyTheme.ARCHIVE_FILE_COLOR);
+        symlinkColor         = MuConfiguration.getVariable(LegacyTheme.SYMLINK_COLOR);
+        markedColor          = MuConfiguration.getVariable(LegacyTheme.MARKED_FILE_COLOR);
+        selectedColor        = MuConfiguration.getVariable(LegacyTheme.SELECTED_FILE_COLOR);
+        selectionColor       = MuConfiguration.getVariable(LegacyTheme.SELECTION_BACKGROUND_COLOR);
+        unfocusedColor       = MuConfiguration.getVariable(LegacyTheme.OUT_OF_FOCUS_COLOR);
+        shellBackgroundColor = MuConfiguration.getVariable(LegacyTheme.SHELL_BACKGROUND_COLOR);
+        shellSelectionColor  = MuConfiguration.getVariable(LegacyTheme.SHELL_SELECTION_COLOR);
+        shellTextColor       = MuConfiguration.getVariable(LegacyTheme.SHELL_TEXT_COLOR);
+        fontFamily           = MuConfiguration.getVariable(LegacyTheme.FONT_FAMILY);
+        fontSize             = MuConfiguration.getVariable(LegacyTheme.FONT_SIZE);
+        fontStyle            = MuConfiguration.getVariable(LegacyTheme.FONT_STYLE);
 
         // Clears the configuration of the legacy theme data.
         // This is not strictly necessary, but why waste perfectly good memory and
         // hard drive space with values that are never going to be used?
-        ConfigurationManager.setVariable(LegacyTheme.BACKGROUND_COLOR,           null);
-        ConfigurationManager.setVariable(LegacyTheme.PLAIN_FILE_COLOR,           null);
-        ConfigurationManager.setVariable(LegacyTheme.HIDDEN_FILE_COLOR,          null);
-        ConfigurationManager.setVariable(LegacyTheme.FOLDER_COLOR,               null);
-        ConfigurationManager.setVariable(LegacyTheme.ARCHIVE_FILE_COLOR,         null);
-        ConfigurationManager.setVariable(LegacyTheme.SYMLINK_COLOR,              null);
-        ConfigurationManager.setVariable(LegacyTheme.MARKED_FILE_COLOR,          null);
-        ConfigurationManager.setVariable(LegacyTheme.SELECTED_FILE_COLOR,        null);
-        ConfigurationManager.setVariable(LegacyTheme.SELECTION_BACKGROUND_COLOR, null);
-        ConfigurationManager.setVariable(LegacyTheme.OUT_OF_FOCUS_COLOR,         null);
-        ConfigurationManager.setVariable(LegacyTheme.SHELL_BACKGROUND_COLOR,     null);
-        ConfigurationManager.setVariable(LegacyTheme.SHELL_SELECTION_COLOR,      null);
-        ConfigurationManager.setVariable(LegacyTheme.SHELL_TEXT_COLOR,           null);
-        ConfigurationManager.setVariable(LegacyTheme.FONT_FAMILY,                null);
-        ConfigurationManager.setVariable(LegacyTheme.FONT_SIZE,                  null);
-        ConfigurationManager.setVariable(LegacyTheme.FONT_STYLE,                 null);
+        MuConfiguration.setVariable(LegacyTheme.BACKGROUND_COLOR,           null);
+        MuConfiguration.setVariable(LegacyTheme.PLAIN_FILE_COLOR,           null);
+        MuConfiguration.setVariable(LegacyTheme.HIDDEN_FILE_COLOR,          null);
+        MuConfiguration.setVariable(LegacyTheme.FOLDER_COLOR,               null);
+        MuConfiguration.setVariable(LegacyTheme.ARCHIVE_FILE_COLOR,         null);
+        MuConfiguration.setVariable(LegacyTheme.SYMLINK_COLOR,              null);
+        MuConfiguration.setVariable(LegacyTheme.MARKED_FILE_COLOR,          null);
+        MuConfiguration.setVariable(LegacyTheme.SELECTED_FILE_COLOR,        null);
+        MuConfiguration.setVariable(LegacyTheme.SELECTION_BACKGROUND_COLOR, null);
+        MuConfiguration.setVariable(LegacyTheme.OUT_OF_FOCUS_COLOR,         null);
+        MuConfiguration.setVariable(LegacyTheme.SHELL_BACKGROUND_COLOR,     null);
+        MuConfiguration.setVariable(LegacyTheme.SHELL_SELECTION_COLOR,      null);
+        MuConfiguration.setVariable(LegacyTheme.SHELL_TEXT_COLOR,           null);
+        MuConfiguration.setVariable(LegacyTheme.FONT_FAMILY,                null);
+        MuConfiguration.setVariable(LegacyTheme.FONT_SIZE,                  null);
+        MuConfiguration.setVariable(LegacyTheme.FONT_STYLE,                 null);
 
         // If no legacy theme information could be found, aborts import.
         if(backgroundColor == null && fileColor == null && hiddenColor == null && folderColor == null && archiveColor == null &&
@@ -1330,15 +1329,15 @@ public class ThemeManager {
     // -----------------------------------------------------------------------------------
     /**
      * Returns a valid type identifier from the specified configuration type definition.
-     * @param  label label of the theme type as defined in {@link com.mucommander.conf.ConfigurationVariables}.
+     * @param  label label of the theme type as defined in {@link com.mucommander.conf.MuConfiguration}.
      * @return       a valid theme type identifier.
      */
     private static int getThemeTypeFromLabel(String label) {
-        if(label.equals(ConfigurationVariables.THEME_USER))
+        if(label.equals(MuConfiguration.THEME_USER))
             return Theme.USER_THEME;
-        else if(label.equals(ConfigurationVariables.THEME_PREDEFINED))
+        else if(label.equals(MuConfiguration.THEME_PREDEFINED))
             return Theme.PREDEFINED_THEME;
-        else if(label.equals(ConfigurationVariables.THEME_CUSTOM))
+        else if(label.equals(MuConfiguration.THEME_CUSTOM))
             return Theme.CUSTOM_THEME;
         throw new IllegalStateException("Unknown theme type: " + label);
     }

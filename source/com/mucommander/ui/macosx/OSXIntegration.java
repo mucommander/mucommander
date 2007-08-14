@@ -16,17 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.macosx;
 
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.about.AboutDialog;
 import com.mucommander.ui.dialog.shutdown.QuitDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
-
 
 /**
  * This class handles Mac OS X specifics when muCommander is started:
@@ -48,13 +45,13 @@ public class OSXIntegration {
         //  "Allows you to display your main windows with the 'textured' Aqua window appearance.
         //   This property should be applied only to the primary application window,
         //   and should not affect supporting windows like dialogs or preference windows."
-        System.setProperty("apple.awt.brushMetalLook", ""+ConfigurationManager.getVariable(ConfigurationVariables.USE_BRUSHED_METAL,
-                                                                                           ConfigurationVariables.DEFAULT_USE_BRUSHED_METAL));
+        System.setProperty("apple.awt.brushMetalLook", ""+MuConfiguration.getVariable(MuConfiguration.USE_BRUSHED_METAL,
+                                                                                           MuConfiguration.DEFAULT_USE_BRUSHED_METAL));
 
         // Enables/Disables screen menu bar (default is on) :
         //  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."
-        System.setProperty("apple.laf.useScreenMenuBar", ""+ConfigurationManager.getVariable(ConfigurationVariables.USE_SCREEN_MENU_BAR,
-                                                                                             ConfigurationVariables.DEFAULT_USE_SCREEN_MENU_BAR));
+        System.setProperty("apple.laf.useScreenMenuBar", ""+MuConfiguration.getVariable(MuConfiguration.USE_SCREEN_MENU_BAR,
+                                                                                             MuConfiguration.DEFAULT_USE_SCREEN_MENU_BAR));
 
         // Catch 'About', 'Preferences' and 'Quit' events
         new EAWTHandler();

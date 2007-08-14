@@ -25,8 +25,7 @@ import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.FileURL;
@@ -94,7 +93,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         BookmarkManager.addBookmarkListener(this);
 
         // Listen to configuration changes to update the drive if the system file icons policy has changed 
-        ConfigurationManager.addConfigurationListener(this);
+        MuConfiguration.addConfigurationListener(this);
     }
 
     public Dimension getPreferredSize() {
@@ -289,7 +288,7 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         String var = event.getVariable();
 
         // Update the button's icon if the system file icons policy has changed
-        if (var.equals(ConfigurationVariables.USE_SYSTEM_FILE_ICONS))
+        if (var.equals(MuConfiguration.USE_SYSTEM_FILE_ICONS))
             updateButton();
     }
 }

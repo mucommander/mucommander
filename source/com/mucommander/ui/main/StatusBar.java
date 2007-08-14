@@ -20,8 +20,7 @@ package com.mucommander.ui.main;
 
 import com.mucommander.PlatformManager;
 import com.mucommander.cache.LRUCache;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.impl.local.LocalFile;
@@ -127,7 +126,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         // Show/hide this status bar based on user preferences
         // Note: setVisible has to be called even with true for the auto-update thread to be initialized
-        setVisible(ConfigurationManager.getVariable(ConfigurationVariables.STATUS_BAR_VISIBLE, ConfigurationVariables.DEFAULT_STATUS_BAR_VISIBLE));
+        setVisible(MuConfiguration.getVariable(MuConfiguration.STATUS_BAR_VISIBLE, MuConfiguration.DEFAULT_STATUS_BAR_VISIBLE));
         
         // Catch location events to update status bar info when folder is changed
         FolderPanel folderPanel1 = mainFrame.getFolderPanel1();
@@ -204,8 +203,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         else
             nbSelectedFiles = nbMarkedFiles;
 
-        boolean compactFileSize = ConfigurationManager.getVariable(ConfigurationVariables.DISPLAY_COMPACT_FILE_SIZE,
-                                                                   ConfigurationVariables.DEFAULT_DISPLAY_COMPACT_FILE_SIZE);
+        boolean compactFileSize = MuConfiguration.getVariable(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE,
+                                                                   MuConfiguration.DEFAULT_DISPLAY_COMPACT_FILE_SIZE);
         String filesInfo;
 		
         if(fileCount==0) {

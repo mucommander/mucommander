@@ -22,8 +22,7 @@ import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
@@ -43,7 +42,6 @@ import java.awt.event.MouseListener;
 import java.io.*;
 import java.util.Hashtable;
 import java.util.Vector;
-
 
 /**
  * CommandBar is the button bar that sits at the bottom of the main window and provides access to
@@ -74,8 +72,8 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
 
 
     /** Current icon scale factor */
-    private static float scaleFactor = ConfigurationManager.getVariable(ConfigurationVariables.COMMAND_BAR_ICON_SCALE,
-                                                                        ConfigurationVariables.DEFAULT_COMMAND_BAR_ICON_SCALE);
+    private static float scaleFactor = MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_ICON_SCALE,
+                                                                        MuConfiguration.DEFAULT_COMMAND_BAR_ICON_SCALE);
 
 
     /** Command bar actions */
@@ -174,7 +172,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
         addMouseListener(this);
 
         // Listen to configuration changes to reload command bar buttons when icon size has changed
-        ConfigurationManager.addConfigurationListener(this);
+        MuConfiguration.addConfigurationListener(this);
 
         // Create buttons and add them to this command bar
         int nbButtons = actions.length;
@@ -262,7 +260,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
         String var = event.getVariable();
 
         // Reload butons icon if the icon scale factor has changed
-        if (var.equals(ConfigurationVariables.COMMAND_BAR_ICON_SCALE)) {
+        if (var.equals(MuConfiguration.COMMAND_BAR_ICON_SCALE)) {
             scaleFactor = event.getFloatValue();
 
             int nbButtons = buttons.length;

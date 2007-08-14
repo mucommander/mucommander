@@ -23,8 +23,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.cache.LRUCache;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ar.ArArchiveFile;
@@ -79,8 +78,8 @@ public abstract class FileFactory {
     private static ArchiveFormatMapping archiveFormatMappings[];
 
     /** Static LRUCache instance that caches frequently accessed AbstractFile instances */
-    private static LRUCache fileCache = LRUCache.createInstance(ConfigurationManager.getVariable(ConfigurationVariables.FILE_CACHE_CAPACITY,
-                                                                                                 ConfigurationVariables.DEFAULT_FILE_CACHE_CAPACITY));
+    private static LRUCache fileCache = LRUCache.createInstance(MuConfiguration.getVariable(MuConfiguration.FILE_CACHE_CAPACITY,
+                                                                                                 MuConfiguration.DEFAULT_FILE_CACHE_CAPACITY));
 
 private static WeakHashMap archiveFileCache = new WeakHashMap();
 

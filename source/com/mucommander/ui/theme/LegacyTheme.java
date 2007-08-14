@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.theme;
 
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 
 /**
  * Defines older muCommander versions' way of managing themes.

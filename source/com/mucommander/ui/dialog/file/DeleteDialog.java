@@ -16,11 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractArchiveFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.AbstractTrash;
@@ -76,9 +74,9 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
         AbstractTrash trash = FileFactory.getTrash();
         AbstractFile baseFolder = files.getBaseFolder();
         if(trash!=null && !(baseFolder instanceof AbstractArchiveFile) && !trash.isTrashFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
-            moveToTrash = ConfigurationManager.getVariable(
-                        ConfigurationVariables.DELETE_TO_TRASH,
-                        ConfigurationVariables.DEFAULT_DELETE_TO_TRASH);
+            moveToTrash = MuConfiguration.getVariable(
+                        MuConfiguration.DELETE_TO_TRASH,
+                        MuConfiguration.DEFAULT_DELETE_TO_TRASH);
 
             moveToTrashCheckBox = new JCheckBox(Translator.get("delete_dialog.move_to_trash.option"), moveToTrash);
             moveToTrashCheckBox.addItemListener(this);
@@ -102,7 +100,7 @@ public class DeleteDialog extends QuestionDialog implements ItemListener {
         if(getActionValue()==DELETE_ACTION) {
             if(moveToTrashCheckBox!=null) {
                 // Save the 'Move to trash' option choice in the preferences, will be used next time this dialog is invoked.
-                ConfigurationManager.setVariable(ConfigurationVariables.DELETE_TO_TRASH, moveToTrash);
+                MuConfiguration.setVariable(MuConfiguration.DELETE_TO_TRASH, moveToTrash);
             }
 
             // Starts deleting files

@@ -25,8 +25,7 @@ import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.MappedCredentials;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.AndFileFilter;
 import com.mucommander.file.filter.DSStoreFileFilter;
@@ -146,15 +145,15 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         chainedFileFilter = new AndFileFilter();
 
         // Filters out hidden files, null when 'show hidden files' option is enabled
-        if(!ConfigurationManager.getVariable(ConfigurationVariables.SHOW_HIDDEN_FILES, ConfigurationVariables.DEFAULT_SHOW_HIDDEN_FILES))
+        if(!MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES))
             chainedFileFilter.addFileFilter(new HiddenFileFilter());
 
         // Filters out Mac OS X .DS_Store files, null when 'show DS_Store files' option is enabled
-        if(!ConfigurationManager.getVariable(ConfigurationVariables.SHOW_DS_STORE_FILES, ConfigurationVariables.DEFAULT_SHOW_DS_STORE_FILES))
+        if(!MuConfiguration.getVariable(MuConfiguration.SHOW_DS_STORE_FILES, MuConfiguration.DEFAULT_SHOW_DS_STORE_FILES))
             chainedFileFilter.addFileFilter(new DSStoreFileFilter());
 
         /** Filters out Mac OS X system folders, null when 'show system folders' option is enabled */
-        if(!ConfigurationManager.getVariable(ConfigurationVariables.SHOW_SYSTEM_FOLDERS, ConfigurationVariables.DEFAULT_SHOW_SYSTEM_FOLDERS))
+        if(!MuConfiguration.getVariable(MuConfiguration.SHOW_SYSTEM_FOLDERS, MuConfiguration.DEFAULT_SHOW_SYSTEM_FOLDERS))
             chainedFileFilter.addFileFilter(new SystemFileFilter());
 
         try {
@@ -210,7 +209,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
         add(scrollPane, BorderLayout.CENTER);
 
         // Listens to some configuration variables
-        ConfigurationManager.addConfigurationListener(this);
+        MuConfiguration.addConfigurationListener(this);
         ThemeManager.addCurrentThemeListener(this);
 
         // Listen to focus event in order to notify MainFrame of changes of the current active panel/table
@@ -583,21 +582,21 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
     	String var = event.getVariable();
 
         // Show or hide hidden files
-        if (var.equals(ConfigurationVariables.SHOW_HIDDEN_FILES)) {
+        if (var.equals(MuConfiguration.SHOW_HIDDEN_FILES)) {
             if(event.getBooleanValue())
                 removeFileFilter(HiddenFileFilter.class);
             else
                 chainedFileFilter.addFileFilter(new HiddenFileFilter());
         }
         // Show or hide .DS_Store files (Mac OS X option)
-        else if (var.equals(ConfigurationVariables.SHOW_DS_STORE_FILES)) {
+        else if (var.equals(MuConfiguration.SHOW_DS_STORE_FILES)) {
             if(event.getBooleanValue())
                 removeFileFilter(DSStoreFileFilter.class);
             else
                 chainedFileFilter.addFileFilter(new DSStoreFileFilter());
         }
         // Show or hide system folders (Mac OS X option)
-        else if (var.equals(ConfigurationVariables.SHOW_SYSTEM_FOLDERS)) {
+        else if (var.equals(MuConfiguration.SHOW_SYSTEM_FOLDERS)) {
             if(event.getBooleanValue())
                 removeFileFilter(SystemFileFilter.class);
             else
@@ -667,7 +666,7 @@ public class FolderPanel extends JPanel implements FocusListener, ConfigurationL
          * the preferences.
          */
         private boolean followCanonicalPath(AbstractFile file) {
-            if(ConfigurationManager.getVariable(ConfigurationVariables.CD_FOLLOWS_SYMLINKS, ConfigurationVariables.DEFAULT_CD_FOLLOWS_SYMLINKS)
+            if(MuConfiguration.getVariable(MuConfiguration.CD_FOLLOWS_SYMLINKS, MuConfiguration.DEFAULT_CD_FOLLOWS_SYMLINKS)
                     || file.getURL().getProtocol().equals(FileProtocols.HTTP) && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false)))
                 return true;
 

@@ -22,8 +22,7 @@ import com.mucommander.command.Command;
 import com.mucommander.command.CommandParser;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
@@ -67,8 +66,8 @@ public class EditAction extends InternalEditAction implements ConfigurationListe
             setIcon(IconManager.getIcon(iconPath));
 
         // Initialises configuration.
-        useCustomEditor = ConfigurationManager.getVariable(ConfigurationVariables.USE_CUSTOM_EDITOR, ConfigurationVariables.DEFAULT_USE_CUSTOM_EDITOR);
-        setCustomEditor(ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_EDITOR));
+        useCustomEditor = MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_EDITOR, MuConfiguration.DEFAULT_USE_CUSTOM_EDITOR);
+        setCustomEditor(MuConfiguration.getVariable(MuConfiguration.CUSTOM_EDITOR));
     }
 
 
@@ -114,10 +113,10 @@ public class EditAction extends InternalEditAction implements ConfigurationListe
      */
     public synchronized void configurationChanged(ConfigurationEvent event) {
         // Updates useCustomEditor.
-        if(event.getVariable().equals(ConfigurationVariables.USE_CUSTOM_EDITOR))
+        if(event.getVariable().equals(MuConfiguration.USE_CUSTOM_EDITOR))
             useCustomEditor = event.getBooleanValue();
         // Updates customEditor.
-        else if(event.getVariable().equals(ConfigurationVariables.CUSTOM_EDITOR))
+        else if(event.getVariable().equals(MuConfiguration.CUSTOM_EDITOR))
             setCustomEditor(event.getValue());
     }
 

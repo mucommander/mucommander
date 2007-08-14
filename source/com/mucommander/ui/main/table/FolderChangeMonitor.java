@@ -19,8 +19,7 @@
 package com.mucommander.ui.main.table;
 
 import com.mucommander.Debug;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -100,10 +99,10 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         instances = new Vector();
 
         // Retrieve configuration values
-        checkPeriod = ConfigurationManager.getVariable(ConfigurationVariables.REFRESH_CHECK_PERIOD,
-                                                       ConfigurationVariables.DEFAULT_REFRESH_CHECK_PERIOD);
-        waitAfterRefresh = ConfigurationManager.getVariable(ConfigurationVariables.WAIT_AFTER_REFRESH,
-                                                            ConfigurationVariables.DEFAULT_WAIT_AFTER_REFRESH);
+        checkPeriod = MuConfiguration.getVariable(MuConfiguration.REFRESH_CHECK_PERIOD,
+                                                       MuConfiguration.DEFAULT_REFRESH_CHECK_PERIOD);
+        waitAfterRefresh = MuConfiguration.getVariable(MuConfiguration.WAIT_AFTER_REFRESH,
+                                                            MuConfiguration.DEFAULT_WAIT_AFTER_REFRESH);
     }
 
 		
@@ -290,23 +289,17 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     // WindowListener implementation //
     ///////////////////////////////////
 
-    public void windowActivated(WindowEvent e) {
-    }
+    public void windowActivated(WindowEvent e) {}
 
-    public void windowDeactivated(WindowEvent e) {
-    }
+    public void windowDeactivated(WindowEvent e) {}
 
-    public void windowIconified(WindowEvent e) {
-    }
+    public void windowIconified(WindowEvent e) {}
 
-    public void windowDeiconified(WindowEvent e) {
-    }
+    public void windowDeiconified(WindowEvent e) {}
 
-    public void windowOpened(WindowEvent e) {
-    }
+    public void windowOpened(WindowEvent e) {}
 
-    public void windowClosing(WindowEvent e) {
-    }
+    public void windowClosing(WindowEvent e) {}
 
     public void windowClosed(WindowEvent e) {
         // Remove the MainFrame from the list of monitored instances

@@ -19,8 +19,7 @@
 package com.mucommander.ui.main;
 
 import com.mucommander.Debug;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.event.ActivePanelListener;
@@ -37,7 +36,6 @@ import java.awt.*;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
-
 
 /**
  * This is the main frame, which contains all other UI components visible on a mucommander window.
@@ -76,7 +74,7 @@ public class MainFrame extends JFrame implements LocationListener {
     private WeakHashMap activePanelListeners = new WeakHashMap();
 
     /** Split pane orientation */
-    private final static String SPLIT_ORIENTATION = ConfigurationVariables.SPLIT_ORIENTATION;
+    private final static String SPLIT_ORIENTATION = MuConfiguration.SPLIT_ORIENTATION;
 
 
     /**
@@ -113,7 +111,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Create toolbar and show it only if it hasn't been disabled in the preferences
         this.toolbar = new ToolBar(this);
         // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be properly initialized
-        this.toolbar.setVisible(ConfigurationManager.getVariable(ConfigurationVariables.TOOLBAR_VISIBLE, ConfigurationVariables.DEFAULT_TOOLBAR_VISIBLE));
+        this.toolbar.setVisible(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
 			
         contentPane.add(toolbar, BorderLayout.NORTH);
 
@@ -130,7 +128,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing.
         splitPane = new ProportionalSplitPane(this,
-            ConfigurationManager.getVariable(SPLIT_ORIENTATION, ConfigurationVariables.DEFAULT_SPLIT_ORIENTATION).equals(ConfigurationVariables.VERTICAL_SPLIT_ORIENTATION)?JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
+            MuConfiguration.getVariable(SPLIT_ORIENTATION, MuConfiguration.DEFAULT_SPLIT_ORIENTATION).equals(MuConfiguration.VERTICAL_SPLIT_ORIENTATION)?JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
             false,
             folderPanel1,
             folderPanel2) {
@@ -168,7 +166,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Show command bar only if it hasn't been disabled in the preferences
         this.commandBar = new CommandBar(this);
         // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
-        this.commandBar.setVisible(ConfigurationManager.getVariable(ConfigurationVariables.COMMAND_BAR_VISIBLE, ConfigurationVariables.DEFAULT_COMMAND_BAR_VISIBLE));
+        this.commandBar.setVisible(MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_VISIBLE, MuConfiguration.DEFAULT_COMMAND_BAR_VISIBLE));
 
         southPanel.add(commandBar);
 
@@ -367,7 +365,7 @@ public class MainFrame extends JFrame implements LocationListener {
     private void saveSplitPaneOrientation() {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing
-        ConfigurationManager.setVariable(SPLIT_ORIENTATION, splitPane.getOrientation()==JSplitPane.HORIZONTAL_SPLIT?ConfigurationVariables.VERTICAL_SPLIT_ORIENTATION:ConfigurationVariables.HORIZONTAL_SPLIT_ORIENTATION);
+        MuConfiguration.setVariable(SPLIT_ORIENTATION, splitPane.getOrientation()==JSplitPane.HORIZONTAL_SPLIT?MuConfiguration.VERTICAL_SPLIT_ORIENTATION:MuConfiguration.HORIZONTAL_SPLIT_ORIENTATION);
     }
 
 
@@ -483,20 +481,20 @@ public class MainFrame extends JFrame implements LocationListener {
         // Save last MainFrame's attributes (last folders, window position) in the preferences.
 //        if(WindowManager.getMainFrames().size()==1) {
         // Save last folders
-        ConfigurationManager.setVariable(ConfigurationVariables.LAST_LEFT_FOLDER, 
+        MuConfiguration.setVariable(MuConfiguration.LAST_LEFT_FOLDER, 
                                          getFolderPanel1().getFolderHistory().getLastRecallableFolder());
-        ConfigurationManager.setVariable(ConfigurationVariables.LAST_RIGHT_FOLDER, 
+        MuConfiguration.setVariable(MuConfiguration.LAST_RIGHT_FOLDER, 
                                          getFolderPanel2().getFolderHistory().getLastRecallableFolder());
 
         // Save window position, size and screen resolution
         Rectangle bounds = getBounds();
-        ConfigurationManager.setVariable(ConfigurationVariables.LAST_X, (int)bounds.getX());
-        ConfigurationManager.setVariable(ConfigurationVariables.LAST_Y, (int)bounds.getY());
-        ConfigurationManager.setVariable(ConfigurationVariables.LAST_WIDTH, (int)bounds.getWidth());
-        ConfigurationManager.setVariable(ConfigurationVariables.LAST_HEIGHT, (int)bounds.getHeight());
+        MuConfiguration.setVariable(MuConfiguration.LAST_X, (int)bounds.getX());
+        MuConfiguration.setVariable(MuConfiguration.LAST_Y, (int)bounds.getY());
+        MuConfiguration.setVariable(MuConfiguration.LAST_WIDTH, (int)bounds.getWidth());
+        MuConfiguration.setVariable(MuConfiguration.LAST_HEIGHT, (int)bounds.getHeight());
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        ConfigurationManager.setVariable(ConfigurationVariables.SCREEN_WIDTH, screenSize.width);
-        ConfigurationManager.setVariable(ConfigurationVariables.SCREEN_HEIGHT, screenSize.height);
+        MuConfiguration.setVariable(MuConfiguration.SCREEN_WIDTH, screenSize.width);
+        MuConfiguration.setVariable(MuConfiguration.SCREEN_HEIGHT, screenSize.height);
 
         // Save split pane orientation
         saveSplitPaneOrientation();

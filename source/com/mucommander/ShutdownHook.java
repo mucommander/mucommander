@@ -20,10 +20,9 @@ package com.mucommander;
 
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.command.CommandManager;
-import com.mucommander.conf.ConfigurationManager;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.theme.ThemeManager;
-
 
 /**
  * The run method of this thread is called when the program shuts down, either because
@@ -71,7 +70,7 @@ public class ShutdownHook extends Thread {
             return;
 
         // Save preferences
-        try {ConfigurationManager.writeConfiguration();}
+        try {MuConfiguration.write();}
         catch(Exception e) {if(Debug.ON) Debug.trace("Failed to save configugration: " + e);}
 
         // Save shell history

@@ -16,11 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
 import com.mucommander.job.SendMailJob;
@@ -40,7 +38,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
-
 
 /**
  * Dialog allowing the user to email files to someone.
@@ -102,8 +99,8 @@ public class EmailFilesDialog extends FocusDialog implements ActionListener, Ite
             XAlignedComponentPanel compPanel = new XAlignedComponentPanel();
 
             // From (sender) field, non editable
-            JLabel fromLabel = new JLabel(ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_NAME)
-                                          +" <"+ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_ADDRESS)+">");
+            JLabel fromLabel = new JLabel(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_NAME)
+                                          +" <"+MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_ADDRESS)+">");
             //			fromField.setEditable(false);
             compPanel.addRow(Translator.get("email_dialog.from")+":", fromLabel, 10);
 			

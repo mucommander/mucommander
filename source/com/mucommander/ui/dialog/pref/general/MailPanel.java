@@ -18,8 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
@@ -59,15 +58,15 @@ class MailPanel extends PreferencesPanel {
         XAlignedComponentPanel compPanel = new XAlignedComponentPanel();
 
         // Name field
-        nameField = new JTextField(ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_NAME, ""));
+        nameField = new JTextField(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_NAME, ""));
         compPanel.addRow(Translator.get("prefs_dialog.mail_name"), nameField, 10);
 		
         // Email field
-        emailField = new JTextField(ConfigurationManager.getVariable(ConfigurationVariables.MAIL_SENDER_ADDRESS, ""));
+        emailField = new JTextField(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_ADDRESS, ""));
         compPanel.addRow(Translator.get("prefs_dialog.mail_address"), emailField, 10);
 
         // SMTP field
-        smtpField = new JTextField(ConfigurationManager.getVariable(ConfigurationVariables.SMTP_SERVER, ""));
+        smtpField = new JTextField(MuConfiguration.getVariable(MuConfiguration.SMTP_SERVER, ""));
         compPanel.addRow(Translator.get("prefs_dialog.mail_server"), smtpField, 10);
 
         mainPanel.add(compPanel, BorderLayout.NORTH);
@@ -79,8 +78,8 @@ class MailPanel extends PreferencesPanel {
     // PrefPanel methods //
     ///////////////////////
     protected void commit() {
-        ConfigurationManager.setVariable(ConfigurationVariables.MAIL_SENDER_NAME, nameField.getText());
-        ConfigurationManager.setVariable(ConfigurationVariables.MAIL_SENDER_ADDRESS, emailField.getText());
-        ConfigurationManager.setVariable(ConfigurationVariables.SMTP_SERVER, smtpField.getText());
+        MuConfiguration.setVariable(MuConfiguration.MAIL_SENDER_NAME, nameField.getText());
+        MuConfiguration.setVariable(MuConfiguration.MAIL_SENDER_ADDRESS, emailField.getText());
+        MuConfiguration.setVariable(MuConfiguration.SMTP_SERVER, smtpField.getText());
     }
 }

@@ -16,13 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.text;
 
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,10 +51,10 @@ public class CustomDateFormat implements ConfigurationListener {
      */
     public static void init() {
         // Create a singleton instance and keep it as a static member of this class.
-        // Not doing it so would cause the garbage collector to GC it as ConfigurationManager holds
+        // Not doing it so would cause the garbage collector to GC it as MuConfiguration holds
         // weak references of its listeners.
         singleton = new CustomDateFormat();
-        ConfigurationManager.addConfigurationListener(singleton);
+        MuConfiguration.addConfigurationListener(singleton);
 
         dateFormat = createDateFormat();
     }
@@ -89,9 +87,9 @@ public class CustomDateFormat implements ConfigurationListener {
      */
     public static String getDateFormatString() {
         return replaceDateSeparator(
-            ConfigurationManager.getVariable(ConfigurationVariables.DATE_FORMAT, ConfigurationVariables.DEFAULT_DATE_FORMAT),
-            ConfigurationManager.getVariable(ConfigurationVariables.DATE_SEPARATOR, ConfigurationVariables.DEFAULT_DATE_SEPARATOR))
-        + " " + ConfigurationManager.getVariable(ConfigurationVariables.TIME_FORMAT, ConfigurationVariables.DEFAULT_TIME_FORMAT);
+            MuConfiguration.getVariable(MuConfiguration.DATE_FORMAT, MuConfiguration.DEFAULT_DATE_FORMAT),
+            MuConfiguration.getVariable(MuConfiguration.DATE_SEPARATOR, MuConfiguration.DEFAULT_DATE_SEPARATOR))
+        + " " + MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT, MuConfiguration.DEFAULT_TIME_FORMAT);
     }
 
 
@@ -136,7 +134,7 @@ public class CustomDateFormat implements ConfigurationListener {
     public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
-        if (var.equals(ConfigurationVariables.TIME_FORMAT) || var.equals(ConfigurationVariables.DATE_FORMAT) || var.equals(ConfigurationVariables.DATE_SEPARATOR))
+        if (var.equals(MuConfiguration.TIME_FORMAT) || var.equals(MuConfiguration.DATE_FORMAT) || var.equals(MuConfiguration.DATE_SEPARATOR))
             dateFormat = createDateFormat();
     }
 }

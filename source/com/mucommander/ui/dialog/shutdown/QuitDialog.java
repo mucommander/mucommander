@@ -16,11 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.dialog.shutdown;
 
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -28,7 +26,6 @@ import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
 import java.awt.*;
-
 
 /**
  * Quit confirmation dialog invoked when the user asked the application to quit, which gives the user a chance
@@ -77,7 +74,7 @@ public class QuitDialog extends QuestionDialog {
         this.quitConfirmed = getActionValue()==QUIT_ACTION;
         if(quitConfirmed) {
             // Remember user preference
-            ConfigurationManager.setVariable(ConfigurationVariables.CONFIRM_ON_QUIT, showNextTimeCheckBox.isSelected());
+            MuConfiguration.setVariable(MuConfiguration.CONFIRM_ON_QUIT, showNextTimeCheckBox.isSelected());
         }
     }
     
@@ -94,7 +91,7 @@ public class QuitDialog extends QuestionDialog {
      * Returns <code>true</code> if quit confirmation hasn't been disabled in the preferences. 
      */
     public static boolean confirmationRequired() {
-        return ConfigurationManager.getVariable(ConfigurationVariables.CONFIRM_ON_QUIT, ConfigurationVariables.DEFAULT_CONFIRM_ON_QUIT);
+        return MuConfiguration.getVariable(MuConfiguration.CONFIRM_ON_QUIT, MuConfiguration.DEFAULT_CONFIRM_ON_QUIT);
     }
     
     

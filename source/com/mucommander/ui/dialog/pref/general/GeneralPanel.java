@@ -18,8 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
@@ -113,7 +112,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         JPanel languagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         languagePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.language")));
         this.languages = Translator.getAvailableLanguages();
-        String currentLang = ConfigurationManager.getVariable(ConfigurationVariables.LANGUAGE);
+        String currentLang = MuConfiguration.getVariable(MuConfiguration.LANGUAGE);
         String lang;
         languageComboBox = new JComboBox();
 
@@ -164,7 +163,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
         // Date format combo
         dateFormatComboBox = new JComboBox();
-        String dateFormat = ConfigurationManager.getVariable(ConfigurationVariables.DATE_FORMAT);
+        String dateFormat = MuConfiguration.getVariable(MuConfiguration.DATE_FORMAT);
         int dateFormatIndex = 0;
         for(int i=0; i<DATE_FORMATS.length; i++) {
             dateFormatComboBox.addItem(DATE_FORMAT_LABELS[i]);
@@ -205,7 +204,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
                 }
             };
         dateSeparatorField.setDocument(doc);
-        dateSeparatorField.setText(ConfigurationManager.getVariable(ConfigurationVariables.DATE_SEPARATOR, ConfigurationVariables.DEFAULT_DATE_SEPARATOR));
+        dateSeparatorField.setText(MuConfiguration.getVariable(MuConfiguration.DATE_SEPARATOR, MuConfiguration.DEFAULT_DATE_SEPARATOR));
         doc.addDocumentListener(this);
         tempPanel.add(dateSeparatorField);
         tempPanel.add(Box.createHorizontalGlue());
@@ -227,7 +226,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         time24RadioButton = new JRadioButton(Translator.get("prefs_dialog.time_24_hour"));
         time24RadioButton.addActionListener(this);
         
-        String timeFormat = ConfigurationManager.getVariable(ConfigurationVariables.TIME_FORMAT);
+        String timeFormat = MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT);
         if(timeFormat.equals(HOUR_12_TIME_FORMAT) || timeFormat.equals(HOUR_12_TIME_FORMAT_WITH_SECONDS))
             time12RadioButton.setSelected(true);
         else
@@ -294,10 +293,10 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
     // PrefPanel methods //
     ///////////////////////
     protected void commit() {
-        ConfigurationManager.setVariable(ConfigurationVariables.LANGUAGE, languages[languageComboBox.getSelectedIndex()]);
-        ConfigurationManager.setVariable(ConfigurationVariables.DATE_FORMAT, getDateFormatString());
-        ConfigurationManager.setVariable(ConfigurationVariables.DATE_SEPARATOR, dateSeparatorField.getText());
-        ConfigurationManager.setVariable(ConfigurationVariables.TIME_FORMAT, getTimeFormatString());
+        MuConfiguration.setVariable(MuConfiguration.LANGUAGE, languages[languageComboBox.getSelectedIndex()]);
+        MuConfiguration.setVariable(MuConfiguration.DATE_FORMAT, getDateFormatString());
+        MuConfiguration.setVariable(MuConfiguration.DATE_SEPARATOR, dateSeparatorField.getText());
+        MuConfiguration.setVariable(MuConfiguration.TIME_FORMAT, getTimeFormatString());
     }
 
 

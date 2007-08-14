@@ -21,8 +21,7 @@ package com.mucommander.ui.dialog.startup;
 import com.mucommander.Debug;
 import com.mucommander.PlatformManager;
 import com.mucommander.VersionChecker;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -144,8 +143,8 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
              0);
 			
         JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"),
-                                                       ConfigurationManager.getVariable(ConfigurationVariables.CHECK_FOR_UPDATE,
-                                                                                        ConfigurationVariables.DEFAULT_CHECK_FOR_UPDATE));
+                                                       MuConfiguration.getVariable(MuConfiguration.CHECK_FOR_UPDATE,
+                                                                                        MuConfiguration.DEFAULT_CHECK_FOR_UPDATE));
         addCheckBox(showNextTimeCheckBox);
 
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
@@ -156,6 +155,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             PlatformManager.openUrl(FileFactory.getFile(downloadURL));
 		
         // Remember user preference
-        ConfigurationManager.setVariable(ConfigurationVariables.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
+        MuConfiguration.setVariable(MuConfiguration.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
     }
 }

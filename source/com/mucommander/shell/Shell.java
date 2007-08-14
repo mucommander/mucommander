@@ -23,8 +23,7 @@ import com.mucommander.PlatformManager;
 import com.mucommander.command.CommandParser;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.process.AbstractProcess;
@@ -56,7 +55,7 @@ public class Shell implements ConfigurationListener {
      * Initialises the shell.
      */
     static {
-        ConfigurationManager.addConfigurationListener(confListener = new Shell());
+        MuConfiguration.addConfigurationListener(confListener = new Shell());
 
         // This could in theory also be written without the confListener reference.
         // It turns out, however, that proGuard is a bit too keen when removing fields
@@ -143,22 +142,22 @@ public class Shell implements ConfigurationListener {
         String buffer;
 
         // Retrieves the configuration defined shell command.
-        if(ConfigurationManager.getVariable(ConfigurationVariables.USE_CUSTOM_SHELL, ConfigurationVariables.DEFAULT_USE_CUSTOM_SHELL))
-            buffer = ConfigurationManager.getVariable(ConfigurationVariables.CUSTOM_SHELL, PlatformManager.DEFAULT_SHELL_COMMAND);
+        if(MuConfiguration.getVariable(MuConfiguration.USE_CUSTOM_SHELL, MuConfiguration.DEFAULT_USE_CUSTOM_SHELL))
+            buffer = MuConfiguration.getVariable(MuConfiguration.CUSTOM_SHELL, PlatformManager.DEFAULT_SHELL_COMMAND);
         else
             buffer = PlatformManager.DEFAULT_SHELL_COMMAND;
 
         // Splits the command into tokens, leaving room for the argument.
         tokens = CommandParser.getTokensWithParams(buffer, 1);
 
-        encoding = ConfigurationManager.getVariable(ConfigurationVariables.SHELL_ENCODING);
+        encoding = MuConfiguration.getVariable(MuConfiguration.SHELL_ENCODING);
     }
 
     /**
      * Reacts to configuration changes.
      */
     public void configurationChanged(ConfigurationEvent event) {
-        if(event.getVariable().startsWith(ConfigurationVariables.SHELL_SECTION))
+        if(event.getVariable().startsWith(MuConfiguration.SHELL_SECTION))
             setShellCommand();
     }
 }

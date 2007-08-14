@@ -24,8 +24,7 @@ import com.mucommander.auth.AuthException;
 import com.mucommander.auth.MappedCredentials;
 import com.mucommander.conf.ConfigurationEvent;
 import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.ui.dialog.auth.AuthDialog;
@@ -36,7 +35,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.Vector;
-
 
 /**
  * Window Manager is responsible for creating, disposing, switching,
@@ -87,7 +85,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         instance   = new WindowManager();
 
         // Sets custom lookAndFeel if different from current lookAndFeel
-        String lnfName = ConfigurationManager.getVariable(ConfigurationVariables.LOOK_AND_FEEL);
+        String lnfName = MuConfiguration.getVariable(MuConfiguration.LOOK_AND_FEEL);
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
             setLookAndFeel(lnfName);
 
@@ -100,7 +98,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     /**
      * Creates a new instance of WindowManager.
      */
-    private WindowManager() {ConfigurationManager.addConfigurationListener(this);}
+    private WindowManager() {MuConfiguration.addConfigurationListener(this);}
 
     /**
      * Retrieves the user's initial path for the specified frame.
@@ -119,18 +117,18 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         AbstractFile folder;     // Initial folder.
 
         // Checks which kind of initial path we're dealing with.
-        isCustom = (frame == LEFT_FRAME ? ConfigurationManager.getVariable(ConfigurationVariables.LEFT_STARTUP_FOLDER, ConfigurationVariables.DEFAULT_STARTUP_FOLDER) :
-                    ConfigurationManager.getVariable(ConfigurationVariables.RIGHT_STARTUP_FOLDER, ConfigurationVariables.DEFAULT_STARTUP_FOLDER)).equals(ConfigurationVariables.STARTUP_FOLDER_CUSTOM);
+        isCustom = (frame == LEFT_FRAME ? MuConfiguration.getVariable(MuConfiguration.LEFT_STARTUP_FOLDER, MuConfiguration.DEFAULT_STARTUP_FOLDER) :
+                    MuConfiguration.getVariable(MuConfiguration.RIGHT_STARTUP_FOLDER, MuConfiguration.DEFAULT_STARTUP_FOLDER)).equals(MuConfiguration.STARTUP_FOLDER_CUSTOM);
 
         // Handles custom initial paths.
         if (isCustom)
-            folderPath = (frame == LEFT_FRAME ? ConfigurationManager.getVariable(ConfigurationVariables.LEFT_CUSTOM_FOLDER) :
-                          ConfigurationManager.getVariable(ConfigurationVariables.RIGHT_CUSTOM_FOLDER));
+            folderPath = (frame == LEFT_FRAME ? MuConfiguration.getVariable(MuConfiguration.LEFT_CUSTOM_FOLDER) :
+                          MuConfiguration.getVariable(MuConfiguration.RIGHT_CUSTOM_FOLDER));
 
         // Handles "last folder" initial paths.
         else
-            folderPath = (frame == LEFT_FRAME ? ConfigurationManager.getVariable(ConfigurationVariables.LAST_LEFT_FOLDER) :
-                          ConfigurationManager.getVariable(ConfigurationVariables.LAST_RIGHT_FOLDER));
+            folderPath = (frame == LEFT_FRAME ? MuConfiguration.getVariable(MuConfiguration.LAST_LEFT_FOLDER) :
+                          MuConfiguration.getVariable(MuConfiguration.LAST_RIGHT_FOLDER));
 
         // If the initial path is not legal or does not exist, defaults to the user's home.
         if(folderPath == null || (folder = FileFactory.getFile(folderPath)) == null || !folder.exists())
@@ -289,14 +287,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(mainFrames.isEmpty()) {
             currentMainFrame = newMainFrame;
             // Retrieve last saved window bounds
-            x      = ConfigurationManager.getIntegerVariable(ConfigurationVariables.LAST_X);
-            y      = ConfigurationManager.getIntegerVariable(ConfigurationVariables.LAST_Y);
-            width  = ConfigurationManager.getIntegerVariable(ConfigurationVariables.LAST_WIDTH);
-            height = ConfigurationManager.getIntegerVariable(ConfigurationVariables.LAST_HEIGHT);
+            x      = MuConfiguration.getIntegerVariable(MuConfiguration.LAST_X);
+            y      = MuConfiguration.getIntegerVariable(MuConfiguration.LAST_Y);
+            width  = MuConfiguration.getIntegerVariable(MuConfiguration.LAST_WIDTH);
+            height = MuConfiguration.getIntegerVariable(MuConfiguration.LAST_HEIGHT);
 
             // Retrieves the last known size of the screen.
-            int lastScreenWidth  = ConfigurationManager.getIntegerVariable(ConfigurationVariables.SCREEN_WIDTH);
-            int lastScreenHeight = ConfigurationManager.getIntegerVariable(ConfigurationVariables.SCREEN_HEIGHT);
+            int lastScreenWidth  = MuConfiguration.getIntegerVariable(MuConfiguration.SCREEN_WIDTH);
+            int lastScreenHeight = MuConfiguration.getIntegerVariable(MuConfiguration.SCREEN_HEIGHT);
 
             // If no previous location was saved, or if the resolution has changed,
             // reset the window's dimensions to their default values.
@@ -360,20 +358,20 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 /*
     public static synchronized void disposeMainFrame(MainFrame mainFrameToDispose) {
         // Saves last folders
-        ConfigurationManager.setVariable("prefs.startup_folder.left.last_folder", 
+        MuConfiguration.setVariable("prefs.startup_folder.left.last_folder", 
                                          mainFrameToDispose.getFolderPanel1().getFolderHistory().getLastRecallableFolder());
-        ConfigurationManager.setVariable("prefs.startup_folder.right.last_folder", 
+        MuConfiguration.setVariable("prefs.startup_folder.right.last_folder", 
                                          mainFrameToDispose.getFolderPanel2().getFolderHistory().getLastRecallableFolder());
 
         // Saves window position, size and screen resolution
         Rectangle bounds = mainFrameToDispose.getBounds();
-        ConfigurationManager.setVariableInt("prefs.last_window.x", (int)bounds.getX());
-        ConfigurationManager.setVariableInt("prefs.last_window.y", (int)bounds.getY());
-        ConfigurationManager.setVariableInt("prefs.last_window.width", (int)bounds.getWidth());
-        ConfigurationManager.setVariableInt("prefs.last_window.height", (int)bounds.getHeight());
+        MuConfiguration.setVariableInt("prefs.last_window.x", (int)bounds.getX());
+        MuConfiguration.setVariableInt("prefs.last_window.y", (int)bounds.getY());
+        MuConfiguration.setVariableInt("prefs.last_window.width", (int)bounds.getWidth());
+        MuConfiguration.setVariableInt("prefs.last_window.height", (int)bounds.getHeight());
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        ConfigurationManager.setVariableInt("prefs.last_window.screen_width", screenSize.width);
-        ConfigurationManager.setVariableInt("prefs.last_window.screen_height", screenSize.height);
+        MuConfiguration.setVariableInt("prefs.last_window.screen_width", screenSize.width);
+        MuConfiguration.setVariableInt("prefs.last_window.screen_height", screenSize.height);
 
         // Disposes the MainFrame
         int frameIndex = mainFrames.indexOf(mainFrameToDispose);
@@ -583,8 +581,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     
     	// /!\ font.size is set after font.family in AppearancePrefPanel
     	// that's why we only listen to this one in order not to change Font twice
-    	if (var.equals(ConfigurationVariables.LOOK_AND_FEEL)) {
-            if(Debug.ON) Debug.trace("LookAndFeel changed! " + event.getValue());
+    	if (var.equals(MuConfiguration.LOOK_AND_FEEL)) {
             String lnfName = event.getValue();
 
 	    if(!UIManager.getLookAndFeel().getClass().getName().equals(lnfName))

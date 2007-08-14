@@ -18,8 +18,6 @@
 
 package com.mucommander.ui.dialog.pref;
 
-import com.mucommander.conf.ConfigurationManager;
-
 import javax.swing.*;
 
 /**

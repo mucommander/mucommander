@@ -22,8 +22,7 @@ package com.mucommander.file.impl.ftp;
 import com.mucommander.Debug;
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
-import com.mucommander.conf.ConfigurationManager;
-import com.mucommander.conf.impl.ConfigurationVariables;
+import com.mucommander.conf.impl.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.FileProtocols;
@@ -1130,7 +1129,7 @@ public class FTPFile extends AbstractFile implements ConnectionHandlerFactory {
                 // Note that by default, if 'LIST -l' is used, the decision to list hidden files is left to the
                 // FTP server: some servers will choose to show them, some other will not. This behavior usually is a
                 // configuration setting of the FTP server.
-                ftpClient.setListHiddenFiles(ConfigurationManager.getVariable(ConfigurationVariables.LIST_HIDDEN_FILES, ConfigurationVariables.DEFAULT_LIST_HIDDEN_FILES));
+                ftpClient.setListHiddenFiles(MuConfiguration.getVariable(MuConfiguration.LIST_HIDDEN_FILES, MuConfiguration.DEFAULT_LIST_HIDDEN_FILES));
 
                 if(encoding.equalsIgnoreCase("UTF-8")) {
                     // This command enables UTF8 on the remote server... but only a few FTP servers currently support this command
