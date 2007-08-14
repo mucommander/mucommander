@@ -19,7 +19,7 @@
 package com.mucommander.conf;
 
 /**
- * Interface used to provide the {@link ConfigurationManager} with a way of creating {@link ConfigurationReader reader} instances.
+ * Interface used to provide instances of {@link Configuration} with a way of creating {@link ConfigurationReader reader} instances.
  * <p>
  * A <code>ConfigurationReaderFactory</code>'s sole purpose is to create instances of {@link ConfigurationReader}. In most cases, a
  * factory class will be associated with a reader class, and its code will look something like:

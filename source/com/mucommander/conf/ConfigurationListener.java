@@ -22,7 +22,7 @@ package com.mucommander.conf;
  * Listener interface for receiving configuration events.
  * <p>
  * Implementations of this interface can register themselves through
- * {@link ConfigurationManager#addConfigurationListener(ConfigurationListener)} to be notified of configuration changes.
+ * {@link Configuration#addConfigurationListener(ConfigurationListener)} to be notified of configuration changes.
  * </p>
  * @author Nicolas Rinaudo
  */

@@ -22,10 +22,10 @@ package com.mucommander.conf;
  * Interface for exploring configuration data using callbacks.
  * <p>
  * <code>ConfigurationBuilder</code> implementations can be passed to
- * {@link ConfigurationManager#buildConfiguration(ConfigurationBuilder)} to receive
+ * {@link Configuration#build(ConfigurationBuilder)} to receive
  * information about the whole configuration tree. This mechanism is mostly meant
  * for saving the configuration, but applications that wish, for example, to display
- * the whole configuration as a <code>JTree</code> can use it to initialise their UI.
+ * it as a <code>JTree</code> can use it to initialise their UI.
  * </p>
  * @author Nicolas Rinaudo
  */

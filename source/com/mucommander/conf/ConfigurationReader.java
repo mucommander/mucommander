@@ -31,7 +31,7 @@ import java.io.IOException;
  * which handles the standard muCommander configuration file format.
  * </p>
  * <p>
- * In order for an implementation of <code>ConfigurationReader</code> to be useable by the {@link ConfigurationManager},
+ * In order for an implementation of <code>ConfigurationReader</code> to be useable by {@link Configuration} instances,
  * it must come with an associated implementation of {@link ConfigurationReaderFactory}.<br/>
  * </p>
  * <p>

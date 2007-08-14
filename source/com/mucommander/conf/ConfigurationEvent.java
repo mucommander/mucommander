@@ -19,21 +19,12 @@
 package com.mucommander.conf;
 
 import java.awt.*;
-import java.util.Iterator;
-import java.util.WeakHashMap;
 
 /**
  * Event triggered when the configuration has been modified.
  * @author Nicolas Rinaudo
  */
 public class ConfigurationEvent {
-    // - Class variables -----------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /** Contains all registered configuration listeners, stored as weak references */
-    private static WeakHashMap                listeners = new WeakHashMap();
-
-
-
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Name of the variable that has been modified. */
@@ -123,38 +114,4 @@ public class ConfigurationEvent {
      * @return the new value for the modified variable.
      */
     public double getDoubleValue() {return ConfigurationSection.getDoubleValue(value);}
-
-
-
-    // - Listeners -----------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    // While having listeners being handled by the ConfigurationEvent rather than the
-    // ConfigurationManager might look like shody design, it's necessary for the
-    // ConfigurationExplorer to be able to trigger events when loading the configuration.
-    // Well, it's either that or have a cross-dependency between the manager and the
-    // explorer, which is even shodier design.
-
-    /**
-     * Adds the specified object to the list of registered configuration listeners.
-     * @param listener object to register as a configuration listener.
-     */
-    static void addConfigurationListener(ConfigurationListener listener) {listeners.put(listener, null);}
-
-    /**
-     * Removes the specified object from the list of registered configuration listeners.
-     * @param listener object to remove from the list of registered configuration listeners.
-     */
-    static void removeConfigurationListener(ConfigurationListener listener) {listeners.remove(listener);}
-
-    /**
-     * Passes the specified event to all registered configuration listeners.
-     * @param event event to propagate.
-     */
-    static void triggerEvent(ConfigurationEvent event) {
-        Iterator iterator;
-
-        iterator = listeners.keySet().iterator();
-        while(iterator.hasNext())
-            ((ConfigurationListener)iterator.next()).configurationChanged(event);
-    }
 }

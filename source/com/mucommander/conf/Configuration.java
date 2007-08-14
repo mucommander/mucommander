@@ -25,60 +25,60 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
+import java.util.Iterator;
+import java.util.WeakHashMap;
+import java.util.Stack;
+import java.util.EmptyStackException;
 
 /**
- * Used to access and modify the application's configuration.
- * <h3>Reading and writing the configuration</h3>
- * <h3>Accessing the configuration</h3>
  * @author Nicolas Rinaudo
  */
-public class ConfigurationManager {
+public class Configuration {
     // - Class variables -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Used to get access to the configuration source's input and output streams. */
-    private static ConfigurationSource        source;
+    private ConfigurationSource        source;
     /** Used to create objects that will read from the configuration source. */
-    private static ConfigurationReaderFactory readerFactory;
+    private ConfigurationReaderFactory readerFactory;
     /** Used to create objects that will write to the configuration source. */
-    private static ConfigurationWriterFactory writerFactory;
+    private ConfigurationWriterFactory writerFactory;
     /** Holds the content of the configuration file. */
-    private static ConfigurationSection       root = new ConfigurationSection();
+    private ConfigurationSection       root = new ConfigurationSection();
+    /** Contains all registered configuration listeners, stored as weak references */
+    private static WeakHashMap         listeners = new WeakHashMap();
 
 
 
     // - Synchronisation locks -----------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Used to synchronise concurent access of the configuration source. */
-    private static Object sourceLock = new Object();
+    private Object sourceLock = new Object();
     /** Used to synchronise concurent access of the reader factory. */
-    private static Object readerLock = new Object();
+    private Object readerLock = new Object();
     /** Used to synchronise concurent access of the writer factory. */
-    private static Object writerLock = new Object();
+    private Object writerLock = new Object();
 
 
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /**
-     * Prevents the class from being instanciated.
-     */
-    private ConfigurationManager() {}
+    public Configuration() {}
 
 
 
     // - Configuration source --------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Sets the source that will be used to raed and write configuration information.
+     * Sets the source that will be used to read and write configuration information.
      * @param s new configuration source.
      */
-    public static void setConfigurationSource(ConfigurationSource s) {synchronized(sourceLock) {source = s;}}
+    public void setSource(ConfigurationSource s) {synchronized(sourceLock) {source = s;}}
 
     /**
      * Returns the current configuration source.
      * @return the current configuration source.
      */
-    public static ConfigurationSource getConfigurationSource() {synchronized(sourceLock) {return source;}}
+    public ConfigurationSource getSource() {synchronized(sourceLock) {return source;}}
 
 
 
@@ -88,27 +88,27 @@ public class ConfigurationManager {
      * Sets the factory that will be used to create {@link ConfigurationReader reader} instances.
      * @param f factory that will be used to create reader instances.
      */
-    public static void setConfigurationReaderFactory(ConfigurationReaderFactory f) {synchronized(readerLock) {readerFactory = f;}}
+    public void setReaderFactory(ConfigurationReaderFactory f) {synchronized(readerLock) {readerFactory = f;}}
 
     /**
      * Returns the factory that is being used to create {@link ConfigurationReader reader} instances.
      * @return the factory that is being used to create reader instances.
      */
-    public static ConfigurationReaderFactory getConfigurationReaderFactory() {synchronized(readerLock) {return readerFactory;}}
+    public ConfigurationReaderFactory getReaderFactory() {synchronized(readerLock) {return readerFactory;}}
 
     /**
      * Returns an instance of the class that will be used to read configuration data.
      * <p>
      * By default, this method will return an instance of {@link XmlConfigurationReader}. However, this can be
-     * modified by {@link #setConfigurationReaderFactory(ConfigurationReaderFactory)}.
+     * modified by {@link #setReaderFactory(ConfigurationReaderFactory)}.
      * </p>
      * @return an instance of the class that will be used to read configuration data.
      */
-    public static ConfigurationReader getConfigurationReader() {
+    public ConfigurationReader getReader() {
         ConfigurationReaderFactory factory;
 
         // If no factory has been set, return an XML configuration reader.
-        if((factory = getConfigurationReaderFactory()) == null)
+        if((factory = getReaderFactory()) == null)
             return new XmlConfigurationReader();
 
         return factory.getReaderInstance();
@@ -122,27 +122,27 @@ public class ConfigurationManager {
      * Sets the factory that will be used to create {@link ConfigurationWriter writer} instances.
      * @param f factory that will be used to create writer instances.
      */
-    public static void setConfigurationWriterFactory(ConfigurationWriterFactory f) {synchronized(writerLock) {writerFactory = f;}}
+    public void setWriterFactory(ConfigurationWriterFactory f) {synchronized(writerLock) {writerFactory = f;}}
 
     /**
      * Returns the factory that is being used to create {@link ConfigurationWriter writer} instances.
      * @return the factory that is being used to create writer instances.
      */
-    public static ConfigurationWriterFactory getConfigurationWriterFactory() {synchronized(writerLock) {return writerFactory;}}
+    public ConfigurationWriterFactory getWriterFactory() {synchronized(writerLock) {return writerFactory;}}
 
     /**
      * Returns an instance of the class that will be used to write configuration data.
      * <p>
      * By default, this method will return an instance of {@link XmlConfigurationWriter}. However, this can be
-     * modified by {@link #setConfigurationWriterFactory(ConfigurationWriterFactory)}.
+     * modified by {@link #setWriterFactory(ConfigurationWriterFactory)}.
      * </p>
      * @return an instance of the class that will be used to read configuration data.
      */
-    public static ConfigurationWriter getConfigurationWriter() {
+    public ConfigurationWriter getWriter() {
         ConfigurationWriterFactory factory;
 
         // If no factory was set, return an XML configuration writer.
-        if((factory = getConfigurationWriterFactory()) == null)
+        if((factory = getWriterFactory()) == null)
             return new XmlConfigurationWriter();
 
         return factory.getWriterInstance();
@@ -159,45 +159,43 @@ public class ConfigurationManager {
      * @throws IOException                  if an I/O error occurs.
      * @throws ConfigurationException       if a configuration error occurs.
      * @throws ConfigurationFormatException if there is an error in the format of the configuration file.
-     * @see                                 #writeConfiguration(OutputStream,ConfigurationWriter)
+     * @see                                 #write(OutputStream,ConfigurationWriter)
      */
-    public static synchronized void readConfiguration(InputStream in, ConfigurationReader reader) throws ConfigurationException, IOException, ConfigurationFormatException {
+    public synchronized void read(InputStream in, ConfigurationReader reader) throws ConfigurationException, IOException, ConfigurationFormatException {
         reader.read(in, new ConfigurationLoader(root));
     }
 
     /**
      * Loads configuration from the specified input stream.
      * <p>
-     * This method will use the configuration reader set by {@link #setConfigurationReaderFactory(ConfigurationReaderFactory)} if any,
+     * This method will use the configuration reader set by {@link #setReaderFactory(ConfigurationReaderFactory)} if any,
      * or an {@link com.mucommander.conf.XmlConfigurationReader} instance if not.
      * </p>
      * @param  in                           where to read the configuration from.
      * @throws ConfigurationException       if a configuration error occurs.
      * @throws ConfigurationFormatException if there is an error in the format of the configuration file.
      * @throws IOException                  if an I/O error occurs.
-     * @see                                 #writeConfiguration(OutputStream)
+     * @see                                 #write(OutputStream)
      */
-    public static void readConfiguration(InputStream in) throws ConfigurationException, IOException, ConfigurationFormatException {
-        readConfiguration(in, getConfigurationReader());
-    }
+    public void read(InputStream in) throws ConfigurationException, IOException, ConfigurationFormatException {read(in, getReader());}
 
     /**
      * Loads configuration using the specified configuration reader.
      * <p>
-     * This method will use the input stream provided by {@link #setConfigurationSource(ConfigurationSource)} if any, or
+     * This method will use the input stream provided by {@link #setSource(ConfigurationSource)} if any, or
      * fail otherwise.
      * </p>
      * @param  reader                       reader that will be used to interpret the content of <code>in</code>.
      * @throws IOException                  if an I/O error occurs.
      * @throws ConfigurationFormatException if there is an error in the format of the configuration file.
      * @throws ConfigurationException       if a configuration error occurs.
-     * @see                                 #writeConfiguration(ConfigurationWriter)
+     * @see                                 #write(ConfigurationWriter)
      */
-    public static void readConfiguration(ConfigurationReader reader) throws IOException, ConfigurationException, ConfigurationFormatException {
+    public void read(ConfigurationReader reader) throws IOException, ConfigurationException, ConfigurationFormatException {
         InputStream in;
 
         in = null;
-        try {readConfiguration(in = getConfigurationSource().getInputStream(), reader);}
+        try {read(in = getSource().getInputStream(), reader);}
         finally {
             if(in != null) {
                 try {in.close();}
@@ -209,22 +207,20 @@ public class ConfigurationManager {
     /**
      * Loads configuration.
      * <p>
-     * If a reader has been specified through {@link #setConfigurationReaderFactory(ConfigurationReaderFactory)}, it
+     * If a reader has been specified through {@link #setReaderFactory(ConfigurationReaderFactory)}, it
      * will be used to analyse the configuration. Otherwise, an {@link com.mucommander.conf.XmlConfigurationReader} instance
      * will be used.
      * </p>
      * <p>
-     * If a configuration source has been specified through {@link #setConfigurationSource(ConfigurationSource)}, it will be
+     * If a configuration source has been specified through {@link #setSource(ConfigurationSource)}, it will be
      * used. Otherwise, this method will fail.
      * </p>
      * @throws IOException                  if an I/O error occurs.
      * @throws ConfigurationFormatException if there is an error in the format of the configuration file.
      * @throws ConfigurationException       if a configuration error occurs.
-     * @see                                 #writeConfiguration()
+     * @see                                 #write()
      */
-    public static void readConfiguration() throws ConfigurationException, IOException, ConfigurationFormatException {
-        readConfiguration(getConfigurationReader());
-    }
+    public void read() throws ConfigurationException, IOException, ConfigurationFormatException {read(getReader());}
 
 
 
@@ -235,43 +231,41 @@ public class ConfigurationManager {
      * @param out                     where to write the configuration to.
      * @param writer                  writer that will be used to format the configuration.
      * @throws ConfigurationException if any error occurs.
-     * @see                           #readConfiguration(InputStream,ConfigurationReader)
+     * @see                           #read(InputStream,ConfigurationReader)
      */
-    public static void writeConfiguration(OutputStream out, ConfigurationWriter writer) throws ConfigurationException {
+    public void write(OutputStream out, ConfigurationWriter writer) throws ConfigurationException {
         writer.setOutputStream(out);
-        buildConfiguration(writer);
+        build(writer);
     }
 
     /**
      * Writes configuration to the specified output stream.
      * <p>
-     * If a writer was specified through {@link #setConfigurationWriterFactory(ConfigurationWriterFactory)}, this will be
+     * If a writer was specified through {@link #setWriterFactory(ConfigurationWriterFactory)}, this will be
      * used to format the configuration. Otherwise, an {@link XmlConfigurationWriter} will be used.
      * </p>
      * @param out                     where to write the configuration to.
      * @throws ConfigurationException if any error occurs.
-     * @see                           #readConfiguration(InputStream)
+     * @see                           #read(InputStream)
      */
-    public static void writeConfiguration(OutputStream out) throws ConfigurationException {
-        writeConfiguration(out, getConfigurationWriter());
-    }
+    public void write(OutputStream out) throws ConfigurationException {write(out, getWriter());}
 
     /**
      * Writes configuration using the specified writer.
      * <p>
-     * If a configuration source was specified through {@link #setConfigurationSource(ConfigurationSource)}, it will be used
+     * If a configuration source was specified through {@link #setSource(ConfigurationSource)}, it will be used
      * to open an output stream. Otherwise, this method will fail.
      * </p>
      * @param writer                  writer that will be used to format the configuration.
      * @throws ConfigurationException if any error occurs.
      * @throws IOException            if any I/O error occurs.
-     * @see                           #readConfiguration(ConfigurationReader)
+     * @see                           #read(ConfigurationReader)
      */
-    public static void writeConfiguration(ConfigurationWriter writer) throws IOException, ConfigurationException {
+    public void write(ConfigurationWriter writer) throws IOException, ConfigurationException {
         OutputStream out;
 
         out = null;
-        try {writeConfiguration(out = getConfigurationSource().getOutputStream(), writer);}
+        try {write(out = getSource().getOutputStream(), writer);}
         finally {
             if(out != null) {
                 try {out.close();}
@@ -283,20 +277,18 @@ public class ConfigurationManager {
     /**
      * Writes configuration.
      * <p>
-     * If a writer was specified through {@link #setConfigurationWriterFactory(ConfigurationWriterFactory)}, this will be
+     * If a writer was specified through {@link #setWriterFactory(ConfigurationWriterFactory)}, this will be
      * used to format the configuration. Otherwise, an {@link XmlConfigurationWriter} will be used.
      * </p>
      * <p>
-     * If a configuration source was specified through {@link #setConfigurationSource(ConfigurationSource)}, it will be used
+     * If a configuration source was specified through {@link #setSource(ConfigurationSource)}, it will be used
      * to open an output stream. Otherwise, this method will fail.
      * </p>
      * @throws ConfigurationException if any error occurs.
      * @throws IOException            if any I/O error occurs.
-     * @see                           #readConfiguration()
+     * @see                           #read()
      */
-    public static void writeConfiguration() throws IOException, ConfigurationException {
-        writeConfiguration(getConfigurationWriter());
-    }
+    public void write() throws IOException, ConfigurationException {write(getWriter());}
 
 
 
@@ -308,7 +300,7 @@ public class ConfigurationManager {
      * @param  root                   section to explore.
      * @throws ConfigurationException if any error occurs.
      */
-    private static synchronized void buildConfiguration(ConfigurationBuilder builder, ConfigurationSection root) throws ConfigurationException {
+    private synchronized void build(ConfigurationBuilder builder, ConfigurationSection root) throws ConfigurationException {
         Enumeration          enumeration; // Enumeration on the section's variables, then subsections.
         String               name;        // Name of the current variable, then section.
         String               value;       // Value of the current variable.
@@ -328,7 +320,7 @@ public class ConfigurationManager {
             // We only go through subsections if contain either variables or subsections of their own.
             if(section.hasSections() || section.hasVariables()) {
                 builder.startSection(name);
-                buildConfiguration(builder, section);
+                build(builder, section);
                 builder.endSection(name);
             }
         }
@@ -339,9 +331,9 @@ public class ConfigurationManager {
      * @param  builder                object that will receive configuration building messages.
      * @throws ConfigurationException if any error occurs while going through the configuration tree.
      */
-    public static void buildConfiguration(ConfigurationBuilder builder) throws ConfigurationException {
+    public void build(ConfigurationBuilder builder) throws ConfigurationException {
         builder.startConfiguration();
-        buildConfiguration(builder, root);
+        build(builder, root);
         builder.endConfiguration();
     }
 
@@ -365,7 +357,7 @@ public class ConfigurationManager {
      * @param fromVar fully qualified name of the variable to rename.
      * @param toVar   fully qualified name of the variable that will receive <code>fromVar</code>'s value.
      */
-    public static void renameVariable(String fromVar, String toVar) {setVariable(toVar, removeVariable(fromVar));}
+    public void renameVariable(String fromVar, String toVar) {setVariable(toVar, removeVariable(fromVar));}
 
     /**
      * Sets the value of the specified variable.
@@ -382,7 +374,7 @@ public class ConfigurationManager {
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
      */
-    public static synchronized boolean setVariable(String name, String value) {
+    public synchronized boolean setVariable(String name, String value) {
         ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
         String                buffer;   // Buffer for the variable's name trimmed of section information.
 
@@ -391,7 +383,7 @@ public class ConfigurationManager {
 
         // If the variable's value was actually modified, triggers an event.
         if(explorer.getSection().setVariable(buffer, value)) {
-            ConfigurationEvent.triggerEvent(new ConfigurationEvent(name, value));
+            triggerEvent(new ConfigurationEvent(name, value));
             return true;
         }
         return false;
@@ -412,7 +404,7 @@ public class ConfigurationManager {
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
      */
-    public static boolean setVariable(String name, int value) {return setVariable(name, ConfigurationSection.getValue(value));}
+    public boolean setVariable(String name, int value) {return setVariable(name, ConfigurationSection.getValue(value));}
 
     /**
      * Sets the value of the specified variable.
@@ -429,7 +421,7 @@ public class ConfigurationManager {
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
      */
-    public static boolean setVariable(String name, float value) {return setVariable(name, ConfigurationSection.getValue(value));}
+    public boolean setVariable(String name, float value) {return setVariable(name, ConfigurationSection.getValue(value));}
 
     /**
      * Sets the value of the specified variable.
@@ -446,7 +438,7 @@ public class ConfigurationManager {
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
      */
-    public static boolean setVariable(String name, boolean value) {return setVariable(name, ConfigurationSection.getValue(value));}
+    public boolean setVariable(String name, boolean value) {return setVariable(name, ConfigurationSection.getValue(value));}
 
     /**
      * Sets the value of the specified variable.
@@ -463,7 +455,7 @@ public class ConfigurationManager {
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
      */
-    public static boolean setVariable(String name, long value) {return setVariable(name, ConfigurationSection.getValue(value));}
+    public boolean setVariable(String name, long value) {return setVariable(name, ConfigurationSection.getValue(value));}
 
     /**
      * Sets the value of the specified variable.
@@ -480,7 +472,7 @@ public class ConfigurationManager {
      * @param  value new value for the variable.
      * @return       <code>true</code> if this call resulted in a modification of the variable's value, <code>false</code> otherwise.
      */
-    public static boolean setVariable(String name, double value) {return setVariable(name, ConfigurationSection.getValue(value));}
+    public boolean setVariable(String name, double value) {return setVariable(name, ConfigurationSection.getValue(value));}
 
 
 
@@ -491,7 +483,7 @@ public class ConfigurationManager {
      * @param  name fully qualified name of the variable whose value should be retrieved.
      * @return      the variable's value if set, <code>null</code> otherwise.
      */
-    public static synchronized String getVariable(String name) {
+    public synchronized String getVariable(String name) {
         ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
 
         // If the variable's 'path' doesn't exist, return null.
@@ -506,7 +498,7 @@ public class ConfigurationManager {
      * @return                       the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to an integer.
      */
-    public static int getIntegerVariable(String name) {return ConfigurationSection.getIntegerValue(getVariable(name));}
+    public int getIntegerVariable(String name) {return ConfigurationSection.getIntegerValue(getVariable(name));}
 
     /**
      * Returns the value of the specified variable as a long.
@@ -514,7 +506,7 @@ public class ConfigurationManager {
      * @return                       the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to a long.
      */
-    public static long getLongVariable(String name) {return ConfigurationSection.getLongValue(getVariable(name));}
+    public long getLongVariable(String name) {return ConfigurationSection.getLongValue(getVariable(name));}
 
     /**
      * Returns the value of the specified variable as a float.
@@ -522,7 +514,7 @@ public class ConfigurationManager {
      * @return                       the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to a float.
      */
-    public static float getFloatVariable(String name) {return ConfigurationSection.getFloatValue(getVariable(name));}
+    public float getFloatVariable(String name) {return ConfigurationSection.getFloatValue(getVariable(name));}
 
     /**
      * Returns the value of the specified variable as a double.
@@ -530,21 +522,21 @@ public class ConfigurationManager {
      * @return                       the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to a double.
      */
-    public static double getDoubleVariable(String name) {return ConfigurationSection.getDoubleValue(getVariable(name));}
+    public double getDoubleVariable(String name) {return ConfigurationSection.getDoubleValue(getVariable(name));}
 
     /**
      * Returns the value of the specified variable as a boolean.
      * @param  name fully qualified name of the variable whose value should be retrieved.
      * @return the variable's value if set, <code>false</code> otherwise.
      */
-    public static boolean getBooleanVariable(String name) {return ConfigurationSection.getBooleanValue(getVariable(name));}
+    public boolean getBooleanVariable(String name) {return ConfigurationSection.getBooleanValue(getVariable(name));}
 
     /**
      * Checks whether the specified variable has been set.
      * @param  name fully qualified name of the variable to check for.
      * @return      <code>true</code> if the variable is set, <code>false</code> otherwise.
      */
-    public static boolean isVariableSet(String name) {return getVariable(name) != null;}
+    public boolean isVariableSet(String name) {return getVariable(name) != null;}
 
 
 
@@ -559,7 +551,7 @@ public class ConfigurationManager {
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>null</code> if it wasn't set.
      */
-    public static synchronized String removeVariable(String name) {
+    public synchronized String removeVariable(String name) {
         ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
         String                buffer;   // Buffer for the variable's name trimmed of section information.
 
@@ -569,7 +561,7 @@ public class ConfigurationManager {
 
         // If the variable was actually set, triggers an event.
         if((buffer = explorer.getSection().removeVariable(buffer)) != null)
-            ConfigurationEvent.triggerEvent(new ConfigurationEvent(name, null));
+            triggerEvent(new ConfigurationEvent(name, null));
 
         return buffer;
     }
@@ -583,7 +575,7 @@ public class ConfigurationManager {
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
      */
-    public static int removeIntegerVariable(String name) {return ConfigurationSection.getIntegerValue(removeVariable(name));}
+    public int removeIntegerVariable(String name) {return ConfigurationSection.getIntegerValue(removeVariable(name));}
 
     /**
      * Deletes the specified variable from the configuration.
@@ -594,7 +586,7 @@ public class ConfigurationManager {
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
      */
-    public static long removeLongVariable(String name) {return ConfigurationSection.getLongValue(removeVariable(name));}
+    public long removeLongVariable(String name) {return ConfigurationSection.getLongValue(removeVariable(name));}
 
     /**
      * Deletes the specified variable from the configuration.
@@ -605,7 +597,7 @@ public class ConfigurationManager {
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
      */
-    public static float removeFloatVariable(String name) {return ConfigurationSection.getFloatValue(removeVariable(name));}
+    public float removeFloatVariable(String name) {return ConfigurationSection.getFloatValue(removeVariable(name));}
 
     /**
      * Deletes the specified variable from the configuration.
@@ -616,7 +608,7 @@ public class ConfigurationManager {
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
      */
-    public static double removeDoubleVariable(String name) {return ConfigurationSection.getDoubleValue(removeVariable(name));}
+    public double removeDoubleVariable(String name) {return ConfigurationSection.getDoubleValue(removeVariable(name));}
 
     /**
      * Deletes the specified variable from the configuration.
@@ -627,7 +619,7 @@ public class ConfigurationManager {
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>false</code> if it wasn't set.
      */
-    public static boolean removeBooleanVariable(String name) {return ConfigurationSection.getBooleanValue(removeVariable(name));}
+    public boolean removeBooleanVariable(String name) {return ConfigurationSection.getBooleanValue(removeVariable(name));}
 
 
 
@@ -644,7 +636,7 @@ public class ConfigurationManager {
      * @param  defaultValue value to use if <code>name</code> is not set.
      * @return              the specified variable's value.
      */
-    public static synchronized String getVariable(String name, String defaultValue) {
+    public synchronized String getVariable(String name, String defaultValue) {
         ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
         String                value;    // Buffer for the variable's value.
         String                buffer;   // Buffer for the variable's name trimmed of section information.
@@ -656,7 +648,7 @@ public class ConfigurationManager {
         // If the variable isn't set, set it to defaultValue and triggers an event.
         if((value = explorer.getSection().getVariable(buffer)) == null) {
             explorer.getSection().setVariable(buffer, defaultValue);
-            ConfigurationEvent.triggerEvent(new ConfigurationEvent(name, defaultValue));
+            triggerEvent(new ConfigurationEvent(name, defaultValue));
             return defaultValue;
         }
         return value;
@@ -674,7 +666,7 @@ public class ConfigurationManager {
      * @return                       the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to an integer.
      */
-    public static int getVariable(String name, int defaultValue) {
+    public int getVariable(String name, int defaultValue) {
         return ConfigurationSection.getIntegerValue(getVariable(name, ConfigurationSection.getValue(defaultValue)));
     }
 
@@ -690,7 +682,7 @@ public class ConfigurationManager {
      * @return                       the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to a long.
      */
-    public static long getVariable(String name, long defaultValue) {
+    public long getVariable(String name, long defaultValue) {
         return ConfigurationSection.getLongValue(getVariable(name, ConfigurationSection.getValue(defaultValue)));
     }
 
@@ -706,7 +698,7 @@ public class ConfigurationManager {
      * @return                       the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to a float.
      */
-    public static float getVariable(String name, float defaultValue) {
+    public float getVariable(String name, float defaultValue) {
         return ConfigurationSection.getFloatValue(getVariable(name, ConfigurationSection.getValue(defaultValue)));
     }
 
@@ -721,7 +713,7 @@ public class ConfigurationManager {
      * @param  defaultValue          value to use if <code>name</code> is not set.
      * @return                       the specified variable's value.
      */
-    public static boolean getVariable(String name, boolean defaultValue) {
+    public boolean getVariable(String name, boolean defaultValue) {
         return ConfigurationSection.getBooleanValue(getVariable(name, ConfigurationSection.getValue(defaultValue)));
     }
 
@@ -737,7 +729,7 @@ public class ConfigurationManager {
      * @return                       the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to a double.
      */
-    public static double getVariable(String name, double defaultValue) {
+    public double getVariable(String name, double defaultValue) {
         return ConfigurationSection.getDoubleValue(getVariable(name, ConfigurationSection.getValue(defaultValue)));
     }
 
@@ -752,7 +744,7 @@ public class ConfigurationManager {
      * @param  create whether or not the path to the variable should be created if it doesn't exist.
      * @return the name of the variable trimmed of section information, <code>null</code> if not found.
      */
-    private static String moveToParent(ConfigurationExplorer root, String name, boolean create) {
+    private String moveToParent(ConfigurationExplorer root, String name, boolean create) {
         StringTokenizer parser; // Used to parse the variable's path.
 
         // Goes through each element of the path.
@@ -778,11 +770,127 @@ public class ConfigurationManager {
      * Adds the specified object to the list of registered configuration listeners.
      * @param listener object to register as a configuration listener.
      */
-    public static void addConfigurationListener(ConfigurationListener listener) {ConfigurationEvent.addConfigurationListener(listener);}
+    public static void addConfigurationListener(ConfigurationListener listener) {listeners.put(listener, null);}
 
     /**
      * Removes the specified object from the list of registered configuration listeners.
      * @param listener object to remove from the list of registered configuration listeners.
      */
-    public static void removeConfigurationListener(ConfigurationListener listener) {ConfigurationEvent.removeConfigurationListener(listener);}
+    public static void removeConfigurationListener(ConfigurationListener listener) {listeners.remove(listener);}
+
+    /**
+     * Passes the specified event to all registered configuration listeners.
+     * @param event event to propagate.
+     */
+    private static void triggerEvent(ConfigurationEvent event) {
+        Iterator iterator;
+
+        iterator = listeners.keySet().iterator();
+        while(iterator.hasNext())
+            ((ConfigurationListener)iterator.next()).configurationChanged(event);
+    }
+
+
+
+    // - Loading ---------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    /**
+     * @author Nicolas Rinaudo
+     */
+    private class ConfigurationLoader implements ConfigurationBuilder {
+        // - Instance variables ------------------------------------------------
+        // ---------------------------------------------------------------------
+        /** Parents of {@link #currentSection}. */
+        private Stack                sections;
+        /** Fully qualified names of {@link #currentSection}. */
+        private Stack                sectionNames;
+        /** Section that we're currently building. */
+        private ConfigurationSection currentSection;
+
+
+
+        // - Initialisation ----------------------------------------------------
+        // ---------------------------------------------------------------------
+        /**
+         * Creates a new configuration loader.
+         * @param root where to create the configuration in.
+         */
+        public ConfigurationLoader(ConfigurationSection root) {currentSection = root;}
+
+
+
+        // - Building ----------------------------------------------------------
+        // ---------------------------------------------------------------------
+        /**
+         * Initialises the configuration bulding.
+         */
+        public void startConfiguration() {
+            sections     = new Stack();
+            sectionNames = new Stack();
+        }
+
+        /**
+         * Ends the configuration building.
+         * @throws ConfigurationException if not all opened sections have been closed.
+         */
+        public void endConfiguration() throws ConfigurationException {
+            // Makes sure currentSection is the root section.
+            if(!sections.empty())
+                throw new ConfigurationException("Not all sections have been closed.");
+            sections     = null;
+            sectionNames = null;
+        }
+
+        /**
+         * Creates a new sub-section to the current section.
+         * @param name name of the new section.
+         */
+        public void startSection(String name) throws ConfigurationException {
+            ConfigurationSection buffer;
+
+            buffer = currentSection.addSection(name);
+            sections.push(currentSection);
+            if(sectionNames.empty())
+                sectionNames.push(name + '.');
+            else
+                sectionNames.push(((String)sectionNames.peek()) + name + '.');
+            currentSection = buffer;
+        }
+
+        /**
+         * Ends the current section.
+         * @param  name                   name of the section that's being closed.
+         * @throws ConfigurationException if we're not closing a legal section.
+         */
+        public void endSection(String name) throws ConfigurationException {
+            ConfigurationSection buffer;
+
+            // Makes sure there is a section to close.
+            try {
+                buffer = (ConfigurationSection)sections.pop();
+                sectionNames.pop();
+            }
+            catch(EmptyStackException e) {throw new ConfigurationException("Section " + name + " was already closed.");}
+
+            // Makes sure we're closing the right section.
+            if(buffer.getSection(name) != currentSection)
+                throw new ConfigurationException("Section " + name + " is not the currently opened section.");
+            currentSection = buffer;
+        }
+
+        /**
+         * Adds the specified variable to the current section.
+         * @param name  name of the variable.
+         * @param value value of the variable.
+         */
+        public void addVariable(String name, String value) {
+            // If the variable's value was modified, trigger an event.
+            if(currentSection.setVariable(name, value)) {
+                if(sectionNames.empty())
+                    triggerEvent(new ConfigurationEvent(name, value));
+                else
+                    triggerEvent(new ConfigurationEvent(((String)sectionNames.peek()) + name, value));
+            }
+        }
+    }
 }

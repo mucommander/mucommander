@@ -30,7 +30,7 @@ import java.io.IOException;
  * which handles the standard muCommander configuration file format.
  * </p>
  * <p>
- * In order for an implementation of <code>ConfigurationWriter</code> to be useable by the {@link ConfigurationManager},
+ * In order for an implementation of <code>ConfigurationWriter</code> to be useable by instances of {@link Configuration},
  * it must come with an associated implementation of {@link ConfigurationWriterFactory}.<br/>
  * </p>
  * <p>

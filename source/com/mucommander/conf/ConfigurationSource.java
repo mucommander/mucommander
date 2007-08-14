@@ -23,10 +23,10 @@ import java.io.OutputStream;
 import java.io.IOException;
 
 /**
- * Provides the {@link ConfigurationManager} with streams to configuration data.
+ * Provides instances of {@link Configuration} with streams to configuration data.
  * <p>
  * Implementations of this interface can be registered through
- * {@link ConfigurationManager#setConfigurationSource(ConfigurationSource)}. Their purpose is
+ * {@link Configuration#setSource(ConfigurationSource)}. Their purpose is
  * to provide the system with streams to a configuration source. This system allows applications
  * to retrieve their configuration information from non-standard sources, such as over the network,
  * in a database, ...

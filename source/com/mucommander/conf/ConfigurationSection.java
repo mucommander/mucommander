@@ -23,7 +23,7 @@ import java.util.Enumeration;
 
 /**
  * Represents a section in the configuration tree.
- * @author Nicolas Rinaudo, Maxence Bernard
+ * @author Nicolas Rinaudo
  */
 class ConfigurationSection {
     // - Instance fields -------------------------------------------------------

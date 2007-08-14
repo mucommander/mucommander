@@ -19,7 +19,7 @@
 package com.mucommander.conf;
 
 /**
- * Interface used to provide the {@link ConfigurationManager} with a way of creating {@link ConfigurationWriter writer} instances.
+ * Interface used to provide interfaces of {@link Configuration} with a way of creating {@link ConfigurationWriter writer} instances.
  * <p>
  * A <code>ConfigurationWriterFactory</code>'s sole purpose is to create instances of {@link ConfigurationWriter}. In most cases, a
  * factory class will be associated with a writer class, and its code will look something like:

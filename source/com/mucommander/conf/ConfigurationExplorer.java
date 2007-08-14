@@ -19,7 +19,7 @@
 package com.mucommander.conf;
 
 /**
- * Helper class meant for the {@link ConfigurationManager} to explore its configuration tree.
+ * Helper class meant for instances of {@link Configuration} to explore their own configuration tree.
  * @author Nicolas Rinaudo
  */
 class ConfigurationExplorer {

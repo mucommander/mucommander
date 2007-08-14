@@ -20,14 +20,7 @@ package com.mucommander.conf.impl;
 
 import com.mucommander.RuntimeConstants;
 import com.mucommander.PlatformManager;
-import com.mucommander.conf.ConfigurationManager;
 import com.mucommander.conf.ConfigurationSource;
-import com.mucommander.conf.ConfigurationReaderFactory;
-import com.mucommander.conf.ConfigurationWriterFactory;
-import com.mucommander.conf.ConfigurationReader;
-import com.mucommander.conf.ConfigurationWriter;
-import com.mucommander.conf.XmlConfigurationReader;
-import com.mucommander.conf.XmlConfigurationWriter;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.io.BackupOutputStream;
 import com.mucommander.file.AbstractFile;
@@ -40,22 +33,9 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 
 /**
- * muCommander's implementation of the configuration.
- * <p>
- * This acts as a {@link com.mucommander.conf.ConfigurationSource}, a {@link com.mucommander.conf.ConfigurationReaderFactory} and
- * a {@link com.mucommander.conf.ConfigurationWriterFactory}.
- * </p>
- * <p>
- * The configuration file format used is that defined in {@link com.mucommander.conf.XmlConfigurationReader}.
- * </p>
- * <p>
- * <code>MucoConfigurationSource</code> behaves like a {@link com.mucommander.conf.FileConfigurationSource}, but uses
- * instances of {@link com.mucommander.file.AbstractFile} rather <code>java.io.File</code>. This allows configuration data
- * to be loaded from remote file systems, inside archives, ...
- * </p>
  * @author Nicolas Rinaudo
  */
-public class MucoConfigurationSource implements ConfigurationSource, ConfigurationReaderFactory, ConfigurationWriterFactory {
+class MuConfigurationSource implements ConfigurationSource {
     // - Class fields ---------------------------------------------------------------
     // ------------------------------------------------------------------------------
     /** Path to the configuration file. */
@@ -65,25 +45,11 @@ public class MucoConfigurationSource implements ConfigurationSource, Configurati
 
 
 
-
-    // - Backward compatibility -----------------------------------------------------
+    // - Initialisation -------------------------------------------------------------
     // ------------------------------------------------------------------------------
-    /**
-     * Moves old configuration variables to their new names.
-     */
-    public static void processConfiguration() {
-        String configurationVersion;
+    public MuConfigurationSource(String path) {setConfigurationFile(path);}
+    public MuConfigurationSource() {}
 
-        configurationVersion = ConfigurationManager.getVariable(ConfigurationVariables.VERSION);
-        if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
-            ConfigurationManager.renameVariable("show_hidden_files", ConfigurationVariables.SHOW_HIDDEN_FILES);
-            ConfigurationManager.renameVariable("auto_size_columns", ConfigurationVariables.AUTO_SIZE_COLUMNS);
-            ConfigurationManager.renameVariable("show_toolbar",      ConfigurationVariables.TOOLBAR_VISIBLE);
-            ConfigurationManager.renameVariable("show_status_bar",   ConfigurationVariables.STATUS_BAR_VISIBLE);
-            ConfigurationManager.renameVariable("show_command_bar",  ConfigurationVariables.COMMAND_BAR_VISIBLE);
-            ConfigurationManager.setVariable(ConfigurationVariables.VERSION, RuntimeConstants.VERSION);
-        }
-    }
 
 
     // - Configuration file handling ------------------------------------------------
@@ -105,6 +71,7 @@ public class MucoConfigurationSource implements ConfigurationSource, Configurati
     public static synchronized void setConfigurationFile(String file) {configurationFile = FileFactory.getFile(file);}
 
 
+
     // - Streams handling -----------------------------------------------------------
     // ------------------------------------------------------------------------------
     /**
@@ -118,20 +85,4 @@ public class MucoConfigurationSource implements ConfigurationSource, Configurati
      * @return an output stream on the configuration file.
      */
     public synchronized OutputStream getOutputStream() throws IOException {return new BackupOutputStream(getConfigurationFile());}
-
-
-
-    // - File format handling -------------------------------------------------------
-    // ------------------------------------------------------------------------------
-    /**
-     * Returns a {@link com.mucommander.conf.ConfigurationReader} used to parse the muCommander configuration file.
-     * @return the object that will be used to parse the muCommander configuration file.
-     */
-    public ConfigurationReader getReaderInstance() {return new XmlConfigurationReader();}
-
-    /**
-     * Returns a {@link com.mucommander.conf.ConfigurationWriter} used to write the muCommander configuration file.
-     * @return the object that will be used to write the muCommander configuration file.
-     */
-    public ConfigurationWriter getWriterInstance() {return new XmlConfigurationWriter();}
 }

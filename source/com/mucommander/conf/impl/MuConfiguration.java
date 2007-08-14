@@ -18,15 +18,20 @@
 
 package com.mucommander.conf.impl;
 
+import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
-import com.mucommander.ui.icon.FileIcons;
+import com.mucommander.conf.Configuration;
+import com.mucommander.conf.ConfigurationFormatException;
+import com.mucommander.conf.ConfigurationException;
+import com.mucommander.conf.ConfigurationListener;
+
+import java.io.IOException;
 
 /**
- * Aggregates all of muCommander's configuration variables in one place.
  * @author Nicolas Rinaudo
  */
-public interface ConfigurationVariables {
+public class MuConfiguration {
     // - Misc. variables -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Whether or not to automaticaly check for updates on startup. */
@@ -370,5 +375,110 @@ public interface ConfigurationVariables {
     public static final String LIST_HIDDEN_FILES                  = FTP_SECTION + '.' + "list_hidden_files";
     /** Default value for {@link #LIST_HIDDEN_FILES} */
     public static final boolean DEFAULT_LIST_HIDDEN_FILES         = false;
+
+    private static Configuration configuration;
+
+    static {
+        configuration = new Configuration();
+        configuration.setSource(new MuConfigurationSource());
+    }
+
+    public static void read() throws IOException, ConfigurationException, ConfigurationFormatException {
+        String configurationVersion;
+
+        try {configuration.read();}
+        finally {
+            configurationVersion = getVariable(VERSION);
+            if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
+                renameVariable("show_hidden_files", SHOW_HIDDEN_FILES);
+                renameVariable("auto_size_columns", AUTO_SIZE_COLUMNS);
+                renameVariable("show_toolbar",      TOOLBAR_VISIBLE);
+                renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
+                renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
+                setVariable(VERSION, RuntimeConstants.VERSION);
+            }
+        }
+    }
+
+    public static void write() throws IOException, ConfigurationException {configuration.write();}
+
+
+    // - Variable setting ------------------------------------------------------
+    // -------------------------------------------------------------------------
+    public static void renameVariable(String fromVar, String toVar) {configuration.renameVariable(fromVar, toVar);}
+
+    public static boolean setVariable(String name, String value) {return configuration.setVariable(name, value);}
+
+    public static boolean setVariable(String name, int value) {return configuration.setVariable(name, value);}
+
+    public static boolean setVariable(String name, float value) {return configuration.setVariable(name, value);}
+
+    public static boolean setVariable(String name, boolean value) {return configuration.setVariable(name, value);}
+
+    public static boolean setVariable(String name, long value) {return configuration.setVariable(name, value);}
+
+    public static boolean setVariable(String name, double value) {return configuration.setVariable(name, value);}
+
+
+
+    // - Variable retrieval ----------------------------------------------------
+    // -------------------------------------------------------------------------
+    public static String getVariable(String name) {return configuration.getVariable(name);}
+
+    public static int getIntegerVariable(String name) {return configuration.getIntegerVariable(name);}
+
+    public static long getLongVariable(String name) {return configuration.getLongVariable(name);}
+
+    public static float getFloatVariable(String name) {return configuration.getFloatVariable(name);}
+
+    public static double getDoubleVariable(String name) {return configuration.getDoubleVariable(name);}
+
+    public static boolean getBooleanVariable(String name) {return configuration.getBooleanVariable(name);}
+
+    public static boolean isVariableSet(String name) {return configuration.isVariableSet(name);}
+
+
+
+    // - Variable removal ------------------------------------------------------
+    // -------------------------------------------------------------------------
+    public static String removeVariable(String name) {return configuration.removeVariable(name);}
+
+    public static int removeIntegerVariable(String name) {return configuration.removeIntegerVariable(name);}
+
+    public static long removeLongVariable(String name) {return configuration.removeLongVariable(name);}
+
+    public static float removeFloatVariable(String name) {return configuration.removeFloatVariable(name);}
+
+    public static double removeDoubleVariable(String name) {return configuration.removeDoubleVariable(name);}
+
+    public static boolean removeBooleanVariable(String name) {return configuration.removeBooleanVariable(name);}
+
+
+
+    // - Advanced variable retrieval -------------------------------------------
+    // -------------------------------------------------------------------------
+    public static String getVariable(String name, String defaultValue) {return configuration.getVariable(name, defaultValue);}
+
+    public static int getVariable(String name, int defaultValue) {return configuration.getVariable(name, defaultValue);}
+
+    public static long getVariable(String name, long defaultValue) {return configuration.getVariable(name, defaultValue);}
+
+    public static float getVariable(String name, float defaultValue) {return configuration.getVariable(name, defaultValue);}
+
+    public static boolean getVariable(String name, boolean defaultValue) {return configuration.getVariable(name, defaultValue);}
+
+    public static double getVariable(String name, double defaultValue) {return configuration.getVariable(name, defaultValue);}
+
+
+    // - Configuration listening -----------------------------------------------
+    // -------------------------------------------------------------------------
+    public static void addConfigurationListener(ConfigurationListener listener) {configuration.addConfigurationListener(listener);}
+
+    public static void removeConfigurationListener(ConfigurationListener listener) {configuration.removeConfigurationListener(listener);}
+
+
+    // - Configuration source --------------------------------------------------
+    // -------------------------------------------------------------------------
+    public static void setConfigurationFile(String file) {configuration.setSource(new MuConfigurationSource(file));}
 
 }
