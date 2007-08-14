@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- ======================================================= -->
   <!-- Imports the various buildfiles that configure how the   -->
   <!-- project will be compiled.                               -->
-  <import file="local.xml"/>
   <import file="build/common.xml"/>
   <import file="build/tools/structure.xml"/>
+  <import file="local.xml"/>
   <import file="build/tools/main.xml"/>
 </project>

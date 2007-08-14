@@ -21,16 +21,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This acts as a proxy to all other buildfiles.             -->
 <!-- ========================================================= -->
 <project name="mucommander" default="run" basedir=".">
-  <!-- Paths to local tools.                                   -->
-  <import file="local.xml"/>
   <!-- Common targets and directory structure.                 -->
   <import file="build/common.xml"/>
-  <!-- muCommander specific targets.                           -->
-  <import file="build/muco/main.xml"/>
   <!-- muCommander specific directory structure.               -->
   <import file="build/muco/structure.xml"/>
+  <!-- Paths to local tools.                                   -->
+  <import file="local.xml"/>
   <!-- Ant tools specific targets.                             -->
   <import file="build/tools/main.xml"/>
   <!-- Configuration API specific targets.                     -->
   <import file="build/conf/main.xml"/>
+  <!-- muCommander specific targets.                           -->
+  <import file="build/muco/main.xml"/>
 </project>
