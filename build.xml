@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Common targets and directory structure.                 -->
   <import file="build/common.xml"/>
   <!-- muCommander specific directory structure.               -->
-  <import file="build/muco/structure.xml"/>
+  <import file="build/mucommander/structure.xml"/>
   <!-- Paths to local tools.                                   -->
   <import file="local.xml"/>
   <!-- Ant tools specific targets.                             -->
@@ -32,5 +32,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Configuration API specific targets.                     -->
   <import file="build/conf/main.xml"/>
   <!-- muCommander specific targets.                           -->
-  <import file="build/muco/main.xml"/>
+  <import file="build/mucommander/main.xml"/>
 </project>
