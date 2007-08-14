@@ -34,10 +34,10 @@ import java.io.OutputStream;
 import java.util.regex.Pattern;
 
 /**
- * Abstract is the superclass of all files.
+ * <code>AbstractFile</code> is the superclass of all files.
  *
- * <p>AbstractFile classes should not be instanciated directly. Instead, the {@link FileFactory} <code>getFile</code>
- * methods should be used for that purpose.</p>
+ * <p>AbstractFile classes should never be instanciated directly. Instead, the {@link FileFactory} <code>getFile</code>
+ * methods should be used to get a file instance from a path or {@link FileURL} location.</p>
  *
  * @see com.mucommander.file.FileFactory
  * @see com.mucommander.file.impl.ProxyFile
@@ -91,16 +91,17 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the name of this AbstractFile.
+     * Returns this file's name.
      *
-     * <p>
-     * The returned name is the filename extracted from this file's <code>FileURL</code>
+     * <p>The returned name is the filename extracted from this file's <code>FileURL</code>
      * as returned by {@link FileURL#getFilename()}. If the filename is <code>null</code> (e.g. http://google.com), the
      * <code>FileURL</code>'s host will be returned instead. If the host is <code>null</code> (e.g. smb://), an empty
-     * String will be returned. Thus, the returned name will never be <code>null</code>.
+     * String will be returned. Thus, the returned name will never be <code>null</code>.</p>
      *
      * <p>This method should be overridden if a special processing (e.g. URL-decoding) needs to be applied to the
-     * returned filename.
+     * returned filename.</p>
+     *
+     * @return this file's name
      */
     public String getName() {
         String name = fileURL.getFilename();
@@ -118,15 +119,13 @@ public abstract class AbstractFile implements FilePermissions {
 
     /**
      * Returns the name of the file without its extension.
-     * <p>
-     * Within the context of this method, a file will have an
-     * extension if and only if:<br/>
-     * - it's not a directory.<br/>
-     * - it contains at least one <code>.</code> character.<br/>
-     * - the last <code>.</code> is not the last character in the file's name.<br/>
-     * - the last <code>.</code> is not the first character in the file's name.<br/>
-     * If a file is found not to have an extension, its full name is returned.
-     * </p>
+     *
+     * <p>A filename has an extension if and only if:<br/>
+     * - it contains at least one <code>.</code> character<br/>
+     * - the last <code>.</code> is not the last character of the filename<br/>
+     * - the last <code>.</code> is not the first character of the filename<br/>
+     * If this file has no extension, its full name is returned.</p>
+     *
      * @return this file's name, without its extension.
      * @see    #getName()
      * @see    #getExtension()
@@ -135,20 +134,10 @@ public abstract class AbstractFile implements FilePermissions {
         String name;
         int    position;
 
-        // Directories do not have extension.
-        if(isDirectory())
-            return getName();
-
         name     = getName();
         position = name.lastIndexOf('.');
 
-        // If the extension 'dot' either:
-        // - does not exist
-        // - is the first character of the file's name
-        // - is the last character of the file's name
-        // then we don't have an extension.
-        if((position == -1) || (position == name.length() - 1) ||
-           (position == 0))
+        if((position<=0) || (position == name.length() - 1))
             return name;
 
         return name.substring(0, position);
@@ -156,7 +145,14 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the given file's extension, <code>null</code> if the file doesn't have an extension.
+     * Returns this file's extension, <code>null</code> if this file's name doesn't have an extension.
+     *
+     * <p>A filename has an extension if and only if:<br/>
+     * - it contains at least one <code>.</code> character<br/>
+     * - the last <code>.</code> is not the last character of the filename<br/>
+     * - the last <code>.</code> is not the first character of the filename</p>
+     *
+     * @return this file's extension, <code>null</code> if this file's name doesn't have an extension
      */
     public String getExtension() {
         return getExtension(getName());
@@ -164,15 +160,21 @@ public abstract class AbstractFile implements FilePermissions {
 
     
     /**
-     * Returns the given filename's extension, <code>null</code> if the name doesn't have an extension.
+     * Returns the given filename's extension, <code>null</code> if the filename doesn't have an extension.
+     *
+     * <p>A filename has an extension if and only if:<br/>
+     * - it contains at least one <code>.</code> character<br/>
+     * - the last <code>.</code> is not the last character of the filename<br/>
+     * - the last <code>.</code> is not the first character of the filename</p>
      *
      * @param filename a filename, not a full path
+     * @return the given filename's extension, <code>null</code> if the filename doesn't have an extension
      */
     public static String getExtension(String filename) {
         int lastDotPos = filename.lastIndexOf('.');
 
         int len;
-        if(lastDotPos==-1 || lastDotPos==(len=filename.length())-1)
+        if(lastDotPos<=0 || lastDotPos==(len=filename.length())-1)
             return null;
 
         return filename.substring(lastDotPos+1, len);
@@ -181,13 +183,15 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the absolute path of this AbstractFile:
+     * Returns the absolute path to this file:
      * <ul>
-     * <li>For local files, the path is returned 'sans' the protocol and host parts (i.e. without file://localhost)
+     * <li>For local files, the path is returned without the protocol and host parts (i.e. without file://localhost)
      * <li>For any other file protocol, the full URL including the protocol and host parts is returned (e.g. smb://192.168.1.1/root/blah)
      * </ul>
      *
      * <p>The returned path will always be free of any login and password and thus can be safely displayed or stored.
+     *
+     * @return the absolute path to this file
      */
     public String getAbsolutePath() {
         FileURL fileURL = getURL();
@@ -202,8 +206,11 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the absolute path of this AbstractFile with a trailing separator character if <code>true</code> is passed,
-     * or without one if <code>false</code> is passed.
+     * Returns the absolute path to this file.
+     * A separator character will be appended to the returned path if <code>true</code> is passed.
+     *
+     * @param appendSeparator if true, a separator will be appended to the returned path
+     * @return the absolute path to this file
      */
     public final String getAbsolutePath(boolean appendSeparator) {
         String path = getAbsolutePath();
@@ -212,10 +219,12 @@ public abstract class AbstractFile implements FilePermissions {
 
 	
     /**
-     * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences.
+     * Returns the canonical path to this file, resolving any symbolic links or '..' and '.' occurrences.
      *
      * <p>This implementation simply returns the value of {@link #getAbsolutePath()}, and thus should be overridden
-     * if canonical path resolution is available.
+     * if canonical path resolution is available.</p>
+     *
+     * @return the canonical path to this file
      */
     public String getCanonicalPath() {
         return getAbsolutePath();
@@ -223,8 +232,11 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the canonical path of this AbstractFile, resolving any symbolic links or '..' and '.' occurrences,
-     * with an appended separator character if <code>true</code> is passed or without one if <code>false</code> is passed.
+     * Returns the canonical path to this file, resolving any symbolic links or '..' and '.' occurrences.
+     * A separator character will be appended to the returned path if <code>true</code> is passed.
+     *
+     * @param appendSeparator if true, a separator will be appended to the returned path
+     * @return the canonical path to this file
      */
     public final String getCanonicalPath(boolean appendSeparator) {
         String path = getCanonicalPath();
@@ -233,9 +245,12 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the path separator of this AbstractFile.
-     * <p>This implementation returns the default separator "/", this method should be overridden
-     * if the path separator is different.
+     * Returns the path separator used by this file.
+     *
+     * <p>This default implementation returns the default separator "/", this method should be overridden if the path
+     * separator used by the file implementation is different.</p>
+     *
+     * @return the path separator used by this file
      */
     public String getSeparator() {
         return DEFAULT_SEPARATOR;
@@ -244,6 +259,9 @@ public abstract class AbstractFile implements FilePermissions {
 
     /**
      * Returns <code>true</code> if this file is a parent folder of the given file, or if the 2 files are equal.
+     *
+     * @param file the AbstractFile to test
+     * @return true if this file is a parent folder of the given file, or if the 2 files are equal
      */
     public boolean isParentOf(AbstractFile file) {
         return isBrowsable() && file.getCanonicalPath(true).startsWith(getCanonicalPath(true));
@@ -251,7 +269,11 @@ public abstract class AbstractFile implements FilePermissions {
 
 	
     /**
-     * Returns true if this AbstractFile can be browsed (entered): true for directories and supported archive files.
+     * Returns <code>true</code> if this file is browsable. A file is considered browsable if it contains children files
+     * that can be exposed by calling the <code>ls()</code> methods. {@link AbstractArchiveFile} implementations will
+     * usually return <code>true<code>, as will directories (directories are always browsable).
+     *
+     * @return true if this file is browsable
      */
     public boolean isBrowsable() {
         return isDirectory() || (this instanceof AbstractArchiveFile);
@@ -259,11 +281,13 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns true if this AbstractFile is hidden.
+     * Returns <code>true</code> if this file is hidden.
      *
      * <p>This default implementation is solely based on the filename and returns <code>true</code> if this
      * file's name starts with '.'. This method should be overriden if the underlying filesystem has a notion 
      * of hidden files.</p>
+     *
+     * @return true if this file is hidden
      */	
     public boolean isHidden() {
         return getName().startsWith(".");
@@ -271,8 +295,10 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the root folder that contains this AbstractFile. If this file is already
-     * a root folder (no parent), it will simply be returned.
+     * Returns the root folder that contains this file either as a direct or an indirect child. If this file is already
+     * a root folder (has no parent), <code>this</code> is returned.
+     *
+     * @return the root folder that contains this file
      */
     public AbstractFile getRoot() {
         AbstractFile parent;
@@ -286,11 +312,16 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns true if this file is a root folder, that is:
+     * Returns <code>true</code> if this file is a root folder.
+     *
+     * <p>This default implementation characterizes root folders in the following way:
      * <ul>
-     *  <li>for all protocols other than 'file', if the URL's path part is '/'
-     *  <li>for the 'file' protocol, '/' if the OS is not Windows, a drive root for Windows ('C:\' for instance)
+     *  <li>For local files under Windows: if the path corresponds a drive's root ('C:\' for instance)
+     *  <li>For local files under other OS: if the path is "/"
+     *  <li>For any other file kinds: if the FileURL's path is '/'
      * </ul>
+     *
+     * @return <code>true</code> if this file is a root folder
      */
     public boolean isRoot() {
         String path = fileURL.getPath();
@@ -303,8 +334,11 @@ public abstract class AbstractFile implements FilePermissions {
     
 
     /**
-     * Tests if the given path contains a trailing separator character, and if not, adds one and returns the path.
+     * Tests if the given path contains a trailing separator, and if not, adds one to the returned path.
      * The separator used is the one returned by {@link #getSeparator()}.
+     *
+     * @param path the path for which to add a trailing separator
+     * @return the path with a trailing separator
      */
     protected final String addTrailingSeparator(String path) {
         // Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
@@ -317,8 +351,11 @@ public abstract class AbstractFile implements FilePermissions {
 	
 	
     /**
-     * Tests if the given path contains a trailing separator character, and if it does, removes it and returns the new path.
+     * Tests if the given path contains a trailing separator, and if it does, removes it from the returned path.
      * The separator used is the one returned by {@link #getSeparator()}.
+     *
+     * @param path the path for which to remove the trailing separator
+     * @return the path free of a trailing separator
      */
     protected final String removeTrailingSlash(String path) {
         // Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\' 
@@ -332,22 +369,24 @@ public abstract class AbstractFile implements FilePermissions {
 	
 
     /**
-     * Returns an InputStream to read from this AbstractFile, skipping the
-     * specified number of bytes. This method should be overridden whenever
-     * possible to provide a more efficient implementation, as this implementation
-     * uses {@link java.io.InputStream#skip(long)}
-     * which may *read* bytes and discards them, which is bad (think of an ISO file on a remote server).
+     * Returns an <code>InputStream</code> to read this file's contents, starting at the specified offset (in bytes).
      *
-     * @throws IOException if this AbstractFile cannot be read or is a folder.
+     * <p>This method should be overridden whenever possible to provide a more efficient implementation, as this
+     * default implementation uses {@link java.io.InputStream#skip(long)} which may just read bytes and discards them, 
+     * which is very slow.</p>
+     *
+     * @param offset the offset in bytes from the beginning of the file, must be >0
+     * @throws IOException if this file cannot be read or is a folder.
+     * @return an <code>InputStream</code> to read this file's contents, skipping the specified number of bytes
      */
-    public InputStream getInputStream(long skipBytes) throws IOException {
+    public InputStream getInputStream(long offset) throws IOException {
         InputStream in = getInputStream();
 		
         // Call InputStream.skip() until the specified number of bytes have been skipped
         long nbSkipped = 0;
         long n;
-        while(nbSkipped<skipBytes) {
-            n = in.skip(skipBytes-nbSkipped);
+        while(nbSkipped<offset) {
+            n = in.skip(offset-nbSkipped);
             if(n>0)
                 nbSkipped += n;
         }
@@ -448,20 +487,21 @@ public abstract class AbstractFile implements FilePermissions {
     
 
     /**
-     * Copies this AbstractFile to another specified one, overwriting the contents of the destination file (if any).
-     * Returns true if the operation could be successfully be completed, false if the operation could not be performed
-     * because of unsatisfied conditions (not an error), or throws an {@link FileTransferException} if the
-     * operation was attempted but failed.
+     * Copies this file to another specified one, overwriting the contents of the destination file (if any).
+     * Returns <code>true</code> if the operation could be successfully be completed, <code>false</code> if the
+     * operation could not be performed because of unsatisfied conditions (not an error), or throws an
+     * {@link FileTransferException} if the operation was attempted but failed.
      *
      * <p>This generic implementation copies this file to the destination one, overwriting any data it contains.
-     * The operation will always be attempted, thus will either return true or throw an exception, but will never return false.
+     * The operation will always be attempted, thus will either return <code>true</code> or throw an exception, but
+     * will never return <code>false</code>.</p>
      *
-     * <p>This method should be overridden by file protocols which are able to perform a server-to-server copy.
+     * <p>This method should be overridden by file protocols which are able to perform a server-to-server copy.</p>
      *
      * @param destFile the destination file this file should be copied to
      * @return true if the operation could be successfully be completed, false if the operation could not be performed
      * because of unsatisfied conditions (not an error)
-     * @throws FileTransferException if this AbstractFile or destination cannot be written or if the operation failed
+     * @throws FileTransferException if this file or the destination could not be written or if the operation failed
      * for any other reason (use {@link FileTransferException#getReason()} to get the reason of the failure).
      */
     public boolean copyTo(AbstractFile destFile) throws FileTransferException {
@@ -520,20 +560,21 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Moves this AbstractFile to another specified one. Returns true if the operation could be successfully
-     * be completed, false if the operation could not be performed because of unsatisfied conditions (not an error),
-     * or throws an {@link FileTransferException} if the operation was attempted but failed.
+     * Moves this file to another specified one. Returns <code>true</code> if the operation was successfully
+     * completed, <code>false</code> if the operation could not be performed because of unsatisfied conditions
+     * (not an error), or throws an {@link FileTransferException} if the operation was attempted but failed.
      *
      * <p>This generic implementation copies this file to the destination one, overwriting any data it contains,
      * and if (and only if) the copy was successful, deletes the original file (this file). The operation will always
-     * be attempted, thus will either return true or throw an exception, but will never return false.
+     * be attempted, thus will either return <code>true</code> or throw an exception, but will never return
+     * <code>false</code>.
      *
-     * <p>This method should be overridden by file protocols which are able to rename files.
+     * <p>This method should be overridden by file protocols which are able to rename files.</p>
      *
      * @param destFile the destination file this file should be moved to
      * @return true if the operation could be successfully be completed, false if the operation could not be performed
      * because of unsatisfied conditions (not an error)
-     * @throws FileTransferException if this AbstractFile or destination cannot be written or if the operation failed
+     * @throws FileTransferException if this file or the destination could be written or if the operation failed
      * for any other reason (use {@link FileTransferException#getReason()} to get the reason of the failure).
      */
     public boolean moveTo(AbstractFile destFile) throws FileTransferException {
@@ -584,7 +625,7 @@ public abstract class AbstractFile implements FilePermissions {
         // This test is a bit complicated because each of the hosts can potentially be null (e.g. smb://)
         String host = fileURL.getHost();
         String destHost = destFile.fileURL.getHost();
-        boolean hostsEqual = host==null?(destHost==null?true:destHost.equals(host)):host.equals(destHost);
+        boolean hostsEqual = host==null?(destHost==null||destHost.equals(host)):host.equals(destHost);
 
         // Return SHOULD_NOT if hosts differ
         if(!hostsEqual)
@@ -615,11 +656,12 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the files contained by this AbstractFile, filtering out files that do not match the specified FileFilter.
+     * Returns the children files that this file contains, filtering out files that do not match the specified FileFilter.
      * For this operation to be successful, this file must be 'browsable', i.e. {@link #isBrowsable()} must return
      * <code>true</code>.
      *
      * @param filter the FileFilter to be used to filter files out from the list, may be <code>null</code>
+     * @return the children files that this file contains
      * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
      */
     public AbstractFile[] ls(FileFilter filter) throws IOException {
@@ -628,7 +670,7 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Returns the files contained by this AbstractFile, filtering out files that do not match the specified FilenameFilter.
+     * Returns the children files that this file contains, filtering out files that do not match the specified FilenameFilter.
      * For this operation to be successful, this file must be 'browsable', i.e. {@link #isBrowsable()} must return 
      * <code>true</code>.
      *
@@ -636,6 +678,8 @@ public abstract class AbstractFile implements FilePermissions {
      * should be overridden if a more efficient implementation can be provided by subclasses.
      *
      * @param filter the FilenameFilter to be used to filter out files from the list, may be <code>null</code>
+     * @return the children files that this file contains
+     * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
      */
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
         return filter==null?ls():filter.filter(ls());
@@ -643,7 +687,12 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Convenience method that sets/unsets a bit in the given permissions int.
+     * Convenience method that sets/unsets a bit in the given permission int.
+     *
+     * @param permissions the permission int
+     * @param bit the bit to set
+     * @param enabled true to enable the bit, false to disable it
+     * @return the modified permission int
      */
     protected static int setPermissionBit(int permissions, int bit, boolean enabled) {
         if(enabled)
@@ -685,8 +734,8 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     /**
-     * Changes this file's permissions to the specified permissions int and returns true if
-     * the operation was successful, false if at least one of the file permissions could not be changed.
+     * Changes this file's permissions to the specified permissions int and returns <code>true</code> if
+     * the operation was successful, <code>false</code> if at least one of the file permissions could not be changed.
      * The permissions int should be created using {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION}, {@link #EXECUTE_PERMISSION}
      * and {@link #USER_ACCESS}, {@link #GROUP_ACCESS} and {@link #OTHER_ACCESS} masks combined with logical OR.
      *
@@ -798,6 +847,8 @@ public abstract class AbstractFile implements FilePermissions {
      *  <li>a regular file for which {@link #getPermissionGetMask()} returns 777 (full permissions support) and which
      * has read/write/executable permissions for all three 'user', 'group' and 'other' access types will return "-rwxrwxrwx".
      * </ul>
+     *
+     * @return a string representation of this file's permissions
      */
     public String getPermissionsString() {
         int availPerms = getPermissionGetMask();
@@ -850,7 +901,7 @@ public abstract class AbstractFile implements FilePermissions {
      * Returns the first ancestor of this file that is an instance of the given Class or of a subclass of the given
      * Class, or <code>this</code> if this instance's class matches those criteria. Returns <code>null</code> if this
      * file has no such ancestor.
-     * Note that the specified must correspond to an AbstractFile subclass. Specifying any other Class will
+     * Note that the specified must correspond to an <code>AbstractFile</code> subclass. Specifying any other Class will
      * always yield to this method returning <code>null</code>. Also note that this method will always return
      * <code>this</code> if <code>AbstractFile.class</code> is specified.
      *
@@ -901,9 +952,10 @@ public abstract class AbstractFile implements FilePermissions {
 
     /**
      * Returns <code>true</code> if this file is or has an ancestor (immediate or not) that is an instance of the given
-     * Class or of a subclass of the given Class. Note that the specified must correspond to an AbstractFile subclass.
-     * Specifying any other Class will always yield to this method returning <code>false</code>. Also note that this
-     * method will always return <code>true</code> if <code>AbstractFile.class</code> is specified.
+     * <code>Class</code> or of a subclass of the <code>Class</code>. Note that the specified must correspond to an
+     * <code>AbstractFile</code> subclass. Specifying any other Class will always yield to this method returning
+     * <code>false</code>. Also note that this method will always return <code>true</code> if
+     * <code>AbstractFile.class</code> is specified.
      *
      * @param abstractFileClass a Class corresponding to an AbstractFile subclass
      * @return <code>true</code> if this file has an ancestor (immediate or not) that is an instance of the given Class
@@ -964,7 +1016,8 @@ public abstract class AbstractFile implements FilePermissions {
 
 	
     /**
-     * Returns a String representation of this AbstractFile which is the path as returned by getAbsolutePath().
+     * Returns a String representation of this file. The returned String is this file's path as returned by
+     * {@link #getAbsolutePath()}.
      */
     public String toString() {
         return getAbsolutePath();
@@ -972,17 +1025,19 @@ public abstract class AbstractFile implements FilePermissions {
 
 
     //////////////////////
-    // Abstract Methods //
+    // Abstract methods //
     //////////////////////
 
     /**
-     * Returns the last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
+     * Returns this file's last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
+     *
+     * @return this file's last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      */
     public abstract long getDate();
 	
     /**
-     * Changes last modified date and returns <code>true</code> if date was changed successfully, false if the
-     * operation is not implemented or could not be successfully completed.
+     * Changes last modified date and returns <code>true</code> if date was changed successfully, <code>false</code>
+     *  if the operation is not implemented or could not be successfully completed.
      *
      * @param lastModified last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      * @return <code>true</code> if date was changed successfully.
@@ -990,27 +1045,35 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract boolean changeDate(long lastModified);
 	
     /**
-     * Returns the size in bytes of this AbstractFile, -1 if not known.
+     * Returns this file's size in bytes, <code>-1</code> if unknown.
+     *
+     * @return this file's size in bytes, <code>-1</code> if unknown
      */
     public abstract long getSize();
 	
     /**
-     * Returns this AbstractFile's parent or null if it doesn't have any parent.
+     * Returns this file's parent, <code>null</code> if it doesn't have any parent.
+     *
+     * @return this file's parent, <code>null</code> if it doesn't have any parent
      */
     public abstract AbstractFile getParent();
 	
     /**
-     * Sets this file's parent or null if it doesn't have any parent.
+     * Sets this file's parent. <code>null</code> can be specified if this file doesn't have a parent.
+     *
+     * @param parent the new parent of this file
      */
     public abstract void setParent(AbstractFile parent);
 
     /**
      * Returns <code>true</code> if this file exists.
+     *
+     * @return <code>true</code> if this file exists
      */
     public abstract boolean exists();
 
     /**
-     * Returns true if this file has the specified permission enabled for the given access type.
+     * Returns <code>true</code> if this file has the specified permission enabled for the given access type.
      * If the permission flag for the access type is not supported (use {@link #getPermissionGetMask()} or
      * {@link #canGetPermission(int, int)} to determine that), the return value will be meaningless and therefore
      * should not be taken into account.
@@ -1028,12 +1091,13 @@ public abstract class AbstractFile implements FilePermissions {
      *
      * @param access {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION} or {@link #EXECUTE_PERMISSION}
      * @param permission {@link #USER_ACCESS}, {@link #GROUP_ACCESS} or {@link #OTHER_ACCESS}
+     * @param enabled true to enable the flag, false to disable it
      * @return true if the permission flag was successfully set for the access type
      */
     public abstract boolean setPermission(int access, int permission, boolean enabled);
 
     /**
-     * Returns true if this file can retrieve the specified permission flag for the given access type.
+     * Returns <code>true</code> if this file can retrieve the specified permission flag for the given access type.
      *
      * @param access {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION} or {@link #EXECUTE_PERMISSION}
      * @param permission {@link #USER_ACCESS}, {@link #GROUP_ACCESS} or {@link #OTHER_ACCESS}
@@ -1042,7 +1106,7 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract boolean canGetPermission(int access, int permission);
 
     /**
-     * Returns true if this file can change the specified permission flag for the given access type.
+     * Returns <code>true</code> if this file can change the specified permission flag for the given access type.
      *
      * @param access {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION} or {@link #EXECUTE_PERMISSION}
      * @param permission {@link #USER_ACCESS}, {@link #GROUP_ACCESS} or {@link #OTHER_ACCESS}
@@ -1051,19 +1115,25 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract boolean canSetPermission(int access, int permission);
 
     /**
-     * Returns true if this AbstractFile is a 'regular' directory, not only a 'browsable' file (like an archive file).
+     * Returns <code>true</code> if this file is a regular directory, and not just a 'browsable' file.
+     *
+     * @return <code>true</code> if this file is a directory
      */
     public abstract boolean isDirectory();
 
     /**
-     * Returns true if this file *may* be a symbolic link and thus handled with care.
+     * Returns <code>true</code> if this file is a symbolic link. Symbolic links need to be handled with special care,
+     * especially when manipulating files recursively.
+     *
+     * @return <code>true</code> if this file is a symbolic link
      */
     public abstract boolean isSymlink();
 	
     /**
-     * Returns the files contained by this AbstractFile. For this operation to be successful, this file must be
+     * Returns the children files that this file contains. For this operation to be successful, this file must be
      * 'browsable', i.e. {@link #isBrowsable()} must return <code>true</code>.
      *
+     * @return the children files that this file contains
      * @throws IOException if this operation is not possible (file is not browsable) or if an error occurred.
      */
     public abstract AbstractFile[] ls() throws IOException;
@@ -1076,18 +1146,22 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract void mkdir() throws IOException;
 
     /**
-     * Returns an <code>InputStream</code> to read the contents of this AbstractFile.
+     * Returns an <code>InputStream</code> to read this file's contents.
      *
-     * @throws IOException if this AbstractFile could not be read or if an <code>InputStream</code> could not be
+     * @return an <code>InputStream</code> to read this file's contents
+     * @throws IOException if this file could not be read or if an <code>InputStream</code> could not be
      * provided for any other reason (e.g. file is a directory).
      */
     public abstract InputStream getInputStream() throws IOException;
 
     /**
-     * Returns an OuputStream to write to this AbstractFile.
+     * Returns an <code>OuputStream</code> to write this file's contents, appending or overwriting the existing
+     * contents.
      *
-     * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any existing data will be overwritten.
-     * @throws IOException if this operation is not permitted or if this AbstractFile is a folder
+     * @param append if true, data written to the OutputStream will be appended to the end of this file. If false,
+     * any existing data this file contains will be discarded and overwritten.
+     * @return an <code>OuputStream</code> to write this file's contents
+     * @throws IOException if this operation is not permitted or if this file is a folder
      */
     public abstract OutputStream getOutputStream(boolean append) throws IOException;
 
@@ -1102,9 +1176,10 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract boolean hasRandomAccessInputStream();
 
     /**
-     * Returns a {@link RandomAccessInputStream} to read the contents of this AbstractFile with random access.
+     * Returns a {@link RandomAccessInputStream} to read this file's contents with random access.
      *
-     * @throws IOException if this AbstractFile cannot be read or if a {@link RandomAccessInputStream} cannot
+     * @return a <code>RandomAccessInputStream</code> to read this file's contents with random access
+     * @throws IOException if this file cannot be read or if a {@link RandomAccessInputStream} cannot
      * be provided because the underlying file protocol doesn't have random access support or for any other reason
      * (e.g. file is a directory).
      */
@@ -1121,44 +1196,52 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract boolean hasRandomAccessOutputStream();
 
     /**
-     * Returns a {@link RandomAccessOutputStream} to write to this AbstractFile with random access.
+     * Returns a {@link RandomAccessOutputStream} to write this file's contents with random access.
      *
-     * @throws IOException if this AbstractFile cannot be written or if a {@link RandomAccessOutputStream} cannot
+     * @return a <code>RandomAccessOutputStream</code> to write this file's contents with random access
+     * @throws IOException if this file cannot be written or if a {@link RandomAccessOutputStream} cannot
      * be provided because the underlying file protocol doesn't have random access support or for any other reason
      * (e.g. file is a directory).
      */
     public abstract RandomAccessOutputStream getRandomAccessOutputStream() throws IOException;
 
     /**
-     * Deletes this AbstractFile and this one only (does not recurse), throws an IOException
-     * if it failed.
-     * @throws IOException if this AbstractFile is not writable or could not be deleted.
+     * Deletes this file and this file only (does not recurse). Directories must be empty before they can be deleted.
+     *
+     * @throws IOException if this file could not be deleted
      */	
     public abstract void delete() throws IOException;
 	
     /**
-     * Returns free space (in bytes) on the disk/volume where this file is, -1 if this information is not available.
+     * Returns the free space (in bytes) on the disk/volume where this file is, <code>-1</code> if this information is
+     * not available.
+     *
+     * @return the free space (in bytes) on the disk/volume where this file is, <code>-1</code> if this information is
+     * not available.
      */
     public abstract long getFreeSpace();
 
     /**
      * Returns the total space (in bytes) of the disk/volume where this file is, -1 if this information is not available. 
+     *
+     * @return the total space (in bytes) of the disk/volume where this file is, -1 if this information is not available
      */
     public abstract long getTotalSpace();
 
     /**
      * Returns the file Object of the underlying API providing access to the filesystem. The returned Object may expose
-     * filesystem-specific functionalities that are not available in AbstractFile. Please note however that the
+     * filesystem-specific functionalities that are not available in <code>AbstractFile</code>. Note however that the
      * returned Object type may change over time, if the underlying API used to provide access to the filesystem
      * changes, so this method should be used only as a last resort.
      *
-     * If the implemented filesystem has no such Object, <code>null</code> will be be returned.
+     * <p>If the implemented filesystem has no such Object, <code>null</code> is returned.</p>
+     *
+     * @return the file Object of the underlying API providing access to the filesystem, <code>null</code> if there
+     * is none
      */
     public abstract Object getUnderlyingFileObject();
 
 
-    // - Process running -------------------------------------------------------
-    // -------------------------------------------------------------------------
     /**
      * Returns <code>true</code> if it's possible to run processes on the underlying file system.
      * @return <code>true</code> if it's possible to run processes on the underlying file system, <code>false</code> otherwise.
@@ -1166,9 +1249,9 @@ public abstract class AbstractFile implements FilePermissions {
     public abstract boolean canRunProcess();
 
     /**
-     * Creates a process executing the specified command tokens using this AbstractFile as a working directory.
+     * Creates a process executing the specified command tokens using this file as a working directory.
      * @param  tokens                        command and its arguments for the process to create.
-     * @return                               a process executing the specified command tokens using this AbstractFile as a working directory.
+     * @return                               a process executing the specified command tokens using this file as a working directory.
      * @throws IOException                   thrown if an error occured while creating the process, if the current file is not a directory or if the operation is not supported.
      */
     public abstract AbstractProcess runProcess(String[] tokens) throws IOException;
