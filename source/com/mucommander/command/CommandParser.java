@@ -224,7 +224,6 @@ public class CommandParser {
 
             // Backslash escaping: the next character is not analyzed.
             else if(buffer[i] == '\\') {
-                currentToken.append(buffer[i]);
                 if(i + 1 != command.length())
                     currentToken.append(buffer[++i]);
             }
