@@ -83,7 +83,7 @@ Translators:
 - Kent Hsu (Traditional Chinese)
 - Jioh L. Jung (Korean)
 - Andrzej Kosiński (Polish)
-- Tamás Balogh-Walder (Hungarian)
+- Tamás Balogh-Walder and György Varga (Hungarian)
 - XXXX Pro (Russian)
 - Woodie (Simplified Chinese)
 - Joze Kovacic (Slovenian)
@@ -323,7 +323,6 @@ Bug fixes:
   folder
 
 Known issues:
-- Hungarian translation is not up-to-date
 - Executable permissions are not preserved properly for local files prior to
   Java 1.6
 - Some BZ2 archives can not be properly opened
