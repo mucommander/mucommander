@@ -164,10 +164,12 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         // Date format combo
         dateFormatComboBox = new JComboBox();
         String dateFormat = MuConfiguration.getVariable(MuConfiguration.DATE_FORMAT);
+        String separator = MuConfiguration.getVariable(MuConfiguration.DATE_SEPARATOR, MuConfiguration.DEFAULT_DATE_SEPARATOR);
         int dateFormatIndex = 0;
+        String buffer = dateFormat.replace(separator.charAt(0), '/');
         for(int i=0; i<DATE_FORMATS.length; i++) {
             dateFormatComboBox.addItem(DATE_FORMAT_LABELS[i]);
-            if(dateFormat.equals(DATE_FORMATS[i]) || dateFormat.equals(DATE_FORMATS_WITH_CENTURY[i]))
+            if(buffer.equals(DATE_FORMATS[i]) || buffer.equals(DATE_FORMATS_WITH_CENTURY[i]))
                 dateFormatIndex = i;
         }        
         dateFormatComboBox.setSelectedIndex(dateFormatIndex);
@@ -204,7 +206,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
                 }
             };
         dateSeparatorField.setDocument(doc);
-        dateSeparatorField.setText(MuConfiguration.getVariable(MuConfiguration.DATE_SEPARATOR, MuConfiguration.DEFAULT_DATE_SEPARATOR));
+        dateSeparatorField.setText(separator);
         doc.addDocumentListener(this);
         tempPanel.add(dateSeparatorField);
         tempPanel.add(Box.createHorizontalGlue());
