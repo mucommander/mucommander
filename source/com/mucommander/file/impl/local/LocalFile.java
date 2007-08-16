@@ -313,6 +313,11 @@ public class LocalFile extends AbstractFile {
     }
 	
     public boolean changeDate(long lastModified) {
+        // java.io.File#setLastModified(long) throws an IllegalArgumentException if time is negative.
+        // If specified time is negative, set it to 0 (01/01/1970).
+        if(lastModified < 0)
+            lastModified = 0;
+
         return file.setLastModified(lastModified);
     }
 		
