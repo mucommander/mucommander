@@ -50,15 +50,19 @@ public class CommandParser {
     // - Keywords --------------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Header of replacement keywords. */
-    private static final char KEYWORD_HEADER  = '$';
+    private static final char KEYWORD_HEADER                 = '$';
     /** Instances of this keyword will be replaced by the file's full path. */
-    private static final char KEYWORD_PATH    = 'f';
+    private static final char KEYWORD_PATH                   = 'f';
     /** Instances of this keyword will be replaced by the file's name. */
-    private static final char KEYWORD_NAME    = 'n';
+    private static final char KEYWORD_NAME                   = 'n';
     /** Instances of this keyword will be replaced by the file's parent directory. */
-    private static final char KEYWORD_PARENT  = 'p';
+    private static final char KEYWORD_PARENT                 = 'p';
     /** Instances of this keyword will be replaced by the JVM's current directory. */
-    private static final char KEYWORD_VM_PATH = 'j';
+    private static final char KEYWORD_VM_PATH                = 'j';
+    /** Instances of this keyword will be replaced by the file's extension. */
+    private static final char KEYWORD_EXTENSION              = 'e';
+    /** Instances of this keyword will be replaced by the file's name without its extension. */
+    private static final char KEYWORD_NAME_WITHOUT_EXTENSION = 'N';
 
 
 
@@ -255,7 +259,8 @@ public class CommandParser {
                     // actually dealing with one and mark it if necessary.
                     if(tokenTypes != null)
                         if(buffer[i] == KEYWORD_PATH || buffer[i] == KEYWORD_NAME ||
-                           buffer[i] == KEYWORD_PARENT || buffer[i] == KEYWORD_VM_PATH)
+                           buffer[i] == KEYWORD_PARENT || buffer[i] == KEYWORD_VM_PATH ||
+                           buffer[i] == KEYWORD_EXTENSION || buffer[i] == KEYWORD_NAME_WITHOUT_EXTENSION)
                             tokenTypes[tokenIndex] = true;
 
                     currentToken.append(buffer[i]);
@@ -315,6 +320,14 @@ public class CommandParser {
                     }
                     else if(chars[i + 1] == CommandParser.KEYWORD_VM_PATH) {
                         buffer.append(new File(System.getProperty("user.dir")).getAbsolutePath());
+                        i++;
+                    }
+                    else if(chars[i + 1] == CommandParser.KEYWORD_EXTENSION) {
+                        buffer.append(target.getExtension());
+                        i++;
+                    }
+                    else if(chars[i + 1] == CommandParser.KEYWORD_NAME_WITHOUT_EXTENSION) {
+                        buffer.append(target.getNameWithoutExtension());
                         i++;
                     }
                     // Not a legal keyword, append $ to the token.
