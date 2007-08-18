@@ -51,7 +51,7 @@ import java.util.EmptyStackException;
  * <h3>Variable types</h3>
  * While the <code>com.mucommander.conf</code> really only handles one type of variables, strings, it offers
  * tools to cast them as primitive Java types (int, long, float, double, boolean). This is done through the use
- * of the various primitive types' class implementation <code>parseXXX</code> methods.
+ * of the various primitive types' class implementation <code>parseXXX</code> method.
  * </p>
  * <p>
  * <h3>Configuration file format</h3>

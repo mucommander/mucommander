@@ -26,7 +26,7 @@ import java.util.Iterator;
  * <p>
  * This class is meant for use with {@link com.mucommander.xml.writer.XmlWriter}.
  * It's used to hold a list of XML attributes that will be passed to one of
- * the {@link com.mucommander.xml.writer.XmlWriter#startElement(String,XmlAttributes) tag opening}
+ * the {@link com.mucommander.xml.writer.XmlWriter#startElement(String,XmlAttributes) element opening}
  * methods.
  * </p>
  * @author Nicolas Rinaudo
@@ -57,6 +57,11 @@ public class XmlAttributes {
      *         <code>null</code> otherwise.
      */
     public String getValue(String name) {return (String)attributes.get(name);}
+
+    /**
+     * Clears the list of all previously defined attributes.
+     */
+    public void clear() {attributes.clear();}
 
     /**
      * Adds the specified attribute to this container.

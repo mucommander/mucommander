@@ -18,22 +18,23 @@
 
 package com.mucommander.xml.writer;
 
-import java.io.*;
+import java.io.Writer;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 
 /**
  * Used to write pretty-printed XML content.
  * <p>
- * Writing XML content with this class is meant to be just about as easy and straightforward
- * as possible:<br/>
- * - open your XML stream ({@link #XmlWriter(File)} or {@link #XmlWriter(OutputStream)}).<br/>
- * - open and close elements ({@link #startElement(String)} and {@link #endElement(String)}).<br/>
- * - add any CDATA you need ({@link #writeCData(String)}).
- * </p>
- * <p>
- * It's important to realize that no coherency checking whatsoever is performed.
- * There's nothing to prevent developers from closing elements they haven't opened yet, or
- * duplicating attribute names, or pretty much any other silly thing you can think of in XML.
+ * Application writers should keep in mind that this class does not perform any sort
+ * of coherency check, and will not prevent them from closing elements they haven't opened yet,
+ * or any other thing that would make the XML output invalid.
  * </p>
  * @author Nicolas Rinaudo
  */
@@ -50,13 +51,13 @@ public class XmlWriter {
     public static final String  DEFAULT_ENCODING    = "UTF-8";
 
 
+
     // - XML standard entities -------------------------------------------
     // -------------------------------------------------------------------
     /** Forbiden XML characters. */
     private final static String[] ENTITIES            = new String[] {"&", "\"" , "'", "<", ">"};
     /** What to replace forbiden XML characters with. */
     private final static String[] ENTITY_REPLACEMENTS = new String[] {"&amp;", "&quot;", "&apos;", "&lt;", "&gt;"};
-
 
 
 
@@ -73,54 +74,44 @@ public class XmlWriter {
 
     // - Initialisation --------------------------------------------------
     // -------------------------------------------------------------------
-
     /**
-     * Creates an XmlWriter that will write to the specified file.
+     * Creates an <code>XmlWriter</code> that will write to the specified file.
      * <p>
-     * The generated XML content will be encoded using <code>UTF-8</code>.
+     * The generated XML content will be <code>UTF-8</code> encoded.
      * </p>
-     * @param     file                  where the XmlWriter should write its content to.
-     * @exception FileNotFoundException thrown if <code>file</code> could not be found.
+     * @param  file                  where to write XML output to.
+     * @throws FileNotFoundException if <code>file</code> could not be found.
+     * @throws UnsupportedException  in the unlikely case where <code>UTF-8</code> is not supported.
      */
-    public XmlWriter(File file) throws FileNotFoundException {this(new FileOutputStream(file));}
+    public XmlWriter(File file) throws FileNotFoundException, UnsupportedEncodingException {this(new FileOutputStream(file));}
 
     /**
-     * Creates an XmlWriter that will write to the specified file using the specified encoding.
-     * @param     file                         where the XmlWriter should write its content to.
-     * @param     encoding                     encoding to use when writing the XML content.
-     * @exception FileNotFoundException        thrown if <code>file</code> could not be found.
-     * @exception UnsupportedEncodingException thrown if <code>encoding</code> is not supported.
+     * Creates an <code>XmlWriter</code> that will write to the specified file using the specified encoding.
+     * @param  file                         where to write XML output to.
+     * @param  encoding                     encoding to use when writing the XML content.
+     * @throws FileNotFoundException        if <code>file</code> could not be found.
+     * @throws UnsupportedEncodingException if <code>encoding</code> is not supported.
      */
-    public XmlWriter(File file, String encoding) throws FileNotFoundException, UnsupportedEncodingException {
-        this(new FileOutputStream(file), encoding);
-    }
+    public XmlWriter(File file, String encoding) throws FileNotFoundException, UnsupportedEncodingException {this(new FileOutputStream(file), encoding);}
 
     /**
-     * Creates an XmlWriter that will write to the specified output stream.
+     * Creates an <code>XmlWriter</code> that will write to the specified output stream.
      * <p>
-     * The generated XML content will be encoded using <code>UTF-8</code>.
+     * The generated XML content will be <code>UTF-8</code> encoded.
      * </p>
-     * @param stream where the XmlWriter should write its content to.
+     * @param  stream                where to write XML output to.
+     * @throws UnsupportedException  in the unlikely case where <code>UTF-8</code> is not supported.
      */
-    public XmlWriter(OutputStream stream) {
-//        try {out = new PrintStream(stream, true, DEFAULT_ENCODING);}  // Not available under Java 1.3
-        try {out = new PrintWriter(new OutputStreamWriter(stream, DEFAULT_ENCODING), true);}
-        // We can safely assume that any JVM knows how to encode text in UTF-8.
-        catch(Exception e) {}
-
-        writeHeader(DEFAULT_ENCODING);
-    }
+    public XmlWriter(OutputStream stream) throws UnsupportedEncodingException {this(stream, DEFAULT_ENCODING);}
 
     /**
-     * Creates an XmlWriter that will write to the specified stream.
-     * @param     stream                       where the XmlWriter should write its content to.
-     * @param     encoding                     encoding to use when writing the XML content.
-     * @exception UnsupportedEncodingException thrown if <code>encoding</code> is not supported.
+     * Creates an <code>XmlWriter</code> that will write to the specified stream.
+     * @param  stream                       where to write XML output to.
+     * @param  encoding                     encoding to use when writing the XML content.
+     * @throws UnsupportedEncodingException if <code>encoding</code> is not supported.
      */
     public XmlWriter(OutputStream stream, String encoding) throws UnsupportedEncodingException {
-//        out = new PrintStream(stream, true, encoding);    // Not available under Java 1.3
         out = new PrintWriter(new OutputStreamWriter(stream, encoding), true);
-
         writeHeader(encoding);
     }
 
@@ -140,7 +131,7 @@ public class XmlWriter {
     /**
      * Writes the document type declaration of the XML file.
      * <p>
-     * For the generated XML content to be valid, developers should make sure that this
+     * For the generated XML content to be valid, application writers should make sure that this
      * is the very first method they call. This class doesn't ensure coherency and won't
      * complain if the <code>DOCTYPE</code> statement is the last in the file.
      * </p>
@@ -183,12 +174,12 @@ public class XmlWriter {
      * Writes a element opening sequence.
      * <p>
      * Elements opened using this method will not have any attribute, and will
-     * need to be closed using a {@link #endElement(String)} call.
+     * need to be closed using an {@link #endElement(String) endElement} call.
      * </p>
      * @param name name of the element to open.
-     * @see #startElement(String,XmlAttributes)
-     * @see #writeStandAloneElement(String)
-     * @see #writeStandAloneElement(String,com.mucommander.xml.writer.XmlAttributes)
+     * @see        #startElement(String,XmlAttributes)
+     * @see        #writeStandAloneElement(String)
+     * @see        #writeStandAloneElement(String,XmlAttributes)
      */
     public void startElement(String name) {startElement(name, false, null);}
 
@@ -199,22 +190,22 @@ public class XmlWriter {
      * closed immediately.
      * </p>
      * @param name name of the element to write.
-     * @see #startElement(String,XmlAttributes)
-     * @see #startElement(String)
-     * @see #writeStandAloneElement(String)
+     * @see        #startElement(String,XmlAttributes)
+     * @see        #startElement(String)
+     * @see        #writeStandAloneElement(String)
      */
     public void writeStandAloneElement(String name) {startElement(name, true, null);}
 
     /**
      * Writes a element opening sequence.
      * <p>
-     * Elements opened using this method will need to be closed using a {@link #endElement(String)} call.
+     * Elements opened using this method will need to be closed using an {@link #endElement(String) endElement} call.
      * </p>
      * @param name       name of the element to open.
      * @param attributes attributes that this element will have.
-     * @see #startElement(String)
-     * @see #writeStandAloneElement(String)
-     * @see #writeStandAloneElement(String,com.mucommander.xml.writer.XmlAttributes)
+     * @see              #startElement(String)
+     * @see              #writeStandAloneElement(String)
+     * @see              #writeStandAloneElement(String,XmlAttributes)
      */
     public void startElement(String name, XmlAttributes attributes) {startElement(name, false, attributes);}
 
@@ -225,9 +216,9 @@ public class XmlWriter {
      * </p>
      * @param name       name of the element to write.
      * @param attributes attributes that this element will be closed immediately.
-     * @see #startElement(String)
-     * @see #startElement(String,XmlAttributes)
-     * @see #writeStandAloneElement(String)
+     * @see              #startElement(String)
+     * @see              #startElement(String,XmlAttributes)
+     * @see              #writeStandAloneElement(String)
      */
     public void writeStandAloneElement(String name, XmlAttributes attributes) {startElement(name, true, attributes);}
 
@@ -297,11 +288,6 @@ public class XmlWriter {
     // -------------------------------------------------------------------
     /**
      * Writes the specified CDATA to the XML stream.
-     * <p>
-     * Note that you can use this method whenever you want. While this might seem obvious,
-     * it means that you can use it, for example, to add XML headers before you even opened
-     * your first element.
-     * </p>
      * @param cdata content to write to the XML stream.
      */
     public void writeCData(String cdata) {
@@ -335,9 +321,6 @@ public class XmlWriter {
     // -------------------------------------------------------------------
     /**
      * Prints a line break.
-     * <p>
-     * The next line will be indented.
-     * </p>
      */
     public void println() {
         out.println();
