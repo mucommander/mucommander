@@ -27,8 +27,7 @@ package com.mucommander.conf;
  * </p>
  * <p>
  * This exception is mostly meant to be used by implementations of {@link ConfigurationBuilder},
- * as they have to analyse the structure of the configuration they're receiving events for. However,
- * application writers might find other uses for it.
+ * as they have to analyse the structure of the configuration they're receiving events for.
  * </p>
  * <p>
  * Since <code>ConfigurationStructureException</code> subclasses {@link ConfigurationException}, it

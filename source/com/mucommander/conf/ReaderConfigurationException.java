@@ -22,8 +22,7 @@ package com.mucommander.conf;
  * Encapsulate a reader configuration error.
  * <p>
  * This exception is mostly meant to be used by implementations of {@link ConfigurationReaderFactory},
- * as they're the ones who will configure instances of {@link ConfigurationReader}. However,
- * application writers might find other uses for it.
+ * as they're the ones who will configure instances of {@link ConfigurationReader}.
  * </p>
  * <p>
  * Since <code>ReaderConfigurationException</code> subclasses {@link ConfigurationException}, it

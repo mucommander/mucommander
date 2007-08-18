@@ -26,8 +26,7 @@ package com.mucommander.conf;
  * </p>
  * <p>
  * This exception is mostly meant to be used by implementations of {@link ConfigurationReader},
- * as they're the ones who will analyse the syntax of a configuration stream. However,
- * application writers might find other uses for it.
+ * as they're the ones who will analyse the syntax of a configuration stream.
  * </p>
  * <p>
  * When applicable, instances of <code>ConfigurationFormatException</code> might provide information
