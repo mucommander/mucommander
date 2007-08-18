@@ -25,6 +25,10 @@ import java.io.IOException;
 /**
  * Provides instances of {@link Configuration} with streams to configuration data.
  * <p>
+ * Application writers that need to retrieve configuration data for a non-standard source
+ * (over the network, from a database, ...) need to subclass this.
+ * </p>
+ * <p>
  * Implementations of this interface can be registered through
  * {@link Configuration#setSource(ConfigurationSource)}. Their purpose is
  * to provide the system with streams to a configuration source. This system allows applications
@@ -41,13 +45,15 @@ import java.io.IOException;
 public interface ConfigurationSource {
     /**
      * Returns an input stream on the configuration source.
-     * @return an input stream on the configuration source.
+     * @return             an input stream on the configuration source.
+     * @throws IOException if any I/O error occurs.
      */
     public InputStream getInputStream() throws IOException;
 
     /**
      * Returns an output stream on the configuration source.
-     * @return an output stream on the configuration source.
+     * @return             an output stream on the configuration source.
+     * @throws IOException if any I/O error occurs.
      */
     public OutputStream getOutputStream() throws IOException;
 }
