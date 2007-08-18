@@ -222,7 +222,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <mkdir dir="${conf.tmp}/release/docs"/>
     <mkdir dir="${conf.tmp}/release/source"/>
     <mkdir dir="${conf.tmp}/release/tools"/>
-    <mkdir dir="${conf.tmp}/release/res/"/>
 
     <!-- Adds the license, readme and compile files.           -->
     <copy file="${conf.license}" todir="${conf.tmp}/release"/>
@@ -231,13 +230,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Adds the compressed JAR file.                         -->
     <copy file="${conf.jar.cmp}" todir="${conf.tmp}/release/lib"/>
-
-    <!-- Adds the resources.                                   -->
-    <copy todir="${conf.tmp}/release/res">
-      <fileset dir="${conf.res}">
-        <exclude name="**/*.txt"/>
-      </fileset>
-    </copy>
 
     <!-- Adds the build files.                                 -->
     <copy file="${conf.build}" tofile="${conf.tmp}/release/build.xml"/>
