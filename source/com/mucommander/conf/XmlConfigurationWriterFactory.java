@@ -19,7 +19,7 @@
 package com.mucommander.conf;
 
 /**
- * {@link ConfigurationWriterFactory} implementation used to create instances of {@link XmlConfigurationWriter}.
+ * Writer factory implementation used to create instances of {@link XmlConfigurationWriter}.
  * <p>
  * {@link ConfigurationWriter Writer} instances created by this factory are meant to create the standard muCommander
  * configuration file format described in the documentation of {@link XmlConfigurationWriter}.
@@ -29,6 +29,11 @@ package com.mucommander.conf;
  * @see    XmlConfigurationWriter
  */
 public class XmlConfigurationWriterFactory implements ConfigurationWriterFactory {
+    /**
+     * Creates a new XML configuration writer factory.
+     */
+    public XmlConfigurationWriterFactory() {}
+
     /**
      * Returns an instance of {@link XmlConfigurationWriter}.
      * @return an instance of {@link XmlConfigurationWriter}.

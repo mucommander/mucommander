@@ -122,12 +122,12 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
     // - XML handling ----------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * This method is public as an implementation side effect and should never be called directlry.
+     * This method is public as an implementation side effect and should never be called directly.
      */
     public void characters(char[] ch, int start, int length) {buffer.append(ch, start, length);}
 
     /**
-     * This method is public as an implementation side effect and should never be called directlry.
+     * This method is public as an implementation side effect and should never be called directly.
      */
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         depth++;
@@ -144,7 +144,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
     }
 
     /**
-     * This method is public as an implementation side effect and should never be called directlry.
+     * This method is public as an implementation side effect and should never be called directly.
      */
     public void endElement(String uri, String localName, String qName) throws SAXException {
         depth--;
@@ -175,7 +175,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
     }
 
     /**
-     * This method is public as an implementation side effect and should never be called directlry.
+     * This method is public as an implementation side effect and should never be called directly.
      */
     public void startDocument() throws SAXException {
         try {builder.startConfiguration();}
@@ -183,7 +183,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
     }
 
     /**
-     * This method is public as an implementation side effect and should never be called directlry.
+     * This method is public as an implementation side effect and should never be called directly.
      */
     public void endDocument() throws SAXException {
         try {builder.endConfiguration();}
@@ -191,7 +191,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
     }
 
     /**
-     * This method is public as an implementation side effect and should never be called directlry.
+     * This method is public as an implementation side effect and should never be called directly.
      */
     public void setDocumentLocator(Locator locator) {this.locator = locator;}
 }

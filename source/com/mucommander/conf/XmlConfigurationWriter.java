@@ -30,12 +30,26 @@ import java.io.OutputStream;
  * @author Nicolas Rinaudo
  */
 public class XmlConfigurationWriter implements ConfigurationWriter {
-    // - Fields ----------------------------------------------------------------
+    // - Class constants -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Root element name. */
     private static final String ROOT_ELEMENT = "prefs";
-    /** Used to write to the XML stream. */
-    private XmlWriter out;
+
+
+
+    // - Instance fields -------------------------------------------------------
+    // -------------------------------------------------------------------------
+    /** Writer on the destination XML stream. */
+    protected XmlWriter out;
+
+
+
+    // - Initialisation --------------------------------------------------------
+    // -------------------------------------------------------------------------
+    /**
+     * Creates a new instance of XML configuration writer.
+     */
+    public XmlConfigurationWriter() {}
 
 
 

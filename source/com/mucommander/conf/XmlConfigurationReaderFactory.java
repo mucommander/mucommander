@@ -19,7 +19,7 @@
 package com.mucommander.conf;
 
 /**
- * {@link ConfigurationReaderFactory} implementation used to create instances of {@link XmlConfigurationReader}.
+ * Reader factory implementation used to create instances of {@link XmlConfigurationReader}.
  * <p>
  * {@link ConfigurationReader Reader} instances created by this factory are meant to read the standard muCommander
  * configuration file format described in the documentation of {@link XmlConfigurationReader}.
@@ -29,6 +29,11 @@ package com.mucommander.conf;
  * @see    XmlConfigurationWriter
  */
 public class XmlConfigurationReaderFactory implements ConfigurationReaderFactory {
+    /**
+     * Creates a new XML configuration reader factory.
+     */
+    public XmlConfigurationReaderFactory() {}
+
     /**
      * Returns an instance of {@link XmlConfigurationReader}.
      * @return an instance of {@link XmlConfigurationReader}.
