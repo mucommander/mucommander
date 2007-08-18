@@ -41,5 +41,5 @@ public interface ConfigurationWriterFactory {
      * Creates an instance of {@link ConfigurationWriter}.
      * @return an instance of {@link ConfigurationWriter}.
      */
-    public ConfigurationWriter getWriterInstance();
+    public ConfigurationWriter getWriterInstance() throws WriterConfigurationException;
 }

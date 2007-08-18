@@ -24,14 +24,17 @@ import java.io.IOException;
 /**
  * Interface for writing to a configuration source using callbacks.
  * <p>
- * <code>ConfigurationWriter</code> is a specialised version of
- * {@link ConfigurationBuilder}.<br/>
+ * Application writers that need to implement a specific configuration format need to subclass this.
+ * Writer implementations have the task of writing the configuration data described by its callback methods
+ * to an output stream.
+ * </p>
+ * <p>
  * The <code>com.mucommander.conf</code> packages comes with a default implementation, {@link XmlConfigurationWriter},
  * which handles the standard muCommander configuration file format.
  * </p>
  * <p>
  * In order for an implementation of <code>ConfigurationWriter</code> to be useable by instances of {@link Configuration},
- * it must come with an associated implementation of {@link ConfigurationWriterFactory}.<br/>
+ * it must come with an associated implementation of {@link ConfigurationWriterFactory}.
  * </p>
  * <p>
  * In addition, most writers will have an associated {@link ConfigurationReader}, the later being used to read configuration
@@ -43,10 +46,11 @@ public interface ConfigurationWriter extends ConfigurationBuilder {
     /**
      * Sets the output stream in which the writer should write its data.
      * <p>
-     * <code>ConfigurationWriter</code> implementations can rely on this method
-     * always being called before configuration building has started.
+     * This method will be invoked once, before any call to the callback methods
+     * inherited from {@link ConfigurationBuilder}.
      * </p>
-     * @param out output stream in which to write the configuration data.
+     * @param  out                    output stream in which to write the configuration data.
+     * @throws ConfigurationException any Configuration error, possibly wrapping another exception. 
      */
-    public void setOutputStream(OutputStream out);
+    public void setOutputStream(OutputStream out) throws ConfigurationException;
 }

@@ -24,15 +24,17 @@ import java.io.IOException;
 /**
  * Interface for reading from a configuration source using callbacks.
  * <p>
- * A <code>ConfigurationReader</code> implementation is used to read the content of an input stream,
- * extract the information it needs from it and send events to a {@link ConfigurationBuilder}. This mechanism
- * is meant to allow applications to implement their own configuration format.<br/>
+ * Application writers that need to implement a specific configuration format need to subclass this.
+ * Reader implementations have the task of parsing an input stream for configuration data and invoking the
+ * relevant callback methods of {@link ConfigurationBuilder}.
+ * </p>
+ * <p>
  * The <code>com.mucommander.conf</code> package comes with a default implementation, {@link XmlConfigurationReader},
  * which handles the standard muCommander configuration file format.
  * </p>
  * <p>
- * In order for an implementation of <code>ConfigurationReader</code> to be useable by {@link Configuration} instances,
- * it must come with an associated implementation of {@link ConfigurationReaderFactory}.<br/>
+ * In order for an implementation of <code>ConfigurationReader</code> to be useable by {@link Configuration configuration}
+ * instances, it must come with an associated implementation of {@link ConfigurationReaderFactory}.
  * </p>
  * <p>
  * In addition, most readers will have an associated {@link ConfigurationWriter} used to write configuration files in a format
@@ -44,12 +46,16 @@ import java.io.IOException;
  */
 public interface ConfigurationReader {
     /**
-     * Reads configuration information from the specified input stream and passes messages to the specified builder.
-     * @param in                            where to read the configuration information from.
-     * @param builder                       where to send configuration messages to.
-     * @throws IOException                  if an I/O error occurs.
-     * @throws ConfigurationFormatException if <code>in</code> contains a syntax or semantic error.
-     * @throws ConfigurationException       if another type of error occurs, in which case that error must be returned by <code>ConfigurationException.getCause()</code>.
+     * Reads configuration information from the specified input stream and invokes the specified builder's callback methods.
+     * <p>
+     * When applicable, this method is expected to throw {@link ConfigurationFormatException format} exceptions rather than
+     * {@link ConfigurationException configuration} exceptions. This will allow applications to report errors in a way that is
+     * useful for users.
+     * </p>
+     * @param in                      where to read the configuration information from.
+     * @param builder                 where to send configuration messages to.
+     * @throws IOException            if an I/O error occurs.
+     * @throws ConfigurationException if another type of error occurs, in which case that error must be returned by <code>ConfigurationException.getCause()</code>.
      */
-    public void read(InputStream in, ConfigurationBuilder builder) throws ConfigurationException, ConfigurationFormatException, IOException;
+    public void read(InputStream in, ConfigurationBuilder builder) throws ConfigurationException, IOException;
 }

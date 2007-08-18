@@ -32,7 +32,8 @@ package com.mucommander.conf;
  * <p>
  * When applicable, instances of <code>ConfigurationFormatException</code> might provide information
  * about the position in the source at which the error occured. See the documentation of
- * {@link #getLineNumber()} and {@link #getColumnNumber()} for more information on location conventions.
+ * {@link #getLineNumber() getLineNumber} and {@link #getColumnNumber() getColumnNumber} for more
+ * information on location conventions.
  * </p>
  * <p>
  * Since <code>ConfigurationFormatException</code> subclasses {@link ConfigurationException}, it
@@ -69,8 +70,8 @@ public class ConfigurationFormatException extends ConfigurationException {
      * Creates a new configuration format exception.
      * <p>
      * {@link #UNKNOWN_LOCATION} is a legal value for both <code>line</code> and <code>column</code>.
-     * See the documentation of {@link #getLineNumber()} and {@link #getColumnNumber()} for more
-     * information on location conventions.
+     * See the documentation of {@link #getLineNumber()  getLineNumber} and
+     * {@link #getColumnNumber() getColumnNumber} for more information on location conventions.
      * </p>
      * @param message the error message.
      * @param line    line at which the error occured.
@@ -99,8 +100,8 @@ public class ConfigurationFormatException extends ConfigurationException {
      * </p>
      * <p>
      * {@link #UNKNOWN_LOCATION} is a legal value for both <code>line</code> and <code>column</code>.
-     * See the documentation of {@link #getLineNumber()} and {@link #getColumnNumber()} for more
-     * information on location conventions.
+     * See the documentation of {@link #getLineNumber() getLineNumber} and
+     * {@link #getColumnNumber() getColumnNumber} for more information on location conventions.
      * </p>
      * @param cause  the exception to be wrapped in a <code>ConfigurationFormatException</code>.
      * @param line   line at which the error occured.
@@ -128,8 +129,8 @@ public class ConfigurationFormatException extends ConfigurationException {
      * </p>
      * <p>
      * {@link #UNKNOWN_LOCATION} is a legal value for both <code>line</code> and <code>column</code>.
-     * See the documentation of {@link #getLineNumber()} and {@link #getColumnNumber()} for more
-     * information on location conventions.
+     * See the documentation of {@link #getLineNumber() getLineNumber} and
+     * {@link #getColumnNumber() getColumnNumber} for more information on location conventions.
      * </p>
      * @param message the detail message.
      * @param cause   the exception to be wrapped in a <code>ConfigurationFormatException</code>.

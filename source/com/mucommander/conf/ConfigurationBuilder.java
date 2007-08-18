@@ -19,7 +19,7 @@
 package com.mucommander.conf;
 
 /**
- * Receive notification of the logical structure of a {@link Configuration}.
+ * Receive notification of the logical structure of a {@link Configuration configuration} instance.
  * <p>
  * If a class needs to be informed of the logical structure of a configuration instance,
  * it implements this interface and registers an instance with the {@link Configuration} using
@@ -37,16 +37,16 @@ package com.mucommander.conf;
  */
 public interface ConfigurationBuilder {
     /**
-     * Receive notification at the begining of the configuration.
+     * Receives notification at the begining of the configuration.
      * <p>
      * This method will only be invoked once, before any other method in this interface.
      * </p>
-     * @throws ConfigurationException any Configuration error, possible wrapping another exception.
+     * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
     public void startConfiguration() throws ConfigurationException;
 
     /**
-     * Receive notification at the end of the configuration.
+     * Receives notification at the end of the configuration.
      * <p>
      * This method will be invoked at most once, and if it is, it will be the last one. If an
      * unrecoverable error happens, this method might never be called.
@@ -56,7 +56,7 @@ public interface ConfigurationBuilder {
     public void endConfiguration() throws ConfigurationException;
 
     /**
-     * Receive notification at the beginning of a section.
+     * Receives notification at the beginning of a section.
      * <p>
      * This method will be invoked once at the beginning of every configuration section. Unless an
      * unrecoverable error happens, there will be an {@link #endSection(String) endSection} event for every
@@ -69,7 +69,7 @@ public interface ConfigurationBuilder {
     public void startSection(String name) throws ConfigurationException;
 
     /**
-     * Receive notification at the end of a section.
+     * Receives notification at the end of a section.
      * <p>
      * This method will be invoked once at the end of every configuration section. There will be a
      * corresponding {@link #startSection(String) startSection} event for every <code>endSection</code>
@@ -81,7 +81,7 @@ public interface ConfigurationBuilder {
     public void endSection(String name) throws ConfigurationException;
 
     /**
-     * Receive notification of variable definition.
+     * Receives notification of variable definition.
      * <p>
      * This method will be invoked once per variable found in a section. The declared variable
      * will always belong to the section defined in the last {@link #startSection(String) startSection}

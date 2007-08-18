@@ -102,9 +102,10 @@ public class Configuration {
      * By default, this method will return an instance of {@link XmlConfigurationReader}. However, this can be
      * modified by {@link #setReaderFactory(ConfigurationReaderFactory)}.
      * </p>
-     * @return an instance of the class that will be used to read configuration data.
+     * @return                              an instance of the class that will be used to read configuration data.
+     * @throws ReaderConfigurationException any configuration reader error, possibly wrapping another exception.
      */
-    public ConfigurationReader getReader() {
+    public ConfigurationReader getReader() throws ReaderConfigurationException {
         ConfigurationReaderFactory factory;
 
         // If no factory has been set, return an XML configuration reader.
@@ -136,9 +137,10 @@ public class Configuration {
      * By default, this method will return an instance of {@link XmlConfigurationWriter}. However, this can be
      * modified by {@link #setWriterFactory(ConfigurationWriterFactory)}.
      * </p>
-     * @return an instance of the class that will be used to read configuration data.
+     * @return                              an instance of the class that will be used to read configuration data.
+     * @throws ReaderConfigurationException any configuration writer error, possibly wrapping another exception.
      */
-    public ConfigurationWriter getWriter() {
+    public ConfigurationWriter getWriter() throws WriterConfigurationException {
         ConfigurationWriterFactory factory;
 
         // If no factory was set, return an XML configuration writer.

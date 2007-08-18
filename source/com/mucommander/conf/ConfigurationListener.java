@@ -21,8 +21,9 @@ package com.mucommander.conf;
 /**
  * Listener interface for receiving configuration events.
  * <p>
- * Implementations of this interface can register themselves through
- * {@link Configuration#addConfigurationListener(ConfigurationListener)} to be notified of configuration changes.
+ * Implementations of this interface can register themselves to a {@link Configuration configuration} instance through
+ * its {@link Configuration#addConfigurationListener(ConfigurationListener) addConfigurationListener} method to be
+ * notified of configuration changes.
  * </p>
  * @author Nicolas Rinaudo
  */

@@ -41,5 +41,5 @@ public interface ConfigurationReaderFactory {
      * Creates an instance of {@link ConfigurationReader}.
      * @return an instance of {@link ConfigurationReader}.
      */
-    public ConfigurationReader getReaderInstance();
+    public ConfigurationReader getReaderInstance() throws ReaderConfigurationException;
 }
