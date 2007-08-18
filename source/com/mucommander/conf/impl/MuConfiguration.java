@@ -381,24 +381,19 @@ public class MuConfiguration {
 
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
-    public static Configuration configuration;
+    public static Configuration configuration = new Configuration(new MuConfigurationSource());
 
 
 
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
-    static {
-        configuration = new Configuration();
-        configuration.setSource(new MuConfigurationSource());
-    }
-
     private MuConfiguration() {}
 
 
 
     // - Configuration reading / writing -------------------------------------
     // -----------------------------------------------------------------------
-    public static void read() throws IOException, ConfigurationException, ConfigurationFormatException {
+    public static void read() throws IOException, ConfigurationException {
         String configurationVersion;
 
         try {configuration.read();}

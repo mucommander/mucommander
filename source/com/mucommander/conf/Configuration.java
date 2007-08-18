@@ -31,6 +31,56 @@ import java.util.Stack;
 import java.util.EmptyStackException;
 
 /**
+ * Base class for all configuration related tasks.
+ * <p>
+ * A <code>Configuration</code> instance's main goal is to act as a configuration data repository.
+ * Once created, it can be used to {@link #getVariable(String) retrieve}, {@link #removeVariable(String) delete}
+ * and {@link #setVariable(String,String) set} configuration variables.
+ * </p>
+ * <p>
+ * <h3>Naming conventions</h3>
+ * Configuration variable names follow the same convention as Java System properties: a serie of strings
+ * separated by periods. By convention, all but the last string are called configuration sections, while
+ * the last one is the variable's name. When we refer to a variable's fully qualified name, we're talking
+ * about the whole period-separated name.<br>
+ * For example, <code>startup_folder.right.last_folder</code> is interpreted as a variable called
+ * <code>last_folder</code> contained in a section called <code>right</code>, itself contained in
+ * another section called <code>startup_folder</code>.<br>
+ * </p>
+ * <p>
+ * <h3>Variable types</h3>
+ * While the <code>com.mucommander.conf</code> really only handles one type of variables, strings, it offers
+ * tools to cast them as primitive Java types (int, long, float, double, boolean). This is done through the use
+ * of the various primitive types' class implementation <code>parseXXX</code> methods.
+ * </p>
+ * <p>
+ * <h3>Configuration file format</h3>
+ * By default, configuration data is assumed to be in the standard muCommander file format (described in
+ * {@link XmlConfigurationReader}). However, application writers can modify that to any format they want
+ * through the {@link #setReaderFactory(ConfigurationReaderFactory) setReaderFactory} and
+ * {@link #setWriterFactory(ConfigurationWriterFactory) setWriterFactory} methods.
+ * </p>
+ * <p>
+ * <h3>Configuration data location</h3>
+ * While <code>Configuration</code> provides read and write methods that accept streams as parameters, it's
+ * also possible to set the data source once and for all and let the API deal with the details. This can
+ * be achieved through the {@link #setSource(ConfigurationSource) setSource} method.<br>
+ * Note that a default implementation, {@link FileConfigurationSource}, is provided. It covers the most
+ * common case of configuration sources, a local configuration file.<br>
+ * For application writers who wish to be able to retrieve configuration files through a variety of file systems,
+ * we suggest creating a source using the <code>com.mucommander.file</code> API.
+ * </p>
+ * <p>
+ * <h3>Monitoring configuration changes</h3>
+ * Classes that need to monitor the state of the configuration in order, for example, to react to changes
+ * dynamically rather than wait for an application reboot can implement the {@link ConfigurationListener}
+ * interface and register themselves through
+ * {@link #addConfigurationListener(ConfigurationListener) addConfigurationListener}. This guarantees that they
+ * will receive configuration events whenever a modification occurs.<br>
+ * Note that listeners are stored as weak references, meaning that application writers must ensure that they keep
+ * direct references to the listener instances they register if they do not want them to be garbaged collected
+ * out of existence randomly.
+ * </p>
  * @author Nicolas Rinaudo
  */
 public class Configuration {
@@ -62,7 +112,54 @@ public class Configuration {
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    /**
+     * Creates a new instance of <code>Configuration</code>.
+     * <p>
+     * The resulting instance will use the default reader and writer factories,
+     * {@link XmlConfigurationReaderFactory} and {@link XmlConfigurationWriterFactory}.
+     * </p>
+     * <p>
+     * Note that until the {@link #setSource(ConfigurationSource) setSource} method has been
+     * invoked, calls to read or write methods without a stream parameter will fail.
+     * </p>
+     */
     public Configuration() {}
+
+    /**
+     * Creates a new instance of <code>Configuration</code> using the specified source.
+     * <p>
+     * The resulting instance will use the default reader and writer factories,
+     * {@link XmlConfigurationReaderFactory} and {@link XmlConfigurationWriterFactory}.
+     * </p>
+     * @param source where the resulting instance will look for its configuration data.
+     */
+    public Configuration(ConfigurationSource source) {setSource(source);}
+
+    /**
+     * Creates a new instance of <code>Configuration</code> using the specified format.
+     * <p>
+     * Note that until the {@link #setSource(ConfigurationSource) setSource} method has been
+     * invoked, calls to read or write methods without a stream parameter will fail.
+     * </p>
+     * @param reader object that will be used to create {@link ConfigurationReader} instances.
+     * @param writer object that will be used to create {@link ConfigurationWriter} instances.
+     */
+    public Configuration(ConfigurationReaderFactory reader, ConfigurationWriterFactory writer) {
+        setReaderFactory(reader);
+        setWriterFactory(writer);
+    }
+
+    /**
+     * Creates a new instance of <code>Configuration</code> using the specified source and format.
+     * @param source where the resulting instance will look for its configuration data.
+     * @param reader object that will be used to create {@link ConfigurationReader} instances.
+     * @param writer object that will be used to create {@link ConfigurationWriter} instances.
+     */
+    public Configuration(ConfigurationSource source, ConfigurationReaderFactory reader, ConfigurationWriterFactory writer) {
+        setSource(source);
+        setReaderFactory(reader);
+        setWriterFactory(writer);
+    }
 
 
 
@@ -86,6 +183,10 @@ public class Configuration {
     // -------------------------------------------------------------------------
     /**
      * Sets the factory that will be used to create {@link ConfigurationReader reader} instances.
+     * <p>
+     * In order to reset the configuration to its default reader factory ({@link XmlConfigurationReaderFactory}),
+     * application writers can call <code>setReaderFactory(null);</code>.
+     * </p>
      * @param f factory that will be used to create reader instances.
      * @see     #getReader()
      * @see     #getReaderFactory()
@@ -94,33 +195,34 @@ public class Configuration {
 
     /**
      * Returns the factory that is being used to create {@link ConfigurationReader reader} instances.
+     * <p>
+     * By default, this method will return an instance of {@link XmlConfigurationReaderFactory}. However,
+     * this can be modified by calling {@link #setReaderFactory(ConfigurationReaderFactory) setReaderFactory}.
+     * </p>
      * @return the factory that is being used to create reader instances.
      * @see    #getReader()
      * @see    #setReaderFactory(ConfigurationReaderFactory)
-
      */
-    public ConfigurationReaderFactory getReaderFactory() {synchronized(readerLock) {return readerFactory;}}
+    public ConfigurationReaderFactory getReaderFactory() {
+        synchronized(readerLock) {
+            if(readerFactory == null)
+                return new XmlConfigurationReaderFactory();
+            return readerFactory;
+        }
+    }
 
     /**
      * Returns an instance of the class that will be used to read configuration data.
      * <p>
      * By default, this method will return an instance of {@link XmlConfigurationReader}. However, this can be
-     * modified by {@link #setReaderFactory(ConfigurationReaderFactory) setReaderFactory}.
+     * modified by calling {@link #setReaderFactory(ConfigurationReaderFactory) setReaderFactory}.
      * </p>
      * @return                              an instance of the class that will be used to read configuration data.
      * @throws ReaderConfigurationException any configuration reader error, possibly wrapping another exception.
      * @see                                 #setReaderFactory(ConfigurationReaderFactory)
      * @see                                 #getReaderFactory()
      */
-    public ConfigurationReader getReader() throws ReaderConfigurationException {
-        ConfigurationReaderFactory factory;
-
-        // If no factory has been set, return an XML configuration reader.
-        if((factory = getReaderFactory()) == null)
-            return new XmlConfigurationReader();
-
-        return factory.getReaderInstance();
-    }
+    public ConfigurationReader getReader() throws ReaderConfigurationException {return getReaderFactory().getReaderInstance();}
 
 
 
@@ -128,6 +230,10 @@ public class Configuration {
     // -------------------------------------------------------------------------
     /**
      * Sets the factory that will be used to create {@link ConfigurationWriter writer} instances.
+     * <p>
+     * In order to reset the configuration to its default writer factory ({@link XmlConfigurationWriterFactory}),
+     * application writers can call <code>setWriterFactory(null);</code>.
+     * </p>
      * @param f factory that will be used to create writer instances.
      * @see     #getWriterFactory()
      * @see    #getWriter()
@@ -136,11 +242,21 @@ public class Configuration {
 
     /**
      * Returns the factory that is being used to create {@link ConfigurationWriter writer} instances.
+     * <p>
+     * By default, this method will return an instance of {@link XmlConfigurationWriterFactory}. However, this
+     * can be modified by calling {@link #setWriterFactory(ConfigurationWriterFactory) setWriterFactory}.
+     * </p>
      * @return the factory that is being used to create writer instances.
      * @see    #setWriterFactory(ConfigurationWriterFactory)
      * @see    #getWriter()
      */
-    public ConfigurationWriterFactory getWriterFactory() {synchronized(writerLock) {return writerFactory;}}
+    public ConfigurationWriterFactory getWriterFactory() {
+        synchronized(writerLock) {
+            if(writerFactory == null)
+                return new XmlConfigurationWriterFactory();
+            return writerFactory;
+        }
+    }
 
     /**
      * Returns an instance of the class that will be used to write configuration data.
@@ -153,15 +269,7 @@ public class Configuration {
      * @see                                 #setWriterFactory(ConfigurationWriterFactory)
      * @see                                 #getWriterFactory()
      */
-    public ConfigurationWriter getWriter() throws WriterConfigurationException {
-        ConfigurationWriterFactory factory;
-
-        // If no factory was set, return an XML configuration writer.
-        if((factory = getWriterFactory()) == null)
-            return new XmlConfigurationWriter();
-
-        return factory.getWriterInstance();
-    }
+    public ConfigurationWriter getWriter() throws WriterConfigurationException {return getWriterFactory().getWriterInstance();}
 
 
 
@@ -169,14 +277,16 @@ public class Configuration {
     // -------------------------------------------------------------------------
     /**
      * Loads configuration from the specified input stream, using the specified configuration reader.
-     * @param  in                     where to read the configuration from.
-     * @param  reader                 reader that will be used to interpret the content of <code>in</code>.
-     * @throws IOException            if an I/O error occurs.
-     * @throws ConfigurationException if a configuration error occurs.
-     * @see                           #write(OutputStream,ConfigurationWriter)
-     * @see                           #read(InputStream)
-     * @see                           #read(ConfigurationReader)
-     * @see                           #read()
+     * @param  in                              where to read the configuration from.
+     * @param  reader                          reader that will be used to interpret the content of <code>in</code>.
+     * @throws IOException                     if an I/O error occurs.
+     * @throws ConfigurationException          if a configuration error occurs.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @see                                    #write(OutputStream,ConfigurationWriter)
+     * @see                                    #read(InputStream)
+     * @see                                    #read(ConfigurationReader)
+     * @see                                    #read()
      */
     public synchronized void read(InputStream in, ConfigurationReader reader) throws IOException, ConfigurationException {reader.read(in, new ConfigurationLoader(root));}
 
@@ -186,13 +296,16 @@ public class Configuration {
      * This method will use the configuration reader set by {@link #setReaderFactory(ConfigurationReaderFactory)} if any,
      * or an {@link com.mucommander.conf.XmlConfigurationReader} instance if not.
      * </p>
-     * @param  in                     where to read the configuration from.
-     * @throws ConfigurationException if a configuration error occurs.
-     * @throws IOException            if an I/O error occurs.
-     * @see                           #write(OutputStream)
-     * @see                           #read()
-     * @see                           #read(ConfigurationReader)
-     * @see                           #read(InputStream,ConfigurationReader)
+     * @param  in                              where to read the configuration from.
+     * @throws ConfigurationException          if a configuration error occurs.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @throws ReaderConfigurationException    if the {@link ConfigurationReaderFactory} isn't properly configured.
+     * @throws IOException                     if an I/O error occurs.
+     * @see                                    #write(OutputStream)
+     * @see                                    #read()
+     * @see                                    #read(ConfigurationReader)
+     * @see                                    #read(InputStream,ConfigurationReader)
      */
     public void read(InputStream in) throws ConfigurationException, IOException {read(in, getReader());}
 
@@ -202,16 +315,18 @@ public class Configuration {
      * This method will use the input stream provided by {@link #setSource(ConfigurationSource)} if any, or
      * fail otherwise.
      * </p>
-     * @param  reader                       reader that will be used to interpret the content of <code>in</code>.
-     * @throws IOException                  if an I/O error occurs.
-     * @throws ConfigurationException       if a configuration error occurs.
-     * @throws SourceConfigurationException if no {@link ConfigurationSource} has been set.
-     * @see                                 #write(ConfigurationWriter)
-     * @see                                 #read(InputStream)
-     * @see                                 #read()
-     * @see                                 #read(InputStream,ConfigurationReader)
+     * @param  reader                          reader that will be used to interpret the content of <code>in</code>.
+     * @throws IOException                     if an I/O error occurs.
+     * @throws ConfigurationException          if a configuration error occurs.
+     * @throws SourceConfigurationException    if no {@link ConfigurationSource} has been set.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @see                                    #write(ConfigurationWriter)
+     * @see                                    #read(InputStream)
+     * @see                                    #read()
+     * @see                                    #read(InputStream,ConfigurationReader)
      */
-    public void read(ConfigurationReader reader) throws IOException, ConfigurationException, SourceConfigurationException {
+    public void read(ConfigurationReader reader) throws IOException, ConfigurationException {
         InputStream         in;     // Input stream on the configuration source.
         ConfigurationSource source; // Configuration source.
 
@@ -221,6 +336,7 @@ public class Configuration {
         if((source = getSource()) == null)
             throw new SourceConfigurationException("Configuration source hasn't been set.");
 
+        // Reads the configuration data.
         try {read(in = source.getInputStream(), reader);}
         finally {
             if(in != null) {
@@ -241,15 +357,18 @@ public class Configuration {
      * If a configuration source has been specified through {@link #setSource(ConfigurationSource)}, it will be
      * used. Otherwise, this method will fail.
      * </p>
-     * @throws IOException                 if an I/O error occurs.
-     * @throws ConfigurationException       if a configuration error occurs.
-     * @throws SourceConfigurationException if a {@link ConfigurationSource} hasn't been configured.
-     * @see                                 #write()
-     * @see                                 #read(InputStream)
-     * @see                                 #read(ConfigurationReader)
-     * @see                                 #read(InputStream,ConfigurationReader)
+     * @throws IOException                     if an I/O error occurs.
+     * @throws ConfigurationException          if a configuration error occurs.
+     * @throws SourceConfigurationException    if no {@link ConfigurationSource} hasn been set.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @throws ReaderConfigurationException    if the {@link ConfigurationReaderFactory} isn't properly configured.
+     * @see                                    #write()
+     * @see                                    #read(InputStream)
+     * @see                                    #read(ConfigurationReader)
+     * @see                                    #read(InputStream,ConfigurationReader)
      */
-    public void read() throws SourceConfigurationException, ConfigurationException, IOException {read(getReader());}
+    public void read() throws ConfigurationException, IOException {read(getReader());}
 
 
 
@@ -257,13 +376,15 @@ public class Configuration {
     // -------------------------------------------------------------------------
     /**
      * Writes configuration to the specified output stream using the specified writer.
-     * @param out                     where to write the configuration to.
-     * @param writer                  writer that will be used to format the configuration.
-     * @throws ConfigurationException if any error occurs.
-     * @see                           #read(InputStream,ConfigurationReader)
-     * @see                           #write(OutputStream)
-     * @see                           #write(ConfigurationWriter)
-     * @see                           #write()
+     * @param out                              where to write the configuration to.
+     * @param writer                           writer that will be used to format the configuration.
+     * @throws ConfigurationException          if any error occurs.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @see                                    #read(InputStream,ConfigurationReader)
+     * @see                                    #write(OutputStream)
+     * @see                                    #write(ConfigurationWriter)
+     * @see                                    #write()
      */
     public void write(OutputStream out, ConfigurationWriter writer) throws ConfigurationException {
         writer.setOutputStream(out);
@@ -276,12 +397,15 @@ public class Configuration {
      * If a writer was specified through {@link #setWriterFactory(ConfigurationWriterFactory)}, this will be
      * used to format the configuration. Otherwise, an {@link XmlConfigurationWriter} will be used.
      * </p>
-     * @param out                     where to write the configuration to.
-     * @throws ConfigurationException if any error occurs.
-     * @see                           #read(InputStream)
-     * @see                           #write(OutputStream,ConfigurationWriter)
-     * @see                           #write(ConfigurationWriter)
-     * @see                           #write()
+     * @param out                              where to write the configuration to.
+     * @throws ConfigurationException          if any error occurs.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @throws WriterConfigurationException    if the {@link ConfigurationWriterFactory} isn't properly configured.
+     * @see                                    #read(InputStream)
+     * @see                                    #write(OutputStream,ConfigurationWriter)
+     * @see                                    #write(ConfigurationWriter)
+     * @see                                    #write()
      */
     public void write(OutputStream out) throws ConfigurationException {write(out, getWriter());}
 
@@ -291,16 +415,18 @@ public class Configuration {
      * If a configuration source was specified through {@link #setSource(ConfigurationSource)}, it will be used
      * to open an output stream. Otherwise, this method will fail.
      * </p>
-     * @param writer                        writer that will be used to format the configuration.
-     * @throws ConfigurationException       if any error occurs.
-     * @throws SourceConfigurationException if no {@link ConfigurationSource} has been set.
-     * @throws IOException                  if any I/O error occurs.
-     * @see                                 #read(ConfigurationReader)
-     * @see                                 #write(OutputStream,ConfigurationWriter)
-     * @see                                 #write(OutputStream)
-     * @see                                 #write()
+     * @param writer                           writer that will be used to format the configuration.
+     * @throws ConfigurationException          if any error occurs.
+     * @throws SourceConfigurationException    if no {@link ConfigurationSource} has been set.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @throws IOException                     if any I/O error occurs.
+     * @see                                    #read(ConfigurationReader)
+     * @see                                    #write(OutputStream,ConfigurationWriter)
+     * @see                                    #write(OutputStream)
+     * @see                                    #write()
      */
-    public void write(ConfigurationWriter writer) throws IOException, ConfigurationException, SourceConfigurationException {
+    public void write(ConfigurationWriter writer) throws IOException, ConfigurationException {
         OutputStream        out;    // Where to write the configuration data.
         ConfigurationSource source; // Configuration source.
 
@@ -330,22 +456,25 @@ public class Configuration {
      * If a configuration source was specified through {@link #setSource(ConfigurationSource)}, it will be used
      * to open an output stream. Otherwise, this method will fail.
      * </p>
-     * @throws SourceConfigurationException if a {@link ConfigurationSource} hasn't been set.
-     * @throws ConfigurationException       if any error occurs.
-     * @throws IOException                  if any I/O error occurs.
-     * @see                                 #read()
-     * @see                                 #write(OutputStream,ConfigurationWriter)
-     * @see                                 #write(OutputStream)
-     * @see                                 #write(ConfigurationWriter)
+     * @throws SourceConfigurationException    if a {@link ConfigurationSource} hasn't been set.
+     * @throws ConfigurationException          if any error occurs.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @throws WriterConfigurationException    if the {@link ConfigurationWriterFactory} isn't properly configured.
+     * @throws IOException                     if any I/O error occurs.
+     * @see                                    #read()
+     * @see                                    #write(OutputStream,ConfigurationWriter)
+     * @see                                    #write(OutputStream)
+     * @see                                    #write(ConfigurationWriter)
      */
-    public void write() throws IOException, ConfigurationException, SourceConfigurationException {write(getWriter());}
+    public void write() throws IOException, ConfigurationException {write(getWriter());}
 
 
 
     // - Configuration building ------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Recursively explores the specified section and sends messages to the specified builder.
+     * Recursively explores the specified section and invokes the specified builder's callback methods.
      * @param  builder                object that will receive building events.
      * @param  root                   section to explore.
      * @throws ConfigurationException if any error occurs.
@@ -377,7 +506,7 @@ public class Configuration {
     }
 
     /**
-     * Explores the whole configuration tree and sends build messages to <code>builder</code>.
+     * Explores the whole configuration tree and invokes the specified builder's callback methods.
      * @param  builder                object that will receive configuration building messages.
      * @throws ConfigurationException if any error occurs while going through the configuration tree.
      */
@@ -412,9 +541,8 @@ public class Configuration {
     /**
      * Sets the value of the specified variable.
      * <p>
-     * This method will return <code>false</code> if it didn't modify <code>name</code>'s value. This, however, is not a way
-     * of indicating that the call failed: <code>false</code> is only ever returned if the previous value is equal to the
-     * new value.
+     * This method will return <code>false</code> if it didn't modify <code>name</code>'s value. Note that this doesn't mean
+     * the call failed, but that <code>name</code>'s value was already equal to <code>value</code>.
      * </p>
      * <p>
      * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
