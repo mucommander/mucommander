@@ -103,7 +103,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <libraryjar name="${java.lib}"/>
       <libraryjar name="${ant.lib}"/>
 
-      <keep access="public" name="com.mucommander.conf.**">
+      <keep access="public">
         <field access="public,protected"/>
         <method access="public,protected"/>
         <constructor access="public,protected"/>
@@ -177,6 +177,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <javadoc destdir="${conf.doc}" author="true" windowtitle="muCommander Configuration API" encoding="UTF-8" access="protected">
       <packageset dir="${source}">
         <include name="com/mucommander/conf/**"/>
+        <include name="com/mucommander/xml/writer/**"/>
         <exclude name="com/mucommander/conf/impl/**"/>
       </packageset>
     </javadoc>
