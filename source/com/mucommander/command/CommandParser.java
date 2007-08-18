@@ -38,6 +38,8 @@ import java.io.File;
  * <ul>
  *  <li><code>$f</code> is replaced by a file's full path.</li>
  *  <li><code>$n</code> is replaced by a file's name.</li>
+ *  <li><code>$e</code> is replaced by a file's extension.</li>
+ *  <li><code>$N</code> is replaced by a file's name without its extension.</li>
  *  <li><code>$p</code> is replaced by a file's parent's path.</li>
  *  <li><code>$j</code> is replaced by the path of the folder in which the JVM was started.</li>
  * </ul>

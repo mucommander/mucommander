@@ -154,16 +154,13 @@ public class Configuration {
     // -------------------------------------------------------------------------
     /**
      * Loads configuration from the specified input stream, using the specified configuration reader.
-     * @param  in                           where to read the configuration from.
-     * @param  reader                       reader that will be used to interpret the content of <code>in</code>.
-     * @throws IOException                  if an I/O error occurs.
-     * @throws ConfigurationException       if a configuration error occurs.
-     * @throws ConfigurationFormatException if there is an error in the format of the configuration file.
-     * @see                                 #write(OutputStream,ConfigurationWriter)
+     * @param  in                     where to read the configuration from.
+     * @param  reader                 reader that will be used to interpret the content of <code>in</code>.
+     * @throws IOException            if an I/O error occurs.
+     * @throws ConfigurationException if a configuration error occurs.
+     * @see                           #write(OutputStream,ConfigurationWriter)
      */
-    public synchronized void read(InputStream in, ConfigurationReader reader) throws ConfigurationException, IOException, ConfigurationFormatException {
-        reader.read(in, new ConfigurationLoader(root));
-    }
+    public synchronized void read(InputStream in, ConfigurationReader reader) throws IOException, ConfigurationException {reader.read(in, new ConfigurationLoader(root));}
 
     /**
      * Loads configuration from the specified input stream.
@@ -171,13 +168,12 @@ public class Configuration {
      * This method will use the configuration reader set by {@link #setReaderFactory(ConfigurationReaderFactory)} if any,
      * or an {@link com.mucommander.conf.XmlConfigurationReader} instance if not.
      * </p>
-     * @param  in                           where to read the configuration from.
-     * @throws ConfigurationException       if a configuration error occurs.
-     * @throws ConfigurationFormatException if there is an error in the format of the configuration file.
-     * @throws IOException                  if an I/O error occurs.
-     * @see                                 #write(OutputStream)
+     * @param  in                     where to read the configuration from.
+     * @throws ConfigurationException if a configuration error occurs.
+     * @throws IOException            if an I/O error occurs.
+     * @see                           #write(OutputStream)
      */
-    public void read(InputStream in) throws ConfigurationException, IOException, ConfigurationFormatException {read(in, getReader());}
+    public void read(InputStream in) throws ConfigurationException, IOException {read(in, getReader());}
 
     /**
      * Loads configuration using the specified configuration reader.
@@ -185,13 +181,12 @@ public class Configuration {
      * This method will use the input stream provided by {@link #setSource(ConfigurationSource)} if any, or
      * fail otherwise.
      * </p>
-     * @param  reader                       reader that will be used to interpret the content of <code>in</code>.
-     * @throws IOException                  if an I/O error occurs.
-     * @throws ConfigurationFormatException if there is an error in the format of the configuration file.
-     * @throws ConfigurationException       if a configuration error occurs.
-     * @see                                 #write(ConfigurationWriter)
+     * @param  reader                 reader that will be used to interpret the content of <code>in</code>.
+     * @throws IOException            if an I/O error occurs.
+     * @throws ConfigurationException if a configuration error occurs.
+     * @see                           #write(ConfigurationWriter)
      */
-    public void read(ConfigurationReader reader) throws IOException, ConfigurationException, ConfigurationFormatException {
+    public void read(ConfigurationReader reader) throws IOException, ConfigurationException {
         InputStream in;
 
         in = null;
@@ -215,12 +210,11 @@ public class Configuration {
      * If a configuration source has been specified through {@link #setSource(ConfigurationSource)}, it will be
      * used. Otherwise, this method will fail.
      * </p>
-     * @throws IOException                  if an I/O error occurs.
-     * @throws ConfigurationFormatException if there is an error in the format of the configuration file.
-     * @throws ConfigurationException       if a configuration error occurs.
-     * @see                                 #write()
+     * @throws IOException            if an I/O error occurs.
+     * @throws ConfigurationException if a configuration error occurs.
+     * @see                           #write()
      */
-    public void read() throws ConfigurationException, IOException, ConfigurationFormatException {read(getReader());}
+    public void read() throws ConfigurationException, IOException {read(getReader());}
 
 
 
@@ -383,7 +377,7 @@ public class Configuration {
 
         // If the variable's value was actually modified, triggers an event.
         if(explorer.getSection().setVariable(buffer, value)) {
-            triggerEvent(new ConfigurationEvent(name, value));
+            triggerEvent(new ConfigurationEvent(this, name, value));
             return true;
         }
         return false;
@@ -561,7 +555,7 @@ public class Configuration {
 
         // If the variable was actually set, triggers an event.
         if((buffer = explorer.getSection().removeVariable(buffer)) != null)
-            triggerEvent(new ConfigurationEvent(name, null));
+            triggerEvent(new ConfigurationEvent(this, name, null));
 
         return buffer;
     }
@@ -648,7 +642,7 @@ public class Configuration {
         // If the variable isn't set, set it to defaultValue and triggers an event.
         if((value = explorer.getSection().getVariable(buffer)) == null) {
             explorer.getSection().setVariable(buffer, defaultValue);
-            triggerEvent(new ConfigurationEvent(name, defaultValue));
+            triggerEvent(new ConfigurationEvent(this, name, defaultValue));
             return defaultValue;
         }
         return value;
@@ -836,7 +830,7 @@ public class Configuration {
         public void endConfiguration() throws ConfigurationException {
             // Makes sure currentSection is the root section.
             if(!sections.empty())
-                throw new ConfigurationException("Not all sections have been closed.");
+                throw new ConfigurationStructureException("Not all sections have been closed.");
             sections     = null;
             sectionNames = null;
         }
@@ -870,11 +864,11 @@ public class Configuration {
                 buffer = (ConfigurationSection)sections.pop();
                 sectionNames.pop();
             }
-            catch(EmptyStackException e) {throw new ConfigurationException("Section " + name + " was already closed.");}
+            catch(EmptyStackException e) {throw new ConfigurationStructureException("Section " + name + " was already closed.");}
 
             // Makes sure we're closing the right section.
             if(buffer.getSection(name) != currentSection)
-                throw new ConfigurationException("Section " + name + " is not the currently opened section.");
+                throw new ConfigurationStructureException("Section " + name + " is not the currently opened section.");
             currentSection = buffer;
         }
 
@@ -887,9 +881,9 @@ public class Configuration {
             // If the variable's value was modified, trigger an event.
             if(currentSection.setVariable(name, value)) {
                 if(sectionNames.empty())
-                    triggerEvent(new ConfigurationEvent(name, value));
+                    triggerEvent(new ConfigurationEvent(Configuration.this, name, value));
                 else
-                    triggerEvent(new ConfigurationEvent(((String)sectionNames.peek()) + name, value));
+                    triggerEvent(new ConfigurationEvent(Configuration.this, ((String)sectionNames.peek()) + name, value));
             }
         }
     }

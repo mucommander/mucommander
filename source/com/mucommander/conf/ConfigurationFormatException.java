@@ -19,53 +19,126 @@
 package com.mucommander.conf;
 
 /**
- * Exception thrown when errors are found in a configuration stream's format.
+ * Encapsulate a configuration format error.
  * <p>
- * Developers can use the {@link #getColumnNumber()} and {@link #getLineNumber()} methods
- * in order to display precise error messages.
+ * Within the scope of the <code>com.mucommander.conf</code> API, format errors
+ * are syntax errors in a configuration source.
+ * </p>
+ * <p>
+ * This exception is mostly meant to be used by implementations of {@link ConfigurationReader},
+ * as they're the ones who will analyse the syntax of a configuration stream. However,
+ * application writers might find other uses for it.
+ * </p>
+ * <p>
+ * When applicable, instances of <code>ConfigurationFormatException</code> might provide information
+ * about the position in the source at which the error occured. See the documentation of
+ * {@link #getLineNumber()} and {@link #getColumnNumber()} for more information on location conventions.
+ * </p>
+ * <p>
+ * Since <code>ConfigurationFormatException</code> subclasses {@link ConfigurationException}, it
+ * inherits his capacity to wrap other exceptions.
  * </p>
  * @author Nicolas Rinaudo
  */
-public class ConfigurationFormatException extends Exception {
+public class ConfigurationFormatException extends ConfigurationException {
+    // - Class constants -----------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    public static final int UNKNOWN_LOCATION = -1;
+
+
+
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Line at which the error occured. */
-    private int line   = -1;
+    private int line   = UNKNOWN_LOCATION;
     /** Column at which the error occured. */
-    private int column = -1;
+    private int column = UNKNOWN_LOCATION;
 
 
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    public ConfigurationFormatException() {super();}
-
-    public ConfigurationFormatException(Throwable cause) {super(cause == null ? null : cause.getMessage(), cause);}
-
-    public ConfigurationFormatException(String message, Throwable cause) {super(message, cause);}
-
+    /**
+     * Creates a new configuration format exception.
+     * @param message the error message.
+     */
     public ConfigurationFormatException(String message) {super(message);}
 
-    public ConfigurationFormatException(int line, int column) {
-        this();
-        setLocationInformation(line, column);
-    }
-
-    public ConfigurationFormatException(Throwable cause, int line, int column) {
-        this(cause);
-        setLocationInformation(line, column);
-    }
-
-    public ConfigurationFormatException(String message, Throwable cause, int line, int column) {
-        this(message, cause);
-        setLocationInformation(line, column);
-    }
-
+    /**
+     * Creates a new configuration format exception.
+     * <p>
+     * {@link #UNKNOWN_LOCATION} is a legal value for both <code>line</code> and <code>column</code>.
+     * See the documentation of {@link #getLineNumber()} and {@link #getColumnNumber()} for more
+     * information on location conventions.
+     * </p>
+     * @param message the error message.
+     * @param line    line at which the error occured.
+     * @param column  column at which the error occured.
+     */
     public ConfigurationFormatException(String message, int line, int column) {
         this(message);
         setLocationInformation(line, column);
     }
 
+    /**
+     * Creates a new configuration format exception wrapping an existing exception.
+     * <p>
+     * The existing exception will be embedded in the new one, and its message will
+     * become the default message for the <code>ConfigurationFormatException</code>.
+     * </p>
+     * @param cause the exception to be wrapped in a <code>ConfigurationFormatException</code>.
+     */
+    public ConfigurationFormatException(Throwable cause) {super(cause == null ? null : cause.getMessage(), cause);}
+
+    /**
+     * Creates a new configuration format exception wrapping an existing exception.
+     * <p>
+     * The existing exception will be embedded in the new one, and its message will
+     * become the default message for the <code>ConfigurationFormatException</code>.
+     * </p>
+     * <p>
+     * {@link #UNKNOWN_LOCATION} is a legal value for both <code>line</code> and <code>column</code>.
+     * See the documentation of {@link #getLineNumber()} and {@link #getColumnNumber()} for more
+     * information on location conventions.
+     * </p>
+     * @param cause  the exception to be wrapped in a <code>ConfigurationFormatException</code>.
+     * @param line   line at which the error occured.
+     * @param column column at which the error occured.
+     */
+    public ConfigurationFormatException(Throwable cause, int line, int column) {
+        this(cause);
+        setLocationInformation(line, column);
+    }
+
+    /**
+     * Creates a new configuration format exception from an existing exception.
+     * <p>
+     * The existing exception will be embedded in the new one, but the new exception will have its own message.
+     * </p>
+     * @param message the detail message.
+     * @param cause   the exception to be wrapped in a <code>ConfigurationFormatException</code>.
+     */
+    public ConfigurationFormatException(String message, Throwable cause) {super(message, cause);}
+
+    /**
+     * Creates a new configuration format exception from an existing exception.
+     * <p>
+     * The existing exception will be embedded in the new one, but the new exception will have its own message.
+     * </p>
+     * <p>
+     * {@link #UNKNOWN_LOCATION} is a legal value for both <code>line</code> and <code>column</code>.
+     * See the documentation of {@link #getLineNumber()} and {@link #getColumnNumber()} for more
+     * information on location conventions.
+     * </p>
+     * @param message the detail message.
+     * @param cause   the exception to be wrapped in a <code>ConfigurationFormatException</code>.
+     * @param line    line at which the error occured.
+     * @param column  column at which the error occured.
+     */
+    public ConfigurationFormatException(String message, Throwable cause, int line, int column) {
+        this(message, cause);
+        setLocationInformation(line, column);
+    }
 
 
     // - Misc. ---------------------------------------------------------------------------
@@ -82,7 +155,12 @@ public class ConfigurationFormatException extends Exception {
 
     /**
      * Returns the line at which the error occured.
-     * @return the line at which the error occured, <code>-1</code> if the information is not
+     * <p>
+     * By convention, the line at which an error occurs is equal to the number of line breaks encountered
+     * before the problem, plus one. This means that a line number of <code>1</code> will describe the
+     * first line in the configuration source.
+     * </p>
+     * @return the line at which the error occured, {@link #UNKNOWN_LOCATION} if the information is not
      *         avaiable or relevant.
      * @see    #getColumnNumber()
      */
@@ -90,7 +168,12 @@ public class ConfigurationFormatException extends Exception {
 
     /**
      * Returns the column at which the error occured.
-     * @return the column at which the error occured, <code>-1</code> if the information is not
+     * <p>
+     * By convention, the column at which an error occurs is equal to the number of character encountered
+     * after the last line break and before the problem, plus one. This means that a column number of
+     * <code>1</code> will describe the first character in the current line.
+     * </p>
+     * @return the column at which the error occured, {@link #UNKNOWN_LOCATION} if the information is not
      *         avaiable or relevant.
      * @see    #getLineNumber()
      */

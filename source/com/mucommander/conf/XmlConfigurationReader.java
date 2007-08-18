@@ -113,7 +113,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
         locator      = null;
         try {SAXParserFactory.newInstance().newSAXParser().parse(in, this);}
         catch(ParserConfigurationException e) {throw new ConfigurationException("Failed to create a SAX parser", e);}
-        catch(SAXParseException e) {throw new ConfigurationFormatException(e.getException() == null ? e : e.getException(), e.getLineNumber(), e.getColumnNumber());}
+        catch(SAXParseException e) {throw new ConfigurationFormatException(e.getMessage(), e.getLineNumber(), e.getColumnNumber());}
         catch(SAXException e) {throw new ConfigurationFormatException(e.getException() == null ? e : e.getException());}
     }
 

@@ -19,31 +19,43 @@
 package com.mucommander.conf;
 
 /**
- * Exception thrown when configuration related errors happen.
+ * Encapsulates a general configuration error.
+ * <p>
+ * This class can contain basic error information from either the <code>com.mucommander.conf</code> API
+ * or the application. Application writers can subclass it to provide additional functionality. Different
+ * classes of the <code>com.mucommander.conf</code> API may throw this exception or any exception subclassed
+ * from it.
+ * </p>
+ * <p>
+ * If the application needs to pass through other types of exceptions, it must wrap them in a
+ * <code>ConfigurationException</code> or an exception derived from it.
+ * </p>
  * @author Nicolas Rinaudo
  */
 public class ConfigurationException extends Exception {
     /**
-     * Builds a new exception.
-     */
-    public ConfigurationException() {super();}
-
-    /**
-     * Builds a new exception with the specified message.
-     * @param message exception's message.
+     * Creates a new configuration exception.
+     * @param message the error message.
      */
     public ConfigurationException(String message) {super(message);}
 
     /**
-     * Builds a new exception with the specified cause.
-     * @param cause exception's cause.
+     * Creates a new configuration exception wrapping an existing exception.
+     * <p>
+     * The existing exception will be embedded in the new one, and its message will
+     * become the default message for the <code>ConfigurationException</code>.
+     * </p>
+     * @param cause the exception to be wrapped in a <code>ConfigurationException</code>.
      */
     public ConfigurationException(Throwable cause) {super(cause);}
 
     /**
-     * Builds a new exception with the specified message and cause.
-     * @param message exception's message.
-     * @param cause   exception's cause.
+     * Creates a new configuration exception from an existing exception.
+     * <p>
+     * The existing exception will be embedded in the new one, but the new exception will have its own message.
+     * </p>
+     * @param message the detail message.
+     * @param cause   the exception to be wrapped in a <code>ConfigurationException</code>.
      */
     public ConfigurationException(String message, Throwable cause) {super(message, cause);}
 }
