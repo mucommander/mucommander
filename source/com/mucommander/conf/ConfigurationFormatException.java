@@ -43,6 +43,7 @@ package com.mucommander.conf;
 public class ConfigurationFormatException extends ConfigurationException {
     // - Class constants -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+    /** Describes an unknown {@link #getLineNumber() line} or {@link #getColumnNumber() column} value.*/
     public static final int UNKNOWN_LOCATION = -1;
 
 
