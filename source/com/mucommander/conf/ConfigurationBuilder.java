@@ -51,7 +51,7 @@ public interface ConfigurationBuilder {
      * This method will be invoked at most once, and if it is, it will be the last one. If an
      * unrecoverable error happens, this method might never be called.
      * </p>
-     * @throws ConfigurationException any Configuration error, possible wrapping another exception.
+     * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
     public void endConfiguration() throws ConfigurationException;
 
@@ -64,7 +64,7 @@ public interface ConfigurationBuilder {
      * reported, in order, before the corresponding {@link #endSection(String) endSection} event.
      * </p>
      * @param  name                   name of the new section.
-     * @throws ConfigurationException any Configuration error, possible wrapping another exception.
+     * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
     public void startSection(String name) throws ConfigurationException;
 
@@ -76,7 +76,7 @@ public interface ConfigurationBuilder {
      * event, even if the section is empty.
      * </p>
      * @param  name                   name of the finished section.
-     * @throws ConfigurationException any Configuration error, possible wrapping another exception.
+     * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
     public void endSection(String name) throws ConfigurationException;
 
@@ -90,7 +90,7 @@ public interface ConfigurationBuilder {
      * </p>
      * @param  name                   name of the new variable.
      * @param  value                  value of the new variable.
-     * @throws ConfigurationException thrown if an error occurs.
+     * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
     public void addVariable(String name, String value) throws ConfigurationException;
 }
