@@ -158,7 +158,7 @@ public class PlatformManager {
     /** File manager command for MAC OS X OSes. */
     private static final String MAC_OS_X_FILE_MANAGER       = "open -a Finder $f";
     /** URL opener command for KDE. */
-    private static final String KDE_URL_OPENER              = "kmfclient openURL $f";
+    private static final String KDE_URL_OPENER              = "kfmclient openURL $f";
     /** Default Windows 9x shell. */
     private static final String WINDOWS_9X_SHELL            = "command.com /c";
     /** Default Windows NT shell. */
