@@ -353,6 +353,11 @@ public class Translator {
         else {
         */
         // Parameters order: originalFile newLanguageFile resultingFile newLanguage
+        if(args.length<4) {
+            System.out.println("usage: Translator originalFile newLanguageFile mergedFile newLanguage");
+            return;
+        }
+
         addLanguageToDictionary(args[0], args[1], args[2], args[3]);
         /*
           }
