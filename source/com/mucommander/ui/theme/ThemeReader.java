@@ -90,7 +90,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Theme template that is currently being built. */
-    private ThemeData template;
+    private ThemeData     template;
     /** Current state of the XML parser. */
     private int           state;
     /** Used to ignore the content of an unknown tag. */

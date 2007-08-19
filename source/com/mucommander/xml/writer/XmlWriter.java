@@ -77,16 +77,20 @@ public class XmlWriter {
     /**
      * Creates an <code>XmlWriter</code> that will write to the specified file.
      * <p>
-     * The generated XML content will be <code>UTF-8</code> encoded.
+     * This is a convenience constructor and is strictly equivalent to
+     * <code>{@link #XmlWriter(OutputStream,String) XmlWriter}(new FileOutputStream(file), {@link #DEFAULT_ENCODING})</code>.
      * </p>
      * @param  file                  where to write XML output to.
      * @throws FileNotFoundException if <code>file</code> could not be found.
-     * @throws UnsupportedException  in the unlikely case where <code>UTF-8</code> is not supported.
      */
-    public XmlWriter(File file) throws FileNotFoundException, UnsupportedEncodingException {this(new FileOutputStream(file));}
+    public XmlWriter(File file) throws FileNotFoundException {this(new FileOutputStream(file));}
 
     /**
      * Creates an <code>XmlWriter</code> that will write to the specified file using the specified encoding.
+     * <p>
+     * This is a convenience constructor and is strictly equivalent to
+     * <code>{@link #XmlWriter(OutputStream,String) XmlWriter}(new FileOutputStream(file), encoding)</code>.
+     * </p>
      * @param  file                         where to write XML output to.
      * @param  encoding                     encoding to use when writing the XML content.
      * @throws FileNotFoundException        if <code>file</code> could not be found.
@@ -97,29 +101,28 @@ public class XmlWriter {
     /**
      * Creates an <code>XmlWriter</code> that will write to the specified output stream.
      * <p>
-     * The generated XML content will be <code>UTF-8</code> encoded.
+     * This is a convenience constructor and is strictly equivalent to
+     * <code>{@link #XmlWriter(OutputStream,String) XmlWriter}(stream, {@link #DEFAULT_ENCODING})</code>.
      * </p>
-     * @param  stream                where to write XML output to.
-     * @throws UnsupportedException  in the unlikely case where <code>UTF-8</code> is not supported.
+     * @param stream where to write XML output to.
      */
-    public XmlWriter(OutputStream stream) throws UnsupportedEncodingException {this(stream, DEFAULT_ENCODING);}
+    public XmlWriter(OutputStream stream) {
+        try {init(new OutputStreamWriter(stream, DEFAULT_ENCODING), DEFAULT_ENCODING);}
+        // UTF-8 is guaranteed to be supported by the Java specifications,
+        // we can safely ignore this exception.
+        catch(UnsupportedEncodingException e) {}
+    }
 
     /**
-     * Creates an <code>XmlWriter</code> that will write to the specified stream.
+     * Creates an <code>XmlWriter</code> that will write to the specified stream using the specified encoding.
      * @param  stream                       where to write XML output to.
      * @param  encoding                     encoding to use when writing the XML content.
      * @throws UnsupportedEncodingException if <code>encoding</code> is not supported.
      */
-    public XmlWriter(OutputStream stream, String encoding) throws UnsupportedEncodingException {
-        out = new PrintWriter(new OutputStreamWriter(stream, encoding), true);
-        writeHeader(encoding);
-    }
+    public XmlWriter(OutputStream stream, String encoding) throws UnsupportedEncodingException {init(new OutputStreamWriter(stream, encoding), encoding);}
 
-    /**
-     * Prints the XML header.
-     * @param encoding encoding used to write the XML content.
-     */
-    private void writeHeader(String encoding) {
+    private void init(Writer writer, String encoding) {
+        out = new PrintWriter(writer, true);
         out.print("<?xml version=\"1.0\" encoding=\"");
         out.print(encoding);
         out.println("\"?>");
@@ -171,7 +174,7 @@ public class XmlWriter {
     }
 
     /**
-     * Writes a element opening sequence.
+     * Writes an element opening sequence.
      * <p>
      * Elements opened using this method will not have any attribute, and will
      * need to be closed using an {@link #endElement(String) endElement} call.
@@ -181,7 +184,9 @@ public class XmlWriter {
      * @see        #writeStandAloneElement(String)
      * @see        #writeStandAloneElement(String,XmlAttributes)
      */
-    public void startElement(String name) {startElement(name, false, null);}
+    public void startElement(String name) {startElement(name, false, null, false);}
+
+    public void startElement(String name, boolean lineBreak) {startElement(name, false, null, lineBreak);}
 
     /**
      * Writes a stand-alone element.
@@ -194,10 +199,10 @@ public class XmlWriter {
      * @see        #startElement(String)
      * @see        #writeStandAloneElement(String)
      */
-    public void writeStandAloneElement(String name) {startElement(name, true, null);}
+    public void writeStandAloneElement(String name) {startElement(name, true, null, true);}
 
     /**
-     * Writes a element opening sequence.
+     * Writes an element opening sequence.
      * <p>
      * Elements opened using this method will need to be closed using an {@link #endElement(String) endElement} call.
      * </p>
@@ -207,7 +212,9 @@ public class XmlWriter {
      * @see              #writeStandAloneElement(String)
      * @see              #writeStandAloneElement(String,XmlAttributes)
      */
-    public void startElement(String name, XmlAttributes attributes) {startElement(name, false, attributes);}
+    public void startElement(String name, XmlAttributes attributes) {startElement(name, false, attributes, false);}
+
+    public void startElement(String name, XmlAttributes attributes, boolean lineBreak) {startElement(name, false, attributes, lineBreak);}
 
     /**
      * Writes a stand-alone element.
@@ -220,15 +227,15 @@ public class XmlWriter {
      * @see              #startElement(String,XmlAttributes)
      * @see              #writeStandAloneElement(String)
      */
-    public void writeStandAloneElement(String name, XmlAttributes attributes) {startElement(name, true, attributes);}
+    public void writeStandAloneElement(String name, XmlAttributes attributes) {startElement(name, true, attributes, true);}
 
     /**
-     * Writes a element opening sequence.
+     * Writes an element opening sequence.
      * @param name         name of the element to open.
      * @param isStandAlone whether or not this element should be closed immediately.
      * @param attributes   XML attributes for this element.
      */
-    private void startElement(String name, boolean isStandAlone, XmlAttributes attributes) {
+    private void startElement(String name, boolean isStandAlone, XmlAttributes attributes, boolean lineBreak) {
         // Prints indentation if necessary.
         indent();
 
@@ -261,13 +268,13 @@ public class XmlWriter {
         // Finishes the element opening sequence.
         out.print('>');
 
-        // Stand-alone tags are followed by a line break.
-        if(isStandAlone)
+        // Stand-alone elements are followed by a line break.
+        if(lineBreak)
             println();
     }
 
     /**
-     * Writes a element closing sequence.
+     * Writes an element closing sequence.
      * @param name name of the element to close.
      */
     public void endElement(String name) {
