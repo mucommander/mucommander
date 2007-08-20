@@ -20,7 +20,6 @@ Official website: http://www.mucommander.com
 Copyright (C) 2002-2007 Maxence Bernard
 
 
-
 Requirements
 ------------
 
@@ -33,7 +32,6 @@ good to go!
 If you're having problems launching muCommander, make sure the $JAVA_HOME
 environment variable points to the directory where your Java runtime is
 installed.
-
 
 
 License
@@ -98,7 +96,6 @@ Many thanks to all of you who suggested new features, reported bugs, sent warm
 emails or generously donated to the project !
 
 
-
 Command Line Interface
 ----------------------
 
@@ -138,7 +135,6 @@ Will:
  - load ~/dev in the right panel of the main window
  - open a second window and load http://slashdot.org in its left panel
  - load the default directory in the second window's fourth panel
-
 
 
 Advanced configuration
@@ -252,7 +248,6 @@ associations are always present, and that you do not change their attributes.
 <association mask="[^.]+" command="execute"/>
 
 <association mask=".*"    command="execute"/>
-
 
 
 What's new since v0.8 beta 3 ?
