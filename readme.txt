@@ -307,6 +307,7 @@ Localization:
 - British English translation contributed by Jonathan Murphy
 - Russian translation update
 - Czech translation update
+- Hungarian translation update by György Varga
 
 Bug fixes:
 - FTP filenames containing extended characters are now properly handled if the
