@@ -22,9 +22,9 @@ package com.mucommander.file.impl.zip.provider;
  * Utility class that represents a two byte integer with conversion
  * rules for the big endian byte order of ZIP files.
  *
- * ------------------------------------------------------------------------------------------------------------------
- *
- * <p>This class is based off the <code>org.apache.tools.zip</code> package of the <i>Apache Ant</i> project. The Ant
+ * <p>--------------------------------------------------------------------------------------------------------------<br>
+ * <br>
+ * This class is based off the <code>org.apache.tools.zip</code> package of the <i>Apache Ant</i> project. The Ant
  * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
  * file. It was forked at version 1.7.0 of Ant.</p>
  *
