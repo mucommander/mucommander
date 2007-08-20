@@ -35,6 +35,7 @@ import java.util.Vector;
  * @author Maxence Bernard
  */
 public class Debug {
+
     /** Sets whether or not debug messages should be output to the standard output */
     public final static boolean ON        = RuntimeConstants.DEBUG;
     /** Used to disable debug messages even though debug instructions have been compiled in. */
@@ -56,31 +57,65 @@ public class Debug {
      * Enables / disables debut output.
      * @param b whether or not debug messages should be enabled.
      */
-    public static final void setEnabled(boolean b) {enabled = b;}
+    public static void setEnabled(boolean b) {enabled = b;}
 
+    /**
+     * Resets the timestamp used by {@link #time()} to now.
+     */
     public static void resetTimer() {lastTime = System.currentTimeMillis();}
 
+    /**
+     * Traces the time difference between now and the last call to this method.
+     */
     public static void time() {
         long currentTime = System.currentTimeMillis();
         trace((currentTime - lastTime)+" ms since last call");
         lastTime = currentTime;
     }
 
-    public static void trace(String message) {trace(message, 0);}
+    /**
+     * Prints the given debug message. The caller class and method names and line number within the calling method
+     * will be printed before the message. This method is equivalent to calling {@link #trace(String, int)} with a
+     * level of <code>0</code>.
+     *
+     * @param message the debug message to print
+     */
+    public static void trace(String message) {
+        trace(message, 0);
+    }
 
-    public static void trace(Throwable e) {e.printStackTrace();}
-
+    /**
+     * Prints the given debug message. The caller class and method names and line number within the calling methods
+     * will be printed before the message. The level parameter controls how many class/method names will be printed.
+     * Use <code>-1</code> for no limit.
+     *
+     * @param message the debug message to print
+     * @param level controls how many class/method names will be printed
+     */
     public static void trace(String message, int level) {
         if(enabled)
-            System.out.println(getCallerSignature(level)+" : "+message);
+            System.out.println(getCallerTrace(level)+" : "+message);
+    }
+
+    /**
+     * Prints the given <code>Throwable</code>'s stack trace.
+     *
+     * @param e the Throwable for which the stack trace will be printed
+     */
+    public static void trace(Throwable e) {
+        e.printStackTrace();
     }
 
 
     /**
-     * Returns the names of the class and method and source code line number which
-     * triggered the method which called this method.
+     * Returns the names of the class and method and source code line number which triggered the call to the debug
+     * method of this class. The level parameter controls how many class/method names will be printed.
+     * Use <code>-1</code> for no limit.
+     *
+     * @param level controls how many class/method names will be printed
+     * @return the caller trace
      */
-    public static String getCallerSignature(int level) {
+    private static String getCallerTrace(int level) {
         try {
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             PrintStream ps = new PrintStream(bout, true);
@@ -147,10 +182,6 @@ public class Debug {
         } catch (Exception e) {
             throw new RuntimeException();
         }
-    }
-
-    public static void printStackTrace() {
-        new Throwable().printStackTrace();
     }
 
     /**
