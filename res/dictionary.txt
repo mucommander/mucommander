@@ -204,6 +204,7 @@ close:SK:Zatvoriť
 reset:EN:Reset
 reset:FR:Réinitialiser
 reset:HU:Alaphelyzet
+reset:NL:Resetten
 # Translation missing
 
 
@@ -684,6 +685,7 @@ encoding:HU:Kódolás
 license:EN:License
 license:FR:License
 license:HU:Licenc
+license:NL:Licentie
 # Translation missing
 
 
@@ -978,6 +980,7 @@ preview:HU:Előnézet
 sample_text:EN:Sample text
 sample_text:FR:Texte d'exemple
 sample_text:HU:Példa szöveg
+sample_text:NL:Voorbeeldtekst
 # Translation missing
 
 
@@ -1082,6 +1085,7 @@ this_folder_does_not_exist:SK:Tento priečinok neexistuje, alebo nie je k dispoz
 
 this_file_does_not_exist:EN:This file doesn't exist or is not available: %1
 this_file_does_not_exist:FR:Ce fichier n'existe pas ou n'est pas disponible: %1
+this_file_does_not_exist:NL:Dit bestand bestaat niet of is niet beschikbaar: %1
 # Translation missing
 
 
@@ -1356,6 +1360,7 @@ write_error:SK:Chyba zápisu
 read_error:EN:Read error
 read_error:FR:Erreur de lecture
 read_error:HU:Olvasási hiba
+read_error:NL:Leesfout
 # Translation missing
 
 
@@ -5150,6 +5155,7 @@ move_dialog.moving:RO:În curs de mutare
 move_dialog.moving:IT:Spostando file
 move_dialog.moving:KR:파일 이동중
 move_dialog.moving:pt_BR:Movendo arquivos
+move_dialog.moving:NL:Bezig te verplaatsen
 move_dialog.moving:SK:Presúvam súbory
 
 move_dialog.moving_file:EN:Moving %1
@@ -5292,6 +5298,7 @@ delete_dialog.permanently_delete.confirmation_details:FR:Cette opération ne peu
 delete_dialog.move_to_trash.confirmation:EN:Delete selected file(s) ?
 delete_dialog.move_to_trash.confirmation:FR:Supprimer les fichiers sélectionnés ?
 delete_dialog.move_to_trash.confirmation:HU:Törli a kijelölt fájl(oka)t?
+delete_dialog.move_to_trash.confirmation:NL:Wis gemarkeerd(e) bestand(en) ?
 # Translation missing
 
 
@@ -5310,6 +5317,7 @@ delete_dialog.move_to_trash.confirmation:HU:Törli a kijelölt fájl(oka)t?
 delete_dialog.move_to_trash.confirmation_details:EN:Files will be moved to the trash.
 delete_dialog.move_to_trash.confirmation_details:FR:Les fichiers seront déplacés dans la corbeille.
 delete_dialog.move_to_trash.confirmation_details:HU:A fájlok a lomtárba lesznek áthelyezve.
+delete_dialog.move_to_trash.confirmation_details:NL:Bestanden worden naar de prullebak verplaatst.
 # Translation missing
 
 
@@ -5327,6 +5335,7 @@ delete_dialog.move_to_trash.confirmation_details:HU:A fájlok a lomtárba leszne
 delete_dialog.move_to_trash.option:EN:Move to trash
 delete_dialog.move_to_trash.option:FR:Déplacer dans la corbeille
 delete_dialog.move_to_trash.option:HU:Áthelyezés a lomtárba
+delete_dialog.move_to_trash.option:NL:Verplaats naar prullebak
 # Translation missing
 
 
@@ -7871,6 +7880,7 @@ shortcuts_dialog.windows:SK:Okná
 theme_editor.title:EN:Theme editor
 theme_editor.title:FR:Editeur de thèmes
 theme_editor.title:HU:Témaszerkesztő
+theme_editor.title:NL:Thema bewerken
 # Translation missing
 
 
@@ -7880,6 +7890,7 @@ theme_editor.title:HU:Témaszerkesztő
 theme_editor.folder_tab:EN:Folder pane
 theme_editor.folder_tab:FR:Panneau de dossier
 theme_editor.folder_tab:HU:Könyvtár tábla
+theme_editor.folder_tab:NL:Bestandsvenster
 # Translation missing
 
 
@@ -7890,6 +7901,7 @@ theme_editor.folder_tab:HU:Könyvtár tábla
 theme_editor.shell_tab:EN:Shell
 theme_editor.shell_tab:FR:Shell
 theme_editor.shell_tab:HU:Héjazat
+theme_editor.shell_tab:NL:Shell
 # Translation missing
 
 
@@ -7899,6 +7911,7 @@ theme_editor.shell_tab:HU:Héjazat
 theme_editor.statusbar_tab:EN:Status bar
 theme_editor.statusbar_tab:FR:Barre de status
 theme_editor.statusbar_tab:HU:Állapotsor
+theme_editor.statusbar_tab:NL:Statusbalk
 # Translation missing
 
 
@@ -7907,6 +7920,7 @@ theme_editor.statusbar_tab:HU:Állapotsor
 theme_editor.free_space:EN:Free space (%1)
 theme_editor.free_space:FR:Espace libre (%1)
 theme_editor.free_space:HU:Szabad hely (%1)
+theme_editor.free_space:NL:(ruimte) Vrij (%1)
 # Translation missing
 
 
@@ -7916,6 +7930,7 @@ theme_editor.free_space:HU:Szabad hely (%1)
 theme_editor.free_space.ok:EN:OK
 theme_editor.free_space.ok:FR:OK
 theme_editor.free_space.ok:HU:OK
+theme_editor.free_space.ok:NL:OK
 # Translation missing
 
 
@@ -7925,6 +7940,7 @@ theme_editor.free_space.ok:HU:OK
 theme_editor.free_space.warning:EN:Warning
 theme_editor.free_space.warning:FR:Avertissement
 theme_editor.free_space.warning:HU:Figyelem
+theme_editor.free_space.warning:NL:Waarschuwing
 # Translation missing
 
 
@@ -7934,6 +7950,7 @@ theme_editor.free_space.warning:HU:Figyelem
 theme_editor.free_space.critical:EN:Critical
 theme_editor.free_space.critical:FR:Critique
 theme_editor.free_space.critical:HU:Kritikus
+theme_editor.free_space.critical:NL:Kritiek
 # Translation missing
 
 
@@ -7944,6 +7961,7 @@ theme_editor.free_space.critical:HU:Kritikus
 theme_editor.locationbar_tab:EN:Location bar
 theme_editor.locationbar_tab:FR:Barre d'emplacement
 theme_editor.locationbar_tab:HU:Helyzetsor
+theme_editor.locationbar_tab:NL:Locatiebalk
 # Translation missing
 
 
@@ -7952,6 +7970,7 @@ theme_editor.locationbar_tab:HU:Helyzetsor
 theme_editor.editor_tab:EN:File editor
 theme_editor.editor_tab:FR:Editeur de fichiers
 theme_editor.editor_tab:HU:Fájlszerkesztő
+theme_editor.editor_tab:NL:Bestandsbewerker
 # Translation missing
 
 
@@ -7979,6 +7998,7 @@ theme_editor.font:SK:Písmo
 theme_editor.shell_font:EN:Shell font
 theme_editor.shell_font:FR:Fonte du shell
 theme_editor.shell_font:HU:Héjazat betűtípus
+theme_editor.shell_font:NL:Shell font
 # Translation missing
 
 
@@ -7989,6 +8009,7 @@ theme_editor.shell_font:HU:Héjazat betűtípus
 theme_editor.history_font:EN:History font
 theme_editor.history_font:FR:Fonte de l'historique
 theme_editor.history_font:HU:Előzmények betűtípus
+theme_editor.history_font:NL:Font van Geschiedenis
 # Translation missing
 
 
@@ -8028,6 +8049,7 @@ theme_editor.theme_warning:HU:Ez felülírja az egyedi témát. Biztos folytatja
 theme_editor.could_not_save_theme:EN:Unable to write theme %1
 theme_editor.could_not_save_theme:FR:Erreur lors de l'écriture du thème %1
 theme_editor.could_not_save_theme:HU:Nem lehet írni a témát %1
+theme_editor.could_not_save_theme:NL:Problemen bij opslaan van thema %1
 # Translation missing
 
 
@@ -8038,6 +8060,7 @@ theme_editor.could_not_save_theme:HU:Nem lehet írni a témát %1
 theme_editor.border:EN:Border
 theme_editor.border:FR:Bordure
 theme_editor.border:HU:Keret
+theme_editor.border:NL:Rand
 # Translation missing
 
 
@@ -8069,6 +8092,7 @@ theme_editor.background:SK:Pozadie
 theme_editor.unfocused_background:EN:Background (without focus)
 theme_editor.unfocused_background:FR:Fond (sans focus)
 theme_editor.unfocused_background:HU:Háttér (kijelölve)
+theme_editor.unfocused_background:NL:Achtergrond (zonder focus)
 # Translation missing
 
 
@@ -8085,6 +8109,7 @@ theme_editor.quick_search:EN:$[quick_search]
 theme_editor.quick_search.unmatched_file:EN:Unmatched file
 theme_editor.quick_search.unmatched_file:FR:Fichier ne correspondant pas
 theme_editor.quick_search.unmatched_file:HU:Kívülálló fájlok
+theme_editor.quick_search.unmatched_file:NL:Bestanden zijn niet hetzelfde
 # Translation missing
 
 
@@ -8101,6 +8126,7 @@ theme_editor.quick_search.unmatched_file:HU:Kívülálló fájlok
 theme_editor.text:EN:Text
 theme_editor.text:FR:Texte
 theme_editor.text:HU:Szöveg
+theme_editor.text:NL:Tekst
 # Translation missing
 
 
@@ -8112,6 +8138,7 @@ theme_editor.text:HU:Szöveg
 theme_editor.progress:EN:Progress
 theme_editor.progress:FR:Progression
 theme_editor.progress:HU:Folyamat
+theme_editor.progress:NL:Voortgang
 # Translation missing
 
 
@@ -8125,6 +8152,7 @@ theme_editor.progress:HU:Folyamat
 theme_editor.normal:EN:Normal
 theme_edit/r.normal:FR:Normal
 theme_editor.normal:HU:Normál
+theme_editor.normal:NL:Normaal
 # Translation missing
 
 
@@ -8138,6 +8166,7 @@ theme_editor.normal:HU:Normál
 theme_editor.normal_unfocused:EN:Normal (without focus)
 theme_editor.normal_unfocused:FR:Normal (sans focus)
 theme_editor.normal_unfocused:HU:Normál (kijelöletlen)
+theme_editor.normal_unfocused:NL:Normaal (zonder focus)
 # Translation missing
 
 
@@ -8151,6 +8180,7 @@ theme_editor.normal_unfocused:HU:Normál (kijelöletlen)
 theme_editor.selected:EN:Selected
 theme_editor.selected:FR:Sélectionné
 theme_editor.selected:HU:Kiválasztott
+theme_editor.selected:NL:Geselecteerd
 # Translation missing
 
 
@@ -8163,6 +8193,7 @@ theme_editor.selected:HU:Kiválasztott
 theme_editor.selected_unfocused:EN:Selected (without focus)
 theme_editor.selected_unfocused:FR:Sélectionné (without focus)
 theme_editor.selected_unfocused:HU:Kiválasztott (kijelöletlen)
+theme_editor.selected_unfocused:NL:Geselecteerd (zonder focus)
 # Translation missing
 
 
@@ -8176,6 +8207,7 @@ theme_editor.color:EN:Color
 theme_editor.color:en_GB:Colour
 theme_editor.color:FR:Couleur
 theme_editor.color:HU:Szín
+theme_editor.color:NL:Kleur
 # Translation missing
 
 
@@ -8192,6 +8224,7 @@ theme_editor.colors:EN:Colors
 theme_editor.colors:en_GB:Colours
 theme_editor.colors:FR:Couleurs
 theme_editor.colors:HU:Színek
+theme_editor.colors:NL:Kleuren
 # Translation missing
 
 
@@ -8226,6 +8259,7 @@ theme_editor.history_colors:EN:History colors
 theme_editor.history_colors:en_GB:History colours
 theme_editor.history_colors:FR:Couleurs de l'historique
 theme_editor.history_colors:HU:Előzmények színei
+theme_editor.history_colors:NL:Kleuren van geschiedenis
 # Translation missing
 
 
@@ -9101,6 +9135,7 @@ prefs_dialog.import_theme:HU:Téma importálás
 prefs_dialog.error_in_import:EN:Error while importing theme %1.
 prefs_dialog.error_in_import:FR:Une erreur est survenue lors de l'import du thème %1.
 prefs_dialog.error_in_import:HU:Hiba a téma importálásakor %1
+prefs_dialog.error_in_import:NL:Fout bij importeren van thema
 # Translation missing
 
 
@@ -9113,6 +9148,7 @@ prefs_dialog.error_in_import:HU:Hiba a téma importálásakor %1
 prefs_dialog.cannot_read_theme:EN:Cannot load theme from file %1
 prefs_dialog.cannot_read_theme:FR:Erreur lors de la lecture du fichier %1
 prefs_dialog.cannot_read_theme:HU:Nem lehet betölteni a témát a fájlból %1
+prefs_dialog.cannot_read_theme:NL:Kan bestand niet importeren uit bestand %1
 # Translation missing
 
 
@@ -9126,6 +9162,7 @@ prefs_dialog.cannot_read_theme:HU:Nem lehet betölteni a témát a fájlból %1
 prefs_dialog.export_theme:EN:Export %1
 prefs_dialog.export_theme:FR:Exporter %1
 prefs_dialog.export_theme:HU:Exportálás %1
+prefs_dialog.export_theme:NL:Exporteer %1
 # Translation missing
 
 
@@ -9136,6 +9173,7 @@ prefs_dialog.export_theme:HU:Exportálás %1
 prefs_dialog.import:EN:Import
 prefs_dialog.import:FR:Importer
 prefs_dialog.import:HU:Importálás
+prefs_dialog.import:NL:Importeer
 # Translation missing
 
 
@@ -9146,6 +9184,7 @@ prefs_dialog.import:HU:Importálás
 prefs_dialog.export:EN:Export
 prefs_dialog.export:FR:Exporter
 prefs_dialog.export:HU:Exportálás
+prefs_dialog.export:NL:Exporteer
 # Translation missing
 
 
@@ -9157,6 +9196,7 @@ prefs_dialog.export:HU:Exportálás
 prefs_dialog.theme_type:EN:Type: %1
 prefs_dialog.theme_type:FR:Type: %1
 prefs_dialog.theme_type:HU:Típus: %1
+prefs_dialog.theme_type:NL:Type: %1
 # Translation missing
 
 
@@ -9178,6 +9218,7 @@ prefs_dialog.delete_theme:HU:Folyamatosan törli a %1 témát?
 prefs_dialog.rename_failed:EN:Failed to rename theme %1
 prefs_dialog.rename_failed:Fr:Impossible de renommer le thème %1
 prefs_dialog.rename_failed:HU:Hiba a téma átnevezéskor %1
+prefs_dialog.rename_failed:NL:Kan niet hernoemen thema %1
 # Translation missing
 
 
@@ -9190,6 +9231,7 @@ prefs_dialog.rename_failed:HU:Hiba a téma átnevezéskor %1
 prefs_dialog.xml_file:EN:XML file
 prefs_dialog.xml_file:FR:Fichier XML
 prefs_dialog.xml_file:HU:XML fájl
+prefs_dialog.xml_file:NL:XML bestand
 # Translation missing
 
 
@@ -9783,6 +9825,7 @@ theme.custom:EN:Customized
 theme.custom:en_GB:Customised
 theme.custom:FR:Personnalisé
 theme.custom:HU:Módosított
+theme.custom:NL:Aangepast
 # Translation missing
 
 
@@ -9796,6 +9839,7 @@ theme.custom:HU:Módosított
 theme.built_in:EN:Built-in
 theme.built_in:FR:Pré-installé
 theme.built_in:HU:Beépített
+theme.built_in:NL:Ingebouwd
 # Translation missing
 
 
@@ -9809,6 +9853,7 @@ theme.built_in:HU:Beépített
 theme.add_on:EN:Add-on
 theme.add_on:FR:Ajouté
 theme.add_on:HU:Bővítmény
+theme.add_on:NL:Toegevoegd
 # Translation missing
 
 
@@ -9822,6 +9867,7 @@ theme.add_on:HU:Bővítmény
 theme.current:EN:current
 theme.current:FR:courant
 theme.current:HU:jelenlegi
+theme.current:NL:huidig
 # Translation missing
 
 
@@ -10003,6 +10049,7 @@ font_chooser.font_bold:SI:Krepko
 font_chooser.font_bold:RO:Îngroșat
 font_chooser.font_bold:IT:Grassetto
 font_chooser.font_bold:KR:볼드
+font_chooser.font_bold:NL:Vet
 # Translation missing
 
 
@@ -10024,6 +10071,7 @@ font_chooser.font_italic:SI:Poševno
 font_chooser.font_italic:RO:Cursiv
 font_chooser.font_italic:IT:Corsivo
 font_chooser.font_italic:KR:이탤릭
+font_chooser.font_italic:NL:Schuin
 # Translation missing
 
 
@@ -10037,6 +10085,7 @@ font_chooser.font_italic:KR:이탤릭
 color_chooser.red:EN:Red
 color_chooser.red:FR:Rouge
 color_chooser.red:HU:Piros
+color_chooser.red:NL:Rood
 # Translation missing
 
 
@@ -10046,6 +10095,7 @@ color_chooser.red:HU:Piros
 color_chooser.green:EN:Green
 color_chooser.green:FR:Vert
 color_chooser.green:HU:Zöld
+color_chooser.green:NL:Groen
 # Translation missing
 
 
@@ -10055,6 +10105,7 @@ color_chooser.green:HU:Zöld
 color_chooser.blue:EN:Blue
 color_chooser.blue:FR:Bleu
 color_chooser.blue:HU:Kék
+color_chooser.blue:NL:Blauw
 # Translation missing
 
 
@@ -10063,6 +10114,7 @@ color_chooser.blue:HU:Kék
 color_chooser.hue:EN:Hue
 color_chooser.hue:FR:Tonalité
 color_chooser.hue:HU:Színárnyalat
+color_chooser.hue:NL:Tint
 # Translation missing
 
 
@@ -10072,6 +10124,7 @@ color_chooser.hue:HU:Színárnyalat
 color_chooser.brightness:EN:Brightness
 color_chooser.brightness:FR:Luminosité
 color_chooser.brightness:HU:Világosság
+color_chooser.brightness:NL:Helderheid
 # Translation missing
 
 
@@ -10080,6 +10133,7 @@ color_chooser.brightness:HU:Világosság
 color_chooser.swatches:EN:Swatches
 color_chooser.swatches:FR:Echantillons
 color_chooser.swatches:HU:Foltok
+color_chooser.swatches:NL:Actieve kleuren
 # Translation missing
 
 
@@ -10088,6 +10142,7 @@ color_chooser.swatches:HU:Foltok
 color_chooser.saturation:EN:Saturation
 color_chooser.saturation:FR:Saturation
 color_chooser.saturation:HU:Telítettség
+color_chooser.saturation:NL:Verzadiging
 # Translation missing
 
 
@@ -10097,6 +10152,7 @@ color_chooser.saturation:HU:Telítettség
 color_chooser.rgb:EN:RGB
 color_chooser.rgb:FR:RVB
 color_chooser.rgb:HU:RGB
+color_chooser.rgb:NL:RGB
 # Translation missing
 
 
@@ -10107,6 +10163,7 @@ color_chooser.rgb:HU:RGB
 color_chooser.hsb:EN:HSB
 color_chooser.hsb:FR:TSL
 color_chooser.hsb:HU:HSB
+color_chooser.hsb:NL:HSB
 # Translation missing
 
 
@@ -10116,6 +10173,7 @@ color_chooser.hsb:HU:HSB
 color_chooser.recent:EN:Recent
 color_chooser.recent:FR:Récentes
 color_chooser.recent:HU:Legutóbbi
+color_chooser.recent:NL:Recent
 # Translation missing
 
 
@@ -10148,6 +10206,7 @@ color_chooser.title:SI:Izberi barvo
 color_chooser.title:RO:Alegeți o culoare
 color_chooser.title:IT:Scegli un colore
 color_chooser.title:KR:색상 선택
+color_chooser.title:NL:Kies een kleur
 # Translation missing
 
 
