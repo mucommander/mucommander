@@ -213,6 +213,10 @@ reset:NL:Resetten
 
 
 
+
+
+
+
 rename:EN:Rename
 rename:FR:Renommer
 rename:DE:Umbenennen
@@ -446,7 +450,6 @@ duplicate:pt_BR:Duplicar
 duplicate:NL:Dupliceer
 duplicate:SK:Duplikovať
 duplicate:HU:Megkettőz
-# Translation missing
 
 apply_to_all:EN:Apply to all
 apply_to_all:FR:Appliquer à tous
@@ -573,19 +576,6 @@ pause:pt_BR:Pausa
 pause:NL:Onderbreken
 pause:SK:Pauza
 pause:HU:Szünet
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
-
 
 quick_search:EN:Quick search
 quick_search:FR:Recherche rapide
@@ -603,7 +593,8 @@ quick_search:pt_BR:Busca rápida
 quick_search:NL:Snelzoeken
 quick_search:SK:Rýchle hľadanie
 quick_search:HU:Gyorskeresés
-# Translation missing
+# Translation missing (KR)
+
 
 
 
@@ -675,6 +666,8 @@ encoding:NL:Tekenset
 encoding:SK:Kódovanie
 encoding:HU:Kódolás
 # Translation missing
+
+
 
 
 
@@ -768,13 +761,6 @@ extension:pt_BR:Extensão
 extension:NL:Extensie
 extension:SK:Prípona
 extension:HU:Típus
-# Translation missing
-
-
-
-
-
-
 
 permissions:EN:Permissions
 permissions:FR:Permissions
@@ -793,15 +779,6 @@ permissions:pt_BR:Permissões
 permissions:NL:Rechten
 permissions:SK:Oprávnenia
 permissions:HU:Engedély
-# Translation missing
-
-
-
-
-
-
-
-
 
 location:EN:Location
 location:FR:Emplacement
@@ -839,14 +816,6 @@ untitled:pt_BR:Sem título
 untitled:NL:Zonder naam
 untitled:SK:Bez mena
 untitled:HU:Névtelen
-# Translation missing
-
-
-
-
-
-
-
 
 source:EN:Source
 source:FR:Source
@@ -865,14 +834,6 @@ source:pt_BR:Fonte
 source:NL:Bron
 source:SK:Zdroj
 source:HU:Forrás
-# Translation missing
-
-
-
-
-
-
-
 
 destination:EN:Destination
 destination:FR:Destination
@@ -891,14 +852,6 @@ destination:pt_BR:Destino
 destination:NL:Doellocatie
 destination:SK:Cieľ
 destination:HU:Cél
-# Translation missing
-
-
-
-
-
-
-
 
 # Used as an option (checkbox) in 'Change permissions' and 'Change date' dialogs
 recurse_directories:EN:Process selected directories recursively
@@ -918,14 +871,6 @@ recurse_directories:pt_BR:Processar recursivamente aos diretórios selecionados
 recurse_directories:NL:Toepassen op onderliggende mappen
 recurse_directories:SK:Použiť aj pre vnorené zložky
 recurse_directories:HU:A kiválasztott könyvtárakra rekurzívan alkalmaz
-# Translation missing
-
-
-
-
-
-
-
 
 # Used in the 'Edit bookmarks' and 'Edit credentials' dialogs to go to the selected location
 go_to:EN:Go to
@@ -937,6 +882,7 @@ go_to:NL:Ga naar
 go_to:SK:Ísť na
 go_to:HU:Ugrás
 # Translation missing
+
 
 
 
@@ -1034,14 +980,6 @@ error:pt_BR:Erro
 error:NL:Fout
 error:SK:Chyba
 error:HU:Hiba
-# Translation missing
-
-
-
-
-
-
-
 
 folder_does_not_exist:EN:This folder doesn't exist or is not available.
 folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
@@ -1087,6 +1025,15 @@ this_file_does_not_exist:EN:This file doesn't exist or is not available: %1
 this_file_does_not_exist:FR:Ce fichier n'existe pas ou n'est pas disponible: %1
 this_file_does_not_exist:NL:Dit bestand bestaat niet of is niet beschikbaar: %1
 # Translation missing
+
+
+
+
+
+
+
+
+
 
 
 invalid_path:EN:Invalid path: %1
@@ -1161,18 +1108,6 @@ source_parent_of_destination:pt_BR:Tentativa de transferir um diretório para um
 source_parent_of_destination:NL:Poging om een map in een onderliggende map te verplaatsen
 source_parent_of_destination:SK:Pokus o presun priečinku do jeho vlastného podpriečinku
 source_parent_of_destination:HU:A könyvtárat saját alkönyvtárába próbálta másolni
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
 
 cannot_read_file:EN:Cannot read file %1
 cannot_read_file:FR:Erreur lors de la lecture de %1
@@ -1397,15 +1332,6 @@ permissions.read:pt_BR:Leitura
 permissions.read:NL:Lezen
 permissions.read:SK:Čítanie
 permissions.read:HU:Olvasás
-# Translation missing
-
-
-
-
-
-
-
-
 
 permissions.write:EN:Write
 permissions.write:FR:Ecriture
@@ -1424,14 +1350,6 @@ permissions.write:pt_BR:Gravação
 permissions.write:NL:Schrijven
 permissions.write:SK:Zápis
 permissions.write:HU:Írás
-# Translation missing
-
-
-
-
-
-
-
 
 permissions.executable:EN:Executable
 permissions.executable:FR:Execution
@@ -1450,14 +1368,6 @@ permissions.executable:pt_BR:Execução
 permissions.executable:NL:Uitvoerbaar
 permissions.executable:SK:Spúšťanie
 permissions.executable:HU:Végrehajtás
-# Translation missing
-
-
-
-
-
-
-
 
 permissions.user:EN:User
 permissions.user:FR:User
@@ -1476,13 +1386,6 @@ permissions.user:pt_BR:Usuário
 permissions.user:NL:Gebruiker
 permissions.user:SK:Užívateľ
 permissions.user:HU:Felhasználó
-# Translation missing
-
-
-
-
-
-
 
 permissions.group:EN:Group
 permissions.group:FR:Groupe
@@ -1501,13 +1404,6 @@ permissions.group:pt_BR:Grupo
 permissions.group:NL:Groep
 permissions.group:SK:Skupina
 permissions.group:HU:Csoport
-# Translation missing
-
-
-
-
-
-
 
 permissions.other:EN:Other
 permissions.other:FR:Autre
@@ -1526,13 +1422,6 @@ permissions.other:pt_BR:Outros
 permissions.other:NL:Anderen
 permissions.other:SK:Ostatní
 permissions.other:HU:Egyéb
-# Translation missing
-
-
-
-
-
-
 
 permissions.octal_notation:EN:Octal notation
 permissions.octal_notation:FR:Notation octale
@@ -1551,14 +1440,6 @@ permissions.octal_notation:pt_BR:Notação Octal
 permissions.octal_notation:NL:Octale schrijfwijze
 permissions.octal_notation:SK:Zápis v osmičkovej sústave
 permissions.octal_notation:HU:Oktális jelölés
-# Translation missing
-
-
-
-
-
-
-
 
 
 ###########
@@ -1585,13 +1466,6 @@ com.mucommander.ui.action.AddBookmarkAction.label:pt_BR:Adicionar aos favoritos
 com.mucommander.ui.action.AddBookmarkAction.label:NL:Toevoegen aan bladwijzers
 com.mucommander.ui.action.AddBookmarkAction.label:SK:Pridať záložku
 com.mucommander.ui.action.AddBookmarkAction.label:HU:Hozzáadás a Könyvjelzőkhöz
-# Translation missing
-
-
-
-
-
-
 
 com.mucommander.ui.action.AddBookmarkAction.tooltip:EN:Add the current folder to the list of bookmarks
 com.mucommander.ui.action.AddBookmarkAction.tooltip:FR:Ajouter le dossier courant à la liste de favoris
@@ -1610,13 +1484,6 @@ com.mucommander.ui.action.AddBookmarkAction.tooltip:pt_BR:Adicionar o diretório
 com.mucommander.ui.action.AddBookmarkAction.tooltip:NL:Voeg huidige map aan bladwijzers toe
 com.mucommander.ui.action.AddBookmarkAction.tooltip:SK:Pridať aktuálny priečinok do zoznamu záložiek
 com.mucommander.ui.action.AddBookmarkAction.tooltip:HU:Az aktuális könyvtár hozzáadása a Könyvjelzőkhöz
-# Translation missing
-
-
-
-
-
-
 
 com.mucommander.ui.action.EditBookmarksAction.label:EN:Edit bookmarks
 com.mucommander.ui.action.EditBookmarksAction.label:FR:Éditer les favoris
@@ -1635,13 +1502,6 @@ com.mucommander.ui.action.EditBookmarksAction.label:pt_BR:Editar favoritos
 com.mucommander.ui.action.EditBookmarksAction.label:NL:Bladwijzers bewerken
 com.mucommander.ui.action.EditBookmarksAction.label:SK:Editovať záložky
 com.mucommander.ui.action.EditBookmarksAction.label:HU:Könyvjelzők rendezése
-# Translation missing
-
-
-
-
-
-
 
 com.mucommander.ui.action.EditCredentialsAction.label:EN:Edit credentials
 com.mucommander.ui.action.EditCredentialsAction.label:FR:Éditer les indentifiants
@@ -1660,15 +1520,6 @@ com.mucommander.ui.action.EditCredentialsAction.label:pt_BR:Editar credenciais
 com.mucommander.ui.action.EditCredentialsAction.label:NL:Toegangsgegevens bewerken
 com.mucommander.ui.action.EditCredentialsAction.label:SK:Editovať účty
 com.mucommander.ui.action.EditCredentialsAction.label:HU:Megbízólevél javítása
-# Translation missing
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.ChangeLocationAction.label:EN:Change current location
 com.mucommander.ui.action.ChangeLocationAction.label:FR:Changer le chemin courant
@@ -1687,17 +1538,6 @@ com.mucommander.ui.action.ChangeLocationAction.label:pt_BR:Alterar localização
 com.mucommander.ui.action.ChangeLocationAction.label:NL:Huidige locatie veranderen
 com.mucommander.ui.action.ChangeLocationAction.label:SK:Zmeniť aktuálne umiestnenie
 com.mucommander.ui.action.ChangeLocationAction.label:HU:Az aktuális hely módosítása
-# Translation missing
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.ChangeDateAction.label:EN:Change date
 com.mucommander.ui.action.ChangeDateAction.label:FR:Changer la date
@@ -1716,18 +1556,6 @@ com.mucommander.ui.action.ChangeDateAction.label:pt_BR:Alterar data
 com.mucommander.ui.action.ChangeDateAction.label:NL:Verander datum
 com.mucommander.ui.action.ChangeDateAction.label:SK:Zmeniť dátum
 com.mucommander.ui.action.ChangeDateAction.label:HU:Dátum módosítása
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.ChangeDateAction.tooltip:EN:Change date of selected file(s)
 com.mucommander.ui.action.ChangeDateAction.tooltip:FR:Change la date des fichiers selectionnés
@@ -1746,19 +1574,6 @@ com.mucommander.ui.action.ChangeDateAction.tooltip:pt_BR:Alterar data do(s) arqu
 com.mucommander.ui.action.ChangeDateAction.tooltip:NL:Verander datum van gemarkeerde bestanden
 com.mucommander.ui.action.ChangeDateAction.tooltip:SK:Zmeniť dátum vybraných súborov
 com.mucommander.ui.action.ChangeDateAction.tooltip:HU:A kijelölt fájl(ok) módosítása
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.ChangePermissionsAction.label:EN:Change permissions
 com.mucommander.ui.action.ChangePermissionsAction.label:FR:Changer les permissions
@@ -1777,18 +1592,6 @@ com.mucommander.ui.action.ChangePermissionsAction.label:pt_BR:Alterar permissõe
 com.mucommander.ui.action.ChangePermissionsAction.label:NL:Rechten veranderen
 com.mucommander.ui.action.ChangePermissionsAction.label:SK:Zmeniť oprávnenia
 com.mucommander.ui.action.ChangePermissionsAction.label:HU:Jogosultságok módosítása
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:EN:Change permissions of selected file(s)
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:FR:Change les permissions des fichiers selectionnés
@@ -1807,20 +1610,6 @@ com.mucommander.ui.action.ChangePermissionsAction.tooltip:pt_BR:Alterar permiss�
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:NL:Rechten van gemarkeerde bestanden wijzigen
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:SK:Zmeniť oprávnenia pre vybrané súbory
 com.mucommander.ui.action.ChangePermissionsAction.tooltip:HU:A kijelölt fájl(ok) jogosultságainak módosítása
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.CheckForUpdatesAction.label:EN:Check for updates
 com.mucommander.ui.action.CheckForUpdatesAction.label:FR:Mises à jour
@@ -2131,13 +1920,6 @@ com.mucommander.ui.action.MkfileAction.label:pt_BR:Criar arquivo
 com.mucommander.ui.action.MkfileAction.label:NL:Maak bestand
 com.mucommander.ui.action.MkfileAction.label:SK:Vytvoriť súbor
 com.mucommander.ui.action.MkfileAction.label:HU:Fájl létrehozása
-# Translation missing (HU)
-
-
-
-
-
-
 
 com.mucommander.ui.action.MkfileAction.tooltip:EN:Create a file in current folder
 com.mucommander.ui.action.MkfileAction.tooltip:FR:Créer un fichier dans le dossier courant
@@ -2156,13 +1938,6 @@ com.mucommander.ui.action.MkfileAction.tooltip:pt_BR:Criar um arquivo no diretó
 com.mucommander.ui.action.MkfileAction.tooltip:NL:Maak bestand in huidig directory
 com.mucommander.ui.action.MkfileAction.tooltip:SK:Vytvoriť súbor v aktuálnom priečinku
 com.mucommander.ui.action.MkfileAction.tooltip:HU: Fájl létrehozása az aktuális könyvtárban
-# Translation missing (HU)
-
-
-
-
-
-
 
 com.mucommander.ui.action.DeleteAction.label:EN:Delete
 com.mucommander.ui.action.DeleteAction.label:FR:Supprimer
@@ -2289,12 +2064,6 @@ com.mucommander.ui.action.CopyFileNamesAction.label:pt_BR:Copiar nome(s)
 com.mucommander.ui.action.CopyFileNamesAction.label:NL:Naam kopiëren
 com.mucommander.ui.action.CopyFileNamesAction.label:SK:Kopírovať názov(názvy)
 com.mucommander.ui.action.CopyFileNamesAction.label:HU:Fájlnevek másolása
-# Translation missing
-
-
-
-
-
 
 com.mucommander.ui.action.CopyFilePathsAction.label:EN:Copy path(s)
 com.mucommander.ui.action.CopyFilePathsAction.label:FR:Copier chemin(s)
@@ -2313,13 +2082,6 @@ com.mucommander.ui.action.CopyFilePathsAction.label:pt_BR:Copiar caminho(s)
 com.mucommander.ui.action.CopyFilePathsAction.label:NL:Kopieer pad
 com.mucommander.ui.action.CopyFilePathsAction.label:SK:Kopírovať cestu(y)
 com.mucommander.ui.action.CopyFilePathsAction.label:HU:Útvonalak másolása
-# Translation missing
-
-
-
-
-
-
 
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:EN:Copy file(s)
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:FR:Copier fichier(s)
@@ -2338,13 +2100,6 @@ com.mucommander.ui.action.CopyFilesToClipboardAction.label:pt_BR:Copiar arquivo(
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:NL:Bestand(en) kopiëren
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:SK:Kopírovať súbor(y)
 com.mucommander.ui.action.CopyFilesToClipboardAction.label:HU:Fájl(ok) másolása
-# Translation missing
-
-
-
-
-
-
 
 com.mucommander.ui.action.PasteClipboardFilesAction.label:EN:Paste file(s)
 com.mucommander.ui.action.PasteClipboardFilesAction.label:FR:Coller fichier(s)
@@ -2363,11 +2118,6 @@ com.mucommander.ui.action.PasteClipboardFilesAction.label:pt_BR:Colar arquivo(s)
 com.mucommander.ui.action.PasteClipboardFilesAction.label:NL:Bestand(en) plakken
 com.mucommander.ui.action.PasteClipboardFilesAction.label:SK:Prilepiť súbor(y)
 com.mucommander.ui.action.PasteClipboardFilesAction.label:HU:Fájl(ok) beillesztése
-# Translation missing
-
-
-
-
 
 com.mucommander.ui.action.EmailAction.label:EN:Email files
 com.mucommander.ui.action.EmailAction.label:FR:Envoyer par email
@@ -2494,18 +2244,6 @@ com.mucommander.ui.action.GoToHomeAction.label:pt_BR:Ir para o diretório inicia
 com.mucommander.ui.action.GoToHomeAction.label:NL:Ga naar home-map
 com.mucommander.ui.action.GoToHomeAction.label:SK:Domovský priečinok
 com.mucommander.ui.action.GoToHomeAction.label:HU:Ugrás a kezdő mappához
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.GoToParentAction.label:EN:Go to parent
 com.mucommander.ui.action.GoToParentAction.label:FR:Dossier parent
@@ -2560,18 +2298,6 @@ com.mucommander.ui.action.GoToRootAction.label:pt_BR:Ir à raiz
 com.mucommander.ui.action.GoToRootAction.label:NL:Ga naar root
 com.mucommander.ui.action.GoToRootAction.label:SK:Koreňový priečinok
 com.mucommander.ui.action.GoToRootAction.label:HU:Ugrás a főkönyvtárhoz
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.SortByNameAction.label:EN:Sort by Name
 com.mucommander.ui.action.SortByNameAction.label:FR:Trier par Nom
@@ -2662,17 +2388,6 @@ com.mucommander.ui.action.SortByPermissionsAction.label:pt_BR:Ordenar pela permi
 com.mucommander.ui.action.SortByPermissionsAction.label:NL:Sorteer op rechten
 com.mucommander.ui.action.SortByPermissionsAction.label:SK:Zoradiť podľa oprávnení
 com.mucommander.ui.action.SortByPermissionsAction.label:HU:Jogosultság szerint rendez
-# Translation missing
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.MarkGroupAction.label:EN:Mark files
 com.mucommander.ui.action.MarkGroupAction.label:FR:Marquer fichiers
@@ -2782,7 +2497,6 @@ com.mucommander.ui.action.UnmarkAllAction.label:pt_BR:Desmarcar tudo
 com.mucommander.ui.action.UnmarkAllAction.label:NL:Demarkeer alles
 com.mucommander.ui.action.UnmarkAllAction.label:SK:Odznačiť všetko
 
-# Translation missing: this entry has been guessed from com.mucommander.ui.action.MarkSelectedFileAction.tooltip and therefore may not be exact
 com.mucommander.ui.action.MarkSelectedFileAction.label:EN:Mark/unmark
 com.mucommander.ui.action.MarkSelectedFileAction.label:FR:Marquer/dé-marquer
 com.mucommander.ui.action.MarkSelectedFileAction.label:DE:Markieren/Demarkieren
@@ -2836,17 +2550,6 @@ com.mucommander.ui.action.MarkPageDownAction.label:pt_BR:Marcar página abaixo
 com.mucommander.ui.action.MarkPageDownAction.label:NL:Markeer bestanden tot volgende bladzijde
 com.mucommander.ui.action.MarkPageDownAction.label:SK:Označiť po nasledujúcu stránku
 com.mucommander.ui.action.MarkPageDownAction.label:HU:Kijelöl következő lap
-# Translation missing
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.MarkPageUpAction.label:EN:Mark page up
 com.mucommander.ui.action.MarkPageUpAction.label:FR:Marquer les fichiers jusqu'à la page précédente
@@ -2864,8 +2567,7 @@ com.mucommander.ui.action.MarkPageUpAction.label:pt_BR:Marcar página acima
 com.mucommander.ui.action.MarkPageUpAction.label:NL:Markeer bestanden tot vorige pagina
 com.mucommander.ui.action.MarkPageUpAction.label:SK:Označiť po predchádzajúcu stránku
 com.mucommander.ui.action.MarkPageUpAction.label:HU:Kijelöl előző lap
-# Translation missing
-
+# Translation missing (IT)
 
 
 
@@ -2893,17 +2595,6 @@ com.mucommander.ui.action.MarkUpToFirstRowAction.label:pt_BR:Marcar arquivos at�
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:NL:Markeer bestanden tot begin
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:SK:Označiť súbory po začiatok
 com.mucommander.ui.action.MarkUpToFirstRowAction.label:HU:Fájlok kijelölése a kezdethez
-# Translation missing
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.MarkUpToLastRowAction.label:EN:Mark files to the end
 com.mucommander.ui.action.MarkUpToLastRowAction.label:FR:Marquer les fichiers jusqu'à la fin
@@ -2922,18 +2613,6 @@ com.mucommander.ui.action.MarkUpToLastRowAction.label:pt_BR:Marcar arquivos até
 com.mucommander.ui.action.MarkUpToLastRowAction.label:NL:Markeer bestanden tot eind
 com.mucommander.ui.action.MarkUpToLastRowAction.label:SK:Označiť súbory do konca
 com.mucommander.ui.action.MarkUpToLastRowAction.label:HU:Fájlok kijelölése a végéhez
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.InvertSelectionAction.label:EN:Invert selection
 com.mucommander.ui.action.InvertSelectionAction.label:FR:Inverser sélection
@@ -3078,11 +2757,6 @@ com.mucommander.ui.action.OpenAction.label:pt_BR:Abrir
 com.mucommander.ui.action.OpenAction.label:NL:Openen
 com.mucommander.ui.action.OpenAction.label:SK:Otvoriť
 com.mucommander.ui.action.OpenAction.label:HU:Megnyitás
-# Translation missing
-
-
-
-
 
 com.mucommander.ui.action.OpenAction.tooltip:EN:Enter folder / Enter archive / Execute
 com.mucommander.ui.action.OpenAction.tooltip:FR:Entrer dans un dossier / Entrer dans une archive / Exécuter
@@ -3120,15 +2794,6 @@ com.mucommander.ui.action.OpenNativelyAction.label:pt_BR:Abrir com programa padr
 com.mucommander.ui.action.OpenNativelyAction.label:NL:Bestand met eigen toepassing openen
 com.mucommander.ui.action.OpenNativelyAction.label:SK:Otvoriť predvolenou aplikáciou
 com.mucommander.ui.action.OpenNativelyAction.label:HU:Megnyitás közvetlenül
-# Translation missing
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.OpenNativelyAction.tooltip:EN:Execute selected file with system's file associations
 com.mucommander.ui.action.OpenNativelyAction.tooltip:FR:Exécuter le fichier sélectionné avec les associations de fichiers du système
@@ -3167,13 +2832,6 @@ com.mucommander.ui.action.RevealInDesktopAction.label:pt_BR:Mostrar em %1
 com.mucommander.ui.action.RevealInDesktopAction.label:NL:Toon in %1
 com.mucommander.ui.action.RevealInDesktopAction.label:SK:Otvoriť v aplikácii %1
 com.mucommander.ui.action.RevealInDesktopAction.label:HU:Megnyitás a következővel: %1
-# Translation missing
-
-
-
-
-
-
 
 com.mucommander.ui.action.RunCommandAction.label:EN:Run command
 com.mucommander.ui.action.RunCommandAction.label:FR:Exécuter une commande
@@ -3246,12 +2904,6 @@ com.mucommander.ui.action.PackAction.tooltip:pt_BR:Compactar arquivos selecionad
 com.mucommander.ui.action.PackAction.tooltip:NL:Gemarkeerde bestanden inpakken in een archief
 com.mucommander.ui.action.PackAction.tooltip:SK:Skomprimovať označené súbory do archívu
 com.mucommander.ui.action.PackAction.tooltip:HU:Kijelölt fájlok csomagolása az archívumba
-# Translation missing (HU)
-
-
-
-
-
 
 com.mucommander.ui.action.UnpackAction.label:EN:Unpack files
 com.mucommander.ui.action.UnpackAction.label:FR:Décompresser fichiers
@@ -3288,15 +2940,6 @@ com.mucommander.ui.action.UnpackAction.tooltip:pt_BR:Descompactar arquivos selec
 com.mucommander.ui.action.UnpackAction.tooltip:NL:Gemarkeerde archefbestanden uitpakken
 com.mucommander.ui.action.UnpackAction.tooltip:SK:Dekomprimovať súbory z označených archívov
 com.mucommander.ui.action.UnpackAction.tooltip:HU:Kijelölt archívumok kicsomagolása
-# Translation missing (HU)
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.ShowFilePropertiesAction.label:EN:Properties
 com.mucommander.ui.action.ShowFilePropertiesAction.label:FR:Propriétés
@@ -3387,18 +3030,6 @@ com.mucommander.ui.action.ShowServerConnectionsAction.label:pt_BR:Exibir conexõ
 com.mucommander.ui.action.ShowServerConnectionsAction.label:NL:Toon open verbindingen
 com.mucommander.ui.action.ShowServerConnectionsAction.label:SK:Zobratiť otvorené pripojenia
 com.mucommander.ui.action.ShowServerConnectionsAction.label:HU:A megnyitott kapcsolatok megjelenítése
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.QuitAction.label:EN:Quit
 com.mucommander.ui.action.QuitAction.label:FR:Quitter
@@ -3453,13 +3084,6 @@ com.mucommander.ui.action.ToggleAutoSizeAction.label:pt_BR:Dimensionar colunas a
 com.mucommander.ui.action.ToggleAutoSizeAction.label:NL:Kolombreedte automatisch bepalen
 com.mucommander.ui.action.ToggleAutoSizeAction.label:SK:Automatická šírka stĺpcov
 com.mucommander.ui.action.ToggleAutoSizeAction.label:HU:Oszlopok automatikus méretezése
-# Translation missing
-
-
-
-
-
-
 
 com.mucommander.ui.action.StopAction.label:EN:Stop folder change
 com.mucommander.ui.action.StopAction.label:FR:Arrêter le changement de dossier
@@ -3478,14 +3102,6 @@ com.mucommander.ui.action.StopAction.label:pt_BR:Parar mudança de diretórios
 com.mucommander.ui.action.StopAction.label:NL:Verandering aan mappen afbreken
 com.mucommander.ui.action.StopAction.label:SK:Zastaviť zmenu priečinka
 com.mucommander.ui.action.StopAction.label:HU:Könyvtár váltás megállítása
-# Translation missing
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.ToggleCommandBarAction.show:EN:Show command bar
 com.mucommander.ui.action.ToggleCommandBarAction.show:FR:Afficher la barre de commande
@@ -3613,6 +3229,7 @@ com.mucommander.ui.action.ToggleShowFoldersFirstAction.label:HU:Mappákat a list
 
 
 
+
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:EN:Change left folder
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:FR:Changer le dossier de gauche
 com.mucommander.ui.action.PopupLeftDriveButtonAction.label:DE:Linken Ordner ändern
@@ -3695,7 +3312,6 @@ com.mucommander.ui.action.RecallWindowAction.label:zh_TW:還原視窗 #%1
 com.mucommander.ui.action.RecallWindowAction.label:DE:Fenster #%1 aufrufen
 com.mucommander.ui.action.RecallWindowAction.label:zh_CN:还原窗口 #%1
 com.mucommander.ui.action.RecallWindowAction.label:RU:Восстановить окно #%1
-com.mucommander.ui.action.RecallWindowAction.label:ES:Rellamar a una ventana
 com.mucommander.ui.action.RecallWindowAction.label:CS:Přepnout do okna #%1
 com.mucommander.ui.action.RecallWindowAction.label:PL:Wywołaj okno #%1
 com.mucommander.ui.action.RecallWindowAction.label:KR:창 불러오기 #%1
@@ -3703,10 +3319,9 @@ com.mucommander.ui.action.RecallWindowAction.label:pt_BR:Recarregar a janela #%1
 com.mucommander.ui.action.RecallWindowAction.label:NL:Terug naar venster #%1
 com.mucommander.ui.action.RecallWindowAction.label:SK:Prepnúť do okna
 com.mucommander.ui.action.RecallWindowAction.label:HU:Kiválasztandó ablak #%1
-# The following need to be updated
+# The following needs to be updated
 com.mucommander.ui.action.RecallWindowAction.label:ES:Rellamar a una ventana
-com.mucommander.ui.action.RecallWindowAction.label:HU:Kiválasztandó ablak #%1
-# Translation missing
+# Translation missing (ES)
 
 
 
@@ -3716,8 +3331,7 @@ com.mucommander.ui.action.RecallWindowAction.label:HU:Kiválasztandó ablak #%1
 
 
 
-
-# Aliases for specific window numbers
+# Aliases for specific window numbers (no translation required)
 com.mucommander.ui.action.RecallWindow1Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
 com.mucommander.ui.action.RecallWindow2Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
 com.mucommander.ui.action.RecallWindow3Action.label:EN:$[com.mucommander.ui.action.RecallWindowAction.label]
@@ -3821,15 +3435,6 @@ com.mucommander.ui.action.SplitEquallyAction.label:pt_BR:Dividir igualmente
 com.mucommander.ui.action.SplitEquallyAction.label:NL:Splits in gelijke delen
 com.mucommander.ui.action.SplitEquallyAction.label:SK:Rozdeliť rovnomerne
 com.mucommander.ui.action.SplitEquallyAction.label:HU:Felosztás egyenlő részekre
-# Translation missing
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.SplitVerticallyAction.label:EN:Split vertically
 com.mucommander.ui.action.SplitVerticallyAction.label:FR:Scincer verticalement
@@ -3848,13 +3453,6 @@ com.mucommander.ui.action.SplitVerticallyAction.label:pt_BR:Dividir verticalment
 com.mucommander.ui.action.SplitVerticallyAction.label:NL:Splits verticaal
 com.mucommander.ui.action.SplitVerticallyAction.label:SK:Rozdeliť vertikálne
 com.mucommander.ui.action.SplitVerticallyAction.label:HU:Felosztás függőlegesen
-# Translation missing
-
-
-
-
-
-
 
 com.mucommander.ui.action.SplitHorizontallyAction.label:EN:Split horizontally
 com.mucommander.ui.action.SplitHorizontallyAction.label:FR:Scincer horizontalement
@@ -3873,15 +3471,6 @@ com.mucommander.ui.action.SplitHorizontallyAction.label:pt_BR:Dividir horizontal
 com.mucommander.ui.action.SplitHorizontallyAction.label:NL:Splits horizontaal
 com.mucommander.ui.action.SplitHorizontallyAction.label:SK:Rozdeliť horizontálne
 com.mucommander.ui.action.SplitHorizontallyAction.label:HU:Felosztás vízszintesen
-# Translation missing
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:EN:Keyboard shortcuts
 com.mucommander.ui.action.ShowKeyboardShortcutsAction.label:FR:Raccourcis clavier
@@ -3954,18 +3543,6 @@ com.mucommander.ui.action.ReportBugAction.label:pt_BR:Reportar uma falha
 com.mucommander.ui.action.ReportBugAction.label:NL:Een bug melden
 com.mucommander.ui.action.ReportBugAction.label:SK:Ohlásiť chybu
 com.mucommander.ui.action.ReportBugAction.label:HU:Hibajelentés
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
 
 com.mucommander.ui.action.DonateAction.label:EN:Make a donation
 com.mucommander.ui.action.DonateAction.label:FR:Faire une donation
@@ -4069,10 +3646,6 @@ file_menu.open_with:pt_BR:Abrir com...
 file_menu.open_with:NL:Openen met...
 file_menu.open_with:SK:Otvoriť s...
 file_menu.open_with:HU:Megnyitás másként...
-# Translation missing
-
-
-
 
 
 #############
@@ -4137,14 +3710,6 @@ view_menu.show_hide_columns:pt_BR:Exibir/Ocultar colunas
 view_menu.show_hide_columns:NL:Kolommen tonen/verbergen
 view_menu.show_hide_columns:SK:Zobraziť/skryť stĺpce
 view_menu.show_hide_columns:HU:Oszlopok Mutatása/Elrejtése
-# Translation missing
-
-
-
-
-
-
-
 
 
 ###########
@@ -4168,14 +3733,6 @@ go_menu:pt_BR:Ir
 go_menu:NL:Toepassen
 go_menu:SK:Prejsť
 go_menu:HU:Ugrás
-# Translation missing
-
-
-
-
-
-
-
 
 
 ##################
@@ -4200,13 +3757,6 @@ bookmarks_menu:pt_BR:Favoritos
 bookmarks_menu:NL:Bladwijzers
 bookmarks_menu:SK:Záložky
 bookmarks_menu:HU:Könyvjelzők
-# Translation missing
-
-
-
-
-
-
 
 # Displayed in the Bookmarks menu when user hasn't defined any bookmark
 bookmarks_menu.no_bookmark:EN:No bookmark
@@ -4226,11 +3776,6 @@ bookmarks_menu.no_bookmark:pt_BR:Nenhum favorito definido
 bookmarks_menu.no_bookmark:NL:Geen bladwijzer
 bookmarks_menu.no_bookmark:SK:Bez záložiek
 bookmarks_menu.no_bookmark:HU:Nincsenek Könyvjelzők
-# Translation missing
-
-
-
-
 
 
 ###############
@@ -4318,13 +3863,6 @@ status_bar.connecting_to_folder:pt_BR:Conectando ao diretório, tecle ESC para c
 status_bar.connecting_to_folder:NL:Verbinden met map, druk ESC om af te breken
 status_bar.connecting_to_folder:SK:Pripája sa na priečinok, stlač ESC pre zrušenie
 status_bar.connecting_to_folder:HU:Kapcsolódás a mappához... Mégse: [ESCAPE]
-# Translation missing
-
-
-
-
-
-
 
 # Displayed in the status bar to indicate free space on current volume
 status_bar.volume_free:EN:Free: %1
@@ -4344,12 +3882,6 @@ status_bar.volume_free:pt_BR:Livre: %1
 status_bar.volume_free:NL:Vrij: %1
 status_bar.volume_free:SK:Voľné miesto: %1
 status_bar.volume_free:HU:Szabad: %1
-# Translation missing
-
-
-
-
-
 
 # Displayed in the status bar to indicate total space on current volume (not available under Windows)
 status_bar.volume_capacity:EN:Capacity: %1
@@ -4369,13 +3901,6 @@ status_bar.volume_capacity:pt_BR:Capacidade: %1
 status_bar.volume_capacity:NL:Capaciteit: %1
 status_bar.volume_capacity:SK:Kapacita: %1
 status_bar.volume_capacity:HU:Teljes méret: %1
-# Translation missing
-
-
-
-
-
-
 
 
 #########
@@ -4399,16 +3924,6 @@ table.hide_column:pt_BR:Ocultar colunas
 table.hide_column:NL:Kolom verbergen
 table.hide_column:SK:Skryť stĺpec
 table.hide_column:HU:Oszlop elrejtése
-# Translation missing
-
-
-
-
-
-
-
-
-
 
 table.folder_access_error_title:EN:Folder access error
 table.folder_access_error_title:FR:Folder access error
@@ -4702,15 +4217,6 @@ file_collision_dialog.title:pt_BR:Colisão de arquivo
 file_collision_dialog.title:NL:Dataconflict
 file_collision_dialog.title:SK:Kolízia súboru
 file_collision_dialog.title:HU:Fájlütközés
-# Translation missing
-
-
-
-
-
-
-
-
 
 
 ########
@@ -4937,15 +4443,6 @@ pack_dialog.archive_format:pt_BR:Formato de arquivo
 pack_dialog.archive_format:NL:Archiefformaat
 pack_dialog.archive_format:SK:Formát archívu
 pack_dialog.archive_format:HU:Archív formátum
-# Translation missing
-
-
-
-
-
-
-
-
 
 
 ##########
@@ -5065,8 +4562,7 @@ optimizing_archive:HU:Archívum optimalizálás %1
 
 
 
-
-# 
+ 
 error_while_optimizing_archive:EN:Error while optimizing archive %1
 error_while_optimizing_archive:en_GB:Error while optimising archive %1
 error_while_optimizing_archive:FR:Erreur pendant l'optimisation de %1
@@ -5677,7 +5173,13 @@ email_dialog.sending:IT:Inviando file
 email_dialog.sending:pt_BR:Enviando %1
 email_dialog.sending:NL:Verzenden bestanden
 email_dialog.sending:SK:Odosielam %1
-# KR Translation missing
+# Translation missing (KR)
+
+
+
+
+
+
 
 email.sending_file:EN:Sending %1
 email.sending_file:FR:Envoi de %1
@@ -5919,7 +5421,15 @@ file_selection_dialog.ends_with:IT:Termina con
 file_selection_dialog.ends_with:pt_BR:Terminam com
 file_selection_dialog.ends_with:NL:Einigt met
 file_selection_dialog.ends_with:SK:Končí na
-# KR Translation missing
+# Translation missing (KR)
+
+
+
+
+
+
+
+
 
 file_selection_dialog.is:EN:Is
 file_selection_dialog.is:FR:Est
@@ -5938,7 +5448,6 @@ file_selection_dialog.is:KR:is
 file_selection_dialog.is:pt_BR:É
 file_selection_dialog.is:NL:Is
 file_selection_dialog.is:SK:Je
-# KR Translation missing
 
 file_selection_dialog.case_sensitive:EN:Case sensitive
 file_selection_dialog.case_sensitive:FR:Respecter la casse
@@ -6035,16 +5544,6 @@ progress_dialog.elapsed_time:pt_BR:Tempo decorrido
 progress_dialog.elapsed_time:NL:Tijdsduur
 progress_dialog.elapsed_time:SK:Uplynulý čas
 progress_dialog.elapsed_time:HU:Eltelt idő
-# Translation missing
-
-
-
-
-
-
-
-
-
 
 progress_dialog.advanced:EN:Advanced
 progress_dialog.advanced:FR:Avancé
@@ -6063,17 +5562,6 @@ progress_dialog.advanced:pt_BR:Avançado
 progress_dialog.advanced:NL:Geavanceerd
 progress_dialog.advanced:SK:Rozšírené
 progress_dialog.advanced:HU:Speciális
-# Translation missing
-
-
-
-
-
-
-
-
-
-
 
 progress_dialog.current_speed:EN:Current speed
 progress_dialog.current_speed:FR:Vitesse actuelle
@@ -6092,15 +5580,6 @@ progress_dialog.current_speed:pt_BR:Velocidade atual
 progress_dialog.current_speed:NL:Huidige snelheid
 progress_dialog.current_speed:SK:Aktuálna rýchlosť
 progress_dialog.current_speed:HU:Jelenlegi sebesség
-# Translation missing
-
-
-
-
-
-
-
-
 
 progress_dialog.limit_speed:EN:Limit speed
 progress_dialog.limit_speed:FR:Limiter la vitesse
@@ -6119,15 +5598,6 @@ progress_dialog.limit_speed:pt_BR:Limitar a velocidade
 progress_dialog.limit_speed:NL:Maximale snelheid
 progress_dialog.limit_speed:SK:Rýchlostný limit
 progress_dialog.limit_speed:HU:Sebesség korlát
-# Translation missing
-
-
-
-
-
-
-
-
 
 progress_dialog.close_when_finished:EN:Close window when finished
 progress_dialog.close_when_finished:FR:Fermer la fenêtre lorsque terminé
@@ -6146,15 +5616,6 @@ progress_dialog.close_when_finished:pt_BR:Fechar a janela quando finalizado
 progress_dialog.close_when_finished:NL:Na beëinigen venster sluiten
 progress_dialog.close_when_finished:SK:Zatvoriť okno po dokončení
 progress_dialog.close_when_finished:HU:Ablak bezárása, ha elkészült
-# Translation missing
-
-
-
-
-
-
-
-
 
 progress_dialog.processing_files:EN:Processing files
 progress_dialog.processing_files:FR:Traitement des fichiers en cours
@@ -6173,17 +5634,6 @@ progress_dialog.processing_files:pt_BR:Processando arquivos
 progress_dialog.processing_files:NL:Bestanden bewerken
 progress_dialog.processing_files:SK:Spracovávajú sa súbory
 progress_dialog.processing_files:HU:Fájl(ok) feldolgozása
-# Translation missing
-
-
-
-
-
-
-
-
-
-
 
 progress_dialog.processing_file:EN:Processing %1
 progress_dialog.processing_file:FR:Traitement de %1 en cours
@@ -6202,16 +5652,6 @@ progress_dialog.processing_file:pt_BR:Processando %1
 progress_dialog.processing_file:NL:Bewerken %1
 progress_dialog.processing_file:SK:Spracováva sa %1
 progress_dialog.processing_file:HU:Feldolgozás %1
-# Translation missing
-
-
-
-
-
-
-
-
-
 
 progress_dialog.job_finished:EN:Job finished
 progress_dialog.job_finished:FR:Tâche terminée
@@ -6230,16 +5670,6 @@ progress_dialog.job_finished:pt_BR:Trabalho finalizado
 progress_dialog.job_finished:NL:Taak beeindigd
 progress_dialog.job_finished:SK:Úloha dokončená
 progress_dialog.job_finished:HU:Feladat befejezve
-# Translation missing
-
-
-
-
-
-
-
-
-
 
 progress_dialog.job_error:EN:Job error
 progress_dialog.job_error:FR:Erreur pendant tâche
@@ -6377,15 +5807,6 @@ change_date_dialog.now:pt_BR:Agora
 change_date_dialog.now:NL:Nu
 change_date_dialog.now:SK:Aktuálny
 change_date_dialog.now:HU:Most
-# Translation missing
-
-
-
-
-
-
-
-
 
 change_date_dialog.specific_date:EN:Specific date
 change_date_dialog.specific_date:FR:Date spécifique
@@ -6404,15 +5825,6 @@ change_date_dialog.specific_date:pt_BR:Data específica
 change_date_dialog.specific_date:NL:Bepaalde datum
 change_date_dialog.specific_date:SK:Špecifický dátum
 change_date_dialog.specific_date:HU:Speciális dátum
-# Translation missing
-
-
-
-
-
-
-
-
 
 
 ##############
@@ -6454,16 +5866,6 @@ run_dialog.run_in_home_description:pt_BR:Executar no diretório inicial
 run_dialog.run_in_home_description:NL:Voer uit in home-map
 run_dialog.run_in_home_description:SK:Spustiť v domovskom priečinku
 run_dialog.run_in_home_description:HU:Futtatás a főkönyvtárban
-# Translation missing
-
-
-
-
-
-
-
-
-
 
 run_dialog.command_output:EN:Command output
 run_dialog.command_output:FR:Sortie de la commande
@@ -6520,15 +5922,6 @@ run_dialog.clear_history:pt_BR:Limpar histórico
 run_dialog.clear_history:NL:Geschiedenis wissen
 run_dialog.clear_history:SK:Zmazať históriu
 run_dialog.clear_history:HU:Előzmények törlése
-# Translation missing
-
-
-
-
-
-
-
-
 
 
 #########################
@@ -6798,14 +6191,6 @@ http_connect.basic_authentication:pt_BR:HTTP Autenticação básica (opcional)
 http_connect.basic_authentication:NL:HTTP Basic Authentication (optioneel)
 http_connect.basic_authentication:SK:Základné overenie HTTP (voliteľné)
 http_connect.basic_authentication:HU:HTTP Alapszintű Hitelesítés (opcionális)
-# Translation missing
-
-
-
-
-
-
-
 
 
 #############################
@@ -6830,16 +6215,6 @@ server_connections_dialog.disconnect:pt_BR:Desconectar
 server_connections_dialog.disconnect:NL:Verbreken
 server_connections_dialog.disconnect:SK:Odpojiť
 server_connections_dialog.disconnect:HU:Szétkapcsol
-# Translation missing
-
-
-
-
-
-
-
-
-
 
 # Appears in the connection list if the connection is currently busy
 server_connections_dialog.connection_busy:EN:Busy
@@ -6858,7 +6233,7 @@ server_connections_dialog.connection_busy:pt_BR:Ocupado
 server_connections_dialog.connection_busy:NL:Bezet
 server_connections_dialog.connection_busy:SK:Zaneprázdnený
 server_connections_dialog.connection_busy:HU:Foglalt
-# Translation missing
+# Translation missing (ES)
 
 
 
@@ -6886,16 +6261,6 @@ server_connections_dialog.connection_idle:pt_BR:Inativo
 server_connections_dialog.connection_idle:NL:Niet actief
 server_connections_dialog.connection_idle:SK:Neaktívny
 server_connections_dialog.connection_idle:HU:Inaktív
-# Translation missing
-
-
-
-
-
-
-
-
-
 
 
 ############################
@@ -6919,14 +6284,6 @@ bonjour.bonjour_services:pt_BR:Serviço Bonjour
 bonjour.bonjour_services:NL:Bonjour services
 bonjour.bonjour_services:SK:Služba Bonjour
 bonjour.bonjour_services:HU:Bonjour szolgáltatások
-# Translation missing
-
-
-
-
-
-
-
 
 bonjour.no_service_discovered:EN:No service discovered
 bonjour.no_service_discovered:FR:Aucun service découvert
@@ -6945,16 +6302,6 @@ bonjour.no_service_discovered:pt_BR:Nenhum serviço encontrado
 bonjour.no_service_discovered:NL:Geen service gevonden
 bonjour.no_service_discovered:SK:Služba nenájdená
 bonjour.no_service_discovered:HU:Nincs felderített szolgáltatás
-# Translation missing
-
-
-
-
-
-
-
-
-
 
 bonjour.bonjour_disabled:EN:Bonjour disabled
 bonjour.bonjour_disabled:FR:Bonjour disabled
@@ -6973,14 +6320,6 @@ bonjour.bonjour_disabled:pt_BR:Bonjour desabilitado
 bonjour.bonjour_disabled:NL:Bonjout uitgeschakeld
 bonjour.bonjour_disabled:SK:Služba Bonjour nepovolená
 bonjour.bonjour_disabled:HU:Bonjour letiltva
-# Translation missing
-
-
-
-
-
-
-
 
 
 ###############
@@ -7077,7 +6416,7 @@ auth_dialog.store_credentials:NL:Sla naam en wachtwoord op (matige encryptie)
 auth_dialog.store_credentials:SK:Uložiť užívateľské meno a heslo (slabé šifrovanie)
 auth_dialog.store_credentials:HU:A felhasználónév és a jelszó mentése (gyenge titkosítás)
 #auth_dialog.store_credentials:RU:Включить логин и пароль (будут сохранены без шифрования)
-# Translation missing (RU, HU)
+# Translation missing (RU)
 
 
 
@@ -7111,15 +6450,6 @@ sortable_list.move_up:pt_BR:Subir
 sortable_list.move_up:NL:Ga omhoog
 sortable_list.move_up:SK:Presunúť vyššie
 sortable_list.move_up:HU:Mozgatás fel
-# Translation missing
-
-
-
-
-
-
-
-
 
 # Tooltip for the 'Move down' button
 sortable_list.move_down:EN:Move down
@@ -7139,13 +6469,6 @@ sortable_list.move_down:pt_BR:Descer
 sortable_list.move_down:NL:Ga omlaag
 sortable_list.move_down:SK:Presunúť nižšie
 sortable_list.move_down:HU:Mozgatás le
-# Translation missing
-
-
-
-
-
-
 
 
 #######################
@@ -7170,12 +6493,6 @@ add_bookmark_dialog.add:pt_BR:Adicionar
 add_bookmark_dialog.add:NL:Toevoegen
 add_bookmark_dialog.add:SK:Pridať
 add_bookmark_dialog.add:HU:Hozzáadás
-# Translation missing
-
-
-
-
-
 
 
 #######################
@@ -7202,20 +6519,6 @@ edit_bookmarks_dialog.new:pt_BR:Novo
 edit_bookmarks_dialog.new:NL:Nieuw
 edit_bookmarks_dialog.new:SK:Nová
 edit_bookmarks_dialog.new:HU:Új
-# Translation missing
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ###############
@@ -7714,14 +7017,6 @@ shortcuts_dialog.quick_search.start_search:pt_BR:Tecle qualquer caractere para i
 shortcuts_dialog.quick_search.start_search:NL:Voer een teken in om het snelzoeken te starten
 shortcuts_dialog.quick_search.start_search:SK:Vložením ľubovoľného znaku spustíte rýchle hľadanie
 shortcuts_dialog.quick_search.start_search:HU:Gyorskereséshez írjon be néhány karaktert
-# Translation missing
-
-
-
-
-
-
-
 
 shortcuts_dialog.quick_search.cancel_search:EN:Cancel quick search
 shortcuts_dialog.quick_search.cancel_search:FR:Annuler la recherche rapide
@@ -7740,15 +7035,6 @@ shortcuts_dialog.quick_search.cancel_search:pt_BR:Cancelar busca rápida
 shortcuts_dialog.quick_search.cancel_search:NL:Snelzoeken afbreken
 shortcuts_dialog.quick_search.cancel_search:SK:Zrušiť rýchle hľadanie
 shortcuts_dialog.quick_search.cancel_search:HU:Gyorskeresés befejezése
-# Translation missing
-
-
-
-
-
-
-
-
 
 shortcuts_dialog.quick_search.remove_last_char:EN:Remove last character from quick search string
 shortcuts_dialog.quick_search.remove_last_char:FR:Supprimer le dernier caractère de recherche
@@ -7767,15 +7053,6 @@ shortcuts_dialog.quick_search.remove_last_char:pt_BR:Remover o último caractere
 shortcuts_dialog.quick_search.remove_last_char:NL:Verwijder laatste teken uit snelzoek-opdracht
 shortcuts_dialog.quick_search.remove_last_char:SK:Odstrániť z hľadaného reťazca posledný znak
 shortcuts_dialog.quick_search.remove_last_char:HU:A gyorkeresési karakterlánc utolsó betűjének törlése
-# Translation missing
-
-
-
-
-
-
-
-
 
 shortcuts_dialog.quick_search.jump_to_previous:EN:Jump to previous quick search result
 shortcuts_dialog.quick_search.jump_to_previous:FR:Aller au résultat précédent
@@ -7794,14 +7071,6 @@ shortcuts_dialog.quick_search.jump_to_previous:pt_BR:Pular para o resultado ante
 shortcuts_dialog.quick_search.jump_to_previous:NL:Ga naar vorige snelzoekresultaat
 shortcuts_dialog.quick_search.jump_to_previous:SK:Prejsť na predchádzajúci výsledok rýchleho hľadania
 shortcuts_dialog.quick_search.jump_to_previous:HU:Ugrás az előző gyorskeresés eredményéhez
-# Translation missing
-
-
-
-
-
-
-
 
 shortcuts_dialog.quick_search.jump_to_next:EN:Jump to next quick search result
 shortcuts_dialog.quick_search.jump_to_next:FR:Aller au résultat suivant
@@ -7820,13 +7089,6 @@ shortcuts_dialog.quick_search.jump_to_next:pt_BR:Pular para o próximo resultado
 shortcuts_dialog.quick_search.jump_to_next:NL:Ga naar volgende snelzoekresultaat
 shortcuts_dialog.quick_search.jump_to_next:SK:Prejsť na nasledujúci výsledok rýchleho hľadania
 shortcuts_dialog.quick_search.jump_to_next:HU:Ugrás a következő gyorskeresés eredményéhez
-# Translation missing
-
-
-
-
-
-
 
 shortcuts_dialog.quick_search.mark_jump_next:EN:Mark/Unmark current file and jump to next search result
 shortcuts_dialog.quick_search.mark_jump_next:FR:Marquer/Dé-marquer le fichier courant et aller au résultat suivant
@@ -7845,14 +7107,6 @@ shortcuts_dialog.quick_search.mark_jump_next:pt_BR:Marcar/Desmarcar arquivo corr
 shortcuts_dialog.quick_search.mark_jump_next:NL:Markeer/Demarkeer huidige bestand en ga naar volgend zoekresultaat
 shortcuts_dialog.quick_search.mark_jump_next:SK:Označiť/odznačiť aktuálny súbor a prejsť na nasledujúci výsledok hľadania
 shortcuts_dialog.quick_search.mark_jump_next:HU:Kilelöli/Visszavonja az aktuális fájlt és a következő keresési eredményhez ugrik
-# Translation missing
-
-
-
-
-
-
-
 
 shortcuts_dialog.windows:EN:Windows
 shortcuts_dialog.windows:FR:Fenêtres
@@ -8039,10 +7293,6 @@ theme_editor.theme_warning:pt_BR:Esta ação irá sobrescrever o tema personaliz
 theme_editor.theme_warning:NL:Dit zal het huidige thema overschrijven. Wilt u doorgaan?
 theme_editor.theme_warning:SK:Užívateľská téma bude prepísaná. Naozaj chcete pokračovať?
 theme_editor.theme_warning:HU:Ez felülírja az egyedi témát. Biztos folytatja?
-# Translation missing
-
-
-
 
 # Error message displayed when a theme's saving fails.
 # %1 will be replaced by the theme's name.
@@ -8562,10 +7812,6 @@ prefs_dialog.date_separator:pt_BR:Separador
 prefs_dialog.date_separator:NL:Scheidingsteken
 prefs_dialog.date_separator:SK:Oddeľovač
 prefs_dialog.date_separator:HU:Elválasztó
-# Translation missing (HU)
-
-
-
 
 prefs_dialog.time_12_hour:EN:12-hour format
 prefs_dialog.time_12_hour:FR:Format 12 heures
@@ -8786,11 +8032,6 @@ prefs_dialog.show_hidden_files:KR:숨김 파일 표시
 prefs_dialog.show_hidden_files:pt_BR:Exibir arquivos ocultos
 prefs_dialog.show_hidden_files:NL:Toon verborgen bestanden
 prefs_dialog.show_hidden_files:SK:Zobraziť skryté súbory
-# Translation missing
-
-
-
-
 
 # Note: .DS_Store files are Mac OS X specific files which are used by the Finder to store information on how a folder should be displayed
 prefs_dialog.show_ds_store_files:EN:Show .DS_Store files
@@ -8810,17 +8051,6 @@ prefs_dialog.show_ds_store_files:pt_BR:Exibir arquivos .DS_Store
 prefs_dialog.show_ds_store_files:NL:Toon .DS_Store bestanden
 prefs_dialog.show_ds_store_files:SK:Zobraziť súbory .DS_Store
 prefs_dialog.show_ds_store_files:HU:A .DS_Store fájlok megjelenítése
-# Translation missing
-
-
-
-
-
-
-
-
-
-
 
 prefs_dialog.show_system_folders:EN:Show system folders
 prefs_dialog.show_system_folders:FR:Afficher les dossiers système
@@ -8839,17 +8069,6 @@ prefs_dialog.show_system_folders:pt_BR:Exibir diretórios de sistema
 prefs_dialog.show_system_folders:NL:Toon systeem-mappen
 prefs_dialog.show_system_folders:SK:Zobraziť systémové priečinky
 prefs_dialog.show_system_folders:HU:Rendszer könyvtárak megjelenítése
-# Translation missing
-
-
-
-
-
-
-
-
-
-
 
 prefs_dialog.compact_file_size:EN:Round displayed file sizes
 prefs_dialog.compact_file_size:FR:Arrondir les tailles de fichiers affichées
@@ -8941,14 +8160,6 @@ prefs_dialog.icons_size:pt_BR:Tamanho dos ícones
 prefs_dialog.icons_size:NL:Grootte van iconen
 prefs_dialog.icons_size:SK:Veľkosť ikon
 prefs_dialog.icons_size:HU:Ikon méret
-# Translation missing
-
-
-
-
-
-
-
 
 prefs_dialog.toolbar_icons:EN:Toolbar
 prefs_dialog.toolbar_icons:FR:Barre d'outils
@@ -8967,14 +8178,6 @@ prefs_dialog.toolbar_icons:pt_BR:Barra de ferramentas
 prefs_dialog.toolbar_icons:NL:Gereedschappenbalk
 prefs_dialog.toolbar_icons:SK:Panel s nástrojmi
 prefs_dialog.toolbar_icons:HU:Eszköztár
-# Translation missing
-
-
-
-
-
-
-
 
 prefs_dialog.command_bar_icons:EN:Command bar
 prefs_dialog.command_bar_icons:FR:Barre de commande
@@ -8993,13 +8196,6 @@ prefs_dialog.command_bar_icons:pt_BR:Barra de comandos
 prefs_dialog.command_bar_icons:NL:Commandoregel
 prefs_dialog.command_bar_icons:SK:Panel príkazov
 prefs_dialog.command_bar_icons:HU:Parancssor
-# Translation missing
-
-
-
-
-
-
 
 prefs_dialog.file_icons:EN:File types
 prefs_dialog.file_icons:FR:Type de fichiers
@@ -9018,12 +8214,6 @@ prefs_dialog.file_icons:pt_BR:Tipos de arquivos
 prefs_dialog.file_icons:NL:Bestandstypen
 prefs_dialog.file_icons:SK:Typy súborov
 prefs_dialog.file_icons:HU:Fájl típusok
-# Translation missing
-
-
-
-
-
 
 prefs_dialog.use_system_file_icons:EN:Use system file icons
 prefs_dialog.use_system_file_icons:FR:Utiliser les icônes de fichier système
@@ -9114,11 +8304,6 @@ prefs_dialog.themes:pt_BR:Temas
 prefs_dialog.themes:NL:Thema's
 prefs_dialog.themes:SK:Témy
 prefs_dialog.themes:HU:Témák
-# Translation missing
-
-
-
-
 
 prefs_dialog.import_theme:EN:Import theme
 prefs_dialog.import_theme:FR:Importer un thème
@@ -9409,14 +8594,6 @@ prefs_dialog.default_shell:pt_BR:Usar prompt de comando padrão do sistema
 prefs_dialog.default_shell:NL:Gebruik voorkeursshell van het systeem
 prefs_dialog.default_shell:SK:Použiť preddefinovaný systémový shell
 prefs_dialog.default_shell:HU:Az alapértelmezett Rendszerhéj használata
-# Translation missing
-
-
-
-
-
-
-
 
 prefs_dialog.custom_shell:EN:Use custom shell
 prefs_dialog.custom_shell:FR:Utiliser un shell spécifique
@@ -9435,13 +8612,6 @@ prefs_dialog.custom_shell:pt_BR:Usar prompt de comando personalizado
 prefs_dialog.custom_shell:NL:Gebruik zelfgekozen shell
 prefs_dialog.custom_shell:SK:Použiť vlastný shell
 prefs_dialog.custom_shell:HU:Egyedi rendszerhéj használata
-# Translation missing
-
-
-
-
-
-
 
 # Bonjour is a service discovery protocol : http://en.wikipedia.org/wiki/Bonjour_%28software%29
 prefs_dialog.enable_bonjour_discovery:EN:Enable Bonjour services discovery
@@ -9461,15 +8631,6 @@ prefs_dialog.enable_bonjour_discovery:pt_BR:Abilitar Bonjour service discovery
 prefs_dialog.enable_bonjour_discovery:NL:Schakel bonjour services discovery in
 prefs_dialog.enable_bonjour_discovery:SK:Povoliť služby Bonjour discoveny
 prefs_dialog.enable_bonjour_discovery:HU:A Bonjour szolgáltatások felderítésének engedélyezése
-# Translation missing
-
-
-
-
-
-
-
-
 
 # System notifications are displayed in the System tray, or using Growl under Mac OS X
 prefs_dialog.enable_system_notifications:EN:Enable system notifications
@@ -9658,12 +8819,6 @@ duration.seconds:pt_BR:%1s
 duration.seconds:NL:%1s
 duration.seconds:SK:%1s
 duration.seconds:HU:%1m
-# Translation missing
-
-
-
-
-
 
 duration.minutes:EN:%1m
 duration.minutes:FR:%1m
@@ -9682,12 +8837,6 @@ duration.minutes:pt_BR:%1m
 duration.minutes:NL:%1m
 duration.minutes:SK:%1m
 duration.minutes:HU:%1p
-# Translation missing
-
-
-
-
-
 
 duration.hours:EN:%1h
 duration.hours:FR:%1h
@@ -9706,13 +8855,6 @@ duration.hours:pt_BR:%1h
 duration.hours:NL:%1h
 duration.hours:SK:%1h
 duration.hours:HU:%1ó
-# Translation missing
-
-
-
-
-
-
 
 duration.days:EN:%1d
 duration.days:FR:%1j
@@ -9731,13 +8873,6 @@ duration.days:pt_BR:%1d
 duration.days:NL:%1d
 duration.days:SK:%1d
 duration.days:HU:%1n
-# Translation missing
-
-
-
-
-
-
 
 duration.months:EN:%1mo
 duration.months:FR:%1mo
@@ -9756,13 +8891,6 @@ duration.months:pt_BR:%1m
 duration.months:NL:%1mnd
 duration.months:SK:%1mesiacov
 duration.months:HU:%1h
-# Translation missing
-
-
-
-
-
-
 
 duration.years:EN:%1y
 duration.years:FR:%1a
@@ -9781,13 +8909,6 @@ duration.years:pt_BR:%1a
 duration.years:NL:%1jr
 duration.years:SK:%1rokov
 duration.years:HU:%1é
-# Translation missing
-
-
-
-
-
-
 
 duration.infinite:EN:∞
 
@@ -9813,7 +8934,7 @@ theme.custom_theme:pt_BR:Tema personalizado
 theme.custom_theme:NL:Zelfgemaakt thema
 theme.custom_theme:SK:Užívateľská téma
 theme.custom_theme:HU:Egyedi téma
-# Translation missing
+# Translation missing (RU)
 
 
 
@@ -9896,15 +9017,6 @@ theme_could_not_be_loaded:pt_BR:Ocorreu um erro ao tentar carregar este tema.
 theme_could_not_be_loaded:NL:Er deed zich een fout voor bij het laden van dit thema.
 theme_could_not_be_loaded:SK:Chyba pri načítavaní témy.
 theme_could_not_be_loaded:HU:Hiba a téma betöltésekor.
-# Translation missing
-
-
-
-
-
-
-
-
 
 
 #################
@@ -9930,11 +9042,6 @@ setup.title:pt_BR:Bem-vindo ao muCommander
 setup.title:NL:Welkom bij muCommander
 setup.title:SK:Víta Vás muCommander
 setup.title:HU:Üdvözöljük a muCommanderben
-# Translation missing
-
-
-
-
 
 setup.intro:EN:Please choose the way you want muCommander to behave.
 setup.intro:FR:Veuillez choisir le comportement souhaité de muCommander.
@@ -9953,13 +9060,6 @@ setup.intro:pt_BR:Por favor, selecione como o muCommander deve se comportar.
 setup.intro:NL:Kiest u a.u.b. de manier waarop muCommander zich moet gedragen.
 setup.intro:SK:Prosím, zvoľte vlastné nastavenie aplikácie muCommander.
 setup.intro:HU:Válassza ki a muCommander működési módját.
-# Translation missing
-
-
-
-
-
-
 
 setup.look_and_feel:EN:Select your Look & feel
 setup.look_and_feel:FR:Selectionnez votre Look & Feel
@@ -9978,13 +9078,6 @@ setup.look_and_feel:pt_BR:Selecione seu Look & feel
 setup.look_and_feel:NL:Kies uw Look & feel
 setup.look_and_feel:SK:Vyberte Vzhľad & chovanie
 setup.look_and_feel:HU:Válassza ki a Megjelenést
-# Translation missing
-
-
-
-
-
-
 
 setup.theme:EN:Select your theme
 setup.theme:FR:Selectionnez votre thème
@@ -10003,11 +9096,6 @@ setup.theme:pt_BR:Selecione seu tema
 setup.theme:NL:Kies uw thema
 setup.theme:SK:Vyberte tému
 setup.theme:HU:Válassza ki a témát
-# Translation missing
-
-
-
-
 
 
 ################
@@ -10028,7 +9116,7 @@ font_chooser.font_size:SI:Velikost
 font_chooser.font_size:RO:Dimensiune
 font_chooser.font_size:IT:Dimensione
 font_chooser.font_size:KR:크기
-# Translation missing
+# Translation missing (SK, pt_BR)
 
 
 
@@ -10050,7 +9138,7 @@ font_chooser.font_bold:RO:Îngroșat
 font_chooser.font_bold:IT:Grassetto
 font_chooser.font_bold:KR:볼드
 font_chooser.font_bold:NL:Vet
-# Translation missing
+# Translation missing (SK, pt_BR)
 
 
 
@@ -10072,7 +9160,7 @@ font_chooser.font_italic:RO:Cursiv
 font_chooser.font_italic:IT:Corsivo
 font_chooser.font_italic:KR:이탤릭
 font_chooser.font_italic:NL:Schuin
-# Translation missing
+# Translation missing (SK, pt_BR)
 
 
 
@@ -10092,11 +9180,14 @@ color_chooser.red:NL:Rood
 
 
 
+
 color_chooser.green:EN:Green
 color_chooser.green:FR:Vert
 color_chooser.green:HU:Zöld
 color_chooser.green:NL:Groen
 # Translation missing
+
+
 
 
 
@@ -10111,11 +9202,16 @@ color_chooser.blue:NL:Blauw
 
 
 
+
+
+
 color_chooser.hue:EN:Hue
 color_chooser.hue:FR:Tonalité
 color_chooser.hue:HU:Színárnyalat
 color_chooser.hue:NL:Tint
 # Translation missing
+
+
 
 
 
@@ -10130,6 +9226,8 @@ color_chooser.brightness:NL:Helderheid
 
 
 
+
+
 color_chooser.swatches:EN:Swatches
 color_chooser.swatches:FR:Echantillons
 color_chooser.swatches:HU:Foltok
@@ -10139,11 +9237,15 @@ color_chooser.swatches:NL:Actieve kleuren
 
 
 
+
+
 color_chooser.saturation:EN:Saturation
 color_chooser.saturation:FR:Saturation
 color_chooser.saturation:HU:Telítettség
 color_chooser.saturation:NL:Verzadiging
 # Translation missing
+
+
 
 
 
@@ -10160,11 +9262,15 @@ color_chooser.rgb:NL:RGB
 
 
 
+
+
 color_chooser.hsb:EN:HSB
 color_chooser.hsb:FR:TSL
 color_chooser.hsb:HU:HSB
 color_chooser.hsb:NL:HSB
 # Translation missing
+
+
 
 
 
@@ -10181,10 +9287,14 @@ color_chooser.recent:NL:Recent
 
 
 
+
+
 color_chooser.alpha:EN:Alpha transparency
 color_chooser.alpha:FR:Transparence alpha
 color_chooser.alpha:HU:Alfa átlátszóság
 # Translation missing
+
+
 
 
 
@@ -10207,7 +9317,10 @@ color_chooser.title:RO:Alegeți o culoare
 color_chooser.title:IT:Scegli un colore
 color_chooser.title:KR:색상 선택
 color_chooser.title:NL:Kies een kleur
-# Translation missing
+# Translation missing (SK, pt_BR)
+
+
+
 
 
 
