@@ -228,8 +228,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.FILE_SELECTED_BACKGROUND_COLOR)));
         if(theme.isColorSet(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(theme.getColor(Theme.FILE_SELECTED_UNFOCUSED_BACKGROUND_COLOR)));
-        if(theme.isColorSet(Theme.FILE_SELECTED_FOREGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(theme.getColor(Theme.FILE_SELECTED_FOREGROUND_COLOR)));
+        if(theme.isColorSet(Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(theme.getColor(Theme.FILE_SELECTED_UNFOCUSED_FOREGROUND_COLOR)));
         if(theme.isColorSet(Theme.FILE_SELECTED_FOREGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.FILE_SELECTED_FOREGROUND_COLOR)));
         out.endElement(ELEMENT_SELECTED);
