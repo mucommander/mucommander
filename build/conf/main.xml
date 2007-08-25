@@ -177,7 +177,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <javadoc destdir="${conf.doc}" author="true" windowtitle="muCommander Configuration API" encoding="UTF-8" access="protected" linksource="yes">
       <packageset dir="${source}">
         <include name="com/mucommander/conf/**"/>
-        <include name="com/mucommander/xml/writer/**"/>
+        <include name="com/mucommander/xml/**"/>
         <exclude name="com/mucommander/conf/impl/**"/>
       </packageset>
     </javadoc>
