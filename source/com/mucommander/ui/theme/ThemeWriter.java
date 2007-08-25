@@ -147,8 +147,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.ARCHIVE_SELECTED_BACKGROUND_COLOR)));
         if(theme.isColorSet(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(theme.getColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_BACKGROUND_COLOR)));
-        if(theme.isColorSet(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(theme.getColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR)));
+        if(theme.isColorSet(Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(theme.getColor(Theme.ARCHIVE_SELECTED_UNFOCUSED_FOREGROUND_COLOR)));
         if(theme.isColorSet(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR)));
         out.endElement(ELEMENT_SELECTED);
@@ -174,8 +174,8 @@ class ThemeWriter implements ThemeXmlConstants {
             out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.SYMLINK_SELECTED_BACKGROUND_COLOR)));
         if(theme.isColorSet(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_UNFOCUSED_BACKGROUND, getColorAttributes(theme.getColor(Theme.SYMLINK_SELECTED_UNFOCUSED_BACKGROUND_COLOR)));
-        if(theme.isColorSet(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(theme.getColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR)));
+        if(theme.isColorSet(Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_UNFOCUSED_FOREGROUND, getColorAttributes(theme.getColor(Theme.SYMLINK_SELECTED_UNFOCUSED_FOREGROUND_COLOR)));
         if(theme.isColorSet(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR)));
         out.endElement(ELEMENT_SELECTED);
