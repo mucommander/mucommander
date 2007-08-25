@@ -24,9 +24,14 @@ import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.io.BackupInputStream;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
 
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.Locator;
+import org.xml.sax.Attributes;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.swing.*;
 import java.io.*;
 import java.util.Enumeration;
@@ -37,7 +42,7 @@ import java.util.Vector;
 /**
  * @author Maxence Bernard
  */
-public class ActionKeymap implements ContentHandler {
+public class ActionKeymap extends DefaultHandler {
 
     private static Hashtable primaryActionKeymap = new Hashtable();
     private static Hashtable alternateActionKeymap = new Hashtable();
@@ -288,7 +293,7 @@ public class ActionKeymap implements ContentHandler {
      */
     private void parseActionKeymapFile(InputStream in) throws Exception {
         // Parse action keymap file
-        try {new Parser().parse(in, this, "UTF-8");}
+        try {SAXParserFactory.newInstance().newSAXParser().parse(in, this);}
         finally {
             if(in!=null) {
                 try { in.close(); }
@@ -302,31 +307,23 @@ public class ActionKeymap implements ContentHandler {
     // ContentHandler implementation //
     ///////////////////////////////////
 
-    public void startDocument() throws Exception {
-    }
-
-    public void endDocument() throws Exception {
-    }
-
-    public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
-        if(name.equals("action")) {
-            String actionClassName = (String)attValues.get("class");
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        if(qName.equals("action")) {
+            String actionClassName = attributes.getValue("class");
             if(actionClassName==null) {
                 if(Debug.ON) Debug.trace("Error in action keymap file: no 'class' attribute specified in 'action' element");
                 return;
             }
 
             Class actionClass;
-            try {
-                actionClass = Class.forName(actionClassName);
-            }
+            try {actionClass = Class.forName(actionClassName);}
             catch(ClassNotFoundException e) {
                 if(Debug.ON) Debug.trace("Error in action keymap file: could not resolve class "+actionClassName);
                 return;
             }
 
             // Primary keystroke
-            String keyStrokeString = (String)attValues.get("keystroke");
+            String keyStrokeString = attributes.getValue("keystroke");
             if(keyStrokeString==null) {
                 if(Debug.ON) Debug.trace("Error in action keymap file: no 'keystroke' attribute specified in 'action' element");
                 return;
@@ -348,7 +345,7 @@ public class ActionKeymap implements ContentHandler {
             acceleratorMap.put(keyStroke, actionClass);
 
             // Alternate keystroke (if any)
-            keyStrokeString = (String)attValues.get("alt_keystroke");
+            keyStrokeString = attributes.getValue("alt_keystroke");
             if(keyStrokeString!=null) {
                 keyStroke = KeyStroke.getKeyStroke(keyStrokeString);
                 if(keyStroke==null) {
@@ -366,11 +363,5 @@ public class ActionKeymap implements ContentHandler {
                 acceleratorMap.put(keyStroke, actionClass);
             }
         }
-    }
-
-    public void endElement(String uri, String name) throws Exception {
-    }
-
-    public void characters(String s) throws Exception {
     }
 }

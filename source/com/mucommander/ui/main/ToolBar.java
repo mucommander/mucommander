@@ -32,9 +32,14 @@ import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
 
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.Locator;
+import org.xml.sax.Attributes;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -314,7 +319,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
      *
      * @author Maxence Bernard
      */
-    private static class ToolBarReader implements ContentHandler {
+    private static class ToolBarReader extends DefaultHandler {
 
         /** Temporarily used for XML parsing */
         private Vector actionsV;
@@ -324,12 +329,10 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
          * Starts parsing the XML description file.
          */
         private ToolBarReader() throws Exception {
-            InputStream in = null;
+            InputStream in;
 
-            try {
-                in = new BackupInputStream(getDescriptionFile());
-                new Parser().parse(in, this, "UTF-8");
-            }
+            in = null;
+            try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(getDescriptionFile()), this);}
             finally {
                 if(in != null) {
                     try {in.close();}
@@ -342,13 +345,13 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         // ContentHandler methods //
         ////////////////////////////
 
-        public void startDocument() throws Exception {
+        public void startDocument() {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_RESOURCE_PATH+" parsing started");
 
             actionsV = new Vector();
         }
 
-        public void endDocument() throws Exception {
+        public void endDocument() {
             int nbActions = actionsV.size();
             actions = new Class[nbActions];
             actionsV.toArray(actions);
@@ -357,23 +360,17 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(TOOLBAR_RESOURCE_PATH+" parsing finished");
         }
 
-        public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
-            if(name.equals("button")) {
-                String actionClassName = (String)attValues.get("action");
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            if(qName.equals("button")) {
+                String actionClassName = attributes.getValue("action");
                 try {
                     actionsV.add(Class.forName(actionClassName));
                 }
                 catch(Exception e) {if(Debug.ON) Debug.trace("Error in "+TOOLBAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);}
             }
-            else if(name.equals("separator")) {
+            else if(qName.equals("separator")) {
                 actionsV.add(null);
             }
-        }
-
-        public void endElement(String uri, String name) throws Exception {
-        }
-
-        public void characters(String s) throws Exception {
         }
     }
 }

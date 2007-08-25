@@ -18,9 +18,13 @@
 
 package com.mucommander.res;
 
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
-
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.Locator;
+import org.xml.sax.Attributes;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -28,7 +32,7 @@ import java.util.Vector;
 /**
  * @author Nicolas Rinaudo
  */
-public class ResourceListReader implements ContentHandler, XmlConstants {
+public class ResourceListReader extends DefaultHandler implements XmlConstants {
     // - Parser states -------------------------------------------------------
     // -----------------------------------------------------------------------
     /** Parsing hasn't started. */
@@ -69,7 +73,7 @@ public class ResourceListReader implements ContentHandler, XmlConstants {
         state   = STATE_UNKNOWN;
         content = new Vector();
 
-        new Parser().parse(in, this, "UTF-8");
+        SAXParserFactory.newInstance().newSAXParser().parse(in, this);
 
         return content;
     }
@@ -77,61 +81,42 @@ public class ResourceListReader implements ContentHandler, XmlConstants {
     /**
      * Notifies the reader that a new XML element is starting.
      */
-    public void startElement(String uri, String name, Hashtable attributes, Hashtable attURIs) throws Exception {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         String path;
 
         // Root element.
-        if(name.equals(ROOT_ELEMENT)) {
+        if(qName.equals(ROOT_ELEMENT)) {
             if(state != STATE_UNKNOWN)
-                throw new Exception("Illegal start of element: " + name);
+                throw new SAXException("Illegal start of element: " + qName);
             state = STATE_ROOT;
         }
 
         // File element.
-        else if(name.equals(FILE_ELEMENT)) {
+        else if(qName.equals(FILE_ELEMENT)) {
             if(state != STATE_ROOT)
-                throw new Exception("Illegal start of element: " + name);
-            if((path = (String)attributes.get(PATH_ATTRIBUTE)) != null)
+                throw new SAXException("Illegal start of element: " + qName);
+            if((path = attributes.getValue(PATH_ATTRIBUTE)) != null)
                 content.add(path);
         }
 
         // Unknown element.
         else
-            throw new Exception("Unknown XML element: " + name);
+            throw new SAXException("Unknown XML element: " + qName);
     }
     
     /**
      * Notifies the reader that an XML element declaration is finished,
      */
-    public void endElement(String uri, String name) throws Exception {
+    public void endElement(String uri, String localName, String qName) throws SAXException {
         // Root element.
-        if(name.equals(ROOT_ELEMENT)) {
+        if(qName.equals(ROOT_ELEMENT)) {
             if(state != STATE_ROOT)
-                throw new Exception("Illegal end of element: " + name);
+                throw new SAXException("Illegal end of element: " + qName);
             state = STATE_UNKNOWN;
         }
 
         // Unknown element.
-        else if(!name.equals(FILE_ELEMENT))
-            throw new Exception("Unknown XML element: " + name);
+        else if(!qName.equals(FILE_ELEMENT))
+            throw new SAXException("Unknown XML element: " + qName);
     }
-
-
-
-    // - Unused XML methods --------------------------------------------------
-    // -----------------------------------------------------------------------
-    /**
-     * Not used.
-     */
-    public void startDocument() {}
-
-    /**
-     * Not used.
-     */
-    public void endDocument() {}
-
-    /**
-     * Not used.
-     */
-    public void characters(String s) {}
 }

@@ -18,7 +18,7 @@
 
 package com.mucommander.shell;
 
-import com.mucommander.xml.writer.XmlWriter;
+import com.mucommander.xml.XmlWriter;
 
 import java.io.OutputStream;
 import java.util.Iterator;

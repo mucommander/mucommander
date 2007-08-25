@@ -19,9 +19,14 @@
 package com.mucommander.ui.theme;
 
 import com.mucommander.Debug;
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
 
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.Locator;
+import org.xml.sax.Attributes;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.InputStream;
 import java.util.Hashtable;
@@ -31,7 +36,7 @@ import java.util.StringTokenizer;
  * Loads theme instances from properly formatted XML files.
  * @author Nicolas Rinaudo
  */
-class ThemeReader implements ContentHandler, ThemeXmlConstants {
+class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     // - XML parser states ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Parsing hasn't started yet. */
@@ -114,7 +119,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
      * @param     template  template in which to store the data.
      * @exception Exception thrown if an error occured while reading the template.
      */
-    public static void read(InputStream in, ThemeData template) throws Exception {new Parser().parse(in, new ThemeReader(template), "UTF-8");}
+    public static void read(InputStream in, ThemeData template) throws Exception {SAXParserFactory.newInstance().newSAXParser().parse(in, new ThemeReader(template));}
 
 
     // - XML interaction -----------------------------------------------------
@@ -122,100 +127,100 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
     /**
      * Notifies the reader that a new XML element is starting.
      */
-    public void startElement(String uri, String name, Hashtable attributes, Hashtable attURIs) throws Exception {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // Ignores the content of unknown elements.
         if(unknownElement != null) {
-            if(Debug.ON) Debug.trace("Ignoring element " + name);
+            if(Debug.ON) Debug.trace("Ignoring element " + qName);
             return;
         }
 
         // XML root element.
-        if(name.equals(ELEMENT_ROOT)) {
+        if(qName.equals(ELEMENT_ROOT)) {
             if(state != STATE_UNKNOWN)
                 traceIllegalDeclaration(ELEMENT_ROOT);
             state = STATE_ROOT;
         }
 
         // File table declaration.
-        else if(name.equals(ELEMENT_TABLE)) {
+        else if(qName.equals(ELEMENT_TABLE)) {
             if(state != STATE_ROOT)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_TABLE;
         }
 
         // Shell declaration.
-        else if(name.equals(ELEMENT_SHELL)) {
+        else if(qName.equals(ELEMENT_SHELL)) {
             if(state != STATE_ROOT)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_SHELL;
         }
 
         // Editor declaration.
-        else if(name.equals(ELEMENT_EDITOR)) {
+        else if(qName.equals(ELEMENT_EDITOR)) {
             if(state != STATE_ROOT)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_EDITOR;
         }
 
         // Location bar declaration.
-        else if(name.equals(ELEMENT_LOCATION_BAR)) {
+        else if(qName.equals(ELEMENT_LOCATION_BAR)) {
             if(state != STATE_ROOT)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_LOCATION_BAR;
         }
 
         // Shell history declaration.
-        else if(name.equals(ELEMENT_SHELL_HISTORY)) {
+        else if(qName.equals(ELEMENT_SHELL_HISTORY)) {
             if(state != STATE_ROOT)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_SHELL_HISTORY;
         }
 
         // Volume label declaration.
-        else if(name.equals(ELEMENT_STATUS_BAR)) {
+        else if(qName.equals(ELEMENT_STATUS_BAR)) {
             if(state != STATE_ROOT)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_STATUS_BAR;
         }
 
-        else if(name.equals(ELEMENT_HIDDEN)) {
+        else if(qName.equals(ELEMENT_HIDDEN)) {
             if(state != STATE_TABLE)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_HIDDEN;
         }
 
-        else if(name.equals(ELEMENT_FOLDER)) {
+        else if(qName.equals(ELEMENT_FOLDER)) {
             if(state != STATE_TABLE)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_FOLDER;
         }
 
-        else if(name.equals(ELEMENT_ARCHIVE)) {
+        else if(qName.equals(ELEMENT_ARCHIVE)) {
             if(state != STATE_TABLE)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_ARCHIVE;
         }
 
-        else if(name.equals(ELEMENT_SYMLINK)) {
+        else if(qName.equals(ELEMENT_SYMLINK)) {
             if(state != STATE_TABLE)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_SYMLINK;
         }
 
-        else if(name.equals(ELEMENT_MARKED)) {
+        else if(qName.equals(ELEMENT_MARKED)) {
             if(state != STATE_TABLE)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_MARKED;
         }
 
-        else if(name.equals(ELEMENT_FILE)) {
+        else if(qName.equals(ELEMENT_FILE)) {
             if(state != STATE_TABLE)
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
             state = STATE_FILE;
         }
 
         // Normal element declaration.
-        else if(name.equals(ELEMENT_NORMAL)) {
+        else if(qName.equals(ELEMENT_NORMAL)) {
             if(state == STATE_SHELL)
                 state = STATE_SHELL_NORMAL;
             else if(state == STATE_EDITOR)
@@ -237,11 +242,11 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_FILE)
                 state = STATE_FILE_NORMAL;
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // Selected element declaration.
-        else if(name.equals(ELEMENT_SELECTED)) {
+        else if(qName.equals(ELEMENT_SELECTED)) {
             if(state == STATE_SHELL)
                 state = STATE_SHELL_SELECTED;
             else if(state == STATE_EDITOR)
@@ -263,11 +268,11 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_FILE)
                 state = STATE_FILE_SELECTED;
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // Font creation.
-        else if(name.equals(ELEMENT_FONT)) {
+        else if(qName.equals(ELEMENT_FONT)) {
             if(state == STATE_SHELL)
                 template.setFont(ThemeData.SHELL_FONT, createFont(attributes));
             else if(state == STATE_EDITOR)
@@ -281,27 +286,27 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_TABLE)
                 template.setFont(ThemeData.FILE_TABLE_FONT, createFont(attributes));
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // Unmatched background color.
-        else if(name.equals(ELEMENT_UNMATCHED_BACKGROUND)) {
+        else if(qName.equals(ELEMENT_UNMATCHED_BACKGROUND)) {
             if(state == STATE_TABLE)
                 template.setColor(ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR, createColor(attributes));
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // Unmatched foreground color.
-        else if(name.equals(ELEMENT_UNMATCHED_FOREGROUND)) {
+        else if(qName.equals(ELEMENT_UNMATCHED_FOREGROUND)) {
             if(state == STATE_TABLE)
                 template.setColor(ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR, createColor(attributes));
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // Unfocused background color.
-        else if(name.equals(ELEMENT_UNFOCUSED_BACKGROUND)) {
+        else if(qName.equals(ELEMENT_UNFOCUSED_BACKGROUND)) {
             if(state == STATE_FILE_NORMAL)
                 template.setColor(ThemeData.FILE_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
             else if(state == STATE_TABLE)
@@ -329,11 +334,11 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_MARKED_SELECTED)
                 template.setColor(ThemeData.MARKED_SELECTED_UNFOCUSED_BACKGROUND_COLOR, createColor(attributes));
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // Unfocused foreground color.
-        else if(name.equals(ELEMENT_UNFOCUSED_FOREGROUND)) {
+        else if(qName.equals(ELEMENT_UNFOCUSED_FOREGROUND)) {
             if(state == STATE_FILE_NORMAL)
                 template.setColor(ThemeData.FILE_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_FOLDER_NORMAL)
@@ -359,11 +364,11 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_MARKED_SELECTED)
                 template.setColor(ThemeData.MARKED_SELECTED_UNFOCUSED_FOREGROUND_COLOR, createColor(attributes));
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // File table border color.
-        else if(name.equals(ELEMENT_BORDER)) {
+        else if(qName.equals(ELEMENT_BORDER)) {
             if(state == STATE_TABLE)
                 template.setColor(ThemeData.FILE_TABLE_BORDER_COLOR, createColor(attributes));
 
@@ -371,11 +376,11 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
                 template.setColor(ThemeData.STATUS_BAR_BORDER_COLOR, createColor(attributes));
 
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // Background color.
-        else if(name.equals(ELEMENT_BACKGROUND)) {
+        else if(qName.equals(ELEMENT_BACKGROUND)) {
             if(state == STATE_HIDDEN_NORMAL)
                 template.setColor(ThemeData.HIDDEN_FILE_BACKGROUND_COLOR, createColor(attributes));
             else if(state == STATE_HIDDEN_SELECTED)
@@ -433,43 +438,43 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
                 template.setColor(ThemeData.STATUS_BAR_BACKGROUND_COLOR, createColor(attributes));
 
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // Progress bar color.
-        else if(name.equals(ELEMENT_PROGRESS)) {
+        else if(qName.equals(ELEMENT_PROGRESS)) {
             if(state == STATE_LOCATION_BAR)
                 template.setColor(ThemeData.LOCATION_BAR_PROGRESS_COLOR, createColor(attributes));
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // 'OK' color.
-        else if(name.equals(ELEMENT_OK)) {
+        else if(qName.equals(ELEMENT_OK)) {
             if(state == STATE_STATUS_BAR)
                 template.setColor(ThemeData.STATUS_BAR_OK_COLOR, createColor(attributes));
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // 'WARNING' color.
-        else if(name.equals(ELEMENT_WARNING)) {
+        else if(qName.equals(ELEMENT_WARNING)) {
             if(state == STATE_STATUS_BAR)
                 template.setColor(ThemeData.STATUS_BAR_WARNING_COLOR, createColor(attributes));
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // 'CRITICAL' color.
-        else if(name.equals(ELEMENT_CRITICAL)) {
+        else if(qName.equals(ELEMENT_CRITICAL)) {
             if(state == STATE_STATUS_BAR)
                 template.setColor(ThemeData.STATUS_BAR_CRITICAL_COLOR, createColor(attributes));
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         // Text color.
-        else if(name.equals(ELEMENT_FOREGROUND)) {
+        else if(qName.equals(ELEMENT_FOREGROUND)) {
             if(state == STATE_HIDDEN_NORMAL)
                 template.setColor(ThemeData.HIDDEN_FILE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_HIDDEN_SELECTED)
@@ -524,21 +529,21 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
                 template.setColor(ThemeData.STATUS_BAR_FOREGROUND_COLOR, createColor(attributes));
 
             else
-                traceIllegalDeclaration(name);
+                traceIllegalDeclaration(qName);
         }
 
         else
-            traceIllegalDeclaration(name);
+            traceIllegalDeclaration(qName);
     }
 
     /**
      * Notifies the reader that the current element declaration is over.
      */
-    public void endElement(String uri, String name) throws Exception {
+    public void endElement(String uri, String localName, String qName) throws SAXException {
         // If we're in an unknown element....
         if(unknownElement != null) {
             // If it just closed, resume normal parsing.
-            if(name.equals(unknownElement))
+            if(qName.equals(unknownElement))
                 unknownElement = null;
             // Ignores all other tags.
             else
@@ -546,92 +551,92 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
         }
 
         // XML root element.
-        if(name.equals(ELEMENT_ROOT)) {
+        if(qName.equals(ELEMENT_ROOT)) {
             if(state != STATE_ROOT)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_UNKNOWN;
         }
 
         // File table declaration.
-        else if(name.equals(ELEMENT_TABLE)) {
+        else if(qName.equals(ELEMENT_TABLE)) {
             if(state != STATE_TABLE)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_ROOT;
         }
 
-        else if(name.equals(ELEMENT_HIDDEN)) {
+        else if(qName.equals(ELEMENT_HIDDEN)) {
             if(state != STATE_HIDDEN)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_TABLE;
         }
 
-        else if(name.equals(ELEMENT_FOLDER)) {
+        else if(qName.equals(ELEMENT_FOLDER)) {
             if(state != STATE_FOLDER)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_TABLE;
         }
 
-        else if(name.equals(ELEMENT_ARCHIVE)) {
+        else if(qName.equals(ELEMENT_ARCHIVE)) {
             if(state != STATE_ARCHIVE)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_TABLE;
         }
 
-        else if(name.equals(ELEMENT_SYMLINK)) {
+        else if(qName.equals(ELEMENT_SYMLINK)) {
             if(state != STATE_SYMLINK)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_TABLE;
         }
 
-        else if(name.equals(ELEMENT_MARKED)) {
+        else if(qName.equals(ELEMENT_MARKED)) {
             if(state != STATE_MARKED)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_TABLE;
         }
 
-        else if(name.equals(ELEMENT_FILE)) {
+        else if(qName.equals(ELEMENT_FILE)) {
             if(state != STATE_FILE)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_TABLE;
         }
 
         // Shell declaration.
-        else if(name.equals(ELEMENT_SHELL)) {
+        else if(qName.equals(ELEMENT_SHELL)) {
             if(state != STATE_SHELL)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_ROOT;
         }
 
         // Shell history declaration.
-        else if(name.equals(ELEMENT_SHELL_HISTORY)) {
+        else if(qName.equals(ELEMENT_SHELL_HISTORY)) {
             if(state != STATE_SHELL_HISTORY)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_ROOT;
         }
 
         // Editor declaration.
-        else if(name.equals(ELEMENT_EDITOR)) {
+        else if(qName.equals(ELEMENT_EDITOR)) {
             if(state != STATE_EDITOR)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_ROOT;
         }
 
         // Location bar declaration.
-        else if(name.equals(ELEMENT_LOCATION_BAR)) {
+        else if(qName.equals(ELEMENT_LOCATION_BAR)) {
             if(state != STATE_LOCATION_BAR)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_ROOT;
         }
 
         // Volume label declaration
-        else if(name.equals(ELEMENT_STATUS_BAR)) {
+        else if(qName.equals(ELEMENT_STATUS_BAR)) {
             if(state != STATE_STATUS_BAR)
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
             state = STATE_ROOT;
         }
 
         // Normal element declaration.
-        else if(name.equals(ELEMENT_NORMAL)) {
+        else if(qName.equals(ELEMENT_NORMAL)) {
             if(state == STATE_SHELL_NORMAL)
                 state = STATE_SHELL;
             else if(state == STATE_SHELL_HISTORY_NORMAL)
@@ -653,11 +658,11 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_LOCATION_BAR_NORMAL)
                 state = STATE_LOCATION_BAR;
             else
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
         }
 
         // Selected element declaration.
-        else if(name.equals(ELEMENT_SELECTED)) {
+        else if(qName.equals(ELEMENT_SELECTED)) {
             if(state == STATE_SHELL_SELECTED)
                 state = STATE_SHELL;
             else if(state == STATE_SHELL_HISTORY_SELECTED)
@@ -679,28 +684,9 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
             else if(state == STATE_LOCATION_BAR_SELECTED)
                 state = STATE_LOCATION_BAR;
             else
-                if(Debug.ON) traceIllegalClosing(name);
+                if(Debug.ON) traceIllegalClosing(qName);
         }
     }
-
-
-
-    // - Unused XML methods --------------------------------------------------
-    // -----------------------------------------------------------------------
-    /**
-     * Not used.
-     */
-    public void startDocument() {}
-
-    /**
-     * Not used.
-     */
-    public void endDocument() {}
-
-    /**
-     * Not used.
-     */
-    public void characters(String s) {}
 
 
 
@@ -732,7 +718,7 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
      * @param  attributes XML attributes describing the font to use.
      * @return            the resulting Font instance.
      */
-    private static Font createFont(Hashtable attributes) {
+    private static Font createFont(Attributes attributes) {
         String          buffer; // Buffer for attribute values.
         int             size;   // Font size.
         int             style;  // Font style.
@@ -741,20 +727,20 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
 
         // Computes the font style.
         style = 0;
-        if(((buffer = (String)attributes.get(ATTRIBUTE_BOLD)) != null) && buffer.equals(VALUE_TRUE))
+        if(((buffer = (String)attributes.getValue(ATTRIBUTE_BOLD)) != null) && buffer.equals(VALUE_TRUE))
             style |= Font.BOLD;
-        if(((buffer = (String)attributes.get(ATTRIBUTE_ITALIC)) != null) && buffer.equals(VALUE_TRUE))
+        if(((buffer = (String)attributes.getValue(ATTRIBUTE_ITALIC)) != null) && buffer.equals(VALUE_TRUE))
             style |= Font.ITALIC;
 
         // Computes the font size.
-        if((buffer = (String)attributes.get(ATTRIBUTE_SIZE)) == null) {
+        if((buffer = (String)attributes.getValue(ATTRIBUTE_SIZE)) == null) {
             if(Debug.ON) Debug.trace("Missing font size attribute in theme, ignoring.");
             return null;
 	}
 	size = Integer.parseInt(buffer);
 
         // Computes the font family.
-        if((buffer = (String)attributes.get(ATTRIBUTE_FAMILY)) == null) {
+        if((buffer = (String)attributes.getValue(ATTRIBUTE_FAMILY)) == null) {
             if(Debug.ON) Debug.trace("Missing font family attribute in theme, ignoring.");
             return null;
 	}
@@ -778,21 +764,20 @@ class ThemeReader implements ContentHandler, ThemeXmlConstants {
      * Creates a color from the specified XML attributes.
      * @param  attributes XML attributes describing the font to use.
      * @return            the resulting Color instance.
-     * @throws Exception  thrown if the {@link #ATTRIBUTE_COLOR} attribute is not set.
      */
-    private static Color createColor(Hashtable attributes) throws Exception {
+    private static Color createColor(Attributes attributes) {
         String buffer;
         int    color;
 
         // Retrieves the color attribute's value.
-        if((buffer = (String)attributes.get(ATTRIBUTE_COLOR)) == null) {
+        if((buffer = (String)attributes.getValue(ATTRIBUTE_COLOR)) == null) {
             if(Debug.ON) Debug.trace("Missing color attribute in theme, ignoring.");
             return null;
         }
         color = Integer.parseInt(buffer, 16);
 
         // Retrieves the transparency attribute's value..
-        if((buffer = (String)attributes.get(ATTRIBUTE_ALPHA)) == null)
+        if((buffer = (String)attributes.getValue(ATTRIBUTE_ALPHA)) == null)
             return new Color(color);
         return new Color(color | (Integer.parseInt(buffer, 16) << 24), true);
     }

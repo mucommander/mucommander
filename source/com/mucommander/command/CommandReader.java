@@ -18,17 +18,20 @@
 
 package com.mucommander.command;
 
-import com.mucommander.Debug;
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
-
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.Locator;
+import org.xml.sax.Attributes;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.InputStream;
 import java.util.Hashtable;
 
 /**
  * Class used to parse custom commands XML files.
  * <p>
- * Command file parsing is done through the {@link #read(InputStream,CommandBuilder,String) read} method, which is
+ * Command file parsing is done through the {@link #read(InputStream,CommandBuilder) read} method, which is
  * the only way to interact with this class.
  * </p>
  * <p>
@@ -40,7 +43,7 @@ import java.util.Hashtable;
  * @see    CommandWriter
  * @author Nicolas Rinaudo
  */
-public class CommandReader implements ContentHandler, CommandsXmlConstants {
+public class CommandReader extends DefaultHandler implements CommandsXmlConstants {
     // - Instance variables --------------------------------------------------
     // -----------------------------------------------------------------------
     /** Where to send building messages. */
@@ -63,18 +66,6 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
     /**
      * Parses the content of the specified input stream.
      * <p>
-     * This is a convenience method, and is equivalent to calling <code>CommandReader.read(in, b, "UTF-8")</code>.
-     * </p>
-     * @param  in        where to read command data from.
-     * @param  b         where to send building events to.
-     * @throws Exception thrown if any error occurs.
-     * @see    #read(InputStream,CommandBuilder,String)
-     */
-    public static void read(InputStream in, CommandBuilder b) throws Exception {read(in, b, "UTF-8");}
-
-    /**
-     * Parses the content of the specified input stream.
-     * <p>
      * This method will go through the specified input stream and notify the builder of any new command declaration it
      * encounters. Note that parsing is done in a very lenient fashion, and perfectly invalid XML files might not raise
      * an exception. This is not a flaw in the parser, and both allows muCommander to be error resilient and the commands
@@ -88,16 +79,12 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
      * </p>
      * @param  in        where to read command data from.
      * @param  b         where to send building events to.
-     * @param  encoding  encoding used by <code>in</code>.
      * @throws Exception thrown if any error occurs.
-     * @see    #read(InputStream,CommandBuilder)
      */
-    public static void read(InputStream in, CommandBuilder b, String encoding) throws Exception {
-        if(Debug.ON) Debug.trace("Starting to load custom commands.");
+    public static void read(InputStream in, CommandBuilder b) throws Exception {
         b.startBuilding();
-        try {new Parser().parse(in, new CommandReader(b), encoding);}
+        try {SAXParserFactory.newInstance().newSAXParser().parse(in, new CommandReader(b));}
         finally {b.endBuilding();}
-        if(Debug.ON) Debug.trace("Custom commands succesfully loaded.");
     }
 
 
@@ -107,9 +94,9 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
     /**
      * This method is public as an implementation side effect and should not be called directly.
      */
-    public void startElement(String uri, String name, Hashtable attributes, Hashtable attURIs) throws Exception {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // New custom command declaration.
-        if(name.equals(ELEMENT_COMMAND)) {
+        if(qName.equals(ELEMENT_COMMAND)) {
             String  alias;
             String  command;
             int     type;
@@ -117,43 +104,17 @@ public class CommandReader implements ContentHandler, CommandsXmlConstants {
             Command buffer;
 
             // Makes sure the required attributes are there.
-            if(((alias = (String)attributes.get(ATTRIBUTE_ALIAS)) == null) || ((command = (String)attributes.get(ATTRIBUTE_VALUE)) == null)) {
-                if(Debug.ON) Debug.trace("Missing attribute(s) to command declaration, ignoring.");
+            if(((alias = attributes.getValue(ATTRIBUTE_ALIAS)) == null) || ((command = attributes.getValue(ATTRIBUTE_VALUE)) == null))
                 return;
-            }
-            type    = parseCommandType((String)attributes.get(ATTRIBUTE_TYPE));
-            display = (String)attributes.get(ATTRIBUTE_DISPLAY);
+            type    = parseCommandType(attributes.getValue(ATTRIBUTE_TYPE));
+            display = attributes.getValue(ATTRIBUTE_DISPLAY);
 
 
             // Creates the command and passes it to the builder.
-            builder.addCommand(buffer = CommandParser.getCommand(alias, command, type, display));
+            try {builder.addCommand(buffer = CommandParser.getCommand(alias, command, type, display));}
+            catch(CommandException e) {throw new SAXException(e);}
         }
-        else if(Debug.ON) Debug.trace("Unexpected start of element " + name + ", ignoring.");
     }
-
-
-
-    // - Unused XML methods --------------------------------------------------
-    // -----------------------------------------------------------------------
-    /**
-     * This method is public as an implementation side effect and should not be called directly.
-     */
-    public void startDocument() {}
-
-    /**
-     * This method is public as an implementation side effect and should not be called directly.
-     */
-    public void endDocument() {}
-
-    /**
-     * This method is public as an implementation side effect and should not be called directly.
-     */
-    public void characters(String s) {}
-
-    /**
-     * This method is public as an implementation side effect and should not be called directly.
-     */
-    public void endElement(String uri, String name) {}
 
 
 

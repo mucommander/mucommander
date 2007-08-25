@@ -30,9 +30,14 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
 
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.Locator;
+import org.xml.sax.Attributes;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -306,7 +311,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
      *
      * @author Maxence Bernard
      */
-    private static class CommandBarReader implements ContentHandler {
+    private static class CommandBarReader extends DefaultHandler {
 
         /** Temporarily used for XML parsing */
         private Vector actionsV;
@@ -318,12 +323,10 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
          * Starts parsing the XML description file.
          */
         private CommandBarReader() throws Exception {
-            // Parse the XML file describing the command bar buttons and associated actions
-            InputStream in = null;
-            try {
-                in = new BackupInputStream(getDescriptionFile());
-                new Parser().parse(in, this, "UTF-8");
-            }
+            InputStream in;
+
+            in = null;
+            try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(getDescriptionFile()), this);}
             finally {
                 if(in!=null)
                     try { in.close(); }
@@ -335,7 +338,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
         // ContentHandler methods //
         ////////////////////////////
 
-        public void startDocument() throws Exception {
+        public void startDocument() {
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_RESOURCE_PATH+" parsing started");
 
             actionsV = new Vector();
@@ -343,7 +346,7 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
             alternateActionsV = new Vector();
         }
 
-        public void endDocument() throws Exception {
+        public void endDocument() {
             int nbActions = actionsV.size();
 
             actions = new Class[nbActions];
@@ -357,39 +360,29 @@ public class CommandBar extends JPanel implements ConfigurationListener, KeyList
             if(com.mucommander.Debug.ON) com.mucommander.Debug.trace(COMMAND_BAR_RESOURCE_PATH+" parsing finished");
         }
 
-        public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
-            if(name.equals("button")) {
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            if(qName.equals("button")) {
                 // Resolve action class
-                String actionClassName = (String)attValues.get("action");
-                try {
-                    actionsV.add(Class.forName(actionClassName));
-                }
+                String actionClassName = attributes.getValue("action");
+                try {actionsV.add(Class.forName(actionClassName));}
                 catch(Exception e) {if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);}
 
                 // Resolve alternate action class (if any)
-                actionClassName = (String)attValues.get("alt_action");
+                actionClassName = attributes.getValue("alt_action");
                 if(actionClassName==null)
                     alternateActionsV.add(null);
                 else
-                    try {
-                        alternateActionsV.add(Class.forName(actionClassName));
-                    }
+                    try {alternateActionsV.add(Class.forName(actionClassName));}
                     catch(Exception e) {if(Debug.ON) Debug.trace("Error in "+COMMAND_BAR_RESOURCE_PATH+": action class "+actionClassName+" not found: "+e);}
             }
-            else if(name.equals("command_bar")) {
+            else if(qName.equals("command_bar")) {
                 // Retrieve modifier key (shift by default)
                 // Note: early 0.8 beta3 nightly builds did not have this attribute, so the attribute may be null
-                String modifierString = (String)attValues.get("modifier");
+                String modifierString = attributes.getValue("modifier");
 
                 if(modifierString==null || (modifier=KeyStroke.getKeyStroke(modifierString))==null)
                     modifier = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
             }
-        }
-
-        public void endElement(String uri, String name) throws Exception {
-        }
-
-        public void characters(String s) throws Exception {
         }
     }
 }

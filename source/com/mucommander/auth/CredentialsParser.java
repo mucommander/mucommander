@@ -22,9 +22,14 @@ import com.mucommander.Debug;
 import com.mucommander.bookmark.XORCipher;
 import com.mucommander.file.FileURL;
 import com.mucommander.io.BackupInputStream;
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
 
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.Locator;
+import org.xml.sax.Attributes;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +43,7 @@ import java.util.Hashtable;
  *
  * @author Maxence Bernard
  */
-class CredentialsParser implements ContentHandler, CredentialsConstants {
+class CredentialsParser extends DefaultHandler implements CredentialsConstants {
 
     // Variables used for XML parsing
     private FileURL url;
@@ -62,9 +67,16 @@ class CredentialsParser implements ContentHandler, CredentialsConstants {
      * Parses the given XML credentials file. Should only be called by CredentialsManager.
      */
     void parse(File file) throws Exception {
-        InputStream fin = new BackupInputStream(file);
-        new Parser().parse(fin, this, "UTF-8");
-        fin.close();
+        InputStream in;
+
+        in = null;
+        try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
+        finally {
+            if(in != null) {
+                try {in.close();}
+                catch(Exception e) {}
+            }
+        }
     }
 
 
@@ -72,10 +84,10 @@ class CredentialsParser implements ContentHandler, CredentialsConstants {
     // ContentHandler implementation //
     ///////////////////////////////////
 
-    public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) throws Exception {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         this.characters = null;
 
-        if(name.equals(ELEMENT_CREDENTIALS)) {
+        if(qName.equals(ELEMENT_CREDENTIALS)) {
             // Reset parsing variables
             url = null;
             urlProperties = null;
@@ -83,19 +95,19 @@ class CredentialsParser implements ContentHandler, CredentialsConstants {
             password = null;
         }
         // Property element (properties will be set when credentials element ends
-        else if(name.equals(ELEMENT_PROPERTY)) {
+        else if(qName.equals(ELEMENT_PROPERTY)) {
             if(urlProperties==null)
                 urlProperties = new Hashtable();
-            urlProperties.put(attValues.get(ATTRIBUTE_NAME), attValues.get(ATTRIBUTE_VALUE));
+            urlProperties.put(attributes.getValue(ATTRIBUTE_NAME), attributes.getValue(ATTRIBUTE_VALUE));
         }
         // Root element, the 'encryption' attribute specifies which encoding was used to encrypt passwords
-        else if(name.equals(ELEMENT_ROOT)) {
-            encryptionMethod = (String)attValues.get("encryption");
+        else if(qName.equals(ELEMENT_ROOT)) {
+            encryptionMethod = attributes.getValue("encryption");
         }
     }
 
-    public void endElement(String uri, String name) throws Exception {
-        if(name.equals(ELEMENT_CREDENTIALS)) {
+    public void endElement(String uri, String localName, String qName) throws SAXException {
+        if(qName.equals(ELEMENT_CREDENTIALS)) {
             if(url ==null || login ==null || password ==null) {
                 if(Debug.ON) Debug.trace("Missing value, credentials ignored: url="+ url +" login="+ login +" password="+ password);
                 return;
@@ -112,9 +124,7 @@ class CredentialsParser implements ContentHandler, CredentialsConstants {
             }
 
             // Decrypt password
-            try {
-                password = XORCipher.decryptXORBase64(password);
-            }
+            try {password = XORCipher.decryptXORBase64(password);}
             catch(IOException e) {
                 if(Debug.ON) Debug.trace("Password could not be decrypted: "+ password +", credentials will be ignored");
                 return;
@@ -123,29 +133,15 @@ class CredentialsParser implements ContentHandler, CredentialsConstants {
             // Add credentials to persistent credentials list
             CredentialsManager.getPersistentCredentials().add(new MappedCredentials(login, password, url, true));
         }
-        else if(name.equals(ELEMENT_URL)) {
-            try {
-                url = new FileURL(characters);
-            }
-            catch(MalformedURLException e) {
-                if(Debug.ON) Debug.trace("Malformed URL: "+characters+", location will be ignored");
-            }
+        else if(qName.equals(ELEMENT_URL)) {
+            try {url = new FileURL(characters.trim());}
+            catch(MalformedURLException e) {if(Debug.ON) Debug.trace("Malformed URL: "+characters+", location will be ignored");}
         }
-        else if(name.equals(ELEMENT_LOGIN)) {
-            login = characters;
-        }
-        else if(name.equals(ELEMENT_PASSWORD)) {
-            password = characters;
-        }
+        else if(qName.equals(ELEMENT_LOGIN))
+            login = characters.trim();
+        else if(qName.equals(ELEMENT_PASSWORD))
+            password = characters.trim();
     }
 
-    public void characters(String s) throws Exception {
-        this.characters = s.trim();
-    }
-
-    public void startDocument() throws Exception {
-    }
-
-    public void endDocument() throws Exception {
-    }
+    public void characters(char[] ch, int offset, int length) {this.characters = new String(ch, offset, length);}
 }

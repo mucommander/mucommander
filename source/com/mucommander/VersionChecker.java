@@ -18,9 +18,13 @@
 
 package com.mucommander;
 
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
-
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.Locator;
+import org.xml.sax.Attributes;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -67,7 +71,7 @@ import java.util.Hashtable;
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class VersionChecker implements ContentHandler {
+public class VersionChecker extends DefaultHandler {
     // - XML structure ----------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Root XML element. */
@@ -120,7 +124,6 @@ public class VersionChecker implements ContentHandler {
      * @exception Exception thrown if any error happens while retrieving the remote version.
      */
     public static VersionChecker getInstance() throws Exception {
-        Parser         parser; // Used to parse the XML file.
         URLConnection  conn;   // Connection to the remote XML file.
         InputStream    in;     // Input stream on the remote XML file.
         VersionChecker instance;
@@ -129,14 +132,13 @@ public class VersionChecker implements ContentHandler {
             Debug.trace("Opening connection to " + RuntimeConstants.VERSION_URL);
 
         // Initialisation.
-        parser = new Parser();
         conn   = new URL(RuntimeConstants.VERSION_URL).openConnection();
         conn.setRequestProperty("user-agent", PlatformManager.USER_AGENT);
 
         // Parses the remote XML file using UTF-8 encoding.
         conn.connect();
         in = conn.getInputStream();
-        parser.parse(in, instance = new VersionChecker(), "UTF-8");
+        SAXParserFactory.newInstance().newSAXParser().parse(in, instance = new VersionChecker());
         in.close();
 
         // Makes sure we retrieved the information we were looking for.
@@ -208,25 +210,25 @@ public class VersionChecker implements ContentHandler {
     /**
      * Notifies the parser of CDATA.
      */
-    public void characters(String s) {
+    public void characters(char[] ch, int offset, int length) {
         if(state == STATE_VERSION)
-            latestVersion += s;
+            latestVersion += new String(ch, offset, length);
         else if(state == STATE_URL)
-            downloadURL += s;
+            downloadURL += new String(ch, offset, length);
         else if(state == STATE_DATE)
-            releaseDate += s;
+            releaseDate += new String(ch, offset, length);
     }
 
     /**
      * Notifies the parser that a new tag is starting.
      */
-    public void startElement(String uri, String name, Hashtable attValues, Hashtable attURIs) {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // Checks whether we know the tag and updates the current state.
-        if(name.equals(VERSION_ELEMENT))
+        if(qName.equals(VERSION_ELEMENT))
             state = STATE_VERSION;
-        else if(name.equals(URL_ELEMENT))
+        else if(qName.equals(URL_ELEMENT))
             state = STATE_URL;
-        else if(name.equals(DATE_ELEMENT))
+        else if(qName.equals(DATE_ELEMENT))
             state = STATE_DATE;
         else
             state = STATE_UNKNOWN;
@@ -235,7 +237,7 @@ public class VersionChecker implements ContentHandler {
     /**
      * Notifies the parser that the current element is finished.
      */
-    public void endElement(String uri, String name) {state = STATE_UNKNOWN;}
+    public void endElement(String uri, String localName, String qName) throws SAXException {state = STATE_UNKNOWN;}
 
     /**
      * Notifies the parser that XML parsing is finished.

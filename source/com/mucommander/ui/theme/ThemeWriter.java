@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.theme;
 
-import com.mucommander.xml.writer.XmlAttributes;
-import com.mucommander.xml.writer.XmlWriter;
+import com.mucommander.xml.XmlAttributes;
+import com.mucommander.xml.XmlWriter;
 
 import java.awt.*;
 import java.io.IOException;

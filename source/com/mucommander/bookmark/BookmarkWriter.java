@@ -18,7 +18,7 @@
 
 package com.mucommander.bookmark;
 
-import com.mucommander.xml.writer.XmlWriter;
+import com.mucommander.xml.XmlWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;

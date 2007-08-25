@@ -19,16 +19,21 @@
 package com.mucommander.command;
 
 import com.mucommander.Debug;
-import com.mucommander.xml.parser.ContentHandler;
-import com.mucommander.xml.parser.Parser;
 
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.Locator;
+import org.xml.sax.Attributes;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.InputStream;
 import java.util.Hashtable;
 
 /**
  * Class used to parse custom associations XML files.
  * <p>
- * Association file parsing is done through the {@link #read(InputStream,AssociationBuilder,String) read} method, which is
+ * Association file parsing is done through the {@link #read(InputStream,AssociationBuilder) read} method, which is
  * the only way to interact with this class.
  * </p>
  * <p>
@@ -40,7 +45,7 @@ import java.util.Hashtable;
  * @see    AssociationWriter
  * @author Nicolas Rinaudo
  */
-public class AssociationReader implements ContentHandler, AssociationsXmlConstants {
+public class AssociationReader extends DefaultHandler implements AssociationsXmlConstants {
     // - Instance variables --------------------------------------------------
     // -----------------------------------------------------------------------
     /** Where to send building messages. */
@@ -64,18 +69,6 @@ public class AssociationReader implements ContentHandler, AssociationsXmlConstan
     /**
      * Parses the content of the specified input stream.
      * <p>
-     * This is a convenience method, and is equivalent to calling <code>AssociationReader.read(in, b, "UTF-8")</code>.
-     * </p>
-     * @param  in        where to read association data from.
-     * @param  b         where to send building events to.
-     * @throws Exception thrown if any error occurs.
-     * @see    #read(InputStream,AssociationBuilder,String)
-     */
-    public static void read(InputStream in, AssociationBuilder b) throws Exception {read(in, b, "UTF-8");}
-
-    /**
-     * Parses the content of the specified input stream.
-     * <p>
      * This method will go through the specified input stream and notify the builder of any new association declaration it
      * encounters. Note that parsing is done in a very lenient fashion, and perfectly invalid XML files might not raise
      * an exception. This is not a flaw in the parser, and both allows muCommander to be error resilient and the associations
@@ -89,16 +82,13 @@ public class AssociationReader implements ContentHandler, AssociationsXmlConstan
      * </p>
      * @param  in        where to read association data from.
      * @param  b         where to send building events to.
-     * @param  encoding  encoding used by <code>in</code>.
      * @throws Exception thrown if any error occurs.
      * @see    #read(InputStream,AssociationBuilder)
      */
-    public static void read(InputStream in, AssociationBuilder b, String encoding) throws Exception {
-        if(Debug.ON) Debug.trace("Starting to load command associations.");
+    public static void read(InputStream in, AssociationBuilder b) throws Exception {
         b.startBuilding();
-        try {new Parser().parse(in, new AssociationReader(b), encoding);}
+        try {SAXParserFactory.newInstance().newSAXParser().parse(in, new AssociationReader(b));}
         finally {b.endBuilding();}
-        if(Debug.ON) Debug.trace("Command associations succesfully loaded.");
     }
 
 
@@ -108,101 +98,69 @@ public class AssociationReader implements ContentHandler, AssociationsXmlConstan
     /**
      * This method is public as an implementation side effect and should not be called directly.
      */
-    public void startElement(String uri, String name, Hashtable attributes, Hashtable attURIs) throws Exception {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         String buffer;
 
-        if(!isInAssociation) {
-            if(name.equals(ELEMENT_ASSOCIATION)) {
-                // Makes sure the required attributes are present.
-                if((buffer = (String)attributes.get(ATTRIBUTE_COMMAND)) == null) {
-                    if(Debug.ON) Debug.trace("Missing command attribute in association declaration. Ignoring association.");
-                    return;
-                }
+        try {
+            if(!isInAssociation) {
+                if(qName.equals(ELEMENT_ASSOCIATION)) {
+                    // Makes sure the required attributes are present.
+                    if((buffer = attributes.getValue(ATTRIBUTE_COMMAND)) == null)
+                        return;
 
-                isInAssociation = true;
-                builder.startAssociation(buffer);
+                    isInAssociation = true;
+                    builder.startAssociation(buffer);
+                }
             }
-            else if(Debug.ON) Debug.trace("Unexpected start of element " + name + ", ignoring.");
-        }
-        else {
-            if(name.equals(ELEMENT_MASK)) {
-                String caseSensitive;
+            else {
+                if(qName.equals(ELEMENT_MASK)) {
+                    String caseSensitive;
 
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
-                    if(Debug.ON) Debug.trace("Missing value in file mask declaration. Ignoring mask.");
-                    return;
+                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                        return;
+                    if((caseSensitive = attributes.getValue(ATTRIBUTE_CASE_SENSITIVE)) != null)
+                        builder.setMask(buffer, caseSensitive.equals(VALUE_TRUE));
+                    else
+                        builder.setMask(buffer, true);
                 }
-                if((caseSensitive = (String)attributes.get(ATTRIBUTE_CASE_SENSITIVE)) != null)
-                    builder.setMask(buffer, caseSensitive.equals(VALUE_TRUE));
-                else
-                    builder.setMask(buffer, true);
-            }
-            else if(name.equals(ELEMENT_IS_HIDDEN)) {
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
-                    if(Debug.ON) Debug.trace("Missing value in is_hidden declaration. Ignoring filter.");
-                    return;
+                else if(qName.equals(ELEMENT_IS_HIDDEN)) {
+                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                        return;
+                    builder.setIsHidden(buffer.equals(VALUE_TRUE));
                 }
-                builder.setIsHidden(buffer.equals(VALUE_TRUE));
-            }
-            else if(name.equals(ELEMENT_IS_SYMLINK)) {
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
-                    if(Debug.ON) Debug.trace("Missing value in is_symlink declaration. Ignoring filter.");
-                    return;
+                else if(qName.equals(ELEMENT_IS_SYMLINK)) {
+                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                        return;
+                    builder.setIsSymlink(buffer.equals(VALUE_TRUE));
                 }
-                builder.setIsSymlink(buffer.equals(VALUE_TRUE));
-            }
-            else if(name.equals(ELEMENT_IS_READABLE)) {
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
-                    if(Debug.ON) Debug.trace("Missing value in is_readable declaration. Ignoring filter.");
-                    return;
+                else if(qName.equals(ELEMENT_IS_READABLE)) {
+                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                        return;
+                    builder.setIsReadable(buffer.equals(VALUE_TRUE));
                 }
-                builder.setIsReadable(buffer.equals(VALUE_TRUE));
-            }
-            else if(name.equals(ELEMENT_IS_WRITABLE)) {
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
-                    if(Debug.ON) Debug.trace("Missing value in is_writable declaration. Ignoring filter.");
-                    return;
+                else if(qName.equals(ELEMENT_IS_WRITABLE)) {
+                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                        return;
+                    builder.setIsWritable(buffer.equals(VALUE_TRUE));
                 }
-                builder.setIsWritable(buffer.equals(VALUE_TRUE));
-            }
-            else if(name.equals(ELEMENT_IS_EXECUTABLE)) {
-                if((buffer = (String)attributes.get(ATTRIBUTE_VALUE)) == null) {
-                    if(Debug.ON) Debug.trace("Missing value in is_executable declaration. Ignoring filter.");
-                    return;
+                else if(qName.equals(ELEMENT_IS_EXECUTABLE)) {
+                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                        return;
+                    builder.setIsExecutable(buffer.equals(VALUE_TRUE));
                 }
-                builder.setIsExecutable(buffer.equals(VALUE_TRUE));
             }
-            else if(Debug.ON) Debug.trace("Unexpected start of element " + name + ", ignoring.");
         }
+        catch(CommandException e) {throw new SAXException(e);}
     }
 
     /**
      * This method is public as an implementation side effect, but should not be called directly.
      */
-    public void endElement(String uri, String name) throws Exception {
-        if(name.equals(ELEMENT_ASSOCIATION) && isInAssociation) {
-            builder.endAssociation();
+    public void endElement(String uri, String localName, String qName) throws SAXException {
+        if(qName.equals(ELEMENT_ASSOCIATION) && isInAssociation) {
+            try {builder.endAssociation();}
+            catch(CommandException e) {throw new SAXException(e);}
             isInAssociation = false;
         }
-        else if(Debug.ON) Debug.trace("Unexpected end of element " + name + ", ignoring.");
     }
-
-
-
-    // - Unused XML methods --------------------------------------------------
-    // -----------------------------------------------------------------------
-    /**
-     * This method is public as an implementation side effect, but should not be called directly.
-     */
-    public void startDocument() throws Exception {isInAssociation = false;}
-
-    /**
-     * This method is public as an implementation side effect, but should not be called directly.
-     */
-    public void endDocument() throws Exception {}
-
-    /**
-     * This method is public as an implementation side effect, but should not be called.
-     */
-    public void characters(String s) {}
 }

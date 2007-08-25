@@ -19,8 +19,8 @@
 package com.mucommander.auth;
 
 import com.mucommander.file.FileURL;
-import com.mucommander.xml.writer.XmlAttributes;
-import com.mucommander.xml.writer.XmlWriter;
+import com.mucommander.xml.XmlAttributes;
+import com.mucommander.xml.XmlWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;

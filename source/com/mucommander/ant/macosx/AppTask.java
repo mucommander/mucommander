@@ -18,8 +18,8 @@
 
 package com.mucommander.ant.macosx;
 
-import com.mucommander.xml.writer.XmlAttributes;
-import com.mucommander.xml.writer.XmlWriter;
+import com.mucommander.xml.XmlAttributes;
+import com.mucommander.xml.XmlWriter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
