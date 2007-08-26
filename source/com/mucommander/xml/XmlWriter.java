@@ -176,8 +176,8 @@ public class XmlWriter {
     /**
      * Writes an element opening sequence.
      * <p>
-     * Elements opened using this method will not have any attribute, and will
-     * need to be closed using an {@link #endElement(String) endElement} call.
+     * This is a convenience method and is strictly equivalent to calling
+     * <code>{@link #startElement(String,boolean) startElement}(name, false)</code>.
      * </p>
      * @param name name of the element to open.
      * @see        #startElement(String,XmlAttributes)
@@ -186,6 +186,18 @@ public class XmlWriter {
      */
     public void startElement(String name) {startElement(name, false, null, false);}
 
+    /**
+     * Writes an element opening sequence.
+     * <p>
+     * Elements opened using this method will not have any attribute, and will
+     * need to be closed using an {@link #endElement(String) endElement} call.
+     * </p>
+     * @param name      name of the element to open.
+     * @param lineBreak if <code>true</code>, a line break will be printed after the element declaration.
+     * @see             #startElement(String,XmlAttributes)
+     * @see             #writeStandAloneElement(String)
+     * @see             #writeStandAloneElement(String,XmlAttributes)
+     */
     public void startElement(String name, boolean lineBreak) {startElement(name, false, null, lineBreak);}
 
     /**
@@ -193,6 +205,9 @@ public class XmlWriter {
      * <p>
      * Elements opened using this method will not have any attributes, and will be
      * closed immediately.
+     * </p>
+     * <p>
+     * A line break will always be printed after a stand-alone element.
      * </p>
      * @param name name of the element to write.
      * @see        #startElement(String,XmlAttributes)
@@ -204,7 +219,8 @@ public class XmlWriter {
     /**
      * Writes an element opening sequence.
      * <p>
-     * Elements opened using this method will need to be closed using an {@link #endElement(String) endElement} call.
+     * This is a covenience method and is stricly equivalent to calling
+     * <code>{@link #startElement(String,XmlAttributes,boolean) startElement}(name, attributes, false)</code>.
      * </p>
      * @param name       name of the element to open.
      * @param attributes attributes that this element will have.
@@ -214,12 +230,27 @@ public class XmlWriter {
      */
     public void startElement(String name, XmlAttributes attributes) {startElement(name, false, attributes, false);}
 
+    /**
+     * Writes an element opening sequence.
+     * <p>
+     * Elements opened using this method will need to be closed using an {@link #endElement(String) endElement} call.
+     * </p>
+     * @param name       name of the element to open.
+     * @param attributes attributes that this element will have.
+     * @param lineBreak  if <code>true</code>, a line break will be printed after the element declaration.
+     * @see              #startElement(String)
+     * @see              #writeStandAloneElement(String)
+     * @see              #writeStandAloneElement(String,XmlAttributes)
+     */
     public void startElement(String name, XmlAttributes attributes, boolean lineBreak) {startElement(name, false, attributes, lineBreak);}
 
     /**
      * Writes a stand-alone element.
      * <p>
      * Elements opened using this method will not need to be closed
+     * </p>
+     * <p>
+     * A line break will always be printed after a stand-alone element.
      * </p>
      * @param name       name of the element to write.
      * @param attributes attributes that this element will be closed immediately.
