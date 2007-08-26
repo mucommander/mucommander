@@ -271,7 +271,7 @@ public abstract class AbstractFile implements FilePermissions {
     /**
      * Returns <code>true</code> if this file is browsable. A file is considered browsable if it contains children files
      * that can be exposed by calling the <code>ls()</code> methods. {@link AbstractArchiveFile} implementations will
-     * usually return <code>true<code>, as will directories (directories are always browsable).
+     * usually return <code>true</code>, as will directories (directories are always browsable).
      *
      * @return true if this file is browsable
      */
