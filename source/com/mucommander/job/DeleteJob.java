@@ -131,15 +131,14 @@ public class DeleteJob extends FileJob {
         if(getState()==INTERRUPTED)
             return false;
 
-        String filePath = file.getAbsolutePath();
-        filePath = filePath.substring(baseSourceFolder.getAbsolutePath(false).length()+1, filePath.length());
-
         int ret;
         boolean followSymlink = false;
         // Delete files recursively, only if trash is not used.
         if(!moveToTrash && file.isDirectory()) {
             // If folder is a symlink, asks the user what to do
             boolean isSymlink = file.isSymlink();
+            String filePath = file.getAbsolutePath();
+            filePath = filePath.substring(baseSourceFolder.getAbsolutePath(false).length()+1, filePath.length());
             if(isSymlink) {
                 ret = showSymlinkDialog(filePath, file.getCanonicalPath());
                 if(ret==-1 || ret==CANCEL_ACTION) {
