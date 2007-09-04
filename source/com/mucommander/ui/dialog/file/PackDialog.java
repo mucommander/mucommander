@@ -97,7 +97,7 @@ public class PackDialog extends FocusDialog implements ActionListener, ItemListe
                 break;
             }
         }
-        oldFormatIndex = initialFormat;
+        oldFormatIndex = initialFormatIndex;
 		
         Container contentPane = getContentPane();
 		
