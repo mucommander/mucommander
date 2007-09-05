@@ -21,6 +21,7 @@ package com.mucommander.conf;
 import com.mucommander.xml.XmlWriter;
 
 import java.io.OutputStream;
+import java.io.IOException;
 
 /**
  * Implementation of {@link ConfigurationWriter} used to write XML configuration streams.
@@ -57,9 +58,13 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
     // -------------------------------------------------------------------------
     /**
      * Sets the output stream in which to write the XML data.
-     * @param out where to write the XML data.
+     * @param  out                    where to write the XML data.
+     * @throws ConfigurationException as a wrapper for any <code>IOException</code> that might have occured. 
      */
-    public void setOutputStream(OutputStream out) {this.out = new XmlWriter(out);}
+    public void setOutputStream(OutputStream out) throws ConfigurationException {
+        try {this.out = new XmlWriter(out);}
+        catch(IOException e) {throw new ConfigurationException(e);}
+    }
 
 
 
@@ -67,40 +72,60 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
     // -------------------------------------------------------------------------
     /**
      * Starts a new configuration section.
-     * @param name name of the new section.
+     * @param  name                   name of the new section.
+     * @throws ConfigurationException as a wrapper for any <code>IOException</code> that might have occured. 
      */
-    public void startSection(String name) {
-        out.startElement(name);
-        out.println();
+    public void startSection(String name) throws ConfigurationException {
+        try {
+            out.startElement(name);
+            out.println();
+        }
+        catch(IOException e) {throw new ConfigurationException(e);}
     }
 
     /**
      * Ends a configuration section.
-     * @param name name of the closed section.
+     * @param  name                   name of the closed section.
+     * @throws ConfigurationException as a wrapper for any <code>IOException</code> that might have occured. 
      */
-    public void endSection(String name) {out.endElement(name);}
+    public void endSection(String name) throws ConfigurationException {
+        try {out.endElement(name);}
+        catch(IOException e) {throw new ConfigurationException(e);}
+    }
 
     /**
      * Creates a new variable in the current section.
-     * @param name  name of the new variable.
-     * @param value value of the new variable.
+     * @param  name                   name of the new variable.
+     * @param  value                  value of the new variable.
+     * @throws ConfigurationException as a wrapper for any <code>IOException</code> that might have occured. 
      */
-    public void addVariable(String name, String value) {
-        out.startElement(name);
-        out.writeCData(value);
-        out.endElement(name);
+    public void addVariable(String name, String value) throws ConfigurationException {
+        try {
+            out.startElement(name);
+            out.writeCData(value);
+            out.endElement(name);
+        }
+        catch(IOException e) {throw new ConfigurationException(e);}
     }
 
     /**
      * Writes the XML header.
+     * @throws ConfigurationException as a wrapper for any <code>IOException</code> that might have occured. 
      */
-    public void startConfiguration() {
-        out.startElement(ROOT_ELEMENT);
-        out.println();
+    public void startConfiguration() throws ConfigurationException {
+        try {
+            out.startElement(ROOT_ELEMENT);
+            out.println();
+        }
+        catch(IOException e) {throw new ConfigurationException(e);}
     }
 
     /**
      * Writes the XML footer.
+     * @throws ConfigurationException as a wrapper for any <code>IOException</code> that might have occured. 
      */
-    public void endConfiguration() {out.endElement(ROOT_ELEMENT);}
+    public void endConfiguration() throws ConfigurationException {
+        try {out.endElement(ROOT_ELEMENT);}
+        catch(IOException e) {throw new ConfigurationException(e);}
+    }
 }
