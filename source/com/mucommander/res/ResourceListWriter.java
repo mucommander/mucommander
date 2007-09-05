@@ -41,13 +41,15 @@ public class ResourceListWriter implements XmlConstants {
     // -------------------------------------------------------------------
     /**
      * Opens a new resource list writer on the specified output stream.
-     * @param out where to write the resource list.
+     * @param  out         where to write the resource list.
+     * @throws IOException if an I/O error occurs.
      */
-    public ResourceListWriter(OutputStream out) {this.out = new XmlWriter(out);}
+    public ResourceListWriter(OutputStream out) throws IOException {this.out = new XmlWriter(out);}
 
     /**
      * Opens a new resource list writer on the specified file.
-     * @param file where to write the resource list.
+     * @param  file        where to write the resource list.
+     * @throws IOException if an I/O error occurs.
      */
     public ResourceListWriter(File file) throws IOException {out = new XmlWriter(file);}
 
@@ -57,17 +59,19 @@ public class ResourceListWriter implements XmlConstants {
     // -------------------------------------------------------------------
     /**
      * Starts the list.
+     * @throws IOException if an I/O error occurs.
      */
-    public void startList() {
+    public void startList() throws IOException {
         out.startElement(ROOT_ELEMENT);
         out.println();
     }
 
     /**
      * Adds the specified path to the list.
-     * @param path path to add to the list.
+     * @param  path        path to add to the list.
+     * @throws IOException if an I/O error occurs.
      */
-    public void addFile(String path) {
+    public void addFile(String path) throws IOException {
         XmlAttributes attributes;
 
         attributes = new XmlAttributes();
@@ -77,13 +81,13 @@ public class ResourceListWriter implements XmlConstants {
 
     /**
      * Ends the list.
+     * @throws IOException if an I/O error occurs.
      */
-    public void endList() {
-        out.endElement(ROOT_ELEMENT);
-    }
+    public void endList() throws IOException {out.endElement(ROOT_ELEMENT);}
 
     /**
      * Closes the stream used to write the list.
+     * @throws IOException if an I/O error occurs.
      */
     public void close() throws IOException {out.close();}
 }
