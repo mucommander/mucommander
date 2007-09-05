@@ -1472,7 +1472,7 @@ public class FileTable extends JTable implements Columns, MouseListener, MouseMo
 
             // Select filename without extension, only if filename is not empty (unlike '.DS_Store' for example)
             String fieldText = filenameField.getText();
-            int extPos = fieldText.indexOf('.');
+            int extPos = fieldText.lastIndexOf('.');
             // Text is selected so that user can directly type and replace path
             filenameField.setSelectionStart(0);
             filenameField.setSelectionEnd(extPos>0?extPos:fieldText.length());
