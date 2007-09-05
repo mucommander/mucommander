@@ -22,6 +22,7 @@ import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 
 import java.io.OutputStream;
+import java.io.IOException;
 
 /**
  * Class used to write custom commands XML files.
@@ -45,7 +46,7 @@ public class CommandWriter implements CommandsXmlConstants, CommandBuilder {
      * Builds a new writer that will send data to the specified output stream.
      * @param stream where to write the XML data.
      */
-    public CommandWriter(OutputStream stream) {out = new XmlWriter(stream);}
+    public CommandWriter(OutputStream stream) throws IOException {out = new XmlWriter(stream);}
 
 
 
@@ -54,21 +55,27 @@ public class CommandWriter implements CommandsXmlConstants, CommandBuilder {
     /**
      * Opens the root XML element.
      */
-    public void startBuilding() {
-        out.startElement(ELEMENT_ROOT);
-        out.println();
+    public void startBuilding() throws CommandException {
+        try {
+            out.startElement(ELEMENT_ROOT);
+            out.println();
+        }
+        catch(IOException e) {throw new CommandException(e);}
     }
 
     /**
      * Closes the root XML element.
      */
-    public void endBuilding() {out.endElement(ELEMENT_ROOT);}
+    public void endBuilding() throws CommandException {
+        try {out.endElement(ELEMENT_ROOT);}
+        catch(IOException e) {throw new CommandException(e);}
+    }
 
     /**
      * Writes the specified command's XML description.
      * @param command command that should be written.
      */
-    public void addCommand(Command command) {
+    public void addCommand(Command command) throws CommandException {
         XmlAttributes attributes;
 
         // Builds the XML description of the command.
@@ -83,6 +90,7 @@ public class CommandWriter implements CommandsXmlConstants, CommandBuilder {
             attributes.add(ATTRIBUTE_DISPLAY, command.getDisplayName());
 
         // Writes the XML description.
-        out.writeStandAloneElement(ELEMENT_COMMAND, attributes);
+        try {out.writeStandAloneElement(ELEMENT_COMMAND, attributes);}
+        catch(IOException e) {throw new CommandException(e);}
     }
 }

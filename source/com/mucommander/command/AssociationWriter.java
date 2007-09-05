@@ -22,6 +22,7 @@ import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 
 import java.io.OutputStream;
+import java.io.IOException;
 
 /**
  * Class used to write custom associations XML files.
@@ -43,9 +44,10 @@ public class AssociationWriter implements AssociationsXmlConstants, AssociationB
     // -----------------------------------------------------------------------
     /**
      * Builds a new writer that will send data to the specified output stream.
-     * @param stream where to write the XML data.
+     * @param  stream      where to write the XML data.
+     * @throws IOException if an I/O error occurs.
      */
-    public AssociationWriter(OutputStream stream) {out = new XmlWriter(stream);}
+    public AssociationWriter(OutputStream stream) throws IOException {out = new XmlWriter(stream);}
 
 
 
@@ -54,28 +56,41 @@ public class AssociationWriter implements AssociationsXmlConstants, AssociationB
     /**
      * Opens the root XML element.
      */
-    public void startBuilding() {
-        out.startElement(ELEMENT_ROOT);
-        out.println();
+    public void startBuilding() throws CommandException {
+        try {
+            out.startElement(ELEMENT_ROOT);
+            out.println();
+        }
+        catch(IOException e) {throw new CommandException(e);}
     }
 
     /**
      * Closes the root XML element.
      */
-    public void endBuilding() {out.endElement(ELEMENT_ROOT);}
+    public void endBuilding() throws CommandException {
+        try {out.endElement(ELEMENT_ROOT);}
+        catch(IOException e) {throw new CommandException(e);}
+    }
 
-    public void startAssociation(String command) {
+    public void startAssociation(String command) throws CommandException {
         XmlAttributes attr;
 
         attr = new XmlAttributes();
         attr.add(ATTRIBUTE_COMMAND, command);
-        out.startElement(ELEMENT_ASSOCIATION, attr);
-        out.println();
+
+        try {
+            out.startElement(ELEMENT_ASSOCIATION, attr);
+            out.println();
+        }
+        catch(IOException e) {throw new CommandException(e);}
     }
 
-    public void endAssociation() {out.endElement(ELEMENT_ASSOCIATION);}
+    public void endAssociation() throws CommandException {
+        try {out.endElement(ELEMENT_ASSOCIATION);}
+        catch(IOException e) {throw new CommandException(e);}
+    }
 
-    public void setMask(String mask, boolean isCaseSensitive) {
+    public void setMask(String mask, boolean isCaseSensitive) throws CommandException {
         XmlAttributes attr;
 
         attr = new XmlAttributes();
@@ -83,51 +98,57 @@ public class AssociationWriter implements AssociationsXmlConstants, AssociationB
         if(!isCaseSensitive)
             attr.add(ATTRIBUTE_CASE_SENSITIVE, VALUE_FALSE);
 
-        out.writeStandAloneElement(ELEMENT_MASK, attr);
+        try {out.writeStandAloneElement(ELEMENT_MASK, attr);}
+        catch(IOException e) {throw new CommandException(e);}
     }
 
-    public void setIsSymlink(boolean isSymlink) {
+    public void setIsSymlink(boolean isSymlink) throws CommandException {
         XmlAttributes attr;
 
         attr = new XmlAttributes();
         attr.add(ATTRIBUTE_VALUE, isSymlink ? VALUE_TRUE : VALUE_FALSE);
 
-        out.writeStandAloneElement(ELEMENT_IS_SYMLINK, attr);
+        try {out.writeStandAloneElement(ELEMENT_IS_SYMLINK, attr);}
+        catch(IOException e) {throw new CommandException(e);}
     }
 
-    public void setIsHidden(boolean isHidden) {
+    public void setIsHidden(boolean isHidden) throws CommandException {
         XmlAttributes attr;
 
         attr = new XmlAttributes();
         attr.add(ATTRIBUTE_VALUE, isHidden ? VALUE_TRUE : VALUE_FALSE);
 
-        out.writeStandAloneElement(ELEMENT_IS_HIDDEN, attr);
+        try {out.writeStandAloneElement(ELEMENT_IS_HIDDEN, attr);}
+        catch(IOException e) {throw new CommandException(e);}
     }
 
-    public void setIsReadable(boolean isReadable) {
+    public void setIsReadable(boolean isReadable) throws CommandException {
         XmlAttributes attr;
 
         attr = new XmlAttributes();
         attr.add(ATTRIBUTE_VALUE, isReadable ? VALUE_TRUE : VALUE_FALSE);
 
-        out.writeStandAloneElement(ELEMENT_IS_READABLE, attr);
+        try {out.writeStandAloneElement(ELEMENT_IS_READABLE, attr);}
+        catch(IOException e) {throw new CommandException(e);}
     }
 
-    public void setIsWritable(boolean isWritable) {
+    public void setIsWritable(boolean isWritable) throws CommandException {
         XmlAttributes attr;
 
         attr = new XmlAttributes();
         attr.add(ATTRIBUTE_VALUE, isWritable ? VALUE_TRUE : VALUE_FALSE);
 
-        out.writeStandAloneElement(ELEMENT_IS_WRITABLE, attr);
+        try {out.writeStandAloneElement(ELEMENT_IS_WRITABLE, attr);}
+        catch(IOException e) {throw new CommandException(e);}
     }
 
-    public void setIsExecutable(boolean isExecutable) {
+    public void setIsExecutable(boolean isExecutable) throws CommandException {
         XmlAttributes attr;
 
         attr = new XmlAttributes();
         attr.add(ATTRIBUTE_VALUE, isExecutable ? VALUE_TRUE : VALUE_FALSE);
 
-        out.writeStandAloneElement(ELEMENT_IS_EXECUTABLE, attr);
+        try {out.writeStandAloneElement(ELEMENT_IS_EXECUTABLE, attr);}
+        catch(IOException e) {throw new CommandException(e);}
     }
 }

@@ -62,13 +62,13 @@ public interface CommandBuilder {
      * Notifies the builder that command building is about to start.
      * @throws CommandException if an error occurs.
      */
-    public void startBuilding();
+    public void startBuilding() throws CommandException;
 
     /**
      * Notifies the builder that command building is finished.
      * @throws CommandException if an error occurs.
      */
-    public void endBuilding();
+    public void endBuilding() throws CommandException;
 
     /**
      * Notifies the builder that a new command has been found.
