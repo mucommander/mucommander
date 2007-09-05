@@ -19,7 +19,9 @@
 package com.mucommander.ant.macosx;
 
 import com.mucommander.xml.XmlWriter;
+
 import org.apache.tools.ant.BuildException;
+import java.io.IOException;
 
 /**
  * Ant representation of the value of an <code>integer</code> property.
@@ -122,8 +124,11 @@ class IntegerValue implements InfoElement {
         if(value == null)
             throw new BuildException("Uninitialised integer property.");
 
-        out.startElement(ELEMENT_INTEGER);
-        out.writeCData(value.toString());
-        out.endElement(ELEMENT_INTEGER);
+        try {
+            out.startElement(ELEMENT_INTEGER);
+            out.writeCData(value.toString());
+            out.endElement(ELEMENT_INTEGER);
+        }
+        catch(IOException e) {throw new BuildException(e);}
     }
 }

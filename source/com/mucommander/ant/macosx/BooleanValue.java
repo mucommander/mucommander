@@ -19,7 +19,9 @@
 package com.mucommander.ant.macosx;
 
 import com.mucommander.xml.XmlWriter;
+
 import org.apache.tools.ant.BuildException;
+import java.io.IOException;
 
 /**
  *
@@ -34,9 +36,12 @@ class BooleanValue implements InfoElement {
     public void setValue(boolean b) {value = b;}
 
     public void write(XmlWriter out) throws BuildException {
-        if(value)
-            out.writeStandAloneElement(ELEMENT_TRUE);
-        else
-            out.writeStandAloneElement(ELEMENT_FALSE);
+        try {
+            if(value)
+                out.writeStandAloneElement(ELEMENT_TRUE);
+            else
+                out.writeStandAloneElement(ELEMENT_FALSE);
+        }
+        catch(IOException e) {throw new BuildException(e);}
     }
 }

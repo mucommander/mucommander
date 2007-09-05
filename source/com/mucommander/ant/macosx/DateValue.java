@@ -19,8 +19,9 @@
 package com.mucommander.ant.macosx;
 
 import com.mucommander.xml.XmlWriter;
-import org.apache.tools.ant.BuildException;
 
+import org.apache.tools.ant.BuildException;
+import java.io.IOException;
 import java.util.Calendar;
 
 /**
@@ -171,35 +172,38 @@ class DateValue implements InfoElement {
             }
         }
 
-        // Writes the date value.
-        out.startElement(ELEMENT_DATE);
-        writeValue(out, year, 4);
+        try {
+            // Writes the date value.
+            out.startElement(ELEMENT_DATE);
+            writeValue(out, year, 4);
 
-        // Writes the month and day information if they were specified.
-        if(month != null) {
-            out.writeCData("-");
-            writeValue(out, month, 2);
-            if(day != null) {
+            // Writes the month and day information if they were specified.
+            if(month != null) {
                 out.writeCData("-");
-                writeValue(out, day, 2);
-            }
-        }
-
-        // Writes the time information if it was specified.
-        if(hours != null) {
-            out.writeCData("T");
-            writeValue(out, hours, 2);
-            if(minutes != null) {
-                out.writeCData(":");
-                writeValue(out, minutes, 2);
-                if(seconds != null) {
-                    out.writeCData(":");
-                    writeValue(out, seconds, 2);
+                writeValue(out, month, 2);
+                if(day != null) {
+                    out.writeCData("-");
+                    writeValue(out, day, 2);
                 }
             }
+
+            // Writes the time information if it was specified.
+            if(hours != null) {
+                out.writeCData("T");
+                writeValue(out, hours, 2);
+                if(minutes != null) {
+                    out.writeCData(":");
+                    writeValue(out, minutes, 2);
+                    if(seconds != null) {
+                        out.writeCData(":");
+                        writeValue(out, seconds, 2);
+                    }
+                }
+            }
+            out.writeCData("Z");
+            out.endElement(ELEMENT_DATE);
         }
-        out.writeCData("Z");
-        out.endElement(ELEMENT_DATE);
+        catch(IOException e) {throw new BuildException(e);}
     }
 
 
@@ -211,7 +215,7 @@ class DateValue implements InfoElement {
      * @param value  value to write to the XML output stream.
      * @param digits minimum number of digits the value must have.
      */
-    private static void writeValue(XmlWriter out, Integer value, int digits) {
+    private static void writeValue(XmlWriter out, Integer value, int digits) throws IOException {
         String buffer;
 
         buffer = value.toString();

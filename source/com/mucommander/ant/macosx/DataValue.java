@@ -19,6 +19,8 @@
 package com.mucommander.ant.macosx;
 
 import com.mucommander.xml.XmlWriter;
+
+import java.io.IOException;
 import org.apache.tools.ant.BuildException;
 
 class DataValue implements InfoElement {
@@ -31,8 +33,11 @@ class DataValue implements InfoElement {
     public void addText(String txt) {data.append(txt);}
 
     public void write(XmlWriter out) throws BuildException {
-        out.startElement(DATA_ELEMENT);
-        out.writeCData(data.toString());
-        out.endElement(DATA_ELEMENT);
+        try {
+            out.startElement(DATA_ELEMENT);
+            out.writeCData(data.toString());
+            out.endElement(DATA_ELEMENT);
+        }
+        catch(IOException e) {throw new BuildException(e);}
     }
 }

@@ -240,7 +240,7 @@ public class JnlpTask extends Task {
         return attr;
     }
 
-    private static void writeDescription(XmlWriter out, DescriptionElement description) {
+    private static void writeDescription(XmlWriter out, DescriptionElement description) throws IOException {
         XmlAttributes attr;
         int           kind;
 
@@ -263,7 +263,7 @@ public class JnlpTask extends Task {
         out.endElement(ELEMENT_DESCRIPTION);
     }
 
-    private static void writeIcon(XmlWriter out, IconElement icon) throws BuildException {
+    private static void writeIcon(XmlWriter out, IconElement icon) throws IOException, BuildException {
         XmlAttributes attr;
 
         if(icon.getHref() == null)
@@ -296,7 +296,7 @@ public class JnlpTask extends Task {
         out.writeStandAloneElement(ELEMENT_ICON, attr);
     }
 
-    private static void writeInformation(XmlWriter out, InformationElement information) {
+    private static void writeInformation(XmlWriter out, InformationElement information) throws IOException {
         XmlAttributes attr;
         Iterator      iterator;
 
@@ -338,7 +338,7 @@ public class JnlpTask extends Task {
         out.endElement(ELEMENT_INFORMATION);
     }
 
-    private static void writeJ2se(XmlWriter out, J2seElement j2se) throws BuildException {
+    private static void writeJ2se(XmlWriter out, J2seElement j2se) throws BuildException, IOException {
         XmlAttributes attr;
         Iterator      iterator;
 
@@ -368,7 +368,7 @@ public class JnlpTask extends Task {
             out.writeStandAloneElement(ELEMENT_J2SE, attr);
     }
 
-    private static void writeJar(XmlWriter out, JarElement jar) throws BuildException {
+    private static void writeJar(XmlWriter out, JarElement jar) throws BuildException, IOException {
         XmlAttributes attr;
 
         if(jar.getHref() == null)
@@ -390,7 +390,7 @@ public class JnlpTask extends Task {
         out.writeStandAloneElement(ELEMENT_JAR, attr);
     }
 
-    private static void writeNativeLib(XmlWriter out, NativeLibElement nativeLib) throws BuildException {
+    private static void writeNativeLib(XmlWriter out, NativeLibElement nativeLib) throws BuildException, IOException {
         XmlAttributes attr;
 
         if(nativeLib.getHref() == null)
@@ -410,7 +410,7 @@ public class JnlpTask extends Task {
         out.writeStandAloneElement(ELEMENT_NATIVE_LIB, attr);
     }
 
-    private static void writeExtensionDownload(XmlWriter out, ExtDownloadElement ext) throws BuildException {
+    private static void writeExtensionDownload(XmlWriter out, ExtDownloadElement ext) throws BuildException, IOException {
         XmlAttributes attr;
 
         if(ext.getExtPart() == null)
@@ -426,7 +426,7 @@ public class JnlpTask extends Task {
         out.writeStandAloneElement(ELEMENT_EXT_DOWNLOAD, attr);
     }
 
-    private static void writeExtension(XmlWriter out, ExtensionElement extension) throws BuildException {
+    private static void writeExtension(XmlWriter out, ExtensionElement extension) throws BuildException, IOException {
         XmlAttributes attr;
 
         if(extension.getHref() == null)
@@ -453,7 +453,7 @@ public class JnlpTask extends Task {
             out.writeStandAloneElement(ELEMENT_EXTENSION, attr);
     }
 
-    private static void writeProperty(XmlWriter out, PropertyElement property, String element) throws BuildException {
+    private static void writeProperty(XmlWriter out, PropertyElement property, String element) throws BuildException, IOException {
         XmlAttributes attr;
 
         if(property.getName() == null)
@@ -468,7 +468,7 @@ public class JnlpTask extends Task {
         out.writeStandAloneElement(element, attr);
     }
 
-    private static void writePackage(XmlWriter out, PackageElement element) throws BuildException {
+    private static void writePackage(XmlWriter out, PackageElement element) throws BuildException, IOException {
         XmlAttributes attr;
 
         if(element.getName() == null)
@@ -485,7 +485,7 @@ public class JnlpTask extends Task {
         out.writeStandAloneElement(ELEMENT_PACKAGE, attr);
     }
 
-    private static void writeResources(XmlWriter out, ResourcesElement resources) throws BuildException {
+    private static void writeResources(XmlWriter out, ResourcesElement resources) throws BuildException, IOException {
         XmlAttributes attr;
         Iterator      iterator;
 
@@ -527,7 +527,7 @@ public class JnlpTask extends Task {
         out.endElement(ELEMENT_RESOURCES);
     }
 
-    private static void writeApplicationDesc(XmlWriter out, ApplicationDescElement desc) {
+    private static void writeApplicationDesc(XmlWriter out, ApplicationDescElement desc) throws IOException {
         XmlAttributes attr;
 
         attr = new XmlAttributes();
@@ -550,7 +550,7 @@ public class JnlpTask extends Task {
             out.writeStandAloneElement(ELEMENT_APPLICATION_DESC, attr);
     }
 
-    private static void writeAppletDesc(XmlWriter out, AppletDescElement desc) throws BuildException {
+    private static void writeAppletDesc(XmlWriter out, AppletDescElement desc) throws BuildException, IOException {
         XmlAttributes attr;
 
         if(desc.getMain() == null)
@@ -586,7 +586,7 @@ public class JnlpTask extends Task {
             out.writeStandAloneElement(ELEMENT_APPLET_DESC, attr);
     }
 
-    private static void writeInstallerDesc(XmlWriter out, InstallerDescElement desc) {
+    private static void writeInstallerDesc(XmlWriter out, InstallerDescElement desc) throws IOException {
         XmlAttributes attr;
 
         attr = new XmlAttributes();

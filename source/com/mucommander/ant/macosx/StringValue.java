@@ -19,10 +19,12 @@
 package com.mucommander.ant.macosx;
 
 import com.mucommander.xml.XmlWriter;
+
 import org.apache.tools.ant.BuildException;
+import java.io.IOException;
 
 /**
- *
+ * @author Nicolas Rinaudo
  */
 class StringValue implements InfoElement {
     private static final String ELEMENT_STRING    = "string";
@@ -36,8 +38,12 @@ class StringValue implements InfoElement {
     public void write(XmlWriter out) throws BuildException {
         if(value == null)
             throw new BuildException("Uninitialised string key.");
-        out.startElement(ELEMENT_STRING);
-        out.writeCData(value);
-        out.endElement(ELEMENT_STRING);
+
+        try {
+            out.startElement(ELEMENT_STRING);
+            out.writeCData(value);
+            out.endElement(ELEMENT_STRING);
+        }
+        catch(IOException e) {throw new BuildException(e);}
     }
 }

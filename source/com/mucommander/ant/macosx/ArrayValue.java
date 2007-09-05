@@ -23,6 +23,7 @@ import org.apache.tools.ant.BuildException;
 
 import java.util.Iterator;
 import java.util.Vector;
+import java.io.IOException;
 
 /**
  *
@@ -100,13 +101,16 @@ class ArrayValue implements InfoElement {
     public void write(XmlWriter out) throws BuildException {
         Iterator iterator;
 
-        out.startElement(ELEMENT_ARRAY);
-        out.println();
+        try {
+            out.startElement(ELEMENT_ARRAY);
+            out.println();
 
-        iterator = keys.iterator();
-        while(iterator.hasNext())
-            ((InfoElement)iterator.next()).write(out);
+            iterator = keys.iterator();
+            while(iterator.hasNext())
+                ((InfoElement)iterator.next()).write(out);
 
-        out.endElement(ELEMENT_ARRAY);
+            out.endElement(ELEMENT_ARRAY);
+        }
+        catch(IOException e) {throw new BuildException(e);}
     }
 }

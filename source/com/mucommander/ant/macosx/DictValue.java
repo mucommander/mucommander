@@ -23,6 +23,7 @@ import org.apache.tools.ant.BuildException;
 
 import java.util.Iterator;
 import java.util.Vector;
+import java.io.IOException;
 
 /**
  *
@@ -114,13 +115,16 @@ class DictValue implements InfoElement {
     public void write(XmlWriter out) throws BuildException {
         Iterator iterator;
 
-        out.startElement(ELEMENT_DICT);
-        out.println();
+        try {
+            out.startElement(ELEMENT_DICT);
+            out.println();
 
-        iterator = keys.iterator();
-        while(iterator.hasNext())
-            ((InfoElement)iterator.next()).write(out);
+            iterator = keys.iterator();
+            while(iterator.hasNext())
+                ((InfoElement)iterator.next()).write(out);
 
-        out.endElement(ELEMENT_DICT);
+            out.endElement(ELEMENT_DICT);
+        }
+        catch(IOException e) {throw new BuildException(e);}
     }
 }

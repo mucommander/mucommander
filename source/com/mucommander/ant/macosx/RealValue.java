@@ -19,7 +19,9 @@
 package com.mucommander.ant.macosx;
 
 import com.mucommander.xml.XmlWriter;
+
 import org.apache.tools.ant.BuildException;
+import java.io.IOException;
 
 /**
  * Ant representation of the value of an <code>real</code> property.
@@ -122,9 +124,12 @@ class RealValue implements InfoElement {
         if(value == null)
             throw new BuildException("Uninitialised real property.");
 
-        // Writes its XML representation.
-        out.startElement(ELEMENT_REAL);
-        out.writeCData(value.toString());
-        out.endElement(ELEMENT_REAL);
+        try {
+            // Writes its XML representation.
+            out.startElement(ELEMENT_REAL);
+            out.writeCData(value.toString());
+            out.endElement(ELEMENT_REAL);
+        }
+        catch(IOException e) {throw new BuildException(e);}
     }
 }

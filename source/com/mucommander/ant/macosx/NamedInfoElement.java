@@ -19,7 +19,9 @@
 package com.mucommander.ant.macosx;
 
 import com.mucommander.xml.XmlWriter;
+
 import org.apache.tools.ant.BuildException;
+import java.io.IOException;
 
 /**
  * Wrapper for all Info.plist named elements.
@@ -133,12 +135,15 @@ public class NamedInfoElement implements InfoElement {
         if(value == null)
             throw new BuildException("Element value was not set.");
 
-        // Writes the element's name.
-        out.startElement(ELEMENT_KEY);
-        out.writeCData(name);
-        out.endElement(ELEMENT_KEY);
+        try {
+            // Writes the element's name.
+            out.startElement(ELEMENT_KEY);
+            out.writeCData(name);
+            out.endElement(ELEMENT_KEY);
 
-        // Writes the element's value.
-        value.write(out);
+            // Writes the element's value.
+            value.write(out);
+        }
+        catch(IOException e) {throw new BuildException(e);}
     }
 }
